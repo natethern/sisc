@@ -578,11 +578,11 @@
       &SISC; provides hooks for accessing a number of third-party
       Scheme libraries.
     </para>
-    <note>
+    <warning>
       <para>
         This functionality has not undergone much testing.
       </para>
-    </note>
+    </warning>
     <sect2>
       <title>SRFIs</title>
       <para>
