@@ -44,6 +44,10 @@ public class DynamicEnv extends Util implements Cloneable {
     //the lexer is stateful
     public Parser parser = new Parser(new Lexer());
 
+    public DynamicEnv() {
+	this(System.in, System.out);
+    }
+
     public DynamicEnv(InputPort in, OutputPort out) {
 	this.in = in;
 	this.out = out;
@@ -52,5 +56,14 @@ public class DynamicEnv extends Util implements Cloneable {
     public DynamicEnv(InputStream in, OutputStream out) {
 	this(new InputPort(new BufferedReader(new InputStreamReader(in))),
 	     new OutputPort(new PrintWriter(out), true));
+    }
+
+    public DynamicEnv copy() {
+	try {
+	    return (DynamicEnv)super.clone();
+	}
+	catch (CloneNotSupportedException e) {
+	    return this;
+	}
     }
 }
