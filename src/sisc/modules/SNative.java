@@ -24,6 +24,7 @@ public class SNative extends IndexedProcedure {
         SUBSTRING = 17,
         CHARGRTRTHAN = 26,
         CHARLESSTHAN = 27,
+        CHAREQUALCI = 30,
         CHARGRTRTHANCI = 28,
         CHARLESSTHANCI = 29,
         STRINGORDER = 18,
@@ -62,6 +63,7 @@ public class SNative extends IndexedProcedure {
             define("char<?", CHARLESSTHAN);
             define("char-ci>?", CHARGRTRTHANCI);
             define("char-ci<?", CHARLESSTHANCI);
+            define("char-ci=?", CHAREQUALCI);
             define("char>?", CHARGRTRTHAN);
             define("string-order", STRINGORDER);
             define("string-downcase", STRINGDOWNCASE);
@@ -207,6 +209,9 @@ public class SNative extends IndexedProcedure {
                     return truth(character(f.vlr[0])<character(f.vlr[1]));
                 case CHARGRTRTHAN:
                     return truth(character(f.vlr[0])>character(f.vlr[1]));
+                case CHAREQUALCI:
+                    return truth(Character.toLowerCase(character(f.vlr[0]))=
+                                 Character.toLowerCase(character(f.vlr[1])));
                 case CHARLESSTHANCI:
                     return truth(Character.toLowerCase(character(f.vlr[0]))<
                                  Character.toLowerCase(character(f.vlr[1])));
