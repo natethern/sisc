@@ -1800,11 +1800,13 @@ Class.getSigners()
                   existing method.
                 </para>
                 <note>
-                  <function>define-method</function> is a macro that
-                  expands into a function call rather than a
-                  definition. This means any usage inside a function
-                  must occur <emphasis>after</emphasis> all
-                  definitions. Otherwise a syntax error will be raised.
+                  <para>
+                    <function>define-method</function> is a macro that
+                    expands into a function call rather than a
+                    definition. This means any usage inside a function
+                    must occur <emphasis>after</emphasis> all
+                    definitions. Otherwise a syntax error will be raised.
+                  </para>
                 </note>
               </blockquote>
             </para>
@@ -1958,11 +1960,13 @@ Class.getSigners()
                   generic constructor called by <function>make</function>.
                 </para>
                 <note>
-                  <function>define-constructor</function> is a macro that
-                  expands into a function call rather than a
-                  definition. This means any usage inside a function
-                  must occur <emphasis>after</emphasis> all
-                  definitions. Otherwise a syntax error will be raised.
+                  <para>
+                    <function>define-constructor</function> is a macro that
+                    expands into a function call rather than a
+                    definition. This means any usage inside a function
+                    must occur <emphasis>after</emphasis> all
+                    definitions. Otherwise a syntax error will be raised.
+                  </para>
                 </note>
               </blockquote>
             </para>
