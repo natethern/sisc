@@ -135,7 +135,7 @@
 			   ; Set the stack trace base here, so that
 			   ; automatically printed stack traces needn't 
 			   ; include the REPL code
-				  (call/cc
+				  (call/cc-unsafe
 				   (lambda (k)
 				     (stack-trace-base k)
 				     (eval exp (interaction-environment))))])

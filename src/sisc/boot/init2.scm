@@ -562,7 +562,9 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
 ;; handling work properly and conform with SRFI18 requirements with
 ;; regard to call/cc behaviour.
 (define dynamic-wind)
-
+(define call-with-current-continuation-unsafe call-with-current-continuation)
+(define call/cc-unsafe call-with-current-continuation)
+  
 ;;a point in the dynamic wind stack
 ;;-this would be easier if we had structures
 (let-syntax ([point-depth 

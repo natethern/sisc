@@ -1,3 +1,7 @@
+2005-03-15  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Changed stack trace printing to condense duplicate lines.
+	
 2005-03-14  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Implemented the logical operators (and, or, xor, not bit-count) for

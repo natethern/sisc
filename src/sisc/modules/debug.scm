@@ -248,15 +248,34 @@
                      (_free-reference-symbol
                       (_fill-rib-exp expr)))]
             [else
-              (format "~a:~a:~a: <indeterminate call>" 
-                      sourcefile
-                      line column)]))))
+             (format "~a:~a:~a: <indeterminate call>" 
+                     sourcefile
+                     line column)])]))
 
 (define (print-stack-trace k . base)
-  (for-each (lambda (entry)
-              (display (format-stack-trace-entry entry))
-              (newline))
-            (apply stack-trace k base)))
+  (define (print-single-entry entry count)
+    (display entry)
+    (when (> count 1)
+      (display (format " [Repeated~a]"
+                       (case count
+                         ((1) " once")
+                         ((2) " twice")
+                         (else (format " ~a times" count))))))
+    (newline))
+  ; Bunch up multiple lines and add a repeat count
+  (let ([entries (apply stack-trace k base)])
+    (unless (null? entries)
+      (let loop ([ls (cdr entries)]
+                 [last (format-stack-trace-entry (car entries))]
+                 [count 1])
+        (if (null? ls) 
+            (print-single-entry last count)
+            (let ([current (format-stack-trace-entry (car ls))])
+              (if (equal? last current)
+                  (loop (cdr ls) current (+ count 1))
+                  (begin
+                    (print-single-entry last count)
+                    (loop (cdr ls) current 1)))))))))
 
 (print-exception-stack-trace-hook
  'debug
@@ -264,3 +283,4 @@
    (if (exception? e)
        (apply print-stack-trace (exception-continuation e) base)
        (next e))))
+
