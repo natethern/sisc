@@ -2,7 +2,6 @@ package sisc.modules.io;
 
 import java.net.*;
 import java.io.*;
-import sisc.*;
 import sisc.io.*;
 import sisc.data.*;
 import sisc.interpreter.*;

@@ -4,7 +4,7 @@ import java.net.URL;
 import java.net.MalformedURLException;
 import java.io.*;
 import java.util.*;
-import sisc.Util;
+import sisc.util.Util;
 import sisc.data.Expression;
 import sisc.data.Symbol;
 

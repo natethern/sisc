@@ -1,6 +1,5 @@
 package sisc.data;
 
-import sisc.*;
 import java.io.*;
 import sisc.interpreter.*;
 import sisc.io.ValueWriter;

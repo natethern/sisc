@@ -18,7 +18,7 @@ public class SchemeInvocation implements InvocationHandler {
             equalsMeth = Object.class.getMethod("equals", new Class[]{java.lang.Object.class});
             toStringMeth = Object.class.getMethod("toString", new Class[]{});
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException(sisc.Util.liMessage(Util.S2JB, "reqmethodnotfound"));
+            throw new RuntimeException(sisc.util.Util.liMessage(Util.S2JB, "reqmethodnotfound"));
         }
     }
 
@@ -44,7 +44,7 @@ public class SchemeInvocation implements InvocationHandler {
             }
         }
         Interpreter r = Context.enter(ctx, new sisc.env.DynamicEnvironment());
-        Pair p = sisc.Util.EMPTYLIST;
+        Pair p = Util.EMPTYLIST;
         if (args != null) { //for some reason args can be null
             Class[] pTypes = m.getParameterTypes();
             for (int i=args.length-1; i>=0; i--) {

@@ -1,9 +1,9 @@
 package sisc.interpreter;
 
-import sisc.*;
 import sisc.data.*;
 import java.util.*;
 import sisc.env.DynamicEnvironment;
+import sisc.util.Util;
 
 public class Context extends Util {
 

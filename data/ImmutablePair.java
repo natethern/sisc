@@ -1,7 +1,5 @@
 package sisc.data;
 
-import sisc.*;
-
 public class ImmutablePair extends Pair {
 
     public ImmutablePair() {

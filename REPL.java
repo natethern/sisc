@@ -12,6 +12,7 @@ import sisc.ser.*;
 import sisc.io.*;
 import sisc.interpreter.*;
 import sisc.env.DynamicEnvironment;
+import sisc.util.Util;
 
 public class REPL extends Thread {
 

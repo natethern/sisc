@@ -3,13 +3,13 @@ package sisc.interpreter;
 import java.lang.ref.*;
 import java.io.*;
 import java.util.*;
-import sisc.*;
 import sisc.io.*;
 import sisc.data.*;
 import sisc.compiler.*;
 import sisc.exprs.*;
 import sisc.env.*;
 import sisc.compiler.Compiler;
+import sisc.util.Util;
 
 /**
  * The SISC engine.

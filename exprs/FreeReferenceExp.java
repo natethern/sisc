@@ -1,6 +1,5 @@
 package sisc.exprs;
 
-import sisc.*;
 import sisc.data.*;
 import java.io.*;
 import sisc.interpreter.*;

@@ -1,4 +1,4 @@
-package sisc;
+package sisc.util;
 
 public interface Version {
 

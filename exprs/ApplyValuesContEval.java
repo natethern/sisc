@@ -1,7 +1,6 @@
 package sisc.exprs;
 
 import java.io.*;
-import sisc.*;
 import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.io.ValueWriter;

@@ -2,7 +2,6 @@ package sisc.modules;
 
 import java.io.*;
 import java.util.*;
-import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import sisc.interpreter.*;
@@ -11,6 +10,7 @@ import sisc.modules.SThread.Monitor;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.Util;
 
 public class SHashtable extends ModuleAdapter {
 

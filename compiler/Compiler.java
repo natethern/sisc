@@ -2,7 +2,6 @@ package sisc.compiler;
 
 import java.util.*;
 import java.io.*;
-import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import sisc.interpreter.*;
@@ -10,6 +9,7 @@ import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
+import sisc.util.Util;
 
 /**
  * Compiler - Compiles regularized Scheme s-expressions into an

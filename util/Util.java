@@ -1,4 +1,4 @@
-package sisc;
+package sisc.util;
 
 import java.util.*;
 import java.util.jar.*;

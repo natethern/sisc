@@ -1,7 +1,5 @@
 package sisc.data;
 
-import sisc.*;
-
 public class ImmutableVector extends SchemeVector {
 
     public ImmutableVector() {}

@@ -1,6 +1,5 @@
 package sisc.data;
 
-import sisc.*;
 import sisc.interpreter.*;
 
 /**

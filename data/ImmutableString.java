@@ -1,6 +1,5 @@
 package sisc.data;
 
-import sisc.*;
 public class ImmutableString extends SchemeString {
 
     public ImmutableString() {}

@@ -2,10 +2,10 @@ package sisc.interpreter;
 
 import java.util.*;
 import java.io.*;
-import sisc.*;
 import sisc.ser.*;
 import sisc.data.*;
 import sisc.env.SymbolicEnvironment;
+import sisc.util.Util;
 
 public class AppContext extends Util {
 

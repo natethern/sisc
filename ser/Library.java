@@ -5,8 +5,8 @@ import java.io.*;
 import java.math.*;
 import java.lang.reflect.*;
 import java.net.URL;
-import sisc.*;
 import sisc.data.*;
+import sisc.util.Util;
 
 public class Library extends Util {
     final static String LIBRARY_VERSION="SLL2";

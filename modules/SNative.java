@@ -2,7 +2,6 @@ package sisc.modules;
 
 import java.awt.*;
 import java.io.IOException;
-import sisc.*;
 import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;

@@ -1,12 +1,12 @@
 package sisc.compiler;
 
-import sisc.Util;
+import java.io.*;
+import java.util.*;
 import sisc.data.*;
+import sisc.util.Util;
 import sisc.io.InputPort;
 import sisc.io.SourceInputPort;
 import sisc.exprs.AnnotatedExpr;
-import java.io.*;
-import java.util.*;
 
 /**
  * Receives tokens from the Lexer and parses them into valid

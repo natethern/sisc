@@ -4,7 +4,6 @@ import java.util.*;
 import java.io.*;
 import java.lang.ref.*;
 import java.lang.reflect.*;
-import sisc.*;
 import sisc.data.*;
 import sisc.nativefun.Module;
 import sisc.env.SymbolicEnvironment;

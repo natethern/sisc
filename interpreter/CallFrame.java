@@ -2,7 +2,6 @@ package sisc.interpreter;
 
 import java.io.*;
 import java.lang.ref.*;
-import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import sisc.io.ValueWriter;

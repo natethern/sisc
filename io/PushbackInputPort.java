@@ -1,7 +1,6 @@
 package sisc.io;
 
 import java.io.*;
-import sisc.*;
 import sisc.data.SchemeInputPort;
 import sisc.interpreter.*;
 

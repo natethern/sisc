@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import sisc.Util;
+import sisc.util.Util;
 
 public abstract class DeserializerImpl extends Util implements Deserializer {
 

@@ -12,7 +12,7 @@
   (java-class "sisc.ser.SeekableDataInputStream"))
 (define <sisc.ser.BufferedRandomAccessInputStream> 
   (java-class "sisc.ser.BufferedRandomAccessInputStream"))
-(define <sisc.Util> (java-class "sisc.Util"))
+(define <sisc.util.Util> (java-class "sisc.util.Util"))
 (define <sisc.ser.LibraryAE> (java-class "sisc.ser.LibraryAE"))
 
 (define-generic get-parent)
@@ -60,7 +60,7 @@
     (define-generic load)
     (lambda (filename)
       (load <sisc.ser.Library>
-            (url <sisc.Util> (normalize-url (current-url) filename))))))
+            (url <sisc.util.Util> (normalize-url (current-url) filename))))))
 
 (define (link-library lib)
   (for-each

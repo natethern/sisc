@@ -1,8 +1,8 @@
 package sisc.interpreter;
 
-import sisc.*;
-import sisc.data.*;
 import java.util.*;
+import sisc.data.*;
+import sisc.util.Util;
 
 public class ThreadContext extends Util {
 

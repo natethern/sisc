@@ -1,10 +1,11 @@
 package sisc.io;
 
+import java.io.IOException;
 import sisc.data.Value;
 import sisc.data.Pair;
-import java.io.IOException;
+import sisc.util.Util;
 
-public class PortValueWriter extends sisc.Util implements ValueWriter {
+public class PortValueWriter extends Util implements ValueWriter {
 
     private OutputPort port;
 

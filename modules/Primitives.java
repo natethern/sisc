@@ -5,7 +5,6 @@ import java.lang.reflect.*;
 import java.io.IOException;
 import java.io.StringReader;
 
-import sisc.*;
 import sisc.data.*;
 import sisc.io.*;
 import sisc.exprs.*;

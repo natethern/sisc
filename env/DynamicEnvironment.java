@@ -1,11 +1,12 @@
 package sisc.env;
 
+import java.io.*;
 import sisc.data.*;
 import sisc.compiler.*;
-import java.io.*;
 import sisc.io.*;
+import sisc.util.Util;
 
-public class DynamicEnvironment extends sisc.Util implements Cloneable {
+public class DynamicEnvironment extends Util implements Cloneable {
 
     public SchemeInputPort in;
     public SchemeOutputPort out;
