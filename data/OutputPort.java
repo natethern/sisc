@@ -37,21 +37,27 @@ import sisc.*;
 
 public class OutputPort extends NamedValue {
     public transient Writer w;
-    
+    transient boolean autoflush;
+
     public OutputPort(Writer w) {
+	this(w, false);
+    }
+
+    public OutputPort(Writer w, boolean autoflush) {
 	this.w=w;
+	this.autoflush=autoflush;
     }
 
     public void writeChar(char c) throws IOException {
 	w.write(c);
-	flush();
+	if (autoflush) flush();
     }
 
     public void write(Interpreter i, char[] buff, int count) 
 	throws ContinuationException {
 	try {
 	    w.write(buff, 0, count);
-	    flush();
+	    if (autoflush) flush();
 	} catch (IOException e) {
 	    error(i, "error writing to "+display());
 	}
@@ -59,7 +65,7 @@ public class OutputPort extends NamedValue {
 
     public void write(String s) throws IOException {
 	w.write(s);
-	flush();
+	if (autoflush) flush();
     }
 
     public String display() {
@@ -71,6 +77,11 @@ public class OutputPort extends NamedValue {
     }
 
     public void close(Interpreter f) throws ContinuationException {
+	try {
+	    flush();
+	} catch (IOException e) {
+	}
+
 	try {
 	    w.close();
 	} catch (IOException e) {

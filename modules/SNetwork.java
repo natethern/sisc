@@ -57,7 +57,7 @@ public class SNetwork extends Module {
     abstract class SchemeSocket extends Value implements Closable {
 	public abstract void close() throws IOException;
 	abstract InputPort getInputPort() throws IOException;
-	abstract OutputPort getOutputPort() throws IOException;
+	abstract OutputPort getOutputPort(boolean autoflush) throws IOException;
     }
 
     class SchemeServerSocket extends Value implements Closable {
@@ -100,8 +100,9 @@ public class SNetwork extends Module {
 	    return new InputPort(new BufferedReader(new InputStreamReader(s.getInputStream())));
 	}
 
-	public OutputPort getOutputPort() throws IOException {
-	    return new OutputPort(new PrintWriter(s.getOutputStream()));
+	public OutputPort getOutputPort(boolean autoflush) throws IOException {
+	    return new OutputPort(new PrintWriter(s.getOutputStream()),
+				  autoflush);
 	}
     }
 
@@ -206,8 +207,9 @@ public class SNetwork extends Module {
 	    return new InputPort(new BufferedReader(new InputStreamReader(new UDPInputStream(s, packet_size))));
 	}
 
-	public OutputPort getOutputPort() throws IOException {
-	    return new OutputPort(new PrintWriter(new UDPOutputStream(s, remoteHost, dport)));
+	public OutputPort getOutputPort(boolean autoflush) throws IOException {
+	    return new OutputPort(new PrintWriter(new UDPOutputStream(s, remoteHost, dport)),
+				  autoflush);
 	}
     }
 
@@ -297,7 +299,7 @@ public class SNetwork extends Module {
 		    return ss.getInputPort();
 		case OPEN_SOCKET_OUTPUT_PORT:
 		    SchemeSocket ssock=sock(f,f.vlr[0]);
-		    return ssock.getOutputPort();
+		    return ssock.getOutputPort(false);
 		case CLOSE_SOCKET:
 		    Closable c=(Closable)f.vlr[0];
 		    c.close();
@@ -343,6 +345,9 @@ public class SNetwork extends Module {
 		    port=num(f,f.vlr[0]).intValue();
 		    ps=num(f,f.vlr[1]).intValue();
 		    return new SchemeMulticastUDPSocket(new MulticastSocket(port), ps);
+		case OPEN_SOCKET_OUTPUT_PORT:
+		    SchemeSocket ssock=sock(f,f.vlr[0]);
+		    return ssock.getOutputPort(truth(f.vlr[1]));
 		case SET_MULTICAST_TTL:
 		    SchemeMulticastUDPSocket ms=mcastsock(f,f.vlr[0]);
 		    int ttl=num(f,f.vlr[1]).intValue();

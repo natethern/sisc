@@ -62,7 +62,7 @@ public class Primitives extends Module {
         GCD=57,   DENOMINATOR=55,  REMAINDER=56,  LIST2VECTOR=62,      
         LCM=58,   VECTOR2LIST=61,  LOOKUP=70,     STRING2SYMBOL=60, 
         EVAL=63,  STRINGAPPEND=68, ERROR=69,      CURRENTWRITE=65, 
-	SIN=98,   CURRENTEVAL=64, 
+	SIN=98,   CURRENTEVAL=64,  
         COS=99,   FILETYPE=73,     SYSTIME=78,    STRING2NUMBER=74, 
         TAN=100,  CALLCC=76,       ROUND=85,      NUMBER2STRING=75, 
         ASIN=101, SETBOX=117,      CEILING=84,    INEXACT2EXACT=82, 
@@ -80,7 +80,8 @@ public class Primitives extends Module {
         FLOOR=83, OPENOUTPUTSTRING=48,         GETOUTPUTSTRING=49, 
 	PUTPROP=121, STRING2UNINTERNEDSYMBOL=66,  OPENINPUTSTRING=50,
 	LIST=122, _VOID=123, VECTORFINDLASTUNIQUE=124, MAKEPATH=125,
-	ABSPATHQ=126, PARENT_CONT=127, CONTINUATIONQ=128;
+	ABSPATHQ=126, PARENT_CONT=127, CONTINUATIONQ=128,
+	FLUSHOUTPUTPORT=129;
 
     public static SchemeBoolean numQuery(Value v, int mask) 
 	throws ContinuationException {
@@ -144,6 +145,7 @@ public class Primitives extends Module {
 	define(r, "file-type", FILETYPE);
 	define(r, "find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
 	define(r, "floor", FLOOR);
+	define(r, "flush-output-port", FLUSHOUTPUTPORT);
 	define(r, "get-output-string", GETOUTPUTSTRING);
 	define(r, "getprop", LOOKUP);
 	define(r, "imag-part", IMAGPART);
@@ -344,6 +346,10 @@ public class Primitives extends Module {
 		OutputPort port=outport(f,f.vlr[0]);
 		if (!(port.w instanceof StringWriter))
 		    throw new RuntimeException( "output port is not a string output port");
+		try {
+		    port.flush();
+		} catch (IOException e) {}
+
 		StringWriter sw=(StringWriter)port.w;
 		SchemeString s=new SchemeString(sw.getBuffer().toString());
 		sw.getBuffer().setLength(0);
@@ -362,12 +368,20 @@ public class Primitives extends Module {
 		} catch (IOException e) {
 		    throw new RuntimeException( "error opening file "+fname);
 		}
+	    case FLUSHOUTPUTPORT:
+		OutputPort op=outport(f,f.vlr[0]);
+		try {
+		    op.flush();
+		} catch (IOException e) {
+		    error(f, "error flushing port: "+e.getMessage());
+		}
+		return VOID;
 	    case CLOSEINPUTPORT: 
 		InputPort inp=inport(f,f.vlr[0]);
 		if (inp!=f.console_in) inp.close(f);
 		return VOID;
 	    case CLOSEOUTPUTPORT: 
-		OutputPort op=outport(f,f.vlr[0]);
+		op=outport(f,f.vlr[0]);
 		if (op!=f.console_out) op.close(f);
 		return VOID;
 	    case BOX: return new Box(f.vlr[0]);
@@ -569,6 +583,14 @@ public class Primitives extends Module {
 		    throw new RuntimeException("Error writing to output port "+port);
 		}
 		return VOID;
+	    case OPENOUTPUTFILE:
+		String fname=string(f,f.vlr[0]);
+		try {
+		    return new OutputPort(new BufferedWriter(new FileWriter(fname)),
+					  truth(f.vlr[1]));
+		} catch (IOException e) {
+		    throw new RuntimeException( "error opening file "+fname);
+		}
 	    case EVAL:
 		f.nxp=f.compile(f.vlr[0], env(f,f.vlr[1]));
 		return VOID;
