@@ -188,16 +188,7 @@ public abstract class Util implements Version {
 
     public static void error(Interpreter r, Pair error)
         throws ContinuationException {
-        Expression last=(r.nxp != null ? r.nxp : (r.lxp != null ? r.lxp :
-                                                  r.lcf.nxp));
-        r.acc = new Values(new Value[] {
-            error,
-            new ApplyParentFrame(new CallFrame(last, 
-                                               r.vlr, r.vlk,
-                                               r.lcl, r.env,
-                                               r.fk, r.stk,
-                                               r.cap).capture(r))});
-        throw new ContinuationException(r.fk);
+        r.error(error);
     }
 
     public static String justify(String v, int p, char c) {

@@ -54,10 +54,10 @@ public class Interpreter extends Util {
                                                       new Value[3]};
 
     //ACCOUNTING REGISTERS
-    public CallFrame             lcf, llcf;//used for continuation capture
+    private CallFrame            lcf, llcf;//used for continuation capture
     public boolean               vlk;      //vlk, when true, indicates the
                                            //frame was captured.
-    public boolean             cap[];      //Indicates which vlr positions
+    private boolean              cap[];    //Indicates which vlr positions
                                            //contained a k capture.
     public Expression            lxp;      //Used for debugging
 
@@ -174,6 +174,19 @@ public class Interpreter extends Util {
             }
         }
         vlr[pos]=v;
+    }
+
+    public void error(Pair error)  throws ContinuationException {
+        Expression last = (nxp != null ? nxp :
+                           (lxp != null ? lxp : lcf.nxp));
+        acc = new Values(new Value[] {
+                             error,
+                             new ApplyParentFrame(new CallFrame(last, 
+                                                                vlr, vlk,
+                                                                lcl, env,
+                                                                fk, stk,
+                                                                cap).capture(this))});
+        throw new ContinuationException(fk);
     }
 
     /**
