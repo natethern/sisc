@@ -33,7 +33,7 @@
     <property name="libjar" value="sisc-lib.jar"/>
     <property name="heapjar" value="sisc-heap.jar"/>
     <property name="heap" value="${basedir}/sisc.shp"/>
-    <property name="quantity-type" value="64float"/>
+    <property name="quantity-type" value="apfloat"/>
     <condition property="debugging" value="on">
       <isset property="beta"/>
     </condition>
