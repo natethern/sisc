@@ -231,6 +231,7 @@
                 <type>sisc.Interpreter</type>
                 <parameter>interpreter</parameter>
               </methodparam>
+              <exceptionname>sisc.ContinuationException</exceptionname>
             </methodsynopsis>
             <blockquote>
               <para>

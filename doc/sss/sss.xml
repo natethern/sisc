@@ -137,7 +137,7 @@
 	</listitem>
 	<listitem>
 	  <para>6.2.3 - 
-	    The standard 'desires that that operations such as
+	    The standard desires that that operations such as
 	    <function>sqrt</function> try to provide exact results
 	    when given exact arguments.  While &SISC; meets the requirement
 for <function>sqrt</function>, it is not clear what other mathematical
