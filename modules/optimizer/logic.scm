@@ -24,6 +24,13 @@
             (let ((cx (car x))
                   (cy (car y)))
               (cond [(null? x) acc]
+                    ;; If this var gets set!'ed, or its right-hand side
+                    ;; is non-immediate, skip it
+                    [(or (not (immediate? cy))
+                         (and set-vars (memq cx set-vars)))
+                     (set! nf (cons cx nf))
+                     (set! nv (cons cy nv))
+                     (cp-helper (cdr x) (cdr y) acc)]
                     ;; If this var is bound to another var ref,
                     ;; see if it too is bound to a cp-candidate,
                     ;; and use that value instead of the var.
@@ -53,11 +60,6 @@
                      (cp-helper (cdr x)
                                 (cdr y) 
                                 (cons (cons cx cy) acc))]
-                    [(or (not (immediate? cy))
-                         (and set-vars (memq cx set-vars)))
-                     (set! nf (cons cx nf))
-                     (set! nv (cons cy nv))
-                     (cp-helper (cdr x) (cdr y) acc)]
                     [else 
                       (if rec
                           (begin
