@@ -222,12 +222,12 @@
                         #f
                         (cdr (assoc 'proc-name data)))])
       (cond [procname
-             (format "~a:~a:~a <called from ~a>"
+             (format "~a:~a:~a: <from call to ~a>"
                      sourcefile line column procname)]
             [(and (_fill-rib? expr)
                   (_free-reference-exp? 
                    (_fill-rib-exp expr)))
-             (format "~a:~a:~a: <called from ~a>" 
+             (format "~a:~a:~a: <from call to/argument of ~a>" 
                      sourcefile
                      line column
                      (_free-reference-symbol

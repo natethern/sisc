@@ -40,8 +40,8 @@ public class SDebug extends ModuleAdapter {
         define("quantity-type", QTYPE);
     }
 
-    class SISCExpression extends Value {
-        protected Expression e;
+    public class SISCExpression extends Value {
+        public Expression e;
         
         SISCExpression(Expression e) {
             this.e=e;
