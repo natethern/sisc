@@ -186,7 +186,7 @@
            (values `(if ,@rands '#f '#t) '((new-assumptions not)))]
           [(and (symbol? rator)
                 (not-redefined? rator)
-                (andmap immediate? rands))
+                (andmap constant? rands))
            (values `',(eval `("noexpand" (,rator ,@rands)))
                    `((new-assumptions ,rator)))]
           [(and (pair? rator)
