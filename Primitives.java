@@ -156,6 +156,7 @@ public class Primitives extends ModuleAdapter {
         define("open-input-string", OPENINPUTSTRING);
         define("open-output-file", OPENOUTPUTFILE);
         define("open-output-string", OPENOUTPUTSTRING);
+        define("open-source-input-file", OPENSOURCEINPUTFILE);
         define("output-port?", OUTPORTQ);
         define("pair?", PAIRQ);
         define("parameter?", PARAMETERQ);
@@ -393,8 +394,15 @@ public class Primitives extends ModuleAdapter {
                 SchemeString s=new SchemeString(sw.getBuffer().toString());
                 sw.getBuffer().setLength(0);
                 return s;
-            case OPENINPUTFILE:
+            case OPENSOURCEINPUTFILE:
                 String fname=string(f.vlr[0]);
+                try {
+                    return new SourceInputPort(new BufferedReader(new FileReader(fname)), fname);
+                } catch (IOException e) {
+                    throwPrimException( "error opening file "+fname);
+                }
+            case OPENINPUTFILE:
+                fname=string(f.vlr[0]);
                 try {
                     return new InputPort(new BufferedReader(new FileReader(fname)));
                 } catch (IOException e) {
@@ -925,6 +933,7 @@ public class Primitives extends ModuleAdapter {
         OPENINPUTFILE = 72,
         OPENINPUTSTRING = 73,
         OPENOUTPUTFILE = 125,
+        OPENSOURCEINPUTFILE = 154,
         //	OPENOUTPUTFILE = 74,
         OPENOUTPUTSTRING = 7,
         OUTPORTQ = 75,
