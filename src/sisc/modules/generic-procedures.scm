@@ -6,9 +6,9 @@
 
 ;;same as in srfi-1
 (define (every2 pred x y)
-  (or (null? x)
-      (null? y)
-      (and (pred (car x) (car y)) (every2 pred (cdr x) (cdr y)))))
+  (cond [(null? x) #t]
+        [(null? y) #t]
+        [else (and (pred (car x) (car y)) (every2 pred (cdr x) (cdr y)))]))
 
 ;;simplified from srfi-1
 (define (any pred l)
@@ -43,7 +43,7 @@
       <java.lang.Object>
       (cdr m)))
 (define (meta? x)
-  (or (eqv? x <java.lang.Class>)
+  (if (eqv? x <java.lang.Class>) #t
       (and (pair? x) (eq? (car x) 'meta))))
 
 ;;special types
@@ -99,9 +99,9 @@
        (o 'superclasses)
        (o 'slots)))
 (define (class? o)
-  (or (java/class? o) (scheme-class? o)))
+  (if (java/class? o) #t (scheme-class? o)))
 (define (object? o)
-  (or (java/object? o) (scheme-object? o)))
+  (if (java/object? o) #t (scheme-object? o)))
 
 (define (make-object class slots)
   (let ([slots (alist->hashtable slots eq? #f)])
@@ -390,25 +390,25 @@
   ;;make sure we know about all relevant methods
   ;;we really only need/ought to do this when proc is a
   ;;generic-java-procedure
-  (if (not (null? otypes))
-      (let ([first (car otypes)])
-        (if (meta? first)
-            (set! first (meta-type first)))
-        (if (java/class? first)
-            (add-class first))))
+  (unless (null? otypes)
+    (let ([first (car otypes)])
+      (if (meta? first)
+          (set! first (meta-type first)))
+      (if (java/class? first)
+          (add-class first))))
   (let ([methods       (get-methods proc)])
     (mutex/synchronize-unsafe
      (car methods)
      (lambda ()
        (let ([mlist (cdr methods)])
-         (if (not (method-list-cache mlist))
-             (let ([meths (method-list-methods mlist)])
-               (set! mlist (make-method-list
-                            meths
-                            (+ (apply max 0 (map method-arity meths))
-                               1)
-                            (make-hashtable equal? #f)))
-               (set-cdr! methods mlist)))
+         (unless (method-list-cache mlist)
+           (let ([meths (method-list-methods mlist)])
+             (set! mlist (make-method-list
+                          meths
+                          (+ (apply max 0 (map method-arity meths))
+                             1)
+                          (make-hashtable equal? #f)))
+             (set-cdr! methods mlist)))
          (set! otypes (take otypes (method-list-arity mlist)))
          (let* ([cache (method-list-cache mlist)]
                 [res (hashtable/get cache otypes)])
@@ -477,8 +477,8 @@
         (call-method-helper applicable args
                             (procedure-property proc 'next)))))
   (set-procedure-property! proc 'methods methods)
-  (if (not (null? rest))
-      (set-procedure-property! proc 'next (car rest)))
+  (unless (null? rest)
+    (set-procedure-property! proc 'next (car rest)))
   proc)
 
 (define (generic-java-procedure name . rest)
