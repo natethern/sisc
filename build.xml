@@ -17,8 +17,9 @@
     <property name="gendocdir" value="${docdir}/generated"/>
     <property name="schemedir" value="${basedir}/scheme-src"/>
     <property name="packagename" value="sisc"/>
-    <property name="basejar" value="sisc.jar"/>
+    <property name="basejar" value="esisc.jar"/>
     <property name="optjar" value="sisc-opt.jar"/>
+    <property name="srfisll" value="srfi.sll"/>
     <property name="heap" value="${basedir}/boot/sisc.shp"/>
     <property name="quantity-type" value="apfloat"/>
     <property name="debugging" value="off"/>
@@ -108,7 +109,17 @@
       </fileset>
     </jar>
   </target>
-  
+
+  <target name="srfi-sll" depends="full-heap" unless="lite">
+    <java classname="sisc.REPL"
+          classpath="${classdir}"
+          dir="${schemedir}"
+	  fork="yes">
+	<arg value="srfi-sll.scm"/>
+    </java>
+    <move file="${srfisll}" todir="${basedir}"/>
+  </target> 
+
   <target name="full-heap" depends="jars" unless="lite">
     <java classname="sisc.boot.GenerateHeap"
           classpath="${classdir}"
@@ -225,7 +236,7 @@
 
   </target>
 
-  <target name="full-dist" depends="clean,all" unless="lite">
+  <target name="full-dist" depends="clean,all,srfi-sll" unless="lite">
     <delete dir="${dist}/full"/>
     <mkdir dir="${dist}/full"/>
     <mkdir dir="${dist}/full/sisc"/>
@@ -244,6 +255,8 @@
           file="${basedir}/${basejar}"/>
     <copy todir="${dist}/full/sisc"
           file="${basedir}/${optjar}"/>
+    <copy todir="${dist}/full/sisc"
+          file="${basedir}/${srfisll}"/>
     <copy todir="${dist}/full/sisc"
           file="${heap}"/>
     <copy todir="${dist}/full/sisc">

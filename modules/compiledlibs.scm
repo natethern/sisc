@@ -23,7 +23,6 @@
   (if (null? segments) '()
       (let ((segment1 (car segments))
             (segments (cdr segments)))
-        (pretty-print segment1)
         (let ((symenv (car segment1))
               (bindings (map car (cdr segment1))))
           (if (null? bindings)
@@ -66,11 +65,8 @@
                                  (string-length symenv-id-str))))
                        (bindings (java-unwrap (get-local-expression lib symenv-id))))
 
-                  (display (format "{~a}" symenv))
-
                   (for-each 
                    (lambda (binding)
-                     (display binding)
                      (putprop binding symenv 
                                         ;fixme, eventually we want to register
                                         ;the binding for lazy-load
