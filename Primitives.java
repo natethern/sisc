@@ -170,6 +170,7 @@ public class Primitives extends ModuleAdapter {
         define("symbol?", SYMBOLQ);
         define("system-time", SYSTIME);
         define("tan", TAN);
+        define("time-zone-offset", TIMEZONEOFFSET);
         define("truncate", TRUNCATE);
         define("unbox", UNBOX);
         define("vector-fill!", VECTORFILL);
@@ -292,6 +293,9 @@ public class Primitives extends ModuleAdapter {
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throwPrimException(liMessage(SISCB, "nosiscspecificenv"));
                 }
+            case TIMEZONEOFFSET:
+                Calendar cal = Calendar.getInstance();
+                return Quantity.valueOf((cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET)) / 1000);
             }
         case 1:
             switch (primid) {
@@ -1018,7 +1022,6 @@ public class Primitives extends ModuleAdapter {
         ENVIRONMENTQ = 39,
         EQ = 112,
         EQUAL = 113,
-        //ERROR = 114,
         EVAL = 115,
         READCODE = 40,
         EXACT2INEXACT = 41,
@@ -1113,6 +1116,7 @@ public class Primitives extends ModuleAdapter {
         SYMBOLQ = 95,
         SYSTIME = 11,
         TAN = 96,
+        TIMEZONEOFFSET = 114,
         TRUNCATE = 12,
         UNBOX = 97,
         VECTOR2LIST = 98,
