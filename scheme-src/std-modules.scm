@@ -131,6 +131,7 @@
    java-null?
    java-class-of
    java-array-new
+   java-new
    java-set!
    jnull
    ->
@@ -201,8 +202,9 @@
   (define java-null? 		java/null?)
   (define java-class-of		java/class-of)
   (define java-array-new  	java/array-new)
+  (define java-new          java/new)
   (define java-set!         java/set!)
-  (define jnull     (java/superclass (java/class '|java.lang.Object|)))
+  (define jnull             (java/new))
   (define-generic ->)
   (define-method (-> ((meta <jboolean>) _)) ->jboolean)
   (define-method (-> ((meta <jchar>)_))     ->jchar)

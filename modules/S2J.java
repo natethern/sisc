@@ -68,7 +68,8 @@ public class S2J extends ModuleAdapter {
         JAVA_ARRAY_NEW      =62,
         JAVA_INV_HANDLER    =63,
         JAVA_PROXY          =64,
-        JAVA_SET            =65,
+        JAVA_NEW            =65,
+        JAVA_SET            =66,
 
         CONV_JBOOLEAN       =100,
         CONV_JCHAR          =101,
@@ -140,6 +141,7 @@ public class S2J extends ModuleAdapter {
         define("java/array-new"     ,JAVA_ARRAY_NEW);
         define("java/invocation-handler",JAVA_INV_HANDLER);
         define("java/proxy"         ,JAVA_PROXY);
+        define("java/new"           ,JAVA_NEW);
         define("java/set!"          ,JAVA_SET);
 
         define("->jboolean"         ,CONV_JBOOLEAN);
@@ -178,8 +180,6 @@ public class S2J extends ModuleAdapter {
             JOBJ    = 7;
 
         protected byte objType = JUNKN;
-
-        protected static JavaObject nullObj = new JavaObject(null);
 
         public final byte getObjType() {
             //we do not need to make this synchronized since we are only
@@ -249,7 +249,6 @@ public class S2J extends ModuleAdapter {
                 switch (ty) {
                 case JNULL: {
                     obj = null;
-                    nullObj = this;
                     break;
                 }
                 case JCLASS: {
@@ -297,12 +296,7 @@ public class S2J extends ModuleAdapter {
             }
         }
 
-        public static final JavaObject create(Object o) {
-            if (o == null) return nullObj;
-            return new JavaObject(o);
-        }
-
-        protected JavaObject(Object o) {
+        public JavaObject(Object o) {
             this.obj = o;
         }
 
@@ -363,7 +357,7 @@ public class S2J extends ModuleAdapter {
                     error(r, liMessage(S2JB, "cannotapplyobject", obj.toString()));
                 }
             } catch (InvocationTargetException e) {
-                error(r, create(e.getTargetException()));
+                error(r, new JavaObject(e.getTargetException()));
             } catch (RuntimeException e) {
                 e.printStackTrace(System.err);
                 error(r, e.getMessage());
@@ -377,9 +371,9 @@ public class S2J extends ModuleAdapter {
             try {
                 switch (arg.length) {
                 case 0: //instantiate class
-                    return create(obj.newInstance());
+                    return new JavaObject(obj.newInstance());
                 case 1: //get value of static field
-                    return create(obj.getField(symval(arg[0])).get(null));
+                    return new JavaObject(obj.getField(symval(arg[0])).get(null));
                 case 2: //set value of static field
                     obj.getField(symval(arg[0])).set(null,jobj(arg[1]));
                     return VOID;
@@ -399,7 +393,7 @@ public class S2J extends ModuleAdapter {
             try {
                 switch (args.length) {
                 case 1: //get value
-                    return create(obj.get(jobj(args[0])));
+                    return new JavaObject(obj.get(jobj(args[0])));
                 case 2: //set value
                     obj.set(jobj(args[0]), jobj(args[1]));
                     return VOID;
@@ -419,7 +413,7 @@ public class S2J extends ModuleAdapter {
                 params[i] = jobj(args[i+1]);
             }
             try {
-                return create(obj.invoke(o,params));
+                return new JavaObject(obj.invoke(o,params));
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(liMessage(S2JB, "illegalaccess", liMessage(S2JB, "jmethod"), obj.toString(), o.toString()));
             }
@@ -432,7 +426,7 @@ public class S2J extends ModuleAdapter {
                 params[i] = jobj(args[i]);
             }
             try {
-                return create(obj.newInstance(params));
+                return new JavaObject(obj.newInstance(params));
             } catch (InstantiationException e) {
                 throw new RuntimeException(liMessage(S2JB, "constructorerror", obj.toString(), obj.getDeclaringClass().getName()));
             } catch (IllegalAccessException e) {
@@ -455,7 +449,7 @@ public class S2J extends ModuleAdapter {
                 } else {
                     obj = Array.get(obj,num(args[0]).intValue());
                 }
-                return create(obj);
+                return new JavaObject(obj);
             case 2: //set element
                 Value idx = null;
                 if (args[0] instanceof Pair) {
@@ -485,7 +479,7 @@ public class S2J extends ModuleAdapter {
             try {
                 switch (args.length) {
                 case 1: //get value of field
-                    return create(obj.getClass().getField(symval(args[0])).get(obj));
+                    return new JavaObject(obj.getClass().getField(symval(args[0])).get(obj));
                 case 2: //set value of field
                     obj.getClass().getField(symval(args[0])).set(obj, jobj(args[1]));
                     return VOID;
@@ -544,13 +538,13 @@ public class S2J extends ModuleAdapter {
             Pair p = EMPTYLIST;
             if (args != null) { //for some reason args can be null
                 for (int i=args.length-1; i>=0; i--) {
-                    p = new Pair(makeJObj(args[i]), p);
+                    p = new Pair(new JavaObject(args[i]), p);
                 }
             }
             Value res = null;
             try {
-                res = r.eval(proc, new Value[] {makeJObj(proxy),
-                                                makeJObj(m),
+                res = r.eval(proc, new Value[] {new JavaObject(proxy),
+                                                new JavaObject(m),
                                                 p});
             } catch (SchemeException e) {
                 throw javaException(e);
@@ -620,7 +614,7 @@ public class S2J extends ModuleAdapter {
     }
 
     public static final JavaObject makeJObj(Object o) {
-        return JavaObject.create(o);
+        return new JavaObject(o);
     }
 
     public static final Value objArrayToVec(Object[] objs) {
@@ -727,6 +721,11 @@ public class S2J extends ModuleAdapter {
 
     public Value eval(int primid, Interpreter f) throws ContinuationException {
         switch(f.vlr.length) {
+        case 0:
+            switch(primid) {
+            case JAVA_NEW:
+                return makeJObj(null);
+            }
         case 1:
             switch(primid) {
             case JAVA_WRAP:
