@@ -36,25 +36,6 @@
 ;;;;;;
 
 (define hedged-inlining       (_make-native-parameter "hedgedInlining"))
-(define inline-primitives       (_make-native-parameter "inlinePrimitives"))
-
-(define (inline-usual-primitives)
-    (inline-primitives 
-      '(* + - / < <= = > >= abs acos angle asin assoc assq assv atan boolean?
-        car cdr caar cadr cdar cddr ceiling char-alphabetic? char-ci<=? 
-        char-ci<? char-ci=? char-ci>=? char-ci>? char-lower-case? 
-        char-numeric? char-ready? char-upcase char-upper-case? char-whitespace? 
-        char<=? char<? char=? char>=? char>? char? complex? cos denominator 
-        eof-object? eq? equal? eqv? even? exact? exp expt floor gcd imag-part
-        inexact? input-port? integer? lcm length list-ref list? log magnitude
-        max member memq memv min modulo negative? not null? number? numerator 
-        odd? output-port? pair? positive? procedure? quotient rational? real-part
-        real? remainder round sin sqrt string-ci<=? string-ci<? string-ci=?
-        string-ci>=? string-ci>? string-length string<=? string<? string=? 
-        string>=? string>? string? symbol? tan truncate vector-length vector? 
-        zero?)))
-
-(inline-usual-primitives)
 (hedged-inlining #f)
 
 (define-syntax boolean-or

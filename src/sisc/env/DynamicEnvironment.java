@@ -13,12 +13,6 @@ import sisc.util.Util;
 import sisc.util.Defaults;
 
 public class DynamicEnvironment extends Util implements Cloneable {
-    static {
-        // Weird init order problem
-        if (Defaults.INLINE_PRIMITIVES == null)
-            Defaults.INLINE_PRIMITIVES = EMPTYLIST;
-    }
-
     public AppContext ctx;
 
     public Value in, out;
@@ -28,7 +22,6 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public boolean vectorLengthPrefixing = Defaults.VECTOR_LENGTH_PREFIXING;
     public boolean emitDebuggingSymbols = Defaults.EMIT_DEBUGGING_SYMBOLS;
     public String characterSet = getDefaultCharacterSet();
-    public Value inlinePrimitives = Defaults.INLINE_PRIMITIVES;
     public boolean hedgedInlining = Defaults.HEDGED_INLINING;
     public boolean permissiveParsing = Defaults.PERMISSIVE_PARSING;
     
@@ -44,7 +37,6 @@ public class DynamicEnvironment extends Util implements Cloneable {
         new Boolean(Defaults.EMIT_ANNOTATIONS).toString();
     private static String defaultCaseSensitive = 
         new Boolean(Defaults.CASE_SENSITIVE).toString();
-    private static String defaultInlinePrimitives = Defaults.INLINE_PRIMITIVES.toString();
     private static String defaultHedgedInlining = new Boolean(Defaults.HEDGED_INLINING).toString();
     private static String defaultPermissiveParsing = new Boolean(Defaults.PERMISSIVE_PARSING).toString();
 
@@ -223,14 +215,6 @@ public class DynamicEnvironment extends Util implements Cloneable {
         parser.lexer.strictR5RS = truth(v);
     }
 
-    public Value getInlinePrimitives() {
-        return inlinePrimitives;
-    }
-
-    public void setInlinePrimitives(Value v) {
-        inlinePrimitives=pair(v);
-    }
-    
     public Value getHedgedInlining() {
         return truth(hedgedInlining);
     }
