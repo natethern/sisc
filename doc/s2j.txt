@@ -76,7 +76,7 @@ Instances of a class can be created with the generic MAKE function.
 
 (java-wrap <obj>) => <jobj>
 (java-unwrap <jobj>) => <obj>
-These first function wraps a Scheme so it can be passed in call to a
+The first function wraps a Scheme so it can be passed in call to a
 java method / constructor or when setting a field of a java object or
 class. The second function "casts" a java object into a Scheme object
 and is used when java methods return Scheme objects or java fields
