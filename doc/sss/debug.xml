@@ -58,6 +58,8 @@
           <methodname>stack-trace</methodname>
           <methodparam><parameter>error-record</parameter>
           </methodparam>
+          <methodparam choice="opt"><parameter>error-continuation</parameter>
+          </methodparam>
         </methodsynopsis>
         <blockquote>
           <para>
@@ -65,6 +67,12 @@
             error-record to the console.  If available, line numbers,
             column numbers, and the source file of the Scheme source
             where each call is located will be displayed.
+          </para>
+          <para>
+            If provided, the optional error-continuation overrides 
+            that given in the error-record, or provides the
+            error-continuation if it is not included in the error record
+            (as may occur when calling stack-trace from an error handler).
           </para>
         </blockquote>
       </para>
@@ -102,12 +110,12 @@
       </para>
     </blockquote>
     <para>
-      In addition, setting the Java system property
-      <literal>sisc.emitannotations</literal> to <literal>true</literal>
+      In addition, setting the <literal>sisc.emitannotations</literal> 
+      system property to <literal>true</literal>
       will enable annotations.  This method must be used to annotate
       any source passed to &SISC; on the command line.  See <xref
-      linkend="running-sisc"/> for information on passing Java options to
-      the &SISC; startup script.
+      linkend="running-sisc"/> for information on passing system
+      properties options to the &SISC; startup script.
     </para>
   </sect1>
   <sect1 id="ActiveDebugging">
@@ -146,10 +154,11 @@
 	    <para>
 	      When replaced with a trace-lambda, all calls to a lambda
 	      defined procedure are traced on the console.
-	      <parameter>trace-name</parameter> is a symbol to identify
-	      the procedure in the trace. <parameter>formals</parameter>
-              and <parameter>body</parameter> have identical
-	      semantics to lambda.
+	      <parameter>trace-name</parameter> is an identifier which
+              will disambiguate the procedure in the trace. 
+              <parameter>formals</parameter> and
+	      <parameter>body</parameter> have identical semantics to 
+              <function>lambda</function>.
 	    </para>
 	  </blockquote>
 	</para>
@@ -159,7 +168,7 @@
 	    <type>value</type>
 	    <methodname>trace-let</methodname>
 	    <methodparam>
-	      <parameter>loop-name</parameter>
+	      <parameter>loop-identifier</parameter>
 	    </methodparam>
 	    <methodparam>
 	      <parameter>formal-bindings</parameter>
@@ -229,14 +238,14 @@
     </para>
     <para>
       When a function is traced, each call to the function will be
-      displayed to the console with the function's name and the values
-      of the operands the function is being applied to.  Each nested
-      call is indented slightly, so as to illustrate the depth of
-      calls.  When the function application returns, the value of the
-      function-call is displayed at the same indentation as the call
-      itself.  Once indented to a certain depth, the same indentation
-      is kept for further nesting, but the depth of the call is
-      displayed as an integer preceding the call.
+      displayed to the console with the function's trace identifier
+      and the values of the operands the function is being applied to.
+      Each nested call is indented slightly, so as to illustrate the
+      depth of calls.  When the function application returns, the
+      value of the function-call is displayed at the same indentation
+      as the call itself.  Once indented to a certain depth, the same
+      indentation is kept for further nesting, but the depth of the
+      call is displayed as an integer preceding the call.
     </para>
   </sect1>
 </chapter>

@@ -23,7 +23,7 @@ file:c:\bar\baz.scm
 file:foo.scm
 jar:http://foo.com/bar.jar!/bar/bar1.scm
 </programlisting>
-        The latter is a URL referring to a file stored in a JAR on a
+        The last is a URL referring to a file stored in a JAR on a
         remote web server. For further details on the format of URLs
         please consult <ulink url="http://www.ietf.org/rfc/rfc2396.txt">this
         specification</ulink>. The format of JAR URLs is defined in
@@ -32,7 +32,14 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         supported by a particular installation of Java depends on the
         configured protocol handlers. See <ulink
         url="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">the
-        JDK API documentation</ulink> for details.
+        JDK API documentation</ulink> for details. 
+        <footnote>
+          <para>
+            Handling of JAR files in URLS may be dependent on the
+            &SISC; host language, as well as some uncommon protocols.  
+            HTTP and FTP should be expected to work with any host language.
+          </para>
+        </footnote>
       </para>
       <para>
         Relative file names or URLs are resolved in relation to the
@@ -158,8 +165,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         automatically flush
 	<footnote>
 	  <para>
-	    Except for the console output port, which does flush
-	    automatically by default.
+            The console output port is an exception, as it is 
+            an auto-flush port.
 	  </para>
 	</footnote>.  Enabling auto-flush can be done when the
         port is created per the specifications below.  A port that
@@ -190,7 +197,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 Creates an output port to the specified
                 <parameter>url</parameter> If the optional
                 <parameter>auto-flush</parameter> argument is provided
-                and is &num;t, the port will automatically flush after
+                and is non-false, the port will automatically flush after
                 each write call.  If the specified file exists, it
                 will be overwritten silently when the port is opened.
               </para>

@@ -234,7 +234,7 @@
       </title>
       <para>
 	&SISC;'s symbols are ordinarily case-insensitive. &SISC;
-	maintains pointer equality between symbols with like
+	maintains true pointer equality between symbols with like
 	contents, unless the symbol is created
 	<emphasis>uninterned</emphasis>. An uninterned symbol is one
 	which is guaranteed to be pointer distinct from any other
@@ -726,10 +726,10 @@
       Equivalence
     </title>
     <para>
-      &SISC;'s storage model maintains pointer equality between
+      &SISC;'s storage model maintains true pointer equality between
       symbols, booleans, the end-of-file object, void, and the empty
-      list.  Thus two instances of any of those types will produce
-      <literal>#t</literal> from <function>eq?</function> if they
+      list.  Thus two instances of any of those types is guaranteed to
+      return <literal>#t</literal> from <function>eq?</function> if they
       would have produced <literal>#t</literal> from
       <function>equal?</function>.  
     </para>
@@ -1044,6 +1044,8 @@
                   format-string is present as the message.
                 </para>
               </blockquote>
+            </para>
+            <para>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>error-record</type>
@@ -1305,7 +1307,9 @@
                   <function>format</function> function in SRFI 28.
                 </para>
               </blockquote>
-                &procedure;
+            </para>
+            <para>
+              &procedure;
               <methodsynopsis language="scheme">
                 <type>does not return</type>
                 <methodname>error</methodname>
@@ -1377,7 +1381,7 @@
 ; => <emphasis>A divide by zero error is raised</emphasis>
 	</programlisting>
       </example>
-      <example>
+      <example id="properror">
 	<title>Propagate a different error with the same error continuation</title>
 	<programlisting>
 (with-failure-continuation
@@ -1387,7 +1391,7 @@
 ; => <emphasis>An error is raised: Error in /: could not perform the division.</emphasis>
 	</programlisting>
       </example>
-      <example>
+      <example id="raisenewerror">
 	<title>Raise a new error</title>
 	<programlisting>
 (with-failure-continuation
@@ -1398,14 +1402,14 @@
 	</programlisting>
       </example>
       <para>
-        Note that the difference between the last and next-to-last
-        example is that in the next-to-last example, the computation
-        can still be restarted from the second argument of the
-        addition if an outside handler catches the newly raised
-        exception and applies the continuation.  This is not true in
-        the last example, as its a new error whose continuation is the
-        same as the <function>with-failure-continuation</function>
-        expression.
+        Note that the difference between <xref linkend="properror"/> and 
+        <xref linkend="raisenewerror"/> is that in the latter,
+        the computation can still be restarted from the second
+        argument of the addition if an outside handler catches the
+        newly raised exception and applies the continuation.  This is
+        not true in the last example, as its a new error whose
+        continuation is the same as the
+        <function>with-failure-continuation</function> expression.
       </para>
     </sect2>
   </sect1>
@@ -1414,7 +1418,7 @@
     <para>
       &R5RS; does not specify the behavior of
       <function>dynamic-wind</function> in the case
-      where an error is raised somewhere in a call to the
+      where an error is raised while evaluating the 
       <emphasis>during</emphasis> thunk.  &SISC; chooses to view
       an error raised in that section as an instance of the
       dynamic extent being exited.  In other words, if an error is
@@ -1830,7 +1834,7 @@
               where <emphasis>n</emphasis> is the number of
               milliseconds taken to evaluate the expression.  If more
               than one iteration occurred, then the average number of
-              milliseconds elapsed is returned.
+              milliseconds elapsed during each iteration is returned.
             </para>
           </blockquote>
         </para>

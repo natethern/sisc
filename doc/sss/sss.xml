@@ -84,6 +84,19 @@
       as it is the goal of the system to conform to this document, 
       not for this document to describe the idiosyncrasies of the system.
     </para>
+    <para>
+      <orderedlist>
+	<listitem>
+          <para>
+            <xref linkend="BlockIO"/> - Binary data is not correctly
+            read or written in all circumstances.  Strings are capable
+            of storing binary data, but on some platforms, the I/O
+            ports may attempt to apply a characterset mapping to the
+            data.  This will be fixed in a future release.
+          </para>
+        </listitem>
+      </orderedlist>
+    </para>
   </appendix>
   <appendix>
     <title>&R5RS; Liberties and Violations</title>
@@ -160,9 +173,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
       <programlisting>
 (library-path . "/usr/local/sisc/lib")
 (slib . "/usr/share/slib")
-      </programlisting>. 
-    </para>
-    <para>
+      </programlisting>
       Any properties set on the Java commandline override the values
       in the property file.  Boolean values, when on the Java command
       line, should be <literal>true</literal> or
@@ -223,7 +234,8 @@ for <function>sqrt</function>, it is not clear what other mathematical
             <function>thread/interrupt</function> will permitted to
             interrupt running <emphasis>Scheme</emphasis> code, in
             addition to sending an interrupt signal to the host
-            language.  
+            language.  <emphasis role="bold">Can only be set on the
+            command-line</emphasis>.
           </para>
         </listitem>
       </varlistentry>
