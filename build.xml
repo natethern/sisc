@@ -229,13 +229,17 @@
           classpath="${classdir}"
           dir="${srfidir}"
           fork="yes">
-        <jvmarg value="-server"/>
-        <arg value="-h"/>
-        <arg value="${heap}"/>
-        <arg value="-x"/>
-        <arg value="${srfidir}/srfi-slt.scm"/>
-        <arg value="-p"/>
-        <arg value="${property-file}"/>
+      <!--
+      the -server stops jdk1.4.2 on windows from throwing an
+      StackOverflowError.
+      -->
+      <jvmarg value="-server"/>
+      <arg value="-h"/>
+      <arg value="${heap}"/>
+      <arg value="-x"/>
+      <arg value="${srfidir}/srfi-slt.scm"/>
+      <arg value="-p"/>
+      <arg value="${property-file}"/>
     </java>
   </target>
 
