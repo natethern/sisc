@@ -53,16 +53,6 @@
 ; The following does no error checking.
 (load-module "sisc.debug.SDebug")
 
-(define annotation-stripped
-  (lambda (x)
-    (not (annotation? x))))
-
-(define set-annotation-stripped!
-  (lambda (what huh)
-    ;Just going to ignore this since I have *no* idea what its supposed
-    ;to do
-    (void)))
-
 (define andmap
    (lambda (f first . rest)
      (if (null? rest)

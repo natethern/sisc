@@ -17,7 +17,7 @@ evaluator. An application is represented by instances of the
 <classname>AppContext</classname> class.
 
 A Scheme application can execute in multiple threads. Each thread must
-have its own dynamic environment, containing things like the current
+have its own dynamic environment, containing entities such as the current
 input and output ports. Dynamic environments are represented by
 instances of the <classname>DynamicEnv</classname> class.
 
@@ -59,8 +59,7 @@ get hold of such an interpreter using
 <programlisting>
 Interpreter r = Context.enter();
 </programlisting>
-If one isn't sure whether the call is internal, one can check this
-using
+One can determine if a call is internal in the following manner:
 <programlisting>
 Interpreter current = Context.currentInterpreter();
 if (current == null) { ...make external call...}
@@ -190,7 +189,7 @@ Context.exit()
           <literal>Interpreter.eval()</literal> throws a
           <classname>SchemeException</classname> when an evaluation causes an
           exception that is not caught inside the evaluation. When making
-          internal calls the exception can be propagted to the calling
+          internal calls the exception can be propagated to the calling
           interpreter in one of four ways:
           <itemizedlist>
             <listitem>

@@ -36,6 +36,7 @@ import sisc.*;
 import sisc.data.*;
 import sisc.exprs.AnnotatedExpr;
 import java.awt.*;
+import java.util.Set;
 
 public class SDebug extends ModuleAdapter {
     public String getModuleName() {
@@ -45,9 +46,10 @@ public class SDebug extends ModuleAdapter {
     protected static final int 
 	EXPRESSV=0, COMPILE=1,
 	CONT_VLR=2, CONT_NXP=3, CONT_ENV=4, CONT_FK=5,
-	CONT_LOCKQ=6, CONT_PARENT=7, ANNOTATEDQ=8,
-	ANNOTATIONSRC=9, ANNOTATIONEXPR=10, ANNOTATIONQ=11,
-	EMITANNOTATIONS=12, ERROR_CONT_K=13, SETANNOTATIONSRC=14;
+	CONT_LOCKQ=6, CONT_PARENT=7, 
+	ANNOTATIONEXPR=10, ANNOTATIONQ=11, ANNOTATION=8, ANNOTATIONKEYS=9,
+	EMITANNOTATIONS=12, ERROR_CONT_K=13, SETANNOTATION=14,
+        ANNOTATIONSRC=15, ANNOTATIONSTRIPPED=16, SETANNOTATIONSTRIPPED=17;
 
     public SDebug() {
 	define("emit-annotations", EMITANNOTATIONS);
@@ -60,11 +62,12 @@ public class SDebug extends ModuleAdapter {
         define("continuation-fk", CONT_FK);
 	define("continuation-stk", CONT_PARENT);
         define("continuation-captured?", CONT_LOCKQ);
-	define("annotated?", ANNOTATEDQ);
 	define("annotation?", ANNOTATIONQ);
-	define("annotation-source", ANNOTATIONSRC);
-	define("annotation-expression", ANNOTATIONEXPR);
-	define("set-annotation-source!", SETANNOTATIONSRC);
+	define("annotation-keys", ANNOTATIONKEYS);
+	define("annotation", ANNOTATION);
+	define("set-annotation!", SETANNOTATION);
+	define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
+        define("annotation-stripped", ANNOTATIONSTRIPPED);
     }
 
     class SISCExpression extends Value {
@@ -74,8 +77,16 @@ public class SDebug extends ModuleAdapter {
             this.e=e;
         }
 
-	public Value getAnnotation() {
-	    return e.getAnnotation();
+        public void setAnnotation(Symbol key, Value v) {
+            e.setAnnotation(key, v);
+        }
+ 
+        public Set getAnnotationKeys() {
+            return e.getAnnotationKeys();
+        }
+
+	public Value getAnnotation(Symbol key) {
+	    return e.getAnnotation(key);
 	}
 
         public String display() {
@@ -101,6 +112,8 @@ public class SDebug extends ModuleAdapter {
 	    }
         case 1:
             switch(primid) {
+            case ANNOTATIONSTRIPPED:
+                return annotated(f.vlr[0]).stripped;
 	    case EMITANNOTATIONS:
 		f.dynenv.parser.annotate=truth(f.vlr[0]);
 		return VOID;
@@ -135,15 +148,12 @@ public class SDebug extends ModuleAdapter {
                 return cn.parent;
 	    case ANNOTATIONQ:
 		return truth(f.vlr[0] instanceof AnnotatedExpr);
-	    case ANNOTATEDQ:
-		return truth(f.vlr[0].getAnnotation()!=null);
 	    case ANNOTATIONSRC:
 		Value rv;
 		if (f.vlr[0] instanceof AnnotatedExpr) 
 		    rv=annotated(f.vlr[0]).annotation;
-		else if (f.vlr[0].getAnnotation()!=null)
-		    rv=f.vlr[0].getAnnotation();
-		else rv=FALSE;
+                else 
+                    rv=FALSE;
 		return rv;
 	    case ANNOTATIONEXPR:
 		if (f.vlr[0] instanceof AnnotatedExpr) 
@@ -154,9 +164,18 @@ public class SDebug extends ModuleAdapter {
             }
         case 2:
             switch(primid) {
-	    case SETANNOTATIONSRC:
-                f.vlr[0].annotation=f.vlr[1];
+            case SETANNOTATIONSTRIPPED:
+                annotated(f.vlr[0]).stripped=f.vlr[1];
                 return VOID;
+            case ANNOTATION:
+		return f.vlr[0].getAnnotation(symbol(f.vlr[1]));
+            default:
+                throwArgSizeException();
+            }
+        case 3:
+            switch(primid) {
+	    case SETANNOTATION:
+                f.vlr[0].setAnnotation(symbol(f.vlr[1]), f.vlr[2]);
             default:
                 throwArgSizeException();
             }

@@ -79,7 +79,7 @@ public class Compiler extends Util {
 	APP=-1, LAMBDA = 0, _IF=1, BEGIN=2, QUOTE=3, SET=4, DEFINE=5,
 	MAKEANNOTATION=6,
 	
-	TAIL=1, COMMAND=2, PREDICATE=4;
+	TAIL=1, COMMAND=2, PREDICATE=4, REALTAIL=8;
 
     public Compiler() {}
 
@@ -169,6 +169,14 @@ public class Compiler extends Util {
         return APP;
     }
 
+    void setAnnotations(Expression e, Pair p) {
+        while (p!=EMPTYLIST) {
+            Pair kv=(Pair)p.car;
+            e.setAnnotation(symbol(kv.car), kv.cdr);
+            p=(Pair)p.cdr;
+        }
+    }
+
     public Expression compileApp(Interpreter r,
                                  Pair expr, ReferenceEnv rt,
                                  int context, AssociativeEnvironment env)
@@ -206,7 +214,7 @@ public class Compiler extends Util {
                 if (expr.cdr != EMPTYLIST)
                     expr=list(new Pair(Util.BEGIN, expr));
                 tmp=compile(r, expr.car, new ReferenceEnv(formals, rt),
-                            TAIL | LAMBDA, env);
+                            TAIL | LAMBDA | REALTAIL, env);
                 return new LambdaExp(formals.length, tmp, infArity);
             case _IF:
                 tmp=compile(r, expr.car, rt, PREDICATE, env);
@@ -254,29 +262,27 @@ public class Compiler extends Util {
             case MAKEANNOTATION:
                 Value aexpr=expr.car;
                 expr=(Pair)expr.cdr;
-                
+
                 rhs=compile(r, aexpr, rt, context, env);
-                if (rhs instanceof EvalExp) {
-                    EvalExp eve=(EvalExp)rhs;
-                    eve.post.annotation=expr.car;
-                } else rhs.annotation=expr.car;
+                if (expr.car instanceof Pair)
+                    setAnnotations(rhs, pair(expr.car));
+                else
+                    setAnnotations(rhs, list(new Pair(OTHER, expr.car)));
+
                 return rhs;
             default:
                 Expression[] exps=pairToExpressions(expr);
                 compileExpressions(r, exps, rt, 0, env);
-                return application(compile(r,s,rt,0,env),
-				   exps, (context & TAIL)==0);
+                return application(compile(r,s,rt,0,env), exps, context);
             }
         } else if (expr.car instanceof Pair) {
             Expression[] exps=pairToExpressions((Pair)expr.cdr);
             compileExpressions(r, exps, rt, 0, env);
-	    return application(compile(r, expr.car, rt, 0, env),
-			       exps, (context & TAIL)==0);
+	    return application(compile(r, expr.car, rt, 0, env), exps, context);
         } else {
             Expression[] exps=pairToExpressions((Pair)expr.cdr);
             compileExpressions(r, exps, rt, 0, env);
-	    return application(compile(r, expr.car, rt, 0, env),
-			       exps, (context & TAIL)==0);
+	    return application(compile(r, expr.car, rt, 0, env), exps, context);
         }
 
     }
@@ -287,13 +293,16 @@ public class Compiler extends Util {
              (((AnnotatedExpr)e).expr instanceof Immediate));
     }
 
-    public final Expression application(Expression rator, Expression rands[], boolean nonTail) {
+    public final Expression application(Expression rator, Expression rands[], int context) {
+        boolean nonTail=(context & TAIL) == 0;
+
         if (rator instanceof Value && 
 	    !(rator instanceof Procedure) &&
 	    !(rator instanceof AnnotatedExpr))
 
             System.err.println(warn("nonprocappdetected",((Value)rator).synopsis()));
         Expression nxp = APPEVAL;
+
         Expression lastRand = rator;
         boolean allImmediate=isImmediate(rator);
         for (int i= rands.length-1; i>=0; i--) {
@@ -329,6 +338,7 @@ public class Compiler extends Util {
             if (!(e instanceof Immediate))
 		be=new EvalExp(e, be);
         }
+
 	return be;
 
 	/*

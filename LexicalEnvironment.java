@@ -39,7 +39,7 @@ import sisc.data.*;
 public class LexicalEnvironment extends Value {
     public LexicalEnvironment parent;
     public Value[] vals;
-    public boolean locked;
+    //    public boolean locked;
 
     public LexicalEnvironment() {
         this.vals=ZV;
@@ -47,12 +47,7 @@ public class LexicalEnvironment extends Value {
 
     public LexicalEnvironment(Interpreter r, Closure c) 
 	throws ContinuationException {
-	reset(r, c);
-    }
-
-    public final void reset(Interpreter r, Closure c) throws ContinuationException {
         parent=c.env;
-
 	int s=c.fcount;
 	Value[] v=r.vlr;
         if (c.arity) {
@@ -62,31 +57,36 @@ public class LexicalEnvironment extends Value {
 				   v.length));
 
 	    if (v.length>=s) {
-		if (vals!=null) r.returnValues(vals);
+		//if (vals!=null) r.returnValues(vals);
 		vals=v;
 		vals[sm1]=valArrayToList(v, sm1, v.length-sm1);
-	    } else if (vals!=null && vals.length>=s) {
+                /*	    } else if (vals!=null && vals.length>=s) {
 		System.arraycopy(v, 0, vals, 0, sm1);
 		vals[sm1]=valArrayToList(v, sm1, v.length-sm1);
 		r.returnValues(r.vlr);
+                */
 	    } else {
 		vals=r.createValues(s);
 		System.arraycopy(v, 0, vals, 0, sm1);
 		vals[sm1]=valArrayToList(v, sm1, v.length-sm1);
-		r.returnValues(v);
+                r.returnValues(v);
 	    }
         } else {
-	    r.returnValues(vals);
-	    v=r.vlr;
-            if (v.length!=s)
-		error(r, liMessage(SISCB,"notenoughargsto", c.write(), s, v.length));
+	    //r.returnValues(vals);
             vals=v;
+            if (vals.length!=s)
+		error(r, liMessage(SISCB,"notenoughargsto", c.write(), s, v.length));
         }
     }
 
-    public final void lock() {
-	locked=true;
+    /*    public final void lock() {
+        if (!locked) {
+            locked=true;
+            if (parent!=null)
+                parent.lock();
+        }
     }
+    */
 
     public final Value lookup(int depth, int pos) {
         LexicalEnvironment e = this;
@@ -111,7 +111,7 @@ public class LexicalEnvironment extends Value {
 
     public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
-	    dos.writeBoolean(locked);
+	    //dos.writeBoolean(locked);
             s.writeBer(vals.length, dos);
             for (int i=0; i<vals.length; i++)
                 s.serialize(vals[i], dos);
@@ -127,7 +127,7 @@ public class LexicalEnvironment extends Value {
     public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
-	    locked=dis.readBoolean();
+	    //locked=dis.readBoolean();
             int size=s.readBer(dis);
             vals=new Value[size];
 

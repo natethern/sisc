@@ -225,17 +225,6 @@ public class Interpreter extends Util {
             return returnRegister;
         }
     }
-    /*
-    static int bReclaimCount, eReclaimCount=0;
-    static {
-	System.runFinalizersOnExit(true);
-    }
-
-    protected void finalize() {
-	System.err.println("envr: "+eReclaimCount);
-	System.err.println("vlrr: "+bReclaimCount);
-    }
-    */
 
     public final void returnFrame(CallFrame f) {
 	if (!f.lock && (deadFramePointer < FPMAX)) {
@@ -247,15 +236,39 @@ public class Interpreter extends Util {
     protected Value deadValues[][] = new Value[VALUESPOOLSIZE][];
 
 
+    //static int sizemiss, miss, hit, zerohit;
     public final Value[] createValues(int size) {
-        if (size == 0) { return ZV; }
-        if (size >= VALUESPOOLSIZE) { return new Value[size]; }
+        if (size == 0) { 
+            //zerohit++; 
+            return ZV; 
+        }
+        if (size >= VALUESPOOLSIZE) { 
+            //sizemiss++; 
+            return new Value[size]; 
+        }
+        
         Value[] res = deadValues[size];
-        if (res == null) { return new Value[size]; }
+        if (res == null) { 
+            //miss++; 
+            return new Value[size]; 
+        }
+        //hit++;
         deadValues[size] = null;
         return res;
     }
 
+    /*
+    protected void finalize() {
+        System.err.println(hit);
+        System.err.println(zerohit);
+        System.err.println(sizemiss);
+        System.err.println(miss);
+    }
+
+    static {
+        System.runFinalizersOnExit(true);
+    }
+    */
     public final void returnValues(Value[] v) {
         if (v == null) return;
         int size = v.length;

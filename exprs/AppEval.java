@@ -38,6 +38,7 @@ import java.io.*;
 
 public class AppEval extends Expression {
 
+
     public void eval(Interpreter r) throws ContinuationException {
         try {
             ((Procedure)r.acc).apply(r);
@@ -52,7 +53,16 @@ public class AppEval extends Expression {
 
     public AppEval() {}
 
-    public AppEval(Value annotation) {
-	this.annotation=annotation;
+    public boolean equals(Object o) {
+        if (!(o instanceof AppEval)) return false;
+        AppEval other=(AppEval)o;
+        return (annotation!=null ? 
+                annotation.equals(other.annotation) :
+                other.annotation == null);
+    }
+
+    public int hashCode() {
+        return 0x37895f61 ^ (annotation == null ? 0 : 
+                             annotation.hashCode());
     }
 }

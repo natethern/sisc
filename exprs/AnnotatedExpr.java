@@ -38,7 +38,7 @@ import java.io.*;
 
 public class AnnotatedExpr extends Value {
     public Expression expr;
-    public Value annotation;
+    public Value annotation, stripped;
 
     public AnnotatedExpr(Expression expr, Value annotation) {
 	this.expr=expr;
@@ -63,6 +63,7 @@ public class AnnotatedExpr extends Value {
         if (SERIALIZATION) {
 	    s.serialize(expr, dos);
 	    s.serialize(annotation, dos);
+	    s.serialize(stripped, dos);
         }
     }
 
@@ -93,6 +94,7 @@ public class AnnotatedExpr extends Value {
         if (SERIALIZATION) {
 	    expr=s.deserialize(dis);
 	    annotation=(Value)s.deserialize(dis);
+            stripped=(Value)s.deserialize(dis);
         }
     }
 }

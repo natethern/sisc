@@ -292,7 +292,7 @@
         modules for further examples. 
       </para>
     </sect2>
-    <sect2>
+    <sect2 id="serialization">
       <title>Serialization</title>
       <para>
         &SISC; provides an API for serializing the state of a running

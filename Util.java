@@ -46,6 +46,7 @@ public abstract class Util implements Conf {
     protected static final Value[] ZV=new Value[0];
     protected static final Quantity FIVE=Quantity.valueOf(5);
     protected static final Expression APPEVAL=new AppEval();
+    
     public static EOFObject EOF=EOFObject.EOF;
     public static EmptyList EMPTYLIST=EmptyList.EMPTYLIST;
     public static SchemeVoid VOID=SchemeVoid.VOID;
@@ -65,7 +66,8 @@ public abstract class Util implements Conf {
 	TOPLEVEL=Symbol.get("*toplevel*"),
 	REPORT=Symbol.get("*report*"),
 	ENVVARS=Symbol.get("*environment-variables*"),
-	SISC=Symbol.get("*sisc*");
+	SISC=Symbol.get("*sisc*"),
+        OTHER=Symbol.get("other");
 
     public static final int DEFAULT_SYNOPSIS_LENGTH=30;
 

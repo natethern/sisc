@@ -125,3 +125,7 @@
 				    line column
 				    line column)))))
 	   st)))))
+
+(define annotated? 
+  (lambda (obj)
+    (not (null? (annotation-keys obj)))))

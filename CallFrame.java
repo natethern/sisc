@@ -67,6 +67,9 @@ public class CallFrame extends Procedure {
                 vlr=nvlr;
             }
 
+            //if (env!=null)
+            //    env.lock();
+
             if (parent!=null)
                 parent.capture(r);
 

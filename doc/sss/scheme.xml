@@ -216,7 +216,7 @@
 	The second method is via a non-standard symbol syntax. If a
 	symbol is enclosed in pipe ('|') characters, the reader will
 	treat that individual symbol as cased.  The syntax extends the
-	&R5RS; grammar:
+	&R5RS; grammar with the following production:
       </para>
       <programlisting>
 &lt;cased symbol&gt; --> |&lt;identifier&gt;|
@@ -410,7 +410,7 @@
 	reference.
       </para>
       <para>
-	Below is an addition to the &R5RS;
+	Below is an additional production in the &R5RS;
 	formal syntax (specifically section 7.1.2, external
 	representations) to support circular structures:
       </para>

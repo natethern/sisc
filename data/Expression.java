@@ -32,17 +32,34 @@
  */
 package sisc.data;
 
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import sisc.*;
 import java.io.*;
 
 public abstract class Expression extends Util implements Serializable {
+    protected static Set EMPTYSET=new TreeSet();
 
-    public Value getAnnotation() {
-	return annotation;
+    protected TreeMap annotation;
+    
+    public Value getAnnotation(Symbol key) {
+        if (annotation==null)
+            return FALSE;
+        else return (Value)annotation.get(key);
     }
 
-    public Value annotation;
-    
+    public synchronized void setAnnotation(Symbol key, Value val) {
+        if (annotation==null)
+            annotation=new TreeMap();
+        annotation.put(key, val);
+    }
+     
+    public Set getAnnotationKeys() {
+        if (annotation==null) return EMPTYSET;
+        return annotation.keySet();
+    }
+
     public abstract void eval(Interpreter r) throws ContinuationException;
     public Value getValue(Interpreter r) throws ContinuationException {
         return null;

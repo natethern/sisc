@@ -177,8 +177,10 @@ public class Serializer implements Conf {
                         deserState.put(serialId, e);
                         if (callDeser) {
 			    DESM.invoke(e, new Object[] { this, dis });
-			    if (dis.readBoolean())
-				e.annotation=(Value)deserialize(dis);
+                            for (int i=readBer(dis); i>0; i--) {
+                                Symbol key=(Symbol)deserialize(dis);
+                                e.setAnnotation(key, (Value)deserialize(dis));
+                            }
 			}
                     }
                 } catch (Exception e1) {
@@ -213,9 +215,15 @@ public class Serializer implements Conf {
                 putClass(e.getClass(), dos);
                 e.serialize(this, dos);
 		if (!(e instanceof Singleton)) {
-		    dos.writeBoolean(e.annotation!=null);
-		    if (e.annotation!=null)
-			serialize(e.annotation, dos);
+                    Set s=e.getAnnotationKeys();
+                    writeBer(s.size(), dos);
+                    if (!s.isEmpty()) {
+                        for (Iterator i=s.iterator(); i.hasNext();) {
+                            Symbol key=(Symbol)i.next();
+                            serialize(key, dos);
+                            serialize(e.getAnnotation(key), dos);
+                        }
+                    }
 		}
             } else
                 writeBer(serialId.intValue(), dos);
