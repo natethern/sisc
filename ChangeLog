@@ -1,3 +1,10 @@
+2004-07-22  Scott G. Miller   <scott@sgmiller.org>
+
+	* Fixed REPL annotations
+
+	* Fixed psyntax's quasiquote macro to preserve 
+	  immutable pairs for inert quasiquotes.
+
 2004-07-08  Scott G. Miller   <scgmille@freenetproject.org>
 
 	* Fixed |equal?| on numbers, which was insensitive to 
