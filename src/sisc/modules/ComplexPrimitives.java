@@ -22,6 +22,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
         public Index() {
             define("apply", APPLY);
             define("call-with-current-continuation", CALLCC);
+            define("call-with-escape-continuation", CALLEC);
             define("call-with-failure-continuation", CALLFC);
             define("call-with-values", CALLWITHVALUES);
             define("compact-string-rep", COMPACTSTRINGREP);
@@ -98,6 +99,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             }
         case 1:
             switch (id) {
+            case NUMBER2STRING: return new SchemeString(num(vlr[0]).toString());
             case GETENVIRONMENT:
                 try {
                     return r.getCtx().lookupContextEnv(symbol(vlr[0])).asValue();
@@ -122,8 +124,17 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                 r.nxp=r.compile(vlr[0]);
                 r.env=null;
                 return VOID;
-            case CALLCC:
+            case CALLEC:
                 Value kproc=vlr[0];
+                r.replaceVLR(1);
+                r.vlr[0]=r.stk;
+                
+                r.saveVLR=true;
+                r.vlk=true;
+                r.nxp = APPEVAL;
+                return kproc;
+            case CALLCC:
+                kproc=vlr[0];
                 r.replaceVLR(1);
                 r.vlr[0]=r.stk.capture(r);
                 

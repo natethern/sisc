@@ -87,7 +87,6 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define("min-float-precision", MINFLOATPRECISION);
             define("null-environment", NULLENVIRONMENT);
             define("null?", NULLQ);
-            define("number->string", NUMBER2STRING);
             define("number?", NUMBERQ);
             define("numerator", NUMERATOR);
             define("pair?", PAIRQ);
@@ -283,8 +282,6 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
         case SYNTOKEN2STRING: 
             return new ImmutableString(((sisc.compiler.Syntax)v1).toString());
 
-        case NUMBER2STRING: return new SchemeString(num(v1)
-                                                    .toString());
         case STRING2SYMBOL: return Symbol.intern(string(v1));
         case CHAR2INTEGER: return Quantity.valueOf(chr(v1).c);
         case LIST2VECTOR: return new SchemeVector(Util.pairToValues(pair(v1)));
