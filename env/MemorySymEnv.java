@@ -70,6 +70,10 @@ public class MemorySymEnv extends NamedValue implements SymbolicEnvironment {
         parent=e;
     }
 
+    public SymbolicEnvironment getParent() {
+        return parent;
+    }
+
     protected void expand() {
         synchronized(symbolMap) {
             Value[] newenv=new Value[(int)((env.length*EXPFACT) + 1)];

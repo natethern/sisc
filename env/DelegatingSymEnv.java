@@ -25,6 +25,10 @@ public class DelegatingSymEnv extends NamedValue implements SymbolicEnvironment 
     public void setParent(SymbolicEnvironment e) {
         getEnv().setParent(e);
     }
+    
+    public SymbolicEnvironment getParent() {
+        return getEnv().getParent();
+    }
 
     public sisc.data.Value asValue() {
         return getEnv().asValue();

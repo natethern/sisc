@@ -16,6 +16,16 @@ import sisc.env.SymbolicEnvironment;
  */
 public class LibraryAE extends MemorySymEnv {
 
+    static class LibraryBinding {
+        public Library lib;
+        public int entryPoint;
+
+        public LibraryBinding(Library lib, int ep) {
+            this.lib=lib;
+            entryPoint=ep;
+        }
+    }
+
     protected LibraryBuilder lb;
     protected Library base;
     protected Map addressMap;
@@ -43,6 +53,10 @@ public class LibraryAE extends MemorySymEnv {
     public LibraryAE(Library base) {
         this.base=base;
         addressMap=new HashMap();
+    }
+
+    public void addBinding(Library lib, Symbol sym, int ep) {
+        addressMap.put(sym, new LibraryBinding(lib, ep));
     }
 
     public void ignore(Symbol s) {
@@ -81,11 +95,13 @@ public class LibraryAE extends MemorySymEnv {
             Integer i = (Integer)symbolMap.get(s);
             if (i!=null) return i.intValue();
             //present in this AE?
-            if (base != null) {
-                i = (Integer)addressMap.get(s);
-                if (i!=null) {
+            
+            if (addressMap != null) {
+                LibraryBinding b=(LibraryBinding)addressMap.get(s);
+                if (b!=null) {
                     try {
-                        return store(s, (Value)base.getExpression(i.intValue()));
+                        return store(s, 
+                                     (Value)b.lib.getExpression(b.entryPoint));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -118,16 +134,15 @@ public class LibraryAE extends MemorySymEnv {
 
     public void deserialize(Deserializer d) throws IOException {
         setName((Symbol)d.readExpression());
+        base=d.getLibrary();
+
         int size=d.readInt();
         addressMap=new HashMap(size);
         for (int i=0; i<size; i++) {
             Symbol name=(Symbol)d.readExpression();
-
-            Integer ep=new Integer(d.readInt());
-            addressMap.put(name, ep);
+            addBinding(base, name, d.readInt());
         }
         parentIdx=d.readInt();
-        base=d.getLibrary();
     }
 
     public void serialize(Serializer s) throws IOException {

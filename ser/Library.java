@@ -63,6 +63,12 @@ public class Library extends Util {
         lib.baseLib=this;
     }
 
+    public int getEntryPoint(Symbol name) {
+        Integer i=(Integer)names.get(name);
+        if (i==null) return -1;
+        else return i.intValue();
+    }
+
     public Expression getLocalExpression(Symbol name) throws IOException {
         Integer i=(Integer)names.get(name);
         if (i==null) 

@@ -8,6 +8,8 @@ public interface SymbolicEnvironment {
     public Symbol getName();
 
     public void setParent(SymbolicEnvironment e);
+    public SymbolicEnvironment getParent();
+
     public sisc.data.Value asValue();
 
     public java.util.Iterator keys();
