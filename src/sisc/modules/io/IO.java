@@ -180,8 +180,6 @@ public class IO extends IndexedProcedure {
     URL urlClean(URL u) {
         if (u.getProtocol().equals("file") &&
             (u.getRef()!=null || u.getQuery()!=null)) {
-            System.err.println(u.getRef());
-            System.err.println(u.getQuery());
             StringBuffer b=new StringBuffer(u.getProtocol());
             b.append(':');
             b.append(u.getPath());
