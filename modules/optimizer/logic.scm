@@ -170,13 +170,9 @@
       (make-begin B altern)
       (new-state)))
     ((if ,B '#f (quote ,x))
-     (values 
-      `(if ,B ,altern ,conseq)
-      (new-state)))
+     (opt:if B altern conseq state))
     ((if ,B (quote ,x) '#f)
-     (values 
-      `(if ,B ,conseq ,altern)
-      (new-state)))
+     (opt:if B conseq altern))
     ((if ,B (quote ,x) (quote ,y))
      (values 
       (make-begin B conseq)
@@ -184,8 +180,9 @@
     ;;Begin lifting (possibly unsafe)
     ((begin ,e* ... ,el)
 ;       (guard (not-redefined? 'begin))
-     (values (apply make-begin (append e* `((if ,el ,conseq ,altern))))
-             '((new-assumptions begin))))
+     (let-values ([(rv state) (opt:if el conseq altern state)])
+       (values (apply make-begin (append e* `(,rv)))
+               (merge-states state '((new-assumptions begin))))))
     (,other (values `(if ,other ,conseq ,altern) (new-state)))))
 
 ;; Applications and constant folding (possibly unsafe)
