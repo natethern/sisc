@@ -343,7 +343,7 @@ public class Parser extends Util implements Tokens {
                     if (v==null)
                         v=new Value[length((Pair)expr)];
                     else if (v.length < length((Pair)expr)) {
-                        warn("veclengthtooshort");
+                        System.err.println(warn("veclengthtooshort"));
                         v=new Value[length((Pair)expr)];
                     }                        
                 } else if (expr!=null)
