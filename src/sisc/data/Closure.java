@@ -25,15 +25,14 @@ public class Closure extends Procedure implements NamedValue {
 
     private final Value[] matchArgs(Interpreter r)
         throws ContinuationException {
-        Value[] v=r.vlr;
-        final int vl=v.length;
+        final int vl=r.vlr.length;
         if (!arity) {
             if (vl == fcount) {
                 if (r.vlk) {
                     Value[] v2=r.createValues(vl);
-                    System.arraycopy(v, 0, v2, 0, vl);
+                    System.arraycopy(r.vlr, 0, v2, 0, vl);
                     return v2;
-                } else return v;
+                } else return r.vlr;
             }
             error(r, liMessage(SISCB,"notenoughargsto", toString(),
                                          fcount, vl));
@@ -48,13 +47,13 @@ public class Closure extends Procedure implements NamedValue {
         }
         Value[] vals;
         if (vl > sm1 && !r.vlk) {
-            vals=v;
+            vals=r.vlr;
         } else {
             vals=r.createValues(fcount);
-            System.arraycopy(v, 0, vals, 0, sm1);
+            System.arraycopy(r.vlr, 0, vals, 0, sm1);
         }
 
-        vals[sm1]=valArrayToList(v, sm1, vl-sm1);
+        vals[sm1]=valArrayToList(r.vlr, sm1, vl-sm1);
         return vals;
     }
 
