@@ -17,5 +17,5 @@
 
 (define (calculator servlet)
   (let ([get/post-fn (java-wrap (make-dispatcher default-page))])
-    (for-each (lambda (m) (servlet m get/post-fn))
-              '(|getFn| |postFn|))))
+    (for-each (lambda (m) (m servlet get/post-fn))
+              (list :get-fn! :post-fn!))))

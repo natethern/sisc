@@ -10,6 +10,16 @@
   get-session
   get-servlet-context
   get-real-path)
+(define-generic-java-field-accessors
+  :get-fn
+  :post-fn
+  :put-fn
+  :delete-fn)
+(define-generic-java-field-modifiers
+  :get-fn!
+  :post-fn!
+  :put-fn!
+  :delete-fn!)
 
 (define current-request (make-parameter #f))
 (define current-response (make-parameter #f))
