@@ -30,10 +30,10 @@ Installation
 
 Define SISC_HOME in your environment variables to point to the
 directory in which you installed the SISC distribution. Then, install
-"sisc.sh" or "sisc.bat" in your path. If you are running on a Unix or
-Unix-like system, you may also wish to run the "install-srfi22.sh" script,
-which will set up SRFI-22 support for running Scheme programs directly
-from the shell.
+"sisc" (Unix) or "sisc.bat" (Windows) in your path. 
+If you are running on a Unix or Unix-like system, you may also wish to 
+run the "install-srfi22.sh" script, which will set up SRFI-22 support 
+for running Scheme programs directly from the shell.
 
 To run SISC, just type "sisc" or "sisc.bat", followed by any scheme source
 files you wish to load.  Refer to the SISC Manual (which accompanies
