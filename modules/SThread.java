@@ -202,23 +202,6 @@ public class SThread extends ModuleAdapter {
 	protected int state;
 	Value rv;
 
-	class CatchException extends Expression {
-	    
-	    public void eval(Interpreter r) throws ContinuationException {
-		r.nxp=null;
-		rv=r.acc;
-		state=FINISHED_ABNORMALLY;
-	    }
-
-	    public Value express() {
-		return list(sym("CatchException-exp"));
-	    }
-	    
-	    public String display() {
-		return "#<continuation>";
-	    }
-	}
-
         ThreadContext(Interpreter parent, Procedure thunk) {
 	    this.parent = parent;
 	    this.thunk = thunk;
@@ -248,12 +231,13 @@ public class SThread extends ModuleAdapter {
 	public void run() {
 	    Interpreter r = Context.enter(parent.ctx, parent.dynenv.copy());
 	    state=RUNNING;
-	    r.fk=new CallFrame(new CatchException(), null, null, null, null);
-	    r.eval(thunk,new Value[]{});
-	    if (state<FINISHED) {
-		rv=r.acc;
+	    try {
+		rv=r.eval(thunk,new Value[]{});
 		state=FINISHED;
-	    }
+	    } catch (SchemeException se) {
+		rv=new Values(new Value[] {se.m, se.e, se.f});
+		state=FINISHED_ABNORMALLY;
+	    } 
 	    Context.exit();
 	}
 

@@ -433,8 +433,13 @@ public class Primitives extends ModuleAdapter {
                         f.pop(before);
                         throw new RuntimeException( "error reading from "+p.write());
                     }
-                    if (v!=EOF)
-                        f.eval(v);
+                    if (v!=EOF) {
+			try {
+			    f.eval(v);
+			} catch (SchemeException se) {
+			    se.throwSchemeException(f);
+			}
+		    }
                 } while (v!=EOF);
                 f.pop(before);
                 return VOID;

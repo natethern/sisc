@@ -3,8 +3,8 @@ package sisc;
 import sisc.data.*;
 
 public class SchemeException extends Exception {
-    Value m;
-    CallFrame e, f;
+    public Value m;
+    public CallFrame e, f;
 
     public SchemeException(Value message, CallFrame exception_k, 
 			   CallFrame parent_fk) {
