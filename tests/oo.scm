@@ -58,7 +58,7 @@
 (define d (make <d>))
 
 (time
- 10
+ 100
  (cons (m a b c d)
        (map m
             (list a a a a b b b b c c c c d d d d)
