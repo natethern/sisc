@@ -85,7 +85,8 @@ public class InputPort extends NamedValue {
 
         } catch (IOException e) {
             throw new RuntimeException(liMessage(SISCB, "errorreading",
-                                                 synopsis()));
+                                                 synopsis(),
+                                                 e.getMessage()));
         }
     }
 
@@ -96,7 +97,8 @@ public class InputPort extends NamedValue {
             return Util.EOF;
         } catch (IOException e) {
             throw new RuntimeException(liMessage(SISCB, "errorreading",
-                                                 synopsis()));
+                                                 synopsis(),
+                                                 e.getMessage()));
         }
     }
 

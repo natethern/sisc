@@ -81,6 +81,29 @@ public class REPL extends Thread {
         return r.dynenv.parser.nextExpression(ip);
     }
 
+    public static String simpleErrorToString(Pair p) {
+        StringBuffer b=new StringBuffer("\n  ");
+        String location=null;
+        String message=null;
+        while (p!=Util.EMPTYLIST && (location==null || message==null)) {
+            Pair cp=(Pair)p.car;
+            if (cp.car.equals(Util.MESSAGE))
+                message=cp.cdr.display();
+            else if (cp.car.equals(Util.LOCATION))
+                location=cp.cdr.display();
+            p=(Pair)p.cdr;
+        }
+        if (location==null)
+            b.append(Util.liMessage(Util.SISCB, "error"));
+        else 
+            b.append(Util.liMessage(Util.SISCB, "errorinwhere", location));
+        if (message!=null) 
+            b.append(": ").append(message);
+        else
+            b.append('.');
+        return b.toString();
+    }
+        
     public static boolean initializeInterpreter(Interpreter r,
                                                 String[] args,
                                                 SeekableInputStream in)
@@ -110,7 +133,14 @@ public class REPL extends Thread {
                 r.eval((Procedure)r.ctx.toplevel_env.lookup(loadSymb),
                        new Value[]{new SchemeString(args[i])});
             } catch (SchemeException se) {
-                System.err.println("Error during load: "+se.getMessage());
+                Value vm=se.m;
+                if (vm instanceof Pair) {
+                    String errormessage=simpleErrorToString((Pair)vm);
+                    System.err.println(Util.liMessage(Util.SISCB, "errorduringload")+
+                                       errormessage);
+                } else {
+                    System.err.println(Util.liMessage(Util.SISCB, "errorduringload")+vm);
+                }
             }
         }
 
@@ -146,9 +176,11 @@ public class REPL extends Thread {
         try {
             r.eval("(initialize)");
         } catch (SchemeException se) {
-            System.err.println("Error during initialize: "+se.getMessage());
-        } catch (IOException se) {
-            System.err.println("Error during initialize: "+se.getMessage());
+            System.err.println(Util.liMessage(Util.SISCB, "errorduringinitialize")+
+                               simpleErrorToString((Pair)se.m));
+        } catch (IOException e) {
+            System.err.println(Util.liMessage(Util.SISCB, "errorduringinitialize")+
+                               e.getMessage());
         }
         
         return true;
@@ -166,7 +198,7 @@ public class REPL extends Thread {
                 r.ctx.toplevel_env.lookup(replSymb);
             } catch (ArrayIndexOutOfBoundsException aiob) {
                 aiob.printStackTrace();
-                System.err.println("Fatal error: Heap not found or does not contain repl.");
+                System.err.println(Util.liMessage(Util.SISCB, "heapnotfound"));
                 return;
             }
             do {
@@ -174,11 +206,13 @@ public class REPL extends Thread {
                     r.eval((Procedure)r.ctx.toplevel_env.lookup(replSymb),
                            new Values[]{});
                     break;
-                } catch (SchemeException e) {
-                    System.err.println("Uncaught error: "+e.getMessage());
+                } catch (SchemeException se) {
+                    System.err.println(Util.liMessage(Util.SISCB, "uncaughterror")+
+                                       simpleErrorToString((Pair)se.m));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.err.println("System error: "+e.toString());
+                    System.err.println(Util.liMessage(Util.SISCB, "systemerror")+
+                                       e.toString());
                 }
             } while (true);
         } finally {

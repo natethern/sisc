@@ -154,6 +154,15 @@ public class SDebug extends ModuleAdapter {
             default:
                 throwArgSizeException();
             }
+        case 2:
+            /*
+            switch (primid) {
+            case COMPILE:
+                return new Box(f.compile(f.vlr[0], (CompilerState)f.vlr[1]));
+            default:
+                throwArgSizeException();
+            }
+            */
         default:
             throwArgSizeException();
         }

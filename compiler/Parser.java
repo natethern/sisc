@@ -131,7 +131,7 @@ public class Parser extends Util implements Tokens {
         try {
             return (Quantity)o;
         } catch (ClassCastException cce) {
-            throw new IOException("unexpected token where number was mandatory");
+            throw new IOException(liMessage(SISCB, "badtokennotnumber"));
         }
     }
 
@@ -270,7 +270,7 @@ public class Parser extends Util implements Tokens {
             case '!':
                 if (lexer.readToBreak(is, Lexer.special).equals("eof"))
                     return EOF;
-                else throw new IOException(liMessage(SISCB, "invalidsharp"));
+                else throw new IOException(liMessage(SISCB, "invalidsharpc"));
             case '\'':
                 o=listSpecial(SYNTAX, is, state, def, flags);
                 break;
@@ -327,7 +327,8 @@ public class Parser extends Util implements Tokens {
                     if (v==null)
                         v=new Value[length((Pair)expr)];
                 } else if (expr!=null)
-                    throw new IOException("Invalid sharp construct '"+expr+"'");
+                    throw new IOException(liMessage(SISCB,"invalidsharp",
+                                                    expr.toString()));
                 p=(Pair)expr;
                 Object lastObject=Quantity.ZERO;
 
