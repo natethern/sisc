@@ -39,16 +39,28 @@
   (define (onMessage channel nick login host message)
     (store-seen dbcon (normalize-nick nick) (->string nick) (->string message))
     (unless (equal? (symbol->string bot-name) nick)
-      (let ([response (answer (->string nick) (->string channel)
-			      (->string message))])
-        (when response
-          (send-messages channel response)))))
+      (cond  [(getprop (->symbol channel) 'scheme-channels) =>
+	      (lambda (chanrec)
+		(java-write (car chanrec) 
+			    (get-bytes (->jstring
+					(string-append
+					 (->string message) (string #\newline))))))]
+	     [else 
+	      (let ([response (answer (->string nick) (->string channel)
+				      (->string message))])
+		(when response
+		      (send-messages channel response)))])))
 
   (define (do-part channel)
     (remove-presence (string->symbol channel))
     (part-channel bot (->jstring channel))
     (putprop 'members (string->symbol channel) '())
-    (set! channels (remove channel channels)))
+    (set! channels (remove channel channels))
+    (cond [(getprop (string->symbol channel) 'scheme-channels)
+	   =>
+	   (lambda (chanrec)
+	     (thread/interrupt (cadr chanrec))
+	     (remprop (string->symbol channel) 'scheme-channels))]))
 
   (define (do-join channel)
     (add-presence (string->symbol channel))

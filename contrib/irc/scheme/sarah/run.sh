@@ -5,4 +5,5 @@ JAVAOPT="-Dsisc.permitinterrupts=true"
 export CLASSPATH SISC_HOME JAVAOPT PATH
 screen sh ~/bin/sisc libs.scm ~/java/sisc/scheme-src/slib.scm streams.scm \
                  jdbc.scm amb.scm phrases.scm alice.scm random.scm \
-                 state.scm time.scm ../pirc.scm db.scm ai.scm bot.scm
+                 state.scm time.scm ../pirc.scm db.scm ai.scm schemechan.scm \
+                 bot.scm

@@ -48,7 +48,7 @@
       (cond [(= substridx substrlen) (- sidx substrlen)]
             [(= sidx strlen) #f]
             [(eqv? (string-ref str sidx)
-                   (string-ref substr substridx))
+                  (string-ref substr substridx))
              (loop (+ sidx 1) (+ substridx 1))]
             [else (loop (+ sidx 1) 0)]))))
 
@@ -83,11 +83,11 @@
         (if (symbol? graph) 
             graph
             (let ([pattern (apply amb graph)])
-              (cond [(eq? (car pattern) (car tokens))
+              (cond [(eqv? (car pattern) (car tokens))
                      (find-pattern-helper (cdr tokens) (cdr pattern) (+ n 1) 
                                           #f)]
-                    [(and first (eq? (car pattern) '^)
-                          (eq? (cadr pattern) (car tokens)))
+                    [(and first (eqv? (car pattern) '^)
+                          (eqv? (cadr pattern) (car tokens)))
                      (find-pattern-helper (cdr tokens) (cddr pattern)
                                           (+ n 1)
                                           #f)]
@@ -117,8 +117,8 @@
                                   tokens))]
           [to-bot (or (and (not (null? priv-message)) (car priv-message))
 		      ;; Name must be first or last in a sentence
-		      (eq? bot-name (car strict-tokens))
-		      (eq? bot-name (rac strict-tokens)))]
+		      (eqv? bot-name (car strict-tokens))
+		      (eqv? bot-name (rac strict-tokens)))]
           [cleaned-message (bot-clean message)]
           [pattern (find-pattern strict-tokens)]
           [response (and pattern 
@@ -161,6 +161,7 @@
     (tell . TELL)
     (leave . LEAVE)
     (join . JOIN)
+    (new . ((scheme . SCHEMECHANNEL)))
     ))
 
 (define (help from . args)
@@ -206,24 +207,25 @@
   (bot-quiet! (string->symbol channel) #f) 
   "Okay, I'm listening.")
 
-(define (evaluate from channel message st)
-  (let-values ([(ignoreables term) (string-split message "evaluate ")])
+(define (eval-within-n-ms datum ms . env)
     (let* ([evaluation-thread
            (thread/new 
             (lambda ()
               (with-output-to-string 
                   (lambda () (pretty-print 
-                              (eval (with-input-from-string term read)
+                              (eval datum
                                     ;Run this in R5RS only
-                                    (scheme-report-environment 5)))))))]
+				    (if (null? env)
+					(scheme-report-environment 5)
+					(car env))))))))]
            [watchdog-thread
             (thread/new
              (lambda ()
-               (sleep 500)
+               (sleep ms)
                (with-failure-continuation
                    (lambda (m e)
                      ; An error?  Egads!
-                     (if (eq? (thread/state evaluation-thread) 'running)
+                     (if (eqv? (thread/state evaluation-thread) 'running)
                          (begin 
                            (thread/interrupt evaluation-thread)
                            "Sorry, I couldn't evaluate your expression in the given time.")
@@ -236,8 +238,11 @@
       (thread/start evaluation-thread)
       (thread/start watchdog-thread)
       (let loop () (unless (thread/join watchdog-thread) (loop)))
-      (thread/result watchdog-thread))))
+      (thread/result watchdog-thread)))
 
+(define (evaluate from channel message st)
+  (let-values ([(ignoreables term) (string-split message "evaluate ")])
+    (eval-within-n-ms (with-input-from-string term read) 500)))
 
 (define (learn from channel message st)
   (let-values ([(term definition) (string-split message " is at ")])    
@@ -339,7 +344,7 @@
                         (set-capitalization 
                          (if (pair? (cdr x))
                              ; Do we know the guy/gal's sex?
-                             (if (or (not sex) (eq? sex 'male))
+                             (if (or (not sex) (eqv? sex 'male))
                                  (cadr x) ;male
                                  (cddr x)) ;female 
                              (cdr x))
@@ -399,7 +404,10 @@
 	(do-part chan))
     "Okay."))
 
-	  
+(define (schemechan from channel message st) 
+  (let-values ([(ignoreables chan) (string-split message "new scheme ")])
+    (make-schemechan message)
+    "Done."))
 
 (define (if-spoken-to handler)
   (lambda (from channel message spoken-to)
@@ -420,4 +428,5 @@
     (LEARN . ,(if-spoken-to learn))
     (EVALUATE . ,(if-spoken-to evaluate))
     (TELL . ,(if-spoken-to tell))
-    (HELP . ,(if-spoken-to help))))
+    (HELP . ,(if-spoken-to help))
+    (SCHEMECHANNEL . ,schemechan)))
