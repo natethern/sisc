@@ -13,6 +13,9 @@
     (monitor/unlock monitor)
     result))
 
+(define (synchronized-unsafe obj thunk)
+  (monitor/synchronize-unsafe (monitor-of obj) thunk))
+
 ;;
 ; monitor/synchronize will synchronize the execution of a thunk on a
 ; given monitor and will safely unlock the monitor if the synchronized
@@ -23,3 +26,7 @@
    (lambda () (monitor/lock monitor))
    thunk
    (lambda () (monitor/unlock monitor))))
+
+(define (synchronized obj thunk)
+  (monitor/synchronize (monitor-of obj) thunk))
+

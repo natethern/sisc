@@ -43,22 +43,6 @@
 (native-module s2j-native        "sisc.modules.S2J")
 (native-module hashtable-native  "sisc.modules.SHashtable")
 
-(module hashtable
-  (make-hashtable
-   hashtable?
-   hashtable/put!
-   hashtable/get
-   hashtable/get!
-   hashtable/remove!
-   hashtable/clear!
-   hashtable->alist
-   alist->hashtable
-   hashtable/keys
-   hashtable/for-each
-   hashtable/map)
-  (import hashtable-native)
-  (include "../modules/hashtable.scm"))
-
 (module threading
   (thread/new
    thread/start
@@ -80,6 +64,7 @@
    thread/interrupted?
    thread/holds-lock?
    thread/_active-thread-count
+   monitor-of
    monitor/new
    monitor/lock
    monitor/unlock
@@ -87,9 +72,27 @@
    monitor/notify
    monitor/notify-all
    monitor/synchronize
-   monitor/synchronize-unsafe)
+   monitor/synchronize-unsafe
+   synchronized
+   synchronized-unsafe)
   (import threading-native)
   (include "../modules/thread.scm"))
+
+(module hashtable
+  (make-hashtable
+   hashtable?
+   hashtable/put!
+   hashtable/get
+   hashtable/get!
+   hashtable/remove!
+   hashtable/clear!
+   hashtable->alist
+   alist->hashtable
+   hashtable/keys
+   hashtable/for-each
+   hashtable/map)
+  (import hashtable-native)
+  (include "../modules/hashtable.scm"))
 
 (module generic-procedures
   (meta
