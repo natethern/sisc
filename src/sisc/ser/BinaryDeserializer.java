@@ -29,7 +29,6 @@ public class BinaryDeserializer extends DeserializerImpl {
     }
 
     int indent=0;
-    static final String indentionBase="                                                                                                       ";
 
     public final Expression readExpression() throws IOException {
         return readExpression(false);
