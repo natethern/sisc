@@ -151,7 +151,6 @@
            (not (hashtable/put! *CLASSES* class #t)))
       (begin
         (add-class (java/superclass class))
-        (for-each add-class (vector->list (java/interfaces class)))
         (if (memq 'public (java/modifiers class))
             (let ([methods (make-hashtable)])
               (add-java-constructors
