@@ -1,3 +1,8 @@
+2003-09-20  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed k invocation bug introduced by a misguided "optimization"
+	  in release 1.8.1.
+
 2003-09-18  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed subtle bug in the use of the vlk register that was causing
