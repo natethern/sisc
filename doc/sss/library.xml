@@ -187,11 +187,15 @@
           <methodsynopsis language="scheme">
             <type>hashtable</type>
             <methodname>make-hashtable</methodname>
-            <void/>
+            <methodparam choice="opt">
+              <parameter>hashtable</parameter>
+            </methodparam>
           </methodsynopsis>
           <blockquote>
             <para>
-              Creates an empty hash table.
+              Creates a hash table. When called without an argument,
+              the new hash table is empty, otherwise it is initialized
+              with the elements of <parameter>hashtable</parameter>.
             </para>
           </blockquote>
         </para>

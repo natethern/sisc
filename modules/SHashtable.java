@@ -39,9 +39,15 @@ public class SHashtable extends ModuleAdapter {
 
     public static class SchemeHashtable extends Procedure {
 
-        public Map ht = new HashMap(0);
+        public HashMap ht;
 
-        public SchemeHashtable() {}
+        public SchemeHashtable() {
+            this.ht = new HashMap(0);
+        }
+
+        public SchemeHashtable(HashMap ht) {
+            this.ht = ht;
+        }
 
         public void addAList(Pair p) {
             for (; p != EMPTYLIST; p = pair(p.cdr)) {
@@ -114,7 +120,7 @@ public class SHashtable extends ModuleAdapter {
         return null;
     }
 
-    public static final Map hash(Value o) {
+    public static final HashMap hash(Value o) {
         return shash(o).ht;
     }
 
@@ -129,6 +135,8 @@ public class SHashtable extends ModuleAdapter {
             }
         case 1:
             switch(primid) {
+            case HT_MAKE:
+                return new SchemeHashtable((HashMap)hash(f.vlr[0]).clone());
             case HTQ:
                 return truth(f.vlr[0] instanceof SchemeHashtable);
             case ALIST_TO_HT: {
