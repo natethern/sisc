@@ -263,9 +263,8 @@ public class Compiler extends Util {
                  * operator position.
                  */
                 if (r.dynenv.emitDebuggingSymbols &&
-                    (i+1) < rands.length &&
-                    rands[i+1] instanceof AppExp) {
-                    AppExp ae=(AppExp)rands[i+1];
+                    rands[i] instanceof AppExp) {
+                    AppExp ae=(AppExp)rands[i];
                     if (ae.exp instanceof FreeReferenceExp) {
                         nxp.setAnnotation(PROCNAME, 
                                           ((FreeReferenceExp)ae.exp).sym);
@@ -283,7 +282,8 @@ public class Compiler extends Util {
             }
         }
         if (lastRand.annotations != null)
-            nxp.annotations = lastRand.annotations;
+            nxp.annotations.putAll(lastRand.annotations);
+
         return new LetrecExp(lastRand, rands, nxp, allImmediate);
     }
 
@@ -321,10 +321,10 @@ public class Compiler extends Util {
                  * FillRibExps with the names of the functions in the 
                  * operator position.
                  */
+
                 if (r.dynenv.emitDebuggingSymbols &&
-                    (i+1) < rands.length &&
-                    rands[i+1] instanceof AppExp) {
-                    AppExp ae=(AppExp)rands[i+1];
+                    rands[i] instanceof AppExp) {
+                    AppExp ae=(AppExp)rands[i];
                     if (ae.exp instanceof FreeReferenceExp) {
                         nxp.setAnnotation(PROCNAME, 
                                           ((FreeReferenceExp)ae.exp).sym);
@@ -342,7 +342,7 @@ public class Compiler extends Util {
             }
         }
         if (lastRand.annotations != null)
-            nxp.annotations = lastRand.annotations;
+            nxp.annotations.putAll(lastRand.annotations);
         return new AppExp(lastRand, rands, nxp, allImmediate);
     }
 
