@@ -89,11 +89,12 @@
      body)
     ((_ ((param-name new-value) ...)
 	body)
-     (let ([old-values #f])
+     (let ([old-values #f]
+	   [tmp new-value] ...)
        (dynamic-wind 
 	   (lambda () 
 	     (set! old-values (list (param-name) ...))
-	     (param-name new-value) ...)
+	     (param-name tmp) ...)
 	   (lambda () body)
 	   (lambda () 
 	     (for-each (lambda (p l) (p l))
