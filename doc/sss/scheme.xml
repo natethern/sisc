@@ -668,83 +668,133 @@
         </blockquote>
       </para>
     </sect2>
-    <sect2 id="CircularStructures">
+    <sect2 id="SharedStructures">
       <title>
-	Circular structures
+	Shared Structures
       </title>
-      <para>
-	&SISC; provides a parse-time syntax for 
-	creating data (primarily vectors and lists) that contain
-	references to themselves.  This can be useful to create streams,
-	graphs, and other self-referencing structures while
-	maintaining readability and avoiding complex construction
-	code.
-      </para>
-      <para> 
-	The reader syntax has two parts, defining a pointer, and
-	later referencing the pointer to create the circular
-	reference.
-      </para>
-      <para>
-	Below is an additional production in the &R5RS;
-	formal syntax (specifically section 7.1.2, external
-	representations) to support circular structures:
-      </para>
-      <programlisting>
-&lt;pointer definition&gt; --> #&lt;uinteger 10&gt;=&lt;datum&gt;
-&lt;pointer reference&gt; --> #&lt;uinteger 10&gt;#
-      </programlisting>
-      <para>
-	The first form instructs the reader to create a pointer
-	identified by the specified integer, which maps to the datum
-	that follows, and is active during the reading of the datum
-	on the right-hand side of the definition.  
-      </para>
-      <para>
-	If a second definition occurs during the reading of the
-	datum with the same integral identifier, the previous
-	definition is overwritten for the duration of the read.  The
-	definitions are <emphasis>not</emphasis> scoped in any way.
-	The pointer identifiers should be kept unique by the
-	programmer to prevent any unintended effects of identifier
-	collisions. 
-      </para>
-      <para>
-	The second form references a previously created pointer 
-	definition.  It is an error to reference an undefined
-	pointer.  The reader will handle a valid reference by
-	placing a pointer at the current read position back to the
-	location of the definition. 
-      </para>
-      <para>
-	At this point some examples might be helpful:
-      </para>
-      <example>
-	<title>Circular Structures</title>
-	<programlisting>
-(define x '#0=(1 2 . #0#))
-(caddr x)        ; => 1
-(list-ref x 15)  ; => 2
-	
-(define y '(1 2 #1=#(3 4) . #1#))
-(eq? (caddr y) (cdddr y)) ; => #t
-	</programlisting>
-      </example>
-      <para>
-        The Read-Eval-Print-Loop will attempt to check the structure
-	it is about to print for circularities before printing.  If a
-	cycle is found in the structure, the REPL will refuse to
-	print, instead warning the user that the structure contains a
-	cycle.  If a circular structure is printed with
-	<function>display</function>, <function>write</function>, etc,
-	it may cause the environment to enter an infinite loop which
-	may or may cause the Scheme system to exit with an error. 
-      </para>
-      <para>
-        No support yet exists for printing circular lists or other
-        compound cyclic structures, though such functionality may
-        exist in future releases.
-      </para>
+      <sect3 id="ReaderSyntax">
+        <title>
+          Reader Syntax
+        </title>
+        <para>
+          &SISC; provides a parse-time syntax for 
+          creating data (primarily vectors and lists) that contain
+          references to themselves or data which contains several 
+          pointer-equal elements.  This can be useful to create streams,
+          graphs, and other self-referencing structures while
+          maintaining readability and avoiding complex construction
+          code.
+        </para>
+        <para> 
+          The reader syntax has two parts, defining a pointer, and
+          later referencing the pointer to create the circular
+          reference.
+        </para>
+        <para>
+          Below is an additional production in the &R5RS;
+          formal syntax (specifically section 7.1.2, external
+          representations) to support circular structures:
+        </para>
+        <programlisting>
+          &lt;pointer definition&gt; --> #&lt;uinteger 10&gt;=&lt;datum&gt;
+          &lt;pointer reference&gt; --> #&lt;uinteger 10&gt;#
+        </programlisting>
+        <para>
+          The first form instructs the reader to create a pointer
+          identified by the specified integer, which maps to the datum
+          that follows, and is active during the reading of the datum
+          on the right-hand side of the definition.  
+        </para>
+        <para>
+          If a second definition occurs during the reading of the
+          datum with the same integral identifier, the previous
+          definition is overwritten for the duration of the read.  The
+          definitions are <emphasis>not</emphasis> scoped in any way.
+          The pointer identifiers should be kept unique by the
+          programmer to prevent any unintended effects of identifier
+          collisions. 
+        </para>
+        <para>
+          The second form references a previously created pointer 
+          definition.  It is an error to reference an undefined
+          pointer.  The reader will handle a valid reference by
+          placing a pointer at the current read position back to the
+          location of the definition. 
+        </para>
+        <para>
+          At this point some examples might be helpful:
+        </para>
+        <example>
+          <title>Circular Structures</title>
+          <programlisting>
+            (define x '#0=(1 2 . #0#))
+            (caddr x)        ; => 1
+            (list-ref x 15)  ; => 2
+            
+            (define y '(1 2 #1=#(3 4) . #1#))
+            (eq? (caddr y) (cdddr y)) ; => #t
+          </programlisting>
+        </example>
+      </sect3>
+      <sect3 id="Writing">
+        <title>Writing</title>
+        <para>
+          Ordinarily, the display of cyclical data would cause a
+          problem for a Read-Eval-Print-Loop.  For this reason, the
+          REPL will attempt to check the structure it is about to
+          print for circularities before printing.  If a
+          cycle is found in the structure, the REPL will refuse to
+          print if the <function>print-shared</function> parameter, 
+          described below, is not set non-false.  If it is not, 
+          the REPL will issue a warning to the user that the structure 
+          contains a cycle.  If a circular structure is printed with
+          <function>display</function>, <function>write</function>,
+          etc, and the <function>print-shared</function> parameter is
+          set false, the environment may enter an infinite loop which
+          may or may not cause the Scheme system to exit with an error. 
+        </para>
+        <para>
+          The <function>print-shared</function> parameter will enable
+          &SISC; to scan data for circularity and data sharing before
+          writing values.  If enabled and such sharing is found, an
+          alternate printer is invoked which will emit a
+          representation compatible with the circular
+          structure representation described in the previous section.  
+          <function>print-shared</function> is enabled by default.
+          The user may wish to disable it because of the overhead of
+          both scanning all data, and constructing this representation
+          when shared structures are detected.
+        </para>
+        <blockquote>
+          <para>
+            <indexterm><primary>print-shared</primary>
+            </indexterm>
+            &parameter;
+            <methodsynopsis language="scheme">
+            <type>&num;t/&num;f</type>
+            <methodname>print-shared</methodname>
+            <methodparam choice="opt">
+              <parameter>boolean</parameter>
+            </methodparam>
+          </methodsynopsis>
+            <blockquote>
+              <para>
+                If set non-false, <function>write</function> and the
+                REPL will attempt to detect shared-structures in data
+                and invoke a version of <function>write</function>
+                capable of emitting the shared-structure external
+                representation of data.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+        <para>
+          Alternately, &SISC; also intends to support SRFI-38, which describes
+          the functions <function>write-showing-shared</function> and
+          <function>read-with-shared-structure</function>.  At the
+          time of this writing, the SRFI is in draft.
+        </para>
+      </sect3>
     </sect2>
     <sect2 id="ImmutableTypes">
       <title>
