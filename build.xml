@@ -28,6 +28,7 @@
 <!--    <property name="classopt" value="yes"/>-->
     <property name="optjar" value="sisc-opt.jar"/>
     <property name="libjar" value="sisc-lib.jar"/>
+    <property name="heapjar" value="sisc-heap.jar"/>
     <property name="heap" value="${basedir}/sisc.shp"/>
     <property name="quantity-type" value="apfloat"/>
     <property name="property-file" value="~/sisc.properties"/>
@@ -66,6 +67,7 @@
     <delete file="${docdir}/sss/style.xsl"/>
     <delete file="${basedir}/${basejar}"/>
     <delete file="${basedir}/${optjar}"/>
+    <delete file="${basedir}/${heapjar}"/>
     <delete file="${heap}"/>
     <delete file="${quantitydir}/Quantity.java"/>
     <delete>
@@ -279,6 +281,27 @@
   </target>
 
   <target name="heap" depends="full-heap,lite-heap">
+  </target>
+
+  <target name="heap-jar" depends="heap"
+          description="Package the built heap into a JAR, accessible by sisc.boot.HeapAnchor">
+    <jar jarfile="${basedir}/${heapjar}">
+      <fileset dir="${classdir}" includes="sisc/boot/HeapAnchor.class"/>
+      <zipfileset dir="${basedir}"
+        prefix="sisc/boot" includes="sisc.shp"/>
+      <manifest>
+        <section name="SISC Heap">
+          <attribute name="Specification-Title" value="Second Interpreter of Scheme Code"/>
+          <attribute name="Specification-Version" value="${specver}"/>
+           <!-- Got a better idea?: -->
+          <attribute name="Specification-Vendor" value="SISC Development Group"/>
+          <attribute name="Implementation-Title" value="sisc-heap"/>
+          <attribute name="Implementation-Version" value="${version}"/>
+           <!-- Got a better idea?: -->
+          <attribute name="Implementation-Vendor" value="SISC Development Group"/>
+        </section>
+      </manifest>
+    </jar>
   </target>
 
   <target name="javadocs" depends="prepare"
