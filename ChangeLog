@@ -12,6 +12,36 @@
 	precedence for methods overloaded on java.lang.Object and an
 	interface. See bug 953043.
 
+2004-01-01 -> 2004-05-20  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Added support for immediate primitive calls,
+	  an optimization which breaks R5RS compliance by breaking 
+	  redefinition.
+	
+	* Added .scm versions of all files which were previously 
+	  expanded only, and added a "bootstrap" target to the
+	  build.
+
+	* Engine now uses a flat closure representation which
+	  is more safe-for-space.  Various changes to the compiler
+	  and the core classes to support this.
+
+	* Support for trapping signals from the OS using an 
+	  unsupported (but apparently everpresent) Sun library.
+
+	* Support for ctl-c to break execution in the REPL.
+
+	* Interrupts are now enabled by default.
+
+	* Native procedures now separated into a Complex (requiring 
+	  the interpreter context) and Simple (dependent only on 
+	  parameters) form.  Simple procedure calls may be made immediate.
+
+	* Updated the pattern matching library to a more recent
+	  version from IU.
+
+	* Added support for weak hashtables.
+	  
 2004-04-12  Released SISC 1.8.8
 
 2004-04-08  Scott G. Miller <scgmille@freenetproject.org>

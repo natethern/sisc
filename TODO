@@ -5,12 +5,13 @@ Bug Fixes
   demanded
 
 General
+* Document weak hashtables
 * do a code walk to weed out anything that breaks thread-safety
 * produce a validation testing framework that is invokable from ant
 * produce a performance testing framework that is invokable from ant
 
 Features
-* produce code that is safe-for-space rather than just tail-recursive
+* Support for composable IO.
 * rationalize/integrate modules, libraries, slib
 * implement random-access files
 * write a debugger
