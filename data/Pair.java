@@ -111,8 +111,8 @@ public class Pair extends Value {
     public boolean valueEqual(Value v) {
         if (!(v instanceof Pair)) return false;
         Pair p=(Pair)v;
-        return car.equals(p.car) &&
-               cdr.equals(p.cdr);
+        return car.valueEqual(p.car) &&
+               cdr.valueEqual(p.cdr);
     }
 
     protected final static int CONT=1, MUTABLE=2;
