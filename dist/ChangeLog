@@ -2,6 +2,9 @@
 
 	* Fixed circular structure creation for 'special' lists
 	  created with ', `, ',', ,@, etc.
+
+	* Added synopsis() to Value, which allows abbreviated printing.
+	  Still need to convert all error prints to use it.
 	
 2002-1-27  Matthias Radestock <matthias@sorted.org>
 
