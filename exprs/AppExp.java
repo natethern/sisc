@@ -38,13 +38,15 @@ import java.io.*;
 
 public class AppExp extends Expression {
     public Expression exp, rands[], nxp;
-    public boolean nonTail;
+    public boolean nonTail, allImmediate;
 
-    public AppExp(Expression exp, Expression rands[], Expression nxp, boolean nontail) {
+    public AppExp(Expression exp, Expression rands[], Expression nxp, 
+		  boolean nontail, boolean allImmediate) {
         this.exp=exp;
         this.rands=rands;
         this.nxp = nxp;
         this.nonTail=nontail;
+	this.allImmediate=allImmediate;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
@@ -62,10 +64,10 @@ public class AppExp extends Expression {
                 r.vlr[i] = ex.getValue(r);
 	    }
 
-        if (nxp == null) {
+        if (allImmediate) {
             //all rands and the rator are immediate
             r.acc=exp.getValue(r);
-            r.nxp=APPEVAL;
+            r.nxp=nxp;
         } else {
             //some rands or the rator are non-immediate
             r.push(nxp);
@@ -92,6 +94,7 @@ public class AppExp extends Expression {
             }
             s.serialize(nxp, dos);
             dos.writeBoolean(nonTail);
+            dos.writeBoolean(allImmediate);
         }
     }
 
@@ -108,6 +111,7 @@ public class AppExp extends Expression {
             }
             nxp=s.deserialize(dis);
             nonTail=dis.readBoolean();
+	    allImmediate=dis.readBoolean();
         }
     }
 }
