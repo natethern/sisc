@@ -166,6 +166,49 @@ r / 2<superscript>s</superscript>
         integers and produce only exact integers.  
       </para>
     </sect2>
+    <sect2 id="Records">
+      <title>Records</title>
+      <para>
+          &requires; 
+        <emphasis role="bold">
+          (import <emphasis>record</emphasis>)
+        </emphasis>
+      </para>
+      <para>
+        &SISC; provides a native implementation of record types as
+        defined in SRFI-9. See <ulink
+          url="http://srfi.schemers.org/srfi-9/"/> for details. In
+        addition to the <function>define-record-type</function> syntax
+        provided by SRFI-9, a more compact (but less flexible)
+        <function>define-struct</function> syntax is offered.
+      </para>
+      <para>
+        <indexterm><primary>define-struct</primary></indexterm>
+        &syntax;
+        <methodsynopsis language="scheme">
+          <void/>
+          <methodname>define-struct</methodname>
+          <methodparam><parameter>name</parameter></methodparam>
+          <methodparam rep="repeat">
+            <parameter>field</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Defines a SRFI-9 record type as follows:
+<programlisting>
+(define-record-type (make-<parameter>name</parameter> <parameter>field</parameter> ...)
+  <parameter>name</parameter>?
+  (<parameter>field</parameter> <parameter>name</parameter>-<parameter>field</parameter> set-<parameter>name</parameter>-<parameter>field</parameter>!)
+  ...)
+</programlisting>
+            i.e. naming conventions are used to determine the names of
+            the record type constructor, predicate, field access and
+            field modifier procedures.
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
     <sect2 id="Hashtables">
       <title>Hash Tables</title>
       <para>
