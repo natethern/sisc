@@ -157,7 +157,7 @@
   (import threading-native)
   (include "thread.scm"))
 
-(module buffer
+(module buffers
   (make-buffer
    buffer
    buffer?
@@ -234,7 +234,7 @@
    buffer-length
    buffer-copy!)
   (import block-io-native)
-  (include "io/buffer.scm"))
+  (import buffers))
 
 (module hashtable
     (make-hashtable
