@@ -66,6 +66,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
         this.ctx = ctx;
         this.in = in;
         this.out = out;
+        this.caseSensitive =
+            ctx.getProperty("sisc.caseSensitive", defaultCaseSensitive).equals("true");
         this.parser.annotate =
             ctx.getProperty("sisc.emitAnnotations", defaultEmitAnnotations).equals("true");
         this.parser.lexer.strictR5RS =
