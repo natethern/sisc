@@ -13,18 +13,16 @@ public class StreamOutputPort extends AutoflushOutputPort {
         this.out=out;
     }
 
-    public void write(char v) throws IOException {
+    protected void writeHelper(char v) throws IOException {
         out.write(v);
-        if (autoflush) flush();
     }
 
-    public void write(String s) throws IOException {
+    protected void writeHelper(String s) throws IOException {
         out.write(s.getBytes("UTF-8"));
-        if (autoflush) flush();
     }
 
-    public void display(Value v) throws IOException {
-        write(v.display());
+    protected void displayHelper(Value v) throws IOException {
+        writeHelper(v.display());
     }
 
     public void flush() throws IOException {

@@ -1,6 +1,8 @@
 package sisc.io;
 
+import sisc.data.Value;
 import sisc.data.SchemeOutputPort;
+import java.io.IOException;
 
 public abstract class AutoflushOutputPort extends SchemeOutputPort {
 
@@ -9,6 +11,25 @@ public abstract class AutoflushOutputPort extends SchemeOutputPort {
     public AutoflushOutputPort(boolean a) {
         autoflush=a;
     }
+
+    public void write(char v) throws IOException {
+        writeHelper(v);
+        if (autoflush) flush();
+    }
+
+    public void write(String s) throws IOException {
+        writeHelper(s);
+        if (autoflush) flush();
+    }
+
+    public void display(Value v) throws IOException {
+        displayHelper(v);
+        if (autoflush) flush();
+    }
+
+    protected abstract void writeHelper(char v) throws IOException;
+    protected abstract void writeHelper(String v) throws IOException;
+    protected abstract void displayHelper(Value v) throws IOException;
 }
 /*
  * The contents of this file are subject to the Mozilla Public
