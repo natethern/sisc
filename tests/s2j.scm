@@ -76,8 +76,10 @@
 ;;equality
 (define jstring-null (java-null <jstring>))
 (eq? jstring-null jnull) ;=> #f
+(eqv? jstring-null jnull) ;=> #f
 (equal? jstring-null jnull) ;=> #t
 (eq? <jstring> jstring-null) ;=> #f
+(eqv? <jstring> jstring-null) ;=> #f
 (equal? <jstring> jstring-null) ;=> #f
 (define <java.util.Date> (java-class "java.util.Date"))
 (define d (make <java.util.Date>))
@@ -85,7 +87,11 @@
 (define d1 (make <java.util.Date> time))
 (define d2 (make <java.util.Date> time))
 (eq? d1 d2) ;=> #f
+(eqv? d1 d2) ;=> #f
 (equal? d1 d2) ;=> #t
+(eq? (java-null <jstring>) (java-null <jstring>)) ;=> may return #f
+(eqv? (java-null <jstring>) (java-null <jstring>)) ;=> #t
+(equal? (java-null <jstring>) (java-null <jstring>)) ;=> #t
 
 ;;special handling of jnull
 (value-of <jstring> jnull) ;=> #<java java.lang.String null>
