@@ -146,6 +146,232 @@
       integers and produce only exact integers.  
     </para>
   </sect1>
+  <sect1 id="Hashtables">
+    <title>Hash Tables</title>
+    <para>
+      &requires; 
+      <emphasis role="bold">
+        (import <emphasis>hashtable</emphasis>)
+      </emphasis>
+    </para>
+    <para>
+      Hash tables store mappings of keys to values. Hence they are
+      similar to association lists, except that hash tables allow
+      retrieval, addition and modification in constant whereas
+      association lists typically perform these operations in linear
+      time based on the number of elements.
+    </para>
+    <para>
+      SISC hash tables use <function>eqv?</function> for element
+      comparison, which implies that keys generally ought to be of a
+      type for which comparison with <function>eqv?</function> is
+      meaningful. Furthermore, <emphasis>keys must be
+      immutable</emphasis>. Specifically this excludes dynamically
+      allocated strings, lists and vectors.
+    </para>
+    <para>
+      SISC hash tables are thread-safe, i.e. multiple threads can
+      concurrently access and modify the same hash table.
+    </para>
+    <sect2>
+      <title>Creation</title>
+      <para>
+        Hash tables are a distinct data type. They can be created
+        empty or filled with the contents of an association list. The
+        converse, creating an association list from a hash table, is
+        also supported.
+      </para>
+      <blockquote>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>hashtable</type>
+            <methodname>make-hashtable</methodname>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>&num;t/&num;f</type>
+            <methodname>hashtable?</methodname>
+            <methodparam><parameter>obj</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>hashtable</type>
+            <methodname>alist-&gt;hashtable</methodname>
+            <methodparam><parameter>alist</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>alist</type>
+            <methodname>hashtable-&gt;alist</methodname>
+            <methodparam><parameter>hashtable</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+    </sect2>
+    <sect2>
+      <title>Access</title>
+      <para>
+        All hash table access operations follow a similar
+        pattern. They return the value that was associated with the
+        the given key at the time the operation was invoked. If no
+        binding for the key existed, an optionally supplied value is
+        returned that defaults to &num;f. This allows the programmer
+        to associate keys with &num;f values and distinguish this case
+        from not having any association for a key.
+      </para>
+      <blockquote>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>obj</type>
+            <methodname>hashtable/put!</methodname>
+            <methodparam><parameter>hashtable</parameter></methodparam>
+            <methodparam><parameter>key</parameter></methodparam>
+            <methodparam><parameter>val</parameter></methodparam>
+            <methodparam choice="opt">
+              <parameter>nobinding</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>obj</type>
+            <methodname>hashtable/get</methodname>
+            <methodparam><parameter>hashtable</parameter></methodparam>
+            <methodparam><parameter>key</parameter></methodparam>
+            <methodparam choice="opt">
+              <parameter>nobinding</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>obj</type>
+            <methodname>hashtable/get!</methodname>
+            <methodparam><parameter>hashtable</parameter></methodparam>
+            <methodparam><parameter>key</parameter></methodparam>
+            <methodparam><parameter>thunk</parameter></methodparam>
+            <methodparam choice="opt">
+              <parameter>nobinding</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>obj</type>
+            <methodname>hashtable/remove!</methodname>
+            <methodparam><parameter>hashtable</parameter></methodparam>
+            <methodparam><parameter>key</parameter></methodparam>
+            <methodparam><parameter>val</parameter></methodparam>
+            <methodparam choice="opt">
+              <parameter>nobinding</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+    </sect2>
+    <sect2>
+      <title>Bulk Operations</title>
+      <para>
+        Bulk operations are operations that apply to all elements of a
+        hash table.
+      </para>
+      <blockquote>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <void/>
+            <methodname>hashtable/clear!</methodname>
+            <methodparam><parameter>hashtable</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>list</type>
+            <methodname>hashtable/keys</methodname>
+            <methodparam><parameter>hashtable</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <void/>
+            <methodname>hashtable/for-each</methodname>
+            <methodparam><parameter>thunk</parameter></methodparam>
+            <methodparam><parameter>hashtable</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>list</type>
+            <methodname>hashtable/map</methodname>
+            <methodparam><parameter>thunk</parameter></methodparam>
+            <methodparam><parameter>hashtable</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+    </sect2>
+  </sect1>
   <sect1 id="OperatingSystemInterface">
     <title>
       Operating System interface
