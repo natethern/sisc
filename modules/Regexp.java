@@ -358,8 +358,8 @@ public class Regexp extends ModuleAdapter
         MatchResult matchResult = matcher.getMatch();
 
         for (int i = 0, length = matchResult.groups(); i < length; i++) {
-          Pair m = new Pair(new Quantity(matchResult.beginOffset(i)),
-                            new Quantity(matchResult.endOffset(i)));
+          Pair m = new Pair(Quantity.valueOf(matchResult.beginOffset(i)),
+                            Quantity.valueOf(matchResult.endOffset(i)));
           Pair elem = new Pair(m, EMPTYLIST);
           if (result == null)
             result = prev = elem;
