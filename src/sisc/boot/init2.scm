@@ -443,7 +443,7 @@
         (putprop 'call-with-current-continuation dynwind-call/cc)
         (putprop 'call/cc dynwind-call/cc)
         (putprop 'dynamic-wind dynamic-wind/impl)
-        (dynamic-wind in body out)))
+        (dynamic-wind/impl in body out)))
     ;;finally, the install the dynamic-wind hooks
     (set! dynamic-wind dynamic-wind-loader)
     (set! unload-dynamic-wind
