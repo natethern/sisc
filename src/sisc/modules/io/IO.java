@@ -569,17 +569,24 @@ public class IO extends IndexedProcedure {
     }
 
     private void annotateException(SchemeException se, int line, int column, String sourceFile, Symbol procName) {
-        CallFrame ek=(CallFrame)se.e;
-        CallFrame lastWithNXP=null;
-        while (ek.parent!=null) {
-            if (ek.nxp!=null) lastWithNXP=ek;
-            ek=ek.parent;
+        CallFrame ek=null;
+        if (se.e instanceof CallFrame) {
+            ek=(CallFrame)se.e;
+        } else if (se.e instanceof ApplyParentFrame) {
+            ek=((ApplyParentFrame)se.e).c;
         }
-        System.err.println(lastWithNXP.nxp.express());
-        lastWithNXP.nxp.setAnnotation(Symbol.get("line-number"), Quantity.valueOf(line));
-        lastWithNXP.nxp.setAnnotation(Symbol.get("column-number"), Quantity.valueOf(column));
-        lastWithNXP.nxp.setAnnotation(Symbol.get("source-file"), new SchemeString(sourceFile));
-        lastWithNXP.nxp.setAnnotation(Symbol.get("proc-name"), procName);
+        
+        if (se.e != null) {
+            CallFrame lastWithNXP=null;
+            while (ek.parent!=null) {
+                if (ek.nxp!=null) lastWithNXP=ek;
+                ek=ek.parent;
+            }
+            lastWithNXP.nxp.setAnnotation(Symbol.get("line-number"), Quantity.valueOf(line));
+            lastWithNXP.nxp.setAnnotation(Symbol.get("column-number"), Quantity.valueOf(column));
+            lastWithNXP.nxp.setAnnotation(Symbol.get("source-file"), new SchemeString(sourceFile));
+            lastWithNXP.nxp.setAnnotation(Symbol.get("proc-name"), procName);
+        }
     }
 }
 /*
