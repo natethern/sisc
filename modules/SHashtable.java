@@ -102,11 +102,17 @@ public class SHashtable extends ModuleAdapter {
         }
 
         public void display(ValueWriter w) throws IOException {
-            w.append("#<")
-                .append(Util.liMessage(SHASHB, "hashtable"))
-                .append(' ')
-                .append(Integer.toString(ht.size()))
-                .append('>');
+            w.append("#<").append(Util.liMessage(SHASHB, "hashtable"));
+            Iterator i = ht.entrySet().iterator();
+            while(i.hasNext()) {
+                Map.Entry e = (Map.Entry)i.next();
+                w.append(" (")
+                    .append((Value)e.getKey())
+                    .append(" . ")
+                    .append((Value)e.getValue())
+                    .append(")");
+            }
+            w.append('>');
         }
 
         public void apply(Interpreter r)
