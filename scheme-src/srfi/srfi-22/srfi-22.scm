@@ -7,7 +7,7 @@
   (call-with-input-file source-file
     (lambda (in)
       (do ((c (read-char in) (read-char in)))
-	  ((or (eq? c #\newline)
+	  ((or (eqv? c #\newline)
 	       (eof-object? c))))
       (let loop ((e (read-code in)))
 	(unless (eof-object? e)
