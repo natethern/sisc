@@ -23,7 +23,7 @@ public class LetrecExp extends AppExp {
         r.env=LexicalUtils.fixLexicals(r, lcount, localIndices, lexicalIndices);
         r.lcl=r.createValues(rands.length);
         for (int i=rands.length-1; i>=0; i--)
-            r.lcl[i]=new Box();
+            r.lcl[i]=new Box(VOID);
         super.eval(r);
     }
 

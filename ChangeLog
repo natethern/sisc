@@ -1,3 +1,8 @@
+2005-01-22  Matthias Radestock  <matthias@sorted.org>
+
+	* Prevent NPEs in code that has illegal naked references in
+	  letrecs. See bug 1106981.
+
 2005-01-19  SISC 1.10.0-alpha Released
 
 2005-01-16  Scott G. Miller  <sgmiller@gmail.com>
