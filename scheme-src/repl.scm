@@ -85,7 +85,8 @@
        (putprop 'last-error '*sisc* 
                 (cons `(error-continuation . ,(error-continuation-k e))
                       (if m 
-                          (cond [(pair? m) m]
+                          (cond [(null? m) '()]
+                                [(pair? m) m]
                                 [else (list (cons 'message m))]) 
                           '())))))))
 

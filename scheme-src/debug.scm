@@ -122,7 +122,7 @@
 
 (define _k-stack 
   (lambda (e)
-    (let* ([k (cdr (assoc 'cont e))]
+    (let* ([k (cdr (assoc 'error-continuation e))]
            [st (let loop ((k k))
                  (cond [(null? k) (values '() '())]
                        [(null? (continuation-nxp k)) 
@@ -186,9 +186,8 @@
                                sourcefile
                                line column
                                (make-error-message 
-                                (and (pair? m) (assoc-val 'location m))
-                                (or (and (pair? m) (assoc-val 'message m))
-                                    "{no error message}"))))))
+                                (and (pair? e) (assoc-val 'location e))
+                                (and (pair? e) (assoc-val 'message e)))))))
               (for-each
                (lambda (data expr)
                  (if data
