@@ -365,7 +365,7 @@
   (add-feature 'srfi-28))
 
 (display "srfi-29 ")
-(module srfi-29 (current-country current-language currrent-locale-details
+(module srfi-29 (current-country current-language current-locale-details
                  declare-bundle! store-bundle load-bundle! 
                  localized-template format)
   (include "srfi/srfi-29.scm")
