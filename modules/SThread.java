@@ -28,16 +28,13 @@ public class SThread extends ModuleAdapter {
         THREADHOLDSLOCKQ=19, THREADSRUNNING=20, THREADRESULT=21,
         MONITORNEW=22, MONITORLOCK=23, MONITORUNLOCK=24, 
         MONITORNOTIFY=25, MONITORNOTIFYALL=26, MONITORWAIT=27,
-        MONITORFOR=28, MONITORQ=29,
+        MONITORFOR=28, MONITORQ=29;
 
-        READY=0, RUNNING=1, FINISHED=2, FINISHED_ABNORMALLY=3;
 
     protected static Symbol 
 	    S_READY=Symbol.get("ready"), S_RUNNING=Symbol.get("running"),
 	    S_FINISHED=Symbol.get("finished"), 
 	    S_FINISHED_ABNORMALLY=Symbol.get("finished-with-error");
-
-    static ThreadGroup schemeThreads=new ThreadGroup("SISC Threads");
 
     public SThread() {
         define("thread?", THREADQ);
@@ -236,63 +233,6 @@ public class SThread extends ModuleAdapter {
         }
     }
 
-    public static class SchemeThread extends NamedValue implements Runnable {
-        protected AppContext ctx;
-        protected sisc.env.DynamicEnvironment env;
-        protected Procedure thunk;
-        protected Thread thread;
-        protected int state;
-        Value rv;
-
-        SchemeThread(Interpreter parent, Procedure thunk) {
-            this.ctx = parent.ctx;
-            this.env = parent.dynenv.copy();
-            this.env.wind = FALSE;
-            this.thunk = thunk;
-            thread=new Thread(schemeThreads, this);
-            state=READY;
-        }
-
-        public Value getResult(Interpreter r) throws ContinuationException {
-            if (state < FINISHED) {
-                throw new RuntimeException(liMessage(THREADB,"threadnotyetterminated"));
-            } else if (state == FINISHED) {
-                return rv;
-            } else {
-                r.acc=rv;
-                throw new ContinuationException(r.fk);
-            }
-        }
-
-        public int getState() {
-            return state;
-        }
-
-        public void start() {
-            thread.start();
-        }
-
-        public void run() {
-            Interpreter interp = Context.enter(ctx, env);
-            state=RUNNING;
-            synchronized(this) {
-                this.notify();
-            }
-            try {
-                rv=interp.eval(thunk,new Value[]{});
-                state=FINISHED;
-            } catch (SchemeException se) {
-                rv=new Values(new Value[] {se.m, se.e});
-                state=FINISHED_ABNORMALLY;
-            } 
-            Context.exit();
-        }
-
-        public void display(ValueWriter w) throws IOException {
-            displayNamedOpaque(w, "thread");
-        }
-    }
-
     public static final SchemeThread sthread(Value o) {
         try {
             return (SchemeThread)o;
@@ -309,13 +249,13 @@ public class SThread extends ModuleAdapter {
 
     static Symbol stateOf(SchemeThread c) {
         switch (c.getState()) {
-        case READY:
+        case SchemeThread.READY:
             return S_READY;
-        case RUNNING:
+        case SchemeThread.RUNNING:
             return S_RUNNING;
-        case FINISHED:
+        case SchemeThread.FINISHED:
             return S_FINISHED;
-        case FINISHED_ABNORMALLY:
+        case SchemeThread.FINISHED_ABNORMALLY:
             return S_FINISHED_ABNORMALLY;
         default:
             return null;
@@ -328,11 +268,12 @@ public class SThread extends ModuleAdapter {
             switch(primid) {
             case MONITORNEW:
                 return new Monitor();
-
-                //	    case THREADCURRENT:
-                //		return f.dynenv.threadContext;
+            case THREADCURRENT:
+                SchemeThread t=Context.lookupThreadContext().hostThread;
+                if (t==null) return FALSE;
+                else return t;
             case THREADSRUNNING:
-                return Quantity.valueOf(schemeThreads.activeCount());
+                return Quantity.valueOf(SchemeThread.schemeThreads.activeCount());
             case THREADYIELD:
                 Thread.yield();
                 return VOID;
@@ -366,7 +307,7 @@ public class SThread extends ModuleAdapter {
             case THREADSTART:
                 SchemeThread c=sthread(f.vlr[0]);
                 c.start();
-                while (c.state==READY) {
+                while (c.state==SchemeThread.READY) {
                     synchronized(c) {
                         try {
                             c.wait(500);
@@ -389,7 +330,7 @@ public class SThread extends ModuleAdapter {
                 return sthread(f.vlr[0]).getResult(f);
             case THREADJOIN:
                 c=sthread(f.vlr[0]);
-                if (c.state>=RUNNING) {
+                if (c.state>=SchemeThread.RUNNING) {
                     try {
                         c.thread.join();
                     } catch (InterruptedException ie) {}
@@ -413,11 +354,11 @@ public class SThread extends ModuleAdapter {
             case THREADJOIN:
                 SchemeThread c=sthread(f.vlr[0]);
 
-                if (c.state>=RUNNING) {
+                if (c.state>=SchemeThread.RUNNING) {
                     try {
                         c.thread.join(num(f.vlr[1]).intValue());
                     } catch (InterruptedException ie) {}
-                    if (c.state==RUNNING) 
+                    if (c.state==SchemeThread.RUNNING) 
                         return FALSE;
                     else return stateOf(c);
                 } else {

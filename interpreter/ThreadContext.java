@@ -8,7 +8,8 @@ public class ThreadContext extends Util {
 
     protected Stack interpreters = new Stack();
     protected Random r = new Random();
-
+    
+    public SchemeThread hostThread;
     public boolean interrupt = false;
     public long unicityMajor=genUnicityMajor();
     public char unicityMinor=0;

@@ -110,6 +110,12 @@
             (void)
             (repl-start))))))
 
+(define (sisc-cli)
+  (with/fc (lambda (m e)
+             (display (format "Uncaught error: ~a~%" m))
+             (sisc-cli))
+           repl))
+
 (define (exit)
   (let ([k (car (_exit-handler))])
     (_exit-handler (cdr (_exit-handler)))

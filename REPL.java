@@ -14,14 +14,18 @@ import sisc.interpreter.*;
 import sisc.env.DynamicEnvironment;
 import sisc.util.Util;
 
-public class REPL extends Thread {
+public class REPL extends SchemeThread {
 
     public String appName;
-    public DynamicEnvironment dynenv;
 
-    public REPL(String appName, DynamicEnvironment dynenv) {
-        this.appName = appName;
-        this.dynenv = dynenv;
+    public REPL(String appName, DynamicEnvironment dynenv, Procedure repl) {
+        this(appName, repl);
+        env=dynenv;
+    }
+
+    public REPL(String appName, Procedure repl) {
+        super(appName, repl);
+        this.appName=appName;
     }
     
     public static SeekableInputStream findHeap() {
@@ -162,36 +166,17 @@ public class REPL extends Thread {
         return true;
     }
 
-    public void run() {
+    public void go() {
         try {
-            dynenv.out.write("SISC ("+Util.VERSION+") - " + appName + "\n");
+            env.out.write("SISC ("+Util.VERSION+") - " + appName + "\n");
         } catch (IOException e) {}
-            
-        Interpreter r = Context.enter(Context.lookup(appName), dynenv);
-        try {
-            Symbol replSymb = Symbol.get("repl");
-            Value replVal = r.ctx.toplevel_env.lookup(replSymb);
-            if (replVal == null) {
-                System.err.println(Util.liMessage(Util.SISCB, "heapnotfound"));
-                return;
-            }
-            do {
-                try {
-                    r.eval((Procedure)r.ctx.toplevel_env.lookup(replSymb),
-                           new Values[]{});
-                    break;
-                } catch (SchemeException se) {
-                    System.err.println(Util.liMessage(Util.SISCB, "uncaughterror")+
-                                       simpleErrorToString((Pair)se.m));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.err.println(Util.liMessage(Util.SISCB, "systemerror")+
-                                       e.toString());
-                }
-            } while (true);
-        } finally {
-            Context.exit();
+
+        if (thunk == null) {
+            System.err.println(Util.liMessage(Util.SISCB, "heapnotfound"));
+            return;
         }
+
+        start();
     }
 
     public static void main(String[] argv) throws Exception {
@@ -248,8 +233,10 @@ public class REPL extends Thread {
             System.out.flush();
             SocketREPL.listen("main", ssocket);
         } else {
-            REPL repl = new REPL("main", new DynamicEnvironment());
-            repl.start();
+            Procedure p=(Procedure)
+                r.ctx.toplevel_env.lookup(Symbol.get("sisc-cli"));
+            REPL repl = new REPL("main",p);
+            repl.go();
         }
     }
 
@@ -257,8 +244,9 @@ public class REPL extends Thread {
         
         public Socket s;
         
-        public SocketREPL(String appName, DynamicEnvironment dynenv, Socket s) {
-            super(appName, dynenv);
+        public SocketREPL(String appName, DynamicEnvironment dynenv,
+                          Socket s, Procedure repl) {
+            super(appName, dynenv, repl);
             this.s = s;
         }
     
@@ -275,7 +263,11 @@ public class REPL extends Thread {
                 Socket client = ssocket.accept();
                 DynamicEnvironment dynenv = new DynamicEnvironment(new SourceInputPort(new BufferedInputStream(client.getInputStream()), "console"),
                                                                    new StreamOutputPort(client.getOutputStream(), true));
-                REPL repl = new SocketREPL(app, dynenv, client);
+                Interpreter r=Context.enter();
+                Procedure p=(Procedure)
+                    r.ctx.toplevel_env.lookup(Symbol.get("sisc-cli"));
+                Context.exit();
+                REPL repl = new SocketREPL(app, dynenv, client, p);
                 repl.start();
             }
         }

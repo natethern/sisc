@@ -1,5 +1,12 @@
 2002-12-10  Released SISC 1.7.0-beta
 
+2002-12-10  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Refactored the REPL such that the main SISC thread is also
+	  a Scheme thread.
+
+	* Re-added thread/current
+
 2002-12-09  Scott G. Miller <scgmille@freenetproject.org>
  
 	* Fixed error in arbint->double conversion.
