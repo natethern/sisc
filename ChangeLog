@@ -1,3 +1,13 @@
+2005-01-09  Matthias Radestock  <matthias@sorted.org>
+
+	* Added missing gio/peek-char procedure to generic-io module
+	  exports.
+
+	* Fixed bug in gio/read-string procedure that caused it to throw
+	  an error.
+
+	* Fixed bug in gio/read-block - it wasn't accepting generic ports.
+	
 2005-01-08  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Added orphaned-paren-is-error parameter, which
