@@ -147,8 +147,8 @@
 	      When replaced with a trace-lambda, all calls to a lambda
 	      defined procedure are traced on the console.
 	      <parameter>trace-name</parameter> is a symbol to identify
-	      the procedure in the trace. <parameter>formals
-	      </parameter>and <parameter>body</parameter> have identical
+	      the procedure in the trace. <parameter>formals</parameter>
+              and <parameter>body</parameter> have identical
 	      semantics to lambda.
 	    </para>
 	  </blockquote>

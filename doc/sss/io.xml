@@ -179,14 +179,10 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>output port</type>
               <methodname>open-output-file</methodname>
               <methodparam>
-                <parameter>
-                  url
-                </parameter>
+                <parameter>url</parameter>
               </methodparam>
               <methodparam choice="opt">
-                <parameter>
-                  auto-flush
-                </parameter>
+                <parameter>auto-flush</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -206,9 +202,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>undefined</type>
               <methodname>flush-output-port</methodname>
               <methodparam>
-                <parameter>
-                  output-port
-                </parameter>
+                <parameter>output-port</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -247,19 +241,13 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>integer</type>
               <methodname>block-read</methodname>
               <methodparam>
-                <parameter>
-                  buffer
-                </parameter>
+                <parameter>buffer</parameter>
               </methodparam>
               <methodparam>
-                <parameter>
-                  input-port
-                </parameter>
+                <parameter>input-port</parameter>
               </methodparam>
               <methodparam>
-                <parameter>
-                  count
-                </parameter>
+                <parameter>count</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -280,19 +268,13 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>undefined</type>
               <methodname>block-write</methodname>
               <methodparam>
-                <parameter>
-                  buffer
-                </parameter>
+                <parameter>buffer</parameter>
               </methodparam>
               <methodparam>
-                <parameter>
-                  output-port
-                </parameter>
+                <parameter>output-port</parameter>
               </methodparam>
               <methodparam>
-                <parameter>
-                  count
-                </parameter>
+                <parameter>count</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -324,9 +306,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>input-port</type>
               <methodname>open-input-string</methodname>
               <methodparam>
-                <parameter>
-                  string
-                </parameter>
+                <parameter>string</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -360,9 +340,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             <methodsynopsis language="scheme">
               <type>string</type> <methodname>get-output-string</methodname>
               <methodparam>
-                <parameter>
-                  string-output-port
-                </parameter>
+                <parameter>string-output-port</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -402,14 +380,10 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>value</type>
               <methodname>call-with-input-file</methodname>
               <methodparam>
-                <parameter>
-                  url
-                </parameter>
+                <parameter>url</parameter>
               </methodparam>
               <methodparam>
-                <parameter>
-                  procedure
-                </parameter>
+                <parameter>procedure</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -426,14 +400,10 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>value</type>
               <methodname>call-with-output-file</methodname>
               <methodparam>
-                <parameter>
-                  url
-                </parameter>
+                <parameter>url</parameter>
               </methodparam>
               <methodparam>
-                <parameter>
-                  procedure
-                </parameter>
+                <parameter>procedure</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -450,14 +420,10 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>value</type>
               <methodname>call-with-input-string</methodname>
               <methodparam>
-                <parameter>
-                  string
-                </parameter>
+                <parameter>string</parameter>
               </methodparam>
               <methodparam>
-                <parameter>
-                  procedure
-                </parameter>
+                <parameter>procedure</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -474,9 +440,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>string</type>
               <methodname>call-with-output-string</methodname>
               <methodparam>
-                <parameter>
-                  procedure
-                </parameter>
+                <parameter>procedure</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -510,14 +474,10 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>value</type>
               <methodname>with-input-from-port</methodname>
               <methodparam>
-                <parameter>
-                  port
-                </parameter>
+                <parameter>port</parameter>
               </methodparam>
               <methodparam>
-                <parameter>
-                  thunk
-                </parameter>
+                <parameter>thunk</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -535,14 +495,10 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>value</type>
               <methodname>with-output-to-port</methodname>
               <methodparam>
-                <parameter>
-                  port
-                </parameter>
+                <parameter>port</parameter>
               </methodparam>
               <methodparam>
-                <parameter>
-                  thunk
-                </parameter>
+                <parameter>thunk</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -560,14 +516,10 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>value</type>
               <methodname>with-input-from-file</methodname>
               <methodparam>
-                <parameter>
-                  url
-                </parameter>
+                <parameter>url</parameter>
               </methodparam>
               <methodparam>
-                <parameter>
-                  thunk
-                </parameter>
+                <parameter>thunk</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -586,14 +538,10 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>value</type>
               <methodname>with-output-to-file</methodname>
               <methodparam>
-                <parameter>
-                  url
-                </parameter>
+                <parameter>url</parameter>
               </methodparam>
               <methodparam>
-                <parameter>
-                  thunk
-                </parameter>
+                <parameter>thunk</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -613,14 +561,10 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>value</type>
               <methodname>with-input-from-string</methodname>
               <methodparam>
-                <parameter>
-                  string
-                </parameter>
+                <parameter>string</parameter>
               </methodparam>
               <methodparam>
-                <parameter>
-                  thunk
-                </parameter>
+                <parameter>thunk</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -639,9 +583,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>string</type>
               <methodname>with-output-to-string</methodname>
               <methodparam>
-                <parameter>
-                  thunk
-                </parameter>
+                <parameter>thunk</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>

@@ -313,12 +313,25 @@
      (process-children))))
 
 (element methodparam
-  ($mono-seq$
-   (make sequence
-    (if (first-sibling?)
-        (empty-sosofo)
-	(literal " "))
-    (process-children))))
+  (let ((choice (attribute-string (normalize "choice")))
+        (rep (attribute-string (normalize "rep"))))
+    ($mono-seq$
+     (make sequence
+;       (if (first-sibling?)
+ ;          (empty-sosofo)
+           (literal " ");)
+       (if (equal? choice (normalize "opt"))
+           (literal "[")
+           (empty-sosofo))
+       (process-children)
+       (if (equal? choice (normalize "opt"))
+           (literal "]")
+           (empty-sosofo))
+       (if (equal? rep (normalize "repeat"))
+           (make sequence
+             (literal " ")
+             (literal "..."))
+           (empty-sosofo))))))
 
 (element parameter
   (process-children))
