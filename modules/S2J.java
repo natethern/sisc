@@ -552,7 +552,7 @@ public class S2J extends ModuleAdapter {
                     return "proxy";
                 }
             }
-            Interpreter r = Context.enter(ctx, new DynamicEnv());
+            Interpreter r = Context.enter(ctx, new sisc.env.DynamicEnvironment());
             Pair p = EMPTYLIST;
             if (args != null) { //for some reason args can be null
                 for (int i=args.length-1; i>=0; i--) {

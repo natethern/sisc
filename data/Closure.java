@@ -5,6 +5,7 @@ import sisc.*;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.env.LexicalEnvironment;
 
 public class Closure extends Procedure {
     public boolean arity;

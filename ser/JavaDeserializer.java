@@ -6,7 +6,8 @@ import java.math.*;
 import sisc.Module;
 import sisc.data.Expression;
 import sisc.data.Symbol;
-import sisc.SymbolicEnvironment;
+import sisc.env.SymbolicEnvironment;
+import sisc.env.DelegatingSymEnv;
 
 public class JavaDeserializer implements Deserializer {
 

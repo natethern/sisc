@@ -6,6 +6,7 @@ import java.io.*;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.env.SymbolicEnvironment;
 
 public class FreeReferenceExp extends Expression implements Immediate {
     public Symbol sym;

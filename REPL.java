@@ -10,13 +10,14 @@ import sisc.data.*;
 import sisc.exprs.*;
 import sisc.ser.*;
 import sisc.interpreter.*;
+import sisc.env.DynamicEnvironment;
 
 public class REPL extends Thread {
 
     public String appName;
-    public DynamicEnv dynenv;
+    public DynamicEnvironment dynenv;
 
-    public REPL(String appName, DynamicEnv dynenv) {
+    public REPL(String appName, DynamicEnvironment dynenv) {
         this.appName = appName;
         this.dynenv = dynenv;
     }
@@ -241,7 +242,7 @@ public class REPL extends Thread {
             System.out.flush();
             SocketREPL.listen("main", ssocket);
         } else {
-            REPL repl = new REPL("main", new DynamicEnv());
+            REPL repl = new REPL("main", new DynamicEnvironment());
             repl.start();
         }
     }
@@ -250,7 +251,7 @@ public class REPL extends Thread {
         
         public Socket s;
         
-        public SocketREPL(String appName, DynamicEnv dynenv, Socket s) {
+        public SocketREPL(String appName, DynamicEnvironment dynenv, Socket s) {
             super(appName, dynenv);
             this.s = s;
         }
@@ -266,7 +267,7 @@ public class REPL extends Thread {
             throws IOException {
             for (;;) {
                 Socket client = ssocket.accept();
-                DynamicEnv dynenv = new DynamicEnv(new SourceInputPort(new BufferedReader(new InputStreamReader(client.getInputStream())), "console"),
+                DynamicEnvironment dynenv = new DynamicEnvironment(new SourceInputPort(new BufferedReader(new InputStreamReader(client.getInputStream())), "console"),
                                                    new OutputPort(new PrintWriter(client.getOutputStream()), true));
                 REPL repl = new SocketREPL(app, dynenv, client);
                 repl.start();

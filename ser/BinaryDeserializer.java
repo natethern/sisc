@@ -1,12 +1,13 @@
 package sisc.ser;
 
-import sisc.data.*;
-import sisc.Module;
 import java.util.*;
 import java.io.*;
 import java.lang.ref.*;
-import sisc.*;
 import java.lang.reflect.*;
+import sisc.*;
+import sisc.data.*;
+import sisc.Module;
+import sisc.env.SymbolicEnvironment;
 
 public class BinaryDeserializer extends DeserializerImpl {
 

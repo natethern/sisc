@@ -3,6 +3,7 @@ package sisc.interpreter;
 import sisc.*;
 import sisc.data.*;
 import java.util.*;
+import sisc.env.DynamicEnvironment;
 
 public class Context extends Util {
 
@@ -55,10 +56,10 @@ public class Context extends Util {
     }
     
     public static Interpreter enter(String appName) {
-        return enter(lookup(appName), new DynamicEnv());
+        return enter(lookup(appName), new DynamicEnvironment());
     }
     
-    public static Interpreter enter(AppContext ctx, DynamicEnv dynenv) {
+    public static Interpreter enter(AppContext ctx, DynamicEnvironment dynenv) {
         ThreadContext tctx = lookupThreadContext();
         Interpreter res = createInterpreter(ctx, tctx, dynenv);
         tctx.pushInterpreter(res);
@@ -80,7 +81,7 @@ public class Context extends Util {
      */
     private static Interpreter createInterpreter(AppContext ctx,
                                                  ThreadContext tctx,
-                                                 DynamicEnv dynenv) {
+                                                 DynamicEnvironment dynenv) {
         return new Interpreter(ctx, tctx, dynenv);
     }
 

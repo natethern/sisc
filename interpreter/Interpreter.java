@@ -7,6 +7,7 @@ import sisc.*;
 import sisc.data.*;
 import sisc.compiler.*;
 import sisc.exprs.*;
+import sisc.env.*;
 import sisc.compiler.Compiler;
 
 /**
@@ -45,7 +46,7 @@ public class Interpreter extends Util {
 
     public AppContext ctx;
     public ThreadContext tctx;
-    public DynamicEnv dynenv;
+    public DynamicEnvironment dynenv;
 
     //REGISTERS
     public Value                 acc;
@@ -64,7 +65,7 @@ public class Interpreter extends Util {
         top_fk.vlk = true;
     }
 
-    public Interpreter(AppContext ctx, ThreadContext tctx, DynamicEnv dynenv) {
+    public Interpreter(AppContext ctx, ThreadContext tctx, DynamicEnvironment dynenv) {
         fk=top_fk;
         this.ctx = ctx;
         this.tctx = tctx;
@@ -196,7 +197,7 @@ public class Interpreter extends Util {
         try {
             contenv = lookupContextEnv(s);
         } catch (ArrayIndexOutOfBoundsException e) {
-            contenv=new AssociativeEnvironment();
+            contenv=new MemorySymEnv();
             defineContextEnv(s, contenv);
         }
         return contenv;

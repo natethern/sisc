@@ -8,6 +8,7 @@ import sisc.data.Expression;
 import sisc.data.Singleton;
 import sisc.data.Symbol;
 import sisc.Module;
+import sisc.env.SymbolicEnvironment;
 import sisc.interpreter.Interpreter;
 
 public class StreamSerializer extends SerializerImpl {

@@ -6,6 +6,7 @@ import java.lang.reflect.*;
 import sisc.*;
 import sisc.data.*;
 import sisc.interpreter.*;
+import sisc.env.SymbolicEnvironment;
 import sisc.Module;
 
 /**

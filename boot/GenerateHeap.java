@@ -45,6 +45,7 @@ import sisc.compiler.*;
 import sisc.ser.*;
 import sisc.data.*;
 import sisc.exprs.*;
+import sisc.env.*;
 
 public class GenerateHeap {
 
@@ -150,8 +151,8 @@ public class GenerateHeap {
         }
 
         LibraryBuilder lb=new LibraryBuilder();
-        AssociativeEnvironment symenv=new AssociativeEnvironment(Symbol.get("symenv"));
-        AssociativeEnvironment toplevel=new AssociativeEnvironment(new LibraryAE(null, lb), Util.TOPLEVEL);
+        MemorySymEnv symenv=new MemorySymEnv(Symbol.get("symenv"));
+        MemorySymEnv toplevel=new MemorySymEnv(new LibraryAE(null, lb), Util.TOPLEVEL);
         sisc.compiler.Compiler.addSpecialForms(toplevel);
         symenv.define(Util.TOPLEVEL, toplevel);
 
@@ -206,7 +207,7 @@ public class GenerateHeap {
         r5rs=results[0];
         sisc_specific=results[1];
 
-        r.ctx.toplevel_env=top_level=new AssociativeEnvironment(sisc_specific, Util.TOPLEVEL);
+        r.ctx.toplevel_env=top_level=new MemorySymEnv(sisc_specific, Util.TOPLEVEL);
         r5rs.setName(Util.REPORT);
         sisc_specific.setName(Util.SISC_SPECIFIC);
         

@@ -1,8 +1,6 @@
-
-package sisc.ser;
+package sisc.env;
 
 import sisc.data.*;
-import sisc.SymbolicEnvironment;
 
 public class DelegatingSymEnv extends NamedValue implements SymbolicEnvironment {
     private SymbolicEnvironment delegee;

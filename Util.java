@@ -306,9 +306,9 @@ public abstract class Util extends Defaults implements Version {
 	return null;
     }
 
-    public static final SymbolicEnvironment env(Value o) {
+    public static final sisc.env.SymbolicEnvironment env(Value o) {
         try {
-            return (SymbolicEnvironment)o;
+            return (sisc.env.SymbolicEnvironment)o;
         } catch (ClassCastException e) { typeError("environment", o); }
 	return null;
     }

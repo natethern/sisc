@@ -1,10 +1,10 @@
-package sisc;
+package sisc.env;
 
 import sisc.data.*;
 import sisc.compiler.*;
 import java.io.*;
 
-public class DynamicEnv extends Util implements Cloneable {
+public class DynamicEnvironment extends sisc.Util implements Cloneable {
 
     public InputPort in;
     public OutputPort out;
@@ -18,23 +18,23 @@ public class DynamicEnv extends Util implements Cloneable {
     //hang on to vars that are no longer in use.
     public java.util.Map parameters = new java.util.WeakHashMap(0);
 
-    public DynamicEnv() {
+    public DynamicEnvironment() {
         this(System.in, System.out);
     }
 
-    public DynamicEnv(InputPort in, OutputPort out) {
+    public DynamicEnvironment(InputPort in, OutputPort out) {
         this.in = in;
         this.out = out;
     }
 
-    public DynamicEnv(InputStream in, OutputStream out) {
+    public DynamicEnvironment(InputStream in, OutputStream out) {
         this(new SourceInputPort(new BufferedReader(new InputStreamReader(in)), liMessage(SISCB, "console")),
              new OutputPort(new PrintWriter(out), true));
     }
 
-    public DynamicEnv copy() {
+    public DynamicEnvironment copy() {
         try {
-            return (DynamicEnv)super.clone();
+            return (DynamicEnvironment)super.clone();
         }
         catch (CloneNotSupportedException e) {
             return this;

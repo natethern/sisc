@@ -7,7 +7,7 @@ import java.math.BigInteger;
 
 import sisc.Module;
 import sisc.data.Expression;
-import sisc.SymbolicEnvironment;
+import sisc.env.SymbolicEnvironment;
 
 public interface Serializer extends ObjectOutput {
 

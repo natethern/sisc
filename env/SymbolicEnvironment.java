@@ -1,4 +1,4 @@
-package sisc;
+package sisc.env;
 
 import sisc.data.*;
 

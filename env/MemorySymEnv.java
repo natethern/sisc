@@ -1,4 +1,4 @@
-package sisc;
+package sisc.env;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.io.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
-public class AssociativeEnvironment extends NamedValue implements SymbolicEnvironment {
+public class MemorySymEnv extends NamedValue implements SymbolicEnvironment {
 
     protected static final float EXPFACT=1.5F;
     public Map symbolMap;
@@ -18,28 +18,28 @@ public class AssociativeEnvironment extends NamedValue implements SymbolicEnviro
     public SymbolicEnvironment parent;
     protected int nextFree;
 
-    public AssociativeEnvironment(SymbolicEnvironment parent) {
+    public MemorySymEnv(SymbolicEnvironment parent) {
         this();
         this.parent=parent;
     }
 
-    public AssociativeEnvironment(SymbolicEnvironment parent, Symbol name) {
+    public MemorySymEnv(SymbolicEnvironment parent, Symbol name) {
         this(name);
         this.parent=parent;
     }
 
-    private AssociativeEnvironment(Value[] env, Map symMap) {
+    private MemorySymEnv(Value[] env, Map symMap) {
         this.env=env;
         symbolMap=symMap;
         nextFree=env.length;
     }
 
-    public AssociativeEnvironment(Symbol name) {
+    public MemorySymEnv(Symbol name) {
         this();
         this.name=name;
     }
 
-    public AssociativeEnvironment() {
+    public MemorySymEnv() {
         env=new Value[1];
         nextFree=0;
         symbolMap=new HashMap(1);

@@ -11,6 +11,8 @@ import sisc.exprs.*;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.env.SymbolicEnvironment;
+import sisc.env.MemorySymEnv;
 
 public class Primitives extends ModuleAdapter {
 
@@ -290,7 +292,7 @@ public class Primitives extends ModuleAdapter {
             case CASESENSITIVE: return truth(Symbol.caseSensitive);
             case SISCINITIAL: 
                 try {
-                    return new AssociativeEnvironment(f.lookupContextEnv(SISC_SPECIFIC));
+                    return new MemorySymEnv(f.lookupContextEnv(SISC_SPECIFIC));
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throwPrimException(liMessage(SISCB, "nosiscspecificenv"));
                 }
@@ -568,14 +570,14 @@ public class Primitives extends ModuleAdapter {
             case REPORTENVIRONMENT:
                 if (FIVE.equals(num(f.vlr[0])))
                     try {
-                        return new AssociativeEnvironment(f.lookupContextEnv(REPORT));
+                        return new MemorySymEnv(f.lookupContextEnv(REPORT));
                     } catch (ArrayIndexOutOfBoundsException e) {
                         throwPrimException(liMessage(SISCB, "noreportenv"));
                     }
                 else throwPrimException(liMessage(SISCB, "unsupportedstandardver"));
             case NULLENVIRONMENT:
                 if (FIVE.equals(num(f.vlr[0]))) {
-                    AssociativeEnvironment ae = new AssociativeEnvironment();
+                    MemorySymEnv ae = new MemorySymEnv();
                     sisc.compiler.Compiler.addSpecialForms(ae);
                     return ae;
                 } else throwPrimException(liMessage(SISCB, "unsupportedstandardver"));

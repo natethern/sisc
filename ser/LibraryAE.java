@@ -2,19 +2,19 @@ package sisc.ser;
 
 import java.io.IOException;
 import java.util.*;
-import sisc.AssociativeEnvironment;
-import sisc.SymbolicEnvironment;
 import sisc.data.*;
+import sisc.env.MemorySymEnv;
+import sisc.env.SymbolicEnvironment;
 
 
 /**
- * An AE backed by a random-access library. It can operate in two
+ * An SymEnv backed by a random-access library. It can operate in two
  * modes:
  * 1) "observe" - keep track of bindings from which to later create a
  * library
  * 2) "retrieve" - access bindings in a library
  */
-public class LibraryAE extends AssociativeEnvironment {
+public class LibraryAE extends MemorySymEnv {
 
     protected LibraryBuilder lb;
     protected Library base;
@@ -25,7 +25,7 @@ public class LibraryAE extends AssociativeEnvironment {
     /**
      * Operate in "observe" mode.
      *
-     * @param name the name of the AE
+     * @param name the name of the SymEnv
      * @param lb the library serializer
      */
     public LibraryAE(Symbol name, LibraryBuilder lb) {

@@ -1,16 +1,16 @@
 package sisc.contrib.applet;
 
-import sisc.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.text.*;
 import java.awt.font.*;
+import java.io.*;
 
 import sisc.*;
 import sisc.data.*;
-import java.io.*;
+import sisc.env.DynamicEnvironment;
 
 public class SchemePanel extends JScrollPane {
     protected static final int
@@ -24,7 +24,7 @@ public class SchemePanel extends JScrollPane {
     protected int currentEditablePos;
     protected REPL repl;
 
-    public DynamicEnv dynenv;
+    public DynamicEnvironment dynenv;
     
     public SchemePanel(SchemeDocument sd, JTextPane disp) {
         super(disp, VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -35,7 +35,7 @@ public class SchemePanel extends JScrollPane {
         try {
             iis=new PipedInputStream(interpin);
         } catch (IOException e) {}
-        dynenv = new DynamicEnv(new SourceInputPort(new BufferedReader(new InputStreamReader(iis)), "console"),
+        dynenv = new DynamicEnvironment(new SourceInputPort(new BufferedReader(new InputStreamReader(iis)), "console"),
                                 new OutputPort(new PrintWriter(new BufferedOutputStream(dos)), true));
         disp.setEditable(false);
         currentEditablePos=sd.getLength()-1;

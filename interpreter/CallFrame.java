@@ -8,6 +8,7 @@ import sisc.data.*;
 import sisc.exprs.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.env.LexicalEnvironment;
 
 public class CallFrame extends Procedure {
 

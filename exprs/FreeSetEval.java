@@ -6,6 +6,7 @@ import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.env.SymbolicEnvironment;
 
 public class FreeSetEval extends Expression {
     public Symbol lhs;

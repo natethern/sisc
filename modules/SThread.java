@@ -228,7 +228,7 @@ public class SThread extends ModuleAdapter {
 
     public static class SchemeThread extends NamedValue implements Runnable {
         protected AppContext ctx;
-        protected DynamicEnv env;
+        protected sisc.env.DynamicEnvironment env;
         protected Procedure thunk;
         protected Thread thread;
         protected int state;

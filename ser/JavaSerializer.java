@@ -3,7 +3,7 @@ package sisc.ser;
 import java.io.*;
 import java.math.*;
 import sisc.Module;
-import sisc.SymbolicEnvironment;
+import sisc.env.SymbolicEnvironment;
 import sisc.data.Expression;
 
 public class JavaSerializer implements Serializer {

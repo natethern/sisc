@@ -7,7 +7,7 @@ import java.math.BigInteger;
 import sisc.Module;
 import sisc.data.Expression;
 import sisc.Util;
-import sisc.SymbolicEnvironment;
+import sisc.env.SymbolicEnvironment;
 
 public abstract class SerializerImpl extends Util implements Serializer {
 

@@ -5,6 +5,7 @@ import java.io.*;
 import sisc.*;
 import sisc.data.*;
 import sisc.interpreter.*;
+import sisc.env.SymbolicEnvironment;
 
 public class R5RS extends Module {
 

@@ -14,12 +14,12 @@ implementation of Java interfaces in Scheme.
 Multiple Scheme applications can run within a single &SISC;
 runtime. Each application has its own top level environment and
 evaluator. An application is represented by instances of the
-<classname>AppContext</classname> class.
+<classname>sisc.interpreter.AppContext</classname> class.
 
 A Scheme application can execute in multiple threads. Each thread must
 have its own dynamic environment, containing entities such as the current
 input and output ports. Dynamic environments are represented by
-instances of the <classname>DynamicEnv</classname> class.
+instances of the <classname>sisc.env.DynamicEnvironment</classname> class.
 
 A thread can be associated with multiple interpreters. The reason for
 there being multiple interpreters is that internal calls need to be
@@ -46,15 +46,15 @@ call</quote>.
 </para>
           </listitem>
         </itemizedlist>
-The <classname>Context</classname> class is the key point where both
-the above call scenarios are managed.
+The <classname>sisc.interpreter.Context</classname> class is the key
+point where both the above call scenarios are managed.
 </para>
       <sect3>
         <title>Internal Calls</title>
         <para>
 When making an internal call, one typically wants to do that in an
 interpreter that shares the same <classname>AppContext</classname> and
-<classname>DynamicEnv</classname> as the calling interpreter. One can
+<classname>DynamicEnvironment</classname> as the calling interpreter. One can
 get hold of such an interpreter using
 <programlisting>
 Interpreter r = Context.enter();
@@ -67,7 +67,7 @@ else { ...make internal call... }
 </programlisting>
 The calls themselves are made using one of the three
 <function>eval</function> methods on the
-<classname>Interpreter</classname>:
+<classname>sisc.interpreter.Interpreter</classname>:
 <itemizedlist>
             <listitem>
               <methodsynopsis language="java">
@@ -139,7 +139,7 @@ Context.exit()
         <para>
           The main challenge when making external calls is what
           application and dynamic environment to make them
-          in. <classname>Context</classname> maintains an application
+          in. <classname>sisc.interpreter.Context</classname> maintains an application
           registry. To register an application call
           <programlisting>
 Context.register("appname", appContext)
@@ -197,7 +197,7 @@ Context.exit()
         <title>Error Handling</title>
         <para>
           <literal>Interpreter.eval()</literal> throws a
-          <classname>SchemeException</classname> when an evaluation
+          <classname>sisc.interpreter.SchemeException</classname> when an evaluation
           causes an exception that is not caught inside the
           evaluation. When making internal calls the exception can be
           propagated to the calling interpreter in one of four ways:
