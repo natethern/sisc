@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -40,33 +40,33 @@ public class IfEval extends Expression {
     public Expression conseq, altern;
 
     public IfEval(Expression conseq, Expression altern) {
-	this.conseq=conseq;
-	this.altern=altern;
+        this.conseq=conseq;
+        this.altern=altern;
     }
 
-    public void eval(Interpreter r) throws ContinuationException { 
-	r.nxp = (truth(r.acc) ? conseq : altern);
+    public void eval(Interpreter r) throws ContinuationException {
+        r.nxp = (truth(r.acc) ? conseq : altern);
     }
 
     public Value express() {
-	return list(sym("If-eval"), conseq.express(), altern.express());
+        return list(sym("If-eval"), conseq.express(), altern.express());
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    s.serialize(conseq, dos);
-	    s.serialize(altern, dos);
-	}
+        if (SERIALIZATION) {
+            s.serialize(conseq, dos);
+            s.serialize(altern, dos);
+        }
     }
 
     public IfEval() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    conseq=s.deserialize(dis);
-	    altern=s.deserialize(dis);
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            conseq=s.deserialize(dis);
+            altern=s.deserialize(dis);
+        }
     }
 }
 

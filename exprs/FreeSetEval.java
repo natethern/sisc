@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -42,47 +42,47 @@ public class FreeSetEval extends Expression {
     public int envLoc;
 
     public FreeSetEval(Symbol lhs, int e, AssociativeEnvironment senv) {
-	this.lhs=lhs;
-	envLoc=e;
-	this.senv=senv;
+        this.lhs=lhs;
+        envLoc=e;
+        this.senv=senv;
     }
 
-    public void eval(Interpreter r) throws ContinuationException { 
-	try {
-	    senv.env[envLoc]=r.acc;
-	} catch (ArrayIndexOutOfBoundsException aie) {
-	    envLoc=senv.set(lhs, r.acc);
-	}
+    public void eval(Interpreter r) throws ContinuationException {
+        try {
+            senv.env[envLoc]=r.acc;
+        } catch (ArrayIndexOutOfBoundsException aie) {
+            envLoc=senv.set(lhs, r.acc);
+        }
 
-	if (r.acc instanceof NamedValue) {
-	    NamedValue nv=(NamedValue)r.acc;
-	    if (nv.name==null)
-		nv.name=lhs;
-	}
+        if (r.acc instanceof NamedValue) {
+            NamedValue nv=(NamedValue)r.acc;
+            if (nv.name==null)
+                nv.name=lhs;
+        }
 
-	r.acc=VOID;
-	r.nxp=null;
+        r.acc=VOID;
+        r.nxp=null;
     }
 
     public Value express() {
-	return list(sym("FreeSet-eval"), lhs);
+        return list(sym("FreeSet-eval"), lhs);
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    s.serialize(lhs, dos);
-	    s.serialize(senv, dos);
-	}
+        if (SERIALIZATION) {
+            s.serialize(lhs, dos);
+            s.serialize(senv, dos);
+        }
     }
 
     public FreeSetEval() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    lhs=(Symbol)s.deserialize(dis);
-	    senv=(AssociativeEnvironment)s.deserialize(dis);
-	    envLoc=-1;
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            lhs=(Symbol)s.deserialize(dis);
+            senv=(AssociativeEnvironment)s.deserialize(dis);
+            envLoc=-1;
+        }
     }
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -38,65 +38,65 @@ import java.io.*;
 
 public class FreeReferenceExp extends Expression implements Immediate {
     public Symbol sym;
-    public AssociativeEnvironment lenv; 
+    public AssociativeEnvironment lenv;
     public int envLoc;
 
-    public FreeReferenceExp(Symbol s, int envLoc, 
-			    AssociativeEnvironment lenv) {
-	this.lenv=lenv;
-	sym=s;
-	this.envLoc=envLoc;
+    public FreeReferenceExp(Symbol s, int envLoc,
+                            AssociativeEnvironment lenv) {
+        this.lenv=lenv;
+        sym=s;
+        this.envLoc=envLoc;
     }
 
-    public void eval(Interpreter r) throws ContinuationException { 
-	r.nxp=null;
-	if (envLoc==-1) { 
-	    envLoc=lenv.getLoc(sym);
-	    if (envLoc==-1)
-		error(r, "undefined variable '"+sym+"'");
-	}
-	r.acc= lenv.env[envLoc];
+    public void eval(Interpreter r) throws ContinuationException {
+        r.nxp=null;
+        if (envLoc==-1) {
+            envLoc=lenv.getLoc(sym);
+            if (envLoc==-1)
+                error(r, "undefined variable '"+sym+"'");
+        }
+        r.acc= lenv.env[envLoc];
     }
 
     public Value getValue(Interpreter r) throws ContinuationException {
-	if (envLoc==-1) { 
-	    envLoc=lenv.getLoc(sym);
-	    if (envLoc==-1)
-		error(r, "undefined variable '"+sym+"'");
-	}
-	return lenv.env[envLoc];
+        if (envLoc==-1) {
+            envLoc=lenv.getLoc(sym);
+            if (envLoc==-1)
+                error(r, "undefined variable '"+sym+"'");
+        }
+        return lenv.env[envLoc];
     }
 
     public Value express() {
-	return list(sym("FreeReference-exp"), sym);
+        return list(sym("FreeReference-exp"), sym);
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    s.serialize(sym, dos);
-	    s.serialize(lenv, dos);
-	}
+        if (SERIALIZATION) {
+            s.serialize(sym, dos);
+            s.serialize(lenv, dos);
+        }
     }
 
     public FreeReferenceExp() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    sym=(Symbol)s.deserialize(dis);
-	    lenv=(AssociativeEnvironment)s.deserialize(dis);
-	    envLoc=-1;
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            sym=(Symbol)s.deserialize(dis);
+            lenv=(AssociativeEnvironment)s.deserialize(dis);
+            envLoc=-1;
+        }
     }
 
     public boolean equals(Object o) {
-	if (!(o instanceof FreeReferenceExp))
-	    return false;
-	FreeReferenceExp e=(FreeReferenceExp)o;
-	return lenv.equals(e.lenv) && sym.equals(e.sym);
+        if (!(o instanceof FreeReferenceExp))
+            return false;
+        FreeReferenceExp e=(FreeReferenceExp)o;
+        return lenv.equals(e.lenv) && sym.equals(e.sym);
     }
 
     public int hashCode() {
-	return lenv.hashCode() ^ sym.hashCode();
+        return lenv.hashCode() ^ sym.hashCode();
     }
 }

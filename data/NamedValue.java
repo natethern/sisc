@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -36,15 +36,15 @@ public abstract class NamedValue extends Value {
     public Symbol name;
 
     public void setName(Symbol s) {
-	name=s;
+        name=s;
     }
 
     public String displayNamedOpaque(String type) {
-	StringBuffer b=new StringBuffer();
-	b.append("#<").append(type);
-	if (name!=null) 
-	    b.append(' ').append(name.display());
-	b.append('>');
-	return b.toString();
+        StringBuffer b=new StringBuffer();
+        b.append("#<").append(type);
+        if (name!=null)
+            b.append(' ').append(name.display());
+        b.append('>');
+        return b.toString();
     }
 }

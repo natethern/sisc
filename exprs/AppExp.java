@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -42,84 +42,84 @@ public class AppExp extends Expression {
     public boolean nonTail;
 
     public AppExp(Expression rator, Expression rands[], boolean nontail) {
-	if (rator instanceof Value && !(rator instanceof Procedure)) 
-	    System.err.println("{warning: compiler detected application of non-procedure '"+
-			       ((Value)rator).write()+"'}");
+        if (rator instanceof Value && !(rator instanceof Procedure))
+            System.err.println("{warning: compiler detected application of non-procedure '"+
+                               ((Value)rator).write()+"'}");
 
-	this.rator=rator;
-	this.rands=rands;
-	this.nonTail=nontail;
+        this.rator=rator;
+        this.rands=rands;
+        this.nonTail=nontail;
     }
 
-    public void eval(Interpreter r) throws ContinuationException { 
-	Value tmp;
-	int i;
+    public void eval(Interpreter r) throws ContinuationException {
+        Value tmp;
+        int i;
 
-	if (nonTail) {
-	    r.nxp=null;
-	    r.save();
-	}
+        if (nonTail) {
+            r.nxp=null;
+            r.save();
+        }
 
-	r.vlr=rands.length == 0 ? ZV : new Value[rands.length];
+        r.vlr=rands.length == 0 ? ZV : new Value[rands.length];
 
-	// Fill the rib right to left with immediates until non-imm.
-	// encountered
-	for (i=rands.length-1; 
-	     i>=0 && ((tmp=rands[i].getValue(r)) != null); 
-	     i--)
-	    r.vlr[i]=tmp;
-	
-	// If not all were immediate, push a fillrib, otherwise
-	// go straight to eval
-	if (i>-1) {
-	    r.push(r.createFillRib(i, rands, rator, APPEVAL));
-	    r.nxp=rands[i];
-	} else {
-	    tmp=rator.getValue(r);
-	    if (tmp==null) { 
-		r.push(APPEVAL);
-		r.nxp=rator;
-	    } else {
-		r.acc=tmp;
-		r.nxp=APPEVAL;
-	    }
-	}
+        // Fill the rib right to left with immediates until non-imm.
+        // encountered
+        for (i=rands.length-1;
+                i>=0 && ((tmp=rands[i].getValue(r)) != null);
+                i--)
+            r.vlr[i]=tmp;
+
+        // If not all were immediate, push a fillrib, otherwise
+        // go straight to eval
+        if (i>-1) {
+            r.push(r.createFillRib(i, rands, rator, APPEVAL));
+            r.nxp=rands[i];
+        } else {
+            tmp=rator.getValue(r);
+            if (tmp==null) {
+                r.push(APPEVAL);
+                r.nxp=rator;
+            } else {
+                r.acc=tmp;
+                r.nxp=APPEVAL;
+            }
+        }
     }
 
     public Value express() {
-	Pair args=EMPTYLIST;
-	for (int i=rands.length-1; i>=0; i--) {
-	    args=new Pair(rands[i].express(), args);
-	}
-	args=new Pair(rator.express(), args);
-	return new Pair(nonTail ? sym("App-exp") : sym("TailApp-exp"), args);
+        Pair args=EMPTYLIST;
+        for (int i=rands.length-1; i>=0; i--) {
+            args=new Pair(rands[i].express(), args);
+        }
+        args=new Pair(rator.express(), args);
+        return new Pair(nonTail ? sym("App-exp") : sym("TailApp-exp"), args);
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    s.writeBer(rands.length, dos);
-	    for (int i=0; i<rands.length; i++) 
-		s.serialize(rands[i], dos);
-	    s.serialize(rator, dos);
-	    dos.writeBoolean(nonTail);
-	}
+        if (SERIALIZATION) {
+            s.writeBer(rands.length, dos);
+            for (int i=0; i<rands.length; i++)
+                s.serialize(rands[i], dos);
+            s.serialize(rator, dos);
+            dos.writeBoolean(nonTail);
+        }
     }
 
     public AppExp() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    int size=s.readBer(dis);
-	    
-	    rands=new Expression[size];
-	    for (int i=0; i<size; i++) { 
-		rands[i]=s.deserialize(dis);
-	    } 
-	    
-	    rator=s.deserialize(dis);
-	    nonTail=dis.readBoolean();
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            int size=s.readBer(dis);
+
+            rands=new Expression[size];
+            for (int i=0; i<size; i++) {
+                rands[i]=s.deserialize(dis);
+            }
+
+            rator=s.deserialize(dis);
+            nonTail=dis.readBoolean();
+        }
     }
 }
 

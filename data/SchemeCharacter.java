@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -41,70 +41,69 @@ public class SchemeCharacter extends Value {
     static final Hashtable humanReadables=new Hashtable(8);
 
     static {
-	humanReadables.put(new SchemeCharacter(' '), "#\\space");
-	humanReadables.put(new SchemeCharacter('\u0008'), "#\\backspace");
-	humanReadables.put(new SchemeCharacter('\u007f'), "#\\rubout");
-	humanReadables.put(new SchemeCharacter('\u000c'), "#\\page");
-	humanReadables.put(new SchemeCharacter('\t'), "#\\tab");
-	humanReadables.put(new SchemeCharacter('\n'), "#\\newline");
-	humanReadables.put(new SchemeCharacter('\r'), "#\\return");
-	humanReadables.put(new SchemeCharacter((char)0), "#\\nul");
-
+        humanReadables.put(new SchemeCharacter(' '), "#\\space");
+        humanReadables.put(new SchemeCharacter('\u0008'), "#\\backspace");
+        humanReadables.put(new SchemeCharacter('\u007f'), "#\\rubout");
+        humanReadables.put(new SchemeCharacter('\u000c'), "#\\page");
+        humanReadables.put(new SchemeCharacter('\t'), "#\\tab");
+        humanReadables.put(new SchemeCharacter('\n'), "#\\newline");
+        humanReadables.put(new SchemeCharacter('\r'), "#\\return");
+        humanReadables.put(new SchemeCharacter((char)0), "#\\nul");
     }
 
     public char c;
 
     public SchemeCharacter(char c) {
-	this.c=c;
+        this.c=c;
     }
 
     public String display() {
-	return ""+c;
+        return ""+c;
     }
 
     public String write() {
-	String hr=(String)humanReadables.get(this);
-	if (hr!=null) return hr;
-	StringBuffer b=new StringBuffer();
-	b.append("#\\");
-	if (c<128 && c>31) 
-	    b.append(c);
-	else b.append(justify(Integer.toOctalString(c),3,'0'));
-	return b.toString();
+        String hr=(String)humanReadables.get(this);
+        if (hr!=null) return hr;
+        StringBuffer b=new StringBuffer();
+        b.append("#\\");
+        if (c<128 && c>31)
+            b.append(c);
+        else b.append(justify(Integer.toOctalString(c),3,'0'));
+        return b.toString();
     }
 
     public boolean eq(Object v) {
-	return (v instanceof SchemeCharacter &&
-		((SchemeCharacter)v).c==c);
+        return (v instanceof SchemeCharacter &&
+                ((SchemeCharacter)v).c==c);
     }
 
     public boolean valueEqual(Value v) {
-	return (v instanceof sisc.data.SchemeCharacter && 
-		((sisc.data.SchemeCharacter)v).c==c);
+        return (v instanceof sisc.data.SchemeCharacter &&
+                ((sisc.data.SchemeCharacter)v).c==c);
     }
 
-   
+
     public int hashCode(){
-	return (int)c;
+        return (int)c;
     }
 
     public Object javaValue() {
-	return new Character(c);
+        return new Character(c);
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    dos.writeChar(c);
-	}
+        if (SERIALIZATION) {
+            dos.writeChar(c);
+        }
     }
 
     public SchemeCharacter() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    c=dis.readChar();
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            c=dis.readChar();
+        }
     }
 }
 

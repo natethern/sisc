@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -39,53 +39,53 @@ public class Values extends Value {
     public Value[] values;
 
     public Values(Value[] v) {
-	values=v;
+        values=v;
     }
 
     public String display() {
-	StringBuffer b=new StringBuffer();
-	
-	for (int i=0; i<values.length; i++) {
-	    b.append(values[i].display());
-	    if (i+1<values.length) b.append('\n');
-	}
-	return b.toString();
+        StringBuffer b=new StringBuffer();
+
+        for (int i=0; i<values.length; i++) {
+            b.append(values[i].display());
+            if (i+1<values.length) b.append('\n');
+        }
+        return b.toString();
     }
 
     public String write() {
-	StringBuffer b=new StringBuffer();
-	
-	for (int i=0; i<values.length; i++) {
-	    b.append(values[i].write());
-	    if (i+1<values.length) b.append('\n');
-	}
-	return b.toString();
+        StringBuffer b=new StringBuffer();
+
+        for (int i=0; i<values.length; i++) {
+            b.append(values[i].write());
+            if (i+1<values.length) b.append('\n');
+        }
+        return b.toString();
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-	error(r, "multiple values received in single-value context");
+        error(r, "multiple values received in single-value context");
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    s.writeBer(values.length, dos);
-	    for (int i=0; i<values.length; i++) {
-		s.serialize(values[i], dos);
-	    }
-	}
+        if (SERIALIZATION) {
+            s.writeBer(values.length, dos);
+            for (int i=0; i<values.length; i++) {
+                s.serialize(values[i], dos);
+            }
+        }
     }
 
     public Values() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    int size=s.readBer(dis);
-	    values=new Value[size];
-	    for (int i=0; i<size; i++) {
-		values[i]=(Value)s.deserialize(dis);
-	    }
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            int size=s.readBer(dis);
+            values=new Value[size];
+            for (int i=0; i<size; i++) {
+                values[i]=(Value)s.deserialize(dis);
+            }
+        }
     }
 }
 

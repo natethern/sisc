@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -38,41 +38,41 @@ import java.io.*;
 
 public class DefineEval extends Expression {
     public Symbol lhs;
-    
+
     public DefineEval(Symbol lhs) {
-	this.lhs=lhs;
+        this.lhs=lhs;
     }
 
-    public void eval(Interpreter r) throws ContinuationException { 
-	Value rhs=r.acc;
-	if (rhs instanceof NamedValue) {
-	    NamedValue nv=(NamedValue)rhs;
-	    if (nv.name==null)
-		nv.name=lhs;
-	}
-	r.define(lhs, rhs, TOPLEVEL);
+    public void eval(Interpreter r) throws ContinuationException {
+        Value rhs=r.acc;
+        if (rhs instanceof NamedValue) {
+            NamedValue nv=(NamedValue)rhs;
+            if (nv.name==null)
+                nv.name=lhs;
+        }
+        r.define(lhs, rhs, TOPLEVEL);
 
-	r.acc=VOID;
-	r.nxp=null;
+        r.acc=VOID;
+        r.nxp=null;
     }
 
     public Value express() {
-	return list(sym("Define-eval"), lhs);
+        return list(sym("Define-eval"), lhs);
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    s.serialize(lhs, dos);
-	}
+        if (SERIALIZATION) {
+            s.serialize(lhs, dos);
+        }
     }
 
     public DefineEval() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    lhs=(Symbol)s.deserialize(dis);
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            lhs=(Symbol)s.deserialize(dis);
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -42,41 +42,41 @@ public class LambdaExp extends Expression implements Immediate {
     public Expression body;
 
     public LambdaExp(int s, Expression body, boolean arity) {
-	infiniteArity=arity;
-	fcount=s;
-	this.body=body;
+        infiniteArity=arity;
+        fcount=s;
+        this.body=body;
     }
 
-    public void eval(Interpreter r) throws ContinuationException { 
-	r.nxp=null;
-	r.acc=new Closure(infiniteArity, fcount, body, r.env);
+    public void eval(Interpreter r) throws ContinuationException {
+        r.nxp=null;
+        r.acc=new Closure(infiniteArity, fcount, body, r.env);
     }
 
     public Value getValue(Interpreter r) throws ContinuationException {
-	return new Closure(infiniteArity, fcount, body, r.env);
+        return new Closure(infiniteArity, fcount, body, r.env);
     }
 
     public Value express() {
-	return list(sym("Lambda-exp"), sisc.data.Number.valueOf(fcount), body.express());
+        return list(sym("Lambda-exp"), sisc.data.Number.valueOf(fcount), body.express());
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    dos.writeBoolean(infiniteArity);
-	    s.writeBer(fcount, dos);
-	    s.serialize(body, dos);
-	}
+        if (SERIALIZATION) {
+            dos.writeBoolean(infiniteArity);
+            s.writeBer(fcount, dos);
+            s.serialize(body, dos);
+        }
     }
 
     public LambdaExp() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    infiniteArity=dis.readBoolean();
-	    fcount=s.readBer(dis);
-	    body=s.deserialize(dis);
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            infiniteArity=dis.readBoolean();
+            fcount=s.readBer(dis);
+            body=s.deserialize(dis);
+        }
     }
 }
 

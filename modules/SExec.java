@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -41,30 +41,30 @@ public class SExec extends Module {
     public static final int SEXEC=1;
 
     public void initialize(Interpreter r) {
-	define(r, "exec", SEXEC);
+        define(r, "exec", SEXEC);
     }
 
     public Value eval(int primid, Interpreter r)
-        throws ContinuationException {
-	Runtime rt=Runtime.getRuntime();
-	try {
-	    Process p=rt.exec(string(r,r.vlr[0]));
-	    BufferedReader stdout=new BufferedReader(new InputStreamReader(p.getInputStream()));
-	    BufferedReader stderr=new BufferedReader(new InputStreamReader(p.getInputStream()));
-	    int rc=p.waitFor();
-	    String sol=stdout.readLine();
-	    String sel=stdout.readLine();
-	    return list(new Quantity(rc),
-			(sol == null ? new SchemeString("") : 
-			 new SchemeString(sol)),
-			(sel == null ? new SchemeString("") :
-			 new SchemeString(sel)));
-	} catch (InterruptedException ie) {
-	    return Quantity.ONE;
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    throw new RuntimeException(e.getMessage());
-	}
+    throws ContinuationException {
+        Runtime rt=Runtime.getRuntime();
+        try {
+            Process p=rt.exec(string(r,r.vlr[0]));
+            BufferedReader stdout=new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader stderr=new BufferedReader(new InputStreamReader(p.getInputStream()));
+            int rc=p.waitFor();
+            String sol=stdout.readLine();
+            String sel=stdout.readLine();
+            return list(new Quantity(rc),
+                        (sol == null ? new SchemeString("") :
+                         new SchemeString(sol)),
+                        (sel == null ? new SchemeString("") :
+                         new SchemeString(sel)));
+        } catch (InterruptedException ie) {
+            return Quantity.ONE;
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }
-	    
+

@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -40,35 +40,35 @@ public class SchemeBoolean extends Value implements Singleton {
     public static SchemeBoolean FALSE=new SchemeBoolean(false);
     public static Boolean JTRUE=new Boolean(true), JFALSE=new Boolean(false);
     private boolean val;
-    
+
     protected SchemeBoolean(boolean v) {
-	val=v;
+        val=v;
     }
 
     public String display() {
-	return (val ? "#t" : "#f");
+        return (val ? "#t" : "#f");
     }
-    
+
     public Object javaValue() {
-	return val ? JTRUE : JFALSE;
+        return val ? JTRUE : JFALSE;
     }
 
     public SchemeBoolean() {}
 
     public void serialize(Serializer s,
-			  DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    dos.writeBoolean(val);
-	}
+                          DataOutputStream dos) throws IOException {
+        if (SERIALIZATION) {
+            dos.writeBoolean(val);
+        }
     }
 
     public static Value getValue(DataInputStream dis) throws IOException {
-	if (SERIALIZATION) {
-	    boolean v=dis.readBoolean();
-	    if (v)
-		return TRUE;
-	    return FALSE;
-	} else return null;
+        if (SERIALIZATION) {
+            boolean v=dis.readBoolean();
+            if (v)
+                return TRUE;
+            return FALSE;
+        } else return null;
     }
 }
 

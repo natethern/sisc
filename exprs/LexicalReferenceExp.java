@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -41,48 +41,48 @@ public class LexicalReferenceExp extends Expression implements Immediate {
     public int depth, pos;
 
     public LexicalReferenceExp(int ribcount, int position) {
-	depth=ribcount;
-	pos=position;
+        depth=ribcount;
+        pos=position;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-	r.nxp=null;
-	r.acc=r.env.lookup(depth, pos);
+        r.nxp=null;
+        r.acc=r.env.lookup(depth, pos);
     }
-    
+
     public Value getValue(Interpreter r) throws ContinuationException {
-	return r.env.lookup(depth, pos);
+        return r.env.lookup(depth, pos);
     }
 
     public Value express() {
-	return new Pair(new Quantity(depth), new Quantity(pos));
+        return new Pair(new Quantity(depth), new Quantity(pos));
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    s.writeBer(depth, dos);
-	    s.writeBer(pos, dos);
-	}
+        if (SERIALIZATION) {
+            s.writeBer(depth, dos);
+            s.writeBer(pos, dos);
+        }
     }
 
     public boolean equals(Object o) {
-	if (!(o instanceof LexicalReferenceExp))
-	    return false;
-	LexicalReferenceExp e=(LexicalReferenceExp)o;
-	return e.depth==depth && e.pos==pos;
+        if (!(o instanceof LexicalReferenceExp))
+            return false;
+        LexicalReferenceExp e=(LexicalReferenceExp)o;
+        return e.depth==depth && e.pos==pos;
     }
 
     public int hashCode() {
-	return depth<<16 | pos | 0xea000000;
+        return depth<<16 | pos | 0xea000000;
     }
     public LexicalReferenceExp() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    depth=s.readBer(dis);
-	    pos=s.readBer(dis);
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            depth=s.readBer(dis);
+            pos=s.readBer(dis);
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -39,18 +39,18 @@ public abstract class Expression extends Util implements Serializable {
 
     public abstract void eval(Interpreter r) throws ContinuationException;
     public Value getValue(Interpreter r) throws ContinuationException {
-	return null;
+        return null;
     }
 
     public abstract Value express();
 
-    public void serialize(Serializer s, 
-			  DataOutputStream dos) throws IOException {	
+    public void serialize(Serializer s,
+                          DataOutputStream dos) throws IOException {
     }
 
     public void deserialize(Serializer s,
-			    DataInputStream dis) throws IOException 
-    {}
+                            DataInputStream dis) throws IOException
+        {}
 }
 
 

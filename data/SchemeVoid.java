@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -41,10 +41,10 @@ public class SchemeVoid extends Value implements Singleton {
     protected SchemeVoid() {}
 
     public String display() {
-	return "#<void>";
-    }    
+        return "#<void>";
+    }
 
     public static Value getValue(DataInputStream dis) {
-	return VOID;
+        return VOID;
     }
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -42,51 +42,51 @@ public class Box extends Value {
     protected boolean locked=false;
 
     public Box(Expression val) {
-	this.val=val;
+        this.val=val;
     }
 
     public void lock() {
-	locked=true;
+        locked=true;
     }
 
     public void set(Value v) throws ImmutableException {
-	if (!locked)
-	    val=v;
-	else throw new ImmutableException();
+        if (!locked)
+            val=v;
+        else throw new ImmutableException();
     }
 
     public String display() {
-	StringBuffer b=new StringBuffer();
-	b.append("#&").append((val instanceof Value ? 
-			       ((Value)val).write() : "#<expression>"));
-	return b.toString();
+        StringBuffer b=new StringBuffer();
+        b.append("#&").append((val instanceof Value ?
+                               ((Value)val).write() : "#<expression>"));
+        return b.toString();
     }
-    
+
     public String write() {
-	return display();
+        return display();
     }
 
     public boolean valueEqual(Value v) {
-	Box b=(Box)v;
-	if (val==null && b.val!=null) return false;
-	return ((Value)val).valueEqual((Value)b.val);
+        Box b=(Box)v;
+        if (val==null && b.val!=null) return false;
+        return ((Value)val).valueEqual((Value)b.val);
     }
-    
+
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    dos.writeBoolean(locked);
-	    s.serialize(val, dos);
-	}
+        if (SERIALIZATION) {
+            dos.writeBoolean(locked);
+            s.serialize(val, dos);
+        }
     }
-    
+
     public Box() {}
 
     public void deserialize(Serializer s, DataInputStream dis)
-	throws IOException {
-	if (SERIALIZATION) {
-	    locked=dis.readBoolean();
-	    val=s.deserialize(dis);
-	}
+    throws IOException {
+        if (SERIALIZATION) {
+            locked=dis.readBoolean();
+            val=s.deserialize(dis);
+        }
     }
 }
 

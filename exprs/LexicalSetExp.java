@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -41,34 +41,34 @@ public class LexicalSetExp extends Expression {
     public LexicalSetEval eexpr;
 
     public LexicalSetExp(int depth, int pos, Expression rhs) {
-	this.rhs=rhs;
-	this.eexpr = new LexicalSetEval(depth, pos);
+        this.rhs=rhs;
+        this.eexpr = new LexicalSetEval(depth, pos);
     }
 
-    public void eval(Interpreter r) throws ContinuationException { 
-	r.push(eexpr);
-	r.nxp=rhs;
+    public void eval(Interpreter r) throws ContinuationException {
+        r.push(eexpr);
+        r.nxp=rhs;
     }
 
     public Value express() {
-	return list(sym("LexicalSet-exp"), eexpr.express(), rhs.express());
+        return list(sym("LexicalSet-exp"), eexpr.express(), rhs.express());
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    s.serialize(rhs, dos);
-	    s.serialize(eexpr, dos);
-	}
+        if (SERIALIZATION) {
+            s.serialize(rhs, dos);
+            s.serialize(eexpr, dos);
+        }
     }
 
     public LexicalSetExp() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    rhs=s.deserialize(dis);
-	    eexpr=(LexicalSetEval)s.deserialize(dis);
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            rhs=s.deserialize(dis);
+            eexpr=(LexicalSetEval)s.deserialize(dis);
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -38,198 +38,198 @@ import java.awt.*;
 import java.io.IOException;
 
 public class SNative extends Module {
-    protected static final int 
+    protected static final int
 	ASSQ=0, MEMQ=1, ASSOC=6, MEMBER=7,
 	CADR=2, CDAR=3, CAAR=4, CDDR=5, NOT=8,
-	APPEND=9, EQV=10, MEMV=11, ASSV=12, 
+	APPEND=9, EQV=10, MEMV=11, ASSV=12,
 	VECTOR=13, LISTREF=14, VALUES=15, READLINE=16;
-
+    
     static long symid=0;
 
     public void initialize(Interpreter r) {
-	define(r, "assq", ASSQ);
-	define(r, "memq", MEMQ);
-	define(r, "vector", VECTOR);
-	define(r, "assoc", ASSOC);
-	define(r, "member", MEMBER);
-	define(r, "append2", APPEND);
-	define(r, "not", NOT);
-	define(r, "eqv?", EQV);
-	define(r, "assv", ASSV);
-	define(r, "memv", MEMV);
-	define(r, "caar", CAAR);
-	define(r, "cadr", CADR);
-	define(r, "cdar", CDAR);
-	define(r, "cddr", CDDR);
-	define(r, "list-ref", LISTREF);
-	define(r, "values", VALUES);
-	define(r, "read-line", READLINE);
+        define(r, "assq", ASSQ);
+        define(r, "memq", MEMQ);
+        define(r, "vector", VECTOR);
+        define(r, "assoc", ASSOC);
+        define(r, "member", MEMBER);
+        define(r, "append2", APPEND);
+        define(r, "not", NOT);
+        define(r, "eqv?", EQV);
+        define(r, "assv", ASSV);
+        define(r, "memv", MEMV);
+        define(r, "caar", CAAR);
+        define(r, "cadr", CADR);
+        define(r, "cdar", CDAR);
+        define(r, "cddr", CDDR);
+        define(r, "list-ref", LISTREF);
+        define(r, "values", VALUES);
+        define(r, "read-line", READLINE);
     }
 
     public static final Value cadr(Value p) {
-	return ((Pair)((Pair)p).cdr).car;
+        return ((Pair)((Pair)p).cdr).car;
     }
 
 
     public static final Value cddr(Value p) {
-	return ((Pair)((Pair)p).cdr).cdr;
+        return ((Pair)((Pair)p).cdr).cdr;
     }
 
     public static boolean jnumQuery(Value v, int mask) {
-	return v instanceof Quantity &&
-	    (((Quantity)v).type & mask)!=0;
+        return v instanceof Quantity &&
+               (((Quantity)v).type & mask)!=0;
     }
 
     protected boolean eqv(Value v1, Value v2) {
-	return v1.eq(v2) ||
-	    ((jnumQuery(v1, Quantity.EXACT) &&
-	      jnumQuery(v2, Quantity.EXACT)) ||
-	     (jnumQuery(v1, Quantity.INEXACT) &&
-	      jnumQuery(v2, Quantity.INEXACT))) &&
-	    v1.valueEqual(v2);
+        return v1.eq(v2) ||
+               ((jnumQuery(v1, Quantity.EXACT) &&
+                 jnumQuery(v2, Quantity.EXACT)) ||
+                (jnumQuery(v1, Quantity.INEXACT) &&
+                 jnumQuery(v2, Quantity.INEXACT))) &&
+               v1.valueEqual(v2);
     }
 
     public Value eval(int primid, Interpreter f) throws ContinuationException {
-	switch(primid) {
-	case VECTOR:
-	    return new SchemeVector(f.vlr);
-	case VALUES:
-	    return (f.vlr.length==1 ? f.vlr[0] : 
-		    (Value)new Values(f.vlr));
-	default:
-	    switch(f.vlr.length) {
-	    case 0:
-		switch(primid) {
-		case READLINE:
-		    try {
-			String s=f.console_in.getReader().readLine();
-			if (s==null) return EOF;
-			return new SchemeString(s);
-		    } catch (IOException e) {
-			throw new RuntimeException(e.getMessage());
-		    }
-		default: 
-		    error(f, "Incorrect number of arguments to procedure "+f.acc);
-		}	
-	    case 1:
-		switch(primid) {
-		case NOT: return truth(f.vlr[0]) ? FALSE : TRUE;
-		case CADR:
-		    return ((Pair)pair(f,f.vlr[0]).cdr).car;
-		case CDAR:
-		    return ((Pair)pair(f,f.vlr[0]).car).cdr;
-		case CAAR:
-		    return ((Pair)pair(f,f.vlr[0]).car).car;
-		case CDDR:
-		    return ((Pair)pair(f,f.vlr[0]).cdr).cdr;
-		case READLINE:
-		    try {
-			String s=inport(f,f.vlr[0]).getReader().readLine();
-			if (s==null) return EOF;
-			return new SchemeString(s);
-		    } catch (IOException e) {
-			throw new RuntimeException(e.getMessage());
-		    }
-		default: 
-		    error(f, "Incorrect number of arguments to procedure "+f.acc);
-		}	
-	    case 2:
-		switch(primid) {
-		case APPEND:
-		    Pair p1=pair(f,f.vlr[0]);
-		    Pair p2=pair(f,f.vlr[1]);
-		    if (p1==EMPTYLIST)
-			return p2;
-		    if (p2==EMPTYLIST)
-			return p1;
-		    Pair p3=list(p1.car);
-		    p1=(Pair)p1.cdr;
-		    Pair p4=p3;
-		    while (p1!=EMPTYLIST) {
-			p3=(Pair)(p3.cdr=new Pair());
-			p3.car=p1.car;
-			p1=(Pair)p1.cdr;
-		    }
-		    p3.cdr=p2;
-		    return p4;
-		case EQV:
-		    Value v1=f.vlr[0];
-		    Value v2=f.vlr[1];
-		    return truth(eqv(v1,v2));
-		case LISTREF:
-		    p1=pair(f,f.vlr[0]);
-		    for (int l=num(f,f.vlr[1]).intValue(); l>0; l--) {
-			p1=(Pair)p1.cdr;
-		    }
-		    return p1.car;
-		case ASSV:
-		    v1=f.vlr[0];
-		    p1=pair(f,f.vlr[1]);
-		    while (p1!=EMPTYLIST) {
-			Pair assc=pair(f,p1.car);
-			if (eqv(assc.car,v1))
-			    return assc;
-			p1=pair(f,p1.cdr);
-		    }
-		    return FALSE;
-		case ASSQ:
-		    v1=f.vlr[0];
-		    p1=pair(f,f.vlr[1]);
-		    while (p1!=EMPTYLIST) {
-			Pair assc=pair(f,p1.car);
-			if (assc.car.eq(v1))
-			    return assc;
-			p1=pair(f,p1.cdr);
-		    }
-		    return FALSE;
-		case MEMQ:
-		    v1=f.vlr[0];
-		    p1=pair(f,f.vlr[1]);
-		    while (p1!=EMPTYLIST) {
-			if (p1.car.eq(v1))
-			    return p1;
-			p1=pair(f,p1.cdr);
-		    }
-		    return FALSE;
-		case MEMV:
-		    v1=f.vlr[0];
-		    p1=pair(f,f.vlr[1]);
-		    while (p1!=EMPTYLIST) {
-			if (eqv(p1.car,v1))
-			    return p1;
-			p1=pair(f,p1.cdr);
-		    }
-		    return FALSE;
-		case ASSOC:
-		    v1=f.vlr[0];
-		    p1=pair(f,f.vlr[1]);
-		    while (p1!=EMPTYLIST) {
-			Pair assc=pair(f,p1.car);
-			if (assc.car.valueEqual(v1))
-			    return assc;
-			p1=pair(f,p1.cdr);
-		    }
-		    return FALSE;
-		case MEMBER:
-		    v1=f.vlr[0];
-		    p1=pair(f,f.vlr[1]);
-		    while (p1!=EMPTYLIST) {
-			if (p1.car.valueEqual(v1))
-			    return p1;
-			p1=pair(f,p1.cdr);
-		}
-		    return FALSE;
-		default: 
-		    error(f, "Incorrect number of arguments to procedure "+f.acc);
-		}	
-	    case 3:
-		switch(primid) {
-		default: 
-		    error(f, "Incorrect number of arguments to procedure "+f.acc);
-		}	
-	    }
-	}
-	return VOID;
+        switch(primid) {
+        case VECTOR:
+            return new SchemeVector(f.vlr);
+        case VALUES:
+            return (f.vlr.length==1 ? f.vlr[0] :
+                    (Value)new Values(f.vlr));
+        default:
+            switch(f.vlr.length) {
+            case 0:
+                switch(primid) {
+                case READLINE:
+                    try {
+                        String s=f.console_in.getReader().readLine();
+                        if (s==null) return EOF;
+                        return new SchemeString(s);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e.getMessage());
+                    }
+                default:
+                    error(f, "Incorrect number of arguments to procedure "+f.acc);
+                }
+            case 1:
+                switch(primid) {
+                case NOT: return truth(f.vlr[0]) ? FALSE : TRUE;
+                case CADR:
+                    return ((Pair)pair(f,f.vlr[0]).cdr).car;
+                case CDAR:
+                    return ((Pair)pair(f,f.vlr[0]).car).cdr;
+                case CAAR:
+                    return ((Pair)pair(f,f.vlr[0]).car).car;
+                case CDDR:
+                    return ((Pair)pair(f,f.vlr[0]).cdr).cdr;
+                case READLINE:
+                    try {
+                        String s=inport(f,f.vlr[0]).getReader().readLine();
+                        if (s==null) return EOF;
+                        return new SchemeString(s);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e.getMessage());
+                    }
+                default:
+                    error(f, "Incorrect number of arguments to procedure "+f.acc);
+                }
+            case 2:
+                switch(primid) {
+                case APPEND:
+                    Pair p1=pair(f,f.vlr[0]);
+                    Pair p2=pair(f,f.vlr[1]);
+                    if (p1==EMPTYLIST)
+                        return p2;
+                    if (p2==EMPTYLIST)
+                        return p1;
+                    Pair p3=list(p1.car);
+                    p1=(Pair)p1.cdr;
+                    Pair p4=p3;
+                    while (p1!=EMPTYLIST) {
+                        p3=(Pair)(p3.cdr=new Pair());
+                        p3.car=p1.car;
+                        p1=(Pair)p1.cdr;
+                    }
+                    p3.cdr=p2;
+                    return p4;
+                case EQV:
+                    Value v1=f.vlr[0];
+                    Value v2=f.vlr[1];
+                    return truth(eqv(v1,v2));
+                case LISTREF:
+                    p1=pair(f,f.vlr[0]);
+                    for (int l=num(f,f.vlr[1]).intValue(); l>0; l--) {
+                        p1=(Pair)p1.cdr;
+                    }
+                    return p1.car;
+                case ASSV:
+                    v1=f.vlr[0];
+                    p1=pair(f,f.vlr[1]);
+                    while (p1!=EMPTYLIST) {
+                        Pair assc=pair(f,p1.car);
+                        if (eqv(assc.car,v1))
+                            return assc;
+                        p1=pair(f,p1.cdr);
+                    }
+                    return FALSE;
+                case ASSQ:
+                    v1=f.vlr[0];
+                    p1=pair(f,f.vlr[1]);
+                    while (p1!=EMPTYLIST) {
+                        Pair assc=pair(f,p1.car);
+                        if (assc.car.eq(v1))
+                            return assc;
+                        p1=pair(f,p1.cdr);
+                    }
+                    return FALSE;
+                case MEMQ:
+                    v1=f.vlr[0];
+                    p1=pair(f,f.vlr[1]);
+                    while (p1!=EMPTYLIST) {
+                        if (p1.car.eq(v1))
+                            return p1;
+                        p1=pair(f,p1.cdr);
+                    }
+                    return FALSE;
+                case MEMV:
+                    v1=f.vlr[0];
+                    p1=pair(f,f.vlr[1]);
+                    while (p1!=EMPTYLIST) {
+                        if (eqv(p1.car,v1))
+                            return p1;
+                        p1=pair(f,p1.cdr);
+                    }
+                    return FALSE;
+                case ASSOC:
+                    v1=f.vlr[0];
+                    p1=pair(f,f.vlr[1]);
+                    while (p1!=EMPTYLIST) {
+                        Pair assc=pair(f,p1.car);
+                        if (assc.car.valueEqual(v1))
+                            return assc;
+                        p1=pair(f,p1.cdr);
+                    }
+                    return FALSE;
+                case MEMBER:
+                    v1=f.vlr[0];
+                    p1=pair(f,f.vlr[1]);
+                    while (p1!=EMPTYLIST) {
+                        if (p1.car.valueEqual(v1))
+                            return p1;
+                        p1=pair(f,p1.cdr);
+                    }
+                    return FALSE;
+                default:
+                    error(f, "Incorrect number of arguments to procedure "+f.acc);
+                }
+            case 3:
+                switch(primid) {
+                default:
+                    error(f, "Incorrect number of arguments to procedure "+f.acc);
+                }
+            }
+        }
+        return VOID;
     }
 }
-    
+

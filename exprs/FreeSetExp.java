@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -41,39 +41,39 @@ public class FreeSetExp extends Expression {
     public FreeSetEval eexpr;
 
     FreeSetExp(Expression rhs, FreeSetEval eexp) {
-	this.rhs=rhs;
-	this.eexpr=eexp;
+        this.rhs=rhs;
+        this.eexpr=eexp;
     }
 
     public FreeSetExp(Symbol lhs, int envLoc, Expression rhs,
-		      AssociativeEnvironment lenv) {
-	this.rhs=rhs;
-	this.eexpr = new FreeSetEval(lhs, envLoc, lenv);
+                      AssociativeEnvironment lenv) {
+        this.rhs=rhs;
+        this.eexpr = new FreeSetEval(lhs, envLoc, lenv);
     }
 
-    public void eval(Interpreter r) throws ContinuationException { 
-	r.push(eexpr);
-	r.nxp=rhs;
+    public void eval(Interpreter r) throws ContinuationException {
+        r.push(eexpr);
+        r.nxp=rhs;
     }
 
     public Value express() {
-	return list(sym("FreeSet-exp"), eexpr.express(), rhs.express());
+        return list(sym("FreeSet-exp"), eexpr.express(), rhs.express());
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    s.serialize(rhs, dos);
-	    s.serialize(eexpr, dos);
-	}
+        if (SERIALIZATION) {
+            s.serialize(rhs, dos);
+            s.serialize(eexpr, dos);
+        }
     }
 
     public FreeSetExp() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    rhs=s.deserialize(dis);
-	    eexpr=(FreeSetEval)s.deserialize(dis);
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            rhs=s.deserialize(dis);
+            eexpr=(FreeSetEval)s.deserialize(dis);
+        }
     }
 }

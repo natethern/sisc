@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -42,82 +42,82 @@ public class FillRibExp extends Expression implements Volatile {
     public Expression rands[], last, cleanup;
     public int pos;
     public boolean locked;
-    
+
     public FillRibExp(int pos, Expression rands[], Expression last,
-		      Expression cleanup) {
-	this.pos=pos;
-	this.rands=rands;
-	this.last=last;
-	this.cleanup=cleanup;
+                      Expression cleanup) {
+        this.pos=pos;
+        this.rands=rands;
+        this.last=last;
+        this.cleanup=cleanup;
     }
 
-    public void eval(Interpreter r) throws ContinuationException { 
-	r.vlr[pos]=r.acc;
+    public void eval(Interpreter r) throws ContinuationException {
+        r.vlr[pos]=r.acc;
 
-	int np=pos-1;
+        int np=pos-1;
         Value tmp;
-	for (np=pos-1;
-             np>=0 && ((tmp=rands[np].getValue(r)) != null);
-             np--) {
+        for (np=pos-1;
+                np>=0 && ((tmp=rands[np].getValue(r)) != null);
+                np--) {
             r.vlr[np]=tmp;
         }
 
- 	if (np>-1) {
-	    if (locked) {
-		r.push(r.createFillRib(np, rands, last, cleanup));
-	    } else {
-		pos=np;
-		r.push(this);
-	    }
-	    r.nxp=rands[np];
-	} else {
-	    tmp=last.getValue(r);
-	    if (tmp==null) {
-		r.push(cleanup);
-		r.nxp=last;
-	    } else {
-		r.acc=tmp;
-		r.nxp=cleanup;
-	    }
-	    r.returnFillRib(this);
-	}
+        if (np>-1) {
+            if (locked) {
+                r.push(r.createFillRib(np, rands, last, cleanup));
+            } else {
+                pos=np;
+                r.push(this);
+            }
+            r.nxp=rands[np];
+        } else {
+            tmp=last.getValue(r);
+            if (tmp==null) {
+                r.push(cleanup);
+                r.nxp=last;
+            } else {
+                r.acc=tmp;
+                r.nxp=cleanup;
+            }
+            r.returnFillRib(this);
+        }
     }
 
     public void lock() {
-	locked=true;
+        locked=true;
     }
 
     public Value express() {
-	return list(sym("FillRib-exp"), rands[pos].express(), last.express());
+        return list(sym("FillRib-exp"), rands[pos].express(), last.express());
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    s.writeBer(rands.length, dos);
-	    for (int i=0; i<rands.length; i++) 
-		s.serialize(rands[i], dos);
-	    s.serialize(last, dos);
-	    s.serialize(cleanup, dos);
-	    s.writeBer(pos, dos);
-	    dos.writeBoolean(locked);
-	}
+        if (SERIALIZATION) {
+            s.writeBer(rands.length, dos);
+            for (int i=0; i<rands.length; i++)
+                s.serialize(rands[i], dos);
+            s.serialize(last, dos);
+            s.serialize(cleanup, dos);
+            s.writeBer(pos, dos);
+            dos.writeBoolean(locked);
+        }
     }
 
     public FillRibExp() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    int size=s.readBer(dis);
-	    rands=new Expression[size];
-	    for (int i=0; i<size; i++) 
-		rands[i]=s.deserialize(dis);
-	    last=s.deserialize(dis);
-	    cleanup=s.deserialize(dis);
-	    pos=s.readBer(dis);
-	    
-	    locked=dis.readBoolean();
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            int size=s.readBer(dis);
+            rands=new Expression[size];
+            for (int i=0; i<size; i++)
+                rands[i]=s.deserialize(dis);
+            last=s.deserialize(dis);
+            cleanup=s.deserialize(dis);
+            pos=s.readBer(dis);
+
+            locked=dis.readBoolean();
+        }
     }
 }
 

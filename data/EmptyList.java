@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -39,27 +39,27 @@ public class EmptyList extends Pair implements Singleton {
     public static EmptyList EMPTYLIST=new EmptyList();
 
     static {
-	EMPTYLIST.car=EMPTYLIST.cdr=EMPTYLIST;
+        EMPTYLIST.car=EMPTYLIST.cdr=EMPTYLIST;
     }
 
     protected EmptyList() {}
 
     public String display() {
-	return "()";
+        return "()";
     }
 
     public String write() {
-	return display();
+        return display();
     }
 
     public Object javaValue() {
-	return null;
+        return null;
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {}
 
     public static Value getValue(DataInputStream dis) {
-	return EMPTYLIST;
+        return EMPTYLIST;
     }
 }
 

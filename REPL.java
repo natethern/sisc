@@ -45,126 +45,126 @@ public class REPL extends Thread {
     public Interpreter r;
 
     public REPL(Interpreter r) {
-	this.r = r;
+        this.r = r;
     }
 
     public static Interpreter createInterpreter(String[] args) {
-	Interpreter r = new Interpreter(System.in, System.out);
-	r.setEvaluator("eval");
-	try {
-	    r.loadEnv(new DataInputStream(
-		       new BufferedInputStream(
-		       new GZIPInputStream(
-		       new BufferedInputStream(
-                         new FileInputStream(
-			     System.getProperty("HEAP","sisc.heap")),
-		         90000))
-		       )));
-	} catch (IOException e) {
-	    System.err.println("Error loading heap!");
-	    e.printStackTrace();
-	}
+        Interpreter r = new Interpreter(System.in, System.out);
+        r.setEvaluator("eval");
+        try {
+            r.loadEnv(new DataInputStream(
+                          new BufferedInputStream(
+                              new GZIPInputStream(
+                                  new BufferedInputStream(
+                                      new FileInputStream(
+                                          System.getProperty("HEAP","sisc.heap")),
+                                      90000))
+                          )));
+        } catch (IOException e) {
+            System.err.println("Error loading heap!");
+            e.printStackTrace();
+        }
 
-	FreeReferenceExp load=new FreeReferenceExp(Symbol.get("load"),
-						   -1, r.toplevel_env);
-	for (int i=0; i<args.length; i++) {
-	    Value[] v=new Value[1];
-	    v[0]=new SchemeString(args[i]);
-	    r.interpret(new AppExp(load,
-				   (Expression[])v,
-				   false));
-	}
+        FreeReferenceExp load=new FreeReferenceExp(Symbol.get("load"),
+                              -1, r.toplevel_env);
+        for (int i=0; i<args.length; i++) {
+            Value[] v=new Value[1];
+            v[0]=new SchemeString(args[i]);
+            r.interpret(new AppExp(load,
+                                   (Expression[])v,
+                                   false));
+        }
 
-	Properties sysProps=System.getProperties();
-	for (Iterator ir=sysProps.keySet().iterator(); ir.hasNext();) {
-	    String key=(String)ir.next();
-	    Symbol s=Symbol.get(key);
-	    r.define(s, new SchemeString(sysProps.getProperty(key)), 
-		     Util.ENVVARS);
-	}
-	r.define(Symbol.get("version"), new SchemeString(Util.VERSION), Util.SISC);
-	File[] roots=File.listRoots();
-	SchemeString[] rootss=new SchemeString[roots.length];
-	for (int i=0; i<roots.length; i++) 
-	    rootss[i]=new SchemeString(roots[i].getPath());
-	r.define(Symbol.get("fs-roots"), Util.valArrayToList((Value[])rootss,
-							     0, rootss.length), 
-		 Util.SISC);
+        Properties sysProps=System.getProperties();
+        for (Iterator ir=sysProps.keySet().iterator(); ir.hasNext();) {
+            String key=(String)ir.next();
+            Symbol s=Symbol.get(key);
+            r.define(s, new SchemeString(sysProps.getProperty(key)),
+                     Util.ENVVARS);
+        }
+        r.define(Symbol.get("version"), new SchemeString(Util.VERSION), Util.SISC);
+        File[] roots=File.listRoots();
+        SchemeString[] rootss=new SchemeString[roots.length];
+        for (int i=0; i<roots.length; i++)
+            rootss[i]=new SchemeString(roots[i].getPath());
+        r.define(Symbol.get("fs-roots"), Util.valArrayToList((Value[])rootss,
+                 0, rootss.length),
+                 Util.SISC);
 
-	return r;
+        return r;
     }
 
     public void run() {
-	Value v=null;
-	FreeReferenceExp repl=new FreeReferenceExp(Symbol.get("repl"),
-						   -1, r.toplevel_env);
-	start:
-	do {
-	    try {
-		r.interpret(new AppExp(repl, new Expression[0],
-				       false));
-	    } catch (Exception e) {
-		System.err.println("System error: "+e.toString());
-		continue start;
-	    }
-	} while (false);
-	//System.runFinalizersOnExit(true);
+        Value v=null;
+        FreeReferenceExp repl=new FreeReferenceExp(Symbol.get("repl"),
+                              -1, r.toplevel_env);
+start:
+        do {
+            try {
+                r.interpret(new AppExp(repl, new Expression[0],
+                                       false));
+            } catch (Exception e) {
+                System.err.println("System error: "+e.toString());
+                continue start;
+            }
+        } while (false);
+        //System.runFinalizersOnExit(true);
     }
 
     public static void main(String[] args) throws Exception {
 
-	boolean server = false;
-	InetAddress bindAddr = null;
-	int port = 0;
+        boolean server = false;
+        InetAddress bindAddr = null;
+        int port = 0;
 
-	java.util.Vector fargs = new java.util.Vector();
+        java.util.Vector fargs = new java.util.Vector();
 
-	for (int iArg=0; iArg < args.length; iArg++) {
-	    String arg = args[iArg];
-	    if (arg.equals("--server")) {
-		server = true;
-		continue;
-	    }
-	    if (arg.equals("--host")) {
-		iArg++;
-		bindAddr = InetAddress.getByName(args[iArg]);
-		continue;
-	    }
-	    if (arg.equals("--port")) {
-		iArg++;
-		port = Integer.parseInt(args[iArg]);
-		continue;
-	    }
-	    fargs.add(arg);
-	}
-	
-	PrintWriter pout=new PrintWriter(System.out);
-	PrintWriter perr=new PrintWriter(System.err);
-	pout.print("SISC");
-	pout.flush();
+        for (int iArg=0; iArg < args.length; iArg++) {
+            String arg = args[iArg];
+            if (arg.equals("--server")) {
+                server = true;
+                continue;
+            }
+            if (arg.equals("--host")) {
+                iArg++;
+                bindAddr = InetAddress.getByName(args[iArg]);
+                continue;
+            }
+            if (arg.equals("--port")) {
+                iArg++;
+                port = Integer.parseInt(args[iArg]);
+                continue;
+            }
+            fargs.add(arg);
+        }
 
-	Interpreter r = createInterpreter((String[])fargs.toArray(new String[0]));
+        PrintWriter pout=new PrintWriter(System.out);
+        PrintWriter perr=new PrintWriter(System.err);
+        pout.print("SISC");
+        pout.flush();
 
-	pout.println(" ("+Util.VERSION+")");
-	pout.flush();
+        Interpreter r = createInterpreter((String[])fargs.toArray(new String[0]));
 
-	if (server) {
-	    ServerSocket ssocket = new ServerSocket(port, 50, bindAddr);
-	    pout.println("Listening on " + ssocket.getInetAddress().toString() + ":" + ssocket.getLocalPort());
-	    pout.flush();
-	    for (;;) {
-		Socket client = ssocket.accept();
-		Interpreter cr = Interpreter.newContext(r);
-		cr.console_in = new InputPort(new BufferedReader(new InputStreamReader(client.getInputStream())));
-		cr.console_out = new OutputPort(new PrintWriter(client.getOutputStream()), true);
-		REPL repl = new SocketREPL(cr, client);
-		repl.start();
-	    }
-	}
-	else {
-	    REPL repl=new REPL(r);
-	    repl.start();
-	}
+        pout.println(" ("+Util.VERSION+")");
+        pout.flush();
+
+        if (server) {
+            ServerSocket ssocket = new ServerSocket(port, 50, bindAddr);
+            pout.println("Listening on " + ssocket.getInetAddress().toString() + ":" + ssocket.getLocalPort());
+            pout.flush();
+            for (;;) {
+                Socket client = ssocket.accept();
+                Interpreter cr = Interpreter.newContext(r);
+                cr.console_in = new InputPort(new BufferedReader(new InputStreamReader(client.getInputStream())));
+                cr.console_out = new OutputPort(new PrintWriter(client.getOutputStream()), true);
+                REPL repl = new SocketREPL(cr, client);
+                repl.start();
+            }
+        }
+        else {
+            REPL repl=new REPL(r);
+            repl.start();
+        }
     }
 }
 
@@ -173,16 +173,16 @@ class SocketREPL extends REPL {
     public Socket s;
 
     public SocketREPL(Interpreter r, Socket s) {
-	super(r);
-	this.s = s;
+        super(r);
+        this.s = s;
     }
 
     public void run() {
-	super.run();
-	try {
-	    s.close();
-	}
-	catch(IOException e) {}
+        super.run();
+        try {
+            s.close();
+        }
+        catch(IOException e) {}
     }
 }
 

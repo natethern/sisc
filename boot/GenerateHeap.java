@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -43,63 +43,63 @@ import java.util.*;
 public class GenerateHeap {
 
     public static void main(String[] args) throws Exception {
-	Interpreter r;
+        Interpreter r;
 
-	System.out.println("Generating heap: "+args[0]);
+        System.out.println("Generating heap: "+args[0]);
 
-	r=new Interpreter(System.in, System.out);
-	r.setEvaluator("eval");
-	FreeReferenceExp load=new FreeReferenceExp(Symbol.get("load"),
-						   -1, r.toplevel_env);
+        r=new Interpreter(System.in, System.out);
+        r.setEvaluator("eval");
+        FreeReferenceExp load=new FreeReferenceExp(Symbol.get("load"),
+                              -1, r.toplevel_env);
 
 
-	Properties sysProps=System.getProperties();
-	for (Iterator ir=sysProps.keySet().iterator(); ir.hasNext();) {
-	    String key=(String)ir.next();
-	    Symbol s=Symbol.get(key);
-	    r.define(s, new SchemeString(sysProps.getProperty(key)), 
-		     Util.ENVVARS);
-	}
+        Properties sysProps=System.getProperties();
+        for (Iterator ir=sysProps.keySet().iterator(); ir.hasNext();) {
+            String key=(String)ir.next();
+            Symbol s=Symbol.get(key);
+            r.define(s, new SchemeString(sysProps.getProperty(key)),
+                     Util.ENVVARS);
+        }
 
-	for (int i=1; i<args.length; i++) {
-	    System.out.println("Expanding and compiling "+args[i]+"...");
-	    r.interpret(new AppExp(load,
-				   (Expression[])
-				   new Value[] {new SchemeString(args[i])},
-				   false));
-	}
+        for (int i=1; i<args.length; i++) {
+            System.out.println("Expanding and compiling "+args[i]+"...");
+            r.interpret(new AppExp(load,
+                                   (Expression[])
+                                   new Value[] {new SchemeString(args[i])},
+                                   false));
+        }
 
-	if (!r.setWriter("pretty-print"))
-	    r.setWriter("write");
+        if (!r.setWriter("pretty-print"))
+            r.setWriter("write");
 
-	// Lock in the R5RS environment
-	AssociativeEnvironment report_env, top_env;
-	report_env=(AssociativeEnvironment)r.symenv.lookup(Util.TOPLEVEL);
-	report_env.trim();
-	top_env=new AssociativeEnvironment(report_env);
-	r.symenv.define(Util.TOPLEVEL, top_env);
-	r.symenv.define(Util.REPORT, report_env);
-	//	report_env.lock();
-	report_env.name=Symbol.get("r5rs");
-	top_env.name=Symbol.get("top-level");
+        // Lock in the R5RS environment
+        AssociativeEnvironment report_env, top_env;
+        report_env=(AssociativeEnvironment)r.symenv.lookup(Util.TOPLEVEL);
+        report_env.trim();
+        top_env=new AssociativeEnvironment(report_env);
+        r.symenv.define(Util.TOPLEVEL, top_env);
+        r.symenv.define(Util.REPORT, report_env);
+        //	report_env.lock();
+        report_env.name=Symbol.get("r5rs");
+        top_env.name=Symbol.get("top-level");
 
-	System.out.println("Saving heap...");
+        System.out.println("Saving heap...");
 
-	try {
-	    DataOutputStream out=new DataOutputStream(
-				 new GZIPOutputStream(
-				 new BufferedOutputStream(
-				 new FileOutputStream(args[0]))));
-	    r.saveEnv(out);
-	    out.flush();
-	    out.close();
-	} catch (Exception e) {
-	    System.err.println("Error generating heap:");
-	    e.printStackTrace();
-	    System.exit(1);
+        try {
+            DataOutputStream out=new DataOutputStream(
+                                     new GZIPOutputStream(
+                                         new BufferedOutputStream(
+                                             new FileOutputStream(args[0]))));
+            r.saveEnv(out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            System.err.println("Error generating heap:");
+            e.printStackTrace();
+            System.exit(1);
 
-	}
-	System.out.println("Heap saved.");
+        }
+        System.out.println("Heap saved.");
     }
 }
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -39,41 +39,41 @@ public abstract class Value extends Expression implements Immediate {
 
     public abstract String display();
     public Object javaValue() {
-	return this;
+        return this;
     }
 
     public String write() {
-	return display();
+        return display();
     }
 
     public boolean equals(Object v) {
-	return eq(v) || (v.getClass()==this.getClass() && 
-			 valueEqual((Value)v));
+        return eq(v) || (v.getClass()==this.getClass() &&
+                         valueEqual((Value)v));
     }
 
     public boolean eq(Object v) {
-	return this==v;
+        return this==v;
     }
 
     public boolean valueEqual(Value v) {
-	return eq(v);
+        return eq(v);
     }
 
     public String toString() {
-	return display();
+        return display();
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-	r.acc=this;
-	r.nxp=null;
+        r.acc=this;
+        r.nxp=null;
     }
 
     public final Value getValue(Interpreter r) throws ContinuationException {
-	return this;
+        return this;
     }
 
     public Value express() {
-	return this;
+        return this;
     }
 }
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -39,110 +39,110 @@ public class Pair extends Value {
     public Value car, cdr;
 
     public Pair() {
-	car=cdr=EMPTYLIST;
+        car=cdr=EMPTYLIST;
     }
 
     public Pair(Value car, Value cdr) {
-	this.car=car;
-	this.cdr=cdr;
+        this.car=car;
+        this.cdr=cdr;
     }
 
     protected void display(StringBuffer b, boolean write) {
 
-	Pair cv=this;
-	do {
-	    b.append((write ? cv.car.write() : cv.car.display()));
-	    
-	    if (cv.cdr instanceof Pair) {
-		if (cv.cdr!=EMPTYLIST)
-		    b.append(' ');
-		cv=(Pair)cv.cdr;
-	    } else {
-		b.append(" . ").append((write ? cv.cdr.write() : cv.cdr.display()));
-		break;
-	    }
-	} while (cv!=EMPTYLIST);
+        Pair cv=this;
+        do {
+            b.append((write ? cv.car.write() : cv.car.display()));
+
+            if (cv.cdr instanceof Pair) {
+                if (cv.cdr!=EMPTYLIST)
+                    b.append(' ');
+                cv=(Pair)cv.cdr;
+            } else {
+                b.append(" . ").append((write ? cv.cdr.write() : cv.cdr.display()));
+                break;
+            }
+        } while (cv!=EMPTYLIST);
     }
-	    
+
     public String display() {
-	StringBuffer b=new StringBuffer();
-	if (car==QUOTE) {
-	    b.append('\'').append(((Pair)cdr).car.display());
-	} else if (car==UNQUOTE) {
-	    b.append(',').append(((Pair)cdr).car.display());
-	} else if (car==BACKQUOTE) {
-	    b.append('`').append(((Pair)cdr).car.display());
-	} else if (car==UNQUOTE_SPLICING) {
-	    b.append(",@").append(((Pair)cdr).car.display());
-	} else {
-	    b.append('(');
-	    display(b, false);
-	    b.append(')');
-	}
-	return b.toString();
+        StringBuffer b=new StringBuffer();
+        if (car==QUOTE) {
+            b.append('\'').append(((Pair)cdr).car.display());
+        } else if (car==UNQUOTE) {
+            b.append(',').append(((Pair)cdr).car.display());
+        } else if (car==BACKQUOTE) {
+            b.append('`').append(((Pair)cdr).car.display());
+        } else if (car==UNQUOTE_SPLICING) {
+            b.append(",@").append(((Pair)cdr).car.display());
+        } else {
+            b.append('(');
+            display(b, false);
+            b.append(')');
+        }
+        return b.toString();
     }
 
     public String write() {
-	StringBuffer b=new StringBuffer();
-	if (car==QUOTE) {
-	    b.append('\'').append(((Pair)cdr).car.write());
-	} else if (car==UNQUOTE) {
-	    b.append(',').append(((Pair)cdr).car.write());
-	} else if (car==BACKQUOTE) {
-	    b.append('`').append(((Pair)cdr).car.write());
-	} else if (car==UNQUOTE_SPLICING) {
-	    b.append(",@").append(((Pair)cdr).car.write());
-	} else {
-	    b.append('(');
-	    display(b, true);
-	    b.append(')');
-	}
-	return b.toString();
+        StringBuffer b=new StringBuffer();
+        if (car==QUOTE) {
+            b.append('\'').append(((Pair)cdr).car.write());
+        } else if (car==UNQUOTE) {
+            b.append(',').append(((Pair)cdr).car.write());
+        } else if (car==BACKQUOTE) {
+            b.append('`').append(((Pair)cdr).car.write());
+        } else if (car==UNQUOTE_SPLICING) {
+            b.append(",@").append(((Pair)cdr).car.write());
+        } else {
+            b.append('(');
+            display(b, true);
+            b.append(')');
+        }
+        return b.toString();
     }
 
     public boolean valueEqual(Value v) {
-	if (!(v instanceof Pair)) return false;
-	Pair p=(Pair)v;
-	return car.equals(p.car) &&
-	    cdr.equals(p.cdr);
+        if (!(v instanceof Pair)) return false;
+        Pair p=(Pair)v;
+        return car.equals(p.car) &&
+               cdr.equals(p.cdr);
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    Pair rv=this;
-	    boolean cont;
-	    do {
-		cont=false;
-		s.serialize(rv.car, dos);
-		if (!s.seen(rv.cdr) &&
-		    rv.cdr instanceof Pair && rv.cdr != EMPTYLIST) {
-		    dos.writeBoolean(cont=true);
-		    rv=(Pair)rv.cdr;
-		} else {
-		    dos.writeBoolean(false);
-		}
-	    } while (cont);
-	    s.serialize(rv.cdr, dos);
-	}
+    public void serialize(Serializer s, DataOutputStream dos)
+    throws IOException {
+        if (SERIALIZATION) {
+            Pair rv=this;
+            boolean cont;
+            do {
+                cont=false;
+                s.serialize(rv.car, dos);
+                if (!s.seen(rv.cdr) &&
+                        rv.cdr instanceof Pair && rv.cdr != EMPTYLIST) {
+                    dos.writeBoolean(cont=true);
+                    rv=(Pair)rv.cdr;
+                } else {
+                    dos.writeBoolean(false);
+                }
+            } while (cont);
+            s.serialize(rv.cdr, dos);
+        }
     }
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    car=(Value)s.deserialize(dis);
-	    Pair rv=this, tmp, head=rv;
-	    while (dis.readBoolean()) {
-		tmp=new Pair();
-		rv.cdr=tmp;
-		tmp.car=(Value)s.deserialize(dis);
-		rv=tmp;
-	    }
-	    rv.cdr=(Value)s.deserialize(dis);
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            car=(Value)s.deserialize(dis);
+            Pair rv=this, tmp, head=rv;
+            while (dis.readBoolean()) {
+                tmp=new Pair();
+                rv.cdr=tmp;
+                tmp.car=(Value)s.deserialize(dis);
+                rv=tmp;
+            }
+            rv.cdr=(Value)s.deserialize(dis);
+        }
     }
 }
-    
 
-	    
-		
+
+
+

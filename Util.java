@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -46,11 +46,11 @@ public abstract class Util implements Conf {
     public static EOFObject EOF=EOFObject.EOF;
     public static EmptyList EMPTYLIST=EmptyList.EMPTYLIST;
     public static SchemeVoid VOID=SchemeVoid.VOID;
-    public static SchemeBoolean 
-	TRUE=SchemeBoolean.TRUE,
-	FALSE=SchemeBoolean.FALSE;
+    public static SchemeBoolean
+    TRUE=SchemeBoolean.TRUE,
+         FALSE=SchemeBoolean.FALSE;
 
-    public static Symbol 
+    public static Symbol
 	UNQUOTE=Symbol.get("unquote"),
 	QUOTE=Symbol.get("quote"),
 	UNQUOTE_SPLICING=Symbol.get("unquote-splicing"),
@@ -63,242 +63,242 @@ public abstract class Util implements Conf {
 	ENVVARS=Symbol.get("*environment-variables*"),
 	SISC=Symbol.get("*sisc*");
 
-    public static void error(Interpreter r, Value where, String errormessage) 
-	throws ContinuationException {
-	r.acc=new Values(new Value[] {
-	    new SchemeString("Error in "+where
-			     +": "+ errormessage),
-	    new CallFrame(r.nxp, r.vlr, r.env, r.fk, r.stk).capture(),
-	    r.fk.fk});
+    public static void error(Interpreter r, Value where, String errormessage)
+    throws ContinuationException {
+        r.acc=new Values(new Value[] {
+                             new SchemeString("Error in "+where
+                                              +": "+ errormessage),
+                             new CallFrame(r.nxp, r.vlr, r.env, r.fk, r.stk).capture(),
+                             r.fk.fk});
 
-	throw new ContinuationException(r.fk);
+        throw new ContinuationException(r.fk);
     }
 
     public static final Symbol sym(String s) {
-	return Symbol.get(s);
+        return Symbol.get(s);
     }
 
-    public static void error(Interpreter r, String errormessage) 
-	throws ContinuationException {
-	error(r, errormessage, true);
+    public static void error(Interpreter r, String errormessage)
+    throws ContinuationException {
+        error(r, errormessage, true);
     }
 
-    public static void error(Interpreter r, String errormessage, 
-			     boolean prependError) 			     
-	throws ContinuationException {
-	r.acc=new Values(new Value[] {
-	    new SchemeString((prependError ? "Error: "+errormessage : 
-			      errormessage)),
-	    new CallFrame(r.nxp, r.vlr, r.env, r.fk, r.stk).capture(),
-	    r.fk.fk});
+    public static void error(Interpreter r, String errormessage,
+                             boolean prependError)
+    throws ContinuationException {
+        r.acc=new Values(new Value[] {
+                             new SchemeString((prependError ? "Error: "+errormessage :
+                                               errormessage)),
+                             new CallFrame(r.nxp, r.vlr, r.env, r.fk, r.stk).capture(),
+                             r.fk.fk});
 
-	throw new ContinuationException(r.fk);
+        throw new ContinuationException(r.fk);
     }
 
     public static String justify(String v, int p, char c) {
-	StringBuffer b=new StringBuffer();
-	while (b.length()<(p-v.length()))
-	    b.append(c);
-	return b.append(v).toString();
+        StringBuffer b=new StringBuffer();
+        while (b.length()<(p-v.length()))
+            b.append(c);
+        return b.append(v).toString();
     }
 
-    public static final void argCheck(Pair argl, int arity) 
-	throws Exception {
-	int x=length(argl);
-	if (x!=arity && arity!=-1) 
-	    throw new RuntimeException("expected "+arity+" args, got "+x);
+    public static final void argCheck(Pair argl, int arity)
+    throws Exception {
+        int x=length(argl);
+        if (x!=arity && arity!=-1)
+            throw new RuntimeException("expected "+arity+" args, got "+x);
     }
 
     public static int length(Pair p) {
-	Pair s=p;
-	try {
-	    int i=0;
-	    for (; p!=EMPTYLIST; i++)
-		p=(Pair)p.cdr;
-	    return i;
-	} catch (ClassCastException ce) {
-	    throw new RuntimeException(s+" is not a proper list");
-	}
+        Pair s=p;
+        try {
+            int i=0;
+            for (; p!=EMPTYLIST; i++)
+                p=(Pair)p.cdr;
+            return i;
+        } catch (ClassCastException ce) {
+            throw new RuntimeException(s+" is not a proper list");
+        }
     }
 
     public static Vector pairToExpVect(Pair p) {
-	Vector v=new Vector();
-	for (; p!=EMPTYLIST; p=(Pair)p.cdr) {
-	    v.addElement(p.car);
-	}
+        Vector v=new Vector();
+        for (; p!=EMPTYLIST; p=(Pair)p.cdr) {
+            v.addElement(p.car);
+        }
 
-	return v;
+        return v;
     }
 
     public static Expression[] pairToExpressions(Pair p) {
-	Vector v=pairToExpVect(p);
-	Expression[] vs=new Expression[v.size()];
-	v.copyInto(vs);
-	return vs;
+        Vector v=pairToExpVect(p);
+        Expression[] vs=new Expression[v.size()];
+        v.copyInto(vs);
+        return vs;
     }
 
     public static Value[] pairToValues(Pair p) {
-	Vector v=pairToExpVect(p);
-	Value[] vs=new Value[v.size()];
-	v.copyInto(vs);
-	return vs;
+        Vector v=pairToExpVect(p);
+        Value[] vs=new Value[v.size()];
+        v.copyInto(vs);
+        return vs;
     }
 
     public static Symbol[] pairToSymbols(Pair p) {
-	Pair o=p;
-	if (p==EMPTYLIST) return new Symbol[0];
+        Pair o=p;
+        if (p==EMPTYLIST) return new Symbol[0];
 
-	Vector v=pairToExpVect(p);
-	Symbol[] vs=new Symbol[v.size()];
-	v.copyInto(vs);
-	return vs;
+        Vector v=pairToExpVect(p);
+        Symbol[] vs=new Symbol[v.size()];
+        v.copyInto(vs);
+        return vs;
     }
 
     public static Symbol[] argsToSymbols(Pair p) {
-	if (p==EMPTYLIST) return new Symbol[0];
-	Vector v=new Vector();
-	int i=0;
+        if (p==EMPTYLIST) return new Symbol[0];
+        Vector v=new Vector();
+        int i=0;
 
-	for (; (p.cdr instanceof Pair) &&
-		 (p.cdr!=EMPTYLIST); 
-	     p=(Pair)p.cdr) {
-	    v.addElement(p.car);
-	}
-	v.addElement(p.car);
-	if (p.cdr!=EMPTYLIST)
-	    v.addElement(p.cdr);
-	Symbol[] vs=new Symbol[v.size()];
-	v.copyInto(vs);
-	return vs;
+        for (; (p.cdr instanceof Pair) &&
+                (p.cdr!=EMPTYLIST);
+                p=(Pair)p.cdr) {
+            v.addElement(p.car);
+        }
+        v.addElement(p.car);
+        if (p.cdr!=EMPTYLIST)
+            v.addElement(p.cdr);
+        Symbol[] vs=new Symbol[v.size()];
+        v.copyInto(vs);
+        return vs;
     }
 
-/* Casting checks */
+    /* Casting checks */
     public static void typeError(Interpreter r, String type, Value o) {
-	if (o instanceof Values)
-	    throw new RuntimeException(((Values)o).values.length+
-			  " values received in single-value context");
-	throw new RuntimeException("expected type "+type+", got '"+o.write()+
-				   '\'');
+        if (o instanceof Values)
+            throw new RuntimeException(((Values)o).values.length+
+                                       " values received in single-value context");
+        throw new RuntimeException("expected type "+type+", got '"+o.write()+
+                                   '\'');
     }
 
-    public static final Quantity num(Interpreter r, Value o) 
-	throws ContinuationException {
-	try {
-	    return (Quantity)o;
-	} catch (ClassCastException e) { typeError(r, "number", o); } return null;
+    public static final Quantity num(Interpreter r, Value o)
+    throws ContinuationException {
+        try {
+            return (Quantity)o;
+        } catch (ClassCastException e) { typeError(r, "number", o); } return null;
     }
 
-    public static final Pair pair(Interpreter r, Value o) 
-	throws ContinuationException {
-	try {
-	    return (Pair)o;
-	} catch (ClassCastException e) { typeError(r, "pair", o); } return null;
+    public static final Pair pair(Interpreter r, Value o)
+    throws ContinuationException {
+        try {
+            return (Pair)o;
+        } catch (ClassCastException e) { typeError(r, "pair", o); } return null;
     }
 
-    public static final Procedure proc(Interpreter r, Value o) 
-	throws ContinuationException {
-	try {
-	    return (Procedure)o;
-	} catch (ClassCastException e) { typeError(r, "procedure", o); } return null;
+    public static final Procedure proc(Interpreter r, Value o)
+    throws ContinuationException {
+        try {
+            return (Procedure)o;
+        } catch (ClassCastException e) { typeError(r, "procedure", o); } return null;
     }
 
-    public static final Pair truePair(Interpreter r, Value o) 
-	throws ContinuationException {
-	Pair p=pair(r, o);
-	if (p==EMPTYLIST) typeError(r, "pair", o);
-	return p;
+    public static final Pair truePair(Interpreter r, Value o)
+    throws ContinuationException {
+        Pair p=pair(r, o);
+        if (p==EMPTYLIST) typeError(r, "pair", o);
+        return p;
     }
-	
-    public static final char character(Interpreter r, Value c) 
-	throws ContinuationException {
-	return chr(r, c).c;
+
+    public static final char character(Interpreter r, Value c)
+    throws ContinuationException {
+        return chr(r, c).c;
     }
 
     public static final SchemeCharacter chr(Interpreter r, Value o) throws ContinuationException {
-	try {
-	    return (SchemeCharacter)o;
-	} catch (ClassCastException e) { typeError(r, "character", o); } return null;
+        try {
+            return (SchemeCharacter)o;
+        } catch (ClassCastException e) { typeError(r, "character", o); } return null;
     }
 
     public static final String string(Interpreter r, Value o) throws ContinuationException {
-	return new String(str(r, o).stringdata);
+        return new String(str(r, o).stringdata);
     }
 
     public static final SchemeString str(Interpreter r, Value o) throws ContinuationException {
-	try {
-	    return (SchemeString)o;
-	} catch (ClassCastException e) { typeError(r, "string", o); } return null;
+        try {
+            return (SchemeString)o;
+        } catch (ClassCastException e) { typeError(r, "string", o); } return null;
     }
 
     public static final Symbol symbol(Interpreter r, Value o) throws ContinuationException {
-	try {
-	    return (Symbol)o;
-	} catch (ClassCastException e) { typeError(r, "symbol", o); } return null;
+        try {
+            return (Symbol)o;
+        } catch (ClassCastException e) { typeError(r, "symbol", o); } return null;
     }
 
     public static final SchemeVector vec(Interpreter r, Value o) throws ContinuationException {
-	try {
-	    return (SchemeVector)o;
-	} catch (ClassCastException e) { typeError(r, "vector", o); } return null;
+        try {
+            return (SchemeVector)o;
+        } catch (ClassCastException e) { typeError(r, "vector", o); } return null;
     }
-    
+
     public static final OutputPort outport(Interpreter r, Value o) throws ContinuationException {
-	try {
-	    return (OutputPort)o;
-	} catch (ClassCastException e) { typeError(r, "output-port", o); } return null;
+        try {
+            return (OutputPort)o;
+        } catch (ClassCastException e) { typeError(r, "output-port", o); } return null;
     }
 
     public static final InputPort inport(Interpreter r, Value o) throws ContinuationException {
-	try {
-	    return (InputPort)o;
-	} catch (ClassCastException e) { typeError(r, "input-port", o); } return null;
+        try {
+            return (InputPort)o;
+        } catch (ClassCastException e) { typeError(r, "input-port", o); } return null;
     }
-    
+
     public static final AssociativeEnvironment env(Interpreter r, Value o) throws ContinuationException {
-	try {
-	    return (AssociativeEnvironment)o;
-	} catch (ClassCastException e) { typeError(r, "environment", o); } return null;
+        try {
+            return (AssociativeEnvironment)o;
+        } catch (ClassCastException e) { typeError(r, "environment", o); } return null;
     }
 
     public static final Box box(Interpreter r, Value o) throws ContinuationException {
-	try {	
-	    return (Box)o;
-	} catch (ClassCastException e) { typeError(r, "box", o); } return null;
+        try {
+            return (Box)o;
+        } catch (ClassCastException e) { typeError(r, "box", o); } return null;
     }
-    
+
     public static final SchemeBoolean truth(boolean b) throws ContinuationException {
-	return b ? TRUE : FALSE;
+        return b ? TRUE : FALSE;
     }
 
     public static final boolean truth(Value v) {
-	return v != FALSE;
+        return v != FALSE;
     }
 
     /* List functions */
 
     public static Pair append(Pair p1, Pair p2) {
-	if (p1==EMPTYLIST) return p2;
-	return new Pair(p1.car, append((Pair)p1.cdr, p2));
+        if (p1==EMPTYLIST) return p2;
+        return new Pair(p1.car, append((Pair)p1.cdr, p2));
     }
-	    
+
     public static final Pair list(Value o1) {
-	return new Pair(o1, EMPTYLIST);
+        return new Pair(o1, EMPTYLIST);
     }
 
     public static final Pair list(Value o1, Value o2) {
-	return new Pair(o1, list(o2));
+        return new Pair(o1, list(o2));
     }
 
     public static final Pair list(Value o1, Value o2, Value o3) {
-	return new Pair(o1, list(o2, o3));
+        return new Pair(o1, list(o2, o3));
     }
 
     public static Pair valArrayToList(Value[] r, int offset, int len) {
-	Pair p=EMPTYLIST;
-	for (int i=0; i<len; i++) {
-	    p=new Pair(r[(offset+len)-i-1], p);
-	}
-	return p;
+        Pair p=EMPTYLIST;
+        for (int i=0; i<len; i++) {
+            p=new Pair(r[(offset+len)-i-1], p);
+        }
+        return p;
     }
 }
 

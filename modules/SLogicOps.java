@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -38,51 +38,51 @@ import java.awt.*;
 import java.io.IOException;
 
 public class SLogicOps extends Module {
-    protected static final int 
+    protected static final int
 	LOGAND=1, LOGOR=2, LOGXOR=3, LOGNOT=4;
 
     public void initialize(Interpreter r) {
-	define(r, "logand", LOGAND);
-	define(r, "logor",  LOGOR);
-	define(r, "logxor", LOGXOR);
-	define(r, "lognot", LOGNOT);
+        define(r, "logand", LOGAND);
+        define(r, "logor",  LOGOR);
+        define(r, "logxor", LOGXOR);
+        define(r, "lognot", LOGNOT);
     }
 
     public int fixed(Interpreter f, Value v) throws ContinuationException {
-	try {
-	    Quantity q=(Quantity)v;
-	    if (q.type==Quantity.FIXEDINT) return q.val;
-	    else throw new ClassCastException();
-	} catch (ClassCastException e) { typeError(f, "fixed integer", v); } return -1;
+        try {
+            Quantity q=(Quantity)v;
+            if (q.type==Quantity.FIXEDINT) return q.val;
+            else throw new ClassCastException();
+        } catch (ClassCastException e) { typeError(f, "fixed integer", v); } return -1;
     }
 
     public Value eval(int primid, Interpreter f) throws ContinuationException {
-	if (primid==LOGNOT) {
-	    if (f.vlr.length > 1)
-		error(f, "Incorrect number of arguments to procedure "+f.acc);
-	    return new Quantity(~fixed(f,f.vlr[0]));
-	} else {
-	    int v=fixed(f,f.vlr[0]);
-	    switch(primid) {
-	    case LOGAND:
-		for (int i=f.vlr.length-1; i>0; i--) 
-		    v&=fixed(f,f.vlr[i]);
-		break;
-	    case LOGOR:
-		for (int i=f.vlr.length-1; i>0; i--) 
-		    v|=fixed(f,f.vlr[i]);
-		break;
-	    case LOGXOR:
-		for (int i=f.vlr.length-1; i>0; i--) 
-		    v^=fixed(f,f.vlr[i]);
-		break;
-	    }
-	    return new Quantity(v);
-	}
+        if (primid==LOGNOT) {
+            if (f.vlr.length > 1)
+                error(f, "Incorrect number of arguments to procedure "+f.acc);
+            return new Quantity(~fixed(f,f.vlr[0]));
+        } else {
+            int v=fixed(f,f.vlr[0]);
+            switch(primid) {
+            case LOGAND:
+                for (int i=f.vlr.length-1; i>0; i--)
+                    v&=fixed(f,f.vlr[i]);
+                break;
+            case LOGOR:
+                for (int i=f.vlr.length-1; i>0; i--)
+                    v|=fixed(f,f.vlr[i]);
+                break;
+            case LOGXOR:
+                for (int i=f.vlr.length-1; i>0; i--)
+                    v^=fixed(f,f.vlr[i]);
+                break;
+            }
+            return new Quantity(v);
+        }
     }
 }
-		    
 
-	    
-	    
-	    
+
+
+
+

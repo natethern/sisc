@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -38,12 +38,12 @@ import sisc.exprs.FreeReferenceExp;
 public abstract class Module extends Util implements java.io.Serializable {
 
     protected void define(Interpreter r, String s, int id) {
-	Symbol name=Symbol.get(s);
-	r.toplevel_env.define(name, new BuiltinProcedure(this, name, id));
+        Symbol name=Symbol.get(s);
+        r.toplevel_env.define(name, new BuiltinProcedure(this, name, id));
     }
 
     public abstract void initialize(Interpreter r);
 
-    public abstract Value eval(int primid, Interpreter f) 
-	throws ContinuationException;
+    public abstract Value eval(int primid, Interpreter f)
+    throws ContinuationException;
 }

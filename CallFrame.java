@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -47,89 +47,89 @@ public class CallFrame extends Procedure {
     public CallFrame              fk;
     public CallFrame          parent;
 
-    public CallFrame(Expression n, Value[] v, 
-		     LexicalEnvironment e, 
-		     CallFrame f, CallFrame p) {
-	nxp=n;
-	vlr=v;
-	env=e;
-	fk=f;
-	parent=p;
+    public CallFrame(Expression n, Value[] v,
+                     LexicalEnvironment e,
+                     CallFrame f, CallFrame p) {
+        nxp=n;
+        vlr=v;
+        env=e;
+        fk=f;
+        parent=p;
     }
 
     public CallFrame capture() {
-	if (!lock) {
-	    lock=true;
+        if (!lock) {
+            lock=true;
 
-	    if (vlr!=null) {
-		Value[] nvlr=new Value[vlr.length];
-		System.arraycopy(vlr,0,nvlr,0,nvlr.length);
-		vlr=nvlr;
-	    } 
+            if (vlr!=null) {
+                Value[] nvlr=new Value[vlr.length];
+                System.arraycopy(vlr,0,nvlr,0,nvlr.length);
+                vlr=nvlr;
+            }
 
 
-	    if (nxp!=null && nxp instanceof Volatile)
-		((Volatile)nxp).lock();
+            if (nxp!=null && nxp instanceof Volatile)
+                ((Volatile)nxp).lock();
 
-	    if (parent!=null)
-		parent.capture();
+            if (parent!=null)
+                parent.capture();
 
-	    if (fk!=null)
-		fk.capture();
-	}
+            if (fk!=null)
+                fk.capture();
+        }
 
-	return this;
+        return this;
     }
 
     public void apply(Interpreter r) throws ContinuationException {
-	if (r.vlr.length==1) {
-	    r.acc=r.vlr[0];
-	}
-	else r.acc=new Values(r.vlr);
-	r.pop(this);
+        if (r.vlr.length==1) {
+            r.acc=r.vlr[0];
+        }
+        else r.acc=new Values(r.vlr);
+        r.pop(this);
     }
 
     public String display() {
-	return displayNamedOpaque("continuation");
+        return displayNamedOpaque("continuation");
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    if (vlr==null) 
-		dos.writeBoolean(false);
-	    else {
-		dos.writeBoolean(true);
-		s.writeBer(vlr.length, dos);
-		for (int i=0; i<vlr.length; i++) 
-		    s.serialize(vlr[i], dos);
-	    }
-	    s.serialize(nxp, dos);
-	    s.serialize(fk, dos);
-	    s.serialize(parent, dos);
-	    s.serialize(env, dos);
-	    
-	    dos.writeBoolean(lock);
-	}
+        if (SERIALIZATION) {
+            if (vlr==null)
+                dos.writeBoolean(false);
+            else {
+                dos.writeBoolean(true);
+                s.writeBer(vlr.length, dos);
+                for (int i=0; i<vlr.length; i++)
+                    s.serialize(vlr[i], dos);
+            }
+            s.serialize(nxp, dos);
+            s.serialize(fk, dos);
+            s.serialize(parent, dos);
+            s.serialize(env, dos);
+
+            dos.writeBoolean(lock);
+        }
     }
 
-    public CallFrame() {}
+public CallFrame() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    vlr=null;
-	    if (dis.readBoolean()) {
-		int size=s.readBer(dis);
-		vlr=new Value[size];
-		for (int i=0; i<size; i++) 
-		    vlr[i]=(Value)s.deserialize(dis);
-	    }
-	    nxp=s.deserialize(dis);
-	    fk=(CallFrame)s.deserialize(dis);
-	    parent=(CallFrame)s.deserialize(dis);
-	    env=(LexicalEnvironment)s.deserialize(dis);
-	    lock=dis.readBoolean();
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            vlr=null;
+            if (dis.readBoolean()) {
+                int size=s.readBer(dis);
+                vlr=new Value[size];
+                for (int i=0; i<size; i++)
+                    vlr[i]=(Value)s.deserialize(dis);
+            }
+            nxp=s.deserialize(dis);
+            fk=(CallFrame)s.deserialize(dis);
+            parent=(CallFrame)s.deserialize(dis);
+            env=(LexicalEnvironment)s.deserialize(dis);
+            lock=dis.readBoolean();
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -40,60 +40,60 @@ public class OutputPort extends NamedValue {
     transient boolean autoflush;
 
     public OutputPort(Writer w) {
-	this(w, false);
+        this(w, false);
     }
 
     public OutputPort(Writer w, boolean autoflush) {
-	this.w=w;
-	this.autoflush=autoflush;
+        this.w=w;
+        this.autoflush=autoflush;
     }
 
     public void writeChar(char c) throws IOException {
-	w.write(c);
-	if (autoflush) flush();
+        w.write(c);
+        if (autoflush) flush();
     }
 
-    public void write(Interpreter i, char[] buff, int count) 
-	throws ContinuationException {
-	try {
-	    w.write(buff, 0, count);
-	    if (autoflush) flush();
-	} catch (IOException e) {
-	    error(i, "error writing to "+display());
-	}
+    public void write(Interpreter i, char[] buff, int count)
+    throws ContinuationException {
+        try {
+            w.write(buff, 0, count);
+            if (autoflush) flush();
+        } catch (IOException e) {
+            error(i, "error writing to "+display());
+        }
     }
 
     public void write(String s) throws IOException {
-	w.write(s);
-	if (autoflush) flush();
+        w.write(s);
+        if (autoflush) flush();
     }
 
     public String display() {
-	return displayNamedOpaque("output-port");
+        return displayNamedOpaque("output-port");
     }
 
     public void flush() throws IOException {
-	w.flush();
+        w.flush();
     }
 
     public void close(Interpreter f) throws ContinuationException {
-	try {
-	    flush();
-	} catch (IOException e) {
-	}
+        try {
+            flush();
+        } catch (IOException e) {
+        }
 
-	try {
-	    w.close();
-	} catch (IOException e) {
-	    error(f,"error closing "+this);
-	}
+        try {
+            w.close();
+        } catch (IOException e) {
+            error(f,"error closing "+this);
+        }
     }
 
     public Object javaValue() {
-	return w;
+        return w;
     }
 }
-	
+
 
 
 

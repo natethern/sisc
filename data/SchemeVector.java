@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -41,100 +41,100 @@ public class SchemeVector extends Value {
     protected int lastUnique=-1;
 
     public SchemeVector(int count) {
-	this(count, sisc.data.Number.ZERO);
+        this(count, sisc.data.Number.ZERO);
     }
 
     public SchemeVector(int count, Value initializer) {
-	vals=new Value[count];
-	for (int i=0; i<vals.length; i++) {
-	    vals[i]=initializer;
-	}
+        vals=new Value[count];
+        for (int i=0; i<vals.length; i++) {
+            vals[i]=initializer;
+        }
     }
 
     public SchemeVector(Value[] v) {
-	vals=v;
+        vals=v;
     }
 
     public boolean valueEqual(Value v) {
-	if (!(v instanceof SchemeVector)) return false;
-	SchemeVector o=(SchemeVector)v;
-	if (o.vals.length!=vals.length)
-	    return false;
+        if (!(v instanceof SchemeVector)) return false;
+        SchemeVector o=(SchemeVector)v;
+        if (o.vals.length!=vals.length)
+            return false;
 
-	for (int i=0; i<vals.length; i++) {
-	    if (!vals[i].valueEqual(o.vals[i]))
-		return false;
-	}
-	return true;
+        for (int i=0; i<vals.length; i++) {
+            if (!vals[i].valueEqual(o.vals[i]))
+                return false;
+        }
+        return true;
     }
 
     public int findEnd() {
         if (lastUnique > -1) return lastUnique;
-	if (vals.length>1) {
-	    Value v=vals[vals.length-1];
-	    for (int i=vals.length-2; i>=0; i--) 
-		if (!vals[i].eq(v)) return lastUnique=i+2;
-	    return lastUnique=1;
-	} 
-	return lastUnique=vals.length;
+        if (vals.length>1) {
+            Value v=vals[vals.length-1];
+            for (int i=vals.length-2; i>=0; i--)
+                if (!vals[i].eq(v)) return lastUnique=i+2;
+            return lastUnique=1;
+        }
+        return lastUnique=vals.length;
     }
-	
+
     void display(StringBuffer b, boolean write) {
-	int l=findEnd();
-	for (int i=0; i<l; i++) {
-	    b.append((write ? vals[i].write() : vals[i].display()));
-	    if (i+1<l) b.append(' ');
-	}
+        int l=findEnd();
+        for (int i=0; i<l; i++) {
+            b.append((write ? vals[i].write() : vals[i].display()));
+            if (i+1<l) b.append(' ');
+        }
     }
 
     public String display() {
-	StringBuffer b=new StringBuffer();
-	b.append("#(");
-	display(b, false);
-	b.append(')');
-	return b.toString();
+        StringBuffer b=new StringBuffer();
+        b.append("#(");
+        display(b, false);
+        b.append(')');
+        return b.toString();
     }
 
     public void set(int idx, Value v) {
         lastUnique=-1;
-	vals[idx]=v;
+        vals[idx]=v;
     }
 
     public String write() {
-	StringBuffer b=new StringBuffer();
-	b.append('#').append(vals.length).append('(');
-	display(b, true);
-	b.append(')');
-	return b.toString();
+        StringBuffer b=new StringBuffer();
+        b.append('#').append(vals.length).append('(');
+        display(b, true);
+        b.append(')');
+        return b.toString();
     }
 
     public Object javaValue() {
-	Object[] v=new Object[vals.length];
-	for (int i=0; i<vals.length; i++) 
-	    v[i]=vals[i].javaValue();
-	return v;
+        Object[] v=new Object[vals.length];
+        for (int i=0; i<vals.length; i++)
+            v[i]=vals[i].javaValue();
+        return v;
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    s.writeBer(vals.length, dos);
-	    for (int i=0; i<vals.length; i++) {
-		s.serialize(vals[i], dos);
-	    }
-	}
+    public void serialize(Serializer s, DataOutputStream dos)
+    throws IOException {
+        if (SERIALIZATION) {
+            s.writeBer(vals.length, dos);
+            for (int i=0; i<vals.length; i++) {
+                s.serialize(vals[i], dos);
+            }
+        }
     }
 
     public SchemeVector() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    vals=new Value[s.readBer(dis)];
-	    for (int i=0; i<vals.length; i++) {
-		vals[i]=(Value)s.deserialize(dis);
-	    }
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            vals=new Value[s.readBer(dis)];
+            for (int i=0; i<vals.length; i++) {
+                vals[i]=(Value)s.deserialize(dis);
+            }
+        }
     }
 }
 

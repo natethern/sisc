@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -40,51 +40,51 @@ public class BeginExp extends Expression {
     public Expression exprs[], tail;
 
     public BeginExp(Expression[] exprs, Expression tail) {
-	this.exprs=exprs;
-	this.tail=tail;
+        this.exprs=exprs;
+        this.tail=tail;
     }
 
-    public void eval(Interpreter r) throws ContinuationException { 
-	r.push(tail);
-	for (int i=exprs.length-1; i>0; i--)
-	    if (exprs[i].getValue(r)==null) 
-		r.push(exprs[i]);
-	Value tmp=exprs[0].getValue(r);
-	if (tmp==null) 
-	    r.nxp=exprs[0];
-	else 
-	    r.pop(r.stk);
+    public void eval(Interpreter r) throws ContinuationException {
+        r.push(tail);
+        for (int i=exprs.length-1; i>0; i--)
+            if (exprs[i].getValue(r)==null)
+                r.push(exprs[i]);
+        Value tmp=exprs[0].getValue(r);
+        if (tmp==null)
+            r.nxp=exprs[0];
+        else
+            r.pop(r.stk);
 
     }
 
     public Value express() {
-	Pair args=list(tail.express());
-	for (int i=exprs.length-1; i>=0; i--) {
-	    args=new Pair(exprs[i].express(), args);
-	}
-	return new Pair(sym("Begin-exp"), args);
+        Pair args=list(tail.express());
+        for (int i=exprs.length-1; i>=0; i--) {
+            args=new Pair(exprs[i].express(), args);
+        }
+        return new Pair(sym("Begin-exp"), args);
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    s.writeBer(exprs.length, dos);
-	    for (int i=0; i<exprs.length; i++) 
-		s.serialize(exprs[i], dos);
-	    s.serialize(tail, dos);
-	}
+        if (SERIALIZATION) {
+            s.writeBer(exprs.length, dos);
+            for (int i=0; i<exprs.length; i++)
+                s.serialize(exprs[i], dos);
+            s.serialize(tail, dos);
+        }
     }
 
-    public BeginExp() {}
+public BeginExp() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    int size=s.readBer(dis);
-	    exprs=new Expression[size];
-	    for (int i=0; i<size; i++) 
-		exprs[i]=s.deserialize(dis);
-	    tail=s.deserialize(dis);
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            int size=s.readBer(dis);
+            exprs=new Expression[size];
+            for (int i=0; i<size; i++)
+                exprs[i]=s.deserialize(dis);
+            tail=s.deserialize(dis);
+        }
     }
 }
 

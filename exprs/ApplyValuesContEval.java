@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -40,39 +40,39 @@ public class ApplyValuesContEval extends Expression {
     public Procedure consumer;
 
     public ApplyValuesContEval(Procedure c) {
-	consumer=c;
+        consumer=c;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-	try {
-	    r.vlr=((Values)r.acc).values;
-	} catch (ClassCastException c) {
-	    r.vlr=new Value[] {r.acc};
-	}
-	r.nxp=APPEVAL;
-	r.acc=(Value)consumer;
+        try {
+            r.vlr=((Values)r.acc).values;
+        } catch (ClassCastException c) {
+            r.vlr=new Value[] {r.acc};
+        }
+        r.nxp=APPEVAL;
+        r.acc=(Value)consumer;
     }
 
     public String display() {
-	return "#<system continuation>";
+        return "#<system continuation>";
     }
 
     public Value express() {
-	return list(sym("ApplyValuesContEval"));
+        return list(sym("ApplyValuesContEval"));
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    s.serialize(consumer, dos);
-	}
+        if (SERIALIZATION) {
+            s.serialize(consumer, dos);
+        }
     }
 
     public ApplyValuesContEval() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    consumer=(Procedure)s.deserialize(dis);
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            consumer=(Procedure)s.deserialize(dis);
+        }
     }
 }

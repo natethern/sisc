@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -40,36 +40,36 @@ public class LexicalSetEval extends Expression {
     public int depth, pos;
 
     public LexicalSetEval(int depth, int pos) {
-	this.depth=depth;
-	this.pos=pos;
+        this.depth=depth;
+        this.pos=pos;
     }
 
-    public void eval(Interpreter r) throws ContinuationException { 
-	r.env.set(depth, pos, r.acc);
-	r.acc=VOID;
-	r.nxp=null;
+    public void eval(Interpreter r) throws ContinuationException {
+        r.env.set(depth, pos, r.acc);
+        r.acc=VOID;
+        r.nxp=null;
     }
 
     public Value express() {
-	return list(sym("LexicalSet-eval"), 
-		    new Pair(new Quantity(depth), new Quantity(pos)));
+        return list(sym("LexicalSet-eval"),
+                    new Pair(new Quantity(depth), new Quantity(pos)));
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    s.writeBer(depth, dos);
-	    s.writeBer(pos, dos);
-	}
+        if (SERIALIZATION) {
+            s.writeBer(depth, dos);
+            s.writeBer(pos, dos);
+        }
     }
 
     public LexicalSetEval() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    depth=s.readBer(dis);
-	    pos=s.readBer(dis);
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            depth=s.readBer(dis);
+            pos=s.readBer(dis);
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -41,60 +41,60 @@ public class BuiltinProcedure extends Procedure {
     public Module host;
 
     public BuiltinProcedure(Module host, String name, int id) {
-	this(host, Symbol.get(name),id);
+        this(host, Symbol.get(name),id);
     }
 
     public BuiltinProcedure(Module host, Symbol name, int id) {
-	this.id=id;
-	this.name=name;
-	this.host=host;
+        this.id=id;
+        this.name=name;
+        this.host=host;
     }
 
-     public void apply(Interpreter r) throws ContinuationException {
-	 r.nxp=null;
-	try {
-	    Value v=host.eval(id, r);
-	    if (v!=null) r.acc=v;
-	} catch (ArrayIndexOutOfBoundsException np) {
-	    error(r, name, "incorrect number of arguments to procedure");
-	} catch (ClassCastException cc) {
-	    cc.printStackTrace();
-	    error(r, name, "got unexpected value "+cc.getMessage());
-	} catch (RuntimeException re) {
-	    re.printStackTrace();
-	    error(r, name, re.getMessage());
-	}
+    public void apply(Interpreter r) throws ContinuationException {
+        r.nxp=null;
+        try {
+            Value v=host.eval(id, r);
+            if (v!=null) r.acc=v;
+        } catch (ArrayIndexOutOfBoundsException np) {
+            error(r, name, "incorrect number of arguments to procedure");
+        } catch (ClassCastException cc) {
+            cc.printStackTrace();
+            error(r, name, "got unexpected value "+cc.getMessage());
+        } catch (RuntimeException re) {
+            re.printStackTrace();
+            error(r, name, re.getMessage());
+        }
     }
 
     public String display() {
-	return displayNamedOpaque("builtin procedure");
+        return displayNamedOpaque("builtin procedure");
     }
 
     public boolean valueEqual(Value v) {
-	return ((BuiltinProcedure)v).id==id &&
-	    ((BuiltinProcedure)v).host==host;
+        return ((BuiltinProcedure)v).id==id &&
+               ((BuiltinProcedure)v).host==host;
     }
 
-    public void serialize(Serializer s, 
-			  DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    s.serializeModule(host, dos);
-	    s.writeBer(id, dos);
-	    s.serialize(name, dos);
-	}
+    public void serialize(Serializer s,
+                          DataOutputStream dos) throws IOException {
+        if (SERIALIZATION) {
+            s.serializeModule(host, dos);
+            s.writeBer(id, dos);
+            s.serialize(name, dos);
+        }
     }
 
     public BuiltinProcedure() {}
 
-    public void deserialize(Serializer s, 
-			    DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    host=s.retrieveModule(dis);
-	    id=s.readBer(dis);
-	    name=(Symbol)s.deserialize(dis);
-	}
+    public void deserialize(Serializer s,
+                            DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            host=s.retrieveModule(dis);
+            id=s.readBer(dis);
+            name=(Symbol)s.deserialize(dis);
+        }
     }
-}	
-	
-    
+}
+
+

@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -41,43 +41,43 @@ public class IfExp extends Expression {
     public IfEval eexp;
 
     public IfExp(Expression test, IfEval eexp) {
-	this.test=test;
-	this.eexp=eexp;
+        this.test=test;
+        this.eexp=eexp;
     }
 
     public IfExp(Expression test, Expression conseq, Expression altern) {
-	this.test=test;
-	this.eexp = new IfEval(conseq,altern);
+        this.test=test;
+        this.eexp = new IfEval(conseq,altern);
     }
 
-    public void eval(Interpreter r) throws ContinuationException { 
-	Value tmp=test.getValue(r);
-	if (tmp==null) {
-	    r.push(this.eexp);
-	    r.nxp=test;
-	} else {
-	    r.nxp=(tmp==FALSE ? eexp.altern : eexp.conseq);
-	}
+    public void eval(Interpreter r) throws ContinuationException {
+        Value tmp=test.getValue(r);
+        if (tmp==null) {
+            r.push(this.eexp);
+            r.nxp=test;
+        } else {
+            r.nxp=(tmp==FALSE ? eexp.altern : eexp.conseq);
+        }
     }
 
     public Value express() {
-	return list(sym("If-exp"), test.express(), eexp.express());
+        return list(sym("If-exp"), test.express(), eexp.express());
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (SERIALIZATION) {
-	    s.serialize(test, dos);
-	    s.serialize(eexp, dos);
-	}
+        if (SERIALIZATION) {
+            s.serialize(test, dos);
+            s.serialize(eexp, dos);
+        }
     }
 
-    public IfExp() {} 
+    public IfExp() {}
 
-    public void deserialize(Serializer s, DataInputStream dis) 
-	throws IOException {
-	if (SERIALIZATION) {
-	    test=s.deserialize(dis);
-	    eexp=(IfEval)s.deserialize(dis);
-	}
+    public void deserialize(Serializer s, DataInputStream dis)
+    throws IOException {
+        if (SERIALIZATION) {
+            test=s.deserialize(dis);
+            eexp=(IfEval)s.deserialize(dis);
+        }
     }
 }
