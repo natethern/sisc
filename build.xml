@@ -207,7 +207,7 @@
           description="Build lite edition">
   </target>
 
-  <target name="lite-dist" depends="clean,all" if="lite">
+  <target name="lite-dist" depends="all" if="lite">
     <java jar="jarg.jar" fork="true">
       <arg line="-nobco sisc.jar"/>
     </java>
@@ -255,7 +255,7 @@
 
   </target>
 
-  <target name="full-dist" depends="clean,all" unless="lite">
+  <target name="full-dist" depends="all" unless="lite">
     <delete dir="${dist}/full"/>
     <mkdir dir="${dist}/full"/>
     <mkdir dir="${dist}/full/sisc"/>
@@ -384,6 +384,6 @@
     </cvs>
   </target> 
  
-  <target name="release-full-dist" depends="prepare,clean,srfi-sce"/> 
+  <target name="release-full-dist" depends="prepare,clean,srfi-sce,dist"/> 
   <target name="release" depends="prepare,tag,source-dist"/> 
 </project>
