@@ -27,7 +27,13 @@ public class Closure extends Procedure implements NamedValue {
         Value[] v=r.vlr;
         int vl=v.length;
         if (!arity) {
-            if (vl == fcount) return v;
+            if (vl == fcount) {
+                if (false && r.vlk) {
+                    Value[] v2=r.createValues(vl);
+                    System.arraycopy(v, 0, v2, 0, vl);
+                    return v2;
+                } else return v;
+            }
             error(r, liMessage(SISCB,"notenoughargsto", toString(),
                                fcount, vl));
             return null;
