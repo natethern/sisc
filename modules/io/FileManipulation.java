@@ -43,11 +43,7 @@ public class FileManipulation extends ModuleAdapter {
         URL u=url(o);
         if (!"file".equals(u.getProtocol()))
             throwPrimException(liMessage(IO.IOB, "notafileurl"));
-        try {
-            return new File(URLDecoder.decode(u.getPath(), "UTF-8"));
-        } catch (UnsupportedEncodingException ue) {
-            return null;
-        }
+	return new File(URLDecoder.decode(u.getPath()));
     }
 
     public Value eval(int primid, Interpreter f)
