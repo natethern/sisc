@@ -2,6 +2,14 @@
 
 	* Rationalized retrieval and display of stack trace information.
 
+2002-08-28  Scott G. Miller  <scgmille@freenetproject.org>
+	
+	* A number of Quantity-lib fixes pointed out by Justin Sampson
+		- Fixed parsing of negative imaginary numbers.
+		- Fixed oversight; log of negative numbers (now works)
+		- Fixed oversight; expt with negative and fractional
+		        exponents.
+
 2002-08-26  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Checked in the source-level optimizer.  Matthias
