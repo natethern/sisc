@@ -86,7 +86,11 @@ public class IO extends IndexedProcedure {
         if (f.acc == null) {
             error(f, message, list(new Pair(JEXCEPTION, javaWrap(e))));
         } else {
-            error(f, f.acc.getName(), message, list(new Pair(JEXCEPTION, javaWrap(e))));
+            if (f.acc.getName() != null) {
+               error(f, f.acc.getName(), message, list(new Pair(JEXCEPTION, javaWrap(e))));
+            } else {
+               error(f, message, list(new Pair(JEXCEPTION, javaWrap(e))));
+            }
         }
     }
 
@@ -369,7 +373,7 @@ public class IO extends IndexedProcedure {
                 try {
                     v=null;
                     do {
-                        v=readCode(r, p);
+                        v=readCode(f, p);
 
                         if (v!=EOF) {
                             try {
