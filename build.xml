@@ -248,7 +248,35 @@
     </jar>
   </target>
 
-  <target name="full-heap" depends="jars" unless="lite">
+  <target name="heap-uptodate" depends="prepare">
+    <uptodate property="heapUptodate"
+              targetfile="${heap}">
+      <srcfiles dir="${srcdir}" includes="**/*.scm" excludes="**/srfi/**"/>
+      <srcfiles dir="${srcdir}" includes="**/*.sce"/>
+      <srcfiles file="${basedir}/${basejar}"/>
+      <srcfiles file="${basedir}/${optjar}"/>
+    </uptodate>
+  </target>
+
+  <target name="build-full-heap" depends="heap-uptodate">
+    <condition property="buildFullHeap">
+      <and>
+        <not><isset property="lite"/></not>
+        <not><isset property="heapUptodate"/></not>
+      </and>
+    </condition>
+  </target>
+
+  <target name="build-lite-heap" depends="heap-uptodate">
+    <condition property="buildFullHeap">
+      <and>
+        <isset property="lite"/>
+        <not><isset property="heapUptodate"/></not>
+      </and>
+    </condition>
+  </target>
+
+  <target name="full-heap" depends="jars,build-full-heap" if="buildFullHeap">
     <java classname="sisc.boot.GenerateHeap"
           classpath="${classdir}"
           dir="${bootdir}"
@@ -267,7 +295,7 @@
     </java>
   </target>
 
-  <target name="lite-heap" depends="jars" if="lite">
+  <target name="lite-heap" depends="jars,build-lite-heap" if="buildLiteHeap">
     <java classname="sisc.boot.GenerateHeap"
           classpath="${classdir}"
           dir="${bootdir}"
