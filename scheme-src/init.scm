@@ -166,7 +166,7 @@
                    (begin (vector-set! v n (car l))
                           (l2v (cdr l) v (+ n 1))))))]
      (lambda (l)
-       (if (not (circular? l))
+       (if (not (circular-list? l))
 	   (l2v l (make-vector (length l)) 0)
 	   (error 'list->vector "cannot convert a circular list" l)))))
 
@@ -296,6 +296,16 @@
       (if (null? lses)
 	  (map1 proc ls)
 	  (iter proc (cons ls lses) () ())))))
+
+;;Flat list circularity detection
+(define (circular-list? x)
+  (let lp ((x x) (lag x))
+    (and (pair? x)
+         (let ((x (cdr x)))
+           (and (pair? x)
+                (let ((x   (cdr x))
+                      (lag (cdr lag)))
+                  (or (eq? x lag) (lp x lag))))))))
 
 ;; Credits to Al Petrofsky for the following code, modified to support
 ;; boxes

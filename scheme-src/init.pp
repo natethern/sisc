@@ -157,7 +157,7 @@
                (vector-set! %_922 %_923 (car %_921))
                (%_919 (cdr %_921) %_922 (+ %_923 '1))))))
        (lambda (%_920)
-         (if (not (circular? %_920))
+         (if (not (circular-list? %_920))
            (%_919 %_920 (make-vector (length %_920)) '0)
            (error 'list->vector
                   '"cannot convert a circular list"
@@ -337,113 +337,135 @@
            (%_964 %_967 (cons %_966 %_965) '() '())))))
    #f
    #f))
-(define circular?
+(define circular-list?
   (lambda (%_974)
-    ((lambda (%_979 %_978 %_977 %_976 %_975)
+    (((lambda (%_975)
+        (begin
+          (set! %_975
+            (lambda (%_976 %_977)
+              (if (pair? %_976)
+                ((lambda (%_978)
+                   (if (pair? %_978)
+                     ((lambda (%_979 %_980)
+                        ((lambda (%_981)
+                           (if %_981 %_981 (%_975 %_979 %_980)))
+                         (eq? %_979 %_980)))
+                      (cdr %_978)
+                      (cdr %_977))
+                     '#f))
+                 (cdr %_976))
+                '#f)))
+          %_975))
+      #f)
+     %_974
+     %_974)))
+(define circular?
+  (lambda (%_982)
+    ((lambda (%_987 %_986 %_985 %_984 %_983)
        (begin
-         (set! %_979
-           (lambda (%_981 %_982)
-             ((lambda (%_983)
+         (set! %_987
+           (lambda (%_989 %_990)
+             ((lambda (%_991)
                 (begin
-                  (set! %_983
-                    (lambda (%_992 %_993)
-                      ((lambda (%_994)
-                         (if %_994
-                           (%_979 (%_978 %_992) (%_978 %_994))
+                  (set! %_991
+                    (lambda (%_1000 %_1001)
+                      ((lambda (%_1002)
+                         (if %_1002
+                           (%_987 (%_986 %_1000) (%_986 %_1002))
                            '#f))
-                       (%_978 %_993))))
-                  (if %_982
-                    (if (not (eq? (car %_982) (car %_981)))
-                      (%_983 %_981 %_982)
-                      (((lambda (%_984)
+                       (%_986 %_1001))))
+                  (if %_990
+                    (if (not (eq? (car %_990) (car %_989)))
+                      (%_991 %_989 %_990)
+                      (((lambda (%_992)
                           (begin
-                            (set! %_984
-                              (lambda (%_985 %_986)
-                                ((lambda (%_987)
-                                   (if %_987
-                                     %_987
-                                     (if (if (= (cadr %_985) (cadr %_986))
-                                           (eq? (caddr %_985) (caddr %_986))
+                            (set! %_992
+                              (lambda (%_993 %_994)
+                                ((lambda (%_995)
+                                   (if %_995
+                                     %_995
+                                     (if (if (= (cadr %_993) (cadr %_994))
+                                           (eq? (caddr %_993) (caddr %_994))
                                            '#f)
-                                       (%_984 (cddr %_985) (cddr %_986))
-                                       ((lambda (%_988)
-                                          (((lambda (%_989)
+                                       (%_992 (cddr %_993) (cddr %_994))
+                                       ((lambda (%_996)
+                                          (((lambda (%_997)
                                               (begin
-                                                (set! %_989
-                                                  (lambda (%_990)
-                                                    (if %_990
-                                                      ((lambda (%_991)
-                                                         (if %_991
-                                                           %_991
-                                                           (%_989 (%_978 %_990))))
-                                                       (eq? (car %_990) %_988))
-                                                      (%_983 %_985 %_986))))
-                                                %_989))
+                                                (set! %_997
+                                                  (lambda (%_998)
+                                                    (if %_998
+                                                      ((lambda (%_999)
+                                                         (if %_999
+                                                           %_999
+                                                           (%_997 (%_986 %_998))))
+                                                       (eq? (car %_998) %_996))
+                                                      (%_991 %_993 %_994))))
+                                                %_997))
                                             #f)
-                                           (%_978 (list %_988))))
-                                        (car %_985)))))
-                                 (null? (cdr %_985)))))
-                            %_984))
+                                           (%_986 (list %_996))))
+                                        (car %_993)))))
+                                 (null? (cdr %_993)))))
+                            %_992))
                         #f)
-                       %_981
-                       %_982))
+                       %_989
+                       %_990))
                     '#f)))
               #f)))
-         (set! %_978
-           (lambda (%_995)
-             ((lambda (%_996)
-                (((lambda (%_997)
+         (set! %_986
+           (lambda (%_1003)
+             ((lambda (%_1004)
+                (((lambda (%_1005)
                     (begin
-                      (set! %_997
-                        (lambda (%_998 %_999 %_1000)
-                          (if (>= %_999 '0)
-                            ((lambda (%_1004)
-                               (if (%_975 %_1004)
-                                 (cons %_1004 (cons %_999 %_1000))
-                                 (%_997 %_998 (- %_999 '1) %_1000)))
-                             (%_977 %_998 %_999))
-                            ((lambda (%_1001)
-                               (if (pair? %_1001)
-                                 ((lambda (%_1002 %_1003)
-                                    (%_997 (car %_1003) (- %_1002 '1) %_1003))
-                                  (car %_1001)
-                                  (cdr %_1001))
+                      (set! %_1005
+                        (lambda (%_1006 %_1007 %_1008)
+                          (if (>= %_1007 '0)
+                            ((lambda (%_1012)
+                               (if (%_983 %_1012)
+                                 (cons %_1012 (cons %_1007 %_1008))
+                                 (%_1005 %_1006 (- %_1007 '1) %_1008)))
+                             (%_985 %_1006 %_1007))
+                            ((lambda (%_1009)
+                               (if (pair? %_1009)
+                                 ((lambda (%_1010 %_1011)
+                                    (%_1005 (car %_1011) (- %_1010 '1) %_1011))
+                                  (car %_1009)
+                                  (cdr %_1009))
                                  '#f))
-                             (cdr %_1000)))))
-                      %_997))
+                             (cdr %_1008)))))
+                      %_1005))
                   #f)
-                 %_996
-                 (- (%_976 %_996) '1)
-                 %_995))
-              (car %_995))))
-         (set! %_977
-           (lambda (%_1005 %_1006)
-             (if (vector? %_1005)
-               (vector-ref %_1005 %_1006)
-               (if (box? %_1005)
-                 (unbox %_1005)
-                 ((if (zero? %_1006) car cdr) %_1005)))))
-         (set! %_976
-           (lambda (%_1007)
-             (if (pair? %_1007)
+                 %_1004
+                 (- (%_984 %_1004) '1)
+                 %_1003))
+              (car %_1003))))
+         (set! %_985
+           (lambda (%_1013 %_1014)
+             (if (vector? %_1013)
+               (vector-ref %_1013 %_1014)
+               (if (box? %_1013)
+                 (unbox %_1013)
+                 ((if (zero? %_1014) car cdr) %_1013)))))
+         (set! %_984
+           (lambda (%_1015)
+             (if (pair? %_1015)
                '2
-               (if (box? %_1007) '1 (vector-length %_1007)))))
-         (set! %_975
-           (lambda (%_1008)
-             ((lambda (%_1009)
-                (if %_1009
-                  %_1009
-                  ((lambda (%_1010)
-                     (if %_1010
-                       %_1010
-                       (if (vector? %_1008)
-                         (not (zero? (vector-length %_1008)))
+               (if (box? %_1015) '1 (vector-length %_1015)))))
+         (set! %_983
+           (lambda (%_1016)
+             ((lambda (%_1017)
+                (if %_1017
+                  %_1017
+                  ((lambda (%_1018)
+                     (if %_1018
+                       %_1018
+                       (if (vector? %_1016)
+                         (not (zero? (vector-length %_1016)))
                          '#f)))
-                   (box? %_1008))))
-              (pair? %_1008))))
-         (if (%_975 %_974)
-           ((lambda (%_980) (%_979 %_980 (%_978 %_980)))
-            (list %_974))
+                   (box? %_1016))))
+              (pair? %_1016))))
+         (if (%_983 %_982)
+           ((lambda (%_988) (%_987 %_988 (%_986 %_988)))
+            (list %_982))
            '#f)))
      #f
      #f
@@ -451,206 +473,206 @@
      #f
      #f)))
 (define list?
-  ((lambda (%_1011)
+  ((lambda (%_1019)
      (begin
-       (set! %_1011
-         (lambda (%_1014 %_1015)
-           ((lambda (%_1016)
-              (if %_1016
-                %_1016
-                ((lambda (%_1017)
-                   (if %_1017
-                     %_1017
-                     (if (pair? %_1015)
-                       ((lambda (%_1018)
-                          (if %_1018
-                            %_1018
-                            (if (not (eq? %_1014 %_1015))
-                              (%_1011 (cdr %_1014) (cddr %_1015))
+       (set! %_1019
+         (lambda (%_1022 %_1023)
+           ((lambda (%_1024)
+              (if %_1024
+                %_1024
+                ((lambda (%_1025)
+                   (if %_1025
+                     %_1025
+                     (if (pair? %_1023)
+                       ((lambda (%_1026)
+                          (if %_1026
+                            %_1026
+                            (if (not (eq? %_1022 %_1023))
+                              (%_1019 (cdr %_1022) (cddr %_1023))
                               '#f)))
-                        (null? (cdr %_1015)))
+                        (null? (cdr %_1023)))
                        '#f)))
-                 (null? %_1015))))
-            (null? %_1014))))
-       (lambda (%_1012)
-         ((lambda (%_1013)
-            (if %_1013
-              %_1013
-              (if (pair? %_1012)
-                (%_1011 %_1012 (cdr %_1012))
+                 (null? %_1023))))
+            (null? %_1022))))
+       (lambda (%_1020)
+         ((lambda (%_1021)
+            (if %_1021
+              %_1021
+              (if (pair? %_1020)
+                (%_1019 %_1020 (cdr %_1020))
                 '#f)))
-          (null? %_1012)))))
+          (null? %_1020)))))
    #f))
 (define expt
-  (lambda (%_1019 %_1020)
-    (if (if (integer? %_1020) (= %_1019 '2) '#f)
-      (ashl '1 %_1020)
-      (((lambda (%_1021)
+  (lambda (%_1027 %_1028)
+    (if (if (integer? %_1028) (= %_1027 '2) '#f)
+      (ashl '1 %_1028)
+      (((lambda (%_1029)
           (begin
-            (set! %_1021
-              (lambda (%_1022 %_1023 %_1024)
-                (if (zero? %_1022)
-                  %_1023
-                  (%_1021
-                    (quotient %_1022 '2)
-                    (if (odd? %_1022) (* %_1023 %_1024) %_1023)
-                    (* %_1024 %_1024)))))
-            %_1021))
+            (set! %_1029
+              (lambda (%_1030 %_1031 %_1032)
+                (if (zero? %_1030)
+                  %_1031
+                  (%_1029
+                    (quotient %_1030 '2)
+                    (if (odd? %_1030) (* %_1031 %_1032) %_1031)
+                    (* %_1032 %_1032)))))
+            %_1029))
         #f)
-       %_1020
+       %_1028
        '1
-       %_1019))))
+       %_1027))))
 (define modpow
-  (lambda (%_1025 %_1026 %_1027)
-    ((lambda (%_1028)
-       (if (= %_1026 '1)
-         (modulo %_1025 %_1027)
-         (if (even? %_1026)
-           ((lambda (%_1030)
-              (modulo (* %_1030 %_1030) %_1027))
-            (modpow %_1025 (/ %_1026 '2) %_1027))
-           ((lambda (%_1029)
+  (lambda (%_1033 %_1034 %_1035)
+    ((lambda (%_1036)
+       (if (= %_1034 '1)
+         (modulo %_1033 %_1035)
+         (if (even? %_1034)
+           ((lambda (%_1038)
+              (modulo (* %_1038 %_1038) %_1035))
+            (modpow %_1033 (/ %_1034 '2) %_1035))
+           ((lambda (%_1037)
               (begin
-                (set! %_1029 (modulo (* %_1029 %_1029) %_1027))
-                (modulo (* %_1025 %_1029) %_1027)))
-            (modpow %_1025 (/ (- %_1026 '1) '2) %_1027)))))
+                (set! %_1037 (modulo (* %_1037 %_1037) %_1035))
+                (modulo (* %_1033 %_1037) %_1035)))
+            (modpow %_1033 (/ (- %_1034 '1) '2) %_1035)))))
      '0)))
 (define integer?
-  ((lambda (%_1031)
-     (lambda (%_1032)
-       ((lambda (%_1033)
-          (if %_1033
-            %_1033
-            (if (real? %_1032) (= (round %_1032) %_1032) '#f)))
-        (%_1031 %_1032))))
+  ((lambda (%_1039)
+     (lambda (%_1040)
+       ((lambda (%_1041)
+          (if %_1041
+            %_1041
+            (if (real? %_1040) (= (round %_1040) %_1040) '#f)))
+        (%_1039 %_1040))))
    integer?))
 (define real?
-  ((lambda (%_1034)
-     (lambda (%_1035) (not (%_1034 %_1035))))
+  ((lambda (%_1042)
+     (lambda (%_1043) (not (%_1042 %_1043))))
    complex?))
 (define complex? number?)
 (define abs
-  (lambda (%_1036)
-    (if (not (real? %_1036))
-      ((lambda (%_1037 %_1038)
-         (sqrt (+ (* %_1037 %_1037) (* %_1038 %_1038))))
-       (real-part %_1036)
-       (imag-part %_1036))
-      (if (< %_1036 '0) (- %_1036) %_1036))))
+  (lambda (%_1044)
+    (if (not (real? %_1044))
+      ((lambda (%_1045 %_1046)
+         (sqrt (+ (* %_1045 %_1045) (* %_1046 %_1046))))
+       (real-part %_1044)
+       (imag-part %_1044))
+      (if (< %_1044 '0) (- %_1044) %_1044))))
 (define min (void))
 (define max (void))
-((lambda (%_1039)
+((lambda (%_1047)
    (begin
-     (set! %_1039
-       (lambda (%_1044 %_1045 %_1046 %_1047)
-         (if (null? %_1046)
-           (if (if %_1047 (exact? %_1045) '#f)
-             (exact->inexact %_1045)
-             %_1045)
-           (if (%_1044 (car %_1046) %_1045)
-             (%_1039
-               %_1044
-               (car %_1046)
-               (cdr %_1046)
-               ((lambda (%_1048)
-                  (if %_1048 %_1048 (inexact? (car %_1046))))
-                %_1047))
-             (%_1039 %_1044 %_1045 (cdr %_1046) %_1047)))))
+     (set! %_1047
+       (lambda (%_1052 %_1053 %_1054 %_1055)
+         (if (null? %_1054)
+           (if (if %_1055 (exact? %_1053) '#f)
+             (exact->inexact %_1053)
+             %_1053)
+           (if (%_1052 (car %_1054) %_1053)
+             (%_1047
+               %_1052
+               (car %_1054)
+               (cdr %_1054)
+               ((lambda (%_1056)
+                  (if %_1056 %_1056 (inexact? (car %_1054))))
+                %_1055))
+             (%_1047 %_1052 %_1053 (cdr %_1054) %_1055)))))
      (begin
        (set! min
-         (lambda (%_1041 . %_1040)
-           (if (null? %_1040)
-             %_1041
-             (%_1039 < %_1041 %_1040 (inexact? (car %_1040))))))
+         (lambda (%_1049 . %_1048)
+           (if (null? %_1048)
+             %_1049
+             (%_1047 < %_1049 %_1048 (inexact? (car %_1048))))))
        (set! max
-         (lambda (%_1043 . %_1042)
-           (if (null? %_1042)
-             %_1043
-             (%_1039 > %_1043 %_1042 (inexact? (car %_1042)))))))))
+         (lambda (%_1051 . %_1050)
+           (if (null? %_1050)
+             %_1051
+             (%_1047 > %_1051 %_1050 (inexact? (car %_1050)))))))))
  #f)
 (define negative?
-  (lambda (%_1049) (< %_1049 '0)))
+  (lambda (%_1057) (< %_1057 '0)))
 (define positive?
-  (lambda (%_1050) (> %_1050 '0)))
+  (lambda (%_1058) (> %_1058 '0)))
 (define even?
-  (lambda (%_1051) (= '0 (modulo %_1051 '2))))
+  (lambda (%_1059) (= '0 (modulo %_1059 '2))))
 (define odd?
-  (lambda (%_1052) (not (even? %_1052))))
-(define zero? (lambda (%_1053) (= %_1053 '0)))
-(define add1 (lambda (%_1054) (+ %_1054 '1)))
-(define sub1 (lambda (%_1055) (- %_1055 '1)))
+  (lambda (%_1060) (not (even? %_1060))))
+(define zero? (lambda (%_1061) (= %_1061 '0)))
+(define add1 (lambda (%_1062) (+ %_1062 '1)))
+(define sub1 (lambda (%_1063) (- %_1063 '1)))
 (define >= (void))
 (define <= (void))
-((lambda (%_1056 %_1057)
+((lambda (%_1064 %_1065)
    (begin
      (set! <=
-       (%_1056
-         (lambda (%_1058 %_1059)
-           ((lambda (%_1060)
-              (if %_1060 %_1060 (= %_1058 %_1059)))
-            (< %_1058 %_1059)))
-         %_1057
+       (%_1064
+         (lambda (%_1066 %_1067)
+           ((lambda (%_1068)
+              (if %_1068 %_1068 (= %_1066 %_1067)))
+            (< %_1066 %_1067)))
+         %_1065
          '#t))
      (set! >=
-       (%_1056
-         (lambda (%_1061 %_1062)
-           ((lambda (%_1063)
-              (if %_1063 %_1063 (= %_1061 %_1062)))
-            (> %_1061 %_1062)))
-         %_1057
+       (%_1064
+         (lambda (%_1069 %_1070)
+           ((lambda (%_1071)
+              (if %_1071 %_1071 (= %_1069 %_1070)))
+            (> %_1069 %_1070)))
+         %_1065
          '#t))))
- (lambda (%_1064 %_1065 %_1066)
-   (lambda %_1067
-     (((lambda (%_1068)
-         (begin
-           (set! %_1068
-             (lambda (%_1069)
-               (if (null? %_1069)
-                 %_1066
-                 (if (null? (cdr %_1069))
-                   %_1066
-                   (%_1065
-                     (%_1064 (car %_1069) (cadr %_1069))
-                     (%_1068 (cdr %_1069)))))))
-           %_1068))
-       #f)
-      %_1067)))
- (lambda (%_1070 %_1071) (if %_1070 %_1071 '#f)))
-((lambda (%_1072)
-   (begin
-     (set! >= (%_1072 > >=))
-     (set! <= (%_1072 < <=))))
- (lambda (%_1073 %_1074)
+ (lambda (%_1072 %_1073 %_1074)
    (lambda %_1075
-     ((lambda (%_1076)
-        (if %_1076
-          %_1076
-          ((lambda (%_1077)
-             (if %_1077
-               %_1077
-               (if ((lambda (%_1078)
-                      (if %_1078
-                        %_1078
-                        (%_1073 (car %_1075) (cadr %_1075))))
-                    (= (car %_1075) (cadr %_1075)))
-                 (apply %_1074 (cdr %_1075))
+     (((lambda (%_1076)
+         (begin
+           (set! %_1076
+             (lambda (%_1077)
+               (if (null? %_1077)
+                 %_1074
+                 (if (null? (cdr %_1077))
+                   %_1074
+                   (%_1073
+                     (%_1072 (car %_1077) (cadr %_1077))
+                     (%_1076 (cdr %_1077)))))))
+           %_1076))
+       #f)
+      %_1075)))
+ (lambda (%_1078 %_1079) (if %_1078 %_1079 '#f)))
+((lambda (%_1080)
+   (begin
+     (set! >= (%_1080 > >=))
+     (set! <= (%_1080 < <=))))
+ (lambda (%_1081 %_1082)
+   (lambda %_1083
+     ((lambda (%_1084)
+        (if %_1084
+          %_1084
+          ((lambda (%_1085)
+             (if %_1085
+               %_1085
+               (if ((lambda (%_1086)
+                      (if %_1086
+                        %_1086
+                        (%_1081 (car %_1083) (cadr %_1083))))
+                    (= (car %_1083) (cadr %_1083)))
+                 (apply %_1082 (cdr %_1083))
                  '#f)))
-           (null? (cdr %_1075)))))
-      (null? %_1075)))))
+           (null? (cdr %_1083)))))
+      (null? %_1083)))))
 (define gcd
-  (lambda %_1079
-    (if (null? %_1079)
+  (lambda %_1087
+    (if (null? %_1087)
       '0
-      (if (null? (cdr %_1079))
-        (car %_1079)
-        (_gcd (car %_1079) (cadr %_1079))))))
+      (if (null? (cdr %_1087))
+        (car %_1087)
+        (_gcd (car %_1087) (cadr %_1087))))))
 (define lcm
-  (lambda %_1080
-    (if (null? %_1080)
+  (lambda %_1088
+    (if (null? %_1088)
       '1
-      (if (null? (cdr %_1080))
-        (car %_1080)
-        (_lcm (car %_1080) (cadr %_1080))))))
+      (if (null? (cdr %_1088))
+        (car %_1088)
+        (_lcm (car %_1088) (cadr %_1088))))))
 (max-precision '1500)
 (define pi-10 (string->number '"3.1415926536"))
 (define pi-70
@@ -670,352 +692,352 @@
 (define e e-10)
 (max-precision '32)
 (define string-append
-  (lambda %_1081
-    (if (null? %_1081)
+  (lambda %_1089
+    (if (null? %_1089)
       '""
-      (if (null? (cdr %_1081))
-        (car %_1081)
+      (if (null? (cdr %_1089))
+        (car %_1089)
         (apply string-append
-               (_string-append (car %_1081) (cadr %_1081))
-               (cddr %_1081))))))
+               (_string-append (car %_1089) (cadr %_1089))
+               (cddr %_1089))))))
 (define char-downcase
-  ((lambda (%_1082)
-     ((lambda (%_1083)
-        ((lambda (%_1084)
+  ((lambda (%_1090)
+     ((lambda (%_1091)
+        ((lambda (%_1092)
            ((lambda ()
-              (lambda (%_1085)
-                ((lambda (%_1086)
-                   (if (if (>= %_1086 %_1082) (<= %_1086 %_1083) '#f)
-                     (integer->char (+ %_1086 %_1084))
-                     %_1085))
-                 (char->integer %_1085))))))
-         (- (char->integer '#\a) %_1082)))
+              (lambda (%_1093)
+                ((lambda (%_1094)
+                   (if (if (>= %_1094 %_1090) (<= %_1094 %_1091) '#f)
+                     (integer->char (+ %_1094 %_1092))
+                     %_1093))
+                 (char->integer %_1093))))))
+         (- (char->integer '#\a) %_1090)))
       (char->integer '#\Z)))
    (char->integer '#\A)))
 (define char-upcase
-  ((lambda (%_1087)
-     ((lambda (%_1088)
-        ((lambda (%_1089)
+  ((lambda (%_1095)
+     ((lambda (%_1096)
+        ((lambda (%_1097)
            ((lambda ()
-              (lambda (%_1090)
-                ((lambda (%_1091)
-                   (if (if (>= %_1091 %_1087) (<= %_1091 %_1088) '#f)
-                     (integer->char (- %_1091 %_1089))
-                     %_1090))
-                 (char->integer %_1090))))))
-         (- %_1087 (char->integer '#\A))))
+              (lambda (%_1098)
+                ((lambda (%_1099)
+                   (if (if (>= %_1099 %_1095) (<= %_1099 %_1096) '#f)
+                     (integer->char (- %_1099 %_1097))
+                     %_1098))
+                 (char->integer %_1098))))))
+         (- %_1095 (char->integer '#\A))))
       (char->integer '#\z)))
    (char->integer '#\a)))
 (define char>?
-  (lambda (%_1092 %_1093)
-    (> (char->integer %_1092) (char->integer %_1093))))
+  (lambda (%_1100 %_1101)
+    (> (char->integer %_1100) (char->integer %_1101))))
 (define char<?
-  (lambda (%_1094 %_1095)
-    (< (char->integer %_1094) (char->integer %_1095))))
+  (lambda (%_1102 %_1103)
+    (< (char->integer %_1102) (char->integer %_1103))))
 (define char=? eq?)
 (define char>=?
-  (lambda (%_1096 %_1097)
-    ((lambda (%_1098)
-       (if %_1098 %_1098 (char=? %_1096 %_1097)))
-     (char>? %_1096 %_1097))))
-(define char<=?
-  (lambda (%_1099 %_1100)
-    ((lambda (%_1101)
-       (if %_1101 %_1101 (char=? %_1099 %_1100)))
-     (char<? %_1099 %_1100))))
-(define char-ci>?
-  (lambda (%_1102 %_1103)
-    (char>?
-      (char-downcase %_1102)
-      (char-downcase %_1103))))
-(define char-ci<?
   (lambda (%_1104 %_1105)
+    ((lambda (%_1106)
+       (if %_1106 %_1106 (char=? %_1104 %_1105)))
+     (char>? %_1104 %_1105))))
+(define char<=?
+  (lambda (%_1107 %_1108)
+    ((lambda (%_1109)
+       (if %_1109 %_1109 (char=? %_1107 %_1108)))
+     (char<? %_1107 %_1108))))
+(define char-ci>?
+  (lambda (%_1110 %_1111)
+    (char>?
+      (char-downcase %_1110)
+      (char-downcase %_1111))))
+(define char-ci<?
+  (lambda (%_1112 %_1113)
     (char<?
-      (char-downcase %_1104)
-      (char-downcase %_1105))))
+      (char-downcase %_1112)
+      (char-downcase %_1113))))
 (define char-ci=?
-  (lambda (%_1106 %_1107)
+  (lambda (%_1114 %_1115)
     (char=?
-      (char-downcase %_1106)
-      (char-downcase %_1107))))
+      (char-downcase %_1114)
+      (char-downcase %_1115))))
 (define char-ci>=?
-  (lambda (%_1108 %_1109)
-    ((lambda (%_1110)
-       (if %_1110 %_1110 (char-ci=? %_1108 %_1109)))
-     (char-ci>? %_1108 %_1109))))
+  (lambda (%_1116 %_1117)
+    ((lambda (%_1118)
+       (if %_1118 %_1118 (char-ci=? %_1116 %_1117)))
+     (char-ci>? %_1116 %_1117))))
 (define char-ci<=?
-  (lambda (%_1111 %_1112)
-    ((lambda (%_1113)
-       (if %_1113 %_1113 (char-ci=? %_1111 %_1112)))
-     (char-ci<? %_1111 %_1112))))
+  (lambda (%_1119 %_1120)
+    ((lambda (%_1121)
+       (if %_1121 %_1121 (char-ci=? %_1119 %_1120)))
+     (char-ci<? %_1119 %_1120))))
 (define char-alphabetic?
-  (lambda (%_1114)
-    (if (char-ci>=? %_1114 '#\a)
-      (char-ci<=? %_1114 '#\z)
+  (lambda (%_1122)
+    (if (char-ci>=? %_1122 '#\a)
+      (char-ci<=? %_1122 '#\z)
       '#f)))
 (define char-numeric?
-  (lambda (%_1115)
-    (if (char-ci>=? %_1115 '#\0)
-      (char-ci<=? %_1115 '#\9)
+  (lambda (%_1123)
+    (if (char-ci>=? %_1123 '#\0)
+      (char-ci<=? %_1123 '#\9)
       '#f)))
 (define char-whitespace?
-  (lambda (%_1116)
-    (if (memq %_1116 '(#\space #\tab #\newline))
+  (lambda (%_1124)
+    (if (memq %_1124 '(#\space #\tab #\newline))
       '#t
       '#f)))
 (define char-upper-case?
-  (lambda (%_1117)
-    (if (char-alphabetic? %_1117)
-      (char<? %_1117 '#\a)
+  (lambda (%_1125)
+    (if (char-alphabetic? %_1125)
+      (char<? %_1125 '#\a)
       '#f)))
 (define char-lower-case?
-  (lambda (%_1118)
-    (if (char-alphabetic? %_1118)
-      (char>? %_1118 '#\z)
+  (lambda (%_1126)
+    (if (char-alphabetic? %_1126)
+      (char>? %_1126 '#\z)
       '#f)))
 (define string-downcase (void))
 (define string-upcase (void))
-((lambda (%_1119)
+((lambda (%_1127)
    (begin
-     (set! %_1119
-       (lambda (%_1124 %_1125 %_1126 %_1127 %_1128)
-         (if (< %_1127 %_1128)
+     (set! %_1127
+       (lambda (%_1132 %_1133 %_1134 %_1135 %_1136)
+         (if (< %_1135 %_1136)
            (begin
              (string-set!
-               %_1125
-               %_1127
-               (%_1126 (string-ref %_1124 %_1127)))
-             (%_1119
-               %_1124
-               %_1125
-               %_1126
-               (+ %_1127 '1)
-               %_1128))
-           %_1125)))
+               %_1133
+               %_1135
+               (%_1134 (string-ref %_1132 %_1135)))
+             (%_1127
+               %_1132
+               %_1133
+               %_1134
+               (+ %_1135 '1)
+               %_1136))
+           %_1133)))
      (begin
        (set! string-downcase
-         (lambda (%_1120)
-           ((lambda (%_1121)
-              (%_1119
-                %_1120
-                %_1121
+         (lambda (%_1128)
+           ((lambda (%_1129)
+              (%_1127
+                %_1128
+                %_1129
                 char-downcase
                 '0
-                (string-length %_1120)))
-            (make-string (string-length %_1120)))))
+                (string-length %_1128)))
+            (make-string (string-length %_1128)))))
        (set! string-upcase
-         (lambda (%_1122)
-           ((lambda (%_1123)
-              (%_1119
-                %_1122
-                %_1123
+         (lambda (%_1130)
+           ((lambda (%_1131)
+              (%_1127
+                %_1130
+                %_1131
                 char-upcase
                 '0
-                (string-length %_1122)))
-            (make-string (string-length %_1122))))))))
+                (string-length %_1130)))
+            (make-string (string-length %_1130))))))))
  #f)
 (define string=? equal?)
 (define string<?
-  ((lambda (%_1129)
+  ((lambda (%_1137)
      (begin
-       (set! %_1129
-         (lambda (%_1132 %_1133)
-           (if (null? %_1132)
-             (not (null? %_1133))
-             (if (null? %_1133)
+       (set! %_1137
+         (lambda (%_1140 %_1141)
+           (if (null? %_1140)
+             (not (null? %_1141))
+             (if (null? %_1141)
                '#f
-               ((lambda (%_1134 %_1135)
-                  (if (char<? %_1134 %_1135)
+               ((lambda (%_1142 %_1143)
+                  (if (char<? %_1142 %_1143)
                     '#t
-                    (if (char>? %_1134 %_1135)
+                    (if (char>? %_1142 %_1143)
                       '#f
-                      (%_1129 (cdr %_1132) (cdr %_1133)))))
-                (car %_1132)
-                (car %_1133))))))
-       (lambda (%_1130 %_1131)
-         (%_1129
-           (string->list %_1130)
-           (string->list %_1131)))))
+                      (%_1137 (cdr %_1140) (cdr %_1141)))))
+                (car %_1140)
+                (car %_1141))))))
+       (lambda (%_1138 %_1139)
+         (%_1137
+           (string->list %_1138)
+           (string->list %_1139)))))
    #f))
 (define string>?
-  ((lambda (%_1136)
+  ((lambda (%_1144)
      (begin
-       (set! %_1136
-         (lambda (%_1139 %_1140)
-           (if (null? %_1140)
-             (not (null? %_1139))
-             (if (null? %_1139)
+       (set! %_1144
+         (lambda (%_1147 %_1148)
+           (if (null? %_1148)
+             (not (null? %_1147))
+             (if (null? %_1147)
                '#f
-               ((lambda (%_1141 %_1142)
-                  (if (char>? %_1141 %_1142)
+               ((lambda (%_1149 %_1150)
+                  (if (char>? %_1149 %_1150)
                     '#t
-                    (if (char<? %_1141 %_1142)
+                    (if (char<? %_1149 %_1150)
                       '#f
-                      (%_1136 (cdr %_1139) (cdr %_1140)))))
-                (car %_1139)
-                (car %_1140))))))
-       (lambda (%_1137 %_1138)
-         (%_1136
-           (string->list %_1137)
-           (string->list %_1138)))))
+                      (%_1144 (cdr %_1147) (cdr %_1148)))))
+                (car %_1147)
+                (car %_1148))))))
+       (lambda (%_1145 %_1146)
+         (%_1144
+           (string->list %_1145)
+           (string->list %_1146)))))
    #f))
 (define string<=?
-  (lambda (%_1143 %_1144)
-    ((lambda (%_1145)
-       (if %_1145 %_1145 (string=? %_1143 %_1144)))
-     (string<? %_1143 %_1144))))
-(define string>=?
-  (lambda (%_1146 %_1147)
-    ((lambda (%_1148)
-       (if %_1148 %_1148 (string=? %_1146 %_1147)))
-     (string>? %_1146 %_1147))))
-(define string-ci=?
-  (lambda (%_1149 %_1150)
-    (string=?
-      (string-downcase %_1149)
-      (string-downcase %_1150))))
-(define string-ci<?
   (lambda (%_1151 %_1152)
-    (string<?
-      (string-downcase %_1151)
-      (string-downcase %_1152))))
-(define string-ci>?
-  (lambda (%_1153 %_1154)
-    (string>?
-      (string-downcase %_1153)
-      (string-downcase %_1154))))
-(define string-ci>=?
-  (lambda (%_1155 %_1156)
-    (string>=?
-      (string-downcase %_1155)
-      (string-downcase %_1156))))
-(define string-ci<=?
+    ((lambda (%_1153)
+       (if %_1153 %_1153 (string=? %_1151 %_1152)))
+     (string<? %_1151 %_1152))))
+(define string>=?
+  (lambda (%_1154 %_1155)
+    ((lambda (%_1156)
+       (if %_1156 %_1156 (string=? %_1154 %_1155)))
+     (string>? %_1154 %_1155))))
+(define string-ci=?
   (lambda (%_1157 %_1158)
-    (string<=?
+    (string=?
       (string-downcase %_1157)
       (string-downcase %_1158))))
+(define string-ci<?
+  (lambda (%_1159 %_1160)
+    (string<?
+      (string-downcase %_1159)
+      (string-downcase %_1160))))
+(define string-ci>?
+  (lambda (%_1161 %_1162)
+    (string>?
+      (string-downcase %_1161)
+      (string-downcase %_1162))))
+(define string-ci>=?
+  (lambda (%_1163 %_1164)
+    (string>=?
+      (string-downcase %_1163)
+      (string-downcase %_1164))))
+(define string-ci<=?
+  (lambda (%_1165 %_1166)
+    (string<=?
+      (string-downcase %_1165)
+      (string-downcase %_1166))))
 (define substring
-  ((lambda (%_1159)
+  ((lambda (%_1167)
      (begin
-       (set! %_1159
-         (lambda (%_1164 %_1165 %_1166 %_1167 %_1168)
-           (if (< %_1167 %_1168)
+       (set! %_1167
+         (lambda (%_1172 %_1173 %_1174 %_1175 %_1176)
+           (if (< %_1175 %_1176)
              (begin
                (string-set!
-                 %_1165
-                 %_1166
-                 (string-ref %_1164 %_1167))
-               (%_1159
-                 %_1164
-                 %_1165
-                 (+ %_1166 '1)
-                 (+ %_1167 '1)
-                 %_1168))
+                 %_1173
+                 %_1174
+                 (string-ref %_1172 %_1175))
+               (%_1167
+                 %_1172
+                 %_1173
+                 (+ %_1174 '1)
+                 (+ %_1175 '1)
+                 %_1176))
              (void))))
-       (lambda (%_1160 %_1161 %_1162)
-         ((lambda (%_1163)
+       (lambda (%_1168 %_1169 %_1170)
+         ((lambda (%_1171)
             (begin
-              (%_1159 %_1160 %_1163 '0 %_1161 %_1162)
-              %_1163))
-          (make-string (- %_1162 %_1161))))))
+              (%_1167 %_1168 %_1171 '0 %_1169 %_1170)
+              %_1171))
+          (make-string (- %_1170 %_1169))))))
    #f))
 (define format
-  ((lambda (%_1169)
+  ((lambda (%_1177)
      (begin
-       (set! %_1169
-         (lambda (%_1172 %_1173 %_1174)
-           (if (null? %_1172)
-             (get-output-string %_1174)
-             (if (eq? (car %_1172) '#\~)
+       (set! %_1177
+         (lambda (%_1180 %_1181 %_1182)
+           (if (null? %_1180)
+             (get-output-string %_1182)
+             (if (eq? (car %_1180) '#\~)
                (begin
-                 ((lambda (%_1175)
-                    (if (memv %_1175 '(#\s))
-                      (write (car %_1173) %_1174)
-                      (if (memv %_1175 '(#\a))
-                        (display (car %_1173) %_1174)
-                        (if (memv %_1175 '(#\%))
-                          (display '#\newline %_1174)
-                          (if (memv %_1175 '(#\~))
-                            (display '#\~ %_1174)
+                 ((lambda (%_1183)
+                    (if (memv %_1183 '(#\s))
+                      (write (car %_1181) %_1182)
+                      (if (memv %_1183 '(#\a))
+                        (display (car %_1181) %_1182)
+                        (if (memv %_1183 '(#\%))
+                          (display '#\newline %_1182)
+                          (if (memv %_1183 '(#\~))
+                            (display '#\~ %_1182)
                             (void))))))
-                  (cadr %_1172))
-                 (%_1169
-                   (cddr %_1172)
-                   (if (not (null? %_1173)) (cdr %_1173) '())
-                   %_1174))
+                  (cadr %_1180))
+                 (%_1177
+                   (cddr %_1180)
+                   (if (not (null? %_1181)) (cdr %_1181) '())
+                   %_1182))
                (begin
-                 (display (car %_1172) %_1174)
-                 (%_1169 (cdr %_1172) %_1173 %_1174))))))
-       (lambda (%_1171 . %_1170)
-         (%_1169
-           (string->list %_1171)
-           %_1170
+                 (display (car %_1180) %_1182)
+                 (%_1177 (cdr %_1180) %_1181 %_1182))))))
+       (lambda (%_1179 . %_1178)
+         (%_1177
+           (string->list %_1179)
+           %_1178
            (open-output-string)))))
    #f))
 (define error
-  ((lambda (%_1176)
-     (lambda %_1177
-       ((lambda (%_1178)
-          ((lambda (%_1179)
-             ((lambda (%_1180)
+  ((lambda (%_1184)
+     (lambda %_1185
+       ((lambda (%_1186)
+          ((lambda (%_1187)
+             ((lambda (%_1188)
                 ((lambda ()
-                   (if %_1178
-                     (if %_1179
-                       (%_1176
+                   (if %_1186
+                     (if %_1187
+                       (%_1184
                          (format
                            '"Error in ~s: ~a"
-                           %_1178
-                           (apply format (cons %_1179 %_1180))))
-                       (%_1176 (format '"Error in ~s." %_1178)))
-                     (if %_1179
-                       (if (string? %_1179)
-                         (%_1176
+                           %_1186
+                           (apply format (cons %_1187 %_1188))))
+                       (%_1184 (format '"Error in ~s." %_1186)))
+                     (if %_1187
+                       (if (string? %_1187)
+                         (%_1184
                            (format
                              '"Error: ~a"
-                             (apply format (cons %_1179 %_1180))))
-                         (if (null? %_1180)
-                           (%_1176 %_1179)
+                             (apply format (cons %_1187 %_1188))))
+                         (if (null? %_1188)
+                           (%_1184 %_1187)
                            (error 'error
                                   '"cannot specify error arguments to a non format-string error.")))
-                       (%_1176 '"Error."))))))
-              (if (not %_1179)
+                       (%_1184 '"Error."))))))
+              (if (not %_1187)
                 '()
-                (if (not %_1178)
-                  (if (not (null? %_1177))
-                    (if (not (car %_1177))
-                      (cddr %_1177)
-                      (cdr %_1177))
-                    (cdr %_1177))
-                  (cddr %_1177)))))
-           (if (not %_1178)
-             (if (not (null? %_1177))
-               (if (not (car %_1177))
-                 (cadr %_1177)
-                 (car %_1177))
+                (if (not %_1186)
+                  (if (not (null? %_1185))
+                    (if (not (car %_1185))
+                      (cddr %_1185)
+                      (cdr %_1185))
+                    (cdr %_1185))
+                  (cddr %_1185)))))
+           (if (not %_1186)
+             (if (not (null? %_1185))
+               (if (not (car %_1185))
+                 (cadr %_1185)
+                 (car %_1185))
                '#f)
-             (if (not (null? (cdr %_1177))) (cadr %_1177) '#f))))
-        (if (if (not (null? %_1177))
-              (symbol? (car %_1177))
+             (if (not (null? (cdr %_1185))) (cadr %_1185) '#f))))
+        (if (if (not (null? %_1185))
+              (symbol? (car %_1185))
               '#f)
-          (car %_1177)
+          (car %_1185)
           '#f))))
    error))
 (define list-ref
-  (lambda (%_1181 %_1182)
-    (if (zero? %_1182)
-      (car %_1181)
-      (list-ref (cdr %_1181) (- %_1182 '1)))))
+  (lambda (%_1189 %_1190)
+    (if (zero? %_1190)
+      (car %_1189)
+      (list-ref (cdr %_1189) (- %_1190 '1)))))
 (define iota
-  ((lambda (%_1183)
+  ((lambda (%_1191)
      (begin
-       (set! %_1183
-         (lambda (%_1185 %_1186)
-           (if (> %_1185 %_1186)
+       (set! %_1191
+         (lambda (%_1193 %_1194)
+           (if (> %_1193 %_1194)
              '()
-             (cons %_1185 (%_1183 (+ %_1185 '1) %_1186)))))
-       (lambda (%_1184) (%_1183 '0 %_1184))))
+             (cons %_1193 (%_1191 (+ %_1193 '1) %_1194)))))
+       (lambda (%_1192) (%_1191 '0 %_1192))))
    #f))
 (define values
-  (lambda %_1187
+  (lambda %_1195
     (call-with-current-continuation
-      (lambda (%_1188) (apply %_1188 %_1187)))))
+      (lambda (%_1196) (apply %_1196 %_1195)))))
