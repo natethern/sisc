@@ -39,7 +39,7 @@ import java.io.*;
 public class FreeSetEval extends Expression {
     public Symbol lhs;
     public AssociativeEnvironment senv;
-    private transient int envLoc;
+    private transient int envLoc=-1;
 
     public FreeSetEval(Symbol lhs, AssociativeEnvironment senv) {
         this.lhs=lhs;
@@ -80,9 +80,6 @@ public class FreeSetEval extends Expression {
         }
     }
 
-    public FreeSetEval() {
-        envLoc=-1;
-    }
 
     public void deserialize(Serializer s, DataInput dis)
     throws IOException {
@@ -102,5 +99,11 @@ public class FreeSetEval extends Expression {
 
     public int hashCode() {
         return lhs.hashCode() ^ senv.hashCode();
+    }
+
+    private void readObject(java.io.ObjectInputStream in)
+	throws IOException, ClassNotFoundException {
+	in.defaultReadObject();
+	envLoc=-1;
     }
 }

@@ -39,7 +39,7 @@ import java.io.*;
 public class FreeReferenceExp extends Expression implements Immediate {
     public Symbol sym;
     public AssociativeEnvironment lenv;
-    private transient int envLoc;
+    private transient int envLoc=-1;
 
     public FreeReferenceExp(Symbol s, AssociativeEnvironment lenv) {
         this.lenv=lenv;
@@ -62,7 +62,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
             envLoc=lenv.getLoc(sym);
             if (envLoc==-1)
                 error(r, liMessage(SISCB,"undefinedvar", sym.write()));
-        }
+        } 
         return lenv.env[envLoc];
     }
 
@@ -78,7 +78,6 @@ public class FreeReferenceExp extends Expression implements Immediate {
     }
 
     public FreeReferenceExp() {
-        envLoc=-1;
     }
 
     public void deserialize(Serializer s, DataInput dis)
@@ -101,4 +100,11 @@ public class FreeReferenceExp extends Expression implements Immediate {
     public int hashCode() {
         return lenv.hashCode() ^ sym.hashCode();
     }
+
+    private void readObject(java.io.ObjectInputStream in)
+	throws IOException, ClassNotFoundException {
+	in.defaultReadObject();
+	envLoc=-1;
+    }
+    
 }

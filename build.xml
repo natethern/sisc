@@ -194,7 +194,7 @@
       </tarfileset>
       <tarfileset dir="${dist}/lite">
 	<include name="sisc/*"/>
-	<exclude name="sisc/sisc"/>
+        <exclude name="sisc/sisc"/>
       </tarfileset>
     </tar>
 
