@@ -1,3 +1,7 @@
+2005-03-08  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Added support for SRFI 60.
+	
 2005-02-24  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Lazy dynamic-wind installation isn't semantically safe.  
