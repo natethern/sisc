@@ -108,15 +108,19 @@ public class BinaryDeserializer extends DeserializerImpl {
     }
 
     protected Expression fetchShared(int oid) throws IOException {
-        Expression e=alreadyReadObjects[oid];
-        if (e==null) {
-            long currentPos=raf.getFilePointer();
-            if (DEBUG) System.err.println("Seeking to "+ base +":"+ offsets[oid]+" ["+Long.toHexString(base+offsets[oid])+"]");
-            raf.seek(base + offsets[oid]);
-            e=readExpression();
-            raf.seek(currentPos);
+        try {
+            Expression e=alreadyReadObjects[oid];
+            if (e==null) {
+                long currentPos=raf.getFilePointer();
+                if (DEBUG) System.err.println("Seeking to "+ base +":"+ offsets[oid]+" ["+Long.toHexString(base+offsets[oid])+"]");
+                raf.seek(base + offsets[oid]);
+                e=readExpression();
+                raf.seek(currentPos);
+            }
+            return e;
+        } catch (ArrayIndexOutOfBoundsException aib) {
+            throw new FileNotFoundException(liMessage(SISCB, "invalidentrypoint", new Object[] {new Integer(oid)}));
         }
-        return e;
     }            
 
     public Library getLibrary() {

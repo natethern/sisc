@@ -1,5 +1,6 @@
 package sisc.ser;
 
+import sisc.Util;
 import sisc.data.Expression;
 import sisc.data.Symbol;
 import java.net.URL;
@@ -7,7 +8,7 @@ import java.net.MalformedURLException;
 import java.io.*;
 import java.util.*;
 
-public class LibraryManager {
+public class LibraryManager extends Util {
     
     protected static LibraryManager systemLibraryManager;
 
@@ -65,11 +66,14 @@ public class LibraryManager {
         for (Iterator i=loadedLibraries.keySet().iterator(); i.hasNext();) {
             Object key=i.next();
             LoadableLibrary ll=(LoadableLibrary)loadedLibraries.get(key);
-            Expression rv=ll.getLibrary().getLocalExpression(name);
-            if (rv != null)
-                return rv;
+            try {
+                return ll.getLibrary().getLocalExpression(name);
+            } catch (FileNotFoundException fnf) {
+            }
         }
-        throw new IOException("cannot locate " + name + " in libraries");
+        throw new FileNotFoundException(liMessage(SISCB,
+                                                  "namedlibbindingnotanywhere",
+                                                  name.toString()));
     }
 
     public void addLibrary(Library l) {

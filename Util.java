@@ -157,7 +157,8 @@ public abstract class Util implements Version {
     throws Exception {
         int x=length(argl);
         if (x!=arity && arity!=-1)
-            throw new RuntimeException(liMessage(SISCB, "notenoughargs", arity, x));
+            throw new RuntimeException(liMessage(SISCB, "notenoughargs", 
+                                                 new Object[] {new Integer(arity), new Integer(x)}));
     }
 
     public static int length(Pair p) {
@@ -443,25 +444,15 @@ public abstract class Util implements Version {
     }
 
     public static String liMessage(Symbol bundle, String messageName, 
-				   String arg1, String arg2, String arg3) {
-	return formatter.format(liMessage(bundle, messageName),
-				new Object[] { arg1, arg2, arg3 });
+                                   String arg1, int arg2, int arg3) {
+        return formatter.format(liMessage(bundle, messageName),
+				new Object[] { arg1, new Integer(arg2),
+                                               new Integer(arg3)});
     }
 
-
-    public static String liMessage(Symbol bundle, String messageName, 
-				   int arg1, int arg2) {
-	return formatter.format(liMessage(bundle, messageName),
-				new Object[] { new Integer(arg1), 
-					       new Integer(arg2) });
-    }
-
-    public static String liMessage(Symbol bundle, String messageName, 
-				   String arg1, int arg2, int arg3) {
-	return formatter.format(liMessage(bundle, messageName),
-				new Object[] { arg1,
-					       new Integer(arg2), 
-					       new Integer(arg3) });
+    public static String liMessage(Symbol bundle, String messageName,
+                                   Object[] args) {
+        return formatter.format(liMessage(bundle, messageName), args);
     }
 }
 

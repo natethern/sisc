@@ -315,9 +315,9 @@
 (element methodparam
   ($mono-seq$
    (make sequence
-;    (if (first-sibling?)
-	;(empty-sosofo)
-	(literal " ");)
+    (if (first-sibling?)
+        (empty-sosofo)
+	(literal " "))
     (process-children))))
 
 (element parameter

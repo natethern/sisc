@@ -7,7 +7,7 @@ import java.lang.reflect.*;
 import sisc.*;
 import java.util.*;
 
-public class Library {
+public class Library extends Util {
 
     protected String name;
     protected BinaryDeserializer lib;
@@ -47,14 +47,19 @@ public class Library {
 
     public Expression getLocalExpression(Symbol name) throws IOException {
         Integer i=(Integer)names.get(name);
-        if (i==null) return null;
+        if (i==null) 
+            throw new FileNotFoundException(liMessage(SISCB, 
+                                                      "namedlibbindingnotfound", 
+                                                      name.toString()));
         return getExpression(i.intValue());
     }
 
     public Expression getExpression(Symbol name) throws IOException {
-        Expression rv=getLocalExpression(name);
-        if (rv==null) return LibraryManager.getInstance().getExpression(name);
-        return rv;
+        try {
+            return getLocalExpression(name);
+        } catch (FileNotFoundException fnf) {
+            return LibraryManager.getInstance().getExpression(name);
+        }
     }
 
     public Expression getExpression(int oid) throws IOException {

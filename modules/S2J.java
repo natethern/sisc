@@ -380,7 +380,11 @@ public class S2J extends ModuleAdapter {
             } catch (InstantiationException e) {
                 throw new RuntimeException(liMessage(S2JB, "errorinstantiating", obj.toString()));
             } catch (IllegalAccessException e) {
-                throw new RuntimeException(liMessage(S2JB, "illegalaccess", liMessage(S2JB, "jconstructor"), "default", obj.toString()));
+                throw new RuntimeException(liMessage(S2JB, "illegalaccess", 
+                                                     new Object[] {
+                                                         liMessage(S2JB, "jconstructor"), 
+                                                         "default", 
+                                                         obj.toString()}));
             } catch (NoSuchFieldException e) {
                 throw new RuntimeException(liMessage(S2JB, "nosuchfield", arg[0].toString(), obj.toString()));
             }
@@ -398,7 +402,11 @@ public class S2J extends ModuleAdapter {
                     throw new RuntimeException(liMessage(S2JB, "onetwoargs", liMessage(S2JB, "jfield"), obj.toString()));
                 }
             } catch (IllegalAccessException e) {
-                throw new RuntimeException(liMessage(S2JB, "illegalaccess", liMessage(S2JB, "jfield"), obj.toString(), args[0].toString()));
+                throw new RuntimeException(liMessage(S2JB, "illegalaccess", 
+                                                     new Object[] {
+                                                         liMessage(S2JB, "jfield"), 
+                                                         obj.toString(), 
+                                                         args[0].toString()}));
             }
         }
 
@@ -412,7 +420,11 @@ public class S2J extends ModuleAdapter {
             try {
                 return new JavaObject(obj.invoke(o,params));
             } catch (IllegalAccessException e) {
-                throw new RuntimeException(liMessage(S2JB, "illegalaccess", liMessage(S2JB, "jmethod"), obj.toString(), o.toString()));
+                throw new RuntimeException(liMessage(S2JB, "illegalaccess", 
+                                                     new Object[] {
+                                                         liMessage(S2JB, "jmethod"), 
+                                                         obj.toString(), 
+                                                         o.toString()}));
             }
         }
 
@@ -427,7 +439,11 @@ public class S2J extends ModuleAdapter {
             } catch (InstantiationException e) {
                 throw new RuntimeException(liMessage(S2JB, "constructorerror", obj.toString(), obj.getDeclaringClass().getName()));
             } catch (IllegalAccessException e) {
-                throw new RuntimeException(liMessage(S2JB, "illegalaccess", liMessage(S2JB, "jconstructor"), obj.toString(), obj.getDeclaringClass().getName()));
+                throw new RuntimeException(liMessage(S2JB, "illegalaccess", 
+                                                     new Object[] {
+                                                         liMessage(S2JB, "jconstructor"), 
+                                                         obj.toString(), 
+                                                         obj.getDeclaringClass().getName()}));
             }
         }
 
@@ -484,7 +500,11 @@ public class S2J extends ModuleAdapter {
                     throw new RuntimeException(liMessage(S2JB, "onetwoargs", liMessage(S2JB, "jobject"), obj.toString()));
                 }
             } catch (IllegalAccessException e) {
-                throw new RuntimeException(liMessage(S2JB, "illegalaccess", liMessage(S2JB, "jobject"), args[0].toString(), obj.toString()));
+                throw new RuntimeException(liMessage(S2JB, "illegalaccess", 
+                                                     new Object[] {
+                                                         liMessage(S2JB, "jobject"), 
+                                                         args[0].toString(), 
+                                                         obj.toString()}));
             } catch (NoSuchFieldException e) {
                 throw new RuntimeException(liMessage(S2JB, "nosuchfield", args[0].toString(), obj.toString()));
             }
