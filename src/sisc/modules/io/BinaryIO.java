@@ -184,10 +184,11 @@ public class BinaryIO extends IndexedProcedure {
                 return VOID;
             case BLOCKREAD:
                 int count=num(f.vlr[2]).indexValue();
-                BinaryInputPort inport=binport(f.vlr[1]);
+                int offset=num(f.vlr[1]).indexValue();
+                BinaryInputPort inport=binport(f.vlr[3]);
                 byte[] buf=buffer(f.vlr[0]).buf;
                 try {
-                    int rv=inport.read(buf, 0, Math.min(buf.length, count));
+                    int rv=inport.read(buf, offset, Math.min(buf.length-offset, count));
                     if (rv==-1) return EOF;
                     else return Quantity.valueOf(rv);
                 } catch (IOException e) {
