@@ -277,7 +277,7 @@ Context.exit()
     <para>
       A significant proportion of the module's functionality is
       offered through tight integration with the 
-      <xref linkend="GenericProcedures">generic procedures</xref> mechanism.
+      <link linkend="GenericProcedures">generic procedures</link> mechanism.
     </para>
     <sect2>
       <title>Java Objects</title>
@@ -1107,6 +1107,7 @@ Context.exit()
             <methodsynopsis language="scheme">
               <type>jobj</type>
               <methodname>java-new</methodname>
+              <void/>
             </methodsynopsis>
             <blockquote>
               <para>
@@ -1897,7 +1898,7 @@ Class.getSigners()
           This defines a new generic procedure
           <function>app</function> which is chained to a generic
           procedure representing the Java <function>append</function>
-          methods. The explict chaining is done in order to avoid a
+          methods. The explicit chaining is done in order to avoid a
           name clash with Scheme's <function>append</function>
           procedure. A method is defined on the generic procedure that
           appends the contents of any number of arguments to a
@@ -2000,7 +2001,7 @@ Class.getSigners()
           <function>make</function>. The main purpose of
           <function>initialize</function> is to facilitate the
           definition of post-creation object initialization,
-          particularly the invocation of initialisation code for
+          particularly the invocation of initialization code for
           superclasses.
         </para>
         <para>
@@ -2127,7 +2128,7 @@ Class.getSigners()
               </methodsynopsis>
               <blockquote>
                 <para>
-                  Determinesd whether the types in
+                  Determines whether the types in
                   <parameter>types</parameter> (a list) match the type
                   signature of <parameter>method</parameter>, i.e. if
                   it is possible to invoke
@@ -2154,7 +2155,7 @@ Class.getSigners()
           <parameter>next-method</parameter> should only be called
           with arguments that would result in the same ordered
           sequence of applicable methods as the original arguments.
-          The behaviour of <parameter>next-method</parameter> when
+          The behavior of <parameter>next-method</parameter> when
           invoked with arguments that do not meet this criteria is
           undefined.
         </para>

@@ -476,7 +476,7 @@
     <para>
       &SISC; allows key/value bindings to be associated with
       procedures. This has a number of applications. For instance,
-      <xref linkend="GenericProcedures">generic procedures</xref>
+      <link linkend="GenericProcedures">generic procedures</link>
       store their methods in a procedure property.
     </para>
     <para>

@@ -643,7 +643,7 @@
               Wakes exactly one thread waiting on the monitor, if any such
               threads exist.  If the notifying thread holds the lock
               on <parameter>monitor</parameter>, the waiting thread
-              will not procede until the notifying thread releases the lock.
+              will not proceed until the notifying thread releases the lock.
             </para>
           </blockquote>
         </para>

@@ -989,7 +989,7 @@
         <para>
           Similarly, invoking a continuation that escapes a region of
           code will cause any created failure continuations to be
-          abandonned, unless the region is itself captured in a
+          abandoned, unless the region is itself captured in a
           continuation and later invoked.
         </para>
         <para>
@@ -1000,7 +1000,7 @@
     <sect2 id="ErrorRecords">
       <title>Error Records</title>
       <para>
-        An error record is the value usually propogated with an error
+        An error record is the value usually propagated with an error
         in SISC.  It is a datastructure containing such information as
         the location of the error, a descriptive message about the
         error, and possibly other error metadata.  
@@ -1229,7 +1229,7 @@
             <para>
                 &procedure;
               <methodsynopsis language="scheme">
-                <type><emphasis>does not return</emphasis></type>
+                <type>does not return</type>
                 <methodname>throw</methodname>
                 <methodparam>      
                   <parameter>error-record</parameter>
@@ -1253,7 +1253,7 @@
         <para>
           If invoked from an error-handler with the values of the handler's 
           formal parameters, throw has the effect of
-          propogating the error in a manner that is equivalent to the
+          propagating the error in a manner that is equivalent to the
           absence of the modified failure-continuation. 
         </para>
         <para>
@@ -1282,7 +1282,7 @@
             <para>
                 &procedure;
               <methodsynopsis language="scheme">
-                <type><emphasis>does not return</emphasis></type>
+                <type>does not return</type>
                 <methodname>error</methodname>
                 <methodparam choice="opt">
                   <parameter>location</parameter>
@@ -1307,7 +1307,7 @@
               </blockquote>
                 &procedure;
               <methodsynopsis language="scheme">
-                <type><emphasis>does not return</emphasis></type>
+                <type>does not return</type>
                 <methodname>error</methodname>
                 <methodparam choice="opt">
                   <parameter>location</parameter>
@@ -1575,7 +1575,7 @@
     <para>
       Symbolic environments are a first class datatype in &SISC;.  The
       top-level environment itself is merely a special cased symbolic
-      enviornment.  To obtain the top-level environment as a first
+      environment.  To obtain the top-level environment as a first
       class value, one can use the 
       <function>interaction-environment</function> function that is an
       optional procedure in &R5RS;.  Another useful environment is the

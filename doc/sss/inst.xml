@@ -46,9 +46,10 @@
 	<para>
 	  &procedure; 
 	  <methodsynopsis language="scheme">
-	      <type>undefined</type>
-	      <methodname>exit</methodname>
-	    </methodsynopsis>
+            <type>undefined</type>
+            <methodname>exit</methodname>
+            <void/>
+          </methodsynopsis>
 	  <blockquote>
 	    <para>
 	      Instructs the current REPL to exit.

@@ -362,6 +362,7 @@
                 <modifier>public</modifier>
                 <type>BigInteger</type>
                 <methodname>readBigInteger</methodname>
+                <void/>
                 <exceptionname>java.io.IOException</exceptionname>
               </methodsynopsis>          
               <blockquote>
@@ -375,6 +376,7 @@
                 <modifier>public</modifier>
                 <type>BigDecimal</type>
                 <methodname>readBigDecimal</methodname>
+                <void/>
                 <exceptionname>java.io.IOException</exceptionname>
               </methodsynopsis>          
               <blockquote>
@@ -388,6 +390,7 @@
                 <modifier>public</modifier>
                 <type>Class</type>
                 <methodname>readClass</methodname>
+                <void/>
                 <exceptionname>java.io.IOException</exceptionname>
               </methodsynopsis>          
               <blockquote>
@@ -401,6 +404,7 @@
                 <modifier>public</modifier>
                 <type>Expression</type>
                 <methodname>readExpression</methodname>
+                <void/>
                 <exceptionname>java.io.IOException</exceptionname>
               </methodsynopsis>          
               <blockquote>
@@ -414,6 +418,7 @@
                 <modifier>public</modifier>
                 <type>Module</type>
                 <methodname>readModule</methodname>
+                <void/>
                 <exceptionname>java.io.IOException</exceptionname>
               </methodsynopsis>          
               <blockquote>

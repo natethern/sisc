@@ -329,7 +329,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
       </para>
     </sect1>
     <sect1>
-      <title>Performance considerations</title>
+      <title>Performance and Efficiency considerations</title>
       <sect2>
         <title>Math</title>
         <para>
@@ -358,6 +358,53 @@ for <function>sqrt</function>, it is not clear what other mathematical
           prevent an unbounded increase in the scale of arbitrary
           precision inexacts which will very rapidly slow
           calculations.
+        </para>
+      </sect2>
+      <sect2>
+        <title>Strings</title>
+        <para>
+          At the time of this writing, the Scheme string type can be
+          represented either as a character array, a native string, 
+          or simultaneously as both.  The character array
+          representation allows efficient, constant time modification
+          of a mutable string (using <function>string-set!</function>
+          for example). The native string representation allows
+          efficient output to ports, string comparison, and substring
+          operations.  
+        </para>
+        <para>
+          By default, &SISC; allows the Scheme string to contain both
+          representations simultaneously, ensuring that there is not a 
+          costly representation conversion necessary to perform
+          certain operations.  However, in this default mode, strings
+          may occupy twice the memory as a string in a single
+          representation.  If a program uses many strings or several
+          very large strings, the programmer may wish to create 
+          strings that may only be in one representation at any given 
+          time.  &SISC; provides a parameter to control this behavior.
+        </para>
+        <para>
+	  <blockquote>
+	    <para>
+	      &parameter;
+	      <methodsynopsis language="scheme">
+                <type>&num;t/&num;f</type>
+                <methodname>compact-string-rep</methodname>
+                <methodparam choice="opt"> 
+                  <parameter>boolean</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  This parameter, if set <literal>&num;t</literal>,
+                  will force strings to be represented either as a
+                  character array, or as a native string, but never
+                  both.  If false, simultaneous representations are 
+                  possible.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
         </para>
       </sect2>
     </sect1>

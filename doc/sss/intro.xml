@@ -55,7 +55,7 @@
       <listitem>
 	<para>
 	  Lightweight Scheme engine, implementing all &R5RS; functionality
-	  in appoximately 10,000 lines of native code plus
+	  in approximately 10,000 lines of native code plus
 	  approximately 5,000 lines of Scheme code.
 	</para>
       </listitem>

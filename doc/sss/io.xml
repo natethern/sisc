@@ -25,15 +25,13 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
 </programlisting>
         The latter is a URL referring to a file stored in a JAR on a
         remote web server. For further details on the format of URLs
-        please consult <ulink
-        href="http://www.ietf.org/rfc/rfc2396.txt">this
+        please consult <ulink url="http://www.ietf.org/rfc/rfc2396.txt">this
         specification</ulink>. The format of JAR URLs is defined in
-        <ulink
-        href="http://java.sun.com/j2se/1.4/docs/api/java/net/JarURLConnection.html">the
+        <ulink url="http://java.sun.com/j2se/1.4/docs/api/java/net/JarURLConnection.html">the
         JDK API documentation</ulink>.  What types of URLs are
         supported by a particular installation of Java depends on the
         configured protocol handlers. See <ulink
-        href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">the
+        url="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">the
         JDK API documentation</ulink> for details.
       </para>
       <para>
@@ -61,7 +59,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
           </para>
         </blockquote>
         The algorithm for resolving relative URLs is defined in <ulink
-        href="http://www.ietf.org/rfc/rfc2396.txt">this
+        url="http://www.ietf.org/rfc/rfc2396.txt">this
         specification</ulink>.  For compatibility with other Schemes,
         &SISC; also supports the
         <function>current-directory</function> procedure, which is a
