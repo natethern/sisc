@@ -82,6 +82,7 @@
 (native-module networking "sisc.modules.io.SNetwork$Index")
 (native-module debugging-native  "sisc.modules.SDebug$Index")
 (native-module threading-native  "sisc.modules.SThread$Index")
+(native-module types-native      "sisc.modules.STypes$Index")
 (native-module s2j-reflection    "sisc.modules.s2j.Reflection$Index")
 (native-module s2j-conversion    "sisc.modules.s2j.Conversion$Index")
 (native-module hashtable-native  "sisc.modules.hashtable.Primitives$Index")
@@ -343,6 +344,7 @@
    java-null
    java-mangle-field-name
    java-mangle-method-name
+   java-mangle-class-name
    java-invocation-handler
    jnull
    ->
@@ -423,6 +425,7 @@
   (define java-null             java/null)
   (define java-mangle-field-name        java/mangle-field-name)
   (define java-mangle-method-name       java/mangle-method-name)
+  (define java-mangle-class-name        java/mangle-class-name)
   (define java-invocation-handler       java/invocation-handler)
   (define jnull (java/null))
   (define-generic ->)

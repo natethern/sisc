@@ -51,13 +51,14 @@ public class Reflection extends Util {
         JAVA_NULL = 35,
         JAVA_MANGLE_FIELD_NAME = 36,
         JAVA_MANGLE_METHOD_NAME = 37,
+        JAVA_MANGLE_CLASS_NAME = 38,
 
-        JAVA_INVOKE_CONSTRUCTOR = 38,
-        JAVA_INVOKE_METHOD = 39,
-        JAVA_FIELD_REF = 40,
-        JAVA_FIELD_SET = 41,
-        JAVA_ARRAY_REF = 42,
-        JAVA_ARRAY_SET = 43;
+        JAVA_INVOKE_CONSTRUCTOR = 39,
+        JAVA_INVOKE_METHOD = 40,
+        JAVA_FIELD_REF = 41,
+        JAVA_FIELD_SET = 42,
+        JAVA_ARRAY_REF = 43,
+        JAVA_ARRAY_SET = 44;
 
     public static class Index extends IndexedLibraryAdapter {
 
@@ -108,6 +109,7 @@ public class Reflection extends Util {
             define("java/null", JAVA_NULL);
             define("java/mangle-field-name", JAVA_MANGLE_FIELD_NAME);
             define("java/mangle-method-name", JAVA_MANGLE_METHOD_NAME);
+            define("java/mangle-class-name", JAVA_MANGLE_CLASS_NAME);
 
             define("java/invoke-constructor", JAVA_INVOKE_CONSTRUCTOR);
             define("java/invoke-method", JAVA_INVOKE_METHOD);
@@ -392,6 +394,8 @@ public class Reflection extends Util {
                 return Symbol.intern(mangleFieldName(symval(f.vlr[0])));
             case JAVA_MANGLE_METHOD_NAME:
                 return Symbol.intern(mangleMethodName(symval(f.vlr[0])));
+            case JAVA_MANGLE_CLASS_NAME:
+                return Symbol.intern(mangleClassName(symval(f.vlr[0])));
             default: break SIZESWITCH;
             }
         case 2:

@@ -315,6 +315,22 @@ public abstract class Util extends IndexedProcedure {
         return mangleFieldName(s);
     }
 
+    public static String mangleClassName(String s) {
+        if (s.startsWith("<") && s.endsWith(">")) {
+            int l = s.length();
+            s = s.substring(1, l-1);
+            int p = s.lastIndexOf('.');
+            if (p != -1) {
+                StringBuffer res = new StringBuffer(l);
+                res.append(s.substring(0, p+1));
+                res.append(Character.toUpperCase(s.charAt(p+1)));
+                res.append(s.substring(p+2));
+                s = res.toString();
+            }
+        }
+        return mangleFieldName(s);
+    }
+
 }
 
 /*
