@@ -227,3 +227,16 @@
 
 (should-be 1096047 '#(1 2 unquote (list 3 4)) 
                    `#(1 2 unquote (list 3 4)))
+
+(module m (a b)
+  (module ((a x))
+   (define x 10)
+   (define (a) x))
+  (module ((b x))
+   (define x 20)
+   (define (b) x)))
+
+(should-be 1124005 10
+  (let () 
+    (import m)
+    (a)))
