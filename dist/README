@@ -1,7 +1,7 @@
 About SISC (Second Interpreter of Scheme Code)
 ---------------------------------------------------------------------------
 
-    SISC is a relatively lightweight, from scratch, fully functional scheme
+    SISC is a relatively lightweight, from scratch, fully functional Scheme
 interpreter.  SISC is the successor to LISC, and sacrifices a few dozen
 more KB in order to be orders of magnitude faster and fully R5RS compliant.
 SISC has the following general features:
@@ -11,7 +11,7 @@ SISC has the following general features:
          - Arbitrary precision integers, floating point numbers 
          - Arbitrary precision ratios (based on bigints)
          - Arbitrary precision complex numbers (based on bigfloats)
-    * A full R5RS compliant, hygenic macro system based on syntax-case.
+    * A fully R5RS compliant, hygenic macro system based on syntax-case.
     * Full support for continuations via call/cc.
 
 Installation
