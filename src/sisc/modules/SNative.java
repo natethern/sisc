@@ -6,7 +6,10 @@ import sisc.nativefun.*;
 
 public class SNative extends IndexedProcedure {
 
+    //Next: 33
     protected static final int ASSQ = 0,
+        MIN = 31,
+        MAX = 32,
         MEMQ = 1,
         ASSOC = 6,
         MEMBER = 7,
@@ -53,8 +56,10 @@ public class SNative extends IndexedProcedure {
             define("cadr", CADR);
             define("cdar", CDAR);
             define("cddr", CDDR);
+            define("max", MAX);
             define("memq", MEMQ);
             define("member", MEMBER);
+            define("min", MIN);
             define("list-ref", LISTREF);
             define("memv", MEMV);
             define("not", NOT);
@@ -99,6 +104,26 @@ public class SNative extends IndexedProcedure {
 
     public final Value doApply(Interpreter f) throws ContinuationException {
         switch(id) {
+        case MAX:
+            if (f.vlr.length < 1)
+                throwArgSizeException();            
+            Quantity q1=num(f.vlr[0]);
+            for (int i=f.vlr.length-1; i>0; i--) {
+                Quantity q2=num(f.vlr[i]);
+                if (q1.comp(q2,-1))
+                    q1=q2;
+            }
+            return q1;
+        case MIN:
+            if (f.vlr.length < 1)
+                throwArgSizeException();            
+            q1=num(f.vlr[0]);
+            for (int i=f.vlr.length-1; i>0; i--) {
+                Quantity q2=num(f.vlr[i]);
+                if (q1.comp(q2,1))
+                    q1=q2;
+            }
+            return q1;
         case CHARLESSTHAN:
             if (f.vlr.length < 2)
                 throwArgSizeException();
