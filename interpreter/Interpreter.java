@@ -32,8 +32,9 @@ public class Interpreter extends Util {
                                              proc(v.values[1]), 
                                              v.values.length>2 ? 
                                              proc(v.values[2]) :
-                                             //This really shouldn't ever happen, but it seems possible at the very top of stacks for some reason
-                                             (r.fk == null ? proc(v.values[1]) : r.fk));
+                                             //If we are at the top of the
+                                             //stack, use a default fk
+                                             (r.fk == null ? top_fk : r.fk));
         }
 
         public Value express() {
