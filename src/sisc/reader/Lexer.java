@@ -122,6 +122,10 @@ public class Lexer implements Tokens {
             default:
                 is.pushback(c);
                 String v=readToBreak(is, special, true, false);
+
+                if (c=='\\') 
+                   v="\\"+v;    
+
                 Object result=v;
                 if (numberStart(v.charAt(0), radix))
                     result=readNum(v, radix);
