@@ -753,7 +753,8 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
       (or (eof-object? e)
           (let ([source (analyze
                          ((current-optimizer)
-                          (apply sc-expand e scexpopts) (interaction-environment)))])
+                          (apply sc-expand e scexpopts))
+                         (interaction-environment))])
             (pretty-print source outf) (newline outf)
             (loop (read inf)))))
     (close-output-port outf)
