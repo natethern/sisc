@@ -68,6 +68,17 @@ public class AssociativeEnvironment extends NamedValue {
         symbolMap=new HashMap(1);
     }
 
+    public java.util.Set bindingKeys() {
+        java.util.Set res;
+        synchronized(symbolMap) {
+            res = symbolMap.keySet();
+        }
+        if (parent != null) {
+            res.addAll(parent.bindingKeys());
+        }
+        return res;
+    }
+    
     protected void expand() {
         synchronized(symbolMap) {
             Value[] newenv=new Value[(int)((env.length*EXPFACT) + 1)];

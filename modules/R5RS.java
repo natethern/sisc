@@ -1,3 +1,42 @@
+package sisc.modules;
+
+import sisc.*;
+import sisc.data.*;
+import java.util.*;
+import java.io.*;
+
+public class R5RS extends Module {
+
+    public String getModuleName() {
+        return "R5RS";
+    }
+
+    public float getModuleVersion() {
+        return 0.0f;
+    }
+
+    public R5RS() {}
+
+    public Symbol[] getModuleBindingNames(Interpreter r) {
+        AssociativeEnvironment ae =
+            (AssociativeEnvironment)r.lookupContextEnv(REPORT);
+        return (Symbol[])ae.bindingKeys().toArray(new Symbol[] {});
+    }
+
+    public Value getBindingValue(Interpreter r, Symbol name)
+        throws NoSuchMethodError {
+        AssociativeEnvironment ae =
+            (AssociativeEnvironment)r.lookupContextEnv(REPORT);
+        return ae.lookup(name);
+    }
+
+    public Value eval(int primid, Interpreter f)
+        throws ContinuationException {
+        throwArgSizeException();
+        return VOID;
+    }
+}
+
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -12,7 +51,7 @@
  * The Original Code is the Second Interpreter of Scheme Code (SISC).
  * 
  * The Initial Developer of the Original Code is Scott G. Miller.
- * Portions created by Scott G. Miller are Copyright (C) 2000-2001
+ * Portions created by Scott G. Miller are Copyright (C) 2000-2002
  * Scott G. Miller.  All Rights Reserved.
  * 
  * Contributor(s):
@@ -30,39 +69,3 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-package sisc;
-
-import sisc.data.*;
-import sisc.exprs.FreeReferenceExp;
-
-public abstract class Module extends NamedValue implements java.io.Serializable {
-
-    public abstract Symbol[] getModuleBindingNames(Interpreter r);
-    public abstract Value getBindingValue(Interpreter r, Symbol name) throws NoSuchMethodError;
-
-    public abstract String getModuleName();
-    public abstract float getModuleVersion();
-
-    public String display() {
-	return displayNamedOpaque("native library");
-    }
-
-    public abstract Value eval(int primid, Interpreter f)
-    throws ContinuationException;
-
-    public static void throwPrimException(String message) {
-	throw new PrimRuntimeException(message);
-    }
-
-    public static void throwNestedPrimException(String message, SchemeException e) {
-	throw new NestedPrimRuntimeException(message, e);
-    }
-
-    public static void throwNestedPrimException(SchemeException e) {
-	throw new NestedPrimRuntimeException(e);
-    }
-
-    public static void throwArgSizeException() {
-	throw new ArrayIndexOutOfBoundsException();
-    }
-}

@@ -56,10 +56,10 @@ public class Primitives extends ModuleAdapter {
                      (((Quantity)v).is(mask)));
     }
 
-    public void bindAll(AssociativeEnvironment a) {
-        Symbol[] syms=getModuleBindingNames();
+    public void bindAll(Interpreter r, AssociativeEnvironment a) {
+        Symbol[] syms=getModuleBindingNames(r);
         for (int i=0; i<syms.length; i++) {
-            a.define(syms[i], getBindingValue(syms[i]));
+            a.define(syms[i], getBindingValue(r, syms[i]));
         }
     }
 
@@ -112,7 +112,6 @@ public class Primitives extends ModuleAdapter {
         define("eq?", EQ);
         define("equal?", EQUAL);
         define("error", ERROR);
-        define("eval", EVAL);
         define("eval", EVAL);
         define("exact->inexact", EXACT2INEXACT);
         define("exact?", EXACTQ);
@@ -537,7 +536,7 @@ public class Primitives extends ModuleAdapter {
             case NLVERSION:
                 return Quantity.valueOf(module(f.vlr[0]).getModuleVersion());
             case NLBINDINGNAMES:
-                Value[] va=(Value[])module(f.vlr[0]).getModuleBindingNames();
+                Value[] va=(Value[])module(f.vlr[0]).getModuleBindingNames(f);
                 return valArrayToList(va,0,va.length);
             case LOADNL:
                 try {
@@ -672,7 +671,7 @@ public class Primitives extends ModuleAdapter {
                     throwPrimException("error opening file "+fname);
                 }
             case NLBINDING:
-                return module(f.vlr[0]).getBindingValue(symbol(f.vlr[1]));
+                return module(f.vlr[0]).getBindingValue(f, symbol(f.vlr[1]));
             case EVAL:
                 f.nxp=f.compile(f.vlr[0], env(f.vlr[1]));
                 f.returnValues();

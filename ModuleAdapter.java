@@ -12,7 +12,7 @@ public abstract class ModuleAdapter extends Module {
 	bindings.put(name, new Integer(id));
     }
 
-    public Symbol[] getModuleBindingNames() {
+    public Symbol[] getModuleBindingNames(Interpreter r) {
 	Symbol[] slist=new Symbol[bindings.size()];
 	int x=0;
 	for (Iterator i=bindings.keySet().iterator(); 
@@ -22,7 +22,7 @@ public abstract class ModuleAdapter extends Module {
     }
 
 
-    public Value getBindingValue(Symbol name) throws NoSuchMethodError {
+    public Value getBindingValue(Interpreter r, Symbol name) throws NoSuchMethodError {
 	Integer i=(Integer)bindings.get(name);
 	try {
 	    int inum=i.intValue();

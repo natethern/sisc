@@ -72,7 +72,7 @@ public class GenerateHeap {
 	Context.register("main", ctx);
 
         Interpreter r = Context.enter("main");
-	new Primitives().bindAll(r.ctx.toplevel_env);
+        new Primitives().bindAll(r, r.ctx.toplevel_env);
         ctx.setEvaluator("eval");
 
 
