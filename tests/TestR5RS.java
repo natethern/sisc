@@ -46,32 +46,12 @@ import sisc.REPL;
 import sisc.CallFrame;
 import sisc.Util;
 import sisc.ContinuationException;
+import sisc.SchemeException;
 
 import sisc.data.Value;
 import sisc.data.Expression;
 import sisc.data.InputPort;
 import sisc.data.Procedure;
-
-
-class SchemeException
-    extends RuntimeException
-{
-    SchemeException()
-    { }
-}
-
-class Failure extends Expression
-{
-    public void eval(Interpreter r)
-    {
-        throw new SchemeException();
-    }
-
-    public Value express()
-    {
-        return Util.list(Util.sym("Failure"));
-    }
-}
 
 
 public class TestR5RS
@@ -87,16 +67,12 @@ public class TestR5RS
 
 
     protected void setUp()
-        throws Exception
+        throws ClassNotFoundException
     {
         AppContext ctx = new AppContext();
         Context.register("main", ctx);
         interpreter = Context.enter("main");
         REPL.initializeInterpreter(interpreter,new String[0]);
-        
-        interpreter.fk = new CallFrame(new Failure(), null, null, null, interpreter.stk);
-        interpreter.fk.capture();
-        interpreter.fk.fk = interpreter.fk;
     }
 
     protected void tearDown()
@@ -110,27 +86,27 @@ public class TestR5RS
     {
         return
             interpreter.
-	    dynenv.
+            dynenv.
             parser.
             nextExpression(
                 new InputPort(
                     new BufferedReader(
                         new StringReader(
                             expression
-			    )
-			)
-		    )
-		);
+                        )
+                    )
+                )
+            );
     }
 
     private Value eval(String expression)
-        throws IOException, ContinuationException
+        throws IOException, SchemeException
     {
-        return interpreter.eval(expression);
+        return interpreter.eval(quote(expression));
     }
 
     private void check(String in, String out)
-        throws IOException, ContinuationException
+        throws IOException, SchemeException
     {
         Value   value   = eval(in);
         boolean success = value.equals(quote(out));
