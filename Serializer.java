@@ -118,18 +118,18 @@ public class Serializer implements Conf {
 	return new BigDecimal(new BigInteger(buffer), scale);
     }
 
-    public static void writeBer(int v, DataOutput dos) throws IOException {
+    public static void writeBer(long v, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
-            byte[] b=new byte[5];
-            int p=4;
+            byte[] b=new byte[9];
+            int p=8;
 
             while (v>0) {
                 b[p--]=(byte)((v & BER_MASK) | BER_CONT);
                 v>>>=7;
             }
-            b[4]&=BER_MASK;
+            b[8]&=BER_MASK;
 
-            if (p==4) p=3;
+            if (p==8) p=7;
             dos.write(b, p+1, b.length-(p+1));
         }
     }
@@ -139,9 +139,13 @@ public class Serializer implements Conf {
     }
 
     public static int readBer(DataInput dis) throws IOException {
+        return (int)readBerLong(dis);
+    }
+
+    public static long readBerLong(DataInput dis) throws IOException {
         if (SERIALIZATION) {
-            int b=dis.readUnsignedByte();
-            int val=b & BER_MASK;
+	    int b=dis.readUnsignedByte();
+            long val=b & BER_MASK;
             while ((b & BER_CONT) != 0) {
                 b=dis.readUnsignedByte();
                 val=(val<<7) + (b & BER_MASK);
