@@ -869,33 +869,187 @@
   <sect1 id="SchemeClasses">
     <title>Scheme Classes</title>
     <para>
+      A Scheme object is a collection of key/value pairs, where the
+      keys are symbols and values can be any Scheme values. Every
+      Scheme object is an instance of exactly one Scheme class.
+      Scheme classes have zero or more superclasses. The combination
+      of a Scheme class and its superclasses defines the set of keys
+      for instances of the class and the initial values they contain.
+    </para>
+    <para>
+      Scheme classes are themselves Scheme objects which are instances
+      of the class <literal>&lt;class&gt;</literal>.
     </para>
     <sect2>
       <title>Defining Classes</title>
-      <!--
-      make-class
-      define-class
-      &lt;class&gt;
-      -->
-      <para></para>
+      <para>
+        Scheme classes are defined with
+        <blockquote>
+          <para>
+            <indexterm><primary>make-class</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>class</type>
+              <methodname>make-class</methodname>
+              <methodparam><parameter>superclasses</parameter></methodparam>
+              <methodparam><parameter>slots</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns a new Scheme class, an instance of
+                <literal>&lt;class&gt;</literal>.
+                <parameter>superclasses</parameter> is the list of
+                direct superclasses of the new class, and
+                <parameter>slots</parameter> contains an alist of
+                key/value pairs which are the direct slot names and
+                their initial values.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>        
+      </para>
+      <para>
+        A macro simplifies the common task of binding a variable to a
+        newly created class:
+        <blockquote>
+          <para>
+            <indexterm><primary>define-class</primary>
+            </indexterm>
+              &syntax;
+            <methodsynopsis language="scheme">
+              <void/>
+              <methodname>define-class</methodname>
+              <methodparam><parameter>name-and-super</parameter></methodparam>
+              <methodparam choice="opt">
+                <parameter>slots</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <simplelist>
+                <member>
+                  where <parameter>name-and-super</parameter> is of
+                  the form
+                  <literal>(</literal><parameter>name</parameter>
+                  <parameter>superclass</parameter>
+                  <literal>...</literal><literal>)</literal>
+                </member>
+                <member>
+                  and <parameter>slots</parameter> contains one or
+                  more two-element lists of the form
+                  <literal>(</literal><parameter>key</parameter>
+                  <parameter>value</parameter><literal>)</literal>.
+                </member>
+              </simplelist>
+              <para>
+                Creates a new Scheme class and binds it to the
+                variable <parameter>name</parameter>. The optional
+                <parameter>superclass</parameter>es are the direct
+                superclasses of the new class and the list of
+                <parameter>key</parameter>s and
+                <parameter>value</parameter>s define the direct slots
+                and their initial values.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        The list of slots and their initial values of instances of a
+        class is determined by collecting all slots and initial values
+        from the class precedence list. Should a slot name appear more
+        than once then the initial value is the one found earlier in
+        the list.
+      </para>
     </sect2>
     <sect2>
       <title>Instantiating Classes</title>
-      <!--
-      calling make
-      default constructor
-      own constructor
-      make-object
-      -->
-      <para></para>
+      <para>
+        The normal way to instantiate a class is to call
+        <function>make</function>. Classes define a default
+        constructor that takes care of creating a new instance of the
+        class and initialising the slots to the values specified in
+        the class definition. The default constructor takes any number
+        of arguments, all of which are ignored.
+      </para>
+      <para>
+        It is possible to override the default constructor by defining
+        a constructor with <function>define-constructor</function>.
+        This is rarely needed though since in most cases the
+        post-creation object initialisation carried out by the
+        <function>initialize</function> generic procedure suffices.
+      </para>
+      <para>
+        Scheme objects can also be created directly using
+        <blockquote>
+          <para>
+            <indexterm><primary>make-object</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>object</type>
+              <methodname>make-object</methodname>
+              <methodparam><parameter>class</parameter></methodparam>
+              <methodparam><parameter>slots</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns a new Scheme object, which is an instance of
+                <parameter>class</parameter> and has slots with
+                initial values defined by the
+                <parameter>slots</parameter> association list.
+              </para>
+              <para>
+                No constructor and initialisation methods are
+                invoked. The slots must comprise exactly the slots
+                defined by <parameter>class</parameter> and its
+                superclasses.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote> 
+      </para>
     </sect2>
     <sect2>
       <title>Predicates</title>
-      <!--
-      scheme-class?
-      scheme-object?
-      -->
-      <para></para>
+      <para>
+        Two predicates exist to determine whether a value is a Scheme
+        class or Scheme object respectively.
+        <blockquote>
+          <para>
+            <indexterm><primary>scheme-object?</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>&num;t/&num;f</type>
+              <methodname>scheme-object?</methodname>
+              <methodparam><parameter>value</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns &num;t if <parameter>value</parameter> is a
+                Scheme object, &num;f otherwise.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>scheme-class?</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>&num;t/&num;f</type>
+              <methodname>scheme-class?</methodname>
+              <methodparam><parameter>value</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns &num;t if <parameter>value</parameter> is a
+                Scheme class, &num;f otherwise.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
     </sect2>
   </sect1>
   <sect1>
