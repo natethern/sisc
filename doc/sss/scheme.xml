@@ -622,7 +622,8 @@
       </para>
       <para>
         The reader, upon encountering this sharp sequence, will read
-        and discard the next datum.
+        and discard the next datum.  The expression commented out must still
+        be a valid s-expression, however.
       </para>
       <para>
         Nested, multiline comments are as defined in SRFI-30.
