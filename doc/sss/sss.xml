@@ -176,9 +176,8 @@ for <function>sqrt</function>, it is not clear what other mathematical
           <para>6.5 -
             The environment returned by the
             <function>scheme-report-environment</function> contains
-            more bindings than specified in &R5RS;.  The standard
-            doesn't specify whether this is allowed or not, but we
-            suspect it isn't in the spirit of the standard.
+            more bindings than specified in &R5RS;.  This is a
+            violation of the standard.
           </para>
         </listitem>
       </orderedlist>
