@@ -38,17 +38,18 @@
   (debug "Receiving Game State...")
   
   (let ((playerno (receive-gamestate in)))
-    (set! gui-frame (make (java-class "Gui") (->jint playerno)))
-    (set! gui-pane (gui-frame 'a))
-    (display gui-frame)
-    (show gui-frame)
+;    (if (getprop 'gui '*environment-variables*)
+;        (setup-gui playerno))
     (debug "Entering main-loop...")
     (main-loop playerno #f #f #f)))
-;(go)
-(define (gui id) 
- (repaint gui-pane))
 
-(make-world! 5 5)
-(set! world-map "#####.....@...@.....#####")
+(define (setup-gui playerno)
+    (set! gui-frame (make (java-class "Gui") (->jint playerno)))
+    (set! gui-pane (gui-frame 'a))
+    (show gui-frame))
+
+(define (gui id) id)
+; (repaint gui-pane))
+
 
 

@@ -45,20 +45,20 @@
 	    (lambda (return state id start next c)
               ;Hmm, ran out of moves
               (cond [(null? (node-parent next))
-                     (begin ;(clear-seen! id)
-                            '(|Move| |W|))]
+                     (begin (clear-seen! id)
+                            '(|Drop|))]
                     [(equal? start (node-pos (node-parent next)))
                      (let ((n (length next)))
                        (return (node-move next) 
-                               (if (> n c) #f state)))]
-                    [else (unwind return state id start (node-parent next)
+                               #f #;state))]
+                    [else (unwind return #f #;state id start (node-parent next)
                                   (+ c 1))])))
            (highest-rated 
             (lambda (cache id closed-list max-so-far maxf-so-far)
               (if (null? closed-list)
                   max-so-far
                   (let ((fitness (calculate-fitness 
-                                  cache id 
+                                  cache (node-parent (car closed-list)) id 
                                   (node-pos (car closed-list))
                                   (node-move (car closed-list)))))
                     (if (> fitness maxf-so-far)
@@ -70,22 +70,20 @@
                                        (cdr closed-list)
                                        max-so-far
                                        maxf-so-far)))))))
-    (lambda (id start start-time limit)
-      (call/cc 
-       (lambda (return)
-         (let ((openl (pq-create))
-               (cost-cache (make-hashtable))
-               (last-move #f)
-               (moves 0)
-               (closed '())
-               (root-node (apply make-node `((false) () ,@start)))
-               (make-restart
-                (lambda (k)
-                  (lambda (npos nstart)
-                    (set! start-time nstart)
-                    (set! start npos)
-                    (k)))))
-;           (debug "Root node: ~a" root-node)
+    (lambda (id start start-time limit return)
+      (let ((openl (pq-create))
+            (cost-cache (make-hashtable))
+            (last-move #f)
+            (moves 0)
+            (closed '())
+            (root-node (apply make-node `((false) () ,@start)))
+            (make-restart
+             (lambda (k)
+               (lambda (npos nstart)
+                 (set! start-time nstart)
+                 (set! start npos)
+                 (k)))))
+                                        ;           (debug "Root node: ~a" root-node)
  ;          (debug "Open: ~a" openl)
 	   (pq-add! openl root-node 0.0)
 	   (let search-loop ()
@@ -133,7 +131,9 @@
                                            (my-cost (+ parent-cost -0.0001))
                                            (goodness 
                                             (calculate-fitness 
-                                             cost-cache id 
+                                             cost-cache 
+                                             (node-parent node-current)
+                                             id 
                                              (node-pos node-current) 
                                              (node-move f)))
                                            (weight (+ my-cost goodness)))
@@ -170,7 +170,7 @@
                                     (set! closed (remove f closed))
                                     (loop (cdr s))))))))
                    (set! closed (cons node-current closed))
-                   (search-loop))))))))))
+                   (search-loop))))))))
 
   (define (test-a* x y) 
   (store-robot-position! 1 x y)

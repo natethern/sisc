@@ -32,13 +32,13 @@
 		  type val))
 
 (define initial-weights
-  '((return-to-base . 1500)
+  '((return-to-base . 5)
     (danger . -2)
     (crowd . -0.1)
     (delivery . 1000)
     (delivery-transit . 10)
     (do-nothing . -0.1)
-    (revisit . -2)
+    (revisit . -3)
     (visit . 1)
     (pickup . 200)
     (go-nowhere . -100)))
@@ -47,26 +47,27 @@
   (hashtable/get (hashtable/get! weights id make-hashtable)
 		  type (cdr (assq type initial-weights))))
 
-(define (danger-weight id x y)
+(define (danger-weight id seen x y)
   (neighbor-search 1xmap id x y (lambda (id x y) (water? x y)) 
 		   (weight id 'danger)))
 
-(define (crowd-weight id x y)
+(define (crowd-weight id seen x y)
   (neighbor-search 2xmap id x y opponent? (weight id 'crowd)))
 
-(define (revisit-weight id x y)
+(define (revisit-weight id seen x y)
   (let ((sum 
          (apply + (map (lambda (d)
                          (let ((nx (+ (car d) x))
                                (ny (+ (cadr d) y)))
                            (if (and (<= 1 nx world-width)
                                     (<= 1 ny world-height))
-                               (/ (seen? id nx ny) (+ 1 (caddr d)))
+                               (/ (+ (seen? id x y)
+                                     (sseen? seen (list nx ny))) (+ 1 (caddr d)))
                                0)))
                        (cons '(0 0 0.5) 2xmap)))))
     (- (* sum sum))))
 
-(define (delivery-distance-weight id x y)
+(define (delivery-distance-weight id seen x y)
   (let ((delivery-weight (weight id 'delivery)))
     (let loop ((packages (robots-packages id)) (acc 0.0))
       (if (null? packages) acc
@@ -84,7 +85,7 @@
 
 (define (zeroguard n) (if (zero? n) 1 n))
 
-(define (pickup-distance-weight id x y)
+(define (pickup-distance-weight id seen x y)
   (let ((pickup-weight (weight id 'pickup)))
     (let loop ((packages (all-unclaimed-packages)) (acc 0.0))
       (if (null? packages) acc
@@ -93,7 +94,7 @@
 		      (zeroguard (apply dist `(,x ,y ,@(package-location (car packages))))))
 		   acc))))))
 
-(define (base-weight id x y)
+(define (base-weight id seen x y)
   (apply + (map (lambda (base)
 		  (let ((rp (robots-packages id))
                         (visargs `(,x ,y ,@base))
@@ -110,13 +111,13 @@
                                2)))))
 		bases)))
 
-(define (search-weight id x y)
+(define (search-weight id seen x y)
   (* (weight id 'revisit)
      (if (null? (robots-packages id))
          (seen? id x y)
          0)))
 
-(define (barrier-weight id x y)
+(define (barrier-weight id seen x y)
   (if (wall? x y)
       (weight id 'go-nowhere)
       0))
@@ -135,10 +136,10 @@
     (lambda (x1 y1 x2 y2)
       (vh x1 y1 x2 y2 #f))))
 
-(define (all-weights id x y . move)
+(define (all-weights id seen x y . move)
   (apply + (let ((result
 		  (map (lambda (v)
-			 (v id x y)) 
+			 (v id seen x y)) 
 		       (list danger-weight crowd-weight 
 			     ;pickup-distance-weight 
                              revisit-weight

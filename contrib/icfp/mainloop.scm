@@ -5,7 +5,7 @@
   (debug "Receiving server response...")
   (receive-responses id in)
 
-  (debug "State: ~a [~a]" (robot-position id) (robots-packages id))
+;  (debug "State: ~a [~a]" (robot-position id) (robots-packages id))
   ; If we were making a confrontational move, check the success
   ; and adjust our estimated bid accordingly
 
@@ -41,7 +41,7 @@
 
     (debug "Thinking...")
     ; Decide on our move and send it to the server
-    (let ((next-move (decide id (system-time) 500)))
+    (let ((next-move (decide id (system-time) 900)))
       (debug "Sending move ~a ..." next-move)
       (apply send-command (cons out next-move))
                                         ;loop

@@ -1,6 +1,14 @@
 (define seen-table (make-hashtable))
 
 
+(define (sseen? moves pos)
+  (cond [(null? moves) 0]
+        [(null? (node-parent moves)) 0]
+        [(equal? (node-pos moves) pos)
+         (+ 1 (sseen? (node-parent moves) pos))]
+        [else (sseen? (node-parent moves) pos)]))
+
+
 (define (seen? id x y) 
   (let ((seenworld (hashtable/get! seen-table id (lambda () (make-string 
 							     (* world-width world-height))))))

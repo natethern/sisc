@@ -22,5 +22,5 @@
 	  body ...))))))
 
 
-(trace 'load)
 (load "init.scm")
+;(define repl go)

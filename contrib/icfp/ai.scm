@@ -83,7 +83,8 @@
              (if (and (not new-packages) last-state)
                  (last-state current-pos start-time)
                  (begin (set! new-packages #f)
-                        (a* id current-pos start-time limit)))])
+                        (call/cc (lambda (return)
+                        (a* id current-pos start-time limit return)))))])
        (begin
          (set! last-state (if (eq? (car selected-move)
                                    '|Move|)
@@ -125,7 +126,7 @@
 			   `((|Move| ,(caddr d)))
 			   '())))
 		   delta-map))
-       '((|Drop|))
+;       '((|Drop|))
        ; Package pickup moves
        (let ploop ((ph (packages x y)) 
                   (acc '())
@@ -163,17 +164,17 @@
 (define calculate-fitness 
 (letrec
     ((get-cost
-      (lambda (cache id x y . move)
+      (lambda (cache seen id x y . move)
         (cond [(hashtable/get cache (make-rectangular x y)) => (lambda (x)
                                                      x)]
               [else 
                 (let ((cost
                        (apply fitness 
-                              `(,id ,x ,y ,@move))))
+                              `(,id ,seen ,x ,y ,@move))))
                   (hashtable/put! cache (make-rectangular x y) cost)
                   cost)]))))
 
-  (lambda (cache id pos move)
+  (lambda (cache seen id pos move)
   (case (car move)
     ((|Drop|)
      (if (null? (cadr move))
@@ -203,20 +204,20 @@
        (case (cadr move)
 	 ((|N|) (if (= myy world-height) 
 		    (weight id 'go-nowhere)
-		    (get-cost cache id myx (+ myy 1) move)))
+		    (get-cost cache seen id myx (+ myy 1) move)))
 	 ((|S|) (if (= myy 1) 
 		    (weight id 'go-nowhere)
-		    (get-cost cache id myx (- myy 1) move)))
+		    (get-cost cache seen id myx (- myy 1) move)))
 	 ((|E|) (if (= myx world-width) 
 		    (weight id 'go-nowhere)
-		    (get-cost cache id (+ myx 1) myy move)))
+		    (get-cost cache seen id (+ myx 1) myy move)))
 	 ((|W|) (if (= myx 1) 
 		    (weight id 'go-nowhere)
-		    (get-cost cache id (- myx 1) myy move))))))
+		    (get-cost cache seen id (- myx 1) myy move))))))
     (else 0.0)))))
 
-(define (fitness id x y move)
-  (all-weights id x y move))
+(define (fitness id seen x y move)
+  (all-weights id seen x y move))
 
 (define (xdif direction current-x)
   (case direction
