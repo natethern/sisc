@@ -88,6 +88,18 @@ public abstract class Util implements Version {
         return b.toString();
     }
 
+    public static String warn(String messageClass, String sourceFile, 
+                              int lineNumber, int columnNumber) {
+        StringBuffer b = new StringBuffer("{");
+        b.append(liMessage(SISCB, "warning"));
+        b.append(": ");
+        b.append(liMessage(SISCB, messageClass));
+        b.append("\n ");
+        b.append(sourceFile).append(':').append(lineNumber);
+        b.append(':').append(columnNumber).append(": }");
+        return b.toString();
+    }
+
     public static String warn(String messageClass, String arg) {
         StringBuffer b = new StringBuffer("{");
         b.append(liMessage(SISCB, "warning"));

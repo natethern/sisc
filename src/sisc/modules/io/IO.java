@@ -363,7 +363,7 @@ public class IO extends IndexedProcedure {
                 } else
                     return FALSE;
             case LOAD:
-                InputPort p=null;
+                SourceInputPort p=null;
                 url = url(f.vlr[0]);
                 try {
                     URLConnection conn = url.openConnection();
@@ -379,12 +379,16 @@ public class IO extends IndexedProcedure {
                 try {
                     v=null;
                     do {
+                        int startLine=p.line;
+                        int startColumn=p.column;
                         v=readCode(f, p);
 
                         if (v!=EOF) {
                             try {
                                 r.eval(v);
                             } catch (SchemeException se) {
+                                annotateException(se, startLine, startColumn, p.sourceFile, 
+                                        Symbol.get("load"));
                                 throwNestedPrimException(se);
                             }
                         }
@@ -410,6 +414,8 @@ public class IO extends IndexedProcedure {
                 try {
                     v=null;
                     do {
+                        int startLine=p.line;
+                        int startColumn=p.column;
                         v=readCode(f, p);
 
                         if (v!=EOF) {
@@ -417,6 +423,8 @@ public class IO extends IndexedProcedure {
                                 Expression ev=r.compile(v);
                                 r.interpret(ev);
                             } catch (SchemeException se) {
+                                annotateException(se, startLine, startColumn, p.sourceFile, 
+                                        Symbol.get("load-expanded"));
                                 throwNestedPrimException(se);
                             }
                         }
@@ -558,6 +566,20 @@ public class IO extends IndexedProcedure {
             throwArgSizeException();
         }
         return VOID;
+    }
+
+    private void annotateException(SchemeException se, int line, int column, String sourceFile, Symbol procName) {
+        CallFrame ek=(CallFrame)se.e;
+        CallFrame lastWithNXP=null;
+        while (ek.parent!=null) {
+            if (ek.nxp!=null) lastWithNXP=ek;
+            ek=ek.parent;
+        }
+        System.err.println(lastWithNXP.nxp.express());
+        lastWithNXP.nxp.setAnnotation(Symbol.get("line-number"), Quantity.valueOf(line));
+        lastWithNXP.nxp.setAnnotation(Symbol.get("column-number"), Quantity.valueOf(column));
+        lastWithNXP.nxp.setAnnotation(Symbol.get("source-file"), new SchemeString(sourceFile));
+        lastWithNXP.nxp.setAnnotation(Symbol.get("proc-name"), procName);
     }
 }
 /*

@@ -1,5 +1,11 @@
 2004-10-15  Scott G. Miller   <scott@sgmiller.org>
 
+	* Made some attempt to display line/column numbers from load
+	  and parsing so that one can trace the start of an s-expression
+	  where syntax-errors occur, for example.
+	  
+2004-10-15  Scott G. Miller   <scott@sgmiller.org>
+
 	* Created a dedicated flag for marking call frames as captured.  
 	  Previously, vlk was overloaded, causing rare continuation bugs.
 	  See bug 1038532.

@@ -64,6 +64,15 @@ public class Parser extends Util implements Tokens {
         this.lexer=l;
     }
 
+    void warn(String messageClass, InputPort is) {
+        if (is instanceof SourceInputPort) {
+            SourceInputPort sp=(SourceInputPort)is;
+            System.err.println(warn(messageClass, sp.sourceFile, sp.line, sp.column));
+        } else {                
+            System.err.println(warn(messageClass));
+        }    
+    }
+    
     public final Value nextExpression(InputPort is, int flags) throws IOException {
         return nextExpression(is, 10, flags);
     }
@@ -96,7 +105,7 @@ public class Parser extends Util implements Tokens {
             return (Value)n;
         } catch (ClassCastException ce) {
             if (n==ENDPAIR) {
-                System.err.println(warn("orphanedparen"));
+                warn("orphanedparen", is);
                 return nextExpression(is, radix, flags);
             } else if (n==DOT)
                 throw new IOException(liMessage(SISCB, "unexpecteddot"));
@@ -350,7 +359,7 @@ public class Parser extends Util implements Tokens {
                     if (v==null)
                         v=new Value[length((Pair)expr)];
                     else if (v.length < length((Pair)expr)) {
-                        System.err.println(warn("veclengthtooshort"));
+                        warn("veclengthtooshort", is);
                         v=new Value[length((Pair)expr)];
                     }                        
                 } else if (expr!=null)
@@ -412,7 +421,7 @@ public class Parser extends Util implements Tokens {
                 l=_nextExpression(is, state, null, flags);
             }
         } catch (EOFException e) {
-            System.err.println(warn("unexpectedeof"));
+            warn("unexpectedeof", is);
             return VOID;
         }
 
