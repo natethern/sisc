@@ -411,12 +411,3 @@ public class Interpreter extends Util {
 	    deadFillRibs[++deadFillRibsPointer]=f;
     }
 }
-
-
-
-
-
-
-
-
-
