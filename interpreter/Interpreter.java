@@ -54,7 +54,7 @@ public class Interpreter extends Util {
     public Expression            lxp;      //used only for debugging
     public boolean               vlk;      //vlk, when true, indicates the
                                            //frame was captured.
-    public int                 cap[];      //Indicates which vlr positions
+    public boolean             cap[];      //Indicates which vlr positions
                                            //contained a k capture.
 
     //ACTIVITY REGISTERS
@@ -146,42 +146,14 @@ public class Interpreter extends Util {
     }
 
     public final void setVLR(int pos, Value v) {
-        
         if (cap!=null) {
-            if (pos>31) {
-                //This code will only be executed for function calls 
-                //of more than 32 args, and where we're setting a vlr 
-                //pos above 31
-                boolean b=cap[0]!=0;
-                if (!b) {
-                    int p=pos-31;
-                    int i=1;
-                    for (; p>32; p-=32) {
-                        //Any non-zero while pos > 32 
-                        if (cap[i] != 0) {
-                            b=true;
-                            break;
-                        } else {
-                            i++;
-                        }
-                    }
-                    b = b || ((cap[i] & (0xffffffff >>> (31-p))) != 0);
-                }
-
-                if (b) {
-                    //clear the flag in the correct array variable
-                    if ((pos+1) < vlr.length)
-                        cap[(pos+1)>>5] &= (0xffffffff ^ 
-                                             (1 << ((pos + 1) % 32)));
-                    lcf.parent=lcf=lcf.makeSafe(this);
+            for (int i=pos; i>=0; i--) {
+                if (cap[i]) {
+                    cap[i]=false;
+                    llcf.parent=lcf=lcf.makeSafe(this);
                     vlr=lcf.vlr;
+                    break;
                 }
-            //This is the most common case, vlrs of size < 32
-            } else if ((cap[0] & (0xffffffff >>> (31-pos))) != 0) {
-                if ((pos+1) < vlr.length)
-                    cap[0] &= (0xffffffff ^ (1 << (pos + 1))); //Clear the 
-                llcf.parent=lcf=lcf.makeSafe(this);
-                vlr=lcf.vlr;
             }
         }
         vlr[pos]=v;
@@ -339,7 +311,7 @@ public class Interpreter extends Util {
                                  LexicalEnvironment e,
                                  CallFrame f,
                                  CallFrame p, 
-                                 int[] cap) {
+                                 boolean[] cap) {
         if (deadFramePointer < 0)
             return new CallFrame(n,v,vlk,e,f,p,cap);
         else {

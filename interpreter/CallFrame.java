@@ -21,13 +21,13 @@ public class CallFrame extends Procedure {
     public CallFrame              fk;
     public CallFrame          parent;
 
-    public int                 cap[];
+    public boolean             cap[];
 
     public CallFrame(Expression n, Value[] v,
                      boolean vlk,
                      LexicalEnvironment e,
                      CallFrame f, CallFrame p,
-                     int[] cap) {
+                     boolean[] cap) {
         nxp=n;
         vlr=v;
         this.vlk=vlk;
@@ -74,11 +74,13 @@ public class CallFrame extends Procedure {
     }
 
     public final void setCaptured(Interpreter r, int pos) {
-        if (cap==null) {
-            cap=new int[(vlr.length >> 5) + 1];
+        if (vlr!=null) {
+            if (cap==null) {
+                cap=new boolean[vlr.length];
+            }
+            if (pos<vlr.length) 
+                cap[pos]=true;
         }
-        if (pos<vlr.length) 
-            cap[pos>>5] |= (1 << (pos % 32));
     }
 
     protected final CallFrame cloneFrame(Interpreter r) {
@@ -118,7 +120,7 @@ public class CallFrame extends Procedure {
             s.writeInt(cap==null ? 0 : cap.length);
             if (cap!=null)
                 for (int i=0; i<cap.length; i++) 
-                    s.writeInt(cap[i]);
+                    s.writeBoolean(cap[i]);
         }
         s.writeExpression(nxp);
         s.writeExpression(fk);
@@ -139,9 +141,9 @@ public class CallFrame extends Procedure {
                 vlr[i]=(Value)s.readExpression();
             int capsize=s.readInt();
             if (capsize>0) {
-                cap=new int[capsize];
+                cap=new boolean[capsize];
                 for (int i=0; i<capsize; i++) 
-                    cap[i]=s.readInt();
+                    cap[i]=s.readBoolean();
             }
         }
 
@@ -152,7 +154,6 @@ public class CallFrame extends Procedure {
         vlk=s.readBoolean();
     }
 }
-
 
 /*
  * The contents of this file are subject to the Mozilla Public
