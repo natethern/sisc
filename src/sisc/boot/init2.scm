@@ -47,49 +47,65 @@
                      [(and (null? env) (strict-r5rs-compliance))
                       (error 'eval "expected 2 arguments to procedure, got 1.")]
                      [else 
-                       (let* ([optimizer (current-optimizer)]
-                              [old-ie (apply interaction-environment env)]
-                              [source (optimizer
-                                        (sc-expand x '(e) '(e)))])
-                          (interaction-environment old-ie)
-                          (apply old-eval source env))]))))
+                       (let ([optimizer (current-optimizer)]
+                             [old-ie (apply interaction-environment env)]
+                             [source #f])
+                         (with-failure-continuation
+                           (lambda (m e)
+                             (interaction-environment old-ie)
+                             (throw m e))
+                           (lambda ()               
+                             (set! source (optimizer
+                                            (sc-expand x '(e) '(e))))
+                             (interaction-environment old-ie)))
+                         (apply old-eval source env))]))))
 (set! eval
-  ((lambda (|interaction-environment_a9Lbf3gRD|
-              |sc-expand_a9pfhCfRD|
-              |apply_a9JmlIeRD|
-              |old-eval_a9nqnfeRD|)
-     (lambda (|x_a9r4bZgRD| . |env_a958dwgRD|)
-       (if (if (pair? |x_a9r4bZgRD|)
-               (equal? (car |x_a9r4bZgRD|) "noexpand")
+  ((lambda (|interaction-environment_tjYQs0KEg|
+              |sc-expand_tjCUuzJEg|
+              |apply_tjW_yFIEg|
+              |old-eval_tjA3BcIEg|)
+     (lambda (|x_tjEJoWKEg| . |env_tjiNqtKEg|)
+       (if (if (pair? |x_tjEJoWKEg|)
+               (equal? (car |x_tjEJoWKEg|) "noexpand")
                #f)
-         (|apply_a9JmlIeRD|
-           |old-eval_a9nqnfeRD|
-           (cadr |x_a9r4bZgRD|)
-           |env_a958dwgRD|)
-         (if (if (null? |env_a958dwgRD|)
+         (|apply_tjW_yFIEg|
+           |old-eval_tjA3BcIEg|
+           (cadr |x_tjEJoWKEg|)
+           |env_tjiNqtKEg|)
+         (if (if (null? |env_tjiNqtKEg|)
                  (strict-r5rs-compliance)
                  #f)
            (error (quote eval)
                   "expected 2 arguments to procedure, got 1.")
-           ((lambda (|optimizer_a9N09qhRD|)
-              ((lambda (|old-ie_a97Z6ThRD|)
-                 ((lambda (|source_a9tV4kiRD|)
+           ((lambda (|optimizer_tj-FmnLEg|
+                       |old-ie_tjkCkQLEg|
+                       |source_tjGyihMEg|)
+              (begin
+                (with-failure-continuation
+                  (lambda (|m_tj0vgKMEg| |e_tjmrebNEg|)
                     (begin
-                      (|interaction-environment_a9Lbf3gRD|
-                        |old-ie_a97Z6ThRD|)
-                      (|apply_a9JmlIeRD|
-                        |old-eval_a9nqnfeRD|
-                        |source_a9tV4kiRD|
-                        |env_a958dwgRD|)))
-                  (|optimizer_a9N09qhRD|
-                    (|sc-expand_a9pfhCfRD|
-                      |x_a9r4bZgRD|
-                      (#%quote (e))
-                      (#%quote (e))))))
-               (|apply_a9JmlIeRD|
-                 |interaction-environment_a9Lbf3gRD|
-                 |env_a958dwgRD|)))
-            (current-optimizer))))))
+                      (|interaction-environment_tjYQs0KEg|
+                        |old-ie_tjkCkQLEg|)
+                      (throw |m_tj0vgKMEg| |e_tjmrebNEg|)))
+                  (lambda ()
+                    (begin
+                      (set! |source_tjGyihMEg|
+                        (|optimizer_tj-FmnLEg|
+                          (|sc-expand_tjCUuzJEg|
+                            |x_tjEJoWKEg|
+                            (#%quote (e))
+                            (#%quote (e)))))
+                      (|interaction-environment_tjYQs0KEg|
+                        |old-ie_tjkCkQLEg|))))
+                (|apply_tjW_yFIEg|
+                  |old-eval_tjA3BcIEg|
+                  |source_tjGyihMEg|
+                  |env_tjiNqtKEg|)))
+            (current-optimizer)
+            (|apply_tjW_yFIEg|
+              |interaction-environment_tjYQs0KEg|
+              |env_tjiNqtKEg|)
+            #f)))))
    interaction-environment
    sc-expand
    apply
