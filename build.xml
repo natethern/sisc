@@ -240,7 +240,25 @@
     </java>
   </target>
 
-  <target name="sisc-lib" depends="srfi-scc" unless="lite">
+  <target name="sisclib-uptodate" depends="prepare">
+    <uptodate property="sisclibUptodate"
+              targetfile="${basedir}/${libjar}">
+      <srcfiles dir="${srfilibdir}" includes="**/*.scm"/>
+      <srcfiles file="${heap}"/>
+    </uptodate>
+  </target>
+
+  <target name="build-sisclib" depends="sisclib-uptodate">
+    <condition property="buildSisclib">
+      <and>
+        <not><isset property="lite"/></not>
+        <not><isset property="sisclibUptodate"/></not>
+      </and>
+    </condition>
+  </target>
+
+  <target name="sisc-lib" depends="build-sisclib" if="buildSisclib">
+    <antcall target="srfi-scc"/>
     <jar jarfile="${basedir}/${libjar}">
       <fileset dir="${tmpdir}">
             <include name="*/**"/>
