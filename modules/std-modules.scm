@@ -286,8 +286,38 @@
   (import hashtable)
   (include "libraries.scm"))
 
+(module pattern-matching
+    ((match
+      let-values** match-help match-help1 clause-body guard-body
+      convert-pat mapper my-backquote extend-backquote sexp-dispatch)
+     (trace-match
+      let-values** match-help match-help1 clause-body guard-body
+      convert-pat mapper my-backquote extend-backquote sexp-dispatch)
+     (match+
+      let-values** match-help match-help1 clause-body guard-body
+      convert-pat mapper my-backquote extend-backquote sexp-dispatch)
+     (trace-match+
+      let-values** match-help match-help1 clause-body guard-body
+      convert-pat mapper my-backquote extend-backquote sexp-dispatch))
+  (include "match.ss"))
+
+(putprop 'assumptive-procedures '*opt* '())
+(module optimizer
+    (optimize)
+  (import pattern-matching)
+  (include "optimizer/mvlet.scm")
+  (include "optimizer/ds.scm")
+  (include "optimizer/helpers.scm")
+  (include "optimizer/logic.scm")
+  (include "optimizer/main.scm")
+  (define optimize opt:optimize)
+  (initialize))
+  
 (import libraries)
 (import debugging)
+(import optimizer)
+;;not ready yet
+;;(define (current-optimizer . args) optimize)
 
 ;;load and import srfi-0
 (module srfi-0 (cond-expand)

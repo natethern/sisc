@@ -1,7 +1,10 @@
 (define opt:lambda
   (lambda (formals body state)
     (mvlet ([(rv state)
-             (opt body (union-state-entry* state 'vars formals))])
+             (opt body ((if (list? formals)
+                            union-state-entry*
+                            union-state-entry)
+                        state 'vars formals))])
       (values `(lambda ,formals ,rv) state))))
 
 

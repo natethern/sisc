@@ -29,17 +29,8 @@
                            (addproc entry value*)
                            value*)))))
 
-(define union-state-entry*
-  (generic-modify-state-entry*
-   (lambda (entry value*)
-     (union value* entry))))
-
-(define union-state-entry
-  (generic-modify-state-entry 
-   (lambda (entry value)
-     (if (not (memq value entry))
-         (cons value entry)
-         entry))))
+(define union-state-entry*)
+(define union-state-entry)
 
 (define (distinct ls)
   (cond [(null? ls) '()]
@@ -62,5 +53,18 @@
                                               a*)))
                       (loop (cdr x)))))))))
 
-            
-(define merge-states union-assoc)
+
+(define merge-states)
+
+(define (initialize)
+  (set! union-state-entry*
+    (generic-modify-state-entry*
+     (lambda (entry value*)
+       (union value* entry))))
+  (set! union-state-entry
+    (generic-modify-state-entry 
+     (lambda (entry value)
+       (if (not (memq value entry))
+           (cons value entry)
+           entry))))
+  (set! merge-states union-assoc))

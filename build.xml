@@ -99,7 +99,6 @@
       <arg value="file:psyntax.sce"/>
       <arg value="file:init2.scm"/>
       <arg value="file:pp.scm"/>
-      <arg value="file:opt-boot.scm"/>      
       <arg value="file:repl.scm"/>
     </java>
   </target>

@@ -552,9 +552,6 @@
 ;;; Try (collect-symbols '(if (x y 'a 'c zz) 'b 'c))
 ;;; Note that it commonizes the reference to c. 
 
-(define-syntax with-values
-  (syntax-rules ()
-    ((_ P C) (call-with-values (lambda () P) C))))
 (define collect-symbols
   (lambda (exp)
     (with-values (collect-symbols-help exp)
