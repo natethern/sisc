@@ -7,6 +7,7 @@ import java.net.*;
 
 import sisc.compiler.*;
 import sisc.data.*;
+import sisc.env.SymbolicEnvironment;
 import sisc.exprs.*;
 import sisc.io.*;
 import sisc.interpreter.*;
@@ -201,24 +202,27 @@ public abstract class Util implements Version {
 
     public static String justify(String v, int p, char c) {
         StringBuffer b = new StringBuffer();
-        while (b.length() < (p - v.length()))
+        while (b.length() < (p - v.length())) {
             b.append(c);
+        }
         return b.append(v).toString();
     }
 
     public static final void argCheck(Pair argl, int arity) throws Exception {
         int x = length(argl);
-        if (x != arity && arity != -1)
+        if (x != arity && arity != -1) {
             throw new RuntimeException(liMessage(SISCB,
                                                  "notenoughargs",
                                                  new Object[] { new Integer(arity), new Integer(x)}));
+       }
     }
 
     public static void updateName(Value v, Symbol s) {
         if (v instanceof NamedValue) {
             NamedValue nv = (NamedValue) v;
-            if (nv.getName() == null)
+            if (nv.getName() == null) {
                 nv.setName(s);
+            }
         }
     }
 
@@ -226,14 +230,21 @@ public abstract class Util implements Version {
         Pair s = p;
         try {
             int i = 0;
-            for (; p != EMPTYLIST; i++)
+            for (; p != EMPTYLIST; i++) {
                 p = (Pair) p.cdr;
+            }
             return i;
         } catch (ClassCastException ce) {
             throw new RuntimeException(liMessage(SISCB, "notaproperlist", s.synopsis()));
         }
     }
 
+    /**
+     * @param p  the head of a list
+     * @return   a Vector containing the same elements as the list
+     * 
+     * @deprecated Obsoleted by pairToExpressions and pairToValues.
+     */
     public static Vector pairToExpVect(Pair p) {
         Vector v = new Vector();
         for (; p != EMPTYLIST; p = (Pair) p.cdr) {
@@ -242,45 +253,70 @@ public abstract class Util implements Version {
 
         return v;
     }
-
-    public static final void arraycopy(Object[] a1, Object[] a2, int len) {
-        if (len < 8)
-            for (int k = len - 1; k >= 0; k--)
-                a1[k] = a2[k];
-        else
-            System.arraycopy(a1, 0, a2, 0, len);
-    }
-
+    
     public static Expression[] pairToExpressions(Pair p) {
-        Vector v = pairToExpVect(p);
-        Expression[] vs = new Expression[v.size()];
-        v.copyInto(vs);
-        return vs;
+        int           len = length(p);
+        Expression[] es  = new Expression[len];
+
+        for (int i = 0; i < len; ++i) {
+            es[i] = p.car;
+            p     = (Pair)p.cdr;
+        }
+        
+        return es;
     }
 
     public static Value[] pairToValues(Pair p) {
-        Vector v = pairToExpVect(p);
-        Value[] vs = new Value[v.size()];
-        v.copyInto(vs);
+        int      len = length(p);
+        Value[] vs  = new Value[len];
+
+        for (int i = 0; i < len; ++i) {
+            vs[i] = p.car;
+            p     = (Pair)p.cdr;
+        }
+        
         return vs;
     }
 
     public static Symbol[] argsToSymbols(Pair p) {
-        if (p == EMPTYLIST)
+        if (p == EMPTYLIST) {
             return new Symbol[0];
-        Vector v = new Vector();
-
-        for (;
-             (p.cdr instanceof Pair) && (p.cdr != EMPTYLIST);
-             p = (Pair) p.cdr) {
-            v.addElement(p.car);
         }
-        v.addElement(p.car);
-        if (p.cdr != EMPTYLIST)
-            v.addElement(p.cdr);
-        Symbol[] vs = new Symbol[v.size()];
-        v.copyInto(vs);
-        return vs;
+
+        // Count the proper elements ignoring the tail: 
+        int    l = 1;
+        Value q = p.cdr;
+        while ((q instanceof Pair) && (q != EMPTYLIST)) {
+            ++l;
+            q = ((Pair)q).cdr;
+        }
+
+        // Allocate result array:
+        Symbol[] result;
+
+        if (q == EMPTYLIST) {
+            result = new Symbol[l];
+        } else {
+            // improper list: the tail is expected to contain a symbol
+            result = new Symbol[l+1];
+            result[l] = (Symbol)q;
+        }
+
+        // Copy the proper elements into the result
+        int i = 0;
+        for (;;) {
+            result[i++] = (Symbol)p.car;
+
+            if (i == l) {
+                // An update of p as done below would throw a
+                // ClassCastException for improper lists.
+                break;
+            }
+
+            p = (Pair)p.cdr;
+        }
+        
+        return result;
     }
 
     /* Casting checks */
@@ -303,39 +339,39 @@ public abstract class Util implements Version {
     }
 
     public static final String symval(Value o) {
-        try {
+        if (o instanceof Symbol) {
             return ((Symbol) o).symval;
-        } catch (ClassCastException e) {
+        } else {
             typeError("symbol", o);
+            return null;
         }
-        return null;
     }
 
     public static final Quantity num(Value o) {
-        try {
+        if (o instanceof Quantity) {
             return (Quantity) o;
-        } catch (ClassCastException e) {
+        } else {
             typeError("number", o);
+            return null;
         }
-        return null;
     }
 
     public static final Pair pair(Value o) {
-        try {
+        if (o instanceof Pair) {
             return (Pair) o;
-        } catch (ClassCastException e) {
+        } else {
             typeError("pair", o);
+            return null;
         }
-        return null;
     }
 
     public static final Procedure proc(Value o) {
-        try {
+        if (o instanceof Procedure) {
             return (Procedure) o;
-        } catch (ClassCastException e) {
+        } else {
             typeError("procedure", o);
+            return null;
         }
-        return null;
     }
 
     public static final Pair truePair(Value o) {
@@ -349,12 +385,12 @@ public abstract class Util implements Version {
     }
 
     public static final SchemeCharacter chr(Value o) {
-        try {
+        if (o instanceof SchemeCharacter) {
             return (SchemeCharacter) o;
-        } catch (ClassCastException e) {
+        } else {
             typeError("character", o);
+            return null;            
         }
-        return null;
     }
 
     public static final String string(Value o) {
@@ -362,84 +398,84 @@ public abstract class Util implements Version {
     }
 
     public static final SchemeString str(Value o) {
-        try {
+        if (o instanceof SchemeString) {
             return (SchemeString) o;
-        } catch (ClassCastException e) {
+        } else {
             typeError("string", o);
+            return null;
         }
-        return null;
     }
 
     public static final Symbol symbol(Value o) {
-        try {
+        if (o instanceof Symbol) {
             return (Symbol) o;
-        } catch (ClassCastException e) {
+        } else {
             typeError("symbol", o);
+            return null;
         }
-        return null;
     }
 
     public static final SchemeVector vec(Value o) {
-        try {
+        if (o instanceof SchemeVector) {
             return (SchemeVector) o;
-        } catch (ClassCastException e) {
+        } else {
             typeError("vector", o);
+            return null;
         }
-        return null;
     }
 
     public static final SchemeOutputPort outport(Value o) {
-        try {
+        if (o instanceof SchemeOutputPort) {
             return (SchemeOutputPort) o;
-        } catch (ClassCastException e) {
+        } else {
             typeError("output-port", o);
+            return null;
         }
-        return null;
     }
 
     public static final SchemeInputPort inport(Value o) {
-        try {
+        if (o instanceof SchemeInputPort) {
             return (SchemeInputPort) o;
-        } catch (ClassCastException e) {
+        } else {
             typeError("input-port", o);
+            return null;
         }
-        return null;
     }
 
-    public static final sisc.env.SymbolicEnvironment env(Value o) {
-        try {
+    public static final SymbolicEnvironment env(Value o) {
+        if (o instanceof SymbolicEnvironment) {
             return (sisc.env.SymbolicEnvironment) o;
-        } catch (ClassCastException e) {
+        } else {
             typeError("environment", o);
+            return null;
         }
-        return null;
     }
 
     public static final Box box(Value o) {
-        try {
+        if (o instanceof Box) {
             return (Box) o;
-        } catch (ClassCastException e) {
+        } else {
             typeError("box", o);
+            return null;            
         }
-        return null;
     }
 
     public static final CallFrame cont(Value o) {
-        try {
+        if (o instanceof CallFrame) {
             return (CallFrame) o;
-        } catch (ClassCastException e) {
+        } else {
             typeError("continuation", o);
+            return null;
         }
-        return null;
     }
 
     public static final AnnotatedExpr annotated(Value o) {
-        try {
+        if (o instanceof AnnotatedExpr) {
             return (AnnotatedExpr) o;
-        } catch (ClassCastException e) {
+        } else {
             typeError("annotatedexpression", o);
+            return null;
         }
-        return null;
     }
 
     public static URL url(Value v) {
@@ -475,11 +511,12 @@ public abstract class Util implements Version {
     }
 
     public static final NativeLibrary nlib(Value o) {
-        try {
-            return (NativeLibrary)o;
-        } catch (ClassCastException e) { typeError("nativelibrary", o); }
-        
-        return null;
+        if (o instanceof NativeLibrary) {
+            return (NativeLibrary) o;
+        } else {
+            typeError("nativelibrary", o);
+            return null;
+        }        
     }
 
 
@@ -495,8 +532,9 @@ public abstract class Util implements Version {
     public static Value assq(Value v, Pair p) {
         while (p!=EMPTYLIST) {
             Pair assc=pair(p.car);
-            if (assc.car == v)
+            if (assc.car == v) {
                 return assc;
+            }
             p=pair(p.cdr);
         }
         return FALSE;
@@ -521,19 +559,22 @@ public abstract class Util implements Version {
     }
 
     public static Pair reverseInPlace(Pair s) {
-	if (s==EMPTYLIST) return EMPTYLIST;
-	Pair r=EMPTYLIST;
-	Value d;
-	do {
-	    d=s.cdr;
-	    s.cdr=r;
-	    r=s;
-	    if (d==EMPTYLIST) break;
-	    s=(Pair)d;
-        } while (true);
+		if (s==EMPTYLIST) {
+		    return EMPTYLIST;
+		}
+		Pair r=EMPTYLIST;
+		Value d;
+		for (;;) {
+		    d=s.cdr;
+		    s.cdr=r;
+		    r=s;
+		    if (d==EMPTYLIST) {
+		        break;
+		    }
+		    s=(Pair)d;
+	    }
         return r;
     }
-
 
     public static Pair append(Pair p1, Pair p2) {
         if (p1 == EMPTYLIST)
@@ -563,8 +604,9 @@ public abstract class Util implements Version {
 
     public static Value memq(Value v, Pair p) {
         while (p!=EMPTYLIST) {
-            if (p.car == v)
+            if (p.car == v) {
                 return p;
+            }
             p=pair(p.cdr);
         }
         return FALSE;
