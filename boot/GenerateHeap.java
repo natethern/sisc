@@ -101,7 +101,7 @@ public class GenerateHeap {
     static SymbolicEnvironment[] classify(SymbolicEnvironment base, 
                                           LibraryBuilder lb) {
         SymbolicEnvironment[] rv=new SymbolicEnvironment[2];
-        rv[0]=new LibraryAE(null, lb);
+        rv[0]=new LibraryAE((Symbol)null, lb);
         rv[1]=base;
         rv[1].setParent(rv[0]);
 
@@ -152,7 +152,7 @@ public class GenerateHeap {
 
         LibraryBuilder lb=new LibraryBuilder();
         MemorySymEnv symenv=new MemorySymEnv(Symbol.get("symenv"));
-        MemorySymEnv toplevel=new LibraryAE(null, lb);
+        MemorySymEnv toplevel=new LibraryAE((Symbol)null, lb);
         toplevel.setName(Util.TOPLEVEL);
         sisc.compiler.Compiler.addSpecialForms(toplevel);
         symenv.define(Util.TOPLEVEL, toplevel);

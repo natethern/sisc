@@ -24,7 +24,7 @@
     <property name="quantity-type" value="apfloat"/>
     <property name="debugging" value="off"/>
     <property name="optimization" value="on"/>
-<!--    <property name="releasecandidate" value="yes"/> -->
+    <property name="releasecandidate" value="yes"/> 
     <property name="dist" value="${basedir}/dist"/>
     <property name="doc.style" value="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/docbook.xsl"/>
     <mkdir dir="${libdir}"/>
