@@ -1,3 +1,5 @@
+2005-01-19  SISC 1.10.0-alpha Released
+
 2005-01-16  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed a bug where the SLL2 serializer was writing the 
