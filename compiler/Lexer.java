@@ -147,11 +147,20 @@ public class Lexer implements Tokens {
     public int readChar(InputPort is) throws IOException {
         int c=is.read();
 
-        if (c=='\\') {
-            return is.read() | 0x80000000;
-        }
+        if (c!='\\') return c;
 
-        return c;
+	switch (c = is.read()) {
+	case '"': return c | 0x80000000;
+	case '0': return 0x0;
+	case 'a': return 0x7;
+	case 'b': return 0x8;
+	case 't': return 0x9;
+	case 'n': return 0xa;
+	case 'v': return 0xb;
+	case 'f': return 0xc;
+	case 'r': return 0xd;
+        default: return c;
+	}
     }
 
     public String readToEndOfString(InputPort is)
