@@ -41,7 +41,8 @@ public class J2S extends Module {
     public static final int JFIELDREF=1, JCLASSFORNAME=2,
 	JFIELDSET=3, JGETMETHODS=4, JGETCONSTRUCTORS=5,
 	JINSTANTIATE=6, JCALL=7, JCLASSQ=8, JOBJECTQ=9,
-	JINSTANCEOFQ=10, JGETCLASS=11, JGETCLASSNAME=12;
+	JINSTANCEOFQ=10, JGETCLASS=11, JGETCLASSNAME=12,
+	JGETFIELDS=13;
 
     static class JavaClass extends Value {
 	public Class clazz;
@@ -52,8 +53,12 @@ public class J2S extends Module {
 
 	public String display() {
 	    StringBuffer b=new StringBuffer();
-	    b.append("#<java class ").append(clazz).append('>');
+	    b.append("#<java class ").append(clazz.getName()).append('>');
 	    return b.toString();
+	}
+
+	public boolean valueEqual(Value ov) {
+	    return ((JavaClass)ov).clazz.equals(clazz);
 	}
     }
 
@@ -69,6 +74,10 @@ public class J2S extends Module {
 	    b.append("#<java object ").append(o).append('>');
 	    return b.toString();
 	}
+
+	public boolean valueEqual(Value ov) {
+	    return ((JavaObject)ov).o.equals(o);
+	}
     }
 
 
@@ -76,6 +85,7 @@ public class J2S extends Module {
 	define(r, "java/field-ref", JFIELDREF);
 	define(r, "java/field-set!", JFIELDSET);
 	define(r, "java/get-methods", JGETMETHODS);
+	define(r, "java/get-fields", JGETFIELDS);
 	define(r, "java/get-constructors", JGETCONSTRUCTORS);
 	define(r, "java/instantiate", JINSTANTIATE);
 	define(r, "java/call", JCALL);
@@ -108,16 +118,67 @@ public class J2S extends Module {
 		    return new JavaClass(r.vlr[0].getClass());
 	    case JCLASSQ: return truth(r.vlr[0] instanceof JavaClass);
 	    case JOBJECTQ: return truth(r.vlr[0] instanceof JavaObject);
-	    case JGETMETHODS: 
-		Class c=((JavaClass)r.vlr[0]).clazz;
-		Method[] m=c.getMethods();
+	    case JGETCONSTRUCTORS:
+		Class clazz;
+		if (r.vlr[0] instanceof JavaClass) {
+			JavaClass c=(JavaClass)r.vlr[0];
+			clazz=c.clazz;
+		} else if (r.vlr[0] instanceof JavaObject) {
+		    JavaObject o=(JavaObject)r.vlr[0];
+		    clazz=o.o.getClass();
+		} else {
+		    clazz=r.vlr[0].getClass();
+		}
+
+		Constructor[] cns=clazz.getConstructors();		
 		Pair p=EMPTYLIST;
 		HashSet s=new HashSet();
+		for (int i=0; i<cns.length; i++) {
+		    Class[] proto=cns[i].getParameterTypes();
+		    JavaClass[] protow=new JavaClass[proto.length];
+		    for (int j=0; j<proto.length; j++)
+			protow[j]=new JavaClass(proto[j]);
+		    p=new Pair(new SchemeVector((Value[])protow), p);
+		}
+		return p;
+	    case JGETMETHODS: 
+		if (r.vlr[0] instanceof JavaClass) {
+			JavaClass c=(JavaClass)r.vlr[0];
+			clazz=c.clazz;
+		} else if (r.vlr[0] instanceof JavaObject) {
+		    JavaObject o=(JavaObject)r.vlr[0];
+		    clazz=o.o.getClass();
+		} else {
+		    clazz=r.vlr[0].getClass();
+		}
+
+
+		Method[] m=clazz.getMethods();		
+		p=EMPTYLIST;
+		s=new HashSet();
 		for (int i=0; i<m.length; i++) {
 		    if (!s.contains(m[i].getName())) {
 			s.add(m[i].getName());
 			p=new Pair(new SchemeString(m[i].getName()), p);
 		    }
+		}
+		return p;
+	    case JGETFIELDS: 
+		if (r.vlr[0] instanceof JavaClass) {
+			JavaClass c=(JavaClass)r.vlr[0];
+			clazz=c.clazz;
+		} else if (r.vlr[0] instanceof JavaObject) {
+		    JavaObject o=(JavaObject)r.vlr[0];
+		    clazz=o.o.getClass();
+		} else {
+		    clazz=r.vlr[0].getClass();
+		}
+
+
+		Field[] fs=clazz.getFields();		
+		p=EMPTYLIST;
+		for (int i=0; i<fs.length; i++) {
+		    p=new Pair(new SchemeString(fs[i].getName()), p);
 		}
 		return p;
 	    case JCLASSFORNAME:
@@ -146,7 +207,7 @@ public class J2S extends Module {
 			f=o.o.getClass().getField(string(r,r.vlr[1]));
 			on=o.o;
 		    } else {
-			typeError(r, "java entity", r.vlr[1]);
+			f=r.vlr[0].getClass().getField(string(r,r.vlr[1]));
 		    }
 		    Object v=f.get(on);
 		    return schemeValue(v);
@@ -158,8 +219,29 @@ public class J2S extends Module {
 	    }
 	    break;
 	case 3:
-
 	    switch(primid) {
+	    case JFIELDSET:
+		Field f;
+		Object target=null;
+		try {
+		    if (r.vlr[0] instanceof JavaClass) {
+			JavaClass c=(JavaClass)r.vlr[0];
+			f=c.clazz.getField(string(r,r.vlr[1]));
+		    } else if (r.vlr[0] instanceof JavaObject) {
+			JavaObject o=(JavaObject)r.vlr[0];
+			f=o.o.getClass().getField(string(r,r.vlr[1]));
+			target=o.o;
+		    } else {
+			f=r.vlr[0].getClass().getField(string(r,r.vlr[1]));
+			target=r.vlr[0];
+		    }
+		    f.set(target, ((JavaObject)r.vlr[2]).o);
+		} catch (NoSuchFieldException e) {
+		    throw new RuntimeException("No such field");
+		} catch (IllegalAccessException e2) {
+		    throw new RuntimeException("Field is unreachable due access protection");
+		}
+		return VOID;
 	    case JINSTANTIATE:
 		Class clz=((JavaClass)r.vlr[0]).clazz;
 		SchemeVector v1=vec(r,r.vlr[1]);
