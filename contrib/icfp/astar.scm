@@ -42,14 +42,17 @@
 (define (identity x) x)
 (define a* 
   (letrec ((unwind 
-	    (lambda (return state id start next)
+	    (lambda (return state id start next c)
               ;Hmm, ran out of moves
               (cond [(null? (node-parent next))
-                     (begin (clear-seen! id)
-                            '(|Drop|))]
+                     (begin ;(clear-seen! id)
+                            '(|Move| |W|))]
                     [(equal? start (node-pos (node-parent next)))
-                     (return (node-move next) state)]
-                    [else (unwind return state id start (node-parent next))])))
+                     (let ((n (length next)))
+                       (return (node-move next) 
+                               (if (> n c) #f state)))]
+                    [else (unwind return state id start (node-parent next)
+                                  (+ c 1))])))
            (highest-rated 
             (lambda (cache id closed-list max-so-far maxf-so-far)
               (if (null? closed-list)
@@ -98,7 +101,7 @@
                                                              closed root-node 
                                                              -100000.0)))
                                  (set! last-path (map node-pos highest))
-                                 highest))))
+                                 highest))) 0)
 		 (let ((node-current
 			(pq-remove-max! openl)))
 ;                   (debug "Exploring: ~a" node-current)
@@ -119,7 +122,7 @@
                                                        (loop (node-parent n))))))
                            (call/cc (lambda (k)
                                       (unwind return (make-restart k)
-                                              id start selected-node))))))
+                                              id start selected-node 0))))))
                        (begin
                          (let loop ((s (fetch-successors id node-current)))
                            (unless (null? s)

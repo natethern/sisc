@@ -37,7 +37,7 @@
     (crowd . -0.1)
     (delivery . 1000)
     (delivery-transit . 10)
-    (do-nothing . 0.001)
+    (do-nothing . -0.1)
     (revisit . -2)
     (visit . 1)
     (pickup . 200)
