@@ -90,9 +90,9 @@ public class BlockIO extends ModuleAdapter {
                     if (rv==-1) return EOF;
                     else return Quantity.valueOf(rv);
                 } catch (IOException e) {
-                    error(f, liMessage(SISCB, "errorreading", 
-                                       e.getMessage(),
-                                       inport.toString()));
+                    error(f, liMessage(BLOCKB, "errorreading", 
+                                       inport.toString(),
+                                       e.getMessage()));
                 }
                 break;
             case BLOCKWRITE:
@@ -102,8 +102,9 @@ public class BlockIO extends ModuleAdapter {
                 try {
                     outport.write(buf, 0, count);
                 } catch (IOException e) {
-                    error(f, liMessage(SISCB, "errorwriting", e.getMessage(),
-                                       outport.toString()));
+                    error(f, liMessage(BLOCKB, "errorwriting",
+                                       outport.toString(),
+                                       e.getMessage()));
                 }
                 return VOID;
             default:

@@ -10,6 +10,9 @@ import sisc.io.*;
 
 public class IO extends ModuleAdapter {
 
+    protected static Symbol IOB =
+        Symbol.intern("sisc.modules.io.Messages");
+
     protected static final int
         //NEXT = 31,
 
@@ -84,8 +87,7 @@ public class IO extends ModuleAdapter {
         } catch (EOFException e) {
             return EOF;
         } catch (IOException e2) {
-            e2.printStackTrace();
-            throw new RuntimeException(liMessage(SISCB, "errorreading",
+            throw new RuntimeException(liMessage(IOB, "errorreading",
                                                  i.toString(),
                                                  e2.getMessage()));
         }
@@ -97,8 +99,7 @@ public class IO extends ModuleAdapter {
         } catch (EOFException e) {
             return EOF;
         } catch (IOException e2) {
-            e2.printStackTrace();
-            throw new RuntimeException(liMessage(SISCB, "errorreading",
+            throw new RuntimeException(liMessage(IOB, "errorreading",
                                                  i.toString(),
                                                  e2.getMessage()));
         }
@@ -114,8 +115,7 @@ public class IO extends ModuleAdapter {
             }
             return rc;
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(liMessage(SISCB, "errorreading",
+            throw new RuntimeException(liMessage(IOB, "errorreading",
                                                  is.toString(),
                                                  e.getMessage()));
         }
@@ -172,8 +172,9 @@ public class IO extends ModuleAdapter {
                     else
                         w.display(f.vlr[0]);
                 } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "errorwriting",
-                                                 f.dynenv.out.toString()));
+                    throwPrimException(liMessage(IOB, "errorwriting",
+                                                 f.dynenv.out.toString(),
+                                                 e.getMessage()));
                 }
                 return VOID;
             case OPENINPUTSTRING:
@@ -198,7 +199,7 @@ public class IO extends ModuleAdapter {
                 if (!(port instanceof WriterOutputPort) ||
                     !(((WriterOutputPort)port).getWriter() 
                       instanceof StringWriter))
-                    throwPrimException( liMessage(SISCB, "outputnotastringport"));
+                    throwPrimException( liMessage(IOB, "outputnotastringport"));
                 try {
                     port.flush();
                 } catch (IOException e) {}
@@ -215,7 +216,7 @@ public class IO extends ModuleAdapter {
                     conn.setDoOutput(false);
                     return new SourceInputPort(new BufferedInputStream(conn.getInputStream()), url.toString());
                 } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
+                    throwPrimException(liMessage(IOB, "erroropening", url.toString()));
                 }
             case OPENINPUTFILE:
                 url = url(f.vlr[0]);
@@ -225,7 +226,7 @@ public class IO extends ModuleAdapter {
                     conn.setDoOutput(false);
                     return new StreamInputPort(new BufferedInputStream(conn.getInputStream()));
                 } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
+                    throwPrimException(liMessage(IOB, "erroropening", url.toString()));
                 }
             case OPENOUTPUTFILE:
                 url = url(f.vlr[0]);
@@ -239,14 +240,14 @@ public class IO extends ModuleAdapter {
                     conn.setDoOutput(true);
                     return new StreamOutputPort(new BufferedOutputStream(conn.getOutputStream()), false);
                 } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
+                    throwPrimException(liMessage(IOB, "erroropening", url.toString()));
                 }
             case FLUSHOUTPUTPORT:
                 SchemeOutputPort op=outport(f.vlr[0]);
                 try {
                     op.flush();
                 } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "errorflushing", op.toString()));
+                    throwPrimException(liMessage(IOB, "errorflushing", op.toString()));
                 }
                 return VOID;
             case CLOSEINPUTPORT:
@@ -254,7 +255,7 @@ public class IO extends ModuleAdapter {
                 try {
                     if (inp!=f.dynenv.in) inp.close();
                 } catch (IOException e) {
-                    error(f, liMessage(SISCB, "errorclosing", inp.toString()));
+                    error(f, liMessage(IOB, "errorclosing", inp.toString()));
                 }
                 return VOID;
             case CLOSEOUTPUTPORT:
@@ -262,7 +263,7 @@ public class IO extends ModuleAdapter {
                 try {
                     if (op!=f.dynenv.out) op.close();
                 } catch (IOException e) {
-                    error(f, liMessage(SISCB, "errorclosing", op.toString()));
+                    error(f, liMessage(IOB, "errorclosing", op.toString()));
                 }
                 return VOID;
             case INPORTLOCATION:
@@ -286,7 +287,7 @@ public class IO extends ModuleAdapter {
                     conn.setDoOutput(false);
                     p=new SourceInputPort(new BufferedInputStream(conn.getInputStream()), url.toString());
                 } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
+                    throwPrimException(liMessage(IOB, "erroropening", url.toString()));
                 }
                 Interpreter r = Context.enter();
                 try {
@@ -310,8 +311,9 @@ public class IO extends ModuleAdapter {
                 try {
                     f.dynenv.out.write(character(f.vlr[0]));
                 } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "errorwriting",
-                                                 f.dynenv.out.toString()));
+                    throwPrimException(liMessage(IOB, "errorwriting",
+                                                 f.dynenv.out.toString(),
+                                                 e.getMessage()));
                 }
                 return VOID;
             case CURRENTOUTPUTPORT:
@@ -366,8 +368,9 @@ public class IO extends ModuleAdapter {
                 try {
                     port.write(character(f.vlr[0]));
                 } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "errorwriting",
-                                                 port.toString()));
+                    throwPrimException(liMessage(IOB, "errorwriting",
+                                                 port.toString(),
+                                                 e.getMessage()));
                 }
                 return VOID;
             case DISPLAY: case WRITE:
@@ -379,8 +382,9 @@ public class IO extends ModuleAdapter {
                     else
                         w.display(f.vlr[0]);
                 } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "errorwriting",
-                                                 port.toString()));   
+                    throwPrimException(liMessage(IOB, "errorwriting",
+                                                 port.toString(),
+                                                 e.getMessage()));
                 }
                 return VOID;
             case MAKEPATH:
@@ -391,7 +395,7 @@ public class IO extends ModuleAdapter {
                 try {
                     return new SchemeString(fn.getCanonicalPath());
                 } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "invalidpathspec"));
+                    throwPrimException(liMessage(IOB, "invalidpathspec"));
                 }
             case OPENOUTPUTFILE:
                 URL url = url(f.vlr[0]);
@@ -407,7 +411,7 @@ public class IO extends ModuleAdapter {
                     return new StreamOutputPort(new BufferedOutputStream(conn.getOutputStream()),
                                                 truth(f.vlr[1]));
                 } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
+                    throwPrimException(liMessage(IOB, "erroropening", url.toString()));
                 }
             case NORMALIZEURL:
                 return new SchemeString(url(f.vlr[0], f.vlr[1]).toString());
