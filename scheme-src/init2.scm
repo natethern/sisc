@@ -64,8 +64,11 @@
 (define (error . args)
   (throw (apply make-error args)))
 
-(define (make-nested-error error-record parent-record)
-  `((parent . ,parent-record) . ,error-record))
+(define (make-nested-error error-record parent-record . parent-k)
+  `((parent . ,(if (null? parent-k)
+                   parent-record
+                   (make-exception parent-record (car parent-k))))
+    . ,error-record))
 
 (define (make-error . args)
   (let ([error-record '()])
