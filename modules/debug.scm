@@ -98,7 +98,7 @@
         (begin
           (for-each 
            (lambda (procedure-symbol)
-             (let* ([real-ps (sc-expand procedure-smbol)]
+             (let* ([real-ps (sc-expand procedure-symbol)]
                     [proc (getprop real-ps '*toplevel*)])
                (cond [(not (procedure? proc))
                       (error 'trace "'~s' is not bound to a procedure." 
