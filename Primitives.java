@@ -581,10 +581,10 @@ public class Primitives extends Module {
             case MAKERECTANGULAR:
                 return Quantity.valueOf(num(f,f.vlr[0]),
 					num(f,f.vlr[1]));
-            case ASHL: return Quantity.valueOf(num(f,f.vlr[0]).integerVal()
+            case ASHL: return Quantity.valueOf(num(f,f.vlr[0]).integer()
                                                .shiftLeft(num(f,f.vlr[1])
                                                           .intValue()));
-            case ASHR: return Quantity.valueOf(num(f,f.vlr[0]).integerVal()
+            case ASHR: return Quantity.valueOf(num(f,f.vlr[0]).integer()
                                                .shiftRight(num(f,f.vlr[1])
                                                            .intValue()));
         case DISPLAY: case WRITE:
