@@ -1,0 +1,8 @@
+(module _srfi-28 (_format)
+  (define _format format))
+(module srfi-28 (format)
+  (import _srfi-28)
+  (define format _format)
+  (add-feature 'srfi-28))
+
+(display "srfi-28\n")
