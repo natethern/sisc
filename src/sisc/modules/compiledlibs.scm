@@ -64,44 +64,51 @@
     (define-generic load)
     (lambda (filename)
       (load <sisc.ser.Library>
-            (url <sisc.util.Util> (normalize-url (current-url) filename))))))
+            (url <sisc.util.Util>
+                 (java-wrap (normalize-url (current-url)  filename)))))))
+
+(define (find-base-library se)
+  (cond [(instance-of? se <sisc.ser.LibraryAE>)
+         (values se #t)]
+        [(not (java-null? (get-parent se)))
+         (find-base-library (get-parent se))]
+        [else (values se #f)]))
+
+(define (find-symbolic-environment symenv-sym)
+  (with/fc (lambda (m e)
+             (let ([e (null-environment 0)])
+               (set-symbolic-environment! symenv-sym e)
+               (set-annotation! e 'name symenv-sym)
+               e))
+    (lambda () (get-symbolic-environment symenv-sym))))
 
 (define (link-library lib)
   (for-each
    (lambda (symenv-id)
-     (let* ((symenv-id-str (symbol->string symenv-id))
-            (symenv-sym (string->symbol
-                         (substring 
-                          symenv-id-str
-                          (string-length segment-str)
-                          (string-length symenv-id-str))))
-            (isLae #f)
-            (symenv (let loop ((se (with/fc
-                                    (lambda (m e)
-                                      (let ([e (null-environment 0)])
-                                        (set-symbolic-environment! 
-                                         symenv-sym e)
-                                        (set-annotation! e 'name symenv-sym)
-                                        e))
-                                    (lambda ()
-                                      (get-symbolic-environment symenv-sym)))))
-                      (cond [(instance-of? 
-                              se <sisc.ser.LibraryAE>)
-                             (begin (set! isLae #t) se)]
-                            [(not (java-null? (get-parent se)))
-                             (loop (get-parent se))]
-                            [else se]))))
-                                   
-       (for-each 
-        (lambda (binding)
-          (if isLae
-              (add-binding symenv lib (java-wrap binding)
-                           (get-entry-point lib (java-wrap binding)))
-              (putprop binding symenv
-                       (java-unwrap
-                        (get-local-expression lib (java-wrap binding))))))
-        (java-unwrap
-         (get-local-expression lib (java-wrap symenv-id))))))
+     (call-with-values
+         (lambda ()
+           (find-base-library
+            (java-wrap
+             (find-symbolic-environment
+              (let ((symenv-id-str (symbol->string symenv-id)))
+                (string->symbol
+                 (substring symenv-id-str
+                            (string-length segment-str)
+                            (string-length symenv-id-str))))))))
+       (lambda (symenv lae?)
+         (for-each 
+          (lambda (binding)
+            (if lae?
+                (add-binding symenv
+                             lib
+                             (java-wrap binding)
+                             (get-entry-point lib (java-wrap binding)))
+                (putprop binding
+                         (java-unwrap symenv)
+                         (java-unwrap
+                          (get-local-expression lib (java-wrap binding))))))
+          (java-unwrap
+           (get-local-expression lib (java-wrap symenv-id)))))))
    (java-unwrap (get-local-expression lib (java-wrap index-sym)))))
 
 (define (find-bindings prefix env)
