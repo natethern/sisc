@@ -21,9 +21,17 @@
              (and k (let ((kk k)) (set! k #f) (kk)))))
 
 ;;Used to be an infinite loop
-(should-be 'okay (dynamic-wind void (lambda () 'okay) void))
+(should-be 812557 'okay (dynamic-wind void (lambda () 'okay) void))
 
 ;;Used to corrupt the global environment
-(define (identity x) x)
-(eval '(import foobarbaz) (scheme-report-environment 5))
-(should-be 3 (identity 3))
+(should-be 812537 3
+           (begin (putprop 'identity (lambda (x) x))
+                    (with/fc (lambda (m e)
+                               (void))
+                      (lambda () 
+                        (eval '(import foobarbaz) 
+                               (scheme-report-environment 5))))
+                   (with/fc (lambda (m e) 'failed)
+                      (lambda () 
+                        (eval '(identity 3))))))
+                        
