@@ -2,10 +2,10 @@
                     "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd" [
  <!ENTITY SISC "<emphasis>SISC</emphasis>">
  <!ENTITY R5RS "R<superscript>5</superscript>RS">
- <!ENTITY syntax "<emphasis role='bold'><emphasis>syntax:</emphasis></emphasis>">
- <!ENTITY returns "<emphasis role='bold'><emphasis>returns:</emphasis></emphasis>">
- <!ENTITY procedure "<emphasis role='bold'><emphasis>procedure:</emphasis></emphasis>">
- <!ENTITY parameter "<emphasis role='bold'><emphasis>parameter:</emphasis></emphasis>">
+ <!ENTITY syntax "<emphasis>syntax:</emphasis>">
+ <!ENTITY returns "<emphasis>returns:</emphasis>">
+ <!ENTITY procedure "<emphasis>procedure:</emphasis>">
+ <!ENTITY parameter "<emphasis>parameter:</emphasis>">
  <!ENTITY f "&num;f">
  <!ENTITY requires "<emphasis>Requires:</emphasis>">
  <!ENTITY intro-chapter SYSTEM "intro.xml">
