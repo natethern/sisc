@@ -40,6 +40,8 @@ import java.io.IOException;
 import junit.framework.*;
 
 import sisc.Interpreter;
+import sisc.Context;
+import sisc.AppContext;
 import sisc.REPL;
 import sisc.ContinuationException;
 
@@ -63,7 +65,10 @@ public class TestR5RS
     protected void setUp()
     throws Exception
     {
-        interpreter = REPL.createInterpreter(new String[0]);
+	AppContext ctx = new AppContext();
+	Context.register("main", ctx);
+        interpreter = Context.enter("main");
+        REPL.initializeInterpreter(interpreter,new String[0]);
     }
 
     protected void tearDown()
@@ -77,26 +82,23 @@ public class TestR5RS
     {
         return
             interpreter.
+	    dynenv.
             parser.
             nextExpression(
                 new InputPort(
                     new BufferedReader(
                         new StringReader(
                             expression
-                        )
-                    )
-                )
-            );
+			    )
+			)
+		    )
+		);
     }
 
     private Value eval(String expression)
         throws IOException, ContinuationException
     {
-        return
-            interpreter.
-            eval(
-                quote(expression)
-            );
+        return interpreter.eval(expression);
     }
 
     private void check(String in, String out)
