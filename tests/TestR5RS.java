@@ -42,6 +42,7 @@ import junit.framework.*;
 import sisc.interpreter.*;
 import sisc.data.*;
 import sisc.REPL;
+import sisc.io.ReaderInputPort;
 
 public class TestR5RS
     extends TestCase
@@ -82,7 +83,7 @@ public class TestR5RS
             dynenv.
             parser.
             nextExpression(
-                new InputPort(
+                new ReaderInputPort(
                     new BufferedReader(
                         new StringReader(
                             expression
