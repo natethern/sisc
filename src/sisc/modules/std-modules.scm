@@ -811,17 +811,6 @@
   (include "libraries.scm")
   (install))
 
-(module compiled-libraries
-    (create-library
-     create-library-from-module
-     open-library
-     link-library)
-  (import s2j)
-  (import type-system)
-  (import binary-io)
-  (include "compiledlibs.scm")
-  (install))
-
 (module pattern-matching
   ((match+ match-help match-help1 clause-body let-values**
            guard-body convert-pat mapper my-backquote extend-backquote
