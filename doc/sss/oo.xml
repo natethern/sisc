@@ -1,97 +1,27 @@
-<chapter id="OO">
-  <title>Object Oriented Programming</title>
-    <para>
-        &requires; 
-      <emphasis role="bold">
-        (import <emphasis>generic-procedures</emphasis>)
-      </emphasis>
-    </para>
+<chapter id="TypesAndOO">
+  <title>Types and Objects</title>
   <sect1 id="TypeSystem">
     <title>Type System</title>
     <para>
-      The &SISC; type system supports the following kinds of types:
-      <itemizedlist>
-        <listitem>
-          <para>
-            Scheme-level classes, as described in <xref
-            linkend="SchemeClasses"/>
-            </para>
-        </listitem>
-        <listitem>
-          <para>
-            Java classes and interfaces, obtained through the
-            mechanisms described in <xref linkend="JavaClasses"/>.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            Meta types, obtained by invoking
-            <function>meta</function>.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            <literal>&lt;top&gt;</literal> and
-            <literal>&lt;bot&gt;</literal>. All types are
-            sub-types of <literal>&lt;top&gt;</literal> and
-            super-types of <literal>&lt;bot&gt;</literal>.
-          </para>
-        </listitem>
-      </itemizedlist>
-      <function>meta</function> is defined as follows:
-      <blockquote>
-        <para>
-          <indexterm><primary>meta</primary>
-          </indexterm>
-            &procedure;
-          <methodsynopsis language="scheme">
-            <type>type</type>
-            <methodname>meta</methodname>
-            <methodparam><parameter>type</parameter></methodparam>
-          </methodsynopsis>
-          <blockquote>
-            <para>
-              Returns the meta type of <parameter>type</parameter>,
-              i.e. a type whose instances are comprised of
-              <parameter>type</parameter> and all its sub-types.
-            </para>
-          </blockquote>
-        </para>
-      </blockquote>
+        &requires; 
+      <emphasis role="bold">
+        (import <emphasis>type-system</emphasis>)
+      </emphasis>
+    </para>
+    <para>
+      &SISC;'s extensible type system provides programmatic access to
+      the type information of values and provides a core set of type
+      testing and comparison procedures. The type system is extensible
+      in two ways. Firstly any new native types are recognised
+      automatically. Secondly, hooks are provided for Scheme-level
+      extensions of the type-system.
     </para>
     <sect2>
-      <title>Type Operations</title>
+      <title>Core Procedures and Predicates</title>
       <para>
-        Types can be compared with
         <blockquote>
           <para>
-            <indexterm><primary>type&lt;=</primary>
-            </indexterm>
-              &procedure;
-            <methodsynopsis language="scheme">
-              <type>&num;t/&num;f</type>
-              <methodname>type&lt;=</methodname>
-              <methodparam><parameter>type1</parameter></methodparam>
-              <methodparam><parameter>type2</parameter></methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Returns &num;t if <parameter>type1</parameter> is a
-                sub-type of <parameter>type2</parameter>, &num;f
-                otherwise.
-              </para>
-              <para>
-                Meta types are compared by comparing their underlying
-                types.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
-        The type of an object can be obtained with
-        <blockquote>
-          <para>
-            <indexterm><primary>type-of</primary>
-            </indexterm>
+            <indexterm><primary>type-of</primary></indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>type</type>
@@ -100,179 +30,408 @@
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns the type of <parameter>value</parameter>. The
-                type of an object (Scheme or Java) is represented by
-                its class (Scheme or Java). The type of a class
-                (Scheme or Java) is represented by its meta type.  The
-                type of any other Scheme value is represented by its
-                corresponding &SISC; Java class.
+                Returns the type of
+                <parameter>value</parameter>. There is no standard
+                representation for types, leaving type extensions free
+                to choose a representation that suits them most.
+              </para>
+              <para>
+                The procedure is equipped with an extension hook,
+                <function>type-of-hook</function>. See <xref
+                linkend="TypeSystemHooks"/> for more details on
+                hooks. The default implementation of the hook
+                <function>type-of</function> returns a type based on
+                the Java type of the internal representation of
+                <parameter>value</parameter>.
               </para>
             </blockquote>
+            <informalexample>
+              <programlisting>
+(type-of 1) &arrow; &num;&lt;scheme sisc.data.Quantity&gt;
+(type-of (lambda (x) x)) &arrow; &num;&lt;scheme sisc.data.Closure&gt;
+              </programlisting>
+            </informalexample>
+          </para>
+          <para>
+            <indexterm><primary>types&lt;=</primary></indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>&t;/&f;</type>
+              <methodname>type&lt;=</methodname>
+              <methodparam><parameter>type1</parameter></methodparam>
+              <methodparam><parameter>type2</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns &t; if <parameter>type1</parameter> is a a
+                sub-type of <parameter>type2</parameter>.
+              </para>
+              <para>
+                The predicate is equipped with an extension hook,
+                <function>type&lt;=-hook</function>. See <xref
+                linkend="TypeSystemHooks"/> for more details on
+                hooks. The default implementation of the hook
+                determines sub-typing based on the inheritance
+                relationship of the Java types representing native
+                types.
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(type&lt;= (type-of 'a) (type-of 'b)) &arrow; &t;
+(type&lt;= (type-of 'b) (type-of 'a)) &arrow; &t;
+(type&lt;= (type-of 1) (type-of 'a)) &arrow; &f;
+(type&lt;= (type-of 1) &lt;number&gt;) &arrow; &t;
+(type&lt;= (type-of 'a) &lt;symbol&gt;) &arrow; &t;
+(type&lt;= &lt;number;&gt; &lt;symbol&gt;) &arrow; &f;
+(type&lt;= &lt;symbol;&gt; &lt;number&gt;) &arrow; &f;
+(type&lt;= &lt;number&gt; &lt;value&gt;) &arrow; &t;
+(type&lt;= &lt;symbol&gt; &lt;value&gt;) &arrow; &t;
+              </programlisting>
+            </informalexample>
+          </para>
+          <para>
+            <indexterm><primary>compare-types</primary></indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>'equal,'more-specific,'less-specific</type>
+              <methodname>compare-types</methodname>
+              <methodparam><parameter>type1</parameter></methodparam>
+              <methodparam><parameter>type2</parameter></methodparam>
+              <methodparam><parameter>type3</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Determines the relationship of
+                <parameter>type1</parameter> and
+                <parameter>type2</parameter> with respect to
+                <parameter>type3</parameter>. <parameter>type3</parameter>
+                must be a sub-type of <parameter>type1</parameter> and
+                <parameter>type2</parameter>. <parameter>type1</parameter>
+                and <parameter>type2</parameter> are first compared
+                using <function>type&lt;=</function>. If that
+                comparison indicates that the types are disjoint
+                (i.e. <parameter>type1</parameter> is not sub-type of
+                <parameter>type2</parameter>,
+                <parameter>type2</parameter> is not a sub-type of
+                <parameter>type1</parameter> and the types are not
+                equal) then additional information from
+                <parameter>type3</parameter> is taken into account for
+                the comparison.
+              </para>
+              <para>
+                The predicate is equipped with an extension hook,
+                <function>compare-types-hook</function> that is
+                invoked in the case the comparison of
+                <parameter>type1</parameter> with
+                <parameter>type2</parameter> using
+                <function>type&lt;=</function> finds the two types to
+                be disjoint. See <xref
+                  linkend="TypeSystemHooks"/> for more details on
+                hooks. The default implementation of the hook returns
+                an error
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(compare-types &lt;number&gt; &lt;value&gt; &lt;number&gt;)
+  &arrow; 'more-specific
+(compare-types &lt;value&gt; &lt;number&gt; &lt;number&gt;)
+  &arrow; 'less-specific
+(compare-types &lt;number&gt; &lt;number&gt; &lt;number&gt;)
+  &arrow; 'equal
+              </programlisting>
+            </informalexample>
           </para>
         </blockquote>
       </para>
     </sect2>
     <sect2>
-      <title>Class Operations</title>
+      <title>Derived Procedures and Predicates</title>
       <para>
-        For types that are classes, the following operations are
-        supported:
-        <blockquote>
-          <para>
-            <indexterm><primary>class-direct-superclasses</primary>
-            </indexterm>
-              &procedure;
-            <methodsynopsis language="scheme">
-              <type>list</type>
-              <methodname>class-direct-superclasses</methodname>
-              <methodparam><parameter>class</parameter></methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Returns the list of classes of which
-                <parameter>class</parameter> is a direct
-                descendant. If <parameter>class</parameter> is a
-                Java class or interface the list comprises the
-                superclass and superinterfaces in exactly the order
-                specified in the class/interface declaration.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
-        <blockquote>
-          <para>
-            <indexterm><primary>class-direct-slot-names</primary>
-            </indexterm>
-              &procedure;
-            <methodsynopsis language="scheme">
-              <type>list</type>
-              <methodname>class-direct-slot-names</methodname>
-              <methodparam><parameter>class</parameter></methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Returns the list of slot names (as symbols) directly
-                defined by <parameter>class</parameter>. If
-                <parameter>class</parameter> is a Java class or
-                interface the list comprises the names of
-                the static and normal fields specified in the
-                class/interface declaration.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
-        <blockquote>
-          <para>
-            <indexterm><primary>class-precedence-list</primary>
-            </indexterm>
-              &procedure;
-            <methodsynopsis language="scheme">
-              <type>list</type>
-              <methodname>class-precedence-list</methodname>
-              <methodparam><parameter>class</parameter></methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Returns the class precedence list for class
-                <parameter>class</parameter>. The class precedence
-                list for a class <varname>C</varname> is a total
-                ordering on <varname>C</varname> and its
-                superclasses that is consistent with the local
-                precedence order of <varname>C</varname> and with
-                the class precedence lists of its superclasses.
-              </para>
-              <para>
-                Two
-                lists are consistent if for every
-                <varname>A</varname> and <varname>B</varname> that
-                are each members of both lists, either
-                <varname>A</varname> precedes <varname>B</varname>
-                in both or <varname>B</varname> precedes
-                <varname>A</varname> in both.
-              </para>
-              <para>
-                The local precedence order of a class
-                <varname>C</varname> consists of the class itself
-                followed by the direct superclasses as returned by
-                <function>class-direct-superclasses</function>.
-              </para>
-              <para>
-                The exact algorithm for computing the class
-                precedence list is the same as that employed by
-                Dylan, Goo and others. When there are
-                <emphasis>several</emphasis> possible total
-                orderings, one is chosen deterministically. When
-                there is <emphasis>no</emphasis> possible total
-                ordering, an error is signalled. The details of the
-                algorithm are beyond the scope of this document. The
-                interested reader is referred to the Dylan
-                documentation and the &SISC; source code.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
+        The type system's derived procedures and predicates are
+        implemented in terms of the core procedures and predicates.
       </para>
-    </sect2>
-    <sect2>
-      <title>Predicates</title>
       <para>
-        One can test whether an object is an instance of a
-        particular type with
         <blockquote>
           <para>
-            <indexterm><primary>instance-of?</primary>
-            </indexterm>
+            <indexterm><primary>instance-of?</primary></indexterm>
               &procedure;
             <methodsynopsis language="scheme">
-              <type>&num;t/&num;f</type>
+              <type>&t;/&f;</type>
               <methodname>instance-of?</methodname>
               <methodparam><parameter>value</parameter></methodparam>
               <methodparam><parameter>type</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns &num;t if <parameter>value</parameter> is an
-                instance of <parameter>type</parameter>, &num;f
-                otherwise.
+                Determines whether <parameter>value</parameter> is an
+                instance of <parameter>type</parameter>. 
+              </para>
+              <para>
+                The predicate obtains <parameter>value</parameter>'s
+                type using <function>type-of</function> and then
+                compares it to <parameter>type</parameter> using
+                <function>type&lt;=</function>.
               </para>
             </blockquote>
+            <informalexample>
+              <programlisting>
+(instance-of? 1 &lt;number&lt;) &arrow; &t;
+(instance-of? 'a &lt;symbol&lt;) &arrow; &t;
+(instance-of? 1 &lt;symbol&lt;) &arrow; &f;
+(instance-of? 1 &lt;value&lt;) &arrow; &t;
+              </programlisting>
+            </informalexample>
+          </para>
+          <para>
+            <indexterm><primary>types=</primary></indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>&t;/&f;</type>
+              <methodname>type=</methodname>
+              <methodparam><parameter>type1</parameter></methodparam>
+              <methodparam><parameter>type2</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Determines whether two types are equal by comparing
+                them using <function>type&lt;=</function>.
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(type= (type-of 'a) (type-of 'b)) &arrow; &t;
+(type= (type-of 1) (type-of 'a)) &arrow; &f;
+(type= (type-of 1) &lt;number&gt;) &arrow; &t;
+(type= (type-of 'a) &lt;symbol&gt;) &arrow; &t;
+(type= &lt;number;&gt; &lt;symbol&gt;) &arrow; &f;
+              </programlisting>
+            </informalexample>
+          </para>
+          <para>
+            <indexterm><primary>types&lt;=</primary></indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>&t;/&f;</type>
+              <methodname>types&lt;=</methodname>
+              <methodparam><parameter>type-list1</parameter></methodparam>
+              <methodparam><parameter>type-list2</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Determines whether all of the types in
+                <parameter>type-list1</parameter> are sub-types of the
+                the corresponding (by position) types in
+                <parameter>type-list2</parameter>.
+              </para>
+              <para>
+                A pair-wise comparison of the elements in the two
+                lists using <function>type&lt;=</function> is
+                performed until a test returns &f;, in which case
+                &f; is returned, or one (or both) of the lists has
+                been exhausted, in which case &t; is returned.
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(types&lt;= (list &lt;number&gt; &lt;symbol&gt;)
+         (list &lt;value&gt; &lt;value&gt;)) &arrow; &t;
+(types&lt;= (list &lt;number&gt; &lt;symbol&gt;)
+         (list &lt;number&gt; &lt;number&gt;)) &arrow; &f;
+              </programlisting>
+            </informalexample>
+          </para>
+          <para>
+            <indexterm><primary>instances-of?</primary></indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>&t;/&f;</type>
+              <methodname>instances-of?</methodname>
+              <methodparam><parameter>value-list</parameter></methodparam>
+              <methodparam><parameter>type-list</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Determines whether all of the values in
+                <parameter>value-list</parameter> are instances of the
+                the corresponding (by position) types in
+                <parameter>type-list</parameter>.
+              </para>
+              <para>
+                A pair-wise comparison of the elements in the two
+                lists using <function>instance-of?</function> is
+                performed until a test returns &f;, in which case
+                &f; is returned, or one (or both) of the lists has
+                been exhausted, in which case &t; is returned.
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(instances-of? (list 1 'a)
+               (list &lt;number&gt; &lt;symbol&gt;)) &arrow; &t;
+(instances-of? (list 1 'a)
+               (list &lt;number&gt; &lt;number&gt;)) &arrow; &f;
+              </programlisting>
+            </informalexample>
+          </para>
+          <para>
+            <indexterm><primary>types=</primary></indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>&t;/&f;</type>
+              <methodname>types=</methodname>
+              <methodparam><parameter>type-list1</parameter></methodparam>
+              <methodparam><parameter>type-list2</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Determines whether all of the types in
+                <parameter>type-list1</parameter> are equal to the
+                the corresponding (by position) types in
+                <parameter>type-list2</parameter>.
+              </para>
+              <para>
+                A pair-wise comparison of the elements in the two
+                lists using <function>type=</function> is
+                performed until a difference is found, in which ase
+                &f; is returned, or one (or both) of the lists has
+                been exhausted, in which case &t; is returned.
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(types= (list &lt;number&gt; &lt;symbol&gt;)
+        (list &lt;number&gt; &lt;symbol&gt;)) &arrow; &t;
+(types= (list &lt;number&gt; &lt;symbol&gt;)
+        (list &lt;number&gt; &lt;number&gt;)) &arrow; &f;
+              </programlisting>
+            </informalexample>
           </para>
         </blockquote>
-        Two predicates are provided that determine whether a value
-        is an object or a class respectively.
+      </para>
+    </sect2>
+    <sect2 id="TypeSystemHooks">
+      <title>Hooks</title>
+      <indexterm><primary>type-of-hook</primary></indexterm> 
+      <indexterm><primary>type-&lt;=-hook</primary></indexterm> 
+      <indexterm><primary>compare-typess-hook</primary></indexterm> 
+      <para>
+        Hooks are the main mechanism by which Scheme code can extend
+        the default type system. The core type system procedures
+        <function>type-of</function>, <function>type&lt;=</function>
+        and <function>compare-types</function> all provide such
+        hooks, called <function>type-of-hook</function>,
+        <function>type-&lt;=-hook</function>, and
+        <function>compare-types-hook</function> respectively.
+      </para>
+      <para>
+        Extension takes place by installing labelled handler
+        procedures on the hook, which is done by invoking the hook
+        procedure. Installing a handler procedure with a label of an
+        already installed procedure replaces the latter with the
+        former.
+      </para>
+      <para>
+        The handler procedures are called with a
+        <parameter>next</parameter> procedure as the first argument
+        and all the arguments of the call to the hook-providing
+        procedures as the remaining arguments. Typically a handler
+        procedure first determines whether it is applicable, i.e. is
+        capable of performing the requested comparison etc. If not it
+        calls the <parameter>next</parameter> handler procedure, which
+        invokes the next hook or, if no further hooks exist, the
+        default implementation of the hooked procedure.
+      </para>
+      <example>
+        <title>Hook Installation</title>
+        <para>
+          This example shows how &SISC;'s record type module adds
+          record types to the type system by installing handler
+          procedure on <function>type-of-hook</function> and
+          <function>type&lt;=-hook</function>.
+        </para>
+        <programlisting>
+(type-of-hook 'record
+  (lambda (next o)
+    (if (record? o)
+        (record-type o)
+        (next o))))
+
+(type&lt;=-hook 'record
+  (lambda (next x y)
+    (cond [(record-type? x)
+           (if (record-type? y)
+               (eq? x y)
+               (type&lt;= &lt;record&gt; y))]
+          [(record-type? y) #f]
+          [else (next x y)])))
+        </programlisting>
+      </example>
+    </sect2>
+    <sect2>
+      <title>Standard Types</title>
+      <indexterm><primary>&lt;value&gt;</primary></indexterm>
+      <indexterm><primary>&lt;eof&gt;</primary></indexterm>
+      <indexterm><primary>&lt;symbol&gt;</primary></indexterm>
+      <indexterm><primary>&lt;list&gt;</primary></indexterm>
+      <indexterm><primary>&lt;procedure&gt;</primary></indexterm>
+      <indexterm><primary>&lt;number&gt;</primary></indexterm>
+      <indexterm><primary>&lt;boolean&gt;</primary></indexterm>
+      <indexterm><primary>&lt;char&gt;</primary></indexterm>
+      <indexterm><primary>&lt;string&gt;</primary></indexterm>
+      <indexterm><primary>&lt;vector&gt;</primary></indexterm>
+      <indexterm><primary>&lt;input-port&gt;</primary></indexterm>
+      <indexterm><primary>&lt;output-port&gt;</primary></indexterm>
+      <para>
+        The type system pre-defines bindings for the native types
+        corresponding to all the data types defined in R5RS:
+        <literal>&lt;eof&gt;</literal>,
+        <literal>&lt;symbol&gt;</literal>,
+        <literal>&lt;list&gt;</literal>,
+        <literal>&lt;procedure&gt;</literal>,
+        <literal>&lt;number&gt;</literal>,
+        <literal>&lt;boolean&gt;</literal>,
+        <literal>&lt;char&gt;</literal>,
+        <literal>&lt;string&gt;</literal>,
+        <literal>&lt;vector&gt;</literal>,
+        <literal>&lt;input-port&gt;</literal>,
+        <literal>&lt;output-port&gt;</literal>. One notable exception
+        is that pairs and null are combined into a
+        <literal>&lt;list&gt;</literal> type.
+      </para>
+      <para>
+        The type system also defines a
+        <literal>&lt;value&gt;</literal> type that is the base type of
+        all &SISC; values, i.e. all &SISC; values are instances of
+        <literal>&lt;value&gt;</literal> and all types are sub-types
+        of <literal>&lt;value&gt;</literal>.
+      </para>
+      <para>
+        The representations of other native types can be obtained
+        using
         <blockquote>
           <para>
-            <indexterm><primary>object?</primary>
-            </indexterm>
+            <indexterm><primary>make-type</primary></indexterm>
               &procedure;
             <methodsynopsis language="scheme">
-              <type>&num;t/&num;f</type>
-              <methodname>object?</methodname>
-              <methodparam><parameter>value</parameter></methodparam>
+              <type>type</type>
+              <methodname>make-type</methodname>
+              <methodparam><parameter>symbol</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns &num;t if <parameter>value</parameter> is an
-                object (Scheme or Java), &num;f otherwise. Note that
-                classes are objects.
+                Constructs a type representing a built-in type. The
+                <parameter>symbol</parameter> must denote a Java class
+                that is a sub-class of <classname>sisc.data.Value</classname>, the base of the &SISC; value type hierarchy.
               </para>
             </blockquote>
-          </para>
-          <para>
-            <indexterm><primary>class?</primary>
-            </indexterm>
-              &procedure;
-            <methodsynopsis language="scheme">
-              <type>&num;t/&num;f</type>
-              <methodname>class?</methodname>
-              <methodparam><parameter>value</parameter></methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Returns &num;t if <parameter>value</parameter> is a
-                class (Scheme or Java), &num;f otherwise.
-              </para>
-            </blockquote>
+            <informalexample>
+              <programlisting>
+(define &lt;record&gt; (make-type '|sisc.modules.record.Record|))
+(type&lt;= &lt;record&gt; &lt;value&gt;) &arrow; &t;
+              </programlisting>
+            </informalexample>
           </para>
         </blockquote>
       </para>
@@ -349,7 +508,7 @@
                 (see <xref linkend="JavaMethodInvocation"/>), resulting
                 in the invocation of Java methods if no matching Scheme
                 methods are found. Setting
-                <parameter>next-proc</parameter> to &num;f disables
+                <parameter>next-proc</parameter> to &f; disables
                 chaining; an error will be thrown if an invocation of
                 the generic procedure cannot find a matching method.
               </para>
@@ -404,14 +563,14 @@
             </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
-              <type>proc/&num;f</type>
+              <type>proc/&f;</type>
               <methodname>generic-procedure-next</methodname>
               <methodparam><parameter>proc</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
                 Returns the chainee of the generic procedure
-                <parameter>proc</parameter>, or &num;f if no chainee was
+                <parameter>proc</parameter>, or &f; if no chainee was
                 specified.
               </para>
             </blockquote>
@@ -549,7 +708,7 @@
               </indexterm>
                 &procedure;
               <methodsynopsis language="scheme">
-                <type>&num;t/&num;f</type>
+                <type>&t;/&f;</type>
                 <methodname>method-rest?</methodname>
                 <methodparam><parameter>method</parameter></methodparam>
               </methodsynopsis>
@@ -572,7 +731,7 @@
   (for-each (lambda (x) (next-method buf x)) rest)
   buf)
 (define sb (make &lt;jstringbuffer&gt;))
-(-&gt;string (app sb (-&gt;jstring "foo") (-&gt;jint 1) (-&gt;jstring "bar"))) ;=&gt; "foo1bar"
+(-&gt;string (app sb (-&gt;jstring "foo") (-&gt;jint 1) (-&gt;jstring "bar"))) &arrow; "foo1bar"
         </programlisting>
         This defines a new generic procedure
         <function>app</function> which is chained to a generic
@@ -727,14 +886,14 @@
 (define-method (create ((meta &lt;jstring&gt;) class)
                        (&lt;jchar&gt; c))
   (make &lt;jstring&gt; (-&gt;jarray (list c) &lt;jchar&gt;)))
-(-&gt;string (make &lt;jstring&gt; (-&gt;jchar #\o))) ;=&gt; "o"
+(-&gt;string (make &lt;jstring&gt; (-&gt;jchar &num;\o))) &arrow; "o"
 (define-method (create (next: next-method)
                        ((meta &lt;jstringbuffer&gt;) class)
                        . rest)
   (next-method class))
 (define-method (initialize (&lt;jstringbuffer&gt; sb) . rest)
   (apply app sb rest))
-(-&gt;string (make &lt;jstringbuffer&gt; (-&gt;jstring "foo") (-&gt;jint 1) (-&gt;jstring "bar"))) ;=&gt; "foo1bar"
+(-&gt;string (make &lt;jstringbuffer&gt; (-&gt;jstring "foo") (-&gt;jint 1) (-&gt;jstring "bar"))) &arrow; "foo1bar"
         </programlisting>
         First this defines a method new constructor on
         <classname>java.lang.String</classname> that constructs a
@@ -833,7 +992,7 @@
             </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
-              <type>&num;t/&num;f</type>
+              <type>&t;/&f;</type>
               <methodname>method-applicable?</methodname>
               <methodparam><parameter>method</parameter></methodparam>
               <methodparam><parameter>types</parameter></methodparam>
@@ -977,12 +1136,12 @@
       <example>
         <title>Class Definition</title>
         <programlisting>
-(define-class (&lt;foo&gt;) (x #f) (y 1))
-(define-class (&lt;bar&gt;) (y 2)  (z #f))
-(define-class (&lt;baz&gt; &lt;foo&gt; &lt;bar&gt;) (a 1) (b 2) (c #f))
-(type&lt;= &lt;baz&gt; &lt;foo&gt;) ;=&gt; #t
-(type&lt;= &lt;baz&gt; &lt;bar&gt;) ;=&gt; #t
-(type&lt;= &lt;foo&gt; &lt;bar&gt;) ;=> #f
+(define-class (&lt;foo&gt;) (x &f;) (y 1))
+(define-class (&lt;bar&gt;) (y 2)  (z &f;))
+(define-class (&lt;baz&gt; &lt;foo&gt; &lt;bar&gt;) (a 1) (b 2) (c &f;))
+(type&lt;= &lt;baz&gt; &lt;foo&gt;) &arrow; &t;
+(type&lt;= &lt;baz&gt; &lt;bar&gt;) &arrow; &t;
+(type&lt;= &lt;foo&gt; &lt;bar&gt;) &arrow; &f;
         </programlisting>
       </example>
     </sect2>
@@ -1079,12 +1238,12 @@
       <example>
         <title>Simple Slot Access</title>
         <programlisting>
-(foo 'x) ;=&gt; 1
-(bar 'y) ;=&gt; 2
-(baz 'z) ;=&gt; #f
-(map foo '(x y)) ;=&gt; (1 1)
-(map bar '(y z)) ;=&gt; (2 2)
-(map baz '(x y z a b c)) ;=&gt; (#f 1 #f 1 2 3)
+(foo 'x) &arrow; 1
+(bar 'y) &arrow; 2
+(baz 'z) &arrow; &f;
+(map foo '(x y)) &arrow; (1 1)
+(map bar '(y z)) &arrow; (2 2)
+(map baz '(x y z a b c)) &arrow; (&f; 1 &f; 1 2 3)
         </programlisting>
       </example>
       <para>
@@ -1129,8 +1288,8 @@
         <programlisting>
 (baz '(c) bar)
 (bar '(z) foo)
-(baz '(c z x) 2) ;=&gt; 1
-(baz '(c z x)) ;=&gt; 2
+(baz '(c z x) 2) &arrow; 1
+(baz '(c z x)) &arrow; 2
         </programlisting>
       </example>
     </sect2>
@@ -1145,14 +1304,14 @@
             </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
-              <type>&num;t/&num;f</type>
+              <type>&t;/&f;</type>
               <methodname>scheme-object?</methodname>
               <methodparam><parameter>value</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns &num;t if <parameter>value</parameter> is a
-                Scheme object, &num;f otherwise.
+                Returns &t; if <parameter>value</parameter> is a
+                Scheme object, &f; otherwise.
               </para>
             </blockquote>
           </para>
@@ -1161,14 +1320,14 @@
             </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
-              <type>&num;t/&num;f</type>
+              <type>&t;/&f;</type>
               <methodname>scheme-class?</methodname>
               <methodparam><parameter>value</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns &num;t if <parameter>value</parameter> is a
-                Scheme class, &num;f otherwise.
+                Returns &t; if <parameter>value</parameter> is a
+                Scheme class, &f; otherwise.
               </para>
             </blockquote>
           </para>
@@ -1194,7 +1353,7 @@
           <para>
             Objects (Java and Scheme), including classes, are not a
             distinct type from procedures,
-            i.e. <function>procedure?</function> will return &num;t
+            i.e. <function>procedure?</function> will return &t;
             for objects.
           </para>
         </listitem>
