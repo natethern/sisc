@@ -383,6 +383,14 @@
 	<computeroutput>&lt;datum&gt;</computeroutput> as the contained
 	value.
       </para>
+      <para>
+        Boxes, like pairs, are only equal in the sense of
+        <function>eq?</function> and <function>eqv?</function> when a
+        box is compared with itself.  A box is equal to another in the
+        sense of <function>equal?</function> if the value contained
+        within the box is <function>equal?</function> to the value
+        contained in the other.
+      </para>
     </sect2>
     <sect2 id="CircularStructures">
       <title>
