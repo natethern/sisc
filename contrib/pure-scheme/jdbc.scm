@@ -6,9 +6,9 @@
 ;;
 ;; Currently only supports SQL number and string types.
 (module jdbc (jdbc/connect jdbc/prepare-statement 
-                           jdbc/execute-query jdbc/close)
+                           jdbc/execute-query jdbc/execute jdbc/close
+                           set-int set-string set-double set-float)
   (import s2j)
-  (import streams)
   (import generic-procedures)
   (import streams)
   (define <java.sql.Connection> (java-class "java.sql.Connection"))
@@ -27,6 +27,10 @@
   (define-generic get-int)
   (define-generic get-float)
   (define-generic get-double)
+  (define-generic set-string)
+  (define-generic set-int)
+  (define-generic set-float)
+  (define-generic set-double)
   (define-generic get-column-type)
   (define-generic get-column-count)
   (define-generic get-column-label)
