@@ -32,51 +32,30 @@
  */
 package sisc.data;
 
-import java.io.*;
-import sisc.ser.Serializer;
-import sisc.ser.Deserializer;
+import java.util.WeakHashMap;
 
-public class Symbol extends Value {
+public class MemoizedSymbol extends Symbol implements Singleton {
 
-    public static boolean caseSensitive;
+    public static WeakHashMap memo=new WeakHashMap(100);
 
-    public static Symbol getUnique(String str) {
-        return new Symbol(str);
+    public MemoizedSymbol(String symval) {
+        super(symval);
     }
 
     public static Symbol intern(String str) {
-        return MemoizedSymbol.intern(str);
+        synchronized(memo) {
+            Symbol s=(Symbol)memo.get(str);
+            if (s==null) {
+                s=new MemoizedSymbol(str);
+                memo.put(str, s);
+            }
+            return s;
+        }
     }
 
-    public static Symbol get(String str) {
-        int l = str.length();
-        if (l>1 && str.charAt(0)=='|' && str.charAt(l-1) == '|')
-            return intern(str.substring(1,l-1));
-        else
-            return intern(caseSensitive ? str : str.toLowerCase());
-    }
+    public MemoizedSymbol() {}
 
-    public String symval;
-
-    public Symbol(String symval) {
-        this.symval=symval;
-    }
-
-    public Symbol normalize() {
-        return Symbol.get(symval.toLowerCase());
-    }
-
-    public String display() {
-        return symval;
-    }
-
-    public Symbol() {}
-
-    public void serialize(Serializer s) throws IOException {
-        s.writeUTF(symval);
-    }
-
-    public void deserialize(Deserializer s) throws IOException {
-        symval = s.readUTF();
+    public Value singletonValue() {
+        return intern(symval);
     }
 }
