@@ -12,33 +12,41 @@ public abstract class Module extends NamedValue implements java.io.Serializable 
     public abstract float getModuleVersion();
 
     public String display() {
-	return displayNamedOpaque(liMessage(SISCB, "nativelibrary"));
+        return displayNamedOpaque(liMessage(SISCB, "nativelibrary"));
+    }
+
+    public void bindAll(Interpreter r, sisc.env.SymbolicEnvironment env) {
+        Symbol[] syms=getModuleBindingNames(r);
+        for (int i=0; i<syms.length; i++) {
+            env.define(syms[i], getBindingValue(r, syms[i]));
+        }
     }
 
     public abstract Value eval(int primid, Interpreter f)
-    throws ContinuationException;
+        throws ContinuationException;
 
     public static void throwPrimException(String message) {
-	throw new PrimRuntimeException(message);
+        throw new PrimRuntimeException(message);
     }
 
     public static void throwNestedPrimException(String message, SchemeException e) {
-	throw new NestedPrimRuntimeException(message, e);
+        throw new NestedPrimRuntimeException(message, e);
     }
 
     public static void throwNestedPrimException(SchemeException e) {
-	throw new NestedPrimRuntimeException(e);
+        throw new NestedPrimRuntimeException(e);
     }
 
     public static void throwArgSizeException() {
-	throw new ArrayIndexOutOfBoundsException();
+        throw new ArrayIndexOutOfBoundsException();
     }
 
     public static final Module module(Value o) {
         try {
             return (Module)o;
         } catch (ClassCastException e) { typeError("nativelibrary", o); }
-	return null;
+
+        return null;
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.jar.*;
 import java.io.*;
 import java.text.*;
+import java.net.*;
 import java.lang.reflect.Field;
 import sisc.data.*;
 import sisc.exprs.*;
@@ -191,7 +192,7 @@ public abstract class Util extends Defaults implements Version {
 
     /* Casting checks */
     public static void typeError(String type, Value o) {
-	typeError(SISCB, type, o);
+        typeError(SISCB, type, o);
     }
 
     public static void typeError(Symbol bundleName, String type, Value o) {
@@ -316,6 +317,35 @@ public abstract class Util extends Defaults implements Version {
             return (AnnotatedExpr)o;
         } catch (ClassCastException e) { typeError("annotatedexpression", o); }
         return null;
+    }
+
+    public static URL url(Value v) {
+        String s = string(v);
+        try {
+            return new URL(s);
+        } catch (MalformedURLException e) {
+            try {
+                return new URL("file:"+s);
+            } catch (MalformedURLException ee) {
+                typeError("url", v);
+            }
+            return null;
+        }
+    }
+
+    public static URL url(Value current, Value v) {
+        URL c = url(current);
+        String s = string(v);
+        try {
+            return new URL(c, s);
+        } catch (MalformedURLException e) {
+            try {
+                return new URL(c, "file:"+s);
+            } catch (MalformedURLException ee) {
+                typeError("url", v);
+            }
+            return null;
+        }
     }
 
     public static final SchemeBoolean truth(boolean b) {
