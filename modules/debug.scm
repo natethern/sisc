@@ -98,17 +98,17 @@
         (begin
           (for-each 
            (lambda (procedure-symbol)
-             (let ([proc (getprop (sc-expand procedure-symbol) '*toplevel*)])
+             (let* ([real-pc (sc-expand procedure-smbol)]
+                    [proc (getprop real-pc '*toplevel*)])
                (cond [(not (procedure? proc))
                       (error 'trace "'~s' is not bound to a procedure." 
                              procedure-symbol)]
-                     [(not (assq procedure-symbol traced-procedures))
+                     [(not (assq real-pc traced-procedures))
                       (begin
                         (set! traced-procedures 
-                              (cons (cons procedure-symbol proc)
-                                    traced-procedures))
-                        (putprop procedure-symbol '*toplevel*
-                                 (make-traced procedure-symbol proc)))])))
+                              (cons (cons real-pc proc) traced-procedures))
+                        (putprop real-pc '*toplevel*
+                                 (make-traced real-pc proc)))])))
            procs)
           (putprop 'traced-procedures '*debug* traced-procedures)))))
 
@@ -126,14 +126,15 @@
                                  [else '()])])
     (for-each 
      (lambda (procedure-symbol)
-       (let ([proc (assq (sc-expand procedure-symbol) traced-procedures)])
+       (let* ([real-pc (sc-expand procedure-symbol)]
+              [proc (assq real-pc traced-procedures)])
          (if proc
              (begin
                (when (eq? (cdr proc) 
-                          (getprop procedure-symbol '*toplevel*))
-                 (putprop procedure-symbol '*toplevel* (cdr proc)))
+                          (getprop real-pc '*toplevel*))
+                 (putprop real-pc '*toplevel* (cdr proc)))
                (set! traced-procedures 
-                     (remove-from-assoc procedure-symbol traced-procedures))))))
+                     (remove-from-assoc real-pc traced-procedures))))))
      (cons proc1 procs))
     (putprop 'traced-procedures '*debug* traced-procedures)))
 
