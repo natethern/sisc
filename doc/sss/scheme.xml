@@ -319,7 +319,7 @@
 	  <para>
 	    &procedure;
 	    <methodsynopsis language="scheme">
-	      <type>undefined</type>
+	      <type>box</type>
 	      <methodname>box</methodname>
 	      <methodparam>
 		<parameter>value</parameter>
