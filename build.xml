@@ -175,8 +175,8 @@
         <include name="ChangeLog"/>
         <include name="README"/>
         <include name="COPYING"/>
-        <include name="GOALS.txt"/>
-        <include name="TODO.txt"/>
+        <include name="GOALS"/>
+        <include name="TODO"/>
         <include name="ReleaseCandidate" if="releasecandidate"/>
         <include name="sisc.bat"/>
       </fileset>
@@ -231,6 +231,8 @@
         <include name="ReleaseCandidate" if="releasecandidate"/>
 	<include name="README"/>
 	<include name="COPYING"/>
+        <include name="GOALS"/>
+        <include name="TODO"/>
 	<include name="sisc.bat"/>
       </fileset>
     </copy>
