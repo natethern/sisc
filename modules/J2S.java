@@ -237,13 +237,14 @@ public class J2S extends ModuleAdapter {
 		Procedure thunk=proc(f.vlr[1]);
 		Value rv=VOID;
 		synchronized(syncOn) {
-		    Interpreter i=Context.enter(f.ctx, f.dynenv.copy());
+		    Interpreter i=Context.enter();
 		    try {
 			rv=i.eval(thunk, new Value[0]);
 		    } catch (SchemeException se) {
 			throwNestedPrimException(se);
-		    }
-		    Context.exit();
+		    } finally {
+                        Context.exit();
+                    }
 		}
 		return rv;
             case JINSTANCEOFQ:
