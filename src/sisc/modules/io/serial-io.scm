@@ -28,6 +28,30 @@
   (call-with-serial-output-port port 
     (lambda (port) (with-output-to-port port thunk))))
 
+(define (call-with-serial-input-file url proc)
+  (call-with-input-file url
+    (lambda (in)
+      (call-with-serial-input-port in proc))))
+
+(define (call-with-serial-output-file url proc)
+  (call-with-output-file url
+    (lambda (out)
+      (call-with-serial-output-port
+       out
+       (lambda (out)
+         (proc out)
+         (flush-output-port out))))))
+
+(define (with-serial-output-to-file url thunk)
+  (call-with-serial-output-file url
+   (lambda (out)
+     (with-output-to-port out thunk))))
+
+(define (with-serial-input-from-file url thunk)
+  (call-with-serial-input-file url
+   (lambda (in)
+     (with-input-from-port in thunk))))
+
 (define (serialize v . portarg)
   (_serialize v (unwrap-native-output-port
                  (if (null? portarg) (current-input-port) (car portarg)))))
