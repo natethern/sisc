@@ -17,15 +17,13 @@ public class SchemeThread extends Value implements Runnable, NamedValue {
     public Thread thread;
     public int state;
     public Value rv;
-    
-    public SchemeThread(String appName,
-                        Procedure thunk) {
-        this(Context.enter(appName), thunk);
-        Context.exit();
-    }
 
     public SchemeThread(Interpreter r, Procedure thunk) {
-        this.env = r.dynenv.copy();
+        this(r.dynenv, thunk);
+    }
+
+    public SchemeThread(DynamicEnvironment dynenv, Procedure thunk) {
+        this.env = dynenv.copy();
         this.env.wind = FALSE;
         this.thunk = thunk;
         thread=new Thread(schemeThreads, this);

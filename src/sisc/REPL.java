@@ -16,14 +16,10 @@ public class REPL {
     public String appName;
 
     public REPL(String appName, DynamicEnvironment dynenv, Procedure repl) {
-        this(appName, repl);
+        this(appName, new SchemeThread(dynenv, repl));
         primordialThread.env = dynenv;
     }
 
-    public REPL(String appName, Procedure repl) {
-        this(appName, new SchemeThread(appName, repl));
-    }
-    
     public REPL(String appName, SchemeThread primordialThread) {
         this.primordialThread = primordialThread;
         this.appName = appName;
@@ -296,8 +292,7 @@ public class REPL {
             Interpreter r=Context.enter(dynenv);
             Procedure p=(Procedure)r.lookup(Symbol.get("sisc-cli"), Util.TOPLEVEL);
             Context.exit();
-            SchemeThread t = new SchemeSocketThread(app, p, client);
-            t.env = dynenv;
+            SchemeThread t = new SchemeSocketThread(dynenv, p, client);
             REPL repl = new REPL(app, t);
             repl.go();
         }
@@ -307,8 +302,10 @@ public class REPL {
 
         public Socket s;
         
-        public SchemeSocketThread(String appName, Procedure thunk, Socket s) {
-            super(appName, thunk);
+        public SchemeSocketThread(DynamicEnvironment dynenv,
+                                  Procedure thunk,
+                                  Socket s) {
+            super(dynenv, thunk);
             this.s = s;
         }
 
