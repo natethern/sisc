@@ -1,3 +1,7 @@
+2004-11-19  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Fixed mutex state management bug in SRFI-18.
+	
 2004-11-18  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Finished making all the numeric operators work in some

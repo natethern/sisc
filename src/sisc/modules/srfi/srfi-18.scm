@@ -108,7 +108,7 @@
 
 (define mutex-lock!
   (let ([finish-lock
-         (lambda finish-lock (mutex thread)
+         (lambda (mutex thread)
            (let ([oldstate (annotation mutex 'state)]
                  [threads-mutexes (annotation thread 'mutexes '())])
              (if thread
@@ -137,7 +137,7 @@
 
 (define mutex-unlock!
   (let ([finish-unlock
-         (lambda finish-unlock (mutex owner)
+         (lambda (mutex owner)
            (set-annotation!
             owner 'mutexes
             (delete! mutex (annotation owner 'mutexes '()) eq?)))])
