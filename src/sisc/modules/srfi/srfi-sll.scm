@@ -11,7 +11,6 @@
  'srfi-1
  'srfi-2
  'srfi-5
- '_srfi-6
  'srfi-6
  'srfi-7
  'srfi-9
