@@ -30,7 +30,7 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-package sisc.debug;
+package sisc.modules;
 
 import sisc.*;
 import sisc.data.*;

@@ -38,7 +38,7 @@
 
 (native-module logicops   "sisc.modules.SLogicOps")
 (native-module networking "sisc.modules.SNetwork")
-(native-module debugging  "sisc.debug.SDebug")
+(native-module debugging-native  "sisc.modules.SDebug")
 (native-module threading-native  "sisc.modules.SThread")
 (native-module s2j-native        "sisc.modules.S2J")
 (native-module hashtable-native  "sisc.modules.SHashtable")
@@ -47,6 +47,27 @@
     (wrap-symbol
      dynamic-freeze)
   (include "misc.scm"))
+
+(module debugging
+    (show
+     express
+     compile
+     get-last-error
+     error-continuation-k
+     annotated?
+     stack-trace
+     trace-depth
+     trace-call
+     trace-lambda
+     trace-let
+     trace
+     untrace
+     stack-trace
+     set-breakpoint!
+     clear-breakpoint!
+     continue)
+  (import debugging-native)
+  (include "debug.scm"))
 
 (module threading
   (thread/new
