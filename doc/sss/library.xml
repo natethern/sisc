@@ -208,10 +208,11 @@ r / 2<superscript>s</superscript>
             <blockquote>
               <para>
                 Creates a hash table. The optional argument supplies
-                the equality test procedure that the hashtable should
+                the equivalence test procedure that the hashtable should
                 use. It must be one of <function>eq?</function>,
                 <function>eqv?</function>, or
-                <function>equal?</function>.
+                <function>equal?</function>. The default is
+                <function>eqv?</function>.
               </para>
               <para>
                   The keys of hash tables using
@@ -259,19 +260,30 @@ r / 2<superscript>s</superscript>
               <type>hashtable</type>
               <methodname>alist-&gt;hashtable</methodname>
               <methodparam><parameter>alist</parameter></methodparam>
+              <methodparam choice="opt">
+                <parameter>eq?/eqv?/equal?</parameter>
+              </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Creates a hashtable and initializes it with the keys and
-                values found in
+                Creates a hashtable and initializes it with the keys
+                and values found in
                 <parameter>alist</parameter>. <parameter>alist</parameter>
-                must be a list of pairs, with the <function>car</function>
-                of each pair representing a key and the
-                <function>cdr</function> representing its associated
-                value. If there are multiple pairs which contain the
-                same key (with respect to <function>eqv?</function>)
-                then the resulting hash table will associate the key
-                with the value of the last such pair.
+                must be a list of pairs, with the
+                <function>car</function> of each pair representing a
+                key and the <function>cdr</function> representing its
+                associated value. The optional argument supplies the
+                equivalence test procedure that the hashtable should
+                use. It must be one of <function>eq?</function>,
+                <function>eqv?</function>, or
+                <function>equal?</function>. The default is
+                <function>eqv?</function>.
+              </para>
+              <para>
+                If there are multiple pairs which contain the same key
+                (with respect to chosen equivalence test) then the
+                resulting hash table will associate the key with the
+                value of the last such pair.
               </para>
             </blockquote>
           </para>

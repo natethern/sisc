@@ -528,14 +528,16 @@ Context.exit()
       <sect3>
         <title>Object Comparison</title>
         <para>
-          Comparing Java objects using <function>eq?</function>
+          Comparing Java objects using <function>eqv?</function>
           compares the objects using Java's <function>==</function>
           comparison. <function>equal?</function>, on the other hand,
           compares the objects using Java's
-          <function>equals</function> method. Applying either
-          <function>eq?</function> or <function>equal?</function> to a
-          mixture of Java objects and other Scheme values returns
-          &num;f.
+          <function>equals</function> method. <function>eq?</function>
+          uses pointer equality on the Scheme objects representing the
+          Java objects and is therefore not generally useful.
+          Applying <function>eq?</function>, <function>eqv?</function>
+          or <function>equal?</function> to a mixture of Java objects
+          and other Scheme values returns &num;f.
         </para>
       </sect3>
       <sect3>
@@ -1278,7 +1280,7 @@ Context.exit()
         <para>
           All objects representing Java <literal>null</literal> are
           equal with respect to <function>equal?</function>, but are
-          only equal with respect to <function>eq?</function> if they
+          only equal with respect to <function>eqv?</function> if they
           have the same type.
         </para>
         <para>
