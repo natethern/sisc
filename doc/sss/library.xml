@@ -1382,6 +1382,23 @@ com/foo/bar/baz/baz3.scm
           the module, i.e. any code outside the importing module
           remains unaffected.
         </para>
+        <para>
+          If, however, an SRFI is to be imported into the top-level,
+          one can use the <function>require-extension</function>
+          mechanism from <ulink
+          url="http://srfi.schemers.org/srfi-55/srfi-55.html">SRFI-55</ulink>
+          to both load the module and import one or more SRFIs into the
+          top-level. For example:
+          <programlisting>
+(require-extension (srfi 1 9 23))
+          </programlisting> 
+        </para>
+        <para>
+          SRFI-55 is supported in the initial &SISC; environment, no
+          <function>require-library</function> or
+          <function>import</function> is needed to use
+          <function>require-extension</function>.
+        </para>
       </sect3>
     </sect2>
     <sect2>
