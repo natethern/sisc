@@ -551,18 +551,18 @@
 
 (module generic-io
   (char-ready?
-   read
    peek-char
+   read
    read-char
-   read-code
    read-block
    read-string
-   flush-output-port
+   read-code
    write
-   display
    write-char
    write-block
    write-string
+   display
+   flush-output-port
    open-input-file
    open-output-file
    open-binary-input-file
@@ -579,17 +579,18 @@
    unwrap-native-input-port
    unwrap-native-output-port
    gio/char-ready?
+   gio/peek-char
    gio/read
    gio/read-char
-   gio/read-code
    gio/read-block
    gio/read-string
-   gio/flush-output-port
+   gio/read-code
    gio/write
-   gio/display
    gio/write-char
    gio/write-block
    gio/write-string
+   gio/display
+   gio/flush-output-port
    gio/close
    <port> <input-port> <output-port>
    <character-input-port> <character-output-port>
@@ -668,17 +669,16 @@
     (putprop x (eval (sc-expand x)))
     ($sc-put-cte x `(global . ,x)))
  '(char-ready?
-   read
    peek-char
+   read
    read-char
-   read-code
    read-string
-   flush-output-port
+   read-code
    write
-   display
-   newline
    write-char
    write-string
+   display
+   flush-output-port
    open-input-file
    open-output-file
    close-input-port
