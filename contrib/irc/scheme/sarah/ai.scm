@@ -6,6 +6,7 @@
 (define <java.util.StringTokenizer> (java-class "java.util.StringTokenizer"))
 (define-generic next-token)
 (define-generic has-more-tokens)
+(define-generic jtrim (generic-java-procedure 'trim))
 
 (define somewhat-clean
   (string->list "abcdefghijklmnopqrstuvwxyz()[]->+-*/_01234567890?!."))
@@ -22,11 +23,15 @@
                          tokens)))])
     (substring str 0 (- (string-length str) 1))))
 
+
+(define (trim str)
+ (->string (jtrim (->jstring str))))
+
 (define (string-split str on)
   (let ([i (string-index str on)])
     (if i
-        (values (substring str 0 i)
-                (substring str (+ i (string-length on)) (string-length str)))
+        (values (trim (substring str 0 i))
+                (trim (substring str (+ i (string-length on)) (string-length str))))
         (values #f #f))))
 
 (define (string-index str substr)
@@ -107,7 +112,7 @@
           [response (and pattern 
                          (display pattern)
                          (and-let* ([handler (assq pattern pattern-handlers)]) 
-                                   ((cdr handler) from cleaned-message)))])
+                                   ((cdr handler) from cleaned-message to-bot)))])
     (if response
         (and (or (not bot-quiet) to-bot) response)
         (and (or (not bot-quiet) to-bot)
@@ -157,7 +162,7 @@
     "  (I'll run a simple program for you, but it must complete quickly!)\n"))
 
 
-(define (*-is type from message)
+(define (*-is type from message st)
   (let-values ([(ignoreables term) (string-split message " is ")])
     (and term 
          (begin 
@@ -176,7 +181,7 @@
 (define (quiet . args) (set! bot-quiet #t) "Fine, shutting up.")
 (define (listen . args) (set! bot-quiet #f) "Okay, I'm listening.")
 
-(define (evaluate from message)
+(define (evaluate from message st)
   (let-values ([(ignoreables term) (string-split message "evaluate ")])
     (let* ([evaluation-thread
            (thread/new 
@@ -209,16 +214,20 @@
       (thread/result watchdog-thread))))
 
 
-(define (learn from message)
+(define (learn from message st)
   (let-values ([(term definition) (string-split message " is at ")])    
     (and (or (and term definition
                   (if (store-item dbcon 'where term definition)
-                      (random-elem learn-responses)
+                      (string-append (ask-alice message) " ("
+				     (random-elem learn-responses) 
+				     ")")
                       (random-elem knewthat-responses)))
              (let-values ([(term definition) (string-split message " is ")])
                (and term definition
                     (if (store-item dbcon 'what term definition)
-                        (random-elem learn-responses)
+			(string-append (ask-alice message) " ("
+				       (random-elem learn-responses) 
+				       ")")
                         (random-elem knewthat-responses))))))))
 
 (define (onJoin channel sender login hostname)
@@ -243,7 +252,7 @@
   (remove-nick (string->symbol (->string channel))
                (normalize-nick sender)))
 (define (onQuit nick login hostname reason)
-  (onPart (find-nick (normalize-nick nick)) nick login hostname))
+  (onPart (->jstring (find-nick (normalize-nick nick))) nick login hostname))
 
 (define (onNickChange oldnick login hostname newnick)
   (let ([locations (find-nicks (normalize-nick oldnick))])
@@ -323,7 +332,7 @@
                 (->jstring 
                  (sisc:format "~a, ~a says: ~a" recipient sender message))))
   
-(define (tell from message)
+(define (tell from message st)
   (let-values ([(ignoreables message) (string-split message "tell ")])
     (and message
          (and-let* ([spidx (string-index message " ")]
@@ -340,7 +349,7 @@
                                   (string-downcase recipient) message)
                    (random-elem tell-responses))))))))
       
-(define (seen from message)
+(define (seen from message st)
   (let-values ([(ignoreables person) (string-split message "seen ")])
     (and person 
          (begin 
@@ -357,15 +366,21 @@
 (define (where-is from message) (*-is 'where from message))
 (define (who-is from message) (*-is 'what from message))
 
+(define (if-spoken-to handler)
+  (lambda (from message spoken-to)
+    (if spoken-to
+	(handler from message spoken-to)
+	#f)))
+
 (define pattern-handlers
-  `((WHATIS . ,what-is)
+  `((WHATIS . ,(if-spoken-to what-is))
     (WHATTIME . ,what-time)
-    (WHOIS . ,who-is)
-    (WHEREIS . ,where-is)
+    (WHOIS . ,(if-spoken-to who-is))
+    (WHEREIS . ,(if-spoken-to where-is))
     (QUIET . ,quiet)
     (SEEN . ,seen)
     (LISTEN . ,listen)
-    (LEARN . ,learn)
-    (EVALUATE . ,evaluate)
-    (TELL . ,tell)
+    (LEARN . ,(if-spoken-to learn))
+    (EVALUATE . ,(if-spoken-to evaluate))
+    (TELL . ,(if-spoken-to tell))
     (HELP . ,help)))

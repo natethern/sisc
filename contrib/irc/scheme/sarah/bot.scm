@@ -20,7 +20,7 @@
    (lambda ()
      (connect bot (->jstring "irc.freenode.net"))))
   
-  (define channels '("#sarahtest" "#sisc"))
+  (define channels '("#scheme" "#sisc"))
 
   (define (send-messages destination response)
     (let ([tokenizer (make <java.util.StringTokenizer> 
