@@ -90,6 +90,9 @@ public class Pair extends Value {
     protected final static int CONT=1, MUTABLE=2;
 
     public void serialize(Serializer s) throws IOException {
+        s.writeExpression(car);
+        s.writeExpression(cdr);
+        /*
         Pair p=this;
         boolean cont;
         do {
@@ -104,11 +107,13 @@ public class Pair extends Value {
                 p=(Pair)p.cdr;
             }
         } while (cont);
-        s.writeExpression(p.cdr);
+        s.writeExpression(p.cdr);*/
     }
 
     public void deserialize(Deserializer s) throws IOException {
-        Pair p=this;
+        car=(Value)s.readExpression();
+        cdr=(Value)s.readExpression();
+        /*        Pair p=this;
         boolean cont;
         do {
             p.car=(Value)s.readExpression();
@@ -123,7 +128,7 @@ public class Pair extends Value {
                 p=n;
             }
         } while (cont);
-        p.cdr=(Value)s.readExpression();
+        p.cdr=(Value)s.readExpression();*/
     }
 }
 
