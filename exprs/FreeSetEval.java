@@ -63,24 +63,26 @@ public class FreeSetEval extends Expression {
 	r.acc=VOID;
 	r.nxp=null;
     }
-#ifdef EXPRESS
+
     public Value express() {
 	return list(sym("FreeSet-eval"), lhs);
     }
-#endif
-#ifdef SERIALIZATION
+
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	s.serialize(lhs, dos);
-	s.serialize(senv, dos);
+	if (SERIALIZATION) {
+	    s.serialize(lhs, dos);
+	    s.serialize(senv, dos);
+	}
     }
 
     public FreeSetEval() {}
 
     public void deserialize(Serializer s, DataInputStream dis) 
 	throws IOException {
-	lhs=(Symbol)s.deserialize(dis);
-	senv=(AssociativeEnvironment)s.deserialize(dis);
-	envLoc=-1;
+	if (SERIALIZATION) {
+	    lhs=(Symbol)s.deserialize(dis);
+	    senv=(AssociativeEnvironment)s.deserialize(dis);
+	    envLoc=-1;
+	}
     }
-#endif
 }

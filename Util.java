@@ -38,8 +38,7 @@ import sisc.compiler.*;
 import java.util.*;
 import java.io.*;
 
-public abstract class Util {
-    public static final String VERSION = "r1.2.0";
+public abstract class Util implements Conf {
 
     protected static final Quantity FIVE=new Quantity(5);
     protected static final Expression APPEVAL=new AppEval();

@@ -32,10 +32,9 @@
  */
 package sisc.data;
 
-#ifdef SERIALIZATION
 import java.io.*;
 import sisc.Serializer;
-#endif
+
 public class Pair extends Value {
     public Value car, cdr;
 
@@ -108,38 +107,40 @@ public class Pair extends Value {
 	    cdr.equals(p.cdr);
     }
 
-#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) 
 	throws IOException {
-	Pair rv=this;
-	boolean cont;
-	do {
-	    cont=false;
-	    s.serialize(rv.car, dos);
-	    if (!s.seen(rv.cdr) &&
-		rv.cdr instanceof Pair && rv.cdr != EMPTYLIST) {
-		dos.writeBoolean(cont=true);
-		rv=(Pair)rv.cdr;
-	    } else {
-		dos.writeBoolean(false);
-	    }
-	} while (cont);
-	s.serialize(rv.cdr, dos);
+	if (SERIALIZATION) {
+	    Pair rv=this;
+	    boolean cont;
+	    do {
+		cont=false;
+		s.serialize(rv.car, dos);
+		if (!s.seen(rv.cdr) &&
+		    rv.cdr instanceof Pair && rv.cdr != EMPTYLIST) {
+		    dos.writeBoolean(cont=true);
+		    rv=(Pair)rv.cdr;
+		} else {
+		    dos.writeBoolean(false);
+		}
+	    } while (cont);
+	    s.serialize(rv.cdr, dos);
+	}
     }
 
     public void deserialize(Serializer s, DataInputStream dis) 
 	throws IOException {
-	car=(Value)s.deserialize(dis);
-	Pair rv=this, tmp, head=rv;
-	while (dis.readBoolean()) {
-	    tmp=new Pair();
-	    rv.cdr=tmp;
-	    tmp.car=(Value)s.deserialize(dis);
-	    rv=tmp;
+	if (SERIALIZATION) {
+	    car=(Value)s.deserialize(dis);
+	    Pair rv=this, tmp, head=rv;
+	    while (dis.readBoolean()) {
+		tmp=new Pair();
+		rv.cdr=tmp;
+		tmp.car=(Value)s.deserialize(dis);
+		rv=tmp;
+	    }
+	    rv.cdr=(Value)s.deserialize(dis);
 	}
-	rv.cdr=(Value)s.deserialize(dis);
     }
-#endif
 }
     
 

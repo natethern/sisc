@@ -32,10 +32,8 @@
  */
 package sisc.data;
 
-#ifdef SERIALIZATION
 import sisc.Serializer;
 import java.io.*;
-#endif
 
 public class SchemeBoolean extends Value implements Singleton {
     public static SchemeBoolean TRUE=new SchemeBoolean(true);
@@ -55,20 +53,22 @@ public class SchemeBoolean extends Value implements Singleton {
 	return val ? JTRUE : JFALSE;
     }
 
-#ifdef SERIALIZATION
     public SchemeBoolean() {}
 
     public void serialize(Serializer s,
 			  DataOutputStream dos) throws IOException {
-	dos.writeBoolean(val);
+	if (SERIALIZATION) {
+	    dos.writeBoolean(val);
+	}
     }
 
     public static Value getValue(DataInputStream dis) throws IOException {
-	boolean v=dis.readBoolean();
-	if (v)
-	    return TRUE;
-	return FALSE;
+	if (SERIALIZATION) {
+	    boolean v=dis.readBoolean();
+	    if (v)
+		return TRUE;
+	    return FALSE;
+	} else return null;
     }
-#endif
 }
 

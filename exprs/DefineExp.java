@@ -54,23 +54,25 @@ public class DefineExp extends Expression {
 	r.push(defineEval);
 	r.nxp=rhs;
     }
-#ifdef EXPRESS
+
     public Value express() {
 	return list(sym("Define-exp"), defineEval.express(), rhs.express());
     }
-#endif
-#ifdef SERIALIZATION
+
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	s.serialize(rhs, dos);
-	s.serialize(defineEval, dos);
+	if (SERIALIZATION) {
+	    s.serialize(rhs, dos);
+	    s.serialize(defineEval, dos);
+	}
     }
 
     public DefineExp() {}
 
     public void deserialize(Serializer s, DataInputStream dis) 
 	throws IOException {
-	rhs=s.deserialize(dis);
-	defineEval=(DefineEval)s.deserialize(dis);
+	if (SERIALIZATION) {
+	    rhs=s.deserialize(dis);
+	    defineEval=(DefineEval)s.deserialize(dis);
+	}
     }
-#endif
 }

@@ -127,30 +127,32 @@ public class AssociativeEnvironment extends NamedValue {
 	return displayNamedOpaque("environment");
     }
 
-#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	s.writeBer(symbolMap.size(), dos);
-	for (Iterator i=symbolMap.keySet().iterator(); i.hasNext();) {
-	    Symbol key=(Symbol)i.next();
-	    s.serialize(key, dos);
-	    int loc=((Integer)symbolMap.get(key)).intValue();
-	    s.serialize(env[loc], dos);
+	if (SERIALIZATION) {
+	    s.writeBer(symbolMap.size(), dos);
+	    for (Iterator i=symbolMap.keySet().iterator(); i.hasNext();) {
+		Symbol key=(Symbol)i.next();
+		s.serialize(key, dos);
+		int loc=((Integer)symbolMap.get(key)).intValue();
+		s.serialize(env[loc], dos);
+	    }
 	}
     }
 
     public void deserialize(Serializer s, DataInputStream dis) 
 	throws IOException {
-	int size=s.readBer(dis);
-	env=new Value[Math.max(10,size)];
-	symbolMap=new HashMap();
-	for (int i=0; i<size; i++) {
-	    Symbol id=(Symbol)s.deserialize(dis);
-	    env[i]=(Value)s.deserialize(dis);
-	    symbolMap.put(id, new Integer(i));
+	if (SERIALIZATION) {
+	    int size=s.readBer(dis);
+	    env=new Value[Math.max(10,size)];
+	    symbolMap=new HashMap();
+	    for (int i=0; i<size; i++) {
+		Symbol id=(Symbol)s.deserialize(dis);
+		env[i]=(Value)s.deserialize(dis);
+		symbolMap.put(id, new Integer(i));
+	    }
+	    nextFree=size;
 	}
-	nextFree=size;
     }
-#endif
 }
 
 

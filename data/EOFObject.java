@@ -33,9 +33,8 @@
 package sisc.data;
 
 import java.io.*;
-#ifdef SERIALIZATION
 import sisc.Serializer;
-#endif
+
 public class EOFObject extends Value implements Singleton {
     public static EOFObject EOF=new EOFObject();
 
@@ -49,9 +48,7 @@ public class EOFObject extends Value implements Singleton {
 	return new EOFException();
     }
 
-#ifdef SERIALIZATION
     public static Value getValue(DataInputStream dis) {
 	return EOF;
     }
-#endif
 }

@@ -62,11 +62,10 @@ public class Interpreter extends Util {
 	    r.acc=VOID;
 
 	}
-#ifdef EXPRESS
+
 	public Value express() {
 	    return list(sym("DisplayLn-exp"));
 	}
-#endif
     }
 
     //REGISTERS
@@ -257,80 +256,102 @@ public class Interpreter extends Util {
 
     // Heapfile loading/saving
     public void loadEnv(DataInputStream i) throws IOException {
-#ifdef SERIALIZATION
-	Serializer s=new Serializer(this);
-	CallFrame lstk=(CallFrame)s.deserialize(i);
-	AssociativeEnvironment lsymenv=(AssociativeEnvironment)s.deserialize(i);
-	Procedure levaluator=(Procedure)s.deserialize(i);
-	Procedure lwriter=(Procedure)s.deserialize(i);
-	SchemeBoolean lTRUE=(SchemeBoolean)s.deserialize(i),
-	    lFALSE=(SchemeBoolean)s.deserialize(i);
-	SchemeVoid lVOID=(SchemeVoid)s.deserialize(i);
-	EmptyList lEMPTYLIST=(EmptyList)s.deserialize(i);
-	EOFObject lEOF=(EOFObject)s.deserialize(i);
-	try {
-#else
-	ObjectInputStream ois=new ObjectInputStream(i);
-	try {
-	    CallFrame lstk=(CallFrame)ois.readObject();
-	    AssociativeEnvironment lsymenv=(AssociativeEnvironment)ois.readObject();
-	    Procedure levaluator=(Procedure)ois.readObject();
-	    Procedure lwriter=(Procedure)ois.readObject();
-	    SchemeBoolean lTRUE=(SchemeBoolean)ois.readObject(),
-	    lFALSE=(SchemeBoolean)ois.readObject();
-	    SchemeVoid lVOID=(SchemeVoid)ois.readObject();
-	    EmptyList lEMPTYLIST=(EmptyList)ois.readObject();
-	    EOFObject lEOF=(EOFObject)ois.readObject();
-#endif	
-	    
-	    stk=lstk;
-	    symenv=lsymenv;
+	if (SERIALIZATION) {
+	    Serializer s=new Serializer(this);
+	    CallFrame lstk=(CallFrame)s.deserialize(i);
+	    AssociativeEnvironment lsymenv=(AssociativeEnvironment)s.deserialize(i);
+	    Procedure levaluator=(Procedure)s.deserialize(i);
+	    Procedure lwriter=(Procedure)s.deserialize(i);
+	    SchemeBoolean lTRUE=(SchemeBoolean)s.deserialize(i),
+		lFALSE=(SchemeBoolean)s.deserialize(i);
+	    SchemeVoid lVOID=(SchemeVoid)s.deserialize(i);
+	    EmptyList lEMPTYLIST=(EmptyList)s.deserialize(i);
+	    EOFObject lEOF=(EOFObject)s.deserialize(i);
+
 	    try {
-		toplevel_env=(AssociativeEnvironment)symenv.lookup(TOPLEVEL);
-	    } catch (ArrayIndexOutOfBoundsException e) {
-		throw new IOException("Heap did not contain toplevel environment!");
+		stk=lstk;
+		symenv=lsymenv;
+		try {
+		    toplevel_env=(AssociativeEnvironment)symenv.lookup(TOPLEVEL);
+		} catch (ArrayIndexOutOfBoundsException e) {
+		    throw new IOException("Heap did not contain toplevel environment!");
+		}
+		writer=lwriter;
+		evaluator=levaluator;
+		TRUE=lTRUE;
+		FALSE=lFALSE;
+		VOID=lVOID;
+		EMPTYLIST=lEMPTYLIST;
+		EOF=lEOF;
+	    } catch (Exception e) {
+		throw new IOException(e.getMessage());
+	    } finally {
+		pop(stk);
 	    }
-	    writer=lwriter;
-	    evaluator=levaluator;
-	    TRUE=lTRUE;
-	    FALSE=lFALSE;
-	    VOID=lVOID;
-	    EMPTYLIST=lEMPTYLIST;
-	    EOF=lEOF;
-	} catch (Exception e) {
-	    throw new IOException(e.getMessage());
-	} finally {
-	    pop(stk);
+	} else {
+	    ObjectInputStream ois=new ObjectInputStream(i);
+
+	    try {
+		CallFrame lstk=(CallFrame)ois.readObject();
+		AssociativeEnvironment lsymenv=(AssociativeEnvironment)ois.readObject();
+		Procedure levaluator=(Procedure)ois.readObject();
+		Procedure lwriter=(Procedure)ois.readObject();
+		SchemeBoolean lTRUE=(SchemeBoolean)ois.readObject(),
+		    lFALSE=(SchemeBoolean)ois.readObject();
+		SchemeVoid lVOID=(SchemeVoid)ois.readObject();
+		EmptyList lEMPTYLIST=(EmptyList)ois.readObject();
+		EOFObject lEOF=(EOFObject)ois.readObject();
+
+		
+		stk=lstk;
+		symenv=lsymenv;
+		try {
+		    toplevel_env=(AssociativeEnvironment)symenv.lookup(TOPLEVEL);
+		} catch (ArrayIndexOutOfBoundsException e) {
+		    throw new IOException("Heap did not contain toplevel environment!");
+		}
+		writer=lwriter;
+		evaluator=levaluator;
+		TRUE=lTRUE;
+		FALSE=lFALSE;
+		VOID=lVOID;
+		EMPTYLIST=lEMPTYLIST;
+		EOF=lEOF;
+	    } catch (Exception e) {
+		throw new IOException(e.getMessage());
+	    } finally {
+		pop(stk);
+	    }
 	}
     }
 
     public void saveEnv(DataOutputStream o) throws IOException {
 	save();
-#ifdef SERIALIZATION
-	Serializer s=new Serializer(this);
-	s.serialize(stk, o);
-	s.serialize(symenv, o);
-	s.serialize(evaluator, o);
-	s.serialize(writer, o);
-	s.serialize(TRUE, o);
-	s.serialize(FALSE, o);
-	s.serialize(VOID,o);
-	s.serialize(EMPTYLIST,o);
-	s.serialize(EOF,o);
-	o.flush();
-#else
-	ObjectOutputStream out=new ObjectOutputStream(o);
-	out.writeObject(stk);
-	out.writeObject(symenv);
-	out.writeObject(evaluator);
-	out.writeObject(writer);
-	out.writeObject(TRUE);
-	out.writeObject(FALSE);
-	out.writeObject(VOID);
-	out.writeObject(EMPTYLIST);
-	out.writeObject(EOF);
-	out.flush();
-#endif
+	if (SERIALIZATION) {
+	    Serializer s=new Serializer(this);
+	    s.serialize(stk, o);
+	    s.serialize(symenv, o);
+	    s.serialize(evaluator, o);
+	    s.serialize(writer, o);
+	    s.serialize(TRUE, o);
+	    s.serialize(FALSE, o);
+	    s.serialize(VOID,o);
+	    s.serialize(EMPTYLIST,o);
+	    s.serialize(EOF,o);
+	    o.flush();
+	} else {
+	    ObjectOutputStream out=new ObjectOutputStream(o);
+	    out.writeObject(stk);
+	    out.writeObject(symenv);
+	    out.writeObject(evaluator);
+	    out.writeObject(writer);
+	    out.writeObject(TRUE);
+	    out.writeObject(FALSE);
+	    out.writeObject(VOID);
+	    out.writeObject(EMPTYLIST);
+	    out.writeObject(EOF);
+	    out.flush();
+	}
 
 	pop(stk);
     }

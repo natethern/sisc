@@ -156,7 +156,6 @@
 	       (java/method-proxy c (car x) coerce))
 	      (loop (cdr x)))))
       (let loop ([x fields])
-	(display x)
 	(if (not (null? x))
 	    (begin
 	      (putprop 

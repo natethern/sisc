@@ -66,23 +66,26 @@ public class Values extends Value {
 	error(r, "multiple values received in single-value context");
     }
 
-#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	s.writeBer(values.length, dos);
-	for (int i=0; i<values.length; i++) {
-	    s.serialize(values[i], dos);
+	if (SERIALIZATION) {
+	    s.writeBer(values.length, dos);
+	    for (int i=0; i<values.length; i++) {
+		s.serialize(values[i], dos);
+	    }
 	}
     }
 
     public Values() {}
+
     public void deserialize(Serializer s, DataInputStream dis) 
 	throws IOException {
-	int size=s.readBer(dis);
-	values=new Value[size];
-	for (int i=0; i<size; i++) {
-	    values[i]=(Value)s.deserialize(dis);
+	if (SERIALIZATION) {
+	    int size=s.readBer(dis);
+	    values=new Value[size];
+	    for (int i=0; i<size; i++) {
+		values[i]=(Value)s.deserialize(dis);
+	    }
 	}
     }
-#endif
 }
 

@@ -56,7 +56,7 @@ public class BeginExp extends Expression {
 	    r.pop(r.stk);
 
     }
-#ifdef EXPRESS
+
     public Value express() {
 	Pair args=list(tail.express());
 	for (int i=exprs.length-1; i>=0; i--) {
@@ -64,26 +64,28 @@ public class BeginExp extends Expression {
 	}
 	return new Pair(sym("Begin-exp"), args);
     }
-#endif
-#ifdef SERIALIZATION
+
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	s.writeBer(exprs.length, dos);
-	for (int i=0; i<exprs.length; i++) 
-	    s.serialize(exprs[i], dos);
-	s.serialize(tail, dos);
+	if (SERIALIZATION) {
+	    s.writeBer(exprs.length, dos);
+	    for (int i=0; i<exprs.length; i++) 
+		s.serialize(exprs[i], dos);
+	    s.serialize(tail, dos);
+	}
     }
 
     public BeginExp() {}
 
     public void deserialize(Serializer s, DataInputStream dis) 
 	throws IOException {
-	int size=s.readBer(dis);
-	exprs=new Expression[size];
-	for (int i=0; i<size; i++) 
-	    exprs[i]=s.deserialize(dis);
-	tail=s.deserialize(dis);
+	if (SERIALIZATION) {
+	    int size=s.readBer(dis);
+	    exprs=new Expression[size];
+	    for (int i=0; i<size; i++) 
+		exprs[i]=s.deserialize(dis);
+	    tail=s.deserialize(dis);
+	}
     }
-#endif
 }
 
 

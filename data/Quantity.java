@@ -1,10 +1,8 @@
 package sisc.data;
 
 import java.math.*;
-#ifdef SERIALIZATION
 import sisc.Serializer;
 import java.io.*;
-#endif
 
 public class Quantity extends Value {
     public static int min_precision; 
@@ -241,10 +239,6 @@ public class Quantity extends Value {
     }
 
      
-
-
-
-
     protected void simplify() {
 	if (type==RATIO) {
 	    if (de.equals(_BI_ZERO))
@@ -254,6 +248,10 @@ public class Quantity extends Value {
 		i=i.divide(gcd);
 		de=de.divide(gcd);
 	    }
+	    if (de.signum()==-1) {
+		i=i.negate();
+	        de=de.negate();
+	    }
 	    if (de.equals(_BI_ONE)) {
 		de=null;
 		type=INTEG;
@@ -262,7 +260,13 @@ public class Quantity extends Value {
 	    if (im==0.0) {
 		type=DECIM;
 	    }
-	} else if (type==DECIM) {
+	}
+	if (type==INTEG) {
+	    if (i.compareTo(_INT_MAX)==-1 &&
+		i.compareTo(_INT_MIN)==1) {
+		val=i.intValue();
+		type=FIXEDINT;		
+	    }
 	}
     }
 
@@ -1193,89 +1197,74 @@ public class Quantity extends Value {
 	out_cache_radix=(byte)radix;
 	return out_cache=b.toString();
     }
-    
-    public Object javaValue() {
-	switch(type) {
-	case FIXEDINT:
-	    if (val < Integer.MAX_VALUE && val > Integer.MIN_VALUE)
-		return new Integer((int)val);
-	    else return new Long(val);
-	case INTEG:
-	    return i;
-	case DECIM:
-	    return new Double(d);
-	case RATIO:
-	    return new Double(ratioToDecimal(i, de));
-	case COMPLEX:
-	}
-	return null;
-    }
 
-#ifdef SERIALIZATION
     public void deserialize(Serializer s,
 			    DataInputStream dis) throws IOException {
-	type=s.readBer(dis);
-	switch (type) {
-	case FIXEDINT:
-	    val=s.readBer(dis);
-	    break;
-	case INTEG:
-	    byte[] buffer=new byte[s.readBer(dis)];
-	    dis.readFully(buffer);
-	    i=new BigInteger(buffer);
-	    break;
-	case DECIM:
-	    d=dis.readDouble();
-	    break;
-	case RATIO:
-	    buffer=new byte[s.readBer(dis)];
-	    dis.readFully(buffer);
-	    i=new BigInteger(buffer);
-	    buffer=new byte[s.readBer(dis)];
-	    dis.readFully(buffer);
-	    de=new BigInteger(buffer);
-	    break;
-	case COMPLEX:
-	    d=dis.readDouble();
-	    im=dis.readDouble();
-	    break;
+	if (SERIALIZATION) {
+	    type=s.readBer(dis);
+	    switch (type) {
+	    case FIXEDINT:
+		val=s.readBer(dis);
+		break;
+	    case INTEG:
+		byte[] buffer=new byte[s.readBer(dis)];
+		dis.readFully(buffer);
+		i=new BigInteger(buffer);
+		break;
+	    case DECIM:
+		d=dis.readDouble();
+		break;
+	    case RATIO:
+		buffer=new byte[s.readBer(dis)];
+		dis.readFully(buffer);
+		i=new BigInteger(buffer);
+		buffer=new byte[s.readBer(dis)];
+		dis.readFully(buffer);
+		de=new BigInteger(buffer);
+		break;
+	    case COMPLEX:
+		d=dis.readDouble();
+		im=dis.readDouble();
+		break;
+	    }
+	    simplify();
 	}
-	simplify();
     }
-
+	
     protected BigInteger unscaledValue(BigDecimal d) {
 	return d.setScale(0).toBigInteger();
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	s.writeBer(type, dos);
-	switch (type) {
-	case FIXEDINT:
-	    s.writeBer(val, dos);
-	    break;
-	case INTEG:
-	    byte[] buffer=i.toByteArray();
-	    s.writeBer(buffer.length, dos);
-	    dos.write(buffer);
-	    break;
-	case DECIM:
-	    dos.writeDouble(d);
-	    break;
-	case RATIO:
-	    buffer=i.toByteArray();
-	    s.writeBer(buffer.length, dos);
-	    dos.write(buffer);
-	    buffer=de.toByteArray();
-	    s.writeBer(buffer.length, dos);
-	    dos.write(buffer);
-	    break;
-	case COMPLEX:
-	    dos.writeDouble(d);
-	    dos.writeDouble(im);
-	    break;
+	if (SERIALIZATION) {
+	    s.writeBer(type, dos);
+	    switch (type) {
+	    case FIXEDINT:
+		s.writeBer(val, dos);
+		break;
+	    case INTEG:
+		byte[] buffer=i.toByteArray();
+		s.writeBer(buffer.length, dos);
+		dos.write(buffer);
+		break;
+	    case DECIM:
+		dos.writeDouble(d);
+		break;
+	    case RATIO:
+		buffer=i.toByteArray();
+		s.writeBer(buffer.length, dos);
+		dos.write(buffer);
+		buffer=de.toByteArray();
+		s.writeBer(buffer.length, dos);
+		dos.write(buffer);
+		break;
+	    case COMPLEX:
+		dos.writeDouble(d);
+		dos.writeDouble(im);
+		break;
+	    }
 	}
     }
-#endif
 }
 
 

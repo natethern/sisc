@@ -36,6 +36,8 @@ import sisc.*;
 import sisc.data.*;
 import java.lang.reflect.*;
 import java.util.*;
+import sisc.Serializer;
+import java.io.*;
 
 public class J2S extends Module {
     public static final int JFIELDREF=1, JCLASSFORNAME=2,
@@ -44,7 +46,7 @@ public class J2S extends Module {
 	JINSTANCEOFQ=10, JGETCLASS=11, JGETCLASSNAME=12,
 	JGETFIELDS=13;
 
-    static class JavaClass extends Value {
+    public static class JavaClass extends Value {
 	public Class clazz;
 
 	public JavaClass(Class c) {
@@ -60,9 +62,29 @@ public class J2S extends Module {
 	public boolean valueEqual(Value ov) {
 	    return ((JavaClass)ov).clazz.equals(clazz);
 	}
+
+	public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	    if (SERIALIZATION) {
+		s.putClass(clazz, dos);
+	    }
+	}
+	
+	public JavaClass() {}
+	
+	public void deserialize(Serializer s, DataInputStream dis)
+	    throws IOException {
+	    if (SERIALIZATION) {
+		try {
+		    clazz=s.getClass(dis);
+		} catch (ClassNotFoundException cnf) {
+		    cnf.printStackTrace();
+		}
+	    }
+	}
+
     }
 
-    static class JavaObject extends Value {
+    public static class JavaObject extends Value {
 	public Object o;
 
 	public JavaObject(Object c) {
@@ -78,6 +100,8 @@ public class J2S extends Module {
 	public boolean valueEqual(Value ov) {
 	    return ((JavaObject)ov).o.equals(o);
 	}
+
+	public JavaObject() {}
     }
 
 

@@ -55,23 +55,25 @@ public class DefineEval extends Expression {
 	r.acc=VOID;
 	r.nxp=null;
     }
-#ifdef EXPRESS
+
     public Value express() {
 	return list(sym("Define-eval"), lhs);
     }
-#endif
-#ifdef SERIALIZATION
+
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	s.serialize(lhs, dos);
+	if (SERIALIZATION) {
+	    s.serialize(lhs, dos);
+	}
     }
 
     public DefineEval() {}
 
     public void deserialize(Serializer s, DataInputStream dis) 
 	throws IOException {
-	lhs=(Symbol)s.deserialize(dis);
+	if (SERIALIZATION) {
+	    lhs=(Symbol)s.deserialize(dis);
+	}
     }
-#endif
 }
 
 

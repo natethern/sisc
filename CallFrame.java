@@ -93,42 +93,44 @@ public class CallFrame extends Procedure {
 	return displayNamedOpaque("continuation");
     }
 
-#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	if (vlr==null) 
-	    dos.writeBoolean(false);
-	else {
-	    dos.writeBoolean(true);
-	    s.writeBer(vlr.length, dos);
-	    for (int i=0; i<vlr.length; i++) 
-		s.serialize(vlr[i], dos);
+	if (SERIALIZATION) {
+	    if (vlr==null) 
+		dos.writeBoolean(false);
+	    else {
+		dos.writeBoolean(true);
+		s.writeBer(vlr.length, dos);
+		for (int i=0; i<vlr.length; i++) 
+		    s.serialize(vlr[i], dos);
+	    }
+	    s.serialize(nxp, dos);
+	    s.serialize(fk, dos);
+	    s.serialize(parent, dos);
+	    s.serialize(env, dos);
+	    
+	    dos.writeBoolean(lock);
 	}
-	s.serialize(nxp, dos);
-	s.serialize(fk, dos);
-	s.serialize(parent, dos);
-	s.serialize(env, dos);
-				      
-	dos.writeBoolean(lock);
     }
 
     public CallFrame() {}
 
     public void deserialize(Serializer s, DataInputStream dis) 
 	throws IOException {
-	vlr=null;
-	if (dis.readBoolean()) {
-	    int size=s.readBer(dis);
-	    vlr=new Value[size];
-	    for (int i=0; i<size; i++) 
-		vlr[i]=(Value)s.deserialize(dis);
+	if (SERIALIZATION) {
+	    vlr=null;
+	    if (dis.readBoolean()) {
+		int size=s.readBer(dis);
+		vlr=new Value[size];
+		for (int i=0; i<size; i++) 
+		    vlr[i]=(Value)s.deserialize(dis);
+	    }
+	    nxp=s.deserialize(dis);
+	    fk=(CallFrame)s.deserialize(dis);
+	    parent=(CallFrame)s.deserialize(dis);
+	    env=(LexicalEnvironment)s.deserialize(dis);
+	    lock=dis.readBoolean();
 	}
-	nxp=s.deserialize(dis);
-	fk=(CallFrame)s.deserialize(dis);
-	parent=(CallFrame)s.deserialize(dis);
-	env=(LexicalEnvironment)s.deserialize(dis);
-	lock=dis.readBoolean();
     }
-#endif
 }
 
 

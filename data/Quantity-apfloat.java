@@ -33,10 +33,8 @@
 package sisc.data;
 
 import java.math.*;
-#ifdef SERIALIZATION
 import java.io.*;
 import sisc.Serializer;
-#endif
 
 public class Quantity extends Value {
     public static int min_precision; 
@@ -131,14 +129,9 @@ public class Quantity extends Value {
     }
 
     public Quantity(BigInteger i) {
-	if (i.compareTo(_INT_MAX)==-1 &&
-	    i.compareTo(_INT_MIN)==1) {
-	    val=i.intValue();
-	    type=FIXEDINT;		
-	} else {
-	    type=INTEG;
-	    this.i=i;
-	}
+	type=INTEG;
+	this.i=i;
+	simplify();
     }
 
     public Quantity (BigInteger numerator, BigInteger denominator) {
@@ -293,6 +286,10 @@ public class Quantity extends Value {
 		i=i.divide(gcd);
 		de=de.divide(gcd);
 	    }
+	    if (de.signum()==-1) {
+		i=i.negate();
+	        de=de.negate();
+	    }
 	    if (de.equals(_BI_ONE)) {
 		de=null;
 		type=INTEG;
@@ -311,6 +308,13 @@ public class Quantity extends Value {
 	} else if (type==DECIM) {
 	    if (d.scale()>max_precision) {
 		d=d.setScale(max_precision, BigDecimal.ROUND_HALF_EVEN);
+	    }
+	} 
+	if (type==INTEG) {
+	    if (i.compareTo(_INT_MAX)==-1 &&
+		i.compareTo(_INT_MIN)==1) {
+		val=i.intValue();
+		type=FIXEDINT;		
 	    }
 	}
     }
@@ -1248,43 +1252,45 @@ public class Quantity extends Value {
 #ifdef SERIALIZATION
     public void deserialize(Serializer s,
 			    DataInputStream dis) throws IOException {
-	type=s.readBer(dis);
-	switch (type) {
-	case FIXEDINT:
-	    val=s.readBer(dis);
-	    break;
-	case INTEG:
-	    byte[] buffer=new byte[s.readBer(dis)];
-	    dis.readFully(buffer);
-	    i=new BigInteger(buffer);
-	    break;
-	case DECIM:
-	    buffer=new byte[s.readBer(dis)];
-	    int scale=s.readBer(dis);
-	    dis.readFully(buffer);
-
-	    d=new BigDecimal(new BigInteger(buffer), scale);
-	    break;
-	case RATIO:
-	    buffer=new byte[s.readBer(dis)];
-	    dis.readFully(buffer);
-	    i=new BigInteger(buffer);
-	    buffer=new byte[s.readBer(dis)];
-	    dis.readFully(buffer);
-	    de=new BigInteger(buffer);
-	    break;
-	case COMPLEX:
-	    buffer=new byte[s.readBer(dis)];
-	    dis.readFully(buffer);
-	    scale=s.readBer(dis);
-	    d=new BigDecimal(new BigInteger(buffer), scale);
-	    buffer=new byte[s.readBer(dis)];
-	    dis.readFully(buffer);
-	    scale=s.readBer(dis);
-	    im=new BigDecimal(new BigInteger(buffer), scale);
-	    break;
+	if (SERIALIZATION) {
+	    type=s.readBer(dis);
+	    switch (type) {
+	    case FIXEDINT:
+		val=s.readBer(dis);
+		break;
+	    case INTEG:
+		byte[] buffer=new byte[s.readBer(dis)];
+		dis.readFully(buffer);
+		i=new BigInteger(buffer);
+		break;
+	    case DECIM:
+		buffer=new byte[s.readBer(dis)];
+		int scale=s.readBer(dis);
+		dis.readFully(buffer);
+		
+		d=new BigDecimal(new BigInteger(buffer), scale);
+		break;
+	    case RATIO:
+		buffer=new byte[s.readBer(dis)];
+		dis.readFully(buffer);
+		i=new BigInteger(buffer);
+		buffer=new byte[s.readBer(dis)];
+		dis.readFully(buffer);
+		de=new BigInteger(buffer);
+		break;
+	    case COMPLEX:
+		buffer=new byte[s.readBer(dis)];
+		dis.readFully(buffer);
+		scale=s.readBer(dis);
+		d=new BigDecimal(new BigInteger(buffer), scale);
+		buffer=new byte[s.readBer(dis)];
+		dis.readFully(buffer);
+		scale=s.readBer(dis);
+		im=new BigDecimal(new BigInteger(buffer), scale);
+		break;
+	    }
+	    simplify();
 	}
-	simplify();
     }
 
     protected BigInteger unscaledValue(BigDecimal d) {
@@ -1292,47 +1298,48 @@ public class Quantity extends Value {
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	s.writeBer(type, dos);
-	switch (type) {
-	case FIXEDINT:
-	    s.writeBer(val, dos);
-	    break;
-	case INTEG:
-	    byte[] buffer=i.toByteArray();
-	    s.writeBer(buffer.length, dos);
-	    dos.write(buffer);
-	    break;
-	case DECIM:
-	    int scale=d.scale();
-	    buffer=unscaledValue(d).toByteArray();
-	    s.writeBer(buffer.length, dos);
-	    s.writeBer(scale, dos);
-	    dos.write(buffer);
-	    break;
-	case RATIO:
-	    buffer=i.toByteArray();
-	    s.writeBer(buffer.length, dos);
-	    dos.write(buffer);
-	    buffer=de.toByteArray();
-	    s.writeBer(buffer.length, dos);
-	    dos.write(buffer);
-	    break;
-	case COMPLEX:
-	    buffer=unscaledValue(d).toByteArray();
-	    scale=d.scale();
-	    s.writeBer(buffer.length, dos);
-	    s.writeBer(scale, dos);
-	    dos.write(buffer);
-
-	    buffer=unscaledValue(d).toByteArray();
-	    scale=im.scale();
-	    s.writeBer(buffer.length, dos);
-	    s.writeBer(scale, dos);
-	    dos.write(buffer);
-	    break;
+	if (SERIALIZATION) {
+	    s.writeBer(type, dos);
+	    switch (type) {
+	    case FIXEDINT:
+		s.writeBer(val, dos);
+		break;
+	    case INTEG:
+		byte[] buffer=i.toByteArray();
+		s.writeBer(buffer.length, dos);
+		dos.write(buffer);
+		break;
+	    case DECIM:
+		int scale=d.scale();
+		buffer=unscaledValue(d).toByteArray();
+		s.writeBer(buffer.length, dos);
+		s.writeBer(scale, dos);
+		dos.write(buffer);
+		break;
+	    case RATIO:
+		buffer=i.toByteArray();
+		s.writeBer(buffer.length, dos);
+		dos.write(buffer);
+		buffer=de.toByteArray();
+		s.writeBer(buffer.length, dos);
+		dos.write(buffer);
+		break;
+	    case COMPLEX:
+		buffer=unscaledValue(d).toByteArray();
+		scale=d.scale();
+		s.writeBer(buffer.length, dos);
+		s.writeBer(scale, dos);
+		dos.write(buffer);
+		
+		buffer=unscaledValue(d).toByteArray();
+		scale=im.scale();
+		s.writeBer(buffer.length, dos);
+		s.writeBer(scale, dos);
+		dos.write(buffer);
+		break;
+	    }
 	}
     }
-#endif
 }
 
 

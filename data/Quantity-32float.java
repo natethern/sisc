@@ -1,10 +1,9 @@
 package sisc.data;
 
 import java.math.*;
-#ifdef SERIALIZATION
 import sisc.Serializer;
 import java.io.*;
-#endif
+
 public class Quantity extends Value {
     public static int min_precision; 
     public static int max_precision;
@@ -239,11 +238,6 @@ public class Quantity extends Value {
 	simplify();
     }
 
-     
-
-
-
-
     protected void simplify() {
 	if (type==RATIO) {
 	    if (de.equals(_BI_ZERO))
@@ -253,6 +247,10 @@ public class Quantity extends Value {
 		i=i.divide(gcd);
 		de=de.divide(gcd);
 	    }
+	    if (de.signum()==-1) {
+		i=i.negate();
+	        de=de.negate();
+	    }
 	    if (de.equals(_BI_ONE)) {
 		de=null;
 		type=INTEG;
@@ -261,7 +259,13 @@ public class Quantity extends Value {
 	    if (im==0.0f) {
 		type=DECIM;
 	    }
-	} else if (type==DECIM) {
+	}
+	if (type==INTEG) {
+	    if (i.compareTo(_INT_MAX)==-1 &&
+		i.compareTo(_INT_MIN)==1) {
+		val=i.intValue();
+		type=FIXEDINT;		
+	    }
 	}
     }
 
@@ -1193,36 +1197,37 @@ public class Quantity extends Value {
 	return out_cache=b.toString();
     }
 
-#ifdef SERIALIZATION
     public void deserialize(Serializer s,
 			    DataInputStream dis) throws IOException {
-	type=s.readBer(dis);
-	switch (type) {
-	case FIXEDINT:
-	    val=s.readBer(dis);
-	    break;
-	case INTEG:
-	    byte[] buffer=new byte[s.readBer(dis)];
-	    dis.readFully(buffer);
-	    i=new BigInteger(buffer);
-	    break;
-	case DECIM:
-	    d=dis.readFloat();
-	    break;
-	case RATIO:
-	    buffer=new byte[s.readBer(dis)];
-	    dis.readFully(buffer);
-	    i=new BigInteger(buffer);
-	    buffer=new byte[s.readBer(dis)];
-	    dis.readFully(buffer);
-	    de=new BigInteger(buffer);
-	    break;
-	case COMPLEX:
-	    d=dis.readFloat();
-	    im=dis.readFloat();
-	    break;
+	if (SERIALIZATION) {
+	    type=s.readBer(dis);
+	    switch (type) {
+	    case FIXEDINT:
+		val=s.readBer(dis);
+		break;
+	    case INTEG:
+		byte[] buffer=new byte[s.readBer(dis)];
+		dis.readFully(buffer);
+		i=new BigInteger(buffer);
+		break;
+	    case DECIM:
+		d=dis.readFloat();
+		break;
+	    case RATIO:
+		buffer=new byte[s.readBer(dis)];
+		dis.readFully(buffer);
+		i=new BigInteger(buffer);
+		buffer=new byte[s.readBer(dis)];
+		dis.readFully(buffer);
+		de=new BigInteger(buffer);
+		break;
+	    case COMPLEX:
+		d=dis.readFloat();
+		im=dis.readFloat();
+		break;
+	    }
+	    simplify();
 	}
-	simplify();
     }
 
     protected BigInteger unscaledValue(BigDecimal d) {
@@ -1230,34 +1235,35 @@ public class Quantity extends Value {
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	s.writeBer(type, dos);
-	switch (type) {
-	case FIXEDINT:
-	    s.writeBer(val, dos);
-	    break;
-	case INTEG:
-	    byte[] buffer=i.toByteArray();
-	    s.writeBer(buffer.length, dos);
-	    dos.write(buffer);
-	    break;
-	case DECIM:
-	    dos.writeFloat(d);
-	    break;
-	case RATIO:
-	    buffer=i.toByteArray();
-	    s.writeBer(buffer.length, dos);
-	    dos.write(buffer);
-	    buffer=de.toByteArray();
-	    s.writeBer(buffer.length, dos);
-	    dos.write(buffer);
-	    break;
-	case COMPLEX:
-	    dos.writeFloat(d);
-	    dos.writeFloat(im);
-	    break;
+	if (SERIALIZATION) {
+	    s.writeBer(type, dos);
+	    switch (type) {
+	    case FIXEDINT:
+		s.writeBer(val, dos);
+		break;
+	    case INTEG:
+		byte[] buffer=i.toByteArray();
+		s.writeBer(buffer.length, dos);
+		dos.write(buffer);
+		break;
+	    case DECIM:
+		dos.writeFloat(d);
+		break;
+	    case RATIO:
+		buffer=i.toByteArray();
+		s.writeBer(buffer.length, dos);
+		dos.write(buffer);
+		buffer=de.toByteArray();
+		s.writeBer(buffer.length, dos);
+		dos.write(buffer);
+		break;
+	    case COMPLEX:
+		dos.writeFloat(d);
+		dos.writeFloat(im);
+		break;
+	    }
 	}
     }
-#endif
 }
 
 

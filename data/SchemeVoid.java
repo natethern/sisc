@@ -32,10 +32,9 @@
  */
 package sisc.data;
 
-#ifdef SERIALIZATION
 import java.io.*;
 import sisc.Serializer;
-#endif
+
 public class SchemeVoid extends Value implements Singleton {
     public static SchemeVoid VOID=new SchemeVoid();
 
@@ -45,9 +44,7 @@ public class SchemeVoid extends Value implements Singleton {
 	return "#<void>";
     }    
 
-#ifdef SERIALIZATION
     public static Value getValue(DataInputStream dis) {
 	return VOID;
     }
-#endif
 }

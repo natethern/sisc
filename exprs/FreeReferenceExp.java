@@ -66,24 +66,27 @@ public class FreeReferenceExp extends Expression implements Immediate {
 	}
 	return lenv.env[envLoc];
     }
-#ifdef EXPRESS
+
     public Value express() {
 	return list(sym("FreeReference-exp"), sym);
     }
-#endif
-#ifdef SERIALIZATION
+
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	s.serialize(sym, dos);
-	s.serialize(lenv, dos);
+	if (SERIALIZATION) {
+	    s.serialize(sym, dos);
+	    s.serialize(lenv, dos);
+	}
     }
 
     public FreeReferenceExp() {}
 
     public void deserialize(Serializer s, DataInputStream dis) 
 	throws IOException {
-	sym=(Symbol)s.deserialize(dis);
-	lenv=(AssociativeEnvironment)s.deserialize(dis);
-	envLoc=-1;
+	if (SERIALIZATION) {
+	    sym=(Symbol)s.deserialize(dis);
+	    lenv=(AssociativeEnvironment)s.deserialize(dis);
+	    envLoc=-1;
+	}
     }
 
     public boolean equals(Object o) {
@@ -96,5 +99,4 @@ public class FreeReferenceExp extends Expression implements Immediate {
     public int hashCode() {
 	return lenv.hashCode() ^ sym.hashCode();
     }
-#endif
 }

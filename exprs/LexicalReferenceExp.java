@@ -53,15 +53,16 @@ public class LexicalReferenceExp extends Expression implements Immediate {
     public Value getValue(Interpreter r) throws ContinuationException {
 	return r.env.lookup(depth, pos);
     }
-#ifdef EXPRESS
+
     public Value express() {
 	return new Pair(new Quantity(depth), new Quantity(pos));
     }
-#endif
-#ifdef SERIALIZATION
+
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	s.writeBer(depth, dos);
-	s.writeBer(pos, dos);
+	if (SERIALIZATION) {
+	    s.writeBer(depth, dos);
+	    s.writeBer(pos, dos);
+	}
     }
 
     public boolean equals(Object o) {
@@ -78,10 +79,11 @@ public class LexicalReferenceExp extends Expression implements Immediate {
 
     public void deserialize(Serializer s, DataInputStream dis) 
 	throws IOException {
-	depth=s.readBer(dis);
-	pos=s.readBer(dis);
+	if (SERIALIZATION) {
+	    depth=s.readBer(dis);
+	    pos=s.readBer(dis);
+	}
     }
-#endif
 }
 
 

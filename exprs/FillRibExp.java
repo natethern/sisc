@@ -86,37 +86,39 @@ public class FillRibExp extends Expression implements Volatile {
     public void lock() {
 	locked=true;
     }
-#ifdef EXPRESS
+
     public Value express() {
 	return list(sym("FillRib-exp"), rands[pos].express(), last.express());
     }
-#endif
-#ifdef SERIALIZATION
+
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	s.writeBer(rands.length, dos);
-	for (int i=0; i<rands.length; i++) 
-	    s.serialize(rands[i], dos);
-	s.serialize(last, dos);
-	s.serialize(cleanup, dos);
-	s.writeBer(pos, dos);
-	dos.writeBoolean(locked);
+	if (SERIALIZATION) {
+	    s.writeBer(rands.length, dos);
+	    for (int i=0; i<rands.length; i++) 
+		s.serialize(rands[i], dos);
+	    s.serialize(last, dos);
+	    s.serialize(cleanup, dos);
+	    s.writeBer(pos, dos);
+	    dos.writeBoolean(locked);
+	}
     }
 
     public FillRibExp() {}
 
     public void deserialize(Serializer s, DataInputStream dis) 
 	throws IOException {
-	int size=s.readBer(dis);
-	rands=new Expression[size];
-	for (int i=0; i<size; i++) 
-	    rands[i]=s.deserialize(dis);
-	last=s.deserialize(dis);
-	cleanup=s.deserialize(dis);
-	pos=s.readBer(dis);
-	
-	locked=dis.readBoolean();
+	if (SERIALIZATION) {
+	    int size=s.readBer(dis);
+	    rands=new Expression[size];
+	    for (int i=0; i<size; i++) 
+		rands[i]=s.deserialize(dis);
+	    last=s.deserialize(dis);
+	    cleanup=s.deserialize(dis);
+	    pos=s.readBer(dis);
+	    
+	    locked=dis.readBoolean();
+	}
     }
-#endif
 }
 
 

@@ -34,6 +34,8 @@ import java.io.*;
  *   (get-host-ip-by-name <inet address>) => <inet address>
  *   (get-host-name-by-ip <inet address>) => <inet address>
  *   (get-local-host) => <inet address>
+ *
+ *   (set-so-timeout <tcp socket>) => <void>
  */
 
 public class SNetwork extends Module {
@@ -45,7 +47,8 @@ public class SNetwork extends Module {
 	OPEN_UDP_SOCKET=9, ACCEPT_TCP_SOCKET=7,
 	OPEN_SOCKET_OUTPUT_PORT=10, OPEN_SOCKET_INPUT_PORT=11, 
 	OPEN_TCP_SOCKET=12,
-	OPEN_TCP_LISTENER=13, CLOSE_SOCKET=14;
+	OPEN_TCP_LISTENER=13, CLOSE_SOCKET=14,
+	SET_SO_TIMEOUT=15;
 
     interface Closable {
 	void close() throws IOException;
@@ -89,6 +92,10 @@ public class SNetwork extends Module {
 	    s.close();
 	}
 	
+	public void setSoTimeout(int ms) throws SocketException {
+	    s.setSoTimeout(ms);
+	}
+
 	public InputPort getInputPort() throws IOException {
 	    return new InputPort(new BufferedReader(new InputStreamReader(s.getInputStream())));
 	}
@@ -252,6 +259,7 @@ public class SNetwork extends Module {
 	define(r, "join-multicast-group", JOIN_MULTICAST_GROUP);
 	define(r, "leave-multicast-group", LEAVE_MULTICAST_GROUP);
 	define(r, "set-multicast-ttl!", SET_MULTICAST_TTL);
+	define(r, "set-so-timeout", SET_SO_TIMEOUT);
     }
 
     public static SchemeSocket sock(Interpreter r, Value o) throws ContinuationException {
@@ -348,6 +356,10 @@ public class SNetwork extends Module {
 		    ms=mcastsock(f,f.vlr[0]);
 		    host=string(f, f.vlr[1]);
 		    ms.leaveGroup(InetAddress.getByName(host));
+		case SET_SO_TIMEOUT:
+		    SchemeTCPSocket tcps=(SchemeTCPSocket)sock(f,f.vlr[0]);
+		    tcps.setSoTimeout(num(f,f.vlr[1]).intValue());
+		    return VOID;
 		default:
 		    error(f, "Incorrect number of arguments to procedure "+f.acc);
 		}

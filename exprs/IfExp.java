@@ -60,23 +60,24 @@ public class IfExp extends Expression {
 	}
     }
 
-#ifdef EXPRESS
     public Value express() {
 	return list(sym("If-exp"), test.express(), eexp.express());
     }
-#endif
-#ifdef SERIALIZATION
+
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
-	s.serialize(test, dos);
-	s.serialize(eexp, dos);
+	if (SERIALIZATION) {
+	    s.serialize(test, dos);
+	    s.serialize(eexp, dos);
+	}
     }
 
     public IfExp() {} 
 
     public void deserialize(Serializer s, DataInputStream dis) 
 	throws IOException {
-	test=s.deserialize(dis);
-	eexp=(IfEval)s.deserialize(dis);
+	if (SERIALIZATION) {
+	    test=s.deserialize(dis);
+	    eexp=(IfEval)s.deserialize(dis);
+	}
     }
-#endif
 }
