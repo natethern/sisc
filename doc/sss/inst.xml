@@ -247,7 +247,8 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
         <listitem>
           <para>
             Load each Scheme source file found in the order they
-            occured on the commandline.
+            occured on the commandline.  Note whether any errors
+            occurred.   
           </para>
         </listitem>
         <listitem>
@@ -273,10 +274,13 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
         </listitem>
         <listitem>
           <para>
-            Take the last return value (from the REPL if one was run,
-            otherwise the most recent return-value from the above steps).
-            If it is an integer, return that integer value
-            as SISC's overall return code.  
+          	If the REPL was run if its return value is 
+          	an integer, return that integer as &SISC';s overall 
+          	return code.  If the REPL was not run, and any
+          	return code supporting step above was run, return
+          	the most recent return code.  If no return code step
+          	was performed, but a success/failure step was performed,
+          	return 1 if any failures occured, zero otherwise.
           </para>
         </listitem>
       </orderedlist>

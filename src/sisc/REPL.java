@@ -66,9 +66,12 @@ public class REPL {
         return b.toString();
     }
         
-    public static boolean initializeInterpreter(Interpreter r,
-                                                String[] args,
-                                                SeekableInputStream in)
+    /**
+     * Given an existing interpreter, loads a heap into the
+     * interpreter and initializes it.  Returns true on success,
+     * false otherwise.
+     */       
+    public static boolean loadHeap(Interpreter r, SeekableInputStream in)
         throws ClassNotFoundException {
 
         try {
@@ -78,22 +81,6 @@ public class REPL {
                                                    "errorloadingheap"));
             e.printStackTrace();
             return false;
-        }
-
-        Symbol loadSymb = Symbol.get("load");
-        for (int i=0; i<args.length; i++) {
-            try {
-                r.eval((Procedure)r.lookup(loadSymb, Util.TOPLEVEL),
-                       new Value[] {new SchemeString(args[i])});
-            } catch (SchemeException se) {
-                Value vm=se.m;
-                if (vm instanceof Pair) {
-                    String errormessage=simpleErrorToString((Pair)vm);
-                    System.err.println(errormessage);
-                } else {
-                    System.err.println(Util.liMessage(Util.SISCB, "errorduringload")+vm);
-                }
-            }
         }
 
         try {
@@ -117,6 +104,33 @@ public class REPL {
         }
         
         return true;
+    }
+
+    /**
+     * Loads zero or more Scheme source files (actually, any
+     * file which |load| can handle) into the provided interpreter.
+     * Returns true on success, false if any source file produced
+     * an error.
+     */
+    public static boolean loadSourceFiles(Interpreter r, String[] files) {
+        boolean returnStatus=true;
+        Symbol loadSymb = Symbol.get("load");
+        for (int i=0; i<files.length; i++) {
+            try {
+                r.eval((Procedure)r.lookup(loadSymb, Util.TOPLEVEL),
+                       new Value[] {new SchemeString(files[i])});
+            } catch (SchemeException se) {
+                Value vm=se.m;
+                if (vm instanceof Pair) {
+                    String errormessage=simpleErrorToString((Pair)vm);
+                    System.err.println(errormessage);
+                } else {
+                    System.err.println(Util.liMessage(Util.SISCB, "errorduringload")+vm);
+                }
+                returnStatus=false;
+            }
+        }
+        return returnStatus;
     }
 
     public void go() {
@@ -166,15 +180,16 @@ public class REPL {
         AppContext ctx = new AppContext(props);
         Context.register("main", ctx);
         Interpreter r = Context.enter(ctx);
-        if (!initializeInterpreter(r, 
-                                   (String[])((Vector)args.get("files")).toArray(new String[0]),
-                                   heap))
+        if (!loadHeap(r, heap)) 
             return;
 
-        int returnCode = 0;
+        boolean filesLoadedSuccessfully = 
+            loadSourceFiles(r, (String[])((Vector)args.get("files")).toArray(new String[0]));
+            
         boolean noRepl=args.get("no-repl")!=null;
         boolean call=args.get("call-with-args")!=null;
-
+        int returnCode = 0;
+        
         String expr=(String)args.get("eval");
         if (expr!=null) {
             Value v=r.eval(expr);
@@ -230,7 +245,10 @@ public class REPL {
                     break;
                 }                                    
             }
+        } else if (returnCode == 0 && !filesLoadedSuccessfully) {
+            returnCode=1;
         }
+
         System.exit(returnCode);
     }
 
