@@ -160,7 +160,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
         These forms are equivalent in meaning.
       </para>
       <table id="commandline-switches">
-        <title>&SISC; Commandline Switches</title>
+        <title>&SISC; Command line Switches</title>
         <tgroup cols='3' align='left' colsep='1' rowsep='1'>
           <colspec colname='Long-switch'/>
           <colspec colname='Short-switch'/>
@@ -230,12 +230,12 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
         </tgroup>
       </table>
       <para>
-        The order of processing the commandline is as follows:
+        The order of processing the command line is as follows:
       </para>
       <orderedlist>
         <listitem>
           <para>
-            Process the entire commandline, noting the
+            Process the entire command line, noting the
             settings of each switch and accumulating all Scheme source
             files and arguments after the end of options sequence.
           </para>
@@ -248,7 +248,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
         <listitem>
           <para>
             Load each Scheme source file found in the order they
-            occured on the commandline.  Note whether any errors
+            occured on the command line.  Note whether any errors
             occurred.   
           </para>
         </listitem>
