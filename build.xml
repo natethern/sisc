@@ -24,7 +24,6 @@
 <!--    <property name="classopt" value="yes"/>-->
     <property name="optjar" value="sisc-opt.jar"/>
     <property name="libjar" value="sisc-lib.jar"/>
-    <property name="srfisll" value="${basedir}/boot/srfi.sll"/>
     <property name="heap" value="${basedir}/boot/sisc.shp"/>
     <property name="quantity-type" value="apfloat"/>
     <!--<property name="releasecandidate" value="yes"/> -->
@@ -182,8 +181,8 @@
     </java>
   </target> 
 
-  <target name="sisc-libs" depends="srfi-sll">
-    <jar jarfile="${basedir}/boot/sisc-libs.jar">
+  <target name="sisc-lib" depends="srfi-sll">
+    <jar jarfile="${basedir}/${libjar}">
       <fileset dir="${tmpdir}">
     	<include name="*/**"/>
       </fileset>
@@ -264,7 +263,7 @@
   <target name="docs" depends="javadocs,manual"
           description="Generate Documentation"/>
 
-  <target name="all" depends="heap"
+  <target name="all" depends="sisc-lib,docs"
           description="Build lite edition">
   </target>
 
@@ -335,9 +334,9 @@
     <copy todir="${dist}/full/sisc"
           file="${basedir}/${optjar}"/>
     <copy todir="${dist}/full/sisc"
-          file="${heap}"/>
+          file="${basedir}/${libjar}"/>
     <copy todir="${dist}/full/sisc"
-          file="${srfisll}"/>
+          file="${heap}"/>
     <copy todir="${dist}/full/sisc">
       <fileset dir="${dist}">
 	<include name="ChangeLog"/>
@@ -446,6 +445,6 @@
     </cvs>
   </target> 
  
-  <target name="release-full-dist" depends="prepare,clean,srfi-sll,dist"/> 
-  <target name="release" depends="prepare,tag,source-dist"/> 
+  <target name="release-full-dist" depends="clean,dist"/> 
+  <target name="release" depends="tag,source-dist"/> 
 </project>
