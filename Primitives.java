@@ -377,6 +377,7 @@ public class Primitives extends ModuleAdapter {
                                                         new StringReader(string(f.vlr[0]))));
             case CALLCC:
                 Procedure kproc=(Procedure)f.vlr[0];
+                f.returnValues();
                 f.vlr = new Value[] {f.stk.capture(f)};
                 f.nxp = APPEVAL;
                 return kproc;
