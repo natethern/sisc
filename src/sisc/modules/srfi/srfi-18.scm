@@ -129,34 +129,44 @@
       (if (eq? oldstate 'abandoned)
           (raise 'abandoned-mutex mutex)))))
 
-(define (mutex-unlock! mutex . args)
-  (let* ([condvar (and (not (null? args))
-                       (car args))]
-         [timeout (and condvar (let ([v (and (not (null? (cdr args)))
-                                             (cadr args))])
-                                (and v (time->ms v))))])
-    (if condvar
-        (if timeout
-            (mutex/unlock! mutex condvar timeout)
-            (mutex/unlock! mutex condvar)))
-    (let ([owner (annotation mutex 'owner)])
-      (set-annotation! mutex 'state
-                       (if (or owner (eq? (mutex-state mutex) 'not-owned))
-                           'not-abandoned
-                           'abandoned))
-      (let ([mutexes (annotation owner 'mutexes '())])
-        (cond [(null? mutexes)]
-              [(eq? (car mutexes) mutex)
-               (set-annotation! owner 'mutexes (cdr mutexes))]
-              [(and (null? (cdr mutexes))
-                    (eq? (car mutexes) mutex))
-               (set-annotation! owner 'mutexes '())]
-              [else
-               (do ([ls mutexes (cdr ls)])
-                   ((null? (cdr ls)))
-                 (if (eq? (cadr ls) mutex)
-                     (set-cdr! ls (cddr ls))))])))
-    (mutex/unlock! mutex)))
+(define mutex-unlock!
+  (let ([finish-unlock
+         (lambda (mutex owner)
+           (let ([mutexes (annotation owner 'mutexes '())])
+             (cond [(null? mutexes)]
+                   [(eq? (car mutexes) mutex)
+                    (set-annotation! owner 'mutexes (cdr mutexes))]
+                   [(and (null? (cdr mutexes))
+                         (eq? (car mutexes) mutex))
+                    (set-annotation! owner 'mutexes '())]
+                   [else
+                    (do ([ls mutexes (cdr ls)])
+                        ((null? (cdr ls)))
+                      (if (eq? (cadr ls) mutex)
+                          (set-cdr! ls (cddr ls))))])))])
+    (lambda (mutex . args)
+      (let* ([condvar (and (not (null? args))
+                           (car args))]
+             [timeout (and condvar (let ([v (and (not (null? (cdr args)))
+                                                 (cadr args))])
+                                     (and v (time->ms v))))])
+        (let ([owner (annotation mutex 'owner)]
+              [old-state (mutex-state mutex)])
+          (set-annotation! mutex 'state
+                           (if (or owner (eq? old-state 'not-owned))
+                               'not-abandoned
+                               'abandoned))
+          (if condvar
+              (if timeout
+                  (if (mutex/unlock! mutex condvar timeout)
+                      (begin (finish-unlock mutex owner) #t)
+                      (begin
+                        (set-annotation! mutex 'state old-state)
+                        #f))
+                  (begin (mutex/unlock! mutex condvar)
+                         (finish-unlock mutex owner)
+                         #t))
+              (mutex/unlock! mutex)))))))
 
 ; Condition Variables
 
