@@ -43,7 +43,7 @@
 (define (make-exception error error-k)
   `((error-continuation . ,error-k) . ,error))
 (define (exception? e)
-  (and (pair? e) (pair (car e)) (eq? (caar e) 'error-continuation)))
+  (and (pair? e) (pair? (car e)) (eq? (caar e) 'error-continuation)))
 (define (exception-continuation exception)
   (cdar exception))
 (define (exception-error exception)
@@ -52,14 +52,14 @@
 (define (throw error . error-k)
   (call-with-failure-continuation
       (lambda (fk)
-        (cond ([(not (null? error-k))
-                (fk error error-k)]
-               [(exception? error)
-                (fk (exception-error error)
-                    (exception-continuation error))]
-               [else
-                 (call-with-current-continuation
-                     (lambda (k) (fk error k)))])))))
+        (cond [(not (null? error-k))
+               (fk error error-k)]
+              [(exception? error)
+               (fk (exception-error error)
+                   (exception-continuation error))]
+              [else
+                (call-with-current-continuation
+                    (lambda (k) (fk error k)))]))))
 
 (define (error . args)
   (throw (apply make-error args)))
