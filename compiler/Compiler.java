@@ -324,7 +324,7 @@ public class Compiler extends Util {
         for (int i= 0; i<rands.length; i++) {
             if (!isImmediate(rands[i])) {
                 nxp.annotations = lastRand.annotations;
-                nxp = new FillRibExp(lastRand, i, nxp, (i==0 && allImmediate));
+                nxp = new FillRibExp(lastRand, i, nxp, allImmediate);
                 lastRand = rands[i];
                 rands[i] = null;
                 allImmediate=false;
