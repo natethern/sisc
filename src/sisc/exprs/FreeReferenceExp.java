@@ -16,12 +16,6 @@ import sisc.util.UndefinedVarException;
 public class FreeReferenceExp extends Expression 
     implements Immediate, OptimisticExpression {
 
-    /**
-     * @author scgmille
-     *
-     * TODO To change the template for this generated type comment go to
-     * Window - Preferences - Java - Code Style - Code Templates
-     */
     public class NonImmediateFreeReferenceExp extends Expression {
 
         FreeReferenceExp base;
@@ -111,17 +105,11 @@ public class FreeReferenceExp extends Expression
         return ref;
     }
 
-    /* (non-Javadoc)
-     * @see sisc.exprs.fp.OptimisticExpression#setHost(sisc.exprs.fp.OptimisticHost, int)
-     */
     public void setHost(OptimisticHost host, int uexpPosition) {
         this.host=host;
         this.uexpPosition=uexpPosition;
     }
 
-    /* (non-Javadoc)
-     * @see sisc.exprs.fp.OptimisticExpression#dropSafe()
-     */
     public void dropSafe() {
         host=null;
     }
