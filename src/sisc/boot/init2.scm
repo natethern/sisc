@@ -503,28 +503,28 @@
 
 (define (with-binary-input-from-file file thunk)
   (call-with-binary-input-file file 
-    (lambda (port) (with-input-from-port port (if port thunk)))))
+    (lambda (port) (with-input-from-port port thunk))))
 
 (define (with-binary-output-to-file file thunk)
   (call-with-binary-output-file file 
-    (lambda (port) (with-output-to-port port (if port thunk)))))
+    (lambda (port) (with-output-to-port port thunk))))
         
 (define (with-input-from-file file thunkOrEncoding . thunk)
   (cond [(null? thunk)
          (call-with-input-file file 
-           (lambda (port) (with-input-from-port port (if port thunkOrEncoding))))]
+           (lambda (port) (with-input-from-port port thunkOrEncoding)))]
         [(null? (cdr thunk))
          (call-with-input-file file thunkOrEncoding
-           (lambda (port) (with-input-from-port port (if port (car thunk)))))]
+           (lambda (port) (with-input-from-port port (car thunk))))]
         [else (error 'with-input-from-file "too many arguments.")]))
 
 (define (with-output-to-file file thunkOrEncoding . thunk)
   (cond [(null? thunk)
          (call-with-output-file file 
-           (lambda (port) (with-output-to-port port (if port thunkOrEncoding))))]
+           (lambda (port) (with-output-to-port port thunkOrEncoding)))]
         [(null? (cdr thunk))
          (call-with-output-file file thunkOrEncoding
-           (lambda (port) (with-output-to-port port (if port (car thunk)))))]
+           (lambda (port) (with-output-to-port port (car thunk))))]
         [else (error 'with-output-to-file "too many arguments.")]))
 
 (define (with-character-set set thunk)
