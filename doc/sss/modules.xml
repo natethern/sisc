@@ -391,9 +391,10 @@
 	  procedures are implemented this way.  Native procedures extend
 	  the <classname>sisc.nativefun.NativeProcedure</classname>
 	  abstract class.  Working NativeProcedure subclasses must
-	  implement the <functionname>doApply<functionname> method, as
+	  implement the <function>doApply</function> method, as
           described below.
-	  <blockquote>
+	</para>
+	<blockquote>
 	  <para>
 	    <indexterm><primary>doApply</primary>
 	     </indexterm>
@@ -418,14 +419,14 @@
                 (<literal>vlr.length</literal>).
               </para>
             </blockquote>
-          </para>
-        </para>
+           </para>
+         </blockquote>
         <para> 
 	  If the native procedure wishes to raise an error, it may do
           so by throwing any Java runtime exception (subclass of
 	  <classname>java.lang.Runtime</classname>).
 	  For a more descriptive error, one may raise a &SISC; error 
-	  using any of a number of <functionname>error</functionname>
+	  using any of a number of <function>error</function>
 	  forms in <classname>sisc.util.Util</classname>.  Consult the
 	  source of Util or inquire on the sisc-devel mailinglist for
           assistance.
@@ -442,14 +443,14 @@
 	is provided.  The IndexedLibraryAdapter class provides
 	implementations for all four required NativeLibrary methods, and
 	introduces a new abstract method which must be implemented, called
-	<functionname>construct</functionname>.  In addition, the method
-	<functionname>define</functionname> is provided.
+	<function>construct</function>.  In addition, the method
+	<function>define</function> is provided.
        </para>
       <para>
         In an indexed native library, each binding is associated with
         a Java <literal>int</literal> unique to that binding within
 	the library.  The IndexedLibraryAdapter subclass should in its
-	constructor call <functionname>define</functionname> for each
+	constructor call <function>define</function> for each
 	binding provided by the library, according to the
 	contract of the method:
 	<blockquote>
@@ -480,10 +481,10 @@
       </para>
       <para>
         In implementing the
-	<functionname>getBindingValue</functionname> method of the 
+	<function>getBindingValue</function> method of the 
 	<classname>NativeLibrary</classname> class, an
 	<classname>IndexedLibraryAdapter</classname> will call the
-	abstract method <functionname>construct</functionname> 
+	abstract method <function>construct</function> 
 	required by the its subclasses:
 	<blockquote>
 	  <para>
@@ -520,12 +521,12 @@
 	<classname>IndexedProcedure</classname>.  A subclass can 
 	then use the <literal>id</literal> instance variable to
 	dispatch to many native procedures in the body of the
-	<functionname>doApply</functionname> method required by native 
+	<function>doApply</function> method required by native 
 	procedures.
       </para>
       <para>
         So, typically, an IndexedNativeLibrary subclass is created
-	whose <functionname>construct</functionname> method creates 
+	whose <function>construct</function> method creates 
 	instances of IndexedProcedure subclasses.  The
 	IndexedNativeLibrary subclass its itself nested in the
 	IndexedProcedure class which it is constructing.  See the
@@ -533,7 +534,8 @@
 	<classname>sisc.modules</classname>
 	for concrete examples.
       </para>
-     </sect2>
+     </sect3>
+    </sect2>
     <sect2 id="serialization">
       <title>Serialization</title>
       <para>
@@ -855,7 +857,7 @@
                   This method should
                   <emphasis>only</emphasis> be used if fields internal
                   to the Expression returned must be available during
-                  deserialization.            <para>
+                  deserialization.         
                 </para>
               </blockquote>
             </para>
