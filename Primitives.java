@@ -258,8 +258,12 @@ public class Primitives extends ModuleAdapter {
         try {
             return new URL(s);
         } catch (MalformedURLException e) {
-            throwPrimException("malformed url " + s);
-            return null;
+            try {
+                return new URL("file:"+s);
+            } catch (MalformedURLException ee) {
+                throwPrimException("malformed url " + s);
+                return null;
+            }
         }
     }
 
@@ -269,8 +273,12 @@ public class Primitives extends ModuleAdapter {
         try {
             return new URL(c, s);
         } catch (MalformedURLException e) {
-            throwPrimException("malformed url " + s);
-            return null;
+            try {
+                return new URL(c, "file:"+s);
+            } catch (MalformedURLException ee) {
+                throwPrimException("malformed url " + s);
+                return null;
+            }
         }
     }
 
