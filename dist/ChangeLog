@@ -1,3 +1,13 @@
+2003-01-29  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Fixed a bug in Interpreter which caused the failure continuation
+	  to be forgotten if interpret is called and a SchemeException is
+	  thrown.
+
+	* Fixed compile issues for Java < 1.4
+	
+	* Added |stack-trace-on-error| parameter.
+
 2003-01-23  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Made NamedValues value properties, allowing introspection from
