@@ -916,7 +916,7 @@
                   If present, the message is a format-string processed
                   with the optional arguments that follow as by
                   <function>format</function> in SRFI-28.  The
-                  optional arguments must only be present if the
+                  remaining arguments must only be present if the
                   format-string is present as the message.
                 </para>
               </blockquote>
