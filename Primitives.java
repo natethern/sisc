@@ -110,7 +110,6 @@ public class Primitives extends ModuleAdapter {
         define("environment?", ENVIRONMENTQ);
         define("eq?", EQ);
         define("equal?", EQUAL);
-        define("error", ERROR);
         define("eval", EVAL);
         define("exact->inexact", EXACT2INEXACT);
         define("exact?", EXACTQ);
@@ -198,6 +197,7 @@ public class Primitives extends ModuleAdapter {
         define("vector?", VECTORQ);
         define("void", _VOID);
         define("void?", VOIDQ);
+        define("with-failure-continuation", WITHFC);
         define("write", WRITE);
         define("write-char", WRITECHAR);
     }
@@ -404,6 +404,12 @@ public class Primitives extends ModuleAdapter {
                 f.vlr[0]=f.stk.capture(f);
                 f.nxp = APPEVAL;
                 return kproc;
+            case CALLFC:
+                Procedure proc=proc(f.vlr[0]);
+                f.replaceVLR(1);
+                f.vlr[0]=f.fk.capture(f);
+                f.nxp = APPEVAL;
+                return proc;
             case GETOUTPUTSTRING:
                 OutputPort port=outport(f.vlr[0]);
                 if (!(port.w instanceof StringWriter))
@@ -724,9 +730,9 @@ public class Primitives extends ModuleAdapter {
                 f.nxp=f.compile(f.vlr[0], env(f.vlr[1]));
                 f.returnVLR();
                 return VOID;
-            case CALLFC:
-                Procedure proc=proc(f.vlr[0]);
-                Procedure ehandler=new CurriedFC(proc(f.vlr[1]), f.fk);
+            case WITHFC:
+                Procedure proc=proc(f.vlr[1]);
+                Procedure ehandler=proc(f.vlr[0]);
                 f.fk=f.createFrame(new ApplyValuesContEval(ehandler),
                                    null, false, f.env, f.fk, f.stk);
                 f.replaceVLR(0);
@@ -739,8 +745,6 @@ public class Primitives extends ModuleAdapter {
                 f.replaceVLR(0);
                 f.nxp = APPEVAL;
                 return producer;
-            case ERROR:
-                error(f, f.vlr[0]);
             case MAKEPATH:
                 String f1=string(f.vlr[0]);
                 String f2=string(f.vlr[1]);
@@ -1055,9 +1059,9 @@ public class Primitives extends ModuleAdapter {
         VECTORSET = 142,
         VECTORFILL = 145,
         VOIDQ = 102,
+        WITHFC = 103,
         WRITE = 111,
         //	WRITE = 38,
-        //	WRITECHAR = 103,
         WRITECHAR = 136,
         _VOID = 12;
 

@@ -223,14 +223,14 @@
     (lambda (file)
       (let ([previous-url (current-url)])
         (current-url (normalize-url previous-url file))
-        (call-with-failure-continuation
+        (with-failure-continuation
+          (lambda (m e)
+            (current-url previous-url)
+            (throw m e))
             (lambda () 
               ((file-handler (string->symbol
                               (file-extension (current-url))))
-               (current-url)))
-          (lambda (m e c)
-            (current-url previous-url)
-            (c m e)))
+               (current-url))))
         (current-url previous-url))
       (void)))))
 

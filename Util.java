@@ -142,8 +142,7 @@ public abstract class Util implements Version {
 	    error,
 	    new ApplyParentFrame(new CallFrame((r.nxp==null?r.lxp:r.nxp), 
                                                r.vlr, r.vlk,
-					       r.env, r.fk, r.stk).capture(r)),
-	    r.fk.fk});
+					       r.env, r.fk, r.stk).capture(r))});
         throw new ContinuationException(r.fk);
     }
 

@@ -48,7 +48,7 @@
 (define current-default-error-handler
   (parameterize
    (letrec ((eh
-             (lambda (message error-cont failure-cont)
+             (lambda (message error-cont)
                (cond [(null? message) "Error."]
                      [(not (pair? message)) message]
                      [(assoc 'message message) => 
@@ -64,8 +64,7 @@
                       (lambda (p)
                         (let ((p (cdr p)))
                           (let ((m (assoc 'message p))
-                                (e (assoc 'error-continuation p))
-                                (c (assoc 'failure-continuation p)))
+                                (e (assoc 'error-continuation p)))
                             (let ((submessage
                                    (eh (and m (cdr m)) 
                                        (and e (cdr e))
@@ -79,8 +78,8 @@
                                       (format "Error in nested call:~% ~a"
                                               submessage)])))))]
                      [else (make-error-message #f #f)]))))
-     (lambda (m e c o)
-       (display (eh m e c) o)
+     (lambda (m e o)
+       (display (eh m e) o)
        (newline o)
        (putprop 'last-error '*sisc* 
                 (cons `(error-continuation . ,(error-continuation-k e))
@@ -143,13 +142,13 @@
                 (lambda (k)
                   (set! repl-start k)))
                (let loop ()
-                 (call/fc
+                 (with/fc
+                  (lambda (m e)
+                    ((current-default-error-handler) m e console-out)
+                    (loop))
                   (lambda ()
                     (repl/read console-in console-out pretty-print)
-                    (void))
-                  (lambda (m e f)
-                    ((current-default-error-handler) m e f console-out)
-                    (loop)))))))
+                    (void)))))))
           (if ((current-exit-handler))
               (void)
               (repl-start)))))))

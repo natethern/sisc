@@ -124,12 +124,12 @@
 	(set-dynamic-point! point)
 	(call-with-values
 	    (lambda ()
-	      (call/fc
-	       body
-	       (lambda (m e fk)
+	      (with/fc
+	       (lambda (m e)
 		 (set-dynamic-point! here)
 		 (out)
-		 (fk m e))))
+		 (throw m e))
+	       body))
    	    (lambda results
 	      (set-dynamic-point! here)
 	      (out)
@@ -172,6 +172,7 @@
 
 (define list-tail (lambda (x k) (if (zero? k) x (list-tail (cdr x) (- k 1)))))
 (define call/fc call-with-failure-continuation)
+(define with/fc with-failure-continuation)
 (define call/cc call-with-current-continuation)
 
 (define make-polar
@@ -433,7 +434,8 @@
                                  '*environment-variables*)
                         "sisc.properties")]
          [testval	(list #f)])
-     (call/fc  ;ignore errors
+     (with/fc  ;ignore errors
+      (lambda (m e) #f)
       (lambda ()
         (with-input-from-file prop-file
           (lambda ()
@@ -447,8 +449,7 @@
                         (putprop (car entry)
                                  '*config-parameters*
                                  (cdr entry)))
-                    (loop (read))))))))
-      (lambda (m e c) #f)))
+                    (loop (read))))))))))
    (unload-dynamic-wind)))
 
 ;;
