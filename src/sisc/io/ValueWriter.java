@@ -10,8 +10,7 @@ public interface ValueWriter {
     ValueWriter append(Value v)  throws IOException;
     ValueWriter append(char c)   throws IOException;
     ValueWriter append(String s) throws IOException;
-    ValueWriter append(byte[] b, int offset, int length)
-        throws IOException;
+
     boolean isInlinable(Value v);
     boolean vectorLengthPrefixing();
 }

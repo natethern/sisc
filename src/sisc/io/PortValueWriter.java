@@ -62,12 +62,6 @@ public class PortValueWriter extends Util
         return this;
     }
 
-    public ValueWriter append(byte[] b, int offset, int length)
-        throws IOException {
-        port.write(b, offset, length);
-        return this;
-    }
-
     public boolean isInlinable(Value v) {
         return true;
     }
