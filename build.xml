@@ -1,7 +1,6 @@
 <project name="sisc" default="all">
   <property name="build.compiler" value="jikes" />
 
-
   <path id="classpath">
     <fileset dir="./lib">
       <include name="*.jar"/>
@@ -13,6 +12,7 @@
     <property file="${basedir}/build.properties"/>    
     <property name="srcdir" value="${basedir}/.."/>
     <property name="classdir" value="${basedir}/classes"/>
+    <property name="libdir" value="${basedir}/lib"/>
     <property name="docdir" value="${basedir}/doc/javadoc"/>
     <property name="schemedir" value="${basedir}/scheme-src"/>
     <property name="packagename" value="sisc"/>
@@ -22,6 +22,7 @@
   </target>
 
   <target name="init" depends="prepare">
+    <mkdir dir="${libdir}"/>
     <available classname="junit.framework.TestCase"
                property="junit.present"
 	       classpathref="classpath"/>
