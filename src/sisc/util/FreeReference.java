@@ -23,22 +23,20 @@ public class FreeReference implements ExpressionVisitee {
     }
 
     private void resolve() throws UndefinedVarException {
-        if (envLoc<0) {
-            //this is an optimization that ensures we short-circuit
-            //any DelegatingSymEnvs
-            senv = (SymbolicEnvironment)senv.asValue();
-            envLoc=senv.getLoc(sym);
-            if (envLoc<0) throw new UndefinedVarException(sym.toString());
-        }
+        //this is an optimization that ensures we short-circuit
+        //any DelegatingSymEnvs
+        senv = (SymbolicEnvironment)senv.asValue();
+        envLoc=senv.getLoc(sym);
+        if (envLoc<0) throw new UndefinedVarException(sym.toString());
     }
 
     public Value getValue() throws UndefinedVarException {
-        resolve();
+        if (envLoc<0) resolve();
         return senv.lookup(envLoc);
     }
 
     public void setValue(Value v) throws UndefinedVarException {
-        resolve();
+        if (envLoc<0) resolve();
         senv.set(envLoc, v);
         Util.updateName(v, sym);
     }

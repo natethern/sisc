@@ -52,7 +52,7 @@ public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
      * @param val the value of the entry point
      * @return the index of the new (or existing) entry point
      */
-    public int add(Symbol name, Expression val) {
+    public int add(Value name, Expression val) {
         int epidx=add(val);
         names.put(name, new Integer(epidx));
         return epidx;

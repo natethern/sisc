@@ -52,9 +52,10 @@ else
     then
       JAVA=java
     fi
-    
+
+        
     D=":"
-    case $(/bin/uname) in 
+    case $(uname) in 
       CYGWIN* )
         D=";" ;;
     esac

@@ -17,7 +17,8 @@
      join-timeout-exception? abandoned-mutex-exception?
      terminated-thread-exception? uncaught-exception?
      uncaught-exception-reason)
-  (import threading-native)
+    (import debugging)
+    (import threading-native)
   (import srfi-9)
   (import* srfi-19
            current-time

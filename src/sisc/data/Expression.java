@@ -3,6 +3,7 @@ package sisc.data;
 import java.util.*;
 import java.io.*;
 import sisc.ser.*;
+import sisc.exprs.fp.OptimismUnwarrantedException;
 import sisc.interpreter.*;
 import sisc.util.Util;
 import sisc.util.ExpressionVisitor;
@@ -93,8 +94,8 @@ public abstract class Expression extends Util
         setAnnotation(NAME, s);
     }
 
-    public Symbol getName() {
-        return (Symbol)getAnnotation(NAME, null);
+    public Value getName() {
+        return getAnnotation(NAME, null);
     }
 
     /**
@@ -126,7 +127,7 @@ public abstract class Expression extends Util
      * @return the immediate value of this expression, or null if the value 
      *        cannot be obtained immediately.
      */
-    public Value getValue(Interpreter r) throws ContinuationException {
+    public Value getValue(Interpreter r) throws ContinuationException, OptimismUnwarrantedException {
         return null;
     }
 

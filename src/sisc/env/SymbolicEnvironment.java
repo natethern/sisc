@@ -6,7 +6,7 @@ import sisc.util.ExpressionVisitee;
 public interface SymbolicEnvironment extends ExpressionVisitee {
 
     void setName(Symbol s);
-    Symbol getName();
+    Value getName();
 
     void setParent(SymbolicEnvironment e);
     SymbolicEnvironment getParent();

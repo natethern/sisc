@@ -32,11 +32,11 @@ public class Syntax extends Value implements NamedValue, Singleton {
     
     public void serialize(Serializer s) throws IOException {
         s.writeInt(synid);
-        s.writeUTF(getName().symval);
+        s.writeUTF(((Symbol)getName()).symval);
     }
     
     public Value singletonValue() {
-        return (Value)CompilerConstants.SYNTACTIC_TOKENS.get(getName().symval);
+        return (Value)CompilerConstants.SYNTACTIC_TOKENS.get(((Symbol)getName()).symval);
     }
 }
 

@@ -14,7 +14,7 @@
     <property name="spectitle" value="Second Interpreter of Scheme Code"/>
     <!-- Got a better idea?: -->
     <property name="specvendor" value="SISC Development Group"/>
-    <property name="beta" value="yes"/>
+<!--    <property name="beta" value="yes"/>-->
     <property file="${basedir}/build.properties"/>    
     <property name="srcdir" value="${basedir}/src"/>
     <property name="classdir" value="${basedir}/classes"/>
@@ -33,7 +33,7 @@
     <property name="libjar" value="sisc-lib.jar"/>
     <property name="heapjar" value="sisc-heap.jar"/>
     <property name="heap" value="${basedir}/sisc.shp"/>
-    <property name="quantity-type" value="apfloat"/>
+    <property name="quantity-type" value="64float"/>
     <condition property="debugging" value="on">
       <isset property="beta"/>
     </condition>
