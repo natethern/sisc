@@ -889,7 +889,7 @@ Context.exit()
                 type. Automatic conversion effectively gives objects
                 more than one type - their original type and the type
                 of the objects they can be converted to. While it
-                would be technically possible do devise a method
+                would be technically possible to devise a method
                 selection algorithm that accommodates this, the
                 algorithm would impose a substantial overhead on
                 generic procedure invocation and also make it
