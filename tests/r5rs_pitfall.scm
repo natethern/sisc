@@ -215,7 +215,7 @@
                     (cont 1)))
          res2)))
   (if (equal? result '(0 0 0))
-      (display "Map is call/cc safe, but probably not tail recursive.")
-      (display "Map is not call/cc safe, but probably tail recursive."))
+      (display "Map is call/cc safe, but probably not tail recursive or inefficient.")
+      (display "Map is not call/cc safe, but probably tail recursive and efficient."))
   (newline))
 
