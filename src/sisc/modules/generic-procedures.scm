@@ -141,7 +141,7 @@
 (define (class-direct-superclasses class)
   (cond ((java/class? class)
          (let ([sc (java/superclass class)]
-               [intfs (vector->list (java/interfaces class))])
+               [intfs (java/interfaces class)])
            (if (java/null? sc)
                intfs
                (cons sc intfs))))
@@ -155,7 +155,7 @@
          (map java/name
               (filter (lambda (f)
                         (memq 'public (java/modifiers f)))
-                      (vector->list (java/decl-fields class)))))
+                      (java/fields class))))
         ((scheme-class? class)
          (class 'slots))
         (else
@@ -355,7 +355,7 @@
         *CONSTRUCTORS*
         (make-method (lambda (next class . args) (apply c args))
                      (cons (meta (java/declaring-class c))
-                           (vector->list (java/parameter-types c)))
+                           (java/parameter-types c))
                      #f))))
 (define (add-java-method m)
   (and (memq 'public (java/modifiers m))
@@ -365,20 +365,18 @@
                      (cons (if (memq 'static (java/modifiers m))
                                (meta (java/declaring-class m))
                                (java/declaring-class m))
-                           (vector->list (java/parameter-types m)))
+                           (java/parameter-types m))
                      #f))))
 (define (add-class class)
   (if (and (not (java/null? class))
            (not (hashtable/put! *JAVA-CLASSES* class #t)))
       (begin
         (add-class (java/superclass class))
-        (for-each add-class (vector->list (java/interfaces class)))
+        (for-each add-class (java/interfaces class))
         (if (memq 'public (java/modifiers class))
             (begin
-              (for-each add-java-constructor
-                        (vector->list (java/decl-constructors class)))
-              (for-each add-java-method 
-                        (vector->list (java/decl-methods class))))))))
+              (for-each add-java-constructor (java/constructors class))
+              (for-each add-java-method (java/methods class)))))))
 
 ;;returns a list of applicable methods and ambiguous methods. The
 ;;applicable methods are returned in a total order based on their
