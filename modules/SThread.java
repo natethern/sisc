@@ -262,6 +262,7 @@ public class SThread extends ModuleAdapter {
         protected DynamicEnv env;
 	protected Procedure thunk;
 	protected Thread thread;
+        protected Interpreter interp;
 	protected int state;
 	Value rv;
 
@@ -280,8 +281,8 @@ public class SThread extends ModuleAdapter {
 	    } else if (state == FINISHED) {
 		return rv;
 	    } else {
-		r.acc=rv;
-		throw new ContinuationException(r.fk);
+                r.acc=rv;
+                throw new ContinuationException(r.fk);
 	    }
 	}
 
@@ -294,16 +295,16 @@ public class SThread extends ModuleAdapter {
 	}
 
 	public void run() {
-	    Interpreter r = Context.enter(ctx, env);
+	    interp = Context.enter(ctx, env);
 	    state=RUNNING;
 	    synchronized(this) {
 		this.notify();
 	    }
 	    try {
-		rv=r.eval(thunk,new Value[]{});
+		rv=interp.eval(thunk,new Value[]{});
 		state=FINISHED;
 	    } catch (SchemeException se) {
-		rv=new Values(new Value[] {se.m, se.e, se.f});
+		rv=new Values(new Value[] {se.m, se.e});
 		state=FINISHED_ABNORMALLY;
 	    } 
 	    Context.exit();
@@ -394,6 +395,7 @@ public class SThread extends ModuleAdapter {
 	    case THREADINTERRUPT:
 		c=tcont(f.vlr[0]);
 		c.thread.interrupt();
+                c.interp.abortEvaluation();
 		return VOID;
 	    case THREADNAME:
 		return new SchemeString(tcont(f.vlr[0]).thread.getName());
