@@ -84,13 +84,9 @@ public class IO extends IndexedProcedure {
     static void throwIOException(Interpreter f, String message, IOException e) 
         throws ContinuationException {
         if (f.acc == null) {
-            error(f, message, list(new Pair(JEXCEPTION, 
-                                            Symbol.intern(e.getClass()
-                                                          .getName()))));
+            error(f, message, list(new Pair(JEXCEPTION, javaWrap(e))));
         } else {
-            error(f, f.acc.getName(), message, 
-                  list(new Pair(JEXCEPTION, Symbol.intern(e.getClass()
-                                                          .getName()))));
+            error(f, f.acc.getName(), message, list(new Pair(JEXCEPTION, javaWrap(e))));
         }
     }
 
