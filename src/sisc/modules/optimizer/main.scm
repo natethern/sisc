@@ -68,7 +68,9 @@
     (,x 
      (guard (symbol? x))
      (when (memq x ulrvars)
-         (display (format "{warning: naked left-hand reference in letrec rhs: '~a'.}~%" x)))
+     	 (if (strict-r5rs-compliance)
+     	     (error 'compile "naked left hand reference in letrec rhs: '~a'.}~%" x)
+             (display (format "{warning: naked left-hand reference in letrec rhs: '~a'.}~%" x))))
      (cons `(refed-vars ,x)
            (if (memq x lvars) '()
                `((free-vars ,x)))))
