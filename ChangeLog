@@ -1,10 +1,15 @@
+2004-12-13  Matthias Radestock  <matthias@sorted.org>
+
+	* Allow S2J proxy definitions to refer to classes defined in the
+	  same module/scope.
+
 2004-12-09  Matthias Radestock  <matthias@sorted.org>
 
 	* Simplified the OO system by removing slot initializers / default
 	  values.
 
-	* Allow class definitions on the OO system to refer to slot
-	  accessors and modifiers defined in the same module / local
+	* Allow class definitions in the OO system to refer to classes,
+	  slot accessors and modifiers defined in the same module / local
 	  scope.
 
 2004-12-07  Matthias Radestock  <matthias@sorted.org>

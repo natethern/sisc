@@ -299,13 +299,15 @@
 (define-simple-syntax (define-java-proxy (?name . ?args)
                         (?interface ...)
                         ?handler ...)
-  (define ?name
-    (let ([proxy-class (java/proxy-class ?interface ...)])
-      (lambda ?args
-        (java-new proxy-class
-                  (java-proxy-dispatcher
-                   (list (java-proxy-method-handler ?handler)
-                         ...)))))))
+  (module (?name)
+      (define ?name)
+    (set! ?name
+      (let ([proxy-class (java/proxy-class ?interface ...)])
+        (lambda ?args
+          (java-new proxy-class
+                    (java-proxy-dispatcher
+                     (list (java-proxy-method-handler ?handler)
+                           ...))))))))
 
 (define-simple-syntax (make-definition-syntax thing things
                                               complex simple)
