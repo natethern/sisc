@@ -113,7 +113,6 @@ public class Interpreter extends Util {
                     do {
                         while (nxp==null) 
                             pop(stk);
-                        //                        System.err.println(nxp);
                         nxp.eval(this);
                     } while (true);
                 } catch (ContinuationException ce) {
@@ -341,9 +340,9 @@ public class Interpreter extends Util {
         }
     }
 
-    protected static final int LENVPOOLSIZE=128, LEMAX=LENVPOOLSIZE-1;
-    protected LexicalEnvironment deadLenvs[]=new LexicalEnvironment[LENVPOOLSIZE];
-    protected int deadLenvPointer=-1;
+    protected static final int ENVPOOLSIZE=128, ENVMAX=ENVPOOLSIZE-1;
+    protected LexicalEnvironment deadEnvs[]=new LexicalEnvironment[ENVPOOLSIZE];
+    protected int deadEnvPointer=-1;
     /*
     protected static int m, o, h;
     static {
@@ -359,22 +358,22 @@ public class Interpreter extends Util {
     public final void returnEnv() {
         if (env != null && !env.locked) {
             returnValues(env.vals);
-            if (deadLenvPointer < LEMAX)
-                deadLenvs[++deadLenvPointer]=env;
+            if (deadEnvPointer < ENVMAX)
+                deadEnvs[++deadEnvPointer]=env;
             //else 
             //    o++;
         }
     }
     
-    public final void newLenv(Value[] vals, 
-                              LexicalEnvironment p) {
-        if (deadLenvPointer < 0) {
+    public final void newEnv(Value[] vals, 
+                             LexicalEnvironment p) {
+        if (deadEnvPointer < 0) {
 	    //m++;
             env=new LexicalEnvironment(vals, p);
         } else {
             //h++;
-            env=deadLenvs[deadLenvPointer--];
-            //            deadLenvs[deadLenvPointer--]=null;
+            env=deadEnvs[deadEnvPointer--];
+            //            deadEnvs[deadEnvPointer--]=null;
             env.vals=vals;
             env.parent=p;
         }

@@ -62,7 +62,7 @@ public class Closure extends Procedure implements NamedValue {
     }
 
     public void apply(Interpreter r) throws ContinuationException {
-        r.newLenv(matchArgs(r), env);
+        r.newEnv(matchArgs(r), env);
         r.nxp=body;
         r.vlr=ZV;
     }

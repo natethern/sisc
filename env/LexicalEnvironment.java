@@ -25,18 +25,16 @@ public class LexicalEnvironment extends Value {
 
     public final Value lookup(int depth, int pos) {
         LexicalEnvironment e = this;
-        while(depth-- > 0) 
-	    e = e.parent;
-	if (e==null) System.err.println("$");
+        while(depth-- > 0) e = e.parent;
         return e.vals[pos];
     }
 
     public final void set(int depth, int pos, Value v) {
         LexicalEnvironment e = this;
         while(depth > 0) {
-	    depth--;
-	    e = e.parent;
-	}
+            depth--;
+            e = e.parent;
+        }
         e.vals[pos]=v;
     }
 

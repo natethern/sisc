@@ -26,8 +26,7 @@ public class AppEval extends Expression {
            error(r, liMessage(SISCB, "evaluationinterrupted"));
         }
         
-        if (tail)
- 	   r.returnEnv();
+        if (tail) r.returnEnv();
         r.acc.apply(r);
     }
 
