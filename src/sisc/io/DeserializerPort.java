@@ -2,43 +2,31 @@ package sisc.io;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
 
-public class StreamInputPort
-    extends PushbackInputPort
-    implements BinaryInputPort {
+import sisc.data.Value;
 
-    public InputStream in;
+public class DeserializerPort
+    extends StreamInputPort
+    implements SerialInputPort {
 
-    public StreamInputPort(InputStream in) {
-        this.in=in;
+    public DeserializerPort(InputStream in)
+        throws IOException {
+
+        super(new ObjectInputStream(in));
     }
 
-    public int readHelper() throws IOException {
-        return in.read();
+    public Value readSer() throws IOException {
+        return readSerHelper();
     }
 
-    public boolean ready() throws IOException {
-        return in.available()>0;
-    }
-
-    public int read(byte[] buff, int offs, 
-                    int count) throws IOException {
-        if (pushback!=-1) {
-            buff[offs]=(byte)pushback;
-            pushback=-1;
-            count--;
-            offs++;
+    protected Value readSerHelper() throws IOException {
+        try {
+            return (Value)((ObjectInput)in).readObject();
+        } catch (ClassNotFoundException e) {
+            throw new IOException("class not found: " + e.getMessage());
         }
-        return readHelper(buff, offs, count);
-    }
-
-    public int readHelper(byte[] buff, int offs, 
-                          int count) throws IOException {
-        return in.read(buff, offs, count);
-    }
-
-    public void close() throws IOException {
-        in.close();
     }
 }
 /*

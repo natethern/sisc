@@ -89,6 +89,7 @@
 (native-module record-native     "sisc.modules.record.Primitives$Index")
 (native-module binary-io-native  "sisc.modules.io.BinaryIO$Index")
 (native-module string-io-native  "sisc.modules.io.StringIO$Index")
+(native-module serial-io-native  "sisc.modules.io.SerialIO$Index")
 (native-module file-manipulation-native "sisc.modules.io.FileManipulation$Index")
 
 (module misc
@@ -267,6 +268,20 @@
            binary-input-port?
            binary-output-port?)
   (include "io/binary-io.scm"))
+
+(module serial-io
+  (serialize
+   deserialize
+   open-serial-input-file
+   open-serial-output-file
+   call-with-serial-input-file
+   call-with-serial-output-file
+   with-serial-input-from-file
+   with-serial-output-to-file
+   serial-input-port?
+   serial-output-port?)
+  (import serial-io-native)
+  (include "io/serial-io.scm"))
 
 (module hashtable
     (make-hashtable

@@ -46,17 +46,17 @@ public class BinaryIO extends IndexedProcedure {
         }   
     }
     
-    public static final BinaryOutputPort boutport(Value o) {
-        try {
-            return (BinaryOutputPort)o;
-        } catch (ClassCastException e) { typeError(BINARYB, "boutput-port", o); }
-        return null;
-    }
-
     public static final BinaryInputPort binport(Value o) {
         try {
             return (BinaryInputPort)o;
         } catch (ClassCastException e) { typeError(BINARYB, "binput-port", o); }
+        return null;
+    }
+
+    public static final BinaryOutputPort boutport(Value o) {
+        try {
+            return (BinaryOutputPort)o;
+        } catch (ClassCastException e) { typeError(BINARYB, "boutput-port", o); }
         return null;
     }
 

@@ -1,45 +1,12 @@
 package sisc.io;
 
 import java.io.IOException;
-import java.io.InputStream;
 
-public class StreamInputPort
-    extends PushbackInputPort
-    implements BinaryInputPort {
+import sisc.data.Value;
 
-    public InputStream in;
+public interface SerialInputPort extends BinaryInputPort {
 
-    public StreamInputPort(InputStream in) {
-        this.in=in;
-    }
-
-    public int readHelper() throws IOException {
-        return in.read();
-    }
-
-    public boolean ready() throws IOException {
-        return in.available()>0;
-    }
-
-    public int read(byte[] buff, int offs, 
-                    int count) throws IOException {
-        if (pushback!=-1) {
-            buff[offs]=(byte)pushback;
-            pushback=-1;
-            count--;
-            offs++;
-        }
-        return readHelper(buff, offs, count);
-    }
-
-    public int readHelper(byte[] buff, int offs, 
-                          int count) throws IOException {
-        return in.read(buff, offs, count);
-    }
-
-    public void close() throws IOException {
-        in.close();
-    }
+    Value readSer() throws IOException;
 }
 /*
  * The contents of this file are subject to the Mozilla Public

@@ -1,44 +1,29 @@
 package sisc.io;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 
-public class StreamInputPort
-    extends PushbackInputPort
-    implements BinaryInputPort {
+import sisc.data.Value;
 
-    public InputStream in;
+public class SerializerPort
+    extends StreamOutputPort
+    implements SerialOutputPort {
 
-    public StreamInputPort(InputStream in) {
-        this.in=in;
+    public SerializerPort(OutputStream out, boolean aflush)
+        throws IOException {
+
+        super(new ObjectOutputStream(out), aflush);
     }
 
-    public int readHelper() throws IOException {
-        return in.read();
+    public void writeSer(Value v) throws IOException {
+        writeSerHelper(v);
+        if (autoflush) flush();
     }
 
-    public boolean ready() throws IOException {
-        return in.available()>0;
-    }
-
-    public int read(byte[] buff, int offs, 
-                    int count) throws IOException {
-        if (pushback!=-1) {
-            buff[offs]=(byte)pushback;
-            pushback=-1;
-            count--;
-            offs++;
-        }
-        return readHelper(buff, offs, count);
-    }
-
-    public int readHelper(byte[] buff, int offs, 
-                          int count) throws IOException {
-        return in.read(buff, offs, count);
-    }
-
-    public void close() throws IOException {
-        in.close();
+    protected void writeSerHelper(Value v) throws IOException {
+        ((ObjectOutput)out).writeObject(v);
     }
 }
 /*

@@ -4,6 +4,8 @@
 
 	* Added predicates to distinguish between different port types.
 
+	* Added serial-io module for (de)serialization of SISC values.
+
 2003-06-04  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Separated character from binary IO. 
