@@ -40,7 +40,7 @@ import java.io.*;
 public abstract class Expression extends Util implements Serializable {
     protected static Set EMPTYSET=new TreeSet();
 
-    protected Map annotations;
+    public Map annotations;
     
     public synchronized Value getAnnotation(Symbol key, Value def) {
         if (annotations==null)

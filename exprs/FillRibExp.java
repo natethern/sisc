@@ -65,14 +65,6 @@ public class FillRibExp extends Expression {
         return new Pair(sym("FillRib-exp"), new Pair(exp.express(), nxp.express()));
     }
 
-    public Set getAnnotationKeys() {
-        return nxp.getAnnotationKeys();
-    }
-
-    public Value getAnnotation(Symbol key) {
-        return nxp.getAnnotation(key);
-    }
-
     public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.serialize(exp, dos);

@@ -239,10 +239,8 @@ public class Compiler extends Util {
                     Expression altern=compile(r, expr.car, rt, TAIL | context,
                                               env, null);
                     rv = new IfEval(conseq, altern);
-                    if (an!=null) {
-                        setAnnotations(rv, an);
-                    }
-                    rv=new EvalExp(tmp, rv);
+                    rv.annotations = tmp.annotations;
+                    rv = new EvalExp(tmp, rv);
                     break;
                 }
             case BEGIN:
@@ -264,22 +262,16 @@ public class Compiler extends Util {
                     error(r, liMessage(SISCB, "setlhsnotsymbol"));
                     return null;
                 }
-                if (an!=null) {
-                    setAnnotations(rv, an);
-                }
+                rv.annotations = rhs.annotations;
                 rv=new EvalExp(rhs, rv);
                 break;
             case DEFINE:
                 Symbol lhs=(Symbol)expr.car;
                 expr=(Pair)expr.cdr;
-                
-                rv=new DefineEval(lhs);
-
-                if (an!=null) {
-                    setAnnotations(rv, an);
-                }
-
-                rv=new EvalExp(compile(r, expr.car, rt, 0, env, null), rv);
+                rhs = compile(r, expr.car, rt, 0, env, null);
+                rv = new DefineEval(lhs);
+                rv.annotations = rhs.annotations;
+                rv=new EvalExp(rhs, rv);
                 break;
             case MAKEANNOTATION:
                 Value aexpr=expr.car;
@@ -324,25 +316,22 @@ public class Compiler extends Util {
 	    !(rator instanceof AnnotatedExpr))
 
             System.err.println(warn("nonprocappdetected",((Value)rator).synopsis()));
-        Expression nxp;
-        if (annotation==null)
-            nxp=APPEVAL;
-        else {
-            nxp=new AppEval();
+        Expression nxp = new AppEval();
+        if (annotation!=null)
             setAnnotations(nxp, annotation);
-        }
-
         Expression lastRand = rator;
         boolean allImmediate=isImmediate(rator);
-        for (int i= rands.length-1; i>=0; i--) {
+        for (int i= 0; i<rands.length; i++) {
             if (!isImmediate(rands[i])) {
-                nxp = new FillRibExp(lastRand, i, nxp, (i==rands.length-1 &&
-							allImmediate));
+                nxp.annotations = lastRand.annotations;
+                nxp = new FillRibExp(lastRand, i, nxp, (i==0 && allImmediate));
                 lastRand = rands[i];
                 rands[i] = null;
                 allImmediate=false;
             }
         }
+        if (lastRand.annotations != null)
+            nxp.annotations = lastRand.annotations;
         return new AppExp(lastRand, rands, nxp, nonTail, allImmediate);
     }
 
@@ -364,23 +353,12 @@ public class Compiler extends Util {
         for (int i=v.size()-2; i>=0; i--) {
             Expression e=compile(r, (Expression)v.elementAt(i),
                                  rt, COMMAND, env, null);
-            if (!(e instanceof Immediate))
-                be=new EvalExp(e, be);
+            if (!(e instanceof Immediate)) {
+                be.annotations = e.annotations;
+                be = new EvalExp(e, be);
+            }
         }
-
         return be;
-
-	/*
-	Vector ev=new Vector(v.size()-1);
-	for (int i=0; i<v.size()-1; i++) {
-            Expression e=compile(r, (Expression)v.elementAt(i),
-                                 rt, COMMAND, env, null);
-	    if (!(e instanceof Immediate))
-		ev.addElement(e);
-	}
-	Expression[] cexprs=new Expression[ev.size()];
-	ev.copyInto(cexprs);
-	return new BeginExp(cexprs, last);*/
     }
 }
 
