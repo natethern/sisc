@@ -27,13 +27,13 @@
     (syntax-case x ()
       ((_ name class)
        (let ((m (load-native-library (syntax-object->datum (syntax class)))))
-	 (with-syntax (((def ...) (datum->syntax-object
-				   (syntax name)
-				   (get-native-library-binding-names m))))
+         (with-syntax (((def ...) (datum->syntax-object
+                                   (syntax name)
+                                   (get-native-library-binding-names m))))
            (syntax (module name (def ...)
 		     (define *module* (load-native-library class))
-                     (define def (get-native-library-binding
-                                   *module* (quote def)))
+             (define def (get-native-library-binding
+                          *module* (quote def)))
 		     ...))))))))
 
 (native-module logicops   "sisc.modules.SLogicOps")
@@ -59,7 +59,7 @@
   (import hashtable)
   (include "../modules/hashtable.scm"))
 
-(module threads
+(module threading
   (thread/new
    thread/start
    thread/yield
@@ -113,7 +113,7 @@
    make)
   (import s2j)
   (import hashtable)
-  (import threads)
+  (import threading)
   (include "../modules/generic-procedures.scm"))
 
 (module s2j
