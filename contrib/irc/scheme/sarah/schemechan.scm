@@ -22,11 +22,15 @@
 		   i)]
 	 [pipeout (make <java.io.PipedOutputStream>)]
 	 [env (let ([e (scheme-report-environment 5)])
-                (putprop 'open-input-file e (forbidden-procedure 
-                                             'open-input-file))
-                (putprop 'open-output-file e (forbidden-procedure 
-                                             'open-output-file))
-                e)]
+		(for-each (lambda (proc)
+			    (putprop proc e (forbidden-procedure proc)))
+			  '(open-input-file open-output-file 
+					    with-output-to-file
+					    with-input-from-file
+					    call-with-input-file
+					    call-with-output-file
+					    open-source-input-file))
+		e)]
 	 [parserinput (java-unwrap (make <sisc.io.SourceInputPort> 
 				     (make <java.io.PipedInputStream> pipeout)
 				     (->jstring channel-name)))]

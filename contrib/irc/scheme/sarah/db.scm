@@ -26,6 +26,12 @@
     (set-string pstmt (->jint 3) (->jstring data))
     (with/fc (lambda (m e) #f) (lambda () (jdbc/execute pstmt)))))
 
+(define (remove-items conn key)
+  (let ([pstmt (jdbc/prepare-statement conn
+                "DELETE FROM knowledge WHERE key=?")])
+    (set-string pstmt (->jint 1) (->jstring key))
+    (with/fc (lambda (m e) #f) (lambda () (jdbc/execute pstmt)))))
+
 (define (lookup-seen conn person)
   (let* ([stmt (jdbc/prepare-statement conn
                 (sisc:format "SELECT to_char(seenon, 'Mon DD at HH:MI pm'),message FROM seen WHERE id='~a'" 

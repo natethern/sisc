@@ -15,12 +15,12 @@
              (list->string (reverse clist)))))))
 
 	          
-(define alice-mutex (mutex/new))                              
+(define alice-mutex (monitor/new))                              
 
 (define ask-alice
   (let ([last-user #f])
     (lambda (from message)
-      (mutex/synchronize-unsafe alice-mutex
+      (monitor/synchronize-unsafe alice-mutex
        (lambda ()
 	 (unless (equal? from last-user)
   	   (call-with-input-file 

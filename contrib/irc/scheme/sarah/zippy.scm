@@ -1,0 +1,16 @@
+(define (read-to-null in)
+  (with-output-to-string 
+    (lambda ()
+       (let loop ([c (read-char in)])
+         (unless (or (eof-object? c) (eqv? c #\nul))
+           (display c)
+           (loop (read-char in)))))))
+
+(define zippy 
+  (let ([inf (open-input-file "yow.lines")])
+    (read-to-null inf)
+    (let loop ([line (read-to-null inf)] [acc '()])
+      (if (equal? "" line) acc
+          (loop (read-to-null inf) (cons (trim line) acc))))))
+
+  

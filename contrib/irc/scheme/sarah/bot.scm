@@ -13,12 +13,15 @@
   (define bot (make-bot (symbol->string bot-name)))
 ;  (set-version bot (->jstring "Sarah - Scheme InfoBot (SISC) v0.6"))
   
-  (display (sisc:format "Connecting...~%"))
-  (with/fc 
-   (lambda (m e)
-     (display m)(newline))
-   (lambda ()
-     (connect bot (->jstring "irc.freenode.net"))))
+  (define (do-connect)
+    (display "Connecting...\n")
+    (with/fc 
+     (lambda (m e)
+       (display m)(newline)
+       #f)
+     (lambda ()
+       (connect bot (->jstring "irc.freenode.net"))
+       #t)))
   
   (define channels '("#scheme" "#sisc"))
 
@@ -46,7 +49,8 @@
 					(string-append
 					 (->string message) (string #\newline))))))]
 	     [else 
-	      (let ([response (answer (->string nick) (->string channel)
+	      (let ([response (answer (->string nick) (string-downcase 
+	                                               (->string channel))
 				      (->string message))])
 		(when response
 		      (send-messages channel response)))])))
@@ -68,7 +72,17 @@
     (set! channels (cons channel channels))
     (bot-quiet! (string->symbol channel) #t))
 
-  (for-each (lambda (channel)
-              (display (sisc:format "Joining ~a...~%" channel))
-	      (do-join channel))
-            '("#sisc" "#scheme"))
+;; Try to stay connected
+  
+  (define (onDisconnect)
+    (let loop ()
+      (sleep 15)
+      (unless (do-connect)
+	(loop)))
+    (for-each (lambda (channel)
+		(display (sisc:format "Joining ~a...~%" channel))
+		(do-join channel))
+	      '("#sisc" "#scheme"))
+    (make-schemechan "#schemerepl"))
+
+  (onDisconnect)

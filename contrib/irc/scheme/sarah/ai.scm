@@ -1,9 +1,18 @@
-
 (import srfi-2)
 (import srfi-11)
 (import threading)
 (import s2j)
 (import generic-procedures)
+
+(define (read-line . port)
+  (let* ((char (apply read-char port)))
+    (if (eof-object? char)
+        char
+        (do ((char char (apply read-char port))
+             (clist '() (cons char clist)))
+            ((or (eof-object? char) (char=? #\newline char))
+             (list->string (reverse clist)))))))
+
 (define <java.util.StringTokenizer> (java-class "java.util.StringTokenizer"))
 (define-generic next-token)
 (define-generic has-more-tokens)
@@ -97,7 +106,7 @@
       (with/fc 
        (lambda (m e)
          (if (null? tokens)
-             'UNKNOWN
+	     #f
              (find-pattern (cdr tokens))))
        (lambda ()
          (find-pattern-helper tokens pattern-graph 1 #t))))))
@@ -121,11 +130,11 @@
 		      (eqv? bot-name (rac strict-tokens)))]
           [cleaned-message (bot-clean message)]
           [pattern (find-pattern strict-tokens)]
-          [response (and pattern 
-                         (display pattern)
-                         (and-let* ([handler (assq pattern pattern-handlers)]) 
-                                   ((cdr handler) from channel
-				    cleaned-message to-bot)))])
+          [response (and-let* ([handler (assq (or pattern 'EXPLAIN)
+                                              pattern-handlers)])
+                        (display (car handler))
+                        ((cdr handler) from channel
+				       cleaned-message to-bot))])
     (if response
         (and (or (and channel
 		      (not (bot-quiet (string->symbol channel))))
@@ -136,16 +145,18 @@
 	     (ask-alice from cleaned-message)))))
     
 (define (bot-clean message)
-  (let loop ([x 0])
-    (cond [(or (= x (string-length message))
-               (> x (+ bot-name-length 1)))
-           message]
-          [(eqv? (string-ref message x) #\:)
-           (substring message (+ x 1) (string-length message))]
-          [else (loop (+ x 1))])))
+  (trim 
+   (let loop ([x 0])
+     (cond [(or (= x (string-length message))
+                (> x (+ bot-name-length 1)))
+            message]
+           [(eqv? (string-ref message x) #\:)
+            (substring message (+ x 1) (string-length message))]
+           [else (loop (+ x 1))]))))
 
 (define pattern-graph
   '((^ help . HELP)
+    (yow . YOW)
     (what . ((is . WHATIS)
              (time . WHATTIME)))
     (whats . WHATIS)
@@ -156,9 +167,16 @@
     (is . LEARN)
     (be . ((quiet . QUIET)))
     (^ listen . ((up . LISTEN)))
-    (evaluate . EVALUATE)
+    (expand . EXPAND)
+    (beautify . PRETTYPRINT)
+    (pretty . ((print . PRETTYPRINT)))
+    (prettyprint . PRETTYPRINT)
+    (pp . PRETTYPRINT)
+    (eval . EVALUATE)
+;    (evaluate . EVALUATE)
     (seen . SEEN)
     (tell . TELL)
+    (forget . FORGET)
     (leave . LEAVE)
     (join . JOIN)
     (new . ((scheme . SCHEMECHANNEL)))
@@ -169,37 +187,38 @@
    (string-append
     "Hello, I'm Sarah, a SISC Scheme Infobot.\n"
     "I respond to some natural language commands, such as:\n"
-    "help - You're doing it.\n"
-    "Something is something's description\n"
-    "  (I'll remember this for someone's later query of...)\n"
-    "What is something?\n"
-    "  (You'll get a similar effect with Who is somebody? and Where is something?)\n\n"
-    "Tell somebody something.\n"
-    "  (I'll tell someone your message immediately if they're online, or\n"
-    "   hold it until I see them next.)\n"
-    "Seen somebody?\n"
-    "  (I'll tell you the last time I saw someone, and what they said last.)\n"
-    "evaluate (some-scheme-expression)\n"
-    "  (I'll run a simple program for you, but it must complete quickly!)\n"))
+    "help - You're doing it.\n\n"
+    "<Something> is <something's description> -- I'll remember this for someone's later query of...\n"
+    "What is <something> -- You'll get a similar effect with Who is somebody? and Where is something?\n\n"
+    "forget <something> -- I'll forget all knowledge of a term.  Please be careful!\n"
+    "Tell somebody something. -- I'll tell someone your message immediately if they're online, or hold it until I see them next.\n"
+    "Seen somebody? -- I'll tell you the last time I saw someone, and what they last said.\n"
+    "\n"
+    "evaluate <s-expression> -- I'll run a simple program for you, but it must complete quickly!\n"
+    "pretty-print <s-expression> -- I'll nicely format your Scheme expression for you.\n"
+    "expand <s-expression> -- I'll syntactically expand the expression and pretty print it.\n"))
   "")
   
 
 (define (*-is type from channel message st)
   (let-values ([(ignoreables term) (string-split message " is ")])
-    (and term 
-         (begin 
-           (if (eqv? #\? (string-ref term (- (string-length term) 1)))
-               (set! term (substring term 
-                                     0 (- (string-length term) 1))))
-           (and-let* ([results (lookup-item dbcon type term)])
-             (let ([random-result (random-elem results)])
-               (sisc:format "~a~a ~a ~a" 
+    (and term (explain type from channel term st))))
+
+(define (puzzled from channel term st)
+  (explain 'what from channel term st))
+
+(define (explain type from channel term st) 
+  (if (eqv? #\? (string-ref term (- (string-length term) 1)))
+      (set! term (substring term 
+                            0 (- (string-length term) 1))))
+      (and-let* ([results (lookup-item dbcon type term)])
+        (let ([random-result (random-elem results)])
+          (sisc:format "~a~a ~a ~a" 
                        (random-elem whatis-preludes) 
                        (car random-result)
                        (cdr (assq type '((what . is) (where . "is at"))))
-                       (cdr random-result))))))))
+                       (cdr random-result)))))
        
-
 (define (quiet from channel message . args) 
   (bot-quiet! (string->symbol channel) #t) 
   "Fine, shutting up.")
@@ -212,12 +231,14 @@
            (thread/new 
             (lambda ()
               (with-output-to-string 
-                  (lambda () (pretty-print 
-                              (eval datum
-                                    ;Run this in R5RS only
-				    (if (null? env)
-					(scheme-report-environment 5)
-					(car env))))))))]
+                  (lambda () (let ([result 
+                                    (eval datum
+                                        ;Run this in R5RS only
+	      			      (if (null? env)
+				  	  (scheme-report-environment 5)
+					  (car env)))])
+                               (if (not (void? result))
+                                   (pretty-print result)))))))]
            [watchdog-thread
             (thread/new
              (lambda ()
@@ -241,8 +262,8 @@
       (thread/result watchdog-thread)))
 
 (define (evaluate from channel message st)
-  (let-values ([(ignoreables term) (string-split message "evaluate ")])
-    (eval-within-n-ms (with-input-from-string term read) 500)))
+  (let-values ([(ignoreables term) (string-split message "eval ")])
+    (eval-within-n-ms (with-input-from-string term read-code) 500)))
 
 (define (learn from channel message st)
   (let-values ([(term definition) (string-split message " is at ")])    
@@ -255,6 +276,12 @@
                     (if (store-item dbcon 'what term definition)
 			(random-elem learn-responses) 
                         (random-elem knewthat-responses))))))))
+
+(define (forget from channel message st)
+  (let-values ([(ignorables term) (string-split message "forget ")])    
+    (if (remove-items dbcon term)
+        (random-elem forget-responses)
+        (random-elem didntknow-responses))))
 
 (define (onJoin channel sender login hostname)
   (add-nick (string->symbol (->string channel))
@@ -392,6 +419,20 @@
 (define (where-is from channel message st) (*-is 'where from channel message st))
 (define (who-is from channel message st) (*-is 'what from channel message st))
 
+(define (prettyprint from channel message st)
+  (with-input-from-string message
+    (lambda ()
+      (let loop ([x (read)] [l #f])
+	(if (eof-object? x)
+	    (and l (pretty-print-to-string l))
+	    (loop (read) x))))))
+
+(define (expand from channel message st)
+  (let-values ([(ignoreables expr) (string-split message "expand ")])
+    (with-input-from-string expr
+      (lambda ()
+	(pretty-print-to-string (sc-expand (read-code)))))))
+
 (define (join from channel message st) 
   (let-values ([(ignoreables chan) (string-split message "join ")])
     (if (char=? (string-ref chan 0) #\#)
@@ -415,6 +456,9 @@
 	(handler from channel message spoken-to)
 	#f)))
 
+(define (yow from channel message st)
+  (random-elem zippy))
+
 (define pattern-handlers
   `((WHATIS . ,(if-spoken-to what-is))
     (JOIN . ,(if-spoken-to join))
@@ -429,4 +473,9 @@
     (EVALUATE . ,(if-spoken-to evaluate))
     (TELL . ,(if-spoken-to tell))
     (HELP . ,(if-spoken-to help))
+    (EXPAND . ,(if-spoken-to expand))
+    (PRETTYPRINT . ,(if-spoken-to prettyprint))
+    (EXPLAIN . ,(if-spoken-to puzzled))
+    (FORGET . ,(if-spoken-to forget))
+    (YOW . ,(if-spoken-to yow))
     (SCHEMECHANNEL . ,schemechan)))

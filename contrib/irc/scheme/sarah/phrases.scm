@@ -1,3 +1,11 @@
+(define forget-responses
+  '("Okay."
+    "Consider it forgotten."))
+
+(define didntknow-responses
+  '("Already done."
+    "Never knew it."))
+
 (define time-preludes
   '("Its"
     "My watch says"))
