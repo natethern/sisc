@@ -184,5 +184,4 @@
 (should-be 1094233 4.0 (max 3.9 4))
 (should-be 1094233 3.0 (min 3 4.9))
 
-(should-be '(`(b ,(+ 1 2))) `(`(b ,(+ 1 2))))
-
+(should-be 1093762 '((quasiquote (b (unquote (+ 1 2))))) `(`(b ,(+ 1 2))))
