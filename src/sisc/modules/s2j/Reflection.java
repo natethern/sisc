@@ -54,8 +54,10 @@ public class Reflection extends Util {
 
         JAVA_INVOKE_CONSTRUCTOR = 38,
         JAVA_INVOKE_METHOD = 39,
-        JAVA_GET_FIELD = 40,
-        JAVA_SET_FIELD = 41;
+        JAVA_FIELD_REF = 40,
+        JAVA_FIELD_SET = 41,
+        JAVA_ARRAY_REF = 42,
+        JAVA_ARRAY_SET = 43;
 
     public static class Index extends IndexedLibraryAdapter {
 
@@ -109,11 +111,145 @@ public class Reflection extends Util {
 
             define("java/invoke-constructor", JAVA_INVOKE_CONSTRUCTOR);
             define("java/invoke-method", JAVA_INVOKE_METHOD);
-            define("java/get-field", JAVA_GET_FIELD);
-            define("java/set-field", JAVA_SET_FIELD);
+            define("java/field-ref", JAVA_FIELD_REF);
+            define("java/field-set!", JAVA_FIELD_SET);
+            define("java/array-ref", JAVA_ARRAY_REF);
+            define("java/array-set!", JAVA_ARRAY_SET);
         }
     }
-    
+
+    private static String typeString(Object o) {
+        return (o == null) ? "null" : Util.nameType(o.getClass());
+    }
+
+    private static String typeString(Class o) {
+        return (o == null) ? "null" : Util.nameType(o);
+    }
+
+    private static String typesString(Class[] args) {
+        StringBuffer res = new StringBuffer();
+        for (int i=0; i<args.length; i++) {
+            res.append(typeString(args[i]));
+            if (i<args.length-1) res.append(", ");
+        }
+        return res.toString();
+    }
+            
+    private static String typesString(Object[] args) {
+        StringBuffer res = new StringBuffer();
+        for (int i=0; i<args.length; i++) {
+            res.append(typeString(args[i]));
+            if (i<args.length-1) res.append(", ");
+        }
+        return res.toString();
+    }
+            
+    private static Object invokeConstructor(Constructor c, Object[] args)
+        throws InvocationTargetException {
+
+        try {
+            return c.newInstance(args);
+        } catch (InstantiationException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "constructorabstract",
+                                                 c.toString(),
+                                                 Util.nameType(c.getDeclaringClass())));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "illegalconstructoraccess", 
+                                                 c.toString(), 
+                                                 Util.nameType(c.getDeclaringClass())));
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "illegalconstructorargument",
+                                                 c.toString(), 
+                                                 Util.nameType(c.getDeclaringClass()),
+                                                 typesString(args)));
+        }
+    }
+
+    private static Object invokeMethod(Method m, Object o, Object[] args)
+        throws InvocationTargetException {
+
+        try {
+            return m.invoke(o, args);
+        } catch (NullPointerException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "illegalmethodnull", 
+                                                 m.toString(),
+                                                 Util.nameType(m.getDeclaringClass())));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "illegalmethodaccess", 
+                                                 m.toString(), 
+                                                 Util.nameType(m.getDeclaringClass())));
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "illegalmethodargument", 
+                                                 m.toString(), 
+                                                 Util.nameType(m.getDeclaringClass()),
+                                                 typeString(o),
+                                                 typesString(args)));
+        }
+    }
+
+    private static Object getField(Field f, Object o) {
+        try {
+            return f.get(o);
+        } catch (NullPointerException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "illegalfieldnull", 
+                                                 f.toString(),
+                                                 Util.nameType(f.getDeclaringClass())));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "illegalfieldaccess",
+                                                 f.toString(), 
+                                                 Util.nameType(f.getDeclaringClass())));
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "illegalfieldgetargument", 
+                                                 f.toString(), 
+                                                 Util.nameType(f.getDeclaringClass()),
+                                                 typeString(o)));
+        }
+    }
+
+    private static void setField(Field f, Object o, Object v) {
+        try {
+            f.set(o, v);
+        } catch (NullPointerException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "illegalfieldnull", 
+                                                 f.toString(),
+                                                 Util.nameType(f.getDeclaringClass())));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "illegalfieldaccess", 
+                                                 f.toString(), 
+                                                 Util.nameType(f.getDeclaringClass())));
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "illegalfieldsetargument", 
+                                                 f.toString(), 
+                                                 Util.nameType(f.getDeclaringClass()),
+                                                 typeString(o),
+                                                 typeString(v)));
+        }
+    }
+
+    private static Object getArray(Object a, int idx) {
+        try {
+            return Array.get(a, idx);
+        } catch (NullPointerException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "illegalarraynull"));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "arraybounds", String.valueOf(idx)));
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "notarray", typeString(a)));
+        }
+    }
+
+    private static void setArray(Object a, int idx, Object v) {
+        try {
+            Array.set(a, idx, v);
+        } catch (NullPointerException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "illegalarraynull"));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "arraybounds", String.valueOf(idx)));
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "illegalarrayargs", typeString(a), typeString(v)));
+        }
+    }
+
     public Reflection(int id) {
         super(id);
     }
@@ -144,29 +280,25 @@ public class Reflection extends Util {
                 try {
                     return objectsToList(jclass(f.vlr[0]).getDeclaredConstructors());
                 } catch (SecurityException e) {
-                    throw new RuntimeException(liMessage(S2JB, "constructoraccess",
-                                                         Util.nameType(jclass(f.vlr[0]))));
+                    throw new RuntimeException(liMessage(S2JB, "constructoraccess", Util.nameType(jclass(f.vlr[0]))));
                 }
             case JAVA_METHODS:
                 try {
                     return objectsToList(jclass(f.vlr[0]).getDeclaredMethods());
                 } catch (SecurityException e) {
-                    throw new RuntimeException(liMessage(S2JB, "methodaccess",
-                                                         Util.nameType(jclass(f.vlr[0]))));
+                    throw new RuntimeException(liMessage(S2JB, "methodaccess", Util.nameType(jclass(f.vlr[0]))));
                 }
             case JAVA_FIELDS:
                 try {
                     return objectsToList(jclass(f.vlr[0]).getDeclaredFields());
                 } catch (SecurityException e) {
-                    throw new RuntimeException(liMessage(S2JB, "fieldaccess",
-                                                         Util.nameType(jclass(f.vlr[0]))));
+                    throw new RuntimeException(liMessage(S2JB, "fieldaccess", Util.nameType(jclass(f.vlr[0]))));
                 }
             case JAVA_CLASSES:
                 try {
                     return objectsToList(jclass(f.vlr[0]).getDeclaredClasses());
                 } catch (SecurityException e) {
-                    throw new RuntimeException(liMessage(S2JB, "classaccess",
-                                                         Util.nameType(jclass(f.vlr[0]))));
+                    throw new RuntimeException(liMessage(S2JB, "classaccess", Util.nameType(jclass(f.vlr[0]))));
                 }
             case JAVA_INTERFACES:
                 return objectsToList(jclass(f.vlr[0]).getInterfaces());
@@ -235,31 +367,21 @@ public class Reflection extends Util {
             case JAVA_OBJECTQ:
                 return truth(f.vlr[0] instanceof JavaObject);
             case JAVA_CLASSQ:
-                return truth(f.vlr[0] instanceof JavaObject &&
-                             jtype(f.vlr[0]) == JavaObject.JCLASS);
+                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JCLASS);
             case JAVA_FIELDQ:
-                return truth(f.vlr[0] instanceof JavaObject &&
-                             jtype(f.vlr[0]) == JavaObject.JFIELD);
+                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JFIELD);
             case JAVA_METHODQ:
-                return truth(f.vlr[0] instanceof JavaObject &&
-                             jtype(f.vlr[0]) == JavaObject.JMETHOD);
+                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JMETHOD);
             case JAVA_CONSTRUCTORQ:
-                return truth(f.vlr[0] instanceof JavaObject &&
-                             jtype(f.vlr[0]) == JavaObject.JCONSTR);
+                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JCONSTR);
             case JAVA_ARRAYQ:
-                return truth(f.vlr[0] instanceof JavaObject &&
-                             jtype(f.vlr[0]) == JavaObject.JARRAY);
+                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JARRAY);
             case JAVA_NULLQ:
-                return truth(f.vlr[0] instanceof JavaObject &&
-                             jtype(f.vlr[0]) == JavaObject.JNULL);
+                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JNULL);
             case JAVA_INTERFACEQ:
-                return truth(f.vlr[0] instanceof JavaObject &&
-                             jtype(f.vlr[0]) == JavaObject.JCLASS &&
-                             jclass(f.vlr[0]).isInterface());
+                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JCLASS && jclass(f.vlr[0]).isInterface());
             case JAVA_ARRAY_CLASSQ:
-                return truth(f.vlr[0] instanceof JavaObject &&
-                             jtype(f.vlr[0]) == JavaObject.JCLASS &&
-                             jclass(f.vlr[0]).isArray());
+                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JCLASS && jclass(f.vlr[0]).isArray());
             case JAVA_CLASS_OF:
                 return makeJObj(sjobj(f.vlr[0]).classOf(), Class.class);
             case JAVA_INV_HANDLER:
@@ -304,8 +426,7 @@ public class Reflection extends Util {
                 } catch (IllegalArgumentException e) {
                     throw new RuntimeException(liMessage(S2JB, "arraytypevoid"));
                 } catch (NegativeArraySizeException e) {
-                    throw new RuntimeException(liMessage(S2JB, "arraynegative",
-                                                         f.vlr[1].toString()));
+                    throw new RuntimeException(liMessage(S2JB, "arraynegative", f.vlr[1].toString()));
                 }
             case JAVA_ARRAY_NEW:
                 Value dims = f.vlr[1];
@@ -330,59 +451,22 @@ public class Reflection extends Util {
                 } catch (IllegalArgumentException e) {
                     throw new RuntimeException(liMessage(S2JB, "arraytypevoid"));
                 } catch (NegativeArraySizeException e) {
-                    throw new RuntimeException(liMessage(S2JB, "arraynegative",
-                                                         dims.toString()));
+                    throw new RuntimeException(liMessage(S2JB, "arraynegative", dims.toString()));
                 }
             case JAVA_INVOKE_CONSTRUCTOR:
                 Constructor jc = jconstr(f.vlr[0]);
                 try {
-                    return Util.makeJObj(jc.newInstance(pairToObjects(pair(f.vlr[1]))),
+                    return Util.makeJObj(invokeConstructor(jc, pairToObjects(pair(f.vlr[1]))),
                                          jc.getDeclaringClass());
-                } catch (InstantiationException e) {
-                    throw new RuntimeException(liMessage(Util.S2JB, "constructorabstract",
-                                                         jc.toString(),
-                                                         Util.nameType(jc.getDeclaringClass())));
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(liMessage(Util.S2JB, "illegalaccess", 
-                                                         new Object[] {
-                                                             liMessage(Util.S2JB, "jconstructor"), 
-                                                             jc.toString(), 
-                                                             Util.nameType(jc.getDeclaringClass())}));
-                } catch (IllegalArgumentException e) {
-                    throw new RuntimeException(liMessage(Util.S2JB, "illegalargument", 
-                                                         new Object[] {
-                                                             liMessage(Util.S2JB, "jconstructor"), 
-                                                             jc.toString(), 
-                                                             Util.nameType(jc.getDeclaringClass()),
-                                                             f.vlr[1].toString()}));
                 } catch (InvocationTargetException e) {
                     error(f, Util.makeJObj(e.getTargetException(), Throwable.class));
                 }
-            case JAVA_GET_FIELD:
+            case JAVA_FIELD_REF:
                 Field jf = jfield(f.vlr[0]);
-                try {
-                    return Util.makeJObj(jf.get(jobj(f.vlr[1])),
-                                         jf.getType());
-                } catch (NullPointerException e) {
-                    throw new RuntimeException(liMessage(Util.S2JB, "illegalnull", 
-                                                         new Object[] {
-                                                             liMessage(Util.S2JB, "jfield"), 
-                                                             jf.toString(),
-                                                             Util.nameType(jf.getDeclaringClass())}));
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(liMessage(Util.S2JB, "illegalaccess", 
-                                                         new Object[] {
-                                                             liMessage(Util.S2JB, "jfield"), 
-                                                             jf.toString(), 
-                                                             Util.nameType(jf.getDeclaringClass())}));
-                } catch (IllegalArgumentException e) {
-                    throw new RuntimeException(liMessage(Util.S2JB, "illegalargument", 
-                                                         new Object[] {
-                                                             liMessage(Util.S2JB, "jfield"), 
-                                                             jf.toString(), 
-                                                             Util.nameType(jf.getDeclaringClass()),
-                                                             f.vlr[1].toString()}));
-                }
+                return Util.makeJObj(getField(jf, jobj(f.vlr[1])), jf.getType());
+            case JAVA_ARRAY_REF:
+                Object ar = jobj(f.vlr[0]);
+                return Util.makeJObj(getArray(ar, num(f.vlr[1]).indexValue()), ar.getClass().getComponentType());
             default: break SIZESWITCH;
             }
         case 3:
@@ -390,55 +474,17 @@ public class Reflection extends Util {
             case JAVA_INVOKE_METHOD:
                 Method jm = jmethod(f.vlr[0]);
                 try {
-                    return Util.makeJObj(jm.invoke(jobj(f.vlr[1]), pairToObjects(pair(f.vlr[2]))),
+                    return Util.makeJObj(invokeMethod(jm, jobj(f.vlr[1]), pairToObjects(pair(f.vlr[2]))),
                                          jm.getReturnType());
-                } catch (NullPointerException e) {
-                    throw new RuntimeException(liMessage(Util.S2JB, "illegalnull", 
-                                                         new Object[] {
-                                                             liMessage(Util.S2JB, "jmethod"), 
-                                                             jm.toString(),
-                                                             Util.nameType(jm.getDeclaringClass())}));
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(liMessage(Util.S2JB, "illegalaccess", 
-                                                         new Object[] {
-                                                             liMessage(Util.S2JB, "jmethod"), 
-                                                             jm.toString(), 
-                                                             Util.nameType(jm.getDeclaringClass())}));
-                } catch (IllegalArgumentException e) {
-                    throw new RuntimeException(liMessage(Util.S2JB, "illegalargument", 
-                                                         new Object[] {
-                                                             liMessage(Util.S2JB, "jmethod"), 
-                                                             jm.toString(), 
-                                                             Util.nameType(jm.getDeclaringClass()),
-                                                             f.vlr[1].toString()}));
                 } catch (InvocationTargetException e) {
                     error(f, Util.makeJObj(e.getTargetException(), Throwable.class));
                 }
-            case JAVA_SET_FIELD:
-                Field jf = jfield(f.vlr[0]); 
-                try {
-                    jf.set(jobj(f.vlr[1]), jobj(f.vlr[2]));
-                    return VOID;
-                } catch (NullPointerException e) {
-                    throw new RuntimeException(liMessage(Util.S2JB, "illegalnull", 
-                                                         new Object[] {
-                                                             liMessage(Util.S2JB, "jfield"), 
-                                                             jf.toString(),
-                                                             Util.nameType(jf.getDeclaringClass())}));
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(liMessage(Util.S2JB, "illegalaccess", 
-                                                         new Object[] {
-                                                             liMessage(Util.S2JB, "jfield"), 
-                                                             jf.toString(), 
-                                                             Util.nameType(jf.getDeclaringClass())}));
-                } catch (IllegalArgumentException e) {
-                    throw new RuntimeException(liMessage(Util.S2JB, "illegalargument", 
-                                                         new Object[] {
-                                                             liMessage(Util.S2JB, "jfield"), 
-                                                             jf.toString(), 
-                                                             Util.nameType(jf.getDeclaringClass()),
-                                                             f.vlr[1].toString()}));
-                }
+            case JAVA_FIELD_SET:
+                setField(jfield(f.vlr[0]), jobj(f.vlr[1]), jobj(f.vlr[2]));
+                return VOID;
+            case JAVA_ARRAY_SET:
+                setArray(jobj(f.vlr[0]), num(f.vlr[1]).indexValue(), jobj(f.vlr[2]));
+                return VOID;
             default: break SIZESWITCH;
             }
         }
@@ -451,9 +497,9 @@ public class Reflection extends Util {
             try {
                 return makeJObj(Proxy.getProxyClass(f.dynenv.getClassLoader(), interfaces), Class.class);
             } catch (IllegalArgumentException e) {
-                throw new RuntimeException(liMessage(Util.S2JB, "proxyinterfaceillegal"));
+                throw new RuntimeException(liMessage(Util.S2JB, "proxyinterfaceillegal", typesString(interfaces)));
             } catch (NullPointerException e) {
-                throw new RuntimeException(liMessage(Util.S2JB, "proxyinterfacenull"));
+                throw new RuntimeException(liMessage(Util.S2JB, "proxyinterfacenull", typesString(interfaces)));
             }
         default:
             throwArgSizeException();

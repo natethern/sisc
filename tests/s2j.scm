@@ -1,4 +1,5 @@
 (import s2j)
+(import s2j-reflection)
 (import generic-procedures)
 
 (define-generic value-of)
@@ -240,8 +241,11 @@
 
 ;;check exception handling in reflection api
 
-(import s2j-reflection)
-(import s2j)
+(define (find pred l)
+  (and (not (null? l))
+       (if (pred (car l))
+           (car l)
+           (find pred (cdr l)))))
 (java/wrap) ;;arg size exception
 (java/unwrap 1) ;;type error
 (java/class '|foo|) ;;class not found
@@ -260,17 +264,10 @@
                                <jaccessible-object>))
                          (list)) ;;access to protected constructor
 (define <jurl> (java/class '|java.net.URL|))
-(define (find pred l)
-  (and (not (null? l))
-       (if (pred (car l))
-           (car l)
-           (find pred (cdr l)))))
-
 (define make-url-from-string
   (find (lambda (c) (equal? (java/parameter-types c)
                             (list <jstring>)))
         (java/constructors <jurl>)))
-
 (java/invoke-constructor make-url-from-string
                          (list)) ;;illegal arguments
 (java/invoke-constructor make-url-from-string
@@ -286,7 +283,7 @@
   (java/invoke-constructor
    (car (java/constructors <jstring-reader>))
    (list (->jstring "foo"))))
-(java/get-field reader-lock str) ;;illegal access
+(java/field-ref reader-lock str) ;;illegal access
 (define <jstream-tokenizer> (java/class '|java.io.StreamTokenizer|))
 (define st
   (java/invoke-constructor
@@ -297,18 +294,18 @@
 (define tokenizer-sval
   (find (lambda (f) (eq? (java/name f) 'sval))
         (java/fields <jstream-tokenizer>)))
-(java/get-field tokenizer-sval (java/null)) ;;illegal null
-(java/get-field tokenizer-sval str) ;;illegal arg
-(java/set-field tokenizer-sval
-                (java/null)
-                (->jstring "foo")) ;;illegal null
-(java/set-field tokenizer-sval
-                str
-                (->jstring "foo")) ;;illegal arg
-(java/set-field tokenizer-sval
-                st
-                (->jint 1)) ;;illegal arg
-(java/set-field reader-lock str (->jstring "foo")) ;;illegal access
+(java/field-ref tokenizer-sval (java/null)) ;;illegal null
+(java/field-ref tokenizer-sval str) ;;illegal arg
+(java/field-set! tokenizer-sval
+                 (java/null)
+                 (->jstring "foo")) ;;illegal null
+(java/field-set! tokenizer-sval
+                 str
+                 (->jstring "foo")) ;;illegal arg
+(java/field-set! tokenizer-sval
+                 st
+                 (->jint 1)) ;;illegal arg
+(java/field-set! reader-lock str (->jstring "foo")) ;;illegal access
 (define url-set
   (find (lambda (m) (and (eq? (java/name m) 'set)
                          (equal? (java/parameter-types m)
@@ -344,3 +341,11 @@
                     (list (->jint -1))) ;;IllegalArgumentException
 (java/proxy-class <jurl>) ;;illegal interfaces
 (java/proxy-class (java/null)) ;;illegal null
+(java/array-ref (java/null) 1) ;;illegal null
+(java/array-ref (->jint 1) 1) ;;not an array
+(define ar (java/array-new <jint> '(1)))
+(java/array-ref ar 2) ;;out of bounds
+(java/array-set! (java/null) 1 (->jint 1)) ;;illegal null
+(java/array-set! (->jint 1) 1 (->jint 1)) ;;not an array
+(java/array-set! ar 0 (->jstring "foo")) ;;type incompatible
+(java/array-set! ar 2 (->jint 1)) ;;out of bounds
