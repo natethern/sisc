@@ -8,7 +8,7 @@ import sisc.*;
 import sisc.data.*;
 import sisc.interpreter.*;
 
-import sisc.modules.S2J.JavaObject;
+import sisc.modules.s2j.JavaObject;
 
 public class SchemeServlet extends SchemeServletBase {
 
@@ -38,10 +38,10 @@ public class SchemeServlet extends SchemeServletBase {
         Interpreter r = Context.enter(appName);
         try {
             r.eval(fn, new Value[] {
-                new sisc.modules.S2J.JavaObject(request),
-                    new sisc.modules.S2J.JavaObject(response) });
+                new JavaObject(request),
+                    new JavaObject(response) });
         } catch (SchemeException e) {
-            throw new ServletException("calling " + fn + " failed", sisc.modules.S2J.javaException(e));
+            throw new ServletException("calling " + fn + " failed", sisc.modules.s2j.Util.javaException(e));
         } finally {
             Context.exit();
         }
