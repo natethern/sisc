@@ -458,11 +458,15 @@
            r))))
 
 ;;;;;;;;;;;;;; String functions
-(define (string-append . args)
-  (cond [(null? args) ""]
-        [(null? (cdr args)) (car args)]
-        [else (apply string-append (_string-append (car args) (cadr args))
-                   (cddr args))]))
+(define string-append
+  (letrec ([string-append-helper
+	    (lambda (acc args)
+	      (if (null? args) acc
+		  (string-append-helper (_string-append acc (car args))
+					(cdr args))))])
+    (lambda args
+      (if (null? args) ""
+	  (string-append-helper (car args) (cdr args))))))
 
 (define char-downcase
   (let* ((a (char->integer #\A))
