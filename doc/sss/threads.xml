@@ -305,17 +305,15 @@
     <warning>
       <title>Final Continuation of a Thread</title>
       <para>
-        The continuation of an expression run in a thread is store
-        the thread's result in its thread handle, then
-        exit the thread in which it is running.  If a thread is
-        interrupted, then its computation resumed, the thread that
-        hosts the resumed computation will exit when the result is
-        complete.  As a consequence, if a computation run in a
+        If a thread is interrupted and later its computation is
+        resumed by calling the error-continuation, the thread that
+        hosts the resumed computation will exit when the computation
+        terminates. As a consequence, if a computation that ran in a
         separate thread is resumed in the primordial thread (that
         usually hosts the REPL), the primordial thread will terminate
-        as soon as the computation completes.  This will circumvent
-        the REPL entirely and cause &SISC; to exit of no non-daemon
-        threads remain.  In general, interrupted threads should be
+        as soon as the computation completes. This will circumvent the
+        REPL entirely and cause &SISC; to exit if no non-daemon
+        threads remain. In general, interrupted threads should be
         resumed in a newly created thread to avoid this scenario.
       </para>
     </warning>
