@@ -410,7 +410,7 @@ public class IO extends IndexedProcedure {
 
                         if (v!=EOF) {
                             try {
-                                Expression ev=r.compile(v, false);
+                                Expression ev=r.compile(v);
                                 r.interpret(ev);
                             } catch (SchemeException se) {
                                 throwNestedPrimException(se);
