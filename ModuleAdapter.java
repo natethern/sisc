@@ -35,42 +35,4 @@ public abstract class ModuleAdapter extends Module {
     public float getModuleVersion() {
 	return 0.0f;
     }
-
-    /* Localization and Internationalization */
-    static Locale myLocale=Locale.getDefault();
-    static MessageFormat formatter=new MessageFormat("");
-    ResourceBundle localLiMessages;
-
-    static {
-	formatter.setLocale(myLocale);
-    }
-
-    public ModuleAdapter() {
-        try {
-            localLiMessages = ResourceBundle.getBundle(getModuleName());
-        } catch (MissingResourceException mr) {
-            localLiMessages = Util.liMessages;
-        }
-    }
-
-    protected String getLocalizedMessage(String mn) {
-	String rv=localLiMessages.getString(mn);
-	if (rv==null) return Util.liMessage(mn);
-	else return rv;
-    }
-
-    public String localizedMessage(String messageName) {
-	return getLocalizedMessage(messageName);
-    }
-
-    public String localizedMessage(String messageName, String arg1) {
-	return formatter.format(getLocalizedMessage(messageName),
-				new Object[] { arg1 });
-    }
-
-    public String localizedMessage(String messageName, String arg1,
-				   String arg2) {
-	return formatter.format(getLocalizedMessage(messageName),
-				new Object[] { arg1, arg2 });
-    }
 }
