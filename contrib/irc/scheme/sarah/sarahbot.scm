@@ -11,7 +11,6 @@
 (import srfi-2)
 (import srfi-9)
 (import srfi-11)
-(import srfi-13)
 (import srfi-19)
 (import srfi-27)
 (import jdbc)
@@ -40,6 +39,8 @@
 (include "plugins/zippy.scm")
 (include "plugins/schemechan.scm")
 (include "plugins/logging.scm")
+
+(define bot-metaphone (metaphone botname))
 
 (define (random-elem ls)
   (list-ref ls (random-integer (length ls))))

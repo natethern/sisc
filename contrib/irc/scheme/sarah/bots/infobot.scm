@@ -37,8 +37,14 @@
    ("what is "
     "\"What is <something>\" asks for information about the something."
     (*-is? 'what))
+   ("what are "
+    "\"What are <somethings>\" asks for information about the somethings."
+    (*-is? 'what))
    ("where is "
     "\"Where is <something>\" asks for the location of the something."
+    (*-is? 'where))
+   ("where are "
+    "\"Where are <somethings>\" asks for the location of the somethings."
     (*-is? 'where))
    ("who is "
     "\"Who is <someone>\" asks for information about someone."
@@ -70,6 +76,7 @@
     join-chan)
    ("scheme-channel " "\"scheme-channel <channel-name>\" creates a scheme channel with the given name" make-schemechan)
    ("part " "\"part <channel-name>\" asks me to leave a channel I'm in." request-part)
+   ("pasted " "" (lambda args (random-elem paste-responses)))
    ("locate " "\"locate <someone>\" asks me to tell you where I see someone."
     locate)
    ("forget " "\"forget <something>\" asks me to forget what I know about something."
@@ -82,6 +89,12 @@
     (learn 'what))
    (#t "<something>? asks me what something is" (*-is? #f))
 ))
+
+(define paste-responses
+ '("Wait, no I didn't.  Hey..."
+   "Quit screwing around."
+   "Thats really not funny, leave me out of it."
+   "Wait, that wasn't me."))
 
 (define (infobot . plugins)
   (lambda (channel message)

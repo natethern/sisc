@@ -23,6 +23,7 @@
   (let ([response (ask-anna (message-nick message)
                             (bot-clean (->string (get-name (channel-bot channel)))
                                        (message-text message)))])
+    (display "From anna: ")
     (send-messages (channel-bot channel)
                    (message-source message) response)
     #t))

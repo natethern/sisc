@@ -30,9 +30,10 @@
  (->string (jtrim (->jstring str))))
 
 (define (crib-split on str)
+  (import srfi-13)
   (if (eq? on #t)
       (list "" (trim str))
-      (let ([i (string-contains str on)])
+      (let ([i (string-contains (string-downcase str) on)])
         (if i
             (list (trim (substring str 0 i))
                   (trim (substring str (+ i (string-length on)) (string-length str))))
@@ -69,7 +70,7 @@
        (cond [(or (= x (string-length message))
                   (> x (+ bot-name-length 1)))
               message]
-             [(memv (string-ref message x) '(#\: #\,))
+             [(memv (string-ref message x) '(#\: #\, #\space))
               (substring message (+ x 1) (string-length message))]
              [else (loop (+ x 1))])))))
 
@@ -103,8 +104,10 @@
   (let* ([strict-tokens (strict-tokenize (message-text message))]
          [to-bot (or (message-is-private? message)
                      ;; Name must be first or last in a sentence
-                     (eqv? (string->symbol bot-name) (car strict-tokens))
-                     (eqv? (string->symbol bot-name) (last strict-tokens)))]
+                     (string=? bot-metaphone
+                           (metaphone (symbol->string (car strict-tokens))))
+                     (string=? bot-metaphone 
+                           (metaphone (symbol->string (last strict-tokens)))))]
          [cleaned-message (bot-clean bot-name (message-text message))])
     (values to-bot cleaned-message strict-tokens)))
           

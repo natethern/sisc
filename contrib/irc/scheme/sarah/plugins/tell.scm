@@ -5,6 +5,7 @@
     (store-tell dbcon message term (eq? type 'later))))
 
 (define (store-tell dbcon message term later)
+  (import srfi-13)
   (and (not (equal? term ""))
        (and-let* ([spidx (string-index term #\space)]
 		  [recipient (substring term 0 spidx)])

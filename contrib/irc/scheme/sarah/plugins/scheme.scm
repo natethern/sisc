@@ -1,6 +1,6 @@
 ; Various Scheme evaluating/printing plugins
 (import threading)
-
+(import debugging)
 (define (pprint channel message ignore term)
   (with-input-from-string term
     (lambda ()

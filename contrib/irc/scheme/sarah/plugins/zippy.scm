@@ -1,5 +1,7 @@
 (define (yow channel message ignore term)
-  (or (and (equal? ignore "") (<= (string-length term) 1) (random-elem zippy))
+  (or (and (or (not ignore) (equal? ignore ""))
+           (or (not term) (<= (string-length term) 1))
+           (random-elem zippy))
       'continue))
 
 (define (read-to-null in)

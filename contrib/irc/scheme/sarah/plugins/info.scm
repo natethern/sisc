@@ -16,19 +16,22 @@
                               (cddr random-result))))))))
 
 
+(define (ignorable? tokens definition)
+  (or (and (> (length tokens) (length (tokenize definition)))
+           (> (length tokens) 1))
+      (and (= 1 (length tokens)) (memq (car tokens) ignored-words))))
+
 (define (learn type)
   (lambda (channel message term definition)
     (let ([tt (tokenize term)])
-      (or (and (or (and (> (length tt) (length (tokenize definition))
-                        (> (length tt) 1))
-                   (and (= 1 (length tt)) (memq (car tt) ignored-words))))
-               'continue)
+      (display tt) (newline) (display definition)
+      (or (and (ignorable? tt definition) 'continue)
           (if (store-item dbcon type term definition)
               (random-elem learn-responses) 
               (random-elem knewthat-responses))))))
 
 (define (learn-aka channel message term definition)
-  (or (and (> (length (tokenize term)) (length (tokenize definition)))
+  (or (and (ignorable? (tokenize term) definition)
            'continue)
       (if (store-aka dbcon term definition)
           (random-elem learn-responses) 

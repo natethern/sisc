@@ -8,6 +8,7 @@
 
 (define (add-user-to-channel channel-name nick)
   (let ([chanrec (get-channel channel-name)])
+    (import srfi-1)
     (when chanrec
       (set-channel-members! chanrec
                             (lset-adjoin equal?
@@ -17,6 +18,7 @@
 
 (define (remove-user-from-channel channel-name metaphone-nick)
   (let ([chanrec (get-channel channel-name)])
+    (import srfi-1)
     (when chanrec
       (set-channel-members! chanrec (delete metaphone-nick
                                             (channel-members chanrec))))))

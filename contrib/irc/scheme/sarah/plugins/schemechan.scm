@@ -60,6 +60,7 @@
   (set-schemers-queue! schemer ""))
 
 (define (scheme-channel channel message)
+  (import srfi-13)
   (unless (channel-seed channel)
     (set-channel-seed! channel (make-scheme-channel
                                 '())))
@@ -74,7 +75,7 @@
                           (scheme-channel-schemers schemechan))))
       (let ([schemer (cdr (assoc nick (scheme-channel-schemers schemechan)))]
             [text (message-text message)]
-            [commands '(".exit" ".repl" ".attach" ".reset")])
+            [commands '(".exit" ".repl" ".attach" ".reset" ".help")])
         (let* ([i (string-index text #\space)]
                [command (trim (or (and i (substring text 0 i))
                                   text))])
@@ -100,7 +101,19 @@
                                                    schemechan))))))]
                     [(equal? command ".reset")
                      (set-schemers-env! schemer
-                                        (make-scheme-channel-env schemechan))])
+                                        (make-scheme-channel-env schemechan))]
+                    [(equal? command ".help")
+                     (send-messages (channel-bot channel)
+                                    (message-nick message)
+(string-append 
+"Welcome to the Scheme IRC REPL\n"
+"The following commands are available\n"
+".repl - Enters the REPL.  All text after this is sent to your\n"
+"Scheme session, which is distinct from others.\n"
+".exit - When in the REPL, returns to chat mode (exits the REPL).\n"
+".attach <nick> - Allows you to join <nick>'s Scheme session.\n"
+".reset - Clears your Scheme session.\n"
+".help - This screen"))])
             (when (schemer-at-repl? schemer)
               (add-text-to-queue! schemer text)
               (when (queue-complete? schemer)
@@ -168,14 +181,17 @@
     etmp))
 
 (define (init-schemechan-plugin)
-  (add-part-hook
-   (lambda (channel sender login hostname)
-     (when (get-channel channel)
-       (let ([schemechan (channel-seed (get-channel channel))]
-             [sender (string-downcase sender)])
-         (when (and schemechan
-                    (assoc sender (scheme-channel-schemers schemechan)))
-           (set-scheme-channel-schemers!
-            (delete (cdr (assoc sender
-                                (scheme-channel-schemers schemechan)))
-                    (scheme-channel-schemers scheme-channel-schemers)))))))))
+  (let () 
+    (import srfi-1)
+  
+    (add-part-hook
+     (lambda (channel sender login hostname)
+       (when (get-channel channel)
+         (let ([schemechan (channel-seed (get-channel channel))]
+               [sender (string-downcase sender)])
+           (when (and schemechan
+                      (assoc sender (scheme-channel-schemers schemechan)))
+             (set-scheme-channel-schemers!
+              (delete (cdr (assoc sender
+                                  (scheme-channel-schemers schemechan)))
+                      (scheme-channel-schemers scheme-channel-schemers))))))))))
