@@ -45,7 +45,7 @@
 
 (module misc
     (wrap-symbol
-     dynamic-lambda)
+     dynamic-freeze)
   (include "misc.scm"))
 
 (module threading
