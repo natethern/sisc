@@ -526,6 +526,10 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
                          q2.comp(num(v3),1));
         case DIV: 
             return num(v1).div(num(v2).mul(num(v3)));
+        case EQ: return truth(v1 == v2 && v2 == v3);
+        case EQV: return truth(v1.eqv(v2));
+        case EQUAL:
+            return truth(v1.valueEqual(v2) && v2.valueEqual(v3));
         default:
             throwArgSizeException();
             return VOID;
