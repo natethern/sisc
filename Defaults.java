@@ -4,7 +4,7 @@ public abstract class Defaults {
 
     public static final int DEFAULT_SYNOPSIS_LENGTH=30;
     
-    static String permitinterrupts="false";
+    public static String permitinterrupts="false";
 
 }
  
