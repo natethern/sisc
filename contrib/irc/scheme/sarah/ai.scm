@@ -13,6 +13,25 @@
                          tokens)))])
     (substring str 0 (- (string-length str) 1))))
 
+(define (string-split str on)
+  (let ([i (string-index str on)])
+    (if i
+        (values (substring str 0 i)
+                (substring str (+ i (string-length on)) (string-length str)))
+        (values #f #f))))
+
+(define (string-index str substr)
+  (let ([strlen (string-length str)]
+        [substrlen (string-length substr)])
+    (let loop ([sidx 0]
+               [substridx 0])
+      (cond [(= substridx substrlen) (- sidx substrlen)]
+            [(= sidx strlen) #f]
+            [(eq? (string-ref str sidx)
+                  (string-ref substr substridx))
+             (loop (+ sidx 1) (+ substridx 1))]
+            [else (loop (+ sidx 1) 0)]))))
+
 (define (clean word charset)
   (if (null? word) 
       '()
@@ -42,10 +61,8 @@
     (define find-pattern-helper
       (lambda (tokens graph n)
         (if (symbol? graph) 
-            (values graph n)
-            (let ([pattern (eval `(amb ,@(map (lambda (v)
-                                                `',v)
-                                              graph)))])
+            graph
+            (let ([pattern (apply amb graph)])
               (if (eq? (car pattern) (car tokens))
                   (find-pattern-helper (cdr tokens) (cdr pattern) (+ n 1))
                   (amb-fail))))))
@@ -54,7 +71,7 @@
       (with/fc 
        (lambda (m e)
          (if (null? tokens)
-             (values 'UNKNOWN '())
+             'UNKNOWN
              (find-pattern (cdr tokens))))
        (lambda ()
          (find-pattern-helper tokens pattern-graph 1))))))
@@ -70,26 +87,25 @@
 
     ;Is it addressed to the bot
     (let* ([to-bot (memq bot-name tokens)]
-           [response (and (or (not bot-quiet) to-bot)
-                          (let-values ([(pattern n) 
-                                        (find-pattern 
-                                         (map (lambda (ts)
-                                                (string->symbol
-                                                 (list->string 
-                                                  (clean ts really-clean))))
-                                              (map (lambda (tok)
-                                                     (string->list
-                                                      (symbol->string tok)))
-                                                   tokens)))])
-                            (display pattern)
-                            (and-let* ([handler (assq pattern pattern-handlers)]) 
-                                      (display tokens)
-                                      (apply (cdr handler) tokens))))])
-      (if response response
-          (let ([cleaned-message (bot-clean message)])
-            (let ([hal-response
-                   (say hal cleaned-message)])
-              (and (or (not bot-quiet) to-bot) hal-response)))))))
+           [cleaned-message (bot-clean message)]
+           [pattern (find-pattern (map (lambda (ts)
+                                         (string->symbol
+                                          (list->string 
+                                           (clean ts really-clean))))
+                                       (map (lambda (tok)
+                                              (string->list
+                                               (symbol->string tok)))
+                                            tokens)))]
+           [response (and pattern 
+                          (display pattern)
+                          (and-let* ([handler (assq pattern pattern-handlers)]) 
+                                    (display tokens)
+                                    ((cdr handler) cleaned-message)))])
+      (if (and response (or (not bot-quiet) to-bot))
+          response
+          (let ([hal-response
+                 (say hal cleaned-message)])
+            (and (or (not bot-quiet) to-bot) hal-response))))))
     
 (define (bot-clean message)
   (let loop ([x 0])
@@ -112,67 +128,36 @@
     (evaluate . EVALUATE)
     ))
 
-(define whatis-preludes 
-  '("I've heard" 
-    "Someone once said"
-    ""
-    "I could be wrong, but"
-    "And I quote:"
-    "Last time I checked"
-    "From what I understand"))
-
-(define (what-is . args)
-  (and (not (null? args))
-       (if (eq? bot-name (car args))
-           (apply what-is (cdr args))
-           (let* ([relevent-tokens
-                   (let loop ((ls args))
-                     (cond [(null? ls) #f]
-                           [(eq? (car ls) 'is)
-                            (cdr ls)]
-                           [else (loop (cdr ls))]))]
-                  [term (and relevent-tokens (tokens->string relevent-tokens))])
-             (and term
-                  (begin 
-                    (if (eq? #\? (string-ref term (- (string-length term) 1)))
-                        (set! term (substring term 
-                                              0 (- (string-length term) 1))))
-                    (and-let* ([result (lookup-item dbcon term)])
-                              (format "~a ~a is ~a" 
-                                      (random-elem whatis-preludes) 
-                                      term result))))))))
+(define (what-is message)
+  (let-values ([(ignoreables term) (string-split message " is ")])
+    (and term 
+         (begin 
+           (if (eq? #\? (string-ref term (- (string-length term) 1)))
+               (set! term (substring term 
+                                     0 (- (string-length term) 1))))
+           (display term)
+           (and-let* ([results (lookup-item dbcon term)])
+             (let ([random-result (random-elem results)])
+               (format "~a ~a is ~a" 
+                       (random-elem whatis-preludes) 
+                       (car random-result)
+                       (cdr random-result))))))))
        
 
 (define (quiet . args) (set! bot-quiet #t) "Fine, shutting up.")
 (define (listen . args) (set! bot-quiet #f) "Okay, I'm listening.")
 (define (evaluate . args)
-  (with-output-to-string 
-      (lambda () (pretty-print 
-                  (eval (with-input-from-string
-                            (with-output-to-string
-                                (lambda ()
-                                  (for-each (lambda (elem)
-                                              (display elem)
-                                              (display #\space))
-                                            args)))
-                          read))))))
-(define (learn . args)
-  (and (not (null? args))
-       (if (eq? bot-name (car args))
-           (apply learn (cdr args))
-           (let-values ([(term definition)
-                         (let loop ((term (list (car args)))
-                                    (ls (cdr args)))
-                           (if (null? ls)
-                               (values #f #f)
-                               (if (eq? (car ls) 'is)
-                                   (values (reverse term) (cdr ls))
-                                   (loop (cons (car ls) term) (cdr ls)))))])
-             (if (and term definition)
-                 (store-item dbcon (tokens->string term) (tokens->string definition)))))
-       #f))
-             
-          
+  (let-values ([(ignoreables term) (string-split message "evaluate ")])
+    (with-output-to-string 
+        (lambda () (pretty-print 
+                    (eval (with-input-from-string term read)))))))
+
+(define (learn message)
+  (let-values ([(term definition) (string-split message " is ")])
+    (if (and term definition)
+        (if (store-item dbcon term definition)
+            (random-elem learn-responses)
+            (random-elem knewthat-responses)))))
                 
 (define what-time)
 (define who-is)
