@@ -81,10 +81,11 @@ public class CallFrame extends Procedure {
     }
 
     public void apply(Interpreter r) throws ContinuationException {
-        if (r.vlr.length==1) {
+        if (r.vlr.length==1) 
             r.acc=r.vlr[0];
-        }
-        else r.acc=new Values(r.vlr);
+        else 
+	    r.acc=new Values(r.vlr);
+
         r.pop(this);
     }
 
