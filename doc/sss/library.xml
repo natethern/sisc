@@ -1227,10 +1227,10 @@ com/foo/bar/baz/baz3.scm
           jar file is on the classpath, which is the case by default,
           any SRFI's module definition may be loaded with the expression
           <literal>(require-library
-          'sisc/libs/srfi-<parameter>n</parameter>)</literal>, where 
+          'sisc/libs/srfi/srfi-<parameter>n</parameter>)</literal>, where 
           <parameter>n</parameter> is the SRFI's number.  For example:
           <programlisting>
-(require-library 'sisc/libs/srfi-9)
+(require-library 'sisc/libs/srfi/srfi-9)
           </programlisting>
           All SRFI's may be loaded at once by requiring
           <literal>sisc/libs/srfi</literal>.
@@ -1409,86 +1409,63 @@ com/foo/bar/baz/baz3.scm
     <para>
       &requires; 
       <emphasis role="bold">
-        (import <emphasis>compiled-libraries</emphasis>)
+        (import <emphasis>libraries</emphasis>)
       </emphasis>
     </para>
     <para>
       &SISC; allows the creation of <emphasis>compiled libraries</emphasis> 
       which contain compiled scheme code.  These
-      libraries can then be linked into a running &SISC; session in
+      libraries can then be executed into a running &SISC; session in
       order to extend the functionality without processing or
       possessing the original source.  Such libraries can be loaded
       using <function>load</function> as would any ordinary Scheme
       source file.
     </para>
     <para>
-      Compiled libraries must currently be generated from a Scheme
-      module (see <xref linkend="SchemeModules"/>).  First, the user
-      creates such a module (usually by loading a source file that
-      defines the module), then use the
-      <function>create-library-from-module</function> function to
-      create the library file and save it to disk.  When loaded, the
-      created library will have the same effect as defining the module
-      from source code.  That is, the module will be available for
-      import but will <emphasis>not</emphasis> be imported.
+      Compiled code files (<literal>.scc</literal>) are created using
+      the <function>compile-file</function> function, which takes a
+      Scheme source file and a target output file, and processes the
+      Scheme source through the various expansion and compilation
+      phases, and then serializes the resulting &SISC;
+      microexpressions to the given target file.  The resulting file
+      may then be loaded with <function>load</function> as any
+      ordinary Scheme file would, or can be placed in the library path
+      and resolved using <function>require-library</function>.
     </para>
     <para>
       <blockquote>
         <para>
-          <indexterm><primary>create-library-from-module</primary>
+          <indexterm><primary>compile-file</primary>
           </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
             <type>undefined</type>
-            <methodname>create-library-from-module</methodname>
-            <methodparam><parameter>module-name</parameter></methodparam>
-            <methodparam><parameter>library-filename</parameter></methodparam>
+            <methodname>compile-file</methodname>
+            <methodparam><parameter>source-file</parameter></methodparam>
+            <methodparam><parameter>target-file</parameter></methodparam>
           </methodsynopsis>
           <blockquote>
             <para>
-              Creates a library named
-              <parameter>module-name</parameter> and stores it in the
-              file named by the string
-              <parameter>library-filename</parameter>.  The library
-              created will when loaded have the effect of defining 
-              the module named by <parameter>module-name</parameter>
-              (a symbol).
-            </para>
-          </blockquote>
-        </para>
-        <para>
-          &procedure;
-          <methodsynopsis language="scheme">
-            <type>undefined</type>
-            <methodname>create-library-from-module</methodname>
-            <methodparam><parameter>library-name</parameter></methodparam>
-            <methodparam><parameter>library-filename</parameter>
-            </methodparam>
-            <methodparam><parameter>module-name</parameter>
-            </methodparam>
-            <methodparam choice="opt" rep="repeat"><parameter>module-name</parameter>
-            </methodparam>
-          </methodsynopsis>
-          <blockquote>
-            <para>
-              Creates a library named
-              <parameter>library-name</parameter> and stores it in the
-              file named by the string
-              <parameter>library-filename</parameter>.  The library
-              created will when loaded define the modules named by the
-              <parameter>module-name</parameter> symbols.
+              Compiles the Scheme source present in
+              <parameter>source-file</parameter>, writing the
+              resulting micro-expressions into
+              <parameter>target-file</parameter>, suitable for
+              loading.
             </para>
           </blockquote>
         </para>
       </blockquote>
     </para>
-    <para>
-      In the first form, a library is created from the existing module
-      named <parameter>module-name</parameter>, which will also become
-      the name of the library.  In the second form, the user is able
-      to specify the name of the library, and have it include the
-      definitions of several modules at once.  
-    </para>
+    <note>
+      <title><literal>.sll</literal> Deprecation</title>
+      <para>
+        Scheme Loadable Libraries (<literal>.sll</literal> files) were
+        deprecated in version 1.9.
+        This was due to unresolvable incompatibilities in the engine's
+        closure representation and the <literal>.sll</literal>
+        functionality.
+      </para>
+    </note>
   </sect1>
 </chapter>
 <!-- Keep this comment at the end of the file

@@ -52,6 +52,13 @@ else
     then
       JAVA=java
     fi
-    $JAVA $JAVAOPT -classpath $SISC_HOME/sisc-opt.jar:$SISC_HOME/sisc.jar:$SISC_HOME/sisc-lib.jar:$CLASSPATH -Dsisc.home=$SISC_HOME sisc.REPL -h $SISC_HOME/sisc.shp $PROPERTIES $EXTENSIONS "$@"
+    
+    D=":"
+    case $(/bin/uname) in 
+      CYGWIN* )
+        D=";" ;;
+    esac
+      
+    $JAVA $JAVAOPT -classpath $SISC_HOME/sisc-opt.jar${D}$SISC_HOME/sisc.jar${D}$SISC_HOME/sisc-lib.jar${D}$CLASSPATH -Dsisc.home=$SISC_HOME sisc.REPL -h $SISC_HOME/sisc.shp $PROPERTIES $EXTENSIONS "$@"
 fi
 

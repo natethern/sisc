@@ -25,7 +25,9 @@
       (constant? e)))
 
 (define (not-redefined? proc)
-  (memq proc (getprop 'assumptive-procedures '*opt* '())))
+  (and (memq proc (inline-primitives))
+       (eq? (getprop proc) 
+            (getprop proc (sisc-initial-environment)))))
 
 (define-syntax core-form-eq? 
   (syntax-rules ()

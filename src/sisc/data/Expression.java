@@ -67,7 +67,7 @@ public abstract class Expression extends Util
     public void deserializeAnnotations(Deserializer s) throws IOException {
         int ac = s.readInt();
         if (ac == 0) return;
-        annotations = new HashMap(0);
+        annotations = new HashMap(ac);
         for (; ac>0; ac--) {
             Expression key = s.readExpression();
             Expression val = s.readExpression();
