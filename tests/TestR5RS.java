@@ -43,11 +43,35 @@ import sisc.Interpreter;
 import sisc.Context;
 import sisc.AppContext;
 import sisc.REPL;
+import sisc.CallFrame;
+import sisc.Util;
 import sisc.ContinuationException;
 
 import sisc.data.Value;
+import sisc.data.Expression;
 import sisc.data.InputPort;
 import sisc.data.Procedure;
+
+
+class SchemeException
+    extends RuntimeException
+{
+    SchemeException()
+    { }
+}
+
+class Failure extends Expression
+{
+    public void eval(Interpreter r)
+    {
+        throw new SchemeException();
+    }
+
+    public Value express()
+    {
+        return Util.list(Util.sym("Failure"));
+    }
+}
 
 
 public class TestR5RS
@@ -63,12 +87,16 @@ public class TestR5RS
 
 
     protected void setUp()
-    throws Exception
+        throws Exception
     {
-	AppContext ctx = new AppContext();
-	Context.register("main", ctx);
+        AppContext ctx = new AppContext();
+        Context.register("main", ctx);
         interpreter = Context.enter("main");
         REPL.initializeInterpreter(interpreter,new String[0]);
+        
+        interpreter.fk = new CallFrame(new Failure(), null, null, null, interpreter.stk);
+        interpreter.fk.capture();
+        interpreter.fk.fk = interpreter.fk;
     }
 
     protected void tearDown()
@@ -167,7 +195,7 @@ public class TestR5RS
             eval("(set-car! '(1 . 2) 'a)");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -179,7 +207,7 @@ public class TestR5RS
             eval("(string-set! '\"abc\" 0 #\\b)");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -191,7 +219,7 @@ public class TestR5RS
             eval("(vector-set! '#(1 2 3) 0 'a)");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -209,7 +237,7 @@ public class TestR5RS
             eval("()");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -244,7 +272,7 @@ public class TestR5RS
             eval("(lambda (x y x) y)");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -337,7 +365,7 @@ public class TestR5RS
             eval("(let ((x 1) (y x)) 0)");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -349,7 +377,7 @@ public class TestR5RS
             eval("(let ((x y) (y 1)) 0)");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -377,7 +405,7 @@ public class TestR5RS
             eval("(let* ((x y) (y 1)) 0)");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -481,7 +509,7 @@ public class TestR5RS
             eval("(define x 1 2 3)");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -493,7 +521,7 @@ public class TestR5RS
             eval("(set! x 1 2 3)");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -516,7 +544,7 @@ public class TestR5RS
                 "20"
             );
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -661,7 +689,7 @@ public class TestR5RS
             eval("(car '())");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -676,7 +704,7 @@ public class TestR5RS
             eval("(cdr '())");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -693,7 +721,7 @@ public class TestR5RS
             eval("(set-car! (g) 3)");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -710,7 +738,7 @@ public class TestR5RS
             eval("(set-cdr! (g) 3)");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -799,7 +827,7 @@ public class TestR5RS
             eval("(string-set! (g) 0 #\\?)");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
@@ -811,7 +839,7 @@ public class TestR5RS
             eval("(string-set! (symbol->string 'immutable) 0 #\\?)");
             fail();
         }
-        catch (ContinuationException e)
+        catch (SchemeException e)
         { }
     }
 
