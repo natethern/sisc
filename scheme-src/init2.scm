@@ -41,6 +41,10 @@
 	  value
 	  (set! value (car newval))))))
 
+;;A parameter that defines whether vectors will be printed with a length
+;;prefix
+(define vector-length-prefixing (parameterize #t))
+
 (define modulo
   (lambda (x y)
     (let ([r (remainder x y)])

@@ -2,6 +2,12 @@
 
 	* Added new, experimental Scheme->Java interface module
 
+2002-02-14  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Added parameter (vector-length-prefixing) which
+	  specified whether pretty-print should display the prefixed
+	  length of a vector.
+	
 2002-02-12  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed CHAR-UPPER-CASE? and CHAR-LOWER-CASE?

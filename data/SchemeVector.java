@@ -81,8 +81,7 @@ public class SchemeVector extends Value {
         return lastUnique=vals.length;
     }
     
-    void display(StringBuffer b, boolean write) {
-        int l=findEnd();
+    void display(StringBuffer b, boolean write, int l) {
         for (int i=0; i<l; i++) {
             b.append(write ? vals[i].write() : vals[i].display());
             if (i+1<l) b.append(' ');
@@ -92,7 +91,7 @@ public class SchemeVector extends Value {
     public String display() {
         StringBuffer b=new StringBuffer();
         b.append("#(");
-        display(b, false);
+        display(b, false, vals.length);
         b.append(')');
         return b.toString();
     }
@@ -105,7 +104,7 @@ public class SchemeVector extends Value {
     public String write() {
         StringBuffer b=new StringBuffer();
         b.append('#').append(vals.length).append('(');
-        display(b, true);
+        display(b, true, findEnd());
         b.append(')');
         return b.toString();
     }
