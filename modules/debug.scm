@@ -104,11 +104,11 @@
                       (error 'trace "'~s' is not bound to a procedure." 
                              procedure-symbol)]
                      [(not (assq real-ps traced-procedures))
-                      (begin
+                      (let ([traced-proc (make-traced real-ps proc)])
                         (set! traced-procedures 
-                              (cons (cons real-ps proc) traced-procedures))
-                        (putprop real-ps '*toplevel*
-                                 (make-traced real-ps proc)))])))
+                          (cons (cons real-ps (list proc traced-proc)) 
+                                traced-procedures))
+                        (putprop real-ps '*toplevel* traced-proc))])))
            procs)))
     (putprop 'traced-procedures '*debug* traced-procedures)))
 
@@ -130,11 +130,10 @@
               [proc (assq real-ps traced-procedures)])
          (if proc
              (begin
-               (when (eq? (cdr proc) 
-                          (getprop real-ps '*toplevel*))
-                 (putprop real-ps '*toplevel* (cdr proc)))
+               (when (eq? (caddr proc) (getprop real-ps '*toplevel*))
+                 (putprop real-ps '*toplevel* (cadr proc)))
                (set! traced-procedures 
-                     (remove-from-assoc real-ps traced-procedures))))))
+                 (remove-from-assoc real-ps traced-procedures))))))
      (cons proc1 procs))
     (putprop 'traced-procedures '*debug* traced-procedures)))
 
