@@ -1,0 +1,34 @@
+About SISC (Second Interpreter of Scheme Code)
+---------------------------------------------------------------------------
+
+    SISC is a relatively lightweight, from scratch, fully functional scheme
+interpreter.  SISC is the successor to LISC, and sacrifices a few dozen
+more KB in order to be orders of magnitude faster and fully R5RS compliant.
+SISC has the following general features:
+
+    * Fully R5RS compliant.    
+    * A full number tower for unlimited precision math including:
+         - Arbitrary precision integers, floating point numbers 
+	     (AP floats not enabled by default)
+         - Arbitrary precision ratios (based on bigints)
+         - Arbitrary precision complex numbers (based on bigfloats)
+             (AP not enabled by default)
+    * A full R5RS compliant, hygenic macro system based on syntax-case.
+    * Full support for continuations via call/cc.
+
+Installation
+------------
+  Edit the "sisc" or "sisc.bat" files (the former for Unix machines, the
+latter for DOS/Windows), and change the location of LIBDIR to point to the
+directory you wish to store the "sisc.heap" and "sisc.jar" files.  Then put
+"sisc" or "sisc.bat" in your path.  To run SISC, just type "sisc" or
+"sisc.bat", followed by any scheme source files you wish to load.
+
+More information about SISC, including a paper on the implementation, can be
+found at the SISC website, http://sisc.sourceforge.net
+
+(C) 2000,2001 Scott G. Miller <scgmille@freenetproject.org>
+This software is distributed under a dual licensing scheme, with the 
+GNU General Public License, v2, and the Mozilla Public License.  The source
+code should be available from the same place you found this binary
+distribution.

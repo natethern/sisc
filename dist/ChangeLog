@@ -1,0 +1,164 @@
+r1.3.0  Major changes
+
+	* Removed BeginExp, DefineExp, FreeSetExp, IfExp, and LexicalSetExp,
+          which were replaced with EvalExp, which simply evaluates
+          an expression and pushes another onto the stack (the second being
+          the corresponding Eval)
+
+r1.2.3  Performance enhancements
+
+        * Added ashr, the complement to ashl.  
+ 
+	* In fixing other reader errors, 1.2.2 fixed hex digit handling.
+	  Fixed.
+
+	* exact? and inexact? should error on non-numbers.  They 
+	  weren't.  Fixed.
+
+	* eqv? in scheme was relying on above bug for correct operation.
+
+r1.2.2  Minor enhancements, bug fixes
+
+	* Output ports do not automatically flush now (except for
+	  console out).  
+
+	* Added 'flush-output-port' which takes an output port
+ 	  and finalizes any writes
+
+	* Added an optional parameter to open-output-file and
+	  get-socket-output-port, <autoflush>, a boolean.  If
+	  #t, the port will flush after every write.
+
+	* #\return wasn't recognized on read, but could be produced
+          on write.  Fixed.
+
+	* (null-environment) was returning a completely empty 
+	  environment, which is incorrect in SISC, since the special
+	  forms (quote, lambda, etc) should still be present.  Fixed.
+
+	* Fixed an inaccuracy in the reader, where "<radix> <exactness>
+          could not be used.
+
+ 	* Somewhat fixed the parser wrt the unspecified digit, '#'.
+	  Still somewhat broken in that the presence of a '#' does not
+          force inexactness.
+
+r1.2.1  Bugfixes
+
+	* Ratio simplification now properly handles numerator
+	  and denominator signs sanely.  
+
+	* Full-sisc now includes J2S, Netlib, Exec, and Debug
+	
+r1.2.0  Major enhancements
+
+	* New serialization structure.  The heap can be serialized in 1/3
+          the space, and we can shave .7 seconds off SISC startup time.
+          Also, the heap isn't tied to a specific version of SISC.
+	  (Not present in sisc-lite)
+	
+	* Dead code eliminated
+
+	* Default Quantity lib is now double precision floating point 
+	  instead of arbitrary precision.  In the future, the library
+          will be selectable at startup
+
+	* Some minor performance tweaks 
+
+r1.1.3  Bug fixes (Never formally released)
+
+	* Added continuation? type checker
+
+	* Fixed scalability issue in Pair.display.  Couldn't handle
+	  incredibly large lists because it was using a recursive
+	  print method (which doesnt work well in Java, stack smash)
+	
+r1.1.2  Bug fixes
+
+	* Fixed startup scripts for windows
+
+	* Cross-platform path handling (only tested on Windows/Unix atm)
+
+	* Tidied up SLIB initialization file
+
+	* Limiting lexical depth to 65536, function argument count to
+          65536
+	
+r1.1.1  Bug fixes, code cleaning
+
+	* Startup scripts werent able to load files, fixed 
+	
+	* Error in the syntax expander wasnt handling final cdr
+          unquotes in a quasi-quoted list
+  
+	* Vector printing optimizations
+
+	* Scheme source optimized and tidied to hide scaffolding functions
+
+r1.1.0  Many many changes.  v1.1.0 is on average 45% faster than 1.0.3
+
+	Reimplementation of global environments as a simple flat array.
+
+        * LexicalEnvironments don't need symbol information,
+          this was an old debugging mode that isn't necessary.
+          Result is a smaller heap and small boost to 
+          performance.
+        
+        Added Matthias Radestock's optimizations:
+        * replace recursion with loops in LexicalEnvironment.lookup and
+	  LexicalEnvironment.set => no noticable difference, but might 
+          show in deeply nested expressions
+
+	* recycler for FillRibExp along the same lines as CallFrames. 
+	  This gives a 5-10% performance boost.
+
+	* creation of {*}Eval instances in constructor of
+	  {FreeSet,If,LexicalSet}Expr, rather than in eval method. 
+	  Shifts the burden from runtime to compile time and results in 
+	  ~5% performance boost.
+
+        Added Immediates, which fill the value rib directly (16% bonus)
+
+        Compiler now eliminates Immediates from effect context.  Example:
+	   (begin (set! a 3) 5 a) => (begin (set! a 3) a)
+           (begin 1 a (lambda (x) x) #t) => #t
+        and chooses branches with a decidable constant test-exp:
+           (if 3 1 2) => 1
+           (if #f 1 2) => 2
+        
+        Made SISC thread safe.  Also added two new methods in Interpreter:
+
+        * newContext(Interpreter):  Creates a new Interpreter context
+          in which expressions can be interpreted.  By having multiple
+          Interpreter contexts, you can run multiple scheme programs in the
+          same environment simultaneously (multithreaded scheme).  
+  
+        * eval(String): Evaluates the given String as a scheme expression in 
+          the current context and returns the resulting value.  This should
+          be helpful for running scheme expressions from Java.
+
+        Fixed a Ratio->Floating point conversion error in Quantity.
+
+        Fixed R5RS env handling.  There were a number of side cases
+        where the R5RS env was not immutable, or where shadowing the R5RS
+        environment wasn't reflected in procedures defined before that 
+        shadowed binding.
+
+        Fixed abs for complex numbers.
+        Made procedures proper values.
+
+        TODO: Add synchronization module to allow synchronization in scheme
+              code.
+
+r1.0.3  Cruft bug that disabled number->string
+        Precision fixes so FP calculations respect max_precision
+        Added setters/getters for max-precision and min-precision.  These
+          can be used to set the minimum and maximum amount of precision
+          allowed in a floating point calculation
+        Some minor code cleanup
+        Some minor speed improvements (very minor)
+r1.0.2  Added Boxes back into the language since they were used in 
+  	  variable references.
+r1.0.1	Fixed continuation capturing bug related to side-effects on the
+  	  value rib.
+r1.0.0	First public release.
