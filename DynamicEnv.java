@@ -36,6 +36,8 @@ import sisc.data.*;
 import sisc.compiler.*;
 import java.io.*;
 
+import java.util.WeakHashMap;
+
 public class DynamicEnv extends Util implements Cloneable {
 
     public InputPort in;
@@ -46,26 +48,30 @@ public class DynamicEnv extends Util implements Cloneable {
     //the lexer is stateful
     public Parser parser = new Parser(new Lexer());
 
+    //user-defined thread variables; this map is weak so that we don't
+    //hang on to vars that are no longer in use.
+    public WeakHashMap parameters = new WeakHashMap();
+
     public DynamicEnv() {
-	this(System.in, System.out);
+        this(System.in, System.out);
     }
 
     public DynamicEnv(InputPort in, OutputPort out) {
-	this.in = in;
-	this.out = out;
+        this.in = in;
+        this.out = out;
     }
 
     public DynamicEnv(InputStream in, OutputStream out) {
-	this(new InputPort(new BufferedReader(new InputStreamReader(in))),
-	     new OutputPort(new PrintWriter(out), true));
+        this(new InputPort(new BufferedReader(new InputStreamReader(in))),
+             new OutputPort(new PrintWriter(out), true));
     }
 
     public DynamicEnv copy() {
-	try {
-	    return (DynamicEnv)super.clone();
-	}
-	catch (CloneNotSupportedException e) {
-	    return this;
-	}
+        try {
+            return (DynamicEnv)super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            return this;
+        }
     }
 }

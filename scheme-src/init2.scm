@@ -33,13 +33,8 @@
 		 
 (current-evaluator eval)
 
-
 (define (parameterize . default)
-  (let ([value (if (not (null? default)) (car default) #f)])
-    (lambda newval
-      (if (null? newval) 
-	  value
-	  (set! value (car newval))))))
+  (make-parameter (if (not (null? default)) (car default) #f)))
 
 ;;A parameter that defines whether vectors will be printed with a length
 ;;prefix

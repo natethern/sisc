@@ -42,25 +42,25 @@ import java.lang.reflect.*;
 
 public class Primitives extends ModuleAdapter {
     public static final Symbol
-	FILE=Symbol.get("file"),
-	NOFILE=Symbol.get("no-file"),
-	DIRECTORY=Symbol.get("directory");
+        FILE=Symbol.get("file"),
+        NOFILE=Symbol.get("no-file"),
+        DIRECTORY=Symbol.get("directory");
 
     public String getModuleName() {
-	return "Primitives";
+        return "Primitives";
     }
 
     public static SchemeBoolean numQuery(Value v, int mask)
-    throws ContinuationException {
+        throws ContinuationException {
         return truth(v instanceof Quantity &&
                      (((Quantity)v).is(mask)));
     }
 
     public void bindAll(AssociativeEnvironment a) {
-	Symbol[] syms=getModuleBindingNames();
-	for (int i=0; i<syms.length; i++) {
-	    a.define(syms[i], getBindingValue(syms[i]));
-	}
+        Symbol[] syms=getModuleBindingNames();
+        for (int i=0; i<syms.length; i++) {
+            a.define(syms[i], getBindingValue(syms[i]));
+        }
     }
 
     public Primitives() {
@@ -77,7 +77,7 @@ public class Primitives extends ModuleAdapter {
         define("_string-append", STRINGAPPEND);
         define("absolute-path?", ABSPATHQ);
         define("acos", ACOS);
-	define("annotation?", ANNOTATIONQ);
+        define("annotation?", ANNOTATIONQ);
         define("apply", APPLY);
         define("ashl", ASHL);
         define("ashr", ASHR);
@@ -92,7 +92,7 @@ public class Primitives extends ModuleAdapter {
         define("call-with-failure-continuation", CALLFC);
         define("call-with-values", CALLWITHVALUES);
         define("car", CAR);
-	define("case-sensitive", CASESENSITIVE);
+        define("case-sensitive", CASESENSITIVE);
         define("cdr", CDR);
         define("ceiling", CEILING);
         define("char->integer", CHAR2INTEGER);
@@ -122,10 +122,10 @@ public class Primitives extends ModuleAdapter {
         define("find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
         define("floor", FLOOR);
         define("flush-output-port", FLUSHOUTPUTPORT);
-	define("get-native-library-binding", GETNLBINDING);
-	define("get-native-library-binding-names", GETNLBINDINGNAMES);
-	define("get-native-library-name", GETNLNAME);
-	define("get-native-library-version", GETNLVERSION);
+        define("get-native-library-binding", GETNLBINDING);
+        define("get-native-library-binding-names", GETNLBINDINGNAMES);
+        define("get-native-library-name", GETNLNAME);
+        define("get-native-library-version", GETNLVERSION);
         define("get-output-string", GETOUTPUTSTRING);
         define("getprop", LOOKUP);
         define("imag-part", IMAGPART);
@@ -140,6 +140,7 @@ public class Primitives extends ModuleAdapter {
         define("load", LOAD);
         define("load-native-library", LOADNL);
         define("log", LOG);
+        define("make-parameter", MAKEPARAM);
         define("make-path", MAKEPATH);
         define("make-rectangular", MAKERECTANGULAR);
         define("make-string", MAKESTRING);
@@ -157,6 +158,7 @@ public class Primitives extends ModuleAdapter {
         define("open-output-string", OPENOUTPUTSTRING);
         define("output-port?", OUTPORTQ);
         define("pair?", PAIRQ);
+        define("parameter?", PARAMETERQ);
         define("peek-char", PEEKCHAR);
         define("procedure?", PROCEDUREQ);
         define("putprop", PUTPROP);
@@ -173,7 +175,7 @@ public class Primitives extends ModuleAdapter {
         define("set-cdr!", SETCDR);
         define("sin", SIN);
         define("sqrt", SQRT);
-	define("sleep", SLEEP);
+        define("sleep", SLEEP);
         define("string->number", STRING2NUMBER);
         define("string->symbol", STRING2SYMBOL);
         define("string->uninterned-symbol", STRING2UNINTERNEDSYMBOL);
@@ -186,9 +188,9 @@ public class Primitives extends ModuleAdapter {
         define("symbol?", SYMBOLQ);
         define("system-time", SYSTIME);
         define("tan", TAN);
-	define("truncate", TRUNCATE);
+        define("truncate", TRUNCATE);
         define("unbox", UNBOX);
-	define("vector-fill!", VECTORFILL);
+        define("vector-fill!", VECTORFILL);
         define("vector->list", VECTOR2LIST);
         define("vector-length", VECTORLENGTH);
         define("vector-ref", VECTORREF);
@@ -200,8 +202,56 @@ public class Primitives extends ModuleAdapter {
         define("write-char", WRITECHAR);
     }
 
+    public static class Parameter extends Procedure {
+
+        private Value v;
+
+        public Parameter() {}
+
+        public Parameter(Value v) {
+            this.v = v;
+        }
+
+        public void apply(Interpreter r)
+            throws ContinuationException {
+            r.nxp = null;
+            Value res = null;
+            switch (r.vlr.length) {
+            case 0:
+                res = (Value)r.dynenv.parameters.get(this);
+                if (null == res) res = v;
+                break;
+            case 1:
+                res = (Value)r.dynenv.parameters.put(this,r.vlr[0]);
+                if (null == res) res = FALSE;
+                break;
+            default:
+                throwArgSizeException();
+            }
+            r.acc = res;
+        }
+
+        public String display() {
+            return displayNamedOpaque("parameter");
+        }
+
+        public void serialize(Serializer s, DataOutput dos)
+            throws IOException {
+            if (SERIALIZATION) {
+                s.serialize(v, dos);
+            }
+        }
+
+        public void deserialize(Serializer s, DataInput dis)
+            throws IOException {
+            if (SERIALIZATION) {
+                v = (Value)s.deserialize(dis);
+            }
+        }
+    }
+
     public Value eval(int primid, Interpreter f)
-	throws ContinuationException {
+        throws ContinuationException {
         switch (f.vlr.length) {
         case 0:
             switch (primid) {
@@ -215,7 +265,7 @@ public class Primitives extends ModuleAdapter {
                 if (v instanceof SchemeCharacter)
                     f.dynenv.in.pushback(((SchemeCharacter)v).c);
                 return v;
-	    case READ: case READCHAR:
+            case READ: case READCHAR:
                 return (primid==READ ? f.dynenv.in.read(f) :
                         f.dynenv.in.readchar());
             case CURRENTEVAL: return (Value)f.ctx.evaluator;
@@ -224,16 +274,16 @@ public class Primitives extends ModuleAdapter {
             case SYSTIME: return Quantity.valueOf(System.currentTimeMillis());
             case MAX_PRECISION: return Quantity.valueOf(Quantity.max_precision);
             case MIN_PRECISION: return Quantity.valueOf(Quantity.min_precision);
-	    case CASESENSITIVE: return truth(Symbol.caseSensitive);
+            case CASESENSITIVE: return truth(Symbol.caseSensitive);
             }
         case 1:
             switch (primid) {
-	    case ANNOTATIONQ: return truth(f.vlr[0] instanceof AnnotatedExpr);
+            case ANNOTATIONQ: return truth(f.vlr[0] instanceof AnnotatedExpr);
             case NULLQ: return truth(f.vlr[0]==EMPTYLIST);
             case CAR: return truePair( f.vlr[0]).car;
-	    case CASESENSITIVE:
-		Symbol.caseSensitive = truth(f.vlr[0]);
-		return VOID;
+            case CASESENSITIVE:
+                Symbol.caseSensitive = truth(f.vlr[0]);
+                return VOID;
             case CDR: return truePair( f.vlr[0]).cdr;
             case PAIRQ:
                 return truth(f.vlr[0] instanceof Pair &&
@@ -261,7 +311,7 @@ public class Primitives extends ModuleAdapter {
             case BOOLEANQ: return truth(f.vlr[0] instanceof SchemeBoolean);
             case VOIDQ: return truth(f.vlr[0]==VOID);
             case ENVIRONMENTQ: return truth(f.vlr[0] instanceof
-					    AssociativeEnvironment);
+                                            AssociativeEnvironment);
             case PROCEDUREQ: return truth(f.vlr[0] instanceof Procedure);
             case INTEGERQ: return numQuery(f.vlr[0],Quantity.INTEGER);
 
@@ -271,6 +321,7 @@ public class Primitives extends ModuleAdapter {
             case INEXACTQ: return numQuery(f.vlr[0],Quantity.INEXACT);
             case INPORTQ: return truth(f.vlr[0] instanceof InputPort);
             case OUTPORTQ: return truth(f.vlr[0] instanceof OutputPort);
+            case PARAMETERQ: return truth(f.vlr[0] instanceof Parameter);
             case SYMBOL2STRING:
                 return new ImmutableString(symbol(f.vlr[0]).symval);
             case STRING2NUMBER:
@@ -279,10 +330,10 @@ public class Primitives extends ModuleAdapter {
                 } catch (NumberFormatException nf) {
                     return FALSE;
                 } catch (IOException e) {
-		    return FALSE;
-		}
+                    return FALSE;
+                }
             case NUMBER2STRING: return new SchemeString(num(f.vlr[0])
-							.toString());
+                                                        .toString());
             case STRING2SYMBOL: return Symbol.intern(string(f.vlr[0]));
             case CHAR2INTEGER: return Quantity.valueOf(chr(f.vlr[0]).c);
             case LIST2VECTOR: return new SchemeVector(pairToValues(pair(f.vlr[0])));
@@ -294,9 +345,9 @@ public class Primitives extends ModuleAdapter {
             case FLOOR: return num(f.vlr[0]).floor();
             case CEILING: return num(f.vlr[0]).ceiling();
             case ROUND: return num(f.vlr[0]).round();
-	    case TRUNCATE: return num(f.vlr[0]).truncate();
+            case TRUNCATE: return num(f.vlr[0]).truncate();
             case INTEGER2CHAR: return new SchemeCharacter((char)num(f.vlr[0]).
-							  intValue());
+                                                          intValue());
             case VECTORFINDLASTUNIQUE: return Quantity.valueOf(vec(f.vlr[0]).findEnd());
             case PEEKCHAR:
                 InputPort inport=inport(f.vlr[0]);
@@ -311,7 +362,7 @@ public class Primitives extends ModuleAdapter {
                 } catch (IOException e) {
                     return FALSE;
                 }
-	    case READ: case READCHAR:
+            case READ: case READCHAR:
                 inport=inport(f.vlr[0]);
                 return (primid==READ ? inport.read(f) :
                         inport.readchar());
@@ -321,7 +372,7 @@ public class Primitives extends ModuleAdapter {
                 return VOID;
             case OPENINPUTSTRING:
                 return new InputPort(new BufferedReader(
-							new StringReader(string(f.vlr[0]))));
+                                                        new StringReader(string(f.vlr[0]))));
             case CALLCC:
                 Procedure kproc=(Procedure)f.vlr[0];
                 f.vlr = new Value[] {f.stk.capture(f)};
@@ -391,12 +442,12 @@ public class Primitives extends ModuleAdapter {
                         throwPrimException( "error reading from "+p.write());
                     }
                     if (v!=EOF) {
-			try {
-			    f.eval(v);
-			} catch (SchemeException se) {
-			    throwNestedPrimException(se);
-			}
-		    }
+                        try {
+                            f.eval(v);
+                        } catch (SchemeException se) {
+                            throwNestedPrimException(se);
+                        }
+                    }
                 } while (v!=EOF);
                 f.pop(before);
                 return VOID;
@@ -406,6 +457,8 @@ public class Primitives extends ModuleAdapter {
                 return Quantity.valueOf(str(f.vlr[0]).stringdata.length);
             case VECTORLENGTH:
                 return Quantity.valueOf(vec(f.vlr[0]).vals.length);
+            case MAKEPARAM:
+                return new Parameter(f.vlr[0]);
             case MAKESTRING:
                 return new SchemeString(new char[num(f.vlr[0]).intValue()]);
             case MAKEVECTOR:
@@ -421,10 +474,10 @@ public class Primitives extends ModuleAdapter {
             case DENOMINATOR: return num(f.vlr[0]).denominator();
             case REALPART: return num(f.vlr[0]).realpart();
             case IMAGPART: return num(f.vlr[0]).imagpart();
-	    case DISPLAY: case WRITE:
+            case DISPLAY: case WRITE:
                 try {
                     f.dynenv.out.write((primid == WRITE ? f.vlr[0].write() :
-					f.vlr[0].display()));
+                                        f.vlr[0].display()));
                 } catch (IOException e) {
                     throwPrimException("Error writing to output port "+f.dynenv.out);
                 }
@@ -460,13 +513,13 @@ public class Primitives extends ModuleAdapter {
             case CURRENTEVAL:
                 f.ctx.evaluator=proc(f.vlr[0]);
                 return VOID;
-	    case GETNLNAME:
-		return Symbol.get(module(f.vlr[0]).getModuleName());
-	    case GETNLVERSION:
-		return Quantity.valueOf(module(f.vlr[0]).getModuleVersion());
-	    case GETNLBINDINGNAMES:
-		Value[] va=(Value[])module(f.vlr[0]).getModuleBindingNames();
-		return valArrayToList(va,0,va.length);
+            case GETNLNAME:
+                return Symbol.get(module(f.vlr[0]).getModuleName());
+            case GETNLVERSION:
+                return Quantity.valueOf(module(f.vlr[0]).getModuleVersion());
+            case GETNLBINDINGNAMES:
+                Value[] va=(Value[])module(f.vlr[0]).getModuleBindingNames();
+                return valArrayToList(va,0,va.length);
             case LOADNL:
                 try {
                     Class clazz=Class.forName(string(f.vlr[0]));
@@ -484,11 +537,11 @@ public class Primitives extends ModuleAdapter {
                 String f1=string(f.vlr[0]);
                 File fn=new File(f1);
                 return truth(fn.isAbsolute());
-	    case SLEEP:
-		try {
-		    Thread.sleep(num(f.vlr[0]).longValue());
-		} catch (InterruptedException ie) {}
-		return VOID;
+            case SLEEP:
+                try {
+                    Thread.sleep(num(f.vlr[0]).longValue());
+                } catch (InterruptedException ie) {}
+                return VOID;
             }
         case 2:
             switch (primid) {
@@ -521,20 +574,20 @@ public class Primitives extends ModuleAdapter {
                 }
                 return VOID;
             case STRINGREF:
-		int index=num(f.vlr[1]).intValue();
-		try {
-		    return new SchemeCharacter(str(f.vlr[0]).stringdata[index]);
-		} catch (ArrayIndexOutOfBoundsException e) {
+                int index=num(f.vlr[1]).intValue();
+                try {
+                    return new SchemeCharacter(str(f.vlr[0]).stringdata[index]);
+                } catch (ArrayIndexOutOfBoundsException e) {
                     throwPrimException("index "+index+" out of bounds for '"+
-				       f.vlr[0].synopsis()+"'");
-		}
+                                       f.vlr[0].synopsis()+"'");
+                }
             case VECTORREF:
                 index=num(f.vlr[1]).intValue();
                 try {
                     return vec(f.vlr[0]).vals[index];
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throwPrimException("index "+index+" out of bounds for '"+
-				       f.vlr[0].synopsis()+"'");
+                                       f.vlr[0].synopsis()+"'");
                 }
             case MAKEVECTOR:
                 return new SchemeVector(num(f.vlr[0]).intValue(),
@@ -553,13 +606,13 @@ public class Primitives extends ModuleAdapter {
                 }
                 return new SchemeString(newStr);
             case STRING2NUMBER:
-		try {
+                try {
                     return (Quantity)f.dynenv.parser.nextExpression(new InputPort(new BufferedReader(new StringReader(string(f.vlr[0])))), num(f.vlr[1]).intValue());
-		} catch (NumberFormatException nf) {
-		    return FALSE;
-		} catch (IOException e) {
-		    return FALSE;
-		}
+                } catch (NumberFormatException nf) {
+                    return FALSE;
+                } catch (IOException e) {
+                    return FALSE;
+                }
             case NUMBER2STRING:
                 return new SchemeString(num(f.vlr[0])
                                         .toString(num(f.vlr[1]).intValue()));
@@ -575,14 +628,14 @@ public class Primitives extends ModuleAdapter {
                 return VOID;
             case MAKERECTANGULAR:
                 return Quantity.valueOf(num(f.vlr[0]),
-					num(f.vlr[1]));
+                                        num(f.vlr[1]));
             case ASHL: return Quantity.valueOf(num(f.vlr[0]).integer()
                                                .shiftLeft(num(f.vlr[1])
                                                           .intValue()));
             case ASHR: return Quantity.valueOf(num(f.vlr[0]).integer()
                                                .shiftRight(num(f.vlr[1])
                                                            .intValue()));
-	    case DISPLAY: case WRITE:
+            case DISPLAY: case WRITE:
                 port=outport(f.vlr[1]);
                 try {
                     port.write((primid == WRITE ? f.vlr[0].write() :
@@ -599,8 +652,8 @@ public class Primitives extends ModuleAdapter {
                 } catch (IOException e) {
                     throwPrimException("error opening file "+fname);
                 }
-	    case GETNLBINDING:
-		return module(f.vlr[0]).getBindingValue(symbol(f.vlr[1]));
+            case GETNLBINDING:
+                return module(f.vlr[0]).getBindingValue(symbol(f.vlr[1]));
             case EVAL:
                 f.nxp=f.compile(f.vlr[0], env(f.vlr[1]));
                 f.returnValues(f.vlr);
@@ -658,15 +711,15 @@ public class Primitives extends ModuleAdapter {
                 return VOID;
             case STRINGSET:
                 int index=num(f.vlr[1]).intValue();
-		try {
-		    str(f.vlr[0]).set(index, character(f.vlr[2]));
-		} catch (ArrayIndexOutOfBoundsException e) {
+                try {
+                    str(f.vlr[0]).set(index, character(f.vlr[2]));
+                } catch (ArrayIndexOutOfBoundsException e) {
                     throwPrimException("index "+index+" out of bounds for '"+f.vlr[0].synopsis()+"'");
                 }
                 return VOID;
-	    case VECTORFILL:
-		vec(f.vlr[0]).fill(f.vlr[1]);
-		return VOID;
+            case VECTORFILL:
+                vec(f.vlr[0]).fill(f.vlr[1]);
+                return VOID;
             case VECTORSET:
                 index=num(f.vlr[1]).intValue();
                 try {
@@ -710,7 +763,7 @@ public class Primitives extends ModuleAdapter {
                 f.vlr = newvlr;
                 f.nxp = APPEVAL;
                 return proc;
-	    case LIST: return valArrayToList(f.vlr,0,f.vlr.length);
+            case LIST: return valArrayToList(f.vlr,0,f.vlr.length);
             case ADD:
                 quantity=Quantity.ZERO;
                 for (int i=f.vlr.length-1; i>=0; i--) {
@@ -757,7 +810,7 @@ public class Primitives extends ModuleAdapter {
                 return TRUE;
             case DIV:
                 quantity=num(f.vlr[0]);
-		if (f.vlr.length==1) {return Quantity.ONE.div(quantity); }
+                if (f.vlr.length==1) {return Quantity.ONE.div(quantity); }
                 for (int i=1; i<f.vlr.length; i++) {
                     quantity=quantity.div(num(f.vlr[i]));
                 }
@@ -766,164 +819,164 @@ public class Primitives extends ModuleAdapter {
                 throwArgSizeException();
             }
         }
-	return VOID;
+        return VOID;
     }
 
     static final int
-	ABSPATHQ = 13,
-	ACOS = 14,
-	ADD = 152,
-	APPLY = 137,
-	ASHL = 104,
-	ASHR = 105,
-	ASIN = 15,
-	ATAN = 106,
-	//	ATAN = 16,
-	BLOCKREAD = 138,
-	BLOCKWRITE = 139,
-	BOOLEANQ = 17,
-	BOX = 18,
-	BOXQ = 19,
-	CALLCC = 20,
-	CALLFC = 107,
-	CALLWITHVALUES = 108,
-	CAR = 21,
-	CASESENSITIVE = 151,
-	CDR = 22,
-	CEILING = 23,
-	CHAR2INTEGER = 24,
-	CHARACTERQ = 25,
-	CHARREADY = 26,
-	CLOSEINPUTPORT = 27,
-	CLOSEOUTPUTPORT = 28,
-	COMPLEXQ = 29,
-	CONS = 109,
-	ANNOTATIONQ = 30,
-	COS = 31,
-	//	CURRENTEVAL = 0,
-	CURRENTEVAL = 32,
-	//	CURRENTINPUTPORT = 1,
-	CURRENTINPUTPORT = 33,
-	//	CURRENTOUTPUTPORT = 2,
-	CURRENTOUTPUTPORT = 34,
-	//	CURRENTWIND = 3,
-	CURRENTWIND = 35,
-	DENOMINATOR = 36,
-	DISPLAY = 110,
-	//      DISPLAY = 37,
-	DIV = 144,
-	ENVIRONMENTQ = 39,
-	EQ = 112,
-	EQUAL = 113,
-	ERROR = 114,
-	EVAL = 115,
-	//	EVAL = 40,
-	EXACT2INEXACT = 41,
-	EXACTQ = 42,
-	EXP = 43,
-	FILETYPE = 44,
-	FLOOR = 45,
-	FLUSHOUTPUTPORT = 46,
-	GCD = 116,
-	GETNLBINDING = 117,
-	GETNLBINDINGNAMES = 47,
-	GETNLNAME = 48,
-	GETNLVERSION = 49,
-	GETOUTPUTSTRING = 50,
-	GRT = 153,
-	IMAGPART = 51,
-	INEXACT2EXACT = 52,
-	INEXACTQ = 53,
-	INPORTQ = 54,
-	INTEGER2CHAR = 55,
-	INTEGERQ = 56,
-	INTERACTIONENVIRONMENT = 4,
-	LCM = 118,
-	LENGTH = 57,
-	LIST = 146,
-	LIST2VECTOR = 58,
-	LOAD = 59,
-	LOADNL = 60,
-	LOG = 61,
-	LOOKUP = 119,
-	//	LOOKUP = 62,
-	LT = 147,
-	MAKEPATH = 120,
-	MAKERECTANGULAR = 121,
-	MAKESTRING = 122,
-	//	MAKESTRING = 63,
-	MAKEVECTOR = 123,
-	//	MAKEVECTOR = 64,
-	//	MAX_PRECISION = 5,
-	MAX_PRECISION = 65,
-	//	MIN_PRECISION = 6,
-	MIN_PRECISION = 66,
-	MUL = 148,
-	NEQ = 149,
-	NULLENVIRONMENT = 67,
-	NULLQ = 68,
-	NUMBER2STRING = 124,
-	//	NUMBER2STRING = 69,
-	NUMBERQ = 70,
-	NUMERATOR = 71,
-	OPENINPUTFILE = 72,
-	OPENINPUTSTRING = 73,
-	OPENOUTPUTFILE = 125,
-	//	OPENOUTPUTFILE = 74,
-	OPENOUTPUTSTRING = 7,
-	OUTPORTQ = 75,
-	PAIRQ = 76,
-	// <77>
-	PEEKCHAR = 78,
-	//	PEEKCHAR = 8,
-	PROCEDUREQ = 79,
-	PUTPROP = 140,
-	QUOTIENT = 126,
-	RATIOQ = 80,
-	READ = 81,
-	//	READ = 9,
-	//	READCHAR = 10,
-	READCHAR = 82,
-	REALPART = 83,
-	REMAINDER = 127,
-	REPORTENVIRONMENT = 84,
-	ROUND = 85,
-	SETBOX = 128,
-	SETCAR = 129,
-	SETCDR = 130,
-	SIN = 86,
-	SLEEP = 87,
-	SQRT = 88,
-	STRING2NUMBER = 131,
-	//	STRING2NUMBER = 89,
-	STRING2SYMBOL = 90,
-	STRING2UNINTERNEDSYMBOL = 91,
-	STRINGAPPEND = 132,
-	STRINGFILL = 133,
-	STRINGLENGTH = 92,
-	STRINGQ = 93,
-	STRINGREF = 134,
-	STRINGSET = 141,
-	SUB = 150,
-	SYMBOL2STRING = 94,
-	SYMBOLQ = 95,
-	SYSTIME = 11,
-	TAN = 96,
-	TRUNCATE = 12,
-	UNBOX = 97,
-	VECTOR2LIST = 98,
-	VECTORFINDLASTUNIQUE = 99,
-	VECTORLENGTH = 100,
-	VECTORQ = 101,
-	VECTORREF = 135,
-	VECTORSET = 142,
-	VECTORFILL = 145,
-	VOIDQ = 102,
-	WRITE = 111,
-	//	WRITE = 38,
-	//	WRITECHAR = 103,
-	WRITECHAR = 136,
-	_VOID = 12;
+        ABSPATHQ = 13,
+        ACOS = 14,
+        ADD = 152,
+        APPLY = 137,
+        ASHL = 104,
+        ASHR = 105,
+        ASIN = 15,
+        ATAN = 106,
+        //	ATAN = 16,
+        BLOCKREAD = 138,
+        BLOCKWRITE = 139,
+        BOOLEANQ = 17,
+        BOX = 18,
+        BOXQ = 19,
+        CALLCC = 20,
+        CALLFC = 107,
+        CALLWITHVALUES = 108,
+        CAR = 21,
+        CASESENSITIVE = 151,
+        CDR = 22,
+        CEILING = 23,
+        CHAR2INTEGER = 24,
+        CHARACTERQ = 25,
+        CHARREADY = 26,
+        CLOSEINPUTPORT = 27,
+        CLOSEOUTPUTPORT = 28,
+        COMPLEXQ = 29,
+        CONS = 109,
+        ANNOTATIONQ = 30,
+        COS = 31,
+        //	CURRENTEVAL = 0,
+        CURRENTEVAL = 32,
+        //	CURRENTINPUTPORT = 1,
+        CURRENTINPUTPORT = 33,
+        //	CURRENTOUTPUTPORT = 2,
+        CURRENTOUTPUTPORT = 34,
+        //	CURRENTWIND = 3,
+        CURRENTWIND = 35,
+        DENOMINATOR = 36,
+        DISPLAY = 110,
+        //      DISPLAY = 37,
+        DIV = 144,
+        ENVIRONMENTQ = 39,
+        EQ = 112,
+        EQUAL = 113,
+        ERROR = 114,
+        EVAL = 115,
+        //	EVAL = 40,
+        EXACT2INEXACT = 41,
+        EXACTQ = 42,
+        EXP = 43,
+        FILETYPE = 44,
+        FLOOR = 45,
+        FLUSHOUTPUTPORT = 46,
+        GCD = 116,
+        GETNLBINDING = 117,
+        GETNLBINDINGNAMES = 47,
+        GETNLNAME = 48,
+        GETNLVERSION = 49,
+        GETOUTPUTSTRING = 50,
+        GRT = 153,
+        IMAGPART = 51,
+        INEXACT2EXACT = 52,
+        INEXACTQ = 53,
+        INPORTQ = 54,
+        INTEGER2CHAR = 55,
+        INTEGERQ = 56,
+        INTERACTIONENVIRONMENT = 4,
+        LCM = 118,
+        LENGTH = 57,
+        LIST = 146,
+        LIST2VECTOR = 58,
+        LOAD = 59,
+        LOADNL = 60,
+        LOG = 61,
+        LOOKUP = 119,
+        //	LOOKUP = 62,
+        LT = 147,
+        MAKEPARAM = 63,
+        MAKEPATH = 120,
+        MAKERECTANGULAR = 121,
+        MAKESTRING = 122,
+        MAKEVECTOR = 123,
+        //	MAKEVECTOR = 64,
+        //	MAX_PRECISION = 5,
+        MAX_PRECISION = 65,
+        //	MIN_PRECISION = 6,
+        MIN_PRECISION = 66,
+        MUL = 148,
+        NEQ = 149,
+        NULLENVIRONMENT = 67,
+        NULLQ = 68,
+        NUMBER2STRING = 124,
+        //	NUMBER2STRING = 69,
+        NUMBERQ = 70,
+        NUMERATOR = 71,
+        OPENINPUTFILE = 72,
+        OPENINPUTSTRING = 73,
+        OPENOUTPUTFILE = 125,
+        //	OPENOUTPUTFILE = 74,
+        OPENOUTPUTSTRING = 7,
+        OUTPORTQ = 75,
+        PAIRQ = 76,
+        PARAMETERQ = 77,
+        PEEKCHAR = 78,
+        //	PEEKCHAR = 8,
+        PROCEDUREQ = 79,
+        PUTPROP = 140,
+        QUOTIENT = 126,
+        RATIOQ = 80,
+        READ = 81,
+        //	READ = 9,
+        //	READCHAR = 10,
+        READCHAR = 82,
+        REALPART = 83,
+        REMAINDER = 127,
+        REPORTENVIRONMENT = 84,
+        ROUND = 85,
+        SETBOX = 128,
+        SETCAR = 129,
+        SETCDR = 130,
+        SIN = 86,
+        SLEEP = 87,
+        SQRT = 88,
+        STRING2NUMBER = 131,
+        //	STRING2NUMBER = 89,
+        STRING2SYMBOL = 90,
+        STRING2UNINTERNEDSYMBOL = 91,
+        STRINGAPPEND = 132,
+        STRINGFILL = 133,
+        STRINGLENGTH = 92,
+        STRINGQ = 93,
+        STRINGREF = 134,
+        STRINGSET = 141,
+        SUB = 150,
+        SYMBOL2STRING = 94,
+        SYMBOLQ = 95,
+        SYSTIME = 11,
+        TAN = 96,
+        TRUNCATE = 12,
+        UNBOX = 97,
+        VECTOR2LIST = 98,
+        VECTORFINDLASTUNIQUE = 99,
+        VECTORLENGTH = 100,
+        VECTORQ = 101,
+        VECTORREF = 135,
+        VECTORSET = 142,
+        VECTORFILL = 145,
+        VOIDQ = 102,
+        WRITE = 111,
+        //	WRITE = 38,
+        //	WRITECHAR = 103,
+        WRITECHAR = 136,
+        _VOID = 12;
 
 
 }

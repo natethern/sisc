@@ -1,3 +1,17 @@
+2002-03-08  Matthias Radestock  <matthias@sorted.org>
+
+	* Fxied access violation problems in generic functions when
+	  sub-classes have more restrictive permissions than base
+	  classes. The fix is restricts the visiblity of non-public
+	  classes/interfaces/methods.
+
+	* Added mechanism to throw Java exceptions from Scheme code and
+	  propagating them back to Java code if the Scheme code was called
+	  from Java.
+
+	* Added MAKE-PARAMETER and PARAMETER? primitives that deal with
+	  thread-local variables.
+
 2002-02-28  Scott G. Miller  <scgmille@freenetproject.org>
 	
 	* Fixed a couple of math bugs in Quantity-64float
