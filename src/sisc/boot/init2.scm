@@ -751,10 +751,9 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
         [outf (open-output-file to)])
     (let loop ([e (read-code inf)])
       (or (eof-object? e)
-          (let ([source (#;(lambda (x) x) (current-optimizer)
-                                        (analyze
-                         (apply sc-expand e scexpopts) (interaction-environment)))
-                ])
+          (let ([source (analyze
+                         ((current-optimizer)
+                          (apply sc-expand e scexpopts) (interaction-environment)))])
             (pretty-print source outf) (newline outf)
             (loop (read inf)))))
     (close-output-port outf)
