@@ -8,8 +8,8 @@
 (module jdbc (jdbc/connect jdbc/prepare-statement
                            jdbc/execute-query jdbc/execute jdbc/close
                            set-int set-string set-double set-float)
-  (import s2j)
-  (import generic-procedures)
+  (import old-s2j)
+  (import old-generic-procedures)
   (import streams)
   (define <java.sql.Connection> (java-class "java.sql.Connection"))
   (define <java.sql.PreparedStatement> (java-class "java.sql.PreparedStatement"))

@@ -145,9 +145,9 @@
   (define (generate-generic-java-field-accessors fields)
     `(define-generic-field-accessors ,@(map generate-generic-accessor fields)))
   
-  (define (write-autos2j-module-definition module-name class . port)
+  (define (write-autos2j-module-definition module-name classes . port)
     (receive (sclasses saccessors smodifiers smethods)
-        (scan-java-class class)
+        (scan-java-classes class)
       (parameterize ((print-shared #f))
         (apply pretty-print (generate-module-definition
                              module-name
