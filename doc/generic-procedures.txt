@@ -122,6 +122,14 @@ Creates a generic procedure. If <generic-proc>s are specified then
 their method lists are combined, in effect merging the generic
 procedures into one.
 
+The typical scenario for using method list merging is when several
+modules have defined generic functions (and procedures using these
+functions) that perform identical operations but on different data
+types. Method list merging allows the generic procedures to be
+combined, covering the combination of data types, and
+extended. Furthermore, the coverage of the dependent procedures is
+implicitly extended to the combined set of data types.
+
 
 GENERIC-PROCEDURE-METHODS <generic-proc> => <list methods>
 Returns the list of methods currently contained in <generic-proc>.
@@ -197,6 +205,81 @@ best matching method.
 
 The next best matching method must be invoked with arguments to which
 the current method is applicable.
+
+
+Examples
+--------
+
+Method selection, rest arguments, next: parameter:
+
+(define-generic m)
+(define-methods m
+  [((next: next) (<number> x) (<value> y) (<number> z) . rest)
+   (cons 'a (if next (apply next x y z rest) '()))]
+  [((next: next) (<number> x) (<value> y) (<number> z))
+   (cons 'b (if next (next x y z) '()))]
+  [((next: next) (<number> x) (<number> y) . rest)
+   (cons 'c (if next (apply next x y rest) '()))]
+  [((next: next) (<number> x) (<number> y) (<value> z))
+   (cons 'd (if next (next x y z) '()))])
+(m 1 1 1) ;=> '(d c b a)
+(m 1 1) ;=> '(c)
+(m 1 'x 2) ;=> '(b a)
+(m 1 1 'x) ;=> '(d c)
+(m 1 'x 'x) ;=> error
+
+Method list merging:
+
+(import* misc compose)
+(module foo
+    (p-append p-reverse-append)
+  (define (p-reverse-append . args)
+    (apply p-append (reverse args)))
+  (define-generic p-append)
+  (define-methods p-append
+    [((<list> x) . rest)
+     (apply append x rest)]
+    [((<vector> x) . rest)
+     (list->vector (apply append
+                          (vector->list x)
+                          (map vector->list rest)))]))
+(module bar
+    (p-append p-repeat)
+  (define (p-repeat n x)
+    (let loop ([res '()]
+               [n   n])
+      (if (= n 0)
+          (apply p-append res)
+          (loop (cons x res) (- n 1)))))
+  (define-generic p-append)
+  (define-methods p-append
+    [((<string> x) . rest)
+     (apply string-append x rest)]
+    [((<symbol> x) . rest)
+     (string->symbol (apply string-append
+                            (symbol->string x)
+                            (map symbol->string rest)))]))
+
+(import* foo (p-append1 p-append) p-reverse-append)
+(import* bar (p-append2 p-append) p-repeat)
+(define-generic p-append p-append1 p-append2)
+(define-method (p-append (<procedure> x) . rest)
+  (apply compose x rest))
+
+(p-append '(a b)) ;=> '(a b)
+(p-append '(a b) '(c d) '(e f)) ;=> '(a b c d e f)
+(p-append '#(a b)) ;=> '#(a b)
+(p-append '#(a b) '#(c d) '#(e f)) ;=> '#(a b c d e f)
+(p-append "ab") ;=> "ab"
+(p-append "ab" "cd" "ef") ;=> "abcdef"
+(p-append 'ab) ;=> 'ab
+(p-append 'ab 'cd 'ef) ;=> 'abcdef
+((p-append car cdr cdr cdr) '(1 2 3 4)) ;=> 4
+
+(p-reverse-append "ab" "cd" "ef") ;=> "efcdab"
+(p-repeat 3 '(a b)) ;=> '(a b a b a b)
+((p-reverse-append cdr cdr cdr car) '(1 2 3 4)) ;=> 4
+((p-repeat 3 cdr) '(1 2 3 4)) ;=> (4)
 
 
 What's Changed?
