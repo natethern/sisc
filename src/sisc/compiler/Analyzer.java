@@ -87,10 +87,8 @@ public abstract class Analyzer extends CompilerConstants {
                 expr=(Pair)expr.cdr;
 
             Pair locals=EMPTYLIST;
+            Value formals=expr.car;
 
-            Value formals;
-
-            formals=expr.car;
             if (formals instanceof Symbol) {
                 locals=list(formals);
             } else if (formals instanceof Pair) {
