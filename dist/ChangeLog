@@ -1,3 +1,9 @@
+2001-12-16  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Implemented Scheme level threading 
+
+	* Fixed a division by zero error in the refined Quantity classes
+
 2001-12-14  Matthias Radestock  <matthias@sorted.org>
 
 	* Implemented clean interface for calling Scheme from Java,
@@ -37,7 +43,7 @@
         * Fixed equals? handling of immutable data (more specifically,
           equals? handling of subclasses of values)
 
-r1.3.0  Major changes
+12/1/2001 Scott G. Miller <scgmille@freenetproject.org>	
 
 	* Removed BeginExp, DefineExp, FreeSetExp, IfExp, and LexicalSetExp,
           which were replaced with EvalExp, which simply evaluates
