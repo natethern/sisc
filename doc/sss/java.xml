@@ -30,7 +30,7 @@
     <sect2>
       <title>Calling Scheme From Java</title>
       <para>
-        A call from Scheme to Java can occur in one of two places:
+        A call to Scheme from Java can occur in one of two places:
         <itemizedlist>
           <listitem>
             <para>
