@@ -215,4 +215,29 @@
     ((_ e0 e1 e2 ...)
      (if (not e0) (begin e1 e2 ...)))))
 
-
+;;perform macro expansion on a file
+(define (expand-file expand-from expand-to)
+  (let ([inp (open-input-file expand-from)]
+	[outp (open-output-file expand-to)]
+	[precision (max-precision)])
+    (max-precision 1500)
+    (let loop ([expr (read inp)])
+      (if (not (eof-object? expr))
+	  (begin
+	    (let ([ev (sc-expand expr)])
+	      (pretty-print
+	       ;;the expansion tends to generate a lot of of
+	       ;;expressions of the form (begin (void) <x>). The
+	       ;;following reduces these to <x>.
+	       (if (and #t
+			(list? ev) 
+			(= (length ev) 3)
+			(eq? (car ev) 'begin)
+			(equal? (cadr ev) '(void)) )
+		   (caddr ev)
+		   ev) outp))
+	    (newline outp)
+	    (loop (read inp))))
+      (close-input-port inp)
+      (close-output-port outp)
+      (max-precision precision))))
