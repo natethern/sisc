@@ -537,12 +537,12 @@ public class Quantity extends Value implements Singleton {
                 if (Math.floor(o.d)==o.d)
                     return new Quantity(i.remainder(d2i(o.d))).toInexact();
             }
+            break;            
         case DECIM:
             if (Math.floor(d)==d)
                 return new Quantity(d2i(d)).remainder(o).toInexact();
-        default:
-            throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
         }
+        throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
     }
 
     public static float sinh(float x) {
@@ -831,6 +831,7 @@ public class Quantity extends Value implements Singleton {
             case COMPLEX:
                 return o.mul(this);
             }
+            break;
         case RATIO:
             switch (o.type) {
             case FIXEDINT:
@@ -850,6 +851,7 @@ public class Quantity extends Value implements Singleton {
             case COMPLEX:
                 return o.mul(this);
             }
+            break;
         case COMPLEX:
             float g=0, h=0;
             switch (o.type) {
@@ -869,6 +871,8 @@ public class Quantity extends Value implements Singleton {
             case RATIO:
                 g=ratioToDecimal(o.i, o.de);
                 break;
+            default:
+                return NaN;                
             }
             float nd=(d*g)-(im*h);
             float nim=(d*h)+(im*g);
@@ -1014,6 +1018,8 @@ public class Quantity extends Value implements Singleton {
                 q.im=0.0f;
                 q.type=COMPLEX;
                 return q.div(o);
+            case NEGINF: case POSINF: return ZERO;
+            case NAN: return NaN;                
             }
         case RATIO:
             switch (o.type) {
@@ -1032,6 +1038,8 @@ public class Quantity extends Value implements Singleton {
             case COMPLEX:
                 r=ratioToDecimal(i,de);
                 return new Quantity(div(r, o.d), o.im);
+            case NEGINF: case POSINF: return ZERO;
+            case NAN: return NaN;                
             }
         case COMPLEX:
             float g=0.0f, h=0.0f;
@@ -1050,6 +1058,8 @@ public class Quantity extends Value implements Singleton {
             case COMPLEX:
                 g=o.d;
                 h=o.im;
+            case NEGINF: case POSINF:
+            case NAN: return NaN;
             }
 
             // (a+ib)/(c+id)=(ac+bd+i(bc-ad))/(c^2+d^2)
@@ -1065,8 +1075,24 @@ public class Quantity extends Value implements Singleton {
             Quantity rc1=new Quantity(ac+bd);
             Quantity rc2=new Quantity(bc-ad);
             return rc1.add(I.mul(rc2)).div(c2_p_d2);
+        case POSINF:
+            switch (o.type) {
+            case POSINF: 
+            case NEGINF: 
+            case NAN: return NaN;
+            default:
+                return POSITIVE_INFINITY;
+            }
+        case NEGINF:
+            switch (o.type) {
+            case NEGINF: 
+            case POSINF: 
+            case NAN: return NaN;
+            default:
+                return NEGATIVE_INFINITY;
+            }
         }
-        return null;
+        return NaN;
     }
 
     public boolean comp(Quantity o, int test) {
@@ -1088,6 +1114,8 @@ public class Quantity extends Value implements Singleton {
             case COMPLEX:
                 if (test==0)
                     return (o.im==0) && d==o.d;
+            case POSINF: return test==-1;
+            case NEGINF: return test==1;
             }
         case INTEG:
             switch (o.type) {
@@ -1104,6 +1132,8 @@ public class Quantity extends Value implements Singleton {
                 if (test==0)
                     return o.im==0 &&
                         comp(new Quantity(o.d), 0);
+            case POSINF: return test==-1;
+            case NEGINF: return test==1;
             }
             break;
         case RATIO:
@@ -1124,6 +1154,8 @@ public class Quantity extends Value implements Singleton {
                 if (test==0)
                     return o.im==0 &&
                         comp(new Quantity(o.d), 0);
+            case POSINF: return test==-1;
+            case NEGINF: return test==1;
             }
             break;
         case COMPLEX:

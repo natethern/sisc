@@ -44,7 +44,7 @@ public class Quantity extends Value implements Singleton {
     public static final int
         FIXEDINT = 0,
         DECIM = 1,
-	INTEG = 2,
+		INTEG = 2,
         RATIO = 3,
         COMPLEX = 4,
         POSINF  = 5,
@@ -536,14 +536,15 @@ public class Quantity extends Value implements Singleton {
                 BigInteger o2=o.d.toBigInteger();
                 if (new BigDecimal(o2).compareTo(o.d)==0)
                     return new Quantity(i.remainder(o2)).toInexact();
-            }
+            } 
+            break;
         case DECIM:
             BigInteger o2=d.toBigInteger();
             if (new BigDecimal(o2).compareTo(d)==0)
                 return new Quantity(o2).remainder(o).toInexact();
         default:
-            throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
         }
+	    throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
     }
 
     public static double sinh(double x) {
@@ -587,8 +588,8 @@ public class Quantity extends Value implements Singleton {
         Quantity z=ONE.sub(mul(this)).sqrt();
         z=mul(I).add(z).log();
         return I.mul(z).negate();
-    }
 
+    }
     public Quantity acos() {
         return HALF_PI.sub(asin());
     }
@@ -627,7 +628,7 @@ public class Quantity extends Value implements Singleton {
             // select k=0 for principal value, giving:
             // Log[w] = Log[|w|]+I*Arg[w]
             //        = Log[sqrt(a^2 + b^2)] + I * ArcTan(b/a)
-	    BigDecimal dv=(type==COMPLEX ? d : decimal());
+	    	BigDecimal dv=(type==COMPLEX ? d : decimal());
             BigDecimal a2=dv.multiply(dv);
             BigDecimal b2=im.multiply(im);
             double arctan=Math.atan2(im.doubleValue(),dv.doubleValue());
@@ -845,6 +846,7 @@ public class Quantity extends Value implements Singleton {
             case COMPLEX:
                 return o.mul(this);
             }
+            break;
         case RATIO:
             switch (o.type) {
             case FIXEDINT:
@@ -864,6 +866,7 @@ public class Quantity extends Value implements Singleton {
             case COMPLEX:
                 return o.mul(this);
             }
+            break;
         case COMPLEX:
             BigDecimal g=null, h=_BD_ZERO;
             switch (o.type) {
@@ -883,6 +886,8 @@ public class Quantity extends Value implements Singleton {
             case RATIO:
                 g=ratioToDecimal(o.i, o.de);
                 break;
+            default: 
+                return NaN;
             }
             BigDecimal nd=d.multiply(g).subtract(im.multiply(h));
             BigDecimal nim=d.multiply(h).add(im.multiply(g));
@@ -1043,6 +1048,8 @@ public class Quantity extends Value implements Singleton {
                 q.im=_BD_ZERO;
                 q.type=COMPLEX;
                 return q.div(o);
+            case NEGINF: case POSINF: return ZERO;
+            case NAN: return NaN;                
             }
         case INTEG:
             switch (o.type) {
@@ -1061,6 +1068,8 @@ public class Quantity extends Value implements Singleton {
                 q.im=_BD_ZERO;
                 q.type=COMPLEX;
                 return q.div(o);
+            case NEGINF: case POSINF: return ZERO;
+            case NAN: return NaN;
             }
         case RATIO:
             switch (o.type) {
@@ -1079,6 +1088,8 @@ public class Quantity extends Value implements Singleton {
             case COMPLEX:
                 r=ratioToDecimal(i,de);
                 return new Quantity(div(r, o.d), o.im);
+            case NEGINF: case POSINF: return ZERO;
+            case NAN: return NaN;
             }
         case COMPLEX:
             BigDecimal g=null, h=_BD_ZERO;
@@ -1097,6 +1108,9 @@ public class Quantity extends Value implements Singleton {
             case COMPLEX:
                 g=o.d;
                 h=o.im;
+            case NEGINF: case POSINF:
+            case NAN: return NaN;
+                
             }
 
             // (a+ib)/(c+id)=(ac+bd+i(bc-ad))/(c^2+d^2)
@@ -1114,14 +1128,16 @@ public class Quantity extends Value implements Singleton {
             return rc1.add(I.mul(rc2)).div(c2_p_d2);
         case POSINF:
             switch (o.type) {
-            case POSINF: return ONE;
+            case POSINF: 
+            case NEGINF: 
             case NAN: return NaN;
             default:
                 return POSITIVE_INFINITY;
             }
         case NEGINF:
             switch (o.type) {
-            case NEGINF: return ONE;
+            case NEGINF: 
+            case POSINF: 
             case NAN: return NaN;
             default:
                 return NEGATIVE_INFINITY;
@@ -1150,6 +1166,8 @@ public class Quantity extends Value implements Singleton {
                 if (test==0)
                     return o.im.compareTo(_BD_ZERO)==0 &&
                         o.d.compareTo(d)==0;
+            case POSINF: return test==-1;
+            case NEGINF: return test==1;
             }
         case INTEG:
             switch (o.type) {
@@ -1166,6 +1184,8 @@ public class Quantity extends Value implements Singleton {
                 if (test==0)
                     return o.im.compareTo(_BD_ZERO)==0 &&
                         comp(new Quantity(o.d), 0);
+            case POSINF: return test==-1;
+            case NEGINF: return test==1;
             }
             break;
         case RATIO:
@@ -1186,6 +1206,8 @@ public class Quantity extends Value implements Singleton {
                 if (test==0)
                     return o.im.compareTo(_BD_ZERO)==0 &&
                         comp(new Quantity(o.d), 0);
+            case POSINF: return test==-1;
+            case NEGINF: return test==1;
             }
             break;
         case COMPLEX:

@@ -1,3 +1,8 @@
+2004-11-18  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Finished making all the numeric operators work in some
+	  way with #!+inf, #!-inf, and #!nan.
+
 2004-11-14  Matthias Radestock  <matthias@sorted.org>
 
 	* Removed compiledlibs module and support for .sll libraries,
