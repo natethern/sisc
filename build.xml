@@ -120,7 +120,7 @@
     </jar>
   </target>
   
-  <target name="heap" depends="compiler,i18n">
+  <target name="heap" depends="jars">
     <java classname="sisc.boot.GenerateHeap"
           classpath="${classdir}"
           dir="${schemedir}"
@@ -138,7 +138,7 @@
     </java>
   </target>
 
-  <target name="lite-heap" depends="compiler,i18n">
+  <target name="lite-heap" depends="jars">
     <java classname="sisc.boot.GenerateHeap"
           classpath="${classdir}"
           dir="${schemedir}"
@@ -156,11 +156,11 @@
     </java>
   </target>
 
-  <target name="all-lite" depends="lite-prepare,lite-heap,jars"
+  <target name="all-lite" depends="lite-prepare,lite-heap,docs"
           description="Build lite edition">
   </target>
 
-  <target name="all" depends="full-prepare,heap,jars"
+  <target name="all" depends="full-prepare,heap,docs"
           description="Build all">  
   </target>
     
