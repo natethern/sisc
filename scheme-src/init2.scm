@@ -30,6 +30,9 @@
 ;; may use your version of this file under either the MPL or the
 ;; GPL.
 ;;
+		 
+(current-evaluator eval)
+
 
 (define (parameterize . default)
   (let ([value (if (not (null? default)) (car default) #f)])
@@ -37,8 +40,6 @@
       (if (null? newval) 
 	  value
 	  (set! value (car newval))))))
-		 
-(current-evaluator eval)
 
 (define modulo
   (lambda (x y)
