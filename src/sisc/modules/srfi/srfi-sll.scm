@@ -33,4 +33,9 @@
  'srfi-34
  'srfi-35
  'srfi-37
- 'srfi-38)
+ 'srfi-38
+ 'srfi-39
+ 'srfi-42
+ 'srfi-43
+ 'srfi-45
+ 'srfi-48)
