@@ -72,7 +72,7 @@
 	  <blockquote>
 	    <para>
 	      &parameter;
-	      <methodsynopsis language="scheme">
+	      <methodsynopsis language="scheme" id="min-precision">
 		<type>integer</type>
 		<methodname>min-precision</methodname>
 		<methodparam choice="opt">
@@ -88,7 +88,7 @@
 	    </para>
 	    <para>
 	      &parameter;
-	      <methodsynopsis language="scheme">
+	      <methodsynopsis language="scheme" id="max-precision">
 		<type>integer</type>
 		<methodname>max-precision</methodname>
 		<methodparam choice="opt">
@@ -248,7 +248,7 @@
 	<blockquote>
 	  <para>
 	    &procedure;
-	    <methodsynopsis language="scheme">
+	    <methodsynopsis language="scheme" id="string2uninterned-symbol">
 	      <type>symbol</type>
 	      <methodname>string-&gt;uninterned-symbol</methodname>
 	      <methodparam>
@@ -274,7 +274,7 @@
 	<blockquote>
 	  <para>
 	    &parameter;
-	    <methodsynopsis language="scheme">
+	    <methodsynopsis language="scheme" id="case-sensitive">
 	      <type>#t/#f</type>
 	      <methodname>case-sensitive</methodname>
 	      <methodparam choice="opt">
@@ -378,7 +378,7 @@
 	<blockquote>
 	  <para>
 	    &procedure;
-	    <methodsynopsis language="scheme">
+	    <methodsynopsis language="scheme" id="proper-list-q">
 	      <type>#t/#f</type>
 	      <methodname>proper-list?</methodname>
 	      <methodparam>
@@ -437,7 +437,7 @@
 	<blockquote>
 	  <para>
 	    &parameter;
-	    <methodsynopsis language="scheme">
+	    <methodsynopsis language="scheme" id="vector-length-prefixing">
 	      <type>#t/#f</type>
 	      <methodname>vector-length-prefixing</methodname>
 	      <methodparam choice="opt">
@@ -471,7 +471,7 @@
 	<blockquote>
 	  <para>
 	    &procedure;
-	    <methodsynopsis language="scheme">
+	    <methodsynopsis language="scheme" id="box">
 	      <type>box</type>
 	      <methodname>box</methodname>
 	      <methodparam>
@@ -486,7 +486,7 @@
 	  </para>
 	  <para>
 	    &procedure;
-	    <methodsynopsis language="scheme">
+	    <methodsynopsis language="scheme" id="unbox">
 	      <type>value</type>
 	      <methodname>unbox</methodname>
 	      <methodparam>
@@ -501,7 +501,7 @@
 	  </para>
 	  <para>
 	    &procedure;
-	    <methodsynopsis language="scheme">
+	    <methodsynopsis language="scheme" id="set-box-bang">
 	      <type>undefined</type>
 	      <methodname>set-box!</methodname>
 	      <methodparam>
@@ -543,7 +543,7 @@
 	<blockquote>
 	  <para>
 	    &procedure;
-	    <methodsynopsis language="scheme">
+	    <methodsynopsis language="scheme" id="box-q">
 	      <type>#t/#f</type>
 	      <methodname>box?</methodname>
 	      <methodparam>
@@ -584,7 +584,7 @@
       </para>
       <para>
         &procedure;
-        <methodsynopsis language="scheme">
+        <methodsynopsis language="scheme" id="parameterize">
           <type>parameter</type>
           <methodname>parameterize</methodname>
           <methodparam choice="opt">
@@ -775,7 +775,7 @@
       <blockquote>
         <para>
           &syntax;
-          <methodsynopsis language="scheme">
+          <methodsynopsis language="scheme" id="when">
             <type>value</type>
             <methodname>when</methodname>
             <methodparam>
@@ -799,7 +799,7 @@
         </para>
         <para>
           &syntax;
-          <methodsynopsis language="scheme">
+          <methodsynopsis language="scheme" id="unless">
             <type>value</type>
             <methodname>unless</methodname>
             <methodparam>
@@ -869,7 +869,7 @@
           <blockquote>
             <para>
                 &procedure;
-              <methodsynopsis language="scheme">
+              <methodsynopsis language="scheme" id="with-failure-continuation">
                 <type>value</type>
                 <methodname>with-failure-continuation</methodname>
                 <methodparam>
@@ -882,7 +882,7 @@
             </para>
             <para>
                 &procedure;
-              <methodsynopsis language="scheme">
+              <methodsynopsis language="scheme" id="with-fc">
                 <type>value</type>
                 <methodname>with/fc</methodname>
                 <methodparam>
@@ -948,7 +948,7 @@
           <blockquote>
             <para>
                 &procedure;
-              <methodsynopsis language="scheme">
+              <methodsynopsis language="scheme" id="call-with-failure-continuation">
                 <type>value</type>
                 <methodname>call-with-failure-continuation</methodname>
                 <methodparam>
@@ -958,7 +958,7 @@
             </para>
             <para>
                 &procedure;
-              <methodsynopsis language="scheme">
+              <methodsynopsis language="scheme" id="call-fc">
                 <type>value</type>
                 <methodname>call/fc</methodname>
                 <methodparam>
@@ -1018,7 +1018,7 @@
           <blockquote>
             <para>
               &procedure;
-              <methodsynopsis language="scheme">
+              <methodsynopsis language="scheme" id="make-error">
                 <type>error-record</type>
                 <methodname>make-error</methodname>
                 <methodparam choice="opt">
@@ -1110,7 +1110,7 @@
           <blockquote>
             <para>
               &procedure;
-              <methodsynopsis language="scheme">
+              <methodsynopsis language="scheme" id="make-nested-error">
                 <type>error-record</type>
                 <methodname>make-nested-error</methodname>
                 <methodparam>
@@ -1159,7 +1159,7 @@
           <blockquote>
             <para>
               &procedure;
-              <methodsynopsis language="scheme">
+              <methodsynopsis language="scheme" id="error-location">
                 <type>symbol</type>
                 <methodname>error-location</methodname>
                 <methodparam>
@@ -1177,7 +1177,7 @@
             </para>
             <para>
               &procedure;
-              <methodsynopsis language="scheme">
+              <methodsynopsis language="scheme" id="error-message">
                 <type>value</type>
                 <methodname>error-message</methodname>
                 <methodparam>
@@ -1197,7 +1197,7 @@
             </para>
             <para>
               &procedure;
-              <methodsynopsis language="scheme">
+              <methodsynopsis language="scheme" id="error-parent">
                 <type>error-record</type>
                 <methodname>error-parent</methodname>
                 <methodparam>
@@ -1228,7 +1228,7 @@
           <blockquote>
             <para>
                 &procedure;
-              <methodsynopsis language="scheme">
+              <methodsynopsis language="scheme" id="throw">
                 <type>does not return</type>
                 <methodname>throw</methodname>
                 <methodparam>      
@@ -1281,7 +1281,7 @@
           <blockquote>
             <para>
                 &procedure;
-              <methodsynopsis language="scheme">
+              <methodsynopsis language="scheme" id="error">
                 <type>does not return</type>
                 <methodname>error</methodname>
                 <methodparam choice="opt">
@@ -1479,152 +1479,238 @@
       program specific data without exposing it to the general
       purpose top-level environment.
     </para>
-    <para>
-      <blockquote>
-	<para>
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>a value, or &num;f if unbound</type>
-	    <methodname>getprop</methodname>
-	    <methodparam>
-	      <parameter>variable-name</parameter>
-	    </methodparam>
-	    <methodparam>
-	      <parameter>environment-name</parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Attempts a lookup of variable-name in the symbolic environment
-	      named by environment-name (both are symbols).  If found,
-	      the value is returned.
-	      If not bound, &num;f is returned.
-	    </para>
-	  </blockquote>
-	</para>
-	<para>
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>undefined</type>
-	    <methodname>putprop</methodname>
-	    <methodparam>
-	      <parameter>variable-name</parameter>
-	    </methodparam>
-	    <methodparam>
-	      <parameter>environment-name</parameter>
-	    </methodparam>
-	    <methodparam>
-	      <parameter>value</parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Sets the value of the variable named by variable name in the
-	      symbolic environment named by environment-value to the provided
-	      value (both are symbols).  Any previous value is forgotten.
-	    </para>
-	  </blockquote>
-	</para>
-      </blockquote>
-    </para>
-    <para>
-      In addition, the top-level Scheme environment is a symbolic
-      environment in &SISC; that can be accessed using getprop and putprop, 
-      by omitting the <parameter>environment-name</parameter> parameter.  
-    </para>
-    <para>
-      <blockquote>
-	<para>
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>a value, or &num;f if unbound</type>
-	    <methodname>getprop</methodname>
-	    <methodparam>
-	      <parameter>variable-name</parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Attempts a lookup of variable-name in the top-level environment.
-	      If found, the value is returned.  If not bound, &num;f
-	      is returned.
-	    </para>
-	  </blockquote>
-	</para>
-	<para>
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>undefined</type>
-	    <methodname>putprop</methodname>
-	    <methodparam>
-	      <parameter>variable-name</parameter>
-	    </methodparam>
-	    <methodparam>
-	      <parameter>value</parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Sets the value of the variable named by variable name in the
-	      top-level environment to the provided value.  
-	    </para>
-	  </blockquote>
-	</para>
-      </blockquote>
-    </para>
-    <para>
-      Symbolic environments are a first class datatype in &SISC;.  The
-      top-level environment itself is merely a special cased symbolic
-      environment.  To obtain the top-level environment as a first
-      class value, one can use the 
-      <function>interaction-environment</function> function that is an
-      optional procedure in &R5RS;.  Another useful environment is the
-      &R5RS; report environment available by calling:
-      <programlisting>
+    <sect2 id="AccessingSymbolicEnvironments">
+      <title>
+        Access Functions
+      </title>
+      <para>
+        <blockquote>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme" id="getprop">
+              <type>value</type>
+              <methodname>getprop</methodname>
+              <methodparam>
+                <parameter>binding-name</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>environment-name</parameter>
+              </methodparam>
+              <methodparam choice="opt"> 
+                <parameter>default-value</parameter>
+              </methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>getprop</methodname>
+              <methodparam>
+                <parameter>binding-name</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>environment</parameter>
+              </methodparam>
+              <methodparam choice="opt"> 
+                <parameter>default-value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Attempts a lookup of <parameter>binding-name</parameter>
+                in an environment.
+              </para>
+              <para>
+                In the first form, the environment
+                in which to retrieve the binding is resolved up using a 
+                symbolic name 
+                (<parameter>environment-name</parameter>).  If the
+                environment is not found,
+                <parameter>default-value</parameter> is returned if
+                provided, otherwise <literal>&num;f</literal> is
+                returned.
+                In the second form, the environment is provided as a 
+                first-class value.
+              </para>
+              <para>
+                If found, the value is returned.  If not bound,
+                <parameter>default-value</parameter> is returned, or
+                <literal>&num;f</literal> if
+                <parameter>default-value</parameter> is not specified.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme" id="putprop">
+              <type>undefined</type>
+              <methodname>putprop</methodname>
+              <methodparam>
+                <parameter>binding-name</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>environment-name</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>value</parameter>
+              </methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>putprop</methodname>
+              <methodparam>
+                <parameter>binding-name</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>environment</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Sets the value of a binding named with the symbol <parameter>binding-name</parameter> in a symbolic environment.
+              </para>
+              <para>
+                In the first form, the environment is resolved using a 
+                symbolic name
+                (<parameter>environment-name</parameter>). If the
+                environment does not yet exist, it is created as an 
+                empty environment (as if returned by
+                <function>null-environment</function>).  In the second
+                form, the environment is provided as a first-class
+                value.
+              </para>
+              <para>
+                If the binding does not yet exist in the given
+                environment, it is created.  If a binding previously
+                existed, its previous value is discarded.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
+    <sect2 id="ObtainingSymbolicEnvironments">
+      <title> 
+        Obtaining and Naming
+      </title>
+      <para>
+        Symbolic environments are a first class datatype in &SISC;.  The
+        top-level environment itself is merely a special cased symbolic
+        environment.  To obtain the top-level environment as a first
+        class value, one can use the 
+        <function>interaction-environment</function> function that is an
+        optional procedure in &R5RS;.  Another useful environment is the
+        &R5RS; report environment available by calling:
+        <programlisting>
 (scheme-report-environment 5)
-      </programlisting>
-      Each call to <function>scheme-report-environment</function>
-      returns a new environment that contains only the bindings
-      available in the Scheme report.  Finally, the initial
-      environment available to the programmer when &SISC; starts can
-      be retrieved using the
-      <function>sisc-initial-environment</function> function:
-    </para>
-    <para>
-      <blockquote>
-	<para>
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>environment</type>
-	    <methodname>sisc-initial-environment</methodname>
-            <void/>
-          </methodsynopsis>
-          <blockquote>
-            <para>
-              Returns the initial &SISC; interaction environment.
-            </para>
-          </blockquote>
-        </para>
-      </blockquote>
-    </para>
-    <para>
-      Like <function>scheme-report-environment</function>, each call
-      to <function>sisc-initial-environment</function> returns a
-      distinct environment which contains only the bindings initially
-      available when &SISC; starts.  An interesting use of this would
-      be to define one or more distinct initial-environments, bound to
-      toplevel variables.  One could then define Scheme code and data
-      in each environment that can use the full &SISC; language but
-      cannot see any bindings in other environments.
-    </para>
-    <para>
-      Finally, &SISC; adheres strictly to &R5RS; when it comes to
-      using <function>set!</function> to modify the
-      contents of a top-level variable.  If an attempt to set an
-      undefined variable is made, an error will be raised.  This
-      differs from some Scheme systems that will silently create the
-      binding and set it to the new value.
-    </para>
+        </programlisting>
+        Each call to <function>scheme-report-environment</function>
+        returns a new environment that contains only the bindings
+        available in the Scheme report.  Finally, the initial
+        environment available to the programmer when &SISC; starts can
+        be retrieved using the
+        <function>sisc-initial-environment</function> function:
+      </para>
+      <para>
+        <blockquote>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme" id="sisc-initial-environment">
+              <type>environment</type>
+              <methodname>sisc-initial-environment</methodname>
+              <void/>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the initial &SISC; interaction environment.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        Like <function>scheme-report-environment</function>, each call
+        to <function>sisc-initial-environment</function> returns a
+        distinct environment which contains only the bindings initially
+        available when &SISC; starts.  An interesting use of this would
+        be to define one or more distinct initial-environments, bound to
+        toplevel variables.  One could then define Scheme code and data
+        in each environment that can use the full &SISC; language but
+        cannot see any bindings in other environments.
+      </para>
+      <para> 
+        A programmer may also wish to get a named environment created
+        as a side effect of <function>putprop</function>, or to 
+        define or set an existing first-class environment as a named
+        environment.  The functions
+        <function>get-symbolic-environment</function> and
+        <function>set-symbolic-environment!</function> address these
+        needs.
+      </para>
+      <para>
+        <blockquote>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme" id="get-symbolic-environment">
+              <type>environment</type>
+              <methodname>get-symbolic-environment</methodname>
+              <methodparam>
+                <parameter>environment-name</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Retrieves the symbolic environment named by the symbol
+                <parameter>environment-name</parameter>.  If no such
+                symbolic environment exists with that name,
+                <literal>&num;f</literal> is returned instead.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme" id="set-symbolic-environment-bang">
+              <type>undefined</type>
+              <methodname>set-symbolic-environment!</methodname>
+              <methodparam>
+                <parameter>environment-name</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>environment</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates or replaces a named symbolic environment.  The
+                name of the new symbolic environment is that of the
+                symbol <parameter>environment-name</parameter>.  The
+                name from then on can be used to identify the
+                first-class environment
+                <parameter>environment</parameter>.  If a previous
+                environment occupied the provided name, it is
+                disassociated from that name and the association is
+                assigned to the passed environment.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>                
+      <para>
+        Finally, &SISC; adheres strictly to &R5RS; when it comes to
+        using <function>set!</function> to modify the
+        contents of a top-level variable.  If an attempt to set an
+        undefined variable is made, an error will be raised.  This
+        differs from some Scheme systems that will silently create the
+        binding and set it to the new value.
+      </para>
+    </sect2>
   </sect1>
   <sect1>
     <title>
@@ -1658,7 +1744,7 @@
       <blockquote>
         <para>
           &procedure;
-          <methodsynopsis language="scheme">
+          <methodsynopsis language="scheme" id="circular-q">
             <type>#t/#f</type>
             <methodname>circular?</methodname>
             <methodparam>
@@ -1677,7 +1763,7 @@
         </para>
         <para>
           &procedure;
-          <methodsynopsis language="scheme">
+          <methodsynopsis language="scheme" id="compose">
             <type>procedure</type>
             <methodname>compose</methodname>
             <methodparam choice="opt" rep="repeat">
@@ -1704,7 +1790,7 @@
         </para>
         <para>
           &procedure;
-          <methodsynopsis language="scheme">
+          <methodsynopsis language="scheme" id="iota">
             <type>pair</type>
             <methodname>iota</methodname>
             <methodparam>
@@ -1721,7 +1807,7 @@
         </para>
         <para>
           &syntax;
-          <methodsynopsis language="scheme">
+          <methodsynopsis language="scheme" id="time">
             <type>list</type>
             <methodname>time</methodname>
             <methodparam choice="opt">

@@ -427,6 +427,20 @@
                 </para>
               </blockquote>
             </para>
+            <para>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>SymbolicEnvironment</type>
+                <methodname>readSymbolicEnvironment</methodname>
+                <void/>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Reads a &SISC; Symbolic Environment from the stream.
+                </para>
+              </blockquote>
+            </para>
           </blockquote>
         </para>
       </sect3>
@@ -454,7 +468,7 @@
             <para>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
-                <type>BigDecimal</type>
+                <type>void</type>
                 <methodname>writeBigDecimal</methodname>
                 <methodparam>
                   <type>BigDecimal</type>
@@ -471,7 +485,7 @@
             <para>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
-                <type>Class</type>
+                <type>void</type>
                 <methodname>writeClass</methodname>
                 <methodparam>
                   <type>Class</type>
@@ -488,7 +502,7 @@
             <para>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
-                <type>Expression</type>
+                <type>void</type>
                 <methodname>writeExpression</methodname>
                 <methodparam>
                   <type>Expression</type>
@@ -505,7 +519,7 @@
             <para>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
-                <type>Module</type>
+                <type>void</type>
                 <methodname>writeModule</methodname>
                 <methodparam>
                   <type>Module</type>
@@ -516,6 +530,24 @@
               <blockquote>
                 <para>
                   Writes a &SISC; Native Module to the stream.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>void</type>
+                <methodname>writeSymbolicEnvironment</methodname>
+                <methodparam>
+                  <type>SymbolicEnvironment</type>
+                  <parameter>e</parameter>
+                </methodparam>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Writes a &SISC; Symbolic Environment to the
+                  stream.
                 </para>
               </blockquote>
             </para>
