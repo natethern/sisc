@@ -119,7 +119,7 @@
         (and (or (and channel
 		      (not (bot-quiet (string->symbol channel))))
 		 to-bot)
-	     (ask-alice cleaned-message)))))
+	     (ask-alice from cleaned-message)))))
     
 (define (bot-clean message)
   (let loop ([x 0])
@@ -141,7 +141,7 @@
     (shut . ((up . QUIET)))
     (is . LEARN)
     (be . ((quiet . QUIET)))
-    (listen . LISTEN)
+    (listen . ((up . LISTEN)))
     (evaluate . EVALUATE)
     (seen . SEEN)
     (tell . TELL)
@@ -167,7 +167,7 @@
     "  (I'll run a simple program for you, but it must complete quickly!)\n"))
 
 
-(define (*-is type from message st)
+(define (*-is type from channel message st)
   (let-values ([(ignoreables term) (string-split message " is ")])
     (and term 
          (begin 
@@ -227,14 +227,14 @@
   (let-values ([(term definition) (string-split message " is at ")])    
     (and (or (and term definition
                   (if (store-item dbcon 'where term definition)
-                      (string-append (ask-alice message) " ("
+                      (string-append (ask-alice from message) " ("
 				     (random-elem learn-responses) 
 				     ")")
                       (random-elem knewthat-responses)))
              (let-values ([(term definition) (string-split message " is ")])
                (and term definition
                     (if (store-item dbcon 'what term definition)
-			(string-append (ask-alice message) " ("
+			(string-append (ask-alice from message) " ("
 				       (random-elem learn-responses) 
 				       ")")
                         (random-elem knewthat-responses))))))))
@@ -404,7 +404,7 @@
     (WHEREIS . ,(if-spoken-to where-is))
     (QUIET . ,quiet)
     (SEEN . ,seen)
-    (LISTEN . ,listen)
+    (LISTEN . ,(if-spoken-to listen))
     (LEARN . ,(if-spoken-to learn))
     (EVALUATE . ,(if-spoken-to evaluate))
     (TELL . ,(if-spoken-to tell))
