@@ -1,3 +1,9 @@
+2003-05-04  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Fixed a bug in Library symbolic environments where not
+	  all bindings were returned in bindingKeys.  This affected
+	  many macros in the SRFIs.
+
 2003-05-01  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed serialization problem with Hashtables requiring 
