@@ -153,6 +153,10 @@ public class REPL extends Thread {
     }
 
     public void run() {
+        try {
+            dynenv.out.write("SISC ("+Util.VERSION+") - " + appName + "\n");
+        } catch (IOException e) {}
+            
         Interpreter r = Context.enter(Context.lookup(appName), dynenv);
         try {
             Symbol replSymb = Symbol.get("repl");
@@ -181,6 +185,7 @@ public class REPL extends Thread {
     }
 
     public static void main(String[] args) throws Exception {
+
         boolean server = false;
         InetAddress bindAddr = null;
         int port = 0;
@@ -206,13 +211,6 @@ public class REPL extends Thread {
             fargs.add(arg);
         }
 
-        if (!server) {
-            System.out.println("SISC ("+Util.VERSION+") - main");
-            if (args.length==0) System.out.print("> ");
-            System.out.flush();
-        } 
-            
-
         SeekableInputStream heap = findHeap();
         if (heap==null) {
             System.err.println(Util.liMessage(Util.SISCB, "noheap"));
@@ -235,14 +233,9 @@ public class REPL extends Thread {
             SocketREPL.listen("main", ssocket);
         } else {
             REPL repl = new REPL("main", new DynamicEnv());
-            if (args.length!=0) {
-                System.out.println("> ");
-                System.out.flush();
-            }
             repl.start();
         }
     }
-
 
     public static class SocketREPL extends REPL {
         
@@ -271,13 +264,4 @@ public class REPL extends Thread {
             }
         }
     }
-    /*
-    static {
-        System.runFinalizersOnExit(true);
-    }
-    
-    protected void finalize() throws Throwable {
-        System.err.println(Closure.nlt);
-    }
-    */
 }
