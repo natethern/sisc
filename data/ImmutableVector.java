@@ -9,7 +9,7 @@ public class ImmutableVector extends SchemeVector {
     }
 
     public ImmutableVector(int count, Value initializer) {
-	super(count, initializer);
+        super(count, initializer);
     }
 
     public ImmutableVector(Value[] v) {
@@ -17,24 +17,13 @@ public class ImmutableVector extends SchemeVector {
     }
 
     public void set(int idx, Value v) {
-	throw new RuntimeException(liMessage(SISCB, "vectorisimmutable"));
+        throw new RuntimeException(liMessage(SISCB, "vectorisimmutable"));
     }
 
     public void fill(Value v) {
-	throw new RuntimeException(liMessage(SISCB, "vectorisimmutable"));
+        throw new RuntimeException(liMessage(SISCB, "vectorisimmutable"));
     }
 
-    public boolean equals(Object o) {
-        return (o instanceof ImmutableVector) && valueEqual((Value)o);
-    }
-
-    public int hashCode() {
-	int reg=0;
-	for (int i=0; i<vals.length; i++) 
-	    reg^=vals[i].hashCode();
-	return reg;
-    }
-		    
 }
 
 

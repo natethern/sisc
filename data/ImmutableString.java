@@ -24,20 +24,6 @@ public class ImmutableString extends SchemeString {
         throw new RuntimeException(liMessage(SISCB, "stringisimmutable"));
     }
 
-    public boolean equals(Object o) {
-        return (o instanceof ImmutableString) && valueEqual((Value) o);
-    }
-    
-    public int hashCode() {
-	int hc=0;
-	for (int i=0; i<length(); i++) {
-	    if (i%2==0)
-		hc^=charAt(i)<<16;
-	    else
-		hc^=charAt(i);
-	}
-	return hc;
-    }
 }
 
 

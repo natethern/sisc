@@ -182,12 +182,12 @@ r / 2<superscript>s</superscript>
         time based on the number of elements.
       </para>
       <para>
-          &SISC; hash tables use <function>eqv?</function> for element
+        &SISC; hash tables use <function>eqv?</function> for element
         comparison, which implies that keys generally ought to be of a
         type for which comparison with <function>eqv?</function> is
-        meaningful. Furthermore, <emphasis>keys must be
-          immutable</emphasis>. Specifically this excludes dynamically
-        allocated strings, lists and vectors.
+        meaningful. Note that most Scheme objects, including strings,
+        vectors, pairs and their immutable variants, are not
+        <function>eqv?</function> unless they are identical.
       </para>
       <para>
           &SISC; hash tables are thread-safe, i.e. multiple threads can

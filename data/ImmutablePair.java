@@ -3,28 +3,21 @@ package sisc.data;
 public class ImmutablePair extends Pair {
 
     public ImmutablePair() {
-	super();
+        super();
     }
 
     public ImmutablePair(Value car, Value cdr) {
-	super(car, cdr);
+        super(car, cdr);
     }
 
     public void setCar(Value v) {
-	throw new RuntimeException(liMessage(SISCB,"pairisimmutable"));
+        throw new RuntimeException(liMessage(SISCB,"pairisimmutable"));
     }
 
     public void setCdr(Value v) {
-	throw new RuntimeException(liMessage(SISCB,"pairisimmutable"));
+        throw new RuntimeException(liMessage(SISCB,"pairisimmutable"));
     }
 
-    public boolean equals(Object o) {
-        return (o instanceof ImmutablePair) && valueEqual((Value)o);
-    }
-
-    public int hashCode() {
-	return car.hashCode() ^ cdr.hashCode();
-    }
 }
 
 

@@ -1,3 +1,9 @@
+2002-12-16  Matthias Radestock  <matthias@sorted.org>
+
+	* Changed |eq?| and |eqv?| on immutable pairs, vectors, strings to
+	  pointer equality in order to avoid (de)serialization
+	  inconsistencies and problems in circularity detection.
+
 2002-12-15  Released SISC 1.7.0-beta
 
 2002-12-14  Scott G. Miller <scgmille@freenetproject.org>
