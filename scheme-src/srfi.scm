@@ -149,24 +149,6 @@
   (include "srfi/srfi-11.scm")
   (add-feature 'srfi-11))
 
-(native-module srfi-12-native "sisc.modules.SRFI12")
-
-(display "srfi-12\n")
-(module srfi-12
-  (current-exception-handler
-   with-exception-handler
-   handle-exceptions
-   abort
-   signal
-   condition?
-   make-composite-condition
-   make-property-condition
-   condition-predicate
-   condition-property-accessor)
-  (import srfi-12-native)
-  (include "srfi/srfi-12.scm")
-  (add-feature 'srfi-12))
-
 (display "srfi-14\n")
 (module srfi-14
   (char-set?
