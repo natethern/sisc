@@ -483,7 +483,7 @@
 ;; code dependent on a module won't depend on a specific compilation of 
 ;; that module
 (define (generate-module-id module-id id)
-  (string->symbol (format "_~a ~a" module-id id)))
+  (string->symbol (format "_~a_ ~a" module-id id)))
 
 ;  (let ((digits "0123456789abcdefghijklmnopqrstuvwxyz"))
 ;    (let ((base (string-length digits)) (session-key "_"))
@@ -1500,7 +1500,7 @@
 (define chi-top-module
   (lambda (e r ribcage w s ctem rtem id exports forms)
     (let ((fexports (flatten-exports exports))
-          (module-id (if id (id-sym-name id) 'anon)))
+          (module-id (if id (id-sym-name id) (gensym-hook))))
       (chi-external ribcage (source-wrap e w s)
         (map (lambda (d) (cons r d)) forms) r exports fexports ctem
         (lambda (bindings inits)
