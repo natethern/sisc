@@ -1,13 +1,18 @@
-2002-6-1  Scott G. Miller  <scgmille@freenetproject.org>
+2002-06-01  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed a compliance bug with letrec and call/cc interactions.
 
 	* Added the core syntactic forms to the R5RS environment.
 
-	* Matthias' change of self-evaluating to include vectors
+	* Matthias' change of self-evaluating to exclude vectors
 	  causes the expander to raise an error for unquoted
 	  vectors, which is actually the specified behavior.  
 	
+2002-06-01  Matthias Radestock  <matthias@sorted.org>
+
+	* Upgrade to latest version of syntax-case. This fixes some bugs
+	  with the module system.
+
 2002-05-25  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Randomly accessable libraries
