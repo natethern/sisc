@@ -163,3 +163,8 @@
 (class-precedence-list <java.util.TreeSet>)
 ;; slot names
 (class-direct-slot-names <number>)
+;; applicable methods
+(define ts (make <java.util.TreeSet>))
+(define-generic remove-all)
+(applicable-methods (generic-procedure-next remove-all)
+                    (list <java.util.TreeSet> <java.util.TreeSet>))

@@ -92,6 +92,29 @@
                  (append (map class-precedence-list parents)
                          (list parents)))))
 
+;;compares two types taking into account the cpl of c
+;;NB: c must be a sub-type of both types
+(define (compare-types x y c)
+  (cond ((and (meta? x) (meta? y))
+         (compare-types (meta-type x) (meta-type y) (meta-type c)))
+        ((or (meta? x) (meta? y))
+         'ambiguous)
+        (else
+          (let ([x<y? (java/assignable? y x)]
+                [y<x? (java/assignable? x y)])
+            (cond ((and x<y? y<x?) 'equal)
+                  (x<y? 'more-specific)
+                  (y<x? 'less-specific)
+                  (else
+                    ;;find first occurrence of x or y in c's cpl
+                    (let loop ([cpl (class-precedence-list c)])
+                      (if (null? cpl)
+                          'ambiguous;;shouldn't happen
+                          (let ([p (car cpl)])
+                            (cond ((eq? p x) 'more-specific)
+                                  ((eq? p y) 'less-specific)
+                                  (else (loop (cdr cpl)))))))))))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;; METHOD OBJECTS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -116,6 +139,54 @@
         ((and (not (method-rest? m2)) (method-rest? m1)) #f)
         ;;both or neither have rest arg
         (else (types<= (method-types m1) (method-types m2)))))
+
+;;Checks whether a method can be called with arguments of specific
+;;types. This will eventually replace the preceeding procedure
+(define (method-applicable? m otypes)
+  (let ([l (length otypes)]
+        [a (method-arity m)])
+    (and (or (= a l) (and (< a l) (method-rest? m)))
+         (types<= otypes (method-types m)))))
+
+;;compares two methods m1, taking into account the cpls of otypes
+;;NB: we assume that both methods are applicable, i.e. otypes matches
+;;both their signature.
+(define (compare-methods m1 m2 otypes)
+  (let loop ([m1-t (method-types m1)]
+             [m2-t (method-types m2)]
+             [o-t  otypes]
+             [res 'equal])
+    (cond ((and (null? m1-t) (null? m2-t))
+           res)
+          ((null? m1-t)
+           (if (eq? res 'more-specific)
+               'ambiguous
+               'less-specific))
+          ((null? m2-t)
+           (if (eq? res 'less-specific)
+               'ambiguous
+               'more-specific))
+          (else
+            (let ([m1-tn (cdr m1-t)]
+                  [m2-tn (cdr m2-t)]
+                  [o-tn  (cdr o-t)])
+              (case (compare-types (car m1-t) (car m2-t) (car o-t))
+                ((equal)
+                 (loop m1-tn m2-tn o-tn res))
+                ((ambiguous)
+                 (loop m1-tn m2-tn o-tn
+                       (if (or (eq? res 'less-specific)
+                               (eq? res 'more-specific))
+                           res
+                           'ambiguous)))
+                ((more-specific)
+                 (if (eq? res 'less-specific)
+                     'ambiguous
+                     (loop m1-tn m2-tn o-tn 'more-specific)))
+                ((less-specific)
+                 (if (eq? res 'more-specific)
+                     'ambiguous
+                     (loop m1-tn m2-tn o-tn 'less-specific)))))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;; MAIN ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -229,6 +300,55 @@
                (lambda (name meths)
                  (add-java-methods (java-methods name) meths))
                methods))))))
+
+;;returns a list of applicable methods and ambiguous methods. The
+;;applicable methods are returned in a total order based on their
+;;specificity with respect to otypes. Ambiguous methods are methods
+;;for which there is at least one other (consequently also ambiguous)
+;;method that could inhabit the same place in the total order.
+;;
+;;The algorithm used here is the same as the one employed by Goo
+;;(http://www.googoogaga.org/), Dylan and others.
+(define (applicable-methods proc otypes)
+  (define (insert applicable ambiguous m)
+    (if (null? applicable)
+        (values (list m) ambiguous)
+        (let ([other (car applicable)])
+          (case (compare-methods m other otypes)
+            ((more-specific)
+             (values (cons m applicable) ambiguous))
+            ((less-specific)
+             (call-with-values (lambda () (insert (cdr applicable)
+                                                  ambiguous
+                                                  m))
+               (lambda (applicable ambiguous)
+                 (values (cons other applicable) ambiguous))))
+            (else
+              (values '() (cons m applicable)))))))
+  ;;make sure we know about all relevant methods
+  (if (not (null? otypes))
+      (let ([first (car otypes)])
+        (if (meta? first)
+            (set! first (meta-type first)))
+        (if (java/class? first)
+            (add-class first))))
+  ;;optimization opportunity: turn classes into a vector so that
+  ;;method-applicable can do a fast size test. Not much point doing
+  ;;this though if we are going to cache the result of this entire
+  ;;operation anyway.
+  (let loop ([methods    (generic-procedure-methods proc)]
+             [applicable '()]
+             [ambiguous  '()])
+    (if (null? methods)
+        (values applicable ambiguous)
+        (let ([m (car methods)])
+          (if (method-applicable? m otypes)
+              (call-with-values (lambda () (insert applicable
+                                                   ambiguous
+                                                   m))
+                (lambda (applicable ambiguous)
+                  (loop (cdr methods) applicable ambiguous)))
+              (loop (cdr methods) applicable ambiguous))))))
 
 ;;SYNC: we don't care if methods gets modified while we do this
 (define (find-method-helper proc args methods)

@@ -142,6 +142,7 @@
    method-procedure
    method-types
    method-rest?
+   method-applicable?
    class-direct-superclasses
    class-direct-slot-names
    class-precedence-list
@@ -149,6 +150,7 @@
    generic-procedure-next
    constructor
    add-method
+   applicable-methods
    generic-java-procedure
    generic-java-constructor
    make)
