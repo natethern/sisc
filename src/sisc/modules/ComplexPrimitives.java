@@ -86,7 +86,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                 long unv=r.tctx.nextUnique();
                 return Symbol.intern(GENSYM_MAGIC_PREFIX+base64encode(unv));
             case INTERACTIONENVIRONMENT:
-                return r.getCtx().toplevel_env.asValue();
+                return r.tpl.asValue();
             case SISCINITIAL: 
                 try {
                     return new MemorySymEnv(r.lookupContextEnv(Util.SISC_SPECIFIC));
@@ -107,8 +107,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                     return VOID;
                 }
             case GETSIDECAR:
-                return r.getCtx().toplevel_env
-                                 .getSidecarEnvironment(symbol(vlr[0])).asValue();
+                return r.tpl.getSidecarEnvironment(symbol(vlr[0])).asValue();
             case GETENV:
                 String str = r.getCtx().getProperty(string(vlr[0]));
                 if (str == null) {
@@ -122,7 +121,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             case GENSYMP:
                 return truth(symbol(vlr[0]).symval.startsWith(GENSYM_MAGIC_PREFIX));
             case EVALUATE:
-                r.nxp=r.compile(vlr[0]);
+                r.nxp=r.compile(vlr[0]);                
                 r.env=null;
                 return VOID;
             case CALLEC:
@@ -148,13 +147,12 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                     throwPrimException(e.getMessage());
                 }
             case GETPROP:
-             SymbolicEnvironment tlev=r.getCtx().toplevel_env;
-                int loc=tlev.getLoc(symbol(vlr[0]));
+                int loc=r.tpl.getLoc(symbol(vlr[0]));
                 if (loc==-1) return FALSE;
-                else return tlev.lookup(loc); 
+                else return r.tpl.lookup(loc); 
             case INTERACTIONENVIRONMENT:
                 Value env=r.getCtx().toplevel_env.asValue();
-                r.getCtx().toplevel_env=Util.env(vlr[0]);
+                r.getCtx().toplevel_env=env(vlr[0]);
                 return env;
             case STRING2NUMBER:
                 String st=string(vlr[0]);
@@ -198,14 +196,16 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             case NLBINDING:
                 return nlib(vlr[0]).getBindingValue(r, symbol(vlr[1]));
             case EVALUATE:
-                r.nxp=r.compile(vlr[0], (SymbolicEnvironment)vlr[1]);
+                SymbolicEnvironment tpl=env(vlr[1]);
+                r.tpl=tpl;
+                r.nxp=r.compile(vlr[0], tpl);
                 r.env=null;
                 return VOID;
             case WITHFC:
                 Procedure proc=proc(vlr[1]);
                 Procedure ehandler=proc(vlr[0]);
                 r.fk=r.createFrame(new ApplyValuesContEval(ehandler),
-                                   null, false, r.lcl, r.env, r.fk, r.stk);
+                                   null, false, r.lcl, r.env, r.tpl, r.fk, r.stk);
                 r.setupTailCall(ZV);
                 return proc;
             case CALLWITHVALUES:
@@ -219,7 +219,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                 if (vlr[1] instanceof SymbolicEnvironment) {
                     ret = env(vlr[1]).lookup(symbol(vlr[0]));
                 } else {
-                    ret = r.getCtx().toplevel_env.getSidecarEnvironment(
+                    ret = r.tpl.getSidecarEnvironment(
                              symbol(vlr[1])).lookup(symbol(vlr[0]));
                 }
                 return (ret == null) ? FALSE : ret;
@@ -227,11 +227,11 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                 if (vlr[1] instanceof SymbolicEnvironment) {
                     env(vlr[1]).undefine(symbol(vlr[0]));
                 } else {
-                    r.getCtx().toplevel_env.getSidecarEnvironment(symbol(vlr[1])).undefine(symbol(vlr[0])); 
+                    r.tpl.getSidecarEnvironment(symbol(vlr[1])).undefine(symbol(vlr[0])); 
                 }
                 return VOID;
             case PUTPROP:
-                r.getCtx().toplevel_env.define(symbol(vlr[0]), vlr[1]);
+                r.tpl.define(symbol(vlr[0]), vlr[1]);
                 return VOID;
             case SETENVIRONMENT:
                 r.getCtx().defineContextEnv(symbol(vlr[0]), env(vlr[1]));
@@ -268,7 +268,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                 if (vlr[1] instanceof SymbolicEnvironment) {
                     ret = env(vlr[1]).lookup(symbol(vlr[0]));
                 } else {
-                    ret = r.getCtx().toplevel_env.getSidecarEnvironment(
+                    ret = r.tpl.getSidecarEnvironment(
                           symbol(vlr[1])).lookup(symbol(vlr[0]));
                 }
                 return (ret == null) ? vlr[2] : ret;
@@ -279,7 +279,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                 if (vlr[1] instanceof SymbolicEnvironment) {
                     env=(SymbolicEnvironment)vlr[1];
                 } else {
-                    env=r.getCtx().toplevel_env.getSidecarEnvironment((Symbol)vlr[1]);
+                    env=r.tpl.getSidecarEnvironment((Symbol)vlr[1]);
                 }
                 updateName(rhs, lhs);
                 env.define(lhs, rhs);               

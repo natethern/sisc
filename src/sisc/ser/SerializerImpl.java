@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import sisc.data.Expression;
+import sisc.data.Value;
 import sisc.env.SymbolicEnvironment;
 
 public abstract class SerializerImpl extends BerEncoding implements Serializer {
@@ -37,6 +38,15 @@ public abstract class SerializerImpl extends BerEncoding implements Serializer {
     public abstract void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException;
     public abstract void writeClass(Class c) throws IOException;
 
+    public void writeExpressionArray(Expression[] v) throws IOException {
+        if (v==null) writeInt(0);
+        else {
+            writeInt(v.length);
+            for (int i=0; i<v.length; i++) {
+                writeExpression(v[i]);
+            }
+        }
+    }
 }
 
 /*

@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import sisc.data.Expression;
+import sisc.data.Value;
 import sisc.env.SymbolicEnvironment;
 
 public interface Serializer extends ObjectOutput {
@@ -15,6 +16,7 @@ public interface Serializer extends ObjectOutput {
     void writeBigInteger(BigInteger i) throws IOException;
 
     void writeExpression(Expression e) throws IOException;
+    void writeExpressionArray(Expression[] vlr) throws IOException;
     void writeInitializedExpression(Expression e) throws IOException;
 
     void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException;
