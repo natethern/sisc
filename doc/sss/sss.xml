@@ -148,8 +148,25 @@ for <function>sqrt</function>, it is not clear what other mathematical
   <appendix id="system-properties">
     <title>Runtime System Properties</title>
     <para>
-      Several Java System properties affect the operation of &SISC;.
-      Below are the properties and their semantics.
+      System properties are key value pairs can be read by the &SISC;
+      runtime to configure various aspects of its behavior.  These
+      properties are ordinarily loaded from a file pointed to by the
+      Java <literal>sisc.propertyfile</literal> system property.  If
+      this property is unset, the file
+      <literal>sisc.properties</literal> is read from the current
+      directory, if it exists.  The property file consists of zero
+      or more Scheme pairs, whose car is the key, and whose cdr is the
+      value.  For example:
+      <programlisting>
+(library-path . "/usr/local/sisc/lib")
+(slib . "/usr/share/slib")
+      </programlisting>. 
+    </para>
+    <para>
+      Any properties set on the Java commandline override the values
+      in the property file.  Boolean values, when on the Java command
+      line, should be <literal>true</literal> or
+      <literal>false</literal>, not <literal>#t/#f</literal>.
     </para>
     <variablelist>
       <varlistentry>
@@ -207,6 +224,16 @@ for <function>sqrt</function>, it is not clear what other mathematical
             interrupt running <emphasis>Scheme</emphasis> code, in
             addition to sending an interrupt signal to the host
             language.  
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><envar>sisc.propertyfile</envar></term>
+        <listitem>
+          <para>
+            Specifies the property file that will be loaded, which may
+            define additional properties that are superceded by those
+            issued on the command-line.
           </para>
         </listitem>
       </varlistentry>
