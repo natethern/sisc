@@ -148,6 +148,26 @@
 	<emphasis>rest</emphasis> argument, and may encapsulate zero
 	or more values.
       </para>
+      <para>
+	Finally, some of the functions described in this document are
+	encapsulated in <emphasis>modules</emphasis> (see <xref
+	linkend="Modules"/>).  Sections that describe functions in
+	modules will have a <emphasis>requires</emphasis> statement
+	indicating the statement that must be evaluated to make those
+	functions available in the Scheme environment.  The require
+	statement will apear as follows:
+      </para>
+      <para>
+	&requires; 
+	<emphasis role="bold">
+	  (import <emphasis>module-name</emphasis>)
+	</emphasis>
+      </para>
+      <para>
+	<emphasis>module-name</emphasis> is will be a name uniquely
+	identifying the name of the module that contains the
+	functions.
+      </para>
     </sect2>
   </sect1>
 </chapter>

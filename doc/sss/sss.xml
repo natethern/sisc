@@ -94,15 +94,6 @@
 	    implemented.
 	  </para>
 	</listitem>
-	<listitem>
-	  <para>
-	    (<xref linkend="PortCreation"/>) The optional boolean
-	    argument in the creation of output ports that specifies
-	    auto-flush behavior is only present on net network port
-	    creation functions.  File ports are missing this
-	    functionality.  
-	  </para>
-	</listitem>
       </orderedlist>
     </para>
   </appendix>

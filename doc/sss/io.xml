@@ -259,8 +259,11 @@
     <title>
       Networking
     </title>
-    <para> 
-      &requires;<emphasis role='bold'>(import networking-module)</emphasis>
+    <para>
+      &requires; 
+      <emphasis role="bold">
+	(import <emphasis>networking</emphasis>)
+      </emphasis>
     </para>
     <para>
       The &SISC; Networking library provides a mechanism for
@@ -418,76 +421,126 @@
       <title>
 	TCP
       </title>
-	<para>
-	  The most commonly used Internet protocol maps most favorably
-	  to Scheme's input/output model.  Writing to an output port
-	  retrieved from a TCP socket writes the data to that socket.
-	  Reading from an input port reads from the connected socket.
-	  One important note is that one can control the amount of data
-	  that fills a TCP packet by using an output port that does
-	  not auto-flush.  Data is written to the port until one
-	  considers the packet complete, and then uses
-	  <computeroutput>(flush-output-port port)</computeroutput> to
-	  complete the packet.  Note also that this does not
-	  <emphasis>guarantee</emphasis> that one gets the desired
-	  packet size, but does allow one to construct reasonably
-	  sized packets.
-	</para>
-	<para>
-	  TCP sockets are obtained one of two ways.  Either one
-	  creates an outgoing connection to another listening host and
-	  then subsequently obtains a socket handle, or one creates a
-	  <emphasis>listening socket</emphasis> and then obtains a
-	  socket by waiting for an incoming connection on the
-	  specified port.  In either case, the result is a socket
-	  handle with an available input and output port that can be
-	  obtained using a function in the previous section.
-	</para>
-	<programlisting>
-	  &procedure; (open-tcp-socket string integer)
-	  &returns; A connected TCP socket
-
-	  Attempts to connect to the host at the given hostname or IP
-	  address encoded in the string, at the given TCP port
-	  specified by the integer.  An error is raised if the host
-	  cannot be found or the connection fails.
-
-	  
-	  &procedure; (open-tcp-listener integer [string])
-	  &returns; A TCP server socket
-
-	  Creates a TCP server socket, which may only be used with
-	  accept-tcp-socket, or closed.  The server socket will listen
-	  on the integer port specified.  If provided, the string
-	  specifies the address of a local interface to bind to.  If
-	  not provided, the port is bound on all available
-	  interfaces.  An error is raised if the socket cannot be
-	  bound and set listening.
-
-	  
-	  &procedure; (accept-tcp-socket server-socket)
-	  &returns; A TCP socket
-
-	  Accepts an incoming connection on the provided
-	  server-socket, and returns a TCP socket handle.  This
-	  function will block until an incoming connection is made,
-	  or, if set, the socket timeout is exceeded.  If the latter
-	  happens, an error will be raised.
-
-	  
-	  &procedure; (set-so-timeout! socket integer)
-	  &returns; undefined
-
-	  Sets the socket timeout on a socket.  The socket can be
-	  either a server socket or connected socket.  In the former
-	  case, this value specifies the number of milliseconds that
-	  an accept-tcp-socket can wait before timing out.  In the
-	  latter, the value specifies the number of milliseconds that
-	  can elapse during a read call before timing out.
-	</programlisting>
-      </sect2>
-    </sect1>
-  </chapter>
+      <para>
+	The most commonly used Internet protocol maps most favorably
+	to Scheme's input/output model.  Writing to an output port
+	retrieved from a TCP socket writes the data to that socket.
+	Reading from an input port reads from the connected socket.
+	One important note is that one can control the amount of data
+	that fills a TCP packet by using an output port that does
+	not auto-flush.  Data is written to the port until one
+	considers the packet complete, and then uses
+	<computeroutput>(flush-output-port port)</computeroutput> to
+	complete the packet.  Note also that this does not
+	<emphasis>guarantee</emphasis> that one gets the desired
+	packet size, but does allow one to construct reasonably
+	sized packets.
+      </para>
+      <para>
+	TCP sockets are obtained one of two ways.  Either one
+	creates an outgoing connection to another listening host and
+	then subsequently obtains a socket handle, or one creates a
+	<emphasis>listening socket</emphasis> and then obtains a
+	socket by waiting for an incoming connection on the
+	specified port.  In either case, the result is a socket
+	handle with an available input and output port that can be
+	obtained using a function in the previous section.
+      </para>
+      <para>
+	<blockquote>
+	  <para>
+	    &procedure;
+	    <methodsynopsis language="scheme">
+	      <type>socket</type>
+	      <methodname>open-tcp-socket</methodname>
+	      <methodparam>
+		<parameter>host</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Attempts to connect to the host at the given hostname or IP
+		address encoded as a string, at the given TCP port
+		specified as an integer.  An error is raised if the host
+		cannot be found or the connection fails.  If successful, 
+		a socket is returned.
+	      </para>
+	    </blockquote>
+	  </para>
+	  <para>
+	    &procedure;
+	    <methodsynopsis language="scheme">
+	      <type>server-socket</type>
+	      <methodname>open-tcp-listener</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	      <methodparam choice="opt">
+		<parameter>interface-address</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Creates a TCP server socket, which may only be used with
+		accept-tcp-socket, or closed.  The server socket will listen
+		on the integer port specified.  If provided, the
+		interface-address, a string specifies the address of a
+		local interface to bind to.  If not provided, the port
+		is bound on all available interfaces.  An error is
+		raised if the socket cannot be bound and set listening.
+	      </para>
+	    </blockquote>
+	    </para>
+	  <para>
+	    &procedure;
+	    <methodsynopsis language="scheme">
+	      <type>socket</type>
+	      <methodname>accept-tcp-socket</methodname>
+	      <methodparam>
+		<parameter>server-socket</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Accepts an incoming connection on the provided
+		server-socket, and returns a TCP socket handle.  This
+		function will block until an incoming connection is made,
+		or, if set, the socket timeout is exceeded.  If the latter
+		happens, an error will be raised.
+	      </para>
+	    </blockquote>
+	  </para>
+	  <para>
+	    &procedure;
+	    <methodsynopsis language="scheme">
+	      <type>undefined</type>
+	      <methodname>set-so-timeout!</methodname>
+	      <methodparam>
+		<parameter>socket</parameter>	  
+	      </methodparam>
+	      <methodparam>
+		<parameter>timeout</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Sets the socket timeout on a socket.  The socket can be
+		either a server socket or connected socket.  In the former
+		case, this value specifies the number of milliseconds that
+		an accept-tcp-socket can wait before timing out.  In the
+		latter, the value specifies the number of milliseconds that
+		can elapse during a read call before timing out.
+	      </para>
+	    </blockquote>
+	  </para>
+	</blockquote>
+      </para>
+    </sect2>
+  </sect1>
+</chapter>
 <!-- Keep this comment at the end of the file
 Local variables:
 sgml-parent-document:("sss.xml" "chapter")
