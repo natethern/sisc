@@ -713,12 +713,21 @@ public class Primitives extends ModuleAdapter {
                 }
                 return VOID;
             case OPENOUTPUTFILE:
-                String fname=string(f.vlr[0]);
+                URL url = makeURL(f.vlr[0]);
                 try {
-                    return new OutputPort(new BufferedWriter(new FileWriter(fname)),
+                    if (url.getProtocol().equals("file")) {
+                        //the JDK does not permit write access to file URLs
+                        return new OutputPort(new BufferedWriter(new FileWriter(url.getPath())),
+                                              truth(f.vlr[1]));
+                    }
+                    URLConnection conn = url.openConnection();
+                    conn.setDoInput(false);
+                    conn.setDoOutput(true);
+                    return new OutputPort(new BufferedWriter(new OutputStreamWriter(conn.getOutputStream())),
                                           truth(f.vlr[1]));
                 } catch (IOException e) {
-                    throwPrimException("error opening file "+fname);
+                    e.printStackTrace();
+                    throwPrimException("error opening " + url);
                 }
             case NLBINDING:
                 return module(f.vlr[0]).getBindingValue(f, symbol(f.vlr[1]));

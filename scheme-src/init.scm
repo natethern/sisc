@@ -194,13 +194,15 @@
 ;;;;;;;;;;;;; File functions
 
 (define current-url (make-parameter "file:."))
+
 (define (current-directory . rest)
   (if (null? rest)
       (normalize-url (current-url) ".")
       (current-url (normalize-url (current-url) (car rest)))))
+
 (let ([normalize (lambda (proc)
-                   (lambda (file)
-                     (proc (normalize-url (current-url) file))))])
+                   (lambda (file . rest)
+                     (apply proc (normalize-url (current-url) file) rest)))])
   (set! open-input-file (normalize open-input-file))
   (set! open-source-input-file (normalize open-source-input-file))
   (set! open-output-file (normalize open-output-file))
