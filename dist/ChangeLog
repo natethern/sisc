@@ -1,3 +1,12 @@
+2002-06-14  Matthias Radestock  <matthias@sorted.org>
+
+	* Added with-current-url procedure.
+
+	* Fixed expand-file so it handles relative includes correctly and
+	  produces annotations (if emit-annotations is #t).
+
+2002-06-13  Released SISC b1.5.2
+
 2002-06-12  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed a number of bugs regarding heap generation

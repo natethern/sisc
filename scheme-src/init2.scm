@@ -349,6 +349,13 @@
   (call-with-output-string
     (lambda (port) (with-output-to-port port thunk))))
 
+(define (with-current-url url thunk)
+  (let ([previous-url (current-url)])
+    (dynamic-wind
+     (lambda () (current-url (normalize-url previous-url url)))
+     thunk
+     (lambda () (current-url previous-url)))))
+
 ;; needed in a few places; cut-down version from SRFI-1
 (define (iota count)
   (do ((count (- count 1) (- count 1))
