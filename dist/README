@@ -11,7 +11,7 @@ SISC has the following general features:
          - Arbitrary precision integers, floating point numbers 
          - Arbitrary precision ratios (based on bigints)
          - Arbitrary precision complex numbers (based on bigfloats)
-    * A fully R5RS compliant, hygenic macro system based on syntax-case.
+    * A fully R5RS compliant, hygienic macro system based on syntax-case.
     * Full support for continuations via call/cc.
 
 Installation
