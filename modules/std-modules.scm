@@ -261,6 +261,7 @@
    make-class
    define-generic
    define-method
+   define-methods
    define-class
    (define-constructor c-proc)
    make-generic-procedure

@@ -513,11 +513,16 @@
      (define-method (?name (next: dummy) ?param ...) . ?body))
     ((_ (?name . ?rest) . ?body)
      (define-method (?name (next: dummy) . ?rest) . ?body))))
+(define-syntax define-methods
+  (syntax-rules ()
+    ((_ name (signature . body) ...)
+     (begin
+       (define-method (name . signature) . body)
+       ...))))
 (define-syntax define-constructor
   (syntax-rules ()
     ((_ (?class . ?rest) . ?body)
      (define-method ((constructor c-proc ?class) . ?rest) . ?body))))
-  
 (define-syntax define-class
   (syntax-rules ()
     ((_ (?name . ?superclasses) (?key ?val) ...)
