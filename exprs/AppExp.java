@@ -37,74 +37,68 @@ import sisc.data.*;
 import java.io.*;
 
 public class AppExp extends Expression {
-    public AppEval appEval=(AppEval)APPEVAL;
-    public Expression rator, rands[];
+    public Expression exp, rands[], nxp;
     public boolean nonTail;
 
-    public AppExp(Expression rator, Expression rands[], boolean nontail) {
-        this.rator=rator;
+    public AppExp(Expression exp, Expression rands[], Expression nxp, boolean nontail) {
+        this.exp=exp;
         this.rands=rands;
+        this.nxp = nxp;
         this.nonTail=nontail;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        Value tmp;
 
         if (nonTail) 
             r.push(null);
 
-	r.vlr = r.createValues(rands.length);
-	if (rands.length > 0) {
-	    
-	    // Load the immediates from right to left, stop
-	    // on the first non-immediate
-	    int i=rands.length-1;
-	    for (; i>=0; i--) {
-		tmp=rands[i].getValue(r);
-		if (tmp==null) break;
-		r.vlr[i]=tmp;
-	    }
-        
-	    if (i>=0) {
-		// We have some non-immediates, so set up 
-		// a FillRib for cleanup and set the first operand
-		// in the nxp
-		r.push(r.createFillRib(i, rands, rator, appEval));
-		r.nxp=rands[i];
-		return;
-	    }
-	}
+        r.vlr = r.createValues(rands.length);
 
-	// No (non-immediate) operands, go straight to the
-	// the operator
-	tmp=rator.getValue(r);
-	
-	if (tmp!=null) {
-	    r.nxp=appEval;
-	    r.acc=tmp;
-	} else { 
-	    r.nxp=rator;
-	    r.push(appEval);
-	}
+	    Expression ex;
+	    // Load the immediates from right to left
+	    for (int i = rands.length-1; i>=0; i--) {
+            ex=rands[i];
+            if (ex != null)
+                r.vlr[i] = ex.getValue(r);
+	    }
+
+        if (nxp == null) {
+            //all rands are immediate
+            Value tmp=exp.getValue(r);
+            if (tmp==null) {
+                //rator is non-immediate
+                r.push(APPEVAL);
+                r.nxp=exp;
+            } else {
+                //rator is immediate
+                r.acc=tmp;
+                r.nxp=APPEVAL;
+            }
+        } else {
+            //some rands are non-immediate
+            r.push(nxp);
+            r.nxp=exp;
+        }
     }
 
     public Value express() {
         Pair args=EMPTYLIST;
         for (int i=rands.length-1; i>=0; i--) {
-            args=new Pair(rands[i].express(), args);
+            args=new Pair(((rands[i]==null) ? FALSE : rands[i].express()), args);
         }
-        args=new Pair(rator.express(), args);
+        args=new Pair(exp.express(), args);
+        if (nxp!=null) args = new Pair(nxp.express(), args);
         return new Pair(nonTail ? sym("App-exp") : sym("TailApp-exp"), args);
     }
 
     public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
+            s.serialize(exp, dos);
             s.writeBer(rands.length, dos);
             for (int i=0; i<rands.length; i++) {
                 s.serialize(rands[i], dos);
-	    }
-            s.serialize(rator, dos);
-	    s.serialize(appEval, dos);
+            }
+            s.serialize(nxp, dos);
             dos.writeBoolean(nonTail);
         }
     }
@@ -114,15 +108,13 @@ public class AppExp extends Expression {
     public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
+            exp=s.deserialize(dis);
             int size=s.readBer(dis);
-
             rands=new Expression[size];
             for (int i=0; i<size; i++) {
                 rands[i]=s.deserialize(dis);
             }
-
-            rator=s.deserialize(dis);
-	    appEval=(AppEval)s.deserialize(dis);
+            nxp=s.deserialize(dis);
             nonTail=dis.readBoolean();
         }
     }

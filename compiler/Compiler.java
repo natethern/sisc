@@ -251,18 +251,16 @@ public class Compiler extends Util {
 
                 return new EvalExp(compile(r, expr.car, rt, 0, env),
 				   new DefineEval(lhs));
-	    case MAKEANNOTATION:
-		Value aexpr=expr.car;
-		expr=(Pair)expr.cdr;
-
-		rhs=compile(r, aexpr, rt, context, env);
-		if (rhs instanceof EvalExp) {
-		    EvalExp eve=(EvalExp)rhs;
-		    eve.post.annotation=expr.car;
-		} else if (rhs instanceof AppExp) {
-		    ((AppExp)rhs).appEval=new AppEval(expr.car);
-		} else rhs.annotation=expr.car;
-		return rhs;
+            case MAKEANNOTATION:
+                Value aexpr=expr.car;
+                expr=(Pair)expr.cdr;
+                
+                rhs=compile(r, aexpr, rt, context, env);
+                if (rhs instanceof EvalExp) {
+                    EvalExp eve=(EvalExp)rhs;
+                    eve.post.annotation=expr.car;
+                } else rhs.annotation=expr.car;
+                return rhs;
             default:
                 Expression[] exps=pairToExpressions(expr);
                 compileExpressions(r, exps, rt, 0, env);
@@ -289,7 +287,16 @@ public class Compiler extends Util {
 	    !(rator instanceof AnnotatedExpr))
 
             System.err.println(warn("nonprocappdetected",((Value)rator).synopsis()));
-	return new AppExp(rator, rands, nonTail);
+        FillRibExp fr = null;
+        Expression lastRand = rator;
+        for (int i= rands.length-1; i>=0; i--) {
+            if (!(rands[i] instanceof Immediate)) {
+                fr = new FillRibExp(lastRand, i, fr);
+                lastRand = rands[i];
+                rands[i] = null;
+            }
+        }
+        return new AppExp(lastRand, rands, fr, nonTail);
     }
 
     void compileExpressions(Interpreter r, Expression exprs[], ReferenceEnv rt,

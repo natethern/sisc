@@ -243,31 +243,6 @@ public class Interpreter extends Util {
 	}
     }
 
-    protected static final int FILLRIBPOOLSIZE=8, FRPMAX=FILLRIBPOOLSIZE-1;
-    protected FillRibExp deadFillRibs[]=new FillRibExp[FILLRIBPOOLSIZE];
-    protected int deadFillRibsPointer=-1;
-
-    public final FillRibExp createFillRib(int pos,
-                                          Expression rands[],
-                                          Expression last,
-                                          Expression cleanup) {
-        if (deadFillRibsPointer < 0)
-            return new FillRibExp(pos,rands,last,cleanup);
-        else {
-            FillRibExp toReturn=deadFillRibs[deadFillRibsPointer--];
-            toReturn.pos=pos;
-            toReturn.rands=rands;
-            toReturn.last=last;
-            toReturn.cleanup=cleanup;
-            return toReturn;
-        }
-    }
-
-    public final void returnFillRib(FillRibExp f) {
-	if (!f.locked && (deadFillRibsPointer < FRPMAX))
-	    deadFillRibs[++deadFillRibsPointer]=f;
-    }
-
     protected static final int VALUESPOOLSIZE=8;
     protected Value deadValues[][] = new Value[VALUESPOOLSIZE][];
 

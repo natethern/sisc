@@ -37,74 +37,49 @@ import sisc.data.*;
 import java.util.*;
 import java.io.*;
 
-public class FillRibExp extends Expression implements Volatile {
+public class FillRibExp extends Expression {
 
-    public Expression rands[], last, cleanup;
+    public Expression exp, nxp;
     public int pos;
-    public boolean locked;
 
-    public FillRibExp(int pos, Expression rands[], Expression last,
-                      Expression cleanup) {
+    public FillRibExp(Expression exp, int pos, Expression nxp) {
+        this.exp=exp;
         this.pos=pos;
-        this.rands=rands;
-        this.last=last;
-        this.cleanup=cleanup;
+        this.nxp=nxp;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
         r.vlr[pos]=r.acc;
-
-        int np=pos-1;
-	Value tmp;
-
-        for (;
-                np>=0 && ((tmp=rands[np].getValue(r)) != null);
-                np--) {
-            r.vlr[np]=tmp;
-        }
-
-        if (np < 0) {
-            tmp=last.getValue(r);
+        if (nxp == null) {
+            //rator
+            Value tmp = exp.getValue(r);
             if (tmp==null) {
-                r.push(cleanup);
-                r.nxp=last;
+                r.push(APPEVAL);
+                r.nxp=exp;
             } else {
                 r.acc=tmp;
-                r.nxp=cleanup;
+                r.nxp=APPEVAL;
             }
-            r.returnFillRib(this);
         } else {
-            if (locked) {
-                r.push(r.createFillRib(np, rands, last, cleanup));
-            } else {
-                pos=np;
-                r.push(this);
-            }
-            r.nxp=rands[np];
+            //rand
+            r.push(nxp);
+            r.nxp=exp;
         }
-    }
-
-    public void lock() {
-        locked=true;
     }
 
     public Value express() {
-        return list(sym("FillRib-exp"), rands[pos].express(), last.express());
+        return new Pair(sym("FillRib-exp"), new Pair(exp.express(), ((nxp==null) ? EMPTYLIST : nxp.express())));
     }
 
     public Value getAnnotation() {
-	return cleanup.getAnnotation();
+        return exp.getAnnotation();
     }
 
     public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
-            s.writeBer(rands.length, dos);
-            for (int i=0; i<rands.length; i++)
-                s.serialize(rands[i], dos);
-            s.serialize(last, dos);
-            s.serialize(cleanup, dos);
+            s.serialize(exp, dos);
             s.writeBer(pos, dos);
-            dos.writeBoolean(locked);
+            s.serialize(nxp, dos);
         }
     }
 
@@ -113,15 +88,9 @@ public class FillRibExp extends Expression implements Volatile {
     public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
-            int size=s.readBer(dis);
-            rands=new Expression[size];
-            for (int i=0; i<size; i++)
-                rands[i]=s.deserialize(dis);
-            last=s.deserialize(dis);
-            cleanup=s.deserialize(dis);
+            exp=s.deserialize(dis);
             pos=s.readBer(dis);
-
-            locked=dis.readBoolean();
+            nxp=s.deserialize(dis);
         }
     }
 }
