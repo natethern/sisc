@@ -70,7 +70,12 @@
        (cond [(or (= x (string-length message))
                   (> x (+ bot-name-length 1)))
               message]
-             [(memv (string-ref message x) '(#\: #\, #\space))
+	     [(and (char=? (string-ref message x) #\space)
+                   (let ([subm (substring message 0 x)])
+                     (or (string=? subm bot-name)
+                         (string=? (metaphone subm) bot-metaphone))))
+              (substring message (+ x 1) (string-length message))]
+             [(memv (string-ref message x) '(#\: #\,))
               (substring message (+ x 1) (string-length message))]
              [else (loop (+ x 1))])))))
 

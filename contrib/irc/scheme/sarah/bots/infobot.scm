@@ -1,7 +1,8 @@
 (define-syntax make-infobot
   (syntax-rules ()
     ((_ (crib help handler) ...)
-        (infobot (make-plugin crib help handler) ...))))
+        (infobot (make-plugin crib help 
+                              (lambda args (apply handler args))) ...))))
 
 (define listen-phrases
   '("Okay."
@@ -102,6 +103,8 @@
                   (full-parse (->string
                                (get-name (channel-bot channel)))
                               message)])
+      (display (sisc:format "<~a \"~a\" \"~a\">~%" to-bot cleaned-message
+strict-tokens))
       (cond [(and (or (channel-bot-listens? channel) to-bot)
                   (equal? cleaned-message "help"))
              ; display help

@@ -74,6 +74,7 @@
 
 (define (stateless-eval channel message ignore term)
   (with/fc (lambda (m e)
+             (throw m e)
              (error-message m))
     (lambda ()
       (let* ([expr 'didnt-read]
@@ -88,7 +89,6 @@
                            [ls '() (cons c ls)])
                           [(eof-object? c)
                            (set! text (apply string (reverse ls)))])))))])
-        (display text) (newline)
         (cond [(eq? expr 'didnt-read) expr-text]
               [(void? expr) "{No expression.  Were the parenthesis closed properly?}"]
               [else

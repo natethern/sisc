@@ -29,8 +29,7 @@
 
 (define (queue-complete? schemer)
   (let* ([text (schemers-queue schemer)]
-         [sexpr (with/fc (lambda (m e)
-                           "error")
+         [sexpr (with/fc (lambda (m e) #!eof)
                          (lambda ()
                            (with-input-from-string text read-code)))])
     (not (or (and (void? sexpr) (not (equal? text "#!void")))
@@ -135,7 +134,7 @@
   (let ([x 0])
     (lambda (var)
       (set! x (+ x 1))
-      (string->symbol (format "~a_~a" var x)))))
+      (string->symbol (sisc:format "~a_~a" var x)))))
 
 (define (make-scheme-channel-env schemechan)
   (let* ([etmp (sandbox (scheme-report-environment 5))]
