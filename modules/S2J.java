@@ -353,11 +353,11 @@ public class S2J extends ModuleAdapter {
                 }
             } catch (InvocationTargetException e) {
                 e.printStackTrace(System.err);
-                error(r, create(e.getCause()));
-            } catch (Exception e) {
+                error(r, create(e.getTargetException()));
+            } catch (RuntimeException e) {
                 e.printStackTrace(System.err);
                 error(r, e.getMessage());
-            } catch (RuntimeException e) {
+            } catch (Exception e) {
                 e.printStackTrace(System.err);
                 error(r, e.getMessage());
             }
