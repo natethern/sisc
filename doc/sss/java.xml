@@ -184,16 +184,26 @@ Context.register("appname", appContext)
           <programlisting>
 Interpreter r = Context.enter("appname");
           </programlisting>
+        </para>
+        <para>
           <classname>AppContext</classname>s are usually created by
-          calling their argument-less constructor and are later
-          modified by loading a heap image into them.  Heap images 
-          are randomly accessable, and as such must be accessed in
-          their entirety, rather than as a stream.  If not loaded
+          calling one of the two primary constructors of the
+          class. The first takes no arguments and results in an
+          application context whose application properties are defined
+          by the Java system properties. The second constructors takes
+          a <classname>Properties</classname> object as an argument,
+          allowing the Java system properties to be overridden with
+          custom application properties.
+        </para>
+        <para>
+          After creation, <classname>AppContext</classname>s are
+          typically modified by loading a heap image into them. Heap
+          images are randomly accessable, and as such must be accessed
+          in their entirety, rather than as a stream.  If not loaded
           from disk, this entails first transfering the image over a
           stream into memory, then operating on the entire heap in
-          memory.
-          A typical initialization sequence, loading the heap image
-          from disk, would be:
+          memory.  A typical initialization sequence, loading the heap
+          image from disk, would be:
           <programlisting>
 AppContext ctx = new AppContext();
 Context.register("myapp", ctx);

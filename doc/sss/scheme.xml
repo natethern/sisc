@@ -64,12 +64,13 @@
 	  The precision specifying exponents (<computeroutput>S, F, L,
 	  </computeroutput>and <computeroutput>D</computeroutput>) are
 	  ignored in &SISC;, all inexact numbers are kept in the precision
-	  of the numeric library. The exponents are read and used to
-	  scale the real number as expected.  In the case of arbitrary
-	  precision floats, specific precision constraints are maintained
-	  to prevent a runaway increase of precision. The constraints can
-	  be set at system startup. See <xref
-	  linkend="system-properties"/>.
+	  of the numeric library. The exponents are read and used to scale
+	  the real number as expected.  In the case of arbitrary precision
+	  floats, specific precision constraints are maintained to prevent
+	  a runaway increase of precision. The constraints can be set by
+	  <envar>minFloatPrecision</envar> and
+	  <envar>maxFloatPrecision</envar> configuration parameters on
+	  startup. See <xref linkend="config-parameters"/>.
 	</para>
 	<para>
 	  All four base specifiers (<computeroutput>&num;x, &num;o,
@@ -242,35 +243,13 @@
         <para>
           &SISC; also allows symbols to be created that
           <emphasis>are</emphasis> case-sensitive. This can be done
-          one of two ways. The first involves setting the reader to
-          produce cased symbols via the procedure
-        </para>
-        <para>
-          <blockquote>
-            <para>
-              <indexterm><primary>case-sensitive</primary>
-              </indexterm>
-              &parameter;
-              <methodsynopsis language="scheme" id="case-sensitive">
-                <type>#t/#f</type>
-                <methodname>case-sensitive</methodname>
-                <methodparam choice="opt">
-                  <parameter>boolean</parameter>
-                </methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Sets or retrieves the reader's case sensitivity.
-                </para>
-	      </blockquote>
-            </para>
-          </blockquote>
-        </para>
-        <para>
-          The second method is via a non-standard symbol syntax. If a
-          symbol is enclosed in pipe ('|') characters, the reader will
-          treat that individual symbol as cased.  The syntax extends the
-          &R5RS; grammar with the following production:
+          one of two ways. The first is by setting the
+          <envar>caseSensitive</envar> configuration parameter (see
+          <xref linkend="config-parameters"/>. The second method is
+          via a non-standard symbol syntax. If a symbol is enclosed in
+          pipe ('|') characters, the reader will treat that individual
+          symbol as cased.  The syntax extends the &R5RS; grammar with
+          the following production:
         </para>
         <programlisting>
 &lt;cased symbol&gt; --&gt; |&lt;identifier&gt;|
@@ -425,39 +404,14 @@
 	produces the compact representation.
       </para>
       <para>
-	Displaying a vector with
-	<function>pretty-print</function> may output
-	either the verbose or compact representation of a vector.
-	The behavior of pretty-print is controlled by the parameter
-	<function>vector-length-prefixing</function>.
-	If set to &num;t, pretty-print will emit the compact representation.
-	If &num;f, the verbose representation is produced.  By default,
-	<function>vector-length-prefixing</function> is true.
-      </para>
-      <para>
-	<blockquote>
-	  <para>
-            <indexterm><primary>vector-length-prefixing</primary>
-            </indexterm>
-	    &parameter;
-	    <methodsynopsis language="scheme" id="vector-length-prefixing">
-	      <type>#t/#f</type>
-	      <methodname>vector-length-prefixing</methodname>
-	      <methodparam choice="opt">
-		<parameter>boolean</parameter>
-	      </methodparam>
-	    </methodsynopsis>
-	    <blockquote>
-	      <para>
-		If set to true, this parameter will instruct the
-		pretty-printer to emit length prefixed,
-		trailing-duplicate-eliminated vectors in its output.  If
-		false, ordinary full-length vectors without prefixes will be
-		emitted.
-              </para>
-	    </blockquote>
-	  </para>
-	</blockquote>
+        Displaying a vector with <function>pretty-print</function> may
+        output either the verbose or compact representation of a
+        vector.  The behavior in this regard is controlled by the
+        <envar>vectorLengthPrefixing</envar> configuration parameter
+        (see <xref linkend="config-parameters"/>).  If set to &num;t,
+        <function>pretty-print</function> will emit the compact
+        representation. If &num;f, the verbose representation is
+        produced.
       </para>
     </sect2>
     <sect2 id="Boxing">
@@ -697,52 +651,27 @@
           Ordinarily, the display of cyclical data would cause a
           problem for a Read-Eval-Print-Loop.  For this reason, the
           REPL will attempt to check the structure it is about to
-          print for circularities before printing.  If a
-          cycle is found in the structure, the REPL will refuse to
-          print if the <function>print-shared</function> parameter, 
-          described below, is not set non-false.  If it is not, 
-          the REPL will issue a warning to the user that the structure 
+          print for circularities before printing.  If a cycle is
+          found in the structure, the REPL will refuse to print if the
+          <envar>printShared</envar> configuration parameter,
+          described below, is <literal>false</literal>.  In that case
+          the REPL will issue a warning to the user that the structure
           contains a cycle.  If a circular structure is printed with
           <function>display</function>, <function>write</function>,
-          etc, and the <function>print-shared</function> parameter is
-          set false, the environment may enter an infinite loop which
-          may or may not cause the Scheme system to exit with an error. 
+          etc, and the <envar>printShared</envar> parameter is set to
+          <literal>false</literal>, the environment may enter an
+          infinite loop which may or may not cause the Scheme system
+          to exit with an error.
         </para>
         <para>
-          The <function>print-shared</function> parameter will enable
-          &SISC; to scan data for circularity and data sharing before
-          writing values.  If enabled and such sharing is found, an
-          alternate printer is invoked which will emit a
-          representation compatible with the circular
-          structure representation described in the previous section.  
-          <function>print-shared</function> is enabled by default.
-          The user may wish to disable it because of the overhead of
-          both scanning all data, and constructing this representation
-          when shared structures are detected.
+          The <envar>printShared</envar> configuration parameter (see
+          <xref linkend="config-parameters"/>), if set to
+          <literal>true</literal> enables &SISC; to scan data for
+          circularity and data sharing before writing values. If such
+          sharing is found, an alternate printer is invoked which will
+          emit a representation compatible with the circular structure
+          representation described in the previous section.
         </para>
-        <blockquote>
-          <para>
-            <indexterm><primary>print-shared</primary>
-            </indexterm>
-            &parameter;
-            <methodsynopsis language="scheme">
-            <type>&num;t/&num;f</type>
-            <methodname>print-shared</methodname>
-            <methodparam choice="opt">
-              <parameter>boolean</parameter>
-            </methodparam>
-          </methodsynopsis>
-            <blockquote>
-              <para>
-                If set non-false, <function>write</function> and the
-                REPL will attempt to detect shared-structures in data
-                and invoke a version of <function>write</function>
-                capable of emitting the shared-structure external
-                representation of data.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
         <para>
           Alternately, &SISC; also intends to support SRFI-38, which describes
           the functions <function>write-showing-shared</function> and

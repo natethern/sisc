@@ -355,9 +355,9 @@
       repeat the join until <literal>&num;t</literal> is returned.
     </para>
     <para>
-      If enabled at runtime (using the
-      <envar>sisc.permitInterrupts</envar> runtime flag, see <xref
-      linkend="system-properties"/>), running threads may be
+      If enabled (using the <envar>permitInterrupts</envar>
+      configuration parameter, see <xref
+      linkend="config-parameters"/>), running threads may be
       interrupted at both the host language level and when executing
       Scheme code with the <function>thread/interrupt</function>
       function.  If disabled (the default), only a host-language
