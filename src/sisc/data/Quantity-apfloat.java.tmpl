@@ -1259,7 +1259,6 @@ public class Quantity extends Value implements Singleton {
 
     protected static BigDecimal ratioToDecimal(BigInteger numerator,
                                                BigInteger denominator) {
-        int precision=numerator.bitLength()+denominator.bitLength();
         BigDecimal d1=new BigDecimal(numerator);
         BigDecimal d2=new BigDecimal(denominator);
         return div(d1, d2);

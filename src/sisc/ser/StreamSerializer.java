@@ -7,7 +7,6 @@ import sisc.data.Expression;
 public class StreamSerializer extends SLL2Serializer {
 
     private Map entryPoints, classes;
-    private HashMap ci;
     private int nextEp, nextClassIdx;
     
     public StreamSerializer(OutputStream out) throws IOException {

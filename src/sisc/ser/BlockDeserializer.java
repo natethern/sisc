@@ -38,7 +38,6 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
     }
     int indent=0;
     public Expression readExpression(boolean flush) throws IOException {
-        long pos=raf.getFilePointer();
         int type=readInt();
         int definingOid = -1;
 

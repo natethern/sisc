@@ -377,13 +377,7 @@ public class Parser extends Util implements Tokens {
     public Value readList(InputPort is, HashMap state, Integer def,
                           int flags)
         throws IOException {
-        
-        int line=0, column=0;
-        if (is instanceof SourceInputPort) {
-            line=((SourceInputPort)is).line;
-            column=((SourceInputPort)is).column-1;
-        }
-
+            
         Pair h=null;
         Pair p=null;
         Object l=_nextExpression(is, state, null, flags);

@@ -30,12 +30,6 @@ public class MemorySymEnv extends Value
         this.parent=parent;
     }
 
-    private MemorySymEnv(Value[] env, Map symMap) {
-        this.env=env;
-        symbolMap=symMap;
-        nextFree=env.length;
-    }
-
     public MemorySymEnv(Symbol name) {
         this();
         setName(name);

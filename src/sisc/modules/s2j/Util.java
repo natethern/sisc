@@ -290,7 +290,6 @@ public abstract class Util extends IndexedProcedure {
     public static String mangleFieldName(String s) {
         int l = s.length();
         StringBuffer res = new StringBuffer(l);
-        int prev = 0;
         int p = 0;
         char c;
         for (; p<l; p++) {
