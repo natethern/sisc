@@ -282,7 +282,10 @@ public class Compiler extends Util {
             }
         }
         if (lastRand.annotations != null)
-            nxp.annotations.putAll(lastRand.annotations);
+            if (nxp.annotations == null)
+                nxp.annotations = lastRand.annotations;
+            else
+                nxp.annotations.putAll(lastRand.annotations);
 
         return new LetrecExp(lastRand, rands, nxp, allImmediate);
     }
@@ -342,7 +345,11 @@ public class Compiler extends Util {
             }
         }
         if (lastRand.annotations != null)
-            nxp.annotations.putAll(lastRand.annotations);
+            if (nxp.annotations == null)
+                nxp.annotations = lastRand.annotations;
+            else
+                nxp.annotations.putAll(lastRand.annotations);
+
         return new AppExp(lastRand, rands, nxp, allImmediate);
     }
 
