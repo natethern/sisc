@@ -576,16 +576,18 @@ public class IO extends IndexedProcedure {
             ek=((ApplyParentFrame)se.e).c;
         }
         
-        if (se.e != null) {
+        if (se.e != null && ek!=null) {
             CallFrame lastWithNXP=null;
             while (ek.parent!=null) {
                 if (ek.nxp!=null) lastWithNXP=ek;
                 ek=ek.parent;
             }
-            lastWithNXP.nxp.setAnnotation(Symbol.get("line-number"), Quantity.valueOf(line));
-            lastWithNXP.nxp.setAnnotation(Symbol.get("column-number"), Quantity.valueOf(column));
-            lastWithNXP.nxp.setAnnotation(Symbol.get("source-file"), new SchemeString(sourceFile));
-            lastWithNXP.nxp.setAnnotation(Symbol.get("proc-name"), procName);
+            if (lastWithNXP!=null) {
+                lastWithNXP.nxp.setAnnotation(Symbol.get("line-number"), Quantity.valueOf(line));
+                lastWithNXP.nxp.setAnnotation(Symbol.get("column-number"), Quantity.valueOf(column));
+                lastWithNXP.nxp.setAnnotation(Symbol.get("source-file"), new SchemeString(sourceFile));
+                lastWithNXP.nxp.setAnnotation(Symbol.get("proc-name"), procName);
+            }
         }
     }
 }
