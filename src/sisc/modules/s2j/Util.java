@@ -377,7 +377,7 @@ public abstract class Util extends IndexedProcedure {
             .append(cn.substring(1));
 
         //add array markers and return
-        return res.append(tail).toString();
+        return res.append(tail.toString()).toString();
     }
 
 }
