@@ -2,7 +2,7 @@ package sisc;
 
 public interface Version {
 
-    String VERSION = "1.6.2";
+    String VERSION = "1.6.3-rc";
 
 }
 
