@@ -25,7 +25,7 @@
     </init-param>
     <init-param>
       <param-name>init-expr</param-name>
-      <param-value>(require-library "srfi") (load "scheme/template-util.scm") (define app (void)) (lambda (x) (set! app x))</param-value>
+      <param-value>(load "scheme/template-util.scm") (define app (void)) (lambda (x) (set! app x))</param-value>
     </init-param>
     <init-param>
       <param-name>destroy-expr</param-name>
