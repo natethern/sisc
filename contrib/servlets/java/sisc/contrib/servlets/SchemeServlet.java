@@ -8,8 +8,6 @@ import sisc.*;
 import sisc.data.*;
 import sisc.interpreter.*;
 
-import sisc.modules.s2j.JavaObject;
-
 public class SchemeServlet extends SchemeServletBase {
 
     public Procedure getFn, postFn, putFn, deleteFn;
@@ -38,8 +36,8 @@ public class SchemeServlet extends SchemeServletBase {
         Interpreter r = Context.enter(appName);
         try {
             r.eval(fn, new Value[] {
-                new JavaObject(request),
-                    new JavaObject(response) });
+                sisc.modules.s2j.Util.makeJObj(request),
+                    sisc.modules.s2j.Util.makeJObj(response) });
         } catch (SchemeException e) {
             throw new ServletException("calling " + fn + " failed", sisc.modules.s2j.Util.javaException(e));
         } finally {

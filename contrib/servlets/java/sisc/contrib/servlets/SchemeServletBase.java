@@ -56,7 +56,7 @@ public class SchemeServletBase extends HttpServlet {
         try {
             r.eval("(current-directory \"" + getServletContext().getRealPath("/")+"\")");
             Procedure p = (Procedure)r.eval(expr);
-            r.eval(p, new Value[] { new sisc.modules.s2j.JavaObject(this) });
+            r.eval(p, new Value[] { sisc.modules.s2j.Util.makeJObj(this) });
         } catch (IOException e) {
             throw new ServletException("evaluating " + expr + " failed", e);
         } catch (SchemeException e) {
