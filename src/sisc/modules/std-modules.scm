@@ -63,6 +63,29 @@
 ;  (define c 3)
 ;  (define d 4))
 
+; Returns the list of bindings exported by a named
+; module
+(module (module-exports)
+  (define (module-record? x)
+    (and (pair? x) (eq? (car x) 'module)
+         (vector? (cdr x))))
+  (define (module-interface? x)
+    (and (vector? x) (= 3 (vector-length x))
+         (eq? (vector-ref x 0) 'interface)))
+  (define (module-exports modname)
+    (let ([symrec (getprop modname '*sc-expander*)])
+      (if (not (module-record? symrec))
+          (error 'module-exports "~a is not a module."
+                 modname))
+      (let ([iface (cdr symrec)])
+        (if (not (module-interface? iface))
+            (error
+             'module-exports
+             "~a does not name a recognizable module"
+             modname))
+        (map syntax-object->datum
+             (vector->list (vector-ref iface 1)))))))
+
 ;;;;;;;;;;;;;;;; NATIVE MODULES ;;;;;;;;;;;;;;;
 
 (define-syntax native-module
@@ -320,6 +343,7 @@
 (module type-system
     (make-type
      type-of
+     native-type-of
      type<=
      type=
      instance-of?
@@ -809,7 +833,7 @@
     (include "match.ss"))
 
 (module optimizer
-  (optimize inline-usual-primitives initialize)
+  (optimize initialize)
   (import pattern-matching)
   (import debugging)
   ;;TODO: we really want to import the srfi-11 module here, but srfis
@@ -824,8 +848,6 @@
 
 (import libraries)
 (import optimizer)
-;*redefine* current-optimizer rather than just setting it, so that
-;the default value becomes |optimize|
 (initialize)
 (set! current-optimizer (make-parameter optimize))
 
