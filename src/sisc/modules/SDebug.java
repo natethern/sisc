@@ -16,11 +16,12 @@ public class SDebug extends IndexedProcedure {
 
     protected static final int EXPRESSV = 0,
         COMPILE = 1,
+        CONT_FLK = 14,
         CONT_VLR = 2,
         CONT_NXP = 3,
         CONT_ENV = 4,
         CONT_FK = 5,
-        CONT_LOCKQ = 6,
+        CONT_VLK = 6,
         CONT_PARENT = 7,
         ERROR_CONT_K = 8,
         FILLRIBQ = 9,
@@ -39,12 +40,13 @@ public class SDebug extends IndexedProcedure {
             define("express", EXPRESSV);
             define("_compile", COMPILE);
             define("error-continuation-k", ERROR_CONT_K);
+            define("continuation-vlk", CONT_VLK);
             define("continuation-vlr", CONT_VLR);
             define("continuation-nxp", CONT_NXP);
             define("continuation-env", CONT_ENV);
             define("continuation-fk", CONT_FK);
             define("continuation-stk", CONT_PARENT);
-            define("continuation-captured?", CONT_LOCKQ);
+            define("continuation-captured?", CONT_FLK);
             define("_fill-rib?", FILLRIBQ);
             define("_fill-rib-exp", FILLRIBEXP);
             define("_free-reference-exp?", FREEXPQ);
@@ -95,6 +97,12 @@ public class SDebug extends IndexedProcedure {
     }
     
     public SDebug() {}
+
+    CallFrame getCont(Value v) {
+        if (v instanceof ApplyParentFrame)
+            return ((ApplyParentFrame)v).c;
+        else return cont(v);
+    }
     
     public Value doApply(Interpreter f) throws ContinuationException {
         switch(f.vlr.length) {
@@ -124,34 +132,21 @@ public class SDebug extends IndexedProcedure {
                 return new Closure(false, (short)0, 
                                    f.compile(f.vlr[0]), ZV, new int[0]);
             case ERROR_CONT_K:
-                return (f.vlr[0] instanceof ApplyParentFrame ? 
-                        ((ApplyParentFrame)f.vlr[0]).c :
-                        f.vlr[0]);
-            case CONT_LOCKQ:
-                if (f.vlr[0] instanceof ApplyParentFrame)
-                    f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
-                CallFrame cn=cont(f.vlr[0]);
-                return truth(cn.vlk);
+                return getCont(f.vlr[0]);
+            case CONT_VLK:
+                return truth(getCont(f.vlr[0]).vlk);
             case CONT_NXP:
-                if (f.vlr[0] instanceof ApplyParentFrame)
-                    f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
-                cn=cont(f.vlr[0]);
+                CallFrame cn=getCont(f.vlr[0]);
                 if (cn.nxp==null) return EMPTYLIST;
                 return new SISCExpression(cn.nxp);
+            case CONT_FLK:
+                return truth(getCont(f.vlr[0]).flk);
             case CONT_VLR:
-                if (f.vlr[0] instanceof ApplyParentFrame)
-                    f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
-                cn=cont(f.vlr[0]);
-                return new SchemeVector(cn.vlr);
+                return new SchemeVector(getCont(f.vlr[0]).vlr);
             case CONT_ENV:
-                if (f.vlr[0] instanceof ApplyParentFrame)
-                    f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
-                cn=cont(f.vlr[0]);
-                return new Values(cn.env);
+                return new Values(getCont(f.vlr[0]).env);
             case CONT_PARENT: 
-                if (f.vlr[0] instanceof ApplyParentFrame)
-                    f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
-                cn=cont(f.vlr[0]);
+                cn=getCont(f.vlr[0]);
                 if (cn.parent==null) return EMPTYLIST;
                 return cn.parent;
             default:
