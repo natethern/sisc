@@ -93,7 +93,8 @@
 (module misc
     (wrap-symbol
      dynamic-freeze
-     define-simple-syntax)
+     define-simple-syntax
+     total-order)
   (include "misc.scm"))
 
 (module debugging
