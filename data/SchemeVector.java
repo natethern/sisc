@@ -41,7 +41,7 @@ public class SchemeVector extends Value {
     protected int lastUnique=-1;
 
     public SchemeVector(int count) {
-        this(count, sisc.data.Number.ZERO);
+        this(count, Quantity.ZERO);
     }
 
     public SchemeVector(int count, Value initializer) {
