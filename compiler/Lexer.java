@@ -149,7 +149,8 @@ public class Lexer implements Tokens {
 
         if (strictR5RS && in((char)c, reserved)) 
             throw new IOException(Util.liMessage(Util.SISCB, "reservedchar", 
-                                                 Character.toString((char)c)));
+                                                 new String(new char[] {
+                                                     ((char)c)})));
 
         if (c!='\\') return c;
 
