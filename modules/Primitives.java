@@ -554,7 +554,8 @@ public class Primitives extends ModuleAdapter {
                 Procedure proc=proc(f.vlr[1]);
                 Procedure ehandler=proc(f.vlr[0]);
                 f.fk=f.createFrame(new ApplyValuesContEval(ehandler),
-                                   null, false, f.env, f.fk, f.stk, f.cap);
+                                   null, false, f.env, f.fk, f.stk, 
+                                   null);
                 f.replaceVLR(0);
                 f.nxp = APPEVAL;
                 return proc;

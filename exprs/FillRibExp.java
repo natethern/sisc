@@ -38,9 +38,7 @@ public class FillRibExp extends Expression {
     }
 
     public void setCaptured(Interpreter r, CallFrame onFrame) {
-        onFrame.createCap(r);
-        if ((pos+1) < onFrame.vlr.length)
-            onFrame.cap[pos+1]=true;
+        onFrame.setCaptured(r, pos+1);
     }
 
     public void serialize(Serializer s) throws IOException {

@@ -13,23 +13,21 @@ import sisc.env.LexicalEnvironment;
 
 public class CallFrame extends Procedure {
 
-    //public static final int ALLSET=0x55;
-    //test for vlr cap: ((cap[pos>>2] >> ((pos%4) << 1)) & 0x1) != 0
     public Expression            nxp;
     public Value[]               vlr;
     public boolean               vlk;
     public LexicalEnvironment    env;
+
     public CallFrame              fk;
     public CallFrame          parent;
-    public boolean[]             cap;
 
-    //public byte[] cap2;
+    public int                 cap[];
 
     public CallFrame(Expression n, Value[] v,
                      boolean vlk,
                      LexicalEnvironment e,
                      CallFrame f, CallFrame p,
-                     boolean[] cap) {
+                     int[] cap) {
         nxp=n;
         vlr=v;
         this.vlk=vlk;
@@ -45,8 +43,7 @@ public class CallFrame extends Procedure {
             Value[] nvlr=r.createValues(l);
             System.arraycopy(vlr, 0, nvlr, 0, l);
             vlr=nvlr;
-            cap=r.createBoolArray(Math.max(1,vlr.length));
-            //cap=new byte[(l>>2) + 1];
+            cap=null;
         }
     }
 
@@ -65,8 +62,6 @@ public class CallFrame extends Procedure {
                 w.nxp.setCaptured(r, w);
             w=w.parent;
         } while (w!=null); 
-        // Checking for a locked frame as a stop-fast 
-        // doesnt work
 
         return toReturn;
     }
@@ -78,10 +73,12 @@ public class CallFrame extends Procedure {
         return cv;
     }
 
-    public final void createCap(Interpreter r) {
+    public final void setCaptured(Interpreter r, int pos) {
         if (cap==null) {
-            cap=r.createBoolArray(Math.max(1,vlr.length));
+            cap=new int[(vlr.length >> 5) + 1];
         }
+        if (pos<vlr.length) 
+            cap[pos>>5] |= (1 << (pos % 32));
     }
 
     protected final CallFrame cloneFrame(Interpreter r) {
@@ -118,6 +115,10 @@ public class CallFrame extends Procedure {
             s.writeInt(vlr.length);
             for (int i=0; i<vlr.length; i++)
                 s.writeExpression(vlr[i]);
+            s.writeInt(cap==null ? 0 : cap.length);
+            if (cap!=null)
+                for (int i=0; i<cap.length; i++) 
+                    s.writeInt(cap[i]);
         }
         s.writeExpression(nxp);
         s.writeExpression(fk);
@@ -136,6 +137,12 @@ public class CallFrame extends Procedure {
             vlr=new Value[size];
             for (int i=0; i<size; i++)
                 vlr[i]=(Value)s.readExpression();
+            int capsize=s.readInt();
+            if (capsize>0) {
+                cap=new int[capsize];
+                for (int i=0; i<capsize; i++) 
+                    cap[i]=s.readInt();
+            }
         }
 
         nxp=s.readExpression();

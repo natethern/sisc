@@ -54,7 +54,7 @@ public class Interpreter extends Util {
     public Expression            lxp;      //used only for debugging
     public boolean               vlk;      //vlk, when true, indicates the
                                            //frame was captured.
-    public boolean[]             cap;      //Indicates which vlr positions
+    public int                 cap[];      //Indicates which vlr positions
                                            //contained a k capture.
 
     //ACTIVITY REGISTERS
@@ -146,17 +146,43 @@ public class Interpreter extends Util {
     }
 
     public final void setVLR(int pos, Value v) {
+        
         if (cap!=null) {
-            //            System.err.println(pos+","+vlr.length);
-            for (int i=pos; i>=0; i--)
-                if (cap[i]) {
-                    llcf.parent=lcf=lcf.makeSafe(this);
-                    
-                    vlr=lcf.vlr;
-                    if ((pos+1)<vlr.length)
-                        cap[pos+1]=false;
-                    break;
+            if (pos>31) {
+                //This code will only be executed for function calls 
+                //of more than 32 args, and where we're setting a vlr 
+                //pos above 31
+                boolean b=cap[0]!=0;
+                if (!b) {
+                    int p=pos-31;
+                    int i=1;
+                    for (; p>32; p-=32) {
+                        //Any non-zero while pos > 32 
+                        if (cap[i] != 0) {
+                            b=true;
+                            break;
+                        } else {
+                            i++;
+                        }
+                    }
+                    b = b || ((cap[i] & (0xffffffff >>> (31-p))) != 0);
                 }
+
+                if (b) {
+                    //clear the flag in the correct array variable
+                    if ((pos+1) < vlr.length)
+                        cap[(pos+1)>>5] &= (0xffffffff ^ 
+                                             (1 << ((pos + 1) % 32)));
+                    lcf.parent=lcf=lcf.makeSafe(this);
+                    vlr=lcf.vlr;
+                }
+            //This is the most common case, vlrs of size < 32
+            } else if ((cap[0] & (0xffffffff >>> (31-pos))) != 0) {
+                if ((pos+1) < vlr.length)
+                    cap[0] &= (0xffffffff ^ (1 << (pos + 1))); //Clear the 
+                llcf.parent=lcf=lcf.makeSafe(this);
+                vlr=lcf.vlr;
+            }
         }
         vlr[pos]=v;
     }
@@ -313,7 +339,7 @@ public class Interpreter extends Util {
                                  LexicalEnvironment e,
                                  CallFrame f,
                                  CallFrame p, 
-                                 boolean[] cap) {
+                                 int[] cap) {
         if (deadFramePointer < 0)
             return new CallFrame(n,v,vlk,e,f,p,cap);
         else {
@@ -333,7 +359,6 @@ public class Interpreter extends Util {
         if (f!=null &&
             !f.vlk && (deadFramePointer < FPMAX)) {
             deadFrames[++deadFramePointer]=f;
-            returnBools(f.cap);
         }
     }
 
@@ -363,7 +388,6 @@ public class Interpreter extends Util {
     public final void returnVLR() {
         if (!vlk) {
             returnValues(vlr);
-            returnBools(cap);
         }
         vlr=null;
     }
@@ -371,7 +395,6 @@ public class Interpreter extends Util {
     public final Value[] replaceVLR(int size) {
         if (!vlk) {
             returnValues(vlr);
-            returnBools(cap);
         }
         return newVLR(size);
     }
@@ -381,38 +404,6 @@ public class Interpreter extends Util {
         int size = v.length;
         if (size == 0 || size >= VALUESPOOLSIZE) return;
         deadValues[size] = v;
-    }
-
-    protected static final int BOOLSPOOLSIZE=8;
-    protected boolean deadBools[][] = new boolean[BOOLSPOOLSIZE][];
-    protected static final boolean[] ZB=new boolean[0];
-
-    //static int sizemiss, miss, hit, zerohit;
-    public final boolean[] createBoolArray(int size) {
-        if (size == 0) {
-            new Throwable().printStackTrace();
-            return ZB; 
-        }
-
-        if (size >= BOOLSPOOLSIZE) 
-            return new boolean[size]; 
-        
-        boolean[] res = deadBools[size];
-        if (res == null) 
-            return new boolean[size]; 
-
-        for (int i=res.length-1; i>=0; i--)
-            res[i]=false;
-
-        deadBools[size] = null;
-        return res;
-    }
-
-    public final void returnBools(boolean[] v) {
-        if (v == null) return;
-        int size = v.length;
-        if (size == 0 || size >= BOOLSPOOLSIZE) return;
-        deadBools[size] = v;
     }
 }
 /*

@@ -21,8 +21,7 @@ public class AppEval extends Expression {
     }
 
     public void setCaptured(Interpreter r, CallFrame onFrame) {
-        onFrame.createCap(r);
-        onFrame.cap[0]=true;
+        onFrame.setCaptured(r, 0);
     }
 
     public Value express() {

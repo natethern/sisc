@@ -101,16 +101,16 @@
       ((4) (c 4)))
     r))
 
-(should-be 8.1 '((-1 4 5 3)
+(should-be 8.2 '((-1 4 5 3)
                  (4 -1 5 3)
                  (-1 5 4 3)
                  (5 -1 4 3)
                  (4 5 -1 3)
                  (5 4 -1 3))
-  (let ([k1 #f]
-        [k2 #f]
-        [k3 #f]
-        [state 0])
+  (let ((k1 #f)
+        (k2 #f)
+        (k3 #f)
+        (state 0))
     (define (identity x) x)
     (define (fn)
       ((identity (if (= state 0)
@@ -124,8 +124,8 @@
                      2))))
     (define (check states)
       (set! state 0)
-      (let* ([res '()]
-             [r (fn)])
+      (let* ((res '())
+             (r (fn)))
         (set! res (cons r res))
         (if (null? states)
             res
