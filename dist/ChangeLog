@@ -1,12 +1,7 @@
 2002-10-12  Scott G. Miller  <scgmille@freenetproject.org>
 
-	* Fixed several aspects of symbol processing
-	  - Symbols containing uppercase letters (either created w/
-	    case-sensitive, pipes, or symbol->string) are printed w/ write
-	    with surrounding pipes if case-sensitivity off.
-	  - Symbols with special characters can be created by escaping
-	    the odd character, eg: foo\ bar.  
-	  - Symbols with special characters are written with escapes.
+	* Implemented read/write invariance for symbols containing special
+	  characters or uppercase letters.
 
 2002-10-11  Scott G. Miller  <scgmille@freenetproject.org>
 
@@ -16,7 +11,7 @@
 
 2002-10-10  Scott G. Miller  <scgmille@freenetproject.org>
 
-	* Created the loadable-libraries module, which allows one
+	* Created the compiled-libraries module, which allows one
           to create additive heaps (expanded and compiled libraries).  
 
 2002-10-08  Scott G. Miller  <scgmille@freenetproject.org>
