@@ -85,7 +85,7 @@
           (if isLae
               (add-binding symenv lib (java-wrap binding)
                            (get-entry-point lib (java-wrap binding)))
-              (putprop binding (java-unwrap symenv)
+              (putprop binding symenv
                        (java-unwrap
                         (get-local-expression lib (java-wrap binding))))))
         (java-unwrap
