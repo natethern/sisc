@@ -89,9 +89,9 @@ public class Primitives extends IndexedProcedure {
             define("list->vector", LIST2VECTOR);
             define("load-native-library", LOADNL);
             define("log", LOG);
-            define("make-parameter", MAKEPARAM);
-            define("make-native-parameter", MAKENATIVEPARAM);
-            define("make-config-parameter", MAKECONFIGPARAM);
+            define("_make-parameter", MAKEPARAM);
+            define("_make-native-parameter", MAKENATIVEPARAM);
+            define("_make-config-parameter", MAKECONFIGPARAM);
             define("make-rectangular", MAKERECTANGULAR);
             define("make-string", MAKESTRING);
             define("make-vector", MAKEVECTOR);
@@ -369,7 +369,8 @@ public class Primitives extends IndexedProcedure {
             case CALLCC:
                 Value kproc=vlr[0];
                 r.replaceVLR(1);
-                r.setVLR(0,r.stk.capture(r));
+                r.vlr[0]=r.stk.capture(r);
+                
                 r.vlk=true;
                 r.nxp = APPEVAL;
                 return kproc;

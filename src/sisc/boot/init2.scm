@@ -34,7 +34,7 @@
 ;;turn on syntax expansion and optimization
 
 (define current-optimizer
-  (make-parameter (lambda (x) x)))
+  (_make-parameter (lambda (x) x)))
 
 (set! eval 
   ((lambda (old-eval)
@@ -44,6 +44,61 @@
            ((lambda (e) (apply old-eval (cons e env)))
             ((current-optimizer) (sc-expand x '(E) '(E)))))))
    eval))
+
+;; Parameter Support, compatible with SRFI-39
+
+(define (make-parameter value . converter)
+    (cond [(null? converter) 
+	   (_make-parameter value)]
+	  [(null? (cdr converter))
+	   (let ([param (_make-parameter value)]
+		 [converter (car converter)])
+	     (lambda arg
+	       (if (null? arg)
+		   (param)
+		   (param (converter (car arg))))))]
+	  [else (error 'make-parameter "too many arguments.")])])
+
+(define (make-config-parameter name value . converter)
+    (cond [(null? converter) 
+	   (_make-config-parameter name value)]
+	  [(null? (cdr converter))
+	   (let ([param (_make-config-parameter name value)]
+		 [converter (car converter)])
+	     (lambda arg
+	       (if (null? arg)
+		   (param)
+		   (param (converter (car arg))))))]
+	  [else (error 'make-config-parameter "too many arguments.")])])
+
+(define (make-native-parameter . converter)
+    (cond [(null? converter) 
+	   (_make-native-parameter)]
+	  [(null? (cdr converter))
+	   (let ([param (_make-native-parameter)]
+		 [converter (car converter)])
+	     (lambda arg
+	       (if (null? arg)
+		   (param)
+		   (param (converter (car arg))))))]
+	  [else (error 'make-config-parameter "too many arguments.")])])
+
+(define-syntax parameterize
+  (syntax-rules ()
+    ((_ () . body)
+     body)
+    ((_ ((param-name new-value) ...)
+	body)
+     (let ([old-values #f])
+       (dynamic-wind 
+	   (lambda () 
+	     (set! old-values (list (param-name) ...))
+	     (param-name new-value) ...)
+	   (lambda () body)
+	   (lambda () 
+	     (for-each (lambda (p l) (p l))
+		       (list param-name ...)
+		       old-values)))))))
 
 ;; native parameters
 
