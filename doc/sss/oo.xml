@@ -16,6 +16,15 @@
       automatically. Secondly, hooks are provided for Scheme-level
       extensions of the type-system.
     </para>
+    <para>
+      By convention, type names start with <literal>&lt;</literal> and
+      end with <literal>&gt;</literal>, with normal Scheme identifier
+      naming conventions applying for everything in-between, i.e. all
+      lower-case with words separated by dashes. For example,
+      <literal>&lt;foo-bar-baz&gt;</literal>. This convention helps to
+      visually distinguish type names from names of procedures and
+      top-level data bindings.
+    </para>
     <sect2>
       <title>Core Procedures and Predicates</title>
       <para>
@@ -483,11 +492,17 @@
     </para>
     <para>
       The use of generic procedures proceeds through three stages:
-      <simplelist type="inline">
-        <member>definition of the generic procedure</member>
-        <member>adding of methods to the generic procedure</member>
-        <member>invocation of the generic procedure</member>
-      </simplelist>.
+      <orderedlist>
+        <listitem>
+          <para>definition of the generic procedure</para>
+        </listitem>
+        <listitem>
+          <para>adding of methods to the generic procedure</para>
+        </listitem>
+        <listitem>
+          <para>adding of methods to the generic procedure</para>
+        </listitem>
+      </orderedlist>
       The adding of methods can be interleaved with invocation,
       i.e. methods can be added to generic procedures while they are
       in use.
@@ -1338,26 +1353,32 @@
               <para>
                 If we run out of elements in both method signatures
                 then
-                <simplelist>
-                  <member>
-                    If both or neither method return rest arguments
-                    (as determined by
-                    <function>method-rest?</function>)
-                    then the methods are of equal specificity.
-                  </member>
-                  <member>
-                    If the first method takes rest arguments (as
-                    determined by <function>method-rest?</function>)
-                    then the first method is less specific than the
-                    second.
-                  </member>
-                  <member>
-                    If the second method takes rest arguments (as
-                    determined by <function>method-rest?</function>)
-                    then the first method is more specific than the
-                    second. 
-                  </member>
-                </simplelist>
+                <itemizedlist>
+                  <listitem>
+                    <para>
+                      If both or neither method return rest arguments
+                      (as determined by
+                      <function>method-rest?</function>) then the
+                      methods are of equal specificity.
+                    </para>
+                  </listitem>
+                  <listitem>
+                    <para>
+                      If the first method takes rest arguments (as
+                      determined by <function>method-rest?</function>)
+                      then the first method is less specific than the
+                      second.
+                    </para>
+                  </listitem>
+                  <listitem>
+                    <para>
+                      If the second method takes rest arguments (as
+                      determined by <function>method-rest?</function>)
+                      then the first method is more specific than the
+                      second.
+                    </para>
+                  </listitem>
+                </itemizedlist>
               </para>
             </listitem>
             <listitem>
@@ -1462,25 +1483,72 @@
     </para>
     <para>
       The key features of the object system are:
+      <itemizedlist>
+        <listitem>
+          <para>
+            class-based, with a restricted form of multiple
+            inheritance
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            instance variables (aka <emphasis>slots</emphasis>) are
+            accessed and modified via generic procedures
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            generic procedures implement all behaviour; there is no
+            separate notion of <emphasis>methods</emphasis>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            introspection API
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            complete integration into &SISC;'s extensible type system
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+    <para>
+      The examples in this section follow a few naming conventions:
       <simplelist>
-        <member>
-          class-based, with a restricted form of multiple
-          inheritance
-        </member>
-        <member>
-          instance variables (aka <emphasis>slots</emphasis>) are
-          accessed and modified via generic procedures
-        </member>
-        <member>
-          generic procedures implement all behaviour; there is no
-          separate notion of <emphasis>methods</emphasis>
-        </member>
-        <member>
-          introspection API
-        </member>
-        <member>
-          complete integration into &SISC;'s extensible type system
-        </member>
+        <listitem>
+          <para>
+            Classes are types in the &SISC; type system and therefore
+            class names follow the naming convention for type names
+            (see
+            <xref linkend="TypeSystem"/>), for example
+            <literal>&lt;foo-bar-baz&gt;</literal>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Generic procedures whose sole purpose it is to access
+            slots of objects have names starting with
+            <literal>:</literal> and otherwise follow the usual Scheme
+            identifier naming conventions, i.e. all lower-case with
+            dashes for separating words. For example
+            <literal>:foo-bar-baz</literal>. This helps to visually
+            distinguish slot access from ordinary procedure
+            invocations and avoids name clashes with other procedures.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Generic procedures whose sole purpose it is to modify
+            slots of objects, are named after the corresponding
+            accessor procedure (whether that exists or not) with a
+            <literal>!</literal> appended, thus following the usual
+            Scheme convention of denoting procedures that perform
+            mutations on their arguments. For example
+            <literal>:foo-bar-baz!</literal>.
+          </para>
+        </listitem>
       </simplelist>
     </para>
     <sect2>
@@ -1575,9 +1643,9 @@
             <informalexample>
               <programlisting>
 (define-generics :x :y :y!)
-(define &lt;Foo&gt; (make-class '&lt;Foo&gt; '() '()))
-(define &lt;Bar&gt; (make-class '&lt;Bar&gt; '() '()))
-(define &lt;Baz&gt; (make-class '&lt;Baz&gt; (list &lt;Foo&gt; &lt;Bar&gt;)
+(define &lt;foo&gt; (make-class '&lt;foo&gt; '() '()))
+(define &lt;bar&gt; (make-class '&lt;bar&gt; '() '()))
+(define &lt;baz&gt; (make-class '&lt;baz&gt; (list &lt;foo&gt; &lt;bar&gt;)
                           `((x (value . 1) (accessor . ,:x))
                             (y (accessor . ,:y) (modifier . ,:y!)))))
               </programlisting>
@@ -1620,9 +1688,9 @@
             <informalexample>
               <programlisting>
 (define-generics :x :y :y!)
-(define-class (&lt;Foo&gt;))
-(define-class (&lt;Bar&gt;))
-(define-class (&lt;Baz&gt; &lt;Foo&gt; &lt;Bar&gt;)
+(define-class (&lt;foo&gt;))
+(define-class (&lt;bar&gt;))
+(define-class (&lt;baz&gt; &lt;foo&gt; &lt;bar&gt;)
   (x (value 1) (accessor :x))
   (y (accessor :y) (modifier :y!)))
               </programlisting>
@@ -1649,10 +1717,10 @@
             </blockquote>
             <informalexample>
               <programlisting>
-(class? (make-class '&lt;Foo&gt; '() '()))  &arrow; &t;
+(class? (make-class '&lt;foo&gt; '() '()))  &arrow; &t;
 (class? (lambda (x) x))  &arrow; &f;
-(define-class (&lt;Foo&gt;))
-(class? &lt;Foo&gt;)  &arrow; &t;
+(define-class (&lt;foo&gt;))
+(class? &lt;foo&gt;)  &arrow; &t;
               </programlisting>
             </informalexample>
           </para>
@@ -1678,9 +1746,9 @@
             </blockquote>
             <informalexample>
               <programlisting>
-(class-name (make-class '&lt;Foo&gt; '() '()))  &arrow; '&lt;Foo&gt;
-(define-class (&lt;Foo&gt;))
-(class-name &lt;Foo&gt;)  &arrow; '&lt;Foo&gt;
+(class-name (make-class '&lt;foo&gt; '() '()))  &arrow; '&lt;foo&gt;
+(define-class (&lt;foo&gt;))
+(class-name &lt;foo&gt;)  &arrow; '&lt;foo&gt;
               </programlisting>
             </informalexample>
           </para>
@@ -1700,11 +1768,11 @@
             </blockquote>
             <informalexample>
               <programlisting>
-(define-class (&lt;Foo&gt;))
-(define-class (&lt;Bar&gt;))
-(define-class (&lt;Baz&gt; &lt;Foo&gt; &lt;Bar&gt;))
-(map class-name (class-direct-super-classes &lt;Foo&gt;)  &arrow; '())
-(map class-name (class-direct-super-classes &lt;Baz&gt;)  &arrow; '(&lt;Foo&gt; &lt;Bar&gt;))
+(define-class (&lt;foo&gt;))
+(define-class (&lt;bar&gt;))
+(define-class (&lt;baz&gt; &lt;foo&gt; &lt;bar&gt;))
+(map class-name (class-direct-super-classes &lt;foo&gt;)  &arrow; '())
+(map class-name (class-direct-super-classes &lt;baz&gt;)  &arrow; '(&lt;foo&gt; &lt;bar&gt;))
               </programlisting>
             </informalexample>
           </para>
@@ -1731,12 +1799,12 @@
             </blockquote>
             <informalexample>
               <programlisting>
-(class-direct-slots (make-class '&lt;Foo&gt; '() '()))  &arrow; '()
+(class-direct-slots (make-class '&lt;foo&gt; '() '()))  &arrow; '()
 (define-generics :x :y :y!)
-(define-class (&lt;Baz&gt;)
+(define-class (&lt;baz&gt;)
   (x (value 1) (accessor :x))
   (y (accessor :y) (modifier :y!)))
-(class-direct-slots &lt;Baz&gt; &arrow; (&lt;slot&gt; &lt;slot&gt;))
+(class-direct-slots &lt;baz&gt; &arrow; (&lt;slot&gt; &lt;slot&gt;))
               </programlisting>
             </informalexample>
           </para>
@@ -1769,8 +1837,8 @@
             </blockquote>
             <informalexample>
               <programlisting>
-(define-class (&lt;Baz&gt;) (x) (y))
-(map slot? (class-direct-slots &lt;Baz&gt;))  &arrow; '(&t; &t;)
+(define-class (&lt;baz&gt;) (x) (y))
+(map slot? (class-direct-slots &lt;baz&gt;))  &arrow; '(&t; &t;)
               </programlisting>
             </informalexample>
           </para>
@@ -1791,8 +1859,8 @@
             </blockquote>
             <informalexample>
               <programlisting>
-(define-class (&lt;Baz&gt;) (x) (y))
-(map slot-name (class-direct-slots &lt;Baz&gt;))  &arrow; '(x y)
+(define-class (&lt;baz&gt;) (x) (y))
+(map slot-name (class-direct-slots &lt;baz&gt;))  &arrow; '(x y)
               </programlisting>
             </informalexample>
           </para>
@@ -1812,8 +1880,8 @@
             </blockquote>
             <informalexample>
               <programlisting>
-(define-class (&lt;Baz&gt;) (x) (y))
-(eq? (slot-class (car (class-direct-slots &lt;Baz&gt;))) &lt;Baz&gt;)  &arrow; &t;
+(define-class (&lt;baz&gt;) (x) (y))
+(eq? (slot-class (car (class-direct-slots &lt;baz&gt;))) &lt;baz&gt;)  &arrow; &t;
               </programlisting>
             </informalexample>
           </para>
@@ -1844,13 +1912,13 @@
             <informalexample>
               <programlisting>
 (define-generics :x :x!)
-(define-class (&lt;Baz&gt;)
+(define-class (&lt;baz&gt;)
   (x (value 1) (accessor :x) (modifier :x!)))
-(define baz (make &lt;Baz&gt;))
+(define baz (make &lt;baz&gt;))
 (:x baz)  &arrow; 1
 (:x! baz 2)
 (:x baz)  &arrow; 2
-((slot-initializer (car (class-direct-slots &lt;Baz&gt;))) baz)
+((slot-initializer (car (class-direct-slots &lt;baz&gt;))) baz)
 (:x baz)  &arrow; 1
               </programlisting>
             </informalexample>
@@ -1872,9 +1940,9 @@
             </blockquote>
             <informalexample>
               <programlisting>
-(define-class (&lt;Baz&gt;) (x (value 1)))
-(define baz (make &lt;Baz&gt;))
-((slot-accessor (car (class-direct-slots &lt;Baz&gt;))) baz) &arrow; 1
+(define-class (&lt;baz&gt;) (x (value 1)))
+(define baz (make &lt;baz&gt;))
+((slot-accessor (car (class-direct-slots &lt;baz&gt;))) baz) &arrow; 1
               </programlisting>
             </informalexample>
           </para>
@@ -1897,10 +1965,10 @@
             <informalexample>
               <programlisting>
 (define-generics :x :x!)
-(define-class (&lt;Baz&gt;) (x (value 1) (accessor :x)))
-(define baz (make &lt;Baz&gt;))
+(define-class (&lt;baz&gt;) (x (value 1) (accessor :x)))
+(define baz (make &lt;baz&gt;))
 (:x baz)  &arrow; 1
-((slot-modifier (car (class-direct-slots &lt;Baz&gt;))) baz 2)
+((slot-modifier (car (class-direct-slots &lt;baz&gt;))) baz 2)
 (:x baz)  &arrow; 2
               </programlisting>
             </informalexample>
@@ -2008,10 +2076,10 @@
             <informalexample>
               <programlisting>
 (define-generics :x :x!)
-(define-class (&lt;Baz&gt;)
+(define-class (&lt;baz&gt;)
   (x (value 1) (accessor :x) (modifier :x!)))
-(define-method (initialize (&lt;Baz&gt; b) (&lt;number&gt; x)) (:x! b x))
-(define baz (make &lt;Baz&gt; 2))
+(define-method (initialize (&lt;baz&gt; b) (&lt;number&gt; x)) (:x! b x))
+(define baz (make &lt;baz&gt; 2))
 (:x baz)  &arrow; 2
               </programlisting>
             </informalexample>
@@ -2028,9 +2096,9 @@
         <informalexample>
           <programlisting>
 (define-generics :x :x!)
-(define-class (&lt;Baz&gt;)
+(define-class (&lt;baz&gt;)
   (x (value 1) (accessor :x) (modifier :x!)))
-(define baz (make &lt;Baz&gt;))
+(define baz (make &lt;baz&gt;))
 (:x baz)  &arrow; 1
           </programlisting>
         </informalexample>
@@ -2076,19 +2144,19 @@
             </blockquote>
             <informalexample>
               <programlisting>
-(define-class (&lt;Foo&gt;))
-(define-class (&lt;Bar&gt; &lt;Foo&gt;))
-(define-class (&lt;Baz&gt; &lt;Foo&gt;))
-(define-class (&lt;Boo&gt; &lt;Bar&gt; &lt;Baz&gt;))
-(define-class (&lt;Goo&gt;))
-(define-class (&lt;Moo1&gt; &lt;Bar&gt; &lt;Baz&gt; &lt;Goo&gt;))
-(map class-name (class-precedence-list &lt;Moo1&gt;))
+(define-class (&lt;foo&gt;))
+(define-class (&lt;bar&gt; &lt;foo&gt;))
+(define-class (&lt;baz&gt; &lt;foo&gt;))
+(define-class (&lt;boo&gt; &lt;bar&gt; &lt;baz&gt;))
+(define-class (&lt;goo&gt;))
+(define-class (&lt;moo1&gt; &lt;bar&gt; &lt;baz&gt; &lt;goo&gt;))
+(map class-name (class-precedence-list &lt;moo1&gt;))
   &arrow; (&lt;moo1&gt; &lt;bar&gt; &lt;baz&gt; &lt;goo&gt; &lt;foo&gt; &lt;object&gt;)
-(define-class (&lt;Moo2&gt; &lt;Bar&gt; &lt;Baz&gt; &lt;Foo&gt; &lt;Goo&gt;))
-(map class-name (class-precedence-list &lt;Moo2&gt;))
+(define-class (&lt;moo2&gt; &lt;bar&gt; &lt;baz&gt; &lt;foo&gt; &lt;goo&gt;))
+(map class-name (class-precedence-list &lt;moo2&gt;))
   &arrow; (&lt;moo1&gt; &lt;bar&gt; &lt;baz&gt; &lt;foo&gt; &lt;goo&gt; &lt;object&gt;)
-(define-class (&lt;Moo3&gt; &lt;Baz&gt; &lt;Bar&gt; &lt;Boo&gt;))
-(map class-name (class-precedence-list &lt;Moo3&gt;))
+(define-class (&lt;moo3&gt; &lt;baz&gt; &lt;bar&gt; &lt;boo&gt;))
+(map class-name (class-precedence-list &lt;moo3&gt;))
   &arrow; (&lt;moo3&gt; &lt;boo&gt; &lt;baz&gt; &lt;bar&gt; &lt;foo&gt; &lt;object&gt;)
               </programlisting>
             </informalexample>
@@ -2130,11 +2198,11 @@
 (define-generics
   :x :x! :y :y! :z :z!
   :xb :xb! :yb :yb! :zb :zb!)
-(define-class (&lt;Foo&gt;)
+(define-class (&lt;foo&gt;)
   (x (value 1) (accessor :x) (modifier :x!))
   (y (accessor :y) (modifier :y!))
   (z (value 1) (accessor :z)))
-(define f (make &lt;Foo&gt;))
+(define f (make &lt;foo&gt;))
 (:x f)  &arrow; 1
 (:y f)  &arrow; #f
 (:z f)  &arrow; 1
@@ -2144,11 +2212,11 @@
 (:y f)  &arrow; 2
 
 ;;overloading slots in sub-class
-(define-class (&lt;Bar&gt; &lt;Foo&gt;)
+(define-class (&lt;bar&gt; &lt;foo&gt;)
   (x (value 2) (accessor :x) (modifier :x!))
   (y (accessor :yb) (modifier :yb!))
   (zb (value 2) (accessor :zb) (modifier :zb!)))
-(define b (make &lt;Bar&gt;))
+(define b (make &lt;bar&gt;))
 (:x b)  &arrow; 2
 (:y b)  &arrow; #f
 (:z b)  &arrow; 1
@@ -2163,14 +2231,14 @@
 (define :foo-x
   (cdr (assq 'x (map (lambda (x)
                        (cons (slot-name x) (slot-accessor x)))
-                     (class-direct-slots &lt;Foo&gt;)))))
+                     (class-direct-slots &lt;foo&gt;)))))
 (:foo-x b)  &arrow; 1
 
 ;;inheritance restriction on slots
-(define-class (&lt;Boo&gt; &lt;Baz&gt;)
+(define-class (&lt;boo&gt; &lt;baz&gt;)
   (yb (accessor :yb) (modifier :yb!)))
-(define-class (&lt;Goo&gt;))
-(define-class (&lt;Moo&gt; &lt;Bar&gt; &lt;Boo&gt; &lt;Goo&gt;))  &arrow; error
+(define-class (&lt;goo&gt;))
+(define-class (&lt;moo&gt; &lt;bar&gt; &lt;boo&gt; &lt;goo&gt;))  &arrow; error
           </programlisting>
         </informalexample>
       </para>
