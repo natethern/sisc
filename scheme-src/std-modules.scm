@@ -238,3 +238,13 @@
   (define-method (-> ((meta <vector>) _))   ->vector)
   (define-method (-> ((meta <symbol>) _))   ->symbol)
   )
+
+(module libraries
+  (require-library
+   library-exists?
+   library-loaded?)
+  (import threading)
+  (import hashtable)
+  (include "../modules/libraries.scm"))
+
+(import libraries)

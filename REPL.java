@@ -112,7 +112,15 @@ public class REPL extends Thread {
                      Util.valArrayToList((Value[])rootss, 0, rootss.length),
                      Util.SISC);
         } catch (java.security.AccessControlException ace) {}
-
+        
+        try {
+            r.eval("(initialize)");
+        } catch (SchemeException se) {
+            System.err.println("Error during initialize: "+se.getMessage());
+        } catch (IOException se) {
+            System.err.println("Error during initialize: "+se.getMessage());
+        }
+        
         return true;
     }
 

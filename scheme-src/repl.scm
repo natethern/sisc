@@ -42,75 +42,71 @@
      (putprop 'last-error '*sisc* `((cont . ,(error-continuation-k error-cont))
 				    (value . ,message))))))
 
-(define _separator (void))
 (define _exit-handler (parameterize))
 
 (define repl
   (letrec ([repl/eval-print-loop
-	    (lambda (exp console-in console-out writer)
-	      ;;eval
-	      (let ([val (eval exp)])
-		(cond [(void? val) (repl/read console-in console-out writer)]
-		      [(circular? val)
-		       (begin 
-			 (display "{Refusing to print non-terminating structure}")
-			 (newline)
-			 (repl/read console-in console-out writer))]
-		      [else 
-		       (begin 
-			 ;;print
-			 (writer val console-out)
-			 (newline console-out)
-			 ;;loop
-			 (repl/read console-in console-out writer))])))]
-	   [repl/read
-	    (lambda (console-in console-out writer)
-	      (display "> " console-out)
-	      ;;read
-	      (let ([exp (read-with-annotations console-in #t)])
-		(if (eof-object? exp) 
-		    (if ((current-exit-handler))
-			(void)
-			(repl/read console-in console-out writer))
-		    (repl/eval-print-loop exp console-in 
-					  console-out writer))))])
+            (lambda (exp console-in console-out writer)
+              ;;eval
+              (let ([val (eval exp)])
+                (cond [(void? val) (repl/read console-in console-out writer)]
+                      [(circular? val)
+                       (begin 
+                         (display "{Refusing to print non-terminating structure}")
+                         (newline)
+                         (repl/read console-in console-out writer))]
+                      [else 
+                       (begin 
+                         ;;print
+                         (writer val console-out)
+                         (newline console-out)
+                         ;;loop
+                         (repl/read console-in console-out writer))])))]
+           [repl/read
+            (lambda (console-in console-out writer)
+              (display "> " console-out)
+              ;;read
+              (let ([exp (read-with-annotations console-in #t)])
+                (if (eof-object? exp) 
+                    (if ((current-exit-handler))
+                        (void)
+                        (repl/read console-in console-out writer))
+                    (repl/eval-print-loop exp console-in 
+                                          console-out writer))))])
     (lambda args
+      (current-url
+       (string-append
+        "file:"
+        (let ([dir (getprop 'user.dir '*environment-variables*)])
+          (if dir
+              (string-append dir (getprop 'file.separator
+                                          '*environment-variables*))
+              "."))))
       (let ([repl-start #f])
-	(if (not (getprop 'first-start '*sisc*))
-	    (begin
-	      (putprop 'first-start '*sisc* #t)
-	      (unload-dynamic-wind)
-	      (set! _separator (getprop 'file.separator '*environment-variables*))
-	      (current-url
-	       (string-append "file:"
-			      (let ([dir (getprop 'user.dir
-						  '*environment-variables*)])
-				(if dir
-				    (string-append dir _separator)
-				    "."))))))
-	(letrec ([console-in (if (null? args) (current-input-port)
-				 (car args))]
-		 [console-out (if (null? args) (current-output-port)
-				  (cadr args))])
-	  (call/cc 
-	   (lambda (k)
-	     (_exit-handler k)
-	     (begin
-	       (call/cc 
-		(lambda (k)
-		  (set! repl-start k)))
-	       (let loop ()
-		 (call/fc
-		  (lambda ()
-		    (repl/read console-in console-out pretty-print)
-		    (void))
-		  (lambda (m e f)
-		    ((current-default-error-handler) m e f console-out)
-		    (loop)))))))
-	  (if ((current-exit-handler))
-	      (void)
-	      (repl-start)))))))
+        (letrec ([console-in (if (null? args) (current-input-port)
+                                 (car args))]
+                 [console-out (if (null? args) (current-output-port)
+                                  (cadr args))])
+          (call/cc
+           (lambda (k)
+             (_exit-handler k)
+             (begin
+               (call/cc 
+                (lambda (k)
+                  (set! repl-start k)))
+               (let loop ()
+                 (call/fc
+                  (lambda ()
+                    (repl/read console-in console-out pretty-print)
+                    (void))
+                  (lambda (m e f)
+                    ((current-default-error-handler) m e f console-out)
+                    (loop)))))))
+          (if ((current-exit-handler))
+              (void)
+              (repl-start)))))))
 
 (define (exit)
   (let ([k (_exit-handler)])
     (if k (k))))
+

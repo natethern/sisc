@@ -400,5 +400,40 @@
           expr)
         rv)))
 
+;;hook that gets invoked when SISC is started
+(define initialize #f)
+(define on-startup #f)
+(let ([*startup-hooks* '()]
+      [startup-enabled? #t])
+  (set! initialize
+        (lambda ()
+          (set! startup-enabled? #f)
+          (for-each (lambda (thunk) (thunk)) *startup-hooks*)))
+  (set! on-startup
+        (lambda (thunk)
+          (if (not startup-enabled?)
+              (error "on-startup is only callable during heap build"))
+          (if (not (procedure? thunk))
+              (error "~a is not a procedure"))
+          (set! *startup-hooks* (cons thunk *startup-hooks*)))))
+
+(on-startup
+ (lambda ()
+   (let ([prop-file (or (getprop 'sisc.properties
+                                 '*environment-variables*)
+                        "sisc.properties")])
+     (call/fc  ;ignore errors
+      (lambda ()
+        (with-input-from-file prop-file
+          (lambda ()
+            (let loop ([entry (read)])
+              (or (eof-object? entry)
+                  (begin
+                    (putprop (car entry) '*config-parameters* (cdr entry))
+                    (loop (read))))))))
+      (lambda (m e c) #f)))
+   (unload-dynamic-wind)))
+
+;;
 (if (not (getprop 'LITE '*sisc*))
     (load "std-modules.scm"))
