@@ -91,7 +91,7 @@
       (ashl i n)
       (ashr i (abs n))))
 (define ash arithmetic-shift)
-(define bitwise-ior logor)
+(define bitwise-ior logor)x
 (define bitwise-xor logxor)
 (define bitwise-and logand)
 (define bitwise-not lognot)
