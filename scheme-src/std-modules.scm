@@ -64,9 +64,7 @@
     (map (lambda (x) (proc (car x) (cdr x))) (hashtable->alist ht))))
 
 (module threads
-  ((monitor/synchronize)
-   (monitor/synchronize-unsafe)
-   thread/new
+  (thread/new
    thread/start
    thread/yield
    thread/interrupt
@@ -91,7 +89,9 @@
    monitor/unlock
    monitor/wait
    monitor/notify
-   monitor/notify-all)
+   monitor/notify-all
+   monitor/synchronize
+   monitor/synchronize-unsafe)
   (import threading-module)
   (include "../modules/thread.scm"))
 

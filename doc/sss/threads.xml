@@ -457,17 +457,17 @@
 	  construction and readability of thread-safe code.
 	</para>
 	<programlisting>
-	  &syntax; (monitor/synchronize monitor expression)
+	  &procedure; (monitor/synchronize monitor thunk)
 	  
-	  Protects expression as a critical section by safely locking
-	  access to the expression with the monitor.
+	  Protects execution of thunk as a critical section by holding the
+	  monitor's lock during execution.
 
 	  
 	  &syntax; (monitor/synchronize-unsafe monitor expression)
 	  
-	  Behaves exactly as monitor/synchronize without automatic 
-	  unlocking when an error is raised from or a continuation 
-	  escapes from expression.
+	  Behaves exactly as monitor/synchronize without automatic
+	  unlocking when an error is raised or a continuation escapes when
+	  executing thunk.
 	</programlisting>
 	<para>
 	  <computeroutput>monitor/synchronize</computeroutput> locks
