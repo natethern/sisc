@@ -375,6 +375,11 @@
   (include "srfi/srfi-29.scm")
   (add-feature 'srfi-29))
 
+(display "srfi-30 ")
+(module srfi-30
+  ()
+  (add-feature 'srfi-30))
+
 (newline)
 
 ;; 
