@@ -135,26 +135,53 @@ public class Interpreter extends Util {
     }
 
     /**
-     * Parses and evaluates an s-expression
+     * Parses and evaluates s-expression(s) from an input port
      * 
-     * @param expr An s-expression
-     * @return The value of the evaluated s-expression
-     * @exception IOException Raised if the given string does not  
-     *     contain a  parseable s-expression
+     * @param port input port
+     * @return The value of the last evaluated s-expression
+     * @exception IOException Raised if the port does not
+     *     contain a parseable s-expression
      * @exception SchemeException Raised if the evaluation of  
-     *      the  expression results in an error
+     *      an expression results in an error
      */
-    public Value eval(String expr) throws IOException, SchemeException {
-        InputPort ip=new ReaderInputPort(new BufferedReader(new StringReader(expr)));
+    public Value evalInput(InputPort port) throws IOException, SchemeException {
         Value rv=VOID;
-
         do {
             try {
-                rv=eval(dynenv.parser.nextExpression(ip));
+                rv=eval(dynenv.parser.nextExpression(port));
             } catch (EOFException e) {
                 return rv;
             }
         } while (true);
+    }
+
+    /**
+     * Parses and evaluates s-expression(s)
+     * 
+     * @param expr s-expressions(s)
+     * @return The value of the last evaluated s-expression
+     * @exception IOException Raised if the given string does not  
+     *     contain a parseable s-expression
+     * @exception SchemeException Raised if the evaluation of  
+     *      an expression results in an error
+     */
+    public Value eval(String expr) throws IOException, SchemeException {
+        return evalInput(new ReaderInputPort(new BufferedReader(new StringReader(expr))));
+    }
+
+    /**
+     * Parses and evaluates s-expression(s) from a stream
+     * 
+     * @param stream s-expression stream
+     * @param sourceId string identifying the stream source
+     * @return The value of the last evaluated s-expression
+     * @exception IOException Raised if the stream does not  
+     *     contain a parseable s-expression
+     * @exception SchemeException Raised if the evaluation of  
+     *      an expression results in an error
+     */
+    public Value eval(InputStream stream, String sourceId) throws IOException, SchemeException {
+        return evalInput(new SourceInputPort(new BufferedInputStream(stream), sourceId));
     }
 
     /**

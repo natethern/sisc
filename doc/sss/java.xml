@@ -82,6 +82,37 @@ else { ...make internal call... }
                   <parameter>expr</parameter>
                 </methodparam>
               </methodsynopsis>
+              <blockquote>
+                <para>
+                  Evaluates expressions read from a string, returning
+                  the result of the evaluation of the last
+                  expression.
+                </para>
+              </blockquote>
+            </listitem>
+            <listitem>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>Value</type>
+                <methodname>eval</methodname>
+                <methodparam>
+                  <type>InputStream</type>
+                  <parameter>stream</parameter>
+                </methodparam>
+                <methodparam>
+                  <type>String</type>
+                  <parameter>sourceId</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Evaluates expressions read from an input stream, returning
+                  the result of the evaluation of the last
+                  expression. The <parameter>sourceId</parameter>
+                  identifies the source of the stream for display
+                  purposes.
+                </para>
+              </blockquote>
             </listitem>
             <listitem>
               <methodsynopsis language="java">
