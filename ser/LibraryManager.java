@@ -69,7 +69,7 @@ public class LibraryManager {
             if (rv != null)
                 return rv;
         }
-        return null;
+        throw new IOException("cannot locate " + name + " in libraries");
     }
 
     public void addLibrary(Library l) {
