@@ -75,8 +75,8 @@ public class GenerateHeap {
 	new Primitives().initialize(r);
         ctx.setEvaluator("eval");
 
-        FreeReferenceExp load=new FreeReferenceExp(Symbol.get("load"),
-                              -1, r.ctx.toplevel_env);
+
+	Symbol loadSymb = Symbol.get("load");
 
         if (inHeap != null) {
           System.out.println("Reading input heap: " + inHeap);
@@ -101,10 +101,8 @@ public class GenerateHeap {
 
         for (; i<args.length; i++) {
             System.out.println("Expanding and compiling "+args[i]+"...");
-            r.interpret(new AppExp(load,
-                                   (Expression[])
-                                   new Value[] {new SchemeString(args[i])},
-                                   false));
+            r.eval((Procedure)r.ctx.toplevel_env.lookup(loadSymb),
+		   new Value[] {new SchemeString(args[i])});
         }
 
         // Lock in the R5RS environment

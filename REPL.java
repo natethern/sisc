@@ -66,14 +66,10 @@ public class REPL extends Thread {
             e.printStackTrace();
         }
 
-        FreeReferenceExp load=new FreeReferenceExp(Symbol.get("load"),
-                              -1, r.ctx.toplevel_env);
+	Symbol loadSymb = Symbol.get("load");
         for (int i=0; i<args.length; i++) {
-            Value[] v=new Value[1];
-            v[0]=new SchemeString(args[i]);
-            r.interpret(new AppExp(load,
-                                   (Expression[])v,
-                                   false));
+            r.eval((Procedure)r.ctx.toplevel_env.lookup(loadSymb),
+		   new Value[]{new SchemeString(args[i])});
         }
 
         Properties sysProps=System.getProperties();
@@ -97,14 +93,12 @@ public class REPL extends Thread {
     }
 
     public void run() {
-        Value v=null;
-        FreeReferenceExp repl=new FreeReferenceExp(Symbol.get("repl"),
-                              -1, r.ctx.toplevel_env);
-start:
+	Symbol replSymb = Symbol.get("repl");
+	start:
         do {
             try {
-                r.interpret(new AppExp(repl, new Expression[0],
-                                       false));
+		r.eval((Procedure)r.ctx.toplevel_env.lookup(replSymb),
+		       new Values[]{});
             } catch (Exception e) {
                 System.err.println("System error: "+e.toString());
                 continue start;

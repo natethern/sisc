@@ -93,14 +93,14 @@ public class Interpreter extends Util {
         return compiler.compile(this, v, env);
     }
 
-    public Value interpret(Expression e) {
+    protected Value interpret(Expression e) {
         stk=new CallFrame(null, null, null, fk, null);
         nxp=e;
         interpret();
         return acc;
     }
 
-    public void interpret() {
+    protected void interpret() {
         try {
             do {
                 try {
