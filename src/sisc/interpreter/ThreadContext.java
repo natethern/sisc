@@ -2,7 +2,6 @@ package sisc.interpreter;
 
 import java.lang.ref.*;
 import java.util.*;
-import sisc.data.*;
 import sisc.util.Util;
 
 public class ThreadContext extends Util {
