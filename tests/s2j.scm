@@ -141,7 +141,7 @@
 (define (comparator fn)
   (make <comparator-proxy>
         (java-proxy-method-dispatcher fn)))
-(define-java-proxy-method (comparex (<procedure> fn)
+(define-java-proxy-method (compare (<procedure> fn)
                                    (<java.util.Comparator> p)
                                    (<jobject> obj1)
                                    (<jobject> obj2))
