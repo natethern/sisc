@@ -7,12 +7,9 @@ import java.io.*;
 import sisc.*;
 import sisc.data.*;
 
-import java.util.Hashtable;
 import sisc.modules.S2J.JavaObject;
 
-public class SchemeServlet extends HttpServlet {
-
-    private String appName;
+public class SchemeServlet extends SchemeServletBase {
 
     public Procedure getFn, postFn, putFn, deleteFn;
 
@@ -20,32 +17,15 @@ public class SchemeServlet extends HttpServlet {
         throws ServletException {
         appName	= getInitParameter("app-name");
         String initExpr = getInitParameter("init-expr");
-        Interpreter r = Context.enter(appName);
-        try {
-            Procedure p = (Procedure)r.eval(initExpr);
-            r.eval(p, new Value[] { new JavaObject(this) });
-        } catch (IOException e) {
-            throw new ServletException("evaluating init-expr " + initExpr + " failed", e);
-        } catch (SchemeException e) {
-            throw new ServletException("calling init-expr " + initExpr + " failed", e);
-        } finally {
-            Context.exit();
-        }
+        evalExpr(initExpr);
     }
 
     public void destroy() {
         String destroyExpr = getInitParameter("destroy-expr");
-        if (null == destroyExpr) return;
-        Interpreter r = Context.enter(appName);
         try {
-            Procedure p = (Procedure)r.eval(destroyExpr);
-            r.eval(p, new Value[] { new JavaObject(this) });
-        } catch (IOException e) {
-            throw new RuntimeException("evaluating destroy-expr " + destroyExpr + " failed");
-        } catch (SchemeException e) {
-            throw new RuntimeException("calling destroy-expr " + destroyExpr + " failed");
-        } finally {
-            Context.exit();
+            evalExpr(destroyExpr);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -56,8 +36,9 @@ public class SchemeServlet extends HttpServlet {
 
         Interpreter r = Context.enter(appName);
         try {
-            r.eval(fn, new Value[] { new JavaObject(request),
-                                         new JavaObject(response) });
+            r.eval(fn, new Value[] {
+                new sisc.modules.S2J.JavaObject(request),
+                    new sisc.modules.S2J.JavaObject(response) });
         } catch (SchemeException e) {
             throw new ServletException("calling " + fn + " failed", sisc.modules.S2J.javaException(e));
         } finally {

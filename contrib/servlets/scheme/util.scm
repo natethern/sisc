@@ -1,4 +1,5 @@
 (import s2j)
+(import generic-procedures)
 (import hashtable)
 
 (define (call-with-output-string f)
@@ -16,6 +17,8 @@
 (define-generic get-parameter)
 (define-generic get-session)
 (define-generic new?)
+(define-generic get-servlet-context)
+(define-generic get-real-path)
 
 (define current-request (parameterize))
 (define current-response (parameterize))
@@ -61,3 +64,12 @@
   
 (define (get-param p)
   (->string (get-parameter (current-request) (->jstring p))))
+
+(define (servlet-load servlet file)
+  (let ([cd (current-directory)])
+    (dynamic-wind
+     (lambda () (current-directory
+                 (->string (get-real-path (get-servlet-context servlet)
+                                          (->jstring "")))))
+     (lambda () (load file))
+     (lambda () (current-directory cd)))))

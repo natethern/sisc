@@ -7,43 +7,12 @@ import java.io.*;
 import sisc.*;
 import sisc.data.*;
 
-import java.util.Hashtable;
-
-public class SchemeAppServlet extends HttpServlet {
-
-    private String appName;
-
-    private static Hashtable htmlEscapes = new Hashtable();
-
-    static {
-        htmlEscapes.put("&", "&amp;");          // &
-        htmlEscapes.put("\"", "&quot;");        // "
-        htmlEscapes.put(">", "&gt;");           // >
-        htmlEscapes.put("<", "&lt;");           // <
-        htmlEscapes.put("'", "&#39;");          // '
-    }
-
-    protected static String searchReplace(String in, Hashtable pairs) {
-        StringBuffer out = new StringBuffer(in.length()*2);
-        String c;
-        String r = null;
-        int len = in.length();
-        for (int i = 0; i < len; i++)
-            {
-                c = in.substring(i, i+1);
-                r = (String) pairs.get(c);
-                if (r != null) out.append(r);
-                else out.append(c);
-            }
-        return out.toString();
-    }
+public class SchemeAppServlet extends SchemeServletBase {
 
     public void init()
         throws ServletException {
         appName	= getInitParameter("app-name");
         String heapFile	= getInitParameter("heap-file");
-        String baseDir = getInitParameter("base-dir");
-        String initExpr = getInitParameter("init-expr");
         AppContext ctx = new AppContext();
         Context.register(appName, ctx);
         Interpreter r = Context.enter(appName);
@@ -55,32 +24,16 @@ public class SchemeAppServlet extends HttpServlet {
         } finally {
             Context.exit();
         }
-        try {
-            r.eval("(current-directory \"" + getServletContext().getRealPath((null == baseDir) ? "/" : baseDir) + "\")");
-            Procedure p = (Procedure)r.eval(initExpr);
-            r.eval(p, new Value[] { new sisc.modules.S2J.JavaObject(this) });
-        } catch (IOException e) {
-            throw new ServletException("evaluating init-expr " + initExpr + " failed", e);
-        } catch (SchemeException e) {
-            throw new ServletException("calling init-expr " + initExpr + " failed", e);
-        } finally {
-            Context.exit();
-        }
+        String initExpr = getInitParameter("init-expr");
+        evalExpr(initExpr);
     }
 
     public void destroy() {
         String destroyExpr = getInitParameter("destroy-expr");
-        if (null == destroyExpr) return;
-        Interpreter r = Context.enter(appName);
         try {
-            Procedure p = (Procedure)r.eval(destroyExpr);
-            r.eval(p, new Value[] { new sisc.modules.S2J.JavaObject(this) });
-        } catch (IOException e) {
-            throw new RuntimeException("evaluating destroy-expr " + destroyExpr + " failed");
-        } catch (SchemeException e) {
-            throw new RuntimeException("calling destroy-expr " + destroyExpr + " failed");
-        } finally {
-            Context.exit();
+            evalExpr(destroyExpr);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
         }
     }
 
