@@ -60,7 +60,14 @@
       <exclude name="${packagename}/dist/**"/>
       <exclude name="${packagename}/tests/**" unless="junit.present"/>
       <exclude name="${packagename}/modules/**" if="lite"/>
+    </javac>
+    <javac srcdir="${srcdir}"
+           destdir="${classdir}"
+           classpathref="classpath"
+           debug="${debugging}"
+           optimize="${optimization}">
       <include name="${packagename}/modules/io/IO.java"/>
+      <include name="${packagename}/modules/Annotations.java"/>
       <include name="${packagename}/modules/Primitives.java"/>
       <include name="${packagename}/modules/R5RS.java"/>
     </javac>      
@@ -85,6 +92,7 @@
       <fileset dir="${classdir}">
         <include name="sisc/modules/io/IO*.class"/>
         <include name="sisc/modules/Primitives*.class"/>
+        <include name="sisc/modules/Annotations*.class"/>
         <include name="sisc/modules/R5RS*.class"/>
       </fileset>
     </jar>

@@ -120,7 +120,11 @@ public class GenerateHeap {
 
         Map baseMap=base.getSymbolMap();
         for (Iterator i=r5rs.keySet().iterator(); i.hasNext();) {
-            baseMap.remove(i.next());
+            Symbol n=(Symbol)i.next();
+            baseMap.remove(n);
+            if (base instanceof LibraryAE) {
+                ((LibraryAE)base).ignore(n);
+            }
         }
         return rv;
     }
@@ -148,7 +152,8 @@ public class GenerateHeap {
 
         LibraryBuilder lb=new LibraryBuilder();
         MemorySymEnv symenv=new MemorySymEnv(Symbol.get("symenv"));
-        MemorySymEnv toplevel=new MemorySymEnv(new LibraryAE(null, lb), Util.TOPLEVEL);
+        MemorySymEnv toplevel=new LibraryAE(null, lb);
+        toplevel.setName(Util.TOPLEVEL);
         sisc.compiler.Compiler.addSpecialForms(toplevel);
         symenv.define(Util.TOPLEVEL, toplevel);
 

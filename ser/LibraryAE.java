@@ -45,6 +45,11 @@ public class LibraryAE extends MemorySymEnv {
         addressMap=new HashMap();
     }
 
+    public void ignore(Symbol s) {
+        if (bindWatch != null)
+            bindWatch.remove(s);
+    }
+
     private void loadParent() {
         if (parent != null || parentIdx == -1) return;
         try {
