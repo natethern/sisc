@@ -9,6 +9,7 @@
 
   <target name="prepare">
     <property name="version" value="1.6.2-rc"/>
+    <property name="cvsversion" value="rc1_6_2"/>
     <property file="${basedir}/build.properties"/>    
     <property name="srcdir" value="${basedir}/.."/>
     <property name="classdir" value="${basedir}/classes"/>
@@ -22,9 +23,16 @@
     <property name="srfisll" value="srfi.sll"/>
     <property name="heap" value="${basedir}/boot/sisc.shp"/>
     <property name="quantity-type" value="apfloat"/>
-    <property name="debugging" value="off"/>
-    <property name="optimization" value="on"/>
     <property name="releasecandidate" value="yes"/> 
+    <condition property="debugging" value="on">
+      <isset property="releasecandidate"/>
+    </condition>
+    <condition property="debugging" value="off">
+      <not>
+        <isset property="releasecandidate"/>
+      </not>
+    </condition>
+    <property name="optimization" value="on"/>
     <property name="dist" value="${basedir}/dist"/>
     <property name="doc.style" value="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/docbook.xsl"/>
     <mkdir dir="${libdir}"/>
@@ -119,6 +127,16 @@
 	<arg value="srfi-sll.scm"/>
     </java>
     <move file="${schemedir}/${srfisll}" todir="${basedir}"/>
+  </target> 
+
+  <target name="srfi-sce" depends="full-heap" unless="lite">
+    <java classname="sisc.REPL"
+          classpath="${classdir}"
+          dir="${schemedir}"
+	  fork="yes">
+	<jvmarg value="-Dsisc.heapfile=${heap}"/>
+	<arg line="-x -e '(expand-file &quot;srfi.scm&quot; &quot;srfi.sce&quot;)'"/>
+    </java>
   </target> 
 
   <target name="full-heap" depends="jars" unless="lite">
@@ -237,7 +255,7 @@
 
   </target>
 
-  <target name="full-dist" depends="clean,all,srfi-sll" unless="lite">
+  <target name="full-dist" depends="clean,all" unless="lite">
     <delete dir="${dist}/full"/>
     <mkdir dir="${dist}/full"/>
     <mkdir dir="${dist}/full/sisc"/>
@@ -246,6 +264,8 @@
     <copy todir="${dist}/full/sisc/scheme-src">
       <fileset dir="${basedir}/scheme-src">
         <include name="slib.scm"/>
+        <include name="srfi.sce"/> 
+        <!-- <include name="srfi/**"/> -->
         <include name="optional-args.scm"/>
       </fileset>
     </copy>
@@ -254,8 +274,6 @@
           file="${basedir}/${basejar}"/>
     <copy todir="${dist}/full/sisc"
           file="${basedir}/${optjar}"/>
-    <copy todir="${dist}/full/sisc"
-          file="${basedir}/${srfisll}"/>
     <copy todir="${dist}/full/sisc"
           file="${heap}"/>
     <copy todir="${dist}/full/sisc">
@@ -355,4 +373,17 @@
       <arg value="${sss}.dvi"/>
     </exec>
   </target>
+
+  <!-- Handle releases --> 
+  <target name="tag" depends="prepare">
+    <cvs compression="true">
+      <commandline>
+        <argument line="tag -F"/>
+        <argument value="${cvsversion}"/>
+      </commandline>
+    </cvs>
+  </target> 
+ 
+  <target name="release-full-dist" depends="prepare,clean,srfi-sce"/> 
+  <target name="release" depends="prepare,tag,source-dist"/> 
 </project>
