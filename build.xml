@@ -172,11 +172,13 @@
           file="${heap}"/>
     <copy todir="${dist}/lite/sisc">
       <fileset dir="${dist}">
-	<include name="ChangeLog"/>
-	<include name="README"/>
-	<include name="COPYING"/>
+        <include name="ChangeLog"/>
+        <include name="README"/>
+        <include name="COPYING"/>
+        <include name="GOALS.txt"/>
+        <include name="TODO.txt"/>
         <include name="ReleaseCandidate" if="releasecandidate"/>
-	<include name="sisc.bat"/>
+        <include name="sisc.bat"/>
       </fileset>
     </copy>
 
@@ -214,6 +216,7 @@
       <fileset dir="${basedir}/scheme-src">
         <include name="slib.scm"/>
         <include name="srfi.scm"/>
+        <include name="optional-args.scm"/>
 	<include name="srfi/*.scm"/>
       </fileset>
     </copy>
