@@ -1086,20 +1086,6 @@ public class Quantity extends Value {
         return 0;
     }
 
-    public long longValue() {
-        switch (type) {
-        case FIXEDINT:
-            return val;
-        case DECIM:
-            return (long)d;
-        case INTEG:
-            return i.longValue();
-        case RATIO:
-            return i.divide(de).longValue();
-        }
-        return 0;
-    }
-
     public int intValue() {
         switch (type) {
         case FIXEDINT:
@@ -1284,7 +1270,7 @@ public class Quantity extends Value {
                 i=new BigInteger(buffer);
                 break;
             case DECIM:
-                d=dis.readFloat();
+		d=s.readFloat(dis).floatValue();
                 break;
             case RATIO:
                 buffer=new byte[s.readBer(dis)];
@@ -1295,8 +1281,8 @@ public class Quantity extends Value {
                 de=new BigInteger(buffer);
                 break;
             case COMPLEX:
-                d=dis.readFloat();
-                im=dis.readFloat();
+                d=s.readFloat(dis).floatValue();
+                im=s.readFloat(dis).floatValue();
                 break;
             }
             simplify();
@@ -1320,7 +1306,7 @@ public class Quantity extends Value {
                 dos.write(buffer);
                 break;
             case DECIM:
-                dos.writeFloat(d);
+		s.writeFloat(d, dos);
                 break;
             case RATIO:
                 buffer=i.toByteArray();
@@ -1331,8 +1317,8 @@ public class Quantity extends Value {
                 dos.write(buffer);
                 break;
             case COMPLEX:
-                dos.writeFloat(d);
-                dos.writeFloat(im);
+                s.writeFloat(d, dos);
+                s.writeFloat(im, dos);
                 break;
             }
         }

@@ -33,7 +33,10 @@
     <property name="jarname" value="sisc.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
     <property name="quantity-type" value="apfloat"/>
+    <property name="debugging" value="off"/>
+    <property name="optimization" value="on"/>
     <property name="dist" value="${basedir}/dist"/>
+	
   </target>
 
   <target name="init" depends="prepare">
@@ -64,8 +67,8 @@
     <javac srcdir="${srcdir}"
            destdir="${classdir}"
 	   classpathref="classpath"
-	   debug="off"
-           optimize="on">
+	   debug="${debugging}"
+           optimize="${optimization}">
       <include name="${packagename}/**"/>
       <exclude name="${packagename}/dist/**"/>
       <exclude name="${packagename}/Conf-*.java"/>
@@ -80,7 +83,8 @@
     <jar jarfile="${basedir}/${jarname}"
 	 manifest="${basedir}/boot/Manifest"
          basedir="${classdir}"
-         includes="*/**"/>
+         includes="*/**"
+	 excludes="sisc/boot/**"/>
   </target>
   
   <target name="heap" depends="compiler">
@@ -120,11 +124,11 @@
     </java>
   </target>
 
-  <target name="all-lite" depends="lite-prepare,jars,lite-heap"
+  <target name="all-lite" depends="lite-prepare,lite-heap,jars"
           description="Build lite edition">
   </target>
 
-  <target name="all" depends="full-prepare,jars,heap"
+  <target name="all" depends="full-prepare,heap,jars"
           description="Build all">  
   </target>
     

@@ -1296,7 +1296,7 @@ public class Quantity extends Value {
                 i=new BigInteger(buffer);
                 break;
             case DECIM:
-                d=dis.readDouble();
+		d=s.readFloat(dis).doubleValue();
                 break;
             case RATIO:
                 buffer=new byte[s.readBer(dis)];
@@ -1307,8 +1307,8 @@ public class Quantity extends Value {
                 de=new BigInteger(buffer);
                 break;
             case COMPLEX:
-                d=dis.readDouble();
-                im=dis.readDouble();
+                d=s.readFloat(dis).doubleValue();
+                im=s.readFloat(dis).doubleValue();
                 break;
             }
             simplify();
@@ -1332,7 +1332,7 @@ public class Quantity extends Value {
                 dos.write(buffer);
                 break;
             case DECIM:
-                dos.writeDouble(d);
+		s.writeFloat(d, dos);
                 break;
             case RATIO:
                 buffer=i.toByteArray();
@@ -1343,8 +1343,8 @@ public class Quantity extends Value {
                 dos.write(buffer);
                 break;
             case COMPLEX:
-                dos.writeDouble(d);
-                dos.writeDouble(im);
+		s.writeFloat(d, dos);
+		s.writeFloat(im, dos);
                 break;
             }
         }

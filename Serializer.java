@@ -1,6 +1,7 @@
 package sisc;
 
 import java.io.*;
+import java.math.*;
 import sisc.data.*;
 import java.util.*;
 import java.lang.reflect.*;
@@ -95,6 +96,26 @@ public class Serializer implements Conf {
             classCache[0]=c;
             return c;
         } else return null;
+    }
+
+    public void writeFloat(double d, DataOutputStream dos) throws IOException {
+	writeFloat(new BigDecimal(d), dos); // could be optimized
+    }
+
+    public void writeFloat(BigDecimal d, DataOutputStream dos) throws IOException {
+	int scale=d.scale();
+	byte[] buffer=d.unscaledValue().toByteArray();
+	writeBer(buffer.length, dos);
+	writeBer(scale, dos);
+	dos.write(buffer);
+    }
+
+    public BigDecimal readFloat(DataInputStream dis) throws IOException {
+	byte[] buffer=new byte[readBer(dis)];
+	int scale=readBer(dis);
+	dis.readFully(buffer);
+
+	return new BigDecimal(new BigInteger(buffer), scale);
     }
 
     public static void writeBer(int v, DataOutputStream dos) throws IOException {

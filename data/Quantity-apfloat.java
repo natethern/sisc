@@ -1322,11 +1322,7 @@ public class Quantity extends Value {
                 i=new BigInteger(buffer);
                 break;
             case DECIM:
-                buffer=new byte[s.readBer(dis)];
-                int scale=s.readBer(dis);
-                dis.readFully(buffer);
-
-                d=new BigDecimal(new BigInteger(buffer), scale);
+		d=s.readFloat(dis);
                 break;
             case RATIO:
                 buffer=new byte[s.readBer(dis)];
@@ -1337,14 +1333,8 @@ public class Quantity extends Value {
                 de=new BigInteger(buffer);
                 break;
             case COMPLEX:
-                buffer=new byte[s.readBer(dis)];
-                dis.readFully(buffer);
-                scale=s.readBer(dis);
-                d=new BigDecimal(new BigInteger(buffer), scale);
-                buffer=new byte[s.readBer(dis)];
-                dis.readFully(buffer);
-                scale=s.readBer(dis);
-                im=new BigDecimal(new BigInteger(buffer), scale);
+		d=s.readFloat(dis);
+                im=s.readFloat(dis);
                 break;
             }
         }
@@ -1363,11 +1353,7 @@ public class Quantity extends Value {
                 dos.write(buffer);
                 break;
             case DECIM:
-                int scale=d.scale();
-                buffer=d.unscaledValue().toByteArray();
-                s.writeBer(buffer.length, dos);
-                s.writeBer(scale, dos);
-                dos.write(buffer);
+		s.writeFloat(d, dos);
                 break;
             case RATIO:
                 buffer=i.toByteArray();
@@ -1378,17 +1364,8 @@ public class Quantity extends Value {
                 dos.write(buffer);
                 break;
             case COMPLEX:
-                buffer=d.unscaledValue().toByteArray();
-                scale=d.scale();
-                s.writeBer(buffer.length, dos);
-                s.writeBer(scale, dos);
-                dos.write(buffer);
-
-                buffer=d.unscaledValue().toByteArray();
-                scale=im.scale();
-                s.writeBer(buffer.length, dos);
-                s.writeBer(scale, dos);
-                dos.write(buffer);
+		s.writeFloat(d, dos);
+		s.writeFloat(im, dos);
                 break;
             }
         }
