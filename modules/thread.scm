@@ -32,12 +32,11 @@
 
 ;;
 
-(define (parallel thunk1 thunk2 . thunks)
-  (let* ([all-thunks (cons thunk1 (cons thunk2 thunks))]
-	 [threads (map thread/new all-thunks)])
+(define (parallel . thunks)
+  (let ([threads (map thread/new thunks)])
     (for-each thread/start threads)
     (for-each (lambda (t)
-		(let loop ([rv (thread/join t)])
-		  (if (not rv) (loop (thread/join t)))))
-	      threads)
+                (let loop ([rv (thread/join t)])
+                  (if (not rv) (loop (thread/join t)))))
+              threads)
     (apply values (map thread/result threads))))
