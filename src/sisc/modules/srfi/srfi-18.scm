@@ -110,11 +110,9 @@
   (let* ([timeout (let ([v (and (not (null? args))
                                 (car args))])
                     (and v (time->ms v)))]
-         [thread (if timeout
-                     (if (null? (cdr args))
-                         (current-thread)
-                         (cadr args))
-                     (current-thread))])
+         [thread (if (or (null? args) (null? (cdr args)))
+                     (current-thread)
+                     (cadr args))])
     (if timeout
         (mutex/lock! mutex (time->ms timeout))
         (mutex/lock! mutex))
