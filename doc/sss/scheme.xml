@@ -64,18 +64,46 @@
 	  arbitrary precision floats, specific precision constraints
 	  are maintained to prevent a runaway increase of
 	  precision. The parameterized functions
-	  <emphasis>min-precision</emphasis> and
-	  <emphasis>max-precision</emphasis> specify the
+	  <function>min-precision</function> and
+	  <function>max-precision</function> specify the
 	  constraints:
 	</para>
-	<programlisting>
-	  &parameter; (min-precision [digits])
-	  Sets or displays the minimum precision constraint, an
-	  integer.
-	  
-	  &parameter; (max-precision [digits])
-	  Sets or displays the maximum precision constraint, an integer.
-	</programlisting>
+	<para>
+	  <blockquote>
+	    <para>
+	      &parameter;
+	      <methodsynopsis language="scheme">
+		<methodtype>integer</methodtype>
+		<methodname>min-precision</methodname>
+		<methodparam choice="opt">
+		  <parameter>digits</parameter>
+		</methodparam>
+	      </methodsynopsis>
+	      <blockquote>
+		<para>
+		  Sets or displays the minimum precision constraint, an
+		  integer.
+		</para>
+	      </blockquote>
+	    </para>
+	    <para>
+	      &parameter;
+	      <methodsynopsis language="scheme">
+		<methodtype>integer</methodtype>
+		<methodname>max-precision</methodname>
+		<methodparam choice="opt">
+		  <parameter>digits</parameter>
+		</methodparam>
+	      </methodsynopsis>
+	      <blockquote>
+		<para>
+		  Sets or displays the maximum precision constraint,
+		  an integer.
+		</para>
+	      </blockquote>
+	    </para>
+	  </blockquote>
+	</para>
 	<para>
 	  All four base specifiers (<computeroutput>&num;x, &num;o,
 	    &num;d, &num;b</computeroutput>) are supported for
@@ -142,6 +170,7 @@
       <para>
 	<blockquote>
 	  <para>
+	    &procedure;
 	    <methodsynopsis language="scheme">
 	      <methodtype>symbol</methodtype>
 	      <methodname>string-&gt;uninterned-symbol</methodname>
@@ -164,20 +193,42 @@
 	one of two ways. The first involves setting the reader to
 	produce cased symbols via the procedure
       </para>
-      <programlisting>
-	&parameter; (case-sensitive [boolean])
-	Sets or retrieves the reader's case sensitivity.
-      </programlisting>
+      <para>
+	<blockquote>
+	  <para>
+	    &parameter;
+	    <methodsynopsis language="scheme">
+	      <methodtype>#t/#f</methodtype>
+	      <methodname>case-sensitive</methodname>
+	      <methodparam choice="opt">
+		<parameter>boolean</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Sets or retrieves the reader's case sensitivity.
+	      </para>
+	      </blockquote>
+	  </para>
+	</blockquote>
+      </para>
       <para>
 	The second method is via a non-standard symbol syntax. If a
 	symbol is enclosed in pipe ('|') characters, the reader will
-	treat that individual symbol as cased. For example:
+	treat that individual symbol as cased.  The syntax extends the
+	&R5RS; grammar:
       </para>
       <programlisting>
-	(eq? 'a '|A|) ; => #f
-	(eq? 'a '|a|) ; => #t
-	(eq? '|A| '|a|) ; => #f
+&lt;cased symbol&gt; --> |&lt;identifier&gt;|
       </programlisting>
+      <example>
+	<title>Case sensitive Symbol literals</title>
+	<programlisting>
+(eq? 'a '|A|) ; => #f
+(eq? 'a '|a|) ; => #t
+(eq? '|A| '|a|) ; => #f
+	</programlisting>
+      </example>
     </sect2>
     <sect2 id="Strings">
       <title>
@@ -229,14 +280,31 @@
 	If &num;f, the verbose representation is produced.  By default,
 	<function>vector-length-prefixing</function> is true.
       </para>
-      <programlisting>
-	&parameter; (vector-length-prefixing [boolean])
-	If set to true, this parameter will instruct the
-	pretty-printer to emit length prefixed,
-	trailing-duplicate-eliminated vectors in its output.  If
-	false, ordinary full-length vectors without prefixes will be
-	emitted.
-      </programlisting>
+      <para>
+	<blockquote>
+	  <para>
+	    &parameter;
+	    <methodsynopsis language="scheme">
+	      <methodtype>#t/#f</methodtype>
+	      <methodname>vector-length-prefixing</methodname>
+	      <methodparam choice="opt">
+		<parameter>boolean</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		If set to true, this parameter will instruct the
+		pretty-printer to emit length prefixed,
+		trailing-duplicate-eliminated vectors in its output.  If
+		false, ordinary full-length vectors without prefixes will be
+		emitted.
+		
+		Sets or retrieves the reader's case sensitivity.
+	      </para>
+	    </blockquote>
+	  </para>
+	</blockquote>
+      </para>
     </sect2>
     <sect2 id="CircularStructures">
       <title>
@@ -261,8 +329,8 @@
 	representations) to support circular structures:
       </para>
       <programlisting>
-	&lt;pointer definition&gt; --> #&lt;uinteger 10&gt;=&lt;datum&gt;
-	&lt;pointer reference&gt; --> #&lt;uinteger 10&gt;#
+&lt;pointer definition&gt; --> #&lt;uinteger 10&gt;=&lt;datum&gt;
+&lt;pointer reference&gt; --> #&lt;uinteger 10&gt;#
       </programlisting>
       <para>
 	The first form instructs the reader to create a pointer
@@ -289,14 +357,17 @@
       <para>
 	At this point some examples might be helpful:
       </para>
-      <programlisting>
-	(define x '#0=(1 2 . #0#))
-	(caddr x)        ; => 1
-	(list-ref x 15)  ; => 2
+      <example>
+	<title>Circular Structures</title>
+	<programlisting>
+(define x '#0=(1 2 . #0#))
+(caddr x)        ; => 1
+(list-ref x 15)  ; => 2
 	
-	(define y '(1 2 #1=#(3 4) . #1#))
-	(eq? (caddr y) (cdddr y)) ; => #t
-      </programlisting>
+(define y '(1 2 #1=#(3 4) . #1#))
+(eq? (caddr y) (cdddr y)) ; => #t
+	</programlisting>
+      </example>
       <para>
 	At this time, only circular lists are detected by the
 	Read-Eval-Print-Loop and blocked from being Printed.  If a
@@ -776,7 +847,7 @@
     <para>
       In addition to the <function>box</function> function for
       creating boxes, &SISC; provides an external representation for
-      boxes and boxed values. It extends the &R5RS; grammer with the 
+      boxes and boxed values. It extends the &R5RS; grammar with the 
       following:
     </para>
     <programlisting>
