@@ -33,7 +33,7 @@ form
 (<slot-name> (<slot-prop-name> . <slot-prop-value) ...)
 
 <slot-name> names a slot. <slot-prop-name> must be the name of one of
-the define slot properties, and <slot-prop-value> is its value. The
+the defined slot properties, and <slot-prop-value> is its value. The
 following are the valid slot properties:
 
 value - the initial value of the slot
@@ -54,7 +54,6 @@ Classes are types in the type system.
 DEFINE-CLASS (<class-name> <superclass> ...)
   (<slot-name> (<slot-prop-name> <slot-prop-value>) ...)
   ...
-=> <class>
 Binds <class-name> to a newly created class. This form
 expands into a call to the MAKE-CLASS procedure.
 
@@ -178,8 +177,8 @@ name. If the slots are define with different accessors and modifiers
 then this does not cause any problems at all. If they are not then an
 invocation of the accessor/modifier will acess/modify the slot of the
 subclass. Note that it is still possible to access/modify the slot of
-the superclass by using procedures/methods obtained from the
-SLOT-{ACCESSOR,MODIFIER}-{PROCEDURE,METHOD} applied to the slot.
+the superclass by using procedures/methods obtained with
+SLOT-{ACCESSOR,MODIFIER}-{PROCEDURE,METHOD}.
 
 
 Examples
