@@ -1,3 +1,8 @@
+2004-10-14  Scott G. Miller   <scott@sgmiller.org>
+
+	* Fixed a bug in REPL that was passing the wrong array type to 
+	  interpret.  This was breaking uses of "sisc -c".  See bug 972606.
+	  
 2004-10-13  Scott G. Miller   <scott@sgmiller.org>
 
 	* Fixed bug in psyntax that broke shadowing of imports at the top
