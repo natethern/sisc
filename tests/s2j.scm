@@ -75,6 +75,10 @@
 (s 'symval)
 (s 'case-sensitive)
 (<sisc.data.Symbol> '|caseSensitive|)
+;;bean field access
+(define <java.io.File> (java-class "java.io.File"))
+(define file (make <java.io.File> (->jstring "/foo/bar.baz")))
+(file '(canonical-file name)) ;=> bar.baz
 
 ;;generic type conversions
 ((-> <list>) a)
@@ -189,13 +193,15 @@
 (applicable-methods (generic-procedure-next remove-all)
                     (list <java.util.TreeSet> <java.util.TreeSet>))
 
-;;special handling of jnull, <bot>, <top>
+;;special handling of jnull, <bot>, <top>, <jclass>
 (value-of <jstring> jnull) ;=> #<java java.lang.String null>
 (type-of jnull) ;=> <bot>
 (define-generic top-bot-test)
 (define-method (top-bot-test (<top> x)) 'top)
+(define-method (top-bot-test (<jclass> x)) 'class)
 (define-method (top-bot-test (<number> x)) 'number)
 (define-method (top-bot-test (<bot> x)) 'bot)
-(top-bot-test 'foo) => 'top
-(top-bot-test 1) => 'number
-(top-bot-test jnull) => 'bot
+(top-bot-test 'foo) ;=> 'top
+(top-bot-test <jstring>) ;=> 'class
+(top-bot-test 1) ;=> 'number
+(top-bot-test jnull) ;=> 'bot

@@ -41,19 +41,26 @@
 (define (object? o)
   (or (java/object? o) (scheme-object? o)))
 
+(define <bot> (void))
+(define <top> (void))
+(define <java.lang.Class> (java/class '|java.lang.Class|))
+(define <java.lang.Object> (java/class '|java.lang.Object|))
+
 ;;meta types
+;;There is a special hack to make java.lang.Class a meta type
 (define (meta x) (cons 'meta x))
-(define (meta-type m) (cdr m))
-(define (meta? x) (and (pair? x) (eq? (car x) 'meta)))
+(define (meta-type m)
+  (if (eq? m <java.lang.Class>)
+      <java.lang.Object>
+      (cdr m)))
+(define (meta? x)
+  (or (eq? x <java.lang.Class>)
+      (and (pair? x) (eq? (car x) 'meta))))
 
 ;;special types
 (define (special-type kind) (cons 'special kind))
 (define (special-type-kind t) (cdr t))
 (define (special-type? x) (and (pair? x) (eq? (car x) 'special)))
-
-(define <bot> (void))
-(define <top> (void))
-(define <java.lang.Class> (java/class '|java.lang.Class|))
 
 (define (type-of o)
   (cond ((class? o) (meta o))
@@ -67,12 +74,9 @@
 (define (type<= x y)
   (cond ((eq? x <bot>) #t)
         ((eq? y <top>) #t)
-        ((and (meta? x) (meta? y))
-         (type<= (meta-type x) (meta-type y)))
-        ((meta? x)
-         (and (java/class? (meta-type x))
-              (eq? y <java.lang.Class>)))
-        ((meta? y) #f)
+        ((or (meta? x) (meta? y))
+         (and (meta? x) (meta? y)
+              (type<= (meta-type x) (meta-type y))))
         ((or (java/class? x) (java/class? y))
          ;;we need this special case because the cpl of primitive
          ;;types does not contain their corresponding java.lang
@@ -148,29 +152,28 @@
                  (append (map class-precedence-list parents)
                          (list parents)))))
 
-;;compares two types taking into account the cpl of c
+;;compare two types taking into account the cpl of c
 ;;NB: c must be a sub-type of both types
 (define (compare-types x y c)
-  (cond ((and (meta? x) (meta? y))
-         (compare-types (meta-type x) (meta-type y) (meta-type c)))
-        ((or (meta? x) (meta? y))
-         'ambiguous)
-        (else
-          (let ([x<y? (type<= x y)]
-                [y<x? (type<= y x)])
-            (cond ((and x<y? y<x?) 'equal)
-                  (x<y? 'more-specific)
-                  (y<x? 'less-specific)
-                  ((or (eq? c <bot>) (eq? c <top>)) 'ambiguous)
-                  (else
-                    ;;find first occurrence of x or y in c's cpl
-                    (let loop ([cpl (class-precedence-list c)])
-                      (if (null? cpl)
-                          'ambiguous;;shouldn't happen
-                          (let ([p (car cpl)])
-                            (cond ((eq? p x) 'more-specific)
-                                  ((eq? p y) 'less-specific)
-                                  (else (loop (cdr cpl)))))))))))))
+  (let ([x<y? (type<= x y)]
+        [y<x? (type<= y x)])
+    (cond ((and x<y? y<x?) 'equal)
+          (x<y? 'more-specific)
+          (y<x? 'less-specific)
+          ((or (eq? c <bot>) (eq? c <top>)) 'ambiguous)
+          ((and (meta? x) (meta? y))
+           (compare-types (meta-type x) (meta-type y) (meta-type c)))
+          ((or (meta? x) (meta? y))
+           'ambiguous)
+          (else
+            ;;find first occurrence of x or y in c's cpl
+            (let loop ([cpl (class-precedence-list c)])
+              (if (null? cpl)
+                  'ambiguous;;shouldn't happen
+                  (let ([p (car cpl)])
+                    (cond ((eq? p x) 'more-specific)
+                          ((eq? p y) 'less-specific)
+                          (else (loop (cdr cpl)))))))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;; METHOD OBJECTS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
