@@ -19,7 +19,7 @@ public class Annotations extends ModuleAdapter {
         EMITANNOTATIONS         = 6,
         MAKEANNOTATION          = 7,
         SETANNOTATION           = 8,
-        SETANNOTATIONSTRIPPED   = 9
+        SETANNOTATIONSTRIPPED   = 9,
         EMITDEBUGGINGSYMS       = 10;
 
     public Annotations() {
@@ -30,7 +30,7 @@ public class Annotations extends ModuleAdapter {
         define("annotation-expression"  , ANNOTATIONEXPR);
         define("annotation-stripped"    , ANNOTATIONSTRIPPED);
         define("emit-annotations"       , EMITANNOTATIONS);
-        define("emit-debugging-symbols"       , EMITDEBUGGINGSYMS);
+        define("emit-debugging-symbols" , EMITDEBUGGINGSYMS);
         define("make-annotation"        , MAKEANNOTATION);
         define("set-annotation!"        , SETANNOTATION);
         define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
