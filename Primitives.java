@@ -372,7 +372,7 @@ public class Primitives extends ModuleAdapter {
             case EVAL:
                 f.nxp=f.compile(f.vlr[0]);
                 f.returnValues(f.vlr);
-                return BuiltinProcedure.CONTINUE;
+                return VOID;
             case OPENINPUTSTRING:
                 return new InputPort(new BufferedReader(
                                                         new StringReader(string(f.vlr[0]))));
