@@ -18,9 +18,20 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public SchemeInputPort in;
     public SchemeOutputPort out;
 
-    public boolean printShared;
-    public boolean vectorLengthPrefixing;
-    public boolean emitDebuggingSymbols;
+    public boolean printShared = DEFAULT_PRINT_SHARED;
+    public boolean vectorLengthPrefixing = DEFAULT_VECTOR_LENGTH_PREFIXING;
+    public boolean emitDebuggingSymbols = DEFAULT_EMIT_DEBUGGING_SYMBOLS;
+
+    private static String defaultPrintShared =
+        Boolean.toString(DEFAULT_PRINT_SHARED);
+    private static String defaultVectorLengthPrefixing =
+        Boolean.toString(DEFAULT_VECTOR_LENGTH_PREFIXING);
+    private static String defaultEmitDebuggingSymbols =
+        Boolean.toString(DEFAULT_EMIT_DEBUGGING_SYMBOLS);
+    private static String defaultStrictR5RS =
+        Boolean.toString(DEFAULT_STRICT_R5RS);
+    private static String defaultEmitAnnotations =
+        Boolean.toString(DEFAULT_EMIT_ANNOTATIONS);
 
     public Value wind = FALSE; //top of wind stack
 
@@ -48,8 +59,17 @@ public class DynamicEnvironment extends Util implements Cloneable {
         this.ctx = ctx;
         this.in = in;
         this.out = out;
-        printShared = false;
-        vectorLengthPrefixing = false;
+        this.parser.annotate =
+            ctx.getProperty("sisc.emitAnnotations", defaultEmitAnnotations).equals("true");
+        this.parser.lexer.strictR5RS =
+            ctx.getProperty("sisc.strictR5RS", defaultStrictR5RS).equals("true");
+        this.printShared =
+            ctx.getProperty("sisc.printShared", defaultPrintShared).equals("true");
+        this.vectorLengthPrefixing = 
+            ctx.getProperty("vectorLengthPrefixing", defaultVectorLengthPrefixing).equals("true");
+        this.emitDebuggingSymbols =
+            ctx.getProperty("emitDebuggingSymbols", defaultEmitDebuggingSymbols).equals("true");
+
         classLoader = currentClassLoader();
         try {
             urlClassLoader = new URLClassLoader(new URL[]{}, classLoader);
