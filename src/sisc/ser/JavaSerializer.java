@@ -29,6 +29,10 @@ public class JavaSerializer implements Serializer {
         os.writeObject(e);
     }
 
+    public void writeInitializedExpression(Expression e) throws IOException {
+        os.writeObject(e);
+    }
+
     public void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException {
         if (e==null) {
             writeExpression((Expression)null);

@@ -53,6 +53,10 @@ public class JavaDeserializer implements Deserializer {
         return (Expression)readObjectIOExceptionOnly();
     }
 
+    public Expression readInitializedExpression() throws IOException {
+        return (Expression)readObjectIOExceptionOnly();
+    }
+        
     public SymbolicEnvironment readSymbolicEnvironment() throws IOException {
         Expression e=readExpression();
         return (e instanceof Symbol) ?
