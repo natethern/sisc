@@ -17,18 +17,20 @@
 
 
 (define (ignorable? tokens definition)
-  (or (and (> (length tokens) (length (tokenize definition)))
+  (or (not definition)
+      (and (> (length tokens) (length (tokenize definition)))
            (> (length tokens) 1))
       (and (= 1 (length tokens)) (memq (car tokens) ignored-words))))
 
 (define (learn type)
   (lambda (channel message term definition)
-    (let ([tt (tokenize term)])
-      (display tt) (newline) (display definition)
-      (or (and (ignorable? tt definition) 'continue)
-          (if (store-item dbcon type term definition)
-              (random-elem learn-responses) 
-              (random-elem knewthat-responses))))))
+    (if (not term)
+        'continue
+        (let ([tt (tokenize term)])
+          (or (and (ignorable? tt definition) 'continue)
+            (if (store-item dbcon type term definition)
+                (random-elem learn-responses) 
+                (random-elem knewthat-responses)))))))
 
 (define (learn-aka channel message term definition)
   (or (and (ignorable? (tokenize term) definition)
