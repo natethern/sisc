@@ -192,7 +192,7 @@ public class REPL {
                 else System.out.println(v);
             }
         }
-
+	DynamicEnvironment dynenv=r.dynenv;
         Context.exit();
         if (noRepl) return;
 
@@ -208,7 +208,7 @@ public class REPL {
             listen("main", ssocket);
         } else {
             Procedure p=(Procedure)r.lookup(Symbol.get("sisc-cli"), Util.TOPLEVEL);
-            REPL repl = new REPL("main",p);
+            REPL repl = new REPL("main",dynenv,p);
             repl.go();
         }
     }
