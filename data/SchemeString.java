@@ -39,94 +39,71 @@ import sisc.ser.Deserializer;
 
 public class SchemeString extends Value {
 
-    static final int CHARARRAY=0, STRING=1;
-
-    protected char[] data_c;
-    protected String data_s;
-    protected byte type;
+    protected char[] data_c = null;
+    protected String data_s = null;
 
     public SchemeString() {}
 
     public SchemeString(String s) {
-        data_s=s; 
-        type=STRING;
+        data_s=s;
     }
 
     public SchemeString(char[] data) {
         data_c=data;
-        type=CHARARRAY;
     }
 
     public final boolean stringRepAvailable() {
-        return type==STRING;
+        return (data_s != null);
     }
 
     public final boolean charRepAvailable() {
-        return type==CHARARRAY;
+        return (data_c != null);
     }
 
     public String asString() {
-        if (type==STRING)
-            return data_s;
-        else {
-            data_s=new String(data_c);
-            type=STRING;
-            data_c=null;
-            return data_s;
-        }
+        if (data_s == null) data_s=new String(data_c);
+        return data_s;
     }
 
     public char[] asCharArray() {
-        if (type==CHARARRAY) 
-            return data_c;
-        else {
-            data_c=data_s.toCharArray();
-            type=CHARARRAY;
-            data_s=null;
-            return data_c;
-        }
+        if (data_c == null) data_c=data_s.toCharArray();
+        return data_c;
     }
 
     public int length() {
-        if (type==CHARARRAY) return data_c.length;
-        else return data_s.length();
+        return (data_s == null) ? data_c.length : data_s.length();
     }
 
     public char charAt(int index) {
-        if (type==CHARARRAY) return data_c[index];
-        else return data_s.charAt(index);
+        return (data_s == null) ? data_c[index] : data_s.charAt(index);
     }
 
     public boolean valueEqual(Value v) {
         if (!(v instanceof SchemeString)) return false;
         SchemeString o=(SchemeString)v;
-        if (type==STRING) {
-            return o.asString().equals(data_s);
-        } else {
-            if (o.type==CHARARRAY) {
-                char[] oc=o.data_c;
-                if (data_c.length!=oc.length) return false;
-                for (int i=0; i<oc.length; i++) {
-                    if (data_c[i]!=oc[i]) return false;
-                }
-                return true;
-            } else {
-                return asString().equals(o.data_s);
+
+        if (data_c != null && o.charRepAvailable()) {
+            char[] oc=o.asCharArray();
+            if (data_c.length!=oc.length) return false;
+            for (int i=0; i<oc.length; i++) {
+                if (data_c[i]!=oc[i]) return false;
             }
+            return true;
+        } else {
+            return asString().equals(o.asString());
         }
     }
 
     public SchemeString append(SchemeString other) {
-        if (type==CHARARRAY) {
+        if (data_c != null && other.charRepAvailable()) {
             char[] oc=other.asCharArray();
             char[] newstr=new char[data_c.length + oc.length];
             System.arraycopy(data_c, 0, newstr, 0, data_c.length);
             System.arraycopy(oc, 0, newstr, data_c.length, oc.length);
             return new SchemeString(newstr);
         } else {
-            return new SchemeString(data_s+other.asString());
+            return new SchemeString(asString()+other.asString());
         }
-            
     }
 
     String display(boolean write) {
@@ -159,11 +136,19 @@ public class SchemeString extends Value {
     }
 
     public void set(int k, char c) {
-        if (type==STRING) {
-            asCharArray()[k]=c;
-            data_s=null;
-        } else 
-            asCharArray()[k]=c;
+        asCharArray();
+        data_c[k]=c;
+        data_s = null;
+    }
+
+    public void set(String s) {
+        data_s = s;
+        data_c = null;
+    }
+
+    public void set(char[] ca) {
+        data_c = ca;
+        data_s = null;
     }
 
     public String display() {
@@ -184,8 +169,5 @@ public class SchemeString extends Value {
 
     public void deserialize(Deserializer s) throws IOException {
         data_s=s.readUTF();
-        type=STRING;
     }
 }
-
-

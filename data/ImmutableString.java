@@ -42,12 +42,19 @@ public class ImmutableString extends SchemeString {
     }
 
     public ImmutableString(char[] data) {
-        super(new String(data));
+        super(data);
     }
 
-
     public void set(int k, char c) {
-	throw new RuntimeException(liMessage(SISCB, "stringisimmutable"));
+        throw new RuntimeException(liMessage(SISCB, "stringisimmutable"));
+    }
+    
+    public void set(String s) {
+        throw new RuntimeException(liMessage(SISCB, "stringisimmutable"));
+    }
+    
+    public void set(char[] ca) {
+        throw new RuntimeException(liMessage(SISCB, "stringisimmutable"));
     }
 
     public boolean equals(Object o) {

@@ -863,7 +863,9 @@ public class Primitives extends ModuleAdapter {
             case BLOCKREAD:
                 int count=num(f.vlr[2]).intValue();
                 InputPort inport=inport(f.vlr[1]);
-                char[] buff=str(f.vlr[0]).asCharArray();
+                SchemeString st=str(f.vlr[0]);
+                char[] buff=st.asCharArray();
+                st.set(buff); //forces string to be represented by char[] only
                 return inport.read(buff, count);
             case BLOCKWRITE:
                 count=num(f.vlr[2]).intValue();
