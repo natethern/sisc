@@ -1069,11 +1069,12 @@
     (lambda %_647
       (call-with-current-continuation
         (lambda (%_648) (apply %_648 %_647))))))
-;(if (not (getprop 'lite '*sisc*))
-;  (for-each
-;    load-module
-;    '("sisc.modules.SNative"
-;      "sisc.modules.J2S"
-;      "sisc.modules.SNetwork"
-;      "sisc.modules.SDebug"))
-;  (void))
+(if (not (getprop 'lite '*sisc*))
+  (for-each
+    load-module
+    '("sisc.modules.SNative"
+      "sisc.modules.J2S"
+      "sisc.modules.SLogicOps"
+      "sisc.modules.SNetwork"
+      "sisc.modules.SDebug"))
+  (void))
