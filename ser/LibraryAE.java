@@ -5,6 +5,14 @@ import java.util.*;
 import sisc.AssociativeEnvironment;
 import sisc.data.*;
 
+
+/**
+ * An AE backed by a random-access library. It can operate in two
+ * modes:
+ * 1) "observe" - keep track of bindings from which to later create a
+ * library
+ * 2) "retrieve" - access bindings in a library
+ */
 public class LibraryAE extends AssociativeEnvironment {
 
     protected LibraryBuilder lb;
@@ -33,12 +41,24 @@ public class LibraryAE extends AssociativeEnvironment {
         return lib;
     }
 
+    /**
+     * Operate in "observe" mode.
+     *
+     * @param name the name of the AE
+     * @param lb the library serializer
+     */
     public LibraryAE(Symbol name, LibraryBuilder lb) {
         super(name);
         this.lb=lb;
         bindWatch=new HashSet();
     }
 
+    
+    /**
+     * Operate in "retrieve" mode.
+     *
+     * @param base the library from which to retrieve bindings
+     */
     public LibraryAE(Library base) {
         this.base=base;
         addressMap=new HashMap();
@@ -139,15 +159,18 @@ public class LibraryAE extends AssociativeEnvironment {
 
     public void serialize(Serializer s) throws IOException {
         if (base == null) {
+            //serialize in "observe" mode
             s.writeInt(bindWatch.size());
             for (Iterator i=bindWatch.iterator(); i.hasNext();) {
                 Symbol key=(Symbol)i.next();
                 s.writeExpression(key);
+                //add binding as new entry point to library
                 int pos=lb.add(super.lookup(key));
                 s.writeInt(pos);
             }
             s.writeInt(lb.add(parent));
         } else {
+            //serialize in "retrieve" mode
             s.writeInt(addressMap.size());
             for (Iterator i=addressMap.keySet().iterator(); i.hasNext();) {
                 Symbol key=(Symbol)i.next();

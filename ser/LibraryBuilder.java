@@ -7,31 +7,47 @@ import java.io.*;
 import sisc.*;
 import java.lang.reflect.*;
 
+/**
+ * Keeps track of entry points - points where serialization begins.
+ *
+ */
 public class LibraryBuilder extends Serializer {
 
     boolean addAllowed=true;
-    Set classes, seen;
-    Map duplicates;
+    Set classes, seen, duplicates;
     int dupid=0;
     LinkedList entryPoints, newEntryPoints;
     Map names; 
 
     public LibraryBuilder() {
         classes=new HashSet();
-        duplicates=new HashMap();
         seen=new HashSet();
+        duplicates=new HashSet();
         entryPoints=new LinkedList();
-        names=new HashMap();
         newEntryPoints=new LinkedList();
+        names=new HashMap();
     }
 
 
+    /**
+     * Add an entry point.
+     *
+     * @param name the name of the entry point
+     * @param val the value of the entry point
+     * @return the index of the new (or existing) entry point
+     */
     public int add(Symbol name, Expression val) {
         int epidx=add(val);
         names.put(new Integer(epidx), name);
         return epidx;
     }
 
+    /**
+     * Add an entry point.
+     *
+     * @param val the value of the entry point
+     * @return the index of the new (or existing) entry point
+     */
     public int add(Expression val) {
         if (val==null) return -1;
         int epidx=entryPoints.indexOf(val);
@@ -54,7 +70,8 @@ public class LibraryBuilder extends Serializer {
         //Pass 1
         System.err.println("Pass 1: Discovery...");
 
-        int y=0;
+        //serialization may create new entry points, so we loop until
+        //no new ones are added
         while (!newEntryPoints.isEmpty()) {
             entryPoints.addAll(newEntryPoints);
             LinkedList newEP=new LinkedList(newEntryPoints);
@@ -68,15 +85,13 @@ public class LibraryBuilder extends Serializer {
         addAllowed=false;
         
         //Create the index table
-        Expression[] epv=new Expression[duplicates.size()+entryPoints.size()];
+        Expression[] epv=new Expression[entryPoints.size()+duplicates.size()];
         int x=0;
         for (Iterator i=entryPoints.iterator(); i.hasNext();) 
             epv[x++]=(Expression)i.next();
 
-        for (Iterator i=duplicates.keySet().iterator(); i.hasNext();) {
-            Expression key=(Expression)i.next();
-            Integer n=(Integer)duplicates.get(key);
-            epv[x++]=key;
+        for (Iterator i=duplicates.iterator(); i.hasNext();) {
+            epv[x++]=(Expression)i.next();
         }
 
         //Pass 2
@@ -87,7 +102,6 @@ public class LibraryBuilder extends Serializer {
         Vector classv=new Vector(classes);
         StreamSerializer ss=new StreamSerializer(fos, classv, epv);
 
-        x=0;
         for (Iterator i=entryPoints.iterator(); i.hasNext();) {
             Expression exp=(Expression)i.next();
             ss.writeExpression(exp);
@@ -130,9 +144,8 @@ public class LibraryBuilder extends Serializer {
     public void writeExpression(Expression e) throws IOException {
         if (e!=null) {
             if (seen(e)) {
-                if (!entryPoints.contains(e) && !newEntryPoints.contains(e) &&
-                    duplicates.get(e)==null)
-                    duplicates.put(e, new Integer(dupid++));
+                if (!entryPoints.contains(e) && !newEntryPoints.contains(e))
+                    duplicates.add(e);
             } else {
                 seen.add(e);
                 writeClass(e.getClass());

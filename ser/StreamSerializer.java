@@ -25,10 +25,10 @@ public class StreamSerializer extends Serializer {
                             Expression[] entryPoints) {
         this.classes=classes;
         cos=new CountingOutputStream(out);
+        this.datout=new DataOutputStream(cos);
         seen=new HashSet();
         this.entryPoints=entryPoints;
         offsets=new int[entryPoints.length];
-        this.datout=new DataOutputStream(cos);
 
         ci=new HashMap();
         for (int i=0; i<classes.size(); i++) {
@@ -46,16 +46,29 @@ public class StreamSerializer extends Serializer {
     }
 
     public boolean SHOWEP;
-    /*---Serialization functions---*/
+
+    /**
+     * Serializes expressions. We distinguish betweeen four types of
+     * expressions:
+     * Type 0: normal expression
+     * Type 1: null
+     * Type 2: first encounter of entry point / shared expression
+     * Type 16+n: reference to entry point / shared expression n
+     *
+     * @param e the expression to serialize
+     * @exception IOException if an error occurs
+     */
     public void writeExpression(Expression e) throws IOException {
         if (e==null) {
+            //null
             writeInt(1);
             return;
         } 
 
         Integer epIndex=(Integer)epi.get(e);
         if (epIndex!=null) {
-            if (seen(e)) {            
+            //entry point / shared expression
+            if (seen(e)) {
                 writeInt(epIndex.intValue()+16);
                 return;
             }  else {
