@@ -29,27 +29,13 @@ public class REPL {
         this.appName = appName;
     }
     
-    public static SeekableInputStream findHeap() {
+    public static SeekableInputStream findHeap(String heapLocation) {
         try {
-            String heapLocation=Util.getSystemProperty("sisc.heapfile", null);
-            SeekableInputStream heap = null;
-            if (heapLocation==null) {
-                URL heapURL=ClassLoader.getSystemResource("sisc.shp");
-                if (heapURL==null)
-                    heap=
-                        new BufferedRandomAccessInputStream("sisc.shp","r",1,8192);
-                else
-                    heap=new MemoryRandomAccessInputStream(heapURL.openStream());
-                //                else 
-                //  heap=heapURL.openStream();
-            } else 
-                heap=//new MemoryRandomAccessInputStream(new FileInputStream(heapLocation));
-                    new BufferedRandomAccessInputStream(heapLocation, "r", 1, 8192);
-
-            return heap;
+            if (heapLocation==null) heapLocation = "sisc.shp";
+            return new BufferedRandomAccessInputStream(heapLocation, "r", 1, 8192);
         } catch (Exception e) {
+            return null;
         }
-        return null;
     }
 
     public static Value read(Interpreter r, String expr) throws IOException {
@@ -184,7 +170,7 @@ public class REPL {
     public static void main(String[] argv) throws Exception {
         Map args=parseOpts(argv);
 
-        SeekableInputStream heap = findHeap();
+        SeekableInputStream heap = findHeap((String)args.get("heap"));
         if (heap==null) {
             System.err.println(Util.liMessage(Util.SISCB, "noheap"));
             return;
@@ -281,13 +267,14 @@ public class REPL {
     static final String[][] opts=new String[][] {
         {"s","server"},
         {"h","host"},
+        {"i","heap"},
         {"p","port"},
         {"e","eval"},
         {"c","call-with-args"},
         {"x","no-repl"},
     };
     static final int optTypes[]=new int[] {
-        SWITCH, OPTION, OPTION, OPTION, OPTION, SWITCH};
+        SWITCH, OPTION, OPTION, OPTION, OPTION, OPTION, SWITCH};
                                                   
     public static Map parseOpts(String[] args) {
         Map m=new HashMap();

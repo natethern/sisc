@@ -242,17 +242,6 @@ for <function>sqrt</function>, it is not clear what other mathematical
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><envar>sisc.heapfile</envar></term>
-        <listitem>
-          <para>
-            Specifies the path to a &SISC; serialized heap file to use
-            to initialize the interpreter's heap on startup.
-            Overrides the default heap file. <emphasis role="bold">Can
-            only be set on the command-line</emphasis>.
-          </para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
         <term><envar>sisc.maxFloatPrecision</envar></term>
         <listitem>
           <para>

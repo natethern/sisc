@@ -207,7 +207,8 @@
           classpath="${classdir}"
           dir="${srfidir}"
           fork="yes">
-        <jvmarg value="-Dsisc.heapfile=${heap}"/>
+        <arg value="-i"/>
+        <arg value="${heap}"/>
         <arg value="-x"/>
         <arg value="${srfidir}/srfi-sll.scm"/>
     </java>
