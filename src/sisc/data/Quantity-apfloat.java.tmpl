@@ -72,9 +72,38 @@ public class Quantity extends Value implements Singleton {
         return valueOf(v, 10);
     }
 
-    public static Quantity valueOf(String v, int radix) {
+	public static final Quantity valueOf(String v, int radix, boolean handleComplex) {
+		return valueOf(v, radix, true);
+	}
+	
+    public static Quantity valueOf(String v, int radix, boolean handleComplex) {
         int x;
-        if ((x=v.indexOf('/'))!=-1) {
+   	    if (handleComplex && (x=v.indexOf('i'))!=-1) {
+			BigDecimal d,im;
+			if (x!=v.length()-1)
+				throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
+			x=v.lastIndexOf('+');
+			if (x==-1) {
+				x=v.lastIndexOf('-');
+				if (x==-1)
+					throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
+
+				if (x==0)
+					d=_BD_ZERO;
+				else
+					d=valueOf(v.substring(0,x), radix, false).decimalVal();
+				im = ( (x+2)==v.length() ? _BD_NEGONE :
+					   valueOf(v.substring(x, v.length()-1), radix, false).decimalVal());
+			} else {
+				if (x==0)
+					d=_BD_ZERO;
+				else
+					d=valueOf(v.substring(0,x), radix, false).decimalVal();
+				im = ( (x+2)==v.length() ? _BD_ONE :
+					   valueOf(v.substring(x+1, v.length()-1), radix, false).decimalVal());
+			}
+			return new Quantity(d,im);
+   	    } else if ((x=v.indexOf('/'))!=-1) {
             Quantity 
                 num=parseUinteger(v.substring(0,x), radix),
                 den=parseUinteger(v.substring(x+1), radix);
@@ -88,31 +117,6 @@ public class Quantity extends Value implements Singleton {
             double yd=parseDecimal(v.substring(x+1), radix, true).doubleValue();
             return new Quantity(new BigDecimal(xd*Math.cos(yd)),
                                 new BigDecimal(xd*Math.sin(yd)));
-        } else if ((x=v.indexOf('i'))!=-1) {
-            BigDecimal d,im;
-            if (x!=v.length()-1)
-                throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
-            x=v.lastIndexOf('+');
-            if (x==-1) {
-                x=v.lastIndexOf('-');
-                if (x==-1)
-                    throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
-
-                if (x==0)
-                    d=_BD_ZERO;
-                else
-                    d=parseDecimal(v.substring(0,x), radix, true);
-                im = ( (x+2)==v.length() ? _BD_NEGONE :
-                       parseDecimal(v.substring(x, v.length()-1), radix, true));
-            } else {
-                if (x==0)
-                    d=_BD_ZERO;
-                else
-                    d=parseDecimal(v.substring(0,x), radix, true);
-                im = ( (x+2)==v.length() ? _BD_ONE :
-                       parseDecimal(v.substring(x+1, v.length()-1), radix, true));
-            }
-            return new Quantity(d,im);
         } else if (radix==10 &&
                    (v.indexOf('.') != -1 ||
                     v.indexOf('e') != -1 ||
