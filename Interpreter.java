@@ -161,13 +161,20 @@ public class Interpreter extends Util {
                                     new Expression[] {v}, true));
     }
 
+    public Value eval(Procedure p, Value[] args) throws ContinuationException {
+	nxp = null;
+	vlr = args;
+	p.apply(this);
+	return acc;
+    }
+
     // Symbolic environment handling
     public AssociativeEnvironment lookupContextEnv(Symbol s) {
 	return ctx.lookupContextEnv(s);
     }
 
     public void defineContextEnv(Symbol s, AssociativeEnvironment env) {
-	ctx.symenv.define(s, env);
+	ctx.symenv.set(s, env);
     }
 
     protected AssociativeEnvironment getContextEnv(Symbol s) {
