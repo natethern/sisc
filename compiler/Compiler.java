@@ -82,6 +82,14 @@ public class Compiler extends Util {
         return APP;
     }
 
+    void addAnnotations(Expression e, Map m) {
+        if (m!=null)
+            if (e.annotations == null)
+                e.annotations = m;
+            else 
+                e.annotations.putAll(m);
+    }
+
     void setAnnotations(Expression e, Pair p) {
         while (p!=EMPTYLIST) {
             Pair kv=(Pair)p.car;
@@ -202,7 +210,7 @@ public class Compiler extends Util {
                 expr=(Pair)expr.cdr;
                 rhs = compile(r, expr.car, rt, 0, env, null);
                 rv = new DefineEval(lhs, env);
-                rv.annotations = rhs.annotations;
+                addAnnotations(rv, rhs.annotations);
                 rv = makeEvalExp(rhs, rv);
                 break;
             case MAKEANNOTATION:
@@ -254,7 +262,7 @@ public class Compiler extends Util {
 
         for (int i= 0; i<rands.length; i++) {
             if (!isImmediate(rands[i])) {
-                nxp.annotations = lastRand.annotations;
+                addAnnotations(nxp, lastRand.annotations);
 
                 nxp=new FillRibExp(lastRand, i, nxp, allImmediate);
 
@@ -281,11 +289,7 @@ public class Compiler extends Util {
                 allImmediate=false;
             }
         }
-        if (lastRand.annotations != null)
-            if (nxp.annotations == null)
-                nxp.annotations = lastRand.annotations;
-            else
-                nxp.annotations.putAll(lastRand.annotations);
+        addAnnotations(nxp, lastRand.annotations);
 
         return new LetrecExp(lastRand, rands, nxp, allImmediate);
     }
@@ -299,6 +303,7 @@ public class Compiler extends Util {
 
             System.err.println(warn("nonprocappdetected",((Value)rator).synopsis()));
         Expression nxp = new AppEval();
+        
         if (annotation!=null)
             setAnnotations(nxp, annotation);
 
@@ -317,7 +322,7 @@ public class Compiler extends Util {
         boolean allImmediate=isImmediate(rator);
         for (int i= 0; i<rands.length; i++) {
             if (!isImmediate(rands[i])) {
-                nxp.annotations = lastRand.annotations;
+                addAnnotations(nxp, lastRand.annotations);
                 nxp = new FillRibExp(lastRand, i, nxp, allImmediate);
 
                 /* If we're emitting debugging symbols, annotate the
@@ -344,11 +349,7 @@ public class Compiler extends Util {
                 allImmediate=false;
             }
         }
-        if (lastRand.annotations != null)
-            if (nxp.annotations == null)
-                nxp.annotations = lastRand.annotations;
-            else
-                nxp.annotations.putAll(lastRand.annotations);
+        addAnnotations(nxp, lastRand.annotations);
 
         return new AppExp(lastRand, rands, nxp, allImmediate);
     }
@@ -372,7 +373,7 @@ public class Compiler extends Util {
         for (int i=v.size()-2; i>=0; i--) {
             Expression e=compile(r, (Expression)v.elementAt(i),
                                  rt, COMMAND, env, null);
-            be.annotations = e.annotations;
+            addAnnotations(be, e.annotations);
             be = makeEvalExp(e, be);
         }
         return be;
