@@ -1,11 +1,22 @@
 package sisc.data;
 
+import java.io.IOException;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
+
 public class ImmutableVector extends SchemeVector {
+
+    private boolean isImmutable = true;
 
     public ImmutableVector() {}
 
     public ImmutableVector(int count) {
         super(count);
+    }
+
+    public ImmutableVector(int count, boolean isImmutable) {
+        super(count);
+        this.isImmutable = isImmutable;
     }
 
     public ImmutableVector(int count, Value initializer) {
@@ -17,11 +28,31 @@ public class ImmutableVector extends SchemeVector {
     }
 
     public void set(int idx, Value v) {
-        throw new RuntimeException(liMessage(SISCB, "vectorisimmutable"));
+        if (isImmutable) throw new RuntimeException(liMessage(SISCB, "vectorisimmutable"));
+        else super.set(idx, v);
     }
 
     public void fill(Value v) {
-        throw new RuntimeException(liMessage(SISCB, "vectorisimmutable"));
+        if (isImmutable) throw new RuntimeException(liMessage(SISCB, "vectorisimmutable"));
+        else super.fill(v);
+    }
+
+    public boolean isImmutable() {
+        return isImmutable;
+    }
+
+    public void makeImmutable() {
+        isImmutable = true;
+    }
+
+    public void serialize(Serializer s) throws IOException {
+        super.serialize(s);
+        s.writeBoolean(isImmutable);
+    }
+
+    public void deserialize(Deserializer s) throws IOException {
+        super.deserialize(s);
+        isImmutable = s.readBoolean();
     }
 
 }

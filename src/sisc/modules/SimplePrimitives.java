@@ -99,6 +99,8 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define("real-part", REALPART);
             define("remainder", REMAINDER);
             define("round", ROUND);
+            define("seal-immutable-pair!", SEALIMMUTABLEPAIR);
+            define("seal-immutable-vector!", SEALIMMUTABLEVECTOR);
             define("set-box!", SETBOX);
             define("set-car!", SETCAR);
             define("set-cdr!", SETCDR);
@@ -246,7 +248,8 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             return truth(v1 instanceof Pair &&
                          v1!=EMPTYLIST);
         case IMMUTABLEPAIRQ:
-            return truth(v1 instanceof ImmutablePair);
+            return truth((v1 instanceof ImmutablePair) &&
+                         ((ImmutablePair)v1).isImmutable());
         case IMMUTABLEVECTORQ:
             return truth(v1 instanceof ImmutableVector);
         case ADD: 
@@ -321,7 +324,7 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
         case MAKEVECTOR:
             return new SchemeVector(num(v1).indexValue());
         case MAKEIMMUTABLEVECTOR:
-            return new ImmutableVector(vec(v1).vals);
+            return new ImmutableVector(num(v1).indexValue(), false);
         case NUMERATOR: return num(v1).numerator();
         case DENOMINATOR: return num(v1).denominator();
         case REALPART: return num(v1).realpart();
@@ -355,6 +358,12 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
         case STRINGAPPEND:
             return str(v1);
         case LIST: return new Pair(v1, EMPTYLIST);
+        case SEALIMMUTABLEPAIR:
+            immutablePair(v1).makeImmutable();
+            return VOID;
+        case SEALIMMUTABLEVECTOR:
+            immutableVector(v1).makeImmutable();
+            return VOID;
         default:
             throwArgSizeException();
             return VOID;
@@ -369,7 +378,7 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
         case CONS:
             return new Pair(v1, v2);
         case CONSIMMUTABLE:
-            return new ImmutablePair(v1, v2);
+            return new ImmutablePair(v1, v2, false);
         case EQUAL:
             return truth(v1.valueEqual(v2));
         case EXPTYPE:

@@ -2,7 +2,7 @@ package sisc.modules;
 
 interface Primitives {
 
-    //next: 134
+    //next: 136
     int ACOS = 23,
         ADD = 114,
         APPLY = 121,
@@ -94,6 +94,8 @@ interface Primitives {
         REMPROP = 107,
         REPORTENVIRONMENT = 72,
         ROUND = 50,
+        SEALIMMUTABLEPAIR = 134,
+        SEALIMMUTABLEVECTOR = 135,
         SETBOX = 94,
         SETCAR = 87,
         SETCDR = 88,

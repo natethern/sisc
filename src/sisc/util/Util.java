@@ -522,6 +522,23 @@ public abstract class Util implements Version {
         }        
     }
 
+    public static final ImmutablePair immutablePair(Value o) {
+        if (o instanceof ImmutablePair) {
+            return (ImmutablePair) o;
+        } else {
+            typeError("immutable-pair", o);
+            return null;
+        }
+    }
+
+    public static final ImmutableVector immutableVector(Value o) {
+        if (o instanceof ImmutableVector) {
+            return (ImmutableVector) o;
+        } else {
+            typeError("immutable-vector", o);
+            return null;
+        }
+    }
 
     public static final SchemeBoolean truth(boolean b) {
         return b ? TRUE : FALSE;

@@ -1,6 +1,12 @@
 package sisc.data;
 
+import java.io.IOException;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
+
 public class ImmutablePair extends Pair {
+
+    private boolean isImmutable = true;
 
     public ImmutablePair() {
         super();
@@ -10,12 +16,37 @@ public class ImmutablePair extends Pair {
         super(car, cdr);
     }
 
+    public ImmutablePair(Value car, Value cdr, boolean isImmutable) {
+        super(car, cdr);
+        this.isImmutable = isImmutable;
+    }
+
     public void setCar(Value v) {
-        throw new RuntimeException(liMessage(SISCB,"pairisimmutable"));
+        if (isImmutable) throw new RuntimeException(liMessage(SISCB,"pairisimmutable"));
+        else super.setCar(v);
     }
 
     public void setCdr(Value v) {
-        throw new RuntimeException(liMessage(SISCB,"pairisimmutable"));
+        if (isImmutable) throw new RuntimeException(liMessage(SISCB,"pairisimmutable"));
+        else super.setCdr(v);
+    }
+
+    public boolean isImmutable() {
+        return isImmutable;
+    }
+
+    public void makeImmutable() {
+        isImmutable = true;
+    }
+
+    public void serialize(Serializer s) throws IOException {
+        super.serialize(s);
+        s.writeBoolean(isImmutable);
+    }
+
+    public void deserialize(Deserializer s) throws IOException {
+        super.deserialize(s);
+        isImmutable = s.readBoolean();
     }
 
 }
