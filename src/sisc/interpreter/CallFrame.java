@@ -73,10 +73,10 @@ public class CallFrame extends Procedure {
     public final void setCaptured(Interpreter r, int pos) {
         if (vlr!=null) {
             if (pos<vlr.length) {
-				if (cap==null) {
-					cap=new boolean[vlr.length];
-				}
-				cap[pos]=true;
+                if (cap==null) {
+                    cap=new boolean[vlr.length];
+                }
+                cap[pos]=true;
             }
         }
     }

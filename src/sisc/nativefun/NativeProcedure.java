@@ -23,8 +23,9 @@ public abstract class NativeProcedure extends Procedure implements NamedValue {
         //r.lxp = r.nxp;
         r.nxp = null;
         try {
+            r.vlrConsumed=true;
             r.acc = doApply(r);
-            if (!r.vlk) r.forceReturnVLR();
+            if (r.vlrConsumed) r.forceReturnVLR();
         } catch (ClassCastException cc) {
             error(
                 r,

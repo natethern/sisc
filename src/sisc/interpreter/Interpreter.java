@@ -43,7 +43,10 @@ public class Interpreter extends Util {
 
     public ThreadContext tctx;
     public DynamicEnvironment dynenv;
-
+    
+    //FLAGS
+    public boolean vlrConsumed;
+        
     //ACCOUNTING REGISTERS
     public CallFrame             lcf, llcf;//used for continuation capture
     public boolean               vlk;      //vlk, when true, indicates the
@@ -76,7 +79,6 @@ public class Interpreter extends Util {
         fk=top_fk;
         this.tctx = tctx;
         this.dynenv = dynenv;
-
         // Set l*cf to a dummy frame, so we dont have to null check 
         // in returnFrame
         llcf=lcf=new CallFrame(null, null, true, null, null, null, null);
@@ -129,7 +131,7 @@ public class Interpreter extends Util {
 
     public final void next(Expression nextExpr) throws ContinuationException {
         nxp=nextExpr;
-        nextExpr.eval(this);
+        //nextExpr.eval(this);
     }
 
     public final void newVLR(int size) {
@@ -384,9 +386,13 @@ public class Interpreter extends Util {
             System.err.println("M:"+m+" H:"+h+" O:"+o);
             m=o=h=0;
         }
+        for (int i=0; i<5; i++) {
+            System.err.println(i+": "+sisc.exprs.AppExp.i[i]+
+                                " "+sisc.exprs.AppExp.n[i]);   
+        }
     }
-   */
-
+   
+*/
     public final void returnEnv() {
         if (env != null && !env.locked) {
             returnValues(env.vals);
@@ -415,8 +421,9 @@ public class Interpreter extends Util {
         }
     }
 
-    protected static final int VALUESPOOLSIZE=8;
-    protected Value deadValues[][] = new Value[VALUESPOOLSIZE][];
+    protected static final int VALUESPOOLWIDTH=8;
+    protected Value deadValues[][]=
+    	new Value[VALUESPOOLWIDTH][];
 
     //static int sizemiss, miss, hit, zerohit;
     public final Value[] createValues(int size) {
@@ -424,17 +431,20 @@ public class Interpreter extends Util {
             //zerohit++; 
             return ZV; 
         }
-        if (size >= VALUESPOOLSIZE) { 
-            //sizemiss++; 
-            return new Value[size]; 
-        }
+        /*
+        if (recycleValues) { 
+            if (size >= VALUESPOOLWIDTH) { 
+            	//sizemiss++; 
+                return new Value[size]; 
+            }
         
-        Value[] res = deadValues[size];
-        if (res == null) { 
-            return new Value[size]; 
-        }
-        deadValues[size] = null;
-        return res;
+            Value[] res = deadValues[size];
+            if (res == null) { 
+                return new Value[size]; 
+            }
+            deadValues[size] = null;
+            return res;
+        } else */return new Value[size];
     }
 
     public final void returnVLR() {
@@ -446,10 +456,10 @@ public class Interpreter extends Util {
     }
 	
 	public final void forceReturnVLR() {
-			if (vlr != null) {
-					returnValues(vlr);
-			}
-		}
+        if (vlr != null) {
+            returnValues(vlr);
+        }
+    }
 
     public final void replaceVLR(int size) {
         if (!vlk) {
@@ -460,9 +470,11 @@ public class Interpreter extends Util {
     }
 
     public final void returnValues(Value[] v) {
-        int size = v.length;
-        if (size == 0 || size >= VALUESPOOLSIZE) return;
-        deadValues[size] = v;
+        /*if (recycleValues) {
+		  int size = v.length;
+          if (size == 0 || size >= VALUESPOOLWIDTH) return;
+		  deadValues[size]=v;
+        }*/
     }
 }
 /*

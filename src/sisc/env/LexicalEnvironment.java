@@ -23,8 +23,8 @@ public class LexicalEnvironment extends Value {
 
     public static final void lock(LexicalEnvironment env) {
         while (env != null && !env.locked) {
-                env.locked=true;
-                env=env.parent;
+            env.locked=true;
+            env=env.parent;
         } 
     }
 
