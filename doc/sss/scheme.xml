@@ -1930,6 +1930,86 @@
 	<citetitle>Section 9.2, Syntax-Case</citetitle>
       </ulink>.  
     </para>
+    <para>
+      In addition, &SISC; supports non-hygienic, legacy macro support
+      in two forms; <function>define-macro</function> and 
+      <function>defmacro</function>.  These forms, found in older
+      Scheme code written for R<superscript>4</superscript>RS
+      compliant Scheme systems, should be used only
+      for executing legacy code which relies on it.  New code should
+      use the safer and more flexible <function>syntax-case</function>
+      or the standard <function>syntax-rules</function> macros.
+    </para>
+    <para>
+      <blockquote>
+        <para>
+          <indexterm><primary>define-macro</primary>
+          </indexterm>
+          &syntax;
+          <methodsynopsis language="scheme" id="define-macro">    
+            <methodname>define-macro</methodname>
+            <methodparam><parameter>(name . args)</parameter>
+            </methodparam>
+            <methodparam rep="repeat"><parameter>body</parameter>
+            </methodparam>
+          </methodsynopsis>
+          &syntax;
+          <methodsynopsis language="scheme" id="define-macro">    
+            <methodname>define-macro</methodname>
+            <methodparam><parameter>name</parameter>
+            </methodparam>
+            <methodparam><parameter>transformer</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              In the first form, <function>define-macro</function>
+              creates a macro transformer bound to
+              <parameter>name</parameter>, which when applied will
+              have raw s-expressions bound to one or more parameters
+              (<parameter>args</parameter>).  The <literal>(name
+              . args)</literal> name and formal parameter form is
+              identical to the short form for procedure definition
+              with <function>define</function>.
+            </para>
+            <para>
+              The transformer's body will then, using the s-expressions bound
+              to its arguments, return a new s-expression that is the
+              result of the macro transformation.
+            </para>
+            <para>
+              The second form binds an arbitrary procedure to the
+              syntactic keyword <literal>name</literal>, using that
+              procedure to transform occurences of that named syntax
+              during future evaluations.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>defmacro</primary>
+          </indexterm>
+          &syntax;
+          <methodsynopsis language="scheme" id="define-macro">    
+            <methodname>defmacro</methodname>
+            <methodparam><parameter>name</parameter>
+            </methodparam>
+            <methodparam><parameter>args</parameter>
+            </methodparam>
+            <methodparam rep="repeat"><parameter>body</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              <function>defmacro</function> is another macro
+              definition form supported by some Scheme systems.  Its
+              semantics are equivalent to:
+              <programlisting>
+(define-macro (name . args) body ...)
+              </programlisting>
+          </blockquote>
+        </para>
+      </blockquote>
+    </para>
   </sect1>
   <sect1 id="MiscellaneousFunctions">
     <title>
