@@ -1221,15 +1221,19 @@ com/foo/bar/baz/baz3.scm
           linkend="Modules"/> for details of &SISC;'s module system.
           The definitions for SRFI modules are not included in the
           standard &SISC; heap build and hence must be loaded
-          separately from the compiled code in
-          <filename>srfi.scc</filename>, which is contained in the
+          separately from various compiled library files in the
           <filename>sisc-lib.jar</filename> jar file in the root
           directory of the &SISC; binary distribution. As long as this
           jar file is on the classpath, which is the case by default,
-          the following command makes the SRFI modules available:
+          any SRFI's module definition may be loaded with the expression
+          <literal>(require-library
+          'sisc/libs/srfi-<parameter>n</parameter>)</literal>, where 
+          <parameter>n</parameter> is the SRFI's number.  For example:
           <programlisting>
-(require-library 'sisc/libs/srfi)
+(require-library 'sisc/libs/srfi-9)
           </programlisting>
+          All SRFI's may be loaded at once by requiring
+          <literal>sisc/libs/srfi</literal>.
         </para>
       </sect3>
       <sect3>
