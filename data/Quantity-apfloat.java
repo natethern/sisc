@@ -1249,7 +1249,6 @@ public class Quantity extends Value {
         return null;
     }
 
-    #ifdef SERIALIZATION
     public void deserialize(Serializer s,
                             DataInputStream dis) throws IOException {
         if (SERIALIZATION) {
