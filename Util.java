@@ -43,6 +43,10 @@ import java.text.*;
 
 public abstract class Util implements Version {
 
+    protected static final boolean PERMITINTERRUPTS=
+        System.getProperty("sisc.permitinterrupts","false")
+          .equalsIgnoreCase("true");
+
     protected static final Value[] ZV=new Value[0];
     protected static final Quantity FIVE=Quantity.valueOf(5);
     protected static final Expression APPEVAL=new AppEval();
