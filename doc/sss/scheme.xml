@@ -245,9 +245,6 @@
 	symbol in the Scheme system, even another with the same
 	contents. Uninterned symbols can be generated with:
       </para>
-      <indexterm>
-	<primary>string-&gt;uninterned-symbol</primary>
-      </indexterm>
       <para>
 	<blockquote>
 	  <para>
@@ -1357,8 +1354,6 @@
               </blockquote>
             </para>
             <para>
-              <indexterm><primary>error</primary>
-              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>does not return</type>

@@ -139,8 +139,6 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         different value:
         <blockquote>
           <para>
-            <indexterm><primary>with-current-url</primary>
-            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
