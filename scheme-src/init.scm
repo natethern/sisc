@@ -47,7 +47,13 @@
 ;;;;;;;;; Standard Scheme functions
 
 (define (not x) (if x #f #t))
+
+;; In SISC, eqv? is the same as eq?, because booleans, symbols,
+;; and the empty list are all pointer equal.  Numbers and characters
+;; define eq? as value equivalent (numbers must also be of the same
+;; exactness), obviating the need for eqv? to do so.
 (define eqv? eq?)
+
 (define (newline . port)
   (apply display (cons #\newline port)))
 

@@ -85,7 +85,8 @@ public abstract class Value extends Expression implements Immediate {
 
     /**
      * Compares this Value to another for pointer-equality.  This is
-     * used to implement Scheme 'eq?'.
+     * used to implement Scheme 'eq?'.  In SISC, this is equivalent
+     * to eqv? as well.
      * 
      * @param v the other Value
      */
