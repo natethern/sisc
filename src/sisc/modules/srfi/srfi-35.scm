@@ -28,18 +28,18 @@
   (syntax-rules ()
     ((define-condition-type ?name ?supertype ?predicate
        (?field1 ?accessor1) ...)
-     (begin
-       (define ?name
-         (make-condition-type '?name
-                              ?supertype
-                              '(?field1 ...)))
+     (module (?name ?predicate ?accessor1 ...)
+       (define ?name)
        (define (?predicate thing)
          (and (condition? thing)
               (condition-has-type? thing ?name)))
        (define (?accessor1 condition)
          (condition-ref (extract-condition condition ?name)
                         '?field1))
-       ...))))
+       ...
+       (set! ?name (make-condition-type '?name
+                                        ?supertype
+                                        '(?field1 ...)))))))
 
 (define (condition-subtype? subtype supertype)
   (let recur ((subtype subtype))
@@ -158,10 +158,12 @@
                     (lset-difference eq? all-fields fields))
           (loop (cdr type-field-alist))))))
 
-(define &condition (really-make-condition-type '&condition
+(module (&condition)
+  (define &condition)
+  (set! &condition (really-make-condition-type '&condition
                                                #f
                                                '()
-                                               '()))
+                                               '())))
 
 (define-condition-type &message &condition
   message-condition?
@@ -172,3 +174,4 @@
 
 (define-condition-type &error &serious
   error?)
+
