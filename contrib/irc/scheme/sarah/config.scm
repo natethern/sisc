@@ -1,0 +1,7 @@
+(define bot-name "sarahbot")
+(define ircserver "irc.freenode.net")
+(define channels '());"#sisc" "#scheme"))
+(define scheme-channels '("#schemerepl"))
+(define dbhost "minstrel")
+(define dbuser "scgmille")
+(define dbpasswd "foo")

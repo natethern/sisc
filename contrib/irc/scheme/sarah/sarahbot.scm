@@ -1,0 +1,93 @@
+(include "streams.scm")
+(include "jdbc.scm")
+
+(import s2j)
+(import generic-procedures)
+(import type-system)
+(import hashtable)
+(import threading)
+(import string-io)
+(import networking)
+(import srfi-1)
+(import srfi-2)
+(import srfi-9)
+(import srfi-11)
+(import srfi-13)
+(import srfi-19)
+(import srfi-27)
+(import jdbc)
+(import streams)
+(include "../pirc.scm")
+(include "irc.scm")
+(include "records.scm")
+(include "channels.scm")
+(include "parsing.scm")
+(include "config.scm")
+
+(include "bots/anna.scm")
+(include "bots/infobot.scm")
+(include "plugins/info.scm")
+(include "plugins/seen.scm")
+(include "plugins/dict.scm")
+(include "plugins/tell.scm")
+(include "plugins/scheme.scm")
+(include "plugins/zippy.scm")
+(include "plugins/schemechan.scm")
+
+(define (random-elem ls)
+  (list-ref ls (random-integer (length ls))))
+
+(define (make-standard-channel name bot)
+  (make-channel-record name bot #f '()
+                       (list unawaybot seenbot (make-standard-infobot) annabot)
+                       #f))
+
+(define (dbconnect host user password)
+  (jdbc/connect (sisc:format "jdbc:postgresql://~a/sarah?user=~a&password=~a" host user password)))
+
+(define private-channel)
+(define bot)
+
+(define (join-chan channel messsage ignore term)
+  (do-join term (make-standard-channel term (channel-bot channel)))
+  "Okay.")
+
+(define (onDisconnect)
+  (let loop ()
+    (sleep 15)
+    (unless (do-connect bot ircserver)
+      (loop)))
+  (for-each (lambda (channel)
+              (display (sisc:format "Joining ~a...~%" channel))
+              (do-join channel (make-standard-channel channel bot)))
+            channels)
+  (for-each (lambda (channel)
+              (display (sisc:format "Joining ~a...~%" channel))
+              (make-schemechan private-channel #f #f channel))
+            scheme-channels))
+
+(define (connect-sarah)
+  (set! dbcon (dbconnect dbhost dbuser dbpasswd))
+  (set! bot (make-bot bot-name))
+  (set! private-channel (make-standard-channel "#private" bot))
+  (init-tell)
+  (onDisconnect))
+
+;; Initializations
+(require 'soundex)
+(require 'line-i/o)
+(srfi-27-init)
+(init-zippy)
+(init-schemechan-plugin)
+
+; Add channel management hooks
+(add-join-hook
+ (lambda (channel sender login hostname)
+   (add-user-to-channel channel
+                        (soundex sender))))
+(add-part-hook
+ (lambda (channel sender login hostname)
+   (remove-user-from-channel channel (soundex sender))))
+
+(define dbcon)
+(connect-sarah)
