@@ -18,10 +18,11 @@ Installation
 ------------
   Define SISC_HOME in your environment variables to point the directory 
 in which you wish to store the "sisc.shp" and the various ".jar" files.
-Then, install "sisc" or "sisc.bat" in your path.  If you are running on a 
-Unix or Unix-like system, you may also wish to install the various 
-shell scripts in scheme-src/srfi-22 in your path in order to support the
-SRFI-22 functionality of Scheme programs as Unix scripts.
+Then, install "sisc" or "sisc.bat" in your path.  
+  If you are running on a Unix or Unix-like system, you may also wish to 
+install the various shell scripts in scheme-src/srfi-22 in your path in 
+order to support the SRFI-22 functionality of Scheme programs as Unix 
+scripts.
   To run SISC, just type "sisc" or "sisc.bat", followed by any scheme 
 source files you wish to load.
 

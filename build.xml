@@ -27,7 +27,7 @@
     <property name="optjar" value="sisc-opt.jar"/>
     <property name="libjar" value="sisc-lib.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.shp"/>
-    <property name="quantity-type" value="apfloat"/>
+    <property name="quantity-type" value="64float"/>
     <condition property="debugging" value="on">
       <or> 
         <isset property="releasecandidate"/>
@@ -354,6 +354,7 @@
     <mkdir dir="${dist}/full"/>
     <mkdir dir="${dist}/full/sisc"/>
     <mkdir dir="${dist}/full/sisc/scheme-src"/>
+    <mkdir dir="${dist}/full/sisc/scheme-src/srfi-22"/>
 
     <copy todir="${dist}/full/sisc/scheme-src">
       <fileset dir="${basedir}/scheme-src">
@@ -362,6 +363,17 @@
         <include name="optional-args.scm"/>
       </fileset>
     </copy>
+
+    <copy tofile="${dist}/full/sisc/scheme-src/srfi-22/scheme-r4rs"
+          file="${basedir}/scheme-src/srfi-22/srfi-22.sh"/>
+    <copy tofile="${dist}/full/sisc/scheme-src/srfi-22/scheme-r5rs"
+          file="${basedir}/scheme-src/srfi-22/srfi-22.sh"/>
+    <copy tofile="${dist}/full/sisc/scheme-src/srfi-22/scheme-srfi-0"
+          file="${basedir}/scheme-src/srfi-22/srfi-22.sh"/>
+    <copy tofile="${dist}/full/sisc/scheme-src/srfi-22/scheme-srfi-7"
+          file="${basedir}/scheme-src/srfi-22/srfi-22.sh"/>
+    <copy tofile="${dist}/full/sisc/scheme-src/srfi-22/scheme-ieee-1178-1900"
+          file="${basedir}/scheme-src/srfi-22/srfi-22.sh"/>
 
     <copy todir="${dist}/full/sisc"
           file="${basedir}/${basejar}"/>

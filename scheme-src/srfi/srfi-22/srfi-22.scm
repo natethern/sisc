@@ -1,7 +1,9 @@
 (define (srfi-22-prepare environment source-file)
   (case environment
     ((scheme-srfi-0)
-     (eval '(import srfi-0))))
+     (eval '(import srfi-0)))
+    ((scheme-srfi-7)
+     (eval '(begin (require-library "sisc/libs/srfi") (import srfi-7)))))
   (call-with-input-file source-file
     (lambda (in)
       (do ((c (read-char in) (read-char in)))
