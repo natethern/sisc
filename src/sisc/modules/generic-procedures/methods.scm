@@ -27,7 +27,7 @@
     (and (or (= a l) (and (< a l) (method-rest? m)))
          (types<= otypes (method-types m)))))
 
-;;compares two methods m1, taking into account the cpls of otypes
+;;compares two methods m1, m2, taking into account the cpls of otypes
 ;;NB: we assume that both methods are applicable, i.e. otypes matches
 ;;both their signature.
 (define (compare-methods m1 m2 otypes)
@@ -35,37 +35,19 @@
              [m2-t (method-types m2)]
              [o-t  otypes]
              [res 'equal])
-    (cond ((and (null? m1-t) (null? m2-t))
-           res)
-          ((null? m1-t)
-           (if (eq? res 'more-specific)
-               'ambiguous
-               'less-specific))
-          ((null? m2-t)
-           (if (eq? res 'less-specific)
-               'ambiguous
-               'more-specific))
-          (else
+    (cond [(and (null? m1-t) (null? m2-t))
+           res]
+          [(null? m1-t) 'less-specific]
+          [(null? m2-t) 'more-specific]
+          [else
             (let ([m1-tn (cdr m1-t)]
                   [m2-tn (cdr m2-t)]
                   [o-tn  (cdr o-t)])
               (case (compare-types (car m1-t) (car m2-t) (car o-t))
-                ((equal)
-                 (loop m1-tn m2-tn o-tn res))
-                ((ambiguous)
-                 (loop m1-tn m2-tn o-tn
-                       (if (or (eq? res 'less-specific)
-                               (eq? res 'more-specific))
-                           res
-                           'ambiguous)))
-                ((more-specific)
-                 (if (eq? res 'less-specific)
-                     'ambiguous
-                     (loop m1-tn m2-tn o-tn 'more-specific)))
-                ((less-specific)
-                 (if (eq? res 'more-specific)
-                     'ambiguous
-                     (loop m1-tn m2-tn o-tn 'less-specific)))))))))
+                [(equal) (loop m1-tn m2-tn o-tn res)]
+                [(ambiguous) (loop m1-tn m2-tn o-tn 'ambiguous)]
+                [(more-specific) 'more-specific]
+                [(less-specific) 'less-specific]))])))
 
 (define-syntax method
   (syntax-rules (next:)

@@ -75,30 +75,31 @@ signatures against each other and using the supplied <types> for
 disambiguation. <types> must be applicable (as determined by
 METHOD-APPLICABLE?) to both <method1> and <method2>.
 
-The comparison is performed triple-wise by calling the
-COMPARE-TYPES procedure. Results are combined using the following
-ruls:
+The result of the overall comparison is initialised to 'equal. Then a
+triple-wise comparison is performed on successive elements of the type
+method signatures and <types>, using the COMPARE-TYPES procedure:
 
-* If COMPARE-TYPES returns 'equal for all triples then the overall
-result is 'equal.
+* If we run out of elements in both method signatures we return
+the result computed so far.
 
-* If COMPARE-TYPES returns 'equal for at least one triple and
-'ambiguous for all others then the overall result is 'ambiguous.
+* If we run out of elements in <method1>'s signature only then we
+return 'less-specific.
 
-* If COMPARE-TYPES returns 'less-specific ['more-specific] for at
-least one of the triples and does not return 'more-specific
-['less-specific] for any other triples then the overall result is
-'less-specific ['more-specific].
+* If we run out of elements in <method2>'s signature only then we
+return 'more-specific.
 
-*  If COMPARE-TYPES returns 'less-specific for at least one of the
-triples and 'more-specific for at least one of the triples then the
-overall result is 'ambiguous.
+* If COMPARE-TYPES returns 'equal we proceed to the next triple.
 
-Comparison stops when the one of the type signature lists is
-exhausted. If <method1>'s [<method2>'s] arity is smaller than that of
-<method2> [<method1>] (i.e. the former requires fewer mandatory
-parameters than the latter) then an comparison result of
-'less-specific ['more-specific] is added to the result combination.
+* If COMPARE-TYPES returns 'ambiguous we set the result to 'ambiguous
+and proceed to the next triple.
+
+* If COMPARE-TYPES returns 'less-specific we return 'less-specific.
+
+* If COMPARE-TYPES returns 'more-specific we return 'more-specific.
+
+Informally, the above performs a left-to-right match, returning the
+result of the type comparison at the point of the first discernible
+difference.
 
 
 METHOD ([(next: ?next)] (<type> ?arg) ... [. ?rest]) . ?body
