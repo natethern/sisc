@@ -433,6 +433,138 @@
        </para>
      </sect3>
      <sect3>
+        <title>Fixable Native Procedures</title>
+        <para>
+         Often it is unnecessary to have access to the full Interpreter
+         context to implement a native procedure.  If the 
+         arguments to the procedure are sufficient, it is recommended
+         that the programmer create a <emphasis>fixable</emphasis>
+         native procedure.  These native procedures may be inlined
+         into generated code when enabled, allowing much faster
+         execution.  In addition, the fixable native procedure
+         interface is simpler to use. 
+        </para>
+        <para>The
+         <literal>FixableProcedure</literal> abstract class consists
+         of five methods which may or may not be subclassed.  These
+         five methods correspond to the case of calling the
+         procedure with no, one, two, three, and more than three
+         arguments respectively.  Not overriding one of these methods
+         will cause a call to the fixable procedure to throw the
+         invalid number of arguments error to the caller.
+       </para>
+	<blockquote>
+	  <para>
+	    <indexterm><primary>apply</primary>
+	     </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>Value</type>
+              <methodname>apply</methodname>        
+            </methodsynopsis>
+            <blockquote>
+              <para>
+	        Perform the necessary computations of the
+		FixableNativeProcedure, returning a Value as the result of
+		the procedure call.  No argument variant.
+              </para>
+            </blockquote>
+           </para>
+	  <para>
+	    <indexterm><primary>apply</primary>
+	     </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>Value</type>
+              <methodname>apply</methodname>        
+              <methodparam>
+                <type>Value</type>
+                <parameter>v1</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+	        Perform the necessary computations of the
+		FixableNativeProcedure, returning a Value as the result of
+		the procedure call.  One argument variant.
+              </para>
+            </blockquote>
+           </para>
+	  <para>
+	    <indexterm><primary>apply</primary>
+	     </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>Value</type>
+              <methodname>apply</methodname>        
+              <methodparam>
+                <type>Value</type>
+                <parameter>v1</parameter>
+              </methodparam>
+              <methodparam>
+                <type>Value</type>
+                <parameter>v2</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+	        Perform the necessary computations of the
+		FixableNativeProcedure, returning a Value as the result of
+		the procedure call.  Two argument variant.
+              </para>
+            </blockquote>
+           </para>
+	  <para>
+	    <indexterm><primary>apply</primary>
+	     </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>Value</type>
+              <methodname>apply</methodname>        
+              <methodparam>
+                <type>Value</type>
+                <parameter>v1</parameter>
+              </methodparam>
+              <methodparam>
+                <type>Value</type>
+                <parameter>v2</parameter>
+              </methodparam>
+              <methodparam>
+                <type>Value</type>
+                <parameter>v3</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+	        Perform the necessary computations of the
+		FixableNativeProcedure, returning a Value as the result of
+		the procedure call.  Three argument variant.
+              </para>
+            </blockquote>
+           </para>
+	  <para>
+	    <indexterm><primary>apply</primary>
+	     </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>Value</type>
+              <methodname>apply</methodname>        
+              <methodparam>
+                <type>Value[]</type>
+                <parameter>v</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+	        Perform the necessary computations of the
+		FixableNativeProcedure, returning a Value as the result of
+		the procedure call.  More than three argument variant.
+              </para>
+            </blockquote>
+           </para>
+         </blockquote>
+      </sect3>
+     <sect3>
       <title>Indexed Native Libraries</title>
       <para>
         In the most common case, a Library is created to define several

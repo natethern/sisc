@@ -993,17 +993,21 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <parameter>buffer</parameter>
               </methodparam>
               <methodparam>
-                <parameter>binary-input-port</parameter>
+                <parameter>offset</parameter>
               </methodparam>
               <methodparam>
                 <parameter>count</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>binary-input-port</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
                 Reads up to <parameter>count</parameter> bytes of data
                 from the provided <parameter>binary-input-port</parameter>
-                into the binary buffer <parameter>buffer</parameter>.  
+                into the binary buffer <parameter>buffer</parameter>
+                starting at position <parameter>offset</parameter>. 
                 Note that less
                 than <parameter>count</parameter> bytes may be read.
                 The number of bytes actually read is returned.  If the
@@ -2154,6 +2158,337 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         Valid multicast TTLs are in the range 0 (restricted to the
         same host) to 255 (unlimited in scope).
+      </para>
+    </sect2>
+  </sect1>
+  <sect1 id="UserDefinedPorts">
+    <title>User Defined Ports</title>
+    <para>
+        &requires; 
+      <emphasis role="bold">
+        (import <emphasis>generic-io</emphasis>)
+      </emphasis>
+    </para>
+    <para>
+      &SISC; provides the ability to create new I/O port types from
+      within Scheme.  The &SISC; I/O facilities are built atop the
+      generic procedures library described in <xref
+      linkend="GenericProcedures"/>, and the object system
+      from <xref linkend="ObjectSystem"/>.  To add a new port type, the
+      programmer simply creates a new port class which extends from
+      any existing port class, and then defines methods to implement
+      the basic functionality of the port.  The classes and required
+      methods are described in the following sections.
+    </para>
+    <sect2 id="GIOPortTypes">
+      <title>Built-in Type Hierarchy</title>
+      <para>
+        &SISC; provides a number of fundamental and utility port
+        types which may be subclassed to create new port types.  The
+        following class definitions describe them:
+      </para>
+<programlisting>
+
+  (define-class (&lt;port&gt;))
+
+  (define-class (&lt;input-port&gt; &lt;port&gt;))
+  (define-class (&lt;output-port&gt; &lt;port&gt;))
+
+  (define-class (&lt;character-input-port&gt; &lt;input-port&gt;))
+  (define-class (&lt;character-output-port&gt; &lt;output-port&gt;))
+
+  (define-class (&lt;filter-input-port&gt; &lt;input-port&gt;)
+    (in (accessor :in) (modifier :in!)))
+  (define-class (&lt;filter-output-port&gt; &lt;output-port&gt;)
+    (out (accessor :out) (modifier :out!))
+    (auto-flush (value #f) (accessor :aflush) (modifier :aflush!)))
+
+  (define-class (&lt;native-input-port&gt; &lt;filter-input-port&gt;))
+  (define-class (&lt;native-output-port&gt; &lt;filter-output-port&gt;))
+
+  (define-class (&lt;native-character-input-port&gt;
+                 &lt;native-input-port&gt; &lt;character-input-port&gt;))
+  (define-class (&lt;native-character-output-port&gt;
+                 &lt;native-output-port&gt; &lt;character-output-port&gt;))
+
+      </programlisting>
+      <para>
+        At the top of the hierarchy is the
+        <literal>&lt;port&gt;</literal> class, which is naturally
+        followed by the <literal>&lt;input-port&gt;</literal> and
+        <literal>&lt;output-port&gt;</literal>.  The default input and
+        output port types are binary.  The character port classes
+        which follow set the type of character ports.  Below those are
+        filter ports, which provide a slot for storing a nested port.
+        In a filter port, the methods transform the operation and read
+        or write the resulting data to the nested port.  Finally, the
+        native port types are filter ports whose target is a Java 
+        I/O stream.
+      </para>
+      <para>
+        Most often the filter ports or both a filter and a character
+        port types are the natural supertypes for
+        newly created port types.
+      </para>
+    </sect2>
+    <sect2>
+      <title>Input Generics</title>
+      <para>
+        All ports must define the <function>gio/close</function>
+        method.
+      </para>
+      <para>
+        <blockquote>
+          <para>
+            <indexterm><primary>gio/char-ready?</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>gio/close</methodname>
+              <methodparam>
+                <parameter>new-port-type</parameter>
+              </methodparam>
+            </methodsynopsis>
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
+    <sect2>
+      <title>Input Generics</title>
+      <para>
+        The following generic procedures must be utilized to create
+        an input port (unless the supertype already provides a
+        satisfactory behavior).  Their behavior should be the same as
+        the &R5RS; input functions or the &SISC; functions of the same
+        name less the <literal>gio/</literal> prefix.
+      </para>
+      <para>
+        <blockquote>
+          <para>
+            <indexterm><primary>gio/char-ready?</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>boolean</type>
+              <methodname>gio/char-ready?</methodname>
+              <methodparam>
+                <parameter>new-input-port-type</parameter>
+              </methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            <indexterm><primary>gio/read</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>gio/read</methodname>
+              <methodparam>
+                <parameter>new-input-port-type</parameter>
+              </methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            <indexterm><primary>gio/read-char</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>character/byte</type>
+              <methodname>gio/read-char</methodname>
+              <methodparam>
+                <parameter>new-input-port-type</parameter>
+              </methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            <indexterm><primary>gio/read-code</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>gio/read-code</methodname>
+              <methodparam>
+                <parameter>new-input-port-type</parameter>
+              </methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            <indexterm><primary>gio/read-block</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>integer</type>
+              <methodname>gio/char-ready?</methodname>
+              <methodparam>
+                <parameter>buffer</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>offset</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>count</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>new-input-port-type</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Only applies to binary ports.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>gio/read-string</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>integer</type>
+              <methodname>gio/read-string</methodname>
+              <methodparam>
+                <parameter>string</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>offset</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>count</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>new-input-port-type</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Only applies to character-ports.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
+    <sect2>
+      <title>Output Generics</title>
+      <para>
+        The following generic procedures must be utilized to create
+        an output port (unless the supertype already provides a
+        satisfactory behavior).  Their behavior should be the same as
+        the &R5RS; output functions or the &SISC; functions of the same
+        name less the <literal>gio/</literal> prefix.
+      </para>
+      <para>
+        <blockquote>
+          <para>
+            <indexterm><primary>gio/flush-output-port</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>gio/flush-output-port</methodname>
+              <methodparam>
+                <parameter>new-output-port-type</parameter>
+              </methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            <indexterm><primary>gio/write</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>gio/write</methodname>
+              <methodparam>
+                <parameter>value</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>new-output-port-type</parameter>
+              </methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            <indexterm><primary>gio/display</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>gio/display</methodname>
+              <methodparam>
+                <parameter>value</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>new-output-port-type</parameter>
+              </methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            <indexterm><primary>gio/write-char</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>gio/write-char</methodname>
+              <methodparam>
+                <parameter>character/byte</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>new-output-port-type</parameter>
+              </methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            <indexterm><primary>gio/write-block</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>gio/write-block</methodname>
+              <methodparam>
+                <parameter>buffer</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>offset</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>count</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>new-output-port-type</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Only applies to binary ports.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>gio/write-string</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>gio/write-string</methodname>
+              <methodparam>
+                <parameter>string</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>offset</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>count</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>new-output-port-type</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Only applies to character-ports.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
       </para>
     </sect2>
   </sect1>
