@@ -1,4 +1,4 @@
-2002-2-6  Scott G. Miller <scgmille@freenetproject.org>
+2002-02-06  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Upgraded to the latest syntax expander.  This fixes
 	  a couple of bugs regarding module imports.
@@ -6,39 +6,55 @@
 	* Immutables now implement equals/hashCode so like Immutables
 	  can be serialized once.
 
-2002-1-30 Scott G. Miller <scgmille@freenetproject.org>
+2002-02-04  Matthias Radestock  <matthias@sorted.org>
+
+	* Added support for the common ASCII escape sequences (i.e. \n, \r
+	  etc) when reading/writing strings.
+	
+	* Fixed bug in string comparison.
+	
+	* Fixed bug that gave wrong #f results in EQUAL? when comparing
+	  mutable to immutable objects.
+	
+	* Fixed bug in PEEK-CHAR - \#nul was not being pushed back after
+	  being read.
+
+	* Added literal notation for case-sensitive symbols (|Foo|) and a
+	  prim for toggling global case-sensitivity.
+
+2002-01-30 Scott G. Miller <scgmille@freenetproject.org>
 
 	* Changed Primitive's throw RuntimeExceptions to
           throwPrimExceptions.
  
 	* Corrected error reporting of invalid indices to strings
 
-2002-1-28 Scott G. Miller <scgmille@freenetproject.org>
+2002-01-28 Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed circular structure creation for 'special' lists
 	  created with ', `, ',', ,@, etc.
 
 	* Added synopsis() to Value, which allows abbreviated printing.
 	
-2002-1-27  Matthias Radestock <matthias@sorted.org>
+2002-01-27  Matthias Radestock <matthias@sorted.org>
 
 	* Added support for reading case sensitive symbols using the
 	  |<symbol>| notation
 
-2002-1-26 Scott G. Miller <scgmille@freenetproject.org>
+2002-01-26 Scott G. Miller <scgmille@freenetproject.org>
 
 	* Made Quantity lib implementations serialize and deserialize
 	  the same.
 
-2002-1-24 Released r1.3.1
+2002-01-24 Released r1.3.1
 
-2002-1-22 Scott G. Miller <scgmille@freenetproject.org>
+2002-01-22 Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed a bug in Symbol serialization that affected
           improper deserialization of uninterned or case sensitive
           symbols (SGM)
 
-2002-1-11 Scott G. Miller <scgmille@freenetproject.org>
+2002-01-11 Scott G. Miller <scgmille@freenetproject.org>
 
 	* java/import can now take a String as the class/object
 	  argument, which will be resolved into a class
