@@ -151,3 +151,7 @@ level.
 
 * There is no longer a built-in meta type. It is however easy to add
 using the new extension mechanism.
+
+* The canonical super type, i.e. the super type of everything, is no
+longer called <top> but <value>. There no longer is a canonical sub
+type <bot>.
