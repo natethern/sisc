@@ -5,9 +5,6 @@ import sisc.nativefun.*;
 import sisc.data.*;
 import java.io.IOException;
 import java.io.EOFException;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.net.URL;
 import sisc.io.*;
 
 public class SerialIO extends IndexedProcedure {

@@ -2,7 +2,6 @@ package sisc.util;
 
 import sisc.data.*;
 import java.io.*;
-import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
