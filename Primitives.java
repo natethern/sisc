@@ -104,6 +104,7 @@ public class Primitives extends ModuleAdapter {
         define("char?", CHARACTERQ);
         define("close-input-port", CLOSEINPUTPORT);
         define("close-output-port", CLOSEOUTPUTPORT);
+        define("compact-string-rep", COMPACTSTRINGREP);
         define("complex?", COMPLEXQ);
         define("cons", CONS);
         define("cos", COS);
@@ -291,6 +292,7 @@ public class Primitives extends ModuleAdapter {
         case 0:
             switch (primid) {
             case _VOID: return VOID;
+            case COMPACTSTRINGREP: return truth(SchemeString.compactRepresentation);
             case CURRENTOUTPUTPORT: return f.dynenv.out;
             case CURRENTINPUTPORT: return f.dynenv.in;
             case CURRENTWIND: return f.dynenv.wind;
@@ -630,6 +632,9 @@ public class Primitives extends ModuleAdapter {
                 return new SchemeString(makeURL(f.vlr[0]).toString());
             case EMITANNOTATIONS:
                 f.dynenv.parser.annotate=truth(f.vlr[0]);
+                return VOID;
+            case COMPACTSTRINGREP:
+                SchemeString.compactRepresentation=truth(f.vlr[0]);
                 return VOID;
             case ANNOTATIONKEYS: {
                 Pair akl=EMPTYLIST;
@@ -1006,6 +1011,7 @@ public class Primitives extends ModuleAdapter {
         CHARREADY = 26,
         CLOSEINPUTPORT = 27,
         CLOSEOUTPUTPORT = 28,
+        COMPACTSTRINGREP = 74,
         COMPLEXQ = 29,
         CONS = 109,
         COS = 31,
@@ -1073,7 +1079,6 @@ public class Primitives extends ModuleAdapter {
         OPENINPUTSTRING = 73,
         OPENOUTPUTFILE = 125,
         OPENSOURCEINPUTFILE = 154,
-        //	OPENOUTPUTFILE = 74,
         OPENOUTPUTSTRING = 7,
         OUTPORTQ = 75,
         PAIRQ = 76,
@@ -1133,15 +1138,3 @@ public class Primitives extends ModuleAdapter {
 
 
 }
-/*
-        define("emit-annotations", EMITANNOTATIONS);
-        define("set-annotation!", SETANNOTATION);
-        define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
-        define("make-annotation", MAKEANNOTATION);
-        define("annotation", ANNOTATION);
-        define("annotation?", ANNOTATIONQ);
-        define("annotation-keys", ANNOTATIONKEYS);
-        define("annotation-source", ANNOTATIONSRC);
-        define("annotation-expression", ANNOTATIONEXPR);
-        define("annotation-stripped", ANNOTATIONSTRIPPED);
-*/

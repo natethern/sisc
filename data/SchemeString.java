@@ -39,6 +39,9 @@ import sisc.ser.Deserializer;
 
 public class SchemeString extends Value {
 
+    //trade off speed vs memory
+    public static boolean compactRepresentation = false;
+
     protected char[] data_c = null;
     protected String data_s = null;
 
@@ -61,12 +64,18 @@ public class SchemeString extends Value {
     }
 
     public String asString() {
-        if (data_s == null) data_s=new String(data_c);
+        if (data_s == null) {
+            data_s=new String(data_c);
+            if (compactRepresentation) data_c = null;
+        }
         return data_s;
     }
 
     public char[] asCharArray() {
-        if (data_c == null) data_c=data_s.toCharArray();
+        if (data_c == null) {
+            data_c=data_s.toCharArray();
+            if (compactRepresentation) data_s = null;
+        }
         return data_c;
     }
 
