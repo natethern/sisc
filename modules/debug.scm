@@ -209,7 +209,8 @@
                      [else #f])
                (car ec))])
     (if k
-        (print-stack-trace k)
+        (cond [(annotation k 'unsafe-cont) => print-stack-trace]
+              [else (print-stack-trace k)])
         (display (format "{no stack trace available}~%")))
     (let ([p (assoc-val 'parent e)])
       (if p 

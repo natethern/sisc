@@ -46,6 +46,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         following parameter:
         <blockquote>
           <para>
+	    <indexterm><primary>current-url</primary></indexterm>
               &parameter;
             <methodsynopsis language="scheme">
               <type>url</type>

@@ -247,6 +247,8 @@
       <para>
 	<blockquote>
 	  <para>
+            <indexterm><primary>string->uninterned-symbol</primary>
+            </indexterm>
 	    &procedure;
 	    <methodsynopsis language="scheme" id="string2uninterned-symbol">
 	      <type>symbol</type>
@@ -273,6 +275,8 @@
       <para>
 	<blockquote>
 	  <para>
+            <indexterm><primary>case-sensitive</primary>
+            </indexterm>
 	    &parameter;
 	    <methodsynopsis language="scheme" id="case-sensitive">
 	      <type>#t/#f</type>
@@ -377,6 +381,8 @@
       <para>
 	<blockquote>
 	  <para>
+            <indexterm><primary>proper-list?</primary>
+            </indexterm>
 	    &procedure;
 	    <methodsynopsis language="scheme" id="proper-list-q">
 	      <type>#t/#f</type>
@@ -436,6 +442,8 @@
       <para>
 	<blockquote>
 	  <para>
+            <indexterm><primary>vector-length-prefixing</primary>
+            </indexterm>
 	    &parameter;
 	    <methodsynopsis language="scheme" id="vector-length-prefixing">
 	      <type>#t/#f</type>
@@ -470,6 +478,8 @@
       <para>
 	<blockquote>
 	  <para>
+            <indexterm><primary>box</primary>
+            </indexterm>
 	    &procedure;
 	    <methodsynopsis language="scheme" id="box">
 	      <type>box</type>
@@ -485,6 +495,8 @@
 	    </blockquote>
 	  </para>
 	  <para>
+            <indexterm><primary>unbox</primary>
+            </indexterm>
 	    &procedure;
 	    <methodsynopsis language="scheme" id="unbox">
 	      <type>value</type>
@@ -500,6 +512,8 @@
 	    </blockquote>
 	  </para>
 	  <para>
+            <indexterm><primary>set-box!</primary>
+            </indexterm>
 	    &procedure;
 	    <methodsynopsis language="scheme" id="set-box-bang">
 	      <type>undefined</type>
@@ -542,6 +556,8 @@
       <para>
 	<blockquote>
 	  <para>
+            <indexterm><primary>box?</primary>
+            </indexterm>
 	    &procedure;
 	    <methodsynopsis language="scheme" id="box-q">
 	      <type>#t/#f</type>
@@ -583,6 +599,8 @@
         <function>parameterize</function> procedure:
       </para>
       <para>
+        <indexterm><primary>parameterize</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme" id="parameterize">
           <type>parameter</type>
@@ -774,6 +792,8 @@
     <para>
       <blockquote>
         <para>
+          <indexterm><primary>when</primary>
+          </indexterm>
           &syntax;
           <methodsynopsis language="scheme" id="when">
             <type>value</type>
@@ -798,6 +818,8 @@
           </blockquote>
         </para>
         <para>
+          <indexterm><primary>unless</primary>
+          </indexterm>
           &syntax;
           <methodsynopsis language="scheme" id="unless">
             <type>value</type>
@@ -868,6 +890,8 @@
         <para>
           <blockquote>
             <para>
+              <indexterm><primary>with-failure-continuation</primary>
+              </indexterm>
                 &procedure;
               <methodsynopsis language="scheme" id="with-failure-continuation">
                 <type>value</type>
@@ -881,7 +905,9 @@
               </methodsynopsis>
             </para>
             <para>
-                &procedure;
+              <indexterm><primary>with/fc</primary>
+              </indexterm>
+              &procedure;
               <methodsynopsis language="scheme" id="with-fc">
                 <type>value</type>
                 <methodname>with/fc</methodname>
@@ -947,7 +973,9 @@
         <para>
           <blockquote>
             <para>
-                &procedure;
+              <indexterm><primary>call-with-failure-continuation</primary>
+              </indexterm>
+              &procedure;
               <methodsynopsis language="scheme" id="call-with-failure-continuation">
                 <type>value</type>
                 <methodname>call-with-failure-continuation</methodname>
@@ -957,7 +985,9 @@
               </methodsynopsis>
             </para>
             <para>
-                &procedure;
+              <indexterm><primary>call/fc</primary>
+              </indexterm>
+              &procedure;
               <methodsynopsis language="scheme" id="call-fc">
                 <type>value</type>
                 <methodname>call/fc</methodname>
@@ -1017,6 +1047,8 @@
         <para>
           <blockquote>
             <para>
+              <indexterm><primary>make-error</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme" id="make-error">
                 <type>error-record</type>
@@ -1111,6 +1143,8 @@
         <para>
           <blockquote>
             <para>
+              <indexterm><primary>make-nested-error</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme" id="make-nested-error">
                 <type>error-record</type>
@@ -1160,6 +1194,8 @@
         <para>
           <blockquote>
             <para>
+              <indexterm><primary>error-location</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme" id="error-location">
                 <type>symbol</type>
@@ -1178,6 +1214,8 @@
               </blockquote>
             </para>
             <para>
+              <indexterm><primary>error-message</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme" id="error-message">
                 <type>value</type>
@@ -1198,6 +1236,8 @@
               </blockquote>
             </para>
             <para>
+              <indexterm><primary>error-parent</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme" id="error-parent">
                 <type>error-record</type>
@@ -1229,7 +1269,9 @@
         <para>
           <blockquote>
             <para>
-                &procedure;
+              <indexterm><primary>throw</primary>
+              </indexterm>
+              &procedure;
               <methodsynopsis language="scheme" id="throw">
                 <type>does not return</type>
                 <methodname>throw</methodname>
@@ -1282,7 +1324,9 @@
         <para>
           <blockquote>
             <para>
-                &procedure;
+              <indexterm><primary>error</primary>
+              </indexterm>
+              &procedure;
               <methodsynopsis language="scheme" id="error">
                 <type>does not return</type>
                 <methodname>error</methodname>
@@ -1309,6 +1353,8 @@
               </blockquote>
             </para>
             <para>
+              <indexterm><primary>error</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>does not return</type>
@@ -1490,6 +1536,8 @@
       <para>
         <blockquote>
           <para>
+            <indexterm><primary>getprop</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme" id="getprop">
               <type>value</type>
@@ -1546,6 +1594,8 @@
             </blockquote>
           </para>
           <para>
+            <indexterm><primary>putprop</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme" id="putprop">
               <type>undefined</type>
@@ -1625,6 +1675,8 @@
       <para>
         <blockquote>
           <para>
+            <indexterm><primary>sisc-initial-environment</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme" id="sisc-initial-environment">
               <type>environment</type>
@@ -1661,6 +1713,8 @@
       <para>
         <blockquote>
           <para>
+            <indexterm><primary>get-symbolic-environment</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme" id="get-symbolic-environment">
               <type>environment</type>
@@ -1679,6 +1733,8 @@
             </blockquote>
           </para>
           <para>
+            <indexterm><primary>set-symbolic-environment!</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme" id="set-symbolic-environment-bang">
               <type>undefined</type>
@@ -1748,6 +1804,8 @@
     <para>
       <blockquote>
         <para>
+          <indexterm><primary>circular?</primary>
+          </indexterm>
           &procedure;
           <methodsynopsis language="scheme" id="circular-q">
             <type>#t/#f</type>
@@ -1767,6 +1825,8 @@
           </blockquote>
         </para>
         <para>
+          <indexterm><primary>compose</primary>
+          </indexterm>
           &procedure;
           <methodsynopsis language="scheme" id="compose">
             <type>procedure</type>
@@ -1794,6 +1854,8 @@
           </blockquote>
         </para>
         <para>
+          <indexterm><primary>iota</primary>
+          </indexterm>
           &procedure;
           <methodsynopsis language="scheme" id="iota">
             <type>pair</type>
@@ -1811,6 +1873,8 @@
           </blockquote>
         </para>
         <para>
+          <indexterm><primary>time</primary>
+          </indexterm>
           &syntax;
           <methodsynopsis language="scheme" id="time">
             <type>list</type>

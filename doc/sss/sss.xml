@@ -460,6 +460,6 @@ for <function>sqrt</function>, it is not clear what other mathematical
       </sect2>
     </sect1>
   </appendix>
-<!--  &index; -->
+  &index; 
   &gfdl;
 </book>

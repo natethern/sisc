@@ -158,10 +158,13 @@
     (define (dynwind-call/cc proc)
       (original-call/cc
        (lambda (cont)
-	 (let ((point (get-dynamic-point)))
-	   (proc (lambda results
+	 (let* ((point (get-dynamic-point))
+                (safe-k
+                 (lambda results
 		   (travel-between-points (get-dynamic-point) point)
-		   (apply cont results)))))))
+		   (apply cont results))))
+           (set-annotation! safe-k 'unsafe-cont cont)
+           (proc safe-k)))))
     (define (dynamic-wind/impl in body out)
       (let* ((here (get-dynamic-point))
 	     (point (make-point 
