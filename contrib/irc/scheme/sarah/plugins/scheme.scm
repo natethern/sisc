@@ -98,8 +98,10 @@
                            '(call/cc $sc-put-cte fold error
                              with-failure-continuation with/fc
                              |@optimizer::optimize| sc-expand)
-                           (list call/cc $sc-put-cte fold error
-                            with/fc with/fc optimize sc-expand))
+                           (let () 
+                              (import srfi-1)
+                              (list call/cc $sc-put-cte fold error
+                               with/fc with/fc optimize sc-expand)))
                  (eval-within-n-ms expr 5000 env text))])))))
 
 (define (safe-pp-to-string value)

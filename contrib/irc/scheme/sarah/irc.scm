@@ -13,11 +13,11 @@
   (let ([tokenizer (java-new <java.util.string-tokenizer> 
                              (->jstring (filter-specials response))
                              (->jstring (string #\newline #\return)))])
+    (for-each (lambda (hook) (hook destination response)) send-hooks)
     (let loop ()
       (when (->boolean (has-more-tokens tokenizer))
         (let ([tok (->string (next-token tokenizer))])
           (display (sisc:format "[to: ~a] ~a~%" destination tok))
-          (for-each (lambda (hook) (hook destination response)) send-hooks)
           (send-message bot (->jstring destination) (->jstring tok))
         (loop))))))
 
@@ -100,7 +100,7 @@
   (display "Connecting...\n")
   (with/fc 
    (lambda (m e)
-     (display m)(newline)
+     (print-exception (make-exception m e))
      #f)
    (lambda ()
      (connect bot (->jstring ircserver))
@@ -115,6 +115,10 @@
                             "<from: ~a> ~a~%"
                             "[from: ~a] ~a~%")
                         (message-nick message) (message-text message)))
-  (let loop ([handlers (channel-handlers chanrec)])
-    (unless (or (null? handlers) (not ((car handlers) chanrec message)))
-      (loop (cdr handlers)))))
+  (with/fc 
+    (lambda (m e)
+      (print-exception (make-exception m e)))
+    (lambda () 
+     (let loop ([handlers (channel-handlers chanrec)])
+       (unless (or (null? handlers) (not ((car handlers) chanrec message)))
+         (loop (cdr handlers)))))))

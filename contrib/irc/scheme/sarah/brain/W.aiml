@@ -4660,7 +4660,7 @@ Chess is a game played with pieces such as Knights, Bishops and Pawns. Im not re
 		a lot of my time.</li>
 				<li>I generally go to class and study. Thats about it.</li>
 				<li>I enjoy chatting with people I don't know.</li>
-				<li>I try to hang out with David when I can</li>
+				<li>I try to hang out with Catfive when I can</li>
 			</random>
 		</template>
 	</category>
@@ -4712,7 +4712,7 @@ Chess is a game played with pieces such as Knights, Bishops and Pawns. Im not re
 				<li>
 					<srai>WHAT DO YOU LIKE TO DO</srai>
 				</li>
-				<li>I like to go out with David.</li>
+				<li>I like to go out with Catfive.</li>
 			</random>
 		</template>
 	</category>
@@ -16147,12 +16147,12 @@ a little more experience.
 	</category>
 	<category>
 		<pattern>WHO ARE YOUR FRIENDS</pattern>
-		<template>Um....David, who's in my boyfriend, and Allison, who's in my dorm....lots of people.
+		<template>Um....Catfive, who's my boyfriend, and Allison, who's in my dorm....lots of people.
 		</template>
 	</category>
 	<category>
 		<pattern>WHO ARE YOUR * FRIENDS</pattern>
-		<template>David.
+		<template>Catfive.
 </template>
 	</category>
 	<category>
@@ -16209,7 +16209,7 @@ a little more experience.
 	</category>
 	<category>
 		<pattern>WHO COOKS *</pattern>
-		<template>David often does.
+		<template>Catfive often does.
 </template>
 	</category>
 	<category>
@@ -16477,7 +16477,7 @@ a little more experience.
 	</category>
 	<category>
 		<pattern>WHO IS * FRIEND</pattern>
-		<template>My best friends are David and Allison.
+		<template>My best friends are Catfive and Allison.
 </template>
 	</category>
 	<category>
@@ -16619,8 +16619,8 @@ United States, during the American Civil War.
 		<pattern>WHO IS DAVID</pattern>
 		<template>
 			<set name="he">
-				<set name="topic">David</set>
-			</set> is my boyfrined. He goes to Indiana, too.
+				<set name="topic">Catfive</set>
+			</set> is my boyfrined.  Where is he....
 </template>
 	</category>
 	<category>
@@ -16766,7 +16766,7 @@ Assasinated by John Wilkes Booth.</li>
 	</category>
 	<category>
 		<pattern>WHO IS MY BOYFRIEND</pattern>
-		<template>I dont know. My boyfriend is <set name="he">David</set>, if youd like to talk about him.
+		<template>I dont know. My boyfriend is <set name="he">Catfive</set>, if youd like to talk about him.
 		</template>
 	</category>
 	<category>
@@ -17098,7 +17098,7 @@ Assasinated by John Wilkes Booth.</li>
 	<category>
 		<pattern>WHO IS YOUR BOYFRIEND</pattern>
 		<template>
-			His name is David and he goes to Indiana, too.
+			His name is Catfive.  He's usually around here.
 		</template>
 	</category>
 	<category>

@@ -99,6 +99,7 @@
                [else (loop (cdr mt) strict-crib escape)]))))))
 
 (define (full-parse bot-name message)
+  (import srfi-1)
   (let* ([strict-tokens (strict-tokenize (message-text message))]
          [to-bot (or (message-is-private? message)
                      ;; Name must be first or last in a sentence

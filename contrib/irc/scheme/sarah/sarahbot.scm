@@ -1,6 +1,6 @@
 (include "streams.scm")
 (include "jdbc.scm")
-
+(display (sc-expand '(car 3))) (newline)
 (import s2j)
 (import generic-procedures)
 (import type-system)
@@ -8,7 +8,6 @@
 (import threading)
 (import string-io)
 (import networking)
-(import srfi-1)
 (import srfi-2)
 (import srfi-9)
 (import srfi-11)
@@ -17,14 +16,18 @@
 (import srfi-27)
 (import jdbc)
 (import streams)
-(include "metaphone.scm")
+
+(module metaphone
+  (metaphone)
+  (import srfi-1)
+  (include "metaphone.scm"))
+(import metaphone)
 (include "../pirc.scm")
 (include "irc.scm")
 (include "records.scm")
 (include "channels.scm")
 (include "parsing.scm")
 (include "config.scm")
-
 (include "bots/anna.scm")
 (include "bots/infobot.scm")
 (include "bots/logbot.scm")

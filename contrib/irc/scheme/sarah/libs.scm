@@ -1,5 +1,13 @@
 (stack-trace-on-error #t)
-(require-library "sisc/libs/srfi")
+(for-each require-library
+ '(sisc/libs/srfi/srfi-1
+   sisc/libs/srfi/srfi-2
+   sisc/libs/srfi/srfi-9
+   sisc/libs/srfi/srfi-11
+   sisc/libs/srfi/srfi-13
+   sisc/libs/srfi/srfi-19
+   sisc/libs/srfi/srfi-27))
+
 (putprop 'home '*config-parameters* (normalize-url (current-url) "sisc/"))
 (putprop 'slib '*config-parameters* "/usr/share/slib")
 (putprop 'sisc.slib '*config-parameters* "/usr/share/slib")

@@ -71,7 +71,7 @@
     (set-string pstmt (->jint 2) (->jstring sender))
     (set-string pstmt (->jint 3) (->jstring message))
     (set-string pstmt (->jint 4) (->jstring id))
-    (with/fc (lambda (m e) (write m) #f) (lambda () (jdbc/execute pstmt)))))
+    (with/fc (lambda (m e) (print-exception (make-exception m e)) #f) (lambda () (jdbc/execute pstmt)))))
 
 (define (fetch-messages! conn recipient)
   (let* ([stmt (jdbc/prepare-statement conn

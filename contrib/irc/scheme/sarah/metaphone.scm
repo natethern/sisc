@@ -1,12 +1,10 @@
-(require-library 'sisc/libs/srfi)
-(import srfi-1)
-
 (define metaphone
   (letrec ((vowels '(#\a #\e #\i #\o #\u))
            (frontv '(#\e #\i #\y))
            (varson '(#\c #\s #\p #\t #\g))
            (has-next? (lambda (ls) (not (null? (cdr ls)))))
-           (has-n+1? (lambda (ls) (not (null? (cddr ls)))))
+           (has-n+1? (lambda (ls) (and (not (null? (cdr ls)))
+                                       (not (null? (cddr ls))))))
            (x->s (lambda (e) (if (char=? (car e) #\x) (cons #\s (cdr e)) e)))
            (?n->n (lambda (e)
                     (if (member (take e 2)
@@ -42,7 +40,8 @@
                      metaph))
                 ((#\d)
                  (cons 
-                  (if (and (not (has-n+1? e)) (char=? (second e) #\g)
+                  (if (and (not (has-n+1? e)) (has-next? e)
+                           (char=? (second e) #\g)
                            (memv (third e) frontv))
                       #\j #\t)
                   metaph))
@@ -101,7 +100,8 @@
                               (if (not (and last (char=? last #\t)))
                                   (cons #\0 metaph)
                                   metaph))
-                             ((not (and (char=? (second e) #\c)
+                             ((not (and (has-n+1? e)
+                                        (char=? (second e) #\c)
                                         (char=? (third e) #\h)))
                               (cons #\t metaph))
                              (else metaph)))
@@ -136,18 +136,3 @@
                               (list sym)
                               (metaphone-rules sym e metaph size last)))
                       sym))))))))                                           
-                                   
-                                       
-                                   
-                                        
-                              
-                                     
-                                   
-                                       
-                                                      
-
-                                       
-                       
-            
-          
-            

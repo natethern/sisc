@@ -18359,7 +18359,7 @@ I never tried it, but it looks like a thrill.
 	</category>
 	<category>
 		<pattern>I SNORE</pattern>
-		<template>So does David....
+		<template>So does Catfive....
 		<think>
 				<set name="it">
 					<set name="does">
