@@ -341,7 +341,7 @@
             </row>
             <row>
               <entry><literal>&bsol;r</literal></entry>
-              <entry>Inserts the rubout character (unicode 0008)</entry>
+              <entry>Inserts the rubout character (unicode 007f)</entry>
             </row>
             <row>
               <entry><literal>&bsol;t</literal></entry>
