@@ -576,7 +576,7 @@ public class SNetwork extends IndexedProcedure {
                     }
                     return VOID;
                 default:
-                    throw new RuntimeException(liMessage(SISCB,"incorrectargcount"));
+                    throwArgSizeException();
                 }
             case 3:
                 switch(id) {
@@ -621,7 +621,7 @@ int dgramsize=num(f.vlr[2]).indexValue();
                 throwArgSizeException();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
+            IO.throwIOException(f, e.getMessage(), e);
         }
         return VOID;
     }
