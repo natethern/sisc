@@ -19,9 +19,9 @@
     <property name="packagename" value="sisc"/>
     <property name="jarname" value="sisc.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
-    <property name="quantity-type" value="64float"/>
-    <property name="debugging" value="on"/>
-    <property name="optimization" value="off"/>
+    <property name="quantity-type" value="apfloat"/>
+    <property name="debugging" value="off"/>
+    <property name="optimization" value="on"/>
     <property name="releasecandidate" value="yes"/>
     <property name="dist" value="${basedir}/dist"/>
     <property name="doc.style" value="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/docbook.xsl"/>
