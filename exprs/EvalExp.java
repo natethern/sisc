@@ -40,20 +40,21 @@ import java.util.Iterator;
 
 public class EvalExp extends Expression {
     public Expression pre, post;
+    public boolean preImmediate;
 
-    public EvalExp(Expression pre, Expression post) {
+    public EvalExp(Expression pre, Expression post, boolean preImmediate) {
         this.pre=pre;
         this.post=post;
+        this.preImmediate=preImmediate;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        Value tmp=pre.getValue(r);
-        if (tmp==null) {
+        if (preImmediate) {
+            r.acc = pre.getValue(r);
+            r.nxp = post;
+        } else {
             r.push(post);
             r.nxp=pre;
-        } else {
-	    r.nxp=post;
-	    r.acc=tmp;
         }
     }
 
@@ -65,6 +66,7 @@ public class EvalExp extends Expression {
         if (SERIALIZATION) {
             s.serialize(pre, dos);
             s.serialize(post, dos);
+            dos.writeBoolean(preImmediate);
         }
     }
 
@@ -75,6 +77,7 @@ public class EvalExp extends Expression {
         if (SERIALIZATION) {
             pre=s.deserialize(dis);
             post=s.deserialize(dis);
+            preImmediate=dis.readBoolean();
         }
     }
 }

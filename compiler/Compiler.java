@@ -178,6 +178,16 @@ public class Compiler extends Util {
         }
     }
 
+    boolean isImmediate(Expression e) {
+        return (e instanceof Immediate) ||
+            ((e instanceof AnnotatedExpr) &&
+             (((AnnotatedExpr)e).expr instanceof Immediate));
+    }
+
+    Expression makeEvalExp(Expression pre, Expression post) {
+        return new EvalExp(pre, post, isImmediate(pre));
+    }
+
     public Expression compileApp(Interpreter r,
                                  Pair expr, ReferenceEnv rt,
                                  int context, AssociativeEnvironment env,
@@ -240,7 +250,7 @@ public class Compiler extends Util {
                                               env, null);
                     rv = new IfEval(conseq, altern);
                     rv.annotations = tmp.annotations;
-                    rv = new EvalExp(tmp, rv);
+                    rv = makeEvalExp(tmp, rv);
                     break;
                 }
             case BEGIN:
@@ -263,7 +273,7 @@ public class Compiler extends Util {
                     return null;
                 }
                 rv.annotations = rhs.annotations;
-                rv=new EvalExp(rhs, rv);
+                rv= makeEvalExp(rhs, rv);
                 break;
             case DEFINE:
                 Symbol lhs=(Symbol)expr.car;
@@ -271,7 +281,7 @@ public class Compiler extends Util {
                 rhs = compile(r, expr.car, rt, 0, env, null);
                 rv = new DefineEval(lhs);
                 rv.annotations = rhs.annotations;
-                rv=new EvalExp(rhs, rv);
+                rv = makeEvalExp(rhs, rv);
                 break;
             case MAKEANNOTATION:
                 Value aexpr=expr.car;
@@ -299,12 +309,6 @@ public class Compiler extends Util {
         if (an!=null)
             setAnnotations(rv, an);
         return rv;
-    }
-
-    boolean isImmediate(Expression e) {
-        return (e instanceof Immediate) ||
-            ((e instanceof AnnotatedExpr) &&
-             (((AnnotatedExpr)e).expr instanceof Immediate));
     }
 
     public final Expression application(Expression rator, Expression rands[], 
@@ -355,7 +359,7 @@ public class Compiler extends Util {
                                  rt, COMMAND, env, null);
             if (!(e instanceof Immediate)) {
                 be.annotations = e.annotations;
-                be = new EvalExp(e, be);
+                be = makeEvalExp(e, be);
             }
         }
         return be;
