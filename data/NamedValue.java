@@ -32,6 +32,10 @@
  */
 package sisc.data;
 
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
+import java.io.IOException;
+
 public abstract class NamedValue extends Value {
     public Symbol name;
 
@@ -46,5 +50,13 @@ public abstract class NamedValue extends Value {
             b.append(' ').append(name.display());
         b.append('>');
         return b.toString();
+    }
+
+    public void serialize(Serializer s) throws IOException {
+        s.writeExpression(name);
+    }
+
+    public void deserialize(Deserializer s) throws IOException {
+        name=(Symbol)s.readExpression();
     }
 }

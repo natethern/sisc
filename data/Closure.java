@@ -62,7 +62,7 @@ public class Closure extends Procedure {
     }
 
     public void serialize(Serializer s) throws IOException {
-        s.writeExpression(name);
+        super.serialize(s);
         long attr=(long)fcount << 1;
         if (arity) attr|=1;
         s.writeLong(attr);
@@ -77,7 +77,7 @@ public class Closure extends Procedure {
     public Closure() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        name=(Symbol)s.readExpression();
+        super.deserialize(s);
         long attr=s.readLong();
         fcount=(int)(attr>>1);
         arity=(attr&1)!=0;

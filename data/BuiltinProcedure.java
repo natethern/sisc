@@ -96,17 +96,17 @@ public class BuiltinProcedure extends Procedure {
     }
 
     public void serialize(Serializer s) throws IOException {
+        super.serialize(s);
         s.writeModule(host);
         s.writeInt(id);
-        s.writeExpression(name);
     }
 
     public BuiltinProcedure() {}
 
     public void deserialize(Deserializer s) throws IOException {
+        super.deserialize(s);
         host=s.readModule();
         id=s.readInt();
-        name=(Symbol)s.readExpression();
     }
 }
 
