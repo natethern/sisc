@@ -29,7 +29,7 @@
     <condition property="debugging" value="on">
       <isset property="releasecandidate"/>
     </condition>
-    <condition property="debugging" value="off">
+    <condition property="debugging" value="on">
       <not>
         <isset property="releasecandidate"/>
       </not>

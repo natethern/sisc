@@ -85,7 +85,8 @@
 (native-module s2j-reflection    "sisc.modules.s2j.Reflection")
 (native-module s2j-conversion    "sisc.modules.s2j.Conversion")
 (native-module hashtable-native  "sisc.modules.SHashtable")
-(native-module block-io-native  "sisc.modules.io.BlockIO")
+(native-module block-io-native   "sisc.modules.io.BlockIO")
+(native-module file-manipulation-native "sisc.modules.io.FileManipulation")
 
 (module misc
     (wrap-symbol
@@ -163,6 +164,18 @@
    buffer-copy!)
   (import block-io-native)
   (include "io/buffer.scm"))
+
+(module file-manipulation
+  (make-file-handle 
+   file-exists? 
+   file-hidden? 
+   file-is-directory?
+   file-is-file? 
+   directory-list)
+  (import file-manipulation-native)
+  (define make-file-handle
+    (lambda (filename)
+      (_make-file-handle (normalize-url (current-url) filename)))))
 
 (module block-io
   (block-read

@@ -6,7 +6,7 @@ import sisc.interpreter.*;
 
 public class AppEval extends Expression {
 
-    public void eval(Interpreter r) throws ContinuationException {
+    public final void eval(Interpreter r) throws ContinuationException {
         /* To allow break of execution (turadg)
          */
         if (PERMITINTERRUPTS && r.tctx.interrupt) {

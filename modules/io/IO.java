@@ -10,7 +10,7 @@ import sisc.io.*;
 
 public class IO extends ModuleAdapter {
 
-    protected static Symbol IOB =
+    static Symbol IOB =
         Symbol.intern("sisc.modules.io.Messages");
 
     protected static final int

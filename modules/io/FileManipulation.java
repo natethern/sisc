@@ -1,6 +1,7 @@
-package sisc.modules;
+package sisc.modules.io;
 
 import java.io.*;
+import java.net.URL;
 
 import sisc.interpreter.*;
 import sisc.nativefun.*;
@@ -31,13 +32,13 @@ public class FileManipulation extends ModuleAdapter {
         
 
     public FileManipulation() {
-        define("make-file-handle" , MAKEFILEHANDLE);
+        define("_make-file-handle" , MAKEFILEHANDLE);
         define("file-handle?"     , FILEHANDLEQ);
-        define("file/hidden?"     , HIDDENQ);
-        define("file/exists?"     , EXISTSQ);
-        define("file/directory?"  , DIRECTORYQ);
-        define("file/file?"       , FILEQ);
-        define("directory/list"   , DIRLIST);
+        define("file-hidden?"     , HIDDENQ);
+        define("file-exists?"     , EXISTSQ);
+        define("file-is-directory?"  , DIRECTORYQ);
+        define("file-is-file?"       , FILEQ);
+        define("directory-list"   , DIRLIST);
     }
 
     public static final FileHandle fileHandle(Value o) 
@@ -54,7 +55,11 @@ public class FileManipulation extends ModuleAdapter {
         case 1:
             switch(primid) {
             case MAKEFILEHANDLE:
-                return new FileHandle(new File(string(f.vlr[0])));
+                URL u=url(f.vlr[0]);
+                if (!"file".equals(u.getProtocol()))
+                    throwPrimException(liMessage(IO.IOB, 
+                                                 "nofilehandlefromurl"));
+                return new FileHandle(new File(u.getPath()));
             case FILEHANDLEQ:
                 return truth(f.vlr[0] instanceof FileHandle);
             case DIRECTORYQ:
