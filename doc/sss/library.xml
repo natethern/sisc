@@ -980,13 +980,218 @@ com/foo/bar/baz/baz3.scm
       <title>
         Operating System Interface
       </title>
-      <note>
-        <para>
-          The interface to the host operating system is a work in
-          progress. Documentation and a corresponding implementation
-          will appear in future revisions. 
-        </para>
-      </note>
+      <para>
+        &requires; 
+        <emphasis role="bold">
+          (import <emphasis>os</emphasis>)
+        </emphasis>
+      </para>
+      <para>
+        The operating system interface currently contains functions
+        for spawning external processes on the host operating system,
+        obtaining input/output ports to the resulting process, and
+        monitoring their status.  
+      </para>
+      <para> 
+        Two procedures exist for spawning processes:
+      </para>
+      <para>
+        <blockquote>
+          <para>
+            <indexterm><primary>spawn-process</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>process</type>
+              <methodname>spawn-process</methodname>
+              <methodparam><parameter>program/commandline</parameter></methodparam>
+              <methodparam choice="opt"><parameter>arglist</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Spawns a process, returning a process handle.  If the
+                optional argument list is provided, then the first
+                argument is the binary to run with those arguments.
+                If omitted, the first argument is tokenized as a
+                commandline and used to spawn the process.
+              </para>
+            </blockquote>
+          </para>      
+          <para>
+            <indexterm><primary>spawn-process-with-environment</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>process</type>
+              <methodname>spawn-process-with-environment</methodname>
+              <methodparam><parameter>program</parameter></methodparam>
+              <methodparam><parameter>arglist</parameter></methodparam>
+              <methodparam><parameter>environment</parameter></methodparam>
+              <methodparam choice="opt"><parameter>working-directory</parameter></methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            <indexterm><primary>spawn-process/env</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>process</type>
+              <methodname>spawn-process/env</methodname>
+              <methodparam><parameter>program</parameter></methodparam>
+              <methodparam><parameter>arglist</parameter></methodparam>
+              <methodparam><parameter>environment</parameter></methodparam>
+              <methodparam choice="opt"><parameter>working-directory</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Spawns a process named by
+                <parameter>program</parameter> with the arguments
+                given in <parameter>arglist</parameter>, in the given
+                <parameter>environment</parameter>.  The environment
+                is an association list of strings to strings.  The key
+                in the association list is an environment variable
+                name, and the corresponding value is the value to
+                assign to that environment variable.  If the
+                environment parameter is <literal>&num;f</literal>,
+                the environment variables of the current &SISC;
+                instance are used.  
+              </para>
+              <para>
+                The optional parameter
+                <parameter>working-directory</parameter> specifies the
+                directory which will be set as the current directory
+                when the process is spawned.  If ommited, the value of
+                the <function>current-directory</function> parameter
+                (i.e. the current directory of the running Scheme
+                program) is used instead.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>process?</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>&num;t/&num;f</type>
+              <methodname>process?</methodname>
+              <methodparam><parameter>value</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns <literal>&num;t</literal> if the given value 
+                is a process handle.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        Once started, a process will run in parallel to the current
+        Scheme program according to the usual scheduling of the host
+        platform.  The process handle obtained can be used to obtain
+        the input, output, and error streams of the process using the
+        following functions:
+      </para>
+      <para>
+        <blockquote>
+          <para>
+            <indexterm><primary>get-process-stdout</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>input-port</type>
+              <methodname>get-process-stdout</methodname>
+              <methodparam><parameter>process</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns an input port which will read bytes which the
+                given process has written to its standard output stream.
+              </para>
+            </blockquote>
+          </para>      
+          <para>
+            <indexterm><primary>get-process-stderr</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>input-port</type>
+              <methodname>get-process-stderr</methodname>
+              <methodparam><parameter>process</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns an input port which will read bytes which the
+                given process has written to its standard error stream.
+              </para>
+            </blockquote>
+          </para>      
+          <para>
+            <indexterm><primary>get-process-stdin</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>output-port</type>
+              <methodname>get-process-stdin</methodname>
+              <methodparam><parameter>process</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns an output port which when written to will send
+                bytes to the given process' standard input stream.
+              </para>
+            </blockquote>
+          </para>      
+        </blockquote>
+      </para>
+      <para>
+        Finally, functions are provided to check the status of a
+        spawned process, and to wait for a process to complete:
+      </para>
+      <para>
+        <blockquote>
+          <para>
+            <indexterm><primary>process-terminated?</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>integer or &num;f</type>
+              <methodname>process-terminated?</methodname>
+              <methodparam><parameter>process</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Checks to see if the given process has terminated, and
+                returns the process' return code if so.  If the
+                process is still running, <literal>&num;f</literal> is returned.
+              </para>
+            </blockquote>
+          </para>      
+          <para>
+            <indexterm><primary>wait-for-process</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>integer or &num;f</type>
+              <methodname>wait-for-process</methodname>
+              <methodparam><parameter>process</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Waits for the given process to terminate, and
+                returns the process' return code if so.  The wait
+                operation may be interrupted by other code, in which
+                <literal>&num;f</literal> is returned.
+              </para>
+            </blockquote>
+          </para>      
+        </blockquote>
+      </para>
     </sect2>
   </sect1>
   <sect1 id="ThirdPartyLibs">
