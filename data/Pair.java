@@ -117,21 +117,28 @@ public class Pair extends Value {
                cdr.equals(p.cdr);
     }
 
+    protected final static int CONT=1, MUTABLE=2;
+
     public void serialize(Serializer s, DataOutputStream dos)
     throws IOException {
         if (SERIALIZATION) {
+	    int pflags;
             Pair rv=this;
             boolean cont;
             do {
-                cont=false;
+		cont=!s.seen(rv.cdr) &&
+		    rv.cdr instanceof Pair && 
+		    rv.cdr != EMPTYLIST;
+
+		pflags=
+		    (cont ? CONT : 0) |
+		    (rv instanceof ImmutablePair ? 0 : MUTABLE);
+
                 s.serialize(rv.car, dos);
-                if (!s.seen(rv.cdr) &&
-                        rv.cdr instanceof Pair && rv.cdr != EMPTYLIST) {
-                    dos.writeBoolean(cont=true);
-                    rv=(Pair)rv.cdr;
-                } else {
-                    dos.writeBoolean(false);
-                }
+		dos.write(pflags);
+		
+		if (cont)
+		    rv=(Pair)rv.cdr;
             } while (cont);
             s.serialize(rv.cdr, dos);
         }
@@ -142,11 +149,15 @@ public class Pair extends Value {
         if (SERIALIZATION) {
             car=(Value)s.deserialize(dis);
             Pair rv=this, tmp, head=rv;
-            while (dis.readBoolean()) {
-                tmp=new Pair();
+	    int pflags=dis.read();
+            while ((pflags & CONT) != 0) {
+                tmp=((pflags & MUTABLE) != 0) ? 
+		    new Pair() : 
+		    new ImmutablePair();
                 rv.cdr=tmp;
                 tmp.car=(Value)s.deserialize(dis);
                 rv=tmp;
+		pflags=dis.read();
             }
             rv.cdr=(Value)s.deserialize(dis);
         }
