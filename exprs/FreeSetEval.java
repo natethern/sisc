@@ -48,17 +48,28 @@ public class FreeSetEval extends Expression {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        if (envLoc == -1) {
+	/*try {
+            senv.env[envLoc]=r.acc;
+	} catch (ArrayIndexOutOfBoundsException aob) {
             try {
                 envLoc=senv.set(lhs, r.acc);
             } catch (NullPointerException np) {
                 //Variable is not bound.  Raise an error.
                 error(r, SETBANG, liMessage(SISCB,"unboundset", lhs.write()));
             }
-        } else {
-            senv.env[envLoc]=r.acc;
         } 
-        
+        */
+	if (envLoc>=0) {
+            senv.env[envLoc]=r.acc;
+	} else {
+            try {
+                envLoc=senv.set(lhs, r.acc);
+            } catch (NullPointerException np) {
+                //Variable is not bound.  Raise an error.
+                error(r, SETBANG, liMessage(SISCB,"unboundset", lhs.write()));
+            }
+        } 
+
         if (r.acc instanceof NamedValue) {
             NamedValue nv=(NamedValue)r.acc;
             if (nv.name==null)

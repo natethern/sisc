@@ -49,21 +49,43 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public void eval(Interpreter r) throws ContinuationException {
         r.nxp=null;
-        if (envLoc==-1) {
+	/*	try {
+	    r.acc=lenv.env[envLoc];
+	} catch (ArrayIndexOutOfBoundsException aob) {
             envLoc=lenv.getLoc(sym);
             if (envLoc==-1)
                 error(r, liMessage(SISCB,"undefinedvar", sym.write()));
-        }
-        r.acc= lenv.env[envLoc];
+	    r.acc=lenv.env[envLoc];
+        } 
+	*/
+	if (envLoc>=0) {
+	    r.acc=lenv.env[envLoc];
+	} else {
+            envLoc=lenv.getLoc(sym);
+            if (envLoc==-1)
+                error(r, liMessage(SISCB,"undefinedvar", sym.write()));
+	    r.acc=lenv.env[envLoc];
+        } 
     }
 
     public Value getValue(Interpreter r) throws ContinuationException {
-        if (envLoc==-1) {
+	/*	try {
+	    return lenv.env[envLoc];
+	} catch (ArrayIndexOutOfBoundsException aob) {
             envLoc=lenv.getLoc(sym);
             if (envLoc==-1)
                 error(r, liMessage(SISCB,"undefinedvar", sym.write()));
+	    return lenv.env[envLoc];
         } 
-        return lenv.env[envLoc];
+	*/
+	if (envLoc>=0) {
+	    return lenv.env[envLoc];
+	} else {
+            envLoc=lenv.getLoc(sym);
+            if (envLoc==-1)
+                error(r, liMessage(SISCB,"undefinedvar", sym.write()));
+	    return lenv.env[envLoc];
+        } 
     }
 
     public Value express() {
