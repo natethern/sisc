@@ -37,8 +37,6 @@ public abstract class SerializerImpl extends BerEncoding implements Serializer {
     public abstract void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException;
     public abstract void writeClass(Class c) throws IOException;
 
-    public abstract boolean seen(Expression e);
-    public abstract void forceSeen(Expression e);
 }
 
 /*

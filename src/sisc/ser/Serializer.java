@@ -19,9 +19,6 @@ public interface Serializer extends ObjectOutput {
 
     void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException;
     void writeClass(Class c) throws IOException;
-
-    boolean seen(Expression e);
-    void forceSeen(Expression e);
 }
 
 /*

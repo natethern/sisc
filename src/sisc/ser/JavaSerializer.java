@@ -46,15 +46,6 @@ public class JavaSerializer implements Serializer {
         os.writeObject(c);
     }
 
-    public boolean seen(Expression e) {
-        //FIXME
-        return false;
-    }
-        
-    public void forceSeen(Expression e) {
-        //FIXME
-    }
-
     public void writeBigDecimal(BigDecimal d) throws IOException {
         os.writeObject(d);
     }

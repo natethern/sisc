@@ -9,7 +9,7 @@ import sisc.env.SymbolicEnvironment;
 
 public class StreamSerializer extends SerializerImpl {
 
-    static class SerJobEnd {
+    private static class SerJobEnd {
         public int posi;
         public int sizeStartOffset;
 
@@ -19,16 +19,16 @@ public class StreamSerializer extends SerializerImpl {
         }
     }
 
-    Vector classes;
-    Set seen;
-    int[] offsets, sizes;
-    Expression[] entryPoints;
-    DataOutput datout;
-    CountingOutputStream cos;
-    HashMap epi, ci;
-    LinkedList serQueue;
+    private Vector classes;
+    private Set seen;
+    private int[] offsets, sizes;
+    private Expression[] entryPoints;
+    private DataOutput datout;
+    private CountingOutputStream cos;
+    private HashMap epi, ci;
+    private LinkedList serQueue;
 
-    static final int WATCH=512;
+    private static final int WATCH=512;
 
     public StreamSerializer(OutputStream out, Vector classes, 
                             Expression[] entryPoints) {
@@ -123,12 +123,12 @@ public class StreamSerializer extends SerializerImpl {
         }
     }
     
-    void serializeEnd(SerJobEnd j) {
+    private void serializeEnd(SerJobEnd j) {
         if (j.sizeStartOffset != -1)
             sizes[j.posi] = cos.position - j.sizeStartOffset;
     }
         
-    void serializeDetails(Expression e) throws IOException {
+    private void serializeDetails(Expression e) throws IOException {
         e.serialize(this);
         Set s=e.getAnnotationKeys();
         writeInt(s.size());
@@ -139,13 +139,17 @@ public class StreamSerializer extends SerializerImpl {
         }
     }
     
+    private boolean seen(Expression e) { 
+        return seen.contains(e);
+    }
+
     public void serialize(Expression e) throws IOException {
         int start=serQueue.size();
         writeExpression(e);
         serLoop(start);
     }
     
-    void serLoop(int start) throws IOException {
+    private void serLoop(int start) throws IOException {
         while (serQueue.size()>start) {
             Object o=serQueue.removeFirst();
             if (o instanceof Expression) {
@@ -170,14 +174,6 @@ public class StreamSerializer extends SerializerImpl {
         writeInt(((Integer)ci.get(c)).intValue());
     }
         
-    public boolean seen(Expression e) { 
-        return seen.contains(e);
-    }
-
-    public void forceSeen(Expression e) {
-        seen.add(e);
-    }
-
     public void write(byte[] b) throws IOException {
         datout.write(b);
     }
