@@ -12,10 +12,13 @@
   (java-class "sisc.ser.SeekableDataInputStream"))
 (define <sisc.ser.BufferedRandomAccessInputStream> 
   (java-class "sisc.ser.BufferedRandomAccessInputStream"))
+(define <sisc.Util> (java-class "sisc.Util"))
+
 (define-generic add)
 (define-generic build-library)
 (define-generic get-local-expression)
-(define-generic load)
+(define-generic url)
+
 (define index-sym (string->symbol "library index"))
 (define segment-str "segment ")
 
@@ -48,12 +51,12 @@
       (lambda (out)
         (build-library lib (->jstring name) ((java-wrap out) 'out))))))
 
-(define (open-library filename)
-  (load <sisc.ser.Library>
-        (make <sisc.ser.SeekableDataInputStream>
-              (make <sisc.ser.BufferedRandomAccessInputStream>
-                    (->jstring filename) 
-                    (->jstring "r")))))
+(define open-library
+  (let () 
+    (define-generic load)
+    (lambda (filename)
+      (load <sisc.ser.Library>
+            (url <sisc.Util> (java-wrap filename))))))
 
 (define (link-library lib)
   (for-each
