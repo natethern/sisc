@@ -1,40 +1,43 @@
 (#%program
-  ((|x_KentM2UOe| . 1) (_make-parameter . 1))
+  ((|%%_iiUwapXaw_x| . 1) (_make-parameter . 1))
   ()
   (_make-parameter)
   (#%define current-optimizer
     (_make-parameter
-      (#%lambda #t (|x_KentM2UOe|) () |x_KentM2UOe|))))
+      (#%lambda #t
+        (|%%_iiUwapXaw_x|)
+        ()
+        |%%_iiUwapXaw_x|))))
 (#%program
   ((interaction-environment . 1)
    (sc-expand . 1)
    (_analyze! . 1)
    (apply . 1)
    (current-optimizer . 1)
-   (|sc-expand_KeLeESVOe| . 1)
-   (|optimizer_Ke70wGXOe| . 1)
-   (|source_KePUrAYOe| . 2)
-   (|e_KevNnuZOe| . 1)
-   (|m_Ke9Rp1ZOe| . 1)
+   (|%%_iigi2dZaw_sc-expand| . 1)
+   (|%%_iiE3W0_aw_optimizer| . 1)
+   (|%%_iikYRW_aw_source| . 2)
+   (|%%_ii0RNQ0bw_e| . 1)
+   (|%%_iiGUPn0bw_m| . 1)
    (throw . 1)
-   (|old-ie_KetYt7YOe| . 2)
+   (|%%_ii-_Tt_aw_old-ie| . 2)
    (with-failure-continuation . 1)
    (error . 1)
    (strict-r5rs-compliance . 1)
-   (|interaction-environment_Ke5bCjWOe| . 4)
-   (|env_Ker7AMWOe| . 6)
+   (|%%_iiCe0GZaw_interaction-environment| . 4)
+   (|%%_iiYa-6-aw_env| . 6)
    (null? . 2)
    (cadr . 2)
-   (|_analyze!_KepiGpVOe| . 2)
+   (|%%_iiWl4MYaw__analyze!| . 2)
    (equal? . 1)
-   (|old-eval_KeJpKvUOe| . 2)
-   (|apply_Ke3mIYUOe| . 3)
+   (|%%_iiet8SXaw_old-eval| . 2)
+   (|%%_iiAp6jYaw_apply| . 3)
    (car . 3)
    (member . 1)
-   (|x_KeN3ydXOe| . 6)
+   (|%%_iii7Yz-aw_x| . 6)
    (pair? . 1)
    (eval . 2))
-  ((|source_KePUrAYOe| . 1) (eval . 1))
+  ((|%%_iikYRW_aw_source| . 1) (eval . 1))
   (interaction-environment
     sc-expand
     _analyze!
@@ -53,86 +56,86 @@
     strict-r5rs-compliance)
   (#%set! eval
     ((#%lambda #t
-       (|old-eval_KeJpKvUOe|
-         |apply_Ke3mIYUOe|
-         |_analyze!_KepiGpVOe|
-         |sc-expand_KeLeESVOe|
-         |interaction-environment_Ke5bCjWOe|)
+       (|%%_iiet8SXaw_old-eval|
+         |%%_iiAp6jYaw_apply|
+         |%%_iiWl4MYaw__analyze!|
+         |%%_iigi2dZaw_sc-expand|
+         |%%_iiCe0GZaw_interaction-environment|)
        ()
        (#%lambda #t
-         (|x_KeN3ydXOe| . |env_Ker7AMWOe|)
-         (|interaction-environment_Ke5bCjWOe|
-           |sc-expand_KeLeESVOe|
-           |_analyze!_KepiGpVOe|
-           |apply_Ke3mIYUOe|
-           |old-eval_KeJpKvUOe|)
-         (#%if (#%if (pair? |x_KeN3ydXOe|)
+         (|%%_iii7Yz-aw_x| . |%%_iiYa-6-aw_env|)
+         (|%%_iiCe0GZaw_interaction-environment|
+           |%%_iigi2dZaw_sc-expand|
+           |%%_iiWl4MYaw__analyze!|
+           |%%_iiAp6jYaw_apply|
+           |%%_iiet8SXaw_old-eval|)
+         (#%if (#%if (pair? |%%_iii7Yz-aw_x|)
                  (member
-                   (car |x_KeN3ydXOe|)
+                   (car |%%_iii7Yz-aw_x|)
                    (#%quote ("noexpand" "analyzeonly")))
                  #f)
-           (|apply_Ke3mIYUOe|
-             |old-eval_KeJpKvUOe|
-             (#%if (equal? (car |x_KeN3ydXOe|) "analyzeonly")
-               (|_analyze!_KepiGpVOe|
-                 (cadr |x_KeN3ydXOe|)
-                 (#%if (null? |env_Ker7AMWOe|)
-                   (|interaction-environment_Ke5bCjWOe|)
-                   (car |env_Ker7AMWOe|)))
-               (cadr |x_KeN3ydXOe|))
-             |env_Ker7AMWOe|)
-           (#%if (#%if (null? |env_Ker7AMWOe|)
+           (|%%_iiAp6jYaw_apply|
+             |%%_iiet8SXaw_old-eval|
+             (#%if (equal? (car |%%_iii7Yz-aw_x|) "analyzeonly")
+               (|%%_iiWl4MYaw__analyze!|
+                 (cadr |%%_iii7Yz-aw_x|)
+                 (#%if (null? |%%_iiYa-6-aw_env|)
+                   (|%%_iiCe0GZaw_interaction-environment|)
+                   (car |%%_iiYa-6-aw_env|)))
+               (cadr |%%_iii7Yz-aw_x|))
+             |%%_iiYa-6-aw_env|)
+           (#%if (#%if (null? |%%_iiYa-6-aw_env|)
                    (strict-r5rs-compliance)
                    #f)
              (error (#%quote eval)
                     "expected 2 arguments to procedure, got 1.")
              ((#%lambda #t
-                (|optimizer_Ke70wGXOe|
-                  |old-ie_KetYt7YOe|
-                  |source_KePUrAYOe|)
-                (|env_Ker7AMWOe|
-                  |x_KeN3ydXOe|
-                  |interaction-environment_Ke5bCjWOe|
-                  |sc-expand_KeLeESVOe|
-                  |_analyze!_KepiGpVOe|
-                  |apply_Ke3mIYUOe|
-                  |old-eval_KeJpKvUOe|)
+                (|%%_iiE3W0_aw_optimizer|
+                  |%%_ii-_Tt_aw_old-ie|
+                  |%%_iikYRW_aw_source|)
+                (|%%_iiYa-6-aw_env|
+                  |%%_iii7Yz-aw_x|
+                  |%%_iiCe0GZaw_interaction-environment|
+                  |%%_iigi2dZaw_sc-expand|
+                  |%%_iiWl4MYaw__analyze!|
+                  |%%_iiAp6jYaw_apply|
+                  |%%_iiet8SXaw_old-eval|)
                 (#%begin
                   (with-failure-continuation
                     (#%lambda #t
-                      (|m_Ke9Rp1ZOe| |e_KevNnuZOe|)
-                      (|old-ie_KetYt7YOe|
-                        |interaction-environment_Ke5bCjWOe|)
+                      (|%%_iiGUPn0bw_m| |%%_ii0RNQ0bw_e|)
+                      (|%%_ii-_Tt_aw_old-ie|
+                        |%%_iiCe0GZaw_interaction-environment|)
                       (#%begin
-                        (|interaction-environment_Ke5bCjWOe|
-                          |old-ie_KetYt7YOe|)
-                        (throw |m_Ke9Rp1ZOe| |e_KevNnuZOe|)))
+                        (|%%_iiCe0GZaw_interaction-environment|
+                          |%%_ii-_Tt_aw_old-ie|)
+                        (throw |%%_iiGUPn0bw_m| |%%_ii0RNQ0bw_e|)))
                     (#%lambda #t
                       ()
-                      (|source_KePUrAYOe|
-                        |old-ie_KetYt7YOe|
-                        |optimizer_Ke70wGXOe|
-                        |x_KeN3ydXOe|
-                        |interaction-environment_Ke5bCjWOe|
-                        |sc-expand_KeLeESVOe|
-                        |_analyze!_KepiGpVOe|)
-                      (#%set! |source_KePUrAYOe|
-                        (|_analyze!_KepiGpVOe|
-                          (|optimizer_Ke70wGXOe|
-                            (|sc-expand_KeLeESVOe|
-                              |x_KeN3ydXOe|
+                      (|%%_iikYRW_aw_source|
+                        |%%_ii-_Tt_aw_old-ie|
+                        |%%_iiE3W0_aw_optimizer|
+                        |%%_iii7Yz-aw_x|
+                        |%%_iiCe0GZaw_interaction-environment|
+                        |%%_iigi2dZaw_sc-expand|
+                        |%%_iiWl4MYaw__analyze!|)
+                      (#%set! |%%_iikYRW_aw_source|
+                        (|%%_iiWl4MYaw__analyze!|
+                          (|%%_iiE3W0_aw_optimizer|
+                            (|%%_iigi2dZaw_sc-expand|
+                              |%%_iii7Yz-aw_x|
                               (#%quote (e))
                               (#%quote (e))))
-                          (|interaction-environment_Ke5bCjWOe|
-                            |old-ie_KetYt7YOe|)))))
-                  (|apply_Ke3mIYUOe|
-                    |old-eval_KeJpKvUOe|
-                    |source_KePUrAYOe|
-                    |env_Ker7AMWOe|)))
+                          (|%%_iiCe0GZaw_interaction-environment|
+                            |%%_ii-_Tt_aw_old-ie|)))))
+                  (|%%_iiAp6jYaw_apply|
+                    |%%_iiet8SXaw_old-eval|
+                    |%%_iikYRW_aw_source|
+                    |%%_iiYa-6-aw_env|)))
               (current-optimizer)
-              (|apply_Ke3mIYUOe|
-                |interaction-environment_Ke5bCjWOe|
-                |env_Ker7AMWOe|)
+              (|%%_iiAp6jYaw_apply|
+                |%%_iiCe0GZaw_interaction-environment|
+                |%%_iiYa-6-aw_env|)
               #f)))))
      eval
      apply
