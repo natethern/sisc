@@ -14,9 +14,8 @@ import java.io.*;
 
 public class SchemePanel extends JScrollPane {
     protected static final int
-	SYS=0, USER=1, RESULT=2, ERROR=3;
+        SYS=0, USER=1, RESULT=2, ERROR=3;
 
-    protected Interpreter interp;
     protected JTextPane disp;
     protected SchemeDocument sd;
     protected PipedOutputStream interpin;
@@ -25,74 +24,73 @@ public class SchemePanel extends JScrollPane {
     protected int currentEditablePos;
     protected REPL repl;
 
-    public SchemePanel(Interpreter interp, SchemeDocument sd,
-		       JTextPane disp) {
-	super(disp, VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_AS_NEEDED);
-	dos=new DocumentOutputStream(sd, sd.siscText, disp);
-	this.sd=sd;
-	this.disp=disp;
-	this.interp=interp;
-	interpin=new PipedOutputStream();
-	try {
-	    iis=new PipedInputStream(interpin);
-	} catch (IOException e) {}
-	interp.dynenv.out=new OutputPort(new PrintWriter(new BufferedOutputStream(dos)), true);
-        interp.dynenv.in=new InputPort(new BufferedReader(new InputStreamReader(iis)));
-	addMessage(RESULT, "SISC "+Util.VERSION);
-	disp.setEditable(false);
-	currentEditablePos=sd.getLength()-1;
-	repl=new REPL(interp);
-	repl.setPriority(repl.getPriority()+1);
-	repl.start();
+    public DynamicEnv dynenv;
+    
+    public SchemePanel(SchemeDocument sd, JTextPane disp) {
+        super(disp, VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        dos=new DocumentOutputStream(sd, sd.siscText, disp);
+        this.sd=sd;
+        this.disp=disp;
+        interpin=new PipedOutputStream();
+        try {
+            iis=new PipedInputStream(interpin);
+        } catch (IOException e) {}
+        dynenv = new DynamicEnv(new SourceInputPort(new BufferedReader(new InputStreamReader(iis)), "console"),
+                                new OutputPort(new PrintWriter(new BufferedOutputStream(dos)), true));
+        disp.setEditable(false);
+        currentEditablePos=sd.getLength()-1;
+        repl=new REPL("main", dynenv);
+        repl.setPriority(repl.getPriority()+1);
+        repl.start();
     }
 
     public Dimension getPreferredSize() {
-	return new Dimension(600,400);
+        return new Dimension(600,400);
     }
 
     public void addMessage(int style, String m) {
-	sd.addMessage(style, m, true);
+        sd.addMessage(style, m, true);
     }
 
     public void addMessageNoNewline(int style, String m) {
-	sd.addMessage(style, m, false);
+        sd.addMessage(style, m, false);
     }
 
     public void eval(String s) {
-	addMessage(USER, s);
-	try {
-	    interpin.write((s+" ").getBytes());
-	    interpin.flush();
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
+        addMessage(USER, s);
+        try {
+            interpin.write((s+" ").getBytes());
+            interpin.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
+    
     static class DocumentOutputStream extends OutputStream {
-	protected Document doc;
-	protected Style style;
+        protected Document doc;
+        protected Style style;
         protected JTextComponent comp;
 
-	public DocumentOutputStream(Document d, Style s, JTextComponent c) {
-	    doc=d;
-	    style=s;
+        public DocumentOutputStream(Document d, Style s, JTextComponent c) {
+            doc=d;
+            style=s;
             comp=c;
-	}
+        }
 
-	public void write(int b) throws IOException {
-	    try {
-		doc.insertString(doc.getLength(), ""+(char)b, style);
+        public void write(int b) throws IOException {
+            try {
+                doc.insertString(doc.getLength(), ""+(char)b, style);
                 comp.setCaretPosition(doc.getLength()-1);
-	    } catch (BadLocationException ble) {}
-	}
+            } catch (BadLocationException ble) {}
+        }
 
-	public void write(byte[] b, int offset, int len) {
-	    try {
-		String s=new String(b, offset, len);
-		doc.insertString(doc.getLength(), s, style);
+        public void write(byte[] b, int offset, int len) {
+            try {
+                String s=new String(b, offset, len);
+                doc.insertString(doc.getLength(), s, style);
                 comp.setCaretPosition(doc.getLength()-1);
-	    } catch (BadLocationException ble) {}
-	}
+            } catch (BadLocationException ble) {}
+        }
     }
 		
     static class SchemeDocument extends DefaultStyledDocument {
@@ -107,8 +105,8 @@ public class SchemePanel extends JScrollPane {
             siscResultText=addStyle(null,masterSettings);
             siscErrorText=addStyle(null,masterSettings);
 
-	    StyleConstants.setFontFamily(siscText, "Courier");
-	    StyleConstants.setFontFamily(siscResultText, "Helvetica");
+            StyleConstants.setFontFamily(siscText, "Courier");
+            StyleConstants.setFontFamily(siscResultText, "Helvetica");
             StyleConstants.setForeground(userText, Color.gray);
             StyleConstants.setForeground(siscText, Color.black);
             StyleConstants.setForeground(siscResultText, Color.blue);
@@ -116,17 +114,17 @@ public class SchemePanel extends JScrollPane {
         }
 
         public synchronized void addMessage(int style, 
-					    String message, boolean newline) {
+                                            String message, boolean newline) {
             try {
-		Style s=null;
-		switch(style) {
-		case SYS: s=siscText; break;
-		case USER: s=userText; break;
-		case RESULT: s=siscResultText; break;
-		case ERROR: s=siscErrorText; break;
-		}
+                Style s=null;
+                switch(style) {
+                case SYS: s=siscText; break;
+                case USER: s=userText; break;
+                case RESULT: s=siscResultText; break;
+                case ERROR: s=siscErrorText; break;
+                }
 
-		if (newline) message+="\n";
+                if (newline) message+="\n";
                 insertString(getLength(), message, s);
             } catch (Exception e){}
         }
