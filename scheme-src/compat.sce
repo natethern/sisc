@@ -80,10 +80,11 @@
 		  (mapf first rest))) '#f)))))
 
 (define gen-sym
-  (lambda (base) 
-    (string->symbol (string-append (symbol->string base)
-                                   "_"
-                                   (symbol->string (gensym))))))
+  (lambda (base)        
+    (if base
+        (string->symbol (string-append (symbol->string base) "_"
+                                       (symbol->string (gensym))))
+        (gensym))))
 
 (define ormap
   (lambda (proc list1)
