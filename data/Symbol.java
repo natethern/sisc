@@ -3,6 +3,7 @@ package sisc.data;
 import java.io.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.compiler.Lexer;
 
 public class Symbol extends Value {
 
@@ -37,13 +38,25 @@ public class Symbol extends Value {
     public String display() {
         return symval;
     }
-    
+
+    public static StringBuffer slashProcess(StringBuffer b, String s) {
+        for (int i=1; i<s.length(); i++) {
+            char c=s.charAt(i);
+            if ((i>0 && Lexer.isIdentifierSubsequent(c)) ||
+                (i==0 && Lexer.isIdentifierStart(c)))
+                b.append(c);
+            else 
+                b.append('\\').append(c);
+        }
+        return b;
+    }
+
     public String write() {
         if (caseSensitive || symval.toLowerCase().equals(symval))
-            return symval;
+            return slashProcess(new StringBuffer(), symval).toString();
         else {
             StringBuffer b=new StringBuffer("|");
-            b.append(symval).append('|');
+            slashProcess(b, symval).append('|');
             return b.toString();
         }
     }

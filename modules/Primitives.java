@@ -70,6 +70,7 @@ public class Primitives extends ModuleAdapter {
         define("native-library-version", NLVERSION);
         define("get-symbolic-environment", GETENVIRONMENT);
         define("set-symbolic-environment!", SETENVIRONMENT);
+        define("gensym", GENSYM);
         define("getprop", GETPROP);
         define("imag-part", IMAGPART);
         define("inexact->exact", INEXACT2EXACT);
@@ -101,7 +102,6 @@ public class Primitives extends ModuleAdapter {
         define("remainder", REMAINDER);
         define("remprop", REMPROP);
         define("round", ROUND);
-        define("rand", RAND);
         define("scheme-report-environment", REPORTENVIRONMENT);
         define("set-box!", SETBOX);
         define("set-car!", SETCAR);
@@ -183,15 +183,28 @@ public class Primitives extends ModuleAdapter {
             v = (Value)s.readExpression();
         }
     }
+    
+    static final char[] b64cs=
+        ("0123456789abcdefghijklmnopqrstuvwxyz"+
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ-_").toCharArray();
 
-    protected java.util.Random rand=new java.util.Random();
+    protected String base64encode(long v) {
+        StringBuffer b=new StringBuffer();
+        while (v!=0) {
+            b.append(b64cs[(int)v & 0x3f]);
+            v>>>=6;
+        }
+        return b.toString();
+    }
 
     public Value eval(int primid, Interpreter f)
         throws ContinuationException {
         switch (f.vlr.length) {
         case 0:
             switch (primid) {
-            case RAND: return Quantity.valueOf(rand.nextInt());
+            case GENSYM: 
+                long unv=f.tctx.nextUnique();
+                return Symbol.intern(base64encode(unv));
             case _VOID: return VOID;
             case COMPACTSTRINGREP: return truth(SchemeString.compactRepresentation);
             case CURRENTWIND: return f.dynenv.wind;
@@ -678,6 +691,7 @@ public class Primitives extends ModuleAdapter {
         EXP = 43,
         FLOOR = 54,
         GCD = 116,
+        GENSYM = 13,
         GETENVIRONMENT = 64,
         GETPROP = 119,
         GRT = 153,
@@ -716,7 +730,6 @@ public class Primitives extends ModuleAdapter {
         PROCEDUREQ = 120,
         PUTPROP = 140,
         QUOTIENT = 126,
-        RAND = 13,
         REALPART = 83,
         REMAINDER = 127,
         REMPROP = 62,

@@ -7,10 +7,25 @@ import java.util.*;
 public class ThreadContext extends Util {
 
     protected Stack interpreters = new Stack();
+    protected Random r = new Random();
 
     public boolean interrupt = false;
+    public long unicityMajor=genUnicityMajor();
+    public char unicityMinor=0;
 
     public ThreadContext() {}
+
+    /*********** Unique Value Support ********************/
+    protected long genUnicityMajor() {
+        return System.currentTimeMillis() + 
+            ((r.nextInt() & 0xffff)*311040000000L);
+    }
+
+    public long nextUnique() {
+        if (++unicityMinor == 0) 
+            unicityMajor=genUnicityMajor();
+        return unicityMajor + (unicityMinor*31104000000L);
+    }
 
     /*********** interpreter stack maintenance ***********/
 

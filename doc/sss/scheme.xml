@@ -267,50 +267,74 @@
 	  </para>
 	</blockquote>
       </para>
-      <para>
-	&SISC; also allows symbols to be created that
-	<emphasis>are</emphasis> case-sensitive. This can be done
-	one of two ways. The first involves setting the reader to
-	produce cased symbols via the procedure
-      </para>
-      <para>
-	<blockquote>
-	  <para>
-            <indexterm><primary>case-sensitive</primary>
-            </indexterm>
-	    &parameter;
-	    <methodsynopsis language="scheme" id="case-sensitive">
-	      <type>#t/#f</type>
-	      <methodname>case-sensitive</methodname>
-	      <methodparam choice="opt">
-		<parameter>boolean</parameter>
-	      </methodparam>
-	    </methodsynopsis>
-	    <blockquote>
-	      <para>
-		Sets or retrieves the reader's case sensitivity.
-	      </para>
+      <sect3>
+        <title>Case Sensitivity</title>
+        <para>
+          &SISC; also allows symbols to be created that
+          <emphasis>are</emphasis> case-sensitive. This can be done
+          one of two ways. The first involves setting the reader to
+          produce cased symbols via the procedure
+        </para>
+        <para>
+          <blockquote>
+            <para>
+              <indexterm><primary>case-sensitive</primary>
+              </indexterm>
+              &parameter;
+              <methodsynopsis language="scheme" id="case-sensitive">
+                <type>#t/#f</type>
+                <methodname>case-sensitive</methodname>
+                <methodparam choice="opt">
+                  <parameter>boolean</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Sets or retrieves the reader's case sensitivity.
+                </para>
 	      </blockquote>
-	  </para>
-	</blockquote>
-      </para>
-      <para>
-	The second method is via a non-standard symbol syntax. If a
-	symbol is enclosed in pipe ('|') characters, the reader will
-	treat that individual symbol as cased.  The syntax extends the
-	&R5RS; grammar with the following production:
-      </para>
-      <programlisting>
-&lt;cased symbol&gt; --> |&lt;identifier&gt;|
-      </programlisting>
-      <example>
-	<title>Case sensitive Symbol literals</title>
-	<programlisting>
-(eq? 'a '|A|) ; => #f
-(eq? 'a '|a|) ; => #t
-(eq? '|A| '|a|) ; => #f
-	</programlisting>
-      </example>
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          The second method is via a non-standard symbol syntax. If a
+          symbol is enclosed in pipe ('|') characters, the reader will
+          treat that individual symbol as cased.  The syntax extends the
+          &R5RS; grammar with the following production:
+        </para>
+        <programlisting>
+          &lt;cased symbol&gt; --> |&lt;identifier&gt;|
+        </programlisting>
+        <example>
+          <title>Case sensitive Symbol literals</title>
+          <programlisting>
+            (eq? 'a '|A|) ; => #f
+            (eq? 'a '|a|) ; => #t
+            (eq? '|A| '|a|) ; => #f
+          </programlisting>
+        </example>
+      </sect3>
+      <sect3>
+        <title>Printed Representation</title>
+        <para>
+          Symbols may contain characters that are disallowed by &R5RS;
+          using <function>symbol->string</function>.  In such a case, 
+          the printed representation of that symbol will contain those
+          characters, prefaced with the escape ('\') character.
+          Likewise, such symbols may be created without
+          <function>symbol->string</function> by escaping non-standard
+          characters.
+        </para>
+        <para>
+          Symbols which contain characters that could only be present
+          in a case-sensitive environment will be printed in one of
+          two ways, depending on the value of the
+          <function>case-sensitive</function> parameter.  If true, the
+          symbols will be printed as is, containing the upper and
+          lower case letters.  If false, the symbol will be printed
+          surrounded by pipe characters.  
+        </para>
+      </sect3>
     </sect2>
     <sect2 id="Strings">
       <title>

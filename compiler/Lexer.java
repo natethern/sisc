@@ -31,7 +31,22 @@ public class Lexer implements Tokens {
 	number_prefixes = new char[]
 	{'+','-','.'},
 	hex_number_prefixes = new char[]
-	{'+','-','.','A','B','C','D','E','F','a','b','c','d','e','f'};
+        {'+','-','.','A','B','C','D','E','F','a','b','c','d','e','f'},
+        special_initials = new char[] 
+        {'!','$','%','&','*','/',':','<','=','>','?','^','_','~'},
+        special_subsequents = new char[] 
+        {'+','-','.','@'};
+
+    public static final boolean isIdentifierStart(char c) {
+        return Character.isLetter(c) ||
+            in(c, special_initials);
+    }
+
+    public static final boolean isIdentifierSubsequent(char c) {
+        return isIdentifierStart(c) ||
+            Character.isDigit(c) ||
+            in(c, special_subsequents);
+    }
 
     public String sval;
     public Quantity nval;
@@ -158,9 +173,16 @@ public class Lexer implements Tokens {
     throws IOException {
         StringBuffer b=new StringBuffer();
         char c;
+        boolean escaped=false, bar=false;
 	try {
-	    while (!in((c=(char)is.read()), stops))
-		b.append(c);
+	    while (!in((c=(char)is.read()), stops) || escaped) {
+                if (!escaped && c=='\\') {
+                    escaped=true;
+                } else {
+                    b.append(c);
+                    escaped=false;
+                }
+            }
 	    is.pushback(c);
 	} catch (EOFException e) {
 	}
