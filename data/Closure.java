@@ -52,6 +52,7 @@ public class Closure extends Procedure {
     public void apply(Interpreter r) throws ContinuationException {
         r.env=new LexicalEnvironment(r, this);
         r.nxp=body;
+	r.vlr=ZV;
     }
 
     public String display() {

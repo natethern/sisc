@@ -55,6 +55,9 @@ public class Quantity extends Value {
 	_INT_MAX = BigInteger.valueOf(Integer.MAX_VALUE),
 	_INT_MIN = BigInteger.valueOf(Integer.MIN_VALUE);
 
+    public final static BigDecimal
+	_BD_ZERO   = BigDecimal.valueOf(0);
+
     public static final Quantity 
 	ZERO = Quantity.valueOf(0),
 	ONE  = Quantity.valueOf(1),
@@ -315,10 +318,16 @@ public class Quantity extends Value {
 
     protected double decimal() {
         switch(type) {
+	case FIXEDINT:
+	    return (double)val;
+	case INTEG:
+	    return i.doubleValue();
         case DECIM:
             return d;
+	case RATIO:
+	    return ratioToDecimal(i, de);
         default:
-            throw new NumberFormatException("Value was not an float");
+            throw new NumberFormatException(liMessage(SISCB, "isnotreal", toString()));
         }
     }
 
@@ -656,22 +665,64 @@ public class Quantity extends Value {
         return null;
     }
 
+    public static BigDecimal[] sqrtrem(BigDecimal x) throws ArithmeticException {
+	
+	BigDecimal y = x.setScale (x.scale () * 2);
+	int scale = scale(x.scale(), 32);
+	
+	BigInteger[] intResult = sqrtrem(y.movePointRight (scale).toBigInteger ());
+	
+	BigDecimal[] result = {
+	    new BigDecimal (intResult[0], scale / 2),
+	    new BigDecimal (intResult[1], scale)
+	};
+	
+	return result;
+    }
+
+    public static BigInteger[] sqrtrem(BigInteger x) throws ArithmeticException {
+	if (x.signum () == 0) {
+	    BigInteger result[] = { x, x };
+	    
+	    return result;
+	}
+
+	int bits = (x.bitLength () - 1) >> 1;
+	BigInteger root = _BI_ONE.shiftLeft (bits);
+	
+	x = x.subtract(root.shiftLeft (bits));
+	while(bits-- > 0) {
+	    BigInteger tmp = x.subtract (_BI_ONE.shiftLeft (bits + bits)).
+		subtract (root.shiftLeft (bits + 1));
+	    if (tmp.signum () >= 0) {
+		root = root.add (_BI_ONE.shiftLeft (bits));
+		x = tmp;
+	    }
+	}
+	
+	BigInteger result[] = { root, x };
+	
+	return result;
+    }
+
     public Quantity sqrt() {
         switch (type) {
-        case FIXEDINT:
-            if (val<0) return new Quantity(0.0, Math.sqrt(-val));
-            break;
-        case INTEGER:
-            if (i.compareTo(_BI_ZERO)==-1)
-                return new Quantity(0.0, Math.sqrt(-1*doubleValue()));
-            break;
 	case DECIM:
-            if (d<0) return new Quantity(0.0, Math.sqrt(-d));
-	    break;
+	    if (d<0)
+		return new Quantity(0.0, Math.sqrt(d));
+	    else return new Quantity(Math.sqrt(d));
+	case FIXEDINT: case INTEG:
+	    BigInteger orig=integer();
+	    BigInteger i=orig.abs();
+	    BigInteger[] rv=sqrtrem(i);
+	    if (rv[1].equals(_BI_ZERO))
+		if (orig.signum()>-1)
+		    return new Quantity(rv[0]);
+		else return new Quantity(0.0, rv[0].doubleValue());
+
 	case RATIO:
-	    double dv=doubleValue();
-            if (dv<0) return new Quantity(0.0, Math.sqrt(-dv));
-	    else return new Quantity(Math.sqrt(dv));
+	    BigDecimal[] rvd=sqrtrem(new BigDecimal(decimal()));
+	    return new Quantity(rvd[0].doubleValue());
         case COMPLEX:
             // Take r=sqrt(a^2 + b^2)
             double a2=d*d;

@@ -613,23 +613,64 @@ public class Quantity extends Value {
         return null;
     }
 
+    public static BigDecimal[] sqrtrem(BigDecimal x) throws ArithmeticException {
+	
+	BigDecimal y = x.setScale (x.scale () * 2);
+	int scale = scale(x.scale(), 32);
+	
+	BigInteger[] intResult = sqrtrem(y.movePointRight (scale).toBigInteger ());
+	
+	BigDecimal[] result = {
+	    new BigDecimal (intResult[0], scale / 2),
+	    new BigDecimal (intResult[1], scale)
+	};
+	
+	return result;
+    }
+
+    public static BigInteger[] sqrtrem(BigInteger x) throws ArithmeticException {
+	if (x.signum () == 0) {
+	    BigInteger result[] = { x, x };
+	    
+	    return result;
+	}
+
+	int bits = (x.bitLength () - 1) >> 1;
+	BigInteger root = _BI_ONE.shiftLeft (bits);
+	
+	x = x.subtract(root.shiftLeft (bits));
+	while(bits-- > 0) {
+	    BigInteger tmp = x.subtract (_BI_ONE.shiftLeft (bits + bits)).
+		subtract (root.shiftLeft (bits + 1));
+	    if (tmp.signum () >= 0) {
+		root = root.add (_BI_ONE.shiftLeft (bits));
+		x = tmp;
+	    }
+	}
+	
+	BigInteger result[] = { root, x };
+	
+	return result;
+    }
+
     public Quantity sqrt() {
         switch (type) {
-        case FIXEDINT:
-            if (val<0)
-                return new Quantity(0.0f, (float)Math.sqrt(-val));
-            break;
-        case INTEGER:
-            if (i.compareTo(_BI_ZERO)==-1)
-                return new Quantity(0.0f, (float)Math.sqrt(-1*floatValue()));
-            break;
 	case DECIM:
-            if (d<0) return new Quantity(0.0f, (float)Math.sqrt(-d));
-	    break;
+	    if (d<0)
+		return new Quantity(0.0f, (float)Math.sqrt(d));
+	    else return new Quantity((float)Math.sqrt(d));
+	case FIXEDINT: case INTEG:
+	    BigInteger orig=integer();
+	    BigInteger i=orig.abs();
+	    BigInteger[] rv=sqrtrem(i);
+	    if (rv[1].equals(_BI_ZERO))
+		if (orig.signum()>-1)
+		    return new Quantity(rv[0]);
+		else return new Quantity(0.0f, rv[0].floatValue());
+
 	case RATIO:
-	    float dv=floatValue();
-            if (dv<0) return new Quantity(0.0f, (float)Math.sqrt(-dv));
-	    else return new Quantity((float)Math.sqrt(dv));
+	    BigDecimal[] rvd=sqrtrem(new BigDecimal(decimal()));
+	    return new Quantity(rvd[0].floatValue());
         case COMPLEX:
             // Take r=sqrt(a^2 + b^2)
             float a2=d*d;
@@ -646,6 +687,21 @@ public class Quantity extends Value {
                 return new Quantity(x, y);
         }
         return new Quantity((float)Math.sqrt(floatValue()));
+    }
+
+    protected float decimal() {
+        switch(type) {
+	case FIXEDINT:
+	    return (float)val;
+	case INTEG:
+	    return i.floatValue();
+        case DECIM:
+            return d;
+	case RATIO:
+	    return ratioToDecimal(i, de);
+        default:
+            throw new NumberFormatException(liMessage(SISCB, "isnotreal", toString()));
+        }
     }
 
     public Quantity add(Quantity o) {
