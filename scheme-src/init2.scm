@@ -30,8 +30,13 @@
 ;; may use your version of this file under either the MPL or the
 ;; GPL.
 ;;
-		 
+
 (current-evaluator eval)
+
+(if (equal? (getprop 'beta '*environment-variables*) "yes")
+    (begin
+      (emit-annotations #t)
+      (emit-debugging-symbols #t)))
 
 ;;;;;;;;;;;;;;;; error handling ;;;;;;;;;;;;;;;
 
