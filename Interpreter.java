@@ -166,16 +166,16 @@ public class Interpreter extends Util {
 	returnFrame(c);
     }
 
-    public void push(Expression nxp, Value[] vlr, LexicalEnvironment env,
+    public final void push(Expression nxp, Value[] vlr, LexicalEnvironment env,
 			   CallFrame fk) {
 	stk=createFrame(nxp, vlr, env, fk, stk);
     }
     
-    public void push(Expression nxp) {
+    public final void push(Expression nxp) {
 	stk=createFrame(nxp, vlr, env, fk, stk);
     }
 
-    public void save() {
+    public final void save() {
 	stk=createFrame(nxp,vlr,env,fk,stk);
     }
 
