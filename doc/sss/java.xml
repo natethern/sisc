@@ -1464,7 +1464,7 @@ Context.exit()
         <title>Reflection</title>
         <para>
           The <literal>s2j</literal> module is based on the native
-          <literal>s2j-module</literal> which defines Scheme
+          <literal>s2j-reflection</literal> module which defines Scheme
           procedures corresponding to almost all methods on
           <classname>java.lang.Class</classname> plus the various
           other reflection classes. The only methods of the Java
@@ -1478,13 +1478,13 @@ Class.getResource(String)
 Class.getResourceAsStream(String)
 Class.getSigners()
           </programlisting>
-          The majority of procedures in <literal>s2j-module</literal>
+          The majority of procedures in <literal>s2j-reflection</literal>
           are not exported by <literal>s2j</literal> since direct use
           of the Java Reflection API should not be necessary due to
           the higher-level functionality provided by
           <literal>s2j</literal> and the
           <literal>generic-procedures</literal> modules. It is however
-          worth noting that <literal>s2j-module</literal> (and hence
+          worth noting that <literal>s2j-reflection</literal> (and hence
           <literal>s2j</literal>) treat reflected Java fields, methods
           and constructors specially. Specifically, they are all
           represented as self-evaluating objects.
