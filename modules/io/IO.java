@@ -376,6 +376,8 @@ public class IO extends ModuleAdapter {
                 return pa;
             case ABSPATHQ:
                 String f1=string(f.vlr[0]);
+                if (f1.startsWith("file:"))
+                    f1=f1.substring(5);
                 File fn=new File(f1);
                 return truth(fn.isAbsolute());
             case NORMALIZEURL:

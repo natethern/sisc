@@ -193,7 +193,7 @@
   (define make-directories!)
   (define (normalize proc)
     (lambda (path)
-      (proc (normalize-url path))))
+      (proc (normalize-url (current-directory) path))))
   (set! directory-list (normalize directory/list))
   (set! file-hidden? (normalize file/hidden?))
   (set! file-is-directory? (normalize file/is-directory?))
