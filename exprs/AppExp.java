@@ -53,6 +53,9 @@ public class AppExp extends Expression {
             r.push(null);
 
 	if (rands.length==0) {
+	    // No arguments, just set the VLR empty, and 
+	    // work on the operator
+
 	    r.vlr=ZV;
 	    tmp=rator.getValue(r);
 	    
@@ -64,8 +67,11 @@ public class AppExp extends Expression {
 		r.push(APPEVAL);
 	    }
 	} else {
+	    // Create the VLR
 	    r.vlr=new Value[rands.length];
 
+	    // Load the immediates from right to left, stop
+	    // on the first non-immediate
 	    int i=rands.length-1;
 	    for (; i>=0; i--) {
 		tmp=rands[i].getValue(r);
@@ -74,6 +80,8 @@ public class AppExp extends Expression {
 	    }
 
 	    if (i<0) {
+		// All the operands were immediate, work on
+		// the operator
 		tmp=rator.getValue(r);
 		
 		if (tmp!=null) {
@@ -84,6 +92,9 @@ public class AppExp extends Expression {
 		    r.push(APPEVAL);
 		}
 	    } else {
+		// We have some non-immediates, so set up 
+		// a FillRib for cleanup and set the first operand
+		// in the nxp
 		r.push(r.createFillRib(i, rands, rator, APPEVAL));
 		r.nxp=rands[i];
 	    }
