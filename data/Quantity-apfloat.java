@@ -86,6 +86,7 @@ public class Quantity extends Value {
 	DECIM = INEXACT | DECIMAL;
 
     public static Quantity valueOf(long val) { return new Quantity(val); }
+    public static Quantity valueOf(double val) { return new Quantity(val); }
     public static Quantity valueOf(BigDecimal val) { return new Quantity(val); }
     public static Quantity valueOf(BigInteger val) { return new Quantity(val); }
     public static Quantity valueOf(BigInteger num, BigInteger den) { 
