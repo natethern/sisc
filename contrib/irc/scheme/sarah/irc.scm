@@ -1,9 +1,17 @@
 (define-java-class <java.util.string-tokenizer>)
 (define-generic-java-methods next-token has-more-tokens)
 
+(define (filter-specials str)
+  (let loop ([ls (string->list str)] [acc '()])
+    (cond [(null? ls) (list->string (reverse acc))]
+          [(and (char<? (car ls) #\space)
+                (not (char=? (car ls) #\newline)))
+           (loop (cdr ls) acc)]
+          [else (loop (cdr ls) (cons (car ls) acc))])))
+
 (define (send-messages bot destination response)
   (let ([tokenizer (java-new <java.util.string-tokenizer> 
-                             (->jstring response)
+                             (->jstring (filter-specials response))
                              (->jstring (string #\newline #\return)))])
     (let loop ()
       (when (->boolean (has-more-tokens tokenizer))
