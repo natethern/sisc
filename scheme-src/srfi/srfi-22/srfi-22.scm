@@ -12,6 +12,9 @@
 	  (eval e)
 	  (loop (read-code in)))))))
 
+(define (main-hook . args)
+  (main args))
+
 ;; Default main, so ordinary "whole bunch 'o scheme code" scripts
 ;; will work
 (define (main . args) 0)
