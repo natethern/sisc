@@ -37,7 +37,7 @@
         (let ((symenv (car segment1))
               (bindings (map-car (cdr segment1))))
           (if (null? bindings)
-              (apply _create-lib (cons lib segments))
+              (apply _create-lib lib segments)
               (let ((symenv-id (string->symbol
                                 (string-append 
                                  segment-str
@@ -49,11 +49,11 @@
                                  (java-wrap 
                                   (cdr (assoc binding (cdr segment1))))))
                           bindings)
-                (cons symenv-id (apply _create-lib (cons lib segments)))))))))
+                (cons symenv-id (apply _create-lib lib segments))))))))
 
 (define (create-library name filename segment1 . segments)
   (let* ((lib (make <sisc.ser.LibraryBuilder> (->jboolean #f)))
-         (index (apply _create-lib (cons lib (cons segment1 segments)))))
+         (index (apply _create-lib lib segment1 segments)))
     (add lib (java-wrap index-sym) (java-wrap index))
     (call-with-output-file filename
       (lambda (out)

@@ -35,13 +35,12 @@
 ;; something you wrote, let me know.
 ;;;;;;
 
-(define (for-each proc . lists)
-  (if (null? lists)
-      (error 'for-each "invalid number of arguments to procedure for-each.")
-      (if (not (null? (car lists)))
-          (begin
-            (apply proc (map-car lists))
-            (apply for-each (cons proc (map-cdr lists)))))))
+(define (for-each proc ls1 . lists)
+  (unless (null? ls1))
+      (begin
+        (set! lists (cons ls1 lists))
+        (apply proc (map-car lists))
+        (apply for-each proc (map-cdr lists))))
 
 (define (eof-object? x) (eq? x #!eof))
 ;;;;;;;;; Standard Scheme functions
@@ -55,7 +54,7 @@
 (define eqv? eq?)
 
 (define (newline . port)
-  (apply display (cons #\newline port)))
+  (apply display #\newline port))
 
 (define reverse
    (letrec [(iter 
@@ -294,12 +293,12 @@
 		    [(null? ls1)
 		     (apply real-append lses)]
 		    [else (apply real-append 
-				 (cons (append2 ls1 (car lses))
-				       (cdr lses)))]))])
+				 (append2 ls1 (car lses))
+				 (cdr lses))]))])
     (lambda lses
       (cond [(null? lses) ()]
 	    [(null? (cdr lses)) (car lses)]
-	    [else (apply real-append `(,(car lses) . ,(cdr lses)))]))))
+	    [else (apply real-append (car lses) (cdr lses))]))))
 
 ; True only if the list is proper (not circular and terminated with null)
 (define (proper-list? x)

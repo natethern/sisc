@@ -96,7 +96,7 @@
                                                error-record)))
           (if (string? message)
               (set! error-record
-                (cons `(message . ,(apply format (cons message args)))
+                (cons `(message . ,(apply format message args))
                       error-record))
               (error 'error "cannot specify arguments to a non format-string error."))))
     (print-shared ops)

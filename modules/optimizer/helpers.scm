@@ -14,7 +14,7 @@
 
 (define (union ls1 . lses)
   (if (null? lses) ls1
-      (apply union (cons (union-2 ls1 (car lses)) (cdr lses)))))
+      (apply union (union-2 ls1 (car lses)) (cdr lses))))
 
 (define (atom? x)
   (and (not (pair? x))

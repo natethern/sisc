@@ -245,7 +245,7 @@
 
 (define (opt:begin exp1 exps* state)
   (values
-   (apply make-begin (cons exp1 exps*))
+   (apply make-begin exp1 exps*)
    (new-state)))
 
 (define (opt:set! lhs rhs state)
