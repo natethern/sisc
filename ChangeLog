@@ -4,7 +4,7 @@
 
 	* Removed old-s2j and old-generic-procedures. Finally!
 
-2004-10-24  Scott G. Miller  <scott@sgmiller.org>
+2004-10-24  Scott G. Miller  <sgmiller@gmail.com>
  
  	* Fixed primitive calls had no error handling, fixed.
  	
@@ -21,24 +21,24 @@
 	* Fixed preservation of immutability in psyntax. This wasn't
 	  working with annotations turned on. See bug 994759.
 
-2004-10-16  Scott G. Miller   <scott@sgmiller.org>
+2004-10-16  Scott G. Miller   <sgmiller@gmail.com>
 
 	* LibraryAE was getting deserialized instead of the child
 	  environment due to a name conflict.  
 	  
-2004-10-16  Scott G. Miller   <scott@sgmiller.org>
+2004-10-16  Scott G. Miller   <sgmiller@gmail.com>
 
 	* Made some attempt to display line/column numbers from load
 	  and parsing so that one can trace the start of an s-expression
 	  where syntax-errors occur, for example.
 	  
-2004-10-15  Scott G. Miller   <scott@sgmiller.org>
+2004-10-15  Scott G. Miller   <sgmiller@gmail.com>
 
 	* Created a dedicated flag for marking call frames as captured.  
 	  Previously, vlk was overloaded, causing rare continuation bugs.
 	  See bug 1038532.
 	  
-2004-10-14  Scott G. Miller   <scott@sgmiller.org>
+2004-10-14  Scott G. Miller   <sgmiller@gmail.com>
 
 	* Fixed a bug in REPL that was passing the wrong array type to 
 	  interpret.  This was breaking uses of "sisc -c".  See bug 972606.
@@ -49,7 +49,7 @@
 	* Fixed various mismatches between generic I/O and the low level
 	  I/O functions scattered in the source (current-*-port for example).
 	  	  
-2004-10-13  Scott G. Miller   <scott@sgmiller.org>
+2004-10-13  Scott G. Miller   <sgmiller@gmail.com>
 
 	* Fixed bug in psyntax that broke shadowing of imports at the top
 	  level. See bug 1046317.
@@ -66,13 +66,13 @@
 
 	* Fixed negation of rationals. See bug 1037559.
 
-2004-08-30  Scott G. Miller   <scott@sgmiller.org>
+2004-08-30  Scott G. Miller   <sgmiller@gmail.com>
 
 	* Fixed the omission of peek-char in the generic I/O code.
 
 2004-08-29  Released SISC 1.9.0.1-alpha
 
-2004-08-29  Scott G. Miller   <scott@sgmiller.org>
+2004-08-29  Scott G. Miller   <sgmiller@gmail.com>
 
 	* Fixed a bug which apparently existed in 1.9.0-alpha preventing
           startup due to the REPL CTL-C functionality.
@@ -80,19 +80,19 @@
 	* Retooled the sisc.sh startup script to behave well with
           the CTL-C functionality.
 
-2004-08-27  Scott G. Miller   <scott@sgmiller.org>
+2004-08-27  Scott G. Miller   <sgmiller@gmail.com>
 
 	* Fixed state bugs in SRFI-18 related to unowned mutexes and
           mutex unlocking with condition variables.
 
 2004-08-24  Released SISC 1.9.0-alpha
 
-2004-08-23  Scott G. Miller   <scott@sgmiller.org>
+2004-08-23  Scott G. Miller   <sgmiller@gmail.com>
 
 	* Numerous bugs related to dead code and undefined references
 	  fixed.
 
-2004-08-14  Scott G. Miller   <scott@sgmiller.org>
+2004-08-14  Scott G. Miller   <sgmiller@gmail.com>
 
 	* SISC-full now uses generic-procedure based I/O, allowing
 	  new port types to be constructed in Scheme.
@@ -103,7 +103,7 @@
 	
 	* Added thread/interrupted? to the threading library.
 	
-2004-07-22  Scott G. Miller   <scott@sgmiller.org>
+2004-07-22  Scott G. Miller   <sgmiller@gmail.com>
 
 	* Fixed REPL annotations
 
