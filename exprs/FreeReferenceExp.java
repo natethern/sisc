@@ -39,7 +39,7 @@ import java.io.*;
 public class FreeReferenceExp extends Expression implements Immediate {
     public Symbol sym;
     public AssociativeEnvironment lenv;
-    public int envLoc;
+    public transient int envLoc;
 
     public FreeReferenceExp(Symbol s, int envLoc,
                             AssociativeEnvironment lenv) {
@@ -93,6 +93,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
         if (!(o instanceof FreeReferenceExp))
             return false;
         FreeReferenceExp e=(FreeReferenceExp)o;
+
         return lenv.equals(e.lenv) && sym.equals(e.sym);
     }
 

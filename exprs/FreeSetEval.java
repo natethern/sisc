@@ -39,7 +39,7 @@ import java.io.*;
 public class FreeSetEval extends Expression {
     public Symbol lhs;
     public AssociativeEnvironment senv;
-    public int envLoc;
+    public transient int envLoc;
 
     public FreeSetEval(Symbol lhs, int e, AssociativeEnvironment senv) {
         this.lhs=lhs;
