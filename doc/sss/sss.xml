@@ -157,6 +157,14 @@ for <function>sqrt</function>, it is not clear what other mathematical
 	    causes &SISC; to revert to base 10.
 	  </para>
 	</listitem>
+	<listitem>
+	  <para><emphasis role="bold">6.6.2 - &SISC; currently only
+	    warns when end-of-file is reached in
+	    <function>read</function>, rather than signaling an
+	    error.  The unterminated datum is discarded.
+            </emphasis>
+	  </para>
+	</listitem>
       </orderedlist>
     </para>
     <para>
