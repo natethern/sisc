@@ -52,7 +52,7 @@ Returns the Java class in which <jclass> was declared, or null if it
 was declared at the top-level.
 
 
-JAVA-CLASS-DIRECT-SUPERCLASSES <jclass> -> <list jclass>
+JAVA-CLASS-DECLARED-SUPERCLASSES <jclass> -> <list jclass>
 Returns the direct superclasses of <jclass>.
 
 For ordinary classes this is the class' superclass followed by all its
@@ -68,22 +68,26 @@ superclasses are:
 <java.io.serializable[][]>)
 
 
-JAVA-CLASS-DIRECT-CLASSES <jclass> => (list <jclass>)
+JAVA-CLASS-DECLARED-CLASSES <jclass> => (list <jclass>)
 Returns all the classes declared by <jclass>.
 
 
-JAVA-CLASS-DIRECT-METHODS <jclass> => (list <jmethod>)
+JAVA-CLASS-DECLARED-CONSTRUCTORS <jclass> => (list <jconstructor>)
+Returns all the constructors declared by <jclass>
+
+
+JAVA-CLASS-DECLARED-METHODS <jclass> => (list <jmethod>)
 Returns all the methods declared by <jclass>.
 
 
-JAVA-CLASS-DIRECT-FIELDS <jclass> -> <list jfield>
+JAVA-CLASS-DECLARED-FIELDS <jclass> -> <list jfield>
 Returns all the fields declared by <jclass>.
 
 
 JAVA-CLASS-PRECEDENCE-LIST <jclass> -> <list jclass>
 Returns the total order of <jclass> and all direct & indirect
 superclasses, as determined by the partial orders obtained from
-calling JAVA-CLASS-DIRECT-SUPER-CLASSES.
+calling JAVA-CLASS-DECLARED-SUPERCLASSES.
 
 
 JAVA-NEW <jclass> <jvalue> ... -> <jobject>
@@ -314,7 +318,7 @@ is the same as
   (java-class '|int[][]|)
 
 The list of direct superclasses returned by
-JAVA-CLASS-DIRECT-SUPERCLASSES for an array class is consistent with
+JAVA-CLASS-DECLARED-SUPERCLASSES for an array class is consistent with
 the widening conversions performed by Java, e.g. the direct
 superclasses of java.util.ArrayList[][] are
   java.util.AbstractList[][]
@@ -413,8 +417,8 @@ double, float, long, int, short, byte, char, are predefined and bound
 to <j...>, e.g. <jvoid>.
 
 The list of direct superclasses returned by
-JAVA-CLASS-DIRECT-SUPERCLASSES for a primitive type is consistent with
-the widening conversions performed by Java, e.g. the direct
+JAVA-CLASS-DECLARED-SUPERCLASSES for a primitive type is consistent
+with the widening conversions performed by Java, e.g. the direct
 superclass of int is long. This is different from what the Java
 reflection APIs returns.
 
@@ -451,6 +455,29 @@ Converts the Scheme string or symbol to a Java string.
 ->SYMBOL <jstring> => <symbol>
 ->STRING <jstring> => <string>
 Converts <jstring> to a Scheme symbol / string.
+
+
+Access Permissions
+------------------
+
+The only class members (i.e. constructors, methods, fields) visible to
+[DEFINE]-GENERIC-JAVA-{METHOD,FIELD-ACCESSOR,FIELD-MODIFIER}[S] and
+JAVA-NEW are public ones declared in public classes. This almost
+exactly mimics the visibility rules in Java for code residing in
+packages other than the one the member is residing in. It is also in
+line with the default permissions granted to the Java reflection
+API. There is one rare case where this rule is more restrictive than
+Java's: public members of package-protected classes are not visible
+even when accessed via a public sub-class.
+
+Depending on the security settings, the Java reflection API is in fact
+capable of granting access to *any* members of *any* class. However,
+using this in the automatic reflection performed by s2j would
+constitute a significant departure from normal Java behaviour and
+result in unpredictable results to the user. For instance,
+undocumented private methods would be invoked in preference to
+documented public methods if the formers type signature provided a
+better match.
 
 
 Common Usage
