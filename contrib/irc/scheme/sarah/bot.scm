@@ -47,7 +47,7 @@
   (define (do-part channel)
     (remove-presence (string->symbol channel))
     (part-channel bot (->jstring channel))
-    (putprop 'members (string->symbol chan) '())
+    (putprop 'members (string->symbol channel) '())
     (set! channels (remove channel channels)))
 
   (define (do-join channel)
