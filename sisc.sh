@@ -1,4 +1,21 @@
 #!/bin/sh
+
+RLWRAP_FILE=~/.sisc-rlwrap
+
+checkIfNonInteractive() {
+# returns true if parameter for "non-interactive" was passed to the script
+    case "-x" in
+    "$@")
+        return 1;
+    esac
+    case "--no-repl" in
+    "$@")
+        return 1;
+    esac
+    return 0;
+};
+
+
 if [ ! -d "$SISC_HOME" ]
 then
    SISC_HOME="`dirname $0`" #/usr/local/lib/sisc
@@ -12,12 +29,32 @@ then
   PROPERTIES="-p $SISC_HOME/sisc.properties"
 fi
 
-#If the rlwrap readline wrapper is in the path, enable it for SISC
-if [ -x "`which rlwrap`" ]
+# We'll attempt to use the rlwrap unix utility to get readline support
+# for the REPL.  However, due to some weirdness in the way threading
+# works in the JVM, interrupts using CTL-C will cause rlwrap to exit
+# prematurely.  To remedy this, we call rlwrap recursively on this shell
+# script, so that the script must terminate to exit through to rlwrap.
+
+#If the rlwrap readline wrapper is in the path, enable it for SISC, 
+#unless the -x or --no-repl switches were used
+checkIfNonInteractive $@;
+if [ "$?" -eq "0" ] && [ -z "$RLWRAPPED" ]
 then
-   RLWRAP=rlwrap
+  if [ -x "`which rlwrap`" ]
+  then
+    if [ ! -f $RLWRAP_FILE ]
+    then
+      touch $RLWRAP_FILE 
+    fi
+    RLWRAP="rlwrap -b '(){}[],+=&^%$#@\;|' -f $RLWRAP_FILE -l $RLWRAP_FILE "
+    RLWRAPPED=yes rlwrap $0 $@
+  fi
+else
+    EXTENSIONS=""
+    if [ -z "$JAVA" ] || ! which $JAVA 
+    then
+      JAVA=java
+    fi
+    $JAVA $JAVAOPT -classpath $SISC_HOME/sisc-opt.jar:$SISC_HOME/sisc.jar:$SISC_HOME/sisc-lib.jar:$CLASSPATH -Dsisc.home=$SISC_HOME sisc.REPL -h $SISC_HOME/sisc.shp $PROPERTIES $EXTENSIONS "$@"
 fi
 
-EXTENSIONS=""
-
-$RLWRAP java $JAVAOPT -classpath $SISC_HOME/sisc-opt.jar:$SISC_HOME/sisc.jar:$SISC_HOME/sisc-lib.jar:$CLASSPATH -Dsisc.home=$SISC_HOME sisc.REPL -h $SISC_HOME/sisc.shp $PROPERTIES $EXTENSIONS "$@"
