@@ -2,6 +2,11 @@
 
 	* Removed inline-primitives and inline-usual-primitives, as 
 	  this is done automatically and safely now.
+
+	* Applied two contributed patches: one which fixes the 
+	  project's Maven description, and another that searches
+	  for sisc.shp in the SISC jar library if not found through
+	  other means.
 	
 2005-01-15  Scott G. Miller  <sgmiller@gmail.com>
 

@@ -1,4 +1,6 @@
-<project xmlns:ant="jelly:ant">
+<project 
+    xmlns:ant="jelly:ant"
+    default="jar:install">
   <goal name="sisc:build-heap">
     <ant:java classname="sisc.boot.GenerateHeap"
           classpath="${maven.build.dest}"
@@ -16,6 +18,14 @@
       <arg value="file:repl.scm"/>
     </ant:java>
   </goal>
+
+  <preGoal name="java:compile">
+      <ant:copy 
+          overwrite="true"
+          tofile="${basedir}/src/sisc/data/Quantity.java"
+          file="${basedir}/src/sisc/data/Quantity-apfloat.java.tmpl" />
+  </preGoal>
+
   <preGoal name="java:jar-resources">
   	<attainGoal name="sisc:build-heap" />
   </preGoal>

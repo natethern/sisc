@@ -28,9 +28,19 @@ public class REPL {
     public static SeekableInputStream findHeap(String heapLocation) {
         try {
             if (heapLocation==null) heapLocation = "sisc.shp";
-            return new BufferedRandomAccessInputStream(heapLocation, "r", 1, 8192);
-        } catch (Exception e) {
-            return null;
+            return new BufferedRandomAccessInputStream(heapLocation, "r", 
+                    1, 8192);
+        } catch (IOException e) {
+            InputStream heapIS = sisc.boot.HeapAnchor.class
+                .getResourceAsStream("sisc.shp");
+            if (null == heapIS) {
+                return null;
+            }
+            try {
+                return new MemoryRandomAccessInputStream(heapIS);
+            } catch (IOException e2) {
+                return null;
+            }
         }
     }
 
