@@ -97,7 +97,7 @@
                           (number->string y '(int))
                           ".")))
 
-(define (definepiece iclass ii jj kk)
+(define (definePiece iclass ii jj kk)
   (let ((index 0))
     (do ((i 0 (+ i 1)))
         ((> i ii))
