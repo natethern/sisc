@@ -590,132 +590,148 @@
     <sect2 id="genconstrdef">
       <title>Defining Constructors</title>
       <para>
-        Constructors are defined with
-        <blockquote>
-          <para>
-            <indexterm><primary>define-constructor</primary>
-            </indexterm>
-              &syntax;
-            <methodsynopsis language="scheme">
-              <void/>
-              <methodname>define-constructor</methodname>
-              <methodparam><parameter>signature</parameter></methodparam>
-              <methodparam><parameter>.</parameter></methodparam>
-              <methodparam><parameter>body</parameter></methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <simplelist>
-                <member>
-                  where <parameter>signature</parameter> is of the
-                  form <literal>(</literal><parameter>type</parameter>
-                  <literal>(</literal><parameter>type</parameter>
-                  <parameter>param</parameter><literal>)</literal>
-                  ... [ <literal>.</literal>
-                  <parameter>rest</parameter>]<literal>)</literal>
-                </member>
-                <member>
-                  and <parameter>body</parameter> can contain anything
-                  that is valid inside the body of a
-                  <function>lambda</function>.
-                </member>
-              </simplelist>
-              <para>
-                This form is basically identical to the
-                <function>define-method</function> form except it
-                defines a "constructor" method for a specific
-                type. All constructor methods are part of the single
-                generic constructor called by <function>make</function>.
-              </para>
-              <note>
-                <para>
-                  <function>define-constructor</function> is a macro that
-                  expands into a function call rather than a
-                  definition. This means any usage inside a function
-                  must occur <emphasis>after</emphasis> all
-                  definitions. Otherwise a syntax error will be raised.
-                </para>
-              </note>
-            </blockquote>
-          </para>
-        </blockquote>
+        Objects are created by invoking the procedure <function>make</function>.
         New generic constructors can be created with
         <blockquote>
           <para>
-            <indexterm><primary>make-generic-constructor</primary>
+            <indexterm><primary>make</primary></indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>object</type>
+              <methodname>make</methodname>
+              <methodparam><parameter>class</parameter></methodparam>
+              <methodparam choice="opt" rep="repeat">
+                <parameter>value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates a new instance of <parameter>class</parameter>.
+              </para>
+              <para>
+                First the generic procedure
+                <function>create</function> is invoked with the
+                <parameter>class</parameter> and
+                <parameter>value</parameter> arguments. Second, the
+                generic procedure <function>initialize</function> is
+                called with the result and the
+                <parameter>value</parameter> arguments.
+              </para>
+              <para>
+                The object returned from this procedure is the result
+                of the aforementioned call to
+                <function>create</function>.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>create</primary></indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>object</type>
+              <methodname>create</methodname>
+              <methodparam><parameter>class</parameter></methodparam>
+              <methodparam choice="opt" rep="repeat">
+                <parameter>value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates a new instance of <parameter>class</parameter>.
+              </para>
+              <para>
+                The main purpose of <function>create</function> is to
+                perform pre-creation processing of constructor
+                arguments. The procedure is typically not called
+                directly but as part of <function>make</function>. It
+                is chained to a generic procedure containing all
+                built-in constructors, obtained by calling
+                <function>generic-builtin-constructor</function>.
+              </para>
+              <para>
+                The result of this procedure must be a newly created
+                instance of <parameter>class</parameter>. Thus,
+                typically methods for argument pre-processing that are
+                added to this procedure should invoke the next best
+                matching method in order to create the appropriate
+                object.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>initialize</primary></indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <void/>
+              <methodname>initialize</methodname>
+              <methodparam><parameter>object</parameter></methodparam>
+              <methodparam choice="opt" rep="repeat">
+                <parameter>value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Initializes <parameter>object</parameter>.
+              </para>
+              <para>
+                The main purpose of <function>initialize</function> is
+                to facilitate the definition of post-creation object
+                initialization, particularly the invocation of
+                initialization code for superclasses. The procedure is
+                typically not called directly but as part of
+                <function>make</function>.
+              </para>
+              <para>
+                The <function>initialize</function> generic procedure
+                is chained to a procedure that accepts any number of
+                arguments and returns nothing. As a result it is not
+                necessary to define methods for
+                <function>initialize</function> unless post-creation
+                initialization is required. Furthermore, it is always
+                possible to invoke the "next best" matching method (as
+                described below) from the body of an
+                <function>initialize</function> method.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>generic-builtin-constructor</primary>
             </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>proc</type>
-              <methodname>make-generic-constructor</methodname>
+              <methodname>generic-builtin-constructor</methodname>
               <methodparam choice="opt">
                 <parameter>next-proc</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Creates a generic constructor which is chained to
-                <parameter>next-proc</parameter>, which must be
-                another generic constructor. This procedure is
-                rarely used since the pre-defined generic
-                constructor called by <function>make</function>
-                typically suffices.
+                Returns a generic procedure containing all built-in
+                and implicitly defined constructors. The returned
+                procedure is chained to
+                <parameter>next-proc</parameter>.
               </para>
-            </blockquote>
-          </para>
-        </blockquote>
-        Generic constructors maintain a table of generic procedures
-        - one for each class of which instances can be
-        constructed. The mapping is performed by
-        <blockquote>
-          <para>
-            <indexterm><primary>constructor</primary>
-            </indexterm>
-              &procedure;
-            <methodsynopsis language="scheme">
-              <type>proc</type>
-              <methodname>constructor</methodname>
-              <methodparam><parameter>constr</parameter></methodparam>
-              <methodparam><parameter>class</parameter></methodparam>
-            </methodsynopsis>
-            <blockquote>
               <para>
-                Returns the generic procedure that holds constructor
-                methods for class <parameter>class</parameter> of the
-                generic constructor <parameter>constr</parameter>.
+                This procedure is rarely used. Its main purpose is to
+                facilitate the alternative <function>make</function>
+                procedures.
               </para>
             </blockquote>
           </para>
         </blockquote>
-      </para>
-      <para>
-        After <function>make</function> has invoked the generic
-        constructor, it calls the <function>initialize</function>
-        generic procedure with the result of the constructor
-        invocation an the arguments supplied to
-        <function>make</function>. The main purpose of
-        <function>initialize</function> is to facilitate the
-        definition of post-creation object initialization,
-        particularly the invocation of initialization code for
-        superclasses.
-      </para>
-      <para>
-        The <function>initialize</function> generic procedure is
-        chained to a procedure that accepts any number of arguments
-        and returns nothing. As a result it is not necessary to
-        define methods for <function>initialize</function> unless
-        post-creation initialization is required. Furthermore, it is
-        always possible to invoke the "next best" matching method
-        (as described below) from the body of an
-        <function>initialize</function> method.
       </para>
       <para>
         An example might be helpful at this stage.
         <programlisting>
-(define-constructor (&lt;jstring&gt; (&lt;jchar&gt; c))
+(define-method (create ((meta &lt;jstring&gt;) class)
+                       (&lt;jchar&gt; c))
   (make &lt;jstring&gt; (-&gt;jarray (list c) &lt;jchar&gt;)))
 (-&gt;string (make &lt;jstring&gt; (-&gt;jchar #\o))) ;=&gt; "o"
-(define-constructor (&lt;jstringbuffer&gt; (next: next-method) . rest)
-  (next-method))
+(define-method (create (next: next-method)
+                       ((meta &lt;jstringbuffer&gt;) class)
+                       . rest)
+  (next-method class))
 (define-method (initialize (&lt;jstringbuffer&gt; sb) . rest)
   (apply app sb rest))
 (-&gt;string (make &lt;jstringbuffer&gt; (-&gt;jstring "foo") (-&gt;jint 1) (-&gt;jstring "bar"))) ;=&gt; "foo1bar"
@@ -981,8 +997,8 @@
         of arguments, all of which are ignored.
       </para>
       <para>
-        It is possible to override the default constructor by defining
-        a constructor with <function>define-constructor</function>.
+        It is possible to override the default constructor by adding a
+        method to the <function>create</function> generic procedure.
         This is rarely needed though since in most cases the
         post-creation object initialisation carried out by the
         <function>initialize</function> generic procedure suffices.
@@ -1010,7 +1026,7 @@
             </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
-              <type>object</type>
+              <type>sobj</type>
               <methodname>make-object</methodname>
               <methodparam><parameter>class</parameter></methodparam>
               <methodparam><parameter>slots</parameter></methodparam>

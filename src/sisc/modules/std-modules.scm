@@ -276,14 +276,12 @@
    make-class
    make-object
    make-generic-procedure
-   make-generic-constructor
    make-method
    define-generic
    define-method
    define-methods
    define-java-proxy-method
    define-class
-   (define-constructor c-proc)
    method-procedure
    method-types
    method-rest?
@@ -293,14 +291,14 @@
    class-precedence-list
    generic-procedure-methods
    generic-procedure-next
-   constructor
    java-proxy-method-dispatcher
    add-method
    applicable-methods
+   generic-builtin-constructor
    generic-java-procedure
-   generic-java-constructor
    generic-java-proxy-procedure
    make
+   create
    initialize)
   (import s2j-reflection)
   (import s2j-conversion)

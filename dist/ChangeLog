@@ -1,3 +1,8 @@
+2003-04-27  Matthias Radestock  <matthias@sorted.org>
+
+	* Simplified mechanism for defining constructors in the object
+	  system.
+
 2003-04-24  Matthias Radestock  <matthias@sorted.org>
 
 	* Removed "invoke hashtables as procedures" access to hashtable

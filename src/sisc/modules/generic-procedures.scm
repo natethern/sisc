@@ -80,6 +80,7 @@
   (type<= (type-of x) y))
 
 (define (types<= x y) (every2 type<= x y))
+(define (types= x y) (and (types<= x y) (types<= y x)))
 (define (instances-of? x y) (every2 instance-of? x y))
 
 
@@ -120,8 +121,8 @@
   (let ([res (make-object <class> `((superclasses . ,superclasses)
                                     (slots . ,(alist->hashtable slots eq?))))])
     (add-method-to-list
-     (java-constructor-methods res)
-     (make-method (object-initializer res) '() #t))
+     *CONSTRUCTORS*
+     (make-method (object-initializer res) (list (meta res)) #t))
     res))
 (define (object-initializer class)
   (let ([slots (make-hashtable eq?)])
@@ -234,7 +235,7 @@
 (define (method= m1 m2)
   (and (= (method-arity m1) (method-arity m2))
        (eq? (method-rest? m1) (method-rest? m2))
-       (every2 eq? (method-types m1) (method-types m2))))
+       (types= (method-types m1) (method-types m2))))
 
 ;;Checks whether a method can be called with arguments of specific
 ;;types.
@@ -303,37 +304,21 @@
 (define (make-method-list)
   ;;#(method-lookup-cache max-arity (monitor . methods))
   (vector #f 0 (list (mutex/new))))
-(define (constructor-methods class) (make-method-list))
 
 ;;we keep track of all the classes whose methods we have already
 ;;learned about
-(define *CLASSES* (make-hashtable eqv?))
+(define *JAVA-CLASSES* (make-hashtable eqv?))
 ;;for each Java method name we maintain a method list which is shared
 ;;by all the generic procedures representing java methods of that name
 (define *JAVA-METHODS* (make-hashtable eq?))
 (define (java-methods name)
   (hashtable/get! *JAVA-METHODS* name make-method-list))
-;;Java constructors are stored in per-class method lists
-(define *JAVA-CONSTRUCTORS* (make-hashtable eqv?))
-(define (java-constructor-methods class)
-  (hashtable/get! *JAVA-CONSTRUCTORS* class make-method-list))
+;;Constructors are stored in a global list which is shared by all
+;;the generic procedures representing constructors
+(define *CONSTRUCTORS* #f)
 ;;mapping of Java method names to generic procedures that handle
 ;;invocation of Scheme code from Java via a proxy
 (define *GENERIC-JAVA-PROXY-PROCEDURES* (make-hashtable eq?))
-
-;;constructors are chained by chaining their contained generic
-;;procedures, which get created lazily on a per-class basis
-(define (constructor proc class)
-  (hashtable/get!
-   (procedure-property proc 'generic-constructors)
-   class
-   (lambda ()
-     (apply _make-generic-procedure
-            ((procedure-property proc 'constructor-methods) class)
-            (let ([next (procedure-property proc 'next)])
-              (if next
-                  (list (constructor next class))
-                  '()))))))
 
 (define (java-proxy-method-dispatcher v)
   (java/invocation-handler
@@ -360,51 +345,38 @@
               (set-cdr! methods (cons m (cdr meths)))
               (add-method-helper m meths))))))
 
-(define (add-java-constructors constructors new-constructors)
-  (for-each (lambda (c)
-              (if (memq 'public (java/modifiers c))
-                  (add-method-to-list
-                   constructors
-                   (make-method
-                    c
-                    (vector->list (java/parameter-types c))
-                    #f))))
-            new-constructors))
-(define (add-java-methods methods new-methods)
-  (for-each (lambda (m)
-              (if (memq 'public (java/modifiers m))
-                  (add-method-to-list
-                   methods
-                   (make-method
-                    m
-                    (cons (if (memq 'static (java/modifiers m))
-                              (meta (java/declaring-class m))
-                              (java/declaring-class m))
-                          (vector->list (java/parameter-types m)))
-                    #f))))
-            new-methods))
+(define (add-java-constructor c)
+  (and (memq 'public (java/modifiers c))
+       (add-method-to-list
+        *CONSTRUCTORS*
+        (make-method
+         (lambda (next class . args) (apply c args))
+         (cons (meta (java/declaring-class c))
+               (vector->list (java/parameter-types c)))
+         #f))))
+(define (add-java-method m)
+  (and (memq 'public (java/modifiers m))
+       (add-method-to-list
+        (java-methods (java/name m))
+        (make-method
+         (lambda (next . args) (apply m args))
+         (cons (if (memq 'static (java/modifiers m))
+                   (meta (java/declaring-class m))
+                   (java/declaring-class m))
+               (vector->list (java/parameter-types m)))
+         #f))))
 (define (add-class class)
   (if (and (not (java/null? class))
-           (not (hashtable/put! *CLASSES* class #t)))
+           (not (hashtable/put! *JAVA-CLASSES* class #t)))
       (begin
         (add-class (java/superclass class))
         (for-each add-class (vector->list (java/interfaces class)))
         (if (memq 'public (java/modifiers class))
-            (let ([methods (make-hashtable eqv?)])
-              (add-java-constructors
-               (java-constructor-methods class)
-               (vector->list (java/decl-constructors class)))
-              (for-each (lambda (m)
-                          (let ([name (java/name m)])
-                            (hashtable/put!
-                             methods name
-                             (cons m (hashtable/get methods name
-                                                    '())))))
-                        (vector->list (java/decl-methods class)))
-              (hashtable/for-each
-               (lambda (name meths)
-                 (add-java-methods (java-methods name) meths))
-               methods))))))
+            (begin
+              (for-each add-java-constructor
+                        (vector->list (java/decl-constructors class)))
+              (for-each add-java-method 
+                        (vector->list (java/decl-methods class))))))))
 
 ;;returns a list of applicable methods and ambiguous methods. The
 ;;applicable methods are returned in a total order based on their
@@ -487,22 +459,11 @@
           (error (format "no matching method for ~s" args)))
       (let ([meth (method-procedure (car applicable))])
         (apply meth
-               (if (or (java/method? meth) (java/constructor? meth))
-                   ;;We only do this because our current type system
-                   ;;does not distinguish between Scheme objects and
-                   ;;their interal representation, which results in
-                   ;;Java methods/constructors being applicable to
-                   ;;Scheme objects. Once this is fixed, we can
-                   ;;eliminate the "map".
-                   (map (lambda (x) (if (java/object? x)
-                                        x
-                                        (java/wrap x)))
-                        args)
-                   (cons (lambda args
-                           (call-method-helper (cdr applicable)
-                                               args
-                                               next))
-                         args))))))
+               (lambda args
+                 (call-method-helper (cdr applicable)
+                                     args
+                                     next))
+               args))))
 
 (define (_make-generic-procedure methods . rest)
   (define (proc . args)
@@ -515,29 +476,15 @@
   (if (not (null? rest))
       (set-procedure-property! proc 'next (car rest)))
   proc)
-(define (_make-generic-constructor cproc . rest)
-  (define (proc class . args)
-    (if (java/class? class) (add-class class))
-    (apply (constructor proc class) args))
-  ;;A constructor procedure maintains a hashtable of
-  ;;generic procedures, one for each class, that contain methods for
-  ;;each of the constructors defined for that class
-  (set-procedure-property! proc 'generic-constructors (make-hashtable eqv?))
-  (set-procedure-property! proc 'constructor-methods cproc)
-  (if (not (null? rest))
-      (set-procedure-property! proc 'next (car rest)))
-  proc)
 
 (define (generic-java-procedure name . rest)
   (apply _make-generic-procedure
          (java-methods (java/mangle-method-name name))
          rest))
-(define (generic-java-constructor . rest)
-  (apply _make-generic-constructor java-constructor-methods rest))
+(define (generic-builtin-constructor . rest)
+  (apply _make-generic-procedure *CONSTRUCTORS* rest))
 (define (make-generic-procedure . rest)
   (apply _make-generic-procedure (make-method-list) rest))
-(define (make-generic-constructor . rest)
-  (apply _make-generic-constructor constructor-methods rest))
 (define <java.lang.UnsupportedOperationException>
   (java/class '|java.lang.UnsupportedOperationException|))
 (define (generic-java-proxy-procedure name)
@@ -586,10 +533,6 @@
      (begin
        (define-method (?name . ?signature) . ?body)
        ...))))
-(define-syntax define-constructor
-  (syntax-rules ()
-    ((_ (?class . ?rest) . ?body)
-     (define-method ((constructor c-proc ?class) . ?rest) . ?body))))
 (define-syntax define-java-proxy-method
   (syntax-rules ()
     ((_ (?name . ?rest) . ?body)
@@ -601,15 +544,14 @@
      (define ?name (make-class (list . ?superclasses)
                                (list (cons '?key ?val) ...))))))
 
-(define c-proc (void))
+(define create (void))
 (define initialize (void))
-;;The global generic constructor chains the generic java constructor
 (define (make class . args)
-  (let ([res (apply c-proc class args)])
+  (let ([res (apply create class args)])
     (apply initialize res args)
     res))
-(set! c-proc (_make-generic-constructor constructor-methods
-                                        (generic-java-constructor)))
+(set! *CONSTRUCTORS* (make-method-list))
+(set! create (make-generic-procedure (generic-builtin-constructor)))
 (set! initialize (make-generic-procedure (lambda args (void))))
 
 (set! <bot> (special-type '<bot>))

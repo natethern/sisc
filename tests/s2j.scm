@@ -12,8 +12,8 @@
 ;;test calling of static methods
 (value-of <jstring> (->jint 1234))
 ;;test overloading of Java methods and constructors in Scheme...
-(define-constructor (<jstring> (next: next-method)
-                               (<jchar> c))
+(define-method (create ((meta <jstring>) class)
+                       (<jchar> c))
   (make <jstring> (->jarray (list c) <jchar>)))
 (make <jstring>) ;calls Java method
 (make <jstring> (->jchar #\o)) ;calls scheme method
@@ -26,8 +26,10 @@
   buf)
 (app sb (->jstring "foo") (->jint 1) (->jstring "bar"))
 ;;test object initialization
-(define-constructor (<jstringbuffer> (next: next-method) . rest)
-  (next-method))
+(define-method (create (next: next-method)
+                       ((meta <jstringbuffer>) class)
+                       . rest)
+  (next-method class))
 (define-method (initialize (<jstringbuffer> sb) . rest)
   (apply app sb rest))
 (make <jstringbuffer> (->jstring "foo") (->jint 1) (->jstring "bar"))

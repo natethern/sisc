@@ -585,50 +585,16 @@ Context.exit()
           Scheme and Java objects.
         </para>
         <para>
-          The <function>make</function> procedure calls a generic
-          constructor which is chained to a generic constructor that
-          is obtained as follows
-          <blockquote>
-            <para>
-              <indexterm><primary>generic-java-constructor</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <type>proc</type>
-                <methodname>generic-java-constructor</methodname>
-                <methodparam choice="opt">
-                  <parameter>next-proc</parameter>
-                </methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Creates a generic constructor that contains all Java
-                  constructors of all classes. Its main purpose is to
-                  allow new constructors (besides
-                  <function>make</function>) to be defined that (like
-                  <function>make</function>) are chaining all Java
-                  constructors.
-                </para>
-                <para>
-                  If the <parameter>next-proc</parameter> parameter is
-                  specified, the generic constructor is chained to
-                  that procedure, which must be a generic constructor.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-        </para>
-        <para>
           The types of the parameters passed to
           <function>make</function> determine which constructor is
           invoked. Normally this is a constructor defined in
           Java. Note however that that Scheme code can define new
-          constructors or overload/override existing constructors via
-          the <function>define-constructor</function> macro, and
-          add post-creation initialization code by defining methods on
-          the <function>initialize</function> generic procedure. See
-          <xref linkend="GenericProcedures"/> for details of the
-          object creation/initialization mechanism.
+          constructors or overload/override existing constructors by
+          defining methods on the <function>create</function> generic
+          procedure, and add post-creation initialization code by
+          defining methods on the <function>initialize</function>
+          generic procedure. See <xref linkend="GenericProcedures"/>
+          for details of the object creation/initialization mechanism.
         </para>
         <para>
           Due to the implicit or
