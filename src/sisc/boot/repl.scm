@@ -153,6 +153,8 @@
            repl))
 
 (define (exit . return-value)
+  (if (not (pair? (_exit-handler)))
+      (error 'exit "not in a read-eval-print-loop."))
   (let ([k (car (_exit-handler))]
         [rv (if (null? return-value) #!void (car return-value))])
     (_exit-handler (cdr (_exit-handler)))

@@ -196,27 +196,47 @@ public class REPL {
         
         String expr=(String)args.get("eval");
         if (expr!=null) {
-            Value v=r.eval(expr);
-            if (!call) 
-                System.out.println(v);
+	    Value v=Util.VOID;
+	    try {
+		v=r.eval(expr);
+		if (!call) 
+		    System.out.println(v);
+	    } catch (SchemeException se) {
+		se.printStackTrace();
+		returnCode = 1;
+	    }
         }
 
         String func=(String)args.get("call-with-args");
         if (func!=null) {
-            Procedure fun=Util.proc(r.eval(func));
-            Vector av=(Vector)args.get("argv");
-            SchemeString[] sargs=new SchemeString[(av == null ? 0 : 
-                                                   av.size())];
-            for (int i=0; i<sargs.length; i++) 
-                sargs[i]=new SchemeString((String)av.elementAt(i));
-            Value v=r.eval(fun, sargs);
-            if (noRepl) {
-                if (v instanceof Quantity)
-                    returnCode=((Quantity)v).indexValue();
-                else if (!(v instanceof SchemeVoid)) {
-                    System.out.println(v);
-                }
-            }
+            Procedure fun=null;
+	    try {
+		fun=Util.proc(r.eval(func));
+	    } catch (SchemeException se) {
+		se.printStackTrace();
+		returnCode = 1;
+	    }
+	    if (fun!=null) {
+		Vector av=(Vector)args.get("argv");
+		SchemeString[] sargs=new SchemeString[(av == null ? 0 : 
+						       av.size())];
+		for (int i=0; i<sargs.length; i++) 
+		    sargs[i]=new SchemeString((String)av.elementAt(i));
+		Value v=Util.VOID;
+		try {
+		    v=r.eval(fun, sargs);
+		    if (noRepl) {
+			if (v instanceof Quantity)
+			    returnCode=((Quantity)v).indexValue();
+			else if (!(v instanceof SchemeVoid)) {
+			    System.out.println(v);
+			}
+		    }
+		} catch (SchemeException se) {
+		    se.printStackTrace();
+		    returnCode = 1;
+		}           
+	    }
         }
         
         DynamicEnvironment dynenv=r.dynenv;
