@@ -75,7 +75,7 @@
         [error-record '()])
     ;;Location
     (cond [(null? args) (void)]
-          [(and (not (null? args))
+          [(and (not (null? (cdr args)))
                 (symbol? (car args)))
            (set! error-record (cons (cons 'location (car args)) 
                                     error-record))
