@@ -1,3 +1,9 @@
+2004-10-24  Scott G. Miller  <scott@sgmiller.org>
+ 
+ 	* Fixed primitive calls had no error handling, fixed.
+ 	
+ 	* Some read I/O generics were not redefined at top level, fixed.
+ 	
 2004-10-19  Matthias Radestock  <matthias@sorted.org>
 
 	* Allowed java proxies to define hashCode, equals and toString.

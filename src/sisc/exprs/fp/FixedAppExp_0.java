@@ -4,6 +4,7 @@ import java.io.*;
 import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.nativefun.FixableProcedure;
+import sisc.nativefun.NestedPrimRuntimeException;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
@@ -21,7 +22,23 @@ public class FixedAppExp_0 extends Expression implements Immediate {
     }
 
     public Value getValue(Interpreter r) throws ContinuationException {
-        return proc.apply();
+    	try {
+        	return proc.apply();
+        } catch (ClassCastException cc) {
+            error(r, getName(),
+                  liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()),
+	  					    cc);
+        } catch (NestedPrimRuntimeException npr) {
+            Procedure.error(r, getName(), npr);
+        } catch (RuntimeException re) {
+            //re.printStackTrace();
+            String msg = re.getMessage();
+            if (msg == null)
+                msg = re.toString();
+            error(r, proc.getName(), msg, re);
+        }
+        // Should be unreachable;
+        return null;
     }
 
     public Value express() {
