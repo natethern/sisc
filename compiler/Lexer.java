@@ -145,6 +145,11 @@ public class Lexer implements Tokens {
     }
 
     public int readChar(InputPort is) throws IOException {
+        return readChar(is, true); 
+    }
+
+    public int readChar(InputPort is, boolean handleEscapes) 
+        throws IOException {
         int c=is.read();
 
         if (strictR5RS && in((char)c, reserved)) 
@@ -152,7 +157,7 @@ public class Lexer implements Tokens {
                                                  new String(new char[] {
                                                      ((char)c)})));
 
-        if (c!='\\') return c;
+        if (!handleEscapes || c!='\\') return c;
 
         //escaping rules are those defined by Java, except we don't
         //handle octal escapes.
@@ -194,16 +199,10 @@ public class Lexer implements Tokens {
     throws IOException {
         StringBuffer b=new StringBuffer();
         char c;
-        boolean escaped=false, bar=false;
 	try {
-	    while (!in((c=(char)readChar(is)), stops) || escaped) {
-                if (handleEscapes && !escaped && c=='\\') {
-                    escaped=true;
-                } else {
-                    b.append(c);
-                    escaped=false;
-                }
-            }
+	    while (!in((c=(char)readChar(is, handleEscapes)),
+                       stops)) 
+                b.append(c);
 	    is.pushback(c);
 	} catch (EOFException e) {
 	}
