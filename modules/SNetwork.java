@@ -249,23 +249,23 @@ public class SNetwork extends ModuleAdapter {
         }
     }
 
-    public void initialize(Interpreter r) {
-        define(r, "open-tcp-listener", OPEN_TCP_LISTENER);
-        define(r, "accept-tcp-socket", ACCEPT_TCP_SOCKET);
-        define(r, "open-tcp-socket", OPEN_TCP_SOCKET);
-        define(r, "open-socket-input-port", OPEN_SOCKET_INPUT_PORT);
-        define(r, "open-socket-output-port", OPEN_SOCKET_OUTPUT_PORT);
-        define(r, "close-socket", CLOSE_SOCKET);
-        define(r, "get-host-ip-by-name", GET_HOST_IP_BY_NAME);
-        define(r, "get-host-name-by-ip", GET_HOST_NAME_BY_IP);
-        define(r, "get-local-host", GET_LOCAL_HOST);
-        define(r, "open-udp-socket", OPEN_UDP_SOCKET);
-        define(r, "open-multicast-client-socket", OPEN_MULTICAST_CLIENT_SOCKET);
-        define(r, "open-multicast-server-socket", OPEN_MULTICAST_SERVER_SOCKET);
-        define(r, "join-multicast-group", JOIN_MULTICAST_GROUP);
-        define(r, "leave-multicast-group", LEAVE_MULTICAST_GROUP);
-        define(r, "set-multicast-ttl!", SET_MULTICAST_TTL);
-        define(r, "set-so-timeout", SET_SO_TIMEOUT);
+    public SNetwork() {
+        define("open-tcp-listener", OPEN_TCP_LISTENER);
+        define("accept-tcp-socket", ACCEPT_TCP_SOCKET);
+        define("open-tcp-socket", OPEN_TCP_SOCKET);
+        define("open-socket-input-port", OPEN_SOCKET_INPUT_PORT);
+        define("open-socket-output-port", OPEN_SOCKET_OUTPUT_PORT);
+        define("close-socket", CLOSE_SOCKET);
+        define("get-host-ip-by-name", GET_HOST_IP_BY_NAME);
+        define("get-host-name-by-ip", GET_HOST_NAME_BY_IP);
+        define("get-local-host", GET_LOCAL_HOST);
+        define("open-udp-socket", OPEN_UDP_SOCKET);
+        define("open-multicast-client-socket", OPEN_MULTICAST_CLIENT_SOCKET);
+        define("open-multicast-server-socket", OPEN_MULTICAST_SERVER_SOCKET);
+        define("join-multicast-group", JOIN_MULTICAST_GROUP);
+        define("leave-multicast-group", LEAVE_MULTICAST_GROUP);
+        define("set-multicast-ttl!", SET_MULTICAST_TTL);
+        define("set-so-timeout", SET_SO_TIMEOUT);
     }
 
     public static SchemeSocket sock(Interpreter r, Value o) throws ContinuationException {

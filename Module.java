@@ -47,11 +47,6 @@ public abstract class Module extends NamedValue implements java.io.Serializable 
 	return displayNamedOpaque("native library");
     }
 
-    public abstract void initialize(Interpreter r);
-
     public abstract Value eval(int primid, Interpreter f)
     throws ContinuationException;
-
-
-    
 }

@@ -47,13 +47,13 @@ public class SRFI12 extends ModuleAdapter {
 	MAKECOMPOSITECONDITION=2, HASCONDITIONKIND=3,
 	CONDPROPERTYACCESSOR=4, GETCONDITIONPROPERTIES=5;
     
-    public void initialize(Interpreter r) {
-        define(r, "condition?", CONDITIONQ);
-	define(r, "has-condition-kind", HASCONDITIONKIND);
-	define(r, "condition-property-accessor", CONDPROPERTYACCESSOR);
-	define(r, "make-composite-condition", MAKECOMPOSITECONDITION);
-        define(r, "sisc-make-property-condition", MAKEPROPERTYCONDITION);
-        define(r, "sisc-get-condition-properties", GETCONDITIONPROPERTIES);
+    public SRFI12() {
+        define("condition?", CONDITIONQ);
+	define("has-condition-kind", HASCONDITIONKIND);
+	define("condition-property-accessor", CONDPROPERTYACCESSOR);
+	define("make-composite-condition", MAKECOMPOSITECONDITION);
+        define("sisc-make-property-condition", MAKEPROPERTYCONDITION);
+        define("sisc-get-condition-properties", GETCONDITIONPROPERTIES);
     }
 
     class Condition extends Value {

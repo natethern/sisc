@@ -44,8 +44,8 @@ public class SExec extends ModuleAdapter {
 
     public static final int SEXEC=1;
 
-    public void initialize(Interpreter r) {
-        define(r, "exec", SEXEC);
+    public SExec() {
+        define("exec", SEXEC);
     }
 
     public Value eval(int primid, Interpreter r)

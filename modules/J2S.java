@@ -110,22 +110,21 @@ public class J2S extends ModuleAdapter {
     }
 
 
-    public void initialize(Interpreter r) {
-        define(r, "java/field-ref", JFIELDREF);
-        define(r, "java/field-set!", JFIELDSET);
-        define(r, "java/get-methods", JGETMETHODS);
-        define(r, "java/get-fields", JGETFIELDS);
-        define(r, "java/get-constructors", JGETCONSTRUCTORS);
-        define(r, "java/instantiate", JINSTANTIATE);
-        define(r, "java/call", JCALL);
-        define(r, "java/class-for-name", JCLASSFORNAME);
-        define(r, "java/class-of-object", JGETCLASS);
-        define(r, "java/object?", JOBJECTQ);
-        define(r, "java/class?", JCLASSQ);
-        define(r, "java/instance-of?", JINSTANCEOFQ);
-        define(r, "java/get-class-name", JGETCLASSNAME);
+    public J2S() {
+        define("java/field-ref", JFIELDREF);
+        define("java/field-set!", JFIELDSET);
+        define("java/get-methods", JGETMETHODS);
+        define("java/get-fields", JGETFIELDS);
+        define("java/get-constructors", JGETCONSTRUCTORS);
+        define("java/instantiate", JINSTANTIATE);
+        define("java/call", JCALL);
+        define("java/class-for-name", JCLASSFORNAME);
+        define("java/class-of-object", JGETCLASS);
+        define("java/object?", JOBJECTQ);
+        define("java/class?", JCLASSQ);
+        define("java/instance-of?", JINSTANCEOFQ);
+        define("java/get-class-name", JGETCLASSNAME);
     }
-
 
     public Value schemeValue(Object v) {
         return (v instanceof Value ? (Value)v :

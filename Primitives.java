@@ -38,9 +38,9 @@ import sisc.data.*;
 import sisc.exprs.*;
 import java.util.*;
 import java.io.*;
+import java.lang.reflect.*;
 
 public class Primitives extends ModuleAdapter {
-    public Primitives() {}
     public static final Symbol
 	FILE=Symbol.get("file"),
 	NOFILE=Symbol.get("no-file"),
@@ -49,7 +49,7 @@ public class Primitives extends ModuleAdapter {
     public String getModuleName() {
 	return "Primitives";
     }
-
+    
     public static final int
            ABSPATHQ=0,               ACOS=1,                ADD=2,
               APPLY=3,               ASHL=4,               ASHR=5,
@@ -105,143 +105,145 @@ public class Primitives extends ModuleAdapter {
                      (((Quantity)v).is(mask)));
     }
 
-    public void define(Interpreter r, String s, int v) {
-	super.define(r,s,v);
-	r.ctx.toplevel_env.define(Symbol.get(s), getBindingValue(Symbol.get(s)));
+    public void bindAll(AssociativeEnvironment a) {
+	Symbol[] syms=getModuleBindingNames();
+	for (int i=0; i<syms.length; i++) {
+	    a.define(syms[i], getBindingValue(syms[i]));
+	}
     }
 
-    public void initialize(Interpreter r) {
-        define(r, "list", LIST);
-        define(r, "*", MUL);
-        define(r, "+", ADD);
-        define(r, "-", SUB);
-        define(r, "/", DIV);
-        define(r, "<", LT);
-        define(r, "=", NEQ);
-        define(r, ">", GRT);
-        define(r, "_gcd", GCD);
-        define(r, "_lcm", LCM);
-        define(r, "_string-append", STRINGAPPEND);
-        define(r, "absolute-path?", ABSPATHQ);
-        define(r, "acos", ACOS);
-        define(r, "apply", APPLY);
-        define(r, "ashl", ASHL);
-        define(r, "ashr", ASHR);
-        define(r, "asin", ASIN);
-        define(r, "atan", ATAN);
-        define(r, "block-read", BLOCKREAD);
-        define(r, "block-write", BLOCKWRITE);
-        define(r, "boolean?", BOOLEANQ);
-        define(r, "box", BOX);
-        define(r, "box?", BOXQ);
-        define(r, "call-with-current-continuation", CALLCC);
-        define(r, "call-with-failure-continuation", CALLFC);
-        define(r, "call-with-values", CALLWITHVALUES);
-        define(r, "car", CAR);
-        define(r, "cdr", CDR);
-        define(r, "ceiling", CEILING);
-        define(r, "char->integer", CHAR2INTEGER);
-        define(r, "char-ready?", CHARREADY);
-        define(r, "char?", CHARACTERQ);
-        define(r, "close-input-port", CLOSEINPUTPORT);
-        define(r, "close-output-port", CLOSEOUTPUTPORT);
-        define(r, "complex?", COMPLEXQ);
-        define(r, "cons", CONS);
-        define(r, "continuation?", CONTINUATIONQ);
-        define(r, "cos", COS);
-        define(r, "current-evaluator", CURRENTEVAL);
-        define(r, "current-input-port", CURRENTINPUTPORT);
-        define(r, "current-output-port", CURRENTOUTPUTPORT);
-        define(r, "denominator", DENOMINATOR);
-        define(r, "display", DISPLAY);
-        define(r, "environment?", ENVIRONMENTQ);
-        define(r, "eq?", EQ);
-        define(r, "equal?", EQUAL);
-        define(r, "error", ERROR);
-        define(r, "eval", EVAL);
-        define(r, "eval", EVAL);
-        define(r, "exact->inexact", EXACT2INEXACT);
-        define(r, "exact?", EXACTQ);
-        define(r, "exp", EXP);
-        define(r, "file-type", FILETYPE);
-        define(r, "find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
-        define(r, "floor", FLOOR);
-        define(r, "flush-output-port", FLUSHOUTPUTPORT);
-	define(r, "get-native-library-binding", GETNLBINDING);
-	define(r, "get-native-library-binding-names", GETNLBINDINGNAMES);
-	define(r, "get-native-library-name", GETNLNAME);
-	define(r, "get-native-library-version", GETNLVERSION);
-        define(r, "get-output-string", GETOUTPUTSTRING);
-        define(r, "getprop", LOOKUP);
-        define(r, "imag-part", IMAGPART);
-        define(r, "inexact->exact", INEXACT2EXACT);
-        define(r, "inexact?", INEXACTQ);
-        define(r, "input-port?", INPORTQ);
-        define(r, "integer->char", INTEGER2CHAR);
-        define(r, "integer?", INTEGERQ);
-        define(r, "interaction-environment", INTERACTIONENVIRONMENT );
-        define(r, "length", LENGTH);
-        define(r, "list->vector", LIST2VECTOR);
-        define(r, "load", LOAD);
-        define(r, "load-native-library", LOADNL);
-        define(r, "log", LOG);
-        define(r, "make-path", MAKEPATH);
-        define(r, "make-rectangular", MAKERECTANGULAR);
-        define(r, "make-string", MAKESTRING);
-        define(r, "make-vector", MAKEVECTOR);
-        define(r, "max-precision", MAX_PRECISION);
-        define(r, "min-precision", MIN_PRECISION);
-        define(r, "null-environment", NULLENVIRONMENT);
-        define(r, "null?", NULLQ);
-        define(r, "number->string", NUMBER2STRING);
-        define(r, "number?", NUMBERQ);
-        define(r, "numerator", NUMERATOR);
-        define(r, "open-input-file", OPENINPUTFILE);
-        define(r, "open-input-string", OPENINPUTSTRING);
-        define(r, "open-output-file", OPENOUTPUTFILE);
-        define(r, "open-output-string", OPENOUTPUTSTRING);
-        define(r, "output-port?", OUTPORTQ);
-        define(r, "pair?", PAIRQ);
-        define(r, "parent-continuation", PARENT_CONT);
-        define(r, "peek-char", PEEKCHAR);
-        define(r, "procedure?", PROCEDUREQ);
-        define(r, "putprop", PUTPROP);
-        define(r, "quotient", QUOTIENT);
-        define(r, "rational?", RATIOQ);
-        define(r, "read", READ);
-        define(r, "read-char", READCHAR);
-        define(r, "real-part", REALPART);
-        define(r, "remainder", REMAINDER);
-        define(r, "round", ROUND);
-        define(r, "scheme-report-environment", REPORTENVIRONMENT);
-        define(r, "set-box!", SETBOX);
-        define(r, "set-car!", SETCAR);
-        define(r, "set-cdr!", SETCDR);
-        define(r, "sin", SIN);
-        define(r, "sqrt", SQRT);
-        define(r, "string->number", STRING2NUMBER);
-        define(r, "string->symbol", STRING2SYMBOL);
-        define(r, "string->uninterned-symbol", STRING2UNINTERNEDSYMBOL);
-        define(r, "string-fill!", STRINGFILL);
-        define(r, "string-length", STRINGLENGTH);
-        define(r, "string-ref", STRINGREF);
-        define(r, "string-set!", STRINGSET);
-        define(r, "string?", STRINGQ);
-        define(r, "symbol->string", SYMBOL2STRING);
-        define(r, "symbol?", SYMBOLQ);
-        define(r, "system-time", SYSTIME);
-        define(r, "system-time",SYSTIME);
-        define(r, "tan", TAN);
-        define(r, "unbox", UNBOX);
-        define(r, "vector->list", VECTOR2LIST);
-        define(r, "vector-length", VECTORLENGTH);
-        define(r, "vector-ref", VECTORREF);
-        define(r, "vector-set!", VECTORSET);
-        define(r, "vector?", VECTORQ);
-        define(r, "void", _VOID);
-        define(r, "void?", VOIDQ);
-        define(r, "write", WRITE);
-        define(r, "write-char", WRITECHAR);
+    public Primitives() {
+        define("list", LIST);
+        define("*", MUL);
+        define("+", ADD);
+        define("-", SUB);
+        define("/", DIV);
+        define("<", LT);
+        define("=", NEQ);
+        define(">", GRT);
+        define("_gcd", GCD);
+        define("_lcm", LCM);
+        define("_string-append", STRINGAPPEND);
+        define("absolute-path?", ABSPATHQ);
+        define("acos", ACOS);
+        define("apply", APPLY);
+        define("ashl", ASHL);
+        define("ashr", ASHR);
+        define("asin", ASIN);
+        define("atan", ATAN);
+        define("block-read", BLOCKREAD);
+        define("block-write", BLOCKWRITE);
+        define("boolean?", BOOLEANQ);
+        define("box", BOX);
+        define("box?", BOXQ);
+        define("call-with-current-continuation", CALLCC);
+        define("call-with-failure-continuation", CALLFC);
+        define("call-with-values", CALLWITHVALUES);
+        define("car", CAR);
+        define("cdr", CDR);
+        define("ceiling", CEILING);
+        define("char->integer", CHAR2INTEGER);
+        define("char-ready?", CHARREADY);
+        define("char?", CHARACTERQ);
+        define("close-input-port", CLOSEINPUTPORT);
+        define("close-output-port", CLOSEOUTPUTPORT);
+        define("complex?", COMPLEXQ);
+        define("cons", CONS);
+        define("continuation?", CONTINUATIONQ);
+        define("cos", COS);
+        define("current-evaluator", CURRENTEVAL);
+        define("current-input-port", CURRENTINPUTPORT);
+        define("current-output-port", CURRENTOUTPUTPORT);
+        define("denominator", DENOMINATOR);
+        define("display", DISPLAY);
+        define("environment?", ENVIRONMENTQ);
+        define("eq?", EQ);
+        define("equal?", EQUAL);
+        define("error", ERROR);
+        define("eval", EVAL);
+        define("eval", EVAL);
+        define("exact->inexact", EXACT2INEXACT);
+        define("exact?", EXACTQ);
+        define("exp", EXP);
+        define("file-type", FILETYPE);
+        define("find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
+        define("floor", FLOOR);
+        define("flush-output-port", FLUSHOUTPUTPORT);
+	define("get-native-library-binding", GETNLBINDING);
+	define("get-native-library-binding-names", GETNLBINDINGNAMES);
+	define("get-native-library-name", GETNLNAME);
+	define("get-native-library-version", GETNLVERSION);
+        define("get-output-string", GETOUTPUTSTRING);
+        define("getprop", LOOKUP);
+        define("imag-part", IMAGPART);
+        define("inexact->exact", INEXACT2EXACT);
+        define("inexact?", INEXACTQ);
+        define("input-port?", INPORTQ);
+        define("integer->char", INTEGER2CHAR);
+        define("integer?", INTEGERQ);
+        define("interaction-environment", INTERACTIONENVIRONMENT );
+        define("length", LENGTH);
+        define("list->vector", LIST2VECTOR);
+        define("load", LOAD);
+        define("load-native-library", LOADNL);
+        define("log", LOG);
+        define("make-path", MAKEPATH);
+        define("make-rectangular", MAKERECTANGULAR);
+        define("make-string", MAKESTRING);
+        define("make-vector", MAKEVECTOR);
+        define("max-precision", MAX_PRECISION);
+        define("min-precision", MIN_PRECISION);
+        define("null-environment", NULLENVIRONMENT);
+        define("null?", NULLQ);
+        define("number->string", NUMBER2STRING);
+        define("number?", NUMBERQ);
+        define("numerator", NUMERATOR);
+        define("open-input-file", OPENINPUTFILE);
+        define("open-input-string", OPENINPUTSTRING);
+        define("open-output-file", OPENOUTPUTFILE);
+        define("open-output-string", OPENOUTPUTSTRING);
+        define("output-port?", OUTPORTQ);
+        define("pair?", PAIRQ);
+        define("parent-continuation", PARENT_CONT);
+        define("peek-char", PEEKCHAR);
+        define("procedure?", PROCEDUREQ);
+        define("putprop", PUTPROP);
+        define("quotient", QUOTIENT);
+        define("rational?", RATIOQ);
+        define("read", READ);
+        define("read-char", READCHAR);
+        define("real-part", REALPART);
+        define("remainder", REMAINDER);
+        define("round", ROUND);
+        define("scheme-report-environment", REPORTENVIRONMENT);
+        define("set-box!", SETBOX);
+        define("set-car!", SETCAR);
+        define("set-cdr!", SETCDR);
+        define("sin", SIN);
+        define("sqrt", SQRT);
+        define("string->number", STRING2NUMBER);
+        define("string->symbol", STRING2SYMBOL);
+        define("string->uninterned-symbol", STRING2UNINTERNEDSYMBOL);
+        define("string-fill!", STRINGFILL);
+        define("string-length", STRINGLENGTH);
+        define("string-ref", STRINGREF);
+        define("string-set!", STRINGSET);
+        define("string?", STRINGQ);
+        define("symbol->string", SYMBOL2STRING);
+        define("symbol?", SYMBOLQ);
+        define("system-time", SYSTIME);
+        define("system-time",SYSTIME);
+        define("tan", TAN);
+        define("unbox", UNBOX);
+        define("vector->list", VECTOR2LIST);
+        define("vector-length", VECTORLENGTH);
+        define("vector-ref", VECTORREF);
+        define("vector-set!", VECTORSET);
+        define("vector?", VECTORQ);
+        define("void", _VOID);
+        define("void?", VOIDQ);
+        define("write", WRITE);
+        define("write-char", WRITECHAR);
     }
 
     public Value eval(int primid, Interpreter f)
@@ -500,9 +502,7 @@ public class Primitives extends ModuleAdapter {
             case LOADNL:
                 try {
                     Class clazz=Class.forName(string(f,f.vlr[0]));
-                    Module m=(Module)clazz.newInstance();
-                    m.initialize(f);
-                    return m;
+                    return (Module)clazz.newInstance();
                 } catch (Exception e) {
                     throw new RuntimeException(e.getMessage());
                 }

@@ -46,14 +46,14 @@ public class SDebug extends ModuleAdapter {
 	CONT_VLR=2, CONT_NXP=3, CONT_ENV=4, CONT_FK=5,
 	CONT_LOCKQ=6;
 
-    public void initialize(Interpreter r) {
-        define(r, "express", EXPRESSV);
-        define(r, "compile", COMPILE);
-        define(r, "continuation-vlr", CONT_VLR);
-        define(r, "continuation-nxp", CONT_NXP);
-        define(r, "continuation-env", CONT_ENV);
-        define(r, "continuation-fk", CONT_FK);
-        define(r, "continuation-captured?", CONT_LOCKQ);
+    public SDebug() {
+        define("express", EXPRESSV);
+        define("compile", COMPILE);
+        define("continuation-vlr", CONT_VLR);
+        define("continuation-nxp", CONT_NXP);
+        define("continuation-env", CONT_ENV);
+        define("continuation-fk", CONT_FK);
+        define("continuation-captured?", CONT_LOCKQ);
     }
 
     class SISCExpression extends Value {

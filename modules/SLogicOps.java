@@ -45,11 +45,11 @@ public class SLogicOps extends ModuleAdapter {
 	return "LogicalOps";
     }
 
-    public void initialize(Interpreter r) {
-        define(r, "logand", LOGAND);
-        define(r, "logor",  LOGOR);
-        define(r, "logxor", LOGXOR);
-        define(r, "lognot", LOGNOT);
+    public SLogicOps() {
+        define("logand", LOGAND);
+        define("logor",  LOGOR);
+        define("logxor", LOGXOR);
+        define("lognot", LOGNOT);
     }
 
     public int fixed(Interpreter f, Value v) throws ContinuationException {

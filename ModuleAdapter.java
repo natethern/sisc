@@ -7,7 +7,7 @@ import sisc.data.*;
 public abstract class ModuleAdapter extends Module {
     protected TreeMap bindings=new TreeMap();
 
-    protected void define(Interpreter r, String s, int id) {
+    protected void define(String s, int id) {
         Symbol name=Symbol.get(s);
 	bindings.put(name, new Integer(id));
     }

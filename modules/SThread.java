@@ -53,12 +53,12 @@ public class SThread extends ModuleAdapter {
 
     static ThreadGroup schemeThreads=new ThreadGroup("SISC Threads");
 
-    public void initialize(Interpreter r) {
-        define(r, "new-thread", NEWTHREAD);    
-        define(r, "thread-start", THREADSTART);    
-	define(r, "thread-return-value", THREADRETURNVALUE);
-	define(r, "thread-state", THREADSTATE);
-	define(r, "_active-thread-count", THREADSRUNNING);
+    public SThread() {
+        define("new-thread", NEWTHREAD);    
+        define("thread-start", THREADSTART);    
+	define("thread-return-value", THREADRETURNVALUE);
+	define("thread-state", THREADSTATE);
+	define("_active-thread-count", THREADSRUNNING);
     }
 
     class ThreadContext extends Value implements Runnable {

@@ -50,24 +50,24 @@ public class SNative extends ModuleAdapter {
     
     static long symid=0;
 
-    public void initialize(Interpreter r) {
-        define(r, "assq", ASSQ);
-        define(r, "memq", MEMQ);
-        define(r, "vector", VECTOR);
-        define(r, "assoc", ASSOC);
-        define(r, "member", MEMBER);
-        define(r, "append2", APPEND);
-        define(r, "not", NOT);
-        define(r, "eqv?", EQV);
-        define(r, "assv", ASSV);
-        define(r, "memv", MEMV);
-        define(r, "caar", CAAR);
-        define(r, "cadr", CADR);
-        define(r, "cdar", CDAR);
-        define(r, "cddr", CDDR);
-        define(r, "list-ref", LISTREF);
-        define(r, "values", VALUES);
-        define(r, "read-line", READLINE);
+    public SNative() {
+        define("assq", ASSQ);
+        define("memq", MEMQ);
+        define("vector", VECTOR);
+        define("assoc", ASSOC);
+        define("member", MEMBER);
+        define("append2", APPEND);
+        define("not", NOT);
+        define("eqv?", EQV);
+        define("assv", ASSV);
+        define("memv", MEMV);
+        define("caar", CAAR);
+        define("cadr", CADR);
+        define("cdar", CDAR);
+        define("cddr", CDDR);
+        define("list-ref", LISTREF);
+        define("values", VALUES);
+        define("read-line", READLINE);
     }
 
     public static final Value cadr(Value p) {
