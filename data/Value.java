@@ -35,15 +35,22 @@ package sisc.data;
 import sisc.*;
 import java.io.*;
 
+/**
+ * Value is the base class for anything treated as a first-class value within Scheme.
+ */
 public abstract class Value extends Expression implements Immediate {
 
+    /**
+     * Returns a representation of this value as a String, as if it were 
+     * output from Scheme's 'display' function.
+     */
     public abstract String display();
 
     public String synopsis() {
 	return synopsis(DEFAULT_SYNOPSIS_LENGTH);
     }
 
-    /** 
+    /**
      * Only this function need be overridden
      */
     public String synopsis(int limit) {
@@ -53,18 +60,38 @@ public abstract class Value extends Expression implements Immediate {
 	else return v;
     }
 
+    /**
+     * Returns a representation of this value as a String, as if it were 
+     * output from Scheme's 'write' function.
+     */
     public String write() {
         return display();
     }
 
+    /**
+     * Compares this Value to another.  By default equal to eq.
+     * eq
+     * 
+     * @param v 
+     */
     public boolean equals(Object v) {
         return eq(v);
     }
 
+    /**
+     * Compares this Value to another for pointer-equality.  This is used to implement Scheme 'eq?'.
+     * 
+     * @param v 
+     */
     public boolean eq(Object v) {
         return this==v;
     }
 
+    /**
+     * Compares this value to another for semantic equality.  Used to implement Scheme's 'equal?'.
+     * 
+     * @param v 
+     */
     public boolean valueEqual(Value v) {
         return eq(v) || equals(v);
     }
@@ -73,11 +100,24 @@ public abstract class Value extends Expression implements Immediate {
         return display();
     }
 
+    /**
+     * Called to evaluate this value.  As Values ordinarily evaluate to themselves, this
+     * method simply sets <tt>acc</tt> to this.
+     * 
+     * @param r 
+     * @exception ContinuationException 
+     */
     public void eval(Interpreter r) throws ContinuationException {
         r.acc=this;
         r.nxp=null;
     }
 
+    /**
+     * Called to obtain the value of this Value.  Simply <tt>this</tt>.
+     * 
+     * @param r 
+     * @exception ContinuationException 
+     */
     public Value getValue(Interpreter r) throws ContinuationException {
         return this;
     }

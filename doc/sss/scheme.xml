@@ -143,8 +143,9 @@
 	such, the full range of unicode characters are
 	supported. Unicode characters can be created with
 	<function>number-&gt;character</function> or 
-	<computeroutput>&num;&bsol;nnnn</computeroutput>, where <computeroutput>nnnn</computeroutput> is an
-	octal number in the range 0000 -&gt; 7777. 
+	<computeroutput>&num;&bsol;nnnnnn</computeroutput>, where <computeroutput>nnnn</computeroutput> is an
+	octal number in the range 000000 -&gt; 177777.  At least two zeros must
+        be specified to distinguish from the '0' character.
       </para>
       <para>
 	Characters are compared with respect to the locale detected
