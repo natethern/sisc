@@ -283,27 +283,19 @@ public class Reflection extends Util {
             case JAVA_CONSTRUCTORS:
                 try {
                     return objectsToList(jclass(f.vlr[0]).getDeclaredConstructors());
-                } catch (SecurityException e) {
-                    throw new RuntimeException(liMessage(S2JB, "constructoraccess", Util.nameType(jclass(f.vlr[0]))));
-                }
+                } catch (SecurityException e) { return FALSE; }
             case JAVA_METHODS:
                 try {
                     return objectsToList(jclass(f.vlr[0]).getDeclaredMethods());
-                } catch (SecurityException e) {
-                    throw new RuntimeException(liMessage(S2JB, "methodaccess", Util.nameType(jclass(f.vlr[0]))));
-                }
+                } catch (SecurityException e) { return FALSE; }
             case JAVA_FIELDS:
                 try {
                     return objectsToList(jclass(f.vlr[0]).getDeclaredFields());
-                } catch (SecurityException e) {
-                    throw new RuntimeException(liMessage(S2JB, "fieldaccess", Util.nameType(jclass(f.vlr[0]))));
-                }
+                } catch (SecurityException e) { return FALSE; }
             case JAVA_CLASSES:
                 try {
                     return objectsToList(jclass(f.vlr[0]).getDeclaredClasses());
-                } catch (SecurityException e) {
-                    throw new RuntimeException(liMessage(S2JB, "classaccess", Util.nameType(jclass(f.vlr[0]))));
-                }
+                } catch (SecurityException e) { return FALSE; }
             case JAVA_INTERFACES:
                 return objectsToList(jclass(f.vlr[0]).getInterfaces());
             case JAVA_SUPERCLASS:
