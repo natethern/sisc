@@ -256,12 +256,6 @@
      (lambda (ls)	
        (iter ls ()))))
 
-(define (remove elem ls)
-  (cond [(null? ls) ()]
-	[(equal? (car ls) elem) (remove elem (cdr ls))]
-	[else
-	 (cons (car ls) (remove elem (cdr ls)))]))
-
 (define append
   (letrec ([real-append 
 	    (lambda (ls1 . lses)
@@ -275,6 +269,7 @@
       (cond [(null? lses) ()]
 	    [(null? (cdr lses)) (car lses)]
 	    [else (apply real-append `(,(car lses) . ,(cdr lses)))]))))
+
 (define map
   (letrec ([map1 map]
 	   [iter

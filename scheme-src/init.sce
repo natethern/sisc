@@ -257,13 +257,6 @@
                  %_1169
                  (%_1166 (cdr %_1168) (cons (car %_1168) %_1169))))))
     (lambda (%_1167) (%_1166 %_1167 '()))))
-(define remove
-  (lambda (%_1170 %_1171)
-    (if (null? %_1171)
-      '()
-      (if (equal? (car %_1171) %_1170)
-        (remove %_1170 (cdr %_1171))
-        (cons (car %_1171) (remove %_1170 (cdr %_1171)))))))
 (define append
   (letrec ((%_1172
              (lambda (%_1175 . %_1174)
