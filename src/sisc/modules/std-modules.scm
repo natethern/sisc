@@ -94,6 +94,7 @@
     (wrap-symbol
      dynamic-freeze
      define-simple-syntax
+     compose
      total-order)
   (include "misc.scm"))
 
@@ -659,6 +660,55 @@
   ;;generic procedure dispatch mechanism
   (applicable-methods -> (list (meta <jclass>)))
   )
+
+(module oo
+    (<slot>
+     slot?
+     slot-name
+     slot-class
+     slot-initializer
+     slot-accessor
+     slot-modifier
+     slot-initializer-method
+     slot-accessor-method
+     slot-modifier-method
+     <class>
+     class?
+     class-name
+     class-direct-superclasses
+     class-precedence-list
+     class-direct-slots
+     <object>
+     make-class
+     define-class
+     make
+     initialize)
+  (import* record
+           define-record-type)
+  (import* record-native
+           make-record
+           record-ref
+           record-set!)
+  (import* type-system
+           type<=
+           type-of
+           instance-of?
+           <value>
+           type-of-hook
+           type<=-hook
+           compare-types-hook)
+  (import* new-generic-procedures
+           make-method
+           add-method
+           define-generic
+           define-method)
+  (import misc)
+  (include "oo/slots.scm")
+  (include "oo/classes.scm")
+  (include "oo/misc.scm")
+  (initialize-classes)
+  (type<=-hook        'oo oo-type<=-hook)
+  (compare-types-hook 'oo oo-compare-types-hook))
 
 (module libraries
   (require-library

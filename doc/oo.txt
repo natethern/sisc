@@ -1,0 +1,208 @@
+Object System
+=============
+
+The key features of the object system are:
+
+* class-based, with a restricted form of multiple inheritance
+
+* instance variables (slots) are accessed and modified via generic
+  procedures
+
+* no methods - generic procedures are used instead
+
+* introspection API
+
+* full integration into SISC's extensible type system
+
+
+Classes
+-------
+
+Classes have a name, a list of direct superclasses, and a list of
+direct slots ("instance variable") definitions.
+
+
+MAKE-CLASS <name> <list class> <list slot-defs> => <class>
+Creates a class named <name> with the specified list of <class>es as
+its superclasses. See Inheritance for restrictions on
+superclasses. When no superclasses are specified, the superclass is
+<object>.
+
+The list of <slot-def>s is an association list with each entry of the
+form
+(<slot-name> (<slot-prop-name> . <slot-prop-value) ...)
+
+<slot-name> names a slot. <slot-prop-name> must be the name of one of
+the define slot properties, and <slot-prop-value> is its value. The
+following are the valid slot properties:
+
+value - the initial value of the slot
+
+accessor - a generic procedure to which an accessor method for the
+slot will be added by MAKE-CLASS.
+
+modifier - a generic procedure to which a modifier method for the slot
+will be added by MAKE-CLASS.
+
+See Inheritance for the semantics of slot inheritance.
+
+All classes are instances of the type <class>.
+
+Classes are types in the type system.
+
+
+DEFINE-CLASS (<class-name> <superclass> ...)
+  (<slot-name> (<slot-prop-name> <slot-prop-value>) ...)
+  ...
+=> <class>
+Binds <class-name> to a newly created class. This form
+expands into a call to the MAKE-CLASS procedure.
+
+
+CLASS? <value> => #t/#f
+Determines whether <value> is a class.
+
+
+CLASS-NAME <class> => <symbol>
+Returns the name of <class>.
+
+
+CLASS-DIRECT-SUPERCLASSES <class> => (list <class>)
+Returns the direct superclasses of <class>.
+
+
+CLASS-DIRECT-SLOTS <class> => (list <slot>)
+Returns the direct slots defined for <class>.
+
+
+CLASS-PRECEDENCE-LIST <class> => (list <class>)
+Returns the total order of <class> and all direct & indirect
+superclasses, as determined by the partial orders obtained from
+calling CLASS-DIRECT-SUPERCLASSES.
+
+The ordering of classes in the class precedence list is important when
+comparing types using the type system's COMPARE-TYPES procedure, which
+is used by the generic procedure method selection algorithm. See
+COMPARE-METHODS.
+
+
+Slots
+-----
+
+All slots are instances of the type <slot>.
+
+
+SLOT? <value> => #t/#f
+Determines whether <value> is a slot.
+
+
+SLOT-NAME <slot> => <symbol>
+Returns the name of <slot>.
+
+
+SLOT-CLASS <slot> => <class>
+Returns the class on which <slot> is defined.
+
+
+SLOT-INITIALIZER <slot> => <procedure>
+Returns a procedure than when applied to an instance of <slot>'s
+class, will set the slot's value on that instance to its initial
+value.
+
+
+SLOT-ACCESSOR <slot> => <procedure>
+Returns a procedure that when applied to an instance of <slot>'s
+class, will return the slot's value on that instance.
+
+
+SLOT-MODIFIER <slot> => <procedure>
+Returns a procedure that when applied to an instance of <slot>'s
+class, with one further argument, sets the slot's value on that
+instance to the value supplied as the second argument of the call.
+
+
+SLOT-INITIALIZER-METHOD <slot> => <method>
+SLOT-ACCESSOR-METHOD <slot> => <method>
+SLOT-MODIFIER-METHOD <slot> => <method>
+These are method-returning versions of the corresponding SLOT-*
+procedures. The methods are suitable for adding to generic
+procedures.
+
+
+Instantiation
+-------------
+
+MAKE <class> <value> ... => <instance>
+Instantiates <class>.
+
+Instantiation creates a new object that is an instance of <class> and
+initialises its slots using the slots' initialisers. The instance and
+<value>'s are then passed as parameters to a call to the INITIALIZE
+generic procedure.
+
+INITIALIZE serves the same purpose as constructors in other object
+systems. By default, INITIALIZE contains a no-op method for
+initialising objects of type <object> with no further arguments. Since
+all objects are instances of <object> this means that all classes can
+be instantiated by calling (make <class>).
+
+
+Inheritance
+-----------
+
+The object system supports a restricted form of multiple
+inheritance. When multiple superclasses are specified in
+MAKE-CLASS/DEFINE-CLASS, the resulting new class is a sub-type of all
+of them. However, for any two classes in the class precedence list of
+the new class the following restriction applies:
+
+If both classes have direct slots then one must be a subclass of
+the other.
+
+In effect this enforces single inheritance of slots while still giving
+control over the order of classes in the class-precedence list.
+
+Slots from a superclass are only ever inherited once, regardless of
+the number of paths in the inheritance graph to that class.
+
+If a subclass defines a slot with the same name as one of its
+superclasses, the resulting class ends up with *two* slots of the same
+name. If the slots are define with different accessors and modifiers
+then this does not cause any problems at all. If they are not then an
+invocation of the accessor/modifier will acess/modify the slot of the
+subclass. Note that it is still possible to access/modify the slot of
+the superclass by using procedures/methods obtained from the
+SLOT-{ACCESSOR,MODIFIER}-{PROCEDURE,METHOD} applied to the slot.
+
+
+What's Changed?
+---------------
+
+* The code and module have been disentangled from that of generic
+procedures, the type system and Java FFI.
+
+* Objects are no longer procedures. Slots are accessed and modified
+via generic procedures.
+
+* Classes are no longer objects; they are records of type <class>.
+
+* Classes are types that are hooked into new extensible type system.
+
+* Slots are a distinct data type (records of type <slot>), resulting
+in a more structured reflection API.
+
+* Slots can be initialized by a procedure.
+
+* Multiple inheritance of slots is not permitted.
+
+* Slots of sub-classes with the same name of slots in a super-classes
+shadow the the latter rather than replacing them.
+
+* Objects have a much more compact internal representation than
+before.
+
+* Class instantiation has been simplified; there no longer is a CREATE
+generic procedure for pre-instantiation processing.
+
+* Improved error reporting.
+
