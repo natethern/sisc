@@ -283,3 +283,24 @@
     (close-output-port port)
     result))
 
+
+;;;;;;;;;;;;;;;; NATIVE MODULES ;;;;;;;;;;;;;;;
+
+(define-syntax native-module
+  (lambda (x)
+    (syntax-case x ()
+      ((_ name class)
+       (let ((m (load-native-library (syntax-object->datum (syntax class)))))
+	 (with-syntax (((def ...) (datum->syntax-object
+				   (syntax name)
+				   (get-native-library-binding-names m))))
+           (syntax (module name (def ...)
+		     (define *module* (load-native-library class))
+                     (define def (get-native-library-binding
+                                   *module* (quote def)))
+		     ...))))))))
+
+(native-module j2s-module "sisc.modules.J2S")
+(native-module logicops-module "sisc.modules.SLogicOps")
+(native-module networking-module "sisc.modules.SNetwork")
+;(native-module debug-module "sisc.modules.SDebug")
