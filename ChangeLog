@@ -1,7 +1,7 @@
 2005-03-27  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Altered psyntax to not generate separately compliable 
-          bindings for implicit exports. See bug 1124005.
+	* Altered psyntax to not generate separately compilable 
+      bindings for implicit exports. See bug 1124005.
 
 2005-03-25  Scott G. Miller  <sgmiller@gmail.com>
 
