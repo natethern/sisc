@@ -29,7 +29,7 @@ public class LetrecExp extends AppExp {
             csf+=cc;
         } while (csf < rands.length);
 
-        r.env=new LexicalEnvironment(envv, r.env);
+        r.newEnv(envv, r.env);
         super.eval(r);
     }
 
