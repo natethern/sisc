@@ -293,41 +293,35 @@
       (close-output-port outp)
       (max-precision precision))))
 
-(define (with-input-from-file str thunk)
-  (let ([cip (current-input-port)]
-	[fip (open-input-file str)])
-    (dynamic-wind
-     void
-     (lambda () 
-       (current-input-port fip)
-       (thunk))
-     (lambda ()
-       (current-input-port cip)))))
-
-(define (with-output-to-file str thunk)
-  (let ([cop (current-output-port)]
-        [fop (open-output-file str)])
-    (dynamic-wind
-     void
-     (lambda ()
-       (current-output-port fop)
-       (thunk))
-     (lambda ()
-       (current-output-port cop)
-       (close-output-port fop)))))
-
-
 (define (call-with-input-file file proc)
-  (let* ((port (open-input-file file))
-	 (result (proc port)))
+  (let* ([port (open-input-file file)]
+         [result (proc port)])
     (close-input-port port)
     result))
 
 (define (call-with-output-file file proc)
   (let* ([port (open-output-file file)]
-	 [result (proc port)])
+         [result (proc port)])
     (close-output-port port)
     result))
+
+(define (with-input-from-file file thunk)
+  (call-with-input-file file
+    (lambda (port)
+      (let ([cip (current-input-port)])
+        (current-input-port port)
+        (let ([res (thunk)])
+          (current-input-port cip)
+          res)))))
+
+(define (with-output-to-file str thunk)
+  (call-with-output-file file
+    (lambda (port)
+      (let ([cop (current-output-port)])
+        (current-output-port port)
+        (let ([res (thunk)])
+          (current-output-port cop)
+          res)))))
 
 ;;;;;;;;;;;;; legacy macro support ;;;;;;;;;;;;
 
