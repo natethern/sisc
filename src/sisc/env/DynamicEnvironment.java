@@ -46,7 +46,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public java.util.Map parameters = new WeakHashMap(0);
 
     public DynamicEnvironment(AppContext ctx) {
-        this(ctx, System.in, System.out);
+        this(ctx, new ReaderInputPort(new InputStreamReader(System.in)), 
+        		  new WriterOutputPort(new PrintWriter(System.out), true));
     }
 
     public DynamicEnvironment(AppContext ctx, InputStream in, OutputStream out) {
