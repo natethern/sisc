@@ -70,7 +70,7 @@ public class CallFrame extends Procedure {
                 //Actually faster than arraycopy for smaller vlrs (<15 elem)
                 if (vl <= 10) {
                     for (int i=vl-1; i>=0; i--)
-                        nvlr[0]=vlr[i];
+                        nvlr[i]=vlr[i];
                 } else
                     System.arraycopy(vlr, 0, nvlr, 0, vl);
 
