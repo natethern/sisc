@@ -234,9 +234,20 @@
    buffer-ref
    buffer-set!
    buffer-length
-   buffer-copy!)
-  (import block-io-native)
-  (include "io/buffer.scm"))
+   buffer-copy!
+   open-binary-input-file
+   open-binary-output-file
+   call-with-binary-input-file
+   call-with-binary-output-file
+   with-binary-input-from-file
+   with-binary-output-to-file)
+  (import buffers)
+  (import* block-io-native
+           block-read
+           block-write
+           open-binary-input-file
+           open-binary-output-file)
+  (include "io/block-io.scm"))
 
 (module hashtable
     (make-hashtable
@@ -725,6 +736,7 @@
      link-library)
   (import s2j)
   (import type-system)
+  (import block-io)
   (include "compiledlibs.scm"))
 
 (module pattern-matching

@@ -86,19 +86,6 @@
       as it is the goal of the system to conform to this document, 
       not for this document to describe the idiosyncrasies of the system.
     </para>
-    <para>
-      <orderedlist>
-	<listitem>
-          <para>
-            <xref linkend="BlockIO"/> - Binary data is not correctly
-            read or written in all circumstances.  Strings are capable
-            of storing binary data, but on some platforms, the I/O
-            ports may attempt to apply a characterset mapping to the
-            data.  This will be fixed in a future release.
-          </para>
-        </listitem>
-      </orderedlist>
-    </para>
   </appendix>
   <appendix id="R5RSViolations">
     <title>&R5RS; Liberties and Violations</title>

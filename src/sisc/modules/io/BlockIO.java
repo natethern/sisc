@@ -4,6 +4,9 @@ import sisc.interpreter.*;
 import sisc.nativefun.*;
 import sisc.data.*;
 import java.io.IOException;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.net.URL;
 import sisc.io.StreamOutputPort;
 import sisc.io.StreamInputPort;
 
@@ -14,7 +17,9 @@ public class BlockIO extends IndexedProcedure {
 
     protected static final int
         BLOCKREAD=1, BLOCKWRITE=2, MAKEBUFFER=3, BUFFERQ=4,
-        BUFFERLENGTH=5, BUFFERREF=6, BUFFERSET=7, BUFFERCOPY=8;
+        BUFFERLENGTH=5, BUFFERREF=6, BUFFERSET=7, BUFFERCOPY=8,
+        OPENBINARYINPUTFILE = 9, OPENBINARYOUTPUTFILE= 10;
+
 
     public static class Index extends IndexedLibraryAdapter {
         
@@ -31,6 +36,8 @@ public class BlockIO extends IndexedProcedure {
             define("buffer-ref",    BUFFERREF);
             define("buffer-set!",   BUFFERSET);
             define("buffer-copy!",  BUFFERCOPY);
+            define("open-binary-output-file", OPENBINARYOUTPUTFILE);
+            define("open-binary-input-file",  OPENBINARYINPUTFILE);        
         }   
     }
     
@@ -45,6 +52,19 @@ public class BlockIO extends IndexedProcedure {
         try {
             return (StreamInputPort)o;
         } catch (ClassCastException e) { typeError(BLOCKB, "sinput-port", o); }
+        return null;
+    }
+
+    private static SchemeOutputPort openBinOutFile(Interpreter f, 
+                                                   URL url, boolean aflush) 
+        throws ContinuationException {
+        try {          
+            return new StreamOutputPort(new BufferedOutputStream(IO.getURLOutputStream(url)),
+                                        aflush);
+        } catch (IOException e) {
+            IO.throwIOException(f, liMessage(IO.IOB, "erroropening",
+                                             url.toString()), e);
+        }
         return null;
     }
 
@@ -71,6 +91,18 @@ public class BlockIO extends IndexedProcedure {
                 return Quantity.valueOf(buffer(f.vlr[0]).buf.length);
             case BUFFERQ:
                 return truth(f.vlr[0] instanceof Buffer);
+            case OPENBINARYINPUTFILE:
+                URL url = url(f.vlr[0]);
+                try {
+                  return new StreamInputPort(
+                          new BufferedInputStream(IO.getURLInputStream(url))); 
+                } catch (IOException e) {
+                  IO.throwIOException(f, liMessage(IO.IOB, "erroropening", 
+                                                   url.toString()), e);
+                }
+            case OPENBINARYOUTPUTFILE:
+                url = url(f.vlr[0]);
+                return openBinOutFile(f, url, false);
             default:
                 throwArgSizeException();
             }
@@ -89,6 +121,9 @@ public class BlockIO extends IndexedProcedure {
                                                      new Integer(index),
                                                      f.vlr[0].synopsis()}));
                 }
+            case OPENBINARYOUTPUTFILE:
+                URL url = url(f.vlr[0]);
+                return openBinOutFile(f, url, truth(f.vlr[1]));
             default:
                 throwArgSizeException();
             }

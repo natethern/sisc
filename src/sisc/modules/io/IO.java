@@ -42,10 +42,7 @@ public class IO extends IndexedProcedure {
         READCHAR            = 25,
         READCODE            = 26,
         WRITE               = 1,
-        WRITECHAR           = 7,
-        OPENBINARYINPUTFILE = 27,
-        OPENBINARYOUTPUTFILE= 28;
-
+        WRITECHAR           = 7;
         
 
     public static class Index extends IndexedLibraryAdapter { 
@@ -72,8 +69,6 @@ public class IO extends IndexedProcedure {
         define("open-input-file"    , OPENINPUTFILE);
         define("open-input-string"  , OPENINPUTSTRING);
         define("open-output-file"   , OPENOUTPUTFILE);
-        define("open-binary-output-file", OPENBINARYOUTPUTFILE);
-        define("open-binary-input-file",  OPENBINARYINPUTFILE);        
         define("open-output-string" , OPENOUTPUTSTRING);
         define("open-source-input-file", OPENSOURCEINPUTFILE);
         define("output-port?"       , OUTPORTQ);
@@ -165,7 +160,7 @@ public class IO extends IndexedProcedure {
         return VOID;
     }
 
-    URL urlClean(URL u) {
+    public static URL urlClean(URL u) {
         if (u.getProtocol().equals("file") &&
             (u.getRef()!=null || u.getQuery()!=null)) {
             StringBuffer b=new StringBuffer(u.getProtocol());
@@ -188,8 +183,10 @@ public class IO extends IndexedProcedure {
         return u;
     }
 
-    SchemeOutputPort openCharOutFile(Interpreter f, 
-                                  URL url, String encoding, boolean aflush) 
+    public static SchemeOutputPort openCharOutFile(Interpreter f, 
+                                                   URL url,
+                                                   String encoding,
+                                                   boolean aflush) 
     throws ContinuationException {
         try {          
           return new WriterOutputPort(getURLOutputStream(url),
@@ -204,28 +201,14 @@ public class IO extends IndexedProcedure {
         return null;
     }
     
-    SchemeOutputPort openBinOutFile(Interpreter f, 
-                                    URL url, boolean aflush) 
-        throws ContinuationException {
-        try {          
-          return new StreamOutputPort(
-                  new BufferedOutputStream(getURLOutputStream(url)),
-                  aflush);
-        } catch (IOException e) {
-          throwIOException(f, liMessage(IOB, "erroropening",
-                           url.toString()), e);
-        }
-        return null;
-    }
-
-    InputStream getURLInputStream(URL u) throws IOException {
+    public static InputStream getURLInputStream(URL u) throws IOException {
         URLConnection conn = u.openConnection();
         conn.setDoInput(true);
         conn.setDoOutput(false);
         return conn.getInputStream();
     }
  
-    OutputStream getURLOutputStream(URL u) throws IOException {
+    public static OutputStream getURLOutputStream(URL u) throws IOException {
         if (u.getProtocol().equals("file")) {
            //the JDK does not permit write access to file URLs
            return new FileOutputStream(u.getPath());
@@ -236,7 +219,9 @@ public class IO extends IndexedProcedure {
         return conn.getOutputStream();
     }
         
-    SchemeInputPort openCharInFile(Interpreter f, URL u, String encoding) 
+    public static SchemeInputPort openCharInFile(Interpreter f,
+                                                 URL u,
+                                                 String encoding) 
     throws ContinuationException {    
       try {
         return new SourceInputPort(
@@ -330,24 +315,12 @@ public class IO extends IndexedProcedure {
                    throwIOException(f, liMessage(IOB, "erroropening", 
                                     url.toString()), e);
                 }
-            case OPENBINARYINPUTFILE:
-                url = url(f.vlr[0]);
-                try {
-                  return new StreamInputPort(
-                          new BufferedInputStream(getURLInputStream(url))); 
-                } catch (IOException e) {
-                  throwIOException(f, liMessage(IOB, "erroropening", 
-                                   url.toString()), e);
-                }
             case OPENINPUTFILE:
                 url = url(f.vlr[0]);
                 return openCharInFile(f, url, f.dynenv.characterSet);
             case OPENOUTPUTFILE:
                 url = url(f.vlr[0]);
                 return openCharOutFile(f, url, f.dynenv.characterSet, false);
-            case OPENBINARYOUTPUTFILE:
-                url = url(f.vlr[0]);
-                return openBinOutFile(f, url, false);
             case FLUSHOUTPUTPORT:
                 SchemeOutputPort op=outport(f.vlr[0]);
                 try {
@@ -497,9 +470,6 @@ public class IO extends IndexedProcedure {
                 else
                    aflush=truth(f.vlr[1]);
                 return openCharOutFile(f, url, encoding, aflush);
-            case OPENBINARYOUTPUTFILE:
-                url = url(f.vlr[0]);
-                return openBinOutFile(f, url, truth(f.vlr[1]));
             case NORMALIZEURL:
                 return new SchemeString(urlClean(url(f.vlr[0], f.vlr[1])).toString());
             default:
