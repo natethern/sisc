@@ -131,7 +131,7 @@ public class Interpreter extends Util {
 
     public final void next(Expression nextExpr) throws ContinuationException {
         nxp=nextExpr;
-        //nextExpr.eval(this);
+        nextExpr.eval(this);
     }
 
     public final void newVLR(int size) {
@@ -431,21 +431,18 @@ public class Interpreter extends Util {
             //zerohit++; 
             return ZV; 
         }
-        /*
-        if (recycleValues) { 
-            if (size >= VALUESPOOLWIDTH) { 
-            	//sizemiss++; 
-                return new Value[size]; 
-            }
-        
-            Value[] res = deadValues[size];
-            if (res == null) { 
-                return new Value[size]; 
-            }
-            deadValues[size] = null;
-            return res;
-        } else */return new Value[size];
-    }
+        if (size >= VALUESPOOLWIDTH) { 
+         	//sizemiss++; 
+            return new Value[size]; 
+        }
+      
+        Value[] res = deadValues[size];
+        if (res == null) { 
+            return new Value[size]; 
+        }
+        deadValues[size] = null;
+        return res;
+     }
 
     public final void returnVLR() {
         if (vlr != null) {
