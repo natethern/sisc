@@ -32,8 +32,7 @@
       presents the user with a prompt ('>'), then reads an
       s-expression from the console.  &SISC; then evaluates the
       s-expression, producing a value or error, which it then
-      prints.  Finally a prompt is displayed and the process begins
-      again.
+      prints.  Finally the process begins again with a new prompt.
     </para>
     <para>
       The process terminates with a forced kill of the JVM (with
@@ -46,7 +45,7 @@
 	<para>
 	  &procedure; 
 	  <methodsynopsis language="scheme">
-            <type>undefined</type>
+            <type><emphasis>does not return</emphasis></type>
             <methodname>exit</methodname>
             <void/>
           </methodsynopsis>

@@ -629,12 +629,34 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       socket handle is then used to obtain Scheme ports.
     </para>
     <para>
-      IP addresses are represented as strings in &SISC;.  Unless
-      otherwise noted, the network library functions that require an
-      address may take an address as a string in the dotted quad
-      form ("aaa.bbb.ccc.ddd"), or as a hostname which will be
-      resolved using the domain name system.  All port values must
-      be integers in the proper range.
+      IP addresses and network hostnames are represented as strings in
+      &SISC;.  Unless otherwise noted, the network library functions
+      that require an address may take a network address as a string
+      which may be any of:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para> 
+          A hostname, to be resolved through the domain name system.
+        </para>
+      </listitem>
+      <listitem>
+        <para> 
+          An IPv4 network address in the standard dotted quad format. (RFC-791)
+        </para>
+      </listitem>
+      <listitem>
+        <para> 
+          An IPv6 network address in colon separated hexadecimal form,
+          and zero-shortened form. (RFC-2373)
+        </para>
+      </listitem>
+    </itemizedlist>
+    <para>
+      IPv6 addresses must be supported by the underlying operating
+      system.  An error may be raised if the address is not
+      supported.  All IP port values must be exact
+      integers in the proper range.
     </para>
     <sect2 id="netutils">
       <title>IP Addressing</title>

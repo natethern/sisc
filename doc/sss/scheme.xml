@@ -1707,10 +1707,11 @@
         </blockquote>
       </para>                
       <para>
-        Finally, &SISC; adheres strictly to &R5RS; when it comes to
-        using <function>set!</function> to modify the
-        contents of a top-level variable.  If an attempt to set an
-        undefined variable is made, an error will be raised.  This
+        Finally, &R5RS; states that it is an error to modify the
+        contents of a top-level variable that has not yet been created.
+        &SISC; adheres to the standard, and raises an error when any
+        unbound variable in a symbolic environment (including the top-level)
+        is modified using <function>set!</function>.  This
         differs from some Scheme systems that will silently create the
         binding and set it to the new value.
       </para>
@@ -1829,9 +1830,11 @@
               once.  When complete, a list is returned of the
               following form:
               <programlisting>
-(result (<emphasis>n</emphasis> ms))
+(<emphasis>result</emphasis> (<emphasis>n</emphasis> ms))
               </programlisting>
-              where <emphasis>n</emphasis> is the number of
+              where <emphasis>result</emphasis> is the Scheme value
+              that resulted from the last evaluation of the
+              expression, and <emphasis>n</emphasis> is the number of
               milliseconds taken to evaluate the expression.  If more
               than one iteration occurred, then the average number of
               milliseconds elapsed during each iteration is returned.
