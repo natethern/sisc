@@ -1,3 +1,11 @@
+2004-12-07  Matthias Radestock  <matthiassorted.org>
+
+	* Implemented DEFINE-VALUES, working correctly at both the top
+	  level and inside lexical scopes.
+
+	* Changed the generic procedure's DEFINE-METHOD(S) macros to be
+	  definitions.
+
 2004-12-01  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Allow arbitrary values as NamedValue names, 

@@ -4,39 +4,62 @@
 
 (define-syntax define-record-type
   (syntax-rules ()
-    ((define-record-type type
+    [(define-record-type "helper" type
        (constructor constructor-tag ...)
        predicate
-       (field-tag accessor . more) ...)
-     (begin
-       (define type (make-record-type 'type '(field-tag ...)))
-       (define (constructor . args)
-         (set! constructor
-           (record-constructor type '(constructor-tag ...)))
-         (apply constructor args))
-       (define (predicate thing)
-         (set! predicate (record-predicate type))
-         (predicate thing))
-       (define-record-field type field-tag accessor . more)
-       ...))))
-
-; An auxilliary macro for define field accessors and modifiers.
-; This is needed only because modifiers are optional.
-
-(define-syntax define-record-field
-  (syntax-rules ()
-    ((define-record-field type field-tag accessor)
-     (define (accessor thing)
-       (set! accessor (record-accessor type 'field-tag))
-       (accessor thing)))
-    ((define-record-field type field-tag accessor modifier)
-     (begin
-       (define (accessor thing)
-         (set! accessor (record-accessor type 'field-tag))
-         (accessor thing))
-       (define (modifier thing value)
-         (set! modifier (record-modifier type 'field-tag))
-         (modifier thing value))))))
+       ()
+       (field-tag ...)
+       ((accessor-field-tag accessor) ...)
+       ((modifier-field-tag modifier) ...))
+     (define-values (type constructor predicate accessor ... modifier ...)
+       (let ([type (make-record-type 'type '(field-tag ...))])
+         (values type
+                 (record-constructor type '(constructor-tag ...))
+                 (record-predicate type)
+                 (record-accessor type 'accessor-field-tag)
+                 ...
+                 (record-modifier type 'modifier-field-tag)
+                 ...)))]
+    [(define-record-type "helper" type
+       constructor
+       predicate
+       ((field-tag accessor modifier) . fields)
+       field-tags
+       accessors
+       modifiers)
+     (define-record-type "helper" type
+       constructor
+       predicate
+       fields
+       (field-tag . field-tags)
+       ((field-tag accessor) . accessors)
+       ((field-tag modifier) . modifiers))]
+    [(define-record-type "helper" type
+       constructor
+       predicate
+       ((field-tag accessor) . fields)
+       field-tags
+       accessors
+       modifiers)
+     (define-record-type "helper" type
+       constructor
+       predicate
+       fields
+       (field-tag . field-tags)
+       ((field-tag accessor) . accessors)
+       modifiers)]
+    [(define-record-type type
+       constructor
+       predicate
+       field
+       ...)
+     (define-record-type "helper" type
+       constructor
+       predicate
+       (field ...)
+       ()
+       ()
+       ())]))
 
 ; We define the following procedures:
 ; 

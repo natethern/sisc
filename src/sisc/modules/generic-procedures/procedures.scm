@@ -186,10 +186,10 @@
      (begin)]))
 
 (define-simple-syntax (define-method (?name . ?signature) . ?body)
-  (add-method ?name (method ?signature . ?body)))
+  (module () (add-method ?name (method ?signature . ?body))))
 
 (define-simple-syntax (define-methods ?name (?signature . ?body) ...)
-  (add-methods ?name (list (method ?signature . ?body) ...)))
+  (module () (add-methods ?name (list (method ?signature . ?body) ...))))
 
 (define (first-method-procedure generic types)
   (let ([methods (applicable-methods generic types)])

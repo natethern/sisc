@@ -40,6 +40,22 @@
                       (call-with-values (lambda () (apply proc args))
                         call-k)))))))))))
 
+;; An implementation of define-values that exploits psyntax's module
+;; system in order to allow appearance of the macro in any place where
+;; a definition can occur.
+;; The code is based on a c.l.s postings by Andrew Wilcox and
+;; Abdulaziz Ghuloum.
+(define-syntax define-values
+  (lambda (ctx)
+    (syntax-case ctx ()
+      [(_ (id? ...) e)
+       (with-syntax ([(tmp? ...) (generate-temporaries #'(id? ...))])
+         #'(module (id? ...)
+               (define id? (void)) ...
+               (call-with-values (lambda () e)
+                 (lambda (tmp? ...)
+                   (set! id? tmp?) ...))))])))
+
 ;; Nice macro to make the other macros look like simple function defines.
 ;; e.g.
 ;; (define-simple-syntax (when condition body ...)

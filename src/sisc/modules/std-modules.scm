@@ -118,6 +118,7 @@
 (module misc
     (wrap-symbol
      dynamic-freeze
+     define-values
      define-simple-syntax
      compose
      total-order)
@@ -290,7 +291,7 @@
   (include "type-system.scm"))
 
 (module record
-    ((define-record-type define-record-field)
+    (define-record-type
      define-struct
      record?
      record-type
@@ -525,7 +526,8 @@
            make-method
            add-method
            define-generic
-           define-method)
+           define-method
+           method)
   (import misc)
   (include "oo/slots.scm")
   (include "oo/classes.scm")

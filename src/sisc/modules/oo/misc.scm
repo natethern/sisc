@@ -4,7 +4,7 @@
 
 (define (initialize-classes)
   (set! <object> (make-class-helper '<object> '() '()))
-  (define-method (initialize (<object> _)) (void)))
+  (add-method initialize (method ((<object> _)) (void))))
 
 (define (make class . args)
   (let ([obj ((class-constructor class))])
