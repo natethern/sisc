@@ -55,6 +55,16 @@ public class Context extends Util {
         return enter(r.ctx, r.dynenv);
     }
 
+    /**
+       Returns a new Interpreter instance with the same
+       AppContext and DynamicEnvironment of the argument
+       instance.
+
+       Necessary when re-using the same Interpreter instance
+       in a different thread.
+       
+       @see Interpreter
+    */
     public static Interpreter enter(Interpreter r) {
         return enter(r.ctx, r.dynenv);
     }
