@@ -327,6 +327,8 @@ public class Primitives extends ModuleAdapter {
                 f.vlr=new Value[] {f.stk.capture()};
 
                 kproc.apply(f);
+                //stop recycling of vlr
+                f.vlr = null;
                 return null;
             case GETOUTPUTSTRING:
                 OutputPort port=outport(f.vlr[0]);
@@ -612,16 +614,20 @@ public class Primitives extends ModuleAdapter {
                 Procedure ehandler=proc(f.vlr[1]);
                 f.fk=f.createFrame(new ApplyValuesContEval(ehandler),
                                    null, f.env, f.fk, f.stk);
-                f.vlr=new Value[0];
+                f.vlr=ZV;
                 proc.apply(f);
+                //stop recycling of vlr
+                f.vlr = null;
                 return null;
             case CALLWITHVALUES:
                 Procedure producer=proc(f.vlr[0]);
                 Procedure consumer=proc(f.vlr[1]);
                 f.push(new ApplyValuesContEval(consumer));
 
-                f.vlr=new Value[0];
+                f.vlr=ZV;
                 producer.apply(f);
+                //stop recycling of vlr
+                f.vlr = null;
                 return null;
             case ERROR:
                 error(f, string(f.vlr[0]), false);
