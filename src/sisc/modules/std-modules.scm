@@ -522,6 +522,7 @@
      java-proxy-dispatcher
      (define-java-proxy java-proxy-method-handler)
      ;;misc
+     s2j/clear-reflection-cache!
      java-synchronized
      java-wrap
      java-unwrap

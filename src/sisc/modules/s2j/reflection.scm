@@ -136,6 +136,15 @@
 (define *REFLECTED-FIELD-ACCESSORS*     (make-hashtable eq? #f))
 (define *REFLECTED-FIELD-MODIFIERS*     (make-hashtable eq? #f))
 
+(define (s2j/clear-reflection-cache!)
+  (hashtable/clear! *CLASS-PRECEDENCE-LISTS*)
+  (hashtable/clear! *REFLECTED-CONSTRUCTORS*)
+  (hashtable/clear! *REFLECTED-METHODS*)
+  (hashtable/clear! *REFLECTED-FIELD-ACCESSORS*)
+  (hashtable/clear! *REFLECTED-FIELD-MODIFIERS*))
+
+(define (s2j/clear-reflection-cache!)
+  (hashtable/clear! 
 (define (reflect-java-class-members jclass)
   (define (helper fetch create)
     (filter-map (lambda (m) (and (memq 'public (java/modifiers m))

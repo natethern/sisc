@@ -779,3 +779,6 @@
 
 ;;some init code (e.g. s2j) pulls in d/w
 (unload-dynamic-wind)
+(let ()
+  (import s2j)
+  (s2j/clear-reflection-cache!))
