@@ -23,7 +23,7 @@
                      metaph
                      (cons sym metaph)))
                 ((#\c)
-                 (if (not (and last[A (char=? last #\s) (has-next? e)
+                 (if (not (and last (char=? last #\s) (has-next? e)
                                (memv (second e) frontv)))
                      (cond ((and (not (has-n+1? e)) (char=? (second e) #\i)
                                  (char=? (third e) #\a))
@@ -73,11 +73,11 @@
                 ((#\f #\j #\l #\m #\n #\r)
                  (cons sym metaph))
                 ((#\k)
-                 (cond [(and last (char=? last #\c))
-                        (cons #\k metaph)]
-                       [(not last)
-                        '(#\k)]
-                       [else metaph]))
+                 (cond ((and last (char=? last #\c))
+                        (cons #\k metaph))
+                       ((not last)
+                        '(#\k))
+                       (else metaph)))
                 ((#\p)
                  (cons 
                   (if (and (has-next? e) (char=? (second e) #\h)) #\f #\p)
