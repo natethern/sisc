@@ -108,7 +108,7 @@
 
 (define mutex-lock!
   (let ([finish-lock
-         (lambda (mutex)
+         (lambda (mutex thread)
            (let ([oldstate (mutex-state mutex)]
                  [threads-mutexes (annotation thread 'mutexes '())])
              (if thread
@@ -131,10 +131,10 @@
                          (cadr args))])
         (if timeout
             (and (mutex/lock! mutex timeout)
-                 (finish-lock mutex))
+                 (finish-lock mutex thread))
             (begin
               (mutex/lock! mutex)
-              (finish-lock mutex)))))))
+              (finish-lock mutex thread)))))))
 
 (define mutex-unlock!
   (let ([finish-unlock
