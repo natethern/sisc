@@ -82,7 +82,8 @@
        (display (eh m e) o)
        (newline o)
        (putprop 'last-error '*sisc* 
-                (cons `(error-continuation . ,(error-continuation-k e))
+                (cons `(error-continuation 
+                        . ,(error-continuation-k e))
                       (if m 
                           (cond [(null? m) '()]
                                 [(pair? m) m]

@@ -40,6 +40,7 @@ import java.util.Set;
 import java.util.Iterator;
 
 public class SDebug extends ModuleAdapter {
+
     public String getModuleName() {
         return "Debugging";
     }
@@ -153,7 +154,9 @@ public class SDebug extends ModuleAdapter {
             case COMPILE:
                 return new Closure(false, (short)0, f.compile(f.vlr[0]), f.env);
             case ERROR_CONT_K:
-                return ((ApplyParentFrame)f.vlr[0]).c;
+                return (f.vlr[0] instanceof CallFrame ? 
+                        f.vlr[0] :
+                        ((ApplyParentFrame)f.vlr[0]).c);
             case CONT_LOCKQ:
                 if (f.vlr[0] instanceof ApplyParentFrame)
                     f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
