@@ -20,8 +20,6 @@ public interface Deserializer extends ObjectInput {
     public abstract Class readClass() throws IOException;
     public abstract Module readModule() throws IOException;
     public abstract Library getLibrary();
-
-    int BER_MASK=0x7f, BER_CONT=0x80;
 }
 
 /*

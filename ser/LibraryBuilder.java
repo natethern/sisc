@@ -13,7 +13,7 @@ import sisc.util.ExpressionVisitor;
  * Keeps track of entry points - points where serialization begins.
  *
  */
-public class LibraryBuilder implements ExpressionVisitor {
+public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
 
     boolean addAllowed=true;
     Set classes, seen, duplicates;
@@ -197,22 +197,6 @@ public class LibraryBuilder implements ExpressionVisitor {
     public boolean seen(Expression e) { 
         return seen.contains(e);
     }
-
-    public static void writeBer(long v, DataOutput dos) throws IOException {
-        byte[] b=new byte[9];
-        int p=8;
-        
-        while (v>0) {
-            b[p--]=(byte)((v & BER_MASK) | BER_CONT);
-            v>>>=7;
-        }
-        b[8]&=BER_MASK;
-        
-        if (p==8) p=7;
-        dos.write(b, p+1, b.length-(p+1));
-    }
-
-    static final int BER_MASK=0x7f, BER_CONT=0x80;
 }
 
 /*

@@ -27,11 +27,11 @@ public abstract class BerEncoding {
         dos.write(b, p+1, b.length-(p+1));
     }
 
-    protected long readBerLong() throws IOException {
-        int b=readUnsignedByte();
+    protected long readBerLong(DataInput in) throws IOException {
+        int b=in.readUnsignedByte();
         long val=b & BER_MASK;
         while ((b & BER_CONT) != 0) {
-            b=readUnsignedByte();
+            b=in.readUnsignedByte();
             val=(val<<7) + (b & BER_MASK);
         }
         return val;

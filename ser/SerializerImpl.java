@@ -42,8 +42,6 @@ public abstract class SerializerImpl extends BerEncoding implements Serializer {
 
     public abstract boolean seen(Expression e);
     public abstract void forceSeen(Expression e);
-
-    static final int BER_MASK=0x7f, BER_CONT=0x80;
 }
 
 /*
