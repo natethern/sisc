@@ -62,11 +62,10 @@
 
 (define (receive-packages in id)
   (let ((package (receive-package in id)))
-    (cond [(not package) (begin (check-newline in) '())]
+    (cond [(not package) (begin (check-newline in) 0)]
 	  [(more-packages? in)
-	   (cons package (receive-packages in id))]
-	  [else 
-	   (list package)])))
+           (+ 1 (receive-packages in id))]
+	  [else 1])))
 
 (define (send-command out bid command . args)
   (display (format "~a ~a" bid command) out)

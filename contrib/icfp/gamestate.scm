@@ -7,6 +7,13 @@
 (define robot-capacities (make-hashtable))
 (define robot-loads (make-hashtable))
 (define package-owners (make-hashtable))
+(define base-package-counts (make-hashtable))
+
+(define (packages-at-base base)
+  (hashtable/get! base-package-counts base (lambda () 5)))
+
+(define (packages-at-base! base v)
+  (hashtable/put! base-package-counts base v))
 
 (define (robot-capacity id)
   (hashtable/get! robot-capacities id (lambda () 0)))

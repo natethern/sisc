@@ -25,7 +25,9 @@
 			       
  ; Receive the currently available packages
   (debug "Receiving packages...")
-  (receive-packages in id)
+  (let ((pc (receive-packages in id)))
+    (if (memq (robot-position id) bases)
+        (packages-at-base! (robot-position id) pc)))
 
   (debug "Thinking...")
   ; Decide on our move and send it to the server

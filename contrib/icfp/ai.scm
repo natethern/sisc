@@ -171,7 +171,7 @@
     ((|Drop|)
      (if (null? (cadr move))
          (weight id 'go-nowhere)
-         (apply + (map (trace-lambda df(p)
+         (apply + (map (lambda (p)
                          (let ((dist-to-deliver 
                                 (apply dist `(,@pos
                                               ,@(package-destination p)))))
