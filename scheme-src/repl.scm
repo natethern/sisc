@@ -55,7 +55,7 @@
               ;;eval
               (let ([val (eval exp)])
                 (cond [(void? val) (repl/read writer)]
-                      [(circular? val)
+                      [(and (not (print-shared)) (circular? val))
                        (begin 
                          (display "{Refusing to print non-terminating structure}")
                          (newline)
