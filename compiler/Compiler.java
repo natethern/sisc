@@ -77,10 +77,11 @@ public class Compiler extends Util {
 	    int[] ra=rt.lookup(sym);
 	    if (ra==null) {
 		try {
-		    System.err.println(sym);
 		    return new FreeReferenceExp(sym, (Box)env.lookup(sym),
 						env);
 		} catch (UndefinedException e) {
+		    return new FreeReferenceExp(sym, null, env);
+		} catch (ClassCastException e) {
 		    return new FreeReferenceExp(sym, null, env);
 		}
 	    } else return new LexicalReferenceExp(ra[0],ra[1]);
@@ -169,14 +170,12 @@ public class Compiler extends Util {
 		    return null;
 		} 
 	    case PUTPROP:
-		System.err.println(expr);
 		expr=(Pair)expr.cdr;
 	        Expression lhs=compile(r, expr.car, rt, 0, env);
 		expr=(Pair)expr.cdr;
 		Expression envctx=compile(r, expr.car, rt, 0, env);
 		expr=(Pair)expr.cdr;
 		rhs=compile(r, expr.car, rt, 0, env);
-		System.err.println("PP"+lhs+" "+rhs+" "+envctx);
 		return new DefineExp(lhs, rhs, envctx);
 	    case DEFINE: 
 		expr=(Pair)expr.cdr;

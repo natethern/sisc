@@ -215,6 +215,8 @@ public class Interpreter extends Util {
 	    fr.val=v;
 	} catch (UndefinedException e) {
 	    contenv.define(s, new Box(v));
+	} catch (ClassCastException e2) {
+	    contenv.define(s, new Box(v));
 	}
     }
 
