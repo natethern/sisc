@@ -53,7 +53,7 @@
   (call-with-failure-continuation
       (lambda (fk)
         (cond [(not (null? error-k))
-               (fk error error-k)]
+               (fk error (car error-k))]
               [(exception? error)
                (fk (exception-error error)
                    (exception-continuation error))]
