@@ -91,16 +91,16 @@ public class Quantity extends Value implements Singleton {
 				if (x==0)
 					d=_BD_ZERO;
 				else
-					d=valueOf(v.substring(0,x), radix, false).decimalVal();
+					d=valueOf(v.substring(0,x), radix, false).decimal();
 				im = ( (x+2)==v.length() ? _BD_NEGONE :
-					   valueOf(v.substring(x, v.length()-1), radix, false).decimalVal());
+					   valueOf(v.substring(x, v.length()-1), radix, false).decimal());
 			} else {
 				if (x==0)
 					d=_BD_ZERO;
 				else
-					d=valueOf(v.substring(0,x), radix, false).decimalVal();
+					d=valueOf(v.substring(0,x), radix, false).decimal();
 				im = ( (x+2)==v.length() ? _BD_ONE :
-					   valueOf(v.substring(x+1, v.length()-1), radix, false).decimalVal());
+					   valueOf(v.substring(x+1, v.length()-1), radix, false).decimal());
 			}
 			return new Quantity(d,im);
    	    } else if ((x=v.indexOf('/'))!=-1) {
