@@ -1456,6 +1456,51 @@
       </blockquote>
     </para>
     <para>
+      Symbolic environments are a first class datatype in &SISC;.  The
+      top-level environment itself is merely a special cased symbolic
+      enviornment.  To obtain the top-level environment as a first
+      class value, one can use the 
+      <function>interaction-environment</function> function that is an
+      optional procedure in &R5RS;.  Another useful environment is the
+      &R5RS; report environment available by calling:
+      <programlisting>
+(scheme-report-environment 5)
+      </programlisting>
+      Each call to <function>scheme-report-environment</function>
+      returns a new environment that contains only the bindings
+      available in the Scheme report.  Finally, the initial
+      environment available to the programmer when &SISC; starts can
+      be retrieved using the
+      <function>sisc-initial-environment</function> function:
+    </para>
+    <para>
+      <blockquote>
+	<para>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>environment</type>
+	    <methodname>sisc-initial-environment</methodname>
+            <void/>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Returns the initial &SISC; interaction environment.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+    </para>
+    <para>
+      Like <function>scheme-report-environment</function>, each call
+      to <function>sisc-initial-environment</function> returns a
+      distinct environment which contains only the bindings initially
+      available when &SISC; starts.  An interesting use of this would
+      be to define one or more distinct initial-environments, bound to
+      toplevel variables.  One could then define Scheme code and data
+      in each environment that can use the full &SISC; language but
+      cannot see any bindings in other environments.
+    </para>
+    <para>
       Finally, &SISC; adheres strictly to &R5RS; when it comes to
       using <function>set!</function> to modify the
       contents of a top-level variable.  If an attempt to set an

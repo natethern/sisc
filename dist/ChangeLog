@@ -1,3 +1,15 @@
+2002-06-18  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Modified SchemeString to be able to store the string either
+	  as a String or a char[] for efficiency.
+
+	* Added native versions of the string comparison functions
+	  and substring, string-upcase, string-downcase.  Performance
+	  with these operations is improved by 10-150x.
+
+	* Added get-environment, which returns a symbolic environment
+	  given its name (as a symbol).
+	
 2002-06-14  Matthias Radestock  <matthias@sorted.org>
 
 	* Added with-current-url procedure.
