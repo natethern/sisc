@@ -1,4 +1,4 @@
-package sisc;
+package sisc.modules;
 
 import java.util.*;
 import java.io.*;
@@ -19,19 +19,6 @@ public class Primitives extends ModuleAdapter {
 
     public String getModuleName() {
         return "Primitives";
-    }
-
-    public static SchemeBoolean numQuery(Value v, int mask)
-        throws ContinuationException {
-        return truth(v instanceof Quantity &&
-                     (((Quantity)v).is(mask)));
-    }
-
-    public void bindAll(Interpreter r, SymbolicEnvironment env) {
-        Symbol[] syms=getModuleBindingNames(r);
-        for (int i=0; i<syms.length; i++) {
-            env.define(syms[i], getBindingValue(r, syms[i]));
-        }
     }
 
     public Primitives() {
@@ -190,6 +177,12 @@ public class Primitives extends ModuleAdapter {
         define("write-char", WRITECHAR);
     }
 
+    public static SchemeBoolean numQuery(Value v, int mask)
+        throws ContinuationException {
+        return truth(v instanceof Quantity &&
+                     (((Quantity)v).is(mask)));
+    }
+
     public static class Parameter extends Procedure {
 
         private Value v;
@@ -229,35 +222,6 @@ public class Primitives extends ModuleAdapter {
 
         public void deserialize(Deserializer s) throws IOException {
             v = (Value)s.readExpression();
-        }
-    }
-
-    public static URL makeURL(Value v) {
-        String s = string(v);
-        try {
-            return new URL(s);
-        } catch (MalformedURLException e) {
-            try {
-                return new URL("file:"+s);
-            } catch (MalformedURLException ee) {
-                throwPrimException(liMessage(SISCB, "malformedurl", s));
-                return null;
-            }
-        }
-    }
-
-    public static URL makeURL(Value current, Value v) {
-        URL c = makeURL(current);
-        String s = string(v);
-        try {
-            return new URL(c, s);
-        } catch (MalformedURLException e) {
-            try {
-                return new URL(c, "file:"+s);
-            } catch (MalformedURLException ee) {
-                throwPrimException(liMessage(SISCB, "malformedurl", s));
-                return null;
-            }
         }
     }
 
@@ -424,7 +388,7 @@ public class Primitives extends ModuleAdapter {
                 sw.getBuffer().setLength(0);
                 return s;
             case OPENSOURCEINPUTFILE:
-                URL url = makeURL(f.vlr[0]);
+                URL url = url(f.vlr[0]);
                 try {
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(true);
@@ -434,7 +398,7 @@ public class Primitives extends ModuleAdapter {
                     throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
                 }
             case OPENINPUTFILE:
-                url = makeURL(f.vlr[0]);
+                url = url(f.vlr[0]);
                 try {
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(true);
@@ -444,7 +408,7 @@ public class Primitives extends ModuleAdapter {
                     throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
                 }
             case OPENOUTPUTFILE:
-                url = makeURL(f.vlr[0]);
+                url = url(f.vlr[0]);
                 try {
                     if (url.getProtocol().equals("file")) {
                         //the JDK does not permit write access to file URLs
@@ -490,7 +454,7 @@ public class Primitives extends ModuleAdapter {
             case BOXQ: return truth(f.vlr[0] instanceof Box);
             case LOAD:
                 InputPort p=null;
-                url = makeURL(f.vlr[0]);
+                url = url(f.vlr[0]);
                 try {
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(true);
@@ -561,7 +525,7 @@ public class Primitives extends ModuleAdapter {
                 return VOID;
             case FILEEXISTSQ:
                 try {
-                    makeURL(f.vlr[0]).openConnection().getInputStream().close();
+                    url(f.vlr[0]).openConnection().getInputStream().close();
                     return TRUE;
                 } catch (IOException e) {
                     return FALSE;
@@ -615,7 +579,7 @@ public class Primitives extends ModuleAdapter {
                 } catch (InterruptedException ie) {}
                 return VOID;
             case NORMALIZEURL:
-                return new SchemeString(makeURL(f.vlr[0]).toString());
+                return new SchemeString(url(f.vlr[0]).toString());
             case EMITANNOTATIONS:
                 f.dynenv.parser.annotate=truth(f.vlr[0]);
                 return VOID;
@@ -753,7 +717,7 @@ public class Primitives extends ModuleAdapter {
                 }
                 return VOID;
             case OPENOUTPUTFILE:
-                URL url = makeURL(f.vlr[0]);
+                URL url = url(f.vlr[0]);
                 try {
                     if (url.getProtocol().equals("file")) {
                         //the JDK does not permit write access to file URLs
@@ -815,7 +779,7 @@ public class Primitives extends ModuleAdapter {
                 f.undefine(symbol(f.vlr[0]), symbol(f.vlr[1]));
                 return VOID;
             case NORMALIZEURL:
-                return new SchemeString(makeURL(f.vlr[0], f.vlr[1]).toString());
+                return new SchemeString(url(f.vlr[0], f.vlr[1]).toString());
             case SETANNOTATIONSTRIPPED:
                 annotated(f.vlr[0]).stripped=f.vlr[1];
                 return VOID;
