@@ -234,7 +234,7 @@
    buffer-length
    buffer-copy!)
   (import block-io-native)
-  (import buffers))
+  (include "io/buffer.scm"))
 
 (module hashtable
     (make-hashtable
