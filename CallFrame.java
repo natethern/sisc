@@ -67,10 +67,6 @@ public class CallFrame extends Procedure {
                 vlr=nvlr;
             }
 
-
-            if (nxp!=null && nxp instanceof Volatile)
-		((Volatile)nxp).lock();
-
             if (parent!=null)
                 parent.capture(r);
 
