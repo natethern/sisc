@@ -208,10 +208,12 @@
     (cond [(and (eq? rator 'not)
                 (not-redefined? 'not)
                 (= (length rands) 1))
+           (varcount-decr! state refv 'not)
            (opt:if '#%if (car rands) #f #t state)]
           [(and (symbol? rator)
                 (not-redefined? rator)
                 (andmap constant? rands))
+           (varcount-decr! state refv rator)
            (eval `("noexpand" (,rator ,@rands)))]
           [(and (pair? rator)
                 (eq? (car rator) 'lambda)

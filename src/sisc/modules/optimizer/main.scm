@@ -68,10 +68,10 @@
       char-numeric? char-ready? char-upcase char-upper-case? char-whitespace? 
       char<=? char<? char=? char>=? char>? char? complex? cos denominator 
       eof-object? eq? equal? eqv? even? exact? exp expt floor gcd imag-part
-	  inexact? input-port? integer?	lcm length list-ref list? log magnitude
-	  max member memq memv min modulo negative? not null? number? numerator 
-	  odd? output-port? pair? positive? procedure? quotient rational? real-part 
-	  real? remainder round sin sqrt string-ci<=? string-ci<? string-ci=?
-	  string-ci>=? string-ci>? string-length string<=? string<? string=? 
-	  string>=? string>? string? symbol? tan truncate vector-length vector? 
-	  zero?)))
+      inexact? input-port? integer? lcm length list-ref list? log magnitude
+      max member memq memv min modulo negative? not null? number? numerator 
+      odd? output-port? pair? positive? procedure? quotient rational? real-part
+      real? remainder round sin sqrt string-ci<=? string-ci<? string-ci=?
+      string-ci>=? string-ci>? string-length string<=? string<? string=? 
+      string>=? string>? string? symbol? tan truncate vector-length vector? 
+      zero?)))
