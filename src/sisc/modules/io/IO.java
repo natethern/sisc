@@ -133,8 +133,8 @@ public class IO extends IndexedProcedure {
         return read(r, i,
                     (r.dynenv.caseSensitive ? 
                     sisc.reader.Parser.CASE_SENSITIVE : 0) |
-                    (r.dynenv.orphanedParenIsError ? 
-                     sisc.reader.Parser.ORPHANED_PAREN_IS_ERROR : 0));
+                    (r.dynenv.permissiveParsing ? 
+                     sisc.reader.Parser.PERMISSIVE_PARSING : 0));
     }
 
     public static Value readCode(Interpreter r, InputPort i) 
@@ -144,8 +144,8 @@ public class IO extends IndexedProcedure {
                     sisc.reader.Parser.PRODUCE_IMMUTABLES |
                     (r.dynenv.caseSensitive ? 
                      sisc.reader.Parser.CASE_SENSITIVE : 0) |
-                    (r.dynenv.orphanedParenIsError ? 
-                     sisc.reader.Parser.ORPHANED_PAREN_IS_ERROR : 0));
+                    (r.dynenv.permissiveParsing ? 
+                     sisc.reader.Parser.PERMISSIVE_PARSING : 0));
     }
 
     public Value displayOrWrite(Interpreter r,
