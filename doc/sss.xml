@@ -92,10 +92,17 @@
 	  Throughout this document, procedures will be defined using
 	  the following syntax:
 	</para>
-	<programlisting>
-	  &procedure; (procedure-name argument [optional argument] ...)
-	  &returns; type and description of the return value
-	</programlisting>
+	  <para>
+	    
+	  <funcsynopsis>
+	    <funcprototype>
+	      <funcdef><function>max</function></funcdef>
+	      <paramdef><parameter>string</parameter></paramdef>
+	      <paramdef><parameter>string</parameter></paramdef>
+	    </funcprototype>
+	  </funcsynopsis>
+
+	</para>
 	<blockquote>
 	  <para>
 	    Description of the procedure's semantics.
@@ -411,35 +418,43 @@
 	</title>
 	<para>
 	  &SISC; supports the length prefix method of creating Vector
-	  constants. For example:
-
-	  <programlisting>
-	    #5(x)
-	  </programlisting>
+	  constants. For example, '<computeroutput>&num;5(x)</computeroutput>'
 	  creates a vector constant containing five identical
 	  symbols.  In addition, the length-prefix form is used when
 	  printing vectors, and if elements repeat at the end of a
-	  Vector, only the last unique element is printed.
+	  Vector, only the last unique element is printed.  This form
+	  is refered to as the <emphasis>compact</emphasis> vector 
+	  representation.  The unprefixed form with all elements
+	  displayed is called the <emphasis>verbose</emphasis> representation.
 	</para>
 	<para>
 	  Vectors are displayed differently depending on the call
 	  used.  When called with
-	  <computeroutput>display</computeroutput>, apart from the
-	  ordinary rule where all elements are displayed using the
-	  same semantics, no shortening of the vector is done and the
-	  length prefix is not displayed.  Using
-	  <computeroutput>write</computeroutput> on the other hand
-	  does produce shortened, length-prefixed vectors. 
+	  <computeroutput>display</computeroutput>, in addition to the
+	  ordinary &R5RS; rules regarding the output of values
+	  displayed with <computeroutput>display</computeroutput>,
+	  the verbose representation is displayed. Using 
+	  <computeroutput>write</computeroutput>, on the other hand
+	  produces the compact representation.
 	</para>
 	<para>
 	  Displaying a vector with
-	  <computeroutput>pretty-print</computeroutput> may or may not
-	  output a compact vector representation.  The behavior of
-	  pretty-print is controlled by the parameter
+	  <computeroutput>pretty-print</computeroutput> may output
+	  either the verbose or compact representation of a vector.
+	  The behavior of pretty-print is controlled by the parameter
 	  <computeroutput>vector-length-prefixing</computeroutput>.
-	  If set to &num;t, pretty-print will emit the compact form.
-	  If &num;f, the standard form is produced.
+	  If set to &num;t, pretty-print will emit the compact representation.
+	  If &num;f, the verbose representation is produced.  By default,
+	  <computeroutput>vector-length-prefixing</computeroutput> is true.
 	</para>
+	<programlisting>
+	  &parameter; (vector-length-prefixing [boolean])
+	  If set to true, this parameter will instruct the
+	  pretty-printer to emit length prefixed,
+	  trailing-duplicate-eliminated vectors in its output.  If
+	  false, ordinary full-length vectors without prefixes will be
+	  emitted.
+	</programlisting>
       </sect2>
       <sect2>
 	<title>
@@ -722,11 +737,11 @@
 	display,</computeroutput> and
 	<computeroutput>write</computeroutput>), &SISC; provides block
 	input/output functions, that allow a Scheme program to read
-	blocks of more than one byte/character of data at a time.
-	&SISC; stores data that is read or is to be written as String
-	objects.  Binary data in strings is fully supported throughout
-	the Scheme system.  Such strings may be read and written as
-	usual, though undisplayable characters will often be escaped.
+	blocks of more than one byte or character of data at a time.
+	&SISC; stores data that is read or is to be written in a string.
+	Binary data in strings is fully supported throughout &SISC;.  
+	Such strings may be read and written as usual, though
+	undisplayable characters will often be escaped.
       </para>
       <programlisting> 
 	&procedure; (block-read buffer input-port integer)
@@ -1022,13 +1037,12 @@
     <para>
       &SISC; can be used as a scripting language
       for Java, or Java may be used to provide functionality to
-      Scheme. Such activity is collectively termed
-      'bridging'. &SISC; provides an API that may
-      be called from Java to execute Scheme code or evaluate Scheme
-      expressions. In addition, the J2S module provides Scheme level
-      control of Java objects, methods, and fields. Finally, the two
-      can be combined in a number of complex ways to intertwine the
-      two languages.
+      Scheme. Such activity is collectively termed 'bridging'. &SISC;
+      provides an API that may be called from Java to execute Scheme
+      code or evaluate Scheme expressions. In addition, the J2S module
+      provides Scheme level control of Java objects, methods, and
+      fields. Finally, the two can be combined in a number of complex
+      ways to intertwine the two languages.
     </para>
     <sect1>
       <title>
