@@ -137,9 +137,9 @@ public class IO extends ModuleAdapter {
                                 Value v,
                                 boolean display) {
         try {
-            ValueWriter w = new PortValueWriter(port,
-                                                r.dynenv.printShared,
-                                                r.dynenv.vectorLengthPrefixing);
+            ValueWriter w = r.dynenv.printShared ?
+                new SharedValueWriter(port, r.dynenv.vectorLengthPrefixing):
+                new PortValueWriter(port, r.dynenv.vectorLengthPrefixing);
             if (display) w.display(v);
             else w.write(v);
         } catch (IOException e) {

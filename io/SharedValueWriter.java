@@ -12,73 +12,69 @@ import sisc.util.Util;
 import sisc.util.ExpressionVisitor;
 import sisc.util.ExpressionVisitee;
 
-public class PortValueWriter extends Util
-    implements ValueWriter, ExpressionVisitor {
+public class SharedValueWriter extends PortValueWriter {
 
-    private OutputPort port;
+    private Map shared;
+    private List visited;
+    private int count;
 
-    private boolean display;
-
-    private boolean vectorLengthPrefixing;
-
-    public PortValueWriter(OutputPort port) {
-        this(port, false);
-    }
-
-    public PortValueWriter(OutputPort port,
-                           boolean vectorLengthPrefixing) {
-        this.port = port;
-        this.vectorLengthPrefixing = vectorLengthPrefixing;
+    public SharedValueWriter(OutputPort port,
+                             boolean vectorLengthPrefixing) {
+        super(port, vectorLengthPrefixing);
+        shared = new HashMap(1);
+        visited = new LinkedList();
+        count = 0;
     }
 
     protected void displayOrWrite(Value v, boolean display)
         throws IOException {
 
-        this.display = display;
-        append(v);
+        visit(v);
+        while(!visited.isEmpty()) {
+            ((Expression)visited.remove(0)).visit(this);
+        }
+
+        super.displayOrWrite(v, display);
+
+        shared.clear();
+        visited.clear();
+        count = 0;
     }
 
-    public void display(Value v) throws IOException {
-        displayOrWrite(v, true);
-    }
-
-    public void write(Value v) throws IOException {
-        displayOrWrite(v, false);
-    }
+    private static Integer seenMarker = new Integer(-1);
+    private static Integer sharedMarker = new Integer(-2);
 
     public void visit(ExpressionVisitee e) {
+        Object i = shared.get(e);
+        if (i == null) {
+            shared.put(e, seenMarker);
+            visited.add(e);
+        } else {
+            shared.put(e, sharedMarker);
+        }
     }
 
     public ValueWriter append(Value v) throws IOException {
-        if (display)
-            v.display(this);
-        else
-            v.write(this);
-        return this;
-    }
+        Integer i = (Integer)shared.get(v);
+        if (i == sharedMarker) {
+            append('#');
+            int shareIdx = count++;
+            shared.put(v, new Integer(shareIdx));
+            append(Integer.toString(shareIdx));
+            append('=');
+        } else if (i != null && i != seenMarker) {
+            append('#');
+            append(i.toString());
+            append('#');
+            return this;
+        }
 
-    public ValueWriter append(char c) throws IOException {
-        port.write(c);
-        return this;
-    }
-
-    public ValueWriter append(String s) throws IOException {
-        port.write(s);
-        return this;
-    }
-
-    public ValueWriter append(byte[] b, int offset, int length)
-        throws IOException {
-        port.write(b, offset, length);
-        return this;
+        return super.append(v);
     }
 
     public boolean isInlinable(Value v) {
-        return true;
-    }
-
-    public boolean vectorLengthPrefixing() {
-        return vectorLengthPrefixing;
+        Object i = shared.get(v);
+        return (i == null || i == seenMarker);
     }
 }
 
