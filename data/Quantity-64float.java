@@ -1362,9 +1362,19 @@ public class Quantity extends Value {
         return comp(o, -1);
     }
 
-    public final boolean equals(Object ob) {
-        if (!(ob instanceof Quantity)) return false;
-        return comp((Quantity)ob, 0);
+    public boolean eq(Value v) {
+	if (!(v instanceof Quantity)) return false;
+	Quantity q=(Quantity)v;
+	return super.eq(q) || 
+	    (q.type==type && valueEqual(q));
+    }
+
+    public boolean equals(Object ob) {
+	return (ob instanceof Quantity) && eq((Value)ob);
+    }
+	
+    public boolean valueEqual(Value ob) {
+	return (ob instanceof Quantity) && comp((Quantity)ob, 0);
     }
 
     public int hashCode() {
