@@ -61,6 +61,8 @@ public class Interpreter extends Util {
     public CallFrame             stk, 
                                   fk;
 
+    public boolean dbg;
+
     //Scheme->Java exception conversion FK
     static CallFrame top_fk = new CallFrame(new ThrowSchemeException(),
                                             null, false, null, null, null,
@@ -103,7 +105,62 @@ public class Interpreter extends Util {
         interpret();
         return acc;
     }
-    
+
+    String i(Object e) {
+        return e == null ? "null" : Integer.toHexString(e.hashCode());
+    }
+
+    void e(LexicalEnvironment x) {
+        System.err.print(i(x));        
+        if (x!=null) {
+            System.err.print('{');
+            v(x.vals);
+            System.err.print(':');
+            System.err.print(i(x.parent));
+            System.err.print('}');
+        }
+    }
+        
+    void v(Value[] vlr) {
+        System.err.print(i(vlr));
+        if (vlr != null) {
+            System.err.print('(');
+            for (int i=0; i<vlr.length; i++) {
+                if (vlr[i]==null)
+                    System.err.print("null");
+                else
+                    System.err.print(vlr[i].express());
+                if (i+1<vlr.length)
+                    System.err.print(',');
+            }
+            System.err.print(')');
+        }
+    }
+
+    int sd() {
+        CallFrame c=stk;
+        int x=0;
+        while (c!=null) {
+            x++;
+            c=c.parent;
+        }
+        return x;
+    }
+
+    void dbg() {
+        System.err.println(nxp.express());
+        System.err.print(sd());
+        System.err.print("["+vlk+' ');
+        v(vlr);
+        System.err.print(' ');
+        e(env);
+        System.err.println(']');
+        try {
+            System.in.read();
+        } catch (IOException e) {}
+    }
+
+
     protected void interpret() throws SchemeException {
         try {
             do {
@@ -111,6 +168,9 @@ public class Interpreter extends Util {
                     do {
                         while (nxp==null) 
                             pop(stk);
+                        if (dbg) {
+                            dbg();
+                        }
                         nxp.eval(this);
                     } while (true);
                 } catch (ContinuationException ce) {
@@ -127,7 +187,8 @@ public class Interpreter extends Util {
 
     public final void next(Expression nextExpr) throws ContinuationException {
         nxp=nextExpr;
-        nextExpr.eval(this);
+        if (dbg) dbg();
+        //nextExpr.eval(this);
     }
 
     public final void newVLR(int size) {
@@ -357,14 +418,20 @@ public class Interpreter extends Util {
     
     public final void returnFrame(CallFrame f) {
         if (f.vlk || frameFreeListSize >= FRAMEPOOLMAX) return;
+
+        //Clear these fields to avoid hanging onto otherwise
+        //garbage collectable data for too long
+        f.env=null;
+        f.vlr=null;
+          
         f.parent=frameFreeList;
         frameFreeList = f;
         frameFreeListSize++;
     }
 
     protected static final int ENVPOOLMAX=128;
-    protected LexicalEnvironment envFreeList;
-    protected int envFreeListSize;
+    public LexicalEnvironment envFreeList = null;
+    public int envFreeListSize;
 
     /*
     protected static int m, o, h;
@@ -386,10 +453,9 @@ public class Interpreter extends Util {
                 env.parent = envFreeList;
                 envFreeList = env;
                 envFreeListSize++;
-            }
-            //else 
-            //    o++;
-        }
+            } 
+
+        } 
     }
     
     public final void newEnv(Value[] vals, 
@@ -438,15 +504,17 @@ public class Interpreter extends Util {
 
     public final void replaceVLR(int size) {
         if (!vlk) {
-            if (vlr.length == size) return;
-            returnValues(vlr);
-        }
-        newVLR(size);
+            newVLR(size);
+            Value ov[]=vlr;
+            if (ov.length == size) return;
+            returnValues(ov);
+        } else 
+            newVLR(size);
     }
 
     public final void returnValues(Value[] v) {
         int size = v.length;
-        if (size == 0 || size >= VALUESPOOLSIZE) return;
+        if (true || size == 0 || size >= VALUESPOOLSIZE) return;
         deadValues[size] = v;
     }
 }
