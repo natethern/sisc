@@ -8,13 +8,14 @@ import sisc.data.*;
 import sisc.exprs.*;
 import sisc.io.*;
 import sisc.interpreter.*;
-import sisc.reader.Lexer;
-import sisc.reader.Parser;
 import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
+import sisc.reader.Lexer;
+import sisc.reader.Parser;
+import sisc.util.Defaults;
 
-public abstract class Util implements Defaults, Version {
+public abstract class Util implements Version {
 
     static String safeGetProperty(String key, String def) {
         try {
@@ -26,16 +27,16 @@ public abstract class Util implements Defaults, Version {
 
     public static final boolean caseSensitive =
         safeGetProperty("sisc.caseSensitive",
-                        new Boolean(DEFAULT_CASE_SENSITIVE).toString()).equals("true");
+                        new Boolean(Defaults.CASE_SENSITIVE).toString()).equals("true");
     public static final boolean permitInterrupts =
         safeGetProperty("sisc.permitInterrupts",
-                        new Boolean(DEFAULT_PERMIT_INTERRUPTS).toString()).equals("true");
+                        new Boolean(Defaults.PERMIT_INTERRUPTS).toString()).equals("true");
     public static final int minFloatPrecision =
         Integer.parseInt(safeGetProperty("sisc.minFloatPrecision",
-                                         Integer.toString(DEFAULT_MIN_FLOAT_PRECISION)));
+                                         Integer.toString(Defaults.MIN_FLOAT_PRECISION)));
     public static final int maxFloatPrecision =
         Integer.parseInt(safeGetProperty("sisc.maxFloatPrecision",
-                                         Integer.toString(DEFAULT_MAX_FLOAT_PRECISION)));
+                                         Integer.toString(Defaults.MAX_FLOAT_PRECISION)));
 
     protected static final Value[] ZV = new Value[0];
     protected static final Quantity FIVE = Quantity.valueOf(5);

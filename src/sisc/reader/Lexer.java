@@ -4,6 +4,7 @@ import java.io.*;
 import sisc.data.*;
 import sisc.io.InputPort;
 import sisc.util.Util;
+import sisc.util.Defaults;
 
 public class Lexer implements Tokens {
 
@@ -63,7 +64,7 @@ public class Lexer implements Tokens {
         {};
         
 
-    public boolean strictR5RS = Util.DEFAULT_STRICT_R5RS;
+    public boolean strictR5RS = Defaults.STRICT_R5RS;
     public String sval;
     public Quantity nval;
     public Pair prval;

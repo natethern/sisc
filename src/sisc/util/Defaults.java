@@ -1,17 +1,18 @@
 package sisc.util;
 
-public interface Defaults {
+public abstract class Defaults {
 
-    int     DEFAULT_SYNOPSIS_LENGTH             = 30;
-    boolean DEFAULT_CASE_SENSITIVE              = false;
-    boolean DEFAULT_PERMIT_INTERRUPTS           = false;
-    int     DEFAULT_MIN_FLOAT_PRECISION         = 16;
-    int     DEFAULT_MAX_FLOAT_PRECISION         = 32;
-    boolean DEFAULT_STRICT_R5RS                 = false;
-    boolean DEFAULT_PRINT_SHARED                = true;
-    boolean DEFAULT_VECTOR_LENGTH_PREFIXING     = true;
-    boolean DEFAULT_EMIT_ANNOTATIONS            = false;
-    boolean DEFAULT_EMIT_DEBUGGING_SYMBOLS      = false;
+    public static int     SYNOPSIS_LENGTH             = 30;
+    public static boolean CASE_SENSITIVE              = false;
+    public static boolean PERMIT_INTERRUPTS           = false;
+    public static int     MIN_FLOAT_PRECISION         = 16;
+    public static int     MAX_FLOAT_PRECISION         = 32;
+    public static boolean STRICT_R5RS                 = false;
+    public static boolean PRINT_SHARED                = true;
+    public static boolean VECTOR_LENGTH_PREFIXING     = true;
+    public static boolean EMIT_ANNOTATIONS            = false;
+    public static boolean EMIT_DEBUGGING_SYMBOLS      = false;
+
 }
  
 /*

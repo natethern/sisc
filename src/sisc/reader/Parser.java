@@ -8,6 +8,7 @@ import sisc.util.Util;
 import sisc.io.InputPort;
 import sisc.io.SourceInputPort;
 import sisc.exprs.AnnotatedExpr;
+import sisc.util.Defaults;
 
 /**
  * Receives tokens from the Lexer and parses them into valid
@@ -25,7 +26,7 @@ public class Parser extends Util implements Tokens {
         PRODUCE_ANNOTATIONS=0x2,
         STRICT_R5RS        =0x4;
 
-    public boolean annotate = DEFAULT_EMIT_ANNOTATIONS;
+    public boolean annotate = Defaults.EMIT_ANNOTATIONS;
 
     public Lexer lexer;
 

@@ -5,6 +5,7 @@ import sisc.interpreter.*;
 import sisc.io.ValueWriter;
 import sisc.io.WriterOutputPort;
 import sisc.io.PortValueWriter;
+import sisc.util.Defaults;
 
 /**
  * Value is the base class for anything treated as a first-class value 
@@ -18,7 +19,7 @@ public abstract class Value extends Expression implements Immediate {
         error(r, liMessage(SISCB,"nonprocapp", synopsis()));
     }
 
-    public String synopsis() {        return synopsis(DEFAULT_SYNOPSIS_LENGTH);
+    public String synopsis() {        return synopsis(Defaults.SYNOPSIS_LENGTH);
     }
 
     /**

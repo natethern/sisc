@@ -10,6 +10,7 @@ import java.security.AccessControlException;
 import sisc.interpreter.AppContext;
 import sisc.reader.*;
 import sisc.util.Util;
+import sisc.util.Defaults;
 
 public class DynamicEnvironment extends Util implements Cloneable {
 
@@ -18,24 +19,24 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public SchemeInputPort in;
     public SchemeOutputPort out;
 
-    public boolean caseSensitive = DEFAULT_CASE_SENSITIVE;
-    public boolean printShared = DEFAULT_PRINT_SHARED;
-    public boolean vectorLengthPrefixing = DEFAULT_VECTOR_LENGTH_PREFIXING;
-    public boolean emitDebuggingSymbols = DEFAULT_EMIT_DEBUGGING_SYMBOLS;
+    public boolean caseSensitive = Defaults.CASE_SENSITIVE;
+    public boolean printShared = Defaults.PRINT_SHARED;
+    public boolean vectorLengthPrefixing = Defaults.VECTOR_LENGTH_PREFIXING;
+    public boolean emitDebuggingSymbols = Defaults.EMIT_DEBUGGING_SYMBOLS;
     public String characterSet = getDefaultCharacterSet();
     
     private static String defaultPrintShared =
-        new Boolean(DEFAULT_PRINT_SHARED).toString();
+        new Boolean(Defaults.PRINT_SHARED).toString();
     private static String defaultVectorLengthPrefixing =
-        new Boolean(DEFAULT_VECTOR_LENGTH_PREFIXING).toString();
+        new Boolean(Defaults.VECTOR_LENGTH_PREFIXING).toString();
     private static String defaultEmitDebuggingSymbols =
-        new Boolean(DEFAULT_EMIT_DEBUGGING_SYMBOLS).toString();
+        new Boolean(Defaults.EMIT_DEBUGGING_SYMBOLS).toString();
     private static String defaultStrictR5RS =
-        new Boolean(DEFAULT_STRICT_R5RS).toString();
+        new Boolean(Defaults.STRICT_R5RS).toString();
     private static String defaultEmitAnnotations =
-        new Boolean(DEFAULT_EMIT_ANNOTATIONS).toString();
+        new Boolean(Defaults.EMIT_ANNOTATIONS).toString();
     private static String defaultCaseSensitive = 
-	new Boolean(DEFAULT_CASE_SENSITIVE).toString();
+        new Boolean(Defaults.CASE_SENSITIVE).toString();
 
     public Value wind = FALSE; //top of wind stack
 
@@ -66,6 +67,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
         this.out = out;
         this.parser.annotate =
             ctx.getProperty("sisc.emitAnnotations", defaultEmitAnnotations).equals("true");
+        System.err.println("defaultEmitAnnotations = " + defaultEmitAnnotations);
         this.parser.lexer.strictR5RS =
             ctx.getProperty("sisc.strictR5RS", defaultStrictR5RS).equals("true");
         this.printShared =

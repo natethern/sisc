@@ -1,3 +1,7 @@
+2003-07-03  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed overriding of defaults for configuration parameters.
+
 2003-07-02  Matthias Radestock  <matthias@sorted.org>
 
 	* Improved S2J class name mangling to handle package-less and
