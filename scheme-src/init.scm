@@ -661,11 +661,3 @@
    (lambda (k) 
      (apply k args))))
 
-;;;;;;;;;;;;; Module loading
-;(if (not (getprop 'LITE '*sisc*))
-;    (for-each load-module 
-;              '("sisc.modules.SNative" "sisc.modules.J2S"
-;                "sisc.modules.SLogicOps"
-;                "sisc.modules.SNetwork" "sisc.modules.SDebug")))
-(if (not (getprop 'LITE '*sisc*))
-    (for-each load-module '("sisc.modules.SNative")))

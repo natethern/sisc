@@ -907,6 +907,3 @@
   (lambda %_765
     (call-with-current-continuation
       (lambda (%_766) (apply %_766 %_765)))))
-(if (not (getprop 'lite '*sisc*))
-  (for-each load-module '("sisc.modules.SNative"))
-  (void))
