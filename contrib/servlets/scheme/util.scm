@@ -1,0 +1,71 @@
+(import s2j)
+(import hashtable)
+
+(define (call-with-output-string f)
+  (let ((outsp (open-output-string)))
+    (f outsp)
+    (close-output-port outsp)
+    (get-output-string outsp)))
+
+;;various servlet / session / request / response methods
+(define-generic get-attribute)    
+(define-generic set-attribute!)
+(define-generic set-content-type!)
+(define-generic get-writer)
+(define-generic print)
+(define-generic get-parameter)
+(define-generic get-session)
+(define-generic new?)
+
+(define current-request (parameterize))
+(define current-response (parameterize))
+(define current-return (parameterize))
+
+(define (access-k-data f)
+  (let ([session (get-session (current-request) (->jboolean #t))])
+    (java-synchronized
+     session
+     (lambda ()
+       (let ([k-data (get-attribute session (->jstring "kData"))])
+         (f (if (java-null? k-data)
+                (let ([k-data (cons 0 (make-hashtable))])
+                  (set-attribute! session
+                                  (->jstring "kData")
+                                  (java-wrap k-data))
+                  k-data)
+                (java-unwrap k-data))))))))
+(define (store-k k)
+  (access-k-data
+   (lambda (k-data)
+     (let* ([counter (car k-data)]
+            [res (string-append "cont" (number->string counter))])
+       ((cdr k-data) (string->symbol res) k)
+       (set-car! k-data (+ counter 1))
+       res))))
+(define (fetch-k n)
+  (access-k-data
+   (lambda (k-data)
+     ((cdr k-data) (string->symbol n)))))
+
+(define (make-dispatcher default-page)
+  (lambda (request response)
+    (current-request request)
+    (current-response response)
+    (set! request #f)
+    (set! response #f)
+    (if (call/cc (lambda (k) (current-return k) #t))
+        (let ([k (get-parameter (current-request) (->jstring "cont"))])
+          (if (java-null? k)
+              (default-page)
+              ((fetch-k (->string k))))))))
+  
+(define (get-param p)
+  (->string (get-parameter (current-request) (->jstring p))))
+
+(define-syntax comment
+  (syntax-rules ()
+    ((_ . rest) (void))))
+(comment
+ (define baz "1234")
+ (->yatl `([foo . ([foo . #(([foo . ,baz] [bar . 2]))])]))
+ )
