@@ -124,6 +124,7 @@ public class AppContext extends Util {
                 EMPTYLIST=lEMPTYLIST;
                 EOF=lEOF;
             } catch (Exception e) {
+		e.printStackTrace();
                 throw new IOException(e.getMessage());
             } finally {
                 r.pop(lstk);
