@@ -149,14 +149,13 @@ public class Lexer implements Tokens {
 
         if (c!='\\') return c;
 
+        //escaping rules are those defined by Java, except we don't
+        //handle octal escapes.
 	switch (c = is.read()) {
 	case '"': return c | 0x80000000;
-	//case '0': return '\0';//enabling this breaks a few things
-	//case 'a': return '\a';//not part of unicode
 	case 'b': return '\b';
 	case 't': return '\t';
 	case 'n': return '\n';
-	//case 'v': return '\v';//not part of unicode
 	case 'f': return '\f';
 	case 'r': return '\r';
         default: return c;

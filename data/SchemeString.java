@@ -68,20 +68,28 @@ public class SchemeString extends Value {
     }
 
     String display(boolean write) {
+        if (!write) return new String(stringdata);
         StringBuffer b=new StringBuffer();
-        if (write) {
-            b.append('"');
-            int lastGood=0;
-            for (int i=0; i<stringdata.length; i++)
-                if (stringdata[i]=='"' || stringdata[i]=='\\') {
-                    b.append(stringdata, lastGood, i-lastGood);
-                    b.append('\\').append(stringdata[i]);
-                    lastGood=i+1;
-                }
-            b.append(stringdata, lastGood, stringdata.length-lastGood);
-            b.append('"');
-        } else
-            b.append(stringdata);
+        b.append('"');
+        int lastGood=0;
+        for (int i=0; i<stringdata.length; i++) {
+            char escapeChar;
+            //see Lexer.readChar for input escaping
+            switch(stringdata[i]) {
+            case '"':  escapeChar = '"'; break;
+            case '\\': escapeChar = '\\'; break;
+            case '\b': escapeChar = 'b'; break;
+            case '\t': escapeChar = 't'; break;
+            case '\n': escapeChar = 'n'; break;
+            case '\f': escapeChar = 'f'; break;
+            default: continue;
+            }
+            b.append(stringdata, lastGood, i-lastGood);
+            b.append('\\').append(escapeChar);
+            lastGood=i+1;
+        }
+        b.append(stringdata, lastGood, stringdata.length-lastGood);
+        b.append('"');
         return b.toString();
     }
 
