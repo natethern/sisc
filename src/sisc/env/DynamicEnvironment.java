@@ -59,7 +59,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
 
     public DynamicEnvironment(AppContext ctx) {
         this(ctx,
-             new ReaderInputPort(new InputStreamReader(System.in)), 
+             new SourceInputPort(new InputStreamReader(System.in), liMessage(SISCB, "console")), 
              new WriterOutputPort(new PrintWriter(System.out), true));
     }
 
