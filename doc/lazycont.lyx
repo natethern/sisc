@@ -1,0 +1,117 @@
+#LyX 1.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 220
+\textclass esub2acm
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+A Mechanism for Lazy Capture of Continuations in a Heap Based Interpreter
+\layout Author
+
+Scott G.
+ Miller and Matthias Radestock
+\layout Abstract
+
+We discuss a mechanism for continuation capture in a heap-based Scheme interpret
+er which minimizes effort required by the interpreter for capturing the
+ continuation, delaying the protection of call-frames until an operation
+ in the interpreter threatens the isolation of the captured continuation.
+\layout Section*
+
+Introduction
+\layout Subsection*
+
+Continuations are Great
+\layout Standard
+
+A quick intro to continuations - what they are - why they are useful
+\layout Subsection*
+
+Continuations are Hard
+\layout Standard
+
+Key implementation issues (brief description of implementation issues and
+ techniques for different types of continuations) - escape-only: easy -
+ one-shot: harder - full: where the fun really begins
+\layout Standard
+
+This should set the scene, i.e.
+ define the problem we are trying to address.
+ 
+\layout Subsection*
+
+Outline of Our Approach
+\layout Standard
+
+Setting: briefly describe the kind of system in which our technique is applicabl
+e Contrast: Briefly describe the naive approach Technique: briefly describe
+ the key aspects of our technique 
+\layout Section*
+
+<Technique Name>
+\layout Subsection*
+
+Interpreter Architecture
+\layout Standard
+
+- briefly describe enough about the SISC interpreter in order to understand
+ our technique - Rationale behind a heap-based interpreter - try to generalize
+ to other interpreters / languages - describe how the interpreter executes
+ non-k code - representation of a k in SISC: it's basically a stack of call
+ frames 
+\layout Subsection*
+
+Continuation Capture
+\layout Standard
+
+- what we do when a continuation is captured - special callframe fields
+\layout Subsection*
+
+Continuation Invocation
+\layout Standard
+
+- what we do when a continuation is invoked 
+\layout Section*
+
+Performance
+\layout Standard
+
+- best case, worst case, typical case scenarios - measurements of the above
+ - comparison with other Schemes
+\layout Section*
+
+Related Work
+\layout Standard
+
+- mostly in other Schemes but for ICFP we need to look at others languages
+ too 
+\layout Section*
+
+Conclusion
+\layout Bibliography
+\bibitem {key-3}
+
+Dybvig, R.
+ Kent, Three Implementation Models for Scheme
+\the_end
