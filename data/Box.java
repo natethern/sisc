@@ -39,20 +39,13 @@ import sisc.Serializer;
 
 public class Box extends Value {
     public Expression val;
-    protected boolean locked=false;
 
     public Box(Expression val) {
         this.val=val;
     }
 
-    public void lock() {
-        locked=true;
-    }
-
     public void set(Value v) throws ImmutableException {
-        if (!locked)
-            val=v;
-        else throw new ImmutableException();
+        val=v;
     }
 
     public String display() {
@@ -73,13 +66,8 @@ public class Box extends Value {
         return ((Value)val).valueEqual((Value)b.val);
     }
     
-    public int hashCode() {
-	return val.hashCode();
-    }
-
     public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
-            dos.writeBoolean(locked);
             s.serialize(val, dos);
         }
     }
@@ -89,7 +77,6 @@ public class Box extends Value {
     public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
-            locked=dis.readBoolean();
             val=s.deserialize(dis);
         }
     }

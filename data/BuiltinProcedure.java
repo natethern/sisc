@@ -76,14 +76,14 @@ public class BuiltinProcedure extends Procedure {
         return displayNamedOpaque("builtin procedure");
     }
 
-    public boolean valueEqual(Value v) {
+    public boolean equals(Object v) {
         return (v instanceof BuiltinProcedure) &&
-	    ((BuiltinProcedure)v).id==id &&
-	    ((BuiltinProcedure)v).host==host;
+            ((BuiltinProcedure)v).id==id &&
+            ((BuiltinProcedure)v).host==host;
     }
 
     public int hashCode() {
-	return host.hashCode() ^ id;
+        return host.hashCode() ^ id;
     }
 
     public void serialize(Serializer s,

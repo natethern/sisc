@@ -78,8 +78,8 @@ public class SchemeCharacter extends Value {
     }
 
     public boolean equals(Object v) {
-        return (v instanceof sisc.data.SchemeCharacter &&
-                ((sisc.data.SchemeCharacter)v).c==c);
+        return (v instanceof SchemeCharacter &&
+                ((SchemeCharacter)v).c==c);
     }
 
 

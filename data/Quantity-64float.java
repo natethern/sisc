@@ -1406,19 +1406,15 @@ public class Quantity extends Value {
         return comp(o, -1);
     }
 
-    public boolean eq(Value v) {
-	if (!(v instanceof Quantity)) return false;
-	Quantity q=(Quantity)v;
-	return super.eq(q) || 
-	    (q.type==type && valueEqual(q));
-    }
-
-    public boolean equals(Object ob) {
-	return (ob instanceof Quantity) && eq((Value)ob);
+    public boolean equals(Object v) {
+        if (!(v instanceof Quantity)) return false;
+        Quantity q=(Quantity)v;
+	    return (q.type==type && comp(q, 0));
     }
 	
-    public boolean valueEqual(Value ob) {
-	return (ob instanceof Quantity) && comp((Quantity)ob, 0);
+    public boolean valueEqual(Value v) {
+        return (this == v) ||
+            ((v instanceof Quantity) && comp((Quantity)v, 0));
     }
 
     public int hashCode() {
