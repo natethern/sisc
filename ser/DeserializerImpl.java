@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import sisc.nativefun.Module;
-import sisc.data.Expression;
 import sisc.Util;
 
 public abstract class DeserializerImpl extends Util implements Deserializer {

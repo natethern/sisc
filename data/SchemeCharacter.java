@@ -1,6 +1,5 @@
 package sisc.data;
 
-import sisc.Util;
 import java.util.Hashtable;
 import java.io.*;
 import sisc.ser.Serializer;

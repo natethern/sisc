@@ -2,7 +2,6 @@ package sisc.modules;
 
 import java.awt.*;
 import java.util.Set;
-import java.util.Iterator;
 import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;

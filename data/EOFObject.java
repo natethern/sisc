@@ -1,7 +1,6 @@
 package sisc.data;
 
 import java.io.*;
-import sisc.ser.Deserializer;
 
 public class EOFObject extends Value implements Singleton {
     public static EOFObject EOF=new EOFObject();

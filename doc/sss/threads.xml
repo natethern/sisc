@@ -70,7 +70,7 @@
     <para>
       It is possible for more than one thread to access the same
       memory location (be it a lexical variable or a named variable
-      in the top-level or a symbolic environment), it is also
+      in the top-level or another symbolic environment), it is also
       possible that interactions on shared variables can have
       unpredictable results.  As in any multi-threaded language,
       unprotected access to shared variables can result in race
@@ -86,10 +86,10 @@
       terminate and the thread handle will contain the return value
       of the thunk.  This completion condition is called a
       <emphasis>clean</emphasis> exit.  If during the execution of
-      the thunk's body an error is raised, the thread will terminate
-      and the thread handle will trap the error.  The error will be
-      raised to any caller that attempts to retrieve the return
-      value of the thread. 
+      the thunk's body an error is raised and is not subsequently
+      caught, the thread will terminate and the thread handle will 
+      trap the error.  The error will be raised to any caller that
+      attempts to retrieve the return value of the thread. 
     </para>
     <para>
       It is perfectly legal for a thunk to both capture and invoke
@@ -100,20 +100,19 @@
       threads.  
     </para>
     <para>
-      Once created, a thread can be in one of three states:
+      Once created, a thread can be in one of four states:
       <emphasis>ready</emphasis>, <emphasis>running</emphasis>, or
-      <emphasis>finished</emphasis>.  The finished state is actually
-      two states, either <emphasis>finished</emphasis>, or
-      <emphasis>finished-with-error</emphasis>.  The former
-      indicates that the thread is stopped and a value was returned
-      from its evaluation.  The later indicates that the thread
-      completed because an error was raised when evaluating its
-      code.
+      <emphasis>finished</emphasis>, or
+      <emphasis>finishd-with-error</emphasis>.  The first two
+      states indicate a newly created thread and a running thread,
+      repectively.  The last represent the end stages of a thread, the
+      former indicating a thread that has exited cleanly, the latter
+      exiting with an error.
     </para>
     <para>
       There are no guarantees that a Scheme thread will ever exit.
       It is perfectly valid for a thread to execute indefinitely.
-      Also, the &SISC; environment will not exit until all threads
+      Furthermore, the &SISC; environment will not exit until all threads
       have completed, either cleanly or with a failure, unless all
       remaining threads are so-called <emphasis>daemon</emphasis>
       threads.  Daemon threads are threads that may run indefinitely
@@ -411,7 +410,7 @@
       The priority of a thread is represented by an integer.  The
       range of priorities and the default priority of a thread is
       unspecified and may be platform specific.  Larger integers
-      represent higher priorities then lower integers.  If a higher 
+      represent higher priorities then smaller integers.  If a higher 
       or lower priority thread is desired, the recommended procedure
       is to get the current priority of a thread and increment or
       decrement it.  Though unspecified, it is possible that an
@@ -524,7 +523,7 @@
     <para>
       Several functions exist for performing low level operations 
       such as creating a monitor.  All require a monitor object.
-      Monitors are represented in scheme as opaque values displayed as
+      Monitors are represented in Scheme as opaque values displayed as
       <literal>&num;&lt;monitor&gt;</literal>.  To
       obtain a monitor, the
       <function>monitor/new</function> or
@@ -644,7 +643,7 @@
         variable) and then <emphasis>notify</emphasis> the sleeping
         thread.  The thread then awakes, checks the variable, and
         proceeds if the condition is met.  If not, it sleeps again.  
-        This construct allows for cooperate between multiple threads
+        This construct allows for cooperation between multiple threads
         on a computation.
       </para>
       <para>

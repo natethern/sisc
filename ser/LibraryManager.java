@@ -7,7 +7,6 @@ import java.util.*;
 import sisc.Util;
 import sisc.data.Expression;
 import sisc.data.Symbol;
-import sisc.interpreter.Context;
 
 public class LibraryManager extends Util {
     

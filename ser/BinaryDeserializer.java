@@ -129,7 +129,6 @@ public class BinaryDeserializer extends DeserializerImpl {
     }
 
     public SymbolicEnvironment readSymbolicEnvironment() throws IOException {
-        SymbolicEnvironment rv;
         Expression e=readExpression();
         return (e instanceof Symbol) ?
             (SymbolicEnvironment)baseLib.getExpression((Symbol)e) :

@@ -1,7 +1,6 @@
 package sisc.data;
 
 import java.io.*;
-import sisc.ser.Deserializer;
 
 public class SchemeVoid extends Value implements Singleton {
     public static SchemeVoid VOID=new SchemeVoid();

@@ -77,7 +77,7 @@ public class Quantity extends Value {
     }
 
     public static Quantity valueOf(String v, int radix) {
-        int x,y;
+        int x;
         if ((x=v.indexOf('/'))!=-1) {
             Quantity 
                 num=parseUinteger(v.substring(0,x), radix),

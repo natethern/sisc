@@ -33,12 +33,8 @@
 package sisc.boot;
 
 import java.io.*;
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
 import java.util.*;
 import java.util.zip.*;
-import java.util.zip.GZIPInputStream;
 import sisc.*;
 import sisc.interpreter.*;
 import sisc.compiler.*;

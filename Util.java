@@ -48,7 +48,9 @@ public abstract class Util extends Defaults implements Version {
         LOCATION=Symbol.get("location"),
         ERRORK=Symbol.get("error-continuation"),
         FCONT=Symbol.get("failure-continuation"),
-        PARENT=Symbol.get("parent");
+        PARENT=Symbol.get("parent"),
+        EXPTOP=Symbol.get("*top*"),
+        EXPSC=Symbol.get("*sc-expander*");
     
     public static String getSystemProperty(String name, String def) {
         try {
@@ -163,7 +165,6 @@ public abstract class Util extends Defaults implements Version {
     }
 
     public static Symbol[] pairToSymbols(Pair p) {
-        Pair o=p;
         if (p==EMPTYLIST) return new Symbol[0];
 
         Vector v=pairToExpVect(p);
@@ -175,7 +176,6 @@ public abstract class Util extends Defaults implements Version {
     public static Symbol[] argsToSymbols(Pair p) {
         if (p==EMPTYLIST) return new Symbol[0];
         Vector v=new Vector();
-        int i=0;
 
         for (; (p.cdr instanceof Pair) &&
                 (p.cdr!=EMPTYLIST);

@@ -7,7 +7,6 @@ import java.math.BigInteger;
 
 import sisc.nativefun.Module;
 import sisc.data.Expression;
-import sisc.Util;
 import sisc.env.SymbolicEnvironment;
 
 public interface Deserializer extends ObjectInput {

@@ -3,8 +3,6 @@ package sisc.exprs;
 import sisc.*;
 import sisc.data.*;
 import java.io.*;
-import java.util.Set;
-import java.util.Iterator;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;

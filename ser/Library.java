@@ -6,7 +6,6 @@ import java.math.*;
 import java.lang.reflect.*;
 import sisc.*;
 import sisc.data.*;
-import sisc.env.SymbolicEnvironment;
 
 public class Library extends Util {
 

@@ -2,7 +2,6 @@ package sisc.compiler;
 
 import java.io.*;
 import java.math.*;
-import java.util.Vector;
 import sisc.data.*;
 import sisc.Util;
 
@@ -73,7 +72,7 @@ public class Lexer implements Tokens {
                 sval=readToEndOfString(is);
                 return TT_STRING;
             case COMMENT:
-            while (is.read()!='\n') {}
+                while (is.read()!='\n') {}
                 return nextToken(is, radix);
             case BACKQUOTE:
                 return TT_BACKQUOTE;

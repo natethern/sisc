@@ -1,6 +1,5 @@
 package sisc.data;
 
-import java.util.Vector;
 import sisc.*;
 import java.io.*;
 import sisc.ser.Serializer;

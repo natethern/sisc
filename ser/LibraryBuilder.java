@@ -115,7 +115,6 @@ public class LibraryBuilder extends SerializerImpl {
         Vector classv=new Vector(classes);
         StreamSerializer ss=new StreamSerializer(fos, classv, epv);
 
-        int j=0;
         for (Iterator i=entryPoints.iterator(); i.hasNext();) {
             Expression exp=(Expression)i.next();
             ss.writeExpression(exp);

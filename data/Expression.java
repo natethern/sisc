@@ -1,6 +1,5 @@
 package sisc.data;
 
-import java.util.Set;
 import java.util.*;
 import sisc.*;
 import java.io.*;
