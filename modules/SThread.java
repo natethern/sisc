@@ -43,7 +43,8 @@ public class SThread extends ModuleAdapter {
 	return "Threading";
     }
 
-    static final Symbol THREADB=Symbol.intern("Threading");
+    static final Symbol THREADB=Symbol.intern("Threading"),
+        MONITOR=Symbol.get("monitor");
 
     protected static final int 
 	THREADNEW=0, THREADSTART=1, THREADYIELD=2, THREADSLEEP=3,
@@ -55,6 +56,7 @@ public class SThread extends ModuleAdapter {
 	THREADHOLDSLOCKQ=19, THREADSRUNNING=20, THREADRESULT=21,
 	MONITORNEW=22, MONITORLOCK=23, MONITORUNLOCK=24, 
 	MONITORNOTIFY=25, MONITORNOTIFYALL=26, MONITORWAIT=27,
+        MONITORFOR=28,
 
 	READY=0, RUNNING=1, FINISHED=2, FINISHED_ABNORMALLY=3;
 
@@ -88,6 +90,7 @@ public class SThread extends ModuleAdapter {
 
 	define("thread/_active-thread-count", THREADSRUNNING);
 
+        define("monitor-of", MONITORFOR);
 	define("monitor/new", MONITORNEW);
 	define("monitor/lock", MONITORLOCK);
 	define("monitor/unlock", MONITORUNLOCK);
@@ -325,6 +328,15 @@ public class SThread extends ModuleAdapter {
 	    }
         case 1:
             switch(primid) {
+            case MONITORFOR:
+                synchronized(f.vlr[0]) {
+                    Monitor m=monitor(f.vlr[0].getAnnotation(MONITOR));
+                    if (m==null) {
+                        m=new Monitor();
+                        f.vlr[0].setAnnotation(MONITOR, m);
+                    } 
+                    return m;
+                }
 	    case MONITORLOCK:
 		return monitor(f.vlr[0]).acquire();
 	    case MONITORUNLOCK:
