@@ -13,10 +13,14 @@
 (define <sisc.ser.BufferedRandomAccessInputStream> 
   (java-class "sisc.ser.BufferedRandomAccessInputStream"))
 (define <sisc.Util> (java-class "sisc.Util"))
+(define <sisc.ser.LibraryAE> (java-class "sisc.ser.LibraryAE"))
 
+(define-generic get-parent)
 (define-generic add)
 (define-generic build-library)
 (define-generic get-local-expression)
+(define-generic add-binding)
+(define-generic get-entry-point)
 (define-generic url)
 
 (define index-sym (string->symbol "library index"))
@@ -62,18 +66,28 @@
   (for-each
    (lambda (symenv-id)
      (let* ((symenv-id-str (symbol->string symenv-id))
-            (symenv (string->symbol
-                     (substring 
-                      symenv-id-str
-                      (string-length segment-str)
-                      (string-length symenv-id-str)))))
+            (symenv-sym (string->symbol
+                         (substring 
+                          symenv-id-str
+                          (string-length segment-str)
+                          (string-length symenv-id-str))))
+            (isLae #f)
+            (symenv (let loop ((se (get-symbolic-environment symenv-sym)))
+                      (cond [(eq? (java-class-of (java-wrap se)) 
+                                  <sisc.ser.LibraryAE>)
+                             (begin (set! isLae #t) se)]
+                            [(not (java-null? (get-parent se)))
+                             (loop (java-unwrap (get-parent se)))]
+                            [else se]))))
+                                   
        (for-each 
         (lambda (binding)
-          (putprop binding symenv 
-                   ;;fixme, eventually we want to register
-                   ;;the binding for lazy-load
-                   (java-unwrap
-                    (get-local-expression lib (java-wrap binding)))))
+          (if isLae
+              (add-binding symenv lib binding 
+                           (get-entry-point lib (java-wrap binding)))
+              (putprop binding symenv 
+                       (java-unwrap
+                        (get-local-expression lib (java-wrap binding))))))
         (java-unwrap
          (get-local-expression lib (java-wrap symenv-id))))))
    (java-unwrap (get-local-expression lib (java-wrap index-sym)))))
@@ -91,9 +105,9 @@
             (loop (cdr b) s (cons (car b) t))))))
 (define (get-referenced-bindings modulename)
   (let ((mod (getprop modulename (get-symbolic-environment '*sc-expander*))))
-                                        ; I'm a little nervous about the hardcoding of the positions of 
-                                        ; important elements here, a better understanding of the psyntax
-                                        ; datastructures would be nice.
+    ; I'm a little nervous about the hardcoding of the positions of 
+    ; important elements here, a better understanding of the psyntax
+    ; datastructures would be nice.
     (if (and (pair? mod) (eq? (car mod) 'module))
         (apply append
                (map (lambda (e)
