@@ -119,10 +119,6 @@
 (define make-false
   (lambda (v) #f))
 
-;;psyntax.[ss,pp] forgot to define these
-(define fx> >)
-(define fx>= >=)
-
 ;;;;;;;;;;;;; Module loading
 ;(if (not (getprop 'LITE '*sisc*))
 ;    (for-each load-module 

@@ -1,8 +1,8 @@
 ;;; Portable implementation of syntax-case
-;;; Extracted from Chez Scheme Version 6.8
+;;; Extracted from Chez Scheme Version 6.9 (May 31, 2002)
 ;;; Authors: R. Kent Dybvig, Oscar Waddell, Bob Hieb, Carl Bruggeman
 
-;;; Copyright (c) 1992-2000 Cadence Research Systems
+;;; Copyright (c) 1992-2002 Cadence Research Systems
 ;;; Permission to copy this software, in whole or in part, to use this
 ;;; software for any lawful purpose, and to redistribute this software
 ;;; is granted subject to the restriction that all copies made of this
@@ -231,7 +231,7 @@
 ;;; In Chez Scheme, the syntactic and procedural forms of these
 ;;; abstractions are equivalent, since the optimizer consistently
 ;;; integrates constants and small procedures.  Some Scheme
-;;; implementations, however, may benefit from more consistent use 
+;;; implementations, however, may benefit from more consistent use
 ;;; of one form or the other.
 
 
@@ -258,7 +258,7 @@
 ;;; no global or lexical binding, it treats it as a global-variable
 ;;; reference.  This allows one to write mutually recursive top-level
 ;;; definitions, e.g.:
-;;;   
+;;;
 ;;;   (define f (lambda (x) (g x)))
 ;;;   (define g (lambda (x) (f x)))
 ;;;
@@ -335,7 +335,7 @@
 ;;; transformers, we cannot determine the set of implicit exports from the
 ;;; transformer code, so without the user's help, we'd have to put all
 ;;; variables at top level.
-;;; 
+;;;
 ;;; Each such top-level identifier is given a generated name (gensym).
 ;;; When a top-level module is imported at top level, a compile-time
 ;;; alias is established from the top-level name to the generated name.
@@ -358,8 +358,10 @@
 
 ;;; When changing syntax-object representations, it is necessary to support
 ;;; both old and new syntax-object representations in id-var-name.  It
-;;; should be sufficient to recognize old representations and treat
-;;; them as not lexically bound.
+;;; should be sufficient to redefine syntax-object-expression to work for
+;;; both old and new representations and syntax-object-wrap to return the
+;;; empty-wrap for old representations.
+
 
 
 (let ()
@@ -420,6 +422,10 @@
                      (lambda (x update)
                        (vector-set! x index update)))
                    ...)))))))
+(define-syntax let-values ; impoverished one-clause version
+  (syntax-rules ()
+    ((_ ((formals expr)) form1 form2 ...)
+     (call-with-values (lambda () expr) (lambda formals form1 form2 ...)))))
 
 (define noexpand "noexpand")
 
@@ -429,6 +435,9 @@
 (define-syntax fx- (identifier-syntax -))
 (define-syntax fx= (identifier-syntax =))
 (define-syntax fx< (identifier-syntax <))
+(define-syntax fx> (identifier-syntax >))
+(define-syntax fx<= (identifier-syntax <=))
+(define-syntax fx>= (identifier-syntax >=))
 
 (define top-level-eval-hook
   (lambda (x)
@@ -475,10 +484,9 @@
     (let ((prefix (fmt (session-key))) (n -1))
       (lambda (name)
         (set! n (+ n 1))
-        (string->symbol (string-append (symbol->string name)
-                                       "#"
-                                       prefix
-                                       (fmt n)))))))
+        (string->symbol
+         (string-append
+          (symbol->string name) "#" prefix (fmt n)))))))
 )
 
 
@@ -488,50 +496,50 @@
   (syntax-rules ()
     ((_ source fun-exp arg-exps)
      (if source 
-	 `(compile-in-annotation (,fun-exp . ,arg-exps) ,source)
-	 `(,fun-exp . ,arg-exps)))))
+         `(compile-in-annotation (,fun-exp . ,arg-exps) ,source)
+         `(,fun-exp . ,arg-exps)))))
 
 (define-syntax build-conditional
   (syntax-rules ()
     ((_ source test-exp then-exp else-exp)
      (if source
        	 `(compile-in-annotation (if ,test-exp ,then-exp ,else-exp) ,source)
-	 `(if ,test-exp ,then-exp ,else-exp)))))
+         `(if ,test-exp ,then-exp ,else-exp)))))
 
 (define-syntax build-lexical-reference
   (syntax-rules ()
     ((_ type source var)
      (if source 
-	 `(compile-in-annotation ,var ,source)
-	 var))))
+         `(compile-in-annotation ,var ,source)
+         var))))
 
 (define-syntax build-lexical-assignment
   (syntax-rules ()
     ((_ source var exp)
      (if source
-	 `(compile-in-annotation (set! ,var ,exp) ,source)
-	 `(set! ,var ,exp)))))
+         `(compile-in-annotation (set! ,var ,exp) ,source)
+         `(set! ,var ,exp)))))
 
 (define-syntax build-global-reference
   (syntax-rules ()
     ((_ source var)
      (if source 
-	 `(compile-in-annotation ,var ,source)
-	 var))))
+         `(compile-in-annotation ,var ,source)
+         var))))
 
 (define-syntax build-global-assignment
   (syntax-rules ()
     ((_ source var exp)
      (if source
-	 `(compile-in-annotation (set! ,var ,exp) ,source)
-	 `(set! ,var ,exp)))))
+         `(compile-in-annotation (set! ,var ,exp) ,source)
+         `(set! ,var ,exp)))))
 
 (define-syntax build-global-definition
   (syntax-rules ()
     ((_ source var exp)
      (if source
-	 `(compile-in-annotation (define ,var ,exp) ,source)
-	 `(define ,var ,exp)))))
+         `(compile-in-annotation (define ,var ,exp) ,source)
+         `(define ,var ,exp)))))
 
 (define-syntax build-module-definition
  ; should have the effect of a global definition but may not appear at top level
@@ -542,25 +550,25 @@
  ; global definition hook
   (syntax-rules ()
     ((_ sym exp) `($sc-put-cte ',sym ,exp))))
- 
+
 (define-syntax build-visit-only
  ; should mark the result as "visit only" for compile-file
  ; in implementations that support visit/revisit
   (syntax-rules ()
     ((_ exp) exp)))
- 
+
 (define-syntax build-revisit-only
  ; should mark the result as "revisit only" for compile-file,
  ; in implementations that support visit/revisit
   (syntax-rules ()
     ((_ exp) exp)))
- 
+
 (define-syntax build-lambda
   (syntax-rules ()
     ((_ src vars exp)
      (if src 
-	 `(compile-in-annotation (lambda ,vars ,exp) ,src)
-	 `(lambda ,vars ,exp)))))
+         `(compile-in-annotation (lambda ,vars ,exp) ,src)
+         `(lambda ,vars ,exp)))))
 
 (define-syntax build-primref
   (syntax-rules ()
@@ -570,28 +578,28 @@
 (define-syntax build-data
   (syntax-rules ()
     ((_ src exp) 
-       (if src
-          `(compile-in-annotation ',exp ,src)
-  	  `',exp))))
+     (if src
+         `(compile-in-annotation ',exp ,src)
+         `',exp))))
 
 (define build-sequence
   (lambda (src exps)
     (if (null? (cdr exps))
-	(if src
-	    `(compile-in-annotation ,(car exps) ,src)
-	    (car exps))
-	(if src
-	    `(compile-in-annotation (begin ,@exps) ,src)
-	    `(begin ,@exps)))))
+        (if src
+            `(compile-in-annotation ,(car exps) ,src)
+            (car exps))
+        (if src
+            `(compile-in-annotation (begin ,@exps) ,src)
+            `(begin ,@exps)))))
 
 (define build-letrec
   (lambda (src vars val-exps body-exp)
     (if (null? vars)
-	(if src
-	    `(compile-in-annotation ,body-exp ,src)
-	    body-exp)
-	(if src
-	    `(compile-in-annotation 
+        (if src
+            `(compile-in-annotation ,body-exp ,src)
+            body-exp)
+        (if src
+            `(compile-in-annotation 
               ,(cons (list 'lambda vars
                            (append (cons 'begin
                                          (map (lambda (v e)
@@ -600,13 +608,29 @@
                                    (list body-exp)))
                      (map (lambda (x) #f) vars))
               ,src)
-	    (cons (list 'lambda vars
-			(append (cons 'begin
-				      (map (lambda (v e)
-					     (list 'set! v e))
-					   vars val-exps))
-				(list body-exp)))
-		  (map (lambda (x) #f) vars))))))
+            (cons (list 'lambda vars
+                        (append (cons 'begin
+                                      (map (lambda (v e)
+                                             (list 'set! v e))
+                                           vars val-exps))
+                                (list body-exp)))
+                  (map (lambda (x) #f) vars))))))
+
+;(define build-letrec
+;  (lambda (src vars val-exps body-exp)
+;    (if (null? vars)
+;        (if src
+;            `(compile-in-annotation ,body-exp ,src)
+;            body-exp)
+;        (if src
+;            `(compile-in-annotation 
+;              (letrec ,(map list vars val-exps) ,body-exp)
+;              ,src)
+;            `(letrec ,(map list vars val-exps) ,body-exp)))))
+
+(define build-body
+  (lambda (src vars val-exps body-exp)
+    (build-letrec src vars val-exps body-exp)))
 
 (define-syntax build-lexical-var
   (syntax-rules ()
@@ -616,11 +640,12 @@
   (syntax-rules ()
     ((_ e)
      (let ((x e))
-       (not (pair? x))))))
+       (not (or (pair? x) (vector? x)))))))
+)
 
-;       (or (boolean? x) (number? x) (string? x) (char? x) (null? x)))))))
 
 (define-structure (syntax-object expression wrap))
+
 
 (define-syntax unannotate
   (syntax-rules ()
@@ -715,7 +740,7 @@
     (cons (cons label binding) r)))
 
 (define extend-env*
-  (lambda (labels bindings r) 
+  (lambda (labels bindings r)
     (if (null? labels)
         r
         (extend-env* (cdr labels) (cdr bindings)
@@ -845,13 +870,18 @@
 (define wrap-marks car)
 (define wrap-subst cdr)
 
-(define-syntax subst-rename? (identifier-syntax vector?))
-(define-syntax rename-old (syntax-rules () ((_ x) (vector-ref x 0))))
-(define-syntax rename-new (syntax-rules () ((_ x) (vector-ref x 1))))
-(define-syntax rename-marks (syntax-rules () ((_ x) (vector-ref x 2))))
-(define-syntax make-rename
+
+(define-syntax empty-wrap (identifier-syntax '(())))
+
+(define-syntax top-wrap (identifier-syntax '((top))))
+
+(define-syntax top-marked?
   (syntax-rules ()
-    ((_ old new marks) (vector old new marks))))
+    ((_ w) (memq 'top (wrap-marks w)))))
+
+(define-syntax only-top-marked?
+  (syntax-rules ()
+    ((_ id) (same-marks? (wrap-marks (syntax-object-wrap id)) (wrap-marks top-wrap)))))
 
 ;;; labels
 
@@ -865,6 +895,14 @@
 ;;; establishes, and chi-top-module whacks the pair to hold the top-level
 ;;; identifier name (symbol) if the id is to be placed at top level, before
 ;;; expanding the right-hand sides of the definitions in the module.
+
+(module (gen-indirect-label indirect-label? get-indirect-label set-indirect-label!)
+  (define-structure (indirect-label label))
+  (define gen-indirect-label
+    (lambda ()
+      (make-indirect-label (gen-label))))
+  (define get-indirect-label (lambda (x) (indirect-label-label x)))
+  (define set-indirect-label! (lambda (x v) (set-indirect-label-label! x v))))
 
 (define gen-label
   (lambda () (string #\i)))
@@ -880,25 +918,7 @@
         '()
         (cons (gen-label) (gen-labels (cdr ls))))))
 
-(define gen-indirect-label
-  (lambda () (list (gen-label))))
-
-(define indirect-label? pair?)
-(define get-indirect-label car)
-(define set-indirect-label! set-car!)
-
 (define-structure (ribcage symnames marks labels))
-(define-syntax empty-wrap (identifier-syntax '(())))
-
-(define-syntax top-wrap (identifier-syntax '((top))))
-
-(define-syntax top-marked?
-  (syntax-rules ()
-    ((_ w) (memq 'top (wrap-marks w)))))
-
-(define-syntax only-top-marked?
-  (syntax-rules ()
-    ((_ id) (same-marks? (wrap-marks (syntax-object-wrap id)) (wrap-marks top-wrap)))))
 
 ;;; Marks must be comparable with "eq?" and distinct from pairs and
 ;;; the symbol top.  We do not use integers so that marks will remain
@@ -916,11 +936,8 @@
     ((_) (string #\m))))
 
 (define barrier-marker #f)
-(module (make-import-token import-token? import-token-key)
-  (define tag 'import-token)
-  (define make-import-token (lambda (x) (cons tag x)))
-  (define import-token? (lambda (x) (and (pair? x) (eq? (car x) tag))))
-  (define import-token-key cdr))
+
+(define-structure (import-token key))
 
 ;;; make-empty-ribcage and extend-ribcage maintain list-based ribcages for
 ;;; internal definitions, in which the ribcages are built incrementally
@@ -967,6 +984,8 @@
            (let f ((new new))
              (cond
                ((pair? new) (or (f (car new)) (f (cdr new))))
+               ((symbol? new)
+                (and (same-marks? marks (wrap-marks top-wrap)) new))
                ((same-marks? marks (wrap-marks (syntax-object-wrap new))) new)
                (else #f)))))))
 
@@ -982,13 +1001,11 @@
               (let ((n (vector-length labelvec)))
                 (let ((symnamevec (make-vector n)) (marksvec (make-vector n)))
                   (let f ((ids ids) (i 0))
-                    (if (not (null? ids))
-                        (call-with-values
-                          (lambda () (id-sym-name&marks (car ids) w))
-                          (lambda (symname marks)
-                            (vector-set! symnamevec i symname)
-                            (vector-set! marksvec i marks)
-                            (f (cdr ids) (fx+ i 1))))))
+                    (unless (null? ids)
+                      (let-values (((symname marks) (id-sym-name&marks (car ids) w)))
+                        (vector-set! symnamevec i symname)
+                        (vector-set! marksvec i marks)
+                        (f (cdr ids) (fx+ i 1)))))
                   (make-ribcage symnamevec marksvec labelvec))))
             (wrap-subst w))))))
 
@@ -997,15 +1014,13 @@
 ;;; unnecessary substitutions or marks.
 (define make-trimmed-syntax-object
   (lambda (id)
-    (call-with-values
-      (lambda () (id-var-name&marks id empty-wrap))
-      (lambda (tosym marks)
-        (unless tosym
-          (syntax-error id "identifier not visible for export"))
-        (let ((fromsym (id-sym-name id)))
-          (make-syntax-object fromsym
-            (make-wrap marks
-              (list (make-ribcage (vector fromsym) (vector marks) (vector tosym))))))))))
+    (let-values (((tosym marks) (id-var-name&marks id empty-wrap)))
+      (unless tosym
+        (syntax-error id "identifier not visible for export"))
+      (let ((fromsym (id-sym-name id)))
+        (make-syntax-object fromsym
+          (make-wrap marks
+            (list (make-ribcage (vector fromsym) (vector marks) (vector tosym)))))))))
 
 ;;; Scheme's append should not copy the first argument if the second is
 ;;; nil, but it does, so we define a smart version here.
@@ -1089,36 +1104,30 @@
        (let ((sym (unannotate (syntax-object-expression id)))
              (w1 (syntax-object-wrap id)))
          (let ((marks (join-marks (wrap-marks w) (wrap-marks w1))))
-           (call-with-values (lambda () (search sym (wrap-subst w) marks))
-             (lambda (new-id marks)
-               (if (eq? new-id sym)
-                   (search sym (wrap-subst w1) marks)
-                   (values new-id marks)))))))
+           (let-values (((new-id marks) (search sym (wrap-subst w) marks)))
+             (if (eq? new-id sym)
+                 (search sym (wrap-subst w1) marks)
+                 (values new-id marks))))))
       ((annotation? id) (search (unannotate id) (wrap-subst w) (wrap-marks w)))
       (else (error-hook 'id-var-name "invalid id" id)))))
 
 (define id-var-name&marks
  ; this version follows indirect labels
   (lambda (id w)
-    (call-with-values
-      (lambda () (id-var-name-loc&marks id w))
-      (lambda (label marks)
-        (values (if (indirect-label? label) (get-indirect-label label) label) marks)))))
+    (let-values (((label marks) (id-var-name-loc&marks id w)))
+      (values (if (indirect-label? label) (get-indirect-label label) label) marks))))
 
 (define id-var-name-loc
  ; this version doesn't follow indirect labels
   (lambda (id w)
-    (call-with-values
-      (lambda () (id-var-name-loc&marks id w))
-      (lambda (label marks) label))))
+    (let-values (((label marks) (id-var-name-loc&marks id w)))
+      label)))
 
 (define id-var-name
  ; this version follows indirect labels
   (lambda (id w)
-    (call-with-values
-      (lambda () (id-var-name-loc&marks id w))
-      (lambda (label marks)
-        (if (indirect-label? label) (get-indirect-label label) label)))))
+    (let-values (((label marks) (id-var-name-loc&marks id w)))
+      (if (indirect-label? label) (get-indirect-label label) label))))
 
 ;;; free-id=? must be passed fully wrapped ids since (free-id=? x y)
 ;;; may be true even if (free-id=? (wrap x w) (wrap y w)) is not.
@@ -1327,110 +1336,106 @@
 
 (define chi-top-expr
   (lambda (e r w top-ribcage)
-    (call-with-values
-      (lambda () (syntax-type e r w no-source top-ribcage))
-      (lambda (type value e w s)
-        (chi-expr type value e r w s)))))
+    (let-values (((type value e w s) (syntax-type e r w no-source top-ribcage)))
+      (chi-expr type value e r w s))))
 
 (define chi-top
   (lambda (e r w ctem rtem top-ribcage)
-    (call-with-values
-      (lambda () (syntax-type e r w no-source top-ribcage))
-      (lambda (type value e w s)
-        (case type
-          ((begin-form)
-           (syntax-case e ()
-             ((_) (chi-void))
-             ((_ e1 e2 ...)
-              (chi-top-sequence (syntax (e1 e2 ...)) r w s ctem rtem top-ribcage))))
-          ((local-syntax-form)
-           (chi-local-syntax value e r w s
-             (lambda (body r w s)
-               (chi-top-sequence body r w s ctem rtem top-ribcage))))
-          ((eval-when-form)
-           (syntax-case e ()
-             ((_ (x ...) e1 e2 ...)
-              (let ((when-list (chi-when-list (syntax (x ...)) w))
-                    (body (syntax (e1 e2 ...))))
-                (let ((ctem (update-mode-set when-list ctem))
-                      (rtem (update-mode-set when-list rtem)))
-                  (if (and (null? ctem) (null? rtem))
-                      (chi-void)
-                      (chi-top-sequence body r w s ctem rtem top-ribcage)))))))
-          ((define-syntax-form)
-           (parse-define-syntax e w s
-             (lambda (id rhs w)
-               (let ((id (wrap id w)))
-                 (let ((n (id-var-name id empty-wrap)))
-                   (let ((b (lookup n r)))
-                     (case (binding-type b)
-                       ((displaced-lexical) (displaced-lexical-error id)))))
-                 (ct-eval/residualize ctem
-                   (lambda ()
-                     (build-cte-install
-                       (let ((sym (id-sym-name id)))
-                         (if (only-top-marked? id)
-                             sym
-                             (let ((marks (wrap-marks (syntax-object-wrap id))))
-                               (make-syntax-object sym
-                                 (make-wrap marks
-                                   (list (make-ribcage (vector sym)
-                                           (vector marks) (vector (generate-id sym)))))))))
-                       (chi rhs (transformer-env r) w))))))))
-          ((define-form)
-           (parse-define e w s
-             (lambda (id rhs w)
-               (let ((id (wrap id w)))
-                 (let ((n (id-var-name id empty-wrap)))
-                   (let ((b (lookup n r)))
-                     (case (binding-type b)
-                       ((displaced-lexical) (displaced-lexical-error id)))))
-                 (let ((sym (id-sym-name id)))
-                   (let ((valsym (if (only-top-marked? id) sym (generate-id sym))))
-                     (build-sequence no-source
-                       (list
-                         (ct-eval/residualize ctem
-                           (lambda ()
-                             (build-cte-install
-                               (if (eq? sym valsym)
-                                   sym
-                                   (let ((marks (wrap-marks (syntax-object-wrap id))))
-                                     (make-syntax-object sym
-                                       (make-wrap marks
-                                         (list (make-ribcage (vector sym)
-                                                 (vector marks) (vector valsym)))))))
-                               (build-data no-source (make-binding 'global valsym)))))
-                         (rt-eval/residualize rtem
-                           (lambda ()
-                             (build-global-definition s valsym (chi rhs r w)))))))
-                  )))))
-          ((module-form)
-           (let ((r (cons '("top-level module placeholder" . (placeholder)) r))
-                 (ribcage (make-empty-ribcage)))
-             (parse-module e w s (make-wrap (wrap-marks w) (cons ribcage (wrap-subst w)))
-               (lambda (id exports forms)
-                 (if id
-                     (begin
-                       (let ((n (id-var-name id empty-wrap)))
-                         (let ((b (lookup n r)))
-                           (case (binding-type b)
-                             ((displaced-lexical) (displaced-lexical-error (wrap id w))))))
-                       (chi-top-module e r ribcage w s ctem rtem id exports forms))
-                     (chi-top-module e r ribcage w s ctem rtem #f exports forms))))))
-          ((import-form)
-           (parse-import e w s
-             (lambda (mid)
+    (let-values (((type value e w s) (syntax-type e r w no-source top-ribcage)))
+      (case type
+        ((begin-form)
+         (syntax-case e ()
+           ((_) (chi-void))
+           ((_ e1 e2 ...)
+            (chi-top-sequence (syntax (e1 e2 ...)) r w s ctem rtem top-ribcage))))
+        ((local-syntax-form)
+         (chi-local-syntax value e r w s
+           (lambda (body r w s)
+             (chi-top-sequence body r w s ctem rtem top-ribcage))))
+        ((eval-when-form)
+         (syntax-case e ()
+           ((_ (x ...) e1 e2 ...)
+            (let ((when-list (chi-when-list (syntax (x ...)) w))
+                  (body (syntax (e1 e2 ...))))
+              (let ((ctem (update-mode-set when-list ctem))
+                    (rtem (update-mode-set when-list rtem)))
+                (if (and (null? ctem) (null? rtem))
+                    (chi-void)
+                    (chi-top-sequence body r w s ctem rtem top-ribcage)))))))
+        ((define-syntax-form)
+         (parse-define-syntax e w s
+           (lambda (id rhs w)
+             (let ((id (wrap id w)))
+               (let ((n (id-var-name id empty-wrap)))
+                 (let ((b (lookup n r)))
+                   (case (binding-type b)
+                     ((displaced-lexical) (displaced-lexical-error id)))))
                (ct-eval/residualize ctem
                  (lambda ()
-                   (when value (syntax-error (source-wrap e w s) "not valid at top-level"))
-                   (let ((binding (lookup (id-var-name mid empty-wrap) null-env)))
-                     (case (binding-type binding)
-                       ((module) (do-top-import mid (interface-token (binding-value binding))))
-                       ((displaced-lexical) (displaced-lexical-error mid))
-                       (else (syntax-error mid "import from unknown module")))))))))
-          (else (rt-eval/residualize rtem
-                  (lambda ()
-                    (chi-expr type value e r w s)))))))))
+                   (build-cte-install
+                     (let ((sym (id-sym-name id)))
+                       (if (only-top-marked? id)
+                           sym
+                           (let ((marks (wrap-marks (syntax-object-wrap id))))
+                             (make-syntax-object sym
+                               (make-wrap marks
+                                 (list (make-ribcage (vector sym)
+                                         (vector marks) (vector (generate-id sym)))))))))
+                     (chi rhs (transformer-env r) w))))))))
+        ((define-form)
+         (parse-define e w s
+           (lambda (id rhs w)
+             (let ((id (wrap id w)))
+               (let ((n (id-var-name id empty-wrap)))
+                 (let ((b (lookup n r)))
+                   (case (binding-type b)
+                     ((displaced-lexical) (displaced-lexical-error id)))))
+               (let ((sym (id-sym-name id)))
+                 (let ((valsym (if (only-top-marked? id) sym (generate-id sym))))
+                   (build-sequence no-source
+                     (list
+                       (ct-eval/residualize ctem
+                         (lambda ()
+                           (build-cte-install
+                             (if (eq? sym valsym)
+                                 sym
+                                 (let ((marks (wrap-marks (syntax-object-wrap id))))
+                                   (make-syntax-object sym
+                                     (make-wrap marks
+                                       (list (make-ribcage (vector sym)
+                                               (vector marks) (vector valsym)))))))
+                             (build-data no-source (make-binding 'global valsym)))))
+                       (rt-eval/residualize rtem
+                         (lambda ()
+                           (build-global-definition s valsym (chi rhs r w)))))))
+                )))))
+        ((module-form)
+         (let ((r (cons '("top-level module placeholder" . (placeholder)) r))
+               (ribcage (make-empty-ribcage)))
+           (parse-module e w s (make-wrap (wrap-marks w) (cons ribcage (wrap-subst w)))
+             (lambda (id exports forms)
+               (if id
+                   (begin
+                     (let ((n (id-var-name id empty-wrap)))
+                       (let ((b (lookup n r)))
+                         (case (binding-type b)
+                           ((displaced-lexical) (displaced-lexical-error (wrap id w))))))
+                     (chi-top-module e r ribcage w s ctem rtem id exports forms))
+                   (chi-top-module e r ribcage w s ctem rtem #f exports forms))))))
+        ((import-form)
+         (parse-import e w s
+           (lambda (mid)
+             (ct-eval/residualize ctem
+               (lambda ()
+                 (when value (syntax-error (source-wrap e w s) "not valid at top-level"))
+                 (let ((binding (lookup (id-var-name mid empty-wrap) null-env)))
+                   (case (binding-type binding)
+                     ((module) (do-top-import mid (interface-token (binding-value binding))))
+                     ((displaced-lexical) (displaced-lexical-error mid))
+                     (else (syntax-error mid "import from unknown module")))))))))
+        (else (rt-eval/residualize rtem
+                (lambda ()
+                  (chi-expr type value e r w s))))))))
 
 (define flatten-exports
   (lambda (exports)
@@ -1527,11 +1532,11 @@
                                    (chi-void)
                                    (build-sequence no-source
                                      (map (lambda (v) (build-global-definition no-source v (chi-void))) svs)))
-                                (build-letrec no-source
+                                (build-body no-source
                                   dvs
                                   des
                                   (build-sequence no-source
-                                    (list 
+                                    (list
                                       (if (null? svs)
                                           (chi-void)
                                           (build-sequence no-source
@@ -1560,7 +1565,10 @@
                       (let loop ((bs bs) (new-bs '()))
                         (if (null? bs)
                             (fail)
-                            (if (bound-id=? (module-binding-id (car bs)) id)
+                           ; this previously used bound-id=?, but free-id=?
+                           ; can prevent false positives and is okay since the
+                           ; substitutions have already been applied
+                            (if (free-id=? (module-binding-id (car bs)) id)
                                 (succ (car bs) (smart-append (reverse new-bs) (cdr bs)))
                                 (loop (cdr bs) (cons (car bs) new-bs)))))))
                   (pluck-binding id bs
@@ -1623,7 +1631,7 @@
       (if (null? fexports)
           (unless (null? missing) (syntax-error missing "missing definition for export(s)"))
           (let ((e (car fexports)) (fexports (cdr fexports)))
-            (if (defined? e ids) 
+            (if (defined? e ids)
                 (loop fexports missing)
                 (loop fexports (cons e missing))))))))
 
@@ -1652,14 +1660,12 @@
       (lambda (x y cls)
         (if (interface? x)
             (if (interface? y)
-                (call-with-values
-                  (lambda ()
-                    (let ((xe (interface-exports x)) (ye (interface-exports y)))
-                      (if (fx> (vector-length xe) (vector-length ye))
-                          (values x ye)
-                          (values y xe))))
-                  (lambda (iface exports)
-                    (vfold exports (lambda (id cls) (id-iface-conflicts id iface cls)) cls)))
+                (let-values (((iface exports)
+                              (let ((xe (interface-exports x)) (ye (interface-exports y)))
+                                (if (fx> (vector-length xe) (vector-length ye))
+                                    (values x ye)
+                                    (values y xe)))))
+                  (vfold exports (lambda (id cls) (id-iface-conflicts id iface cls)) cls))
                 (id-iface-conflicts y x cls))
             (if (interface? y)
                 (id-iface-conflicts x y cls)
@@ -1723,116 +1729,114 @@
       (if (null? body)
           (return bindings ids inits)
           (let ((e (cdar body)) (er (caar body)))
-            (call-with-values
-              (lambda () (syntax-type e er empty-wrap no-source ribcage))
-              (lambda (type value e w s)
-                (case type
-                  ((define-form)
-                   (parse-define e w s
-                     (lambda (id rhs w)
-                       (let* ((id (wrap id w))
-                              (label (gen-indirect-label))
-                              (imps (get-implicit-exports id)))
-                         (extend-ribcage! ribcage id label)
-                         (parse
-                           (cdr body)
-                           (cons id ids)
-                           (cons (make-module-binding type id label
-                                   imps (cons er (wrap rhs w)))
-                                 bindings)
-                           inits)))))
-                  ((define-syntax-form)
-                   (parse-define-syntax e w s
-                     (lambda (id rhs w)
-                       (let* ((id (wrap id w))
-                              (label (gen-indirect-label))
-                              (imps (get-implicit-exports id))
-                              (exp (chi rhs (transformer-env er) w)))
-                         ; arrange to evaluate the transformer lazily
-                         (extend-store! r (get-indirect-label label) (cons 'deferred exp))
-                         (extend-ribcage! ribcage id label)
-                         (parse
-                           (cdr body)
-                           (cons id ids)
-                           (cons (make-module-binding type id label imps exp)
-                                 bindings)
-                           inits)))))
-                  ((module-form)
-                   (let* ((*ribcage (make-empty-ribcage))
-                          (*w (make-wrap (wrap-marks w) (cons *ribcage (wrap-subst w)))))
-                     (parse-module e w s *w
-                       (lambda (id *exports forms)
-                         (chi-external *ribcage (source-wrap e w s)
-                                     (map (lambda (d) (cons er d)) forms)
-                                     r *exports (flatten-exports *exports) ctem rtem
-                           (lambda (*bindings *inits)
-                             (let* ((iface (make-trimmed-interface *exports))
-                                    (bindings (append (if id *bindings (update-imp-exports *bindings *exports)) bindings))
-                                    (inits (append inits *inits)))
-                               (if id
-                                   (let ((label (gen-indirect-label))
-                                         (imps (get-implicit-exports id)))
-                                     (extend-store! r (get-indirect-label label)
-                                       (make-binding 'module iface))
-                                     (extend-ribcage! ribcage id label)
-                                     (parse
-                                       (cdr body)
-                                       (cons id ids)
-                                       (cons (make-module-binding type id label imps *exports) bindings)
-                                       inits))
-                                   (let ()
-                                     (do-import! iface ribcage)
-                                     (parse (cdr body) (cons iface ids) bindings inits))))))))))
-                 ((import-form)
-                  (parse-import e w s
-                    (lambda (mid)
-                      (let ((mlabel (id-var-name mid empty-wrap)))
-                        (let ((binding (lookup mlabel r)))
-                          (case (binding-type binding)
-                            ((module)
-                             (let ((iface (binding-value binding)))
-                               (when value (extend-ribcage-barrier! ribcage value))
-                               (do-import! iface ribcage)
-                               (parse
+            (let-values (((type value e w s) (syntax-type e er empty-wrap no-source ribcage)))
+              (case type
+                ((define-form)
+                 (parse-define e w s
+                   (lambda (id rhs w)
+                     (let* ((id (wrap id w))
+                            (label (gen-indirect-label))
+                            (imps (get-implicit-exports id)))
+                       (extend-ribcage! ribcage id label)
+                       (parse
+                         (cdr body)
+                         (cons id ids)
+                         (cons (make-module-binding type id label
+                                 imps (cons er (wrap rhs w)))
+                               bindings)
+                         inits)))))
+                ((define-syntax-form)
+                 (parse-define-syntax e w s
+                   (lambda (id rhs w)
+                     (let* ((id (wrap id w))
+                            (label (gen-indirect-label))
+                            (imps (get-implicit-exports id))
+                            (exp (chi rhs (transformer-env er) w)))
+                       ; arrange to evaluate the transformer lazily
+                       (extend-store! r (get-indirect-label label) (cons 'deferred exp))
+                       (extend-ribcage! ribcage id label)
+                       (parse
+                         (cdr body)
+                         (cons id ids)
+                         (cons (make-module-binding type id label imps exp)
+                               bindings)
+                         inits)))))
+                ((module-form)
+                 (let* ((*ribcage (make-empty-ribcage))
+                        (*w (make-wrap (wrap-marks w) (cons *ribcage (wrap-subst w)))))
+                   (parse-module e w s *w
+                     (lambda (id *exports forms)
+                       (chi-external *ribcage (source-wrap e w s)
+                                   (map (lambda (d) (cons er d)) forms)
+                                   r *exports (flatten-exports *exports) ctem rtem
+                         (lambda (*bindings *inits)
+                           (let* ((iface (make-trimmed-interface *exports))
+                                  (bindings (append (if id *bindings (update-imp-exports *bindings *exports)) bindings))
+                                  (inits (append inits *inits)))
+                             (if id
+                                 (let ((label (gen-indirect-label))
+                                       (imps (get-implicit-exports id)))
+                                   (extend-store! r (get-indirect-label label)
+                                     (make-binding 'module iface))
+                                   (extend-ribcage! ribcage id label)
+                                   (parse
+                                     (cdr body)
+                                     (cons id ids)
+                                     (cons (make-module-binding type id label imps *exports) bindings)
+                                     inits))
+                                 (let ()
+                                   (do-import! iface ribcage)
+                                   (parse (cdr body) (cons iface ids) bindings inits))))))))))
+               ((import-form)
+                (parse-import e w s
+                  (lambda (mid)
+                    (let ((mlabel (id-var-name mid empty-wrap)))
+                      (let ((binding (lookup mlabel r)))
+                        (case (binding-type binding)
+                          ((module)
+                           (let ((iface (binding-value binding)))
+                             (when value (extend-ribcage-barrier! ribcage value))
+                             (do-import! iface ribcage)
+                             (parse
+                               (cdr body)
+                               (cons iface ids)
+                               (update-imp-exports bindings (vector->list (interface-exports iface)))
+                               inits)))
+                          ((displaced-lexical) (displaced-lexical-error mid))
+                          (else (syntax-error mid "import from unknown module"))))))))
+                ((begin-form)
+                 (syntax-case e ()
+                   ((_ e1 ...)
+                    (parse (let f ((forms (syntax (e1 ...))))
+                             (if (null? forms)
                                  (cdr body)
-                                 (cons iface ids)
-                                 (update-imp-exports bindings (vector->list (interface-exports iface)))
-                                 inits)))
-                            ((displaced-lexical) (displaced-lexical-error mid))
-                            (else (syntax-error mid "import from unknown module"))))))))
-                  ((begin-form)
-                   (syntax-case e ()
-                     ((_ e1 ...)
-                      (parse (let f ((forms (syntax (e1 ...))))
-                               (if (null? forms)
-                                   (cdr body)
-                                   (cons (cons er (wrap (car forms) w))
-                                         (f (cdr forms)))))
-                        ids bindings inits))))
-                  ((eval-when-form)
-                   (syntax-case e ()
-                     ((_ (x ...) e1 ...)
-                      ; mode set is implicitly (E)
-                      (parse (if (memq 'eval (chi-when-list (syntax (x ...)) w))
-                                 (let f ((forms (syntax (e1 ...))))
-                                   (if (null? forms)
-                                       (cdr body)
-                                       (cons (cons er (wrap (car forms) w))
-                                             (f (cdr forms)))))
-                                 (cdr body))
-                        ids bindings inits))))
-                  ((local-syntax-form)
-                   (chi-local-syntax value e er w s
-                     (lambda (forms er w s)
-                       (parse (let f ((forms forms))
-                                (if (null? forms)
-                                    (cdr body)
-                                    (cons (cons er (wrap (car forms) w))
-                                          (f (cdr forms)))))
-                         ids bindings inits))))
-                  (else ; found an init expression
-                   (return bindings ids
-                     (append inits (cons (cons er (source-wrap e w s)) (cdr body)))))))))))))
+                                 (cons (cons er (wrap (car forms) w))
+                                       (f (cdr forms)))))
+                      ids bindings inits))))
+                ((eval-when-form)
+                 (syntax-case e ()
+                   ((_ (x ...) e1 ...)
+                    ; mode set is implicitly (E)
+                    (parse (if (memq 'eval (chi-when-list (syntax (x ...)) w))
+                               (let f ((forms (syntax (e1 ...))))
+                                 (if (null? forms)
+                                     (cdr body)
+                                     (cons (cons er (wrap (car forms) w))
+                                           (f (cdr forms)))))
+                               (cdr body))
+                      ids bindings inits))))
+                ((local-syntax-form)
+                 (chi-local-syntax value e er w s
+                   (lambda (forms er w s)
+                     (parse (let f ((forms forms))
+                              (if (null? forms)
+                                  (cdr body)
+                                  (cons (cons er (wrap (car forms) w))
+                                        (f (cdr forms)))))
+                       ids bindings inits))))
+                (else ; found an init expression
+                 (return bindings ids
+                   (append inits (cons (cons er (source-wrap e w s)) (cdr body))))))))))))
 
 (define vmap
   (lambda (fn v)
@@ -1921,10 +1925,8 @@
 
 (define chi
   (lambda (e r w)
-    (call-with-values
-      (lambda () (syntax-type e r w no-source #f))
-      (lambda (type value e w s)
-        (chi-expr type value e r w s)))))
+    (let-values (((type value e w s) (syntax-type e r w no-source #f)))
+      (chi-expr type value e r w s))))
 
 (define chi-expr
   (lambda (type value e r w s)
@@ -2053,7 +2055,7 @@
       (chi-internal ribcage outer-form body r
         (lambda (exprs ids vars vals inits)
           (when (null? exprs) (syntax-error outer-form "no expressions in body"))
-          (build-letrec no-source
+          (build-body no-source
             vars
             (map (lambda (x) (chi (cdr x) (car x) empty-wrap)) vals)
             (build-sequence no-source
@@ -2102,105 +2104,103 @@
     (define return
       (lambda (exprs ids vars vals inits)
         (check-defined-ids source-exp ids)
-        (k exprs ids vars vals inits)))
+        (k exprs ids (reverse vars) (reverse vals) inits)))
     (let parse ((body body) (ids '()) (vars '()) (vals '()) (inits '()))
       (if (null? body)
           (return body ids vars vals inits)
           (let ((e (cdar body)) (er (caar body)))
-            (call-with-values
-              (lambda () (syntax-type e er empty-wrap no-source ribcage))
-              (lambda (type value e w s)
-                (case type
-                  ((define-form)
-                   (parse-define e w s
-                     (lambda (id rhs w)
-                       (let ((id (wrap id w)) (label (gen-label)))
-                         (let ((var (gen-var id)))
-                           (extend-ribcage! ribcage id label)
-                           (extend-store! r label (make-binding 'lexical var))
-                           (parse
-                             (cdr body)
-                             (cons id ids)
-                             (cons var vars)
-                             (cons (cons er (wrap rhs w)) vals)
-                             inits))))))
-                  ((define-syntax-form)
-                   (parse-define-syntax e w s
-                     (lambda (id rhs w)
-                       (let ((id (wrap id w))
-                             (label (gen-label))
-                             (exp (chi rhs (transformer-env er) w)))
+            (let-values (((type value e w s) (syntax-type e er empty-wrap no-source ribcage)))
+              (case type
+                ((define-form)
+                 (parse-define e w s
+                   (lambda (id rhs w)
+                     (let ((id (wrap id w)) (label (gen-label)))
+                       (let ((var (gen-var id)))
                          (extend-ribcage! ribcage id label)
-                         (extend-store! r label (make-binding 'deferred exp))
-                         (parse (cdr body) (cons id ids) vars vals inits)))))
-                  ((module-form)
-                   (let* ((*ribcage (make-empty-ribcage))
-                          (*w (make-wrap (wrap-marks w) (cons *ribcage (wrap-subst w)))))
-                     (parse-module e w s *w
-                       (lambda (id exports forms)
-                         (chi-internal *ribcage (source-wrap e w s)
-                           (map (lambda (d) (cons er d)) forms) r
-                           (lambda (*body *ids *vars *vals *inits)
-                             ; valid bound ids checked already by chi-internal
-                             (check-module-exports source-exp (flatten-exports exports) *ids)
-                             (let ((iface (make-trimmed-interface exports))
-                                   (vars (append *vars vars))
-                                   (vals (append *vals vals))
-                                   (inits (append inits *inits *body)))
-                               (if id
-                                   (let ((label (gen-label)))
-                                     (extend-ribcage! ribcage id label)
-                                     (extend-store! r label (make-binding 'module iface))
-                                     (parse (cdr body) (cons id ids) vars vals inits))
-                                   (let ()
-                                     (do-import! iface ribcage)
-                                     (parse (cdr body) (cons iface ids) vars vals inits))))))))))
-                 ((import-form)
-                  (parse-import e w s
-                    (lambda (mid)
-                      (let ((mlabel (id-var-name mid empty-wrap)))
-                        (let ((binding (lookup mlabel r)))
-                          (case (car binding)
-                            ((module)
-                             (let ((iface (cdr binding)))
-                               (when value (extend-ribcage-barrier! ribcage value))
-                               (do-import! iface ribcage)
-                               (parse (cdr body) (cons iface ids) vars vals inits)))
-                            ((displaced-lexical) (displaced-lexical-error mid))
-                            (else (syntax-error mid "import from unknown module"))))))))
-                  ((begin-form)
-                   (syntax-case e ()
-                     ((_ e1 ...)
-                      (parse (let f ((forms (syntax (e1 ...))))
-                               (if (null? forms)
-                                   (cdr body)
-                                   (cons (cons er (wrap (car forms) w))
-                                         (f (cdr forms)))))
-                        ids vars vals inits))))
-                  ((eval-when-form)
-                   (syntax-case e ()
-                     ((_ (x ...) e1 ...)
-                      ; mode set is implicitly (E)
-                      (parse (if (memq 'eval (chi-when-list (syntax (x ...)) w))
-                                 (let f ((forms (syntax (e1 ...))))
-                                   (if (null? forms)
-                                       (cdr body)
-                                       (cons (cons er (wrap (car forms) w))
-                                             (f (cdr forms)))))
-                                 (cdr body))
-                        ids vars vals inits))))
-                  ((local-syntax-form)
-                   (chi-local-syntax value e er w s
-                     (lambda (forms er w s)
-                       (parse (let f ((forms forms))
-                                (if (null? forms)
-                                    (cdr body)
-                                    (cons (cons er (wrap (car forms) w))
-                                          (f (cdr forms)))))
-                         ids vars vals inits))))
-                  (else ; found a non-definition
-                   (return (cons (cons er (source-wrap e w s)) (cdr body))
-                           ids vars vals inits))))))))))
+                         (extend-store! r label (make-binding 'lexical var))
+                         (parse
+                           (cdr body)
+                           (cons id ids)
+                           (cons var vars)
+                           (cons (cons er (wrap rhs w)) vals)
+                           inits))))))
+                ((define-syntax-form)
+                 (parse-define-syntax e w s
+                   (lambda (id rhs w)
+                     (let ((id (wrap id w))
+                           (label (gen-label))
+                           (exp (chi rhs (transformer-env er) w)))
+                       (extend-ribcage! ribcage id label)
+                       (extend-store! r label (make-binding 'deferred exp))
+                       (parse (cdr body) (cons id ids) vars vals inits)))))
+                ((module-form)
+                 (let* ((*ribcage (make-empty-ribcage))
+                        (*w (make-wrap (wrap-marks w) (cons *ribcage (wrap-subst w)))))
+                   (parse-module e w s *w
+                     (lambda (id exports forms)
+                       (chi-internal *ribcage (source-wrap e w s)
+                         (map (lambda (d) (cons er d)) forms) r
+                         (lambda (*body *ids *vars *vals *inits)
+                           ; valid bound ids checked already by chi-internal
+                           (check-module-exports source-exp (flatten-exports exports) *ids)
+                           (let ((iface (make-trimmed-interface exports))
+                                 (vars (append *vars vars))
+                                 (vals (append *vals vals))
+                                 (inits (append inits *inits *body)))
+                             (if id
+                                 (let ((label (gen-label)))
+                                   (extend-ribcage! ribcage id label)
+                                   (extend-store! r label (make-binding 'module iface))
+                                   (parse (cdr body) (cons id ids) vars vals inits))
+                                 (let ()
+                                   (do-import! iface ribcage)
+                                   (parse (cdr body) (cons iface ids) vars vals inits))))))))))
+               ((import-form)
+                (parse-import e w s
+                  (lambda (mid)
+                    (let ((mlabel (id-var-name mid empty-wrap)))
+                      (let ((binding (lookup mlabel r)))
+                        (case (car binding)
+                          ((module)
+                           (let ((iface (cdr binding)))
+                             (when value (extend-ribcage-barrier! ribcage value))
+                             (do-import! iface ribcage)
+                             (parse (cdr body) (cons iface ids) vars vals inits)))
+                          ((displaced-lexical) (displaced-lexical-error mid))
+                          (else (syntax-error mid "import from unknown module"))))))))
+                ((begin-form)
+                 (syntax-case e ()
+                   ((_ e1 ...)
+                    (parse (let f ((forms (syntax (e1 ...))))
+                             (if (null? forms)
+                                 (cdr body)
+                                 (cons (cons er (wrap (car forms) w))
+                                       (f (cdr forms)))))
+                      ids vars vals inits))))
+                ((eval-when-form)
+                 (syntax-case e ()
+                   ((_ (x ...) e1 ...)
+                    ; mode set is implicitly (E)
+                    (parse (if (memq 'eval (chi-when-list (syntax (x ...)) w))
+                               (let f ((forms (syntax (e1 ...))))
+                                 (if (null? forms)
+                                     (cdr body)
+                                     (cons (cons er (wrap (car forms) w))
+                                           (f (cdr forms)))))
+                               (cdr body))
+                      ids vars vals inits))))
+                ((local-syntax-form)
+                 (chi-local-syntax value e er w s
+                   (lambda (forms er w s)
+                     (parse (let f ((forms forms))
+                              (if (null? forms)
+                                  (cdr body)
+                                  (cons (cons er (wrap (car forms) w))
+                                        (f (cdr forms)))))
+                       ids vars vals inits))))
+                (else ; found a non-definition
+                 (return (cons (cons er (source-wrap e w s)) (cdr body))
+                         ids vars vals inits)))))))))
 
 (define do-import!
   (lambda (interface ribcage)
@@ -2342,15 +2342,15 @@
 (define strip-annotation
   (lambda (x parent)
     (cond
-      ((annotation? x)
-       (or (annotation-stripped x)
-           (strip-annotation (annotation-expression x) x)))
       ((pair? x)
        (let ((new (cons #f #f)))
          (when parent (set-annotation-stripped! parent new))
          (set-car! new (strip-annotation (car x) #f))
          (set-cdr! new (strip-annotation (cdr x) #f))
          new))
+      ((annotation? x)
+       (or (annotation-stripped x)
+           (strip-annotation (annotation-expression x) x)))
       ((vector? x)
        (let ((new (make-vector (vector-length x))))
          (when parent (set-annotation-stripped! parent new))
@@ -2517,11 +2517,10 @@
             (let ((label (id-var-name e empty-wrap)))
               (let ((b (lookup label r)))
                 (if (eq? (binding-type b) 'syntax)
-                    (call-with-values
-                      (lambda ()
-                        (let ((var.lev (binding-value b)))
-                          (gen-ref src (car var.lev) (cdr var.lev) maps)))
-                      (lambda (var maps) (values `(ref ,var) maps)))
+                    (let-values (((var maps)
+                                  (let ((var.lev (binding-value b)))
+                                    (gen-ref src (car var.lev) (cdr var.lev) maps))))
+                      (values `(ref ,var) maps))
                     (if (ellipsis? e)
                         (syntax-error src "misplaced ellipsis in syntax form")
                         (values `(quote ,e) maps)))))
@@ -2535,51 +2534,37 @@
                (ellipsis? (syntax dots))
                (let f ((y (syntax y))
                        (k (lambda (maps)
-                            (call-with-values
-                              (lambda ()
-                                (gen-syntax src (syntax x) r
-                                  (cons '() maps) ellipsis?))
-                              (lambda (x maps)
-                                (if (null? (car maps))
-                                    (syntax-error src
-                                      "extra ellipsis in syntax form")
-                                    (values (gen-map x (car maps))
-                                            (cdr maps))))))))
+                            (let-values (((x maps)
+                                          (gen-syntax src (syntax x) r
+                                            (cons '() maps) ellipsis?)))
+                              (if (null? (car maps))
+                                  (syntax-error src
+                                    "extra ellipsis in syntax form")
+                                  (values (gen-map x (car maps))
+                                          (cdr maps)))))))
                  (syntax-case y ()
                    ((dots . y)
                     (ellipsis? (syntax dots))
                     (f (syntax y)
                        (lambda (maps)
-                         (call-with-values
-                           (lambda () (k (cons '() maps)))
-                           (lambda (x maps)
-                             (if (null? (car maps))
-                                 (syntax-error src
-                                   "extra ellipsis in syntax form")
-                                 (values (gen-mappend x (car maps))
-                                         (cdr maps))))))))
-                   (_ (call-with-values
-                        (lambda () (gen-syntax src y r maps ellipsis?))
-                        (lambda (y maps)
-                          (call-with-values
-                            (lambda () (k maps))
-                            (lambda (x maps)
-                              (values (gen-append x y) maps)))))))))
+                         (let-values (((x maps) (k (cons '() maps))))
+                           (if (null? (car maps))
+                               (syntax-error src
+                                 "extra ellipsis in syntax form")
+                               (values (gen-mappend x (car maps))
+                                       (cdr maps)))))))
+                   (_ (let-values (((y maps) (gen-syntax src y r maps ellipsis?)))
+                        (let-values (((x maps) (k maps)))
+                          (values (gen-append x y) maps)))))))
               ((x . y)
-               (call-with-values
-                 (lambda () (gen-syntax src (syntax x) r maps ellipsis?))
-                 (lambda (xnew maps)
-                   (call-with-values
-                     (lambda () (gen-syntax src (syntax y) r maps ellipsis?))
-                     (lambda (ynew maps)
-                       (values (gen-cons e (syntax x) (syntax y) xnew ynew)
-                               maps))))))
+               (let-values (((xnew maps) (gen-syntax src (syntax x) r maps ellipsis?)))
+                 (let-values (((ynew maps) (gen-syntax src (syntax y) r maps ellipsis?)))
+                   (values (gen-cons e (syntax x) (syntax y) xnew ynew)
+                           maps))))
               (#(x1 x2 ...)
                (let ((ls (syntax (x1 x2 ...))))
-                 (call-with-values
-                   (lambda () (gen-syntax src ls r maps ellipsis?))
-                   (lambda (lsnew maps)
-                     (values (gen-vector e ls lsnew) maps)))))
+                 (let-values (((lsnew maps) (gen-syntax src ls r maps ellipsis?)))
+                   (values (gen-vector e ls lsnew) maps))))
               (_ (values `(quote ,e) maps))))))
 
     (define gen-ref
@@ -2588,17 +2573,15 @@
             (values var maps)
             (if (null? maps)
                 (syntax-error src "missing ellipsis in syntax form")
-                (call-with-values
-                  (lambda () (gen-ref src var (fx- level 1) (cdr maps)))
-                  (lambda (outer-var outer-maps)
-                    (let ((b (assq outer-var (car maps))))
-                      (if b
-                          (values (cdr b) maps)
-                          (let ((inner-var (gen-var 'tmp)))
-                            (values inner-var
-                                    (cons (cons (cons outer-var inner-var)
-                                                (car maps))
-                                          outer-maps)))))))))))
+                (let-values (((outer-var outer-maps) (gen-ref src var (fx- level 1) (cdr maps))))
+                  (let ((b (assq outer-var (car maps))))
+                    (if b
+                        (values (cdr b) maps)
+                        (let ((inner-var (gen-var 'tmp)))
+                          (values inner-var
+                                  (cons (cons (cons outer-var inner-var)
+                                              (car maps))
+                                        outer-maps))))))))))
 
     (define gen-append
       (lambda (x y)
@@ -2640,7 +2623,7 @@
         (case (car ynew)
           ((quote)
            (if (eq? (car xnew) 'quote)
-               (let ((xnew (cadr xnew)) [ynew (cadr ynew)])
+               (let ((xnew (cadr xnew)) (ynew (cadr ynew)))
                  (if (and (eq? xnew x) (eq? ynew y))
                      `',e
                      `'(,xnew . ,ynew)))
@@ -2681,9 +2664,8 @@
       (let ((e (source-wrap e w s)))
         (syntax-case e ()
           ((_ x)
-           (call-with-values
-             (lambda () (gen-syntax e (syntax x) r '() ellipsis?))
-             (lambda (e maps) (regen e))))
+           (let-values (((e maps) (gen-syntax e (syntax x) r '() ellipsis?)))
+             (regen e)))
           (_ (syntax-error e)))))))
 
 
@@ -2712,6 +2694,7 @@
                    (map (lambda (x) (chi x r w)) (syntax (val ...)))
                    (chi-body (syntax (e1 e2 ...)) (source-wrap e w s) r w)))))))
       (_ (syntax-error (source-wrap e w s))))))
+
 
 (global-extend 'core 'if
    (lambda (e r w s)
@@ -2758,24 +2741,17 @@
               (syntax-case p ()
                 ((x dots)
                  (ellipsis? (syntax dots))
-                 (call-with-values
-                   (lambda () (cvt (syntax x) (fx+ n 1) ids))
-                   (lambda (p ids)
-                     (values (if (eq? p 'any) 'each-any (vector 'each p))
-                             ids))))
+                 (let-values (((p ids) (cvt (syntax x) (fx+ n 1) ids)))
+                   (values (if (eq? p 'any) 'each-any (vector 'each p))
+                           ids)))
                 ((x . y)
-                 (call-with-values
-                   (lambda () (cvt (syntax y) n ids))
-                   (lambda (y ids)
-                     (call-with-values
-                       (lambda () (cvt (syntax x) n ids))
-                       (lambda (x ids)
-                         (values (cons x y) ids))))))
+                 (let-values (((y ids) (cvt (syntax y) n ids)))
+                   (let-values (((x ids) (cvt (syntax x) n ids)))
+                     (values (cons x y) ids))))
                 (() (values '() ids))
                 (#(x ...)
-                 (call-with-values
-                   (lambda () (cvt (syntax (x ...)) n ids))
-                   (lambda (p ids) (values (vector 'vector p) ids))))
+                 (let-values (((p ids) (cvt (syntax (x ...)) n ids)))
+                   (values (vector 'vector p) ids)))
                 (x (values (vector 'atom (strip p empty-wrap)) ids)))))))
 
     (define build-dispatch-call
@@ -2798,39 +2774,37 @@
 
     (define gen-clause
       (lambda (x keys clauses r pat fender exp)
-        (call-with-values
-          (lambda () (convert-pattern pat keys))
-          (lambda (p pvars)
-            (cond
-              ((not (distinct-bound-ids? (map car pvars)))
-               (invalid-ids-error (map car pvars) pat "pattern variable"))
-              ((not (andmap (lambda (x) (not (ellipsis? (car x)))) pvars))
-               (syntax-error pat
-                 "misplaced ellipsis in syntax-case pattern"))
-              (else
-               (let ((y (gen-var 'tmp)))
-                 ; fat finger binding and references to temp variable y
-                 (build-application no-source
-                   (build-lambda no-source (list y)
-                     (let-syntax ((y (identifier-syntax
-                                       (build-lexical-reference 'value no-source y))))
-                       (build-conditional no-source
-                         (syntax-case fender ()
-                           (#t y)
-                           (_ (build-conditional no-source
-                                y
-                                (build-dispatch-call pvars fender y r)
-                                (build-data no-source #f))))
-                         (build-dispatch-call pvars exp y r)
-                         (gen-syntax-case x keys clauses r))))
-                   (list (if (eq? p 'any)
-                             (build-application no-source
-                               (build-primref no-source 'list)
-                               (list (build-lexical-reference no-source 'value x)))
-                             (build-application no-source
-                               (build-primref no-source '$syntax-dispatch)
-                               (list (build-lexical-reference no-source 'value x)
-                                     (build-data no-source p)))))))))))))
+        (let-values (((p pvars) (convert-pattern pat keys)))
+          (cond
+            ((not (distinct-bound-ids? (map car pvars)))
+             (invalid-ids-error (map car pvars) pat "pattern variable"))
+            ((not (andmap (lambda (x) (not (ellipsis? (car x)))) pvars))
+             (syntax-error pat
+               "misplaced ellipsis in syntax-case pattern"))
+            (else
+             (let ((y (gen-var 'tmp)))
+               ; fat finger binding and references to temp variable y
+               (build-application no-source
+                 (build-lambda no-source (list y)
+                   (let-syntax ((y (identifier-syntax
+                                     (build-lexical-reference 'value no-source y))))
+                     (build-conditional no-source
+                       (syntax-case fender ()
+                         (#t y)
+                         (_ (build-conditional no-source
+                              y
+                              (build-dispatch-call pvars fender y r)
+                              (build-data no-source #f))))
+                       (build-dispatch-call pvars exp y r)
+                       (gen-syntax-case x keys clauses r))))
+                 (list (if (eq? p 'any)
+                           (build-application no-source
+                             (build-primref no-source 'list)
+                             (list (build-lexical-reference no-source 'value x)))
+                           (build-application no-source
+                             (build-primref no-source '$syntax-dispatch)
+                             (list (build-lexical-reference no-source 'value x)
+                                   (build-data no-source p))))))))))))
 
     (define gen-syntax-case
       (lambda (x keys clauses r)
@@ -2906,15 +2880,15 @@
 ;;; using the following table.  See also update-mode-set.
 
 ;;;      load  compile  visit  revisit  eval
-;;; 
+;;;
 ;;; L     L      C        V       R      -
-;;; 
+;;;
 ;;; C     -      -        -       -      C
-;;; 
+;;;
 ;;; V     V      C        V       -      -
-;;; 
+;;;
 ;;; R     R      C        -       R      -
-;;; 
+;;;
 ;;; E     -      -        -       -      E
 
 ;;; When we complete the expansion of a compile or run-time expression,
@@ -2924,15 +2898,15 @@
 ;;; Initial mode sets
 ;;;
 ;;; when compiling a file:
-;;; 
+;;;
 ;;;     initial ctem: (L C)
-;;; 
+;;;
 ;;;     initial rtem: (L)
 ;;;
 ;;; when not compiling a file:
-;;; 
+;;;
 ;;;     initial ctem: (E)
-;;; 
+;;;
 ;;;     initial rtem: (E)
 ;;;
 ;;;
@@ -2999,7 +2973,7 @@
     (let ((message (if (null? messages)
                        "invalid syntax"
                        (apply string-append messages))))
-      (error-hook #f message (strip object empty-wrap))))))
+      (error-hook #f message (strip object empty-wrap)))))
 
 ;;; syntax-dispatch expects an expression and a pattern.  If the expression
 ;;; matches the pattern a list of the matching expressions for each
@@ -3129,7 +3103,7 @@
          ((_ ((out in) ...) e1 e2 ...)
           (syntax (syntax-case (list in ...) ()
                      ((out ...) (begin e1 e2 ...))))))))
- 
+
 (define-syntax syntax-rules
   (lambda (x)
     (syntax-case x ()
