@@ -377,8 +377,57 @@
 
 (display "srfi-30 ")
 (module srfi-30
-  ()
+    ()
   (add-feature 'srfi-30))
+
+(display "srfi-31 ")
+(module srfi-31
+    (rec)
+  (include "srfi/srfi-31.scm")
+  (add-feature 'srfi-31))
+
+(display "srfi-34 ")
+(module srfi-34
+    (raise
+     with-exception-handler
+     (guard guard-aux))
+  (include "srfi/srfi-34.scm")
+  (add-feature 'srfi-34))
+
+(display "srfi-35 ")
+(module srfi-35
+    (make-condition-type
+     condition-type?
+     make-condition
+     condition?
+     condition-has-type?
+     condition-ref
+     make-compound-condition
+     extract-condition
+     define-condition-type
+     (condition type-field-alist->condition)
+     &condition
+     &message
+     &serious
+     &error)
+  (import srfi-1)
+  (import srfi-9)
+  (import srfi-23)
+  (include "srfi/srfi-35.scm")
+  (add-feature 'srfi-35))
+
+(display "srfi-37 ")
+(module srfi-37
+    (option
+     option-names
+     option-required-arg?
+     option-optional-arg?
+     option-processor
+     args-fold)
+  (import srfi-9)
+  (import srfi-11)
+  (include "srfi/srfi-37.scm")
+  (add-feature 'srfi-37))
 
 ;Still draft
 (display "srfi-38 ")

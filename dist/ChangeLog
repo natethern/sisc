@@ -1,9 +1,17 @@
+2003-01-15  Matthias Radestock  <matthias@lshift.net>
+
+	* Implemented SRFIs 31, 34, 35, 37.
+
+	* Fixed bug in |make-error| that caused single-arg invocations
+	  with a symbol to produce error locations rather than error
+	  messages.
+
 2003-01-04  SISC 1.7.1-beta Released
 
 2003-01-03  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed a vlr recycling bug in single-value-return case of
-	|call-with-values|.
+	  |call-with-values|.
 
 2003-01-02  Scott G. Miller <scgmille@freenetproject.org>
 
