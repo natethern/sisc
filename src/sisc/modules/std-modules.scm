@@ -809,7 +809,7 @@
     (include "match.ss"))
 
 (module optimizer
-  (optimize inline-usual-primitives)
+  (optimize inline-usual-primitives initialize)
   (import pattern-matching)
   (import debugging)
   ;;TODO: we really want to import the srfi-11 module here, but srfis
@@ -826,6 +826,7 @@
 (import optimizer)
 ;*redefine* current-optimizer rather than just setting it, so that
 ;the default value becomes |optimize|
+(initialize)
 (set! current-optimizer (make-parameter optimize))
 
 ;;load and import srfi-0

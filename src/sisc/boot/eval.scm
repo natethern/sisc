@@ -35,7 +35,6 @@
 
 (define current-optimizer (_make-parameter (lambda (x) x)))
   
-
 (set! eval
       (let ([old-eval eval]
             [apply apply]
@@ -57,8 +56,8 @@
                       (interaction-environment old-ie)
                       (throw m e))
                     (lambda ()               
-                      (set! source (optimizer
-                                    (_analyze!
+                      (set! source (_analyze!
+                                    (optimizer
                                      (sc-expand x '(e) '(e)))))
                       (interaction-environment old-ie)))
                    (apply old-eval source env))]))))
