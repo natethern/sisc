@@ -8,7 +8,7 @@ import sisc.nativefun.*;
 import sisc.data.*;
 import sisc.io.*;
 
-public class IO extends ModuleAdapter {
+public class IO extends IndexedProcedure {
 
     static Symbol IOB =
         Symbol.intern("sisc.modules.io.Messages");
@@ -49,7 +49,13 @@ public class IO extends ModuleAdapter {
         WRITE               = 27,
         WRITECHAR           = 28;
 
-    public IO() {
+    public static class Index extends IndexedLibraryAdapter { 
+
+		public Value construct(int id) {
+			return new IO(id);
+		}
+		    	
+    	public Index() {
         define("absolute-path?"     , ABSPATHQ);
         define("char-ready?"        , CHARREADY);
         define("close-input-port"   , CLOSEINPUTPORT);
@@ -82,7 +88,14 @@ public class IO extends ModuleAdapter {
         define("write"              , WRITE);
         define("write-char"         , WRITECHAR);
     }
-
+    }
+    
+    public IO(int id) {
+    	super(id);
+    }
+    
+    public IO() {}
+    
     static void throwIOException(Interpreter f, String message, IOException e) 
         throws ContinuationException {
         if (f.acc == null) {
@@ -199,11 +212,11 @@ public class IO extends ModuleAdapter {
         return u;
     }
 
-    public Value eval(int primid, Interpreter f)
+    public Value doApply(Interpreter f)
         throws ContinuationException {
         switch (f.vlr.length) {
         case 0:
-            switch (primid) {
+            switch (id) {
             case CURRENTCLASSPATH:
                 URL[] urls = f.dynenv.getClassPath();
                 Pair p = EMPTYLIST;
@@ -233,7 +246,7 @@ public class IO extends ModuleAdapter {
                 throwArgSizeException();
             }
         case 1:
-            switch (primid) {
+            switch (id) {
             case INPORTQ: return truth(f.vlr[0] instanceof SchemeInputPort);
             case OUTPORTQ: return truth(f.vlr[0] instanceof SchemeOutputPort);
             case CHARREADY:
@@ -457,7 +470,7 @@ public class IO extends ModuleAdapter {
                 throwArgSizeException();
             }
         case 2:
-            switch (primid) {
+            switch (id) {
             case WRITECHAR:
                 SchemeOutputPort port=outport(f.vlr[1]);
                 try {

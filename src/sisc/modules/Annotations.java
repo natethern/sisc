@@ -7,47 +7,58 @@ import sisc.nativefun.*;
 import sisc.data.*;
 import sisc.exprs.AnnotatedExpr;
 
-public class Annotations extends ModuleAdapter {
+public class Annotations extends IndexedProcedure {
+	protected static final int ANNOTATION = 0,
+		ANNOTATIONQ = 1,
+		ANNOTATIONKEYS = 2,
+		ANNOTATIONSRC = 3,
+		ANNOTATIONEXPR = 4,
+		ANNOTATIONSTRIPPED = 5,
+		EMITANNOTATIONS = 6,
+		MAKEANNOTATION = 7,
+		SETANNOTATION = 8,
+		SETANNOTATIONSTRIPPED = 9,
+		EMITDEBUGGINGSYMS = 10;
 
-    protected static final int
-        ANNOTATION              = 0,
-        ANNOTATIONQ             = 1,
-        ANNOTATIONKEYS          = 2,
-        ANNOTATIONSRC           = 3,
-        ANNOTATIONEXPR          = 4,
-        ANNOTATIONSTRIPPED      = 5,
-        EMITANNOTATIONS         = 6,
-        MAKEANNOTATION          = 7,
-        SETANNOTATION           = 8,
-        SETANNOTATIONSTRIPPED   = 9,
-        EMITDEBUGGINGSYMS       = 10;
+	public static class Index extends IndexedLibraryAdapter {
 
-    public Annotations() {
-        define("annotation?"            , ANNOTATIONQ);
-        define("annotation-keys"        , ANNOTATIONKEYS);
-        define("annotation"             , ANNOTATION);
-        define("annotation-source"      , ANNOTATIONSRC);
-        define("annotation-expression"  , ANNOTATIONEXPR);
-        define("annotation-stripped"    , ANNOTATIONSTRIPPED);
-        define("emit-annotations"       , EMITANNOTATIONS);
-        define("emit-debugging-symbols" , EMITDEBUGGINGSYMS);
-        define("make-annotation"        , MAKEANNOTATION);
-        define("set-annotation!"        , SETANNOTATION);
-        define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
-    }
+		public Value construct(int id) {
+			return new Annotations(id);
+		}
 
-    public Value eval(int primid, Interpreter f)
-        throws ContinuationException {
+		public Index() {
+			define("annotation?", ANNOTATIONQ);
+			define("annotation-keys", ANNOTATIONKEYS);
+			define("annotation", ANNOTATION);
+			define("annotation-source", ANNOTATIONSRC);
+			define("annotation-expression", ANNOTATIONEXPR);
+			define("annotation-stripped", ANNOTATIONSTRIPPED);
+			define("emit-annotations", EMITANNOTATIONS);
+			define("emit-debugging-symbols", EMITDEBUGGINGSYMS);
+			define("make-annotation", MAKEANNOTATION);
+			define("set-annotation!", SETANNOTATION);
+			define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
+		}
+	}
+
+	public Annotations(int id) {
+		super(id);
+	}
+
+	public Annotations() {
+	}
+	
+    public Value doApply(Interpreter f) throws ContinuationException {
         switch (f.vlr.length) {
         case 0:
-            switch (primid) {
+            switch (id) {
             case EMITANNOTATIONS: return truth(f.dynenv.parser.annotate);
             case EMITDEBUGGINGSYMS: return truth(f.dynenv.emitDebuggingSymbols);
             default:
                 throwArgSizeException();
             }
         case 1:
-            switch (primid) {
+            switch (id) {
             case EMITANNOTATIONS:
                 f.dynenv.parser.annotate=truth(f.vlr[0]);
                 return VOID;
@@ -79,7 +90,7 @@ public class Annotations extends ModuleAdapter {
                 throwArgSizeException();
             }
         case 2:
-            switch (primid) {
+            switch (id) {
             case SETANNOTATIONSTRIPPED:
                 annotated(f.vlr[0]).stripped=f.vlr[1];
                 return VOID;
@@ -89,7 +100,7 @@ public class Annotations extends ModuleAdapter {
                 throwArgSizeException();
             }
         case 3:
-            switch (primid) {
+            switch (id) {
             case MAKEANNOTATION:
                 AnnotatedExpr ae=new AnnotatedExpr(f.vlr[0], f.vlr[1]);
                 ae.stripped=f.vlr[2];
@@ -102,7 +113,7 @@ public class Annotations extends ModuleAdapter {
                 throwArgSizeException();
             }
         case 4:
-            switch(primid) {
+            switch(id) {
             case SETANNOTATION:
                 return f.vlr[0].setAnnotation(symbol(f.vlr[1]),
                                               f.vlr[2],

@@ -18,129 +18,142 @@ import sisc.env.SymbolicEnvironment;
 import sisc.env.MemorySymEnv;
 import sisc.util.*;
 
-public class Primitives extends ModuleAdapter {
+public class Primitives extends IndexedProcedure {
 
-    public Primitives() {
-        define("list", LIST);
-        define("*", MUL);
-        define("+", ADD);
-        define("-", SUB);
-        define("/", DIV);
-        define("<", LT);
-        define("=", NEQ);
-        define(">", GRT);
-        define("_gcd", GCD);
-        define("_lcm", LCM);
-        define("_string-append", STRINGAPPEND);
-        define("acos", ACOS);
-        define("apply", APPLY);
-        define("ashl", ASHL);
-        define("ashr", ASHR);
-        define("asin", ASIN);
-        define("atan", ATAN);
-        define("boolean?", BOOLEANQ);
-        define("box", BOX);
-        define("box?", BOXQ);
-        define("call-with-current-continuation", CALLCC);
-        define("call-with-failure-continuation", CALLFC);
-        define("call-with-values", CALLWITHVALUES);
-        define("car", CAR);
-        define("case-sensitive", CASESENSITIVE);
-        define("cdr", CDR);
-        define("ceiling", CEILING);
-        define("char->integer", CHAR2INTEGER);
-        define("char?", CHARACTERQ);
-        define("circular?", CIRCULARQ);
-        define("compact-string-rep", COMPACTSTRINGREP);
-        define("complex?", COMPLEXQ);
-        define("cons", CONS);
-        define("cos", COS);
-        define("current-evaluator", CURRENTEVAL);
-        define("current-wind", CURRENTWIND);
-        define("denominator", DENOMINATOR);
-        define("environment?", ENVIRONMENTQ);
-        define("eq?", EQ);
-        define("eqv?", EQV);
-        define("equal?", EQUAL);
-        define("eval", EVAL);
-        define("exact->inexact", EXACT2INEXACT);
-        define("exact?", EXACTQ);
-        define("exp", EXP);
-        define("find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
-        define("floor", FLOOR);
-        define("native-library-binding", NLBINDING);
-        define("native-library-binding-names", NLBINDINGNAMES);
-        define("native-library-name", NLNAME);
-        define("native-library-version", NLVERSION);
-        define("get-symbolic-environment", GETENVIRONMENT);
-        define("set-symbolic-environment!", SETENVIRONMENT);
-        define("gensym", GENSYM);
-        define("getprop", GETPROP);
-        define("imag-part", IMAGPART);
-        define("inexact->exact", INEXACT2EXACT);
-        define("inexact?", INEXACTQ);
-        define("integer->char", INTEGER2CHAR);
-        define("integer?", INTEGERQ);
-        define("interaction-environment", INTERACTIONENVIRONMENT );
-        define("length", LENGTH);
-        define("list->vector", LIST2VECTOR);
-        define("load-native-library", LOADNL);
-        define("log", LOG);
-        define("make-parameter", MAKEPARAM);
-        define("make-rectangular", MAKERECTANGULAR);
-        define("make-string", MAKESTRING);
-        define("make-vector", MAKEVECTOR);
-        define("max-precision", MAX_PRECISION);
-        define("min-precision", MIN_PRECISION);
-        define("null-environment", NULLENVIRONMENT);
-        define("null?", NULLQ);
-        define("number->string", NUMBER2STRING);
-        define("number?", NUMBERQ);
-        define("numerator", NUMERATOR);
-        define("pair?", PAIRQ);
-        define("parameter?", PARAMETERQ);
-        define("procedure?", PROCEDUREQ);
-        define("putprop", PUTPROP);
-        define("quotient", QUOTIENT);
-        define("real-part", REALPART);
-        define("remainder", REMAINDER);
-        define("remprop", REMPROP);
-        define("round", ROUND);
-        define("scheme-report-environment", REPORTENVIRONMENT);
-        define("set-box!", SETBOX);
-        define("set-car!", SETCAR);
-        define("set-cdr!", SETCDR);
-        define("sin", SIN);
-        define("sisc-initial-environment", SISCINITIAL);
-        define("sqrt", SQRT);
-        define("sleep", SLEEP);
-        define("strict-r5rs-compliance", STRICTR5RS);
-        define("string->number", STRING2NUMBER);
-        define("string->symbol", STRING2SYMBOL);
-        define("string->uninterned-symbol", STRING2UNINTERNEDSYMBOL);
-        define("string-fill!", STRINGFILL);
-        define("string-length", STRINGLENGTH);
-        define("string-ref", STRINGREF);
-        define("string-set!", STRINGSET);
-        define("string?", STRINGQ);
-        define("symbol->string", SYMBOL2STRING);
-        define("symbol?", SYMBOLQ);
-        define("system-time", SYSTIME);
-        define("tan", TAN);
-        define("time-zone-offset", TIMEZONEOFFSET);
-        define("truncate", TRUNCATE);
-        define("unbox", UNBOX);
-        define("vector-fill!", VECTORFILL);
-        define("vector->list", VECTOR2LIST);
-        define("vector-length", VECTORLENGTH);
-        define("vector-ref", VECTORREF);
-        define("vector-set!", VECTORSET);
-        define("vector?", VECTORQ);
-        define("void", _VOID);
-        define("void?", VOIDQ);
-        define("with-failure-continuation", WITHFC);
-    }
+	public static class Index extends IndexedLibraryAdapter {
 
+		public Value construct(int id) {
+			return new Primitives(id);
+		}
+
+		public Index() {
+			define("list", LIST);
+			define("*", MUL);
+			define("+", ADD);
+			define("-", SUB);
+			define("/", DIV);
+			define("<", LT);
+			define("=", NEQ);
+			define(">", GRT);
+			define("_gcd", GCD);
+			define("_lcm", LCM);
+			define("_string-append", STRINGAPPEND);
+			define("acos", ACOS);
+			define("apply", APPLY);
+			define("ashl", ASHL);
+			define("ashr", ASHR);
+			define("asin", ASIN);
+			define("atan", ATAN);
+			define("boolean?", BOOLEANQ);
+			define("box", BOX);
+			define("box?", BOXQ);
+			define("call-with-current-continuation", CALLCC);
+			define("call-with-failure-continuation", CALLFC);
+			define("call-with-values", CALLWITHVALUES);
+			define("car", CAR);
+			define("case-sensitive", CASESENSITIVE);
+			define("cdr", CDR);
+			define("ceiling", CEILING);
+			define("char->integer", CHAR2INTEGER);
+			define("char?", CHARACTERQ);
+			define("circular?", CIRCULARQ);
+			define("compact-string-rep", COMPACTSTRINGREP);
+			define("complex?", COMPLEXQ);
+			define("cons", CONS);
+			define("cos", COS);
+			define("current-evaluator", CURRENTEVAL);
+			define("current-wind", CURRENTWIND);
+			define("denominator", DENOMINATOR);
+			define("environment?", ENVIRONMENTQ);
+			define("eq?", EQ);
+			define("eqv?", EQV);
+			define("equal?", EQUAL);
+			define("eval", EVAL);
+			define("exact->inexact", EXACT2INEXACT);
+			define("exact?", EXACTQ);
+			define("exp", EXP);
+			define("find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
+			define("floor", FLOOR);
+			define("native-library-binding", NLBINDING);
+			define("native-library-binding-names", NLBINDINGNAMES);
+			define("native-library-name", NLNAME);
+			define("native-library-version", NLVERSION);
+			define("get-symbolic-environment", GETENVIRONMENT);
+			define("set-symbolic-environment!", SETENVIRONMENT);
+			define("gensym", GENSYM);
+			define("getprop", GETPROP);
+			define("imag-part", IMAGPART);
+			define("inexact->exact", INEXACT2EXACT);
+			define("inexact?", INEXACTQ);
+			define("integer->char", INTEGER2CHAR);
+			define("integer?", INTEGERQ);
+			define("interaction-environment", INTERACTIONENVIRONMENT);
+			define("length", LENGTH);
+			define("list->vector", LIST2VECTOR);
+			define("load-native-library", LOADNL);
+			define("log", LOG);
+			define("make-parameter", MAKEPARAM);
+			define("make-rectangular", MAKERECTANGULAR);
+			define("make-string", MAKESTRING);
+			define("make-vector", MAKEVECTOR);
+			define("max-precision", MAX_PRECISION);
+			define("min-precision", MIN_PRECISION);
+			define("null-environment", NULLENVIRONMENT);
+			define("null?", NULLQ);
+			define("number->string", NUMBER2STRING);
+			define("number?", NUMBERQ);
+			define("numerator", NUMERATOR);
+			define("pair?", PAIRQ);
+			define("parameter?", PARAMETERQ);
+			define("procedure?", PROCEDUREQ);
+			define("putprop", PUTPROP);
+			define("quotient", QUOTIENT);
+			define("real-part", REALPART);
+			define("remainder", REMAINDER);
+			define("remprop", REMPROP);
+			define("round", ROUND);
+			define("scheme-report-environment", REPORTENVIRONMENT);
+			define("set-box!", SETBOX);
+			define("set-car!", SETCAR);
+			define("set-cdr!", SETCDR);
+			define("sin", SIN);
+			define("sisc-initial-environment", SISCINITIAL);
+			define("sqrt", SQRT);
+			define("sleep", SLEEP);
+			define("strict-r5rs-compliance", STRICTR5RS);
+			define("string->number", STRING2NUMBER);
+			define("string->symbol", STRING2SYMBOL);
+			define("string->uninterned-symbol", STRING2UNINTERNEDSYMBOL);
+			define("string-fill!", STRINGFILL);
+			define("string-length", STRINGLENGTH);
+			define("string-ref", STRINGREF);
+			define("string-set!", STRINGSET);
+			define("string?", STRINGQ);
+			define("symbol->string", SYMBOL2STRING);
+			define("symbol?", SYMBOLQ);
+			define("system-time", SYSTIME);
+			define("tan", TAN);
+			define("time-zone-offset", TIMEZONEOFFSET);
+			define("truncate", TRUNCATE);
+			define("unbox", UNBOX);
+			define("vector-fill!", VECTORFILL);
+			define("vector->list", VECTOR2LIST);
+			define("vector-length", VECTORLENGTH);
+			define("vector-ref", VECTORREF);
+			define("vector-set!", VECTORSET);
+			define("vector?", VECTORQ);
+			define("void", _VOID);
+			define("void?", VOIDQ);
+			define("with-failure-continuation", WITHFC);
+		}
+	}
+	
+	public Primitives() {}
+	
+	public Primitives(int id) {
+		super(id);
+	}
+	
     public static SchemeBoolean numQuery(Value v, int mask)
         throws ContinuationException {
         return truth(v instanceof Quantity &&
@@ -267,13 +280,13 @@ public class Primitives extends ModuleAdapter {
         return b.toString();
     }
 
-    public Value eval(int primid, Interpreter f)
+    public Value doApply(Interpreter f)
         throws ContinuationException {
 
         
         SIZESWITCH: switch (f.vlr.length) {
         case 0:
-            switch (primid) {
+            switch (id) {
             case GENSYM: 
                 long unv=f.tctx.nextUnique();
                 return Symbol.intern(base64encode(unv));
@@ -308,7 +321,7 @@ public class Primitives extends ModuleAdapter {
                 break SIZESWITCH;
             }
         case 1:
-            switch (primid) {
+            switch (id) {
             case NULLQ: return truth(f.vlr[0]==EMPTYLIST);
             case CAR: return truePair( f.vlr[0]).car;
             case CASESENSITIVE:
@@ -458,11 +471,11 @@ public class Primitives extends ModuleAdapter {
                 f.ctx.evaluator=proc(f.vlr[0]);
                 return VOID;
             case NLNAME:
-                return Symbol.get(module(f.vlr[0]).getModuleName());
+                return Symbol.get(nlib(f.vlr[0]).getLibraryName());
             case NLVERSION:
-                return Quantity.valueOf(module(f.vlr[0]).getModuleVersion());
+                return Quantity.valueOf(nlib(f.vlr[0]).getLibraryVersion());
             case NLBINDINGNAMES:
-                Value[] va=(Value[])module(f.vlr[0]).getModuleBindingNames(f);
+                Value[] va=(Value[])nlib(f.vlr[0]).getLibraryBindingNames(f);
                 return valArrayToList(va,0,va.length);
             case LOADNL:
                 try {
@@ -489,7 +502,7 @@ public class Primitives extends ModuleAdapter {
                 break SIZESWITCH;
             }
         case 2:
-            switch (primid) {
+            switch (id) {
             case EQ: return truth(f.vlr[0] == f.vlr[1]);
             case EQV: return truth(f.vlr[0].eqv(f.vlr[1]));
             case CONS:
@@ -593,7 +606,7 @@ public class Primitives extends ModuleAdapter {
                                                .shiftRight(num(f.vlr[1])
                                                            .indexValue()));
             case NLBINDING:
-                return module(f.vlr[0]).getBindingValue(f, symbol(f.vlr[1]));
+                return nlib(f.vlr[0]).getBindingValue(f, symbol(f.vlr[1]));
             case EVAL:
                 f.nxp=f.compile(f.vlr[0], env(f.vlr[1]));
                 f.env=null;
@@ -633,7 +646,7 @@ public class Primitives extends ModuleAdapter {
                 break SIZESWITCH;
             }
         case 3:
-            switch(primid) {
+            switch(id) {
             case GETPROP:
                 Value ret = null;
                 if (f.vlr[1] instanceof SymbolicEnvironment) {
@@ -683,7 +696,7 @@ public class Primitives extends ModuleAdapter {
         }
         
         Quantity quantity=null;
-        switch (primid) {
+        switch (id) {
         case APPLY:
             Procedure proc=proc(f.vlr[0]);
             int l = f.vlr.length-2;
@@ -888,8 +901,6 @@ public class Primitives extends ModuleAdapter {
         VOIDQ = 102,
         WITHFC = 103,
         _VOID = 12;
-
-
 }
 /*
  * The contents of this file are subject to the Mozilla Public
