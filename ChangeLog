@@ -1,3 +1,5 @@
+2004-01-20  Released SISC 1.8.7
+
 2004-01-16  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed bug where error continuations weren't wind safe.
