@@ -109,7 +109,7 @@
 
 			;; Other common features
 
-;	srfi				;srfi-0, COND-EXPAND finds all srfi-*
+	srfi				;srfi-0, COND-EXPAND finds all srfi-*
 ;	sicp				;runs code from Structure and
 					;Interpretation of Computer
 					;Programs by Abelson and Sussman.

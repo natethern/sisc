@@ -1,9 +1,7 @@
 (native-module r5rs "sisc.modules.R5RS")
 
 (display "srfi-0 ")
-(module srfi-0 (cond-expand)
-  (include "srfi/srfi-0.scm")
-  (add-feature 'srfi-0))
+;;srfi-0 is loaded and imported by default
 
 (display "srfi-8 ")
 (module srfi-8

@@ -288,3 +288,9 @@
 
 (import libraries)
 (import debugging)
+
+;;load and import srfi-0
+(module srfi-0 (cond-expand)
+  (include "../scheme-src/srfi/srfi-0.scm")
+  (add-feature 'srfi-0))
+(import srfi-0)
