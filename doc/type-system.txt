@@ -131,6 +131,31 @@ must be a symbol and it must denote a Java class that is a sub-class
 of sisc.data.Value, the base of the SISC value type hierarchy.
 
 
+Examples
+--------
+
+(import type-system)
+(type<= <number> <value>) ;=> #t
+(type<= <value> <number>) ;=> #f
+(instance-of? 1 <number>) ;=> #t
+(instance-of? 1 <value>) ;=> #t
+(instance-of? 1 <symbol>) ;=> #f
+(eq? (type-of 1) <number>) ;=> #t
+
+(import record)
+(define-struct foo (x))
+(define-struct bar (x))
+(define f (make-foo 1))
+(define b (make-bar 1))
+(instance-of? f foo) ;=> #t
+(instance-of? f <record>) ;=> #t
+(instance-of? f <value>) ;=> #t
+(instance-of? b foo) ;=> #f
+(type<= foo <record>) ;=> #t
+(type<= foo <value>) ;=> #t
+(type<= foo bar) ;=> #f
+
+
 What's Changed?
 ---------------
 

@@ -175,6 +175,74 @@ the superclass by using procedures/methods obtained from the
 SLOT-{ACCESSOR,MODIFIER}-{PROCEDURE,METHOD} applied to the slot.
 
 
+Examples
+--------
+
+;;slots, accessors, modifiers
+(define-generics
+  :x :x! :y :y! :z :z!
+  :xb :xb! :yb :yb! :zb :zb!)
+(define-class (<Foo>)
+  (x (value 1) (accessor :x) (modifier :x!))
+  (y (accessor :y) (modifier :y!))
+  (z (value 1) (accessor :z)))
+(define f (make <Foo>))
+(:x f) ;=> 1
+(:y f) ;=> #f
+(:z f) ;=> 1
+(:x! f 2)
+(:y! f 2)
+(:x f) ;=> 2
+(:y f) ;=> 2
+
+;;overloading slots in sub-class
+(define-class (<Bar> <Foo>)
+  (x (value 2) (accessor :x) (modifier :x!))
+  (y (accessor :yb) (modifier :yb!))
+  (zb (value 2) (accessor :zb) (modifier :zb!)))
+(define b (make <Bar>))
+(:x b) ;=> 2
+(:y b) ;=> #f
+(:z b) ;=> 1
+(:yb b) ;=> #f
+(:zb b) ;=> 2
+(:y! b 3)
+(:yb! b 4)
+(:y b) ;=> 3
+(:yb b) ;=> 4
+(define :foo-x
+  (cdr (assq 'x (map (lambda (x)
+                       (cons (slot-name x) (slot-accessor x)))
+                     (class-direct-slots <Foo>)))))
+(:foo-x b) ;=> 1
+
+;;multiple inheritance and the class precedence list
+(define-class (<Baz> <Foo>))
+(define-class (<Boo> <Baz>)
+  (yb (accessor :yb) (modifier :yb!)))
+(define-class (<Goo>))
+(define-class (<Moo1> <Bar> <Baz> <Goo>))
+(map class-name (class-precedence-list <Moo1>))
+;=> (<moo1> <bar> <baz> <goo> <foo> <object>)
+(define-class (<Moo2> <Bar> <Baz> <Foo> <Goo>))
+(map class-name (class-precedence-list <Moo2>))
+;=> (<moo1> <bar> <baz> <foo> <goo> <object>)
+(define-class (<Moo3> <Bar> <Foo> <Baz> <Goo>)) ;=> error
+
+;;inheritance restriction on slots
+(define-class (<Moo4> <Bar> <Boo> <Goo>)) ;=> error
+
+;;method selection using class precedence list
+(define-generic m)
+(define-methods m
+  [((<Foo> x)) 'foo]
+  [((<Goo> x)) 'goo])
+(define m1 (make <Moo1>))
+(define m2 (make <Moo2>))
+(m m1) ;=> 'goo
+(m m2) ;=> 'foo
+
+
 What's Changed?
 ---------------
 
