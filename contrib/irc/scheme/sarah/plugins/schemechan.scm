@@ -74,7 +74,7 @@
       (let ([schemer (cdr (assoc nick (scheme-channel-schemers schemechan)))]
             [text (message-text message)]
             [commands '(".exit" ".repl" ".attach" ".reset")])
-        (let* ([i (string-index text (string #\space))]
+        (let* ([i (string-index text #\space)]
                [command (trim (or (and i (substring text 0 i))
                                   text))])
           (if (member command commands)
@@ -86,7 +86,7 @@
                                     "You are now chatting.")]
                     [(equal? command ".repl")
                      (schemer-at-repl! schemer #t)
-                     (send-message (channel-bot channel)
+                     (send-messages (channel-bot channel)
                                    (message-nick message)
                                    "You are now in the REPL.")]
                     [(equal? command ".attach")
