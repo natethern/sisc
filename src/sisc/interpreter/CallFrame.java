@@ -12,7 +12,7 @@ public class CallFrame extends Procedure {
     public Expression            nxp;
     public Value[]               vlr, lcl, env;
     public boolean               flk=false, vlk, cap[];
-    public CallFrame              fk, parent;
+    public CallFrame             fk, parent;
 
     public CallFrame(Expression n, Value[] v,
                      boolean vlk, Value[] l, Value[] e,
@@ -135,6 +135,7 @@ public class CallFrame extends Procedure {
     }
 
     public void serialize(Serializer s) throws IOException {
+        s.writeBoolean(flk);
         s.writeBoolean(vlk);
         if (vlr==null)
             s.writeBoolean(false);
@@ -156,6 +157,7 @@ public class CallFrame extends Procedure {
     public CallFrame() {}
 
     public void deserialize(Deserializer s) throws IOException {
+        flk=s.readBoolean();
         vlk=s.readBoolean();
         vlr=null;
         if (s.readBoolean()) {
