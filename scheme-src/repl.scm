@@ -37,20 +37,29 @@
 
 (define (make-error-message location message)
   (if location
-      (format "Error in ~a: ~a" location message)
-      (format "Error: ~a" message)))
+      (if message
+          (format "Error in ~a: ~a" location message)
+          (format "Error in ~a." location))
+      (if message
+          (format "Error: ~a" message)
+          "Error.")))
+
 
 (define current-default-error-handler
   (parameterize
    (letrec ((eh
              (lambda (message error-cont failure-cont)
-               (cond [(not (pair? message)) message]
+               (cond [(null? message) "Error."]
+                     [(not (pair? message)) message]
                      [(assoc 'message message) => 
                       (lambda (mr)
                         (make-error-message 
                          (cond [(assoc 'location message) => cdr] 
                                [else #f])
                          (cdr mr)))]
+                     [(assoc 'location message) =>
+                      (lambda (lr)
+                        (make-error-message (cdr lr) #f))]
                      [(assoc 'parent message) =>
                       (lambda (p)
                         (let ((p (cdr p)))
@@ -69,7 +78,7 @@
                                     [else
                                       (format "Error in nested call:~% ~a"
                                               submessage)])))))]
-                     [else message]))))
+                     [else (make-error-message #f #f)]))))
      (lambda (m e c o)
        (display (eh m e c) o)
        (newline o)

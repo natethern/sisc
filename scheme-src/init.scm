@@ -699,7 +699,7 @@
         ;;Message/Value
         (let ([message (and (not (null? args))
                             (car args))])
-          (set! args (cdr args))
+          (if message (set! args (cdr args)))
           (if (null? args)
               (if message (set! error-record (cons `(message . ,message)
                                                    error-record)))
