@@ -9,12 +9,11 @@
        predicate
        (field-tag accessor . more) ...)
      (begin
-       (define type
-         (make-record-type 'type '(field-tag ...)))
-       (define constructor
-         (record-constructor type '(constructor-tag ...)))
-       (define predicate
-         (record-predicate type))
+       (define type (make-record-type 'type '(field-tag ...)))
+       (define (constructor . args)
+         (apply (record-constructor type '(constructor-tag ...)) args))
+       (define (predicate thing)
+         ((record-predicate type) thing))
        (define-record-field type field-tag accessor . more)
        ...))))
 
@@ -24,11 +23,14 @@
 (define-syntax define-record-field
   (syntax-rules ()
     ((define-record-field type field-tag accessor)
-     (define accessor (record-accessor type 'field-tag)))
+     (define (accessor thing)
+       ((record-accessor type 'field-tag) thing)))
     ((define-record-field type field-tag accessor modifier)
      (begin
-       (define accessor (record-accessor type 'field-tag))
-       (define modifier (record-modifier type 'field-tag))))))
+       (define (accessor thing)
+         ((record-accessor type 'field-tag) thing))
+       (define (modifier thing value)
+         ((record-modifier type 'field-tag) thing value))))))
 
 ; This implements a record abstraction that is identical to vectors,
 ; except that they are not vectors (VECTOR? returns false when given a
