@@ -1850,7 +1850,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
           </para>
           <para>
             <indexterm><primary>with-class-path</primary></indexterm>
-            &parameter;
+            &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>with-class-path</methodname>
