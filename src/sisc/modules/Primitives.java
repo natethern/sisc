@@ -623,6 +623,9 @@ public class Primitives extends IndexedProcedure {
                 return VOID;
             case GETSIDECAR:
                 return env(vlr[1]).getSidecarEnvironment(symbol(vlr[0])).asValue();
+            case VECTORFILL:
+                vec(vlr[0]).fill(vlr[1]);
+                return VOID;
             default:
                 break SIZESWITCH;
             }
@@ -659,9 +662,6 @@ public class Primitives extends IndexedProcedure {
                                                      new Integer(index),
                                                      vlr[0].synopsis()}));
                 }
-                return VOID;
-            case VECTORFILL:
-                vec(vlr[0]).fill(vlr[1]);
                 return VOID;
             case VECTORSET:
                 index=num(vlr[1]).indexValue();
