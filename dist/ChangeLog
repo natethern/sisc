@@ -1,3 +1,10 @@
+2002-10-07  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Fixed Lite build 
+
+	* Module bindings were being loaded at start time, and
+	  only R5RS bindings were lazy loaded.  Now all are, as intended.
+
 2002-10-07  Matthias Radestock  <matthias@sorted.org>
 
 	* Cleaned up error handling by introducing new exception data type
