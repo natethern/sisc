@@ -417,7 +417,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
           Interrupts allow running Scheme code to be forcibly broken 
           from another thread, causing the Scheme code to raise an
           error.  The interrupt signal handling code does add an
-          appreciable overhead (usually around 10%) to execution, and
+          appreciable overhead (usually between 4-10%) to execution, and
           is thus disabled by default.  It can be enabled using the
           <literal>sisc.permitinterrupts</literal> system property.
         </para>

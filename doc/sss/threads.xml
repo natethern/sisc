@@ -298,7 +298,9 @@
       raised error will be rethrown if
       <function>thread/result</function> is called.  The error-continuation
       of the error thrown inside the thread, when invoked with no arguments,
-      will restart the computation exactly where it left off.
+      will restart the computation exactly where it left off.  A thread may 
+      not properly resume if its code calls back into Scheme using any of the
+      mechanisms described in <xref linkend="JavaToScheme"/>.
     </para>
     <warning>
       <title>Final Continuation of a Thread</title>
