@@ -343,9 +343,9 @@ public class J2S extends ModuleAdapter {
                     throw new RuntimeException("Error instantiating object: "+e);
                 }
             }
-
+	default:
+	    throwArgSizeException();
         }
-        throw new RuntimeException( "incorrect number of arguments to procedure");
+	return VOID;
     }
-
 }

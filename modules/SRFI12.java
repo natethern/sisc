@@ -91,7 +91,7 @@ public class SRFI12 extends ModuleAdapter {
 	    case CONDITIONQ: return truth(f.vlr[0] instanceof Condition);
 	    case MAKECOMPOSITECONDITION: return new Condition(cond(f.vlr[0]));
 	    default:
-                throw new RuntimeException( "incorrect number of arguments to procedure");
+                throwArgSizeException();
 	    }
 	case 2:
 	    switch(primid) {
@@ -117,7 +117,7 @@ public class SRFI12 extends ModuleAdapter {
 		} while (q!=null);
 		return FALSE;
 	    default:
-                throw new RuntimeException( "incorrect number of arguments to procedure");
+                throwArgSizeException();
 	    }
 	default:
 	    switch(primid) {
@@ -129,9 +129,10 @@ public class SRFI12 extends ModuleAdapter {
 		}
 		return h;
 	    default:
-                throw new RuntimeException( "incorrect number of arguments to procedure");
+                throwArgSizeException();
 	    }
 	}
+	return VOID;
     }
 }
 		

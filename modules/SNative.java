@@ -113,7 +113,7 @@ public class SNative extends ModuleAdapter {
                         throw new RuntimeException(e.getMessage());
                     }
                 default:
-                    error(f, "Incorrect number of arguments to procedure "+f.acc);
+                    throwArgSizeException();
                 }
             case 1:
                 switch(primid) {
@@ -135,7 +135,7 @@ public class SNative extends ModuleAdapter {
                         throw new RuntimeException(e.getMessage());
                     }
                 default:
-                    throw new RuntimeException("incorrect number of arguments to procedure");
+                    throwArgSizeException();
                 }
             case 2:
                 switch(primid) {
@@ -224,13 +224,10 @@ public class SNative extends ModuleAdapter {
                     }
                     return FALSE;
                 default:
-                    throw new RuntimeException("incorrect number of arguments to procedure");
+                    throwArgSizeException();
                 }
-            case 3:
-                switch(primid) {
-                default:
-                    throw new RuntimeException("incorrect number of arguments to procedure");
-                }
+	    default:
+		throwArgSizeException();
             }
         }
         return VOID;

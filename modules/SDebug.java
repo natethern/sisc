@@ -92,10 +92,11 @@ public class SDebug extends ModuleAdapter {
                 cn=cont(f.vlr[0]);
                 return cn.env;
             default:
-                throw new RuntimeException( "incorrect number of arguments to procedure");
+                throwArgSizeException();
             }
         default:
-	    throw new RuntimeException( "incorrect number of arguments to procedure");
+	    throwArgSizeException();
         }
+	return VOID;
     }
 }

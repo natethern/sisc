@@ -61,4 +61,8 @@ public abstract class Module extends NamedValue implements java.io.Serializable 
     public static void throwNestedPrimException(SchemeException e) {
 	throw new NestedPrimRuntimeException(e);
     }
+
+    public static void throwArgSizeException() {
+	throw new ArrayIndexOutOfBoundsException();
+    }
 }

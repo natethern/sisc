@@ -299,7 +299,7 @@ public class SThread extends ModuleAdapter {
 		Thread.yield();
 		return VOID;
             default:
-                throw new RuntimeException( "incorrect number of arguments to procedure");
+                throwArgSizeException();
 	    }
         case 1:
             switch(primid) {
@@ -355,7 +355,7 @@ public class SThread extends ModuleAdapter {
 		c=tcont(f.vlr[0]);
 		return stateOf(c);
             default:
-                throw new RuntimeException( "incorrect number of arguments to procedure");
+                throwArgSizeException();
             }
 	case 2:
 	    switch(primid) {
@@ -391,10 +391,11 @@ public class SThread extends ModuleAdapter {
 		c.thread.setName(string(f.vlr[1]));
 		return VOID;
 	    default:
-		throw new RuntimeException( "incorrect number of arguments to procedure");
+		throwArgSizeException();
 	    }
         default:
-	    throw new RuntimeException( "incorrect number of arguments to procedure");
+	    throwArgSizeException();
         }
+	return VOID;
     }
 }

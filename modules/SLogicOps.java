@@ -63,8 +63,7 @@ public class SLogicOps extends ModuleAdapter {
 
     public Value eval(int primid, Interpreter f) throws ContinuationException {
         if (primid==LOGNOT) {
-            if (f.vlr.length > 1)
-                throw new RuntimeException( "incorrect number of arguments to procedure");
+            if (f.vlr.length > 1) throwArgSizeException();
             return Quantity.valueOf(~fixed(f.vlr[0]));
         } else {
             int v=fixed(f.vlr[0]);

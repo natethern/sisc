@@ -249,7 +249,7 @@ public class Primitives extends ModuleAdapter {
     }
 
     public Value eval(int primid, Interpreter f)
-    throws ContinuationException {
+	throws ContinuationException {
         switch (f.vlr.length) {
         case 0:
             switch (primid) {
@@ -263,7 +263,7 @@ public class Primitives extends ModuleAdapter {
                 if (v instanceof SchemeCharacter)
                     f.dynenv.in.pushback(((SchemeCharacter)v).c);
                 return v;
-        case READ: case READCHAR:
+	    case READ: case READCHAR:
                 return (primid==READ ? f.dynenv.in.read(f) :
                         f.dynenv.in.readchar());
             case CURRENTEVAL: return (Value)f.ctx.evaluator;
@@ -304,7 +304,7 @@ public class Primitives extends ModuleAdapter {
             case BOOLEANQ: return truth(f.vlr[0] instanceof SchemeBoolean);
             case VOIDQ: return truth(f.vlr[0]==VOID);
             case ENVIRONMENTQ: return truth(f.vlr[0] instanceof
-                                                AssociativeEnvironment);
+					    AssociativeEnvironment);
             case CONTINUATIONQ: return truth(f.vlr[0] instanceof CallFrame);
             case PROCEDUREQ: return truth(f.vlr[0] instanceof Procedure);
             case INTEGERQ: return numQuery(f.vlr[0],Quantity.INTEGER);
@@ -326,7 +326,7 @@ public class Primitives extends ModuleAdapter {
 		    return FALSE;
 		}
             case NUMBER2STRING: return new SchemeString(num(f.vlr[0])
-                                           .toString());
+							.toString());
             case STRING2SYMBOL: return Symbol.intern(string(f.vlr[0]));
             case CHAR2INTEGER: return Quantity.valueOf(chr(f.vlr[0]).c);
             case LIST2VECTOR: return new SchemeVector(pairToValues(pair(f.vlr[0])));
@@ -339,7 +339,7 @@ public class Primitives extends ModuleAdapter {
             case CEILING: return num(f.vlr[0]).ceiling();
             case ROUND: return num(f.vlr[0]).round();
             case INTEGER2CHAR: return new SchemeCharacter((char)num(f.vlr[0]).
-                                          intValue());
+							  intValue());
             case VECTORFINDLASTUNIQUE: return Quantity.valueOf(vec(f.vlr[0]).findEnd());
             case PEEKCHAR:
                 InputPort inport=inport(f.vlr[0]);
@@ -354,7 +354,7 @@ public class Primitives extends ModuleAdapter {
                 } catch (IOException e) {
                     return FALSE;
                 }
-        case READ: case READCHAR:
+	    case READ: case READCHAR:
                 inport=inport(f.vlr[0]);
                 return (primid==READ ? inport.read(f) :
                         inport.readchar());
@@ -363,7 +363,7 @@ public class Primitives extends ModuleAdapter {
                 return VOID;
             case OPENINPUTSTRING:
                 return new InputPort(new BufferedReader(
-                                         new StringReader(string(f.vlr[0]))));
+							new StringReader(string(f.vlr[0]))));
             case CALLCC:
                 Procedure kproc=(Procedure)f.vlr[0];
                 f.vlr=new Value[] {f.stk.capture()};
@@ -464,10 +464,10 @@ public class Primitives extends ModuleAdapter {
             case DENOMINATOR: return num(f.vlr[0]).denominator();
             case REALPART: return num(f.vlr[0]).realpart();
             case IMAGPART: return num(f.vlr[0]).imagpart();
-        case DISPLAY: case WRITE:
+	    case DISPLAY: case WRITE:
                 try {
                     f.dynenv.out.write((primid == WRITE ? f.vlr[0].write() :
-					    f.vlr[0].display()));
+					f.vlr[0].display()));
                 } catch (IOException e) {
                     throw new RuntimeException("Error writing to output port "+f.dynenv.out);
                 }
@@ -620,7 +620,7 @@ public class Primitives extends ModuleAdapter {
             case ASHR: return Quantity.valueOf(num(f.vlr[0]).integer()
                                                .shiftRight(num(f.vlr[1])
                                                            .intValue()));
-        case DISPLAY: case WRITE:
+	    case DISPLAY: case WRITE:
                 port=outport(f.vlr[1]);
                 try {
                     port.write((primid == WRITE ? f.vlr[0].write() :
@@ -731,28 +731,23 @@ public class Primitives extends ModuleAdapter {
 					     pairToExpressions(applyArgs),
 					     false);
                 return null;
+	    case LIST: return valArrayToList(f.vlr,0,f.vlr.length);
             case ADD:
                 quantity=Quantity.ZERO;
                 for (int i=f.vlr.length-1; i>=0; i--) {
                     quantity=quantity.add(num(f.vlr[i]));
                 }
                 return quantity;
-
             case MUL:
                 quantity=Quantity.ONE;
                 for (int i=f.vlr.length-1; i>=0; i--) {
                     quantity=quantity.mul(num(f.vlr[i]));
                 }
                 return quantity;
-
-            }
-            switch (primid) {
-            case LIST: return valArrayToList(f.vlr,0,f.vlr.length);
             case SUB:
                 quantity=num(f.vlr[0]);
                 if (f.vlr.length==1) {
                     return Quantity.ZERO.sub(quantity);
-
                 }
                 for (int i=1; i<f.vlr.length; i++) {
                     quantity=quantity.sub(num(f.vlr[i]));
@@ -762,47 +757,36 @@ public class Primitives extends ModuleAdapter {
             case NEQ:
                 quantity=num(f.vlr[0]);
                 for (int i=f.vlr.length-1; i>=0; i--) {
-                    if (!quantity.comp(num(f.vlr[i]), 0)) {
-                        return FALSE;
-
-                    }
+                    if (!quantity.comp(num(f.vlr[i]), 0)) return FALSE;
                 }
                 return TRUE;
             case LT:
                 quantity=num(f.vlr[0]);
                 for (int i=1; i<f.vlr.length; i++) {
                     Quantity q=num(f.vlr[i]);
-                    if (!quantity.comp(q, -1)){
-                        return FALSE;
-
-                    }
+                    if (!quantity.comp(q, -1)) return FALSE;
                     quantity=q;
                 }
                 return TRUE;
-
             case GRT:
                 quantity=num(f.vlr[0]);
                 for (int i=1; i<f.vlr.length; i++) {
                     Quantity q=num(f.vlr[i]);
-                    if (!quantity.comp(q, 1)) {
-                        return FALSE;
-
-                    }
+                    if (!quantity.comp(q, 1)) return FALSE;
                     quantity=q;
                 }
                 return TRUE;
-
             case DIV:
                 quantity=num(f.vlr[0]);
-            if (f.vlr.length==1) {return Quantity.ONE.div(quantity); }
+		if (f.vlr.length==1) {return Quantity.ONE.div(quantity); }
                 for (int i=1; i<f.vlr.length; i++) {
                     quantity=quantity.div(num(f.vlr[i]));
                 }
                 return quantity;
-
             default:
-                throw new RuntimeException( "incorrect number of arguments to procedure");
+                throwArgSizeException();
             }
         }
+	return VOID;
     }
 }
