@@ -160,15 +160,21 @@ public class Parser extends Util implements Tokens {
 		file=sip.sourceFile;
 	    }
 
-            o=readList(is, state, def, flags);
-	    if (annotate && 
-                produceAnnotations(flags) && o instanceof Pair && line>=0) {
-		o=new AnnotatedExpr((Expression)o, 
-				    list(new Pair(LINE, Quantity.valueOf(line)),
-					 new Pair(COLUMN, Quantity.valueOf(col)),
-					 new Pair(FILE, new SchemeString(file))));
-            } 
-	    return o;
+	    if (annotate && produceAnnotations(flags) && line>=0) {
+		AnnotatedExpr aexp =
+                    new AnnotatedExpr(null, 
+                                      list(new Pair(LINE, Quantity.valueOf(line)),
+                                           new Pair(COLUMN, Quantity.valueOf(col)),
+                                           new Pair(FILE, new SchemeString(file))));
+                if (def != null) {
+                    state.put(def, aexp);
+                    def = null;
+                }
+                aexp.expr=readList(is, state, def, flags);
+                return aexp;
+            } else {
+                return readList(is, state, def, flags);
+            }
         case TT_ENDPAIR:
             o=ENDPAIR;
             break;
@@ -267,7 +273,7 @@ public class Parser extends Util implements Tokens {
 
                     c=is.read();
                     if (c=='=') {
-                        o=_nextExpression(is, state, ref, flags & (~PRODUCE_ANNOTATIONS));
+                        o=_nextExpression(is, state, ref, flags);
                         break;
                     } else if (c=='#') {
                         o=state.get(ref);
