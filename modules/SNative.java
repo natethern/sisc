@@ -16,7 +16,7 @@ public class SNative extends ModuleAdapter {
         
         SUBSTRING=17, STRINGORDER=18, STRINGORDERCI=19,
         STRINGUPCASE=20, STRINGDOWNCASE=21,
-        MAPCDAR=22, MAPCAAR=23, REVERSE=24;
+        MAPCDR=22, MAPCAR=23, REVERSE=24;
     
     static long symid=0;
 
@@ -42,8 +42,8 @@ public class SNative extends ModuleAdapter {
         define("substring", SUBSTRING);
         define("values", VALUES);
         define("vector", VECTOR);
-        define("map-cdar", MAPCDAR);
-        define("map-caar", MAPCAAR);
+        define("map-cdr", MAPCDR);
+        define("map-car", MAPCAR);
     }
 
     public static final Value cadr(Value p) {
@@ -129,7 +129,7 @@ public class SNative extends ModuleAdapter {
                 case STRINGDOWNCASE:
                     str=str(f.vlr[0]);
                     return new SchemeString(str.asString().toLowerCase());
-                case MAPCDAR:
+                case MAPCDR:
                     Value lists=f.vlr[0];
                     Pair c=EMPTYLIST;
                     while (lists != EMPTYLIST) {
@@ -138,7 +138,7 @@ public class SNative extends ModuleAdapter {
                         lists=p1.cdr;
                     }
                     return reverse(c);
-                case MAPCAAR:
+                case MAPCAR:
                     lists=f.vlr[0];
                     c=EMPTYLIST;
                     while (lists != EMPTYLIST) {

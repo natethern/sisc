@@ -491,6 +491,19 @@
                 (format "@~a" id1))))
       (generate-id id)))
 
+;; SISC contains native functions map-car and map-cdr.  The following macro
+;; translates these into ordinary maps when its not present
+;(define-syntax map-car
+; (syntax-rules ()
+;  ((_ ls)
+;   (map car ls))))
+;
+;(define-syntax map-cdr
+; (syntax-rules ()
+;  ((_ ls)
+;   (map cdr ls))))
+
+
 ;  (let ((digits "0123456789abcdefghijklmnopqrstuvwxyz"))
 ;    (let ((base (string-length digits)) (session-key "_"))
 ;      (define make-digit (lambda (x) (string-ref digits x)))
@@ -2638,7 +2651,7 @@
 
     (define gen-map
       (lambda (e map-env)
-        (let ((formals (map cdr map-env))
+        (let ((formals (map-cdr map-env))
               (actuals (map (lambda (x) `(ref ,(car x))) map-env)))
           (cond
             ((eq? (car e) 'ref)
@@ -2814,7 +2827,7 @@
 
     (define build-dispatch-call
       (lambda (pvars exp y r)
-        (let ((ids (map car pvars)) (levels (map cdr pvars)))
+        (let ((ids (map-car pvars)) (levels (map-cdr pvars)))
           (let ((labels (gen-labels ids)) (new-vars (map gen-var ids)))
             (build-application no-source
               (build-primref no-source 'apply)
@@ -2825,7 +2838,7 @@
                              (map (lambda (var level)
                                     (make-binding 'syntax `(,var . ,level)))
                                   new-vars
-                                  (map cdr pvars))
+                                  (map-cdr pvars))
                              r)
                            (make-binding-wrap ids labels empty-wrap)))
                     y))))))
@@ -2834,8 +2847,8 @@
       (lambda (x keys clauses r pat fender exp)
         (let-values (((p pvars) (convert-pattern pat keys)))
           (cond
-            ((not (distinct-bound-ids? (map car pvars)))
-             (invalid-ids-error (map car pvars) pat "pattern variable"))
+            ((not (distinct-bound-ids? (map-car pvars)))
+             (invalid-ids-error (map-car pvars) pat "pattern variable"))
             ((not (andmap (lambda (x) (not (ellipsis? (car x)))) pvars))
              (syntax-error pat
                "misplaced ellipsis in syntax-case pattern"))
@@ -3132,7 +3145,7 @@
   (lambda (r* r)
     (if (null? (car r*))
         r
-        (cons (map car r*) (combine (map cdr r*) r)))))
+        (cons (map-car r*) (combine (map-cdr r*) r)))))
 
 (define match*
   (lambda (e p w r)

@@ -1,158 +1,170 @@
 (define for-each
-  (lambda (|proc_Lveb_L5hE| . |lists_LvUe1j5hE|)
-    (if (null? |lists_LvUe1j5hE|)
+  (lambda (|proc_PwwHyHctI| . |lists_PwaLAectI|)
+    (if (null? |lists_PwaLAectI|)
       (error 'for-each
              '"invalid number of arguments to procedure for-each.")
-      (if (null? (car |lists_LvUe1j5hE|))
+      (if (null? (car |lists_PwaLAectI|))
         (void)
         (begin
-          (apply |proc_Lveb_L5hE|
-                 (map car |lists_LvUe1j5hE|))
+          (apply |proc_PwwHyHctI|
+                 (map-car |lists_PwaLAectI|))
           (apply for-each
-                 (cons |proc_Lveb_L5hE|
-                       (map cdr |lists_LvUe1j5hE|))))))))
+                 (cons |proc_PwwHyHctI|
+                       (map-cdr |lists_PwaLAectI|))))))))
 (define eof-object?
-  (lambda (|x_LvA7Zc6hE|)
-    (eq? |x_LvA7Zc6hE| '#!eof)))
+  (lambda (|x_PwSDw8dtI|)
+    (eq? |x_PwSDw8dtI| '#!eof)))
 (define not
-  (lambda (|x_LvW3XF6hE|)
-    (if |x_LvW3XF6hE| '#f '#t)))
+  (lambda (|x_PwcAuBdtI|)
+    (if |x_PwcAuBdtI| '#f '#t)))
 (define eqv? eq?)
 (define newline
-  (lambda |port_Lvg0V67hE|
+  (lambda |port_Pwyws2etI|
     (apply display
-           (cons '#\newline |port_Lvg0V67hE|))))
+           (cons '#\newline |port_Pwyws2etI|))))
 (define reverse
-  (letrec ((|iter_LvCYSz7hE|
-             (lambda (|ls_LviROt8hE| |acc_LvENMW8hE|)
-               (if (null? |ls_LviROt8hE|)
-                 |acc_LvENMW8hE|
-                 (|iter_LvCYSz7hE|
-                   (cdr |ls_LviROt8hE|)
-                   (cons (car |ls_LviROt8hE|) |acc_LvENMW8hE|))))))
-    (lambda (|ls_LvYUQ08hE|)
-      (|iter_LvCYSz7hE| |ls_LvYUQ08hE| '()))))
+  (letrec ((|iter_PwUsqvetI|
+             (lambda (|ls_PwAlmpftI| |acc_PwWhkSftI|)
+               (if (null? |ls_PwAlmpftI|)
+                 |acc_PwWhkSftI|
+                 (|iter_PwUsqvetI|
+                   (cdr |ls_PwAlmpftI|)
+                   (cons (car |ls_PwAlmpftI|) |acc_PwWhkSftI|))))))
+    (lambda (|ls_PwepoYetI|)
+      (|iter_PwUsqvetI| |ls_PwepoYetI| '()))))
+(define map-car
+  (lambda (|ls_PwgeijgtI|)
+    (if (null? |ls_PwgeijgtI|)
+      '()
+      (cons (caar |ls_PwgeijgtI|)
+            (map-car (cdr |ls_PwgeijgtI|))))))
+(define map-cdr
+  (lambda (|ls_PwCagMgtI|)
+    (if (null? |ls_PwCagMgtI|)
+      '()
+      (cons (cdar |ls_PwCagMgtI|)
+            (map-cdr (cdr |ls_PwCagMgtI|))))))
 (define map
-  (letrec ((|map1_Lv-JKn9hE|
-             (lambda (|proc_LvIrAEbhE|
-                      |list_Lv2oy5chE|
-                      |acc_LvokwychE|)
-               (if (null? |list_Lv2oy5chE|)
-                 (reverse |acc_LvokwychE|)
-                 (|map1_Lv-JKn9hE|
-                   |proc_LvIrAEbhE|
-                   (cdr |list_Lv2oy5chE|)
-                   (cons (|proc_LvIrAEbhE| (car |list_Lv2oy5chE|))
-                         |acc_LvokwychE|)))))
-           (|loop_LvkGIQ9hE|
-             (lambda (|proc_LvKgu_chE|
-                      |list1_Lv4dssdhE|
-                      |lists_Lvq9qVdhE|
-                      |c_LvM5omehE|)
-               (if (null? |list1_Lv4dssdhE|)
-                 (reverse |c_LvM5omehE|)
-                 (|loop_LvkGIQ9hE|
-                   |proc_LvKgu_chE|
-                   (cdr |list1_Lv4dssdhE|)
-                   (map-cdar |lists_Lvq9qVdhE|)
-                   (cons (apply |proc_LvKgu_chE|
-                                (car |list1_Lv4dssdhE|)
-                                (map-caar |lists_Lvq9qVdhE|))
-                         |c_LvM5omehE|))))))
-    (lambda (|proc_LvmvCbbhE|
-             |list1_Lv0zEKahE|
+  (letrec ((|map1_PwY6edhtI|
+             (lambda (|proc_PwGQ3ujtI|
+                      |list_Pw0N1XjtI|
+                      |acc_PwmJ_nktI|)
+               (if (null? |list_Pw0N1XjtI|)
+                 (reverse |acc_PwmJ_nktI|)
+                 (|map1_PwY6edhtI|
+                   |proc_PwGQ3ujtI|
+                   (cdr |list_Pw0N1XjtI|)
+                   (cons (|proc_PwGQ3ujtI| (car |list_Pw0N1XjtI|))
+                         |acc_PwmJ_nktI|)))))
+           (|loop_Pwi3cGhtI|
+             (lambda (|proc_PwIFZQktI|
+                      |list1_Pw2CXhltI|
+                      |lists_PwoyVKltI|
+                      |c_PwKuTbmtI|)
+               (if (null? |list1_Pw2CXhltI|)
+                 (reverse |c_PwKuTbmtI|)
+                 (|loop_Pwi3cGhtI|
+                   |proc_PwIFZQktI|
+                   (cdr |list1_Pw2CXhltI|)
+                   (map-cdr |lists_PwoyVKltI|)
+                   (cons (apply |proc_PwIFZQktI|
+                                (car |list1_Pw2CXhltI|)
+                                (map-car |lists_PwoyVKltI|))
+                         |c_PwKuTbmtI|))))))
+    (lambda (|proc_PwkU51jtI|
+             |list1_Pw-X7AitI|
              .
-             |lists_LvGCGhahE|)
-      (if (null? |lists_LvGCGhahE|)
-        (|map1_Lv-JKn9hE|
-          |proc_LvmvCbbhE|
-          |list1_Lv0zEKahE|
+             |lists_PwE_97itI|)
+      (if (null? |lists_PwE_97itI|)
+        (|map1_PwY6edhtI|
+          |proc_PwkU51jtI|
+          |list1_Pw-X7AitI|
           '())
-        (|loop_LvkGIQ9hE|
-          |proc_LvmvCbbhE|
-          |list1_Lv0zEKahE|
-          |lists_LvGCGhahE|
+        (|loop_Pwi3cGhtI|
+          |proc_PwkU51jtI|
+          |list1_Pw-X7AitI|
+          |lists_PwE_97itI|
           '())))))
 (define compose
-  (lambda |rest_Lv62mPehE|
-    (if (null? |rest_Lv62mPehE|)
-      (lambda (|x_LvuPdDghE|) |x_LvuPdDghE|)
-      ((lambda (|f_Lvs-jgfhE| |g_LvOWhJfhE|)
-         (lambda (|x_Lv8TfaghE|)
-           (|f_Lvs-jgfhE| (|g_LvOWhJfhE| |x_Lv8TfaghE|))))
-       (car |rest_Lv62mPehE|)
-       (apply compose (cdr |rest_Lv62mPehE|))))))
+  (lambda |rest_Pw4rREmtI|
+    (if (null? |rest_Pw4rREmtI|)
+      (lambda (|x_PwscJsotI|) |x_PwscJsotI|)
+      ((lambda (|f_PwqnP5ntI| |g_PwMjNyntI|)
+         (lambda (|x_Pw6gL_ntI|)
+           (|f_PwqnP5ntI| (|g_PwMjNyntI| |x_Pw6gL_ntI|))))
+       (car |rest_Pw4rREmtI|)
+       (apply compose (cdr |rest_Pw4rREmtI|))))))
 (define compose2
-  (lambda (|f_LvQLb4hhE| |g_LvaI9xhhE|)
-    (lambda (|x_LvwE7-hhE|)
-      (|f_LvQLb4hhE| (|g_LvaI9xhhE| |x_LvwE7-hhE|)))))
+  (lambda (|f_PwO8HVotI| |g_Pw85FmptI|)
+    (lambda (|x_Pwu1DPptI|)
+      (|f_PwO8HVotI| (|g_Pw85FmptI| |x_Pwu1DPptI|)))))
 (define assq (void))
 (define assv (void))
 (define assoc (void))
 (define memq (void))
 (define memv (void))
 (define member (void))
-(letrec ((|assn_LvSA5rihE|
-           (lambda (|n_LvGNEMohE| |obj_Lv0KCdphE| |alist_LvmGAGphE|)
-             (if (null? |alist_LvmGAGphE|)
+(letrec ((|assn_PwQZAgqtI|
+           (lambda (|n_PwEa8CwtI| |obj_Pw-663xtI| |alist_Pwk34wxtI|)
+             (if (null? |alist_Pwk34wxtI|)
                '#f
-               (if (|n_LvGNEMohE|
-                     (caar |alist_LvmGAGphE|)
-                     |obj_Lv0KCdphE|)
-                 (car |alist_LvmGAGphE|)
-                 (|assn_LvSA5rihE|
-                   |n_LvGNEMohE|
-                   |obj_Lv0KCdphE|
-                   (cdr |alist_LvmGAGphE|))))))
-         (|memn_Lvcx3UihE|
-           (lambda (|n_LvICy7qhE| |obj_Lv2zwAqhE| |list_Lvovu1rhE|)
-             (if (null? |list_Lvovu1rhE|)
+               (if (|n_PwEa8CwtI|
+                     (caar |alist_Pwk34wxtI|)
+                     |obj_Pw-663xtI|)
+                 (car |alist_Pwk34wxtI|)
+                 (|assn_PwQZAgqtI|
+                   |n_PwEa8CwtI|
+                   |obj_Pw-663xtI|
+                   (cdr |alist_Pwk34wxtI|))))))
+         (|memn_PwaWyJqtI|
+           (lambda (|n_PwG_1ZxtI| |obj_Pw0Y_pytI| |list_PwmUZSytI|)
+             (if (null? |list_PwmUZSytI|)
                '#f
-               (if (|n_LvICy7qhE|
-                     (car |list_Lvovu1rhE|)
-                     |obj_Lv2zwAqhE|)
-                 |list_Lvovu1rhE|
-                 (|memn_Lvcx3UihE|
-                   |n_LvICy7qhE|
-                   |obj_Lv2zwAqhE|
-                   (cdr |list_Lvovu1rhE|)))))))
+               (if (|n_PwG_1ZxtI|
+                     (car |list_PwmUZSytI|)
+                     |obj_Pw0Y_pytI|)
+                 |list_PwmUZSytI|
+                 (|memn_PwaWyJqtI|
+                   |n_PwG_1ZxtI|
+                   |obj_Pw0Y_pytI|
+                   (cdr |list_PwmUZSytI|)))))))
   (begin
     (set! assq
-      (lambda (|obj_Lvyt1ljhE| |alist_LvUp_NjhE|)
-        (|assn_LvSA5rihE|
+      (lambda (|obj_PwwSwartI| |alist_PwSOuDrtI|)
+        (|assn_PwQZAgqtI|
           eq?
-          |obj_Lvyt1ljhE|
-          |alist_LvUp_NjhE|)))
+          |obj_PwwSwartI|
+          |alist_PwSOuDrtI|)))
     (set! assv
-      (lambda (|obj_LvemZekhE| |alist_LvAiXHkhE|)
-        (|assn_LvSA5rihE|
+      (lambda (|obj_PwcLs4stI| |alist_PwyHqxstI|)
+        (|assn_PwQZAgqtI|
           eqv?
-          |obj_LvemZekhE|
-          |alist_LvAiXHkhE|)))
+          |obj_PwcLs4stI|
+          |alist_PwyHqxstI|)))
     (set! assoc
-      (lambda (|obj_LvWeV8lhE| |alist_LvgbTBlhE|)
-        (|assn_LvSA5rihE|
+      (lambda (|obj_PwUDo-stI| |alist_PweAmrttI|)
+        (|assn_PwQZAgqtI|
           equal?
-          |obj_LvWeV8lhE|
-          |alist_LvgbTBlhE|)))
+          |obj_PwUDo-stI|
+          |alist_PweAmrttI|)))
     (set! memq
-      (lambda (|obj_LvC7R2mhE| |list_LvY3PvmhE|)
-        (|memn_Lvcx3UihE|
+      (lambda (|obj_PwAwkUttI| |list_PwWsilutI|)
+        (|memn_PwaWyJqtI|
           eq?
-          |obj_LvC7R2mhE|
-          |list_LvY3PvmhE|)))
+          |obj_PwAwkUttI|
+          |list_PwWsilutI|)))
     (set! memv
-      (lambda (|obj_Lvi0NYmhE| |list_LvEYKpnhE|)
-        (|memn_Lvcx3UihE|
+      (lambda (|obj_PwgpgOutI| |list_PwClefvtI|)
+        (|memn_PwaWyJqtI|
           eqv?
-          |obj_Lvi0NYmhE|
-          |list_LvEYKpnhE|)))
+          |obj_PwgpgOutI|
+          |list_PwClefvtI|)))
     (set! member
-      (lambda (|obj_Lv-UISnhE| |list_LvkRGjohE|)
-        (|memn_Lvcx3UihE|
+      (lambda (|obj_PwYhcIvtI| |list_Pwiea9wtI|)
+        (|memn_PwaWyJqtI|
           equal?
-          |obj_Lv-UISnhE|
-          |list_LvkRGjohE|)))))
+          |obj_PwYhcIvtI|
+          |list_Pwiea9wtI|)))))
 (define cadr (compose2 car cdr))
 (define cdar (compose2 cdr car))
 (define cddr (compose2 cdr cdr))
@@ -182,92 +194,92 @@
 (define cdddar (compose2 cdr cddar))
 (define cddddr (compose2 cdr cdddr))
 (define append2
-  (lambda (|ls1_LvKrsurhE| |ls2_Lv4oqXrhE|)
-    (if (null? |ls1_LvKrsurhE|)
-      |ls2_Lv4oqXrhE|
-      (cons (car |ls1_LvKrsurhE|)
-            (append2 (cdr |ls1_LvKrsurhE|) |ls2_Lv4oqXrhE|)))))
+  (lambda (|ls1_PwIQXjztI| |ls2_Pw2NVMztI|)
+    (if (null? |ls1_PwIQXjztI|)
+      |ls2_Pw2NVMztI|
+      (cons (car |ls1_PwIQXjztI|)
+            (append2 (cdr |ls1_PwIQXjztI|) |ls2_Pw2NVMztI|)))))
 (define append append2)
 (define list->string
-  (lambda (|l_LvqkooshE|)
-    (letrec ((|l2s_LvMgmRshE|
-               (lambda (|l_Lv6dkithE| |s_Lvs9iLthE| |n_LvO5gcuhE|)
-                 (if (null? |l_Lv6dkithE|)
-                   |s_Lvs9iLthE|
+  (lambda (|l_PwoJTdAtI|)
+    (letrec ((|l2s_PwKFRGAtI|
+               (lambda (|l_Pw4CP7BtI| |s_PwqyNABtI| |n_PwMuL1CtI|)
+                 (if (null? |l_Pw4CP7BtI|)
+                   |s_PwqyNABtI|
                    (begin
                      (string-set!
-                       |s_Lvs9iLthE|
-                       |n_LvO5gcuhE|
-                       (car |l_Lv6dkithE|))
-                     (|l2s_LvMgmRshE|
-                       (cdr |l_Lv6dkithE|)
-                       |s_Lvs9iLthE|
-                       (+ |n_LvO5gcuhE| '1)))))))
-      (|l2s_LvMgmRshE|
-        |l_LvqkooshE|
-        (make-string (length |l_LvqkooshE|))
+                       |s_PwqyNABtI|
+                       |n_PwMuL1CtI|
+                       (car |l_Pw4CP7BtI|))
+                     (|l2s_PwKFRGAtI|
+                       (cdr |l_Pw4CP7BtI|)
+                       |s_PwqyNABtI|
+                       (+ |n_PwMuL1CtI| '1)))))))
+      (|l2s_PwKFRGAtI|
+        |l_PwoJTdAtI|
+        (make-string (length |l_PwoJTdAtI|))
         '0))))
 (define string->list
-  (letrec ((|s2l_Lv82eFuhE|
-             (lambda (|s_LvQW9zvhE| |h_LvaT70whE| |n_LvwP5twhE|)
-               (if (< |n_LvwP5twhE| '0)
-                 |h_LvaT70whE|
-                 (|s2l_Lv82eFuhE|
-                   |s_LvQW9zvhE|
-                   (cons (string-ref |s_LvQW9zvhE| |n_LvwP5twhE|)
-                         |h_LvaT70whE|)
-                   (- |n_LvwP5twhE| '1))))))
-    (lambda (|s_Lvu-b6vhE|)
-      (|s2l_Lv82eFuhE|
-        |s_Lvu-b6vhE|
+  (letrec ((|s2l_Pw6rJuCtI|
+             (lambda (|s_PwOjFoDtI| |h_Pw8gDRDtI| |n_PwucBiEtI|)
+               (if (< |n_PwucBiEtI| '0)
+                 |h_Pw8gDRDtI|
+                 (|s2l_Pw6rJuCtI|
+                   |s_PwOjFoDtI|
+                   (cons (string-ref |s_PwOjFoDtI| |n_PwucBiEtI|)
+                         |h_Pw8gDRDtI|)
+                   (- |n_PwucBiEtI| '1))))))
+    (lambda (|s_PwsnHXCtI|)
+      (|s2l_Pw6rJuCtI|
+        |s_PwsnHXCtI|
         '()
-        (- (string-length |s_Lvu-b6vhE|) '1)))))
+        (- (string-length |s_PwsnHXCtI|) '1)))))
 (define list->vector
-  (letrec ((|l2v_LvSL3WwhE|
-             (lambda (|l_LvyE_PxhE| |v_LvUAZgyhE| |n_LvexXJyhE|)
-               (if (null? |l_LvyE_PxhE|)
-                 |v_LvUAZgyhE|
+  (letrec ((|l2v_PwQ8zLEtI|
+             (lambda (|l_Pww1vFFtI| |v_PwSZs6GtI| |n_PwcWqzGtI|)
+               (if (null? |l_Pww1vFFtI|)
+                 |v_PwSZs6GtI|
                  (begin
                    (vector-set!
-                     |v_LvUAZgyhE|
-                     |n_LvexXJyhE|
-                     (car |l_LvyE_PxhE|))
-                   (|l2v_LvSL3WwhE|
-                     (cdr |l_LvyE_PxhE|)
-                     |v_LvUAZgyhE|
-                     (+ |n_LvexXJyhE| '1)))))))
-    (lambda (|l_LvcI1nxhE|)
-      (if (proper-list? |l_LvcI1nxhE|)
-        (|l2v_LvSL3WwhE|
-          |l_LvcI1nxhE|
-          (make-vector (length |l_LvcI1nxhE|))
+                     |v_PwSZs6GtI|
+                     |n_PwcWqzGtI|
+                     (car |l_Pww1vFFtI|))
+                   (|l2v_PwQ8zLEtI|
+                     (cdr |l_Pww1vFFtI|)
+                     |v_PwSZs6GtI|
+                     (+ |n_PwcWqzGtI| '1)))))))
+    (lambda (|l_Pwa5xcFtI|)
+      (if (proper-list? |l_Pwa5xcFtI|)
+        (|l2v_PwQ8zLEtI|
+          |l_Pwa5xcFtI|
+          (make-vector (length |l_Pwa5xcFtI|))
           '0)
         (error 'list->vector
                '"can only convert a proper list."
-               |l_LvcI1nxhE|)))))
+               |l_Pwa5xcFtI|)))))
 (define vector
-  (lambda |elems_LvAtVazhE|
-    (list->vector |elems_LvAtVazhE|)))
+  (lambda |elems_PwySo0HtI|
+    (list->vector |elems_PwySo0HtI|)))
 (define string
-  (lambda |elems_LvWpTDzhE|
-    (list->string |elems_LvWpTDzhE|)))
+  (lambda |elems_PwUOmtHtI|
+    (list->string |elems_PwUOmtHtI|)))
 (define detect-os
   (lambda ()
-    ((lambda (|osn_LvgmR4AhE|)
-       (if (> (string-length |osn_LvgmR4AhE|) '3)
-         (if (equal? (substring |osn_LvgmR4AhE| '0 '3) '"mac")
+    ((lambda (|osn_PweLkWHtI|)
+       (if (> (string-length |osn_PweLkWHtI|) '3)
+         (if (equal? (substring |osn_PweLkWHtI| '0 '3) '"mac")
            'macos
-           (if (equal? (substring |osn_LvgmR4AhE| '0 '3) '"win")
+           (if (equal? (substring |osn_PweLkWHtI| '0 '3) '"win")
              'ms-dos
-             (if (equal? (substring |osn_LvgmR4AhE| '0 '3) '"ms-")
+             (if (equal? (substring |osn_PweLkWHtI| '0 '3) '"ms-")
                'ms-dos
-               (if (equal? (substring |osn_LvgmR4AhE| '0 '3) '"uni")
+               (if (equal? (substring |osn_PweLkWHtI| '0 '3) '"uni")
                  'unix
-                 (if (equal? (substring |osn_LvgmR4AhE| '0 '3) '"lin")
+                 (if (equal? (substring |osn_PweLkWHtI| '0 '3) '"lin")
                    'unix
-                   (if (equal? (substring |osn_LvgmR4AhE| '0 '4) '"os/")
+                   (if (equal? (substring |osn_PweLkWHtI| '0 '4) '"os/")
                      'os2
-                     (if (equal? (substring |osn_LvgmR4AhE| '0 '3) '"vax")
+                     (if (equal? (substring |osn_PweLkWHtI| '0 '3) '"vax")
                        'vax
                        (void))))))))
          'unix))
@@ -275,402 +287,402 @@
        (getprop 'os.name '*environment-variables*)))))
 (define current-url (make-parameter '"file:."))
 (define current-directory
-  (lambda |rest_LvCiPxAhE|
-    (if (null? |rest_LvCiPxAhE|)
+  (lambda |rest_PwAHinItI|
+    (if (null? |rest_PwAHinItI|)
       (normalize-url (current-url) '".")
       (current-url
         (normalize-url
           (current-url)
-          ((lambda (|v_LvYeN-AhE|)
-             ((lambda (|l_LvibLrBhE|)
-                (if (eq? (string-ref |v_LvYeN-AhE| (- |l_LvibLrBhE| '1))
+          ((lambda (|v_PwWDgQItI|)
+             ((lambda (|l_PwgAehJtI|)
+                (if (eq? (string-ref |v_PwWDgQItI| (- |l_PwgAehJtI| '1))
                          '#\/)
-                  |v_LvYeN-AhE|
-                  (string-append |v_LvYeN-AhE| '"/")))
-              (string-length |v_LvYeN-AhE|)))
-           (car |rest_LvCiPxAhE|)))))))
+                  |v_PwWDgQItI|
+                  (string-append |v_PwWDgQItI| '"/")))
+              (string-length |v_PwWDgQItI|)))
+           (car |rest_PwAHinItI|)))))))
 (define load-expanded load)
-((lambda (|_load_LvE7JUBhE|)
-   ((lambda (|normalize_Lv-3HlChE|
-             |file-handler_Lvk0FOChE|
-             |file-extension_LvGYCfDhE|)
+((lambda (|_load_PwCwcKJtI|)
+   ((lambda (|normalize_PwYsabKtI|
+             |file-handler_Pwip8EKtI|
+             |file-extension_PwEl65LtI|)
       (begin
         (set! open-input-file
-          (|normalize_Lv-3HlChE| open-input-file))
+          (|normalize_PwYsabKtI| open-input-file))
         (set! open-source-input-file
-          (|normalize_Lv-3HlChE| open-source-input-file))
+          (|normalize_PwYsabKtI| open-source-input-file))
         (set! open-output-file
-          (|normalize_Lv-3HlChE| open-output-file))
+          (|normalize_PwYsabKtI| open-output-file))
         (set! load
-          (lambda (|file_Lv0VAIDhE|)
+          (lambda (|file_Pw-h4yLtI|)
             (begin
-              ((lambda (|previous-url_LvmRy9EhE|)
+              ((lambda (|previous-url_Pwke2_LtI|)
                  (begin
                    (current-url
                      (normalize-url
-                       |previous-url_LvmRy9EhE|
-                       |file_Lv0VAIDhE|))
+                       |previous-url_Pwke2_LtI|
+                       |file_Pw-h4yLtI|))
                    (with-failure-continuation
-                     (lambda (|m_LvINwCEhE| |e_Lv2Ku3FhE|)
+                     (lambda (|m_PwGa0sMtI| |e_Pw07-UMtI|)
                        (begin
-                         (current-url |previous-url_LvmRy9EhE|)
+                         (current-url |previous-url_Pwke2_LtI|)
                          (call-with-failure-continuation
-                           (lambda (|fk_LvoGswFhE|)
-                             (|fk_LvoGswFhE| |m_LvINwCEhE| |e_Lv2Ku3FhE|)))))
+                           (lambda (|fk_Pwm3YlNtI|)
+                             (|fk_Pwm3YlNtI| |m_PwGa0sMtI| |e_Pw07-UMtI|)))))
                      (lambda ()
-                       ((lambda (|fe_LvKCqZFhE|)
-                          ((|file-handler_Lvk0FOChE|
-                             (if |fe_LvKCqZFhE| |fe_LvKCqZFhE| '"scm"))
+                       ((lambda (|fe_PwI_VONtI|)
+                          ((|file-handler_Pwip8EKtI|
+                             (if |fe_PwI_VONtI| |fe_PwI_VONtI| '"scm"))
                            (current-url)))
-                        (|file-extension_LvGYCfDhE| (current-url)))))
-                   (current-url |previous-url_LvmRy9EhE|)))
+                        (|file-extension_PwEl65LtI| (current-url)))))
+                   (current-url |previous-url_Pwke2_LtI|)))
                (current-url))
               (void))))))
-    (lambda (|proc_Lv4zoqGhE|)
-      (lambda (|file_LvMrkkHhE| . |rest_LvqvmTGhE|)
-        (apply |proc_Lv4zoqGhE|
-               (normalize-url (current-url) |file_LvMrkkHhE|)
-               |rest_LvqvmTGhE|)))
-    (lambda (|extension_Lv6oiNHhE|)
-      ((lambda (|t_LvskgeIhE|)
-         (if (memv |t_LvskgeIhE| '(sce pp))
+    (lambda (|proc_Pw2YTfOtI|)
+      (lambda (|file_PwKQP9PtI| . |rest_PwoURIOtI|)
+        (apply |proc_Pw2YTfOtI|
+               (normalize-url (current-url) |file_PwKQP9PtI|)
+               |rest_PwoURIOtI|)))
+    (lambda (|extension_Pw4NNCPtI|)
+      ((lambda (|t_PwqJL3QtI|)
+         (if (memv |t_PwqJL3QtI| '(sce pp))
            load-expanded
-           (if (memv |t_LvskgeIhE| '(sll))
+           (if (memv |t_PwqJL3QtI| '(sll))
              (with-failure-continuation
-               (lambda (|m_LvOgeHIhE| |e_Lv8dc8JhE|)
-                 (lambda (|name_Lvu9aBJhE|)
+               (lambda (|m_PwMFJwQtI| |e_Pw6CHZQtI|)
+                 (lambda (|name_PwsyFqRtI|)
                    (error 'load
                           '"shared libraries not supported in this build.")))
                (lambda ()
                  (eval '(lambda (name)
                           (import compiled-libraries)
                           (link-library (open-library name))))))
-             |_load_LvE7JUBhE|)))
+             |_load_PwCwcKJtI|)))
        (string->symbol
-         (string-downcase |extension_Lv6oiNHhE|))))
-    (lambda (|url_LvQ582KhE|)
-      ((letrec ((|loop_Lva26vKhE|
-                  (lambda (|x_Lvw-3YKhE| |acc_LvSW1pLhE|)
-                    (if (null? |x_Lvw-3YKhE|)
+         (string-downcase |extension_Pw4NNCPtI|))))
+    (lambda (|url_PwOuDTRtI|)
+      ((letrec ((|loop_Pw8rBkStI|
+                  (lambda (|x_PwunzNStI| |acc_PwQjxeTtI|)
+                    (if (null? |x_PwunzNStI|)
                       '#f
-                      (if (equal? (car |x_Lvw-3YKhE|) '#\.)
-                        (list->string |acc_LvSW1pLhE|)
-                        (|loop_Lva26vKhE|
-                          (cdr |x_Lvw-3YKhE|)
-                          (cons (car |x_Lvw-3YKhE|) |acc_LvSW1pLhE|)))))))
-         |loop_Lva26vKhE|)
-       (reverse (string->list |url_LvQ582KhE|))
+                      (if (equal? (car |x_PwunzNStI|) '#\.)
+                        (list->string |acc_PwQjxeTtI|)
+                        (|loop_Pw8rBkStI|
+                          (cdr |x_PwunzNStI|)
+                          (cons (car |x_PwunzNStI|) |acc_PwQjxeTtI|)))))))
+         |loop_Pw8rBkStI|)
+       (reverse (string->list |url_PwOuDTRtI|))
        '()))))
  load)
 (define load-module
-  (lambda (|str_LvcT_RLhE|)
-    ((lambda (|nl_LvyPZiMhE|)
-       ((lambda (|binding-names_LvULXLMhE|)
+  (lambda (|str_PwagvHTtI|)
+    ((lambda (|nl_Pwwct8UtI|)
+       ((lambda (|binding-names_PwS8rBUtI|)
           (for-each
-            (lambda (|name_LveIVcNhE|)
+            (lambda (|name_Pwc5p2VtI|)
               (putprop
-                |name_LveIVcNhE|
+                |name_Pwc5p2VtI|
                 '*toplevel*
                 (native-library-binding
-                  |nl_LvyPZiMhE|
-                  |name_LveIVcNhE|)))
-            |binding-names_LvULXLMhE|))
-        (native-library-binding-names |nl_LvyPZiMhE|)))
-     (load-native-library |str_LvcT_RLhE|))))
+                  |nl_Pwwct8UtI|
+                  |name_Pwc5p2VtI|)))
+            |binding-names_PwS8rBUtI|))
+        (native-library-binding-names |nl_Pwwct8UtI|)))
+     (load-native-library |str_PwagvHTtI|))))
 (define append
-  (letrec ((|real-append_LvAETFNhE|
-             (lambda (|ls1_LvCtN0PhE| . |lses_LvgxPzOhE|)
-               (if (null? |lses_LvgxPzOhE|)
-                 |ls1_LvCtN0PhE|
-                 (if (null? |ls1_LvCtN0PhE|)
-                   (apply |real-append_LvAETFNhE| |lses_LvgxPzOhE|)
-                   (apply |real-append_LvAETFNhE|
+  (letrec ((|real-append_Pwy1nvVtI|
+             (lambda (|ls1_PwASgSWtI| . |lses_PweWipWtI|)
+               (if (null? |lses_PweWipWtI|)
+                 |ls1_PwASgSWtI|
+                 (if (null? |ls1_PwASgSWtI|)
+                   (apply |real-append_Pwy1nvVtI| |lses_PweWipWtI|)
+                   (apply |real-append_Pwy1nvVtI|
                           (cons (append2
-                                  |ls1_LvCtN0PhE|
-                                  (car |lses_LvgxPzOhE|))
-                                (cdr |lses_LvgxPzOhE|))))))))
-    (lambda |lses_LvWAR6OhE|
-      (if (null? |lses_LvWAR6OhE|)
+                                  |ls1_PwASgSWtI|
+                                  (car |lses_PweWipWtI|))
+                                (cdr |lses_PweWipWtI|))))))))
+    (lambda |lses_PwUZkYVtI|
+      (if (null? |lses_PwUZkYVtI|)
         '()
-        (if (null? (cdr |lses_LvWAR6OhE|))
-          (car |lses_LvWAR6OhE|)
-          (apply |real-append_LvAETFNhE|
-                 (cons (car |lses_LvWAR6OhE|)
-                       (cdr |lses_LvWAR6OhE|))))))))
+        (if (null? (cdr |lses_PwUZkYVtI|))
+          (car |lses_PwUZkYVtI|)
+          (apply |real-append_Pwy1nvVtI|
+                 (cons (car |lses_PwUZkYVtI|)
+                       (cdr |lses_PwUZkYVtI|))))))))
 (define proper-list?
-  (lambda (|x_LvYpLtPhE|)
-    ((letrec ((|lp_LvimJWPhE|
-                (lambda (|x_LvEiHnQhE| |lag_Lv-eFQQhE|)
-                  (if (pair? |x_LvEiHnQhE|)
-                    ((lambda (|x_LvkbDhRhE|)
-                       (if (pair? |x_LvkbDhRhE|)
-                         ((lambda (|x_LvG7BKRhE| |lag_Lv04zbShE|)
-                            (if (eq? |x_LvG7BKRhE| |lag_Lv04zbShE|)
+  (lambda (|x_PwWOejXtI|)
+    ((letrec ((|lp_PwgLcMXtI|
+                (lambda (|x_PwCHadYtI| |lag_PwYD8GYtI|)
+                  (if (pair? |x_PwCHadYtI|)
+                    ((lambda (|x_PwiA67ZtI|)
+                       (if (pair? |x_PwiA67ZtI|)
+                         ((lambda (|x_PwEw4AZtI| |lag_Pw-s21-tI|)
+                            (if (eq? |x_PwEw4AZtI| |lag_Pw-s21-tI|)
                               '#f
-                              (|lp_LvimJWPhE| |x_LvG7BKRhE| |lag_Lv04zbShE|)))
-                          (cdr |x_LvkbDhRhE|)
-                          (cdr |lag_Lv-eFQQhE|))
-                         (null? |x_LvkbDhRhE|)))
-                     (cdr |x_LvEiHnQhE|))
-                    (null? |x_LvEiHnQhE|)))))
-       |lp_LvimJWPhE|)
-     |x_LvYpLtPhE|
-     |x_LvYpLtPhE|)))
+                              (|lp_PwgLcMXtI| |x_PwEw4AZtI| |lag_Pw-s21-tI|)))
+                          (cdr |x_PwiA67ZtI|)
+                          (cdr |lag_PwYD8GYtI|))
+                         (null? |x_PwiA67ZtI|)))
+                     (cdr |x_PwCHadYtI|))
+                    (null? |x_PwCHadYtI|)))))
+       |lp_PwgLcMXtI|)
+     |x_PwWOejXtI|
+     |x_PwWOejXtI|)))
 (define list? proper-list?)
 (define expt
-  (letrec ((|general-expt_Lvm0xEShE|
-             (lambda (|base_LvKNosUhE| |exponent_Lv4KmVUhE|)
-               (exp (* |exponent_Lv4KmVUhE| (log |base_LvKNosUhE|)))))
-           (|integer-expt_LvIYu5ThE|
-             (lambda (|base_LvqGkmVhE| |exponent_LvMCiPVhE|)
-               (if (negative? |exponent_LvMCiPVhE|)
-                 (/ (|integer-expt_LvIYu5ThE|
-                      |base_LvqGkmVhE|
-                      (abs |exponent_LvMCiPVhE|)))
-                 (if (if (exact? |base_LvqGkmVhE|)
-                       (= |base_LvqGkmVhE| '2)
+  (letrec ((|general-expt_Pwkp0u-tI|
+             (lambda (|base_PwIaUh0uI| |exponent_Pw27SK0uI|)
+               (exp (* |exponent_Pw27SK0uI| (log |base_PwIaUh0uI|)))))
+           (|integer-expt_PwGl-W-tI|
+             (lambda (|base_Pwo3Qb1uI| |exponent_PwK_NE1uI|)
+               (if (negative? |exponent_PwK_NE1uI|)
+                 (/ (|integer-expt_PwGl-W-tI|
+                      |base_Pwo3Qb1uI|
+                      (abs |exponent_PwK_NE1uI|)))
+                 (if (if (exact? |base_Pwo3Qb1uI|)
+                       (= |base_Pwo3Qb1uI| '2)
                        '#f)
-                   (ashl '1 |exponent_LvMCiPVhE|)
-                   ((letrec ((|loop_Lv6zggWhE|
-                               (lambda (|rest_LvsveJWhE|
-                                        |result_LvOrcaXhE|
-                                        |squaring_Lv8oaDXhE|)
-                                 (if (zero? |rest_LvsveJWhE|)
-                                   |result_LvOrcaXhE|
-                                   (|loop_Lv6zggWhE|
-                                     (quotient |rest_LvsveJWhE| '2)
-                                     (if (odd? |rest_LvsveJWhE|)
-                                       (* |result_LvOrcaXhE|
-                                          |squaring_Lv8oaDXhE|)
-                                       |result_LvOrcaXhE|)
-                                     (* |squaring_Lv8oaDXhE|
-                                        |squaring_Lv8oaDXhE|))))))
-                      |loop_Lv6zggWhE|)
-                    |exponent_LvMCiPVhE|
+                   (ashl '1 |exponent_PwK_NE1uI|)
+                   ((letrec ((|loop_Pw4YL52uI|
+                               (lambda (|rest_PwqUJy2uI|
+                                        |result_PwMQH_2uI|
+                                        |squaring_Pw6NFs3uI|)
+                                 (if (zero? |rest_PwqUJy2uI|)
+                                   |result_PwMQH_2uI|
+                                   (|loop_Pw4YL52uI|
+                                     (quotient |rest_PwqUJy2uI| '2)
+                                     (if (odd? |rest_PwqUJy2uI|)
+                                       (* |result_PwMQH_2uI|
+                                          |squaring_Pw6NFs3uI|)
+                                       |result_PwMQH_2uI|)
+                                     (* |squaring_Pw6NFs3uI|
+                                        |squaring_Pw6NFs3uI|))))))
+                      |loop_Pw4YL52uI|)
+                    |exponent_PwK_NE1uI|
                     '1
-                    |base_LvqGkmVhE|))))))
-    (lambda (|base_Lv2VsyThE| |exponent_LvoRq_ThE|)
-      (if (zero? |exponent_LvoRq_ThE|)
-        (if (exact? |exponent_LvoRq_ThE|) '1 '1.0)
-        (if (zero? |base_Lv2VsyThE|)
-          (if (exact? |exponent_LvoRq_ThE|)
-            |base_Lv2VsyThE|
+                    |base_Pwo3Qb1uI|))))))
+    (lambda (|base_Pw0iYn_tI| |exponent_PwmeWQ_tI|)
+      (if (zero? |exponent_PwmeWQ_tI|)
+        (if (exact? |exponent_PwmeWQ_tI|) '1 '1.0)
+        (if (zero? |base_Pw0iYn_tI|)
+          (if (exact? |exponent_PwmeWQ_tI|)
+            |base_Pw0iYn_tI|
             '0.0)
-          (if (if (exact? |exponent_LvoRq_ThE|)
-                (integer? |exponent_LvoRq_ThE|)
+          (if (if (exact? |exponent_PwmeWQ_tI|)
+                (integer? |exponent_PwmeWQ_tI|)
                 '#f)
-            (|integer-expt_LvIYu5ThE|
-              |base_Lv2VsyThE|
-              |exponent_LvoRq_ThE|)
-            (|general-expt_Lvm0xEShE|
-              |base_Lv2VsyThE|
-              |exponent_LvoRq_ThE|)))))))
+            (|integer-expt_PwGl-W-tI|
+              |base_Pw0iYn_tI|
+              |exponent_PwmeWQ_tI|)
+            (|general-expt_Pwkp0u-tI|
+              |base_Pw0iYn_tI|
+              |exponent_PwmeWQ_tI|)))))))
 (define modpow
-  (lambda (|x_Lvuk84YhE| |y_LvQg6xYhE| |n_Lvad4-YhE|)
-    (if (= |y_LvQg6xYhE| '1)
-      (modulo |x_Lvuk84YhE| |n_Lvad4-YhE|)
-      (if (even? |y_LvQg6xYhE|)
-        ((lambda (|tmp_Lvc2-k-hE|)
+  (lambda (|x_PwsJDV3uI| |y_PwOFBm4uI| |n_Pw8CzP4uI|)
+    (if (= |y_PwOFBm4uI| '1)
+      (modulo |x_PwsJDV3uI| |n_Pw8CzP4uI|)
+      (if (even? |y_PwOFBm4uI|)
+        ((lambda (|tmp_Pwarta6uI|)
            (modulo
-             (* |tmp_Lvc2-k-hE| |tmp_Lvc2-k-hE|)
-             |n_Lvad4-YhE|))
+             (* |tmp_Pwarta6uI| |tmp_Pwarta6uI|)
+             |n_Pw8CzP4uI|))
          (modpow
-           |x_Lvuk84YhE|
-           (/ |y_LvQg6xYhE| '2)
-           |n_Lvad4-YhE|))
-        ((lambda (|tmp_LvS50UZhE|)
+           |x_PwsJDV3uI|
+           (/ |y_PwOFBm4uI| '2)
+           |n_Pw8CzP4uI|))
+        ((lambda (|tmp_PwQuvJ5uI|)
            (begin
-             (set! |tmp_LvS50UZhE|
+             (set! |tmp_PwQuvJ5uI|
                (modulo
-                 (* |tmp_LvS50UZhE| |tmp_LvS50UZhE|)
-                 |n_Lvad4-YhE|))
+                 (* |tmp_PwQuvJ5uI| |tmp_PwQuvJ5uI|)
+                 |n_Pw8CzP4uI|))
              (modulo
-               (* |x_Lvuk84YhE| |tmp_LvS50UZhE|)
-               |n_Lvad4-YhE|)))
+               (* |x_PwsJDV3uI| |tmp_PwQuvJ5uI|)
+               |n_Pw8CzP4uI|)))
          (modpow
-           |x_Lvuk84YhE|
-           (/ (- |y_LvQg6xYhE| '1) '2)
-           |n_Lvad4-YhE|))))))
+           |x_PwsJDV3uI|
+           (/ (- |y_PwOFBm4uI| '1) '2)
+           |n_Pw8CzP4uI|))))))
 (define integer?
-  ((lambda (|oldint?_Lvy-XN-hE|)
-     (lambda (|n_LvUWVe_hE|)
-       ((lambda (|t_LveTTH_hE|)
-          (if |t_LveTTH_hE|
-            |t_LveTTH_hE|
-            (if (real? |n_LvUWVe_hE|)
-              (= (round |n_LvUWVe_hE|) |n_LvUWVe_hE|)
+  ((lambda (|oldint?_PwwnrD6uI|)
+     (lambda (|n_PwSjp47uI|)
+       ((lambda (|t_Pwcgnx7uI|)
+          (if |t_Pwcgnx7uI|
+            |t_Pwcgnx7uI|
+            (if (real? |n_PwSjp47uI|)
+              (= (round |n_PwSjp47uI|) |n_PwSjp47uI|)
               '#f)))
-        (|oldint?_Lvy-XN-hE| |n_LvUWVe_hE|))))
+        (|oldint?_PwwnrD6uI| |n_PwSjp47uI|))))
    integer?))
 (define real?
-  ((lambda (|oldcomp?_LvAPR80iE|)
-     (lambda (|n_LvWLPB0iE|)
-       (if (number? |n_LvWLPB0iE|)
-         (if (|oldcomp?_LvAPR80iE| |n_LvWLPB0iE|) '#f '#t)
+  ((lambda (|oldcomp?_Pwycl-7uI|)
+     (lambda (|n_PwU8jr8uI|)
+       (if (number? |n_PwU8jr8uI|)
+         (if (|oldcomp?_Pwycl-7uI| |n_PwU8jr8uI|) '#f '#t)
          '#f)))
    complex?))
 (define rational? real?)
 (define complex? number?)
 (define abs
-  (lambda (|num_LvgIN21iE|)
-    (if (real? |num_LvgIN21iE|)
-      (if (< |num_LvgIN21iE| '0)
-        (- |num_LvgIN21iE|)
-        |num_LvgIN21iE|)
-      ((lambda (|a_LvCELv1iE| |b_LvYAJY1iE|)
-         (sqrt (+ (* |a_LvCELv1iE| |a_LvCELv1iE|)
-                  (* |b_LvYAJY1iE| |b_LvYAJY1iE|))))
-       (real-part |num_LvgIN21iE|)
-       (imag-part |num_LvgIN21iE|)))))
+  (lambda (|num_Pwe5hU8uI|)
+    (if (real? |num_Pwe5hU8uI|)
+      (if (< |num_Pwe5hU8uI| '0)
+        (- |num_Pwe5hU8uI|)
+        |num_Pwe5hU8uI|)
+      ((lambda (|a_PwA1fl9uI| |b_PwWZcO9uI|)
+         (sqrt (+ (* |a_PwA1fl9uI| |a_PwA1fl9uI|)
+                  (* |b_PwWZcO9uI| |b_PwWZcO9uI|))))
+       (real-part |num_Pwe5hU8uI|)
+       (imag-part |num_Pwe5hU8uI|)))))
 (define min (void))
 (define max (void))
-(letrec ((|_min_max_LvixHp2iE|
-           (lambda (|proc_Lv0fxG4iE|
-                    |mv_Lvmbv75iE|
-                    |args_LvI7tA5iE|
-                    |inexact_Lv24r16iE|)
-             (if (null? |args_LvI7tA5iE|)
-               (if (if |inexact_Lv24r16iE|
-                     (exact? |mv_Lvmbv75iE|)
+(letrec ((|_min_max_PwgWafauI|
+           (lambda (|proc_Pw-D0wcuI|
+                    |mv_PwkA-YcuI|
+                    |args_PwGwYpduI|
+                    |inexact_Pw0tWSduI|)
+             (if (null? |args_PwGwYpduI|)
+               (if (if |inexact_Pw0tWSduI|
+                     (exact? |mv_PwkA-YcuI|)
                      '#f)
-                 (exact->inexact |mv_Lvmbv75iE|)
-                 |mv_Lvmbv75iE|)
-               (if (|proc_Lv0fxG4iE|
-                     (car |args_LvI7tA5iE|)
-                     |mv_Lvmbv75iE|)
-                 (|_min_max_LvixHp2iE|
-                   |proc_Lv0fxG4iE|
-                   (car |args_LvI7tA5iE|)
-                   (cdr |args_LvI7tA5iE|)
-                   ((lambda (|t_Lvo0pu6iE|)
-                      (if |t_Lvo0pu6iE|
-                        |t_Lvo0pu6iE|
-                        (inexact? (car |args_LvI7tA5iE|))))
-                    |inexact_Lv24r16iE|))
-                 (|_min_max_LvixHp2iE|
-                   |proc_Lv0fxG4iE|
-                   |mv_Lvmbv75iE|
-                   (cdr |args_LvI7tA5iE|)
-                   |inexact_Lv24r16iE|))))))
+                 (exact->inexact |mv_PwkA-YcuI|)
+                 |mv_PwkA-YcuI|)
+               (if (|proc_Pw-D0wcuI|
+                     (car |args_PwGwYpduI|)
+                     |mv_PwkA-YcuI|)
+                 (|_min_max_PwgWafauI|
+                   |proc_Pw-D0wcuI|
+                   (car |args_PwGwYpduI|)
+                   (cdr |args_PwGwYpduI|)
+                   ((lambda (|t_PwmpUjeuI|)
+                      (if |t_PwmpUjeuI|
+                        |t_PwmpUjeuI|
+                        (inexact? (car |args_PwGwYpduI|))))
+                    |inexact_Pw0tWSduI|))
+                 (|_min_max_PwgWafauI|
+                   |proc_Pw-D0wcuI|
+                   |mv_PwkA-YcuI|
+                   (cdr |args_PwGwYpduI|)
+                   |inexact_Pw0tWSduI|))))))
   (begin
     (set! min
-      (lambda (|x1_Lv-pDj3iE| . |args_LvEtFS2iE|)
-        (if (null? |args_LvEtFS2iE|)
-          |x1_Lv-pDj3iE|
-          (|_min_max_LvixHp2iE|
+      (lambda (|x1_PwYO69buI| . |args_PwCS8IauI|)
+        (if (null? |args_PwCS8IauI|)
+          |x1_PwYO69buI|
+          (|_min_max_PwgWafauI|
             <
-            |x1_Lv-pDj3iE|
-            |args_LvEtFS2iE|
-            (inexact? |x1_Lv-pDj3iE|)))))
+            |x1_PwYO69buI|
+            |args_PwCS8IauI|
+            (inexact? |x1_PwYO69buI|)))))
     (set! max
-      (lambda (|x1_LvGizd4iE| . |args_LvkmBM3iE|)
-        (if (null? |args_LvkmBM3iE|)
-          |x1_LvGizd4iE|
-          (|_min_max_LvixHp2iE|
+      (lambda (|x1_PwEH23cuI| . |args_PwiL4CbuI|)
+        (if (null? |args_PwiL4CbuI|)
+          |x1_PwEH23cuI|
+          (|_min_max_PwgWafauI|
             >
-            |x1_LvGizd4iE|
-            |args_LvkmBM3iE|
-            (inexact? |x1_LvGizd4iE|)))))))
+            |x1_PwEH23cuI|
+            |args_PwiL4CbuI|
+            (inexact? |x1_PwEH23cuI|)))))))
 (define negative?
-  (lambda (|n_LvKYmX6iE|) (< |n_LvKYmX6iE| '0)))
+  (lambda (|n_PwIlSMeuI|) (< |n_PwIlSMeuI| '0)))
 (define positive?
-  (lambda (|n_Lv4Vko7iE|) (> |n_Lv4Vko7iE| '0)))
+  (lambda (|n_Pw2iQdfuI|) (> |n_Pw2iQdfuI| '0)))
 (define even?
-  (lambda (|n_LvqRiR7iE|)
-    (= '0 (modulo |n_LvqRiR7iE| '2))))
+  (lambda (|n_PwoeOGfuI|)
+    (= '0 (modulo |n_PwoeOGfuI| '2))))
 (define odd?
-  (lambda (|n_LvMNgi8iE|)
-    (if (even? |n_LvMNgi8iE|) '#f '#t)))
+  (lambda (|n_PwKaM7guI|)
+    (if (even? |n_PwKaM7guI|) '#f '#t)))
 (define zero?
-  (lambda (|n_Lv6KeL8iE|) (= |n_Lv6KeL8iE| '0)))
+  (lambda (|n_Pw47KAguI|) (= |n_Pw47KAguI| '0)))
 (define add1
-  (lambda (|n_LvsGcc9iE|) (+ |n_LvsGcc9iE| '1)))
+  (lambda (|n_Pwq3I1huI|) (+ |n_Pwq3I1huI| '1)))
 (define sub1
-  (lambda (|n_LvOCaF9iE|) (- |n_LvOCaF9iE| '1)))
+  (lambda (|n_PwM_FuhuI|) (- |n_PwM_FuhuI| '1)))
 (define >= (void))
 (define <= (void))
-((lambda (|_comp_help_Lv8z86aiE| |_and2_Lvuv6zaiE|)
+((lambda (|_comp_help_Pw6YDXhuI| |_and2_PwsUBoiuI|)
    (begin
      (set! <=
-       (|_comp_help_Lv8z86aiE|
-         (lambda (|a_LvQr40biE| |b_Lvao2tbiE|)
-           ((lambda (|t_Lvwk0WbiE|)
-              (if |t_Lvwk0WbiE|
-                |t_Lvwk0WbiE|
-                (= |a_LvQr40biE| |b_Lvao2tbiE|)))
-            (< |a_LvQr40biE| |b_Lvao2tbiE|)))
-         |_and2_Lvuv6zaiE|
+       (|_comp_help_Pw6YDXhuI|
+         (lambda (|a_PwOQzRiuI| |b_Pw8NxijuI|)
+           ((lambda (|t_PwuJvLjuI|)
+              (if |t_PwuJvLjuI|
+                |t_PwuJvLjuI|
+                (= |a_PwOQzRiuI| |b_Pw8NxijuI|)))
+            (< |a_PwOQzRiuI| |b_Pw8NxijuI|)))
+         |_and2_PwsUBoiuI|
          '#t))
      (set! >=
-       (|_comp_help_Lv8z86aiE|
-         (lambda (|a_LvSg-mciE| |b_LvcdYPciE|)
-           ((lambda (|t_Lvy9WgdiE|)
-              (if |t_Lvy9WgdiE|
-                |t_Lvy9WgdiE|
-                (= |a_LvSg-mciE| |b_LvcdYPciE|)))
-            (> |a_LvSg-mciE| |b_LvcdYPciE|)))
-         |_and2_Lvuv6zaiE|
+       (|_comp_help_Pw6YDXhuI|
+         (lambda (|a_PwQFtckuI| |b_PwaCrFkuI|)
+           ((lambda (|t_Pwwyp6luI|)
+              (if |t_Pwwyp6luI|
+                |t_Pwwyp6luI|
+                (= |a_PwQFtckuI| |b_PwaCrFkuI|)))
+            (> |a_PwQFtckuI| |b_PwaCrFkuI|)))
+         |_and2_PwsUBoiuI|
          '#t))))
- (lambda (|comparator_LvU5UJdiE|
-          |chainer_Lve2SaeiE|
-          |endstate_LvA-PDeiE|)
-   (lambda |args_LvWWN4fiE|
-     ((letrec ((|loop_LvgTLxfiE|
-                 (lambda (|x_LvCPJ-fiE|)
-                   (if (null? |x_LvCPJ-fiE|)
-                     |endstate_LvA-PDeiE|
-                     (if (null? (cdr |x_LvCPJ-fiE|))
-                       |endstate_LvA-PDeiE|
-                       (|chainer_Lve2SaeiE|
-                         (|comparator_LvU5UJdiE|
-                           (car |x_LvCPJ-fiE|)
-                           (cadr |x_LvCPJ-fiE|))
-                         (|loop_LvgTLxfiE| (cdr |x_LvCPJ-fiE|))))))))
-        |loop_LvgTLxfiE|)
-      |args_LvWWN4fiE|)))
- (lambda (|x_LvYLHrgiE| |y_LviIFUgiE|)
-   (if |x_LvYLHrgiE| |y_LviIFUgiE| '#f)))
-((lambda (|_?=_LvEEDlhiE|)
+ (lambda (|comparator_PwSunzluI|
+          |chainer_Pwcrl0muI|
+          |endstate_PwynjtmuI|)
+   (lambda |args_PwUjhWmuI|
+     ((letrec ((|loop_PwegfnnuI|
+                 (lambda (|x_PwAcdQnuI|)
+                   (if (null? |x_PwAcdQnuI|)
+                     |endstate_PwynjtmuI|
+                     (if (null? (cdr |x_PwAcdQnuI|))
+                       |endstate_PwynjtmuI|
+                       (|chainer_Pwcrl0muI|
+                         (|comparator_PwSunzluI|
+                           (car |x_PwAcdQnuI|)
+                           (cadr |x_PwAcdQnuI|))
+                         (|loop_PwegfnnuI| (cdr |x_PwAcdQnuI|))))))))
+        |loop_PwegfnnuI|)
+      |args_PwUjhWmuI|)))
+ (lambda (|x_PwW8bhouI| |y_Pwg59KouI|)
+   (if |x_PwW8bhouI| |y_Pwg59KouI| '#f)))
+((lambda (|_?=_PwC17bpuI|)
    (begin
-     (set! >= (|_?=_LvEEDlhiE| > >=))
-     (set! <= (|_?=_LvEEDlhiE| < <=))))
- (lambda (|comparator_Lv-ABOhiE| |chainer_LvkxzfiiE|)
-   (lambda |args_LvGtxIiiE|
-     ((lambda (|t_Lv0qv9jiE|)
-        (if |t_Lv0qv9jiE|
-          |t_Lv0qv9jiE|
-          ((lambda (|t_LvmmtCjiE|)
-             (if |t_LvmmtCjiE|
-               |t_LvmmtCjiE|
-               (if ((lambda (|t_LvIir3kiE|)
-                      (if |t_LvIir3kiE|
-                        |t_LvIir3kiE|
-                        (|comparator_Lv-ABOhiE|
-                          (car |args_LvGtxIiiE|)
-                          (cadr |args_LvGtxIiiE|))))
-                    (= (car |args_LvGtxIiiE|)
-                       (cadr |args_LvGtxIiiE|)))
-                 (apply |chainer_LvkxzfiiE|
-                        (cdr |args_LvGtxIiiE|))
+     (set! >= (|_?=_PwC17bpuI| > >=))
+     (set! <= (|_?=_PwC17bpuI| < <=))))
+ (lambda (|comparator_PwYZ4EpuI| |chainer_PwiW25quI|)
+   (lambda |args_PwES0yquI|
+     ((lambda (|t_Pw-O--quI|)
+        (if |t_Pw-O--quI|
+          |t_Pw-O--quI|
+          ((lambda (|t_PwkLYrruI|)
+             (if |t_PwkLYrruI|
+               |t_PwkLYrruI|
+               (if ((lambda (|t_PwGHWUruI|)
+                      (if |t_PwGHWUruI|
+                        |t_PwGHWUruI|
+                        (|comparator_PwYZ4EpuI|
+                          (car |args_PwES0yquI|)
+                          (cadr |args_PwES0yquI|))))
+                    (= (car |args_PwES0yquI|)
+                       (cadr |args_PwES0yquI|)))
+                 (apply |chainer_PwiW25quI|
+                        (cdr |args_PwES0yquI|))
                  '#f)))
-           (null? (cdr |args_LvGtxIiiE|)))))
-      (null? |args_LvGtxIiiE|)))))
+           (null? (cdr |args_PwES0yquI|)))))
+      (null? |args_PwES0yquI|)))))
 (define gcd
-  (lambda |args_Lv2fpwkiE|
-    (if (null? |args_Lv2fpwkiE|)
+  (lambda |args_Pw0EUlsuI|
+    (if (null? |args_Pw0EUlsuI|)
       '0
-      (if (null? (cdr |args_Lv2fpwkiE|))
-        (car |args_Lv2fpwkiE|)
-        (_gcd (car |args_Lv2fpwkiE|)
-              (cadr |args_Lv2fpwkiE|))))))
+      (if (null? (cdr |args_Pw0EUlsuI|))
+        (car |args_Pw0EUlsuI|)
+        (_gcd (car |args_Pw0EUlsuI|)
+              (cadr |args_Pw0EUlsuI|))))))
 (define lcm
-  (lambda |args_LvobnZkiE|
-    (if (null? |args_LvobnZkiE|)
+  (lambda |args_PwmASOsuI|
+    (if (null? |args_PwmASOsuI|)
       '1
-      (if (null? (cdr |args_LvobnZkiE|))
-        (car |args_LvobnZkiE|)
-        (_lcm (car |args_LvobnZkiE|)
-              (cadr |args_LvobnZkiE|))))))
+      (if (null? (cdr |args_PwmASOsuI|))
+        (car |args_PwmASOsuI|)
+        (_lcm (car |args_PwmASOsuI|)
+              (cadr |args_PwmASOsuI|))))))
 (max-precision '1500)
 (define pi-10 (string->number '"3.1415926536"))
 (define pi-70
@@ -689,303 +701,303 @@
     '"2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274274663919320030599218174135966290435729003342952605956307381323286279434907632338298807531952510190115738341879307021540891499348841675092447614606680822648001684774118537423454424371075390777449920695517027618386062613313845830007520449338265602976067371132007093287091274437470472306969772093101416928368190255151086574637721112523897844250569536967707854499699679468644549059879316368892300987931277361782154249992295763514822082698951936680331825288693984964651058209392398294887933203625094431173012381970684161403970198376793206832823764648042953118023287825098194558153017567173613320698112509961818815930416903515988885193458072738667385894228792284998920868058257492796104841984443634632449684875602336248270419786232090021609902353043699418491463140934317381436405462531520961836908887070167683964243781405927145635490613031072085103837505101157477041718986106873969655212671546889570350354"))
 (define e e-10)
 (define modulo
-  (lambda (|x_LvK7lqliE| |y_Lv44jTliE|)
-    ((lambda (|r_Lvq0hkmiE|)
-       (if (if (negative? |y_Lv44jTliE|)
-             (positive? |r_Lvq0hkmiE|)
-             (negative? |r_Lvq0hkmiE|))
-         (+ |r_Lvq0hkmiE| |y_Lv44jTliE|)
-         |r_Lvq0hkmiE|))
-     (remainder |x_LvK7lqliE| |y_Lv44jTliE|))))
+  (lambda (|x_PwIwQftuI| |y_Pw2tOItuI|)
+    ((lambda (|r_PwopM9uuI|)
+       (if (if (negative? |y_Pw2tOItuI|)
+             (positive? |r_PwopM9uuI|)
+             (negative? |r_PwopM9uuI|))
+         (+ |r_PwopM9uuI| |y_Pw2tOItuI|)
+         |r_PwopM9uuI|))
+     (remainder |x_PwIwQftuI| |y_Pw2tOItuI|))))
 (max-precision '32)
 (define string-append
-  (lambda |args_LvMYeNmiE|
-    (if (null? |args_LvMYeNmiE|)
+  (lambda |args_PwKlKCuuI|
+    (if (null? |args_PwKlKCuuI|)
       '""
-      (if (null? (cdr |args_LvMYeNmiE|))
-        (car |args_LvMYeNmiE|)
+      (if (null? (cdr |args_PwKlKCuuI|))
+        (car |args_PwKlKCuuI|)
         (apply string-append
                (_string-append
-                 (car |args_LvMYeNmiE|)
-                 (cadr |args_LvMYeNmiE|))
-               (cddr |args_LvMYeNmiE|))))))
+                 (car |args_PwKlKCuuI|)
+                 (cadr |args_PwKlKCuuI|))
+               (cddr |args_PwKlKCuuI|))))))
 (define char-downcase
-  ((lambda (|a_Lv6VceniE|)
-     ((lambda (|z_LvsRaHniE|)
-        ((lambda (|lc-offset_LvON88oiE|)
-           (lambda (|c_Lv8K6BoiE|)
-             ((lambda (|cv_LvuG42piE|)
-                (if (if (>= |cv_LvuG42piE| |a_Lv6VceniE|)
-                      (<= |cv_LvuG42piE| |z_LvsRaHniE|)
+  ((lambda (|a_Pw4iI3vuI|)
+     ((lambda (|z_PwqeGwvuI|)
+        ((lambda (|lc-offset_PwMaEZvuI|)
+           (lambda (|c_Pw67CqwuI|)
+             ((lambda (|cv_Pws3ATwuI|)
+                (if (if (>= |cv_Pws3ATwuI| |a_Pw4iI3vuI|)
+                      (<= |cv_Pws3ATwuI| |z_PwqeGwvuI|)
                       '#f)
                   (integer->char
-                    (+ |cv_LvuG42piE| |lc-offset_LvON88oiE|))
-                  |c_Lv8K6BoiE|))
-              (char->integer |c_Lv8K6BoiE|))))
-         (- (char->integer '#\a) |a_Lv6VceniE|)))
+                    (+ |cv_Pws3ATwuI| |lc-offset_PwMaEZvuI|))
+                  |c_Pw67CqwuI|))
+              (char->integer |c_Pw67CqwuI|))))
+         (- (char->integer '#\a) |a_Pw4iI3vuI|)))
       (char->integer '#\Z)))
    (char->integer '#\A)))
 (define char-upcase
-  ((lambda (|a_LvQC2vpiE|)
-     ((lambda (|z_Lvaz0YpiE|)
-        ((lambda (|uc-offset_Lvwv-oqiE|)
-           (lambda (|c_LvSrYRqiE|)
-             ((lambda (|cv_LvcoWiriE|)
-                (if (if (>= |cv_LvcoWiriE| |a_LvQC2vpiE|)
-                      (<= |cv_LvcoWiriE| |z_Lvaz0YpiE|)
+  ((lambda (|a_PwO_xkxuI|)
+     ((lambda (|z_Pw8YvNxuI|)
+        ((lambda (|uc-offset_PwuUteyuI|)
+           (lambda (|c_PwQQrHyuI|)
+             ((lambda (|cv_PwaNp8zuI|)
+                (if (if (>= |cv_PwaNp8zuI| |a_PwO_xkxuI|)
+                      (<= |cv_PwaNp8zuI| |z_Pw8YvNxuI|)
                       '#f)
                   (integer->char
-                    (- |cv_LvcoWiriE| |uc-offset_Lvwv-oqiE|))
-                  |c_LvSrYRqiE|))
-              (char->integer |c_LvSrYRqiE|))))
-         (- |a_LvQC2vpiE| (char->integer '#\A))))
+                    (- |cv_PwaNp8zuI| |uc-offset_PwuUteyuI|))
+                  |c_PwQQrHyuI|))
+              (char->integer |c_PwQQrHyuI|))))
+         (- |a_PwO_xkxuI| (char->integer '#\A))))
       (char->integer '#\z)))
    (char->integer '#\a)))
 (define char>?
-  (lambda (|c1_LvykULriE| |c2_LvUgScsiE|)
-    (> (char->integer |c1_LvykULriE|)
-       (char->integer |c2_LvUgScsiE|))))
+  (lambda (|c1_PwwJnBzuI| |c2_PwSFl2AuI|)
+    (> (char->integer |c1_PwwJnBzuI|)
+       (char->integer |c2_PwSFl2AuI|))))
 (define char<?
-  (lambda (|c1_LvedQFsiE| |c2_LvA9O6tiE|)
-    (< (char->integer |c1_LvedQFsiE|)
-       (char->integer |c2_LvA9O6tiE|))))
+  (lambda (|c1_PwcCjvAuI| |c2_PwyyhYAuI|)
+    (< (char->integer |c1_PwcCjvAuI|)
+       (char->integer |c2_PwyyhYAuI|))))
 (define char=? eq?)
 (define char>=?
-  (lambda (|c1_LvW5MztiE| |c2_Lvg2K0uiE|)
-    ((lambda (|t_LvC-HtuiE|)
-       (if |t_LvC-HtuiE|
-         |t_LvC-HtuiE|
-         (char=? |c1_LvW5MztiE| |c2_Lvg2K0uiE|)))
-     (char>? |c1_LvW5MztiE| |c2_Lvg2K0uiE|))))
+  (lambda (|c1_PwUufpBuI| |c2_PwerdSBuI|)
+    ((lambda (|t_PwAnbjCuI|)
+       (if |t_PwAnbjCuI|
+         |t_PwAnbjCuI|
+         (char=? |c1_PwUufpBuI| |c2_PwerdSBuI|)))
+     (char>? |c1_PwUufpBuI| |c2_PwerdSBuI|))))
 (define char<=?
-  (lambda (|c1_LvYWFWuiE| |c2_LviTDnviE|)
-    ((lambda (|t_LvEPBQviE|)
-       (if |t_LvEPBQviE|
-         |t_LvEPBQviE|
-         (char=? |c1_LvYWFWuiE| |c2_LviTDnviE|)))
-     (char<? |c1_LvYWFWuiE| |c2_LviTDnviE|))))
+  (lambda (|c1_PwWj9MCuI| |c2_Pwgg7dDuI|)
+    ((lambda (|t_PwCc5GDuI|)
+       (if |t_PwCc5GDuI|
+         |t_PwCc5GDuI|
+         (char=? |c1_PwWj9MCuI| |c2_Pwgg7dDuI|)))
+     (char<? |c1_PwWj9MCuI| |c2_Pwgg7dDuI|))))
 (define char-ci>?
-  (lambda (|c1_Lv-LzhwiE| |c2_LvkIxKwiE|)
+  (lambda (|c1_PwY837EuI| |c2_Pwi51AEuI|)
     (char>?
-      (char-downcase |c1_Lv-LzhwiE|)
-      (char-downcase |c2_LvkIxKwiE|))))
+      (char-downcase |c1_PwY837EuI|)
+      (char-downcase |c2_Pwi51AEuI|))))
 (define char-ci<?
-  (lambda (|c1_LvGEvbxiE| |c2_Lv0BtExiE|)
+  (lambda (|c1_PwE1_0FuI| |c2_Pw-ZYtFuI|)
     (char<?
-      (char-downcase |c1_LvGEvbxiE|)
-      (char-downcase |c2_Lv0BtExiE|))))
+      (char-downcase |c1_PwE1_0FuI|)
+      (char-downcase |c2_Pw-ZYtFuI|))))
 (define char-ci=?
-  (lambda (|c1_Lvmxr5yiE| |c2_LvItpyyiE|)
+  (lambda (|c1_PwkWWWFuI| |c2_PwGSUnGuI|)
     (char=?
-      (char-downcase |c1_Lvmxr5yiE|)
-      (char-downcase |c2_LvItpyyiE|))))
+      (char-downcase |c1_PwkWWWFuI|)
+      (char-downcase |c2_PwGSUnGuI|))))
 (define char-ci>=?
-  (lambda (|c1_Lv2qn_yiE| |c2_LvomlsziE|)
-    ((lambda (|t_LvKijVziE|)
-       (if |t_LvKijVziE|
-         |t_LvKijVziE|
-         (char-ci=? |c1_Lv2qn_yiE| |c2_LvomlsziE|)))
-     (char-ci>? |c1_Lv2qn_yiE| |c2_LvomlsziE|))))
+  (lambda (|c1_Pw0PSQGuI| |c2_PwmLQhHuI|)
+    ((lambda (|t_PwIHOKHuI|)
+       (if |t_PwIHOKHuI|
+         |t_PwIHOKHuI|
+         (char-ci=? |c1_Pw0PSQGuI| |c2_PwmLQhHuI|)))
+     (char-ci>? |c1_Pw0PSQGuI| |c2_PwmLQhHuI|))))
 (define char-ci<=?
-  (lambda (|c1_Lv4fhmAiE| |c2_LvqbfPAiE|)
-    ((lambda (|t_LvM7dgBiE|)
-       (if |t_LvM7dgBiE|
-         |t_LvM7dgBiE|
-         (char-ci=? |c1_Lv4fhmAiE| |c2_LvqbfPAiE|)))
-     (char-ci<? |c1_Lv4fhmAiE| |c2_LvqbfPAiE|))))
+  (lambda (|c1_Pw2EMbIuI| |c2_PwoAKEIuI|)
+    ((lambda (|t_PwKwI5JuI|)
+       (if |t_PwKwI5JuI|
+         |t_PwKwI5JuI|
+         (char-ci=? |c1_Pw2EMbIuI| |c2_PwoAKEIuI|)))
+     (char-ci<? |c1_Pw2EMbIuI| |c2_PwoAKEIuI|))))
 (define char-alphabetic?
-  (lambda (|c_Lv64bJBiE|)
-    (if (char-ci>=? |c_Lv64bJBiE| '#\a)
-      (char-ci<=? |c_Lv64bJBiE| '#\z)
+  (lambda (|c_Pw4tGyJuI|)
+    (if (char-ci>=? |c_Pw4tGyJuI| '#\a)
+      (char-ci<=? |c_Pw4tGyJuI| '#\z)
       '#f)))
 (define char-numeric?
-  (lambda (|c_Lvs09aCiE|)
-    (if (char-ci>=? |c_Lvs09aCiE| '#\0)
-      (char-ci<=? |c_Lvs09aCiE| '#\9)
+  (lambda (|c_PwqpE_JuI|)
+    (if (char-ci>=? |c_PwqpE_JuI| '#\0)
+      (char-ci<=? |c_PwqpE_JuI| '#\9)
       '#f)))
 (define char-whitespace?
-  (lambda (|c_LvOY6DCiE|)
-    (if (memq |c_LvOY6DCiE| '(#\space #\tab #\newline))
+  (lambda (|c_PwMlCsKuI|)
+    (if (memq |c_PwMlCsKuI| '(#\space #\tab #\newline))
       '#t
       '#f)))
 (define char-upper-case?
-  (lambda (|c_Lv8V44DiE|)
-    (if (char-alphabetic? |c_Lv8V44DiE|)
-      (char<? |c_Lv8V44DiE| '#\a)
+  (lambda (|c_Pw6iAVKuI|)
+    (if (char-alphabetic? |c_Pw6iAVKuI|)
+      (char<? |c_Pw6iAVKuI| '#\a)
       '#f)))
 (define char-lower-case?
-  (lambda (|c_LvuR2xDiE|)
-    (if (char-alphabetic? |c_LvuR2xDiE|)
-      (char>? |c_LvuR2xDiE| '#\Z)
+  (lambda (|c_PwseymLuI|)
+    (if (char-alphabetic? |c_PwseymLuI|)
+      (char>? |c_PwseymLuI| '#\Z)
       '#f)))
 (define string-downcase (void))
 (define string-upcase (void))
-(letrec ((|string-map_LvQN0-DiE|
-           (lambda (|strsrc_LvyvSeGiE|
-                    |strdst_LvUrQHGiE|
-                    |proc_LveoO8HiE|
-                    |n_LvAkMBHiE|
-                    |l_LvWgK2IiE|)
-             (if (< |n_LvAkMBHiE| |l_LvWgK2IiE|)
+(letrec ((|string-map_PwOawPLuI|
+           (lambda (|strsrc_PwwUl4OuI|
+                    |strdst_PwSQjxOuI|
+                    |proc_PwcNh-OuI|
+                    |n_PwyJfrPuI|
+                    |l_PwUFdUPuI|)
+             (if (< |n_PwyJfrPuI| |l_PwUFdUPuI|)
                (begin
                  (string-set!
-                   |strdst_LvUrQHGiE|
-                   |n_LvAkMBHiE|
-                   (|proc_LveoO8HiE|
-                     (string-ref |strsrc_LvyvSeGiE| |n_LvAkMBHiE|)))
-                 (|string-map_LvQN0-DiE|
-                   |strsrc_LvyvSeGiE|
-                   |strdst_LvUrQHGiE|
-                   |proc_LveoO8HiE|
-                   (+ |n_LvAkMBHiE| '1)
-                   |l_LvWgK2IiE|))
-               |strdst_LvUrQHGiE|))))
+                   |strdst_PwSQjxOuI|
+                   |n_PwyJfrPuI|
+                   (|proc_PwcNh-OuI|
+                     (string-ref |strsrc_PwwUl4OuI| |n_PwyJfrPuI|)))
+                 (|string-map_PwOawPLuI|
+                   |strsrc_PwwUl4OuI|
+                   |strdst_PwSQjxOuI|
+                   |proc_PwcNh-OuI|
+                   (+ |n_PwyJfrPuI| '1)
+                   |l_PwUFdUPuI|))
+               |strdst_PwSQjxOuI|))))
   (begin
     (set! string-downcase
-      (lambda (|str_LvaK-qEiE|)
-        ((lambda (|newstr_LvwGYTEiE|)
-           (|string-map_LvQN0-DiE|
-             |str_LvaK-qEiE|
-             |newstr_LvwGYTEiE|
+      (lambda (|str_Pw87ugMuI|)
+        ((lambda (|newstr_Pwu3sJMuI|)
+           (|string-map_PwOawPLuI|
+             |str_Pw87ugMuI|
+             |newstr_Pwu3sJMuI|
              char-downcase
              '0
-             (string-length |str_LvaK-qEiE|)))
-         (make-string (string-length |str_LvaK-qEiE|)))))
+             (string-length |str_Pw87ugMuI|)))
+         (make-string (string-length |str_Pw87ugMuI|)))))
     (set! string-upcase
-      (lambda (|str_LvSCWkFiE|)
-        ((lambda (|newstr_LvczUNFiE|)
-           (|string-map_LvQN0-DiE|
-             |str_LvSCWkFiE|
-             |newstr_LvczUNFiE|
+      (lambda (|str_PwQ_paNuI|)
+        ((lambda (|newstr_PwaYnDNuI|)
+           (|string-map_PwOawPLuI|
+             |str_PwQ_paNuI|
+             |newstr_PwaYnDNuI|
              char-upcase
              '0
-             (string-length |str_LvSCWkFiE|)))
-         (make-string (string-length |str_LvSCWkFiE|)))))))
+             (string-length |str_PwQ_paNuI|)))
+         (make-string (string-length |str_PwQ_paNuI|)))))))
 (define string=? equal?)
 (define string<?
-  (letrec ((|s<?_LvgdIvIiE|
-             (lambda (|s1_Lvi2CSJiE| |s2_LvE-zjKiE|)
-               (if (null? |s1_Lvi2CSJiE|)
-                 (if (null? |s2_LvE-zjKiE|) '#f '#t)
-                 (if (null? |s2_LvE-zjKiE|)
+  (letrec ((|s<?_PweCblQuI|
+             (lambda (|s1_Pwgr5IRuI| |s2_PwCn39SuI|)
+               (if (null? |s1_Pwgr5IRuI|)
+                 (if (null? |s2_PwCn39SuI|) '#f '#t)
+                 (if (null? |s2_PwCn39SuI|)
                    '#f
-                   ((lambda (|c1_Lv-WxMKiE| |c2_LvkTvdLiE|)
-                      (if (char<? |c1_Lv-WxMKiE| |c2_LvkTvdLiE|)
+                   ((lambda (|c1_PwYj1CSuI| |c2_Pwig_2TuI|)
+                      (if (char<? |c1_PwYj1CSuI| |c2_Pwig_2TuI|)
                         '#t
-                        (if (char>? |c1_Lv-WxMKiE| |c2_LvkTvdLiE|)
+                        (if (char>? |c1_PwYj1CSuI| |c2_Pwig_2TuI|)
                           '#f
-                          (|s<?_LvgdIvIiE|
-                            (cdr |s1_Lvi2CSJiE|)
-                            (cdr |s2_LvE-zjKiE|)))))
-                    (car |s1_Lvi2CSJiE|)
-                    (car |s2_LvE-zjKiE|)))))))
-    (lambda (|s1_LvC9GYIiE| |s2_LvY5EpJiE|)
-      (|s<?_LvgdIvIiE|
-        (string->list |s1_LvC9GYIiE|)
-        (string->list |s2_LvY5EpJiE|)))))
+                          (|s<?_PweCblQuI|
+                            (cdr |s1_Pwgr5IRuI|)
+                            (cdr |s2_PwCn39SuI|)))))
+                    (car |s1_Pwgr5IRuI|)
+                    (car |s2_PwCn39SuI|)))))))
+    (lambda (|s1_PwAy9OQuI| |s2_PwWu7fRuI|)
+      (|s<?_PweCblQuI|
+        (string->list |s1_PwAy9OQuI|)
+        (string->list |s2_PwWu7fRuI|)))))
 (define string>?
-  (letrec ((|s>?_LvGPtGLiE|
-             (lambda (|s1_LvIEn1NiE| |s2_Lv2BluNiE|)
-               (if (null? |s2_Lv2BluNiE|)
-                 (if (null? |s1_LvIEn1NiE|) '#f '#t)
-                 (if (null? |s1_LvIEn1NiE|)
+  (letrec ((|s>?_PwEcZvTuI|
+             (lambda (|s1_PwG1TSUuI| |s2_Pw0-QjVuI|)
+               (if (null? |s2_Pw0-QjVuI|)
+                 (if (null? |s1_PwG1TSUuI|) '#f '#t)
+                 (if (null? |s1_PwG1TSUuI|)
                    '#f
-                   ((lambda (|c1_LvoxjXNiE| |c2_LvKthoOiE|)
-                      (if (char>? |c1_LvoxjXNiE| |c2_LvKthoOiE|)
+                   ((lambda (|c1_PwmWOMVuI| |c2_PwISMdWuI|)
+                      (if (char>? |c1_PwmWOMVuI| |c2_PwISMdWuI|)
                         '#t
-                        (if (char<? |c1_LvoxjXNiE| |c2_LvKthoOiE|)
+                        (if (char<? |c1_PwmWOMVuI| |c2_PwISMdWuI|)
                           '#f
-                          (|s>?_LvGPtGLiE|
-                            (cdr |s1_LvIEn1NiE|)
-                            (cdr |s2_Lv2BluNiE|)))))
-                    (car |s1_LvIEn1NiE|)
-                    (car |s2_Lv2BluNiE|)))))))
-    (lambda (|s1_Lv0Mr7MiE| |s2_LvmIpAMiE|)
-      (|s>?_LvGPtGLiE|
-        (string->list |s1_Lv0Mr7MiE|)
-        (string->list |s2_LvmIpAMiE|)))))
+                          (|s>?_PwEcZvTuI|
+                            (cdr |s1_PwG1TSUuI|)
+                            (cdr |s2_Pw0-QjVuI|)))))
+                    (car |s1_PwG1TSUuI|)
+                    (car |s2_Pw0-QjVuI|)))))))
+    (lambda (|s1_Pw-8XYTuI| |s2_Pwk5VpUuI|)
+      (|s>?_PwEcZvTuI|
+        (string->list |s1_Pw-8XYTuI|)
+        (string->list |s2_Pwk5VpUuI|)))))
 (define string<=?
-  (lambda (|s1_Lv4qfROiE| |s2_LvqmdiPiE|)
-    ((lambda (|t_LvMibLPiE|)
-       (if |t_LvMibLPiE|
-         |t_LvMibLPiE|
-         (string=? |s1_Lv4qfROiE| |s2_LvqmdiPiE|)))
-     (string<? |s1_Lv4qfROiE| |s2_LvqmdiPiE|))))
+  (lambda (|s1_Pw2PKGWuI| |s2_PwoLI7XuI|)
+    ((lambda (|t_PwKHGAXuI|)
+       (if |t_PwKHGAXuI|
+         |t_PwKHGAXuI|
+         (string=? |s1_Pw2PKGWuI| |s2_PwoLI7XuI|)))
+     (string<? |s1_Pw2PKGWuI| |s2_PwoLI7XuI|))))
 (define string>=?
-  (lambda (|s1_Lv6f9cQiE| |s2_Lvsb7FQiE|)
-    ((lambda (|t_LvO756RiE|)
-       (if |t_LvO756RiE|
-         |t_LvO756RiE|
-         (string=? |s1_Lv6f9cQiE| |s2_Lvsb7FQiE|)))
-     (string>? |s1_Lv6f9cQiE| |s2_Lvsb7FQiE|))))
+  (lambda (|s1_Pw4EE1YuI| |s2_PwqACuYuI|)
+    ((lambda (|t_PwMwAXYuI|)
+       (if |t_PwMwAXYuI|
+         |t_PwMwAXYuI|
+         (string=? |s1_Pw4EE1YuI| |s2_PwqACuYuI|)))
+     (string>? |s1_Pw4EE1YuI| |s2_PwqACuYuI|))))
 (define string-ci=?
-  (lambda (|s1_Lv843zRiE| |s2_Lvu010SiE|)
+  (lambda (|s1_Pw6tyoZuI| |s2_PwspwRZuI|)
     (string=?
-      (string-downcase |s1_Lv843zRiE|)
-      (string-downcase |s2_Lvu010SiE|))))
+      (string-downcase |s1_Pw6tyoZuI|)
+      (string-downcase |s2_PwspwRZuI|))))
 (define string-ci<?
-  (lambda (|s1_LvQY-sSiE| |s2_LvaVYVSiE|)
+  (lambda (|s1_PwOlui-uI| |s2_Pw8isL-uI|)
     (string<?
-      (string-downcase |s1_LvQY-sSiE|)
-      (string-downcase |s2_LvaVYVSiE|))))
+      (string-downcase |s1_PwOlui-uI|)
+      (string-downcase |s2_Pw8isL-uI|))))
 (define string-ci>?
-  (lambda (|s1_LvwRWmTiE| |s2_LvSNUPTiE|)
+  (lambda (|s1_Pwueqc_uI| |s2_PwQaoF_uI|)
     (string>?
-      (string-downcase |s1_LvwRWmTiE|)
-      (string-downcase |s2_LvSNUPTiE|))))
+      (string-downcase |s1_Pwueqc_uI|)
+      (string-downcase |s2_PwQaoF_uI|))))
 (define string-ci>=?
-  (lambda (|s1_LvcKSgUiE| |s2_LvyGQJUiE|)
+  (lambda (|s1_Pwa7m60vI| |s2_Pww3kz0vI|)
     (string>=?
-      (string-downcase |s1_LvcKSgUiE|)
-      (string-downcase |s2_LvyGQJUiE|))))
+      (string-downcase |s1_Pwa7m60vI|)
+      (string-downcase |s2_Pww3kz0vI|))))
 (define string-ci<=?
-  (lambda (|s1_LvUCOaViE| |s2_LvezMDViE|)
+  (lambda (|s1_PwS_h01vI| |s2_PwcYft1vI|)
     (string<=?
-      (string-downcase |s1_LvUCOaViE|)
-      (string-downcase |s2_LvezMDViE|))))
+      (string-downcase |s1_PwS_h01vI|)
+      (string-downcase |s2_PwcYft1vI|))))
 (define substring
-  (letrec ((|fill-string_LvAvK4WiE|
-             (lambda (|sstr_LvidAlYiE|
-                      |dstr_LvE9yOYiE|
-                      |n_Lv-5wfZiE|
-                      |s_Lvk2uIZiE|
-                      |e_LvG-r9-iE|)
-               (if (< |s_Lvk2uIZiE| |e_LvG-r9-iE|)
+  (letrec ((|fill-string_PwyUdW1vI|
+             (lambda (|sstr_PwgC3b4vI|
+                      |dstr_PwCy1E4vI|
+                      |n_PwYu_45vI|
+                      |s_PwirZx5vI|
+                      |e_PwEnX-5vI|)
+               (if (< |s_PwirZx5vI| |e_PwEnX-5vI|)
                  (begin
                    (string-set!
-                     |dstr_LvE9yOYiE|
-                     |n_Lv-5wfZiE|
-                     (string-ref |sstr_LvidAlYiE| |s_Lvk2uIZiE|))
-                   (|fill-string_LvAvK4WiE|
-                     |sstr_LvidAlYiE|
-                     |dstr_LvE9yOYiE|
-                     (+ |n_Lv-5wfZiE| '1)
-                     (+ |s_Lvk2uIZiE| '1)
-                     |e_LvG-r9-iE|))
+                     |dstr_PwCy1E4vI|
+                     |n_PwYu_45vI|
+                     (string-ref |sstr_PwgC3b4vI| |s_PwirZx5vI|))
+                   (|fill-string_PwyUdW1vI|
+                     |sstr_PwgC3b4vI|
+                     |dstr_PwCy1E4vI|
+                     (+ |n_PwYu_45vI| '1)
+                     (+ |s_PwirZx5vI| '1)
+                     |e_PwEnX-5vI|))
                  (void)))))
-    (lambda (|str_LvWrIxWiE|
-             |start_LvgoG-WiE|
-             |end_LvCkErXiE|)
-      ((lambda (|newstr_LvYgCUXiE|)
+    (lambda (|str_PwUQbn2vI|
+             |start_PweN9Q2vI|
+             |end_PwAJ7h3vI|)
+      ((lambda (|newstr_PwWF5K3vI|)
          (begin
-           (|fill-string_LvAvK4WiE|
-             |str_LvWrIxWiE|
-             |newstr_LvYgCUXiE|
+           (|fill-string_PwyUdW1vI|
+             |str_PwUQbn2vI|
+             |newstr_PwWF5K3vI|
              '0
-             |start_LvgoG-WiE|
-             |end_LvCkErXiE|)
-           |newstr_LvYgCUXiE|))
+             |start_PweN9Q2vI|
+             |end_PwAJ7h3vI|)
+           |newstr_PwWF5K3vI|))
        (make-string
-         (- |end_LvCkErXiE| |start_LvgoG-WiE|))))))
+         (- |end_PwAJ7h3vI| |start_PweN9Q2vI|))))))
 (define list-ref
-  (lambda (|list_Lv0XpC-iE| |n_LvmTn3_iE|)
-    (if (zero? |n_LvmTn3_iE|)
-      (car |list_Lv0XpC-iE|)
+  (lambda (|list_Pw-jVr6vI| |n_PwkgTU6vI|)
+    (if (zero? |n_PwkgTU6vI|)
+      (car |list_Pw-jVr6vI|)
       (list-ref
-        (cdr |list_Lv0XpC-iE|)
-        (- |n_LvmTn3_iE| '1)))))
+        (cdr |list_Pw-jVr6vI|)
+        (- |n_PwkgTU6vI| '1)))))
 (define values
-  (lambda |args_LvIPlw_iE|
+  (lambda |args_PwGcRl7vI|
     (call-with-current-continuation
-      (lambda (|k_Lv2MjZ_iE|)
-        (apply |k_Lv2MjZ_iE| |args_LvIPlw_iE|)))))
+      (lambda (|k_Pw09PO7vI|)
+        (apply |k_Pw09PO7vI| |args_PwGcRl7vI|)))))

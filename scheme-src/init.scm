@@ -40,8 +40,8 @@
       (error 'for-each "invalid number of arguments to procedure for-each.")
       (if (not (null? (car lists)))
           (begin
-            (apply proc (map car lists))
-            (apply for-each (cons proc (map cdr lists)))))))
+            (apply proc (map-car lists))
+            (apply for-each (cons proc (map-cdr lists)))))))
 
 (define (eof-object? x) (eq? x #!eof))
 ;;;;;;;;; Standard Scheme functions
@@ -65,6 +65,14 @@
      (lambda (ls)	
        (iter ls ()))))
 
+(define (map-car ls)
+  (if (null? ls) '()
+      (cons (caar ls) (map-car (cdr ls)))))
+
+(define (map-cdr ls)
+  (if (null? ls) '()
+      (cons (cdar ls) (map-cdr (cdr ls)))))
+  
 (define map
   (letrec ([map1 (lambda (proc list acc)
                    (if (null? list)
@@ -75,10 +83,10 @@
                    (if (null? list1)
                        (reverse c)
                        (loop proc (cdr list1)
-                             (map-cdar lists)
+                             (map-cdr lists)
                              (cons (apply proc
                                           (car list1)
-                                          (map-caar lists))
+                                          (map-car lists))
                                    c))))])
     (lambda (proc list1 . lists)
       (if (null? lists)

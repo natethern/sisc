@@ -74,8 +74,8 @@
 		(begin
 		  (set! mapf (lambda (first rest)
 			       (if (null? first) '#t
-				   (if (apply f (car first) (map car rest))
-				       (mapf (cdr first) (map cdr rest)) 
+				   (if (apply f (car first) (map-car rest))
+				       (mapf (cdr first) (map-cdr rest)) 
                                        '#f))))
 		  (mapf first rest))) '#f)))))
 
