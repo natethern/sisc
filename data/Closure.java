@@ -68,6 +68,10 @@ public class Closure extends Procedure {
         }
     }
 
+    public Value express() {
+	return new Pair(sym("closure"), list(truth(arity), Quantity.valueOf(fcount), body.express()));
+    }
+
     public Closure() {}
 
     public void deserialize(Serializer s, DataInput dis)

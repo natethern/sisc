@@ -66,8 +66,9 @@ public class LexicalEnvironment extends Value {
 	    }
         } else {
             vals=v;
-            if (vals.length!=s)
+            if (vals.length!=s) {
 		error(r, liMessage(SISCB,"notenoughargsto", c.write(), s, v.length));
+	    }
         }
     }
 

@@ -64,7 +64,10 @@ public class Interpreter extends Util {
 	    Values v=(Values)r.acc;
 	    throw new SchemeRuntimeException(v.values[0], 
 					     proc(v.values[1]), 
-					     proc(v.values[2]));
+					     v.values.length>2 ? 
+					     proc(v.values[2]) :
+					     //This really shouldn't ever happen, but it seems possible at the very top of stacks for some reason
+					     r.fk);
 	}
 
 	public Value express() {
@@ -152,7 +155,7 @@ public class Interpreter extends Util {
                     do {
                         while (nxp==null) 
 			    pop(stk);
-
+			
 			nxp.eval(this);
                     } while (true);
                 } catch (ContinuationException ce) {
@@ -350,19 +353,6 @@ public class Interpreter extends Util {
         deadValues[size] = null;
         return res;
     }
-
-    /*
-    protected void finalize() {
-        System.err.println(hit);
-        System.err.println(zerohit);
-        System.err.println(sizemiss);
-        System.err.println(miss);
-    }
-
-    static {
-        System.runFinalizersOnExit(true);
-    }
-    */
 
     public final void returnValues() {
         if (!lck) returnValues(vlr);

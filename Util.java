@@ -121,7 +121,7 @@ public abstract class Util implements Conf {
 	    error,
 	    new ApplyParentFrame(new CallFrame((r.nxp==null?r.lxp:r.nxp), r.vlr, 
 					       r.env, r.fk, r.stk).capture(r)),
-	    new CurriedFC(r.fk.fk)});
+	    r.fk.fk});
         throw new ContinuationException(r.fk);
     }
 

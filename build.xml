@@ -20,7 +20,7 @@
     <property name="jarname" value="sisc.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
     <property name="quantity-type" value="64float"/>
-    <property name="debugging" value="off"/>
+    <property name="debugging" value="on"/>
     <property name="optimization" value="on"/>
     <!-- <property name="releasecandidate" value="yes"/> -->
     <property name="dist" value="${basedir}/dist"/>

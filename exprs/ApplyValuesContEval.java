@@ -59,7 +59,7 @@ public class ApplyValuesContEval extends Expression {
     }
 
     public Value express() {
-        return list(sym("ApplyValuesContEval"));
+        return list(sym("ApplyValuesContEval"), consumer.express());
     }
 
     public void serialize(Serializer s, DataOutput dos) throws IOException {

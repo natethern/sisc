@@ -489,6 +489,7 @@ public class Primitives extends ModuleAdapter {
                     conn.setDoOutput(false);
                     p=new SourceInputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())), url.toString());
                 } catch (IOException e) {
+		    f.pop(before);
                     throwPrimException( "error opening " + url);
                 }
                 v=null;
@@ -505,6 +506,7 @@ public class Primitives extends ModuleAdapter {
                         try {
                             f.eval(v);
                         } catch (SchemeException se) {
+			    f.pop(before);
                             throwNestedPrimException(se);
                         }
                     }
@@ -737,7 +739,7 @@ public class Primitives extends ModuleAdapter {
                 return VOID;
             case CALLFC:
                 Procedure proc=proc(f.vlr[0]);
-                Procedure ehandler=proc(f.vlr[1]);
+                Procedure ehandler=new CurriedFC(proc(f.vlr[1]), f.fk);
                 f.fk=f.createFrame(new ApplyValuesContEval(ehandler),
                                    null, f.env, f.fk, f.stk);
                 f.returnValues();
