@@ -90,8 +90,7 @@ public class LibraryAE extends MemorySymEnv {
         if (base==null)
             return super.bindingKeys();
         else {
-            java.util.Set res = new HashSet();
-            res.addAll(super.bindingKeys());
+            java.util.Set res = super.bindingKeys();
             synchronized(symbolMap) {
                 res.addAll(addressMap.keySet());
             }
