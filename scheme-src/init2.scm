@@ -8,13 +8,13 @@
 (define *here* (list #f))
 (define original-cwcc
   call-with-current-continuation)
-;(define (call-with-current-continuation proc)
-;  (let ((here *here*))
-;    (original-cwcc
-;      (lambda (cont)
-;        (proc (lambda results
-;                (reroot! here)
-;                (apply cont results)))))))
+(define (call-with-current-continuation proc)
+  (let ((here *here*))
+    (original-cwcc
+      (lambda (cont)
+        (proc (lambda results
+                (reroot! here)
+                (apply cont results)))))))
 (define (dynamic-wind before during after)
   (let ((here *here*))
     (reroot! (cons (cons before after) here))
@@ -102,10 +102,3 @@
 (define (unquote-splicing x)
   (error 'unquote-splicing "expression ~s valid outside of a quasiquote."
 	 x))
-
-(define (for-each proc . lists)
-  (if (null? lists)
-      (error 'for-each "invalid number of arguments to procedure for-each")
-      (begin 
-	(apply proc (map car lists))
-	(apply for-each (cons proc (map cdr lists))))))

@@ -1,3 +1,13 @@
+(define for-each
+  (lambda (proc . lists)
+    (if (null? lists)
+      (error 'for-each
+             '"invalid number of arguments to procedure for-each")
+      (if (not (null? (car lists)))
+        (begin
+          (apply proc (map car lists))
+          (apply for-each (cons proc (map cdr lists))))
+        (void)))))
 (define eqv?
   (lambda (x y)
     ((lambda (t)
@@ -11,11 +21,6 @@
      (eq? x y))))
 (define not (lambda (x) (if x #f #t)))
 (define eof-object? (lambda (x) (eq? x #!eof)))
-(define for-each
-  (lambda (proc ls)
-    (if (null? ls)
-      (void)
-      (begin (proc (car ls)) (for-each proc (cdr ls))))))
 (define exit (lambda () '#!eof))
 (define newline
   (lambda port

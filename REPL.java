@@ -4,7 +4,7 @@ import sisc.compiler.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import java.io.*;
-import java.util.zip.GZIPInputStream;
+import java.util.zip.*;
 import java.util.*;
 
 public class REPL extends Thread {
@@ -17,7 +17,7 @@ public class REPL extends Thread {
 	r=new Interpreter(in, out);
 	r.setEvaluator("eval");
 	try {
-	    r.loadEnv(new BufferedInputStream(new GZIPInputStream(new FileInputStream(System.getProperty("HEAP","sisc.heap"))),65535));
+	    r.loadEnv(new BufferedInputStream(new InflaterInputStream(new FileInputStream(System.getProperty("HEAP","sisc.heap"))),65535));
 	} catch (IOException e) {
 	    System.err.println("Error loading heap!");
 	    e.printStackTrace();

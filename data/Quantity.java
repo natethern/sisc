@@ -1023,7 +1023,7 @@ public class Quantity extends Value {
 	case INTEG:
 	    return i.intValue();
 	case RATIO:
-	    return (i.divide(de).intValue());
+	    return i.divide(de).intValue();
 	}
 	return 0;
     }

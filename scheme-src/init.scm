@@ -1,17 +1,15 @@
 ;; SISC initialization file
 ;; Code from various sources, about 80% original.  If you notice
 ;; something you wrote, let me know.
-;;
-;; The quasiquote, and a few others, are from Darius Bacon <djello@well.com>
-;; (But then, he started with my PAIP code, and modified it.)
-;; - Peter Norvig
-;;;;
+;;;;;;
 
-(define for-each
-  (lambda (proc ls)
-     (if (null? ls) (void)
-         (begin (proc (car ls))
-                (for-each proc (cdr ls))))))
+(define (for-each proc . lists)
+  (if (null? lists)
+      (error 'for-each "invalid number of arguments to procedure for-each")
+      (if (not (null? (car lists)))
+          (begin
+            (apply proc (map car lists))
+            (apply for-each (cons proc (map cdr lists)))))))
 
 (define (exit) #!eof)
 

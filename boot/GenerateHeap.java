@@ -5,7 +5,7 @@ import sisc.data.*;
 import sisc.exprs.*;
 import sisc.*;
 import java.io.*;
-import java.util.zip.GZIPOutputStream;
+import java.util.zip.*;
 import java.util.*;
 
 public class GenerateHeap {
@@ -54,7 +54,7 @@ public class GenerateHeap {
 
 	try {
 	    BufferedOutputStream out=
-		new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(args[0])));
+		new BufferedOutputStream(new DeflaterOutputStream(new FileOutputStream(args[0]), new Deflater(Deflater.BEST_COMPRESSION)));
 	    r.saveEnv(out);
 	    out.flush();
 	    out.close();
@@ -65,8 +65,6 @@ public class GenerateHeap {
 
 	}
 	System.out.println("Heap saved.");
-	/*	for (int i=0; i<PrimitiveIds.LASTPRIM; i++) 
-		System.err.println(Primitives.primprof[i]+"\t"+i);*/
     }
 }
 
