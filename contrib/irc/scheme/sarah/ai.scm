@@ -73,13 +73,19 @@
 (define find-pattern 
   (let ()
     (define find-pattern-helper
-      (lambda (tokens graph n)
+      (lambda (tokens graph n first)
         (if (symbol? graph) 
             graph
             (let ([pattern (apply amb graph)])
-              (if (eq? (car pattern) (car tokens))
-                  (find-pattern-helper (cdr tokens) (cdr pattern) (+ n 1))
-                  (amb-fail))))))
+              (cond [(eq? (car pattern) (car tokens))
+                     (find-pattern-helper (cdr tokens) (cdr pattern) (+ n 1) 
+                                          #f)]
+                    [(and first (eq? (car pattern) '^)
+                          (eq? (cadr pattern) (car tokens)))
+                     (find-pattern-helper (cdr tokens) (cddr pattern)
+                                          (+ n 1)
+                                          #f)]
+                    [else (amb-fail)])))))
     (lambda (tokens)
       (initialize-amb-fail)
       (with/fc 
@@ -88,7 +94,7 @@
              'UNKNOWN
              (find-pattern (cdr tokens))))
        (lambda ()
-         (find-pattern-helper tokens pattern-graph 1))))))
+         (find-pattern-helper tokens pattern-graph 1 #t))))))
           
 (define (list-skip ls n)
   (if (zero? n) ls (list-skip (cdr ls) (- n 1))))
@@ -131,7 +137,7 @@
           [else (loop (+ x 1))])))
 
 (define pattern-graph
-  '((help . HELP)
+  '((^ help . HELP)
     (what . ((is . WHATIS)
              (time . WHATTIME)))
     (whats . WHATIS)
@@ -141,7 +147,7 @@
     (shut . ((up . QUIET)))
     (is . LEARN)
     (be . ((quiet . QUIET)))
-    (listen . ((up . LISTEN)))
+    (^ listen . ((up . LISTEN)))
     (evaluate . EVALUATE)
     (seen . SEEN)
     (tell . TELL)
@@ -149,7 +155,8 @@
     (join . JOIN)
     ))
 
-(define (help . args)
+(define (help from . args)
+  (send-messages (->jstring from)
    (string-append
     "Hello, I'm Sarah, a SISC Scheme Infobot.\n"
     "I respond to some natural language commands, such as:\n"
@@ -165,7 +172,8 @@
     "  (I'll tell you the last time I saw someone, and what they said last.)\n"
     "evaluate (some-scheme-expression)\n"
     "  (I'll run a simple program for you, but it must complete quickly!)\n"))
-
+  "")
+  
 
 (define (*-is type from channel message st)
   (let-values ([(ignoreables term) (string-split message " is ")])
@@ -408,4 +416,4 @@
     (LEARN . ,(if-spoken-to learn))
     (EVALUATE . ,(if-spoken-to evaluate))
     (TELL . ,(if-spoken-to tell))
-    (HELP . ,help)))
+    (HELP . ,(if-spoken-to help))))
