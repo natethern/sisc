@@ -1,8 +1,11 @@
 <project name="sisc" default="all">
-  <target name="init" depends="prepare">
-    <available classname="junit.framework.TestCase"
-               property="junit.present"/>
-  </target>
+
+  <path id="classpath">
+    <fileset dir="./lib">
+      <include name="*.jar"/>
+    </fileset>
+    <pathelement path=".."/>
+  </path>
 
   <target name="prepare">
     <property file="${basedir}/build.properties"/>    
@@ -10,10 +13,19 @@
     <property name="classdir" value="${basedir}/classes"/>
     <property name="docdir" value="${basedir}/doc/javadoc"/>
     <property name="schemedir" value="${basedir}/scheme-src"/>
+    <property name="modulesdir" value="${basedir}/modules"/>
     <property name="packagename" value="sisc"/>
     <property name="jarname" value="sisc.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
     <property name="quantity-type" value="apfloat"/>
+  </target>
+
+  <target name="init" depends="prepare">
+    <available classname="junit.framework.TestCase"
+               property="junit.present"/>
+    <available property="oro.present"
+	       classname="org.apache.oro.text.regex.Pattern"
+	       classpathref="classpath"/>
   </target>
 
   <target name="docs" depends="init"
@@ -33,11 +45,13 @@
     <mkdir dir="${classdir}"/>
     <javac srcdir="${srcdir}"
            destdir="${classdir}"
-           classpath=".."
+	   classpathref="classpath"
+	   debug="on"
            optimize="on">
       <include name="${packagename}/**"/>
       <exclude name="${packagename}/*/Quantity-*.java"/>
       <exclude name="${packagename}/tests/**" unless="junit.present"/>
+      <exclude name="${modulesdir}/Regexp.java" unless="oro.present"/>
     </javac>      
   </target>
   
