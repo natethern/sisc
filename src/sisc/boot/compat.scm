@@ -114,4 +114,4 @@
 ;;;;;;;;;;;;; Module loading
 
 (if (not (getprop 'LITE (get-symbolic-environment '*sisc*)))
-    (for-each load-module '("sisc.modules.SNative$Index")))
+    (for-each load-module '("sisc.modules.OptionalPrimitives$Index")))

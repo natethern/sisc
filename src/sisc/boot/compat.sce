@@ -289,4 +289,4 @@
     #!void
     (for-each
       load-module
-      (#%quote ("sisc.modules.SNative$Index")))))
+      (#%quote ("sisc.modules.OptionalPrimitives$Index")))))

@@ -101,11 +101,11 @@
                      (define def (native-library-binding
                                   *module* (quote def))) ...))))))))
 
-(native-module logicops   "sisc.modules.SLogicOps$Index")
-(native-module networking-native "sisc.modules.io.SNetwork$Index")
-(native-module debugging-native  "sisc.modules.SDebug$Index")
-(native-module threading-native  "sisc.modules.SThread$Index")
-(native-module types-native      "sisc.modules.STypes$Index")
+(native-module logicops   "sisc.modules.Logical$Index")
+(native-module networking-native "sisc.modules.io.Networking$Index")
+(native-module debugging-native  "sisc.modules.Debugging$Index")
+(native-module threading-native  "sisc.modules.Threads$Index")
+(native-module types-native      "sisc.modules.Types$Index")
 (native-module s2j-reflection    "sisc.modules.s2j.Reflection$Index")
 (native-module s2j-conversion    "sisc.modules.s2j.Conversion$Index")
 (native-module hashtable-native  "sisc.modules.hashtable.Primitives$Index")
