@@ -690,7 +690,7 @@
 	an error raised in that section as an instance of the
 	dynamic extent being exited.  In other words, if an error is
 	raised in the dynamic extent of a dynamic-wind expression,
-	&SISC will ensure that the <emphasis>after</emphasis> thunk
+	&SISC; will ensure that the <emphasis>after</emphasis> thunk
 	is evaluated before the error is propagated to the
 	failure-continuation of the dynamic-wind expression.
       </para>
