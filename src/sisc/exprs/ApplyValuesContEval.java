@@ -19,13 +19,14 @@ public class ApplyValuesContEval extends Expression {
         if (r.acc instanceof Values) {
             final Value[] vlr = ((Values)r.acc).values;
             final int len = vlr.length;
+            Value[] newvlr;
             if (len == 0) {
-                r.vlr = ZV;
+                newvlr = ZV;
             } else {
-                r.vlr = r.createValues(len);
-                System.arraycopy(vlr, 0, r.vlr, 0, len);
+                newvlr = r.createValues(len);
+                System.arraycopy(vlr, 0, newvlr, 0, len);
             }
-            r.vlk = false;
+            r.newVLR(newvlr);
         } else {
             r.newVLR(1);
             r.vlr[0]=r.acc;

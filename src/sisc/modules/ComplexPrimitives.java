@@ -122,28 +122,16 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                 return VOID;
             case CALLEC:
                 Value kproc=vlr[0];
-                r.replaceVLR(1);
-                r.vlr[0]=r.stk;
-                
-                r.saveVLR=true;
-                r.nxp = APPEVAL;
+                r.setupTailCall(r.stk);
                 return kproc;
             case CALLCC:
                 kproc=vlr[0];
-                r.replaceVLR(1);
-                r.vlr[0]=r.stk.capture(r);
-                
-                r.saveVLR=true;
-                r.nxp = APPEVAL;
+                r.setupTailCall(r.stk.capture(r));
                 return kproc;
             case CALLFC:
-                Procedure proc=proc(vlr[0]);
-                r.replaceVLR(1);
-                r.setVLR(0,r.fk.capture(r));
-
-                r.saveVLR=true;
-                r.nxp = APPEVAL;
-                return proc;
+                kproc=vlr[0];
+                r.setupTailCall(r.fk.capture(r));
+                return kproc;
             case CURRENTWIND:
                 r.dynenv.wind = vlr[0];
                 return VOID;
@@ -213,17 +201,13 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                 Procedure ehandler=proc(vlr[0]);
                 r.fk=r.createFrame(new ApplyValuesContEval(ehandler),
                                    null, false, r.lcl, r.env, r.fk, r.stk);
-                r.replaceVLR(0);
-                r.saveVLR=true;
-                r.nxp = APPEVAL;
+                r.setupTailCall(ZV);
                 return proc;
             case CALLWITHVALUES:
                 Procedure producer=proc(vlr[0]);
                 Procedure consumer=proc(vlr[1]);
                 r.push(new ApplyValuesContEval(consumer));
-                r.replaceVLR(0);
-                r.saveVLR=true;
-                r.nxp = APPEVAL;
+                r.setupTailCall(ZV);
                 return producer;
             case GETPROP:
                 Value ret = null;
@@ -313,10 +297,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             for (; args != EMPTYLIST; args = (Pair)args.cdr) {
                 newvlr[j++] = args.car;
             }
-            r.saveVLR=true;
-            r.nxp = APPEVAL;
-            r.vlk=false;
-            r.vlr=newvlr;
+            r.setupTailCall(newvlr);
             return proc;
         default:
             throwArgSizeException();

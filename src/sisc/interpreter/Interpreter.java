@@ -46,7 +46,8 @@ public class Interpreter extends Util {
     public DynamicEnvironment dynenv;
     
     //FLAGS
-    public boolean saveVLR;
+    private boolean saveVLR; //prevent recycling of VLR after procedure
+                             //invocation 
 
     //Interpreter specific temporaries
     public Value[][]               IAI=new Value[][] {new Value[1],
@@ -54,7 +55,7 @@ public class Interpreter extends Util {
                                                       new Value[3]};
 
     //ACCOUNTING REGISTERS
-    public boolean               vlk;      //vlk, when true, indicates the
+    private boolean              vlk;      //vlk, when true, indicates the
                                            //frame was captured.
     public Expression            lxp;      //Used for debugging
 
@@ -136,8 +137,12 @@ public class Interpreter extends Util {
     }
 
     public final void newVLR(int size) {
+        newVLR(createValues(size));
+    }
+    
+    public final void newVLR(Value[] vlr) {
         vlk=false;
-        vlr=createValues(size);
+        this.vlr=vlr;
     }
     
     public final void pop(CallFrame c) {
@@ -428,32 +433,36 @@ public class Interpreter extends Util {
      }
 
     public final void returnVLR() {
-        if (vlr != null) {
+        if (saveVLR) {
+            saveVLR = false;
+        } else {
             if (!vlk) 
                 returnValues(vlr);
             vlr=null;
         }
     }
 
-    public final void forceReturnVLR() {
-        if (vlr != null) {
-            returnValues(vlr);
+    public final void setupTailCall(Value vlr0) {
+        saveVLR = true;
+        nxp = APPEVAL;
+        if (vlk) {
+            newVLR(1);
+        } else {
+            if (vlr.length != 1) {
+                returnValues(vlr);
+                newVLR(1);
+            }
         }
+        vlr[0] = vlr0;
     }
 
-    public final void returnLCL() {
-        if (!(vlk || lcl==null)) {
-            returnValues(lcl);
-            lcl=null;
-        }
-    }
-
-    public final void replaceVLR(int size) {
+    public final void setupTailCall(Value[] newvlr) {
+        saveVLR = true;
+        nxp = APPEVAL;
         if (!vlk) {
-            if (vlr.length == size) return;
             returnValues(vlr);
         }
-        newVLR(size);
+        vlr = newvlr;
     }
 
     public final void returnValues(Value[] v) {

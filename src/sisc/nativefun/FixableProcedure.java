@@ -49,7 +49,6 @@ public abstract class FixableProcedure extends Procedure implements NamedValue {
         r.lxp = r.nxp;
         r.nxp = null;
         try {
-            r.saveVLR=r.vlk;
             switch(r.vlr.length) {
             case 0: r.acc=apply(); break;
             case 1: r.acc=apply(r.vlr[0]); break;
@@ -57,7 +56,7 @@ public abstract class FixableProcedure extends Procedure implements NamedValue {
             case 3: r.acc=apply(r.vlr[0],r.vlr[1],r.vlr[2]); break;
             default: r.acc=apply(r.vlr); break;
             }
-            if (!r.saveVLR) r.forceReturnVLR();
+            r.returnVLR();
         } catch (ClassCastException cc) {
             //cc.printStackTrace();
             error(r,
