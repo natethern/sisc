@@ -673,9 +673,8 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
         directly as executable programs.  The text of the SRFI, which
         can be found at 
         <ulink url="http://srfi.schemers.org/srfi-22/srfi-22.html">
-          
-          <citetitle>http://srfi.schemers.org</citetitle>
-        </ulink>, describes how such programs are written.  
+          <citetitle>http://srfi.schemers.org</citetitle></ulink>, 
+        describes how such programs are written.  
       </para>
     </sect2>
   </sect1>
