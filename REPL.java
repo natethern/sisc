@@ -43,64 +43,58 @@ import java.util.*;
 import java.net.*;
 
 public class REPL extends Thread {
-    public Interpreter r;
 
-    public REPL(Interpreter r) {
-        this.r = r;
+    public String appName;
+    public DynamicEnv dynenv;
+
+    public REPL(String appName, DynamicEnv dynenv) {
+        this.appName = appName;
+        this.dynenv = dynenv;
     }
     
     public static InputStream findHeap() {
-	try {
-	    String heapLocation=Util.getSystemProperty("HEAP", null);
-	    InputStream heap=null;
-	    if (heapLocation==null) {
-		URL heapURL=ClassLoader.getSystemResource("sisc.heap");
-		if (heapURL==null)
-		    heap=new FileInputStream("sisc.heap");
-		else 
-		    heap=heapURL.openStream();
-	    } else 
-		heap=new FileInputStream(heapLocation);
-	    heap=new BufferedInputStream(new GZIPInputStream(new BufferedInputStream(heap)), 65536);
-
-	    return heap;
-	} catch (Exception e) {
-	}
-	return null;
-    }
-
-    public static boolean initializeInterpreter(Interpreter r, String[] args) throws ClassNotFoundException {
-	InputStream heap=findHeap();
-	if (heap==null) {
-	    System.err.println(Util.liMessage(Util.SISCB, "noheap"));
-	    return false;
-	}
-	return initializeInterpreter(r, args, new DataInputStream(heap));
-    }
-
-    public static boolean initializeInterpreter(Interpreter r, String[] args, DataInputStream in) throws ClassNotFoundException {
         try {
-            r.ctx.loadEnv(r, in);
+            String heapLocation=Util.getSystemProperty("HEAP", null);
+            InputStream heap=null;
+            if (heapLocation==null) {
+                URL heapURL=ClassLoader.getSystemResource("sisc.heap");
+                if (heapURL==null)
+                    heap=new FileInputStream("sisc.heap");
+                else 
+                    heap=heapURL.openStream();
+            } else 
+                heap=new FileInputStream(heapLocation);
+            heap=new BufferedInputStream(new GZIPInputStream(new BufferedInputStream(heap)), 65536);
+
+            return heap;
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public static boolean initializeInterpreter(Interpreter r,
+                                                String[] args,
+                                                InputStream in)
+        throws ClassNotFoundException {
+
+        try {
+            r.ctx.loadEnv(r, new DataInputStream(in));
         } catch (IOException e) {
             System.err.println("\nError loading heap!");
             e.printStackTrace();
-	    return false;
+            return false;
         }
 
-	Symbol loadSymb = Symbol.get("load");
+        Symbol loadSymb = Symbol.get("load");
         for (int i=0; i<args.length; i++) {
-	    try {
-		r.eval((Procedure)r.ctx.toplevel_env.lookup(loadSymb),
-		       new Value[]{new SchemeString(args[i])});
-	    } catch (SchemeException se) {
-		System.err.println("Error during load: "+se.getMessage());
-	    }
+            try {
+                r.eval((Procedure)r.ctx.toplevel_env.lookup(loadSymb),
+                       new Value[]{new SchemeString(args[i])});
+            } catch (SchemeException se) {
+                System.err.println("Error during load: "+se.getMessage());
+            }
         }
 
-        // ovidiu: No need to version, as it is read from the heap
-        // file. Should we do the same with the rest of the
-        // properties?
-        //         r.define(Symbol.get("version"), new SchemeString(Util.VERSION), Util.SISC);        
         try {
             Properties sysProps=System.getProperties();
             for (Iterator ir=sysProps.keySet().iterator(); ir.hasNext();) {
@@ -114,39 +108,44 @@ public class REPL extends Thread {
             SchemeString[] rootss=new SchemeString[roots.length];
             for (int i=0; i<roots.length; i++)
                 rootss[i]=new SchemeString(roots[i].getPath());
-            r.define(Symbol.get("fs-roots"), Util.valArrayToList((Value[])rootss,
-                                                                 0, rootss.length),
+            r.define(Symbol.get("fs-roots"),
+                     Util.valArrayToList((Value[])rootss, 0, rootss.length),
                      Util.SISC);
         } catch (java.security.AccessControlException ace) {}
-	return true;
+
+        return true;
     }
 
     public void run() {
-	r= Context.enter(Context.lookup("main"), r.dynenv);
-	try {
-	    Symbol replSymb = Symbol.get("repl");
-	    try {
-		r.ctx.toplevel_env.lookup(replSymb);
-	    } catch (ArrayIndexOutOfBoundsException aiob) {
+        try {
+            dynenv.out.write("SISC ("+Util.VERSION+") - " + appName + "\n");
+        } catch (IOException e) {}
+            
+        Interpreter r = Context.enter(Context.lookup(appName), dynenv);
+        try {
+            Symbol replSymb = Symbol.get("repl");
+            try {
+                r.ctx.toplevel_env.lookup(replSymb);
+            } catch (ArrayIndexOutOfBoundsException aiob) {
                 aiob.printStackTrace();
-		System.err.println("Fatal error: Heap not found or does not contain repl.");
-		return;
-	    }
-	    do {
-		try {
-		    r.eval((Procedure)r.ctx.toplevel_env.lookup(replSymb),
-			   new Values[]{});
-		    break;
-		} catch (SchemeException e) {
-		    System.err.println("Uncaught error: "+e.getMessage());
-		} catch (Exception e) {
-		    e.printStackTrace();
-		    System.err.println("System error: "+e.toString());
-		}
-	    } while (true);
-	} finally {
-	    Context.exit();
-	}
+                System.err.println("Fatal error: Heap not found or does not contain repl.");
+                return;
+            }
+            do {
+                try {
+                    r.eval((Procedure)r.ctx.toplevel_env.lookup(replSymb),
+                           new Values[]{});
+                    break;
+                } catch (SchemeException e) {
+                    System.err.println("Uncaught error: "+e.getMessage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.err.println("System error: "+e.toString());
+                }
+            } while (true);
+        } finally {
+            Context.exit();
+        }
     }
 
     public static void main(String[] args) throws Exception {
@@ -176,72 +175,59 @@ public class REPL extends Thread {
             fargs.add(arg);
         }
 
-        PrintWriter pout=new PrintWriter(System.out);
-        PrintWriter perr=new PrintWriter(System.err);
-        pout.print("SISC");
-        pout.flush();
-
-	AppContext ctx = new AppContext();
-	Context.register("main", ctx);
-        Interpreter r = Context.enter("main");
-        if (initializeInterpreter(r,(String[])fargs.toArray(new String[0]))) {
-	
-	    pout.println(" ("+Util.VERSION+")");
-	    pout.flush();
-
-	    if (server) {
-		ServerSocket ssocket = new ServerSocket(port, 50, bindAddr);
-		pout.println("Listening on " + ssocket.getInetAddress().toString() + ":" + ssocket.getLocalPort());
-		pout.flush();
-		for (;;) {
-		    Socket client = ssocket.accept();
-		    pout.println("Accepting connection from " + client.getInetAddress().toString());
-		    pout.flush();
-		    DynamicEnv dynenv = new DynamicEnv(new SourceInputPort(new BufferedReader(new InputStreamReader(client.getInputStream())), "console"),
-						       new OutputPort(new PrintWriter(client.getOutputStream()), true));
-		    REPL repl = new SocketREPL(dynenv, client);
-		    repl.start();
-		}
-	    }
-	    else {
-		REPL repl=new REPL(r);
-		repl.start();
-	    }
-	    
-	    Context.exit();
-	}
-    }
-/*
-     protected void finalize() {
-	 System.gc();
-	 for (int i=0; i<Closure.anons.size(); i++) {
-	     Pair p=(Pair)Closure.anons.elementAt(i);
-	     System.err.println("C"+Util.justify(p.cdr.toString(), 10,'0')+"\t"+p.car.write());
- 	}
-     }
-*/
-}
-
-class SocketREPL extends REPL {
-
-    public Socket s;
-    public DynamicEnv dynenv;
-
-    public SocketREPL(DynamicEnv dynenv, Socket s) {
-        super(null);
-	this.dynenv = dynenv;
-        this.s = s;
-    }
-
-    public void run() {
-	r = Context.enter("main");
-	r.dynenv = dynenv;
-        super.run();
-	Context.exit();
-        try {
-            s.close();
+        InputStream heap=findHeap();
+        if (heap==null) {
+            System.err.println(Util.liMessage(Util.SISCB, "noheap"));
+            return;
         }
-        catch(IOException e) {}
+
+        AppContext ctx = new AppContext();
+        Context.register("main", ctx);
+        Interpreter r = Context.enter("main");
+        if (!initializeInterpreter(r,
+                                   (String[])fargs.toArray(new String[0]),
+                                   heap))
+            return;
+        Context.exit();
+        
+        if (server) {
+            ServerSocket ssocket = new ServerSocket(port, 50, bindAddr);
+            System.out.println("Listening on " + ssocket.getInetAddress().toString() + ":" + ssocket.getLocalPort());
+            System.out.flush();
+            SocketREPL.listen("main", ssocket);
+        } else {
+            REPL repl = new REPL("main", new DynamicEnv());
+            repl.start();
+        }
+    }
+
+
+    public static class SocketREPL extends REPL {
+        
+        public Socket s;
+        
+        public SocketREPL(String appName, DynamicEnv dynenv, Socket s) {
+            super(appName, dynenv);
+            this.s = s;
+        }
+    
+        public void run() {
+            super.run();
+            try {
+                s.close();
+            } catch(IOException e) {}
+        }
+    
+        public static void listen(String app, ServerSocket ssocket) {
+            for (;;) {
+                try {
+                    Socket client = ssocket.accept();
+                    DynamicEnv dynenv = new DynamicEnv(new SourceInputPort(new BufferedReader(new InputStreamReader(client.getInputStream())), "console"),
+                                                       new OutputPort(new PrintWriter(client.getOutputStream()), true));
+                    REPL repl = new SocketREPL(app, dynenv, client);
+                    repl.start();
+                } catch (IOException e) {}
+            }
+        }
     }
 }
-
