@@ -99,6 +99,7 @@ public class REPL extends Thread {
     }
 
     public void run() {
+	r= Context.enter("main");
 	Symbol replSymb = Symbol.get("repl");
 	try {
 	    r.ctx.toplevel_env.lookup(replSymb);
@@ -183,6 +184,14 @@ public class REPL extends Thread {
 	    Context.exit();
 	}
     }
+
+     protected void finalize() {
+	 System.gc();
+	 for (int i=0; i<Closure.anons.size(); i++) {
+	     Pair p=(Pair)Closure.anons.elementAt(i);
+	     System.err.println("C"+Util.justify(p.cdr.toString(), 10,'0')+"\t"+p.car.write());
+ 	}
+     }
 }
 
 class SocketREPL extends REPL {
