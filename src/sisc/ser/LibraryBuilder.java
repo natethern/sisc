@@ -103,13 +103,7 @@ public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
                             if (includeAEs || (e.getName()==null))
                                 e.visit(this);
                         } else e.visit(this);                                
-                        if (!(e instanceof Singleton)) {
-                            for (Iterator i=e.getAnnotationKeys().iterator(); i.hasNext();) {
-                                Symbol key=(Symbol)i.next();
-                                visit(key);
-                                visit(e.getAnnotation(key));
-                            }
-                        }
+                        if (!(e instanceof Singleton)) e.visitAnnotations(this);
                     }
                 }
             }

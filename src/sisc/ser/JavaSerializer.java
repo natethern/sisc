@@ -27,10 +27,11 @@ public class JavaSerializer implements Serializer {
 
     public void writeExpression(Expression e) throws IOException {
         os.writeObject(e);
+        if (e != null) e.serializeAnnotations(this);
     }
 
     public void writeInitializedExpression(Expression e) throws IOException {
-        os.writeObject(e);
+        writeExpression(e);
     }
 
     public void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException {

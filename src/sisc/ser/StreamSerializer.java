@@ -130,13 +130,7 @@ public class StreamSerializer extends SerializerImpl {
         
     private void serializeDetails(Expression e) throws IOException {
         e.serialize(this);
-        Set s=e.getAnnotationKeys();
-        writeInt(s.size());
-        for (Iterator i=s.iterator(); i.hasNext();) {
-            Symbol key=(Symbol)i.next();
-            writeExpression(key);
-            writeExpression(e.getAnnotation(key));
-        }
+        e.serializeAnnotations(this);
     }
     
     private boolean seen(Expression e) { 

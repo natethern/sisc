@@ -106,12 +106,7 @@ public class BinaryDeserializer extends DeserializerImpl {
 
     void initializeExpression(Expression e) throws IOException {
         e.deserialize(this);
-        int ac=readInt();
-        for (; ac>0; ac--) {
-            Expression key=readExpression();
-            Expression value=readExpression();
-            e.setAnnotation((Symbol)key, (Value)value);
-        }
+        e.deserializeAnnotations(this);
     }
     
     protected Expression fetchShared(int oid) throws IOException {

@@ -50,11 +50,13 @@ public class JavaDeserializer implements Deserializer {
     }
 
     public Expression readExpression() throws IOException {
-        return (Expression)readObjectIOExceptionOnly();
+        Expression e = (Expression)readObjectIOExceptionOnly();
+        if (e != null) e.deserializeAnnotations(this);
+        return e;
     }
 
     public Expression readInitializedExpression() throws IOException {
-        return (Expression)readObjectIOExceptionOnly();
+        return readExpression();
     }
         
     public SymbolicEnvironment readSymbolicEnvironment() throws IOException {

@@ -51,6 +51,41 @@ public abstract class Expression extends Util
         return annotations.keySet();
     }
 
+    public void serializeAnnotations(Serializer s) throws IOException {
+        if (annotations == null) {
+            s.writeInt(0);
+        } else {
+            s.writeInt(annotations.size());
+            for (Iterator i=annotations.entrySet().iterator(); i.hasNext();) {
+                Map.Entry en = (Map.Entry)i.next();
+                s.writeExpression((Expression)en.getKey());
+                s.writeExpression((Expression)en.getValue());
+            }
+        }
+    }
+
+    public void deserializeAnnotations(Deserializer s) throws IOException {
+        int ac = s.readInt();
+        if (ac == 0) return;
+        annotations = new HashMap(0);
+        for (; ac>0; ac--) {
+            Expression key = s.readExpression();
+            Expression val = s.readExpression();
+            annotations.put(key, val);
+        }
+    }
+
+    public boolean visitAnnotations(ExpressionVisitor v) {
+        if (annotations == null) return true;
+        boolean res = true;
+        for (Iterator i=annotations.entrySet().iterator(); i.hasNext();) {
+            Map.Entry en = (Map.Entry)i.next();
+            if (!v.visit((Expression)en.getKey())) res = false;
+            if (!v.visit((Expression)en.getValue())) res = false;
+        }
+        return res;
+    }
+
     /**
      * The following helpers set the 'name annotation, which is used for 
      * naming procedures, environments, etc.
