@@ -205,13 +205,10 @@ public class GenerateHeap {
         r5rs=results[0];
         sisc_specific=results[1];
 
-        r5rs.name=Util.REPORT;
-        sisc_specific.name=Util.SISC_SPECIFIC;
-
         r.ctx.toplevel_env=top_level=new AssociativeEnvironment(sisc_specific);
         top_level.name=Util.TOPLEVEL;
-        top_level.symbolMap.remove(sisc_specific.symbolMap);
-        sisc_specific.symbolMap.remove(r5rs.symbolMap);
+        r5rs.name=Util.REPORT;
+        sisc_specific.name=Util.SISC_SPECIFIC;
         
         r.defineContextEnv(Util.TOPLEVEL, top_level);
         r.defineContextEnv(Util.REPORT, r5rs);
