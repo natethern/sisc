@@ -23,7 +23,7 @@
       ;; Lets
       (((lambda ,formals ,body) ,[values* values-state*] ...)
        (guard (and (core-form-not-redefined? 'lambda)                    
-		   (list? formals)))
+                   (list? formals)))
        (if (= (length formals) (length values*))
            (let-values ([(rv state) (opt:let formals values* body state)])
              (values rv (merge-states state (apply merge-states values-state*))))

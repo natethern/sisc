@@ -19,11 +19,11 @@ public class Pair extends Value {
     }
 
     public void setCar(Value v) {
-	car = v;
+        car = v;
     }
 
     public void setCdr(Value v) {
-	cdr = v;
+        cdr = v;
     }
 
     private static boolean quasiquote(ValueWriter w, String prefix, Value q, Value v) throws IOException {

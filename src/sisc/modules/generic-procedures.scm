@@ -349,7 +349,7 @@
     (if (null? meths)
         ;;append
         (set-cdr! methods (cons m meths))
-        (let ([current	(car meths)])
+        (let ([current        (car meths)])
           (if (method= m current)
               (set-cdr! methods (cons m (cdr meths)))
               (add-method-helper m meths))))))

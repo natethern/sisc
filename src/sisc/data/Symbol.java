@@ -55,8 +55,8 @@ public class Symbol extends Value {
     }
 
     public boolean valueEqual(Value v) {
-	return super.valueEqual(v) ||
-   	       ((v instanceof Symbol) && ((Symbol)v).symval.equals(symval));
+        return super.valueEqual(v) ||
+                  ((v instanceof Symbol) && ((Symbol)v).symval.equals(symval));
     }
 
     public void write(ValueWriter w) throws IOException {

@@ -8,10 +8,10 @@ public class SchemeRuntimeException extends RuntimeException {
     Procedure e, f;
 
     public SchemeRuntimeException(Pair message, Procedure exception_k, 
-				  Procedure parent_fk) {
-	m=message;
-	e=exception_k;
-	f=parent_fk;
+                                  Procedure parent_fk) {
+        m=message;
+        e=exception_k;
+        f=parent_fk;
     }
 
     public String getMessage() {
@@ -19,7 +19,7 @@ public class SchemeRuntimeException extends RuntimeException {
     }
 
     public SchemeException promote() {
-	return new SchemeException(m,e,f);
+        return new SchemeException(m,e,f);
     }
 }
     

@@ -42,8 +42,8 @@ public class FileManipulation extends ModuleAdapter {
         URL u=url(o);
         if (!"file".equals(u.getProtocol()))
             throwPrimException(liMessage(IO.IOB, "notafileurl"));
-	String path=URLDecoder.decode(u.getPath());
-	return new File(path);
+        String path=URLDecoder.decode(u.getPath());
+        return new File(path);
     }
 
     public Value eval(int primid, Interpreter f)

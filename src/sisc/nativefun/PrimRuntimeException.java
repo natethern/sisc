@@ -3,7 +3,7 @@ package sisc.nativefun;
 public class PrimRuntimeException extends RuntimeException {
     
     public PrimRuntimeException(String message) {
-	super(message);
+        super(message);
     }
 
     public PrimRuntimeException() {}

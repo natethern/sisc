@@ -56,7 +56,7 @@ public class CallFrame extends Procedure {
             w.vlk=true;
             if (w.nxp!=null)
                 w.nxp.setCaptured(r, w);
-	    LexicalEnvironment.lock(w.env);
+            LexicalEnvironment.lock(w.env);
             w=w.parent;
         } while (w!=null && !lastWasLocked); 
 
@@ -101,7 +101,7 @@ public class CallFrame extends Procedure {
         if (r.vlr.length==1) 
             r.acc=r.vlr[0];
         else 
-	    r.acc=new Values(r.vlr);
+            r.acc=new Values(r.vlr);
 
         r.pop(this);
     }

@@ -95,7 +95,7 @@ public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
                     if (seen(e)) {
                         if (!entryPoints.contains(e) && !newEntryPoints.contains(e)) {
                             duplicates.add(e);
-			}
+                        }
                     } else {
                         seen.add(e);
                         classes.add(e.getClass());

@@ -10,7 +10,7 @@ public class SLogicOps extends ModuleAdapter {
         Symbol.intern("sisc.modules.Messages");
 
     protected static final int
-	LOGAND=1, LOGOR=2, LOGXOR=3, LOGNOT=4;
+        LOGAND=1, LOGOR=2, LOGXOR=3, LOGNOT=4;
 
     public SLogicOps() {
         define("logand", LOGAND);
@@ -25,7 +25,7 @@ public class SLogicOps extends ModuleAdapter {
             if (q.type==Quantity.FIXEDINT) return q.val;
             else throw new ClassCastException();
         } catch (ClassCastException e) { typeError(LOGICOPSB, "fixedinteger", v); }
-	return -1;
+        return -1;
     }
 
     public Value eval(int primid, Interpreter f) throws ContinuationException {

@@ -31,9 +31,9 @@ public class SThread extends ModuleAdapter {
 
 
     protected static Symbol 
-	    S_READY=Symbol.get("ready"), S_RUNNING=Symbol.get("running"),
-	    S_FINISHED=Symbol.get("finished"), 
-	    S_FINISHED_ABNORMALLY=Symbol.get("finished-with-error");
+            S_READY=Symbol.get("ready"), S_RUNNING=Symbol.get("running"),
+            S_FINISHED=Symbol.get("finished"), 
+            S_FINISHED_ABNORMALLY=Symbol.get("finished-with-error");
 
     public SThread() {
         define("thread?", THREADQ);
@@ -146,7 +146,7 @@ public class SThread extends ModuleAdapter {
                 owner=thisThread;
             }
 
-	    
+            
             return TRUE;
         }
 

@@ -387,10 +387,10 @@ public class Primitives extends ModuleAdapter {
                                                           indexValue());
             case VECTORFINDLASTUNIQUE: return Quantity.valueOf(vec(f.vlr[0]).findEnd());
             case EVAL:
-		if (f.dynenv.parser.lexer.strictR5RS) 
+                if (f.dynenv.parser.lexer.strictR5RS) 
                    throwArgSizeException();
                 f.nxp=f.compile(f.vlr[0]);
-		f.env=null;
+                f.env=null;
                 f.returnVLR();
                 return VOID;
             case CALLCC:
@@ -596,7 +596,7 @@ public class Primitives extends ModuleAdapter {
                 return module(f.vlr[0]).getBindingValue(f, symbol(f.vlr[1]));
             case EVAL:
                 f.nxp=f.compile(f.vlr[0], env(f.vlr[1]));
-		f.env=null;
+                f.env=null;
                 f.returnVLR();
                 return VOID;
             case WITHFC:

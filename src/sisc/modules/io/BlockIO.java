@@ -29,7 +29,7 @@ public class BlockIO extends ModuleAdapter {
         try {
             return (Buffer)v;
         } catch (ClassCastException e) { typeError(BLOCKB, "buffer", v); }
-	return null;
+        return null;
     }
 
     public Value eval(int primid, Interpreter f)

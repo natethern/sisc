@@ -153,10 +153,10 @@ public class GenerateHeap {
         toplevel.setName(Util.TOPLEVEL);
         sisc.compiler.Compiler.addSpecialForms(toplevel);
         symenv.define(Util.TOPLEVEL, toplevel);
-	
-	// Set this initially, so the optimizer can do its core forms
-	// check without error
-	symenv.define(Util.SISC_SPECIFIC, toplevel);
+        
+        // Set this initially, so the optimizer can do its core forms
+        // check without error
+        symenv.define(Util.SISC_SPECIFIC, toplevel);
         AppContext ctx = new AppContext(symenv);
         
         Context.register("main", ctx);
@@ -235,7 +235,7 @@ public class GenerateHeap {
 
         }
         System.out.println("Heap saved.");
-       	Context.exit();
+               Context.exit();
     }
 }
 

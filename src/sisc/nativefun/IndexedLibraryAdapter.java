@@ -32,7 +32,7 @@ public abstract class IndexedLibraryAdapter extends NativeLibrary {
         Integer i=(Integer)bindings.get(name);
         try {
             int inum=i.intValue();
-	    return construct(inum);
+            return construct(inum);
         } catch (NullPointerException n) {
             throw new NoSuchMethodError();
         }

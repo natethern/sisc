@@ -35,5 +35,5 @@
   (syntax-rules ()
     ((_ proc)
      (eq? (getprop proc '*sisc-specific*)
-	  (getprop proc (interaction-environment))))))
+          (getprop proc (interaction-environment))))))
 

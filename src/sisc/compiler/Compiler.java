@@ -23,10 +23,10 @@ public class Compiler extends Util {
     }
 
     static final int
-	APP=-1, LAMBDA = 0, _IF=1, BEGIN=2, QUOTE=3, SET=4, DEFINE=5,
-	MAKEANNOTATION=6, LETREC=7, 
-	
-	TAIL=1, COMMAND=2, PREDICATE=4, REALTAIL=8;
+        APP=-1, LAMBDA = 0, _IF=1, BEGIN=2, QUOTE=3, SET=4, DEFINE=5,
+        MAKEANNOTATION=6, LETREC=7, 
+        
+        TAIL=1, COMMAND=2, PREDICATE=4, REALTAIL=8;
 
     static final Symbol 
         VARNAME=Symbol.get("var-name"),
@@ -51,12 +51,12 @@ public class Compiler extends Util {
                               Pair an)
     throws ContinuationException {
         if (v==EMPTYLIST) {
-	    //we evaluate () to the empty list, which is an "ignorable
-	    //error", according to R5RS. Note that presently we never
-	    //actually end up in this code since the macro expander
-	    //expands () to '().
-	    return EMPTYLIST;
-	} else if (v instanceof Pair) {
+            //we evaluate () to the empty list, which is an "ignorable
+            //error", according to R5RS. Note that presently we never
+            //actually end up in this code since the macro expander
+            //expands () to '().
+            return EMPTYLIST;
+        } else if (v instanceof Pair) {
             Pair expr=(Pair)v;
             return compileApp(r,expr,rt,context,env,an);
         } else if (v instanceof Symbol) {
@@ -180,8 +180,8 @@ public class Compiler extends Util {
                 expv.copyInto(rhses);
 
                 expr=(Pair)expr.cdr;
-		rv=compileLetrec(r, formals, rhses, expr, 
-				 rt, env, context);
+                rv=compileLetrec(r, formals, rhses, expr, 
+                                 rt, env, context);
                 break;
             case _IF:
                 tmp=compile(r, expr.car, rt, PREDICATE, env, null);
@@ -314,8 +314,8 @@ public class Compiler extends Util {
                                         Expression rator, Expression rands[], 
                                         int context, Pair annotation) {
         if (rator instanceof Value && 
-	    !(rator instanceof Procedure) &&
-	    !(rator instanceof AnnotatedExpr))
+            !(rator instanceof Procedure) &&
+            !(rator instanceof AnnotatedExpr))
 
             System.err.println(warn("nonprocappdetected",((Value)rator).synopsis()));
         Expression nxp = new AppEval((context & REALTAIL) != 0);

@@ -19,7 +19,7 @@ import sisc.util.Util;
 public class Interpreter extends Util {
 
     public static class ThrowSchemeException extends Expression {
-	
+        
         public void eval(Interpreter r) 
             throws ContinuationException, SchemeRuntimeException {
             r.nxp=null;
@@ -393,7 +393,7 @@ public class Interpreter extends Util {
     public final void newEnv(Value[] vals, 
                              LexicalEnvironment p) {
         if (envFreeList == null) {
-	    //m++;
+            //m++;
             env=new LexicalEnvironment(vals, p);
         } else {
             //h++;

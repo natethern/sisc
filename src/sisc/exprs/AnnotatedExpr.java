@@ -13,16 +13,16 @@ public class AnnotatedExpr extends Value {
     public Value annotation, stripped=FALSE;
 
     public AnnotatedExpr(Expression expr, Value annotation) {
-	this.expr=expr;
-	this.annotation=annotation;
+        this.expr=expr;
+        this.annotation=annotation;
     }
 
     public final void eval(Interpreter r) throws ContinuationException {
-	expr.eval(r);
+        expr.eval(r);
     }
     
     public final Value getValue(Interpreter r) throws ContinuationException {
-	return expr.getValue(r);
+        return expr.getValue(r);
     }
 
     public Value express() {
@@ -32,9 +32,9 @@ public class AnnotatedExpr extends Value {
     public AnnotatedExpr() {}
 
     public void serialize(Serializer s) throws IOException {
-	    s.writeExpression(expr);
-	    s.writeExpression(annotation);
-	    s.writeExpression(stripped);
+            s.writeExpression(expr);
+            s.writeExpression(annotation);
+            s.writeExpression(stripped);
     }
 
     public void display(ValueWriter w) throws IOException {

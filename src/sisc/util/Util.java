@@ -69,21 +69,21 @@ public abstract class Util extends Defaults implements Version {
     }
 
     public static String warn(String messageClass) {
-	StringBuffer b=new StringBuffer("{");
-	b.append(liMessage(SISCB, "warning"));
-	b.append(": ");
-	b.append(liMessage(SISCB, messageClass));
-	b.append(')');
-	return b.toString();
+        StringBuffer b=new StringBuffer("{");
+        b.append(liMessage(SISCB, "warning"));
+        b.append(": ");
+        b.append(liMessage(SISCB, messageClass));
+        b.append(')');
+        return b.toString();
     }
 
     public static String warn(String messageClass, String arg) {
-	StringBuffer b=new StringBuffer("{");
-	b.append(liMessage(SISCB, "warning"));
-	b.append(": ");
-	b.append(liMessage(SISCB, messageClass, arg));
-	b.append(')');
-	return b.toString();
+        StringBuffer b=new StringBuffer("{");
+        b.append(liMessage(SISCB, "warning"));
+        b.append(": ");
+        b.append(liMessage(SISCB, messageClass, arg));
+        b.append(')');
+        return b.toString();
     }
 
     public static void error(Interpreter r, Value where, String errormessage,
@@ -118,8 +118,8 @@ public abstract class Util extends Defaults implements Version {
 
     public static ClassLoader currentClassLoader() {
         ClassLoader cl = null;
-	try {
-	    cl = Thread.currentThread().getContextClassLoader();
+        try {
+            cl = Thread.currentThread().getContextClassLoader();
         } catch (java.security.AccessControlException e) {}
         if (cl == null) {
             cl = ClassLoader.getSystemClassLoader();
@@ -222,7 +222,7 @@ public abstract class Util extends Defaults implements Version {
 
         for (; (p.cdr instanceof Pair) &&
                 (p.cdr!=EMPTYLIST);
-	     p=(Pair)p.cdr) {
+             p=(Pair)p.cdr) {
             v.addElement(p.car);
         }
         v.addElement(p.car);
@@ -254,28 +254,28 @@ public abstract class Util extends Defaults implements Version {
         try {
             return ((Symbol)o).symval;
         } catch (ClassCastException e) { typeError("symbol", o); }
-	return null;
+        return null;
     }
 
     public static final Quantity num(Value o) {
         try {
             return (Quantity)o;
         } catch (ClassCastException e) { typeError("number", o); }
-	return null;
+        return null;
     }
 
     public static final Pair pair(Value o) {
         try {
             return (Pair)o;
         } catch (ClassCastException e) { typeError("pair", o); }
-	return null;
+        return null;
     }
 
     public static final Procedure proc(Value o) {
         try {
             return (Procedure)o;
         } catch (ClassCastException e) { typeError("procedure", o); }
-	return null;
+        return null;
     }
 
     public static final Pair truePair(Value o) {
@@ -292,7 +292,7 @@ public abstract class Util extends Defaults implements Version {
         try {
             return (SchemeCharacter)o;
         } catch (ClassCastException e) { typeError("character", o); }
-	return null;
+        return null;
     }
 
     public static final String string(Value o) {
@@ -303,56 +303,56 @@ public abstract class Util extends Defaults implements Version {
         try {
             return (SchemeString)o;
         } catch (ClassCastException e) { typeError("string", o); }
-	return null;
+        return null;
     }
 
     public static final Symbol symbol(Value o) {
         try {
             return (Symbol)o;
         } catch (ClassCastException e) { typeError("symbol", o); }
-	return null;
+        return null;
     }
 
     public static final SchemeVector vec(Value o) {
         try {
             return (SchemeVector)o;
         } catch (ClassCastException e) { typeError("vector", o); }
-	return null;
+        return null;
     }
 
     public static final SchemeOutputPort outport(Value o) {
         try {
             return (SchemeOutputPort)o;
         } catch (ClassCastException e) { typeError("output-port", o); }
-	return null;
+        return null;
     }
 
     public static final SchemeInputPort inport(Value o) {
         try {
             return (SchemeInputPort)o;
         } catch (ClassCastException e) { typeError("input-port", o); }
-	return null;
+        return null;
     }
 
     public static final sisc.env.SymbolicEnvironment env(Value o) {
         try {
             return (sisc.env.SymbolicEnvironment)o;
         } catch (ClassCastException e) { typeError("environment", o); }
-	return null;
+        return null;
     }
 
     public static final Box box(Value o) {
         try {
             return (Box)o;
         } catch (ClassCastException e) { typeError("box", o); }
-	return null;
+        return null;
     }
 
     public static final CallFrame cont(Value o) {
         try {
             return (CallFrame)o;
         } catch (ClassCastException e) { typeError("continuation", o); }
-	return null;
+        return null;
     }
 
     public static final AnnotatedExpr annotated(Value o) {
@@ -459,7 +459,7 @@ public abstract class Util extends Defaults implements Version {
     }
 
     public static String liMessage(Symbol bundle, 
-				   String messageName, String arg1) {
+                                   String messageName, String arg1) {
         return MessageFormat.format(liMessage(bundle, messageName),
                                 new Object[] { arg1 });
     }
@@ -473,7 +473,7 @@ public abstract class Util extends Defaults implements Version {
     public static String liMessage(Symbol bundle, String messageName, 
                                    String arg1, int arg2, int arg3) {
         return MessageFormat.format(liMessage(bundle, messageName),
-				new Object[] { arg1, new Integer(arg2),
+                                new Object[] { arg1, new Integer(arg2),
                                                new Integer(arg3)});
     }
 

@@ -25,7 +25,7 @@ public class Primitives extends ModuleAdapter {
         ALIST_TO_HT_EQV         =12,
         ALIST_TO_HT_EQUAL       =13,
         HT_KEYS                 =14;
-	
+        
     public Primitives() {
 
         define("make-eq-hashtable"      ,HT_MAKE_EQ);

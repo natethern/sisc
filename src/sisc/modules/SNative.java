@@ -7,10 +7,10 @@ import sisc.nativefun.*;
 public class SNative extends ModuleAdapter {
 
     protected static final int
-	ASSQ=0, MEMQ=1, ASSOC=6, MEMBER=7,
-	CADR=2, CDAR=3, CAAR=4, CDDR=5, NOT=8,
-	APPEND=9, MEMV=11, ASSV=12,
-	VECTOR=13, LISTREF=14, VALUES=15,
+        ASSQ=0, MEMQ=1, ASSOC=6, MEMBER=7,
+        CADR=2, CDAR=3, CAAR=4, CDDR=5, NOT=8,
+        APPEND=9, MEMV=11, ASSV=12,
+        VECTOR=13, LISTREF=14, VALUES=15,
         
         SUBSTRING=17, STRINGORDER=18, STRINGORDERCI=19,
         STRINGUPCASE=20, STRINGDOWNCASE=21,
@@ -242,8 +242,8 @@ public class SNative extends ModuleAdapter {
                 default:
                     throwArgSizeException();
                 }
-	    default:
-		throwArgSizeException();
+            default:
+                throwArgSizeException();
             }
         }
         return VOID;

@@ -114,7 +114,7 @@ public class Reflection extends Util {
         define("java/invocation-handler",JAVA_INV_HANDLER);
         define("java/proxy-class"   ,JAVA_PROXY_CLASS);
         define("java/null"          ,JAVA_NULL);
-        define("java/mangle-field-name"	,JAVA_MANGLE_FIELD_NAME);
+        define("java/mangle-field-name"        ,JAVA_MANGLE_FIELD_NAME);
         define("java/mangle-method-name",JAVA_MANGLE_METHOD_NAME);
 
     }

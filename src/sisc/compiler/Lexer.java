@@ -30,29 +30,29 @@ public class Lexer implements Tokens {
     }
 
     static final char
-	STRING_CONST='"',
-	COMMENT     =';',
-	LIST_OPEN_ALT ='[',
-	LIST_CLOSE_ALT =']',
-	LIST_OPEN  ='(',
-	LIST_CLOSE =')',
-	SHARP      ='#',
-	QUOTE      ='\'',
-	BACKQUOTE  ='`',
-	UNQUOTE    =',',
-	UNQUOTE_SPLICING
-	='@',
-	DOT        ='.',
+        STRING_CONST='"',
+        COMMENT     =';',
+        LIST_OPEN_ALT ='[',
+        LIST_CLOSE_ALT =']',
+        LIST_OPEN  ='(',
+        LIST_CLOSE =')',
+        SHARP      ='#',
+        QUOTE      ='\'',
+        BACKQUOTE  ='`',
+        UNQUOTE    =',',
+        UNQUOTE_SPLICING
+        ='@',
+        DOT        ='.',
         PIPE       ='|';
     
     static final char[]
-	special = new char[]
+        special = new char[]
         {'\t', '\n', '\r', ' ', '"', '(', ')', ';', '[', ']'},
-	sharp_special = new char[]
-	{'\t', '\n', ' ', '"', '#', '(', ')', '=', '[', ']'},
-	number_prefixes = new char[]
-	{'+','-','.'},
-	hex_number_prefixes = new char[]
+        sharp_special = new char[]
+        {'\t', '\n', ' ', '"', '#', '(', ')', '=', '[', ']'},
+        number_prefixes = new char[]
+        {'+','-','.'},
+        hex_number_prefixes = new char[]
         {'+','-','.','A','B','C','D','E','F','a','b','c','d','e','f'},
         reserved = new char[] 
         {'[', ']', '{', '|', '}'},
@@ -160,13 +160,13 @@ public class Lexer implements Tokens {
 
         //escaping rules are those defined by Java, except we don't
         //handle octal escapes.
-	switch (c = is.read()) {
-	case '"': return c | 0x80000000;
-	case 'b': return '\b';
-	case 't': return '\t';
-	case 'n': return '\n';
-	case 'f': return '\f';
-	case 'r': return '\r';
+        switch (c = is.read()) {
+        case '"': return c | 0x80000000;
+        case 'b': return '\b';
+        case 't': return '\t';
+        case 'n': return '\n';
+        case 'f': return '\f';
+        case 'r': return '\r';
         case 'u': 
             char[] hexChars=new char[4];
             for (int i=0; i<hexChars.length; i++) {
@@ -181,7 +181,7 @@ public class Lexer implements Tokens {
                                                      "invalidcharconst"));
             }
         default: return c;
-	}
+        }
     }
 
     public String readToEndOfString(InputPort is)
@@ -198,13 +198,13 @@ public class Lexer implements Tokens {
     throws IOException {
         StringBuffer b=new StringBuffer();
         char c;
-	try {
-	    while (!in((c=(char)readChar(is, handleEscapes)),
+        try {
+            while (!in((c=(char)readChar(is, handleEscapes)),
                        stops)) 
                 b.append(c);
-	    is.pushback(c);
-	} catch (EOFException e) {
-	}
+            is.pushback(c);
+        } catch (EOFException e) {
+        }
         return b.toString();
     }
 

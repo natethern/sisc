@@ -207,7 +207,7 @@
                            (f #'Rest vars cdecls depth))
                           ((Dpat Dvars Dcdecls)
                            (f #'(Pat (... ...)) #'Rvars #'Rcdecls
-			     (add1 depth))))
+                             (add1 depth))))
            (with-syntax ((Size (- (length #'Dvars) (length #'Rvars)))
                          ((RevRestTl . RevRest) (reverseX #'Rpat '())))
              (values #'#(tail-each Dpat Size RevRest RevRestTl)
@@ -219,9 +219,9 @@
                            (f #'X #'Yvars #'Ycdecls depth)))
            (values #'(Xpat . Ypat) #'Xvars #'Xcdecls)))
         (() (values #'() vars cdecls))
-	(#(X ...)
-	 (let-synvalues* (((Pat Vars CDecls) (f #'(X ...) vars cdecls depth)))
-	   (values #'#(vector Pat) #'Vars #'CDecls)))
+        (#(X ...)
+         (let-synvalues* (((Pat Vars CDecls) (f #'(X ...) vars cdecls depth)))
+           (values #'#(vector Pat) #'Vars #'CDecls)))
         (Thing (values #'#(atom Thing) vars cdecls))))
     (define reverseX
       (lambda (ls acc)
@@ -376,11 +376,11 @@
                                                Orig))))
                                  (append #'(ExpVar ...) #'RestVars)
                                  (append #'(ExpExp ...) #'RestExps)))))))))
-	  ;; Vectors
-	  (#(X ...)
-	   (with-values (destruct Orig #'(X ...) depth)
-	     (syntax-lambda (LsBuilder LsVars LsExps)
-	       (values #'(list->vector LsBuilder) #'LsVars #'LsExps))))
+          ;; Vectors
+          (#(X ...)
+           (with-values (destruct Orig #'(X ...) depth)
+             (syntax-lambda (LsBuilder LsVars LsExps)
+               (values #'(list->vector LsBuilder) #'LsVars #'LsExps))))
           ;; random stuff
           ((Hd . Tl)
            (with-values (destruct Orig #'Hd depth)
@@ -593,10 +593,10 @@
       ((,[X] . ,[Y])`(cons ,X ,Y))
       (#(,[X] ...) `(vector ,X ...))
       (,thing
-	(guard (symbol? thing))
-	`',thing)
+        (guard (symbol? thing))
+        `',thing)
       (,thing
-	thing))))
+        thing))))
 
 
 ;; CHANGELOG

@@ -9,9 +9,9 @@ public class SchemeException extends Exception {
 
     public SchemeException(Pair message, Procedure exception_k, 
                            Procedure parent_fk) {
-	m=message;
-	e=exception_k;
-	f=parent_fk;
+        m=message;
+        e=exception_k;
+        f=parent_fk;
     }
 
     public String getMessage() {

@@ -43,11 +43,11 @@
   (process      |Process|)
   (runtime      |Runtime|)
   (string       |String|)
-  (stringbuffer	|StringBuffer|)
+  (stringbuffer |StringBuffer|)
   (system       |System|)
   (thread       |Thread|)
-  (throwable	|Throwable|)
-  (exception	|Exception|))
+  (throwable    |Throwable|)
+  (exception    |Exception|))
 
 (define-scheme-types
   (expression   |Expression|)

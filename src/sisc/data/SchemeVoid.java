@@ -13,7 +13,7 @@ public class SchemeVoid extends Value implements Singleton {
     }
 
     public int hashCode() {
-	return 0x56789abc;
+        return 0x56789abc;
     }
 
     public Value singletonValue() {

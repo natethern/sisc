@@ -26,7 +26,7 @@ public class Box extends Value {
     }
 
     public boolean valueEqual(Value v) {
-	if (!(v instanceof Box)) return false;
+        if (!(v instanceof Box)) return false;
         Box b=(Box)v;
         if (val==null && b.val!=null) return false;
         return ((Value)val).valueEqual((Value)b.val);

@@ -20,7 +20,7 @@ public class Closure extends Procedure implements NamedValue {
         this.fcount=fcount;
         this.env=env;
         this.body=body;
-	LexicalEnvironment.lock(env);
+        LexicalEnvironment.lock(env);
     }
 
     private final Value[] matchArgs(Interpreter r)

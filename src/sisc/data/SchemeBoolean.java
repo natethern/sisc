@@ -20,7 +20,7 @@ public class SchemeBoolean extends Value implements Singleton {
     }
 
     public int hashCode() {
-	return (val ? 0x01010101 : 0x10101010);
+        return (val ? 0x01010101 : 0x10101010);
     }
 
     public boolean equals(Object o) {

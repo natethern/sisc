@@ -7,17 +7,17 @@ public class NestedPrimRuntimeException extends PrimRuntimeException {
     protected SchemeException e;
 
     public NestedPrimRuntimeException(String message, SchemeException e) {
-	super(message);
-	this.e=e;
+        super(message);
+        this.e=e;
     }
 
     public NestedPrimRuntimeException(SchemeException e) {
-	super();
-	this.e=e;
+        super();
+        this.e=e;
     }
 
     public SchemeException getRootCause() {
-	return e;
+        return e;
     }
 }
     

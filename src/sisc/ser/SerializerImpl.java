@@ -12,7 +12,7 @@ public abstract class SerializerImpl extends BerEncoding implements Serializer {
 
     public void writeBigDecimal(BigDecimal d) throws IOException {
         int scale=d.scale();
-	byte[] buffer=d.unscaledValue().toByteArray();
+        byte[] buffer=d.unscaledValue().toByteArray();
         writeInt(buffer.length);
         writeInt(scale);
         write(buffer);

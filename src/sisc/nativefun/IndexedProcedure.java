@@ -15,15 +15,15 @@ public abstract class IndexedProcedure extends NativeProcedure {
     public IndexedProcedure() {}
 
     public IndexedProcedure(int id) {
-	this.id=id;
+        this.id=id;
     }
 
     public void serialize(Serializer s) throws IOException {
-	s.writeInt(id);
+        s.writeInt(id);
     }
 
     public void deserialize(Deserializer s) throws IOException {
-	id=s.readInt();
+        id=s.readInt();
     }
 }
 

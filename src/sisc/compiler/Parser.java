@@ -37,15 +37,15 @@ public class Parser extends Util implements Tokens {
     static final Object DOT=new Object();
     static final Object ENDPAIR=new Object();
     static final Symbol SYNTAX=Symbol.get("syntax"),
-	ANNOTATION=Symbol.get("make-annotation"),
-	LINE=Symbol.get("line-number"),
-	COLUMN=Symbol.get("column-number"),
-	FILE=Symbol.get("source-file");
+        ANNOTATION=Symbol.get("make-annotation"),
+        LINE=Symbol.get("line-number"),
+        COLUMN=Symbol.get("column-number"),
+        FILE=Symbol.get("source-file");
 
-	Parser() {
-		annotate=getSystemProperty("sisc.emitannotations", "false").equalsIgnoreCase("true");
-	}
-	
+        Parser() {
+                annotate=getSystemProperty("sisc.emitannotations", "false").equalsIgnoreCase("true");
+        }
+        
     static final HashMap chars=new HashMap (8);
     static {
         chars.put("space", new SchemeCharacter(' '));
@@ -72,8 +72,8 @@ public class Parser extends Util implements Tokens {
 
     protected final Value nextExpression(InputPort is, HashMap state, 
                                          int flags) 
-	throws IOException {
-	return (Value)_nextExpression(is, state, null, flags);
+        throws IOException {
+        return (Value)_nextExpression(is, state, null, flags);
     }
 
     /**
@@ -99,7 +99,7 @@ public class Parser extends Util implements Tokens {
             } else if (n==DOT)
                 throw new IOException(liMessage(SISCB, "unexpecteddot"));
         }
-	return (Value)n;
+        return (Value)n;
     }
 
     protected Object _nextExpression(InputPort is, HashMap state, 
@@ -116,25 +116,25 @@ public class Parser extends Util implements Tokens {
     }
 
     protected Object listSpecial(Symbol car, InputPort is,
-				 HashMap state, Integer def, 
+                                 HashMap state, Integer def, 
                                  int flags) throws IOException {
-	Pair t=new Pair();
+        Pair t=new Pair();
         Pair p;
         if (produceImmutables(flags))
             p=new Pair(car, t);
         else
             p=new ImmutablePair(car, t);
-	if (def!=null)
-	    state.put(def, p);
-	t.setCar(nextExpression(is, state, flags));
-	return p;
+        if (def!=null)
+            state.put(def, p);
+        t.setCar(nextExpression(is, state, flags));
+        return p;
     }
 
     protected Object _nextExpression(InputPort is, HashMap state, Integer def, int radix, int flags)
     throws IOException {
-	int line=-1, col=-1;
-	String file=null;
-	
+        int line=-1, col=-1;
+        String file=null;
+        
         int token=lexer.nextToken(is, radix);
         Object o;
         switch (token) {
@@ -162,16 +162,16 @@ public class Parser extends Util implements Tokens {
             o=new ImmutableString(lexer.sval);
             break;
         case TT_PAIR:
-	    //Annotation support
-	    if (is instanceof SourceInputPort) {
-		SourceInputPort sip=(SourceInputPort)is;
-		line=sip.line;
-		col=sip.column-1;
-		file=sip.sourceFile;
-	    }
+            //Annotation support
+            if (is instanceof SourceInputPort) {
+                SourceInputPort sip=(SourceInputPort)is;
+                line=sip.line;
+                col=sip.column-1;
+                file=sip.sourceFile;
+            }
 
-	    if (annotate && produceAnnotations(flags) && line>=0) {
-		AnnotatedExpr aexp =
+            if (annotate && produceAnnotations(flags) && line>=0) {
+                AnnotatedExpr aexp =
                     new AnnotatedExpr(null, 
                                       list(new Pair(LINE, Quantity.valueOf(line)),
                                            new Pair(COLUMN, Quantity.valueOf(col)),
@@ -251,7 +251,7 @@ public class Parser extends Util implements Tokens {
                 break;
             case '&':
                 o=new Box();
-		if (def!=null) state.put(def, o);
+                if (def!=null) state.put(def, o);
                 ((Box)o).val=(Value)_nextExpression(is, state, null, flags);
                 break;
             case 'i':
@@ -270,11 +270,11 @@ public class Parser extends Util implements Tokens {
             case '\'':
                 o=listSpecial(SYNTAX, is, state, def, flags);
                 break;
-	    case '@': 
-		//Annotation
+            case '@': 
+                //Annotation
                 Pair p=(Pair)nextExpression(is, state, flags);
                 o=new AnnotatedExpr(p.cdr, p.car);
-		break;
+                break;
             case '|': 
                 //Nested multiline comment
                 lexer.skipMultilineComment(is);
@@ -304,7 +304,7 @@ public class Parser extends Util implements Tokens {
                         v=new Value[ref.intValue()];
                     }
                 }
-		
+                
                 SchemeVector iv;
                 if (produceImmutables(flags))
                     iv=new ImmutableVector();
@@ -312,18 +312,18 @@ public class Parser extends Util implements Tokens {
                     iv=new SchemeVector();
 
 
-		o=iv;
-		if (def!=null) state.put(def, iv);
-		def=null;
+                o=iv;
+                if (def!=null) state.put(def, iv);
+                def=null;
 
                 Object expr=_nextExpression(is, state, def, flags);
-		if (expr instanceof AnnotatedExpr) {
+                if (expr instanceof AnnotatedExpr) {
                     o=new AnnotatedExpr(iv, ((AnnotatedExpr)expr).annotation);
                     expr=((AnnotatedExpr)expr).expr;
                 }
 
                 if (expr==null && v==null) {
-		    iv.vals=new Value[0];
+                    iv.vals=new Value[0];
                     break;
                 } else if (expr instanceof Pair) {
                     if (v==null)
@@ -344,27 +344,27 @@ public class Parser extends Util implements Tokens {
                         v[i]=(Value)(lastObject instanceof Integer ?
                                      state.get(lastObject) : lastObject);
                 }
-		iv.vals=v;
+                iv.vals=v;
                 break;
             }
             break;
         default:
             throw new IOException(liMessage(SISCB, "unknowntoken"));
         }
-	if (def!=null) 
+        if (def!=null) 
             state.put(def, o);
-	return o;
+        return o;
     }
 
     public Value readList(InputPort is, HashMap state, Integer def,
                           int flags)
         throws IOException {
-	
-	int line=0, column=0;
-	if (is instanceof SourceInputPort) {
-	    line=((SourceInputPort)is).line;
-	    column=((SourceInputPort)is).column-1;
-	}
+        
+        int line=0, column=0;
+        if (is instanceof SourceInputPort) {
+            line=((SourceInputPort)is).line;
+            column=((SourceInputPort)is).column-1;
+        }
 
         Pair h=null;
         Pair p=null;

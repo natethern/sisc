@@ -13,7 +13,7 @@ public class EOFObject extends Value implements Singleton {
     }
 
     public int hashCode() {
-	return 0x12345678;
+        return 0x12345678;
     }
 
     public Value singletonValue() {

@@ -23,11 +23,11 @@ public abstract class NativeProcedure extends Procedure implements NamedValue {
         r.lxp=r.nxp;
         r.nxp=null;
         try {
-	    r.acc=doApply(r);
+            r.acc=doApply(r);
 
-	    // If we don't have a next expression, this procedure
-	    // application is finished, and the Value rib is 
-	    // up for recycling
+            // If we don't have a next expression, this procedure
+            // application is finished, and the Value rib is 
+            // up for recycling
             if (r.nxp == null) {
                 r.returnVLR();
             }

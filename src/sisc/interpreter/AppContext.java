@@ -37,7 +37,7 @@ public class AppContext extends Util {
     }
 
     public AppContext(SymbolicEnvironment symenv) {
-	this.symenv = symenv;
+        this.symenv = symenv;
         try {
             toplevel_env=lookupContextEnv(TOPLEVEL);
         } catch (ArrayIndexOutOfBoundsException ue) {
