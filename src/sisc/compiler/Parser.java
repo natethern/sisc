@@ -24,13 +24,7 @@ public class Parser extends Util implements Tokens {
         PRODUCE_ANNOTATIONS=0x2,
         STRICT_R5RS        =0x4;
 
-    /**
-     * When set, annotations will be emitted.  Requires that
-     * the given InputPort be a SourceInputPort.
-     *
-     * This should really by in the DynamicEnvironment
-     */
-    public boolean annotate;
+    public boolean annotate = DEFAULT_EMIT_ANNOTATIONS;
 
     public Lexer lexer;
 
@@ -42,10 +36,6 @@ public class Parser extends Util implements Tokens {
         COLUMN=Symbol.get("column-number"),
         FILE=Symbol.get("source-file");
 
-        Parser() {
-                annotate=getSystemProperty("sisc.emitannotations", "false").equalsIgnoreCase("true");
-        }
-        
     static final HashMap chars=new HashMap (8);
     static {
         chars.put("space", new SchemeCharacter(' '));
