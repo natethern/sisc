@@ -69,7 +69,7 @@
 
 ;; Used to trigger any number of serialization bugs related to ports when
 ;; run from the repl
-(should-be 856491 11
+(should-be 856491 22
            (let ()
              (import serial-io)
              (define (foo x)
@@ -79,11 +79,13 @@
                            "test.ser"
                          (lambda (port) (serialize k port)))
                        1))))
-             (if (= (foo 10) 11)
-                 ((call-with-serial-input-file
-                      "test.ser"
-                    deserialize)
-                  12))))
+             (let ([rv (foo 10)])
+               (if (= rv 11)
+                   ((call-with-serial-input-file
+                     "test.ser"
+                     deserialize)
+                    12)
+                   rv))))
 
 ;;Used to cause an error trying to resolve CharSequence
 (should-be 830507 'ok
