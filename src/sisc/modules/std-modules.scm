@@ -872,11 +872,17 @@
   (add-feature 'srfi-0))
 (import srfi-0)
 
-;;load and import srfi-22
+;;load and import srfi-22, 7
 ;; we support this directly so we don't have to load srfi.scc in scripts
 (module srfi-22 (srfi-22-prepare main main-hook)
   (include "srfi/srfi-22/srfi-22.scm")
   (add-feature 'srfi-22))
+
+(module srfi-7 (program)
+  (import srfi-0)
+  (include "srfi/srfi-7.scm")
+  (add-feature 'srfi-7))
+
 (import srfi-22)
 
 ;;Final initialization
