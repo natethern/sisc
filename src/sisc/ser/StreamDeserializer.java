@@ -12,12 +12,14 @@ public class StreamDeserializer extends DeserializerImpl {
     AppContext ctx;
     Map classPool, alreadyReadObjects;
     DataInputStream in;
+    ObjectInputStream objin;
     Object[] thisArray=new Object[] { this };
     LinkedList deserQueue;
 
     public StreamDeserializer(AppContext ctx, InputStream input) throws IOException {
         this.ctx=ctx;
         this.in=new DataInputStream(input);
+        this.objin=new ObjectInputStream(input);
         classPool=new HashMap();
         
         alreadyReadObjects=new HashMap();
@@ -212,6 +214,10 @@ public class StreamDeserializer extends DeserializerImpl {
 
     public String readLine() throws IOException {
         return null; //not supported;
+    }
+
+    public Object readObject() throws IOException, ClassNotFoundException {
+        return objin.readObject();
     }
 
     public static void main(String[] args) throws IOException {

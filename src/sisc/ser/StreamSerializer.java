@@ -8,9 +8,11 @@ public class StreamSerializer extends SLL2Serializer {
 
     private Map entryPoints, classes;
     private int nextEp, nextClassIdx;
-    
+    private ObjectOutputStream objout;
+
     public StreamSerializer(OutputStream out) throws IOException {
         super(out);
+        objout=new ObjectOutputStream(cos);
         this.classes=new HashMap();
         this.entryPoints=new HashMap();
     }
@@ -68,6 +70,10 @@ public class StreamSerializer extends SLL2Serializer {
         }
     }
 
+    public void writeObject(Object o) throws IOException {
+        objout.writeObject(o);
+    }
+       
     protected void serializeEnd(SerJobEnd j) {
     }
 }
