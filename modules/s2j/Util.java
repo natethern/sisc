@@ -6,6 +6,8 @@ import sisc.nativefun.*;
 import sisc.interpreter.*;
 import sisc.data.*;
 
+import java.util.HashMap;
+
 public class Util extends ModuleAdapter {
 
     protected static final Symbol S2JB =
@@ -126,30 +128,55 @@ public class Util extends ModuleAdapter {
     public static Class makeArrayClass(Class c, int dims) {
         return Array.newInstance(c, new int[dims]).getClass();
     }
-    
+
+    private static HashMap primitiveTypesToNames = new HashMap();
+    private static HashMap namesToPrimitiveTypes = new HashMap();
+
+    static {
+        Object[] primitiveTypes = {
+            "void",         Void.TYPE,
+            "boolean",      Boolean.TYPE,
+            "char",         Character.TYPE,
+            "byte",         Byte.TYPE,
+            "char",         Character.TYPE,
+            "short",        Short.TYPE,
+            "int",          Integer.TYPE,
+            "long",         Long.TYPE,
+            "float",        Float.TYPE,
+            "double",       Double.TYPE
+        };
+
+        for (int i=0; i<primitiveTypes.length; i+=2) {
+            namesToPrimitiveTypes.put(primitiveTypes[i],
+                                      primitiveTypes[i+1]);
+            primitiveTypesToNames.put(primitiveTypes[i+1],
+                                      primitiveTypes[i]);
+        }
+    }
+        
     /**
      * Map names of primitive types to their respective classes in
      * the reflection API.
      *
      * @param name primitive type name
      * @return class corresponding to the primitive type, or
-     * <code>null</code> of the name was not recognized as that of a
+     * <code>null</code> if the name was not recognized as that of a
      * primitive type
      */
     public static Class resolvePrimitiveType(String name) {
-        //a hashtable might be faster here, but probably won't be.
-        return
-            name.equals("void")     ? Void.TYPE :
-            name.equals("boolean")  ? Boolean.TYPE:
-            name.equals("char")     ? Character.TYPE:
-            name.equals("byte")     ? Byte.TYPE :
-            name.equals("char")     ? Character.TYPE :
-            name.equals("short")    ? Short.TYPE :
-            name.equals("int")      ? Integer.TYPE :
-            name.equals("long")     ? Long.TYPE :
-            name.equals("float")    ? Float.TYPE :
-            name.equals("double")   ? Double.TYPE :
-            null;
+        return (Class)namesToPrimitiveTypes.get(name);
+    }
+
+    /**
+     * Map a primitive type to it's name
+     *
+     * @param c primitive type class
+     * @return name corresponding to the primitive type, or
+     * <code>null</code> if the class was not recognized as that of a
+     * primitive type
+     */
+    public static String namePrimitiveType(Class c) {
+        return (String)primitiveTypesToNames.get(c);
     }
 
     /**
@@ -175,6 +202,31 @@ public class Util extends ModuleAdapter {
         } catch (ClassNotFoundException e) {
             return resolvePrimitiveType(name);
         }
+    }
+
+    /**
+     * Map a class to its corresponding type name.
+     *
+     * At the center of this is the Class.getName() method.  However,
+     * that method cannot handle primitive types and array types
+     * (actually it can, but one needs to use the VM-internal type
+     * coding scheme), so we handle these case separately.
+     *
+     * @param c class
+     * @return string naming the type
+     */
+    public static String nameType(Class c) {
+        if (c.isArray()) {
+            Class cType = c.getComponentType();
+            StringBuffer res = new StringBuffer("[]");
+            for(; cType.isArray(); cType=cType.getComponentType()) {
+                res.append("[]");
+            }
+            return nameType(cType)+res;
+        }
+
+        String res = namePrimitiveType(c);
+        return (res == null) ? c.getName() : res;
     }
 
     /**

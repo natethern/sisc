@@ -48,33 +48,33 @@ public class JavaObject extends Procedure {
         s.writeByte(ty);
         switch (ty) {
         case JCLASS: {
-            s.writeUTF(((Class)obj).getName());
+            s.writeUTF(Util.nameType((Class)obj));
             break;
         }
         case JFIELD: {
             Field f = (Field)obj;
-            s.writeUTF(f.getDeclaringClass().getName());
+            s.writeUTF(Util.nameType(f.getDeclaringClass()));
             s.writeUTF(f.getName());
             break;
         }
         case JMETHOD: {
             Method m = (Method)obj;
-            s.writeUTF(m.getDeclaringClass().getName());
+            s.writeUTF(Util.nameType(m.getDeclaringClass()));
             s.writeUTF(m.getName());
             Class[] types = m.getParameterTypes();
             s.writeInt(types.length);
             for (int i=0; i < types.length; i++) {
-                s.writeUTF(types[i].getName());
+                s.writeUTF(Util.nameType(types[i]));
             }
             break;
         }
         case JCONSTR: {
             Constructor c = (Constructor)obj;
-            s.writeUTF(c.getDeclaringClass().getName());
+            s.writeUTF(Util.nameType(c.getDeclaringClass()));
             Class[] types = c.getParameterTypes();
             s.writeInt(types.length);
             for (int i=0; i < types.length; i++) {
-                s.writeUTF(types[i].getName());
+                s.writeUTF(Util.nameType(types[i]));
             }
             break;
         }
@@ -150,7 +150,7 @@ public class JavaObject extends Procedure {
     public String display() {
         StringBuffer b=new StringBuffer();
         b.append("#<java ");
-        b.append(obj.getClass().getName());
+        b.append(Util.nameType(obj.getClass()));
         b.append(" ");
         b.append(obj);
         b.append('>');
@@ -276,13 +276,13 @@ public class JavaObject extends Procedure {
         try {
             return Util.makeJObj(obj.newInstance(params), obj.getDeclaringClass());
         } catch (InstantiationException e) {
-            throw new RuntimeException(liMessage(Util.S2JB, "constructorerror", obj.toString(), obj.getDeclaringClass().getName()));
+            throw new RuntimeException(liMessage(Util.S2JB, "constructorerror", obj.toString(), Util.nameType(obj.getDeclaringClass())));
         } catch (IllegalAccessException e) {
             throw new RuntimeException(liMessage(Util.S2JB, "illegalaccess", 
                                                  new Object[] {
                 liMessage(Util.S2JB, "jconstructor"), 
-                    obj.toString(), 
-                    obj.getDeclaringClass().getName()}));
+                obj.toString(), 
+                Util.nameType(obj.getDeclaringClass())}));
         }
     }
 

@@ -1,11 +1,15 @@
+2002-10-18  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed bug in serialization of references to classes in S2J.
+
 2002-10-15  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed bug in parser that caused infinite loop in expander when
-	  processing annotated recursive structures
+	  processing annotated recursive structures.
 
 2002-10-14  Matthias Radestock  <matthias@sorted.org>
 
-	* Fixed bug in hashtable serialization
+	* Fixed bug in hashtable serialization.
 
 2002-10-13  Scott G. Miller  <scgmille@freenetproject.org>
 
