@@ -366,7 +366,6 @@ public class Primitives extends Module {
 		try {
 		    p=new InputPort(new BufferedReader(new FileReader(string(f,f.vlr[0]))));
 		} catch (IOException e) {
-		    e.printStackTrace();
 		    throw new RuntimeException( "error opening '"+string(f,f.vlr[0])+"'");
 		}
 		v=null;
