@@ -7,6 +7,9 @@
 	Debugging
       </title>
       <para>
+        &requires;debugging-module&endrequires;
+      </para>
+      <para>
 	&SISC; provides debugging aids that can be added to Scheme
 	source code, as well as limited support for debugging without
 	modification. 
@@ -45,6 +48,9 @@
       <title>
 	Bitwise Logical Operations
       </title>
+      <para>
+        &requires;logicops-module&endrequires;
+      </para>
       <para>
 	In addition to the &R5RS; set of procedures that deal with
 	numbers, &SISC; provides operators for performing bitwise

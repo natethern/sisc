@@ -160,6 +160,9 @@
       <title>
 	Networking
       </title>
+    <para> 
+      &requires;networking-module&endrequires;
+    </para>
       <para>
 	The &SISC; Networking library provides a mechanism for
 	creating and manipulating IP network protocols as standard

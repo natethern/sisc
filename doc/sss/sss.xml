@@ -7,6 +7,8 @@
  <!ENTITY procedure "<emphasis role='bold'><emphasis>procedure:</emphasis></emphasis>">
  <!ENTITY parameter "<emphasis role='bold'><emphasis>parameter:</emphasis></emphasis>">
  <!ENTITY f "&num;f">
+ <!ENTITY requires "<emphasis>Requires:</emphasis><emphasis role='bold'> (import ">
+ <!ENTITY endrequires ")</emphasis>">  
  <!ENTITY intro-chapter SYSTEM "intro.xml">
  <!ENTITY inst-chapter SYSTEM "inst.xml">
  <!ENTITY scheme-chapter SYSTEM "scheme.xml">
