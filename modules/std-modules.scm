@@ -20,6 +20,48 @@
     [(_ m spec0 spec1 ...)
      (begin (import* m spec0)
             (import* m spec1 ...))]))
+(define-syntax with-implicit
+  (lambda (x)
+    (syntax-case x ()
+      ((_ (tid id ...) exp ...)
+       (andmap identifier? #'(tid id ...))
+       #'(with-syntax ((id (datum->syntax-object #'tid 'id)) ...)
+           exp ...)))))
+(define-syntax define-module
+  (syntax-rules ()
+    [(_ name interface defn ...)
+     (interface name (defn ...))]))
+(define-syntax define-compound-interface
+  (syntax-rules ()
+    [(_ name (element1 element ...))
+     (define-syntax name
+       (lambda (x)
+         (syntax-case x ()
+           [(_ n defs)
+            #'(element1 (element ...) () n defs)])))]))
+(define-syntax define-interface
+  (syntax-rules ()
+    [(_ name (export ...))
+     (define-syntax name
+       (lambda (x)
+         (syntax-case x ()
+           [(_ n defs)
+            #'(_ () () n defs)]
+           [(_ (element1 element (... ...)) exports n defs)
+            (with-implicit (n export ...)
+              #'(element1 (element (... ...)) (export ... . exports) n defs))]
+           [(_ () exports n defs)
+            (with-implicit (n export ...)
+              #'(module n (export ... . exports) . defs))])))]))
+
+;(define-interface foo (a b))
+;(define-interface bar (c d))
+;(define-compound-interface baz (foo bar))
+;(define-module boo baz
+;  (define a 1)
+;  (define b 2)
+;  (define c 3)
+;  (define d 4))
 
 ;;;;;;;;;;;;;;;; NATIVE MODULES ;;;;;;;;;;;;;;;
 
@@ -164,6 +206,8 @@
   (class?
    object?
    meta
+   <top>
+   <bot>
    type-of
    type<=
    instance-of?

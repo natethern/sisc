@@ -1,3 +1,9 @@
+2002-09-27  Matthias Radestock  <matthias@sorted.org>
+
+	* Introduced <top> and <bot> types for generic procedures
+
+	* Fixed problem with passing jnull as an argument
+
 2002-09-26  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed bug that caused SISC to terminate when a builtin procedure

@@ -46,8 +46,17 @@
 (define (meta-type m) (cdr m))
 (define (meta? x) (and (pair? x) (eq? (car x) 'meta)))
 
+;;special types
+(define (special-type kind) (cons 'special kind))
+(define (special-type-kind t) (cdr t))
+(define (special-type? x) (and (pair? x) (eq? (car x) 'special)))
+
+(define <bot> (void))
+(define <top> (void))
+
 (define (type-of o)
   (cond ((class? o) (meta o))
+        ((java/null? o) <bot>)
         ((java/object? o) (java/class-of o))
         ((scheme-object? o) (procedure-property o 'class))
         (else
@@ -55,7 +64,9 @@
           (java/class-of (java/wrap o)))))
 
 (define (type<= x y)
-  (cond ((or (meta? x) (meta? y))
+  (cond ((eq? x <bot>) #t)
+        ((eq? y <top>) #t)
+        ((or (meta? x) (meta? y))
          (and (meta? x) (meta? y)
               (type<= (meta-type x) (meta-type y))))
         ((or (java/class? x) (java/class? y))
@@ -141,11 +152,12 @@
         ((or (meta? x) (meta? y))
          'ambiguous)
         (else
-          (let ([x<y? (type<= y x)]
-                [y<x? (type<= x y)])
+          (let ([x<y? (type<= x y)]
+                [y<x? (type<= y x)])
             (cond ((and x<y? y<x?) 'equal)
                   (x<y? 'more-specific)
                   (y<x? 'less-specific)
+                  ((or (eq? c <bot>) (eq? c <top>)) 'ambiguous)
                   (else
                     ;;find first occurrence of x or y in c's cpl
                     (let loop ([cpl (class-precedence-list c)])
@@ -486,3 +498,6 @@
 (set! c-proc (_make-generic-constructor constructor-methods
                                         (generic-java-constructor)))
 (set! initialize (make-generic-procedure (lambda args (void))))
+
+(set! <bot> (special-type '<bot>))
+(set! <top> (special-type '<top>))

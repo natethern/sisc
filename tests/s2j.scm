@@ -188,3 +188,14 @@
 (define-generic remove-all)
 (applicable-methods (generic-procedure-next remove-all)
                     (list <java.util.TreeSet> <java.util.TreeSet>))
+
+;;special handling of jnull, <bot>, <top>
+(value-of <jstring> jnull) ;=> #<java java.lang.String null>
+(type-of jnull) ;=> <bot>
+(define-generic top-bot-test)
+(define-method (top-bot-test (<top> x)) 'top)
+(define-method (top-bot-test (<number> x)) 'number)
+(define-method (top-bot-test (<bot> x)) 'bot)
+(top-bot-test 'foo) => 'top
+(top-bot-test 1) => 'number
+(top-bot-test jnull) => 'bot
