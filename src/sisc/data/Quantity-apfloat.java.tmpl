@@ -812,7 +812,11 @@ public class Quantity extends Value implements Singleton {
                 new_n=i.multiply(o.i);
                 return new Quantity(new_n, de);
             case RATIO:
-                return new Quantity(i.multiply(o.i), de.multiply(o.de));
+                BigInteger grq=o.i.gcd(de);
+                BigInteger gps=i.gcd(o.de);
+                
+                return new Quantity(i.divide(gps).multiply(o.i.divide(grq)),
+                                    de.divide(grq).multiply(o.de.divide(gps)));
             case COMPLEX:
                 return o.mul(this);
             }
