@@ -15,7 +15,7 @@
 	  (loop (read-code in)))))))
 
 (define (main-hook . args)
-  (main args))
+  ((eval 'main (get-symbolic-environment '*toplevel*)) args))
 
 ;; Default main, so ordinary "whole bunch 'o scheme code" scripts
 ;; will work
