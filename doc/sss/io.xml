@@ -1058,7 +1058,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
 		<parameter>port</parameter>.  The returned socket will
 		also be capable of listening to that group on the same
 		port (and optionally bound only to the interface
-		addressed by <parameter>interface-address</parameter>, 
+		addressed by <parameter>interface-address</parameter>), 
 		though the socket will not initially be a member of
 		the group.  If provided,
 		<parameter>datagram-size</parameter> specifies the
