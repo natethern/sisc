@@ -16,12 +16,12 @@ public class ApplyValuesContEval extends Expression {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        try {
+        if (r.acc instanceof Values) 
             r.vlr=((Values)r.acc).values;
-        } catch (ClassCastException c) {
-            r.vlr=new Value[] {r.acc};
+        else {
+            r.replaceVLR(1);
+            r.vlr[0]=r.acc;
         }
-	r.vlk=true;
         r.nxp=APPEVAL;
         r.acc=(Value)consumer;
     }

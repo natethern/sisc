@@ -78,6 +78,10 @@ public class Interpreter extends Util {
         this.ctx = ctx;
         this.tctx = tctx;
         this.dynenv = dynenv;
+
+        // Set l*cf to a dummy frame, so we dont have to null check 
+        // in returnFrame
+        llcf=lcf=new CallFrame(null, null, true, null, null, null, null);
     }
 
     public Expression compile(Value v) throws ContinuationException {
@@ -138,10 +142,6 @@ public class Interpreter extends Util {
     }
 
     public final void push(Expression nxp) {
-        stk=createFrame(nxp, vlr, vlk, env, fk, stk, cap);
-    }
-
-    public final void save() {
         stk=createFrame(nxp, vlr, vlk, env, fk, stk, cap);
     }
 
@@ -329,8 +329,7 @@ public class Interpreter extends Util {
     }
 
     public final void returnFrame(CallFrame f) {
-        if (f!=null &&
-            !f.vlk && (deadFramePointer < FPMAX)) {
+        if (!f.vlk && (deadFramePointer < FPMAX)) {
             deadFrames[++deadFramePointer]=f;
         }
     }

@@ -95,7 +95,7 @@ public class AppContext extends Util {
 
     public void saveEnv(Interpreter r, OutputStream o, LibraryBuilder lb)
         throws IOException {
-        r.save();
+        r.push(r.nxp);
         lb.add(r.stk);
         lb.add(evaluator);
         lb.add(SYMENV, symenv.asValue());
