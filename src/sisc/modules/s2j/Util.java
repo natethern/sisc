@@ -289,16 +289,31 @@ public abstract class Util extends IndexedProcedure {
         int l = s.length();
         StringBuffer res = new StringBuffer(l);
         int prev = 0;
-        int p;
-        while ((p = s.indexOf('-', prev)) != -1) {
-            res.append(s.substring(prev, p));
-            prev = p+1;
-            if (prev < l) {
-                res.append(Character.toUpperCase(s.charAt(prev)));
-                prev++;
+        int p = 0;
+        char c;
+        for (; p<l; p++) {
+            c = s.charAt(p);
+            if (Character.isJavaIdentifierStart(c)) {
+                res.append(c);
+                break;
             }
         }
-        return res.append(s.substring(prev, l)).toString();
+        p++;
+        for (; p<l; p++) {
+            c = s.charAt(p);
+            if (Character.isJavaIdentifierPart(c)) {
+                res.append(c);
+                continue;
+            }
+            for (; p<l; p++) {
+                c = s.charAt(p);
+                if (Character.isJavaIdentifierPart(c)) {
+                    res.append(Character.toUpperCase(c));
+                    break;
+                }
+            }
+        }
+        return res.toString();
     }
 
     public static String mangleMethodName(String s) {
@@ -316,10 +331,11 @@ public abstract class Util extends IndexedProcedure {
     }
 
     public static String mangleClassName(String s) {
+        int p;
+        int l = s.length();
         if (s.startsWith("<") && s.endsWith(">")) {
-            int l = s.length();
             s = s.substring(1, l-1);
-            int p = s.lastIndexOf('.');
+            p = s.lastIndexOf('.');
             if (p != -1) {
                 StringBuffer res = new StringBuffer(l);
                 res.append(s.substring(0, p+1));
@@ -328,7 +344,19 @@ public abstract class Util extends IndexedProcedure {
                 s = res.toString();
             }
         }
-        return mangleFieldName(s);
+        String tail = "";
+        p = s.indexOf("[]");
+        if (p != -1) {
+            tail = s.substring(p, s.length());
+            s = s.substring(0, p);
+        }
+        int prev=0;
+        StringBuffer res = new StringBuffer(l);
+        while((p=s.indexOf('.', prev)) != -1) {
+            res.append(mangleFieldName(s.substring(prev, p))).append('.');
+            prev = p+1;
+        }
+        return res.append(mangleFieldName(s.substring(prev, s.length()))).append(tail).toString();
     }
 
 }
