@@ -3,6 +3,9 @@
 	* Fixed a bug in REPL that was passing the wrong array type to 
 	  interpret.  This was breaking uses of "sisc -c".  See bug 972606.
 	  
+	* Implemented fine grained library-delta serialization and moved
+	  the interrupt handler's thread off the stack.  See bug 1046307.
+	  
 2004-10-13  Scott G. Miller   <scott@sgmiller.org>
 
 	* Fixed bug in psyntax that broke shadowing of imports at the top
