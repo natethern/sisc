@@ -222,8 +222,10 @@
                 (pair? (cdr rator))
                 (null? (cadr rator))
                 (pair? (cddr rator))
-                (null? (cdddr rator)))
-           (values E (new-state))]
+                (null? (cdddr rator))
+                (not-redefined? 'lambda)
+                (null? rands))
+           (values (caddr rator) (new-state))]
           [else 
             (values `(,rator ,@rands) (new-state))))))
 
