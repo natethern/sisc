@@ -41,7 +41,7 @@ import java.util.*;
 
 public class Interpreter extends Util {
     
-    public static Parser parser=new Parser(new Lexer());
+    public Parser parser=new Parser(new Lexer());
 
     protected Procedure evaluator, writer;
     public OutputPort console_out;

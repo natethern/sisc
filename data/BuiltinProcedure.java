@@ -51,15 +51,17 @@ public class BuiltinProcedure extends Procedure {
     }
 
      public void apply(Interpreter r) throws ContinuationException {
-	r.nxp=null;
+	 r.nxp=null;
 	try {
 	    Value v=host.eval(id, r);
 	    if (v!=null) r.acc=v;
 	} catch (ArrayIndexOutOfBoundsException np) {
 	    error(r, name, "incorrect number of arguments to procedure");
 	} catch (ClassCastException cc) {
+	    cc.printStackTrace();
 	    error(r, name, "got unexpected value "+cc.getMessage());
 	} catch (RuntimeException re) {
+	    re.printStackTrace();
 	    error(r, name, re.getMessage());
 	}
     }

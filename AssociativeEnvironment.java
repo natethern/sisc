@@ -32,6 +32,7 @@
  */
 package sisc;
 
+import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
 import sisc.data.*;
@@ -40,18 +41,18 @@ import java.io.*;
 public class AssociativeEnvironment extends NamedValue {
     
     protected static final float EXPFACT=1.5F;
-    protected HashMap symbolMap;
+    protected Map symbolMap;
     public Value[] env;
     protected int nextFree;
 
     public AssociativeEnvironment(AssociativeEnvironment cloneFrom) {
-	symbolMap=(HashMap)cloneFrom.symbolMap.clone();
+	symbolMap=(Map)((HashMap)cloneFrom.symbolMap).clone();
 	nextFree=cloneFrom.nextFree;
 	env=new Value[nextFree];
 	System.arraycopy(cloneFrom.env, 0, env, 0, nextFree);
     }
 
-    AssociativeEnvironment(Value[] env, HashMap symMap) {
+    AssociativeEnvironment(Value[] env, Map symMap) {
 	this.env=env;
 	symbolMap=symMap;
 	nextFree=env.length;

@@ -173,10 +173,10 @@ public class Parser extends Util implements Tokens {
 		o=new Box((Value)_nextExpression(is, state, null));
 		break;
 	    case 'i': 
-		o=numberCheck(_nextExpression(is, state, null, radix)).decimalVal();
+		o=numberCheck(_nextExpression(is, state, null, radix)).toInexact();
 		break;
 	    case 'e': 
-		o=numberCheck(_nextExpression(is, state, null, radix)).exactVal();
+		o=numberCheck(_nextExpression(is, state, null, radix)).toExact();
 		break;
 	    case '!': 
 		if (lexer.readToBreak(is, Lexer.special).equals("eof"))

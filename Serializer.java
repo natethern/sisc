@@ -26,17 +26,17 @@ public class Serializer implements Conf {
 	}
     }
 
-    HashMap serState, deserState;
-    HashMap modules;
+    Hashtable serState, deserState;
+    Hashtable modules;
     Class[] classCache=new Class[16];
     Interpreter f;
     int nextid=1;
 
     public Serializer(Interpreter r) {
 	if (SERIALIZATION) {
-	    deserState=new HashMap();
-	    serState=new HashMap();
-	    modules=new HashMap();
+	    deserState=new Hashtable();
+	    serState=new Hashtable();
+	    modules=new Hashtable();
 	    f=r;
 	}
     }

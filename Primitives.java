@@ -81,7 +81,7 @@ public class Primitives extends Module {
 	PUTPROP=121, STRING2UNINTERNEDSYMBOL=66,  OPENINPUTSTRING=50,
 	LIST=122, _VOID=123, VECTORFINDLASTUNIQUE=124, MAKEPATH=125,
 	ABSPATHQ=126, PARENT_CONT=127, CONTINUATIONQ=128,
-	FLUSHOUTPUTPORT=129;
+	FLUSHOUTPUTPORT=129, CURRENTFC=130, ASHR=131;
 
     public static SchemeBoolean numQuery(Value v, int mask) 
 	throws ContinuationException {
@@ -105,6 +105,7 @@ public class Primitives extends Module {
 	define(r, "acos", ACOS);
 	define(r, "apply", APPLY);
 	define(r, "ashl", ASHL);
+	define(r, "ashr", ASHR);
 	define(r, "asin", ASIN);
 	define(r, "atan", ATAN);
 	define(r, "block-read", BLOCKREAD);	
@@ -128,6 +129,7 @@ public class Primitives extends Module {
 	define(r, "continuation?", CONTINUATIONQ);
 	define(r, "cos", COS);
 	define(r, "current-evaluator", CURRENTEVAL);
+	define(r, "current-failure-continuation", CURRENTFC);
 	define(r, "current-input-port", CURRENTINPUTPORT);
 	define(r, "current-output-port", CURRENTOUTPUTPORT);
 	define(r, "current-writer", CURRENTWRITE);
@@ -305,8 +307,8 @@ public class Primitives extends Module {
 	    case VECTOR2LIST: 
 		Value[] vals=vec(f,f.vlr[0]).vals;
 		return valArrayToList(vals, 0, vals.length);
-	    case EXACT2INEXACT: return num(f,f.vlr[0]).decimalVal();
-	    case INEXACT2EXACT: return num(f,f.vlr[0]).exactVal();
+	    case EXACT2INEXACT: return num(f,f.vlr[0]).toInexact();
+	    case INEXACT2EXACT: return num(f,f.vlr[0]).toExact();
 	    case FLOOR: return num(f,f.vlr[0]).floor();
 	    case CEILING: return num(f,f.vlr[0]).ceiling();
 	    case ROUND: return num(f,f.vlr[0]).round();
@@ -464,6 +466,8 @@ public class Primitives extends Module {
 		if (FIVE.equals(num(f,f.vlr[0]))) 
 		    return sisc.compiler.Compiler.addSpecialForms(new AssociativeEnvironment());
 		else throw new RuntimeException("Unsupported standard version");
+	    case CURRENTFC:
+		return f.fk;
 	    case CURRENTEVAL:
 		f.evaluator=proc(f,f.vlr[0]);
 		return VOID;
@@ -564,11 +568,14 @@ public class Primitives extends Module {
 		}
 		return VOID;
 	    case MAKERECTANGULAR: 
-		return new Quantity(num(f,f.vlr[0]).decimalVal().d,
-				    num(f,f.vlr[1]).decimalVal().d);
+		return new Quantity(num(f,f.vlr[0]).toInexact().d,
+				    num(f,f.vlr[1]).toInexact().d);
 	    case ASHL: return new Quantity(num(f,f.vlr[0]).integerVal()
 					   .shiftLeft(num(f,f.vlr[1])
 						      .intValue()));
+	    case ASHR: return new Quantity(num(f,f.vlr[0]).integerVal()
+					   .shiftRight(num(f,f.vlr[1])
+						       .intValue()));
 	    case DISPLAY: case WRITE:
 	       port=outport(f,f.vlr[1]);
 		try {

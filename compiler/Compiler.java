@@ -95,7 +95,8 @@ public class Compiler extends Util {
 
     static class ReferenceEnv {
 	ReferenceEnv parent;
-	HashMap ref=new HashMap();
+	Hashtable ref=new Hashtable(5);
+	    
 	
 	public ReferenceEnv() {}
 

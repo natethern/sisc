@@ -57,7 +57,7 @@ public class LambdaExp extends Expression implements Immediate {
     }
 
     public Value express() {
-	return list(sym("Lambda-exp"), new Quantity(fcount), body.express());
+	return list(sym("Lambda-exp"), sisc.data.Number.valueOf(fcount), body.express());
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {

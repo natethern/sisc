@@ -59,7 +59,9 @@ public class Lexer implements Tokens {
 	sharp_special = new char[] 
 	{'\t', '\n', ' ', '"', '#', '(', ')', '=', '[', ']'},
 	number_prefixes = new char[] 
-	{'+','-','.'};
+	{'+','-','.'},
+	hex_number_prefixes = new char[] 
+	{'+','-','.','A','B','C','D','E','F','a','b','c','d','e','f'};
     
     public String sval;
     public Quantity nval;
@@ -119,7 +121,7 @@ public class Lexer implements Tokens {
 		is.pushback(c);
 		String v=readToBreak(is, special);
 		Object result=v;
-		if (numberStart(v.charAt(0)))
+		if (numberStart(v.charAt(0), radix)) 
 		    result=readNum(v, radix);
 		if (result instanceof String) {
 		    sval=(String)result;
@@ -184,8 +186,10 @@ public class Lexer implements Tokens {
 	return b.toString();
     }
     
-    public static boolean numberStart(char c) {
-	return Character.isDigit(c)||in(c, number_prefixes);
+    public static boolean numberStart(char c, int radix) {
+	return Character.isDigit(c) || 
+	    in(c, (radix == 16 ? hex_number_prefixes :
+		   number_prefixes));
     }
 
     public static boolean in(char c, char[] set) {
