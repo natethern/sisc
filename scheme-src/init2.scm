@@ -71,7 +71,8 @@
     . ,error-record))
 
 (define (make-error . args)
-  (let ([error-record '()])
+  (let ([ops (print-shared #t)]
+        [error-record '()])
     ;;Location
     (cond [(null? args) (void)]
           [(and (not (null? args))
@@ -94,7 +95,9 @@
                 (cons `(message . ,(apply format (cons message args)))
                       error-record))
               (error 'error "cannot specify arguments to a non format-string error."))))
+    (print-shared ops)
     error-record))
+    
 
 (define (error-location error-record)
   (cond [(and (pair? error-record) (assq 'location error-record))
@@ -198,6 +201,10 @@
                (parameter (car arg))]
               [else (error "new parameter value does not meet the parameter's type constraints")])))))
 
+(define call/fc call-with-failure-continuation)
+(define with/fc with-failure-continuation)
+(define call/cc call-with-current-continuation)
+
 ;; This code is based on Richard Kelsey and Jonathan Rees' version of
 ;; dynamic-wind in Scheme48 (http://s48.org). It has been heavily
 ;; modified to account for SISC's lack of structures, make exception
@@ -272,6 +279,12 @@
       (putprop 'call/cc '*toplevel* original-call/cc)
       (putprop 'dynamic-wind '*toplevel* dynamic-wind-loader))))
 
+(define r
+(dynamic-wind
+(lambda () #f)
+(lambda () (vector #f (list #f)))
+(lambda () #f))) 
+
 ;;;; "ratize.scm" Convert number to rational number (ported from SLIB)
 
 (define rationalize (void))
@@ -295,9 +308,6 @@
 	  (rational:simplest (- x e) (+ x e)))))
 
 (define list-tail (lambda (x k) (if (zero? k) x (list-tail (cdr x) (- k 1)))))
-(define call/fc call-with-failure-continuation)
-(define with/fc with-failure-continuation)
-(define call/cc call-with-current-continuation)
 
 (define make-polar
   (lambda (x y)
