@@ -298,7 +298,7 @@ public class Primitives extends Module {
             case INPORTQ: return truth(f.vlr[0] instanceof InputPort);
             case OUTPORTQ: return truth(f.vlr[0] instanceof OutputPort);
             case SYMBOL2STRING:
-                return new SchemeString(symbol(f,f.vlr[0]).symval,true);
+                return new ImmutableString(symbol(f,f.vlr[0]).symval);
             case STRING2NUMBER:
                 try {
                     return Quantity.valueOf(string(f,f.vlr[0]));

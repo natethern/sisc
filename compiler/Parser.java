@@ -114,7 +114,7 @@ public class Parser extends Util implements Tokens {
             o=lexer.nval;
             break;
         case TT_STRING:
-            o=new SchemeString(lexer.sval,true);
+            o=new ImmutableString(lexer.sval);
             break;
         case TT_PAIR:
             o=readList(is, state, def);

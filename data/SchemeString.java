@@ -36,24 +36,16 @@ import sisc.*;
 import java.io.*;
 
 public class SchemeString extends Value {
-    public boolean immutable;
     public char[] stringdata;
+
+    public SchemeString() {}
 
     public SchemeString(String s) {
         this(s.toCharArray());
     }
 
-    public SchemeString(String s, boolean imm) {
-        this(s.toCharArray(), imm);
-    }
-
     public SchemeString(char[] data) {
         stringdata=data;
-    }
-
-    public SchemeString(char[] data, boolean imm) {
-        stringdata = data;
-	immutable = imm;
     }
 
     public boolean valueEqual(Value v) {
@@ -95,8 +87,6 @@ public class SchemeString extends Value {
 
     public void set(Interpreter r, int k,
                     char c) throws ContinuationException {
-        if (immutable)
-            error(r, "string is immutable");
         stringdata[k]=c;
     }
 
@@ -119,17 +109,13 @@ public class SchemeString extends Value {
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
         if (SERIALIZATION) {
             dos.writeUTF(new String(stringdata));
-            dos.writeBoolean(immutable);
         }
     }
-
-    public SchemeString() {}
 
     public void deserialize(Serializer s, DataInputStream dis)
     throws IOException {
         if (SERIALIZATION) {
             stringdata=dis.readUTF().toCharArray();
-            immutable=dis.readBoolean();
         }
     }
 }
