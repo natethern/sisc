@@ -116,24 +116,13 @@ public class BinaryDeserializer extends Deserializer {
 
     protected Expression fetchShared(int oid) throws IOException {
         Expression e=alreadyReadObjects[oid];
-        boolean hadIt=false;
-        if (e!=null) {
-            hadIt=true;
-        } else {
+        if (e==null) {
             long currentPos=raf.getFilePointer();
-            //System.err.println("Seeking to "+ base +":"+ offsets[oid]+" ["+Long.toHexString(base+offsets[oid])+"]");
+            if (DEBUG) System.err.println("Seeking to "+ base +":"+ offsets[oid]+" ["+Long.toHexString(base+offsets[oid])+"]");
             raf.seek(base + offsets[oid]);
             e=readExpression();
             raf.seek(currentPos);
         }
-
-        /*
-        if (e instanceof AssociativeEnvironment) {
-            System.err.println(hashCode());
-
-            System.err.println("AE "+e+" returned from oid "+oid+":"+hadIt);
-            if (!hadIt) new Throwable().printStackTrace();
-            }*/
         return e;
     }            
 

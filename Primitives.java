@@ -219,12 +219,7 @@ public class Primitives extends ModuleAdapter {
 
         private Value v;
 
-        private static int serCount = 0;
-        private static int deserCount = 0;
-
-
         public Parameter() {}
-
 
         public Parameter(Value v) {
             this.v = v;
