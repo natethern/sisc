@@ -128,13 +128,6 @@ public class SchemeVector extends Value {
 	return b.toString();
     }
 
-    public Object javaValue() {
-        Object[] v=new Object[vals.length];
-        for (int i=0; i<vals.length; i++)
-            v[i]=vals[i].javaValue();
-        return v;
-    }
-
     public void serialize(Serializer s, DataOutput dos)
     throws IOException {
         if (SERIALIZATION) {

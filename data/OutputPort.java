@@ -88,10 +88,6 @@ public class OutputPort extends NamedValue {
             throw new RuntimeException(e.getMessage());
         }
     }
-
-    public Object javaValue() {
-        return w;
-    }
 }
 
 

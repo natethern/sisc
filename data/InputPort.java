@@ -118,10 +118,6 @@ public class InputPort extends NamedValue {
             throw new RuntimeException(e.getMessage());
         }
     }
-
-    public Object javaValue() {
-        return r;
-    }
 }
 
 

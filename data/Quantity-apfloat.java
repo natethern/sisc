@@ -1352,20 +1352,6 @@ public class Quantity extends Value {
         return out_cache=b.toString();
     }
 
-    public Object javaValue() {
-        switch(type) {
-        case FIXEDINT:
-            return new Integer(intValue());
-        case INTEG:
-            return i;
-    case DECIM: case RATIO:
-            return new Double(doubleValue());
-        case COMPLEX:
-            return this;
-        }
-        return null;
-    }
-
     public void deserialize(Serializer s,
                             DataInput dis) throws IOException {
         if (SERIALIZATION) {

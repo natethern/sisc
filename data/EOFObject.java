@@ -44,10 +44,6 @@ public class EOFObject extends Value implements Singleton {
         return "#!eof";
     }
 
-    public Object javaValue() {
-        return new EOFException();
-    }
-
     public int hashCode() {
 	return 0x12345678;
     }

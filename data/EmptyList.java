@@ -52,10 +52,6 @@ public class EmptyList extends Pair implements Singleton {
         return display();
     }
 
-    public Object javaValue() {
-        return null;
-    }
-
     public boolean valueEqual(Value o) {
 	return o instanceof EmptyList;
     }

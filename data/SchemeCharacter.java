@@ -87,10 +87,6 @@ public class SchemeCharacter extends Value {
         return (int)c;
     }
 
-    public Object javaValue() {
-        return new Character(c);
-    }
-
     public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             dos.writeChar(c);

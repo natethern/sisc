@@ -38,9 +38,6 @@ import java.io.*;
 public abstract class Value extends Expression implements Immediate {
 
     public abstract String display();
-    public Object javaValue() {
-        return this;
-    }
 
     public String synopsis() {
 	return synopsis(DEFAULT_SYNOPSIS_LENGTH);

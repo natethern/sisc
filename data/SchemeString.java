@@ -109,10 +109,6 @@ public class SchemeString extends Value {
         return write();
     }
 
-    public Object javaValue() {
-        return new String(stringdata);
-    }
-
     public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             dos.writeUTF(new String(stringdata));

@@ -49,10 +49,6 @@ public class SchemeBoolean extends Value implements Singleton {
         return (val ? "#t" : "#f");
     }
 
-    public Object javaValue() {
-        return val ? JTRUE : JFALSE;
-    }
-
     public int hashCode() {
 	return (val ? 0x01010101 : 0x10101010);
     }
