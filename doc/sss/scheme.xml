@@ -298,9 +298,7 @@
 		trailing-duplicate-eliminated vectors in its output.  If
 		false, ordinary full-length vectors without prefixes will be
 		emitted.
-		
-		Sets or retrieves the reader's case sensitivity.
-	      </para>
+              </para>
 	    </blockquote>
 	  </para>
 	</blockquote>
