@@ -18,6 +18,7 @@
          (values rv (merge-states state test-state conseq-state altern-state))))
       ;; Lets
       (((lambda ,formals ,body) ,[values* values-state*] ...)
+       (guard (list? formals))
        (let-values ([(rv state) (opt:let formals values* body state)])
          (values rv (merge-states state (apply merge-states values-state*)))))
       ((lambda ,formals ,body)
