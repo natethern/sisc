@@ -64,7 +64,6 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define("exp", EXP);
             define("find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
             define("floor", FLOOR);
-            define("getenv", GETENV);
             define("imag-part", IMAGPART);
             define("inexact->exact", INEXACT2EXACT);
             define("inexact?", INEXACTQ);
@@ -73,7 +72,6 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define("interaction-environment", INTERACTIONENVIRONMENT);
             define("length", LENGTH);
             define("list->vector", LIST2VECTOR);
-            define("load-native-library", LOADNL);
             define("log", LOG);
             define("_make-parameter", MAKEPARAM);
             define("_make-native-parameter", MAKENATIVEPARAM);
@@ -93,11 +91,9 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define("parameter?", PARAMETERQ);
             define("permit-interrupts", PERMITINTERRUPTS);
             define("procedure?", PROCEDUREQ);
-            define("putprop", PUTPROP);
             define("quotient", QUOTIENT);
             define("real-part", REALPART);
             define("remainder", REMAINDER);
-            define("remprop", REMPROP);
             define("round", ROUND);
             define("set-box!", SETBOX);
             define("set-car!", SETCAR);

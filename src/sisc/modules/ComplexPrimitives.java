@@ -25,9 +25,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             define("call-with-escape-continuation", CALLEC);
             define("call-with-failure-continuation", CALLFC);
             define("call-with-values", CALLWITHVALUES);
-            define("compact-string-rep", COMPACTSTRINGREP);
             define("current-wind", CURRENTWIND);
-            define("environment?", ENVIRONMENTQ);
             define("eval", EVALUATE);
             define("gensym", GENSYM);
             define("getenv", GETENV);
@@ -37,8 +35,6 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             define("set-symbolic-environment!", SETENVIRONMENT);
             define("interaction-environment", INTERACTIONENVIRONMENT);
             define("load-native-library", LOADNL);
-            define("max-float-precision", MAXFLOATPRECISION);
-            define("min-float-precision", MINFLOATPRECISION);
             define("native-library-binding", NLBINDING);
             define("native-library-binding-names", NLBINDINGNAMES);
             define("number->string", NUMBER2STRING);
