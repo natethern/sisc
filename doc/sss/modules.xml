@@ -310,19 +310,15 @@
               <void/>
               <methodname>serialize</methodname>
               <methodparam>
-                <type>sisc.Serializer</type>
+                <type>sisc.ser.Serializer</type>
                 <parameter>serializer</parameter>
-              </methodparam>
-              <methodparam>
-                <type>java.io.DataOutput</type>
-                <parameter>out</parameter>
               </methodparam>
               <exceptionname>java.io.IOException</exceptionname>
             </methodsynopsis>
             <blockquote>
               <para>
-                Serializes the contents of the value to the given
-                <literal>DataOutput</literal> source.  
+                Serializes the contents of the Expression to
+                the given Serialization context.
               </para>
             </blockquote>
           </para>
@@ -332,129 +328,195 @@
               <void/>
               <methodname>deserialize</methodname>
               <methodparam>
-                <type>sisc.Serializer</type>
-                <parameter>serializer</parameter>
-              </methodparam>
-              <methodparam>
-                <type>java.io.DataInput</type>
-                <parameter>in</parameter>
+                <type>sisc.ser.Deserializer</type>
+                <parameter>deserializer</parameter>
               </methodparam>
               <exceptionname>java.io.IOException</exceptionname>
             </methodsynopsis>
             <blockquote>
               <para>
-                Sets the state of the expression to the serialized
-                data read from <parameter>in</parameter>.
+                Sets the state of the Expression to the serialized
+                data read from <parameter>deserializer</parameter>.
               </para>
             </blockquote>
           </para>
         </blockquote>
       </para>
       <para>
-        While serializing or deserializing, there are a number of
-        helper methods provided by the passed
-        <function>serializer</function> object.  The methods in
-        <literal>DataOutput</literal> and <literal>DataInput</literal>
-        are also useful for serialization and deserialization respectively.
-        <blockquote>
-          <para>
-            <methodsynopsis language="java">
-              <modifier>public</modifier>
-              <type>int</type>
-              <methodname>readBer</methodname>
-              <methodparam>
-                <type>java.io.DataInput</type>
-                <parameter>in</parameter>
-              </methodparam>
-              <exceptionname>java.io.IOException</exceptionname>
-            </methodsynopsis>
-            <methodsynopsis language="java">
-              <modifier>public</modifier>
-              <type>short</type>
-              <methodname>readBerShort</methodname>
-              <methodparam>
-                <type>java.io.DataInput</type>
-                <parameter>in</parameter>
-              </methodparam>
-              <exceptionname>java.io.IOException</exceptionname>
-            </methodsynopsis>
-            <methodsynopsis language="java">
-              <modifier>public</modifier>
-              <type>long</type>
-              <methodname>readBerLong</methodname>
-              <methodparam>
-                <type>java.io.DataInput</type>
-                <parameter>in</parameter>
-              </methodparam>
-              <exceptionname>java.io.IOException</exceptionname>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Reads a BER encoded integer from the data source.  BER
-                encoding is a compact encoding of integers that
-                requires a variable number of bytes to represent an
-                Integer.
-              </para>
-            </blockquote>
-            <methodsynopsis language="java">
-              <modifier>public</modifier>
-              <void/>
-              <methodname>writeBer</methodname>
-              <methodparam>
-                <type>long</type>
-                <parameter>val</parameter>
-              </methodparam>
-              <methodparam>
-                <type>java.io.DataInput</type>
-                <parameter>in</parameter>
-              </methodparam>
-              <exceptionname>java.io.IOException</exceptionname>
-            </methodsynopsis>        
-            <blockquote>
-              <para>
-                Writes an integer to the data source encoded as a BER
-                integer.
-              </para>
-            </blockquote>
-            <methodsynopsis language="java">
-              <modifier>public</modifier>
-              <void/>
-              <methodname>serialize</methodname>
-              <methodparam>
-                <type>sisc.Expression</type>
-                <parameter>expr</parameter>
-              </methodparam>
-              <methodparam>
-                <type>java.io.DataOutput</type>
-                <parameter>out</parameter>
-              </methodparam>
-              <exceptionname>java.io.IOException</exceptionname>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Serializes a &SISC; Expression or Value to the given
-                data source.
-              </para>
-            </blockquote>
-            <methodsynopsis language="java">
-              <modifier>public</modifier>
-              <type>Expression</type>
-              <methodname>deserialize</methodname>
-              <methodparam>
-                <type>java.io.DataInput</type>
-                <parameter>in</parameter>
-              </methodparam>
-              <exceptionname>java.io.IOException</exceptionname>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Deserializes a &SISC; expression from the given data 
-                source.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
+        The <literal>Serializer</literal> and
+        <literal>Deserializer</literal> objects implement Java's
+        <literal>java.io.DataOutput</literal> and
+        <literal>java.io.DataInput</literal> interfaces,
+        respectively.  This means that you can use any of the
+        write/read functions in those interfaces to serialize the
+        state of your Expression or Value.  In addition, a
+        number of methods are provided that are helpful for this
+        domain.
       </para>
+      <sect3>
+        <title>Deserializer methods</title>
+        <para>
+          <blockquote>
+            <para>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>BigInteger</type>
+                <methodname>readBigInteger</methodname>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Reads a BigInteger from the stream.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>BigDecimal</type>
+                <methodname>readBigDecimal</methodname>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Reads a BigDecimal from the stream.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>Class</type>
+                <methodname>readClass</methodname>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Reads a Java Class object from the stream.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>Expression</type>
+                <methodname>readExpression</methodname>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Reads a &SISC; Expression from the stream.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>Module</type>
+                <methodname>readModule</methodname>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Reads a &SISC; Native Module from the stream.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+        </para>
+      </sect3>
+      <sect3>
+        <title>Serializer methods</title>
+        <para>
+          <blockquote>
+            <para>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>void</type>
+                <methodname>writeBigInteger</methodname>
+                <methodparam>
+                  <type>BigInteger</type>
+                  <parameter>bigint</parameter>
+                </methodparam>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Writes a BigInteger to the stream.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>BigDecimal</type>
+                <methodname>writeBigDecimal</methodname>
+                <methodparam>
+                  <type>BigDecimal</type>
+                  <parameter>bigdecim</parameter>
+                </methodparam>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Writes a BigDecimal to the stream.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>Class</type>
+                <methodname>writeClass</methodname>
+                <methodparam>
+                  <type>Class</type>
+                  <parameter>clazz</parameter>
+                </methodparam>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Writes a Java Class object to the stream.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>Expression</type>
+                <methodname>writeExpression</methodname>
+                <methodparam>
+                  <type>Expression</type>
+                  <parameter>expr</parameter>
+                </methodparam>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Writes a &SISC; Expression to the stream.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>Module</type>
+                <methodname>writeModule</methodname>
+                <methodparam>
+                  <type>Module</type>
+                  <parameter>m</parameter>
+                </methodparam>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Writes a &SISC; Native Module to the stream.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+        </para>
+      </sect3>
     </sect2>
   </sect1>
 </chapter>
