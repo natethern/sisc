@@ -30,3 +30,8 @@
 
 (define (not-redefined? proc)
   (memq proc (getprop 'assumptive-procedures '*opt*)))
+
+(define (core-form-not-redefined? proc)
+  (eq? (getprop proc '*sisc-specific*)
+       (getprop proc (interaction-environment))))
+
