@@ -2078,19 +2078,638 @@ Foo fooObj = new Foo(1, 2);
       knowledge of the Java reflection API.
     </para>
     <sect2>
-      <title>Classes</title>
+      <title>Classes</title>]
+      <para>
+        These functions access attributes and members of classes.
+      </para>
+      <blockquote>
+        <para>
+          <indexterm><primary>java-class-name</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>symbol</type>
+            <methodname>java-class-name</methodname>
+            <methodparam><parameter>jclass</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Returns the name of <parameter>jclass</parameter>.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>java-class-flags</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>list of symbols</type>
+            <methodname>java-class-flags</methodname>
+            <methodparam><parameter>jclass</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns the modifiers of <parameter>jclass</parameter>, for 
+			  example <literal>public static final</literal>.			
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>java-class-declaring-class</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>jclass</type>
+            <methodname>java-class-declaring-class</methodname>
+            <methodparam><parameter>jclass</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns the Java class in which <parameter>jclass</parameter>
+			  was declared, or null if it was declared at the top level.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>java-class-declared-superclasses</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>list of jclass</type>
+            <methodname>java-class-declared-superclasses</methodname>
+            <methodparam><parameter>jclass</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Returns the direct superclasses of <parameter>jclass</parameter>.
+            </para>
+            <para>
+              For ordinary classes this is the class' superclass followed by
+              all of its interfaces in the order they were specified in the class
+              declaration.  For primitive and array types the direct superclass or 
+              superclasses reflect the widening conversions performed by Java.  
+              For example, <literal>&lt;jint&gt;</literal>'s superclass is
+              <literal>&lt;jlong&gt;</literal> and <literal>&lt;java.util.array-list[][]&gt;
+              </literal>'s superclasses are:
+              <itemizedlist>
+                <listitem><para><literal>&lt;java.util.abstract-list[][]&gt;</literal></para></listitem>
+                <listitem><para><literal>&lt;java.util.list[][]&gt;</literal></para></listitem>
+                <listitem><para><literal>&lt;java.util.random-access[][]&gt;</literal></para></listitem>
+                <listitem><para><literal>&lt;java.lang.cloneable[][]&gt;</literal></para></listitem>
+                <listitem><para><literal>&lt;java.io.serializable[][]&gt;</literal></para></listitem>
+              </itemizedlist>
+              Note that this behavior is different from the corresponding method in the Java reflection 
+              API.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>java-class-declared-classes</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>list of jclasses/#f</type>
+            <methodname>java-class-declared-classes</methodname>
+            <methodparam><parameter>jclass</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns all the classes declared by <parameter>jclass</parameter>,
+			  or <literal>#f</literal> if access to this information is 
+			  prohibited.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>java-class-declared-constructors</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>list of jconstructor/#f</type>
+            <methodname>java-class-declared-constructors</methodname>
+            <methodparam><parameter>jclass</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns all the constructors declared by <parameter>jclass</parameter>,
+			  or <literal>#f</literal> if access to this information is 
+			  prohibited.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>java-class-declared-methods</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>list of jmethods/#f</type>
+            <methodname>java-class-declared-methods</methodname>
+            <methodparam><parameter>jclass</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns all the methods declared by <parameter>jclass</parameter>,
+			  or <literal>#f</literal> if access to this information is 
+			  prohibited.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>java-class-declared-fields</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>list of jfields/#f</type>
+            <methodname>java-class-declared-fields</methodname>
+            <methodparam><parameter>jclass</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns all the fields declared by <parameter>jclass</parameter>,
+			  or <literal>#f</literal> if access to this information is 
+			  prohibited.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>java-class-precedence-list</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>list of jclasses</type>
+            <methodname>java-class-precedence-list</methodname>
+            <methodparam><parameter>jclass</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns teh total order of <parameter>jclass</parameter> and
+			  all direct and indirect superclasses, as determined by the
+			  partial orders obtained from calling 
+			  <function>java-class-declared-superclasses</function>.
+            </para>
+            <para>
+              The ordering of the classes returned by <function>
+              java-class-declared-superclasses</function> is considered
+              "weak", whereas the ordering of the class itself with
+              respect to its direct superclasses is considered strong.
+              The significance of this is that when computing the class 
+              precedence list weak orderings are re-arranged if that is the
+              only way to obtain a total order.  By contrast, strong orderings
+              are never rearranged.
+           </para>
+           <para>
+           	  The class precedence list is important when comparing types 
+           	  using the type system's <function>compare-types</function> procedure,
+           	  which is used by the generic procedure method selection algorithm 
+           	  (see <xref linkend="comparemethods"/>).  Since generic Java methods
+           	  and field accessors/mutators are implemented in terms of generic 
+           	  procedures they are all affected by the class precedence list.
+           </para>
+          </blockquote>
+        </para>      
+      </blockquote>
     </sect2>
     <sect2>
+      <title>Constructors</title>
+    </sect2>
+      <blockquote>
+        <para>
+         <indexterm><primary>java-constructor?</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>#t/#f</type>
+            <methodname>java-constructor?</methodname>
+            <methodparam><parameter>value</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Determines whether <parameter>value</parameter> is a Java 
+			  constructor.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-constructor-name</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>symbol</type>
+            <methodname>java-constructor-name</methodname>
+            <methodparam><parameter>jconstructor</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns the name of <parameter>jconstructor</parameter>.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-constructor-flags</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>list of symbols</type>
+            <methodname>java-constructor-flags</methodname>
+            <methodparam><parameter>jconstructor</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns the modifiers of <parameter>jconstructor<parameter>,
+			  such as <literal>public static final</literal>.			
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-constructor-declaring-class</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>jclass</type>
+            <methodname>java-constructor-declaring-class</methodname>
+            <methodparam><parameter>jconstructor</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns the Java class in which <parameter>jconstructor</parameter>
+			  was declared.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-constructor-parameter-types</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>list of jclasses</type>
+            <methodname>java-constructor-parameter-types</methodname>
+            <methodparam><parameter>jconstructor</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns the declared types of the parameters of <parameter>
+			  jconstructor</parameter>.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-constructor-procedure</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>procedure</type>
+            <methodname>java-constructor-procedure</methodname>
+            <methodparam><parameter>jconstructor</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns a procedure that when called invokes the constructor
+			  with the passed arguments, returning the newly created
+			  objected.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-constructor-method</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>method</type>
+            <methodname>java-constructor-method</methodname>
+            <methodparam><parameter>jconstructor</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+	 		  Returns a method suitable for adding to generic procedures
+			  that, when called invokes the underlying Java constructor 
+			  with the passed arguments.  The resulting newly created
+			  object is returned.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+    <sect2>
       <title>Methods</title>
+       <blockquote>
+        <para>
+         <indexterm><primary>java-method?</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>#t/#f</type>
+            <methodname>java-method?</methodname>
+            <methodparam><parameter>value</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Determines whether <parameter>value</parameter> is a Java 
+			  method.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-method-name</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>symbol</type>
+            <methodname>java-method-name</methodname>
+            <methodparam><parameter>jmethod</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns the name of <parameter>jmethod</parameter>.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-method-flags</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>list of symbols</type>
+            <methodname>java-method-flags</methodname>
+            <methodparam><parameter>jmethod</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns the modifiers of <parameter>jmethod<parameter>,
+			  such as <literal>public static final</literal>.			
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-method-declaring-class</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>jclass</type>
+            <methodname>java-method-declaring-class</methodname>
+            <methodparam><parameter>jmethod</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns the Java class in which <parameter>jmethod</parameter>
+			  was declared.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-method-parameter-types</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>list of jclasses</type>
+            <methodname>java-method-parameter-types</methodname>
+            <methodparam><parameter>jmethod</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns the declared types of the parameters of <parameter>
+			  jmethod</parameter>.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-method-procedure</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>procedure</type>
+            <methodname>java-method-procedure</methodname>
+            <methodparam><parameter>jmethod</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns a procedure that when called invokes the method
+			  with the passed arguments, returning the newly created
+			  objected.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-method-method</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>method</type>
+            <methodname>java-method-method</methodname>
+            <methodparam><parameter>jmethod</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+	 		  Returns a method suitable for adding to generic procedures
+			  that, when called invokes the underlying Java method 
+			  on the object passed as the first argument, and with the 
+			  remaining arguments passed as parameters.  The result
+			  of the method invocation is returned.  Static methods
+			  can be invoked by passing a typed null object as the first
+			  parameter to the generic procedure.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>      
     </sect2>
     <sect2>
       <title>Fields</title>
+      <blockquote>
+        <para>
+         <indexterm><primary>java-field?</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>#t/#f</type>
+            <methodname>java-field?</methodname>
+            <methodparam><parameter>value</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Determines whether <parameter>value</parameter> is a Java 
+			  field.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-field-name</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>symbol</type>
+            <methodname>java-field-name</methodname>
+            <methodparam><parameter>jfield</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns the name of <parameter>jfield</parameter>.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-field-flags</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>list of symbols</type>
+            <methodname>java-field-flags</methodname>
+            <methodparam><parameter>jfield</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns the modifiers of <parameter>jfield<parameter>,
+			  such as <literal>public static final</literal>.			
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-field-declaring-class</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>jclass</type>
+            <methodname>java-field-declaring-class</methodname>
+            <methodparam><parameter>jfield</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns the Java class in which <parameter>jfield</parameter>
+			  was declared.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-field-type</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>jclass</type>
+            <methodname>java-field-type</methodname>
+            <methodparam><parameter>jfield</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns the declared type of <parameter>
+			  jfield</parameter>.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-field-accessor-procedure</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>procedure</type>
+            <methodname>java-field-accessor-procedure</methodname>
+            <methodparam><parameter>jfield</parameter></methodparam>
+          </methodsynopsis>
+        </para>
+        <para>
+         <indexterm><primary>java-field-modifier-procedure</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>procedure</type>
+            <methodname>java-field-modifier-procedure</methodname>
+            <methodparam><parameter>jfield</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+			  Returns a procedure that when called returns or sets (respectively)
+			  the value of the field on the object specified by the first parameter
+			  to the invocation.  Static fields can be accessed/modified by
+			  passing a null object.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+         <indexterm><primary>java-field-accessor-method</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>method</type>
+            <methodname>java-field-accessor-method</methodname>
+            <methodparam><parameter>jfield</parameter></methodparam>
+          </methodsynopsis>
+        </para>
+        <para>
+         <indexterm><primary>java-field-modifier-method</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>method</type>
+            <methodname>java-field-modifier-method</methodname>
+            <methodparam><parameter>jfield</parameter></methodparam>
+          </methodsynopsis>          
+          <blockquote>
+            <para>
+	 		  Returns a method suitable for adding to generic procedures that,
+	 		  when called returns/sets the value of the field on the object
+	 		  specified by the first argument to the generic procedure invocation.
+	 		  Static fields can be accessed/modified by passing a typed null
+	 		  object as the first parameter to the generic procedure.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote> 
     </sect2>
     <sect2>
       <title>Arrays</title>
+      <para>
+      <blockquote>
+        <para>
+         <indexterm><primary>java-array-class</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>jclass</type>
+            <methodname>java-array-class</methodname>
+            <methodparam><parameter>jclass</parameter></methodparam>
+            <methodparam><parameter>dimensions</parameter></methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+      	  	  Returns a class representing the array type that has 
+      	  	  <parameter>jclass</parameter> as the component type and
+      	  	  <parameter>dimensions</parameter> as the number of dimensions.
+      	  	  For example, the following expressions are equivalent:
+      	  	  <programlisting>
+(java-array-class &lt;jint&gt; 2)
+(java-class '|int[][]|)
+			  </programlisting>
+			</para>
+			<para>
+			  The list of direct superclasses returned by <function>
+			  java-class-declared-superclasses</function> for an array
+			  class is consistent with the widening conversion performed
+			  by Java, e.g. the direct superclasses of <literal>
+			  java.util.ArrayList[][]</literal> are:
+			  <itemizedlist>
+			    <listitem><para><literal>java.util.AbstractList[][]</literal></para></listitem>
+			    <listitem><para><literal>java.util.List[][]</literal></para></listitem>
+			    <listitem><para><literal>java.util.RandomAccess[][]</literal></para></listitem>
+			    <listitem><para><literal>java.lang.Cloneable[][]</literal></para></listitem>
+			    <listitem><para><literal>java.io.Serializable[][]</literal></para></listitem>
+			  </itemizedlist>
+			  This is different from what the Java reflection APIs return.
+			</para>
+	      </blockquote>
+	    </para>
+	  </blockquote>
     </sect2>
     <sect2>
       <title>Proxies</title>
+      <para>
+        <blockquote>
+          <para>
+           <indexterm><primary>java-proxy-class</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>jclass</type>
+              <methodname>java-proxy-class</methodname>
+              <methodparam><parameter>jinterface</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates a Java class that implements the specified interfaces.
+                The class can be instantiated with an invocation handler, such
+                as the one returned by <function>java-proxy-dispatcher</function>
+                below, that delegates method invocation to Scheme code.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+           <indexterm><primary>java-proxy-dispatcher</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>invocation-handler</type>
+              <methodname>java-proxy-dispatcher</methodname>
+              <methodparam><parameter>alist</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+				Creates an invocation handler suitable for use in the
+				instantiation of a proxy (see <function>java-proxy-class
+				</function> above).  The keys in <parameter>alist</parameter>
+				are Java method names and the values are Scheme procedures.
+              </para>
+              <para>
+                When a method is invoked on a proxy, the procedure matching
+                the method's name is invoked with the proxy object and the
+                parameters of the method invocation as arguments.  The result 
+                of the invocation is returned as the result of the method
+                call.  If <parameter>alist</parameter> does not contain
+                a binding for the method name, an error is signalled.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
     </sect2>
   </sect1>
 </chapter>

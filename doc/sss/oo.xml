@@ -973,7 +973,7 @@
               </programlisting>
             </informalexample>
           </para>
-          <para>
+          <para id="comparemethods">
             <indexterm><primary>compare-methods</primary></indexterm>
             &procedure;
             <methodsynopsis language="scheme">
