@@ -1,3 +1,8 @@
+2003-01-03  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed a vlr recycling bug in single-value-return case of
+	|call-with-values|.
+
 2003-01-02  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed an inadequacy in gen-sym, which wasn't supporting prefix-less

@@ -16,13 +16,19 @@ public class ApplyValuesContEval extends Expression {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        if (r.acc instanceof Values) 
+        if (r.acc instanceof Values) {
             r.vlr=((Values)r.acc).values;
+            //We prevent the vlr from being recycled because values
+            //are first class and hence something could hang on to
+            //them and use them more than once. Currently there is no
+            //way for this to happen from Scheme code, so atm we are
+            //just playing safe here.
+            r.vlk=true;
+        }
         else {
-            r.replaceVLR(1);
+            r.newVLR(1);
             r.vlr[0]=r.acc;
         }
-        r.vlk=true;
         r.nxp=APPEVAL;
         r.acc=(Value)consumer;
     }
