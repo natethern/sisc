@@ -31,7 +31,7 @@
        (let-values ([(rv state) (opt:set! formal value state)])
          (values rv (merge-states state vstate))))     
       ((compile-in-annotation ,[expr expr-state] ,annotation)
-       (values `(compile-in-annotations ,expr ,annotation)
+       (values `(compile-in-annotation ,expr ,annotation)
                expr-state))
       ((,[rator rator-state] ,[rands* rands-state*] ...)
        (let-values ([(rv state) (opt:application rator rands* state)])
