@@ -6,9 +6,6 @@
 ;; of bindings to the named symbolic environment.  A library can
 ;; add to more than one symenv by having more than one segment.
 
-(import s2j)
-(import generic-procedures)
-
 (define <sisc.ser.LibraryBuilder> (java-class "sisc.ser.LibraryBuilder"))
 (define <sisc.ser.Library> (java-class "sisc.ser.Library"))
 (define <sisc.ser.SeekableDataInputStream> 
