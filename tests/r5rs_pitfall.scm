@@ -1,6 +1,6 @@
 (define-syntax should-be
   (syntax-rules ()
-    ((should-be test-id value expression)
+    ((_ test-id value expression)
      (let ((return-value expression))
          (if (not (equal? return-value value))
            (for-each (lambda (v) (display v))
@@ -70,7 +70,7 @@
 (should-be 3.1 4
   (let-syntax ((foo
                 (syntax-rules ()
-                  ((foo expr) (+ expr 1)))))
+                  ((_ expr) (+ expr 1)))))
     (let ((+ *))
       (foo 3))))
 
@@ -96,9 +96,9 @@
   (let ((x 1))
     (let-syntax
         ((foo (syntax-rules ()
-                ((foo y) (let-syntax
+                ((_ y) (let-syntax
                              ((bar (syntax-rules ()
-                                   ((bar) (let ((x 2)) y)))))
+                                   ((_) (let ((x 2)) y)))))
                          (bar))))))
       (foo x))))
 
@@ -242,6 +242,13 @@
          (yin yang))))))
 
 ;; Miscellaneous 
+
+;;Al Petrofsky
+;; In thread:
+;; R5RS Implementors Pitfalls
+;; http://groups.google.com/groups?selm=871zemtmd4.fsf@app.dial.idiom.com
+(should-be 8.1 -1
+  (let - ((n (- 1))) n))
 
 ;;Not really an error to fail this (Matthias Radestock)
 ;;If this returns (0 1 0), your map isn't call/cc safe, but is probably
