@@ -43,6 +43,8 @@
     <para>
       <blockquote>
 	<para>
+          <indexterm><primary>exit</primary>
+          </indexterm>
 	  &procedure; 
 	  <methodsynopsis language="scheme">
             <type><emphasis>does not return</emphasis></type>

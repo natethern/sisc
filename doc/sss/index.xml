@@ -1,0 +1,23 @@
+<!-- func-block-write
+func-open-input-string
+func-open-output-string
+func-get-output-string
+   func-pretty-print
+     func-get-host-by-ip-name
+  func-get-host-name-by-ip
+  func-get-local-host
+  func-open-socket-input-port
+  func-open-socket-output-port
+  func-close-socket
+  func-open-tcp-socket
+  func-open-tcp-listener
+  func-accept-tcp-socket
+  func-set-so-timeout!-->
+<index>
+    <title>Index of Functions, Parameters, and Syntax</title>
+</index>
+<!-- Keep this comment at the end of the file
+Local variables:
+sgml-parent-document:("sss.xml" "chapter")
+End:
+-->

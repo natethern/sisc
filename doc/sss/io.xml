@@ -79,6 +79,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         different value:
         <blockquote>
           <para>
+            <indexterm><primary>with-current-url</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
@@ -102,6 +104,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         URLs can be normalized using
         <blockquote>
           <para>
+            <indexterm><primary>normalize-url</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>url</type>
@@ -135,6 +139,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         different value:
         <blockquote>
           <para>
+            <indexterm><primary>with-current-url</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
@@ -182,6 +188,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para>
+            <indexterm><primary>open-output-file</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>output port</type>
@@ -205,6 +213,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para>
+            <indexterm><primary>flush-output-port</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>undefined</type>
@@ -247,6 +257,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para id="func-block-read">
+            <indexterm><primary>block-read</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>integer</type>
@@ -275,6 +287,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-block-write">
+            <indexterm><primary>block-write</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>undefined</type>
@@ -313,6 +327,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para id="func-open-input-string">
+            <indexterm><primary>open-input-string</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>input-port</type>
@@ -348,6 +364,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-get-output-string">
+            <indexterm><primary>get-output-string</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>string</type> <methodname>get-output-string</methodname>
@@ -387,6 +405,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para id="func-call-with-input-file">
+            <indexterm><primary>call-with-input-file</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
@@ -407,6 +427,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-call-with-output-file">
+            <indexterm><primary>call-with-output-file</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
@@ -427,6 +449,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-call-with-input-string">
+            <indexterm><primary>call-with-input-string</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
@@ -447,6 +471,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-call-with-output-string">
+            <indexterm><primary>call-with-output-string</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>string</type>
@@ -481,6 +507,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para id="func-with-input-from-port">
+            <indexterm><primary>with-input-from-port</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
@@ -502,6 +530,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-with-output-to-port">
+            <indexterm><primary>with-output-to-port</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
@@ -523,6 +553,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-with-input-from-file">
+            <indexterm><primary>with-input-from-file</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
@@ -545,6 +577,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-with-output-to-file">
+            <indexterm><primary>with-output-to-file</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
@@ -568,6 +602,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-with-input-from-string">
+            <indexterm><primary>with-input-from-string</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
@@ -590,6 +626,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-with-output-to-string">
+            <indexterm><primary>with-output-to-string</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>string</type>
@@ -672,6 +710,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para id="func-get-host-by-ip-name">
         <blockquote>
           <para>
+            <indexterm><primary>get-host-by-ip-name</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>string</type>
@@ -689,6 +729,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-get-host-name-by-ip">
+            <indexterm><primary>get-host-name-by-ip</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>string</type>
@@ -706,6 +748,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-get-local-host">
+            <indexterm><primary>get-local-host</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>string</type>
@@ -734,6 +778,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para>
+            <indexterm><primary>socket?</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
               <type>&num;t/&num;f</type>
@@ -748,6 +794,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-open-socket-input-port">
+            <indexterm><primary>open-socket-input-port</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>input-port</type>
@@ -762,6 +810,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-open-socket-output-port">
+            <indexterm><primary>open-socket-output-port</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>output-port</type>
@@ -782,6 +832,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-close-socket">
+            <indexterm><primary>close-socket</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>unspecified</type>
@@ -834,6 +886,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para id="func-open-tcp-socket">
+            <indexterm><primary>open-tcp-socket</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>socket</type>
@@ -856,6 +910,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-open-tcp-listener">
+            <indexterm><primary>open-tcp-listener</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>server-socket</type>
@@ -880,6 +936,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para>
+            <indexterm><primary>server-socket?</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
               <type>&num;t/&num;f</type>
@@ -895,6 +953,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-accept-tcp-socket">
+            <indexterm><primary>accept-tcp-socket</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>socket</type>
@@ -914,6 +974,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-set-so-timeout">
+            <indexterm><primary>set-so-timeout!</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>undefined</type>
@@ -957,6 +1019,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para>
+            <indexterm><primary>open-udp-listen-socket</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>udp socket</type>
@@ -987,6 +1051,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para>
+            <indexterm><primary>open-udp-socket</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>udp socket</type>
@@ -1063,6 +1129,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para>
+            <indexterm><primary>open-multicast-socket</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>multicast udp socket</type>
@@ -1151,6 +1219,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para>
+            <indexterm><primary>join-multicast-group</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>undefined</type>
@@ -1173,6 +1243,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para>
+            <indexterm><primary>leave-multicast-group</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>undefined</type>
@@ -1212,6 +1284,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para>
+            <indexterm><primary>set-multicast-ttl!</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>undefined</type>
@@ -1253,6 +1327,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para id="func-pretty-print">
         <blockquote>
           <para>
+            <indexterm><primary>pretty-print</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>unspecified</type>
@@ -1334,6 +1410,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para>
+            <indexterm><primary>open-source-input-file</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>input-port</type>
@@ -1351,6 +1429,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para>
+            <indexterm><primary>input-port-location</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>list</type>
@@ -1387,6 +1467,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para>
+            <indexterm><primary>find-resource</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>url</type>
@@ -1405,6 +1487,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para>
+            <indexterm><primary>find-resources</primary>
+            </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>url-list</type>

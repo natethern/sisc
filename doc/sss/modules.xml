@@ -43,6 +43,8 @@
       </para>
       <blockquote>
         <para>
+          <indexterm><primary>display</primary>
+          </indexterm>
           <methodsynopsis language="java">
             <modifier>public</modifier>
             <type>String</type>
@@ -73,6 +75,8 @@
       </para>
       <blockquote>
         <para>
+          <indexterm><primary>write</primary>
+          </indexterm>
           <methodsynopsis language="java">
             <modifier>public</modifier>
             <type>String</type>
@@ -92,6 +96,8 @@
       </blockquote>
       <blockquote>
         <para>
+          <indexterm><primary>synopsis</primary>
+          </indexterm>
           <methodsynopsis language="java">
             <modifier>public</modifier>
             <type>String</type>
@@ -114,6 +120,8 @@
       </blockquote>
       <blockquote>
         <para>
+          <indexterm><primary>eq</primary>
+          </indexterm>
           <methodsynopsis language="java">
             <modifier>public</modifier>
             <type>boolean</type>
@@ -133,6 +141,8 @@
       </blockquote>
       <blockquote>
         <para>
+          <indexterm><primary>valueEqual</primary>
+          </indexterm>
           <methodsynopsis language="java">
             <modifier>public</modifier>
             <type>boolean</type>
@@ -166,6 +176,8 @@
         <classname>Module</classname> subclass:
         <blockquote>
           <para>
+            <indexterm><primary>getModuleName</primary>
+            </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
               <type>String</type>
@@ -178,6 +190,8 @@
                 be acceptable for use in filenames.
               </para>
             </blockquote>
+            <indexterm><primary>getModuleVersion</primary>
+            </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
               <type>float</type>
@@ -189,6 +203,8 @@
                 Returns the version of this module.
               </para>
             </blockquote>
+            <indexterm><primary>getModuleBindingNames</primary>
+            </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
               <type>sisc.data.Symbol[]</type>
@@ -201,6 +217,8 @@
                 exported by this module.  Each name is a Scheme symbol.
               </para>
             </blockquote>
+            <indexterm><primary>getBindingValue</primary>
+            </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
               <type>Value</type>
@@ -215,6 +233,8 @@
                 Returns the value of a given binding exported by this module.
               </para>
             </blockquote>
+            <indexterm><primary>eval</primary>
+            </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
               <type>Value</type>
@@ -261,6 +281,8 @@
         available in <classname>ModuleAdapter</classname>:
         <blockquote>
           <para>
+            <indexterm><primary>define</primary>
+            </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
               <void/>
@@ -304,6 +326,8 @@
         argument) constructor, and implement the following two methods:
         <blockquote>
           <para>
+            <indexterm><primary>serialize</primary>
+            </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
               <void/>
@@ -322,6 +346,8 @@
             </blockquote>
           </para>
           <para>
+            <indexterm><primary>deserialize</primary>
+            </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
               <void/>
@@ -357,6 +383,8 @@
         <para>
           <blockquote>
             <para>
+              <indexterm><primary>readBigInteger</primary>
+              </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
                 <type>BigInteger</type>
@@ -371,6 +399,8 @@
               </blockquote>
             </para>
             <para>
+              <indexterm><primary>readBigDecimal</primary>
+              </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
                 <type>BigDecimal</type>
@@ -385,6 +415,8 @@
               </blockquote>
             </para>
             <para>
+              <indexterm><primary>readClass</primary>
+              </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
                 <type>Class</type>
@@ -399,6 +431,8 @@
               </blockquote>
             </para>
             <para>
+              <indexterm><primary>readExpression</primary>
+              </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
                 <type>Expression</type>
@@ -413,6 +447,8 @@
               </blockquote>
             </para>
             <para>
+              <indexterm><primary>readModule</primary>
+              </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
                 <type>Module</type>
@@ -427,6 +463,8 @@
               </blockquote>
             </para>
             <para>
+              <indexterm><primary>readSymbolicEnvironment</primary>
+              </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
                 <type>SymbolicEnvironment</type>
@@ -448,6 +486,8 @@
         <para>
           <blockquote>
             <para>
+              <indexterm><primary>writeBigInteger</primary>
+              </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
                 <type>void</type>
@@ -465,6 +505,8 @@
               </blockquote>
             </para>
             <para>
+              <indexterm><primary>writeBigDecimal</primary>
+              </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
                 <type>void</type>
@@ -482,6 +524,8 @@
               </blockquote>
             </para>
             <para>
+              <indexterm><primary>writeClass</primary>
+              </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
                 <type>void</type>
@@ -499,6 +543,8 @@
               </blockquote>
             </para>
             <para>
+              <indexterm><primary>writeExpression</primary>
+              </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
                 <type>void</type>
@@ -516,6 +562,8 @@
               </blockquote>
             </para>
             <para>
+              <indexterm><primary>writeModule</primary>
+              </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
                 <type>void</type>
@@ -533,6 +581,8 @@
               </blockquote>
             </para>
             <para>
+              <indexterm><primary>writeSymbolicEnvironment</primary>
+              </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
                 <type>void</type>

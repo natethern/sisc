@@ -22,6 +22,8 @@
     </para>
     <blockquote>
       <para>
+        <indexterm><primary>get-last-error</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>error-record</type>
@@ -52,6 +54,8 @@
     </para>
     <blockquote>
       <para>
+        <indexterm><primary>stack-trace</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>list</type>
@@ -74,6 +78,8 @@
         </blockquote>
       </para>
       <para>
+        <indexterm><primary>print-stack-trace</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <void/>
@@ -96,6 +102,8 @@
     </para>
     <blockquote>
       <para>
+        <indexterm><primary>print-error</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <void/>
@@ -134,6 +142,8 @@
     </para>
     <blockquote>
       <para>
+        <indexterm><primary>emit-annotations</primary>
+        </indexterm>
         &parameter;
         <methodsynopsis language="scheme">
           <type>&num;t/&num;f</type>
@@ -181,6 +191,8 @@
     <para>
       <blockquote>
 	<para>
+          <indexterm><primary>trace-lambda</primary>
+          </indexterm>
 	  &syntax;
 	  <methodsynopsis language="scheme">
 	    <type>procedure</type>
@@ -208,6 +220,8 @@
 	  </blockquote>
 	</para>
 	<para>
+          <indexterm><primary>trace-let</primary>
+          </indexterm>
 	  &syntax;
 	  <methodsynopsis language="scheme">
 	    <type>value</type>
@@ -230,6 +244,8 @@
 	  </blockquote>
 	</para>
 	<para>
+          <indexterm><primary>trace</primary>
+          </indexterm>
 	  &procedure;
 	  <methodsynopsis language="scheme">
 	    <type>undefined</type>
@@ -252,6 +268,8 @@
 	  </blockquote>
 	</para>
 	<para>
+          <indexterm><primary>untrace</primary>
+          </indexterm>
 	  &procedure;
 	  <methodsynopsis language="scheme">
 	    <type>undefined</type>

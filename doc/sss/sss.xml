@@ -425,6 +425,8 @@ for <function>sqrt</function>, it is not clear what other mathematical
         <para>
 	  <blockquote>
 	    <para>
+              <indexterm><primary>compact-string-rep</primary>
+              </indexterm>
 	      &parameter;
 	      <methodsynopsis language="scheme">
                 <type>&num;t/&num;f</type>
