@@ -1226,7 +1226,7 @@
 	<programlisting>
 (with-failure-continuation
     (lambda (error-record error-k)
-      (error 'example-function "could not evaluate the expression.")
+      (error 'example-function "could not evaluate the expression."))
   (lambda ()
     (+ 1 (/ 1 0) 3)))
 ; => <emphasis>An error is raised: Error in example-function: could not evaluate the expression.</emphasis>

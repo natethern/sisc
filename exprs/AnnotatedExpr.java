@@ -89,9 +89,9 @@ public class AnnotatedExpr extends Value {
         return b.toString();
     }
 
-    public void readExpression(Deserializer s) throws IOException {
-	    expr=s.readExpression();
-	    annotation=(Value)s.readExpression();
+    public void deserialize(Deserializer s) throws IOException {
+        expr=s.readExpression();
+        annotation=(Value)s.readExpression();
         stripped=(Value)s.readExpression();
     }
 }

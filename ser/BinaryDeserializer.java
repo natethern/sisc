@@ -83,8 +83,9 @@ public class BinaryDeserializer extends Deserializer {
                     //if (ac>0) System.err.println("!!!"+ac);
                     for (; ac>0; ac--) {
                         //System.err.println(pos);
-                        Symbol key=(Symbol)readExpression();
-                        e.setAnnotation(key, (Value)readExpression());
+                        Expression key=readExpression();
+                        Expression value=readExpression();
+                        e.setAnnotation((Symbol)key, (Value)value);
                     }
                 }
                 return e;
