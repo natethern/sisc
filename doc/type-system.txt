@@ -67,21 +67,27 @@ TYPE<=.
 
 TYPES<= <list types1> <list types2> => #t/#f
 Determines whether all of <types1> are sub-types of <types2> by
-performing a pair-wise comparison using TYPE<=
-
+performing a pair-wise comparison using TYPE<= until a difference is
+found (in which ase #f is returned) or one (or both) of the lists has
+been exhausted (in which case #t is returned).
 
 INSTANCES=OF? <list values> <list types> => #t/#f
 Determines whether all of <values> are instances of <types> by
-performing a pair-wise test using INSTANCE-OF?.
+performing a pair-wise test using INSTANCE-OF? until a test returns #f
+(in which case #f is returned) or one (or both) of the lists has been
+exhausted (in which case #t is returned).
 
 
 TYPES= <list types1> <list types2> => #t/#f
 Determines whether all of <types1> are equal to <types2> by performing
-a pair-wise comparison using TYPE=.
+a pair-wise comparison using TYPE= until a difference is found (in
+which case #f is returned) or one (or both) of the lists has been
+exhausted (in which case #t is returned).
 
 
 Hooks
 -----
+
 Hooks are the main mechanism by which Scheme code can extend the
 default type system. The core type system procedures TYPE-OF, TYPE<=
 and COMPARE-TYPES all provide such hooks. Extension takes place by
@@ -126,12 +132,13 @@ must be a symbol and it must denote a Java class that is a sub-class
 of sisc.data.Value, the base of the SISC value type hierarchy.
 
 
-What's Changed
---------------
+What's Changed?
+---------------
+
 The major changes in the type system since the previous version are as
 follows:
 
-* The code and module is no longer mixed with that of generic
+* The code and module are no longer mixed with that of generic
 procedures, the object system and Java FFI.
 
 * The type of a Scheme value is distinct from the type obtained by S2J
