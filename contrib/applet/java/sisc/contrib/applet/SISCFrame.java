@@ -10,6 +10,7 @@ import sisc.io.*;
 
 import javax.swing.Box;
 import sisc.util.Util;
+import sisc.interpreter.Interpreter;
 
 public class SISCFrame extends JPanel implements ActionListener, KeyListener {
 
@@ -18,10 +19,10 @@ public class SISCFrame extends JPanel implements ActionListener, KeyListener {
     protected JButton eval, clear;
     protected JCheckBox autoClear, submitOnEnter;
 
-    public SISCFrame() {
+    public SISCFrame(Interpreter r) {
         setLayout(new BorderLayout());
         SchemePanel.SchemeDocument d=new SchemePanel.SchemeDocument();
-        sp=new SchemePanel(d, new JTextPane(d));
+        sp=new SchemePanel(r, d, new JTextPane(d));
         input=new JTextArea(4,70);
         input.setText("; Enter s-expressions here");
         JSplitPane split=new JSplitPane(JSplitPane.VERTICAL_SPLIT, sp, input);

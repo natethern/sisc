@@ -8,6 +8,7 @@ import javax.swing.text.*;
 import java.awt.font.*;
 import java.io.*;
 
+import sisc.interpreter.Interpreter;
 import sisc.*;
 import sisc.data.*;
 import sisc.io.*;
@@ -28,7 +29,7 @@ public class SchemePanel extends JScrollPane {
 
     public DynamicEnvironment dynenv;
     
-    public SchemePanel(SchemeDocument sd, JTextPane disp) {
+    public SchemePanel(Interpreter r, SchemeDocument sd, JTextPane disp) {
         super(disp, VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_AS_NEEDED);
         dos=new DocumentOutputStream(sd, sd.siscText, disp);
         this.sd=sd;
@@ -41,9 +42,12 @@ public class SchemePanel extends JScrollPane {
                                         new WriterOutputPort(new PrintWriter(new BufferedOutputStream(dos)), true));
         disp.setEditable(false);
         currentEditablePos=sd.getLength()-1;
-        repl=new REPL("main", dynenv);
-        repl.setPriority(repl.getPriority()+1);
-        repl.start();
+
+
+        Procedure p=(Procedure)
+            r.ctx.toplevel_env.lookup(Symbol.get("sisc-cli"));
+        repl=new REPL("main", p);
+        repl.go();
     }
 
     public Dimension getPreferredSize() {

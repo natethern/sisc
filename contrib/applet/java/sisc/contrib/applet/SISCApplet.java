@@ -23,7 +23,7 @@ public class SISCApplet extends JApplet {
             SeekableInputStream in=new MemoryRandomAccessInputStream(new GZIPInputStream(conn.getInputStream()));
             REPL.initializeInterpreter(r, new String[0], in);
             Context.exit();
-            SISCFrame sf=new SISCFrame();
+            SISCFrame sf=new SISCFrame(r);
             //	sf.pack();
             //	sf.show();
             getContentPane().add(sf);
