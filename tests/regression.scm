@@ -170,3 +170,8 @@
 
 ;; equal? was insensitive to exactness of numbers
 (should-be 987271 #f (equal? 3 3.0))
+
+;; Should cause an error
+(should-be 994759 #f
+  (with/fc (lambda (m e) #f)
+           (lambda () (and (set-cdr! `(3) 3) #t))))
