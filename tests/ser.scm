@@ -1,34 +1,29 @@
-(import old-generic-procedures)
-(import old-s2j)
+(import s2j)
 
 ;;example data: a Java object that refers to a k that refers to a Java
 ;;object that refers to a Scheme object.
 
-(define <java.util.Vector>
-  (java-class "java.util.Vector"))
-(define-generic add)
-(define-generic element-at)
+(define-java-class <java.util.vector>)
+(define-generic-java-methods add element-at)
 
-(define v (make <java.util.Vector>))
-(let ([d (make <java.util.Vector>)])
+(define v (java-new <java.util.vector>))
+(let ([d (java-new <java.util.vector>)])
   (add d (java-wrap '(1 2)))
   (call/cc (lambda (k) (add v (java-wrap k))))
   (java-unwrap (element-at d (->jint 0))))
 
 ;;serialization
 
-(define <java.io.FileOutputStream>
-  (java-class "java.io.FileOutputStream"))
-(define <java.io.ObjectOutputStream>
-  (java-class "java.io.ObjectOutputStream"))
-(define-generic write-object)
-(define-generic flush)
-(define-generic close)
+(define-java-classes
+  <java.io.file-output-stream>
+  <java.io.object-output-stream>)
+(define-generic-java-methods write-object flush close)
 
-(define p (make <java.io.ObjectOutputStream>
-                (make <java.io.FileOutputStream>
-                      (->jstring "sisck.ser"))))
-(define-generic print-stack-trace)
+(define p (java-new <java.io.object-output-stream>
+                    (java-new <java.io.file-output-stream>
+                              (->jstring "sisck.ser"))))
+(define-generic-java-method print-stack-trace)
+
 (with/fc (lambda (m e) (print-stack-trace m) #f)
   (lambda () (write-object p v)))
 
@@ -37,15 +32,14 @@
 
 ;;deserialization
 
-(define <java.io.FileInputStream>
-  (java-class "java.io.FileInputStream"))
-(define <java.io.ObjectInputStream>
-  (java-class "java.io.ObjectInputStream"))
-(define-generic read-object)
+(define-java-classes
+  <java.io.file-input-stream>
+  <java.io.object-input-stream>)
+(define-generic-java-methods read-object close)
 
-(define p (make <java.io.ObjectInputStream>
-                (make <java.io.FileInputStream>
-                      (->jstring "sisck.ser"))))
+(define p (java-new <java.io.object-input-stream>
+                    (java-new <java.io.file-input-stream>
+                              (->jstring "sisck.ser"))))
 (define vv #f)
 (with/fc (lambda (m e) (print-stack-trace m) #f)
   (lambda () (set! vv (read-object p))))
