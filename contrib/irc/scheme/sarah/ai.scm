@@ -90,12 +90,10 @@
        (lambda ()
          (find-pattern-helper tokens pattern-graph 1))))))
           
-(define bot-quiet #t)
-
 (define (list-skip ls n)
   (if (zero? n) ls (list-skip (cdr ls) (- n 1))))
 
-(define (answer from message . priv-message)
+(define (answer from channel message . priv-message)
   (let* ([tokens (tokenize message)]
          [strict-tokens (map (lambda (ts)
                                (string->symbol
@@ -112,10 +110,11 @@
           [response (and pattern 
                          (display pattern)
                          (and-let* ([handler (assq pattern pattern-handlers)]) 
-                                   ((cdr handler) from cleaned-message to-bot)))])
+                                   ((cdr handler) from channel
+				    cleaned-message to-bot)))])
     (if response
-        (and (or (not bot-quiet) to-bot) response)
-        (and (or (not bot-quiet) to-bot)
+        (and (or (not (bot-quiet (string->symbol channel))) to-bot) response)
+        (and (or (not (bot-quiet (string->symbol channel))) to-bot)
              (ask-alice cleaned-message)))))
     
 (define (bot-clean message)
@@ -142,6 +141,8 @@
     (evaluate . EVALUATE)
     (seen . SEEN)
     (tell . TELL)
+    (leave . LEAVE)
+    (join . JOIN)
     ))
 
 (define (help . args)
@@ -178,10 +179,14 @@
                        (cdr random-result))))))))
        
 
-(define (quiet . args) (set! bot-quiet #t) "Fine, shutting up.")
-(define (listen . args) (set! bot-quiet #f) "Okay, I'm listening.")
+(define (quiet from channel message . args) 
+  (bot-quiet! (string->symbol channel) #t) 
+  "Fine, shutting up.")
+(define (listen from channel message. args) 
+  (bot-quiet! (string->symbol channel) #f) 
+  "Okay, I'm listening.")
 
-(define (evaluate from message st)
+(define (evaluate from channel message st)
   (let-values ([(ignoreables term) (string-split message "evaluate ")])
     (let* ([evaluation-thread
            (thread/new 
@@ -214,7 +219,7 @@
       (thread/result watchdog-thread))))
 
 
-(define (learn from message st)
+(define (learn from channel message st)
   (let-values ([(term definition) (string-split message " is at ")])    
     (and (or (and term definition
                   (if (store-item dbcon 'where term definition)
@@ -332,7 +337,7 @@
                 (->jstring 
                  (sisc:format "~a, ~a says: ~a" recipient sender message))))
   
-(define (tell from message st)
+(define (tell from channel message st)
   (let-values ([(ignoreables message) (string-split message "tell ")])
     (and message
          (and-let* ([spidx (string-index message " ")]
@@ -349,7 +354,7 @@
                                   (string-downcase recipient) message)
                    (random-elem tell-responses))))))))
       
-(define (seen from message st)
+(define (seen from channel message st)
   (let-values ([(ignoreables person) (string-split message "seen ")])
     (and person 
          (begin 
@@ -362,18 +367,34 @@
                               message)
                  (random-elem haventseen-responses)))))))
                               
-(define (what-is from message) (*-is 'what from message))
-(define (where-is from message) (*-is 'where from message))
-(define (who-is from message) (*-is 'what from message))
+(define (what-is from channel message st) (*-is 'what from channel message st))
+(define (where-is from channel message st) (*-is 'where from channel message st))
+(define (who-is from channel message st) (*-is 'what from channel message st))
+
+(define (join from channel message st) 
+  (let-values ([(ignoreables chan) (string-split message "join ")])
+    (if (char=? (string-ref chan 0) #\#)
+	(do-join chan))
+    "Okay."))
+
+(define (leave from channel message st) 
+  (let-values ([(ignoreables chan) (string-split message "leave ")])
+    (if (char=? (string-ref chan 0) #\#)
+	(do-part chan))
+    "Okay."))
+
+	  
 
 (define (if-spoken-to handler)
-  (lambda (from message spoken-to)
+  (lambda (from channel message spoken-to)
     (if spoken-to
-	(handler from message spoken-to)
+	(handler from channel message spoken-to)
 	#f)))
 
 (define pattern-handlers
   `((WHATIS . ,(if-spoken-to what-is))
+    (JOIN . ,(if-spoken-to join))
+    (LEAVE . ,(if-spoken-to leave))
     (WHATTIME . ,what-time)
     (WHOIS . ,(if-spoken-to who-is))
     (WHEREIS . ,(if-spoken-to where-is))

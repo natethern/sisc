@@ -39,12 +39,24 @@
   (define (onMessage channel nick login host message)
     (store-seen dbcon (normalize-nick nick) (->string nick) (->string message))
     (unless (equal? (symbol->string bot-name) nick)
-      (let ([response (answer (->string nick) (->string message))])
+      (let ([response (answer (->string nick) (->string channel)
+			      (->string message))])
         (when response
           (send-messages channel response)))))
 
+  (define (do-part channel)
+    (remove-presence (string->symbol channel))
+    (part-channel bot (->jstring channel))
+    (putprop 'members (string->symbol chan) '())
+    (set! channels (remove channel channels)))
+
+  (define (do-join channel)
+    (add-presence (string->symbol channel))
+    (join-channel bot (->jstring channel))
+    (set! channels (cons channel channels))
+    (bot-quiet! (string->symbol channel) #t))
+
   (for-each (lambda (channel)
               (display (sisc:format "Joining ~a...~%" channel))
-              (add-presence (string->symbol channel))
-              (join-channel bot (->jstring channel)))
-            channels)
+	      (do-join channel))
+            '("#sisc" "#scheme"))
