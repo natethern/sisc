@@ -1,10 +1,11 @@
-<!doctype book public "-//OASIS//DTD DocBook V4.0//EN" [
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                    "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd" [
  <!ENTITY SISC "<emphasis>SISC</emphasis>">
  <!ENTITY R5RS "R<superscript>5</superscript>RS">
- <!ENTITY syntax "<emphasis role=bold><emphasis>syntax:</emphasis></emphasis>">
- <!ENTITY returns "<emphasis role=bold><emphasis>returns:</emphasis></emphasis>">
- <!ENTITY procedure "<emphasis role=bold><emphasis>procedure:</emphasis></emphasis>">
- <!ENTITY parameter "<emphasis role=bold><emphasis>parameter:</emphasis></emphasis>">
+ <!ENTITY syntax "<emphasis role='bold'><emphasis>syntax:</emphasis></emphasis>">
+ <!ENTITY returns "<emphasis role='bold'><emphasis>returns:</emphasis></emphasis>">
+ <!ENTITY procedure "<emphasis role='bold'><emphasis>procedure:</emphasis></emphasis>">
+ <!ENTITY parameter "<emphasis role='bold'><emphasis>parameter:</emphasis></emphasis>">
  <!ENTITY f "&num;f">
 ]>
 
@@ -137,6 +138,7 @@
 	  brackets ([]), that parameter is optional, and may be
 	  ommited.  If the description ends in elipses (...), then 
 	  additional arguments may be provided, but are not required.
+	</para>
       </sect2>
     </sect1>
   </chapter>
@@ -208,6 +210,7 @@
 	The error-location indicates which procedure encountered
 	the error.  The final form is produced by an explicit call
 	to the error function with no arguments.
+      </para>
       <para>
 	In addition to errors, it is possible for code to produce
 	warnings during compilation or run-time.  A warning is a
@@ -702,6 +705,7 @@
 	  The port-obtaining functions above work on most sockets.
 	  An exception applies for  TCP server sockets, which are used only to
 	  obtain connected TCP sockets.
+	</para>
       </sect2>
       <sect2 id="TCP">
 	<title>
