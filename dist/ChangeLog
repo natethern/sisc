@@ -41,6 +41,10 @@
 	* Immutables now implement equals/hashCode so like Immutables
 	  can be serialized once.
 
+2002-02-05  Matthias Radestock  <matthias@sorted.org>
+
+	* Added support for legacy macros (defmacro and define-macro)
+
 2002-02-04  Matthias Radestock  <matthias@sorted.org>
 
 	* Added support for the common ASCII escape sequences (i.e. \n, \r
