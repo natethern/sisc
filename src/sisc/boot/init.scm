@@ -436,7 +436,7 @@
 	     (lambda args
 	       (boolean-or (null? args) 
 		   (null? (cdr args))
-		   (and (boolean-or (= (car args) (cadr args))
+		   (and (or (= (car args) (cadr args))
 			    (comparator (car args) (cadr args)))
 			(apply chainer (cdr args))))))])
   (set! >= (_?= > >=))
@@ -460,6 +460,11 @@
            r))))
 
 ;;;;;;;;;;;;;; String functions
+(define (string-append . args)
+  (cond [(null? args) ""]
+        [(null? (cdr args)) (car args)]
+        [else (apply string-append (_string-append (car args) (cadr args))
+                   (cddr args))]))
 
 (define char-downcase
   (let* ((a (char->integer #\A))

@@ -114,6 +114,8 @@
 (define $syntax-dispatch (void))
 (define $make-environment (void))
 
+(define throw (lambda args (apply error args)))
+
 (define error
   (lambda args
     (begin

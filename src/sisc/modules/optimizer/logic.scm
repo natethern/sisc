@@ -186,6 +186,15 @@
      (values 
       (make-begin B conseq)
       (new-state)))
+    ;;Or optimization
+    (((,?lambda (,var) (,?if ,itest ,iconseq ,ialtern))
+      ,val)
+     (guard (and (core-form-eq? ?if 'if #%if) 
+                 (core-form-eq? ?lambda 'lambda #%lambda)
+                 (eq? itest var)
+                 (eq? iconseq itest)))
+      (opt:if #%if `(#%if ,val #t ,ialtern)
+              conseq altern state))
     ;;Begin lifting (possibly unsafe)
     ((,?begin ,e* ... ,el)
      (guard (core-form-eq? ?begin 'begin #%begin))
