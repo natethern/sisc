@@ -35,6 +35,17 @@ package sisc.data;
 import sisc.ContinuationException;
 import sisc.Interpreter;
 
+/**
+ * An Immediate is any Expression that can be evaluated without evaluating
+ * any other expressions.
+ *
+ * Immediate Expressions must override the getValue method to return
+ * a non-null value.
+ *
+ * Declaring an Expression to be immediate allows the engine to optimize
+ * the evaluation of other expressions that contain them.  Applications
+ * and sequences (begins) benefit most.
+ */
 public interface Immediate {
 
     Value getValue(Interpreter r) throws ContinuationException;

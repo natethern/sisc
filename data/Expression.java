@@ -38,11 +38,13 @@ import sisc.*;
 import java.io.*;
 
 /**
- * The base class for any and all expressions.  An expression is anything in Scheme that can evaluate to a value.
+ * The base class for any and all expressions.  An expression is anything 
+ * in Scheme that can evaluate to a value.
  * 
- * In SISC, an expression can be <i>annotated</i>.  An annotation is any key/value pair attached
- * to an expression for the duration of its lifetime.  Annotations are used to implement procedure
- * properties and source-tracked debugging.
+ * In SISC, an expression can be <i>annotated</i>.  An annotation is 
+ * any key/value pair attached to an expression for the duration of its 
+ * lifetime.  Annotations are used to implement procedure properties 
+ * and source-tracked debugging.
  */
 public abstract class Expression extends Util implements Serializable {
     protected static Set EMPTYSET=new TreeSet();
@@ -50,8 +52,8 @@ public abstract class Expression extends Util implements Serializable {
     public Map annotations;
     
     /**
-     * Returns the value of the annotation named by <tt>key</tt>.  If there is no such annotation, <tt>def</tt>
-     * is returned instead.
+     * Returns the value of the annotation named by <tt>key</tt>.  
+     * If there is no such annotation, <tt>def</tt> is returned instead.
      * 
      * @param key 
      * @param def 
@@ -64,8 +66,8 @@ public abstract class Expression extends Util implements Serializable {
     }
 
     /**
-     * Returns the value of the annotation named by <tt>key</tt>.  False is returned if there is no such
-     * annotation.
+     * Returns the value of the annotation named by <tt>key</tt>.  False 
+     * is returned if there is no such annotation.
      * 
      * @param key 
      */
@@ -74,8 +76,9 @@ public abstract class Expression extends Util implements Serializable {
     }
 
     /**
-     * Sets the value of the annotation named by <tt>key</tt> to the value <tt>val</tt>.  The previous value
-     * is returned.  If there was no previous value, <tt>def</tt> is returned.
+     * Sets the value of the annotation named by <tt>key</tt> to the 
+     * value <tt>val</tt>.  The previous value is returned.  If there 
+     * was no previous value, <tt>def</tt> is returned.
      * 
      * @param key 
      * @param val 
@@ -89,8 +92,9 @@ public abstract class Expression extends Util implements Serializable {
     }
 
     /**
-     * Sets the value of the annotation named by <tt>key</tt> to the value <tt>val</tt>.  The previous value
-     * is returned.  If there was no previous value, false is returned.
+     * Sets the value of the annotation named by <tt>key</tt> to the 
+     * value <tt>val</tt>.  The previous value is returned.  If there was 
+     * no previous value, false is returned.
      * 
      * @param key 
      * @param val 
@@ -108,42 +112,48 @@ public abstract class Expression extends Util implements Serializable {
     }
 
     /**
-     * All expressions can be evaluated to some Scheme value.  This function implements the exact manner
-     * in which an expression is evaluated.  An expression, when evaluated, performs some action that
-     * results in its value being placed in the <tt>acc</tt> register of the given Interpreter.
+     * All expressions can be evaluated to some Scheme value.  This function 
+     * implements the exact manner in which an expression is evaluated.  
+     * An expression, when evaluated, performs some action that results 
+     * in its value being placed in the <tt>acc</tt> register of the given
+     * Interpreter.
      * 
-     * An expression that immediately evaluates to a value (i.e. does not require that an additional expression be evaluated to obtain its value) <i>must</i> clear the <tt>nxp</tt> register by setting it to null.
-     * Otherwise, <tt>nxp</tt> should be set to the expression that is to be evaluated next before this method returns.
+     * An expression that immediately evaluates to a value (i.e. does not 
+     * require that an additional expression be evaluated to obtain its 
+     * value) <i>must</i> clear the <tt>nxp</tt> register by setting it to 
+     * null.
+     * Otherwise, <tt>nxp</tt> should be set to the expression that is to 
+     * be evaluated next before this method returns.
      * 
      * @exception ContinuationException 
      * @param r 
      */
     public abstract void eval(Interpreter r) throws ContinuationException;
     /**
-     * If an expression implements the Immediate interface, it must implement getValue, which
-     * returns as a Value, the immediate value of this expression.  Immediates never require any
-     * additional expressions to be evaluated to obtain their result.
-     * 
+     * If an expression implements the Immediate interface, it must 
+     * override getValue, which returns as a Value, the immediate value 
+     * of this expression. 
      * 
      * @exception ContinuationException 
      * @param r 
-     * @return the immediate value of this expression, or null if the value  
-     *     cannot be obtained immediately.
+     * @return the immediate value of this expression, or null if the value 
+     *        cannot be obtained   immediately.
      */
     public Value getValue(Interpreter r) throws ContinuationException {
         return null;
     }
 
     /**
-     * A debugging function, express returns a Scheme value that describes this expression.  See
-     * examples in sisc.exprs.*
+     * A debugging function, express returns a Scheme value that describes 
+     * this expression.  See examples in sisc.exprs.*
      */
     public abstract Value express();
 
     /**
-     * All Expressions must implement a default (no-argument) constructor.  Those that wish to be
-     * serialized to a heap must implement both this and the deserialize method.
-     * The Expression may use any method of the DataOutput stream and the Serializer serialization context
+     * All Expressions must implement a default (no-argument) constructor.  
+     * Those that wish to be serialized to a heap must implement both this 
+     * and the deserialize method.  The Expression may use any method of 
+     * the DataOutput stream and the Serializer serialization context
      * to write its state, to be deserialized later.
      * 
      * @exception IOException 
@@ -155,9 +165,10 @@ public abstract class Expression extends Util implements Serializable {
     }
 
     /**
-     * All Expressions must implement a default (no-argument) constructor.  Those that wish to be
-     * serialized to a heap must implement both this and the serialize method.
-     * The Expression may use any method of the DataInput stream and the Serializer serialization context
+     * All Expressions must implement a default (no-argument) constructor.  
+     * Those that wish to b serialized to a heap must implement both this 
+     * and the serialize method.  The Expression may use any method of the 
+     * DataInput stream and the Serializer serialization context
      * to read its state.
      * 
      * @exception IOException 

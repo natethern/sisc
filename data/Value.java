@@ -36,7 +36,8 @@ import sisc.*;
 import java.io.*;
 
 /**
- * Value is the base class for anything treated as a first-class value within Scheme.
+ * Value is the base class for anything treated as a first-class value 
+ * within Scheme.
  */
 public abstract class Value extends Expression implements Immediate {
 
@@ -79,7 +80,8 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     /**
-     * Compares this Value to another for pointer-equality.  This is used to implement Scheme 'eq?'.
+     * Compares this Value to another for pointer-equality.  This is
+     * used to implement Scheme 'eq?'.
      * 
      * @param v 
      */
@@ -88,7 +90,8 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     /**
-     * Compares this value to another for semantic equality.  Used to implement Scheme's 'equal?'.
+     * Compares this value to another for semantic equality.  Used to
+     * implement Scheme's 'equal?'.
      * 
      * @param v 
      */
@@ -101,8 +104,8 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     /**
-     * Called to evaluate this value.  As Values ordinarily evaluate to themselves, this
-     * method simply sets <tt>acc</tt> to this.
+     * Called to evaluate this value.  As Values ordinarily evaluate
+     * to themselves, this method simply sets <tt>acc</tt> to this.
      * 
      * @param r 
      * @exception ContinuationException 

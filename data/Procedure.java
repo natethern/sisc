@@ -35,14 +35,17 @@ package sisc.data;
 import sisc.*;
 
 /**
- * The Procedure class is the base class for any Scheme Procedure.  A procedure is an entity that
- * can be applied to zero or more arguments (stored in the <tt>vlr</tt> register) to return a value or cause
- * additional expressions to be evaluated.
+ * The Procedure class is the base class for any Scheme Procedure.  
+ *
+ * A procedure is an entity that can be applied to zero or more 
+ * arguments (stored in the <tt>vlr</tt> register) to return a 
+ * value or cause additional expressions to be evaluated.
  */
 public abstract class Procedure extends NamedValue {
 
     /**
-     * Called when applying this procedure to a number of arguments in the <tt>vlr</tt> register.
+     * Called when applying this procedure to a number of arguments in 
+     * the <tt>vlr</tt> register.
      * 
      * @param r 
      * @exception ContinuationException 
