@@ -1,3 +1,15 @@
+2005-01-01  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Fix inexactness preservation regressions introduced
+          with the fixable procedures. (#1094233)
+
+	* Fix 3-arg numeric equal bug. (#1094233)
+
+	* Fix nested quasiquote bug (#1093762)
+
+	* Fixed remprop incompatibility with sidecar environments.
+          (#1093699) (Thanks to Magnus Jonsson)
+
 2004-12-31  Matthias Radestock  <matthias@sorted.org>
 
 	* Added GENSYM? predicate, contributed by Magnus Jonsson.

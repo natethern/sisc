@@ -227,7 +227,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                 if (vlr[1] instanceof SymbolicEnvironment) {
                     env(vlr[1]).undefine(symbol(vlr[0]));
                 } else {
-                    r.undefine(symbol(vlr[0]), symbol(vlr[1]));
+                    r.getCtx().toplevel_env.getSidecarEnvironment(symbol(vlr[1])).undefine(symbol(vlr[0])); 
                 }
                 return VOID;
             case PUTPROP:
