@@ -46,7 +46,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         Relative file names or URLs are resolved in relation to the        following parameter:
         <blockquote>
           <para>
-	    <indexterm><primary>current-url</primary></indexterm>
+            <indexterm><primary>current-url</primary></indexterm>
               &parameter;
             <methodsynopsis language="scheme">
               <type>url</type>
@@ -185,43 +185,44 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         the port.
       </para>
       <blockquote>
-	<para>
-	  <indexterm><primary>flush-output-port</primary>
-	  </indexterm>
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>undefined</type>
-	    <methodname>flush-output-port</methodname>
-	    <methodparam>
-	      <parameter>output-port</parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Causes the specified
-	      <parameter>output-port</parameter>'s buffered data to
-	      be written immediately.  This operation is allowed on
-	      both auto-flush and non-auto-flush output ports,
-	      though it has no effect on the former.
-	    </para>
-	  </blockquote>
-	</para>
+        <para>
+          <indexterm><primary>flush-output-port</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>undefined</type>
+            <methodname>flush-output-port</methodname>
+            <methodparam>
+              <parameter>output-port</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Causes the specified
+              <parameter>output-port</parameter>'s buffered data to be
+              written immediately.  This operation is allowed on both
+              auto-flush and non-auto-flush output ports, though it
+              has no effect on the former.
+            </para>
+          </blockquote>
+        </para>
       </blockquote>
     </sect2>
     <sect2 id="charports">
       <title>Character Ports</title>
       <para>
-	The &R5RS; I/O primitives implemented by &SISC; create
-	<emphasis>character ports</emphasis>.  Character ports read
-	characters from input sources and treat the data as characters
-	in a given character set.   
-	Correspondingly, character ports output bytes from characters 
-	according to a given character set's encoding rules. 
-      </para> 
+        The &R5RS; I/O primitives implemented by &SISC; create
+        <emphasis>character ports</emphasis>.  Character ports read
+        characters from input sources and treat the data as characters
+        in a given character set.  Correspondingly, character ports
+        output bytes from characters according to a given character
+        set's encoding rules.
+      </para>
       <para>
-        By default character ports use the value of the string parameter 
-        <function>character-set</function> as the character encoding name.
-        A list of many possible encoding names can be found in the  
+        By default character ports use the value of the string
+        parameter <function>character-set</function> as the character
+        encoding name.  A list of many possible encoding names can be
+        found in the
         <ulink url="http://java.sun.com/j2se/1.4.1/docs/guide/intl/encoding.doc.html">
         Java Platform Documentation</ulink>
       </para>
@@ -285,8 +286,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         </blockquote>
       </para>
       <para>
-	One may also temporarily reset the default character set using
-	the <function>with-character-set</function> function.
+        One may also temporarily reset the default character set using
+        the <function>with-character-set</function> function.
       </para>
       <para>
         <blockquote>
@@ -306,26 +307,26 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>
-		Changes the value of the
-                <function>character-set</function> parameter, and
-		the default character set to the named encoding while
-		executing the body of <parameter>thunk</parameter>.
+                Changes the value of the
+                <function>character-set</function> parameter, and the
+                default character set to the named encoding while
+                executing the body of <parameter>thunk</parameter>.
               </para>
             </blockquote>
           </para>
-	</blockquote>
+        </blockquote>
       </para>
     </sect2>
     <sect2 id="BinaryIO">
       <title>Binary Ports</title>
       <para>
-	In addition to the &R5RS; I/O functions, &SISC; provides a
-	symmetric set of functions for reading and writing binary data
-	to and from ports with no character set translation.  These
-	ports are operated on in the same way as character ports,
-	i.e. with <function>read</function>,
-	<function>read-char</function>, <function>display</function>,
-	etc.  
+        In addition to the &R5RS; I/O functions, &SISC; provides a
+        symmetric set of functions for reading and writing binary data
+        to and from ports with no character set translation.  These
+        ports are operated on in the same way as character ports,
+        i.e. with <function>read</function>,
+        <function>read-char</function>, <function>display</function>,
+        etc.
       </para>
       <para>
         <blockquote>
@@ -349,7 +350,6 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
         </blockquote>
-
         <blockquote>
           <para>
             <indexterm><primary>open-binary-output-file</primary>
@@ -367,7 +367,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>
-		Creates an output port in the same manner as
+                Creates an output port in the same manner as
                 <function>open-output-file</function>, producing an
                 output port that does no character-set encoding.
               </para>
@@ -375,6 +375,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
           </para>
         </blockquote>
       </para>
+    </sect2>
     <sect2 id="BlockIO">
       <title>Block I/O</title>
       <para>
@@ -564,7 +565,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <parameter>procedure</parameter>
               </methodparam>
             </methodsynopsis>
-	  </para>
+          </para>
           <para id="func-call-with-binary-input-file">
             <indexterm><primary>call-with-binary-input-file</primary>
             </indexterm>
@@ -610,7 +611,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <parameter>procedure</parameter>
               </methodparam>
             </methodsynopsis>
-	  </para>
+          </para>
           <para id="func-call-with-binary-output-file">
             <indexterm><primary>call-with-binary-output-file</primary>
             </indexterm>
@@ -632,13 +633,12 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <parameter>url</parameter>. 
                 The result of the thunk is returned.  
               </para>
-	      <para>
-	      <para>
-		In the non-binary form, if the optional 
-		<parameter>encoding</parameter>
+              <para>
+                In the non-binary form, if the optional 
+                <parameter>encoding</parameter>
                 parameter is provided, the character port created will
                 use the specified encoding rather than the default.
-	      </para>
+              </para>
             </blockquote>
           </para>
           <para id="func-call-with-input-string">
@@ -762,7 +762,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <parameter>thunk</parameter>
               </methodparam>
             </methodsynopsis>
-	  </para>
+          </para>
           <para id="func-with-binary-input-from-file">
             <indexterm><primary>with-binary-input-from-file</primary>
             </indexterm>
@@ -786,12 +786,12 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 The port is closed when
                 <parameter>thunk</parameter> returns normally.
               </para>
-	      <para>
-		In the non-binary form,
-		if the optional <parameter>encoding</parameter>
+              <para>
+                In the non-binary form,
+                if the optional <parameter>encoding</parameter>
                 parameter is provided, the character port created will
                 use the specified encoding rather than the default.
-	      </para>
+              </para>
             </blockquote>
           </para>
           <para id="func-with-output-to-file">
@@ -811,7 +811,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <parameter>thunk</parameter>
               </methodparam>
             </methodsynopsis>
-	  </para>
+          </para>
           <para id="func-with-binary-output-to-file">
             <indexterm><primary>with-binary-output-to-file</primary>
             </indexterm>
@@ -836,12 +836,12 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 The port is closed when
                 <parameter>thunk</parameter> returns normally.
               </para>
-	      <para>
-		In the non-binary form, 
-		if the optional <parameter>encoding</parameter>
+              <para>
+                In the non-binary form, 
+                if the optional <parameter>encoding</parameter>
                 parameter is provided, the character port created will
                 use the specified encoding rather than the default.
-	      </para>
+              </para>
             </blockquote>
           </para>
           <para id="func-with-input-from-string">

@@ -441,7 +441,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                   <entry>"UTF8"</entry>
                   <entry>
                     Defines the default character set used by character
-                    ports (see <xref linkend="charports/>) if no character
+                    ports (see <xref linkend="charports"/>) if no character
                     set is otherwise specified.
                   </entry>
                 </row>
