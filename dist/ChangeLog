@@ -1,3 +1,10 @@
+2001-12-14  Matthias Radestock  <matthias@sorted.org>
+
+	* Implemented clean interface for calling Scheme from Java,
+	including support for multiple applications and multiple threads
+
+	* Fixed and optimized several multi-threading issues
+
 2001-12-13  Matthias Radestock  <matthias@sorted.org>
 
 	* Removed current-writer, was only used by repl which now just
