@@ -11,6 +11,10 @@
     <property name="specver" value="1.8.1-alpha"/>
     <property name="version" value="1.8.1-alpha"/>
     <property name="cvsversion" value="a1_8_1"/> 
+    <property name="spectitle" value="Second Interpreter of Scheme Code"/>
+    <!-- Got a better idea?: -->
+    <property name="specvendor" value="SISC Development Group"/>
+
 <!--    <property name="releasecandidate" value="yes"/>-->
     <property name="beta" value="yes"/>
     <property file="${basedir}/build.properties"/>    
@@ -172,14 +176,12 @@
       </fileset>
       <manifest>
         <section name="sisc/">
-          <attribute name="Specification-Title" value="Second Interpreter of Scheme Code"/>
+          <attribute name="Specification-Title" value="${spectitle}"/>
           <attribute name="Specification-Version" value="${specver}"/>
-           <!-- Got a better idea?: -->
-          <attribute name="Specification-Vendor" value="SISC Development Group"/>
+          <attribute name="Specification-Vendor" value="${specvendor}"/>
           <attribute name="Implementation-Title" value="sisc"/>
           <attribute name="Implementation-Version" value="${version}"/>
-           <!-- Got a better idea?: -->
-          <attribute name="Implementation-Vendor" value="SISC Development Group"/>
+          <attribute name="Implementation-Vendor" value="${specvendor}"/>
         </section>
       </manifest>
     </jar>
@@ -194,14 +196,12 @@
       </fileset>
       <manifest>
         <section name="SISC Optional">
-          <attribute name="Specification-Title" value="Second Interpreter of Scheme Code"/>
+          <attribute name="Specification-Title" value="${spectitle}"/>
           <attribute name="Specification-Version" value="${specver}"/>
-           <!-- Got a better idea?: -->
-          <attribute name="Specification-Vendor" value="SISC Development Group"/>
+          <attribute name="Specification-Vendor" value="${specvendor}"/>
           <attribute name="Implementation-Title" value="sisc-opt"/>
           <attribute name="Implementation-Version" value="${version}"/>
-           <!-- Got a better idea?: -->
-          <attribute name="Implementation-Vendor" value="SISC Development Group"/>
+          <attribute name="Implementation-Vendor" value="${specvendor}"/>
         </section>
       </manifest>
     </jar>
@@ -291,14 +291,12 @@
         prefix="sisc/boot" includes="sisc.shp"/>
       <manifest>
         <section name="SISC Heap">
-          <attribute name="Specification-Title" value="Second Interpreter of Scheme Code"/>
+          <attribute name="Specification-Title" value="${spectitle}"/>
           <attribute name="Specification-Version" value="${specver}"/>
-           <!-- Got a better idea?: -->
-          <attribute name="Specification-Vendor" value="SISC Development Group"/>
+          <attribute name="Specification-Vendor" value="${specvendor}"/>
           <attribute name="Implementation-Title" value="sisc-heap"/>
           <attribute name="Implementation-Version" value="${version}"/>
-           <!-- Got a better idea?: -->
-          <attribute name="Implementation-Vendor" value="SISC Development Group"/>
+          <attribute name="Implementation-Vendor" value="${specvendor}"/>
         </section>
       </manifest>
     </jar>
