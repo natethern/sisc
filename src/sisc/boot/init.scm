@@ -375,9 +375,7 @@
   (lambda (n)
     (and (number? n) (not (oldcomp? n))))))
 
-(define (rational? v) (and ;(real? v) ;; commented out because we don't
-                       (exact? v)))   ;; have any exact nonreals
-
+(define rational? real?)
 (define complex? number?)
 
 (define (abs num) 
