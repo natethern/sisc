@@ -131,6 +131,7 @@
 
 (module generic-procedures
   (meta
+   type-of
    type<=
    instance-of?
    define-generic

@@ -29,7 +29,14 @@
 (define (meta-type m) (cdr m))
 (define (meta? x) (and (pair? x) (eq? (car x) 'meta)))
 
-;;this will need to change once we support non-java types
+(define (type-of o)
+  (cond ((java/class? o) (meta o))
+        ((java/object? o) (java/class-of o))
+        (else
+          ;;hack
+          (java/class-of (java/wrap o)))))
+
+  ;;this will need to change once we support non-java types
 (define (type<= x y)
   (cond ((and (meta? x) (meta? y))
          (type<= (meta-type x) (meta-type y)))
@@ -37,8 +44,7 @@
         ((meta? y) #f)
         (else (java/assignable? y x))))
 (define (instance-of? x y)
-  (cond ((meta? y) (type<= x (meta-type y)))
-        (else (java/instance? y x))))
+  (type<= (type-of x) y))
 
 (define (types<= x y) (every2 type<= x y))
 (define (instances-of? x y) (every2 instance-of? x y))
@@ -131,14 +137,10 @@
 (define (method-types m)        (vector-ref m 2))
 (define (method-rest? m)        (vector-ref m 3))
 
-(define (method<= m1 m2)
-  (cond ((> (method-arity m1) (method-arity m2)) #t)
-        ((> (method-arity m2) (method-arity m1)) #f)
-        ;;same arity
-        ((and (not (method-rest? m1)) (method-rest? m2)) #t)
-        ((and (not (method-rest? m2)) (method-rest? m1)) #f)
-        ;;both or neither have rest arg
-        (else (types<= (method-types m1) (method-types m2)))))
+(define (method= m1 m2)
+  (and (= (method-arity m1) (method-arity m2))
+       (eq? (method-rest? m1) (method-rest? m2))
+       (every2 eq? (method-types m1) (method-types m2))))
 
 ;;Checks whether a method can be called with arguments of specific
 ;;types. This will eventually replace the preceeding procedure
@@ -247,12 +249,8 @@
         ;;append
         (set-cdr! methods (cons m meths))
         (let ([current	(car meths)])
-          (if (method<= m current)
-              (if (method<= current m)
-                  ;;replace
-                  (set-cdr! methods (cons m (cdr meths)))
-                  ;;insert
-                  (set-cdr! methods (cons m meths)))
+          (if (method= m current)
+              (set-cdr! methods (cons m (cdr meths)))
               (add-method-helper m meths))))))
 
 (define (add-java-constructors constructors new-constructors)
@@ -326,13 +324,15 @@
             (else
               (values '() (cons m applicable)))))))
   ;;make sure we know about all relevant methods
+  ;;we really only need/ought to do this when proc is a
+  ;;generic-java-procedure
   (if (not (null? otypes))
       (let ([first (car otypes)])
         (if (meta? first)
             (set! first (meta-type first)))
         (if (java/class? first)
             (add-class first))))
-  ;;optimization opportunity: turn classes into a vector so that
+  ;;optimization opportunity: turn otypes into a vector so that
   ;;method-applicable can do a fast size test. Not much point doing
   ;;this though if we are going to cache the result of this entire
   ;;operation anyway.
@@ -350,60 +350,44 @@
                   (loop (cdr methods) applicable ambiguous)))
               (loop (cdr methods) applicable ambiguous))))))
 
-;;SYNC: we don't care if methods gets modified while we do this
-(define (find-method-helper proc args methods)
-  (if (null? methods)
-      #f
-      (let ([current (car methods)])
-        (if (and ((if (method-rest? current) >= =)
-                  (length args)
-                  (method-arity current))
-                 (instances-of? args (method-types current)))
-            (cons (method-procedure current)
-                  (lambda newargs (find-and-call proc newargs methods)))
-            (find-method-helper proc args (cdr methods))))))
-(define (find-method args methods proc)
-  (if (not (null? args))
-      (let ([first (car args)])
-        (if (java/class? first)
-            (add-class first))
-        (if (java/object? first)
-            (add-class (java/class-of first)))))
-  (find-method-helper proc args (cdr methods)))
-(define (call-method-helper m args next)
-  (if m
-      (let ([meth (car m)]
-            [next (cdr m)])
+(define (call-method-helper applicable args next)
+  (if (null? applicable)
+      (if next
+          (apply next args)
+          (error (format "no matching method for ~s" args)))
+      (let ([meth (method-procedure (car applicable))])
         (apply meth
                (if (or (java/method? meth) (java/constructor? meth))
                    args
-                   (cons next args))))
-      (if next
-          (apply next args)
-          (error (format "no matching method for ~s" args)))))
-(define (find-and-call proc args methods)
-  (call-method-helper (find-method args methods proc)
-                      args
-                      (procedure-property proc 'next)))
+                   (cons (lambda args
+                           (call-method-helper (cdr applicable)
+                                               args
+                                               next))
+                         args))))))
 
 (define (_make-generic-procedure methods . rest)
-  (letrec ([proc      (lambda args (find-and-call proc args methods))])
-    (set-procedure-property! proc 'methods methods)
-    (if (not (null? rest))
-        (set-procedure-property! proc 'next (car rest)))
-    proc))
+  (define (proc . args)
+    (call-with-values
+        (lambda () (applicable-methods proc (map type-of args)))
+      (lambda (applicable ambiguous)
+        (call-method-helper applicable args
+                            (procedure-property proc 'next)))))
+  (set-procedure-property! proc 'methods methods)
+  (if (not (null? rest))
+      (set-procedure-property! proc 'next (car rest)))
+  proc)
 (define (_make-generic-constructor cproc . rest)
-  (letrec ([proc (lambda (class . args)
-                   (if (java/class? class) (add-class class))
-                   (apply (constructor proc class) args))])
-    ;;A constructor procedure maintains a hashtable of
-    ;;generic procedures, one for each class, that contain methods for
-    ;;each of the constructors defined for that class
-    (set-procedure-property! proc 'generic-constructors (make-hashtable))
-    (set-procedure-property! proc 'constructor-methods cproc)
-    (if (not (null? rest))
-        (set-procedure-property! proc 'next (car rest)))
-    proc))
+  (define (proc class . args)
+    (if (java/class? class) (add-class class))
+    (apply (constructor proc class) args))
+  ;;A constructor procedure maintains a hashtable of
+  ;;generic procedures, one for each class, that contain methods for
+  ;;each of the constructors defined for that class
+  (set-procedure-property! proc 'generic-constructors (make-hashtable))
+  (set-procedure-property! proc 'constructor-methods cproc)
+  (if (not (null? rest))
+      (set-procedure-property! proc 'next (car rest)))
+  proc)
 
 (define (generic-java-procedure name . rest)
   (apply _make-generic-procedure (java-methods name) rest))

@@ -1506,6 +1506,10 @@ Class.getSigners()
                   sub-type of <parameter>type2</parameter>, &num;f
                   otherwise.
                 </para>
+                <para>
+                  Meta types are compared by comparing their underlying
+                  types.
+                </para>
               </blockquote>
             </para>
           </blockquote>
@@ -1525,6 +1529,114 @@ Class.getSigners()
                   Returns &num;t if <parameter>obj</parameter> is an
                   instance of <parameter>type</parameter>, &num;f
                   otherwise.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+          The type of an object can be obtained with
+          <blockquote>
+            <para>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>type</type>
+                <methodname>type-of</methodname>
+                <methodparam><parameter>obj</parameter></methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Returns the type of <parameter>obj</parameter>
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          For types that are classes, the following operations are
+          supported:
+          <blockquote>
+            <para>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>list</type>
+                <methodname>class-direct-superclasses</methodname>
+                <methodparam><parameter>class</parameter></methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Returns the list of classes of which
+                  <parameter>class</parameter> is a direct
+                  descendant. If <parameter>class</parameter> is a
+                  Java class or interface the list comprises the
+                  superclass and superinterfaces in exactly the order
+                  specified in the class/interface declaration.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+          <blockquote>
+            <para>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>list</type>
+                <methodname>class-direct-slots</methodname>
+                <methodparam><parameter>class</parameter></methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Returns the list of slot names (as symbols) directly
+                  defined by <parameter>class</parameter>. If
+                  <parameter>class</parameter> is a Java class or
+                  interface the list comprises the names of
+                  the static and normal fields specified in the
+                  class/interface declaration.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+          <blockquote>
+            <para>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>list</type>
+                <methodname>class-precedence-list</methodname>
+                <methodparam><parameter>class</parameter></methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Returns the class precedence list for class
+                  <parameter>class</parameter>. The class precedence
+                  list for a class <varname>C</varname> is a total
+                  ordering on <varname>C</varname> and its
+                  superclasses that is consistent with the local
+                  precedence order of <varname>C</varname> and with
+                  the class precedence lists of its superclasses.
+                </para>
+                <para>
+                  Two
+                  lists are consistent if for every
+                  <varname>A</varname> and <varname>B</varname> that
+                  are each members of both lists, either
+                  <varname>A</varname> precedes <varname>B</varname>
+                  in both or <varname>B</varname> precedes
+                  <varname>A</varname> in both.
+                </para>
+                <para>
+                  The local precedence order of a class
+                  <varname>C</varname> consists of the class itself
+                  followed by the direct superclasses as returned by
+                  <function>class-direct-superclasses</function>.
+                </para>
+                <para>
+                  The exact algorithm for computing the class
+                  precedence list is the same as that employed by
+                  Dylan, Goo and others. When there are
+                  <emphasis>several</emphasis> possible total
+                  orderings, one is chosen deterministically. When
+                  there is <emphasis>no</emphasis> possible total
+                  ordering, an error is signalled. The details of the
+                  algorithm are beyond the scope of this document. The
+                  interested reader is referred to the Dylan
+                  documentation and the SISC source code.
                 </para>
               </blockquote>
             </para>
@@ -1865,34 +1977,71 @@ Class.getSigners()
         <title>Invoking Generic Procedures</title>
         <para>
           Generic procedures are invoked just like ordinary
-          procedures. The invocation selects a method whose type
-          signature best matches the types of the given parameters. An
-          error is reported if there is no such method. The following
-          precedence rules apply:
-          <itemizedlist>
-            <listitem>
-              <para>
-                Methods with n+1 mandatory parameters take precedence
-                over methods with n mandatory parameters.
-              </para>
-            </listitem>
-            <listitem>
-              <para>
-                Methods without rest arg take precedence over methods
-                with rest args.
-              </para>
-            </listitem>
-            <listitem>
-              <para>
-                A method with n mandatory parameters with or without a
-                rest arg takes precedence over another method with n
-                mandatory parameters with or without a rest arg, if
-                the types of all parameters of the first method are
-                sub-types or identical to the types of all parameters
-                of the second method.
-              </para>
-            </listitem>
-          </itemizedlist>
+          procedures. The invocation computes a list of applicable
+          methods (i.e. methods whose type signature matches that of
+          the argument types) sorted by specificity and invokes the
+          first. An error is reported if there is no such method. The
+          algorithm for determining the relative specificity of two
+          methods <varname>A</varname> and <varname>B</varname> with
+          respect to a particular set of arguments is the same as that
+          employed by Dylan, Goo and others:
+          <blockquote>
+            <para>
+              The method <varname>A</varname> is more specific than
+              the method <varname>B</varname> if and only if
+              <varname>A</varname> precedes <varname>B</varname> in at
+              least one argument position, and <varname>B</varname>
+              does not precede <varname>A</varname> in any argument
+              position. Similarly, <varname>B</varname> is more
+              specific than <varname>A</varname> if and only if
+              <varname>B</varname> precedes <varname>A</varname> in at
+              least one argument position, and <varname>A</varname>
+              does not precede <varname>B</varname> in any argument
+              position. If neither of these cases apply then
+              <varname>A</varname> and <varname>B</varname> are
+              ambiguous methods.
+            </para>
+            <para>
+              In order to determine the precedence at a particular
+              argument position, the types associated with that
+              position in the method signatures of the two methods are
+              compared. If the types are the same then the position
+              provides no information about the order of the two
+              methods. If one of the types is a subtype of the other
+              then the former type's method precedes the
+              other. Otherwise, the precedence is determined by the
+              order of the types in the class precedence list of the
+              type of the argument in the position in question.
+            </para>
+            <para>
+              In a method with a rest parameter, the type associated
+              with an argument position in the rest part is considered to
+              be a supertype of all other types.
+            </para>
+          </blockquote>
+          The algorithm is encapsulated by the following procedure:
+          <blockquote>
+            <para>
+                &procedure;
+              <methodsynopsis language="scheme">
+                <type>list list</type>
+                <methodname>applicable-methods</methodname>
+                <methodparam><parameter>proc</parameter></methodparam>
+                <methodparam><parameter>types</parameter></methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Returns two values: the list of applicable methods
+                  of generic procedure <parameter>proc</parameter>
+                  when applied to arguments of types
+                  <parameter>types</parameter> (a list), and the
+                  corresponding list of ambiguous methods.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+        </para>
+        <para>
           It is possible to call the "next best" matching method from
           within the body of a method. To do so, the first parameter
           declaration must have the form <literal>(next:
@@ -1905,12 +2054,18 @@ Class.getSigners()
   (display "\nin method\n")
   (next-method s c))
           </programlisting>
-          <parameter>next-method</parameter> can only invoke methods
-          of a lower precedence than the current one. If parameters
-          are supplied that do not meet this criteria then the
-          procedure chained to the current generic procedure will be
-          invoked, if such a procedure is present, and an error will
-          be thrown otherwise.
+          <parameter>next-method</parameter> should only be called
+          with arguments that would result in the same ordered
+          sequence of applicable methods as the original arguments.
+          The behaviour of <parameter>next-method</parameter> when
+          invoked with arguments that do not meet this criteria is
+          undefined.
+        </para>
+        <para>
+          If <parameter>next-method</parameter> is called when there
+          are no more applicable methods left, the chainee of the
+          generic procedure is invoked if present and an error is
+          raised otherwise.
         </para>
       </sect3>
       <sect3>
@@ -1925,6 +2080,16 @@ Class.getSigners()
                 usage will tell what errors crop up frequently and we
                 can then put some mechanism in place for reporting
                 them in a meaningful way.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                The invocation of generic procedures is
+                computationally expensive. The main source of
+                complexity is the computation of applicable
+                methods. This will be addressed in a future release by
+                introducing a cache that records the applicable
+                methods for any combination of argument types used.
               </para>
             </listitem>
             <listitem>

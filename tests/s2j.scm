@@ -13,7 +13,7 @@
 ;;test overloading of Java methods and constructors in Scheme...
 (define-constructor (<jstring> (next: next-method)
                                (<jchar> c))
-  (next-method (->jarray (list c) <jchar>)))
+  (make <jstring> (->jarray (list c) <jchar>)))
 (make <jstring>) ;calls Java method
 (make <jstring> (->jchar #\o)) ;calls scheme method
 ;;test rest arg handling
@@ -36,9 +36,9 @@
 (value-of <jstring> (->jchar #\o))
 
 ;array creation and access
-(define a (java-array-new <jint> #(2 2 2)))
-(a #(1 1 1))
-(a #(1 1 1) (->jint 1))
+(define a (java-array-new <jint> '#(2 2 2)))
+(a '#(1 1 1))
+(a '#(1 1 1) (->jint 1))
 (a '(1 1 1))
 (map ->number (->list (->jarray (map ->jint (iota 10)) <jint>)))
 

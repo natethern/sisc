@@ -1,3 +1,10 @@
+2002-06-23  Matthias Radestock  <matthias@sorted.org>
+
+	* Changed generic procedure method dispatch logic. It now uses the
+	  same algorithm as employed by Dylan, Goo and others that
+	  resolves ambiguities by taking into account the class precedence
+	  lists of the arguments.
+
 2002-06-18  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Modified SchemeString to be able to store the string either
