@@ -801,11 +801,13 @@
      (trace-match+
       let-values** match-help match-help1 clause-body guard-body
       convert-pat mapper my-backquote extend-backquote sexp-dispatch))
-  (include "match.ss"))
+    (import debugging)
+    (include "match.ss"))
 
 (module optimizer
-    (optimize)
+  (optimize)
   (import pattern-matching)
+  (import debugging)
   ;;TODO: we really want to import the srfi-11 module here, but srfis
   ;;are not part of the core build
   (include "srfi/srfi-11.scm")
@@ -813,14 +815,13 @@
   (include "optimizer/helpers.scm")
   (include "optimizer/logic.scm")
   (include "optimizer/main.scm")
-  (define optimize opt:optimize)
-  (initialize))
+  (define optimize opt:optimize))
+
 
 (import libraries)
-(import debugging)
 (import optimizer)
-;;*redefine* current-optimizer rather than just setting it, so that
-;;the default value becomes |optimize|
+;*redefine* current-optimizer rather than just setting it, so that
+;the default value becomes |optimize|
 (set! current-optimizer (make-parameter optimize))
 
 ;;load and import srfi-0

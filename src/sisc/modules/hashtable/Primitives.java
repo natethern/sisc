@@ -22,7 +22,10 @@ public class Primitives extends IndexedProcedure {
         HT_TO_ALIST = 10,
         HT_ADD_ALIST = 11,
         HT_KEYS = 12,
-        HT_THREAD_SAFEQ = 13;
+        HT_THREAD_SAFEQ = 13,
+        WHT_MAKE_EQ = 14,
+        WHT_MAKE_EQV = 15,
+        WHT_MAKE_EQUAL = 16;
 
     public static class Index extends IndexedLibraryAdapter {
 
@@ -34,6 +37,9 @@ public class Primitives extends IndexedProcedure {
             define("make-eq-hashtable", HT_MAKE_EQ);
             define("make-eqv-hashtable", HT_MAKE_EQV);
             define("make-equal-hashtable", HT_MAKE_EQUAL);
+            define("make-eq-weak-hashtable", WHT_MAKE_EQ);
+            define("make-eqv-weak-hashtable", WHT_MAKE_EQV);
+            define("make-equal-weak-hashtable", WHT_MAKE_EQUAL);
             define("hashtable?", HTQ);
             define("hashtable/put!", HT_PUT);
             define("hashtable/get", HT_GET);
@@ -67,7 +73,16 @@ public class Primitives extends IndexedProcedure {
     public Value doApply(Interpreter f) throws ContinuationException {
         switch(f.vlr.length) {
         case 0:
-            throwArgSizeException();
+            switch(id) {
+            case WHT_MAKE_EQ:
+                return new WeakHashtable(eqKeyFactory);
+            case WHT_MAKE_EQV:
+                return new WeakHashtable(eqvKeyFactory);
+            case WHT_MAKE_EQUAL:
+                return new WeakHashtable(equalKeyFactory);
+            default:
+                throwArgSizeException();
+            }
         case 1:
             switch (id) {
             case HT_MAKE_EQ:

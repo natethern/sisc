@@ -13,7 +13,7 @@ import sisc.util.Util;
 
 public class Hashtable extends Value {
 
-    private HashMap ht;
+    protected HashMap ht;
     private KeyFactory kf;
 
     public Hashtable() {
