@@ -61,7 +61,7 @@
 (should-be 2.1 1
  (call/cc (lambda (c) (0 (c 1)))))
 
-;; Section 3: Hygenic macros
+;; Section 3: Hygienic macros
 
 ;; Eli Barzilay 
 ;; In thread:
@@ -86,6 +86,21 @@
        (begin (define foo +))
        (cond (else (foo x))) 
        x)))
+
+;;Al Petrofsky
+;; In thread:
+;; An Advanced syntax-rules Primer for the Mildly Insane
+;; http://groups.google.com/groups?selm=87it8db0um.fsf@radish.petrofsky.org
+
+(should-be 3.3 1
+  (let ((x 1))
+    (let-syntax
+        ((foo (syntax-rules ()
+                ((_ y) (let-syntax
+                           ((bar (syntax-rules ()
+                                   ((_) (let ((x 2)) y)))))
+                         (bar))))))
+      (foo x))))
 
 ;; Setion 4: No identifiers are reserved
 
