@@ -1,0 +1,181 @@
+; A* Algorithm
+
+;(define (pq-create) (make-heap (lambda (e1 e2)
+;				 (> (node-cost e1)
+;				    (node-cost e2)))))
+;(define pq-add! heap-insert!)
+;(define pq-max! heap-extract-max!)
+;(define pq-empty? (lambda (pq)
+;		    (= (heap-length pq) 0)))
+
+(define node-pos caddar)
+(define node-move cadar)
+(define node-cost caar)
+(define node-parent cdr)
+(define (set-cost! f v)
+  (set-car! (car f) v))
+
+(define (new-pos move old-pos)
+  (let ((old-x (car old-pos))
+	(old-y (cadr old-pos)))
+    (if (eq? (car move) '|Move|)
+        (let ((np
+               (case (cadr move)
+                 ((|N|) (list old-x (+ old-y 1)))
+                 ((|S|) (list old-x (- old-y 1)))
+                 ((|E|) (list (+ old-x 1) old-y))
+                 ((|W|) (list (- old-x 1) old-y)))))
+          (if (apply wall? np)
+              (list old-x old-y)
+              np))
+	(list old-x old-y))))
+
+(define (make-node move parent . pos)
+  `((0 ,move ,(if (not (null? parent))
+		  (new-pos move (node-pos parent))
+		  pos)) . ,parent))
+
+(define (fetch-successors id node)
+  (if (package-move? (node-move node))
+      '()
+      (let ((possible-moves (apply enumerate-moves `(,id ,@(node-pos node))))
+            (parent-pos (and (not (null? (node-parent node)))
+                             (node-pos (node-parent node))))
+            (this-pos (node-pos node)))
+        (map (lambda (m p)
+               (apply make-node `(,m ,node ,@p)))
+             possible-moves
+             (map (lambda (v) (new-pos v (node-pos node)))
+                  possible-moves)))))
+	
+	     
+
+;(trace 'fetch-successors)
+
+(define last-path '())
+
+(define (identity x) x)
+(define a* 
+  (letrec ((unwind 
+	    (lambda (return next)
+	      (if (equal? '(false) (node-move (node-parent next)))
+		  (return (node-move next))
+		  (unwind return (node-parent next)))))
+           (highest-rated 
+            (lambda (cache id closed-list max-so-far maxf-so-far)
+              (if (null? closed-list)
+                  max-so-far
+                  (let ((fitness (calculate-fitness 
+                                  cache id 
+                                  (node-pos (car closed-list))
+                                  (node-move (car closed-list)))))
+                    (if (> fitness maxf-so-far)
+                        (highest-rated cache id 
+                                       (cdr closed-list)
+                                       (car closed-list)
+                                       fitness)
+                        (highest-rated cache id 
+                                       (cdr closed-list)
+                                       max-so-far
+                                       maxf-so-far)))))))
+    (lambda (id start start-time limit)
+      (call/cc 
+       (lambda (return)
+         (let ((openl (pq-create))
+               (cost-cache (make-hashtable))
+               (last-move #f)
+               (moves 0)
+               (closed '())
+               (root-node (apply make-node `((false) () ,@start))))
+;           (debug "Root node: ~a" root-node)
+ ;          (debug "Open: ~a" openl)
+	   (pq-add! openl root-node 0.0)
+	   (let search-loop ()
+;             (debug "open: ~a" openl)
+;             (debug "closed: ~a" closed)
+	     (if (pq-empty? openl)
+		 (unwind return (if (null? closed)
+                                    last-move
+                                    (begin 
+                                      (set-cost! root-node -1000.0)
+                                      (let ((highest (highest-rated cost-cache id
+                                                      closed root-node 
+                                                      -1000.0)))
+                                        (set! last-path (map node-pos highest))
+                                        highest))))
+		 (let ((node-current
+			(pq-remove-max! openl)))
+;                   (debug "Exploring: ~a" node-current)
+                   (set! moves (+ moves 1))
+		   (if (> (- (system-time) start-time) limit)
+					; Times up
+		       (begin 
+                         (debug "Stopping search after ~a moves, ~a ms"
+                                moves (- (system-time) start-time))
+                         (set-cost! root-node -1000.0)
+                         (set! node-current (highest-rated cost-cache id
+                                             (cons node-current closed)
+                                             root-node -1000.0))
+                         (debug "Path: ~a" node-current)
+                         (set! last-path (let loop ((n node-current))
+                                           (if (null? n) '()
+                                               (cons (node-pos n)
+                                                     (loop (node-parent n))))))
+                         (unwind return node-current))
+                       (begin
+                         (let loop ((s (fetch-successors id node-current)))
+                           (unless (null? s)
+                               (let ((f (car s)))
+                                 (call/cc 
+                                  (lambda (e)
+                                    (let* ((parent-cost (node-cost node-current))
+                                           (my-cost (+ parent-cost -0.0001))
+                                           (goodness 
+                                            (calculate-fitness 
+                                             cost-cache id 
+                                             (node-pos node-current) 
+                                             (node-move f)))
+                                           (weight (+ my-cost goodness)))
+;        (debug "Examining [~a+~a=~a] ~a..." 
+;               (node-cost node-current)
+;               (apply calculate-fitness
+;                      `(,id ,(node-pos node-current) ,(node-move f)))
+;               cost f)
+
+                                      (for-each (lambda (s2)
+                                               (if (and 
+                                                     (equal? (node-pos s2)
+                                                             (node-pos f))
+                                                     (equal? (node-move s2)
+                                                             (node-move f))
+                                                     (>= (node-cost s2) 
+                                                         my-cost))
+                                                   (e (loop (cdr s)))))
+                                                (cdr s))
+                                      (for-each (lambda (s2)
+                                                (if (and 
+                                                     (equal? (node-pos s2)
+                                                             (node-pos f))
+                                                     (equal? (node-move s2)
+                                                             (node-move f))
+                                                     (>= (node-cost s2) 
+                                                         my-cost))
+                                                    (e (loop (cdr s)))))
+                                                closed)
+                                      (set-cost! f my-cost)
+                                      (pq-delete! openl f)
+                                      (pq-add! openl f weight))
+                                    (set! last-move f)
+                                    (set! closed (remove f closed))
+                                    (loop (cdr s)))))))))
+                   (set! closed (cons node-current closed))
+                   (search-loop))))))))))
+
+  (define (test-a* x y) 
+  (store-robot-position! 1 x y)
+  (write (a* 1 (list x y) (system-time) 1500))
+  (newline)
+  (render-world 1))
+  
+
+;(test-a* 5 5)
