@@ -1,4 +1,11 @@
-2004-11-6  Scott G. Miller  <sgmiller@gmail.com>
+2004-11-08  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed arity checking of thunks.
+
+	* Fixed a bug that caused multi-values to be recycled when they
+	  shouldn't.
+	
+2004-11-06  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Set the lcl even on thunks, to prevent value leaks from
 	  persisting in the stack.  See bug 1060726.
@@ -6,15 +13,15 @@
 	* StreamDeserializer now resolves symbolic environments
 	  in the same way as BlockDeserializer. 
 	  
-2004-11-5  Scott G. Miller  <sgmiller@gmail.com>
+2004-11-05  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Define the I/O procedures as toplevel with psyntax,
 	  so that they aren't syntax-expanded as references
 	  to the generic-io module.  
 	  
-2004-11-4  Released SISC 1.9.2-rc
+2004-11-04  Released SISC 1.9.2-rc
 
-2004-11-4  Scott G. Miller  <sgmiller@gmail.com>
+2004-11-04  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed bug in error handling of load causing a null pointer
 	  exception.
