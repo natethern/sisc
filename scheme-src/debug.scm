@@ -1,19 +1,26 @@
 ;(import debugging)
 
 (define (get-last-error)
-  (getprop 'last-error '*debug*))
+  (let* ([err (getprop 'last-error '*debug*)]
+         [m   (car err)])
+    (cons `(error-continuation 
+            . ,(error-continuation-k (cdr err)))
+          (if m 
+              (cond [(null? m) '()]
+                    [(pair? m) m]
+                    [else (list (cons 'message m))]) 
+              '()))))
 
-(define annotated?
-  (lambda (obj)
-    (not (null? (annotation-keys obj)))))
+(define (annotated? obj)
+  (not (null? (annotation-keys obj))))
 
 (define-syntax show
   (lambda (e)
     (syntax-case e ()
       ((_ expr)
        (syntax
-	(let ([source (sc-expand (quote expr))])
-	  (pretty-print source)
+        (let ([source (sc-expand (quote expr))])
+          (pretty-print source)
           (newline)
           (display "=>")
           (newline)
@@ -122,17 +129,16 @@
     (putprop 'traced-procedures '*debug* traced-procedures)))
 
 
-(define _k-stack 
-  (lambda (e)
-    (let* ([k (cdr (assoc 'error-continuation e))]
-           [st (let loop ((k k))
-                 (cond [(null? k) (values '() '())]
-                       [(null? (continuation-nxp k)) 
-                        (loop (continuation-stk k))]
-                       [else 
-                        (let ([nxp (continuation-nxp k)])
-                          (cons nxp (loop (continuation-stk k))))]))])
-      st)))
+(define (_k-stack e)
+  (let* ([k (cdr (assoc 'error-continuation e))]
+         [st (let loop ((k k))
+               (cond [(null? k) (values '() '())]
+                     [(null? (continuation-nxp k)) 
+                      (loop (continuation-stk k))]
+                     [else 
+                       (let ([nxp (continuation-nxp k)])
+                         (cons nxp (loop (continuation-stk k))))]))])
+    st))
 
 (define (assoc-val x ls)
   (cond [(assoc x ls) => cdr]

@@ -81,14 +81,7 @@
      (lambda (m e o)
        (display (eh m e) o)
        (newline o)
-       (putprop 'last-error '*debug* 
-                (cons `(error-continuation 
-                        . ,(error-continuation-k e))
-                      (if m 
-                          (cond [(null? m) '()]
-                                [(pair? m) m]
-                                [else (list (cons 'message m))]) 
-                          '())))))))
+       (putprop 'last-error '*debug* (cons m e))))))
 
 (define _exit-handler (parameterize))
 
