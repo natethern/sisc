@@ -73,7 +73,7 @@
 
 ;;;; regexp.scm - test regexp functions
 
-(load-module "sisc.contrib.regexp.Regexp")
+(load-module "sisc.contrib.regexp.Regexp$Index")
 
 (test
  (define p1 "abcaaab")

@@ -18,7 +18,7 @@ public class SchemeTag extends BodyTagSupport {
         try {
             Value v=r.eval(bodyText);
             if (v!=Util.VOID) {
-                getPreviousOut().print(v.write());
+                getPreviousOut().print(v);
             }
         } catch (IOException ie) {
             ie.printStackTrace();

@@ -57,14 +57,8 @@ import org.apache.oro.text.regex.StringSubstitution;
 import org.apache.oro.text.regex.Util;
 import sisc.interpreter.ContinuationException;
 import sisc.interpreter.Interpreter;
-import sisc.nativefun.Module;
-import sisc.nativefun.ModuleAdapter;
-import sisc.data.Pair;
-import sisc.data.Quantity;
-import sisc.data.SchemeString;
-import sisc.data.SchemeVector;
-import sisc.data.Symbol;
-import sisc.data.Value;
+import sisc.nativefun.*;
+import sisc.data.*;
 import sisc.io.ValueWriter;
 
 /**
@@ -108,18 +102,13 @@ import sisc.io.ValueWriter;
  * @see org.apache.oro.text.regex.PatternCompiler
  * @see org.apache.oro.text.regex.PatternMatcher
  */
-public class Regexp extends ModuleAdapter
+public class Regexp extends IndexedProcedure
 {
-  public String getModuleName()
-  {
-    return "Jakarta ORO regexp";
+ 
+  public Regexp(int id) {
+  	super(id);
   }
-
-  public float getModuleVersion()
-  {
-    return 1.0f;
-  }
-
+  
   public static final int RPATTERN = 1, RMATCH = 2, RMATCH_POSITIONS = 3,
     RREPLACE = 4, RREPLACE_ALL = 5, RSPLIT = 6, RSPLIT_DELIM = 7;
 
@@ -188,17 +177,33 @@ public class Regexp extends ModuleAdapter
     return 0;
   }
 
-  public Regexp()
-  {
-    define("regexp", RPATTERN);
-    define("regexp-match", RMATCH);
-    define("regexp-match-positions", RMATCH_POSITIONS);
-    define("regexp-replace", RREPLACE);
-    define("regexp-replace*", RREPLACE_ALL);
-    define("regexp-split", RSPLIT);
-    define("regexp-split/delimiter", RSPLIT_DELIM);
-  }
+  public static class Index extends IndexedLibraryAdapter {
 
+		public String getLibraryName()
+		{
+	   	  return "Jakarta ORO regexp";
+	 	}
+
+	 	public float getLibraryVersion()
+	 	{
+	   		return 1.0f;
+	 	}
+
+		public Value construct(int id) {
+		 return new Regexp(id);
+		}
+        
+		 public Index() {
+		    define("regexp", RPATTERN);
+    		define("regexp-match", RMATCH);
+    		define("regexp-match-positions", RMATCH_POSITIONS);
+		    define("regexp-replace", RREPLACE);
+    		define("regexp-replace*", RREPLACE_ALL);
+		    define("regexp-split", RSPLIT);
+    		define("regexp-split/delimiter", RSPLIT_DELIM);
+  		}
+  }
+  
   protected static RPattern patternFor(Value v)
   {
     RPattern pat;
@@ -211,21 +216,21 @@ public class Regexp extends ModuleAdapter
     return pat;
   }
 
-  public Value eval(int primid, Interpreter r)
+  public Value doApply(Interpreter r)
     throws ContinuationException
   {
     switch (r.vlr.length) {
 
       // One argument functions
     case 1: 
-      if (primid == RPATTERN)
+      if (id == RPATTERN)
         return new RPattern(string(r.vlr[0]), REGEX_PERL5, 0);
       else
         break;
 
       // Two argument functions
     case 2:
-      switch (primid) {
+      switch (id) {
       case RPATTERN:
         return new RPattern(string(r.vlr[0]), r.vlr[1], 0);
       case RMATCH:
@@ -242,7 +247,7 @@ public class Regexp extends ModuleAdapter
 
       // Three argument functions
     case 3:
-      switch (primid) {
+      switch (id) {
       case RPATTERN:
         return new RPattern(string(r.vlr[0]),
                             r.vlr[1],
@@ -260,8 +265,7 @@ public class Regexp extends ModuleAdapter
                                + r.acc);
   }
 
-  public static class RPattern extends Value
-  {    
+  public static class RPattern extends Value  {    
     public Pattern pattern;
     Symbol type;
     int options;

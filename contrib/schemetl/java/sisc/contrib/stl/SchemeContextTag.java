@@ -3,6 +3,7 @@ package sisc.contrib.stl;
 import javax.servlet.jsp.tagext.*;
 import javax.servlet.jsp.*;
 import sisc.*;
+import sisc.interpreter.*;
 import sisc.data.Value;
 import java.io.IOException;
 
@@ -21,8 +22,7 @@ public class SchemeContextTag extends TagSupport {
             main=Context.enter("main");
             try {
                 System.err.println("Initializing Scheme...");
-                REPL.initializeInterpreter(main, new String[0],
-                                           REPL.findHeap());
+                REPL.loadHeap(main, REPL.findHeap(null));
                 System.err.println("Main interp:"+main);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -1,7 +1,7 @@
 package sisc.contrib.stl;
 
 import javax.servlet.jsp.PageContext;
-import sisc.Interpreter;
+import sisc.interpreter.Interpreter;
 
 public abstract class TagUtils {
 
