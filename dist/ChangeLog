@@ -1,3 +1,11 @@
+2003-07-16  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed performance problem in loading libraries.
+
+2003-07-16  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Allow redefinition of QUOTE.
+
 2003-07-09  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed bug in char-ready?; the port argument is now optional.
