@@ -41,6 +41,8 @@ public class DynamicEnv extends Util implements Cloneable {
     public InputPort in;
     public OutputPort out;
 
+    public Value wind = FALSE; //top of wind stack
+
     //the lexer is stateful
     public Parser parser = new Parser(new Lexer());
 

@@ -61,7 +61,7 @@ public class Primitives extends ModuleAdapter {
          CHARREADY=21,    CLOSEINPUTPORT=22,   CLOSEOUTPUTPORT=23,
           COMPLEXQ=24,              CONS=25,     CONTINUATIONQ=26,
   	       COS=27,       CURRENTEVAL=28,               // <29>
-	CURRENTINPUTPORT=30, CURRENTOUTPUTPORT=31,	   // <32>,
+  CURRENTINPUTPORT=30, CURRENTOUTPUTPORT=31,       CURRENTWIND=32,
        DENOMINATOR=33,           DISPLAY=34,               DIV=35,
       ENVIRONMENTQ=36,                EQ=37,             EQUAL=38,
              ERROR=39,              EVAL=40,     EXACT2INEXACT=41,
@@ -154,6 +154,7 @@ public class Primitives extends ModuleAdapter {
         define("current-evaluator", CURRENTEVAL);
         define("current-input-port", CURRENTINPUTPORT);
         define("current-output-port", CURRENTOUTPUTPORT);
+        define("current-wind", CURRENTWIND);
         define("denominator", DENOMINATOR);
         define("display", DISPLAY);
         define("environment?", ENVIRONMENTQ);
@@ -254,6 +255,7 @@ public class Primitives extends ModuleAdapter {
             case _VOID: return VOID;
             case CURRENTOUTPUTPORT: return f.dynenv.out;
             case CURRENTINPUTPORT: return f.dynenv.in;
+            case CURRENTWIND: return f.dynenv.wind;
             case OPENOUTPUTSTRING: return new OutputPort(new StringWriter());
             case PEEKCHAR:
                 Value v=f.dynenv.in.readchar();
@@ -469,6 +471,9 @@ public class Primitives extends ModuleAdapter {
                 return VOID;
             case CURRENTINPUTPORT:
                 f.dynenv.in = inport(f.vlr[0]);
+                return VOID;
+            case CURRENTWIND:
+                f.dynenv.wind = f.vlr[0];
                 return VOID;
             case FILETYPE:
                 File tmpf=new File(string(f.vlr[0]));

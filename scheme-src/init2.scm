@@ -56,9 +56,8 @@
 (define dynamic-wind
   (let ((original-call/cc call-with-current-continuation))
     ;;the dynamic wind stack
-    (define *current-dynamic-point* #f)
-    (define (get-dynamic-point) *current-dynamic-point*)
-    (define (set-dynamic-point! p) (set! *current-dynamic-point* p))
+    (define get-dynamic-point current-wind)
+    (define set-dynamic-point! current-wind)
     ;;a point in the dynamic wind stack
     ;;-this would be easier if we had structures
     (define (make-point depth in out parent)
