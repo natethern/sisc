@@ -65,7 +65,8 @@ public abstract class Util {
 	TOPLEVEL=Symbol.get("*toplevel*"),
 	REPORT=Symbol.get("*report*"),
 	ENVVARS=Symbol.get("*environment-variables*"),
-    	SYNTAX=Symbol.get("syntax");
+    	SYNTAX=Symbol.get("syntax"),
+	SISC=Symbol.get("*sisc*");
 
     public static void error(Interpreter r, Value where, String errormessage) 
 	throws ContinuationException {

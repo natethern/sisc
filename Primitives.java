@@ -74,7 +74,8 @@ public class Primitives extends Module {
 	UNBOX=116,CURRENTINPUTPORT=46,         CURRENTOUTPUTPORT=47,      
         FLOOR=83, OPENOUTPUTSTRING=48,         GETOUTPUTSTRING=49, 
 	PUTPROP=121, STRING2UNINTERNEDSYMBOL=66,  OPENINPUTSTRING=50,
-	LIST=122, _VOID=123, VECTORFINDLASTUNIQUE=124;
+	LIST=122, _VOID=123, VECTORFINDLASTUNIQUE=124, MAKEPATH=125,
+	ABSPATHQ=126;
 
     public void initialize(Interpreter r) {
 	define(r, "list", LIST);
@@ -88,6 +89,7 @@ public class Primitives extends Module {
 	define(r, "_gcd", GCD);
 	define(r, "_lcm", LCM);
 	define(r, "_string-append", STRINGAPPEND);
+	define(r, "absolute-path?", ABSPATHQ);
 	define(r, "acos", ACOS);
 	define(r, "apply", APPLY);
 	define(r, "ashl", ASHL);
@@ -144,6 +146,7 @@ public class Primitives extends Module {
 	define(r, "load", LOAD);    
 	define(r, "load-module", LOADMODULE);
 	define(r, "log", LOG);
+	define(r, "make-path", MAKEPATH);
 	define(r, "make-rectangular", MAKERECTANGULAR);
 	define(r, "make-string", MAKESTRING);
 	define(r, "make-vector", MAKEVECTOR);
@@ -474,6 +477,10 @@ public class Primitives extends Module {
 	    case MIN_PRECISION:
 		Quantity.min_precision=num(f,f.vlr[0]).intValue();
 		return VOID;
+	    case ABSPATHQ:
+		String f1=string(f,f.vlr[0]);
+		File fn=new File(f1);
+		return truth(fn.isAbsolute());
 	    }	    
 	case 2:
 	    switch (primid) {
@@ -583,6 +590,16 @@ public class Primitives extends Module {
 		return null;
 	    case ERROR:
 		error(f, string(f,f.vlr[0]), false);
+	    case MAKEPATH:
+		String f1=string(f,f.vlr[0]);
+		String f2=string(f,f.vlr[1]);
+		File fn=new File(f1);
+		fn=new File(f1, f2);
+		try {
+		    return new SchemeString(fn.getCanonicalPath());
+		} catch (IOException e) {
+		    error(f, "Invalid path specification");
+		}
 	    case LOOKUP: 
 		try {
 		    return (Value)f.lookup(symbol(f,f.vlr[0]), 

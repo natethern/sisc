@@ -175,16 +175,53 @@
 
 ;;;;;;;;;;;;; File functions
 
+(define str-upto
+  (lambda (str chr)
+    (let loop ([x (string->list str)] 
+	       [acc ()])
+      (cond [(null? x) ()]
+	    [(eq? (car x) chr) acc]
+	    [else (loop (cdr x) (append acc (list (car x))))]))))
 
+(define _drv-mem 
+  (map 
+   (case (detect-os)
+     [(ms-dos windows)
+      (lambda (p)
+	(cons (car (str-upto p #\:)) p))]
+     [else (lambda (p) p)])
+   (getprop 'fs-roots '*sisc*)))
+
+(define _current-drive-letter
+  (lambda () 
+    (car (str-upto (current-directory) #\:))))
+
+(if (memq (detect-os) '(ms-dos windows))
+    (set! _drv-mem (list (cons (_current-drive-letter) (current-directory)))))
+(define _MP make-path)
+(define make-path
+  (letrec ([old-mp _MP]
+	   [rel-pl
+	    (lambda (p)
+	      (case (detect-os)
+		[(ms-dos windows) 
+		 (let ([drvletter (str-upto p #\:)])
+		   (if (null? drvletter)
+		       (current-directory)
+		       (let ([recalled-path (assq (car drvletter) _drv-mem)])
+			 (if recalled-path
+			     (cdr recalled-path)
+			     ""))))]
+		[else (current-directory)]))])
+    (lambda (pre . post)
+      (if (null? post)
+	  (if (absolute-path? pre)
+	      pre
+	      (let ([rel-path (rel-pl pre)])
+		(old-mp rel-path pre)))
+	  (old-mp pre (car post))))))
 (define current-directory (void))
 (letrec ([_cd ""]
-	 [_separator "/"]
-	 [gen-path
-	  (lambda (base file)
-	    (let ((sl (string->list file)))
-	      (if (eq? (car sl) (string-ref _separator 0))
-		  file
-		  (string-append base file))))]
 	 [is
 	  (lambda (file type)
 	    (if (eq? (file-type file) type)
@@ -193,24 +230,20 @@
   (define *current-directory
     (lambda dir
       (if (null? dir) _cd
-	  (let ((newpath (gen-path _cd (car dir))))
+	  (let ((newpath (make-path (car dir))))
 	    (is newpath 'directory)
-	    (if (not (eq? (string-ref newpath (- (string-length newpath)
-						 1))
-			  _separator))
-		(set! newpath (string-append newpath _separator)))
 	    (set! _cd newpath)))))
   (define *open-input-file
     (let ((old-oif open-input-file))
       (lambda (file)
-	(let ((file (gen-path (current-directory) file)))
+	(let ((file (make-path file)))
 	  (is file 'file)
 	  (old-oif file)))))
 
   (define *open-output-file
     (let ((old-oof open-output-file))
       (lambda (file)
-	(let ((file (gen-path (current-directory) file)))
+	(let ((file (make-path file)))
 	  (if (not (memq (file-type file) '(no-file file)))
 	      (error 'open-output-file "~s points to a directory" file)
 	      (old-oof file))))))
@@ -218,7 +251,7 @@
   (define *load	 
     (let ((_load load))
       (lambda (file)
-	(_load (gen-path _cd file)))))
+	(_load (make-path file)))))
   
   (set! load *load)
   (set! current-directory *current-directory)

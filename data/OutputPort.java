@@ -44,6 +44,7 @@ public class OutputPort extends NamedValue {
 
     public void writeChar(char c) throws IOException {
 	w.write(c);
+	flush();
     }
 
     public void write(Interpreter i, char[] buff, int count) 
@@ -58,6 +59,7 @@ public class OutputPort extends NamedValue {
 
     public void write(String s) throws IOException {
 	w.write(s);
+	flush();
     }
 
     public String display() {

@@ -181,7 +181,15 @@ public class Interpreter extends Util {
 
     public Value eval(String expr) throws ContinuationException, IOException {
 	InputPort ip=new InputPort(new BufferedReader(new StringReader(expr)));
-	return eval(parser.nextExpression(ip));
+	Value rv=VOID;
+
+	do {
+	    try { 
+		rv=eval(parser.nextExpression(ip));
+	    } catch (EOFException e) {
+		return rv;
+	    }
+	} while (true);
     }
 
     public Value eval(Value v) throws ContinuationException {

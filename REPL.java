@@ -42,10 +42,16 @@ import java.util.*;
 public class REPL extends Thread {
     public Interpreter r;
     protected Procedure writeFunc;
+    protected PrintWriter out,err;
+    protected InputStream in;
 
-    public REPL(InputStream in, OutputStream out, String[] args) {
-	System.out.print("SISC");
-	System.out.flush();
+    public REPL(InputStream in, OutputStream out, OutputStream err, 
+		String[] args) {
+	this.in=in;
+	this.out=new PrintWriter(out);
+	this.err=new PrintWriter(err);
+	this.out.print("SISC");
+	this.out.flush();
 	r=new Interpreter(in, out);
 	r.setEvaluator("eval");
 	try {
@@ -75,8 +81,20 @@ public class REPL extends Thread {
 	    r.define(s, new SchemeString(sysProps.getProperty(key)), 
 		     Util.ENVVARS);
 	}
-	System.out.println(" ("+Util.VERSION+")");
-	System.out.println(Quantity.reportLibraryType());
+	r.define(Symbol.get("version"), new SchemeString(Util.VERSION), Util.SISC);
+	File[] roots=File.listRoots();
+	SchemeString[] rootss=new SchemeString[roots.length];
+	for (int i=0; i<roots.length; i++) 
+	    try {
+		rootss[i]=new SchemeString(roots[i].getCanonicalPath());
+	    } catch (IOException e) {}
+	r.define(Symbol.get("fs-roots"), Util.valArrayToList((Value[])rootss,
+							     0, rootss.length), 
+		 Util.SISC);
+
+	this.out.println(" ("+Util.VERSION+")");
+	this.out.println(Quantity.reportLibraryType());
+	this.out.flush();
     }
 
     public void run() {
@@ -89,7 +107,7 @@ public class REPL extends Thread {
 		r.interpret(new AppExp(repl, new Expression[0],
 				       false));
 	    } catch (Exception e) {
-		System.err.println("System error: "+e.toString());
+		err.println("System error: "+e.toString());
 		continue start;
 	    }
 	} while (false);
@@ -97,7 +115,7 @@ public class REPL extends Thread {
     }
 
     public static void main(String[] args) throws Exception {
-	REPL r=new REPL(System.in, System.out, args);
+	REPL r=new REPL(System.in, System.out, System.err, args);
 	r.start();
     }
 }

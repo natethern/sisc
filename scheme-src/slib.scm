@@ -23,8 +23,14 @@
 ;; operating system type.  UNIX, VMS, MACOS, AMIGA and MS-DOS are
 ;; supported.
 
-(define software-type
-  (lambda () 'unix))
+;; FIXME: Detect better
+(define (deduce-environment)
+  (if (eq? (string-ref (getprop 'file.separator '*environment-variables*) 0)
+	   #\\)
+      'ms-dos
+      'unix))
+
+(define software-type deduce-environment)
 
 ;; The SCHEME-IMPLEMENTATION-TYPE procedure returns a symbol denoting the
 ;; Scheme implementation that loads this file.
@@ -36,14 +42,14 @@
 ;; the version of the Scheme implementation that loads this file.
 
 (define scheme-implementation-version
-  (lambda () "1.0.0"))
+  (lambda () (getprop 'version '*sisc*)))
 
 ;; The IMPLEMENTATION-VICINITY procedure returns a string giving the
 ;; pathname of the directory that includes any auxiliary files used by this
 ;; Scheme implementation.
 
 (define implementation-vicinity
-  (lambda () "/usr/local/lib/sisc/"))
+  (lambda () (getprop 'SISC_LIB '*environment-variables*)))
 
 ;; The GETENV returns the value of a shell environment variable.
 
@@ -127,7 +133,8 @@
     full-continuation getenv ieee-p1178 macro multiarg/and-
     multiarg-apply pretty-print rationalize
     rev3-procedures rev3-report rev4-optional-procedures rev4-report
-    string-port values with-file))
+    string-port values with-file rev5-procedures rev5-report 
+    rev5-optional-procedures))
 
 (define *defmacros*
   (list (cons 'defmacro
@@ -242,7 +249,7 @@
 ;; non-negative integers less than CHAR-CODE-LIMIT are eligible as
 ;; arguments to INTEGER->CHAR.
 
-;sisc supports unicode
+; SISC supports unicode
 (define char-code-limit 65536)
 
 (define most-positive-fixnum (- (ashl 2 63) 1))
