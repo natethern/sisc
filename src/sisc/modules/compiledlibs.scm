@@ -54,7 +54,7 @@
   (let* ((lib (make <sisc.ser.LibraryBuilder> (->jboolean #f)))
          (index (apply _create-lib lib segment1 segments)))
     (add lib (java-wrap index-sym) (java-wrap index))
-    (call-with-output-file filename
+    (call-with-binary-output-file filename
       (lambda (out)
         (build-library lib (->jstring name) ((java-wrap out) 'out))))))
 
