@@ -267,11 +267,15 @@
 (define-simple-syntax (make-definition-syntax thing things
                                               complex simple)
   (begin (define-syntax thing
-           (syntax-rules ()
-             [(_ name native)
-              (define name (complex 'native))]
-             [(_ name)
-              (define name (complex (simple 'name)))]))
+           (lambda (x)
+             (syntax-case x ()
+               [(_ name native)
+                (and (identifier? (syntax name))
+                     (identifier? (syntax native)))
+                (syntax (define name (complex 'native)))]
+               [(_ name)
+                (identifier? (syntax name))
+                (syntax (define name (complex (simple 'name))))])))
          (define-syntax things
            (syntax-rules ()
              [(_ (name native) . rest)  (begin (thing name native)
