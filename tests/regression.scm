@@ -85,3 +85,13 @@
                     deserialize)
                   12))))
 
+;;Used to cause an error trying to resolve CharSequence
+(should-be 830507 'ok
+           (let ()
+             (import s2j)
+             ((generic-java-method '|matcher|)
+              ((generic-java-method '|compile|)
+               (java-null (java-class '|java.util.regex.Pattern|))
+               (->jstring "([0-9])"))
+              (->jstring "a3b"))
+             'ok))
