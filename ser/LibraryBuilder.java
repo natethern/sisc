@@ -181,15 +181,15 @@ public class LibraryBuilder extends SerializerImpl {
         seen.add(e);
     }
 
-    public void writeAssociativeEnvironment(AssociativeEnvironment e) 
+    public void writeSymbolicEnvironment(SymbolicEnvironment e) 
         throws IOException {
         if (e!=null) {
             classes.add(e.getClass());
             if (includeAEs) {
-                if (e.name!=null)
-                    add(e.name,e);
+                if (e.getName()==null)
+                    add(e.asValue());
                 else 
-                    add(e);
+                    add(e.getName(),e.asValue());
             }
         }
     }

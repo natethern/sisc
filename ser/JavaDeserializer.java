@@ -6,7 +6,7 @@ import java.math.*;
 import sisc.Module;
 import sisc.data.Expression;
 import sisc.data.Symbol;
-import sisc.AssociativeEnvironment;
+import sisc.SymbolicEnvironment;
 
 public class JavaDeserializer implements Deserializer {
 
@@ -53,12 +53,12 @@ public class JavaDeserializer implements Deserializer {
         return (Expression)readObjectIOExceptionOnly();
     }
 
-    public AssociativeEnvironment readAssociativeEnvironment() throws IOException {
-        AssociativeEnvironment rv;
+    public SymbolicEnvironment readSymbolicEnvironment() throws IOException {
+        SymbolicEnvironment rv;
         Expression e=readExpression();
         if (e instanceof Symbol) 
-            rv=(AssociativeEnvironment)LibraryManager.getInstance().getExpression((Symbol)e);
-        else rv=(AssociativeEnvironment)e;
+            rv=(SymbolicEnvironment)LibraryManager.getInstance().getExpression((Symbol)e);
+        else rv=(SymbolicEnvironment)e;
         return rv;
     }
 

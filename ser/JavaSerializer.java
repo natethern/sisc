@@ -3,7 +3,7 @@ package sisc.ser;
 import java.io.*;
 import java.math.*;
 import sisc.Module;
-import sisc.AssociativeEnvironment;
+import sisc.SymbolicEnvironment;
 import sisc.data.Expression;
 
 public class JavaSerializer implements Serializer {
@@ -30,11 +30,13 @@ public class JavaSerializer implements Serializer {
         os.writeObject(e);
     }
 
-    public void writeAssociativeEnvironment(AssociativeEnvironment e) throws IOException {
-        if (e==null || e.name==null) { 
-            writeExpression(e);
+    public void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException {
+        if (e==null) {
+            writeExpression((Expression)null);
+        } else if (e.getName()==null) { 
+            writeExpression(e.asValue());
         } else 
-            writeExpression(e.name);
+            writeExpression(e.getName());
     }
 
     public void writeClass(Class c) throws IOException {

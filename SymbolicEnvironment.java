@@ -30,38 +30,28 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-package sisc.data;
+package sisc;
 
-import sisc.ser.Serializer;
-import sisc.ser.Deserializer;
-import java.io.IOException;
+import sisc.data.*;
 
-public abstract class NamedValue extends Value {
+public interface SymbolicEnvironment {
 
-    protected Symbol name;
+    public void setName(Symbol s);
+    public Symbol getName();
 
-    public void setName(Symbol s) {
-        name=s;
-    }
+    public void setParent(SymbolicEnvironment e);
+    public sisc.data.Value asValue();
 
-    public Symbol getName() {
-        return name;
-    }
+    public java.util.Iterator keys();
+    public java.util.Set bindingKeys();
+    public java.util.Map getSymbolMap();
+    public void set(int envLoc, Value v);
+    public int define(Symbol s, Value v);
+    public int getLoc(Symbol s);
+    public Value lookup(Symbol s);
+    public Value lookup(int pi);
+    public void undefine(Symbol s);
 
-    public String displayNamedOpaque(String type) {
-        StringBuffer b=new StringBuffer();
-        b.append("#<").append(type);
-        if (name!=null)
-            b.append(' ').append(name.display());
-        b.append('>');
-        return b.toString();
-    }
-
-    public void serialize(Serializer s) throws IOException {
-        s.writeExpression(name);
-    }
-
-    public void deserialize(Deserializer s) throws IOException {
-        name=(Symbol)s.readExpression();
-    }
+    public void serialize(sisc.ser.Serializer s) throws java.io.IOException;
+    public void deserialize(sisc.ser.Deserializer s) throws java.io.IOException;
 }

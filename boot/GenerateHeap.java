@@ -99,9 +99,9 @@ public class GenerateHeap {
             r5rs_bindings.add(bindingNames[i]);
     }
 
-    static AssociativeEnvironment[] classify(AssociativeEnvironment base, 
-                                             LibraryBuilder lb) {
-        AssociativeEnvironment[] rv=new AssociativeEnvironment[2];
+    static SymbolicEnvironment[] classify(SymbolicEnvironment base, 
+                                          LibraryBuilder lb) {
+        SymbolicEnvironment[] rv=new AssociativeEnvironment[2];
         rv[0]=new LibraryAE(null, lb);
         rv[1]=base;
         rv[1].setParent(rv[0]);
@@ -148,10 +148,9 @@ public class GenerateHeap {
         }
 
         LibraryBuilder lb=new LibraryBuilder();
-        AssociativeEnvironment symenv=new AssociativeEnvironment();
-        AssociativeEnvironment toplevel=sisc.compiler.Compiler.addSpecialForms(new AssociativeEnvironment(new LibraryAE(null, lb)));
-        toplevel.name=Util.TOPLEVEL;
-        symenv.name=Symbol.get("symenv");
+        AssociativeEnvironment symenv=new AssociativeEnvironment(Symbol.get("symenv"));
+        AssociativeEnvironment toplevel=new AssociativeEnvironment(new LibraryAE(null, lb), Util.TOPLEVEL);
+        sisc.compiler.Compiler.addSpecialForms(toplevel);
         symenv.define(Util.TOPLEVEL, toplevel);
 
 	AppContext ctx = new AppContext(symenv);
@@ -200,15 +199,14 @@ public class GenerateHeap {
         }
 
         System.err.println("Partitioning bindings...");
-        AssociativeEnvironment[] results=classify(r.lookupContextEnv(Util.TOPLEVEL), lb);
-        AssociativeEnvironment sisc_specific, r5rs, top_level;
+        SymbolicEnvironment[] results=classify(r.lookupContextEnv(Util.TOPLEVEL), lb);
+        SymbolicEnvironment sisc_specific, r5rs, top_level;
         r5rs=results[0];
         sisc_specific=results[1];
 
-        r.ctx.toplevel_env=top_level=new AssociativeEnvironment(sisc_specific);
-        top_level.name=Util.TOPLEVEL;
-        r5rs.name=Util.REPORT;
-        sisc_specific.name=Util.SISC_SPECIFIC;
+        r.ctx.toplevel_env=top_level=new AssociativeEnvironment(sisc_specific, Util.TOPLEVEL);
+        r5rs.setName(Util.REPORT);
+        sisc_specific.setName(Util.SISC_SPECIFIC);
         
         r.defineContextEnv(Util.TOPLEVEL, top_level);
         r.defineContextEnv(Util.REPORT, r5rs);

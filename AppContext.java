@@ -41,20 +41,19 @@ import java.io.*;
 public class AppContext extends Util {
 
     protected Procedure evaluator;
-    protected AssociativeEnvironment symenv;
-    public AssociativeEnvironment toplevel_env;
+    protected SymbolicEnvironment symenv;
+    public SymbolicEnvironment toplevel_env;
 
     public AppContext() {
-        symenv=toplevel_env=new AssociativeEnvironment();
     }
 
-    public AppContext(AssociativeEnvironment symenv) {
+    public AppContext(SymbolicEnvironment symenv) {
 	this.symenv = symenv;
         try {
             toplevel_env=lookupContextEnv(TOPLEVEL);
         } catch (ArrayIndexOutOfBoundsException ue) {
             toplevel_env=symenv;
-            symenv.define(TOPLEVEL, toplevel_env);
+            symenv.define(TOPLEVEL, toplevel_env.asValue());
         }
     }
 
@@ -77,7 +76,7 @@ public class AppContext extends Util {
         CallFrame lstk=(CallFrame)s.getExpression(0);
         Procedure levaluator=(Procedure)s.getExpression(1);
 
-        AssociativeEnvironment lsymenv=(AssociativeEnvironment)s.getExpression(SYMENV);
+        SymbolicEnvironment lsymenv=(SymbolicEnvironment)s.getExpression(SYMENV);
         try {
             symenv=lsymenv;
             try {
@@ -100,19 +99,19 @@ public class AppContext extends Util {
         r.save();
         lb.add(r.stk);
         lb.add(evaluator);
-        lb.add(SYMENV, symenv);
-        lb.add(TOPLEVEL, toplevel_env);
+        lb.add(SYMENV, symenv.asValue());
+        lb.add(TOPLEVEL, toplevel_env.asValue());
 
         lb.buildLibrary("sisc", o);
         r.pop(r.stk);
     }
 
-    public AssociativeEnvironment lookupContextEnv(Symbol s) {
-        return (AssociativeEnvironment)symenv.lookup(s);
+    public SymbolicEnvironment lookupContextEnv(Symbol s) {
+        return (SymbolicEnvironment)symenv.lookup(s);
     }
 
-    public void defineContextEnv(Symbol s, AssociativeEnvironment env) {
-        symenv.define(s, env);
+    public void defineContextEnv(Symbol s, SymbolicEnvironment env) {
+        symenv.define(s, env.asValue());
     }
 
 }

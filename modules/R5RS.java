@@ -18,16 +18,14 @@ public class R5RS extends Module {
     public R5RS() {}
 
     public Symbol[] getModuleBindingNames(Interpreter r) {
-        AssociativeEnvironment ae =
-            (AssociativeEnvironment)r.lookupContextEnv(REPORT);
-        return (Symbol[])ae.bindingKeys().toArray(new Symbol[] {});
+        SymbolicEnvironment env = r.lookupContextEnv(REPORT);
+        return (Symbol[])env.bindingKeys().toArray(new Symbol[] {});
     }
 
     public Value getBindingValue(Interpreter r, Symbol name)
         throws NoSuchMethodError {
-        AssociativeEnvironment ae =
-            (AssociativeEnvironment)r.lookupContextEnv(REPORT);
-        return ae.lookup(name);
+        SymbolicEnvironment env = r.lookupContextEnv(REPORT);
+        return env.lookup(name);
     }
 
     public Value eval(int primid, Interpreter f)

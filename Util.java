@@ -161,6 +161,14 @@ public abstract class Util implements Version {
                                                  new Object[] {new Integer(arity), new Integer(x)}));
     }
 
+    public static void updateName(Value v, Symbol s) {
+        if (v instanceof NamedValue) {
+            NamedValue nv = (NamedValue)v;
+            if (nv.getName() == null)
+                nv.setName(s);
+        }
+    }
+
     public static int length(Pair p) {
         Pair s=p;
         try {
@@ -325,9 +333,9 @@ public abstract class Util implements Version {
 	return null;
     }
 
-    public static final AssociativeEnvironment env(Value o) {
+    public static final SymbolicEnvironment env(Value o) {
         try {
-            return (AssociativeEnvironment)o;
+            return (SymbolicEnvironment)o;
         } catch (ClassCastException e) { typeError("environment", o); }
 	return null;
     }

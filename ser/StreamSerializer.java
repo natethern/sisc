@@ -105,12 +105,14 @@ public class StreamSerializer extends SerializerImpl {
             sizes[posi] = cos.position - sizeStartOffset;
     }
 
-    public void writeAssociativeEnvironment(AssociativeEnvironment e)
+    public void writeSymbolicEnvironment(SymbolicEnvironment e)
         throws IOException {
-        if (e==null || e.name==null) { 
-            writeExpression(e);
+        if (e==null) {
+            writeExpression((Expression)null);
+        } else if (e.getName()==null) { 
+            writeExpression(e.asValue());
         } else 
-            writeExpression(e.name);
+            writeExpression(e.getName());
     }
 
     public void writeModule(Module e) throws IOException {

@@ -7,7 +7,7 @@ import java.math.BigInteger;
 
 import sisc.Module;
 import sisc.data.Expression;
-import sisc.AssociativeEnvironment;
+import sisc.SymbolicEnvironment;
 
 public interface Serializer extends ObjectOutput {
 
@@ -16,7 +16,7 @@ public interface Serializer extends ObjectOutput {
     public abstract void writeBigInteger(BigInteger i) throws IOException;
 
     public abstract void writeExpression(Expression e) throws IOException;
-    public abstract void writeAssociativeEnvironment(AssociativeEnvironment e) throws IOException;
+    public abstract void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException;
     public abstract void writeClass(Class c) throws IOException;
     public abstract void writeModule(Module m) throws IOException;
 

@@ -68,7 +68,7 @@ public class Compiler extends Util {
         }
     }
 
-    static void extendenv(AssociativeEnvironment env, String s, int i) {
+    static void extendenv(SymbolicEnvironment env, String s, int i) {
         Symbol name=Symbol.get(s);
         env.define(name, new Syntax(i));
     }
@@ -81,7 +81,7 @@ public class Compiler extends Util {
 
     public Compiler() {}
 
-    public static AssociativeEnvironment addSpecialForms(AssociativeEnvironment menv) {
+    public static void addSpecialForms(SymbolicEnvironment menv) {
         extendenv(menv,"lambda", LAMBDA);
         extendenv(menv,"letrec", LETREC);
         extendenv(menv,"if", _IF);
@@ -89,8 +89,7 @@ public class Compiler extends Util {
         extendenv(menv,"quote", QUOTE);
         extendenv(menv,"set!", SET);
         extendenv(menv,"define", DEFINE);
-	extendenv(menv,"compile-in-annotation", MAKEANNOTATION);
-        return menv;
+        extendenv(menv,"compile-in-annotation", MAKEANNOTATION);
     }
 
     static class ReferenceEnv {
@@ -107,7 +106,7 @@ public class Compiler extends Util {
             }
         }
 
-        public Expression createReference(Symbol s, AssociativeEnvironment env) {
+        public Expression createReference(Symbol s, SymbolicEnvironment env) {
             int lev=-1;
             ReferenceEnv ctx=this;
             Integer r=null;
@@ -125,7 +124,7 @@ public class Compiler extends Util {
     }
 
     public Expression compile(Interpreter r, Expression v, ReferenceEnv rt,
-                              int context, AssociativeEnvironment env, 
+                              int context, SymbolicEnvironment env, 
                               Pair an)
     throws ContinuationException {
         if (v==EMPTYLIST) {
@@ -149,13 +148,13 @@ public class Compiler extends Util {
     }
 
     public Expression compile(Interpreter r, Expression v,
-                              AssociativeEnvironment env)
+                              SymbolicEnvironment env)
     throws ContinuationException {
         Expression e= compile(r, v, new ReferenceEnv(), TAIL, env, null);
         return e;
     }
 
-    final int getExpType(AssociativeEnvironment env, Symbol s) {
+    final int getExpType(SymbolicEnvironment env, Symbol s) {
         try {
             Object h=env.lookup(s);
 
@@ -187,7 +186,7 @@ public class Compiler extends Util {
 
     public Expression compileApp(Interpreter r,
                                  Pair expr, ReferenceEnv rt,
-                                 int context, AssociativeEnvironment env,
+                                 int context, SymbolicEnvironment env,
                                  Pair an)
     throws ContinuationException {
 
@@ -330,7 +329,7 @@ public class Compiler extends Util {
 
     public Expression compileLambdaBody(Interpreter r, Pair bodyp, 
                                         ReferenceEnv rt, int context,
-                                        AssociativeEnvironment env) 
+                                        SymbolicEnvironment env) 
         throws ContinuationException {
         Expression body;
         if (bodyp.cdr != EMPTYLIST)
@@ -345,7 +344,7 @@ public class Compiler extends Util {
     public Expression compileLetrec(Interpreter r,
                                     Symbol[] formals, Expression[] rands,
                                     Pair body, ReferenceEnv rt, 
-                                    AssociativeEnvironment env) 
+                                    SymbolicEnvironment env) 
         throws ContinuationException {
         ReferenceEnv nrt=new ReferenceEnv(formals, rt);
         compileExpressions(r, rands, nrt, 0, env);
@@ -395,14 +394,14 @@ public class Compiler extends Util {
 
     void compileExpressions(Interpreter r, Expression exprs[], 
                                ReferenceEnv rt,
-                               int context, AssociativeEnvironment env)
+                               int context, SymbolicEnvironment env)
         throws ContinuationException {
         for (int i=exprs.length-1; i>=0; i--) 
             exprs[i]=compile(r, exprs[i], rt, context, env, null);
     }
 
     Expression compileBegin(Interpreter r, Vector v, int context,
-                            ReferenceEnv rt, AssociativeEnvironment env)
+                            ReferenceEnv rt, SymbolicEnvironment env)
     throws ContinuationException {
         Expression last=compile(r, (Expression)v.lastElement(), rt,
                                 TAIL | context, env, null);

@@ -8,7 +8,7 @@ import java.math.BigInteger;
 import sisc.Module;
 import sisc.data.Expression;
 import sisc.Util;
-import sisc.AssociativeEnvironment;
+import sisc.SymbolicEnvironment;
 
 public interface Deserializer extends ObjectInput {
 
@@ -17,7 +17,7 @@ public interface Deserializer extends ObjectInput {
     public abstract BigDecimal readBigDecimal() throws IOException;
 
     public abstract Expression readExpression() throws IOException;
-    public abstract AssociativeEnvironment readAssociativeEnvironment() throws IOException;
+    public abstract SymbolicEnvironment readSymbolicEnvironment() throws IOException;
     public abstract Class readClass() throws IOException;
     public abstract Module readModule() throws IOException;
     public abstract Library getLibrary();

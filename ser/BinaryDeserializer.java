@@ -127,12 +127,12 @@ public class BinaryDeserializer extends DeserializerImpl {
         return baseLib;
     }
 
-    public AssociativeEnvironment readAssociativeEnvironment() throws IOException {
-        AssociativeEnvironment rv;
+    public SymbolicEnvironment readSymbolicEnvironment() throws IOException {
+        SymbolicEnvironment rv;
         Expression e=readExpression();
         if (e instanceof Symbol) 
-            rv=(AssociativeEnvironment)baseLib.getExpression((Symbol)e);
-        else rv=(AssociativeEnvironment)e;
+            rv=(SymbolicEnvironment)baseLib.getExpression((Symbol)e);
+        else rv=(SymbolicEnvironment)e;
         return rv;
     }
 

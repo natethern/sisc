@@ -3,6 +3,7 @@ package sisc.ser;
 import java.io.IOException;
 import java.util.*;
 import sisc.AssociativeEnvironment;
+import sisc.SymbolicEnvironment;
 import sisc.data.*;
 
 
@@ -20,26 +21,6 @@ public class LibraryAE extends AssociativeEnvironment {
     protected Map addressMap;
     protected Set bindWatch;
     protected int parentIdx=-1;
-
-    public static LibraryAE build(AssociativeEnvironment bindingsFrom, 
-                                  LibraryBuilder b) {
-        HashMap addressMap=new HashMap();
-        for (Iterator i=bindingsFrom.bindingKeys().iterator(); i.hasNext();) {
-            Object o=i.next();
-            Symbol key=(Symbol)o;
-            try {
-                Value v=bindingsFrom.lookup(key);
-                int epidx=b.add(v);
-                addressMap.put(key, new Integer(epidx));
-            } catch (ArrayIndexOutOfBoundsException aio) {}
-                
-        }
-
-        int parentIdx = (bindingsFrom.parent == null) ? -1 : b.add(bindingsFrom.parent);
-
-        LibraryAE lib=new LibraryAE(addressMap, parentIdx);
-        return lib;
-    }
 
     /**
      * Operate in "observe" mode.
@@ -64,16 +45,10 @@ public class LibraryAE extends AssociativeEnvironment {
         addressMap=new HashMap();
     }
 
-    LibraryAE(Map addressMap, int parentIdx) {
-        this.addressMap=addressMap;
-        this.parentIdx=parentIdx;
-    }
-
-
     private void loadParent() {
         if (parent != null || parentIdx == -1) return;
         try {
-            parent=(AssociativeEnvironment)base.getExpression(parentIdx);
+            parent=(SymbolicEnvironment)base.getExpression(parentIdx);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -163,7 +138,7 @@ public class LibraryAE extends AssociativeEnvironment {
                 int pos=lb.add(super.lookup(key));
                 s.writeInt(pos);
             }
-            s.writeInt(lb.add(parent));
+            s.writeInt(lb.add(parent == null ? null : parent.asValue()));
         } else {
             //serialize in "retrieve" mode
             s.writeInt(addressMap.size());

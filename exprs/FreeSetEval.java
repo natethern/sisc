@@ -40,32 +40,29 @@ import sisc.ser.Deserializer;
 
 public class FreeSetEval extends Expression {
     public Symbol lhs;
-    public AssociativeEnvironment senv;
+    public SymbolicEnvironment senv;
     private transient int envLoc=-1;
 
-    public FreeSetEval(Symbol lhs, AssociativeEnvironment senv) {
+    public FreeSetEval(Symbol lhs, SymbolicEnvironment senv) {
         this.lhs=lhs;
         this.senv=senv;
         this.envLoc=senv.getLoc(lhs);
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-	if (envLoc>=0) {
-            senv.env[envLoc]=r.acc;
-	} else {
+        if (envLoc>=0) {
+            senv.set(envLoc, r.acc);
+        } else {
             try {
-                envLoc=senv.set(lhs, r.acc);
+                envLoc=senv.getLoc(lhs);
+                senv.set(envLoc, r.acc);
             } catch (ArrayIndexOutOfBoundsException np) {
                 //Variable is not bound.  Raise an error.
                 error(r, SETBANG, liMessage(SISCB,"unboundset", lhs.write()));
             }
         } 
 
-        if (r.acc instanceof NamedValue) {
-            NamedValue nv=(NamedValue)r.acc;
-            if (nv.name==null)
-                nv.name=lhs;
-        }
+        updateName(r.acc, lhs);
         
         r.acc=VOID;
         r.nxp=null;
@@ -77,14 +74,14 @@ public class FreeSetEval extends Expression {
 
     public void serialize(Serializer s) throws IOException {
         s.writeExpression(lhs);
-        s.writeAssociativeEnvironment(senv);
+        s.writeSymbolicEnvironment(senv);
     }
 
     public FreeSetEval() {}
 
      public void deserialize(Deserializer s) throws IOException {
          lhs=(Symbol)s.readExpression();
-         senv=s.readAssociativeEnvironment();
+         senv=s.readSymbolicEnvironment();
          envLoc=-1;
     }
 

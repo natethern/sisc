@@ -104,7 +104,7 @@ public class Interpreter extends Util {
         return compiler.compile(this, v, ctx.toplevel_env);
     }
 
-    public Expression compile(Value v, AssociativeEnvironment env)
+    public Expression compile(Value v, SymbolicEnvironment env)
         throws ContinuationException {
         return compiler.compile(this, v, env);
     }
@@ -212,16 +212,16 @@ public class Interpreter extends Util {
         return interpret(APPEVAL);
     }
 
-    public AssociativeEnvironment lookupContextEnv(Symbol s) {
+    public SymbolicEnvironment lookupContextEnv(Symbol s) {
         return ctx.lookupContextEnv(s);
     }
 
-    public void defineContextEnv(Symbol s, AssociativeEnvironment env) {
+    public void defineContextEnv(Symbol s, SymbolicEnvironment env) {
         ctx.defineContextEnv(s, env);
     }
 
-    protected AssociativeEnvironment getContextEnv(Symbol s) {
-        AssociativeEnvironment contenv=null;
+    protected SymbolicEnvironment getContextEnv(Symbol s) {
+        SymbolicEnvironment contenv=null;
         try {
             contenv = lookupContextEnv(s);
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -240,8 +240,7 @@ public class Interpreter extends Util {
      *      create the binding
      */
     public void define(Symbol s, Value v, Symbol context) {
-        AssociativeEnvironment contenv=getContextEnv(context);
-        contenv.define(s, v);
+        getContextEnv(context).define(s, v);
     }
 
 

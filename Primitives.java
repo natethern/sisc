@@ -55,10 +55,10 @@ public class Primitives extends ModuleAdapter {
                      (((Quantity)v).is(mask)));
     }
 
-    public void bindAll(Interpreter r, AssociativeEnvironment a) {
+    public void bindAll(Interpreter r, SymbolicEnvironment env) {
         Symbol[] syms=getModuleBindingNames(r);
         for (int i=0; i<syms.length; i++) {
-            a.define(syms[i], getBindingValue(r, syms[i]));
+            env.define(syms[i], getBindingValue(r, syms[i]));
         }
     }
 
@@ -311,7 +311,7 @@ public class Primitives extends ModuleAdapter {
                 return f.dynenv.in.readCode(f);
             case CURRENTEVAL: return (Value)f.ctx.evaluator;
             case INTERACTIONENVIRONMENT:
-                return f.ctx.toplevel_env;
+                return f.ctx.toplevel_env.asValue();
             case SYSTIME: return Quantity.valueOf(System.currentTimeMillis());
             case MAX_PRECISION: return Quantity.valueOf(Quantity.max_precision);
             case MIN_PRECISION: return Quantity.valueOf(Quantity.min_precision);
@@ -329,7 +329,7 @@ public class Primitives extends ModuleAdapter {
                 return truth(f.vlr[0] instanceof Pair &&
                              f.vlr[0]!=EMPTYLIST);
             case GETENVIRONMENT:
-                return f.ctx.lookupContextEnv(symbol(f.vlr[0]));
+                return f.ctx.lookupContextEnv(symbol(f.vlr[0])).asValue();
             case LOOKUP:
                 try {
                     return f.ctx.toplevel_env.lookup(symbol(f.vlr[0]));
@@ -352,8 +352,7 @@ public class Primitives extends ModuleAdapter {
             case STRINGQ: return truth(f.vlr[0] instanceof SchemeString);
             case BOOLEANQ: return truth(f.vlr[0] instanceof SchemeBoolean);
             case VOIDQ: return truth(f.vlr[0]==VOID);
-            case ENVIRONMENTQ: return truth(f.vlr[0] instanceof
-                                            AssociativeEnvironment);
+            case ENVIRONMENTQ: return truth(f.vlr[0] instanceof SymbolicEnvironment);
             case PROCEDUREQ: return truth(f.vlr[0] instanceof Procedure);
             case INTEGERQ: return numQuery(f.vlr[0],Quantity.INTEGER);
 
@@ -587,15 +586,17 @@ public class Primitives extends ModuleAdapter {
             case REPORTENVIRONMENT:
                 if (FIVE.equals(num(f.vlr[0])))
                     try {
-                        return new AssociativeEnvironment((AssociativeEnvironment)f.lookupContextEnv(REPORT));
+                        return new AssociativeEnvironment(f.lookupContextEnv(REPORT));
                     } catch (ArrayIndexOutOfBoundsException e) {
                         throwPrimException("Standard environment not present");
                     }
                 else throwPrimException("Unsupported standard version");
             case NULLENVIRONMENT:
-                if (FIVE.equals(num(f.vlr[0])))
-                    return sisc.compiler.Compiler.addSpecialForms(new AssociativeEnvironment());
-                else throwPrimException("Unsupported standard version");
+                if (FIVE.equals(num(f.vlr[0]))) {
+                    AssociativeEnvironment ae = new AssociativeEnvironment();
+                    sisc.compiler.Compiler.addSpecialForms(ae);
+                    return ae;
+                } else throwPrimException("Unsupported standard version");
             case CURRENTEVAL:
                 f.ctx.evaluator=proc(f.vlr[0]);
                 return VOID;
@@ -838,12 +839,7 @@ public class Primitives extends ModuleAdapter {
                 Symbol lhs=symbol(f.vlr[0]);
                 Symbol context=symbol(f.vlr[1]);
                 Value rhs=f.vlr[2];
-                if (rhs instanceof NamedValue) {
-                    NamedValue nv=(NamedValue)rhs;
-                    if (nv.name==null)
-                        nv.name=lhs;
-                }
-
+                updateName(rhs, lhs);
                 f.define(lhs, rhs, context);
                 return VOID;
             case STRINGSET:

@@ -42,33 +42,43 @@ import java.io.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
-public class AssociativeEnvironment extends NamedValue {
+public class AssociativeEnvironment extends NamedValue implements SymbolicEnvironment {
 
     protected static final float EXPFACT=1.5F;
     public Map symbolMap;
     public Value[] env;
-    public AssociativeEnvironment parent;
+    public SymbolicEnvironment parent;
     protected int nextFree;
-    public AssociativeEnvironment(AssociativeEnvironment parent) {
+
+    public AssociativeEnvironment(SymbolicEnvironment parent) {
         this();
         this.parent=parent;
     }
 
-    AssociativeEnvironment(Value[] env, Map symMap) {
+    public AssociativeEnvironment(SymbolicEnvironment parent, Symbol name) {
+        this(name);
+        this.parent=parent;
+    }
+
+    private AssociativeEnvironment(Value[] env, Map symMap) {
         this.env=env;
         symbolMap=symMap;
         nextFree=env.length;
     }
 
     public AssociativeEnvironment(Symbol name) {
-	this();
-	this.name=name;
+        this();
+        this.name=name;
     }
 
     public AssociativeEnvironment() {
         env=new Value[1];
         nextFree=0;
         symbolMap=new HashMap(1);
+    }
+
+    public Value asValue() {
+        return this;
     }
 
     public java.util.Set bindingKeys() {
@@ -89,7 +99,7 @@ public class AssociativeEnvironment extends NamedValue {
         return symbolMap;
     }
 
-    public void setParent(AssociativeEnvironment e) {
+    public void setParent(SymbolicEnvironment e) {
         parent=e;
     }
 
@@ -110,23 +120,16 @@ public class AssociativeEnvironment extends NamedValue {
         }
     }
 
-    public int set(Symbol s, Value v) {
-	synchronized(symbolMap) {
-	    int iv=getLoc(s);
-            env[iv]=v;
-            return iv;
-	}
-    }
-
-    public int set(int envLoc, Value v) {
+    public void set(int envLoc, Value v) {
         env[envLoc]=v;
-        return envLoc;
     }
 
     public int define(Symbol s, Value v) {
         synchronized(symbolMap) {
             try {
-                return set(s, v);
+                int envLoc = getLoc(s);
+                set(envLoc, v);
+                return envLoc;
             } catch (ArrayIndexOutOfBoundsException np) {}
             
             return store(s, v);
@@ -191,7 +194,7 @@ public class AssociativeEnvironment extends NamedValue {
             int loc=((Integer)symbolMap.get(key)).intValue();
             s.writeExpression(env[loc]);
         }
-        s.writeAssociativeEnvironment(parent);
+        s.writeSymbolicEnvironment(parent);
     }
 
     public void deserialize(Deserializer s) throws IOException {
@@ -206,7 +209,7 @@ public class AssociativeEnvironment extends NamedValue {
         }
         nextFree=size;
         
-        parent=s.readAssociativeEnvironment();
+        parent=s.readSymbolicEnvironment();
     }
 }
 

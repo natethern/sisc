@@ -40,10 +40,10 @@ import sisc.ser.Deserializer;
 
 public class FreeReferenceExp extends Expression implements Immediate {
     public Symbol sym;
-    public AssociativeEnvironment lenv;
+    public SymbolicEnvironment lenv;
     private transient int envLoc=-1;
 
-    public FreeReferenceExp(Symbol s, AssociativeEnvironment lenv) {
+    public FreeReferenceExp(Symbol s, SymbolicEnvironment lenv) {
         this.lenv=lenv;
         sym=s;
         this.envLoc=lenv.getLoc(s);
@@ -52,18 +52,18 @@ public class FreeReferenceExp extends Expression implements Immediate {
     public void eval(Interpreter r) throws ContinuationException {
         r.nxp=null;
 	if (envLoc>=0) {
-	    r.acc=lenv.env[envLoc];
+	    r.acc=lenv.lookup(envLoc);
 	} else {
             envLoc=lenv.getLoc(sym);
             if (envLoc==-1)
                 error(r, liMessage(SISCB,"undefinedvar", sym.write()));
-	    r.acc=lenv.env[envLoc];
+	    r.acc=lenv.lookup(envLoc);
         } 
     }
 
     public Value getValue(Interpreter r) throws ContinuationException {
 	if (envLoc>=0) {
-	    return lenv.env[envLoc];
+	    return lenv.lookup(envLoc);
 	} else {
             try {
                 envLoc=lenv.getLoc(sym);
@@ -72,7 +72,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
             }
             if (envLoc==-1)
                 error(r, liMessage(SISCB,"undefinedvar", sym.write()));
-	    return lenv.env[envLoc];
+	    return lenv.lookup(envLoc);
         } 
     }
 
@@ -82,7 +82,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public void serialize(Serializer s) throws IOException {
         s.writeExpression(sym);
-        s.writeAssociativeEnvironment(lenv);
+        s.writeSymbolicEnvironment(lenv);
     }
 
     public FreeReferenceExp() {
@@ -90,7 +90,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public void deserialize(Deserializer s) throws IOException {
         sym=(Symbol)s.readExpression();
-        lenv=s.readAssociativeEnvironment();
+        lenv=s.readSymbolicEnvironment();
         envLoc=-1;
     }
 
