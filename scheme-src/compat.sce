@@ -81,7 +81,7 @@
 
 (define gen-sym
   (lambda (base) 
-    (string->symbol (format "~s_~s" base (gensym)))))
+    (string->symbol (format "~a_~a" base (gensym)))))
 
 (define ormap
   (lambda (proc list1)
