@@ -1,3 +1,8 @@
+2004-10-13  Scott G. Miller   <scott@sgmiller.org>
+
+	* Fixed bug in psyntax that broke shadowing of imports at the top
+	  level. See bug 1046317.
+
 2004-10-13  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed sisc.sh so it works correctly when rlwrap is not
