@@ -169,6 +169,7 @@ public class GenerateHeap {
         new sisc.modules.Primitives.Index().bindAll(r, ctx.toplevel_env);
         new sisc.modules.Annotations.Index().bindAll(r, ctx.toplevel_env);
         new sisc.modules.io.IO.Index().bindAll(r, ctx.toplevel_env);
+        new sisc.modules.io.StringIO.Index().bindAll(r, ctx.toplevel_env);
         
         Symbol loadSymb = Symbol.get("load");
         

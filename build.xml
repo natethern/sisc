@@ -110,6 +110,7 @@
            debug="${debugging}"
            optimize="${optimization}">
       <include name="${packagename}/modules/io/IO.java"/>
+      <include name="${packagename}/modules/io/StringIO.java"/>
       <include name="${packagename}/modules/Annotations.java"/>
       <include name="${packagename}/modules/Primitives.java"/>
       <include name="${packagename}/modules/R5RS.java"/>
@@ -161,6 +162,7 @@
       </fileset>
       <fileset dir="${classdir}">
         <include name="sisc/modules/io/IO*.class"/>
+        <include name="sisc/modules/io/StringIO*.class"/>
         <include name="sisc/modules/Primitives*.class"/>
         <include name="sisc/modules/Annotations*.class"/>
         <include name="sisc/modules/R5RS*.class"/>
@@ -183,6 +185,7 @@
         <include name="sisc/boot/**"/>
         <include name="sisc/modules/**"/>
         <exclude name="sisc/modules/io/IO*.class"/>
+        <exclude name="sisc/modules/io/StringIO*.class"/>
         <exclude name="sisc/modules/Primitives*.class"/>
         <exclude name="sisc/modules/R5RS*.class"/>
       </fileset>
