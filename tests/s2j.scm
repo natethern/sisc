@@ -115,15 +115,18 @@
 ((-> <vector>) a)
 ((-> <symbol>) ((-> <jstring>) 'foo))
 
-;;equivalence of primitive types and their java.lang classes
+;;primitive types are sub-types of their java.lang classes
 (define <java.lang.Integer> (java-class "java.lang.Integer"))
 (java-assignable? <jobject> <java.lang.Integer>) ;=> #t
 (java-assignable? <jobject> <jint>) ;=> #t
 (java-assignable? <java.lang.Integer> <jint>) ;=>#t
-(java-assignable? <jint> <java.lang.Integer>) ;=>#t
+(java-assignable? <jint> <java.lang.Integer>) ;=>#f
 (java-assignable? <jint> <jshort>) ;=>#f
 (java-assignable? <jshort> <jint>) ;=>#f
 (java-instance? <jobject> (->jint 1)) ;=>#t
+(java-instance? <java.lang.Integer> (->jint 1)) ;=>#t
+(java-instance? <jint> (->jint 1)) ;=>#t
+(java-instance? <jint> (make <java.lang.Integer> (->jint 1))) ;=>#f
 
 ;;implementing Java interfaces in Scheme
 (define <java.util.Comparator> (java-class "java.util.Comparator"))

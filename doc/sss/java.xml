@@ -951,20 +951,15 @@ Context.exit()
           </blockquote>
         </para>
         <para>
-          Primitive types are mapped to their respective
-          <classname>java.lang</classname> classes. This means,
-          amongst other things, that, unlike in Java, primitive types
-          are indirect sub-classes of
-          <classname>java.lang.Object</classname> and primitive types
-          are assignable to their respective
-          <classname>java.lang</classname> classes (and visa
-          versa). Note however that no widening conversion takes
-          place, because Java does not define widening conversions for
-          the java.lang classes corresponding to the primitive types,
-          e.g. a <classname>java.lang.Byte</classname> is not
-          assignable to a <classname>java.lang.Integer</classname> and
-          thus, unlike in Java, <classname>byte</classname> is not
-          assignable to <classname>int</classname>.
+          Unlike in Java, primitive types are sub-types of their
+          respective <classname>java.lang</classname> classes. Note
+          however that no widening conversion takes place, because
+          Java does not define widening conversions for the java.lang
+          classes corresponding to the primitive types, e.g. a
+          <classname>java.lang.Byte</classname> is not assignable to a
+          <classname>java.lang.Integer</classname> and thus, unlike in
+          Java, <classname>byte</classname> is not assignable to
+          <classname>int</classname>.
         </para>
       </sect3>
       <sect3 id="S2JConversions">

@@ -100,7 +100,11 @@ public class Util extends ModuleAdapter {
     }
 
     public static final JavaObject makeJObj(Object o, Class c) {
-        return (o == null) ? new JavaNull(c) : new JavaObject(o);
+        if (o == null) return new JavaNull(c);
+        Class fixedClass = fixClass(c);
+        return (fixedClass == c) ?
+            new JavaObject(o) :
+            new JavaPrimitive(c, o);
     }
 
     public static final Value objArrayToVec(Object[] objs) {
@@ -131,26 +135,31 @@ public class Util extends ModuleAdapter {
 
     private static HashMap primitiveTypesToNames = new HashMap();
     private static HashMap namesToPrimitiveTypes = new HashMap();
+    private static HashMap primitiveTypesToClasses = new HashMap();
+    private static HashMap classesToPrimitiveTypes = new HashMap();
 
     static {
         Object[] primitiveTypes = {
-            "void",         Void.TYPE,
-            "boolean",      Boolean.TYPE,
-            "char",         Character.TYPE,
-            "byte",         Byte.TYPE,
-            "char",         Character.TYPE,
-            "short",        Short.TYPE,
-            "int",          Integer.TYPE,
-            "long",         Long.TYPE,
-            "float",        Float.TYPE,
-            "double",       Double.TYPE
+            "void",         Void.TYPE,          Void.class,
+            "boolean",      Boolean.TYPE,       Boolean.class,
+            "char",         Character.TYPE,     Character.class,
+            "byte",         Byte.TYPE,          Byte.class,
+            "short",        Short.TYPE,         Short.class,
+            "int",          Integer.TYPE,       Integer.class,
+            "long",         Long.TYPE,          Long.class,
+            "float",        Float.TYPE,         Float.class,
+            "double",       Double.TYPE,        Double.class
         };
 
-        for (int i=0; i<primitiveTypes.length; i+=2) {
+        for (int i=0; i<primitiveTypes.length; i+=3) {
             namesToPrimitiveTypes.put(primitiveTypes[i],
                                       primitiveTypes[i+1]);
             primitiveTypesToNames.put(primitiveTypes[i+1],
                                       primitiveTypes[i]);
+            primitiveTypesToClasses.put(primitiveTypes[i+1],
+                                        primitiveTypes[i+2]);
+            classesToPrimitiveTypes.put(primitiveTypes[i+2],
+                                        primitiveTypes[i+1]);
         }
     }
         
@@ -243,17 +252,8 @@ public class Util extends ModuleAdapter {
      * returned, otherwise the original class.
      */
     public static Class fixClass(Class c) {
-        return
-            c == Void.TYPE      ? Void.class :
-            c == Boolean.TYPE   ? Boolean.class :
-            c == Character.TYPE ? Character.class :
-            c == Byte.TYPE      ? Byte.class :
-            c == Short.TYPE     ? Short.class :
-            c == Integer.TYPE   ? Integer.class :
-            c == Long.TYPE      ? Long.class :
-            c == Float.TYPE     ? Float.class :
-            c == Double.TYPE    ? Double.class :
-            c;
+        Class res = (Class)primitiveTypesToClasses.get(c);
+        return (res == null) ? c : res;
     }
 
     public static String mangleFieldName(String s) {

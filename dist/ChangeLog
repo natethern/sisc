@@ -2,6 +2,11 @@
 
 	* Fixed a bug in the serialization of typed Java nulls in S2J.
 
+	* Fixed a number of bugs in S2J's implementations of eq?.
+
+	* Made primitive Java types sub-types of their respective
+	  java.lang types in S2J.
+
 2002-10-29  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed begin and let optimization bugs in the optimizer.

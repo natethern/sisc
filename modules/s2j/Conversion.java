@@ -57,21 +57,21 @@ public class Conversion extends Util {
         case 1:
             switch(primid) {
             case CONV_JBOOLEAN:
-                return makeJObj(truth(f.vlr[0]) ? Boolean.TRUE : Boolean.FALSE);
+                return makeJObj((truth(f.vlr[0]) ? Boolean.TRUE : Boolean.FALSE), Boolean.TYPE);
             case CONV_JCHAR:
-                return makeJObj(new Character(character(f.vlr[0])));
+                return makeJObj(new Character(character(f.vlr[0])), Character.TYPE);
             case CONV_JBYTE:
-                return makeJObj(new Byte((byte)num(f.vlr[0]).intValue()));
+                return makeJObj(new Byte((byte)num(f.vlr[0]).intValue()), Byte.TYPE);
             case CONV_JSHORT:
-                return makeJObj(new Short((short)num(f.vlr[0]).intValue()));
+                return makeJObj(new Short((short)num(f.vlr[0]).intValue()), Short.TYPE);
             case CONV_JINT:
-                return makeJObj(new Integer(num(f.vlr[0]).intValue()));
+                return makeJObj(new Integer(num(f.vlr[0]).intValue()), Integer.TYPE);
             case CONV_JLONG:
-                return makeJObj(new Long(num(f.vlr[0]).longValue()));
+                return makeJObj(new Long(num(f.vlr[0]).longValue()), Long.TYPE);
             case CONV_JFLOAT:
-                return makeJObj(new Float((float)num(f.vlr[0]).doubleValue()));
+                return makeJObj(new Float((float)num(f.vlr[0]).doubleValue()), Float.TYPE);
             case CONV_JDOUBLE:
-                return makeJObj(new Double(num(f.vlr[0]).doubleValue()));
+                return makeJObj(new Double(num(f.vlr[0]).doubleValue()), Double.TYPE);
             case CONV_JSTRING:
                 byte b = 1;
                 java.lang.Integer.toString(b);

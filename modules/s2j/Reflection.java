@@ -278,9 +278,15 @@ public class Reflection extends Util {
                     return FALSE;
                 }
             case JAVA_INSTANCEQ:
-                return truth(fixClass(jclass(f.vlr[0])).isInstance(jobj(f.vlr[1])));
+                return truth(((f.vlr[1] instanceof JavaPrimitive) ?
+                              fixClass(jclass(f.vlr[0])) :
+                              jclass(f.vlr[0])).isInstance(jobj(f.vlr[1])));
             case JAVA_ASSIGNABLEQ:
-                return truth(fixClass(jclass(f.vlr[0])).isAssignableFrom(fixClass(jclass(f.vlr[1]))));
+                Class c1 = jclass(f.vlr[1]);
+                Class c1Fixed = fixClass(c1);
+                return truth(((c1 != c1Fixed) ?
+                              fixClass(jclass(f.vlr[0])) :
+                              jclass(f.vlr[0])).isAssignableFrom(c1Fixed));
             case JAVA_ARRAY_CLASS:
                 return makeJObj(makeArrayClass(jclass(f.vlr[0]), num(f.vlr[1]).intValue()), Class.class);
             case JAVA_ARRAY_NEW:
