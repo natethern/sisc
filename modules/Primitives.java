@@ -1,9 +1,8 @@
 package sisc.modules;
 
 import java.util.*;
-import java.io.*;
 import java.lang.reflect.*;
-import java.net.*;
+import java.io.IOException;
 
 import sisc.*;
 import sisc.data.*;
@@ -33,15 +32,12 @@ public class Primitives extends ModuleAdapter {
         define("_gcd", GCD);
         define("_lcm", LCM);
         define("_string-append", STRINGAPPEND);
-        define("absolute-path?", ABSPATHQ);
         define("acos", ACOS);
         define("apply", APPLY);
         define("ashl", ASHL);
         define("ashr", ASHR);
         define("asin", ASIN);
         define("atan", ATAN);
-        define("block-read", BLOCKREAD);
-        define("block-write", BLOCKWRITE);
         define("boolean?", BOOLEANQ);
         define("box", BOX);
         define("box?", BOXQ);
@@ -53,20 +49,14 @@ public class Primitives extends ModuleAdapter {
         define("cdr", CDR);
         define("ceiling", CEILING);
         define("char->integer", CHAR2INTEGER);
-        define("char-ready?", CHARREADY);
         define("char?", CHARACTERQ);
-        define("close-input-port", CLOSEINPUTPORT);
-        define("close-output-port", CLOSEOUTPUTPORT);
         define("compact-string-rep", COMPACTSTRINGREP);
         define("complex?", COMPLEXQ);
         define("cons", CONS);
         define("cos", COS);
         define("current-evaluator", CURRENTEVAL);
-        define("current-input-port", CURRENTINPUTPORT);
-        define("current-output-port", CURRENTOUTPUTPORT);
         define("current-wind", CURRENTWIND);
         define("denominator", DENOMINATOR);
-        define("display", DISPLAY);
         define("environment?", ENVIRONMENTQ);
         define("eq?", EQ);
         define("equal?", EQUAL);
@@ -74,33 +64,26 @@ public class Primitives extends ModuleAdapter {
         define("exact->inexact", EXACT2INEXACT);
         define("exact?", EXACTQ);
         define("exp", EXP);
-        define("file-exists?", FILEEXISTSQ);
         define("find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
         define("floor", FLOOR);
-        define("flush-output-port", FLUSHOUTPUTPORT);
         define("native-library-binding", NLBINDING);
         define("native-library-binding-names", NLBINDINGNAMES);
         define("native-library-name", NLNAME);
         define("native-library-version", NLVERSION);
-        define("get-output-string", GETOUTPUTSTRING);
         define("get-symbolic-environment", GETENVIRONMENT);
         define("set-symbolic-environment!", SETENVIRONMENT);
         define("getprop", GETPROP);
         define("imag-part", IMAGPART);
         define("inexact->exact", INEXACT2EXACT);
         define("inexact?", INEXACTQ);
-        define("input-port?", INPORTQ);
-        define("input-port-location", INPORTLOCATION);
         define("integer->char", INTEGER2CHAR);
         define("integer?", INTEGERQ);
         define("interaction-environment", INTERACTIONENVIRONMENT );
         define("length", LENGTH);
         define("list->vector", LIST2VECTOR);
-        define("load", LOAD);
         define("load-native-library", LOADNL);
         define("log", LOG);
         define("make-parameter", MAKEPARAM);
-        define("make-path", MAKEPATH);
         define("make-rectangular", MAKERECTANGULAR);
         define("make-string", MAKESTRING);
         define("make-vector", MAKEVECTOR);
@@ -111,22 +94,11 @@ public class Primitives extends ModuleAdapter {
         define("number->string", NUMBER2STRING);
         define("number?", NUMBERQ);
         define("numerator", NUMERATOR);
-        define("normalize-url", NORMALIZEURL);
-        define("open-input-file", OPENINPUTFILE);
-        define("open-input-string", OPENINPUTSTRING);
-        define("open-output-file", OPENOUTPUTFILE);
-        define("open-output-string", OPENOUTPUTSTRING);
-        define("open-source-input-file", OPENSOURCEINPUTFILE);
-        define("output-port?", OUTPORTQ);
         define("pair?", PAIRQ);
         define("parameter?", PARAMETERQ);
-        define("peek-char", PEEKCHAR);
         define("procedure?", PROCEDUREQ);
         define("putprop", PUTPROP);
         define("quotient", QUOTIENT);
-        define("read", READ);
-        define("read-char", READCHAR);
-        define("read-code", READCODE);
         define("real-part", REALPART);
         define("remainder", REMAINDER);
         define("remprop", REMPROP);
@@ -163,8 +135,6 @@ public class Primitives extends ModuleAdapter {
         define("void", _VOID);
         define("void?", VOIDQ);
         define("with-failure-continuation", WITHFC);
-        define("write", WRITE);
-        define("write-char", WRITECHAR);
     }
 
     public static SchemeBoolean numQuery(Value v, int mask)
@@ -222,21 +192,7 @@ public class Primitives extends ModuleAdapter {
             switch (primid) {
             case _VOID: return VOID;
             case COMPACTSTRINGREP: return truth(SchemeString.compactRepresentation);
-            case CURRENTOUTPUTPORT: return f.dynenv.out;
-            case CURRENTINPUTPORT: return f.dynenv.in;
             case CURRENTWIND: return f.dynenv.wind;
-            case OPENOUTPUTSTRING: return new OutputPort(new StringWriter());
-            case PEEKCHAR:
-                Value v=f.dynenv.in.readChar();
-                if (v instanceof SchemeCharacter)
-                    f.dynenv.in.pushback(((SchemeCharacter)v).c);
-                return v;
-            case READ:
-                return f.dynenv.in.read(f);
-            case READCHAR:
-                return f.dynenv.in.readChar();
-            case READCODE:
-                return f.dynenv.in.readCode(f);
             case CURRENTEVAL: return (Value)f.ctx.evaluator;
             case INTERACTIONENVIRONMENT:
                 return f.ctx.toplevel_env.asValue();
@@ -290,17 +246,15 @@ public class Primitives extends ModuleAdapter {
             case COMPLEXQ: return numQuery(f.vlr[0],Quantity.IMAGINARY);
             case EXACTQ: return numQuery(f.vlr[0],Quantity.EXACT);
             case INEXACTQ: return numQuery(f.vlr[0],Quantity.INEXACT);
-            case INPORTQ: return truth(f.vlr[0] instanceof InputPort);
-            case OUTPORTQ: return truth(f.vlr[0] instanceof OutputPort);
             case PARAMETERQ: return truth(f.vlr[0] instanceof Parameter);
             case SYMBOL2STRING:
                 return new ImmutableString(symbol(f.vlr[0]).symval);
             case STRING2NUMBER:
-		String st=string(f.vlr[0]);
+                String st=string(f.vlr[0]);
                 try {
-                    return (Quantity)f.dynenv.parser.nextExpression(new InputPort(new BufferedReader(new StringReader(st))));
-		} catch (ClassCastException cce) {
-		    return FALSE;
+                    return (Quantity)f.dynenv.parser.nextExpression(new InputPort(st));
+                } catch (ClassCastException cce) {
+                    return FALSE;
                 } catch (NumberFormatException nf) {
                     return FALSE;
                 } catch (IOException e) {
@@ -323,35 +277,10 @@ public class Primitives extends ModuleAdapter {
             case INTEGER2CHAR: return new SchemeCharacter((char)num(f.vlr[0]).
                                                           intValue());
             case VECTORFINDLASTUNIQUE: return Quantity.valueOf(vec(f.vlr[0]).findEnd());
-            case PEEKCHAR:
-                InputPort inport=inport(f.vlr[0]);
-                Value v=inport.readChar();
-                if (v instanceof SchemeCharacter)
-                    inport.pushback(((SchemeCharacter)v).c);
-                return v;
-            case CHARREADY:
-                inport=inport(f.vlr[0]);
-                try {
-                    return truth(inport.ready());
-                } catch (IOException e) {
-                    return FALSE;
-                }
-            case READ:
-                inport=inport(f.vlr[0]);
-                return inport.read(f);
-            case READCHAR:
-                inport=inport(f.vlr[0]);
-                return inport.readChar();
-            case READCODE:
-                inport=inport(f.vlr[0]);
-                return inport.readCode(f);
             case EVAL:
                 f.nxp=f.compile(f.vlr[0]);
                 f.returnVLR();
                 return VOID;
-            case OPENINPUTSTRING:
-                return new InputPort(new BufferedReader(
-                                                        new StringReader(string(f.vlr[0]))));
             case CALLCC:
                 Procedure kproc=(Procedure)f.vlr[0];
                 f.replaceVLR(1);
@@ -364,112 +293,9 @@ public class Primitives extends ModuleAdapter {
                 f.vlr[0]=f.fk.capture(f);
                 f.nxp = APPEVAL;
                 return proc;
-            case GETOUTPUTSTRING:
-                OutputPort port=outport(f.vlr[0]);
-                if (!(port.w instanceof StringWriter))
-                    throwPrimException( liMessage(SISCB, "outputnotastringport"));
-                try {
-                    port.flush();
-                } catch (IOException e) {}
-
-                StringWriter sw=(StringWriter)port.w;
-                SchemeString s=new SchemeString(sw.getBuffer().toString());
-                sw.getBuffer().setLength(0);
-                return s;
-            case OPENSOURCEINPUTFILE:
-                URL url = url(f.vlr[0]);
-                try {
-                    URLConnection conn = url.openConnection();
-                    conn.setDoInput(true);
-                    conn.setDoOutput(false);
-                    return new SourceInputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())), url.toString());
-                } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
-                }
-            case OPENINPUTFILE:
-                url = url(f.vlr[0]);
-                try {
-                    URLConnection conn = url.openConnection();
-                    conn.setDoInput(true);
-                    conn.setDoOutput(false);
-                    return new InputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())));
-                } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
-                }
-            case OPENOUTPUTFILE:
-                url = url(f.vlr[0]);
-                try {
-                    if (url.getProtocol().equals("file")) {
-                        //the JDK does not permit write access to file URLs
-                        return new OutputPort(new BufferedWriter(new FileWriter(url.getPath())));
-                    }
-                    URLConnection conn = url.openConnection();
-                    conn.setDoInput(false);
-                    conn.setDoOutput(true);
-                    return new OutputPort(new BufferedWriter(new OutputStreamWriter(conn.getOutputStream())));
-                } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
-                }
-            case FLUSHOUTPUTPORT:
-                OutputPort op=outport(f.vlr[0]);
-                try {
-                    op.flush();
-                } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "errorflushing", op.toString()));
-                }
-                return VOID;
-            case CLOSEINPUTPORT:
-                InputPort inp=inport(f.vlr[0]);
-                if (inp!=f.dynenv.in) inp.close();
-                return VOID;
-            case CLOSEOUTPUTPORT:
-                op=outport(f.vlr[0]);
-                if (op!=f.dynenv.out) op.close();
-                return VOID;
-            case INPORTLOCATION:
-                inp = inport(f.vlr[0]);
-                if (inp instanceof SourceInputPort) {
-                    SourceInputPort sinp = (SourceInputPort)inp;
-                    return list(new Pair(sym("source-file"),
-                                         new SchemeString(sinp.sourceFile)),
-                                new Pair(sym("line-number"),
-                                         Quantity.valueOf(sinp.line)),
-                                new Pair(sym("column-number"),
-                                         Quantity.valueOf(sinp.column)));
-                } else
-                    return FALSE;
             case BOX: return new Box(f.vlr[0]);
             case UNBOX: return (Value)box(f.vlr[0]).val;
             case BOXQ: return truth(f.vlr[0] instanceof Box);
-            case LOAD:
-                InputPort p=null;
-                url = url(f.vlr[0]);
-                try {
-                    URLConnection conn = url.openConnection();
-                    conn.setDoInput(true);
-                    conn.setDoOutput(false);
-                    p=new SourceInputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())), url.toString());
-                } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
-                }
-                Interpreter r = Context.enter();
-                try {
-                    v=null;
-                    do {
-                        v=p.readCode(r);
-
-                        if (v!=EOF) {
-                            try {
-                                r.eval(v);
-                            } catch (SchemeException se) {
-                                throwNestedPrimException(se);
-                            }
-                        }
-                    } while (v!=EOF);
-                } finally {
-                    Context.exit();
-                }
-                return VOID;
             case LENGTH:
                 return Quantity.valueOf(length(pair(f.vlr[0])));
             case STRINGLENGTH:
@@ -482,43 +308,13 @@ public class Primitives extends ModuleAdapter {
                 return new SchemeString(new char[num(f.vlr[0]).intValue()]);
             case MAKEVECTOR:
                 return new SchemeVector(num(f.vlr[0]).intValue());
-            case WRITECHAR:
-                try {
-                    f.dynenv.out.writeChar(character(f.vlr[0]));
-                } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "errorwriting",
-                                                 f.dynenv.out.synopsis()));
-                }
-                return VOID;
             case NUMERATOR: return num(f.vlr[0]).numerator();
             case DENOMINATOR: return num(f.vlr[0]).denominator();
             case REALPART: return num(f.vlr[0]).realpart();
             case IMAGPART: return num(f.vlr[0]).imagpart();
-            case DISPLAY: case WRITE:
-                try {
-                    f.dynenv.out.write((primid == WRITE ? f.vlr[0].write() :
-                                        f.vlr[0].display()));
-                } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "errorwriting",
-                                                 f.dynenv.out.write()));
-                }
-                return VOID;
-            case CURRENTOUTPUTPORT:
-                f.dynenv.out= outport(f.vlr[0]);
-                return VOID;
-            case CURRENTINPUTPORT:
-                f.dynenv.in = inport(f.vlr[0]);
-                return VOID;
             case CURRENTWIND:
                 f.dynenv.wind = f.vlr[0];
                 return VOID;
-            case FILEEXISTSQ:
-                try {
-                    url(f.vlr[0]).openConnection().getInputStream().close();
-                    return TRUE;
-                } catch (IOException e) {
-                    return FALSE;
-                }
             case STRING2UNINTERNEDSYMBOL:
                 return Symbol.getUnique(string(f.vlr[0]));
             case REPORTENVIRONMENT:
@@ -558,17 +354,11 @@ public class Primitives extends ModuleAdapter {
             case MIN_PRECISION:
                 Quantity.min_precision=num(f.vlr[0]).intValue();
                 return VOID;
-            case ABSPATHQ:
-                String f1=string(f.vlr[0]);
-                File fn=new File(f1);
-                return truth(fn.isAbsolute());
             case SLEEP:
                 try {
                     Thread.sleep(num(f.vlr[0]).longValue());
                 } catch (InterruptedException ie) {}
                 return VOID;
-            case NORMALIZEURL:
-                return new SchemeString(url(f.vlr[0]).toString());
             case COMPACTSTRINGREP:
                 SchemeString.compactRepresentation=truth(f.vlr[0]);
                 return VOID;
@@ -642,7 +432,7 @@ public class Primitives extends ModuleAdapter {
                 return new SchemeString(newStr);
             case STRING2NUMBER:
                 try {
-                    return (Quantity)f.dynenv.parser.nextExpression(new InputPort(new BufferedReader(new StringReader(string(f.vlr[0])))), num(f.vlr[1]).intValue(), 0);
+                    return (Quantity)f.dynenv.parser.nextExpression(new InputPort(string(f.vlr[0])), num(f.vlr[1]).intValue(), 0);
                 } catch (NumberFormatException nf) {
                     return FALSE;
                 } catch (IOException e) {
@@ -653,15 +443,6 @@ public class Primitives extends ModuleAdapter {
                                         .toString(num(f.vlr[1]).intValue()));
             case STRINGAPPEND:
                 return str(f.vlr[0]).append(str(f.vlr[1]));
-            case WRITECHAR:
-                OutputPort port=outport(f.vlr[1]);
-                try {
-                    port.writeChar(character(f.vlr[0]));
-                } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "errorwriting",
-                                                 port.synopsis()));                    
-                }
-                return VOID;
             case MAKERECTANGULAR:
                 return Quantity.valueOf(num(f.vlr[0]),
                                         num(f.vlr[1]));
@@ -671,32 +452,6 @@ public class Primitives extends ModuleAdapter {
             case ASHR: return Quantity.valueOf(num(f.vlr[0]).integer()
                                                .shiftRight(num(f.vlr[1])
                                                            .intValue()));
-            case DISPLAY: case WRITE:
-                port=outport(f.vlr[1]);
-                try {
-                    port.write((primid == WRITE ? f.vlr[0].write() :
-                                f.vlr[0].display()));
-                } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "errorwriting",
-                                                 port.synopsis()));   
-                }
-                return VOID;
-            case OPENOUTPUTFILE:
-                URL url = url(f.vlr[0]);
-                try {
-                    if (url.getProtocol().equals("file")) {
-                        //the JDK does not permit write access to file URLs
-                        return new OutputPort(new BufferedWriter(new FileWriter(url.getPath())),
-                                              truth(f.vlr[1]));
-                    }
-                    URLConnection conn = url.openConnection();
-                    conn.setDoInput(false);
-                    conn.setDoOutput(true);
-                    return new OutputPort(new BufferedWriter(new OutputStreamWriter(conn.getOutputStream())),
-                                          truth(f.vlr[1]));
-                } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
-                }
             case NLBINDING:
                 return module(f.vlr[0]).getBindingValue(f, symbol(f.vlr[1]));
             case EVAL:
@@ -718,16 +473,6 @@ public class Primitives extends ModuleAdapter {
                 f.replaceVLR(0);
                 f.nxp = APPEVAL;
                 return producer;
-            case MAKEPATH:
-                String f1=string(f.vlr[0]);
-                String f2=string(f.vlr[1]);
-                File fn=new File(f1);
-                fn=new File(f1, f2);
-                try {
-                    return new SchemeString(fn.getCanonicalPath());
-                } catch (IOException e) {
-                    throwPrimException(liMessage(SISCB, "invalidpathspec"));
-                }
             case GETPROP:
                 try {
                     if (f.vlr[1] instanceof SymbolicEnvironment) {
@@ -743,8 +488,6 @@ public class Primitives extends ModuleAdapter {
             case REMPROP:
                 f.undefine(symbol(f.vlr[0]), symbol(f.vlr[1]));
                 return VOID;
-            case NORMALIZEURL:
-                return new SchemeString(url(f.vlr[0], f.vlr[1]).toString());
             case SETENVIRONMENT:
                 f.ctx.defineContextEnv(symbol(f.vlr[0]), env(f.vlr[1]));
                 return VOID;
@@ -799,19 +542,6 @@ public class Primitives extends ModuleAdapter {
                                                      new Integer(index),
                                                      f.vlr[0].synopsis()}));
                 }
-                return VOID;
-            case BLOCKREAD:
-                int count=num(f.vlr[2]).intValue();
-                InputPort inport=inport(f.vlr[1]);
-                SchemeString st=str(f.vlr[0]);
-                char[] buff=st.asCharArray();
-                st.set(buff); //forces string to be represented by char[] only
-                return inport.read(buff, count);
-            case BLOCKWRITE:
-                count=num(f.vlr[2]).intValue();
-                OutputPort outport=outport(f.vlr[1]);
-                buff=str(f.vlr[0]).asCharArray();
-                outport.write(buff, count);
                 return VOID;
             }
         default:
@@ -900,19 +630,30 @@ public class Primitives extends ModuleAdapter {
     }
 
     static final int
-        //0
-        //1
-        //2
-        //3
-        //5
-        //6
-        //8
-        //9
-        //10
+        //0-10
+        //13
         //16
+        //26-28
         //30
+        //33-34
         //37
-        ABSPATHQ = 13,
+        //40
+        //44
+        //46
+        //50
+        //54
+        //59
+        //69
+        //72-73
+        //75
+        //78
+        //80-82
+        //110-111
+        //120
+        //125
+        //136
+        //138-139
+        //154
         ACOS = 14,
         ADD = 152,
         APPLY = 137,
@@ -920,8 +661,6 @@ public class Primitives extends ModuleAdapter {
         ASHR = 105,
         ASIN = 15,
         ATAN = 106,
-        BLOCKREAD = 138,
-        BLOCKWRITE = 139,
         BOOLEANQ = 17,
         BOX = 18,
         BOXQ = 19,
@@ -934,45 +673,33 @@ public class Primitives extends ModuleAdapter {
         CEILING = 23,
         CHAR2INTEGER = 24,
         CHARACTERQ = 25,
-        CHARREADY = 26,
-        CLOSEINPUTPORT = 27,
-        CLOSEOUTPUTPORT = 28,
         COMPACTSTRINGREP = 74,
         COMPLEXQ = 29,
         CONS = 109,
         COS = 31,
         CURRENTEVAL = 32,
-        CURRENTINPUTPORT = 33,
-        CURRENTOUTPUTPORT = 34,
         CURRENTWIND = 35,
         DENOMINATOR = 36,
-        DISPLAY = 110,
         DIV = 144,
         ENVIRONMENTQ = 39,
         EQ = 112,
         EQUAL = 113,
         EVAL = 115,
-        READCODE = 40,
         EXACT2INEXACT = 41,
         EXACTQ = 42,
         EXP = 43,
-        FILEEXISTSQ = 44,
         FLOOR = 45,
-        FLUSHOUTPUTPORT = 46,
         GCD = 116,
         GETENVIRONMENT = 64,
         GETPROP = 119,
+        GRT = 153,
         NLBINDING = 117,
         NLBINDINGNAMES = 47,
         NLNAME = 48,
         NLVERSION = 49,
-        GETOUTPUTSTRING = 50,
-        GRT = 153,
         IMAGPART = 51,
         INEXACT2EXACT = 52,
         INEXACTQ = 53,
-        INPORTQ = 54,
-        INPORTLOCATION = 80,
         INTEGER2CHAR = 55,
         INTEGERQ = 56,
         INTERACTIONENVIRONMENT = 4,
@@ -980,12 +707,10 @@ public class Primitives extends ModuleAdapter {
         LENGTH = 57,
         LIST = 146,
         LIST2VECTOR = 58,
-        LOAD = 59,
         LOADNL = 60,
         LOG = 61,
         LT = 147,
         MAKEPARAM = 63,
-        MAKEPATH = 120,
         MAKERECTANGULAR = 121,
         MAKESTRING = 122,
         MAKEVECTOR = 123,
@@ -998,21 +723,11 @@ public class Primitives extends ModuleAdapter {
         NUMBER2STRING = 124,
         NUMBERQ = 70,
         NUMERATOR = 71,
-        NORMALIZEURL = 69,
-        OPENINPUTFILE = 72,
-        OPENINPUTSTRING = 73,
-        OPENOUTPUTFILE = 125,
-        OPENSOURCEINPUTFILE = 154,
-        OPENOUTPUTSTRING = 7,
-        OUTPORTQ = 75,
         PAIRQ = 76,
         PARAMETERQ = 77,
-        PEEKCHAR = 78,
         PROCEDUREQ = 79,
         PUTPROP = 140,
         QUOTIENT = 126,
-        READ = 81,
-        READCHAR = 82,
         REALPART = 83,
         REMAINDER = 127,
         REMPROP = 62,
@@ -1052,8 +767,6 @@ public class Primitives extends ModuleAdapter {
         VECTORFILL = 145,
         VOIDQ = 102,
         WITHFC = 103,
-        WRITE = 111,
-        WRITECHAR = 136,
         _VOID = 12;
 
 

@@ -14,16 +14,16 @@ public class Annotations extends ModuleAdapter {
     }
 
     protected static final int
-        ANNOTATION				= 0,
-        ANNOTATIONQ				= 1,
-        ANNOTATIONKEYS			= 2,
-        ANNOTATIONSRC			= 3,
-        ANNOTATIONEXPR			= 4,
-        ANNOTATIONSTRIPPED		= 5,
-        EMITANNOTATIONS			= 6,
-        MAKEANNOTATION			= 7,
-        SETANNOTATION			= 8,
-        SETANNOTATIONSTRIPPED	= 9;
+        ANNOTATION              = 0,
+        ANNOTATIONQ             = 1,
+        ANNOTATIONKEYS          = 2,
+        ANNOTATIONSRC           = 3,
+        ANNOTATIONEXPR          = 4,
+        ANNOTATIONSTRIPPED      = 5,
+        EMITANNOTATIONS         = 6,
+        MAKEANNOTATION          = 7,
+        SETANNOTATION           = 8,
+        SETANNOTATIONSTRIPPED   = 9;
 
     public Annotations() {
         define("annotation?"            , ANNOTATIONQ);
@@ -115,6 +115,7 @@ public class Annotations extends ModuleAdapter {
         return VOID;
     }
 }
+
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file

@@ -12,6 +12,10 @@ public class InputPort extends NamedValue {
         this.r=r;
     }
 
+    public InputPort(String s) {
+        this(new BufferedReader(new StringReader(s)));
+    }
+
     public Value readChar() {
         try {
             return new SchemeCharacter((char)read());
