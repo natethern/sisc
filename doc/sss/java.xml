@@ -565,61 +565,77 @@ Context.exit()
               </methodsynopsis>
               <blockquote>
                 <para>
-                  Retrieves the generic procedure singleton that contains
-                  all Java methods of all classes whose mangled name is
-                  <parameter>name</parameter>.
+                  Retrieves the generic procedure singleton that
+                  contains all Java methods of all classes whose name
+                  is <parameter>name</parameter>.
                 </para>
               </blockquote>
             </para>
           </blockquote>
-          The name mangling is performed in order
-          to give Java method names a more Scheme-like appearance. The
-          rules are as follows:
-          <orderedlist spacing="compact">
-            <listitem>
-              <para>
-                A <literal>-</literal> is inserted between a
-                lower-case character and an upper-case
-                character. Non-alphabetic characters are considered to
-                be lower-case characters.
-              </para>
-            </listitem>
-            <listitem>
-              <para>
-                The whole name is down-cased,
-                e.g. <function>fooBarBaz</function> becomes
-                <function>foo-bar-baz</function>, and
-                <function>FooBar</function> becomes
-                <function>foo-bar</function>.
-              </para>
-            </listitem>
-            <listitem>
-              <para>
-                A <literal>!</literal> is appended if the original
-                name started with <function>set</function> followed by
-                an upper-case character,
-                e.g. <function>setFoo</function> becomes
-                <function>set-foo!</function>.
-              </para>
-            </listitem>
-            <listitem>
-              <para>
-                A <literal>?</literal> is appended if the original
-                name started with <function>is</function> followed by
-                an upper-case character. The <function>is</function>
-                is dropped , e.g. <function>isFoo</function> becomes
-                <function>foo?</function>.
-              </para>
-            </listitem>
-          </orderedlist>
-          The names of some Java methods, when mangled, clash with
-          names of standard Scheme
-          procedures. <function>define-generic</function> can take a
-          second argument that makes the chaining explicit. Using the
-          above <function>generic-java-procedure</function> it is thus
+        </para>
+        <para>
+          <function>define-generic</function> mangles the name of the
+          defined procedure when calling the
+          <function>generic-java-procedure</function>. This way,
+          generic procedures following the usual Scheme naming
+          conventions get chained to generic procedures that invoke
+          Java methods with names following usual Java naming
+          conventions. The name mangling is performed by 
+          <blockquote>
+            <para>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>symbol</type>
+                <methodname>java-mangle-name</methodname>
+                <methodparam><parameter>name</parameter></methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Converts a Scheme procedure name, supplied as a
+                  symbol in <parameter>name</parameter> into a Java
+                  method name in accordance with the following rules:
+                  <orderedlist spacing="compact">
+                    <listitem>
+                      <para>
+                        Any trailing <literal>!</literal> is removed.
+                      </para>
+                    </listitem>
+                    <listitem>
+                      <para>
+                        Any trailing <literal>?</literal> is removed
+                        and a leading <literal>is-</literal> added
+                        instead.
+                      </para>
+                    </listitem>
+                    <listitem>
+                      <para>
+                        Any occurrence of <literal>-</literal> is
+                        removed and the character following it is
+                        converted to upper case.
+                      </para>
+                    </listitem>
+                  </orderedlist>
+                </para>
+                <para>
+                  With these rules, <function>foo-bar-baz?</function>
+                  maps to <function>isFooBarBaz</function>.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          Sometimes the names of Java methods make it inconvenient to
+          define generic functions with the right names needed for the
+          automatic chaining described above to work. For instance,
+          the names might clash with those of well-known Scheme
+          procedures. To overcome this problem,
+          <function>define-generic</function> can take a second
+          argument that makes the chaining explicit. Using the above
+          <function>generic-java-procedure</function> it is thus
           possible to avoid name clashes as follows:
           <programlisting>
-(define-generic app (generic-java-procedure 'append))
+(define-generic app (generic-java-procedure (java-mangle-name 'append)))
 (app sb (->jstring "foo"))
           </programlisting>
           The invocation of <function>app</function> selects the
@@ -1183,7 +1199,7 @@ Context.exit()
 (define &lt;java.util.Comparator&gt; (java-class "java.util.Comparator"))
 (define &lt;java.util.Arrays&gt; (java-class "java.util.Arrays"))
 (define-java-proxy (comparator fn) &lt;java.util.Comparator&gt;
-  (method (|compare| (&lt;jobject&gt; obj1) (&lt;jobject&gt; obj2))
+  (method (compare (&lt;jobject&gt; obj1) (&lt;jobject&gt; obj2))
     (let ((x (java-unwrap obj1))
           (y (java-unwrap obj2)))
       (-&gt;jint (cond ((fn x y) -1)

@@ -138,6 +138,7 @@
    java-array-new
    java-new
    java-set!
+   java-mangle-name
    jnull
    ->
    ->jboolean
@@ -209,6 +210,7 @@
   (define java-array-new  	java/array-new)
   (define java-new          java/new)
   (define java-set!         java/set!)
+  (define java-mangle-name  java/mangle-name)
   (define jnull             (java/new))
   (define-generic ->)
   (define-method (-> ((meta <jboolean>) _)) ->jboolean)

@@ -70,6 +70,7 @@ public class S2J extends ModuleAdapter {
         JAVA_PROXY          =64,
         JAVA_NEW            =65,
         JAVA_SET            =66,
+        JAVA_MANGLE         =67,
 
         CONV_JBOOLEAN       =100,
         CONV_JCHAR          =101,
@@ -143,6 +144,7 @@ public class S2J extends ModuleAdapter {
         define("java/proxy"         ,JAVA_PROXY);
         define("java/new"           ,JAVA_NEW);
         define("java/set!"          ,JAVA_SET);
+        define("java/mangle-name"	,JAVA_MANGLE);
 
         define("->jboolean"         ,CONV_JBOOLEAN);
         define("->jchar"            ,CONV_JCHAR);
@@ -714,6 +716,30 @@ public class S2J extends ModuleAdapter {
             c;
     }
 
+    public static String mangleName(String s) {
+        int l = s.length();
+        StringBuffer res = new StringBuffer(l);
+        if (s.endsWith("!")) {
+            s = s.substring(0, l-1);
+            l--;
+        }
+        if (s.endsWith("?")) {
+            s = "is-" + s.substring(0, l-1);
+            l+=2;
+        }
+        int prev = 0;
+        int p;
+        while ((p = s.indexOf('-', prev)) != -1) {
+            res.append(s.substring(prev, p));
+            prev = p+1;
+            if (prev < l) {
+                res.append(Character.toUpperCase(s.charAt(prev)));
+                prev++;
+            }
+        }
+        return res.append(s.substring(prev, l)).toString();
+    }
+
     public Value eval(int primid, Interpreter f) throws ContinuationException {
         switch(f.vlr.length) {
         case 0:
@@ -839,6 +865,8 @@ public class S2J extends ModuleAdapter {
                 return makeJObj(jobj(f.vlr[0]).getClass());
             case JAVA_INV_HANDLER:
                 return makeJObj(new SchemeInvocation(f.ctx, proc(f.vlr[0])));
+            case JAVA_MANGLE:
+                return Symbol.intern(mangleName(symval(f.vlr[0])));
             case CONV_JBOOLEAN:
                 return makeJObj(truth(f.vlr[0]) ? Boolean.TRUE : Boolean.FALSE);
             case CONV_JCHAR:

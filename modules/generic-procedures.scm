@@ -88,44 +88,6 @@
        (if next
            (make-generic-procedure (constructor next class))
            (make-generic-procedure))))))
-    
-;;mangle java method names so they look a bit more like scheme
-;;procedure names
-(define (mangle-name name)
-  ((compose string->symbol mangle-name-phase3
-            list->string mangle-name-phase2 string->list
-            mangle-name-phase1 symbol->string)
-   name))
-;;turn "isFoo" into "Foo?" and "setFoo" into "setFoo!"
-(define (mangle-name-phase1 name)
-  (let ([l (string-length name)])
-    (cond ((and (> l 2)
-                (string=? (substring name 0 2) "is")
-                (char-upper-case? (string-ref name 2)))
-           (string-append (substring name 2 l) "?"))
-          ((and (> l 3)
-                (string=? (substring name 0 3) "set")
-                (char-upper-case? (string-ref name 3)))
-           (string-append name "!"))
-          (else name))))
-;;inserts a '-' between upper case and lower case
-;;characters and downcases everything
-(define (mangle-name-phase2 name)
-  (let loop ([res '()]
-             [name name]
-             [lower? #f])
-    (if (null? name)
-        (reverse res)
-        (let ([c (car name)]
-              [r (cdr name)])
-          (if (and (char-alphabetic? c) (char-upper-case? c))
-              (loop (cons (char-downcase c)
-                          (if lower? (cons #\- res) res))
-                    r
-                    #f)
-              (loop (cons c res) r #t))))))
-(define (mangle-name-phase3 name)
-  name)
 
 (define (method<= m1 m2)
   (cond ((> (method-arity m1) (method-arity m2)) #t)
@@ -199,7 +161,7 @@
               (hashtable/for-each
                (lambda (name meths)
                  (add-java-methods
-                  (generic-java-procedure (mangle-name name))
+                  (generic-java-procedure name)
                   meths))
                methods))))))
 
@@ -276,7 +238,7 @@
      (define ?name (make-generic-procedure ?next)))
     ((_ ?name)
      (define ?name (make-generic-procedure
-                    (generic-java-procedure '?name))))))
+                    (generic-java-procedure (java/mangle-name '?name)))))))
 (define-syntax define-method
   (syntax-rules (next:)
     ((_ (?name (next: ?next) (?type ?arg) ...) . ?body)
