@@ -7,6 +7,7 @@ import java.lang.reflect.*;
 import java.io.*;
 import java.util.*;
 import sisc.Serializer;
+import java.lang.ref.WeakReference;
 
 public class S2J extends ModuleAdapter {
     public String getModuleName() {
@@ -295,16 +296,20 @@ public class S2J extends ModuleAdapter {
                 default:
                     throw new RuntimeException("cannot deserialize java object");
                 }
-                knownObjects.put(obj, this);
+                knownObjects.put(obj, new WeakReference(this));
             }
         }
 
         public static final synchronized JavaObject create(Object o) {
             if (o == null) return nullObj;
-            JavaObject res = (JavaObject)knownObjects.get(o);
-            if (res != null) return res;
+            WeakReference ref = (WeakReference)knownObjects.get(o);
+            JavaObject res;
+            if (ref != null) {
+                res = (JavaObject)ref.get();
+                if (res != null) return res;
+            }
             res = new JavaObject(o);
-            knownObjects.put(o, res);
+            knownObjects.put(o, new WeakReference(res));
             return res;
         }
 

@@ -93,3 +93,11 @@
  (lambda (m e f)
    (print-stack-trace m)
    #f))
+
+;garbage collection
+(let loop ([count 100])
+  (if (> count 0)
+      (begin
+        (java-array-new <jdouble> 10000)
+        (make <jstringbuffer> (->jint 10000))
+        (loop (- count 1)))))
