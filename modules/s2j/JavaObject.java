@@ -174,10 +174,10 @@ public class JavaObject extends Procedure {
     }
 
     public boolean equals(Object v) {
+        if (!(v instanceof JavaObject)) return false;
         if (obj == null)
-            return v == null;
-        return (v instanceof JavaObject) &&
-            obj.equals(((JavaObject)v).obj);
+            return ((JavaObject)v).obj == null;
+        return obj.equals(((JavaObject)v).obj);
     }
 
     public void apply(Interpreter r)
