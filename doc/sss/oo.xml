@@ -1640,7 +1640,7 @@
               <methodname>make-class</methodname>
               <methodparam><parameter>symbol</parameter></methodparam>
               <methodparam><parameter>class-list</parameter></methodparam>
-              <methodparam><parameter>slot-def-list</parameter></methodparam>
+              <methodparam><parameter>slot-list</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
@@ -1652,43 +1652,8 @@
                 superclass is &lt;object&gt;.
               </para>
               <para>
-                <parameter>slot-def-list</parameter> defines the slots
-                that instances of the new class will have, and
-                determines how to access and modify them. It is an
-                association list with each entry of the form
-                <literal>(</literal><parameter>slot-name</parameter>
-                <literal>(</literal><parameter>slot-prop-name</parameter>
-                <literal>.</literal>
-                <parameter>slot-prop-value</parameter><literal>)
-                ...)</literal>. <parameter>slot-name</parameter> names
-                a slot. <parameter>slot-prop-name</parameter> must be
-                the name of one of the defined slot properties, and
-                <parameter>slot-prop-value</parameter> is its
-                value. The following are the valid slot properties:
-                <variablelist>
-                  <varlistentry>
-                    <term>accessor</term>
-                    <listitem>
-                      <para>
-                        The generic procedure to which an accessor
-                        method for the slot will be added. If no
-                        accessor is specified then the slot cannot be
-                        accessed on an instance of the class.
-                      </para>
-                    </listitem>
-                  </varlistentry>
-                  <varlistentry>
-                    <term>modifier</term>
-                    <listitem>
-                      <para>
-                        The generic procedure to which a modifier
-                        method for the slot will be added. If no
-                        modifier is specified then the slot cannot be
-                        modified on an instance of the class.
-                      </para>
-                    </listitem>
-                  </varlistentry>
-                </variablelist>
+                <parameter>slot-list</parameter> is a list of slot
+                names (symbols).
               </para>
               <para>
                 Slots are inherited by sub-classes. For details on
@@ -1701,8 +1666,7 @@
 (define &lt;foo&gt; (make-class '&lt;foo&gt; '() '()))
 (define &lt;bar&gt; (make-class '&lt;bar&gt; '() '()))
 (define &lt;baz&gt; (make-class '&lt;baz&gt; (list &lt;foo&gt; &lt;bar&gt;)
-                          `((x (accessor . ,:x))
-                            (y (accessor . ,:y) (modifier . ,:y!)))))
+                          '(x y)))
               </programlisting>
             </informalexample>
           </para>
@@ -1738,6 +1702,37 @@
                 This form expands into a definition with call to
                 <function>make-class</function> on the right hand
                 side.
+              </para>
+              <para>
+                <parameter>slot-name</parameter> names a
+                slot. <parameter>slot-prop-name</parameter> must be
+                the name of one of the defined slot properties, and
+                <parameter>slot-prop-value</parameter> is its
+                value. The following are the valid slot properties:
+                <variablelist>
+                  <varlistentry>
+                    <term>accessor</term>
+                    <listitem>
+                      <para>
+                        The generic procedure to which an accessor
+                        method for the slot will be added. If no
+                        accessor is specified then the slot cannot be
+                        accessed on an instance of the class.
+                      </para>
+                    </listitem>
+                  </varlistentry>
+                  <varlistentry>
+                    <term>modifier</term>
+                    <listitem>
+                      <para>
+                        The generic procedure to which a modifier
+                        method for the slot will be added. If no
+                        modifier is specified then the slot cannot be
+                        modified on an instance of the class.
+                      </para>
+                    </listitem>
+                  </varlistentry>
+                </variablelist>
               </para>
             </blockquote>
             <informalexample>

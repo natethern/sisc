@@ -502,7 +502,7 @@
      class-direct-slots
      <object>
      make-class
-     define-class
+     (define-class configure-slot)
      make
      initialize)
   (import* record

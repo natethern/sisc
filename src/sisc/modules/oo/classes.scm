@@ -48,27 +48,17 @@
          [cpl   (compute-class-precedence-list class)]
          [idx   (apply + (map class-direct-slot-count (cdr cpl)))]
          [offs  0])
-    (define (process-slot-def name props)
-      (let ([slot (make-slot-helper
-                   name
-                   class
-                   (begin (set! offs (+ offs 1))
-                          (+ idx offs -1)))])
-        (define (add-slot-method kind fetch)
-          (let ([gproc (assq kind props)])
-            (if gproc (add-method (cdr gproc) (fetch slot)))))
-        (add-slot-method 'accessor slot-accessor-method)
-        (add-slot-method 'modifier slot-modifier-method)
-        slot))
+    (define (make-slot name)
+      (make-slot-helper name
+                        class
+                        (begin (set! offs (+ offs 1))
+                               (+ idx offs -1))))
     (define (make-constructor)
       (let ([class-slot-count (+ offs idx)])
         (lambda () (make-record class class-slot-count))))
     (set-class-precedence-list! class cpl)
     (enforce-single-inheritance class)
-    (set-class-direct-slots! class
-                             (map process-slot-def
-                                  (map car direct-slots)
-                                  (map cdr direct-slots)))
+    (set-class-direct-slots! class (map make-slot direct-slots))
     (set-class-direct-slot-count! class offs)
     (set-class-constructor! class (make-constructor))
     class))
@@ -80,12 +70,23 @@
                          direct-superclasses)
                      direct-slots))
 
+(define (configure-slot class slot-props)
+  (for-each (lambda (slot props)
+              (define (add-slot-method kind fetch)
+                (let ([gproc (assq kind props)])
+                  (if gproc (add-method (cdr gproc) (fetch slot)))))
+              (add-slot-method 'accessor slot-accessor-method)
+              (add-slot-method 'modifier slot-modifier-method))
+            (class-direct-slots class)
+            slot-props))
+
 (define-simple-syntax (define-class (name . superclasses)
                         (slot-name (slot-prop-name slot-prop-val) ...)
                         ...)
-  (define name
-    (make-class 'name
-                (list . superclasses)
-                (list (list 'slot-name
-                            `(slot-prop-name . ,slot-prop-val) ...)
-                      ...))))
+  (module (name)
+      (define name
+        (make-class 'name
+                    (list . superclasses)
+                    '(slot-name ...)))
+    (configure-slot name `(((slot-prop-name . ,slot-prop-val) ...) ...))))
+

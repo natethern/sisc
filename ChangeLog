@@ -3,7 +3,11 @@
 	* Simplified the OO system by removing slot initializers / default
 	  values.
 
-2004-12-07  Matthias Radestock  <matthiassorted.org>
+	* Allow class definitions on the OO system to refer to slot
+	  accessors and modifiers defined in the same module / local
+	  scope.
+
+2004-12-07  Matthias Radestock  <matthias@sorted.org>
 
 	* Implemented DEFINE-VALUES, working correctly at both the top
 	  level and inside lexical scopes.
