@@ -470,6 +470,7 @@
   ; Handled natively 
   (add-feature 'srfi-39))
 
+(display "srfi-42 ")
 (module srfi-42
     ((do-ec do-ec:do ec-simplify)
      list-ec
