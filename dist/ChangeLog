@@ -1,3 +1,7 @@
+2003-07-09  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed bug in char-ready?; the port argument is now optional.
+
 2003-07-04  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed open-{serial,binary}-{input,output}-port to take into

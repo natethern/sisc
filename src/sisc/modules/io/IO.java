@@ -238,6 +238,12 @@ public class IO extends IndexedProcedure {
         switch (f.vlr.length) {
         case 0:
             switch (id) {
+            case CHARREADY:
+                try {
+                    return truth(f.dynenv.in.ready());
+                } catch (IOException e) {
+                    return FALSE;
+                }
             case PEEKCHAR:
                 Value v=readChar(f, f.dynenv.in);
                 if (v instanceof SchemeCharacter)
