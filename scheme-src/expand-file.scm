@@ -1,18 +1,14 @@
 (define (expand-file from to)
-  (let ([inf (open-input-file from)]
-	[outf (open-output-file to)])
-    (let loop ([e (read inf)])
-      (if (not (eof-object? e))
-	  (let ([res (sc-expand e)])
-	    (pretty-print
-	     (if (and (pair? res)
-		      (eq? (car res) 'begin)
-		      (pair? (cdr res))
-		      (equal? (caadr res) '$sc-put-cte))
-		 (caddr res)
-		 res)
-	     outf)
-	    (newline outf)
-	    (loop (read inf)))))
+  (let ([inf (open-source-input-file from)]
+        [outf (open-output-file to)])
+    (with-current-url from
+      (lambda ()
+        (let loop ([e (read-with-annotations inf #t)])
+          (if (not (eof-object? e))
+              (begin
+                (pretty-print (sc-expand e) outf)
+                (newline outf)
+                (loop (read inf)))))))
     (close-output-port outf)
     (close-input-port inf)))
+      
