@@ -51,22 +51,16 @@ public class SchemeVector extends Value {
         return lastUnique=vals.length;
     }
     
-    void display(ValueWriter w, int l) throws IOException {
+    public void display(ValueWriter w) throws IOException {
+        w.append('#');
+        if (w.vectorLengthPrefixing())
+            w.append(Integer.toString(vals.length));
+        w.append('(');
+        int l = w.vectorLengthPrefixing() ? findEnd() : vals.length;
         for (int i=0; i<l-1; i++) {
             w.append(vals[i]).append(' ');
         }
         if (l>0) w.append(vals[l-1]);
-    }
-
-    public void display(ValueWriter w) throws IOException {
-        w.append("#(");
-        display(w, vals.length);
-        w.append(')');
-    }
-
-    public void write(ValueWriter w) throws IOException {
-        w.append('#').append(Integer.toString(vals.length)).append('(');
-        display(w, findEnd());
         w.append(')');
     }
 

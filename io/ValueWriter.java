@@ -14,6 +14,7 @@ public interface ValueWriter {
     public ValueWriter append(byte[] b, int offset, int length)
         throws IOException;
     public boolean isInlinable(Value v);
+    public boolean vectorLengthPrefixing();
 }
 
 /*

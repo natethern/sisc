@@ -19,17 +19,22 @@ public class PortValueWriter extends Util
     private boolean display;
 
     private boolean handleSharing;
+    private boolean vectorLengthPrefixing;
+
     private Map shared;
     private List visited;
     private int count;
 
     public PortValueWriter(OutputPort port) {
-        this(port, false);
+        this(port, false, false);
     }
 
-    public PortValueWriter(OutputPort port, boolean handleSharing) {
+    public PortValueWriter(OutputPort port,
+                           boolean handleSharing,
+                           boolean vectorLengthPrefixing) {
         this.port = port;
         this.handleSharing = handleSharing;
+        this.vectorLengthPrefixing = vectorLengthPrefixing;
         if (handleSharing) {
             shared = new HashMap(1);
             visited = new LinkedList();
@@ -121,6 +126,10 @@ public class PortValueWriter extends Util
         if (!handleSharing) return true;
         Object i = shared.get(v);
         return (i == null || i == seenMarker);
+    }
+
+    public boolean vectorLengthPrefixing() {
+        return vectorLengthPrefixing;
     }
 }
 

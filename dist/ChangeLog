@@ -2,6 +2,13 @@
 
 	* Fixed thread localization of parameters.
 
+	* Added logic to display/write shared (incl circular) structures
+	  using CommonLisp-style notation.
+
+	* Added |vector-length-prefixing| and |print-shared| parameters to
+	  control behaviour of |display| and |write|. Both default to #f
+	  for R5RS compatibility.
+
 2002-11-21  Matthias Radestock  <matthias@sorted.org>
 
 	* Added missing serialization methods to some obscure data types -

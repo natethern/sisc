@@ -23,7 +23,6 @@ public class IO extends ModuleAdapter {
         CURRENTINPUTPORT    = 6,
         CURRENTOUTPUTPORT   = 7,
         DISPLAY             = 8,
-        DISPLAYSHARED       = 1,
         FILEEXISTSQ         = 9,
         FINDRESOURCE        = 29,
         FINDRESOURCES       = 30,
@@ -41,12 +40,13 @@ public class IO extends ModuleAdapter {
         OPENOUTPUTSTRING    = 21,
         OUTPORTQ            = 22,
         PEEKCHAR            = 23,
+        PRINTSHARED         = 1,
         READ                = 24,
         READCHAR            = 25,
         READCODE            = 26,
+        VECTORLPREFIXING    = 2,
         WRITE               = 27,
-        WRITECHAR           = 28,
-        WRITESHARED         = 2;
+        WRITECHAR           = 28;
 
     public IO() {
         define("absolute-path?"     , ABSPATHQ);
@@ -56,7 +56,6 @@ public class IO extends ModuleAdapter {
         define("current-input-port" , CURRENTINPUTPORT);
         define("current-output-port", CURRENTOUTPUTPORT);
         define("display"            , DISPLAY);
-        define("display-shared"     , DISPLAYSHARED);
         define("file-exists?"       , FILEEXISTSQ);
         define("find-resource"      , FINDRESOURCE);
         define("find-resources"     , FINDRESOURCES);
@@ -74,12 +73,13 @@ public class IO extends ModuleAdapter {
         define("open-source-input-file", OPENSOURCEINPUTFILE);
         define("output-port?"       , OUTPORTQ);
         define("peek-char"          , PEEKCHAR);
+        define("print-shared"       , PRINTSHARED);
         define("read"               , READ);
         define("read-char"          , READCHAR);
         define("read-code"          , READCODE);
+        define("vector-length-prefixing", VECTORLPREFIXING);
         define("write"              , WRITE);
         define("write-char"         , WRITECHAR);
-        define("write-shared"       , WRITESHARED);
     }
 
     private static Value readChar(SchemeInputPort i) throws ContinuationException {
@@ -132,12 +132,14 @@ public class IO extends ModuleAdapter {
                     sisc.compiler.Parser.PRODUCE_IMMUTABLES);
     }
 
-    public Value displayOrWrite(OutputPort port,
+    public Value displayOrWrite(Interpreter r,
+                                OutputPort port,
                                 Value v,
-                                boolean display,
-                                boolean shared) {
+                                boolean display) {
         try {
-            ValueWriter w = new PortValueWriter(port, shared);
+            ValueWriter w = new PortValueWriter(port,
+                                                r.dynenv.printShared,
+                                                r.dynenv.vectorLengthPrefixing);
             if (display) w.display(v);
             else w.write(v);
         } catch (IOException e) {
@@ -163,12 +165,16 @@ public class IO extends ModuleAdapter {
                 if (v instanceof SchemeCharacter)
                     f.dynenv.in.pushback(((SchemeCharacter)v).c);
                 return v;
+            case PRINTSHARED:
+                return truth(f.dynenv.printShared);
             case READ:
                 return read(f, f.dynenv.in);
             case READCHAR:
                 return readChar(f.dynenv.in);
             case READCODE:
                 return readCode(f, f.dynenv.in);
+            case VECTORLPREFIXING:
+                return truth(f.dynenv.vectorLengthPrefixing);
             default:
                 throwArgSizeException();
             }
@@ -184,13 +190,9 @@ public class IO extends ModuleAdapter {
                     return FALSE;
                 }
             case DISPLAY:
-                return displayOrWrite(f.dynenv.out, f.vlr[0], true, false);
+                return displayOrWrite(f, f.dynenv.out, f.vlr[0], true);
             case WRITE:
-                return displayOrWrite(f.dynenv.out, f.vlr[0], false, false);
-            case DISPLAYSHARED:
-                return displayOrWrite(f.dynenv.out, f.vlr[0], true, true);
-            case WRITESHARED:
-                return displayOrWrite(f.dynenv.out, f.vlr[0], false, true);
+                return displayOrWrite(f, f.dynenv.out, f.vlr[0], false);
             case OPENINPUTSTRING:
                 return new ReaderInputPort(new StringReader(string(f.vlr[0])));
             case PEEKCHAR:
@@ -199,6 +201,9 @@ public class IO extends ModuleAdapter {
                 if (v instanceof SchemeCharacter)
                     inport.pushback(((SchemeCharacter)v).c);
                 return v;
+            case PRINTSHARED:
+                f.dynenv.printShared = truth(f.vlr[0]);
+                return VOID;
             case READ:
                 inport=inport(f.vlr[0]);
                 return read(f, inport);
@@ -208,6 +213,9 @@ public class IO extends ModuleAdapter {
             case READCODE:
                 inport=inport(f.vlr[0]);
                 return readCode(f, inport);
+            case VECTORLPREFIXING:
+                f.dynenv.vectorLengthPrefixing = truth(f.vlr[0]);
+                return VOID;
             case GETOUTPUTSTRING:
                 SchemeOutputPort port=outport(f.vlr[0]);
                 if (!(port instanceof WriterOutputPort) ||
@@ -388,13 +396,9 @@ public class IO extends ModuleAdapter {
                 }
                 return VOID;
             case DISPLAY:
-                return displayOrWrite(outport(f.vlr[1]), f.vlr[0], true, false);
+                return displayOrWrite(f, outport(f.vlr[1]), f.vlr[0], true);
             case WRITE:
-                return displayOrWrite(outport(f.vlr[1]), f.vlr[0], false, false);
-            case DISPLAYSHARED:
-                return displayOrWrite(outport(f.vlr[1]), f.vlr[0], true, true);
-            case WRITESHARED:
-                return displayOrWrite(outport(f.vlr[1]), f.vlr[0], false, true);
+                return displayOrWrite(f, outport(f.vlr[1]), f.vlr[0], false);
             case MAKEPATH:
                 String f1=string(f.vlr[0]);
                 String f2=string(f.vlr[1]);

@@ -12,6 +12,9 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public SchemeInputPort in;
     public SchemeOutputPort out;
 
+    public boolean printShared;
+    public boolean vectorLengthPrefixing;
+
     public Value wind = FALSE; //top of wind stack
 
     //the lexer is stateful
@@ -28,6 +31,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public DynamicEnvironment(SchemeInputPort in, SchemeOutputPort out) {
         this.in = in;
         this.out = out;
+        printShared = false;
+        vectorLengthPrefixing = false;
     }
 
     public DynamicEnvironment(InputStream in, OutputStream out) {

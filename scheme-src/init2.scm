@@ -166,10 +166,6 @@
                (parameter (car arg))]
               [else (error "new parameter value does not meet the parameter's type constraints")])))))
 
-;;A parameter that defines whether vectors will be printed with a length
-;;prefix
-(define vector-length-prefixing (parameterize #t))
-
 ;; This code is based on Richard Kelsey and Jonathan Rees' version of
 ;; dynamic-wind in Scheme48 (http://s48.org). It has been heavily
 ;; modified to account for SISC's lack of structures, make exception
@@ -303,7 +299,7 @@
 				(string-set! newstr n (car sl))
 				(string-loop (cdr sl) (+ n 1)))))])
     (string-loop (string->list x) 0)))
-	  
+
 ;(define (unquote x)
 ;  (error 'unquote "expression ~s not valid outside of a quasiquote."
 ;	 x))
