@@ -6,18 +6,7 @@ import java.math.BigInteger;
 
 import sisc.util.Util;
 
-public abstract class DeserializerImpl extends Util implements Deserializer {
-
-    
-    protected long readBerLong() throws IOException {
-        int b=readUnsignedByte();
-        long val=b & BER_MASK;
-        while ((b & BER_CONT) != 0) {
-            b=readUnsignedByte();
-            val=(val<<7) + (b & BER_MASK);
-        }
-        return val;
-    }
+public abstract class DeserializerImpl extends BerEncoding implements Deserializer {
 
     public BigInteger readBigInteger() throws IOException {
         byte[] buffer=new byte[readInt()];

@@ -233,30 +233,6 @@ public class StreamSerializer extends SerializerImpl {
     public void writeUTF(String v) throws IOException {
         datout.writeUTF(v);
     }
-
-    /*---helper functions---*/
-    public static void writeBer(long v, DataOutput dos) throws IOException {
-        byte[] b=new byte[10];
-        int p=9;
-        
-        while (v!=0) {
-            b[p--]=(byte)((v & BER_MASK) | BER_CONT);
-            v>>>=7;
-        }
-        b[9]&=BER_MASK;
-        
-        if (p==9) p=8;
-        dos.write(b, p+1, b.length-(p+1));
-    }
-
-    static final int BER_MASK=0x7f, BER_CONT=0x80;
-    static Class[]
-	DESER_PROTO=new Class[] { Serializer.class, DataInput.class },
-	SER_PROTO=new Class[] { Serializer.class, DataOutput.class },
-	INIT_PROTO=new Class[] { Interpreter.class },
-	GETVALUE_PROTO=new Class[] { DataInput.class };
-
-    static Method DESM;
 }
 
 /*

@@ -275,19 +275,6 @@ public class BinaryDeserializer extends DeserializerImpl {
         return (int)readBerLong(dis);
     }
 
-    public static long readBerLong(DataInput dis) throws IOException {
-        int b=dis.readUnsignedByte();
-        long val=b & BER_MASK;
-        while ((b & BER_CONT) != 0) {
-            b=dis.readUnsignedByte();
-            val=(val<<7) + (b & BER_MASK);
-        }
-        return val;
-    }
-
-
-    static final int BER_MASK=0x7f, BER_CONT=0x80;
-    
     public static void main(String[] args) throws IOException {
         ByteArrayOutputStream bos=new ByteArrayOutputStream();
         DataOutputStream dos=new DataOutputStream(bos);

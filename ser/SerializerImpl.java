@@ -9,7 +9,7 @@ import sisc.data.Expression;
 import sisc.util.Util;
 import sisc.env.SymbolicEnvironment;
 
-public abstract class SerializerImpl extends Util implements Serializer {
+public abstract class SerializerImpl extends BerEncoding implements Serializer {
 
     public void writeBigDecimal(BigDecimal d) throws IOException {
         int scale=d.scale();

@@ -198,7 +198,7 @@ Interpreter r = Context.enter("appname");
 AppContext ctx = new AppContext();
 Context.register("myapp", ctx);
 Interpreter r = Context.enter("myapp");
-ctx.loadEnv(r, new BufferedRandomAccessInputStream("sisc.shp","r"));
+ctx.loadEnv(r, new SeekableDataInputStream(new BufferedRandomAccessInputStream("sisc.shp","r")));
 Context.exit();
           </programlisting> 
         </para>

@@ -180,28 +180,20 @@ public class LibraryBuilder implements ExpressionVisitor {
         return null;
     }
 
-    /*---Serialization functions---*/
+    /*---Serialization first pass functions---*/
     public void visit(Expression e) {
-        serQueue.addFirst(e);
-    }
-    
-    public void forceSeen(Expression e) {
-        seen.add(e);
-    }
-
-    public void writeSymbolicEnvironment(SymbolicEnvironment e) 
-        throws IOException {
         if (e!=null) {
-            classes.add(e.getClass());
-            if (includeAEs) {
-                if (e.getName()==null)
-                    add(e.asValue());
+            serQueue.addFirst(e);
+            if (includeAEs && e instanceof SymbolicEnvironment) {
+                SymbolicEnvironment se=(SymbolicEnvironment)e;
+                if (se.getName()==null)
+                    add(se.asValue());
                 else 
-                    add(e.getName(),e.asValue());
+                    add(se.getName(),se.asValue());
             }
         }
     }
-
+    
     public boolean seen(Expression e) { 
         return seen.contains(e);
     }
@@ -221,13 +213,6 @@ public class LibraryBuilder implements ExpressionVisitor {
     }
 
     static final int BER_MASK=0x7f, BER_CONT=0x80;
-    static Class[]
-	DESER_PROTO=new Class[] { Serializer.class, DataInput.class },
-	SER_PROTO=new Class[] { Serializer.class, DataOutput.class },
-	INIT_PROTO=new Class[] { Interpreter.class },
-	GETVALUE_PROTO=new Class[] { DataInput.class };
-
-    static Method DESM;
 }
 
 /*
