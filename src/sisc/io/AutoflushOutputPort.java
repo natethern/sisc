@@ -21,6 +21,8 @@ public abstract class AutoflushOutputPort extends SchemeOutputPort {
         if (autoflush) flush();
     }
 
+    public abstract void flush() throws IOException;
+
     protected abstract void writeHelper(char v) throws IOException;
     protected abstract void writeHelper(String v) throws IOException;
 }
