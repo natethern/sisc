@@ -1,3 +1,8 @@
+2003-07-04  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed open-{serial,binary}-{input,output}-port to take into
+	  account the current-url.
+
 2003-07-03  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Changed case-sensitive to a dynamic parameter, so it can be

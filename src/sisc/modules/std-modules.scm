@@ -263,8 +263,8 @@
   (import* binary-io-native
            block-read
            block-write
-           open-binary-input-file
-           open-binary-output-file
+           (_open-binary-input-file open-binary-input-file)
+           (_open-binary-output-file open-binary-output-file)
            binary-input-port?
            binary-output-port?)
   (include "io/binary-io.scm"))
@@ -280,7 +280,13 @@
    with-serial-output-to-file
    serial-input-port?
    serial-output-port?)
-  (import serial-io-native)
+  (import* serial-io-native
+           serialize
+           deserialize
+           (_open-serial-input-file open-serial-input-file)
+           (_open-serial-output-file open-serial-output-file)
+           serial-input-port?
+           serial-output-port?)
   (include "io/serial-io.scm"))
 
 (module hashtable

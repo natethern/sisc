@@ -243,11 +243,11 @@
                => cdr]
               [else _load])))))
 
-(let ([normalize
-       (lambda (proc)
-         (lambda (file . rest)
-           (apply proc (normalize-url (current-url) file) rest)))]
-      [file-extension
+(define (make-io-proc proc)
+  (lambda (file . rest)
+    (apply proc (normalize-url (current-url) file) rest)))
+
+(let ([file-extension
        (lambda (url)
          (let loop ((x (reverse! (string->list url)))
                     (acc '()))
@@ -255,9 +255,9 @@
                  [(equal? (car x) #\.)
                   (list->string acc)]
                  [else (loop (cdr x) (cons (car x) acc))])))])
-    (set! open-input-file (normalize open-input-file))
-    (set! open-source-input-file (normalize open-source-input-file))
-    (set! open-output-file (normalize open-output-file))
+    (set! open-input-file (make-io-proc open-input-file))
+    (set! open-source-input-file (make-io-proc open-source-input-file))
+    (set! open-output-file (make-io-proc open-output-file))
     (set! load
       (lambda (file)
         (let ([previous-url (current-url)])
