@@ -35,6 +35,8 @@ package sisc.modules;
 import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
+import java.io.*;
+import sisc.Serializer;
 
 public class SThread extends ModuleAdapter {
     public String getModuleName() {
@@ -92,8 +94,7 @@ public class SThread extends ModuleAdapter {
 	define("monitor/notify-all", MONITORNOTIFY);
     }
 
-    class Monitor extends NamedValue {
-	private byte l1=0;
+    public static class Monitor extends NamedValue {
 	private int lockCount=0;
 	private Thread owner=null;
 	private Object condvar=new Object();
@@ -199,9 +200,21 @@ public class SThread extends ModuleAdapter {
 	public String display() {
 	    return ((NamedValue)this).displayNamedOpaque("monitor");
 	}
+
+        public Monitor() {}
+
+        public void serialize(Serializer s, DataOutput dos)
+            throws IOException {
+            if (SERIALIZATION) {}
+        }
+
+        public void deserialize(Serializer s, DataInput dis)
+            throws IOException {
+            if (SERIALIZATION) {}
+        }
     }
 
-    class ThreadContext extends NamedValue implements Runnable {
+    public static class ThreadContext extends NamedValue implements Runnable {
         protected Interpreter parent;
 	protected Procedure thunk;
 	protected Thread thread;
