@@ -16,6 +16,19 @@
     functionality through extensions that do not complicate the
     core.
   </para>
+  <para>
+    &SISC; as a project began as the sucessor to the Lightweight
+    Interpreter of Scheme Code (<emphasis>LISC</emphasis>).
+    <emphasis>LISC</emphasis> was a small, stack-based almost R4RS compliant Scheme.
+    &SISC; was born out of the desire to create an interpreter that
+    was of a similar footprint to <emphasis>LISC</emphasis>, but which
+    executed Scheme code much faster, complied fully to the &R5RS;
+    standard, and which wasn't limited by the stack-based model.
+    &SISC; met these goals very quickly, and has since progressed in
+    active development to be a competitive Scheme system.  As a
+    successor to <emphasis>LISC</emphasis> the interpreter was named the Second
+    Interpreter of Scheme Code. 
+  </para>
   <sect1 id="Features">
     <title>
       Features
@@ -33,12 +46,15 @@
       </listitem>
       <listitem>
 	<para>
-	  Lightweight Scheme engine, requiring less than 200 kilobytes of code.
+	  Lightweight Scheme engine, implementing all &R5RS; functionality
+	  in approximately 16,000 lines of native code plus
+	  approximately 5,000 lines of Scheme code.
 	</para>
       </listitem>
       <listitem>
 	<para>
-	  Runtime extensiblity through a scopeable module system, which may add new functions and first-class types.
+	  Flexible runtime extensiblity through a scopeable module
+	  system, which may add new functions and first-class types.
 	</para>
       </listitem>
     </itemizedlist>

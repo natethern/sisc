@@ -97,7 +97,7 @@
     </para>
     <para>
       <blockquote>
-	<para>
+	<para id="func-block-read">
 	  &procedure;
 	  <methodsynopsis language="scheme">
 	    <type>integer</type>
@@ -114,17 +114,49 @@
 	    </methodparam>
 	    <methodparam>
 	      <parameter>
-		bytes
+                count
 	      </parameter>
 	    </methodparam>
 	  </methodsynopsis>
 	  <blockquote>
 	    <para>
-	      Reads up to <parameter>bytes</parameter> bytes of data from
+	      Reads up to <parameter>count</parameter> bytes of data from
 	      the provided <parameter>input-port</parameter> into
 	      <parameter>buffer</parameter>.  Note that less than
-	      <parameter>bytes</parameter> bytes may be read.  The number 
-	      of bytes actually read is returned.
+	      <parameter>count</parameter> bytes may be read.  The number 
+	      of bytes actually read is returned.  If the end-of-file
+              is encountered before any bytes could be read, 
+	      <literal>&num;!eof</literal> will be returned.
+	    </para>
+	  </blockquote>
+	</para>
+	<para id="func-block-write">
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>undefined</type>
+	    <methodname>block-write</methodname>
+	    <methodparam>
+	      <parameter>
+		buffer
+	      </parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>
+		output-port
+	      </parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>
+		count
+	      </parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Writes <parameter>count</parameter> bytes of data from
+	      the provided <parameter>buffer</parameter> to the given
+	      <parameter>output-port</parameter>.  Exactly
+	      <parameter>count</parameter> bytes will be written.  
 	    </para>
 	  </blockquote>
 	</para>
@@ -145,7 +177,7 @@
     </para>
     <para>
       <blockquote>
-	<para>
+	<para id="func-open-input-string">
 	  &procedure;
 	  <methodsynopsis language="scheme">
 	    <type>input-port</type>
@@ -166,7 +198,7 @@
 	    </para>
 	  </blockquote>
 	</para>
-	<para>
+	<para id="func-open-output-string">
 	  &procedure;
 	  <methodsynopsis language="scheme">
 	    <type>output-port</type>
@@ -182,7 +214,7 @@
 	    </para>
 	  </blockquote>
 	</para>
-	<para>
+	<para id="func-get-output-string">
 	  &procedure;
 	  <methodsynopsis language="scheme">
 	    <type>string</type>
@@ -216,7 +248,7 @@
       whitespace in order to make the output of data more readable
       to humans. 
     </para>
-    <para>
+    <para id="func-pretty-print">
       <blockquote>
 	<para>
 	  &procedure;
@@ -301,7 +333,7 @@
 	Several utility functions are provided for manipulating IP
 	addresses.  These are described below.
       </para>
-      <para>
+      <para id="func-get-host-by-ip-name">
 	<blockquote>
 	  <para>
 	    &procedure;
@@ -320,7 +352,7 @@
 	      </para>
 	    </blockquote>
 	  </para>
-	  <para>
+	  <para id="func-get-host-name-by-ip">
 	    &procedure;
 	    <methodsynopsis language="scheme">
 	      <type>string</type>
@@ -337,7 +369,7 @@
 	      </para>
 	    </blockquote>
 	  </para>
-	  <para>
+	  <para id="func-get-local-host">
 	    &procedure;
 	    <methodsynopsis language="scheme">
 	      <type>string</type>
@@ -367,7 +399,7 @@
       </para>
       <para>
 	<blockquote>
-	  <para>
+	  <para id="func-open-socket-input-port">
 	    &procedure;
 	    <methodsynopsis language="scheme">
 	      <type>input-port</type>
@@ -381,7 +413,7 @@
 	      </para>
 	    </blockquote>
 	  </para>
-	  <para>
+	  <para id="func-open-socket-output-port">
 	    &procedure;
 	    <methodsynopsis language="scheme">
 	      <type>output-port</type>
@@ -401,7 +433,7 @@
 	      </para>
 	    </blockquote>
 	  </para>
-	  <para>
+	  <para id="func-close-socket">
 	    &procedure;
 	    <methodsynopsis language="scheme">
 	      <type>unspecified</type>
@@ -455,7 +487,7 @@
       </para>
       <para>
 	<blockquote>
-	  <para>
+	  <para id="func-open-tcp-socket">
 	    &procedure;
 	    <methodsynopsis language="scheme">
 	      <type>socket</type>
@@ -477,7 +509,7 @@
 	      </para>
 	    </blockquote>
 	  </para>
-	  <para>
+	  <para id="func-open-tcp-listener">
 	    &procedure;
 	    <methodsynopsis language="scheme">
 	      <type>server-socket</type>
@@ -501,7 +533,7 @@
 	      </para>
 	    </blockquote>
 	    </para>
-	  <para>
+	  <para id="func-accept-tcp-socket">
 	    &procedure;
 	    <methodsynopsis language="scheme">
 	      <type>socket</type>
@@ -520,7 +552,7 @@
 	      </para>
 	    </blockquote>
 	  </para>
-	  <para>
+	  <para id="func-set-so-timeout!">
 	    &procedure;
 	    <methodsynopsis language="scheme">
 	      <type>undefined</type>

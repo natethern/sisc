@@ -1,87 +1,89 @@
-  <chapter id="Installation">
+<chapter id="Installation">
+  <title>
+    Installation and Invocation
+  </title>
+  <sect1 id="RequiredEnv">
     <title>
-      Installation and Invocation
+      Required Environment
     </title>
-    <sect1 id="RequiredEnv">
-      <title>
-	Required Environment
-      </title>
-      <para>
-	&SISC; primarily targets the Java Virtual
-	Machine, and the Java v1.2 and higher class libraries.  The
-	1.2 libraries and VM are required due to a reliance on memory
-	reference functionality used to properly garbage collect
-	unused symbols while still maintaining pointer equality between
-	those that remain active.
-      </para>
-      <para>
-	&SISC; does not require any particular operating system, though
-	the official distribution currently provides launching
-	assistance for Windows and Unix based systems.  Theoretically
-	any machine that supports Java 1.2 or higher should be able to
-	run &SISC;.
-      </para>
-    </sect1>
-    <sect1 id="REPL">
-      <title>
-	The Read-Eval-Print-Loop
-      </title>
-      <para>
-	As in most Scheme systems, &SISC;'s primary
-	human interface is a REPL, or Read-Eval-Print-Loop.  &SISC;
-	presents the user with a prompt ('>'), then reads an
-	s-expression from the console.  &SISC; then evaluates the
-	s-expression, producing a value or error, which it then
-	prints.  Finally a prompt is displayed and the process begins
-	again.
-      </para>
-      <para>
-	The process terminates with a forced kill of the JVM (with
-	Control-C or similar), or when an end of file is detected on
-	the console.
-      </para>
-    </sect1>
-    <sect1 id="DisplayConventions">
-      <title> 
-	Display Conventions
-      </title>
-      <para>
-	Executing or loading code in the REPL ordinarily produces a value
-	result which is displayed during the Print phase.  However,
-	two other message types may be displayed.  First, if an error
-	is raised that is not handled by the running program, the
-	message will be described in one of three forms:
-      </para>
-      <programlisting>
-	Error: &lt;description&gt;
-
-	Error in &lt;error-location&gt;: &lt;description&gt;
-
-	Error.
-      </programlisting>
-      <para>
-	The first form describes an error that was raised in an
-	anonymous procedure or syntax.  The second describes an error
-	that was raised in a named procedure or syntax definition.
-	The error-location indicates which procedure encountered
-	the error.  The final form is produced by an explicit call
-	to the error function with no arguments.
-      </para>
-      <para>
-	In addition to errors, it is possible for code to produce
-	warnings during compilation or run-time.  A warning is a
-	message to the user about a condition that is unusual but not
-	terminal to the program flow.  The compiler, for example, does
-	a minimal amount of sanity checking on code and may produce
-	warnings about code that has the potential to raise errors
-	during execution.  Warnings are always distinguished from
-	ordinary messages by surrounding braces ({}). 
-      </para>
-      <programlisting>
-	{warning: &lt;description&gt;}
-      </programlisting>
-    </sect1>
-  </chapter>
+    <para>
+      &SISC; primarily targets the Java Virtual
+      Machine, and the Java v1.2 and higher class libraries.  The
+      1.2 libraries and VM are required due to a reliance on memory
+      reference functionality used to properly garbage collect
+      unused symbols while still maintaining pointer equality between
+      those that remain active.
+    </para>
+    <para>
+      &SISC; does not require any particular operating system, though
+      the official distribution currently provides launching
+      assistance for Windows and Unix based systems.  Theoretically
+      any machine that supports Java 1.2 or higher should be able to
+      run &SISC;.
+    </para>
+  </sect1>
+  <sect1 id="REPL">
+    <title>
+      The Read-Eval-Print-Loop
+    </title>
+    <para>
+      As in most Scheme systems, &SISC;'s primary
+      human interface is a REPL, or Read-Eval-Print-Loop.  &SISC;
+      presents the user with a prompt ('>'), then reads an
+      s-expression from the console.  &SISC; then evaluates the
+      s-expression, producing a value or error, which it then
+      prints.  Finally a prompt is displayed and the process begins
+      again.
+    </para>
+    <para>
+      The process terminates with a forced kill of the JVM (with
+      Control-C or similar), or when an end of file is detected on
+      the console.
+    </para>
+  </sect1>
+  <sect1 id="DisplayConventions">
+    <title> 
+      Display Conventions
+    </title>
+    <para>
+      Executing or loading code in the REPL ordinarily produces a value
+      result which is displayed during the Print phase.  However,
+      two other message types may be displayed.  First, if an error
+      is raised that is not handled by the running program, the
+      message will be described in one of three forms:
+    </para>
+    <programlisting>
+      Error: &lt;description&gt;
+      
+      Error in &lt;error-location&gt;: &lt;description&gt;
+      
+      Error.
+    </programlisting>
+    <para>
+      The first form describes an error that was raised in an
+      anonymous procedure or syntax.  The second describes an error
+      that was raised in a named procedure or syntax definition.
+      The error-location indicates which procedure encountered
+      the error.  The final form is produced by an explicit call
+      to the error function with no arguments.
+    </para>
+    <para>
+      In addition to errors, it is possible for code to produce
+      warnings during compilation or run-time.  A warning is a
+      message to the user about a condition that is unusual but not
+      terminal to the program flow.  The compiler, for example, does
+      a minimal amount of sanity checking on code and may produce
+      warnings about code that has the potential to raise errors
+      during execution.  Warnings are always distinguished from
+      ordinary messages by surrounding braces ({}) and starting
+      with the word 'warning'.
+      
+    </para>
+    <programlisting>
+      {warning: &lt;description&gt;}
+    </programlisting>
+  </sect1>
+</chapter>
 <!-- Keep this comment at the end of the file
 Local variables:
 sgml-parent-document:("sss.xml" "chapter")
