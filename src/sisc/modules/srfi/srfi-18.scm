@@ -141,7 +141,9 @@
             (mutex/unlock! mutex condvar)))
     (let ([owner (annotation mutex 'owner)])
       (set-annotation! mutex 'state
-                       (if owner 'not-abandoned 'abandoned))
+                       (if (or owner (thread? (mutex-state mutex)))
+                           'not-abandoned
+                           'abandoned))
       (let ([mutexes (annotation owner 'mutexes '())])
         (cond [(null? mutexes)]
               [(eq? (car mutexes) mutex)
