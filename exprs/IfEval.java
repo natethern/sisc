@@ -45,7 +45,16 @@ public class IfEval extends Expression {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        r.nxp = (truth(r.acc) ? conseq : altern);
+	Value tmp;
+	Expression selected=(truth(r.acc) ? conseq : altern);
+
+	tmp=selected.getValue(r);
+	if (tmp!=null) {
+	    r.nxp=null;
+	    r.acc=tmp;
+	} else 
+	    r.nxp=selected;
+	    
     }
 
     public Value express() {

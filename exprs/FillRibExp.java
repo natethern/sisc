@@ -55,7 +55,8 @@ public class FillRibExp extends Expression implements Volatile {
         r.vlr[pos]=r.acc;
 
         int np=pos-1;
-        Value tmp;
+	Value tmp;
+
         for (np=pos-1;
                 np>=0 && ((tmp=rands[np].getValue(r)) != null);
                 np--) {

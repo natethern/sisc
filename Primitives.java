@@ -36,6 +36,7 @@ import sisc.*;
 import sisc.compiler.*;
 import sisc.data.*;
 import sisc.exprs.*;
+import sisc.vm.*;
 import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
@@ -95,8 +96,8 @@ public class Primitives extends ModuleAdapter {
       VECTOR2LIST=117,VECTORFINDLASTUNIQUE=118,  VECTORLENGTH=119,
           VECTORQ=120,        VECTORREF=121,        VECTORSET=292,
             VOIDQ=123,            WRITE=124,        WRITECHAR=125,
-	    _VOID=126,        GETNLNAME=127,     GETNLVERSION=128,
-                      GETNLBINDINGNAMES=129,     GETNLBINDING=130;
+  	    _VOID=126,        GETNLNAME=127,     GETNLVERSION=128,
+	              GETNLBINDINGNAMES=129,     GETNLBINDING=130;
 	
 
     public static SchemeBoolean numQuery(Value v, int mask)
@@ -727,8 +728,9 @@ public class Primitives extends ModuleAdapter {
                 for (int i=f.vlr.length-2; i>=1; i--)
                     arg1=new Pair(f.vlr[i],arg1);
                 Pair applyArgs=append(arg1, args);
-                f.nxp=new AppExp((Expression)proc,
-                                 pairToExpressions(applyArgs), true);
+                f.nxp=f.compiler.application((Expression)proc,
+					     pairToExpressions(applyArgs),
+					     false);
                 return null;
             case ADD:
                 quantity=Quantity.ZERO;

@@ -1,3 +1,8 @@
+2002-1-11 Scott G. Miller <scgmille@freenetproject.org>
+
+	* java/import can now take a String as the class/object
+	  argument, which will be resolved into a class
+
 2001-12-28  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed locking thinko that broke the mutex goal :(

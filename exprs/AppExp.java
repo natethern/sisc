@@ -41,10 +41,6 @@ public class AppExp extends Expression {
     public boolean nonTail;
 
     public AppExp(Expression rator, Expression rands[], boolean nontail) {
-        if (rator instanceof Value && !(rator instanceof Procedure))
-            System.err.println("{warning: compiler detected application of non-procedure '"+
-                               ((Value)rator).write()+"'}");
-
         this.rator=rator;
         this.rands=rands;
         this.nonTail=nontail;
@@ -52,36 +48,46 @@ public class AppExp extends Expression {
 
     public void eval(Interpreter r) throws ContinuationException {
         Value tmp;
-        int i;
 
         if (nonTail) 
             r.push(null);
 
-        r.vlr=rands.length == 0 ? ZV : new Value[rands.length];
-
-        // Fill the rib right to left with immediates until non-imm.
-        // encountered
-        for (i=rands.length-1;
-	        i>=0 && ((tmp=rands[i].getValue(r)) != null);
-	        i--)
-            r.vlr[i]=tmp;
-
-        // If not all were immediate, push a fillrib, otherwise
-        // go straight to eval
-        if (i < 0) {
-            tmp=rator.getValue(r);
-
+	if (rands.length==0) {
+	    r.vlr=ZV;
+	    tmp=rator.getValue(r);
+	    
 	    if (tmp!=null) {
-                r.acc=tmp;
-                r.nxp=APPEVAL;
-            } else { 
+		r.nxp=APPEVAL;
+		r.acc=tmp;
+	    } else { 
+		r.nxp=rator;
 		r.push(APPEVAL);
-                r.nxp=rator;
 	    }
-        } else {
-	    r.push(r.createFillRib(i, rands, rator, APPEVAL));
-            r.nxp=rands[i];
-        }
+	} else {
+	    r.vlr=new Value[rands.length];
+
+	    int i=rands.length-1;
+	    for (; i>=0; i--) {
+		tmp=rands[i].getValue(r);
+		if (tmp==null) break;
+		r.vlr[i]=tmp;
+	    }
+
+	    if (i<0) {
+		tmp=rator.getValue(r);
+		
+		if (tmp!=null) {
+		    r.nxp=APPEVAL;
+		    r.acc=tmp;
+		} else { 
+		    r.nxp=rator;
+		    r.push(APPEVAL);
+		}
+	    } else {
+		r.push(r.createFillRib(i, rands, rator, APPEVAL));
+		r.nxp=rands[i];
+	    }
+	}
     }
 
     public Value express() {
@@ -96,8 +102,9 @@ public class AppExp extends Expression {
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
         if (SERIALIZATION) {
             s.writeBer(rands.length, dos);
-            for (int i=0; i<rands.length; i++)
+            for (int i=0; i<rands.length; i++) {
                 s.serialize(rands[i], dos);
+	    }
             s.serialize(rator, dos);
             dos.writeBoolean(nonTail);
         }

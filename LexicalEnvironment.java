@@ -46,7 +46,7 @@ public class LexicalEnvironment extends Value {
 
     public LexicalEnvironment(int s, Value[] v, LexicalEnvironment parent,
                               boolean infiniteArity,
-                              Interpreter r, Closure c)
+                              Interpreter r, Procedure c)
     throws ContinuationException {
         this.parent=parent;
 

@@ -246,8 +246,8 @@ public class Compiler extends Util {
             default:
                 Expression[] exps=pairToExpressions(expr);
                 compileExpressions(r, exps, rt, 0, env);
-                return new AppExp(compile(r,s,rt,0,env),
-                                  exps, (context & TAIL)==0);
+                return application(compile(r,s,rt,0,env),
+				   exps, (context & TAIL)==0);
             }
         } else if (expr.car instanceof Pair) {
             Expression[] exps=pairToExpressions((Pair)expr.cdr);
@@ -263,7 +263,10 @@ public class Compiler extends Util {
 
     }
 
-    final Expression application(Expression rator, Expression rands[], boolean tail) {
+    public final Expression application(Expression rator, Expression rands[], boolean tail) {
+        if (rator instanceof Value && !(rator instanceof Procedure))
+            System.err.println("{warning: compiler detected application of non-procedure '"+
+                               ((Value)rator).write()+"'}");
 	return new AppExp(rator, rands, tail);
     }
 

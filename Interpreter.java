@@ -37,6 +37,7 @@ import sisc.data.*;
 import sisc.compiler.*;
 import sisc.compiler.Compiler;
 import sisc.exprs.*;
+import sisc.vm.*;
 import java.io.*;
 import java.util.*;
 
@@ -94,7 +95,7 @@ public class Interpreter extends Util {
     }
 
     protected Value interpret(Expression e) throws SchemeException {
-        stk=new CallFrame(null, null, null, fk, null);
+        stk=createFrame(null, null, null, fk, null);
         nxp=e;
         interpret();
         return acc;
@@ -198,7 +199,7 @@ public class Interpreter extends Util {
     //POOLING
     //STATIC --------------------
 
-    protected static final int FRAMEPOOLSIZE=25, FPMAX=FRAMEPOOLSIZE-1;
+    protected static final int FRAMEPOOLSIZE=24, FPMAX=FRAMEPOOLSIZE-1;
     protected CallFrame deadFrames[]=new CallFrame[FRAMEPOOLSIZE];
     protected int deadFramePointer=-1;
     CallFrame returnRegister;
@@ -224,7 +225,7 @@ public class Interpreter extends Util {
 	if (!f.lock && (deadFramePointer < FPMAX))
 	    deadFrames[++deadFramePointer]=f;
     }
-
+    
     protected static final int FILLRIBPOOLSIZE=8, FRPMAX=FILLRIBPOOLSIZE-1;
     protected FillRibExp deadFillRibs[]=new FillRibExp[FILLRIBPOOLSIZE];
     protected int deadFillRibsPointer=-1;
