@@ -570,7 +570,7 @@
 					 (list 'set! v e))
 				       vars val-exps))
 			    (list body-exp)))
-	      (map (lambda (x) #f) vars))))
+	      (map (lambda (x) #f) vars)))))
 
 (define-syntax build-lexical-var
   (syntax-rules ()
@@ -2963,7 +2963,7 @@
     (let ((message (if (null? messages)
                        "invalid syntax"
                        (apply string-append messages))))
-      (error-hook #f message (strip object empty-wrap)))))
+      (error-hook #f message (strip object empty-wrap))))))
 
 ;;; syntax-dispatch expects an expression and a pattern.  If the expression
 ;;; matches the pattern a list of the matching expressions for each

@@ -60,7 +60,7 @@ public class LambdaExp extends Expression implements Immediate {
         return list(sym("Lambda-exp"), Quantity.valueOf(fcount), body.express());
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             dos.writeBoolean(infiniteArity);
             s.writeBer(fcount, dos);
@@ -70,7 +70,7 @@ public class LambdaExp extends Expression implements Immediate {
 
     public LambdaExp() {}
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             infiniteArity=dis.readBoolean();

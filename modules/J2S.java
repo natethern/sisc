@@ -68,7 +68,7 @@ public class J2S extends ModuleAdapter {
             return ((JavaClass)ov).clazz.equals(clazz);
         }
 
-        public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+        public void serialize(Serializer s, DataOutput dos) throws IOException {
             if (SERIALIZATION) {
                 s.putClass(clazz, dos);
             }
@@ -76,7 +76,7 @@ public class J2S extends ModuleAdapter {
 
         public JavaClass() {}
 
-        public void deserialize(Serializer s, DataInputStream dis)
+        public void deserialize(Serializer s, DataInput dis)
         throws IOException {
             if (SERIALIZATION) {
                 try {

@@ -61,7 +61,7 @@ public class IfEval extends Expression {
         return list(sym("If-eval"), conseq.express(), altern.express());
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.serialize(conseq, dos);
             s.serialize(altern, dos);
@@ -70,7 +70,7 @@ public class IfEval extends Expression {
 
     public IfEval() {}
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             conseq=s.deserialize(dis);

@@ -21,6 +21,7 @@ public abstract class ModuleAdapter extends Module {
 	return slist;
     }
 
+
     public Value getBindingValue(Symbol name) throws NoSuchMethodError {
 	Integer i=(Integer)bindings.get(name);
 	try {

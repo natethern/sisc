@@ -48,7 +48,7 @@ public class EOFObject extends Value implements Singleton {
         return new EOFException();
     }
 
-    public static Value getValue(DataInputStream dis) {
+    public static Value getValue(DataInput dis) {
         return EOF;
     }
 }

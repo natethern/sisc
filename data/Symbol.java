@@ -106,7 +106,7 @@ public class Symbol extends Value implements Singleton, Comparable {
         }
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
 	    dos.writeBoolean(memo.containsKey(this));
             dos.writeUTF(symval);
@@ -115,7 +115,7 @@ public class Symbol extends Value implements Singleton, Comparable {
 
     public Symbol() {}
 
-    public static Expression getValue(DataInputStream dis) throws IOException {
+    public static Expression getValue(DataInput dis) throws IOException {
 	if (dis.readBoolean())
 	    return new Symbol(dis.readUTF());
 	else 

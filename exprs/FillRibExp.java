@@ -57,7 +57,7 @@ public class FillRibExp extends Expression implements Volatile {
         int np=pos-1;
 	Value tmp;
 
-        for (np=pos-1;
+        for (;
                 np>=0 && ((tmp=rands[np].getValue(r)) != null);
                 np--) {
             r.vlr[np]=tmp;
@@ -92,7 +92,7 @@ public class FillRibExp extends Expression implements Volatile {
         return list(sym("FillRib-exp"), rands[pos].express(), last.express());
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.writeBer(rands.length, dos);
             for (int i=0; i<rands.length; i++)
@@ -106,7 +106,7 @@ public class FillRibExp extends Expression implements Volatile {
 
     public FillRibExp() {}
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             int size=s.readBer(dis);

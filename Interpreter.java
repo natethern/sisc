@@ -69,6 +69,7 @@ public class Interpreter extends Util {
     public DynamicEnv dynenv;
 
     //REGISTERS
+    public boolean envReclaimable;
     public Value                 acc;
     public Expression            nxp;
     public Value[]               vlr;
@@ -219,12 +220,24 @@ public class Interpreter extends Util {
             return returnRegister;
         }
     }
+    /*
+    static int bReclaimCount, eReclaimCount=0;
+    static {
+	System.runFinalizersOnExit(true);
+    }
+
+    protected void finalize() {
+	System.err.println("envr: "+eReclaimCount);
+	System.err.println("vlrr: "+bReclaimCount);
+    }
+    */
 
     public final void returnFrame(CallFrame f) {
-	if (!f.lock && (deadFramePointer < FPMAX))
+	if (!f.lock && (deadFramePointer < FPMAX)) {
 	    deadFrames[++deadFramePointer]=f;
+	}
     }
-    
+
     protected static final int FILLRIBPOOLSIZE=8, FRPMAX=FILLRIBPOOLSIZE-1;
     protected FillRibExp deadFillRibs[]=new FillRibExp[FILLRIBPOOLSIZE];
     protected int deadFillRibsPointer=-1;

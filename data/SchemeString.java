@@ -113,13 +113,13 @@ public class SchemeString extends Value {
         return new String(stringdata);
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             dos.writeUTF(new String(stringdata));
         }
     }
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             stringdata=dis.readUTF().toCharArray();

@@ -1316,7 +1316,7 @@ public class Quantity extends Value {
     }
 
     public void deserialize(Serializer s,
-                            DataInputStream dis) throws IOException {
+                            DataInput dis) throws IOException {
         if (SERIALIZATION) {
             type=s.readBer(dis);
             switch (type) {
@@ -1347,7 +1347,7 @@ public class Quantity extends Value {
         }
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.writeBer(type, dos);
             switch (type) {

@@ -166,7 +166,9 @@
                    (begin (vector-set! v n (car l))
                           (l2v (cdr l) v (+ n 1))))))]
      (lambda (l)
-        (l2v l (make-vector (length l)) 0))))
+       (if (not (circular? l))
+	   (l2v l (make-vector (length l)) 0)
+	   (error 'list->vector "cannot convert a circular list" l)))))
 
 ;;;;;;;;;;;;; Constructors
 
@@ -373,26 +375,31 @@
 (define min (void))
 (define max (void))
 (letrec ([_min_max 
-       (lambda (proc mv args inexact)
-	 (cond [(null? args) (if (and inexact (exact? mv)) 
-				 (exact->inexact mv)
-				 mv)]
-	       [(proc (car args) mv) (_min_max proc (car args) (cdr args)
-					       (or inexact (inexact? (car args))))]
-	       [else (_min_max proc mv (cdr args) inexact)]))])
+	  (lambda (proc mv args inexact)
+	    (cond [(null? args) 
+		   (if (and inexact (exact? mv)) 
+		       (exact->inexact mv)
+		       mv)]
+		  [(proc (car args) mv) 
+		   (_min_max proc (car args) (cdr args)
+			     (or inexact (inexact? (car args))))]
+		  [else (_min_max proc mv (cdr args) inexact)]))])
   (set! min (lambda args
 	      (if (null? args) 0
-		  (_min_max < (car args) (cdr args) (inexact? (car args))))))
+		  (_min_max < (car args) (cdr args) 
+			    (inexact? (car args))))))
   (set! max (lambda args
 	      (if (null? args) 0
-		  (_min_max > (car args) (cdr args) (inexact? (car args)))))))
+		  (_min_max > (car args) (cdr args) 
+			    (inexact? (car args)))))))
 
 (define (negative? n) (< n 0))
 (define (positive? n) (> n 0))
 (define (even? n) (= 0 (modulo n 2)))
 (define (odd? n) (not (even? n)))
 (define (zero? n) (= n 0))
-
+(define (add1 n) (+ n 1))
+(define (sub1 n) (- n 1))
 
 (define >= (void))
 (define <= (void))
@@ -505,14 +512,16 @@
 		  (string-set! strdst n (proc (string-ref strsrc n))) 
 		  (string-map strsrc strdst proc (+ n 1) l))
 		strdst))])
-  (set! string-downcase (lambda (str)
-			  (let ([newstr (make-string (string-length str))])
-			    (string-map str newstr char-downcase 0 
-					(string-length str)))))
-  (set! string-upcase (lambda (str)
-			  (let ([newstr (make-string (string-length str))])
-			    (string-map str newstr char-upcase 0 
-					(string-length str))))))
+  (set! string-downcase 
+	(lambda (str)
+	  (let ([newstr (make-string (string-length str))])
+	    (string-map str newstr char-downcase 0 
+			(string-length str)))))
+  (set! string-upcase 
+	(lambda (str)
+	  (let ([newstr (make-string (string-length str))])
+	    (string-map str newstr char-upcase 0 
+			(string-length str))))))
 (define string=? equal?)
 
 (define string<?
@@ -573,7 +582,6 @@
 		       (case (cadr f-l)
 			 ((#\s) (write (car objects) sb))
 			 ((#\a) (display (car objects) sb))
-			 ((#\a) (write-char (car objects) sb))
 			 ((#\%) (display #\newline sb))
 			 ((#\~) (display #\~ sb)))
 		       (make-format (cddr f-l) (if (not (null? objects))

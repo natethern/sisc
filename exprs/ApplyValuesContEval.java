@@ -61,7 +61,7 @@ public class ApplyValuesContEval extends Expression {
         return list(sym("ApplyValuesContEval"));
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.serialize(consumer, dos);
         }
@@ -69,7 +69,7 @@ public class ApplyValuesContEval extends Expression {
 
     public ApplyValuesContEval() {}
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             consumer=(Procedure)s.deserialize(dis);

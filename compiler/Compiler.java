@@ -56,14 +56,14 @@ public class Compiler extends Util {
         }
 
         public Syntax() {}
-        public void deserialize(Serializer s, DataInputStream dis)
+        public void deserialize(Serializer s, DataInput dis)
         throws IOException {
             if (SERIALIZATION) {
                 synid=s.readBer(dis);
             }
         }
 
-        public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+        public void serialize(Serializer s, DataOutput dos) throws IOException {
             if (SERIALIZATION) {
                 s.writeBer(synid, dos);
             }

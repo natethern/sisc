@@ -76,7 +76,7 @@ public class BuiltinProcedure extends Procedure {
     }
 
     public void serialize(Serializer s,
-                          DataOutputStream dos) throws IOException {
+                          DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.serializeModule(host, dos);
             s.writeBer(id, dos);
@@ -87,7 +87,7 @@ public class BuiltinProcedure extends Procedure {
     public BuiltinProcedure() {}
 
     public void deserialize(Serializer s,
-                            DataInputStream dis)
+                            DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             host=s.retrieveModule(dis);

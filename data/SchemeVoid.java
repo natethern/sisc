@@ -44,7 +44,7 @@ public class SchemeVoid extends Value implements Singleton {
         return "#<void>";
     }
 
-    public static Value getValue(DataInputStream dis) {
+    public static Value getValue(DataInput dis) {
         return VOID;
     }
 }

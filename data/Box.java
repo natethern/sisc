@@ -72,7 +72,7 @@ public class Box extends Value {
         return ((Value)val).valueEqual((Value)b.val);
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             dos.writeBoolean(locked);
             s.serialize(val, dos);
@@ -81,7 +81,7 @@ public class Box extends Value {
 
     public Box() {}
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             locked=dis.readBoolean();

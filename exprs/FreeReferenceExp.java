@@ -71,7 +71,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
         return list(sym("FreeReference-exp"), sym);
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.serialize(sym, dos);
             s.serialize(lenv, dos);
@@ -80,7 +80,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public FreeReferenceExp() {}
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             sym=(Symbol)s.deserialize(dis);

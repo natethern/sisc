@@ -130,7 +130,7 @@ public class AssociativeEnvironment extends NamedValue {
         return displayNamedOpaque("environment");
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.writeBer(symbolMap.size(), dos);
             for (Iterator i=symbolMap.keySet().iterator(); i.hasNext();) {
@@ -142,7 +142,7 @@ public class AssociativeEnvironment extends NamedValue {
         }
     }
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             int size=s.readBer(dis);

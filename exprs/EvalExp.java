@@ -59,7 +59,7 @@ public class EvalExp extends Expression {
         return list(sym("Eval-exp"), pre.express(), post.express());
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.serialize(pre, dos);
             s.serialize(post, dos);
@@ -68,7 +68,7 @@ public class EvalExp extends Expression {
 
     public EvalExp() {}
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             pre=s.deserialize(dis);

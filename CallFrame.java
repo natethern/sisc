@@ -93,7 +93,7 @@ public class CallFrame extends Procedure {
         return displayNamedOpaque("continuation");
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             if (vlr==null)
                 dos.writeBoolean(false);
@@ -114,7 +114,7 @@ public class CallFrame extends Procedure {
 
 public CallFrame() {}
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             vlr=null;

@@ -117,7 +117,7 @@ public class Pair extends Value {
 
     protected final static int CONT=1, MUTABLE=2;
 
-    public void serialize(Serializer s, DataOutputStream dos)
+    public void serialize(Serializer s, DataOutput dos)
     throws IOException {
         if (SERIALIZATION) {
 	    int pflags;
@@ -133,7 +133,7 @@ public class Pair extends Value {
 		    (rv instanceof ImmutablePair ? 0 : MUTABLE);
 
                 s.serialize(rv.car, dos);
-		dos.write(pflags);
+		s.writeBer(pflags, dos);
 		
 		if (cont)
 		    rv=(Pair)rv.cdr;
@@ -142,12 +142,12 @@ public class Pair extends Value {
         }
     }
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             car=(Value)s.deserialize(dis);
             Pair rv=this, tmp, head=rv;
-	    int pflags=dis.read();
+	    int pflags=s.readBer(dis);
             while ((pflags & CONT) != 0) {
                 tmp=((pflags & MUTABLE) != 0) ? 
 		    new Pair() : 
@@ -155,7 +155,7 @@ public class Pair extends Value {
                 rv.cdr=tmp;
                 tmp.car=(Value)s.deserialize(dis);
                 rv=tmp;
-		pflags=dis.read();
+		pflags=s.readBer(dis);
             }
             rv.cdr=(Value)s.deserialize(dis);
         }

@@ -91,7 +91,7 @@ public class SchemeCharacter extends Value {
         return new Character(c);
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             dos.writeChar(c);
         }
@@ -99,7 +99,7 @@ public class SchemeCharacter extends Value {
 
     public SchemeCharacter() {}
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             c=dis.readChar();

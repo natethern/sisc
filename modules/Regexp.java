@@ -38,8 +38,8 @@
  */
 package sisc.modules;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.apache.oro.text.GlobCompiler;
@@ -443,7 +443,7 @@ public class Regexp extends ModuleAdapter
         return false;
     }
 
-    public void serialize(Serializer s, DataOutputStream dos)
+    public void serialize(Serializer s, DataOutput dos)
       throws IOException
     {
       if (SERIALIZATION) {
@@ -453,7 +453,7 @@ public class Regexp extends ModuleAdapter
       }
     }
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
       throws IOException
     {
       if (SERIALIZATION) {

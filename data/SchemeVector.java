@@ -130,7 +130,7 @@ public class SchemeVector extends Value {
         return v;
     }
 
-    public void serialize(Serializer s, DataOutputStream dos)
+    public void serialize(Serializer s, DataOutput dos)
     throws IOException {
         if (SERIALIZATION) {
             s.writeBer(vals.length, dos);
@@ -140,7 +140,7 @@ public class SchemeVector extends Value {
         }
     }
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             vals=new Value[s.readBer(dis)];

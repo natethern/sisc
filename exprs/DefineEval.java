@@ -60,7 +60,7 @@ public class DefineEval extends Expression {
         return list(sym("Define-eval"), lhs);
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.serialize(lhs, dos);
         }
@@ -68,7 +68,7 @@ public class DefineEval extends Expression {
 
     public DefineEval() {}
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             lhs=(Symbol)s.deserialize(dis);

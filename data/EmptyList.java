@@ -56,9 +56,9 @@ public class EmptyList extends Pair implements Singleton {
         return null;
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {}
+    public void serialize(Serializer s, DataOutput dos) throws IOException {}
 
-    public static Value getValue(DataInputStream dis) {
+    public static Value getValue(DataInput dis) {
         return EMPTYLIST;
     }
 }

@@ -45,11 +45,11 @@ public abstract class Expression extends Util implements Serializable {
     public abstract Value express();
 
     public void serialize(Serializer s,
-                          DataOutputStream dos) throws IOException {
+                          DataOutput dos) throws IOException {
     }
 
     public void deserialize(Serializer s,
-                            DataInputStream dis) throws IOException
+                            DataInput dis) throws IOException
         {}
 }
 

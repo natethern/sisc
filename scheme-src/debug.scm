@@ -61,7 +61,7 @@
 		     (for-each (lambda (n) (display #\space)) (iota 40))
 		     (display (format "[~s]" depth)))
 		   (for-each (lambda (n) (display #\space)) (iota (* depth 2))))
-	       (display (list 'name val ...))
+	       (display (list 'name var ...))
 	       (newline)
 	       (let ([result (begin body ...)])
 		 (if (> depth 20)

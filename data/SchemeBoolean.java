@@ -56,13 +56,13 @@ public class SchemeBoolean extends Value implements Singleton {
     public SchemeBoolean() {}
 
     public void serialize(Serializer s,
-                          DataOutputStream dos) throws IOException {
+                          DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             dos.writeBoolean(val);
         }
     }
 
-    public static Value getValue(DataInputStream dis) throws IOException {
+    public static Value getValue(DataInput dis) throws IOException {
         if (SERIALIZATION) {
             boolean v=dis.readBoolean();
             if (v)

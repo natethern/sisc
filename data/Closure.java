@@ -59,7 +59,7 @@ public class Closure extends Procedure {
         return displayNamedOpaque("procedure");
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.serialize(name, dos);
             dos.writeBoolean(arity);
@@ -71,7 +71,7 @@ public class Closure extends Procedure {
 
     public Closure() {}
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             name=(Symbol)s.deserialize(dis);

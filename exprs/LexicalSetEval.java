@@ -55,7 +55,7 @@ public class LexicalSetEval extends Expression {
                     new Pair(Quantity.valueOf(depth), Quantity.valueOf(pos)));
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.writeBer(depth, dos);
             s.writeBer(pos, dos);
@@ -64,7 +64,7 @@ public class LexicalSetEval extends Expression {
 
     public LexicalSetEval() {}
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             depth=s.readBer(dis);

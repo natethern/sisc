@@ -36,11 +36,11 @@
 (define run-benchmark 
   (lambda (benchmark-name benchmark-thunk)
     (display benchmark-name) (display "...")
-    (let ([benchresult (cons benchmark-name 
+    (let ((benchresult (cons benchmark-name 
 			     (call/fc (lambda ()
-					(cdr (time (benchmark-thunk))))
+					(cdr (time 3 (benchmark-thunk))))
 				      (lambda (m e f)
-					'failed)))])
+					'failed)))))
       (set! benchmark-results (cons benchresult benchmark-results)))
     (newline)))
 

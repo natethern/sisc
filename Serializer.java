@@ -13,10 +13,10 @@ public class Serializer implements Conf {
     static final int BER_MASK=0x7f, BER_CONT=0x80;
 
     static Class[]
-	DESER_PROTO=new Class[] { Serializer.class, DataInputStream.class },
-	SER_PROTO=new Class[] { Serializer.class, DataOutputStream.class },
+	DESER_PROTO=new Class[] { Serializer.class, DataInput.class },
+	SER_PROTO=new Class[] { Serializer.class, DataOutput.class },
 	INIT_PROTO=new Class[] { Interpreter.class },
-	GETVALUE_PROTO=new Class[] { DataInputStream.class };
+	GETVALUE_PROTO=new Class[] { DataInput.class };
 
     static Method DESM;
 
@@ -42,7 +42,7 @@ public class Serializer implements Conf {
         }
     }
 
-    public void putClass(Class c, DataOutputStream dos) throws IOException {
+    public void putClass(Class c, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             int mp=classCache.length-1;
             int i;
@@ -70,7 +70,7 @@ public class Serializer implements Conf {
         }
     }
 
-    public Class getClass(DataInputStream dis) throws IOException, ClassNotFoundException {
+    public Class getClass(DataInput dis) throws IOException, ClassNotFoundException {
         if (SERIALIZATION) {
             int cp=dis.readUnsignedByte();
             int mp=classCache.length-1;
@@ -98,11 +98,11 @@ public class Serializer implements Conf {
         } else return null;
     }
 
-    public void writeFloat(double d, DataOutputStream dos) throws IOException {
+    public void writeFloat(double d, DataOutput dos) throws IOException {
 	writeFloat(new BigDecimal(d), dos); // could be optimized
     }
 
-    public void writeFloat(BigDecimal d, DataOutputStream dos) throws IOException {
+    public void writeFloat(BigDecimal d, DataOutput dos) throws IOException {
 	int scale=d.scale();
 	byte[] buffer=d.unscaledValue().toByteArray();
 	writeBer(buffer.length, dos);
@@ -110,7 +110,7 @@ public class Serializer implements Conf {
 	dos.write(buffer);
     }
 
-    public BigDecimal readFloat(DataInputStream dis) throws IOException {
+    public BigDecimal readFloat(DataInput dis) throws IOException {
 	byte[] buffer=new byte[readBer(dis)];
 	int scale=readBer(dis);
 	dis.readFully(buffer);
@@ -118,7 +118,7 @@ public class Serializer implements Conf {
 	return new BigDecimal(new BigInteger(buffer), scale);
     }
 
-    public static void writeBer(int v, DataOutputStream dos) throws IOException {
+    public static void writeBer(int v, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             byte[] b=new byte[5];
             int p=4;
@@ -134,11 +134,11 @@ public class Serializer implements Conf {
         }
     }
 
-    public static short readBerShort(DataInputStream dis) throws IOException {
+    public static short readBerShort(DataInput dis) throws IOException {
         return (short)readBer(dis);
     }
 
-    public static int readBer(DataInputStream dis) throws IOException {
+    public static int readBer(DataInput dis) throws IOException {
         if (SERIALIZATION) {
             int b=dis.readUnsignedByte();
             int val=b & BER_MASK;
@@ -150,11 +150,11 @@ public class Serializer implements Conf {
         } else return -1;
     }
 
-    public final Expression deserialize(DataInputStream dis) throws IOException {
+    public final Expression deserialize(DataInput dis) throws IOException {
 	return deserialize(dis, true);
     }
 
-    public Expression deserialize(DataInputStream dis, boolean callDeser) 
+    public Expression deserialize(DataInput dis, boolean callDeser) 
 	throws IOException {
         if (SERIALIZATION) {
             Integer serialId=new Integer(readBer(dis));
@@ -189,7 +189,7 @@ public class Serializer implements Conf {
     }
 
     public void serialize(Expression e,
-                          DataOutputStream dos) throws IOException {
+                          DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             if (e==null) {
                 writeBer(0,dos);
@@ -212,7 +212,7 @@ public class Serializer implements Conf {
 
 
     public void serializeModule(Module m,
-                                DataOutputStream dos) throws IOException {
+                                DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             String className=m.getClass().getName();
 
@@ -223,7 +223,7 @@ public class Serializer implements Conf {
         }
     }
 
-    public Module retrieveModule(DataInputStream dis) throws IOException {
+    public Module retrieveModule(DataInput dis) throws IOException {
         if (SERIALIZATION) {
             String className=dis.readUTF();
             Module m=(Module)modules.get(className);

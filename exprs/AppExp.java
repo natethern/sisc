@@ -51,7 +51,7 @@ public class AppExp extends Expression {
 
         if (nonTail) 
             r.push(null);
-
+	/*
 	if (rands.length==0) {
 	    // No arguments, just set the VLR empty, and 
 	    // work on the operator
@@ -66,7 +66,7 @@ public class AppExp extends Expression {
 		r.nxp=rator;
 		r.push(APPEVAL);
 	    }
-	} else {
+	    } else {*/
 	    // Create the VLR
 	    r.vlr=new Value[rands.length];
 
@@ -98,7 +98,7 @@ public class AppExp extends Expression {
 		r.push(r.createFillRib(i, rands, rator, APPEVAL));
 		r.nxp=rands[i];
 	    }
-	}
+	    //	}
     }
 
     public Value express() {
@@ -110,7 +110,7 @@ public class AppExp extends Expression {
         return new Pair(nonTail ? sym("App-exp") : sym("TailApp-exp"), args);
     }
 
-    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.writeBer(rands.length, dos);
             for (int i=0; i<rands.length; i++) {
@@ -123,7 +123,7 @@ public class AppExp extends Expression {
 
     public AppExp() {}
 
-    public void deserialize(Serializer s, DataInputStream dis)
+    public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
             int size=s.readBer(dis);
