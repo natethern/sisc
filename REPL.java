@@ -156,7 +156,7 @@ public class REPL extends Thread {
 		Socket client = ssocket.accept();
 		Interpreter cr = Interpreter.newContext(r);
 		cr.console_in = new InputPort(new BufferedReader(new InputStreamReader(client.getInputStream())));
-		cr.console_out = new OutputPort(new PrintWriter(client.getOutputStream()));
+		cr.console_out = new OutputPort(new PrintWriter(client.getOutputStream()), true);
 		REPL repl = new SocketREPL(cr, client);
 		repl.start();
 	    }

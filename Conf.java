@@ -37,7 +37,7 @@ package sisc;
  */
 public interface Conf {
 
-    String VERSION = "r1.2.1";
+    String VERSION = "r1.2.2";
 
     boolean
 	SERIALIZATION = true,

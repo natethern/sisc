@@ -114,7 +114,7 @@ public class Interpreter extends Util {
 
     public Interpreter(InputStream in, OutputStream out) {
 	this(new InputPort(new BufferedReader(new InputStreamReader(in))),
-	     new OutputPort(new PrintWriter(out)),
+	     new OutputPort(new PrintWriter(out), true),
 	     new AssociativeEnvironment());
 	if (toplevel_env!=null) 
 	    symenv.define(TOPLEVEL, toplevel_env);

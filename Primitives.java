@@ -435,7 +435,6 @@ public class Primitives extends Module {
 		try {
 		    f.console_out.write((primid == WRITE ? f.vlr[0].write() :
 					 f.vlr[0].display()));
-		    f.console_out.flush();
 		} catch (IOException e) {
 		    throw new RuntimeException("Error writing to output port "+f.console_out);
 		}
@@ -578,7 +577,6 @@ public class Primitives extends Module {
 		try {
 		    port.write((primid == WRITE ? f.vlr[0].write() :
 					 f.vlr[0].display()));
-		    port.flush();
 		} catch (IOException e) {
 		    throw new RuntimeException("Error writing to output port "+port);
 		}
