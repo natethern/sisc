@@ -244,6 +244,14 @@ public class IO extends IndexedProcedure {
                 } catch (IOException e) {
                     return FALSE;
                 }
+            case FLUSHOUTPUTPORT:
+                try {
+                    f.dynenv.out.flush();
+                } catch (IOException e) {
+                    throwIOException(f, liMessage(IOB, "errorflushing", 
+                                                  f.dynenv.out.toString()), e);
+                }
+                return VOID;
             case PEEKCHAR:
                 Value v=readChar(f, f.dynenv.in);
                 if (v instanceof SchemeCharacter)
