@@ -3,6 +3,7 @@
 
   (display (format "Creating bot...~%"))
   (define bot-name 'sarahbot)
+  (define bot-name-length (string-length (symbol->string bot-name)))
   (define bot (make-bot (symbol->string bot-name)))
   
   (display (format "Connecting...~%"))

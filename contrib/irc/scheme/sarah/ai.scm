@@ -111,7 +111,9 @@
     
 (define (bot-clean message)
   (let loop ([x 0])
-    (cond [(= x (string-length message)) message]
+    (cond [(or (= x (string-length message))
+               (> x (+ bot-name-length 1)))
+           message]
           [(eq? (string-ref message x) #\:)
            (substring message (+ x 1) (string-length message))]
           [else (loop (+ x 1))])))
