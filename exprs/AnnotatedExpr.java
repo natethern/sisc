@@ -37,8 +37,8 @@ import sisc.data.*;
 import java.io.*;
 
 public class AnnotatedExpr extends Value {
-    protected Expression expr;
-    protected Value annotation;
+    public Expression expr;
+    public Value annotation;
 
     public AnnotatedExpr(Expression expr, Value annotation) {
 	this.expr=expr;
