@@ -894,20 +894,22 @@ public class S2J extends ModuleAdapter {
                 return new SchemeCharacter(((Character)jobj(f.vlr[0])).charValue());
             case CONV_NUMBER:
                 Object o = jobj(f.vlr[0]);
+                Quantity rv;
                 if (o instanceof Byte ||
                     o instanceof Short ||
                     o instanceof Integer ||
                     o instanceof Long)
-                    return Quantity.valueOf(((Number)o).longValue());
+                    rv=Quantity.valueOf(((Number)o).longValue());
                 else if (o instanceof Float ||
                          o instanceof Double)
-                    return Quantity.valueOf(((Number)o).doubleValue());
+                    rv=Quantity.valueOf(((Number)o).doubleValue());
                 else if (o instanceof java.math.BigInteger)
-                    return Quantity.valueOf((java.math.BigInteger)o);
+                    rv=Quantity.valueOf((java.math.BigInteger)o);
                 else if (o instanceof java.math.BigDecimal)
-                    return Quantity.valueOf((java.math.BigDecimal)o);
+                    rv=Quantity.valueOf((java.math.BigDecimal)o);
                 else
                     typeError(S2JB, "jnumber", f.vlr[0]);
+                return rv.simplify();
             case CONV_STRING:
                 o = jobj(f.vlr[0]);
                 if (o instanceof String)
