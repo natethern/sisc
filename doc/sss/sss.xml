@@ -20,6 +20,7 @@
  <!ENTITY java-chapter SYSTEM "java.xml">
  <!ENTITY index SYSTEM "index.xml">
  <!ENTITY gfdl SYSTEM "fdl.xml">
+ <!ENTITY version SYSTEM "version.xml">
 ]>
 
 <book lang="en">

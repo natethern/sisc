@@ -83,6 +83,7 @@
       code written to that standard should run without reading any
       further.
     </para>
+    &version;
     <sect2 id="AboutProcedures">
       <title>
 	About procedure documentation
