@@ -159,6 +159,21 @@
               name?
               (field field-getter field-setter) ...))))))))
 
+(define <record> (make-type '|sisc.modules.record.Record|))
+
+(define (record-type-of-hook next o)
+  (if (record? o)
+      (record-type o)
+      (next o)))
+
+(define (record-type<=-hook next x y)
+  (cond [(record-type? x)
+         (if (record-type? y)
+             (eq? x y)
+             (type<= <record> y))]
+        [(record-type? y) #f]
+        [else (next x y)]))
+
 (set! :record-type (make-record :record-type 2))
 (record-type! :record-type :record-type)
 (record-set! :record-type 0 ':record-type)

@@ -1,3 +1,7 @@
+2003-05-30  Matthias Radestock  <matthias@sorted.org>
+
+	*  Added extensible type system.
+
 2003-05-26  Matthias Radestock  <matthias@sorted.org>
 
 	* Changed signature of some s2j primitives to return lists instead

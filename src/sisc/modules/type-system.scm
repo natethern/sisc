@@ -1,0 +1,78 @@
+;;;;;;;;;; HOOKS ;;;;;;;;;;
+
+(define (hook-items proc)
+  (procedure-property proc 'items))
+(define (set-hook-items! proc items)
+  (set-procedure-property! proc 'items items))
+
+(define (make-hook default)
+  (let ([items (list default)])
+    (define (hook key item)
+      (cond [(assq key (cdr items))
+             => (lambda (x) (set-cdr! x item))]
+            [else
+              (set-cdr! items (cons (cons key item) (cdr items)))]))
+    (set-hook-items! hook items)
+    hook))
+
+(define (invoke-hook hook . args)
+  (let ([all-items (hook-items hook)])
+    (let loop ([items (cdr all-items)])
+      (if (null? items)
+          (apply (car all-items) args)
+          (apply (cdar items)
+                 (lambda args (loop (cdr items))) args)))))
+
+(define (every2 pred x y)
+  (or (null? x)
+      (null? y)
+      (and (pred (car x) (car y)) (every2 pred (cdr x) (cdr y)))))
+
+(define type-of-hook (make-hook native-type-of))
+(define (type-of o) (invoke-hook type-of-hook o))
+(define type<=-hook (make-hook native-type<=))
+(define (type<= x y) (invoke-hook type<=-hook x y))
+(define (instance-of? x y) (type<= (type-of x) y))
+(define (types<= x y) (every2 type<= x y))
+(define (types= x y) (and (types<= x y) (types<= y x)))
+(define (instances-of? x y) (every2 instance-of? x y))
+
+;;compare two types taking into account the cpl of c
+;;NB: c must be a sub-type of both types
+(define compare-types-hook (make-hook (lambda (x y c) 'ambiguous)))
+(define (compare-types x y c)
+  (let ([x<y? (type<= x y)]
+        [y<x? (type<= y x)])
+    (cond [(and x<y? y<x?) 'equal]
+          [x<y? 'more-specific]
+          [y<x? 'less-specific]
+          [else (invoke-hook compare-types-hook x y c)])))
+
+(define-syntax define-scheme-type
+  (lambda (x)
+    (syntax-case x ()
+      ((_ name jname)
+       (with-syntax ([sname (wrap-symbol "<" (syntax name) ">")]
+                     [jname (wrap-symbol "sisc.data." (syntax jname) "")])
+         (syntax (define sname (make-type 'jname))))))))
+(define-syntax define-scheme-types
+  (syntax-rules ()
+    ((_ (name jname) ...)
+     (begin (define-scheme-type name jname) ...))))
+
+;;for convenience we pre-define all the types defined in R5RS plus the
+;;base type (<value>) of all of them. Caveat: instead of a pair and
+;;null type there is just a list type.
+(define-scheme-types
+  (value        |Value|)
+  (eof          |EOFObject|)
+  (symbol       |Symbol|)
+  (list         |Pair|)
+  (procedure    |Procedure|)
+  (number       |Quantity|)
+  (boolean      |SchemeBoolean|)
+  (char         |SchemeCharacter|)
+  (string       |SchemeString|)
+  (vector       |SchemeVector|)
+  (input-port   |SchemeInputPort|)
+  (output-port  |SchemeOutputPort|))

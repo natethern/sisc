@@ -257,6 +257,45 @@
   (import threading)
   (include "hashtable/hashtable.scm"))
 
+(module procedure-properties
+  (procedure-property
+   set-procedure-property!
+   procedure-property!)
+  (import threading)
+  (include "procedure-properties.scm"))
+
+(module type-system
+    (make-type
+     type-of
+     type<=
+     instance-of?
+     types<=
+     types=
+     instances-of?
+     compare-types
+     <value>
+     <eof>
+     <symbol>
+     <list>
+     <procedure>
+     <number>
+     <boolean>
+     <char>
+     <string>
+     <vector>
+     <input-port>
+     <output-port>
+     type-of-hook
+     type<=-hook
+     compare-types-hook)
+  (import* types-native
+           (native-type-of type-of)
+           (native-type<= type<=)
+           make-type)
+  (import procedure-properties)
+  (import misc)
+  (include "type-system.scm"))
+
 (module record
     ((define-record-type
        make-record-type record-constructor record-predicate
@@ -270,14 +309,15 @@
      record-type-field-tags)
   (import record-native)
   (import misc)
-  (include "record/record.scm"))
-
-(module procedure-properties
-  (procedure-property
-   set-procedure-property!
-   procedure-property!)
-  (import threading)
-  (include "procedure-properties.scm"))
+  (import* type-system
+           make-type
+           type<=
+           type-of-hook
+           type<=-hook
+           compare-types-hook)
+  (include "record/record.scm")
+  (type-of-hook 'record record-type-of-hook)
+  (type<=-hook  'record record-type<=-hook))
 
 (module generic-procedures
   (class?
