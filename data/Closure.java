@@ -28,7 +28,7 @@ public class Closure extends Procedure implements NamedValue {
         int vl=v.length;
         if (!arity) {
             if (vl == fcount) {
-                if (false && r.vlk) {
+                if (r.vlk) {
                     Value[] v2=r.createValues(vl);
                     System.arraycopy(v, 0, v2, 0, vl);
                     return v2;
