@@ -209,7 +209,7 @@ What's Changed?
 The major changes in the generic procedure system since the previous
 version are as follows:
 
-* The code and module are no longer mixed with that of the type
+* The code and module have been disentangled from that of the type
 system, object system and Java FFI.
 
 * There is a clear internal separation between code that deals with

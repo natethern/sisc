@@ -138,7 +138,7 @@ What's Changed?
 The major changes in the type system since the previous version are as
 follows:
 
-* The code and module are no longer mixed with that of generic
+* The code and module have been disentangled from that of generic
 procedures, the object system and Java FFI.
 
 * The type of a Scheme value is distinct from the type obtained by S2J
