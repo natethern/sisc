@@ -168,6 +168,10 @@
   </target>
 
   <target name="lite-dist" depends="clean,all" if="lite">
+    <java jar="jarg.jar" fork="true">
+      <arg line="-nobco sisc.jar"/>
+    </java>
+    <move file="sisc_s.jar" tofile="sisc.jar"/>
     <delete dir="${dist}/lite"/>
     <mkdir dir="${dist}/lite"/>
     <mkdir dir="${dist}/lite/sisc"/>
