@@ -191,7 +191,6 @@ class SocketREPL extends REPL {
     public void run() {
 	r = Context.enter("main");
 	r.dynenv = dynenv;
-	System.err.println(dynenv);
         super.run();
 	Context.exit();
         try {
