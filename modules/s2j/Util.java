@@ -221,7 +221,7 @@ public class Util extends ModuleAdapter {
      * getClassLoader())</code>.
      */
     public static Class resolveType(String name) {
-        return resolveType(name, getClassLoader());
+        return resolveType(name, currentClassLoader());
     }
 
     /**

@@ -100,7 +100,7 @@ public abstract class Util extends Defaults implements Version {
 	error(r, list(new Pair(MESSAGE, new SchemeString(errormessage))));
     }
 
-    public static ClassLoader getClassLoader() {
+    public static ClassLoader currentClassLoader() {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         if (cl == null) {
             cl = ClassLoader.getSystemClassLoader();

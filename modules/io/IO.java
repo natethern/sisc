@@ -184,7 +184,7 @@ public class IO extends ModuleAdapter {
         case 0:
             switch (primid) {
             case CURRENTCLASSPATH:
-                URL[] urls = f.dynenv.classLoader.getURLs();
+                URL[] urls = f.dynenv.getClassPath();
                 Pair p = EMPTYLIST;
                 for (int i=urls.length-1; i>=0; i--) {
                     p = new Pair(new SchemeString(urls[i].toString()), p);
@@ -377,8 +377,7 @@ public class IO extends ModuleAdapter {
                 for (int i=0; pa != EMPTYLIST; i++, pa = (Pair)pa.cdr) {
                     urls[i] = url(pa.car);
                 }
-                f.dynenv.classLoader =
-                    new URLClassLoader(urls, f.dynenv.classLoader.getParent());
+                f.dynenv.setClassPath(urls);
                 return VOID;
             case CURRENTOUTPUTPORT:
                 f.dynenv.out= outport(f.vlr[0]);
@@ -394,14 +393,14 @@ public class IO extends ModuleAdapter {
                     return FALSE;
                 }
             case FINDRESOURCE:
-                url = f.dynenv.classLoader.getResource(string(f.vlr[0]));
+                url = f.dynenv.getClassLoader().getResource(string(f.vlr[0]));
                 if (url == null) 
                     return FALSE;
                 else return new SchemeString(url.toString());
             case FINDRESOURCES:
                 java.util.Enumeration e;
                 try {
-                    e = f.dynenv.classLoader.getResources(string(f.vlr[0]));
+                    e = f.dynenv.getClassLoader().getResources(string(f.vlr[0]));
                 } catch (IOException ex) {
                     return EMPTYLIST;
                 }
