@@ -34,11 +34,30 @@
                             (scheme-report-environment 5))))
                   (eval '(identity 3))))
 
-(should-be 818786 'okay
+;; (Partially fixed) References to helper functions from macros in report-env
+;; will generate code incapable of resolving the helper                        
+(should-be 818786.0 3 (eval '(force (delay 3)) (scheme-report-environment 5)))
+(define test-env (scheme-report-environment 5))
+(should-be 818786.1 '#t
            (with/fc (lambda (m e) 'error)
              (lambda ()
-               (eval '(delay 'okay) (scheme-report-environment 5)))))
-                   
+               (eval '(procedure? (delay 'okay)) (scheme-report-environment 5)))))
+(should-be 818786.2 'okay
+           (begin (eval '(define-syntax foo 
+                           (syntax-rules ()
+                             ((_ x)
+                              (car x))
+                             ((_ x y)
+                              (car y)))) test-env)
+                  (eval '(foo 'a '(okay)) test-env)))
+(should-be 818786.3 '"invalid syntax (foo a b c)"
+           (begin (eval '(define-syntax foo 
+                           (syntax-rules ()
+                             ((_ x)
+                              (car x)))) test-env)
+                  (with/fc (lambda (m e) (error-message m))
+                   (lambda () (eval '(foo a b c) test-env)))))
+                            
 ;; Used to cause an out of memory error
 (import threading)
 (should-be 820401 'okay
