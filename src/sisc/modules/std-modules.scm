@@ -259,7 +259,13 @@
     ((define-record-type
        make-record-type record-constructor record-predicate
        define-record-field record-accessor record-modifier)
-     define-struct)
+     define-struct
+     record?
+     record-type
+     make-record-type
+     record-type?
+     record-type-name
+     record-type-field-tags)
   (import record-native)
   (import misc)
   (include "record/record.scm"))
