@@ -2036,8 +2036,7 @@
                  (let ((ms (wrap-marks w)) (s (wrap-subst w)))
                    (make-syntax-object (syntax-object-expression x)
                      (if (and (pair? ms) (eq? (car ms) the-anti-mark))
-                         (make-wrap (cdr ms)
-                           (if rib (cons rib (cdr s)) (cdr s)))
+                         (make-wrap (cdr ms) (cdr s))
                          (make-wrap (cons m ms)
                            (if rib
                                (cons rib (cons 'shift s))
