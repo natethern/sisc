@@ -36,48 +36,43 @@ import sisc.*;
 import sisc.data.*;
 import java.io.*;
 
-public class IfExp extends Expression {
-    public Expression test;
-    public IfEval eexp;
+public class EvalExp extends Expression {
+    public Expression pre, post;
 
-    public IfExp(Expression test, IfEval eexp) {
-        this.test=test;
-        this.eexp=eexp;
-    }
-
-    public IfExp(Expression test, Expression conseq, Expression altern) {
-        this.test=test;
-        this.eexp = new IfEval(conseq,altern);
+    public EvalExp(Expression pre, Expression post) {
+	this.pre=pre;
+	this.post=post;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        Value tmp=test.getValue(r);
+        Value tmp=pre.getValue(r);
         if (tmp==null) {
-            r.push(this.eexp);
-            r.nxp=test;
+            r.push(this.post);
+            r.nxp=pre;
         } else {
-            r.nxp=(tmp==FALSE ? eexp.altern : eexp.conseq);
+	    r.nxp=post;
+	    r.acc=tmp;
         }
     }
 
     public Value express() {
-        return list(sym("If-exp"), test.express(), eexp.express());
+        return list(sym("Eval-exp"), pre.express(), post.express());
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
         if (SERIALIZATION) {
-            s.serialize(test, dos);
-            s.serialize(eexp, dos);
+            s.serialize(pre, dos);
+            s.serialize(post, dos);
         }
     }
 
-    public IfExp() {}
+    public EvalExp() {}
 
     public void deserialize(Serializer s, DataInputStream dis)
     throws IOException {
         if (SERIALIZATION) {
-            test=s.deserialize(dis);
-            eexp=(IfEval)s.deserialize(dis);
+            pre=s.deserialize(dis);
+            post=s.deserialize(dis);
         }
     }
 }

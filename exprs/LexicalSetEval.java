@@ -52,7 +52,7 @@ public class LexicalSetEval extends Expression {
 
     public Value express() {
         return list(sym("LexicalSet-eval"),
-                    new Pair(new Quantity(depth), new Quantity(pos)));
+                    new Pair(Quantity.valueOf(depth), Quantity.valueOf(pos)));
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {

@@ -55,7 +55,7 @@ public class LexicalReferenceExp extends Expression implements Immediate {
     }
 
     public Value express() {
-        return new Pair(new Quantity(depth), new Quantity(pos));
+        return new Pair(Quantity.valueOf(depth), Quantity.valueOf(pos));
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
