@@ -75,6 +75,9 @@ public class DelegatingSymEnv extends NamedValue
         getEnv().undefine(s);
     }
 
+    public void visit(ExpressionVisitor v) {
+        v.visit((Expression)delegee);
+    }
 }
 
 /*

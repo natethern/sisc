@@ -81,6 +81,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public void visit(ExpressionVisitor v) {
         v.visit(sym);
+        v.visit((Expression)senv);
     }
 }
 /*

@@ -188,7 +188,26 @@ public class LibraryAE extends MemorySymEnv {
     }
 
     public void visit(ExpressionVisitor v) {
-        //TODO: not quite sure what to do here
+        v.visit((Expression)parent);
+        if (base == null) {
+            if (name!=null && v==lb)
+                lb.add(name, this);
+            for (Iterator i=bindWatch.iterator(); i.hasNext();) {
+                Symbol key=(Symbol)i.next();
+                v.visit(key);
+                //add binding as new entry point to library
+                if (v==lb)
+                    lb.add(super.lookup(key));
+            }
+            if (v==lb)
+                lb.add(parent == null ? null : parent.asValue());
+        } else {
+            //serialize in "retrieve" mode
+            for (Iterator i=addressMap.keySet().iterator(); i.hasNext();) {
+                Symbol key=(Symbol)i.next();
+                v.visit(key);
+            }
+        }
     }
 }
 

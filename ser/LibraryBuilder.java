@@ -7,12 +7,13 @@ import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.env.SymbolicEnvironment;
 import sisc.nativefun.Module;
+import sisc.util.ExpressionVisitor;
 
 /**
  * Keeps track of entry points - points where serialization begins.
  *
  */
-public class LibraryBuilder extends SerializerImpl {
+public class LibraryBuilder implements ExpressionVisitor {
 
     boolean addAllowed=true;
     Set classes, seen, duplicates;
@@ -97,13 +98,13 @@ public class LibraryBuilder extends SerializerImpl {
                             duplicates.add(e);
                     } else {
                         seen.add(e);
-                        writeClass(e.getClass());
-                        e.serialize(this);
+                        classes.add(e.getClass());
+                        e.visit(this);
                         if (!(e instanceof Singleton)) {
                             for (Iterator i=e.getAnnotationKeys().iterator(); i.hasNext();) {
                                 Symbol key=(Symbol)i.next();
-                                writeExpression(key);
-                                writeExpression(e.getAnnotation(key));
+                                visit(key);
+                                visit(e.getAnnotation(key));
                             }
                         }
                     }
@@ -180,7 +181,7 @@ public class LibraryBuilder extends SerializerImpl {
     }
 
     /*---Serialization functions---*/
-    public void writeExpression(Expression e) throws IOException {
+    public void visit(Expression e) {
         serQueue.addFirst(e);
     }
     
@@ -201,50 +202,8 @@ public class LibraryBuilder extends SerializerImpl {
         }
     }
 
-    public void writeModule(Module e) throws IOException {
-        classes.add(e.getClass());
-    }
-
-    public void writeClass(Class c) throws IOException {
-        classes.add(c);
-    }
-        
     public boolean seen(Expression e) { 
         return seen.contains(e);
-    }
-
-    public void write(byte[] b) throws IOException {}
-    public void write(byte[] b, int off, int len) throws IOException {}
-    public void write(int b) throws IOException {}
-    public void writeBoolean(boolean v) throws IOException {}
-    public void writeByte(int v) throws IOException {}
-    public void writeBytes(String s) throws IOException {}
-    public void writeChar(int v) throws IOException {}
-    public void writeChars(String v) throws IOException {}
-    public void writeDouble(double v) throws IOException {}
-    public void writeFloat(float v) throws IOException {}
-    public void writeInt(int v) throws IOException {}
-    public void writeLong(long v) throws IOException {}
-    public void writeShort(int v) throws IOException {}
-    public void writeUTF(String v) throws IOException {}
-
-    /*---helper functions---*/
-    public static short readBerShort(DataInput dis) throws IOException {
-        return (short)readBer(dis);
-    }
-
-    public static int readBer(DataInput dis) throws IOException {
-        return (int)readBerLong(dis);
-    }
-
-    public static long readBerLong(DataInput dis) throws IOException {
-        int b=dis.readUnsignedByte();
-        long val=b & BER_MASK;
-        while ((b & BER_CONT) != 0) {
-            b=dis.readUnsignedByte();
-            val=(val<<7) + (b & BER_MASK);
-        }
-        return val;
     }
 
     public static void writeBer(long v, DataOutput dos) throws IOException {

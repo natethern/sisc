@@ -194,7 +194,7 @@ public class MemorySymEnv extends NamedValue
             int loc=((Integer)symbolMap.get(key)).intValue();
             v.visit(env[loc]);
         }
-        //TODO: visit parent?
+        v.visit((Expression)parent);
     }
 
 }
