@@ -19,15 +19,20 @@ Binds <scheme-name> to the Java class named by <java-name>, or if no
 such parameter is supplied, by the mangled <scheme-name>.
 
 Mangling of class names checks for the presence of angle brackets
-around the <scheme-name>. If they are present they are stripped and
-the character following the last dot is converted to upper case. All
+around the <scheme-name>. If they are present they are stripped.  All
 the identifiers between the dots are passed through field name
-mangling (see below). Trailing '*' characters are replaced with pairs
-of brackets ("[]"). Trailing brackets are preserved.
+mangling (see below). The character following the last dot is
+upcased. A slash ('/') is treated as a nested class indicator; it is
+replaced with '$' and the character following it is upcased. Trailing
+'*' characters are replaced with pairs of brackets ("[]"). Trailing
+brackets are preserved.
 
 In essence, the mangling allows classes to be identified
-more schemely, e.g. <java.util.array-list**> corresponds to the Java
-type java.util.ArrayList[][].
+more schemely, e.g.
+  <java.io.object-input-stream/get-field**>
+corresponds to the Java type
+  java.io.ObjectInputStream.GetField[][]
+(note that GetField is a nested class).
 
 
 DEFINE-JAVA-CLASSES [<scheme-name> | (<scheme-name> <java-name>)] ...

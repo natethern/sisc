@@ -334,17 +334,9 @@ public abstract class Util extends IndexedProcedure {
         int p;
         int l = s.length();
 
-        //remove angle brackets and upcase character after last dot.
+        //remove angle brackets
         if (s.startsWith("<") && s.endsWith(">")) {
             s = s.substring(1, l-1);
-            p = s.lastIndexOf('.');
-            if (p != -1) {
-                StringBuffer res = new StringBuffer(l);
-                res.append(s.substring(0, p+1));
-                res.append(Character.toUpperCase(s.charAt(p+1)));
-                res.append(s.substring(p+2));
-                s = res.toString();
-            }
         }
 
         //convert trailing '*' into []
@@ -364,10 +356,27 @@ public abstract class Util extends IndexedProcedure {
         int prev=0;
         StringBuffer res = new StringBuffer(l);
         while((p=s.indexOf('.', prev)) != -1) {
-            res.append(mangleFieldName(s.substring(prev, p))).append('.');
+            res.append(mangleFieldName(s.substring(prev, p)))
+                .append('.');
             prev = p+1;
         }
-        return res.append(mangleFieldName(s.substring(prev, s.length()))).append(tail).toString();
+
+        //process '/' as nested class indicator
+        String cn;
+        while((p=s.indexOf('/', prev)) != -1) {
+            cn = mangleFieldName(s.substring(prev, p));
+            res.append(Character.toUpperCase(cn.charAt(0)))
+                .append(cn.substring(1)).append('$');
+            prev = p+1;
+        }
+
+        //process trailing class name
+        cn = mangleFieldName(s.substring(prev, s.length()));
+        res.append(Character.toUpperCase(cn.charAt(0)))
+            .append(cn.substring(1));
+
+        //add array markers and return
+        return res.append(tail).toString();
     }
 
 }

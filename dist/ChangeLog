@@ -1,6 +1,11 @@
+2003-07-02  Matthias Radestock  <matthias@sorted.org>
+
+	* Improved S2J class name mangling to handle package-less and
+	  nested classes 
+
 2003-06-29  Released SISC 1.8.1-alpha
 
-2003-06-28	Scott G. Miller <scgmille@freenetproject.org>
+2003-06-28  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Added stream compatible serialization mode, and changed
 	  serial-io to use it.
