@@ -53,52 +53,112 @@
    (lambda (m e f)
      f)))
 
-(define dynamic-wind 
-  (lambda args
-    (eval '(let ()
-	     (define *here* (list #f))
+(define dynamic-wind
+  (let ((original-call/cc call-with-current-continuation))
+    ;;the dynamic wind stack
+    (define *current-dynamic-point* #f)
+    (define (get-dynamic-point) *current-dynamic-point*)
+    (define (set-dynamic-point! p) (set! *current-dynamic-point* p))
+    ;;a point in the dynamic wind stack
+    ;;-this would be easier if we had structures
+    (define (make-point depth in out parent)
+      (vector depth in out parent))
+    (define (point-depth point) (vector-ref point 0))
+    (define (point-in point) (vector-ref point 1))
+    (define (point-out point) (vector-ref point 2))
+    (define (point-parent point) (vector-ref point 3))
+    ;;
+    (define (travel-between-points here target)
+      (cond ((eq? here target)
+	     (set-dynamic-point! here))
+	    ((or (not here)             ; HERE has reached the root.
+		 (and target
+		      (< (point-depth here)
+			 (point-depth target))))
+	     (travel-between-points here (point-parent target))
+	     ((point-in target))
+	     (set-dynamic-point! target))
+	    (else
+	     (set-dynamic-point! (point-parent here))
+	     ((point-out here))
+	     (travel-between-points (point-parent here) target))))
+    ;;wind-safe call/cc
+    (define (dynwind-call/cc proc)
+      (original-call/cc
+       (lambda (cont)
+	 (let ((point (get-dynamic-point)))
+	   (proc (lambda results
+		   (travel-between-points (get-dynamic-point) point)
+		   (apply cont results)))))))
+    (set! call-with-current-continuation dynwind-call/cc)
+    (set! call/cc dynwind-call/cc)
+    ;;finally, the dynamic-wind code
+    (lambda (in body out)
+      (let* ((here (get-dynamic-point))
+	     (point (make-point (if here (+ (point-depth here) 1) 1)
+				in out here)))
+	(in)
+	(set-dynamic-point! point)
+	(call-with-values
+	 (lambda ()
+	   (let ((fk (current-failure-continuation)))
+	     (call/fc
+	      body
+	      (lambda (m e c)
+		(set-dynamic-point! here)
+		(out)
+		(fk m e c)))))
+	 (lambda results
+	   (set-dynamic-point! here)
+	   (out)
+	   (apply values results)))))))
+
+;(define dynamic-wind 
+;  (lambda args
+;    (eval '(let ()
+;	     (define *here* (list #f))
 	     
-	     (define original-cwcc call-with-current-continuation)
+;	     (define original-cwcc call-with-current-continuation)
 	     
-	     (define (reroot! there)
-	       (if (not (eq? *here* there))
-		   (begin
-		     (reroot! (cdr there))
-		     (let ((before (caar there)) (after (cdar there)))
-		       (set-car! *here* (cons after before))
-		       (set-cdr! *here* there)
-		       (set-car! there #f)
-		       (set-cdr! there '())
-		       (set! *here* there)
-		       (before)))))                                   
+;	     (define (reroot! there)
+;	       (if (not (eq? *here* there))
+;		   (begin
+;		     (reroot! (cdr there))
+;		     (let ((before (caar there)) (after (cdar there)))
+;		       (set-car! *here* (cons after before))
+;		       (set-cdr! *here* there)
+;		       (set-car! there #f)
+;		       (set-cdr! there '())
+;		       (set! *here* there)
+;		       (before)))))                                   
 	     
-	     (set! dynwind-call/cc
-		   (lambda (proc)
-		     (let ((here *here*))
-		       (original-cwcc
-			(lambda (cont)
-			  (proc (lambda results
-				  (reroot! here)
-				  (apply cont results))))))))
+;	     (set! dynwind-call/cc
+;		   (lambda (proc)
+;		     (let ((here *here*))
+;		       (original-cwcc
+;			(lambda (cont)
+;			  (proc (lambda results
+;				  (reroot! here)
+;				  (apply cont results))))))))
 	     
-	     (set! dynamic-wind
-		   (lambda (before during after)
-		     (let ((here *here*))
-		       (reroot! (cons (cons before after) here))
-		       (call-with-values
-			   (lambda ()
-			     (call/fc 
-			      during
-			      (lambda (m e c)
-				(reroot! here)
-				(c m e (current-failure-continuation)))))
-			 (lambda results
-			   (reroot! here)
-			   (apply values results))))))
+;	     (set! dynamic-wind
+;		   (lambda (before during after)
+;		     (let ((here *here*))
+;		       (reroot! (cons (cons before after) here))
+;		       (call-with-values
+;			   (lambda ()
+;			     (call/fc 
+;			      during
+;			      (lambda (m e c)
+;				(reroot! here)
+;				(c m e (current-failure-continuation)))))
+;			 (lambda results
+;			   (reroot! here)
+;			   (apply values results))))))
 	     
-	     (set! call/cc dynwind-call/cc)
-	     (set! call-with-current-continuation dynwind-call/cc)))
-    (apply (getprop 'dynamic-wind) args)))
+;	     (set! call/cc dynwind-call/cc)
+;	     (set! call-with-current-continuation dynwind-call/cc)))
+;    (apply (getprop 'dynamic-wind) args)))
   
 ;;;; "ratize.scm" Convert number to rational number (ported from SLIB)
 
