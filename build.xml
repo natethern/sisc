@@ -18,10 +18,12 @@
     <property name="docdir" value="${basedir}/doc"/>
     <property name="gendocdir" value="${docdir}/generated"/>
     <property name="schemedir" value="${basedir}/scheme-src"/>
+    <property name="tmpdir" value="${basedir}/tmp"/>
     <property name="packagename" value="sisc"/>
     <property name="basejar" value="sisc.jar"/>
 <!--    <property name="classopt" value="yes"/>-->
     <property name="optjar" value="sisc-opt.jar"/>
+    <property name="libjar" value="sisc-lib.jar"/>
     <property name="srfisll" value="${basedir}/boot/srfi.sll"/>
     <property name="heap" value="${basedir}/boot/sisc.shp"/>
     <property name="quantity-type" value="apfloat"/>
@@ -49,11 +51,11 @@
           description="Remove generated sources, class files and jar files">
     <delete dir="${classdir}"/>
     <delete dir="${gendocdir}"/>
+    <delete dir="${tmpdir}"/>
     <delete file="${docdir}/sss/style.xsl"/>
     <delete file="${basedir}/${basejar}"/>
     <delete file="${basedir}/${optjar}"/>
     <delete file="${heap}"/>
-    <delete file="${srfisll}"/>
     <delete file="${basedir}/data/Quantity.java"/>
     <delete file="${basedir}/Conf.java"/>
   </target> 
@@ -138,8 +140,8 @@
     </jar>
     <jar jarfile="${basedir}/${optjar}">
       <fileset dir="${classdir}">
-	<include name="sisc/boot/**"/>
-	<include name="sisc/modules/**"/>
+        <include name="sisc/boot/**"/>
+        <include name="sisc/modules/**"/>
         <exclude name="sisc/modules/io/IO*.class"/>
         <exclude name="sisc/modules/Primitives*.class"/>
         <exclude name="sisc/modules/R5RS*.class"/>
@@ -148,6 +150,7 @@
   </target>
 
   <target name="srfi-sll" depends="full-heap" unless="lite">
+    <mkdir dir="${tmpdir}/sisc/libs"/>
     <java classname="sisc.REPL"
           classpath="${classdir}"
           dir="${schemedir}"
@@ -157,6 +160,14 @@
 	<arg value="srfi-sll.scm"/>
     </java>
   </target> 
+
+  <target name="sisc-libs" depends="srfi-sll">
+    <jar jarfile="${basedir}/boot/sisc-libs.jar">
+      <fileset dir="${tmpdir}">
+    	<include name="*/**"/>
+      </fileset>
+    </jar>
+  </target>
 
 <!--  <target name="srfi-sce" depends="full-heap" unless="lite">
     <java classname="sisc.REPL"

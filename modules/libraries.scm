@@ -1,8 +1,11 @@
 (define *libraries* (make-hashtable))
 
 (define (locate-library lib)
-  (or (find-resource (string-append lib ".sce"))
-      (find-resource (string-append lib ".scm"))))
+  (define (suffixed-lib ext)
+    (find-resource (string-append lib "." ext)))
+  (or (suffixed-lib "sll")
+      (suffixed-lib "sce")
+      (suffixed-lib "scm")))
 
 (define (require-library lib)
   (synchronized
