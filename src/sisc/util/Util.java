@@ -1,6 +1,7 @@
 package sisc.util;
 
 import java.util.*;
+import java.security.AccessControlException;
 import java.text.*;
 import java.net.*;
 import sisc.data.*;
@@ -15,514 +16,613 @@ import java.lang.reflect.Constructor;
 
 public abstract class Util implements Defaults, Version {
 
-    public static final boolean caseSensitive =
-        System.getProperty("sisc.caseSensitive",
-                           new Boolean(DEFAULT_CASE_SENSITIVE).toString()).equals("true");
-    public static final boolean permitInterrupts =
-        System.getProperty("sisc.permitInterrupts",
-                           new Boolean(DEFAULT_PERMIT_INTERRUPTS).toString()).equals("true");
-    public static final int minFloatPrecision =
-        Integer.parseInt(System.getProperty("sisc.minFloatPrecision",
-                                            Integer.toString(DEFAULT_MIN_FLOAT_PRECISION)));
-    public static final int maxFloatPrecision =
-        Integer.parseInt(System.getProperty("sisc.maxFloatPrecision",
-                                            Integer.toString(DEFAULT_MAX_FLOAT_PRECISION)));
-
-    protected static final Value[] ZV=new Value[0];
-    protected static final Quantity FIVE=Quantity.valueOf(5);
-    protected static final Expression APPEVAL=new AppEval();
-
-    public static EOFObject EOF=EOFObject.EOF;
-    public static EmptyList EMPTYLIST=EmptyList.EMPTYLIST;
-    public static SchemeVoid VOID=SchemeVoid.VOID;
-    public static SchemeBoolean
-        TRUE=SchemeBoolean.TRUE,
-        FALSE=SchemeBoolean.FALSE;
-
-    public static Symbol
-        BEGIN=Symbol.get("begin"),
-        ERRORK=Symbol.get("error-continuation"),
-        EXPSC=Symbol.get("*sc-expander*"),
-        EXPTOP=Symbol.get("*top*"),
-        FCONT=Symbol.get("failure-continuation"),
-        QUOTE=Symbol.get("quote"),
-        JEXCEPTION=Symbol.get("java-exception"),
-        LAMBDA=Symbol.get("lambda"),
-        LOCATION=Symbol.get("location"),
-        MESSAGE=Symbol.get("message"),
-        NAME=Symbol.get("name"),
-        OTHER=Symbol.get("other"),
-        PARENT=Symbol.get("parent"),
-        REPORT=Symbol.get("*report*"),
-        SETBANG=Symbol.get("set!"),
-        SISC=Symbol.get("*sisc*"),
-        SISC_SPECIFIC=Symbol.get("*sisc-specific*"),
-        SYMENV=Symbol.get("*symenv*"),
-        THIS=Symbol.get("this"),
-        TOPLEVEL=Symbol.get("*toplevel*"),
-        BACKQUOTE=Symbol.get("quasiquote"),
-        UNQUOTE=Symbol.get("unquote"),
-        UNQUOTE_SPLICING=Symbol.get("unquote-splicing"),
-        EVAL=Symbol.get("eval");
-
-    
-    public static String warn(String messageClass) {
-        StringBuffer b=new StringBuffer("{");
-        b.append(liMessage(SISCB, "warning"));
-        b.append(": ");
-        b.append(liMessage(SISCB, messageClass));
-        b.append(')');
-        return b.toString();
-    }
-
-    public static String warn(String messageClass, String arg) {
-        StringBuffer b=new StringBuffer("{");
-        b.append(liMessage(SISCB, "warning"));
-        b.append(": ");
-        b.append(liMessage(SISCB, messageClass, arg));
-        b.append(')');
-        return b.toString();
-    }
-
-    static Class JOBJ=null;
-    static Class[] OBJARRY=new Class[] { Object.class };
-    static Constructor JOBJCONST=null;
-    static {
-	try {
-	    JOBJ=Class.forName("sisc.modules.s2j.JavaObject");
-	    JOBJCONST=JOBJ.getConstructor(OBJARRY);
-	} catch (Exception cnf) {}
-    }
-
-    public static Value javaWrap(Object o) {
-	if (JOBJ!=null)
-	    try {
-		return (Value)JOBJCONST.newInstance(new Object[] {o});
-	    } catch (Exception ie) {}
-	return FALSE;
-    }
-
-    public static void error(Interpreter r, Value where, String errormessage,
-                             Pair moreData) 
-        throws ContinuationException {
-        error(r, append(moreData,
-                        list(new Pair(MESSAGE, new SchemeString(errormessage)),
-                             new Pair(LOCATION, where))));
-    }
-
-
-    public static void error(Interpreter r, Value where, String errormessage,
-                             Exception e) 
-        throws ContinuationException {
-        error(r, list(new Pair(MESSAGE, new SchemeString(errormessage)),
-		      new Pair(LOCATION, where),
-		      new Pair(JEXCEPTION, javaWrap(e))));
-    }
-
-    public static void error(Interpreter r, Value where, String errormessage)
-        throws ContinuationException {
-        error(r, list(new Pair(MESSAGE, new SchemeString(errormessage)),
-                      new Pair(LOCATION, where)));
-    }
-
-    public static void error(Interpreter r, String errormessage, Pair moreData)
-        throws ContinuationException {
-        error(r, new Pair(new Pair(MESSAGE, new SchemeString(errormessage)),
-                          moreData));
-    }
-                             
-    public static void error(Interpreter r, String errormessage) 
-        throws ContinuationException {
-        error(r, list(new Pair(MESSAGE, new SchemeString(errormessage))));
-    }
-
-    public static void error(Interpreter r, Value errormessage) 
-        throws ContinuationException {
-        error(r, list(new Pair(MESSAGE, errormessage)));
-    }
-
-    public static ClassLoader currentClassLoader() {
-        ClassLoader cl = null;
-        try {
-            cl = Thread.currentThread().getContextClassLoader();
-        } catch (java.security.AccessControlException e) {}
-        if (cl == null) {
-            cl = ClassLoader.getSystemClassLoader();
-        }
-        if (cl == null) {
-            throw new RuntimeException(liMessage(SISCB, "notclassloader"));
-        }
-        return cl;
-    }
-
-    public static Value read(String expr) throws IOException {
-        InputPort ip=new ReaderInputPort(new StringReader(expr));
-        Parser p = new Parser(new Lexer());
-        Value res = p.nextExpression(ip);
-        if (p.nextExpression(ip) != EOF)
-            throw new IOException(liMessage(SISCB, "stringreaderror", expr));
-        return res;
-    }
-
-    public static void error(Interpreter r, Pair error)
-    throws ContinuationException {
-        r.acc=new Values(new Value[] {
-            error,
-            new ApplyParentFrame(new CallFrame((r.nxp==null?r.lcf.nxp:r.nxp), 
-                                               r.vlr, r.vlk,
-                                               r.env, r.fk, r.stk,
-                                               r.cap).capture(r))});
-        throw new ContinuationException(r.fk);
-    }
-
-    public static String justify(String v, int p, char c) {
-        StringBuffer b=new StringBuffer();
-        while (b.length()<(p-v.length()))
-            b.append(c);
-        return b.append(v).toString();
-    }
-
-    public static final void argCheck(Pair argl, int arity)
-    throws Exception {
-        int x=length(argl);
-        if (x!=arity && arity!=-1)
-            throw new RuntimeException(liMessage(SISCB, "notenoughargs", 
-                                                 new Object[] {new Integer(arity), new Integer(x)}));
-    }
-
-    public static void updateName(Value v, Symbol s) {
-        if (v instanceof NamedValue) {
-            NamedValue nv = (NamedValue)v;
-            if (nv.getName() == null)
-                nv.setName(s);
-        }
-    }
-
-    public static int length(Pair p) {
-        Pair s=p;
-        try {
-            int i=0;
-            for (; p!=EMPTYLIST; i++)
-                p=(Pair)p.cdr;
-            return i;
-        } catch (ClassCastException ce) {
-            throw new RuntimeException(liMessage(SISCB, "notaproperlist", s.synopsis()));
-        }
-    }
-
-    public static Vector pairToExpVect(Pair p) {
-        Vector v=new Vector();
-        for (; p!=EMPTYLIST; p=(Pair)p.cdr) {
-            v.addElement(p.car);
-        }
-
-        return v;
-    }
-
-    public static final void arraycopy(Object[] a1, Object[] a2, int len) {
-        if (len<8) 
-            for (int k=len-1; k>=0; k--) 
-                a1[k]=a2[k];
-        else
-            System.arraycopy(a1, 0, a2, 0, len);
-    }
-
-    public static Expression[] pairToExpressions(Pair p) {
-        Vector v=pairToExpVect(p);
-        Expression[] vs=new Expression[v.size()];
-        v.copyInto(vs);
-        return vs;
-    }
-
-    public static Value[] pairToValues(Pair p) {
-        Vector v=pairToExpVect(p);
-        Value[] vs=new Value[v.size()];
-        v.copyInto(vs);
-        return vs;
-    }
-
-    public static Symbol[] argsToSymbols(Pair p) {
-        if (p==EMPTYLIST) return new Symbol[0];
-        Vector v=new Vector();
-
-        for (; (p.cdr instanceof Pair) &&
-                (p.cdr!=EMPTYLIST);
-             p=(Pair)p.cdr) {
-            v.addElement(p.car);
-        }
-        v.addElement(p.car);
-        if (p.cdr!=EMPTYLIST)
-            v.addElement(p.cdr);
-        Symbol[] vs=new Symbol[v.size()];
-        v.copyInto(vs);
-        return vs;
-    }
-
-    /* Casting checks */
-    public static void typeError(String type, Value o) {
-        typeError(SISCB, type, o);
-    }
-
-    public static void typeError(Symbol bundleName, String type, Value o) {
-        if (o instanceof Values)
-            throw new RuntimeException(liMessage(SISCB, "multiplevalues"));
-        throw new RuntimeException(liMessage(SISCB, "unexpectedarg",
-                                             liMessage(bundleName, type), 
-                                             o.synopsis()));
-    }
-
-    public static final Symbol sym(String s) {
-        return Symbol.get(s);
-    }
-
-    public static final String symval(Value o) {
-        try {
-            return ((Symbol)o).symval;
-        } catch (ClassCastException e) { typeError("symbol", o); }
-        return null;
-    }
-
-    public static final Quantity num(Value o) {
-        try {
-            return (Quantity)o;
-        } catch (ClassCastException e) { typeError("number", o); }
-        return null;
-    }
-
-    public static final Pair pair(Value o) {
-        try {
-            return (Pair)o;
-        } catch (ClassCastException e) { typeError("pair", o); }
-        return null;
-    }
-
-    public static final Procedure proc(Value o) {
-        try {
-            return (Procedure)o;
-        } catch (ClassCastException e) { typeError("procedure", o); }
-        return null;
-    }
-
-    public static final Pair truePair(Value o) {
-        Pair p=pair(o);
-        if (p==EMPTYLIST) typeError("pair", o);
-        return p;
-    }
-
-    public static final char character(Value c) {
-        return chr(c).c;
-    }
-
-    public static final SchemeCharacter chr(Value o) {
-        try {
-            return (SchemeCharacter)o;
-        } catch (ClassCastException e) { typeError("character", o); }
-        return null;
-    }
-
-    public static final String string(Value o) {
-        return str(o).asString();
-    }
-
-    public static final SchemeString str(Value o) {
-        try {
-            return (SchemeString)o;
-        } catch (ClassCastException e) { typeError("string", o); }
-        return null;
-    }
-
-    public static final Symbol symbol(Value o) {
-        try {
-            return (Symbol)o;
-        } catch (ClassCastException e) { typeError("symbol", o); }
-        return null;
-    }
-
-    public static final SchemeVector vec(Value o) {
-        try {
-            return (SchemeVector)o;
-        } catch (ClassCastException e) { typeError("vector", o); }
-        return null;
-    }
-
-    public static final SchemeOutputPort outport(Value o) {
-        try {
-            return (SchemeOutputPort)o;
-        } catch (ClassCastException e) { typeError("output-port", o); }
-        return null;
-    }
-
-    public static final SchemeInputPort inport(Value o) {
-        try {
-            return (SchemeInputPort)o;
-        } catch (ClassCastException e) { typeError("input-port", o); }
-        return null;
-    }
-
-    public static final sisc.env.SymbolicEnvironment env(Value o) {
-        try {
-            return (sisc.env.SymbolicEnvironment)o;
-        } catch (ClassCastException e) { typeError("environment", o); }
-        return null;
-    }
-
-    public static final Box box(Value o) {
-        try {
-            return (Box)o;
-        } catch (ClassCastException e) { typeError("box", o); }
-        return null;
-    }
-
-    public static final CallFrame cont(Value o) {
-        try {
-            return (CallFrame)o;
-        } catch (ClassCastException e) { typeError("continuation", o); }
-        return null;
-    }
-
-    public static final AnnotatedExpr annotated(Value o) {
-        try {
-            return (AnnotatedExpr)o;
-        } catch (ClassCastException e) { typeError("annotatedexpression", o); }
-        return null;
-    }
-
-    public static URL url(Value v) {
-        try {
-            return url(string(v));
-        } catch (MalformedURLException e) {
-            typeError("url", v);
-        }
-        return null;
-    }
-
-    public static URL url(String s) throws MalformedURLException {
-        try {
-            return new URL(s);
-        } catch (MalformedURLException e) {
-            return new URL("file:"+s);
-        }
-    }
-
-    public static URL url(Value current, Value v) {
-        URL c = url(current);
-        String s = string(v);
-        try {
-            return new URL(c, s);
-        } catch (MalformedURLException e) {
-            try {
-                return new URL(c, "file:"+s);
-            } catch (MalformedURLException ee) {
-                typeError("url", v);
-            }
-            return null;
-        }
-    }
-
-    public static final SchemeBoolean truth(boolean b) {
-        return b ? TRUE : FALSE;
-    }
-
-    public static final boolean truth(Value v) {
-        return v != FALSE;
-    }
-
-    /* List functions */
-
-    public static Pair append(Pair p1, Pair p2) {
-        if (p1==EMPTYLIST) return p2;
-        return new Pair(p1.car, append((Pair)p1.cdr, p2));
-    }
-
-    public static final Pair list(Value o1) {
-        return new Pair(o1, EMPTYLIST);
-    }
-
-    public static final Pair list(Value o1, Value o2) {
-        return new Pair(o1, list(o2));
-    }
-
-    public static final Pair list(Value o1, Value o2, Value o3) {
-        return new Pair(o1, list(o2, o3));
-    }
-
-    public static final Pair valArrayToList(Value[] r, int offset, int len) {
-        Pair p=EMPTYLIST;
-        for (int i=(offset+len)-1; i>=offset; i--) {
-            p=new Pair(r[i], p);
-        }
-        return p;
-    }
-
-    /* Localization and Internationalization */
-    public static Symbol SISCB=Symbol.intern("sisc.Messages");
-    public static WeakHashMap bundles=new WeakHashMap();
-    static Locale myLocale=Locale.getDefault();
-    static MessageFormat formatter=new MessageFormat("");
-
-    static {
-        formatter.setLocale(myLocale);
-    }
-
-    public static void registerBundle(Symbol bundleName) 
-        throws MissingResourceException {
-        ResourceBundle b=ResourceBundle.getBundle(bundleName.symval);
-        bundles.put(bundleName, b);
-    }
-
-    public static String liMessage(Symbol bundleName, String messageName) {
-        ResourceBundle bundle=(ResourceBundle)bundles.get(bundleName);
-        try {
-            if (bundle==null) {
-                registerBundle(bundleName);
-                bundle=(ResourceBundle)bundles.get(bundleName);
-            }
-            return bundle.getString(messageName);
-        } catch (MissingResourceException mr) {
-            if (!bundleName.equals(SISCB))
-                return liMessage(SISCB, messageName);
-            else
-                return "<localized message not found: "+messageName+">";
-        }
-    }
-
-    public static String liMessage(Symbol bundle, 
-                                   String messageName, String arg1) {
-        return MessageFormat.format(liMessage(bundle, messageName),
-                                new Object[] { arg1 });
-    }
-
-    public static String liMessage(Symbol bundle, String messageName, 
-                                   String arg1, String arg2) {
-        return MessageFormat.format(liMessage(bundle, messageName),
-                                new Object[] { arg1, arg2 });
-    }
-    
-    public static String liMessage(Symbol bundle, String messageName, 
-                                   String arg1, String arg2,
-                                   String arg3) {
-        return MessageFormat.format(liMessage(bundle, messageName),
-                                new Object[] { arg1, arg2, arg3 });
-    }
-    
-    public static String liMessage(Symbol bundle, String messageName, 
-                                   String arg1, String arg2,
-                                   String arg3, String arg4) {
-        return MessageFormat.format(liMessage(bundle, messageName),
-                                new Object[] { arg1, arg2, arg3, arg4 });
-    }
-    
-    public static String liMessage(Symbol bundle, String messageName, 
-                                   String arg1, int arg2, int arg3) {
-        return MessageFormat.format(liMessage(bundle, messageName),
-                                new Object[] { arg1, new Integer(arg2),
-                                               new Integer(arg3)});
-    }
-
-    public static String liMessage(Symbol bundle, String messageName,
-                                   Object[] args) {
-        return MessageFormat.format(liMessage(bundle, messageName), args);
-    }
+	static String safeGetProperty(String key, String def) {
+		try {
+			return System.getProperty(key, def);
+		} catch (AccessControlException ex) {
+			return def;
+		}
+	}
+
+	public static final boolean caseSensitive =
+		safeGetProperty(
+			"sisc.caseSensitive",
+			new Boolean(DEFAULT_CASE_SENSITIVE).toString()).equals("true");
+	public static final boolean permitInterrupts =
+		safeGetProperty(
+			"sisc.permitInterrupts",
+			new Boolean(DEFAULT_PERMIT_INTERRUPTS).toString()).equals("true");
+	public static final int minFloatPrecision =
+		Integer.parseInt(
+			safeGetProperty(
+				"sisc.minFloatPrecision",
+				Integer.toString(DEFAULT_MIN_FLOAT_PRECISION)));
+	public static final int maxFloatPrecision =
+		Integer.parseInt(
+			safeGetProperty(
+				"sisc.maxFloatPrecision",
+				Integer.toString(DEFAULT_MAX_FLOAT_PRECISION)));
+
+	protected static final Value[] ZV = new Value[0];
+	protected static final Quantity FIVE = Quantity.valueOf(5);
+	protected static final Expression APPEVAL = new AppEval();
+
+	public static EOFObject EOF = EOFObject.EOF;
+	public static EmptyList EMPTYLIST = EmptyList.EMPTYLIST;
+	public static SchemeVoid VOID = SchemeVoid.VOID;
+	public static SchemeBoolean TRUE = SchemeBoolean.TRUE,
+		FALSE = SchemeBoolean.FALSE;
+
+	public static Symbol BEGIN = Symbol.get("begin"),
+		ERRORK = Symbol.get("error-continuation"),
+		EXPSC = Symbol.get("*sc-expander*"),
+		EXPTOP = Symbol.get("*top*"),
+		FCONT = Symbol.get("failure-continuation"),
+		QUOTE = Symbol.get("quote"),
+		JEXCEPTION = Symbol.get("java-exception"),
+		LAMBDA = Symbol.get("lambda"),
+		LOCATION = Symbol.get("location"),
+		MESSAGE = Symbol.get("message"),
+		NAME = Symbol.get("name"),
+		OTHER = Symbol.get("other"),
+		PARENT = Symbol.get("parent"),
+		REPORT = Symbol.get("*report*"),
+		SETBANG = Symbol.get("set!"),
+		SISC = Symbol.get("*sisc*"),
+		SISC_SPECIFIC = Symbol.get("*sisc-specific*"),
+		SYMENV = Symbol.get("*symenv*"),
+		THIS = Symbol.get("this"),
+		TOPLEVEL = Symbol.get("*toplevel*"),
+		BACKQUOTE = Symbol.get("quasiquote"),
+		UNQUOTE = Symbol.get("unquote"),
+		UNQUOTE_SPLICING = Symbol.get("unquote-splicing"),
+		EVAL = Symbol.get("eval");
+
+	public static String warn(String messageClass) {
+		StringBuffer b = new StringBuffer("{");
+		b.append(liMessage(SISCB, "warning"));
+		b.append(": ");
+		b.append(liMessage(SISCB, messageClass));
+		b.append(')');
+		return b.toString();
+	}
+
+	public static String warn(String messageClass, String arg) {
+		StringBuffer b = new StringBuffer("{");
+		b.append(liMessage(SISCB, "warning"));
+		b.append(": ");
+		b.append(liMessage(SISCB, messageClass, arg));
+		b.append(')');
+		return b.toString();
+	}
+
+	static Class JOBJ = null;
+	static Class[] OBJARRY = new Class[] { Object.class };
+	static Constructor JOBJCONST = null;
+	static {
+		try {
+			JOBJ = Class.forName("sisc.modules.s2j.JavaObject");
+			JOBJCONST = JOBJ.getConstructor(OBJARRY);
+		} catch (Exception cnf) {
+		}
+	}
+
+	public static Value javaWrap(Object o) {
+		if (JOBJ != null)
+			try {
+				return (Value) JOBJCONST.newInstance(new Object[] { o });
+			} catch (Exception ie) {
+			}
+		return FALSE;
+	}
+
+	public static void error(
+		Interpreter r,
+		Value where,
+		String errormessage,
+		Pair moreData)
+		throws ContinuationException {
+		error(
+			r,
+			append(
+				moreData,
+				list(
+					new Pair(MESSAGE, new SchemeString(errormessage)),
+					new Pair(LOCATION, where))));
+	}
+
+	public static void error(
+		Interpreter r,
+		Value where,
+		String errormessage,
+		Exception e)
+		throws ContinuationException {
+		error(
+			r,
+			list(
+				new Pair(MESSAGE, new SchemeString(errormessage)),
+				new Pair(LOCATION, where),
+				new Pair(JEXCEPTION, javaWrap(e))));
+	}
+
+	public static void error(Interpreter r, Value where, String errormessage)
+		throws ContinuationException {
+		error(
+			r,
+			list(
+				new Pair(MESSAGE, new SchemeString(errormessage)),
+				new Pair(LOCATION, where)));
+	}
+
+	public static void error(Interpreter r, String errormessage, Pair moreData)
+		throws ContinuationException {
+		error(
+			r,
+			new Pair(
+				new Pair(MESSAGE, new SchemeString(errormessage)),
+				moreData));
+	}
+
+	public static void error(Interpreter r, String errormessage)
+		throws ContinuationException {
+		error(r, list(new Pair(MESSAGE, new SchemeString(errormessage))));
+	}
+
+	public static void error(Interpreter r, Value errormessage)
+		throws ContinuationException {
+		error(r, list(new Pair(MESSAGE, errormessage)));
+	}
+
+	public static ClassLoader currentClassLoader() {
+		ClassLoader cl = null;
+		try {
+			cl = Thread.currentThread().getContextClassLoader();
+		} catch (java.security.AccessControlException e) {
+		}
+		if (cl == null) {
+			cl = ClassLoader.getSystemClassLoader();
+		}
+		if (cl == null) {
+			throw new RuntimeException(liMessage(SISCB, "notclassloader"));
+		}
+		return cl;
+	}
+
+	public static Value read(String expr) throws IOException {
+		InputPort ip = new ReaderInputPort(new StringReader(expr));
+		Parser p = new Parser(new Lexer());
+		Value res = p.nextExpression(ip);
+		if (p.nextExpression(ip) != EOF)
+			throw new IOException(liMessage(SISCB, "stringreaderror", expr));
+		return res;
+	}
+
+	public static void error(Interpreter r, Pair error)
+		throws ContinuationException {
+		r.acc =
+			new Values(
+				new Value[] {
+					error,
+					new ApplyParentFrame(
+						new CallFrame(
+							(r.nxp == null ? r.lcf.nxp : r.nxp),
+							r.vlr,
+							r.vlk,
+							r.env,
+							r.fk,
+							r.stk,
+							r.cap).capture(
+							r))});
+		throw new ContinuationException(r.fk);
+	}
+
+	public static String justify(String v, int p, char c) {
+		StringBuffer b = new StringBuffer();
+		while (b.length() < (p - v.length()))
+			b.append(c);
+		return b.append(v).toString();
+	}
+
+	public static final void argCheck(Pair argl, int arity) throws Exception {
+		int x = length(argl);
+		if (x != arity && arity != -1)
+			throw new RuntimeException(
+				liMessage(
+					SISCB,
+					"notenoughargs",
+					new Object[] { new Integer(arity), new Integer(x)}));
+	}
+
+	public static void updateName(Value v, Symbol s) {
+		if (v instanceof NamedValue) {
+			NamedValue nv = (NamedValue) v;
+			if (nv.getName() == null)
+				nv.setName(s);
+		}
+	}
+
+	public static int length(Pair p) {
+		Pair s = p;
+		try {
+			int i = 0;
+			for (; p != EMPTYLIST; i++)
+				p = (Pair) p.cdr;
+			return i;
+		} catch (ClassCastException ce) {
+			throw new RuntimeException(
+				liMessage(SISCB, "notaproperlist", s.synopsis()));
+		}
+	}
+
+	public static Vector pairToExpVect(Pair p) {
+		Vector v = new Vector();
+		for (; p != EMPTYLIST; p = (Pair) p.cdr) {
+			v.addElement(p.car);
+		}
+
+		return v;
+	}
+
+	public static final void arraycopy(Object[] a1, Object[] a2, int len) {
+		if (len < 8)
+			for (int k = len - 1; k >= 0; k--)
+				a1[k] = a2[k];
+		else
+			System.arraycopy(a1, 0, a2, 0, len);
+	}
+
+	public static Expression[] pairToExpressions(Pair p) {
+		Vector v = pairToExpVect(p);
+		Expression[] vs = new Expression[v.size()];
+		v.copyInto(vs);
+		return vs;
+	}
+
+	public static Value[] pairToValues(Pair p) {
+		Vector v = pairToExpVect(p);
+		Value[] vs = new Value[v.size()];
+		v.copyInto(vs);
+		return vs;
+	}
+
+	public static Symbol[] argsToSymbols(Pair p) {
+		if (p == EMPTYLIST)
+			return new Symbol[0];
+		Vector v = new Vector();
+
+		for (;
+			(p.cdr instanceof Pair) && (p.cdr != EMPTYLIST);
+			p = (Pair) p.cdr) {
+			v.addElement(p.car);
+		}
+		v.addElement(p.car);
+		if (p.cdr != EMPTYLIST)
+			v.addElement(p.cdr);
+		Symbol[] vs = new Symbol[v.size()];
+		v.copyInto(vs);
+		return vs;
+	}
+
+	/* Casting checks */
+	public static void typeError(String type, Value o) {
+		typeError(SISCB, type, o);
+	}
+
+	public static void typeError(Symbol bundleName, String type, Value o) {
+		if (o instanceof Values)
+			throw new RuntimeException(liMessage(SISCB, "multiplevalues"));
+		throw new RuntimeException(
+			liMessage(
+				SISCB,
+				"unexpectedarg",
+				liMessage(bundleName, type),
+				o.synopsis()));
+	}
+
+	public static final Symbol sym(String s) {
+		return Symbol.get(s);
+	}
+
+	public static final String symval(Value o) {
+		try {
+			return ((Symbol) o).symval;
+		} catch (ClassCastException e) {
+			typeError("symbol", o);
+		}
+		return null;
+	}
+
+	public static final Quantity num(Value o) {
+		try {
+			return (Quantity) o;
+		} catch (ClassCastException e) {
+			typeError("number", o);
+		}
+		return null;
+	}
+
+	public static final Pair pair(Value o) {
+		try {
+			return (Pair) o;
+		} catch (ClassCastException e) {
+			typeError("pair", o);
+		}
+		return null;
+	}
+
+	public static final Procedure proc(Value o) {
+		try {
+			return (Procedure) o;
+		} catch (ClassCastException e) {
+			typeError("procedure", o);
+		}
+		return null;
+	}
+
+	public static final Pair truePair(Value o) {
+		Pair p = pair(o);
+		if (p == EMPTYLIST)
+			typeError("pair", o);
+		return p;
+	}
+
+	public static final char character(Value c) {
+		return chr(c).c;
+	}
+
+	public static final SchemeCharacter chr(Value o) {
+		try {
+			return (SchemeCharacter) o;
+		} catch (ClassCastException e) {
+			typeError("character", o);
+		}
+		return null;
+	}
+
+	public static final String string(Value o) {
+		return str(o).asString();
+	}
+
+	public static final SchemeString str(Value o) {
+		try {
+			return (SchemeString) o;
+		} catch (ClassCastException e) {
+			typeError("string", o);
+		}
+		return null;
+	}
+
+	public static final Symbol symbol(Value o) {
+		try {
+			return (Symbol) o;
+		} catch (ClassCastException e) {
+			typeError("symbol", o);
+		}
+		return null;
+	}
+
+	public static final SchemeVector vec(Value o) {
+		try {
+			return (SchemeVector) o;
+		} catch (ClassCastException e) {
+			typeError("vector", o);
+		}
+		return null;
+	}
+
+	public static final SchemeOutputPort outport(Value o) {
+		try {
+			return (SchemeOutputPort) o;
+		} catch (ClassCastException e) {
+			typeError("output-port", o);
+		}
+		return null;
+	}
+
+	public static final SchemeInputPort inport(Value o) {
+		try {
+			return (SchemeInputPort) o;
+		} catch (ClassCastException e) {
+			typeError("input-port", o);
+		}
+		return null;
+	}
+
+	public static final sisc.env.SymbolicEnvironment env(Value o) {
+		try {
+			return (sisc.env.SymbolicEnvironment) o;
+		} catch (ClassCastException e) {
+			typeError("environment", o);
+		}
+		return null;
+	}
+
+	public static final Box box(Value o) {
+		try {
+			return (Box) o;
+		} catch (ClassCastException e) {
+			typeError("box", o);
+		}
+		return null;
+	}
+
+	public static final CallFrame cont(Value o) {
+		try {
+			return (CallFrame) o;
+		} catch (ClassCastException e) {
+			typeError("continuation", o);
+		}
+		return null;
+	}
+
+	public static final AnnotatedExpr annotated(Value o) {
+		try {
+			return (AnnotatedExpr) o;
+		} catch (ClassCastException e) {
+			typeError("annotatedexpression", o);
+		}
+		return null;
+	}
+
+	public static URL url(Value v) {
+		try {
+			return url(string(v));
+		} catch (MalformedURLException e) {
+			typeError("url", v);
+		}
+		return null;
+	}
+
+	public static URL url(String s) throws MalformedURLException {
+		try {
+			return new URL(s);
+		} catch (MalformedURLException e) {
+			return new URL("file:" + s);
+		}
+	}
+
+	public static URL url(Value current, Value v) {
+		URL c = url(current);
+		String s = string(v);
+		try {
+			return new URL(c, s);
+		} catch (MalformedURLException e) {
+			try {
+				return new URL(c, "file:" + s);
+			} catch (MalformedURLException ee) {
+				typeError("url", v);
+			}
+			return null;
+		}
+	}
+
+	public static final SchemeBoolean truth(boolean b) {
+		return b ? TRUE : FALSE;
+	}
+
+	public static final boolean truth(Value v) {
+		return v != FALSE;
+	}
+
+	/* List functions */
+
+	public static Pair append(Pair p1, Pair p2) {
+		if (p1 == EMPTYLIST)
+			return p2;
+		return new Pair(p1.car, append((Pair) p1.cdr, p2));
+	}
+
+	public static final Pair list(Value o1) {
+		return new Pair(o1, EMPTYLIST);
+	}
+
+	public static final Pair list(Value o1, Value o2) {
+		return new Pair(o1, list(o2));
+	}
+
+	public static final Pair list(Value o1, Value o2, Value o3) {
+		return new Pair(o1, list(o2, o3));
+	}
+
+	public static final Pair valArrayToList(Value[] r, int offset, int len) {
+		Pair p = EMPTYLIST;
+		for (int i = (offset + len) - 1; i >= offset; i--) {
+			p = new Pair(r[i], p);
+		}
+		return p;
+	}
+
+	/* Localization and Internationalization */
+	public static Symbol SISCB = Symbol.intern("sisc.Messages");
+	public static WeakHashMap bundles = new WeakHashMap();
+	static Locale myLocale = Locale.getDefault();
+	static MessageFormat formatter = new MessageFormat("");
+
+	static {
+		formatter.setLocale(myLocale);
+	}
+
+	public static void registerBundle(Symbol bundleName)
+		throws MissingResourceException {
+		ResourceBundle b = ResourceBundle.getBundle(bundleName.symval);
+		bundles.put(bundleName, b);
+	}
+
+	public static String liMessage(Symbol bundleName, String messageName) {
+		ResourceBundle bundle = (ResourceBundle) bundles.get(bundleName);
+		try {
+			if (bundle == null) {
+				registerBundle(bundleName);
+				bundle = (ResourceBundle) bundles.get(bundleName);
+			}
+			return bundle.getString(messageName);
+		} catch (MissingResourceException mr) {
+			if (!bundleName.equals(SISCB))
+				return liMessage(SISCB, messageName);
+			else
+				return "<localized message not found: " + messageName + ">";
+		}
+	}
+
+	public static String liMessage(
+		Symbol bundle,
+		String messageName,
+		String arg1) {
+		return MessageFormat.format(
+			liMessage(bundle, messageName),
+			new Object[] { arg1 });
+	}
+
+	public static String liMessage(
+		Symbol bundle,
+		String messageName,
+		String arg1,
+		String arg2) {
+		return MessageFormat.format(
+			liMessage(bundle, messageName),
+			new Object[] { arg1, arg2 });
+	}
+
+	public static String liMessage(
+		Symbol bundle,
+		String messageName,
+		String arg1,
+		String arg2,
+		String arg3) {
+		return MessageFormat.format(
+			liMessage(bundle, messageName),
+			new Object[] { arg1, arg2, arg3 });
+	}
+
+	public static String liMessage(
+		Symbol bundle,
+		String messageName,
+		String arg1,
+		String arg2,
+		String arg3,
+		String arg4) {
+		return MessageFormat.format(
+			liMessage(bundle, messageName),
+			new Object[] { arg1, arg2, arg3, arg4 });
+	}
+
+	public static String liMessage(
+		Symbol bundle,
+		String messageName,
+		String arg1,
+		int arg2,
+		int arg3) {
+		return MessageFormat.format(
+			liMessage(bundle, messageName),
+			new Object[] { arg1, new Integer(arg2), new Integer(arg3)});
+	}
+
+	public static String liMessage(
+		Symbol bundle,
+		String messageName,
+		Object[] args) {
+		return MessageFormat.format(liMessage(bundle, messageName), args);
+	}
 }
 
 /*
