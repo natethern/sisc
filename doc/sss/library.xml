@@ -39,13 +39,15 @@
               <methodparam>
                 <parameter>(binding</parameter>
               </methodparam>
-              <methodparam repeat="repeat">
+              <methodparam rep="repeat">
                 <parameter>binding</parameter>
-              </methodparam>)
-            <methodparam>
-              <parameter>expression</parameter>
-            </methodparam>
-          </methodsynopsis>
+              </methodparam>
+              <methodparam><parameter>)</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>expression</parameter>
+              </methodparam>
+            </methodsynopsis>
             <blockquote>
               <para>
                 Evaluates the expression in the body, which
@@ -85,6 +87,8 @@
               </methodparam>
               <methodparam rep="repeat">
                 <parameter>vars</parameter>
+              </methodparam>
+              <methodparam><parameter>)</parameter>
               </methodparam>
               <methodparam>
                 <parameter>body</parameter>
