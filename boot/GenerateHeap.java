@@ -41,6 +41,7 @@ import java.util.zip.*;
 import java.util.zip.GZIPInputStream;
 import sisc.*;
 import sisc.compiler.*;
+import sisc.ser.*;
 import sisc.data.*;
 import sisc.exprs.*;
 
@@ -92,9 +93,10 @@ public class GenerateHeap {
             r5rs_bindings.add(bindingNames[i]);
     }
 
-    static AssociativeEnvironment[] classify(AssociativeEnvironment base) {
+    static AssociativeEnvironment[] classify(AssociativeEnvironment base, 
+                                             LibraryBuilder lb) {
         AssociativeEnvironment[] rv=new AssociativeEnvironment[2];
-        rv[0]=new AssociativeEnvironment();
+        rv[0]=new AssociativeEnvironment(new LibraryAE(null, lb));//new AssociativeEnvironment();
         rv[1]=base;
         rv[1].setParent(rv[0]);
 
@@ -135,7 +137,12 @@ public class GenerateHeap {
           System.exit(1);
         }
 
-	AppContext ctx = new AppContext(sisc.compiler.Compiler.addSpecialForms(new AssociativeEnvironment(Util.TOPLEVEL)));
+        LibraryBuilder lb=new LibraryBuilder();
+        AssociativeEnvironment symenv=new AssociativeEnvironment();
+        AssociativeEnvironment toplevel=sisc.compiler.Compiler.addSpecialForms(new AssociativeEnvironment(new LibraryAE(null, lb)));
+        symenv.define(Util.TOPLEVEL, toplevel);
+
+	AppContext ctx = new AppContext(symenv);
 
 	Context.register("main", ctx);
 
@@ -148,12 +155,7 @@ public class GenerateHeap {
 
         if (inHeap != null) {
           System.out.println("Reading input heap: " + inHeap);
-          ctx.loadEnv(r, new DataInputStream(
-                             new BufferedInputStream(
-                                 new GZIPInputStream(
-                                     new BufferedInputStream(
-                                         new FileInputStream(inHeap),
-                                         90000)))));
+          ctx.loadEnv(r, new SeekableDataInputStream(new BufferedRandomAccessInputStream(inHeap, "r", 1, 8192)));
         }
 
         r.define(Symbol.get("version"), new SchemeString(Util.VERSION), Util.SISC);
@@ -186,7 +188,7 @@ public class GenerateHeap {
         }
 
         System.err.println("Partitioning bindings...");
-        AssociativeEnvironment[] results=classify(r.lookupContextEnv(Util.TOPLEVEL));
+        AssociativeEnvironment[] results=classify(r.lookupContextEnv(Util.TOPLEVEL), lb);
         AssociativeEnvironment sisc_specific, r5rs, top_level;
         r5rs=results[0];
         sisc_specific=results[1];
@@ -196,7 +198,9 @@ public class GenerateHeap {
 
         top_level=new AssociativeEnvironment(sisc_specific);
         top_level.name=Symbol.get("top-level");
-                                                  
+        top_level.symbolMap.remove(sisc_specific.symbolMap);
+        sisc_specific.symbolMap.remove(r5rs.symbolMap);
+        
         r.defineContextEnv(Util.TOPLEVEL, top_level);
         r.defineContextEnv(Util.REPORT, r5rs);
         r.defineContextEnv(Util.SISC_SPECIFIC, sisc_specific);
@@ -204,11 +208,10 @@ public class GenerateHeap {
         System.out.println("Saving heap...");
 
         try {
-            DataOutputStream out=new DataOutputStream(
-                                     new GZIPOutputStream(
-                                         new BufferedOutputStream(
-                                             new FileOutputStream(outHeap))));
-            ctx.saveEnv(r,out);
+            OutputStream out= //new GZIPOutputStream(
+                                 new BufferedOutputStream(
+                                    new FileOutputStream(outHeap));
+            ctx.saveEnv(r,out,lb);
             out.flush();
             out.close();
         } catch (Exception e) {

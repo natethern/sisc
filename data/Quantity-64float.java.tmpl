@@ -34,7 +34,8 @@ package sisc.data;
 
 import java.lang.ref.SoftReference;
 import java.math.*;
-import sisc.Serializer;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 import java.io.*;
 
 public class Quantity extends Value {
@@ -1331,69 +1332,53 @@ public class Quantity extends Value {
         return rv;
     }
 
-    public void deserialize(Serializer s,
-                            DataInput dis) throws IOException {
+
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            type=s.readBer(dis);
+            type=s.readInt();
             switch (type) {
             case FIXEDINT:
-                val=s.readBer(dis);
+                val=s.readInt();
                 break;
             case INTEG:
-                byte[] buffer=new byte[s.readBer(dis)];
-                dis.readFully(buffer);
-                i=new BigInteger(buffer);
+                i=s.readBigInteger();
                 break;
             case DECIM:
-		d=s.readFloat(dis).doubleValue();
+		d=s.readBigDecimal().doubleValue();
                 break;
             case RATIO:
-                buffer=new byte[s.readBer(dis)];
-                dis.readFully(buffer);
-                i=new BigInteger(buffer);
-                buffer=new byte[s.readBer(dis)];
-                dis.readFully(buffer);
-                de=new BigInteger(buffer);
+                i=s.readBigInteger();
+                de=s.readBigInteger();
                 break;
             case COMPLEX:
-                d=s.readFloat(dis).doubleValue();
-                im=s.readFloat(dis).doubleValue();
+                d=s.readBigDecimal().doubleValue();
+                im=s.readBigDecimal().doubleValue();
                 break;
             }
             simplify();
         }
     }
 
-    protected BigInteger unscaledValue(BigDecimal d) {
-        return d.setScale(0).toBigInteger();
-    }
-
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-            s.writeBer(type, dos);
+            s.writeInt(type);
             switch (type) {
             case FIXEDINT:
-                s.writeBer(val, dos);
+                s.writeInt(val);
                 break;
             case INTEG:
-                byte[] buffer=i.toByteArray();
-                s.writeBer(buffer.length, dos);
-                dos.write(buffer);
+                s.writeBigInteger(i);
                 break;
             case DECIM:
-		s.writeFloat(d, dos);
+                s.writeBigDecimal(new BigDecimal(d));
                 break;
             case RATIO:
-                buffer=i.toByteArray();
-                s.writeBer(buffer.length, dos);
-                dos.write(buffer);
-                buffer=de.toByteArray();
-                s.writeBer(buffer.length, dos);
-                dos.write(buffer);
+                s.writeBigInteger(i);
+                s.writeBigInteger(de);
                 break;
             case COMPLEX:
-		s.writeFloat(d, dos);
-		s.writeFloat(im, dos);
+                s.writeBigDecimal(new BigDecimal(d));
+                s.writeBigDecimal(new BigDecimal(im));
                 break;
             }
         }

@@ -40,6 +40,8 @@ import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class Primitives extends ModuleAdapter {
 
@@ -233,17 +235,15 @@ public class Primitives extends ModuleAdapter {
             return displayNamedOpaque("parameter");
         }
 
-        public void serialize(Serializer s, DataOutput dos)
-            throws IOException {
+        public void serialize(Serializer s) throws IOException {
             if (SERIALIZATION) {
-                s.serialize(v, dos);
+                s.writeExpression(v);
             }
         }
 
-        public void deserialize(Serializer s, DataInput dis)
-            throws IOException {
+        public void deserialize(Deserializer s) throws IOException {
             if (SERIALIZATION) {
-                v = (Value)s.deserialize(dis);
+                v = (Value)s.readExpression();
             }
         }
     }

@@ -35,7 +35,8 @@ package sisc.data;
 import sisc.Util;
 import java.util.Hashtable;
 import java.io.*;
-import sisc.Serializer;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class SchemeCharacter extends Value {
     static final Hashtable humanReadables=new Hashtable(8);
@@ -81,18 +82,17 @@ public class SchemeCharacter extends Value {
         return (int)c;
     }
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-            dos.writeChar(c);
+            s.writeChar(c);
         }
     }
 
     public SchemeCharacter() {}
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            c=dis.readChar();
+            c=s.readChar();
         }
     }
 }

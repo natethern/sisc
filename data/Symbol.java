@@ -34,7 +34,8 @@ package sisc.data;
 
 import java.util.WeakHashMap;
 import java.io.*;
-import sisc.Serializer;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class Symbol extends Value implements Singleton {
 
@@ -102,20 +103,21 @@ public class Symbol extends Value implements Singleton {
         }
     }
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-	    dos.writeBoolean(memo.containsKey(this));
-            dos.writeUTF(symval);
+	    s.writeBoolean(memo.containsKey(this));
+            s.writeUTF(symval);
         }
     }
 
     public Symbol() {}
 
-    public static Expression getValue(DataInput dis) throws IOException {
-	if (dis.readBoolean())
+    public static Expression getValue(Deserializer dis) throws IOException {
+	if (dis.readBoolean()) {
 	    return new Symbol(dis.readUTF());
-	else 
-	    return intern(dis.readUTF());
+        } else {
+            return intern(dis.readUTF());
+        }
     }
 
 }

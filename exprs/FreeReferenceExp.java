@@ -35,6 +35,8 @@ package sisc.exprs;
 import sisc.*;
 import sisc.data.*;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class FreeReferenceExp extends Expression implements Immediate {
     public Symbol sym;
@@ -49,15 +51,6 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public void eval(Interpreter r) throws ContinuationException {
         r.nxp=null;
-	/*	try {
-	    r.acc=lenv.env[envLoc];
-	} catch (ArrayIndexOutOfBoundsException aob) {
-            envLoc=lenv.getLoc(sym);
-            if (envLoc==-1)
-                error(r, liMessage(SISCB,"undefinedvar", sym.write()));
-	    r.acc=lenv.env[envLoc];
-        } 
-	*/
 	if (envLoc>=0) {
 	    r.acc=lenv.env[envLoc];
 	} else {
@@ -69,19 +62,14 @@ public class FreeReferenceExp extends Expression implements Immediate {
     }
 
     public Value getValue(Interpreter r) throws ContinuationException {
-	/*	try {
-	    return lenv.env[envLoc];
-	} catch (ArrayIndexOutOfBoundsException aob) {
-            envLoc=lenv.getLoc(sym);
-            if (envLoc==-1)
-                error(r, liMessage(SISCB,"undefinedvar", sym.write()));
-	    return lenv.env[envLoc];
-        } 
-	*/
 	if (envLoc>=0) {
 	    return lenv.env[envLoc];
 	} else {
-            envLoc=lenv.getLoc(sym);
+            try {
+                envLoc=lenv.getLoc(sym);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             if (envLoc==-1)
                 error(r, liMessage(SISCB,"undefinedvar", sym.write()));
 	    return lenv.env[envLoc];
@@ -92,21 +80,20 @@ public class FreeReferenceExp extends Expression implements Immediate {
         return list(sym("FreeReference-exp"), sym);
     }
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-            s.serialize(sym, dos);
-            s.serialize(lenv, dos);
+            s.writeExpression(sym);
+            s.writeExpression(lenv);
         }
     }
 
     public FreeReferenceExp() {
     }
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            sym=(Symbol)s.deserialize(dis);
-            lenv=(AssociativeEnvironment)s.deserialize(dis);
+            sym=(Symbol)s.readExpression();
+            lenv=(AssociativeEnvironment)s.readExpression();
             envLoc=-1;
         }
     }

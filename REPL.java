@@ -41,6 +41,7 @@ import java.util.zip.*;
 import java.util.jar.*;
 import java.util.*;
 import java.net.*;
+import sisc.ser.*;
 
 public class REPL extends Thread {
 
@@ -52,19 +53,18 @@ public class REPL extends Thread {
         this.dynenv = dynenv;
     }
     
-    public static InputStream findHeap() {
+    public static BufferedRandomAccessInputStream findHeap() {
         try {
             String heapLocation=Util.getSystemProperty("sisc.heapfile", null);
-            InputStream heap=null;
+            BufferedRandomAccessInputStream heap = null;
             if (heapLocation==null) {
                 URL heapURL=ClassLoader.getSystemResource("sisc.heap");
                 if (heapURL==null)
-                    heap=new FileInputStream("sisc.heap");
-                else 
-                    heap=heapURL.openStream();
+                    heap=new BufferedRandomAccessInputStream("sisc.heap","r",1,8192);
+                //                else 
+                //  heap=heapURL.openStream();
             } else 
-                heap=new FileInputStream(heapLocation);
-            heap=new BufferedInputStream(new GZIPInputStream(new BufferedInputStream(heap)), 65536);
+                heap=new BufferedRandomAccessInputStream(heapLocation, "r", 1, 8192);
 
             return heap;
         } catch (Exception e) {
@@ -79,16 +79,26 @@ public class REPL extends Thread {
 
     public static boolean initializeInterpreter(Interpreter r,
                                                 String[] args,
-                                                InputStream in)
+                                                BufferedRandomAccessInputStream in)
         throws ClassNotFoundException {
 
         try {
-            r.ctx.loadEnv(r, new DataInputStream(in));
+            r.ctx.loadEnv(r, new SeekableDataInputStream(in));
         } catch (IOException e) {
             System.err.println("\nError loading heap!");
             e.printStackTrace();
             return false;
         }
+
+        try {
+            Properties sysProps=System.getProperties();
+            for (Iterator ir=sysProps.keySet().iterator(); ir.hasNext();) {
+                String key=(String)ir.next();
+                Symbol s=Symbol.get(key);
+                r.define(s, new SchemeString(sysProps.getProperty(key)),
+                         Util.ENVVARS);
+            }
+        } catch (java.security.AccessControlException ace) {}
 
         Symbol loadSymb = Symbol.get("load");
         for (int i=0; i<args.length; i++) {
@@ -197,7 +207,7 @@ public class REPL extends Thread {
             fargs.add(arg);
         }
 
-        InputStream heap=findHeap();
+        BufferedRandomAccessInputStream heap = findHeap();
         if (heap==null) {
             System.err.println(Util.liMessage(Util.SISCB, "noheap"));
             return;

@@ -36,6 +36,8 @@ import sisc.*;
 import sisc.data.*;
 import java.util.*;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class FillRibExp extends Expression {
 
@@ -47,7 +49,7 @@ public class FillRibExp extends Expression {
         this.exp=exp;
         this.pos=pos;
         this.nxp=nxp;
-        this.lastAndRatorImmediate=lari;
+        lastAndRatorImmediate=lari;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
@@ -65,24 +67,23 @@ public class FillRibExp extends Expression {
         return new Pair(sym("FillRib-exp"), new Pair(exp.express(), nxp.express()));
     }
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-            s.serialize(exp, dos);
-            s.writeBer(pos, dos);
-            s.serialize(nxp, dos);
-	    dos.writeBoolean(lastAndRatorImmediate);
+            s.writeExpression(exp);
+            s.writeInt(pos);
+            s.writeExpression(nxp);
+	    s.writeBoolean(lastAndRatorImmediate);
         }
     }
 
     public FillRibExp() {}
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            exp=s.deserialize(dis);
-            pos=s.readBer(dis);
-            nxp=s.deserialize(dis);
-	    lastAndRatorImmediate=dis.readBoolean();
+            exp=s.readExpression();
+            pos=s.readInt();
+            nxp=s.readExpression();
+	    lastAndRatorImmediate=s.readBoolean();
         }
     }
 }

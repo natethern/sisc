@@ -34,18 +34,21 @@ package sisc;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Iterator;
 import sisc.data.*;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class AssociativeEnvironment extends NamedValue {
 
     protected static final float EXPFACT=1.5F;
-    protected Map symbolMap;
+    public Map symbolMap;
     public Value[] env;
-    protected AssociativeEnvironment parent;
+    public AssociativeEnvironment parent;
     protected int nextFree;
-
     public AssociativeEnvironment(AssociativeEnvironment parent) {
         this();
         this.parent=parent;
@@ -69,9 +72,9 @@ public class AssociativeEnvironment extends NamedValue {
     }
 
     public java.util.Set bindingKeys() {
-        java.util.Set res;
+        java.util.Set res=new HashSet();
         synchronized(symbolMap) {
-            res = symbolMap.keySet();
+            res.addAll(symbolMap.keySet());
         }
         if (parent != null) {
             res.addAll(parent.bindingKeys());
@@ -140,6 +143,7 @@ public class AssociativeEnvironment extends NamedValue {
             //otherwise a lookup taking place concurrently might get garbage
             env[nextFree]=v;
             symbolMap.put(s, new Integer(nextFree));
+            if (parent!=null) parent.store(s, v);
             return nextFree++;
         }
     }
@@ -180,33 +184,37 @@ public class AssociativeEnvironment extends NamedValue {
         return symbolMap.keySet().iterator();
     }
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    //This should not be used outside of SISC (Internal only)
+    public void remove(Set keys) {
+        symbolMap.remove(keys);
+    }
+
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-            s.writeBer(symbolMap.size(), dos);
+            s.writeInt(symbolMap.size());
             for (Iterator i=symbolMap.keySet().iterator(); i.hasNext();) {
                 Symbol key=(Symbol)i.next();
-                s.serialize(key, dos);
+                s.writeExpression(key);
                 int loc=((Integer)symbolMap.get(key)).intValue();
-                s.serialize(env[loc], dos);
+                s.writeExpression(env[loc]);
             }
-            s.serialize(parent, dos);
+            s.writeExpression(parent);
         }
     }
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            int size=s.readBer(dis);
+            int size=s.readInt();
             env=new Value[size];
             symbolMap=new HashMap();
             for (int i=0; i<size; i++) {
-                Symbol id=(Symbol)s.deserialize(dis);
-                env[i]=(Value)s.deserialize(dis);
+                Symbol id=(Symbol)s.readExpression();
+                env[i]=(Value)s.readExpression();
                 symbolMap.put(id, new Integer(i));
             }
             nextFree=size;
 
-            parent=(AssociativeEnvironment)s.deserialize(dis);
+            parent=(AssociativeEnvironment)s.readExpression();
         }
     }
 }

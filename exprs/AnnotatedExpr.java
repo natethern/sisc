@@ -35,6 +35,8 @@ package sisc.exprs;
 import sisc.*;
 import sisc.data.*;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class AnnotatedExpr extends Value {
     public Expression expr;
@@ -59,11 +61,11 @@ public class AnnotatedExpr extends Value {
 
     public AnnotatedExpr() {}
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-	    s.serialize(expr, dos);
-	    s.serialize(annotation, dos);
-	    s.serialize(stripped, dos);
+	    s.writeExpression(expr);
+	    s.writeExpression(annotation);
+	    s.writeExpression(stripped);
         }
     }
 
@@ -89,12 +91,11 @@ public class AnnotatedExpr extends Value {
 	return b.toString();
     }
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void readExpression(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-	    expr=s.deserialize(dis);
-	    annotation=(Value)s.deserialize(dis);
-            stripped=(Value)s.deserialize(dis);
+	    expr=s.readExpression();
+	    annotation=(Value)s.readExpression();
+            stripped=(Value)s.readExpression();
         }
     }
 }

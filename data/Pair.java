@@ -34,6 +34,8 @@ package sisc.data;
 
 import java.io.*;
 import sisc.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class Pair extends Value {
     public Value car, cdr;
@@ -119,47 +121,44 @@ public class Pair extends Value {
 
     protected final static int CONT=1, MUTABLE=2;
 
-    public void serialize(Serializer s, DataOutput dos)
-    throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-	    int pflags;
-            Pair rv=this;
+            Pair p=this;
             boolean cont;
             do {
-		cont=!s.seen(rv.cdr) &&
-		    rv.cdr instanceof Pair && 
-		    rv.cdr != EMPTYLIST;
-
-		pflags=
-		    (cont ? CONT : 0) |
-		    (rv instanceof ImmutablePair ? 0 : MUTABLE);
-
-                s.serialize(rv.car, dos);
-		s.writeBer(pflags, dos);
-		
-		if (cont)
-		    rv=(Pair)rv.cdr;
+                s.writeExpression(p.car);
+                cont=p.cdr != null &&
+                    p.cdr instanceof Pair &&
+                    p.cdr != EMPTYLIST &&
+                    !s.seen(p.cdr);
+                s.writeBoolean(cont);
+                if (cont) {
+                    s.writeBoolean(p.cdr instanceof ImmutablePair);
+                    p=(Pair)p.cdr;
+                }
             } while (cont);
-            s.serialize(rv.cdr, dos);
+            s.writeExpression(p.cdr);
         }
     }
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            car=(Value)s.deserialize(dis);
-            Pair rv=this, tmp, head=rv;
-	    int pflags=s.readBer(dis);
-            while ((pflags & CONT) != 0) {
-                tmp=((pflags & MUTABLE) != 0) ? 
-		    new Pair() : 
-		    new ImmutablePair();
-                rv.cdr=tmp;
-                tmp.car=(Value)s.deserialize(dis);
-                rv=tmp;
-		pflags=s.readBer(dis);
-            }
-            rv.cdr=(Value)s.deserialize(dis);
+            Pair p=this;
+            boolean cont;
+            do {
+                p.car=(Value)s.readExpression();
+                cont=s.readBoolean();
+                if (cont) {
+                    Pair n;
+                    if (s.readBoolean()) 
+                        n=new ImmutablePair();
+                    else
+                        n=new Pair();
+                    p.cdr=n;
+                    p=n;
+                }
+            } while (cont);
+            p.cdr=(Value)s.readExpression();
         }
     }
 }

@@ -36,7 +36,6 @@ import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import java.io.*;
-import sisc.Serializer;
 
 public class SThread extends ModuleAdapter {
     public String getModuleName() {
@@ -242,15 +241,6 @@ public class SThread extends ModuleAdapter {
 
         public Monitor() {}
 
-        public void serialize(Serializer s, DataOutput dos)
-            throws IOException {
-            if (SERIALIZATION) {}
-        }
-
-        public void deserialize(Serializer s, DataInput dis)
-            throws IOException {
-            if (SERIALIZATION) {}
-        }
     }
 
     public static class ThreadContext extends NamedValue implements Runnable {

@@ -35,7 +35,8 @@ package sisc.data;
 import java.util.*;
 import sisc.data.*;
 import java.io.*;
-import sisc.Serializer;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class Box extends Value {
     public Expression val;
@@ -66,18 +67,17 @@ public class Box extends Value {
         return ((Value)val).valueEqual((Value)b.val);
     }
     
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-            s.serialize(val, dos);
+            s.writeExpression(val);
         }
     }
 
     public Box() {}
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            val=s.deserialize(dis);
+            val=s.readExpression();
         }
     }
 }

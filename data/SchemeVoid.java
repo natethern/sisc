@@ -33,7 +33,7 @@
 package sisc.data;
 
 import java.io.*;
-import sisc.Serializer;
+import sisc.ser.Deserializer;
 
 public class SchemeVoid extends Value implements Singleton {
     public static SchemeVoid VOID=new SchemeVoid();
@@ -48,7 +48,7 @@ public class SchemeVoid extends Value implements Singleton {
 	return 0x56789abc;
     }
 
-    public static Value getValue(DataInput dis) {
+    public static Value getValue(Deserializer dis) {
         return VOID;
     }
 }

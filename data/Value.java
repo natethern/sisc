@@ -52,7 +52,12 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     /**
-     * Only this function need be overridden
+     * A synopsis is a limited number of characters of a
+     * human readable Value representation.  They are used in
+     * errors or informational messages where the entire value's 
+     * representation is not necessary.
+     *
+     * @param limit The number of characters to display
      */
     public String synopsis(int limit) {
 	String v=write();

@@ -6,7 +6,8 @@ import sisc.exprs.*;
 import java.lang.reflect.*;
 import java.io.*;
 import java.util.*;
-import sisc.Serializer;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class S2J extends ModuleAdapter {
 
@@ -199,42 +200,41 @@ public class S2J extends ModuleAdapter {
 
         public JavaObject() {}
 
-        public void serialize(Serializer s, DataOutput dos)
-            throws IOException {
+        public void serialize(Serializer s) throws IOException {
             if (SERIALIZATION) {
                 byte ty = getObjType();
-                s.writeBer(ty, dos);
+                s.writeByte(ty);
                 switch (ty) {
                 case JNULL:
                     break;
                 case JCLASS: {
-                    dos.writeUTF(((Class)obj).getName());
+                    s.writeUTF(((Class)obj).getName());
                     break;
                 }
                 case JFIELD: {
                     Field f = (Field)obj;
-                    dos.writeUTF(f.getDeclaringClass().getName());
-                    dos.writeUTF(f.getName());
+                    s.writeUTF(f.getDeclaringClass().getName());
+                    s.writeUTF(f.getName());
                     break;
                 }
                 case JMETHOD: {
                     Method m = (Method)obj;
-                    dos.writeUTF(m.getDeclaringClass().getName());
-                    dos.writeUTF(m.getName());
+                    s.writeUTF(m.getDeclaringClass().getName());
+                    s.writeUTF(m.getName());
                     Class[] types = m.getParameterTypes();
-                    s.writeBer(types.length, dos);
+                    s.writeInt(types.length);
                     for (int i=0; i < types.length; i++) {
-                        dos.writeUTF(types[i].getName());
+                        s.writeUTF(types[i].getName());
                     }
                     break;
                 }
                 case JCONSTR: {
                     Constructor c = (Constructor)obj;
-                    dos.writeUTF(c.getDeclaringClass().getName());
+                    s.writeUTF(c.getDeclaringClass().getName());
                     Class[] types = c.getParameterTypes();
-                    s.writeBer(types.length, dos);
+                    s.writeInt(types.length);
                     for (int i=0; i < types.length; i++) {
-                        dos.writeUTF(types[i].getName());
+                        s.writeUTF(types[i].getName());
                     }
                     break;
                 }
@@ -244,35 +244,34 @@ public class S2J extends ModuleAdapter {
             }
         }
 
-        public void deserialize(Serializer s, DataInput dis)
-            throws IOException {
+        public void deserialize(Deserializer s) throws IOException {
             if (SERIALIZATION) {
-                byte ty = (byte)s.readBer(dis);
+                byte ty = s.readByte();
                 switch (ty) {
                 case JNULL: {
                     obj = null;
                     break;
                 }
                 case JCLASS: {
-                    obj = resolveType(dis.readUTF());
+                    obj = resolveType(s.readUTF());
                     break;
                 }
                 case JFIELD:
                     try {
-                        Class c = resolveType(dis.readUTF());
-                        obj = c.getDeclaredField(dis.readUTF());
+                        Class c = resolveType(s.readUTF());
+                        obj = c.getDeclaredField(s.readUTF());
                     } catch (NoSuchFieldException e) {
                         throw new RuntimeException(liMessage(S2JB, "cannotdeserialize"));
                     }
                     break;
                 case JMETHOD:
                     try {
-                        Class c = resolveType(dis.readUTF());
-                        String n = dis.readUTF();
-                        int l = (int)s.readBer(dis);
+                        Class c = resolveType(s.readUTF());
+                        String n = s.readUTF();
+                        int l = s.readInt();
                         Class types[] = new Class[l];
                         for (int i=0; i < l; i++) {
-                            types[i] = resolveType(dis.readUTF());
+                            types[i] = resolveType(s.readUTF());
                         }
                         obj = c.getDeclaredMethod(n, types);
                     } catch (NoSuchMethodException e) {
@@ -281,11 +280,11 @@ public class S2J extends ModuleAdapter {
                     break;
                 case JCONSTR:
                     try {
-                        Class c = resolveType(dis.readUTF());
-                        int l = (int)s.readBer(dis);
+                        Class c = resolveType(s.readUTF());
+                        int l = s.readInt();
                         Class types[] = new Class[l];
                         for (int i=0; i < l; i++) {
-                            types[i] = resolveType(dis.readUTF());
+                            types[i] = resolveType(s.readUTF());
                         }
                         obj = c.getDeclaredConstructor(types);
                     } catch (NoSuchMethodException e) {

@@ -35,6 +35,8 @@ package sisc.data;
 import sisc.*;
 import sisc.compiler.*;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class BuiltinProcedure extends Procedure {
     public int id;
@@ -60,6 +62,7 @@ public class BuiltinProcedure extends Procedure {
                 r.returnVLR();
 	    }
         } catch (ArrayIndexOutOfBoundsException np) {
+            np.printStackTrace();
             error(r, name, liMessage(SISCB, "incorrectargcount"));
         } catch (ClassCastException cc) {
             error(r, name, liMessage(SISCB,"gotunexpectedvalue",
@@ -85,24 +88,21 @@ public class BuiltinProcedure extends Procedure {
         return host.hashCode() ^ id;
     }
 
-    public void serialize(Serializer s,
-                          DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-            s.serializeModule(host, dos);
-            s.writeBer(id, dos);
-            s.serialize(name, dos);
+            s.writeModule(host);
+            s.writeInt(id);
+            s.writeExpression(name);
         }
     }
 
     public BuiltinProcedure() {}
 
-    public void deserialize(Serializer s,
-                            DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            host=s.retrieveModule(dis);
-            id=s.readBer(dis);
-            name=(Symbol)s.deserialize(dis);
+            host=s.readModule();
+            id=s.readInt();
+            name=(Symbol)s.readExpression();
         }
     }
 }

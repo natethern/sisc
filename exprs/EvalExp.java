@@ -37,6 +37,8 @@ import sisc.data.*;
 import java.io.*;
 import java.util.Set;
 import java.util.Iterator;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class EvalExp extends Expression {
     public Expression pre, post;
@@ -62,22 +64,21 @@ public class EvalExp extends Expression {
         return list(sym("Eval-exp"), pre.express(), post.express());
     }
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-            s.serialize(pre, dos);
-            s.serialize(post, dos);
-            dos.writeBoolean(preImmediate);
+            s.writeExpression(pre);
+            s.writeExpression(post);
+            s.writeBoolean(preImmediate);
         }
     }
 
     public EvalExp() {}
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            pre=s.deserialize(dis);
-            post=s.deserialize(dis);
-            preImmediate=dis.readBoolean();
+            pre=s.readExpression();
+            post=s.readExpression();
+            preImmediate=s.readBoolean();
         }
     }
 }

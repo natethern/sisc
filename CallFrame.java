@@ -37,6 +37,8 @@ import sisc.exprs.*;
 import java.util.Stack;
 import java.io.*;
 import java.lang.ref.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class CallFrame extends Procedure {
 
@@ -64,16 +66,8 @@ public class CallFrame extends Procedure {
             vlk=true;
 
             if (vlr!=null) {
-                int vl=vlr.length;
                 Value[] nvlr=r.createValues(vl);
-
-                //Actually faster than arraycopy for smaller vlrs (<15 elem)
-                if (vl <= 10) {
-                    for (int i=vl-1; i>=0; i--)
-                        nvlr[i]=vlr[i];
-                } else
-                    System.arraycopy(vlr, 0, nvlr, 0, vl);
-
+                System.arraycopy(vlr, 0, nvlr, 0, vl);
                 vlr=nvlr;
             }
 
@@ -95,7 +89,6 @@ public class CallFrame extends Procedure {
             r.acc=r.vlr[0];
         else 
 	    r.acc=new Values(r.vlr);
-
         r.pop(this);
     }
 
@@ -103,42 +96,42 @@ public class CallFrame extends Procedure {
         return displayNamedOpaque("continuation");
     }
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
             if (vlr==null)
-                dos.writeBoolean(false);
+                s.writeBoolean(false);
             else {
-                dos.writeBoolean(true);
-                s.writeBer(vlr.length, dos);
+                s.writeBoolean(true);
+                s.writeInt(vlr.length);
                 for (int i=0; i<vlr.length; i++)
-                    s.serialize(vlr[i], dos);
+                    s.writeExpression(vlr[i]);
             }
-            s.serialize(nxp, dos);
-            s.serialize(fk, dos);
+            s.writeExpression(nxp);
+            s.writeExpression(fk);
 
-            s.serialize(parent, dos);
-            s.serialize(env, dos);
-            dos.writeBoolean(vlk);
+            s.writeExpression(parent);
+            s.writeExpression(env);
+            s.writeBoolean(vlk);
         }
     }
 
-public CallFrame() {}
+    public CallFrame() {}
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
             vlr=null;
-            if (dis.readBoolean()) {
-                int size=s.readBer(dis);
+            if (s.readBoolean()) {
+                int size=s.readInt();
                 vlr=new Value[size];
                 for (int i=0; i<size; i++)
-                    vlr[i]=(Value)s.deserialize(dis);
+                    vlr[i]=(Value)s.readExpression();
             }
-            nxp=s.deserialize(dis);
-            fk=(CallFrame)s.deserialize(dis);
-            parent=(CallFrame)s.deserialize(dis);
-            env=(LexicalEnvironment)s.deserialize(dis);
-            vlk=dis.readBoolean();
+
+            nxp=s.readExpression();
+            fk=(CallFrame)s.readExpression();
+            parent=(CallFrame)s.readExpression();
+            env=(LexicalEnvironment)s.readExpression();
+            vlk=s.readBoolean();
         }
     }
 }

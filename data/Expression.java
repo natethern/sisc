@@ -36,6 +36,8 @@ import java.util.Set;
 import java.util.*;
 import sisc.*;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 /**
  * The base class for any and all expressions.  An expression is anything 
@@ -153,15 +155,13 @@ public abstract class Expression extends Util implements Serializable {
      * All Expressions must implement a default (no-argument) constructor.  
      * Those that wish to be serialized to a heap must implement both this 
      * and the deserialize method.  The Expression may use any method of 
-     * the DataOutput stream and the Serializer serialization context
-     * to write its state, to be deserialized later.
+     * the Serializer, which implements java.io.DataOutput
+     * to write its state.
      * 
      * @exception IOException 
      * @param s 
-     * @param dos 
      */
-    public void serialize(Serializer s,
-                          DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
     }
 
     /**
@@ -175,8 +175,7 @@ public abstract class Expression extends Util implements Serializable {
      * @param s 
      * @param dis 
      */
-    public void deserialize(Serializer s,
-                            DataInput dis) throws IOException
+    public void deserialize(Deserializer s) throws IOException
         {}
 }
 

@@ -35,6 +35,8 @@ package sisc.exprs;
 import sisc.*;
 import sisc.data.*;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class FreeSetEval extends Expression {
     public Symbol lhs;
@@ -48,17 +50,6 @@ public class FreeSetEval extends Expression {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-	/*try {
-            senv.env[envLoc]=r.acc;
-	} catch (ArrayIndexOutOfBoundsException aob) {
-            try {
-                envLoc=senv.set(lhs, r.acc);
-            } catch (NullPointerException np) {
-                //Variable is not bound.  Raise an error.
-                error(r, SETBANG, liMessage(SISCB,"unboundset", lhs.write()));
-            }
-        } 
-        */
 	if (envLoc>=0) {
             senv.env[envLoc]=r.acc;
 	} else {
@@ -84,20 +75,19 @@ public class FreeSetEval extends Expression {
         return list(sym("FreeSet-eval"), lhs);
     }
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-            s.serialize(lhs, dos);
-            s.serialize(senv, dos);
+            s.writeExpression(lhs);
+            s.writeExpression(senv);
         }
     }
 
     public FreeSetEval() {}
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+     public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            lhs=(Symbol)s.deserialize(dis);
-            senv=(AssociativeEnvironment)s.deserialize(dis);
+            lhs=(Symbol)s.readExpression();
+            senv=(AssociativeEnvironment)s.readExpression();
             envLoc=-1;
         }
     }

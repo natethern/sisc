@@ -35,6 +35,8 @@ package sisc;
 import java.util.*;
 import java.io.*;
 import sisc.data.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class LexicalEnvironment extends Value {
     public LexicalEnvironment parent;
@@ -71,13 +73,7 @@ public class LexicalEnvironment extends Value {
             vals=v;
         } else {
             vals=r.createValues(sm1+1);
-
-            if (sm1 <= 11) {
-                //Actually faster than arraycopy for smaller vlrs (<15 elem)
-                for (int i=sm1-1; i>=0; i--)
-                    vals[i]=v[i];
-            } else
-                System.arraycopy(v, 0, vals, 0, sm1);
+            System.arraycopy(v, 0, vals, 0, sm1);
         }
 
         vals[sm1]=valArrayToList(v, sm1, vl-sm1);
@@ -104,35 +100,26 @@ public class LexicalEnvironment extends Value {
         return "#<environment>";
     }
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
 	    //dos.writeBoolean(locked);
-            s.writeBer(vals.length, dos);
+            s.writeInt(vals.length);
             for (int i=0; i<vals.length; i++)
-                s.serialize(vals[i], dos);
-            if (parent==null)
-                dos.writeBoolean(false);
-            else {
-                dos.writeBoolean(true);
-                s.serialize(parent, dos);
-            }
+                s.writeExpression(vals[i]);
+            s.writeExpression(parent);
         }
     }
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
 	    //locked=dis.readBoolean();
-            int size=s.readBer(dis);
+            int size=s.readInt();
             vals=new Value[size];
 
             for (int i=0; i<size; i++)
-                vals[i]=(Value)s.deserialize(dis);
+                vals[i]=(Value)s.readExpression();
 
-            if (dis.readBoolean()) {
-                parent=(LexicalEnvironment)s.deserialize(dis);
-            }
-            else parent=null;
+            parent = (LexicalEnvironment)s.readExpression();
         }
     }
 }

@@ -33,7 +33,8 @@
 package sisc.data;
 
 import java.io.*;
-import sisc.Serializer;
+import sisc.ser.Deserializer;
+import sisc.ser.Serializer;
 
 public class EmptyList extends Pair implements Singleton {
     public static EmptyList EMPTYLIST=new EmptyList();
@@ -60,10 +61,11 @@ public class EmptyList extends Pair implements Singleton {
 	return 0x9abcdef0;
     }
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {}
-
-    public static Value getValue(DataInput dis) {
+    public static Value getValue(Deserializer dis) {
         return EMPTYLIST;
+    }
+    
+    public void serialize(Serializer s) throws IOException {
     }
 }
 

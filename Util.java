@@ -436,10 +436,6 @@ public abstract class Util implements Conf {
 					       new Integer(arg2), 
 					       new Integer(arg3) });
     }
-    
-    public static void main(String[] args) {
-	System.out.println(VERSION);
-    }
 }
 
 

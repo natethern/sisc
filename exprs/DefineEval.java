@@ -35,6 +35,8 @@ package sisc.exprs;
 import sisc.*;
 import sisc.data.*;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class DefineEval extends Expression {
     public Symbol lhs;
@@ -60,18 +62,17 @@ public class DefineEval extends Expression {
         return list(sym("Define-eval"), lhs);
     }
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-            s.serialize(lhs, dos);
+            s.writeExpression(lhs);
         }
     }
 
     public DefineEval() {}
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            lhs=(Symbol)s.deserialize(dis);
+            lhs=(Symbol)s.readExpression();
         }
     }
 

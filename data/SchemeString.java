@@ -34,6 +34,8 @@ package sisc.data;
 
 import sisc.*;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class SchemeString extends Value {
     public char[] stringdata;
@@ -109,16 +111,15 @@ public class SchemeString extends Value {
         return write();
     }
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-            dos.writeUTF(new String(stringdata));
+            s.writeUTF(new String(stringdata));
         }
     }
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            stringdata=dis.readUTF().toCharArray();
+            stringdata=s.readUTF().toCharArray();
         }
     }
 }

@@ -3,6 +3,8 @@ package sisc;
 import sisc.data.Procedure;
 import sisc.data.Value;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class CurriedFC extends Procedure {
     protected Procedure p, fk;
@@ -34,16 +36,14 @@ public class CurriedFC extends Procedure {
     }
 
     public CurriedFC() {}
-    public void deserialize(Serializer s, DataInput dis)
-	throws IOException {
-	p=(Procedure)s.deserialize(dis);
-	fk=(Procedure)s.deserialize(dis);
+    public void deserialize(Deserializer s) throws IOException {
+	p=(Procedure)s.readExpression();
+	fk=(Procedure)s.readExpression();
     }
 
-    public void serialize(Serializer s, DataOutput dos)
-	throws IOException {
-	s.serialize(p, dos);
-	s.serialize(fk, dos);
+    public void serialize(Serializer s) throws IOException {
+	s.writeExpression(p);
+	s.writeExpression(fk);
     }
 }
 

@@ -35,6 +35,8 @@ package sisc.exprs;
 import sisc.*;
 import sisc.data.*;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class AppExp extends Expression {
     public Expression exp, rands[], nxp;
@@ -79,31 +81,30 @@ public class AppExp extends Expression {
         return new Pair(sym("App-exp"), args);
     }
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-            s.serialize(exp, dos);
-            s.writeBer(rands.length, dos);
+            s.writeExpression(exp);
+            s.writeInt(rands.length);
             for (int i=0; i<rands.length; i++) {
-                s.serialize(rands[i], dos);
+                s.writeExpression(rands[i]);
             }
-            s.serialize(nxp, dos);
-            dos.writeBoolean(allImmediate);
+            s.writeExpression(nxp);
+            s.writeBoolean(allImmediate);
         }
     }
 
     public AppExp() {}
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            exp=s.deserialize(dis);
-            int size=s.readBer(dis);
+            exp=s.readExpression();
+            int size=s.readInt();
             rands=new Expression[size];
             for (int i=0; i<size; i++) {
-                rands[i]=s.deserialize(dis);
+                rands[i]=s.readExpression();
             }
-            nxp=s.deserialize(dis);
-            allImmediate=dis.readBoolean();
+            nxp=s.readExpression();
+            allImmediate=s.readBoolean();
         }
     }
 }

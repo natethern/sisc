@@ -35,6 +35,8 @@ package sisc.exprs;
 import sisc.*;
 import sisc.data.*;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class LexicalSetEval extends Expression {
     public int depth, pos;
@@ -55,20 +57,19 @@ public class LexicalSetEval extends Expression {
                     new Pair(Quantity.valueOf(depth), Quantity.valueOf(pos)));
     }
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-            s.writeBer(depth, dos);
-            s.writeBer(pos, dos);
+            s.writeInt(depth);
+            s.writeInt(pos);
         }
     }
 
     public LexicalSetEval() {}
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            depth=s.readBer(dis);
-            pos=s.readBer(dis);
+            depth=s.readInt();
+            pos=s.readInt();
         }
     }
 

@@ -34,6 +34,8 @@ package sisc.data;
 
 import sisc.*;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class Closure extends Procedure {
     public boolean arity;
@@ -59,12 +61,14 @@ public class Closure extends Procedure {
         return displayNamedOpaque("procedure");
     }
 
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-            s.serialize(name, dos);
-            s.writeBer((((long)fcount) << 1) | (arity ? 1 : 0), dos);
-            s.serialize(env, dos);
-            s.serialize(body, dos);
+            s.writeExpression(name);
+            long attr=(long)fcount << 1;
+            if (arity) attr|=1;
+            s.writeLong(attr);
+            s.writeExpression(env);
+            s.writeExpression(body);
         }
     }
 
@@ -74,15 +78,14 @@ public class Closure extends Procedure {
 
     public Closure() {}
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            name=(Symbol)s.deserialize(dis);
-            long attr=s.readBerLong(dis);
+            name=(Symbol)s.readExpression();
+            long attr=s.readLong();
             fcount=(int)(attr>>1);
             arity=(attr&1)!=0;
-            env=(LexicalEnvironment)s.deserialize(dis);
-            body=s.deserialize(dis);
+            env=(LexicalEnvironment)s.readExpression();
+            body=s.readExpression();
         }
     }
 }

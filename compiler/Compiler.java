@@ -37,6 +37,8 @@ import sisc.data.*;
 import sisc.exprs.*;
 import java.util.*;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class Compiler extends Util {
 
@@ -56,16 +58,17 @@ public class Compiler extends Util {
         }
 
         public Syntax() {}
-        public void deserialize(Serializer s, DataInput dis)
+
+        public void deserialize(Deserializer s)
         throws IOException {
             if (SERIALIZATION) {
-                synid=s.readBer(dis);
+                synid=s.readInt();
             }
         }
 
-        public void serialize(Serializer s, DataOutput dos) throws IOException {
+        public void serialize(Serializer s) throws IOException {
             if (SERIALIZATION) {
-                s.writeBer(synid, dos);
+                s.writeInt(synid);
             }
         }
     }
@@ -320,12 +323,14 @@ public class Compiler extends Util {
         if (annotation!=null)
             setAnnotations(nxp, annotation);
         Expression lastRand = rator;
+        boolean seenNonImmediate=false;
         boolean allImmediate=isImmediate(rator);
         for (int i= 0; i<rands.length; i++) {
             if (!isImmediate(rands[i])) {
                 nxp.annotations = lastRand.annotations;
                 nxp = new FillRibExp(lastRand, i, nxp, allImmediate);
                 lastRand = rands[i];
+                seenNonImmediate=true;
                 rands[i] = null;
                 allImmediate=false;
             }

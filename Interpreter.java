@@ -50,7 +50,7 @@ import java.util.*;
  */
 public class Interpreter extends Util {
 
-    static class ThrowSchemeException extends Expression {
+    public static class ThrowSchemeException extends Expression {
 	
 	/**
 	 * "@param r
@@ -365,10 +365,8 @@ public class Interpreter extends Util {
         
         Value[] res = deadValues[size];
         if (res == null) { 
-            //miss++; 
             return new Value[size]; 
         }
-        //hit++;
         deadValues[size] = null;
         return res;
     }

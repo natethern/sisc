@@ -34,6 +34,8 @@ package sisc.data;
 
 import sisc.*;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class Values extends Value {
     public Value[] values;
@@ -83,24 +85,23 @@ public class Values extends Value {
 	return hc;
     }
 	
-    public void serialize(Serializer s, DataOutput dos) throws IOException {
+    public void serialize(Serializer s) throws IOException {
         if (SERIALIZATION) {
-            s.writeBer(values.length, dos);
+            s.writeInt(values.length);
             for (int i=0; i<values.length; i++) {
-                s.serialize(values[i], dos);
+                s.writeExpression(values[i]);
             }
         }
     }
 
     public Values() {}
 
-    public void deserialize(Serializer s, DataInput dis)
-    throws IOException {
+    public void deserialize(Deserializer s) throws IOException {
         if (SERIALIZATION) {
-            int size=s.readBer(dis);
+            int size=s.readInt();
             values=new Value[size];
             for (int i=0; i<size; i++) {
-                values[i]=(Value)s.deserialize(dis);
+                values[i]=(Value)s.readExpression();
             }
         }
     }

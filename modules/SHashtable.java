@@ -5,8 +5,9 @@ import sisc.data.*;
 import sisc.exprs.*;
 import java.io.*;
 import java.util.*;
-import sisc.Serializer;
 import sisc.modules.SThread.Monitor;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class SHashtable extends ModuleAdapter {
     public String getModuleName() {
@@ -68,19 +69,17 @@ public class SHashtable extends ModuleAdapter {
             return res;
         }
 
-        public void serialize(Serializer s, DataOutput dos)
-            throws IOException {
+        public void serialize(Serializer s) throws IOException {
             if (SERIALIZATION) {
                 //not the most efficient, but easiest
-                s.serialize(toAList(), dos);
+                s.writeExpression(toAList());
             }
         }
 
-        public void deserialize(Serializer s, DataInput dis)
-            throws IOException {
+        public void deserialize(Deserializer s) throws IOException {
             if (SERIALIZATION) {
                 //not the most efficient, but easiest
-                addAList((Pair)s.deserialize(dis));
+                addAList((Pair)s.readExpression());
             }
         }
 
