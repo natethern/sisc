@@ -73,11 +73,11 @@
                           (string-length symenv-id-str))))
             (isLae #f)
             (symenv (let loop ((se (get-symbolic-environment symenv-sym)))
-                      (cond [(eq? (java-class-of (java-wrap se)) 
-                                  <sisc.ser.LibraryAE>)
+                      (cond [(instance-of? 
+                              se <sisc.ser.LibraryAE>)
                              (begin (set! isLae #t) se)]
                             [(not (java-null? (get-parent se)))
-                             (loop (java-unwrap (get-parent se)))]
+                             (loop (get-parent se))]
                             [else se]))))
                                    
        (for-each 
