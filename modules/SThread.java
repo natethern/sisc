@@ -96,10 +96,14 @@ public class SThread extends ModuleAdapter {
 	define("monitor/notify-all", MONITORNOTIFY);
     }
 
+    public static class CondVar implements Serializable {
+        public CondVar() {};
+    }
+
     public static class Monitor extends NamedValue {
 	private int lockCount=0;
 	private Thread owner=null;
-	private Object condvar=new Object();
+	private CondVar condvar=new CondVar();
 
 	public Value lock(long timeout) {
 	    Thread thisThread=null;
