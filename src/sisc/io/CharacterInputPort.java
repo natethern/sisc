@@ -24,6 +24,6 @@ public interface CharacterInputPort extends InputPort {
 	 * @param count Number of characters to read
 	 * @throws IOException
 	 */
-	public void read(char[] cbuf, int offset, int count) throws IOException;
+	void read(char[] cbuf, int offset, int count) throws IOException;
 	
 }
