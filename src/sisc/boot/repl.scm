@@ -68,11 +68,20 @@
                     (if ((current-exit-handler))
                         (exit)
                         (repl/read writer))
+                    (begin
+                      ;; Consume any whitespace
+                      (let loop ()
+                        (when (and (char-ready? (current-input-port))
+                                   (char-whitespace? (peek-char)))
+                          (read-char)
+                          (loop)))
+
                     ;;eval
-                    (let ([val (eval exp)])
-                      (if (not (void? val))
-                          (begin (writer val) (newline)))
-                      (repl/read writer)))))])
+
+                      (let ([val (eval exp)])
+                        (if (not (void? val))
+                            (begin (writer val) (newline)))
+                        (repl/read writer))))))])
     (lambda ()
       (current-url
        (string-append
