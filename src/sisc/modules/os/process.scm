@@ -13,8 +13,14 @@
   get-output-stream wait-for destroy 
   exit-value)
 
+(define runtime-instance #f)
+
 (define (get-runtime)
-  (java-get-runtime (java-null <java.lang.runtime>)))
+  (or runtime-instance
+      (begin
+        (set! runtime-instance 
+              (java-get-runtime (java-null <java.lang.runtime>)))
+        (get-runtime))))
 
 (define (process-terminated? process)
   (with-failure-continuation

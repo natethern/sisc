@@ -837,10 +837,16 @@
    get-process-stdin
    spawn-process
    spawn-process-with-environment
-   spawn-process/env)
+   spawn-process/env
+   core-count
+   free-memory
+   total-memory
+   max-memory
+   garbage-collect)
   (import s2j)
   (import* type-system instance-of?)
   (include "os/process.scm")
+  (include "os/system.scm")
   (define spawn-process/env)
   (set! spawn-process/env spawn-process-with-environment))
 
