@@ -5,12 +5,8 @@
 ;;various servlet / session / request / response methods
 (define-generic get-attribute)    
 (define-generic set-attribute)
-(define-generic set-content-type)
-(define-generic get-writer)
-(define-generic print)
 (define-generic get-parameter)
 (define-generic get-session)
-(define-generic new?)
 (define-generic get-servlet-context)
 (define-generic get-real-path)
 
