@@ -10,8 +10,7 @@ public abstract class Util {
     public static final String VERSION = "r1.1.0";
 
     protected static final Quantity FIVE=new Quantity(5);
-    protected static final Expression APPEVAL=new AppEval(),
-	DEFINEEVAL=new DefineEval();
+    protected static final Expression APPEVAL=new AppEval();
 
     public static EOFObject EOF=EOFObject.EOF;
     public static Serializable UNBOUND=new Serializable() {};

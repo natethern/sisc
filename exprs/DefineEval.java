@@ -4,17 +4,24 @@ import sisc.*;
 import sisc.data.*;
 
 public class DefineEval extends Expression {
+    public Symbol lhs;
+    
+    public DefineEval(Symbol lhs) {
+	this.lhs=lhs;
+    }
 
     public void eval(Interpreter r) throws ContinuationException { 
-	Symbol lhs=symbol(r,r.acc);
-	Value rhs=r.vlr[0];
+	Value rhs=r.acc;
 	if (rhs instanceof NamedValue) {
 	    NamedValue nv=(NamedValue)rhs;
 	    if (nv.name==null)
 		nv.name=lhs;
 	}
-
-	r.define(lhs, rhs, TOPLEVEL);
+	try {
+	    r.define(lhs, rhs, TOPLEVEL);
+	} catch (EnvironmentLockedException e) {
+	    error(r,"environment is immutable");
+	}
 
 	r.acc=VOID;
 	r.nxp=null;
@@ -22,7 +29,7 @@ public class DefineEval extends Expression {
 
     public String toString(){
 	StringBuffer b=new StringBuffer();
-	b.append("(Define-eval)");
+	b.append("(Define-eval").append(' ').append(lhs).append(')');
 	return b.toString();
     }
 }
