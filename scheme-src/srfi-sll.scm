@@ -1,6 +1,6 @@
 (load "srfi.scm")
 (import compiled-libraries)
-(create-library-from-module 'srfis "srfi.sll"
+(create-library-from-module 'srfis "../boot/srfi.sll"
  'srfi-0
  'srfi-8
  'srfi-23
