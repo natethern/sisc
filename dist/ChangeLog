@@ -1,3 +1,9 @@
+2002-04-27 Released 1.4.0
+
+2002-04-27  Scott G. Miller  <scgmille@freenetproject.org>
+  
+	* Fixed bugs found in the RC2 round of testing.
+
 2002-04-22  Matthias Radestock  <matthias@sorted.org>
 
 	* Gave all file-based operations the ability to access data via a
