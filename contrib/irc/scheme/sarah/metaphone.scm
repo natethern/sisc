@@ -16,14 +16,14 @@
                     (if (and (char=? (car e) #\w) (char=? (cadr e) #\h))
                         (cons #\w (cddr e)) e)))
            (metaphone-rules
-            (lambda (sym e metaph size)
+            (lambda (sym e metaph size last)
               (case sym
                 ((#\b)
                  (if (and (char=? last #\m) (not (has-next? (cdr e))))
                      metaph
                      (cons sym metaph)))
                 ((#\c)
-                 (if (not (and last (char=? last #\s) (has-next? e)
+                 (if (not (and last[A (char=? last #\s) (has-next? e)
                                (memv (second e) frontv)))
                      (cond ((and (not (has-n+1? e)) (char=? (second e) #\i)
                                  (char=? (third e) #\a))
@@ -134,7 +134,7 @@
                           metaph
                           (if (and (not last) (memv sym vowels))
                               (list sym)
-                              (metaphone-rules sym e metaph size)))
+                              (metaphone-rules sym e metaph size last)))
                       sym))))))))                                           
                                    
                                        
