@@ -1,3 +1,8 @@
+2003-09-04	Scott G. Miller	 <scgmille@freenetproject.org>
+	
+	* Support for return-status from call-with-args, eval, or
+	  the repl using (exit return-code).
+	  
 2003-08-17  Matthias Radestock  <matthias@sorted.org>
 
 	* Added SISC Compiled Code (.scc) library support, which is more
