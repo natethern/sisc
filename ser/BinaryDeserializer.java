@@ -130,10 +130,9 @@ public class BinaryDeserializer extends DeserializerImpl {
     public SymbolicEnvironment readSymbolicEnvironment() throws IOException {
         SymbolicEnvironment rv;
         Expression e=readExpression();
-        if (e instanceof Symbol) 
-            rv=(SymbolicEnvironment)baseLib.getExpression((Symbol)e);
-        else rv=(SymbolicEnvironment)e;
-        return rv;
+        return (e instanceof Symbol) ?
+            (SymbolicEnvironment)baseLib.getExpression((Symbol)e) :
+            (SymbolicEnvironment)e;
     }
 
     public Module readModule() throws IOException {

@@ -43,6 +43,7 @@ public class AppContext extends Util {
     protected Procedure evaluator;
     protected SymbolicEnvironment symenv;
     public SymbolicEnvironment toplevel_env;
+    public LibraryManager libraries;
 
     public AppContext() {
     }
@@ -71,8 +72,10 @@ public class AppContext extends Util {
         throws IOException, ClassNotFoundException {
 
         Library s=Library.load(i);
-        LibraryManager.getInstance().addLibrary(s);
-
+        
+        libraries = new LibraryManager();
+        libraries.addLibrary(s);
+        
         CallFrame lstk=(CallFrame)s.getExpression(0);
         Procedure levaluator=(Procedure)s.getExpression(1);
 

@@ -101,7 +101,7 @@ public class GenerateHeap {
 
     static SymbolicEnvironment[] classify(SymbolicEnvironment base, 
                                           LibraryBuilder lb) {
-        SymbolicEnvironment[] rv=new AssociativeEnvironment[2];
+        SymbolicEnvironment[] rv=new SymbolicEnvironment[2];
         rv[0]=new LibraryAE(null, lb);
         rv[1]=base;
         rv[1].setParent(rv[0]);
@@ -153,22 +153,22 @@ public class GenerateHeap {
         sisc.compiler.Compiler.addSpecialForms(toplevel);
         symenv.define(Util.TOPLEVEL, toplevel);
 
-	AppContext ctx = new AppContext(symenv);
-
-	Context.register("main", ctx);
-
+        AppContext ctx = new AppContext(symenv);
+        
+        Context.register("main", ctx);
+        
         Interpreter r = Context.enter("main");
         new Primitives().bindAll(r, r.ctx.toplevel_env);
         ctx.setEvaluator("eval");
-
-
-	Symbol loadSymb = Symbol.get("load");
-
+        
+        
+        Symbol loadSymb = Symbol.get("load");
+        
         if (inHeap != null) {
-          System.out.println("Reading input heap: " + inHeap);
-          ctx.loadEnv(r, new SeekableDataInputStream(new BufferedRandomAccessInputStream(inHeap, "r", 1, 8192)));
+            System.out.println("Reading input heap: " + inHeap);
+            ctx.loadEnv(r, new SeekableDataInputStream(new BufferedRandomAccessInputStream(inHeap, "r", 1, 8192)));
         }
-
+        
         r.define(Symbol.get("version"), new SchemeString(Util.VERSION), Util.SISC);
         Properties sysProps=System.getProperties();
         Iterator ir;

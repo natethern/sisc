@@ -10,12 +10,8 @@ import java.util.*;
 
 public class LibraryManager extends Util {
     
-    protected static LibraryManager systemLibraryManager;
-
     public static LibraryManager getInstance() {
-        if (systemLibraryManager == null)
-            systemLibraryManager = new LibraryManager();
-        return systemLibraryManager;
+        return sisc.Context.currentInterpreter().ctx.libraries;
     }
 
     static class LoadableLibrary {

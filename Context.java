@@ -58,7 +58,7 @@ public class Context extends Util {
 
     /*********** thread table maintenance ***********/
 
-    protected static Interpreter currentInterpreter() {
+    public static Interpreter currentInterpreter() {
 	Thread thread = Thread.currentThread();
 	Stack stack = (Stack)threads.get(thread);
 	if (stack == null) return null;

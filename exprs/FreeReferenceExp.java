@@ -40,40 +40,43 @@ import sisc.ser.Deserializer;
 
 public class FreeReferenceExp extends Expression implements Immediate {
     public Symbol sym;
-    public SymbolicEnvironment lenv;
+    private SymbolicEnvironment senv;
     private transient int envLoc=-1;
 
-    public FreeReferenceExp(Symbol s, SymbolicEnvironment lenv) {
-        this.lenv=lenv;
+    public FreeReferenceExp(Symbol s, SymbolicEnvironment senv) {
+        this.senv=senv;
         sym=s;
-        this.envLoc=lenv.getLoc(s);
     }
 
     public void eval(Interpreter r) throws ContinuationException {
         r.nxp=null;
-	if (envLoc>=0) {
-	    r.acc=lenv.lookup(envLoc);
-	} else {
-            envLoc=lenv.getLoc(sym);
+        if (envLoc>=0) {
+            r.acc=senv.lookup(envLoc);
+        } else {
+            //this is an optimization that ensures we short-circuit
+            //any DelegatingSymEnvs
+            senv = (SymbolicEnvironment)senv.asValue();
+            envLoc=senv.getLoc(sym);
             if (envLoc==-1)
                 error(r, liMessage(SISCB,"undefinedvar", sym.write()));
-	    r.acc=lenv.lookup(envLoc);
+	    r.acc=senv.lookup(envLoc);
         } 
     }
 
     public Value getValue(Interpreter r) throws ContinuationException {
-	if (envLoc>=0) {
-	    return lenv.lookup(envLoc);
-	} else {
+        if (envLoc>=0) {
+            return senv.lookup(envLoc);
+        } else {
+            //this is an optimization that ensures we short-circuit
+            //any DelegatingSymEnvs
+            senv = (SymbolicEnvironment)senv.asValue();
             try {
-                envLoc=lenv.getLoc(sym);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                envLoc=senv.getLoc(sym);
+            } catch (Exception e) {}
             if (envLoc==-1)
                 error(r, liMessage(SISCB,"undefinedvar", sym.write()));
-	    return lenv.lookup(envLoc);
-        } 
+            return senv.lookup(envLoc);
+        }
     }
 
     public Value express() {
@@ -82,7 +85,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public void serialize(Serializer s) throws IOException {
         s.writeExpression(sym);
-        s.writeSymbolicEnvironment(lenv);
+        s.writeSymbolicEnvironment(senv);
     }
 
     public FreeReferenceExp() {
@@ -90,7 +93,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public void deserialize(Deserializer s) throws IOException {
         sym=(Symbol)s.readExpression();
-        lenv=s.readSymbolicEnvironment();
+        senv=s.readSymbolicEnvironment();
         envLoc=-1;
     }
 
@@ -99,11 +102,11 @@ public class FreeReferenceExp extends Expression implements Immediate {
             return false;
         FreeReferenceExp e=(FreeReferenceExp)o;
 
-        return lenv.equals(e.lenv) && sym.equals(e.sym);
+        return senv.equals(e.senv) && sym.equals(e.sym);
     }
 
     public int hashCode() {
-        return lenv.hashCode() ^ sym.hashCode();
+        return senv.hashCode() ^ sym.hashCode();
     }
 
 }

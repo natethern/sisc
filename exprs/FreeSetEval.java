@@ -40,19 +40,21 @@ import sisc.ser.Deserializer;
 
 public class FreeSetEval extends Expression {
     public Symbol lhs;
-    public SymbolicEnvironment senv;
+    private SymbolicEnvironment senv;
     private transient int envLoc=-1;
 
     public FreeSetEval(Symbol lhs, SymbolicEnvironment senv) {
         this.lhs=lhs;
         this.senv=senv;
-        this.envLoc=senv.getLoc(lhs);
     }
 
     public void eval(Interpreter r) throws ContinuationException {
         if (envLoc>=0) {
             senv.set(envLoc, r.acc);
         } else {
+            //this is an optimization that ensures we short-circuit
+            //any DelegatingSymEnvs
+            senv = (SymbolicEnvironment)senv.asValue();
             try {
                 envLoc=senv.getLoc(lhs);
                 senv.set(envLoc, r.acc);
@@ -60,7 +62,7 @@ public class FreeSetEval extends Expression {
                 //Variable is not bound.  Raise an error.
                 error(r, SETBANG, liMessage(SISCB,"unboundset", lhs.write()));
             }
-        } 
+        }
 
         updateName(r.acc, lhs);
         

@@ -54,12 +54,9 @@ public class JavaDeserializer implements Deserializer {
     }
 
     public SymbolicEnvironment readSymbolicEnvironment() throws IOException {
-        SymbolicEnvironment rv;
         Expression e=readExpression();
-        if (e instanceof Symbol) 
-            rv=(SymbolicEnvironment)LibraryManager.getInstance().getExpression((Symbol)e);
-        else rv=(SymbolicEnvironment)e;
-        return rv;
+        return (e instanceof Symbol) ?
+            new DelegatingSymEnv((Symbol)e) : (SymbolicEnvironment)e;
     }
 
     public Class readClass() throws IOException {
