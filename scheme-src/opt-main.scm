@@ -8,9 +8,9 @@
     (,x
      (guard (symbol? x))
      (opt:ref x state))
-    ((begin ,[exp1 exp1s] ,[exps* exps-state*] ...)
+    ((begin ,[exp1 exp1-state] ,[exps* exps-state*] ...)
      (mvlet ([(rv state) (opt:begin exp1 exps* state)])
-       (values rv (merge-states state exp1s 
+       (values rv (merge-states state exp1-state 
                                 (apply merge-states exps-state*)))))
     ; Lets
     (((lambda ,formals ,body) ,[values* values-state*] ...)
