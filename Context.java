@@ -59,12 +59,25 @@ public class Context extends Util {
         return (AppContext)apps.get(appName);
     }
 
+    /*********** thread context lookup ***********/
+
+    public static ThreadContext lookupThreadContext(Thread thread) {
+        ThreadContext tctx = (ThreadContext)threads.get(thread);
+        if (tctx == null) {
+            tctx = new ThreadContext();
+            threads.put(thread, tctx);
+        }
+        return tctx;
+    }
+
+    public static ThreadContext lookupThreadContext() {
+        return lookupThreadContext(Thread.currentThread());
+    }
+
     /*********** main interface ***********/
 
     public static Interpreter currentInterpreter() {
-        Thread thread = Thread.currentThread();
-        ThreadContext tctx = (ThreadContext)threads.get(thread);
-        if (tctx == null) return null;
+        ThreadContext tctx = lookupThreadContext();
         return tctx.currentInterpreter();
     }
 
@@ -78,21 +91,14 @@ public class Context extends Util {
     }
     
     public static Interpreter enter(AppContext ctx, DynamicEnv dynenv) {
-        Thread thread = Thread.currentThread();
-        ThreadContext tctx = (ThreadContext)threads.get(thread);
-        if (tctx == null) {
-            tctx = new ThreadContext();
-            threads.put(thread, tctx);
-        }
+        ThreadContext tctx = lookupThreadContext();
         Interpreter res = createInterpreter(ctx, tctx, dynenv);
         tctx.pushInterpreter(res);
         return res;
     }
 
     public static void exit() {
-        Thread thread = Thread.currentThread();
-        ThreadContext tctx = (ThreadContext)threads.get(thread);
-        if (tctx == null) return;
+        ThreadContext tctx = lookupThreadContext();
         Interpreter r = tctx.popInterpreter();
         returnInterpreter(r);
     }
