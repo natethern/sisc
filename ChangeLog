@@ -11,6 +11,11 @@
 
 	* Make the REPL writer parameterizable.
 
+2004-06-01  Scott G. Miller   <scgmille@freenetproject.org>
+
+	* Added the module-exports function, which given a module,
+          lists its bindings.
+
 2004-05-20  Scott G. Miller   <scgmille@freenetproject.org>
 	
 	* Moved the analysis pass after the optimizer so
