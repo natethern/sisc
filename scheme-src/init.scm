@@ -397,18 +397,19 @@
        (let ((start (list obj)))
          (race start (next start)))))
 
-(define list? 
-  (letrec [(list-h? 
-            (lambda (lsp1 lsp2)
-              (or (null? lsp1) (null? lsp2)
-                  (and 
-                   (pair? lsp2)
-                   (or 
-                    (null? (cdr lsp2))
-                    (and (not (eq? lsp1 lsp2))
-                         (list-h? (cdr lsp1) (cddr lsp2))))))))]
-    (lambda (lsc)
-      (or (null? lsc) (and  (pair? lsc) (list-h? lsc (cdr lsc)))))))
+(define list? proper-list?)
+
+;  (letrec [(list-h? 
+;            (trace-lambda lh (lsp1 lsp2)
+;              (or (null? lsp1) (null? lsp2)
+;                  (and 
+;                   (pair? lsp2)
+;                   (or 
+;                    (null? (cdr lsp2))
+;                    (and (not (eq? lsp1 lsp2))
+;                         (list-h? (cdr lsp1) (cddr lsp2))))))))]
+;    (lambda (lsc)
+;      (or (null? lsc) (and  (pair? lsc) (list-h? lsc (cdr lsc)))))))
 
 
 ;;;;;;;;;;;;;; Math functions/constants
