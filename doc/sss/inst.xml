@@ -319,17 +319,6 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
               <tbody> 
                 <row>
                   <entry>
-                    <indexterm><primary>case-sensitive</primary></indexterm>
-                    <envar>caseSensitive</envar></entry>
-                  <entry><function>case-sensitive</function></entry>
-                  <entry>false</entry>
-                  <entry>
-                    Determines whether symbols read via the Scheme
-                    reader are to be treated case sensitively.
-                  </entry>
-                </row>
-                <row>
-                  <entry>
                     <indexterm><primary>permit-interrupts</primary></indexterm>
                     <envar>permitInterrupts</envar></entry>
                   <entry><function>permit-interrupts</function></entry>
@@ -442,6 +431,16 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                 </row>
               </thead>
               <tbody>
+                <row>
+                  <entry>
+                    <indexterm><primary>case-sensitive</primary></indexterm>
+                    <envar>caseSensitive</envar></entry>
+                  <entry>false</entry>
+                  <entry>
+                    Determines whether symbols read via the Scheme
+                    reader are to be treated case sensitively.
+                  </entry>
+                </row>
                 <row>
                   <entry>
                     <indexterm><primary>character-set</primary></indexterm>

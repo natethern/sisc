@@ -1,3 +1,8 @@
+2003-07-03  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Changed case-sensitive to a dynamic parameter, so it can be
+	  modified at run-time on a per dynamic-context basis.
+
 2003-07-03  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed overriding of defaults for configuration parameters.
