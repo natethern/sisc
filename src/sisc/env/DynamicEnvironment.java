@@ -68,9 +68,11 @@ public class DynamicEnvironment extends Util implements Cloneable {
         this.printShared =
             ctx.getProperty("sisc.printShared", defaultPrintShared).equals("true");
         this.vectorLengthPrefixing = 
-            ctx.getProperty("vectorLengthPrefixing", defaultVectorLengthPrefixing).equals("true");
+            ctx.getProperty("sisc.vectorLengthPrefixing", defaultVectorLengthPrefixing).equals("true");
         this.emitDebuggingSymbols =
-            ctx.getProperty("emitDebuggingSymbols", defaultEmitDebuggingSymbols).equals("true");
+            ctx.getProperty("sisc.emitDebuggingSymbols", defaultEmitDebuggingSymbols).equals("true");
+        this.characterSet =
+            ctx.getProperty("sisc.characterSet", getDefaultCharacterSet());
 
         classLoader = currentClassLoader();
         try {
