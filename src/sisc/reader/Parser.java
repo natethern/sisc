@@ -311,6 +311,7 @@ public class Parser extends Util implements Tokens {
                     potentialError(flags, "invalidsharpc", bv, is);
                     o=VOID;
                 }
+                break;
             case '%': 
                 // Syntactic tokens
                 bv=lexer.readToBreak(is, Lexer.special, false, false).toLowerCase();
@@ -320,6 +321,7 @@ public class Parser extends Util implements Tokens {
                     s=(Syntax)CompilerConstants.SYNTACTIC_TOKENS.get("unknown");
                 }
                 o=s;
+                break;
             case '\'':
                 o=listSpecial(SYNTAX, is, state, def, flags);
                 break;
@@ -477,6 +479,17 @@ public class Parser extends Util implements Tokens {
     protected final boolean permissiveParsing(int flags) {
         return (flags & PERMISSIVE_PARSING) != 0;
     }
+    
+    
+    public static void main(String[] args) throws Exception {
+        Parser p=new Parser(new Lexer());
+        InputPort is=new sisc.io.StreamInputPort(System.in);
+        Expression e;
+        while (EOF != (e=p.nextExpression(is, 0))) {
+            System.err.println(e);
+        }
+    }
+
 }
 /*
  * The contents of this file are subject to the Mozilla Public
