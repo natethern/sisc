@@ -49,6 +49,13 @@
 (a '(1 1 1))
 (map ->number (->list (->jarray (map ->jint (iota 10)) <jint>)))
 
+;assignment
+(define v (java-new))
+(eq? v jnull)  ;#t
+(java-null? v) ;#t
+(java-set! v a)
+(java-null? v) ;#f
+(eq? v a)      ;#t
 ;;access to static and instance fields
 ;;the only reason we use sisc's symbol class for testing is that the
 ;;JDK has no classes with public instance fields and I didn't want to
@@ -143,3 +150,18 @@
         (java-array-new <jdouble> 10000)
         (make <jstringbuffer> (->jint 10000))
         (loop (- count 1)))))
+
+;awt
+(define <java.awt.Frame> (java-class "java.awt.Frame"))
+(define <java.awt.FlowLayout> (java-class "java.awt.FlowLayout"))
+(define <java.awt.Button> (java-class "java.awt.Button"))
+(define-generic set-layout!)
+(define-generic add)
+(define-generic pack)
+(define-generic show)
+(define frame (make <java.awt.Frame>))
+(set-layout! frame (make <java.awt.FlowLayout>))
+(for-each (lambda (s) (add frame (make <java.awt.Button> (->jstring s))))
+          '(button1 button2 button3))
+(pack frame)
+(show frame)
