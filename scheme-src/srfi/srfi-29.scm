@@ -156,10 +156,7 @@
 (define (localized-template package-name message-template-name)
   (let loop ((bundle-specifier `(,package-name ,@(current-locale-specifier))))
     (if (null? bundle-specifier)
-        (error 'localized-template
-               "no localized template found for message '~a' in bundle '~a'."
-               message-template-name 
-               `(,package-name ,@(current-locale-specifier)))
+        #f
         (let ((bundle-name (bundle-specifier->symbol bundle-specifier)))
           (cond [(getprop bundle-name '*i18n*) =>
                  (lambda (bundle)
