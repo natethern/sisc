@@ -66,7 +66,7 @@ public class J2S extends ModuleAdapter {
         }
 
         public boolean valueEqual(Value ov) {
-	    if (!(v instanceof JavaClass)) return false;
+	    if (!(ov instanceof JavaClass)) return false;
             return ((JavaClass)ov).clazz.equals(clazz);
         }
 
