@@ -31,12 +31,13 @@ public class Parser extends Util implements Tokens {
 
     static final Object DOT=
 	new Object() {
-	    public String toString() { return "." };
-	}
+	    public String toString() { return "."; }
+	};
+
     static final Object ENDPAIR=
 	new Object() {
-	    public String toString() { return ")" };
-	}
+	    public String toString() { return ")"; }
+	};
 	    
     static final Symbol SYNTAX=Symbol.get("syntax"),
         ANNOTATION=Symbol.get("make-annotation"),
