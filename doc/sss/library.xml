@@ -687,7 +687,7 @@
             </listitem>
             <listitem>
               <formalpara>
-                <title><envar>SCHEME_LIBRARY_PATH</envar></title>
+                <title><envar>sisc.slib</envar></title>
                 <para>
                   This must point to the location where you installed
                   <application>SLIB</application>. Other Schemes
@@ -696,12 +696,12 @@
                   <envar>SCHEME_LIBRARY_PATH</envar>, so it is
                   advisable to define that (if it is not already
                   defined) and run Java with a
-                  <computeroutput>-Dslib.path=...</computeroutput>
+                  <computeroutput>-Dsisc.slib=...</computeroutput>
                   option based on the environment variable. If you are
                   using the scripts from the binary $SISC;
                   distribution in order to run &SISC; then you can set
                   the property by adding the
-                  <computeroutput>-Dslib.path=...</computeroutput> to
+                  <computeroutput>-Dsisc.slib=...</computeroutput> to
                   the <envar>JAVAOPT</envar> environment variable.
                 </para>
               </formalpara>

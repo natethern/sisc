@@ -66,7 +66,7 @@
 
 (define implementation-vicinity
   (let ((library-path (string-append
-                       (or (getenv "sisc.home")
+                       (or (getprop 'home '*config-parameters*)
                            (error "You must define the sisc.home property"))
                        "/")))
     (lambda () library-path)))
@@ -76,8 +76,8 @@
 
 (define library-vicinity
   (let ((library-path (string-append
-                       (or (getenv "slib.path")
-                           (error "You must define the slib.path property"))
+                       (or (getprop 'slib '*config-parameters*)
+                           (error "You must define the sisc.slib property"))
                        "/")))
     (lambda () library-path)))
 
