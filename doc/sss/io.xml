@@ -9,6 +9,96 @@
   </para>
   <sect1>
     <title>Ports</title>
+    <sect2 id="urlfile">
+      <title>URLs</title>
+      <para>
+        In &SISC; all procedures that create ports for accessing
+        files, e.g. <function>open-input-file</function>,
+        <function>open-output-file</function> accept URLs in addition
+        to ordinary file names. Here are some examples of valid URLs:
+<programlisting>
+http://foo.com/bar/bar1.scm
+file:/tmp/foo.scm
+file:c:\bar\baz.scm
+file:foo.scm
+jar:http://foo.com/bar.jar!/bar/bar1.scm
+</programlisting>
+        The latter is a URL referring to a file stored in a JAR on a
+        remote web server. For further details on the format of URLs
+        please consult <ulink
+        href="http://www.ietf.org/rfc/rfc2396.txt">this
+        specification</ulink>. The format of JAR URLs is defined in
+        <ulink
+        href="http://java.sun.com/j2se/1.4/docs/api/java/net/JarURLConnection.html">the
+        JDK API documentation</ulink>.  What types of URLs are
+        supported by a particular installation of Java depends on the
+        configured protocol handlers. See <ulink
+        href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">the
+        JDK API documentation</ulink> for details.
+      </para>
+      <para>
+        Relative file names or URLs are resolved in relation to the
+        following parameter:
+        <blockquote>
+          <para>
+              &parameter;
+            <methodsynopsis language="scheme">
+              <type>url</type>
+              <methodname>current-url</methodname>
+              <methodparam choice="opt">
+                <parameter>url</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Retrieves or sets the URL which forms the basis for
+                resolving relative filenames and URLs. It is
+                initialized on start up with the path to the current
+                directory. All parameters and the returned value are
+                strings.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+        The algorithm for resolving relative URLs is defined in <ulink
+        href="http://www.ietf.org/rfc/rfc2396.txt">this
+        specification</ulink>.  For compatibility with other Schemes,
+        &SISC; also supports the
+        <function>current-directory</function> procedure, which is a
+        simple wrapper around <function>current-url</function>.
+      </para>
+      <para>
+        URLs can be normalized using
+        <blockquote>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>url</type>
+              <methodname>normalize-url</methodname>
+              <methodparam><parameter>url1</parameter></methodparam>
+              <methodparam choice="opt">
+                <parameter>url2</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                When called with one string argument,
+                <function>normalize-url</function> returns the
+                normalized version of the given URL. Normalization
+                involves, amongst other things, the replacement of
+                relative path references such as <literal>.</literal>
+                and <literal>..</literal>.
+              </para>
+              <para>
+                When called with two string arguments, the procedure
+                returns the normalized version of the second URL when
+                interpreted as a being relative to the first URL.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
     <sect2 id="PortCreation">
       <title>Port Creation</title>
       <para>
@@ -549,6 +639,41 @@
             </blockquote>
           </para>
         </blockquote>
+      </para>
+    </sect2>
+    <sect2>
+      <title>Load</title>
+      <para>
+        The <function>load</function> procedure accepts URLs as well
+        as ordinary file names. See <xref linkend="urlfile"/> for
+        details on what kinds of URLs are supported.
+      </para>
+      <para>
+        The file name passed to <function>load</function> is resolved
+        relative to the <function>current-url</function>
+        parameter. During the execution of <function>load</function>,
+        <function>current-url</function> is set to the loaded file, so
+        that any invocations of <function>load</function> from the
+        loaded file resolve the given file name relative to the file
+        currently being loaded. For example, lets assume we have a web
+        site that serves the following files:
+<programlisting>
+;;;contents of http://foo.com/bar/bar1.scm ;;;
+(load "bar2.scm")
+;;;contents of http://foo.com/bar/bar2.scm ;;;
+(load "/baz/baz1.scm")
+;;;contents of http://foo.com/baz/baz1.scm ;;;
+(load "../baz/baz2.scm")
+;;;contents of http://foo.com/baz/baz2.scm ;;;
+(display "Hello")
+</programlisting>
+        Invoking
+<programlisting>
+(load "http://foo.com/bar/bar1.scm")
+</programlisting>
+        results in each file being loaded; with the last file in the chain,
+        <filename>baz2.scm</filename>, displaying
+        <computeroutput>Hello</computeroutput>.
       </para>
     </sect2>
     <sect2 id="FileSystem">
