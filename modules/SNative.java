@@ -141,11 +141,9 @@ public class SNative extends ModuleAdapter {
                 switch(primid) {
                 case APPEND:
                     Pair p1=pair(f.vlr[0]);
-                    Pair p2=pair(f.vlr[1]);
+                    Value v=f.vlr[1];
                     if (p1==EMPTYLIST)
-                        return p2;
-                    if (p2==EMPTYLIST)
-                        return p1;
+                        return v;
                     Pair p3=list(p1.car);
                     p1=(Pair)p1.cdr;
                     Pair p4=p3;
@@ -154,7 +152,7 @@ public class SNative extends ModuleAdapter {
                         p3.car=p1.car;
                         p1=(Pair)p1.cdr;
                     }
-                    p3.cdr=p2;
+                    p3.cdr=v;
                     return p4;
                 case EQV:
                     Value v1=f.vlr[0];
