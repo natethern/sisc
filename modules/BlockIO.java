@@ -117,7 +117,13 @@ public class BlockIO extends ModuleAdapter {
                 int doff=num(f.vlr[3]).intValue();
                 int count=sbuf.length;
 
-                System.arraycopy(sbuf, soff, dbuf, doff, count);
+                try {
+                    System.arraycopy(sbuf, soff, dbuf, doff, count);
+                } catch (ArrayIndexOutOfBoundsException aib) {
+                    throwPrimException(liMessage(BLOCKB, "bufferoverrun", 
+                                                 f.vlr[0].synopsis(), 
+                                                 f.vlr[2].synopsis()));
+                }
                 return VOID;
             default:
                 throwArgSizeException();
@@ -132,7 +138,13 @@ public class BlockIO extends ModuleAdapter {
                 int doff=num(f.vlr[3]).intValue();
                 int count=num(f.vlr[4]).intValue();
 
-                System.arraycopy(sbuf, soff, dbuf, doff, count);
+                try {
+                    System.arraycopy(sbuf, soff, dbuf, doff, count);
+                } catch (ArrayIndexOutOfBoundsException aib) {
+                    throwPrimException(liMessage(BLOCKB, "bufferoverrun", 
+                                                 f.vlr[0].synopsis(), 
+                                                 f.vlr[2].synopsis()));
+                }
                 return VOID;
             default:
                 throwArgSizeException();
