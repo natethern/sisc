@@ -1178,7 +1178,7 @@ public class Quantity extends Value {
         case COMPLEX:
             throw new NumberFormatException(toString()+" is not a rational number");
         case DECIM:
-            return toExact().numerator();
+            return toExact().numerator().toInexact();
         case RATIO:
             return new Quantity(i);
         default:
@@ -1191,7 +1191,7 @@ public class Quantity extends Value {
         case COMPLEX:
             throw new NumberFormatException(toString()+" is not a rational number");
         case DECIM:
-            return toExact().denominator();
+            return toExact().denominator().toInexact();
         case RATIO:
             return new Quantity(de);
         default:

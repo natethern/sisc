@@ -57,9 +57,9 @@ public class BuiltinProcedure extends Procedure {
             if (v!=null) r.acc=v;
             if (!r.lck && r.nxp == null) r.returnValues(r.vlr);
         } catch (ArrayIndexOutOfBoundsException np) {
-            error(r, name, "incorrect number of arguments to procedure");
+            error(r, name, liMessage("incorrectargcount"));
         } catch (ClassCastException cc) {
-            error(r, name, "got unexpected value "+cc.getMessage());
+            error(r, name, liMessage("gotunexpectedvalue",cc.getMessage()));
 	} catch (NestedPrimRuntimeException npr) {
 	    error(r, name, npr.getMessage() + "\n  " + npr.getRootCause().getMessage());
         } catch (RuntimeException re) {

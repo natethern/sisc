@@ -47,7 +47,7 @@ public class ImmutableString extends SchemeString {
 
 
     public void set(int k, char c) {
-	throw new RuntimeException("string is immutable");
+	throw new RuntimeException(liMessage("stringisimmutable"));
     }
 
     public boolean equals(Object o) {

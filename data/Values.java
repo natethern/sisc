@@ -63,7 +63,7 @@ public class Values extends Value {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        error(r, "multiple values received in single-value context");
+        error(r, liMessage("multiplevalues"));
     }
 
     public void serialize(Serializer s, DataOutput dos) throws IOException {
