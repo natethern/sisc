@@ -6,8 +6,10 @@
                                            (strict-r5rs-compliance))))))))
                                            
 (define (opt:optimize e)
-  (let-values ([(rv state) (opt e (scan e '() '()))])
-    rv))
+  (let ([scanned (scan e '() '())])
+    (write scanned) (newline)
+    (let-values ([(rv state) (opt e scanned)])
+      rv)))
 
 (define (opt e state)
   (match e
@@ -110,11 +112,13 @@
                          ulrvars)
                    (apply merge-states values*)))
     ((,?lambda #t ,formals ,meta ,body)
+     (guard (core-form-eq? ?lambda 'lambda #%lambda))
      (new-state))
     ((,?lambda ,formals ,body) 
      (guard (core-form-eq? ?lambda 'lambda #%lambda))
      (scan body (append lvars (make-proper formals)) '()))
     ((,?letrec #t ,bindings ,meta ,body)
+     (guard (core-form-eq? ?letrec 'letrec #%letrec))
      (new-state))     
     ((,?letrec ((,lhs* ,rhs*) ...) ,body)
      (guard (core-form-eq? ?letrec 'letrec #%letrec))
