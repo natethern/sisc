@@ -584,7 +584,11 @@ public class Primitives extends IndexedProcedure {
                 }
                 return (ret == null) ? FALSE : ret;
             case REMPROP:
-                r.undefine(symbol(vlr[0]), symbol(vlr[1]));
+                if (vlr[1] instanceof SymbolicEnvironment) {
+                    env(vlr[1]).undefine(symbol(vlr[0]));
+                } else {
+                    r.undefine(symbol(vlr[0]), symbol(vlr[1]));
+                }
                 return VOID;
             case SETENVIRONMENT:
                 r.getCtx().defineContextEnv(symbol(vlr[0]), env(vlr[1]));
