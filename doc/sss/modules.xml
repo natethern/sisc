@@ -1,0 +1,25 @@
+  <chapter>
+    <title>
+      The Module System
+    </title>
+    <para>
+      The Module system consists of two components. The first is the
+      module syntax extension provided by R. Kent Dybvig's syntax
+      expander &lsqb;REF&rsqb;. This level provides the ability to
+      scope Scheme code into importable modules with selectable
+      exports. 
+    </para>
+    <para>
+      The second is the Java level &SISC; API for
+      native extensions to the language. A &SISC;
+      module defines new types and functions. Each
+      &SISC; module can be queried from Scheme, and
+      imported into the runtime environment as a whole, or packaged
+      via the same export mechanism as native Scheme code.
+    </para>
+  </chapter>
+<!-- Keep this comment at the end of the file
+Local variables:
+sgml-parent-document:("sss.xml" "chapter")
+End:
+-->

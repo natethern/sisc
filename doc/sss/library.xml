@@ -1,0 +1,109 @@
+  <chapter id="LibraryFunctions">
+    <title>
+      &SISC; Library Functions
+    </title>
+    <sect1 id="Debugging">
+      <title>
+	Debugging
+      </title>
+      <para>
+	&SISC; provides debugging aids that can be added to Scheme
+	source code, as well as limited support for debugging without
+	modification. 
+      </para>
+      <programlisting>
+	&syntax; (trace-lambda trace-name formals body)
+
+	When replaced with a trace-lambda, all calls to a lambda defined 
+	procedure are traced on the console.  <emphasis>trace-name</emphasis> 
+	is a symbol to identify the procedure in the trace. 
+	<emphasis>formals </emphasis>and <emphasis>body</emphasis> have
+	identical semantics to lambda.
+	 
+	&syntax; (trace-let loop-name formal-bindings body)
+	Replaces a named-let expression in a similar manner to trace-lambda.  
+	 
+	&procedure; (trace-top-level-procedures symbol ...)
+	&returns; undefined
+	 
+	Begins traces on the procedures named by the symbols given.  The procedures must be defined in the top-level environment.
+	 
+	&procedure; (untrace-top-level-procedures symbol ...)
+	&returns; undefined
+	 
+	Stops tracing the top-level procedures named by the symbols given.
+      </programlisting>
+      <para>
+	Trace-lambda and trace-let are useful for debugging anonymous
+	lambdas and named-lets
+	respectively. Trace-top-level-procedures can be used to trace
+	calls to any procedure, including native procedures and stored
+	continuations.
+      </para>
+    </sect1>
+    <sect1 id="BitwiseLogicalOperations">
+      <title>
+	Bitwise Logical Operations
+      </title>
+      <para>
+	In addition to the &R5RS; set of procedures that deal with
+	numbers, &SISC; provides operators for performing bitwise
+	logic operations on a limited range of integers.  The domain of the
+	logical operators are exact real integers of the range
+	-2,147,483,647 to 2,147,483,646 inclusive.  An error is raised
+	if the logical operators are applied to integers outside this
+	range, to a non-integer, or a non-real.
+      </para>
+      <programlisting>
+	&procedure; (logand integer [integer] ...)
+	&returns; The logical AND of all provided operands
+	
+	&procedure; (logor integer [integer] ...)
+	&returns; The logical OR of all provided operands
+
+	&procedure; (logxor integer [integer] ...)
+	&returns; The logical exclusive-OR of all provided operands
+
+	&procedure; (lognot integer)
+	&returns; The logical NOT of the provided operand
+      </programlisting>
+      <para>
+	In addition, two operators are provided to perform arithmetic
+	shifts on any integer (these operators do not have the range
+	limitation the previous logical functions do).  The shift
+	operators return a newly generated number formed by shifting
+	the provided number left or right by the given number of bits.
+      </para>
+      <programlisting>
+	&procedure; (ashl integer bits)
+	&returns; <emphasis>integer</emphasis> shifted left by <emphasis>bits</emphasis> bits.
+
+	&procedure; (ashr integer bits)
+	&returns; <emphasis>integer</emphasis> shifted right by <emphasis>bits</emphasis> bits.
+      </programlisting>
+      <para>
+	Mathematically, if r is the number, and s is the number of
+	bits, ashl calculates:
+	<programlisting>
+	  r x 2<superscript>s</superscript>
+	</programlisting>
+	while ashr calculates
+	<programlisting>
+	  r / 2<superscript>s</superscript>
+	</programlisting>
+	in the integer domain.  Both ashl and ashr operate on exact
+	integers and produce only exact integers.  
+      </para>
+    </sect1>
+    <sect1 id="OperatingSystemInterface">
+      <title>
+	Operating System interface
+      </title>
+      <para></para>
+    </sect1>
+  </chapter>
+<!-- Keep this comment at the end of the file
+Local variables:
+sgml-parent-document:("sss.xml" "chapter")
+End:
+-->

@@ -1,0 +1,113 @@
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                    "http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd" [
+ <!ENTITY SISC "<emphasis>SISC</emphasis>">
+ <!ENTITY R5RS "R<superscript>5</superscript>RS">
+ <!ENTITY syntax "<emphasis role='bold'><emphasis>syntax:</emphasis></emphasis>">
+ <!ENTITY returns "<emphasis role='bold'><emphasis>returns:</emphasis></emphasis>">
+ <!ENTITY procedure "<emphasis role='bold'><emphasis>procedure:</emphasis></emphasis>">
+ <!ENTITY parameter "<emphasis role='bold'><emphasis>parameter:</emphasis></emphasis>">
+ <!ENTITY f "&num;f">
+ <!ENTITY intro-chapter SYSTEM "intro.xml">
+ <!ENTITY inst-chapter SYSTEM "inst.xml">
+ <!ENTITY scheme-chapter SYSTEM "scheme.xml">
+ <!ENTITY library-chapter SYSTEM "library.xml">
+ <!ENTITY io-chapter SYSTEM "io.xml">
+ <!ENTITY threads-chapter SYSTEM "threads.xml">
+ <!ENTITY modules-chapter SYSTEM "modules.xml">
+ <!ENTITY java-chapter SYSTEM "java.xml">
+ <!ENTITY gfdl SYSTEM "fdl.xml">
+]>
+
+<book lang="en">
+  <!-- DocBook file was created by LyX 1.1
+  See http://www.lyx.org/ for more information -->
+  <bookinfo>
+    <title>
+      &SISC; <emphasis>for Seasoned Schemers</emphasis>
+    </title>
+    <authorgroup>
+      <author>
+	<firstname>Scott</firstname>
+	<othername>G.</othername>
+	<surname>Miller</surname>
+      </author>
+      <author>
+	<firstname>Matthias</firstname>
+	<surname>Radestock</surname>
+	<contrib>
+	  Generic functions and Scheme/Java bridge documentation
+	</contrib>
+      </author>
+    </authorgroup>
+    <date>
+      February 2002
+    </date>
+    <copyright>
+      <year>2002</year>
+      <holder>Scott G. Miller</holder>
+    </copyright>
+    <legalnotice>
+      <para>
+	Permission is granted to copy, distribute and/or modify this
+	document under the terms of the GNU Free Documentation License,
+	Version 1.1 or any later version published by the Free Software
+	Foundation; with no Invariant Sections, with no Front-Cover
+	Texts, and with no Back-Cover Texts.  A copy of the license is
+	included in the section entitled "GNU Free Documentation License".
+	(<xref linkend="gfdl"/>)
+      </para>
+    </legalnotice>
+      
+  </bookinfo>
+  &intro-chapter;
+  &inst-chapter;
+  &scheme-chapter;
+  &library-chapter;
+  &io-chapter;
+  &threads-chapter;
+  &modules-chapter;
+  &java-chapter;
+  <appendix id="Errata">
+    <title>Errata</title>
+    <para>
+      This appendix describes where this manual and the implementation
+      of SISC depart.  This section should remain small, as it is the
+      goal of the Interpreter to conform to this document, not for
+      this document to describe the idiosyncrasies of the Interpreter.
+    </para>
+    <para>
+      <orderedlist>
+	<listitem>
+	  <para>
+	    (<xref linkend="Characters"/> and <xref
+	    linkend="Strings"/>) Characters  and strings are not
+	    compared according to locale rules (bug &num;493773)
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    (<xref linkend="Debugging"/>) The debugging functions
+	     functions <computeroutput>trace</computeroutput> and
+	    <computeroutput>untrace</computeroutput> are not yet
+	    implemented.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    (<xref linkend="PortCreation"/>) The optional boolean
+	    argument in the creation of output ports that specifies
+	    auto-flush behavior is only present on net network port
+	    creation functions.  File ports are missing this
+	    functionality.  
+	  </para>
+	</listitem>
+      </orderedlist>
+    </para>
+  </appendix>
+  &gfdl;
+  <index id="functions">
+    <title>Index of Functions</title>
+    <para>
+    </para>
+  </index>
+</book>

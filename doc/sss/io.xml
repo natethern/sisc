@@ -1,0 +1,332 @@
+  <chapter id="IO">
+    <title>
+      I/O
+    </title>
+    <para>
+      &SISC;'s I/O routines are implemented in a flexible manner, allowing 
+      extensions to create new I/O sources that will behave as
+      standard Scheme port objects.  The ports can then be operated on
+      with all &R5RS; port operations, as well as some &SISC; specific 
+      port functions.
+    </para>
+    <sect1 id="PortCreation">
+      <title>
+	Port creation
+      </title>
+      <para>&SISC; extends the &R5RS; standard's port-creation
+	functions in order to provide buffered output ports.  All &SISC; 
+	output ports are buffered, and a programmer may choose whether
+	a given port should automatically flush after each write
+	operation.  By default ports do <emphasis>not</emphasis>
+	automatically flush.  Enabling auto-flush can be done when the
+	port is created per the specifications below.  A port that
+	does not automatically flush can be flushed at any time by
+	calling <computeroutput>flush-output-port</computeroutput>.
+	Finally, an output-port that does not automatically flush will
+	be flushed when the port is closed with
+	<computeroutput>close-output-port</computeroutput>, but may
+	not be flushed if the Scheme system is exited without closing
+	the port.
+      </para>
+      <programlisting>
+	&procedure; (open-output-file file [auto-flush])
+	&returns; An output port
+
+	Creates an output port to the specified file (a string).  If
+	the optional auto-flush argument is provided and is true, the
+	port will automatically flush after each write call.  If the
+	specified file exists, it will be overwritten silently when
+	the port is opened.
+
+
+	&procedure; (flush-output-port output-port)
+	&returns; unspecified
+
+	Causes the specified output-port's buffered data to be written
+	immediately.  This operation is allowed on both auto-flush and
+	non-auto-flush output ports, though it has no effect on the
+	former.
+      </programlisting>
+    </sect1>
+    <sect1 id="BlockIO">
+      <title>
+	Block I/O
+      </title>
+      <para>
+	In addition to the standard operations on ports
+	(<computeroutput>read, read-char, char-available?,
+	display,</computeroutput> and
+	<computeroutput>write</computeroutput>), &SISC; provides block
+	input/output functions, that allow a Scheme program to read
+	blocks of more than one byte or character of data at a time.
+	&SISC; stores data that is read or is to be written in a string.
+	Binary data in strings is fully supported throughout &SISC;.  
+	Such strings may be read and written as usual, though
+	undisplayable characters will often be escaped.
+      </para>
+      <programlisting> 
+	&procedure; (block-read buffer input-port integer)
+	&returns; the number of bytes read, an integer
+
+	Reads up to <emphasis>integer</emphasis> bytes of data from
+        the provided <emphasis>input-port</emphasis> into
+        <emphasis>buffer</emphasis>.  Note that less than
+        <emphasis>integer</emphasis> bytes may be read. 
+
+	&procedure; (block-write buffer input-port integer)
+	&returns; unspecified
+ 
+        Writes up to <emphasis>integer</emphasis> bytes of data stored
+	in <emphasis>buffer</emphasis> to the specified
+	<emphasis>output-port</emphasis>.
+      </programlisting>
+    </sect1>
+    <sect1 id="StringPorts">
+      <title>
+	String Ports
+      </title>
+      <para>
+	String ports are input or output ports that read or write to a
+	string rather than a file or other stream.  String ports can
+	be used to parse or emit formatted strings using the standard
+	Scheme port operations.  A String Input port will read from a
+	given string until the end of string is reached, at which
+	point <computeroutput>&num;!eof</computeroutput> is returned.  
+      </para>
+      <programlisting>
+	&procedure; (open-input-string string)
+	&returns; A string input port 
+	
+	Creates a string input port whose characters are read from the
+	provided string.  Characters will be returned from any read
+	operation on the port until the end of the string is reached.
+	Read calls after reaching the end of the string will return 
+	&num;!eof.
+
+	
+	&procedure; (open-output-string)
+	&returns; A string output port
+
+	Creates a string output port, which behaves as an ordinary
+	output port, except that writes are used to create a string as
+	output.  The results of all the write operations are retrieved
+	using (get-output-string)
+
+
+	&procedure; (get-output-string string-output-port)
+	&returns; A string
+
+	Returns the string that was created by zero or more writes to
+	a string output port.  If no writes were performed on the
+	string output port, an empty string ("") is returned.  After
+	this call, the provided string output port is reset to its
+	initial, empty state.
+      </programlisting>
+    </sect1>
+    <sect1 id="PrettyPrinting">
+      <title>
+	Pretty-printing
+      </title>
+      <para>
+	&SISC; includes a pretty-printer, a function that behaves like
+	<computeroutput>write</computeroutput>, but introduces
+	whitespace in order to make the output of data more readable
+	to humans. 
+	</para>
+      <programlisting>
+	&procedure; (pretty-print value [output-port])
+	&returns; unspecified
+
+	Pretty-prints the specified value, either to the specified
+	output-port, or to the console if no output-port is
+	specified. 
+      </programlisting>
+    </sect1>
+    <sect1 id="FileSystem">
+      <title>
+	File-system interface
+      </title>
+      <para>
+	&SISC; provides several additional functions that allow a
+	programmer to interface to the filesystem, to obtain
+	information about files or directories, and to delete, rename, 
+	and modify these files and directories.
+      </para>
+      <para>
+	This API is incomplete... please stay tuned.
+      </para>
+    </sect1>
+    <sect1 id="netio">
+      <title>
+	Networking
+      </title>
+      <para>
+	The &SISC; Networking library provides a mechanism for
+	creating and manipulating IP network protocols as standard
+	Scheme ports.  &SISC; supports TCP, UDP, and Multicast UDP.
+	Each is described in the sections that follow.
+      </para>
+      <para>
+	Each protocol provides one or more <emphasis>socket
+	constructors</emphasis>.  These functions produce a Socket
+	handle, which is represented in &SISC; as
+	<computeroutput>&num;&lt;socket&gt;</computeroutput>.  A
+	socket handle is then used to obtain Scheme ports.
+      </para>
+      <para>
+	IP addresses are represented as strings in &SISC;.  Unless
+	otherwise noted, the network library functions that require an
+	address may take an address as a string in the dotted quad
+	form ("aaa.bbb.ccc.ddd"), or as a hostname which will be
+	resolved using the domain name system.  All port values must
+	be integers in the proper range.
+      </para>
+      <sect2 id="netutils">
+	<title>
+	  Address functions
+	</title>
+	<para>
+	  Several utility functions are provided for manipulating IP
+	  addresses.  These are described below.
+	</para>
+	<programlisting>
+	  &procedure; (get-host-ip-by-name string)
+	  &returns; A dotted-quad IP address or &f;
+
+	  Attempts to resolve a hostname provided as a string into an 
+	  IP address in dotted-quad form.  If the host cannot be
+	  found, &f; is returned.
+
+	  
+	  &procedure; (get-host-name-by-ip string)
+	  &returns; A hostname or &f;
+
+	  Attempts a reverse lookup of the given dotted-quad address
+	  to determine a registered domain name.  If unsuccessful, &f;
+	  is returned
+
+	  
+	  &procedure; (get-local-host)
+	  &returns; The dotted-quad address of the local host 
+
+	  Attempts to determine the Internet visible IP address of the
+	  local machine.  If successful, this address is returned in
+	  dotted-quad notation.  &f; is returned otherwise.
+	</programlisting>
+      </sect2>
+      <sect2 id="sockets">
+	<title>
+	  Socket operations
+	</title>
+	<para>
+	  Once obtained using a protocol specific constructor, a
+	  Socket Handle allows manipulation of common socket options,
+	  the creation of Scheme input/output ports, and closing of
+	  the socket.
+	</para>
+	<programlisting>
+	  &procedure; (open-socket-input-port socket)
+	  &returns; an input port
+
+	  Opens a Scheme input port to the socket.  
+
+
+	  &procedure; (open-socket-output-port socket [boolean])
+	  &returns; an output port
+
+	  Opens a Scheme output port to the socket.  If provided, the
+	  boolean argument specifies whether the given port should be
+	  set to auto-flush mode.  If unspecified, the port does
+	  <emphasis>not</emphasis> auto-flush.
+	  
+
+	  &procedure; (close-socket socket)
+	  &returns; unspecified
+
+	  Closes an IP socket.  
+	</programlisting>
+	<para>
+	  The port-obtaining functions above work on most sockets.
+	  An exception applies for  TCP server sockets, which are used only to
+	  obtain connected TCP sockets.
+	</para>
+      </sect2>
+      <sect2 id="TCP">
+	<title>
+	  TCP
+	</title>
+	<para>
+	  The most commonly used Internet protocol maps most favorably
+	  to Scheme's input/output model.  Writing to an output port
+	  retrieved from a TCP socket writes the data to that socket.
+	  Reading from an input port reads from the connected socket.
+	  One important note is that one can control the amount of data
+	  that fills a TCP packet by using an output port that does
+	  not auto-flush.  Data is written to the port until one
+	  considers the packet complete, and then uses
+	  <computeroutput>(flush-output-port port)</computeroutput> to
+	  complete the packet.  Note also that this does not
+	  <emphasis>guarantee</emphasis> that one gets the desired
+	  packet size, but does allow one to construct reasonably
+	  sized packets.
+	</para>
+	<para>
+	  TCP sockets are obtained one of two ways.  Either one
+	  creates an outgoing connection to another listening host and
+	  then subsequently obtains a socket handle, or one creates a
+	  <emphasis>listening socket</emphasis> and then obtains a
+	  socket by waiting for an incoming connection on the
+	  specified port.  In either case, the result is a socket
+	  handle with an available input and output port that can be
+	  obtained using a function in the previous section.
+	</para>
+	<programlisting>
+	  &procedure; (open-tcp-socket string integer)
+	  &returns; A connected TCP socket
+
+	  Attempts to connect to the host at the given hostname or IP
+	  address encoded in the string, at the given TCP port
+	  specified by the integer.  An error is raised if the host
+	  cannot be found or the connection fails.
+
+	  
+	  &procedure; (open-tcp-listener integer [string])
+	  &returns; A TCP server socket
+
+	  Creates a TCP server socket, which may only be used with
+	  accept-tcp-socket, or closed.  The server socket will listen
+	  on the integer port specified.  If provided, the string
+	  specifies the address of a local interface to bind to.  If
+	  not provided, the port is bound on all available
+	  interfaces.  An error is raised if the socket cannot be
+	  bound and set listening.
+
+	  
+	  &procedure; (accept-tcp-socket server-socket)
+	  &returns; A TCP socket
+
+	  Accepts an incoming connection on the provided
+	  server-socket, and returns a TCP socket handle.  This
+	  function will block until an incoming connection is made,
+	  or, if set, the socket timeout is exceeded.  If the latter
+	  happens, an error will be raised.
+
+	  
+	  &procedure; (set-so-timeout! socket integer)
+	  &returns; undefined
+
+	  Sets the socket timeout on a socket.  The socket can be
+	  either a server socket or connected socket.  In the former
+	  case, this value specifies the number of milliseconds that
+	  an accept-tcp-socket can wait before timing out.  In the
+	  latter, the value specifies the number of milliseconds that
+	  can elapse during a read call before timing out.
+	</programlisting>
+      </sect2>
+    </sect1>
+  </chapter>
+<!-- Keep this comment at the end of the file
+Local variables:
+sgml-parent-document:("sss.xml" "chapter")
+End:
+-->

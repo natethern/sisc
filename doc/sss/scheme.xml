@@ -1,0 +1,564 @@
+  <chapter id="SchemeLanguage">
+    <title>
+      Scheme Language
+    </title>
+    <para>
+      In this chapter we will examine the language that &SISC;
+      interprets, which is a superset of the
+      &R5RS; Scheme Standard.
+    </para>
+    <sect1 id="Types">
+      <title>
+	Types
+      </title>
+      <sect2 id="Numbers">
+	<title>
+	  Numbers
+	</title>
+	<para>
+	  The full Scheme number tower is supported:
+	</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>
+	      Integers
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Floating Point numbers 
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Rational numbers
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Complex numbers
+	    </para>
+	  </listitem>
+	</itemizedlist>
+	<para>
+	  Depending on the numeric library compiled into &SISC;,
+	  floating point numbers have either 32 or 64 bit IEEE
+	  precision, or arbitrary precision. Regardless, &SISC;'s
+	  complex numbers have floating point components of the same
+	  precision as the reals. Integers have arbitrary precision in
+	  all numeric libraries, and rational numbers are built with
+	  arbitrary precision components.
+	</para>
+	<sect3 id="NumericConstants">
+	  <title>
+	    Numeric constants
+	  </title>
+	  <para>
+	    The precision specifying exponents (<computeroutput>S, F,
+	    L, </computeroutput>and
+	    <computeroutput>D</computeroutput>) 
+	    are ignored in &SISC;, all inexact numbers are kept
+	    in the precision of the numeric library.  The exponents
+	    are read and used to scale the real number as expected.
+	    In the case of
+	    arbitrary precision floats, specific precision constraints
+	    are maintained to prevent a runaway increase of
+	    precision. The parameterized functions
+	    <emphasis>min-precision</emphasis> and
+	    <emphasis>max-precision</emphasis> specify the
+	    constraints:
+	  </para>
+	  <programlisting>
+	    &parameter; (min-precision [digits])
+	    Sets or displays the minimum precision constraint, an
+	    integer.
+
+	    &parameter; (max-precision [digits])
+	    Sets or displays the maximum precision constraint, an integer.
+	  </programlisting>
+	  <para>
+	    All four base specifiers (<computeroutput>&num;x, &num;o,
+	    &num;d, &num;b</computeroutput>) are supported for
+	    integers and rationals. Only decimal 
+	    (<computeroutput>&num;d</computeroutput>), the
+	    default, is supported for floating point and complex
+	    numbers.
+	  </para>
+	</sect3>
+	<sect3 id="Exactness">
+	  <title>
+	    Exactness
+	  </title>
+	  <para>
+	    Exactness and inexactness contagion behaves as
+	    expected. Rational's are made inexact through
+	    division. Floats are made exact by conversion to a
+	    rational number. &SISC; attempts as accurate a conversion as
+	    possible, by converting the decimal portion of the number
+	    to a ratio with a denominator of the form 10^n, where n is
+	    the scale of the floating point number. Then the fraction
+	    is reduced as usual.
+	  </para>
+	  <para>
+	    Since complex numbers must have floating point components
+	    currently, conversion to an exact merely rounds the
+	    components to integers. 
+	  </para>
+	</sect3>
+      </sect2>
+      <sect2 id="Characters">
+	<title>
+	  Characters
+	</title>
+	<para>
+	  &SISC;'s characters are based on the Java character type. As
+	  such, the full range of unicode characters are
+	  supported. Unicode characters can be created with
+	  <computeroutput>number-&gt;character</computeroutput> or 
+	  <computeroutput>&num;&bsol;nnnn</computeroutput>, where <computeroutput>nnnn</computeroutput> is an
+	  octal number in the range 0000 -&gt; ffff. 
+	</para>
+	<para>
+	  Characters are compared with respect to the locale detected
+	  by the Java VM.
+	</para>
+      </sect2>
+      <sect2 id="Symbols">
+	<title>
+	  Symbols
+	</title>
+	<para>
+	  &SISC;'s symbols are ordinarily case-insensitive. &SISC;
+	  maintains pointer equality between symbols with like
+	  contents, unless the symbol is created
+	  <emphasis>uninterned</emphasis>. An uninterned symbol is one
+	  which is guaranteed to be pointer distinct from any other
+	  symbol in the Scheme system, even another with the same
+	  contents. Uninterned symbols can be generated with:
+	</para>
+	<indexterm>
+	  <primary>string-&gt;uninterned-symbol</primary>
+	</indexterm>
+	<programlisting>
+	  &procedure; (string-&gt;uninterned-symbol string)
+	  &returns; an uninterned, pointer distinct symbol
+	  
+	</programlisting>
+	<para>
+	  &SISC; also allows symbols to be created that
+	  <emphasis>are</emphasis> case-sensitive. This can be done
+	  one of two ways. The first involves setting the reader to
+	  produce cased symbols via the procedure
+	</para>
+	<programlisting>
+	  &parameter; (case-sensitive [boolean])
+	  Sets or retrieves the reader's case sensitivity.
+	</programlisting>
+	<para>
+	  The second method is via a non-standard symbol syntax. If a
+	  symbol is enclosed in pipe ('|') characters, the reader will
+	  treat that individual symbol as cased. For example:
+	</para>
+	<programlisting>
+	  (eq? 'a '|A|) ; => #f
+	  (eq? 'a '|a|) ; => #t
+	  (eq? '|A| '|a|) ; => #f
+	</programlisting>
+      </sect2>
+      <sect2 id="Strings">
+	<title>
+	  Strings
+	</title>
+	<para>
+	  Strings are built from unicode characters, and are compared
+	  according to the locale's rules.
+	</para>
+      </sect2>
+      <sect2 id="Lists">
+	<title>
+	  Lists
+	</title>
+	<para></para>
+      </sect2>
+      <sect2 id="Vectors">
+	<title>
+	  Vectors
+	</title>
+	<para>
+	  &SISC; supports the length prefix method of creating Vector
+	  constants. For example, '<computeroutput>&num;5(x)</computeroutput>'
+	  creates a vector constant containing five identical
+	  symbols.  In addition, the length-prefix form is used when
+	  printing vectors, and if elements repeat at the end of a
+	  Vector, only the last unique element is printed.  This form
+	  is referred to as the <emphasis>compact</emphasis> vector 
+	  representation.  The unprefixed form with all elements
+	  displayed is called the <emphasis>verbose</emphasis> representation.
+	</para>
+	<para>
+	  Vectors are displayed differently depending on the call
+	  used.  When called with
+	  <computeroutput>display</computeroutput>, in addition to the
+	  ordinary &R5RS; rules regarding the output of values
+	  displayed with <computeroutput>display</computeroutput>,
+	  the verbose representation is displayed. Using 
+	  <computeroutput>write</computeroutput>, on the other hand
+	  produces the compact representation.
+	</para>
+	<para>
+	  Displaying a vector with
+	  <computeroutput>pretty-print</computeroutput> may output
+	  either the verbose or compact representation of a vector.
+	  The behavior of pretty-print is controlled by the parameter
+	  <computeroutput>vector-length-prefixing</computeroutput>.
+	  If set to &num;t, pretty-print will emit the compact representation.
+	  If &num;f, the verbose representation is produced.  By default,
+	  <computeroutput>vector-length-prefixing</computeroutput> is true.
+	</para>
+	<programlisting>
+	  &parameter; (vector-length-prefixing [boolean])
+	  If set to true, this parameter will instruct the
+	  pretty-printer to emit length prefixed,
+	  trailing-duplicate-eliminated vectors in its output.  If
+	  false, ordinary full-length vectors without prefixes will be
+	  emitted.
+	</programlisting>
+      </sect2>
+      <sect2 id="CircularStructures">
+	<title>
+	  Circular structures
+	</title>
+	<para>
+	  &SISC; provides a parse-time syntax for 
+	  creating data (primarily vectors and lists) that contain
+	  references to themselves.  This can be useful to create streams,
+	  graphs, and other self-referencing structures while
+	  maintaining readability and avoiding complex construction
+	  code.
+	</para>
+	<para> 
+	  The reader syntax has two parts, defining a pointer, and
+	  later referencing the pointer to create the circular
+	  reference.
+	</para>
+	<para>
+	  Below is an addition to the &R5RS;
+	  formal syntax (specifically section 7.1.2, external
+	  representations) to support circular structures:
+	</para>
+	<programlisting>
+	  &lt;pointer definition&gt; --> #&lt;uinteger 10&gt;=&lt;datum&gt;
+	  &lt;pointer reference&gt; --> #&lt;uinteger 10&gt;#
+	</programlisting>
+	<para>
+	  The first form instructs the reader to create a pointer
+	  identified by the specified integer, which maps to the datum
+	  that follows, and is active during the reading of the datum
+	  on the right-hand side of the definition.  
+	</para>
+	<para>
+	  If a second definition occurs during the reading of the
+	  datum with the same integral identifier, the previous
+	  definition is overwritten for the duration of the read.  The
+	  definitions are <emphasis>not</emphasis> scoped in any way.
+	  The pointer identifiers should be kept unique by the
+	  programmer to prevent any unintended effects of identifier
+	  collisions. 
+	</para>
+	<para>
+	  The second form references a previously created pointer 
+	  definition.  It is an error to reference an undefined
+	  pointer.  The reader will handle a valid reference by
+	  placing a pointer at the current read position back to the
+	  location of the definition. 
+	</para>
+	<para>
+	  At this point some examples might be helpful:
+	</para>
+	<programlisting>
+	  (define x '#0=(1 2 . #0#))
+	  (caddr x)        ; => 1
+	  (list-ref x 15)  ; => 2
+
+	  (define y '(1 2 #1=#(3 4) . #1#))
+	  (eq? (caddr y) (cdddr y)) ; => #t
+	</programlisting>
+	<para>
+	  At this time, only circular lists are detected by the
+	  Read-Eval-Print-Loop and blocked from being Printed.  If a
+	  cycle exists in any other compound type, it will
+	  <emphasis>not</emphasis> be detected, and a print will be
+	  attempted.  The print may cause the JVM to exit or may just
+	  print to the console indefinitely.  No support yet exists
+	  for printing circular lists or other compound cyclic
+	  structures, though such functionality may exist in future releases.
+	</para>
+      </sect2>
+      <sect2 id="ImmutableTypes">
+	<title>
+	  Immutable types
+	</title>
+	<para>
+	  &SISC; follows the &R5RS;
+	  recommendation of immutable list, string, and vector
+	  constants. Quoted lists and vectors are
+	  immutable. Attempting to modify elements in these constants
+	  will raise an error. String constants are immutable as well
+	  when created with
+	  <computeroutput>symbol-&gt;string</computeroutput>.
+	</para>
+      </sect2>
+    </sect1>
+    <sect1 id="ErrorHandling">
+      <title>
+	Error handling
+      </title>
+      <para>
+	&SISC; provides a sophisticated mechanism for handling errors
+	raised during the execution of a program.  During the
+	execution of any program, there is always a continuation that
+	represents the <emphasis>rest</emphasis> of a computation.  In
+	addition, one can imagine all the activities that will occur
+	as a result of an error.  This sequence of actions is
+	explicitly represented in &SISC; as a <emphasis>failure
+	continuation</emphasis>. 
+      </para>
+      <sect2 id="FailureContinuations">
+	<title>
+	  Failure continuations
+	</title>
+	<para>
+	  Similar to
+	  <computeroutput>call-with-current-continuation</computeroutput>,
+	  &SISC; provides a function,
+	  <computeroutput>call-with-failure-continuation</computeroutput>,
+	  that allows a programmer to define the sequence of actions
+	  that should occur as a result of an error in a called expression.
+	</para>
+	<programlisting>
+	  &procedure; (call-with-failure-continuation thunk handler)
+	  &procedure; (call/fc thunk handler)
+	</programlisting>
+	<blockquote>
+	  <para>
+	    <computeroutput>call-with-failure-continuation</computeroutput>
+	    takes as arguments a thunk (a zero-argument procedure) to
+	    be evaluated.  If during the
+	    evaluation of the thunk an error is raised, the second,
+	    three argument procedure is called with values describing
+	    the error and its context.  If no error occurs, the
+	    value of evaluating the thunk becomes the value of the
+	    call/fc expression.
+	  </para>
+	</blockquote>
+      </sect2>
+      <sect2 id="ErrorHandlers">
+	<title>
+	  Error handlers
+	</title>
+	<para>
+	  The error handler required as an argument to
+	  <computeroutput>call-with-failure-continuation</computeroutput>
+	  must take three parameters.  The first, a string, is a human
+	  readable message describing the error that occurred.  The
+	  second is a procedure encapsulating the continuation that was
+	  in place at the site of the error.  This continuation is
+	  referred to as the <emphasis>error continuation</emphasis>
+	  The third, the <emphasis>failure-continuation</emphasis> is
+	  a procedure that when invoked calls the failure continuation
+	  of the <computeroutput>call/fc</computeroutput> expression.  
+	</para>
+	<para>
+	  When an error occurs, the error handler may choose one of
+	  three courses in dealing with the error.  First, the handler
+	  may choose to return an alternate value as the result of the
+	  <computeroutput>call/fc</computeroutput> expression.
+	  Second, the handler may restart the computation from the
+	  error site by invoking the error continuation with a value
+	  that should be returned in place of the expression that
+	  caused the error.  Finally, the handler may choose to
+	  propagate the error (or a new error) to the failure
+	  continuation of the <computeroutput>call/fc</computeroutput>
+	  expression.  To do this, the handler invokes the
+	  failure-continuation with the provided or new message and
+	  the provided error-continuation or a different continuation
+	  captured by other means.
+	</para>
+	<para>
+	  At this point, a few examples may be helpful:
+	</para>
+	<programlisting>
+	  (+ 1 (/ 1 0) 3)
+   	    ; => <emphasis>A divide by zero error is raised</emphasis>
+
+	  ; Return a new value
+	  (call-with-failure-continuation
+	    (lambda ()
+              (+ 1 (/ 1 0) 3))
+	    (lambda (message error-k failure-k)
+	      'error))     
+            ; => <emphasis>The symbol</emphasis> 'error
+
+	  ; Restart with a different value
+	  (call-with-failure-continuation
+  	    (lambda ()
+              (+ 1 (/ 1 0) 3))
+	    (lambda (message error-k failure-k)
+	      (error-k 2)))
+            ; => 6
+
+	  ; Propagate the error
+	  (call-with-failure-continuation
+  	    (lambda ()
+              (+ 1 (/ 1 0) 3))
+	    (lambda (message error-k failure-k)
+	      (failure-k message error-k)))
+	    ; => <emphasis>A divide by zero error is raised</emphasis>
+	</programlisting>
+      </sect2>
+    </sect1>
+    <sect1>
+      <title><computeroutput>dynamic-wind</computeroutput></title>
+      <para>
+	&R5RS; does not specify the behavior of
+	<computeroutput>dynamic-wind</computeroutput> in the case
+	where an error is raised somewhere in a call to the
+	<emphasis>during</emphasis> thunk.  &SISC; chooses to view
+	an error raised in that section as an instance of the
+	dynamic extent being exited.  In other words, if an error is
+	raised in the dynamic extent of a dynamic-wind expression,
+	&SISC; will ensure that the <emphasis>after</emphasis> thunk
+	is evaluated before the error is propagated to the
+	failure-continuation of the dynamic-wind expression.
+      </para>
+      <para>
+	Here is an example:
+      </para>
+      <programlisting>
+	(define x 0)
+	(dynamic-wind (lambda () (set! x (+ x 1)))
+	              (lambda () (/ 1 0))
+             	      (lambda () (set! x (+ x 1))))
+	; => A divide by zero error is raised, and the value of x is 2
+      </programlisting>
+      <para>
+	If an error is raised in either the
+	<emphasis>before</emphasis> or <emphasis>after</emphasis>
+	thunks, no additional measures are taken.  The error is
+	propagated to the failure-continuation of the dynamic-wind
+	as if the dynamic-wind call was an ordinary function
+	application.  Explicitly, if an error is raised from
+	<emphasis>before</emphasis>, neither
+	<emphasis>during</emphasis> nor <emphasis>after</emphasis>
+	will be executed.  If an error is raised in
+	<emphasis>after</emphasis>, the results of evaluating
+	<emphasis>before</emphasis> and <emphasis>during</emphasis>
+	remain valid.  
+      </para>
+      <para>
+	Also noteworthy is what happens if a continuation is invoked
+	that exits from either the <emphasis>before</emphasis> or
+	<emphasis>after</emphasis> thunks.  Such a case is treated
+	just as if a continuation was invoked during the evaluation
+	of an operand to an application.  This is to say that no
+	additional steps will be taken by &SISC;.  If
+	<emphasis>before</emphasis> is escaped by a continuation invocation,
+	neither <emphasis>during</emphasis> nor <emphasis>after</emphasis>
+	will be executed.  If <emphasis>after</emphasis> is escaped,
+	the results of <emphasis>before</emphasis> and
+	<emphasis>during</emphasis> remain valid.
+      </para>
+      <para>
+	In summary, extraordinary evaluation is only possible during
+	the evaluation of the <emphasis>during</emphasis> thunk. The
+	<emphasis>before</emphasis> and <emphasis>after</emphasis>
+	thunks are evaluated with the dynamic environment and
+	dynamic-wind stack of the call to dynamic-wind itself.
+      </para>
+    </sect1>
+    <sect1 id="SymbolicEnvironments">
+      <title>
+	Symbolic Environments
+      </title>
+      <para>
+	Symbolic environments (sometimes referred to as property lists) 
+	provide additional named global environments useful for storing 
+	program specific data without exposing it to the general
+	purpose top-level environment.
+      </para>
+      <programlisting>
+	&procedure; (getprop variable-name environment-name)
+	&returns; a value, or &num;f if unbound
+
+	Attempts a lookup of variable-name in the symbolic environment
+	named by environment-name.  If found, the value is returned.
+	If not bound, &num;f is returned.
+
+	&procedure; (putprop variable-name environment-name value)
+	&returns; undefined
+
+	Sets the value of the variable named by variable name in the
+	symbolic environment named by environment-value to the provided
+	value.  Any previous value is forgotten.
+      </programlisting>
+      <para>
+	In addition, the top-level Scheme environment is a symbolic
+	environment in &SISC; that can be accessed using getprop and putprop, 
+	by ommitting the <emphasis>environment-name</emphasis> parameter.  
+      </para>
+      <programlisting>
+	&procedure; (getprop variable-name)
+	&returns; a value, or &num;f if unbound
+
+	Attempts a lookup of variable-name in the top-level environment.
+	If found, the value is returned.  If not bound, &num;f is returned.
+
+	&procedure; (putprop variable-name value)
+	&returns; undefined
+
+	Sets the value of the variable named by variable name in the
+	top-level environment to the provided value.  
+      </programlisting>
+      <para>
+	Finally, &SISC; adheres strictly to &R5RS; when it comes to
+	using <computeroutput>set!</computeroutput> to modify the
+	contents of a top-level variable.  If an attempt to set an
+	undefined variable is made, an error will be raised.  This
+	differs from some Scheme systems that will silently create the
+	binding and set it to the new value.
+      </para>
+    </sect1>
+    <sect1 id="Boxing">
+      <title>
+	Boxing
+      </title>
+      <para>
+	&SISC; supports boxes, a container for a
+	Scheme value. Boxing is often used to implement
+	call-by-reference semantics. Boxes are created and accessed
+	using the following three functions:
+      </para>
+      <programlisting>
+	&procedure; (box value)
+	&returns; a box containing the given value
+	 
+	Creates a box filled with the given value.
+
+	&procedure; (unbox box)
+	&returns; the value contained in the given box
+	 
+	Returns the contents of a box.
+
+	&procedure; (set-box! box value)
+	&returns; undefined
+	 
+	Replaces the value contained in the given box with a given
+	value.
+      </programlisting>
+    </sect1>
+  </chapter>
+<!-- Keep this comment at the end of the file
+Local variables:
+sgml-parent-document:("sss.xml" "chapter")
+End:
+-->
