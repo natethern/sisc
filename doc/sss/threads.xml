@@ -408,7 +408,7 @@
       threads.
     </para>
     <para>
-      The priority of a thread is representing by an integer.  The
+      The priority of a thread is represented by an integer.  The
       range of priorities and the default priority of a thread is
       unspecified and may be platform specific.  Larger integers
       represent higher priorities then lower integers.  If a higher 
