@@ -76,9 +76,11 @@
         ; We use absolute references to threading here so that this can
         ; coexist with the lite and full dists without using import
         (repl-thread (|@threading-native::thread/current|))
-        (lambda ()
-          (_signal-unhook! "INT" handler)
-          (|@threading-native::thread/interrupt| (repl-thread))))
+        (letrec ([handler
+                  (lambda ()
+                    (_signal-unhook! "INT" handler)
+                    (|@threading-native::thread/interrupt| (repl-thread)))])
+          handler))
       (lambda () #f)))
 
 (define repl
