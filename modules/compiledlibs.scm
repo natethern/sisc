@@ -83,9 +83,9 @@
        (for-each 
         (lambda (binding)
           (if isLae
-              (add-binding symenv lib binding 
+              (add-binding symenv lib (java-wrap binding)
                            (get-entry-point lib (java-wrap binding)))
-              (putprop binding symenv 
+              (putprop binding (java-unwrap symenv)
                        (java-unwrap
                         (get-local-expression lib (java-wrap binding))))))
         (java-unwrap
