@@ -3,7 +3,7 @@
 (define (buffer . args)
   (let ((nb (make-buffer (length args))))
     (do ((i 0 (+ i 1))
-         (a args (cdr args)))
+         (a args (cdr a)))
         ((= i (buffer-length nb)) nb)
       (buffer-set! nb i (car a)))))
 
