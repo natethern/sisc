@@ -42,7 +42,9 @@ public class AppContext extends Util {
     protected AssociativeEnvironment symenv;
     public AssociativeEnvironment toplevel_env;
 
-    public AppContext() {}
+    public AppContext() {
+	symenv=toplevel_env=new AssociativeEnvironment();
+    }
 
     public AppContext(AssociativeEnvironment symenv) {
 	this.symenv = symenv;
@@ -90,6 +92,7 @@ public class AppContext extends Util {
                 EMPTYLIST=lEMPTYLIST;
                 EOF=lEOF;
             } catch (Exception e) {
+		e.printStackTrace();
                 throw new IOException(e.getMessage());
             } finally {
                 r.pop(lstk);
