@@ -33,7 +33,6 @@
 ;; The SISC read-eval-print-loop
 
 (define current-exit-handler (parameterize void))
-(load "debug.scm")
 
 (define (make-error-message location message)
   (if location
