@@ -177,7 +177,7 @@ public class Reflection extends Util {
             case JAVA_NAME:
                 switch (jtype(f.vlr[0])) {
                 case JavaObject.JCLASS:
-                    return Symbol.intern(jclass(f.vlr[0]).getName());
+                    return Symbol.intern(Util.nameType(jclass(f.vlr[0])));
                 default:
                     return Symbol.intern(((Member)jobj(f.vlr[0])).getName());
                 }
@@ -407,7 +407,7 @@ public class Reflection extends Util {
                 } catch (IllegalArgumentException e) {
                     throw new RuntimeException(liMessage(Util.S2JB, "illegalargument", 
                                                          new Object[] {
-                                                             liMessage(Util.S2JB, "jfield"), 
+                                                             liMessage(Util.S2JB, "jmethod"), 
                                                              jm.toString(), 
                                                              Util.nameType(jm.getDeclaringClass()),
                                                              f.vlr[1].toString()}));
