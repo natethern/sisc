@@ -161,11 +161,11 @@ public class IO extends ModuleAdapter {
             b.append(u.getPath());
             if (u.getRef()!=null) {
                 b.append("%23");
-		b.append(URLEncoder.encode(u.getRef()));
+                b.append(URLEncoder.encode(u.getRef()));
             }
             if (u.getQuery()!=null) {
                 b.append("%3F");
-		b.append(URLEncoder.encode(u.getQuery()));
+                b.append(URLEncoder.encode(u.getQuery()));
             }
             try {
                 u=new URL(b.toString());
