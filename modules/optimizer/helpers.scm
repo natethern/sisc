@@ -21,6 +21,9 @@
        (not (vector? x))
        (not (box? x))))
 
+(define (constant? e)
+  (and (pair? e) (= (length e) 2) (eq? (car e) 'quote)))
+
 (define (immediate? e)
   (or (symbol? e)
       (and (pair? e) (= (length e) 2) (eq? (car e) 'quote))))
