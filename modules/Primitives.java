@@ -3,9 +3,11 @@ package sisc.modules;
 import java.util.*;
 import java.lang.reflect.*;
 import java.io.IOException;
+import java.io.StringReader;
 
 import sisc.*;
 import sisc.data.*;
+import sisc.io.*;
 import sisc.exprs.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
@@ -248,7 +250,7 @@ public class Primitives extends ModuleAdapter {
             case STRING2NUMBER:
                 String st=string(f.vlr[0]);
                 try {
-                    return (Quantity)f.dynenv.parser.nextExpression(new InputPort(st));
+                    return (Quantity)f.dynenv.parser.nextExpression(new ReaderInputPort(new StringReader(st)));
                 } catch (ClassCastException cce) {
                     return FALSE;
                 } catch (NumberFormatException nf) {
@@ -428,7 +430,7 @@ public class Primitives extends ModuleAdapter {
                 return new SchemeString(newStr);
             case STRING2NUMBER:
                 try {
-                    return (Quantity)f.dynenv.parser.nextExpression(new InputPort(string(f.vlr[0])), num(f.vlr[1]).intValue(), 0);
+                    return (Quantity)f.dynenv.parser.nextExpression(new ReaderInputPort(new StringReader(string(f.vlr[0]))), num(f.vlr[1]).intValue(), 0);
                 } catch (NumberFormatException nf) {
                     return FALSE;
                 } catch (IOException e) {

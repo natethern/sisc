@@ -1,45 +1,29 @@
-package sisc.env;
+package sisc.io;
 
-import sisc.data.*;
-import sisc.compiler.*;
 import java.io.*;
-import sisc.io.*;
 
-public class DynamicEnvironment extends sisc.Util implements Cloneable {
+public class SourceInputPort extends StreamInputPort implements InputPort {
 
-    public SchemeInputPort in;
-    public OutputPort out;
+    public int line, column;
+    public String sourceFile;
 
-    public Value wind = FALSE; //top of wind stack
+    public SourceInputPort(InputStream in, String file) {
+	super(in);
+	line=1;
+	column=1;
+	sourceFile=file;
 
-    //the lexer is stateful
-    public Parser parser = new Parser(new Lexer());
-
-    //user-defined thread variables; this map is weak so that we don't
-    //hang on to vars that are no longer in use.
-    public java.util.Map parameters = new java.util.WeakHashMap(0);
-
-    public DynamicEnvironment() {
-        this(System.in, System.out);
     }
 
-    public DynamicEnvironment(SchemeInputPort in, OutputPort out) {
-        this.in = in;
-        this.out = out;
-    }
-
-    public DynamicEnvironment(InputStream in, OutputStream out) {
-        this(new SourceInputPort(new BufferedInputStream(in), liMessage(SISCB, "console")),
-             new OutputPort(new PrintWriter(out), true));
-    }
-
-    public DynamicEnvironment copy() {
-        try {
-            return (DynamicEnvironment)super.clone();
-        }
-        catch (CloneNotSupportedException e) {
-            return this;
-        }
+    public int read() throws IOException {
+        int c=super.read();
+        if (c=='\n') {
+            line++;
+            column=1;
+        } else if (c=='\t') 
+            column+=8;
+        else column++;
+        return c;
     }
 }
 /*

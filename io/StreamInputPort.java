@@ -1,45 +1,52 @@
-package sisc.env;
+package sisc.io;
 
-import sisc.data.*;
-import sisc.compiler.*;
 import java.io.*;
-import sisc.io.*;
+import sisc.*;
+import sisc.data.NamedValue;
+import sisc.interpreter.*;
 
-public class DynamicEnvironment extends sisc.Util implements Cloneable {
+public class StreamInputPort extends SchemeInputPort {
+    protected InputStream r;
+    protected int pushback = -1;
 
-    public SchemeInputPort in;
-    public OutputPort out;
-
-    public Value wind = FALSE; //top of wind stack
-
-    //the lexer is stateful
-    public Parser parser = new Parser(new Lexer());
-
-    //user-defined thread variables; this map is weak so that we don't
-    //hang on to vars that are no longer in use.
-    public java.util.Map parameters = new java.util.WeakHashMap(0);
-
-    public DynamicEnvironment() {
-        this(System.in, System.out);
+    public StreamInputPort(InputStream in) {
+        this.r=in;
     }
 
-    public DynamicEnvironment(SchemeInputPort in, OutputPort out) {
-        this.in = in;
-        this.out = out;
+    public int read() throws IOException {
+        int c=pushback;
+        if (pushback!=-1)
+            pushback=-1;
+        else 
+            c=r.read();
+
+        if (c==-1)
+            throw new EOFException();
+
+        return c;
     }
 
-    public DynamicEnvironment(InputStream in, OutputStream out) {
-        this(new SourceInputPort(new BufferedInputStream(in), liMessage(SISCB, "console")),
-             new OutputPort(new PrintWriter(out), true));
+    public void pushback(int c) {
+        pushback=c;
     }
 
-    public DynamicEnvironment copy() {
-        try {
-            return (DynamicEnvironment)super.clone();
+    public boolean ready() throws IOException {
+        return r.available()>0;
+    }
+
+    public int read(byte[] buff, int offs, 
+                    int count) throws IOException {
+        if (pushback!=-1) {
+            buff[offs]=(byte)pushback;
+            pushback=-1;
+            count--;
+            offs++;
         }
-        catch (CloneNotSupportedException e) {
-            return this;
-        }
+        return r.read(buff, offs, count);
+    }
+
+    public void close() throws IOException {
+        r.close();
     }
 }
 /*

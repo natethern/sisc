@@ -6,6 +6,7 @@ import java.io.*;
 import java.text.*;
 import java.net.*;
 import java.lang.reflect.Field;
+import sisc.io.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import sisc.interpreter.*;
@@ -284,9 +285,9 @@ public abstract class Util extends Defaults implements Version {
 	return null;
     }
 
-    public static final InputPort inport(Value o) {
+    public static final SchemeInputPort inport(Value o) {
         try {
-            return (InputPort)o;
+            return (SchemeInputPort)o;
         } catch (ClassCastException e) { typeError("input-port", o); }
 	return null;
     }

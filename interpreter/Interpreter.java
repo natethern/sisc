@@ -4,6 +4,7 @@ import java.lang.ref.*;
 import java.io.*;
 import java.util.*;
 import sisc.*;
+import sisc.io.*;
 import sisc.data.*;
 import sisc.compiler.*;
 import sisc.exprs.*;
@@ -144,7 +145,7 @@ public class Interpreter extends Util {
      *      the  expression results in an error
      */
     public Value eval(String expr) throws IOException, SchemeException {
-        InputPort ip=new InputPort(new BufferedReader(new StringReader(expr)));
+        InputPort ip=new ReaderInputPort(new BufferedReader(new StringReader(expr)));
         Value rv=VOID;
 
         do {

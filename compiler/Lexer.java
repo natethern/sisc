@@ -3,6 +3,7 @@ package sisc.compiler;
 import java.io.*;
 import java.math.*;
 import sisc.data.*;
+import sisc.io.InputPort;
 import sisc.Util;
 
 public class Lexer implements Tokens {

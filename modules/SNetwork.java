@@ -3,6 +3,7 @@ package sisc.modules;
 import java.net.*;
 import java.io.*;
 import sisc.*;
+import sisc.io.*;
 import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
@@ -60,7 +61,7 @@ public class SNetwork extends ModuleAdapter {
 
     abstract class SchemeSocket extends Value implements Closable {
         public abstract void close() throws IOException;
-        abstract InputPort getInputPort(Interpreter r) throws IOException, ContinuationException;
+        abstract SchemeInputPort getInputPort(Interpreter r) throws IOException, ContinuationException;
         abstract OutputPort getOutputPort(Interpreter r, boolean autoflush) throws IOException, ContinuationException;
     }
 
@@ -104,8 +105,8 @@ public class SNetwork extends ModuleAdapter {
             s.setSoTimeout(ms);
         }
 
-        public InputPort getInputPort(Interpreter r) throws IOException, ContinuationException {
-            return new InputPort(new BufferedReader(new InputStreamReader(s.getInputStream())));
+        public SchemeInputPort getInputPort(Interpreter r) throws IOException, ContinuationException {
+            return new StreamInputPort(new BufferedInputStream(s.getInputStream()));
         }
 
         public OutputPort getOutputPort(Interpreter r, 
@@ -244,10 +245,10 @@ public class SNetwork extends ModuleAdapter {
             s.close();
         }
 
-        public InputPort getInputPort(Interpreter r) throws IOException, ContinuationException {
+        public SchemeInputPort getInputPort(Interpreter r) throws IOException, ContinuationException {
 	    if ((mode & LISTEN)==0)
 		error(r, liMessage(SNETB, "inputonoutputudp"));
-            return new InputPort(new BufferedReader(new InputStreamReader(new UDPInputStream(s, packet_size))));
+            return new StreamInputPort(new BufferedInputStream(new UDPInputStream(s, packet_size)));
         }
 
         public OutputPort getOutputPort(Interpreter r, boolean autoflush) throws IOException, ContinuationException {

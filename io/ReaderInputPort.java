@@ -1,38 +1,57 @@
-package sisc.data;
+package sisc.io;
 
 import java.io.*;
 import sisc.*;
+import sisc.data.NamedValue;
+import sisc.interpreter.*;
 
-public class SourceInputPort extends InputPort {
+public class ReaderInputPort extends SchemeInputPort {
+    protected Reader r;
+    protected int pushback = -1;
 
-    public int line, column;
-    public String sourceFile;
-
-    public SourceInputPort(BufferedReader rd, String file) {
-	super(rd);
-	line=1;
-	column=1;
-	sourceFile=file;
+    public ReaderInputPort(Reader in) {
+        this.r=in;
     }
 
     public int read() throws IOException {
         int c=pushback;
         if (pushback!=-1)
             pushback=-1;
-        else {
+        else 
             c=r.read();
-	    if (c=='\n') {
-		line++;
-		column=1;
-	    } else if (c=='\t') 
-		column+=8;
-	    else column++;
-	}
 
         if (c==-1)
             throw new EOFException();
 
         return c;
+    }
+
+    public void pushback(int c) {
+        pushback=c;
+    }
+
+    public boolean ready() throws IOException {
+        return r.ready();
+    }
+
+    public int read(char[] buff, int offs, 
+                    int count) throws IOException {
+        if (pushback!=-1) {
+            buff[offs]=(char)pushback;
+            pushback=-1;
+            count--;
+            offs++;
+        }
+        return r.read(buff, offs, count);
+    }
+
+    public int read(byte[] buff, int offs, 
+                    int count) throws IOException {
+        throw new IOException(liMessage(SISCB, "binaryreadunsup"));
+    }
+
+    public void close() throws IOException {
+        r.close();
     }
 }
 /*

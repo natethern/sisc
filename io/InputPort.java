@@ -1,46 +1,34 @@
-package sisc.env;
+package sisc.io;
 
-import sisc.data.*;
-import sisc.compiler.*;
 import java.io.*;
-import sisc.io.*;
+import sisc.*;
+import sisc.interpreter.*;
 
-public class DynamicEnvironment extends sisc.Util implements Cloneable {
+public interface InputPort extends Port {
 
-    public SchemeInputPort in;
-    public OutputPort out;
+    /**
+     * Returns one byte from the port.  This function must
+     * return the pushback byte if available.
+     */
+    public int read() throws IOException;
 
-    public Value wind = FALSE; //top of wind stack
+    /**
+     * Pushes one byte back onto the stream.  An input port is
+     * required to support only one such byte.
+     */
+    public void pushback(int c);
 
-    //the lexer is stateful
-    public Parser parser = new Parser(new Lexer());
+    /**
+     * Returns true if a byte is available for reading
+     */
+    public boolean ready() throws IOException;
 
-    //user-defined thread variables; this map is weak so that we don't
-    //hang on to vars that are no longer in use.
-    public java.util.Map parameters = new java.util.WeakHashMap(0);
+    /**
+     * Reads up to count bytes into the specified buffer, and 
+     * must include the pushback byte
+     */
+    public int read(byte[] buff, int off, int count) throws IOException;
 
-    public DynamicEnvironment() {
-        this(System.in, System.out);
-    }
-
-    public DynamicEnvironment(SchemeInputPort in, OutputPort out) {
-        this.in = in;
-        this.out = out;
-    }
-
-    public DynamicEnvironment(InputStream in, OutputStream out) {
-        this(new SourceInputPort(new BufferedInputStream(in), liMessage(SISCB, "console")),
-             new OutputPort(new PrintWriter(out), true));
-    }
-
-    public DynamicEnvironment copy() {
-        try {
-            return (DynamicEnvironment)super.clone();
-        }
-        catch (CloneNotSupportedException e) {
-            return this;
-        }
-    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public

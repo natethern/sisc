@@ -9,6 +9,7 @@ import sisc.compiler.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import sisc.ser.*;
+import sisc.io.*;
 import sisc.interpreter.*;
 import sisc.env.DynamicEnvironment;
 
@@ -46,7 +47,7 @@ public class REPL extends Thread {
     }
 
     public static Value read(Interpreter r, String expr) throws IOException {
-        InputPort ip=new InputPort(new BufferedReader(new StringReader(expr)));
+        InputPort ip=new ReaderInputPort(new StringReader(expr));
         return r.dynenv.parser.nextExpression(ip);
     }
 
@@ -265,7 +266,7 @@ public class REPL extends Thread {
             throws IOException {
             for (;;) {
                 Socket client = ssocket.accept();
-                DynamicEnvironment dynenv = new DynamicEnvironment(new SourceInputPort(new BufferedReader(new InputStreamReader(client.getInputStream())), "console"),
+                DynamicEnvironment dynenv = new DynamicEnvironment(new SourceInputPort(new BufferedInputStream(client.getInputStream()), "console"),
                                                    new OutputPort(new PrintWriter(client.getOutputStream()), true));
                 REPL repl = new SocketREPL(app, dynenv, client);
                 repl.start();

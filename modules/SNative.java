@@ -13,7 +13,7 @@ public class SNative extends ModuleAdapter {
 	ASSQ=0, MEMQ=1, ASSOC=6, MEMBER=7,
 	CADR=2, CDAR=3, CAAR=4, CDDR=5, NOT=8,
 	APPEND=9, MEMV=11, ASSV=12,
-	VECTOR=13, LISTREF=14, VALUES=15, READLINE=16,
+	VECTOR=13, LISTREF=14, VALUES=15,
         
         SUBSTRING=17, STRINGORDER=18, STRINGORDERCI=19,
         STRINGUPCASE=20, STRINGDOWNCASE=21;
@@ -34,7 +34,6 @@ public class SNative extends ModuleAdapter {
         define("list-ref", LISTREF);
         define("memv", MEMV);
         define("not", NOT);
-        define("read-line", READLINE);
         define("string-order", STRINGORDER);
         define("string-downcase", STRINGDOWNCASE);
         define("string-order-ci", STRINGORDERCI);
@@ -101,19 +100,6 @@ public class SNative extends ModuleAdapter {
             }
         default:
             switch(f.vlr.length) {
-            case 0:
-                switch(primid) {
-                case READLINE:
-                    try {
-                        String s=f.dynenv.in.getReader().readLine();
-                        if (s==null) return EOF;
-                        return new SchemeString(s);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e.getMessage());
-                    }
-                default:
-                    throwArgSizeException();
-                }
             case 1:
                 switch(primid) {
                 case NOT: return truth(f.vlr[0]) ? FALSE : TRUE;
@@ -125,14 +111,6 @@ public class SNative extends ModuleAdapter {
                     return ((Pair)pair(f.vlr[0]).car).car;
                 case CDDR:
                     return ((Pair)pair(f.vlr[0]).cdr).cdr;
-                case READLINE:
-                    try {
-                        String s=inport(f.vlr[0]).getReader().readLine();
-                        if (s==null) return EOF;
-                        return new SchemeString(s);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e.getMessage());
-                    }
                 case STRINGUPCASE:
                     SchemeString str=str(f.vlr[0]);
                     return new SchemeString(str.asString().toUpperCase());

@@ -6,6 +6,7 @@ import java.net.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
 import sisc.data.*;
+import sisc.io.*;
 
 public class IO extends ModuleAdapter {
 
@@ -87,6 +88,60 @@ public class IO extends ModuleAdapter {
         }
         return cl;
     }
+
+    private static Value readChar(SchemeInputPort i) throws ContinuationException {
+        try {
+            int c=i.read();
+            return new SchemeCharacter((char)c);
+        } catch (EOFException e) {
+            return EOF;
+        } catch (IOException e2) {
+            e2.printStackTrace();
+            throw new RuntimeException(liMessage(SISCB, "errorreading",
+                                                 i.synopsis(),
+                                                 e2.getMessage()));
+        }
+    }
+
+    private static Value read(Interpreter r, SchemeInputPort i, int flags) {
+        try {
+            return r.dynenv.parser.nextExpression(i, flags);
+        } catch (EOFException e) {
+            return EOF;
+        } catch (IOException e2) {
+            e2.printStackTrace();
+            throw new RuntimeException(liMessage(SISCB, "errorreading",
+                                                 i.synopsis(),
+                                                 e2.getMessage()));
+        }
+    }
+    
+    private static int readChars(SchemeInputPort is, char[] buff, int off,
+                                 int len) {
+        byte[] buff2=new byte[len];
+        try {
+            int rc=is.read(buff2, 0, len);
+            for (int i=0; i<rc; i++) {
+                buff[i+off]=(char)buff2[i];
+            }
+            return rc;
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(liMessage(SISCB, "errorreading",
+                                                 is.synopsis(),
+                                                 e.getMessage()));
+        }
+    }
+
+    public static Value read(Interpreter r, SchemeInputPort i) {
+        return read(r, i, 0);
+    }
+
+    public static Value readCode(Interpreter r, SchemeInputPort i) {
+        return read(r, i, sisc.compiler.Parser.PRODUCE_ANNOTATIONS |
+                    sisc.compiler.Parser.PRODUCE_IMMUTABLES);
+    }
+
        
     public Value eval(int primid, Interpreter f)
         throws ContinuationException {
@@ -97,16 +152,16 @@ public class IO extends ModuleAdapter {
             case CURRENTINPUTPORT: return f.dynenv.in;
             case OPENOUTPUTSTRING: return new OutputPort(new StringWriter());
             case PEEKCHAR:
-                Value v=f.dynenv.in.readChar();
+                Value v=readChar(f.dynenv.in);
                 if (v instanceof SchemeCharacter)
                     f.dynenv.in.pushback(((SchemeCharacter)v).c);
                 return v;
             case READ:
-                return f.dynenv.in.read(f);
+                return read(f, f.dynenv.in);
             case READCHAR:
-                return f.dynenv.in.readChar();
+                return readChar(f.dynenv.in);
             case READCODE:
-                return f.dynenv.in.readCode(f);
+                return readCode(f, f.dynenv.in);
             default:
                 throwArgSizeException();
             }
@@ -115,7 +170,7 @@ public class IO extends ModuleAdapter {
             case INPORTQ: return truth(f.vlr[0] instanceof InputPort);
             case OUTPORTQ: return truth(f.vlr[0] instanceof OutputPort);
             case CHARREADY:
-                InputPort inport=inport(f.vlr[0]);
+                SchemeInputPort inport=inport(f.vlr[0]);
                 try {
                     return truth(inport.ready());
                 } catch (IOException e) {
@@ -131,22 +186,22 @@ public class IO extends ModuleAdapter {
                 }
                 return VOID;
             case OPENINPUTSTRING:
-                return new InputPort(string(f.vlr[0]));
+                return new ReaderInputPort(new StringReader(string(f.vlr[0])));
             case PEEKCHAR:
                 inport=inport(f.vlr[0]);
-                Value v=inport.readChar();
+                Value v=readChar(inport);
                 if (v instanceof SchemeCharacter)
                     inport.pushback(((SchemeCharacter)v).c);
                 return v;
             case READ:
                 inport=inport(f.vlr[0]);
-                return inport.read(f);
+                return read(f, inport);
             case READCHAR:
                 inport=inport(f.vlr[0]);
-                return inport.readChar();
+                return readChar(inport);
             case READCODE:
                 inport=inport(f.vlr[0]);
-                return inport.readCode(f);
+                return readCode(f, inport);
             case GETOUTPUTSTRING:
                 OutputPort port=outport(f.vlr[0]);
                 if (!(port.w instanceof StringWriter))
@@ -165,7 +220,7 @@ public class IO extends ModuleAdapter {
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(true);
                     conn.setDoOutput(false);
-                    return new SourceInputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())), url.toString());
+                    return new SourceInputPort(new BufferedInputStream(conn.getInputStream()), url.toString());
                 } catch (IOException e) {
                     throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
                 }
@@ -175,7 +230,7 @@ public class IO extends ModuleAdapter {
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(true);
                     conn.setDoOutput(false);
-                    return new InputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())));
+                    return new StreamInputPort(new BufferedInputStream(conn.getInputStream()));
                 } catch (IOException e) {
                     throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
                 }
@@ -202,8 +257,12 @@ public class IO extends ModuleAdapter {
                 }
                 return VOID;
             case CLOSEINPUTPORT:
-                InputPort inp=inport(f.vlr[0]);
-                if (inp!=f.dynenv.in) inp.close();
+                SchemeInputPort inp=inport(f.vlr[0]);
+                try {
+                    if (inp!=f.dynenv.in) inp.close();
+                } catch (IOException e) {
+                    //fixme?
+                }
                 return VOID;
             case CLOSEOUTPUTPORT:
                 op=outport(f.vlr[0]);
@@ -222,13 +281,13 @@ public class IO extends ModuleAdapter {
                 } else
                     return FALSE;
             case LOAD:
-                InputPort p=null;
+                SchemeInputPort p=null;
                 url = url(f.vlr[0]);
                 try {
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(true);
                     conn.setDoOutput(false);
-                    p=new SourceInputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())), url.toString());
+                    p=new SourceInputPort(new BufferedInputStream(conn.getInputStream()), url.toString());
                 } catch (IOException e) {
                     throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
                 }
@@ -236,7 +295,7 @@ public class IO extends ModuleAdapter {
                 try {
                     v=null;
                     do {
-                        v=p.readCode(r);
+                        v=readCode(r, p);
 
                         if (v!=EOF) {
                             try {
@@ -359,11 +418,13 @@ public class IO extends ModuleAdapter {
             switch(primid) {
             case BLOCKREAD:
                 int count=num(f.vlr[2]).intValue();
-                InputPort inport=inport(f.vlr[1]);
+                SchemeInputPort inport=inport(f.vlr[1]);
                 SchemeString st=str(f.vlr[0]);
                 char[] buff=st.asCharArray();
                 st.set(buff); //forces string to be represented by char[] only
-                return inport.read(buff, count);
+                int rv=readChars(inport, buff, 0, count);
+                if (rv==-1) return EOF;
+                else return Quantity.valueOf(rv);
             case BLOCKWRITE:
                 count=num(f.vlr[2]).intValue();
                 OutputPort outport=outport(f.vlr[1]);
