@@ -3,7 +3,9 @@ package sisc.data;
 import sisc.data.NamedValue;
 import sisc.io.InputPort;
 
-public abstract class SchemeInputPort extends NamedValue implements InputPort {
+public abstract class SchemeInputPort extends NamedValue
+    implements InputPort {
+
     public String display() {
         return displayNamedOpaque("input-port");
     }

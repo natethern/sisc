@@ -74,9 +74,9 @@ public class SchemeVector extends Value {
     }
 
     public void fill(Value v) {
-	for (int i=0; i<vals.length; i++)
-	    vals[i]=v;
-	lastUnique=-1;
+        for (int i=0; i<vals.length; i++)
+            vals[i]=v;
+        lastUnique=-1;
     }
 
     public void set(int idx, Value v) {
@@ -92,9 +92,9 @@ public class SchemeVector extends Value {
             b.append(vals[i].synopsis(length-b.length()));
             if (i+1<l) b.append(' ');
         }
-	if (i<l) b.append("...");
-	else b.append(')');
-	return b.toString();
+        if (i<l) b.append("...");
+        else b.append(')');
+        return b.toString();
     }
 
     public void serialize(Serializer s) throws IOException {
