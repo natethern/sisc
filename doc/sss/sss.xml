@@ -162,6 +162,14 @@ for <function>sqrt</function>, it is not clear what other mathematical
 	  </para>
 	</listitem>
 	<listitem>
+	  <para><emphasis role="bold">6.5 - &SISC; currently returns
+          an environment from the <function>scheme-report-environment
+          </function> which contains 
+          four bindings not specified in &R5RS;, bindings which
+          are needed by &R5RS; syntactic keywords.
+         </emphasis></para>
+        </listitem>
+	<listitem>
 	  <para><emphasis role="bold">6.6.2 - &SISC; currently only
 	    warns when end-of-file is reached in
 	    <function>read</function>, rather than signaling an
