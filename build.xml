@@ -20,6 +20,8 @@
     <property name="docdir" value="${basedir}/doc"/>
     <property name="gendocdir" value="${docdir}/generated"/>
     <property name="schemedir" value="${basedir}/scheme-src"/>
+    <property name="srfidir" value="${srcdir}/sisc/modules/srfi"/>
+    <property name="quantitydir" value="${srcdir}/sisc/data"/>
     <property name="tmpdir" value="${basedir}/tmp"/>
     <property name="packagename" value="sisc"/>
     <property name="basejar" value="sisc.jar"/>
@@ -28,7 +30,6 @@
     <property name="libjar" value="sisc-lib.jar"/>
     <property name="heap" value="${basedir}/sisc.shp"/>
     <property name="quantity-type" value="apfloat"/>
-    <property name="quantity-dir" value="${srcdir}/sisc/data"/>
     <condition property="debugging" value="on">
       <or> 
         <isset property="releasecandidate"/>
@@ -65,30 +66,30 @@
     <delete file="${basedir}/${basejar}"/>
     <delete file="${basedir}/${optjar}"/>
     <delete file="${heap}"/>
-    <delete file="${quantity-dir}/Quantity.java"/>
+    <delete file="${quantitydir}/Quantity.java"/>
     <delete>
-      <fileset dir="${quantity-dir}"
+      <fileset dir="${quantitydir}"
                includes=".Quantity-*"/>
     </delete>
   </target> 
 
   <target name="quantity-uptodate" depends="prepare">
     <uptodate property="quantityUptodate"
-              targetfile="${quantity-dir}/.Quantity-${quantity-type}"
-              srcfile="${quantity-dir}/Quantity-${quantity-type}.java.tmpl"/>
+              targetfile="${quantitydir}/.Quantity-${quantity-type}"
+              srcfile="${quantitydir}/Quantity-${quantity-type}.java.tmpl"/>
   </target>
 
   <target name="quantity"
           depends="quantity-uptodate"
           unless="quantityUptodate">
-    <copy file="${quantity-dir}/Quantity-${quantity-type}.java.tmpl"
-          tofile="${quantity-dir}/Quantity.java"
+    <copy file="${quantitydir}/Quantity-${quantity-type}.java.tmpl"
+          tofile="${quantitydir}/Quantity.java"
           overwrite="yes"/>
     <delete>
-      <fileset dir="${quantity-dir}"
+      <fileset dir="${quantitydir}"
                includes=".Quantity-*"/>
     </delete>
-    <touch file="${quantity-dir}/.Quantity-${quantity-type}"/>
+    <touch file="${quantitydir}/.Quantity-${quantity-type}"/>
   </target>
 
   <target name="compile" depends="quantity">
@@ -204,11 +205,11 @@
     <mkdir dir="${tmpdir}/sisc/libs"/>
     <java classname="sisc.REPL"
           classpath="${classdir}"
-          dir="${schemedir}"
+          dir="${srfidir}"
 	  fork="yes">
 	<jvmarg value="-Dsisc.heapfile=${heap}"/>
 	<arg value="-x"/>
-	<arg value="srfi-sll.scm"/>
+	<arg value="${srfidir}/srfi-sll.scm"/>
     </java>
   </target> 
 
@@ -219,16 +220,6 @@
       </fileset>
     </jar>
   </target>
-
-<!--  <target name="srfi-sce" depends="full-heap" unless="lite">
-    <java classname="sisc.REPL"
-          classpath="${classdir}"
-          dir="${schemedir}"
-	  fork="yes">
-	<jvmarg value="-Dsisc.heapfile=${heap}"/>
-	<arg line="-x -e '(expand-file &quot;srfi.scm&quot; &quot;srfi.sce&quot;)'"/>
-    </java>
-  </target> -->
 
   <target name="full-heap" depends="jars" unless="lite">
     <java classname="sisc.boot.GenerateHeap"
@@ -354,16 +345,13 @@
     <mkdir dir="${dist}/full/sisc/scheme-src"/>
     <mkdir dir="${dist}/full/sisc/scheme-src/srfi-22"/>
 
-    <copy todir="${dist}/full/sisc/scheme-src">
-      <fileset dir="${basedir}/scheme-src">
-        <include name="slib.scm"/>
-        <!-- <include name="srfi/**"/> -->
-        <include name="optional-args.scm"/>
-      </fileset>
-    </copy>
+    <copy todir="${dist}/full/sisc/scheme-src"
+          file="${srcdir}/sisc/modules/slib.scm"/>
+    <copy todir="${dist}/full/sisc/scheme-src"
+          file="${srfidir}/optional-args.scm"/>
 
     <copy todir="${dist}/full/sisc/scheme-src/srfi-22/"
-          file="${basedir}/scheme-src/srfi/srfi-22/srfi-22.sh"/>
+          file="${srfidir}/srfi-22/srfi-22.sh"/>
     <chmod file="${dist}/full/sisc/scheme-src/srfi-22/srfi-22.sh"
            perm="ugo+rx"/>
     <chmod file="${dist}/full/sisc/install-srfi22.sh"

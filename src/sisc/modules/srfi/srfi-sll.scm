@@ -1,6 +1,6 @@
 (load "srfi.scm")
 (import compiled-libraries)
-(create-library-from-module 'sisc/libs/srfi "../tmp/sisc/libs/srfi.sll"
+(create-library-from-module 'sisc/libs/srfi "../../../../tmp/sisc/libs/srfi.sll"
  'r5rs
  'srfi-0
  'srfi-22

@@ -474,7 +474,7 @@
   (import pattern-matching)
   ;;TODO: we really want to import the srfi-11 module here, but srfis
   ;;are not part of the core build
-  (include "../../../scheme-src/srfi/srfi-11.scm")
+  (include "srfi/srfi-11.scm")
   (include "optimizer/ds.scm")
   (include "optimizer/helpers.scm")
   (include "optimizer/logic.scm")
@@ -490,13 +490,13 @@
 
 ;;load and import srfi-0
 (module srfi-0 (cond-expand)
-  (include "../../../scheme-src/srfi/srfi-0.scm")
+  (include "srfi/srfi-0.scm")
   (add-feature 'srfi-0))
 (import srfi-0)
 
 ;;load and import srfi-22
 ;; we support this directly so we don't have to load srfi.sll in scripts
 (module srfi-22 (srfi-22-prepare main main-hook)
-  (include "../../../scheme-src/srfi/srfi-22/srfi-22.scm")
+  (include "srfi/srfi-22/srfi-22.scm")
   (add-feature 'srfi-22))
 (import srfi-22)

@@ -6,7 +6,7 @@
 (display "srfi-8 ")
 (module srfi-8
   (receive)
-  (include "srfi/srfi-8.scm")
+  (include "srfi-8.scm")
   (add-feature 'srfi-8))
 
 (display "srfi-23 ")
@@ -95,18 +95,18 @@
            cdaaar cdaadr cdadar cdaddr cddaar cddadr cdddar cddddr)
   (import optional-args)
   (import srfi-8) ;RECEIVE
-  (include "srfi/srfi-1.scm")
+  (include "srfi-1.scm")
   (add-feature 'srfi-1))
 
 (display "srfi-2 ")
 (module srfi-2 (and-let*)
   (import srfi-23) ;ERROR
-  (include "srfi/srfi-2.scm")
+  (include "srfi-2.scm")
   (add-feature 'srfi-2))
 
 (display "srfi-5 ")
 (module srfi-5 (let)
-  (include "srfi/srfi-5.scm")
+  (include "srfi-5.scm")
   (add-feature 'srfi-5))
 
 (display "srfi-6 ")
@@ -124,7 +124,7 @@
 (display "srfi-7 ")
 (module srfi-7 (program)
   (import srfi-0)
-  (include "srfi/srfi-7.scm")
+  (include "srfi-7.scm")
   (add-feature 'srfi-7))
 
 (display "srfi-9 ")
@@ -136,18 +136,18 @@
      vector?)
   (import* r5rs (real-vector? vector?))
   (import srfi-23) ;ERROR
-  (include "srfi/srfi-9.scm")
+  (include "srfi-9.scm")
   (add-feature 'srfi-9))
 (module srfi-9-lib
     ((define-struct define-record-type))
   (import srfi-9)
   (import misc)
-  (include "srfi/srfi-9-lib.scm"))
+  (include "srfi-9-lib.scm"))
 
 (display "srfi-11 ")
 (module srfi-11
   (let-values let*-values)
-  (include "srfi/srfi-11.scm")
+  (include "srfi-11.scm")
   (add-feature 'srfi-11))
 
 (display "srfi-14 ")
@@ -182,7 +182,7 @@
   (import optional-args)
   (define %latin1->char integer->char)
   (define %char->latin1 char->integer)
-  (include "srfi/srfi-14.scm")
+  (include "srfi-14.scm")
   (add-feature 'srfi-14))
 
 (display "srfi-13 ")
@@ -238,13 +238,13 @@
   (import optional-args)
   (define char-cased? char-alphabetic?)
   (define char-titlecase char-upcase)
-  (include "srfi/srfi-13.scm")
+  (include "srfi-13.scm")
   (add-feature 'srfi-13))
 
 (display "srfi-16 ")
 (module srfi-16 (case-lambda)
   (import srfi-23) ;ERROR
-  (include "srfi/srfi-16.scm")
+  (include "srfi-16.scm")
   (add-feature 'srfi-16))
 
 (display "srfi-18 ")
@@ -265,7 +265,7 @@
      uncaught-exception-reason)
   (import threading-native)
   (import srfi-9)
-  (include "srfi/srfi-18.scm"))
+  (include "srfi-18.scm"))
 
 (display "srfi-19 ")
 (module srfi-19
@@ -308,7 +308,7 @@
   (import srfi-8)
   (import srfi-9-lib)
   (import optional-args)
-  (include "srfi/srfi-19.scm"))
+  (include "srfi-19.scm"))
 
 (display "srfi-24 ")
 (module srfi-24 ()
@@ -328,15 +328,15 @@
      array-set!
      share-array)
   (import srfi-9)
-  (include "srfi/srfi-25/as-srfi-9-record.scm")
+  (include "srfi-25/as-srfi-9-record.scm")
   ;;pick one of three alternative implementations
-  (include "srfi/srfi-25/ix-ctor.scm")
-  (include "srfi/srfi-25/op-ctor.scm")
-  ;;(include "srfi/srfi-25/ix-mbda.scm")
-  ;;(include "srfi/srfi-25/op-mbda.scm")
-  ;;(include "srfi/srfi-25/ix-tter.scm")
-  ;;(include "srfi/srfi-25/op-tter.scm")
-  (include "srfi/srfi-25/array.scm"))
+  (include "srfi-25/ix-ctor.scm")
+  (include "srfi-25/op-ctor.scm")
+  ;;(include "srfi-25/ix-mbda.scm")
+  ;;(include "srfi-25/op-mbda.scm")
+  ;;(include "srfi-25/ix-tter.scm")
+  ;;(include "srfi-25/op-tter.scm")
+  (include "srfi-25/array.scm"))
 (module srfi-25-lib
     (array?
      make-array
@@ -367,13 +367,13 @@
      transpose
      share-nths)
   (import srfi-25)
-  (include "srfi/srfi-25/arlib.scm"))
+  (include "srfi-25/arlib.scm"))
 
 (display "srfi-26 ")
 (module srfi-26
     ((cut srfi-26-internal-cut)
      (cute srfi-26-internal-cute))
-  (include "srfi/srfi-26.scm")
+  (include "srfi-26.scm")
   (add-feature 'srfi-26))
 
 (display "srfi-28 ")
@@ -392,7 +392,7 @@
      localized-template)
   (import s2j)
   (import generic-procedures)
-  (include "srfi/srfi-29.scm")
+  (include "srfi-29.scm")
   (add-feature 'srfi-29))
 
 (display "srfi-30 ")
@@ -403,7 +403,7 @@
 (display "srfi-31 ")
 (module srfi-31
     (rec)
-  (include "srfi/srfi-31.scm")
+  (include "srfi-31.scm")
   (add-feature 'srfi-31))
 
 (display "srfi-34 ")
@@ -411,7 +411,7 @@
     (raise
      with-exception-handler
      (guard guard-aux))
-  (include "srfi/srfi-34.scm")
+  (include "srfi-34.scm")
   (add-feature 'srfi-34))
 
 (display "srfi-35 ")
@@ -433,7 +433,7 @@
   (import srfi-1)
   (import srfi-9)
   (import srfi-23)
-  (include "srfi/srfi-35.scm")
+  (include "srfi-35.scm")
   (add-feature 'srfi-35))
 
 (display "srfi-37 ")
@@ -446,14 +446,14 @@
      args-fold)
   (import srfi-9)
   (import srfi-11)
-  (include "srfi/srfi-37.scm")
+  (include "srfi-37.scm")
   (add-feature 'srfi-37))
 
 ;Still draft
 (display "srfi-38 ")
 (module srfi-38
   (write-showing-shared)
-  (include "srfi/srfi-38.scm")
+  (include "srfi-38.scm")
   (add-feature 'srfi-38))
 
 (newline)
