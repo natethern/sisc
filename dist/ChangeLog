@@ -1,3 +1,9 @@
+2002-10-08  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Change from R. Kent Dybvig that fixes some redundancy
+	  in the expander's internal datastructures, resulting in smaller
+	  expanded code and much faster expansion in certain cases.
+
 2002-10-07  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed Lite build 
