@@ -520,7 +520,7 @@ public class Primitives extends ModuleAdapter {
             case REPORTENVIRONMENT:
                 if (FIVE.equals(num(f.vlr[0])))
                     try {
-                        return f.lookupContextEnv(REPORT);
+                        return new AssociativeEnvironment((AssociativeEnvironment)f.lookupContextEnv(REPORT));
                     } catch (ArrayIndexOutOfBoundsException e) {
                         throwPrimException("Standard environment not present");
                     }

@@ -128,6 +128,7 @@ public class REPL extends Thread {
 	    try {
 		r.ctx.toplevel_env.lookup(replSymb);
 	    } catch (ArrayIndexOutOfBoundsException aiob) {
+                aiob.printStackTrace();
 		System.err.println("Fatal error: Heap not found or does not contain repl.");
 		return;
 	    }

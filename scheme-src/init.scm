@@ -194,7 +194,7 @@
 ;;;;;;;;;;;;; File functions
 
 (define current-directory (void))
-(define _current-directory (make-parameter #f))
+(define _current-directory (make-parameter "."))
 (letrec ([_cd 
 	  (lambda args
 	    (if (null? args) (_current-directory)

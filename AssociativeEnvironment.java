@@ -43,13 +43,14 @@ public class AssociativeEnvironment extends NamedValue {
     protected static final float EXPFACT=1.5F;
     protected Map symbolMap;
     public Value[] env;
+    protected AssociativeEnvironment parent;
     protected int nextFree;
 
-    public AssociativeEnvironment(AssociativeEnvironment cloneFrom) {
-        symbolMap=(Map)((HashMap)cloneFrom.symbolMap).clone();
-        nextFree=cloneFrom.nextFree;
+    public AssociativeEnvironment(AssociativeEnvironment parent) {
+        this.parent=parent;
+        symbolMap=new HashMap(parent.symbolMap.size());
+        nextFree=parent.nextFree;
         env=new Value[nextFree];
-        System.arraycopy(cloneFrom.env, 0, env, 0, nextFree);
     }
 
     AssociativeEnvironment(Value[] env, Map symMap) {
@@ -89,9 +90,9 @@ public class AssociativeEnvironment extends NamedValue {
     public int set(Symbol s, Value v) {
 	synchronized(symbolMap) {
 	    Integer i=(Integer)symbolMap.get(s);
-	    int iv=i.intValue();
-	    env[iv]=v;
-	    return iv;
+            int iv=i.intValue();
+            env[iv]=v;
+            return iv;
 	}
     }
 
@@ -118,15 +119,25 @@ public class AssociativeEnvironment extends NamedValue {
     }
 
     public int getLoc(Symbol s) {
-        Integer i=(Integer)symbolMap.get(s);
+        Integer i;
+        synchronized(symbolMap) {
+            i=(Integer)symbolMap.get(s);
+        }
+        if (i==null && parent!=null) {
+            int pi=parent.getLoc(s);
+            if (pi!=-1) {
+                synchronized(symbolMap) {
+                    symbolMap.put(s, i=new Integer(pi));
+                }
+                env[pi]=parent.lookup(s);
+            }
+        }
         return (i==null ? -1 : i.intValue());
     }
 
     public Value lookup(Symbol s) {
-        Integer i=(Integer)symbolMap.get(s);
-        if (i==null)
-            throw new ArrayIndexOutOfBoundsException();
-        else return env[i.intValue()];
+        int pi=getLoc(s);
+        return env[pi];
     }
 
     public Value lookup(int envLoc) {
@@ -139,6 +150,7 @@ public class AssociativeEnvironment extends NamedValue {
 
     public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
+            s.writeBer(nextFree, dos);
             s.writeBer(symbolMap.size(), dos);
             for (Iterator i=symbolMap.keySet().iterator(); i.hasNext();) {
                 Symbol key=(Symbol)i.next();
@@ -146,21 +158,23 @@ public class AssociativeEnvironment extends NamedValue {
                 int loc=((Integer)symbolMap.get(key)).intValue();
                 s.serialize(env[loc], dos);
             }
+            s.serialize(parent, dos);
         }
     }
 
     public void deserialize(Serializer s, DataInput dis)
     throws IOException {
         if (SERIALIZATION) {
+            nextFree=s.readBer(dis);
             int size=s.readBer(dis);
-            env=new Value[Math.max(10,size)];
+            env=new Value[Math.max(10,nextFree)];
             symbolMap=new HashMap();
             for (int i=0; i<size; i++) {
                 Symbol id=(Symbol)s.deserialize(dis);
                 env[i]=(Value)s.deserialize(dis);
                 symbolMap.put(id, new Integer(i));
             }
-            nextFree=size;
+            parent=(AssociativeEnvironment)s.deserialize(dis);
         }
     }
 }

@@ -190,7 +190,7 @@
      (string-downcase
        (getprop 'os.name '*environment-variables*)))))
 (define current-directory (void))
-(define _current-directory (make-parameter '#f))
+(define _current-directory (make-parameter '"."))
 ((lambda (%_927 %_928 %_929)
    (begin
      (set! %_927
