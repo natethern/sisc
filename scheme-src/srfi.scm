@@ -112,7 +112,7 @@
 (display "srfi-6 ")
 (module _srfi-6 (_open-input-string _open-output-string _get-output-string)
   (define _open-input-string	open-input-string)
-  (define _open-output-string	open-input-string)
+  (define _open-output-string	open-output-string)
   (define _get-output-string	get-output-string))
 (module srfi-6 (open-input-string open-output-string get-output-string)
   (import _srfi-6)
