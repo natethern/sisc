@@ -1282,9 +1282,8 @@ public class Quantity extends Value {
                         max_precision);
     }
 
-    protected static Quantity intBound(long v) {
-        return (v>Integer.MAX_VALUE || v<Integer.MIN_VALUE) ?
-            new Quantity(v) : new Quantity((int)v);
+    protected static final Quantity intBound(long v) {
+        return ((int)(v>>>32) == 0) ? new Quantity((int)v) : new Quantity(v);
     }
 
     public boolean is(int mask) {
