@@ -1,0 +1,206 @@
+<chapter id="Debugging">
+  <title>
+    Debugging Facilities
+  </title>
+  <para>
+    No Scheme system would be complete without facilities to assist
+    the programmer in debugging his or her code.  SISC provides aid
+    for passive debugging (requiring no action on the part of the
+    programmer) and active debugging (requiring code modification to
+    facilitate debugging).  
+  </para>
+  <sect1>
+    <title>
+      Passive Debugging
+    </title>
+    <para>
+      Passive debugging facilities are provided that collect
+      information on an error that occured at runtime and was not
+      caught by the executing code.  The programmer can then inspect
+      the last error, obtain information about the call stack of
+      the error, or even attempt to restart the computation.
+    </para>
+    <blockquote>
+      <para>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>error-record</type>
+          <methodname>get-last-error</methodname>
+          <void/>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Retrieves the error record of the last error that occured
+            in &SISC;.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+    <para> 
+      An error record is an association list that contains the
+      error-continuation and error-value (as described in <xref
+      linkend="ErrorHandlers"/>), referenced by the keys
+      <literal>'cont</literal> and <literal>'value</literal>
+      respectively.  With these two values, one may perform many of
+      the actions that can be accomplished in the error-handler of a
+      <literal>call-with-failure-continuation</literal> expression.
+    </para>
+    <para>
+      One of the most common desires is to obtain a trace of the
+      call-stack, to determine what sequence of calls resulted in the
+      error.  This can be done with the
+      <function>stack-trace</function>.
+    </para>
+    <blockquote>
+      <para>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>void</type>
+          <methodname>stack-trace</methodname>
+          <methodparam><parameter>error-record</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Displays a trace of the call-stack for the provided
+            error-record to the console.  If available, line numbers,
+            column numbers, and the source file of the Scheme source
+            where each call is located will be displayed.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </sect1>
+  <sect1 id="ActiveDebugging">
+    <title>
+      Active Debugging
+    </title>
+    <para>
+      &requires; 
+      <emphasis role="bold">
+	(import <emphasis>debugging</emphasis>)
+      </emphasis>
+    </para>
+    <para>
+      &SISC; provides active debugging aids; procedures and syntax
+      that can be used in source code to assist in tracing the
+      activities of running Scheme code.
+    </para>
+    <para>
+      <blockquote>
+	<para>
+	  &syntax;
+	  <methodsynopsis language="scheme">
+	    <type>procedure</type>
+	    <methodname>trace-lambda</methodname>
+	    <methodparam>
+	      <parameter>trace-name</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>formals</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>body</parameter>
+	    </methodparam>	
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      When replaced with a trace-lambda, all calls to a lambda
+	      defined procedure are traced on the console.
+	      <parameter>trace-name</parameter> is a symbol to identify
+	      the procedure in the trace. <parameter>formals
+	      </parameter>and <parameter>body</parameter> have identical
+	      semantics to lambda.
+	    </para>
+	  </blockquote>
+	</para>
+	<para>
+	  &syntax;
+	  <methodsynopsis language="scheme">
+	    <type>value</type>
+	    <methodname>trace-let</methodname>
+	    <methodparam>
+	      <parameter>loop-name</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>formal-bindings</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>body</parameter>
+	    </methodparam>	
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Replaces a named-let expression in a similar manner to
+	      trace-lambda.  
+	    </para>
+	  </blockquote>
+	</para>
+	<para>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>undefined</type>
+	    <methodname>trace</methodname>
+	    <methodparam choice="opt" rep="repeat">
+	      <parameter>symbol</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Begins traces on the procedures named by the symbols
+	      given.  The procedures must be defined in the top-level
+	      environment.
+	    </para>
+            <para>
+              If no procedures are given, a message is displayed
+              indicating the names of top-level procedures currently
+              being traced.
+            </para>
+	  </blockquote>
+	</para>
+	<para>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>undefined</type>
+	    <methodname>untrace</methodname>
+	    <methodparam>
+	      <parameter>symbol</parameter>
+	    </methodparam>
+	    <methodparam choice="opt" rep="repeat">
+	      <parameter>symbol</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Stops tracing the top-level procedures named by the
+	      symbols given.
+	    </para>
+	  </blockquote>
+	</para>
+      </blockquote>
+    </para>
+    <para>
+      <function>trace-lambda</function> and
+      <function>trace-let</function> are useful for debugging
+      anonymous lambdas and named-lets
+      respectively. <function>trace</function> and
+      <function>untrace</function> ar useful for tracing any top-level
+      bound procedure, including calls to builtin procedures and
+      stored continuations.
+    </para>
+    <para>
+      When a function is traced, each call to the function will be
+      displayed to the console with the function's name and the values
+      of the operands the function is being applied to.  Each nested
+      call is indented slightly, so as to illustrate the depth of
+      calls.  When the function application returns, the value of the
+      function-call is displayed at the same indention as the call
+      itself.
+    </para>
+  </sect1>
+</chapter>
+<!-- Keep this comment at the end of the file
+Local variables:
+sgml-parent-document:("sss.xml" "chapter")
+End:
+-->

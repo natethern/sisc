@@ -453,14 +453,19 @@
 	</programlisting>
       </example>
       <para>
-	At this time, only circular lists are detected by the
-	Read-Eval-Print-Loop and blocked from being Printed.  If a
-	cycle exists in any other compound type, it will
-	<emphasis>not</emphasis> be detected, and a print will be
-	attempted.  The print may cause the JVM to exit or may just
-	print to the console indefinitely.  No support yet exists
-	for printing circular lists or other compound cyclic
-	structures, though such functionality may exist in future releases.
+        The Read-Eval-Print-Loop will attempt to check the structure
+	it is about to print for circularities before printing.  If a
+	cycle is found in the structure, the REPL will refuse to
+	print, instead warning the user that the structure contains a
+	cycle.  If a circular structure is printed with
+	<function>display</function>, <function>write</function>, etc,
+	it may cause the environment to enter an infinite loop which
+	may or may cause the Scheme system to exit with an error. 
+      </para>
+      <para>
+        No support yet exists for printing circular lists or other
+        compound cyclic structures, though such functionality may
+        exist in future releases.
       </para>
     </sect2>
     <sect2 id="ImmutableTypes">
