@@ -65,7 +65,8 @@ public class STypes extends IndexedProcedure {
 
         public void deserialize(Deserializer s) throws IOException {
             try {
-                Class.forName(s.readUTF(), true, currentClassLoader());
+                classObject = Class.forName(s.readUTF(), true,
+                                            currentClassLoader());
             } catch(ClassNotFoundException e) {
                 throw new IOException(e.getMessage());
             }
@@ -82,7 +83,7 @@ public class STypes extends IndexedProcedure {
 
         public boolean eqv(Object v) {
             return this == v ||
-                (v != null
+                (v != null && (v instanceof SchemeType)
                  && classObject == ((SchemeType)v).getClassObject());
         }
 
