@@ -56,9 +56,7 @@
     ((letrec ((,lhs* ,[rhs*]) ...) ,[body])
      (merge-states (apply merge-states rhs*) body))
     ((define ,lhs ,[rhs]) rhs)
-    ((,set-proc ,formal ,[value]) 
-     (guard (memq set-proc '(set! string-set! vector-set! set-car! 
-                                  set-cdr! set-box!)))
+    ((set! ,formal ,[value]) 
      (union-state-entry
       (union-state-entry value 'set-vars formal)
       'refed-vars formal))
