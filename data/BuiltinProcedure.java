@@ -1,3 +1,4 @@
+
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -62,7 +63,6 @@ public class BuiltinProcedure extends Procedure {
                 r.returnVLR();
 	    }
         } catch (ArrayIndexOutOfBoundsException np) {
-            np.printStackTrace();
             error(r, name, liMessage(SISCB, "incorrectargcount"));
         } catch (ClassCastException cc) {
             error(r, name, liMessage(SISCB,"gotunexpectedvalue",

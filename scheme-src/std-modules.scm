@@ -31,10 +31,13 @@
                                    (syntax name)
                                    (native-library-binding-names m))))
            (syntax (module name (def ...)
-		   ;  (define *module* (load-native-library class))
-             (define def (native-library-binding
-                          (load-native-library class) #;*module* (quote def)))
-		     ...))))))))
+                           (define *module* (load-native-library class))
+                           (define def #f) ...
+                           (set! def (native-library-binding
+                                      *module* (quote def))) ...))))))))
+;                           (define def (native-library-binding *module*
+ ;                                                              (quote def)))
+  ;                         ...))))))))
 
 (native-module logicops   "sisc.modules.SLogicOps")
 (native-module networking "sisc.modules.SNetwork")

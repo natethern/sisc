@@ -54,9 +54,12 @@ public abstract class Util implements Version {
         TRUE=SchemeBoolean.TRUE,
          FALSE=SchemeBoolean.FALSE;
 
-    protected static final Value[] MANY_FALSES=new Value[] {
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE };
+    protected static Value[] MANY_VOIDS=new Value[32];
+
+    static void setVoids() {
+        for (int i=MANY_VOIDS.length-1; i>=0; i--)
+            MANY_VOIDS[i]=VOID;
+    };
 
 
     public static Symbol

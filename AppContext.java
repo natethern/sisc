@@ -97,6 +97,7 @@ public class AppContext extends Util {
             VOID=lVOID;
             EMPTYLIST=lEMPTYLIST;
             EOF=lEOF;
+            setVoids();
         } catch (Exception e) {
             e.printStackTrace();
             throw new IOException(e.getMessage());

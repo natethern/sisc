@@ -21,7 +21,7 @@
     <property name="optjar" value="sisc-opt.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
     <property name="quantity-type" value="64float"/>
-    <property name="debugging" value="on"/>
+    <property name="debugging" value="off"/>
     <property name="optimization" value="on"/>
     <!-- <property name="releasecandidate" value="yes"/> -->
     <property name="dist" value="${basedir}/dist"/>

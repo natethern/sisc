@@ -37,20 +37,22 @@ import sisc.data.*;
 
 public class LetrecExp extends AppExp {
 
-    public LetrecExp(Expression rhses[], Expression body, boolean allImmediate) {
-        super(FALSE, rhses, new LetrecEval(body), allImmediate);
+    public LetrecExp(Expression exp, Expression rands[], Expression nxp, 
+                     boolean allImmediate) {
+        super(exp, rands, nxp, allImmediate);
     }
 
     public void eval(Interpreter r) throws ContinuationException {
         Value[] envv=r.createValues(rands.length);
-        int csf=0;
-        while (csf < rands.length) {
-            int cc=Math.min(MANY_FALSES.length, rands.length-csf);
-            System.arraycopy(MANY_FALSES, 0, envv, csf, cc);
-            csf+=cc;
-        }
 
-        r.env=new LexicalEnvironment(r.createValues(rands.length), r.env);
+        int csf=0;
+        do {
+            int cc=Math.min(MANY_VOIDS.length, rands.length-csf);
+            System.arraycopy(MANY_VOIDS, 0, envv, csf, cc);
+            csf+=cc;
+        } while (csf < rands.length);
+
+        r.env=new LexicalEnvironment(envv, r.env);
         super.eval(r);
     }
 

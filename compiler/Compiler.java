@@ -343,16 +343,28 @@ public class Compiler extends Util {
     }
 
     public Expression compileLetrec(Interpreter r,
-                                    Symbol[] formals, Expression[] rhses,
+                                    Symbol[] formals, Expression[] rands,
                                     Pair body, ReferenceEnv rt, 
                                     AssociativeEnvironment env) 
         throws ContinuationException {
         ReferenceEnv nrt=new ReferenceEnv(formals, rt);
-        boolean allImmediate=compileExpressions(r, rhses, nrt, 0, env);
-        return new LetrecExp(rhses, 
-                             compileLambdaBody(r, body, nrt, TAIL | LAMBDA,
-                                               env), allImmediate);
-                             
+        compileExpressions(r, rands, nrt, 0, env);
+        boolean allImmediate=true;
+        Expression nxp=new LetrecEval(compileLambdaBody(r, body, nrt, 
+                                                        TAIL | LAMBDA, env));
+        Expression lastRand = VOID;
+        for (int i= 0; i<rands.length; i++) {
+            if (!isImmediate(rands[i])) {
+                nxp.annotations = lastRand.annotations;
+                nxp = new FillRibExp(lastRand, i, nxp, allImmediate);
+                lastRand = rands[i];
+                rands[i] = null;
+                allImmediate=false;
+            }
+        }
+        if (lastRand.annotations != null)
+            nxp.annotations = lastRand.annotations;
+        return new LetrecExp(lastRand, rands, nxp, allImmediate);
     }
 
     public final Expression application(Expression rator, Expression rands[], 
@@ -366,14 +378,12 @@ public class Compiler extends Util {
         if (annotation!=null)
             setAnnotations(nxp, annotation);
         Expression lastRand = rator;
-        boolean seenNonImmediate=false;
         boolean allImmediate=isImmediate(rator);
         for (int i= 0; i<rands.length; i++) {
             if (!isImmediate(rands[i])) {
                 nxp.annotations = lastRand.annotations;
                 nxp = new FillRibExp(lastRand, i, nxp, allImmediate);
                 lastRand = rands[i];
-                seenNonImmediate=true;
                 rands[i] = null;
                 allImmediate=false;
             }
@@ -383,16 +393,12 @@ public class Compiler extends Util {
         return new AppExp(lastRand, rands, nxp, allImmediate);
     }
 
-    boolean compileExpressions(Interpreter r, Expression exprs[], 
+    void compileExpressions(Interpreter r, Expression exprs[], 
                                ReferenceEnv rt,
                                int context, AssociativeEnvironment env)
-    throws ContinuationException {
-        boolean allImmediate=true;
-        for (int i=exprs.length-1; i>=0; i--) {
+        throws ContinuationException {
+        for (int i=exprs.length-1; i>=0; i--) 
             exprs[i]=compile(r, exprs[i], rt, context, env, null);
-            allImmediate&=exprs[i] instanceof Immediate;
-        }
-        return allImmediate;
     }
 
     Expression compileBegin(Interpreter r, Vector v, int context,
