@@ -449,6 +449,12 @@
   <sect1 id="GenericProcedures">
     <title>Generic Procedures</title>
     <para>
+        &requires; 
+      <emphasis role="bold">
+        (import <emphasis>generic-procedures</emphasis>)
+      </emphasis>
+    </para>
+    <para>
       Generic procedures are procedures that select and execute methods
       based on the types of the arguments. Methods have a type
       signature, which generic procedures use for method selection,
