@@ -113,7 +113,7 @@ public class Quantity extends Value {
                     d=_BD_ZERO;
                 else
                     d=parseDecimal(v.substring(0,x), radix, true);
-                im = ( (x+2)==v.length() ? _BD_NEGONE :
+                im = ( (x+2)==v.length() ? _BD_ONE :
                        parseDecimal(v.substring(x+1, v.length()-1), radix, true));
             }
             return new Quantity(d,im);
