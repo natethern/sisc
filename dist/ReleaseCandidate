@@ -7,7 +7,7 @@ following information:
 1. Build version
 2. Steps to reproduce the error
 3. A stack trace, 
-  (stack-trace (get-last-exception))
+  (print-exception (get-last-exception))
 
 If you're running the Lite build, you will not be able to perform step 3. 
 Please obtain the full build and see if your error occurs there as well,
