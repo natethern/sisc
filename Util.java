@@ -284,10 +284,6 @@ public abstract class Util {
 	}
 	return p;
     }
-
-    public static Expression quote(Value v) {
-	return v;
-    }
 }
 
 

@@ -6,11 +6,9 @@ import java.util.Stack;
 
 public class CallFrame extends Procedure {
 
-
-    //STATIC --------------------
     public boolean lock;
     public Expression            nxp;
-    public Value[]                  vlr;
+    public Value[]               vlr;
     public LexicalEnvironment    env;
     public CallFrame              fk;
     public CallFrame          parent;
@@ -23,10 +21,6 @@ public class CallFrame extends Procedure {
 	env=e;
 	fk=f;
 	parent=p;
-    }
-
-    public int depth() {
-	return (parent==null? 1 : 1+parent.depth());
     }
 
     public String toString(Interpreter r) {
@@ -64,7 +58,6 @@ public class CallFrame extends Procedure {
 	}
 	else r.acc=new Values(r.vlr);
 	r.pop(this);
-	//	throw new ContinuationException(k);
     }
 
     public String display() {
