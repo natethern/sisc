@@ -733,7 +733,6 @@
    flush-output-port
    write
    display
-   newline
    write-char
    write-block
    write-string

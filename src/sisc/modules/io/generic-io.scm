@@ -104,9 +104,6 @@
 (define (write-block buf offset length . port)
   (gio/write-block buf offset length (outport port)))
 
-(define (newline . port)
-  (apply display #\newline port))
-  
 (define (flush-output-port . port)
   (gio/flush-output-port (outport port)))
 
@@ -311,5 +308,4 @@
 (define-method (open-character-input-port (<native-input-port> i))
   (make <native-character-input-port>
     (java-new <sisc.io.reader-input-port> (get-input-stream (:in i)))))
-
 
