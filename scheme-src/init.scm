@@ -249,9 +249,9 @@
             (current-url previous-url)
             (throw m e))
             (lambda () 
-              ((file-handler (string->symbol
-                              (file-extension (current-url))))
-               (current-url))))
+              (let ((fe (file-extension (current-url))))
+                ((file-handler (if fe fe "scm"))
+                 (current-url)))))
         (current-url previous-url))
       (void)))))
 

@@ -276,11 +276,12 @@
         (let loop ([e (read-code inf)])
           (if (not (eof-object? e))
               (let ([res (sc-expand e)])
-                ;;transform (begin (void) expr ...) into expr ...
+                ;;transform (begin ($sc-put-cte ...) expr ...) into expr ...
                 (if (and (pair? res) (eq? (car res) 'begin))
                     (let ([res (cdr res)])
                       (if (and (pair? res)
-                               (equal? (car res) '(void)))
+                               (pair? (car res))
+                               (eq? (caar res) '$sc-put-cte))
                           (set! res (cdr res))
                           res)
                       (for-each (lambda (expr)
