@@ -1,5 +1,5 @@
 ;;; Portable implementation of syntax-case
-;;; Extracted from Chez Scheme Version 6.3
+;;; Extracted from Chez Scheme Version 6.8
 ;;; Authors: R. Kent Dybvig, Oscar Waddell, Bob Hieb, Carl Bruggeman
 
 ;;; Copyright (c) 1992-2000 Cadence Research Systems
@@ -483,73 +483,67 @@
 
 ;;; output constructors
 (begin
-; (define-syntax build-application
-;   (syntax-rules ()
-;     ((_ source fun-exp arg-exps)
-;      `(,fun-exp . ,arg-exps))))
-(define (build-application source fun-exp arg-exps)
-  `(,fun-exp . ,arg-exps))
+(define-syntax build-application
+  (syntax-rules ()
+    ((_ source fun-exp arg-exps)
+     `(,fun-exp . ,arg-exps))))
 
-; (define-syntax build-conditional
-;   (syntax-rules ()
-;     ((_ source test-exp then-exp else-exp)
-;      `(if ,test-exp ,then-exp ,else-exp))))
-(define (build-conditional source test-exp then-exp else-exp)
-  `(if ,test-exp ,then-exp ,else-exp))
+(define-syntax build-conditional
+  (syntax-rules ()
+    ((_ source test-exp then-exp else-exp)
+     `(if ,test-exp ,then-exp ,else-exp))))
 
 (define-syntax build-lexical-reference
   (syntax-rules ()
     ((_ type source var)
      var)))
 
-; (define-syntax build-lexical-assignment
-;   (syntax-rules ()
-;     ((_ source var exp)
-;      `(set! ,var ,exp))))
-(define (build-lexical-assignment source var exo)
-  `(set! ,var ,exp))
+(define-syntax build-lexical-assignment
+  (syntax-rules ()
+    ((_ source var exp)
+     `(set! ,var ,exp))))
 
 (define-syntax build-global-reference
   (syntax-rules ()
     ((_ source var)
      var)))
 
-; (define-syntax build-global-assignment
-;   (syntax-rules ()
-;     ((_ source var exp)
-;      `(set! ,var ,exp))))
-(define (build-global-assignment source var exo)
-  `(set! ,var ,exp))
+(define-syntax build-global-assignment
+  (syntax-rules ()
+    ((_ source var exp)
+     `(set! ,var ,exp))))
 
-(define build-global-assignment-func
-  (lambda (var exp)
-     `(set! ,var ,exp)))
-
-; (define-syntax build-global-definition
-;   (syntax-rules ()
-;     ((_ source var exp)
-;      `(define ,var ,exp))))
-(define (build-global-definition source var exp)
-  `(define ,var ,exp))
+(define-syntax build-global-definition
+  (syntax-rules ()
+    ((_ source var exp)
+     `(define ,var ,exp))))
 
 (define-syntax build-module-definition
  ; should have the effect of a global definition but may not appear at top level
   (identifier-syntax build-global-assignment))
 
-; (define-syntax build-cte-install
-;  ; should build a call that has the same effect as calling the
-;  ; global definition hook
-;   (syntax-rules ()
-;     ((_ sym exp) `($sc-put-cte ',sym ,exp))))
-(define (build-cte-install sym exp)
-  `($sc-put-cte ',sym ,exp))
-
-; (define-syntax build-lambda
-;   (syntax-rules ()
-;     ((_ src vars exp)
-;      `(lambda ,vars ,exp))))
-(define (build-lambda src vars exp)
-  `(lambda ,vars ,exp))
+(define-syntax build-cte-install
+ ; should build a call that has the same effect as calling the
+ ; global definition hook
+  (syntax-rules ()
+    ((_ sym exp) `($sc-put-cte ',sym ,exp))))
+ 
+(define-syntax build-visit-only
+ ; should mark the result as "visit only" for compile-file
+ ; in implementations that support visit/revisit
+  (syntax-rules ()
+    ((_ exp) exp)))
+ 
+(define-syntax build-revisit-only
+ ; should mark the result as "revisit only" for compile-file,
+ ; in implementations that support visit/revisit
+  (syntax-rules ()
+    ((_ exp) exp)))
+ 
+(define-syntax build-lambda
+  (syntax-rules ()
+    ((_ src vars exp)
+     `(lambda ,vars ,exp))))
 
 (define-syntax build-primref
   (syntax-rules ()
@@ -567,13 +561,16 @@
         `(begin ,@exps))))
 
 (define build-letrec
-   (lambda (src vars val-exps body-exp)
-      (if (null? vars)
-          body-exp
-          (cons (list 'lambda vars
-                      (append (cons 'begin (map build-global-assignment-func
-                                        vars val-exps)) (list body-exp)))
-                  (map make-false vars)))))
+  (lambda (src vars val-exps body-exp)
+    (if (null? vars)
+        body-exp
+	(cons (list 'lambda vars
+		    (append (cons 'begin
+				  (map (lambda (v e)
+					 (list 'set! v e))
+				       vars val-exps))
+			    (list body-exp)))
+	      (map (lambda (x) #f) vars))))
 
 (define-syntax build-lexical-var
   (syntax-rules ()
@@ -583,9 +580,9 @@
   (syntax-rules ()
     ((_ e)
      (let ((x e))
-       (not (pair? e))))))
-;       (or (boolean? x) (number? x) (string? x) (char? x) (null? x))))))
-)
+       (not (pair? x))))))
+
+;       (or (boolean? x) (number? x) (string? x) (char? x) (null? x)))))))
 
 (define-structure (syntax-object expression wrap))
 
@@ -750,14 +747,12 @@
         (set-binding-value! b (binding-value *b))))
     (let ((b (lookup* x r)))
       (case (binding-type b)
-;        ((*alias) (lookup (id-var-name (binding-value b) empty-wrap) r))
         ((deferred)
          (whack-binding! b
            (let ((*b (local-eval-hook (binding-value b))))
              (or (sanitize-binding *b)
                  (syntax-error *b "invalid transformer"))))
          (case (binding-type b)
-;           ((*alias) (lookup (id-var-name (binding-value b) empty-wrap) r))
            (else b)))
         (else b)))))
 
@@ -1097,7 +1092,15 @@
     (and (eq? (id-sym-name i) (id-sym-name j)) ; accelerator
          (eq? (id-var-name i empty-wrap) (id-var-name j empty-wrap)))))
 
-(define-syntax literal-id=? (identifier-syntax free-id=?))
+;-(define-syntax literal-id=? (identifier-syntax free-id=?))
+(define literal-id=?
+  (lambda (id literal)
+    (and (eq? (id-sym-name id) (id-sym-name literal))
+         (let ((n-id (id-var-name id empty-wrap))
+               (n-literal (id-var-name literal empty-wrap)))
+           (or (eq? n-id n-literal)
+               (and (or (not n-id) (symbol? n-id))
+                    (or (not n-literal) (symbol? n-literal))))))))
 
 ;;; bound-id=? may be passed unwrapped (or partially wrapped) ids as
 ;;; long as the missing portion of the wrap is common to both of the ids
@@ -1185,29 +1188,26 @@
               (cons first (dobody (cdr body) r w))))))))
 
 (define chi-top-sequence
-  (lambda (body r w s m esew ribcage)
+  (lambda (body r w s ctem rtem ribcage)
     (build-sequence s
-      (let dobody ((body body) (r r) (w w) (m m) (esew esew))
+      (let dobody ((body body) (r r) (w w) (ctem ctem) (rtem rtem))
         (if (null? body)
             '()
-            (let ((first (chi-top (car body) r w m esew ribcage)))
-              (cons first (dobody (cdr body) r w m esew))))))))
+            (let ((first (chi-top (car body) r w ctem rtem ribcage)))
+              (cons first (dobody (cdr body) r w ctem rtem))))))))
 
 (define chi-when-list
-  (lambda (e when-list w)
+  (lambda (when-list w)
     ; when-list is syntax'd version of list of situations
-    (let f ((when-list when-list) (situations '()))
-      (if (null? when-list)
-          situations
-          (f (cdr when-list)
-             (cons (let ((x (car when-list)))
-                     (cond
-                       ((literal-id=? x (syntax compile)) 'compile)
-                       ((literal-id=? x (syntax load)) 'load)
-                       ((literal-id=? x (syntax eval)) 'eval)
-                       (else (syntax-error (wrap x w)
-                               "invalid eval-when situation"))))
-                   situations))))))
+    (map (lambda (x)
+           (cond
+             ((literal-id=? x (syntax compile)) 'compile)
+             ((literal-id=? x (syntax load)) 'load)
+             ((literal-id=? x (syntax visit)) 'visit)
+             ((literal-id=? x (syntax revisit)) 'revisit)
+             ((literal-id=? x (syntax eval)) 'eval)
+             (else (syntax-error (wrap x w) "invalid eval-when situation"))))
+         when-list)))
 
 ;;; syntax-type returns five values: type, value, e, w, and s.  The first
 ;;; two are described in the table below.
@@ -1297,13 +1297,7 @@
         (chi-expr type value e r w s)))))
 
 (define chi-top
-  (lambda (e r w m esew top-ribcage)
-    (define-syntax eval-if-c&e
-      (syntax-rules ()
-        ((_ m e)
-         (let ((x e))
-           (if (eq? m 'c&e) (top-level-eval-hook x))
-           x))))
+  (lambda (e r w ctem rtem top-ribcage)
     (call-with-values
       (lambda () (syntax-type e r w no-source top-ribcage))
       (lambda (type value e w s)
@@ -1312,34 +1306,21 @@
            (syntax-case e ()
              ((_) (chi-void))
              ((_ e1 e2 ...)
-              (chi-top-sequence (syntax (e1 e2 ...)) r w s m esew top-ribcage))))
+              (chi-top-sequence (syntax (e1 e2 ...)) r w s ctem rtem top-ribcage))))
           ((local-syntax-form)
            (chi-local-syntax value e r w s
              (lambda (body r w s)
-               (chi-top-sequence body r w s m esew top-ribcage))))
+               (chi-top-sequence body r w s ctem rtem top-ribcage))))
           ((eval-when-form)
            (syntax-case e ()
              ((_ (x ...) e1 e2 ...)
-              (let ((when-list (chi-when-list e (syntax (x ...)) w))
+              (let ((when-list (chi-when-list (syntax (x ...)) w))
                     (body (syntax (e1 e2 ...))))
-                (cond
-                  ((eq? m 'e)
-                   (if (memq 'eval when-list)
-                       (chi-top-sequence body r w s 'e '(eval) top-ribcage)
-                       (chi-void)))
-                  ((memq 'load when-list)
-                   (if (or (memq 'compile when-list)
-                           (and (eq? m 'c&e) (memq 'eval when-list)))
-                       (chi-top-sequence body r w s 'c&e '(compile load) top-ribcage)
-                       (if (memq m '(c c&e))
-                           (chi-top-sequence body r w s 'c '(load) top-ribcage)
-                           (chi-void))))
-                  ((or (memq 'compile when-list)
-                       (and (eq? m 'c&e) (memq 'eval when-list)))
-                   (top-level-eval-hook
-                     (chi-top-sequence body r w s 'e '(eval) top-ribcage))
-                   (chi-void))
-                  (else (chi-void)))))))
+                (let ((ctem (update-mode-set when-list ctem))
+                      (rtem (update-mode-set when-list rtem)))
+                  (if (and (null? ctem) (null? rtem))
+                      (chi-void)
+                      (chi-top-sequence body r w s ctem rtem top-ribcage)))))))
           ((define-syntax-form)
            (parse-define-syntax e w s
              (lambda (id rhs w)
@@ -1348,7 +1329,7 @@
                    (let ((b (lookup n r)))
                      (case (binding-type b)
                        ((displaced-lexical) (displaced-lexical-error id)))))
-                 (ct-eval/residualize m esew
+                 (ct-eval/residualize ctem
                    (lambda ()
                      (build-cte-install
                        (let ((sym (id-sym-name id)))
@@ -1372,7 +1353,7 @@
                    (let ((valsym (if (only-top-marked? id) sym (generate-id sym))))
                      (build-sequence no-source
                        (list
-                         (ct-eval/residualize m esew
+                         (ct-eval/residualize ctem
                            (lambda ()
                              (build-cte-install
                                (if (eq? sym valsym)
@@ -1383,7 +1364,9 @@
                                          (list (make-ribcage (vector sym)
                                                  (vector marks) (vector valsym)))))))
                                (build-data no-source (make-binding 'global valsym)))))
-                         (eval-if-c&e m (build-global-definition s valsym (chi rhs r w))))))
+                         (rt-eval/residualize rtem
+                           (lambda ()
+                             (build-global-definition s valsym (chi rhs r w)))))))
                   )))))
           ((module-form)
            (let ((r (cons '("top-level module placeholder" . (placeholder)) r))
@@ -1396,12 +1379,12 @@
                          (let ((b (lookup n r)))
                            (case (binding-type b)
                              ((displaced-lexical) (displaced-lexical-error (wrap id w))))))
-                       (chi-top-module e r ribcage w s m esew id exports forms))
-                     (chi-top-module e r ribcage w s m esew #f exports forms))))))
+                       (chi-top-module e r ribcage w s ctem rtem id exports forms))
+                     (chi-top-module e r ribcage w s ctem rtem #f exports forms))))))
           ((import-form)
            (parse-import e w s
              (lambda (mid)
-               (ct-eval/residualize m esew
+               (ct-eval/residualize ctem
                  (lambda ()
                    (when value (syntax-error (source-wrap e w s) "not valid at top-level"))
                    (let ((binding (lookup (id-var-name mid empty-wrap) null-env)))
@@ -1409,7 +1392,9 @@
                        ((module) (do-top-import mid (interface-token (binding-value binding))))
                        ((displaced-lexical) (displaced-lexical-error mid))
                        (else (syntax-error mid "import from unknown module")))))))))
-          (else (eval-if-c&e m (chi-expr type value e r w s))))))))
+          (else (rt-eval/residualize rtem
+                  (lambda ()
+                    (chi-expr type value e r w s)))))))))
 
 (define flatten-exports
   (lambda (exports)
@@ -1441,10 +1426,10 @@
 (define-structure (module-binding type id label imps val))
 
 (define chi-top-module
-  (lambda (e r ribcage w s m esew id exports forms)
+  (lambda (e r ribcage w s ctem rtem id exports forms)
     (let ((fexports (flatten-exports exports)))
       (chi-external ribcage (source-wrap e w s)
-        (map (lambda (d) (cons r d)) forms) r exports fexports m esew
+        (map (lambda (d) (cons r d)) forms) r exports fexports ctem rtem
         (lambda (bindings inits)
          ; dvs & des: "defined" (letrec-bound) vars & rhs expressions
          ; svs & ses: "set!" (top-level) vars & rhs expressions
@@ -1458,14 +1443,14 @@
                             (inits (map (lambda (x) (chi (cdr x) (car x) empty-wrap)) inits)))
                        ; we wait to do this here so that expansion of des & ses use
                        ; local versions, which in particular, allows us to use macros
-                       ; locally even if esew tells us not to eval them
+                       ; locally even if ctem tells us not to eval them
                         (for-each (lambda (x)
                                     (apply (lambda (t label sym val)
                                              (when label (set-indirect-label! label sym)))
                                            x))
                                   ctdefs)
                         (build-sequence no-source
-                          (list (ct-eval/residualize m esew
+                          (list (ct-eval/residualize ctem
                                   (lambda ()
                                     (if (null? ctdefs)
                                         (chi-void)
@@ -1480,7 +1465,7 @@
                                                                     (make-resolved-interface val sym))))))
                                                         x))
                                                ctdefs)))))
-                                (ct-eval/residualize m esew
+                                (ct-eval/residualize ctem
                                   (lambda ()
                                     (let ((n (if id (id-sym-name id) #f)))
                                       (let* ((token (generate-id n))
@@ -1502,8 +1487,10 @@
                                                 (list (build-cte-install n b)
                                                       (do-top-import n token)))))))))
                               ; Some systems complain when undefined variables are assigned.
-                               (build-sequence no-source
-                                 (map (lambda (v) (build-global-definition no-source v (chi-void))) svs))
+                               (if (null? svs)
+                                   (chi-void)
+                                   (build-sequence no-source
+                                     (map (lambda (v) (build-global-definition no-source v (chi-void))) svs)))
                                 (build-letrec no-source
                                   dvs
                                   des
@@ -1668,7 +1655,7 @@
                    (lp2 (cdr ls2) (conflicts x (car ls2) cls)))))))))
 
 (define chi-external
-  (lambda (ribcage source-exp body r exports fexports m esew k)
+  (lambda (ribcage source-exp body r exports fexports ctem rtem k)
     (define return
       (lambda (bindings ids inits)
         (check-defined-ids source-exp ids)
@@ -1741,7 +1728,7 @@
                        (lambda (id *exports forms)
                          (chi-external *ribcage (source-wrap e w s)
                                      (map (lambda (d) (cons er d)) forms)
-                                     r *exports (flatten-exports *exports) m esew
+                                     r *exports (flatten-exports *exports) ctem rtem
                            (lambda (*bindings *inits)
                              (let* ((iface (make-trimmed-interface *exports))
                                     (bindings (append (if id *bindings (update-imp-exports *bindings *exports)) bindings))
@@ -1786,6 +1773,18 @@
                                    (cons (cons er (wrap (car forms) w))
                                          (f (cdr forms)))))
                         ids bindings inits))))
+                  ((eval-when-form)
+                   (syntax-case e ()
+                     ((_ (x ...) e1 ...)
+                      ; mode set is implicitly (E)
+                      (parse (if (memq 'eval (chi-when-list (syntax (x ...)) w))
+                                 (let f ((forms (syntax (e1 ...))))
+                                   (if (null? forms)
+                                       (cdr body)
+                                       (cons (cons er (wrap (car forms) w))
+                                             (f (cdr forms)))))
+                                 (cdr body))
+                        ids bindings inits))))
                   ((local-syntax-form)
                    (chi-local-syntax value e er w s
                      (lambda (forms er w s)
@@ -1818,16 +1817,71 @@
       (build-data no-source
         (make-binding 'do-import token)))))
 
+(define update-mode-set
+  (let ((table
+         '((L (load . L) (compile . C) (visit . V) (revisit . R) (eval . -))
+           (C (load . -) (compile . -) (visit . -) (revisit . -) (eval . C))
+           (V (load . V) (compile . C) (visit . V) (revisit . -) (eval . -))
+           (R (load . R) (compile . C) (visit . -) (revisit . R) (eval . -))
+           (E (load . -) (compile . -) (visit . -) (revisit . -) (eval . E)))))
+    (lambda (when-list mode-set)
+      (remq '-
+        (apply append
+          (map (lambda (m)
+                 (let ((row (cdr (assq m table))))
+                   (map (lambda (s) (cdr (assq s row)))
+                        when-list)))
+               mode-set))))))
+
+(define initial-mode-set
+  (lambda (when-list compiling-a-file)
+    (apply append
+      (map (lambda (s)
+             (if compiling-a-file
+                 (case s
+                   ((compile) '(C))
+                   ((load) '(L))
+                   ((visit) '(V))
+                   ((revisit) '(R))
+                   (else '()))
+                 (case s
+                   ((eval) '(E))
+                   (else '()))))
+           when-list))))
+
+(define rt-eval/residualize
+  (lambda (rtem thunk)
+    (if (memq 'E rtem)
+        (thunk)
+        (let ((thunk (if (memq 'C rtem)
+                         (let ((x (thunk)))
+                           (top-level-eval-hook x)
+                           (lambda () x))
+                         thunk)))
+          (if (memq 'V rtem)
+              (if (or (memq 'L rtem) (memq 'R rtem))
+                  (thunk) ; visit-revisit
+                  (build-visit-only (thunk)))
+              (if (or (memq 'L rtem) (memq 'R rtem))
+                  (build-revisit-only (thunk))
+                  (chi-void)))))))
+
 (define ct-eval/residualize
-  (lambda (m esew thunk)
-    (case m
-      ((c) (if (memq 'compile esew)
-               (let ((e (thunk)))
-                 (top-level-eval-hook e)
-                 (if (memq 'load esew) e (chi-void)))
-               (if (memq 'load esew) (thunk) (chi-void))))
-      ((c&e) (let ((e (thunk))) (top-level-eval-hook e) e))
-      (else (if (memq 'eval esew) (top-level-eval-hook (thunk))) (chi-void)))))
+  (lambda (ctem thunk)
+    (if (memq 'E ctem)
+        (begin (top-level-eval-hook (thunk)) (chi-void))
+        (let ((thunk (if (memq 'C ctem)
+                         (let ((x (thunk)))
+                           (top-level-eval-hook x)
+                           (lambda () x))
+                         thunk)))
+          (if (memq 'R ctem)
+              (if (or (memq 'L ctem) (memq 'V ctem))
+                  (thunk) ; visit-revisit
+                  (build-revisit-only (thunk)))
+              (if (or (memq 'L ctem) (memq 'V ctem))
+                  (build-visit-only (thunk))
+                  (chi-void)))))))
 
 (define chi
   (lambda (e r w)
@@ -1857,10 +1911,10 @@
       ((eval-when-form)
        (syntax-case e ()
          ((_ (x ...) e1 e2 ...)
-          (let ((when-list (chi-when-list e (syntax (x ...)) w)))
-            (if (memq 'eval when-list)
-                (chi-sequence (syntax (e1 e2 ...)) r w s)
-                (chi-void))))))
+          ; mode set is implicitly (E)
+          (if (memq 'eval (chi-when-list (syntax (x ...)) w))
+              (chi-sequence (syntax (e1 e2 ...)) r w s)
+              (chi-void)))))
       ((define-form define-syntax-form module-form import-form)
        (syntax-error (source-wrap e w s) "invalid context for definition"))
       ((syntax)
@@ -1933,7 +1987,7 @@
                      ((fx= i n) v)
                      (vector-set! v i
                        (rebuild-macro-output (vector-ref x i) m)))))
-              ((symbol? x) 
+              ((symbol? x)
                (syntax-error (source-wrap e w s)
                  "encountered raw symbol "
                  (format "~s" x)
@@ -2086,6 +2140,18 @@
                                    (cdr body)
                                    (cons (cons er (wrap (car forms) w))
                                          (f (cdr forms)))))
+                        ids vars vals inits))))
+                  ((eval-when-form)
+                   (syntax-case e ()
+                     ((_ (x ...) e1 ...)
+                      ; mode set is implicitly (E)
+                      (parse (if (memq 'eval (chi-when-list (syntax (x ...)) w))
+                                 (let f ((forms (syntax (e1 ...))))
+                                   (if (null? forms)
+                                       (cdr body)
+                                       (cons (cons er (wrap (car forms) w))
+                                             (f (cdr forms)))))
+                                 (cdr body))
                         ids vars vals inits))))
                   ((local-syntax-form)
                    (chi-local-syntax value e er w s
@@ -2350,8 +2416,7 @@
           (lambda (id) (put-token id token))
           exports)))
     (define (put-cte id binding)
-     ;; making assumption here that all macros should be visible to the user and that system
-     ;; globals don't come through here (primvars.ss sets up their properties)
+      (put-token id '*top*)
       (let ((sym (if (symbol? id) id (id-var-name id empty-wrap))))
         (putprop sym '*sc-expander* binding)))
     (let ((binding (or (sanitize-binding b) (error 'define-syntax "invalid transformer ~s" b))))
@@ -2467,15 +2532,18 @@
               ((x . y)
                (call-with-values
                  (lambda () (gen-syntax src (syntax x) r maps ellipsis?))
-                 (lambda (x maps)
+                 (lambda (xnew maps)
                    (call-with-values
                      (lambda () (gen-syntax src (syntax y) r maps ellipsis?))
-                     (lambda (y maps) (values (gen-cons x y) maps))))))
-              (#(e1 e2 ...)
-               (call-with-values
-                 (lambda ()
-                   (gen-syntax src (syntax (e1 e2 ...)) r maps ellipsis?))
-                 (lambda (e maps) (values (gen-vector e) maps))))
+                     (lambda (ynew maps)
+                       (values (gen-cons e (syntax x) (syntax y) xnew ynew)
+                               maps))))))
+              (#(x1 x2 ...)
+               (let ((ls (syntax (x1 x2 ...))))
+                 (call-with-values
+                   (lambda () (gen-syntax src ls r maps ellipsis?))
+                   (lambda (lsnew maps)
+                     (values (gen-vector e ls lsnew) maps)))))
               (_ (values `(quote ,e) maps))))))
 
     (define gen-ref
@@ -2495,6 +2563,12 @@
                                     (cons (cons (cons outer-var inner-var)
                                                 (car maps))
                                           outer-maps)))))))))))
+
+    (define gen-append
+      (lambda (x y)
+        (if (equal? y '(quote ()))
+            x
+            `(append ,x ,y))))
 
     (define gen-mappend
       (lambda (e map-env)
@@ -2520,30 +2594,33 @@
                           (cdr e))))
             (else `(map (lambda ,formals ,e) ,@actuals))))))
 
+   ; 12/12/00: semantic change: we now return original syntax object (e)
+   ; if no pattern variables were found within, to avoid dropping
+   ; source annotations prematurely.  the "syntax returns lists" for
+   ; lists in its input guarantee counts only for substructure that
+   ; contains pattern variables
     (define gen-cons
-      (lambda (x y)
-        (case (car y)
+      (lambda (e x y xnew ynew)
+        (case (car ynew)
           ((quote)
-           (if (eq? (car x) 'quote)
-               `(quote (,(cadr x) . ,(cadr y)))
-               (if (eq? (cadr y) '())
-                   `(list ,x)
-                   `(cons ,x ,y))))
-          ((list) `(list ,x ,@(cdr y)))
-          (else `(cons ,x ,y)))))
-
-    (define gen-append
-      (lambda (x y)
-        (if (equal? y '(quote ()))
-            x
-            `(append ,x ,y))))
+           (if (eq? (car xnew) 'quote)
+               (let ((xnew (cadr xnew)) [ynew (cadr ynew)])
+                 (if (and (eq? xnew x) (eq? ynew y))
+                     `',e
+                     `'(,xnew . ,ynew)))
+               (if (eq? (cadr ynew) '()) `(list ,xnew) `(cons ,xnew ,ynew))))
+          ((list) `(list ,xnew ,@(cdr ynew)))
+          (else `(cons ,xnew ,ynew)))))
 
     (define gen-vector
-      (lambda (x)
+      (lambda (e ls lsnew)
         (cond
-          ((eq? (car x) 'list) `(vector ,@(cdr x)))
-          ((eq? (car x) 'quote) `(quote #(,@(cadr x))))
-          (else `(list->vector ,x)))))
+          ((eq? (car lsnew) 'quote)
+           (if (eq? (cadr lsnew) ls)
+               `',e
+               `(quote #(,@(cadr lsnew)))))
+          ((eq? (car lsnew) 'list) `(vector ,@(cdr lsnew)))
+          (else `(list->vector ,lsnew)))))
 
 
     (define regen
@@ -2762,18 +2839,74 @@
                    (list (chi (syntax val) r empty-wrap))))
                (syntax-error e "invalid literals list in"))))))))
 
-;;; The portable sc-expand seeds chi-top's mode m with 'e (for
-;;; evaluating) and esew (which stands for "eval syntax expanders
-;;; when") with '(eval).  In Chez Scheme, m is set to 'c instead of e
-;;; if we are compiling a file, and esew is set to
-;;; (eval-syntactic-expanders-when), which defaults to the list
-;;; '(compile load eval).  This means that, by default, top-level
-;;; syntactic definitions are evaluated immediately after they are
-;;; expanded, and the expanded definitions are also residualized into
-;;; the object file if we are compiling a file.
+;;; To support eval-when, we maintain two mode sets:
+;;;
+;;; ctem (compile-time-expression mode)
+;;;   determines whether/when to evaluate compile-time expressions such
+;;;   as macro definitions, module definitions, and compile-time
+;;;   registration of variable definitions
+;;;
+;;; rtem (run-time-expression mode)
+;;;   determines whether/when to evaluate run-time expressions such
+;;;   as the actual assignment performed by a variable definition or
+;;;   arbitrary top-level expressions
+
+;;; Possible modes in the mode set are:
+;;;
+;;; L (load): evaluate at load time.  implies V for compile-time
+;;;     expressions and R for run-time expressions.
+;;;
+;;; C (compile): evaluate at compile (file) time
+;;;
+;;; E (eval): evaluate at evaluation (compile or interpret) time
+;;;
+;;; V (visit): evaluate at visit time
+;;;
+;;; R (revisit): evaluate at revisit time
+
+;;; The mode set for the body of an eval-when is determined by
+;;; translating each mode in the old mode set based on the situations
+;;; present in the eval-when form and combining these into a set,
+;;; using the following table.  See also update-mode-set.
+
+;;;      load  compile  visit  revisit  eval
+;;; 
+;;; L     L      C        V       R      -
+;;; 
+;;; C     -      -        -       -      C
+;;; 
+;;; V     V      C        V       -      -
+;;; 
+;;; R     R      C        -       R      -
+;;; 
+;;; E     -      -        -       -      E
+
+;;; When we complete the expansion of a compile or run-time expression,
+;;; the current ctem or rtem determines how the expression will be
+;;; treated.  See ct-eval/residualize and rt-eval/residualize.
+
+;;; Initial mode sets
+;;;
+;;; when compiling a file:
+;;; 
+;;;     initial ctem: (L C)
+;;; 
+;;;     initial rtem: (L)
+;;;
+;;; when not compiling a file:
+;;; 
+;;;     initial ctem: (E)
+;;; 
+;;;     initial rtem: (E)
+;;;
+;;;
+;;; This means that top-level syntactic definitions are evaluated
+;;; immediately after they are expanded, and the expanded definitions
+;;; are also residualized into the object file if we are compiling
+;;; a file.
+
 (set! sc-expand
-  (let ((m 'e) (esew '(eval))
-;   (let ((m 'c) (esew '(compile load eval))
+  (let ((ctem '(L)) (rtem '(L))
         (user-ribcage
          (let ((ribcage (make-empty-ribcage)))
            (extend-ribcage-subst! ribcage '*top*)
@@ -2784,7 +2917,7 @@
       (lambda (x)
         (if (and (pair? x) (equal? (car x) noexpand))
             (cadr x)
-            (chi-top x null-env user-top-wrap m esew user-ribcage))))))
+            (chi-top x null-env user-top-wrap ctem rtem user-ribcage))))))
 
 (set! identifier?
   (lambda (x)
@@ -2818,6 +2951,11 @@
       (arg-check nonsymbol-id? y 'bound-identifier=?)
       (bound-id=? x y)))
 
+(set! literal-identifier=?
+  (lambda (x y)
+    (arg-check nonsymbol-id? x 'literal-identifier=?)
+    (arg-check nonsymbol-id? y 'literal-identifier=?)
+    (literal-id=? x y)))
 
 (set! syntax-error
   (lambda (object . messages)
