@@ -118,6 +118,8 @@ public class Interpreter extends Util {
                 }
             } while (true);
         } catch (NullPointerException done) {
+	    if (nxp!=null) 
+		throw done;
 	} catch (SchemeRuntimeException rte) {
 	    throw rte.promote();
 	}
