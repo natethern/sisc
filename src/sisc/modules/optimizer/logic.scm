@@ -110,19 +110,20 @@
       (let ([state (if (null? cpc)
                        state
                        (union-state-entry* state 'constant-prop cpc))])
-;      (let-values ([(nv fstate*)
-;                    (let ([x (map (lambda (e)
-;                                    (let-values ([(rv state) (opt e state)])
-;                                      (cons rv state)))
-;                                  nvo)])
-;                      (values (map car x) (map cdr x)))])
-;        (if (= (length nv) (length values*))
+        (if (null? cpc)
             (values nf nvo sec state)
-;            (opt:letrec-helper
-;             nf nv (merge-states 
-;                    state 
-;                    (apply merge-states fstate*)))))
-))))
+            (let-values ([(nv fstate*)
+                          (let ([x (map (lambda (e)
+                                          (let-values ([(rv state) (opt e state)])
+                                            (cons rv state)))
+                                        nvo)])
+                            (values (map car x) (map cdr x)))])
+              (if (= (length nv) (length values*))
+                  (values nf nvo sec state)
+                  (opt:letrec-helper
+                   nf nv (merge-states 
+                          state 
+                          (apply merge-states fstate*))))))))))
 
 (define (opt:letrec keyword formals values* body state)
   (let-values ([(nf nv sec state) (opt:letrec-helper formals values* state)])
