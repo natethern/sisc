@@ -63,7 +63,7 @@
                (if (null? ls) acc
                    (iter (cdr ls) (cons (car ls) acc)))))]
      (lambda (ls)	
-       (iter ls ()))))
+       (iter ls '()))))
 
 (define (map-car ls)
   (if (null? ls) '()
@@ -165,23 +165,24 @@
 
 ;;;;;;;;;;;;;;; Conversion functions
 
-(define (list->string l)
+(define list->string
   (letrec ([l2s
-	    (lambda (l s n)
-	      (if (null? l) 
-		  s 
-		  (begin (string-set! s n (car l))
-			 (l2s (cdr l) s (+ n 1)))))])
-    (l2s l (make-string (length l)) 0)))
+            (lambda (l s n)
+              (if (null? l) 
+                  s 
+                  (begin (string-set! s n (car l))
+                         (l2s (cdr l) s (+ n 1)))))])
+    (lambda (l)
+      (l2s l (make-string (length l)) 0))))
 
 (define string->list
   (letrec [(s2l
-             (lambda (s h n)
-               (if (< n 0) 
-		   h
-                   (s2l s (cons (string-ref s n) h) (- n 1)))))]
-     (lambda (s)
-        (s2l s '() (- (string-length s) 1)))))
+            (lambda (s h n)
+              (if (< n 0) 
+                  h
+                  (s2l s (cons (string-ref s n) h) (- n 1)))))]
+    (lambda (s)
+      (s2l s '() (- (string-length s) 1)))))
 
 (define list->vector
   (letrec [(l2v
