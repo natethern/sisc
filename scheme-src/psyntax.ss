@@ -655,7 +655,8 @@
   (syntax-rules ()
     ((_ e)
      (let ((x e))
-       (not (or (pair? x) (vector? x)))))))
+       (not (or (pair? x) (vector? x) (and (null? x)
+                                           (strict-r5rs-compliance))))))))
 )
 
 

@@ -17,8 +17,7 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
 import sisc.env.MemorySymEnv;
-import sisc.util.ExpressionVisitor;
-import sisc.util.ExpressionVisitee;
+import sisc.util.*;
 
 public class Primitives extends ModuleAdapter {
 
@@ -115,6 +114,7 @@ public class Primitives extends ModuleAdapter {
         define("sisc-initial-environment", SISCINITIAL);
         define("sqrt", SQRT);
         define("sleep", SLEEP);
+        define("strict-r5rs-compliance", STRICTR5RS);
         define("string->number", STRING2NUMBER);
         define("string->symbol", STRING2SYMBOL);
         define("string->uninterned-symbol", STRING2UNINTERNEDSYMBOL);
@@ -289,10 +289,11 @@ public class Primitives extends ModuleAdapter {
             case CASESENSITIVE: return truth(Symbol.caseSensitive);
             case SISCINITIAL: 
                 try {
-                    return new MemorySymEnv(f.lookupContextEnv(SISC_SPECIFIC));
+                    return new MemorySymEnv(f.lookupContextEnv(Util.SISC_SPECIFIC));
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throwPrimException(liMessage(SISCB, "nosiscspecificenv"));
                 }
+            case STRICTR5RS: return truth(f.dynenv.parser.lexer.strictR5RS);
             case TIMEZONEOFFSET:
                 Calendar cal = Calendar.getInstance();
                 return Quantity.valueOf((cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET)) / 1000);
@@ -358,7 +359,7 @@ public class Primitives extends ModuleAdapter {
                                                         .toString());
             case STRING2SYMBOL: return Symbol.intern(string(f.vlr[0]));
             case CHAR2INTEGER: return Quantity.valueOf(chr(f.vlr[0]).c);
-            case LIST2VECTOR: return new SchemeVector(pairToValues(pair(f.vlr[0])));
+            case LIST2VECTOR: return new SchemeVector(Util.pairToValues(pair(f.vlr[0])));
             case VECTOR2LIST:
                 Value[] vals=vec(f.vlr[0]).vals;
                 return valArrayToList(vals, 0, vals.length);
@@ -417,7 +418,7 @@ public class Primitives extends ModuleAdapter {
             case REPORTENVIRONMENT:
                 if (FIVE.equals(num(f.vlr[0])))
                     try {
-                        return new MemorySymEnv(f.lookupContextEnv(REPORT));
+                        return new MemorySymEnv(f.lookupContextEnv(Util.REPORT));
                     } catch (ArrayIndexOutOfBoundsException e) {
                         throwPrimException(liMessage(SISCB, "noreportenv"));
                     }
@@ -428,6 +429,9 @@ public class Primitives extends ModuleAdapter {
                     sisc.compiler.Compiler.addSpecialForms(ae);
                     return ae;
                 } else throwPrimException(liMessage(SISCB, "unsupportedstandardver"));
+            case STRICTR5RS: 
+                f.dynenv.parser.lexer.strictR5RS=truth(f.vlr[0]);
+                return VOID;
             case CURRENTEVAL:
                 f.ctx.evaluator=proc(f.vlr[0]);
                 return VOID;
@@ -531,15 +535,24 @@ public class Primitives extends ModuleAdapter {
                 return new SchemeString(newStr);
             case STRING2NUMBER:
                 try {
-                    return (Quantity)f.dynenv.parser.nextExpression(new ReaderInputPort(new StringReader(string(f.vlr[0]))), num(f.vlr[1]).intValue(), 0);
+                    int radix=num(f.vlr[1]).intValue();
+                    if (f.dynenv.parser.lexer.strictR5RS &&
+                        !(radix==10 || radix == 16 || radix == 2 ||
+                          radix==8))
+                        throwPrimException(liMessage(SISCB, "invalidradix"));
+                    return (Quantity)f.dynenv.parser.nextExpression(new ReaderInputPort(new StringReader(string(f.vlr[0]))), radix, 0);
                 } catch (NumberFormatException nf) {
                     return FALSE;
                 } catch (IOException e) {
                     return FALSE;
                 }
             case NUMBER2STRING:
-                return new SchemeString(num(f.vlr[0])
-                                        .toString(num(f.vlr[1]).intValue()));
+                int radix=num(f.vlr[1]).intValue();
+                if (f.dynenv.parser.lexer.strictR5RS &&
+                    !(radix==10 || radix == 16 || radix == 2 ||
+                      radix==8))
+                    throwPrimException(liMessage(SISCB, "invalidradix"));
+                return new SchemeString(num(f.vlr[0]).toString(radix));
             case STRINGAPPEND:
                 return str(f.vlr[0]).append(str(f.vlr[1]));
             case MAKERECTANGULAR:
@@ -651,7 +664,8 @@ public class Primitives extends ModuleAdapter {
             //this might get us back the just recycled f.vlr,
             //which is fine since we only shift its contents to
             //the left by one
-            Value newvlr[] = f.replaceVLR(l + length(args));
+            f.replaceVLR(l + length(args));
+            Value newvlr[] = f.vlr;
             
             int j;
             for (j=0; j < l; j++) {
@@ -728,7 +742,6 @@ public class Primitives extends ModuleAdapter {
         //0-10
         //26-30
         //33-34
-        //37
         //44-46
         //59
         //69
@@ -826,6 +839,7 @@ public class Primitives extends ModuleAdapter {
         SISCINITIAL = 89,
         SLEEP = 87,
         SQRT = 88,
+        STRICTR5RS = 37,
         STRING2NUMBER = 131,
         STRING2SYMBOL = 90,
         STRING2UNINTERNEDSYMBOL = 91,

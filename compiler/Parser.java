@@ -20,8 +20,9 @@ public class Parser extends Util implements Tokens {
     }
 
     public static final int 
-        PRODUCE_IMMUTABLES= 0x1,
-        PRODUCE_ANNOTATIONS=0x2;
+        PRODUCE_IMMUTABLES =0x1,
+        PRODUCE_ANNOTATIONS=0x2,
+        STRICT_R5RS        =0x4;
 
     /**
      * When set, annotations will be emitted.  Requires that
@@ -31,7 +32,7 @@ public class Parser extends Util implements Tokens {
      */
     public static boolean annotate=getSystemProperty("sisc.emitannotations", "false").equalsIgnoreCase("true");
 
-    Lexer lexer;
+    public Lexer lexer;
 
     static final Object DOT=new Object();
     static final Object ENDPAIR=new Object();
@@ -184,6 +185,11 @@ public class Parser extends Util implements Tokens {
             o=ENDPAIR;
             break;
         case TT_SYMBOL:
+            if (lexer.strictR5RS &&
+                lexer.sval.length() > 1 &&
+                lexer.in(lexer.sval.charAt(0), Lexer.number_prefixes)) 
+                throw new IOException(liMessage(SISCB, "invalididentifier",
+                                                lexer.sval));
             o=Symbol.get(lexer.sval);
             break;
         case TT_SHARP:

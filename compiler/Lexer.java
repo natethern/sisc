@@ -45,11 +45,14 @@ public class Lexer implements Tokens {
 	{'+','-','.'},
 	hex_number_prefixes = new char[]
         {'+','-','.','A','B','C','D','E','F','a','b','c','d','e','f'},
+        reserved = new char[] 
+        {'[', ']', '{', '|', '}'},
         special_initials = new char[] 
         {'!','$','%','&','*','/',':','<','=','>','?','^','_','~'},
         special_subsequents = new char[] 
         {'+','-','.','@'};
 
+    public boolean strictR5RS;
     public String sval;
     public Quantity nval;
     public Pair prval;
@@ -134,6 +137,10 @@ public class Lexer implements Tokens {
     public int readChar(InputPort is) throws IOException {
         int c=is.read();
 
+        if (strictR5RS && in((char)c, reserved)) 
+            throw new IOException(Util.liMessage(Util.SISCB, "reservedchar", 
+                                                 Character.toString((char)c)));
+
         if (c!='\\') return c;
 
         //escaping rules are those defined by Java, except we don't
@@ -171,14 +178,14 @@ public class Lexer implements Tokens {
         return b.toString();
     }
 
-    public static String readToBreak(InputPort is, char[] stops, 
-                                     boolean handleEscapes)
+    public String readToBreak(InputPort is, char[] stops, 
+                              boolean handleEscapes)
     throws IOException {
         StringBuffer b=new StringBuffer();
         char c;
         boolean escaped=false, bar=false;
 	try {
-	    while (!in((c=(char)is.read()), stops) || escaped) {
+	    while (!in((c=(char)readChar(is)), stops) || escaped) {
                 if (handleEscapes && !escaped && c=='\\') {
                     escaped=true;
                 } else {
