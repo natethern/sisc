@@ -41,7 +41,7 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     /**
-     * Compares this Value to another. By default equal to eq.
+     * Compares this Value to another. By default equal to eqv.
      * 
      * @param v the other Value
      */
@@ -50,9 +50,10 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     /**
-     * Compares this Value to another for pointer-equality.  This is
-     * used to implement Scheme 'eq?'.  In SISC, this is equivalent
-     * to eqv? as well.
+     * Compares this Value to another for equality according to the
+     * rules for eqv? in R5RS..  This is
+     * used to implement Scheme 'eqv?'.  In SISC, this differs
+     * from eq? in that eq? is strict pointer equality.
      * 
      * @param v the other Value
      */
