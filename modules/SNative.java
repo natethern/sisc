@@ -44,7 +44,7 @@ public class SNative extends ModuleAdapter {
 
     protected static final int
 	ASSQ=0, MEMQ=1, ASSOC=6, MEMBER=7,
-	CADR=2, CDAR=3, CAAR=4, CDDR=5, NOT=8,
+	CADR=2, CDAR=3, CAAR=4, CDDR=5, CADDR=17, NOT=8,
 	APPEND=9, EQV=10, MEMV=11, ASSV=12,
 	VECTOR=13, LISTREF=14, VALUES=15, READLINE=16;
     
@@ -65,6 +65,7 @@ public class SNative extends ModuleAdapter {
         define("cadr", CADR);
         define("cdar", CDAR);
         define("cddr", CDDR);
+	define("caddr", CADDR);
         define("list-ref", LISTREF);
         define("values", VALUES);
         define("read-line", READLINE);
@@ -132,6 +133,8 @@ public class SNative extends ModuleAdapter {
                     return ((Pair)pair(f.vlr[0]).car).car;
                 case CDDR:
                     return ((Pair)pair(f.vlr[0]).cdr).cdr;
+		case CADDR:
+		    return ((Pair)((Pair)pair(f.vlr[0]).cdr).cdr).car;
                 case READLINE:
                     try {
                         String s=inport(f.vlr[0]).getReader().readLine();
