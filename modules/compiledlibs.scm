@@ -96,77 +96,43 @@
          (get-local-expression lib (java-wrap symenv-id))))))
    (java-unwrap (get-local-expression lib (java-wrap index-sym)))))
 
-(define (interface-exports i) (vector-ref i 1))
-(define (syntax-object-sym i) (vector-ref i 1))
-(define (classify-bindings bindings)
-  (let loop ((b bindings) 
-             (s '())
-             (t '()))
-    (if (null? b) 
-        (values s t)
-        (if (getprop (car b) '*sc-expander*)
-            (loop (cdr b) (cons (car b) s) t)
-            (loop (cdr b) s (cons (car b) t))))))
-(define (union ls1 ls2)
-  (let loop ([ls1 ls1] [acc '()])
-    (cond [(null? ls1) (append acc ls2)]
-          [(memq (car ls1) ls2)
-           (loop (cdr ls1) acc)]
-          [else (loop (cdr ls1) (cons (car ls1) acc))])))
-
-(define (binding-matches? binding module-prefix)
-  (let ([s1 (symbol->string binding)]
-        [mpl (string-length module-prefix)])
-    (and (> (string-length s1) mpl)
-         (string=? module-prefix (substring s1 0 mpl)))))
-
-(define (search-for-implicits modulename bindings-so-far env)
-  (let ([module-prefix (string-append "@" (symbol->string modulename) "::")]
-        [iterator (iterator 
-                   (binding-keys 
-                    (get-symbolic-environment env)))])
-    (let loop ([acc bindings-so-far])
-      (if (->boolean (has-next iterator))
-          (let ([b (java-unwrap (next iterator))])
-            (loop
-             (if (and (binding-matches? b module-prefix)
-                      (not (memq b acc)))
-                 (cons b acc)
-                 acc)))
+(define (find-bindings prefix env)
+  (define (binding-matches? binding)
+    (let ([s1 (symbol->string binding)]
+          [mpl (string-length prefix)])
+      (and (> (string-length s1) mpl)
+           (string=? prefix (substring s1 0 mpl)))))
+  (let ([it (iterator (binding-keys (java-wrap env)))])
+    (let loop ([acc '()])
+      (if (->boolean (has-next it))
+          (let ([b (java-unwrap (next it))])
+            (loop (if (binding-matches? b)
+                      (cons b acc)
+                      acc)))
           acc))))
 
-(define (get-referenced-bindings modulename)
+(define (module-bindings modulename)
   (let ((mod (getprop modulename (get-symbolic-environment '*sc-expander*))))
-    ; I'm a little nervous about the hardcoding of the positions of 
-    ; important elements here, a better understanding of the psyntax
-    ; datastructures would be nice.
     (if (and (pair? mod) (eq? (car mod) 'module))
-        (search-for-implicits 
-         modulename
-         (search-for-implicits 
-          modulename
-          (apply append
-                 (map (lambda (e)
-                        (vector->list (vector-ref (cadr (vector-ref e 2))
-                                                  3)))
-                      (vector->list (interface-exports (cdr mod)))))
-          '*sc-expander*)
-         '*toplevel*)
-        (error 'get-referenced-bindings "'~a' does not name a module." 
+        (let ([prefix (string-append "@" (symbol->string modulename) "::")])
+          (map (lambda (env)
+                 (find-bindings prefix (get-symbolic-environment env)))
+               '(*sc-expander* *toplevel*)))
+        (error 'module-bindings "'~a' does not name a module." 
                modulename))))
 
 (define (getprops props table)
   (map (lambda (p) (cons p (getprop p table))) props))
+
 (define (create-library-from-module libname filename . modules)
-  (let ((modules (if (null? modules) (list libname) modules)))
-    (call-with-values
-        (lambda () 
-          (classify-bindings
-           (apply append (map get-referenced-bindings modules))))
-      (lambda (sc-expander toplevel)
-        (create-library
-         libname filename 
-         (cons '*toplevel* (getprops toplevel '*toplevel*))
-         `(*sc-expander* 
-           . (,@(getprops modules '*sc-expander*)
-              ,@(getprops sc-expander '*sc-expander*))))))))
+  (let* ([modules (if (null? modules) (list libname) modules)]
+         [bindings (map module-bindings modules)])
+    (create-library
+     libname filename 
+     `(*toplevel*
+       . (,@(getprops (apply append (map cadr bindings))
+                      '*toplevel*)))
+     `(*sc-expander* 
+       . (,@(getprops modules '*sc-expander*)
+          ,@(getprops (apply append (map car bindings))
+                      '*sc-expander*))))))
