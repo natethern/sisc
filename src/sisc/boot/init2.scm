@@ -126,10 +126,9 @@
 (define-syntax parameterize
   (lambda (expr)
     (syntax-case expr ()
-      ((_ () body ...)
-       (syntax (let () body ...)))
-      ((_ ((param-name new-value) ...)
-          body ...)
+      [(_ () . body)
+       (syntax (let () . body))]
+      [(_ ((param-name new-value) ...) . body)
        (with-syntax ([(tmps ...) 
                       (generate-temporaries (syntax (param-name ...)))])
          (syntax 
@@ -139,11 +138,11 @@
                (lambda () 
                  (set! old-values (list (param-name) ...))
                  (param-name tmps) ...)
-               (lambda () body ...)
+               (lambda () . body)
                (lambda () 
 	             (for-each (lambda (p l) (p l))
 		               (list param-name ...)
-		               old-values))))))))))
+		               old-values))))))])))
 
 ;; native parameters
 
