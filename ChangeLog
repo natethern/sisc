@@ -1,7 +1,12 @@
+2005-02-14  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed a bug in syntax-object->datum and hence define-macro. See
+	  bug 1122651.
+
 2005-02-11  Scott G. Miller  <sgmiller@gmail.com>
 
-    * Fix a bug in our fix of a bug in SRFI-13, which broke
-      string-contains-ci.
+	* Fixed a bug in our fix of a bug in SRFI-13, which broke
+	  string-contains-ci.
       
 2005-01-22  Matthias Radestock  <matthias@sorted.org>
 

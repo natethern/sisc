@@ -2529,9 +2529,6 @@
 
 ;;; strips syntax-objects down to top-wrap; if top-wrap is layered directly
 ;;; on an annotation, strips the annotation as well.
-;;; since only the head of a list is annotated by the reader, not each pair
-;;; in the spine, we also check for pairs whose cars are annotated in case
-;;; we've been passed the cdr of an annotated list
 
 (define strip*
   (lambda (x w fn)
@@ -2554,12 +2551,7 @@
 
 (define strip
   (lambda (x w)
-    (strip* x w
-      (lambda (x)
-        (if (or (annotation? x) (and (pair? x) (annotation? (car x)))
-                (and (box? x) (annotation? (unbox x))))
-            (strip-annotation x #f)
-            x)))))
+    (strip* x w (lambda (x) (strip-annotation x #f)))))
 
 ;;; lexical variables
 
