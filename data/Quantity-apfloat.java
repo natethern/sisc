@@ -310,7 +310,7 @@ public class Quantity extends Value {
     protected void simplify() {
         if (type==RATIO) {
             if (de.equals(_BI_ZERO))
-                throw new ArithmeticException(liMessage("division by zero"));
+                throw new ArithmeticException(liMessage("divisionbyzero"));
             BigInteger gcd=i.gcd(de);
             if (!gcd.equals(_BI_ONE)) {
                 i=i.divide(gcd);
