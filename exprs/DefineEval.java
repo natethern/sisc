@@ -8,14 +8,13 @@ public class DefineEval extends Expression {
     public void eval(Interpreter r) throws ContinuationException { 
 	Symbol lhs=symbol(r,r.acc);
 	Value rhs=r.vlr[0];
-	Symbol context=symbol(r,r.vlr[1]);
 	if (rhs instanceof NamedValue) {
 	    NamedValue nv=(NamedValue)rhs;
 	    if (nv.name==null)
 		nv.name=lhs;
 	}
 
-	r.define(lhs, rhs, context);
+	r.define(lhs, rhs, TOPLEVEL);
 	r.acc=VOID;
 	r.nxp=null;
     }

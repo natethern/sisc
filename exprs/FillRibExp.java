@@ -21,15 +21,15 @@ public class FillRibExp extends Expression implements Volatile {
     public void eval(Interpreter r) throws ContinuationException { 
 	r.vlr[pos]=r.acc;
 
-	int np;
+	int np=pos-1;
         Value tmp;
-        for (np=pos-1;
+	for (np=pos-1;
              np>=0 && ((tmp=rands[np].getValue(r)) != null);
              np--) {
             r.vlr[np]=tmp;
         }
 
-	if (np>-1) {
+ 	if (np>-1) {
 	    if (locked) {
 		r.push(r.createRib(np, rands, last, cleanup));
 	    } else {

@@ -41,7 +41,7 @@ public class Primitives extends Module {
 	BOX=115,  CLOSEOUTPUTPORT=80,          EXACT2INEXACT=81,
 	UNBOX=116,CURRENTINPUTPORT=46,         CURRENTOUTPUTPORT=47,      
         FLOOR=83, OPENOUTPUTSTRING=48,         GETOUTPUTSTRING=49, 
-	          STRING2UNINTERNEDSYMBOL=66,  OPENINPUTSTRING=50;
+	PUTPROP=121, STRING2UNINTERNEDSYMBOL=66,  OPENINPUTSTRING=50;
 
 
     public void initialize(Interpreter r) {
@@ -128,6 +128,7 @@ public class Primitives extends Module {
 	define(r, "pair?", PAIRQ);
 	define(r, "peek-char", PEEKCHAR);
 	define(r, "procedure?", PROCEDUREQ);
+	define(r, "putprop", PUTPROP);
 	define(r, "quotient", QUOTIENT);
 	define(r, "rational?", RATIOQ);
 	define(r, "read", READ);
@@ -547,6 +548,18 @@ public class Primitives extends Module {
 	    }
 	case 3:
 	    switch(primid) {
+	    case PUTPROP:
+		Symbol lhs=symbol(f,f.vlr[0]);
+		Symbol context=symbol(f,f.vlr[1]);
+		Value rhs=f.vlr[2];
+		if (rhs instanceof NamedValue) {
+		    NamedValue nv=(NamedValue)rhs;
+		    if (nv.name==null)
+			nv.name=lhs;
+		}
+		
+		f.define(lhs, rhs, context);
+		return VOID;
 	    case STRINGSET:
 		
 		str(f,f.vlr[0]).set(f, num(f,f.vlr[1]).intValue(),

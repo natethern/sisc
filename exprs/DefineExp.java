@@ -4,30 +4,27 @@ import sisc.*;
 import sisc.data.*;
 
 public class DefineExp extends Expression {
-    public Expression lhs,rhs,env; 
+    public Symbol lhs;
+    public Expression rhs;
 
-    public DefineExp(Expression lhs, Expression rhs, Expression env) {
+    public DefineExp(Symbol lhs, Expression rhs) {
 	this.lhs=lhs;
 	this.rhs=rhs;
-	this.env=env;
     }
 
     public void eval(Interpreter r) throws ContinuationException { 
-	r.vlr=new Value[2];
-
-	//	r.push(lhs);
-	Expression tail=(env==null ? quote(TOPLEVEL) : env);
-	r.push(r.createRib(1, new Expression[] {rhs, tail}, 
+	r.vlr=new Value[1];
+	r.push(r.createRib(0, new Expression[] {rhs}, 
 			   lhs, DEFINEEVAL));
-	
-	r.nxp=tail;
+	r.nxp=rhs;
     }
 
     public String toString(){
 	StringBuffer b=new StringBuffer();
 	b.append("(Define-exp ");
 	b.append(lhs).append(' ');
-	b.append(rhs).append(')');
+	b.append(rhs);
+	b.append(')');
 	return b.toString();
     }
 }

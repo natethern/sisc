@@ -17,7 +17,7 @@ public class Compiler extends Util {
     static final int 
 	APP=-1, LAMBDA = 1, _IF=2, BEGIN=3, QUOTE=4, SET=5, 
 	DEFINE=7, _VOID=8, 
-	PUTPROP=13,
+	//	PUTPROP=13,
 
 	TAIL=1, COMMAND=2, PROCEDURE=4, PREDICATE=8;
 
@@ -28,7 +28,7 @@ public class Compiler extends Util {
 	extendenv("quote", QUOTE);
 	extendenv("set!", SET);
 	extendenv("define", DEFINE);
-	extendenv("putprop", PUTPROP);
+	//	extendenv("putprop", PUTPROP);
     }
 
     static class ReferenceEnv {
@@ -139,10 +139,20 @@ public class Compiler extends Util {
 		expr=(Pair)expr.cdr;
 		Expression test=compile(r, expr.car, rt, PREDICATE, env);
 		expr=(Pair)expr.cdr;
-		Expression conseq=compile(r, expr.car, rt, TAIL, env);
-		expr=(Pair)expr.cdr;
-		Expression altern=compile(r, expr.car, rt, TAIL, env);
-		return new IfExp(test, conseq, altern);
+		if (test instanceof Value) {
+		    System.err.println("bopt:"+test);
+		    if (truth((Value)test))
+			return compile(r, expr.car, rt, TAIL, env);
+		    else {
+			expr=(Pair)expr.cdr;
+			return compile(r, expr.car, rt, TAIL, env);
+		    }
+		} else {
+		    Expression conseq=compile(r, expr.car, rt, TAIL, env);
+		    expr=(Pair)expr.cdr;
+		    Expression altern=compile(r, expr.car, rt, TAIL, env);
+		    return new IfExp(test, conseq, altern);
+		}
 	    case BEGIN:
 		expr=(Pair)expr.cdr;
 		Vector v=new Vector();
@@ -169,28 +179,24 @@ public class Compiler extends Util {
 		    error(r, "left-hand-side of set! is not a symbol");
 		    return null;
 		} 
-	    case PUTPROP:
+		/*	    case PUTPROP:
 		expr=(Pair)expr.cdr;
 	        Expression lhs=compile(r, expr.car, rt, 0, env);
 		expr=(Pair)expr.cdr;
 		Expression envctx=compile(r, expr.car, rt, 0, env);
 		expr=(Pair)expr.cdr;
 		rhs=compile(r, expr.car, rt, 0, env);
-		return new DefineExp(lhs, rhs, envctx);
+		return new DefineExp(lhs, rhs, envctx);*/
 	    case DEFINE: 
 		expr=(Pair)expr.cdr;
-		lhs=null;
+		Expression lhs=expr.car;
 		rhs=null;
 
-		lhs=(Symbol)expr.car;
 		expr=(Pair)expr.cdr;
 		rhs=expr.car;
 
-		return new DefineExp(
-				     //new FreeReferenceExp((Symbol)lhs, null, env),
-				     quote((Value)lhs),
-				     compile(r, rhs, rt, 0, env),
-				     null);
+		return new DefineExp((Symbol)lhs,
+				     compile(r, rhs, rt, 0, env));
 	    default:
 		Expression[] exps=pairToExpressions((Pair)expr.cdr);
 		compileExpressions(r, exps, rt, 0, env);
