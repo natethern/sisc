@@ -49,13 +49,10 @@ public class SDebug extends ModuleAdapter {
         EXPRESSV=0, COMPILE=1,
         CONT_VLR=2, CONT_NXP=3, CONT_ENV=4, CONT_FK=5,
         CONT_LOCKQ=6, CONT_PARENT=7, 
-        ANNOTATIONEXPR=10, ANNOTATIONQ=11, ANNOTATION=8, ANNOTATIONKEYS=9,
-        EMITANNOTATIONS=12, ERROR_CONT_K=13, SETANNOTATION=14,
-        ANNOTATIONSRC=15, ANNOTATIONSTRIPPED=16, SETANNOTATIONSTRIPPED=17, 
-        FILLRIBQ=18, FILLRIBEXP=19, FREEXPQ=20, FRESYM=21, MAKEANNOTATION=22;
+        ERROR_CONT_K=8,
+        FILLRIBQ=9, FILLRIBEXP=10, FREEXPQ=11, FRESYM=12;
 
     public SDebug() {
-        define("emit-annotations", EMITANNOTATIONS);
         define("express", EXPRESSV);
         define("compile", COMPILE);
         define("error-continuation-k", ERROR_CONT_K);
@@ -65,19 +62,10 @@ public class SDebug extends ModuleAdapter {
         define("continuation-fk", CONT_FK);
         define("continuation-stk", CONT_PARENT);
         define("continuation-captured?", CONT_LOCKQ);
-        define("annotation?", ANNOTATIONQ);
-        define("annotation-keys", ANNOTATIONKEYS);
-        define("annotation", ANNOTATION);
-        define("set-annotation!", SETANNOTATION);
-        define("annotation-source", ANNOTATIONSRC);
-        define("annotation-expression", ANNOTATIONEXPR);
-        define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
-        define("annotation-stripped", ANNOTATIONSTRIPPED);
         define("_fill-rib?", FILLRIBQ);
         define("_fill-rib-exp", FILLRIBEXP);
         define("_free-reference-exp?", FREEXPQ);
         define("_free-reference-symbol", FRESYM);
-        define("make-annotation", MAKEANNOTATION);
     }
 
     class SISCExpression extends Value {
@@ -104,22 +92,8 @@ public class SDebug extends ModuleAdapter {
         }
     }
 
-    public static final AnnotatedExpr annotated(Value o) {
-        try {
-            return (AnnotatedExpr)o;
-        } catch (ClassCastException e) { typeError("annotatedexpression", o); }
-        return null;
-    }
-
     public Value eval(int primid, Interpreter f) throws ContinuationException {
         switch(f.vlr.length) {
-        case 0:
-            switch(primid) {
-            case EMITANNOTATIONS:
-                return truth(f.dynenv.parser.annotate);
-            default:
-                throwArgSizeException();
-            }
         case 1:
             switch(primid) {
             case FREEXPQ:
@@ -132,17 +106,6 @@ public class SDebug extends ModuleAdapter {
                              ((SISCExpression)f.vlr[0]).e instanceof FillRibExp);
             case FILLRIBEXP:
                 return new SISCExpression(((FillRibExp)((SISCExpression)f.vlr[0]).e).exp);
-            case ANNOTATIONKEYS:
-                Set s=f.vlr[0].getAnnotationKeys();
-                Pair p=EMPTYLIST;
-                for (Iterator i=s.iterator(); i.hasNext();) 
-                    p=new Pair((Symbol)i.next(), p);
-                return p;
-            case ANNOTATIONSTRIPPED:
-                return annotated(f.vlr[0]).stripped;
-            case EMITANNOTATIONS:
-                f.dynenv.parser.annotate=truth(f.vlr[0]);
-                return VOID;
             case EXPRESSV:
                 if (f.vlr[0] instanceof SISCExpression) {
                     return ((SISCExpression)f.vlr[0]).e.express();
@@ -184,51 +147,6 @@ public class SDebug extends ModuleAdapter {
                 cn=cont(f.vlr[0]);
                 if (cn.parent==null) return EMPTYLIST;
                 return cn.parent;
-            case ANNOTATIONQ:
-                return truth(f.vlr[0] instanceof AnnotatedExpr);
-            case ANNOTATIONSRC:
-                Value rv;
-                if (f.vlr[0] instanceof AnnotatedExpr) 
-                    rv=annotated(f.vlr[0]).annotation;
-                else 
-                    rv=FALSE;
-                return rv;
-            case ANNOTATIONEXPR:
-                if (f.vlr[0] instanceof AnnotatedExpr) 
-                    return (Value)annotated(f.vlr[0]).expr;
-                else return f.vlr[0];
-            default:
-                throwArgSizeException();
-            }
-        case 2:
-            switch(primid) {
-            case SETANNOTATIONSTRIPPED:
-                annotated(f.vlr[0]).stripped=f.vlr[1];
-                return VOID;
-            case ANNOTATION:
-                return f.vlr[0].getAnnotation(symbol(f.vlr[1]));
-            default:
-                throwArgSizeException();
-            }
-        case 3:
-            switch(primid) {
-            case MAKEANNOTATION:
-                AnnotatedExpr ae=new AnnotatedExpr(f.vlr[0], f.vlr[1]);
-                ae.stripped=f.vlr[2];
-                return ae;
-            case ANNOTATION:
-                return f.vlr[0].getAnnotation(symbol(f.vlr[1]), f.vlr[2]);
-            case SETANNOTATION:
-                return f.vlr[0].setAnnotation(symbol(f.vlr[1]), f.vlr[2]);
-            default:
-                throwArgSizeException();
-            }
-        case 4:
-            switch(primid) {
-            case SETANNOTATION:
-                return f.vlr[0].setAnnotation(symbol(f.vlr[1]),
-                                              f.vlr[2],
-                                              f.vlr[3]);
             default:
                 throwArgSizeException();
             }

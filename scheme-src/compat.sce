@@ -48,9 +48,6 @@
 ;   (let ((void-object (if #f #f)))
 ;      (lambda () void-object)))
 
-; Annotation support
-(load-module "sisc.debug.SDebug")
-
 ; "andmap" is like "map" except instead of "consing" the results it
 ; "ands" them, quitting early if #f" is obtained.
 ; The following does no error checking.

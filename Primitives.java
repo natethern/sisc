@@ -76,6 +76,12 @@ public class Primitives extends ModuleAdapter {
         define("_string-append", STRINGAPPEND);
         define("absolute-path?", ABSPATHQ);
         define("acos", ACOS);
+        define("annotation?", ANNOTATIONQ);
+        define("annotation-keys", ANNOTATIONKEYS);
+        define("annotation", ANNOTATION);
+        define("annotation-source", ANNOTATIONSRC);
+        define("annotation-expression", ANNOTATIONEXPR);
+        define("annotation-stripped", ANNOTATIONSTRIPPED);
         define("apply", APPLY);
         define("ashl", ASHL);
         define("ashr", ASHR);
@@ -107,6 +113,7 @@ public class Primitives extends ModuleAdapter {
         define("current-wind", CURRENTWIND);
         define("denominator", DENOMINATOR);
         define("display", DISPLAY);
+        define("emit-annotations", EMITANNOTATIONS);
         define("environment?", ENVIRONMENTQ);
         define("eq?", EQ);
         define("equal?", EQUAL);
@@ -136,6 +143,7 @@ public class Primitives extends ModuleAdapter {
         define("load", LOAD);
         define("load-native-library", LOADNL);
         define("log", LOG);
+        define("make-annotation", MAKEANNOTATION);
         define("make-parameter", MAKEPARAM);
         define("make-path", MAKEPATH);
         define("make-rectangular", MAKERECTANGULAR);
@@ -170,6 +178,8 @@ public class Primitives extends ModuleAdapter {
         define("remprop", REMPROP);
         define("round", ROUND);
         define("scheme-report-environment", REPORTENVIRONMENT);
+        define("set-annotation!", SETANNOTATION);
+        define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
         define("set-box!", SETBOX);
         define("set-car!", SETCAR);
         define("set-cdr!", SETCDR);
@@ -283,6 +293,7 @@ public class Primitives extends ModuleAdapter {
             case CURRENTOUTPUTPORT: return f.dynenv.out;
             case CURRENTINPUTPORT: return f.dynenv.in;
             case CURRENTWIND: return f.dynenv.wind;
+            case EMITANNOTATIONS: return truth(f.dynenv.parser.annotate);
             case OPENOUTPUTSTRING: return new OutputPort(new StringWriter());
             case PEEKCHAR:
                 Value v=f.dynenv.in.readChar();
@@ -614,6 +625,30 @@ public class Primitives extends ModuleAdapter {
                 return VOID;
             case NORMALIZEURL:
                 return new SchemeString(makeURL(f.vlr[0]).toString());
+            case EMITANNOTATIONS:
+                f.dynenv.parser.annotate=truth(f.vlr[0]);
+                return VOID;
+            case ANNOTATIONKEYS: {
+                Pair akl=EMPTYLIST;
+                for (Iterator i=f.vlr[0].getAnnotationKeys().iterator(); i.hasNext();) 
+                    akl=new Pair((Symbol)i.next(), akl);
+                return akl;
+            }
+            case ANNOTATIONSTRIPPED:
+                return annotated(f.vlr[0]).stripped;
+            case ANNOTATIONQ:
+                return truth(f.vlr[0] instanceof AnnotatedExpr);
+            case ANNOTATIONSRC:
+                Value rv;
+                if (f.vlr[0] instanceof AnnotatedExpr) 
+                    rv=annotated(f.vlr[0]).annotation;
+                else 
+                    rv=FALSE;
+                return rv;
+            case ANNOTATIONEXPR:
+                if (f.vlr[0] instanceof AnnotatedExpr) 
+                    return (Value)annotated(f.vlr[0]).expr;
+                else return f.vlr[0];
             }
         case 2:
             switch (primid) {
@@ -776,6 +811,11 @@ public class Primitives extends ModuleAdapter {
                 return VOID;
             case NORMALIZEURL:
                 return new SchemeString(makeURL(f.vlr[0], f.vlr[1]).toString());
+            case SETANNOTATIONSTRIPPED:
+                annotated(f.vlr[0]).stripped=f.vlr[1];
+                return VOID;
+            case ANNOTATION:
+                return f.vlr[0].getAnnotation(symbol(f.vlr[1]));
             }
         case 3:
             switch(primid) {
@@ -828,6 +868,21 @@ public class Primitives extends ModuleAdapter {
                 buff=str(f.vlr[0]).stringdata;
                 outport.write(buff, count);
                 return VOID;
+            case MAKEANNOTATION:
+                AnnotatedExpr ae=new AnnotatedExpr(f.vlr[0], f.vlr[1]);
+                ae.stripped=f.vlr[2];
+                return ae;
+            case ANNOTATION:
+                return f.vlr[0].getAnnotation(symbol(f.vlr[1]), f.vlr[2]);
+            case SETANNOTATION:
+                return f.vlr[0].setAnnotation(symbol(f.vlr[1]), f.vlr[2]);
+            }
+        case 4:
+            switch(primid) {
+            case SETANNOTATION:
+                return f.vlr[0].setAnnotation(symbol(f.vlr[1]),
+                                              f.vlr[2],
+                                              f.vlr[3]);
             }
         default:
             Quantity quantity=null;
@@ -918,12 +973,17 @@ public class Primitives extends ModuleAdapter {
         ABSPATHQ = 13,
         ACOS = 14,
         ADD = 152,
+        ANNOTATION = 0,
+        ANNOTATIONQ = 1,
+        ANNOTATIONKEYS = 2,
+        ANNOTATIONSRC = 3,
+        ANNOTATIONEXPR = 37,
+        ANNOTATIONSTRIPPED = 30,
         APPLY = 137,
         ASHL = 104,
         ASHR = 105,
         ASIN = 15,
         ATAN = 106,
-        //	ATAN = 16,
         BLOCKREAD = 138,
         BLOCKWRITE = 139,
         BOOLEANQ = 17,
@@ -943,27 +1003,21 @@ public class Primitives extends ModuleAdapter {
         CLOSEOUTPUTPORT = 28,
         COMPLEXQ = 29,
         CONS = 109,
-        ANNOTATIONQ = 30,
         COS = 31,
-        //	CURRENTEVAL = 0,
         CURRENTEVAL = 32,
-        //	CURRENTINPUTPORT = 1,
         CURRENTINPUTPORT = 33,
-        //	CURRENTOUTPUTPORT = 2,
         CURRENTOUTPUTPORT = 34,
-        //	CURRENTWIND = 3,
         CURRENTWIND = 35,
         DENOMINATOR = 36,
         DISPLAY = 110,
-        //      DISPLAY = 37,
         DIV = 144,
+        EMITANNOTATIONS = 16,
         ENVIRONMENTQ = 39,
         EQ = 112,
         EQUAL = 113,
         ERROR = 114,
         EVAL = 115,
         READCODE = 40,
-        //	EVAL = 40,
         EXACT2INEXACT = 41,
         EXACTQ = 42,
         EXP = 43,
@@ -993,15 +1047,14 @@ public class Primitives extends ModuleAdapter {
         LOG = 61,
         LOOKUP = 119,
         LT = 147,
+        MAKEANNOTATION = 8,
         MAKEPARAM = 63,
         MAKEPATH = 120,
         MAKERECTANGULAR = 121,
         MAKESTRING = 122,
         MAKEVECTOR = 123,
         //	MAKEVECTOR = 64,
-        //	MAX_PRECISION = 5,
         MAX_PRECISION = 65,
-        //	MIN_PRECISION = 6,
         MIN_PRECISION = 66,
         MUL = 148,
         NEQ = 149,
@@ -1021,7 +1074,6 @@ public class Primitives extends ModuleAdapter {
         PAIRQ = 76,
         PARAMETERQ = 77,
         PEEKCHAR = 78,
-        //	PEEKCHAR = 8,
         PROCEDUREQ = 79,
         PUTPROP = 140,
         QUOTIENT = 126,
@@ -1035,6 +1087,8 @@ public class Primitives extends ModuleAdapter {
         REMPROP = 62,
         REPORTENVIRONMENT = 84,
         ROUND = 85,
+        SETANNOTATION = 5,
+        SETANNOTATIONSTRIPPED = 6,
         SETBOX = 128,
         SETCAR = 129,
         SETCDR = 130,
@@ -1074,3 +1128,15 @@ public class Primitives extends ModuleAdapter {
 
 
 }
+/*
+        define("emit-annotations", EMITANNOTATIONS);
+        define("set-annotation!", SETANNOTATION);
+        define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
+        define("make-annotation", MAKEANNOTATION);
+        define("annotation", ANNOTATION);
+        define("annotation?", ANNOTATIONQ);
+        define("annotation-keys", ANNOTATIONKEYS);
+        define("annotation-source", ANNOTATIONSRC);
+        define("annotation-expression", ANNOTATIONEXPR);
+        define("annotation-stripped", ANNOTATIONSTRIPPED);
+*/

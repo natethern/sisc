@@ -257,3 +257,4 @@
   (include "libraries.scm"))
 
 (import libraries)
+(import debugging)

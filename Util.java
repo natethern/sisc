@@ -352,6 +352,13 @@ public abstract class Util implements Version {
 	return null;
     }
 
+    public static final AnnotatedExpr annotated(Value o) {
+        try {
+            return (AnnotatedExpr)o;
+        } catch (ClassCastException e) { typeError("annotatedexpression", o); }
+        return null;
+    }
+
     public static final SchemeBoolean truth(boolean b) {
         return b ? TRUE : FALSE;
     }
