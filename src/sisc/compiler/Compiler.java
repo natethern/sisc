@@ -483,9 +483,10 @@ public class Compiler extends CompilerConstants {
                     if (fixedCall != null) {
                         if (fixedCall instanceof OptimisticHost)
                             ((OptimisticHost)fixedCall).setHosts();
-                        if (!r.dynenv.hedgedInlining)
-                        addAnnotations(fixedCall, lastRand.annotations);
-                        return fixedCall;
+                        if (!r.dynenv.hedgedInlining) {
+                            addAnnotations(fixedCall, lastRand.annotations);
+                            return fixedCall;
+                        }
                     }
                 }
             } 
