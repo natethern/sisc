@@ -18,14 +18,14 @@ public class SThread extends ModuleAdapter {
     protected static final int 
         THREADNEW=0, THREADSTART=1, THREADYIELD=2, THREADSLEEP=3,
         THREADINTERRUPT=4, THREADJOIN=5, THREADCURRENT=6,
-        /*<7>*/ THREADNOTIFY=8, THREADNOTIFYALL=9,
+        THREADQ=7, THREADNOTIFY=8, THREADNOTIFYALL=9,
         THREADWAIT=10, THREADNAME=11, THREADPRIORITY=12, 
         THREADDAEMONQ=13, SETTHREADNAME=14, SETTHREADPRIORITY=15,
         SETTHREADDAEMON=16, THREADSTATE=17, THREADINTERRUPTEDQ=18,
         THREADHOLDSLOCKQ=19, THREADSRUNNING=20, THREADRESULT=21,
         MONITORNEW=22, MONITORLOCK=23, MONITORUNLOCK=24, 
         MONITORNOTIFY=25, MONITORNOTIFYALL=26, MONITORWAIT=27,
-        MONITORFOR=28,
+        MONITORFOR=28, MONITORQ=29,
 
         READY=0, RUNNING=1, FINISHED=2, FINISHED_ABNORMALLY=3;
 
@@ -37,6 +37,7 @@ public class SThread extends ModuleAdapter {
     static ThreadGroup schemeThreads=new ThreadGroup("SISC Threads");
 
     public SThread() {
+        define("thread?", THREADQ);
         define("thread/new", THREADNEW);    
         define("thread/start", THREADSTART);    
         define("thread/yield", THREADYIELD);    
@@ -59,6 +60,7 @@ public class SThread extends ModuleAdapter {
 
         define("thread/_active-thread-count", THREADSRUNNING);
 
+        define("monitor?", MONITORQ);
         define("monitor-of", MONITORFOR);
         define("monitor/new", MONITORNEW);
         define("monitor/lock", MONITORLOCK);
@@ -330,6 +332,10 @@ public class SThread extends ModuleAdapter {
             }
         case 1:
             switch(primid) {
+            case THREADQ:
+                return truth(f.vlr[0] instanceof SchemeThread);
+            case MONITORQ:
+                return truth(f.vlr[0] instanceof Monitor);
             case MONITORFOR:
                 return Monitor.of(f.vlr[0]);
             case MONITORLOCK:

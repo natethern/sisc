@@ -5,6 +5,7 @@ import java.io.IOException;
 
 public interface OutputPort extends Port {
 
+    public void write(byte[] b, int offset, int length) throws IOException;
     public void write(char v) throws IOException;
     public void write(String v) throws IOException;
     public void display(Value v) throws IOException;

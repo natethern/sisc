@@ -228,17 +228,26 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
     <sect2 id="BlockIO">
       <title>Block I/O</title>
       <para>
+        &requires; 
+        <emphasis role="bold">
+          (import <emphasis>block-io</emphasis>)
+        </emphasis>
+      </para>
+      <para>
+        &requires; 
+        <emphasis role="bold">
+          (import <emphasis>buffer</emphasis>)
+        </emphasis>
+      </para>
+      <para>
         In addition to the standard operations on ports
         (<computeroutput>read, read-char, char-ready?,
           display,</computeroutput> and
         <computeroutput>write</computeroutput>), &SISC; provides block
         input/output functions, that allow a Scheme program to read
-        blocks of more than one byte or character of data at a time.
-          &SISC; stores data that is read or is to be written in a
-        string.  Binary data in strings is fully supported throughout
-          &SISC;.  Such strings may be read and written as usual, though
-        undisplayable characters will often be escaped when printed to
-        the console.
+        blocks of more than one byte of data at a time.
+        &SISC; stores data that is read or is to be written in a 
+        binary buffer (see <xref linkend="Buffers"/>).
       </para>
       <para>
         <blockquote>
@@ -261,7 +270,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <para>
                 Reads up to <parameter>count</parameter> bytes of data
                 from the provided <parameter>input-port</parameter>
-                into <parameter>buffer</parameter>.  Note that less
+                into the binary buffer <parameter>buffer</parameter>.  
+                Note that less
                 than <parameter>count</parameter> bytes may be read.
                 The number of bytes actually read is returned.  If the
                 end-of-file is encountered before any bytes could be
@@ -728,6 +738,20 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       </para>
       <para>
         <blockquote>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>&num;t/&num;f</type>
+              <methodname>socket?</methodname>
+              <methodparam><parameter>value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns true if and only if the provided value is a socket.
+              </para>
+            </blockquote>
+          </para>
           <para id="func-open-socket-input-port">
               &procedure;
             <methodsynopsis language="scheme">
@@ -857,6 +881,21 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 local interface to bind to.  If not provided, the port
                 is bound on all available interfaces.  An error is
                 raised if the socket cannot be bound and set listening.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>&num;t/&num;f</type>
+              <methodname>server-socket?</methodname>
+              <methodparam><parameter>value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns true if and only if the provided value is a server
+                socket.
               </para>
             </blockquote>
           </para>

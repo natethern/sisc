@@ -473,6 +473,140 @@ r / 2<superscript>s</superscript>
         </blockquote>
       </sect3>
     </sect2>
+    <sect2 id="Buffers"> 
+      <title>Binary Buffers</title>
+      <para>
+          &requires; 
+        <emphasis role="bold">
+          (import <emphasis>buffers</emphasis>)
+        </emphasis>
+      </para>
+      <para>
+        Binary buffers provide an opaque container for a fixed amount
+        of binary data.  The binary buffer library provides a number 
+        of functions for creating and accessing those buffers.  
+        The buffer is very similar to a vector, in
+        that it is a randomly accessable, zero-based structure.  But as
+        a tradeoff for space efficiency, binary 
+        buffers are only capable of storing bytes.  The bytes are stored
+        as 8-bit, unsigned fixed integers (of the range 0-255).
+      </para>
+      <para>
+        <blockquote>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>&num;t/&num;f</type>
+              <methodname>buffer?</methodname>
+              <methodparam><parameter>value</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns true if and only if the provided argument is a
+                binary buffer.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>buffer</type>
+              <methodname>make-buffer</methodname>
+              <methodparam><parameter>size</parameter></methodparam>
+              <methodparam choice="opt"><parameter>fill-value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates a new buffer capable of storing
+                <parameter>size</parameter> bytes.
+                <parameter>size</parameter> must be a fixed
+                non-negative integer.  If provided, the value of all
+                bytes in the buffer is initialized to
+                <parameter>fill-value</parameter>.  If not provided,
+                the contents of the buffer is unspecified.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>buffer</type>
+              <methodname>buffer</methodname>
+              <methodparam choice="opt" rep="repeat">
+                <parameter>value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates a new buffer capable whose size is equal to
+                the number of arguments given and whose contents are
+                the bytes given as arguments.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>fixed integer</type>
+              <methodname>buffer-length</methodname>
+              <methodparam><parameter>buffer</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the capacity of the given buffer.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>fixed integer</type>
+              <methodname>buffer-ref</methodname>
+              <methodparam><parameter>buffer</parameter></methodparam>
+              <methodparam><parameter>index</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the byte at offset
+                <parameter>index</parameter> in the specified buffer.
+                It is an error if <parameter>index</parameter> is out
+                of range.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>buffer-set!</methodname>
+              <methodparam><parameter>buffer</parameter></methodparam>
+              <methodparam><parameter>index</parameter>
+              </methodparam>
+              <methodparam><parameter>new-value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Sets the byte at offset <parameter>index</parameter>
+                of the specified buffer to the given fixed integer
+                <parameter>new-value</parameter>.
+                It is an error if <parameter>index</parameter> is out
+                of range.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        Buffers are serializable (can exist in loadable libraries or
+        a &SISC; heap), but are not representable in an s-expression.  
+        For this reason, they bear the printed representation of
+        <literal>&num;&lt;buffer&gt;</literal>.
+      </para>
+    </sect2>
     <sect2>
       <title>Procedure Properties</title>
       <para>

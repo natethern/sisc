@@ -139,11 +139,25 @@
     </para>
     <para>
       Threads are created with
-      <computeroutput>thread/new</computeroutput>.  This function
+      <function>thread/new</function>.  This function
       takes as its sole argument a thunk.  The body of the thunk is
       the code that the thread will execute when started.  
     </para>
     <blockquote>
+      <para>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&num;t/&num;f</type>
+          <methodname>thread?</methodname>
+          <methodparam><parameter>value</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Returns true if and only if the provided value is a thread handle.
+          </para>
+        </blockquote>
+      </para>
       <para id="func-thread-new">
         &procedure;
         <methodsynopsis language="scheme">
@@ -533,6 +547,20 @@
       threads using monitor functionality.
     </para>
     <blockquote>
+      <para>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&num;t/&num;f</type>
+          <methodname>monitor?</methodname>
+          <methodparam><parameter>value</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Returns true if and only if the provided value is a monitor.
+          </para>
+        </blockquote>
+      </para>
       <para id="func-monitor-new">
         &procedure;
         <methodsynopsis language="scheme">

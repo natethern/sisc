@@ -12,6 +12,7 @@ public class IO extends ModuleAdapter {
 
     protected static final int
         //NEXT = 31,
+
         ABSPATHQ            = 0,
         //BLOCKREAD           = 1,
         //BLOCKWRITE          = 2,
@@ -46,8 +47,6 @@ public class IO extends ModuleAdapter {
 
     public IO() {
         define("absolute-path?"     , ABSPATHQ);
-        //define("block-read"         , BLOCKREAD);
-        //define("block-write"        , BLOCKWRITE);
         define("char-ready?"        , CHARREADY);
         define("close-input-port"   , CLOSEINPUTPORT);
         define("close-output-port"  , CLOSEOUTPUTPORT);
@@ -417,26 +416,6 @@ public class IO extends ModuleAdapter {
                 }
             case NORMALIZEURL:
                 return new SchemeString(url(f.vlr[0], f.vlr[1]).toString());
-            default:
-                throwArgSizeException();
-            }
-        case 3:
-            switch(primid) {
-                /*            case BLOCKREAD:
-                int count=num(f.vlr[2]).intValue();
-                SchemeInputPort inport=inport(f.vlr[1]);
-                SchemeString st=str(f.vlr[0]);
-                char[] buff=st.asCharArray();
-                st.set(buff); //forces string to be represented by char[] only
-                int rv=readChars(inport, buff, 0, count);
-                if (rv==-1) return EOF;
-                else return Quantity.valueOf(rv);
-                case BLOCKWRITE:
-                count=num(f.vlr[2]).intValue();
-                OutputPort outport=outport(f.vlr[1]);
-                buff=str(f.vlr[0]).asCharArray();
-                outport.write(buff, count);
-                return VOID;*/
             default:
                 throwArgSizeException();
             }

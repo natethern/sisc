@@ -43,6 +43,7 @@
 (native-module s2j-reflection    "sisc.modules.s2j.Reflection")
 (native-module s2j-conversion    "sisc.modules.s2j.Conversion")
 (native-module hashtable-native  "sisc.modules.SHashtable")
+(native-module block-io-native  "sisc.modules.BlockIO")
 
 (module misc
     (wrap-symbol
@@ -74,7 +75,8 @@
   (include "debug.scm"))
 
 (module threading
-  (thread/new
+  (thread?
+   thread/new
    thread/start
    thread/yield
    thread/interrupt
@@ -94,6 +96,7 @@
    thread/interrupted?
    thread/holds-lock?
    thread/_active-thread-count
+   monitor?
    monitor-of
    monitor/new
    monitor/lock
@@ -108,6 +111,21 @@
    parallel)
   (import threading-native)
   (include "thread.scm"))
+
+(module buffer
+  (make-buffer
+   buffer
+   buffer?
+   buffer-ref
+   buffer-set!
+   buffer-length)
+  (import block-io-native)
+  (include "buffer.scm"))
+
+(module block-io
+  (block-read
+   block-write)
+  (import block-io-native))
 
 (module hashtable
   (make-hashtable

@@ -21,6 +21,10 @@ public class WriterOutputPort extends AutoflushOutputPort {
         out.write(v);
     }
 
+    public void write(byte[] b, int offset, int length) throws IOException {
+        out.write(new String(b), offset, length);
+    }
+
     protected void writeHelper(String s) throws IOException {
         out.write(s);
     }

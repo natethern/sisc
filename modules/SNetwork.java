@@ -53,8 +53,9 @@ public class SNetwork extends ModuleAdapter {
 	OPEN_SOCKET_OUTPUT_PORT=10, OPEN_SOCKET_INPUT_PORT=11,
 	OPEN_TCP_SOCKET=12,
 	OPEN_TCP_LISTENER=13, CLOSE_SOCKET=14,
-	SET_SO_TIMEOUT=15, OPEN_UDP_LISTEN_SOCKET=16;
-    
+	SET_SO_TIMEOUT=15, OPEN_UDP_LISTEN_SOCKET=16, SOCKETQ=17,
+        SERVERSOCKETQ=18;
+   
     interface Closable {
         void close() throws IOException;
     }
@@ -321,6 +322,8 @@ public class SNetwork extends ModuleAdapter {
         define("leave-multicast-group", LEAVE_MULTICAST_GROUP);
         define("set-multicast-ttl!", SET_MULTICAST_TTL);
         define("set-so-timeout!", SET_SO_TIMEOUT);
+        define("socket?", SOCKETQ);
+        define("server-socket?", SERVERSOCKETQ);
     }
 
     public static SchemeSocket sock(Value o) {
@@ -356,6 +359,10 @@ public class SNetwork extends ModuleAdapter {
                 }
             case 1:
                 switch (primid) {
+                case SOCKETQ:
+                    return truth(f.vlr[0] instanceof SchemeSocket);
+                case SERVERSOCKETQ:
+                    return truth(f.vlr[0] instanceof SchemeServerSocket);
                 case OPEN_SOCKET_INPUT_PORT:
                     SchemeSocket ss=sock(f.vlr[0]);
                     return ss.getInputPort(f);
