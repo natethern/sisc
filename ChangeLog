@@ -1,5 +1,9 @@
-b2005-01-16  Scott G. Miller  <sgmiller@gmail.com>
+2005-01-16  Scott G. Miller  <sgmiller@gmail.com>
 
+	* Fixed a bug where the SLL2 serializer was writing the 
+	  string length rather than the number of bytes in its 
+	  representation length, breaking deserialization.
+	
 	* Removed inline-primitives and inline-usual-primitives, as 
 	  this is done automatically and safely now.
 

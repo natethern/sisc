@@ -107,9 +107,8 @@ public abstract class SLL2Serializer extends SerializerImpl {
 
     public void writeUTF(String v) throws IOException {
         try {
-            writeInt(v.length());
-
             byte[] b=v.getBytes("UTF8");
+            writeInt(b.length);
             datout.write(b);
         } catch (UnsupportedEncodingException use) {
             //Not possible
