@@ -32,7 +32,7 @@
                ((< i 1) a)
              (set! a (cons (car atoms) a))
              (set! atoms (cdr atoms))
-             (set! a (cons (init-aux (1- m) n atoms) a))))))
+             (set! a (cons (init-aux (sub1 m) n atoms) a))))))
  
 (define ttest-pattern (init 6 6 ttest-atoms))
  

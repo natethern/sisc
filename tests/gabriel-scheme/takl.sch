@@ -16,9 +16,9 @@
       (cons n (listn (- n 1)))
       ()))
  
-(define 18l (listn 18))
-(define 12l (listn 12))
-(define  6l (listn 6))
+(define l18 (listn 18))
+(define l12 (listn 12))
+(define  l6 (listn 6))
  
 (define (mas x y z)
   (if (not (shorterp y x))
@@ -37,4 +37,4 @@
  
 ;;; call: (mas 18l 12l 6l)
  
-(run-benchmark "TAKL" (lambda () (mas 18l 12l 6l)))
+(run-benchmark "TAKL" (lambda () (mas l18 l12 l6)))

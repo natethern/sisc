@@ -8,13 +8,10 @@
 (define (sub1 x) (- x 1))
 (define (add1 x) (+ x 1))
 
-(define-syntax get
-  (syntax-rules ()
-    ((_ x y) (getprop x y))))
+(load "gabriel-scheme/prop.scm")
 
-(define-syntax put
-  (syntax-rules ()
-    ((_ x y z) (putprop x y z))))
+(define (system-time)
+  (invoke-static <java.lang.System> 'currentTimeMillis))
 
 (define (time n thunk)
   (let ((st (system-time)))
@@ -29,9 +26,6 @@
   (lambda (benchmark-name benchmark-thunk)
     (display benchmark-name) (display "...")
     (let ((benchresult (cons benchmark-name 
-                             (call/fc (lambda ()
-                                        (time 3 benchmark-thunk))
-                                      (lambda (m e f)
-                                        'failed)))))
+                             (time 3 benchmark-thunk))))
       (set! benchmark-results (cons benchresult benchmark-results)))
     (newline)))

@@ -33,27 +33,35 @@
  
 ; Returns the wrong answer for quotients.
 ; Fortunately these aren't used in the benchmark.
- 
+
+(define (dderiv a)
+  (cond
+    ((not (pair? a))
+     (cond ((eq? a 'x) 1) (else 0)))
+    (else (let ((dderiv (get (car a) 'dderiv)))
+         (cond (dderiv (dderiv (cdr a)))
+               (else 'error))))))
+
 (define (dderiv-aux a)
   (list '/ (dderiv a) a))
  
-(define (+dderiv a)
+(define (dderiv+ a)
   (cons '+ (map dderiv a)))
  
-(put '+ 'dderiv +dderiv)    ; install procedure on the property list
+(put '+ 'dderiv dderiv+)    ; install procedure on the property list
  
-(define (-dderiv a)
+(define (dderiv- a)
   (cons '- (map dderiv a)))
  
-(put '- 'dderiv -dderiv)    ; install procedure on the property list
+(put '- 'dderiv dderiv-)    ; install procedure on the property list
  
-(define (*dderiv a)
+(define (dderiv* a)
   (list '* (cons '* a)
         (cons '+ (map dderiv-aux a))))
  
-(put '* 'dderiv *dderiv)    ; install procedure on the property list
+(put '* 'dderiv dderiv*)    ; install procedure on the property list
  
-(define (/dderiv a)
+(define (dderiv/ a)
   (list '-
         (list '/
               (dderiv (car a))
@@ -65,15 +73,7 @@
                     (cadr a)
                     (dderiv (cadr a))))))
  
-(put '/ 'dderiv /dderiv)    ; install procedure on the property list
- 
-(define (dderiv a)
-  (cond
-    ((not (pair? a))
-     (cond ((eq? a 'x) 1) (else 0)))
-    (else (let ((dderiv (get (car a) 'dderiv)))
-         (cond (dderiv (dderiv (cdr a)))
-               (else 'error))))))
+(put '/ 'dderiv dderiv/)    ; install procedure on the property list
  
 (define (run)
   (do ((i 0 (+ i 1)))
