@@ -846,7 +846,7 @@ Context.exit()
             </blockquote>
             <informalexample>
               <programlisting>
-(define-class &lt;java.util.linked-hash-set&gt;)
+(define-java-class &lt;java.util.linked-hash-set&gt;)
 (java-new &lt;java.util.linked-hash-set&gt; (-&gt;jint 100))  &arrow; &lt;jobject&gt;
               </programlisting>
             </informalexample>
@@ -877,7 +877,7 @@ Context.exit()
             </blockquote>
             <informalexample>
               <programlisting>
-(define-class &lt;java.util.linked-hash-set&gt;)
+(define-java-class &lt;java.util.linked-hash-set&gt;)
 (define hs (java-new &lt;java.util.linked-hash-set&gt; (-&gt;jint 100)))
 (java-object? hs)  &arrow; &t;
 (java-object? (-&gt;jint 100))  &arrow; &t;
@@ -907,7 +907,7 @@ Context.exit()
             </blockquote>
             <informalexample>
               <programlisting>
-(define-class &lt;java.util.linked-hash-set&gt;)
+(define-java-class &lt;java.util.linked-hash-set&gt;)
 (java-null &lt;java.util.linked-hash-set&gt;)  &arrow; &lt;jnull&gt;
               </programlisting>
             </informalexample>
@@ -932,7 +932,7 @@ Context.exit()
             </blockquote>
             <informalexample>
               <programlisting>
-(define-class &lt;java.util.linked-hash-set&gt;)
+(define-java-class &lt;java.util.linked-hash-set&gt;)
 (java-null? (java-null &lt;java.util.linked-hash-set&gt;))  &arrow; &t;
               </programlisting>
             </informalexample>
