@@ -437,10 +437,11 @@ public class Primitives extends ModuleAdapter {
             case LOAD:
                 CallFrame before=f.stk.capture(f);
                 InputPort p=null;
+                String sourceFile=string(f.vlr[0]);
                 try {
-                    p=new SourceInputPort(new BufferedReader(new FileReader(string(f.vlr[0]))), string(f.vlr[0]));
+                    p=new SourceInputPort(new BufferedReader(new FileReader(sourceFile)), sourceFile);
                 } catch (IOException e) {
-                    throwPrimException( "error opening '"+string(f.vlr[0])+"'");
+                    throwPrimException( "error opening '"+sourceFile+"'");
                 }
                 v=null;
                 do {

@@ -113,13 +113,14 @@
   <target name="jars" depends="compiler,i18n">
     <jar jarfile="${basedir}/${jarname}"
 	 manifest="${basedir}/boot/Manifest">
-      <fileset dir="${classdir}" includes="*/**"/>
-<!--      <fileset dir="${basedir}/boot" includes="sisc.heap"/>	
-      <fileset dir="${basedir}" includes="lambdafish.gif"/>	-->
+      <fileset dir="${classdir}">
+	<include name="*/**"/>
+	<exclude name="sisc/boot/GenerateHeap.class" if="lite"/>
+      </fileset>
     </jar>
   </target>
   
-  <target name="heap" depends="jars">
+  <target name="heap" depends="compiler,i18n">
     <java classname="sisc.boot.GenerateHeap"
           classpath="${classdir}"
           dir="${schemedir}"
@@ -137,7 +138,7 @@
     </java>
   </target>
 
-  <target name="lite-heap" depends="compiler">
+  <target name="lite-heap" depends="compiler,i18n">
     <java classname="sisc.boot.GenerateHeap"
           classpath="${classdir}"
           dir="${schemedir}"

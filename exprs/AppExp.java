@@ -90,8 +90,8 @@ public class AppExp extends Expression {
                 s.serialize(rands[i], dos);
             }
             s.serialize(nxp, dos);
-            dos.writeBoolean(nonTail);
-            dos.writeBoolean(allImmediate);
+            s.writeBer((nonTail ? 2 : 0) |
+                       (allImmediate ? 1 : 0), dos);
         }
     }
 
@@ -107,8 +107,9 @@ public class AppExp extends Expression {
                 rands[i]=s.deserialize(dis);
             }
             nxp=s.deserialize(dis);
-            nonTail=dis.readBoolean();
-            allImmediate=dis.readBoolean();
+            int flags=s.readBer(dis);
+            allImmediate=(flags & 0x1)!=0;
+            nonTail=(flags & 0x2)!=0;
         }
     }
 }
