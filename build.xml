@@ -9,9 +9,9 @@
   </path>
 
   <target name="prepare">
-    <property name="specver" value="1.7.2"/>
-    <property name="version" value="1.7.2-rc"/>
-    <property name="cvsversion" value="rc1_7_2"/> 
+    <property name="specver" value="1.7.3"/>
+    <property name="version" value="1.7.3-rc"/>
+    <property name="cvsversion" value="rc1_7_3"/> 
     <property name="releasecandidate" value="yes"/>
 <!--    <property name="beta" value="yes"/>-->
     <property file="${basedir}/build.properties"/>    
