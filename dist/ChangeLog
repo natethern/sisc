@@ -1,3 +1,9 @@
+2002-06-26  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Serialization of FreeRefereneExps and FreeSetEvals no longer
+	  drags the entire AE in, so serialization of small code segments
+  	  is space efficient.
+
 2002-06-26  Matthias Radestock  <matthias@sorted.org>
 
 	* Improved object initialisation support provided by generic

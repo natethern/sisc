@@ -95,6 +95,7 @@
       <arg value="${heap}"/>
       <arg value="-files"/>
       <arg value="file:init.sce"/>
+      <arg value="file:optimize.sce"/>
       <arg value="file:compat.sce"/>
       <arg value="file:psyntax.sce"/>
       <arg value="file:init2.scm"/>
@@ -191,7 +192,7 @@
     </tar>
 
     <gzip src="${dist}/sisc-lite-${version}.tar"
-          zipfile="${dist}/sisc-lite-${version}.tar.gz" />
+           zipfile="${dist}/sisc-lite-${version}.tar.gz" />
     <delete file="${dist}/sisc-lite-${version}.tar"/>
     <zip zipfile="${dist}/sisc-lite-${version}.zip"
          basedir="${dist}/lite"/>

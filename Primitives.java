@@ -130,6 +130,7 @@ public class Primitives extends ModuleAdapter {
         define("native-library-name", NLNAME);
         define("native-library-version", NLVERSION);
         define("get-output-string", GETOUTPUTSTRING);
+        define("get-environment", GETENVIRONMENT);
         define("getprop", LOOKUP);
         define("imag-part", IMAGPART);
         define("inexact->exact", INEXACT2EXACT);
@@ -325,6 +326,8 @@ public class Primitives extends ModuleAdapter {
             case PAIRQ:
                 return truth(f.vlr[0] instanceof Pair &&
                              f.vlr[0]!=EMPTYLIST);
+            case GETENVIRONMENT:
+                return f.ctx.lookupContextEnv(symbol(f.vlr[0]));
             case LOOKUP:
                 try {
                     return f.ctx.toplevel_env.lookup(symbol(f.vlr[0]));
@@ -1025,6 +1028,7 @@ public class Primitives extends ModuleAdapter {
         FLOOR = 45,
         FLUSHOUTPUTPORT = 46,
         GCD = 116,
+        GETENVIRONMENT = 64,
         NLBINDING = 117,
         NLBINDINGNAMES = 47,
         NLNAME = 48,
@@ -1053,7 +1057,6 @@ public class Primitives extends ModuleAdapter {
         MAKERECTANGULAR = 121,
         MAKESTRING = 122,
         MAKEVECTOR = 123,
-        //	MAKEVECTOR = 64,
         MAX_PRECISION = 65,
         MIN_PRECISION = 66,
         MUL = 148,

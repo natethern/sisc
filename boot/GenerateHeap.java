@@ -150,6 +150,8 @@ public class GenerateHeap {
         LibraryBuilder lb=new LibraryBuilder();
         AssociativeEnvironment symenv=new AssociativeEnvironment();
         AssociativeEnvironment toplevel=sisc.compiler.Compiler.addSpecialForms(new AssociativeEnvironment(new LibraryAE(null, lb)));
+        toplevel.name=Util.TOPLEVEL;
+        symenv.name=Symbol.get("*symenv*");
         symenv.define(Util.TOPLEVEL, toplevel);
 
 	AppContext ctx = new AppContext(symenv);
@@ -203,17 +205,18 @@ public class GenerateHeap {
         r5rs=results[0];
         sisc_specific=results[1];
 
-        r5rs.name=Symbol.get("r5rs");
-        sisc_specific.name=Symbol.get("sisc-specific");
+        r5rs.name=Util.REPORT;
+        sisc_specific.name=Util.SISC_SPECIFIC;
 
-        top_level=new AssociativeEnvironment(sisc_specific);
-        top_level.name=Symbol.get("top-level");
+        r.ctx.toplevel_env=top_level=new AssociativeEnvironment(sisc_specific);
+        top_level.name=Util.TOPLEVEL;
         top_level.symbolMap.remove(sisc_specific.symbolMap);
         sisc_specific.symbolMap.remove(r5rs.symbolMap);
         
         r.defineContextEnv(Util.TOPLEVEL, top_level);
         r.defineContextEnv(Util.REPORT, r5rs);
         r.defineContextEnv(Util.SISC_SPECIFIC, sisc_specific);
+
 
         System.out.println("Saving heap...");
 

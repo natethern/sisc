@@ -72,6 +72,7 @@ public class AppContext extends Util {
         throws IOException, ClassNotFoundException {
 
         Library s=Library.load(i);
+        LibraryManager.getInstance().addLibrary(s);
 
         SchemeBoolean lTRUE=(SchemeBoolean)s.getExpression(0),
             lFALSE=(SchemeBoolean)s.getExpression(1);
@@ -116,9 +117,10 @@ public class AppContext extends Util {
         lb.add(EOF);            
         lb.add(r.stk);
         lb.add(evaluator);
+        lb.add(Util.TOPLEVEL, toplevel_env);
         lb.add(Symbol.get("symenv"), symenv);
         
-        lb.buildLibrary(o);
+        lb.buildLibrary("sisc", o);
         r.pop(r.stk);
     }
 

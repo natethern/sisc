@@ -188,6 +188,7 @@ public class AssociativeEnvironment extends NamedValue {
     }
 
     public void serialize(Serializer s) throws IOException {
+        super.serialize(s);
         s.writeInt(symbolMap.size());
         for (Iterator i=symbolMap.keySet().iterator(); i.hasNext();) {
             Symbol key=(Symbol)i.next();
@@ -195,10 +196,11 @@ public class AssociativeEnvironment extends NamedValue {
             int loc=((Integer)symbolMap.get(key)).intValue();
             s.writeExpression(env[loc]);
         }
-        s.writeExpression(parent);
+        s.writeAssociativeEnvironment(parent);
     }
 
     public void deserialize(Deserializer s) throws IOException {
+        super.deserialize(s);
         int size=s.readInt();
         env=new Value[size];
         symbolMap=new HashMap();
@@ -209,7 +211,7 @@ public class AssociativeEnvironment extends NamedValue {
         }
         nextFree=size;
         
-        parent=(AssociativeEnvironment)s.readExpression();
+        parent=s.readAssociativeEnvironment();
     }
 }
 
