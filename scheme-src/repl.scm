@@ -32,6 +32,8 @@
 ;;
 ;; The SISC read-eval-print-loop
 
+(define current-exit-handler (parameterize void))
+
 (define current-default-error-handler
   (parameterize
    (lambda (message error-cont failure-cont output-port)
@@ -45,7 +47,10 @@
 	      (let* ([exp (read console-in)]
 		     [val (eval exp)])
 		(cond [(void? val) (repl-loop console-in console-out writer)]
-		      [(eof-object? val) (void)]
+		      [(eof-object? val) 
+		       (if ((current-exit-handler))
+			   (void)
+			   (repl-loop console-in console-out writer))]
 		      [(circular? val)
 		       (begin 
 			 (display "{Refusing to print non-terminating structure}")
