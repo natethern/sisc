@@ -7,6 +7,11 @@
 
 	* Fixed bug in hashtable serialization
 
+2002-10-13  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Modified the structure of libraries so they can be serialized
+	  without relying on recursion, and possibly blowing the Java stack.
+
 2002-10-12  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Implemented read/write invariance for symbols containing special
