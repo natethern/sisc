@@ -236,3 +236,111 @@
 (define-generic remove-all)
 (applicable-methods (generic-procedure-next remove-all)
                     (list <java.util.TreeSet> <java.util.TreeSet>))
+
+
+;;check exception handling in reflection api
+
+(import s2j-reflection)
+(import s2j)
+(java/wrap) ;;arg size exception
+(java/unwrap 1) ;;type error
+(java/class '|foo|) ;;class not found
+(java/array-class (java/null) 1) ;;illegal null
+(java/array-class <jvoid> 1) ;;illegal void
+(java/array-class <jint> -1) ;;illegal dimensions
+(java/array-new (java/null) '(1 1 1)) ;;illegal null
+(java/array-new <jvoid> '(1 1 1)) ;;illegal void
+(java/array-new <jint> '(1 -1 1)) ;;illegal dimensions
+(define <jnumber> (java/class '|java.lang.Number|))
+(java/invoke-constructor (car (java/constructors <jnumber>))
+                         (list)) ;;constructor on abstract class
+(define <jaccessible-object>
+  (java/class '|java.lang.reflect.AccessibleObject|))
+(java/invoke-constructor (car (java/constructors
+                               <jaccessible-object>))
+                         (list)) ;;access to protected constructor
+(define <jurl> (java/class '|java.net.URL|))
+(define (find pred l)
+  (and (not (null? l))
+       (if (pred (car l))
+           (car l)
+           (find pred (cdr l)))))
+
+(define make-url-from-string
+  (find (lambda (c) (equal? (java/parameter-types c)
+                            (list <jstring>)))
+        (java/constructors <jurl>)))
+
+(java/invoke-constructor make-url-from-string
+                         (list)) ;;illegal arguments
+(java/invoke-constructor make-url-from-string
+                         (list (->jint 1))) ;;illegal arguments
+(java/invoke-constructor make-url-from-string
+                         (list (->jstring "foo://bar"))) ;;malformed url
+(define <jreader> (java/class '|java.io.Reader|))
+(define reader-lock
+  (find (lambda (f) (eq? (java/name f) 'lock))
+        (java/fields <jreader>)))
+(define <jstring-reader> (java/class '|java.io.StringReader|))
+(define str
+  (java/invoke-constructor
+   (car (java/constructors <jstring-reader>))
+   (list (->jstring "foo"))))
+(java/get-field reader-lock str) ;;illegal access
+(define <jstream-tokenizer> (java/class '|java.io.StreamTokenizer|))
+(define st
+  (java/invoke-constructor
+   (find (lambda (c) (equal? (java/parameter-types c)
+                             (list <jreader>)))
+         (java/constructors <jstream-tokenizer>))
+   (list str)))
+(define tokenizer-sval
+  (find (lambda (f) (eq? (java/name f) 'sval))
+        (java/fields <jstream-tokenizer>)))
+(java/get-field tokenizer-sval (java/null)) ;;illegal null
+(java/get-field tokenizer-sval str) ;;illegal arg
+(java/set-field tokenizer-sval
+                (java/null)
+                (->jstring "foo")) ;;illegal null
+(java/set-field tokenizer-sval
+                str
+                (->jstring "foo")) ;;illegal arg
+(java/set-field tokenizer-sval
+                st
+                (->jint 1)) ;;illegal arg
+(java/set-field reader-lock str (->jstring "foo")) ;;illegal access
+(define url-set
+  (find (lambda (m) (and (eq? (java/name m) 'set)
+                         (equal? (java/parameter-types m)
+                                 (list <jstring> <jstring> <jint>
+                                       <jstring> <jstring>))))
+        (java/methods <jurl>)))
+(define url (make-url-from-string
+             (->jstring "http://sisc.sourceforge.net")))
+(java/invoke-method url-set
+                    url
+                    (list (->jstring "http")
+                          (->jstring "sisc.sourceforge.net")
+                          (->jint 80)
+                          (->jstring "foo")
+                          (->jstring "bar"))) ;;illegal access
+(define stream-mark
+  (find (lambda (m) (eq? (java/name m) 'mark))
+        (java/methods <jreader>)))
+(java/invoke-method stream-mark
+                    (java/null)
+                    (list (->jint 1))) ;;illegal null
+(java/invoke-method stream-mark
+                    url
+                    (list (->jint 1))) ;;illegal args
+(java/invoke-method stream-mark
+                    str
+                    (list)) ;;illegal args
+(java/invoke-method stream-mark
+                    str
+                    (list (->jstring "foo"))) ;;illegal args
+(java/invoke-method stream-mark
+                    str
+                    (list (->jint -1))) ;;IllegalArgumentException
+(java/proxy-class <jurl>) ;;illegal interfaces
+(java/proxy-class (java/null)) ;;illegal null
