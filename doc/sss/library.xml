@@ -15,7 +15,7 @@
         Bitwise Logical Operations
       </title>
       <para>
-          &requires; 
+        &requires; 
         <emphasis role="bold">
           (import <emphasis>logicops</emphasis>)
         </emphasis>
@@ -1128,6 +1128,12 @@ com/foo/bar/baz/baz3.scm
   </sect1>
   <sect1>
     <title>Creating Libraries</title>
+    <para>
+      &requires; 
+      <emphasis role="bold">
+        (import <emphasis>compiled-libraries</emphasis>)
+      </emphasis>
+    </para>
     <para>
       &SISC; allows the creation of <emphasis>compiled
       libraries</emphasis> which contain compiled scheme code.  These
