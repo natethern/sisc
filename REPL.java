@@ -44,32 +44,14 @@ import java.net.*;
 
 public class REPL extends Thread {
     public Interpreter r;
-    public static Loader l;
 
-    static {
-	try {
-	    l=new Loader(new JarFile("sisc-ext.jar"));
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    l=new Loader();
-	}
-    }
 
     public REPL(Interpreter r) {
         this.r = r;
     }
 
     public static Interpreter createInterpreter(String[] args) throws ClassNotFoundException {
-        Interpreter r = (Interpreter)l.instantiate("sisc.Interpreter",
-						   new Class[] {
-						       InputStream.class,
-						       OutputStream.class },
-						   new Object[] {
-						       System.in, 
-						       System.out });
-
-	System.err.println("!"+r.getClass().getClassLoader().getClass());
-
+        Interpreter r = new Interpreter(System.in, System.out);
 
         r.setEvaluator("eval");
         try {
