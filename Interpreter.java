@@ -155,20 +155,20 @@ public class Interpreter extends Util {
                 try {
                     do {
                         while (nxp==null) 
-			    pop(stk);
+                            pop(stk);
 			
-			nxp.eval(this);
+                        nxp.eval(this);
                     } while (true);
                 } catch (ContinuationException ce) {
                     pop(ce.k);
                 }
             } while (true);
         } catch (NullPointerException done) {
-	    if (nxp!=null) 
-		throw done;
-	} catch (SchemeRuntimeException rte) {
-	    throw rte.promote();
-	}
+            if (nxp!=null) 
+                throw done;
+        } catch (SchemeRuntimeException rte) {
+            throw rte.promote();
+        }
     }
 
     public final Value[] newVLR(int size) {
