@@ -82,7 +82,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public void serialize(Serializer s) throws IOException {
         s.writeExpression(sym);
-        s.writeExpression(lenv);
+        s.writeAssociativeEnvironment(lenv);
     }
 
     public FreeReferenceExp() {
@@ -90,7 +90,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public void deserialize(Deserializer s) throws IOException {
         sym=(Symbol)s.readExpression();
-        lenv=(AssociativeEnvironment)s.readExpression();
+        lenv=s.readAssociativeEnvironment();
         envLoc=-1;
     }
 

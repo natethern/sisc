@@ -77,14 +77,14 @@ public class FreeSetEval extends Expression {
 
     public void serialize(Serializer s) throws IOException {
         s.writeExpression(lhs);
-        s.writeExpression(senv);
+        s.writeAssociativeEnvironment(senv);
     }
 
     public FreeSetEval() {}
 
      public void deserialize(Deserializer s) throws IOException {
          lhs=(Symbol)s.readExpression();
-         senv=(AssociativeEnvironment)s.readExpression();
+         senv=s.readAssociativeEnvironment();
          envLoc=-1;
     }
 
