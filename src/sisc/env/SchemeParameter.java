@@ -10,28 +10,21 @@ import sisc.util.ExpressionVisitor;
 
 public class SchemeParameter extends Parameter {
 
-    private Value v;
+    protected Value def;
 
     public SchemeParameter() {}
 
-    public SchemeParameter(Value v) {
-        this.v = v;
-    }
-
-    public Value getDefault(DynamicEnvironment dynenv) {
-        return v;
-    }
-
-    public void setDefault(DynamicEnvironment dynenv, Value v) {
-        this.v = v;
+    public SchemeParameter(Value def) {
+        this.def = def;
     }
 
     public Value getValue(DynamicEnvironment dynenv) {
-        return (Value)dynenv.parameters.get(this);
+        Value res = (Value)dynenv.parameters.get(this);
+        return (res == null) ? def : res;
     }
 
     public void setValue(DynamicEnvironment dynenv, Value v) {
-        dynenv.parameters.put(this,v);
+        dynenv.parameters.put(this, v);
     }
 
     public void display(ValueWriter w) throws IOException {
@@ -39,15 +32,15 @@ public class SchemeParameter extends Parameter {
     }
 
     public void serialize(Serializer s) throws IOException {
-        s.writeExpression(v);
+        s.writeExpression(def);
     }
 
     public void deserialize(Deserializer s) throws IOException {
-        v = (Value)s.readExpression();
+        def = (Value)s.readExpression();
     }
 
     public boolean visit(ExpressionVisitor v) {
-        return v.visit(this.v);
+        return v.visit(def);
     }
 }
     
