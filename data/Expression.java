@@ -45,7 +45,8 @@ public abstract class Expression extends Util implements Serializable {
     public synchronized Value getAnnotation(Symbol key) {
         if (annotations==null)
             return FALSE;
-        return (Value)annotations.get(key);
+        Value res = (Value)annotations.get(key);
+        return (res == null) ? FALSE : res;
     }
 
     public synchronized void setAnnotation(Symbol key, Value val) {
