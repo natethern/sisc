@@ -80,12 +80,17 @@ public class Compiler extends Util {
 	TAIL=1, COMMAND=2, PREDICATE=4;
 
     public Compiler(AssociativeEnvironment menv) {
+	addSpecialForms(menv);
+    }
+
+    public static AssociativeEnvironment addSpecialForms(AssociativeEnvironment menv) {
 	extendenv(menv,"lambda", LAMBDA);
 	extendenv(menv,"if", _IF);
 	extendenv(menv,"begin", BEGIN);
 	extendenv(menv,"quote", QUOTE);
 	extendenv(menv,"set!", SET);
 	extendenv(menv,"define", DEFINE);
+	return menv;
     }
 
     static class ReferenceEnv {

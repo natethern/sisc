@@ -462,7 +462,7 @@ public class Primitives extends Module {
 		else throw new RuntimeException("Unsupported standard version");
 	    case NULLENVIRONMENT:
 		if (FIVE.equals(num(f,f.vlr[0]))) 
-		    return new AssociativeEnvironment();
+		    return sisc.compiler.Compiler.addSpecialForms(new AssociativeEnvironment());
 		else throw new RuntimeException("Unsupported standard version");
 	    case CURRENTEVAL:
 		f.evaluator=proc(f,f.vlr[0]);
@@ -470,9 +470,6 @@ public class Primitives extends Module {
 	    case CURRENTWRITE:
 		f.writer=proc(f,f.vlr[0]);
 		return VOID;
-		/*	    case SYNTRANS:
-		f.compiler.syntaxTransform=truth(f.vlr[0]);
-		return VOID;*/
 	    case LOADMODULE:
 		try {
 		    Class clazz=Class.forName(string(f,f.vlr[0]));
@@ -587,7 +584,7 @@ public class Primitives extends Module {
 		    return new OutputPort(new BufferedWriter(new FileWriter(fname)),
 					  truth(f.vlr[1]));
 		} catch (IOException e) {
-		    throw new RuntimeException( "error opening file "+fname);
+		    throw new RuntimeException("error opening file "+fname);
 		}
 	    case EVAL:
 		f.nxp=f.compile(f.vlr[0], env(f,f.vlr[1]));

@@ -1075,4 +1075,7 @@
     (lambda %_569
       (call-with-current-continuation
         (lambda (%_570) (apply %_570 %_569))))))
-(load-module "sisc.modules.SNative")
+(if (not (getprop 'LITE '*sisc*))
+    (for-each load-module 
+              '("sisc.modules.SNative" "sisc.modules.J2S"
+                "sisc.modules.SNetwork" "sisc.modules.SDebug")))

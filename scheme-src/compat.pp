@@ -115,10 +115,10 @@
 
 (define eval 
   ((lambda (old-eval)
-     (lambda (x)
+     (lambda (x . env)
        (if (if (pair? x) (eq? (car x) "noexpand") #f)
-	   (old-eval (cadr x)) 
-	   ((lambda (e) (old-eval e))
+	   (apply old-eval (cons (cadr x) env))
+	   ((lambda (e) (apply old-eval (cons e env)))
 	    (sc-expand x)))))
    (current-evaluator)))
 
