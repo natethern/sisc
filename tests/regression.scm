@@ -19,3 +19,11 @@
               (lambda () (call/cc (lambda (x) (set! k x))) (list))
               void)
              (and k (let ((kk k)) (set! k #f) (kk)))))
+
+;;Used to be an infinite loop
+(should-be 'okay (dynamic-wind void (lambda () 'okay) void))
+
+;;Used to corrupt the global environment
+(define (identity x) x)
+(eval '(import foobarbaz) (scheme-report-environment 5))
+(should-be 3 (identity 3))
