@@ -59,6 +59,13 @@ public class BuiltinProcedure extends Procedure {
             error(r, name, "incorrect number of arguments to procedure");
         } catch (ClassCastException cc) {
             error(r, name, "got unexpected value "+cc.getMessage());
+	} catch (NestedPrimRuntimeException npr) {
+	    StringBuffer b=new StringBuffer("Error during nested call");
+	    if (name!=null) 
+		b.append(" from ").append(name);
+	    b.append(':').append(npr.getPrimMessage()).append("\n  ");
+	    b.append(npr.getMessage());
+	    error(r, name, b.toString());
         } catch (RuntimeException re) {
             error(r, name, re.getMessage());
         }

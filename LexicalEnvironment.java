@@ -67,10 +67,9 @@ public class LexicalEnvironment extends Value {
 
     public final Value lookup(int depth, int pos) {
         LexicalEnvironment e = this;
-        while(depth > 0) {
-	    depth--;
+        while(depth-- > 0) 
 	    e = e.parent;
-	}
+	
         return e.vals[pos];
     }
 

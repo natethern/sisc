@@ -201,21 +201,22 @@ public class Interpreter extends Util {
     protected static final int FRAMEPOOLSIZE=25, FPMAX=FRAMEPOOLSIZE-1;
     protected CallFrame deadFrames[]=new CallFrame[FRAMEPOOLSIZE];
     protected int deadFramePointer=-1;
+    CallFrame returnRegister;
 
-    public final CallFrame createFrame(Expression n, Value[] v,
+    public CallFrame createFrame(Expression n, Value[] v,
                                        LexicalEnvironment e,
                                        CallFrame f,
                                        CallFrame p) {
         if (deadFramePointer < 0)
             return new CallFrame(n,v,e,f,p);
         else {
-            CallFrame toReturn=deadFrames[deadFramePointer--];
-            toReturn.nxp=n;
-            toReturn.vlr=v;
-            toReturn.env=e;
-            toReturn.fk=f;
-            toReturn.parent=p;
-            return toReturn;
+	    returnRegister=deadFrames[deadFramePointer--];
+            returnRegister.nxp=n;
+            returnRegister.vlr=v;
+            returnRegister.env=e;
+            returnRegister.fk=f;
+            returnRegister.parent=p;
+            return returnRegister;
         }
     }
 

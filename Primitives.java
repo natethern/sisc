@@ -437,7 +437,7 @@ public class Primitives extends ModuleAdapter {
 			try {
 			    f.eval(v);
 			} catch (SchemeException se) {
-			    se.throwSchemeException(f);
+			    se.throwNestedPrimException();
 			}
 		    }
                 } while (v!=EOF);
