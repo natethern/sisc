@@ -37,7 +37,7 @@
 
 (define (for-each proc . lists)
   (if (null? lists)
-      (error 'for-each "invalid number of arguments to procedure for-each")
+      (error 'for-each "invalid number of arguments to procedure for-each.")
       (if (not (null? (car lists)))
           (begin
             (apply proc (map car lists))
@@ -166,9 +166,9 @@
                    (begin (vector-set! v n (car l))
                           (l2v (cdr l) v (+ n 1))))))]
      (lambda (l)
-       (if (not (circular-list? l))
+       (if (not (proper-list? l))
 	   (l2v l (make-vector (length l)) 0)
-	   (error 'list->vector "cannot convert a circular list" l)))))
+	   (error 'list->vector "can only convert a proper list." l)))))
 
 ;;;;;;;;;;;;; Constructors
 
@@ -210,7 +210,7 @@
 	  (lambda (file type)
 	    (if (eq? (file-type file) type)
 		#t
-		(error 'file-type "~s is not of type ~s" file type)))])
+		(error 'file-type "~s is not of type ~s." file type)))])
   (define *current-directory
     (lambda dir
       (if (null? dir) (_cd)
@@ -229,7 +229,7 @@
       (lambda (file)
 	(let ((file (gen-path file)))
 	  (if (not (memq (file-type file) '(no-file file)))
-	      (error 'open-output-file "~s points to a directory" file)
+	      (error 'open-output-file "~s points to a directory." file)
 	      (old-oof file))))))
 
   (define *load	 
@@ -285,7 +285,7 @@
 	      (if (null? (car lists)) 
 		  (if (andmap null? lists)
 		      head
-		      (error 'map "lists are not of equal length"))
+		      (error 'map "lists are not of equal length."))
 		  (let ([newres (cons (apply proc (map1 car lists)) ())]
 			[rest (map1 cdr lists)])
 		    (if (not (null? acc)) (set-cdr! acc newres))
@@ -297,15 +297,17 @@
 	  (map1 proc ls)
 	  (iter proc (cons ls lses) () ())))))
 
-;;Flat list circularity detection
-(define (circular-list? x)
+; True only if the list is proper (not circular and terminated with null)
+(define (proper-list? x)
   (let lp ((x x) (lag x))
-    (and (pair? x)
-         (let ((x (cdr x)))
-           (and (pair? x)
-                (let ((x   (cdr x))
-                      (lag (cdr lag)))
-                  (or (eq? x lag) (lp x lag))))))))
+    (if (pair? x)
+        (let ((x (cdr x)))
+          (if (pair? x)
+              (let ((x   (cdr x))
+                    (lag (cdr lag)))
+                (and (not (eq? x lag)) (lp x lag)))
+              (null? x)))
+        (null? x))))
 
 ;; Credits to Al Petrofsky for the following code, modified to support
 ;; boxes
