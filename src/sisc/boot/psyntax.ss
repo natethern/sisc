@@ -1538,22 +1538,25 @@
                (let ((sym (id-sym-name id)))
                  (let ((valsym (if (only-top-marked? id) sym (generate-id sym))))
                    (build-sequence no-source
-                     (list
-                       (ct-eval/residualize ctem
-                         (lambda ()
-                           (build-cte-install
-                             (if (eq? sym valsym)
-                                 sym
-                                 (let ((marks (wrap-marks (syntax-object-wrap id))))
-                                   (make-syntax-object sym
-                                     (make-wrap marks
-                                       (list (make-ribcage (vector sym)
-                                               (vector marks) (vector valsym)))))))
-                             (build-data no-source (make-binding 'global valsym)))))
-                       (rt-eval/residualize rtem
-                         (lambda ()
-                           (build-global-definition s valsym (chi rhs r w)))))))
-                )))))
+                    ; make sure compile-time definitions occur before we
+                    ; expand the run-time code
+                     (let ((x (ct-eval/residualize ctem
+                                (lambda ()
+                                  (build-cte-install
+                                   (if (eq? sym valsym)
+                                       sym
+                                       (let ((marks (wrap-marks (syntax-object-wrap id))))
+                                         (make-syntax-object sym
+                                            (make-wrap marks
+                                              (list (make-ribcage (vector sym)
+                                                      (vector marks) (vector valsym)))))))
+                                   (build-data no-source (make-binding 'global valsym)))))))
+                       (list
+                         x
+                         (rt-eval/residualize rtem
+                           (lambda ()
+                             (build-global-definition s valsym (chi rhs r w))))))))
+                 )))))
         ((module-form)
          (let ((r (cons '("top-level module placeholder" . (placeholder)) r))
                (ribcage (make-empty-ribcage)))

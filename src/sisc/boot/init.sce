@@ -131,174 +131,176 @@
   ((map-cdr . 1)
    (for-each . 1)
    (map-car . 1)
-   (|proc_1Q9tA8nNN| . 2)
+   (|proc_sSUAxU9sw| . 2)
    (apply . 2)
    (cons . 1)
-   (|lists_1QtAEemNN| . 4)
-   (|ls1_1QPwCHmNN| . 2)
+   (|lists_sScIB-8sw| . 4)
+   (|ls1_sSyEzr9sw| . 2)
    (null? . 1))
-  ((|lists_1QtAEemNN| . 1))
+  ((|lists_sScIB-8sw| . 1))
   (cons map-car apply map-cdr for-each null?)
   (#%define for-each
     (#%lambda #t
-      (|proc_1Q9tA8nNN|
-        |ls1_1QPwCHmNN|
+      (|proc_sSUAxU9sw|
+        |ls1_sSyEzr9sw|
         .
-        |lists_1QtAEemNN|)
+        |lists_sScIB-8sw|)
       ()
-      (#%if (null? |ls1_1QPwCHmNN|)
+      (#%if (null? |ls1_sSyEzr9sw|)
         #!void
         (#%begin
-          (#%set! |lists_1QtAEemNN|
-            (cons |ls1_1QPwCHmNN| |lists_1QtAEemNN|))
-          (apply |proc_1Q9tA8nNN|
-                 (map-car |lists_1QtAEemNN|))
+          (#%set! |lists_sScIB-8sw|
+            (cons |ls1_sSyEzr9sw| |lists_sScIB-8sw|))
+          (apply |proc_sSUAxU9sw|
+                 (map-car |lists_sScIB-8sw|))
           (apply for-each
-                 |proc_1Q9tA8nNN|
-                 (map-cdr |lists_1QtAEemNN|)))))))
+                 |proc_sSUAxU9sw|
+                 (map-cdr |lists_sScIB-8sw|)))))))
 (#%program
-  ((|x_1QvpyBnNN| . 1) (eq? . 1))
+  ((|x_sSexvlasw| . 1) (eq? . 1))
   ()
   (eq?)
   (#%define eof-object?
     (#%lambda #t
-      (|x_1QvpyBnNN|)
+      (|x_sSexvlasw|)
       ()
-      (eq? |x_1QvpyBnNN| #!eof))))
+      (eq? |x_sSexvlasw| #!eof))))
 (#%program
-  ((|x_1QRlw2oNN| . 1))
+  ((|x_sSAttOasw| . 1))
   ()
   ()
   (#%define not
     (#%lambda #t
-      (|x_1QRlw2oNN|)
+      (|x_sSAttOasw|)
       ()
-      (#%if |x_1QRlw2oNN| #f #t))))
+      (#%if |x_sSAttOasw| #f #t))))
 (#%program
-  ((|port_1QbiuvoNN| . 1)
-   (display . 1)
+  ((|port_sSWprfbsw| . 1)
+   (|display| . 1)
    (apply . 1))
   ()
-  (display apply)
+  (|display| apply)
   (#%define newline
     (#%lambda #t
-      |port_1QbiuvoNN|
+      |port_sSWprfbsw|
       ()
-      (apply display #\newline |port_1QbiuvoNN|))))
+      (apply |display|
+             #\newline
+             |port_sSWprfbsw|))))
 (#%program
-  ((|ls_1QTaqppNN| . 1)
+  ((|ls_sSCin9csw| . 1)
    (car . 1)
    (cons . 1)
    (cdr . 1)
-   (|iter_1QxesYoNN| . 2)
-   (|acc_1Qz3mjqNN| . 2)
-   (|ls_1Qd7oSpNN| . 3)
+   (|iter_sSgmpIbsw| . 2)
+   (|acc_sSibj3dsw| . 2)
+   (|ls_sSYelCcsw| . 3)
    (null? . 1))
-  ((|iter_1QxesYoNN| . 1))
+  ((|iter_sSgmpIbsw| . 1))
   (cdr car cons null?)
   (#%define reverse
     (#%letrec #t
-      ((|iter_1QxesYoNN|
+      ((|iter_sSgmpIbsw|
          (#%lambda #t
-           (|ls_1Qd7oSpNN| |acc_1Qz3mjqNN|)
-           (|iter_1QxesYoNN|)
-           (#%if (null? |ls_1Qd7oSpNN|)
-             |acc_1Qz3mjqNN|
-             (|iter_1QxesYoNN|
-               (cdr |ls_1Qd7oSpNN|)
-               (cons (car |ls_1Qd7oSpNN|) |acc_1Qz3mjqNN|))))))
+           (|ls_sSYelCcsw| |acc_sSibj3dsw|)
+           (|iter_sSgmpIbsw|)
+           (#%if (null? |ls_sSYelCcsw|)
+             |acc_sSibj3dsw|
+             (|iter_sSgmpIbsw|
+               (cdr |ls_sSYelCcsw|)
+               (cons (car |ls_sSYelCcsw|) |acc_sSibj3dsw|))))))
       ()
       (#%lambda #t
-        (|ls_1QTaqppNN|)
-        (|iter_1QxesYoNN|)
-        (|iter_1QxesYoNN| |ls_1QTaqppNN| ())))))
+        (|ls_sSCin9csw|)
+        (|iter_sSgmpIbsw|)
+        (|iter_sSgmpIbsw| |ls_sSCin9csw| ())))))
 (#%program
-  ((|s_1QfYhdrNN| . 1)
+  ((|s_sS-3fZdsw| . 1)
    (cdr . 1)
-   (|d_1QhNbAsNN| . 1)
-   (|iter_1QV_jMqNN| . 2)
+   (|d_sS0V8kfsw| . 1)
+   (|iter_sSE7hwdsw| . 2)
    (set-cdr! . 1)
-   (|r_1QXQd7sNN| . 2)
-   (|s_1QBUfGrNN| . 4)
+   (|r_sSGYaTesw| . 2)
+   (|s_sSk0dqesw| . 4)
    (null? . 1))
-  ((|iter_1QV_jMqNN| . 1))
+  ((|iter_sSE7hwdsw| . 1))
   (set-cdr! cdr null?)
   (#%define reverse!
     (#%letrec #t
-      ((|iter_1QV_jMqNN|
+      ((|iter_sSE7hwdsw|
          (#%lambda #t
-           (|s_1QBUfGrNN| |r_1QXQd7sNN|)
-           (|iter_1QV_jMqNN|)
-           (#%if (null? |s_1QBUfGrNN|)
-             |r_1QXQd7sNN|
+           (|s_sSk0dqesw| |r_sSGYaTesw|)
+           (|iter_sSE7hwdsw|)
+           (#%if (null? |s_sSk0dqesw|)
+             |r_sSGYaTesw|
              ((#%lambda #t
-                (|d_1QhNbAsNN|)
-                (|r_1QXQd7sNN| |s_1QBUfGrNN| |iter_1QV_jMqNN|)
+                (|d_sS0V8kfsw|)
+                (|r_sSGYaTesw| |s_sSk0dqesw| |iter_sSE7hwdsw|)
                 (#%begin
-                  (set-cdr! |s_1QBUfGrNN| |r_1QXQd7sNN|)
-                  (|iter_1QV_jMqNN| |d_1QhNbAsNN| |s_1QBUfGrNN|)))
-              (cdr |s_1QBUfGrNN|))))))
+                  (set-cdr! |s_sSk0dqesw| |r_sSGYaTesw|)
+                  (|iter_sSE7hwdsw| |d_sS0V8kfsw| |s_sSk0dqesw|)))
+              (cdr |s_sSk0dqesw|))))))
       ()
       (#%lambda #t
-        (|s_1QfYhdrNN|)
-        (|iter_1QV_jMqNN|)
-        (|iter_1QV_jMqNN| |s_1QfYhdrNN| ())))))
+        (|s_sS-3fZdsw|)
+        (|iter_sSE7hwdsw|)
+        (|iter_sSE7hwdsw| |s_sS-3fZdsw| ())))))
 (#%program
   ((cdr . 1)
    (map-car . 1)
    (caar . 1)
    (cons . 1)
-   (|ls_1QDJ91tNN| . 3)
+   (|ls_sSmR6Nfsw| . 3)
    (null? . 1))
   ()
   (cons caar cdr map-car null?)
   (#%define map-car
     (#%lambda #t
-      (|ls_1QDJ91tNN|)
+      (|ls_sSmR6Nfsw|)
       ()
-      (#%if (null? |ls_1QDJ91tNN|)
+      (#%if (null? |ls_sSmR6Nfsw|)
         ()
-        (cons (caar |ls_1QDJ91tNN|)
-              (map-car (cdr |ls_1QDJ91tNN|)))))))
+        (cons (caar |ls_sSmR6Nfsw|)
+              (map-car (cdr |ls_sSmR6Nfsw|)))))))
 (#%program
   ((cdr . 1)
    (map-cdr . 1)
    (cdar . 1)
    (cons . 1)
-   (|ls_1QZF7utNN| . 3)
+   (|ls_sSIN4egsw| . 3)
    (null? . 1))
   ()
   (cons cdar cdr map-cdr null?)
   (#%define map-cdr
     (#%lambda #t
-      (|ls_1QZF7utNN|)
+      (|ls_sSIN4egsw|)
       ()
-      (#%if (null? |ls_1QZF7utNN|)
+      (#%if (null? |ls_sSIN4egsw|)
         ()
-        (cons (cdar |ls_1QZF7utNN|)
-              (map-cdr (cdr |ls_1QZF7utNN|)))))))
+        (cons (cdar |ls_sSIN4egsw|)
+              (map-cdr (cdr |ls_sSIN4egsw|)))))))
 (#%program
-  ((|list1_1Qlr_hvNN| . 2)
-   (|proc_1QHnZKvNN| . 2)
-   (|lists_1Q_u1RuNN| . 2)
+  ((|list1_sS4zY1isw| . 2)
+   (|proc_sSqvWuisw| . 2)
+   (|lists_sSKC-Ahsw| . 2)
    (map-car . 1)
    (apply . 1)
-   (|lists_1QL1NsyNN| . 2)
+   (|lists_sSu9Kclsw| . 2)
    (map-cdr . 1)
-   (|proc_1Q39RyxNN| . 2)
-   (|loop_1QFy3ouNN| . 2)
-   (|c_1Q5-KVyNN| . 2)
-   (|list1_1Qp5P_xNN| . 3)
+   (|proc_sSOgOiksw| . 2)
+   (|loop_sSoG08hsw| . 2)
+   (|c_sSQ5IFlsw| . 2)
+   (|list1_sS8dMLksw| . 3)
    (car . 2)
    (cons . 2)
    (cdr . 2)
-   (|proc_1Q1kXbwNN| . 2)
-   (|map1_1QjC5XtNN| . 2)
-   (|acc_1QJcT5xNN| . 2)
+   (|proc_sSMrUXisw| . 2)
+   (|map1_sS2K2Hgsw| . 2)
+   (|acc_sSskQRjsw| . 2)
    (reverse . 2)
-   (|list_1QngVEwNN| . 3)
+   (|list_sS6oSojsw| . 3)
    (null? . 3))
-  ((|loop_1QFy3ouNN| . 1) (|map1_1QjC5XtNN| . 1))
+  ((|loop_sSoG08hsw| . 1) (|map1_sS2K2Hgsw| . 1))
   (map-cdr
     apply
     map-car
@@ -309,67 +311,67 @@
     null?)
   (#%define map
     (#%letrec #t
-      ((|map1_1QjC5XtNN|
+      ((|map1_sS2K2Hgsw|
          (#%lambda #t
-           (|proc_1Q1kXbwNN|
-             |list_1QngVEwNN|
-             |acc_1QJcT5xNN|)
-           (|map1_1QjC5XtNN|)
-           (#%if (null? |list_1QngVEwNN|)
-             (reverse |acc_1QJcT5xNN|)
-             (|map1_1QjC5XtNN|
-               |proc_1Q1kXbwNN|
-               (cdr |list_1QngVEwNN|)
-               (cons (|proc_1Q1kXbwNN| (car |list_1QngVEwNN|))
-                     |acc_1QJcT5xNN|)))))
-       (|loop_1QFy3ouNN|
+           (|proc_sSMrUXisw|
+             |list_sS6oSojsw|
+             |acc_sSskQRjsw|)
+           (|map1_sS2K2Hgsw|)
+           (#%if (null? |list_sS6oSojsw|)
+             (reverse |acc_sSskQRjsw|)
+             (|map1_sS2K2Hgsw|
+               |proc_sSMrUXisw|
+               (cdr |list_sS6oSojsw|)
+               (cons (|proc_sSMrUXisw| (car |list_sS6oSojsw|))
+                     |acc_sSskQRjsw|)))))
+       (|loop_sSoG08hsw|
          (#%lambda #t
-           (|proc_1Q39RyxNN|
-             |list1_1Qp5P_xNN|
-             |lists_1QL1NsyNN|
-             |c_1Q5-KVyNN|)
-           (|loop_1QFy3ouNN|)
-           (#%if (null? |list1_1Qp5P_xNN|)
-             (reverse |c_1Q5-KVyNN|)
-             (|loop_1QFy3ouNN|
-               |proc_1Q39RyxNN|
-               (cdr |list1_1Qp5P_xNN|)
-               (map-cdr |lists_1QL1NsyNN|)
-               (cons (apply |proc_1Q39RyxNN|
-                            (car |list1_1Qp5P_xNN|)
-                            (map-car |lists_1QL1NsyNN|))
-                     |c_1Q5-KVyNN|))))))
+           (|proc_sSOgOiksw|
+             |list1_sS8dMLksw|
+             |lists_sSu9Kclsw|
+             |c_sSQ5IFlsw|)
+           (|loop_sSoG08hsw|)
+           (#%if (null? |list1_sS8dMLksw|)
+             (reverse |c_sSQ5IFlsw|)
+             (|loop_sSoG08hsw|
+               |proc_sSOgOiksw|
+               (cdr |list1_sS8dMLksw|)
+               (map-cdr |lists_sSu9Kclsw|)
+               (cons (apply |proc_sSOgOiksw|
+                            (car |list1_sS8dMLksw|)
+                            (map-car |lists_sSu9Kclsw|))
+                     |c_sSQ5IFlsw|))))))
       ()
       (#%lambda #t
-        (|proc_1QHnZKvNN|
-          |list1_1Qlr_hvNN|
+        (|proc_sSqvWuisw|
+          |list1_sS4zY1isw|
           .
-          |lists_1Q_u1RuNN|)
-        (|loop_1QFy3ouNN| |map1_1QjC5XtNN|)
-        (#%if (null? |lists_1Q_u1RuNN|)
-          (|map1_1QjC5XtNN|
-            |proc_1QHnZKvNN|
-            |list1_1Qlr_hvNN|
+          |lists_sSKC-Ahsw|)
+        (|loop_sSoG08hsw| |map1_sS2K2Hgsw|)
+        (#%if (null? |lists_sSKC-Ahsw|)
+          (|map1_sS2K2Hgsw|
+            |proc_sSqvWuisw|
+            |list1_sS4zY1isw|
             ())
-          (|loop_1QFy3ouNN|
-            |proc_1QHnZKvNN|
-            |list1_1Qlr_hvNN|
-            |lists_1Q_u1RuNN|
+          (|loop_sSoG08hsw|
+            |proc_sSqvWuisw|
+            |list1_sS4zY1isw|
+            |lists_sSKC-Ahsw|
             ()))))))
 (#%program
-  ((|x_1Q7PEgANN| . 1)
-   (|g_1QNSGPzNN| . 1)
-   (|f_1QrWImzNN| . 1))
+  ((|x_sSSWB0nsw| . 1)
+   (|g_sSw-Dzmsw| . 1)
+   (|f_sSa2G6msw| . 1))
   ()
   ()
   (#%define compose2
     (#%lambda #t
-      (|f_1QrWImzNN| |g_1QNSGPzNN|)
+      (|f_sSa2G6msw| |g_sSw-Dzmsw|)
       ()
       (#%lambda #t
-        (|x_1Q7PEgANN|)
-        (|g_1QNSGPzNN| |f_1QrWImzNN|)
-        (|f_1QrWImzNN| (|g_1QNSGPzNN| |x_1Q7PEgANN|))))))
+        (|x_sSSWB0nsw|)
+        (|g_sSw-Dzmsw| |f_sSa2G6msw|)
+        (|f_sSa2G6msw| (|g_sSw-Dzmsw| |x_sSSWB0nsw|))))))
 (#%program
   ((void . 1))
   ()
@@ -401,38 +403,38 @@
   (void)
   (#%define member (void)))
 (#%program
-  ((|list_1QX_bCGNN| . 1)
-   (|obj_1QB3e9GNN| . 1)
+  ((|list_sSG79mtsw| . 1)
+   (|obj_sSkbbVssw| . 1)
    (member . 1)
-   (|list_1Qf7gIFNN| . 1)
-   (|obj_1QVaifFNN| . 1)
+   (|list_sS-edsssw| . 1)
+   (|obj_sSEif_rsw| . 1)
    (memv . 1)
-   (|list_1QzekOENN| . 1)
-   (|obj_1QdimlENN| . 1)
+   (|list_sSimhyrsw| . 1)
+   (|obj_sSYpj5rsw| . 1)
    (memq . 1)
-   (|alist_1QTloUDNN| . 1)
-   (|obj_1QxpqrDNN| . 1)
+   (|alist_sSCtlEqsw| . 1)
+   (|obj_sSgxnbqsw| . 1)
    (equal? . 2)
    (assoc . 1)
-   (|alist_1Qbts-CNN| . 1)
-   (|obj_1QRwuxCNN| . 1)
+   (|alist_sSWApKpsw| . 1)
+   (|obj_sSAErhpsw| . 1)
    (eqv? . 2)
    (assv . 1)
-   (|alist_1QvAw4CNN| . 1)
-   (|obj_1Q9EyDBNN| . 1)
+   (|alist_sSeItQosw| . 1)
+   (|obj_sSULvnosw| . 1)
    (eq? . 2)
    (assq . 1)
-   (|memn_1QPHAaBNN| . 4)
-   (|obj_1QFJ1TINN| . 2)
-   (|n_1QjN3qINN| . 2)
-   (|list_1Q_F_jJNN| . 4)
+   (|memn_sSyPxWnsw| . 4)
+   (|obj_sSoR-Cvsw| . 2)
+   (|n_sS2V0avsw| . 2)
+   (|list_sSKNY3wsw| . 4)
    (cdr . 2)
-   (|assn_1QtLCJANN| . 4)
+   (|assn_sScTztnsw| . 4)
    (car . 2)
-   (|obj_1QDU7wHNN| . 2)
+   (|obj_sSm05gusw| . 2)
    (caar . 1)
-   (|n_1QhY93HNN| . 2)
-   (|alist_1QZQ5ZHNN| . 4)
+   (|n_sS047Ptsw| . 2)
+   (|alist_sSIY2Jusw| . 4)
    (null? . 2))
   ((member . 1)
    (memv . 1)
@@ -440,8 +442,8 @@
    (assoc . 1)
    (assv . 1)
    (assq . 1)
-   (|memn_1QPHAaBNN| . 1)
-   (|assn_1QtLCJANN| . 1))
+   (|memn_sSyPxWnsw| . 1)
+   (|assn_sScTztnsw| . 1))
   (assq eq?
         assv
         eqv?
@@ -455,84 +457,84 @@
         cdr
         null?)
   (#%letrec #t
-    ((|assn_1QtLCJANN|
+    ((|assn_sScTztnsw|
        (#%lambda #t
-         (|n_1QhY93HNN| |obj_1QDU7wHNN| |alist_1QZQ5ZHNN|)
-         (|assn_1QtLCJANN|)
-         (#%if (null? |alist_1QZQ5ZHNN|)
+         (|n_sS047Ptsw| |obj_sSm05gusw| |alist_sSIY2Jusw|)
+         (|assn_sScTztnsw|)
+         (#%if (null? |alist_sSIY2Jusw|)
            #f
-           (#%if (|n_1QhY93HNN|
-                   (caar |alist_1QZQ5ZHNN|)
-                   |obj_1QDU7wHNN|)
-             (car |alist_1QZQ5ZHNN|)
-             (|assn_1QtLCJANN|
-               |n_1QhY93HNN|
-               |obj_1QDU7wHNN|
-               (cdr |alist_1QZQ5ZHNN|))))))
-     (|memn_1QPHAaBNN|
+           (#%if (|n_sS047Ptsw|
+                   (caar |alist_sSIY2Jusw|)
+                   |obj_sSm05gusw|)
+             (car |alist_sSIY2Jusw|)
+             (|assn_sScTztnsw|
+               |n_sS047Ptsw|
+               |obj_sSm05gusw|
+               (cdr |alist_sSIY2Jusw|))))))
+     (|memn_sSyPxWnsw|
        (#%lambda #t
-         (|n_1QjN3qINN| |obj_1QFJ1TINN| |list_1Q_F_jJNN|)
-         (|memn_1QPHAaBNN|)
-         (#%if (null? |list_1Q_F_jJNN|)
+         (|n_sS2V0avsw| |obj_sSoR-Cvsw| |list_sSKNY3wsw|)
+         (|memn_sSyPxWnsw|)
+         (#%if (null? |list_sSKNY3wsw|)
            #f
-           (#%if (|n_1QjN3qINN|
-                   (car |list_1Q_F_jJNN|)
-                   |obj_1QFJ1TINN|)
-             |list_1Q_F_jJNN|
-             (|memn_1QPHAaBNN|
-               |n_1QjN3qINN|
-               |obj_1QFJ1TINN|
-               (cdr |list_1Q_F_jJNN|)))))))
+           (#%if (|n_sS2V0avsw|
+                   (car |list_sSKNY3wsw|)
+                   |obj_sSoR-Cvsw|)
+             |list_sSKNY3wsw|
+             (|memn_sSyPxWnsw|
+               |n_sS2V0avsw|
+               |obj_sSoR-Cvsw|
+               (cdr |list_sSKNY3wsw|)))))))
     ()
     (#%begin
       (#%set! assq
         (#%lambda #t
-          (|obj_1Q9EyDBNN| |alist_1QvAw4CNN|)
-          (|assn_1QtLCJANN|)
-          (|assn_1QtLCJANN|
+          (|obj_sSULvnosw| |alist_sSeItQosw|)
+          (|assn_sScTztnsw|)
+          (|assn_sScTztnsw|
             eq?
-            |obj_1Q9EyDBNN|
-            |alist_1QvAw4CNN|)))
+            |obj_sSULvnosw|
+            |alist_sSeItQosw|)))
       (#%set! assv
         (#%lambda #t
-          (|obj_1QRwuxCNN| |alist_1Qbts-CNN|)
-          (|assn_1QtLCJANN|)
-          (|assn_1QtLCJANN|
+          (|obj_sSAErhpsw| |alist_sSWApKpsw|)
+          (|assn_sScTztnsw|)
+          (|assn_sScTztnsw|
             eqv?
-            |obj_1QRwuxCNN|
-            |alist_1Qbts-CNN|)))
+            |obj_sSAErhpsw|
+            |alist_sSWApKpsw|)))
       (#%set! assoc
         (#%lambda #t
-          (|obj_1QxpqrDNN| |alist_1QTloUDNN|)
-          (|assn_1QtLCJANN|)
-          (|assn_1QtLCJANN|
+          (|obj_sSgxnbqsw| |alist_sSCtlEqsw|)
+          (|assn_sScTztnsw|)
+          (|assn_sScTztnsw|
             equal?
-            |obj_1QxpqrDNN|
-            |alist_1QTloUDNN|)))
+            |obj_sSgxnbqsw|
+            |alist_sSCtlEqsw|)))
       (#%set! memq
         (#%lambda #t
-          (|obj_1QdimlENN| |list_1QzekOENN|)
-          (|memn_1QPHAaBNN|)
-          (|memn_1QPHAaBNN|
+          (|obj_sSYpj5rsw| |list_sSimhyrsw|)
+          (|memn_sSyPxWnsw|)
+          (|memn_sSyPxWnsw|
             eq?
-            |obj_1QdimlENN|
-            |list_1QzekOENN|)))
+            |obj_sSYpj5rsw|
+            |list_sSimhyrsw|)))
       (#%set! memv
         (#%lambda #t
-          (|obj_1QVaifFNN| |list_1Qf7gIFNN|)
-          (|memn_1QPHAaBNN|)
-          (|memn_1QPHAaBNN|
+          (|obj_sSEif_rsw| |list_sS-edsssw|)
+          (|memn_sSyPxWnsw|)
+          (|memn_sSyPxWnsw|
             eqv?
-            |obj_1QVaifFNN|
-            |list_1Qf7gIFNN|)))
+            |obj_sSEif_rsw|
+            |list_sS-edsssw|)))
       (#%set! member
         (#%lambda #t
-          (|obj_1QB3e9GNN| |list_1QX_bCGNN|)
-          (|memn_1QPHAaBNN|)
-          (|memn_1QPHAaBNN|
+          (|obj_sSkbbVssw| |list_sSG79mtsw|)
+          (|memn_sSyPxWnsw|)
+          (|memn_sSyPxWnsw|
             equal?
-            |obj_1QB3e9GNN|
-            |list_1QX_bCGNN|))))))
+            |obj_sSkbbVssw|
+            |list_sSG79mtsw|))))))
 (#%program
   ((cdr . 1) (car . 1) (compose2 . 1))
   ()
@@ -678,19 +680,19 @@
    (append2 . 1)
    (car . 1)
    (cons . 1)
-   (|ls2_1QHyXdKNN| . 2)
-   (|ls1_1QlCZMJNN| . 3)
+   (|ls2_sSqGUZwsw| . 2)
+   (|ls1_sS4KWwwsw| . 3)
    (null? . 1))
   ()
   (cons car cdr append2 null?)
   (#%define append2
     (#%lambda #t
-      (|ls1_1QlCZMJNN| |ls2_1QHyXdKNN|)
+      (|ls1_sS4KWwwsw| |ls2_sSqGUZwsw|)
       ()
-      (#%if (null? |ls1_1QlCZMJNN|)
-        |ls2_1QHyXdKNN|
-        (cons (car |ls1_1QlCZMJNN|)
-              (append2 (cdr |ls1_1QlCZMJNN|) |ls2_1QHyXdKNN|))))))
+      (#%if (null? |ls1_sS4KWwwsw|)
+        |ls2_sSqGUZwsw|
+        (cons (car |ls1_sS4KWwwsw|)
+              (append2 (cdr |ls1_sS4KWwwsw|) |ls2_sSqGUZwsw|))))))
 (#%program
   ((append2 . 1))
   ()
@@ -699,93 +701,93 @@
 (#%program
   ((length . 1)
    (make-string . 1)
-   (|l_1QnrT7LNN| . 2)
+   (|l_sS6zQTxsw| . 2)
    (+ . 1)
    (cdr . 1)
-   (|l2s_1Q1vVGKNN| . 2)
+   (|l2s_sSMCSqxsw| . 2)
    (car . 1)
-   (|n_1QpgNuMNN| . 2)
+   (|n_sS8oKezsw| . 2)
    (string-set! . 1)
-   (|s_1Q3kP1MNN| . 3)
-   (|l_1QJnRALNN| . 3)
+   (|s_sSOrMNysw| . 3)
+   (|l_sSsvOkysw| . 3)
    (null? . 1))
-  ((|l2s_1Q1vVGKNN| . 1))
+  ((|l2s_sSMCSqxsw| . 1))
   (make-string length car string-set! + cdr null?)
   (#%define list->string
     (#%letrec #t
-      ((|l2s_1Q1vVGKNN|
+      ((|l2s_sSMCSqxsw|
          (#%lambda #t
-           (|l_1QJnRALNN| |s_1Q3kP1MNN| |n_1QpgNuMNN|)
-           (|l2s_1Q1vVGKNN|)
-           (#%if (null? |l_1QJnRALNN|)
-             |s_1Q3kP1MNN|
+           (|l_sSsvOkysw| |s_sSOrMNysw| |n_sS8oKezsw|)
+           (|l2s_sSMCSqxsw|)
+           (#%if (null? |l_sSsvOkysw|)
+             |s_sSOrMNysw|
              (#%begin
                (string-set!
-                 |s_1Q3kP1MNN|
-                 |n_1QpgNuMNN|
-                 (car |l_1QJnRALNN|))
-               (|l2s_1Q1vVGKNN|
-                 (cdr |l_1QJnRALNN|)
-                 |s_1Q3kP1MNN|
-                 (+ |n_1QpgNuMNN| 1)))))))
+                 |s_sSOrMNysw|
+                 |n_sS8oKezsw|
+                 (car |l_sSsvOkysw|))
+               (|l2s_sSMCSqxsw|
+                 (cdr |l_sSsvOkysw|)
+                 |s_sSOrMNysw|
+                 (+ |n_sS8oKezsw| 1)))))))
       ()
       (#%lambda #t
-        (|l_1QnrT7LNN|)
-        (|l2s_1Q1vVGKNN|)
-        (|l2s_1Q1vVGKNN|
-          |l_1QnrT7LNN|
-          (make-string (length |l_1QnrT7LNN|))
+        (|l_sS6zQTxsw|)
+        (|l2s_sSMCSqxsw|)
+        (|l2s_sSMCSqxsw|
+          |l_sS6zQTxsw|
+          (make-string (length |l_sS6zQTxsw|))
           0)))))
 (#%program
   ((string-length . 1)
-   (|s_1Q59JoNNN| . 2)
+   (|s_sSQgG8Asw| . 2)
    (- . 2)
    (string-ref . 1)
    (cons . 1)
-   (|s_1Qr5HRNNN| . 2)
-   (|s2l_1QLcLXMNN| . 2)
-   (|h_1QN1FiONN| . 2)
-   (|n_1Q7-CLONN| . 3)
+   (|s_sSadEBAsw| . 2)
+   (|s2l_sSukIHzsw| . 2)
+   (|h_sSw9C2Bsw| . 2)
+   (|n_sSS5AvBsw| . 3)
    (< . 1))
-  ((|s2l_1QLcLXMNN| . 1))
+  ((|s2l_sSukIHzsw| . 1))
   (string-length string-ref cons - <)
   (#%define string->list
     (#%letrec #t
-      ((|s2l_1QLcLXMNN|
+      ((|s2l_sSukIHzsw|
          (#%lambda #t
-           (|s_1Qr5HRNNN| |h_1QN1FiONN| |n_1Q7-CLONN|)
-           (|s2l_1QLcLXMNN|)
-           (#%if (< |n_1Q7-CLONN| 0)
-             |h_1QN1FiONN|
-             (|s2l_1QLcLXMNN|
-               |s_1Qr5HRNNN|
-               (cons (string-ref |s_1Qr5HRNNN| |n_1Q7-CLONN|)
-                     |h_1QN1FiONN|)
-               (- |n_1Q7-CLONN| 1))))))
+           (|s_sSadEBAsw| |h_sSw9C2Bsw| |n_sSS5AvBsw|)
+           (|s2l_sSukIHzsw|)
+           (#%if (< |n_sSS5AvBsw| 0)
+             |h_sSw9C2Bsw|
+             (|s2l_sSukIHzsw|
+               |s_sSadEBAsw|
+               (cons (string-ref |s_sSadEBAsw| |n_sSS5AvBsw|)
+                     |h_sSw9C2Bsw|)
+               (- |n_sSS5AvBsw| 1))))))
       ()
       (#%lambda #t
-        (|s_1Q59JoNNN|)
-        (|s2l_1QLcLXMNN|)
-        (|s2l_1QLcLXMNN|
-          |s_1Q59JoNNN|
+        (|s_sSQgG8Asw|)
+        (|s2l_sSukIHzsw|)
+        (|s2l_sSukIHzsw|
+          |s_sSQgG8Asw|
           ()
-          (- (string-length |s_1Q59JoNNN|) 1))))))
+          (- (string-length |s_sSQgG8Asw|) 1))))))
 (#%program
   ((error . 1)
    (length . 1)
    (make-vector . 1)
-   (|l_1QPSyFPNN| . 4)
+   (|l_sSy-vpCsw| . 4)
    (proper-list? . 1)
    (+ . 1)
    (cdr . 1)
-   (|l2v_1QtWAcPNN| . 2)
+   (|l2v_sSc2yYBsw| . 2)
    (car . 1)
-   (|n_1QRHs0RNN| . 2)
+   (|n_sSAPpMDsw| . 2)
    (vector-set! . 1)
-   (|v_1QvLuzQNN| . 3)
-   (|l_1Q9Pw6QNN| . 3)
+   (|v_sSeTrjDsw| . 3)
+   (|l_sSUWtSCsw| . 3)
    (null? . 1))
-  ((|l2v_1QtWAcPNN| . 1))
+  ((|l2v_sSc2yYBsw| . 1))
   (error length
          make-vector
          proper-list?
@@ -796,51 +798,51 @@
          null?)
   (#%define list->vector
     (#%letrec #t
-      ((|l2v_1QtWAcPNN|
+      ((|l2v_sSc2yYBsw|
          (#%lambda #t
-           (|l_1Q9Pw6QNN| |v_1QvLuzQNN| |n_1QRHs0RNN|)
-           (|l2v_1QtWAcPNN|)
-           (#%if (null? |l_1Q9Pw6QNN|)
-             |v_1QvLuzQNN|
+           (|l_sSUWtSCsw| |v_sSeTrjDsw| |n_sSAPpMDsw|)
+           (|l2v_sSc2yYBsw|)
+           (#%if (null? |l_sSUWtSCsw|)
+             |v_sSeTrjDsw|
              (#%begin
                (vector-set!
-                 |v_1QvLuzQNN|
-                 |n_1QRHs0RNN|
-                 (car |l_1Q9Pw6QNN|))
-               (|l2v_1QtWAcPNN|
-                 (cdr |l_1Q9Pw6QNN|)
-                 |v_1QvLuzQNN|
-                 (+ |n_1QRHs0RNN| 1)))))))
+                 |v_sSeTrjDsw|
+                 |n_sSAPpMDsw|
+                 (car |l_sSUWtSCsw|))
+               (|l2v_sSc2yYBsw|
+                 (cdr |l_sSUWtSCsw|)
+                 |v_sSeTrjDsw|
+                 (+ |n_sSAPpMDsw| 1)))))))
       ()
       (#%lambda #t
-        (|l_1QPSyFPNN|)
-        (|l2v_1QtWAcPNN|)
-        (#%if (proper-list? |l_1QPSyFPNN|)
-          (|l2v_1QtWAcPNN|
-            |l_1QPSyFPNN|
-            (make-vector (length |l_1QPSyFPNN|))
+        (|l_sSy-vpCsw|)
+        (|l2v_sSc2yYBsw|)
+        (#%if (proper-list? |l_sSy-vpCsw|)
+          (|l2v_sSc2yYBsw|
+            |l_sSy-vpCsw|
+            (make-vector (length |l_sSy-vpCsw|))
             0)
           (error (#%quote list->vector)
                  "can only convert a proper list."
-                 |l_1QPSyFPNN|))))))
+                 |l_sSy-vpCsw|))))))
 (#%program
-  ((|elems_1QbEqtRNN| . 1) (list->vector . 1))
+  ((|elems_sSWLndEsw| . 1) (list->vector . 1))
   ()
   (list->vector)
   (#%define vector
     (#%lambda #t
-      |elems_1QbEqtRNN|
+      |elems_sSWLndEsw|
       ()
-      (list->vector |elems_1QbEqtRNN|))))
+      (list->vector |elems_sSWLndEsw|))))
 (#%program
-  ((|elems_1QxAoWRNN| . 1) (list->string . 1))
+  ((|elems_sSgIlGEsw| . 1) (list->string . 1))
   ()
   (list->string)
   (#%define string
     (#%lambda #t
-      |elems_1QxAoWRNN|
+      |elems_sSgIlGEsw|
       ()
-      (list->string |elems_1QxAoWRNN|))))
+      (list->string |elems_sSgIlGEsw|))))
 (#%program
   ((_make-parameter . 1))
   ()
@@ -850,14 +852,14 @@
   ((car . 1)
    (string-length . 1)
    (string-append . 1)
-   (|l_1QzpihTNN| . 1)
+   (|l_sSixf1Gsw| . 1)
    (- . 1)
-   (|v_1QdtkQSNN| . 4)
+   (|v_sSYAhAFsw| . 4)
    (string-ref . 1)
    (eqv? . 1)
    (current-url . 3)
    (normalize-url . 2)
-   (|rest_1QTwmnSNN| . 2)
+   (|rest_sSCEj7Fsw| . 2)
    (null? . 1))
   ()
   (string-length
@@ -871,25 +873,25 @@
     null?)
   (#%define current-directory
     (#%lambda #t
-      |rest_1QTwmnSNN|
+      |rest_sSCEj7Fsw|
       ()
-      (#%if (null? |rest_1QTwmnSNN|)
+      (#%if (null? |rest_sSCEj7Fsw|)
         (normalize-url (current-url) ".")
         (current-url
           (normalize-url
             (current-url)
             ((#%lambda #t
-               (|v_1QdtkQSNN|)
+               (|v_sSYAhAFsw|)
                ()
                ((#%lambda #t
-                  (|l_1QzpihTNN|)
-                  (|v_1QdtkQSNN|)
-                  (#%if (eqv? (string-ref |v_1QdtkQSNN| (- |l_1QzpihTNN| 1))
+                  (|l_sSixf1Gsw|)
+                  (|v_sSYAhAFsw|)
+                  (#%if (eqv? (string-ref |v_sSYAhAFsw| (- |l_sSixf1Gsw| 1))
                               #\/)
-                    |v_1QdtkQSNN|
-                    (string-append |v_1QdtkQSNN| "/")))
-                (string-length |v_1QdtkQSNN|)))
-             (car |rest_1QTwmnSNN|))))))))
+                    |v_sSYAhAFsw|
+                    (string-append |v_sSYAhAFsw| "/")))
+                (string-length |v_sSYAhAFsw|)))
+             (car |rest_sSCEj7Fsw|))))))))
 (#%program
   ((void . 1))
   ()
@@ -902,22 +904,22 @@
   (#%define add-file-handler (void)))
 (#%program
   ((load . 1)
-   (|extension_1Qh78yVNN| . 1)
+   (|extension_sS0f5iIsw| . 1)
    (string-downcase . 1)
    (string->symbol . 1)
-   (|_load_1QXaa5VNN| . 1)
+   (|_load_sSGi7RHsw| . 1)
    (cdr . 1)
-   (|t_1QD36_VNN| . 2)
+   (|t_sSmb3LIsw| . 2)
    (file-handler . 1)
-   (|thunk_1QBecEUNN| . 1)
+   (|thunk_sSkm9oHsw| . 1)
    (cons . 2)
-   (|*file-handlers*_1QVlgKTNN| . 4)
-   (|extension_1QfiebUNN| . 2)
+   (|*file-handlers*_sSEtduGsw| . 4)
+   (|extension_sS-pbXGsw| . 2)
    (assq . 2)
    (not . 1)
    (add-file-handler . 1))
   ((file-handler . 1)
-   (|*file-handlers*_1QVlgKTNN| . 1)
+   (|*file-handlers*_sSEtduGsw| . 1)
    (add-file-handler . 1))
   (cdr string->symbol
        string-downcase
@@ -928,99 +930,99 @@
        assq
        add-file-handler)
   ((#%lambda #t
-     (|*file-handlers*_1QVlgKTNN|)
+     (|*file-handlers*_sSEtduGsw|)
      ()
      (#%begin
        (#%set! add-file-handler
          (#%lambda #t
-           (|extension_1QfiebUNN| |thunk_1QBecEUNN|)
-           (|*file-handlers*_1QVlgKTNN|)
-           (#%if (not (assq |extension_1QfiebUNN|
-                            |*file-handlers*_1QVlgKTNN|))
-             (#%set! |*file-handlers*_1QVlgKTNN|
-               (cons (cons |extension_1QfiebUNN| |thunk_1QBecEUNN|)
-                     |*file-handlers*_1QVlgKTNN|))
+           (|extension_sS-pbXGsw| |thunk_sSkm9oHsw|)
+           (|*file-handlers*_sSEtduGsw|)
+           (#%if (not (assq |extension_sS-pbXGsw|
+                            |*file-handlers*_sSEtduGsw|))
+             (#%set! |*file-handlers*_sSEtduGsw|
+               (cons (cons |extension_sS-pbXGsw| |thunk_sSkm9oHsw|)
+                     |*file-handlers*_sSEtduGsw|))
              #!void)))
        (#%set! file-handler
          ((#%lambda #t
-            (|_load_1QXaa5VNN|)
-            (|*file-handlers*_1QVlgKTNN|)
+            (|_load_sSGi7RHsw|)
+            (|*file-handlers*_sSEtduGsw|)
             (#%lambda #t
-              (|extension_1Qh78yVNN|)
-              (|_load_1QXaa5VNN| |*file-handlers*_1QVlgKTNN|)
+              (|extension_sS0f5iIsw|)
+              (|_load_sSGi7RHsw| |*file-handlers*_sSEtduGsw|)
               ((#%lambda #t
-                 (|t_1QD36_VNN|)
-                 (|_load_1QXaa5VNN|)
-                 (#%if |t_1QD36_VNN|
-                   (cdr |t_1QD36_VNN|)
-                   |_load_1QXaa5VNN|))
+                 (|t_sSmb3LIsw|)
+                 (|_load_sSGi7RHsw|)
+                 (#%if |t_sSmb3LIsw|
+                   (cdr |t_sSmb3LIsw|)
+                   |_load_sSGi7RHsw|))
                (assq (string->symbol
-                       (string-downcase |extension_1Qh78yVNN|))
-                     |*file-handlers*_1QVlgKTNN|))))
+                       (string-downcase |extension_sS0f5iIsw|))
+                     |*file-handlers*_sSEtduGsw|))))
           load))))
    ()))
 (#%program
-  ((|rest_1QjY1VWNN| . 1)
-   (|file_1QFU_lXNN| . 1)
+  ((|rest_sS24_EJsw| . 1)
+   (|file_sSo0Z5Ksw| . 1)
    (current-url . 1)
    (normalize-url . 1)
-   (|proc_1QZ_3sWNN| . 1)
+   (|proc_sSI71cJsw| . 1)
    (apply . 1))
   ()
   (apply current-url normalize-url)
   (#%define make-io-proc
     (#%lambda #t
-      (|proc_1QZ_3sWNN|)
+      (|proc_sSI71cJsw|)
       ()
       (#%lambda #t
-        (|file_1QFU_lXNN| . |rest_1QjY1VWNN|)
-        (|proc_1QZ_3sWNN|)
-        (apply |proc_1QZ_3sWNN|
-               (normalize-url (current-url) |file_1QFU_lXNN|)
-               |rest_1QjY1VWNN|)))))
+        (|file_sSo0Z5Ksw| . |rest_sS24_EJsw|)
+        (|proc_sSI71cJsw|)
+        (apply |proc_sSI71cJsw|
+               (normalize-url (current-url) |file_sSo0Z5Ksw|)
+               |rest_sS24_EJsw|)))))
 (#%program
-  ((|url_1QprLZ-NN| . 1)
+  ((|url_sS8zIJNsw| . 1)
    (string->list . 1)
    (reverse! . 1)
    (cons . 1)
    (cdr . 1)
-   (|loop_1QLnJq_NN| . 2)
-   (|acc_1QrgFk0ON| . 2)
+   (|loop_sSuvGaOsw| . 2)
+   (|acc_sSaoC4Psw| . 2)
    (list->string . 1)
    (car . 2)
    (equal? . 1)
-   (|x_1Q5kHT_NN| . 4)
+   (|x_sSQrEDOsw| . 4)
    (null? . 1)
    (void . 1)
-   (|file-extension_1Q_QZOXNN| . 1)
-   (|fe_1Q3vNw-NN| . 2)
+   (|file-extension_sSKYWyKsw| . 1)
+   (|fe_sSOCKgNsw| . 2)
    (file-handler . 1)
-   (|e_1QnCRCZNN| . 1)
-   (|m_1Q1GT9ZNN| . 1)
-   (|fk_1QJyP3-NN| . 1)
+   (|e_sS6KOmMsw| . 1)
+   (|m_sSMNQVLsw| . 1)
+   (|fk_sSsGMPMsw| . 1)
    (call-with-failure-continuation . 1)
    (with-failure-continuation . 1)
-   (|file_1QlNXfYNN| . 1)
-   (|previous-url_1QHJVIYNN| . 3)
+   (|file_sS4VU_Ksw| . 1)
+   (|previous-url_sSqRSsLsw| . 3)
    (normalize-url . 1)
    (current-url . 6)
    (load . 1)
-   (open-output-file . 2)
+   (|open-output-file| . 2)
    (open-source-input-file . 2)
    (make-io-proc . 3)
-   (open-input-file . 2))
-  ((|loop_1QLnJq_NN| . 1)
+   (|open-input-file| . 2))
+  ((|loop_sSuvGaOsw| . 1)
    (load . 1)
-   (open-output-file . 1)
+   (|open-output-file| . 1)
    (open-source-input-file . 1)
-   (open-input-file . 1))
-  (open-input-file
-    open-input-file
+   (|open-input-file| . 1))
+  (|open-input-file|
+    |open-input-file|
     make-io-proc
     open-source-input-file
     open-source-input-file
-    open-output-file
-    open-output-file
+    |open-output-file|
+    |open-output-file|
     load
     normalize-url
     current-url
@@ -1037,79 +1039,79 @@
     equal?
     car)
   ((#%lambda #t
-     (|file-extension_1Q_QZOXNN|)
+     (|file-extension_sSKYWyKsw|)
      ()
      (#%begin
-       (#%set! open-input-file
-         (make-io-proc open-input-file))
+       (#%set! |open-input-file|
+         (make-io-proc |open-input-file|))
        (#%set! open-source-input-file
          (make-io-proc open-source-input-file))
-       (#%set! open-output-file
-         (make-io-proc open-output-file))
+       (#%set! |open-output-file|
+         (make-io-proc |open-output-file|))
        (#%set! load
          (#%lambda #t
-           (|file_1QlNXfYNN|)
-           (|file-extension_1Q_QZOXNN|)
+           (|file_sS4VU_Ksw|)
+           (|file-extension_sSKYWyKsw|)
            (#%begin
              ((#%lambda #t
-                (|previous-url_1QHJVIYNN|)
-                (|file_1QlNXfYNN| |file-extension_1Q_QZOXNN|)
+                (|previous-url_sSqRSsLsw|)
+                (|file_sS4VU_Ksw| |file-extension_sSKYWyKsw|)
                 (#%begin
                   (current-url
                     (normalize-url
-                      |previous-url_1QHJVIYNN|
-                      |file_1QlNXfYNN|))
+                      |previous-url_sSqRSsLsw|
+                      |file_sS4VU_Ksw|))
                   (with-failure-continuation
                     (#%lambda #t
-                      (|m_1Q1GT9ZNN| |e_1QnCRCZNN|)
-                      (|previous-url_1QHJVIYNN|)
+                      (|m_sSMNQVLsw| |e_sS6KOmMsw|)
+                      (|previous-url_sSqRSsLsw|)
                       (#%begin
-                        (current-url |previous-url_1QHJVIYNN|)
+                        (current-url |previous-url_sSqRSsLsw|)
                         (call-with-failure-continuation
                           (#%lambda #t
-                            (|fk_1QJyP3-NN|)
-                            (|e_1QnCRCZNN| |m_1Q1GT9ZNN|)
-                            (|fk_1QJyP3-NN| |m_1Q1GT9ZNN| |e_1QnCRCZNN|)))))
+                            (|fk_sSsGMPMsw|)
+                            (|e_sS6KOmMsw| |m_sSMNQVLsw|)
+                            (|fk_sSsGMPMsw| |m_sSMNQVLsw| |e_sS6KOmMsw|)))))
                     (#%lambda #t
                       ()
-                      (|file-extension_1Q_QZOXNN|)
+                      (|file-extension_sSKYWyKsw|)
                       ((#%lambda #t
-                         (|fe_1Q3vNw-NN|)
+                         (|fe_sSOCKgNsw|)
                          ()
                          ((file-handler
-                            (#%if |fe_1Q3vNw-NN| |fe_1Q3vNw-NN| "scm"))
+                            (#%if |fe_sSOCKgNsw| |fe_sSOCKgNsw| "scm"))
                           (current-url)))
-                       (|file-extension_1Q_QZOXNN| (current-url)))))
-                  (current-url |previous-url_1QHJVIYNN|)))
+                       (|file-extension_sSKYWyKsw| (current-url)))))
+                  (current-url |previous-url_sSqRSsLsw|)))
               (current-url))
              (void))))))
    (#%lambda #t
-     (|url_1QprLZ-NN|)
+     (|url_sS8zIJNsw|)
      ()
      ((#%letrec #t
-        ((|loop_1QLnJq_NN|
+        ((|loop_sSuvGaOsw|
            (#%lambda #t
-             (|x_1Q5kHT_NN| |acc_1QrgFk0ON|)
-             (|loop_1QLnJq_NN|)
-             (#%if (null? |x_1Q5kHT_NN|)
+             (|x_sSQrEDOsw| |acc_sSaoC4Psw|)
+             (|loop_sSuvGaOsw|)
+             (#%if (null? |x_sSQrEDOsw|)
                #f
-               (#%if (equal? (car |x_1Q5kHT_NN|) #\.)
-                 (list->string |acc_1QrgFk0ON|)
-                 (|loop_1QLnJq_NN|
-                   (cdr |x_1Q5kHT_NN|)
-                   (cons (car |x_1Q5kHT_NN|) |acc_1QrgFk0ON|)))))))
+               (#%if (equal? (car |x_sSQrEDOsw|) #\.)
+                 (list->string |acc_sSaoC4Psw|)
+                 (|loop_sSuvGaOsw|
+                   (cdr |x_sSQrEDOsw|)
+                   (cons (car |x_sSQrEDOsw|) |acc_sSaoC4Psw|)))))))
         ()
-        |loop_1QLnJq_NN|)
-      (reverse! (string->list |url_1QprLZ-NN|))
+        |loop_sSuvGaOsw|)
+      (reverse! (string->list |url_sS8zIJNsw|))
       ()))))
 (#%program
-  ((|str_1QNcDN0ON| . 1)
+  ((|str_sSwkAxPsw| . 1)
    (load-native-library . 1)
    (native-library-binding-names . 1)
-   (|binding-names_1Qt5zH1ON| . 1)
-   (|nl_1Q79Be1ON| . 2)
+   (|binding-names_sScdwrQsw| . 1)
+   (|nl_sSSgy-Psw| . 2)
    (native-library-binding . 1)
-   (|name_1QP1x82ON| . 2)
+   (|name_sSy9uUQsw| . 2)
    (putprop . 1)
    (for-each . 1))
   ()
@@ -1120,150 +1122,150 @@
     native-library-binding-names)
   (#%define load-module
     (#%lambda #t
-      (|str_1QNcDN0ON|)
+      (|str_sSwkAxPsw|)
       ()
       ((#%lambda #t
-         (|nl_1Q79Be1ON|)
+         (|nl_sSSgy-Psw|)
          ()
          ((#%lambda #t
-            (|binding-names_1Qt5zH1ON|)
-            (|nl_1Q79Be1ON|)
+            (|binding-names_sScdwrQsw|)
+            (|nl_sSSgy-Psw|)
             (for-each
               (#%lambda #t
-                (|name_1QP1x82ON|)
-                (|nl_1Q79Be1ON|)
+                (|name_sSy9uUQsw|)
+                (|nl_sSSgy-Psw|)
                 (putprop
-                  |name_1QP1x82ON|
+                  |name_sSy9uUQsw|
                   (native-library-binding
-                    |nl_1Q79Be1ON|
-                    |name_1QP1x82ON|)))
-              |binding-names_1Qt5zH1ON|))
-          (native-library-binding-names |nl_1Q79Be1ON|)))
-       (load-native-library |str_1QNcDN0ON|)))))
+                    |nl_sSSgy-Psw|
+                    |name_sSy9uUQsw|)))
+              |binding-names_sScdwrQsw|))
+          (native-library-binding-names |nl_sSSgy-Psw|)))
+       (load-native-library |str_sSwkAxPsw|)))))
 (#%program
-  ((|lses_1QvWs23ON| . 5)
+  ((|lses_sSe2qORsw| . 5)
    (cdr . 3)
    (car . 3)
    (append2 . 1)
-   (|real-append_1Q9-uB2ON| . 3)
+   (|real-append_sSU5slRsw| . 3)
    (apply . 3)
-   (|ls1_1QbPoY3ON| . 3)
-   (|lses_1QRSqv3ON| . 4)
+   (|ls1_sSWWlISsw| . 3)
+   (|lses_sSA-nfSsw| . 4)
    (null? . 4))
-  ((|real-append_1Q9-uB2ON| . 1))
+  ((|real-append_sSU5slRsw| . 1))
   (apply cdr append2 car null?)
   (#%define append
     (#%letrec #t
-      ((|real-append_1Q9-uB2ON|
+      ((|real-append_sSU5slRsw|
          (#%lambda #t
-           (|ls1_1QbPoY3ON| . |lses_1QRSqv3ON|)
-           (|real-append_1Q9-uB2ON|)
-           (#%if (null? |lses_1QRSqv3ON|)
-             |ls1_1QbPoY3ON|
-             (#%if (null? |ls1_1QbPoY3ON|)
-               (apply |real-append_1Q9-uB2ON| |lses_1QRSqv3ON|)
-               (apply |real-append_1Q9-uB2ON|
-                      (append2 |ls1_1QbPoY3ON| (car |lses_1QRSqv3ON|))
-                      (cdr |lses_1QRSqv3ON|)))))))
+           (|ls1_sSWWlISsw| . |lses_sSA-nfSsw|)
+           (|real-append_sSU5slRsw|)
+           (#%if (null? |lses_sSA-nfSsw|)
+             |ls1_sSWWlISsw|
+             (#%if (null? |ls1_sSWWlISsw|)
+               (apply |real-append_sSU5slRsw| |lses_sSA-nfSsw|)
+               (apply |real-append_sSU5slRsw|
+                      (append2 |ls1_sSWWlISsw| (car |lses_sSA-nfSsw|))
+                      (cdr |lses_sSA-nfSsw|)))))))
       ()
       (#%lambda #t
-        |lses_1QvWs23ON|
-        (|real-append_1Q9-uB2ON|)
-        (#%if (null? |lses_1QvWs23ON|)
+        |lses_sSe2qORsw|
+        (|real-append_sSU5slRsw|)
+        (#%if (null? |lses_sSe2qORsw|)
           ()
-          (#%if (null? (cdr |lses_1QvWs23ON|))
-            (car |lses_1QvWs23ON|)
-            (apply |real-append_1Q9-uB2ON|
-                   (car |lses_1QvWs23ON|)
-                   (cdr |lses_1QvWs23ON|))))))))
+          (#%if (null? (cdr |lses_sSe2qORsw|))
+            (car |lses_sSe2qORsw|)
+            (apply |real-append_sSU5slRsw|
+                   (car |lses_sSe2qORsw|)
+                   (cdr |lses_sSe2qORsw|))))))))
 (#%program
-  ((|x_1QxLmp4ON| . 2)
+  ((|x_sSgTj9Tsw| . 2)
    (null? . 2)
-   (|lag_1QzAgM5ON| . 1)
+   (|lag_sSiIdwUsw| . 1)
    (cdr . 3)
-   (|lp_1QTHkS4ON| . 2)
-   (|lag_1QBpa77ON| . 2)
-   (|x_1QftcG6ON| . 2)
+   (|lp_sSCPhCTsw| . 2)
+   (|lag_sSkx7TVsw| . 2)
+   (|x_sS-A9qVsw| . 2)
    (eq? . 1)
    (not . 1)
-   (|x_1QVwed6ON| . 3)
-   (|x_1QdEij5ON| . 3)
+   (|x_sSEEbZUsw| . 3)
+   (|x_sSYLf3Usw| . 3)
    (pair? . 2))
-  ((|lp_1QTHkS4ON| . 1))
+  ((|lp_sSCPhCTsw| . 1))
   (pair? cdr eq? not null?)
   (#%define proper-list?
     (#%lambda #t
-      (|x_1QxLmp4ON|)
+      (|x_sSgTj9Tsw|)
       ()
       ((#%letrec #t
-         ((|lp_1QTHkS4ON|
+         ((|lp_sSCPhCTsw|
             (#%lambda #t
-              (|x_1QdEij5ON| |lag_1QzAgM5ON|)
-              (|lp_1QTHkS4ON|)
-              (#%if (pair? |x_1QdEij5ON|)
+              (|x_sSYLf3Usw| |lag_sSiIdwUsw|)
+              (|lp_sSCPhCTsw|)
+              (#%if (pair? |x_sSYLf3Usw|)
                 ((#%lambda #t
-                   (|x_1QVwed6ON|)
-                   (|lag_1QzAgM5ON| |lp_1QTHkS4ON|)
-                   (#%if (pair? |x_1QVwed6ON|)
+                   (|x_sSEEbZUsw|)
+                   (|lag_sSiIdwUsw| |lp_sSCPhCTsw|)
+                   (#%if (pair? |x_sSEEbZUsw|)
                      ((#%lambda #t
-                        (|x_1QftcG6ON| |lag_1QBpa77ON|)
-                        (|lp_1QTHkS4ON|)
-                        (#%if (not (eq? |x_1QftcG6ON| |lag_1QBpa77ON|))
-                          (|lp_1QTHkS4ON| |x_1QftcG6ON| |lag_1QBpa77ON|)
+                        (|x_sS-A9qVsw| |lag_sSkx7TVsw|)
+                        (|lp_sSCPhCTsw|)
+                        (#%if (not (eq? |x_sS-A9qVsw| |lag_sSkx7TVsw|))
+                          (|lp_sSCPhCTsw| |x_sS-A9qVsw| |lag_sSkx7TVsw|)
                           #f))
-                      (cdr |x_1QVwed6ON|)
-                      (cdr |lag_1QzAgM5ON|))
-                     (null? |x_1QVwed6ON|)))
-                 (cdr |x_1QdEij5ON|))
-                (null? |x_1QdEij5ON|)))))
+                      (cdr |x_sSEEbZUsw|)
+                      (cdr |lag_sSiIdwUsw|))
+                     (null? |x_sSEEbZUsw|)))
+                 (cdr |x_sSYLf3Usw|))
+                (null? |x_sSYLf3Usw|)))))
          ()
-         |lp_1QTHkS4ON|)
-       |x_1QxLmp4ON|
-       |x_1QxLmp4ON|))))
+         |lp_sSCPhCTsw|)
+       |x_sSgTj9Tsw|
+       |x_sSgTj9Tsw|))))
 (#%program
   ((proper-list? . 1))
   ()
   (proper-list?)
   (#%define list? proper-list?))
 (#%program
-  ((|general-expt_1QXl8A7ON| . 1)
+  ((|general-expt_sSGt5kWsw| . 1)
    (denominator . 1)
    (numerator . 1)
-   (|rational-expt_1Qhi618ON| . 1)
+   (|rational-expt_sS0q3NWsw| . 1)
    (integer? . 2)
    (not . 1)
    (rational? . 1)
-   (|base_1QZa2X8ON| . 9)
-   (|exponent_1Qj70o9ON| . 8)
-   (|squaring_1Q5vFmeON| . 3)
+   (|base_sSIi_GXsw| . 9)
+   (|exponent_sS2fZ7Ysw| . 8)
+   (|squaring_sSQCC61tw| . 3)
    (odd? . 1)
    (quotient . 1)
-   (|loop_1Q3GL_cON| . 2)
-   (|result_1QLyHVdON| . 3)
-   (|rest_1QpCJsdON| . 3)
+   (|loop_sSONIL_sw| . 2)
+   (|result_sSuGEF0tw| . 3)
+   (|rest_sS8KGc0tw| . 3)
    (zero? . 3)
    (ashl . 1)
    (= . 1)
    (exact? . 5)
    (abs . 1)
-   (|base_1QnNP5cON| . 4)
-   (|integer-expt_1QDe4u8ON| . 2)
-   (|exponent_1QJJNycON| . 4)
+   (|base_sS6VMR-sw| . 4)
+   (|integer-expt_sSmm1eXsw| . 2)
+   (|exponent_sSsRKi_sw| . 4)
    (negative? . 1)
-   (|base-denominator_1QHUTbbON| . 1)
-   (|exponent_1Q1RREbON| . 2)
-   (|base-numerator_1QlYVKaON| . 1)
+   (|base-denominator_sSq0RXZsw| . 1)
+   (|exponent_sSMYOo-sw| . 2)
+   (|base-numerator_sS44TuZsw| . 1)
    (expt . 2)
    (/ . 2)
-   (|base_1QF3-Q9ON| . 1)
+   (|base_sSobXAYsw| . 1)
    (log . 1)
-   (|exponent_1Q__XhaON| . 1)
+   (|exponent_sSK7V1Zsw| . 1)
    (* . 3)
    (exp . 1))
-  ((|loop_1Q3GL_cON| . 1)
-   (|integer-expt_1QDe4u8ON| . 1)
-   (|rational-expt_1Qhi618ON| . 1)
-   (|general-expt_1QXl8A7ON| . 1))
+  ((|loop_sSONIL_sw| . 1)
+   (|integer-expt_sSmm1eXsw| . 1)
+   (|rational-expt_sS0q3NWsw| . 1)
+   (|general-expt_sSGt5kWsw| . 1))
   (numerator
     denominator
     not
@@ -1284,167 +1286,167 @@
     exp)
   (#%define expt
     (#%letrec #t
-      ((|general-expt_1QXl8A7ON|
+      ((|general-expt_sSGt5kWsw|
          (#%lambda #t
-           (|base_1QF3-Q9ON| |exponent_1Q__XhaON|)
+           (|base_sSobXAYsw| |exponent_sSK7V1Zsw|)
            ()
-           (exp (* |exponent_1Q__XhaON| (log |base_1QF3-Q9ON|)))))
-       (|rational-expt_1Qhi618ON|
+           (exp (* |exponent_sSK7V1Zsw| (log |base_sSobXAYsw|)))))
+       (|rational-expt_sS0q3NWsw|
          (#%lambda #t
-           (|base-numerator_1QlYVKaON|
-             |base-denominator_1QHUTbbON|
-             |exponent_1Q1RREbON|)
+           (|base-numerator_sS44TuZsw|
+             |base-denominator_sSq0RXZsw|
+             |exponent_sSMYOo-sw|)
            ()
-           (/ (expt |base-numerator_1QlYVKaON|
-                    |exponent_1Q1RREbON|)
-              (expt |base-denominator_1QHUTbbON|
-                    |exponent_1Q1RREbON|))))
-       (|integer-expt_1QDe4u8ON|
+           (/ (expt |base-numerator_sS44TuZsw|
+                    |exponent_sSMYOo-sw|)
+              (expt |base-denominator_sSq0RXZsw|
+                    |exponent_sSMYOo-sw|))))
+       (|integer-expt_sSmm1eXsw|
          (#%lambda #t
-           (|base_1QnNP5cON| |exponent_1QJJNycON|)
-           (|integer-expt_1QDe4u8ON|)
-           (#%if (negative? |exponent_1QJJNycON|)
-             (/ (|integer-expt_1QDe4u8ON|
-                  |base_1QnNP5cON|
-                  (abs |exponent_1QJJNycON|)))
-             (#%if (#%if (exact? |base_1QnNP5cON|)
-                     (= |base_1QnNP5cON| 2)
+           (|base_sS6VMR-sw| |exponent_sSsRKi_sw|)
+           (|integer-expt_sSmm1eXsw|)
+           (#%if (negative? |exponent_sSsRKi_sw|)
+             (/ (|integer-expt_sSmm1eXsw|
+                  |base_sS6VMR-sw|
+                  (abs |exponent_sSsRKi_sw|)))
+             (#%if (#%if (exact? |base_sS6VMR-sw|)
+                     (= |base_sS6VMR-sw| 2)
                      #f)
-               (ashl 1 |exponent_1QJJNycON|)
+               (ashl 1 |exponent_sSsRKi_sw|)
                ((#%letrec #t
-                  ((|loop_1Q3GL_cON|
+                  ((|loop_sSONIL_sw|
                      (#%lambda #t
-                       (|rest_1QpCJsdON|
-                         |result_1QLyHVdON|
-                         |squaring_1Q5vFmeON|)
-                       (|loop_1Q3GL_cON|)
-                       (#%if (zero? |rest_1QpCJsdON|)
-                         |result_1QLyHVdON|
-                         (|loop_1Q3GL_cON|
-                           (quotient |rest_1QpCJsdON| 2)
-                           (#%if (odd? |rest_1QpCJsdON|)
-                             (* |result_1QLyHVdON| |squaring_1Q5vFmeON|)
-                             |result_1QLyHVdON|)
-                           (* |squaring_1Q5vFmeON| |squaring_1Q5vFmeON|))))))
+                       (|rest_sS8KGc0tw|
+                         |result_sSuGEF0tw|
+                         |squaring_sSQCC61tw|)
+                       (|loop_sSONIL_sw|)
+                       (#%if (zero? |rest_sS8KGc0tw|)
+                         |result_sSuGEF0tw|
+                         (|loop_sSONIL_sw|
+                           (quotient |rest_sS8KGc0tw| 2)
+                           (#%if (odd? |rest_sS8KGc0tw|)
+                             (* |result_sSuGEF0tw| |squaring_sSQCC61tw|)
+                             |result_sSuGEF0tw|)
+                           (* |squaring_sSQCC61tw| |squaring_sSQCC61tw|))))))
                   ()
-                  |loop_1Q3GL_cON|)
-                |exponent_1QJJNycON|
+                  |loop_sSONIL_sw|)
+                |exponent_sSsRKi_sw|
                 1
-                |base_1QnNP5cON|))))))
+                |base_sS6VMR-sw|))))))
       ()
       (#%lambda #t
-        (|base_1QZa2X8ON| |exponent_1Qj70o9ON|)
-        (|integer-expt_1QDe4u8ON|
-          |rational-expt_1Qhi618ON|
-          |general-expt_1QXl8A7ON|)
-        (#%if (zero? |exponent_1Qj70o9ON|)
-          (#%if (exact? |exponent_1Qj70o9ON|) 1 1.0)
-          (#%if (zero? |base_1QZa2X8ON|)
-            (#%if (exact? |exponent_1Qj70o9ON|)
-              |base_1QZa2X8ON|
+        (|base_sSIi_GXsw| |exponent_sS2fZ7Ysw|)
+        (|integer-expt_sSmm1eXsw|
+          |rational-expt_sS0q3NWsw|
+          |general-expt_sSGt5kWsw|)
+        (#%if (zero? |exponent_sS2fZ7Ysw|)
+          (#%if (exact? |exponent_sS2fZ7Ysw|) 1 1.0)
+          (#%if (zero? |base_sSIi_GXsw|)
+            (#%if (exact? |exponent_sS2fZ7Ysw|)
+              |base_sSIi_GXsw|
               0.0)
-            (#%if (#%if (exact? |base_1QZa2X8ON|)
-                    (#%if (rational? |base_1QZa2X8ON|)
-                      (not (integer? |base_1QZa2X8ON|))
+            (#%if (#%if (exact? |base_sSIi_GXsw|)
+                    (#%if (rational? |base_sSIi_GXsw|)
+                      (not (integer? |base_sSIi_GXsw|))
                       #f)
                     #f)
-              (|rational-expt_1Qhi618ON|
-                (numerator |base_1QZa2X8ON|)
-                (denominator |base_1QZa2X8ON|)
-                |exponent_1Qj70o9ON|)
-              (#%if (#%if (exact? |exponent_1Qj70o9ON|)
-                      (integer? |exponent_1Qj70o9ON|)
+              (|rational-expt_sS0q3NWsw|
+                (numerator |base_sSIi_GXsw|)
+                (denominator |base_sSIi_GXsw|)
+                |exponent_sS2fZ7Ysw|)
+              (#%if (#%if (exact? |exponent_sS2fZ7Ysw|)
+                      (integer? |exponent_sS2fZ7Ysw|)
                       #f)
-                (|integer-expt_1QDe4u8ON|
-                  |base_1QZa2X8ON|
-                  |exponent_1Qj70o9ON|)
-                (|general-expt_1QXl8A7ON|
-                  |base_1QZa2X8ON|
-                  |exponent_1Qj70o9ON|)))))))))
+                (|integer-expt_sSmm1eXsw|
+                  |base_sSIi_GXsw|
+                  |exponent_sS2fZ7Ysw|)
+                (|general-expt_sSGt5kWsw|
+                  |base_sSIi_GXsw|
+                  |exponent_sS2fZ7Ysw|)))))))))
 (#%program
   ((- . 1)
-   (|tmp_1QtgxagON| . 2)
+   (|tmp_sScouW2tw| . 2)
    (/ . 2)
    (modpow . 2)
-   (|tmp_1QPcvDgON| . 2)
+   (|tmp_sSyksn3tw| . 2)
    (* . 3)
    (even? . 1)
-   (|n_1Q7kzJfON| . 6)
-   (|x_1QrrDPeON| . 4)
+   (|n_sSSrwt2tw| . 6)
+   (|x_sSazAz1tw| . 4)
    (modulo . 4)
-   (|y_1QNnBgfON| . 4)
+   (|y_sSwvy02tw| . 4)
    (= . 1))
   ()
   (even? modpow / * - modulo =)
   (#%define modpow
     (#%lambda #t
-      (|x_1QrrDPeON| |y_1QNnBgfON| |n_1Q7kzJfON|)
+      (|x_sSazAz1tw| |y_sSwvy02tw| |n_sSSrwt2tw|)
       ()
-      (#%if (= |y_1QNnBgfON| 1)
-        (modulo |x_1QrrDPeON| |n_1Q7kzJfON|)
-        (#%if (even? |y_1QNnBgfON|)
+      (#%if (= |y_sSwvy02tw| 1)
+        (modulo |x_sSazAz1tw| |n_sSSrwt2tw|)
+        (#%if (even? |y_sSwvy02tw|)
           ((#%lambda #t
-             (|tmp_1QPcvDgON|)
-             (|n_1Q7kzJfON|)
+             (|tmp_sSyksn3tw|)
+             (|n_sSSrwt2tw|)
              (modulo
-               (* |tmp_1QPcvDgON| |tmp_1QPcvDgON|)
-               |n_1Q7kzJfON|))
+               (* |tmp_sSyksn3tw| |tmp_sSyksn3tw|)
+               |n_sSSrwt2tw|))
            (modpow
-             |x_1QrrDPeON|
-             (/ |y_1QNnBgfON| 2)
-             |n_1Q7kzJfON|))
+             |x_sSazAz1tw|
+             (/ |y_sSwvy02tw| 2)
+             |n_sSSrwt2tw|))
           ((#%lambda #t
-             (|tmp_1QtgxagON|)
-             (|n_1Q7kzJfON| |x_1QrrDPeON|)
+             (|tmp_sScouW2tw|)
+             (|n_sSSrwt2tw| |x_sSazAz1tw|)
              (modulo
-               (* |x_1QrrDPeON|
+               (* |x_sSazAz1tw|
                   (modulo
-                    (* |tmp_1QtgxagON| |tmp_1QtgxagON|)
-                    |n_1Q7kzJfON|))
-               |n_1Q7kzJfON|))
+                    (* |tmp_sScouW2tw| |tmp_sScouW2tw|)
+                    |n_sSSrwt2tw|))
+               |n_sSSrwt2tw|))
            (modpow
-             |x_1QrrDPeON|
-             (/ (- |y_1QNnBgfON| 1) 2)
-             |n_1Q7kzJfON|)))))))
+             |x_sSazAz1tw|
+             (/ (- |y_sSwvy02tw| 1) 2)
+             |n_sSSrwt2tw|)))))))
 (#%program
   ((integer? . 1)
    (round . 1)
    (= . 1)
    (real? . 1)
-   (|n_1Qv5rxhON| . 4)
-   (|oldint?_1Q99t4hON| . 1))
+   (|n_sSedoh4tw| . 4)
+   (|oldint?_sSUgqQ3tw| . 1))
   ()
   (integer? = round real?)
   (#%define integer?
     ((#%lambda #t
-       (|oldint?_1Q99t4hON|)
+       (|oldint?_sSUgqQ3tw|)
        ()
        (#%lambda #t
-         (|n_1Qv5rxhON|)
-         (|oldint?_1Q99t4hON|)
-         (#%if (|oldint?_1Q99t4hON| |n_1Qv5rxhON|)
+         (|n_sSedoh4tw|)
+         (|oldint?_sSUgqQ3tw|)
+         (#%if (|oldint?_sSUgqQ3tw| |n_sSedoh4tw|)
            #t
-           (#%if (real? |n_1Qv5rxhON|)
-             (= (round |n_1Qv5rxhON|) |n_1Qv5rxhON|)
+           (#%if (real? |n_sSedoh4tw|)
+             (= (round |n_sSedoh4tw|) |n_sSedoh4tw|)
              #f))))
      integer?)))
 (#%program
   ((complex? . 1)
-   (|oldcomp?_1QR1p-hON| . 1)
+   (|oldcomp?_sSA9mK4tw| . 1)
    (not . 1)
-   (|n_1Qb-mriON| . 2)
+   (|n_sSW5kb5tw| . 2)
    (number? . 1))
   ()
   (complex? number? not)
   (#%define real?
     ((#%lambda #t
-       (|oldcomp?_1QR1p-hON|)
+       (|oldcomp?_sSA9mK4tw|)
        ()
        (#%lambda #t
-         (|n_1Qb-mriON|)
-         (|oldcomp?_1QR1p-hON|)
-         (#%if (number? |n_1Qb-mriON|)
-           (not (|oldcomp?_1QR1p-hON| |n_1Qb-mriON|))
+         (|n_sSW5kb5tw|)
+         (|oldcomp?_sSA9mK4tw|)
+         (#%if (number? |n_sSW5kb5tw|)
+           (not (|oldcomp?_sSA9mK4tw| |n_sSW5kb5tw|))
            #f)))
      complex?)))
 (#%program
@@ -1462,31 +1464,31 @@
    (< . 1)
    (imag-part . 1)
    (real-part . 1)
-   (|b_1QdPgOjON| . 2)
-   (|a_1QTSiljON| . 2)
+   (|b_sSYWdy6tw| . 2)
+   (|a_sSC-f56tw| . 2)
    (* . 2)
    (+ . 1)
    (sqrt . 1)
-   (|num_1QxWkUiON| . 6)
+   (|num_sSg2iE5tw| . 6)
    (real? . 1)
    (not . 1))
   ()
   (< - + * sqrt real-part imag-part not real?)
   (#%define abs
     (#%lambda #t
-      (|num_1QxWkUiON|)
+      (|num_sSg2iE5tw|)
       ()
-      (#%if (not (real? |num_1QxWkUiON|))
+      (#%if (not (real? |num_sSg2iE5tw|))
         ((#%lambda #t
-           (|a_1QTSiljON| |b_1QdPgOjON|)
+           (|a_sSC-f56tw| |b_sSYWdy6tw|)
            ()
-           (sqrt (+ (* |a_1QTSiljON| |a_1QTSiljON|)
-                    (* |b_1QdPgOjON| |b_1QdPgOjON|))))
-         (real-part |num_1QxWkUiON|)
-         (imag-part |num_1QxWkUiON|))
-        (#%if (< |num_1QxWkUiON| 0)
-          (- |num_1QxWkUiON|)
-          |num_1QxWkUiON|)))))
+           (sqrt (+ (* |a_sSC-f56tw| |a_sSC-f56tw|)
+                    (* |b_sSYWdy6tw| |b_sSYWdy6tw|))))
+         (real-part |num_sSg2iE5tw|)
+         (imag-part |num_sSg2iE5tw|))
+        (#%if (< |num_sSg2iE5tw| 0)
+          (- |num_sSg2iE5tw|)
+          |num_sSg2iE5tw|)))))
 (#%program
   ((void . 1))
   ()
@@ -1499,25 +1501,25 @@
   (#%define max (void)))
 (#%program
   ((> . 1)
-   (|x1_1QXw63mON| . 3)
-   (|args_1QBA8ClON| . 2)
+   (|x1_sSGE3P8tw| . 3)
+   (|args_sSkI5m8tw| . 2)
    (max . 1)
    (< . 1)
-   (|x1_1QfEa9lON| . 3)
-   (|args_1QVHcIkON| . 2)
+   (|x1_sS-L7V7tw| . 3)
+   (|args_sSEP9s7tw| . 2)
    (min . 1)
    (inexact? . 3)
    (cdr . 2)
-   (|_min_max_1QzLefkON| . 4)
+   (|_min_max_sSiTb_6tw| . 4)
    (car . 3)
-   (|proc_1Qht4wmON| . 3)
+   (|proc_sS0B1g9tw| . 3)
    (exact->inexact . 1)
-   (|mv_1QDp2ZmON| . 5)
+   (|mv_sSmx_I9tw| . 5)
    (exact? . 1)
-   (|inexact_1Qji-SnON| . 3)
-   (|args_1QZl0qnON| . 6)
+   (|inexact_sS2qXCatw| . 3)
+   (|args_sSItZ9atw| . 6)
    (null? . 3))
-  ((max . 1) (min . 1) (|_min_max_1QzLefkON| . 1))
+  ((max . 1) (min . 1) (|_min_max_sSiTb_6tw| . 1))
   (min <
        max
        >
@@ -1528,121 +1530,121 @@
        exact->inexact
        null?)
   (#%letrec #t
-    ((|_min_max_1QzLefkON|
+    ((|_min_max_sSiTb_6tw|
        (#%lambda #t
-         (|proc_1Qht4wmON|
-           |mv_1QDp2ZmON|
-           |args_1QZl0qnON|
-           |inexact_1Qji-SnON|)
-         (|_min_max_1QzLefkON|)
-         (#%if (null? |args_1QZl0qnON|)
-           (#%if (#%if |inexact_1Qji-SnON|
-                   (exact? |mv_1QDp2ZmON|)
+         (|proc_sS0B1g9tw|
+           |mv_sSmx_I9tw|
+           |args_sSItZ9atw|
+           |inexact_sS2qXCatw|)
+         (|_min_max_sSiTb_6tw|)
+         (#%if (null? |args_sSItZ9atw|)
+           (#%if (#%if |inexact_sS2qXCatw|
+                   (exact? |mv_sSmx_I9tw|)
                    #f)
-             (exact->inexact |mv_1QDp2ZmON|)
-             |mv_1QDp2ZmON|)
-           (#%if (|proc_1Qht4wmON|
-                   (car |args_1QZl0qnON|)
-                   |mv_1QDp2ZmON|)
-             (|_min_max_1QzLefkON|
-               |proc_1Qht4wmON|
-               (car |args_1QZl0qnON|)
-               (cdr |args_1QZl0qnON|)
-               (#%if |inexact_1Qji-SnON|
+             (exact->inexact |mv_sSmx_I9tw|)
+             |mv_sSmx_I9tw|)
+           (#%if (|proc_sS0B1g9tw|
+                   (car |args_sSItZ9atw|)
+                   |mv_sSmx_I9tw|)
+             (|_min_max_sSiTb_6tw|
+               |proc_sS0B1g9tw|
+               (car |args_sSItZ9atw|)
+               (cdr |args_sSItZ9atw|)
+               (#%if |inexact_sS2qXCatw|
                  #t
-                 (inexact? (car |args_1QZl0qnON|))))
-             (|_min_max_1QzLefkON|
-               |proc_1Qht4wmON|
-               |mv_1QDp2ZmON|
-               (cdr |args_1QZl0qnON|)
-               |inexact_1Qji-SnON|))))))
+                 (inexact? (car |args_sSItZ9atw|))))
+             (|_min_max_sSiTb_6tw|
+               |proc_sS0B1g9tw|
+               |mv_sSmx_I9tw|
+               (cdr |args_sSItZ9atw|)
+               |inexact_sS2qXCatw|))))))
     ()
     (#%begin
       (#%set! min
         (#%lambda #t
-          (|x1_1QfEa9lON| . |args_1QVHcIkON|)
-          (|_min_max_1QzLefkON|)
-          (#%if (null? |args_1QVHcIkON|)
-            |x1_1QfEa9lON|
-            (|_min_max_1QzLefkON|
+          (|x1_sS-L7V7tw| . |args_sSEP9s7tw|)
+          (|_min_max_sSiTb_6tw|)
+          (#%if (null? |args_sSEP9s7tw|)
+            |x1_sS-L7V7tw|
+            (|_min_max_sSiTb_6tw|
               <
-              |x1_1QfEa9lON|
-              |args_1QVHcIkON|
-              (inexact? |x1_1QfEa9lON|)))))
+              |x1_sS-L7V7tw|
+              |args_sSEP9s7tw|
+              (inexact? |x1_sS-L7V7tw|)))))
       (#%set! max
         (#%lambda #t
-          (|x1_1QXw63mON| . |args_1QBA8ClON|)
-          (|_min_max_1QzLefkON|)
-          (#%if (null? |args_1QBA8ClON|)
-            |x1_1QXw63mON|
-            (|_min_max_1QzLefkON|
+          (|x1_sSGE3P8tw| . |args_sSkI5m8tw|)
+          (|_min_max_sSiTb_6tw|)
+          (#%if (null? |args_sSkI5m8tw|)
+            |x1_sSGE3P8tw|
+            (|_min_max_sSiTb_6tw|
               >
-              |x1_1QXw63mON|
-              |args_1QBA8ClON|
-              (inexact? |x1_1QXw63mON|))))))))
+              |x1_sSGE3P8tw|
+              |args_sSkI5m8tw|
+              (inexact? |x1_sSGE3P8tw|))))))))
 (#%program
-  ((|n_1QFeYjoON| . 1) (< . 1))
+  ((|n_sSomV3btw| . 1) (< . 1))
   ()
   (<)
   (#%define negative?
     (#%lambda #t
-      (|n_1QFeYjoON|)
+      (|n_sSomV3btw|)
       ()
-      (< |n_1QFeYjoON| 0))))
+      (< |n_sSomV3btw| 0))))
 (#%program
-  ((|n_1Q_aWMoON| . 1) (> . 1))
+  ((|n_sSKiTwbtw| . 1) (> . 1))
   ()
   (>)
   (#%define positive?
     (#%lambda #t
-      (|n_1Q_aWMoON|)
+      (|n_sSKiTwbtw|)
       ()
-      (> |n_1Q_aWMoON| 0))))
+      (> |n_sSKiTwbtw| 0))))
 (#%program
-  ((|n_1Ql7UdpON| . 1) (modulo . 1) (= . 1))
+  ((|n_sS4fRZbtw| . 1) (modulo . 1) (= . 1))
   ()
   (modulo =)
   (#%define even?
     (#%lambda #t
-      (|n_1Ql7UdpON|)
+      (|n_sS4fRZbtw|)
       ()
-      (= 0 (modulo |n_1Ql7UdpON| 2)))))
+      (= 0 (modulo |n_sS4fRZbtw| 2)))))
 (#%program
-  ((|n_1QH3SGpON| . 1) (even? . 1) (not . 1))
+  ((|n_sSqbPqctw| . 1) (even? . 1) (not . 1))
   ()
   (even? not)
   (#%define odd?
     (#%lambda #t
-      (|n_1QH3SGpON|)
+      (|n_sSqbPqctw|)
       ()
-      (not (even? |n_1QH3SGpON|)))))
+      (not (even? |n_sSqbPqctw|)))))
 (#%program
-  ((|n_1Q10Q7qON| . 1) (= . 1))
+  ((|n_sSM7NTctw| . 1) (= . 1))
   ()
   (=)
   (#%define zero?
     (#%lambda #t
-      (|n_1Q10Q7qON|)
+      (|n_sSM7NTctw|)
       ()
-      (= |n_1Q10Q7qON| 0))))
+      (= |n_sSM7NTctw| 0))))
 (#%program
-  ((|n_1QnYNAqON| . 1) (+ . 1))
+  ((|n_sS64Lkdtw| . 1) (+ . 1))
   ()
   (+)
   (#%define add1
     (#%lambda #t
-      (|n_1QnYNAqON|)
+      (|n_sS64Lkdtw|)
       ()
-      (+ |n_1QnYNAqON| 1))))
+      (+ |n_sS64Lkdtw| 1))))
 (#%program
-  ((|n_1QJUL1rON| . 1) (- . 1))
+  ((|n_sSs0JNdtw| . 1) (- . 1))
   ()
   (-)
   (#%define sub1
     (#%lambda #t
-      (|n_1QJUL1rON|)
+      (|n_sSs0JNdtw|)
       ()
-      (- |n_1QJUL1rON| 1))))
+      (- |n_sSs0JNdtw| 1))))
 (#%program
   ((void . 1))
   ()
@@ -1654,322 +1656,322 @@
   (void)
   (#%define <= (void)))
 (#%program
-  ((|y_1Qx5jnxON| . 1)
-   (|x_1Qb9lWwON| . 1)
-   (|args_1Q9krzvON| . 1)
-   (|loop_1Qvgp0wON| . 2)
+  ((|y_sSgdg7ktw| . 1)
+   (|x_sSWgiGjtw| . 1)
+   (|args_sSUrojitw| . 1)
+   (|loop_sSeomMitw| . 2)
    (cadr . 1)
    (car . 1)
-   (|comparator_1Q7vxcuON| . 1)
-   (|chainer_1QtrvFuON| . 1)
+   (|comparator_sSSCuYgtw| . 1)
+   (|chainer_sSczsphtw| . 1)
    (cdr . 2)
-   (|endstate_1QPnt6vON| . 2)
-   (|x_1QRcntwON| . 5)
+   (|endstate_sSyvqShtw| . 2)
+   (|x_sSAkkdjtw| . 5)
    (null? . 2)
-   (|b_1QNyzLtON| . 2)
-   (|a_1QrCBitON| . 2)
+   (|b_sSwGwvgtw| . 2)
+   (|a_sSaKy2gtw| . 2)
    (> . 1)
    (>= . 1)
-   (|_and2_1QpNHXrON| . 2)
+   (|_and2_sS8VEHetw| . 2)
    (= . 2)
-   (|b_1Q5GDRsON| . 2)
-   (|a_1QLJFosON| . 2)
+   (|b_sSQNABftw| . 2)
+   (|a_sSuRC8ftw| . 2)
    (< . 1)
-   (|_comp_help_1Q3RJurON| . 2)
+   (|_comp_help_sSOYGeetw| . 2)
    (<= . 1))
-  ((|loop_1Qvgp0wON| . 1) (>= . 1) (<= . 1))
+  ((|loop_sSeomMitw| . 1) (>= . 1) (<= . 1))
   (null? cadr car cdr <= = < >= >)
   ((#%lambda #t
-     (|_comp_help_1Q3RJurON| |_and2_1QpNHXrON|)
+     (|_comp_help_sSOYGeetw| |_and2_sS8VEHetw|)
      ()
      (#%begin
        (#%set! <=
-         (|_comp_help_1Q3RJurON|
+         (|_comp_help_sSOYGeetw|
            (#%lambda #t
-             (|a_1QLJFosON| |b_1Q5GDRsON|)
+             (|a_sSuRC8ftw| |b_sSQNABftw|)
              ()
-             (#%if (< |a_1QLJFosON| |b_1Q5GDRsON|)
+             (#%if (< |a_sSuRC8ftw| |b_sSQNABftw|)
                #t
-               (= |a_1QLJFosON| |b_1Q5GDRsON|)))
-           |_and2_1QpNHXrON|
+               (= |a_sSuRC8ftw| |b_sSQNABftw|)))
+           |_and2_sS8VEHetw|
            #t))
        (#%set! >=
-         (|_comp_help_1Q3RJurON|
+         (|_comp_help_sSOYGeetw|
            (#%lambda #t
-             (|a_1QrCBitON| |b_1QNyzLtON|)
+             (|a_sSaKy2gtw| |b_sSwGwvgtw|)
              ()
-             (#%if (> |a_1QrCBitON| |b_1QNyzLtON|)
+             (#%if (> |a_sSaKy2gtw| |b_sSwGwvgtw|)
                #t
-               (= |a_1QrCBitON| |b_1QNyzLtON|)))
-           |_and2_1QpNHXrON|
+               (= |a_sSaKy2gtw| |b_sSwGwvgtw|)))
+           |_and2_sS8VEHetw|
            #t))))
    (#%lambda #t
-     (|comparator_1Q7vxcuON|
-       |chainer_1QtrvFuON|
-       |endstate_1QPnt6vON|)
+     (|comparator_sSSCuYgtw|
+       |chainer_sSczsphtw|
+       |endstate_sSyvqShtw|)
      ()
      (#%lambda #t
-       |args_1Q9krzvON|
-       (|endstate_1QPnt6vON|
-         |chainer_1QtrvFuON|
-         |comparator_1Q7vxcuON|)
+       |args_sSUrojitw|
+       (|endstate_sSyvqShtw|
+         |chainer_sSczsphtw|
+         |comparator_sSSCuYgtw|)
        ((#%letrec #t
-          ((|loop_1Qvgp0wON|
+          ((|loop_sSeomMitw|
              (#%lambda #t
-               (|x_1QRcntwON|)
-               (|loop_1Qvgp0wON|
-                 |endstate_1QPnt6vON|
-                 |chainer_1QtrvFuON|
-                 |comparator_1Q7vxcuON|)
-               (#%if (null? |x_1QRcntwON|)
-                 |endstate_1QPnt6vON|
-                 (#%if (null? (cdr |x_1QRcntwON|))
-                   |endstate_1QPnt6vON|
-                   (|chainer_1QtrvFuON|
-                     (|comparator_1Q7vxcuON|
-                       (car |x_1QRcntwON|)
-                       (cadr |x_1QRcntwON|))
-                     (|loop_1Qvgp0wON| (cdr |x_1QRcntwON|))))))))
-          (|endstate_1QPnt6vON|
-            |chainer_1QtrvFuON|
-            |comparator_1Q7vxcuON|)
-          |loop_1Qvgp0wON|)
-        |args_1Q9krzvON|)))
+               (|x_sSAkkdjtw|)
+               (|loop_sSeomMitw|
+                 |endstate_sSyvqShtw|
+                 |chainer_sSczsphtw|
+                 |comparator_sSSCuYgtw|)
+               (#%if (null? |x_sSAkkdjtw|)
+                 |endstate_sSyvqShtw|
+                 (#%if (null? (cdr |x_sSAkkdjtw|))
+                   |endstate_sSyvqShtw|
+                   (|chainer_sSczsphtw|
+                     (|comparator_sSSCuYgtw|
+                       (car |x_sSAkkdjtw|)
+                       (cadr |x_sSAkkdjtw|))
+                     (|loop_sSeomMitw| (cdr |x_sSAkkdjtw|))))))))
+          (|endstate_sSyvqShtw|
+            |chainer_sSczsphtw|
+            |comparator_sSSCuYgtw|)
+          |loop_sSeomMitw|)
+        |args_sSUrojitw|)))
    (#%lambda #t
-     (|x_1Qb9lWwON| |y_1Qx5jnxON|)
+     (|x_sSWgiGjtw| |y_sSgdg7ktw|)
      ()
-     (#%if |x_1Qb9lWwON| |y_1Qx5jnxON| #f))))
+     (#%if |x_sSWgiGjtw| |y_sSgdg7ktw| #f))))
 (#%program
-  ((|chainer_1QzWcKyON| . 1)
+  ((|chainer_sSi2aultw| . 1)
    (apply . 1)
-   (|comparator_1Qd-ehyON| . 1)
+   (|comparator_sSY5c1ltw| . 1)
    (cadr . 2)
    (car . 2)
    (= . 1)
    (cdr . 2)
-   (|args_1QVSabzON| . 7)
+   (|args_sSE-7Xltw| . 7)
    (null? . 2)
    (< . 1)
    (<= . 2)
    (> . 1)
-   (|_?=_1QT1hQxON| . 2)
+   (|_?=_sSC9eAktw| . 2)
    (>= . 2))
   ((<= . 1) (>= . 1))
   (< <= <= > >= >= null? = car cadr apply cdr)
   ((#%lambda #t
-     (|_?=_1QT1hQxON|)
+     (|_?=_sSC9eAktw|)
      ()
      (#%begin
-       (#%set! >= (|_?=_1QT1hQxON| > >=))
-       (#%set! <= (|_?=_1QT1hQxON| < <=))))
+       (#%set! >= (|_?=_sSC9eAktw| > >=))
+       (#%set! <= (|_?=_sSC9eAktw| < <=))))
    (#%lambda #t
-     (|comparator_1Qd-ehyON| |chainer_1QzWcKyON|)
+     (|comparator_sSY5c1ltw| |chainer_sSi2aultw|)
      ()
      (#%lambda #t
-       |args_1QVSabzON|
-       (|chainer_1QzWcKyON| |comparator_1Qd-ehyON|)
-       (#%if (null? |args_1QVSabzON|)
+       |args_sSE-7Xltw|
+       (|chainer_sSi2aultw| |comparator_sSY5c1ltw|)
+       (#%if (null? |args_sSE-7Xltw|)
          #t
-         (#%if (null? (cdr |args_1QVSabzON|))
+         (#%if (null? (cdr |args_sSE-7Xltw|))
            #t
-           (#%if (#%if (= (car |args_1QVSabzON|)
-                          (cadr |args_1QVSabzON|))
+           (#%if (#%if (= (car |args_sSE-7Xltw|)
+                          (cadr |args_sSE-7Xltw|))
                    #t
-                   (|comparator_1Qd-ehyON|
-                     (car |args_1QVSabzON|)
-                     (cadr |args_1QVSabzON|)))
-             (apply |chainer_1QzWcKyON|
-                    (cdr |args_1QVSabzON|))
+                   (|comparator_sSY5c1ltw|
+                     (car |args_sSE-7Xltw|)
+                     (cadr |args_sSE-7Xltw|)))
+             (apply |chainer_sSi2aultw|
+                    (cdr |args_sSE-7Xltw|))
              #f)))))))
 (#%program
   ((cadr . 1)
    (_gcd . 1)
    (car . 2)
    (cdr . 1)
-   (|args_1QBL65AON| . 5)
+   (|args_sSkT3Rmtw| . 5)
    (null? . 2))
   ()
   (cdr car cadr _gcd null?)
   (#%define gcd
     (#%lambda #t
-      |args_1QBL65AON|
+      |args_sSkT3Rmtw|
       ()
-      (#%if (null? |args_1QBL65AON|)
+      (#%if (null? |args_sSkT3Rmtw|)
         0
-        (#%if (null? (cdr |args_1QBL65AON|))
-          (car |args_1QBL65AON|)
-          (_gcd (car |args_1QBL65AON|)
-                (cadr |args_1QBL65AON|)))))))
+        (#%if (null? (cdr |args_sSkT3Rmtw|))
+          (car |args_sSkT3Rmtw|)
+          (_gcd (car |args_sSkT3Rmtw|)
+                (cadr |args_sSkT3Rmtw|)))))))
 (#%program
   ((cadr . 1)
    (_lcm . 1)
    (car . 2)
    (cdr . 1)
-   (|args_1QXH4yAON| . 5)
+   (|args_sSGP1intw| . 5)
    (null? . 2))
   ()
   (cdr car cadr _lcm null?)
   (#%define lcm
     (#%lambda #t
-      |args_1QXH4yAON|
+      |args_sSGP1intw|
       ()
-      (#%if (null? |args_1QXH4yAON|)
+      (#%if (null? |args_sSGP1intw|)
         1
-        (#%if (null? (cdr |args_1QXH4yAON|))
-          (car |args_1QXH4yAON|)
-          (_lcm (car |args_1QXH4yAON|)
-                (cadr |args_1QXH4yAON|)))))))
+        (#%if (null? (cdr |args_sSGP1intw|))
+          (car |args_sSGP1intw|)
+          (_lcm (car |args_sSGP1intw|)
+                (cadr |args_sSGP1intw|)))))))
 (#%program
-  ((|x_1QhE2_AON| . 1)
+  ((|x_sS0M_Kntw| . 1)
    (remainder . 1)
    (+ . 1)
-   (|r_1QZw-UBON| . 3)
+   (|r_sSIEXEotw| . 3)
    (positive? . 1)
-   (|y_1QDA0sBON| . 3)
+   (|y_sSmIZbotw| . 3)
    (negative? . 2))
   ()
   (remainder positive? negative? +)
   (#%define modulo
     (#%lambda #t
-      (|x_1QhE2_AON| |y_1QDA0sBON|)
+      (|x_sS0M_Kntw| |y_sSmIZbotw|)
       ()
       ((#%lambda #t
-         (|r_1QZw-UBON|)
-         (|y_1QDA0sBON|)
-         (#%if ((#%if (negative? |y_1QDA0sBON|)
+         (|r_sSIEXEotw|)
+         (|y_sSmIZbotw|)
+         (#%if ((#%if (negative? |y_sSmIZbotw|)
                   positive?
                   negative?)
-                |r_1QZw-UBON|)
-           (+ |r_1QZw-UBON| |y_1QDA0sBON|)
-           |r_1QZw-UBON|))
-       (remainder |x_1QhE2_AON| |y_1QDA0sBON|)))))
+                |r_sSIEXEotw|)
+           (+ |r_sSIEXEotw| |y_sSmIZbotw|)
+           |r_sSIEXEotw|))
+       (remainder |x_sS0M_Kntw| |y_sSmIZbotw|)))))
 (#%program
-  ((|args_1QFpWOCON| . 3)
+  ((|args_sSoxTyptw| . 3)
    (cdr . 2)
    (car . 2)
    (_string-append . 1)
-   (|string-append-helper_1QjtYlCON| . 2)
-   (|acc_1Q_lUfDON| . 2)
-   (|args_1QliSIDON| . 3)
+   (|string-append-helper_sS2BV5ptw| . 2)
+   (|acc_sSKtR_ptw| . 2)
+   (|args_sS4qPsqtw| . 3)
    (null? . 2))
-  ((|string-append-helper_1QjtYlCON| . 1))
+  ((|string-append-helper_sS2BV5ptw| . 1))
   (car _string-append cdr null?)
   (#%define string-append
     (#%letrec #t
-      ((|string-append-helper_1QjtYlCON|
+      ((|string-append-helper_sS2BV5ptw|
          (#%lambda #t
-           (|acc_1Q_lUfDON| |args_1QliSIDON|)
-           (|string-append-helper_1QjtYlCON|)
-           (#%if (null? |args_1QliSIDON|)
-             |acc_1Q_lUfDON|
-             (|string-append-helper_1QjtYlCON|
+           (|acc_sSKtR_ptw| |args_sS4qPsqtw|)
+           (|string-append-helper_sS2BV5ptw|)
+           (#%if (null? |args_sS4qPsqtw|)
+             |acc_sSKtR_ptw|
+             (|string-append-helper_sS2BV5ptw|
                (_string-append
-                 |acc_1Q_lUfDON|
-                 (car |args_1QliSIDON|))
-               (cdr |args_1QliSIDON|))))))
+                 |acc_sSKtR_ptw|
+                 (car |args_sS4qPsqtw|))
+               (cdr |args_sS4qPsqtw|))))))
       ()
       (#%lambda #t
-        |args_1QFpWOCON|
-        (|string-append-helper_1QjtYlCON|)
-        (#%if (null? |args_1QFpWOCON|)
+        |args_sSoxTyptw|
+        (|string-append-helper_sS2BV5ptw|)
+        (#%if (null? |args_sSoxTyptw|)
           ""
-          (|string-append-helper_1QjtYlCON|
-            (car |args_1QFpWOCON|)
-            (cdr |args_1QFpWOCON|)))))))
+          (|string-append-helper_sS2BV5ptw|
+            (car |args_sSoxTyptw|)
+            (cdr |args_sSoxTyptw|)))))))
 (#%program
   ((- . 1)
    (char->integer . 4)
-   (|c_1QJ3KwFON| . 2)
-   (|lc-offset_1Qn7M3FON| . 1)
+   (|c_sSsbHgstw| . 2)
+   (|lc-offset_sS6fJPrtw| . 1)
    (+ . 1)
    (integer->char . 1)
-   (|z_1Q1bOCEON| . 1)
+   (|z_sSMiLmrtw| . 1)
    (<= . 1)
-   (|a_1QHeQ9EON| . 2)
-   (|cv_1Q30IZFON| . 3)
+   (|a_sSqmNVqtw| . 2)
+   (|cv_sSO7FJstw| . 3)
    (>= . 1))
   ()
   (integer->char + >= <= char->integer -)
   (#%define char-downcase
     ((#%lambda #t
-       (|a_1QHeQ9EON|)
+       (|a_sSqmNVqtw|)
        ()
        ((#%lambda #t
-          (|z_1Q1bOCEON|)
-          (|a_1QHeQ9EON|)
+          (|z_sSMiLmrtw|)
+          (|a_sSqmNVqtw|)
           ((#%lambda #t
-             (|lc-offset_1Qn7M3FON|)
-             (|z_1Q1bOCEON| |a_1QHeQ9EON|)
+             (|lc-offset_sS6fJPrtw|)
+             (|z_sSMiLmrtw| |a_sSqmNVqtw|)
              (#%lambda #t
-               (|c_1QJ3KwFON|)
-               (|lc-offset_1Qn7M3FON|
-                 |z_1Q1bOCEON|
-                 |a_1QHeQ9EON|)
+               (|c_sSsbHgstw|)
+               (|lc-offset_sS6fJPrtw|
+                 |z_sSMiLmrtw|
+                 |a_sSqmNVqtw|)
                ((#%lambda #t
-                  (|cv_1Q30IZFON|)
-                  (|c_1QJ3KwFON|
-                    |lc-offset_1Qn7M3FON|
-                    |z_1Q1bOCEON|
-                    |a_1QHeQ9EON|)
-                  (#%if (#%if (>= |cv_1Q30IZFON| |a_1QHeQ9EON|)
-                          (<= |cv_1Q30IZFON| |z_1Q1bOCEON|)
+                  (|cv_sSO7FJstw|)
+                  (|c_sSsbHgstw|
+                    |lc-offset_sS6fJPrtw|
+                    |z_sSMiLmrtw|
+                    |a_sSqmNVqtw|)
+                  (#%if (#%if (>= |cv_sSO7FJstw| |a_sSqmNVqtw|)
+                          (<= |cv_sSO7FJstw| |z_sSMiLmrtw|)
                           #f)
                     (integer->char
-                      (+ |cv_1Q30IZFON| |lc-offset_1Qn7M3FON|))
-                    |c_1QJ3KwFON|))
-                (char->integer |c_1QJ3KwFON|))))
-           (- (char->integer #\a) |a_1QHeQ9EON|)))
+                      (+ |cv_sSO7FJstw| |lc-offset_sS6fJPrtw|))
+                    |c_sSsbHgstw|))
+                (char->integer |c_sSsbHgstw|))))
+           (- (char->integer #\a) |a_sSqmNVqtw|)))
         (char->integer #\Z)))
      (char->integer #\A))))
 (#%program
   ((char->integer . 4)
-   (|c_1QrNzNHON| . 2)
-   (|uc-offset_1Q5RBkHON| . 1)
+   (|c_sSaVwxutw| . 2)
+   (|uc-offset_sSQYy4utw| . 1)
    (- . 2)
    (integer->char . 1)
-   (|z_1QLUDTGON| . 1)
+   (|z_sSu0BDttw| . 1)
    (<= . 1)
-   (|a_1QpYFqGON| . 2)
-   (|cv_1QNJxeION| . 3)
+   (|a_sS84Dattw| . 2)
+   (|cv_sSwRu-utw| . 3)
    (>= . 1))
   ()
   (integer->char - >= <= char->integer)
   (#%define char-upcase
     ((#%lambda #t
-       (|a_1QpYFqGON|)
+       (|a_sS84Dattw|)
        ()
        ((#%lambda #t
-          (|z_1QLUDTGON|)
-          (|a_1QpYFqGON|)
+          (|z_sSu0BDttw|)
+          (|a_sS84Dattw|)
           ((#%lambda #t
-             (|uc-offset_1Q5RBkHON|)
-             (|z_1QLUDTGON| |a_1QpYFqGON|)
+             (|uc-offset_sSQYy4utw|)
+             (|z_sSu0BDttw| |a_sS84Dattw|)
              (#%lambda #t
-               (|c_1QrNzNHON|)
-               (|uc-offset_1Q5RBkHON|
-                 |z_1QLUDTGON|
-                 |a_1QpYFqGON|)
+               (|c_sSaVwxutw|)
+               (|uc-offset_sSQYy4utw|
+                 |z_sSu0BDttw|
+                 |a_sS84Dattw|)
                ((#%lambda #t
-                  (|cv_1QNJxeION|)
-                  (|c_1QrNzNHON|
-                    |uc-offset_1Q5RBkHON|
-                    |z_1QLUDTGON|
-                    |a_1QpYFqGON|)
-                  (#%if (#%if (>= |cv_1QNJxeION| |a_1QpYFqGON|)
-                          (<= |cv_1QNJxeION| |z_1QLUDTGON|)
+                  (|cv_sSwRu-utw|)
+                  (|c_sSaVwxutw|
+                    |uc-offset_sSQYy4utw|
+                    |z_sSu0BDttw|
+                    |a_sS84Dattw|)
+                  (#%if (#%if (>= |cv_sSwRu-utw| |a_sS84Dattw|)
+                          (<= |cv_sSwRu-utw| |z_sSu0BDttw|)
                           #f)
                     (integer->char
-                      (- |cv_1QNJxeION| |uc-offset_1Q5RBkHON|))
-                    |c_1QrNzNHON|))
-                (char->integer |c_1QrNzNHON|))))
-           (- |a_1QpYFqGON| (char->integer #\A))))
+                      (- |cv_sSwRu-utw| |uc-offset_sSQYy4utw|))
+                    |c_sSaVwxutw|))
+                (char->integer |c_sSaVwxutw|))))
+           (- |a_sS84Dattw| (char->integer #\A))))
         (char->integer #\z)))
      (char->integer #\a))))
 (#%program
-  ((|args_1Q7GvHION| . 1)
+  ((|args_sSSNsrvtw| . 1)
    (map . 1)
-   (|c2_1QtCt8JON| . 1)
-   (|c1_1QPyrBJON| . 1)
+   (|c2_sScKqUvtw| . 1)
+   (|c1_sSyGolwtw| . 1)
    (char->integer . 3)
    (> . 1)
    (apply . 1))
@@ -1977,20 +1979,20 @@
   (map char->integer > apply)
   (#%define char>?
     (#%lambda #t
-      (|c1_1QPyrBJON|
-        |c2_1QtCt8JON|
+      (|c1_sSyGolwtw|
+        |c2_sScKqUvtw|
         .
-        |args_1Q7GvHION|)
+        |args_sSSNsrvtw|)
       ()
       (apply >
-             (char->integer |c1_1QPyrBJON|)
-             (char->integer |c2_1QtCt8JON|)
-             (map char->integer |args_1Q7GvHION|)))))
+             (char->integer |c1_sSyGolwtw|)
+             (char->integer |c2_sScKqUvtw|)
+             (map char->integer |args_sSSNsrvtw|)))))
 (#%program
-  ((|args_1Q9vp2KON| . 1)
+  ((|args_sSUCmOwtw| . 1)
    (map . 1)
-   (|c2_1QvrnvKON| . 1)
-   (|c1_1QRnlYKON| . 1)
+   (|c2_sSezkfxtw| . 1)
+   (|c1_sSAviIxtw| . 1)
    (char->integer . 3)
    (< . 1)
    (apply . 1))
@@ -1998,15 +2000,15 @@
   (map char->integer < apply)
   (#%define char<?
     (#%lambda #t
-      (|c1_1QRnlYKON|
-        |c2_1QvrnvKON|
+      (|c1_sSAviIxtw|
+        |c2_sSezkfxtw|
         .
-        |args_1Q9vp2KON|)
+        |args_sSUCmOwtw|)
       ()
       (apply <
-             (char->integer |c1_1QRnlYKON|)
-             (char->integer |c2_1QvrnvKON|)
-             (map char->integer |args_1Q9vp2KON|)))))
+             (char->integer |c1_sSAviIxtw|)
+             (char->integer |c2_sSezkfxtw|)
+             (map char->integer |args_sSUCmOwtw|)))))
 (#%program
   ((eqv? . 1))
   ()
@@ -2014,37 +2016,37 @@
   (#%define char=? eqv?))
 (#%program
   ((char=? . 1)
-   (|c2_1QxghSLON| . 2)
-   (|c1_1QbkjpLON| . 2)
+   (|c2_sSgoeCytw| . 2)
+   (|c1_sSWrg9ytw| . 2)
    (char>? . 1))
   ()
   (char=? char>?)
   (#%define char>=?
     (#%lambda #t
-      (|c1_1QbkjpLON| |c2_1QxghSLON|)
+      (|c1_sSWrg9ytw| |c2_sSgoeCytw|)
       ()
-      (#%if (char>? |c1_1QbkjpLON| |c2_1QxghSLON|)
+      (#%if (char>? |c1_sSWrg9ytw| |c2_sSgoeCytw|)
         #t
-        (char=? |c1_1QbkjpLON| |c2_1QxghSLON|)))))
+        (char=? |c1_sSWrg9ytw| |c2_sSgoeCytw|)))))
 (#%program
   ((char=? . 1)
-   (|c2_1Qd9dMMON| . 2)
-   (|c1_1QTcfjMON| . 2)
+   (|c2_sSYgawztw| . 2)
+   (|c1_sSCkc3ztw| . 2)
    (char<? . 1))
   ()
   (char=? char<?)
   (#%define char<=?
     (#%lambda #t
-      (|c1_1QTcfjMON| |c2_1Qd9dMMON|)
+      (|c1_sSCkc3ztw| |c2_sSYgawztw|)
       ()
-      (#%if (char<? |c1_1QTcfjMON| |c2_1Qd9dMMON|)
+      (#%if (char<? |c1_sSCkc3ztw| |c2_sSYgawztw|)
         #t
-        (char=? |c1_1QTcfjMON| |c2_1Qd9dMMON|)))))
+        (char=? |c1_sSCkc3ztw| |c2_sSYgawztw|)))))
 (#%program
-  ((|args_1Qz5bdNON| . 1)
+  ((|args_sSid8Zztw| . 1)
    (map . 1)
-   (|c2_1QV19GNON| . 1)
-   (|c1_1Qf-67OON| . 1)
+   (|c2_sSE96qAtw| . 1)
+   (|c1_sS-54TAtw| . 1)
    (char-downcase . 3)
    (char>? . 1)
    (apply . 1))
@@ -2052,20 +2054,20 @@
   (map char-downcase char>? apply)
   (#%define char-ci>?
     (#%lambda #t
-      (|c1_1Qf-67OON|
-        |c2_1QV19GNON|
+      (|c1_sS-54TAtw|
+        |c2_sSE96qAtw|
         .
-        |args_1Qz5bdNON|)
+        |args_sSid8Zztw|)
       ()
       (apply char>?
-             (char-downcase |c1_1Qf-67OON|)
-             (char-downcase |c2_1QV19GNON|)
-             (map char-downcase |args_1Qz5bdNON|)))))
+             (char-downcase |c1_sS-54TAtw|)
+             (char-downcase |c2_sSE96qAtw|)
+             (map char-downcase |args_sSid8Zztw|)))))
 (#%program
-  ((|args_1QBW4AOON| . 1)
+  ((|args_sSk22kBtw| . 1)
    (map . 1)
-   (|c2_1QXS21PON| . 1)
-   (|c1_1QhP0uPON| . 1)
+   (|c2_sSG-_MBtw| . 1)
+   (|c1_sS0XZdCtw| . 1)
    (char-downcase . 3)
    (char<? . 1)
    (apply . 1))
@@ -2073,20 +2075,20 @@
   (map char-downcase char<? apply)
   (#%define char-ci<?
     (#%lambda #t
-      (|c1_1QhP0uPON|
-        |c2_1QXS21PON|
+      (|c1_sS0XZdCtw|
+        |c2_sSG-_MBtw|
         .
-        |args_1QBW4AOON|)
+        |args_sSk22kBtw|)
       ()
       (apply char<?
-             (char-downcase |c1_1QhP0uPON|)
-             (char-downcase |c2_1QXS21PON|)
-             (map char-downcase |args_1QBW4AOON|)))))
+             (char-downcase |c1_sS0XZdCtw|)
+             (char-downcase |c2_sSG-_MBtw|)
+             (map char-downcase |args_sSk22kBtw|)))))
 (#%program
-  ((|args_1QDL-WPON| . 1)
+  ((|args_sSmTXGCtw| . 1)
    (map . 1)
-   (|c2_1QZHYnQON| . 1)
-   (|c1_1QjEWQQON| . 1)
+   (|c2_sSIPV7Dtw| . 1)
+   (|c1_sS2MTADtw| . 1)
    (char-downcase . 3)
    (char=? . 1)
    (apply . 1))
@@ -2094,96 +2096,96 @@
   (map char-downcase char=? apply)
   (#%define char-ci=?
     (#%lambda #t
-      (|c1_1QjEWQQON|
-        |c2_1QZHYnQON|
+      (|c1_sS2MTADtw|
+        |c2_sSIPV7Dtw|
         .
-        |args_1QDL-WPON|)
+        |args_sSmTXGCtw|)
       ()
       (apply char=?
-             (char-downcase |c1_1QjEWQQON|)
-             (char-downcase |c2_1QZHYnQON|)
-             (map char-downcase |args_1QDL-WPON|)))))
+             (char-downcase |c1_sS2MTADtw|)
+             (char-downcase |c2_sSIPV7Dtw|)
+             (map char-downcase |args_sSmTXGCtw|)))))
 (#%program
   ((char-ci=? . 1)
-   (|c2_1Q_wSKRON| . 2)
-   (|c1_1QFAUhRON| . 2)
+   (|c2_sSKEPuEtw| . 2)
+   (|c1_sSoIR1Etw| . 2)
    (char-ci>? . 1))
   ()
   (char-ci=? char-ci>?)
   (#%define char-ci>=?
     (#%lambda #t
-      (|c1_1QFAUhRON| |c2_1Q_wSKRON|)
+      (|c1_sSoIR1Etw| |c2_sSKEPuEtw|)
       ()
-      (#%if (char-ci>? |c1_1QFAUhRON| |c2_1Q_wSKRON|)
+      (#%if (char-ci>? |c1_sSoIR1Etw| |c2_sSKEPuEtw|)
         #t
-        (char-ci=? |c1_1QFAUhRON| |c2_1Q_wSKRON|)))))
+        (char-ci=? |c1_sSoIR1Etw| |c2_sSKEPuEtw|)))))
 (#%program
   ((char-ci=? . 1)
-   (|c2_1QHpOESON| . 2)
-   (|c1_1QltQbSON| . 2)
+   (|c2_sSqxLoFtw| . 2)
+   (|c1_sS4BNXEtw| . 2)
    (char-ci<? . 1))
   ()
   (char-ci=? char-ci<?)
   (#%define char-ci<=?
     (#%lambda #t
-      (|c1_1QltQbSON| |c2_1QHpOESON|)
+      (|c1_sS4BNXEtw| |c2_sSqxLoFtw|)
       ()
-      (#%if (char-ci<? |c1_1QltQbSON| |c2_1QHpOESON|)
+      (#%if (char-ci<? |c1_sS4BNXEtw| |c2_sSqxLoFtw|)
         #t
-        (char-ci=? |c1_1QltQbSON| |c2_1QHpOESON|)))))
+        (char-ci=? |c1_sS4BNXEtw| |c2_sSqxLoFtw|)))))
 (#%program
-  ((|c_1Q1mM5TON| . 2) (char<? . 2))
+  ((|c_sSMtJRFtw| . 2) (char<? . 2))
   ()
   (char<?)
   (#%define char-alphabetic?
     (#%lambda #t
-      (|c_1Q1mM5TON|)
+      (|c_sSMtJRFtw|)
       ()
-      (#%if (char<? #\@ |c_1Q1mM5TON| #\[)
+      (#%if (char<? #\@ |c_sSMtJRFtw| #\[)
         #t
-        (char<? #\` |c_1Q1mM5TON| #\{)))))
+        (char<? #\` |c_sSMtJRFtw| #\{)))))
 (#%program
-  ((|c_1QniKyTON| . 1) (char<? . 1))
+  ((|c_sS6qHiGtw| . 1) (char<? . 1))
   ()
   (char<?)
   (#%define char-numeric?
     (#%lambda #t
-      (|c_1QniKyTON|)
+      (|c_sS6qHiGtw|)
       ()
-      (char<? #\/ |c_1QniKyTON| #\:))))
+      (char<? #\/ |c_sS6qHiGtw| #\:))))
 (#%program
-  ((|c_1QJeI_TON| . 4) (char=? . 4))
+  ((|c_sSsmFLGtw| . 4) (char=? . 4))
   ()
   (char=?)
   (#%define char-whitespace?
     (#%lambda #t
-      (|c_1QJeI_TON|)
+      (|c_sSsmFLGtw|)
       ()
-      (#%if (char=? |c_1QJeI_TON| #\space)
+      (#%if (char=? |c_sSsmFLGtw| #\space)
         #t
-        (#%if (char=? |c_1QJeI_TON| #\tab)
+        (#%if (char=? |c_sSsmFLGtw| #\tab)
           #t
-          (#%if (char=? |c_1QJeI_TON| #\newline)
+          (#%if (char=? |c_sSsmFLGtw| #\newline)
             #t
-            (char=? |c_1QJeI_TON| #\return)))))))
+            (char=? |c_sSsmFLGtw| #\return)))))))
 (#%program
-  ((|c_1Q3bGsUON| . 1) (char<? . 1))
+  ((|c_sSOiDcHtw| . 1) (char<? . 1))
   ()
   (char<?)
   (#%define char-upper-case?
     (#%lambda #t
-      (|c_1Q3bGsUON|)
+      (|c_sSOiDcHtw|)
       ()
-      (char<? #\@ |c_1Q3bGsUON| #\[))))
+      (char<? #\@ |c_sSOiDcHtw| #\[))))
 (#%program
-  ((|c_1Qp7EVUON| . 1) (char<? . 1))
+  ((|c_sS8fBFHtw| . 1) (char<? . 1))
   ()
   (char<?)
   (#%define char-lower-case?
     (#%lambda #t
-      (|c_1Qp7EVUON|)
+      (|c_sS8fBFHtw|)
       ()
-      (char<? #\` |c_1Qp7EVUON| #\{))))
+      (char<? #\` |c_sS8fBFHtw| #\{))))
 (#%program
   ((void . 1))
   ()
@@ -2196,28 +2198,28 @@
   (#%define string-upcase (void)))
 (#%program
   ((char-upcase . 1)
-   (|newstr_1Q7RtaXON| . 1)
-   (|str_1QNUvJWON| . 3)
+   (|newstr_sSSYqWJtw| . 1)
+   (|str_sSw0ttJtw| . 3)
    (string-upcase . 1)
    (make-string . 2)
    (string-length . 4)
    (char-downcase . 1)
-   (|newstr_1QrYxgWON| . 1)
-   (|str_1Q50APVON| . 3)
+   (|newstr_sSa4v0Jtw| . 1)
+   (|str_sSQ7xzItw| . 3)
    (string-downcase . 1)
    (+ . 1)
-   (|string-map_1QL3CmVON| . 3)
-   (|strsrc_1QtNrDXON| . 2)
+   (|string-map_sSubz6Itw| . 3)
+   (|strsrc_sScVonKtw| . 2)
    (string-ref . 1)
-   (|proc_1Q9GnxYON| . 2)
-   (|strdst_1QPJp4YON| . 3)
+   (|proc_sSUNkhLtw| . 2)
+   (|strdst_sSyRmQKtw| . 3)
    (string-set! . 1)
-   (|l_1QRyjrZON| . 2)
-   (|n_1QvCl-YON| . 4)
+   (|l_sSAGgbMtw| . 2)
+   (|n_sSeKiKLtw| . 4)
    (< . 1))
   ((string-upcase . 1)
    (string-downcase . 1)
-   (|string-map_1QL3CmVON| . 1))
+   (|string-map_sSubz6Itw| . 1))
   (string-downcase
     string-length
     char-downcase
@@ -2229,349 +2231,349 @@
     +
     <)
   (#%letrec #t
-    ((|string-map_1QL3CmVON|
+    ((|string-map_sSubz6Itw|
        (#%lambda #t
-         (|strsrc_1QtNrDXON|
-           |strdst_1QPJp4YON|
-           |proc_1Q9GnxYON|
-           |n_1QvCl-YON|
-           |l_1QRyjrZON|)
-         (|string-map_1QL3CmVON|)
-         (#%if (< |n_1QvCl-YON| |l_1QRyjrZON|)
+         (|strsrc_sScVonKtw|
+           |strdst_sSyRmQKtw|
+           |proc_sSUNkhLtw|
+           |n_sSeKiKLtw|
+           |l_sSAGgbMtw|)
+         (|string-map_sSubz6Itw|)
+         (#%if (< |n_sSeKiKLtw| |l_sSAGgbMtw|)
            (#%begin
              (string-set!
-               |strdst_1QPJp4YON|
-               |n_1QvCl-YON|
-               (|proc_1Q9GnxYON|
-                 (string-ref |strsrc_1QtNrDXON| |n_1QvCl-YON|)))
-             (|string-map_1QL3CmVON|
-               |strsrc_1QtNrDXON|
-               |strdst_1QPJp4YON|
-               |proc_1Q9GnxYON|
-               (+ |n_1QvCl-YON| 1)
-               |l_1QRyjrZON|))
-           |strdst_1QPJp4YON|))))
+               |strdst_sSyRmQKtw|
+               |n_sSeKiKLtw|
+               (|proc_sSUNkhLtw|
+                 (string-ref |strsrc_sScVonKtw| |n_sSeKiKLtw|)))
+             (|string-map_sSubz6Itw|
+               |strsrc_sScVonKtw|
+               |strdst_sSyRmQKtw|
+               |proc_sSUNkhLtw|
+               (+ |n_sSeKiKLtw| 1)
+               |l_sSAGgbMtw|))
+           |strdst_sSyRmQKtw|))))
     ()
     (#%begin
       (#%set! string-downcase
         (#%lambda #t
-          (|str_1Q50APVON|)
-          (|string-map_1QL3CmVON|)
+          (|str_sSQ7xzItw|)
+          (|string-map_sSubz6Itw|)
           ((#%lambda #t
-             (|newstr_1QrYxgWON|)
-             (|str_1Q50APVON| |string-map_1QL3CmVON|)
-             (|string-map_1QL3CmVON|
-               |str_1Q50APVON|
-               |newstr_1QrYxgWON|
+             (|newstr_sSa4v0Jtw|)
+             (|str_sSQ7xzItw| |string-map_sSubz6Itw|)
+             (|string-map_sSubz6Itw|
+               |str_sSQ7xzItw|
+               |newstr_sSa4v0Jtw|
                char-downcase
                0
-               (string-length |str_1Q50APVON|)))
-           (make-string (string-length |str_1Q50APVON|)))))
+               (string-length |str_sSQ7xzItw|)))
+           (make-string (string-length |str_sSQ7xzItw|)))))
       (#%set! string-upcase
         (#%lambda #t
-          (|str_1QNUvJWON|)
-          (|string-map_1QL3CmVON|)
+          (|str_sSw0ttJtw|)
+          (|string-map_sSubz6Itw|)
           ((#%lambda #t
-             (|newstr_1Q7RtaXON|)
-             (|str_1QNUvJWON| |string-map_1QL3CmVON|)
-             (|string-map_1QL3CmVON|
-               |str_1QNUvJWON|
-               |newstr_1Q7RtaXON|
+             (|newstr_sSSYqWJtw|)
+             (|str_sSw0ttJtw| |string-map_sSubz6Itw|)
+             (|string-map_sSubz6Itw|
+               |str_sSw0ttJtw|
+               |newstr_sSSYqWJtw|
                char-upcase
                0
-               (string-length |str_1QNUvJWON|)))
-           (make-string (string-length |str_1QNUvJWON|))))))))
+               (string-length |str_sSw0ttJtw|)))
+           (make-string (string-length |str_sSw0ttJtw|))))))))
 (#%program
   ((equal? . 1))
   ()
   (equal?)
   (#%define string=? equal?))
 (#%program
-  ((|s2_1QTndO-ON| . 1)
-   (|s1_1Qxrfl-ON| . 1)
+  ((|s2_sSCvayNtw| . 1)
+   (|s1_sSgzc5Ntw| . 1)
    (string->list . 2)
    (car . 2)
    (cdr . 2)
-   (|s<?_1QbvhUZON| . 2)
+   (|s<?_sSWCeEMtw| . 2)
    (char>? . 1)
-   (|c2_1Qf95C0PN| . 2)
-   (|c1_1QVc790PN| . 2)
+   (|c2_sS-g2mPtw| . 2)
+   (|c1_sSEk4VOtw| . 2)
    (char<? . 1)
-   (|s2_1Qzg9I_ON| . 4)
+   (|s2_sSio6sOtw| . 4)
    (not . 1)
-   (|s1_1Qdkbf_ON| . 3)
+   (|s1_sSYr8_Ntw| . 3)
    (null? . 3))
-  ((|s<?_1QbvhUZON| . 1))
+  ((|s<?_sSWCeEMtw| . 1))
   (string->list car char<? cdr char>? not null?)
   (#%define string<?
     (#%letrec #t
-      ((|s<?_1QbvhUZON|
+      ((|s<?_sSWCeEMtw|
          (#%lambda #t
-           (|s1_1Qdkbf_ON| |s2_1Qzg9I_ON|)
-           (|s<?_1QbvhUZON|)
-           (#%if (null? |s1_1Qdkbf_ON|)
-             (not (null? |s2_1Qzg9I_ON|))
-             (#%if (null? |s2_1Qzg9I_ON|)
+           (|s1_sSYr8_Ntw| |s2_sSio6sOtw|)
+           (|s<?_sSWCeEMtw|)
+           (#%if (null? |s1_sSYr8_Ntw|)
+             (not (null? |s2_sSio6sOtw|))
+             (#%if (null? |s2_sSio6sOtw|)
                #f
                ((#%lambda #t
-                  (|c1_1QVc790PN| |c2_1Qf95C0PN|)
-                  (|s2_1Qzg9I_ON| |s1_1Qdkbf_ON| |s<?_1QbvhUZON|)
-                  (#%if (char<? |c1_1QVc790PN| |c2_1Qf95C0PN|)
+                  (|c1_sSEk4VOtw| |c2_sS-g2mPtw|)
+                  (|s2_sSio6sOtw| |s1_sSYr8_Ntw| |s<?_sSWCeEMtw|)
+                  (#%if (char<? |c1_sSEk4VOtw| |c2_sS-g2mPtw|)
                     #t
-                    (#%if (char>? |c1_1QVc790PN| |c2_1Qf95C0PN|)
+                    (#%if (char>? |c1_sSEk4VOtw| |c2_sS-g2mPtw|)
                       #f
-                      (|s<?_1QbvhUZON|
-                        (cdr |s1_1Qdkbf_ON|)
-                        (cdr |s2_1Qzg9I_ON|)))))
-                (car |s1_1Qdkbf_ON|)
-                (car |s2_1Qzg9I_ON|)))))))
+                      (|s<?_sSWCeEMtw|
+                        (cdr |s1_sSYr8_Ntw|)
+                        (cdr |s2_sSio6sOtw|)))))
+                (car |s1_sSYr8_Ntw|)
+                (car |s2_sSio6sOtw|)))))))
       ()
       (#%lambda #t
-        (|s1_1Qxrfl-ON| |s2_1QTndO-ON|)
-        (|s<?_1QbvhUZON|)
-        (|s<?_1QbvhUZON|
-          (string->list |s1_1Qxrfl-ON|)
-          (string->list |s2_1QTndO-ON|))))))
+        (|s1_sSgzc5Ntw| |s2_sSCvayNtw|)
+        (|s<?_sSWCeEMtw|)
+        (|s<?_sSWCeEMtw|
+          (string->list |s1_sSgzc5Ntw|)
+          (string->list |s2_sSCvayNtw|))))))
 (#%program
-  ((|s2_1Qh--Y1PN| . 1)
-   (|s1_1QX11w1PN| . 1)
+  ((|s2_sS06YIQtw| . 1)
+   (|s1_sSG9-fQtw| . 1)
    (string->list . 2)
    (car . 2)
    (cdr . 2)
-   (|s>?_1QB5331PN| . 2)
+   (|s>?_sSkd0PPtw| . 2)
    (char<? . 1)
-   (|c2_1QFLSM3PN| . 2)
-   (|c1_1QjPUj3PN| . 2)
+   (|c2_sSoTPwStw| . 2)
+   (|c1_sS2XR3Stw| . 2)
    (char>? . 1)
-   (|s1_1QDWYp2PN| . 4)
+   (|s1_sSm2W9Rtw| . 4)
    (not . 1)
-   (|s2_1QZSWS2PN| . 3)
+   (|s2_sSI-TCRtw| . 3)
    (null? . 3))
-  ((|s>?_1QB5331PN| . 1))
+  ((|s>?_sSkd0PPtw| . 1))
   (string->list car char>? cdr char<? not null?)
   (#%define string>?
     (#%letrec #t
-      ((|s>?_1QB5331PN|
+      ((|s>?_sSkd0PPtw|
          (#%lambda #t
-           (|s1_1QDWYp2PN| |s2_1QZSWS2PN|)
-           (|s>?_1QB5331PN|)
-           (#%if (null? |s2_1QZSWS2PN|)
-             (not (null? |s1_1QDWYp2PN|))
-             (#%if (null? |s1_1QDWYp2PN|)
+           (|s1_sSm2W9Rtw| |s2_sSI-TCRtw|)
+           (|s>?_sSkd0PPtw|)
+           (#%if (null? |s2_sSI-TCRtw|)
+             (not (null? |s1_sSm2W9Rtw|))
+             (#%if (null? |s1_sSm2W9Rtw|)
                #f
                ((#%lambda #t
-                  (|c1_1QjPUj3PN| |c2_1QFLSM3PN|)
-                  (|s2_1QZSWS2PN| |s1_1QDWYp2PN| |s>?_1QB5331PN|)
-                  (#%if (char>? |c1_1QjPUj3PN| |c2_1QFLSM3PN|)
+                  (|c1_sS2XR3Stw| |c2_sSoTPwStw|)
+                  (|s2_sSI-TCRtw| |s1_sSm2W9Rtw| |s>?_sSkd0PPtw|)
+                  (#%if (char>? |c1_sS2XR3Stw| |c2_sSoTPwStw|)
                     #t
-                    (#%if (char<? |c1_1QjPUj3PN| |c2_1QFLSM3PN|)
+                    (#%if (char<? |c1_sS2XR3Stw| |c2_sSoTPwStw|)
                       #f
-                      (|s>?_1QB5331PN|
-                        (cdr |s1_1QDWYp2PN|)
-                        (cdr |s2_1QZSWS2PN|)))))
-                (car |s1_1QDWYp2PN|)
-                (car |s2_1QZSWS2PN|)))))))
+                      (|s>?_sSkd0PPtw|
+                        (cdr |s1_sSm2W9Rtw|)
+                        (cdr |s2_sSI-TCRtw|)))))
+                (car |s1_sSm2W9Rtw|)
+                (car |s2_sSI-TCRtw|)))))))
       ()
       (#%lambda #t
-        (|s1_1QX11w1PN| |s2_1Qh--Y1PN|)
-        (|s>?_1QB5331PN|)
-        (|s>?_1QB5331PN|
-          (string->list |s1_1QX11w1PN|)
-          (string->list |s2_1Qh--Y1PN|))))))
+        (|s1_sSG9-fQtw| |s2_sS06YIQtw|)
+        (|s>?_sSkd0PPtw|)
+        (|s>?_sSkd0PPtw|
+          (string->list |s1_sSG9-fQtw|)
+          (string->list |s2_sS06YIQtw|))))))
 (#%program
   ((string=? . 1)
-   (|s2_1QlEOG4PN| . 2)
-   (|s1_1Q_HQd4PN| . 2)
+   (|s2_sS4MLqTtw| . 2)
+   (|s1_sSKPNZStw| . 2)
    (string<? . 1))
   ()
   (string=? string<?)
   (#%define string<=?
     (#%lambda #t
-      (|s1_1Q_HQd4PN| |s2_1QlEOG4PN|)
+      (|s1_sSKPNZStw| |s2_sS4MLqTtw|)
       ()
-      (#%if (string<? |s1_1Q_HQd4PN| |s2_1QlEOG4PN|)
+      (#%if (string<? |s1_sSKPNZStw| |s2_sS4MLqTtw|)
         #t
-        (string=? |s1_1Q_HQd4PN| |s2_1QlEOG4PN|)))))
+        (string=? |s1_sSKPNZStw| |s2_sS4MLqTtw|)))))
 (#%program
   ((string=? . 1)
-   (|s2_1Q1xKA5PN| . 2)
-   (|s1_1QHAM75PN| . 2)
+   (|s2_sSMEHkUtw| . 2)
+   (|s1_sSqIJTTtw| . 2)
    (string>? . 1))
   ()
   (string=? string>?)
   (#%define string>=?
     (#%lambda #t
-      (|s1_1QHAM75PN| |s2_1Q1xKA5PN|)
+      (|s1_sSqIJTTtw| |s2_sSMEHkUtw|)
       ()
-      (#%if (string>? |s1_1QHAM75PN| |s2_1Q1xKA5PN|)
+      (#%if (string>? |s1_sSqIJTTtw| |s2_sSMEHkUtw|)
         #t
-        (string=? |s1_1QHAM75PN| |s2_1Q1xKA5PN|)))))
+        (string=? |s1_sSqIJTTtw| |s2_sSMEHkUtw|)))))
 (#%program
-  ((|s2_1QJpGu6PN| . 1)
-   (|s1_1QntI16PN| . 1)
+  ((|s2_sSsxDeVtw| . 1)
+   (|s1_sS6BFNUtw| . 1)
    (string-downcase . 2)
    (string=? . 1))
   ()
   (string-downcase string=?)
   (#%define string-ci=?
     (#%lambda #t
-      (|s1_1QntI16PN| |s2_1QJpGu6PN|)
+      (|s1_sS6BFNUtw| |s2_sSsxDeVtw|)
       ()
       (string=?
-        (string-downcase |s1_1QntI16PN|)
-        (string-downcase |s2_1QJpGu6PN|)))))
+        (string-downcase |s1_sS6BFNUtw|)
+        (string-downcase |s2_sSsxDeVtw|)))))
 (#%program
-  ((|s2_1QpiCo7PN| . 1)
-   (|s1_1Q3mEX6PN| . 1)
+  ((|s2_sS8qz8Wtw| . 1)
+   (|s1_sSOtBHVtw| . 1)
    (string-downcase . 2)
    (string<? . 1))
   ()
   (string-downcase string<?)
   (#%define string-ci<?
     (#%lambda #t
-      (|s1_1Q3mEX6PN| |s2_1QpiCo7PN|)
+      (|s1_sSOtBHVtw| |s2_sS8qz8Wtw|)
       ()
       (string<?
-        (string-downcase |s1_1Q3mEX6PN|)
-        (string-downcase |s2_1QpiCo7PN|)))))
+        (string-downcase |s1_sSOtBHVtw|)
+        (string-downcase |s2_sS8qz8Wtw|)))))
 (#%program
-  ((|s2_1Q5byi8PN| . 1)
-   (|s1_1QLeAR7PN| . 1)
+  ((|s2_sSQiv2Xtw| . 1)
+   (|s1_sSumxBWtw| . 1)
    (string-downcase . 2)
    (string>? . 1))
   ()
   (string-downcase string>?)
   (#%define string-ci>?
     (#%lambda #t
-      (|s1_1QLeAR7PN| |s2_1Q5byi8PN|)
+      (|s1_sSumxBWtw| |s2_sSQiv2Xtw|)
       ()
       (string>?
-        (string-downcase |s1_1QLeAR7PN|)
-        (string-downcase |s2_1Q5byi8PN|)))))
+        (string-downcase |s1_sSumxBWtw|)
+        (string-downcase |s2_sSQiv2Xtw|)))))
 (#%program
-  ((|s2_1QN3uc9PN| . 1)
-   (|s1_1Qr7wL8PN| . 1)
+  ((|s2_sSwbrYXtw| . 1)
+   (|s1_sSaftvXtw| . 1)
    (string-downcase . 2)
    (string>=? . 1))
   ()
   (string-downcase string>=?)
   (#%define string-ci>=?
     (#%lambda #t
-      (|s1_1Qr7wL8PN| |s2_1QN3uc9PN|)
+      (|s1_sSaftvXtw| |s2_sSwbrYXtw|)
       ()
       (string>=?
-        (string-downcase |s1_1Qr7wL8PN|)
-        (string-downcase |s2_1QN3uc9PN|)))))
+        (string-downcase |s1_sSaftvXtw|)
+        (string-downcase |s2_sSwbrYXtw|)))))
 (#%program
-  ((|s2_1QtYp6aPN| . 1)
-   (|s1_1Q70sF9PN| . 1)
+  ((|s2_sSc4nSYtw| . 1)
+   (|s1_sSS7ppYtw| . 1)
    (string-downcase . 2)
    (string<=? . 1))
   ()
   (string-downcase string<=?)
   (#%define string-ci<=?
     (#%lambda #t
-      (|s1_1Q70sF9PN| |s2_1QtYp6aPN|)
+      (|s1_sSS7ppYtw| |s2_sSc4nSYtw|)
       ()
       (string<=?
-        (string-downcase |s1_1Q70sF9PN|)
-        (string-downcase |s2_1QtYp6aPN|)))))
+        (string-downcase |s1_sSS7ppYtw|)
+        (string-downcase |s2_sSc4nSYtw|)))))
 (#%program
   ((- . 1)
    (make-string . 1)
-   (|end_1QRJhWbPN| . 2)
-   (|start_1QvNjtbPN| . 2)
-   (|newstr_1QbGfncPN| . 2)
-   (|str_1Q9Rl0bPN| . 1)
+   (|end_sSAReG-tw| . 2)
+   (|start_sSeVgd-tw| . 2)
+   (|newstr_sSWNc7_tw| . 2)
+   (|str_sSUYiMZtw| . 1)
    (+ . 2)
-   (|fill-string_1QPUnzaPN| . 2)
-   (|sstr_1QxCdQcPN| . 2)
+   (|fill-string_sSy0ljZtw| . 2)
+   (|sstr_sSgKaA_tw| . 2)
    (string-ref . 1)
-   (|n_1Qdv9KdPN| . 2)
-   (|dstr_1QTybhdPN| . 2)
+   (|n_sSYC6u0uw| . 2)
+   (|dstr_sSCG810uw| . 2)
    (string-set! . 1)
-   (|e_1QVn5EePN| . 2)
-   (|s_1Qzr7bePN| . 3)
+   (|e_sSEv2o1uw| . 2)
+   (|s_sSiz4X0uw| . 3)
    (< . 1))
-  ((|fill-string_1QPUnzaPN| . 1))
+  ((|fill-string_sSy0ljZtw| . 1))
   (make-string - string-ref string-set! + <)
   (#%define substring
     (#%letrec #t
-      ((|fill-string_1QPUnzaPN|
+      ((|fill-string_sSy0ljZtw|
          (#%lambda #t
-           (|sstr_1QxCdQcPN|
-             |dstr_1QTybhdPN|
-             |n_1Qdv9KdPN|
-             |s_1Qzr7bePN|
-             |e_1QVn5EePN|)
-           (|fill-string_1QPUnzaPN|)
-           (#%if (< |s_1Qzr7bePN| |e_1QVn5EePN|)
+           (|sstr_sSgKaA_tw|
+             |dstr_sSCG810uw|
+             |n_sSYC6u0uw|
+             |s_sSiz4X0uw|
+             |e_sSEv2o1uw|)
+           (|fill-string_sSy0ljZtw|)
+           (#%if (< |s_sSiz4X0uw| |e_sSEv2o1uw|)
              (#%begin
                (string-set!
-                 |dstr_1QTybhdPN|
-                 |n_1Qdv9KdPN|
-                 (string-ref |sstr_1QxCdQcPN| |s_1Qzr7bePN|))
-               (|fill-string_1QPUnzaPN|
-                 |sstr_1QxCdQcPN|
-                 |dstr_1QTybhdPN|
-                 (+ |n_1Qdv9KdPN| 1)
-                 (+ |s_1Qzr7bePN| 1)
-                 |e_1QVn5EePN|))
+                 |dstr_sSCG810uw|
+                 |n_sSYC6u0uw|
+                 (string-ref |sstr_sSgKaA_tw| |s_sSiz4X0uw|))
+               (|fill-string_sSy0ljZtw|
+                 |sstr_sSgKaA_tw|
+                 |dstr_sSCG810uw|
+                 (+ |n_sSYC6u0uw| 1)
+                 (+ |s_sSiz4X0uw| 1)
+                 |e_sSEv2o1uw|))
              #!void))))
       ()
       (#%lambda #t
-        (|str_1Q9Rl0bPN|
-          |start_1QvNjtbPN|
-          |end_1QRJhWbPN|)
-        (|fill-string_1QPUnzaPN|)
+        (|str_sSUYiMZtw|
+          |start_sSeVgd-tw|
+          |end_sSAReG-tw|)
+        (|fill-string_sSy0ljZtw|)
         ((#%lambda #t
-           (|newstr_1QbGfncPN|)
-           (|end_1QRJhWbPN|
-             |start_1QvNjtbPN|
-             |str_1Q9Rl0bPN|
-             |fill-string_1QPUnzaPN|)
+           (|newstr_sSWNc7_tw|)
+           (|end_sSAReG-tw|
+             |start_sSeVgd-tw|
+             |str_sSUYiMZtw|
+             |fill-string_sSy0ljZtw|)
            (#%begin
-             (|fill-string_1QPUnzaPN|
-               |str_1Q9Rl0bPN|
-               |newstr_1QbGfncPN|
+             (|fill-string_sSy0ljZtw|
+               |str_sSUYiMZtw|
+               |newstr_sSWNc7_tw|
                0
-               |start_1QvNjtbPN|
-               |end_1QRJhWbPN|)
-             |newstr_1QbGfncPN|))
+               |start_sSeVgd-tw|
+               |end_sSAReG-tw|)
+             |newstr_sSWNc7_tw|))
          (make-string
-           (- |end_1QRJhWbPN| |start_1QvNjtbPN|)))))))
+           (- |end_sSAReG-tw| |start_sSeVgd-tw|)))))))
 (#%program
   ((- . 1)
    (cdr . 1)
    (list-ref . 1)
-   (|list_1Qfk35fPN| . 2)
+   (|list_sS-r0R1uw| . 2)
    (car . 1)
-   (|n_1QBg1yfPN| . 2)
+   (|n_sSko-h2uw| . 2)
    (zero? . 1))
   ()
   (list-ref cdr - car zero?)
   (#%define list-ref
     (#%lambda #t
-      (|list_1Qfk35fPN| |n_1QBg1yfPN|)
+      (|list_sS-r0R1uw| |n_sSko-h2uw|)
       ()
-      (#%if (zero? |n_1QBg1yfPN|)
-        (car |list_1Qfk35fPN|)
+      (#%if (zero? |n_sSko-h2uw|)
+        (car |list_sS-r0R1uw|)
         (list-ref
-          (cdr |list_1Qfk35fPN|)
-          (- |n_1QBg1yfPN| 1))))))
+          (cdr |list_sS-r0R1uw|)
+          (- |n_sSko-h2uw| 1))))))
 (#%program
-  ((|args_1QXc_-fPN| . 1)
-   (|k_1Qh9ZrgPN| . 1)
+  ((|args_sSGkYK2uw| . 1)
+   (|k_sS0hWb3uw| . 1)
    (apply . 1)
    (call-with-current-continuation . 1))
   ()
   (apply call-with-current-continuation)
   (#%define values
     (#%lambda #t
-      |args_1QXc_-fPN|
+      |args_sSGkYK2uw|
       ()
       (call-with-current-continuation
         (#%lambda #t
-          (|k_1Qh9ZrgPN|)
-          (|args_1QXc_-fPN|)
-          (apply |k_1Qh9ZrgPN| |args_1QXc_-fPN|))))))
+          (|k_sS0hWb3uw|)
+          (|args_sSGkYK2uw|)
+          (apply |k_sS0hWb3uw| |args_sSGkYK2uw|))))))
