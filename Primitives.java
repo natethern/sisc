@@ -372,7 +372,7 @@ public class Primitives extends ModuleAdapter {
                         inport.readchar());
             case EVAL:
                 f.nxp=f.compile(f.vlr[0]);
-                f.returnValues(f.vlr);
+                f.returnValues();
                 return VOID;
             case OPENINPUTSTRING:
                 return new InputPort(new BufferedReader(
@@ -667,14 +667,14 @@ public class Primitives extends ModuleAdapter {
                 return module(f.vlr[0]).getBindingValue(symbol(f.vlr[1]));
             case EVAL:
                 f.nxp=f.compile(f.vlr[0], env(f.vlr[1]));
-                f.returnValues(f.vlr);
+                f.returnValues();
                 return VOID;
             case CALLFC:
                 Procedure proc=proc(f.vlr[0]);
                 Procedure ehandler=proc(f.vlr[1]);
                 f.fk=f.createFrame(new ApplyValuesContEval(ehandler),
                                    null, f.env, f.fk, f.stk);
-                f.returnValues(f.vlr);
+                f.returnValues();
                 f.vlr = ZV;
                 f.nxp = APPEVAL;
                 return proc;
@@ -682,7 +682,7 @@ public class Primitives extends ModuleAdapter {
                 Procedure producer=proc(f.vlr[0]);
                 Procedure consumer=proc(f.vlr[1]);
                 f.push(new ApplyValuesContEval(consumer));
-                f.returnValues(f.vlr);
+                f.returnValues();
                 f.vlr = ZV;
                 f.nxp = APPEVAL;
                 return producer;
@@ -758,8 +758,6 @@ public class Primitives extends ModuleAdapter {
                 Procedure proc=proc(f.vlr[0]);
                 int l = f.vlr.length-2;
                 Pair args=pair(f.vlr[l+1]);
-                //f.vlr can be recycled
-                f.returnValues(f.vlr);
                 //this might get us back the just recycled f.vlr,
                 //which is fine since we only shift its contents to
                 //the left by one
@@ -771,6 +769,10 @@ public class Primitives extends ModuleAdapter {
                 for (; args != EMPTYLIST; args = (Pair)args.cdr, j++) {
                     newvlr[j] = args.car;
                 }
+
+                //f.vlr can be recycled
+                f.returnValues();
+
                 f.vlr = newvlr;
                 f.nxp = APPEVAL;
                 return proc;

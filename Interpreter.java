@@ -269,6 +269,14 @@ public class Interpreter extends Util {
         System.runFinalizersOnExit(true);
     }
     */
+
+    public final void returnValues() {
+        if (!lck) {
+            returnValues(vlr);
+            vlr=ZV;
+        }
+    }
+
     public final void returnValues(Value[] v) {
         if (v == null) return;
         int size = v.length;

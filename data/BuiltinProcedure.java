@@ -56,9 +56,8 @@ public class BuiltinProcedure extends Procedure {
         try {
             Value v=host.eval(id, r);
             if (v!=null) r.acc=v;
-            if (!r.lck && r.nxp == null) {
-		r.returnValues(r.vlr);
-		r.vlr=ZV;
+            if (r.nxp == null) {
+		r.returnValues();
 	    }
         } catch (ArrayIndexOutOfBoundsException np) {
             error(r, name, liMessage(SISCB, "incorrectargcount"));

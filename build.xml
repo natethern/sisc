@@ -36,7 +36,7 @@
     <property name="debugging" value="off"/>
     <property name="optimization" value="on"/>
     <property name="dist" value="${basedir}/dist"/>
-    <property name="doc.style" value="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl"/>
+    <property name="doc.style" value="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/docbook.xsl"/>
   </target>
 
   <target name="init" depends="prepare">

@@ -265,7 +265,7 @@
 			(list? ev) 
 			(= (length ev) 3)
 			(eq? (car ev) 'begin)
-			(equal? (cadr ev) '(void)) )
+			(equal? (caadr ev) '$sc-put-cte))
 		   (caddr ev)
 		   ev) outp))
 	    (newline outp)
