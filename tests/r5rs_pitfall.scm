@@ -116,7 +116,27 @@
       ((4) (c 4)))
     r))
 
-(should-be 7.2 '((-1 4 5 3)
+;; Same test, but in reverse order
+(define r #f)
+(define a #f)
+(define b #f)
+(define c #f)
+(define i 0)
+(should-be 7.2 28
+  (let () 
+    (set! r (+ 1 (+ 2 (+ 3 (call/cc (lambda (k) (set! a k) 4))))
+               (+ 5 (+ 6 (call/cc (lambda (k) (set! b k) 7))))))
+    (if (not c) 
+        (set! c a))
+    (set! i (+ i 1))
+    (case i
+      ((1) (b 8))
+      ((2) (a 5))
+      ((3) (b 7))
+      ((4) (c 4)))
+    r))
+
+(should-be 7.3 '((-1 4 5 3)
                  (4 -1 5 3)
                  (-1 5 4 3)
                  (5 -1 4 3)
@@ -151,6 +171,27 @@
                      ((2) (k2 2))
                      ((3) (k1 -)))))))
     (map check '((1 2 3) (1 3 2) (2 1 3) (2 3 1) (3 1 2) (3 2 1)))))
+
+;; Modification of the yin-yang puzzle so that it terminates and produces
+;; a value as a result. (Scott G. Miller)
+(should-be 7.4 '(10 9 8 7 6 5 4 3 2 1 0)
+  (let ((x '())
+        (y 0))
+    (call/cc 
+     (lambda (escape)
+       (let* ((yin ((lambda (foo) 
+                      (set! x (cons y x))
+                      (if (= y 10)
+                          (escape x)
+                          (begin
+                            (set! y 0)
+                            foo)))
+                    (call/cc (lambda (bar) bar))))
+              (yang ((lambda (foo) 
+                       (set! y (+ y 1))
+                       foo)
+                     (call/cc (lambda (baz) baz)))))
+         (yin yang))))))
 
 ;; Miscellaneous 
 
