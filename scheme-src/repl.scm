@@ -38,10 +38,12 @@
 
 (define current-default-error-handler
   (parameterize
-   (lambda (m e)
-     (let ([exception (make-exception m e)])
-       (putprop 'last-exception '*debug* exception)
-       (print-exception exception #f)))))
+   (let () 
+     (import debugging)
+     (lambda (m e)
+       (let ([exception (make-exception m e)])
+         (putprop 'last-exception '*debug* exception)
+         (print-exception exception (stack-trace-on-error)))))))
 
 (define (get-last-exception)
   (getprop 'last-exception '*debug*))
@@ -106,7 +108,7 @@
 
 (define (sisc-cli)
   (with/fc (lambda (m e)
-             (display (format "Uncaught error: ~a~%" m))
+             (display (format "Uncaught error: ~a~%Please report this error to sisc-devel@lists.sourceforge.net~%" m))
              (sisc-cli))
            repl))
 
