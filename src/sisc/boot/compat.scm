@@ -96,7 +96,7 @@
 (define $syntax-dispatch)
 (define $make-environment)
 
-(define (throw args) (apply error args))
+(define (throw . args) (apply error args))
 
 (define (error . args)
   (for-each (lambda (arg)
