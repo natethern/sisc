@@ -13,8 +13,6 @@ Features
 * implement character ports
 * port scsh's SREs
 * add type and object system that is tightly integrated with S2J
-* optimize S2J method dispatch
-* display of recursive structures
 * write a debugger
 * mechanism to construct immutable objects other than literals
 * mechanism for dynamic loading of scheme modules
