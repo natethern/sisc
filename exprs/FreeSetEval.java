@@ -51,8 +51,13 @@ public class FreeSetEval extends Expression {
         try {
             senv.env[envLoc]=r.acc;
         } catch (ArrayIndexOutOfBoundsException aie) {
-            envLoc=senv.set(lhs, r.acc);
-        }
+	    try {
+		envLoc=senv.set(lhs, r.acc);
+	    } catch (NullPointerException np) {
+		//Variable is not bound.  Raise an error.
+		error(r, SETBANG, "attempt to set unbound variable '"+lhs+"'.");
+	    }
+        } 
 
         if (r.acc instanceof NamedValue) {
             NamedValue nv=(NamedValue)r.acc;

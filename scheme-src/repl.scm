@@ -40,6 +40,7 @@
      (display message output-port)
      (newline output-port))))
 
+(define _separator (void))
 (define repl
   (letrec ([repl-loop
 	    (lambda (console-in console-out writer)

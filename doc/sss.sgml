@@ -35,7 +35,7 @@
     </para>
     <para>
       &SISC;'s development progresses in two
-      directions, to improvide the core interpreter to be simpler,
+      directions, to improve the core interpreter to be simpler,
       more elegant, and more efficient; and to add necessary
       functionality through extensions that do not complicate the
       core.
@@ -183,6 +183,45 @@
 	the console.
       </para>
     </sect1>
+    <sect1>
+      <title> 
+	Display Conventions
+      </title>
+      <para>
+	Executing or loading code in the REPL ordinarily producs a value
+	result which is displayed during the Print phase.  However,
+	two other message types may be displayed.  First, if an error
+	is raised that is not handled by the running program, the
+	message will be described in one of three forms:
+      </para>
+      <programlisting>
+	Error: &lt;description&gt;
+
+	Error in &lt;error-location&gt;: &lt;description&gt;
+
+	Error.
+      </programlisting>
+      <para>
+	The first form describes an error that was raised in an
+	anonymous procedure or syntax.  The second describes an error
+	that was raised in a named procedure or syntax definition.
+	The error-location indicates which procedure encountered
+	the error.  The final form is produced by an explicit call
+	to the error function with no arguments.
+      <para>
+	In addition to errors, it is possible for code to produce
+	warnings during compilation or run-time.  A warning is a
+	message to the user about a condition that is unusual but not
+	terminal to the program flow.  The compiler, for example, does
+	a minimal amount of sanity checking on code and may produce
+	warnings about code that has the potential to raise errors
+	during execution.  Warnings are always distinguished from
+	ordinary messages by surrounding braces ({}). 
+      </para>
+      <programlisting>
+	{warning: &lt;description&gt;}
+      </programlisting>
+    </sect1>
   </chapter>
   <chapter>
     <title>
@@ -240,11 +279,15 @@
 	    Numeric constants
 	  </title>
 	  <para>
-	    Precision specifiers (&num;e, &num;s, &num;f, &num;d,
-	    &num;l) are ignored in &SISC;, all inexact numbers are kept
-	    in the precision of the numeric library. In the case of
+	    The precision specifying exponents (<computeroutput>S, F,
+	    L, </computeroutput>and
+	    <computeroutput>D</computeroutput>) 
+	    are ignored in &SISC;, all inexact numbers are kept
+	    in the precision of the numeric library.  The exponents
+	    are read and used to scale the real number as expected.
+	    In the case of
 	    arbitrary precision floats, specific precision constraints
-	    are maintained to prevent runaway expansion of
+	    are maintained to prevent a runaway increase of
 	    precision. The parameterized functions
 	    <emphasis>min-precision</emphasis> and
 	    <emphasis>max-precision</emphasis> specify the
@@ -252,10 +295,19 @@
 	  </para>
 	  <programlisting>
 	    &parameter; (min-precision [digits])
-	    Sets or displays the minimum precision constraint, an integer.
+	    Sets or displays the minimum precision constraint, an
+	    integer.
+
+	    &parameter; (max-precision [digits])
+	    Sets or displays the maximum precision constraint, an integer.
 	  </programlisting>
 	  <para>
-	    All four base specifiers (&num;x, &num;o, &num;d, &num;b) are supported for integers and rationals. Only decimal (&num;d), the default, is supported for floating point and complex numbers.
+	    All four base specifiers (<computeroutput>&num;x, &num;o,
+	    &num;d, &num;b</computeroutput>) are supported for
+	    integers and rationals. Only decimal 
+	    (<computeroutput>&num;d</computeroutput>), the
+	    default, is supported for floating point and complex
+	    numbers.
 	  </para>
 	</sect3>
 	<sect3>
@@ -287,7 +339,8 @@
 	  &SISC;'s characters are based on the Java character type. As
 	  such, the full range of unicode characters are
 	  supported. Unicode characters can be created with
-	  number-&gt;character or &num;&bsol;nnnn, where nnnn is an
+	  <computeroutput>number-&gt;character</computeroutput> or 
+	  <computeroutput>&num;&bsol;nnnn</computeroutput>, where <computeroutput>nnnn</computeroutput> is an
 	  octal number in the range 0000 -&gt; ffff. 
 	</para>
 	<para>
@@ -360,7 +413,10 @@
 	  <programlisting>
 	    #5(x)
 	  </programlisting>
-	  creates a vector constant containing five identical symbols.
+	  creates a vector constant containing five identical
+	  symbols.  In addition, the length-prefix form is used when
+	  printing vectors, and if elements repeat at the end of a
+	  Vector, only the last unique element is printed.
 	</para>
       </sect2>
       <sect2>
@@ -369,8 +425,8 @@
 	</title>
 	<para>
 	  &SISC; provides a parse-time syntax for 
-	  creating data (primarily vectors and lists) that contains
-	  references to itself.  This can be useful to create streams,
+	  creating data (primarily vectors and lists) that contain
+	  references to themselves.  This can be useful to create streams,
 	  graphs, and other self-referencing structures while
 	  maintaining readability and avoiding complex construction
 	  code.
@@ -433,7 +489,7 @@
 	  constants. Quoted lists and vectors are
 	  immutable. Attempting to modify elements in these constants
 	  will raise an error. String constants are immutable as well
-	  when created with symbol-&gt;string.
+	  when created with <computeroutput>symbol-&gt;string</computeroutput>.
 	</para>
       </sect2>
     </sect1>

@@ -52,6 +52,7 @@ public abstract class Util implements Conf {
          FALSE=SchemeBoolean.FALSE;
 
     public static Symbol
+	SETBANG=Symbol.get("set!"),
 	UNQUOTE=Symbol.get("unquote"),
 	QUOTE=Symbol.get("quote"),
 	UNQUOTE_SPLICING=Symbol.get("unquote-splicing"),
