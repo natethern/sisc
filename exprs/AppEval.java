@@ -41,11 +41,11 @@ public class AppEval extends Expression {
     public void eval(Interpreter r) throws ContinuationException {
         /* To allow break of execution (turadg)
          */
-        if (PERMITINTERRUPTS && r.abortEvaluation) {
-           r.abortEvaluation=false;
+        if (PERMITINTERRUPTS && r.tctx.interrupt) {
            r.push(this);
            r.push(r.acc);
            r.nxp=null;
+           r.tctx.interrupt = false;
            error(r, liMessage(SISCB, "evaluationinterrupted"));
         }
 
