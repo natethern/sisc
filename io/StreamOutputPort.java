@@ -25,10 +25,6 @@ public class StreamOutputPort extends AutoflushOutputPort {
         out.write(s.getBytes("UTF-8"));
     }
 
-    protected void displayHelper(Value v) throws IOException {
-        writeHelper(v.display());
-    }
-
     public void flush() throws IOException {
         out.flush();
     }

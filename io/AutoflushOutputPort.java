@@ -22,14 +22,8 @@ public abstract class AutoflushOutputPort extends SchemeOutputPort {
         if (autoflush) flush();
     }
 
-    public void display(Value v) throws IOException {
-        displayHelper(v);
-        if (autoflush) flush();
-    }
-
     protected abstract void writeHelper(char v) throws IOException;
     protected abstract void writeHelper(String v) throws IOException;
-    protected abstract void displayHelper(Value v) throws IOException;
 }
 /*
  * The contents of this file are subject to the Mozilla Public

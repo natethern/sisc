@@ -29,10 +29,6 @@ public class WriterOutputPort extends AutoflushOutputPort {
         out.write(s);
     }
 
-    protected void displayHelper(Value v) throws IOException {
-        writeHelper(v.display());
-    }
-
     public void flush() throws IOException {
         out.flush();
     }
