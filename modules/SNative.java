@@ -102,7 +102,7 @@ public class SNative extends Module {
                 switch(primid) {
                 case READLINE:
                     try {
-                        String s=f.console_in.getReader().readLine();
+                        String s=f.dynenv.in.getReader().readLine();
                         if (s==null) return EOF;
                         return new SchemeString(s);
                     } catch (IOException e) {

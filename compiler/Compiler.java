@@ -79,9 +79,7 @@ public class Compiler extends Util {
 	APP=-1, LAMBDA = 0, _IF=1, BEGIN=2, QUOTE=3, SET=4, DEFINE=5,
 	TAIL=1, COMMAND=2, PREDICATE=4;
 
-    public Compiler(AssociativeEnvironment menv) {
-        addSpecialForms(menv);
-    }
+    public Compiler() {}
 
     public static AssociativeEnvironment addSpecialForms(AssociativeEnvironment menv) {
         extendenv(menv,"lambda", LAMBDA);
@@ -127,9 +125,15 @@ public class Compiler extends Util {
     public Expression compile(Interpreter r, Expression v, ReferenceEnv rt,
                               int context, AssociativeEnvironment env)
     throws ContinuationException {
-        if (v==EMPTYLIST)
-            return EMPTYLIST;
-        else if (v instanceof Pair) {
+        if (v==EMPTYLIST) {
+	    //error(r, "invalid expression: ()"); return null;
+
+	    //we evaluate () to the empty list, which is an "ignorable
+	    //error", according to R5RS. Note that presently we never
+	    //actually end up in this code since the macro expander
+	    //expands () to '().
+	    return EMPTYLIST;
+	} else if (v instanceof Pair) {
             Pair expr=(Pair)v;
             return compileApp(r,expr,rt,context,env);
         } else if (v instanceof Symbol) {

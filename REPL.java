@@ -51,9 +51,10 @@ public class REPL extends Thread {
     }
 
     public static Interpreter createInterpreter(String[] args) throws ClassNotFoundException {
-        Interpreter r = new Interpreter(System.in, System.out);
-
+	DynamicEnv d = new DynamicEnv(System.in, System.out);
+        Interpreter r = new Interpreter(d);
         r.setEvaluator("eval");
+
         try {
             r.loadEnv(new DataInputStream(
                           new BufferedInputStream(
@@ -157,9 +158,11 @@ start:
             pout.flush();
             for (;;) {
                 Socket client = ssocket.accept();
+		pout.println("Accepting connection from " + client.getInetAddress().toString());
+		pout.flush();
                 Interpreter cr = Interpreter.newContext(r);
-                cr.console_in = new InputPort(new BufferedReader(new InputStreamReader(client.getInputStream())));
-                cr.console_out = new OutputPort(new PrintWriter(client.getOutputStream()), true);
+		cr.dynenv = new DynamicEnv(new InputPort(new BufferedReader(new InputStreamReader(client.getInputStream()))),
+					   new OutputPort(new PrintWriter(client.getOutputStream()), true));
                 REPL repl = new SocketREPL(cr, client);
                 repl.start();
             }

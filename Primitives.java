@@ -235,17 +235,17 @@ public class Primitives extends Module {
         case 0:
             switch (primid) {
             case _VOID: return VOID;
-            case CURRENTOUTPUTPORT: return f.console_out;
-            case CURRENTINPUTPORT: return f.console_in;
+            case CURRENTOUTPUTPORT: return f.dynenv.out;
+            case CURRENTINPUTPORT: return f.dynenv.in;
             case OPENOUTPUTSTRING: return new OutputPort(new StringWriter());
             case PEEKCHAR:
-                Value v=f.console_in.readchar(f);
+                Value v=f.dynenv.in.readchar(f);
                 if (v instanceof SchemeCharacter)
-                    f.console_in.pushback(((SchemeCharacter)v).c);
+                    f.dynenv.in.pushback(((SchemeCharacter)v).c);
                 return v;
         case READ: case READCHAR:
-                return (primid==READ ? f.console_in.read(f) :
-                        f.console_in.readchar(f));
+                return (primid==READ ? f.dynenv.in.read(f) :
+                        f.dynenv.in.readchar(f));
             case CURRENTEVAL: return (Value)f.evaluator;
             case INTERACTIONENVIRONMENT:
                 return f.toplevel_env;
@@ -386,11 +386,11 @@ public class Primitives extends Module {
                 return VOID;
             case CLOSEINPUTPORT:
                 InputPort inp=inport(f,f.vlr[0]);
-                if (inp!=f.console_in) inp.close(f);
+                if (inp!=f.dynenv.in) inp.close(f);
                 return VOID;
             case CLOSEOUTPUTPORT:
                 op=outport(f,f.vlr[0]);
-                if (op!=f.console_out) op.close(f);
+                if (op!=f.dynenv.out) op.close(f);
                 return VOID;
             case BOX: return new Box(f.vlr[0]);
             case UNBOX: return (Value)box(f,f.vlr[0]).val;
@@ -430,9 +430,9 @@ public class Primitives extends Module {
                 return new SchemeVector(num(f,f.vlr[0]).intValue());
             case WRITECHAR:
                 try {
-                    f.console_out.writeChar(character(f,f.vlr[0]));
+                    f.dynenv.out.writeChar(character(f,f.vlr[0]));
                 } catch (IOException e) {
-                    throw new RuntimeException("Error writing to output port "+f.console_out);
+                    throw new RuntimeException("Error writing to output port "+f.dynenv.out);
                 }
                 return VOID;
             case NUMERATOR: return num(f,f.vlr[0]).numerator();
@@ -441,17 +441,17 @@ public class Primitives extends Module {
             case IMAGPART: return num(f,f.vlr[0]).imagpart();
         case DISPLAY: case WRITE:
                 try {
-                    f.console_out.write((primid == WRITE ? f.vlr[0].write() :
-                                         f.vlr[0].display()));
+                    f.dynenv.out.write((primid == WRITE ? f.vlr[0].write() :
+					    f.vlr[0].display()));
                 } catch (IOException e) {
-                    throw new RuntimeException("Error writing to output port "+f.console_out);
+                    throw new RuntimeException("Error writing to output port "+f.dynenv.out);
                 }
                 return VOID;
             case CURRENTOUTPUTPORT:
-                f.console_out=outport(f,f.vlr[0]);
+                f.dynenv.out= outport(f,f.vlr[0]);
                 return VOID;
             case CURRENTINPUTPORT:
-                f.console_in=inport(f,f.vlr[0]);
+                f.dynenv.in = inport(f,f.vlr[0]);
                 return VOID;
             case FILETYPE:
                 File tmpf=new File(string(f,f.vlr[0]));
@@ -463,7 +463,7 @@ public class Primitives extends Module {
             case REPORTENVIRONMENT:
                 if (FIVE.equals(num(f,f.vlr[0])))
                     try {
-                        return f.symenv.lookup(REPORT);
+                        return f.lookupContextEnv(REPORT);
                     } catch (ArrayIndexOutOfBoundsException e) {
                         throw new RuntimeException("Standard environment not present");
                     }
@@ -570,7 +570,7 @@ public class Primitives extends Module {
                 try {
                     port.writeChar(character(f,f.vlr[0]));
                 } catch (IOException e) {
-                    throw new RuntimeException("Error writing to output port "+f.console_out);
+                    throw new RuntimeException("Error writing to output port "+port);
                 }
                 return VOID;
             case MAKERECTANGULAR:

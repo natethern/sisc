@@ -35,19 +35,23 @@ package sisc;
 import java.lang.ref.*;
 import sisc.data.*;
 import sisc.compiler.*;
+import sisc.compiler.Compiler;
 import sisc.exprs.*;
 import java.io.*;
 import java.util.*;
 
 public class Interpreter extends Util {
 
-    public Parser parser=new Parser(new Lexer());
+    //the lexer, parser and compiler are stateless; if that ever
+    // changes they'd  need to be moved to the dynenv
+    public static Parser parser=new Parser(new Lexer());
+    public static Compiler compiler = new Compiler();
 
     protected Procedure evaluator;
-    public OutputPort console_out;
-    public InputPort console_in;
-    public AssociativeEnvironment symenv, toplevel_env;
-    public sisc.compiler.Compiler compiler;
+    protected AssociativeEnvironment symenv;
+    public AssociativeEnvironment toplevel_env;
+
+    public DynamicEnv dynenv;
 
     static class DisplaylnExp extends Expression {
 
@@ -76,54 +80,29 @@ public class Interpreter extends Util {
     public CallFrame             stk, fk;
 
     public static Interpreter newContext(Interpreter parent) {
-        Interpreter rnew=new Interpreter(parent.console_in, parent.console_out,
-                                         parent.symenv);
+        Interpreter rnew=new Interpreter(parent.symenv, parent.dynenv);
         rnew.evaluator=parent.evaluator;
-        if (rnew.toplevel_env!=null)
-            rnew.symenv.define(TOPLEVEL, rnew.toplevel_env);
-        else
-            try {
-                rnew.toplevel_env=
-                    (AssociativeEnvironment)rnew.symenv.lookup(TOPLEVEL);
-            } catch (ArrayIndexOutOfBoundsException ue) {
-                rnew.toplevel_env=rnew.symenv;
-            }
-
         return rnew;
     }
 
-    public Interpreter(InputPort cin, OutputPort cout,
-                       AssociativeEnvironment symenv) {
+    protected Interpreter(AssociativeEnvironment symenv,
+		       DynamicEnv dynenv) {
         fk=new CallFrame(new DisplaylnExp(), null, null, null, stk);
         fk.capture();
         fk.fk=fk;
         this.symenv=symenv;
         try {
-            toplevel_env=(AssociativeEnvironment)symenv.lookup(TOPLEVEL);
+            toplevel_env=lookupContextEnv(TOPLEVEL);
         } catch (ArrayIndexOutOfBoundsException ue) {
             toplevel_env=symenv;
+            symenv.define(TOPLEVEL, toplevel_env);
         }
         env=new LexicalEnvironment();
-        console_in=cin;
-        console_out=cout;
-        console_in.name=Symbol.get("console");
-        console_out.name=Symbol.get("console");
-        compiler=new sisc.compiler.Compiler(this.toplevel_env);
+	this.dynenv = dynenv;
     }
 
-    public Interpreter(InputStream in, OutputStream out) {
-        this(new InputPort(new BufferedReader(new InputStreamReader(in))),
-             new OutputPort(new PrintWriter(out), true),
-             new AssociativeEnvironment());
-        if (toplevel_env!=null)
-            symenv.define(TOPLEVEL, toplevel_env);
-        else
-            try {
-                toplevel_env=(AssociativeEnvironment)symenv.lookup(TOPLEVEL);
-            } catch (ArrayIndexOutOfBoundsException ue) {
-                toplevel_env=symenv;
-            }
-
+    public Interpreter(DynamicEnv dynenv) {
+        this(Compiler.addSpecialForms(new AssociativeEnvironment()), dynenv);
         new Primitives().initialize(this);
     }
 
@@ -210,14 +189,21 @@ public class Interpreter extends Util {
     }
 
     // Symbolic environment handling
+    public AssociativeEnvironment lookupContextEnv(Symbol s) {
+	return (AssociativeEnvironment)symenv.lookup(s);
+    }
+
+    public void defineContextEnv(Symbol s, AssociativeEnvironment env) {
+	symenv.define(s, env);
+    }
+
     protected AssociativeEnvironment getContextEnv(Symbol s) {
         AssociativeEnvironment contenv=null;
         try {
-            contenv=(AssociativeEnvironment)
-                    symenv.lookup(s);
+            contenv = lookupContextEnv(s);
         } catch (ArrayIndexOutOfBoundsException e) {
             contenv=new AssociativeEnvironment();
-            symenv.define(s, contenv);
+            defineContextEnv(s, contenv);
         }
         return contenv;
     }
@@ -255,7 +241,7 @@ public class Interpreter extends Util {
                 stk=lstk;
                 symenv=lsymenv;
                 try {
-                    toplevel_env=(AssociativeEnvironment)symenv.lookup(TOPLEVEL);
+                    toplevel_env=lookupContextEnv(TOPLEVEL);
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throw new IOException("Heap did not contain toplevel environment!");
                 }
@@ -287,7 +273,7 @@ public class Interpreter extends Util {
                 stk=lstk;
                 symenv=lsymenv;
                 try {
-                    toplevel_env=(AssociativeEnvironment)symenv.lookup(TOPLEVEL);
+                    toplevel_env=lookupContextEnv(TOPLEVEL);
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throw new IOException("Heap did not contain toplevel environment!");
                 }

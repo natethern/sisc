@@ -66,8 +66,6 @@ public class Lexer implements Tokens {
     public String sval;
     public Quantity nval;
     public Pair prval;
-    public boolean escaped;
-    protected boolean ec;
 
     public int readIgnoringWhitespace(InputPort is)
     throws IOException {
@@ -160,7 +158,6 @@ public class Lexer implements Tokens {
         int c=is.read();
 
         if (c=='\\') {
-            escaped=true;
             return is.read() | 0x80000000;
         }
 

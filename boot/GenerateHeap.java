@@ -47,7 +47,8 @@ public class GenerateHeap {
 
         System.out.println("Generating heap: "+args[0]);
 
-        r=new Interpreter(System.in, System.out);
+	DynamicEnv d = new DynamicEnv(System.in, System.out);
+        r=new Interpreter(d);
         r.setEvaluator("eval");
         FreeReferenceExp load=new FreeReferenceExp(Symbol.get("load"),
                               -1, r.toplevel_env);
@@ -71,11 +72,11 @@ public class GenerateHeap {
 
         // Lock in the R5RS environment
         AssociativeEnvironment report_env, top_env;
-        report_env=(AssociativeEnvironment)r.symenv.lookup(Util.TOPLEVEL);
+        report_env=r.lookupContextEnv(Util.TOPLEVEL);
         report_env.trim();
         top_env=new AssociativeEnvironment(report_env);
-        r.symenv.define(Util.TOPLEVEL, top_env);
-        r.symenv.define(Util.REPORT, report_env);
+        r.defineContextEnv(Util.TOPLEVEL, top_env);
+	r.defineContextEnv(Util.REPORT, report_env);
         //	report_env.lock();
         report_env.name=Symbol.get("r5rs");
         top_env.name=Symbol.get("top-level");
