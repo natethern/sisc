@@ -363,15 +363,19 @@
 ;;; empty-wrap for old representations.
 
 
-
 (let ()
-
+(define-syntax self-evaluating?
+  (syntax-rules ()
+    ((_ e)
+     (let ((x e))
+       (not (or (pair? x) (vector? x) (and (null? x)
+                                           (strict-r5rs-compliance))))))))
 (define-syntax when
   (syntax-rules ()
     ((_ test e1 e2 ...) (if test (begin e1 e2 ...)))))
 (define-syntax unless
   (syntax-rules ()
-    ((_ test e1 e2 ...) (if test ('#(quote) #!void) (begin e1 e2 ...)))))
+    ((_ test e1 e2 ...) (if test #!void (begin e1 e2 ...)))))
 (define-syntax define-structure
   (lambda (x)
     (define construct-name
@@ -529,49 +533,49 @@
   (syntax-rules ()
     ((_ source fun-exp arg-exps)
      (if source 
-         `(compile-in-annotation (,fun-exp . ,arg-exps) ,source)
+         `(annotate (,fun-exp . ,arg-exps) ,source)
          `(,fun-exp . ,arg-exps)))))
 
 (define-syntax build-conditional
   (syntax-rules ()
     ((_ source test-exp then-exp else-exp)
      (if source
-       	 `(compile-in-annotation (if ,test-exp ,then-exp ,else-exp) ,source)
+       	 `(annotate (if ,test-exp ,then-exp ,else-exp) ,source)
          `(if ,test-exp ,then-exp ,else-exp)))))
 
 (define-syntax build-lexical-reference
   (syntax-rules ()
     ((_ type source var)
      (if source 
-         `(compile-in-annotation ,var ,source)
+         `(annotate ,var ,source)
          var))))
 
 (define-syntax build-lexical-assignment
   (syntax-rules ()
     ((_ source var exp)
      (if source
-         `(compile-in-annotation (set! ,var ,exp) ,source)
+         `(annotate (set! ,var ,exp) ,source)
          `(set! ,var ,exp)))))
 
 (define-syntax build-global-reference
   (syntax-rules ()
     ((_ source var)
      (if source 
-         `(compile-in-annotation ,var ,source)
+         `(annotate ,var ,source)
          var))))
 
 (define-syntax build-global-assignment
   (syntax-rules ()
     ((_ source var exp)
      (if source
-         `(compile-in-annotation (set! ,var ,exp) ,source)
+         `(annotate (set! ,var ,exp) ,source)
          `(set! ,var ,exp)))))
 
 (define-syntax build-global-definition
   (syntax-rules ()
     ((_ source var exp)
      (if source
-         `(compile-in-annotation (define ,var ,exp) ,source)
+         `(annotate (define ,var ,exp) ,source)
          `(define ,var ,exp)))))
 
 (define-syntax build-module-definition
@@ -600,7 +604,7 @@
   (syntax-rules ()
     ((_ src vars exp)
      (if src 
-         `(compile-in-annotation (lambda ,vars ,exp) ,src)
+         `(annotate (lambda ,vars ,exp) ,src)
          `(lambda ,vars ,exp)))))
 
 (define-syntax build-primref
@@ -608,12 +612,19 @@
     ((_ src name) name)
     ((_ src level name) name)))
 
+(define-syntax do-build-data
+  (syntax-rules () 
+    ((_ data)
+     (if (atom? data) 
+         data 
+         `(#%quote ,data)))))
+         
 (define-syntax build-data
   (syntax-rules ()
     ((_ src exp) 
      (if src
-         `(compile-in-annotation ('#(quote) ,exp) ,src)
-         `('#(quote) ,exp)))))
+         `(annotate ,(do-build-data exp) ,src)
+         (do-build-data exp)))))
 
 (define build-sequence
   (lambda (src exps)
@@ -623,21 +634,21 @@
            (build-sequence src (cdr exps))]
           [(null? (cdr exps)) 
            (if src 
-               `(compile-in-annotation ,(car exps) ,src)
+               `(annotate ,(car exps) ,src)
                (car exps))]
           [else
             (if src
-                `(compile-in-annotation (begin ,@exps) ,src)
+                `(annotate (begin ,@exps) ,src)
                 `(begin ,@exps))])))
 
 (define build-letrec
   (lambda (src vars val-exps body-exp)
     (if (null? vars)
         (if src
-            `(compile-in-annotation ,body-exp ,src)
+            `(annotate ,body-exp ,src)
             body-exp)
         (if src
-            `(compile-in-annotation 
+            `(annotate 
               (letrec ,(map list vars val-exps) ,body-exp)
               ,src)
             `(letrec ,(map list vars val-exps) ,body-exp)))))
@@ -648,15 +659,9 @@
 
 (define-syntax build-lexical-var
   (syntax-rules ()
-    ((_ src id) (if src `(compile-in-annotation ,(gen-sym id) ,src) 
+    ((_ src id) (if src `(annotate ,(gen-sym id) ,src) 
         (gen-sym id)))))
 
-(define-syntax self-evaluating?
-  (syntax-rules ()
-    ((_ e)
-     (let ((x e))
-       (not (or (pair? x) (vector? x) (and (null? x)
-                                           (strict-r5rs-compliance))))))))
 )
 
 
@@ -2382,7 +2387,7 @@
 
 (define chi-void
   (lambda ()
-  	(build-data #f '#!void)))
+  	(build-data #f #!void)))
 
 (define ellipsis?
   (lambda (x)

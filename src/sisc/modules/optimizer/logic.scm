@@ -106,7 +106,7 @@
 (define (opt:letrec-helper formals values* state)
   (let ((state (union-state-entry* state 'lvars formals)))
     (let-values ([(nf nvo cpc sec)
-                  (cp-candidates formals values* state '#t)])
+                  (cp-candidates formals values* state #t)])
       (let ([state (if (null? cpc)
                        state
                        (union-state-entry* state 'constant-prop cpc))])
@@ -138,7 +138,7 @@
 
 (define (opt:let formals values* body state)
   (let ((state (union-state-entry* state 'lvars formals)))
-    (let-values ([(nf nv cpc sec) (cp-candidates formals values* state '#f)])
+    (let-values ([(nf nv cpc sec) (cp-candidates formals values* state #f)])
       (let-values ([(rv state)
                     (opt body (if (null? cpc)
                                   state
@@ -164,26 +164,32 @@
 (define (opt:if test conseq altern state)
   (match test
     ;;Branch elimination (always safe)
-    ((quote ,x)
+    (,x
+     (guard (constant? x))
      (values 
       (if x conseq altern)
       (new-state)))
     ;;Various lookahead opts
-    ((if ,B '#f '#f)
+    ((,?if ,B #f #f)     
+     (guard (core-form-eq? ?if 'if #%if))
      (values 
       (make-begin B altern)
       (new-state)))
-    ((if ,B '#f (quote ,x))
+    ((,?if ,B #f ,x)
+     (guard (and (constant? x)
+                 (core-form-eq? ?if 'if #%if)))
      (opt:if B altern conseq state))
-    ((if ,B (quote ,x) '#f)
+    ((,?if ,B ,x #f)
+     (guard (and (constant? x) (core-form-eq? ?if 'if #%if)))
      (opt:if B conseq altern))
-    ((if ,B (quote ,x) (quote ,y))
+    ((,?if ,B ,x ,y)
+     (guard (and (constant? x) (constant? y) (core-form-eq? ?if 'if #%if)))
      (values 
       (make-begin B conseq)
       (new-state)))
     ;;Begin lifting (possibly unsafe)
-    ((begin ,e* ... ,el)
-;       (guard (core-form-not-redefined? 'begin))
+    ((,?begin ,e* ... ,el)
+     (guard (core-form-eq? ?begin 'begin #%begin))
      (let-values ([(rv state) (opt:if el conseq altern state)])
        (values (apply make-begin (append e* `(,rv)))
                (merge-states state '((new-assumptions begin))))))
@@ -195,7 +201,7 @@
     (cond [(and (eq? rator 'not)
                 (not-redefined? 'not)
                 (= (length rands) 1))
-           (let-values ([(rv state) (opt:if (car rands) ''#f ''#t state)])
+           (let-values ([(rv state) (opt:if (car rands) #f #t state)])
              (values rv (merge-states state '((new-assumptions not)))))]
           [(and (symbol? rator)
                 (not-redefined? rator)
@@ -216,16 +222,14 @@
 (define (mb-helper exp1 . exps*)
   (if (null? exps*)
       (if (and (pair? exp1)
-               (eq? (car exp1) 'begin))
+               (core-form-eq? (car exp1) 'begin '#%begin))
           (apply mb-helper (cdr exp1))
           (list exp1))
       (match exp1
-        ;; Eliminate constants in command context
-        ((quote ,x) 
-         (apply mb-helper exps*))
-        ;; Eliminate variable references in command context
+        ;; Eliminate constants and variable references
+        ;; in command context.
         (,x
-         (guard (symbol? x))
+         (guard (or (constant? x) (symbol? x)))
          (apply mb-helper exps*))
         ;; Eliminate procedures in command context
         ((lambda ,formals ,body)
@@ -244,7 +248,7 @@
         (if (and (pair? result)
                  (= (length result) 1))
             (car result)
-            (cons 'begin result)))))
+            (cons #%begin result)))))
                    
 
 (define (opt:begin exp1 exps* state)

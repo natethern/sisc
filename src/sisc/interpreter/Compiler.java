@@ -16,19 +16,39 @@ import sisc.util.Util;
  */
 public class Compiler extends Util {
 
+	//Various integer constants
+	public static final int 
+	 	  SYNTACTIC_TOKEN_COUNT = 9,
+	 	  
+		  APPLICATION=0, LAMBDA = 1, _IF=2, BEGIN=3, QUOTE=4, SET=5, DEFINE=6,
+		  MAKEANNOTATION=7, LETREC=8, UNKNOWN=-1, 
+        
+		  TAIL=1, COMMAND=2, PREDICATE=4, REALTAIL=8;
+
+	public static final Map SYNTACTIC_TOKENS=new HashMap(SYNTACTIC_TOKEN_COUNT);
+			  
+	//Define the core syntactic constructs of the interpreter
+	static final Syntax
+    	SYN_QUOTE  = syntax("quote", QUOTE),
+    	SYN_BEGIN  = syntax("begin", BEGIN),
+     	SYN_IF     = syntax("if", _IF),
+    	SYN_DEFINE = syntax("define", DEFINE),
+        SYN_SET    = syntax("set!", SET),	
+		SYN_LAMBDA = syntax("lambda", LAMBDA),
+		SYN_LETREC = syntax("letrec", LETREC),
+		SYN_ANNOT  = syntax("annotate", MAKEANNOTATION);
+		
+	static Syntax syntax(String name, int id) {
+		Syntax s=new Syntax(id);
+		s.setName(Symbol.get(name));
+		SYNTACTIC_TOKENS.put(name, s);
+		return s;
+	}
+	
     static void extendenv(SymbolicEnvironment env, String s, int i) {
         Symbol name=Symbol.get(s);
         env.define(name, new Syntax(i));
-    }
-
-    static String synnames[]={"app", "lambda","if", "begin","quote","set","define",
-        "makeann","letrec"};
-        
-    public static final int 
-        APP=0, LAMBDA = 1, _IF=2, BEGIN=3, QUOTE=4, SET=5, DEFINE=6,
-        MAKEANNOTATION=7, LETREC=8, 
-        
-        TAIL=1, COMMAND=2, PREDICATE=4, REALTAIL=8;
+    }       
 
     static final Symbol 
         VARNAME=Symbol.get("var-name"),
@@ -38,14 +58,10 @@ public class Compiler extends Util {
     public Compiler() {}
 
     public static void addSpecialForms(SymbolicEnvironment menv) {
-        extendenv(menv,"lambda", LAMBDA);
-        extendenv(menv,"letrec", LETREC);
-        extendenv(menv,"if", _IF);
-        extendenv(menv,"begin", BEGIN);
-        extendenv(menv,"quote", QUOTE);
-        extendenv(menv,"set!", SET);
-        extendenv(menv,"define", DEFINE);
-        extendenv(menv,"compile-in-annotation", MAKEANNOTATION);
+    	for (Iterator i=SYNTACTIC_TOKENS.keySet().iterator(); i.hasNext();) {
+			String name=(String)i.next();
+			extendenv(menv,name,((Syntax)SYNTACTIC_TOKENS.get(name)).synid);
+    	}
     }
 
     public Expression compile(Interpreter r, Expression v, ReferenceEnv rt,
@@ -77,12 +93,15 @@ public class Compiler extends Util {
         return e;
     }
 
-    final int getExpType(SymbolicEnvironment env, Symbol s) {
-        Object h=env.lookup(s);
-        if (h == null) return APP;
-        if (h instanceof Syntax)
-            return ((Syntax)h).synid;
-        return APP;
+    final int getExpType(SymbolicEnvironment env, Value s) {
+    	if (s instanceof Syntax) {
+    		return ((Syntax)s).synid;
+		} else if (s instanceof Symbol){
+			Object h = env.lookup((Symbol)s);
+			if (h != null && (h instanceof Syntax))
+				return ((Syntax) h).synid;
+    	}
+		return APPLICATION;
     }
 
     void addAnnotations(Expression e, Map m) {
@@ -119,37 +138,29 @@ public class Compiler extends Util {
 
         Expression tmp, rv;
 
-        int eType=-1;
-        Value oper=expr.car;
-        if (expr.car instanceof Symbol) {
-            eType=getExpType(env, (Symbol)oper);
-            expr=(Pair)expr.cdr;
-        } else if (expr.car instanceof Syntax) {
-            eType=((Syntax)expr.car).synid;
-            expr=(Pair)expr.cdr;
-        }
-        
-        if (eType >= 0) {
-            switch (eType) {
-            case QUOTE:
-                rv=expr.car;
-                break;
-            case LAMBDA:
-                boolean infArity=false;
-                Symbol[] formals=null;
+		Value oper=expr.car;
+        int eType=getExpType(env, oper);
+        expr=(Pair)expr.cdr;
 
-                if (expr.car == EMPTYLIST) {
-                    // If the formals were empty (a thunk), we're not'
-                    // going to allocate a lexical rib, so don't increase
-                    // the lexical depth
+        switch (eType) {
+        case QUOTE:
+            rv=expr.car;
+            break;
+        case LAMBDA:
+            boolean infArity=false;
+            Symbol[] formals=null;
+            if (expr.car == EMPTYLIST) {
+                // If the formals were empty (a thunk), we're not'
+                // going to allocate a lexical rib, so don't increase
+                // the lexical depth
 
-                    expr=(Pair)expr.cdr;
-                    tmp=compile(r, expr.car, rt, TAIL | LAMBDA | REALTAIL, 
-                                env, null);
-                    rv=new LambdaExp(0, tmp, false);
-                } else {
-                    if (expr.car instanceof Pair) {
-                        formals=argsToSymbols((Pair)expr.car);
+                expr=(Pair)expr.cdr;
+                tmp=compile(r, expr.car, rt, TAIL | LAMBDA | REALTAIL, 
+                            env, null);
+                rv=new LambdaExp(0, tmp, false);
+            } else {
+                if (expr.car instanceof Pair) {
+                    formals=argsToSymbols((Pair)expr.car);
                         Pair tmpp=(Pair)expr.car;
                         while (tmpp.cdr instanceof Pair
                                && tmpp.cdr!=EMPTYLIST)
@@ -245,19 +256,17 @@ public class Compiler extends Util {
                 rv=compile(r, aexpr, rt, context, env, annot);
                 an=null;
                 break;
+            case APPLICATION:
+			case UNKNOWN:
+				  Expression[] exps=pairToExpressions(expr);
+				  compileExpressions(r, exps, rt, 0, env);
+				  rv = application(r, 
+								   compile(r,oper,rt,0,env, null), 
+								   exps, context, an);
+				  break;
             default:
-                Expression[] exps=pairToExpressions(expr);
-                compileExpressions(r, exps, rt, 0, env);
-                rv = application(r, 
-                                 compile(r,oper,rt,0,env, null), 
-                                 exps, context, an);
-            }
-        } else {
-            Expression[] exps=pairToExpressions((Pair)expr.cdr);
-            compileExpressions(r, exps, rt, 0, env);
-            rv = application(r, 
-                             compile(r, expr.car, rt, 0, env, null), 
-                             exps, context, an);
+            	error(r, "Unsupported syntactic type ["+eType+"].  Should never happen!");
+            	rv=null;
         }
         if (an!=null)
             setAnnotations(rv, an);
@@ -420,7 +429,7 @@ public class Compiler extends Util {
         }
 
         public void display(ValueWriter w) throws IOException {
-            w.append("#!").append(synnames[synid]);
+            w.append("#%").append(getName());
         }
 
         public Syntax() {}

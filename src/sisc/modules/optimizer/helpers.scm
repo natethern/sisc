@@ -16,24 +16,22 @@
   (if (null? lses) ls1
       (apply union (union-2 ls1 (car lses)) (cdr lses))))
 
-(define (atom? x)
-  (and (not (pair? x))
-       (not (vector? x))
-       (not (box? x))))
-
 (define (constant? e)
-  (and (pair? e) (= (length e) 2) (eq? (car e) 'quote)))
+  (or (atom? e) 
+      (and (pair? e) (= (length e) 2) (eq? (car e) #%quote))))
 
 (define (immediate? e)
   (or (symbol? e)
-      (and (pair? e) (= (length e) 2) (eq? (car e) 'quote))))
+      (constant? e)))
 
 (define (not-redefined? proc)
   (memq proc (getprop 'assumptive-procedures '*opt* '())))
 
-(define-syntax core-form-not-redefined? 
+(define-syntax core-form-eq? 
   (syntax-rules ()
-    ((_ proc)
-     (eq? (getprop proc (get-symbolic-environment '*sisc-specific*))
-          (getprop proc)))))
+    ((_ proc name syntoken)
+     (or (eq? proc syntoken)
+     	 (and (eq? proc name)
+              (eq? (getprop proc (get-symbolic-environment '*sisc-specific*))
+                   (getprop proc)))))))
 

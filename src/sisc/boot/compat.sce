@@ -124,6 +124,14 @@
 
 (define strict-r5rs-compliance (_make-native-parameter "strictR5RSCompliance"))
   
+(define atom?
+  (lambda (v)
+    (if (pair? v)
+        #f
+        (if (symbol? v)
+            #f
+            #t))))
+            
 (define make-false
   (lambda (v) '#f))
 

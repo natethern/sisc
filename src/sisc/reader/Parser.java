@@ -3,6 +3,7 @@ package sisc.reader;
 import java.io.*;
 import java.util.*;
 
+import sisc.interpreter.Compiler;
 import sisc.data.*;
 import sisc.util.Util;
 import sisc.io.InputPort;
@@ -272,9 +273,14 @@ public class Parser extends Util implements Tokens {
                     return EOF;
                 else if (bv.equals("void"))
                     return VOID;
-                else if (bv.equals("quote"))
-                    return QUOTE;
-                else throw new IOException(liMessage(SISCB, "invalidsharpc"));
+                else throw new IOException(liMessage(SISCB, "invalidsharpc", bv));
+			case '%': 
+				// Syntactic tokens
+				bv=lexer.readToBreak(is, Lexer.special, false, false).toLowerCase();
+				Compiler.Syntax s=(Compiler.Syntax)Compiler.SYNTACTIC_TOKENS.get(bv);
+				if (s==null)
+					throw new IOException(liMessage(SISCB, "invalidsyntoken", bv));
+				return s;				
             case '\'':
                 o=listSpecial(SYNTAX, is, state, def, flags);
                 break;

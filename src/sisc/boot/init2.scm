@@ -166,6 +166,7 @@
 
 (define (hook-items proc)
   (annotation proc 'items))
+  
 (define (set-hook-items! proc items)
   (set-annotation! proc 'items items))
 
