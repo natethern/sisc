@@ -8,6 +8,11 @@
 
 	* Changed eq? to pointer equality.
 
+2003-03-24  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed bug in exception handling logic that was causing breakage
+	  on non-Scheme exceptions, e.g. exceptions thrown by s2j.
+
 2003-03-10  SISC 1.7.7 Released
 	
 2003-03-10  Scott G. Miller  <scgmille@freenetproject.org>
