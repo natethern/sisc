@@ -50,7 +50,8 @@
      ; An already analyzed expression, skip it.  This can occur when
      ; psyntax pre-expands some forms in complicated syntax-case expressions.
      ; The analyzer also must deal with expressions that contain a mix of
-     ; analyzed and unanalyzed code.
+     ; analyzed and unanalyzed code.  Only lambda/letrec have a different structure
+     ; in analyzed vs unanalyzed code, hence only the distinction here.
      (guard (or (core-form-eq? ?lambda/letrec 'lambda #%lambda)
                 (core-form-eq? ?lambda/letrec 'letrec #%letrec)))
      (values `(,?lambda/letrec #t ,formals ,meta ,body) (new-state)))
