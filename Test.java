@@ -85,8 +85,8 @@ public class Test extends JFrame implements Runnable {
 
 
     public static void main(String[] args) throws Exception {
-	REPL r=new REPL(System.in, System.out, System.err, args);
-	Test t=new Test(r.r);
+	Interpreter r = REPL.createInterpreter(args);
+	Test t=new Test(r);
 	t.show();
     }
 }
