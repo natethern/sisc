@@ -44,7 +44,11 @@ public class Interpreter extends Util {
 	rnew.writer=parent.writer;
 	rnew.evaluator=parent.evaluator;
 	if (rnew.toplevel_env!=null) 
-	    rnew.symenv.define(TOPLEVEL, rnew.toplevel_env);
+	    try {
+		rnew.symenv.define(TOPLEVEL, rnew.toplevel_env);
+	    } catch (EnvironmentLockedException el) {
+		el.printStackTrace();
+	    }
 	else 
 	    try {
 		rnew.toplevel_env=
@@ -79,7 +83,9 @@ public class Interpreter extends Util {
 	     new OutputPort(new PrintWriter(out)),
 	     new AssociativeEnvironment());
 	if (toplevel_env!=null) 
-	    symenv.define(TOPLEVEL, toplevel_env);
+	    try {
+		symenv.define(TOPLEVEL, toplevel_env);
+	    } catch (EnvironmentLockedException e) {}
 	else 
 	    try {
 		toplevel_env=(AssociativeEnvironment)symenv.lookup(TOPLEVEL);
@@ -208,21 +214,24 @@ public class Interpreter extends Util {
                 symenv.lookup(s);
         } catch (UndefinedException e) {
             contenv=new AssociativeEnvironment();
-            symenv.define(s, contenv);
+	    try {
+		symenv.define(s, contenv);
+	    } catch (EnvironmentLockedException el) {}
         }
 	return contenv;
     }
 
-    public void define(Symbol s, Value v, Symbol context) {
-        AssociativeEnvironment contenv=getContextEnv(context);
-	contenv.define(s,new Box(v));
-    }
-    
-    public void set(Symbol s, Value v, Symbol context) {
+    public void define(Symbol s, Value v, Symbol context) throws EnvironmentLockedException {
         AssociativeEnvironment contenv=getContextEnv(context);	
 	try {
-	    Box fr=(Box)contenv.lookup(s);
-	    fr.val=v;
+	    AssociativeEnvironment host=contenv.lookupHost(s);
+
+	    if (host.locked()) 
+		contenv.define(s, new Box(v));
+	    else {
+		Box fr=(Box)host.lookup(s);
+		fr.val=v;
+	    }
 	} catch (UndefinedException e) {
 	    contenv.define(s, new Box(v));
 	} catch (ClassCastException e2) {

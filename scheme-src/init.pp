@@ -384,7 +384,12 @@
    complex?))
 (define complex? number?)
 (define abs
-  (lambda (num) (if (< num '0) (- num) num)))
+  (lambda (num)
+    (if (not (real? num))
+      ((lambda (a b) (sqrt (+ (* a a) (* b b))))
+       (real-part num)
+       (imag-part num))
+      (if (< num '0) (- num) num))))
 (define _min_max
   (lambda (proc mv args inexact)
     (if (null? args)

@@ -4,14 +4,23 @@ import sisc.data.*;
 import java.util.*;
 import java.io.*;
 
-public class AssociativeEnvironment extends Value implements Serializable {
+public class AssociativeEnvironment extends NamedValue implements Serializable {
 
     AssociativeEnvironment parent;
     protected Hashtable  bindings;
+    private boolean locked=false;
 
     public AssociativeEnvironment() {
 	this(5);
     } 
+    
+    public void lock() {
+	locked=true;
+    }
+
+    public boolean locked() {
+	return locked;
+    }
 
     public AssociativeEnvironment(int size) {
 	bindings=new Hashtable (size); 
@@ -40,12 +49,22 @@ public class AssociativeEnvironment extends Value implements Serializable {
 	parent=par;
     }
     */
-    public Expression define(Symbol s, Expression val) {
+    public Expression define(Symbol s, Expression val) throws EnvironmentLockedException {
+	if (locked) throw new EnvironmentLockedException();
 	Expression ov=(Expression)bindings.get(s);
 	bindings.put(s,val);
 	return ov;
     }
 
+    public AssociativeEnvironment lookupHost(Symbol sym) throws UndefinedException {
+	Expression b=(Expression)bindings.get(sym);
+	if (b==null)
+	    if (parent!=null)
+		return parent.lookupHost(sym);
+	    else throw new UndefinedException();
+	else return this;
+    }
+	
     public Expression lookup(Symbol sym) throws UndefinedException {
 	Expression b=(Expression)bindings.get(sym);
 	if (b==null)
@@ -55,7 +74,8 @@ public class AssociativeEnvironment extends Value implements Serializable {
 	else return b;
     }
     
-    public Expression set(Symbol s, Expression v) {
+    public Expression set(Symbol s, Expression v) throws EnvironmentLockedException {
+	if (locked) throw new EnvironmentLockedException();
 	Expression b=(Expression)bindings.get(s);
 	if (b==null) {
 	    if (parent!=null) {
@@ -82,7 +102,12 @@ public class AssociativeEnvironment extends Value implements Serializable {
     }
 
     public String display() {
-	return "#<environment>";
+	StringBuffer sb=new StringBuffer();
+	sb.append("#<environment");
+	if (name!=null)
+	    sb.append(' ').append(name);
+	sb.append('>');
+	return sb.toString();
     }
 
     public boolean valueEqual(Expression v) {
@@ -94,7 +119,9 @@ public class AssociativeEnvironment extends Value implements Serializable {
 	AssociativeEnvironment newEnv=new AssociativeEnvironment();
 	while (assoc!=EMPTYLIST) {
 	    Pair bind=(Pair)assoc.car;
-	    newEnv.define((Symbol)bind.car, bind.cdr);
+	    try {
+		newEnv.define((Symbol)bind.car, bind.cdr);
+	    } catch (Exception e) {}
 	    assoc=(Pair)assoc.cdr;
 	}
 	return newEnv;

@@ -15,6 +15,7 @@ public class DefineEval extends Expression {
 	}
 
 	r.define(lhs, rhs, TOPLEVEL);
+
 	r.acc=VOID;
 	r.nxp=null;
     }

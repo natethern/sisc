@@ -322,7 +322,12 @@
 
 (define complex? number?)
 
-(define (abs num) (if (< num 0) (- num) num))
+(define (abs num) 
+  (if (not (real? num))
+      (let ([a (real-part num)]
+	    [b (imag-part num)])
+	(sqrt (+ (* a a) (* b b))))
+      (if (< num 0) (- num) num)))
 
 (define (_min_max proc mv args inexact)
   (cond [(null? args) (if (and inexact (exact? mv)) 
