@@ -69,7 +69,7 @@ public class TestR5RS
         AppContext ctx = new AppContext();
         Context.register("main", ctx);
         interpreter = Context.enter("main");
-        
+
         REPL.loadHeap(
         	interpreter,
         	REPL.findHeap(
