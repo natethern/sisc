@@ -39,17 +39,11 @@ public class Symbol extends Value {
     }
 
     private void slashify(ValueWriter w) throws IOException {
-        if (Parser.isPeculiarIdentifier(symval)) 
-            w.append(symval);
-        else 
-            for (int i=0; i<symval.length(); i++) {
-                char c=symval.charAt(i);
-                if ((i>0 && Lexer.isIdentifierSubsequent(c)) ||
-                    (i==0 && Lexer.isIdentifierStart(c)))
-                    w.append(c);
-                else 
-                    w.append('\\').append(c);
-            }
+        for (int i=0; i<symval.length(); i++) {
+            char c=symval.charAt(i);
+            if (!Lexer.isIdentifierSubsequent(c)) w.append('\\');
+            w.append(c);
+        }
     }
 
     public boolean valueEqual(Value v) {
@@ -58,7 +52,10 @@ public class Symbol extends Value {
     }
 
     public void write(ValueWriter w) throws IOException {
-        if (caseSensitive || symval.toLowerCase().equals(symval))
+        if ((caseSensitive || symval.toLowerCase().equals(symval))
+            && (Parser.isPeculiarIdentifier(symval)
+                || (symval.length()>0
+                    && Lexer.isIdentifierStart(symval.charAt(0)))))
             slashify(w);
         else {
             w.append('|');
