@@ -56,6 +56,10 @@ public class EmptyList extends Pair implements Singleton {
         return null;
     }
 
+    public boolean valueEqual(Value o) {
+	return o instanceof EmptyList;
+    }
+
     public void serialize(Serializer s, DataOutput dos) throws IOException {}
 
     public static Value getValue(DataInput dis) {
