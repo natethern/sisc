@@ -139,17 +139,27 @@
 	Characters
       </title>
       <para>
-	&SISC;'s characters are based on the Java character type. As
-	such, the full range of unicode characters are
-	supported. Unicode characters can be created with
+	&SISC;'s characters are double-byte wide.  This means that they
+	are capable of representing the full range of unicode characters. 
+        Unicode characters can be created with
 	<function>number-&gt;character</function> or 
 	<computeroutput>&num;&bsol;nnnnnn</computeroutput>, where <computeroutput>nnnn</computeroutput> is an
 	octal number in the range 000000 -&gt; 177777.  At least two zeros must
         be specified to distinguish from the '0' character.
       </para>
       <para>
-	Characters are compared with respect to the locale detected
-	by the Java VM.
+	Characters are <emphasis>not</emphasis> compared with respect to the
+        locale of the running system.  Character comparison is equivalent
+        to numeric comparison of the character value as returned by
+        <function>char->integer</function>.
+      </para>
+      <para>
+        There are a number of reasons why a full Unicode system is
+        non-trivial, especially within the framework of the &R5RS;
+        string and character functions.  Such a discussion is outside
+        the scope of this document.  A Unicode compliant processing
+        library may be made available in the future as a library,
+        however.
       </para>
     </sect2>
     <sect2 id="Symbols">
@@ -236,8 +246,8 @@
 	Strings
       </title>
       <para>
-	Strings are built from unicode characters, and are compared
-	according to the locale's rules.
+	Strings are built from Unicode characters, and are compared
+        lexicographically in a manner derived from character comparison.
       </para>
     </sect2>
     <sect2 id="Lists">

@@ -80,20 +80,9 @@
     <title>Errata</title>
     <para>
       This appendix describes where this manual and the implementation
-      of SISC depart.  This section should remain small, as it is the
-      goal of the Interpreter to conform to this document, not for
-      this document to describe the idiosyncrasies of the Interpreter.
-    </para>
-    <para>
-      <orderedlist>
-	<listitem>
-	  <para>
-	    (<xref linkend="Characters"/> and <xref
-	    linkend="Strings"/>) Characters  and strings are not
-	    compared according to locale rules (bug &num;493773)
-	  </para>
-	</listitem>
-      </orderedlist>
+      of SISC depart.  This section should ideally remain small or empty, 
+      as it is the goal of the system to conform to this document, 
+      not for this document to describe the idiosyncrasies of the system.
     </para>
   </appendix>
   <appendix>
