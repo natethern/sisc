@@ -187,8 +187,8 @@
                                line column
                                (make-error-message 
                                 (and (pair? m) (assoc-val 'location m))
-                                (and (pair? m) (or (assoc-val 'message m)
-                                                   "{no error message}")))))))
+                                (or (and (pair? m) (assoc-val 'message m))
+                                    "{no error message}"))))))
               (for-each
                (lambda (data expr)
                  (if data
