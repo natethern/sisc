@@ -631,7 +631,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
         </listitem>
         <listitem>
           <para>
-            <literal>slt</literal> - &SISC; Loadable Thunk.  This
+            <literal>scc</literal> - &SISC; Compiled Code.  This
             contains expanded and compiled code in a &SISC; specific
             representation. The code gets executed when loaded.
           </para>

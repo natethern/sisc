@@ -3,7 +3,7 @@
 (define (locate-library lib)
   (define (suffixed-lib ext)
     (find-resource (string-append (symbol->string lib) "." ext)))
-  (or (suffixed-lib "slt")
+  (or (suffixed-lib "scc")
       (suffixed-lib "sll")
       (suffixed-lib "sce")
       (suffixed-lib "scm")))
@@ -35,34 +35,31 @@
   (let ([lib (normalize-lib-name lib)])
     (hashtable/get *libraries* lib)))
 
-(define *thunk-libraries* (make-hashtable eq?))
+(define (load-compiled name)
+  (call-with-serial-input-file name
+    (lambda (port)
+      (let loop ()
+        (let ([v (deserialize port)])
+          (or (eof-object? v) (begin (v) (loop))))))))
 
-(define (provide-thunk-library name thunk)
-  (hashtable/put! *thunk-libraries* name thunk)
-  (provide-library name))
-
-(define (thunk-library name)
-  (hashtable/get *thunk-libraries* name))
-
-(define (load-thunk-library name)
-  (let ([thunk (call-with-serial-input-file name deserialize)])
-    ;;thunk libs return their name when evaluated
-    (provide-thunk-library (thunk) thunk)))
-
-(define (save-thunk-library name filename)
-  (call-with-serial-output-file filename
-    (lambda (port) (serialize (thunk-library name) port))))
-
-(define-simple-syntax (define-library (?name ?req-lib ...) ?expr ...)
-  (begin
-    (require-library '?req-lib)
-    ...
-    (let ([thunk (compile '(begin
-                             (require-library '?req-lib)
-                             ...
-                             ?expr ...
-                             '?name))])
-      (provide-thunk-library (thunk) thunk))))
+(define (compile-file from to)
+  (let ([inf #f]
+        [outf #f])
+    (dynamic-wind
+     (lambda ()
+       (set! inf (open-source-input-file from))
+       (set! outf (open-serial-output-file to)))
+     (lambda ()
+       (with-current-url from
+         (lambda ()
+           (let loop ()
+             (let ([e (read-code inf)])
+               (or (eof-object? e)
+                   (begin (serialize (compile e) outf)
+                          (loop))))))))
+     (lambda ()
+       (close-output-port outf)
+       (close-input-port inf)))))
 
 (define (install)
-  (add-file-handler 'slt load-thunk-library))
+  (add-file-handler 'scc load-compiled))

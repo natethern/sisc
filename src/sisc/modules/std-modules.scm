@@ -768,14 +768,11 @@
    provide-library
    library-exists?
    library-loaded?
-   load-thunk-library
-   save-thunk-library
-   (define-library provide-thunk-library))
+   compile-file)
   (import threading)
   (import hashtable)
   (import serial-io)
   (import* debugging compile)
-  (import* misc define-simple-syntax)
   (include "libraries.scm")
   (install))
 

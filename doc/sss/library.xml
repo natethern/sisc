@@ -912,7 +912,7 @@ com/foo/bar/baz/baz3.scm
                 located by the <link
                 linkend="Resources"><function>find-resource</function>
                 procedure</link>.  The name of the resource is derived
-                from the name of the library by appending ".slt",
+                from the name of the library by appending ".scc",
                 ".sll", ".sce" and, if that does not succeed, ".scm".
               </para>
             </blockquote>
@@ -1016,8 +1016,8 @@ com/foo/bar/baz/baz3.scm
           linkend="Modules"/> for details of &SISC;'s module system.
           The definitions for SRFI modules are not included in the
           standard &SISC; heap build and hence must be loaded
-          separately from the thunk library
-          <filename>srfi.slt</filename>, which is contained in the
+          separately from the compiled code in
+          <filename>srfi.scc</filename>, which is contained in the
           <filename>sisc-lib.jar</filename> jar file in the root
           directory of the &SISC; binary distribution. As long as this
           jar file is on the classpath, which is the case by default,

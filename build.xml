@@ -217,7 +217,7 @@
     </java>
   </target> 
 
-  <target name="srfi-slt" depends="full-heap" unless="lite">
+  <target name="srfi-scc" depends="full-heap" unless="lite">
     <mkdir dir="${tmpdir}/sisc/libs"/>
     <java classname="sisc.REPL"
           classpath="${classdir}"
@@ -233,11 +233,11 @@
       <arg value="-h"/>
       <arg value="${heap}"/>
       <arg value="-x"/>
-      <arg value="${srfidir}/srfi-slt.scm"/>
+      <arg value="${srfidir}/srfi-scc.scm"/>
     </java>
   </target>
 
-  <target name="sisc-lib" depends="srfi-slt" unless="lite">
+  <target name="sisc-lib" depends="srfi-scc" unless="lite">
     <jar jarfile="${basedir}/${libjar}">
       <fileset dir="${tmpdir}">
             <include name="*/**"/>

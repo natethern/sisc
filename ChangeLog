@@ -1,3 +1,8 @@
+2003-08-17  Matthias Radestock  <matthias@sorted.org>
+
+	* Added SISC Compiled Code (.scc) library support, which is more
+	  general than (and replaces) Thunk Libraries (.slt).
+
 2003-08-13  SISC 1.8.2-alpha Released
 
 2003-08-10  Scott G. Miller  <scgmille@freenetproject.org>
