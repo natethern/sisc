@@ -300,6 +300,68 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
           </blockquote>
         </para>
       </sect3>
+      <sect3 id="bulkchario">
+        <title>Bulk Character I/O</title>
+        <para>
+          In addition to the &R5RS; I/O primitives, &SISC; provides
+          two functions for reading and writing blocks of characters
+          from a character port.
+        </para>
+        <para>
+          <blockquote>
+            <para>
+              <indexterm><primary>read-string</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>integer</type>
+                <methodname>read-string</methodname>
+                <methodparam><parameter>buffer</parameter></methodparam>
+                <methodparam><parameter>offset</parameter></methodparam>
+                <methodparam><parameter>count</parameter></methodparam>
+                <methodparam choice="opt">
+                  <parameter>character-input-port</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Reads up to <parameter>count</parameter> characters from the
+                  implicit or specified character port into the string
+                  <parameter>buffer</parameter> starting from the position
+                  specified by the integer <parameter>offset</parameter>.  The
+                  number of characters successfully read (which may be
+                  fewer than <parameter>count</parameter>) is returned, or the
+                  end-of-file value if the end-of-file was reached
+                  before any characters were encountered.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>write-string</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>undefined</type>
+                <methodname>write-string</methodname>
+                <methodparam><parameter>buffer</parameter></methodparam>
+                <methodparam><parameter>offset</parameter></methodparam>
+                <methodparam><parameter>count</parameter></methodparam>
+                <methodparam choice="opt">
+                  <parameter>character-output-port</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Writes exactly <parameter>count</parameter> characters from
+                  the given string <parameter>buffer</parameter> starting from
+                  the integer position <parameter>offset</parameter> to the
+                  implicit or specified character output port.  
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+        </para>
+      </sect3>
       <sect3 id="iodelegate">
         <title>Port Creation Wrappers</title>
         <para>
