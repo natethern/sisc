@@ -269,7 +269,9 @@ public class Primitives extends ModuleAdapter {
 
     public Value eval(int primid, Interpreter f)
         throws ContinuationException {
-        switch (f.vlr.length) {
+
+        
+        SIZESWITCH: switch (f.vlr.length) {
         case 0:
             switch (primid) {
             case GENSYM: 
@@ -294,6 +296,8 @@ public class Primitives extends ModuleAdapter {
             case TIMEZONEOFFSET:
                 Calendar cal = Calendar.getInstance();
                 return Quantity.valueOf((cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET)) / 1000);
+            default:
+                break SIZESWITCH;
             }
         case 1:
             switch (primid) {
@@ -454,6 +458,8 @@ public class Primitives extends ModuleAdapter {
             case COMPACTSTRINGREP:
                 SchemeString.compactRepresentation=truth(f.vlr[0]);
                 return VOID;
+            default:
+                break SIZESWITCH;
             }
         case 2:
             switch (primid) {
@@ -580,6 +586,8 @@ public class Primitives extends ModuleAdapter {
             case SETENVIRONMENT:
                 f.ctx.defineContextEnv(symbol(f.vlr[0]), env(f.vlr[1]));
                 return VOID;
+            default:
+                break SIZESWITCH;
             }
         case 3:
             switch(primid) {
@@ -629,87 +637,87 @@ public class Primitives extends ModuleAdapter {
                 }
                 return VOID;
             }
-        default:
-            Quantity quantity=null;
-            switch (primid) {
-            case APPLY:
-                Procedure proc=proc(f.vlr[0]);
-                int l = f.vlr.length-2;
-                Pair args=pair(f.vlr[l+1]);
-                Value oldvlr[] = f.vlr;
-                //this might get us back the just recycled f.vlr,
-                //which is fine since we only shift its contents to
-                //the left by one
-                Value newvlr[] = f.replaceVLR(l + length(args));
-
-                int j;
-                for (j=0; j < l; j++) {
-                    newvlr[j] = oldvlr[j+1];
-                }
-                for (; args != EMPTYLIST; args = (Pair)args.cdr) {
-                    newvlr[j++] = args.car;
-                }
-
-                f.nxp = APPEVAL;
-                return proc;
-            case LIST: return valArrayToList(f.vlr,0,f.vlr.length);
-            case ADD:
-                quantity=Quantity.ZERO;
-                for (int i=f.vlr.length-1; i>=0; i--) {
-                    quantity=quantity.add(num(f.vlr[i]));
-                }
-                return quantity;
-            case MUL:
-                quantity=Quantity.ONE;
-                for (int i=f.vlr.length-1; i>=0; i--) {
-                    quantity=quantity.mul(num(f.vlr[i]));
-                }
-                return quantity;
-            case SUB:
-                quantity=num(f.vlr[0]);
-                if (f.vlr.length==1) {
-                    return Quantity.ZERO.sub(quantity);
-                }
-                for (int i=1; i<f.vlr.length; i++) {
-                    quantity=quantity.sub(num(f.vlr[i]));
-                }
-                return quantity;
-
-            case NEQ:
-                if (f.vlr.length<2) throwArgSizeException();
-                quantity=num(f.vlr[0]);
-                for (int i=f.vlr.length-1; i>=0; i--) {
-                    if (!quantity.comp(num(f.vlr[i]), 0)) return FALSE;
-                }
-                return TRUE;
-            case LT:
-                if (f.vlr.length<2) throwArgSizeException();
-                quantity=num(f.vlr[0]);
-                for (int i=1; i<f.vlr.length; i++) {
-                    Quantity q=num(f.vlr[i]);
-                    if (!quantity.comp(q, -1)) return FALSE;
-                    quantity=q;
-                }
-                return TRUE;
-            case GRT:
-                if (f.vlr.length<2) throwArgSizeException();
-                quantity=num(f.vlr[0]);
-                for (int i=1; i<f.vlr.length; i++) {
-                    Quantity q=num(f.vlr[i]);
-                    if (!quantity.comp(q, 1)) return FALSE;
-                    quantity=q;
-                }
-                return TRUE;
-            case DIV:
-                quantity=num(f.vlr[0]);
-                if (f.vlr.length==1) {return Quantity.ONE.div(quantity); }
-                for (int i=1; i<f.vlr.length; i++) {
-                    quantity=quantity.div(num(f.vlr[i]));
-                }
-                return quantity;
-            default:
-                throwArgSizeException();
+        }
+        
+        Quantity quantity=null;
+        switch (primid) {
+        case APPLY:
+            Procedure proc=proc(f.vlr[0]);
+            int l = f.vlr.length-2;
+            Pair args=pair(f.vlr[l+1]);
+            Value oldvlr[] = f.vlr;
+            //this might get us back the just recycled f.vlr,
+            //which is fine since we only shift its contents to
+            //the left by one
+            Value newvlr[] = f.replaceVLR(l + length(args));
+            
+            int j;
+            for (j=0; j < l; j++) {
+                newvlr[j] = oldvlr[j+1];
             }
+            for (; args != EMPTYLIST; args = (Pair)args.cdr) {
+                newvlr[j++] = args.car;
+            }
+            
+            f.nxp = APPEVAL;
+            return proc;
+        case LIST: return valArrayToList(f.vlr,0,f.vlr.length);
+        case ADD:
+            quantity=Quantity.ZERO;
+            for (int i=f.vlr.length-1; i>=0; i--) {
+                quantity=quantity.add(num(f.vlr[i]));
+            }
+            return quantity;
+        case MUL:
+            quantity=Quantity.ONE;
+            for (int i=f.vlr.length-1; i>=0; i--) {
+                quantity=quantity.mul(num(f.vlr[i]));
+            }
+            return quantity;
+        case SUB:
+            quantity=num(f.vlr[0]);
+            if (f.vlr.length==1) {
+                return Quantity.ZERO.sub(quantity);
+            }
+            for (int i=1; i<f.vlr.length; i++) {
+                quantity=quantity.sub(num(f.vlr[i]));
+            }
+            return quantity;
+            
+        case NEQ:
+            if (f.vlr.length<2) throwArgSizeException();
+            quantity=num(f.vlr[0]);
+            for (int i=f.vlr.length-1; i>=0; i--) {
+                if (!quantity.comp(num(f.vlr[i]), 0)) return FALSE;
+            }
+            return TRUE;
+        case LT:
+            if (f.vlr.length<2) throwArgSizeException();
+            quantity=num(f.vlr[0]);
+            for (int i=1; i<f.vlr.length; i++) {
+                Quantity q=num(f.vlr[i]);
+                if (!quantity.comp(q, -1)) return FALSE;
+                quantity=q;
+            }
+            return TRUE;
+        case GRT:
+            if (f.vlr.length<2) throwArgSizeException();
+            quantity=num(f.vlr[0]);
+            for (int i=1; i<f.vlr.length; i++) {
+                Quantity q=num(f.vlr[i]);
+                if (!quantity.comp(q, 1)) return FALSE;
+                quantity=q;
+            }
+            return TRUE;
+        case DIV:
+            quantity=num(f.vlr[0]);
+            if (f.vlr.length==1) {return Quantity.ONE.div(quantity); }
+            for (int i=1; i<f.vlr.length; i++) {
+                quantity=quantity.div(num(f.vlr[i]));
+            }
+            return quantity;
+        default:
+            throwArgSizeException();
         }
         return VOID;
     }
