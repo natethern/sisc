@@ -198,7 +198,7 @@
 ;;;;;;;;;;;;; OS Detection
 
 (define (detect-os)
-  (let ([osn (string-downcase (getprop 'os.name '*environment-variables*))])
+  (let ([osn (string-downcase (getenv "os.name"))])
     (if (> (string-length osn) 3)
 	(cond [(equal? (substring osn 0 3) "mac") 'macos]
 	      [(equal? (substring osn 0 3) "win") 'ms-dos]

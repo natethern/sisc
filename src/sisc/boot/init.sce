@@ -290,7 +290,7 @@
                        (void))))))))
          'unix))
      (string-downcase
-       (getprop 'os.name '*environment-variables*)))))
+       (getenv "os.name")))))
 (define current-url (make-parameter '"file:."))
 (define current-directory
   (lambda |rest_SuONHQmSU|

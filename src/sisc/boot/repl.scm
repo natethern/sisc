@@ -86,10 +86,9 @@
       (current-url
        (string-append
         "file:"
-        (let ([dir (getprop 'user.dir '*environment-variables*)])
+        (let ([dir (getenv "user.dir")])
           (if dir
-              (string-append dir (getprop 'file.separator
-                                          '*environment-variables*))
+              (string-append dir (getenv "file.separator"))
               "."))))
       (let ([repl-start #f])
         (call/cc

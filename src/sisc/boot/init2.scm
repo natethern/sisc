@@ -55,7 +55,7 @@
 (define emit-debugging-symbols  (make-native-parameter "emitDebuggingSymbols"))
 (define emit-annotations        (make-native-parameter "emitAnnotations"))
 
-(if (equal? (getprop 'beta '*environment-variables*) "yes")
+(if (equal? (getenv "beta") "yes")
     (begin
       (emit-annotations #t)
       (emit-debugging-symbols #t)))
@@ -600,39 +600,6 @@
           (if (not (procedure? thunk))
               (error "~a is not a procedure" thunk))
           (set! *startup-hooks* (cons thunk *startup-hooks*)))))
-
-(on-startup
- (lambda ()
-   ;;populate *config-parameters* symbolic env with contents of
-   ;;sisc.properties file, but leaving any existing entries intact
-   (let ([prop-file (or (getprop 'sisc.propertyfile
-                                 '*environment-variables*)
-                        "sisc.properties")]
-         [testval	(list #f)])
-     (when (file-exists? prop-file) 
-       (with/fc  ;ignore errors
-        (lambda (m e) #f)
-        (lambda ()
-          (with-input-from-file prop-file
-            (lambda ()
-              (let loop ([entry (read)])
-                (or (eof-object? entry)
-                    (begin
-                      (if (eq? (getprop (car entry)
-                                        '*config-parameters*
-                                        testval)
-                               testval)
-                          (putprop (car entry)
-                                   '*config-parameters*
-                                   (cdr entry)))
-                      (loop (read))))))))))
-      ;;set various special properties
-      (let ([v (getprop 'emitannotations '*config-parameters*
-                        testval)])
-        (if (not (eq? v testval))
-            (emit-annotations v)))
-      ;;return to non-winding call/cc
-      (unload-dynamic-wind))))
 
 ;;
 (if (not (getprop 'LITE '*sisc*))
