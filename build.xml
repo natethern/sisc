@@ -8,7 +8,7 @@
   </path>
 
   <target name="prepare">
-    <property name="version" value="1.4.0"/>
+    <property name="version" value="1.4.1"/>
     <property file="${basedir}/build.properties"/>    
     <property name="srcdir" value="${basedir}/.."/>
     <property name="classdir" value="${basedir}/classes"/>
@@ -19,7 +19,7 @@
     <property name="packagename" value="sisc"/>
     <property name="jarname" value="sisc.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
-    <property name="quantity-type" value="apfloat"/>
+    <property name="quantity-type" value="64float"/>
     <property name="debugging" value="off"/>
     <property name="optimization" value="on"/>
     <!-- <property name="releasecandidate" value="yes"/> -->
