@@ -104,6 +104,7 @@
                    (repl/read
                     (lambda (v)
                       (if (and (getprop 'pretty-print '*toplevel*)
+                               (not (getprop '*sisc* 'LITE))
                                (not (circular? v)))
                           (pretty-print v)
                           ;;dynamic wind would be better here, but
