@@ -3,6 +3,7 @@
 (import s2j-reflection)
 
 ;;constructor
+(define-java-class <java.lang.object>)
 (define-java-class <java.lang.string-buffer>)
 (define sb (java-new <java.lang.string-buffer> (->jstring "foo")))
 
