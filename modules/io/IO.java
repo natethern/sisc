@@ -162,7 +162,7 @@ public class IO extends ModuleAdapter {
             if (u.getRef()!=null) {
                 b.append("%23");
                 try {
-                    b.append(URLEncoder.encode(u.getRef(), "UTF-8"));
+                    b.append(URLEncoder.encode(u.getRef()));
                 } catch (UnsupportedEncodingException e) {
                     //Cannot happen
                 }
@@ -170,7 +170,7 @@ public class IO extends ModuleAdapter {
             if (u.getQuery()!=null) {
                 b.append("%3F");
                 try {
-                    b.append(URLEncoder.encode(u.getQuery(), "UTF-8"));
+                    b.append(URLEncoder.encode(u.getQuery()));
                 } catch (UnsupportedEncodingException e) {
                     //Cannot happen
                 }
