@@ -45,9 +45,9 @@
        (lambda () (if k (let ((kk k)) (set! k #f) (kk)))))))
 
 (define (t2)
-  (call/fc (lambda () (f (lambda () (/ 1 0))
-			 (lambda () #f)))
-	   (lambda (m e c) #f)))
+  (with/fc (lambda (m e) #f)
+    (lambda () (f (lambda () (/ 1 0))
+                  (lambda () #f)))))
 
 ;;the thing to watch out for is that b and a must always appear in
 ;;pairs and without interleaving unless the level (indicated by -)

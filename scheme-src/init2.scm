@@ -67,12 +67,6 @@
            (+ r y)
            r))))
 
-(define (current-failure-continuation)
-  (call-with-failure-continuation
-   (lambda () (error 'current-fc))
-   (lambda (m e f)
-     f)))
-
 ;; This code is based on Richard Kelsey and Jonathan Rees' version of
 ;; dynamic-wind in Scheme48 (http://s48.org). It has been heavily
 ;; modified to account for SISC's lack of structures, make exception

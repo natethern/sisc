@@ -4,33 +4,29 @@
 ;;raise conditions as demanded by this SRFI's spec.
 
 (define (current-exception-handler)
-  (let ([cfc (current-failure-continuation)])
-    (lambda (exn)
-      (call/cc (lambda (k)
-		 (cfc exn k cfc))))))
+  (let ([cfc (call/fc (fk) fk)])
+    (lambda (exn) (call/cc (lambda (k) (cfc exn k cfc))))))
 
 (define (with-exception-handler handler thunk)
-  (call/fc 
-   thunk
-   (lambda (m e f)
-     (if (string? m)
-	 (set! m (make-property-condition 'exn 
-					  'message m
-					  'error-continuation e
-					  'parent-failure-continuation f)))
-     (handler m))))
+  (with/fc 
+      (lambda (m e)
+        (if (string? m)
+            (set! m (make-property-condition
+                     'exn
+                     'message m
+                     'error-continuation e
+                     'parent-failure-continuation
+                     (call/fc (fk) fk))))
+        (handler m))
+    thunk))
 
 (define-syntax handle-exceptions
   (lambda (expr)
     (syntax-case expr ()
       ((_ var handle-expr exprs ...)
        (syntax
-	(call/fc 
-	 (lambda ()
-	   exprs ...)
-	 (lambda (m e c)
-	   (let ([var m])
-	     handle-expr))))))))
+        (with/fc (lambda (m e) (let ([var m]) handle-expr))
+          (lambda () exprs ...)))))))
       
 (define (condition-predicate kind-key)
   (lambda (exn)

@@ -99,11 +99,8 @@
 ;;exception handling
 (define-generic char-at)
 (define-generic print-stack-trace)
-(call/fc
- (lambda () (char-at (->jstring "foo") (->jint 3)))
- (lambda (m e f)
-   (print-stack-trace m)
-   #f))
+(with/fc (lambda (m e) (print-stack-trace m) #f)
+  (lambda () (char-at (->jstring "foo") (->jint 3))))
 ;;throwing exceptions from within proxy
 (define <java.util.Iterator> (java-class "java.util.Iterator"))
 (define <java.lang.UnsupportedOperationException>

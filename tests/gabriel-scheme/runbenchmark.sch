@@ -30,9 +30,7 @@
   (lambda (benchmark-name benchmark-thunk)
     (display benchmark-name) (display "...")
     (let ((benchresult (cons benchmark-name 
-                             (call/fc (lambda ()
-                                        (time 3 benchmark-thunk))
-                                      (lambda (m e f)
-                                        'failed)))))
+                             (with/fc (lambda (m e) 'failed)
+                               (lambda () (time 3 benchmark-thunk))))))
       (set! benchmark-results (cons benchresult benchmark-results)))
     (newline)))
