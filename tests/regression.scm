@@ -57,12 +57,12 @@
 (should-be 820401 'okay
            (let ()
              (import threading)
-             (let loop ([x 20])
+             (let loop ([x 200])
                (if (zero? x)
                    'okay
                    (let ([t (thread/new (lambda () (force (let loop () 
                                                            (delay (force (loop)))))))])
                      (thread/start t)
-                     (sleep 1000)
+                     (sleep 100)
                      (thread/interrupt t)
                      (loop (- x 1)))))))
