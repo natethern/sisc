@@ -305,7 +305,7 @@
 
 (define format
   (lambda (where how . args)
-    (let ((str (apply sic:format how args)))
+    (let ((str (apply sisc:format how args)))
       (cond ((not where) str)
 	    ((eq? where #t) (display str))
 	    (else (display str where))))))
