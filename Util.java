@@ -77,7 +77,9 @@ public abstract class Util implements Version {
         SISCCONF=Symbol.get("*config-parameters*"),
         SISC=Symbol.get("*sisc*"),
         SISC_SPECIFIC=Symbol.get("*sisc-specific*"),
-        OTHER=Symbol.get("other");
+        OTHER=Symbol.get("other"),
+        MESSAGE=Symbol.get("message"),
+        LOCATION=Symbol.get("location");
 
     public static final int DEFAULT_SYNOPSIS_LENGTH=30;
 
@@ -109,26 +111,21 @@ public abstract class Util implements Version {
 
     public static void error(Interpreter r, Value where, String errormessage)
     throws ContinuationException {
-	error(r, liMessage(SISCB, "errorinwhere", where.toString())+": "+errormessage, false);
+	error(r, list(new Pair(MESSAGE, new SchemeString(errormessage)),
+                      new Pair(LOCATION, where)));
     }
 
-    public static void error(Interpreter r, String errormessage)
+    public static void error(Interpreter r, String errormessage) 
     throws ContinuationException {
-	error(r, errormessage, true);
-    }
-
-    public static void error(Interpreter r, String errormessage,
-                             boolean prependError)
-    throws ContinuationException {
-	error(r, new SchemeString((prependError ? liMessage(SISCB, "error")+": "+errormessage :
-				   errormessage)));
+	error(r, list(new Pair(MESSAGE, new SchemeString(errormessage))));
     }
 
     public static void error(Interpreter r, Value error)
     throws ContinuationException {
         r.acc=new Values(new Value[] {
 	    error,
-	    new ApplyParentFrame(new CallFrame((r.nxp==null?r.lxp:r.nxp), r.vlr, r.vlk,
+	    new ApplyParentFrame(new CallFrame((r.nxp==null?r.lxp:r.nxp), 
+                                               r.vlr, r.vlk,
 					       r.env, r.fk, r.stk).capture(r)),
 	    r.fk.fk});
         throw new ContinuationException(r.fk);

@@ -670,46 +670,34 @@
 ;;;;;;;;;;;;;; Runtime system
 
 ;;we try to accomodate syntax-case's way of reporting errors.
-;;This code is pretty horrible and should be cleaned up at some point.
+
 (define error
   (let ((oerror error))
     (lambda args
-      (let* ([location (if (and (not (null? args)) 
-				(symbol? (car args)))
-			   (car args)
-			   #f)]
-	     [message (if (not location)
-			  (if (not (null? args))
-			      (if (not (car args))
-				  (cadr args)
-				  (car args))
-			      #f)
-			  (if (not (null? (cdr args)))
-			      (cadr args)
-			      #f))]
-	     [objects (if (not message) 
-			  '()
-			  (if (not location)
-                              (if (not (null? args))
-                                  (if (not (car args))
-                                      (cddr args)
-                                      (cdr args))
-                                  (cdr args))
-			      (cddr args)))])
-	(if location
-	    (if message
-		(oerror (format "Error in ~s: ~a" location 
-				(apply format (cons message objects))))
-		(oerror (format "Error in ~s." location)))
-	    (if message
-		(if (string? message)
-		    (oerror (format "Error: ~a" 
-				    (apply format (cons message objects))))
-		    (if (null? objects)
-			(oerror message)
-			(error 'error "cannot specify error arguments to a non format-string error.")))
-		(oerror "Error.")))))))
-	    
+      (let ([error-record '()])
+        ;;Location
+        (cond [(null? args) (void)]
+              [(and (not (null? args))
+                    (symbol? (car args)))
+               (set! error-record (cons (cons 'location (car args)) 
+                                        error-record))
+               (set! args (cdr args))]
+              [(not (car args))
+               (set! args (cdr args))])
+
+        ;;Message/Value
+        (let ([message (and (not (null? args))
+                            (car args))])
+          (set! args (cdr args))
+          (if (null? args)
+              (if message (set! error-record (cons `(message . ,message)
+                                                   error-record)))
+              (if (string? message)
+                  (set! error-record
+                    (cons `(message . ,(apply format (cons message args)))
+                          error-record))
+                  (error 'error "cannot specify arguments to a non format-string error."))))
+        (oerror error-record)))))
 
 ;;;;;;;;;;;;; Miscellaneous
 

@@ -894,56 +894,44 @@
   ((lambda (%_1267)
      (lambda %_1268
        ((lambda (%_1269)
-          ((lambda (%_1270)
-             ((lambda (%_1271)
-                ((lambda ()
-                   (if %_1269
-                     (if %_1270
-                       (%_1267
-                         (format
-                           '"Error in ~s: ~a"
-                           %_1269
-                           (apply format (cons %_1270 %_1271))))
-                       (%_1267 (format '"Error in ~s." %_1269)))
-                     (if %_1270
-                       (if (string? %_1270)
-                         (%_1267
-                           (format
-                             '"Error: ~a"
-                             (apply format (cons %_1270 %_1271))))
-                         (if (null? %_1271)
-                           (%_1267 %_1270)
-                           (error 'error
-                                  '"cannot specify error arguments to a non format-string error.")))
-                       (%_1267 '"Error."))))))
-              (if (not %_1270)
-                '()
-                (if (not %_1269)
-                  (if (not (null? %_1268))
-                    (if (not (car %_1268))
-                      (cddr %_1268)
-                      (cdr %_1268))
-                    (cdr %_1268))
-                  (cddr %_1268)))))
-           (if (not %_1269)
-             (if (not (null? %_1268))
-               (if (not (car %_1268))
-                 (cadr %_1268)
-                 (car %_1268))
-               '#f)
-             (if (not (null? (cdr %_1268))) (cadr %_1268) '#f))))
-        (if (if (not (null? %_1268))
-              (symbol? (car %_1268))
-              '#f)
-          (car %_1268)
-          '#f))))
+          (begin
+            (if (null? %_1268)
+              (void)
+              (if (if (not (null? %_1268))
+                    (symbol? (car %_1268))
+                    '#f)
+                (begin
+                  (set! %_1269
+                    (cons (cons 'location (car %_1268)) %_1269))
+                  (set! %_1268 (cdr %_1268)))
+                (if (not (car %_1268))
+                  (set! %_1268 (cdr %_1268))
+                  (void))))
+            ((lambda (%_1270)
+               (begin
+                 (set! %_1268 (cdr %_1268))
+                 (if (null? %_1268)
+                   (if %_1270
+                     (set! %_1269
+                       (cons (cons 'message %_1270) %_1269))
+                     (void))
+                   (if (string? %_1270)
+                     (set! %_1269
+                       (cons (cons 'message
+                                   (apply format (cons %_1270 %_1268)))
+                             %_1269))
+                     (error 'error
+                            '"cannot specify arguments to a non format-string error.")))))
+             (if (not (null? %_1268)) (car %_1268) '#f))
+            (%_1267 %_1269)))
+        '())))
    error))
 (define list-ref
-  (lambda (%_1272 %_1273)
-    (if (zero? %_1273)
-      (car %_1272)
-      (list-ref (cdr %_1272) (- %_1273 '1)))))
+  (lambda (%_1271 %_1272)
+    (if (zero? %_1272)
+      (car %_1271)
+      (list-ref (cdr %_1271) (- %_1272 '1)))))
 (define values
-  (lambda %_1274
+  (lambda %_1273
     (call-with-current-continuation
-      (lambda (%_1275) (apply %_1275 %_1274)))))
+      (lambda (%_1274) (apply %_1274 %_1273)))))

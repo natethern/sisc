@@ -37,10 +37,25 @@
 (define current-default-error-handler
   (parameterize
    (lambda (message error-cont failure-cont output-port)
-     (display message output-port)
+     (display 
+      (cond [(not (pair? message)) message]
+            [(assoc 'message message) => 
+             (lambda (mr)
+               (cond [(assoc 'location message) =>
+                      (lambda (lr)
+                        (format "Error in ~a: ~a" 
+                                (cdr lr) (cdr mr)))]
+                     [else 
+                       (format "Error: ~a"
+                               (cdr mr))]))]
+            [else message])
+      output-port)
      (newline output-port)
-     (putprop 'last-error '*sisc* `((cont . ,(error-continuation-k error-cont))
-				    (value . ,message))))))
+     (putprop 'last-error '*sisc* 
+              (cons `(cont . ,(error-continuation-k error-cont))
+                    (if (pair? message) 
+                        message 
+                        (list (cons 'message message))))))))
 
 (define _exit-handler (parameterize))
 
