@@ -95,28 +95,27 @@
 ;       (guard (not-redefined? 'begin))
        (values `(begin ,@e* (if ,el ,conseq ,altern))
                '((new-assumptions begin))))
-      ;branch swap (possibly unsafe)
-      ((not ,x)
-       (guard (not-redefined? 'not))
-       (values 
-        `(if ,x ,altern ,conseq)
-        '((new-assumptions not))))
       (,other (values `(if ,other ,conseq ,altern) (new-state))))))
 
 (define constant-fold-candidates '(+ - / * not))
 
 ;; Applications and constant folding (possibly unsafe)
 (define (opt:application rator rands state)
-  (if (and (symbol? rator)
-           (memq rator (getprop 'assumptive-procedures '*opt*))
-          (andmap immediate? rands))
-      (values (list 'quote (eval `(,rator ,@rands))) 
-              (merge-states state `((new-assumptions ,rator))))
-      (match rator
-        ((lambda () ,E)
-         (values E (new-state)))
-        (,else 
-          (values `(,else ,@rands) (new-state))))))
+  (match rator
+    (not
+     (guard (and (not-redefined? 'not)
+                 (= (length rands) 1)))
+     (values `(if ,@rands '#f '#t) '((new-assumptions not))))
+    (,x
+     (guard (and (symbol? rator)
+                 (not-redefined? x)
+                 (andmap immediate? rands)))
+     (values `',(eval `(,rator ,@rands))
+             `((new-assumptions ,x))))
+    ((lambda () ,E)
+     (values E (new-state)))
+    (,else
+      (values `(,else ,@rands) (new-state)))))
 
 ;; begin flattening, constant elimination, and collapse
 (define make-begin 
