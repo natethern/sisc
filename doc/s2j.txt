@@ -99,10 +99,6 @@ evaluation depends on the type of object and the arguments:
 
 eq? is mapped to Java's == and equal? is mapped to Java's equals.
 
-A weak hash of mappings from Java objects to their corresponding
-Scheme wrappers is maintained. Thus, Java objects are represented by
-at most one Scheme object.
-
 The objects representing Java classes, fields, methods and
 constructors can be (de)serialized. Ordinary Java objects cannot be
 (de)serialized.

@@ -7,7 +7,6 @@ import java.lang.reflect.*;
 import java.io.*;
 import java.util.*;
 import sisc.Serializer;
-import java.lang.ref.WeakReference;
 
 public class S2J extends ModuleAdapter {
     public String getModuleName() {
@@ -159,8 +158,6 @@ public class S2J extends ModuleAdapter {
 
         public Object obj;
 
-        protected static WeakHashMap knownObjects = new WeakHashMap();
-
         public static final byte
             JUNKN	= 0,
             JNULL	= 1,
@@ -235,15 +232,7 @@ public class S2J extends ModuleAdapter {
                 }
             }
         }
-        /*
-            JNULL	= 1,
-            JCLASS	= 2,
-            JFIELD	= 3,
-            JMETHOD	= 4,
-            JCONSTR	= 5,
-            JARRAY	= 6,
-            JOBJ	= 7;
-        */
+
         public void deserialize(Serializer s, DataInput dis)
             throws IOException {
             if (SERIALIZATION) {
@@ -296,21 +285,12 @@ public class S2J extends ModuleAdapter {
                 default:
                     throw new RuntimeException("cannot deserialize java object");
                 }
-                knownObjects.put(obj, new WeakReference(this));
             }
         }
 
-        public static final synchronized JavaObject create(Object o) {
+        public static final JavaObject create(Object o) {
             if (o == null) return nullObj;
-            WeakReference ref = (WeakReference)knownObjects.get(o);
-            JavaObject res;
-            if (ref != null) {
-                res = (JavaObject)ref.get();
-                if (res != null) return res;
-            }
-            res = new JavaObject(o);
-            knownObjects.put(o, new WeakReference(res));
-            return res;
+            return new JavaObject(o);
         }
 
         protected JavaObject(Object o) {
@@ -492,14 +472,6 @@ public class S2J extends ModuleAdapter {
             } catch (NoSuchFieldException e) {
                 throw new RuntimeException("no field " + args[0] + " in class " + obj.getClass().getName());
             }
-        }
-
-        public void serialize(Serializer s, DataOutputStream dos)
-            throws IOException {
-        }
-
-        public void deserialize(Serializer s, DataInputStream dis)
-            throws IOException {
         }
     }
 
