@@ -180,7 +180,7 @@ public class Lexer implements Tokens {
         return false;
     }
 
-    public void skipSRFI30Comment(InputPort in) 
+    public void skipMultilineComment(InputPort in) 
         throws IOException {
         boolean seenSharp=false, seenPipe=false;
         int depth=0;

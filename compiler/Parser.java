@@ -251,7 +251,7 @@ public class Parser extends Util implements Tokens {
 		break;
             case '|': 
                 //Nested multiline comment
-                lexer.skipSRFI30Comment(is);
+                lexer.skipMultilineComment(is);
                 o=nextExpression(is, state, flags);
                 break;
             default:
