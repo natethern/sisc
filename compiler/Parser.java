@@ -75,10 +75,22 @@ public class Parser extends Util implements Tokens {
 	return (Value)n;
     }
     
-    protected Object _nextExpression(InputPort is, HashMap state, Integer def) 
+    protected Object _nextExpression(InputPort is, HashMap state, Integer def) throws IOException {
+	return _nextExpression(is, state, def, 10);
+    }
+
+    protected Quantity numberCheck(Object o) throws IOException {
+	try {
+	    return (Quantity)o;
+	} catch (ClassCastException cce) {
+	    throw new IOException("unexpected token where number was mandatory");
+	}
+    }
+	
+    protected Object _nextExpression(InputPort is, HashMap state, Integer def, int radix) 
 	throws IOException {
 
-	int token=lexer.nextToken(is);
+	int token=lexer.nextToken(is, radix);
 	Object o;
 	switch (token) {
 	case TT_EOF:
@@ -146,25 +158,25 @@ public class Parser extends Util implements Tokens {
 		}
 		break;
 	    case 'b': 
-		o=new Quantity(lexer.readToBreak(is, Lexer.special), 2);
+		o=numberCheck(_nextExpression(is, state, null, 2));
 		break;
 	    case 'o': 
-		o=new Quantity(lexer.readToBreak(is, Lexer.special), 8);
+		o=numberCheck(_nextExpression(is, state, null, 8));
 		break;
 	    case 'x': 
-		o=new Quantity(lexer.readToBreak(is, Lexer.special), 16);
+		o=numberCheck(_nextExpression(is, state, null, 16));
 		break;
 	    case 'd': 
-		o=new Quantity(lexer.readToBreak(is, Lexer.special));
+		o=numberCheck(_nextExpression(is, state, null));
 		break;
 	    case '&':
 		o=new Box((Value)_nextExpression(is, state, null));
 		break;
 	    case 'i': 
-		o=((Quantity)_nextExpression(is, state, null)).decimalVal();
+		o=numberCheck(_nextExpression(is, state, null, radix)).decimalVal();
 		break;
 	    case 'e': 
-		o=((Quantity)_nextExpression(is, state, null)).exactVal();
+		o=numberCheck(_nextExpression(is, state, null, radix)).exactVal();
 		break;
 	    case '!': 
 		if (lexer.readToBreak(is, Lexer.special).equals("eof"))

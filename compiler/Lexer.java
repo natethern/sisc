@@ -78,12 +78,12 @@ public class Lexer implements Tokens {
 	return c;
     }
 
-    public int nextToken(InputPort is) throws IOException {
-	int nt=_nextToken(is);
+    public int nextToken(InputPort is, int radix) throws IOException {
+	int nt=_nextToken(is, radix);
 	return nt;
     }
 
-    public int _nextToken(InputPort is) 
+    public int _nextToken(InputPort is, int radix) 
 	throws IOException {
 
 	synchronized(is) {
@@ -105,7 +105,7 @@ public class Lexer implements Tokens {
 		return TT_STRING;
 	    case COMMENT:
 		while (is.read()!='\n') {}
-		return nextToken(is);
+		return nextToken(is, radix);
 	    case BACKQUOTE:
 		return TT_BACKQUOTE;
 	    case UNQUOTE:
@@ -120,7 +120,7 @@ public class Lexer implements Tokens {
 		String v=readToBreak(is, special);
 		Object result=v;
 		if (numberStart(v.charAt(0)))
-		    result=readNum(v);
+		    result=readNum(v, radix);
 		if (result instanceof String) {
 		    sval=(String)result;
 		    if (sval.length()==1 && 
@@ -135,9 +135,9 @@ public class Lexer implements Tokens {
 	}
     }
     
-    static Object readNum(String v) {
+    static Object readNum(String v, int radix) {
 	try {
-	    Quantity q=new Quantity(v);
+	    Quantity q=new Quantity(v, radix);
 	    return q;
 	} catch (NumberFormatException n) {
 	    return v;
