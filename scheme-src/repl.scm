@@ -39,7 +39,6 @@
 (define current-default-error-handler
   (parameterize
    (let () 
-     (import debugging)
      (lambda (m e)
        (let ([exception (make-exception m e)])
          (putprop 'last-exception '*debug* exception)
