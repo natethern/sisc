@@ -95,7 +95,6 @@
       <arg value="${heap}"/>
       <arg value="-files"/>
       <arg value="file:init.sce"/>
-      <arg value="file:optimize.sce"/>
       <arg value="file:compat.sce"/>
       <arg value="file:psyntax.sce"/>
       <arg value="file:init2.scm"/>
