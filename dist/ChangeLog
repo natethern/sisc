@@ -1,3 +1,10 @@
+2002-02-16  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Fixed two bugs in SNative's append.  First is that the last 
+	  (in this case second) argument to append can be any object.  Second
+	  is that that R5RS mandates that everything *but* the last is
+	  newly allocated.
+	
 2002-02-15  Matthias Radestock  <matthias@sorted.org>
 
 	* Added new, experimental Scheme->Java interface module
