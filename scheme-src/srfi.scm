@@ -250,6 +250,11 @@
 (module srfi-24 ()
   ;;this srfi is natively supported by our syntax expander
   (add-feature 'srfi-24))
+
+(module srfi-28 ()
+  ;;this srfi is natively supported by SISC
+  (add-feature 'srfi-28))
+
 ;; 
 ;; The contents of this file are subject to the Mozilla Public
 ;; License Version 1.1 (the "License"); you may not use this file
