@@ -248,7 +248,7 @@
 ; SISC supports unicode
 (define char-code-limit 65536)
 
-(define most-positive-fixnum (- (ashl 2 63) 1))
+(define most-positive-fixnum (- (ashl 1 31) 1))
 
 ;; The IDENTITY procedure returns its argument without change.
 
