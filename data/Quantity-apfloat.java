@@ -37,8 +37,7 @@ import java.io.*;
 import sisc.Serializer;
 
 public class Quantity extends Value {
-    public static int min_precision;
-    public static int max_precision;
+    public static int min_precision, max_precision;
 
     static {
         String x=System.getProperty("minprecision");
@@ -68,23 +67,43 @@ public class Quantity extends Value {
 	_BD_HUNDRED= BigDecimal.valueOf(100);
 
     public final static Quantity
-    ZERO = new Quantity(0),
-           ONE  = new Quantity(1),
-                  TWO  = new Quantity(2),
-                         I    = new Quantity(_BD_ZERO, _BD_ONE),
-                                TWO_I= new Quantity(_BD_ZERO, _BD_TWO),
-                                       HALF_PI = new Quantity(Math.PI/2);
+	ZERO = new Quantity(0),
+	ONE  = new Quantity(1),
+	TWO  = new Quantity(2),
+	I    = new Quantity(_BD_ZERO, _BD_ONE),
+	TWO_I= new Quantity(_BD_ZERO, _BD_TWO),
+	HALF_PI = new Quantity(Math.PI/2);
+    
+    public static final int
+	FIXED=1, EXACT=2, INEXACT=4, RATIONAL=8,
+	IMAGINARY=16, INTEGER=32, DECIMAL=64;
 
     public static final int
-    FIXED=1, EXACT=2, INEXACT=4, RATIONAL=8,
-                                          IMAGINARY=16, INTEGER=32, DECIMAL=64;
+	FIXEDINT = EXACT | FIXED | INTEGER | RATIONAL,
+	INTEG = EXACT | INTEGER | RATIONAL,
+	RATIO = EXACT | RATIONAL,
+	COMPLEX  = INEXACT | IMAGINARY,
+	DECIM = INEXACT | DECIMAL;
 
-    public static final int
-    FIXEDINT = EXACT | FIXED | INTEGER | RATIONAL,
-               INTEG = EXACT | INTEGER | RATIONAL,
-                       RATIO = EXACT | RATIONAL,
-                               COMPLEX  = INEXACT | IMAGINARY,
-                                          DECIM = INEXACT | DECIMAL;
+    public static Quantity valueOf(long val) { return new Quantity(val); }
+    public static Quantity valueOf(BigDecimal val) { return new Quantity(val); }
+    public static Quantity valueOf(BigInteger val) { return new Quantity(val); }
+    public static Quantity valueOf(BigInteger num, BigInteger den) { 
+	return new Quantity(num, den);
+    }
+
+    public static Quantity valueOf(Quantity real, Quantity imag) {
+	return new Quantity(real.toInexact().decimalValue(),
+			    imag.toInexact().decimalValue());
+    }
+
+    public static Quantity valueOf(String v) {
+	return valueOf(v, 10);
+    }
+
+    public static Quantity valueOf(String v, int radix) {
+	return new Quantity(v, radix);
+    }
 
     public int type;
     public int val;
@@ -369,7 +388,7 @@ public class Quantity extends Value {
             if (o.type==DECIM) {
                 o2=o.d.toBigInteger();
                 if (new BigDecimal(o2).compareTo(o.d)==0)
-                    return new Quantity(i.gcd(o2)).decimalVal();
+                    return new Quantity(i.gcd(o2)).toInexact();
             }
         }
         throw new ArithmeticException(this+" is not an integer.");
@@ -382,7 +401,7 @@ public class Quantity extends Value {
         case DECIM:
             BigInteger o2=d.toBigInteger();
             if (new BigDecimal(o2).compareTo(d)==0)
-                return new Quantity(o2).lcm(o).decimalVal();
+                return new Quantity(o2).lcm(o).toInexact();
         case INTEG:
             o2=null;
             boolean inexact=false;
@@ -400,7 +419,7 @@ public class Quantity extends Value {
             g = n.gcd(L);
             L = ( g.compareTo(_BI_ZERO) == 0 ?
                   g : n.divide(g).multiply(L) );
-            return (inexact? new Quantity(L).decimalVal():
+            return (inexact? new Quantity(L).toInexact():
                     new Quantity(L));
         }
         throw new ArithmeticException(this+" is not an integer.");
@@ -413,7 +432,7 @@ public class Quantity extends Value {
         case COMPLEX:
             throw new ArithmeticException(this+" is not a real number");
         case RATIO:
-            return decimalVal().round(rtype).exactVal();
+            return toInexact().round(rtype).toExact();
         default:
             return this;
         }
@@ -433,12 +452,12 @@ public class Quantity extends Value {
             if (o.type==DECIM) {
                 BigInteger o2=o.d.toBigInteger();
                 if (new BigDecimal(o2).compareTo(o.d)==0)
-                    return new Quantity(i.mod(o2)).decimalVal();
+                    return new Quantity(i.mod(o2)).toInexact();
             }
         case DECIM:
             BigInteger o2=d.toBigInteger();
             if (new BigDecimal(o2).compareTo(d)==0)
-                return new Quantity(o2).modulo(o).decimalVal();
+                return new Quantity(o2).modulo(o).toInexact();
         default:
             throw new NumberFormatException("expected integral quantities");
         }
@@ -458,12 +477,12 @@ public class Quantity extends Value {
             if (o.type==DECIM) {
                 BigInteger o2=o.d.toBigInteger();
                 if (new BigDecimal(o2).compareTo(o.d)==0)
-                    return new Quantity(i.divide(o2)).decimalVal();
+                    return new Quantity(i.divide(o2)).toInexact();
             }
         case DECIM:
             BigInteger o2=d.toBigInteger();
             if (new BigDecimal(o2).compareTo(d)==0)
-                return new Quantity(o2).quotient(o).decimalVal();
+                return new Quantity(o2).quotient(o).toInexact();
         default:
             throw new NumberFormatException("expected integral quantities");
         }
@@ -481,12 +500,12 @@ public class Quantity extends Value {
             if (o.type==DECIM) {
                 BigInteger o2=o.d.toBigInteger();
                 if (new BigDecimal(o2).compareTo(o.d)==0)
-                    return new Quantity(i.remainder(o2)).decimalVal();
+                    return new Quantity(i.remainder(o2)).toInexact();
             }
         case DECIM:
             BigInteger o2=d.toBigInteger();
             if (new BigDecimal(o2).compareTo(d)==0)
-                return new Quantity(o2).remainder(o).decimalVal();
+                return new Quantity(o2).remainder(o).toInexact();
         default:
             throw new NumberFormatException("expected integral quantities");
         }
@@ -1024,6 +1043,10 @@ public class Quantity extends Value {
         throw new NumberFormatException("cannot compare complex numbers for order");
     }
 
+    public final boolean is(int mask) {
+	return (type & mask) != 0;
+    }
+
     public boolean greater(Quantity o) {
         return comp(o, 1);
     }
@@ -1061,6 +1084,20 @@ public class Quantity extends Value {
         return 0.0;
     }
 
+    public BigDecimal decimalValue() {
+        switch (type) {
+        case FIXEDINT:
+            return new BigDecimal(val);
+        case DECIM:
+            return d;
+        case INTEG:
+            return new BigDecimal(i);
+        case RATIO:
+            return ratioToDecimal(i,de);
+        }
+        return new BigDecimal(0.0);
+    }
+
     public int intValue() {
         switch (type) {
         case FIXEDINT:
@@ -1089,7 +1126,7 @@ public class Quantity extends Value {
         return null;
     }
 
-    public Quantity exactVal() {
+    public Quantity toExact() {
         switch (type) {
         case DECIM:
             BigInteger ipart=d.toBigInteger();
@@ -1108,7 +1145,7 @@ public class Quantity extends Value {
     }
 
 
-    public Quantity decimalVal() {
+    public Quantity toInexact() {
         switch (type) {
         case FIXEDINT:
             return new Quantity((double)val);
@@ -1138,7 +1175,7 @@ public class Quantity extends Value {
         case COMPLEX:
             throw new NumberFormatException(toString()+" is not a rational number");
         case DECIM:
-            return exactVal().numerator();
+            return toExact().numerator();
         case RATIO:
             return new Quantity(i);
         default:
@@ -1151,7 +1188,7 @@ public class Quantity extends Value {
         case COMPLEX:
             throw new NumberFormatException(toString()+" is not a rational number");
         case DECIM:
-            return exactVal().denominator();
+            return toExact().denominator();
         case RATIO:
             return new Quantity(de);
         default:

@@ -37,27 +37,8 @@ import sisc.Serializer;
 import java.io.*;
 
 public class Quantity extends Value {
-    public static int min_precision;
-    public static int max_precision;
 
-    public static Quantity valueOf(long val) { return new Quantity(val); }
-    public static Quantity valueOf(double val) { return new Quantity(val); }
-    public static Quantity valueOf(BigInteger val) { return new Quantity(val); }
-    public static Quantity valueOf(BigInteger num, BigInteger den) { 
-	return new Quantity(num, den);
-    }
-
-    public static Quantity valueOf(double real, double complex) {
-	return new Quantity(real, complex);
-    }
-
-    public static Quantity valueOf(String v) {
-	return valueOf(v, 10);
-    }
-
-    public static Quantity valueOf(String v, int radix) {
-	return new Quantity(v, radix);
-    }
+    public static int min_precision, max_precision;
 
     static {
         String x=System.getProperty("minprecision");
@@ -74,13 +55,13 @@ public class Quantity extends Value {
 	_INT_MAX = BigInteger.valueOf(Integer.MAX_VALUE),
 	_INT_MIN = BigInteger.valueOf(Integer.MIN_VALUE);
 
-    public final static Quantity
-	ZERO = new Quantity(0),
-	ONE  = new Quantity(1),
-	TWO  = new Quantity(2),
-	I    = new Quantity(0.0, 1.0),
-	TWO_I= new Quantity(0.0, 2.0),
-	HALF_PI = new Quantity(Math.PI/2);
+    public static final Quantity 
+	ZERO = Quantity.valueOf(0),
+	ONE  = Quantity.valueOf(1),
+	TWO  = Quantity.valueOf(2),
+	I    = Quantity.valueOf(0.0, 1.0),
+	TWO_I= Quantity.valueOf(0.0, 2.0),
+	HALF_PI = Quantity.valueOf(Math.PI/2);
 
     public static final int
 	FIXED=1, EXACT=2, INEXACT=4, RATIONAL=8,
@@ -93,6 +74,30 @@ public class Quantity extends Value {
 	COMPLEX  = INEXACT | IMAGINARY,
 	DECIM = INEXACT | DECIMAL;
 
+    public static Quantity valueOf(long val) { return new Quantity(val); }
+    public static Quantity valueOf(double val) { return new Quantity(val); }
+    public static Quantity valueOf(BigInteger val) { return new Quantity(val); }
+    public static Quantity valueOf(BigInteger num, BigInteger den) { 
+	return new Quantity(num, den);
+    }
+
+    public static Quantity valueOf(Quantity real, Quantity imag) {
+	return new Quantity(real.toInexact().doubleValue(),
+			    imag.toInexact().doubleValue());
+    }
+
+    public static Quantity valueOf(double real, double imag) {
+	return new Quantity(real, imag);
+    }
+
+    public static Quantity valueOf(String v) {
+	return valueOf(v, 10);
+    }
+
+    public static Quantity valueOf(String v, int radix) {
+	return new Quantity(v, radix);
+    }
+
     public int type;
     public int val;
     public double d, im;
@@ -102,12 +107,12 @@ public class Quantity extends Value {
 
     public Quantity() {}
 
-    Quantity (int l) {
+    Quantity(int l) {
         val=l;
         type=FIXEDINT;
     }
 
-    Quantity (double l) {
+    Quantity(double l) {
         d=l;
         type=DECIM;
     }
@@ -132,14 +137,14 @@ public class Quantity extends Value {
         }
     }
 
-    Quantity (BigInteger numerator, BigInteger denominator) {
+    Quantity(BigInteger numerator, BigInteger denominator) {
         i=numerator;
         de=denominator;
         type=RATIO;
         simplify();
     }
 
-    Quantity (double real, double imag) {
+    Quantity(double real, double imag) {
         d=real;
         im=imag;
         type=COMPLEX;
@@ -165,11 +170,11 @@ public class Quantity extends Value {
         return rv;
     }
 
-    protected static Quantity parseDecimal(String dv, int radix) {
+    protected static double parseDecimal(String dv, int radix) {
         return parseDecimal(dv, radix, false);
     }
 
-    protected static Quantity parseDecimal(String dv, int radix,
+    protected static double parseDecimal(String dv, int radix,
                                            boolean asDecimal) {
         if (radix==10) {
             int x;
@@ -195,7 +200,7 @@ public class Quantity extends Value {
                 }
                 b.append(dv.substring(e));
                 dv=b.toString();
-                return new Quantity(Double.parseDouble(dv));
+                return Double.parseDouble(dv);
             } else if ((x=dv.indexOf('s'))!=-1 ||
                        (x=dv.indexOf('f'))!=-1 ||
                        (x=dv.indexOf('d'))!=-1 ||
@@ -221,13 +226,13 @@ public class Quantity extends Value {
                 }
                 b.append('.').append(c);
 
-                return new Quantity(Double.parseDouble(b.toString()));
+                return Double.parseDouble(b.toString());
             } else if (dv.indexOf('#')!=-1) {
                 char[] c=dv.toCharArray();
                 parsePounds(c);
-                return new Quantity(Double.parseDouble(new String(c)));
+                return Double.parseDouble(new String(c));
             } else if (asDecimal)
-                return new Quantity(Double.parseDouble(dv));
+                return Double.parseDouble(dv);
             else
                 throw new NumberFormatException("not a decimal value");
         } else {
@@ -236,9 +241,9 @@ public class Quantity extends Value {
                 if (dv.indexOf('#')!=-1) {
                     char[] c=dv.toCharArray();
                     parsePounds(c);
-                    return new Quantity(Double.parseDouble(new String(c)));
+                    return Double.parseDouble(new String(c));
                 } else if (asDecimal)
-                    return new Quantity(Double.parseDouble(dv));
+                    return Double.parseDouble(dv);
                 else
                     throw new NumberFormatException("not a decimal value");
             else {
@@ -248,8 +253,8 @@ public class Quantity extends Value {
 
                 String fpartstr=dv.substring(x+1);
                 fpart=new BigInteger(fpartstr, radix);
-                return new Quantity(ipart.add(new BigDecimal(Double.toString(fpart.doubleValue() /
-                                              Math.pow(radix, fpartstr.length())))).doubleValue());
+                return ipart.add(new BigDecimal(Double.toString(fpart.doubleValue() /
+			 Math.pow(radix, fpartstr.length())))).doubleValue();
             }
         }
     }
@@ -290,10 +295,10 @@ public class Quantity extends Value {
 
         } else if ((x=v.indexOf('@'))!=-1) {
             //R5RS Lexical structure violation:
-            Quantity xd=parseDecimal(v.substring(0,x), radix, true);
-            Quantity yd=parseDecimal(v.substring(x+1), radix, true);
-            d=xd.mul(yd.cos()).decimal();
-            im=xd.mul(yd.sin()).decimal();
+            double xd=parseDecimal(v.substring(0,x), radix, true);
+	    double yd=parseDecimal(v.substring(x+1), radix, true);
+            d=xd*Math.cos(yd);
+            im=xd*Math.sin(yd);
             type=COMPLEX;
         } else if ((x=v.indexOf('i'))!=-1) {
             if (x!=v.length()-1)
@@ -305,17 +310,16 @@ public class Quantity extends Value {
                 if (x==0)
                     d=0.0;
                 else
-                    d=parseDecimal(v.substring(0,x), radix, true).decimal();
-                im = ( (x+2)==v.length() ? new Quantity(-1.0) :
-                       parseDecimal(v.substring(x, v.length()-1), radix, true)).decimal();
+                    d=parseDecimal(v.substring(0,x), radix, true);
+                im = ( (x+2)==v.length() ? -1.0 :
+		       parseDecimal(v.substring(x, v.length()-1), radix, true));
             } else {
                 if (x==0)
                     d=0.0;
                 else
-                    d=parseDecimal(v.substring(0,x), radix, true).decimal();
-                im = ( (x+2)==v.length() ?
-                       new Quantity(1.0) :
-                       parseDecimal(v.substring(x+1, v.length()-1), radix, true)).decimal();
+                    d=parseDecimal(v.substring(0,x), radix, true);
+                im = ( (x+2)==v.length() ? 1.0 :
+		       parseDecimal(v.substring(x+1, v.length()-1), radix, true));
             }
             type=COMPLEX;
         } else if (radix==10 &&
@@ -325,7 +329,7 @@ public class Quantity extends Value {
                     v.indexOf('f') != -1 ||
                     v.indexOf('d') != -1 ||
                     v.indexOf('l') != -1)) {
-            d=parseDecimal(v, radix).decimal();
+            d=parseDecimal(v, radix);
             type=DECIM;
         } else {
             i=parseUinteger(v, radix).integer();
@@ -463,7 +467,7 @@ public class Quantity extends Value {
         throw new ArithmeticException(this+" is not an integer.");
     }
 
-    public Quantity round(int rtype) {
+    protected Quantity round(int rtype) {
         switch (type) {
         case DECIM:
             switch (rtype) {
@@ -480,7 +484,7 @@ public class Quantity extends Value {
         case COMPLEX:
             throw new ArithmeticException(this+" is not a real number");
         case RATIO:
-            return toInexact().round(rtype).toExact();
+            return ((Quantity)toInexact()).round(rtype).toExact();
         default:
             return this;
         }
@@ -605,12 +609,12 @@ public class Quantity extends Value {
         return z.div(TWO_I);
     }
 
-    public Quantity atan(Quantity other) {
+    public Quantity atan(Quantity o) {
         if (type==COMPLEX)
             throw new ArithmeticException(this+" is not a real number.");
-        if (other.type==COMPLEX)
-            throw new ArithmeticException(other+" is not a real number.");
-        return new Quantity(Math.atan2(doubleValue(), other.doubleValue()));
+        if (o.type==COMPLEX)
+            throw new ArithmeticException(o+" is not a real number.");
+        return new Quantity(Math.atan2(doubleValue(), o.doubleValue()));
     }
 
     public Quantity exp() {
@@ -1086,13 +1090,6 @@ public class Quantity extends Value {
         throw new NumberFormatException("cannot compare complex numbers for order");
     }
 
-    public final boolean greater(Quantity o) {
-        return comp(o, 1);
-    }
-
-    public final boolean less(Quantity o) {
-        return comp(o, -1);
-    }
 
     public boolean eq(Object v) {
         return v instanceof Quantity &&
@@ -1100,14 +1097,6 @@ public class Quantity extends Value {
                valueEqual((Value)v);
     }
 
-    public boolean valueEqual(Value v) {
-        return equals(v);
-    }
-
-    public boolean equals(Object ob) {
-        if (!(ob instanceof Quantity)) return false;
-        return comp((Quantity)ob, 0);
-    }
 
     public double doubleValue() {
         switch (type) {
@@ -1248,17 +1237,6 @@ public class Quantity extends Value {
                new Quantity(v) : new Quantity((int)v);
     }
 
-    public String display() {
-        return write();
-    }
-
-    public String write() {
-        return toString();
-    }
-
-    public String toString() {
-        return toString(10);
-    }
 
     protected static String zeroTrim(String s) {
         int y=s.indexOf('.');
@@ -1369,6 +1347,37 @@ public class Quantity extends Value {
                 break;
             }
         }
+    }
+
+    public final boolean is(int mask) {
+	return (type & mask) != 0;
+    }
+
+    public final boolean greater(Quantity o) {
+        return comp(o, 1);
+    }
+
+    public final boolean less(Quantity o) {
+        return comp(o, -1);
+    }
+
+
+    public final boolean valueEqual(Value v) {
+        return equals(v);
+    }
+
+    public final boolean equals(Object ob) {
+        if (!(ob instanceof Quantity)) return false;
+        return comp((Quantity)ob, 0);
+    }
+
+
+    public final String display() {
+	return toString();
+    }
+
+    public final String toString() {
+        return toString(10);
     }
 }
 

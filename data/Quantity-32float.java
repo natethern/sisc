@@ -55,23 +55,13 @@ public class Quantity extends Value {
 	_INT_MAX = BigInteger.valueOf(Integer.MAX_VALUE),
 	_INT_MIN = BigInteger.valueOf(Integer.MIN_VALUE);
     
-    /*
-      public final static BigDecimal 
-      _BD_NEGONE = BigDecimal.valueOf(-1),
-      _BD_ZERO   = BigDecimal.valueOf(0),
-      _BD_ONE    = BigDecimal.valueOf(1),
-      _BD_TWO    = BigDecimal.valueOf(2),
-      _BD_TEN    = BigDecimal.valueOf(10),
-      _BD_HUNDRED= BigDecimal.valueOf(100);
-    */
-    
     public final static Quantity
-	ZERO = new Quantity(0),
-	ONE  = new Quantity(1),
-	TWO  = new Quantity(2),
-	I    = new Quantity(0.0f, 1.0f),
-	TWO_I= new Quantity(0.0f, 2.0f),
-	HALF_PI = new Quantity((float)Math.PI/2);
+	ZERO = Quantity.valueOf(0),
+	ONE  = Quantity.valueOf(1),
+	TWO  = Quantity.valueOf(2),
+	I    = Quantity.valueOf(0.0f, 1.0f),
+	TWO_I= Quantity.valueOf(0.0f, 2.0f),
+	HALF_PI = Quantity.valueOf((float)Math.PI/2);
     
     public static final int
 	FIXED=1, EXACT=2, INEXACT=4, RATIONAL=8,
@@ -84,6 +74,30 @@ public class Quantity extends Value {
 	COMPLEX  = INEXACT | IMAGINARY,
 	DECIM = INEXACT | DECIMAL;
     
+    public static Quantity valueOf(long val) { return new Quantity(val); }
+    public static Quantity valueOf(float val) { return new Quantity(val); }
+    public static Quantity valueOf(BigInteger val) { return new Quantity(val); }
+    public static Quantity valueOf(BigInteger num, BigInteger den) { 
+	return new Quantity(num, den);
+    }
+
+    public static Quantity valueOf(Quantity real, Quantity imag) {
+	return new Quantity(real.toInexact().floatValue(),
+			    imag.toInexact().floatValue());
+    }
+
+    public static Quantity valueOf(float real, float imag) {
+	return new Quantity(real, imag);
+    }
+
+    public static Quantity valueOf(String v) {
+	return valueOf(v, 10);
+    }
+
+    public static Quantity valueOf(String v, int radix) {
+	return new Quantity(v, radix);
+    }
+
     public int type;
     public int val;
     public float d, im;
@@ -363,7 +377,7 @@ public class Quantity extends Value {
                 return new Quantity(i.gcd(o.i));
             if (o.type==DECIM) {
                 if (Math.floor(d)==d)
-                    return new Quantity(i.gcd(d2i(d))).decimalVal();
+                    return new Quantity(i.gcd(d2i(d))).toInexact();
             }
         }
         throw new ArithmeticException(this+" is not an integer.");
@@ -375,7 +389,7 @@ public class Quantity extends Value {
             return o.lcm(new Quantity((long)val));
         case DECIM:
             if (Math.floor(d)==d)
-                return new Quantity(d2i(d)).lcm(o).decimalVal();
+                return new Quantity(d2i(d)).lcm(o).toInexact();
         case INTEG:
             BigInteger o2=null;
             boolean inexact=false;
@@ -392,7 +406,7 @@ public class Quantity extends Value {
             g = n.gcd(L);
             L = ( g.compareTo(_BI_ZERO) == 0 ?
                   g : n.divide(g).multiply(L) );
-            return (inexact? new Quantity(L).decimalVal():
+            return (inexact? new Quantity(L).toInexact():
                     new Quantity(L));
         }
         throw new ArithmeticException(this+" is not an integer.");
@@ -415,7 +429,7 @@ public class Quantity extends Value {
         case COMPLEX:
             throw new ArithmeticException(this+" is not a real number");
         case RATIO:
-            return decimalVal().round(rtype).exactVal();
+            return toInexact().round(rtype).toExact();
         default:
             return this;
         }
@@ -434,11 +448,11 @@ public class Quantity extends Value {
                 return new Quantity(i.mod(o.i));
             if (o.type==DECIM) {
                 if (Math.floor(d)==d)
-                    return new Quantity(i.mod(d2i(d))).decimalVal();
+                    return new Quantity(i.mod(d2i(d))).toInexact();
             }
         case DECIM:
             if (Math.floor(d)==d)
-                return new Quantity(d2i(d)).modulo(o).decimalVal();
+                return new Quantity(d2i(d)).modulo(o).toInexact();
         default:
             throw new NumberFormatException("expected integral quantities");
         }
@@ -457,11 +471,11 @@ public class Quantity extends Value {
                 return new Quantity(i.divide(o.i));
             if (o.type==DECIM) {
                 if (Math.floor(o.d)==o.d)
-                    return new Quantity(i.divide(d2i(o.d))).decimalVal();
+                    return new Quantity(i.divide(d2i(o.d))).toInexact();
             }
         case DECIM:
             if (Math.floor(d)==d)
-                return new Quantity(d2i(d)).quotient(o).decimalVal();
+                return new Quantity(d2i(d)).quotient(o).toInexact();
         default:
             throw new NumberFormatException("expected integral quantities");
         }
@@ -478,11 +492,11 @@ public class Quantity extends Value {
                 return new Quantity(i.remainder(o.i));
             if (o.type==DECIM) {
                 if (Math.floor(o.d)==o.d)
-                    return new Quantity(i.remainder(d2i(o.d))).decimalVal();
+                    return new Quantity(i.remainder(d2i(o.d))).toInexact();
             }
         case DECIM:
             if (Math.floor(d)==d)
-                return new Quantity(d2i(d)).remainder(o).decimalVal();
+                return new Quantity(d2i(d)).remainder(o).toInexact();
         default:
             throw new NumberFormatException("expected integral quantities");
         }
@@ -1008,6 +1022,10 @@ public class Quantity extends Value {
         throw new NumberFormatException("cannot compare complex numbers for order");
     }
 
+    public final boolean is(int mask) {
+	return (type & mask) != 0;
+    }
+
     public boolean greater(Quantity o) {
         return comp(o, 1);
     }
@@ -1087,7 +1105,7 @@ public class Quantity extends Value {
         return null;
     }
 
-    public Quantity exactVal() {
+    public Quantity toExact() {
         switch (type) {
         case DECIM:
             BigInteger ipart=d2i(d);
@@ -1105,7 +1123,7 @@ public class Quantity extends Value {
     }
 
 
-    public Quantity decimalVal() {
+    public Quantity toInexact() {
         switch (type) {
         case FIXEDINT:
             return new Quantity((float)val);
@@ -1135,7 +1153,7 @@ public class Quantity extends Value {
         case COMPLEX:
             throw new NumberFormatException(toString()+" is not a rational number");
         case DECIM:
-            return exactVal().numerator();
+            return toExact().numerator();
         case RATIO:
             return new Quantity(i);
         default:
@@ -1148,7 +1166,7 @@ public class Quantity extends Value {
         case COMPLEX:
             throw new NumberFormatException(toString()+" is not a rational number");
         case DECIM:
-            return exactVal().denominator();
+            return toExact().denominator();
         case RATIO:
             return new Quantity(de);
         default:

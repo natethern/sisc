@@ -575,8 +575,8 @@ public class Primitives extends Module {
                 }
                 return VOID;
             case MAKERECTANGULAR:
-                return Quantity.valueOf(num(f,f.vlr[0]).toInexact().doubleValue(),
-                                    num(f,f.vlr[1]).toInexact().doubleValue());
+                return Quantity.valueOf(num(f,f.vlr[0]),
+					num(f,f.vlr[1]));
             case ASHL: return Quantity.valueOf(num(f,f.vlr[0]).integerVal()
                                                .shiftLeft(num(f,f.vlr[1])
                                                           .intValue()));
