@@ -140,7 +140,6 @@ public class Primitives extends ModuleAdapter {
         define("procedure?", PROCEDUREQ);
         define("putprop", PUTPROP);
         define("quotient", QUOTIENT);
-        define("rational?", RATIOQ);
         define("read", READ);
         define("read-char", READCHAR);
         define("read-code", READCODE);
@@ -330,7 +329,6 @@ public class Primitives extends ModuleAdapter {
             case PROCEDUREQ: return truth(f.vlr[0] instanceof Procedure);
             case INTEGERQ: return numQuery(f.vlr[0],Quantity.INTEGER);
 
-            case RATIOQ: return numQuery(f.vlr[0],Quantity.RATIONAL);
             case COMPLEXQ: return numQuery(f.vlr[0],Quantity.IMAGINARY);
             case EXACTQ: return numQuery(f.vlr[0],Quantity.EXACT);
             case INEXACTQ: return numQuery(f.vlr[0],Quantity.INEXACT);
@@ -1082,7 +1080,7 @@ public class Primitives extends ModuleAdapter {
         PROCEDUREQ = 79,
         PUTPROP = 140,
         QUOTIENT = 126,
-        RATIOQ = 80,
+	// <80>
         READ = 81,
         //	READ = 9,
         //	READCHAR = 10,

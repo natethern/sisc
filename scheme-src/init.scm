@@ -412,19 +412,34 @@
 
 
 ;;;;;;;;;;;;;; Math functions/constants
-(define (expt base exponent)
-  (if (and (integer? exponent) (= base 2))
-      (ashl 1 exponent)
-      (let loop ([rest exponent]
-		 [result 1]
-		 [squaring base])
-	(if (zero? rest)
-	    result
-	    (loop (quotient rest 2)
-		  (if (odd? rest)
-		      (* result squaring)
-		      result)
-		  (* squaring squaring))))))
+(define expt 
+  (letrec ([general-expt
+	    (lambda (base exponent)
+	      (exp (* exponent (log base))))]
+	   [integer-expt 
+	    (lambda (base exponent)
+	      (cond
+	       ((negative? exponent) (/ (integer-expt base (abs exponent))))
+	       ((and (exact? base) (= base 2)) (ashl 1 exponent))
+	       (else
+		(let loop ([rest exponent]
+			   [result 1]
+			   [squaring base])
+		  (if (zero? rest)
+		      result
+		      (loop
+		       (quotient rest 2)
+		       (if (odd? rest)
+			   (* result squaring)
+			   result)
+		       (* squaring squaring)))))))])
+    (lambda (base exponent)
+      (cond
+       ((zero? exponent) (if (exact? exponent) #e1 #i1))
+       ((zero? base) (if (exact? exponent) base #i0))       
+       ((and (exact? exponent) (integer? exponent))
+	(integer-expt base exponent))
+       (else (general-expt base exponent))))))
   
 (define (modpow x y N)
   (let ((tmp 0))
