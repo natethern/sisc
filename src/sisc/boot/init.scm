@@ -86,13 +86,6 @@
           (map1 proc list1 '())
           (loop proc list1 lists '())))))
 
-(define (compose . rest)
-  (if (null? rest)
-      (lambda (x) x)
-      (let ([f (car rest)]
-            [g (apply compose (cdr rest))])
-        (lambda (x) (f (g x))))))
-
 (define (compose2 f g)
   (lambda (x) (f (g x))))
 

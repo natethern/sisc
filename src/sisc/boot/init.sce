@@ -89,15 +89,6 @@
           |list1_Suc2x1ZRU|
           |lists_SuS5zAYRU|
           '())))))
-(define compose
-  (lambda |rest_Suixe61SU|
-    (if (null? |rest_Suixe61SU|)
-      (lambda (|x_SuGi6W2SU|) |x_SuGi6W2SU|)
-      ((lambda (|f_SuEtcz1SU| |g_Su-pa02SU|)
-         (lambda (|x_Sukm8t2SU|)
-           (|f_SuEtcz1SU| (|g_Su-pa02SU| |x_Sukm8t2SU|))))
-       (car |rest_Suixe61SU|)
-       (apply compose (cdr |rest_Suixe61SU|))))))
 (define compose2
   (lambda (|f_Su0f4n3SU| |g_Sumb2Q3SU|)
     (lambda (|x_SuI70h4SU|)

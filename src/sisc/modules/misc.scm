@@ -53,6 +53,20 @@
          ((name . args)
           body ...))))))
 
+;; function composition
+;; This version handles multi-value returns and is optimized for
+;; application. Construction is tail recursive.
+(define (compose . fs)
+  (let loop ((g values) (fs fs))
+    (if (null? fs)
+        g
+        (loop (let ([f (car fs)])
+                (lambda args
+                  (call-with-values
+                      (lambda () (apply f args))
+                    g)))
+              (cdr fs)))))
+
 ;; This computes a total order from a set of partial orders, e.g.
 ;; (total-order '((a d) (b c) (c d))) ;=> '(a b c d)
 ;; #f is returned if no such total order exists
