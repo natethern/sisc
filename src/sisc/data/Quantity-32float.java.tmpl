@@ -24,8 +24,11 @@ public class Quantity extends Value implements Singleton {
         TWO  = Quantity.valueOf(2),
         I    = Quantity.valueOf(0.0f, 1.0f),
         TWO_I= Quantity.valueOf(0.0f, 2.0f),
-        HALF_PI = Quantity.valueOf((float)Math.PI/2);
-
+        POSITIVE_INFINITY = Quantity.valueOf(Double.POSITIVE_INFINITY),
+        NEGATIVE_INFINITY = Quantity.valueOf(Double.NEGATIVE_INFINITY),  
+        HALF_PI = Quantity.valueOf((float)Math.PI/2),
+        NaN = Quantity.valueOf(Double.NaN);
+    
     public static final int
         FIXED=1, EXACT=2, INEXACT=4, RATIONAL=8,
         IMAGINARY=16, INTEGER=32, DECIMAL=64;
