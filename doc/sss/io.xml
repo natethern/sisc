@@ -100,7 +100,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       </para>
     </sect2>
     <sect2 id="PortCreation">
-      <title>Port Creation</title>
+      <title>Buffered I/O</title>
       <para>
         &SISC; extends the &R5RS; standard's port-creation functions
         in order to provide buffered output ports.  All &SISC; output
@@ -126,7 +126,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <methodname>open-output-file</methodname>
               <methodparam>
                 <parameter>
-                  file
+                  url
                 </parameter>
               </methodparam>
               <methodparam choice="opt">
@@ -137,12 +137,12 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>
-                Creates an output port to the specified file (a
-                string).  If the optional auto-flush argument is
-                provided and is true, the port will automatically
-                flush after each write call.  If the specified file
-                exists, it will be overwritten silently when the port
-                is opened.
+                Creates an output port to the specified
+                <parameter>url</parameter> If the optional
+                <parameter>auto-flush</parameter> argument is provided
+                and is &num;t, the port will automatically flush after
+                each write call.  If the specified file exists, it
+                will be overwritten silently when the port is opened.
               </para>
             </blockquote>
           </para>
@@ -159,10 +159,284 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>
-                Causes the specified output-port's buffered data to be
-                written immediately.  This operation is allowed on
+                Causes the specified
+                <parameter>output-port</parameter>'s buffered data to
+                be written immediately.  This operation is allowed on
                 both auto-flush and non-auto-flush output ports,
                 though it has no effect on the former.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
+    <sect2 id="redirectedio">
+      <title>Redirected I/O</title>
+      <para>
+        Redirected I/O functions wrap a thunk, redirecting the input
+        and output of the thunk while it is evaluating to an input or
+        output port other than the
+        <literal>current-input-port</literal> 
+        and <literal>current-output-port</literal>. Invoking escaping
+        continuations from inside the procedure restores the original
+        port, and invoking a continuation captured inside the procedure
+        restores the redirection.
+      </para>
+      <para>
+        <blockquote>
+          <para id="func-with-input-from-port">
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>with-input-from-port</methodname>
+              <methodparam>
+                <parameter>
+                  port
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  thunk
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>   
+                Evaluates <parameter>thunk</parameter> with
+                <parameter>port</parameter> as the
+                <literal>current-input-port</literal> for the duration
+                of the evaluation.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-with-output-to-port">
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>with-output-to-port</methodname>
+              <methodparam>
+                <parameter>
+                  port
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  thunk
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>   
+                Evaluates <parameter>thunk</parameter> with
+                <parameter>port</parameter> as the
+                <literal>current-output-port</literal> for the duration
+                of the evaluation.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-with-input-from-file">
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>with-input-from-file</methodname>
+              <methodparam>
+                <parameter>
+                  url
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  thunk
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para> Evaluates <parameter>thunk</parameter> with an
+              input port attached to a file opened for reading from
+              <parameter>url</parameter> as the
+              <literal>current-input-port</literal> for the duration
+              of the evaluation. The port is closed when
+                <parameter>thunk</parameter> returns normally.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-with-output-to-file">
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>with-output-to-file</methodname>
+              <methodparam>
+                <parameter>
+                  url
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  thunk
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>   
+                Evaluates <parameter>thunk</parameter> with
+                an input port attached to a file opened for writing
+                to <parameter>url</parameter> as the
+                <literal>current-output-port</literal> for the duration
+                of the evaluation. The port is closed when
+                <parameter>thunk</parameter> returns normally.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-with-input-from-string">
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>with-input-from-string</methodname>
+              <methodparam>
+                <parameter>
+                  string
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  thunk
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>   
+                Evaluates <parameter>thunk</parameter> with a
+                string-input-port created from
+                <parameter>string</parameter> as the
+                <literal>current-input-port</literal> for the duration
+                of the evaluation.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-with-output-to-string">
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>string</type>
+              <methodname>with-output-to-string</methodname>
+              <methodparam>
+                <parameter>
+                  thunk
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>   
+                Evaluates <parameter>thunk</parameter> with a
+                string-output-port created as the
+                <literal>current-output-port</literal> for the duration
+                of the evaluation.  When the thunk returns, the
+                contents of the string-output-port are returned.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
+    <sect2 id="iodelegate">
+      <title>I/O Delegate Functions</title>
+      <para>
+        The next set of functions assists in creating a port, followed
+        by calling a given procedure with that port.  When the
+        procedure returns, the port is closed. Invoking escaping
+        continuations from inside the procedure does not close the
+        port, and invoking a continuation captured inside the procedue
+        does not open the port.
+      </para>
+      <para>
+        <blockquote>
+          <para id="func-call-with-input-file">
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>call-with-input-file</methodname>
+              <methodparam>
+                <parameter>
+                  url
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  procedure
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>   
+                Calls <parameter>procedure</parameter> with a new input port attached to
+                <parameter>url</parameter>.  The result of the thunk
+                is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-call-with-output-file">
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>call-with-output-file</methodname>
+              <methodparam>
+                <parameter>
+                  url
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  procedure
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>   
+                Calls <parameter>procedure</parameter> with a new output port attached to
+                <parameter>url</parameter>.  The result of the thunk
+                is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-call-with-input-string">
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>call-with-input-string</methodname>
+              <methodparam>
+                <parameter>
+                  string
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  procedure
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>   
+                Calls <parameter>procedure</parameter> with a new string input port created from
+                <parameter>string</parameter>.  The result of the
+                thunk is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-call-with-output-string">
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>string</type>
+              <methodname>call-with-output-string</methodname>
+              <methodparam>
+                <parameter>
+                  procedure
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>   
+                Calls <parameter>procedure</parameter> with a new string output port.  The
+                contents of the string-output-port are returned when 
+                the procedure returns.
               </para>
             </blockquote>
           </para>
@@ -608,270 +882,6 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
   </sect1>
   <sect1>
     <title>Miscellaneous</title>
-    <sect2 id="redirectedio">
-      <title>Redirected I/O</title>
-      <para>
-        Redirected I/O functions wrap a thunk, redirecting the input
-        and output of the thunk while it is evaluating to an input or
-        output port other than the
-        <literal>current-input-port</literal> 
-        and <literal>current-output-port</literal>. 
-      </para>
-      <para>
-        <blockquote>
-          <para id="func-with-input-from-port">
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>with-input-from-port</methodname>
-              <methodparam>
-                <parameter>
-                  port
-                </parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>
-                  thunk
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>   
-                Evaluates <parameter>thunk</parameter> with
-                <parameter>port</parameter> as the
-                <literal>current-input-port</literal> for the duration
-                of the evaluation.
-              </para>
-            </blockquote>
-          </para>
-          <para id="func-with-output-to-port">
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>with-output-to-port</methodname>
-              <methodparam>
-                <parameter>
-                  port
-                </parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>
-                  thunk
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>   
-                Evaluates <parameter>thunk</parameter> with
-                <parameter>port</parameter> as the
-                <literal>current-output-port</literal> for the duration
-                of the evaluation.
-              </para>
-            </blockquote>
-          </para>
-          <para id="func-with-input-from-file">
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>with-input-from-file</methodname>
-              <methodparam>
-                <parameter>
-                  url
-                </parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>
-                  thunk
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>   
-                Evaluates <parameter>thunk</parameter> with
-                an input port attached to <parameter>url</parameter> as the
-                <literal>current-input-port</literal> for the duration
-                of the evaluation.
-              </para>
-            </blockquote>
-          </para>
-          <para id="func-with-output-to-file">
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>with-output-to-file</methodname>
-              <methodparam>
-                <parameter>
-                  url
-                </parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>
-                  thunk
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>   
-                Evaluates <parameter>thunk</parameter> with
-                an input port attached to <parameter>url</parameter> as the
-                <literal>current-output-port</literal> for the duration
-                of the evaluation.
-              </para>
-            </blockquote>
-          </para>
-          <para id="func-with-input-from-string">
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>with-input-from-string</methodname>
-              <methodparam>
-                <parameter>
-                  string
-                </parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>
-                  thunk
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>   
-                Evaluates <parameter>thunk</parameter> with a
-                string-input-port created from
-                <parameter>string</parameter> as the
-                <literal>current-input-port</literal> for the duration
-                of the evaluation.
-              </para>
-            </blockquote>
-          </para>
-          <para id="func-with-output-to-string">
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>string</type>
-              <methodname>with-output-to-string</methodname>
-              <methodparam>
-                <parameter>
-                  thunk
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>   
-                Evaluates <parameter>thunk</parameter> with a
-                string-output-port created as the
-                <literal>current-output-port</literal> for the duration
-                of the evaluation.  When the thunk returns, the
-                contents of the string-output-port are returned.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
-      </para>
-    </sect2>
-    <sect2 id="iodelegate">
-      <title>I/O Delegate Functions</title>
-      <para>
-        The next set of functions assists in creating a port, followed
-        by calling a given procedure with that port.  When the
-        procedure returns, the port is closed.  
-      </para>
-      <para>
-        <blockquote>
-          <para id="func-call-with-input-file">
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>call-with-input-file</methodname>
-              <methodparam>
-                <parameter>
-                  url
-                </parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>
-                  procedure
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>   
-                Calls <parameter>procedure</parameter> with a new input port attached to
-                <parameter>url</parameter>.  The result of the thunk
-                is returned.
-              </para>
-            </blockquote>
-          </para>
-          <para id="func-call-with-output-file">
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>call-with-output-file</methodname>
-              <methodparam>
-                <parameter>
-                  url
-                </parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>
-                  procedure
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>   
-                Calls <parameter>procedure</parameter> with a new output port attached to
-                <parameter>url</parameter>.  The result of the thunk
-                is returned.
-              </para>
-            </blockquote>
-          </para>
-          <para id="func-call-with-input-string">
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>call-with-input-string</methodname>
-              <methodparam>
-                <parameter>
-                  string
-                </parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>
-                  procedure
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>   
-                Calls <parameter>procedure</parameter> with a new string input port created from
-                <parameter>string</parameter>.  The result of the
-                thunk is returned.
-              </para>
-            </blockquote>
-          </para>
-          <para id="func-call-with-output-string">
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>string</type>
-              <methodname>call-with-output-string</methodname>
-              <methodparam>
-                <parameter>
-                  procedure
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>   
-                Calls <parameter>procedure</parameter> with a new string output port.  The
-                contents of the string-output-port are returned when 
-                the procedure returns.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
-      </para>
-    </sect2>
     <sect2 id="PrettyPrinting">
       <title>Pretty-Printing</title>
       <para>
