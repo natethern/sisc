@@ -80,24 +80,19 @@ public class SchemeVector extends Value {
         }
         return lastUnique=vals.length;
     }
-
-    boolean display(StringBuffer b, boolean write, Integer limit) {
+    
+    void display(StringBuffer b, boolean write) {
         int l=findEnd();
         for (int i=0; i<l; i++) {
-            b.append((limit == null ?
-		      (write ? vals[i].write() : vals[i].display()) :
-		      vals[i].synopsis(limit.intValue()-b.length())));
-	    if (limit != null &&
-		b.length() > limit.intValue()) return false;
+            b.append(write ? vals[i].write() : vals[i].display());
             if (i+1<l) b.append(' ');
         }
-	return true;
     }
 
     public String display() {
         StringBuffer b=new StringBuffer();
         b.append("#(");
-        display(b, false, null);
+        display(b, false);
         b.append(')');
         return b.toString();
     }
@@ -110,19 +105,11 @@ public class SchemeVector extends Value {
     public String write() {
         StringBuffer b=new StringBuffer();
         b.append('#').append(vals.length).append('(');
-        display(b, true, null);
+        display(b, true);
         b.append(')');
         return b.toString();
     }
 
-    public String synopsis(int limit) {
-        StringBuffer b=new StringBuffer();
-        b.append('#').append(vals.length).append('(');
-        if (display(b, true, new Integer(limit)))
-	    b.append(')');
-	else b.append(" ...");
-        return b.toString();
-    }
 
     public Object javaValue() {
         Object[] v=new Object[vals.length];

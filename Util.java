@@ -111,7 +111,8 @@ public abstract class Util implements Conf {
                 p=(Pair)p.cdr;
             return i;
         } catch (ClassCastException ce) {
-            throw new RuntimeException(s+" is not a proper list");
+            throw new RuntimeException(s.synopsis(DEFAULT_SYNOPSIS_LENGTH)+
+				       " is not a proper list");
         }
     }
 
@@ -171,7 +172,8 @@ public abstract class Util implements Conf {
         if (o instanceof Values)
             throw new RuntimeException(((Values)o).values.length+
                                        " values received in single-value context");
-        throw new RuntimeException("expected type "+type+", got '"+o.write()+
+        throw new RuntimeException("expected type "+type+", got '"+
+				   o.synopsis(DEFAULT_SYNOPSIS_LENGTH)+
                                    '\'');
     }
 

@@ -43,7 +43,10 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     public String synopsis(int limit) {
-	return write();
+	String v=write();
+	if (v.length() > limit)
+	    return write().substring(0,limit)+"...";
+	else return v;
     }
 
     public String write() {
