@@ -115,7 +115,9 @@
 
 ;;exception handling
 (define-generic char-at)
-(define-generic print-stack-trace)
+;;chain Scheme print-stack-trace to Java printStackTrace
+(define-generic print-stack-trace
+  (generic-java-procedure '|printStackTrace| print-stack-trace))
 (with/fc (lambda (m e) (print-stack-trace m) #f)
   (lambda () (char-at (->jstring "foo") (->jint 3))))
 ;;throwing exceptions from within proxy
