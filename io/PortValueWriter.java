@@ -10,6 +10,7 @@ import sisc.data.Pair;
 import sisc.data.Expression;
 import sisc.util.Util;
 import sisc.util.ExpressionVisitor;
+import sisc.util.ExpressionVisitee;
 
 public class PortValueWriter extends Util
     implements ValueWriter, ExpressionVisitor {
@@ -73,7 +74,7 @@ public class PortValueWriter extends Util
     private static Integer seenMarker = new Integer(-1);
     private static Integer sharedMarker = new Integer(-2);
 
-    public void visit(Expression e) {
+    public void visit(ExpressionVisitee e) {
         Object i = shared.get(e);
         if (i == null) {
             shared.put(e, seenMarker);

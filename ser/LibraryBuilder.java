@@ -8,6 +8,7 @@ import sisc.interpreter.*;
 import sisc.env.SymbolicEnvironment;
 import sisc.nativefun.Module;
 import sisc.util.ExpressionVisitor;
+import sisc.util.ExpressionVisitee;
 
 /**
  * Keeps track of entry points - points where serialization begins.
@@ -181,7 +182,7 @@ public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
     }
 
     /*---Serialization first pass functions---*/
-    public void visit(Expression e) {
+    public void visit(ExpressionVisitee e) {
         if (e!=null) {
             serQueue.addFirst(e);
             if (includeAEs && e instanceof SymbolicEnvironment) {
