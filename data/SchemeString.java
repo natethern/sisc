@@ -39,67 +39,71 @@ import sisc.ser.Deserializer;
 
 public class SchemeString extends Value {
 
+    static final int CHARARRAY=0, STRING=1;
+
     protected char[] data_c;
     protected String data_s;
-    protected boolean sync_c, sync_s;
+    protected byte type;
 
     public SchemeString() {}
 
     public SchemeString(String s) {
         data_s=s; 
-        sync_s=true;
+        type=STRING;
     }
 
     public SchemeString(char[] data) {
         data_c=data;
-        sync_c=true;
+        type=CHARARRAY;
     }
 
     public final boolean stringRepAvailable() {
-        return sync_s;
+        return type==STRING;
     }
 
     public final boolean charRepAvailable() {
-        return sync_c;
+        return type==CHARARRAY;
     }
 
     public String asString() {
-        if (sync_s)
+        if (type==STRING)
             return data_s;
         else {
             data_s=new String(data_c);
-            sync_s=true;
+            type=STRING;
+            data_c=null;
             return data_s;
         }
     }
 
     public char[] asCharArray() {
-        if (sync_c) 
+        if (type==CHARARRAY) 
             return data_c;
         else {
             data_c=data_s.toCharArray();
-            sync_c=true;
+            type=CHARARRAY;
+            data_s=null;
             return data_c;
         }
     }
 
     public int length() {
-        if (sync_c) return data_c.length;
+        if (type==CHARARRAY) return data_c.length;
         else return data_s.length();
     }
 
     public char charAt(int index) {
-        if (sync_c) return data_c[index];
+        if (type==CHARARRAY) return data_c[index];
         else return data_s.charAt(index);
     }
 
     public boolean valueEqual(Value v) {
         if (!(v instanceof SchemeString)) return false;
         SchemeString o=(SchemeString)v;
-        if (sync_s) {
+        if (type==STRING) {
             return o.asString().equals(data_s);
         } else {
-            if (o.sync_c) {
+            if (o.type==CHARARRAY) {
                 char[] oc=o.data_c;
                 if (data_c.length!=oc.length) return false;
                 for (int i=0; i<oc.length; i++) {
@@ -113,7 +117,7 @@ public class SchemeString extends Value {
     }
 
     public SchemeString append(SchemeString other) {
-        if (sync_c) {
+        if (type==CHARARRAY) {
             char[] oc=other.asCharArray();
             char[] newstr=new char[data_c.length + oc.length];
             System.arraycopy(data_c, 0, newstr, 0, data_c.length);
@@ -155,11 +159,11 @@ public class SchemeString extends Value {
     }
 
     public void set(int k, char c) {
-        asCharArray()[k]=c;
-        if (sync_s) {
-            sync_s=false;
+        if (type==STRING) {
+            asCharArray()[k]=c;
             data_s=null;
-        }
+        } else 
+            asCharArray()[k]=c;
     }
 
     public String display() {
@@ -180,7 +184,7 @@ public class SchemeString extends Value {
 
     public void deserialize(Deserializer s) throws IOException {
         data_s=s.readUTF();
-        sync_s=true;
+        type=STRING;
     }
 }
 
