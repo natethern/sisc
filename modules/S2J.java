@@ -486,19 +486,19 @@ public class S2J extends ModuleAdapter {
 	protected AppContext ctx;
 	protected Procedure proc;
 
-	/*
 	static Method hashCodeMeth;
 	static Method equalsMeth;
+	static Method toStringMeth;
 
 	static {
 	    try {
 		hashCodeMeth = Object.class.getMethod("hashCode", new Class[]{});
 		equalsMeth = Object.class.getMethod("equals", new Class[]{java.lang.Object.class});
+		toStringMeth = Object.class.getMethod("toString", new Class[]{});
 	    } catch (NoSuchMethodException e) {
 		throw new RuntimeException("could not find method", e);
 	    }
 	}
-	*/
 
 	public SchemeInvocation(AppContext ctx, Procedure proc) {
 	    this.ctx = ctx;
@@ -510,22 +510,14 @@ public class S2J extends ModuleAdapter {
 	    //intercept hashCode, equals and toString
 	    //in order to avoid infinite recursion
 	    if (m.getDeclaringClass() == Object.class) {
-		/*
-		 * for some reason the method objects are *not* the
-		 * same as the ones found by a getMethod on
-		 * java.lang.Object. So the only way of figuring out
-		 * what method has been invoked is to do a comparison
-		 * by name. Yuck.
-		 */
-		String mname = m.getName();
-		if (mname.equals("hashCode")) {
+		if (m.equals(hashCodeMeth)) {
 		    //better than returning a constant;
 		    //this works because a proxy can only have one
 		    //invocation handler
 		    return new Integer(hashCode());
-		} else if (mname.equals("equals")) {
+		} else if (m.equals(equalsMeth)) {
 		    return new Boolean(proxy == args[0]);
-		} else if (mname.equals("toString")) {
+		} else if (m.equals(toStringMeth)) {
 		    return "proxy";
 		}
 	    }
