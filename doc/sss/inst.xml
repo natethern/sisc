@@ -178,7 +178,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
         </listitem>
       </itemizedlist>
     </sect2>
-    <sect2 id="Scheme Scripts">
+    <sect2 id="SchemeScripts">
       <title>Scheme Shell Scripts</title>
       <para>
         On Unix or Unix-like systems, &SISC; supports SRFI-22, a
