@@ -27,7 +27,7 @@
       The Read-Eval-Print-Loop
     </title>
     <para>
-      As in most Scheme systems, &SISC;'s primary human interface is a
+      As in most Scheme systems, &SISC;'ss primary human interface is a
       REPL, or Read-Eval-Print-Loop.  &SISC; presents the user with a
       prompt ('<computeroutput>#;></computeroutput>'), then reads an
       s-expression from the console.  &SISC; then evaluates the
@@ -275,7 +275,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
         <listitem>
           <para>
           	If the REPL was run if its return value is 
-          	an integer, return that integer as &SISC';s overall 
+          	an integer, return that integer as &SISC;'s overall 
           	return code.  If the REPL was not run, and any
           	return code supporting step above was run, return
           	the most recent return code.  If no return code step
