@@ -699,16 +699,6 @@
 (define (list-ref list n)
   (if (zero? n) (car list) (list-ref (cdr list) (- n 1))))
 
-(define iota
-  (letrec ([iota-help
-	    (lambda (n acc) 
-	      (if (< n 0)
-		  acc
-		  (iota-help (- n 1) (cons n acc))))])
-    (lambda (n) 
-      (iota-help (- n 1) '()))))
-
-
 (define (values . args)
   (call-with-current-continuation
    (lambda (k) 

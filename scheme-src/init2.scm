@@ -350,6 +350,12 @@
   (call-with-output-string
     (lambda (port) (with-output-to-port port thunk))))
 
+;; needed in a few places; cut-down version from SRFI-1
+(define (iota count)
+  (do ((count (- count 1) (- count 1))
+       (ans '() (cons count ans)))
+      ((< count 0) ans)))
+
 ;;;;;;;;;;;;; legacy macro support ;;;;;;;;;;;;
 
 (define-syntax define-macro

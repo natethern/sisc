@@ -24,88 +24,53 @@
             (newline)
             (compiled))))))))
 
-(putprop 'trace-depth '*sisc* -1)
+(define trace-depth (parameterize -1))
+
+(define (indent n)
+  (for-each (lambda (n) (display #\space)) (iota n)))
+
+(define (trace-call before call)
+  (dynamic-wind
+   (lambda () (trace-depth (+ (trace-depth) 1)))
+   (lambda ()
+     (let ([depth (trace-depth)])
+       (if (> depth 20)
+           (begin 
+             (indent 40)
+             (display (format "[~s]" depth)))
+           (indent (* depth 2)))
+       (write (before))
+       (newline)
+       (let ([result (call)])
+         (if (> depth 20)
+             (begin 
+               (indent 40)
+               (display (format "[~s]" depth)))
+             (indent (* depth 2)))
+         (write result)
+         (newline)
+         result)))
+   (lambda () (trace-depth (- (trace-depth) 1)))))
 
 (define-syntax trace-lambda
   (syntax-rules ()
     ((trace-lambda name (formal ...) body ...)
      (lambda (formal ...)
-       (dynamic-wind
-	   (lambda () (putprop 'trace-depth '*sisc* 
-			       (+ (getprop 'trace-depth '*sisc*) 1)))
-	   (lambda ()
-	     (let ([depth (getprop 'trace-depth '*sisc*)])
-	       (if (> depth 20)
-		   (begin 
-		     (for-each (lambda (n) (display #\space)) (iota 40))
-		     (display (format "[~s]" depth)))
-		   (for-each (lambda (n) (display #\space)) (iota (* depth 2))))
-	       (write (list 'name formal ...))
-	       (newline)
-	       (let ([result (begin body ...)])
-		 (if (> depth 20)
-		     (begin 
-		       (for-each (lambda (n) (display #\space)) (iota 40))
-		       (display (format "[~s]" depth)))
-		     (for-each (lambda (n) (display #\space)) (iota (* depth 2))))		 (write result)
-		     (newline)
-		     result)))
-	   (lambda () (putprop 'trace-depth '*sisc* 
-			       (- (getprop 'trace-depth '*sisc*) 1))))))))
-
+       (trace-call (lambda () (list 'name formal ...))
+                   (lambda () (begin body ...)))))))
 
 (define-syntax trace-let
   (syntax-rules ()
     ((trace-let name ([var val] ...) body ...)
      (let name ([var val] ...)
-       (dynamic-wind
-	   (lambda () (putprop 'trace-depth '*sisc* 
-			       (+ (getprop 'trace-depth '*sisc*) 1)))
-	   (lambda ()
-	     (let ([depth (getprop 'trace-depth '*sisc*)])
-	       (if (> depth 20)
-		   (begin 
-		     (for-each (lambda (n) (display #\space)) (iota 40))
-		     (display (format "[~s]" depth)))
-		   (for-each (lambda (n) (display #\space)) (iota (* depth 2))))
-	       (write (list 'name var ...))
-	       (newline)
-	       (let ([result (begin body ...)])
-		 (if (> depth 20)
-		     (begin 
-		       (for-each (lambda (n) (display #\space)) (iota 40))
-		       (display (format "[~s]" depth)))
-		     (for-each (lambda (n) (display #\space)) (iota (* depth 2))))		 (write result)
-		     (newline)
-		     result)))
-	   (lambda () (putprop 'trace-depth '*sisc* 
-			       (- (getprop 'trace-depth '*sisc*) 1))))))))
+       (trace-call (lambda () (list 'name var ...))
+                   (lambda () (begin body ...)))))))
 
 (define (trace . procs)
   (define (make-traced procedure-name procedure)
     (lambda args
-      (dynamic-wind
-          (lambda () (putprop 'trace-depth '*sisc* 
-                              (+ (getprop 'trace-depth '*sisc*) 1)))
-	   (lambda ()
-	     (let ([depth (getprop 'trace-depth '*sisc*)])
-	       (if (> depth 20)
-		   (begin 
-		     (for-each (lambda (n) (display #\space)) (iota 40))
-		     (display (format "[~s]" depth)))
-		   (for-each (lambda (n) (display #\space)) (iota (* depth 2))))
-	       (write (cons procedure-name args))
-	       (newline)
-	       (let ([result (apply procedure args)])
-		 (if (> depth 20)
-		     (begin 
-		       (for-each (lambda (n) (display #\space)) (iota 40))
-		       (display (format "[~s]" depth)))
-		     (for-each (lambda (n) (display #\space)) (iota (* depth 2))))		 (write result)
-		     (newline)
-		     result)))
-	   (lambda () (putprop 'trace-depth '*sisc* 
-			       (- (getprop 'trace-depth '*sisc*) 1))))))
+      (trace-call (lambda () (cons procedure-name args))
+                  (lambda () (apply procedure args)))))
   (let ([traced-procedures (cond [(getprop 'traced-procedures '*sisc*) => 
                                   (lambda (x) x)]
                                  [else '()])])
@@ -115,18 +80,17 @@
         (begin
           (for-each 
            (lambda (procedure-symbol)
-             (cond [(not (procedure? (getprop procedure-symbol))) 
-                    (error 'trace "'~s' is not bound to a procedure." 
-                           procedure-symbol)]
-                   [(not (assq procedure-symbol traced-procedures))
-                    (begin
-                      (set! traced-procedures 
-                            (cons (cons procedure-symbol
-                                        (getprop procedure-symbol))
-                                  traced-procedures))
-                      (putprop procedure-symbol '*toplevel*
-                               (make-traced procedure-symbol 
-                                            (getprop procedure-symbol))))]))
+             (let ([proc (getprop procedure-symbol)])
+               (cond [(not (procedure? proc))
+                      (error 'trace "'~s' is not bound to a procedure." 
+                             procedure-symbol)]
+                     [(not (assq procedure-symbol traced-procedures))
+                      (begin
+                        (set! traced-procedures 
+                              (cons (cons procedure-symbol proc)
+                                    traced-procedures))
+                        (putprop procedure-symbol '*toplevel*
+                                 (make-traced procedure-symbol proc)))])))
            procs)
           (putprop 'traced-procedures '*sisc* traced-procedures)))))
 
