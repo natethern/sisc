@@ -257,7 +257,7 @@ public class Quantity extends Value {
                     if (wholeHadPounds)
                         for (int i=0; i<c.length; i++)
                             if (c[i]!='#')
-                                throw new NumberFormatException("non-contiguous use of #s");
+                                throw new NumberFormatException(liMessage(SISCB,"noncontigpounds"));
                     parsePounds(c);
                     b.append('.').append(c);
                 } else {
@@ -284,7 +284,7 @@ public class Quantity extends Value {
                     c=dv.substring(x+1).toCharArray();
                     for (int i=0; i<c.length; i++)
                         if (c[i]!='#')
-                            throw new NumberFormatException("non-contiguous use of #s");
+                            throw new NumberFormatException(liMessage(SISCB,"noncontigpounds"));
                     parsePounds(c);
                 } else {
                     b.append(c);
