@@ -267,7 +267,7 @@ public class Parser extends Util implements Tokens {
 
                     c=is.read();
                     if (c=='=') {
-                        o=_nextExpression(is, state, ref, flags);
+                        o=_nextExpression(is, state, ref, flags & (~PRODUCE_ANNOTATIONS));
                         break;
                     } else if (c=='#') {
                         o=state.get(ref);
