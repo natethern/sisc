@@ -66,7 +66,7 @@
    ("join " "\"join <channel-name>\" asks me to join the channel as an infobot"
     join-chan)
    ("scheme-channel " "\"scheme-channel <channel-name>\" creates a scheme channel with the given name" make-schemechan)
-   ("part " "\"part <channel-name>\" creates a scheme channel with the given name" request-part)
+   ("part " "\"part <channel-name>\" asks me to leave a channel I'm in." request-part)
 ))
 
 (define (infobot . plugins)
