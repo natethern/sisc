@@ -93,6 +93,13 @@
 	    compared according to locale rules (bug &num;493773)
 	  </para>
 	</listitem>
+        <listitem>
+          <para>
+            (<xref linkend="annotation-property"/>) The
+            <literal>EMITANNOTATIONS</literal> property is not yet
+            supported by &SISC; at the time of this writing.
+          </para>
+        </listitem>
       </orderedlist>
     </para>
   </appendix>
