@@ -44,7 +44,7 @@
         <para>
           In order to be able to display the value in the Scheme
           system, all <type>Value</type>s must implement the
-          <method>display</method> method:
+          <function>display</function> method:
         </para>
         <blockquote>
           <para>
@@ -73,9 +73,9 @@
         <para>
           If the programmer desires the Value to have a different
           representation when written with <function>write</function>,
-          the <method>write</method> method must be overridden.  If it
-          is not, the output of <method>display</method> is used for
-          <method>write</method> as well.
+          the <function>write</function> method must be overridden.  If it
+          is not, the output of <function>display</function> is used for
+          <function>write</function> as well.
         </para>
         <blockquote>
           <para>
@@ -107,7 +107,7 @@
         <para>
           Finally, if the external representation of a new Value is
           likely to be long, the programmer should implement the
-          <method>synopsis</method> method, which generates a
+          <function>synopsis</function> method, which generates a
           <emphasis>summary representation</emphasis> of the value.
         </para>
         <blockquote>
@@ -136,8 +136,8 @@
         </blockquote>
         <para>
           The <type>sisc.io.ValueWriter</type> type that is passed as an
-          argument to both <method>display</method> and
-          <method>write</method> contains a number of methods to
+          argument to both <function>display</function> and
+          <function>write</function> contains a number of methods to
           generate the representation.  First there are several methods
           for appending Java Strings, characters, and SISC Values.  In
           each, the called <type>ValueWriter</type> is returned, to
@@ -164,8 +164,6 @@
             </blockquote>
           </para>
           <para>
-            <indexterm><primary>append</primary>
-            </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
               <type>sisc.io.ValueWriter</type>
@@ -183,8 +181,6 @@
             </blockquote>
           </para>
           <para>
-            <indexterm><primary>append</primary>
-            </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
               <type>sisc.io.ValueWriter</type>
@@ -206,11 +202,11 @@
           </para>
         </blockquote>
         <para>
-          In addition to the above <method>append</method> methods, the
+          In addition to the above <function>append</function> methods, the
           programmer may wish to force <function>display</function> or
           <function>write</function> rather than use the same method as
           the <type>ValueWriter</type>.  To do this, one can call the
-          <method>display</method> or <method>write</method> methods on
+          <function>display</function> or <function>write</function> methods on
           the <type>ValueWriter</type>.
         </para>
         <blockquote>
@@ -316,7 +312,7 @@
           <function>visit</function> methods described in <xref
           linkend="serialization"/>.
         </para>
-      </blockquote>
+      </sect3>
     </sect2>
     <sect2>
       <title>Adding Native Bindings</title>
@@ -779,17 +775,17 @@
             </para>
           </blockquote>
         </para>
-        <para>
-          The <type>ExpressionVisitor</type> passed to visit contains
-          only one method, <method>visit</method>, which bears the
-          same contract as the <method>visit</method> above.  When
-          called, an Expression would then call the
-          ExpressionVisitor's <method>visit</method> method once for
-          each nested Expression.  This method is used during
-          serialization and during printing to detect cycles in data
-          and code structures.
-        </para>
       </sect3>
+      <para>
+        The <type>ExpressionVisitor</type> passed to visit contains
+        only one method, <function>visit</function>, which bears the
+        same contract as the <function>visit</function> above.  When
+        called, an Expression would then call the
+        ExpressionVisitor's <function>visit</function> method once for
+          each nested Expression.  This method is used during
+        serialization and during printing to detect cycles in data
+        and code structures.
+      </para>
     </sect2>
   </sect1>
 </chapter>
