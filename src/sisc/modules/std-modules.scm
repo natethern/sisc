@@ -889,7 +889,17 @@
   (include "srfi/srfi-7.scm")
   (add-feature 'srfi-7))
 
+;;load and import srfi-55
+
+(module srfi-55
+  ((require-extension srfi-55-clause-handler))
+  (include "srfi/srfi-55.scm")
+  (add-feature 'srfi-55))
+
+(import srfi-0)
 (import srfi-22)
+(import srfi-55)
+
 
 ;;Final initialization
 (let ()
