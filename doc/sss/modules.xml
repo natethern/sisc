@@ -37,80 +37,85 @@
       <title>Adding Types</title>
       <para>
         A Scheme value is represented in &SISC; as a subclass of the
-        abstract Java class <classname>sisc.data.Value</classname>.  A proper
-        subclass <emphasis>must</emphasis> implement the
-        <function>display</function> method:
+        abstract Java class <classname>sisc.data.Value</classname>. 
       </para>
-      <blockquote>
+      <sect3>
+        <title>External Representation of Values</title>
         <para>
-          <indexterm><primary>display</primary>
-          </indexterm>
-          <methodsynopsis language="java">
-            <modifier>public</modifier>
-            <void/>
-            <methodname>display</methodname>
-            <methodparam>
-              <type>sisc.io.ValueWriter</type>
-              <parameter>writer</parameter>
-            </methodparam>
-          </methodsynopsis>
-          <blockquote>
-            <para>
-              Uses the various output methods of
-              <type>sisc.io.ValueWriter</type> to construct an
-              external representation of the given Value
-              suitable for output from the
-              <function>display</function> Scheme function.
-            </para>
-          </blockquote>
+          In order to be able to display the value in the Scheme
+          system, all <type>Value</type>s must implement the
+          <method>display</method> method:
         </para>
-      </blockquote>
-      <para>
-        If the type that is being added will be serialized in a &SISC;
-        heap, and it contains one or more member variables, the Value
-        must include a default constructor (a constructor with no
-        arguments), and implement the <function>deserialize</function>
-        and <function>serialize</function> methods described in <xref
-        linkend="serialization"/>.
-      </para>
-      <para>
-        No other method that we describe below is required.  Suitable
-        defaults are provided by the Value class itself.  However, it
-        may be desirable to do so.
-      </para>
-      <blockquote>
+        <blockquote>
+          <para>
+            <indexterm><primary>display</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <void/>
+              <methodname>display</methodname>
+              <methodparam>
+                <type>sisc.io.ValueWriter</type>
+                <parameter>writer</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Uses the various output methods of
+                <type>sisc.io.ValueWriter</type> to construct an
+                external representation of the given Value
+                suitable for output from the
+                <function>display</function> Scheme function.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
         <para>
-          <indexterm><primary>write</primary>
-          </indexterm>
-          <methodsynopsis language="java">
-            <modifier>public</modifier>
-            <void/>
-            <methodname>write</methodname>
-            <methodparam>
-              <type>sisc.io.ValueWriter</type>
-              <parameter>writer</parameter>
-            </methodparam>
-          </methodsynopsis>
-          <blockquote>
-            <para>
-              Uses the various output methods of
-              <type>sisc.io.ValueWriter</type> to construct an
-              external representation of the given Value
-              suitable for output from the
-              <function>write</function> Scheme function.
-              If not implemented, the output constructed the by the
-              <function>display</function> method is used as output
-              from <function>write</function>.
-            </para>
-          </blockquote>
+          If the programmer desires the Value to have a different
+          representation when written with <function>write</function>,
+          the <method>write</method> method must be overridden.  If it
+          is not, the output of <method>display</method> is used for
+          <method>write</method> as well.
         </para>
-      </blockquote>
-      <blockquote>
+        <blockquote>
+          <para>
+            <indexterm><primary>write</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <void/>
+              <methodname>write</methodname>
+              <methodparam>
+                <type>sisc.io.ValueWriter</type>
+                <parameter>writer</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Uses the various output methods of
+                <type>sisc.io.ValueWriter</type> to construct an
+                external representation of the given Value
+                suitable for output from the
+                <function>write</function> Scheme function.
+                If not implemented, the output constructed the by the
+                <function>display</function> method is used as output
+                from <function>write</function>.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
         <para>
-          <indexterm><primary>synopsis</primary>
-          </indexterm>
-          <methodsynopsis language="java">
-            <modifier>public</modifier>
+          Finally, if the external representation of a new Value is
+          likely to be long, the programmer should implement the
+          <method>synopsis</method> method, which generates a
+          <emphasis>summary representation</emphasis> of the value.
+        </para>
+        <blockquote>
+          <para>
+            <indexterm><primary>synopsis</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
             <type>String</type>
             <methodname>synopsis</methodname>
             <methodparam>
@@ -118,57 +123,198 @@
               <parameter>limit</parameter>
             </methodparam>
           </methodsynopsis>
-          <blockquote>
-            <para>
-              Returns approximately <parameter>limit</parameter>
-              characters from the printable representation of this
-              value as if returned by <function>write</function>.
-              This method is used for displaying the value in error
-              messages where the entire representation may be superfluous.
-            </para>
-          </blockquote>
-        </para>
-      </blockquote>
-      <blockquote>
+            <blockquote>
+              <para>
+                Returns approximately <parameter>limit</parameter>
+                characters from the printable representation of this
+                value as if returned by <function>write</function>.
+                This method is used for displaying the value in error
+                messages where the entire representation may be superfluous.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
         <para>
-          <indexterm><primary>eq</primary>
-          </indexterm>
-          <methodsynopsis language="java">
-            <modifier>public</modifier>
-            <type>boolean</type>
-            <methodname>eq</methodname>
-            <methodparam>
-              <type>Object</type>
-              <parameter>other</parameter>
-            </methodparam>
-          </methodsynopsis>
-          <blockquote>
-            <para>
-              Returns true if another provided Java object is equal in
-              the sense of <function>eq?</function> to this Value.
-            </para>
-          </blockquote>
+          The <type>sisc.io.ValueWriter</type> type that is passed as an
+          argument to both <method>display</method> and
+          <method>write</method> contains a number of methods to
+          generate the representation.  First there are several methods
+          for appending Java Strings, characters, and SISC Values.  In
+          each, the called <type>ValueWriter</type> is returned, to
+          allow for easy chaining of calls.
         </para>
-      </blockquote>
-      <blockquote>
+        <blockquote>
+          <para>
+            <indexterm><primary>append</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>sisc.io.ValueWriter</type>
+              <methodname>append</methodname>
+              <methodparam>
+                <type>char</type>
+                <parameter>c</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Appends a single character to the external
+                representation.  
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>append</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>sisc.io.ValueWriter</type>
+              <methodname>append</methodname>
+              <methodparam>
+                <type>String</type>
+                <parameter>s</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Appends the contents of a Java String to the external
+                representation.  
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>append</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>sisc.io.ValueWriter</type>
+              <methodname>append</methodname>
+              <methodparam>
+                <type>sisc.data.Value</type>
+                <parameter>v</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Appends the contents of a Scheme value to the external
+                representation.  The value is converted to an external
+                representation using the print style with which the
+                <type>ValueWriter</type> was constructed (for example,
+                <function>display</function> or <function>write</function>).
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
         <para>
-          <indexterm><primary>valueEqual</primary>
-          </indexterm>
-          <methodsynopsis language="java">
-            <modifier>public</modifier>
-            <type>boolean</type>
-            <methodname>valueEqual</methodname>
-            <methodparam>
-              <type>Value</type>
-              <parameter>other</parameter>
-            </methodparam>
-          </methodsynopsis>
-          <blockquote>
-            <para>
-              Returns true if another provided Scheme value is equal in
-              the sense of <function>equal?</function> to this Value.
-            </para>
-          </blockquote>
+          In addition to the above <method>append</method> methods, the
+          programmer may wish to force <function>display</function> or
+          <function>write</function> rather than use the same method as
+          the <type>ValueWriter</type>.  To do this, one can call the
+          <method>display</method> or <method>write</method> methods on
+          the <type>ValueWriter</type>.
+        </para>
+        <blockquote>
+          <para>
+            <indexterm><primary>display</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <void/>
+              <methodname>display</methodname>
+              <methodparam>
+                <type>sisc.data.Value</type>
+                <parameter>v</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Appends the external representation of the given value
+                as returned by <function>display</function>.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>write</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <void/>
+              <methodname>write</methodname>
+              <methodparam>
+                <type>sisc.data.Value</type>
+                <parameter>v</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Appends the external representation of the given value
+                as returned by <function>write</function>.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </sect3>
+      <sect3>
+        <title>Equality</title>
+        <para>
+          If the one wants a Value to be comparable for any
+          more than pointer equality, or for the concept of pointer
+          equality to be less strict than actual pointer equality, one
+          or more of the equality methods must be overridden.
+        </para>
+        <blockquote>
+          <para>
+            <indexterm><primary>eq</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>boolean</type>
+              <methodname>eq</methodname>
+              <methodparam>
+                <type>Object</type>
+                <parameter>other</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns true if another provided Java object is equal in
+                the sense of <function>eq?</function> to this Value.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+        <blockquote>
+          <para>
+            <indexterm><primary>valueEqual</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>boolean</type>
+              <methodname>valueEqual</methodname>
+              <methodparam>
+                <type>Value</type>
+                <parameter>other</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns true if another provided Scheme value is equal in
+                the sense of <function>equal?</function> to this Value.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </sect3>
+      <sect3>
+        <title>Serializable Values</title>
+        <para>
+          If the type that is being added will be serialized in a &SISC;
+          heap, and it contains one or more member variables, the Value
+          must include a default constructor (a constructor with no
+          arguments), and implement the <function>deserialize</function>,
+          <function>serialize</function>, and
+          <function>visit</function> methods described in <xref
+          linkend="serialization"/>.
         </para>
       </blockquote>
     </sect2>
@@ -334,7 +480,7 @@
         If the Expression or Value contains no internal state that
         need be serialized, the serialization methods may be ignored.
         If not, the Expression or Value must contain a default (no
-        argument) constructor, and implement the following two methods:
+        argument) constructor, and implement the following three methods:
         <blockquote>
           <para>
             <indexterm><primary>serialize</primary>
@@ -373,6 +519,26 @@
               <para>
                 Sets the state of the Expression to the serialized
                 data read from <parameter>deserializer</parameter>.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>visit</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>boolean</type>
+              <methodname>visit</methodname>
+              <methodparam>
+                <type>sisc.util.ExpressionVisitor</type>
+                <parameter>visitor</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                When called, the Expression should call
+                <literal>visitor.visit(n)</literal> on any nested
+                Expressions.  
               </para>
             </blockquote>
           </para>
@@ -612,6 +778,16 @@
               </blockquote>
             </para>
           </blockquote>
+        </para>
+        <para>
+          The <type>ExpressionVisitor</type> passed to visit contains
+          only one method, <method>visit</method>, which bears the
+          same contract as the <method>visit</method> above.  When
+          called, an Expression would then call the
+          ExpressionVisitor's <method>visit</method> method once for
+          each nested Expression.  This method is used during
+          serialization and during printing to detect cycles in data
+          and code structures.
         </para>
       </sect3>
     </sect2>
