@@ -391,7 +391,7 @@ r / 2<superscript>s</superscript>
                 <parameter>key</parameter> in
                 <parameter>hashtable</parameter>. If
                 <parameter>key</parameter> has no association then
-                <parameter>thunk</parameter> is evaluated and the
+                <parameter>thunk</parameter> is called and the
                 result is associated with <parameter>key</parameter>
                 in <parameter>hashtable</parameter> and also returned.
                 The <parameter>unsafe?</parameter>, which defaults to
@@ -508,14 +508,14 @@ r / 2<superscript>s</superscript>
             <methodsynopsis language="scheme">
               <void/>
               <methodname>hashtable/for-each</methodname>
-              <methodparam><parameter>thunk</parameter></methodparam>
+              <methodparam><parameter>proc</parameter></methodparam>
               <methodparam><parameter>hashtable</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Applies <parameter>thunk</parameter> to each element of
-                <parameter>hashtable</parameter>. <parameter>thunk</parameter>
-                is invoked with two parameters - the key and the value
+                Applies <parameter>proc</parameter> to each element of
+                <parameter>hashtable</parameter>. <parameter>proc</parameter>
+                is called with two parameters - the key and the value
                 of the element.
               </para>
             </blockquote>
@@ -527,16 +527,16 @@ r / 2<superscript>s</superscript>
             <methodsynopsis language="scheme">
               <type>list</type>
               <methodname>hashtable/map</methodname>
-              <methodparam><parameter>thunk</parameter></methodparam>
+              <methodparam><parameter>proc</parameter></methodparam>
               <methodparam><parameter>hashtable</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Applies <parameter>thunk</parameter> to each element of
-                <parameter>hashtable</parameter>. <parameter>thunk</parameter>
-                is invoked with two parameters - the key and the value
-                of the element. The results of evaluating
-                <parameter>thunk</parameter> are returned as a list.
+                Applies <parameter>proc</parameter> to each element of
+                <parameter>hashtable</parameter>. <parameter>proc</parameter>
+                is called with two parameters - the key and the value
+                of the element. The results of calling
+                <parameter>proc</parameter> are returned as a list.
               </para>
             </blockquote>
           </para>
@@ -811,7 +811,7 @@ r / 2<superscript>s</superscript>
                 Returns the value associated with the property
                 <parameter>symbol</parameter> of procedure
                 <parameter>proc</parameter>. If the property is unset
-                then <parameter>thunk</parameter> is evaluated and the
+                then <parameter>thunk</parameter> is called and the
                 property is set to the result, which is also returned.
                 The <parameter>unsafe?</parameter>, which defaults to
                 &num;t, indicates whether <parameter>thunk</parameter>
