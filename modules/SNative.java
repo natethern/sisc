@@ -119,16 +119,16 @@ public class SNative extends ModuleAdapter {
                 switch(primid) {
                 case NOT: return truth(f.vlr[0]) ? FALSE : TRUE;
                 case CADR:
-                    return ((Pair)pair(f,f.vlr[0]).cdr).car;
+                    return ((Pair)pair(f.vlr[0]).cdr).car;
                 case CDAR:
-                    return ((Pair)pair(f,f.vlr[0]).car).cdr;
+                    return ((Pair)pair(f.vlr[0]).car).cdr;
                 case CAAR:
-                    return ((Pair)pair(f,f.vlr[0]).car).car;
+                    return ((Pair)pair(f.vlr[0]).car).car;
                 case CDDR:
-                    return ((Pair)pair(f,f.vlr[0]).cdr).cdr;
+                    return ((Pair)pair(f.vlr[0]).cdr).cdr;
                 case READLINE:
                     try {
-                        String s=inport(f,f.vlr[0]).getReader().readLine();
+                        String s=inport(f.vlr[0]).getReader().readLine();
                         if (s==null) return EOF;
                         return new SchemeString(s);
                     } catch (IOException e) {
@@ -140,8 +140,8 @@ public class SNative extends ModuleAdapter {
             case 2:
                 switch(primid) {
                 case APPEND:
-                    Pair p1=pair(f,f.vlr[0]);
-                    Pair p2=pair(f,f.vlr[1]);
+                    Pair p1=pair(f.vlr[0]);
+                    Pair p2=pair(f.vlr[1]);
                     if (p1==EMPTYLIST)
                         return p2;
                     if (p2==EMPTYLIST)
@@ -161,66 +161,66 @@ public class SNative extends ModuleAdapter {
                     Value v2=f.vlr[1];
                     return truth(eqv(v1,v2));
                 case LISTREF:
-                    p1=pair(f,f.vlr[0]);
-                    for (int l=num(f,f.vlr[1]).intValue(); l>0; l--) {
+                    p1=pair(f.vlr[0]);
+                    for (int l=num(f.vlr[1]).intValue(); l>0; l--) {
                         p1=(Pair)p1.cdr;
                     }
                     return p1.car;
                 case ASSV:
                     v1=f.vlr[0];
-                    p1=pair(f,f.vlr[1]);
+                    p1=pair(f.vlr[1]);
                     while (p1!=EMPTYLIST) {
-                        Pair assc=pair(f,p1.car);
+                        Pair assc=pair(p1.car);
                         if (eqv(assc.car,v1))
                             return assc;
-                        p1=pair(f,p1.cdr);
+                        p1=pair(p1.cdr);
                     }
                     return FALSE;
                 case ASSQ:
                     v1=f.vlr[0];
-                    p1=pair(f,f.vlr[1]);
+                    p1=pair(f.vlr[1]);
                     while (p1!=EMPTYLIST) {
-                        Pair assc=pair(f,p1.car);
+                        Pair assc=pair(p1.car);
                         if (assc.car.eq(v1))
                             return assc;
-                        p1=pair(f,p1.cdr);
+                        p1=pair(p1.cdr);
                     }
                     return FALSE;
                 case MEMQ:
                     v1=f.vlr[0];
-                    p1=pair(f,f.vlr[1]);
+                    p1=pair(f.vlr[1]);
                     while (p1!=EMPTYLIST) {
                         if (p1.car.eq(v1))
                             return p1;
-                        p1=pair(f,p1.cdr);
+                        p1=pair(p1.cdr);
                     }
                     return FALSE;
                 case MEMV:
                     v1=f.vlr[0];
-                    p1=pair(f,f.vlr[1]);
+                    p1=pair(f.vlr[1]);
                     while (p1!=EMPTYLIST) {
                         if (eqv(p1.car,v1))
                             return p1;
-                        p1=pair(f,p1.cdr);
+                        p1=pair(p1.cdr);
                     }
                     return FALSE;
                 case ASSOC:
                     v1=f.vlr[0];
-                    p1=pair(f,f.vlr[1]);
+                    p1=pair(f.vlr[1]);
                     while (p1!=EMPTYLIST) {
-                        Pair assc=pair(f,p1.car);
+                        Pair assc=pair(p1.car);
                         if (assc.car.valueEqual(v1))
                             return assc;
-                        p1=pair(f,p1.cdr);
+                        p1=pair(p1.cdr);
                     }
                     return FALSE;
                 case MEMBER:
                     v1=f.vlr[0];
-                    p1=pair(f,f.vlr[1]);
+                    p1=pair(f.vlr[1]);
                     while (p1!=EMPTYLIST) {
                         if (p1.car.valueEqual(v1))
                             return p1;
-                        p1=pair(f,p1.cdr);
+                        p1=pair(p1.cdr);
                     }
                     return FALSE;
                 default:

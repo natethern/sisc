@@ -68,12 +68,6 @@ public class SDebug extends ModuleAdapter {
         }
     }
 
-    public static final CallFrame cont(Interpreter r, Value o) throws ContinuationException {
-        try {
-            return (CallFrame)o;
-        } catch (ClassCastException e) { typeError(r, "continuation", o); } return null;
-    }
-
     public Value eval(int primid, Interpreter f) throws ContinuationException {
         switch(f.vlr.length) {
         case 1:
@@ -85,17 +79,17 @@ public class SDebug extends ModuleAdapter {
             case COMPILE:
                 return new Closure(false, (short)0, f.compile(f.vlr[0]), f.env);
             case CONT_LOCKQ:
-                CallFrame cn=cont(f,f.vlr[0]);
+                CallFrame cn=cont(f.vlr[0]);
                 return truth(cn.lock);
             case CONT_NXP:
-                cn=cont(f,f.vlr[0]);
+                cn=cont(f.vlr[0]);
                 if (cn.nxp==null) return EMPTYLIST;
                 return new SISCExpression(cn.nxp);
             case CONT_VLR:
-                cn=cont(f,f.vlr[0]);
+                cn=cont(f.vlr[0]);
                 return new SchemeVector(cn.vlr);
             case CONT_ENV:
-                cn=cont(f,f.vlr[0]);
+                cn=cont(f.vlr[0]);
                 return cn.env;
             default:
                 error(f, "Incorrect number of arguments to procedure "+f.acc);

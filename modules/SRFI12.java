@@ -76,10 +76,11 @@ public class SRFI12 extends ModuleAdapter {
 	}
     }
 
-    public static Condition cond(Interpreter r, Value o) throws ContinuationException {
+    public static Condition cond(Value o) {
         try {
             return (Condition)o;
-        } catch (ClassCastException e) { typeError(r, "condition", o); } return null;
+        } catch (ClassCastException e) { typeError("condition", o); }
+	return null;
     }
 
 
@@ -88,27 +89,27 @@ public class SRFI12 extends ModuleAdapter {
 	case 1:
 	    switch(primid) {
 	    case CONDITIONQ: return truth(f.vlr[0] instanceof Condition);
-	    case MAKECOMPOSITECONDITION: return new Condition(cond(f,f.vlr[0]));
+	    case MAKECOMPOSITECONDITION: return new Condition(cond(f.vlr[0]));
 	    default:
 		error(f, "Incorrect number of arguments to procedure "+f.acc);
 	    }
 	case 2:
 	    switch(primid) {
 	    case MAKEPROPERTYCONDITION:
-		return new Condition(f.vlr[0], pair(f,f.vlr[1]));
+		return new Condition(f.vlr[0], pair(f.vlr[1]));
 	    case MAKECOMPOSITECONDITION: 
-		Condition q=new Condition(cond(f,f.vlr[0]));
-		q.next=new Condition(cond(f,f.vlr[1]));
+		Condition q=new Condition(cond(f.vlr[0]));
+		q.next=new Condition(cond(f.vlr[1]));
 		return q;
 	    case GETCONDITIONPROPERTIES:
-		q=cond(f,f.vlr[0]);
+		q=cond(f.vlr[0]);
 		while (!q.kindkey.valueEqual(f.vlr[1]) &&
 		       q.next!=null)
 		    q=q.next;
 		if (q==null) return FALSE;
 		else return q.props;
 	    case HASCONDITIONKIND:
-		q=cond(f,f.vlr[0]);
+		q=cond(f.vlr[0]);
 		do {
 		    if (q.kindkey.valueEqual(f.vlr[1]))
 			return TRUE;
@@ -121,9 +122,9 @@ public class SRFI12 extends ModuleAdapter {
 	default:
 	    switch(primid) {
 	    case MAKECOMPOSITECONDITION:
-		Condition q=new Condition(cond(f,f.vlr[0])), h=q;
+		Condition q=new Condition(cond(f.vlr[0])), h=q;
 		for (int i=0; i<f.vlr.length; i++) {
-		    q.next=new Condition(cond(f,f.vlr[i]));
+		    q.next=new Condition(cond(f.vlr[i]));
 		    q=q.next;
 		}
 		return h;

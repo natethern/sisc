@@ -268,22 +268,25 @@ public class SNetwork extends ModuleAdapter {
         define("set-so-timeout", SET_SO_TIMEOUT);
     }
 
-    public static SchemeSocket sock(Interpreter r, Value o) throws ContinuationException {
+    public static SchemeSocket sock(Value o) {
         try {
             return (SchemeSocket)o;
-        } catch (ClassCastException e) { typeError(r, "socket", o); } return null;
+        } catch (ClassCastException e) { typeError("socket", o); }
+	return null;
     }
 
-    public static SchemeMulticastUDPSocket mcastsock(Interpreter r, Value o) throws ContinuationException {
+    public static SchemeMulticastUDPSocket mcastsock(Value o) {
         try {
             return (SchemeMulticastUDPSocket)o;
-        } catch (ClassCastException e) { typeError(r, "multicast udp socket", o); } return null;
+        } catch (ClassCastException e) { typeError("multicast udp socket", o); } 
+	return null;
     }
 
-    public static SchemeServerSocket serversock(Interpreter r, Value o) throws ContinuationException {
+    public static SchemeServerSocket serversock(Value o) {
         try {
             return (SchemeServerSocket)o;
-        } catch (ClassCastException e) { typeError(r, "tcp listen socket", o); } return null;
+        } catch (ClassCastException e) { typeError("tcp listen socket", o); } 
+	return null;
     }
 
     public Value eval(int primid, Interpreter f) throws ContinuationException {
@@ -299,34 +302,34 @@ public class SNetwork extends ModuleAdapter {
             case 1:
                 switch (primid) {
                 case OPEN_SOCKET_INPUT_PORT:
-                    SchemeSocket ss=sock(f,f.vlr[0]);
+                    SchemeSocket ss=sock(f.vlr[0]);
                     return ss.getInputPort();
                 case OPEN_SOCKET_OUTPUT_PORT:
-                    SchemeSocket ssock=sock(f,f.vlr[0]);
+                    SchemeSocket ssock=sock(f.vlr[0]);
                     return ssock.getOutputPort(false);
                 case CLOSE_SOCKET:
                     Closable c=(Closable)f.vlr[0];
                     c.close();
                     return VOID;
                 case GET_HOST_NAME_BY_IP:
-                    String str=string(f,f.vlr[0]);
+                    String str=string(f.vlr[0]);
                     InetAddress addr=InetAddress.getByName(str);
                     return new SchemeString(addr.getHostName());
                 case GET_HOST_IP_BY_NAME:
-                    str=string(f,f.vlr[0]);
+                    str=string(f.vlr[0]);
                     addr=InetAddress.getByName(str);
                     return new SchemeString(addr.getHostAddress());
                 case OPEN_TCP_LISTENER:
-                    int port=num(f,f.vlr[0]).intValue();
+                    int port=num(f.vlr[0]).intValue();
                     return new SchemeServerSocket(new ServerSocket(port));
                 case ACCEPT_TCP_SOCKET:
-                    Socket s=serversock(f,f.vlr[0]).s.accept();
+                    Socket s=serversock(f.vlr[0]).s.accept();
                     return new SchemeTCPSocket(s);
                 case OPEN_UDP_SOCKET:
-                    port=num(f,f.vlr[0]).intValue();
+                    port=num(f.vlr[0]).intValue();
                     return new SchemeUDPSocket(new DatagramSocket(port));
                 case OPEN_MULTICAST_CLIENT_SOCKET:
-                    port=num(f,f.vlr[0]).intValue();
+                    port=num(f.vlr[0]).intValue();
                     return new SchemeMulticastUDPSocket(new MulticastSocket(port));
                 default:
                     error(f, "Incorrect number of arguments to procedure "+f.acc);
@@ -334,40 +337,40 @@ public class SNetwork extends ModuleAdapter {
             case 2:
                 switch (primid) {
                 case OPEN_TCP_SOCKET:
-                    String host=string(f, f.vlr[0]);
-                    int port=num(f,f.vlr[1]).intValue();
+                    String host=string( f.vlr[0]);
+                    int port=num(f.vlr[1]).intValue();
                     return new SchemeTCPSocket(new Socket(host, port));
                 case OPEN_UDP_SOCKET:
-                    port=num(f,f.vlr[0]).intValue();
-                    int ps=num(f,f.vlr[1]).intValue();
+                    port=num(f.vlr[0]).intValue();
+                    int ps=num(f.vlr[1]).intValue();
                     return new SchemeUDPSocket(new DatagramSocket(port), ps);
                 case OPEN_MULTICAST_SERVER_SOCKET:
-                    host=string(f,f.vlr[0]);
-                    int dport=num(f,f.vlr[1]).intValue();
+                    host=string(f.vlr[0]);
+                    int dport=num(f.vlr[1]).intValue();
                     return new SchemeMulticastUDPSocket(new MulticastSocket(), host, dport);
                 case OPEN_MULTICAST_CLIENT_SOCKET:
-                    port=num(f,f.vlr[0]).intValue();
-                    ps=num(f,f.vlr[1]).intValue();
+                    port=num(f.vlr[0]).intValue();
+                    ps=num(f.vlr[1]).intValue();
                     return new SchemeMulticastUDPSocket(new MulticastSocket(port), ps);
                 case OPEN_SOCKET_OUTPUT_PORT:
-                    SchemeSocket ssock=sock(f,f.vlr[0]);
+                    SchemeSocket ssock=sock(f.vlr[0]);
                     return ssock.getOutputPort(truth(f.vlr[1]));
                 case SET_MULTICAST_TTL:
-                    SchemeMulticastUDPSocket ms=mcastsock(f,f.vlr[0]);
-                    int ttl=num(f,f.vlr[1]).intValue();
+                    SchemeMulticastUDPSocket ms=mcastsock(f.vlr[0]);
+                    int ttl=num(f.vlr[1]).intValue();
                     ms.setTTL(ttl);
                     return VOID;
                 case JOIN_MULTICAST_GROUP:
-                    ms=mcastsock(f,f.vlr[0]);
-                    host=string(f, f.vlr[1]);
+                    ms=mcastsock(f.vlr[0]);
+                    host=string( f.vlr[1]);
                     ms.joinGroup(InetAddress.getByName(host));
                 case LEAVE_MULTICAST_GROUP:
-                    ms=mcastsock(f,f.vlr[0]);
-                    host=string(f, f.vlr[1]);
+                    ms=mcastsock(f.vlr[0]);
+                    host=string( f.vlr[1]);
                     ms.leaveGroup(InetAddress.getByName(host));
                 case SET_SO_TIMEOUT:
-                    SchemeTCPSocket tcps=(SchemeTCPSocket)sock(f,f.vlr[0]);
-                    tcps.setSoTimeout(num(f,f.vlr[1]).intValue());
+                    SchemeTCPSocket tcps=(SchemeTCPSocket)sock(f.vlr[0]);
+                    tcps.setSoTimeout(num(f.vlr[1]).intValue());
                     return VOID;
                 default:
                     error(f, "Incorrect number of arguments to procedure "+f.acc);
@@ -375,9 +378,9 @@ public class SNetwork extends ModuleAdapter {
             case 3:
                 switch(primid) {
                 case OPEN_UDP_SOCKET:
-                    String host=string(f,f.vlr[0]);
-                    int dport=num(f,f.vlr[1]).intValue();
-                    int lport=num(f,f.vlr[2]).intValue();
+                    String host=string(f.vlr[0]);
+                    int dport=num(f.vlr[1]).intValue();
+                    int lport=num(f.vlr[2]).intValue();
                     return new SchemeUDPSocket(new DatagramSocket(lport),
                                                host, dport);
                 }

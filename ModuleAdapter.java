@@ -34,11 +34,4 @@ public abstract class ModuleAdapter extends Module {
     public float getModuleVersion() {
 	return 0.0f;
     }
-
-    public static final Module module(Interpreter r, Value o)
-    throws ContinuationException {
-        try {
-            return (Module)o;
-        } catch (ClassCastException e) { typeError(r, "native library", o); } return null;
-    }
 }

@@ -132,30 +132,30 @@ public class J2S extends ModuleAdapter {
                 (Value)new JavaObject(v));
     }
 
-    public Value eval(int primid, Interpreter r)
+    public Value eval(int primid, Interpreter f)
     throws ContinuationException {
-        switch (r.vlr.length) {
+        switch (f.vlr.length) {
         case 0:
             break;
         case 1:
             switch(primid) {
             case JGETCLASS:
-                if (r.vlr[0] instanceof JavaObject)
-                    return new JavaClass(((JavaObject)r.vlr[0]).o.getClass());
+                if (f.vlr[0] instanceof JavaObject)
+                    return new JavaClass(((JavaObject)f.vlr[0]).o.getClass());
                 else
-                    return new JavaClass(r.vlr[0].getClass());
-            case JCLASSQ: return truth(r.vlr[0] instanceof JavaClass);
-            case JOBJECTQ: return truth(r.vlr[0] instanceof JavaObject);
+                    return new JavaClass(f.vlr[0].getClass());
+            case JCLASSQ: return truth(f.vlr[0] instanceof JavaClass);
+            case JOBJECTQ: return truth(f.vlr[0] instanceof JavaObject);
             case JGETCONSTRUCTORS:
                 Class clazz;
-                if (r.vlr[0] instanceof JavaClass) {
-                    JavaClass c=(JavaClass)r.vlr[0];
+                if (f.vlr[0] instanceof JavaClass) {
+                    JavaClass c=(JavaClass)f.vlr[0];
                     clazz=c.clazz;
-                } else if (r.vlr[0] instanceof JavaObject) {
-                    JavaObject o=(JavaObject)r.vlr[0];
+                } else if (f.vlr[0] instanceof JavaObject) {
+                    JavaObject o=(JavaObject)f.vlr[0];
                     clazz=o.o.getClass();
                 } else {
-                    clazz=r.vlr[0].getClass();
+                    clazz=f.vlr[0].getClass();
                 }
 
                 Constructor[] cns=clazz.getConstructors();
@@ -170,14 +170,14 @@ public class J2S extends ModuleAdapter {
                 }
                 return p;
             case JGETMETHODS:
-                if (r.vlr[0] instanceof JavaClass) {
-                    JavaClass c=(JavaClass)r.vlr[0];
+                if (f.vlr[0] instanceof JavaClass) {
+                    JavaClass c=(JavaClass)f.vlr[0];
                     clazz=c.clazz;
-                } else if (r.vlr[0] instanceof JavaObject) {
-                    JavaObject o=(JavaObject)r.vlr[0];
+                } else if (f.vlr[0] instanceof JavaObject) {
+                    JavaObject o=(JavaObject)f.vlr[0];
                     clazz=o.o.getClass();
                 } else {
-                    clazz=r.vlr[0].getClass();
+                    clazz=f.vlr[0].getClass();
                 }
 
 
@@ -192,14 +192,14 @@ public class J2S extends ModuleAdapter {
                 }
                 return p;
             case JGETFIELDS:
-                if (r.vlr[0] instanceof JavaClass) {
-                    JavaClass c=(JavaClass)r.vlr[0];
+                if (f.vlr[0] instanceof JavaClass) {
+                    JavaClass c=(JavaClass)f.vlr[0];
                     clazz=c.clazz;
-                } else if (r.vlr[0] instanceof JavaObject) {
-                    JavaObject o=(JavaObject)r.vlr[0];
+                } else if (f.vlr[0] instanceof JavaObject) {
+                    JavaObject o=(JavaObject)f.vlr[0];
                     clazz=o.o.getClass();
                 } else {
-                    clazz=r.vlr[0].getClass();
+                    clazz=f.vlr[0].getClass();
                 }
 
 
@@ -211,33 +211,33 @@ public class J2S extends ModuleAdapter {
                 return p;
             case JCLASSFORNAME:
                 try {
-                    return new JavaClass(Class.forName(string(r,r.vlr[0])));
+                    return new JavaClass(Class.forName(string(f.vlr[0])));
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException("class not found");
                 }
             case JGETCLASSNAME:
-                return new SchemeString(((JavaClass)r.vlr[0]).clazz.getName());
+                return new SchemeString(((JavaClass)f.vlr[0]).clazz.getName());
             }
             break;
         case 2:
             switch(primid) {
             case JINSTANCEOFQ:
-                return truth(((JavaClass)r.vlr[1]).clazz.isAssignableFrom(r.vlr[0].getClass()));
+                return truth(((JavaClass)f.vlr[1]).clazz.isAssignableFrom(f.vlr[0].getClass()));
             case JFIELDREF:
-                Field f=null;
+                Field field=null;
                 Object on=null;
                 try {
-                    if (r.vlr[0] instanceof JavaClass) {
-                        JavaClass c=(JavaClass)r.vlr[0];
-                        f=c.clazz.getField(string(r,r.vlr[1]));
-                    } else if (r.vlr[0] instanceof JavaObject) {
-                        JavaObject o=(JavaObject)r.vlr[0];
-                        f=o.o.getClass().getField(string(r,r.vlr[1]));
+                    if (f.vlr[0] instanceof JavaClass) {
+                        JavaClass c=(JavaClass)f.vlr[0];
+                        field=c.clazz.getField(string(f.vlr[1]));
+                    } else if (f.vlr[0] instanceof JavaObject) {
+                        JavaObject o=(JavaObject)f.vlr[0];
+                        field=o.o.getClass().getField(string(f.vlr[1]));
                         on=o.o;
                     } else {
-                        f=r.vlr[0].getClass().getField(string(r,r.vlr[1]));
+                        field=f.vlr[0].getClass().getField(string(f.vlr[1]));
                     }
-                    Object v=f.get(on);
+                    Object v=field.get(on);
                     return schemeValue(v);
                 } catch (NoSuchFieldException e) {
                     throw new RuntimeException("no such field");
@@ -249,21 +249,21 @@ public class J2S extends ModuleAdapter {
         case 3:
             switch(primid) {
             case JFIELDSET:
-                Field f;
+                Field field;
                 Object target=null;
                 try {
-                    if (r.vlr[0] instanceof JavaClass) {
-                        JavaClass c=(JavaClass)r.vlr[0];
-                        f=c.clazz.getField(string(r,r.vlr[1]));
-                    } else if (r.vlr[0] instanceof JavaObject) {
-                        JavaObject o=(JavaObject)r.vlr[0];
-                        f=o.o.getClass().getField(string(r,r.vlr[1]));
+                    if (f.vlr[0] instanceof JavaClass) {
+                        JavaClass c=(JavaClass)f.vlr[0];
+                        field=c.clazz.getField(string(f.vlr[1]));
+                    } else if (f.vlr[0] instanceof JavaObject) {
+                        JavaObject o=(JavaObject)f.vlr[0];
+                        field=o.o.getClass().getField(string(f.vlr[1]));
                         target=o.o;
                     } else {
-                        f=r.vlr[0].getClass().getField(string(r,r.vlr[1]));
-                        target=r.vlr[0];
+                        field=f.vlr[0].getClass().getField(string(f.vlr[1]));
+                        target=f.vlr[0];
                     }
-                    f.set(target, ((JavaObject)r.vlr[2]).o);
+                    field.set(target, ((JavaObject)f.vlr[2]).o);
                 } catch (NoSuchFieldException e) {
                     throw new RuntimeException("No such field");
                 } catch (IllegalAccessException e2) {
@@ -271,9 +271,9 @@ public class J2S extends ModuleAdapter {
                 }
                 return VOID;
             case JINSTANTIATE:
-                Class clz=((JavaClass)r.vlr[0]).clazz;
-                SchemeVector v1=vec(r,r.vlr[1]);
-                SchemeVector v2=vec(r,r.vlr[2]);
+                Class clz=((JavaClass)f.vlr[0]).clazz;
+                SchemeVector v1=vec(f.vlr[1]);
+                SchemeVector v2=vec(f.vlr[2]);
                 Class[] classSpec=new Class[v1.vals.length];
                 Object[] objects=new Object[v2.vals.length];
 
@@ -294,19 +294,19 @@ public class J2S extends ModuleAdapter {
                 Class clz=null;
                 Object callOn=null;
 
-                if (r.vlr[0] instanceof JavaClass) {
-                    clz=((JavaClass)r.vlr[0]).clazz;
-                } else if (r.vlr[0] instanceof JavaObject) {
-                    callOn=((JavaObject)r.vlr[0]).o;
+                if (f.vlr[0] instanceof JavaClass) {
+                    clz=((JavaClass)f.vlr[0]).clazz;
+                } else if (f.vlr[0] instanceof JavaObject) {
+                    callOn=((JavaObject)f.vlr[0]).o;
                     clz=callOn.getClass();
-                } else if (r.vlr[0] != EMPTYLIST) {
-                    callOn=r.vlr[0];
+                } else if (f.vlr[0] != EMPTYLIST) {
+                    callOn=f.vlr[0];
                     clz=callOn.getClass();
                 }
 
-                String methodName=string(r,r.vlr[1]);
-                SchemeVector v1=vec(r,r.vlr[2]);
-                SchemeVector v2=vec(r,r.vlr[3]);
+                String methodName=string(f.vlr[1]);
+                SchemeVector v1=vec(f.vlr[2]);
+                SchemeVector v2=vec(f.vlr[3]);
                 Class[] classSpec=new Class[v1.vals.length];
                 Object[] objects=new Object[v2.vals.length];
 

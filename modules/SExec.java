@@ -48,11 +48,11 @@ public class SExec extends ModuleAdapter {
         define("exec", SEXEC);
     }
 
-    public Value eval(int primid, Interpreter r)
+    public Value eval(int primid, Interpreter f)
     throws ContinuationException {
         Runtime rt=Runtime.getRuntime();
         try {
-            Process p=rt.exec(string(r,r.vlr[0]));
+            Process p=rt.exec(string(f.vlr[0]));
             BufferedReader stdout=new BufferedReader(new InputStreamReader(p.getInputStream()));
             BufferedReader stderr=new BufferedReader(new InputStreamReader(p.getInputStream()));
             int rc=p.waitFor();

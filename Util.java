@@ -175,7 +175,7 @@ public abstract class Util implements Conf {
     }
 
     /* Casting checks */
-    public static void typeError(Interpreter r, String type, Value o) {
+    public static void typeError(String type, Value o) {
         if (o instanceof Values)
             throw new RuntimeException(((Values)o).values.length+
                                        " values received in single-value context");
@@ -183,92 +183,112 @@ public abstract class Util implements Conf {
                                    '\'');
     }
 
-    public static final Quantity num(Interpreter r, Value o)
-    throws ContinuationException {
+    public static final Quantity num(Value o) {
         try {
             return (Quantity)o;
-        } catch (ClassCastException e) { typeError(r, "number", o); } return null;
+        } catch (ClassCastException e) { typeError("number", o); }
+	return null;
     }
 
-    public static final Pair pair(Interpreter r, Value o)
-    throws ContinuationException {
+    public static final Pair pair(Value o) {
         try {
             return (Pair)o;
-        } catch (ClassCastException e) { typeError(r, "pair", o); } return null;
+        } catch (ClassCastException e) { typeError("pair", o); }
+	return null;
     }
 
-    public static final Procedure proc(Interpreter r, Value o)
-    throws ContinuationException {
+    public static final Procedure proc(Value o) {
         try {
             return (Procedure)o;
-        } catch (ClassCastException e) { typeError(r, "procedure", o); } return null;
+        } catch (ClassCastException e) { typeError("procedure", o); }
+	return null;
     }
 
-    public static final Pair truePair(Interpreter r, Value o)
-    throws ContinuationException {
-        Pair p=pair(r, o);
-        if (p==EMPTYLIST) typeError(r, "pair", o);
+    public static final Pair truePair(Value o) {
+        Pair p=pair(o);
+        if (p==EMPTYLIST) typeError("pair", o);
         return p;
     }
 
-    public static final char character(Interpreter r, Value c)
-    throws ContinuationException {
-        return chr(r, c).c;
+    public static final char character(Value c) {
+        return chr(c).c;
     }
 
-    public static final SchemeCharacter chr(Interpreter r, Value o) throws ContinuationException {
+    public static final SchemeCharacter chr(Value o) {
         try {
             return (SchemeCharacter)o;
-        } catch (ClassCastException e) { typeError(r, "character", o); } return null;
+        } catch (ClassCastException e) { typeError("character", o); }
+	return null;
     }
 
-    public static final String string(Interpreter r, Value o) throws ContinuationException {
-        return new String(str(r, o).stringdata);
+    public static final String string(Value o) {
+        return new String(str(o).stringdata);
     }
 
-    public static final SchemeString str(Interpreter r, Value o) throws ContinuationException {
+    public static final SchemeString str(Value o) {
         try {
             return (SchemeString)o;
-        } catch (ClassCastException e) { typeError(r, "string", o); } return null;
+        } catch (ClassCastException e) { typeError("string", o); }
+	return null;
     }
 
-    public static final Symbol symbol(Interpreter r, Value o) throws ContinuationException {
+    public static final Symbol symbol(Value o) {
         try {
             return (Symbol)o;
-        } catch (ClassCastException e) { typeError(r, "symbol", o); } return null;
+        } catch (ClassCastException e) { typeError("symbol", o); }
+	return null;
     }
 
-    public static final SchemeVector vec(Interpreter r, Value o) throws ContinuationException {
+    public static final SchemeVector vec(Value o) {
         try {
             return (SchemeVector)o;
-        } catch (ClassCastException e) { typeError(r, "vector", o); } return null;
+        } catch (ClassCastException e) { typeError("vector", o); }
+	return null;
     }
 
-    public static final OutputPort outport(Interpreter r, Value o) throws ContinuationException {
+    public static final OutputPort outport(Value o) {
         try {
             return (OutputPort)o;
-        } catch (ClassCastException e) { typeError(r, "output-port", o); } return null;
+        } catch (ClassCastException e) { typeError("output-port", o); }
+	return null;
     }
 
-    public static final InputPort inport(Interpreter r, Value o) throws ContinuationException {
+    public static final InputPort inport(Value o) {
         try {
             return (InputPort)o;
-        } catch (ClassCastException e) { typeError(r, "input-port", o); } return null;
+        } catch (ClassCastException e) { typeError("input-port", o); }
+	return null;
     }
 
-    public static final AssociativeEnvironment env(Interpreter r, Value o) throws ContinuationException {
+    public static final AssociativeEnvironment env(Value o) {
         try {
             return (AssociativeEnvironment)o;
-        } catch (ClassCastException e) { typeError(r, "environment", o); } return null;
+        } catch (ClassCastException e) { typeError("environment", o); }
+	return null;
     }
 
-    public static final Box box(Interpreter r, Value o) throws ContinuationException {
+    public static final Box box(Value o) {
         try {
             return (Box)o;
-        } catch (ClassCastException e) { typeError(r, "box", o); } return null;
+        } catch (ClassCastException e) { typeError("box", o); }
+	return null;
     }
 
-    public static final SchemeBoolean truth(boolean b) throws ContinuationException {
+    public static final Module module(Value o) {
+        try {
+            return (Module)o;
+        } catch (ClassCastException e) { typeError("native library", o); }
+	return null;
+    }
+
+    public static final CallFrame cont(Value o) {
+        try {
+            return (CallFrame)o;
+        } catch (ClassCastException e) { typeError("continuation", o); }
+	return null;
+    }
+
+    public static final SchemeBoolean truth(boolean b) {
         return b ? TRUE : FALSE;
     }
 

@@ -97,10 +97,11 @@ public class SThread extends ModuleAdapter {
         }
     }
 
-    public static final ThreadContext tcont(Interpreter r, Value o) throws ContinuationException {
+    public static final ThreadContext tcont(Value o) {
         try {
             return (ThreadContext)o;
-        } catch (ClassCastException e) { typeError(r, "thread context", o); } return null;
+        } catch (ClassCastException e) { typeError("thread context", o); }
+	return null;
     }
 
     public Value eval(int primid, Interpreter f) throws ContinuationException {
@@ -115,18 +116,18 @@ public class SThread extends ModuleAdapter {
         case 1:
             switch(primid) {
             case NEWTHREAD:
-		return new ThreadContext(f,proc(f,f.vlr[0]));
+		return new ThreadContext(f,proc(f.vlr[0]));
 	    case THREADSTART:
-		ThreadContext c=tcont(f,f.vlr[0]);
+		ThreadContext c=tcont(f.vlr[0]);
 		c.start();
 		return VOID;
 	    case THREADRETURNVALUE:
-		c=tcont(f,f.vlr[0]);
+		c=tcont(f.vlr[0]);
 		if (c.rv==null)
 		    error(f, "Thread has not completed");
 		else return c.rv;
 	    case THREADSTATE:
-		c=tcont(f,f.vlr[0]);
+		c=tcont(f.vlr[0]);
 		switch (c.getState()) {
 		case READY:
 		    return S_READY;

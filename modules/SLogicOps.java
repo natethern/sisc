@@ -52,33 +52,34 @@ public class SLogicOps extends ModuleAdapter {
         define("lognot", LOGNOT);
     }
 
-    public int fixed(Interpreter f, Value v) throws ContinuationException {
+    public int fixed(Value v) {
         try {
             Quantity q=(Quantity)v;
             if (q.type==Quantity.FIXEDINT) return q.val;
             else throw new ClassCastException();
-        } catch (ClassCastException e) { typeError(f, "fixed integer", v); } return -1;
+        } catch (ClassCastException e) { typeError("fixed integer", v); }
+	return -1;
     }
 
     public Value eval(int primid, Interpreter f) throws ContinuationException {
         if (primid==LOGNOT) {
             if (f.vlr.length > 1)
                 error(f, "Incorrect number of arguments to procedure "+f.acc);
-            return Quantity.valueOf(~fixed(f,f.vlr[0]));
+            return Quantity.valueOf(~fixed(f.vlr[0]));
         } else {
-            int v=fixed(f,f.vlr[0]);
+            int v=fixed(f.vlr[0]);
             switch(primid) {
             case LOGAND:
                 for (int i=f.vlr.length-1; i>0; i--)
-                    v&=fixed(f,f.vlr[i]);
+                    v&=fixed(f.vlr[i]);
                 break;
             case LOGOR:
                 for (int i=f.vlr.length-1; i>0; i--)
-                    v|=fixed(f,f.vlr[i]);
+                    v|=fixed(f.vlr[i]);
                 break;
             case LOGXOR:
                 for (int i=f.vlr.length-1; i>0; i--)
-                    v^=fixed(f,f.vlr[i]);
+                    v^=fixed(f.vlr[i]);
                 break;
             }
             return Quantity.valueOf(v);
