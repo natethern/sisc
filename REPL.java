@@ -58,10 +58,12 @@ public class REPL extends Thread {
             String heapLocation=Util.getSystemProperty("sisc.heapfile", null);
             SeekableInputStream heap = null;
             if (heapLocation==null) {
-                URL heapURL=ClassLoader.getSystemResource("sisc.heap");
+                URL heapURL=ClassLoader.getSystemResource("sisc.shp");
                 if (heapURL==null)
-                    heap=//new MemoryRandomAccessInputStream(new FileInputStream(heapLocation));
-                        new BufferedRandomAccessInputStream("sisc.heap","r",1,8192);
+                    heap=
+                        new BufferedRandomAccessInputStream("sisc.shp","r",1,8192);
+                else
+                    heap=new MemoryRandomAccessInputStream(heapURL.openStream());
                 //                else 
                 //  heap=heapURL.openStream();
             } else 

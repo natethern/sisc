@@ -50,7 +50,8 @@ public class SDebug extends ModuleAdapter {
         CONT_VLR=2, CONT_NXP=3, CONT_ENV=4, CONT_FK=5,
         CONT_LOCKQ=6, CONT_PARENT=7, 
         ERROR_CONT_K=8,
-        FILLRIBQ=9, FILLRIBEXP=10, FREEXPQ=11, FRESYM=12;
+        FILLRIBQ=9, FILLRIBEXP=10, FREEXPQ=11, FRESYM=12,
+        QTYPE=13;
 
     public SDebug() {
         define("express", EXPRESSV);
@@ -66,6 +67,7 @@ public class SDebug extends ModuleAdapter {
         define("_fill-rib-exp", FILLRIBEXP);
         define("_free-reference-exp?", FREEXPQ);
         define("_free-reference-symbol", FRESYM);
+        define("quantity-type", QTYPE);
     }
 
     class SISCExpression extends Value {
@@ -96,6 +98,8 @@ public class SDebug extends ModuleAdapter {
         switch(f.vlr.length) {
         case 1:
             switch(primid) {
+            case QTYPE:
+                return Quantity.valueOf(num(f.vlr[0]).type);
             case FREEXPQ:
                 return truth(((SISCExpression)f.vlr[0]).e
                              instanceof FreeReferenceExp);

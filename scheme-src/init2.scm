@@ -353,6 +353,23 @@
        (ans '() (cons count ans)))
       ((< count 0) ans)))
 
+;;;;;;;;;;;;;;;; native functions ;;;;;;;;;;;;;
+
+(if (getprop 'string-order '*toplevel*)
+    (let ((string-order-predicate 
+           (lambda (p o)
+             (lambda (str1 str2)
+               (p (o str1 str2) 0)))))
+      ;; string=? isn't present because equal? str1 str2 is far faster
+      (set! string<? (string-order-predicate < string-order))
+      (set! string>? (string-order-predicate > string-order))
+      (set! string<=? (string-order-predicate <= string-order))
+      (set! string>=? (string-order-predicate >= string-order))
+      (set! string-ci=? (string-order-predicate = string-order-ci))
+      (set! string-ci>? (string-order-predicate > string-order-ci))
+      (set! string-ci<? (string-order-predicate < string-order-ci))
+      (set! string-ci<=? (string-order-predicate <= string-order-ci))
+      (set! string-ci>=? (string-order-predicate >= string-order-ci))))
 
 ;;;;;;;;;;;;;;;; error handling ;;;;;;;;;;;;;;;
 

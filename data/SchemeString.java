@@ -38,46 +38,103 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
 public class SchemeString extends Value {
-    public char[] stringdata;
+
+    protected char[] data_c;
+    protected String data_s;
+    protected boolean sync_c, sync_s;
 
     public SchemeString() {}
 
     public SchemeString(String s) {
-        this(s.toCharArray());
+        data_s=s; 
+        sync_s=true;
     }
 
     public SchemeString(char[] data) {
-        stringdata=data;
+        data_c=data;
+        sync_c=true;
+    }
+
+    public final boolean stringRepAvailable() {
+        return sync_s;
+    }
+
+    public final boolean charRepAvailable() {
+        return sync_c;
+    }
+
+    public String asString() {
+        if (sync_s)
+            return data_s;
+        else {
+            data_s=new String(data_c);
+            sync_s=true;
+            return data_s;
+        }
+    }
+
+    public char[] asCharArray() {
+        if (sync_c) 
+            return data_c;
+        else {
+            data_c=data_s.toCharArray();
+            sync_c=true;
+            return data_c;
+        }
+    }
+
+    public int length() {
+        if (sync_c) return data_c.length;
+        else return data_s.length();
+    }
+
+    public char charAt(int index) {
+        if (sync_c) return data_c[index];
+        else return data_s.charAt(index);
     }
 
     public boolean valueEqual(Value v) {
         if (!(v instanceof SchemeString)) return false;
-        char[] o=((sisc.data.SchemeString)v).stringdata;
-        if (stringdata.length!=o.length) return false;
-        for (int i=0; i<o.length; i++) {
-            if (stringdata[i]!=o[i]) return false;
+        SchemeString o=(SchemeString)v;
+        if (sync_s) {
+            return o.asString().equals(data_s);
+        } else {
+            if (o.sync_c) {
+                char[] oc=o.data_c;
+                if (data_c.length!=oc.length) return false;
+                for (int i=0; i<oc.length; i++) {
+                    if (data_c[i]!=oc[i]) return false;
+                }
+                return true;
+            } else {
+                return asString().equals(o.data_s);
+            }
         }
-        return true;
     }
 
-    public SchemeString append(SchemeString other){
-        char[] newstr=new char[stringdata.length + other.stringdata.length];
-        System.arraycopy(stringdata, 0, newstr, 0, stringdata.length);
-        System.arraycopy(other.stringdata, 0,
-                         newstr, stringdata.length,
-                         other.stringdata.length);
-        return new SchemeString(newstr);
+    public SchemeString append(SchemeString other) {
+        if (sync_c) {
+            char[] oc=other.asCharArray();
+            char[] newstr=new char[data_c.length + oc.length];
+            System.arraycopy(data_c, 0, newstr, 0, data_c.length);
+            System.arraycopy(oc, 0, newstr, data_c.length, oc.length);
+            return new SchemeString(newstr);
+        } else {
+            return new SchemeString(data_s+other.asString());
+        }
+            
     }
 
     String display(boolean write) {
-        if (!write) return new String(stringdata);
+        if (!write) return asString();
+
         StringBuffer b=new StringBuffer();
         b.append('"');
         int lastGood=0;
-        for (int i=0; i<stringdata.length; i++) {
+        asCharArray();
+        for (int i=0; i<data_c.length; i++) {
             char escapeChar;
-            //see Lexer.readChar for input escaping
-            switch(stringdata[i]) {
+            switch(data_c[i]) {
             case '"':  escapeChar = '"'; break;
             case '\\': escapeChar = '\\'; break;
             case '\b': escapeChar = 'b'; break;
@@ -86,17 +143,23 @@ public class SchemeString extends Value {
             case '\f': escapeChar = 'f'; break;
             default: continue;
             }
-            b.append(stringdata, lastGood, i-lastGood);
+            
+            b.append(data_c, lastGood, i-lastGood);
             b.append('\\').append(escapeChar);
             lastGood=i+1;
         }
-        b.append(stringdata, lastGood, stringdata.length-lastGood);
+
+        b.append(data_c, lastGood, data_c.length-lastGood);
         b.append('"');
         return b.toString();
     }
 
     public void set(int k, char c) {
-        stringdata[k]=c;
+        asCharArray()[k]=c;
+        if (sync_s) {
+            sync_s=false;
+            data_s=null;
+        }
     }
 
     public String display() {
@@ -112,11 +175,12 @@ public class SchemeString extends Value {
     }
 
     public void serialize(Serializer s) throws IOException {
-        s.writeUTF(new String(stringdata));
+        s.writeUTF(asString());
     }
 
     public void deserialize(Deserializer s) throws IOException {
-        stringdata=s.readUTF().toCharArray();
+        data_s=s.readUTF();
+        sync_s=true;
     }
 }
 

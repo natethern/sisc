@@ -604,6 +604,46 @@
       </para>
     </sect2>
   </sect1>
+  <sect1 id="Equivalence">
+    <title>
+      Equivalence
+    </title>
+    <para>
+      &SISC;'s storage model maintains pointer equality between
+      symbols, booleans, the end-of-file object, void, and the empty
+      list.  Thus two instances of any of those types will produce
+      <literal>#t</literal> from <function>eq?</function> if they
+      would have produced <literal>#t</literal> from
+      <function>equal?</function>.  
+    </para>
+    <para>
+      Numbers are conceptually represented as unique objects who are
+      pointer equal (produce <literal>#t</literal> with
+      <function>eq?</function>) if two numbers are both exact, or both 
+      inexact, and are numerically equal.  This is the behavior
+      specified by &R5RS; to hold true for the
+      <function>eqv?</function> predicate.  In &SISC;,
+      <function>eqv?</function> and <function>eq?</function> are
+      equivalent for numbers.
+    </para>
+    <para>
+      Characters too are represented conceptually as objects that are
+      pointer equal if their values are equal.
+      <function>eq?</function>, <function>eqv?</function>, and
+      <function>equal?</function> are equivalent for characters in
+      &SISC;.
+    </para>
+    <para>
+      Strings, vectors, lists, and boxes are containers for other
+      Scheme types.  As such they are not pointer equal unless they
+      are referenced by two variables that point to the same storage
+      location (i.e. they are actually pointer equal).  &SISC; holds
+      that only <function>equal?</function> will return
+      <literal>#t</literal> if two objects are the
+      same type and their contents contain equivalent values with respect to
+      <function>equal?</function>.  
+    </para>
+  </sect1>
   <sect1 id="ControlFeatures">
     <title>
       Control Features

@@ -46,27 +46,35 @@ public class SNative extends ModuleAdapter {
 	ASSQ=0, MEMQ=1, ASSOC=6, MEMBER=7,
 	CADR=2, CDAR=3, CAAR=4, CDDR=5, NOT=8,
 	APPEND=9, MEMV=11, ASSV=12,
-	VECTOR=13, LISTREF=14, VALUES=15, READLINE=16;
+	VECTOR=13, LISTREF=14, VALUES=15, READLINE=16,
+        
+        SUBSTRING=17, STRINGORDER=18, STRINGORDERCI=19,
+        STRINGUPCASE=20, STRINGDOWNCASE=21;
     
     static long symid=0;
 
     public SNative() {
-        define("assq", ASSQ);
-        define("memq", MEMQ);
-        define("vector", VECTOR);
-        define("assoc", ASSOC);
-        define("member", MEMBER);
         define("append2", APPEND);
-        define("not", NOT);
+        define("assq", ASSQ);
+        define("assoc", ASSOC);
         define("assv", ASSV);
-        define("memv", MEMV);
         define("caar", CAAR);
         define("cadr", CADR);
         define("cdar", CDAR);
         define("cddr", CDDR);
+        define("memq", MEMQ);
+        define("member", MEMBER);
         define("list-ref", LISTREF);
-        define("values", VALUES);
+        define("memv", MEMV);
+        define("not", NOT);
         define("read-line", READLINE);
+        define("string-order", STRINGORDER);
+        define("string-downcase", STRINGDOWNCASE);
+        define("string-order-ci", STRINGORDERCI);
+        define("string-upcase", STRINGUPCASE);
+        define("substring", SUBSTRING);
+        define("values", VALUES);
+        define("vector", VECTOR);
     }
 
     public static final Value cadr(Value p) {
@@ -130,6 +138,12 @@ public class SNative extends ModuleAdapter {
                     } catch (IOException e) {
                         throw new RuntimeException(e.getMessage());
                     }
+                case STRINGUPCASE:
+                    SchemeString str=str(f.vlr[0]);
+                    return new SchemeString(str.asString().toUpperCase());
+                case STRINGDOWNCASE:
+                    str=str(f.vlr[0]);
+                    return new SchemeString(str.asString().toLowerCase());
                 default:
                     throwArgSizeException();
                 }
@@ -213,6 +227,32 @@ public class SNative extends ModuleAdapter {
                         p1=pair(p1.cdr);
                     }
                     return FALSE;
+                case STRINGORDER:
+                    SchemeString str=str(f.vlr[0]);
+                    SchemeString str2=str(f.vlr[1]);
+                    return Quantity.valueOf(str.asString().compareTo(str2.asString()));
+                case STRINGORDERCI:
+                    str=str(f.vlr[0]);
+                    str2=str(f.vlr[1]);
+                    return Quantity.valueOf(str.asString().compareToIgnoreCase(str2.asString()));
+                default:
+                    throwArgSizeException();
+                }
+            case 3:
+                switch (primid) {
+                case SUBSTRING:
+                    SchemeString str=str(f.vlr[0]);
+                    int lidx=num(f.vlr[1]).intValue();
+                    int uidx=num(f.vlr[2]).intValue();
+                    if (str.stringRepAvailable())
+                        return new SchemeString(str.asString().substring(lidx, uidx));
+                    else {
+                        int len=uidx-lidx;
+                        char[] cdata=str.asCharArray();
+                        char[] newstr=new char[len];
+                        System.arraycopy(cdata, lidx, newstr, 0, len);
+                        return new SchemeString(newstr);
+                    }
                 default:
                     throwArgSizeException();
                 }

@@ -286,7 +286,7 @@ public abstract class Util implements Version {
     }
 
     public static final String string(Value o) {
-        return new String(str(o).stringdata);
+        return str(o).asString();
     }
 
     public static final SchemeString str(Value o) {

@@ -533,7 +533,7 @@ public class Primitives extends ModuleAdapter {
             case LENGTH:
                 return Quantity.valueOf(length(pair(f.vlr[0])));
             case STRINGLENGTH:
-                return Quantity.valueOf(str(f.vlr[0]).stringdata.length);
+                return Quantity.valueOf(str(f.vlr[0]).length());
             case VECTORLENGTH:
                 return Quantity.valueOf(vec(f.vlr[0]).vals.length);
             case MAKEPARAM:
@@ -683,7 +683,7 @@ public class Primitives extends ModuleAdapter {
             case STRINGREF:
                 int index=num(f.vlr[1]).intValue();
                 try {
-                    return new SchemeCharacter(str(f.vlr[0]).stringdata[index]);
+                    return new SchemeCharacter(str(f.vlr[0]).charAt(index));
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throwPrimException("index "+index+" out of bounds for '"+
                                        f.vlr[0].synopsis()+"'");
@@ -702,7 +702,7 @@ public class Primitives extends ModuleAdapter {
             case STRINGFILL:
                 SchemeString st=str(f.vlr[0]);
                 char c=character(f.vlr[1]);
-                for (int i=0; i<st.stringdata.length; i++)
+                for (int i=0; i<st.length(); i++)
                     st.set(i, c);
                 return VOID;
             case MAKESTRING:
@@ -860,12 +860,12 @@ public class Primitives extends ModuleAdapter {
             case BLOCKREAD:
                 int count=num(f.vlr[2]).intValue();
                 InputPort inport=inport(f.vlr[1]);
-                char[] buff=str(f.vlr[0]).stringdata;
+                char[] buff=str(f.vlr[0]).asCharArray();
                 return inport.read(buff, count);
             case BLOCKWRITE:
                 count=num(f.vlr[2]).intValue();
                 OutputPort outport=outport(f.vlr[1]);
-                buff=str(f.vlr[0]).stringdata;
+                buff=str(f.vlr[0]).asCharArray();
                 outport.write(buff, count);
                 return VOID;
             case MAKEANNOTATION:

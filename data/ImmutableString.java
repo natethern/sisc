@@ -42,7 +42,7 @@ public class ImmutableString extends SchemeString {
     }
 
     public ImmutableString(char[] data) {
-        super(data);
+        super(new String(data));
     }
 
 
@@ -56,11 +56,11 @@ public class ImmutableString extends SchemeString {
     
     public int hashCode() {
 	int hc=0;
-	for (int i=0; i<stringdata.length; i++) {
+	for (int i=0; i<length(); i++) {
 	    if (i%2==0)
-		hc^=stringdata[i]<<16;
+		hc^=charAt(i)<<16;
 	    else
-		hc^=stringdata[i];
+		hc^=charAt(i);
 	}
 	return hc;
     }
