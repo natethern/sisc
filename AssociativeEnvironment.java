@@ -4,7 +4,7 @@ import sisc.data.*;
 import java.util.*;
 import java.io.*;
 
-public class AssociativeEnvironment extends NamedValue implements Serializable {
+public class AssociativeEnvironment extends NamedValue {
 
     AssociativeEnvironment parent;
     protected Hashtable  bindings;
@@ -15,15 +15,8 @@ public class AssociativeEnvironment extends NamedValue implements Serializable {
     
     public AssociativeEnvironment(int size) {
 	bindings=new Hashtable (size); 
-	//	define(THIS, this);
     } 
 
-    /*
-    public AssociativeEnvironment(Hashtable bindings) {
-	this.bindings=(Hashtable)bindings.clone();
-	define(THIS, this);
-    }
-    */
     public AssociativeEnvironment(AssociativeEnvironment par) {
 	this();
 	parent=par;
@@ -33,13 +26,6 @@ public class AssociativeEnvironment extends NamedValue implements Serializable {
 	this(size);
 	parent=par;
     }
-    /*
-    public AssociativeEnvironment(AssociativeEnvironment clone, AssociativeEnvironment par) {
-	bindings=(Hashtable )clone.bindings.clone();
-	define(THIS, this);
-	parent=par;
-    }
-    */
 
     public Expression define(Symbol s, Expression val) {
 	Expression ov=(Expression)bindings.get(s);
@@ -47,15 +33,6 @@ public class AssociativeEnvironment extends NamedValue implements Serializable {
 	return ov;
     }
 
-    public AssociativeEnvironment lookupHost(Symbol sym) throws UndefinedException {
-	Expression b=(Expression)bindings.get(sym);
-	if (b==null)
-	    if (parent!=null)
-		return parent.lookupHost(sym);
-	    else throw new UndefinedException();
-	else return this;
-    }
-	
     public Expression lookup(Symbol sym) throws UndefinedException {
 	Expression b=(Expression)bindings.get(sym);
 	if (b==null)
@@ -68,9 +45,8 @@ public class AssociativeEnvironment extends NamedValue implements Serializable {
     public Expression set(Symbol s, Expression v) {
 	Expression b=(Expression)bindings.get(s);
 	if (b==null) {
-	    if (parent!=null) {
+	    if (parent!=null) 
 		return parent.set(s,v);
-	    }
 	    bindings.put(s,v);
 	    return null;
 	} else {
@@ -84,15 +60,14 @@ public class AssociativeEnvironment extends NamedValue implements Serializable {
      */
     public void lock() {
 	for (Iterator enum=bindings.keySet().iterator(); enum.hasNext();) {
-	    Symbol key=(Symbol)enum.next();
+	    Object key=enum.next();
 	    Object e=bindings.get(key);
-	    if (e instanceof Box) {
+	    if (e instanceof Box) 
 		((Box)e).lock();
-	    }
 	}
     }
 
-
+    /*
     public Pair toAssocList() {
 	Pair p=EMPTYLIST;
 
@@ -104,6 +79,7 @@ public class AssociativeEnvironment extends NamedValue implements Serializable {
 	}
 	return p;
     }
+    */
 
     public String display() {
 	StringBuffer sb=new StringBuffer();
@@ -113,29 +89,4 @@ public class AssociativeEnvironment extends NamedValue implements Serializable {
 	sb.append('>');
 	return sb.toString();
     }
-
-    public boolean valueEqual(Expression v) {
-	return false;
-    }
-
-    public AssociativeEnvironment copy() {
-	Pair assoc=toAssocList();
-	AssociativeEnvironment newEnv=new AssociativeEnvironment();
-	while (assoc!=EMPTYLIST) {
-	    Pair bind=(Pair)assoc.car;
-	    try {
-		newEnv.define((Symbol)bind.car, bind.cdr);
-	    } catch (Exception e) {}
-	    assoc=(Pair)assoc.cdr;
-	}
-	return newEnv;
-    }
-
-    public void merge(AssociativeEnvironment sibling) {
-	for (Iterator i=sibling.bindings.keySet().iterator(); i.hasNext();) {
-	    Symbol key=(Symbol)i.next();
-	    bindings.put(key, sibling.bindings.get(key));
-	}
-    }
-		
 }

@@ -4,7 +4,7 @@ import java.util.*;
 import java.io.*;
 import sisc.data.*;
 
-public class LexicalEnvironment extends Value implements Serializable {
+public class LexicalEnvironment extends Value {
     public LexicalEnvironment parent;
     public Value[] vals;
 
