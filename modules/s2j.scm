@@ -98,7 +98,7 @@
   (let ((methods (map (lambda (x y) (cons x y)) methods meths)))
     (constr (java/invocation-handler
 	     (lambda (p m a)
-	       (let ((m (assq m methods)))
+	       (let ((m (assoc m methods)))
 		 (if m
 		     (apply (cdr m) p a)
 		     (error "no such method"))))))))
