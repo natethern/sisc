@@ -38,7 +38,11 @@ public class DynamicEnvironment extends Util implements Cloneable {
         this.out = out;
         printShared = false;
         vectorLengthPrefixing = false;
-        classLoader = new URLClassLoader(new URL[]{}, getClassLoader());
+        try {
+            classLoader = new URLClassLoader(new URL[]{}, getClassLoader());
+        } catch (java.security.AccessControlException ace) {
+            System.err.println("Running as an applet, can't create classloader.");
+        }
     }
 
     public DynamicEnvironment(InputStream in, OutputStream out) {
@@ -49,8 +53,13 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public Object clone() throws CloneNotSupportedException {
         DynamicEnvironment res = (DynamicEnvironment)super.clone();
         res.parser = new Parser(new Lexer());
-        res.classLoader = new URLClassLoader(res.classLoader.getURLs(),
-                                             getClassLoader());
+        try {
+            if (res.classLoader != null)
+                res.classLoader = new URLClassLoader(res.classLoader.getURLs(),
+                                                     getClassLoader());
+        } catch (java.security.AccessControlException ace) {
+            System.err.println("Running as an applet, can't create classloader.");
+        }
         res.parameters = new WeakHashMap(res.parameters);
         return res;
     }
