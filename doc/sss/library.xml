@@ -915,8 +915,8 @@ com/foo/bar/baz/baz3.scm
             <blockquote>
               <para>
                 Returns &num;t if the library identified by
-                <parameter>name</parameter> (a string) exists, &num;f
-                has been loaded.
+                <parameter>name</parameter> (a string) 
+                has been loaded, &num;f otherwise.
               </para>
             </blockquote>
           </para>
