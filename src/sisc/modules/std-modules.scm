@@ -481,12 +481,11 @@
   (include "optimizer/main.scm")
   (define optimize opt:optimize)
   (initialize))
-  
+
 (import libraries)
 (import debugging)
 (import optimizer)
-;;not ready yet
-(define (current-optimizer . args) optimize)
+(current-optimizer optimize)
 
 ;;load and import srfi-0
 (module srfi-0 (cond-expand)
