@@ -209,24 +209,30 @@
                               (make-generic-procedure)))))))
 
 (define (generic-java-procedure table name)
-  (mutex/synchronize
-   *REFLECTION-MUTEX*
-   (lambda ()
-     (let ([gproc (hashtable/get! table
-                                  name
-                                  (lambda ()
-                                    (let ([p (make-generic-procedure)])
-                                      (set-annotation! p 'name name)
-                                      p)))])
-       (lambda args
-         (if (not (null? args))
-             (let ([o (car args)])
-               (if (java/object? o)
-                   (mutex/synchronize
-                    *REFLECTION-MUTEX*
-                    (lambda ()
-                      (reflect-java-class (java/class-of o)))))))
-         (apply gproc args))))))
+  (lambda args
+    (apply (mutex/synchronize
+            *REFLECTION-MUTEX*
+            (lambda ()
+              (if (not (null? args))
+                  (let ([o (car args)])
+                    (if (java/object? o)
+                        (reflect-java-class (java/class-of o)))))
+              ;;It is tempting to lift the following code out of the
+              ;;lambda, but doing so results in the returned procedure
+              ;;containing a reference to a generic procedure that
+              ;;resides in the reflection cache, which causes problems
+              ;;after deserialization of the procedure since it will
+              ;;then refer to a gproc that is not maintained by the
+              ;;reflection cache.
+              ;;In any case, the performance gain would be marginal -
+              ;;less than 1% at the time of writing.
+              (hashtable/get! table
+                              name
+                              (lambda ()
+                                (let ([p (make-generic-procedure)])
+                                  (set-annotation! p 'name name)
+                                  p)))))
+           args)))
 
 ;;;;;;;;;; HIGH LEVEL PROCEDURES AND SYNTAX ;;;;;;;;;;
 

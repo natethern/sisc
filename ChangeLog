@@ -1,3 +1,8 @@
+2004-11-13  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed a bug in s2j that caused generic java methods, accessors
+	  and modifiers to break when deserialized.
+
 2004-11-09  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed a bug that caused continuations to misbehave in a
