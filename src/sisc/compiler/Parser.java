@@ -30,7 +30,7 @@ public class Parser extends Util implements Tokens {
      *
      * This should really by in the DynamicEnvironment
      */
-    public static boolean annotate=getSystemProperty("sisc.emitannotations", "false").equalsIgnoreCase("true");
+    public boolean annotate;
 
     public Lexer lexer;
 
@@ -42,6 +42,10 @@ public class Parser extends Util implements Tokens {
 	COLUMN=Symbol.get("column-number"),
 	FILE=Symbol.get("source-file");
 
+	Parser() {
+		annotate=getSystemProperty("sisc.emitannotations", "false").equalsIgnoreCase("true");
+	}
+	
     static final HashMap chars=new HashMap (8);
     static {
         chars.put("space", new SchemeCharacter(' '));
@@ -187,7 +191,7 @@ public class Parser extends Util implements Tokens {
         case TT_SYMBOL:
             if (lexer.strictR5RS &&
                 lexer.sval.length() > 1 &&
-                lexer.in(lexer.sval.charAt(0), Lexer.number_prefixes)) 
+                Lexer.in(lexer.sval.charAt(0), Lexer.number_prefixes)) 
                 throw new IOException(liMessage(SISCB, "invalididentifier",
                                                 lexer.sval));
             o=Symbol.get(lexer.sval);
@@ -210,7 +214,7 @@ public class Parser extends Util implements Tokens {
                 break;
             case '\\':
                 c=is.read();
-                if (lexer.in((char)c, lexer.special)) {
+                if (Lexer.in((char)c, Lexer.special)) {
                     o=new SchemeCharacter((char)c);
                     break;
                 }

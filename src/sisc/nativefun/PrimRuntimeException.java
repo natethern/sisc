@@ -1,7 +1,5 @@
 package sisc.nativefun;
 
-import sisc.data.*;
-
 public class PrimRuntimeException extends RuntimeException {
     
     public PrimRuntimeException(String message) {

@@ -1,17 +1,12 @@
 package sisc.util;
 
 import java.util.*;
-import java.util.jar.*;
-import java.io.*;
 import java.text.*;
 import java.net.*;
-import java.security.*;
 import java.lang.reflect.Field;
-import sisc.io.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import sisc.interpreter.*;
-import sisc.compiler.*;
 
 public abstract class Util extends Defaults implements Version {
 
@@ -465,26 +460,26 @@ public abstract class Util extends Defaults implements Version {
 
     public static String liMessage(Symbol bundle, 
 				   String messageName, String arg1) {
-        return formatter.format(liMessage(bundle, messageName),
+        return MessageFormat.format(liMessage(bundle, messageName),
                                 new Object[] { arg1 });
     }
 
     public static String liMessage(Symbol bundle, String messageName, 
                                    String arg1, String arg2) {
-        return formatter.format(liMessage(bundle, messageName),
+        return MessageFormat.format(liMessage(bundle, messageName),
                                 new Object[] { arg1, arg2 });
     }
     
     public static String liMessage(Symbol bundle, String messageName, 
                                    String arg1, int arg2, int arg3) {
-        return formatter.format(liMessage(bundle, messageName),
+        return MessageFormat.format(liMessage(bundle, messageName),
 				new Object[] { arg1, new Integer(arg2),
                                                new Integer(arg3)});
     }
 
     public static String liMessage(Symbol bundle, String messageName,
                                    Object[] args) {
-        return formatter.format(liMessage(bundle, messageName), args);
+        return MessageFormat.format(liMessage(bundle, messageName), args);
     }
 }
 

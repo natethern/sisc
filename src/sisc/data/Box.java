@@ -1,8 +1,6 @@
 package sisc.data;
 
-import java.util.*;
 import java.io.*;
-import sisc.data.*;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;

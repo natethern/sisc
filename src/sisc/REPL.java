@@ -1,13 +1,9 @@
 package sisc;
 
 import java.io.*;
-import java.util.zip.*;
-import java.util.jar.*;
 import java.util.*;
 import java.net.*;
-import sisc.compiler.*;
 import sisc.data.*;
-import sisc.exprs.*;
 import sisc.ser.*;
 import sisc.io.*;
 import sisc.interpreter.*;

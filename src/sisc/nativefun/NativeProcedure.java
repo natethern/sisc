@@ -1,13 +1,9 @@
 package sisc.nativefun;
 
 import java.io.*;
-import sisc.compiler.*;
 import sisc.interpreter.*;
 import sisc.data.*;
 import sisc.io.ValueWriter;
-import sisc.ser.Serializer;
-import sisc.ser.Deserializer;
-import sisc.util.ExpressionVisitor;
 
 /**
  * A native procedure is a Scheme procedure whose behavior when

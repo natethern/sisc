@@ -1,7 +1,5 @@
 package sisc.interpreter;
 
-import sisc.data.*;
-
 public class ContinuationException extends Exception {
     public CallFrame k;
 

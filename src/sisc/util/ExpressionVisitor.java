@@ -1,7 +1,5 @@
 package sisc.util;
 
-import sisc.data.Expression;
-
 public interface ExpressionVisitor {
 
     boolean visit(ExpressionVisitee e);

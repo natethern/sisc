@@ -1,13 +1,8 @@
 package sisc.nativefun;
 
 import java.io.*;
-import sisc.compiler.*;
-import sisc.interpreter.*;
-import sisc.data.*;
-import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
-import sisc.util.ExpressionVisitor;
 
 /**
  * An indexed procedure contains the implementation of many

@@ -1,7 +1,6 @@
 package sisc.nativefun;
 
 import java.io.*;
-import sisc.compiler.*;
 import sisc.interpreter.*;
 import sisc.data.*;
 import sisc.io.ValueWriter;

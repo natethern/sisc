@@ -2,13 +2,11 @@ package sisc.modules;
 
 import java.io.*;
 import sisc.data.*;
-import sisc.exprs.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
 
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
-import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 
 public class SThread extends ModuleAdapter {

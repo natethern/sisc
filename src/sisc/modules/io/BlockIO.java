@@ -1,11 +1,8 @@
 package sisc.modules.io;
 
-import java.net.*;
-
 import sisc.interpreter.*;
 import sisc.nativefun.*;
 import sisc.data.*;
-import sisc.io.*;
 import java.io.IOException;
 
 public class BlockIO extends ModuleAdapter {

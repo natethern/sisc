@@ -2,7 +2,6 @@ package sisc.io;
 
 import java.io.*;
 import sisc.data.SchemeInputPort;
-import sisc.interpreter.*;
 
 public abstract class PushbackInputPort extends SchemeInputPort {
 

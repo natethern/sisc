@@ -7,7 +7,6 @@ import java.net.MalformedURLException;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
 import sisc.data.*;
-import sisc.io.*;
 
 /**
  * Scheme functions for manipulating files and directories.

@@ -34,12 +34,9 @@ package sisc.boot;
 
 import java.io.*;
 import java.util.*;
-import java.util.zip.*;
 import sisc.interpreter.*;
-import sisc.compiler.*;
 import sisc.ser.*;
 import sisc.data.*;
-import sisc.exprs.*;
 import sisc.env.*;
 import sisc.util.Util;
 

@@ -1,6 +1,5 @@
 package sisc.interpreter;
 
-import sisc.data.*;
 import java.util.*;
 import sisc.env.DynamicEnvironment;
 import sisc.util.Util;

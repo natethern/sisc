@@ -2,8 +2,6 @@ package sisc.exprs;
 
 import sisc.data.*;
 import sisc.interpreter.*;
-import sisc.env.SymbolicEnvironment;
-import sisc.env.LexicalEnvironment;
 
 public class LetrecExp extends AppExp {
 

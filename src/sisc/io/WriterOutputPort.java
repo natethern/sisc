@@ -1,6 +1,5 @@
 package sisc.io;
 
-import sisc.data.Value;
 import java.io.IOException;
 import java.io.Writer;
 

@@ -2,11 +2,8 @@ package sisc.ser;
 
 import java.util.*;
 import java.io.*;
-import java.lang.reflect.*;
 import sisc.data.*;
-import sisc.interpreter.*;
 import sisc.env.SymbolicEnvironment;
-import sisc.nativefun.Module;
 import sisc.util.ExpressionVisitor;
 import sisc.util.ExpressionVisitee;
 

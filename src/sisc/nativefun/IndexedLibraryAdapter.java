@@ -1,6 +1,5 @@
 package sisc.nativefun;
 
-import java.text.*;
 import java.util.*;
 import sisc.data.*;
 import sisc.interpreter.*;

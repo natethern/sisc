@@ -6,10 +6,7 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.LinkedList;
 import sisc.data.Value;
-import sisc.data.Pair;
 import sisc.data.Expression;
-import sisc.util.Util;
-import sisc.util.ExpressionVisitor;
 import sisc.util.ExpressionVisitee;
 
 public class SharedValueWriter extends PortValueWriter {

@@ -1,7 +1,6 @@
 package sisc.io;
 
 import sisc.data.Value;
-import sisc.data.Pair;
 import java.io.IOException;
 
 public interface ValueWriter {

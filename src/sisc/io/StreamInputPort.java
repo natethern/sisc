@@ -1,7 +1,6 @@
 package sisc.io;
 
 import java.io.*;
-import sisc.interpreter.*;
 
 public class StreamInputPort extends PushbackInputPort {
     public InputStream in;

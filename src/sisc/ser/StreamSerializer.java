@@ -2,13 +2,11 @@ package sisc.ser;
 
 import java.util.*;
 import java.io.*;
-import java.lang.reflect.*;
 import sisc.data.Expression;
 import sisc.data.Singleton;
 import sisc.data.Symbol;
 import sisc.nativefun.Module;
 import sisc.env.SymbolicEnvironment;
-import sisc.interpreter.Interpreter;
 
 public class StreamSerializer extends SerializerImpl {
 

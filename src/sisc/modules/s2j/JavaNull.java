@@ -1,7 +1,5 @@
 package sisc.modules.s2j;
 
-import java.lang.reflect.*;
-
 import sisc.data.*;
 import sisc.interpreter.*;
 
