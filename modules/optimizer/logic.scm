@@ -21,14 +21,17 @@
              (cond [(null? x) acc]
                    ; If this var is bound to another var ref,
                    ; see if it too is bound to a cp-candidate,
-                   ; and use that value instead of the var
+                   ; and use that value instead of the var.
                    [(and rec
                          (symbol? (car y))
                          (assq (car y) acc)) =>
                     (lambda (vref)
                       (let vloop ((v (cdr vref)))
+                              ;Watch that we never have a chain leading
+                              ;to an existing var
                         (cond [(eq? v (car x))
                                (error 'optimizer "optimizer detected circular variable assignment")]
+                              ; Reached an immediate or non-var
                               [(not (symbol? v)) 
                                (loop (cdr x) (cdr y)
                                      (cons (cons (car x) v) acc))]
