@@ -1077,6 +1077,14 @@ Context.exit()
           objects anyway, the wrapping and unwrapping preserves object
           identity.
         </para>
+        <para>
+          At present, the invocation of Java methods and constructors
+          via generic procedures automatically wraps Scheme object
+          arguments. This is done purely in order to ensure
+          consistency with the present type system, which does not
+          distinguish between Scheme objects and their internal
+          representation.
+        </para>
       </sect3>
       <sect3>
         <title>Assignment</title>
@@ -1544,7 +1552,11 @@ Class.getSigners()
               </methodsynopsis>
               <blockquote>
                 <para>
-                  Returns the type of <parameter>obj</parameter>
+                  Returns the type of <parameter>obj</parameter>. The
+                  type of a Scheme object is represented by its
+                  corresponding &SISC; Java class. The type of a Java
+                  class is represented by its meta type. The type of a
+                  Java object is represented by its Java class.
                 </para>
               </blockquote>
             </para>
@@ -1636,7 +1648,7 @@ Class.getSigners()
                   ordering, an error is signalled. The details of the
                   algorithm are beyond the scope of this document. The
                   interested reader is referred to the Dylan
-                  documentation and the SISC source code.
+                  documentation and the &SISC; source code.
                 </para>
               </blockquote>
             </para>
@@ -2116,10 +2128,12 @@ Class.getSigners()
             </listitem>
             <listitem>
               <para>
-                Generic procedures only operate on Java
-                objects. &SISC; needs a more complex type system to
-                fix this, which is quite hard but most of the code for
-                that has already been written.
+                The type of Scheme objects is their &SISC; class. This
+                makes it impossible to distinguish between Scheme
+                objects and their internal representation. &SISC;
+                needs a more complex type system to fix this, which is
+                quite hard but most of the code for that has already
+                been written.
               </para>
             </listitem>
             <listitem>

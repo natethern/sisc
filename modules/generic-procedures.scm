@@ -354,7 +354,16 @@
       (let ([meth (method-procedure (car applicable))])
         (apply meth
                (if (or (java/method? meth) (java/constructor? meth))
-                   args
+                   ;;We only do this because our current type system
+                   ;;does not distinguish between Scheme objects and
+                   ;;their interal representation, which results in
+                   ;;Java methods/constructors being applicable to
+                   ;;Scheme objects. Once this is fixed, we can
+                   ;;eliminate the "map".
+                   (map (lambda (x) (if (java/object? x)
+                                        x
+                                        (java/wrap x)))
+                        args)
                    (cons (lambda args
                            (call-method-helper (cdr applicable)
                                                args
