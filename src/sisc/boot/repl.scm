@@ -32,19 +32,16 @@
 ;;
 ;; The SISC read-eval-print-loop
 
-(define current-exit-handler (parameterize void))
-
-(define current-optimizer (parameterize (current-optimizer)))
+(define current-exit-handler (make-parameter void))
 
 (define current-default-error-handler
-  (parameterize
-   (let () 
-     (lambda (m e)
-       (let ([exception (make-exception m e)])
-         (putprop 'last-exception '*debug* exception)
-         (print-exception exception (stack-trace-on-error)))))))
+  (make-parameter
+   (lambda (m e)
+     (let ([exception (make-exception m e)])
+       (putprop 'last-exception '*debug* exception)
+       (print-exception exception (stack-trace-on-error))))))
 
-(define current-prompt (parameterize #f))
+(define current-prompt (make-config-parameter "prompt" ""))
 
 (define (get-last-exception)
   (getprop 'last-exception '*debug*))
@@ -58,9 +55,7 @@
               (let ([len (- (length (_exit-handler)) 1)])
                 (unless (zero? len)
                   (display len)))
-              (when (current-prompt)
-                (display #\-)
-                (display (current-prompt)))
+              (display (current-prompt))
               (display "> ")
               ;;read
               (let ([exp (read-code (current-input-port))])

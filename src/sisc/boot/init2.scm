@@ -34,7 +34,7 @@
 ;;turn on syntax expansion and optimization
 
 (define current-optimizer
-  (lambda args (lambda (x) x)))
+  (make-parameter (lambda (x) x)))
 
 (set! eval 
   ((lambda (old-eval)

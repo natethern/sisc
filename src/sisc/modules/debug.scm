@@ -23,7 +23,7 @@
               (newline)
               (compiled)))))))))
   
-(define trace-depth (parameterize -1))
+(define trace-depth (make-parameter -1))
 
 (define (indent n)
   (for-each (lambda (n) (display #\space)) (iota n)))
@@ -255,6 +255,7 @@
                  (apply print-exception p st))))))
 
 ;; Always display stack traces
-(define stack-trace-on-error (parameterize '#f))
+(define stack-trace-on-error
+  (make-config-parameter "stackTraceOnError" #f))
 
            
