@@ -160,6 +160,7 @@
 
 (define make-condition-variable (named-constructor condvar/new 
                                                    (lambda (v) (void))))
+(define condition-variable-name *-name)
 (define condition-variable-specific *-specific)
 (define condition-variable-specific-set! *-specific-set!)
 
@@ -198,5 +199,3 @@
 (define uncaught-exception? (*-mutex-exception? 'uncaught-exception))
 (define (uncaught-exception-reason exc)
   (srfi18-exception-val exc))
-
-    
