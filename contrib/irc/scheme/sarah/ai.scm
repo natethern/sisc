@@ -142,7 +142,8 @@
         (and (or (and channel
 		      (not (bot-quiet (string->symbol channel))))
 		 to-bot)
-	     (ask-alice from cleaned-message)))))
+	     (or (explain #f from channel cleaned-message to-bot)
+                 (ask-alice from cleaned-message))))))
     
 (define (bot-clean message)
   (trim 
@@ -168,6 +169,7 @@
     (be . ((quiet . QUIET)))
     (^ listen . ((up . LISTEN)))
     (expand . EXPAND)
+    (optimize . optimize)
     (beautify . PRETTYPRINT)
     (pretty . ((print . PRETTYPRINT)))
     (prettyprint . PRETTYPRINT)
@@ -175,6 +177,7 @@
     (eval . EVALUATE)
 ;    (evaluate . EVALUATE)
     (seen . SEEN)
+    (later . ((tell . LATERTELL)))
     (tell . TELL)
     (forget . FORGET)
     (leave . LEAVE)
@@ -191,7 +194,8 @@
     "<Something> is <something's description> -- I'll remember this for someone's later query of...\n"
     "What is <something> -- You'll get a similar effect with Who is somebody? and Where is something?\n\n"
     "forget <something> -- I'll forget all knowledge of a term.  Please be careful!\n"
-    "Tell somebody something. -- I'll tell someone your message immediately if they're online, or hold it until I see them next.\n"
+    "Tell <somebody> <something>. -- I'll tell someone your message immediately if they're online, or hold it until I see them next.\n"
+    "Later tell <somebody> <something>. -- I'll tell someone your message next time they speak, or hold it until I see them next if they're offline.\n"
     "Seen somebody? -- I'll tell you the last time I saw someone, and what they last said.\n"
     "\n"
     "evaluate <s-expression> -- I'll run a simple program for you, but it must complete quickly!\n"
@@ -216,7 +220,8 @@
           (sisc:format "~a~a ~a ~a" 
                        (random-elem whatis-preludes) 
                        (car random-result)
-                       (cdr (assq type '((what . is) (where . "is at"))))
+                       (cdr (assq (if type type 'what)
+                                  '((what . is) (where . "is at"))))
                        (cdr random-result)))))
        
 (define (quiet from channel message . args) 
@@ -286,6 +291,9 @@
 (define (onJoin channel sender login hostname)
   (add-nick (string->symbol (->string channel))
             (normalize-nick sender))
+  (deliver-messages channel sender))
+
+(define (deliver-messages channel sender)
   (let ([messages (fetch-messages! dbcon (normalize-nick sender))])
     (when messages 
          (send-message bot channel 
@@ -386,6 +394,12 @@
                  (sisc:format "~a, ~a says: ~a" recipient sender message))))
   
 (define (tell from channel message st)
+  (store-tell from channel message st #f))
+
+(define (later-tell from channel message st)
+  (store-tell from channel message st #t))
+
+(define (store-tell from channel message st later)
   (let-values ([(ignoreables message) (string-split message "tell ")])
     (and message
          (and-let* ([spidx (string-index message " ")]
@@ -395,7 +409,7 @@
              (if (not (equal? (string-ref message 0) #\"))
                  (set! message
                    (translate-for-third-party message 'male)))
-             (if (find-nick (soundex recipient))
+             (if (and (not later) (find-nick (soundex recipient)))
                  (begin (do-tell recipient (find-nick (soundex recipient)) from message) #t)
                  (begin 
                    (store-message dbcon from (soundex recipient)
@@ -409,10 +423,11 @@
            (if (eqv? #\? (string-ref person (- (string-length person) 1)))
                (set! person (substring person 
                                      0 (- (string-length person) 1))))
-           (let-values ([(seen message) (lookup-seen dbcon (soundex person))])
-             (if seen (sisc:format "~a, saying: ~a."
-                              (sisc:format (random-elem seen-phrases) person seen)
-                              message)
+           (let-values ([(seen message person) 
+                         (lookup-seen dbcon (soundex person))])
+             (if seen (sisc:format "~a UTC, saying: ~a."
+                         (sisc:format (random-elem seen-phrases) person seen)
+                         message)
                  (random-elem haventseen-responses)))))))
                               
 (define (what-is from channel message st) (*-is 'what from channel message st))
@@ -432,6 +447,12 @@
     (with-input-from-string expr
       (lambda ()
 	(pretty-print-to-string (sc-expand (read-code)))))))
+
+(define (optimize from channel message st)
+  (let-values ([(ignoreables expr) (string-split message "optimize ")])
+    (with-input-from-string expr
+      (lambda ()
+	(pretty-print-to-string (optimize (sc-expand (read-code))))))))
 
 (define (join from channel message st) 
   (let-values ([(ignoreables chan) (string-split message "join ")])
@@ -459,6 +480,8 @@
 (define (yow from channel message st)
   (random-elem zippy))
 
+          
+
 (define pattern-handlers
   `((WHATIS . ,(if-spoken-to what-is))
     (JOIN . ,(if-spoken-to join))
@@ -474,8 +497,10 @@
     (TELL . ,(if-spoken-to tell))
     (HELP . ,(if-spoken-to help))
     (EXPAND . ,(if-spoken-to expand))
+    (OPTIMIZE . ,(if-spoken-to optimize))
     (PRETTYPRINT . ,(if-spoken-to prettyprint))
     (EXPLAIN . ,(if-spoken-to puzzled))
     (FORGET . ,(if-spoken-to forget))
     (YOW . ,(if-spoken-to yow))
+    (LATERTELL . ,(if-spoken-to later-tell))
     (SCHEMECHANNEL . ,schemechan)))

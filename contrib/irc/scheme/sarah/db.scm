@@ -9,8 +9,13 @@
 
 (define (lookup-item conn type key)
   (let* ([stmt (jdbc/prepare-statement conn
-                (sisc:format "SELECT key, data FROM knowledge WHERE type='~a' AND lower(key)='~a'" 
-                        type (string-downcase key)))]
+                (if type
+                  (sisc:format 
+                    "SELECT key, data FROM knowledge WHERE type='~a' AND key ilike '%~a%'" 
+                        type (string-downcase key))
+                  (sisc:format 
+                    "SELECT key, data FROM knowledge WHERE key ilike '%~a%'" 
+                        (string-downcase key))))]
          [results
           (jdbc/execute-query stmt)])
     (and (not (null? results)) 
@@ -34,17 +39,19 @@
 
 (define (lookup-seen conn person)
   (let* ([stmt (jdbc/prepare-statement conn
-                (sisc:format "SELECT to_char(seenon, 'Mon DD at HH:MI pm'),message FROM seen WHERE id='~a'" 
+                (sisc:format (string-append "SELECT to_char(timezone('UTC',seenon), 'Mon DD at HH:MI pm')"
+		                            ", message, nick FROM seen WHERE id='~a'")
                              person))]
          [result
           (jdbc/execute-query stmt)])
     (if (not (null? result)) 
         (values ((car result) '1)
-                ((car result) '2))
-        (values #f #f))))
+                ((car result) '2)
+		((car result) '3))
+        (values #f #f #f))))
 
 (define (store-seen conn id person message)
-  (let ([pstmt (if (let-values ([(a b) (lookup-seen conn id)]) a)
+  (let ([pstmt (if (let-values ([(a b c) (lookup-seen conn id)]) a)
                    (let ([stmt
                           (jdbc/prepare-statement conn 
                "UPDATE seen SET seenon=NOW(), message=?, nick=? WHERE id=?")])

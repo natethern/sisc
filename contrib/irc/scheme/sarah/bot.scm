@@ -40,7 +40,6 @@
           (send-messages nick response))))
 
   (define (onMessage channel nick login host message)
-    (store-seen dbcon (normalize-nick nick) (->string nick) (->string message))
     (unless (equal? (symbol->string bot-name) nick)
       (cond  [(getprop (->symbol channel) 'scheme-channels) =>
 	      (lambda (chanrec)
@@ -53,7 +52,9 @@
 	                                               (->string channel))
 				      (->string message))])
 		(when response
-		      (send-messages channel response)))])))
+		      (send-messages channel response)))]))
+    (store-seen dbcon (normalize-nick nick) (->string nick) (->string message))
+    (deliver-messages channel nick))
 
   (define (do-part channel)
     (remove-presence (string->symbol channel))

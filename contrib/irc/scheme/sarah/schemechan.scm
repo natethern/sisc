@@ -15,6 +15,16 @@
   (lambda (args)
     (error name "use is forbidden in this environment.")))
 
+(define schemechan-env #f)
+
+(define forbidden-bindings 
+   '(open-input-file open-output-file 
+    with-output-to-file
+    with-input-from-file
+    call-with-input-file
+    call-with-output-file
+    open-source-input-file))
+
 (define (make-schemechan channel-name)
   (let* ([parser (let* ([interp (enter <sisc.interpreter.Context>)]
 			[i ((interp 'dynenv) 'parser)])
@@ -24,12 +34,7 @@
 	 [env (let ([e (scheme-report-environment 5)])
 		(for-each (lambda (proc)
 			    (putprop proc e (forbidden-procedure proc)))
-			  '(open-input-file open-output-file 
-					    with-output-to-file
-					    with-input-from-file
-					    call-with-input-file
-					    call-with-output-file
-					    open-source-input-file))
+                          forbidden-bindings)
 		e)]
 	 [parserinput (java-unwrap (make <sisc.io.SourceInputPort> 
 				     (make <java.io.PipedInputStream> pipeout)
@@ -45,4 +50,5 @@
 			    (loop)))))])
     (putprop (string->symbol channel-name)
 	     'scheme-channels (list pipeout evalthread))
+    (set! schemechan-env env)
     (thread/start evalthread)))

@@ -6,4 +6,4 @@ export CLASSPATH SISC_HOME JAVAOPT PATH
 screen sh sisc/sisc libs.scm sisc/scheme-src/slib.scm streams.scm \
                  jdbc.scm amb.scm phrases.scm alice.scm random.scm \
                  state.scm time.scm ../pirc.scm db.scm ai.scm schemechan.scm \
-                 bot.scm
+                 bot.scm zippy.scm
