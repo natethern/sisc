@@ -1,6 +1,6 @@
-(import s2j)
+(import old-s2j)
 (import s2j-reflection)
-(import generic-procedures)
+(import old-generic-procedures)
 
 (define-generic value-of)
 (define-generic app (generic-java-procedure 'append)) ;;do not overwrite Scheme's append

@@ -1,4 +1,4 @@
-(import generic-procedures)
+(import old-generic-procedures)
 (define-class (<foo>) (x #f) (y 1))
 (define-class (<bar>) (y 2)  (z #f))
 (define-class (<baz> <foo> <bar>) (a 1) (b 2) (c #f))

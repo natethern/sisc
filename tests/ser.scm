@@ -1,5 +1,5 @@
-(import generic-procedures)
-(import s2j)
+(import old-generic-procedures)
+(import old-s2j)
 
 ;;example data: a Java object that refers to a k that refers to a Java
 ;;object that refers to a Scheme object.
