@@ -947,27 +947,15 @@ com/foo/bar/baz/baz3.scm
         <title>SRFI Modules</title>
         <para>
           In &SISC; each SRFI is encapsulated in a module. See <xref
-                                                                     linkend="Modules"/> for details of &SISC;'s module system.
+          linkend="Modules"/> for details of &SISC;'s module system. 
           The definitions for SRFI modules are not included in the
           standard &SISC; heap build and hence must be loaded
-          separately from the <filename>srfi.scm</filename>, which can
-          be found in the <filename>scheme-src</filename> directory
-          of the &SISC; distribution:
+          separately from the compiled library
+          <filename>srfi.sll</filename>, which can be found in the
+          root of the &SISC; distribution:
           <programlisting>
-(load "<parameter>path</parameter>/srfi.scm")
+(load "<parameter>path</parameter>/srfi.sll")
           </programlisting>
-          Loading this takes quite a while, which is one reason why
-          the module definitions are not included in the standard heap
-          build. One way to significantly reduce the load time is to
-          produce and load a pre-expanded version:
-          <programlisting>
-(expand-file "<parameter>path</parameter>/srfi.scm" "<parameter>path</parameter>/srfi.sce")
-(load "<parameter>path</parameter>/srfi.sce")
-          </programlisting>
-          The first line, which only needs to run once, produces a
-          single file containing all SRFI code with all macros
-          expanded already. The file can be loaded in the usual way using 
-          <function>load</function>.
         </para>
       </sect3>
       <sect3>
