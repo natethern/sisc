@@ -324,13 +324,24 @@ public class SNative extends IndexedFixableProcedure {
             }
             return TRUE;
         case VECTOR:
-            Value[] newvlr=new Value[vlr.length];
-            System.arraycopy(vlr,0,newvlr,0,vlr.length);
+            int len = vlr.length;
+            Value[] newvlr;
+            if (len == 0) {
+                newvlr = ZV;
+            } else {
+                newvlr = new Value[len];
+                System.arraycopy(vlr,0,newvlr,0,len);
+            }
             Value res = new SchemeVector(newvlr);
             return res;
         case VALUES:
-            newvlr=new Value[vlr.length];
-            System.arraycopy(vlr,0,newvlr,0,vlr.length);
+            len = vlr.length;
+            if (len == 0) {
+                newvlr = ZV;
+            } else {
+                newvlr =new Value[len];
+                System.arraycopy(vlr,0,newvlr,0,len);
+            }
             res = new Values(newvlr);
             return res;
         case APPEND:

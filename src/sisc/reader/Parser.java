@@ -353,7 +353,7 @@ public class Parser extends Util implements Tokens {
                 }
 
                 if (expr==null && v==null) {
-                    iv.vals=new Value[0];
+                    iv.vals = ZV;
                     break;
                 } else if (expr instanceof Pair) {
                     if (v==null)

@@ -271,8 +271,9 @@ public abstract class Util implements Version {
 
     public static Value[] pairToValues(Pair p) {
         int      len = length(p);
-        Value[] vs  = new Value[len];
+        if (len == 0) return ZV;
 
+        Value[] vs  = new Value[len];
         for (int i = 0; i < len; ++i) {
             vs[i] = p.car;
             p     = (Pair)p.cdr;
