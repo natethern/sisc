@@ -1116,7 +1116,7 @@
           <blockquote>
             <para>        
               The <function>iota</function> function produces a list
-              whose elements are the integers 0 to n-1 inclusive.
+              whose elements are the integers 0 to n inclusive.
             </para>
           </blockquote>
         </para>
