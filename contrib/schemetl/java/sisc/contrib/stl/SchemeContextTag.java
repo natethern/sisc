@@ -38,7 +38,7 @@ public class SchemeContextTag extends TagSupport {
 
     public int doStartTag() {
         init();
-        AppContext ctx=main.ctx;
+        AppContext ctx=main.getCtx();
         Context.register(name, ctx);
         pageContext.setAttribute("scheme-context", Context.enter(name));
         return EVAL_BODY_INCLUDE;
