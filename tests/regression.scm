@@ -225,4 +225,5 @@
                                           port)))
               (call-with-serial-input-file "test.ser" deserialize)))
 
-(should-be 1096047 '#(1 2 unquote (list 3 4)) #(1 2 unquote (list 3 4)))
+(should-be 1096047 '#(1 2 unquote (list 3 4)) 
+                   `#(1 2 unquote (list 3 4)))
