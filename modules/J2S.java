@@ -236,7 +236,7 @@ public class J2S extends ModuleAdapter {
 		    try {
 			rv=i.eval(thunk, new Value[0]);
 		    } catch (SchemeException se) {
-			se.throwSchemeException(f);
+			se.throwNestedPrimException();
 		    }
 		    Context.exit();
 		}

@@ -140,7 +140,10 @@
     (let* ([prefix (if (not (null? args)) (car args))]
 	   [args (if (not (void? prefix)) (cdr args) args)]
 	   [coerce (if (not (null? args)) (car args) #f)]
-	   [c (if (java/class? class) class (java/class-of-object class))]
+	   [c (cond
+	       [(java/class? class) class]
+	       [(string? class) (java/class-for-name class)]
+	       [else (java/class-of-object class)])]
 	   [methods (java/get-methods c)]
 	   [fields (java/get-fields c)])
       (let loop ([x methods]) 

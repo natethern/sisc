@@ -129,7 +129,7 @@ public class SThread extends ModuleAdapter {
 	    }
 	}
 
-	public final Value lock() {
+	public final Value acquire() {
 	    Thread thisThread=Thread.currentThread();
 
 	    if (owner==thisThread) 
@@ -304,7 +304,7 @@ public class SThread extends ModuleAdapter {
         case 1:
             switch(primid) {
 	    case MONITORLOCK:
-		return monitor(f.vlr[0]).lock();
+		return monitor(f.vlr[0]).acquire();
 	    case MONITORUNLOCK:
 		monitor(f.vlr[0]).unlock();
 		return VOID;
