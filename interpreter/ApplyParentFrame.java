@@ -24,6 +24,14 @@ public class ApplyParentFrame extends Procedure {
     public void display(ValueWriter w) throws IOException {
         displayNamedOpaque(w, liMessage(SISCB, "errorcontinuation"));
     }
+
+    public void serialize(Serializer s) throws IOException {
+        s.writeExpression(c);
+    }
+
+    public void deserialize(Deserializer s) throws IOException {
+        c=(CallFrame)s.readExpression();
+    }
 }
 
 /*
