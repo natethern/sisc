@@ -51,6 +51,7 @@ public class Parser extends Util implements Tokens {
 	chars.put("rubout", new SchemeCharacter('\u007f'));
 	chars.put("page", new SchemeCharacter('\u000c'));
 	chars.put("tab", new SchemeCharacter('\t'));
+	chars.put("return", new SchemeCharacter('\r'));
 	chars.put("newline", new SchemeCharacter('\n'));
 	chars.put("nul", new SchemeCharacter((char)0));
     }
