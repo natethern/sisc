@@ -2,13 +2,12 @@ package sisc.interpreter;
 
 import java.io.*;
 import java.lang.ref.*;
+import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
-import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.LexicalEnvironment;
-import sisc.util.ExpressionVisitor;
 
 public class CallFrame extends Procedure {
 
@@ -18,7 +17,7 @@ public class CallFrame extends Procedure {
     public LexicalEnvironment    env;
     public CallFrame              fk;
     public CallFrame          parent;
-    
+
     public CallFrame(Expression n, Value[] v,
                      boolean vlk,
                      LexicalEnvironment e,
@@ -30,38 +29,61 @@ public class CallFrame extends Procedure {
         fk=f;
         parent=p;
     }
-
+    
     public CallFrame capture(Interpreter r) {
-        if (!vlk) {
+        CallFrame rv;
+        if (vlk) {
+            rv=clone(r);
+        } else {
             vlk=true;
-
-            if (vlr!=null) {
-                int l=vlr.length;
-                Value[] nvlr=r.createValues(l);
-                System.arraycopy(vlr, 0, nvlr, 0, l);
-                vlr=nvlr;
-            }
-
-            if (parent!=null)
-                parent.capture(r);
-
-            if (fk!=null)
-                fk.capture(r);
+            rv=this;
         }
+        rv.capture(r, null, null);
 
-        return this;
+        return rv;
     }
 
+    protected void capture(Interpreter r, 
+                           Value[] parentOld, Value[] parentNew) {
+        vlk=true;
+        Value[] vo=vlr;
+
+        if (vlr==parentOld)
+            vlr=parentNew;
+        else if (vlr!=null) {
+            Value[] nvlr=r.createValues(vlr.length);
+            System.arraycopy(vlr, 0, nvlr, 0, vlr.length);
+            vlr=nvlr;
+        }
+        
+        if (parent!=null) {
+            if (parent.vlk)
+                parent=parent.clone(r);
+            parent.capture(r, vo, vlr);
+        }
+        
+        if (fk!=null) {
+            if (fk.vlk)
+                fk=fk.clone(r);
+            fk.capture(r, vo, vlr);
+        }
+    }
+
+    protected CallFrame clone(Interpreter r) {
+        return new CallFrame(nxp, vlr, vlk, env, fk, parent);
+    }
+            
     public void apply(Interpreter r) throws ContinuationException {
         if (r.vlr.length==1) 
             r.acc=r.vlr[0];
         else 
 	    r.acc=new Values(r.vlr);
+
         r.pop(this);
     }
 
-    public void display(ValueWriter w) throws IOException {
-        displayNamedOpaque(w, "continuation");
+    public String display() {
+        return displayNamedOpaque("continuation");
     }
 
     public void serialize(Serializer s) throws IOException {
@@ -97,14 +119,6 @@ public class CallFrame extends Procedure {
         parent=(CallFrame)s.readExpression();
         env=(LexicalEnvironment)s.readExpression();
         vlk=s.readBoolean();
-    }
-
-    public boolean visit(ExpressionVisitor v) {
-        if (vlr!=null)
-            for (int i=0; i<vlr.length; i++) {
-                if (!v.visit(vlr[i])) return false;
-            }
-        return v.visit(nxp) && v.visit(fk) && v.visit(parent) && v.visit(env);
     }
 }
 

@@ -62,7 +62,6 @@ public class Interpreter extends Util {
     static CallFrame top_fk = new CallFrame(new ThrowSchemeException(),
                                             null, false, null, null, null);
     static {
-        top_fk.fk = top_fk;
         top_fk.vlk = true;
     }
 
