@@ -312,7 +312,7 @@
   </target>
 
   <target name="manual" depends="prepare"
-          description="Generate Manual">
+          description="Generate Manual" unless="lite">
     <copy file="${docdir}/sss/html.xsl" tofile="${docdir}/sss/style.xsl"/>
     <replace file="${docdir}/sss/style.xsl"
              token="@@@doc.style@@@"
@@ -326,7 +326,7 @@
     <copy file="${docdir}/sss/sss.css" tofile="${gendocdir}/sss/sss.css"/>
   </target>
 
-  <target name="docs" depends="javadocs"
+  <target name="docs" depends="javadocs,manual"
           description="Generate Documentation"/>
 
   <target name="all" depends="sisc-lib,docs"
@@ -392,7 +392,7 @@
           file="${srfidir}/optional-args.scm"/>
 
     <copy todir="${dist}/full/sisc/doc">
-      <fileset dir="${docdir}/sss">
+      <fileset dir="${gendocdir}/sss">
         <include name="*.html"/>
       </fileset>
     </copy>
