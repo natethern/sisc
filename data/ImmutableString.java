@@ -47,9 +47,8 @@ public class ImmutableString extends SchemeString {
     }
 
 
-    public void set(Interpreter r, int k,
-                    char c) throws ContinuationException {
-	error(r, "string is immutable");
+    public void set(int k, char c) {
+	throw new RuntimeException("string is immutable");
     }
 }
 

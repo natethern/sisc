@@ -297,7 +297,7 @@ public class SNetwork extends ModuleAdapter {
                 case GET_LOCAL_HOST:
                     return new SchemeString(InetAddress.getLocalHost().getHostAddress());
                 default:
-                    error(f, "Incorrect number of arguments to procedure "+f.acc);
+		    throw new RuntimeException( "incorrect number of arguments to procedure");
                 }
             case 1:
                 switch (primid) {
@@ -332,7 +332,7 @@ public class SNetwork extends ModuleAdapter {
                     port=num(f.vlr[0]).intValue();
                     return new SchemeMulticastUDPSocket(new MulticastSocket(port));
                 default:
-                    error(f, "Incorrect number of arguments to procedure "+f.acc);
+		    throw new RuntimeException( "incorrect number of arguments to procedure");
                 }
             case 2:
                 switch (primid) {
@@ -373,7 +373,7 @@ public class SNetwork extends ModuleAdapter {
                     tcps.setSoTimeout(num(f.vlr[1]).intValue());
                     return VOID;
                 default:
-                    error(f, "Incorrect number of arguments to procedure "+f.acc);
+		    throw new RuntimeException( "incorrect number of arguments to procedure");
                 }
             case 3:
                 switch(primid) {
@@ -385,11 +385,10 @@ public class SNetwork extends ModuleAdapter {
                                                host, dport);
                 }
             default:
-                error(f, "Incorrect number of arguments to procedure "+f.acc);
+		throw new RuntimeException( "incorrect number of arguments to procedure");
             }
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
-        return VOID;
     }
 }

@@ -53,13 +53,13 @@ public class OutputPort extends NamedValue {
         if (autoflush) flush();
     }
 
-    public void write(Interpreter i, char[] buff, int count)
+    public void write(char[] buff, int count)
     throws ContinuationException {
         try {
             w.write(buff, 0, count);
             if (autoflush) flush();
         } catch (IOException e) {
-            error(i, "error writing to "+display());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ public class OutputPort extends NamedValue {
         w.flush();
     }
 
-    public void close(Interpreter f) throws ContinuationException {
+    public void close() throws ContinuationException {
         try {
             flush();
         } catch (IOException e) {
@@ -85,7 +85,7 @@ public class OutputPort extends NamedValue {
         try {
             w.close();
         } catch (IOException e) {
-            error(f,"error closing "+this);
+            throw new RuntimeException(e.getMessage());
         }
     }
 

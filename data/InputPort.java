@@ -44,14 +44,13 @@ public class InputPort extends NamedValue {
         this.r=r;
     }
 
-    public Value readchar(Interpreter r) throws ContinuationException {
+    public Value readchar() {
         try {
             return new SchemeCharacter((char)read());
         } catch (EOFException e) {
             return Util.EOF;
         } catch (IOException e) {
-            error(r, "I/O error reading from "+display());
-            return VOID;
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -80,28 +79,24 @@ public class InputPort extends NamedValue {
         return r.ready();
     }
 
-    public Value read(Interpreter i,
-                      char[] buff, int count) throws ContinuationException {
+    public Value read(char[] buff, int count) throws ContinuationException {
         try {
             int s=r.read(buff, 0, count);
             return (s==-1 ? (Value)EOFObject.EOF : (Value)Quantity.valueOf(s));
 
         } catch (IOException e) {
-            error(i, "I/O error reading from "+display());
-            return VOID;
+            throw new RuntimeException(e.getMessage());
         }
-
     }
 
-    public Value read(Interpreter r) throws ContinuationException {
+    public Value read(Interpreter r) {
         try {
             return r.dynenv.parser.nextExpression(this);
         } catch (EOFException e) {
             return Util.EOF;
         } catch (IOException e) {
-            error(r, READ, e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
-        return VOID;
     }
 
     public void mark(int ral) throws IOException {
@@ -116,11 +111,11 @@ public class InputPort extends NamedValue {
         return displayNamedOpaque("input-port");
     }
 
-    public void close(Interpreter f) throws ContinuationException {
+    public void close() throws ContinuationException {
         try {
             r.close();
         } catch (IOException e) {
-            error(f,"error closing "+this);
+            throw new RuntimeException(e.getMessage());
         }
     }
 

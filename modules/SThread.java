@@ -111,7 +111,7 @@ public class SThread extends ModuleAdapter {
 	    case THREADSRUNNING:
 		return Quantity.valueOf(schemeThreads.activeCount());
             default:
-                error(f, "Incorrect number of arguments to procedure "+f.acc);
+                throw new RuntimeException( "incorrect number of arguments to procedure");
 	    }
         case 1:
             switch(primid) {
@@ -137,11 +137,10 @@ public class SThread extends ModuleAdapter {
 		    return S_FINISHED;
 		} 
             default:
-                error(f, "Incorrect number of arguments to procedure "+f.acc);
+                throw new RuntimeException( "incorrect number of arguments to procedure");
             }
         default:
-            error(f, "Incorrect number of arguments to procedure "+f.acc);
+	    throw new RuntimeException( "incorrect number of arguments to procedure");
         }
-        return VOID;
     }
 }

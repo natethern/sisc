@@ -256,13 +256,13 @@ public class Primitives extends ModuleAdapter {
             case CURRENTINPUTPORT: return f.dynenv.in;
             case OPENOUTPUTSTRING: return new OutputPort(new StringWriter());
             case PEEKCHAR:
-                Value v=f.dynenv.in.readchar(f);
+                Value v=f.dynenv.in.readchar();
                 if (v instanceof SchemeCharacter)
                     f.dynenv.in.pushback(((SchemeCharacter)v).c);
                 return v;
         case READ: case READCHAR:
                 return (primid==READ ? f.dynenv.in.read(f) :
-                        f.dynenv.in.readchar(f));
+                        f.dynenv.in.readchar());
             case CURRENTEVAL: return (Value)f.ctx.evaluator;
             case INTERACTIONENVIRONMENT:
                 return f.ctx.toplevel_env;
@@ -340,7 +340,7 @@ public class Primitives extends ModuleAdapter {
             case VECTORFINDLASTUNIQUE: return Quantity.valueOf(vec(f.vlr[0]).findEnd());
             case PEEKCHAR:
                 InputPort inport=inport(f.vlr[0]);
-                Value v=inport.readchar(f);
+                Value v=inport.readchar();
                 if (v instanceof SchemeCharacter)
                     inport.pushback(((SchemeCharacter)v).c);
                 return v;
@@ -354,7 +354,7 @@ public class Primitives extends ModuleAdapter {
         case READ: case READCHAR:
                 inport=inport(f.vlr[0]);
                 return (primid==READ ? inport.read(f) :
-                        inport.readchar(f));
+                        inport.readchar());
             case EVAL:
                 f.nxp=f.compile(f.vlr[0]);
                 return VOID;
@@ -403,11 +403,11 @@ public class Primitives extends ModuleAdapter {
                 return VOID;
             case CLOSEINPUTPORT:
                 InputPort inp=inport(f.vlr[0]);
-                if (inp!=f.dynenv.in) inp.close(f);
+                if (inp!=f.dynenv.in) inp.close();
                 return VOID;
             case CLOSEOUTPUTPORT:
                 op=outport(f.vlr[0]);
-                if (op!=f.dynenv.out) op.close(f);
+                if (op!=f.dynenv.out) op.close();
                 return VOID;
             case BOX: return new Box(f.vlr[0]);
             case UNBOX: return (Value)box(f.vlr[0]).val;
@@ -527,10 +527,10 @@ public class Primitives extends ModuleAdapter {
             case EQUAL:
                 return truth(f.vlr[0].equals(f.vlr[1]));
             case SETCAR:
-                truePair(f.vlr[0]).setCar(f,f.vlr[1]);
+                truePair(f.vlr[0]).setCar(f.vlr[1]);
                 return VOID;
             case SETCDR:
-                truePair(f.vlr[0]).setCdr(f,f.vlr[1]);
+                truePair(f.vlr[0]).setCdr(f.vlr[1]);
                 return VOID;
             case REMAINDER:
                 return num(f.vlr[0]).remainder(num(f.vlr[1]));
@@ -565,7 +565,7 @@ public class Primitives extends ModuleAdapter {
                 SchemeString st=str(f.vlr[0]);
                 char c=character(f.vlr[1]);
                 for (int i=0; i<st.stringdata.length; i++)
-                    st.set(f, i, c);
+                    st.set(i, c);
                 return VOID;
             case MAKESTRING:
                 char newStr[]=new char[num(f.vlr[0]).intValue()];
@@ -678,13 +678,13 @@ public class Primitives extends ModuleAdapter {
                 return VOID;
             case STRINGSET:
 
-                str(f.vlr[0]).set(f, num(f.vlr[1]).intValue(),
-                                    character(f.vlr[2]));
+                str(f.vlr[0]).set(num(f.vlr[1]).intValue(),
+				  character(f.vlr[2]));
                 return VOID;
             case VECTORSET:
                 int index=num(f.vlr[1]).intValue();
                 try {
-                    vec(f.vlr[0]).set(f,index,f.vlr[2]);
+                    vec(f.vlr[0]).set(index,f.vlr[2]);
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throw new RuntimeException("index "+index+" out of bounds for '"+f.vlr[0].display()+"'");
                 }
@@ -693,12 +693,12 @@ public class Primitives extends ModuleAdapter {
                 int count=num(f.vlr[2]).intValue();
                 InputPort inport=inport(f.vlr[1]);
                 char[] buff=str(f.vlr[0]).stringdata;
-                return inport.read(f, buff, count);
+                return inport.read(buff, count);
             case BLOCKWRITE:
                 count=num(f.vlr[2]).intValue();
                 OutputPort outport=outport(f.vlr[1]);
                 buff=str(f.vlr[0]).stringdata;
-                outport.write(f, buff, count);
+                outport.write(buff, count);
                 return VOID;
             }
         default:
@@ -789,6 +789,3 @@ public class Primitives extends ModuleAdapter {
         }
     }
 }
-
-
-

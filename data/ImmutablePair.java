@@ -44,14 +44,12 @@ public class ImmutablePair extends Pair {
 	super(car, cdr);
     }
 
-    public void setCar(Interpreter r, Value v)
-	throws ContinuationException {
-	error(r, "list is immutable");
+    public void setCar(Value v) {
+	throw new RuntimeException("pair is immutable");
     }
 
-    public void setCdr(Interpreter r, Value v)
-	throws ContinuationException {
-	error(r, "list is immutable");
+    public void setCdr(Value v) {
+	throw new RuntimeException("pair is immutable");
     }
 }
 

@@ -47,13 +47,11 @@ public class Pair extends Value {
         this.cdr=cdr;
     }
 
-    public void setCar(Interpreter r, Value v)
-	throws ContinuationException {
+    public void setCar(Value v) {
 	car = v;
     }
 
-    public void setCdr(Interpreter r, Value v)
-	throws ContinuationException {
+    public void setCdr(Value v) {
 	cdr = v;
     }
 

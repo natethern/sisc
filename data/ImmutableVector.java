@@ -50,9 +50,8 @@ public class ImmutableVector extends SchemeVector {
         super(v);
     }
 
-    public void set(Interpreter r, int idx, Value v)
-	throws ContinuationException {
-	error(r, "vector is immutable");
+    public void set(int idx, Value v) {
+	throw new RuntimeException("vector is immutable");
     }
 }
 

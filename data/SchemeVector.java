@@ -97,8 +97,7 @@ public class SchemeVector extends Value {
         return b.toString();
     }
 
-    public void set(Interpreter r, int idx, Value v)
-	throws ContinuationException {
+    public void set(int idx, Value v) {
         lastUnique=-1;
         vals[idx]=v;
     }

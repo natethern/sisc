@@ -85,8 +85,7 @@ public class SchemeString extends Value {
         return b.toString();
     }
 
-    public void set(Interpreter r, int k,
-                    char c) throws ContinuationException {
+    public void set(int k, char c) {
         stringdata[k]=c;
     }
 
