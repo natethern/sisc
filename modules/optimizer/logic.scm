@@ -16,8 +16,8 @@
 
 (define cp-candidates 
   (lambda (formals values* state rec)
-    (let ((set-vars (get-state-entry state 'set-vars))
-          (refed-vars (get-state-entry state 'refed-vars))
+    (let ((set-vars (or (get-state-entry state 'set-vars) '()))
+          (refed-vars (or (get-state-entry state 'refed-vars) '()))
           (nf '())
           (nv '())
           (sec '()))
@@ -68,7 +68,7 @@
                     ;; If the right hand side is a var-ref, 
                     ;; but its set!'ed, skip it.
                     [(and (symbol? cy) 
-                          (memq cy (get-state-entry state 'set-vars)))
+                          (memq cy set-vars))
                      (set! nf (cons cx nf))
                      (set! nv (cons cy nv))
                      (cp-helper (cdr x) (cdr y) acc)]
@@ -77,7 +77,8 @@
                     ;; do a simple variable renaming.
                     [(and (symbol? cy) 
                           (or (and rec (memq cy formals))
-                              (memq cy (get-state-entry state 'lvars))))
+                              (memq cy (or (get-state-entry state 'lvars)) 
+                                    '())))
                      (cp-helper (cdr x)
                                 (cdr y) 
                                 (cons (cons cx cy) acc))]
