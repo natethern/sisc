@@ -80,7 +80,9 @@ public class FreeSetEval extends Expression {
         }
     }
 
-    public FreeSetEval() {}
+    public FreeSetEval() {
+        envLoc=-1;
+    }
 
     public void deserialize(Serializer s, DataInput dis)
     throws IOException {

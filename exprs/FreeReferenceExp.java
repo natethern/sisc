@@ -78,7 +78,9 @@ public class FreeReferenceExp extends Expression implements Immediate {
         }
     }
 
-    public FreeReferenceExp() {}
+    public FreeReferenceExp() {
+        envLoc=-1;
+    }
 
     public void deserialize(Serializer s, DataInput dis)
     throws IOException {
