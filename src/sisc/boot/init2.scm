@@ -127,7 +127,7 @@
   (lambda (expr)
     (syntax-case expr ()
       ((_ () body ...)
-       (syntax body ...))
+       (syntax (let () body ...)))
       ((_ ((param-name new-value) ...)
           body ...)
        (with-syntax ([(tmps ...) 
