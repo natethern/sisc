@@ -109,19 +109,6 @@ public class J2S extends ModuleAdapter {
         public JavaObject() {}
     }
 
-    class CatchError extends Expression {
-	boolean caught=false;
-
-	public void eval(Interpreter r) throws ContinuationException {
-	    r.nxp=null;
-	    caught=true;
-	}
-
-	public Value express() {
-	    return list(Symbol.get("CatchErrorExp"));
-	}
-    }
-
     public J2S() {
         define("java/field-ref", JFIELDREF);
         define("java/field-set!", JFIELDSET);
@@ -246,14 +233,12 @@ public class J2S extends ModuleAdapter {
 		Value rv=VOID;
 		synchronized(syncOn) {
 		    Interpreter i=Context.enter(f.ctx, f.dynenv.copy());
-		    CatchError e=new CatchError();
-		    i.fk=new CallFrame(e, null, null, i.fk, i.stk);
-		    rv=i.eval(thunk, new Value[0]);
-		    Context.exit();
-		    if (rv instanceof Values && e.caught) {
-			f.acc=rv;
-			throw new ContinuationException(f.fk);
+		    try {
+			rv=i.eval(thunk, new Value[0]);
+		    } catch (SchemeException se) {
+			se.throwSchemeException(f);
 		    }
+		    Context.exit();
 		}
 		return rv;
             case JINSTANCEOFQ:

@@ -24,56 +24,58 @@
 (define failures 0)
 (define passes 0)
 
-(define-syntax assert
-  (lambda (x)
-    (syntax-case x ()
-     ((_ op? e1 e2 . args)
-      (syntax
-       ((lambda (a b)
-	  (if (op? a b)
-	      (set! passes (+ passes 1))
-	      (begin
-		(set! failures (+ failures 1))
-		(display (format "failed ~s = ~s, got ~s, expected ~s"
-				 (syntax-object->datum (syntax e1))
-				 (syntax-object->datum (syntax e2))
-				 e1 e2))
-		(if (> (length (syntax-object->datum (syntax args))) 0)
-		    (begin
-		      (display ": ")
-		      (map display (syntax-object->datum (syntax args)))))
-		(newline))))
-	e1 e2))))))
-
-(define-syntax assertEqual
-  (lambda (x)
-    (syntax-case
-     x ()
-     ((_ e1 e2) (syntax (assert equal? e1 e2)))
-     ((_ e1 e2 args) (syntax (assert equal? e1 e2 args))))))
-
-(define-syntax assertNotEqual
-  (lambda (x)
-    (syntax-case
-     x ()
-     ((_ e1 e2)
-      (syntax (assert (lambda (a b) (not (equal? a b))) e1 e2)))
-     ((_ e1 e2 args)
-      (syntax (assert (lambda (a b) (not (equal? a b))) e1 e2 args))))))
-
-(define-syntax test
-  (lambda (x)
-    (syntax-case
-     x ()
-     ((_) 
-      (syntax
-       (begin
-	 (display (format "~s passes, ~s failures~%" passes failures))
-	 (set! passes 0)
-	 (set! failures 0))))
-     ((_ e1 e2 ...)
-      (syntax (begin e1 (test e2 ...)))))))
-
+(let ([failures 0]
+      [passes 0])
+  (define-syntax assert
+    (lambda (x)
+      (syntax-case x (passes failures)
+       ((_ op? e1 e2 . args)
+	(syntax
+	 ((lambda (a b)
+	    (if (op? a b)
+		(set! passes (+ passes 1))
+		(begin
+		  (set! failures (+ failures 1))
+		  (display (format "failed ~s = ~s, got ~s, expected ~s"
+				   (syntax-object->datum (syntax e1))
+				   (syntax-object->datum (syntax e2))
+				   e1 e2))
+		  (if (> (length (syntax-object->datum (syntax args))) 0)
+		      (begin
+			(display ": ")
+			(map display (syntax-object->datum (syntax args)))))
+		  (newline))))
+	  e1 e2))))))
+  
+  (define-syntax assertEqual
+    (lambda (x)
+      (syntax-case
+       x ()
+       ((_ e1 e2) (syntax (assert equal? e1 e2)))
+       ((_ e1 e2 args) (syntax (assert equal? e1 e2 args))))))
+  
+  (define-syntax assertNotEqual
+    (lambda (x)
+      (syntax-case
+       x ()
+       ((_ e1 e2)
+	(syntax (assert (lambda (a b) (not (equal? a b))) e1 e2)))
+       ((_ e1 e2 args)
+	(syntax (assert (lambda (a b) (not (equal? a b))) e1 e2 args))))))
+  
+  (define-syntax test
+    (lambda (x)
+      (syntax-case x (passes failures)
+       ((_) 
+	(syntax
+	 (begin
+	   (display (format "~s passes, ~s failures~%" passes failures))
+	   (set! passes 0)
+	   (set! failures 0))))
+       ((_ e1 e2 ...)
+	(syntax (begin e1 (test e2 ...)))))))
+  (void))
+  
 
 ;;;; regexp.scm - test regexp functions
 

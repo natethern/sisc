@@ -82,6 +82,7 @@ public class SThread extends ModuleAdapter {
 	define("thread/state", THREADSTATE);
 	define("thread/interrupted?", THREADINTERRUPTEDQ);
 	define("thread/holds-lock?", THREADHOLDSLOCKQ);
+
 	define("_active-thread-count", THREADSRUNNING);
 
 	define("monitor/new", MONITORNEW);

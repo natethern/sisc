@@ -93,14 +93,14 @@ public class Interpreter extends Util {
         return compiler.compile(this, v, env);
     }
 
-    protected Value interpret(Expression e) {
+    protected Value interpret(Expression e) throws SchemeException {
         stk=new CallFrame(null, null, null, fk, null);
         nxp=e;
         interpret();
         return acc;
     }
 
-    protected void interpret() {
+    protected void interpret() throws SchemeException {
         try {
             do {
                 try {
@@ -114,7 +114,10 @@ public class Interpreter extends Util {
                     pop(ce.k);
                 }
             } while (true);
-        } catch (NullPointerException done) {}
+        } catch (NullPointerException done) {
+	} catch (SchemeRuntimeException rte) {
+	    throw rte.promote();
+	}
     }
 
     public final void pop(CallFrame c) {
@@ -139,7 +142,7 @@ public class Interpreter extends Util {
         stk=createFrame(nxp,vlr,env,fk,stk);
     }
 
-    public Value eval(String expr) throws IOException {
+    public Value eval(String expr) throws IOException, SchemeException {
         InputPort ip=new InputPort(new BufferedReader(new StringReader(expr)));
         Value rv=VOID;
 
@@ -152,11 +155,11 @@ public class Interpreter extends Util {
         } while (true);
     }
 
-    public Value eval(Value v) {
+    public Value eval(Value v) throws SchemeException {
         return eval(ctx.evaluator, new Value[] {v});
     }
 
-    public Value eval(Procedure p, Value[] args) {
+    public Value eval(Procedure p, Value[] args) throws SchemeException {
 	acc = p;
 	vlr = args;
         return interpret(APPEVAL);

@@ -1106,6 +1106,20 @@ public class Quantity extends Value {
         return new BigDecimal(0.0);
     }
 
+    public long longValue() {
+        switch (type) {
+        case FIXEDINT:
+            return val;
+        case DECIM:
+            return d.longValue();
+        case INTEG:
+            return i.longValue();
+        case RATIO:
+            return i.divide(de).longValue();
+        }
+        return 0;
+    }
+
     public int intValue() {
         switch (type) {
         case FIXEDINT:

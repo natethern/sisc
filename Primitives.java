@@ -60,7 +60,7 @@ public class Primitives extends ModuleAdapter {
            CEILING=18,      CHAR2INTEGER=19,        CHARACTERQ=20,
          CHARREADY=21,    CLOSEINPUTPORT=22,   CLOSEOUTPUTPORT=23,
           COMPLEXQ=24,              CONS=25,     CONTINUATIONQ=26,
-  	       COS=27,       CURRENTEVAL=28,               // <29>
+  	       COS=27,       CURRENTEVAL=28,               
   CURRENTINPUTPORT=30, CURRENTOUTPUTPORT=31,       CURRENTWIND=32,
        DENOMINATOR=33,           DISPLAY=34,               DIV=35,
       ENVIRONMENTQ=36,                EQ=37,             EQUAL=38,
@@ -85,8 +85,8 @@ public class Primitives extends ModuleAdapter {
             RATIOQ=90,              READ=91,          READCHAR=92,
           REALPART=93,         REMAINDER=94, REPORTENVIRONMENT=95,
              ROUND=96,            SETBOX=97,            SETCAR=98,
-            SETCDR=99,              SIN=100,             SQRT=101,
-    STRING2NUMBER=102,    STRING2SYMBOL=103,
+  	    SETCDR=99,              SIN=100,             SLEEP=29,
+	     SQRT=101,    STRING2NUMBER=102,    STRING2SYMBOL=103,            
                 STRING2UNINTERNEDSYMBOL=104,
      STRINGAPPEND=105,       STRINGFILL=106,     STRINGLENGTH=107,
           STRINGQ=108,        STRINGREF=109,        STRINGSET=110,
@@ -222,6 +222,7 @@ public class Primitives extends ModuleAdapter {
         define("set-cdr!", SETCDR);
         define("sin", SIN);
         define("sqrt", SQRT);
+	define("sleep", SLEEP);
         define("string->number", STRING2NUMBER);
         define("string->symbol", STRING2SYMBOL);
         define("string->uninterned-symbol", STRING2UNINTERNEDSYMBOL);
@@ -521,6 +522,11 @@ public class Primitives extends ModuleAdapter {
                 String f1=string(f.vlr[0]);
                 File fn=new File(f1);
                 return truth(fn.isAbsolute());
+	    case SLEEP:
+		try {
+		    Thread.sleep(num(f.vlr[0]).longValue());
+		} catch (InterruptedException ie) {}
+		return VOID;
             case PARENT_CONT:
                 return ((CallFrame)f.vlr[0]).parent;
             }

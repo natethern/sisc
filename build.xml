@@ -1,4 +1,6 @@
 <project name="sisc" default="all">
+  <property name="build.compiler" value="jikes" />
+
 
   <path id="classpath">
     <fileset dir="./lib">
