@@ -39,7 +39,7 @@ public class Library extends Util {
         for (int i=0; i<symtableLength; i++) {
             String s=di.readUTF();
             int ep=BinaryDeserializer.readBer(di);
-            names.put(Symbol.get(s), new Integer(ep));
+            names.put(Symbol.intern(s), new Integer(ep));
         }
 
         return new Library(libname, new BinaryDeserializer(di, classes, sharedObjectOffsets, sharedObjectSizes), names);
