@@ -342,6 +342,10 @@ public class Parser extends Util implements Tokens {
                 } else if (expr instanceof Pair) {
                     if (v==null)
                         v=new Value[length((Pair)expr)];
+                    else if (v.length < length((Pair)expr)) {
+                        warn("veclengthtooshort");
+                        v=new Value[length((Pair)expr)];
+                    }                        
                 } else if (expr!=null)
                     throw new IOException(liMessage(SISCB,"invalidsharp",
                                                     expr.toString()));
