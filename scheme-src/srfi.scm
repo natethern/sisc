@@ -1,7 +1,7 @@
 (native-module r5rs "sisc.modules.R5RS")
 
-(display "srfi-0 ")
-;;srfi-0 is loaded and imported by default
+(display "srfi-0 srfi-22 ")
+;;srfi-0, 22 is loaded and imported by default
 
 (display "srfi-8 ")
 (module srfi-8

@@ -481,3 +481,10 @@
   (include "../scheme-src/srfi/srfi-0.scm")
   (add-feature 'srfi-0))
 (import srfi-0)
+
+;;load and import srfi-22
+;; we support this directly so we don't have to load srfi.sll in scripts
+(module srfi-22 (srfi-22-prepare main main-hook)
+  (include "../scheme-src/srfi/srfi-22/srfi-22.scm")
+  (add-feature 'srfi-22))
+(import srfi-22)
