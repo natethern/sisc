@@ -74,8 +74,7 @@
              (string-append "file:"
                             (let ([dir (getprop 'user.dir
                                                 '*environment-variables*)])
-                              (if dir dir "."))
-                            _separator))))
+                              (if dir dir "."))))))
       (letrec ([console-in (if (null? args) (current-input-port)
                                (car args))]
 	       [console-out (if (null? args) (current-output-port)

@@ -158,7 +158,8 @@ public class GenerateHeap {
 
         r.define(Symbol.get("version"), new SchemeString(Util.VERSION), Util.SISC);
         Properties sysProps=System.getProperties();
-        for (Iterator ir=sysProps.keySet().iterator(); ir.hasNext();) {
+        Iterator ir;
+        for (ir=sysProps.keySet().iterator(); ir.hasNext();) {
             String key=(String)ir.next();
             Symbol s=Symbol.get(key);
             r.define(s, new SchemeString(sysProps.getProperty(key)),
@@ -169,12 +170,19 @@ public class GenerateHeap {
 
         for (; i<args.length; i++) {
             System.out.println("Expanding and compiling "+args[i]+"...");
-	    try {
-		r.eval((Procedure)r.ctx.toplevel_env.lookup(loadSymb),
-		       new Value[] {new SchemeString(args[i])});
-	    } catch (SchemeException se) {
-		System.err.println("Error during expand: "+se.getMessage());
-	    }
+            try {
+                r.eval((Procedure)r.ctx.toplevel_env.lookup(loadSymb),
+                       new Value[] {new SchemeString(args[i])});
+            } catch (SchemeException se) {
+                System.err.println("Error during expand: "+se.getMessage());
+            }
+        }
+        
+        //clearing env vars
+        for (ir=sysProps.keySet().iterator(); ir.hasNext();) {
+            String key=(String)ir.next();
+            Symbol s=Symbol.get(key);
+            r.define(s, Util.FALSE, Util.ENVVARS);
         }
 
         System.err.println("Partitioning bindings...");
@@ -190,7 +198,7 @@ public class GenerateHeap {
         top_level.name=Symbol.get("top-level");
                                                   
         r.defineContextEnv(Util.TOPLEVEL, top_level);
-	r.defineContextEnv(Util.REPORT, r5rs);
+        r.defineContextEnv(Util.REPORT, r5rs);
         r.defineContextEnv(Util.SISC_SPECIFIC, sisc_specific);
 
         System.out.println("Saving heap...");
