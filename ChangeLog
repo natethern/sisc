@@ -1,7 +1,10 @@
-2003-09-20  Matthias Radestock  <matthias@sorted.org>
+2003-09-21  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed k invocation bug introduced by a misguided "optimization"
 	  in release 1.8.1.
+
+	* Added back dynamic-wind unloading at end of heap build in order
+	  to improve performance.
 
 2003-09-18  Scott G. Miller  <scgmille@freenetproject.org>
 
@@ -9,8 +12,6 @@
 	  a fatal NullPointerException when continuations were incompletely 
 	  captured.
 	  
-2003-09-17  Scott G. Miller  <scgmille@freenetproject.org>
-
 	* Fixed bug in PARAMETERIZE - it was only allowing one expression
 	  in the body.
 

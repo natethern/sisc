@@ -750,3 +750,6 @@
 ;;
 (if (not (getprop 'LITE (get-symbolic-environment '*sisc*)))
     (load "../modules/std-modules.scm"))
+
+;;some init code (e.g. s2j) pulls in d/w
+(unload-dynamic-wind)
