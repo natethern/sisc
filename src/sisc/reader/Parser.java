@@ -3,7 +3,7 @@ package sisc.reader;
 import java.io.*;
 import java.util.*;
 
-import sisc.interpreter.Compiler;
+import sisc.compiler.*;
 import sisc.data.*;
 import sisc.util.Util;
 import sisc.io.InputPort;
@@ -197,8 +197,9 @@ public class Parser extends Util implements Tokens {
             return sym;
         case TT_SYMBOL:
             if (lexer.strictR5RS && !isPeculiarIdentifier(lexer.sval) &&
-                lexer.sval.length() > 1 &&
-                Lexer.in(lexer.sval.charAt(0), Lexer.number_prefixes)) 
+                lexer.sval.length() >= 1 &&
+                !(Character.isAlphabetic(lexer.sval.charAt(0)) ||
+                  Lexer.in(lexer.sval.charAt(0), Lexer.special_initials)))
                 throw new IOException(liMessage(SISCB, "invalididentifier",
                                                 lexer.sval));
             o=Symbol.get(lexer.sval, caseSensitive(flags));
@@ -277,7 +278,7 @@ public class Parser extends Util implements Tokens {
 			case '%': 
 				// Syntactic tokens
                 bv=lexer.readToBreak(is, Lexer.special, false, false).toLowerCase();
-                Compiler.Syntax s=(Compiler.Syntax)Compiler.SYNTACTIC_TOKENS.get(bv);
+                Syntax s=(Syntax)CompilerConstants.SYNTACTIC_TOKENS.get(bv);
                 if (s==null)
                 	throw new IOException(liMessage(SISCB, "invalidsyntoken", bv));
                 return s;				
