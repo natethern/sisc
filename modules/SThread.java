@@ -215,14 +215,17 @@ public class SThread extends ModuleAdapter {
     }
 
     public static class ThreadContext extends NamedValue implements Runnable {
-        protected Interpreter parent;
+        protected AppContext ctx;
+        protected DynamicEnv env;
 	protected Procedure thunk;
 	protected Thread thread;
 	protected int state;
 	Value rv;
 
         ThreadContext(Interpreter parent, Procedure thunk) {
-	    this.parent = parent;
+	    this.ctx = parent.ctx;
+            this.env = parent.dynenv.copy();
+            this.env.wind = FALSE;
 	    this.thunk = thunk;
 	    thread=new Thread(schemeThreads, this);
 	    state=READY;
@@ -248,9 +251,7 @@ public class SThread extends ModuleAdapter {
 	}
 
 	public void run() {
-            DynamicEnv newenv = parent.dynenv.copy();
-            newenv.wind = FALSE;
-	    Interpreter r = Context.enter(parent.ctx, newenv);
+	    Interpreter r = Context.enter(ctx, env);
 	    state=RUNNING;
 	    synchronized(this) {
 		this.notify();
