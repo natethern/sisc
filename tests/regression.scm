@@ -108,5 +108,14 @@
              (length (call-with-serial-input-file "test.ser"
                        (lambda (in)
                          (deserialize in))))))
-                    
-             
+
+;; Used to cause an error (couldn't serialize)
+(should-be 870468 "Hello, World!"
+           (let ()
+             (import serial-io)
+             (import s2j)
+             (let ([x (->jstring "Hello, World!")])
+               (call-with-serial-output-file "test.ser"
+                 (lambda (out) (serialize x out)))
+               (->string (call-with-serial-input-file "test.ser"
+                          (lambda (in) (deserialize in)))))))
