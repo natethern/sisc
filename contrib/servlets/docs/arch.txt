@@ -1,19 +1,16 @@
 SchemeAppServlet has the following init parameters
 * app-name
 * heap-file
-* base-dir (optional)
 * init-expr
 * destroy-expr (optional)
+* repl-port (optional)
+* repl-host (optional)
 
 SchemeAppServlet is responsible for initialising a scheme
 application. When it's init() method is called it establishes an
 application context of the given name and loads the specified heap
 into it. The heap-file is loaded from a location relative to the
 servlet context root.
-
-The base-dir is used for resolving all relative filenames, e.g. in
-load. It defaults to the servlet context root and is otherwise
-relative to it.
 
 Typically there would be *one* SchemeAppServlet per web app and it
 would be loaded when the web app starts up. There is nothing stopping
@@ -34,16 +31,28 @@ the servlet object as a parameter. Ditto for destroy-expr, which gets
 evaluated and the resulting function called when the servlet's
 destroy() method is called.
 
+The current directory which is active during the evaluation of
+init-expr and destroy-expr is the servlet context root, which means
+relative file names in load etc are resolved relative to it.
+
+If repl-port is specified, the servlet creates a thread listening for
+connections on that port. New connections spawn a thread with a
+Read-Eval-Print-Loop running in the servlet's Scheme
+application, i.e. connecting to the port via, say, telnet will present
+you with a SISC prompt just as if you were running SISC from the
+command line except that all expressions are evaluated within the
+context of the servlet's Scheme application.
+
+Specifying repl-host forces the the listening port to be bound to a
+specific IP address.
+
+
 SchemeServlet has the following init parameters:
 * app-name
 * init-expr
 * destroy-expr (optional)
 
-init-expr is evaluated by the servlet's init() method and must yield a
-function. init() then calls that function with the servlet object as a
-parameter. Ditto for destroy-expr, which gets evaluated and the
-resulting function called when the servlet's destroy() method is
-called.
+init-expr and destroy-expr behave as described above.
 
 The servlet object has public slots deleteFn, getFn, putFn, postFn,
 which are intially all set to null, indicating that the default

@@ -3,11 +3,14 @@ package sisc.contrib.servlets;
 import javax.servlet.http.*;
 import javax.servlet.*;
 import java.io.*;
+import java.net.*;
 
 import sisc.*;
 import sisc.data.*;
 
 public class SchemeAppServlet extends SchemeServletBase {
+
+    SocketListener socketListener = null;
 
     public void init()
         throws ServletException {
@@ -26,6 +29,27 @@ public class SchemeAppServlet extends SchemeServletBase {
         }
         String initExpr = getInitParameter("init-expr");
         evalExpr(initExpr);
+
+        String port = getInitParameter("repl-port");
+        if (port == null) return;
+        InetAddress bindAddr = null;
+        String host = getInitParameter("repl-host");
+        if (host != null) {
+            try {
+                bindAddr = InetAddress.getByName(host);
+            } catch (UnknownHostException e) {
+                throw new ServletException("unable to bind to host " + host, e);
+            }
+        }
+        try {
+            ServerSocket ssocket = new ServerSocket(Integer.parseInt(port),
+                                                    50,
+                                                    bindAddr);
+            socketListener = new SocketListener(appName, ssocket);
+            socketListener.start();
+        } catch (IOException e) {
+            throw new ServletException("unable to listen", e);
+        }
     }
 
     public void destroy() {
@@ -34,6 +58,13 @@ public class SchemeAppServlet extends SchemeServletBase {
             evalExpr(destroyExpr);
         } catch (ServletException e) {
             throw new RuntimeException(e);
+        }
+        if (socketListener != null) {
+            socketListener.interrupt();
+            try {
+                socketListener.ssocket.close();
+            } catch (IOException e) {}
+            socketListener = null;
         }
     }
 
@@ -103,6 +134,24 @@ public class SchemeAppServlet extends SchemeServletBase {
             Context.exit();
         }
         
+    }
+}
+
+class SocketListener extends Thread {
+
+    public ServerSocket ssocket;
+    public String appName;
+
+    SocketListener(String appName, ServerSocket ssocket) {
+        this.appName = appName;
+        this.ssocket = ssocket;
+    }
+
+    public void run() {
+        try {
+            REPL.SocketREPL.listen(appName, ssocket);
+            ssocket.close();
+        } catch (IOException e) {}
     }
 }
 

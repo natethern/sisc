@@ -70,6 +70,6 @@
           description="Generate Documentation"/>
 
   <target name="all" depends="jars,docs"
-          description="Build lite edition">
+          description="Build everything">
   </target>
 </project>
