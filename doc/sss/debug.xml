@@ -55,7 +55,7 @@
       <para>
         &procedure;
         <methodsynopsis language="scheme">
-          <type>void</type>
+          <void/>
           <methodname>stack-trace</methodname>
           <methodparam><parameter>error-record</parameter>
           </methodparam>

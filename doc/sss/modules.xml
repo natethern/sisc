@@ -264,7 +264,7 @@
           <para>
             <methodsynopsis language="java">
               <modifier>public</modifier>
-              <type>void</type>
+              <void/>
               <methodname>define</methodname>        
               <methodparam>
                 <type>String</type>
@@ -307,7 +307,7 @@
           <para>
             <methodsynopsis language="java">
               <modifier>public</modifier>
-              <type>void</type>
+              <void/>
               <methodname>serialize</methodname>
               <methodparam>
                 <type>sisc.Serializer</type>
@@ -329,7 +329,7 @@
           <para>
             <methodsynopsis language="java">
               <modifier>public</modifier>
-              <type>void</type>
+              <void/>
               <methodname>deserialize</methodname>
               <methodparam>
                 <type>sisc.Serializer</type>
@@ -398,7 +398,7 @@
             </blockquote>
             <methodsynopsis language="java">
               <modifier>public</modifier>
-              <type>void</type>
+              <void/>
               <methodname>writeBer</methodname>
               <methodparam>
                 <type>long</type>
@@ -418,7 +418,7 @@
             </blockquote>
             <methodsynopsis language="java">
               <modifier>public</modifier>
-              <type>void</type>
+              <void/>
               <methodname>serialize</methodname>
               <methodparam>
                 <type>sisc.Expression</type>

@@ -1046,6 +1046,53 @@ Context.exit()
           identity.
         </para>
       </sect3>
+      <sect3>
+        <title>Assignment</title>
+        <para>
+          Internally, Java objects are represented by a special Scheme
+          object containing a reference to the Java object. It is
+          possible to create these objects explicitly and to assign
+          one to another.
+        </para>
+        <blockquote>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>jobj</type>
+              <methodname>java-new</methodname>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates a new Scheme object, initially representing
+                the <literal>null</literal> Java object.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <void/>
+              <methodname>java-set!</methodname>
+              <methodparam><parameter>jobj1</parameter></methodparam>
+              <methodparam><parameter>jobj2</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Makes <parameter>jobj1</parameter> refer to the same
+                Java object as <parameter>jobj2</parameter>.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+        <para>
+          For convenience there is a constant <literal>jnull</literal>
+          that represents the java <literal>null</literal>
+          object. Note however that the object isn't truly constant,
+          i.e. it is actually possible to make it refer to another
+          Java object using <literal>java-set!</literal>. Doing so is
+          not recommended, for obvious reasons.
+        </para>
+      </sect3>
       <sect3 id="JavaProxies">
         <title>Proxies</title>
         <para>
