@@ -93,20 +93,6 @@
 	    compared according to locale rules (bug &num;493773)
 	  </para>
 	</listitem>
-        <listitem>
-          <para>            
-            (<xref linkend="system-properties"/>) The
-            <literal>emitannotations</literal> property is not yet
-            supported by &SISC; at the time of this writing.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            (<xref linkend="system-properties"/>) The
-            <literal>heapfile</literal> property is actually named
-            <literal>HEAP</literal> in current releases of &SISC;.
-          </para>
-        </listitem>
       </orderedlist>
     </para>
   </appendix>
