@@ -2,7 +2,11 @@
 
 	* Introduced <top> and <bot> types for generic procedures
 
-	* Fixed problem with passing jnull as an argument
+	* Fixed problem with passing jnull as an argument to generic
+	  procedures
+
+	* Fixed generic procedure type system so that java classes are
+	  recognized as instances of jclass
 
 2002-09-26  Matthias Radestock  <matthias@sorted.org>
 

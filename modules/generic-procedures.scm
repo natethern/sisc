@@ -53,6 +53,7 @@
 
 (define <bot> (void))
 (define <top> (void))
+(define <java.lang.Class> (java/class '|java.lang.Class|))
 
 (define (type-of o)
   (cond ((class? o) (meta o))
@@ -66,9 +67,12 @@
 (define (type<= x y)
   (cond ((eq? x <bot>) #t)
         ((eq? y <top>) #t)
-        ((or (meta? x) (meta? y))
-         (and (meta? x) (meta? y)
-              (type<= (meta-type x) (meta-type y))))
+        ((and (meta? x) (meta? y))
+         (type<= (meta-type x) (meta-type y)))
+        ((meta? x)
+         (and (java/class? (meta-type x))
+              (eq? y <java.lang.Class>)))
+        ((meta? y) #f)
         ((or (java/class? x) (java/class? y))
          ;;we need this special case because the cpl of primitive
          ;;types does not contain their corresponding java.lang
