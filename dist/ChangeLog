@@ -1,3 +1,11 @@
+2002-05-02  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Fixed bugs in Quantity that were precluding the largest
+	  and smallest fixed integers from being stored as such.
+
+	* Fixed a bug in Quantity that was causing ashl/ashr to accept
+          non-integers.
+
 2002-05-02  Matthias Radestock  <matthias@sorted.org>
 
 	* Added capability to define multiple generic Java procedures
