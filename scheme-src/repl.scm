@@ -43,59 +43,63 @@
 				    (value . ,message))))))
 
 (define _separator (void))
+(define _exit-handler (parameterize))
+
 (define repl
   (letrec ([repl-loop
-	    (lambda (console-in console-out writer)
-	      (display "> " console-out)
-	      (let* ([exp (read-with-annotations console-in #t)]
-		     [val (eval exp)])
-		(cond [(void? val) (repl-loop console-in console-out writer)]
-		      [(circular? val)
-		       (begin 
-			 (display "{Refusing to print non-terminating structure}")
-			 (newline)
-			 (repl-loop console-in console-out writer))]
-		      [else 
-		       (begin 
-			 (writer val console-out)
-			 (newline console-out)
-			 (repl-loop console-in console-out writer))])))])
+            (lambda (console-in console-out writer)
+              (display "> " console-out)
+              ;;read
+              (let ([exp (read-with-annotations console-in #t)])
+                (if (eof-object? exp)
+                    (void)
+                    ;;eval
+                    (let ([val (eval exp)])
+                      ;;print
+                      (cond [(void? val) (void)]
+                            [(circular? val)
+                             (begin
+                           (display "{Refusing to print non-terminating structure}"
+                                    console-out)
+                           (newline console-out))]
+                            [else
+                             (begin
+                               (writer val console-out)
+                               (newline console-out))])
+                      ;;loop
+                      (repl-loop console-in console-out writer)))))])
     (lambda args
-      (let ([repl-start #f])
-	(if (not (getprop 'first-start '*sisc*))
-	    (begin
-	      (putprop 'first-start '*sisc* #t)
-	      (unload-dynamic-wind)
-	      (set! _separator (getprop 'file.separator '*environment-variables*))
-	      (current-url
-	       (string-append "file:"
-			      (let ([dir (getprop 'user.dir
-						  '*environment-variables*)])
-				(if dir
-				    (string-append dir _separator)
-				    "."))))))
-	(letrec ([console-in (if (null? args) (current-input-port)
-				 (car args))]
-		 [console-out (if (null? args) (current-output-port)
-				  (cadr args))])
-	  (call/cc 
-	   (lambda (k)
-	     (putprop 'exit-handler '*sisc* (parameterize k))
-	     (begin
-	       (call/cc 
-		(lambda (k)
-		  (set! repl-start k)))
-	       (let loop ()
-		 (call/fc
-		  (lambda ()
-		    (repl-loop console-in console-out pretty-print)
-		    (void))
-		  (lambda (m e f)
-		    ((current-default-error-handler) m e f console-out)
-		    (loop)))))))
-	  (if ((current-exit-handler))
-	      (void)
-	      (repl-start)))))))
+      (if (not (getprop 'first-start '*sisc*))
+          (begin
+            (putprop 'first-start '*sisc* #t)
+            (unload-dynamic-wind)
+            (set! _separator (getprop 'file.separator '*environment-variables*))
+            (current-url
+             (string-append "file:"
+                            (let ([dir (getprop 'user.dir
+                                                '*environment-variables*)])
+                              (if dir
+                                  (string-append dir _separator)
+                                  "."))))))
+      (let ([console-in (if (null? args) (current-input-port) (car args))]
+            [console-out (if (null? args) (current-output-port) (cadr args))]
+            [repl-start #f])
+        (call/cc (lambda (k) (set! repl-start k)))
+        (call/cc 
+         (lambda (k)
+           (_exit-handler k)
+           (let loop ()
+             (call/fc
+              (lambda ()
+                (repl-loop console-in console-out pretty-print)
+                (void))
+              (lambda (m e f)
+                ((current-default-error-handler) m e f console-out)
+                (loop))))))
+        (if ((current-exit-handler))
+            (void)
+            (repl-start))))))
 
 (define (exit)
-  (((getprop 'exit-handler '*sisc*)) (void)))
+  (let ([k (_exit-handler)])
+    (if k (k))))
