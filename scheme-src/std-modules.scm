@@ -44,13 +44,35 @@
 (native-module threading-module "sisc.modules.SThread")
 (native-module debug-module "sisc.modules.SDebug")
 (native-module s2j-module "sisc.modules.S2J")
+(native-module hashtable-module "sisc.modules.SHashtable")
 
+(module hashtable
+  (make-hashtable
+   hashtable?
+   hashtable/put!
+   hashtable/get
+   hashtable/remove!
+   hashtable/clear!
+   hashtable->alist
+   alist->hashtable
+   hashtable/keys
+   hashtable/for-each
+   hashtable/map)
+  (import hashtable-module)
+  ;;The following are quite inefficient. To get around that we'd have
+  ;;to expose java collection iterators.
+  (define (hashtable/for-each proc ht)
+    (for-each (lambda (x) (proc (car x) (cdr x))) (hashtable->alist ht)))
+  (define (hashtable/map proc ht)
+    (map (lambda (x) (proc (car x) (cdr x))) (hashtable->alist ht))))
+  
 (module generic-functions 
   ((define-generic generic-function)
    (define-method add-method generic-function-name)
    (define-constructor add-constructor)
    make)
   (import s2j-module)
+  (import hashtable)
   (include "../modules/generic-functions.scm"))
 
 (module s2j

@@ -26,41 +26,40 @@
 ;;by which methods are stored / looked up. We do this so that all
 ;;generic functions share the same pool of methods that gets
 ;;constructed incrementally as we learn about java classes.
-(define *FUNCTIONS* '())
+(define *FUNCTIONS* (make-hashtable))
 (define (add-generic-function f name)
-  (set! *FUNCTIONS* (cons (cons f name) *FUNCTIONS*)))
+  (*FUNCTIONS* f (cons f name)))
 (define (generic-function-name f)
-  (let ([n (assq f *FUNCTIONS*)])
+  (let ([n (*FUNCTIONS* f)])
     (if n
         (cdr n)
         (error "~a is not a generic function" f))))
 ;;we keep track of all the classes whose methods we have already
 ;;incorporated into the *METHODS* table below
-(define *CLASSES* '())
-;;This is an association list. The CARs are method names and the CDRs
-;;are lists of methods, ordered by their "specificity", i.e. methods
+(define *CLASSES* (make-hashtable))
+;;This maps function names to lists of methods
+;;ordered by their "specificity", i.e. methods
 ;;appearing earlier in the list are almost more specific or
 ;;incomparable (i.e. neither less or more specific) than methods
 ;;appearing later.
 ;;Methods are represented by a pair with the CAR containing the method
 ;;object and the CDR containing the type signature, i.e. a list of
 ;;types (one for each parameter).
-(define *METHODS* '())
+(define *METHODS* (make-hashtable))
 (define (get-methods name)
-  (let ([m (assq name *METHODS*)])
+  (let ([m (*METHODS* name)])
     (or m (let ([m (cons name '())])
-            (set! *METHODS* (cons m *METHODS*))
+            (*METHODS* name m)
             m))))
-;;This is an association list. The CARs are classes and the CDRs are
-;;lists of constructors ordered by their "specificity".
+;;This maps classes to lists of constructors ordered by their "specificity".
 ;;Constructors are represented by a pair with the CAR containing the
 ;;constructor object and the CDR containing the type signature, i.e. a
 ;;list of types (one for each parameter);
-(define *CONSTRUCTORS* '())
+(define *CONSTRUCTORS* (make-hashtable))
 (define (get-constructors class)
-  (let ([c (assq class *CONSTRUCTORS*)])
+  (let ([c (*CONSTRUCTORS* class)])
     (or c (let ([c (cons class '())])
-            (set! *CONSTRUCTORS* (cons c *CONSTRUCTORS*))
+            (*CONSTRUCTORS* class c)
             c))))
 ;;mangle java method names so they look a bit more like scheme
 ;;function names
@@ -140,9 +139,8 @@
                      (get-constructors class)))
 (define (add-class class)
   (if (and (not (java/null? class))
-           (not (memq class *CLASSES*)))
+           (not (*CLASSES* class #t)))
       (begin
-        (set! *CLASSES* (cons class *CLASSES*))
         (add-class (java/superclass class))
         (for-each add-class (vector->list (java/interfaces class)))
         (for-each (lambda (c)
@@ -162,6 +160,7 @@
                                        (java/parameter-types m)))
                                 #f))
                   (vector->list (java/decl-methods class))))))
+
 (define (find-method genf args methods)
   (or (find-normal-method genf args methods)
       (find-static-method genf args methods)))
@@ -218,6 +217,7 @@
             genf
             args
             (cdr methods))))))
+
 (define (generic-function name)
   (let ([methods (get-methods name)])
     (define (genf . args)

@@ -313,6 +313,10 @@ public class S2J extends ModuleAdapter {
             return b.toString();
         }
 
+        public int hashCode() {
+            return obj.hashCode();
+        }
+
         public boolean eq(Object v) {
             return super.eq(v) || (v instanceof JavaObject
                                    && ((JavaObject)v).obj == obj);

@@ -1,3 +1,9 @@
+2002-02-24  Matthias Radestock  <matthias@sorted.org>
+
+	* Added hashtable module.
+
+	* Changed S2J module to use hashtables instead of alists
+
 2002-02-20  Matthias Radestock  <matthias@sorted.org>
 
 	* Made various tweaks to improve performance. Overall gain is ~7%
