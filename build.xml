@@ -71,6 +71,7 @@
     <delete file="${docdir}/sss/style.xsl"/>
     <delete file="${basedir}/${basejar}"/>
     <delete file="${basedir}/${optjar}"/>
+    <delete file="${basedir}/${libjar}"/>
     <delete file="${basedir}/${heapjar}"/>
     <delete file="${heap}"/>
     <delete file="${quantitydir}/Quantity.java"/>
