@@ -1,3 +1,5 @@
+2004-01-04  Released SISC 1.8.6-rc
+
 2004-01-04  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed serialization of Java Objects from serial ports.
