@@ -6,7 +6,7 @@
                                            (strict-r5rs-compliance))))))))
                                            
 (define (opt:optimize e)
-  (let-values ([(rv state) (scan e '() '())])
+  (let-values ([(rv state) (opt e (scan e '() ()))])
     rv))
 
 (define (opt e state)
