@@ -79,13 +79,6 @@ public class Quantity extends Value {
 	return new Quantity(v, radix);
     }
 
-    static {
-        String x=System.getProperty("minprecision");
-        String y=System.getProperty("maxprecision");
-        min_precision=(x==null ? 16 : Integer.parseInt(x));
-        max_precision=(y==null ? 32 : Integer.parseInt(y));
-    }
-
     public final static BigInteger
 	_BI_NEGONE=BigInteger.valueOf(-1),
 	_BI_ZERO = BigInteger.valueOf(0),
