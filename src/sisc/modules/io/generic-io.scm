@@ -1,7 +1,7 @@
-(define-generics gio/peek-char gio/read-char gio/char-ready?
-  gio/flush-output-port gio/write-char gio/write-block
-  gio/read-block gio/read-string gio/write-string gio/close
-  gio/write gio/display gio/read gio/read-code
+(define-generics gio/char-ready? gio/peek-char
+  gio/read gio/read-char gio/read-block gio/read-string gio/read-code
+  gio/write gio/write-char gio/write-block gio/write-string
+  gio/display gio/flush-output-port gio/close
   open-character-input-port open-character-output-port)
 
 ; Define the native types
@@ -28,21 +28,21 @@
      (if (null? portarg) (current-output-port) (car portarg)))))
 
 ; First, save the original functions
-(define native-peek-char   (getprop 'peek-char))
-(define native-read-char   (getprop 'read-char))
-(define native-char-ready? (getprop 'char-ready?))
-(define native-read-string (getprop 'read-string))
-(define native-read-code   (getprop 'read-code))
-(define native-read        (getprop 'read))
-(define native-display     (getprop 'display))
-(define native-write       (getprop 'write))
-(define native-write-char  (getprop 'write-char))
-(define native-write-string (getprop 'write-string))
-(define native-open-input-file (getprop 'open-input-file))
+(define native-char-ready?      (getprop 'char-ready?))
+(define native-peek-char        (getprop 'peek-char))
+(define native-read             (getprop 'read))
+(define native-read-char        (getprop 'read-char))
+(define native-read-string      (getprop 'read-string))
+(define native-read-code        (getprop 'read-code))
+(define native-write            (getprop 'write))
+(define native-write-char       (getprop 'write-char))
+(define native-write-string     (getprop 'write-string))
+(define native-display          (getprop 'display))
+(define native-flush-output-port (getprop 'flush-output-port))
+(define native-open-input-file  (getprop 'open-input-file))
 (define native-open-output-file (getprop 'open-output-file))
 (define native-close-input-port (getprop 'close-input-port))
 (define native-close-output-port (getprop 'close-output-port))
-(define native-flush-output-port (getprop 'flush-output-port))
 
 (define set-filter-in!)
 (define set-filter-out!)
@@ -56,8 +56,7 @@
 (define open-binary-output-file
   (let ([ioproc (make-io-proc native-open-binary-output-file)])
     (lambda args
-      (make <native-output-port>
-        (apply ioproc args)))))
+      (make <native-output-port> (apply ioproc args)))))
 
 (define (open-input-file . args)
   (make <native-character-input-port> (apply native-open-input-file args)))
@@ -68,29 +67,26 @@
       (make <native-input-port>
         (apply ioproc args)))))
 
-(define (read . port)
-  (gio/read (inport port)))
+(define (char-ready? . port)
+  (gio/char-ready? (inport port)))
 
 (define (peek-char . port)
   (gio/peek-char (inport port)))
 
+(define (read . port)
+  (gio/read (inport port)))
+
 (define (read-char . port)
   (gio/read-char (inport port)))
-
-(define (read-code . port)
-  (gio/read-code (inport port)))
-
-(define (char-ready? . port)
-  (gio/char-ready? (inport port)))
-
-(define (read-string string offset length . port)
-  (gio/read-string string offset length (inport port)))
 
 (define (read-block buffer offset length . port)
   (gio/read-block buffer offset length (inport port)))
 
-(define (display v . port)
-  (gio/display v (outport port)))
+(define (read-string string offset length . port)
+  (gio/read-string string offset length (inport port)))
+
+(define (read-code . port)
+  (gio/read-code (inport port)))
 
 (define (write v . port)
   (gio/write v (outport port)))
@@ -98,11 +94,14 @@
 (define (write-char char . port)
   (gio/write-char char (outport port)))
 
+(define (write-block buf offset length . port)
+  (gio/write-block buf offset length (outport port)))
+
 (define (write-string str offset length . port)
   (gio/write-string str offset length (outport port)))
 
-(define (write-block buf offset length . port)
-  (gio/write-block buf offset length (outport port)))
+(define (display v . port)
+  (gio/display v (outport port)))
 
 (define (flush-output-port . port)
   (gio/flush-output-port (outport port)))
@@ -140,42 +139,66 @@
 (define-method (initialize (<filter-output-port> i) (<value> parent-i))
   (:out! i parent-i))
 
-(define-method (gio/read (<filter-input-port> i))
-  (gio/read (:in i)))
+(define-method (gio/char-ready? (<filter-input-port> i))
+  (gio/char-ready? (:in i)))
 
 (define-method (gio/peek-char (<filter-input-port> i))
   (gio/peek-char (:in i)))
 
+(define-method (gio/read (<filter-input-port> i))
+  (gio/read (:in i)))
+
 (define-method (gio/read-char (<filter-input-port> i))
   (gio/read-char (:in i)))
+
+(define-method (gio/read-block (<sisc.modules.io.buffer> buffer)
+                               (<number> offset)
+                               (<number> length)
+                               (<filter-input-port> i))
+  (gio/read-block buffer offset length (:in i)))
+
+(define-method (gio/read-string (<string> string)
+                                (<number> offset)
+                                (<number> length)
+                                (<filter-input-port> i))
+  (gio/read-string string offset length (:in i)))
 
 (define-method (gio/read-code (<filter-input-port> i))
   (gio/read-code (:in i)))
 
-(define-method (gio/char-ready? (<filter-input-port> i))
-  (gio/char-ready? (:in i)))
-
-(define-method (gio/read-string (<string> string) (<number> length)
-                                (<filter-input-port> i))
-  (gio/read-string string length (:in i)))
+(define-method (gio/write (<value> v) (<filter-output-port> o))
+  (gio/write v (:out o)))
 
 (define-method (gio/write-char (<char> c) (<filter-output-port> o))
   (gio/write-char c (:out o)))
 
 (define-method (gio/write-block (<sisc.modules.io.buffer> b)
-                                (<number> off) (<number> count)
+                                (<number> off)
+                                (<number> count)
                                 (<filter-output-port> o))
   (gio/write-block b off count (:out o)))
 
 (define-method (gio/write-string (<string> s)
-                                 (<number> off) (<number> count)
+                                 (<number> off)
+                                 (<number> count)
                                  (<filter-output-port> o))
   (gio/write-string s off count (:out o)))
 
-(define-method (gio/write-char (<char> c) (<filter-output-port> o))
-  (gio/write-char c (:out o)))
+(define-method (gio/display (<value> v) (<filter-output-port> o))
+  (gio/display v (:out o)))
+
+(define-method (gio/flush-output-port (<filter-output-port> o))
+  (gio/flush-output-port (:out o)))
+
+(define-method (gio/close (<filter-input-port> i))
+  (close-input-port (:in i)))
+
+(define-method (gio/close (<filter-output-port> i))
+  (flush-output-port i)
+  (close-output-port (:out i)))
 
 ; Native port classes
+; Finally, add back the R5RS function logic
 
 (define-method (initialize (<native-input-port> i)
                            (<sisc.data.scheme-input-port> parent-i))
@@ -185,44 +208,17 @@
                            (<sisc.data.scheme-output-port> parent-i))
   (:out! i parent-i))
 
-; Finally, add back the R5RS function logic
-
-(define-method (gio/read (<sisc.data.scheme-input-port> i))
-  (native-read i))
-
-(define-method (gio/read (<filter-input-port> i))
-  (gio/read (:in i)))
+(define-method (gio/char-ready? (<sisc.data.scheme-input-port> i))
+  (native-char-ready? i))
 
 (define-method (gio/peek-char (<sisc.data.scheme-input-port> i))
   (native-peek-char i))
 
+(define-method (gio/read (<sisc.data.scheme-input-port> i))
+  (native-read i))
+
 (define-method (gio/read-char (<sisc.data.scheme-input-port> i))
   (native-read-char i))
-
-(define-method (gio/read-char (<filter-input-port> i))
-  (gio/read-char (:in i)))
-
-(define-method (gio/read-code (<sisc.data.scheme-input-port> i))
-  (native-read-code i))
-
-(define-method (gio/read-code (<filter-input-port> i))
-  (gio/read-code (:in i)))
-
-(define-method (gio/char-ready? (<sisc.data.scheme-input-port> i))
-  (native-char-ready? i))
-
-(define-method (gio/char-ready? (<filter-input-port> i))
-  (gio/char-ready? (:in i)))
-
-(define-method (gio/read-string (<string> string)
-                                (<number> offset) (<number> length)
-                                (<sisc.data.scheme-input-port> i))
-  (native-read-string string offset length (:in i)))
-
-(define-method (gio/read-string (<string> string)
-                                (<number> offset) (<number> length)
-                                (<filter-input-port> i))
-  (gio/read-string string offset length (:in i)))
 
 (define-method (gio/read-block (<sisc.modules.io.buffer> buffer)
                                (<number> offset)
@@ -230,68 +226,44 @@
                                (<sisc.data.scheme-input-port> i))
   (native-read-block buffer offset length i))
 
-(define-method (gio/read-block (<sisc.modules.io.buffer> buffer)
-                               (<number> offset)
-                               (<number> length)
-                               (<filter-input-port> i))
-  (gio/read-block buffer offset length (:in i)))
+(define-method (gio/read-string (<string> string)
+                                (<number> offset)
+                                (<number> length)
+                                (<sisc.data.scheme-input-port> i))
+  (native-read-string string offset length i))
 
-(define-method (gio/write-char (<char> c) (<sisc.data.scheme-output-port> o))
-  (native-write-char c o))
-
-(define-method (gio/write-char (<char> c) (<filter-output-port> o))
-  (gio/write-char c (:out o)))
+(define-method (gio/read-code (<sisc.data.scheme-input-port> i))
+  (native-read-code i))
 
 (define-method (gio/write (<value> v) (<sisc.data.scheme-output-port> o))
   (native-write v o))
 
-(define-method (gio/write (<value> v) (<filter-output-port> o))
-  (gio/write v (:out o)))
+(define-method (gio/write-char (<char> c) (<sisc.data.scheme-output-port> o))
+  (native-write-char c o))
+
+(define-method (gio/write-block (<sisc.modules.io.buffer> b)
+                                (<number> off)
+                                (<number> count)
+                                (<sisc.data.scheme-output-port> o))
+  (native-write-block b off count o))
+
+(define-method (gio/write-string (<string> s)
+                                 (<number> off)
+                                 (<number> count)
+                                 (<sisc.data.scheme-output-port> o))
+  (native-write-string s off count o))
 
 (define-method (gio/display (<value> v) (<sisc.data.scheme-output-port> o))
   (native-display v o))
 
-(define-method (gio/display (<value> v) (<filter-output-port> o))
-  (gio/display v (:out o)))
-
-(define-method (gio/write-string (<string> s)
-                                 (<number> off) (<number> count)
-                                 (<sisc.data.scheme-output-port> o))
-  (native-write-string s off count o))
-
-(define-method (gio/write-block (<sisc.modules.io.buffer> b)
-                                (<number> off) (<number> count)
-                                (<filter-output-port> o))
-  (gio/write-block b off count (:out o)))
-
-(define-method (gio/write-block (<sisc.modules.io.buffer> b)
-                                (<number> off) (<number> count)
-                                (<sisc.data.scheme-output-port> o))
-  (native-write-block b off count o))
-
-(define-method (gio/write-block (<sisc.modules.io.buffer> b)
-                                (<number> off) (<number> count)
-                                (<filter-output-port> o))
-  (gio/write-block b off count (:out o)))
-
 (define-method (gio/flush-output-port (<sisc.data.scheme-output-port> o))
   (native-flush-output-port o))
-
-(define-method (gio/flush-output-port (<filter-output-port> o))
-  (gio/flush-output-port (:out o)))
 
 (define-method (gio/close (<sisc.data.scheme-output-port> o))
   (native-close-output-port o))
 
 (define-method (gio/close (<sisc.data.scheme-input-port> i))
   (native-close-input-port i))
-
-(define-method (gio/close (<filter-input-port> i))
-  (close-input-port (:in i)))
-
-(define-method (gio/close (<filter-output-port> i))
-  (flush-output-port i)
-  (close-output-port (:out i)))
 
 ; And a couple of utility methods
 
