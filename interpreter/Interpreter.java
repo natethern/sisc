@@ -33,7 +33,7 @@ public class Interpreter extends Util {
                                              v.values.length>2 ? 
                                              proc(v.values[2]) :
                                              //This really shouldn't ever happen, but it seems possible at the very top of stacks for some reason
-                                             r.fk);
+                                             (r.fk == null ? proc(v.values[1]) : r.fk));
         }
 
         public Value express() {
