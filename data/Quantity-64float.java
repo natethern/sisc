@@ -11,10 +11,7 @@ public class Quantity extends Value {
 	String y=System.getProperty("maxprecision");
 	min_precision=(x==null ? 16 : Integer.parseInt(x));
 	max_precision=(y==null ? 32 : Integer.parseInt(y));
-    }
-
-    public static String reportLibraryType() {
-	return "Quantity-lib: 64 bit floating point";
+	System.err.println("Quantity-lib: 64 bit floating point");
     }
 
     public final static BigInteger 

@@ -330,31 +330,50 @@
 	     (cons (apply proc (map1 car lists)) '()) 
 	     (map1 cdr lists)))))) 
    '#f))
-(define list?
+(define circular?
   ((lambda (list-h?)
-     ((lambda (%_23)
+     ((lambda (%_14)
         (begin
-          (set! list-h? %_23)
+          (set! list-h? %_14)
           ((lambda ()
              (lambda (lsc)
                (if (pair? lsc) (list-h? lsc (cdr lsc)) '#f))))))
       (lambda (lsp1 lsp2)
-        ((lambda (t)
-           (if t
-             t
-             ((lambda (t)
-                (if t
-                  t
-                  ((lambda (t)
-                     (if t
-                       t
-                       (if (not (eq? lsp1 lsp2))
-                         (list-h? (cdr lsp1) (cddr lsp2))
-                         '#f)))
-                   (null? (cdr lsp2)))))
-              (null? lsp2))))
-         (null? lsp1)))))
+        (if ((lambda (t) (if t t (null? lsp2))) (null? lsp1))
+          '#f
+          (if (if (pair? lsp2) (null? (cdr lsp2)) '#f)
+            '#f
+            (if (not (pair? lsp2))
+              '#f
+              (if (eq? lsp1 lsp2)
+                '#t
+                (list-h? (cdr lsp1) (cddr lsp2)))))))))
    '#f))
+(define list?
+  ((lambda (list-h)	
+     (begin	
+       (set! list-h
+	     (lambda (lsp1 lsp2)
+	       (if (pair? lsp2)
+		   ((lambda (%_279)
+		      (if %_279
+			  %_279
+			  ((lambda (%_280)
+			     (if %_280
+				 %_280
+				 ((lambda (%_281)
+				    (if %_281
+					%_281
+					(if (not (eq? lsp1 lsp2))
+					    (list-h (cdr lsp1) (cddr lsp2))
+					    '#f)))
+				  (null? (cdr lsp2)))))
+			   (null? lsp2))))
+		    (null? lsp1))
+		   '#f)))
+       (lambda (ls)
+	 (if (pair? ls) (list-h ls (cdr ls)) '#f))))
+   #f))
 (define expt
   (lambda (base exponent)
     (if (if (integer? exponent) (= base '2) '#f)

@@ -275,14 +275,29 @@
 	  (map1 proc ls)
 	  (iter proc (cons ls lses) () ())))))
 
+(define circular? 
+  (letrec [(list-h? 
+	    (lambda (lsp1 lsp2)
+	      (cond [(or (null? lsp1)
+			 (null? lsp2)) #f]
+		    [(and (pair? lsp2)
+			  (null? (cdr lsp2))) #f]
+		    [(not (pair? lsp2)) #f]
+		    [(eq? lsp1 lsp2) #t]
+		    [else (list-h? (cdr lsp1) (cddr lsp2))])))]
+   (lambda (lsc)
+     (and (pair? lsc) (list-h? lsc (cdr lsc))))))
+
 (define list? 
   (letrec [(list-h? 
              (lambda (lsp1 lsp2)
-	       (or (null? lsp1)
-		   (null? lsp2)
-		   (null? (cdr lsp2))
-		   (and (not (eq? lsp1 lsp2))
-			(list-h? (cdr lsp1) (cddr lsp2))))))]
+	       (and 
+		(pair? lsp2)
+		(or (null? lsp1)
+		    (null? lsp2)
+		    (null? (cdr lsp2))
+		    (and (not (eq? lsp1 lsp2))
+			 (list-h? (cdr lsp1) (cddr lsp2)))))))]
    (lambda (lsc)
      (and (pair? lsc) (list-h? lsc (cdr lsc))))))
 

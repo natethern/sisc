@@ -8,6 +8,11 @@
 		     [val (eval exp)])
 		(cond [(void? val) (repl-loop console-in console-out writer)]
 		      [(eof-object? val) (void)]
+		      [(circular? val)
+		       (begin 
+			 (display "{Refusing to print non-terminating structure}")
+			 (newline)
+			 (repl-loop console-in console-out writer))]
 		      [else 
 		       (begin 
 			 (writer val console-out)

@@ -33,14 +33,13 @@ public class Compiler extends Util {
 	DEFINE=7, 
 	TAIL=1, COMMAND=2, PROCEDURE=4, PREDICATE=8;
 
-    public Compiler(Interpreter r) {
-	extendenv(r.toplevel_env,"lambda", LAMBDA);
-	extendenv(r.toplevel_env,"if", _IF);
-	extendenv(r.toplevel_env,"begin", BEGIN);
-	extendenv(r.toplevel_env,"quote", QUOTE);
-	extendenv(r.toplevel_env,"set!", SET);
-	extendenv(r.toplevel_env,"define", DEFINE);
-	//	extendenv(r.toplevel_env,"void", _VOID);
+    public Compiler(AssociativeEnvironment menv) {
+	extendenv(menv,"lambda", LAMBDA);
+	extendenv(menv,"if", _IF);
+	extendenv(menv,"begin", BEGIN);
+	extendenv(menv,"quote", QUOTE);
+	extendenv(menv,"set!", SET);
+	extendenv(menv,"define", DEFINE);
     }
 
     static class ReferenceEnv {
@@ -104,8 +103,9 @@ public class Compiler extends Util {
 	try {
 	    Object h=env.lookup(s);
 	    
-	    if (h instanceof Syntax)  
+	    if (h instanceof Syntax) 
 		return ((Syntax)h).synid;
+
 	} catch (ArrayIndexOutOfBoundsException ab) {
 	}
 	return APP;

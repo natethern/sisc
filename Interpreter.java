@@ -75,7 +75,7 @@ public class Interpreter extends Util {
 	console_out=cout;
 	console_in.name=Symbol.get("console");
 	console_out.name=Symbol.get("console");
-	compiler=new sisc.compiler.Compiler(this);
+	compiler=new sisc.compiler.Compiler(this.toplevel_env);
     }
 
     public Interpreter(InputStream in, OutputStream out) {

@@ -10,7 +10,7 @@ public class Parser extends Util implements Tokens {
     static final Object DOT=new Object();
     static final Object ENDPAIR=new Object();
 
-    static final HashMap  chars=new HashMap (8);
+    static final HashMap chars=new HashMap (8);
     static {
 	chars.put("space", new SchemeCharacter(' '));
 	chars.put("backspace", new SchemeCharacter('\u0008'));
@@ -35,16 +35,15 @@ public class Parser extends Util implements Tokens {
 		System.err.println("{warning: ignored orphaned close-parenthesis ')'}");
 		return nextExpression(is);
 	    } else if (n==DOT)
-		throw new IOException("unexpected dot (.).");
+		throw new IOException("unexpected dot '.'.");
 	} 
 	return (Value)n;
     }
     
-    protected Object _nextExpression(InputPort is, HashMap  state, Integer def) 
+    protected Object _nextExpression(InputPort is, HashMap state, Integer def) 
 	throws IOException {
 
 	int token=lexer.nextToken(is);
-
 	Object o;
 	switch (token) {
 	case TT_EOF:
@@ -71,7 +70,8 @@ public class Parser extends Util implements Tokens {
 	    o=new SchemeString(lexer.sval);
 	    break;
 	case TT_PAIR:
-	    return readList(is, state, def);
+	    o=readList(is, state, def);
+	    return o;
 	case TT_ENDPAIR: 
 	    o=ENDPAIR;
 	    break;
@@ -141,8 +141,12 @@ public class Parser extends Util implements Tokens {
 		Value[] v=null;
 		is.pushback(c);
 		if (Character.isDigit((char)c)) {
-		    Integer ref=new Integer(Integer.parseInt(lexer.readToBreak(is, 
-							       Lexer.sharp_special)));
+		    Integer ref=
+			new Integer(Integer
+				    .parseInt(lexer
+					      .readToBreak(is, 
+							   Lexer
+							   .sharp_special)));
 		    c=is.read();
 		    if (c=='=') {
 			o=_nextExpression(is, state, ref);
@@ -192,7 +196,7 @@ public class Parser extends Util implements Tokens {
 	}
     }	    
 
-    public Value readList(InputPort is, HashMap  state, Integer def) 
+    public Value readList(InputPort is, HashMap state, Integer def) 
 	throws IOException, EOFException {
 	Pair h=null;
 	Pair p=null;
@@ -206,8 +210,7 @@ public class Parser extends Util implements Tokens {
 		    l=_nextExpression(is, state, null);
 		    if (l==ENDPAIR)
 			throw new IOException("Expected expression in cdr field");
-		    p.cdr=(Value)(l instanceof Integer ? state.get(l) : 
-				  l);
+		    p.cdr=(Value)(l instanceof Integer ? state.get(l) : l);
 		    if (_nextExpression(is, state, null)!=ENDPAIR)
 			throw new IOException("More than one object after dot ('.')");
 		    return h;

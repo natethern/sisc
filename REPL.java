@@ -40,6 +40,7 @@ public class REPL extends Thread {
 		     Util.ENVVARS);
 	}
 	System.out.println(" ("+Util.VERSION+")");
+	System.out.println(Quantity.reportLibraryType());
     }
 
     public void run() {
