@@ -478,31 +478,29 @@
                 |base_xAlafsvaG|
                 |exponent_xAH6dVvaG|))))))))
 (#%define modpow
-  (#%lambda (|x_xAPqQkBaG| |y_xA9nONBaG| |n_xAvjMeCaG|)
-    (#%if (= |y_xA9nONBaG| 1)
-      (modulo |x_xAPqQkBaG| |n_xAvjMeCaG|)
-      (#%if (even? |y_xA9nONBaG|)
-        ((#%lambda (|tmp_xAx8GBDaG|)
-           (modulo
-             (* |tmp_xAx8GBDaG| |tmp_xAx8GBDaG|)
-             |n_xAvjMeCaG|))
-         (modpow
-           |x_xAPqQkBaG|
-           (/ |y_xA9nONBaG| 2)
-           |n_xAvjMeCaG|))
-        ((#%lambda (|tmp_xAbcI8DaG|)
-           (#%begin
-             (#%set! |tmp_xAbcI8DaG|
-               (modulo
-                 (* |tmp_xAbcI8DaG| |tmp_xAbcI8DaG|)
-                 |n_xAvjMeCaG|))
+    (#%lambda (|x_PrRpqd4831| |y_PrbmoG4831| |n_Prxim75831|)
+      (#%if (= |y_PrbmoG4831| 1)
+        (modulo |x_PrRpqd4831| |n_Prxim75831|)
+        (#%if (even? |y_PrbmoG4831|)
+          ((#%lambda (|tmp_Prdbi16831|)
              (modulo
-               (* |x_xAPqQkBaG| |tmp_xAbcI8DaG|)
-               |n_xAvjMeCaG|)))
-         (modpow
-           |x_xAPqQkBaG|
-           (/ (- |y_xA9nONBaG| 1) 2)
-           |n_xAvjMeCaG|))))))
+               (* |tmp_Prdbi16831| |tmp_Prdbi16831|)
+               |n_Prxim75831|))
+           (modpow
+             |x_PrRpqd4831|
+             (/ |y_PrbmoG4831| 2)
+             |n_Prxim75831|))
+          ((#%lambda (|tmp_PrTekA5831|)
+             (modulo
+               (* |x_PrRpqd4831|
+                  (modulo
+                    (* |tmp_PrTekA5831| |tmp_PrTekA5831|)
+                    |n_Prxim75831|))
+               |n_Prxim75831|))
+           (modpow
+             |x_PrRpqd4831|
+             (/ (- |y_PrbmoG4831| 1) 2)
+             |n_Prxim75831|))))))
 (#%define integer?
   ((#%lambda (|oldint?_xAT4E2EaG|)
      (#%lambda (|n_xAd1CvEaG|)

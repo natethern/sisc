@@ -353,15 +353,13 @@
        (else (general-expt base exponent))))))
   
 (define (modpow x y N)
-  (let ((tmp 0))
-    (if (= y 1) 
-	(modulo x N)
-	(if (even? y)
-	    (let ([tmp (modpow x (/ y 2) N)])
-	      (modulo (* tmp tmp) N))
-	    (let ([tmp (modpow x (/ (- y 1) 2) N)])
-	      (set! tmp (modulo (* tmp tmp) N))
-	      (modulo (* x tmp) N))))))
+  (if (= y 1) 
+      (modulo x N)
+      (if (even? y)
+	  (let ([tmp (modpow x (/ y 2) N)])
+	    (modulo (* tmp tmp) N))
+	  (let ([tmp (modpow x (/ (- y 1) 2) N)])
+	    (modulo (* x (modulo (* tmp tmp) N)) N)))))
 
 (define integer?
   (let ((oldint? integer?))
