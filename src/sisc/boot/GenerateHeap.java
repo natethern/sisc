@@ -278,6 +278,7 @@ public class GenerateHeap {
         r5rs.setName(Util.REPORT);
         sisc_specific.setName(Util.SISC_SPECIFIC);
         
+        toplevel.setName(Symbol.get("*toplevel-lib*"));
         r.defineContextEnv(Util.TOPLEVEL, top_level);
         r.defineContextEnv(Util.REPORT, r5rs);
         r.defineContextEnv(Util.SISC_SPECIFIC, sisc_specific);
