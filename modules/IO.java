@@ -14,6 +14,7 @@ public class IO extends ModuleAdapter {
     }
 
     protected static final int
+        //NEXT = 31,
         ABSPATHQ            = 0,
         BLOCKREAD           = 1,
         BLOCKWRITE          = 2,
@@ -24,6 +25,8 @@ public class IO extends ModuleAdapter {
         CURRENTOUTPUTPORT   = 7,
         DISPLAY             = 8,
         FILEEXISTSQ         = 9,
+        FINDRESOURCE        = 29,
+        FINDRESOURCES       = 30,
         FLUSHOUTPUTPORT     = 10,
         GETOUTPUTSTRING     = 11,
         INPORTQ             = 12,
@@ -55,6 +58,8 @@ public class IO extends ModuleAdapter {
         define("current-output-port", CURRENTOUTPUTPORT);
         define("display"            , DISPLAY);
         define("file-exists?"       , FILEEXISTSQ);
+        define("find-resource"      , FINDRESOURCE);
+        define("find-resources"     , FINDRESOURCES);
         define("flush-output-port"  , FLUSHOUTPUTPORT);
         define("get-output-string"  , GETOUTPUTSTRING);
         define("input-port?"        , INPORTQ);
@@ -76,6 +81,17 @@ public class IO extends ModuleAdapter {
         define("write-char"         , WRITECHAR);
     }
 
+    public ClassLoader getClassLoader() {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        if (cl == null) {
+            cl = ClassLoader.getSystemClassLoader();
+        }
+        if (cl == null) {
+            throwPrimException(liMessage(SISCB, "noclassloader"));
+        }
+        return cl;
+    }
+       
     public Value eval(int primid, Interpreter f)
         throws ContinuationException {
         switch (f.vlr.length) {
@@ -259,6 +275,29 @@ public class IO extends ModuleAdapter {
                 } catch (IOException e) {
                     return FALSE;
                 }
+            case FINDRESOURCE:
+                ClassLoader cl = getClassLoader();
+                url = cl.getResource(string(f.vlr[0]));
+                if (url == null) 
+                    return FALSE;
+                else return new SchemeString(url.toString());
+            case FINDRESOURCES:
+                cl = getClassLoader();
+                java.util.Enumeration e;
+                try {
+                    e = cl.getResources(string(f.vlr[0]));
+                } catch (IOException ex) {
+                    return EMPTYLIST;
+                }
+                if (!e.hasMoreElements()) return EMPTYLIST;
+                Pair pa = new Pair();
+                while(true) {
+                    pa.setCar(new SchemeString((String)e.nextElement()));
+                    if (!e.hasMoreElements()) break;
+                    pa.setCdr(new Pair());
+                    pa = (Pair)pa.cdr;
+                }
+                return pa;
             case ABSPATHQ:
                 String f1=string(f.vlr[0]);
                 File fn=new File(f1);

@@ -1,21 +1,8 @@
-(define (library-path)
-  (or (getprop 'library-path '*config-parameters*) `(,(current-directory))))
-(define (library-path-prepend . args)
-  (putprop 'library-path '*config-parameters*
-           (append args (library-path))))
-(define (library-path-append . args)
-  (putprop 'library-path '*config-parameters*
-           (append (library-path) args)))
-
 (define *libraries* (make-hashtable))
 
 (define (locate-library lib)
-  (let loop ([paths (library-path)])
-    (and (not (null? paths))
-         (let ([url (normalize-url (car paths) (string-append lib ".scm"))])
-           (if (file-exists? url)
-               url
-               (loop (cdr paths)))))))
+  (or (find-resource (string-append lib ".sce"))
+      (find-resource (string-append lib ".scm"))))
 
 (define (require-library lib)
   (synchronized

@@ -171,8 +171,8 @@ for <function>sqrt</function>, it is not clear what other mathematical
       or more Scheme pairs, whose car is the key, and whose cdr is the
       value.  For example:
       <programlisting>
-(library-path . "/usr/local/sisc/lib")
 (slib . "/usr/share/slib")
+(emitannotations . #t)
       </programlisting>
       Any properties set on the Java commandline override the values
       in the property file.  Boolean values, when on the Java command

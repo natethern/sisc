@@ -1,7 +1,7 @@
 <chapter id="IO">
   <title>I/O</title>
   <para>
-    &SISC;'s I/O routines are implemented in a flexible manner, allowing 
+      &SISC;'s I/O routines are implemented in a flexible manner, allowing 
     extensions to create new I/O sources that will behave as
     standard Scheme port objects.  The ports can then be operated on
     with all &R5RS; port operations, as well as some &SISC; specific 
@@ -16,27 +16,27 @@
         files, e.g. <function>open-input-file</function>,
         <function>open-output-file</function> accept URLs in addition
         to ordinary file names. Here are some examples of valid URLs:
-<programlisting>
+        <programlisting>
 http://foo.com/bar/bar1.scm
 file:/tmp/foo.scm
 file:c:\bar\baz.scm
 file:foo.scm
 jar:http://foo.com/bar.jar!/bar/bar1.scm
-</programlisting>
+        </programlisting>
         The last is a URL referring to a file stored in a JAR on a
         remote web server. For further details on the format of URLs
         please consult <ulink url="http://www.ietf.org/rfc/rfc2396.txt">this
-        specification</ulink>. The format of JAR URLs is defined in
+          specification</ulink>. The format of JAR URLs is defined in
         <ulink url="http://java.sun.com/j2se/1.4/docs/api/java/net/JarURLConnection.html">the
-        JDK API documentation</ulink>.  What types of URLs are
+          JDK API documentation</ulink>.  What types of URLs are
         supported by a particular installation of Java depends on the
         configured protocol handlers. See <ulink
-        url="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">the
-        JDK API documentation</ulink> for details. 
+                                                 url="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">the
+          JDK API documentation</ulink> for details. 
         <footnote>
           <para>
             Handling of JAR files in URLS may be dependent on the
-            &SISC; host language, as well as some uncommon protocols.  
+              &SISC; host language, as well as some uncommon protocols.  
             HTTP and FTP should be expected to work with any host language.
           </para>
         </footnote>
@@ -66,9 +66,9 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
           </para>
         </blockquote>
         The algorithm for resolving relative URLs is defined in <ulink
-        url="http://www.ietf.org/rfc/rfc2396.txt">this
-        specification</ulink>.  For compatibility with other Schemes,
-        &SISC; also supports the
+                                                                       url="http://www.ietf.org/rfc/rfc2396.txt">this
+          specification</ulink>.  For compatibility with other Schemes,
+          &SISC; also supports the
         <function>current-directory</function> procedure, which is a
         simple wrapper around <function>current-url</function>.
       </para>
@@ -157,18 +157,18 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
     <sect2 id="PortCreation">
       <title>Buffered I/O</title>
       <para>
-        &SISC; extends the &R5RS; standard's port-creation functions
+          &SISC; extends the &R5RS; standard's port-creation functions
         in order to provide buffered output ports.  All &SISC; output
         ports are buffered, and a programmer may choose whether a
         given port should automatically flush after each write
         operation.  By default ports do <emphasis>not</emphasis>
         automatically flush
-	<footnote>
-	  <para>
+        <footnote>
+          <para>
             The console output port is an exception, as it is 
             an auto-flush port.
-	  </para>
-	</footnote>.  Enabling auto-flush can be done when the
+          </para>
+        </footnote>.  Enabling auto-flush can be done when the
         port is created per the specifications below.  A port that
         does not automatically flush can be flushed at any time by
         calling <computeroutput>flush-output-port</computeroutput>.
@@ -382,7 +382,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para id="func-call-with-input-file">
-            &procedure;
+              &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>call-with-input-file</methodname>
@@ -402,7 +402,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-call-with-output-file">
-            &procedure;
+              &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>call-with-output-file</methodname>
@@ -422,7 +422,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-call-with-input-string">
-            &procedure;
+              &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>call-with-input-string</methodname>
@@ -442,7 +442,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-call-with-output-string">
-            &procedure;
+              &procedure;
             <methodsynopsis language="scheme">
               <type>string</type>
               <methodname>call-with-output-string</methodname>
@@ -476,7 +476,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para id="func-with-input-from-port">
-            &procedure;
+              &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>with-input-from-port</methodname>
@@ -497,7 +497,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-with-output-to-port">
-            &procedure;
+              &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>with-output-to-port</methodname>
@@ -518,7 +518,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-with-input-from-file">
-            &procedure;
+              &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>with-input-from-file</methodname>
@@ -531,16 +531,16 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para> Evaluates <parameter>thunk</parameter> with an
-              input port attached to a file opened for reading from
-              <parameter>url</parameter> as the
-              <literal>current-input-port</literal> for the duration
-              of the evaluation. The port is closed when
+                input port attached to a file opened for reading from
+                <parameter>url</parameter> as the
+                <literal>current-input-port</literal> for the duration
+                of the evaluation. The port is closed when
                 <parameter>thunk</parameter> returns normally.
               </para>
             </blockquote>
           </para>
           <para id="func-with-output-to-file">
-            &procedure;
+              &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>with-output-to-file</methodname>
@@ -563,7 +563,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-with-input-from-string">
-            &procedure;
+              &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>with-input-from-string</methodname>
@@ -585,7 +585,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
           <para id="func-with-output-to-string">
-            &procedure;
+              &procedure;
             <methodsynopsis language="scheme">
               <type>string</type>
               <methodname>with-output-to-string</methodname>
@@ -610,9 +610,9 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
   <sect1 id="netio">
     <title>Networking</title>
     <para>
-      &requires; 
+        &requires; 
       <emphasis role="bold">
-	(import <emphasis>networking</emphasis>)
+        (import <emphasis>networking</emphasis>)
       </emphasis>
     </para>
     <para>
@@ -623,7 +623,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
     </para>
     <para>
       Each protocol provides one or more <emphasis>socket
-	constructors</emphasis>.  These functions produce a Socket
+        constructors</emphasis>.  These functions produce a Socket
       handle, which is represented in &SISC; as
       <computeroutput>&num;&lt;socket&gt;</computeroutput>.  A
       socket handle is then used to obtain Scheme ports.
@@ -639,264 +639,264 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
     <sect2 id="netutils">
       <title>IP Addressing</title>
       <para>
-	Several utility functions are provided for manipulating IP
-	addresses.  These are described below.
+        Several utility functions are provided for manipulating IP
+        addresses.  These are described below.
       </para>
       <para id="func-get-host-by-ip-name">
-	<blockquote>
-	  <para>
-	    &procedure;
-	    <methodsynopsis language="scheme">
-	      <type>string</type>
-	      <methodname>get-host-by-ip-name</methodname>
-	      <methodparam>
-		<parameter>hostname</parameter>
-	      </methodparam>
-	    </methodsynopsis>
-	    <blockquote>
-	      <para>
-		Attempts to resolve a hostname provided as a string into an 
-		IP address in dotted-quad form.  If the host cannot be
-		found, &f; is returned.
-	      </para>
-	    </blockquote>
-	  </para>
-	  <para id="func-get-host-name-by-ip">
-	    &procedure;
-	    <methodsynopsis language="scheme">
-	      <type>string</type>
-	      <methodname>get-host-name-by-ip</methodname>
-	      <methodparam>
-		<parameter>ip-address</parameter>
-	      </methodparam>
-	    </methodsynopsis>
-	    <blockquote>
-	      <para>
-		Attempts a reverse lookup of the given dotted-quad address
-		to determine a registered domain name.  If unsuccessful, &f;
-		is returned.
-	      </para>
-	    </blockquote>
-	  </para>
-	  <para id="func-get-local-host">
-	    &procedure;
-	    <methodsynopsis language="scheme">
-	      <type>string</type>
-	      <methodname>get-local-host</methodname>
-	      <void/>
-	    </methodsynopsis>
-	    <blockquote>
-	      <para>
-		Attempts to determine the Internet visible IP address of the
-		local machine.  If successful, this address is returned in
-		dotted-quad notation.  &f; is returned otherwise.
-	      </para>
-	    </blockquote>
-	  </para>
-	</blockquote>
+        <blockquote>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>string</type>
+              <methodname>get-host-by-ip-name</methodname>
+              <methodparam>
+                <parameter>hostname</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Attempts to resolve a hostname provided as a string into an 
+                IP address in dotted-quad form.  If the host cannot be
+                found, &f; is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-get-host-name-by-ip">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>string</type>
+              <methodname>get-host-name-by-ip</methodname>
+              <methodparam>
+                <parameter>ip-address</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Attempts a reverse lookup of the given dotted-quad address
+                to determine a registered domain name.  If unsuccessful, &f;
+                is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-get-local-host">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>string</type>
+              <methodname>get-local-host</methodname>
+              <void/>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Attempts to determine the Internet visible IP address of the
+                local machine.  If successful, this address is returned in
+                dotted-quad notation.  &f; is returned otherwise.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
       </para>
     </sect2>
     <sect2 id="sockets">
       <title>Socket Operations</title>
       <para>
-	Once obtained using a protocol specific constructor, a
-	Socket Handle allows manipulation of common socket options,
-	the creation of Scheme input/output ports, and closing of
-	the socket.
+        Once obtained using a protocol specific constructor, a
+        Socket Handle allows manipulation of common socket options,
+        the creation of Scheme input/output ports, and closing of
+        the socket.
       </para>
       <para>
-	<blockquote>
-	  <para id="func-open-socket-input-port">
-	    &procedure;
-	    <methodsynopsis language="scheme">
-	      <type>input-port</type>
-	      <methodname>open-socket-input-port</methodname>
-	      <methodparam><parameter>socket</parameter>
-	      </methodparam>
-	    </methodsynopsis>
-	    <blockquote>
-	      <para>
-		Opens a Scheme input port to the socket.  
-	      </para>
-	    </blockquote>
-	  </para>
-	  <para id="func-open-socket-output-port">
-	    &procedure;
-	    <methodsynopsis language="scheme">
-	      <type>output-port</type>
-	      <methodname>open-socket-output-port</methodname>
-	      <methodparam><parameter>socket</parameter>
-	      </methodparam>
-	      <methodparam choice="opt">
-		<parameter>auto-flush</parameter>
-	      </methodparam>
-	    </methodsynopsis>
-	    <blockquote>
-	      <para>
-		Opens a Scheme output port to the socket.  If provided, the
-		boolean argument specifies whether the given port should be
-		set to auto-flush mode.  If unspecified, the port does
-		<emphasis>not</emphasis> auto-flush.
-	      </para>
-	    </blockquote>
-	  </para>
-	  <para id="func-close-socket">
-	    &procedure;
-	    <methodsynopsis language="scheme">
-	      <type>unspecified</type>
-	      <methodname>close-socket</methodname>
-	      <methodparam>
-		<parameter>socket</parameter>
-	      </methodparam>
-	    </methodsynopsis>
-	    <blockquote>
-	      <para>
-		Closes an IP socket.  
-	      </para>
-	    </blockquote>
-	  </para>
-	</blockquote>
+        <blockquote>
+          <para id="func-open-socket-input-port">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>input-port</type>
+              <methodname>open-socket-input-port</methodname>
+              <methodparam><parameter>socket</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Opens a Scheme input port to the socket.  
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-open-socket-output-port">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>output-port</type>
+              <methodname>open-socket-output-port</methodname>
+              <methodparam><parameter>socket</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>auto-flush</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Opens a Scheme output port to the socket.  If provided, the
+                boolean argument specifies whether the given port should be
+                set to auto-flush mode.  If unspecified, the port does
+                <emphasis>not</emphasis> auto-flush.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-close-socket">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>unspecified</type>
+              <methodname>close-socket</methodname>
+              <methodparam>
+                <parameter>socket</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Closes an IP socket.  
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
       </para>
       <para>
-	The port-obtaining functions above work on most sockets.
-	An exception applies for  TCP server sockets, which are used only to
-	obtain connected TCP sockets.
+        The port-obtaining functions above work on most sockets.
+        An exception applies for  TCP server sockets, which are used only to
+        obtain connected TCP sockets.
       </para>
     </sect2>
     <sect2 id="TCP">
       <title>TCP</title>
       <para>
-	The most commonly used Internet protocol maps most favorably
-	to Scheme's input/output model.  Writing to an output port
-	retrieved from a TCP socket writes the data to that socket.
-	Reading from an input port reads from the connected socket.
-	One important note is that one can control the amount of data
-	that fills a TCP packet by using an output port that does
-	not auto-flush.  Data is written to the port until one
-	considers the packet complete, and then uses
-	<computeroutput>(flush-output-port port)</computeroutput> to
-	complete the packet.  Note also that this does not
-	<emphasis>guarantee</emphasis> that one gets the desired
-	packet size, but does allow one to construct reasonably
-	sized packets.
+        The most commonly used Internet protocol maps most favorably
+        to Scheme's input/output model.  Writing to an output port
+        retrieved from a TCP socket writes the data to that socket.
+        Reading from an input port reads from the connected socket.
+        One important note is that one can control the amount of data
+        that fills a TCP packet by using an output port that does
+        not auto-flush.  Data is written to the port until one
+        considers the packet complete, and then uses
+        <computeroutput>(flush-output-port port)</computeroutput> to
+        complete the packet.  Note also that this does not
+        <emphasis>guarantee</emphasis> that one gets the desired
+        packet size, but does allow one to construct reasonably
+        sized packets.
       </para>
       <para>
-	TCP sockets are obtained one of two ways.  Either one
-	creates an outgoing connection to another listening host and
-	then subsequently obtains a socket handle, or one creates a
-	<emphasis>listening socket</emphasis> and then obtains a
-	socket by waiting for an incoming connection on the
-	specified port.  In either case, the result is a socket
-	handle with an available input and output port that can be
-	obtained using a function in the previous section.
+        TCP sockets are obtained one of two ways.  Either one
+        creates an outgoing connection to another listening host and
+        then subsequently obtains a socket handle, or one creates a
+        <emphasis>listening socket</emphasis> and then obtains a
+        socket by waiting for an incoming connection on the
+        specified port.  In either case, the result is a socket
+        handle with an available input and output port that can be
+        obtained using a function in the previous section.
       </para>
       <para>
-	<blockquote>
-	  <para id="func-open-tcp-socket">
-	    &procedure;
-	    <methodsynopsis language="scheme">
-	      <type>socket</type>
-	      <methodname>open-tcp-socket</methodname>
-	      <methodparam>
-		<parameter>host</parameter>
-	      </methodparam>
-	      <methodparam>
-		<parameter>port</parameter>
-	      </methodparam>
-	    </methodsynopsis>
-	    <blockquote>
-	      <para>
-		Attempts to connect to the host at the given hostname or IP
-		address encoded as a string, at the given TCP port
-		specified as an integer.  An error is raised if the host
-		cannot be found or the connection fails.  If successful, 
-		a socket is returned.
-	      </para>
-	    </blockquote>
-	  </para>
-	  <para id="func-open-tcp-listener">
-	    &procedure;
-	    <methodsynopsis language="scheme">
-	      <type>server-socket</type>
-	      <methodname>open-tcp-listener</methodname>
-	      <methodparam>
-		<parameter>port</parameter>
-	      </methodparam>
-	      <methodparam choice="opt">
-		<parameter>interface-address</parameter>
-	      </methodparam>
-	    </methodsynopsis>
-	    <blockquote>
-	      <para>
-		Creates a TCP server socket, which may only be used with
-		accept-tcp-socket, or closed.  The server socket will listen
-		on the integer port specified.  If provided, the
-		interface-address, a string specifies the address of a
-		local interface to bind to.  If not provided, the port
-		is bound on all available interfaces.  An error is
-		raised if the socket cannot be bound and set listening.
-	      </para>
-	    </blockquote>
-	    </para>
-	  <para id="func-accept-tcp-socket">
-	    &procedure;
-	    <methodsynopsis language="scheme">
-	      <type>socket</type>
-	      <methodname>accept-tcp-socket</methodname>
-	      <methodparam>
-		<parameter>server-socket</parameter>
-	      </methodparam>
-	    </methodsynopsis>
-	    <blockquote>
-	      <para>
-		Accepts an incoming connection on the provided
-		server-socket, and returns a TCP socket handle.  This
-		function will block until an incoming connection is made,
-		or, if set, the socket timeout is exceeded.  If the latter
-		happens, an error will be raised.
-	      </para>
-	    </blockquote>
-	  </para>
-	  <para id="func-set-so-timeout">
-	    &procedure;
-	    <methodsynopsis language="scheme">
-	      <type>undefined</type>
-	      <methodname>set-so-timeout!</methodname>
-	      <methodparam>
-		<parameter>socket</parameter>	  
-	      </methodparam>
-	      <methodparam>
-		<parameter>timeout</parameter>
-	      </methodparam>
-	    </methodsynopsis>
-	    <blockquote>
-	      <para>
-		Sets the socket timeout on a socket.  The socket can be
-		either a server socket or connected socket.  In the former
-		case, this value specifies the number of milliseconds that
-		an accept-tcp-socket can wait before timing out.  In the
-		latter, the value specifies the number of milliseconds that
-		can elapse during a read call before timing out.
-	      </para>
-	    </blockquote>
-	  </para>
-	</blockquote>
+        <blockquote>
+          <para id="func-open-tcp-socket">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>socket</type>
+              <methodname>open-tcp-socket</methodname>
+              <methodparam>
+                <parameter>host</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>port</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Attempts to connect to the host at the given hostname or IP
+                address encoded as a string, at the given TCP port
+                specified as an integer.  An error is raised if the host
+                cannot be found or the connection fails.  If successful, 
+                a socket is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-open-tcp-listener">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>server-socket</type>
+              <methodname>open-tcp-listener</methodname>
+              <methodparam>
+                <parameter>port</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>interface-address</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates a TCP server socket, which may only be used with
+                accept-tcp-socket, or closed.  The server socket will listen
+                on the integer port specified.  If provided, the
+                interface-address, a string specifies the address of a
+                local interface to bind to.  If not provided, the port
+                is bound on all available interfaces.  An error is
+                raised if the socket cannot be bound and set listening.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-accept-tcp-socket">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>socket</type>
+              <methodname>accept-tcp-socket</methodname>
+              <methodparam>
+                <parameter>server-socket</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Accepts an incoming connection on the provided
+                server-socket, and returns a TCP socket handle.  This
+                function will block until an incoming connection is made,
+                or, if set, the socket timeout is exceeded.  If the latter
+                happens, an error will be raised.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-set-so-timeout">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>set-so-timeout!</methodname>
+              <methodparam>
+                <parameter>socket</parameter>	  
+              </methodparam>
+              <methodparam>
+                <parameter>timeout</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Sets the socket timeout on a socket.  The socket can be
+                either a server socket or connected socket.  In the former
+                case, this value specifies the number of milliseconds that
+                an accept-tcp-socket can wait before timing out.  In the
+                latter, the value specifies the number of milliseconds that
+                can elapse during a read call before timing out.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
       </para>
     </sect2>
     <sect2 id="UDP">
       <title>UDP</title>
       <para>
-	UDP sockets can be obtained for both receive only and
-	send/receive sessions. 
+        UDP sockets can be obtained for both receive only and
+        send/receive sessions. 
       </para>
       <note>
-	<para>
-	  The behavior of the <function>char-ready?</function>
-	  function is somewhat more difficult to predict on a UDP
-	  input port.  The function will return <literal>#t</literal>
-	  only when a previous datagram contained more bytes than were
-	  requested by the read operation that received it.
-	</para>
+        <para>
+          The behavior of the <function>char-ready?</function>
+          function is somewhat more difficult to predict on a UDP
+          input port.  The function will return <literal>#t</literal>
+          only when a previous datagram contained more bytes than were
+          requested by the read operation that received it.
+        </para>
       </note>
       <para>
         <blockquote>
@@ -917,21 +917,21 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>
-		Opens a UDP socket that listens on
-		<parameter>listen-port</parameter> (optionally bound
-		to only the interface on
-		<parameter>interface-address</parameter>).  If
-		provided, <parameter>datagram-size</parameter>
-		specifies the buffer size (in bytes) for receiving UDP
-		datagrams.  Datagrams larger than
-		<parameter>datagram-size</parameter> are truncated to
-		that size.  If unspecified, the default datagram size
-		is 1500 bytes.
-	      </para>
-	    </blockquote>
-	  </para>
+                Opens a UDP socket that listens on
+                <parameter>listen-port</parameter> (optionally bound
+                to only the interface on
+                <parameter>interface-address</parameter>).  If
+                provided, <parameter>datagram-size</parameter>
+                specifies the buffer size (in bytes) for receiving UDP
+                datagrams.  Datagrams larger than
+                <parameter>datagram-size</parameter> are truncated to
+                that size.  If unspecified, the default datagram size
+                is 1500 bytes.
+              </para>
+            </blockquote>
+          </para>
           <para>
-	    &procedure;
+              &procedure;
             <methodsynopsis language="scheme">
               <type>udp socket</type>
               <methodname>open-udp-socket</methodname>
@@ -941,71 +941,71 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <methodparam>
                 <parameter>remote-port</parameter>
               </methodparam>
-	    </methodsynopsis>
+            </methodsynopsis>
             <blockquote>
               <para>
-		Opens a UDP socket for sending datagrams to 
-		the Internet host specified by
-		<parameter>remote-host</parameter>, on port
-		<parameter>remote-port</parameter>.
-	      </para>
-	    </blockquote>
-	  </para>
-	</blockquote>
+                Opens a UDP socket for sending datagrams to 
+                the Internet host specified by
+                <parameter>remote-host</parameter>, on port
+                <parameter>remote-port</parameter>.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
       </para>
       <para>
-	After obtaining a UDP socket, input and output ports can be
-	obtained in the usual manner.  It is an error to attempt to
-	obtain an output-port from a listening UDP socket, or an input
-	port from a sending UDP socket.  
+        After obtaining a UDP socket, input and output ports can be
+        obtained in the usual manner.  It is an error to attempt to
+        obtain an output-port from a listening UDP socket, or an input
+        port from a sending UDP socket.  
       </para>
       <para>
-	UDP input ports behave as
-	ordinary input ports.  When a datagram arrives as a result of
-	any read operation on the port, their entire contents are
-	stored in a buffer of length
-	<parameter>datagram-size</parameter> bytes.  Successive read
-	operations return data from that buffer until it is exhausted,
-	at which point a read operation will cause the UDP socket to
-	listen for another datagram.
+        UDP input ports behave as
+        ordinary input ports.  When a datagram arrives as a result of
+        any read operation on the port, their entire contents are
+        stored in a buffer of length
+        <parameter>datagram-size</parameter> bytes.  Successive read
+        operations return data from that buffer until it is exhausted,
+        at which point a read operation will cause the UDP socket to
+        listen for another datagram.
       </para>
       <para>
-	UDP output ports should be treated with some care, however.
-	If a UDP output port was obtained in auto-flush mode, each
-	write operation to the output port will cause a new datagram
-	to be sent.  Control over the size of the datagram must be
-	maintained by using a port that does not auto-flush, writing
-	the desired data, and flushing once the amount of data that
-	the user wants to occupy a single UDP datagram is reached.
-	The behavior of constructing very large UDP packets is
-	undefined.  The packet may be silently dropped or (more
-	likely) fragmented at the IP layer.
+        UDP output ports should be treated with some care, however.
+        If a UDP output port was obtained in auto-flush mode, each
+        write operation to the output port will cause a new datagram
+        to be sent.  Control over the size of the datagram must be
+        maintained by using a port that does not auto-flush, writing
+        the desired data, and flushing once the amount of data that
+        the user wants to occupy a single UDP datagram is reached.
+        The behavior of constructing very large UDP packets is
+        undefined.  The packet may be silently dropped or (more
+        likely) fragmented at the IP layer.
       </para>
     </sect2>
     <sect2>
       <title>Multicast UDP</title>
       <para>
-	&SISC; provides support for IP multicast UDP datagrams as
-	well.  This allows a program to both send and receive to an IP
-	multicast group.  Multicast UDPs are an extension of ordinary
-	UDP.  Thus all I/O operations on a Multicast UDP socket are
-	subject to the same semantics as an ordinary UDP socket.
+          &SISC; provides support for IP multicast UDP datagrams as
+        well.  This allows a program to both send and receive to an IP
+        multicast group.  Multicast UDPs are an extension of ordinary
+        UDP.  Thus all I/O operations on a Multicast UDP socket are
+        subject to the same semantics as an ordinary UDP socket.
       </para>
       <note>
-	<para>
-	  The Multicast UDP library requires that the underlying
-	  operating system's IP networking stack support Multicast.
-	  The functions described here may produce an error if the
-	  operating system does not.
-	</para>
+        <para>
+          The Multicast UDP library requires that the underlying
+          operating system's IP networking stack support Multicast.
+          The functions described here may produce an error if the
+          operating system does not.
+        </para>
       </note>
       <para>
-	A program wishing to use multicast UDP sockets must first
-	obtain a multicast socket for either listening to a multicast
-	group, or for both listening and sending to such a group.
+        A program wishing to use multicast UDP sockets must first
+        obtain a multicast socket for either listening to a multicast
+        group, or for both listening and sending to such a group.
       </para>
       <para>
-	<blockquote>
+        <blockquote>
           <para>
               &procedure;
             <methodsynopsis language="scheme">
@@ -1023,19 +1023,19 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>
-		Opens a multicast UDP socket that listens on
-		<parameter>listen-port</parameter> (optionally bound
-		only to the interface addressed by
-		<parameter>interface-address</parameter>.  If
-		provided, <parameter>datagram-size</parameter> specifies the
-		buffer size (in bytes) for receiving UDP datagrams.
-		Datagrams larger than
-		<parameter>datagram-size</parameter> are truncated to
-		that size.  If unspecified, the default datagram size
-		is 1500 bytes.  
-	      </para>
-	    </blockquote>
-	  </para>
+                Opens a multicast UDP socket that listens on
+                <parameter>listen-port</parameter> (optionally bound
+                only to the interface addressed by
+                <parameter>interface-address</parameter>.  If
+                provided, <parameter>datagram-size</parameter> specifies the
+                buffer size (in bytes) for receiving UDP datagrams.
+                Datagrams larger than
+                <parameter>datagram-size</parameter> are truncated to
+                that size.  If unspecified, the default datagram size
+                is 1500 bytes.  
+              </para>
+            </blockquote>
+          </para>
           <para>
               &procedure;
             <methodsynopsis language="scheme">
@@ -1056,44 +1056,44 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>
-		Opens a multicast UDP socket for sending datagrams 
-		to the specified multicast
-		<parameter>group</parameter>, on the specified
-		<parameter>port</parameter>.  The returned socket will
-		also be capable of listening to that group on the same
-		port (and optionally bound only to the interface
-		addressed by <parameter>interface-address</parameter>), 
-		though the socket will not initially be a member of
-		the group.  If provided,
-		<parameter>datagram-size</parameter> specifies the
-		buffer size (in bytes) for receiving UDP datagrams.
-		Datagrams larger than
-		<parameter>datagram-size</parameter> are truncated to
-		that size.  If unspecified, the default datagram size
-		is 1500 bytes.  
-	      </para>
-	    </blockquote>
-	  </para>
-	</blockquote>
+                Opens a multicast UDP socket for sending datagrams 
+                to the specified multicast
+                <parameter>group</parameter>, on the specified
+                <parameter>port</parameter>.  The returned socket will
+                also be capable of listening to that group on the same
+                port (and optionally bound only to the interface
+                addressed by <parameter>interface-address</parameter>), 
+                though the socket will not initially be a member of
+                the group.  If provided,
+                <parameter>datagram-size</parameter> specifies the
+                buffer size (in bytes) for receiving UDP datagrams.
+                Datagrams larger than
+                <parameter>datagram-size</parameter> are truncated to
+                that size.  If unspecified, the default datagram size
+                is 1500 bytes.  
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
       </para>
       <para> 
-	Once a sending socket has been obtained (the second form), an
-	output-port can be obtained in the usual manner, and datagrams
-	can be immediately sent to the multicast group.  To receive
-	datagrams, sockets returned from both forms must
-	<emphasis>join</emphasis> a multicast group.  
+        Once a sending socket has been obtained (the second form), an
+        output-port can be obtained in the usual manner, and datagrams
+        can be immediately sent to the multicast group.  To receive
+        datagrams, sockets returned from both forms must
+        <emphasis>join</emphasis> a multicast group.  
       </para>
       <para>
-	A multicast group is specified by a class D IP address and by a
-	standard UDP port number. Class D IP addresses are in the range
-	224.0.0.0 to 239.255.255.255, inclusive. The address 224.0.0.0 is
-	reserved and should not be used. 
+        A multicast group is specified by a class D IP address and by a
+        standard UDP port number. Class D IP addresses are in the range
+        224.0.0.0 to 239.255.255.255, inclusive. The address 224.0.0.0 is
+        reserved and should not be used. 
       </para>
       <para>
-	Groups are joined and left using the following functions:
+        Groups are joined and left using the following functions:
       </para>
       <para>
-	<blockquote>
+        <blockquote>
           <para>
               &procedure;
             <methodsynopsis language="scheme">
@@ -1108,14 +1108,14 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>		
-		Causes the given multicast socket to join the group
-		specified by the Internet address in
-		<parameter>group</parameter>.  Once joined, read
-		operations on an obtained input-port will be able to
-		receive datagrams destined to that group.
-	      </para>
-	    </blockquote>
-	  </para>
+                Causes the given multicast socket to join the group
+                specified by the Internet address in
+                <parameter>group</parameter>.  Once joined, read
+                operations on an obtained input-port will be able to
+                receive datagrams destined to that group.
+              </para>
+            </blockquote>
+          </para>
           <para>
               &procedure;
             <methodsynopsis language="scheme">
@@ -1130,33 +1130,33 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>		
-		Causes the given multicast socket to leave the group
-		specified by the Internet address in
-		<parameter>group</parameter>.  Read operations on any
-		input ports obtained from this socket will no longer
-		receive datagrams from that group.
-	      </para>
-	    </blockquote>
-	  </para>
-	</blockquote>
+                Causes the given multicast socket to leave the group
+                specified by the Internet address in
+                <parameter>group</parameter>.  Read operations on any
+                input ports obtained from this socket will no longer
+                receive datagrams from that group.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
       </para>
       <para>
-	A single multicast socket can simultaneously listen to more
-	than one multicast group.  A socket can only send to one
-	group, however: the group it was constructed with.
+        A single multicast socket can simultaneously listen to more
+        than one multicast group.  A socket can only send to one
+        group, however: the group it was constructed with.
       </para>
       <para>
-	Multicast packets are limited in extent by their
-	time-to-live.  Each time a multicast packet crosses a router,
-	its ttl is decremented.  In this manner, one can send
-	datagrams only to local networks or subnetworks, as well as
-	more grand scopes.  The TTL of a socket is set using
-	<function>set-multicast-ttl!</function>
+        Multicast packets are limited in extent by their
+        time-to-live.  Each time a multicast packet crosses a router,
+        its ttl is decremented.  In this manner, one can send
+        datagrams only to local networks or subnetworks, as well as
+        more grand scopes.  The TTL of a socket is set using
+        <function>set-multicast-ttl!</function>
       </para>
       <para>
-	<blockquote>
+        <blockquote>
           <para>
-	    &procedure;
+              &procedure;
             <methodsynopsis language="scheme">
               <type>undefined</type>
               <methodname>set-multicast-ttl!</methodname>
@@ -1169,18 +1169,18 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>		
-		Sets the multicast TTL of the given socket to
-		<parameter>ttl</parameter>, an integer.  All datagrams
-		sent after this call will have their TTL set to the
-		new value.
-	      </para>
-	    </blockquote>
-	  </para>
-	</blockquote>
+                Sets the multicast TTL of the given socket to
+                <parameter>ttl</parameter>, an integer.  All datagrams
+                sent after this call will have their TTL set to the
+                new value.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
       </para>
       <para>
-	Valid multicast TTLs are in the range 0 (restricted to the
-	same host) to 255 (unlimited in scope).
+        Valid multicast TTLs are in the range 0 (restricted to the
+        same host) to 255 (unlimited in scope).
       </para>
     </sect2>
   </sect1>
@@ -1189,7 +1189,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
     <sect2 id="PrettyPrinting">
       <title>Pretty-Printing</title>
       <para>
-        &SISC; includes a pretty-printer, a function that behaves like
+          &SISC; includes a pretty-printer, a function that behaves like
         <computeroutput>write</computeroutput>, but introduces
         whitespace in order to make the output of data more readable
         to humans.
@@ -1235,8 +1235,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         loaded file resolve the given file name relative to the file
         currently being loaded. For example, lets assume we have a web
         site that serves the following files:
-<programlisting>
-;;;contents of http://foo.com/bar/bar1.scm ;;;
+        <programlisting>
+ ;;;contents of http://foo.com/bar/bar1.scm ;;;
 (load "bar2.scm")
 ;;;contents of http://foo.com/bar/bar2.scm ;;;
 (load "/baz/baz1.scm")
@@ -1244,11 +1244,11 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
 (load "../baz/baz2.scm")
 ;;;contents of http://foo.com/baz/baz2.scm ;;;
 (display "Hello")
-</programlisting>
+        </programlisting>
         Invoking
-<programlisting>
+        <programlisting>
 (load "http://foo.com/bar/bar1.scm")
-</programlisting>
+        </programlisting>
         results in each file being loaded; with the last file in the chain,
         <filename>baz2.scm</filename>, displaying
         <computeroutput>Hello</computeroutput>.
@@ -1260,7 +1260,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         by the file's extension) which type of file is being loaded to
         load that file in the correct manner.  The file types
         currently supported are those described in <xref
-        linkend="FileExtensions"/>.  
+                                                         linkend="FileExtensions"/>.  
       </para>
       <para>
         When a pure source file is loaded, each s-expression is evaluated
@@ -1271,7 +1271,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
     <sect2>
       <title>Location Tracking</title>
       <para>
-        &SISC; allows the location of input, i.e. the file name, line
+          &SISC; allows the location of input, i.e. the file name, line
         number, and column number, to be tracked when reading from an
         input port.
       </para>
@@ -1317,6 +1317,57 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
           </para>
         </blockquote>
       </para>      
+    </sect2>
+    <sect2 id="Resources">
+      <title>Locating Resources</title>
+      <para>
+          &SISC; provides a mechanism for locating and subsequently
+        loading named resources, such as Scheme source files, Scheme
+        data files, property files. The resources are located on the
+        Java class path associated with the class loader of the
+        currently executing thread. This allows Scheme programs to
+        load resources in a portable, J2EE-compliant manner.
+      </para>
+      <para>
+        <blockquote>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>url</type>
+              <methodname>find-resource</methodname>
+              <methodparam><parameter>string</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Locates the resource named by
+                <parameter>string</parameter> on the Java class path
+                associated with the current thread's class loader. The
+                resource location is returned as a URL suitable for
+                &SISC; I/O operations. If the resource cannot be
+                found, &num;f is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>url-list</type>
+              <methodname>find-resources</methodname>
+              <methodparam><parameter>string</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Locates the resource named by
+                <parameter>string</parameter> on the Java class path
+                associated with the current thread's class loader. The
+                resource locations are returned as a list of URLs
+                suitable for &SISC; I/O operations. If the resource
+                cannot be found, an empty list is returned.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
     </sect2>
     <sect2 id="FileSystem">
       <title>File-System Interface</title>

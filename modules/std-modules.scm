@@ -281,10 +281,7 @@
 (module libraries
   (require-library
    library-exists?
-   library-loaded?
-   library-path
-   library-path-prepend
-   library-path-append)
+   library-loaded?)
   (import threading)
   (import hashtable)
   (include "libraries.scm"))
