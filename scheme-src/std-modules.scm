@@ -38,10 +38,10 @@
 
 (native-module logicops   "sisc.modules.SLogicOps")
 (native-module networking "sisc.modules.SNetwork")
-(native-module threading  "sisc.modules.SThread")
 (native-module debugging  "sisc.debug.SDebug")
-(native-module s2j        "sisc.modules.S2J")
-(native-module hashtable  "sisc.modules.SHashtable")
+(native-module threading-native  "sisc.modules.SThread")
+(native-module s2j-native        "sisc.modules.S2J")
+(native-module hashtable-native  "sisc.modules.SHashtable")
 
 (module hashtable
   (make-hashtable
@@ -56,7 +56,7 @@
    hashtable/keys
    hashtable/for-each
    hashtable/map)
-  (import hashtable)
+  (import hashtable-native)
   (include "../modules/hashtable.scm"))
 
 (module threading
@@ -88,7 +88,7 @@
    monitor/notify-all
    monitor/synchronize
    monitor/synchronize-unsafe)
-  (import threading)
+  (import threading-native)
   (include "../modules/thread.scm"))
 
 (module generic-procedures
@@ -111,7 +111,7 @@
    generic-java-procedure
    generic-java-constructor
    make)
-  (import s2j)
+  (import s2j-native)
   (import hashtable)
   (import threading)
   (include "../modules/generic-procedures.scm"))
@@ -131,6 +131,8 @@
    java-null?
    java-class-of
    java-array-new
+   java-set!
+   jnull
    ->
    ->jboolean
    ->jchar
@@ -182,13 +184,13 @@
    <void>
    <symbol>
    <object>)
-  (import s2j)
+  (import s2j-native)
   (import generic-procedures)
   (include "../modules/s2j.scm")
   (define (java-class name)
     (java/class (if (string? name) (string->symbol name) name)))
   (define java-synchronized	java/synchronized)
-  (define java-wrap		java/wrap)
+  (define java-wrap         java/wrap)
   (define java-unwrap		java/unwrap)
   (define java-instance?	java/instance?)
   (define java-assignable?	java/assignable?)
@@ -199,6 +201,8 @@
   (define java-null? 		java/null?)
   (define java-class-of		java/class-of)
   (define java-array-new  	java/array-new)
+  (define java-set!         java/set!)
+  (define jnull     (java/superclass (java/class '|java.lang.Object|)))
   (define-generic ->)
   (define-method (-> ((meta <jboolean>) _)) ->jboolean)
   (define-method (-> ((meta <jchar>)_))     ->jchar)

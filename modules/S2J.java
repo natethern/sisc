@@ -68,6 +68,7 @@ public class S2J extends ModuleAdapter {
         JAVA_ARRAY_NEW      =62,
         JAVA_INV_HANDLER    =63,
         JAVA_PROXY          =64,
+        JAVA_SET            =65,
 
         CONV_JBOOLEAN       =100,
         CONV_JCHAR          =101,
@@ -139,6 +140,7 @@ public class S2J extends ModuleAdapter {
         define("java/array-new"     ,JAVA_ARRAY_NEW);
         define("java/invocation-handler",JAVA_INV_HANDLER);
         define("java/proxy"         ,JAVA_PROXY);
+        define("java/set!"          ,JAVA_SET);
 
         define("->jboolean"         ,CONV_JBOOLEAN);
         define("->jchar"            ,CONV_JCHAR);
@@ -304,6 +306,11 @@ public class S2J extends ModuleAdapter {
             this.obj = o;
         }
 
+        public void set(Object o) {
+            this.obj = o;
+            this.objType = JUNKN;
+        }
+
         public Object javaValue()
         {
             return obj;
@@ -324,7 +331,7 @@ public class S2J extends ModuleAdapter {
         }
 
         public int hashCode() {
-            return obj.hashCode();
+            return (obj == null) ? 0 : obj.hashCode();
         }
 
         public boolean eq(Object v) {
@@ -333,8 +340,10 @@ public class S2J extends ModuleAdapter {
         }
 
         public boolean equals(Object v) {
+            if (obj == null)
+                return v == null;
             return (v instanceof JavaObject) &&
-                ((JavaObject)v).obj.equals(obj);
+                obj.equals(((JavaObject)v).obj);
         }
 
         public void apply(Interpreter r)
@@ -566,6 +575,13 @@ public class S2J extends ModuleAdapter {
             return ((JavaObject)o).getObjType();
         } catch (ClassCastException e) { typeError(S2JB, "jobject", o); }
         return JavaObject.JUNKN;
+    }
+
+    public static final JavaObject sjobj(Value o) {
+        try {
+            return (JavaObject)o;
+        } catch (ClassCastException e) { typeError(S2JB, "jobject", o); }
+        return null;
     }
 
     public static final Object jobj(Value o) {
@@ -938,6 +954,9 @@ public class S2J extends ModuleAdapter {
                 return truth(fixClass(jclass(f.vlr[0])).isInstance(jobj(f.vlr[1])));
             case JAVA_ASSIGNABLEQ:
                 return truth(fixClass(jclass(f.vlr[0])).isAssignableFrom(fixClass(jclass(f.vlr[1]))));
+            case JAVA_SET:
+                sjobj(f.vlr[0]).set(jobj(f.vlr[1]));
+                return VOID;
             case JAVA_ARRAY_CLASS:
                 return makeJObj(makeArrayClass(jclass(f.vlr[0]), num(f.vlr[1]).intValue()));
             case JAVA_ARRAY_NEW:
