@@ -1,9 +1,10 @@
-(define (hashtable/get! ht key . rest)
-  (or (hashtable/get ht key)
-      (and (not (null? rest))
-           (let ([res ((car rest))])
-             (hashtable/put! ht key res)
-             res))))
+(define (hashtable/get! ht key thunk . rest)
+  (let ([res (apply hashtable/get ht key rest)])
+    (if (eqv? res (if (null? rest) #f (car rest)))
+        (let ([res (thunk)])
+          (hashtable/put! ht key res)
+          res)
+        res)))
 
 ;;The following are quite inefficient. To get around that we'd have
 ;;to expose java collection iterators.

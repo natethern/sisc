@@ -49,14 +49,15 @@
   (assert-proc proc
                (lambda ()
                  (apply set-annotation! proc key val rest))))
-(define (procedure-property! proc key . rest)
+(define (procedure-property! proc key thunk . rest)
   (assert-proc proc
                (lambda ()
-                 (or (annotation proc key)
-                     (and (not (null? rest))
-                          (let ([res ((car rest))])
-                            (set-annotation! proc key res)
-                            res))))))
+                 (let ([res (apply annotation proc key rest)])
+                   (if (eqv? res (if (null? rest) #f (car rest)))
+                       (let ([res (thunk)])
+                         (set-annotation! proc key res)
+                         res)
+                       res)))))
 
 ;;This maps procedure to lists of methods ordered by their
 ;;"specificity", i.e. methods appearing earlier in the list are always
