@@ -1,3 +1,7 @@
+2004-12-29  Matthias Radestock  <matthias@sorted.org>
+
+	* Simplified the syntax for DEFINE-CLASS.
+
 2004-12-27  Matthias Radestock  <matthias@sorted.org>
 
 	* Implemented srfi-40.

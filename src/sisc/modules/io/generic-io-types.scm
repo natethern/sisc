@@ -29,10 +29,10 @@
   (import gio/filtergenerics)
   (import gio/porttypes)
   (define-class (<filter-input-port> <input-port>)
-    (in (accessor :in) (modifier :in!)))
+    (in :in :in!))
   (define-class (<filter-output-port> <output-port>)
-    (out (accessor :out) (modifier :out!))
-    (auto-flush (accessor :aflush) (modifier :aflush!))))
+    (out :out :out!)
+    (auto-flush :aflush :aflush!)))
 
 (module gio/nativeporttypes
   (<native-input-port>

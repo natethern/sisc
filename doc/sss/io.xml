@@ -2202,10 +2202,10 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
   (define-class (&lt;character-output-port&gt; &lt;output-port&gt;))
 
   (define-class (&lt;filter-input-port&gt; &lt;input-port&gt;)
-    (in (accessor :in) (modifier :in!)))
+    (in :in :in!))
   (define-class (&lt;filter-output-port&gt; &lt;output-port&gt;)
-    (out (accessor :out) (modifier :out!))
-    (auto-flush (value #f) (accessor :aflush) (modifier :aflush!)))
+    (out :out :out!)
+    (auto-flush :aflush :aflush!))
 
   (define-class (&lt;native-input-port&gt; &lt;filter-input-port&gt;))
   (define-class (&lt;native-output-port&gt; &lt;filter-output-port&gt;))

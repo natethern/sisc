@@ -70,24 +70,33 @@
                          direct-superclasses)
                      direct-slots))
 
-(define (configure-slot class slot-props)
-  (for-each (lambda (slot props)
-              (define (add-slot-method kind fetch)
-                (let ([gproc (assq kind props)])
-                  (if gproc (add-method (cdr gproc) (fetch slot)))))
-              (add-slot-method 'accessor slot-accessor-method)
-              (add-slot-method 'modifier slot-modifier-method))
-            (class-direct-slots class)
-            slot-props))
+(define (make-class-with-slots name direct-superclasses slot-defs)
+  (let ([class (make-class name
+                           direct-superclasses
+                           (map car slot-defs))])
+    (for-each
+     (lambda (slot props)
+       (if (not (null? props))
+           (let ([method (car props)]
+                 [props (cdr props)])
+             (add-method method (slot-accessor-method slot))
+             (if (not (null? props))
+                 (let ([method (car props)]
+                       [props (cdr props)])
+                   (add-method method (slot-modifier-method slot))
+                   (if (not (null? props))
+                       (error "too many slot properties")))))))
+     (class-direct-slots class)
+     (map cdr slot-defs))
+    class))
 
 (define-simple-syntax (define-class (name . superclasses)
-                        (slot-name (slot-prop-name slot-prop-val) ...)
+                        (slot-name . slot-props)
                         ...)
   (module (name)
-      (define name)
+    (define name)
     (set! name
-      (make-class 'name
-                  (list . superclasses)
-                  '(slot-name ...)))
-    (configure-slot name `(((slot-prop-name . ,slot-prop-val) ...) ...))))
-
+      (make-class-with-slots 'name
+                             (list . superclasses)
+                             `((slot-name ,@(list . slot-props))
+                               ...)))))

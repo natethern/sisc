@@ -1688,10 +1688,10 @@
                 </member>
                 <member>
                   and <parameter>slot-def</parameter> is of the form
-                <literal>(</literal><parameter>slot-name</parameter>
-                <literal>(</literal><parameter>slot-prop-name</parameter>
-                <parameter>slot-prop-value</parameter><literal>)
-                ...)</literal>
+                  <literal>(</literal>
+                  <parameter>slot-name</parameter>
+                  [<parameter>accessor</parameter> [<parameter>modifier</parameter>]]
+                  <literal>)</literal>
                 </member>
               </simplelist>
               <para>
@@ -1705,34 +1705,11 @@
               </para>
               <para>
                 <parameter>slot-name</parameter> names a
-                slot. <parameter>slot-prop-name</parameter> must be
-                the name of one of the defined slot properties, and
-                <parameter>slot-prop-value</parameter> is its
-                value. The following are the valid slot properties:
-                <variablelist>
-                  <varlistentry>
-                    <term>accessor</term>
-                    <listitem>
-                      <para>
-                        The generic procedure to which an accessor
-                        method for the slot will be added. If no
-                        accessor is specified then the slot cannot be
-                        accessed on an instance of the class.
-                      </para>
-                    </listitem>
-                  </varlistentry>
-                  <varlistentry>
-                    <term>modifier</term>
-                    <listitem>
-                      <para>
-                        The generic procedure to which a modifier
-                        method for the slot will be added. If no
-                        modifier is specified then the slot cannot be
-                        modified on an instance of the class.
-                      </para>
-                    </listitem>
-                  </varlistentry>
-                </variablelist>
+                slot. <parameter>accessor</paramter> must be a generic
+                procedure. An accessor method for the slot will be
+                added to it. <parameter>modifier</paramter> must be a
+                generic procedure. A modifier method for the slot will
+                be added to it.
               </para>
             </blockquote>
             <informalexample>
@@ -1741,8 +1718,8 @@
 (define-class (&lt;foo&gt;))
 (define-class (&lt;bar&gt;))
 (define-class (&lt;baz&gt; &lt;foo&gt; &lt;bar&gt;)
-  (x (accessor :x))
-  (y (accessor :y) (modifier :y!)))
+  (x :x)
+  (y :y :y!))
               </programlisting>
             </informalexample>
           </para>
@@ -1852,8 +1829,8 @@
 (class-direct-slots (make-class '&lt;foo&gt; '() '()))  &arrow; '()
 (define-generics :x :y :y!)
 (define-class (&lt;baz&gt;)
-  (x (accessor :x))
-  (y (accessor :y) (modifier :y!)))
+  (x :x)
+  (y :y :y!))
 (class-direct-slots &lt;baz&gt; &arrow; (&lt;slot&gt; &lt;slot&gt;))
               </programlisting>
             </informalexample>
@@ -1985,7 +1962,7 @@
             <informalexample>
               <programlisting>
 (define-generics :x :x!)
-(define-class (&lt;baz&gt;) (x (accessor :x)))
+(define-class (&lt;baz&gt;) (x :x))
 (define baz (make &lt;baz&gt;))
 (:x baz)  &arrow; 1
 ((slot-modifier (car (class-direct-slots &lt;baz&gt;))) baz 2)
@@ -2077,7 +2054,7 @@
               <programlisting>
 (define-generics :x :x!)
 (define-class (&lt;baz&gt;)
-  (x (accessor :x) (modifier :x!)))
+  (x :x :x!))
 (define-method (initialize (&lt;baz&gt; b) (&lt;number&gt; x)) (:x! b x))
 (define baz (make &lt;baz&gt; 2))
 (:x baz)  &arrow; 2
@@ -2097,7 +2074,7 @@
           <programlisting>
 (define-generics :x :x!)
 (define-class (&lt;baz&gt;)
-  (x (accessor :x) (modifier :x!)))
+  (x :x :x!))
 (define baz (make &lt;baz&gt;))
 (:x baz)  &arrow; #f
           </programlisting>
@@ -2199,9 +2176,9 @@
   :x :x! :y :y! :z :z!
   :xb :xb! :yb :yb! :zb :zb!)
 (define-class (&lt;foo&gt;)
-  (x (accessor :x) (modifier :x!))
-  (y (accessor :y) (modifier :y!))
-  (z (accessor :z)))
+  (x :x :x!)
+  (y :y :y!)
+  (z :z))
 (define f (make &lt;foo&gt;))
 (:x f)  &arrow; #f
 (:y f)  &arrow; #f
@@ -2213,9 +2190,9 @@
 
 ;;overloading slots in sub-class
 (define-class (&lt;bar&gt; &lt;foo&gt;)
-  (x (accessor :x) (modifier :x!))
-  (y (accessor :yb) (modifier :yb!))
-  (zb (accessor :zb) (modifier :zb!)))
+  (x :x :x!)
+  (y :yb :yb!)
+  (zb :zb :zb!))
 (define b (make &lt;bar&gt;))
 (:x b)  &arrow; #f
 (:y b)  &arrow; #f
@@ -2236,7 +2213,7 @@
 
 ;;inheritance restriction on slots
 (define-class (&lt;boo&gt; &lt;baz&gt;)
-  (yb (accessor :yb) (modifier :yb!)))
+  (yb :yb :yb!))
 (define-class (&lt;goo&gt;))
 (define-class (&lt;moo&gt; &lt;bar&gt; &lt;boo&gt; &lt;goo&gt;))  &arrow; error
           </programlisting>

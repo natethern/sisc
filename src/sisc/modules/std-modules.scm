@@ -492,6 +492,7 @@
      slot-name
      slot-class
      slot-accessor
+     slot-accessor-method
      slot-modifier
      slot-modifier-method
      <class>
@@ -502,7 +503,7 @@
      class-direct-slots
      <object>
      make-class
-     (define-class configure-slot)
+     (define-class make-class-with-slots)
      make
      initialize)
   (import* record
