@@ -179,7 +179,7 @@
       (new-state)))
     ;;Begin lifting (possibly unsafe)
     ((begin ,e* ... ,el)
-;       (guard (not-redefined? 'begin))
+;       (guard (core-form-not-redefined? 'begin))
      (let-values ([(rv state) (opt:if el conseq altern state)])
        (values (apply make-begin (append e* `(,rv)))
                (merge-states state '((new-assumptions begin))))))
@@ -252,7 +252,7 @@
   (match rhs
     ;; Begin lifting
     ((begin ,e* ... ,el)
-;     (guard (not-redefined? 'begin))
+;     (guard (core-form-not-redefined? 'begin))
      (values
       (apply make-begin (append e* `((set! ,lhs ,el))))
       '((new-assumptions 'begin))))
