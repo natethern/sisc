@@ -223,23 +223,18 @@
   (lambda (x)
     (syntax-case x ()
       ((_ e)
-       (let ([st (gensym)]
-	     [et (gensym)])
-	 (syntax (let* ((st (system-time))
-			(val e)
-			(et (system-time)))
-		   (list val (list (- et st) 'ms))))))
+       (syntax (let* ((st (system-time))
+		      (val e)
+		      (et (system-time)))
+		 (list val (list (- et st) 'ms)))))
       ((_ n e)
-       (let ([st (gensym)]
-	     [x (gensym)]
-	     [et (gensym)])
-	 (syntax (let* ((st (system-time))
-			(val (let loop ([x (- n 1)])
-			       (if (zero? x) 
-				   e
-				   (begin e (loop (- x 1))))))
-			(et (system-time)))
-		   (list val (list (quotient (- et st) n) 'avg 'ms)))))))))
+       (syntax (let* ((st (system-time))
+		      (val (let loop ([x (- n 1)])
+			     (if (zero? x) 
+				 e
+				 (begin e (loop (- x 1))))))
+		      (et (system-time)))
+		 (list val (list (quotient (- et st) n) 'avg 'ms))))))))
 
 ;; Unless and When 
 (define-syntax when
