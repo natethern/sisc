@@ -58,7 +58,8 @@ public class Reflection extends Util {
         JAVA_FIELD_REF = 41,
         JAVA_FIELD_SET = 42,
         JAVA_ARRAY_REF = 43,
-        JAVA_ARRAY_SET = 44;
+        JAVA_ARRAY_SET = 44,
+        JAVA_ARRAY_LENGTH = 45;
 
     public static class Index extends IndexedLibraryAdapter {
 
@@ -117,6 +118,7 @@ public class Reflection extends Util {
             define("java/field-set!", JAVA_FIELD_SET);
             define("java/array-ref", JAVA_ARRAY_REF);
             define("java/array-set!", JAVA_ARRAY_SET);
+            define("java/array-length", JAVA_ARRAY_LENGTH);
         }
     }
 
@@ -396,6 +398,13 @@ public class Reflection extends Util {
                 return Symbol.intern(mangleMethodName(symval(f.vlr[0])));
             case JAVA_MANGLE_CLASS_NAME:
                 return Symbol.intern(mangleClassName(symval(f.vlr[0])));
+            case JAVA_ARRAY_LENGTH:
+                Object ar = jobj(f.vlr[0]);
+                try {
+                    return Quantity.valueOf(Array.getLength(ar));
+                } catch (IllegalArgumentException e) {
+                    throw new RuntimeException(liMessage(Util.S2JB, "notarray", typeString(ar)));
+                }
             default: break SIZESWITCH;
             }
         case 2:
