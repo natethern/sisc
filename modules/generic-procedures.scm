@@ -188,17 +188,17 @@
                (vector->list (java/decl-methods class))))))))
 
 ;;SYNC: we don't care if methods gets modified while we do this
-(define (find-method-helper pred proc args methods)
+(define (find-method-helper proc args methods)
   (if (null? methods)
       #f
       (let ([current (car methods)])
         (if (and ((if (method-rest? current) >= =)
                   (length args)
                   (method-arity current))
-                 (pred args current))
+                 (instances-of? args (method-types current)))
             (cons (method-procedure current)
                   (lambda newargs (find-and-call proc newargs methods)))
-            (find-method-helper pred proc args (cdr methods))))))
+            (find-method-helper proc args (cdr methods))))))
 (define (find-method args methods proc)
   (if (not (null? args))
       (let ([first (car args)])
@@ -206,9 +206,7 @@
             (add-class first))
         (if (java/object? first)
             (add-class (java/class-of first)))))
-  (find-method-helper (lambda (args m)
-                        (instances-of? args (method-types m)))
-                      proc args (cdr methods)))
+  (find-method-helper proc args (cdr methods)))
 (define (call-method-helper m args next)
   (if m
       (let ([meth (car m)]
