@@ -230,11 +230,13 @@
 (require-library 'com/foo/lib2)
 
 (module lib3
-    (foo)
+    (a-function)
   (import srfi-1)
   (import com/foo/lib2)
-  (define (a-function) (do-something))
-  (define (another-function) (something-else)))
+  (define (a-function) 
+    (do-something (another-function)))
+  (define (another-function) 
+    (something-else))
     </programlisting>
     <para>
      Libraries should not depend on any top-level definitions outside
