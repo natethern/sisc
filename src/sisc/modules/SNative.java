@@ -210,13 +210,13 @@ public class SNative extends IndexedProcedure {
                 switch(id) {
                 case NOT: return truth(f.vlr[0]) ? FALSE : TRUE;
                 case CADR:
-                    return ((Pair)pair(f.vlr[0]).cdr).car;
+                    return truePair(truePair(f.vlr[0]).cdr).car;
                 case CDAR:
-                    return ((Pair)pair(f.vlr[0]).car).cdr;
+                    return truePair(truePair(f.vlr[0]).car).cdr;
                 case CAAR:
-                    return ((Pair)pair(f.vlr[0]).car).car;
+                    return truePair(truePair(f.vlr[0]).car).car;
                 case CDDR:
-                    return ((Pair)pair(f.vlr[0]).cdr).cdr;
+                    return truePair(truePair(f.vlr[0]).cdr).cdr;
                 case STRINGUPCASE:
                     SchemeString str=str(f.vlr[0]);
                     return new SchemeString(str.asString().toUpperCase());
