@@ -32,7 +32,7 @@
 ;;
 		 
 (current-evaluator eval)
-(emit-annotations #t)
+;(emit-annotations #t)
 
 ;Loads an already expanded file (ie does not run it through the expander)
 (define (load-expanded file)
