@@ -57,7 +57,7 @@ public class Reflection extends Util {
         JAVA_ARRAY_CLASS    =61,
         JAVA_ARRAY_NEW      =62,
         JAVA_INV_HANDLER    =63,
-        JAVA_PROXY          =64,
+        JAVA_PROXY_CLASS    =64,
         JAVA_NULL           =66,
         JAVA_MANGLE_FIELD_NAME  =68,
         JAVA_MANGLE_METHOD_NAME =69;
@@ -112,7 +112,7 @@ public class Reflection extends Util {
         define("java/array-class"   ,JAVA_ARRAY_CLASS);
         define("java/array-new"     ,JAVA_ARRAY_NEW);
         define("java/invocation-handler",JAVA_INV_HANDLER);
-        define("java/proxy"         ,JAVA_PROXY);
+        define("java/proxy-class"   ,JAVA_PROXY_CLASS);
         define("java/null"          ,JAVA_NULL);
         define("java/mangle-field-name"	,JAVA_MANGLE_FIELD_NAME);
         define("java/mangle-method-name",JAVA_MANGLE_METHOD_NAME);
@@ -349,7 +349,7 @@ public class Reflection extends Util {
                 } catch (NoSuchMethodException e) {
                     return FALSE;
                 }
-            case JAVA_PROXY:
+            case JAVA_PROXY_CLASS:
                 Class[] interfaces = new Class[f.vlr.length];
                 for (int i=0; i<f.vlr.length; i++) {
                     interfaces[i] = jclass(f.vlr[i]);
