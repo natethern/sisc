@@ -124,8 +124,8 @@ public class Quantity extends Value {
 
     public int type;
     public int val;
-    public float d, im;
-    public BigInteger i, de;
+    public float d, im=0.0f;
+    public BigInteger i, de=_BI_ONE;
 
     public Quantity() {}
 
@@ -301,7 +301,6 @@ public class Quantity extends Value {
                 de=de.negate();
             }
             if (de.equals(_BI_ONE)) {
-                de=null;
                 type=INTEG;
             }
         } else if (type==COMPLEX) {
@@ -578,7 +577,7 @@ public class Quantity extends Value {
     }
 
     public Quantity log() {
-        if (type==COMPLEX) {
+        if (type==COMPLEX || (type==DECIM && d < 0.0f)) {
             // Arg[w] = ArcTan(b/a)
             // |w| = sqrt(a^2 + b^2)
             // Log[w] = Log[|w|]+I*(Arg[w]+2*Pi*k), for any integer k.

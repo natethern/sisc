@@ -131,8 +131,8 @@ public class Quantity extends Value {
 
     public int type;
     public int val;
-    public BigDecimal d, im;
-    public BigInteger i, de;
+    public BigDecimal d, im=_BD_ZERO;
+    public BigInteger i, de=_BI_ONE;
 
     public Quantity() {}
 
@@ -310,7 +310,7 @@ public class Quantity extends Value {
                 de=de.negate();
             }
             if (de.equals(_BI_ONE)) {
-                de=null;
+                de=_BI_ONE;
                 type=INTEG;
             }
         } else if (type==COMPLEX) {
@@ -318,10 +318,10 @@ public class Quantity extends Value {
                 d=d.setScale(max_precision, BigDecimal.ROUND_HALF_EVEN);
             }
             if (im.compareTo(_BD_ZERO)==0) {
-                im=null;
+	        im = _BD_ZERO;
                 type=DECIM;
             }
-            if (im!=null && im.scale()>max_precision) {
+            if (im!=_BD_ZERO && im.scale()>max_precision) {
                 im=im.setScale(max_precision, BigDecimal.ROUND_HALF_EVEN);
             }
         } else if (type==DECIM) {
@@ -584,16 +584,17 @@ public class Quantity extends Value {
     }
 
     public Quantity log() {
-        if (type==COMPLEX) {
+        if (type==COMPLEX || comp(ZERO,-1)) {
             // Arg[w] = ArcTan(b/a)
             // |w| = sqrt(a^2 + b^2)
             // Log[w] = Log[|w|]+I*(Arg[w]+2*Pi*k), for any integer k.
             // select k=0 for principal value, giving:
             // Log[w] = Log[|w|]+I*Arg[w]
             //        = Log[sqrt(a^2 + b^2)] + I * ArcTan(b/a)
-            BigDecimal a2=d.multiply(d);
+	    BigDecimal dv=(type==COMPLEX ? d : decimal());
+            BigDecimal a2=dv.multiply(dv);
             BigDecimal b2=im.multiply(im);
-            double arctan=Math.atan2(im.doubleValue(),d.doubleValue());
+            double arctan=Math.atan2(im.doubleValue(),dv.doubleValue());
             BigDecimal x=new BigDecimal(Math.log(Math.sqrt(a2.add(b2).doubleValue())));
             BigDecimal y=new BigDecimal(arctan);
             return new Quantity(x,y);
