@@ -13,22 +13,29 @@
 	   (if (not (equal? (string-ref todeliver 0) #\"))
 	       (set! todeliver
 		     (translate-for-third-party todeliver 'male)))
-	   (if (and (not later) (not (null? (channels-user-occupies 
-					     (soundex recipient)))))
-                 (begin (do-tell recipient 
-				 (car (channels-user-occupies 
-				       (message-soundex-nick message)))
-				 (message-nick message) todeliver) #f)
-                 (begin 
-                   (store-message dbcon (message-nick message)
-				  (soundex recipient)
-                                  (string-downcase recipient) todeliver)
-                   (random-elem tell-responses)))))))
+	   (cond [(equal? (metaphone recipient) (metaphone bot-name))
+                  (random-elem '("You just did."
+                                 "Umm, I'm right here."
+                                 "Weirdo."))]
+                 [(and (not later) (not (null? (channels-user-occupies 
+                                                (metaphone recipient)))))
+                  (do-tell recipient
+                           (car (channels-user-occupies 
+                                 (message-metaphone-nick message)))
+                           (message-nick message) todeliver)
+                  #f]
+                 [else
+                  (store-message dbcon (message-nick message)
+                                 (metaphone recipient)
+                                 (string-downcase recipient) todeliver)
+                  (random-elem tell-responses)))))))
 
 (define (do-tell recipient channel-name sender message)
   (send-messages (channel-bot (get-channel channel-name))
                  channel-name
-                 (sisc:format "~a, ~a says: ~a" recipient sender message)))
+                 (sisc:format "~a, ~a says: ~a" 
+                    (or (real-name (metaphone recipient)) recipient)
+                    sender message)))
 
 (define (init-tell)
   (add-join-hook 
@@ -42,7 +49,7 @@
   #t)
 
 (define (deliver-messages dbcon channel sender)
-  (let ([messages (fetch-messages! dbcon (soundex sender))])    
+  (let ([messages (fetch-messages! dbcon (metaphone sender))])    
     (when messages 
       (send-messages bot (channel-name channel)
                      (sisc:format 

@@ -38,7 +38,8 @@
                              (if (and (not last) (not (has-n+1? e))
                                       (memv (third e) vowels))
                                  #\k #\x) metaph))
-                           (else (cons #\k metaph)))))
+                           (else (cons #\k metaph)))
+                     metaph))
                 ((#\d)
                  (cons 
                   (if (and (not (has-n+1? e)) (char=? (second e) #\g)
@@ -72,10 +73,11 @@
                 ((#\f #\j #\l #\m #\n #\r)
                  (cons sym metaph))
                 ((#\k)
-                 (if last
-                     (if (char=? last #\c)
-                         (cons #\k metaph))
-                     '(#\k)))
+                 (cond [(and last (char=? last #\c))
+                        (cons #\k metaph)]
+                       [(not last)
+                        '(#\k)]
+                       [else metaph]))
                 ((#\p)
                  (cons 
                   (if (and (has-next? e) (char=? (second e) #\h)) #\f #\p)
@@ -105,7 +107,8 @@
                              (else metaph)))
                 ((#\v) (cons #\f metaph))
                 ((#\w #\y)
-                 (if (and (has-next? e) (memv (second e) vowels))
+                 (if (or (not (has-next? e))
+                         (memv (second e) vowels))
                      (cons sym metaph)
                      metaph))
                 ((#\x)
@@ -132,7 +135,7 @@
                           (if (and (not last) (memv sym vowels))
                               (list sym)
                               (metaphone-rules sym e metaph size)))
-                        sym))))))))                                           
+                      sym))))))))                                           
                                    
                                        
                                    

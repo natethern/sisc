@@ -24,12 +24,12 @@
   (handler command-handler set-command-handler!))
 
 (define-record-type :irc-message
-  (make-irc-message private source nick soundex-nick login host message)
+  (make-irc-message private source nick metaphone-nick login host message)
   irc-message?
   (private message-is-private?)
   (source message-source)
   (nick message-nick)
-  (soundex-nick message-soundex-nick)
+  (metaphone-nick message-metaphone-nick)
   (login message-login)
   (host message-host)
   (message message-text))

@@ -3,9 +3,9 @@
 
 (define (normalize-nick nick)
   (cond [(instance-of? nick <jstring>)
-         (soundex (->string nick))]
+         (metaphone (->string nick))]
         [(symbol? nick)
-         (soundex (symbol->string nick))]
+         (metaphone (symbol->string nick))]
         [(string? nick)
          nick]
         [else (error 'normalize-nick "Invalid nick type ~a" nick)]))

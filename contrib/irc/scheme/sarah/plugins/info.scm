@@ -15,12 +15,27 @@
                                          '((what . is) (where . "is at"))))
                               (cdr random-result))))))))
 
+
 (define (learn type)
   (lambda (channel message term definition)
-    (if (store-item dbcon type term definition)
-	(random-elem learn-responses) 
-	(random-elem knewthat-responses))))
+    (let ([tt (tokenize term)])
+      (or (and (or (> (length tt) (length (tokenize definition)))
+                   (and (= 1 (length tt)) (memq (car tt) ignored-words)))
+               'continue)
+          (if (store-item dbcon type term definition)
+              (random-elem learn-responses) 
+              (random-elem knewthat-responses))))))
 
+(define (learn-aka channel message term definition)
+  (or (and (> (length (tokenize term)) (length (tokenize definition)))
+           'continue)
+      (if (store-aka dbcon term definition)
+          (random-elem learn-responses) 
+          (random-elem knewthat-responses))))
+
+(define (forget channel message ignore term)
+  (remove-items dbcon term)
+  (random-elem forget-responses))
 
 (define (lookup-item conn type key)
   (let* ([stmt (jdbc/prepare-statement conn
@@ -48,7 +63,7 @@
     (set-string pstmt (->jint 3) (->jstring data))
     (with/fc (lambda (m e) #f) (lambda () (jdbc/execute pstmt)))))
 
-(define (store-aka conn key data)
+(define (store-aka conn data key)
   (let ([pstmt (jdbc/prepare-statement conn
                 "INSERT INTO aka VALUES(trim(?),trim(?))")])
     (set-string pstmt (->jint 1) (->jstring key))
@@ -90,3 +105,122 @@
   '("Already done."
     "Never knew it."))
 
+(define ignored-words '(
+about
+after
+all
+also
+an
+and
+another
+any
+are
+as
+at
+be
+$
+because
+been
+before
+being
+between
+both
+but
+by
+came
+can
+come
+could
+did
+do
+does
+each
+else
+for
+from
+get
+got
+has
+had
+he
+have
+her
+here
+him
+himself
+his
+how
+if
+in
+into
+is
+it
+its
+just
+like
+make
+many
+me
+might
+more
+most
+much
+must
+my
+never
+now
+of
+on
+only
+or
+other
+our
+out
+over
+re
+said
+same
+see
+should
+since
+so
+some
+still
+such
+take
+than
+that
+the
+their
+them
+then
+there
+these
+they
+this
+those
+through
+to
+too
+under
+up
+use
+very
+want
+was
+way
+we
+well
+were
+what
+when
+where
+which
+while
+who
+why
+will
+with
+would
+you
+your))

@@ -15208,7 +15208,7 @@ a little more experience.
 	</category>
 	<category>
 		<pattern>WHERE IS *</pattern>
-		<template>I think I know where <person/> is located.....
+		<template>I wish I knew where <person/> was. :(
 			<think>
 				<set name="it">
 					<set name="topic">

@@ -51,11 +51,22 @@
          (eval expr env)
          (loop (read-code in)))))))
 
+(define (my-dynamic-wind pre in post)
+  (let ([was-an-error #f])
+  (dynamic-wind pre
+    (lambda ()
+      (with/fc (lambda (m e)
+                 (set! was-an-error #t)
+                 (throw m e))
+               in))
+    (lambda ()
+      (unless was-an-error (post))))))
+
 (define (sandbox env)
   (putprop 'eval env (lambda (expr env)
                        (eval expr (sandbox env))))
   (putprop 'load env (lambda (url) (my-load url env)))
-  
+  (putprop 'dynamic-wind env my-dynamic-wind)  
   (for-each (lambda (binding)
               (putprop binding env (forbidden-procedure binding)))
             forbidden-bindings)
@@ -119,29 +130,36 @@
           (thread/new
            (lambda ()
              (thread/join evaluation-thread ms)
-             (with-output-to-port os
-               (lambda () 
-                 (with-failure-continuation
-                  (lambda (m e)
-                    ; An error?  Egads!
-                    (if (eqv? (thread/state evaluation-thread) 'running)
-                        (begin 
-                          (thread/interrupt evaluation-thread)
-                          (thread/join evaluation-thread)
-                          (with/fc (lambda (m e)
-                                     (putprop 'resume env (make-resume e)))
-                                   (lambda ()
-                                     (thread/result evaluation-thread)))
-                          (display 
-                           "Sorry, I couldn't evaluate your expression in the given time."))
-                        (print-exception (make-exception m e) #f)))
-                  (lambda ()
-                    (let ([result (thread/result evaluation-thread)])
-                      (if (circular? result) 
-                          (write result)
-                          (pretty-print result))
-                      (unless (void? result) 
-                        (putprop '! env result)))))))))])
+             (let* ([result
+                    (with-output-to-port os
+                      (lambda () 
+                        (with-failure-continuation
+                         (lambda (m e)
+                                        ; An error?  Egads!
+                           (if (eqv? (thread/state evaluation-thread) 'running)
+                               (begin 
+                                 (thread/interrupt evaluation-thread)
+                                 (thread/join evaluation-thread)
+                                 (with/fc (lambda (m e)
+                                            (putprop 'resume env (make-resume e)))
+                                          (lambda ()
+                                            (thread/result evaluation-thread)))
+                                 (display 
+                                  "Sorry, I couldn't evaluate your expression in the given time."))
+                               (print-exception (make-exception m e) #f)))
+                         (lambda ()
+                           (let ([result (thread/result evaluation-thread)])
+                             (unless (void? result) 
+                               (putprop '! env result))
+                             result)))))]
+                    [resultstring (get-output-string os)])
+               (set! os (open-output-string))
+               (display resultstring os)
+               (if (or (not (void? result))
+                       (equal? resultstring ""))
+                   (if (circular? result) 
+                       (write result os)
+                       (pretty-print result os))))))])
     ;Start the threads
     (thread/start evaluation-thread)
     (thread/start watchdog-thread)

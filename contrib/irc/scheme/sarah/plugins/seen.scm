@@ -6,7 +6,7 @@
   (display (sisc:format "~a ~a~%" ignore term))
   (if (equal? ignore "")
       (let-values ([(seen message person) 
-                    (lookup-seen dbcon (soundex term))])
+                    (lookup-seen dbcon (metaphone term))])
         (if seen (sisc:format "~a UTC, saying: ~a."
                               (sisc:format (random-elem seen-phrases) person seen)
                               message)
@@ -15,7 +15,7 @@
 
 (define (seenbot channel message)
   (unless (message-is-private? message)
-    (store-seen dbcon (message-soundex-nick message)
+    (store-seen dbcon (message-metaphone-nick message)
                 (message-nick message) (message-text message)))
   #t)
 

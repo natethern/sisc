@@ -64,7 +64,7 @@
     (set-channel-seed! channel (make-scheme-channel
                                 '())))
   (let ([schemechan (channel-seed channel)]
-        [nick (message-nick message)])
+        [nick (string-downcase (message-nick message))])
     (unless (message-is-private? message)
       (unless (assoc nick (scheme-channel-schemers schemechan))
         (set-scheme-channel-schemers!
@@ -91,7 +91,9 @@
                                    (message-nick message)
                                    "You are now in the REPL.")]
                     [(equal? command ".attach")
-                     (let ([user (trim (substring text i (string-length text)))])
+                     (let ([user (string-downcase
+                                  (trim
+                                   (substring text i (string-length text))))])
                        (set-schemers-env!
                         schemer (schemers-env
                                  (cdr (assoc user (scheme-channel-schemers
@@ -126,16 +128,17 @@
   (let* ([etmp (sandbox (scheme-report-environment 5))]
          [special-var (string->uninterned-symbol "no-binding")]
          [from (lambda (user binding)
-                 (if (assoc user (scheme-channel-schemers schemechan))
-                     (let ([rv (getprop binding
-                                        (schemers-env
-                                         (cdr (assoc user (scheme-channel-schemers
-                                                           schemechan))))
-                                        special-var)])
-                       (if (eq? rv special-var)
-                           (eval binding (null-environment 5))
-                           rv))
-                     (eval binding (null-environment 5))))]
+                 (let ([user (string-downcase (trim user))])
+                   (if (assoc user (scheme-channel-schemers schemechan))
+                       (let ([rv (getprop binding
+                                          (schemers-env
+                                           (cdr (assoc user (scheme-channel-schemers
+                                                             schemechan))))
+                                          special-var)])
+                         (if (eq? rv special-var)
+                             (eval binding (null-environment 5))
+                             rv))
+                       (eval binding (null-environment 5)))))]
          [load-from-url
           (lambda (url)
             (with/fc (lambda (m e)  
@@ -168,7 +171,8 @@
   (add-part-hook
    (lambda (channel sender login hostname)
      (when (get-channel channel)
-       (let ([schemechan (channel-seed (get-channel channel))])
+       (let ([schemechan (channel-seed (get-channel channel))]
+             [sender (string-downcase sender)])
          (when (and schemechan
                     (assoc sender (scheme-channel-schemers schemechan)))
            (set-scheme-channel-schemers!

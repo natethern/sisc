@@ -17,6 +17,7 @@
 (import srfi-27)
 (import jdbc)
 (import streams)
+(include "metaphone.scm")
 (include "../pirc.scm")
 (include "irc.scm")
 (include "records.scm")
@@ -27,6 +28,7 @@
 (include "bots/anna.scm")
 (include "bots/infobot.scm")
 (include "plugins/info.scm")
+(include "plugins/locate.scm")
 (include "plugins/seen.scm")
 (include "plugins/dict.scm")
 (include "plugins/tell.scm")
@@ -74,7 +76,6 @@
   (onDisconnect))
 
 ;; Initializations
-(require 'soundex)
 (require 'line-i/o)
 (srfi-27-init)
 (init-zippy)
@@ -83,11 +84,12 @@
 ; Add channel management hooks
 (add-join-hook
  (lambda (channel sender login hostname)
-   (add-user-to-channel channel
-                        (soundex sender))))
+   (add-user-to-channel channel sender)))
+
 (add-part-hook
  (lambda (channel sender login hostname)
-   (remove-user-from-channel channel (soundex sender))))
+   (remove-user-from-channel
+    channel (metaphone sender))))
 
 (define dbcon)
 (connect-sarah)

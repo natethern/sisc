@@ -68,6 +68,12 @@
     join-chan)
    ("scheme-channel " "\"scheme-channel <channel-name>\" creates a scheme channel with the given name" make-schemechan)
    ("part " "\"part <channel-name>\" asks me to leave a channel I'm in." request-part)
+   ("locate " "\"locate <someone>\" asks me to tell you where I see someone."
+    locate)
+   ("forget " "\"forget <something>\" asks me to forget what I know about something."
+    forget)
+   (" is also " "\"<fact> is also <something>\" tells me that the first term which I already know can also be named by the second." learn-aka)
+   (" is aka " "\"<fact> is also <something>\" tells me that the first term which I already know can also be named by the second." learn-aka)
    (" is at " "\"<something> is at <somewhere>\" defines the location of a term for later recollection by \"where is\"."
     (learn 'where))
    (" is " "\"<something> is <something else>\" defines a term for later recollection by \"what is\"."
