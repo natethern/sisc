@@ -1,3 +1,12 @@
+2002-04-21  Scott G. Miller  <scgmille@freenetproject.org>
+	
+	* Implemented a three level (empty->sisc-bindings->r5rs) chained
+          toplevel environment, that allows us to properly implement
+	  (scheme-report-environment).
+
+	* Fixed some bugs discovered in the condition variable/lock
+          interaction of the threading module.
+
 2002-04-15  Released 1.4.0rc2
 
 2002-04-15  Scott G. Miller  <scgmille@freenetproject.org>
