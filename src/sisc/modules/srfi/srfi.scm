@@ -518,6 +518,14 @@
   (import srfi-23)
   (include "srfi-42/ec.scm"))
 
+(display "srfi-48 ")
+(module _srfi-48 (_format)
+  (define _format format))
+(module srfi-48 (format)
+  (import _srfi-48)
+  (define format _format)
+  (add-feature 'srfi-48))
+
 (newline)
 
 ;; 
