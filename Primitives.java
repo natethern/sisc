@@ -781,8 +781,9 @@ public class Primitives extends ModuleAdapter {
             switch(primid) {
             case READCODE: 
                 InputPort inport=inport(f.vlr[0]);
-                return inport.read(f, truth(f.vlr[1]) ? 
-                                   Parser.PRODUCE_IMMUTABLES : 0);
+                return inport.read(f, Parser.PRODUCE_ANNOTATIONS |
+                                   (truth(f.vlr[1]) ? 
+                                    Parser.PRODUCE_IMMUTABLES : 0));
             case LOOKUP:
                 try {
                     return (Value)f.lookup(symbol(f.vlr[0]),

@@ -87,7 +87,7 @@ public class Parser extends Util implements Tokens {
     }
 
     public final Value nextExpression(InputPort is) throws IOException {
-        return nextExpression(is, 10, 0);
+        return nextExpression(is, 10, PRODUCE_IMMUTABLES);
     }
 
     protected final Value nextExpression(InputPort is, HashMap state, 
@@ -191,7 +191,8 @@ public class Parser extends Util implements Tokens {
 	    }
 
             o=readList(is, state, def, flags);
-	    if (produceAnnotations(flags) && o instanceof Pair && line>=0) {
+	    if (annotate && 
+                produceAnnotations(flags) && o instanceof Pair && line>=0) {
 		o=new AnnotatedExpr((Expression)o, 
 				    list(new Pair(LINE, Quantity.valueOf(line)),
 					 new Pair(COLUMN, Quantity.valueOf(col)),
