@@ -29,8 +29,15 @@ public class Parser extends Util implements Tokens {
 
     public Lexer lexer;
 
-    static final Object DOT=new Object();
-    static final Object ENDPAIR=new Object();
+    static final Object DOT=
+	new Object() {
+	    public String toString() { return "." };
+	}
+    static final Object ENDPAIR=
+	new Object() {
+	    public String toString() { return ")" };
+	}
+	    
     static final Symbol SYNTAX=Symbol.get("syntax"),
         ANNOTATION=Symbol.get("make-annotation"),
         LINE=Symbol.get("line-number"),
