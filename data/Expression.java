@@ -55,7 +55,7 @@ public abstract class Expression extends Util implements Serializable {
 
     public synchronized Value setAnnotation(Symbol key, Value val, Value def) {
         if (annotations==null)
-            annotations=Collections.synchronizedMap(new HashMap(0));
+            annotations=new HashMap(0);
         Value res = (Value)annotations.put(key, val);
         return (res == null) ? def : res;
     }
