@@ -38,6 +38,7 @@
 (define native-write       (getprop 'write))
 (define native-write-char  (getprop 'write-char))
 (define native-write-block (getprop 'write-block))
+(define native-write-string (getprop 'write-string))
 (define native-open-input-file (getprop 'open-input-file))
 (define native-open-output-file (getprop 'open-output-file))
 (define native-close-input-port (getprop 'close-input-port))

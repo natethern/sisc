@@ -140,7 +140,8 @@
      clear-breakpoint!
      continue
      stack-trace
-     print-stack-trace)
+     print-stack-trace
+     expression-annotations)
   (import debugging-native)
   (include "debug.scm"))
 
@@ -845,6 +846,7 @@
    open-source-input-string)
   (import oo)
   (import generic-io)
+  (import* type-system instance-of?)
   (import string-io-native)
   (include "io/string-io.scm"))
 
@@ -885,6 +887,7 @@
            (_open-serial-output-port open-serial-output-port))
   (import oo)
   (import generic-io)
+  (import* type-system instance-of?)
   (include "io/serial-io.scm"))
 
 (module networking
@@ -975,7 +978,8 @@
     (include "match.ss"))
 
 (module os
-  (process-terminated?
+  (process?
+   process-terminated?
    wait-for-process
    get-process-stdout
    get-process-stderr
@@ -984,6 +988,7 @@
    spawn-process-with-environment
    spawn-process/env)
   (import s2j)
+  (import* type-system instance-of?)
   (include "os/process.scm")
   (define spawn-process/env)
   (set! spawn-process/env spawn-process-with-environment))

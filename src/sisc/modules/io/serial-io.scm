@@ -10,7 +10,7 @@
     (_open-serial-output-port (unwrap-native-output-port port))))
 
 (define (call-with-serial-input-port port proc)
-  (proc (open-serial-input-port file)))
+  (proc (open-serial-input-port port)))
 
 (define (call-with-serial-output-port port proc)
   (let ([port (open-serial-output-port port)])
