@@ -3,6 +3,16 @@
 (define really-clean
   (string->list "abcdefghijklmnopqrstuvwxyz"))
 
+(define (tokens->string tokens)
+  (let ([str
+         (with-output-to-string
+             (lambda ()
+               (for-each (lambda (tok)
+                           (display tok)
+                           (display #\space))
+                         tokens)))])
+    (substring str 0 (- (string-length str) 1))))
+
 (define (clean word charset)
   (if (null? word) 
       '()
@@ -73,7 +83,8 @@
                                                    tokens)))])
                             (display pattern)
                             (and-let* ([handler (assq pattern pattern-handlers)]) 
-                                      (apply (cdr handler) (list-skip tokens n)))))])
+                                      (display tokens)
+                                      (apply (cdr handler) tokens))))])
       (if response response
           (let ([cleaned-message (bot-clean message)])
             (let ([hal-response
@@ -95,15 +106,42 @@
     (where . ((is . WHEREIS)
               (can . WHEREIS)))
     (shut . ((up . QUIET)))
+    (is . LEARN)
     (be . ((quiet . QUIET)))
     (listen . LISTEN)
     (evaluate . EVALUATE)
     ))
 
+(define whatis-preludes 
+  '("I've heard" 
+    "Someone once said"
+    ""
+    "I could be wrong, but"
+    "And I quote:"
+    "Last time I checked"
+    "From what I understand"))
+
 (define (what-is . args)
-  (case (car args)
-    ((SISC) "A lightweight Scheme Interpreter")
-    (else #f)))
+  (and (not (null? args))
+       (if (eq? bot-name (car args))
+           (apply what-is (cdr args))
+           (let* ([relevent-tokens
+                   (let loop ((ls args))
+                     (cond [(null? ls) #f]
+                           [(eq? (car ls) 'is)
+                            (cdr ls)]
+                           [else (loop (cdr ls))]))]
+                  [term (and relevent-tokens (tokens->string relevent-tokens))])
+             (and term
+                  (begin 
+                    (if (eq? #\? (string-ref term (- (string-length term) 1)))
+                        (set! term (substring term 
+                                              0 (- (string-length term) 1))))
+                    (and-let* ([result (lookup-item dbcon term)])
+                              (format "~a ~a is ~a" 
+                                      (random-elem whatis-preludes) 
+                                      term result))))))))
+       
 
 (define (quiet . args) (set! bot-quiet #t) "Fine, shutting up.")
 (define (listen . args) (set! bot-quiet #f) "Okay, I'm listening.")
@@ -118,6 +156,24 @@
                                               (display #\space))
                                             args)))
                           read))))))
+(define (learn . args)
+  (and (not (null? args))
+       (if (eq? bot-name (car args))
+           (apply learn (cdr args))
+           (let-values ([(term definition)
+                         (let loop ((term (list (car args)))
+                                    (ls (cdr args)))
+                           (if (null? ls)
+                               (values #f #f)
+                               (if (eq? (car ls) 'is)
+                                   (values (reverse term) (cdr ls))
+                                   (loop (cons (car ls) term) (cdr ls)))))])
+             (if (and term definition)
+                 (store-item dbcon (tokens->string term) (tokens->string definition)))))
+       #f))
+             
+          
+                
 (define what-time)
 (define who-is)
 (define where-is)
@@ -129,5 +185,6 @@
     (WHEREIS . ,where-is)
     (QUIET . ,quiet)
     (LISTEN . ,listen)
+    (LEARN . ,learn)
     (EVALUATE . ,evaluate)))
 
