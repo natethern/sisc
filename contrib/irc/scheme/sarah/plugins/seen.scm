@@ -51,8 +51,9 @@
                      (set-string stmt (->jint 2) (->jstring message))
                      (set-string stmt (->jint 3) (->jstring id))
                      stmt))])
-    (with/fc (lambda (m e) #f) (lambda () 
-                                 (jdbc/execute pstmt)))))
+    (with/fc (lambda (m e) (print-exception (make-exception m e)))
+                     (lambda () 
+                       (jdbc/execute pstmt)))))
 
 
 (define haventseen-responses

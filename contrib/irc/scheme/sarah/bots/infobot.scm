@@ -33,6 +33,7 @@
   (make-infobot
     ; Plugins go here, in the form:
     ; (crib help handler)
+   ("botsnack" "Feed me!" (lambda args ":)"))
    ("what is "
     "\"What is <something>\" asks for information about the something."
     (*-is? 'what))
@@ -57,6 +58,10 @@
     pprint)
    ("expand " "\"expand <s-expression>\" causes me to expand all the macros in the s-expression, and pretty-print the vanilla Scheme form."
     expand)
+   ("optimize " "\"optimize <s-expression>\" causes me to expand all the macros in the s-expression, and pretty-print the optimized vanilla Scheme form."
+    do-optimize)
+   ("express " "\"express <s-expression>\" will print the uExp version of an optimized, compiled s-expression."
+    do-express)
    ("dictionary" "\"dictionary <word>\" tells me to look up a word in Webster's dictionary." (dict "web1913"))
    ("yow" "A bit of randomness from Zippy the Pinhead." yow)
    ("join " "\"join <channel-name>\" asks me to join the channel as an infobot"

@@ -116,14 +116,6 @@
                         (string #\newline)
                         (loop (cdr vs))))))))))))))
 
-(define (my-load url env)
-  (call-with-input-file url
-    (lambda (in)
-     (let loop ([expr (read-code in)])
-       (unless (eof-object? expr)
-         (eval expr env)
-         (loop (read-code in)))))))
-
 (define simple-gen-sym 
   (let ([x 0])
     (lambda (var)
@@ -153,12 +145,15 @@
                      (lambda ()
                        (when (file-is-file? url) 
                          (error 'load "Loading from local files not permitted.")))))])
-    (putprop '$sc-put-cte etmp $sc-put-cte)
-    (putprop '$syntax-dispatch etmp $syntax-dispatch)
-    (putprop 'syntax-error etmp syntax-error)
-    (putprop '_load etmp my-load)
-    (putprop 'gen-sym etmp simple-gen-sym)
-    (putprop ': etmp from)
+    (for-each (lambda (b v)
+               (putprop b etmp v))
+              '($sc-put-cte $syntax-dispatch syntax-error _load gen-sym
+                |@optimizer::optimize| with/fc 
+                with-failure-continuation : throw make-error load)
+              (list $sc-put-cte $syntax-dispatch syntax-error my-load
+                    simple-gen-sym optimize with/fc with/fc from throw
+                    make-error load-from-url))
+
     (putprop 'sc-expand etmp 
              (lambda (v) 
                (let ((old-env (interaction-environment etmp)))
@@ -167,7 +162,6 @@
                      (lambda () (sc-expand v '(e) '(e)))
                      (lambda () (interaction-environment
                                  old-env))))))
-    (putprop 'load etmp load-from-url)
     etmp))
 
 (define (init-schemechan-plugin)
