@@ -1,3 +1,8 @@
+2003-02-24  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* The optimizer now considers all the *set! operations sets, 
+	  instead of just set!
+	  
 2003-02-18  SISC 1.7.4-rc Released
 
 2003-02-17  Matthias Radestock  <matthias@sorted.org>
