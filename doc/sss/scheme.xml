@@ -671,17 +671,59 @@
       explicitly represented in &SISC; as a <emphasis>failure
 	continuation</emphasis>. 
     </para>
+    <para>
+      Two values must be applied to a failure continuation.  The first
+      is an error value, which describes the error (and may contain
+      information about the name of the function that generated the
+      error, a descriptive message about the error, etc.).  The second
+      is the continuation of the expression that raised the error.
+      All errors raised in &SISC; automatically and implicitly obtain
+      and apply these values to the active failure continuation.  The
+      currently active failure continuation may be obtained explicitly
+      using the <function>call-with-failure-continuation</function>
+      procedure.  This continuation may be applied to appropriate
+      values at any time in the future.
+    </para>
+    <para>
+      <blockquote>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>value</type>
+	      <methodname>call-with-failure-continuation</methodname>
+	      <methodparam>
+		<parameter>procedure</parameter>
+            </methodparam>
+          </methodsynopsis>
+        </para>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>value</type>
+	      <methodname>call/fc</methodname>
+	      <methodparam>
+		<parameter>procedure</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Calls the given one-argument procedure with the
+              currently active failure continuation.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+    </para>
     <sect2 id="FailureContinuations">
       <title>
-	Failure continuations
+	Adding Failure Continuations
       </title>
       <para>
-	Similar to
-	<function>call-with-current-continuation</function>,
-	&SISC; provides a function,
-	<function>call-with-failure-continuation</function>,
-	that allows a programmer to define the sequence of actions
-	that should occur as a result of an error in a called expression.
+        A programmer may wish to augment the system default failure
+	continuation, choosing a different set of actions to occur for
+	a body of code if it raises an error.  To facilitate this,
+	&SISC; provides the
+	<function>with-failure-continuation</function> procedure.
       </para>
       <para>
 	<blockquote>
@@ -689,12 +731,12 @@
 	    &procedure;
 	    <methodsynopsis language="scheme">
 	      <type>value</type>
-	      <methodname>call-with-failure-continuation</methodname>
-	      <methodparam>
-		<parameter>thunk</parameter>
-	      </methodparam>
+	      <methodname>with-failure-continuation</methodname>
 	      <methodparam>
 		<parameter>handler</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>thunk</parameter>
 	      </methodparam>
 	    </methodsynopsis>
 	  </para>
@@ -702,24 +744,27 @@
 	    &procedure;
 	    <methodsynopsis language="scheme">
 	      <type>value</type>
-	      <methodname>call/fc</methodname>
-	      <methodparam>
-		<parameter>thunk</parameter>
-	      </methodparam>
+	      <methodname>with/fc</methodname>
 	      <methodparam>
 		<parameter>handler</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>thunk</parameter>
 	      </methodparam>
 	    </methodsynopsis>
 	    <blockquote>
 	      <para>
-		<function>call-with-failure-continuation</function>
+		<function>with-failure-continuation</function>
 		takes as arguments a thunk (a zero-argument procedure) to
-		be evaluated.  If during the
-		evaluation of the thunk an error is raised, the second,
-		three argument procedure is called with values describing
-		the error and its context.  If no error occurs, the
-		value of evaluating the thunk becomes the value of the
-		call/fc expression.
+		be evaluated.  The thunk will be evaluated in the
+		continuation of the <function>with/fc</function>
+		function, and with a failure continuation defined by
+		the provided error handler.  If during the
+		evaluation of the thunk an error is raised, the first,
+		two argument procedure is called with values describing
+		the error and its context.  If no error occurs, 
+                value of the thunk is applied to the continuation of
+                the <function>with/fc</function> expression.
 	      </para>
 	    </blockquote>
 	  </para>
@@ -728,37 +773,76 @@
     </sect2>
     <sect2 id="ErrorHandlers">
       <title>
-	Error handlers
+	Error Handlers and <function>rethrow</function>
       </title>
       <para>
 	The error handler required as an argument to
-	<function>call-with-failure-continuation</function>
-	must take three parameters.  The first is a value
+	<function>with-failure-continuation</function>
+	must accept two value.  The first is a value
 	containing information about the error that occurred.  This is
-	often a string containing the error message.  The
+	often an association list containing a number of attributes 
+        of the error.  The
 	second is a procedure encapsulating the continuation that was
 	in place at the site of the error.  This continuation is
 	referred to as the <emphasis>error continuation</emphasis>
-	The third, the <emphasis>failure-continuation</emphasis> is
-	a procedure that when invoked calls the failure continuation
-	of the <function>call/fc</function> expression.  
       </para>
       <para>
 	When an error occurs, the error handler may choose one of
 	three courses in dealing with the error.  First, the handler
-	may choose to return an alternate value as the result of the
-	<function>call/fc</function> expression.
+	may choose to return an alternate value to be applied to the
+	continuation of the <function>with/fc</function> expression.
 	Second, the handler may restart the computation from the
 	error site by invoking the error continuation with a value
 	that should be returned in place of the expression that
 	caused the error.  Finally, the handler may choose to
 	propagate the error (or a new error) to the failure
-	continuation of the <function>call/fc</function>
-	expression.  To do this, the handler invokes the
-	failure-continuation with the provided or new message and
-	the provided error-continuation or a different continuation
-	captured by other means.
+	continuation of the <function>with/fc</function>
+	expression.  This can be done with the
+	<function>rethrow</function> function described below.
       </para>
+      <para>
+	<blockquote>
+	  <para>
+	    &procedure;
+	    <methodsynopsis language="scheme">
+	      <type><emphasis>does not return</emphasis></type>
+	      <methodname>rethrow</methodname>
+	      <methodparam>      
+                <parameter>error-value</parameter>
+              </methodparam>
+	      <methodparam>      
+                <parameter>error-continuation</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Propogates the error described by the error value,
+                that occured in the provided error continuation, to
+                the currently active failure continuation.
+              </para>
+              <para>
+                <function>rethrow</function> could be defined in terms of
+                <function>call-with-failure-continuation</function>
+                as:
+                <programlisting>
+(define rethrow
+  (lambda (error-value error-continuation)
+    (call-with-failure-continuation 
+      (lambda (fk) (fk error-value error-continuation)))))
+                </programlisting>
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        If invoked from an error-handler, rethrow has the effect of
+        propogating the error in a manner that is equivalent to the
+        absence of the modified failure-continuation. 
+      </para>
+    </sect2>
+    <sect2>
+      <title>Examples</title>
       <para>
 	At this point, a few examples may be helpful:
       </para>
@@ -771,33 +855,33 @@
       <example>
 	<title>Return a new value</title>
 <programlisting>
-(call-with-failure-continuation
+(with-failure-continuation
+  (lambda (message error-k)
+    'error)
   (lambda ()
-    (+ 1 (/ 1 0) 3))
-  (lambda (message error-k failure-k)
-    'error))     
+    (+ 1 (/ 1 0) 3)))
 ; => <emphasis>The symbol</emphasis> 'error
 	</programlisting>
       </example>
       <example>
 	<title>Restart with a different value</title>
 	<programlisting>
-(call-with-failure-continuation
+(with-failure-continuation
+   (lambda (message error-k)
+    (error-k 2))
    (lambda ()
-     (+ 1 (/ 1 0) 3))
-   (lambda (message error-k failure-k)
-    (error-k 2)))
+     (+ 1 (/ 1 0) 3)))
 ; => 6
 	</programlisting>
       </example>
       <example>
 	<title>Propagate the error</title>
 	<programlisting>
-(call-with-failure-continuation
+(with-failure-continuation
+  (lambda (message error-k)
+    (rethrow message error-k))
   (lambda ()
-    (+ 1 (/ 1 0) 3))
-  (lambda (message error-k failure-k)
-    (failure-k message error-k)))
+    (+ 1 (/ 1 0) 3)))
 ; => <emphasis>A divide by zero error is raised</emphasis>
 	</programlisting>
       </example>
@@ -808,70 +892,81 @@
 	Explicit errors are raised using the
 	<function>error</function> function.  
       </para>
-      <blockquote>
-	<para>
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>undefined</type>
-	    <methodname>error</methodname>
-	    <methodparam>
-	      <parameter>location</parameter>
-	    </methodparam>
-	    <methodparam choice="opt">
-	      <parameter>message</parameter>
-	    </methodparam>
-	    <methodparam choice="opt" rep="repeat">
-	      <parameter>arguments</parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Raises an error whose location is
-	      <parameter>location</parameter>, and whose error
-	      message, if present, is <parameter>message</parameter>.
-	      If provided, the error message is a format-string that
-	      is processed, with the optional
-	      <parameter>argument</parameter>s, as with
-	      <function>format</function> in <!--<xref linkend="format"/> -->.
-	    </para>
-	  </blockquote>
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>undefined</type>
-	    <methodname>error</methodname>
-	    <methodparam>
-	      <parameter>message</parameter>
-	    </methodparam>
-	    <methodparam choice="opt" rep="repeat">
-	      <parameter>arguments</parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Raises an error whose location undefined, and 
-	      and whose error is <parameter>message</parameter>.
-	      The error message is a format-string that
-	      is processed, with the optional
-	      <parameter>argument</parameter>s, as with
-	      <function>format</function> in <!--<xref linkend="format"/> -->.
-	    </para>
-	  </blockquote>
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>undefined</type>
-	    <methodname>error</methodname>
-	    <methodparam>
-	      <parameter>error-value</parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Raises an error whose location undefined, and 
-	      and whose error-value is any arbitrary Scheme value.
-	    </para>
-	  </blockquote>
-	</para>
-      </blockquote>
+      <para>
+        <blockquote>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>error</methodname>
+              <methodparam choice="opt">
+                <parameter>location</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>message</parameter>
+              </methodparam>
+              <methodparam choice="opt" rep="repeat">
+                <parameter>arguments</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Raises an error whose location, if provided, is
+                <parameter>location</parameter>, a symbol; and whose error
+                message, if present, is <parameter>message</parameter>.
+                If provided, the error message is a format-string that
+                is processed, with the optional
+                <parameter>argument</parameter>s, as with the
+                <function>format</function> function in SRFI 28.
+              </para>
+            </blockquote>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>error</methodname>
+              <methodparam choice="opt">
+                <parameter>location</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>error-value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Raises an error whose location, if present, is the
+                symbol <parameter>location</parameter>, and 
+                and whose error-value is any arbitrary Scheme value.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        <function>error</function> processes its arguments to
+        generate an appropriate <emphasis>error record</emphasis>, a
+        structure that describes various attributes of the error,
+        which it then applies to the current failure continuation with
+        its own continuation as the error continuation.
+      </para>
+    </sect2>
+    <sect2>
+      <title>Failure Continuations and
+      <function>call/cc</function></title>
+      <para>
+        Failure continuations exist as an attribute of the ordinary
+        continuations of Scheme expressions.  Because of this, the
+        invocation of a continuation may cause a different failure
+        continuation to become active in the region of the invoked
+        continuation.  Specifically, the failure continuation in place
+        at the <function>call/cc</function> expression will be
+        reinstated when that continuation is later invoked.
+      </para>
+      <para>
+        Similarly, invoking a continuation that escapes a region of
+        code will cause any created failure continuations to be
+        abandonned, unless the region is itself captured in a
+        continuation and later invoked.
+      </para>
     </sect2>
   </sect1>
   <sect1>
