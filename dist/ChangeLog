@@ -1,3 +1,8 @@
+2002-02-11  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Modified serialization format to support non-stream
+	  data sources
+
 2002-02-06  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Upgraded to the latest syntax expander.  This fixes
