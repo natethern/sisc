@@ -374,11 +374,15 @@
    <vector>
    <void>
    <symbol>
-   <object>)
+   <object>
+   print-stack-trace
+   display-java-stack-trace
+   print-exception)
   (import s2j-reflection)
   (import s2j-conversion)
   (import generic-procedures)
   (import misc)
+  (import* debugging (standard-print-stack-trace print-stack-trace))
   (include "s2j/s2j.scm")
   (define (java-class name)
     (java/class (if (string? name) (string->symbol name) name)))

@@ -1138,13 +1138,14 @@ Context.exit()
           Java exceptions are propagated to scheme and can be caught
           like any other exception, e.g. with
           <function>with/fc</function> as defined in <xref
-          linkend="FailureContinuations"/>. For example
+          linkend="FailureContinuations"/>. The <literal>s2j</literal>
+          module exports augmented versions of the
+          <function>print-stack-trace</function> and
+          <function>print-exception</function> functions that handle
+          Java exceptions. For example
           <programlisting>
 (define-generic char-at)
-;;chain Scheme print-stack-trace to Java printStackTrace
-(define-generic print-stack-trace
-  (generic-java-procedure '|printStackTrace| print-stack-trace))
-(with/fc (lambda (m e) (print-stack-trace (error-message m)) #f)
+(with/fc (lambda (m e) (print-exception (make-exception m e)) #f)
   (lambda () (char-at (-&gt;jstring "foo") (-&gt;jint 3))))
           </programlisting>
           will catch the

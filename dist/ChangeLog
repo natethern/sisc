@@ -1,3 +1,8 @@
+2003-03-26  Matthias Radestock  <matthias@lshift.net>
+
+	* Added support for display of stack traces of Java exceptions by
+	  |print-exception|.
+
 2003-03-25  Matthias Radestock  <matthias@sorted.org>
 
 	* Changed eq?-based hashtable to match new semantics of eq?.
