@@ -247,11 +247,8 @@ public class Parser extends Util implements Tokens {
                 break;
 	    case '@': 
 		//Annotation
-		Pair p=new Pair(ANNOTATION, EMPTYLIST);
-		if (def!=null)
-		    state.put(def, p);
-		p.setCdr(nextExpression(is, state, flags));
-		o=p;
+                Pair p=(Pair)nextExpression(is, state, flags);
+                o=new AnnotatedExpr(p.cdr, p.car);
 		break;
             default:
                 Value[] v=null;
