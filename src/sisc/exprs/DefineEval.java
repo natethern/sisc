@@ -21,7 +21,6 @@ public class DefineEval extends Expression {
         Value rhs=r.acc;
         updateName(rhs, lhs);
         env.define(lhs, rhs);
-
         r.acc=VOID;
         r.nxp=null;
     }

@@ -1,11 +1,48 @@
-package sisc.util;
+package sisc.exprs;
 
-public interface Version {
+import java.io.*;
+import sisc.data.*;
+import sisc.interpreter.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
-    String VERSION = "1.9.0-alpha";
+public class SetboxEval extends Expression {
 
+    public Immediate ref;
+
+    public SetboxEval(Immediate ref) {
+        this.ref=ref;
+    }
+
+    public void eval(Interpreter r) throws ContinuationException {
+        r.nxp=null;
+        ((Box)ref.getValue(r)).val=r.acc;
+    }
+
+    public Value express() {
+        return list(sym("setbox"), ((Expression)ref).express());
+    }
+
+    public void serialize(Serializer s) throws IOException {
+        s.writeExpression((Expression)ref);
+    }
+
+    public SetboxEval() {}
+
+    public void deserialize(Deserializer s) throws IOException {
+        ref=(Immediate)s.readExpression();
+    }
+
+    public boolean equals(Object o) {
+        if (!(o instanceof SetboxEval))
+            return false;
+        return ref.equals(((SetboxEval)o).ref);
+    }
+
+    public int hashCode() {
+        return 0xed000000 | ref.hashCode();
+    }
 }
-
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -24,6 +61,7 @@ public interface Version {
  * Scott G. Miller.  All Rights Reserved.
  * 
  * Contributor(s):
+ * Matthias Radestock 
  * 
  * Alternatively, the contents of this file may be used under the
  * terms of the GNU General Public License Version 2 or later (the

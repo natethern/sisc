@@ -7,9 +7,9 @@ import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 
 public class Box extends Value {
-    public Expression val;
+    public Value val;
 
-    public Box(Expression val) {
+    public Box(Value val) {
         this.val=val;
     }
 
@@ -39,7 +39,7 @@ public class Box extends Value {
     public Box() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        val=s.readExpression();
+        val=(Value)s.readExpression();
     }
 
     public boolean visit(ExpressionVisitor v) {

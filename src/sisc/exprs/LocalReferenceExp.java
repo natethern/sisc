@@ -6,49 +6,49 @@ import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
-public class LexicalSetEval extends Expression {
-    public int depth, pos;
+public class LocalReferenceExp extends Expression implements Immediate {
 
-    public LexicalSetEval(int depth, int pos) {
-        this.depth=depth;
-        this.pos=pos;
+    public int idx;
+
+    public LocalReferenceExp(int idx) {
+        this.idx=idx;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        r.env.set(depth, pos, r.acc);
-        r.acc=VOID;
         r.nxp=null;
+        r.acc=r.lcl[idx];
+        //r.lc++;
+    }
+
+    public final Value getValue(Interpreter r) throws ContinuationException {
+        //r.lc++;
+        return r.lcl[idx];
     }
 
     public Value express() {
-        return list(sym("LexicalSet-eval"),
-                    new Pair(Quantity.valueOf(depth), Quantity.valueOf(pos)));
+        return list(sym("lcl"), Quantity.valueOf(idx));
     }
 
     public void serialize(Serializer s) throws IOException {
-        s.writeInt(depth);
-        s.writeInt(pos);
+        s.writeInt(idx);
     }
 
-    public LexicalSetEval() {}
+    public LocalReferenceExp() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        depth=s.readInt();
-        pos=s.readInt();
+        idx=s.readInt();
     }
 
     public boolean equals(Object o) {
-        if (!(o instanceof LexicalSetEval))
+        if (!(o instanceof LocalReferenceExp))
             return false;
-        LexicalSetEval e=(LexicalSetEval)o;
-        return e.depth==depth && e.pos==pos;
+        return idx==((LocalReferenceExp)o).idx;
     }
 
     public int hashCode() {
-        return depth<<16 | pos | 0xea000000;
+        return idx | 0xeb000000;
     }
 }
-
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file

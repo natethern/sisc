@@ -431,7 +431,7 @@
     ((_ ((formals expr)) form1 form2 ...)
      (call-with-values (lambda () expr) (lambda formals form1 form2 ...)))))
 
-(define noexpand "noexpand")
+(define noexpand "analyzeonly")
 
 ;;; hooks to nonportable run-time helpers
 (begin

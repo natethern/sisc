@@ -1,87 +1,52 @@
 package sisc.exprs;
 
-import sisc.data.*;
 import java.io.*;
+import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
-import sisc.env.SymbolicEnvironment;
-import sisc.util.ExpressionVisitor;
 
-public class FreeReferenceExp extends Expression implements Immediate {
-    public Symbol sym;
-    private SymbolicEnvironment senv;
-    private transient int envLoc=-1;
+public class UnboxExp extends Expression implements Immediate {
 
-    public FreeReferenceExp(Symbol s, SymbolicEnvironment senv) {
-        this.senv=senv;
-        sym=s;
+    public Immediate ref;
+
+    public UnboxExp(Immediate ref) {
+        this.ref=ref;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
         r.nxp=null;
-
-        if (envLoc>=0) {
-            r.acc=senv.lookup(envLoc);
-        } else {
-            //this is an optimization that ensures we short-circuit
-            //any DelegatingSymEnvs
-            senv = (SymbolicEnvironment)senv.asValue();
-            envLoc=senv.getLoc(sym);
-            if (envLoc==-1)
-                error(r, liMessage(SISCB,"undefinedvar", sym.toString()));
-            r.acc=senv.lookup(envLoc);
-        } 
+        r.acc=((Box)ref.getValue(r)).val;
+        //r.ux++;
     }
 
-    public Value getValue(Interpreter r) throws ContinuationException {
-        if (envLoc>=0) {
-            return senv.lookup(envLoc);
-        } else {
-            //this is an optimization that ensures we short-circuit
-            //any DelegatingSymEnvs
-            senv = (SymbolicEnvironment)senv.asValue();
-            try {
-                envLoc=senv.getLoc(sym);
-            } catch (Exception e) {}
-            if (envLoc==-1)
-                error(r, liMessage(SISCB,"undefinedvar", sym.toString()));
-            return senv.lookup(envLoc);
-        }
+    public final Value getValue(Interpreter r) throws ContinuationException {
+        //r.ux++;
+        return (Value)((Box)ref.getValue(r)).val;
     }
 
     public Value express() {
-        return list(sym("FreeReference-exp"), sym);
+        return list(sym("unbox"), ((Expression)ref).express());
     }
 
     public void serialize(Serializer s) throws IOException {
-        s.writeExpression(sym);
-        s.writeSymbolicEnvironment(senv);
+        s.writeExpression((Expression)ref);
     }
 
-    public FreeReferenceExp() {
-    }
+    public UnboxExp() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        sym=(Symbol)s.readExpression();
-        senv=s.readSymbolicEnvironment();
-        envLoc=-1;
+        ref=(Immediate)s.readExpression();
     }
 
     public boolean equals(Object o) {
-        if (!(o instanceof FreeReferenceExp))
+        if (!(o instanceof UnboxExp))
             return false;
-        FreeReferenceExp e=(FreeReferenceExp)o;
-
-        return senv.equals(e.senv) && sym.equals(e.sym);
+        return ref.equals(((UnboxExp)o).ref);
     }
 
     public int hashCode() {
-        return senv.hashCode() ^ sym.hashCode();
-    }
-
-    public boolean visit(ExpressionVisitor v) {
-        return v.visit(sym) && v.visit(senv);
+        return 0xec000000 | ref.hashCode();
     }
 }
 /*

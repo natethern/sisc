@@ -8,56 +8,47 @@ import sisc.ser.Deserializer;
 
 public class LexicalReferenceExp extends Expression implements Immediate {
 
-    public int depth, pos;
+    public int idx;
 
-    public LexicalReferenceExp(int ribcount, int position) {
-        depth=ribcount;
-        pos=position;
+    public LexicalReferenceExp(int idx) {
+        this.idx=idx;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
         r.nxp=null;
-        r.acc=r.env.lookup(depth, pos);
+        r.acc=r.env[idx];
+        //r.lx++;
     }
 
     public final Value getValue(Interpreter r) throws ContinuationException {
-        return r.env.lookup(depth, pos);
+        //r.lx++;
+        return r.env[idx];
     }
 
     public Value express() {
-        return new Pair(Quantity.valueOf(depth), Quantity.valueOf(pos));
+        return list(sym("env"), Quantity.valueOf(idx));
     }
 
     public void serialize(Serializer s) throws IOException {
-        s.writeInt(depth);
-        s.writeInt(pos);
+        s.writeInt(idx);
     }
 
     public LexicalReferenceExp() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        depth=s.readInt();
-        pos=s.readInt();
+        idx=s.readInt();
     }
 
     public boolean equals(Object o) {
         if (!(o instanceof LexicalReferenceExp))
             return false;
-        LexicalReferenceExp e=(LexicalReferenceExp)o;
-        return e.depth==depth && e.pos==pos;
+        return idx==((LexicalReferenceExp)o).idx;
     }
 
     public int hashCode() {
-        return depth<<16 | pos | 0xea000000;
+        return idx | 0xeb000000;
     }
 }
-
-
-
-
-
-
-
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file

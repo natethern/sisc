@@ -1,5 +1,7 @@
 package sisc.util;
 
+import sisc.data.Pair;
+
 public abstract class Defaults {
 
     public static int     SYNOPSIS_LENGTH             = 30;
@@ -12,7 +14,7 @@ public abstract class Defaults {
     public static boolean VECTOR_LENGTH_PREFIXING     = true;
     public static boolean EMIT_ANNOTATIONS            = false;
     public static boolean EMIT_DEBUGGING_SYMBOLS      = false;
-
+    public static Pair    INLINE_PRIMITIVES           = null;
 }
  
 /*

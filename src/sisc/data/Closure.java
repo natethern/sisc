@@ -5,66 +5,75 @@ import sisc.interpreter.*;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
-import sisc.env.LexicalEnvironment;
 import sisc.util.ExpressionVisitor;
+import sisc.env.LexicalUtils;
 
 public class Closure extends Procedure implements NamedValue {
     public boolean arity;
-    public int fcount;
-    public LexicalEnvironment env;
+    public int fcount, boxes[];
+    private transient int bl;
+    public Value[] env;
     public Expression body;
 
     public Closure(boolean arity, int fcount, Expression body,
-                   LexicalEnvironment env) {
+                   Value[] env, int[] boxes) {
         this.arity=arity;
         this.fcount=fcount;
         this.env=env;
         this.body=body;
-        LexicalEnvironment.lock(env);
+        this.boxes=boxes;
+        bl=(boxes == null ? -1 : boxes.length-1);
     }
 
     private final Value[] matchArgs(Interpreter r)
         throws ContinuationException {
-        final int vl=r.vlr.length;
+        Value[] vals;
+        int vl=r.vlr.length;
         if (!arity) {
             if (vl == fcount) {
                 if (r.vlk) {
-                    Value[] v2=r.createValues(vl);
-                    System.arraycopy(r.vlr, 0, v2, 0, vl);
-                    return v2;
-                } else return r.vlr;
+                    vals=r.createValues(vl);
+                    System.arraycopy(r.vlr, 0, vals, 0, vl);
+                } else {
+                    r.vlk=true;
+                    vals=r.vlr;
+                }
+            } else {
+                error(r, liMessage(SISCB,"notenoughargsto", toString(),
+                                             fcount, vl));
+                return null;
             }
-            error(r, liMessage(SISCB,"notenoughargsto", toString(),
-                                         fcount, vl));
-            return null;
-        }
-        
-        final int sm1=fcount-1;
-        if (vl < sm1) {
-            error(r, liMessage(SISCB,"notenoughargstoinf", toString(),
-                               sm1, vl));
-            return null;
-        }
-        Value[] vals;
-        if (vl > sm1 && !r.vlk) {
-            vals=r.vlr;
-        } else {
-            vals=r.createValues(fcount);
-            System.arraycopy(r.vlr, 0, vals, 0, sm1);
+        } else {        
+            final int sm1=fcount-1;
+            if (vl < sm1) {
+                error(r, liMessage(SISCB,"notenoughargstoinf", toString(),
+                                   sm1, vl));
+                return null;
+            }
+            if (vl > sm1 && !r.vlk) {
+                vals=r.vlr;
+                r.vlk=true;
+            } else {
+                vals=r.createValues(fcount);
+                System.arraycopy(r.vlr, 0, vals, 0, sm1);
+            }
+
+            vals[sm1]=valArrayToList(r.vlr, sm1, vl-sm1);
         }
 
-        vals[sm1]=valArrayToList(r.vlr, sm1, vl-sm1);
+        for (int i=bl; i>=0; i--) {
+            int bi=boxes[i];
+            vals[bi]=new Box(vals[bi]);
+        }
         return vals;
     }
 
     public void apply(Interpreter r) throws ContinuationException {
-        if (fcount == 0)
-            r.env=env;
-        else 
-            r.newEnv(matchArgs(r), env);
-
+        if (fcount != 0) 
+            r.lcl=matchArgs(r);
+        r.env=env;
         r.nxp=body;
-        r.vlr=ZV;
+        //        r.vlr=ZV;
     }
 
     public void display(ValueWriter w) throws IOException {
@@ -75,7 +84,8 @@ public class Closure extends Procedure implements NamedValue {
         long attr=(long)fcount << 1;
         if (arity) attr|=1;
         s.writeLong(attr);
-        s.writeExpression(env);
+        LexicalUtils.writeIntArray(s, boxes);
+        CallFrame.writeValueArray(s,env);
         s.writeExpression(body);
     }
 
@@ -89,12 +99,15 @@ public class Closure extends Procedure implements NamedValue {
         long attr=s.readLong();
         fcount=(int)(attr>>1);
         arity=(attr&1)!=0;
-        env=(LexicalEnvironment)s.readExpression();
+        boxes=LexicalUtils.readIntArray(s);
+        bl=(boxes == null ? -1 : boxes.length-1);
+        env=CallFrame.readValueArray(s);
         body=s.readExpression();
     }
 
     public boolean visit(ExpressionVisitor v) {
-        return super.visit(v) && v.visit(env) && v.visit(body);
+        return super.visit(v) && CallFrame.visitValueArray(v, env) && 
+            v.visit(body);
     }
 
     /*

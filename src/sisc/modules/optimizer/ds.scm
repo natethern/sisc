@@ -1,68 +1,60 @@
 ;; Datastructure support for the optimizer
 (define-syntax new-state
   (syntax-rules ()
-    ((_) '())))
-     
-(define (get-state-entry state key)
-  (cond [(assq key state) => cdr]
-        [else #f]))
+    ((_) (vector '() '() '() '() '()))))
+(define make-state vector)
 
-(define (set-state-entry state key value)
-  (cond [(null? state) (list (cons key value))]
-        [(eq? (caar state) key) 
-         (cons (cons key value) (cdr state))]
-        [else (cons (car state) (set-state-entry (cdr state) key value))]))
+(define cpc 0)
+(define lexv 1)
+(define freev 2)
+(define refv 3)
+(define setv 4)
 
-(define (generic-modify-state-entry addproc)
-  (lambda (state key value)
-    (let ((entry (get-state-entry state key)))
-      (set-state-entry state key
-                       (if entry 
-                           (addproc entry value)
-                           (list value))))))
+(define state-get vector-ref)
+(define state-set! vector-set!)
+(define (state-clone state)
+  (let ([ns (new-state)])
+    (for-each (lambda (i) (state-set! ns i (state-get state i)))
+              '(0 1 2 3 4))
+    ns))
+(define (state-replace state type val)
+  (state-set! (state-clone state) type val))
+(define (state-union-ls state type val)
+  (let ([cloned (state-clone state)])
+    (state-set! cloned type (union val (state-get state type)))
+    cloned))
+(define (state-union-varlist state type val)
+  (let ([cloned (state-clone state)])
+    (state-set! cloned type (merge-varlist val (state-get state type)))
+    cloned))
 
-(define (generic-modify-state-entry* addproc)
-  (lambda (state key value*)
-    (let ((entry (get-state-entry state key)))
-      (set-state-entry state key
-                       (if entry 
-                           (addproc entry value*)
-                           value*)))))
+(define (reference-count var ls)
+  (cond [(assq var ls) => cdr]
+        [else 0]))
 
-(define union-state-entry*)
-(define union-state-entry)
+(define (trim ls)
+  (cond [(null? ls) '()]
+        [(zero? (cdar ls))
+         (trim (cdr ls))]
+        [else (cons (car ls) (trim (cdr ls)))]))
+
+(define (varcount-decr! state type var)
+  (let ([v (assq var (state-get state type))])
+    (and v (set-cdr! v (- (cdr v) 1)))))
+
+(define (list-copy ls) (apply list ls))
+
+(define (merge-varlist v1 v2)
+  (let loop ([ls v1] [acc (list-copy v2)])
+    (cond [(null? ls) acc]
+          [(assq (caar ls) acc) =>
+           (lambda (p)
+             (set-cdr! p (+ (cdr p) (cdar ls)))
+             (loop (cdr ls) acc))]
+          [else (loop (cdr v1) (cons (car v1) acc))])))
 
 (define (distinct ls)
   (cond [(null? ls) '()]
         [(memq (car ls) (cdr ls))
          (distinct (cdr ls))]
         [else (cons (car ls) (distinct (cdr ls)))]))
-
-(define (union-assoc . a*)
-  (if (null? a*) 
-      '()
-      (let ((keys (distinct (map-car (apply append a*)))))
-        (let loop ((x keys))
-          (if (null? x) 
-              '()
-              (cons (cons (car x)
-                          (apply union (map (lambda (v)
-                                              (cond [(assoc (car x) v) => cdr]
-                                                    [else '()]))
-                                            a*)))
-                    (loop (cdr x))))))))
-
-(define merge-states)
-
-(define (initialize)
-  (set! union-state-entry*
-    (generic-modify-state-entry*
-    (lambda (entry value*)
-       (union value* entry))))
-  (set! union-state-entry
-    (generic-modify-state-entry 
-     (lambda (entry value)
-       (if (not (memq value entry))
-           (cons value entry)
-           entry))))
-  (set! merge-states union-assoc))

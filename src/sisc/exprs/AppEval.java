@@ -1,18 +1,19 @@
 package sisc.exprs;
 
-import java.io.*;
 import sisc.data.*;
 import sisc.interpreter.*;
-import sisc.ser.Serializer;
-import sisc.ser.Deserializer;
+import sisc.ser.*;
+import java.io.IOException;
 
 public class AppEval extends Expression {
-
-    public boolean tail;
+    
+    private boolean tail;
 
     public AppEval(boolean tail) {
         this.tail=tail;
     }
+
+    public AppEval() {}
 
     public final void eval(Interpreter r) throws ContinuationException {
         /* To allow break of execution (turadg)
@@ -24,8 +25,7 @@ public class AppEval extends Expression {
            r.tctx.interrupt = false;
            error(r, liMessage(SISCB, "evaluationinterrupted"));
         }
-        
-        if (tail) r.returnEnv();
+
         r.acc.apply(r);
     }
 
@@ -34,18 +34,7 @@ public class AppEval extends Expression {
     }
 
     public Value express() {
-        return list(sym(tail ? "TApp-Eval" : "App-Eval"));
-    }
-
-    public AppEval() {}
-
-    
-    public void serialize(Serializer s) throws IOException {
-        s.writeBoolean(tail);
-    }
-
-    public void deserialize(Deserializer s) throws IOException {
-        tail=s.readBoolean();
+        return list(sym((tail ? "TApp-Eval" : "App-Eval")));
     }
 
     public boolean equals(Object o) {
@@ -53,13 +42,20 @@ public class AppEval extends Expression {
         AppEval other=(AppEval)o;
         return (annotations!=null ? 
                 annotations.equals(other.annotations) :
-                other.annotations == null) &&
-            tail==other.tail;
+                other.annotations == null);
     }
 
     public int hashCode() {
         return 0x37895f61 ^ (annotations == null ? 0 : 
                              annotations.hashCode());
+    }
+
+    public void serialize(Serializer s) throws IOException {
+        s.writeBoolean(tail);
+    }
+
+    public void deserialize(Deserializer s) throws IOException {
+        tail=s.readBoolean();
     }
 }
 /*

@@ -1,30 +1,57 @@
 package sisc.exprs;
 
 import sisc.data.*;
+import sisc.env.LexicalUtils;
 import sisc.interpreter.*;
+import sisc.ser.*;
+import java.io.IOException;
 
 public class LetrecExp extends AppExp {
 
+    int lcount, localIndices[], lexicalIndices[];
+
     public LetrecExp(Expression exp, Expression rands[], Expression nxp, 
+                     int[] localIndices, int[] lexicalIndices,
                      boolean allImmediate) {
         super(exp, rands, nxp, allImmediate);
+        this.localIndices=localIndices;
+        this.lexicalIndices=lexicalIndices;
+        lcount=localIndices.length+lexicalIndices.length;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        r.newEnv(r.createValues(rands.length), r.env);
+        r.env=LexicalUtils.fixLexicals(r, lcount, localIndices, lexicalIndices);
+        r.lcl=r.createValues(rands.length);
+        for (int i=rands.length-1; i>=0; i--)
+            r.lcl[i]=new Box();
         super.eval(r);
     }
 
     public Value express() {
+        Pair lccps=LexicalUtils.intArrayToList(localIndices);
+        Pair lxcps=LexicalUtils.intArrayToList(lexicalIndices);
         Pair args=EMPTYLIST;
         for (int i=rands.length-1; i>=0; i--) {
             args=new Pair(((rands[i]==null) ? FALSE : rands[i].express()), args);
         }
-        args = new Pair(exp.express(), new Pair(nxp.express(), args));
+        args = new Pair(lccps, new Pair(lxcps, new Pair(nxp.express(), args)));
         return new Pair(sym("Letrec-exp"), args);
     }
 
     public LetrecExp() {}
+    public void serialize(Serializer s) throws IOException {
+        super.serialize(s);
+        LexicalUtils.writeIntArray(s,localIndices);
+        LexicalUtils.writeIntArray(s,lexicalIndices);
+    }
+
+    public void deserialize(Deserializer s) throws IOException {
+        super.deserialize(s);
+        localIndices=LexicalUtils.readIntArray(s);
+        lexicalIndices=LexicalUtils.readIntArray(s);
+        lcount=((localIndices==null ? 0 : localIndices.length) +
+                (lexicalIndices==null ? 0 : lexicalIndices.length));
+    }
 }
 
 

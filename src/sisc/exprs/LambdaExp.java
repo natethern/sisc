@@ -2,6 +2,7 @@ package sisc.exprs;
 
 import java.io.*;
 import sisc.data.*;
+import sisc.env.LexicalUtils;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
@@ -9,31 +10,48 @@ import sisc.util.ExpressionVisitor;
 
 public class LambdaExp extends Expression implements Immediate {
     public boolean infiniteArity;
-    public int fcount;
+    public int fcount, lcount, localIndices[], lexicalIndices[], boxes[];
     public Expression body;
 
-    public LambdaExp(int s, Expression body, boolean arity) {
+    public LambdaExp(int s, Expression body, boolean arity,
+                     int[] localids, int[] lexids, int[] boxes) {
         infiniteArity=arity;
         fcount=s;
         this.body=body;
+        localIndices=localids;
+        lexicalIndices=lexids;
+        this.boxes=boxes;
+        lcount=localids.length+lexids.length;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
         r.nxp=null;
-        r.acc=new Closure(infiniteArity, fcount, body, r.env);
+        r.acc=getValue(r);
     }
 
     public Value getValue(Interpreter r) throws ContinuationException {
-        return new Closure(infiniteArity, fcount, body, r.env);
+        return new Closure(infiniteArity, fcount, body, 
+                           LexicalUtils.fixLexicals(r, lcount, localIndices, lexicalIndices), 
+                           boxes);
     }
 
     public Value express() {
-        return list(sym("Lambda-exp"), Quantity.valueOf(fcount), body.express());
+        Pair lccps=LexicalUtils.intArrayToList(localIndices);
+        Pair lxcps=LexicalUtils.intArrayToList(lexicalIndices);
+        Pair boxs=LexicalUtils.intArrayToList(boxes);
+        Value rv=list(body.express());
+        if (boxs!=EMPTYLIST) rv=new Pair(new Pair(sym("box:"), boxs), rv);
+        if (lxcps!=EMPTYLIST) rv=new Pair(new Pair(sym("cenv:"), lxcps), rv);
+        if (lccps!=EMPTYLIST) rv=new Pair(new Pair(sym("clcl:"), lccps), rv);
+        return new Pair(sym("Lambda-exp"),  new Pair(Quantity.valueOf(fcount), rv));
     }
 
     public void serialize(Serializer s) throws IOException {
         s.writeBoolean(infiniteArity);
         s.writeInt(fcount);
+        LexicalUtils.writeIntArray(s,localIndices);
+        LexicalUtils.writeIntArray(s,lexicalIndices);
+        LexicalUtils.writeIntArray(s,boxes);
         s.writeExpression(body);
     }
 
@@ -42,6 +60,11 @@ public class LambdaExp extends Expression implements Immediate {
     public void deserialize(Deserializer s) throws IOException {
         infiniteArity=s.readBoolean();
         fcount=s.readInt();
+        localIndices=LexicalUtils.readIntArray(s);
+        lexicalIndices=LexicalUtils.readIntArray(s);
+        lcount=((localIndices==null ? 0 : localIndices.length) +
+                (lexicalIndices==null ? 0 : lexicalIndices.length));
+        boxes=LexicalUtils.readIntArray(s);
         body=s.readExpression();
     }
 

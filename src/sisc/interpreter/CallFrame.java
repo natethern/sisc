@@ -6,29 +6,23 @@ import sisc.io.ValueWriter;
 import sisc.util.ExpressionVisitor;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
-import sisc.env.LexicalEnvironment;
 
 public class CallFrame extends Procedure {
 
     public Expression            nxp;
-    public Value[]               vlr;
-    public boolean               vlk;
-    public LexicalEnvironment    env;
-
-    public CallFrame              fk;
-    public CallFrame          parent;
-
-    public boolean             cap[];
+    public Value[]               vlr, lcl, env;
+    public boolean               vlk, cap[];
+    public CallFrame              fk, parent;
 
     public CallFrame(Expression n, Value[] v,
-                     boolean vlk,
-                     LexicalEnvironment e,
+                     boolean vlk, Value[] l, Value[] e,
                      CallFrame f, CallFrame p,
                      boolean[] cap) {
         nxp=n;
         vlr=v;
         this.vlk=vlk;
         env=e;
+        lcl=l;
         fk=f;
         parent=p;
         this.cap=cap;
@@ -67,7 +61,6 @@ public class CallFrame extends Procedure {
             w.vlk=true;
             if (w.nxp!=null)
                 w.nxp.setCaptured(r, w);
-            LexicalEnvironment.lock(w.env);
             w=w.parent;
         } while (w!=null && !lastWasLocked); 
 
@@ -93,20 +86,24 @@ public class CallFrame extends Procedure {
     }
 
     protected final CallFrame cloneFrame(Interpreter r) {
-        return r.createFrame(nxp, vlr, vlk, env, fk, parent);
+        return r.createFrame(nxp, vlr, vlk, lcl, env, fk, parent);
     }
 
     public void display(ValueWriter w) throws IOException {    
         displayNamedOpaque(w, "continuation"); 
     }
 
+    public static boolean visitValueArray(ExpressionVisitor v, Value[] va) {
+        if (va==null) return true;
+        for (int i=0; i<va.length; i++) 
+            if (!v.visit(va[i])) return false;
+        return true;
+    }
+
     public boolean visit(ExpressionVisitor v) {
-        if (vlr!=null)
-            for (int i=0; i<vlr.length; i++) {  
-                if (!v.visit(vlr[i])) return false; 
-            }      
-        return v.visit(nxp) && v.visit(fk) && v
-            .visit(parent) && v.visit(env); 
+        return visitValueArray(v, vlr) && visitValueArray(v,lcl) && 
+            visitValueArray(v,env) && v.visit(nxp) && v.visit(fk) && 
+            v.visit(parent);
     }
 
     public void apply(Interpreter r) throws ContinuationException {
@@ -118,36 +115,51 @@ public class CallFrame extends Procedure {
         r.pop(this);
     }
 
+    public static void writeValueArray(Serializer s, Value[] v) throws IOException {
+        if (v==null) s.writeInt(0);
+        else {
+            s.writeInt(v.length);
+            for (int i=0; i<v.length; i++) {
+                s.writeExpression(v[i]);
+            }
+        }
+    }
+    
+    public static Value[] readValueArray(Deserializer s) throws IOException {
+        int l=s.readInt();
+        Value[] v=new Value[l];
+        for (int i=0; i<v.length; i++) {
+            v[i]=(Value)s.readExpression();
+        }
+        return v;
+    }
+
     public void serialize(Serializer s) throws IOException {
+        s.writeBoolean(vlk);
         if (vlr==null)
             s.writeBoolean(false);
         else {
             s.writeBoolean(true);
-            s.writeInt(vlr.length);
-            for (int i=0; i<vlr.length; i++)
-                s.writeExpression(vlr[i]);
+            writeValueArray(s,vlr);
             s.writeInt(cap==null ? 0 : cap.length);
             if (cap!=null)
                 for (int i=0; i<cap.length; i++) 
                     s.writeBoolean(cap[i]);
         }
+        writeValueArray(s,lcl);
+        writeValueArray(s,env);
         s.writeExpression(nxp);
         s.writeExpression(fk);
-
         s.writeExpression(parent);
-        s.writeExpression(env);
-        s.writeBoolean(vlk);
     }
 
     public CallFrame() {}
 
     public void deserialize(Deserializer s) throws IOException {
+        vlk=s.readBoolean();
         vlr=null;
         if (s.readBoolean()) {
-            int size=s.readInt();
-            vlr=new Value[size];
-            for (int i=0; i<size; i++)
-                vlr[i]=(Value)s.readExpression();
+            vlr=readValueArray(s);
             int capsize=s.readInt();
             if (capsize>0) {
                 cap=new boolean[capsize];
@@ -155,12 +167,11 @@ public class CallFrame extends Procedure {
                     cap[i]=s.readBoolean();
             }
         }
-
+        lcl=readValueArray(s);
+        env=readValueArray(s);
         nxp=s.readExpression();
         fk=(CallFrame)s.readExpression();
         parent=(CallFrame)s.readExpression();
-        env=(LexicalEnvironment)s.readExpression();
-        vlk=s.readBoolean();
     }
 }
 

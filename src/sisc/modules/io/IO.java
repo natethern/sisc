@@ -14,7 +14,7 @@ public class IO extends IndexedProcedure {
         Symbol.intern("sisc.modules.io.Messages");
 
     protected static final int
-        //NEXT = 24,
+        //NEXT = 25,
 
         ABSPATHQ            = 0,
         CHARREADY           = 3,
@@ -28,6 +28,7 @@ public class IO extends IndexedProcedure {
         INPORTQ             = 12,
         INPORTLOCATION      = 13,
         LOAD                = 14,
+        LOADEXPANDED        = 24,
         MAKEPATH            = 15,
         NORMALIZEURL        = 16,
         OPENINPUTFILE       = 17,
@@ -61,6 +62,7 @@ public class IO extends IndexedProcedure {
             define("input-port?"        , INPORTQ);
             define("input-port-location", INPORTLOCATION);
             define("load"               , LOAD);
+            define("load-expanded"               , LOADEXPANDED);
             define("normalize-url"      , NORMALIZEURL);
             define("open-input-file"    , OPENINPUTFILE);
             define("open-output-file"   , OPENOUTPUTFILE);
@@ -378,6 +380,38 @@ public class IO extends IndexedProcedure {
                         if (v!=EOF) {
                             try {
                                 r.eval(v);
+                            } catch (SchemeException se) {
+                                throwNestedPrimException(se);
+                            }
+                        }
+                    } while (v!=EOF);
+                } finally {
+                    Context.exit();
+                }
+                return VOID;
+            case LOADEXPANDED:
+                p=null;
+                url = url(f.vlr[0]);
+                try {
+                    URLConnection conn = url.openConnection();
+                    conn.setDoInput(true);
+                    conn.setDoOutput(false);
+                    p=new SourceInputPort(new BufferedInputStream(conn.getInputStream()), url.toString());
+                } catch (IOException e) {
+                    throwIOException(f, liMessage(IOB, "erroropening",
+                                                  url.toString()),
+                                     e);
+                }
+                r = Context.enter(f);
+                try {
+                    v=null;
+                    do {
+                        v=readCode(f, p);
+
+                        if (v!=EOF) {
+                            try {
+                                Expression ev=r.compile(v, false);
+                                r.interpret(ev);
                             } catch (SchemeException se) {
                                 throwNestedPrimException(se);
                             }

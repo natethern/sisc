@@ -1,7 +1,8 @@
 package sisc.data;
 
 import sisc.interpreter.*;
-
+import sisc.nativefun.NestedPrimRuntimeException;
+import sisc.nativefun.PrimRuntimeException;
 /**
  * The Procedure class is the base class for any Scheme Procedure.  
  *
@@ -22,6 +23,45 @@ public abstract class Procedure extends Value {
      * @exception ContinuationException 
      */
     public abstract void apply(Interpreter r) throws ContinuationException;
+
+    public static void throwPrimException(String message) {
+        throw new PrimRuntimeException(message);
+    }
+
+    public static void throwNestedPrimException(String message,
+                                                SchemeException e) {
+        throw new NestedPrimRuntimeException(message, e);
+    }
+
+    public static void throwNestedPrimException(SchemeException e) {
+        throw new NestedPrimRuntimeException(e);
+    }
+
+    public static void throwArgSizeException() {
+        throwPrimException(liMessage(SISCB, "incorrectargcount"));
+    }
+    
+    public static void error(Interpreter r,
+                             Value where,
+                             NestedPrimRuntimeException parent)
+        throws ContinuationException {
+        SchemeException rootCauseException = parent.getRootCause();
+        Pair rootCause =
+            new Pair(
+                new Pair(ERRORK, rootCauseException.e),
+                new Pair(
+                    new Pair(FCONT, rootCauseException.f),
+                    rootCauseException.m));
+        String parentMessage = parent.getMessage();
+        error(r,
+            (parentMessage == null
+                ? list(new Pair(LOCATION, where), new Pair(PARENT, rootCause))
+                : list(
+                    new Pair(MESSAGE, new SchemeString(parentMessage)),
+                    new Pair(LOCATION, where),
+                    new Pair(PARENT, rootCause))));
+    }
+
 }
 /*
  * The contents of this file are subject to the Mozilla Public

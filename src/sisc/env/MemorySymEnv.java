@@ -153,7 +153,7 @@ public class MemorySymEnv extends Value
         return env[pi];
     }
 
-    public Value lookup(int pi) {
+    public final Value lookup(int pi) {
         return env[pi];
     }
 

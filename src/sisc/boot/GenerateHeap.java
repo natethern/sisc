@@ -160,7 +160,7 @@ public class GenerateHeap {
         MemorySymEnv symenv=new LibraryAE(Symbol.get("symenv"), lb);
         MemorySymEnv toplevel=new LibraryAE((Symbol)null, lb);
         toplevel.setName(Util.TOPLEVEL);
-        sisc.interpreter.Compiler.addSpecialForms(toplevel);
+        sisc.compiler.Compiler.addSpecialForms(toplevel);
         symenv.define(Util.TOPLEVEL, toplevel);
         //we do the following so that code can explictly refer to the r5rs env during boot
         symenv.define(Util.REPORT, toplevel);
@@ -173,11 +173,13 @@ public class GenerateHeap {
         Context.register("main", ctx);
         
         Interpreter r = Context.enter(ctx);
-        new sisc.modules.Primitives.Index().bindAll(r, ctx.toplevel_env);
+        new sisc.modules.SimplePrimitives.Index().bindAll(r, ctx.toplevel_env);
+        new sisc.modules.ComplexPrimitives.Index().bindAll(r, ctx.toplevel_env);
         new sisc.modules.Annotations.Index().bindAll(r, ctx.toplevel_env);
         new sisc.modules.io.IO.Index().bindAll(r, ctx.toplevel_env);
         new sisc.modules.io.StringIO.Index().bindAll(r, ctx.toplevel_env);
         
+        Symbol loadExpSymb = Symbol.get("load-expanded");
         Symbol loadSymb = Symbol.get("load");
         
         if (inHeap != null) {
@@ -189,11 +191,15 @@ public class GenerateHeap {
 
         System.out.println("Generating heap: "+outHeap);
 
+        Procedure load=null;
         for (; i<args.length; i++) {
             System.out.println("Expanding and compiling "+args[i]+"...");
             try {
-                r.eval((Procedure)r.getCtx().toplevel_env.lookup(loadSymb),
-                       new Value[] {new SchemeString(args[i])});
+                if (args[i].endsWith("sce"))
+                    load=(Procedure)r.getCtx().toplevel_env.lookup(loadExpSymb);
+                else
+                    load=(Procedure)r.getCtx().toplevel_env.lookup(loadSymb);
+                r.eval(load, new Value[] {new SchemeString(args[i])});
             } catch (SchemeException se) {
                 System.err.println("Error during expand: "+se.getMessage());
             }

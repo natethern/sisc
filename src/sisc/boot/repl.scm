@@ -54,10 +54,20 @@
 
 (define _exit-handler (make-parameter '()))
 
+(define make-interrupt-handler
+  (let ()
+    (import threading)
+    (lambda ()
+      (letrec ([thread (thread/current)]
+              [handler
+                (lambda ()
+                  (_signal-unhook! "INT" handler)
+                  (thread/interrupt thread))])
+        handler))))
+
 (define repl
   (letrec ([repl/read
             (lambda (writer)
-
               ; Display the prompt
               (let ([rp (repl-prompt)]
                     [repl-depth (- (length (_exit-handler)) 1)])
@@ -80,12 +90,19 @@
                           (read-char)
                           (loop)))
 
-                    ;;eval
-
-                      (let ([val (eval exp (interaction-environment))])
-                        (if (not (void? val))
-                            (begin (writer val) (newline)))
-                        (repl/read writer))))))])
+                      ;;eval                      
+                      (let ([handler (make-interrupt-handler)])
+                        (_signal-hook! "INT" handler)
+                        (with/fc
+                         (lambda (m e)
+                           (_signal-unhook! "INT" handler)
+                           (throw m e))
+                         (lambda () 
+                           (let ([val (eval exp (interaction-environment))])
+                             (_signal-unhook! "INT" handler)
+                             (if (not (void? val))
+                                 (begin (writer val) (newline)))))))
+                      (repl/read writer)))))])
     (lambda ()
       (current-url
        (string-append

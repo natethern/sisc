@@ -13,6 +13,11 @@ import sisc.util.Util;
 import sisc.util.Defaults;
 
 public class DynamicEnvironment extends Util implements Cloneable {
+    static {
+        // Weird init order problem
+        if (Defaults.INLINE_PRIMITIVES == null)
+            Defaults.INLINE_PRIMITIVES = EMPTYLIST;
+    }
 
     public AppContext ctx;
 
@@ -24,7 +29,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public boolean vectorLengthPrefixing = Defaults.VECTOR_LENGTH_PREFIXING;
     public boolean emitDebuggingSymbols = Defaults.EMIT_DEBUGGING_SYMBOLS;
     public String characterSet = getDefaultCharacterSet();
-    
+    public Pair inlinePrimitives = Defaults.INLINE_PRIMITIVES;
+
     private static String defaultPrintShared =
         new Boolean(Defaults.PRINT_SHARED).toString();
     private static String defaultVectorLengthPrefixing =
@@ -37,6 +43,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
         new Boolean(Defaults.EMIT_ANNOTATIONS).toString();
     private static String defaultCaseSensitive = 
         new Boolean(Defaults.CASE_SENSITIVE).toString();
+    private static String defaultInlinePrimitives = Defaults.INLINE_PRIMITIVES.toString();
 
     public Value wind = FALSE; //top of wind stack
 
@@ -48,7 +55,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
 
     //user-defined thread variables; this map is weak so that we don't
     //hang on to vars that are no longer in use.
-    public java.util.Map parameters = new WeakHashMap(0);
+    public java.util.Map parameters = new WeakHashMap(1);
 
     public DynamicEnvironment(AppContext ctx) {
         this(ctx,
@@ -202,12 +209,21 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public void setStrictR5RSCompliance(Value v) {
         parser.lexer.strictR5RS = truth(v);
     }
+
+    public Value getInlinePrimitives() {
+        return inlinePrimitives;
+    }
+
+    public void setInlinePrimitives(Value v) {
+        inlinePrimitives=pair(v);
+    }
     
     protected static String getDefaultCharacterSet() {
         // I wish there were a better way to do this
         InputStreamReader r=new InputStreamReader(new ByteArrayInputStream(new byte[0]));
         return r.getEncoding();
     }
+
 }
 /*
  * The contents of this file are subject to the Mozilla Public

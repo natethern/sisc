@@ -1,143 +1,21 @@
-
-;; 
-;; The contents of this file are subject to the Mozilla Public
-;; License Version 1.1 (the "License"); you may not use this file
-;; except in compliance with the License. You may obtain a copy of
-;; the License at http://www.mozilla.org/MPL/
-;; 
-;; Software distributed under the License is distributed on an "AS
-;; IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-;; implied. See the License for the specific language governing
-;; rights and limitations under the License.
-;; 
-;; The Original Code is the Second Interpreter of Scheme Code (SISC).
-;; 
-;; The Initial Developer of the Original Code is Scott G. Miller.
-;; Portions created by Scott G. Miller are Copyright (C) 2000-2001
-;; Scott G. Miller.  All Rights Reserved.
-;; 
-;; Contributor(s):
-;; Matthias Radestock 
-;; 
-;; Alternatively, the contents of this file may be used under the
-;; terms of the GNU General Public License Version 2 or later (the
-;; "GPL"), in which case the provisions of the GPL are applicable 
-;; instead of those above.  If you wish to allow use of your 
-;; version of this file only under the terms of the GPL and not to
-;; allow others to use your version of this file under the MPL,
-;; indicate your decision by deleting the provisions above and
-;; replace them with the notice and other provisions required by
-;; the GPL.  If you do not delete the provisions above, a recipient
-;; may use your version of this file under either the MPL or the
-;; GPL.
-;;
-;;; compat.ss
-;;; Robert Hieb & Kent Dybvig
-;;; 92/06/18
-
-;;; This file contains nonstandard help procedures.
-;;; They are all present in Chez Scheme, but are easily defined
-;;; in any standard Scheme system.
-;;; These versions do no error checking.
-
-; In Chez Scheme "(void)" returns an object that is ignored by the
-; REP loop.  It is returned whenever a "nonspecified" value is specified
-; by the standard.  The following should pick up an appropriate value.
-
-;(define void
-;   (let ((void-object (if #f #f)))
-;      (lambda () void-object)))
-
-; "andmap" is like "map" except instead of "consing" the results it
-; "ands" them, quitting early if #f" is obtained.
-; The following does no error checking.
-
-(define andmap
-   (lambda (f first . rest)
-     (if (null? rest)
-	 ((lambda (mapf)
-	    (begin 
-	      (set! mapf (lambda (l)
-			   (if (null? l) '#t
-			       (if (f (car l)) (mapf (cdr l)) '#f))))
-	      (mapf first))) '#f)
-	 (if (null? (cdr rest))
-	     ((lambda (mapf)
-		(begin 
-		  (set! mapf (lambda (l1 l2)
-			       (if (null? l1) '#t
-				   (if (f (car l1) (car l2)) 
-				       (mapf (cdr l1) (cdr l2)) 
-                                       '#f))))
-		  (mapf first (car rest)))) '#f)
-	     ((lambda (mapf)
-		(begin
-		  (set! mapf (lambda (first rest)
-			       (if (null? first) '#t
-				   (if (apply f (car first) (map-car rest))
-				       (mapf (cdr first) (map-cdr rest)) 
-                                       '#f))))
-		  (mapf first rest))) '#f)))))
-
-(define gen-sym
-  (lambda (base)        
-    (if base
-        (string->symbol (string-append (symbol->string base) "_"
-                                       (symbol->string (gensym))))
-        (gensym))))
-
-(define ormap
-  (lambda (proc list1)
-    (if (null? list1)
-      '#f
-      ((lambda (t) (if t t (ormap proc (cdr list1))))
-       (proc (car list1))))))
-
-(define remq
-  (lambda (o lst)
-    (if (null? lst)
-        '()
-        (if (eq? o (car lst))
-            (remq o (cdr lst))
-            (cons (car lst) (remq o (cdr lst)))))))
-
-(define $sc-put-cte (void))
-(define identifier? (void))
-(define sc-expand (void))
-(define datum->syntax-object (void))
-(define syntax-object->datum (void))
-(define generate-temporaries (void))
-(define free-identifier=? (void))
-(define bound-identifier=? (void))
-(define literal-identifier=? (void))
-(define syntax-error (void))
-(define $syntax-dispatch (void))
-(define $make-environment (void))
-
-(define throw (lambda args (apply error args)))
-
-(define error
-  (lambda args
-    (begin
-      (for-each (lambda (arg)
-                   (begin (display arg) (display #\space)))
-                args)
-      (newline))))
-
-(define strict-r5rs-compliance (_make-native-parameter "strictR5RSCompliance"))
-  
-(define atom?
-  (lambda (v)
-    (if (pair? v)
-        #f
-        (if (symbol? v)
-            #f
-            #t))))
-            
-(define make-false
-  (lambda (v) '#f))
-
-;;;;;;;;;;;;; Module loading
-
-(if (not (getprop 'LITE (get-symbolic-environment '*sisc*)))
-    (for-each load-module '("sisc.modules.SNative$Index")))
+(program ((apply . 1) (first . 6) (mapf . 9) (null? . 5) (l1 . 3) (car . 5) (map-cdr . 1) (map-car . 1) (cdr . 5) (rest . 6) (l . 3) (l2 . 2) (f . 3)) ((mapf . 3)) (car apply map-cdr cdr map-car null?) (define andmap (lambda #t (f first . rest) () (if (null? rest) ((lambda #t (mapf) (f first) (begin (set! mapf (lambda #t (l) (mapf f) (if (null? l) (quote #t) (if (f (car l)) (mapf (cdr l)) (quote #f))))) (mapf first))) (quote #f)) (if (null? (cdr rest)) ((lambda #t (mapf) (f first rest) (begin (set! mapf (lambda #t (l1 l2) (mapf f) (if (null? l1) (quote #t) (if (f (car l1) (car l2)) (mapf (cdr l1) (cdr l2)) (quote #f))))) (mapf first (car rest)))) (quote #f)) ((lambda #t (mapf) (f first rest) (begin (set! mapf (lambda #t (first rest) (mapf f first rest) (if (null? first) (quote #t) (if (apply f (car first) (map-car rest)) (mapf (cdr first) (map-cdr rest)) (quote #f))))) (mapf first rest))) (quote #f)))))))
+(program ((gensym . 2) (string->symbol . 1) (string-append . 1) (symbol->string . 2) (base . 2)) () (gensym string->symbol string-append symbol->string) (define gen-sym (lambda #t (base) () (if base (string->symbol (string-append (symbol->string base) "_" (symbol->string (gensym)))) (gensym)))))
+(program ((ormap . 1) (t . 2) (list1 . 3) (car . 1) (cdr . 1) (null? . 1) (proc . 2)) () (ormap car cdr null?) (define ormap (lambda #t (proc list1) () (if (null? list1) (quote #f) ((lambda #t (t) (proc list1) (if t t (ormap proc (cdr list1)))) (proc (car list1)))))))
+(program ((lst . 5) (car . 2) (cons . 1) (remq . 2) (cdr . 2) (eq? . 1) (null? . 1) (o . 3)) () (car cons cdr remq eq? null?) (define remq (lambda #t (o lst) () (if (null? lst) (quote ()) (if (eq? o (car lst)) (remq o (cdr lst)) (cons (car lst) (remq o (cdr lst))))))))
+(program ((void . 1)) () () (define $sc-put-cte (void)))
+(program ((void . 1)) () () (define identifier? (void)))
+(program ((void . 1)) () () (define sc-expand (void)))
+(program ((void . 1)) () () (define datum->syntax-object (void)))
+(program ((void . 1)) () () (define syntax-object->datum (void)))
+(program ((void . 1)) () () (define generate-temporaries (void)))
+(program ((void . 1)) () () (define free-identifier=? (void)))
+(program ((void . 1)) () () (define bound-identifier=? (void)))
+(program ((void . 1)) () () (define literal-identifier=? (void)))
+(program ((void . 1)) () () (define syntax-error (void)))
+(program ((void . 1)) () () (define $syntax-dispatch (void)))
+(program ((void . 1)) () () (define $make-environment (void)))
+(program ((display . 2) (arg . 1) (for-each . 1) (args . 1) (newline . 1)) () (display for-each newline) (define error (lambda #t args () (begin (for-each (lambda #t (arg) () (begin (display arg) (display #\space))) args) (newline)))))
+(program ((_make-native-parameter . 1)) () () (define strict-r5rs-compliance (_make-native-parameter "strictR5RSCompliance")))
+(program ((pair? . 1) (symbol? . 1) (v . 2)) () (pair? symbol?) (define atom? (lambda #t (v) () (if (pair? v) #f (if (symbol? v) #f #t)))))
+(program () () () (define make-false (lambda #t (v) () (quote #f))))
+(program ((getprop . 1) (load-module . 1) (get-symbolic-environment . 1) (for-each . 1) (not . 1)) () () (if (not (getprop (quote lite) (get-symbolic-environment (quote *sisc*)))) (for-each load-module (quote ("sisc.modules.SNative$Index")))))

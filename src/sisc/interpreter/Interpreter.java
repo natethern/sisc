@@ -2,6 +2,7 @@ package sisc.interpreter;
 
 import java.io.*;
 import sisc.io.*;
+import sisc.compiler.Compiler;
 import sisc.data.*;
 import sisc.env.*;
 import sisc.util.Util;
@@ -46,7 +47,12 @@ public class Interpreter extends Util {
     
     //FLAGS
     public boolean saveVLR;
-        
+
+    //Interpreter specific temporaries
+    public Value[][]               IAI=new Value[][] {new Value[1],
+                                                      new Value[2],
+                                                      new Value[3]};
+
     //ACCOUNTING REGISTERS
     public CallFrame             lcf, llcf;//used for continuation capture
     public boolean               vlk;      //vlk, when true, indicates the
@@ -56,17 +62,18 @@ public class Interpreter extends Util {
     public Expression            lxp;      //Used for debugging
 
     //ACTIVITY REGISTERS
-    public Value                 acc;
-    public Expression            nxp;
-    public Value[]               vlr;
-    public LexicalEnvironment    env;     
-    public CallFrame             stk, 
-                                  fk;
+    public Value                 acc;    //Accumulator
+    public Expression            nxp;    //Next Expression
+    public Value[]               vlr,    //Value Rib
+                                 lcl,    //Local Variables
+                                 env;    //Lexical Variables
+    public CallFrame             stk,    //Continuation (Stack)
+                                  fk;    //Failure Continuation
 
     //Scheme->Java exception conversion FK
     static CallFrame top_fk = new CallFrame(new ThrowSchemeException(),
                                             null, false, null, null, null,
-                                            null);
+                                            null, null);
     static {
         top_fk.vlk = true;
         // This creates a loop in the stack, which will be a problem for
@@ -82,7 +89,7 @@ public class Interpreter extends Util {
         this.dynenv = dynenv;
         // Set l*cf to a dummy frame, so we dont have to null check 
         // in returnFrame
-        llcf=lcf=new CallFrame(null, null, true, null, null, null, null);
+        llcf=lcf=new CallFrame(null, null, true, null, null, null, null, null);
     }
 
     public AppContext getCtx() {
@@ -94,16 +101,26 @@ public class Interpreter extends Util {
     }
 
     public Expression compile(Value v) throws ContinuationException {
-        return compiler.compile(this, v, getCtx().toplevel_env);
+        return compile(v, getCtx().toplevel_env);
+    }
+
+    public Expression compile(Value v, boolean a)
+        throws ContinuationException {
+        return compile(v, getCtx().toplevel_env, a);
     }
 
     public Expression compile(Value v, SymbolicEnvironment env)
         throws ContinuationException {
-        return compiler.compile(this, v, env);
+        return compile(v, env, true);
     }
 
-    protected Value interpret(Expression e) throws SchemeException {
-        stk=createFrame(null, null, false, null, top_fk, null);
+    public Expression compile(Value v, SymbolicEnvironment env, boolean a)
+        throws ContinuationException {
+        return compiler.compile(this, v, env, a);
+    }
+
+    public Value interpret(Expression e) throws SchemeException {
+        stk=createFrame(null, null, false, null, null, top_fk, null);
         nxp=e;
         interpret();
         return acc;
@@ -140,11 +157,12 @@ public class Interpreter extends Util {
         cap=null;
         vlr=createValues(size);
     }
-
+    
     public final void pop(CallFrame c) {
         cap=c.cap;
         nxp=c.nxp;
         vlr=c.vlr;
+        lcl=c.lcl;
         env=c.env;
         fk=c.fk;
         stk=c.parent;
@@ -316,43 +334,49 @@ public class Interpreter extends Util {
 
     public final CallFrame createFrame(Expression n,
                                        Value[] v,
-                                       boolean vlk, 
-                                       LexicalEnvironment e,
+                                       boolean vlk,
+                                       Value[] l,
+                                       Value[] e,
                                        CallFrame f,
                                        CallFrame p) {
-        if (frameFreeList == null)
-            return new CallFrame(n,v,vlk,e,f,p, null);
-        else {
-            frameFreeList.fk=f;
-            f=frameFreeList;
+        CallFrame rv;
+        if (frameFreeList == null) {
+            rv=new CallFrame();
+        } else {
+            rv=frameFreeList;
             frameFreeList=frameFreeList.parent;
             frameFreeListSize--;
-            f.nxp=n;
-            f.vlr=v;
-            f.vlk=vlk;
-            f.env=e;
-            f.parent=p;
-            f.cap=null;
-            return f;
         }
+        rv.parent=p;
+        rv.fk=f;
+        rv.nxp=n;
+        rv.vlr=v;
+        rv.vlk=vlk;
+        rv.env=e;
+        rv.lcl=l;
+        rv.cap=null;
+        return rv;
     }
 
     public final void push(Expression n) {
-        if (frameFreeList == null)
-            stk=new CallFrame(n,vlr,vlk,env,fk,stk,cap);
-        else {
-            CallFrame rv=frameFreeList;
+        CallFrame rv;
+        if (frameFreeList == null) {
+            rv=new CallFrame();
+        } else {
+            rv=frameFreeList;
             frameFreeList=frameFreeList.parent;
             frameFreeListSize--;
-            rv.fk=fk;
-            rv.nxp=n;
-            rv.vlr=vlr;
-            rv.vlk=vlk;
-            rv.env=env;
-            rv.parent=stk;
-            rv.cap=cap;
-            stk=rv;
         }
+
+        rv.parent=stk;
+        stk=rv;
+        stk.fk=fk;
+        stk.nxp=n;
+        stk.vlr=vlr;
+        stk.vlk=vlk;
+        stk.env=env;
+        stk.lcl=lcl;
+        stk.cap=cap;
     }
     
     public final void returnFrame(CallFrame f) {
@@ -368,77 +392,44 @@ public class Interpreter extends Util {
         frameFreeListSize++;
     }
 
-    protected static final int ENVPOOLMAX=128;
-    protected LexicalEnvironment envFreeList;
-    protected int envFreeListSize;
 
-    /*
-    protected static int m, o, h;
-    static {
-        System.runFinalizersOnExit(true);
-    }
-    protected void finalize() throws Throwable {
-        if (m>0) {
-            System.err.println("M:"+m+" H:"+h+" O:"+o);
-            m=o=h=0;
-        }
-        for (int i=0; i<5; i++) {
-            System.err.println(i+": "+sisc.exprs.AppExp.i[i]+
-                                " "+sisc.exprs.AppExp.n[i]);   
-        }
-    }
-   
-*/
-
-    public final void returnEnv() {
-        if (env != null && !env.locked) {
-            returnValues(env.vals);
-            if (envFreeListSize < ENVPOOLMAX) {
-                env.parent = envFreeList;
-                envFreeList = env;
-                envFreeListSize++;
-            }
-            //else 
-            //    o++;
-        }
-    }
+    protected Value dv1[], dv2[], dv3[], dv4[];
     
-    public final void newEnv(Value[] vals, 
-                             LexicalEnvironment p) {
-        if (envFreeList == null) {
-            //m++;
-            env=new LexicalEnvironment(vals, p);
-        } else {
-            //h++;
-            env=envFreeList;
-            envFreeList = envFreeList.parent;
-            envFreeListSize--;
-            env.vals=vals;
-            env.parent=p;
-        }
-    }
-
-    protected static final int VALUESPOOLWIDTH=4;
-    protected Value deadValues[][]=new Value[VALUESPOOLWIDTH][];
-
-    //static int sizemiss, miss, hit, zerohit;
     public final Value[] createValues(int size) {
-        if (size == 0) { 
-            //zerohit++; 
-            return ZV; 
+        Value[] rv;
+        switch(size) {
+        case 0: return ZV;
+        case 1: 
+            if (dv1 != null) {
+                rv=dv1;
+                dv1=null;
+                return rv;
+            } 
+            break;
+        case 2: 
+            if (dv2 != null) {
+                rv=dv2;
+                dv2=null;
+                return rv;
+            } 
+            break;
+        case 3: 
+            if (dv3 != null) {
+                rv=dv3;
+                dv3=null;
+                return rv;
+            } 
+            break;
+        case 4: 
+            if (dv4 != null) {
+                rv=dv4;
+                dv4=null;
+                return rv;
+            } 
+            break;
         }
-        if (size >= VALUESPOOLWIDTH) { 
-         	//sizemiss++; 
-            return new Value[size]; 
-        }
-        int slot=size-1;
-        Value[] res = deadValues[slot];
-        if (res == null) { 
-            return new Value[size]; 
-        } else {
-            deadValues[slot] = null;
-            return res;
-        }
+        return new Value[size];
+
      }
 
     public final void returnVLR() {
@@ -448,10 +439,17 @@ public class Interpreter extends Util {
             vlr=null;
         }
     }
-	
+
     public final void forceReturnVLR() {
         if (vlr != null) {
             returnValues(vlr);
+        }
+    }
+
+    public final void returnLCL() {
+        if (!(vlk || lcl==null)) {
+            returnValues(lcl);
+            lcl=null;
         }
     }
 
@@ -464,13 +462,23 @@ public class Interpreter extends Util {
     }
 
     public final void returnValues(Value[] v) {
-        int slot = v.length-1;
-        switch(slot) {
-        case 3: v[3]=null;
-        case 2: v[2]=null;
-        case 1: v[1]=null;
-        case 0: v[0]=null;
-            deadValues[slot]=v;
+        switch(v.length) {
+        case 4: 
+            v[3]=v[2]=v[1]=v[0]=null; 
+            dv4=v;
+            break;
+        case 3: 
+            v[2]=v[1]=v[0]=null; 
+            dv3=v;
+            break;
+        case 2: 
+            v[1]=v[0]=null; 
+            dv2=v;
+            break;
+        case 1: 
+            v[0]=null; 
+            dv1=v;
+            break;
         }
     }
 }

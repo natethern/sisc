@@ -72,7 +72,7 @@ public class DelegatingSymEnv extends Value
         return getEnv().lookup(s);
     }
 
-    public Value lookup(int pi) {
+    public final Value lookup(int pi) {
         return getEnv().lookup(pi);
     }
 

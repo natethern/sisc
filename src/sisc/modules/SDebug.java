@@ -121,7 +121,8 @@ public class SDebug extends IndexedProcedure {
                                 Quantity.valueOf(c.fcount), c.body.express());
                 }
             case COMPILE:
-                return new Closure(false, (short)0, f.compile(f.vlr[0]), f.env);
+                return new Closure(false, (short)0, 
+                                   f.compile(f.vlr[0]), ZV, new int[0]);
             case ERROR_CONT_K:
                 return (f.vlr[0] instanceof ApplyParentFrame ? 
                         ((ApplyParentFrame)f.vlr[0]).c :
@@ -146,7 +147,7 @@ public class SDebug extends IndexedProcedure {
                 if (f.vlr[0] instanceof ApplyParentFrame)
                     f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
                 cn=cont(f.vlr[0]);
-                return cn.env;
+                return new Values(cn.env);
             case CONT_PARENT: 
                 if (f.vlr[0] instanceof ApplyParentFrame)
                     f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
@@ -159,7 +160,9 @@ public class SDebug extends IndexedProcedure {
         case 2:
             switch (id) {
             case COMPILE:
-                return new Closure(false, (short)0, f.compile(f.vlr[0], env(f.vlr[1])), f.env);
+                return new Closure(false, (short)0, 
+                                   f.compile(f.vlr[0], env(f.vlr[1])), 
+                                   ZV, new int[0]);
             default:
                 throwArgSizeException();
             }

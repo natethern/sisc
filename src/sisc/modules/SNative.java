@@ -97,29 +97,6 @@ public class SNative extends IndexedProcedure {
                (((Quantity)v).type & mask)!=0;
     }
 
-    protected final Pair reverse(Pair p) {
-        Pair n=EMPTYLIST;
-        while (p!=EMPTYLIST) {
-            n=new Pair(p.car, n);
-            p=(Pair)p.cdr;
-        }
-        return n;
-    }
-
-    protected final Pair reverseInPlace(Pair s) {
-	if (s==EMPTYLIST) return EMPTYLIST;
-	Pair r=EMPTYLIST;
-	Value d;
-	do {
-	    d=s.cdr;
-	    s.cdr=r;
-	    r=s;
-	    if (d==EMPTYLIST) break;
-	    s=(Pair)d;
-        } while (true);
-        return r;
-    }
-
     public final Value doApply(Interpreter f) throws ContinuationException {
         switch(id) {
         case CHARLESSTHAN:
@@ -256,12 +233,7 @@ public class SNative extends IndexedProcedure {
                     return reverseInPlace(c);
                 case MAPCAR:
                     lists=pair(f.vlr[0]);
-                    c=EMPTYLIST;
-                    while (lists != EMPTYLIST) {
-                        c=new Pair(truePair(lists.car).car, c);
-                        lists=pair(lists.cdr);
-                    }
-                    return reverseInPlace(c);
+                    return mapcar(pair(f.vlr[0]));
                 case REVERSE:
                     return reverse(pair(f.vlr[0]));
                 case REVERSEB:
@@ -288,24 +260,9 @@ public class SNative extends IndexedProcedure {
                     }
                     return FALSE;
                 case ASSQ:
-                    v1=f.vlr[0];
-                    p1=pair(f.vlr[1]);
-                    while (p1!=EMPTYLIST) {
-                        Pair assc=pair(p1.car);
-                        if (assc.car == v1)
-                            return assc;
-                        p1=pair(p1.cdr);
-                    }
-                    return FALSE;
+                    return assq(f.vlr[0], pair(f.vlr[1]));
                 case MEMQ:
-                    v1=f.vlr[0];
-                    p1=pair(f.vlr[1]);
-                    while (p1!=EMPTYLIST) {
-                        if (p1.car == v1)
-                            return p1;
-                        p1=pair(p1.cdr);
-                    }
-                    return FALSE;
+                    return memq(f.vlr[0], pair(f.vlr[1]));
                 case MEMV:
                     v1=f.vlr[0];
                     p1=pair(f.vlr[1]);
