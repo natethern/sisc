@@ -17,10 +17,10 @@ public class PortValueWriter extends Util
 
     public PortValueWriter(OutputPort port,
                            boolean vectorLengthPrefixing,
-			   boolean caseSensitive) {
+                           boolean caseSensitive) {
         this.port = port;
         this.vectorLengthPrefixing = vectorLengthPrefixing;
-	this.caseSensitive = caseSensitive;
+        this.caseSensitive = caseSensitive;
     }
 
     protected void displayOrWrite(Value v, boolean display)
@@ -69,7 +69,7 @@ public class PortValueWriter extends Util
     }
 
     public boolean caseSensitive() {
-	return caseSensitive;
+        return caseSensitive;
     }
 }
 
