@@ -264,7 +264,7 @@ public class Interpreter extends Util {
 	    deadFillRibs[++deadFillRibsPointer]=f;
     }
 
-    protected static final int VALUESPOOLSIZE=4;
+    protected static final int VALUESPOOLSIZE=8;
     protected Value deadValues[][] = new Value[VALUESPOOLSIZE][];
 
     public final Value[] createValues(int size) {
