@@ -1,3 +1,11 @@
+2004-05-13  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed bug in s2j that resulted in incorrect method lookup
+	precedence for methods overloaded on java.lang.Object and an
+	interface. See bug 953043.
+
+2004-04-12  Released SISC 1.8.8
+
 2004-04-08  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed bugs in the native versions of c??r which

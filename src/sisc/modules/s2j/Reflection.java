@@ -9,6 +9,7 @@ import sisc.nativefun.IndexedLibraryAdapter;
 public class Reflection extends Util {
 
     protected static final int
+    //NEXT = 47
         JAVA_WRAP = 1,
         JAVA_UNWRAP = 2,
         JAVA_CLASS = 3,
@@ -39,6 +40,7 @@ public class Reflection extends Util {
         JAVA_METHODQ = 24,
         JAVA_CONSTRUCTORQ = 25,
         JAVA_INTERFACEQ = 26,
+        JAVA_PRIMITIVEQ = 46,
         JAVA_ARRAYQ = 27,
         JAVA_ARRAY_CLASSQ = 28,
         JAVA_NULLQ = 29,
@@ -98,6 +100,7 @@ public class Reflection extends Util {
             define("java/method?", JAVA_METHODQ);
             define("java/constructor?", JAVA_CONSTRUCTORQ);
             define("java/interface?", JAVA_INTERFACEQ);
+            define("java/primitive?", JAVA_PRIMITIVEQ);
             define("java/array?", JAVA_ARRAYQ);
             define("java/array-class?", JAVA_ARRAY_CLASSQ);
             define("java/null?", JAVA_NULLQ);
@@ -376,6 +379,8 @@ public class Reflection extends Util {
                 return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JNULL);
             case JAVA_INTERFACEQ:
                 return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JCLASS && jclass(f.vlr[0]).isInterface());
+            case JAVA_PRIMITIVEQ:
+                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JCLASS && jclass(f.vlr[0]).isPrimitive());
             case JAVA_ARRAY_CLASSQ:
                 return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JCLASS && jclass(f.vlr[0]).isArray());
             case JAVA_CLASS_OF:

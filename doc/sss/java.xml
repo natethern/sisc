@@ -2140,13 +2140,22 @@ Foo fooObj = new Foo(1, 2);
               Returns the direct superclasses of <parameter>jclass</parameter>.
             </para>
             <para>
-              For ordinary classes this is the class' superclass followed by
-              all of its interfaces in the order they were specified in the class
-              declaration.  For primitive and array types the direct superclass or 
-              superclasses reflect the widening conversions performed by Java.  
-              For example, <literal>&lt;jint&gt;</literal>'s superclass is
-              <literal>&lt;jlong&gt;</literal> and <literal>&lt;java.util.array-list[][]&gt;
-              </literal>'s superclasses are:
+              Normally this is the class' superclass followed by all
+              of its interfaces in the order they were specified in
+              the class declaration.  There are a number of exceptions
+              which ensure that the result is consistent with the
+              precedence order employed by Java for method lookup on
+              overloaded method.  Interfaces and classes that directly
+              inherit from <classname>java.lang.Object</classname> are
+              all given <classname>java.lang.Object</classname> as the
+              <emhpasis>last</emphasis> element in their superclass
+              list.  For primitive and array types the direct
+              superclass or superclasses reflect the widening
+              conversions performed by Java.  For example,
+              <literal>&lt;jint&gt;</literal>'s superclass is
+              <literal>&lt;jlong&gt;</literal> and
+              <literal>&lt;java.util.array-list[][]&gt; </literal>'s
+              superclasses are:
               <itemizedlist>
                 <listitem><para><literal>&lt;java.util.abstract-list[][]&gt;</literal></para></listitem>
                 <listitem><para><literal>&lt;java.util.list[][]&gt;</literal></para></listitem>
@@ -2233,21 +2242,11 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-              Returns teh total order of <parameter>jclass</parameter> and
+              Returns the total order of <parameter>jclass</parameter> and
               all direct and indirect superclasses, as determined by the
               partial orders obtained from calling 
               <function>java-class-declared-superclasses</function>.
             </para>
-            <para>
-              The ordering of the classes returned by <function>
-              java-class-declared-superclasses</function> is considered
-              "weak", whereas the ordering of the class itself with
-              respect to its direct superclasses is considered strong.
-              The significance of this is that when computing the class 
-              precedence list weak orderings are re-arranged if that is the
-              only way to obtain a total order.  By contrast, strong orderings
-              are never rearranged.
-           </para>
            <para>
                  The class precedence list is important when comparing types 
                  using the type system's <function>compare-types</function> procedure,

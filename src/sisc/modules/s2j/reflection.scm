@@ -12,53 +12,35 @@
 ;;;;;;;;;; CLASS PRECEDENCE LIST ;;;;;;;;;;
 
 (define (java-class-declared-superclasses jclass)
-  ((if (java/array-class? jclass)
-       java-array-superclasses
-       java-normal-superclasses)
+  ((cond [(java/array-class? jclass) java-array-superclasses]
+         [(java/primitive? jclass) java-primitive-superclasses]
+         [(java/interface? jclass) java-interface-superclasses]
+         [else java-normal-superclasses])
    jclass))
 
-(define (java-normal-superclasses jclass)
-  (let ([super (java/superclass jclass)]
-        [interfaces (java/interfaces jclass)])
-    (if (java/null? super)
-        (if (null? interfaces)
-            (if (java/interface? jclass)
-                '()
-                (java-primitive-superclasses jclass))
-            interfaces)
-        (cons super interfaces))))
-
-;;let X[n] denote the type of an array of type X with n dimensions.
-;;
-;;X[n]'s superclasses are B[n], I_0[n] ... I_k[n] where B is X's
-;;superclass and I_0...I_k are X's superinterfaces. If X has no
-;;superclass and no superinterfaces and is not an interface (i.e. X is
-;;a primitive type or Object) then X[n]'s superclasses are
-;;Object[n-1], Serializable[n-1] and Cloneable[n-1].
-(define java-array-superclasses
+(define java-normal-superclasses
   (let ([<java.lang.object-class>
-         (java/class '|java.lang.Object|)]
-        [<java.io.serializable-class>
-         (java/class '|java.io.Serializable|)]
-        [<java.lang.cloneable-class>
-         (java/class '|java.lang.Cloneable|)])
+         (java/class '|java.lang.Object|)])
     (lambda (jclass)
-      (let loop ([level 0]
-                 [c jclass])
-        (if (java/array-class? c)
-            (loop (+ level 1) (java/component-type c))
-            (let ([supers (java-normal-superclasses c)])
-              (if (and (null? supers) (not (java/interface? c)))
-                  (let ([level (- level 1)])
-                    (map (lambda (c)
-                           (if (zero? level)
-                               c
-                               (java/array-class c level)))
-                         (list <java.lang.object-class>
-                               <java.io.serializable-class>
-                               <java.lang.Cloneable-class>)))
-                  (map (lambda (c) (java/array-class c level))
-                       supers))))))))
+      (let ([super (java/superclass jclass)]
+            [interfaces (java/interfaces jclass)])
+        (cond
+          [(java/null? super)
+           interfaces]
+          [(eqv? super <java.lang.object-class>)
+           ;;we always shuffle Object to the end
+           (append interfaces (list <java.lang.object-class>))]
+          [else
+            (cons super interfaces)])))))
+
+(define java-interface-superclasses
+  (let ([<java.lang.object-class>
+         (java/class '|java.lang.Object|)])
+    ;;we pretend that all interfaces have Object as the last element in
+    ;;their declared superclasses
+    (lambda (jclass)
+      (append (java/interfaces jclass)
+              (list <java.lang.object-class>)))))
 
 ;;fake type hierarchy for primitive types that is consistent with
 ;;Java's widening conversion
@@ -78,6 +60,39 @@
     (lambda (jclass)
       (cond [(assv jclass super-classes) => cdr]
             [else '()]))))
+
+;;let X[n] denote the type of an array of type X with n dimensions.
+;;
+;;X[n]'s superclasses are B[n], I_0[n] ... I_k[n] where B is X's
+;;superclass and I_0...I_k are X's superinterfaces. If X is
+;;a primitive type or Object then X[n]'s superclasses are
+;;Serializable[n-1] and Cloneable[n-1], Object[n-1].
+(define java-array-superclasses
+  (let ([<java.lang.object-class>
+         (java/class '|java.lang.Object|)]
+        [<java.io.serializable-class>
+         (java/class '|java.io.Serializable|)]
+        [<java.lang.cloneable-class>
+         (java/class '|java.lang.Cloneable|)])
+    (lambda (jclass)
+      (let loop ([level 0]
+                 [c jclass])
+        (cond
+          [(java/array-class? c)
+           (loop (+ level 1) (java/component-type c))]
+          [(or (java/primitive? c)
+               (eqv? c <java.lang.object-class>))
+           (let ([level (- level 1)])
+             (map (lambda (c)
+                    (if (zero? level)
+                        c
+                        (java/array-class c level)))
+                  (list <java.io.serializable-class>
+                        <java.lang.cloneable-class>
+                        <java.lang.object-class>)))]
+          [else 
+            (map (lambda (c) (java/array-class c level))
+                 (java-class-declared-superclasses c))))))))
 
 (define (compute-class-precedence-list jclass)
   (or (total-order

@@ -148,3 +148,22 @@
                      (with/fc (lambda (m e) #t)
                               (lambda () (p '()) (p '(a)) #f)))
                    (list caar cadr cdar cddr)))
+
+;;interfaces and classes that inherit from Object must have Object
+;;last in their declared-superclasses list
+(should-be 953043 '(#t #t #t)
+           (let ()
+             (import s2j)
+             (define-java-classes
+               <java.lang.object>
+               <java.io.file>
+               <java.io.serializable>
+               (<int*> |int[]|))
+             (map (lambda (c)
+                    (eqv? (car
+                           (reverse
+                            (java-class-declared-superclasses c)))
+                          <java.lang.object>))
+                  (list <java.io.file>
+                        <java.io.serializable>
+                        <int*>))))
