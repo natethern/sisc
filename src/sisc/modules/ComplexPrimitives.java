@@ -126,7 +126,6 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                 r.vlr[0]=r.stk;
                 
                 r.saveVLR=true;
-                r.vlk=true;
                 r.nxp = APPEVAL;
                 return kproc;
             case CALLCC:
@@ -135,13 +134,13 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                 r.vlr[0]=r.stk.capture(r);
                 
                 r.saveVLR=true;
-                r.vlk=true;
                 r.nxp = APPEVAL;
                 return kproc;
             case CALLFC:
                 Procedure proc=proc(vlr[0]);
                 r.replaceVLR(1);
                 r.setVLR(0,r.fk.capture(r));
+
                 r.saveVLR=true;
                 r.nxp = APPEVAL;
                 return proc;
