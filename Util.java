@@ -93,7 +93,7 @@ public abstract class Util implements Conf {
 
     public static void error(Interpreter r, String errormessage)
     throws ContinuationException {
-        error(r, errormessage, true);
+	error(r, errormessage, true);
     }
 
     public static void error(Interpreter r, String errormessage,
@@ -110,12 +110,12 @@ public abstract class Util implements Conf {
 	    error,
 	    c=new CallFrame(r.nxp, r.vlr, r.env, r.fk, r.stk).capture(r),
 	    new CurriedFC(r.fk.fk)});
-	while (c!=null) {
+	/*	while (c!=null) {
 	    if (c.nxp!=null)
 		System.err.println(c.nxp.getClass());
-	    c=c.parent;
+		c=c.parent;
 	}
-
+	*/
         throw new ContinuationException(r.fk);
     }
 

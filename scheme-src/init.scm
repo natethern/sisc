@@ -622,7 +622,7 @@
 			      (cadr args)
 			      #f))]
 	     [objects (if (not message) 
-			  #f
+			  '()
 			  (if (not location)
                               (if (not (null? args))
                                   (if (not (car args))
@@ -636,8 +636,12 @@
 				(apply format (cons message objects))))
 		(oerror (format "Error in ~s." location)))
 	    (if message
-		(oerror (format "Error: ~a" 
-				(apply format (cons message objects))))
+		(if (string? message)
+		    (oerror (format "Error: ~a" 
+				    (apply format (cons message objects))))
+		    (if (null? objects)
+			(oerror message)
+			(error 'error "cannot specify error arguments to a non format-string error.")))
 		(oerror "Error.")))))))
 	    
 

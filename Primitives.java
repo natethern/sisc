@@ -623,7 +623,7 @@ public class Primitives extends ModuleAdapter {
                 f.nxp = APPEVAL;
                 return producer;
             case ERROR:
-                error(f, string(f.vlr[0]), false);
+                error(f, f.vlr[0]);
             case MAKEPATH:
                 String f1=string(f.vlr[0]);
                 String f2=string(f.vlr[1]);
