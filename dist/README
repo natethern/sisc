@@ -1,37 +1,47 @@
 About SISC (Second Interpreter of Scheme Code)
----------------------------------------------------------------------------
+----------------------------------------------
 
-    SISC is a relatively lightweight, from scratch, fully functional Scheme
-interpreter.  SISC is the successor to LISC, and sacrifices a few dozen
-more KB in order to be orders of magnitude faster and fully R5RS compliant.
-SISC has the following general features:
+SISC is an extensible Java based interpreter of the algorithmic
+language Scheme.  SISC uses modern interpretation techniques, and
+handily outperforms all existing JVM interpreters (often by more than
+an order of magnitude).
 
-    * Fully R5RS compliant.    
-    * A full number tower for unlimited precision math including:
-         - Arbitrary precision integers, floating point numbers 
-         - Arbitrary precision ratios (based on bigints)
-         - Arbitrary precision complex numbers (based on bigfloats)
-    * A fully R5RS compliant, hygienic macro system based on syntax-case.
-    * Full support for continuations via call/cc.
+In addition, SISC is a complete implementation of the language. The
+entire R5RS Scheme standard is supported, no exceptions. This includes
+a full number tower including complex number support, arbitrary
+precision integers and floating point numbers, as well as hygenic R5RS
+macros, proper tail recursion, and first-class continuations (not just
+the escaping continuations as in many limited Scheme systems). SISC
+also attempts to implement the standard as correctly as possible,
+while still providing exceptional performance.
+
+SISC also provides useful real-world extensions, such as networking,
+elegant exception handling, a scope-friendly module system, support
+for SLIB, numerous SRFIs, and a Java foreign-function interface.
+
+Finally, native functionality can be added through the use of Modules,
+extensions that may add new types, values, and functions to the
+language. These extensions can be packaged into scopable modules at
+the Scheme level as well.
 
 Installation
 ------------
-  Define SISC_HOME in your environment variables to point the directory 
-in which you wish to store the "sisc.shp" and the various ".jar" files.
-Then, install "sisc" or "sisc.bat" in your path.  
-  If you are running on a Unix or Unix-like system, you may also wish to 
-install the various shell scripts in scheme-src/srfi-22 in your path in 
-order to support the SRFI-22 functionality of Scheme programs as Unix 
-scripts.
-  To run SISC, just type "sisc" or "sisc.bat", followed by any scheme 
-source files you wish to load.
+
+Define SISC_HOME in your environment variables to point to the
+directory in which you installed the SISC distribution. Then, install
+"sisc.sh" or "sisc.bat" in your path. If you are running on a Unix or
+Unix-like system, you may also wish to install the various shell
+scripts in scheme-src/srfi-22 in your path in order to support the
+SRFI-22 functionality of Scheme programs as Unix scripts.  To run
+SISC, just type "sisc" or "sisc.bat", followed by any scheme source
+files you wish to load.
 
 More information about SISC, including a paper on the implementation
 and the full SISC manual, can be found at the SISC website,
 http://sisc.sourceforge.net
 
-(C) 2000-2003 Scott G. Miller <scgmille@freenetproject.org>
-This software is distributed under a dual licensing scheme, with the 
-GNU General Public License, v2, and the Mozilla Public License.  The source
-code should be available from the same place you found this binary
-distribution.
+(C) 2000-2003 Scott G. Miller <scgmille@freenetproject.org> This
+software is distributed under a dual licensing scheme, with the GNU
+General Public License, v2, and the Mozilla Public License.  The
+source code should be available from the same place you found this
+binary distribution.
