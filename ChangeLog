@@ -1,3 +1,7 @@
+2004-08-27  Scott G. Miller   <scott@sgmiller.org>
+
+	* Fixed state bugs in SRFI-18 related to unowned mutexes.
+
 2004-08-24  Released SISC 1.9.0-alpha
 
 2004-08-23  Scott G. Miller   <scott@sgmiller.org>
