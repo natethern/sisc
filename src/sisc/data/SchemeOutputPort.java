@@ -9,7 +9,7 @@ public abstract class SchemeOutputPort extends Value
     implements OutputPort, NamedValue {
 
     public void display(ValueWriter w) throws IOException {
-        displayNamedOpaque(w, "output-port");
+        displayNamedOpaque(w, "native-output-port");
     }
 }
 /*

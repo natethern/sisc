@@ -13,6 +13,10 @@ public class StreamInputPort
         this.in=in;
     }
 
+    public InputStream getInputStream() {
+        return in;
+    }
+
     public int readHelper() throws IOException {
         return in.read();
     }

@@ -119,14 +119,8 @@
                                  (begin ((current-writer) val) (newline)))))))
                       (repl/read)))))])
     (lambda ()
-      (current-url
-       (string-append
-        "file:"
-        (let ([dir (getenv "user.dir")])
-          (if dir
-              (string-append dir (getenv "file.separator"))
-              "."))))
       (let ([repl-start #f])
+        (repl-initialize)
         (or ((current-exit-handler)
              (call/cc
                (lambda (k)
@@ -160,3 +154,13 @@
     (_exit-handler (cdr (_exit-handler)))
     (newline)
     (if k (k rv) rv)))
+
+(on-repl-start
+ (lambda ()
+   (current-url
+    (string-append
+     "file:"
+     (let ([dir (getenv "user.dir")])
+       (if dir
+           (string-append dir (getenv "file.separator"))
+           "."))))))

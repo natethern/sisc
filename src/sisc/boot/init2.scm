@@ -402,12 +402,12 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
           (letrec ((port 
                     (cond ((output-port? output-port) output-port)
                           ((eq? output-port #t) (current-output-port)) 
-                          ((eq? output-port #f) (open-output-string)) 
+                          ((eq? output-port #f) (_open-output-string)) 
                           (else (error 'format "bad output-port argument: ~s"
                                        output-port))))
                    (return-value 
                     (if (eq? output-port #f)    ;; if format into a string 
-                        (lambda () (get-output-string port)) ;; then return the string
+                        (lambda () (_get-output-string port)) ;; then return the string
                         void))) ;; else do something harmless
             
             (define (format-help format-strg arglist)
@@ -942,7 +942,19 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
 
 ;;hook that gets invoked when SISC is started
 (define initialize #f)
+(define repl-initialize #f)
 (define on-startup #f)
+(define on-repl-start
+  (let ([repl-start-hooks '()])
+    (set! repl-initialize
+          (lambda ()
+            (for-each (lambda (thunk) (thunk)) 
+                      (reverse repl-start-hooks))))
+    (lambda (thunk)
+      (if (not (procedure? thunk))
+          (error "~a is not a procedure" thunk))
+      (set! repl-start-hooks (cons thunk repl-start-hooks)))))
+      
 (let ([*startup-hooks* '()]
       [startup-enabled? #t])
   (set! initialize

@@ -8,10 +8,7 @@ import java.io.EOFException;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.net.URL;
-import sisc.io.SerialOutputPort;
-import sisc.io.SerialInputPort;
-import sisc.io.SerializerPort;
-import sisc.io.DeserializerPort;
+import sisc.io.*;
 
 public class SerialIO extends IndexedProcedure {
 
@@ -20,9 +17,7 @@ public class SerialIO extends IndexedProcedure {
 
     protected static final int
         DESERIALIZE=1, SERIALIZE=2,
-        OPENSERIALINPUTFILE = 3, OPENSERIALOUTPUTFILE= 4,
-        SERIALINPUTPORTQ = 5, SERIALOUTPUTPORTQ = 6;
-
+        OPENSERIALINPUTFILE = 3, OPENSERIALOUTPUTFILE= 4;
 
     public static class Index extends IndexedLibraryAdapter {
         
@@ -31,12 +26,10 @@ public class SerialIO extends IndexedProcedure {
         }
         
       	public Index() {
-           	define("serialize",               SERIALIZE);
+            define("serialize",               SERIALIZE);
             define("deserialize",             DESERIALIZE);
-            define("open-serial-input-file",  OPENSERIALINPUTFILE);
-            define("open-serial-output-file", OPENSERIALOUTPUTFILE);
-            define("serial-input-port?",      SERIALINPUTPORTQ);
-            define("serial-output-port?",     SERIALOUTPUTPORTQ);
+            define("open-serial-input-port",  OPENSERIALINPUTFILE);
+            define("open-serial-output-port", OPENSERIALOUTPUTFILE);
         }   
     }
     
@@ -54,27 +47,25 @@ public class SerialIO extends IndexedProcedure {
         return null;
     }
 
-    private static DeserializerPort openSerInFile(Interpreter f, URL url)
+    private static DeserializerPort openSerInPort(Interpreter f, 
+                                                  StreamInputPort sip)
         throws ContinuationException {
         try {
-            return new DeserializerPort(f.getCtx(),
-                                        new BufferedInputStream(IO.getURLInputStream(url))); 
+            return new DeserializerPort(f.getCtx(), sip.getInputStream());
         } catch (IOException e) {
-            IO.throwIOException(f, liMessage(IO.IOB, "erroropening", 
-                                             url.toString()), e);
+            IO.throwIOException(f, liMessage(BINARYB, "erroropening"), e);
         }
         return null;
     }
 
-    private static SerializerPort openSerOutFile(Interpreter f,  URL url,
+    private static SerializerPort openSerOutPort(Interpreter f, 
+                                                 StreamOutputPort sop,
                                                  boolean aflush) 
         throws ContinuationException {
-        try {          
-            return new SerializerPort(new BufferedOutputStream(IO.getURLOutputStream(url)),
-                                      aflush);
+        try {
+            return new SerializerPort(sop.getOutputStream(), aflush);
         } catch (IOException e) {
-            IO.throwIOException(f, liMessage(IO.IOB, "erroropening",
-                                             url.toString()), e);
+            IO.throwIOException(f, liMessage(BINARYB, "erroropening"), e);
         }
         return null;
     }
@@ -116,34 +107,23 @@ public class SerialIO extends IndexedProcedure {
 
     public Value doApply(Interpreter f) throws ContinuationException {
         switch (f.vlr.length) {
-        case 0:
-            switch (id) {
-            case DESERIALIZE:
-                return readSer(f, sinport(f.dynenv.in));
-            default:
-                throwArgSizeException();
-            }
         case 1:
             switch (id) {
             case OPENSERIALINPUTFILE:
-                return openSerInFile(f, url(f.vlr[0]));
+                return openSerInPort(f, (StreamInputPort)inport(f.vlr[0]));
             case OPENSERIALOUTPUTFILE:
-                return openSerOutFile(f, url(f.vlr[0]), false);
-            case SERIALINPUTPORTQ:
-                return truth(f.vlr[0] instanceof SerialInputPort);
-            case SERIALOUTPUTPORTQ:
-                return truth(f.vlr[0] instanceof SerialOutputPort);
+                return openSerOutPort(f, (StreamOutputPort)outport(f.vlr[0]), 
+                                      false);
             case DESERIALIZE:
                 return readSer(f, sinport(f.vlr[0]));
-            case SERIALIZE:
-                return writeSer(f, soutport(f.dynenv.out), f.vlr[0]);
             default:
                 throwArgSizeException();
             }
         case 2:
             switch (id) {
             case OPENSERIALOUTPUTFILE:
-                return openSerOutFile(f, url(f.vlr[0]), truth(f.vlr[1]));
+                return openSerOutPort(f, (StreamOutputPort)outport(f.vlr[0]), 
+                                      truth(f.vlr[1]));
             case SERIALIZE:
                 return writeSer(f, soutport(f.vlr[1]), f.vlr[0]);
             default:

@@ -14,6 +14,10 @@ public class StreamOutputPort
         this.out=out;
     }
 
+    public OutputStream getOutputStream() {
+        return out;
+    }
+
     public void write(byte[] b, int offset, int length) throws IOException {
         writeHelper(b, offset, length);
         if (autoflush) flush();

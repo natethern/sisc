@@ -1,137 +1,143 @@
 (#%program
-  ((|make-arecord_XiypxsKee| . 1)
-   (|env_Xig7nJMee| . 1)
-   (|arec_XiC3laNee| . 5)
-   (|v_XiWapgMee| . 2)
+  ((|make-arecord_1Q1hsic5O| . 1)
+   (|env_1QL-hze5O| . 1)
+   (|arec_1Q5Xf0f5O| . 5)
+   (|v_1Qp2k6e5O| . 2)
    (_expression-type . 1)
-   (|v_Xi-_at1fe| . 3)
-   (|oper_XimN2h3fe| . 1)
-   (|loop_XioCYD4fe| . 2)
-   (|rv_Xi4vUx5fe| . 2)
+   (|v_1QvI_Fw5O| . 3)
+   (|oper_1QTtTty5O| . 1)
+   (|loop_1QViNQz5O| . 2)
+   (|rv_1QBbJKA5O| . 2)
    (not . 1)
-   (|v_XiKyW45fe| . 4)
-   (|t_XisgMl7fe| . 2)
-   (|t_Xi6kOU6fe| . 2)
-   (|s_XiMnQr6fe| . 6)
-   (|binding_XigtjHdfe| . 3)
-   (|t_XiCph8efe| . 2)
+   (|v_1QffLhA5O| . 4)
+   (|t_1QZYAyC5O| . 2)
+   (|t_1QD0D5C5O| . 2)
+   (|s_1Qh4FEB5O| . 6)
+   (|binding_1QN98UI5O| . 3)
+   (|t_1Q766lJ5O| . 2)
    (map . 1)
    (cadar . 1)
-   (|loop_XieEpkcfe| . 2)
-   (|refs_XiWwledfe| . 2)
-   (|bindings_XiAAnNcfe| . 3)
+   (|loop_1QLkexH5O| . 2)
+   (|refs_1QrdarI5O| . 2)
+   (|bindings_1Q5hc-H5O| . 3)
    (cddr . 1)
-   (|refs_XiwWz3afe| . 1)
-   (|newlxs_Xia-BC9fe| . 2)
-   (|v_XiSSxwafe| . 1)
-   (|locals_XiQ1E99fe| . 2)
-   (|refs_XicPvZafe| . 2)
-   (|lexicals_XiUHrTbfe| . 1)
-   (|v_Xi89If8fe| . 7)
-   (|analyzed_XiOcKO7fe| . 3)
-   (|locally-frees_XiyLtqbfe| . 2)
+   (|refs_1Q1DogF5O| . 1)
+   (|newlxs_1QHGqPE5O| . 2)
+   (|v_1QnzmJF5O| . 1)
+   (|locals_1QlKsmE5O| . 2)
+   (|refs_1QJvkaG5O| . 2)
+   (|lexicals_1Qpog4H5O| . 1)
+   (|v_1QFRwsD5O| . 7)
+   (|analyzed_1QjVy_C5O| . 3)
+   (|locally-frees_1Q3siDG5O| . 2)
    (eq? . 2)
-   (|v_Xiiid2ffe| . 3)
-   (|env_XiGU6n2fe| . 9)
+   (|v_1QP-1fK5O| . 3)
+   (|env_1QbBXzx5O| . 9)
    (cadr . 3)
-   (|analyze!_XieitmLee| . 9)
-   (|locals_XiEebvffe| . 2)
-   (|refs_Xik77pgfe| . 2)
-   (|in_XigNqLjee| . 2)
+   (|analyze!_1QJ9ocd5O| . 9)
+   (|locals_1Q9X_HK5O| . 2)
+   (|refs_1QRPXBL5O| . 2)
+   (|in_1QpIn8N4O| . 2)
    (set-car! . 2)
-   (|lexicals_XimY0Mhfe| . 1)
-   (|v_Xi-a9Yffe| . 5)
-   (|analyzed_XiYlfBefe| . 3)
-   (|arec_XikY8W1fe| . 19)
-   (|arecord-union-frees!_Xi0v8SBee| . 2)
-   (|lxs_Xi0R4Q2fe| . 12)
-   (|locally-frees_XiG35Sgfe| . 3)
-   (|difference_XiAUuRiee| . 5)
-   (|v_XiIJ0K3fe| . 12)
+   (|lexicals_1QTERYM5O| . 1)
+   (|v_1QvTZ8L5O| . 5)
+   (|analyzed_1Qt24OJ5O| . 3)
+   (|arec_1QREZ6x5O| . 19)
+   (|arecord-union-frees!_1Qvm3I35O| . 2)
+   (|lxs_1QxxV0y5O| . 12)
+   (|locally-frees_1QbMV2M5O| . 3)
+   (|difference_1QJPreM4O| . 5)
+   (|v_1QdqRWy5O| . 12)
    (map-car . 1)
-   (|exp-type_Xi2G-a4fe| . 8)
+   (|exp-type_1QzmPnz5O| . 8)
    (= . 8)
-   (|lxs_Xii7fz0fe| . 1)
-   (|env_XiYah60fe| . 1)
-   (|analyze-app!_XiAerPLee| . 1)
+   (|env_1QtT5jv5O| . 1)
+   (|analyze-app!_1Q36mFd5O| . 1)
+   (|arecord-add-free!_1Q9q5f35O| . 1)
+   (|lxs_1QPP3Mv5O| . 2)
    (assq . 4)
-   (|arec_XiCejF_ee| . 4)
-   (|inc-cdr!_XiuALftee| . 4)
-   (|t_XiE3d01fe| . 2)
-   (|v_Xigilc_ee| . 6)
+   (|arec_1Q7X7Su5O| . 5)
+   (|inc-cdr!_1QDvIEW4O| . 4)
+   (|t_1Q9M1dw5O| . 2)
+   (|v_1QN-9pu5O| . 8)
    (symbol? . 2)
-   (|build-refs_XiUlvVKee| . 4)
+   (|build-refs_1QndqLc5O| . 4)
    (cdar . 1)
    (zero? . 1)
-   (|vals_XiWlnL-ee| . 5)
-   (|v_XiAppi-ee| . 1)
+   (|vals_1Qr2cYt5O| . 5)
+   (|v_1Q56evt5O| . 1)
    (vector . 1)
    (list . 6)
-   (|->proper-list_Xictz_Jee| . 2)
+   (|->proper-list_1QHkuRb5O| . 2)
    (pair? . 3)
-   (|elem_XietrRZee| . 5)
-   (|v_XiSHz1Yee| . 2)
+   (|elem_1QL9g2t5O| . 5)
+   (|v_1Qnooer5O| . 2)
    (> . 1)
-   (|newfrees_XiwLBAXee| . 1)
-   (|union_XieYwoiee| . 6)
-   (|arec_XiaPD7Xee| . 2)
-   (vector-ref . 18)
+   (|newfrees_1Q1sqNq5O| . 1)
+   (|union_1QnTtNL4O| . 6)
+   (|arec_1QHvskq5O| . 2)
+   (|arec_1QFGyZo5O| . 1)
+   (vector-ref . 19)
+   (|afrees_1QlzuTp5O| . 3)
+   (|newfree_1Q_Cwqp5O| . 2)
    (+ . 1)
-   (|v_XiQSFGWee| . 2)
-   (|ls2_XiuWHdWee| . 1)
-   (|ls1_Xi8-JMVee| . 1)
-   (|intersection_XiWQsijee| . 1)
+   (|v_1QjKAwo5O| . 2)
+   (|ls2_1QZNC3o5O| . 1)
+   (|ls1_1QDRECn5O| . 1)
+   (|intersection_1Q3MpHM4O| . 1)
    (reverse . 1)
-   (|ls1_XiqgUvTee| . 1)
-   (|loop_Xi69QpUee| . 3)
-   (|ls2_XiMcSYTee| . 1)
-   (|acc_XiO1MjVee| . 3)
-   (|ls1_Xis5OSUee| . 5)
-   (|ls1_XiIy2fRee| . 1)
-   (|loop_Xior-8See| . 3)
-   (|ls2_Xi2v0IRee| . 1)
-   (|acc_Xi4kW2Tee| . 3)
-   (|ls1_XiKnYBSee| . 5)
-   (|ls1_XiY_iDNee| . 1)
-   (cons . 18)
-   (|cc_Xi0G6lQee| . 2)
-   (cdr . 33)
-   (|loop_XiEUexOee| . 3)
+   (|ls1_1QV7Pll5O| . 1)
+   (|loop_1QB0Lfm5O| . 3)
+   (|ls2_1Qf4NOl5O| . 1)
+   (|acc_1QhVG9n5O| . 3)
+   (|ls1_1QXYIIm5O| . 5)
+   (|ls1_1QbqZ4j5O| . 1)
+   (|loop_1QTiV-j5O| . 3)
+   (|ls2_1QxmXxj5O| . 1)
+   (|acc_1QzbRUk5O| . 3)
+   (|ls1_1QdfTrk5O| . 5)
+   (|ls1_1QrTdtf5O| . 1)
+   (cons . 19)
+   (|cc_1Qvx1bi5O| . 2)
+   (cdr . 35)
+   (|loop_1Q7M9ng5O| . 3)
    (car . 25)
-   (memq . 3)
-   (|acc_XiGJ8UPee| . 3)
-   (|ls2_XiiYg4Oee| . 3)
-   (set-cdr! . 9)
-   (|tail_XikNarPee| . 5)
-   (|ls1_Xi-Qc-Oee| . 5)
+   (memq . 5)
+   (|acc_1Q9B3Kh5O| . 3)
+   (|ls2_1QNPbWf5O| . 3)
+   (set-cdr! . 10)
+   (|tail_1QPE5hh5O| . 5)
+   (|ls1_1QtI7Qg5O| . 5)
    (null? . 7)
    ($sc-put-cte . 1))
-  ((|loop_XioCYD4fe| . 1)
-   (|loop_XieEpkcfe| . 1)
-   (|loop_Xi69QpUee| . 1)
-   (|loop_Xior-8See| . 1)
-   (|loop_XiEUexOee| . 1)
-   (|analyze-app!_XiAerPLee| . 1)
-   (|analyze!_XieitmLee| . 1)
-   (|build-refs_XiUlvVKee| . 1)
-   (|make-arecord_XiypxsKee| . 1)
-   (|->proper-list_Xictz_Jee| . 1)
-   (|_cdr>0_XiwAD5Jee| . 1)
-   (|arecord-union-frees!_Xi0v8SBee| . 1)
-   (|inc-cdr!_XiuALftee| . 1)
-   (|in_XigNqLjee| . 1)
-   (|intersection_XiWQsijee| . 1)
-   (|difference_XiAUuRiee| . 1)
-   (|union_XieYwoiee| . 1)
-   (|_letrec_Xiy3Buhee| . 1)
-   (|makeannotation_Xic7D1hee| . 1)
-   (|_define_XiSaFAgee| . 1)
-   (|set_XiweH7gee| . 1)
-   (|_quote_XiaiJGfee| . 1)
-   (|_lambda_Xi8tPjeee| . 1)
-   (|application_XiOwRSdee| . 1)
-   (|program_XisATpdee| . 1))
-  (_expression-type
+  ((|loop_1QViNQz5O| . 1)
+   (|loop_1QLkexH5O| . 1)
+   (|loop_1QB0Lfm5O| . 1)
+   (|loop_1QTiV-j5O| . 1)
+   (|loop_1Q7M9ng5O| . 1)
+   (|analyze-app!_1Q36mFd5O| . 1)
+   (|analyze!_1QJ9ocd5O| . 1)
+   (|build-refs_1QndqLc5O| . 1)
+   (|make-arecord_1Q1hsic5O| . 1)
+   (|->proper-list_1QHkuRb5O| . 1)
+   (|_cdr>0_1Q_ryXa5O| . 1)
+   (|arecord-union-frees!_1Qvm3I35O| . 1)
+   (|arecord-add-free!_1Q9q5f35O| . 1)
+   (|inc-cdr!_1QDvIEW4O| . 1)
+   (|in_1QpIn8N4O| . 1)
+   (|intersection_1Q3MpHM4O| . 1)
+   (|difference_1QJPreM4O| . 1)
+   (|union_1QnTtNL4O| . 1)
+   (|_letrec_1QH-xTK4O| . 1)
+   (|makeannotation_1Ql2AqK4O| . 1)
+   (|_define_1Q_5CZJ4O| . 1)
+   (|set_1QF9EwJ4O| . 1)
+   (|_quote_1QjdG3J4O| . 1)
+   (|_lambda_1QhoMIH4O| . 1)
+   (|application_1QXrOfH4O| . 1)
+   (|program_1QBvQOG4O| . 1))
+  ($sc-put-cte
+    _expression-type
     =
     eq?
     cadr
@@ -164,674 +170,696 @@
       (#%quote (global . _analyze!)))
     (#%define _analyze!
       (#%letrec #t
-        ((|program_XisATpdee| 0)
-         (|application_XiOwRSdee| 1)
-         (|_lambda_Xi8tPjeee| 2)
-         (|_quote_XiaiJGfee| 5)
-         (|set_XiweH7gee| 6)
-         (|_define_XiSaFAgee| 7)
-         (|makeannotation_Xic7D1hee| 8)
-         (|_letrec_Xiy3Buhee| 9)
-         (|union_XieYwoiee|
+        ((|program_1QBvQOG4O| 0)
+         (|application_1QXrOfH4O| 1)
+         (|_lambda_1QhoMIH4O| 2)
+         (|_quote_1QjdG3J4O| 5)
+         (|set_1QF9EwJ4O| 6)
+         (|_define_1Q_5CZJ4O| 7)
+         (|makeannotation_1Ql2AqK4O| 8)
+         (|_letrec_1QH-xTK4O| 9)
+         (|union_1QnTtNL4O|
            (#%lambda #t
-             (|ls1_XiY_iDNee| |ls2_XiiYg4Oee|)
+             (|ls1_1QrTdtf5O| |ls2_1QNPbWf5O|)
              ()
              ((#%letrec #t
-                ((|loop_XiEUexOee|
+                ((|loop_1Q7M9ng5O|
                    (#%lambda #t
-                     (|ls1_Xi-Qc-Oee|
-                       |tail_XikNarPee|
-                       |acc_XiGJ8UPee|)
-                     (|loop_XiEUexOee| |ls2_XiiYg4Oee|)
-                     (#%if (null? |ls1_Xi-Qc-Oee|)
-                       (#%if |tail_XikNarPee|
+                     (|ls1_1QtI7Qg5O|
+                       |tail_1QPE5hh5O|
+                       |acc_1Q9B3Kh5O|)
+                     (|loop_1Q7M9ng5O| |ls2_1QNPbWf5O|)
+                     (#%if (null? |ls1_1QtI7Qg5O|)
+                       (#%if |tail_1QPE5hh5O|
                          (#%begin
-                           (set-cdr! |tail_XikNarPee| |ls2_XiiYg4Oee|)
-                           |acc_XiGJ8UPee|)
-                         |ls2_XiiYg4Oee|)
-                       (#%if (memq (car |ls1_Xi-Qc-Oee|) |ls2_XiiYg4Oee|)
-                         (|loop_XiEUexOee|
-                           (cdr |ls1_Xi-Qc-Oee|)
-                           |tail_XikNarPee|
-                           |acc_XiGJ8UPee|)
+                           (set-cdr! |tail_1QPE5hh5O| |ls2_1QNPbWf5O|)
+                           |acc_1Q9B3Kh5O|)
+                         |ls2_1QNPbWf5O|)
+                       (#%if (memq (car |ls1_1QtI7Qg5O|) |ls2_1QNPbWf5O|)
+                         (|loop_1Q7M9ng5O|
+                           (cdr |ls1_1QtI7Qg5O|)
+                           |tail_1QPE5hh5O|
+                           |acc_1Q9B3Kh5O|)
                          ((#%lambda #t
-                            (|cc_Xi0G6lQee|)
-                            (|tail_XikNarPee|
-                              |ls1_Xi-Qc-Oee|
-                              |loop_XiEUexOee|)
-                            (|loop_XiEUexOee|
-                              (cdr |ls1_Xi-Qc-Oee|)
-                              (#%if |tail_XikNarPee|
-                                |tail_XikNarPee|
-                                |cc_Xi0G6lQee|)
-                              |cc_Xi0G6lQee|))
-                          (cons (car |ls1_Xi-Qc-Oee|) |acc_XiGJ8UPee|)))))))
-                (|ls2_XiiYg4Oee|)
-                |loop_XiEUexOee|)
-              |ls1_XiY_iDNee|
+                            (|cc_1Qvx1bi5O|)
+                            (|tail_1QPE5hh5O|
+                              |ls1_1QtI7Qg5O|
+                              |loop_1Q7M9ng5O|)
+                            (|loop_1Q7M9ng5O|
+                              (cdr |ls1_1QtI7Qg5O|)
+                              (#%if |tail_1QPE5hh5O|
+                                |tail_1QPE5hh5O|
+                                |cc_1Qvx1bi5O|)
+                              |cc_1Qvx1bi5O|))
+                          (cons (car |ls1_1QtI7Qg5O|) |acc_1Q9B3Kh5O|)))))))
+                (|ls2_1QNPbWf5O|)
+                |loop_1Q7M9ng5O|)
+              |ls1_1QrTdtf5O|
               #f
               ())))
-         (|difference_XiAUuRiee|
+         (|difference_1QJPreM4O|
            (#%lambda #t
-             (|ls1_XiIy2fRee| |ls2_Xi2v0IRee|)
+             (|ls1_1QbqZ4j5O| |ls2_1QxmXxj5O|)
              ()
              ((#%letrec #t
-                ((|loop_Xior-8See|
+                ((|loop_1QTiV-j5O|
                    (#%lambda #t
-                     (|ls1_XiKnYBSee| |acc_Xi4kW2Tee|)
-                     (|loop_Xior-8See| |ls2_Xi2v0IRee|)
-                     (#%if (null? |ls1_XiKnYBSee|)
-                       |acc_Xi4kW2Tee|
-                       (#%if (memq (car |ls1_XiKnYBSee|) |ls2_Xi2v0IRee|)
-                         (|loop_Xior-8See|
-                           (cdr |ls1_XiKnYBSee|)
-                           |acc_Xi4kW2Tee|)
-                         (|loop_Xior-8See|
-                           (cdr |ls1_XiKnYBSee|)
-                           (cons (car |ls1_XiKnYBSee|) |acc_Xi4kW2Tee|)))))))
-                (|ls2_Xi2v0IRee|)
-                |loop_Xior-8See|)
-              |ls1_XiIy2fRee|
+                     (|ls1_1QdfTrk5O| |acc_1QzbRUk5O|)
+                     (|loop_1QTiV-j5O| |ls2_1QxmXxj5O|)
+                     (#%if (null? |ls1_1QdfTrk5O|)
+                       |acc_1QzbRUk5O|
+                       (#%if (memq (car |ls1_1QdfTrk5O|) |ls2_1QxmXxj5O|)
+                         (|loop_1QTiV-j5O|
+                           (cdr |ls1_1QdfTrk5O|)
+                           |acc_1QzbRUk5O|)
+                         (|loop_1QTiV-j5O|
+                           (cdr |ls1_1QdfTrk5O|)
+                           (cons (car |ls1_1QdfTrk5O|) |acc_1QzbRUk5O|)))))))
+                (|ls2_1QxmXxj5O|)
+                |loop_1QTiV-j5O|)
+              |ls1_1QbqZ4j5O|
               ())))
-         (|intersection_XiWQsijee|
+         (|intersection_1Q3MpHM4O|
            (#%lambda #t
-             (|ls1_XiqgUvTee| |ls2_XiMcSYTee|)
+             (|ls1_1QV7Pll5O| |ls2_1Qf4NOl5O|)
              ()
              ((#%letrec #t
-                ((|loop_Xi69QpUee|
+                ((|loop_1QB0Lfm5O|
                    (#%lambda #t
-                     (|ls1_Xis5OSUee| |acc_XiO1MjVee|)
-                     (|loop_Xi69QpUee| |ls2_XiMcSYTee|)
-                     (#%if (null? |ls1_Xis5OSUee|)
-                       |acc_XiO1MjVee|
-                       (#%if (memq (car |ls1_Xis5OSUee|) |ls2_XiMcSYTee|)
-                         (|loop_Xi69QpUee|
-                           (cdr |ls1_Xis5OSUee|)
-                           (cons (car |ls1_Xis5OSUee|) |acc_XiO1MjVee|))
-                         (|loop_Xi69QpUee|
-                           (cdr |ls1_Xis5OSUee|)
-                           |acc_XiO1MjVee|))))))
-                (|ls2_XiMcSYTee|)
-                |loop_Xi69QpUee|)
-              |ls1_XiqgUvTee|
+                     (|ls1_1QXYIIm5O| |acc_1QhVG9n5O|)
+                     (|loop_1QB0Lfm5O| |ls2_1Qf4NOl5O|)
+                     (#%if (null? |ls1_1QXYIIm5O|)
+                       |acc_1QhVG9n5O|
+                       (#%if (memq (car |ls1_1QXYIIm5O|) |ls2_1Qf4NOl5O|)
+                         (|loop_1QB0Lfm5O|
+                           (cdr |ls1_1QXYIIm5O|)
+                           (cons (car |ls1_1QXYIIm5O|) |acc_1QhVG9n5O|))
+                         (|loop_1QB0Lfm5O|
+                           (cdr |ls1_1QXYIIm5O|)
+                           |acc_1QhVG9n5O|))))))
+                (|ls2_1Qf4NOl5O|)
+                |loop_1QB0Lfm5O|)
+              |ls1_1QV7Pll5O|
               ())))
-         (|in_XigNqLjee|
+         (|in_1QpIn8N4O|
            (#%lambda #t
-             (|ls1_Xi8-JMVee| |ls2_XiuWHdWee|)
-             (|intersection_XiWQsijee|)
+             (|ls1_1QDRECn5O| |ls2_1QZNC3o5O|)
+             (|intersection_1Q3MpHM4O|)
              (reverse
-               (|intersection_XiWQsijee|
-                 |ls1_Xi8-JMVee|
-                 |ls2_XiuWHdWee|))))
-         (|inc-cdr!_XiuALftee|
+               (|intersection_1Q3MpHM4O|
+                 |ls1_1QDRECn5O|
+                 |ls2_1QZNC3o5O|))))
+         (|inc-cdr!_1QDvIEW4O|
            (#%lambda #t
-             (|v_XiQSFGWee|)
+             (|v_1QjKAwo5O|)
              ()
              (set-cdr!
-               |v_XiQSFGWee|
-               (+ 1 (cdr |v_XiQSFGWee|)))))
-         (|arecord-union-frees!_Xi0v8SBee|
+               |v_1QjKAwo5O|
+               (+ 1 (cdr |v_1QjKAwo5O|)))))
+         (|arecord-add-free!_1Q9q5f35O|
            (#%lambda #t
-             (|arec_XiaPD7Xee| |newfrees_XiwLBAXee|)
-             (|union_XieYwoiee|)
-             (set-cdr!
-               (vector-ref |arec_XiaPD7Xee| 2)
-               (|union_XieYwoiee|
-                 (cdr (vector-ref |arec_XiaPD7Xee| 2))
-                 |newfrees_XiwLBAXee|))))
-         (|_cdr>0_XiwAD5Jee|
-           (#%lambda #t
-             (|v_XiSHz1Yee|)
+             (|arec_1QFGyZo5O| |newfree_1Q_Cwqp5O|)
              ()
-             (#%if (> (cdr |v_XiSHz1Yee|) 0)
-               (cdr |v_XiSHz1Yee|)
+             ((#%lambda #t
+                (|afrees_1QlzuTp5O|)
+                (|newfree_1Q_Cwqp5O|)
+                (#%if (memq |newfree_1Q_Cwqp5O|
+                            (cdr |afrees_1QlzuTp5O|))
+                  #!void
+                  (set-cdr!
+                    |afrees_1QlzuTp5O|
+                    (cons |newfree_1Q_Cwqp5O|
+                          (cdr |afrees_1QlzuTp5O|)))))
+              (vector-ref |arec_1QFGyZo5O| 2))))
+         (|arecord-union-frees!_1Qvm3I35O|
+           (#%lambda #t
+             (|arec_1QHvskq5O| |newfrees_1Q1sqNq5O|)
+             (|union_1QnTtNL4O|)
+             (set-cdr!
+               (vector-ref |arec_1QHvskq5O| 2)
+               (|union_1QnTtNL4O|
+                 (cdr (vector-ref |arec_1QHvskq5O| 2))
+                 |newfrees_1Q1sqNq5O|))))
+         (|_cdr>0_1Q_ryXa5O|
+           (#%lambda #t
+             (|v_1Qnooer5O|)
+             ()
+             (#%if (> (cdr |v_1Qnooer5O|) 0)
+               (cdr |v_1Qnooer5O|)
                #f)))
-         (|->proper-list_Xictz_Jee|
+         (|->proper-list_1QHkuRb5O|
            (#%lambda #t
-             (|elem_XietrRZee|)
-             (|->proper-list_Xictz_Jee|)
-             (#%if (null? |elem_XietrRZee|)
+             (|elem_1QL9g2t5O|)
+             (|->proper-list_1QHkuRb5O|)
+             (#%if (null? |elem_1QL9g2t5O|)
                ()
-               (#%if (pair? |elem_XietrRZee|)
-                 (cons (car |elem_XietrRZee|)
-                       (|->proper-list_Xictz_Jee|
-                         (cdr |elem_XietrRZee|)))
-                 (list |elem_XietrRZee|)))))
-         (|make-arecord_XiypxsKee|
+               (#%if (pair? |elem_1QL9g2t5O|)
+                 (cons (car |elem_1QL9g2t5O|)
+                       (|->proper-list_1QHkuRb5O|
+                         (cdr |elem_1QL9g2t5O|)))
+                 (list |elem_1QL9g2t5O|)))))
+         (|make-arecord_1Q1hsic5O|
            (#%lambda #t
-             (|v_XiAppi-ee|)
+             (|v_1Q56evt5O|)
              ()
              (vector
                (list (#%quote *refs*))
                (list (#%quote *sets*))
                (list (#%quote *frees*))
-               |v_XiAppi-ee|)))
-         (|build-refs_XiUlvVKee|
+               |v_1Q56evt5O|)))
+         (|build-refs_1QndqLc5O|
            (#%lambda #t
-             (|vals_XiWlnL-ee|)
-             (|build-refs_XiUlvVKee|)
-             (#%if (null? |vals_XiWlnL-ee|)
+             (|vals_1Qr2cYt5O|)
+             (|build-refs_1QndqLc5O|)
+             (#%if (null? |vals_1Qr2cYt5O|)
                ()
-               (#%if (zero? (cdar |vals_XiWlnL-ee|))
-                 (|build-refs_XiUlvVKee| (cdr |vals_XiWlnL-ee|))
-                 (cons (car |vals_XiWlnL-ee|)
-                       (|build-refs_XiUlvVKee| (cdr |vals_XiWlnL-ee|)))))))
-         (|analyze!_XieitmLee|
+               (#%if (zero? (cdar |vals_1Qr2cYt5O|))
+                 (|build-refs_1QndqLc5O| (cdr |vals_1Qr2cYt5O|))
+                 (cons (car |vals_1Qr2cYt5O|)
+                       (|build-refs_1QndqLc5O| (cdr |vals_1Qr2cYt5O|)))))))
+         (|analyze!_1QJ9ocd5O|
            (#%lambda #t
-             (|v_Xigilc_ee|
-               |arec_XiCejF_ee|
-               |env_XiYah60fe|
-               |lxs_Xii7fz0fe|)
-             (|analyze-app!_XiAerPLee| |inc-cdr!_XiuALftee|)
-             (#%if (symbol? |v_Xigilc_ee|)
+             (|v_1QN-9pu5O|
+               |arec_1Q7X7Su5O|
+               |env_1QtT5jv5O|
+               |lxs_1QPP3Mv5O|)
+             (|analyze-app!_1Q36mFd5O|
+               |arecord-add-free!_1Q9q5f35O|
+               |inc-cdr!_1QDvIEW4O|)
+             (#%if (symbol? |v_1QN-9pu5O|)
                (#%begin
                  ((#%lambda #t
-                    (|t_XiE3d01fe|)
-                    (|arec_XiCejF_ee|
-                      |v_Xigilc_ee|
-                      |inc-cdr!_XiuALftee|)
-                    (#%if |t_XiE3d01fe|
-                      (|inc-cdr!_XiuALftee| |t_XiE3d01fe|)
+                    (|t_1Q9M1dw5O|)
+                    (|arec_1Q7X7Su5O|
+                      |v_1QN-9pu5O|
+                      |inc-cdr!_1QDvIEW4O|)
+                    (#%if |t_1Q9M1dw5O|
+                      (|inc-cdr!_1QDvIEW4O| |t_1Q9M1dw5O|)
                       (set-cdr!
-                        (vector-ref |arec_XiCejF_ee| 0)
-                        (cons (cons |v_Xigilc_ee| 1)
-                              (cdr (vector-ref |arec_XiCejF_ee| 0))))))
-                  (assq |v_Xigilc_ee|
-                        (cdr (vector-ref |arec_XiCejF_ee| 0))))
-                 (list |v_Xigilc_ee|))
-               (#%if (pair? |v_Xigilc_ee|)
-                 (|analyze-app!_XiAerPLee|
-                   |v_Xigilc_ee|
-                   |arec_XiCejF_ee|
-                   |env_XiYah60fe|
-                   |lxs_Xii7fz0fe|)
+                        (vector-ref |arec_1Q7X7Su5O| 0)
+                        (cons (cons |v_1QN-9pu5O| 1)
+                              (cdr (vector-ref |arec_1Q7X7Su5O| 0))))))
+                  (assq |v_1QN-9pu5O|
+                        (cdr (vector-ref |arec_1Q7X7Su5O| 0))))
+                 (#%if (memq |v_1QN-9pu5O| |lxs_1QPP3Mv5O|)
+                   #!void
+                   (|arecord-add-free!_1Q9q5f35O|
+                     |arec_1Q7X7Su5O|
+                     |v_1QN-9pu5O|))
+                 (list |v_1QN-9pu5O|))
+               (#%if (pair? |v_1QN-9pu5O|)
+                 (|analyze-app!_1Q36mFd5O|
+                   |v_1QN-9pu5O|
+                   |arec_1Q7X7Su5O|
+                   |env_1QtT5jv5O|
+                   |lxs_1QPP3Mv5O|)
                  ()))))
-         (|analyze-app!_XiAerPLee|
+         (|analyze-app!_1Q36mFd5O|
            (#%lambda #t
-             (|v_Xi-_at1fe|
-               |arec_XikY8W1fe|
-               |env_XiGU6n2fe|
-               |lxs_Xi0R4Q2fe|)
-             (|analyze!_XieitmLee|
-               |->proper-list_Xictz_Jee|
-               |arecord-union-frees!_Xi0v8SBee|
-               |inc-cdr!_XiuALftee|
-               |in_XigNqLjee|
-               |difference_XiAUuRiee|
-               |union_XieYwoiee|)
+             (|v_1QvI_Fw5O|
+               |arec_1QREZ6x5O|
+               |env_1QbBXzx5O|
+               |lxs_1QxxV0y5O|)
+             (|analyze!_1QJ9ocd5O|
+               |->proper-list_1QHkuRb5O|
+               |arecord-union-frees!_1Qvm3I35O|
+               |inc-cdr!_1QDvIEW4O|
+               |in_1QpIn8N4O|
+               |difference_1QJPreM4O|
+               |union_1QnTtNL4O|)
              ((#%lambda #t
-                (|oper_XimN2h3fe|
-                  |v_XiIJ0K3fe|
-                  |exp-type_Xi2G-a4fe|)
-                (|lxs_Xi0R4Q2fe|
-                  |env_XiGU6n2fe|
-                  |arec_XikY8W1fe|
-                  |analyze!_XieitmLee|
-                  |->proper-list_Xictz_Jee|
-                  |arecord-union-frees!_Xi0v8SBee|
-                  |inc-cdr!_XiuALftee|
-                  |in_XigNqLjee|
-                  |difference_XiAUuRiee|
-                  |union_XieYwoiee|)
-                (#%if (= |exp-type_Xi2G-a4fe| 5)
+                (|oper_1QTtTty5O|
+                  |v_1QdqRWy5O|
+                  |exp-type_1QzmPnz5O|)
+                (|lxs_1QxxV0y5O|
+                  |env_1QbBXzx5O|
+                  |arec_1QREZ6x5O|
+                  |analyze!_1QJ9ocd5O|
+                  |->proper-list_1QHkuRb5O|
+                  |arecord-union-frees!_1Qvm3I35O|
+                  |inc-cdr!_1QDvIEW4O|
+                  |in_1QpIn8N4O|
+                  |difference_1QJPreM4O|
+                  |union_1QnTtNL4O|)
+                (#%if (= |exp-type_1QzmPnz5O| 5)
                   ()
-                  (#%if (= |exp-type_Xi2G-a4fe| 0)
-                    (map-car (car |v_XiIJ0K3fe|))
-                    (#%if (= |exp-type_Xi2G-a4fe| 2)
+                  (#%if (= |exp-type_1QzmPnz5O| 0)
+                    (map-car (car |v_1QdqRWy5O|))
+                    (#%if (= |exp-type_1QzmPnz5O| 2)
                       ((#%lambda #t
-                         (|analyzed_XiYlfBefe|)
-                         (|v_XiIJ0K3fe|
-                           |lxs_Xi0R4Q2fe|
-                           |env_XiGU6n2fe|
-                           |arec_XikY8W1fe|
-                           |analyze!_XieitmLee|
-                           |->proper-list_Xictz_Jee|
-                           |arecord-union-frees!_Xi0v8SBee|
-                           |in_XigNqLjee|
-                           |difference_XiAUuRiee|
-                           |union_XieYwoiee|)
+                         (|analyzed_1Qt24OJ5O|)
+                         (|v_1QdqRWy5O|
+                           |lxs_1QxxV0y5O|
+                           |env_1QbBXzx5O|
+                           |arec_1QREZ6x5O|
+                           |analyze!_1QJ9ocd5O|
+                           |->proper-list_1QHkuRb5O|
+                           |arecord-union-frees!_1Qvm3I35O|
+                           |in_1QpIn8N4O|
+                           |difference_1QJPreM4O|
+                           |union_1QnTtNL4O|)
                          ((#%lambda #t
-                            (|v_Xiiid2ffe|)
-                            (|analyzed_XiYlfBefe|
-                              |lxs_Xi0R4Q2fe|
-                              |env_XiGU6n2fe|
-                              |arec_XikY8W1fe|
-                              |analyze!_XieitmLee|
-                              |->proper-list_Xictz_Jee|
-                              |arecord-union-frees!_Xi0v8SBee|
-                              |in_XigNqLjee|
-                              |difference_XiAUuRiee|
-                              |union_XieYwoiee|)
+                            (|v_1QP-1fK5O|)
+                            (|analyzed_1Qt24OJ5O|
+                              |lxs_1QxxV0y5O|
+                              |env_1QbBXzx5O|
+                              |arec_1QREZ6x5O|
+                              |analyze!_1QJ9ocd5O|
+                              |->proper-list_1QHkuRb5O|
+                              |arecord-union-frees!_1Qvm3I35O|
+                              |in_1QpIn8N4O|
+                              |difference_1QJPreM4O|
+                              |union_1QnTtNL4O|)
                             ((#%lambda #t
-                               (|locals_XiEebvffe|)
-                               (|v_Xiiid2ffe|
-                                 |analyzed_XiYlfBefe|
-                                 |lxs_Xi0R4Q2fe|
-                                 |env_XiGU6n2fe|
-                                 |arec_XikY8W1fe|
-                                 |analyze!_XieitmLee|
-                                 |arecord-union-frees!_Xi0v8SBee|
-                                 |in_XigNqLjee|
-                                 |difference_XiAUuRiee|
-                                 |union_XieYwoiee|)
+                               (|locals_1Q9X_HK5O|)
+                               (|v_1QP-1fK5O|
+                                 |analyzed_1Qt24OJ5O|
+                                 |lxs_1QxxV0y5O|
+                                 |env_1QbBXzx5O|
+                                 |arec_1QREZ6x5O|
+                                 |analyze!_1QJ9ocd5O|
+                                 |arecord-union-frees!_1Qvm3I35O|
+                                 |in_1QpIn8N4O|
+                                 |difference_1QJPreM4O|
+                                 |union_1QnTtNL4O|)
                                ((#%lambda #t
-                                  (|v_Xi-a9Yffe|)
-                                  (|locals_XiEebvffe|
-                                    |analyzed_XiYlfBefe|
-                                    |lxs_Xi0R4Q2fe|
-                                    |env_XiGU6n2fe|
-                                    |arec_XikY8W1fe|
-                                    |analyze!_XieitmLee|
-                                    |arecord-union-frees!_Xi0v8SBee|
-                                    |in_XigNqLjee|
-                                    |difference_XiAUuRiee|
-                                    |union_XieYwoiee|)
+                                  (|v_1QvTZ8L5O|)
+                                  (|locals_1Q9X_HK5O|
+                                    |analyzed_1Qt24OJ5O|
+                                    |lxs_1QxxV0y5O|
+                                    |env_1QbBXzx5O|
+                                    |arec_1QREZ6x5O|
+                                    |analyze!_1QJ9ocd5O|
+                                    |arecord-union-frees!_1Qvm3I35O|
+                                    |in_1QpIn8N4O|
+                                    |difference_1QJPreM4O|
+                                    |union_1QnTtNL4O|)
                                   ((#%lambda #t
-                                     (|refs_Xik77pgfe|)
-                                     (|v_Xi-a9Yffe|
-                                       |locals_XiEebvffe|
-                                       |analyzed_XiYlfBefe|
-                                       |lxs_Xi0R4Q2fe|
-                                       |arec_XikY8W1fe|
-                                       |arecord-union-frees!_Xi0v8SBee|
-                                       |in_XigNqLjee|
-                                       |difference_XiAUuRiee|)
+                                     (|refs_1QRPXBL5O|)
+                                     (|v_1QvTZ8L5O|
+                                       |locals_1Q9X_HK5O|
+                                       |analyzed_1Qt24OJ5O|
+                                       |lxs_1QxxV0y5O|
+                                       |arec_1QREZ6x5O|
+                                       |arecord-union-frees!_1Qvm3I35O|
+                                       |in_1QpIn8N4O|
+                                       |difference_1QJPreM4O|)
                                      ((#%lambda #t
-                                        (|locally-frees_XiG35Sgfe|)
-                                        (|refs_Xik77pgfe|
-                                          |v_Xi-a9Yffe|
-                                          |analyzed_XiYlfBefe|
-                                          |lxs_Xi0R4Q2fe|
-                                          |arec_XikY8W1fe|
-                                          |arecord-union-frees!_Xi0v8SBee|
-                                          |in_XigNqLjee|
-                                          |difference_XiAUuRiee|)
+                                        (|locally-frees_1QbMV2M5O|)
+                                        (|refs_1QRPXBL5O|
+                                          |v_1QvTZ8L5O|
+                                          |analyzed_1Qt24OJ5O|
+                                          |lxs_1QxxV0y5O|
+                                          |arec_1QREZ6x5O|
+                                          |arecord-union-frees!_1Qvm3I35O|
+                                          |in_1QpIn8N4O|
+                                          |difference_1QJPreM4O|)
                                         (#%begin
-                                          (|difference_XiAUuRiee|
-                                            |locally-frees_XiG35Sgfe|
-                                            |lxs_Xi0R4Q2fe|)
+                                          (|difference_1QJPreM4O|
+                                            |locally-frees_1QbMV2M5O|
+                                            |lxs_1QxxV0y5O|)
                                           ((#%lambda #t
-                                             (|lexicals_XimY0Mhfe|)
-                                             (|locally-frees_XiG35Sgfe|
-                                               |v_Xi-a9Yffe|
-                                               |analyzed_XiYlfBefe|
-                                               |lxs_Xi0R4Q2fe|
-                                               |arec_XikY8W1fe|
-                                               |arecord-union-frees!_Xi0v8SBee|
-                                               |difference_XiAUuRiee|)
+                                             (|lexicals_1QTERYM5O|)
+                                             (|locally-frees_1QbMV2M5O|
+                                               |v_1QvTZ8L5O|
+                                               |analyzed_1Qt24OJ5O|
+                                               |lxs_1QxxV0y5O|
+                                               |arec_1QREZ6x5O|
+                                               |arecord-union-frees!_1Qvm3I35O|
+                                               |difference_1QJPreM4O|)
                                              (#%begin
-                                               (|arecord-union-frees!_Xi0v8SBee|
-                                                 |arec_XikY8W1fe|
-                                                 (|difference_XiAUuRiee|
-                                                   |locally-frees_XiG35Sgfe|
-                                                   |lxs_Xi0R4Q2fe|))
-                                               (#%if |analyzed_XiYlfBefe|
+                                               (|arecord-union-frees!_1Qvm3I35O|
+                                                 |arec_1QREZ6x5O|
+                                                 (|difference_1QJPreM4O|
+                                                   |locally-frees_1QbMV2M5O|
+                                                   |lxs_1QxxV0y5O|))
+                                               (#%if |analyzed_1Qt24OJ5O|
                                                  #!void
                                                  (#%begin
                                                    (set-cdr!
-                                                     |v_Xi-a9Yffe|
-                                                     (cons (car |v_Xi-a9Yffe|)
-                                                           (cons |lexicals_XimY0Mhfe|
-                                                                 (cdr |v_Xi-a9Yffe|))))
+                                                     |v_1QvTZ8L5O|
+                                                     (cons (car |v_1QvTZ8L5O|)
+                                                           (cons |lexicals_1QTERYM5O|
+                                                                 (cdr |v_1QvTZ8L5O|))))
                                                    (set-car!
-                                                     |v_Xi-a9Yffe|
+                                                     |v_1QvTZ8L5O|
                                                      #t)))
-                                               |locally-frees_XiG35Sgfe|))
-                                           (|in_XigNqLjee|
-                                             |lxs_Xi0R4Q2fe|
-                                             |refs_Xik77pgfe|))))
-                                      (|difference_XiAUuRiee|
-                                        |refs_Xik77pgfe|
-                                        |locals_XiEebvffe|)))
-                                   (|analyze!_XieitmLee|
-                                     (cadr |v_Xi-a9Yffe|)
-                                     |arec_XikY8W1fe|
-                                     |env_XiGU6n2fe|
-                                     (|union_XieYwoiee|
-                                       |locals_XiEebvffe|
-                                       |lxs_Xi0R4Q2fe|))))
-                                (#%if |analyzed_XiYlfBefe|
-                                  (cdr |v_Xiiid2ffe|)
-                                  |v_Xiiid2ffe|)))
-                             (|->proper-list_Xictz_Jee| (car |v_Xiiid2ffe|))))
-                          (#%if |analyzed_XiYlfBefe|
-                            (cdr |v_XiIJ0K3fe|)
-                            |v_XiIJ0K3fe|)))
-                       (eq? (car |v_XiIJ0K3fe|) #t))
-                      (#%if (= |exp-type_Xi2G-a4fe| 9)
+                                               |locally-frees_1QbMV2M5O|))
+                                           (|in_1QpIn8N4O|
+                                             |lxs_1QxxV0y5O|
+                                             |refs_1QRPXBL5O|))))
+                                      (|difference_1QJPreM4O|
+                                        |refs_1QRPXBL5O|
+                                        |locals_1Q9X_HK5O|)))
+                                   (|analyze!_1QJ9ocd5O|
+                                     (cadr |v_1QvTZ8L5O|)
+                                     |arec_1QREZ6x5O|
+                                     |env_1QbBXzx5O|
+                                     (|union_1QnTtNL4O|
+                                       |locals_1Q9X_HK5O|
+                                       |lxs_1QxxV0y5O|))))
+                                (#%if |analyzed_1Qt24OJ5O|
+                                  (cdr |v_1QP-1fK5O|)
+                                  |v_1QP-1fK5O|)))
+                             (|->proper-list_1QHkuRb5O| (car |v_1QP-1fK5O|))))
+                          (#%if |analyzed_1Qt24OJ5O|
+                            (cdr |v_1QdqRWy5O|)
+                            |v_1QdqRWy5O|)))
+                       (eq? (car |v_1QdqRWy5O|) #t))
+                      (#%if (= |exp-type_1QzmPnz5O| 9)
                         ((#%lambda #t
-                           (|analyzed_XiOcKO7fe|)
-                           (|v_XiIJ0K3fe|
-                             |lxs_Xi0R4Q2fe|
-                             |env_XiGU6n2fe|
-                             |arec_XikY8W1fe|
-                             |analyze!_XieitmLee|
-                             |arecord-union-frees!_Xi0v8SBee|
-                             |inc-cdr!_XiuALftee|
-                             |in_XigNqLjee|
-                             |difference_XiAUuRiee|
-                             |union_XieYwoiee|)
+                           (|analyzed_1QjVy_C5O|)
+                           (|v_1QdqRWy5O|
+                             |lxs_1QxxV0y5O|
+                             |env_1QbBXzx5O|
+                             |arec_1QREZ6x5O|
+                             |analyze!_1QJ9ocd5O|
+                             |arecord-union-frees!_1Qvm3I35O|
+                             |inc-cdr!_1QDvIEW4O|
+                             |in_1QpIn8N4O|
+                             |difference_1QJPreM4O|
+                             |union_1QnTtNL4O|)
                            ((#%lambda #t
-                              (|v_Xi89If8fe|)
-                              (|analyzed_XiOcKO7fe|
-                                |lxs_Xi0R4Q2fe|
-                                |env_XiGU6n2fe|
-                                |arec_XikY8W1fe|
-                                |analyze!_XieitmLee|
-                                |arecord-union-frees!_Xi0v8SBee|
-                                |inc-cdr!_XiuALftee|
-                                |in_XigNqLjee|
-                                |difference_XiAUuRiee|
-                                |union_XieYwoiee|)
+                              (|v_1QFRwsD5O|)
+                              (|analyzed_1QjVy_C5O|
+                                |lxs_1QxxV0y5O|
+                                |env_1QbBXzx5O|
+                                |arec_1QREZ6x5O|
+                                |analyze!_1QJ9ocd5O|
+                                |arecord-union-frees!_1Qvm3I35O|
+                                |inc-cdr!_1QDvIEW4O|
+                                |in_1QpIn8N4O|
+                                |difference_1QJPreM4O|
+                                |union_1QnTtNL4O|)
                               ((#%lambda #t
-                                 (|locals_XiQ1E99fe|)
-                                 (|v_Xi89If8fe|
-                                   |analyzed_XiOcKO7fe|
-                                   |lxs_Xi0R4Q2fe|
-                                   |env_XiGU6n2fe|
-                                   |arec_XikY8W1fe|
-                                   |analyze!_XieitmLee|
-                                   |arecord-union-frees!_Xi0v8SBee|
-                                   |in_XigNqLjee|
-                                   |difference_XiAUuRiee|
-                                   |union_XieYwoiee|)
+                                 (|locals_1QlKsmE5O|)
+                                 (|v_1QFRwsD5O|
+                                   |analyzed_1QjVy_C5O|
+                                   |lxs_1QxxV0y5O|
+                                   |env_1QbBXzx5O|
+                                   |arec_1QREZ6x5O|
+                                   |analyze!_1QJ9ocd5O|
+                                   |arecord-union-frees!_1Qvm3I35O|
+                                   |in_1QpIn8N4O|
+                                   |difference_1QJPreM4O|
+                                   |union_1QnTtNL4O|)
                                  ((#%lambda #t
-                                    (|newlxs_Xia-BC9fe|)
-                                    (|locals_XiQ1E99fe|
-                                      |v_Xi89If8fe|
-                                      |analyzed_XiOcKO7fe|
-                                      |lxs_Xi0R4Q2fe|
-                                      |env_XiGU6n2fe|
-                                      |arec_XikY8W1fe|
-                                      |analyze!_XieitmLee|
-                                      |arecord-union-frees!_Xi0v8SBee|
-                                      |in_XigNqLjee|
-                                      |difference_XiAUuRiee|
-                                      |union_XieYwoiee|)
+                                    (|newlxs_1QHGqPE5O|)
+                                    (|locals_1QlKsmE5O|
+                                      |v_1QFRwsD5O|
+                                      |analyzed_1QjVy_C5O|
+                                      |lxs_1QxxV0y5O|
+                                      |env_1QbBXzx5O|
+                                      |arec_1QREZ6x5O|
+                                      |analyze!_1QJ9ocd5O|
+                                      |arecord-union-frees!_1Qvm3I35O|
+                                      |in_1QpIn8N4O|
+                                      |difference_1QJPreM4O|
+                                      |union_1QnTtNL4O|)
                                     ((#%lambda #t
-                                       (|refs_XiwWz3afe|)
-                                       (|newlxs_Xia-BC9fe|
-                                         |locals_XiQ1E99fe|
-                                         |v_Xi89If8fe|
-                                         |analyzed_XiOcKO7fe|
-                                         |lxs_Xi0R4Q2fe|
-                                         |env_XiGU6n2fe|
-                                         |arec_XikY8W1fe|
-                                         |analyze!_XieitmLee|
-                                         |arecord-union-frees!_Xi0v8SBee|
-                                         |in_XigNqLjee|
-                                         |difference_XiAUuRiee|
-                                         |union_XieYwoiee|)
+                                       (|refs_1Q1DogF5O|)
+                                       (|newlxs_1QHGqPE5O|
+                                         |locals_1QlKsmE5O|
+                                         |v_1QFRwsD5O|
+                                         |analyzed_1QjVy_C5O|
+                                         |lxs_1QxxV0y5O|
+                                         |env_1QbBXzx5O|
+                                         |arec_1QREZ6x5O|
+                                         |analyze!_1QJ9ocd5O|
+                                         |arecord-union-frees!_1Qvm3I35O|
+                                         |in_1QpIn8N4O|
+                                         |difference_1QJPreM4O|
+                                         |union_1QnTtNL4O|)
                                        ((#%lambda #t
-                                          (|v_XiSSxwafe|)
-                                          (|refs_XiwWz3afe|
-                                            |newlxs_Xia-BC9fe|
-                                            |locals_XiQ1E99fe|
-                                            |v_Xi89If8fe|
-                                            |analyzed_XiOcKO7fe|
-                                            |lxs_Xi0R4Q2fe|
-                                            |env_XiGU6n2fe|
-                                            |arec_XikY8W1fe|
-                                            |analyze!_XieitmLee|
-                                            |arecord-union-frees!_Xi0v8SBee|
-                                            |in_XigNqLjee|
-                                            |difference_XiAUuRiee|
-                                            |union_XieYwoiee|)
+                                          (|v_1QnzmJF5O|)
+                                          (|refs_1Q1DogF5O|
+                                            |newlxs_1QHGqPE5O|
+                                            |locals_1QlKsmE5O|
+                                            |v_1QFRwsD5O|
+                                            |analyzed_1QjVy_C5O|
+                                            |lxs_1QxxV0y5O|
+                                            |env_1QbBXzx5O|
+                                            |arec_1QREZ6x5O|
+                                            |analyze!_1QJ9ocd5O|
+                                            |arecord-union-frees!_1Qvm3I35O|
+                                            |in_1QpIn8N4O|
+                                            |difference_1QJPreM4O|
+                                            |union_1QnTtNL4O|)
                                           ((#%lambda #t
-                                             (|refs_XicPvZafe|)
-                                             (|locals_XiQ1E99fe|
-                                               |v_Xi89If8fe|
-                                               |analyzed_XiOcKO7fe|
-                                               |lxs_Xi0R4Q2fe|
-                                               |arec_XikY8W1fe|
-                                               |arecord-union-frees!_Xi0v8SBee|
-                                               |in_XigNqLjee|
-                                               |difference_XiAUuRiee|)
+                                             (|refs_1QJvkaG5O|)
+                                             (|locals_1QlKsmE5O|
+                                               |v_1QFRwsD5O|
+                                               |analyzed_1QjVy_C5O|
+                                               |lxs_1QxxV0y5O|
+                                               |arec_1QREZ6x5O|
+                                               |arecord-union-frees!_1Qvm3I35O|
+                                               |in_1QpIn8N4O|
+                                               |difference_1QJPreM4O|)
                                              ((#%lambda #t
-                                                (|locally-frees_XiyLtqbfe|)
-                                                (|refs_XicPvZafe|
-                                                  |v_Xi89If8fe|
-                                                  |analyzed_XiOcKO7fe|
-                                                  |lxs_Xi0R4Q2fe|
-                                                  |arec_XikY8W1fe|
-                                                  |arecord-union-frees!_Xi0v8SBee|
-                                                  |in_XigNqLjee|
-                                                  |difference_XiAUuRiee|)
+                                                (|locally-frees_1Q3siDG5O|)
+                                                (|refs_1QJvkaG5O|
+                                                  |v_1QFRwsD5O|
+                                                  |analyzed_1QjVy_C5O|
+                                                  |lxs_1QxxV0y5O|
+                                                  |arec_1QREZ6x5O|
+                                                  |arecord-union-frees!_1Qvm3I35O|
+                                                  |in_1QpIn8N4O|
+                                                  |difference_1QJPreM4O|)
                                                 ((#%lambda #t
-                                                   (|lexicals_XiUHrTbfe|)
-                                                   (|locally-frees_XiyLtqbfe|
-                                                     |v_Xi89If8fe|
-                                                     |analyzed_XiOcKO7fe|
-                                                     |lxs_Xi0R4Q2fe|
-                                                     |arec_XikY8W1fe|
-                                                     |arecord-union-frees!_Xi0v8SBee|
-                                                     |difference_XiAUuRiee|)
+                                                   (|lexicals_1Qpog4H5O|)
+                                                   (|locally-frees_1Q3siDG5O|
+                                                     |v_1QFRwsD5O|
+                                                     |analyzed_1QjVy_C5O|
+                                                     |lxs_1QxxV0y5O|
+                                                     |arec_1QREZ6x5O|
+                                                     |arecord-union-frees!_1Qvm3I35O|
+                                                     |difference_1QJPreM4O|)
                                                    (#%begin
-                                                     (|arecord-union-frees!_Xi0v8SBee|
-                                                       |arec_XikY8W1fe|
-                                                       (|difference_XiAUuRiee|
-                                                         |locally-frees_XiyLtqbfe|
-                                                         |lxs_Xi0R4Q2fe|))
-                                                     (#%if |analyzed_XiOcKO7fe|
+                                                     (|arecord-union-frees!_1Qvm3I35O|
+                                                       |arec_1QREZ6x5O|
+                                                       (|difference_1QJPreM4O|
+                                                         |locally-frees_1Q3siDG5O|
+                                                         |lxs_1QxxV0y5O|))
+                                                     (#%if |analyzed_1QjVy_C5O|
                                                        #!void
                                                        (#%begin
                                                          (set-cdr!
-                                                           |v_Xi89If8fe|
-                                                           (cons (car |v_Xi89If8fe|)
-                                                                 (cons |lexicals_XiUHrTbfe|
-                                                                       (cdr |v_Xi89If8fe|))))
+                                                           |v_1QFRwsD5O|
+                                                           (cons (car |v_1QFRwsD5O|)
+                                                                 (cons |lexicals_1Qpog4H5O|
+                                                                       (cdr |v_1QFRwsD5O|))))
                                                          (set-car!
-                                                           |v_Xi89If8fe|
+                                                           |v_1QFRwsD5O|
                                                            #t)))
-                                                     |locally-frees_XiyLtqbfe|))
-                                                 (|in_XigNqLjee|
-                                                   |lxs_Xi0R4Q2fe|
-                                                   |refs_XicPvZafe|)))
-                                              (|difference_XiAUuRiee|
-                                                |refs_XicPvZafe|
-                                                |locals_XiQ1E99fe|)))
-                                           (|union_XieYwoiee|
-                                             (|analyze!_XieitmLee|
-                                               (car |v_XiSSxwafe|)
-                                               |arec_XikY8W1fe|
-                                               |env_XiGU6n2fe|
-                                               |newlxs_Xia-BC9fe|)
-                                             |refs_XiwWz3afe|)))
-                                        ((#%if |analyzed_XiOcKO7fe| cddr cdr)
-                                         |v_Xi89If8fe|)))
+                                                     |locally-frees_1Q3siDG5O|))
+                                                 (|in_1QpIn8N4O|
+                                                   |lxs_1QxxV0y5O|
+                                                   |refs_1QJvkaG5O|)))
+                                              (|difference_1QJPreM4O|
+                                                |refs_1QJvkaG5O|
+                                                |locals_1QlKsmE5O|)))
+                                           (|union_1QnTtNL4O|
+                                             (|analyze!_1QJ9ocd5O|
+                                               (car |v_1QnzmJF5O|)
+                                               |arec_1QREZ6x5O|
+                                               |env_1QbBXzx5O|
+                                               |newlxs_1QHGqPE5O|)
+                                             |refs_1Q1DogF5O|)))
+                                        ((#%if |analyzed_1QjVy_C5O| cddr cdr)
+                                         |v_1QFRwsD5O|)))
                                      ((#%letrec #t
-                                        ((|loop_XieEpkcfe|
+                                        ((|loop_1QLkexH5O|
                                            (#%lambda #t
-                                             (|bindings_XiAAnNcfe|
-                                               |refs_XiWwledfe|)
-                                             (|loop_XieEpkcfe|
-                                               |newlxs_Xia-BC9fe|
-                                               |env_XiGU6n2fe|
-                                               |arec_XikY8W1fe|
-                                               |analyze!_XieitmLee|
-                                               |union_XieYwoiee|)
-                                             (#%if (null? |bindings_XiAAnNcfe|)
-                                               |refs_XiWwledfe|
-                                               (|loop_XieEpkcfe|
-                                                 (cdr |bindings_XiAAnNcfe|)
-                                                 (|union_XieYwoiee|
-                                                   (|analyze!_XieitmLee|
-                                                     (cadar |bindings_XiAAnNcfe|)
-                                                     |arec_XikY8W1fe|
-                                                     |env_XiGU6n2fe|
-                                                     |newlxs_Xia-BC9fe|)
-                                                   |refs_XiWwledfe|))))))
-                                        (|newlxs_Xia-BC9fe|
-                                          |env_XiGU6n2fe|
-                                          |arec_XikY8W1fe|
-                                          |analyze!_XieitmLee|
-                                          |union_XieYwoiee|)
-                                        |loop_XieEpkcfe|)
-                                      (car |v_Xi89If8fe|)
+                                             (|bindings_1Q5hc-H5O|
+                                               |refs_1QrdarI5O|)
+                                             (|loop_1QLkexH5O|
+                                               |newlxs_1QHGqPE5O|
+                                               |env_1QbBXzx5O|
+                                               |arec_1QREZ6x5O|
+                                               |analyze!_1QJ9ocd5O|
+                                               |union_1QnTtNL4O|)
+                                             (#%if (null? |bindings_1Q5hc-H5O|)
+                                               |refs_1QrdarI5O|
+                                               (|loop_1QLkexH5O|
+                                                 (cdr |bindings_1Q5hc-H5O|)
+                                                 (|union_1QnTtNL4O|
+                                                   (|analyze!_1QJ9ocd5O|
+                                                     (cadar |bindings_1Q5hc-H5O|)
+                                                     |arec_1QREZ6x5O|
+                                                     |env_1QbBXzx5O|
+                                                     |newlxs_1QHGqPE5O|)
+                                                   |refs_1QrdarI5O|))))))
+                                        (|newlxs_1QHGqPE5O|
+                                          |env_1QbBXzx5O|
+                                          |arec_1QREZ6x5O|
+                                          |analyze!_1QJ9ocd5O|
+                                          |union_1QnTtNL4O|)
+                                        |loop_1QLkexH5O|)
+                                      (car |v_1QFRwsD5O|)
                                       ())))
-                                  (|union_XieYwoiee|
-                                    |locals_XiQ1E99fe|
-                                    |lxs_Xi0R4Q2fe|)))
+                                  (|union_1QnTtNL4O|
+                                    |locals_1QlKsmE5O|
+                                    |lxs_1QxxV0y5O|)))
                                (map (#%lambda #t
-                                      (|binding_XigtjHdfe|)
-                                      (|arec_XikY8W1fe| |inc-cdr!_XiuALftee|)
+                                      (|binding_1QN98UI5O|)
+                                      (|arec_1QREZ6x5O| |inc-cdr!_1QDvIEW4O|)
                                       (#%begin
                                         ((#%lambda #t
-                                           (|t_XiCph8efe|)
-                                           (|binding_XigtjHdfe|
-                                             |arec_XikY8W1fe|
-                                             |inc-cdr!_XiuALftee|)
-                                           (#%if |t_XiCph8efe|
-                                             (|inc-cdr!_XiuALftee|
-                                               |t_XiCph8efe|)
+                                           (|t_1Q766lJ5O|)
+                                           (|binding_1QN98UI5O|
+                                             |arec_1QREZ6x5O|
+                                             |inc-cdr!_1QDvIEW4O|)
+                                           (#%if |t_1Q766lJ5O|
+                                             (|inc-cdr!_1QDvIEW4O|
+                                               |t_1Q766lJ5O|)
                                              (set-cdr!
-                                               (vector-ref |arec_XikY8W1fe| 1)
-                                               (cons (cons (car |binding_XigtjHdfe|)
+                                               (vector-ref |arec_1QREZ6x5O| 1)
+                                               (cons (cons (car |binding_1QN98UI5O|)
                                                            1)
                                                      (cdr (vector-ref
-                                                            |arec_XikY8W1fe|
+                                                            |arec_1QREZ6x5O|
                                                             1))))))
-                                         (assq (car |binding_XigtjHdfe|)
+                                         (assq (car |binding_1QN98UI5O|)
                                                (cdr (vector-ref
-                                                      |arec_XikY8W1fe|
+                                                      |arec_1QREZ6x5O|
                                                       1))))
-                                        (car |binding_XigtjHdfe|)))
-                                    (car |v_Xi89If8fe|))))
-                            (#%if |analyzed_XiOcKO7fe|
-                              (cdr |v_XiIJ0K3fe|)
-                              |v_XiIJ0K3fe|)))
-                         (eq? (car |v_XiIJ0K3fe|) #t))
-                        (#%if (= |exp-type_Xi2G-a4fe| 6)
+                                        (car |binding_1QN98UI5O|)))
+                                    (car |v_1QFRwsD5O|))))
+                            (#%if |analyzed_1QjVy_C5O|
+                              (cdr |v_1QdqRWy5O|)
+                              |v_1QdqRWy5O|)))
+                         (eq? (car |v_1QdqRWy5O|) #t))
+                        (#%if (= |exp-type_1QzmPnz5O| 6)
                           ((#%lambda #t
-                             (|s_XiMnQr6fe|)
-                             (|v_XiIJ0K3fe|
-                               |lxs_Xi0R4Q2fe|
-                               |env_XiGU6n2fe|
-                               |arec_XikY8W1fe|
-                               |analyze!_XieitmLee|
-                               |inc-cdr!_XiuALftee|)
+                             (|s_1Qh4FEB5O|)
+                             (|v_1QdqRWy5O|
+                               |lxs_1QxxV0y5O|
+                               |env_1QbBXzx5O|
+                               |arec_1QREZ6x5O|
+                               |analyze!_1QJ9ocd5O|
+                               |inc-cdr!_1QDvIEW4O|)
                              (#%begin
-                               (#%if (symbol? |s_XiMnQr6fe|)
+                               (#%if (symbol? |s_1Qh4FEB5O|)
                                  (#%begin
                                    ((#%lambda #t
-                                      (|t_Xi6kOU6fe|)
-                                      (|s_XiMnQr6fe|
-                                        |arec_XikY8W1fe|
-                                        |inc-cdr!_XiuALftee|)
-                                      (#%if |t_Xi6kOU6fe|
-                                        (|inc-cdr!_XiuALftee| |t_Xi6kOU6fe|)
+                                      (|t_1QD0D5C5O|)
+                                      (|s_1Qh4FEB5O|
+                                        |arec_1QREZ6x5O|
+                                        |inc-cdr!_1QDvIEW4O|)
+                                      (#%if |t_1QD0D5C5O|
+                                        (|inc-cdr!_1QDvIEW4O| |t_1QD0D5C5O|)
                                         (set-cdr!
-                                          (vector-ref |arec_XikY8W1fe| 0)
-                                          (cons (cons |s_XiMnQr6fe| 1)
+                                          (vector-ref |arec_1QREZ6x5O| 0)
+                                          (cons (cons |s_1Qh4FEB5O| 1)
                                                 (cdr (vector-ref
-                                                       |arec_XikY8W1fe|
+                                                       |arec_1QREZ6x5O|
                                                        0))))))
-                                    (assq |s_XiMnQr6fe|
+                                    (assq |s_1Qh4FEB5O|
                                           (cdr (vector-ref
-                                                 |arec_XikY8W1fe|
+                                                 |arec_1QREZ6x5O|
                                                  0))))
                                    ((#%lambda #t
-                                      (|t_XisgMl7fe|)
-                                      (|s_XiMnQr6fe|
-                                        |arec_XikY8W1fe|
-                                        |inc-cdr!_XiuALftee|)
-                                      (#%if |t_XisgMl7fe|
-                                        (|inc-cdr!_XiuALftee| |t_XisgMl7fe|)
+                                      (|t_1QZYAyC5O|)
+                                      (|s_1Qh4FEB5O|
+                                        |arec_1QREZ6x5O|
+                                        |inc-cdr!_1QDvIEW4O|)
+                                      (#%if |t_1QZYAyC5O|
+                                        (|inc-cdr!_1QDvIEW4O| |t_1QZYAyC5O|)
                                         (set-cdr!
-                                          (vector-ref |arec_XikY8W1fe| 1)
-                                          (cons (cons |s_XiMnQr6fe| 1)
+                                          (vector-ref |arec_1QREZ6x5O| 1)
+                                          (cons (cons |s_1Qh4FEB5O| 1)
                                                 (cdr (vector-ref
-                                                       |arec_XikY8W1fe|
+                                                       |arec_1QREZ6x5O|
                                                        1))))))
-                                    (assq |s_XiMnQr6fe|
+                                    (assq |s_1Qh4FEB5O|
                                           (cdr (vector-ref
-                                                 |arec_XikY8W1fe|
+                                                 |arec_1QREZ6x5O|
                                                  1)))))
                                  #!void)
-                               (cons |s_XiMnQr6fe|
-                                     (|analyze!_XieitmLee|
-                                       (cadr |v_XiIJ0K3fe|)
-                                       |arec_XikY8W1fe|
-                                       |env_XiGU6n2fe|
-                                       |lxs_Xi0R4Q2fe|))))
-                           (car |v_XiIJ0K3fe|))
-                          (#%if (= |exp-type_Xi2G-a4fe| 7)
-                            (|analyze!_XieitmLee|
-                              (cadr |v_XiIJ0K3fe|)
-                              |arec_XikY8W1fe|
-                              |env_XiGU6n2fe|
-                              |lxs_Xi0R4Q2fe|)
-                            (#%if (= |exp-type_Xi2G-a4fe| 8)
-                              (|analyze!_XieitmLee|
-                                (car |v_XiIJ0K3fe|)
-                                |arec_XikY8W1fe|
-                                |env_XiGU6n2fe|
-                                |lxs_Xi0R4Q2fe|)
+                               (cons |s_1Qh4FEB5O|
+                                     (|analyze!_1QJ9ocd5O|
+                                       (cadr |v_1QdqRWy5O|)
+                                       |arec_1QREZ6x5O|
+                                       |env_1QbBXzx5O|
+                                       |lxs_1QxxV0y5O|))))
+                           (car |v_1QdqRWy5O|))
+                          (#%if (= |exp-type_1QzmPnz5O| 7)
+                            (|analyze!_1QJ9ocd5O|
+                              (cadr |v_1QdqRWy5O|)
+                              |arec_1QREZ6x5O|
+                              |env_1QbBXzx5O|
+                              |lxs_1QxxV0y5O|)
+                            (#%if (= |exp-type_1QzmPnz5O| 8)
+                              (|analyze!_1QJ9ocd5O|
+                                (car |v_1QdqRWy5O|)
+                                |arec_1QREZ6x5O|
+                                |env_1QbBXzx5O|
+                                |lxs_1QxxV0y5O|)
                               ((#%letrec #t
-                                 ((|loop_XioCYD4fe|
+                                 ((|loop_1QViNQz5O|
                                     (#%lambda #t
-                                      (|v_XiKyW45fe| |rv_Xi4vUx5fe|)
-                                      (|loop_XioCYD4fe|
-                                        |lxs_Xi0R4Q2fe|
-                                        |env_XiGU6n2fe|
-                                        |arec_XikY8W1fe|
-                                        |analyze!_XieitmLee|
-                                        |union_XieYwoiee|)
-                                      (#%if (#%if (null? |v_XiKyW45fe|)
+                                      (|v_1QffLhA5O| |rv_1QBbJKA5O|)
+                                      (|loop_1QViNQz5O|
+                                        |lxs_1QxxV0y5O|
+                                        |env_1QbBXzx5O|
+                                        |arec_1QREZ6x5O|
+                                        |analyze!_1QJ9ocd5O|
+                                        |union_1QnTtNL4O|)
+                                      (#%if (#%if (null? |v_1QffLhA5O|)
                                               #t
-                                              (not (pair? |v_XiKyW45fe|)))
-                                        |rv_Xi4vUx5fe|
-                                        (|loop_XioCYD4fe|
-                                          (cdr |v_XiKyW45fe|)
-                                          (|union_XieYwoiee|
-                                            (|analyze!_XieitmLee|
-                                              (car |v_XiKyW45fe|)
-                                              |arec_XikY8W1fe|
-                                              |env_XiGU6n2fe|
-                                              |lxs_Xi0R4Q2fe|)
-                                            |rv_Xi4vUx5fe|))))))
-                                 (|lxs_Xi0R4Q2fe|
-                                   |env_XiGU6n2fe|
-                                   |arec_XikY8W1fe|
-                                   |analyze!_XieitmLee|
-                                   |union_XieYwoiee|)
-                                 |loop_XioCYD4fe|)
-                               |v_XiIJ0K3fe|
-                               (#%if (= |exp-type_Xi2G-a4fe| 1)
-                                 (|analyze!_XieitmLee|
-                                   |oper_XimN2h3fe|
-                                   |arec_XikY8W1fe|
-                                   |env_XiGU6n2fe|
-                                   |lxs_Xi0R4Q2fe|)
+                                              (not (pair? |v_1QffLhA5O|)))
+                                        |rv_1QBbJKA5O|
+                                        (|loop_1QViNQz5O|
+                                          (cdr |v_1QffLhA5O|)
+                                          (|union_1QnTtNL4O|
+                                            (|analyze!_1QJ9ocd5O|
+                                              (car |v_1QffLhA5O|)
+                                              |arec_1QREZ6x5O|
+                                              |env_1QbBXzx5O|
+                                              |lxs_1QxxV0y5O|)
+                                            |rv_1QBbJKA5O|))))))
+                                 (|lxs_1QxxV0y5O|
+                                   |env_1QbBXzx5O|
+                                   |arec_1QREZ6x5O|
+                                   |analyze!_1QJ9ocd5O|
+                                   |union_1QnTtNL4O|)
+                                 |loop_1QViNQz5O|)
+                               |v_1QdqRWy5O|
+                               (#%if (= |exp-type_1QzmPnz5O| 1)
+                                 (|analyze!_1QJ9ocd5O|
+                                   |oper_1QTtTty5O|
+                                   |arec_1QREZ6x5O|
+                                   |env_1QbBXzx5O|
+                                   |lxs_1QxxV0y5O|)
                                  ()))))))))))
-              (car |v_Xi-_at1fe|)
-              (cdr |v_Xi-_at1fe|)
+              (car |v_1QvI_Fw5O|)
+              (cdr |v_1QvI_Fw5O|)
               (_expression-type
-                |env_XiGU6n2fe|
-                (car |v_Xi-_at1fe|))))))
+                |env_1QbBXzx5O|
+                (car |v_1QvI_Fw5O|))))))
         ()
         (#%lambda #t
-          (|v_XiWapgMee| |env_Xig7nJMee|)
-          (|analyze!_XieitmLee|
-            |build-refs_XiUlvVKee|
-            |make-arecord_XiypxsKee|)
+          (|v_1Qp2k6e5O| |env_1QL-hze5O|)
+          (|analyze!_1QJ9ocd5O|
+            |build-refs_1QndqLc5O|
+            |make-arecord_1Q1hsic5O|)
           ((#%lambda #t
-             (|arec_XiC3laNee|)
-             (|env_Xig7nJMee|
-               |v_XiWapgMee|
-               |analyze!_XieitmLee|
-               |build-refs_XiUlvVKee|)
+             (|arec_1Q5Xf0f5O|)
+             (|env_1QL-hze5O|
+               |v_1Qp2k6e5O|
+               |analyze!_1QJ9ocd5O|
+               |build-refs_1QndqLc5O|)
              (#%begin
-               (|analyze!_XieitmLee|
-                 |v_XiWapgMee|
-                 |arec_XiC3laNee|
-                 |env_Xig7nJMee|
+               (|analyze!_1QJ9ocd5O|
+                 |v_1Qp2k6e5O|
+                 |arec_1Q5Xf0f5O|
+                 |env_1QL-hze5O|
                  ())
                (list #%program
-                     (|build-refs_XiUlvVKee|
-                       (cdr (vector-ref |arec_XiC3laNee| 0)))
-                     (|build-refs_XiUlvVKee|
-                       (cdr (vector-ref |arec_XiC3laNee| 1)))
-                     (cdr (vector-ref |arec_XiC3laNee| 2))
-                     (vector-ref |arec_XiC3laNee| 3))))
-           (|make-arecord_XiypxsKee| |v_XiWapgMee|)))))))
+                     (|build-refs_1QndqLc5O|
+                       (cdr (vector-ref |arec_1Q5Xf0f5O| 0)))
+                     (|build-refs_1QndqLc5O|
+                       (cdr (vector-ref |arec_1Q5Xf0f5O| 1)))
+                     (cdr (vector-ref |arec_1Q5Xf0f5O| 2))
+                     (vector-ref |arec_1Q5Xf0f5O| 3))))
+           (|make-arecord_1Q1hsic5O| |v_1Qp2k6e5O|)))))))

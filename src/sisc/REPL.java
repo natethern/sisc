@@ -26,6 +26,7 @@ public class REPL {
     
     public REPL(String appName, SchemeThread primordialThread) {
         this.primordialThread = primordialThread;
+        primordialThread.thread.setDaemon(false);
         this.appName = appName;
     }
     

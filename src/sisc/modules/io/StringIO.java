@@ -29,12 +29,12 @@ public class StringIO extends IndexedProcedure {
 		}
 		    	
     	public Index() {
-        define("get-output-string"  , GETOUTPUTSTRING);
-        define("open-input-string"  , OPENINPUTSTRING);
-        define("open-output-string" , OPENOUTPUTSTRING);
-        define("open-source-input-string", OPENSOURCEINPUTSTRING);
-        define("string-input-port?" , STRINGINPORTQ);
-        define("string-output-port?", STRINGOUTPORTQ);
+        define("_get-output-string"  , GETOUTPUTSTRING);
+        define("_open-input-string"  , OPENINPUTSTRING);
+        define("_open-output-string" , OPENOUTPUTSTRING);
+        define("_open-source-input-string", OPENSOURCEINPUTSTRING);
+        define("_string-input-port?" , STRINGINPORTQ);
+        define("_string-output-port?", STRINGOUTPORTQ);
         }
     }
     

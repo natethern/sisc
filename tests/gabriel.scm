@@ -7,6 +7,7 @@
 (load-test 'runbenchmark)
 ;(load-test 'runbenchmark_kawa)
 ;(load-test 'runbenchmark_jscheme)
+;(load-test 'runbenchmark_mzscheme)
 
 ;;the following steps are required for the compiled-Kawa test
 ;;1) compile all test files, including runbenchmark_kawa using
@@ -39,7 +40,7 @@
             cpstack	;Kawa
             fprint	;Kawa-(C)TC
             fread
-            ;tprint	;Kawa-(C)TC
+;            tprint	;Kawa-(C)TC
             ))
 
 ;Kawa		- breaks in Kawa non-tailcall mode

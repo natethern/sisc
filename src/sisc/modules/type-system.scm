@@ -3,14 +3,14 @@
 (define type-of-hook (make-hook native-type-of))
 (define type<=-hook (make-hook native-type<=))
 (define (type-of o) (invoke-hook type-of-hook o))
-(define (type<= x y) (invoke-hook type<=-hook x y))
+(define (type<= x y) (if (eq? x y) #t (invoke-hook type<=-hook x y)))
 (define (type= x y) (and (type<= x y) (type<= y x)))
 (define (instance-of? x y) (type<= (type-of x) y))
 
 (define (every2 pred x y)
-  (or (null? x)
-      (null? y)
-      (and (pred (car x) (car y)) (every2 pred (cdr x) (cdr y)))))
+  (cond [(null? x) #t]
+        [(null? y) #t]
+        [else (and (pred (car x) (car y)) (every2 pred (cdr x) (cdr y)))]))
 
 (define (types<= x y)       (every2 type<= x y))
 (define (types= x y)        (every2 type= x y))
@@ -60,6 +60,4 @@
   (boolean      |SchemeBoolean|)
   (char         |SchemeCharacter|)
   (string       |SchemeString|)
-  (vector       |SchemeVector|)
-  (input-port   |SchemeInputPort|)
-  (output-port  |SchemeOutputPort|))
+  (vector       |SchemeVector|))

@@ -102,7 +102,7 @@
                                   *module* (quote def))) ...))))))))
 
 (native-module logicops   "sisc.modules.SLogicOps$Index")
-(native-module networking "sisc.modules.io.SNetwork$Index")
+(native-module networking-native "sisc.modules.io.SNetwork$Index")
 (native-module debugging-native  "sisc.modules.SDebug$Index")
 (native-module threading-native  "sisc.modules.SThread$Index")
 (native-module types-native      "sisc.modules.STypes$Index")
@@ -253,68 +253,6 @@
   (set! make-directory! (normalize _make-directory!))
   (set! make-directories! (normalize _make-directories!)))
 
-(module string-io
-  (with-input-from-string
-   with-output-to-string
-   call-with-input-string
-   call-with-output-string
-   open-input-string
-   open-output-string
-   get-output-string
-   string-input-port?
-   string-output-port?
-   open-source-input-string)
-  (import string-io-native)
-  (include "io/string-io.scm"))
-  
-(module binary-io
-  (block-read
-   block-write
-   make-buffer
-   buffer
-   buffer?
-   buffer-ref
-   buffer-set!
-   buffer-length
-   buffer-copy!
-   open-binary-input-file
-   open-binary-output-file
-   call-with-binary-input-file
-   call-with-binary-output-file
-   with-binary-input-from-file
-   with-binary-output-to-file
-   binary-input-port?
-   binary-output-port?)
-  (import buffers)
-  (import* binary-io-native
-           block-read
-           block-write
-           (_open-binary-input-file open-binary-input-file)
-           (_open-binary-output-file open-binary-output-file)
-           binary-input-port?
-           binary-output-port?)
-  (include "io/binary-io.scm"))
-
-(module serial-io
-  (serialize
-   deserialize
-   open-serial-input-file
-   open-serial-output-file
-   call-with-serial-input-file
-   call-with-serial-output-file
-   with-serial-input-from-file
-   with-serial-output-to-file
-   serial-input-port?
-   serial-output-port?)
-  (import* serial-io-native
-           serialize
-           deserialize
-           (_open-serial-input-file open-serial-input-file)
-           (_open-serial-output-file open-serial-output-file)
-           serial-input-port?
-           serial-output-port?)
-  (include "io/serial-io.scm"))
-
 (module hashtable
     (make-hashtable
      hashtable?
@@ -361,8 +299,6 @@
      <char>
      <string>
      <vector>
-     <input-port>
-     <output-port>
      type-of-hook
      type<=-hook
      compare-types-hook)
@@ -410,6 +346,7 @@
      define-generics
      define-method
      define-methods
+     (let-monomorphic first-method-procedure)
      ;;method stuff
      <method>
      make-method
@@ -791,6 +728,207 @@
   (type<=-hook        'oo oo-type<=-hook)
   (compare-types-hook 'oo oo-compare-types-hook))
 
+(module binary-io
+  (read-block
+   write-block
+   make-buffer
+   buffer
+   buffer?
+   buffer-ref
+   buffer-set!
+   buffer-length
+   buffer-copy!
+   open-binary-input-file
+   open-binary-output-file
+   call-with-binary-input-file
+   call-with-binary-output-file
+   with-binary-input-from-file
+   with-binary-output-to-file
+   binary-input-port?
+   binary-output-port?)
+  (import buffers)
+  (import* binary-io-native
+           read-block
+           write-block
+           (_open-binary-input-file open-binary-input-file)
+           (_open-binary-output-file open-binary-output-file)
+           binary-input-port?
+           binary-output-port?)
+  (include "io/binary-io.scm"))
+
+(include "io/generic-io-types.scm")
+(module generic-io-types
+  (<port> <input-port> <output-port>
+          <character-input-port> <character-output-port>
+          <filter-input-port> <filter-output-port>
+          <native-input-port> <native-output-port>
+          <native-character-input-port> <native-character-output-port>)
+  (import gio/basetype)
+  (import gio/porttypes)
+  (import gio/charporttypes)
+  (import gio/filterporttypes)
+  (import gio/nativeporttypes)
+  (import gio/nativecharporttypes))
+
+(module generic-io
+  (char-ready?
+   read
+   read-char
+   read-code
+   read-block
+   read-string
+   flush-output-port
+   write
+   display
+   write-char
+   write-block
+   write-string
+   open-input-file
+   open-output-file
+   open-binary-input-file
+   open-binary-output-file
+   close-input-port
+   close-output-port
+   input-port?
+   output-port?
+   character-input-port?
+   character-output-port?
+   make-wrapped-constructor
+   unwrap-native-input-port
+   unwrap-native-output-port
+   gio/char-ready?
+   gio/read
+   gio/read-char
+   gio/read-code
+   gio/read-block
+   gio/read-string
+   gio/flush-output-port
+   gio/write
+   gio/display
+   gio/write-char
+   gio/write-block
+   gio/write-string
+   gio/close
+   <port> <input-port> <output-port>
+   <character-input-port> <character-output-port>
+   <filter-input-port> <filter-output-port>
+   <native-input-port> <native-output-port>
+   <native-character-input-port> <native-character-output-port>)
+  (import generic-io-types)
+  (import generic-procedures)
+  (import oo)
+  (import type-system)
+  (import s2j)
+  (import* binary-io
+           read-block write-block
+           (_open-binary-input-file open-binary-input-file)
+           (_open-binary-output-file open-binary-output-file))
+  (import gio/filtergenerics)
+  (include "io/generic-io.scm")
+  (set! read-block _gio/read-block)
+  (set! write-block _gio/write-block)
+  (set! unwrap-native-output-port :out)
+  (set! unwrap-native-input-port :in)
+  (set! close-input-port gio/close)
+  (set! close-output-port gio/close))
+
+(module string-io
+  (with-input-from-string
+   with-output-to-string
+   call-with-input-string
+   call-with-output-string
+   open-input-string
+   open-output-string
+   get-output-string
+   string-input-port?
+   string-output-port?
+   open-source-input-string)
+  (import oo)
+  (import generic-io)
+  (import string-io-native)
+  (include "io/string-io.scm"))
+
+(import generic-io)
+(let ()
+  (import type-system)
+  (import oo)
+  (on-repl-start
+   (lambda ()
+     (let ([curin (current-input-port)]
+           [curout (current-output-port)])
+       (unless (type<= curin <native-input-port>)
+         (set! current-input-port (make-parameter
+                                   (make <native-input-port> curin))))
+       (unless (instance-of? curin <native-output-port>)
+         (set! current-output-port (make-parameter
+                                    (make <native-output-port> curout))))))))
+
+(module serial-io
+  (serialize
+   deserialize
+   open-serial-input-port
+   open-serial-output-port
+   call-with-serial-input-port
+   call-with-serial-output-port
+   with-serial-input-from-port
+   with-serial-output-to-port
+   serial-input-port?
+   serial-output-port?)
+  (import* serial-io-native
+           (_serialize serialize)
+           (_deserialize deserialize)
+           (_open-serial-input-port open-serial-input-port)
+           (_open-serial-output-port open-serial-output-port))
+  (import oo)
+  (import generic-io)
+  (include "io/serial-io.scm"))
+
+(module networking
+  (open-tcp-listener
+   accept-tcp-socket
+   open-tcp-socket
+   open-binary-socket-input-port
+   open-binary-socket-output-port
+   open-socket-input-port
+   open-socket-output-port
+   close-socket
+   get-host-ip-by-name
+   get-host-name-by-ip
+   get-local-host
+   open-udp-listen-socket
+   open-udp-socket
+   open-multicast-socket
+   join-multicast-group
+   leave-multicast-group
+   set-multicast-ttl!
+   set-so-timeout!
+   socket?
+   server-socket?)
+  (import* networking-native
+           open-tcp-listener
+           accept-tcp-socket
+           open-tcp-socket
+           (_open-binary-socket-input-port open-binary-socket-input-port)
+           (_open-binary-socket-output-port open-binary-socket-output-port)
+           (_open-socket-input-port open-socket-input-port)
+           (_open-socket-output-port open-socket-output-port)
+           close-socket
+           get-host-ip-by-name
+           get-host-name-by-ip
+           get-local-host
+           open-udp-listen-socket
+           open-udp-socket
+           open-multicast-socket
+           join-multicast-group
+           leave-multicast-group
+           set-multicast-ttl!
+           set-so-timeout!
+           socket?
+           server-socket?)
+  (import generic-io)
+  (import oo)
+  (include "io/networking.scm"))
+  
 (module libraries
   (require-library
    provide-library
@@ -877,6 +1015,14 @@
   (include "srfi/srfi-22/srfi-22.scm")
   (add-feature 'srfi-22))
 (import srfi-22)
+
+(module pretty-printing
+  (pretty-print
+   generic-write)
+  (import string-io)
+  (include "pp.scm"))
+
+(import pretty-printing)
 
 ;;Final initialization
 (let ()

@@ -48,7 +48,7 @@
     (dynamic-wind
      (lambda ()
        (set! inf (open-source-input-file from))
-       (set! outf (open-serial-output-file to)))
+       (set! outf (open-serial-output-port (open-binary-output-file to))))
      (lambda ()
        (with-current-url from
          (lambda ()
