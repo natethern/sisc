@@ -71,7 +71,6 @@
       <exclude name="${packagename}/dist/**"/>
       <exclude name="${packagename}/tests/**" unless="junit.present"/>
       <exclude name="${packagename}/modules/**" if="lite"/>
-      <exclude name="${packagename}/applet/**"/>
     </javac>      
   </target>
   
@@ -286,19 +285,6 @@
     <jar jarfile="${dist}/sisc-${version}.jar" 
          basedir="${dist}"  
          includes="sisc/**"/>
-  </target>
-
-  <target name="applet" depends="all">
-    <javac srcdir="${srcdir}"
-           destdir="${classdir}"
-	   classpathref="classpath"
-	   debug="${debugging}"
-           optimize="${optimization}">
-      <include name="${packagename}/applet/**"/>
-    </javac>
-    <jar jarfile="${dist}/sisc-applet.jar"
-         basedir="${classdir}"
-         includes="sisc/applet/**"/>
   </target>
 
   <target name="check" depends="heap" if="junit.present">
