@@ -690,7 +690,7 @@
 	  dynamic extent being exited.  In other words, if an error is
 	  raised in the dynamic extent of a dynamic-wind expression,
 	  &SISC will ensure that the <emphasis>after</emphasis> thunk
-	  is exited before the error is propogated to the
+	  is evaluated before the error is propogated to the
 	  failure-continuation of the dynamic-wind expression.
 	</para>
 	<para>
@@ -703,6 +703,40 @@
 	                (lambda () (set! x (+ x 1))))
 	  ; => A divide by zero error is raised, and the value of x is 2
 	</programlisting>
+	<para>
+	  If an error is raised in either the
+	  <emphasis>before</emphasis> or <emphasis>after</emphasis>
+	  thunks, no additional measures are taken.  The error is
+	  propogated to the failure-continuation of the dynamic-wind
+	  as if the dynamic-wind call was an ordinary function
+	  application.  Explicitly, if an error is raised from
+	  <emphasis>before</emphasis>, neither
+	  <emphasis>during</emphasis> nor <emphasis>after</emphasis>
+	  will be executed.  If an error is raised in
+	  <emphasis>after</emphasis>, the results of evaluating
+	  <emphasis>before</emphasis> and <emphasis>during</emphasis>
+	  remain valid.  
+	</para>
+	<para>
+	  Also noteworthy is what happens if a continuation is invoked
+	  that exits from either the <emphasis>before</emphasis> or
+	  <emphasis>after</emphasis> thunks.  Such a case is treated
+	  just as if a continuation was invoked during the evaluation
+	  of an operand to an application.  This is to say that no
+	  additional steps will be taken by &SISC;.  If
+	  <emphasis>before</emphasis> is escaped by a continuation invocation,
+	  neither <emphasis>during</emphasis> nor <emphasis>after</emphasis>
+	  will be executed.  If <emphasis>after</emphasis> is escaped,
+	  the results of <emphasis>before</emphasis> and
+	  <emphasis>during</emphasis> remain valid.
+	</para>
+	<para>
+	  In summary, extraordinary evaluation is only possible during
+	  the evaluation of the <emphasis>during</emphasis> thunk, the
+	  <emphasis>before</emphasis> and <emphasis>after</emphasis>
+	  thunks are evaluated with the dynamic environment and
+	  dynamic-wind stack of the call to dynamic-wind itself.
+	</para>
       </sect2>
     </sect1>
     <sect1 id="SymbolicEnvironments">
