@@ -287,7 +287,7 @@
   </target>
 
   <target name="build-lite-heap" depends="heap-uptodate">
-    <condition property="buildFullHeap">
+    <condition property="buildLiteHeap">
       <and>
         <isset property="lite"/>
         <not><isset property="heapUptodate"/></not>
