@@ -373,6 +373,8 @@ public class Primitives extends ModuleAdapter {
                                                           indexValue());
             case VECTORFINDLASTUNIQUE: return Quantity.valueOf(vec(f.vlr[0]).findEnd());
             case EVAL:
+		if (f.dynenv.parser.lexer.strictR5RS) 
+                   throwArgSizeException();
                 f.nxp=f.compile(f.vlr[0]);
 		f.env=null;
                 f.returnVLR();
