@@ -19,4 +19,4 @@
   (and (pair? e) (= (length e) 2) (eq? (car e) 'quote)))
 
 (define (not-redefined? proc)
-  (not (memq proc (getprop 'assumptive-procedures '*opt*))))
+  (memq proc (getprop 'assumptive-procedures '*opt*)))
