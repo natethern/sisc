@@ -18,6 +18,12 @@ public class ApplyValuesContEval extends Expression {
     public void eval(Interpreter r) throws ContinuationException {
         if (r.acc instanceof Values) {
             r.vlr=((Values)r.acc).values;
+            //r.vlk=true
+            //Because we are explicitly setting the VLR, we may want to lock it to keep it
+            //from being recycled.  This cannot currently happen in Scheme code, and
+            //blindly setting vlk to true can break continuation capture by short circuiting
+            //continuation marking too soon, so we will disable it and leave this note for
+            //further study.
         }
         else {
             r.newVLR(1);
