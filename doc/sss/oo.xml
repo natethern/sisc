@@ -996,9 +996,11 @@
     </sect2>
     <sect2>
       <title>Procedures on Methods</title>
+      <indexterm><primary>&lt;method&gt;</primary></indexterm>
       <para>
-        Methods are abstract data types, with a range of procedures
-        that operate on them:
+        Methods are instances of the abstract data type
+        <literal>&lt;method&gt;</literal>, which has range of
+        procedures:
         <blockquote>
           <para>
             <indexterm><primary>method?</primary></indexterm>
