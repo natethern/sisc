@@ -72,6 +72,11 @@ public class Interpreter extends Util {
                                             null);
     static {
         top_fk.vlk = true;
+        // This creates a loop in the stack, which will be a problem for
+        // any code checking for null as the bottom of the stack.  However,
+        // the only code in SISC which does this is CallFrame.capture(), which
+        // will also break when vlk=true.
+        top_fk.fk=top_fk;
     }
 
     public Interpreter(AppContext ctx, ThreadContext tctx, DynamicEnvironment dynenv) {
@@ -94,8 +99,8 @@ public class Interpreter extends Util {
         return compiler.compile(this, v, env);
     }
 
-    protected Value interpret(Expression e) throws SchemeException {
-        stk=createFrame(null, null, false, null, fk, null, null);
+    public Value interpret(Expression e) throws SchemeException {
+        stk=createFrame(null, null, false, null, top_fk, null, null);
         nxp=e;
         interpret();
         return acc;
