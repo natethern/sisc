@@ -89,6 +89,22 @@ public class Parser extends Util implements Tokens {
         return (Value)_nextExpression(is, state, null, flags);
     }
 
+    protected void potentialError(int flags, String message, InputPort is) throws IOException {
+        if (permissiveParsing(flags))
+            if (is==null) warn(message);
+            else warn(message, is);
+        else
+            throw new IOException(liMessage(SISCB, message));
+    }
+
+    protected void potentialError(int flags, String message, String arg, InputPort is) throws IOException {
+        if (permissiveParsing(flags))
+            if (is==null) warn(message, arg);
+            else warn(liMessage(SISCB, message, arg));
+        else
+            throw new IOException(liMessage(SISCB, message));
+    }
+
     /**
      * Reads an s-expression from the given input port.
      *
@@ -107,10 +123,7 @@ public class Parser extends Util implements Tokens {
             return (Value)n;
         } catch (ClassCastException ce) {
             if (n==ENDPAIR) {
-                if (permissiveParsing(flags))
-                    warn("orphanedparen", is);
-                else
-                    throw new IOException(liMessage(SISCB, "orphanedparen"));
+                potentialError(flags, "orphanedparen", is);
                 return nextExpression(is, radix, flags);
             } else if (n==DOT)
                 throw new IOException(liMessage(SISCB, "unexpecteddot"));
@@ -123,11 +136,12 @@ public class Parser extends Util implements Tokens {
         return _nextExpression(is, state, def, 10, flags);
     }
 
-    protected Quantity numberCheck(Object o) throws IOException {
+    protected Quantity numberCheck(Object o, int flags) throws IOException {
         try {
             return (Quantity)o;
         } catch (ClassCastException cce) {
-            throw new IOException(liMessage(SISCB, "badtokennotnumber"));
+            potentialError(flags, "badtokennotnumber", null);
+            return Quantity.ZERO;
         }
     }
 
@@ -214,8 +228,7 @@ public class Parser extends Util implements Tokens {
                 lexer.sval.length() >= 1 &&
                 !(Character.isLetter(lexer.sval.charAt(0)) ||
                   Lexer.in(lexer.sval.charAt(0), Lexer.special_initials)))
-                throw new IOException(liMessage(SISCB, "invalididentifier",
-                                                lexer.sval));
+                potentialError(flags, "invalididentifier", lexer.sval, is);
             o=Symbol.get(lexer.sval, caseSensitive(flags));
             break;
         case TT_SHARP:
@@ -255,21 +268,21 @@ public class Parser extends Util implements Tokens {
                         o=new SchemeCharacter(CharUtil.octToChar(cnl));
                     }
                 } catch (NumberFormatException nfe) {
-                    throw new IOException(Util.liMessage(Util.SISCB,
-                                                         "invalidcharconst"));
+                    potentialError(flags, "invalidcharconst", is);
+                    o=new SchemeCharacter('\u0000');
                 }
                 break;
             case 'b':
-                o=numberCheck(_nextExpression(is, state, null, 2, flags));
+                o=numberCheck(_nextExpression(is, state, null, 2, flags), flags);
                 break;
             case 'o':
-                o=numberCheck(_nextExpression(is, state, null, 8, flags));
+                o=numberCheck(_nextExpression(is, state, null, 8, flags), flags);
                 break;
             case 'x':
-                o=numberCheck(_nextExpression(is, state, null, 16, flags));
+                o=numberCheck(_nextExpression(is, state, null, 16, flags), flags);
                 break;
             case 'd':
-                o=numberCheck(_nextExpression(is, state, null, flags));
+                o=numberCheck(_nextExpression(is, state, null, flags), flags);
                 break;
             case '&':
                 o=new Box();
@@ -277,31 +290,36 @@ public class Parser extends Util implements Tokens {
                 ((Box)o).val=(Value)_nextExpression(is, state, null, flags);
                 break;
             case 'i':
-                o=numberCheck(_nextExpression(is, state, null, radix, flags)).toInexact();
+                o=numberCheck(_nextExpression(is, state, null, radix, flags), flags).toInexact();
                 break;
             case 'e':
-                o=numberCheck(_nextExpression(is, state, null, radix, flags)).toExact();
+                o=numberCheck(_nextExpression(is, state, null, radix, flags), flags).toExact();
                 break;
             case '!':
                 String bv=lexer.readToBreak(is, Lexer.special, false, false);
                 if (bv.equals("eof"))
-                    return EOF;
+                    o=EOF;
                 else if (bv.equals("void"))
-                    return VOID;
+                    o=VOID;
                 else if (bv.equals("+inf"))
-                    return Quantity.POSITIVE_INFINITY;
+                    o=Quantity.POSITIVE_INFINITY;
                 else if (bv.equals("-inf"))
-                    return Quantity.NEGATIVE_INFINITY;
+                    o=Quantity.NEGATIVE_INFINITY;
                 else if (bv.equals("nan"))
-                    return Quantity.NaN;
-                else throw new IOException(liMessage(SISCB, "invalidsharpc", bv));
+                    o=Quantity.NaN;
+                else {
+                    potentialError(flags, "invalidsharpc", bv, is);
+                    o=VOID;
+                }
             case '%': 
                 // Syntactic tokens
                 bv=lexer.readToBreak(is, Lexer.special, false, false).toLowerCase();
                 Syntax s=(Syntax)CompilerConstants.SYNTACTIC_TOKENS.get(bv);
-                if (s==null)
-                 throw new IOException(liMessage(SISCB, "invalidsyntoken", bv));
-                return s;    
+                if (s==null) {
+                    potentialError(flags, "invalidsyntoken", bv, is);
+                    s=(Syntax)CompilerConstants.SYNTACTIC_TOKENS.get("unknown");
+                }
+                o=s;
             case '\'':
                 o=listSpecial(SYNTAX, is, state, def, flags);
                 break;
@@ -388,7 +406,8 @@ public class Parser extends Util implements Tokens {
             }
             break;
         default:
-            throw new IOException(liMessage(SISCB, "unknowntoken"));
+            potentialError(flags, "unknowntoken", is);
+            o=VOID; 
         }
         if (def!=null) 
             state.put(def, o);
@@ -414,15 +433,15 @@ public class Parser extends Util implements Tokens {
                 } else
                     if (l == DOT) {
                         if (readingVector) {
-                            throw new IOException(liMessage(SISCB, "dotwhenreadingvector"));
+                            potentialError(flags, "dotwhenreadingvector", is);
                         }
                         l=_nextExpression(is, state, null, flags);
                         if (l==ENDPAIR)
-                            throw new IOException(liMessage(SISCB, "expectedexprincdr"));
+                            potentialError(flags, "expectedexprincdr", is);
                         p.cdr=(Value)(l instanceof Integer ? state.get(l) : l);
                         if (_nextExpression(is, state, null, flags)
                             !=ENDPAIR)
-                            throw new IOException(liMessage(SISCB, "toomanyafterdot"));
+                            potentialError(flags, "toomanyafterdot", is);
                         return h;
                     } else
                         p.cdr=p=(produceImmutables(flags) ? 
@@ -432,7 +451,7 @@ public class Parser extends Util implements Tokens {
                 l=_nextExpression(is, state, null, flags & ~READING_VECTOR);
             }
         } catch (EOFException e) {
-            warn("unexpectedeof", is);
+            potentialError(flags, "unexpectedeof", is);
             return VOID;
         }
 

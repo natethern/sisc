@@ -28,7 +28,9 @@ public abstract class CompilerConstants extends Util {
         SYN_LAMBDA = syntax("lambda", LAMBDA),
         SYN_LETREC = syntax("letrec", LETREC),
         SYN_FIX = syntax("fix", FIX),
-        SYN_ANNOT  = syntax("annotate", MAKEANNOTATION);
+        SYN_ANNOT  = syntax("annotate", MAKEANNOTATION),
+        SYN_UNKNOWN = syntax("unknown", UNKNOWN);
+    
     
     static Syntax syntax(String name, int id) {
         Syntax s=new Syntax(id);
