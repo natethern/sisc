@@ -47,8 +47,8 @@
             </blockquote>
             <informalexample>
               <programlisting>
-(type-of 1) &arrow; &num;&lt;scheme sisc.data.Quantity&gt;
-(type-of (lambda (x) x)) &arrow; &num;&lt;scheme sisc.data.Closure&gt;
+(type-of 1)  &arrow; &num;&lt;scheme sisc.data.Quantity&gt;
+(type-of (lambda (x) x))  &arrow; &num;&lt;scheme sisc.data.Closure&gt;
               </programlisting>
             </informalexample>
           </para>
@@ -78,15 +78,15 @@
             </blockquote>
             <informalexample>
               <programlisting>
-(type&lt;= (type-of 'a) (type-of 'b)) &arrow; &t;
-(type&lt;= (type-of 'b) (type-of 'a)) &arrow; &t;
-(type&lt;= (type-of 1) (type-of 'a)) &arrow; &f;
-(type&lt;= (type-of 1) &lt;number&gt;) &arrow; &t;
-(type&lt;= (type-of 'a) &lt;symbol&gt;) &arrow; &t;
-(type&lt;= &lt;number;&gt; &lt;symbol&gt;) &arrow; &f;
-(type&lt;= &lt;symbol;&gt; &lt;number&gt;) &arrow; &f;
-(type&lt;= &lt;number&gt; &lt;value&gt;) &arrow; &t;
-(type&lt;= &lt;symbol&gt; &lt;value&gt;) &arrow; &t;
+(type&lt;= (type-of 'a) (type-of 'b))  &arrow; &t;
+(type&lt;= (type-of 'b) (type-of 'a))  &arrow; &t;
+(type&lt;= (type-of 1) (type-of 'a))  &arrow; &f;
+(type&lt;= (type-of 1) &lt;number&gt;)  &arrow; &t;
+(type&lt;= (type-of 'a) &lt;symbol&gt;)  &arrow; &t;
+(type&lt;= &lt;number;&gt; &lt;symbol&gt;)  &arrow; &f;
+(type&lt;= &lt;symbol;&gt; &lt;number&gt;)  &arrow; &f;
+(type&lt;= &lt;number&gt; &lt;value&gt;)  &arrow; &t;
+(type&lt;= &lt;symbol&gt; &lt;value&gt;)  &arrow; &t;
               </programlisting>
             </informalexample>
           </para>
@@ -177,10 +177,10 @@
             </blockquote>
             <informalexample>
               <programlisting>
-(instance-of? 1 &lt;number&lt;) &arrow; &t;
-(instance-of? 'a &lt;symbol&lt;) &arrow; &t;
-(instance-of? 1 &lt;symbol&lt;) &arrow; &f;
-(instance-of? 1 &lt;value&lt;) &arrow; &t;
+(instance-of? 1 &lt;number&lt;)  &arrow; &t;
+(instance-of? 'a &lt;symbol&lt;)  &arrow; &t;
+(instance-of? 1 &lt;symbol&lt;)  &arrow; &f;
+(instance-of? 1 &lt;value&lt;)  &arrow; &t;
               </programlisting>
             </informalexample>
           </para>
@@ -201,11 +201,11 @@
             </blockquote>
             <informalexample>
               <programlisting>
-(type= (type-of 'a) (type-of 'b)) &arrow; &t;
-(type= (type-of 1) (type-of 'a)) &arrow; &f;
-(type= (type-of 1) &lt;number&gt;) &arrow; &t;
-(type= (type-of 'a) &lt;symbol&gt;) &arrow; &t;
-(type= &lt;number;&gt; &lt;symbol&gt;) &arrow; &f;
+(type= (type-of 'a) (type-of 'b))  &arrow; &t;
+(type= (type-of 1) (type-of 'a))  &arrow; &f;
+(type= (type-of 1) &lt;number&gt;)  &arrow; &t;
+(type= (type-of 'a) &lt;symbol&gt;)  &arrow; &t;
+(type= &lt;number;&gt; &lt;symbol&gt;)  &arrow; &f;
               </programlisting>
             </informalexample>
           </para>
@@ -236,9 +236,9 @@
             <informalexample>
               <programlisting>
 (types&lt;= (list &lt;number&gt; &lt;symbol&gt;)
-         (list &lt;value&gt; &lt;value&gt;)) &arrow; &t;
+         (list &lt;value&gt; &lt;value&gt;))  &arrow; &t;
 (types&lt;= (list &lt;number&gt; &lt;symbol&gt;)
-         (list &lt;number&gt; &lt;number&gt;)) &arrow; &f;
+         (list &lt;number&gt; &lt;number&gt;))  &arrow; &f;
               </programlisting>
             </informalexample>
           </para>
@@ -269,9 +269,9 @@
             <informalexample>
               <programlisting>
 (instances-of? (list 1 'a)
-               (list &lt;number&gt; &lt;symbol&gt;)) &arrow; &t;
+               (list &lt;number&gt; &lt;symbol&gt;))  &arrow; &t;
 (instances-of? (list 1 'a)
-               (list &lt;number&gt; &lt;number&gt;)) &arrow; &f;
+               (list &lt;number&gt; &lt;number&gt;))  &arrow; &f;
               </programlisting>
             </informalexample>
           </para>
@@ -302,9 +302,9 @@
             <informalexample>
               <programlisting>
 (types= (list &lt;number&gt; &lt;symbol&gt;)
-        (list &lt;number&gt; &lt;symbol&gt;)) &arrow; &t;
+        (list &lt;number&gt; &lt;symbol&gt;))  &arrow; &t;
 (types= (list &lt;number&gt; &lt;symbol&gt;)
-        (list &lt;number&gt; &lt;number&gt;)) &arrow; &f;
+        (list &lt;number&gt; &lt;number&gt;))  &arrow; &f;
               </programlisting>
             </informalexample>
           </para>
@@ -429,7 +429,7 @@
             <informalexample>
               <programlisting>
 (define &lt;record&gt; (make-type '|sisc.modules.record.Record|))
-(type&lt;= &lt;record&gt; &lt;value&gt;) &arrow; &t;
+(type&lt;= &lt;record&gt; &lt;value&gt;)  &arrow; &t;
               </programlisting>
             </informalexample>
           </para>
@@ -868,7 +868,7 @@
 (define-methods m
   [((next: next)(&lt;number&gt; x)(&lt;number&gt; y)) (next x y)]
   [((&lt;number&gt; x) . rest) (apply + x rest)])
-(generic-procedure-methods m) &arrow; (&lt;method&gt; &lt;method&gt;)
+(generic-procedure-methods m)  &arrow; (&lt;method&gt; &lt;method&gt;)
               </programlisting>
             </informalexample>
           </para>
@@ -1216,20 +1216,20 @@
 (define-method (p-append (&lt;procedure&gt; x) . rest)
   (apply compose x rest))
 
-(p-append '(a b)) &arrow; '(a b)
-(p-append '(a b) '(c d) '(e f)) &arrow; '(a b c d e f)
-(p-append '#(a b)) &arrow; '#(a b)
-(p-append '#(a b) '#(c d) '#(e f)) &arrow; '#(a b c d e f)
-(p-append "ab") &arrow; "ab"
-(p-append "ab" "cd" "ef") &arrow; "abcdef"
-(p-append 'ab) &arrow; 'ab
-(p-append 'ab 'cd 'ef) &arrow; 'abcdef
-((p-append car cdr cdr cdr) '(1 2 3 4)) &arrow; 4
+(p-append '(a b))  &arrow; '(a b)
+(p-append '(a b) '(c d) '(e f))  &arrow; '(a b c d e f)
+(p-append '#(a b))  &arrow; '#(a b)
+(p-append '#(a b) '#(c d) '#(e f))  &arrow; '#(a b c d e f)
+(p-append "ab")  &arrow; "ab"
+(p-append "ab" "cd" "ef")  &arrow; "abcdef"
+(p-append 'ab)  &arrow; 'ab
+(p-append 'ab 'cd 'ef)  &arrow; 'abcdef
+((p-append car cdr cdr cdr) '(1 2 3 4))  &arrow; 4
 
-(p-reverse-append "ab" "cd" "ef") &arrow; "efcdab"
-(p-repeat 3 '(a b)) &arrow; '(a b a b a b)
-((p-reverse-append cdr cdr cdr car) '(1 2 3 4)) &arrow; 4
-((p-repeat 3 cdr) '(1 2 3 4)) &arrow; (4)
+(p-reverse-append "ab" "cd" "ef")  &arrow; "efcdab"
+(p-repeat 3 '(a b))  &arrow; '(a b a b a b)
+((p-reverse-append cdr cdr cdr car) '(1 2 3 4))  &arrow; 4
+((p-repeat 3 cdr) '(1 2 3 4))  &arrow; (4)
           </programlisting>
         </informalexample>
       </sect3>
@@ -1254,23 +1254,23 @@
           <programlisting>
 (define-generic m)
 (define-method (m (&lt;value&gt; v)) v)
-(m 1) &arrow; 1
+(m 1)  &arrow; 1
 (let ([x 1])
   (define-method (m (&lt;number&gt; v)) (+ x v))
-  (m 1)) &arrow; 2
-(m 1) &arrow; 2
+  (m 1))  &arrow; 2
+(m 1)  &arrow; 2
 
 (module foo
     (m)
   (define-generic m)
   (define-method (m (&lt;value&gt; v)) v))
 (import foo)
-(m 1) &arrow; 1
+(m 1)  &arrow; 1
 (module bar
     ()
   (import foo)
   (define-method (m (&lt;number&gt; v)) (+ 1 v)))
-(m 1) &arrow; 2
+(m 1)  &arrow; 2
           </programlisting>
         </informalexample>
       </sect3>
@@ -1442,310 +1442,737 @@
    (cons 'c (if next (apply next x y rest) '()))]
   [((next: next) (&lt;number&gt; x) (&lt;number&gt; y) (&lt;value&gt; z))
    (cons 'd (if next (next x y z) '()))])
-(m 1 1 1) &arrow; '(d c b a)
-(m 1 1) &arrow; '(c)
-(m 1 'x 2) &arrow; '(b a)
-(m 1 1 'x) &arrow; '(d c)
-(m 1 'x 'x) &arrow; error
+(m 1 1 1)  &arrow; '(d c b a)
+(m 1 1)  &arrow; '(c)
+(m 1 'x 2)  &arrow; '(b a)
+(m 1 1 'x)  &arrow; '(d c)
+(m 1 'x 'x)  &arrow; error
           </programlisting>
         </informalexample>
       </sect3>
     </sect2>
   </sect1>
-  <sect1 id="SchemeClasses">
-    <title>Scheme Classes</title>
+  <sect1 id="ObjectSystem">
+    <title>Object System</title>
     <para>
-      A Scheme object is a collection of key/value pairs, where the
-      keys are symbols and values can be any Scheme values. Every
-      Scheme object is an instance of exactly one Scheme class.
-      Scheme classes have zero or more superclasses. The combination
-      of a Scheme class and its superclasses defines the set of keys
-      for instances of the class and the initial values they contain.
+        &requires; 
+      <emphasis role="bold">
+        (import <emphasis>oo</emphasis>)
+      </emphasis>
     </para>
     <para>
-      Scheme classes are themselves Scheme objects which are instances
-      of the class <literal>&lt;class&gt;</literal>.
+      The key features of the object system are:
+      <simplelist>
+        <member>
+          class-based, with a restricted form of multiple
+          inheritance
+        </member>
+        <member>
+          instance variables (aka <emphasis>slots</emphasis>) are
+          accessed and modified via generic procedures
+        </member>
+        <member>
+          generic procedures implement all behaviour; there is no
+          separate notion of <emphasis>methods</emphasis>
+        </member>
+        <member>
+          introspection API
+        </member>
+        <member>
+          complete integration into &SISC;'s extensible type system
+        </member>
+      </simplelist>
     </para>
     <sect2>
-      <title>Defining Classes</title>
+      <title>Classes</title>
+      <indexterm><primary>&lt;class&gt;</primary></indexterm>
+      <indexterm><primary>&lt;object&gt;</primary></indexterm>
       <para>
-        Scheme classes are defined with
+        Classes have a name, a list of direct superclasses, and a list
+        of direct slot descriptions. All classes are instances of the
+        type &lt;class&gt; and are themselves types in &SISC;'s
+        extensible type system. All classes are direct or indirect
+        sub-classes of the class &lt;object&gt;, except for
+        &lt;object&gt; itself, which has no super-classes.
+      </para>
+      <para>
+        Classes are created as follows:
         <blockquote>
           <para>
-            <indexterm><primary>make-class</primary>
-            </indexterm>
-              &procedure;
+            <indexterm><primary>make-method</primary></indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>class</type>
               <methodname>make-class</methodname>
-              <methodparam><parameter>superclasses</parameter></methodparam>
-              <methodparam><parameter>slots</parameter></methodparam>
+              <methodparam><parameter>symbol</parameter></methodparam>
+              <methodparam><parameter>class-list</parameter></methodparam>
+              <methodparam><parameter>slot-def-list</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns a new Scheme class, an instance of
-                <literal>&lt;class&gt;</literal>.
-                <parameter>superclasses</parameter> is the list of
-                direct superclasses of the new class, and
-                <parameter>slots</parameter> contains an alist of
-                key/value pairs which are the direct slot names and
-                their initial values.
+                Creates a class named <parameter>symbol</parameter>
+                with the classes in <parameter>class-list</parameter>
+                as its direct super-classes. See <xref
+                  linkend="OOInheritance"/> for restrictions on
+                super-classes. When no super-classes are specified, the
+                superclass is &lt;object&gt;.
+              </para>
+              <para>
+                <parameter>slot-def-list</parameter> defines the slots
+                that instances of the new class will have, and
+                determines how to initialise, access and modify
+                them. It is an association list with each entry of the
+                form
+                <literal>(</literal><parameter>slot-name</parameter>
+                <literal>(</literal><parameter>slot-prop-name</parameter>
+                <literal>.</literal>
+                <parameter>slot-prop-value</parameter><literal>)
+                ...)</literal>. <parameter>slot-name</parameter> names
+                a slot. <parameter>slot-prop-name</parameter> must be
+                the name of one of the defined slot properties, and
+                <parameter>slot-prop-value</parameter> is its
+                value. The following are the valid slot properties:
+                <variablelist>
+                  <varlistentry>
+                    <term>value</term>
+                    <listitem>
+                      <para>
+                        The initial value of the slot. The default is
+                        &f;. This value will be assigned to the slot
+                        in instances of the class upon their creation.
+                      </para>
+                    </listitem>
+                  </varlistentry>
+                  <varlistentry>
+                    <term>accessor</term>
+                    <listitem>
+                      <para>
+                        The generic procedure to which an accessor
+                        method for the slot will be added. If no
+                        accessor is specified then the slot cannot be
+                        accessed on an instance of the class.
+                      </para>
+                    </listitem>
+                  </varlistentry>
+                  <varlistentry>
+                    <term>modifier</term>
+                    <listitem>
+                      <para>
+                        The generic procedure to which a modifier
+                        method for the slot will be added. If no
+                        modifier is specified then the slot cannot be
+                        modified on an instance of the class.
+                      </para>
+                    </listitem>
+                  </varlistentry>
+                </variablelist>
+              </para>
+              <para>
+                Slots are inherited by sub-classes. For details on
+                slot inheritance see <xref linkend="OOInheritance"/>.
               </para>
             </blockquote>
+            <informalexample>
+              <programlisting>
+(define-generics :x :y :y!)
+(define &lt;Foo&gt; (make-class '&lt;Foo&gt; '() '()))
+(define &lt;Bar&gt; (make-class '&lt;Bar&gt; '() '()))
+(define &lt;Baz&gt; (make-class '&lt;Baz&gt; (list &lt;Foo&gt; &lt;Bar&gt;)
+                          `((x (value . 1) (accessor . ,:x))
+                            (y (accessor . ,:y) (modifier . ,:y!)))))
+              </programlisting>
+            </informalexample>
           </para>
-        </blockquote>        
-      </para>
-      <para>
-        A macro simplifies the common task of binding a variable to a
-        newly created class:
-        <blockquote>
           <para>
-            <indexterm><primary>define-class</primary>
-            </indexterm>
-              &syntax;
+            <indexterm><primary>define-class</primary></indexterm>
+            &syntax;
             <methodsynopsis language="scheme">
               <void/>
               <methodname>define-class</methodname>
-              <methodparam><parameter>name-and-super</parameter></methodparam>
-              <methodparam choice="opt">
-                <parameter>slots</parameter>
-              </methodparam>
+              <methodparam><parameter>name-and-supers</parameter></methodparam>
+              <methodparam rep="repeat"><parameter>slot-def</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <simplelist>
                 <member>
-                  where <parameter>name-and-super</parameter> is of
-                  the form
-                  <literal>(</literal><parameter>name</parameter>
-                  <parameter>superclass</parameter>
-                  <literal>...</literal><literal>)</literal>
+                  where <parameter>name-and-supers</parameter> is of the
+                  form
+                  <literal>(</literal><parameter>class-name</parameter> <parameter>super-class</parameter> <literal>...)</literal>
                 </member>
                 <member>
-                  and <parameter>slots</parameter> contains one or
-                  more two-element lists of the form
-                  <literal>(</literal><parameter>key</parameter>
-                  <parameter>value</parameter><literal>)</literal>.
+                  and <parameter>slot-def</parameter> is of the form
+                <literal>(</literal><parameter>slot-name</parameter>
+                <literal>(</literal><parameter>slot-prop-name</parameter>
+                <parameter>slot-prop-value</parameter><literal>)
+                ...)</literal>
                 </member>
               </simplelist>
               <para>
-                Creates a new Scheme class and binds it to the
-                variable <parameter>name</parameter>. The optional
-                <parameter>superclass</parameter>es are the direct
-                superclasses of the new class and the list of
-                <parameter>key</parameter>s and
-                <parameter>value</parameter>s define the direct slots
-                and their initial values.
+                Binds <parameter>class-name</parameter> to a newly
+                created class.
+              </para>
+              <para>
+                This form expands into a definition with call to
+                <function>make-class</function> on the right hand
+                side.
               </para>
             </blockquote>
+            <informalexample>
+              <programlisting>
+(define-generics :x :y :y!)
+(define-class (&lt;Foo&gt;))
+(define-class (&lt;Bar&gt;))
+(define-class (&lt;Baz&gt; &lt;Foo&gt; &lt;Bar&gt;)
+  (x (value 1) (accessor :x))
+  (y (accessor :y) (modifier :y!)))
+              </programlisting>
+            </informalexample>
           </para>
         </blockquote>
       </para>
       <para>
-        The list of slots and their initial values of instances of a
-        class is determined by collecting all slots and initial values
-        from the class precedence list. Should a slot name appear more
-        than once then the initial value is the one found earlier in
-        the list.
-      </para>
-      <example>
-        <title>Class Definition</title>
-        <programlisting>
-(define-class (&lt;foo&gt;) (x &f;) (y 1))
-(define-class (&lt;bar&gt;) (y 2)  (z &f;))
-(define-class (&lt;baz&gt; &lt;foo&gt; &lt;bar&gt;) (a 1) (b 2) (c &f;))
-(type&lt;= &lt;baz&gt; &lt;foo&gt;) &arrow; &t;
-(type&lt;= &lt;baz&gt; &lt;bar&gt;) &arrow; &t;
-(type&lt;= &lt;foo&gt; &lt;bar&gt;) &arrow; &f;
-        </programlisting>
-      </example>
-    </sect2>
-    <sect2>
-      <title>Instantiating Classes</title>
-      <para>
-        The normal way to instantiate a class is to call
-        <function>make</function>. Classes define a default
-        constructor that takes care of creating a new instance of the
-        class and initialising the slots to the values specified in
-        the class definition. The default constructor takes any number
-        of arguments, all of which are ignored.
-      </para>
-      <para>
-        It is possible to override the default constructor by adding a
-        method to the <function>create</function> generic procedure.
-        This is rarely needed though since in most cases the
-        post-creation object initialisation carried out by the
-        <function>initialize</function> generic procedure suffices.
-      </para>
-      <example>
-        <title>Class Instantiation</title>
-        <programlisting>
-(define-method (initialize (&lt;foo&gt; o) (&lt;top&gt; v))
-  (o 'x v))
-(define-method (initialize (&lt;bar&gt; o) (&lt;top&gt; v))
-  (o 'z v))
-(define-method (initialize (&lt;baz&gt; o) (&lt;top&gt; v))
-  (o 'c v))
-
-(define foo (make &lt;foo&gt; 1))
-(define bar (make &lt;bar&gt; 2))
-(define baz (make &lt;baz&gt; 3))
-        </programlisting>
-      </example>
-      <para>
-        Scheme objects can also be created directly using
+        One can test whether a particular value is a class:
         <blockquote>
           <para>
-            <indexterm><primary>make-object</primary>
-            </indexterm>
-              &procedure;
+            <indexterm><primary>class?</primary></indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
-              <type>sobj</type>
-              <methodname>make-object</methodname>
+              <type>&t;/&f;</type>
+              <methodname>class?</methodname>
+              <methodparam><parameter>value</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns &t; if <parameter>value</parameter> is a
+                class, &f; otherwise.
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(class? (make-class '&lt;Foo&gt; '() '()))  &arrow; &t;
+(class? (lambda (x) x))  &arrow; &f;
+(define-class (&lt;Foo&gt;))
+(class? &lt;Foo&gt;)  &arrow; &t;
+              </programlisting>
+            </informalexample>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        The following procedures provide access to the various
+        elements of the &lt;class&gt; abstract data type:
+        <blockquote>
+          <para>
+            <indexterm><primary>class-name</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>symbol</type>
+              <methodname>class-name</methodname>
               <methodparam><parameter>class</parameter></methodparam>
-              <methodparam><parameter>slots</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns a new Scheme object, which is an instance of
-                <parameter>class</parameter> and has slots with
-                initial values defined by the
-                <parameter>slots</parameter> association list.
-              </para>
-              <para>
-                No constructor and initialisation methods are
-                invoked. The slots must comprise exactly the slots
-                defined by <parameter>class</parameter> and its
-                superclasses.
+                Returns the name of the class
+                <parameter>class</parameter>.
               </para>
             </blockquote>
+            <informalexample>
+              <programlisting>
+(class-name (make-class '&lt;Foo&gt; '() '()))  &arrow; '&lt;Foo&gt;
+(define-class (&lt;Foo&gt;))
+(class-name &lt;Foo&gt;)  &arrow; '&lt;Foo&gt;
+              </programlisting>
+            </informalexample>
           </para>
-        </blockquote> 
-      </para>
-    </sect2>
-    <sect2>
-      <title>Slot Access</title>
-      <para>
-        The slots of a Scheme object can be accessed by invoking the
-        object as a procedure.
-        <blockquote>
           <para>
+            <indexterm><primary>class-direct-superclasses</primary></indexterm>
             &procedure;
             <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname></methodname>
-              <methodparam><parameter>sobj</parameter></methodparam>
-              <methodparam><parameter>fieldname</parameter></methodparam>
-              <methodparam choice="opt">
-                <parameter>value</parameter>
-              </methodparam>
+              <type>class-list</type>
+              <methodname>class-direct-superclasses</methodname>
+              <methodparam><parameter>class</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Gets or sets the value of the Scheme object
-                <parameter>sobj</parameter>'s slot
-                <parameter>fieldname</parameter> (a symbol).
+                Returns the list of direct super-classes of the class
+                <parameter>class</parameter>.
               </para>
             </blockquote>
+            <informalexample>
+              <programlisting>
+(define-class (&lt;Foo&gt;))
+(define-class (&lt;Bar&gt;))
+(define-class (&lt;Baz&gt; &lt;Foo&gt; &lt;Bar&gt;))
+(map class-name (class-direct-super-classes &lt;Foo&gt;)  &arrow; '())
+(map class-name (class-direct-super-classes &lt;Baz&gt;)  &arrow; '(&lt;Foo&gt; &lt;Bar&gt;))
+              </programlisting>
+            </informalexample>
+          </para>
+          <para>
+            <indexterm><primary>class-direct-slots</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>slot-list</type>
+              <methodname>class-direct-slots</methodname>
+              <methodparam><parameter>class</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the list of descriptions of the direct slots
+                of the class <parameter>class</parameter>.
+              </para>
+              <para>
+                Slot descriptions are created by
+                <function>make-class</function> for each slot
+                definitions. The procedures operating on slot
+                descriptions are documented in <xref
+                linkend="OOSlots"/>.
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(class-direct-slots (make-class '&lt;Foo&gt; '() '()))  &arrow; '()
+(define-generics :x :y :y!)
+(define-class (&lt;Baz&gt;)
+  (x (value 1) (accessor :x))
+  (y (accessor :y) (modifier :y!)))
+(class-direct-slots &lt;Baz&gt; &arrow; (&lt;slot&gt; &lt;slot&gt;))
+              </programlisting>
+            </informalexample>
           </para>
         </blockquote>
       </para>
-      <example>
-        <title>Simple Slot Access</title>
-        <programlisting>
-(foo 'x) &arrow; 1
-(bar 'y) &arrow; 2
-(baz 'z) &arrow; &f;
-(map foo '(x y)) &arrow; (1 1)
-(map bar '(y z)) &arrow; (2 2)
-(map baz '(x y z a b c)) &arrow; (&f; 1 &f; 1 2 3)
-        </programlisting>
-      </example>
-      <para>
-        Often programs require access to object fields that are deeply
-        nested inside some containment hierarchy or reference
-        chain. This can be accomplished succinctly using the following
-        operation:
-        <blockquote>
-          <para>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname></methodname>
-              <methodparam><parameter>sobj</parameter></methodparam>
-              <methodparam><parameter>slot-list</parameter></methodparam>
-              <methodparam choice="opt">
-                <parameter>value</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Gets or sets the value of nested Scheme object's slot.
-                <parameter>sobj</parameter> is the Scheme object on
-                which to start the
-                lookup. <parameter>slot-list</parameter> is a list of
-                slot, supplied as symbols, and must contain at least
-                one element. If <parameter>slot-list</parameter>
-                contains more than one element then a nested lookup is
-                performed, i.e. the first slot name is looked up on
-                the <parameter>sobj</parameter>, the second slot nanme
-                is looked up on the resulting object, and so on until
-                the final slot name in the list, which is retrieved
-                from or set on the object resulting from the preceding
-                lookup.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
-      </para>
-      <example>
-        <title>Nested Slot Access</title>
-        <programlisting>
-(baz '(c) bar)
-(bar '(z) foo)
-(baz '(c z x) 2) &arrow; 1
-(baz '(c z x)) &arrow; 2
-        </programlisting>
-      </example>
     </sect2>
-    <sect2>
-      <title>Predicates</title>
+    <sect2 id="OOSlots">
+      <title>Slots</title>
+      <indexterm><primary>&lt;slot&gt;</primary></indexterm>
       <para>
-        Two predicates exist to determine whether a value is a Scheme
-        class or Scheme object respectively.
+        Slot descriptions are instances of the abstract data
+        type &lt;slot&gt;. They are created implicitly when classes
+        are created; it is not possible to create them directly.
+      </para>
+      <para>
         <blockquote>
           <para>
-            <indexterm><primary>scheme-object?</primary>
-            </indexterm>
-              &procedure;
+            <indexterm><primary>slot?</primary></indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>&t;/&f;</type>
-              <methodname>scheme-object?</methodname>
+              <methodname>slot?</methodname>
               <methodparam><parameter>value</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns &t; if <parameter>value</parameter> is a
-                Scheme object, &f; otherwise.
+                Returns &t; if <parameter>value</parameter> is a slot
+                description, &f; otherwise.
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(define-class (&lt;Baz&gt;) (x) (y))
+(map slot? (class-direct-slots &lt;Baz&gt;))  &arrow; '(&t; &t;)
+              </programlisting>
+            </informalexample>
+          </para>
+          <para>
+            <indexterm><primary>slot-name</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>symbol</type>
+              <methodname>slot-name</methodname>
+              <methodparam><parameter>slot</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the name of the slot described by
+                <parameter>slot</parameter>. This is the name given to
+                the slot when its class was created.
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(define-class (&lt;Baz&gt;) (x) (y))
+(map slot-name (class-direct-slots &lt;Baz&gt;))  &arrow; '(x y)
+              </programlisting>
+            </informalexample>
+          </para>
+          <para>
+            <indexterm><primary>slot-class</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>class</type>
+              <methodname>slot-class</methodname>
+              <methodparam><parameter>slot</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the class to which the slot description
+                <parameter>slot</parameter> belongs.
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(define-class (&lt;Baz&gt;) (x) (y))
+(eq? (slot-class (car (class-direct-slots &lt;Baz&gt;))) &lt;Baz&gt;)  &arrow; &t;
+              </programlisting>
+            </informalexample>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        Slot definitions can produce procedures that allow
+        initialization, access and modification of slots. Since slots
+        can be defined without accessors and modifiers, this may be
+        the only way to access/modify a particular slot.
+        <blockquote>
+          <para>
+            <indexterm><primary>slot-initializer</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>procedure</type>
+              <methodname>slot-initializer</methodname>
+              <methodparam><parameter>slot</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns a procedure than when applied to an instance
+                of <parameter>slot</parameter>'s class, will set the
+                slot's value on that instance to its initial value, as
+                specified in the class definition.
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(define-generics :x :x!)
+(define-class (&lt;Baz&gt;)
+  (x (value 1) (accessor :x) (modifier :x!)))
+(define baz (make &lt;Baz&gt;))
+(:x baz)  &arrow; 1
+(:x! baz 2)
+(:x baz)  &arrow; 2
+((slot-initializer (car (class-direct-slots &lt;Baz&gt;))) baz)
+(:x baz)  &arrow; 1
+              </programlisting>
+            </informalexample>
+          </para>
+          <para>
+            <indexterm><primary>slot-accessor</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>procedure</type>
+              <methodname>slot-accessor</methodname>
+              <methodparam><parameter>slot</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns a procedure than when applied to an instance
+                of <parameter>slot</parameter>'s class, will return
+                the slot's value on that instance.
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(define-class (&lt;Baz&gt;) (x (value 1)))
+(define baz (make &lt;Baz&gt;))
+((slot-accessor (car (class-direct-slots &lt;Baz&gt;))) baz) &arrow; 1
+              </programlisting>
+            </informalexample>
+          </para>
+          <para>
+            <indexterm><primary>slot-modifier</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>procedure</type>
+              <methodname>slot-modifier</methodname>
+              <methodparam><parameter>slot</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns a procedure than when applied to an instance
+                of <parameter>slot</parameter>'s class, will set the
+                slot's value on that instance to its initial value, as
+                specified in the class definition.
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(define-generics :x :x!)
+(define-class (&lt;Baz&gt;) (x (value 1) (accessor :x)))
+(define baz (make &lt;Baz&gt;))
+(:x baz)  &arrow; 1
+((slot-modifier (car (class-direct-slots &lt;Baz&gt;))) baz 2)
+(:x baz)  &arrow; 2
+              </programlisting>
+            </informalexample>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        In addition to <emphasis>procedures</emphasis> for slt
+        initialization, access and modification, slot definitions can
+        also produce equivalent <emphasis>methods</emphasis>. These
+        are suitable for adding to generic procedures and can, for
+        instance, be used to achieve the same effect as specifying
+        generic procedures for slot access/modification at class
+        creation time.
+        <blockquote>
+          <para>
+            <indexterm><primary>slot-initializer-method</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>method</type>
+              <methodname>slot-initializer-method</methodname>
+              <methodparam><parameter>slot</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                This is the same as
+                <function>slot-initializer</function>, except it
+                returns a method instead of a procedure.
               </para>
             </blockquote>
           </para>
           <para>
-            <indexterm><primary>scheme-class?</primary>
-            </indexterm>
-              &procedure;
+            <indexterm><primary>slot-accessor-method</primary></indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
-              <type>&t;/&f;</type>
-              <methodname>scheme-class?</methodname>
-              <methodparam><parameter>value</parameter></methodparam>
+              <type>method</type>
+              <methodname>slot-accessor-method</methodname>
+              <methodparam><parameter>slot</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns &t; if <parameter>value</parameter> is a
-                Scheme class, &f; otherwise.
+                This is the same as
+                <function>slot-accessor</function>, except it
+                returns a method instead of a procedure.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>slot-modifier-method</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>method</type>
+              <methodname>slot-modifier-method</methodname>
+              <methodparam><parameter>slot</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                This is the same as
+                <function>slot-modifier</function>, except it
+                returns a method instead of a procedure.
               </para>
             </blockquote>
           </para>
         </blockquote>
+      </para>
+    </sect2>
+    <sect2>
+      <title>Instantiation</title>
+      <indexterm><primary>initialize</primary></indexterm>
+      <para>
+        Class instantiation is a three-stage process. First a new object
+        is created whose type is that of the instantiated class. Then
+        the object's slots are initialized using the slot initializers
+        of the class and its super-classes. Finally, the
+        <function>initialize</function> generic procedure is called
+        with the newly created instance and additional
+        arguments. <function>initialize</function> serves the same
+        purpose as constructors in other object systems.
+      </para>
+      <para>
+        All the phases of class instantiation are carried out by a
+        single procedure:
+        <blockquote>
+          <para>
+            <indexterm><primary>make</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>instance</type>
+              <methodname>make</methodname>
+              <methodparam><parameter>class</parameter></methodparam>
+              <methodparam rep="repeat"><parameter>value</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates a new object that is an instance of
+                <parameter>class</parameter> and initialises its slots
+                using the slots' initialisers. The instance and
+                <parameter>value</parameter>s are then passed as
+                parameters to a call to the
+                <function>initialize</function> generic procedure. The
+                result of calling <function>make</function> is the
+                instance.
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(define-generics :x :x!)
+(define-class (&lt;Baz&gt;)
+  (x (value 1) (accessor :x) (modifier :x!)))
+(define-method (initialize (&lt;Baz&gt; b) (&lt;number&gt; x)) (:x! b x))
+(define baz (make &lt;Baz&gt; 2))
+(:x baz)  &arrow; 2
+              </programlisting>
+            </informalexample>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        By default the <function>initialize</function> contains a
+        no-op method for initialising objects of type &lt;object&gt;
+        with no further arguments. Since all objects are instances of
+        &lt;object&gt; all classes can be instantiated by calling
+        <literal>(make</literal>
+        <parameter>class</parameter><literal>)</literal>.
+        <informalexample>
+          <programlisting>
+(define-generics :x :x!)
+(define-class (&lt;Baz&gt;)
+  (x (value 1) (accessor :x) (modifier :x!)))
+(define baz (make &lt;Baz&gt;))
+(:x baz)  &arrow; 1
+          </programlisting>
+        </informalexample>
+      </para>
+    </sect2>
+    <sect2 id="OOInheritance">
+      <title>Inheritance</title>
+      <para>
+        Inheritance is a form of sub-typing. A class is a sub-type of
+        all its direct and indirect superclasses. Method selection in
+        generic procedures (and hence also slot access/modification)
+        is based on a relationship called <emphasis>class
+          precedence</emphasis>; a total order of classes based on the
+        partial orders established by the direct super-classes:
+        <blockquote>
+          <para>
+            <indexterm><primary>class-precedence-list</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>class-list</type>
+              <methodname>class-precedence-list</methodname>
+              <methodparam><parameter>class</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the total order of
+                <parameter>class</parameter> and all direct and
+                indirect super-classes, as determined by the partial
+                orders obtained from calling
+                <function>class-direct-superclasses</function>.
+              </para>
+              <para>
+                The ordering of classes returned by
+                <function>class-direct-superclasses</function> is
+                considered "weak" whereas the ordering of the class
+                itself to its direct super-classes is considered
+                strong. The significance of this is that when
+                computing the class precedence list weak orderings are
+                re-arranged if that is the only way to obtain a total
+                order. By contrast, strong orderings are never
+                rearranged.
+              </para>
+            </blockquote>
+            <informalexample>
+              <programlisting>
+(define-class (&lt;Foo&gt;))
+(define-class (&lt;Bar&gt; &lt;Foo&gt;))
+(define-class (&lt;Baz&gt; &lt;Foo&gt;))
+(define-class (&lt;Boo&gt; &lt;Bar&gt; &lt;Baz&gt;))
+(define-class (&lt;Goo&gt;))
+(define-class (&lt;Moo1&gt; &lt;Bar&gt; &lt;Baz&gt; &lt;Goo&gt;))
+(map class-name (class-precedence-list &lt;Moo1&gt;))
+  &arrow; (&lt;moo1&gt; &lt;bar&gt; &lt;baz&gt; &lt;goo&gt; &lt;foo&gt; &lt;object&gt;)
+(define-class (&lt;Moo2&gt; &lt;Bar&gt; &lt;Baz&gt; &lt;Foo&gt; &lt;Goo&gt;))
+(map class-name (class-precedence-list &lt;Moo2&gt;))
+  &arrow; (&lt;moo1&gt; &lt;bar&gt; &lt;baz&gt; &lt;foo&gt; &lt;goo&gt; &lt;object&gt;)
+(define-class (&lt;Moo3&gt; &lt;Baz&gt; &lt;Bar&gt; &lt;Boo&gt;))
+(map class-name (class-precedence-list &lt;Moo3&gt;))
+  &arrow; (&lt;moo3&gt; &lt;boo&gt; &lt;baz&gt; &lt;bar&gt; &lt;foo&gt; &lt;object&gt;)
+              </programlisting>
+            </informalexample>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        For any two classes in the class precedence list that have
+        direct slots, one must be a sub-class of the other.
+      </para>
+      <para>
+        In effect this enforces single inheritance of slots while
+        still giving control over the order of classes in the
+        class-precedence list.
+      </para>
+      <para>
+        Slots from a superclass are only ever inherited once,
+        regardless of the number of paths in the inheritance graph to
+        that class.
+      </para>
+      <para>
+        If a sub-class defines a slot with the same name as one of its
+        super-classes, instances of the resulting class ends up with
+        <emphasis>two</emphasis> slots of the same name. If the slots
+        are define with different accessors and modifiers then this
+        does not cause any problems at all. If they are not then an
+        invocation of the accessor/modifier will acess/modify the slot
+        of the sub-class. Note that it is still possible to
+        access/modify the slot of the superclass by using
+        procedures/methods obtained from the slot descriptor. See
+        <xref linkend="OOSlots"/>.
+      </para>
+      <para>
+        The following example illustrates the rules governing slot
+        inheritance.
+        <informalexample>
+          <programlisting>
+;;ordinary slot access and modification
+(define-generics
+  :x :x! :y :y! :z :z!
+  :xb :xb! :yb :yb! :zb :zb!)
+(define-class (&lt;Foo&gt;)
+  (x (value 1) (accessor :x) (modifier :x!))
+  (y (accessor :y) (modifier :y!))
+  (z (value 1) (accessor :z)))
+(define f (make &lt;Foo&gt;))
+(:x f)  &arrow; 1
+(:y f)  &arrow; #f
+(:z f)  &arrow; 1
+(:x! f 2)
+(:y! f 2)
+(:x f)  &arrow; 2
+(:y f)  &arrow; 2
+
+;;overloading slots in sub-class
+(define-class (&lt;Bar&gt; &lt;Foo&gt;)
+  (x (value 2) (accessor :x) (modifier :x!))
+  (y (accessor :yb) (modifier :yb!))
+  (zb (value 2) (accessor :zb) (modifier :zb!)))
+(define b (make &lt;Bar&gt;))
+(:x b)  &arrow; 2
+(:y b)  &arrow; #f
+(:z b)  &arrow; 1
+(:yb b)  &arrow; #f
+(:zb b)  &arrow; 2
+(:y! b 3)
+(:yb! b 4)
+(:y b)  &arrow; 3
+(:yb b)  &arrow; 4
+
+;;accessing a fully shadowed slot
+(define :foo-x
+  (cdr (assq 'x (map (lambda (x)
+                       (cons (slot-name x) (slot-accessor x)))
+                     (class-direct-slots &lt;Foo&gt;)))))
+(:foo-x b)  &arrow; 1
+
+;;inheritance restriction on slots
+(define-class (&lt;Boo&gt; &lt;Baz&gt;)
+  (yb (accessor :yb) (modifier :yb!)))
+(define-class (&lt;Goo&gt;))
+(define-class (&lt;Moo&gt; &lt;Bar&gt; &lt;Boo&gt; &lt;Goo&gt;))  &arrow; error
+          </programlisting>
+        </informalexample>
       </para>
     </sect2>
   </sect1>
