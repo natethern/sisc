@@ -23,7 +23,7 @@
        (connect bot (->jstring "irc.freenode.net"))
        #t)))
   
-  (define channels '("#scheme" "#sisc"))
+  (define channels '("#sisc" "#scheme"))
 
   (define (send-messages destination response)
     (let ([tokenizer (make <java.util.StringTokenizer> 
@@ -83,7 +83,7 @@
     (for-each (lambda (channel)
 		(display (sisc:format "Joining ~a...~%" channel))
 		(do-join channel))
-	      '("#sisc" "#scheme"))
-#;    (make-schemechan "#schemerepl"))
+	      channels)
+    (make-schemechan "#schemerepl"))
 
   (onDisconnect)

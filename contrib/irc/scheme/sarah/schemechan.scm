@@ -49,7 +49,7 @@
 			(let loop ()
 			  (let ([datum (read-code parserinput)])
 			    (send-messages (->jstring channel-name)
-					   (eval-within-n-ms datum 5000))
+					   (eval-within-n-ms datum 5000 env))
 			    (loop)))))])
     (putprop (string->symbol channel-name)
 	     'scheme-channels (list pipeout evalthread))

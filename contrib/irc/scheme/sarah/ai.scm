@@ -241,12 +241,14 @@
                             (scheme-report-environment 5)
                             (car env))])
               (putprop 'call/cc env call/cc)
+              (putprop '$sc-put-cte env $sc-put-cte)
               (thread/new 
                (lambda ()
                  (with-output-to-string 
-                     (lambda () (let ([result (eval datum env)])
-                                  (if (not (void? result))
-                                      (pretty-print result))))))))]
+                     (lambda ()
+		       (let ([result (eval datum env)])
+			 (cond [(circular? result) (write result)]
+                               [else (pretty-print result)])))))))]
            [watchdog-thread
             (thread/new
              (lambda ()

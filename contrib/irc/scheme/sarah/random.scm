@@ -1,12 +1,11 @@
+(import s2j)
+(import generic-procedures)
+(define-generic-java-method next-int)
+
 (define random 
-  (let ((inf (open-input-file "/dev/urandom")))
+  (let ((rand-source (java-new (java-class '|java.util.Random|))))
     (lambda (n)
-      (if (zero? n) 0
-          (modulo (+ (ashl (char->integer (read-char inf)) 24)
-                     (ashl (char->integer (read-char inf)) 16)
-                     (ashl (char->integer (read-char inf)) 8)
-                     (char->integer (read-char inf)))
-                  n)))))
+      (modulo (abs (->number (next-int rand-source))) n))))
 
 (define (random-elem ls)
   (list-ref ls (random (length ls))))
