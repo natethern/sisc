@@ -131,7 +131,11 @@
                         (let ([nxp (continuation-nxp k)])
                           (cons nxp (loop (continuation-stk k))))]))])
       st)))
-           
+
+(define (assoc-val x ls)
+  (cond [(assoc x ls) => cdr]
+        [else #f]))
+
 (define stack-trace 
   (letrec ([annotations-to-assoc
             (lambda (expr)
@@ -143,8 +147,8 @@
                      (cdr keys)))))])
     (lambda (e)
       (let* ([k (cdr (assoc 'error-continuation e))]
-             [m (cond [(assoc 'message e) => cdr] [else #f])]
-             [p (cond [(assoc 'parent e) => cdr] [else #f])]
+             [m (assoc-val 'message e)]
+             [p (assoc-val 'parent e)]
              [st #f]
              [annots #f])
         (call-with-values 
@@ -182,12 +186,9 @@
                                sourcefile
                                line column
                                (make-error-message 
-                                (cond [(and (pair? m) (assoc 'location m)) 
-                                       => cdr] 
-                                      [else #f])
-                                (cond [(and (pair? m) (assoc 'message m)) 
-                                       => cdr]
-                                      [else "{no error message}"]))))))
+                                (and (pair? m) (assoc-val 'location m))
+                                (and (pair? m) (or (assoc-val 'message m)
+                                                   "{no error message}")))))))
               (for-each
                (lambda (data expr)
                  (if data
