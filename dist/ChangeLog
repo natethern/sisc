@@ -1,3 +1,8 @@
+2003-06-20  Scott G. Miller <scgmille@freenetproject.org>
+ 
+    * Retooled the evaluation pipeline so that syntax is expanded
+      in the interaction, rather than a global environment.
+      
 2003-06-18  Matthias Radestock  <matthias@lshift.net>
 
 	* Fixed and rationalized SISC's command line parameters.
