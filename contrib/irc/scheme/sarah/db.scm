@@ -1,7 +1,7 @@
 (import srfi-11)
 (import srfi-19)
 (import jdbc)
-(import s2j)
+(import old-s2j)
 (import streams)
 
 (define (dbconnect host)
@@ -9,13 +9,15 @@
 
 (define (lookup-item conn type key)
   (let* ([stmt (jdbc/prepare-statement conn
-                (if type
                   (sisc:format 
-                    "SELECT key, data FROM knowledge WHERE type='~a' AND key ilike '%~a%'" 
-                        type (string-downcase key))
-                  (sisc:format 
-                    "SELECT key, data FROM knowledge WHERE key ilike '%~a%'" 
-                        (string-downcase key))))]
+                    (string-append
+                      "SELECT knowledge.key, knowledge.data FROM knowledge LEFT JOIN aka ON "
+                      "    (aka.key ilike '~a' AND aka.data ilike knowledge.key)"
+                      " WHERE ((aka.key IS NULL AND knowledge.key ilike '%~a%') "
+                      "    OR (aka.key IS NOT NULL)) "
+                      "   ~a") 
+                     key key (if type (sisc:format "AND type='~a'"
+                                                   type) "")))]
          [results
           (jdbc/execute-query stmt)])
     (and (not (null? results)) 
@@ -29,6 +31,13 @@
     (set-string pstmt (->jint 1) (->jstring type))
     (set-string pstmt (->jint 2) (->jstring key))
     (set-string pstmt (->jint 3) (->jstring data))
+    (with/fc (lambda (m e) #f) (lambda () (jdbc/execute pstmt)))))
+
+(define (store-aka conn key data)
+  (let ([pstmt (jdbc/prepare-statement conn
+                "INSERT INTO aka VALUES(trim(?),trim(?))")])
+    (set-string pstmt (->jint 1) (->jstring key))
+    (set-string pstmt (->jint 2) (->jstring data))
     (with/fc (lambda (m e) #f) (lambda () (jdbc/execute pstmt)))))
 
 (define (remove-items conn key)

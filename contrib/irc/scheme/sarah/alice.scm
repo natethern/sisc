@@ -1,6 +1,6 @@
-(import s2j)
+(import old-s2j)
 (import threading)
-(import generic-procedures)
+(import old-generic-procedures)
 (define <java.net.URLEncoder> (java-class "java.net.URLEncoder"))
 
 (define-generic encode)
@@ -15,12 +15,12 @@
              (list->string (reverse clist)))))))
 
 	          
-(define alice-mutex (monitor/new))                              
+(define alice-mutex (mutex/new))                              
 
 (define ask-alice
   (let ([last-user #f])
     (lambda (from message)
-      (monitor/synchronize-unsafe alice-mutex
+      (mutex/synchronize-unsafe alice-mutex
        (lambda ()
 	 (unless (equal? from last-user)
   	   (call-with-input-file 

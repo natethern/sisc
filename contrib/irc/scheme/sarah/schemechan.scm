@@ -1,3 +1,5 @@
+(import old-s2j)
+(import old-generic-procedures)
 (define-generic dcc-accept-chat)
 (define-generic exit)
 (define-generic enter)
@@ -35,6 +37,7 @@
 		(for-each (lambda (proc)
 			    (putprop proc e (forbidden-procedure proc)))
                           forbidden-bindings)
+                (putprop '$sc-put-cte e $sc-put-cte)
 		e)]
 	 [parserinput (java-unwrap (make <sisc.io.SourceInputPort> 
 				     (make <java.io.PipedInputStream> pipeout)
@@ -46,7 +49,7 @@
 			(let loop ()
 			  (let ([datum (read-code parserinput)])
 			    (send-messages (->jstring channel-name)
-					   (eval-within-n-ms datum 500 env))
+					   (eval-within-n-ms datum 5000))
 			    (loop)))))])
     (putprop (string->symbol channel-name)
 	     'scheme-channels (list pipeout evalthread))

@@ -1,8 +1,9 @@
 (import srfi-2)
 (import srfi-11)
 (import threading)
-(import s2j)
-(import generic-procedures)
+(import old-s2j)
+(import old-generic-procedures)
+(import string-io)
 
 (define (read-line . port)
   (let* ((char (apply read-char port)))
@@ -165,6 +166,8 @@
     (where . ((is . WHEREIS)
               (can . WHEREIS)))
     (shut . ((up . QUIET)))
+    (is . ((aka . AKA)
+           (also . AKA)))
     (is . LEARN)
     (be . ((quiet . QUIET)))
     (^ listen . ((up . LISTEN)))
@@ -193,6 +196,7 @@
     "help - You're doing it.\n\n"
     "<Something> is <something's description> -- I'll remember this for someone's later query of...\n"
     "What is <something> -- You'll get a similar effect with Who is somebody? and Where is something?\n\n"
+    "<Something> is also <something else> -- I'll remember the first as an alias for the second.\n"
     "forget <something> -- I'll forget all knowledge of a term.  Please be careful!\n"
     "Tell <somebody> <something>. -- I'll tell someone your message immediately if they're online, or hold it until I see them next.\n"
     "Later tell <somebody> <something>. -- I'll tell someone your message next time they speak, or hold it until I see them next if they're offline.\n"
@@ -233,21 +237,20 @@
 
 (define (eval-within-n-ms datum ms . env)
     (let* ([evaluation-thread
-           (thread/new 
-            (lambda ()
-              (with-output-to-string 
-                  (lambda () (let ([result 
-                                    (eval datum
-                                        ;Run this in R5RS only
-	      			      (if (null? env)
-				  	  (scheme-report-environment 5)
-					  (car env)))])
-                               (if (not (void? result))
-                                   (pretty-print result)))))))]
+            (let* ([env (if (null? env) 
+                            (scheme-report-environment 5)
+                            (car env))])
+              (putprop 'call/cc env call/cc)
+              (thread/new 
+               (lambda ()
+                 (with-output-to-string 
+                     (lambda () (let ([result (eval datum env)])
+                                  (if (not (void? result))
+                                      (pretty-print result))))))))]
            [watchdog-thread
             (thread/new
              (lambda ()
-               (sleep ms)
+               (thread/join evaluation-thread ms)
                (with-failure-continuation
                    (lambda (m e)
                      ; An error?  Egads!
@@ -268,7 +271,7 @@
 
 (define (evaluate from channel message st)
   (let-values ([(ignoreables term) (string-split message "eval ")])
-    (eval-within-n-ms (with-input-from-string term read-code) 500)))
+    (eval-within-n-ms (with-input-from-string term read-code) 5000)))
 
 (define (learn from channel message st)
   (let-values ([(term definition) (string-split message " is at ")])    
@@ -279,6 +282,18 @@
              (let-values ([(term definition) (string-split message " is ")])
                (and term definition
                     (if (store-item dbcon 'what term definition)
+			(random-elem learn-responses) 
+                        (random-elem knewthat-responses))))))))
+
+(define (aka from channel message st)
+  (let-values ([(term definition) (string-split message " is also ")])    
+    (and (or (and term definition
+                  (if (store-aka dbcon term definition)
+		      (random-elem learn-responses) 
+                      (random-elem knewthat-responses)))
+             (let-values ([(term definition) (string-split message " is aka ")])
+               (and term definition
+                    (if (store-aka dbcon term definition)
 			(random-elem learn-responses) 
                         (random-elem knewthat-responses))))))))
 
@@ -446,7 +461,7 @@
   (let-values ([(ignoreables expr) (string-split message "expand ")])
     (with-input-from-string expr
       (lambda ()
-	(pretty-print-to-string (sc-expand (read-code)))))))
+	(pretty-print-to-string (sc-expand (read-code) '(e) '(e)))))))
 
 (define (optimize from channel message st)
   (let-values ([(ignoreables expr) (string-split message "optimize ")])
@@ -493,6 +508,7 @@
     (SEEN . ,seen)
     (LISTEN . ,(if-spoken-to listen))
     (LEARN . ,(if-spoken-to learn))
+    (AKA . ,(if-spoken-to aka))
     (EVALUATE . ,(if-spoken-to evaluate))
     (TELL . ,(if-spoken-to tell))
     (HELP . ,(if-spoken-to help))

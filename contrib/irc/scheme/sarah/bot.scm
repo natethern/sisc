@@ -1,5 +1,5 @@
-(import s2j)
-(import generic-procedures)
+(import old-s2j)
+(import old-generic-procedures)
 (define <java.util.StringTokenizer> (java-class "java.util.StringTokenizer"))
 (define-generic next-token)
 (define-generic has-more-tokens)
@@ -84,6 +84,6 @@
 		(display (sisc:format "Joining ~a...~%" channel))
 		(do-join channel))
 	      '("#sisc" "#scheme"))
-    (make-schemechan "#schemerepl"))
+#;    (make-schemechan "#schemerepl"))
 
   (onDisconnect)
