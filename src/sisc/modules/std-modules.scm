@@ -320,7 +320,7 @@
   (type-of-hook 'record record-type-of-hook)
   (type<=-hook  'record record-type<=-hook))
 
-(module new-generic-procedures
+(module generic-procedures
     (make-generic-procedure
      generic-procedure-methods
      add-method
@@ -357,7 +357,7 @@
   (include "generic-procedures/methods.scm")
   (include "generic-procedures/procedures.scm"))
 
-(module generic-procedures
+(module old-generic-procedures
   (class?
    object?
    meta
@@ -405,7 +405,7 @@
   (import record)
   (include "generic-procedures.scm"))
 
-(module new-s2j
+(module s2j
     (java-new
      ;;classes
      java-class
@@ -515,7 +515,7 @@
            type-of-hook
            type<=-hook
            compare-types-hook)
-  (import* new-generic-procedures
+  (import* generic-procedures
            make-method
            make-generic-procedure
            add-methods
@@ -536,7 +536,7 @@
   (compare-types-hook 'java java-compare-types-hook)
   (initialize-exception-handling))
 
-(module s2j
+(module old-s2j
   (java-class
    java-wrap
    java-unwrap
@@ -611,7 +611,7 @@
    display-java-stack-trace)
   (import s2j-reflection)
   (import s2j-conversion)
-  (import generic-procedures)
+  (import old-generic-procedures)
   (import misc)
   (include "s2j/s2j.scm")
   (define (java-class name)
@@ -697,7 +697,7 @@
            type-of-hook
            type<=-hook
            compare-types-hook)
-  (import* new-generic-procedures
+  (import* generic-procedures
            make-method
            add-method
            define-generic
@@ -725,6 +725,7 @@
      link-library)
   (import s2j)
   (import generic-procedures)
+  (import type-system)
   (include "compiledlibs.scm"))
 
 (module pattern-matching
