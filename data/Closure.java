@@ -62,8 +62,7 @@ public class Closure extends Procedure {
     public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.serialize(name, dos);
-            dos.writeBoolean(arity);
-            s.writeBer(fcount, dos);
+            s.writeBer((((long)fcount) << 1) | (arity ? 1 : 0), dos);
             s.serialize(env, dos);
             s.serialize(body, dos);
         }
@@ -75,8 +74,9 @@ public class Closure extends Procedure {
     throws IOException {
         if (SERIALIZATION) {
             name=(Symbol)s.deserialize(dis);
-            arity=dis.readBoolean();
-            fcount=s.readBer(dis);
+            long attr=s.readBerLong(dis);
+            fcount=(int)(attr>>1);
+            arity=(attr&1)!=0;
             env=(LexicalEnvironment)s.deserialize(dis);
             body=s.deserialize(dis);
         }

@@ -32,6 +32,7 @@
  */
 package sisc.data;
 
+import java.lang.ref.SoftReference;
 import java.math.*;
 import java.io.*;
 import sisc.Serializer;
@@ -159,7 +160,7 @@ public class Quantity extends Value {
     public int val;
     public BigDecimal d, im;
     public BigInteger i, de;
-    public transient String out_cache;
+    public transient SoftReference out_cache;
     public transient byte out_cache_radix;
 
     public Quantity() {}
@@ -1325,7 +1326,9 @@ public class Quantity extends Value {
     }
 
     public String toString(int radix) {
-        if (out_cache!=null && out_cache_radix==radix) return out_cache;
+        if (out_cache!=null && out_cache_radix==radix &&
+            out_cache.get()!=null) return (String)out_cache.get();
+
         StringBuffer b=new StringBuffer();
         if (type==FIXEDINT)
             b.append(Integer.toString(val,radix));
@@ -1352,7 +1355,9 @@ public class Quantity extends Value {
             b.append('i');
         }
         out_cache_radix=(byte)radix;
-        return out_cache=b.toString();
+        String rv=b.toString();
+        out_cache=new SoftReference(rv);
+        return rv;
     }
 
     public void deserialize(Serializer s,
