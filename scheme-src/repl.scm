@@ -40,7 +40,6 @@
   (parameterize
    (let () 
      (lambda (m e)
-       (import debugging)
        (let ([exception (make-exception m e)])
          (putprop 'last-exception '*debug* exception)
          (print-exception exception (stack-trace-on-error)))))))
