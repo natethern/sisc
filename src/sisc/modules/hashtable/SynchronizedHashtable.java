@@ -5,7 +5,7 @@ import java.io.IOException;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.util.ExpressionVisitor;
-import sisc.modules.SThread.Mutex;
+import sisc.modules.Threads.Mutex;
 
 public class SynchronizedHashtable extends Hashtable {
 
