@@ -137,7 +137,7 @@
 
 ;Used to cause an undefined variable error
 (should-be 886733 4
-           (let ([x 2])
+           (let ([x (car '(2))])
              (letrec ([y x]
                       [g (lambda (i)
                            (+ y x))])
