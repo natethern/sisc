@@ -11,7 +11,7 @@ import java.lang.reflect.*;
  * Keeps track of entry points - points where serialization begins.
  *
  */
-public class LibraryBuilder extends Serializer {
+public class LibraryBuilder extends SerializerImpl {
 
     boolean addAllowed=true;
     Set classes, seen, duplicates;

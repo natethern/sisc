@@ -8,7 +8,7 @@ import java.lang.ref.*;
 import sisc.*;
 import java.lang.reflect.*;
 
-public class BinaryDeserializer extends Deserializer {
+public class BinaryDeserializer extends DeserializerImpl {
 
     static final boolean DEBUG = false;
 

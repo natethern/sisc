@@ -9,7 +9,7 @@ import java.io.*;
 import sisc.*;
 import java.lang.reflect.*;
 
-public class StreamSerializer extends Serializer {
+public class StreamSerializer extends SerializerImpl {
 
     Vector classes;
     Set seen;

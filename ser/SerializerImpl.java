@@ -9,11 +9,21 @@ import sisc.Module;
 import sisc.data.Expression;
 import sisc.AssociativeEnvironment;
 
-public interface Serializer extends DataOutput {
+public abstract class SerializerImpl implements Serializer, DataOutput {
 
-    public abstract void writeBigDecimal(BigDecimal d) throws IOException;
+    public void writeBigDecimal(BigDecimal d) throws IOException {
+        int scale=d.scale();
+	byte[] buffer=d.unscaledValue().toByteArray();
+        writeInt(buffer.length);
+        writeInt(scale);
+        write(buffer);
+    }
 
-    public abstract void writeBigInteger(BigInteger i) throws IOException;
+    public void writeBigInteger(BigInteger i) throws IOException {
+        byte[] buffer=i.toByteArray();
+        writeInt(buffer.length);
+        write(buffer);
+    }
 
     public abstract void writeExpression(Expression e) throws IOException;
     public abstract void writeAssociativeEnvironment(AssociativeEnvironment e) throws IOException;
@@ -23,5 +33,5 @@ public interface Serializer extends DataOutput {
     public abstract boolean seen(Expression e);
     public abstract void forceSeen(Expression e);
 
-    int BER_MASK=0x7f, BER_CONT=0x80;
+    static final int BER_MASK=0x7f, BER_CONT=0x80;
 }
