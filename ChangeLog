@@ -7,6 +7,8 @@
 
 	* Pretty-printing is now a module.
 	
+	* Added thread/interrupted? to the threading library.
+	
 2004-07-22  Scott G. Miller   <scott@sgmiller.org>
 
 	* Fixed REPL annotations
