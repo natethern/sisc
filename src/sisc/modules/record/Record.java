@@ -16,9 +16,10 @@ public class Record extends Value {
 
     public Record() {}
 
-    public Record(Value type, Value[] slots) {
+    public Record(Value type, int sz) {
         this.type = type;
-        this.slots = slots;
+        this.slots = new Value[sz];
+        for (int i=0; i<sz; i++) slots[i] = VOID;
     }
 
     public Value getType() { return type; }

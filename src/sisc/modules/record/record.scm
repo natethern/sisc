@@ -67,7 +67,10 @@
 (define :record-type (void))
 
 (define (make-record-type name field-tags)
-  (make-record :record-type (list name field-tags)))
+  (let ([res (make-record :record-type 2)])
+    (record-set! res 0 name)
+    (record-set! res 1 field-tags)
+    res))
 
 ; Accessors for record types.
 
@@ -94,10 +97,16 @@
 ; procedures used by the macro expansion of DEFINE-RECORD-TYPE.
 
 (define (record-constructor type tags)
-  (let ((arg-count (length tags)))
+  (let ((size (length (record-type-field-tags type)))
+        (arg-count (length tags))
+        (indexes (map (lambda (tag) (field-index type tag)) tags)))
     (lambda args
       (if (= (length args) arg-count)
-          (make-record type args)
+          (let ((new (make-record type size)))
+            (for-each (lambda (arg i) (record-set! new i arg))
+                      args
+                      indexes)
+            new)
           (error "wrong number of arguments to constructor" type args)))))
 
 (define (record-predicate type)
@@ -147,6 +156,7 @@
               name?
               (field field-getter field-setter) ...))))))))
 
-(set! :record-type (make-record :record-type
-                                '(:record-type (name field-tags))))
+(set! :record-type (make-record :record-type 2))
 (record-type! :record-type :record-type)
+(record-set! :record-type 0 ':record-type)
+(record-set! :record-type 1 '(name field-tags))

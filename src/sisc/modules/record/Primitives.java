@@ -62,7 +62,7 @@ public class Primitives extends IndexedProcedure {
         case 2:
             switch (id) {
             case RECORD_MAKE:
-                return new Record(f.vlr[0], pairToValues(pair(f.vlr[1])));
+                return new Record(f.vlr[0], num(f.vlr[1]).indexValue());
             case RECORD_SET_TYPE:
                 record(f.vlr[0]).setType(f.vlr[1]);
                 return VOID;
