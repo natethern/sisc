@@ -367,7 +367,7 @@ public class Interpreter extends Util {
         vlr=null;
     }
 
-    public final Value[] returnVLR(int size) {
+    public final Value[] replaceVLR(int size) {
         if (!vlk) returnValues(vlr);
         return newVLR(size);
     }

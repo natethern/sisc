@@ -403,7 +403,7 @@ public class Primitives extends ModuleAdapter {
                                                         new StringReader(string(f.vlr[0]))));
             case CALLCC:
                 Procedure kproc=(Procedure)f.vlr[0];
-                f.returnVLR(1);
+                f.replaceVLR(1);
                 f.vlr[0]=f.stk.capture(f);
                 f.nxp = APPEVAL;
                 return kproc;
@@ -732,14 +732,14 @@ public class Primitives extends ModuleAdapter {
                 Procedure ehandler=new CurriedFC(proc(f.vlr[1]), f.fk);
                 f.fk=f.createFrame(new ApplyValuesContEval(ehandler),
                                    null, false, f.env, f.fk, f.stk);
-                f.returnVLR(0);
+                f.replaceVLR(0);
                 f.nxp = APPEVAL;
                 return proc;
             case CALLWITHVALUES:
                 Procedure producer=proc(f.vlr[0]);
                 Procedure consumer=proc(f.vlr[1]);
                 f.push(new ApplyValuesContEval(consumer));
-                f.returnVLR(0);
+                f.replaceVLR(0);
                 f.nxp = APPEVAL;
                 return producer;
             case ERROR:
@@ -823,7 +823,7 @@ public class Primitives extends ModuleAdapter {
                 //this might get us back the just recycled f.vlr,
                 //which is fine since we only shift its contents to
                 //the left by one
-                Value newvlr[] = f.returnVLR(l + length(args));
+                Value newvlr[] = f.replaceVLR(l + length(args));
 
                 int j;
                 for (j=0; j < l; j++) {
