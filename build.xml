@@ -359,8 +359,6 @@
 
     <copy file="${basedir}/sisc.sh"
           tofile="${dist}/lite/sisc/sisc"/>
-    <chmod file="${dist}/lite/sisc/sisc"
-           perm="ugo+rx"/>
 
     <tar tarfile="${dist}/sisc-lite-${version}.tar">
       <tarfileset dir="${dist}/lite" mode="755">
@@ -400,12 +398,8 @@
     </copy>
     <copy todir="${dist}/full/sisc/scheme-src/srfi-22/"
           file="${srfidir}/srfi-22/srfi-22.sh"/>
-    <chmod file="${dist}/full/sisc/scheme-src/srfi-22/srfi-22.sh"
-           perm="ugo+rx"/>
     <copy todir="${dist}/full/sisc/"
           file="${basedir}/install-srfi22.sh"/>
-    <chmod file="${dist}/full/sisc/install-srfi22.sh"
-           perm="ugo+rx"/>
 
     <copy todir="${dist}/full/sisc"
           file="${basedir}/${basejar}"/>
@@ -433,10 +427,12 @@
 
       <tarfileset dir="${dist}/full" mode="755">
         <include name="sisc/sisc"/>
+        <include name="sisc/install-srfi22.sh"/>
       </tarfileset>
       <tarfileset dir="${dist}/full">
         <include name="sisc/**"/>
         <exclude name="sisc/sisc"/>
+        <exclude name="sisc/install-srfi22.sh"/>
       </tarfileset>
     </tar>
 
