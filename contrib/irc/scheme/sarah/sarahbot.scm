@@ -25,7 +25,6 @@
 (include "irc.scm")
 (include "channels.scm")
 (include "parsing.scm")
-(include "config.scm")
 (include "bots/anna.scm")
 (include "bots/infobot.scm")
 (include "bots/logbot.scm")

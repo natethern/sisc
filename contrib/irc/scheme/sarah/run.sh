@@ -9,5 +9,5 @@ ANNAPID=$!
 echo $ANNAPID
 cd ..
 
-sh sisc/sisc ./libs.scc ./sarahbot.scc
+sh sisc/sisc ./config.scm ./libs.scc ./sarahbot.scc
 kill $ANNAPID
