@@ -34,8 +34,8 @@ public class BinaryIO extends IndexedProcedure {
         }
         
       	public Index() {
-            define("block-read",    BLOCKREAD);
-            define("block-write",   BLOCKWRITE);
+            define("read-block",    BLOCKREAD);
+            define("write-block",   BLOCKWRITE);
             define("make-buffer",   MAKEBUFFER);
             define("buffer?",       BUFFERQ);
             define("buffer-length", BUFFERLENGTH);
