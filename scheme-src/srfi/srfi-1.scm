@@ -208,6 +208,9 @@
 ;;;
 ;;; The SRFI discussion record contains more discussion on this topic.
 
+(define (check-arg pred val caller)
+      (let lp ((val val))
+        (if (pred val) val (lp (error "Bad argument" val pred caller)))))
 
 ;;; Constructors
 ;;;;;;;;;;;;;;;;
