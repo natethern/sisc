@@ -1,129 +1,156 @@
-  <chapter>
+<chapter>
+  <title>
+    Introduction
+  </title>
+  <para>
+    &SISC; is a lightweight, platform independent
+    Scheme system whose primary goals are rapid execution of the
+    complete &R5RS; and future Scheme
+    standards, plus a useful superset for real-world application
+    development. 
+  </para>
+  <para>
+    &SISC;'s development progresses in two
+    directions, to improve the core interpreter to be simpler,
+    more elegant, and more efficient; and to add necessary
+    functionality through extensions that do not complicate the
+    core.
+  </para>
+  <sect1 id="Features">
     <title>
-      Introduction
+      Features
+    </title>
+    <itemizedlist>
+      <listitem>
+	<para>
+	  Full &R5RS; compliance
+	</para>
+      </listitem>
+      <listitem>
+	<para>
+	  Efficient number tower, with support for integers, floating-point numbers, rationals, and complex numbers of arbitrary precision
+	</para>
+      </listitem>
+      <listitem>
+	<para>
+	  Lightweight Scheme engine, requiring less than 200 kilobytes of code.
+	</para>
+      </listitem>
+      <listitem>
+	<para>
+	  Runtime extensiblity through a scopeable module system, which may add new functions and first-class types.
+	</para>
+      </listitem>
+    </itemizedlist>
+  </sect1>
+  <sect1 id="About">
+    <title>
+      About this document
     </title>
     <para>
-      &SISC; is a lightweight, platform independent
-      Scheme system whose primary goals are rapid execution of the
-      complete &R5RS; and future Scheme
-      standards, plus a useful superset for real-world application
-      development. 
+      This document explains the &SISC; Scheme system. It assumes
+      knowledge of the Scheme language. As such, when discussing the
+      Scheme language, we will focus primarily on differences
+      between the Scheme standard and the language implemented by
+      &SISC;.
     </para>
     <para>
-      &SISC;'s development progresses in two
-      directions, to improve the core interpreter to be simpler,
-      more elegant, and more efficient; and to add necessary
-      functionality through extensions that do not complicate the
-      core.
+      Secondly, &SISC; implements the &R5RS; standard. As such, any
+      code written to that standard should run without reading any
+      further.
     </para>
-    <sect1 id="Features">
+    <sect2 id="AboutProcedures">
       <title>
-	Features
-      </title>
-      <itemizedlist>
-	<listitem>
-	  <para>
-	    Full &R5RS; compliance
-	  </para>
-	</listitem>
-	<listitem>
-	  <para>
-	    Efficient number tower, with support for integers, floating-point numbers, rationals, and complex numbers of arbitrary precision
-	  </para>
-	</listitem>
-	<listitem>
-	  <para>
-	    Lightweight Scheme engine, requiring less than 200 kilobytes of code.
-	  </para>
-	</listitem>
-	<listitem>
-	  <para>
-	    Runtime extensiblity through a scopeable module system, which may add new functions and first-class types.
-	  </para>
-	</listitem>
-      </itemizedlist>
-    </sect1>
-    <sect1 id="About">
-      <title>
-	About this document
+	About procedure documentation
       </title>
       <para>
-	This document explains the &SISC; Scheme system. It assumes
-	knowledge of the Scheme language. As such, when discussing the
-	Scheme language, we will focus primarily on differences
-	between the Scheme standard and the language implemented by
-	&SISC;.
+	Throughout this document, procedures will be defined using
+	the following syntax:
       </para>
       <para>
-	Secondly, &SISC; implements the &R5RS; standard. As such, any
-	code written to that standard should run without reading any
-	further.
-      </para>
-      <sect2 id="AboutProcedures">
-	<title>
-	  About procedure documentation
-	</title>
-	<para>
-	  Throughout this document, procedures will be defined using
-	  the following syntax:
-	</para>
-	  <para>
-	    
-	  <funcsynopsis>
-	    <funcprototype>
-	      <funcdef><function>max</function></funcdef>
-	      <paramdef><parameter>string</parameter></paramdef>
-	      <paramdef><parameter>string</parameter></paramdef>
-	    </funcprototype>
-	  </funcsynopsis>
-
-	</para>
 	<blockquote>
 	  <para>
-	    Description of the procedure's semantics.
+	    &procedure; <methodsynopsis language="scheme">
+	      <type>return value</type>
+	      <methodname>function-name</methodname>
+	      <methodparam>
+		<parameter>required-argument</parameter>
+	      </methodparam>
+	      <methodparam choice="opt">
+		<parameter>optional-argument</parameter>
+	      </methodparam>
+	      <methodparam choice="opt" rep="repeat">
+		<parameter>rest-argument</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Description of the procedure's semantics.
+	      </para>
+	    </blockquote>
 	  </para>
 	</blockquote>
-	<programlisting>
-	  &parameter; (parameter-name [new-value])
-	  Description of the parameter and its effects.
-	   
-	   
-	  &syntax; (syntactic-keyword structure ...)
-	  Description of the syntax expressions semantics
-	</programlisting>
-	<para>
-	  A procedure is a function that takes a number of arguments
-	  and produces a result, which may be undefined. The arguments
-	  of a procedure are always evaluated before the procedure is
-	  invoked.</para> 
-	<para>
-	  A parameter is a value that effects the operation of part of
-	  the Scheme system. When a parameter is invoked with no
-	  arguments, the current value of the parameter is
-	  returned. With arguments, the value of the parameter is
-	  changed to the arguments given. 
-	</para>
-	<para>
-	  Finally, syntax is any construct whose arguments are not
-	  necessarily other s-expressions. Arguments to a syntactic
-	  expression are not necessarily evaluated. Syntactic
-	  expressions are expanded at compile time to expressions that
-	  have the correct semantics but contain no additional
-	  syntactic expressions, and are often much more difficult to
-	  read then the unexpanded version.
-	</para>
-	<para>
-	  Procedures, parameters, and syntax may take one or more
-	  arguments.  The name of an argument in a description
-	  indicates the expected type of the argument.  'value'
-	  indicates any type.  If the argument is enclosed in square
-	  brackets ([]), that parameter is optional, and may be
-	  ommitted.  If the description ends in ellipses (...), then 
-	  additional arguments may be provided, but are not required.
-	</para>
-      </sect2>
-    </sect1>
-  </chapter>
+	A procedure is any function that takes zero or more arguments
+	and returns a value.
+      </para>
+      <para>
+	<blockquote>
+	  <para>
+	    &parameter; <methodsynopsis language="scheme">
+	      <methodname>parameter-name</methodname>
+	      <methodparam choice="opt">
+		<parameter>new-parameter-value</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Description of the parameter. 
+	      </para>
+	    </blockquote>
+	  </para>
+	</blockquote>
+	A Parameter is a special function that is used to store a
+	value in the dynamic-environment.  When given no arguments, a
+	parameter will return its current value.  When provided an
+	argument, the value of the parameter is set to the value of
+	that argument.
+      </para>
+      <para>
+	<blockquote>
+	  <para>
+	    &syntax; <methodsynopsis language="scheme">
+	      <methodname>syntactic-keyword</methodname>
+	      <methodparam rep="repeat">
+		<parameter>structure</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Description of the syntactic transform.
+	      </para>
+	    </blockquote>
+	  </para>
+	</blockquote>
+	Syntax refers to a syntactic keyword that when read or
+	compiled will be transformed into some expression composed
+	only of basic Scheme forms.  <function>let</function>,
+	<function>cond</function>, and <function>or</function> are all
+	examples of syntactic forms.
+      </para>
+      <para>
+	Procedures, parameters, and syntax may take one or more
+	arguments.  The name of an argument in a description
+	indicates the expected type of the argument.  'value'
+	indicates any type.  If the argument is enclosed in square
+	brackets ([]), that parameter is optional, and may be
+	ommitted.  If a parameter is optional and is followed by 
+	ellipses (...), then the procedure is a
+	<emphasis>rest</emphasis> argument, and may encapsulate zero
+	or more values.
+      </para>
+    </sect2>
+  </sect1>
+</chapter>
 <!-- Keep this comment at the end of the file
 Local variables:
 sgml-parent-document:("sss.xml" "chapter")
