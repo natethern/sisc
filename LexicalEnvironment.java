@@ -71,7 +71,13 @@ public class LexicalEnvironment extends Value {
             vals=v;
         } else {
             vals=r.createValues(sm1+1);
-            System.arraycopy(v, 0, vals, 0, sm1);
+
+            if (sm1 <= 11) {
+                //Actually faster than arraycopy for smaller vlrs (<15 elem)
+                for (int i=sm1-1; i>=0; i--)
+                    vals[i]=v[i];
+            } else
+                System.arraycopy(v, 0, vals, 0, sm1);
         }
 
         vals[sm1]=valArrayToList(v, sm1, vl-sm1);
