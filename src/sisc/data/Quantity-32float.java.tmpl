@@ -26,15 +26,19 @@ public class Quantity extends Value implements Singleton {
         HALF_PI = Quantity.valueOf((float)Math.PI/2);
 
     public static final int
-        FIXED=1, EXACT=2, INEXACT=4, RATIONAL=8,
-        IMAGINARY=16, INTEGER=32, DECIMAL=64;
+        FIXEDINT = 0,
+        DECIM = 1,
+	INTEG = 2,
+        RATIO = 3,
+        COMPLEX = 4;
 
-    public static final int
-        FIXEDINT = EXACT | FIXED | INTEGER | RATIONAL,
-        INTEG = EXACT | INTEGER | RATIONAL,
-        RATIO = EXACT | RATIONAL,
-        COMPLEX  = INEXACT | IMAGINARY,
-        DECIM = INEXACT | DECIMAL;
+    public static final int[] characteristics = new int[] {
+	( EXACT | FIXED | INTEGER | RATIONAL ), //FIXEDINT
+        ( INEXACT | DECIMAL ), //DECIM
+	( EXACT | INTEGER | RATIONAL ), //INTEG
+        ( EXACT | RATIONAL ), //RATIO
+        ( INEXACT | IMAGINARY ) //COMPLEX
+    };
 
     public static Quantity valueOf(int val) { return new Quantity(val); }
     public static Quantity valueOf(long val) { 
@@ -1289,7 +1293,7 @@ public class Quantity extends Value implements Singleton {
     }
 
     public boolean is(int mask) {
-        return (type & mask) != 0;
+        return (characteristics[type] & mask) != 0;
     }
 
     public boolean greater(Quantity o) {

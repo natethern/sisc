@@ -38,11 +38,19 @@ public class Quantity extends Value implements Singleton {
         IMAGINARY=16, INTEGER=32, DECIMAL=64;
 
     public static final int
-        FIXEDINT = EXACT | FIXED | INTEGER | RATIONAL,
-        INTEG = EXACT | INTEGER | RATIONAL,
-        RATIO = EXACT | RATIONAL,
-        COMPLEX  = INEXACT | IMAGINARY,
-        DECIM = INEXACT | DECIMAL;
+        FIXEDINT = 0,
+        DECIM = 1,
+	INTEG = 2,
+        RATIO = 3,
+        COMPLEX = 4;
+
+    public static final int[] characteristics = new int[] {
+	( EXACT | FIXED | INTEGER | RATIONAL ), //FIXEDINT
+        ( INEXACT | DECIMAL ), //DECIM
+	( EXACT | INTEGER | RATIONAL ), //INTEG
+        ( EXACT | RATIONAL ), //RATIO
+        ( INEXACT | IMAGINARY ) //COMPLEX
+    };
 
     public static final Quantity valueOf(int val) { 
         return new Quantity(val); 
@@ -1270,7 +1278,7 @@ public class Quantity extends Value implements Singleton {
     }
 
     public boolean is(int mask) {
-        return (type & mask) != 0;
+        return (characteristics[type] & mask) != 0;
     }
 
     public boolean greater(Quantity o) {
