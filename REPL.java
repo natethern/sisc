@@ -162,10 +162,9 @@ start:
                 Socket client = ssocket.accept();
 		pout.println("Accepting connection from " + client.getInetAddress().toString());
 		pout.flush();
-                Interpreter cr = Context.enter("main");
-		cr.dynenv = new DynamicEnv(new InputPort(new BufferedReader(new InputStreamReader(client.getInputStream()))),
-					   new OutputPort(new PrintWriter(client.getOutputStream()), true));
-                REPL repl = new SocketREPL(cr, client);
+		DynamicEnv dynenv = new DynamicEnv(new InputPort(new BufferedReader(new InputStreamReader(client.getInputStream()))),
+						   new OutputPort(new PrintWriter(client.getOutputStream()), true));
+                REPL repl = new SocketREPL(dynenv, client);
                 repl.start();
             }
         }
@@ -181,14 +180,20 @@ start:
 class SocketREPL extends REPL {
 
     public Socket s;
+    public DynamicEnv dynenv;
 
-    public SocketREPL(Interpreter r, Socket s) {
-        super(r);
+    public SocketREPL(DynamicEnv dynenv, Socket s) {
+        super(null);
+	this.dynenv = dynenv;
         this.s = s;
     }
 
     public void run() {
+	r = Context.enter("main");
+	r.dynenv = dynenv;
+	System.err.println(dynenv);
         super.run();
+	Context.exit();
         try {
             s.close();
         }
