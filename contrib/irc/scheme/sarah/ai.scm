@@ -1,6 +1,11 @@
 (import srfi-2)
 (import srfi-11)
 (import threading)
+(import s2j)
+(import generic-procedures)
+(define <java.util.StringTokenizer> (java-class "java.util.StringTokenizer"))
+(define-generic next-token)
+(define-generic has-more-tokens)
 
 (define somewhat-clean
   (string->list "abcdefghijklmnopqrstuvwxyz()[]->+-*/_01234567890?!."))
@@ -103,12 +108,10 @@
                          (display pattern)
                          (and-let* ([handler (assq pattern pattern-handlers)]) 
                                    ((cdr handler) from cleaned-message)))])
-    (if (and response (or (not bot-quiet) to-bot))
-        (and (not (eq? response #t))
-             response)
-        (let ([hal-response
-               (say hal cleaned-message)])
-          (and (or (not bot-quiet) to-bot) hal-response)))))
+    (if response
+        (and (or (not bot-quiet) to-bot) response)
+        (and (or (not bot-quiet) to-bot)
+             (ask-alice cleaned-message)))))
     
 (define (bot-clean message)
   (let loop ([x 0])
@@ -240,12 +243,15 @@
   (remove-nick (string->symbol (->string channel))
                (normalize-nick sender)))
 (define (onQuit nick login hostname reason)
-  (onPart (->jstring channel) nick login hostname))
+  (onPart (find-nick (normalize-nick nick)) nick login hostname))
 
 (define (onNickChange oldnick login hostname newnick)
-  (remove-nick (string->symbol channel) (normalize-nick oldnick))
-  (onJoin (->jstring channel) 
-          newnick newnick (->jstring "unknown.net")))
+  (let ([locations (find-nicks (normalize-nick oldnick))])
+    (for-each (lambda (channel)
+                (remove-nick channel (normalize-nick oldnick))
+                (onJoin (->jstring channel) newnick newnick 
+                        (->jstring "unknown.net")))
+     locations)))
 
 (define (onUserList channel users)
   (let ([channel (string->symbol (->string channel))])
@@ -257,6 +263,61 @@
                      (get-nick arrayelem))
                    (->list users)))))
 
+(define pronouns
+  '((his . your)
+    (hers . yours)
+    (her . you)
+    (my . (his . her))
+    (we . you)
+    (you . me)
+    (your . my)
+    (she . you)
+    (|she's| . you're)
+    (he . you)
+    (|he's| . you're)
+    (|i'm| . (|he's| . |she's|))
+    (i . (he . she))
+    (mine . (his . hers))))
+
+(define (set-capitalization sym orig-str)
+  (let ([new-str (sisc:format "~a" sym)])
+    (if (and (char-upper-case? (string-ref orig-str 0))
+             (not (equal? (string-ref orig-str 0) '#\I)))
+        (string-set! new-str 0 (char-upcase (string-ref new-str 0))))
+    new-str))
+
+;disabled for now
+(define (translate-for-third-party sentence sex) sentence)
+
+#;(define (translate-for-third-party sentence sex)
+  (let ([tokenizer (make <java.util.StringTokenizer> 
+                         (->jstring sentence)
+                         (->jstring "\n\t ")
+                         (->jboolean #t))]
+        [result-str ""])
+
+    (let loop ()
+        (when (->boolean (has-more-tokens tokenizer))
+          (let ([tok (->string (next-token tokenizer))])
+            (set! result-str
+              (string-append 
+               result-str
+               (cond [(assoc (string->symbol (string-downcase tok))
+                            pronouns)=>
+                      (lambda (x)
+                        ; Sex specific pronoun?
+                        (set-capitalization 
+                         (if (pair? (cdr x))
+                             ; Do we know the guy/gal's sex?
+                             (if (or (not sex) (eq? sex 'male))
+                                 (cadr x) ;male
+                                 (cddr x)) ;female 
+                             (cdr x))
+                         tok))]
+                     [else tok]))))
+          (loop)))
+    result-str))
+    
 (define (do-tell recipient channel sender message)
   (send-message bot (->jstring channel)
                 (->jstring 
@@ -269,15 +330,15 @@
                     [recipient (substring message 0 spidx)])
            (let ([message (substring message (+ spidx 1)
                                      (string-length message))])
-             (if (member (soundex recipient)
-                         (get-present (string->symbol channel)))
-                 (begin (do-tell recipient channel from message) #t)
+             (if (not (equal? (string-ref message 0) #\"))
+                 (set! message
+                   (translate-for-third-party message 'male)))
+             (if (find-nick (soundex recipient))
+                 (begin (do-tell recipient (find-nick (soundex recipient)) from message) #t)
                  (begin 
                    (store-message dbcon from (soundex recipient)
                                   (string-downcase recipient) message)
                    (random-elem tell-responses))))))))
-  
-
       
 (define (seen from message)
   (let-values ([(ignoreables person) (string-split message "seen ")])

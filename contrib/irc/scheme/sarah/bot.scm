@@ -20,7 +20,7 @@
    (lambda ()
      (connect bot (->jstring "irc.freenode.net"))))
   
-  (define channel "#sisc")
+  (define channels '("#sarahtest" "#sisc"))
 
   (define (send-messages destination response)
     (let ([tokenizer (make <java.util.StringTokenizer> 
@@ -40,9 +40,11 @@
     (store-seen dbcon (normalize-nick nick) (->string nick) (->string message))
     (unless (equal? (symbol->string bot-name) nick)
       (let ([response (answer (->string nick) (->string message))])
-        (send-messages channel response))))
+        (when response
+          (send-messages channel response)))))
 
-  (display (sisc:format "Starting Hal...~%"))
-  (define hal (make-hal))
-  (display (sisc:format "Joining ~a...~%" channel))
-  (join-channel bot (->jstring channel))
+  (for-each (lambda (channel)
+              (display (sisc:format "Joining ~a...~%" channel))
+              (add-presence (string->symbol channel))
+              (join-channel bot (->jstring channel)))
+            channels)
