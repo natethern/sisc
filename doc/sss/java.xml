@@ -1799,6 +1799,13 @@ Class.getSigners()
                   same signature as an existing method overwrites the
                   existing method.
                 </para>
+                <note>
+                  <function>define-method</function> is a macro that
+                  expands into a function call rather than a
+                  definition. This means any usage inside a function
+                  must occur <emphasis>after</emphasis> all
+                  definitions. Otherwise a syntax error will be raised.
+                </note>
               </blockquote>
             </para>
           </blockquote>
@@ -1950,6 +1957,13 @@ Class.getSigners()
                   type. All constructor methods are part of the single
                   generic constructor called by <function>make</function>.
                 </para>
+                <note>
+                  <function>define-constructor</function> is a macro that
+                  expands into a function call rather than a
+                  definition. This means any usage inside a function
+                  must occur <emphasis>after</emphasis> all
+                  definitions. Otherwise a syntax error will be raised.
+                </note>
               </blockquote>
             </para>
           </blockquote>
