@@ -15,21 +15,6 @@
 (define (set-cost! f v)
   (set-car! (car f) v))
 
-(define (new-pos move old-pos)
-  (let ((old-x (car old-pos))
-	(old-y (cadr old-pos)))
-    (if (eq? (car move) '|Move|)
-        (let ((np
-               (case (cadr move)
-                 ((|N|) (list old-x (+ old-y 1)))
-                 ((|S|) (list old-x (- old-y 1)))
-                 ((|E|) (list (+ old-x 1) old-y))
-                 ((|W|) (list (- old-x 1) old-y)))))
-          (if (apply wall? np)
-              (list old-x old-y)
-              np))
-	(list old-x old-y))))
-
 (define (make-node move parent . pos)
   `((0 ,move ,(if (not (null? parent))
 		  (new-pos move (node-pos parent))
@@ -57,9 +42,14 @@
 (define (identity x) x)
 (define a* 
   (letrec ((unwind 
-	    (lambda (return next)
-	      (if (equal? '(false) (node-move (node-parent next)))		  (return (node-move next))
-		  (unwind return (node-parent next)))))
+	    (lambda (return state id start next)
+              ;Hmm, ran out of moves
+              (cond [(null? (node-parent next))
+                     (begin (clear-seen! id)
+                            '(|Drop|))]
+                    [(equal? start (node-pos (node-parent next)))
+                     (return (node-move next) state)]
+                    [else (unwind return state id start (node-parent next))])))
            (highest-rated 
             (lambda (cache id closed-list max-so-far maxf-so-far)
               (if (null? closed-list)
@@ -85,7 +75,13 @@
                (last-move #f)
                (moves 0)
                (closed '())
-               (root-node (apply make-node `((false) () ,@start))))
+               (root-node (apply make-node `((false) () ,@start)))
+               (make-restart
+                (lambda (k)
+                  (lambda (npos nstart)
+                    (set! start-time nstart)
+                    (set! start npos)
+                    (k)))))
 ;           (debug "Root node: ~a" root-node)
  ;          (debug "Open: ~a" openl)
 	   (pq-add! openl root-node 0.0)
@@ -93,15 +89,16 @@
 ;             (debug "open: ~a" openl)
 ;             (debug "closed: ~a" closed)
 	     (if (pq-empty? openl)
-		 (unwind return (if (null? closed)
-                                    last-move
-                                    (begin 
-                                      (set-cost! root-node -100000.0)
-                                      (let ((highest (highest-rated cost-cache id
-                                                      closed root-node 
-                                                      -100000.0)))
-                                        (set! last-path (map node-pos highest))
-                                        highest))))
+                 (unwind return #f id start
+                         (if (null? closed)
+                             last-move
+                             (begin 
+                               (set-cost! root-node -100000.0)
+                               (let ((highest (highest-rated cost-cache id
+                                                             closed root-node 
+                                                             -100000.0)))
+                                 (set! last-path (map node-pos highest))
+                                 highest))))
 		 (let ((node-current
 			(pq-remove-max! openl)))
 ;                   (debug "Exploring: ~a" node-current)
@@ -112,14 +109,17 @@
                          (debug "Stopping search after ~a moves, ~a ms"
                                 moves (- (system-time) start-time))
                          (set-cost! root-node -100000.0)
-                         (set! node-current (highest-rated cost-cache id
-                                             (cons node-current closed)
-                                             root-node -100000.0))
-                         (set! last-path (let loop ((n node-current))
-                                           (if (null? n) '()
-                                               (cons (node-pos n)
-                                                     (loop (node-parent n))))))
-                         (unwind return node-current))
+                         (let ((selected-node
+                                (highest-rated cost-cache id
+                                               (cons node-current closed)
+                                               root-node -100000.0)))
+                           (set! last-path (let loop ((n selected-node))
+                                             (if (null? n) '()
+                                                 (cons (node-pos n)
+                                                       (loop (node-parent n))))))
+                           (call/cc (lambda (k)
+                                      (unwind return (make-restart k)
+                                              id start selected-node))))))
                        (begin
                          (let loop ((s (fetch-successors id node-current)))
                            (unless (null? s)
@@ -165,7 +165,7 @@
                                       (pq-add! openl f weight))
                                     (set! last-move f)
                                     (set! closed (remove f closed))
-                                    (loop (cdr s)))))))))
+                                    (loop (cdr s))))))))
                    (set! closed (cons node-current closed))
                    (search-loop))))))))))
 

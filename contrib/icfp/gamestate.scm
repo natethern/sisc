@@ -51,8 +51,7 @@
     (store-robot-position! id (car cl) y)))
 
 (define (store-robot-position! id x y)
-  (hashtable/put! robot-locations id (list x y))
-  (set-seen! id x y))
+  (hashtable/put! robot-locations id (list x y)))
 
 (define (move-robot! id dx dy)
   (let ((cl (robot-position id)))
@@ -81,7 +80,6 @@
     ((W) (move-robot! id -1 0))
     (else 
      (let ((arg (read in)))
-       (debug "Ra: ~a" arg)
        (case command
 	 ((P) (apply package-pickup! `(,(package-lookup arg) 
                                        ,id ,@(robot-position id))))

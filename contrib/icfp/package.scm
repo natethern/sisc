@@ -23,7 +23,8 @@
                  '()))
 (define (package-at! p pos) 
   (hashtable/put! package-locations (apply make-rectangular pos) 
-                  (cons p (apply packages pos))))
+                  (cons p (removep p (apply packages pos)))))
+
 (define (package-not-at! p pos) 
   (let* ((op (apply packages pos))
          (np (removep p op)))
@@ -48,32 +49,30 @@
   (hashtable/put! p 'location loc))
 
 (define (package-lookup id)
-  (hashtable/get all-packages id))
+  (hashtable/get! all-packages id (lambda () (make-package id))))
 
 ; Called when we observe a drop action.  This does nothing if the package
 ; was delivered (we knew its destination and it was dropped at that destination)
 ; If it was dropped and we don't know its destination, we record the package as
 ; unclaimed.
 (define (package-drop! p id . droploc)
-  (when p
-	(let ((loc (package-destination p)))
-          (begin (if (not (and loc (equal? loc droploc)))
-                     (hashtable/put! unclaimed-packages (package-id p) p)
-                     (begin 
-                       (hashtable/put! 
-                        claimed-packages id 
-                        (remove p (hashtable/get claimed-packages id '())))
-                       (hashtable/remove! all-packages (package-id p))))
-                 (robot-load-decr! id (package-weight p))
-                 (apply package-location! `(,p ,@droploc))
-                 (clear-seen! id)))
-        droploc))
+  (let ((loc (package-destination p)))
+    (begin (if (not (and loc (equal? loc droploc)))
+               (hashtable/put! unclaimed-packages (package-id p) p)
+               (hashtable/remove! all-packages (package-id p)))
+           (hashtable/put! 
+            claimed-packages id 
+            (removep p (hashtable/get claimed-packages id '())))
+           (robot-load-decr! id (package-weight p))
+           (apply package-location! `(,p ,@droploc))
+           (clear-seen! id)))
+  droploc)
 
 
 (define (package-add! p)
   (hashtable/put! unclaimed-packages (package-id p) p)
-  (if (not (hashtable/put! all-packages (package-id p) p))
-      (package-at! p (package-location p))))
+  (hashtable/put! all-packages (package-id p) p)
+  (package-at! p (package-location p)))
 
                   
     

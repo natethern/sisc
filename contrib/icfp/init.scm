@@ -1,6 +1,7 @@
 ;; ICFP 2002 Entry 
 ;; Initialization file
 ; Load the source code
+(load "mvlet.scm")
 (load "constants.scm")
 (load "gamestate.scm")
 (load "world.scm")
@@ -42,9 +43,12 @@
     (display gui-frame)
     (show gui-frame)
     (debug "Entering main-loop...")
-    (main-loop playerno #f #f)))
+    (main-loop playerno #f #f #f)))
 ;(go)
 (define (gui id) 
  (repaint gui-pane))
+
+(make-world! 5 5)
+(set! world-map "#####.....@...@.....#####")
 
 

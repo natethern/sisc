@@ -6,6 +6,15 @@
 	 (out (open-socket-output-port sock)))
     (list sock in out)))
 
+(define (read-line . port)
+  (let* ((char (apply read-char port)))
+    (if (eof-object? char)
+	char
+	(do ((char char (apply read-char port))
+	     (clist '() (cons char clist)))
+	    ((or (eof-object? char) (char=? #\newline char))
+	     (list->string (reverse clist)))))))
+
 (define (check-newline in)
   (let ((next-char (read-char in)))
     (if (not (eq? next-char #\newline))
@@ -38,20 +47,20 @@
     (robot-money! id money)
     id))
 
-(define (receive-package in rid)
-  (and (not (eq? (peek-char in) #\newline))
-      (let* ((id (read in))
-	     (x (read in))
-	     (y (read in))
-	     (weight (read in)))
-        (let ((p (or (package-lookup id)
-                     (make-package id))))
-          (package-details! p x y weight)
-          (apply package-location! (cons p (robot-position rid)))
-          (package-add! p)
-          p))))
-
-
+(define (receive-packages in rid)
+  (let ((ln (read-line in)))
+    (let loop ((ls (read (open-input-string (string-append "(" ln ")")))))
+      (unless (null? ls) 
+        (let ((id (car ls))
+              (x (cadr ls))
+              (y (caddr ls))
+              (weight (cadddr ls)))
+          (let ((p (package-lookup id)))
+            (package-details! p x y weight)
+            (apply package-location! (cons p (robot-position rid)))
+            (package-add! p)
+            (loop (cddddr ls))))))))
+        
 (define (more-packages? in)
   (let ((nc (read-char in)))
     (and (not (eof-object? nc))
@@ -59,13 +68,6 @@
 
 (define more-responses? more-packages?)
 (define more-robots? more-packages?)
-
-(define (receive-packages in id)
-  (let ((package (receive-package in id)))
-    (cond [(not package) (begin (check-newline in) 0)]
-	  [(more-packages? in)
-           (+ 1 (receive-packages in id))]
-	  [else 1])))
 
 (define (send-command out bid command . args)
   (display (format "~a ~a" bid command) out)
@@ -77,25 +79,30 @@
   (flush-output-port out))
 
 
-(define (receive-responses in)
-  (let* ((id (begin (read-char in) (read in))))
-    (if (not (eq? (peek-char in) #\newline))
-	(let loop ([code (read in)])
-	  (parse-response id code in)
-	  (cond [(and (eq? (peek-char in) #\space)
-		      (read-char in)
-		      (eq? (peek-char in) #\#))
-		 (receive-responses in)]
-		[(not (eq? (peek-char in) #\newline))
-		 (loop (read in))])))
-    (check-newline in)))
+(define (receive-responses id in)
+  (let ((ln (read-line in)))
+    (debug "server response: ~a" ln)
+    (call-with-input-string ln
+      (lambda (in)
+        (let loop () 
+          (unless (eof-object? (read-char in))
+            (let ((id (read in)))
+              (let loop2 () 
+                (unless (eof-object? (read-char in))
+                  (if (eq? #\# (peek-char in))
+                      (loop)
+                      (let ((command (read in)))
+                        (parse-response id command in)
+                        (loop2))))))))))))
 
 (define (receive-gamestate in)
   (receive-world in)
   (receive-configuration in))
 
 (define (handshake in out)
-  (display (format #;"Login 30 10~%" "Player~%") out)
+  (display (format 
+            ;"Login 12 1~%" 
+            "Player~%") out)
   (flush-output-port out))
 
 ;(trace 'receive-configuration 'read-char 'receive-responses 'parse-response)

@@ -1,14 +1,24 @@
 ; The main turn-based engine
 
-(define (main-loop id last-move expected-position)
+(define (main-loop id last-pos last-move expected-position)
   ; Receive and apply the server responses
   (debug "Receiving server response...")
-  (receive-responses in)
+  (receive-responses id in)
 
+  (debug "State: ~a [~a]" (robot-position id) (robots-packages id))
   ; If we were making a confrontational move, check the success
   ; and adjust our estimated bid accordingly
-;  (when expected-position
-;	(adjust-bid! (equal? (my-position) expected-position)))
+
+  (when (and last-move expected-position)
+    (if (and (equal? (cadr last-move) '|Move|)
+             (equal? (robot-position id) expected-position))
+        (apply set-seen! `(,id ,@last-pos)))
+    (if (> 1 (car last-move))
+        (if (equal? (robot-position id) expected-position)
+            (begin 
+              (adjust-bid! #t))
+            (begin
+              (adjust-bid! #f)))))
 
   ; Display the board
   (gui id)
@@ -39,5 +49,6 @@
     ; Pause for debugging
 ;    (read-char)
 
-    (main-loop id next-move #f)))
+    (main-loop id (robot-position id)
+               next-move (new-pos (cdr next-move) (robot-position id)))))
 

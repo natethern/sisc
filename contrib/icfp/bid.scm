@@ -21,5 +21,5 @@
 (define (adjust-bid! id success)
   (hashtable/put! estimated-bids id 
 		  ((if success + -) (forceful-bid id #t) 1)))
-
+(Trace 'adjust-bid!)
 

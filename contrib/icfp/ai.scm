@@ -75,15 +75,20 @@
 ; When we get the response, we update our successful bid value if 
 ; we attempted a confrontational move.  
 
+(define last-state #f)
 
 (define (decide id start-time limit)
-  (let* (; (moves (apply enumerate-moves `(,id ,@(robot-position id))))
-	 ;(weighted-moves (evaluate-moves id moves start-time))
-	 (current-pos (robot-position id))
-	 (selected-move
-	  (a* id current-pos start-time limit)))
-    (attach-bid selected-move id (car current-pos) 
-		(cadr current-pos))))
+  (let ((current-pos (robot-position id)))
+    (mvlet ([(selected-move state) 
+             (if last-state
+                 (last-state current-pos start-time)
+                 (a* id current-pos start-time limit))])
+       (begin
+         (set! last-state (if (eq? (car selected-move)
+                                   '|Move|)
+                              state #f))
+         (attach-bid selected-move id (car current-pos) 
+                     (cadr current-pos))))))
 
 (define (attach-bid move id x y)
   (cons (if (> (neighbor-search 1xmap id x y opponent? 1) 0)
@@ -119,6 +124,7 @@
 			   `((|Move| ,(caddr d)))
 			   '())))
 		   delta-map))
+       '((|Drop|))
        ; Package pickup moves
        (let ploop ((ph (packages x y)) 
                   (acc '())
@@ -170,7 +176,7 @@
   (case (car move)
     ((|Drop|)
      (if (null? (cadr move))
-         (weight id 'go-nowhere)
+         (weight id 'do-nothing)
          (apply + (map (lambda (p)
                          (let ((dist-to-deliver 
                                 (apply dist `(,@pos
@@ -182,7 +188,7 @@
     ((|Pick|)
      (if (null? (cadr move))
          (weight id 'go-nowhere)
-         (apply + (map (trace-lambda pf(p)
+         (apply + (map (lambda (p)
                          (let ((dist-to-deliver 
                                 (apply dist `(,@pos
                                               ,@(package-location p))))

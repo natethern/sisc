@@ -58,3 +58,20 @@
   (let ((rob (reverse-robot-lookup x y)))
     (and rob (not (= rob id)))))
 
+
+(define (new-pos move old-pos)
+  (let ((old-x (car old-pos))
+	(old-y (cadr old-pos)))
+    (if (eq? (car move) '|Move|)
+        (let ((np
+               (case (cadr move)
+                 ((|N|) (list old-x (+ old-y 1)))
+                 ((|S|) (list old-x (- old-y 1)))
+                 ((|E|) (list (+ old-x 1) old-y))
+                 ((|W|) (list (- old-x 1) old-y)))))
+          (if (apply wall? np)
+              (list old-x old-y)
+              np))
+	(list old-x old-y))))
+
+

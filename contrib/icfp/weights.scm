@@ -34,10 +34,11 @@
 (define initial-weights
   '((return-to-base . 5)
     (danger . -2)
-    (crowd . -1)
+    (crowd . -0.1)
     (delivery . 1000)
     (delivery-transit . 10)
-    (revisit . -2.3)
+    (do-nothing . 0)
+    (revisit . -2)
     (visit . 1)
     (pickup . 200)
     (go-nowhere . -100)))
@@ -62,7 +63,7 @@
                                     (<= 1 ny world-height))
                                (/ (seen? id nx ny) (+ 1 (caddr d)))
                                0)))
-                       (cons '(0 0 0) 1xmap)))))
+                       (cons '(0 0 0.5) 2xmap)))))
     (- (* sum sum))))
 
 (define (delivery-distance-weight id x y)
@@ -72,7 +73,7 @@
           (let ((visargs `(,x ,y ,@(package-destination (car packages)))))
             (loop (cdr packages)
                   (+ (*
-                      (if (apply visible? visargs) 2 0.5)
+                      (if (apply visible? visargs) 3 0.5)
                     (/ (package-weight (car packages))
                        (zeroguard (apply dist visargs)))
                     (weight id 'delivery-transit))
@@ -95,15 +96,18 @@
 (define (base-weight id x y)
   (apply + (map (lambda (base)
 		  (let ((rp (robots-packages id))
-                        (visargs `(,x ,y ,@base)))
-		    (/ (/ (* (packages-at-base base)
-                             (weight id 'return-to-base))
-			  (let ([x (apply dist visargs)])
-			    (if (zero? x) 1 x)))
-		       (+ 1 (length rp))
-                       (if (apply visible? visargs)
-                           0.5
-                           2))))
+                        (visargs `(,x ,y ,@base))
+                        (pab (packages-at-base base)))
+                    (if (zero? pab)
+                        0
+                        (/ (/ (* pab
+                                 (weight id 'return-to-base))
+                              (let ([x (apply dist visargs)])
+                                (if (zero? x) 1 x)))
+                           (+ 1 (length rp))
+                           (if (apply visible? visargs)
+                               0.33
+                               2)))))
 		bases)))
 
 (define (search-weight id x y)
