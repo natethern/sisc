@@ -885,7 +885,10 @@
         <title>Creating Error Records</title>
         <para>
           Error records can be created in advance of actually 
-          raising an error with the <function>make-error</function> function.
+          raising an error with the <function>make-error</function> function.  
+          The function allows the programmer to create error records that 
+          contain a location and a message or value.  No field of an
+          error record is required.
         </para>
         <para>
           <blockquote>
@@ -906,13 +909,15 @@
               </methodsynopsis>
               <blockquote>
                 <para>
-                  Constructs an error record whose location, if provided, is
-                  <parameter>location</parameter>, a symbol; and whose error
-                  message, if present, is <parameter>message</parameter>.
-                  If provided, the error message is a format-string that
-                  is processed, with the optional
-                  <parameter>argument</parameter>s, as with the
-                <function>format</function> function in SRFI 28.
+                  Constructs an error record.  If present, a symbol,
+                  and not <literal>#f</literal>, the first argument
+                  is the location of the error, which may be a symbol
+                  equivalent to a function identifier.
+                  If present, the message is a format-string processed
+                  with the optional arguments that follow as by
+                  <function>format</function> in SRFI-28.  The
+                  optional arguments must only be present if the
+                  format-string is present as the message.
                 </para>
               </blockquote>
               &procedure;
@@ -928,14 +933,41 @@
               </methodsynopsis>
               <blockquote>
                 <para>
-                  Creates an error record whose location, if present, is the
-                  symbol <parameter>location</parameter>, and 
-                  and whose error-value is any arbitrary Scheme value.
+                  Constructs an error record.  If present, a symbol,
+                  and not <literal>#f</literal>, the first argument is
+                  the location of the error.  If present, the second
+                  argument is an arbitrary Scheme value that will be
+                  the error value.  This value will be accessible with
+                  the <function>error-message</function> function.  
                 </para>
               </blockquote>
             </para>
           </blockquote>
         </para>
+        <para> 
+          None of the fields of an error-record are required.  One may
+          create an error record with no information, an error record
+          with only a location, or an error record with only a message
+          or value.  Below are some examples:
+        </para>
+        <informalexample>
+          <programlisting>
+(throw (make-error))
+; => Error.
+
+(throw (make-error 'foo))
+; => Error in foo.
+
+(throw (make-error 3))
+; => Error: 3
+
+(throw (make-error #f 'foo))
+; => Error: foo
+
+(throw (make-error 'foo "something ~a happened" 'bad))
+; => Error in foo: something bad happened
+          </programlisting>
+        </informalexample>
       </sect3>
       <sect3>
         <title>Nested Errors</title>
