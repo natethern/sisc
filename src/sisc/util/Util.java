@@ -4,17 +4,19 @@ import java.util.*;
 import java.security.AccessControlException;
 import java.text.*;
 import java.net.*;
+
+import sisc.compiler.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import sisc.io.*;
 import sisc.interpreter.*;
+import sisc.nativefun.NativeLibrary;
 import java.io.IOException;
 import java.io.EOFException;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import sisc.reader.Lexer;
 import sisc.reader.Parser;
-import sisc.util.Defaults;
 
 public abstract class Util implements Version {
 
@@ -44,8 +46,8 @@ public abstract class Util implements Version {
     protected static final Expression APPEVAL = new AppEval();
 
     public static EOFObject EOF = EOFObject.EOF;
-    public static sisc.interpreter.Compiler.Syntax QUOTE = 
-        new sisc.interpreter.Compiler.Syntax(sisc.interpreter.Compiler.QUOTE);
+    public static Syntax QUOTE = 
+        new Syntax(sisc.compiler.Compiler.QUOTE);
     public static EmptyList EMPTYLIST = EmptyList.EMPTYLIST;
     public static SchemeVoid VOID = SchemeVoid.VOID;
     public static SchemeBoolean TRUE = SchemeBoolean.TRUE,
@@ -190,11 +192,9 @@ public abstract class Util implements Version {
         r.acc = new Values(new Value[] {
             error,
             new ApplyParentFrame(new CallFrame(last, 
-                                               r.vlr,
-                                               r.vlk,
-                                               r.env,
-                                               r.fk,
-                                               r.stk,
+                                               r.vlr, r.vlk,
+                                               r.lcl, r.env,
+                                               r.fk, r.stk,
                                                r.cap).capture(r))});
         throw new ContinuationException(r.fk);
     }
@@ -474,6 +474,15 @@ public abstract class Util implements Version {
         }
     }
 
+    public static final NativeLibrary nlib(Value o) {
+        try {
+            return (NativeLibrary)o;
+        } catch (ClassCastException e) { typeError("nativelibrary", o); }
+        
+        return null;
+    }
+
+
     public static final SchemeBoolean truth(boolean b) {
         return b ? TRUE : FALSE;
     }
@@ -483,6 +492,48 @@ public abstract class Util implements Version {
     }
 
     /* List functions */
+    public static Value assq(Value v, Pair p) {
+        while (p!=EMPTYLIST) {
+            Pair assc=pair(p.car);
+            if (assc.car == v)
+                return assc;
+            p=pair(p.cdr);
+        }
+        return FALSE;
+    }
+
+    public static Pair mapcar(Pair list) {
+        Pair c=EMPTYLIST;
+        while (list != EMPTYLIST) {
+            c=new Pair(truePair(list.car).car, c);
+            list=pair(list.cdr);
+        }
+        return reverseInPlace(c);
+    }
+
+    public static Pair reverse(Pair p) {
+        Pair n=EMPTYLIST;
+        while (p!=EMPTYLIST) {
+            n=new Pair(p.car, n);
+            p=(Pair)p.cdr;
+        }
+        return n;
+    }
+
+    public static Pair reverseInPlace(Pair s) {
+	if (s==EMPTYLIST) return EMPTYLIST;
+	Pair r=EMPTYLIST;
+	Value d;
+	do {
+	    d=s.cdr;
+	    s.cdr=r;
+	    r=s;
+	    if (d==EMPTYLIST) break;
+	    s=(Pair)d;
+        } while (true);
+        return r;
+    }
+
 
     public static Pair append(Pair p1, Pair p2) {
         if (p1 == EMPTYLIST)
@@ -508,6 +559,23 @@ public abstract class Util implements Version {
             p = new Pair(r[i], p);
         }
         return p;
+    }
+
+    public static Value memq(Value v, Pair p) {
+        while (p!=EMPTYLIST) {
+            if (p.car == v)
+                return p;
+            p=pair(p.cdr);
+        }
+        return FALSE;
+    }
+
+    public static final Pair collectionToList(Collection c) {
+        Pair rv=EMPTYLIST;
+        for (Iterator i=c.iterator(); i.hasNext();) {
+            rv=new Pair((Value)i.next(), rv);
+        }
+        return rv;
     }
 
     /* Localization and Internationalization */
