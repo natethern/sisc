@@ -472,6 +472,20 @@ public abstract class Util implements Defaults, Version {
     }
     
     public static String liMessage(Symbol bundle, String messageName, 
+                                   String arg1, String arg2,
+                                   String arg3) {
+        return MessageFormat.format(liMessage(bundle, messageName),
+                                new Object[] { arg1, arg2, arg3 });
+    }
+    
+    public static String liMessage(Symbol bundle, String messageName, 
+                                   String arg1, String arg2,
+                                   String arg3, String arg4) {
+        return MessageFormat.format(liMessage(bundle, messageName),
+                                new Object[] { arg1, arg2, arg3, arg4 });
+    }
+    
+    public static String liMessage(Symbol bundle, String messageName, 
                                    String arg1, int arg2, int arg3) {
         return MessageFormat.format(liMessage(bundle, messageName),
                                 new Object[] { arg1, new Integer(arg2),
