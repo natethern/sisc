@@ -18,19 +18,21 @@ public class FileManipulation extends ModuleAdapter {
         DIRECTORYQ = 1, FILEQ = 2, HIDDENQ = 3,
         DIRLIST = 6, LASTMODIFIED = 7, SETLASTMODIFIED = 8,
         SETREADONLY = 9, LENGTH = 10, GETPARENTURL = 11, MAKEDIRECTORY = 12,
-        MAKEDIRECTORIES = 13, RENAME = 14, DELETE=15;
-        
+        MAKEDIRECTORIES = 13, RENAME = 14, DELETE=15, READABLE=16, 
+        WRITEABLE=17;
 
     public FileManipulation() {
         define("file/hidden?"      , HIDDENQ);
         define("file/is-directory?", DIRECTORYQ);
         define("file/is-file?"     , FILEQ);
+        define("file/is-readable?" , READABLE);
+        define("file/is-writeable?", WRITEABLE);
         define("directory/list"    , DIRLIST);
         define("file/last-modified", LASTMODIFIED);
         define("file/set-last-modified!", SETLASTMODIFIED);
         define("file/set-read-only!", SETREADONLY);
         define("file/length"       , LENGTH);
-        define("file/rename"       , RENAME);
+        define("file/rename!"       , RENAME);
         define("file/delete!"      , DELETE);
         define("_get-parent-url"    , GETPARENTURL);
         define("_make-directory!"    , MAKEDIRECTORY);
@@ -55,6 +57,10 @@ public class FileManipulation extends ModuleAdapter {
                 return truth(fileHandle(f.vlr[0]).isFile());
             case HIDDENQ:
                 return truth(fileHandle(f.vlr[0]).isHidden());
+            case READABLE:
+                return truth(fileHandle(f.vlr[0]).canRead());
+            case WRITEABLE:
+                return truth(fileHandle(f.vlr[0]).canWrite());
             case DIRLIST:
                 Pair p=EMPTYLIST;
                 String[] contents=fileHandle(f.vlr[0]).list();

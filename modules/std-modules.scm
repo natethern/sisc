@@ -170,9 +170,11 @@
    file-hidden? 
    file-is-directory?
    file-is-file? 
+   file-is-readable? 
+   file-is-writeable? 
    file-length
    file-last-modified
-   file-rename
+   file-rename!
    file-set-last-modified!
    file-set-read-only!
    file-delete!
@@ -184,9 +186,11 @@
   (define file-hidden?)
   (define file-is-directory?)
   (define file-is-file?)
+  (define file-is-readable?)
+  (define file-is-writeable?)
   (define file-length)
   (define file-last-modified)
-  (define file-rename)
+  (define file-rename!)
   (define file-set-last-modified!)
   (define file-set-read-only!)
   (define file-delete!)
@@ -200,11 +204,13 @@
   (set! file-hidden? (normalize file/hidden?))
   (set! file-is-directory? (normalize file/is-directory?))
   (set! file-is-file? (normalize file/is-file?))
+  (set! file-is-readable? (normalize file/is-readable?))
+  (set! file-is-writeable? (normalize file/is-writeable?))
   (set! file-length (normalize file/length))
   (set! file-last-modified (normalize file/last-modified))
-  (set! file-rename 
+  (set! file-rename! 
     (lambda (f1 f2)
-      (file/rename (normalize-url f1) (normalize-url f2))))
+      (file/rename! (normalize-url f1) (normalize-url f2))))
   (set! file-set-last-modified! 
     (lambda (f1 v)
       (file/set-last-modified! (normalize-url f1) v)))
