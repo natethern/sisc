@@ -199,7 +199,7 @@
         &procedure;
         <methodsynopsis language="scheme">
           <type>symbol</type>
-          <methodname>thread/start</methodname>
+          <methodname>thread/state</methodname>
           <methodparam>
             <parameter>thread-handle</parameter>
           </methodparam>
