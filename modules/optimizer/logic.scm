@@ -20,10 +20,14 @@
           (nf '())
           (nv '()))
       (define (cp-helper x y acc)
-        (if (null? x) acc
-            (let ((cx (car x))
-                  (cy (car y)))
-              (cond [(null? x) acc]
+        ;Watch for null? x but not null? y, or vice versa, indicating
+        ;argument count mismatch.  If we find one, don't optimize
+        (cond [(null? x) (if (null? y) acc '())]
+              [(null? y) '()] 
+              [else 
+                (let ((cx (car x))
+                      (cy (car y)))
+                  (cond 
                     ;; If this var gets set!'ed, or its right-hand side
                     ;; is non-immediate, skip it
                     [(or (not (immediate? cy))
@@ -71,9 +75,11 @@
                             (set! nv (cons cy nv))))
                       (cp-helper (cdr x)
                                  (cdr y) 
-                                 (cons (cons cx cy) acc))]))))
+                                 (cons (cons cx cy) acc))]))]))
       (let ((cpc (cp-helper formals values* '())))
-        (values nf nv cpc)))))
+        (if (null? cpc) 
+            (values formals values* cpc)
+            (values nf nv cpc))))))
   
 (define (opt:letrec-helper formals values* state)
   (let ((state (union-state-entry* state 'lvars formals)))
