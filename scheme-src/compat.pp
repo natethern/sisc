@@ -124,3 +124,7 @@
 
 (define make-false
   (lambda (v) #f))
+
+;;psyntax.[ss,pp] forgot to define these
+(define fx> >)
+(define fx>= >=)
