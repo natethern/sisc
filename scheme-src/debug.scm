@@ -93,25 +93,27 @@
     (lambda (e)
       (let* ([k (cdr (assoc 'cont e))]
              [m (cdr (assoc 'value e))]
-             [st
+             [st #f]
+             [annots #f])
+        (call-with-values 
+            (lambda ()
               (let loop ((k k))
-                (cond [(null? k) '()]
+                (cond [(null? k) (values '() '())]
                       [(null? (continuation-nxp k)) 
                        (loop (continuation-stk k))]
                       [else 
-                       (let ([nxp (continuation-nxp k)])
-                         (cons nxp 
-                               (loop (continuation-stk k))))]))]
-             [annots 
-              (let loop ((st st) (last-st #f))
-                (if (null? st) '()
-                    (let ([asc (annotations-to-assoc (car st))])
-                      (if (null? asc)
-                          (begin
-                            (if last-st
-                                (set-cdr! last-st (cdr st)))
-                            (loop (cdr st) st))
-                          (cons asc (loop (cdr st) st))))))])
+                       (let* ([nxp (continuation-nxp k)]
+                              [nxp-annot (annotations-to-assoc nxp)])
+                         (if (null? nxp-annot)
+                             (loop (continuation-stk k))
+                             (call-with-values 
+                               (lambda () (loop (continuation-stk k)))
+                               (lambda (exprs annots)
+                                 (values (cons nxp exprs)
+                                         (cons nxp-annot annots))))))])))
+          (lambda (exprs ants)
+            (set! st exprs)
+            (set! annots ants)))
         (if (not (null? annots))
             (begin
               (let ([data (car annots)])
