@@ -3,7 +3,7 @@ package sisc.data;
 import sisc.*;
 import sisc.compiler.*;
 
-public class BuiltinProcedure extends NamedValue implements Procedure {
+public class BuiltinProcedure extends Procedure {
     public int id, arglen;
     public Module host;
 

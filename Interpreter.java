@@ -105,24 +105,13 @@ public class Interpreter extends Util {
 	interpret();
 	return acc;
     }
-
-    protected static final int TIMER_DEFAULT=1000;
-    public int timer=TIMER_DEFAULT;
-
     public void interpret() {
 	try {
 	    do {
 		try {
 		    do {
-			while (nxp==null) {
+			while (nxp==null) 
 			    pop(stk);
-			    /*			    nxp=stk.nxp;
-			    vlr=stk.vlr;
-			    env=stk.env;
-			    fk=stk.fk;
-			    returnFrame(stk);
-			    stk=stk.parent;*/
-			}
 
 			nxp.eval(this);
 		    } while (true);
@@ -133,15 +122,7 @@ public class Interpreter extends Util {
 	} catch (NullPointerException done) {}
     }
     
-    /**
-     * Process a timer interrupt
-     */
-    public void timerInterrupt() {
-	//	System.out.println("Timer Interrupt");
-	timer=TIMER_DEFAULT;
-    }
-
-    public void pop(CallFrame c) {
+    public final void pop(CallFrame c) {
 	nxp=c.nxp;
 	vlr=c.vlr;
 	env=c.env;

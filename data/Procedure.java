@@ -2,8 +2,7 @@ package sisc.data;
 
 import sisc.*;
 
-public interface Procedure {
+public abstract class Procedure extends NamedValue {
 
-    public void apply(Interpreter r) throws ContinuationException;
-
+    public abstract void apply(Interpreter r) throws ContinuationException;
 }

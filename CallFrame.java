@@ -4,8 +4,7 @@ import sisc.data.*;
 import sisc.exprs.*;
 import java.util.Stack;
 
-public class CallFrame extends NamedValue 
-    implements java.io.Serializable, Procedure {
+public class CallFrame extends Procedure {
 
 
     //STATIC --------------------

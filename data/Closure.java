@@ -2,7 +2,7 @@ package sisc.data;
 
 import sisc.*;
 
-public class Closure extends NamedValue implements Procedure {
+public class Closure extends Procedure {
     public boolean arity;
     public Symbol[] formals;
     public LexicalEnvironment env;

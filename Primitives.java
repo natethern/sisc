@@ -43,7 +43,6 @@ public class Primitives extends Module {
         FLOOR=83, OPENOUTPUTSTRING=48,         GETOUTPUTSTRING=49, 
 	PUTPROP=121, STRING2UNINTERNEDSYMBOL=66,  OPENINPUTSTRING=50;
 
-
     public void initialize(Interpreter r) {
 	define(r, "*", MUL); 
 	define(r, "+", ADD); 
