@@ -88,9 +88,9 @@ public class InputPort extends NamedValue {
         }
     }
 
-    public Value read(Interpreter r, boolean produceImmutables) {
+    public Value read(Interpreter r, int flags) {
         try {
-            return r.dynenv.parser.nextExpression(this, !produceImmutables);
+            return r.dynenv.parser.nextExpression(this, flags);
         } catch (EOFException e) {
             return Util.EOF;
         } catch (IOException e) {

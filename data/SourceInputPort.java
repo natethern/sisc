@@ -36,6 +36,7 @@ import java.io.*;
 import sisc.*;
 
 public class SourceInputPort extends InputPort {
+
     public int line, column;
     public String sourceFile;
 

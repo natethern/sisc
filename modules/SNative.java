@@ -45,7 +45,7 @@ public class SNative extends ModuleAdapter {
     protected static final int
 	ASSQ=0, MEMQ=1, ASSOC=6, MEMBER=7,
 	CADR=2, CDAR=3, CAAR=4, CDDR=5, NOT=8,
-	APPEND=9, EQV=10, MEMV=11, ASSV=12,
+	APPEND=9, MEMV=11, ASSV=12,
 	VECTOR=13, LISTREF=14, VALUES=15, READLINE=16;
     
     static long symid=0;
@@ -58,7 +58,6 @@ public class SNative extends ModuleAdapter {
         define("member", MEMBER);
         define("append2", APPEND);
         define("not", NOT);
-        define("eqv?", EQV);
         define("assv", ASSV);
         define("memv", MEMV);
         define("caar", CAAR);
@@ -82,15 +81,6 @@ public class SNative extends ModuleAdapter {
     public static boolean jnumQuery(Value v, int mask) {
         return v instanceof Quantity &&
                (((Quantity)v).type & mask)!=0;
-    }
-
-    protected boolean eqv(Value v1, Value v2) {
-        return v1.eq(v2) ||
-               ((jnumQuery(v1, Quantity.EXACT) &&
-                 jnumQuery(v2, Quantity.EXACT)) ||
-                (jnumQuery(v1, Quantity.INEXACT) &&
-                 jnumQuery(v2, Quantity.INEXACT))) &&
-               v1.valueEqual(v2);
     }
 
     public Value eval(int primid, Interpreter f) throws ContinuationException {
@@ -160,10 +150,6 @@ public class SNative extends ModuleAdapter {
                     }
                     p3.cdr=v;
                     return p4;
-                case EQV:
-                    Value v1=f.vlr[0];
-                    Value v2=f.vlr[1];
-                    return truth(eqv(v1,v2));
                 case LISTREF:
                     p1=pair(f.vlr[0]);
                     for (int l=num(f.vlr[1]).intValue(); l>0; l--) {
@@ -171,11 +157,11 @@ public class SNative extends ModuleAdapter {
                     }
                     return p1.car;
                 case ASSV:
-                    v1=f.vlr[0];
+                    Value v1=f.vlr[0];
                     p1=pair(f.vlr[1]);
                     while (p1!=EMPTYLIST) {
                         Pair assc=pair(p1.car);
-                        if (eqv(assc.car,v1))
+                        if (assc.car.eq(v1))
                             return assc;
                         p1=pair(p1.cdr);
                     }
@@ -203,7 +189,7 @@ public class SNative extends ModuleAdapter {
                     v1=f.vlr[0];
                     p1=pair(f.vlr[1]);
                     while (p1!=EMPTYLIST) {
-                        if (eqv(p1.car,v1))
+                        if (p1.car.eq(v1))
                             return p1;
                         p1=pair(p1.cdr);
                     }

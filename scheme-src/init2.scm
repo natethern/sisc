@@ -456,20 +456,6 @@
 (define (has-feature? feature)
   (memq feature *features*))
 
-; We must redefine READ so that it converts explicit annotations to internal 
-; ones
-(define read-with-annotations read)
-(define (read . port)
-  (let ([rv (apply read-with-annotations port)])
-    (if (annotation? rv)
-        (let ([expr (annotation-expression rv)]
-              [source (annotation-source rv)])
-          (for-each (lambda (kv)
-                      (set-annotation! expr (car kv) (cdr kv)))
-                    source)
-          expr)
-        rv)))
-
 ;;hook that gets invoked when SISC is started
 (define initialize #f)
 (define on-startup #f)

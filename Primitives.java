@@ -164,6 +164,7 @@ public class Primitives extends ModuleAdapter {
         define("rational?", RATIOQ);
         define("read", READ);
         define("read-char", READCHAR);
+        define("read-code", READCODE);
         define("real-part", REALPART);
         define("remainder", REMAINDER);
         define("remprop", REMPROP);
@@ -289,8 +290,11 @@ public class Primitives extends ModuleAdapter {
                     f.dynenv.in.pushback(((SchemeCharacter)v).c);
                 return v;
             case READ: case READCHAR:
-                return (primid==READ ? f.dynenv.in.read(f, false) :
+                return (primid==READ ? f.dynenv.in.read(f, 0) :
                         f.dynenv.in.readchar());
+            case READCODE:
+                return f.dynenv.in.read(f, Parser.PRODUCE_ANNOTATIONS |
+                                        Parser.PRODUCE_IMMUTABLES);
             case CURRENTEVAL: return (Value)f.ctx.evaluator;
             case INTERACTIONENVIRONMENT:
                 return f.ctx.toplevel_env;
@@ -389,8 +393,13 @@ public class Primitives extends ModuleAdapter {
                 }
             case READ: case READCHAR:
                 inport=inport(f.vlr[0]);
-                return (primid==READ ? inport.read(f, false) :
+                return (primid==READ ? inport.read(f, 0) :
                         inport.readchar());
+            case READCODE:
+                inport=inport(f.vlr[0]);
+                return inport.read(f, 
+                                   Parser.PRODUCE_ANNOTATIONS |
+                                   Parser.PRODUCE_IMMUTABLES);
             case EVAL:
                 f.nxp=f.compile(f.vlr[0]);
                 f.returnVLR();
@@ -670,7 +679,7 @@ public class Primitives extends ModuleAdapter {
                 return new SchemeString(newStr);
             case STRING2NUMBER:
                 try {
-                    return (Quantity)f.dynenv.parser.nextExpression(new InputPort(new BufferedReader(new StringReader(string(f.vlr[0])))), num(f.vlr[1]).intValue(), false);
+                    return (Quantity)f.dynenv.parser.nextExpression(new InputPort(new BufferedReader(new StringReader(string(f.vlr[0])))), num(f.vlr[1]).intValue(), 0);
                 } catch (NumberFormatException nf) {
                     return FALSE;
                 } catch (IOException e) {
@@ -770,9 +779,10 @@ public class Primitives extends ModuleAdapter {
             }
         case 3:
             switch(primid) {
-            case READ: 
+            case READCODE: 
                 InputPort inport=inport(f.vlr[0]);
-                return inport.read(f, truth(f.vlr[1]));
+                return inport.read(f, truth(f.vlr[1]) ? 
+                                   Parser.PRODUCE_IMMUTABLES : 0);
             case LOOKUP:
                 try {
                     return (Value)f.lookup(symbol(f.vlr[0]),
@@ -956,6 +966,7 @@ public class Primitives extends ModuleAdapter {
         EQUAL = 113,
         ERROR = 114,
         EVAL = 115,
+        READCODE = 40,
         //	EVAL = 40,
         EXACT2INEXACT = 41,
         EXACTQ = 42,

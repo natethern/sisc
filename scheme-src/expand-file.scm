@@ -3,7 +3,7 @@
         [outf (open-output-file to)])
     (with-current-url from
       (lambda ()
-        (let loop ([e (read-with-annotations inf #t)])
+        (let loop ([e (read-code inf #t)])
           (if (not (eof-object? e))
               (begin
                 (pretty-print (sc-expand e) outf)

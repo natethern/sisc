@@ -45,12 +45,17 @@ import java.util.*;
  * s-expressions.
  */
 public class Parser extends Util implements Tokens {
-    
+
+    public static final int 
+        PRODUCE_IMMUTABLES= 0x1,
+        PRODUCE_ANNOTATIONS=0x2;
+
     /**
      * When set, annotations will be emitted.  Requires that
      * the given InputPort be a SourceInputPort
      */
     public boolean annotate=getSystemProperty("sisc.emitannotations", "false").equalsIgnoreCase("true");
+
     Lexer lexer;
 
     static final Object DOT=new Object();
@@ -77,18 +82,18 @@ public class Parser extends Util implements Tokens {
         this.lexer=l;
     }
 
-    public final Value nextExpression(InputPort is, boolean read) throws IOException {
-        return nextExpression(is, 10, read);
+    public final Value nextExpression(InputPort is, int flags) throws IOException {
+        return nextExpression(is, 10, flags);
     }
 
     public final Value nextExpression(InputPort is) throws IOException {
-        return nextExpression(is, 10, false);
+        return nextExpression(is, 10, 0);
     }
 
     protected final Value nextExpression(InputPort is, HashMap state, 
-                                         boolean read) 
+                                         int flags) 
 	throws IOException {
-	return (Value)_nextExpression(is, state, null, read);
+	return (Value)_nextExpression(is, state, null, flags);
     }
 
     /**
@@ -101,16 +106,16 @@ public class Parser extends Util implements Tokens {
      * @exception IOException if an error occurs
      */
     public Value nextExpression(InputPort is, int radix,
-                                boolean read) throws IOException {
+                                int flags) throws IOException {
         Object n=VOID;
 
         try {
-            n=_nextExpression(is, new HashMap (), null, radix, read);
+            n=_nextExpression(is, new HashMap (), null, radix, flags);
             return (Value)n;
         } catch (ClassCastException ce) {
             if (n==ENDPAIR) {
                 System.err.println(warn("orphanedparen"));
-                return nextExpression(is, radix, read);
+                return nextExpression(is, radix, flags);
             } else if (n==DOT)
                 throw new IOException(liMessage(SISCB, "unexpecteddot"));
         }
@@ -118,8 +123,8 @@ public class Parser extends Util implements Tokens {
     }
 
     protected Object _nextExpression(InputPort is, HashMap state, 
-                                     Integer def, boolean read) throws IOException {
-        return _nextExpression(is, state, def, 10, read);
+                                     Integer def, int flags) throws IOException {
+        return _nextExpression(is, state, def, 10, flags);
     }
 
     protected Quantity numberCheck(Object o) throws IOException {
@@ -132,20 +137,20 @@ public class Parser extends Util implements Tokens {
 
     protected Object listSpecial(Symbol car, InputPort is,
 				 HashMap state, Integer def, 
-                                 boolean read) throws IOException {
+                                 int flags) throws IOException {
 	Pair t=new Pair();
         Pair p;
-        if (read)
+        if (produceImmutables(flags))
             p=new Pair(car, t);
         else
             p=new ImmutablePair(car, t);
 	if (def!=null)
 	    state.put(def, p);
-	t.setCar(nextExpression(is, state, read));
+	t.setCar(nextExpression(is, state, flags));
 	return p;
     }
 
-    protected Object _nextExpression(InputPort is, HashMap state, Integer def, int radix, boolean read)
+    protected Object _nextExpression(InputPort is, HashMap state, Integer def, int radix, int flags)
     throws IOException {
 	int line=-1, col=-1;
 	String file=null;
@@ -159,16 +164,16 @@ public class Parser extends Util implements Tokens {
             o=DOT;
             break;
         case TT_UNQUOTE:
-            o=listSpecial(UNQUOTE, is, state, def, read);
+            o=listSpecial(UNQUOTE, is, state, def, flags);
             break;
         case TT_UNQUOTE_SPLICING:
-            o=listSpecial(UNQUOTE_SPLICING, is, state, def, read);
+            o=listSpecial(UNQUOTE_SPLICING, is, state, def, flags);
             break;
         case TT_QUOTE:
-            o=listSpecial(QUOTE, is, state, def, read);
+            o=listSpecial(QUOTE, is, state, def, flags);
             break;
         case TT_BACKQUOTE:
-            o=listSpecial(BACKQUOTE, is, state, def, read);
+            o=listSpecial(BACKQUOTE, is, state, def, flags);
             break;
         case TT_NUMBER:
             o=lexer.nval;
@@ -185,8 +190,8 @@ public class Parser extends Util implements Tokens {
 		file=sip.sourceFile;
 	    }
 
-            o=readList(is, state, def, read);
-	    if (annotate && o instanceof Pair && line>=0) {
+            o=readList(is, state, def, flags);
+	    if (produceAnnotations(flags) && o instanceof Pair && line>=0) {
 		o=new AnnotatedExpr((Expression)o, 
 				    list(new Pair(LINE, Quantity.valueOf(line)),
 					 new Pair(COLUMN, Quantity.valueOf(col)),
@@ -213,7 +218,7 @@ public class Parser extends Util implements Tokens {
                 //SISC supports s-expression commenting
             case ';':
                 nextExpression(is);
-                o=_nextExpression(is, state, def, read);
+                o=_nextExpression(is, state, def, flags);
                 break;
             case '\\':
                 c=is.read();
@@ -234,39 +239,39 @@ public class Parser extends Util implements Tokens {
                 }
                 break;
             case 'b':
-                o=numberCheck(_nextExpression(is, state, null, 2, read));
+                o=numberCheck(_nextExpression(is, state, null, 2, flags));
                 break;
             case 'o':
-                o=numberCheck(_nextExpression(is, state, null, 8, read));
+                o=numberCheck(_nextExpression(is, state, null, 8, flags));
                 break;
             case 'x':
-                o=numberCheck(_nextExpression(is, state, null, 16, read));
+                o=numberCheck(_nextExpression(is, state, null, 16, flags));
                 break;
             case 'd':
-                o=numberCheck(_nextExpression(is, state, null, read));
+                o=numberCheck(_nextExpression(is, state, null, flags));
                 break;
             case '&':
-                o=new Box((Value)_nextExpression(is, state, null, read));
+                o=new Box((Value)_nextExpression(is, state, null, flags));
                 break;
             case 'i':
-                o=numberCheck(_nextExpression(is, state, null, radix, read)).toInexact();
+                o=numberCheck(_nextExpression(is, state, null, radix, flags)).toInexact();
                 break;
             case 'e':
-                o=numberCheck(_nextExpression(is, state, null, radix, read)).toExact();
+                o=numberCheck(_nextExpression(is, state, null, radix, flags)).toExact();
                 break;
             case '!':
                 if (lexer.readToBreak(is, Lexer.special).equals("eof"))
                     return EOF;
                 else throw new IOException(liMessage(SISCB, "invalidsharp"));
             case '\'':
-                o=listSpecial(SYNTAX, is, state, def, read);
+                o=listSpecial(SYNTAX, is, state, def, flags);
                 break;
 	    case '@': 
 		//Annotation
 		Pair p=new Pair(ANNOTATION, EMPTYLIST);
 		if (def!=null)
 		    state.put(def, p);
-		p.setCdr(nextExpression(is, state, read));
+		p.setCdr(nextExpression(is, state, flags));
 		o=p;
 		break;
             default:
@@ -282,7 +287,7 @@ public class Parser extends Util implements Tokens {
 
                     c=is.read();
                     if (c=='=') {
-                        o=_nextExpression(is, state, ref, read);
+                        o=_nextExpression(is, state, ref, flags);
                         break;
                     } else if (c=='#') {
                         o=state.get(ref);
@@ -294,16 +299,17 @@ public class Parser extends Util implements Tokens {
                 }
 		
                 SchemeVector iv;
-                if (read)
-                    iv=new SchemeVector();
-                else
+                if (produceImmutables(flags))
                     iv=new ImmutableVector();
+                else
+                    iv=new SchemeVector();
+
 
 		o=iv;
 		if (def!=null) state.put(def, iv);
 		def=null;
 
-                Object expr=_nextExpression(is, state, def, read);
+                Object expr=_nextExpression(is, state, def, flags);
 		if (expr instanceof AnnotatedExpr)
 		    expr=((AnnotatedExpr)expr).expr;
                 if (expr==null && v==null) {
@@ -340,7 +346,7 @@ public class Parser extends Util implements Tokens {
     }
 
     public Value readList(InputPort is, HashMap state, Integer def,
-                          boolean read)
+                          int flags)
 	throws IOException, EOFException {
 	
 	int line=0, column=0;
@@ -351,26 +357,29 @@ public class Parser extends Util implements Tokens {
 
         Pair h=null;
         Pair p=null;
-        Object l=_nextExpression(is, state, null, read);
+        Object l=_nextExpression(is, state, null, flags);
         try {
             while (l!=ENDPAIR) {
                 if (p==null) {
-                    h=p=(read ? new Pair() : new ImmutablePair());
+                    h=p=(produceImmutables(flags) ? new ImmutablePair() :
+                         new Pair());
                     if (def!=null) state.put(def, p);
                 } else
                     if (l == DOT) {
-                        l=_nextExpression(is, state, null, read);
+                        l=_nextExpression(is, state, null, flags);
                         if (l==ENDPAIR)
                             throw new IOException(liMessage(SISCB, "expectedexprincdr"));
                         p.cdr=(Value)(l instanceof Integer ? state.get(l) : l);
-                        if (_nextExpression(is, state, null, read)
+                        if (_nextExpression(is, state, null, flags)
                             !=ENDPAIR)
                             throw new IOException(liMessage(SISCB, "toomanyafterdot"));
                         return h;
                     } else
-                        p.cdr=p=(read ? new Pair () : new ImmutablePair());
+                        p.cdr=p=(produceImmutables(flags) ? 
+                                 new ImmutablePair() :
+                                 new Pair ());
                 p.car=(Value)(l instanceof Integer ? state.get(l) : l);
-                l=_nextExpression(is, state, null, read);
+                l=_nextExpression(is, state, null, flags);
             }
         } catch (EOFException e) {
             System.err.println(warn("unexpectedeof"));
@@ -378,5 +387,13 @@ public class Parser extends Util implements Tokens {
         }
 
         return (h==null ? (Value)EMPTYLIST : (Value)h);
+    }
+
+    protected final boolean produceAnnotations(int flags) {
+        return (flags & PRODUCE_ANNOTATIONS) != 0;
+    }
+
+    protected final boolean produceImmutables(int flags) {
+        return (flags & PRODUCE_IMMUTABLES) != 0;
     }
 }

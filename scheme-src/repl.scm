@@ -114,7 +114,7 @@
             (lambda (console-in console-out writer)
               (display "> " console-out)
               ;;read
-              (let ([exp (read-with-annotations console-in #t)])
+              (let ([exp (read-code console-in #t)])
                 (if (eof-object? exp) 
                     (if ((current-exit-handler))
                         (void)
