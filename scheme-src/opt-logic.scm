@@ -97,8 +97,6 @@
                '((new-assumptions begin))))
       (,other (values `(if ,other ,conseq ,altern) (new-state))))))
 
-(define constant-fold-candidates '(+ - / * not))
-
 ;; Applications and constant folding (possibly unsafe)
 (define (opt:application rator rands state)
   (match rator
@@ -107,10 +105,10 @@
                  (= (length rands) 1)))
      (values `(if ,@rands '#f '#t) '((new-assumptions not))))
     (,x
-     (guard (and (symbol? rator)
+     (guard (and (symbol? x)
                  (not-redefined? x)
                  (andmap immediate? rands)))
-     (values `',(eval `(,rator ,@rands))
+     (values `',(eval `("noexpand" (,x ,@rands)))
              `((new-assumptions ,x))))
     ((lambda () ,E)
      (values E (new-state)))
