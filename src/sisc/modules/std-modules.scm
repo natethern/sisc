@@ -768,7 +768,8 @@
   (import serial-io)
   (import* debugging compile)
   (import* misc define-simple-syntax)
-  (include "libraries.scm"))
+  (include "libraries.scm")
+  (install))
 
 (module compiled-libraries
     (create-library
