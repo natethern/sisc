@@ -354,7 +354,6 @@ public class S2J extends ModuleAdapter {
                     error(r, liMessage(S2JB, "cannotapplyobject", obj.toString()));
                 }
             } catch (InvocationTargetException e) {
-                e.printStackTrace(System.err);
                 error(r, create(e.getTargetException()));
             } catch (RuntimeException e) {
                 e.printStackTrace(System.err);
