@@ -55,18 +55,19 @@ public abstract class Util implements Conf {
          FALSE=SchemeBoolean.FALSE;
 
     public static Symbol
-	SETBANG=Symbol.get("set!"),
-	UNQUOTE=Symbol.get("unquote"),
-	QUOTE=Symbol.get("quote"),
-	UNQUOTE_SPLICING=Symbol.get("unquote-splicing"),
-	BACKQUOTE=Symbol.get("quasiquote"),
-	BEGIN=Symbol.get("begin"),
-	THIS=Symbol.get("this"),
-	LAMBDA=Symbol.get("lambda"),
-	TOPLEVEL=Symbol.get("*toplevel*"),
-	REPORT=Symbol.get("*report*"),
-	ENVVARS=Symbol.get("*environment-variables*"),
-	SISC=Symbol.get("*sisc*"),
+        SETBANG=Symbol.get("set!"),
+        UNQUOTE=Symbol.get("unquote"),
+        QUOTE=Symbol.get("quote"),
+        UNQUOTE_SPLICING=Symbol.get("unquote-splicing"),
+        BACKQUOTE=Symbol.get("quasiquote"),
+        BEGIN=Symbol.get("begin"),
+        THIS=Symbol.get("this"),
+        LAMBDA=Symbol.get("lambda"),
+        TOPLEVEL=Symbol.get("*toplevel*"),
+        REPORT=Symbol.get("*report*"),
+        ENVVARS=Symbol.get("*environment-variables*"),
+        SISCCONF=Symbol.get("*config-parameters*"),
+        SISC=Symbol.get("*sisc*"),
         SISC_SPECIFIC=Symbol.get("*sisc-specific*"),
         OTHER=Symbol.get("other");
 

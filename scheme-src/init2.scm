@@ -408,7 +408,7 @@
   (set! initialize
         (lambda ()
           (set! startup-enabled? #f)
-          (for-each (lambda (thunk) (thunk)) *startup-hooks*)))
+          (for-each (lambda (thunk) (thunk)) (reverse *startup-hooks*))))
   (set! on-startup
         (lambda (thunk)
           (if (not startup-enabled?)
@@ -419,9 +419,12 @@
 
 (on-startup
  (lambda ()
+   ;;populate *config-parameters* symbolic env with contents of
+   ;;sisc.properties file, but leaving any existing entries intact
    (let ([prop-file (or (getprop 'sisc.properties
                                  '*environment-variables*)
-                        "sisc.properties")])
+                        "sisc.properties")]
+         [testval	(list #f)])
      (call/fc  ;ignore errors
       (lambda ()
         (with-input-from-file prop-file
@@ -429,7 +432,13 @@
             (let loop ([entry (read)])
               (or (eof-object? entry)
                   (begin
-                    (putprop (car entry) '*config-parameters* (cdr entry))
+                    (if (eq? (getprop (car entry)
+                                      '*config-parameters*
+                                      testval)
+                             testval)
+                        (putprop (car entry)
+                                 '*config-parameters*
+                                 (cdr entry)))
                     (loop (read))))))))
       (lambda (m e c) #f)))
    (unload-dynamic-wind)))

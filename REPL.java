@@ -72,6 +72,11 @@ public class REPL extends Thread {
         return null;
     }
 
+    public static Value read(Interpreter r, String expr) throws IOException {
+        InputPort ip=new InputPort(new BufferedReader(new StringReader(expr)));
+        return r.dynenv.parser.nextExpression(ip);
+    }
+
     public static boolean initializeInterpreter(Interpreter r,
                                                 String[] args,
                                                 InputStream in)
@@ -99,11 +104,20 @@ public class REPL extends Thread {
             Properties sysProps=System.getProperties();
             for (Iterator ir=sysProps.keySet().iterator(); ir.hasNext();) {
                 String key=(String)ir.next();
-                Symbol s=Symbol.get(key);
-                r.define(s, new SchemeString(sysProps.getProperty(key)),
+                String val=sysProps.getProperty(key);
+                r.define(Symbol.get(key),
+                         new SchemeString(val),
                          Util.ENVVARS);
+                if (key.startsWith("sisc.")) {
+                    try {
+                        r.define(Symbol.get(key.substring(5)),
+                                 read(r, val),
+                                 Util.SISCCONF);
+                    } catch (IOException e) {
+                        System.err.println("\""+val+"\" is not a valid Scheme expression");
+                    }
+                }
             }
-
             File[] roots=File.listRoots();
             SchemeString[] rootss=new SchemeString[roots.length];
             for (int i=0; i<roots.length; i++)

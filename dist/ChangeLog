@@ -1,3 +1,10 @@
+2002-05-18  Matthias Radestock  <matthias@sorted.org>
+
+	* Improved GETPROP and REMPROP.
+
+	* Allowed properties from config file to be overridden by Java
+	  properties.
+
 2002-05-16  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed a compiler bug that was setting lastAndRatorImmediate
