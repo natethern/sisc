@@ -218,7 +218,12 @@
       Libraries are typically compiled using the meachanism from <xref
      linkend="CreatingLibraries"/>.
      Loading the resulting library makes the library available 
-     to the loading code.
+     to the loading code.  To create a compiled library from a module,
+      compile a source file which contains any necessary
+      <function>require-library</function> calls, followed by the
+      module definition.  When loaded, this will cause the necessary
+      libraries to be loaded if necessary, and then define the module
+      into the environment.
     </para>
     <para>
      Libraries should not depend on any top-level definitions outside
@@ -226,43 +231,20 @@
      modules. Otherwise it is not possible to use the libraries portably.
     </para>
     <para>
-     Libraries should not contain any mutable state that affects
-     their behavior. For instance, consider an OO library that assigns a
-     unique number to all classes defined when using it. If two libraries
-     used that OO library, were compiled independently and
-     then loaded, the ids of classes defined in the first library 
-     would overlap with those defined in the second.
-    </para>
-    <para>
      Libraries can be packaged with supporting code (e.g. ordinary Java
      code and native modules) and other libraries into jar files. A typical
      structure for such a jar file would be
     </para>
     <programlisting>
-com/foo/lib1.scm
-com/foo/lib1/module.scc
+com/foo/lib1.scc
 com/foo/lib1/Class1.class
 com/foo/lib1/Class2.class
-com/foo/lib2.scm
-com/foo/lib2/module.scc
+com/foo/lib2.scc
 com/foo/lib2/Class1.class
 com/foo/lib2/Class2.class
-com/foo/lib3.scm
-com/foo/lib3/module.scc
+com/foo/lib3.scc
 com/foo/lib3/Class1.class
 com/foo/lib3/Class2.class
-    </programlisting>
-    <para>
-     The <literal>.scm</literal> files contain code to auto-load any
-     libraries a library depends on and load the
-     <literal>module.scc</literal>
-     (compiled module). For example, lib1.scm could look like this:
-    </para>
-    <programlisting>
-(require-library 'com/foo/lib2)
-(require-library 'com/foo/lib3)
-(require-library 'some/other/library)
-(load "lib1/module.scc")
     </programlisting>
     <para>
      It is usually a good idea to name the library after the
