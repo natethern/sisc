@@ -94,7 +94,7 @@ public class SNative extends IndexedProcedure {
         return n;
     }
 
-    public Value doApply(Interpreter f) throws ContinuationException {
+    public final Value doApply(Interpreter f) throws ContinuationException {
         switch(id) {
         case VECTOR:
             Value res = new SchemeVector(f.vlr);

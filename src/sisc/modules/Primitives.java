@@ -280,33 +280,34 @@ public class Primitives extends IndexedProcedure {
         return b.toString();
     }
 
-    public Value doApply(Interpreter f)
+    public final Value doApply(Interpreter r)
         throws ContinuationException {
-
+        final Value[] vlr = r.vlr;
+        final int vls = vlr.length;
         
-        SIZESWITCH: switch (f.vlr.length) {
+        SIZESWITCH: switch (vls) {
         case 0:
             switch (id) {
             case GENSYM: 
-                long unv=f.tctx.nextUnique();
+                long unv=r.tctx.nextUnique();
                 return Symbol.intern(base64encode(unv));
             case _VOID: return VOID;
             case COMPACTSTRINGREP: return truth(SchemeString.compactRepresentation);
-            case CURRENTWIND: return f.dynenv.wind;
-            case CURRENTEVAL: return (Value)f.ctx.evaluator;
+            case CURRENTWIND: return r.dynenv.wind;
+            case CURRENTEVAL: return (Value)r.ctx.evaluator;
             case INTERACTIONENVIRONMENT:
-                return f.ctx.toplevel_env.asValue();
+                return r.ctx.toplevel_env.asValue();
             case SYSTIME: return Quantity.valueOf(System.currentTimeMillis());
             case MAX_PRECISION: return Quantity.valueOf(Quantity.max_precision);
             case MIN_PRECISION: return Quantity.valueOf(Quantity.min_precision);
             case CASESENSITIVE: return truth(Symbol.caseSensitive);
             case SISCINITIAL: 
                 try {
-                    return new MemorySymEnv(f.lookupContextEnv(Util.SISC_SPECIFIC));
+                    return new MemorySymEnv(r.lookupContextEnv(Util.SISC_SPECIFIC));
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throwPrimException(liMessage(SISCB, "nosiscspecificenv"));
                 }
-            case STRICTR5RS: return truth(f.dynenv.parser.lexer.strictR5RS);
+            case STRICTR5RS: return truth(r.dynenv.parser.lexer.strictR5RS);
             case TIMEZONEOFFSET:
                 Calendar cal = Calendar.getInstance();
                 return Quantity.valueOf((cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET)) / 1000);
@@ -322,59 +323,59 @@ public class Primitives extends IndexedProcedure {
             }
         case 1:
             switch (id) {
-            case NULLQ: return truth(f.vlr[0]==EMPTYLIST);
-            case CAR: return truePair( f.vlr[0]).car;
+            case NULLQ: return truth(vlr[0]==EMPTYLIST);
+            case CAR: return truePair( vlr[0]).car;
             case CASESENSITIVE:
-                Symbol.caseSensitive = truth(f.vlr[0]);
+                Symbol.caseSensitive = truth(vlr[0]);
                 return VOID;
-            case CDR: return truePair( f.vlr[0]).cdr;
+            case CDR: return truePair( vlr[0]).cdr;
             case PAIRQ:
-                return truth(f.vlr[0] instanceof Pair &&
-                             f.vlr[0]!=EMPTYLIST);
+                return truth(vlr[0] instanceof Pair &&
+                             vlr[0]!=EMPTYLIST);
             case GETENVIRONMENT:
                 try {
-                    return f.ctx.lookupContextEnv(symbol(f.vlr[0])).asValue();
+                    return r.ctx.lookupContextEnv(symbol(vlr[0])).asValue();
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    throwPrimException(liMessage(SISCB, "noenv", f.vlr[0].synopsis()));
+                    throwPrimException(liMessage(SISCB, "noenv", vlr[0].synopsis()));
                     return VOID;
                 }
             case ADD: 
-            case MUL: return num(f.vlr[0]);
-            case SUB: return num(f.vlr[0]).negate();
-            case DIV: return Quantity.ONE.div(num(f.vlr[0]));
+            case MUL: return num(vlr[0]);
+            case SUB: return num(vlr[0]).negate();
+            case DIV: return Quantity.ONE.div(num(vlr[0]));
             case LT: 
             case GRT:
             case NEQ: throwArgSizeException(); return VOID;
-            case SIN: return num(f.vlr[0]).sin();
-            case COS: return num(f.vlr[0]).cos();
-            case TAN: return num(f.vlr[0]).tan();
-            case ASIN: return num(f.vlr[0]).asin();
-            case ACOS: return num(f.vlr[0]).acos();
-            case ATAN: return num(f.vlr[0]).atan();
-            case LOG: return num(f.vlr[0]).log();
-            case EXP: return num(f.vlr[0]).exp();
-            case SQRT: return num(f.vlr[0]).sqrt();
-            case NUMBERQ: return truth(f.vlr[0] instanceof Quantity);
-            case VECTORQ: return truth(f.vlr[0] instanceof SchemeVector);
-            case SYMBOLQ: return truth(f.vlr[0] instanceof Symbol);
-            case CHARACTERQ: return truth(f.vlr[0] instanceof SchemeCharacter);
-            case STRINGQ: return truth(f.vlr[0] instanceof SchemeString);
-            case BOOLEANQ: return truth(f.vlr[0] instanceof SchemeBoolean);
-            case VOIDQ: return truth(f.vlr[0]==VOID);
-            case ENVIRONMENTQ: return truth(f.vlr[0] instanceof SymbolicEnvironment);
-            case PROCEDUREQ: return truth(f.vlr[0] instanceof Procedure);
-            case INTEGERQ: return numQuery(f.vlr[0],Quantity.INTEGER);
+            case SIN: return num(vlr[0]).sin();
+            case COS: return num(vlr[0]).cos();
+            case TAN: return num(vlr[0]).tan();
+            case ASIN: return num(vlr[0]).asin();
+            case ACOS: return num(vlr[0]).acos();
+            case ATAN: return num(vlr[0]).atan();
+            case LOG: return num(vlr[0]).log();
+            case EXP: return num(vlr[0]).exp();
+            case SQRT: return num(vlr[0]).sqrt();
+            case NUMBERQ: return truth(vlr[0] instanceof Quantity);
+            case VECTORQ: return truth(vlr[0] instanceof SchemeVector);
+            case SYMBOLQ: return truth(vlr[0] instanceof Symbol);
+            case CHARACTERQ: return truth(vlr[0] instanceof SchemeCharacter);
+            case STRINGQ: return truth(vlr[0] instanceof SchemeString);
+            case BOOLEANQ: return truth(vlr[0] instanceof SchemeBoolean);
+            case VOIDQ: return truth(vlr[0]==VOID);
+            case ENVIRONMENTQ: return truth(vlr[0] instanceof SymbolicEnvironment);
+            case PROCEDUREQ: return truth(vlr[0] instanceof Procedure);
+            case INTEGERQ: return numQuery(vlr[0],Quantity.INTEGER);
 
-            case COMPLEXQ: return numQuery(f.vlr[0],Quantity.IMAGINARY);
-            case EXACTQ: return numQuery(f.vlr[0],Quantity.EXACT);
-            case INEXACTQ: return numQuery(f.vlr[0],Quantity.INEXACT);
-            case PARAMETERQ: return truth(f.vlr[0] instanceof Parameter);
+            case COMPLEXQ: return numQuery(vlr[0],Quantity.IMAGINARY);
+            case EXACTQ: return numQuery(vlr[0],Quantity.EXACT);
+            case INEXACTQ: return numQuery(vlr[0],Quantity.INEXACT);
+            case PARAMETERQ: return truth(vlr[0] instanceof Parameter);
             case SYMBOL2STRING:
-                return new ImmutableString(symbol(f.vlr[0]).symval);
+                return new ImmutableString(symbol(vlr[0]).symval);
             case STRING2NUMBER:
-                String st=string(f.vlr[0]);
+                String st=string(vlr[0]);
                 try {
-                    return (Quantity)f.dynenv.parser.nextExpression(new ReaderInputPort(new StringReader(st)));
+                    return (Quantity)r.dynenv.parser.nextExpression(new ReaderInputPort(new StringReader(st)));
                 } catch (ClassCastException cce) {
                     return FALSE;
                 } catch (NumberFormatException nf) {
@@ -382,78 +383,78 @@ public class Primitives extends IndexedProcedure {
                 } catch (IOException e) {
                     return FALSE;
                 }
-            case NUMBER2STRING: return new SchemeString(num(f.vlr[0])
+            case NUMBER2STRING: return new SchemeString(num(vlr[0])
                                                         .toString());
-            case STRING2SYMBOL: return Symbol.intern(string(f.vlr[0]));
-            case CHAR2INTEGER: return Quantity.valueOf(chr(f.vlr[0]).c);
-            case LIST2VECTOR: return new SchemeVector(Util.pairToValues(pair(f.vlr[0])));
+            case STRING2SYMBOL: return Symbol.intern(string(vlr[0]));
+            case CHAR2INTEGER: return Quantity.valueOf(chr(vlr[0]).c);
+            case LIST2VECTOR: return new SchemeVector(Util.pairToValues(pair(vlr[0])));
             case VECTOR2LIST:
-                Value[] vals=vec(f.vlr[0]).vals;
+                Value[] vals=vec(vlr[0]).vals;
                 return valArrayToList(vals, 0, vals.length);
-            case EXACT2INEXACT: return num(f.vlr[0]).toInexact();
-            case INEXACT2EXACT: return num(f.vlr[0]).toExact();
-            case FLOOR: return num(f.vlr[0]).floor();
-            case CEILING: return num(f.vlr[0]).ceiling();
-            case ROUND: return num(f.vlr[0]).round();
-            case TRUNCATE: return num(f.vlr[0]).truncate();
-            case INTEGER2CHAR: return new SchemeCharacter((char)num(f.vlr[0]).
+            case EXACT2INEXACT: return num(vlr[0]).toInexact();
+            case INEXACT2EXACT: return num(vlr[0]).toExact();
+            case FLOOR: return num(vlr[0]).floor();
+            case CEILING: return num(vlr[0]).ceiling();
+            case ROUND: return num(vlr[0]).round();
+            case TRUNCATE: return num(vlr[0]).truncate();
+            case INTEGER2CHAR: return new SchemeCharacter((char)num(vlr[0]).
                                                           indexValue());
-            case VECTORFINDLASTUNIQUE: return Quantity.valueOf(vec(f.vlr[0]).findEnd());
+            case VECTORFINDLASTUNIQUE: return Quantity.valueOf(vec(vlr[0]).findEnd());
             case EVAL:
-                if (f.dynenv.parser.lexer.strictR5RS) 
+                if (r.dynenv.parser.lexer.strictR5RS) 
                    throwArgSizeException();
-                f.nxp=f.compile(f.vlr[0]);
-                f.env=null;
-                f.returnVLR();
+                r.nxp=r.compile(vlr[0]);
+                r.env=null;
+                r.returnVLR();
                 return VOID;
             case CALLCC:
-                Value kproc=f.vlr[0];
-                f.replaceVLR(1);
-                f.setVLR(0,f.stk.capture(f));
-                f.nxp = APPEVAL;
+                Value kproc=vlr[0];
+                r.replaceVLR(1);
+                r.setVLR(0,r.stk.capture(r));
+                r.nxp = APPEVAL;
                 return kproc;
             case CALLFC:
-                Procedure proc=proc(f.vlr[0]);
-                f.replaceVLR(1);
-                f.setVLR(0,f.fk.capture(f));
-                f.nxp = APPEVAL;
+                Procedure proc=proc(vlr[0]);
+                r.replaceVLR(1);
+                r.setVLR(0,r.fk.capture(r));
+                r.nxp = APPEVAL;
                 return proc;
-            case BOX: return new Box(f.vlr[0]);
-            case UNBOX: return (Value)box(f.vlr[0]).val;
-            case BOXQ: return truth(f.vlr[0] instanceof Box);
+            case BOX: return new Box(vlr[0]);
+            case UNBOX: return (Value)box(vlr[0]).val;
+            case BOXQ: return truth(vlr[0] instanceof Box);
             case LENGTH:
-                return Quantity.valueOf(length(pair(f.vlr[0])));
+                return Quantity.valueOf(length(pair(vlr[0])));
             case STRINGLENGTH:
-                return Quantity.valueOf(str(f.vlr[0]).length());
+                return Quantity.valueOf(str(vlr[0]).length());
             case VECTORLENGTH:
-                return Quantity.valueOf(vec(f.vlr[0]).vals.length);
+                return Quantity.valueOf(vec(vlr[0]).vals.length);
             case CIRCULARQ:
-                return truth(new CircularityDetector().isCircular(f.vlr[0]));
+                return truth(new CircularityDetector().isCircular(vlr[0]));
             case MAKEPARAM:
-                return new Parameter(f.vlr[0]);
+                return new Parameter(vlr[0]);
             case MAKESTRING:
-                return new SchemeString(new char[num(f.vlr[0]).indexValue()]);
+                return new SchemeString(new char[num(vlr[0]).indexValue()]);
             case MAKEVECTOR:
-                return new SchemeVector(num(f.vlr[0]).indexValue());
-            case NUMERATOR: return num(f.vlr[0]).numerator();
-            case DENOMINATOR: return num(f.vlr[0]).denominator();
-            case REALPART: return num(f.vlr[0]).realpart();
-            case IMAGPART: return num(f.vlr[0]).imagpart();
+                return new SchemeVector(num(vlr[0]).indexValue());
+            case NUMERATOR: return num(vlr[0]).numerator();
+            case DENOMINATOR: return num(vlr[0]).denominator();
+            case REALPART: return num(vlr[0]).realpart();
+            case IMAGPART: return num(vlr[0]).imagpart();
             case CURRENTWIND:
-                f.dynenv.wind = f.vlr[0];
+                r.dynenv.wind = vlr[0];
                 return VOID;
             case STRING2UNINTERNEDSYMBOL:
-                return Symbol.getUnique(string(f.vlr[0]));
+                return Symbol.getUnique(string(vlr[0]));
             case REPORTENVIRONMENT:
-                if (FIVE.equals(num(f.vlr[0])))
+                if (FIVE.equals(num(vlr[0])))
                     try {
-                        return new MemorySymEnv(f.lookupContextEnv(Util.REPORT));
+                        return new MemorySymEnv(r.lookupContextEnv(Util.REPORT));
                     } catch (ArrayIndexOutOfBoundsException e) {
                         throwPrimException(liMessage(SISCB, "noreportenv"));
                     }
                 else throwPrimException(liMessage(SISCB, "unsupportedstandardver"));
             case NULLENVIRONMENT:
-                switch (num(f.vlr[0]).indexValue()) {
+                switch (num(vlr[0]).indexValue()) {
                 case 5:
                     MemorySymEnv ae = new MemorySymEnv();
                     sisc.compiler.Compiler.addSpecialForms(ae);
@@ -465,182 +466,182 @@ public class Primitives extends IndexedProcedure {
                     return VOID;
                 }
             case STRICTR5RS: 
-                f.dynenv.parser.lexer.strictR5RS=truth(f.vlr[0]);
+                r.dynenv.parser.lexer.strictR5RS=truth(vlr[0]);
                 return VOID;
             case CURRENTEVAL:
-                f.ctx.evaluator=proc(f.vlr[0]);
+                r.ctx.evaluator=proc(vlr[0]);
                 return VOID;
             case NLNAME:
-                return Symbol.get(nlib(f.vlr[0]).getLibraryName());
+                return Symbol.get(nlib(vlr[0]).getLibraryName());
             case NLVERSION:
-                return Quantity.valueOf(nlib(f.vlr[0]).getLibraryVersion());
+                return Quantity.valueOf(nlib(vlr[0]).getLibraryVersion());
             case NLBINDINGNAMES:
-                Value[] va=(Value[])nlib(f.vlr[0]).getLibraryBindingNames(f);
+                Value[] va=(Value[])nlib(vlr[0]).getLibraryBindingNames(r);
                 return valArrayToList(va,0,va.length);
             case LOADNL:
                 try {
-                    Class clazz=Class.forName(string(f.vlr[0]), true, f.dynenv.getClassLoader());
+                    Class clazz=Class.forName(string(vlr[0]), true, r.dynenv.getClassLoader());
                     return (NativeLibrary)clazz.newInstance();
                 } catch (Exception e) {
                     throwPrimException(e.getMessage());
                 }
             case MAX_PRECISION:
-                Quantity.max_precision=num(f.vlr[0]).indexValue();
+                Quantity.max_precision=num(vlr[0]).indexValue();
                 return VOID;
             case MIN_PRECISION:
-                Quantity.min_precision=num(f.vlr[0]).indexValue();
+                Quantity.min_precision=num(vlr[0]).indexValue();
                 return VOID;
             case SLEEP:
                 try {
-                    Thread.sleep(num(f.vlr[0]).longValue());
+                    Thread.sleep(num(vlr[0]).longValue());
                 } catch (InterruptedException ie) {}
                 return VOID;
             case COMPACTSTRINGREP:
-                SchemeString.compactRepresentation=truth(f.vlr[0]);
+                SchemeString.compactRepresentation=truth(vlr[0]);
                 return VOID;
             default:
                 break SIZESWITCH;
             }
         case 2:
             switch (id) {
-            case EQ: return truth(f.vlr[0] == f.vlr[1]);
-            case EQV: return truth(f.vlr[0].eqv(f.vlr[1]));
+            case EQ: return truth(vlr[0] == vlr[1]);
+            case EQV: return truth(vlr[0].eqv(vlr[1]));
             case CONS:
-                return new Pair(f.vlr[0], f.vlr[1]);
+                return new Pair(vlr[0], vlr[1]);
             case EQUAL:
-                return truth(f.vlr[0].valueEqual(f.vlr[1]));
+                return truth(vlr[0].valueEqual(vlr[1]));
             case SETCAR:
-                truePair(f.vlr[0]).setCar(f.vlr[1]);
+                truePair(vlr[0]).setCar(vlr[1]);
                 return VOID;
             case SETCDR:
-                truePair(f.vlr[0]).setCdr(f.vlr[1]);
+                truePair(vlr[0]).setCdr(vlr[1]);
                 return VOID;
-            case ADD: return num(f.vlr[0]).add(num(f.vlr[1]));
-            case MUL: return num(f.vlr[0]).mul(num(f.vlr[1]));
-            case SUB: return num(f.vlr[0]).sub(num(f.vlr[1]));
-            case DIV: return num(f.vlr[0]).div(num(f.vlr[1]));
-            case NEQ: return truth(num(f.vlr[0]).comp(num(f.vlr[1]),0));
+            case ADD: return num(vlr[0]).add(num(vlr[1]));
+            case MUL: return num(vlr[0]).mul(num(vlr[1]));
+            case SUB: return num(vlr[0]).sub(num(vlr[1]));
+            case DIV: return num(vlr[0]).div(num(vlr[1]));
+            case NEQ: return truth(num(vlr[0]).comp(num(vlr[1]),0));
             case REMAINDER:
-                return num(f.vlr[0]).remainder(num(f.vlr[1]));
+                return num(vlr[0]).remainder(num(vlr[1]));
             case QUOTIENT:
-                return num(f.vlr[0]).quotient(num(f.vlr[1]));
+                return num(vlr[0]).quotient(num(vlr[1]));
             case LCM:
-                return num(f.vlr[0]).lcm(num(f.vlr[1]));
+                return num(vlr[0]).lcm(num(vlr[1]));
             case GCD:
-                return num(f.vlr[0]).gcd(num(f.vlr[1]));
+                return num(vlr[0]).gcd(num(vlr[1]));
             case ATAN:
-                return num(f.vlr[0]).atan(num(f.vlr[1]));
+                return num(vlr[0]).atan(num(vlr[1]));
             case SETBOX:
                 try {
-                    box(f.vlr[0]).set(f.vlr[1]);
+                    box(vlr[0]).set(vlr[1]);
                 } catch (ImmutableException e) {
                     throwPrimException(liMessage(SISCB, "isimmutable", "box",
-                                                 f.vlr[0].synopsis()));
+                                                 vlr[0].synopsis()));
                 }
                 return VOID;
             case STRINGREF:
-                int index=num(f.vlr[1]).indexValue();
+                int index=num(vlr[1]).indexValue();
                 try {
-                    return new SchemeCharacter(str(f.vlr[0]).charAt(index));
+                    return new SchemeCharacter(str(vlr[0]).charAt(index));
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throwPrimException(liMessage(SISCB, "indexoob", 
                                                  new Object[] {
                                                      new Integer(index),
-                                                     f.vlr[0].synopsis()}));
+                                                     vlr[0].synopsis()}));
                 }
             case VECTORREF:
-                index=num(f.vlr[1]).indexValue();
+                index=num(vlr[1]).indexValue();
                 try {
-                    return vec(f.vlr[0]).vals[index];
+                    return vec(vlr[0]).vals[index];
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throwPrimException(liMessage(SISCB, "indexoob", 
                                                  new Object[] {
                                                      new Integer(index),
-                                                     f.vlr[0].synopsis()}));
+                                                     vlr[0].synopsis()}));
                 }
             case MAKEVECTOR:
-                return new SchemeVector(num(f.vlr[0]).indexValue(),
-                                        f.vlr[1]);
+                return new SchemeVector(num(vlr[0]).indexValue(),
+                                        vlr[1]);
             case STRINGFILL:
-                SchemeString st=str(f.vlr[0]);
-                char c=character(f.vlr[1]);
+                SchemeString st=str(vlr[0]);
+                char c=character(vlr[1]);
                 for (int i=0; i<st.length(); i++)
                     st.set(i, c);
                 return VOID;
             case MAKESTRING:
-                char newStr[]=new char[num(f.vlr[0]).indexValue()];
-                char fillchar=character(f.vlr[1]);
+                char newStr[]=new char[num(vlr[0]).indexValue()];
+                char fillchar=character(vlr[1]);
                 for (int i=0; i<newStr.length; i++) {
                     newStr[i]=fillchar;
                 }
                 return new SchemeString(newStr);
             case STRING2NUMBER:
                 try {
-                    int radix=num(f.vlr[1]).indexValue();
-                    if (f.dynenv.parser.lexer.strictR5RS &&
+                    int radix=num(vlr[1]).indexValue();
+                    if (r.dynenv.parser.lexer.strictR5RS &&
                         !(radix==10 || radix == 16 || radix == 2 ||
                           radix==8))
                         throwPrimException(liMessage(SISCB, "invalidradix"));
-                    return (Quantity)f.dynenv.parser.nextExpression(new ReaderInputPort(new StringReader(string(f.vlr[0]))), radix, 0);
+                    return (Quantity)r.dynenv.parser.nextExpression(new ReaderInputPort(new StringReader(string(vlr[0]))), radix, 0);
                 } catch (NumberFormatException nf) {
                     return FALSE;
                 } catch (IOException e) {
                     return FALSE;
                 }
             case NUMBER2STRING:
-                int radix=num(f.vlr[1]).indexValue();
-                if (f.dynenv.parser.lexer.strictR5RS &&
+                int radix=num(vlr[1]).indexValue();
+                if (r.dynenv.parser.lexer.strictR5RS &&
                     !(radix==10 || radix == 16 || radix == 2 ||
                       radix==8))
                     throwPrimException(liMessage(SISCB, "invalidradix"));
-                return new SchemeString(num(f.vlr[0]).toString(radix));
+                return new SchemeString(num(vlr[0]).toString(radix));
             case STRINGAPPEND:
-                return str(f.vlr[0]).append(str(f.vlr[1]));
+                return str(vlr[0]).append(str(vlr[1]));
             case MAKERECTANGULAR:
-                return Quantity.valueOf(num(f.vlr[0]),
-                                        num(f.vlr[1]));
-            case ASHL: return Quantity.valueOf(num(f.vlr[0]).integer()
-                                               .shiftLeft(num(f.vlr[1])
+                return Quantity.valueOf(num(vlr[0]),
+                                        num(vlr[1]));
+            case ASHL: return Quantity.valueOf(num(vlr[0]).integer()
+                                               .shiftLeft(num(vlr[1])
                                                           .indexValue()));
-            case ASHR: return Quantity.valueOf(num(f.vlr[0]).integer()
-                                               .shiftRight(num(f.vlr[1])
+            case ASHR: return Quantity.valueOf(num(vlr[0]).integer()
+                                               .shiftRight(num(vlr[1])
                                                            .indexValue()));
             case NLBINDING:
-                return nlib(f.vlr[0]).getBindingValue(f, symbol(f.vlr[1]));
+                return nlib(vlr[0]).getBindingValue(r, symbol(vlr[1]));
             case EVAL:
-                f.nxp=f.compile(f.vlr[0], env(f.vlr[1]));
-                f.env=null;
-                f.returnVLR();
+                r.nxp=r.compile(vlr[0], env(vlr[1]));
+                r.env=null;
+                r.returnVLR();
                 return VOID;
             case WITHFC:
-                Procedure proc=proc(f.vlr[1]);
-                Procedure ehandler=proc(f.vlr[0]);
-                f.fk=f.createFrame(new ApplyValuesContEval(ehandler),
-                                   null, false, f.env, f.fk, f.stk, 
+                Procedure proc=proc(vlr[1]);
+                Procedure ehandler=proc(vlr[0]);
+                r.fk=r.createFrame(new ApplyValuesContEval(ehandler),
+                                   null, false, r.env, r.fk, r.stk, 
                                    null);
-                f.replaceVLR(0);
-                f.nxp = APPEVAL;
+                r.replaceVLR(0);
+                r.nxp = APPEVAL;
                 return proc;
             case CALLWITHVALUES:
-                Procedure producer=proc(f.vlr[0]);
-                Procedure consumer=proc(f.vlr[1]);
-                f.push(new ApplyValuesContEval(consumer));
-                f.replaceVLR(0);
-                f.nxp = APPEVAL;
+                Procedure producer=proc(vlr[0]);
+                Procedure consumer=proc(vlr[1]);
+                r.push(new ApplyValuesContEval(consumer));
+                r.replaceVLR(0);
+                r.nxp = APPEVAL;
                 return producer;
             case GETPROP:
                 Value ret = null;
-                if (f.vlr[1] instanceof SymbolicEnvironment) {
-                    ret = (Value)env(f.vlr[1]).lookup(symbol(f.vlr[0]));
+                if (vlr[1] instanceof SymbolicEnvironment) {
+                    ret = (Value)env(vlr[1]).lookup(symbol(vlr[0]));
                 } else {
-                    ret = (Value)f.lookup(symbol(f.vlr[0]), symbol(f.vlr[1]));
+                    ret = (Value)r.lookup(symbol(vlr[0]), symbol(vlr[1]));
                 }
                 return (ret == null) ? FALSE : ret;
             case REMPROP:
-                f.undefine(symbol(f.vlr[0]), symbol(f.vlr[1]));
+                r.undefine(symbol(vlr[0]), symbol(vlr[1]));
                 return VOID;
             case SETENVIRONMENT:
-                f.ctx.defineContextEnv(symbol(f.vlr[0]), env(f.vlr[1]));
+                r.ctx.defineContextEnv(symbol(vlr[0]), env(vlr[1]));
                 return VOID;
             default:
                 break SIZESWITCH;
@@ -649,47 +650,47 @@ public class Primitives extends IndexedProcedure {
             switch(id) {
             case GETPROP:
                 Value ret = null;
-                if (f.vlr[1] instanceof SymbolicEnvironment) {
-                    ret = (Value)env(f.vlr[1]).lookup(symbol(f.vlr[0]));
+                if (vlr[1] instanceof SymbolicEnvironment) {
+                    ret = (Value)env(vlr[1]).lookup(symbol(vlr[0]));
                 } else {
-                    ret = (Value)f.lookup(symbol(f.vlr[0]), symbol(f.vlr[1]));
+                    ret = (Value)r.lookup(symbol(vlr[0]), symbol(vlr[1]));
                 }
-                return (ret == null) ? f.vlr[2] : ret;
+                return (ret == null) ? vlr[2] : ret;
             case PUTPROP:
-                Symbol lhs=symbol(f.vlr[0]);
-                Value rhs=f.vlr[2];
+                Symbol lhs=symbol(vlr[0]);
+                Value rhs=vlr[2];
                 SymbolicEnvironment env;
-                if (f.vlr[1] instanceof SymbolicEnvironment) {
-                    env=(SymbolicEnvironment)f.vlr[1];
+                if (vlr[1] instanceof SymbolicEnvironment) {
+                    env=(SymbolicEnvironment)vlr[1];
                 } else {
-                    env=f.getContextEnv(symbol(f.vlr[1]));
+                    env=r.getContextEnv(symbol(vlr[1]));
                 }
                 updateName(rhs, lhs);
                 env.define(lhs, rhs);
                 return VOID;
             case STRINGSET:
-                int index=num(f.vlr[1]).indexValue();
+                int index=num(vlr[1]).indexValue();
                 try {
-                    str(f.vlr[0]).set(index, character(f.vlr[2]));
+                    str(vlr[0]).set(index, character(vlr[2]));
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throwPrimException(liMessage(SISCB, "indexoob", 
                                                  new Object[] {
                                                      new Integer(index),
-                                                     f.vlr[0].synopsis()}));
+                                                     vlr[0].synopsis()}));
                 }
                 return VOID;
             case VECTORFILL:
-                vec(f.vlr[0]).fill(f.vlr[1]);
+                vec(vlr[0]).fill(vlr[1]);
                 return VOID;
             case VECTORSET:
-                index=num(f.vlr[1]).indexValue();
+                index=num(vlr[1]).indexValue();
                 try {
-                    vec(f.vlr[0]).set(index,f.vlr[2]);
+                    vec(vlr[0]).set(index,vlr[2]);
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throwPrimException(liMessage(SISCB, "indexoob", 
                                                  new Object[] {
                                                      new Integer(index),
-                                                     f.vlr[0].synopsis()}));
+                                                     vlr[0].synopsis()}));
                 }
                 return VOID;
             }
@@ -698,73 +699,70 @@ public class Primitives extends IndexedProcedure {
         Quantity quantity=null;
         switch (id) {
         case APPLY:
-            Procedure proc=proc(f.vlr[0]);
-            int l = f.vlr.length-2;
-            Pair args=pair(f.vlr[l+1]);
-            Value oldvlr[] = f.vlr;
-            //this might get us back the just recycled f.vlr,
-            //which is fine since we only shift its contents to
-            //the left by one
-            f.replaceVLR(l + length(args));
-            Value newvlr[] = f.vlr;
+            Procedure proc=proc(vlr[0]);
+            int l = vls-2;
+            Pair args=pair(vlr[l+1]);
+            
+            r.replaceVLR(l + length(args));
+            Value newvlr[] = r.vlr;
             
             int j;
             for (j=0; j < l; j++) {
-                newvlr[j] = oldvlr[j+1];
+                newvlr[j] = vlr[j+1];
             }
             for (; args != EMPTYLIST; args = (Pair)args.cdr) {
                 newvlr[j++] = args.car;
             }
             
-            f.nxp = APPEVAL;
+            r.nxp = APPEVAL;
             return proc;
-        case LIST: return valArrayToList(f.vlr,0,f.vlr.length);
+        case LIST: return valArrayToList(vlr,0,vls);
         case ADD:
-            int x=f.vlr.length-1;
-            quantity=num(f.vlr[x]);
+            int x=vls-1;
+            quantity=num(vlr[x]);
             while (--x >= 0) 
-                quantity=quantity.add(num(f.vlr[x]));
+                quantity=quantity.add(num(vlr[x]));
             return quantity;
         case MUL:
-            x=f.vlr.length-1;
-            quantity=num(f.vlr[x]);
+            x=vls-1;
+            quantity=num(vlr[x]);
             while (--x >= 0) 
-                quantity=quantity.mul(num(f.vlr[x]));
+                quantity=quantity.mul(num(vlr[x]));
             return quantity;
         case SUB: 
-            quantity=num(f.vlr[0]);
-            for (int i=1; i<f.vlr.length; i++) {
-                quantity=quantity.sub(num(f.vlr[i]));
+            quantity=num(vlr[0]);
+            for (int i=1; i<vls; i++) {
+                quantity=quantity.sub(num(vlr[i]));
             }
             return quantity;
         case NEQ:
-            quantity=num(f.vlr[0]);
-            for (int i=f.vlr.length-1; i>0; i--) {
-                if (!quantity.comp(num(f.vlr[i]), 0)) return FALSE;
+            quantity=num(vlr[0]);
+            for (int i=vls-1; i>0; i--) {
+                if (!quantity.comp(num(vlr[i]), 0)) return FALSE;
             }
             return TRUE;
         case LT:
-            quantity=num(f.vlr[0]);
-            for (int i=1; i<f.vlr.length; i++) {
-                Quantity q=num(f.vlr[i]);
+            quantity=num(vlr[0]);
+            for (int i=1; i<vls; i++) {
+                Quantity q=num(vlr[i]);
                 if (!quantity.comp(q, -1)) return FALSE;
                 quantity=q;
             }
             return TRUE;
         case GRT:
-            quantity=num(f.vlr[0]);
-            for (int i=1; i<f.vlr.length; i++) {
-                Quantity q=num(f.vlr[i]);
+            quantity=num(vlr[0]);
+            for (int i=1; i<vls; i++) {
+                Quantity q=num(vlr[i]);
                 if (!quantity.comp(q, 1)) return FALSE;
                 quantity=q;
             }
             return TRUE;
         case DIV: 
-            x=f.vlr.length-1;
-            quantity=num(f.vlr[x]);
+            x=vls-1;
+            quantity=num(vlr[x]);
             while (--x >= 1) 
-                quantity=quantity.mul(num(f.vlr[x]));
-            return num(f.vlr[0]).div(quantity);
+                quantity=quantity.mul(num(vlr[x]));
+            return num(vlr[0]).div(quantity);
         default:
             throwArgSizeException();
         }
