@@ -59,7 +59,7 @@ public abstract class Expression extends Util implements Serializable {
         Value res = (Value)annotations.put(key, val);
         return (res == null) ? def : res;
     }
-     
+
     public Value setAnnotation(Symbol key, Value val) {
         return setAnnotation(key, val, FALSE);
     }
