@@ -180,7 +180,8 @@ public class REPL {
         if (func!=null) {
             Procedure fun=Util.proc(r.eval(func));
             Vector av=(Vector)args.get("argv");
-            SchemeString[] sargs=new SchemeString[av.size()];
+            SchemeString[] sargs=new SchemeString[(av == null ? 0 : 
+						   av.size())];
             for (int i=0; i<sargs.length; i++) 
                 sargs[i]=new SchemeString((String)av.elementAt(i));
             Value v=r.eval(fun, sargs);
