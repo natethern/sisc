@@ -106,6 +106,7 @@ public class Primitives extends ModuleAdapter {
         define("inexact->exact", INEXACT2EXACT);
         define("inexact?", INEXACTQ);
         define("input-port?", INPORTQ);
+        define("input-port-location", INPORTLOCATION);
         define("integer->char", INTEGER2CHAR);
         define("integer?", INTEGERQ);
         define("interaction-environment", INTERACTIONENVIRONMENT );
@@ -468,6 +469,18 @@ public class Primitives extends ModuleAdapter {
                 op=outport(f.vlr[0]);
                 if (op!=f.dynenv.out) op.close();
                 return VOID;
+            case INPORTLOCATION:
+                inp = inport(f.vlr[0]);
+                if (inp instanceof SourceInputPort) {
+                    SourceInputPort sinp = (SourceInputPort)inp;
+                    return list(new Pair(sym("source-file"),
+                                         new SchemeString(sinp.sourceFile)),
+                                new Pair(sym("line-number"),
+                                         Quantity.valueOf(sinp.line)),
+                                new Pair(sym("column-number"),
+                                         Quantity.valueOf(sinp.column)));
+                } else
+                    return FALSE;
             case BOX: return new Box(f.vlr[0]);
             case UNBOX: return (Value)box(f.vlr[0]).val;
             case BOXQ: return truth(f.vlr[0] instanceof Box);
@@ -1041,6 +1054,7 @@ public class Primitives extends ModuleAdapter {
         INEXACT2EXACT = 52,
         INEXACTQ = 53,
         INPORTQ = 54,
+        INPORTLOCATION = 80,
         INTEGER2CHAR = 55,
         INTEGERQ = 56,
         INTERACTIONENVIRONMENT = 4,
@@ -1080,7 +1094,6 @@ public class Primitives extends ModuleAdapter {
         PROCEDUREQ = 79,
         PUTPROP = 140,
         QUOTIENT = 126,
-	// <80>
         READ = 81,
         //	READ = 9,
         //	READCHAR = 10,

@@ -1268,6 +1268,56 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         s-expression at a time.
       </para>
     </sect2>
+    <sect2>
+      <title>Location Tracking</title>
+      <para>
+        &SISC; allows the location of input, i.e. the file name, line
+        number, and column number, to be tracked when reading from an
+        input port.
+      </para>
+      <para>
+        <blockquote>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>input-port</type>
+              <methodname>open-source-input-file</methodname>
+              <methodparam>
+                <parameter>url</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                This procedure behaves the same as
+                <function>open-input-file</function>, except that it
+                also tracks the location of the input.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>list</type>
+              <methodname>input-port-location</methodname>
+              <methodparam>
+                <parameter>input-port</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the current location information associated
+                with <parameter>input-port</parameter>. The return
+                value is an association list containing the following
+                keys: <literal>source-file</literal>,
+                <literal>line-number</literal>,
+                <literal>column-number</literal>. If no location
+                information is available, &num;f is returned.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>      
+    </sect2>
     <sect2 id="FileSystem">
       <title>File-System Interface</title>
       <note>
