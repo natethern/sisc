@@ -571,7 +571,7 @@
           <itemizedlist>
             <listitem>
               <formalpara>
-                <title><envar>SISC_LIB</envar></title>
+                <title><envar>SISC_HOME</envar></title>
                 <para>
                   This should (but does not actually
                   <emphasis>have</emphasis> to) point to the location
@@ -608,7 +608,7 @@
         <para>
           Make sure that the above environment variables are set and
           that you have <emphasis>write</emphasis> permissions to the
-          <envar>SISC_LIB</envar> directory; often this means you
+          <envar>SISC_HOME</envar> directory; often this means you
           need to be logged in as a privileged user.
         </para>
         <para>
@@ -623,7 +623,7 @@
         </para>
         <para>
           The above should create a file <filename>slibcat</filename>
-          in the <envar>SISC_LIB</envar>. It is a good idea to check
+          in the <envar>SISC_HOME</envar>. It is a good idea to check
           that this has indeed happened.
         </para>
       </sect3>
