@@ -20,7 +20,8 @@ public class AppEval extends Expression {
         r.acc.apply(r);
     }
 
-    public void setCaptured(CallFrame onFrame) {
+    public void setCaptured(Interpreter r, CallFrame onFrame) {
+        onFrame.createCap(r);
         onFrame.cap[0]=true;
     }
 

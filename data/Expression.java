@@ -133,7 +133,7 @@ public abstract class Expression extends Util
         return true;
     }
 
-    public void setCaptured(CallFrame onFrame) {}
+    public void setCaptured(Interpreter r, CallFrame onFrame) {}
 }
 /*
  * The contents of this file are subject to the Mozilla Public

@@ -104,14 +104,6 @@ public class Interpreter extends Util {
                         while (nxp==null) 
                             pop(stk);
 
-                        /*
-                          System.err.print(nxp);		
-                          if (vlr!=null) {
-                          for (int i=0; i<vlr.length; i++)
-                          System.err.print(" "+vlr[i]);
-                          System.err.println();
-                          }
-                        */
                         nxp.eval(this);
                     } while (true);
                 } catch (ContinuationException ce) {
@@ -128,7 +120,7 @@ public class Interpreter extends Util {
 
     public final Value[] newVLR(int size) {
         vlk=false;
-        cap=createBoolArray(size);
+        cap=null;
         return (vlr=createValues(size));
     }
 
@@ -154,15 +146,18 @@ public class Interpreter extends Util {
     }
 
     public final void setVLR(int pos, Value v) {
-        for (int i=pos; i>=0; i--)
-            if (cap[i]) {
-                llcf.parent=lcf=lcf.makeSafe(this);
-                
-                vlr=lcf.vlr;
-                if ((pos+1)<vlr.length)
-                    cap[pos+1]=false;
-                break;
-            }
+        if (cap!=null) {
+            //            System.err.println(pos+","+vlr.length);
+            for (int i=pos; i>=0; i--)
+                if (cap[i]) {
+                    llcf.parent=lcf=lcf.makeSafe(this);
+                    
+                    vlr=lcf.vlr;
+                    if ((pos+1)<vlr.length)
+                        cap[pos+1]=false;
+                    break;
+                }
+        }
         vlr[pos]=v;
     }
 
@@ -338,6 +333,7 @@ public class Interpreter extends Util {
         if (f!=null &&
             !f.vlk && (deadFramePointer < FPMAX)) {
             deadFrames[++deadFramePointer]=f;
+            returnBools(f.cap);
         }
     }
 
@@ -393,8 +389,10 @@ public class Interpreter extends Util {
 
     //static int sizemiss, miss, hit, zerohit;
     public final boolean[] createBoolArray(int size) {
-        if (size == 0) 
+        if (size == 0) {
+            new Throwable().printStackTrace();
             return ZB; 
+        }
 
         if (size >= BOOLSPOOLSIZE) 
             return new boolean[size]; 
@@ -402,6 +400,9 @@ public class Interpreter extends Util {
         boolean[] res = deadBools[size];
         if (res == null) 
             return new boolean[size]; 
+
+        for (int i=res.length-1; i>=0; i--)
+            res[i]=false;
 
         deadBools[size] = null;
         return res;

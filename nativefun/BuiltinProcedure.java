@@ -41,6 +41,7 @@ public class BuiltinProcedure extends Procedure {
                 r.returnVLR();
             }
         } catch (ArrayIndexOutOfBoundsException np) {
+            np.printStackTrace();
             error(r, name, liMessage(SISCB, "incorrectargcount"));
         } catch (ClassCastException cc) {
             error(r, name, liMessage(SISCB,"gotunexpectedvalue",

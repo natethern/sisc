@@ -45,7 +45,7 @@ public class CallFrame extends Procedure {
             Value[] nvlr=r.createValues(l);
             System.arraycopy(vlr, 0, nvlr, 0, l);
             vlr=nvlr;
-            cap=new boolean[l];
+            cap=r.createBoolArray(Math.max(1,vlr.length));
             //cap=new byte[(l>>2) + 1];
         }
     }
@@ -56,10 +56,13 @@ public class CallFrame extends Procedure {
         // Set the captured flags all the way to the root,
         // including our unsafe doppleganger
         CallFrame w=this;
+        boolean lastWasLocked=false;
         do {
+            if (lastWasLocked) break;
+            lastWasLocked=w.vlk;
             w.vlk=true;
             if (w.nxp!=null)
-                w.nxp.setCaptured(w);
+                w.nxp.setCaptured(r, w);
             w=w.parent;
         } while (w!=null); 
         // Checking for a locked frame as a stop-fast 
@@ -69,14 +72,20 @@ public class CallFrame extends Procedure {
     }
     
     public final CallFrame makeSafe(Interpreter r) {
-        CallFrame cv=cloneFrame();
+        CallFrame cv=cloneFrame(r);
         cv.vlk=true;
         cv.copyVLR(r);
         return cv;
     }
-    
-    protected final CallFrame cloneFrame() {
-        return new CallFrame(nxp, vlr, vlk, env, fk, parent, cap);
+
+    public final void createCap(Interpreter r) {
+        if (cap==null) {
+            cap=r.createBoolArray(Math.max(1,vlr.length));
+        }
+    }
+
+    protected final CallFrame cloneFrame(Interpreter r) {
+        return r.createFrame(nxp, vlr, vlk, env, fk, parent, cap);
     }
 
     public void display(ValueWriter w) throws IOException {    

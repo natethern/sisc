@@ -451,7 +451,7 @@
 (import debugging)
 (import optimizer)
 ;;not ready yet
-(define (current-optimizer . args) #;optimize (lambda (x) x))
+(define (current-optimizer . args) optimize)
 
 ;;load and import srfi-0
 (module srfi-0 (cond-expand)
