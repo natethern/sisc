@@ -74,7 +74,7 @@
 
 (define library-vicinity
   (let ((library-path (or (getenv "SCHEME_LIBRARY_PATH")
-			  "/usr/local/lib/slib/")))
+			  "/usr/share/slib/")))
     (lambda () library-path)))
 
 ;;; (home-vicinity) should return the vicinity of the user's HOME

@@ -162,7 +162,7 @@
       time based on the number of elements.
     </para>
     <para>
-      SISC hash tables use <function>eqv?</function> for element
+      &SISC; hash tables use <function>eqv?</function> for element
       comparison, which implies that keys generally ought to be of a
       type for which comparison with <function>eqv?</function> is
       meaningful. Furthermore, <emphasis>keys must be
@@ -170,7 +170,7 @@
       allocated strings, lists and vectors.
     </para>
     <para>
-      SISC hash tables are thread-safe, i.e. multiple threads can
+      &SISC; hash tables are thread-safe, i.e. multiple threads can
       concurrently access and modify the same hash table.
     </para>
     <sect2>
@@ -469,6 +469,198 @@
         will appear in future revisions. 
       </para>
     </note>
+  </sect1>
+  <sect1 id="ThirdPartyLibs">
+    <title>Third-Party Libraries</title>
+    <para>
+      &SISC; provides hooks for accessing a number of third-party
+      Scheme libraries.
+    </para>
+    <note>
+      <para>
+        This functionality has not undergone much testing.
+      </para>
+    </note>
+    <sect2>
+      <title>SRFIs</title>
+      <para>
+        The Scheme Requests For Implementation (SRFI) process aims to
+        coordinate libraries and other additions to the Scheme
+        language between different Scheme implementations. For details
+        see <ulink url="http://srfi.schemers.org/"/> which describes
+        the process and contains a list of all available SRFIs.
+      </para>
+      <sect3>
+        <title>SRFI Modules</title>
+        <para>
+          In &SISC; each SRFI is encapsulated in a module. See <xref
+          linkend="Modules"/> for details of &SISC;'s module system.
+          The definitions for SRFI modules are not included in the
+          standard &SISC; heap build and hence must be loaded
+          separately from the <filename>srfi.scm</filename>, which can
+          be found in the <filename>scheme-src</filename> directory
+          of the &SISC; distribution:
+<programlisting>
+(load "<parameter>path</parameter>/srfi.scm")
+</programlisting>
+          Loading this takes quite a while, which is one reason why
+          the module definitions are not included in the standard heap
+          build.
+        </para>
+      </sect3>
+      <sect3>
+        <title>Using SRFIs</title>
+        <para>
+          &SISC; currently supports SRFIs
+          0,1,2,5,6,7,8,9,11,12,13,14,16,23,24.
+          Once the SRFI module definitions have been loaded as
+          described above, an SRFI <parameter>n</parameter> can be
+          imported using
+<programlisting>
+(import srfi-<parameter>n</parameter>)
+</programlisting>
+          e.g.
+<programlisting>
+(import srfi-1)
+(xcons 1 2) ;=&gt; (2 . 1)
+</programlisting>
+        </para>
+        <para>
+          SRFI modules, like all modules in &SISC;, can be
+          imported/used by other modules. Doing so does not pollute
+          the top-level environment with the definitions exported by
+          the module, i.e. any code outside the importing module
+          remains unaffected.
+        </para>
+      </sect3>
+    </sect2>
+    <sect2>
+      <title>SLIB</title>
+      <para>
+        The <application>SLIB</application> portable scheme library
+        provides compatibility and utility functions for standard
+        Scheme implementations. It is supported by many Schemes,
+        including &SISC;.
+      </para>
+      <sect3>
+        <title>Downloading and Installation</title>
+        <para>
+          The latest version of <application>SLIB</application> is
+          available from <ulink
+          url="http://swissnet.ai.mit.edu/~jaffer/SLIB.html"/> as both
+          a zip file and RPM. The site also hosts an online version of
+          the <application>SLIB</application> manual.
+        </para>
+        <para>
+          Download <application>SLIB</application> and install it in a
+          convenient location. The RPM will be default be installed
+          in <filename>/usr/share/slib/</filename>. Do not worry when
+          you see some errors about missing programs such as
+          <application>mzscheme</application> and
+          <application>scheme48</application> when installing the RPM
+          - these happen because <application>SLIB</application> tries
+          to auto-configure itself for various Schemes that you may
+          not have installed on your system.
+        </para>
+      </sect3>
+      <sect3>
+        <title>Environment</title>
+        <para>
+          Using <application>SLIB</application> in &SISC; requires two
+          environment variables to be set:
+          <itemizedlist>
+            <listitem>
+              <formalpara>
+                <title><envar>SISC_LIB</envar></title>
+                <para>
+                  This should (but does not actually
+                  <emphasis>have</emphasis> to) point to the location
+                  where you have installed &SISC;.
+                </para>
+              </formalpara>
+            </listitem>
+            <listitem>
+              <formalpara>
+                <title><envar>SCHEME_LIBRARY_PATH</envar></title>
+                <para>
+                  This must point to the location where you installed
+                  <application>SLIB</application>.
+                </para>
+              </formalpara>
+            </listitem>
+          </itemizedlist>
+          Note that you must specify a trailing separator, i.e. a
+          <literal>/</literal> if you are on a Unix system. You also
+          need to ensure that all potential users of
+          <application>SLIB</application> have
+          <emphasis>read</emphasis> permissions to files in the
+          directories referred to by the above environment variables.
+        </para>
+        <para>
+          You also need access to the file
+          <filename>slib.scm</filename>, which can be found in the
+          <filename>scheme-src</filename> directory of the &SISC;
+          distribution.
+        </para>
+      </sect3>
+      <sect3>
+        <title>Building the Catalog</title>
+        <para>
+          Make sure that the above environment variables are set and
+          that you have <emphasis>write</emphasis> permissions to the
+          <envar>SISC_LIB</envar> directory; often this means you
+          need to be logged in as a privileged user.
+        </para>
+        <para>
+          Start &SISC; as you normally would. At the prompt type
+<programlisting>
+(load "<parameter>path</parameter>/slib.scm")
+(require 'new-catalog)
+(exit)
+</programlisting>
+          where <parameter>path</parameter> is the directory
+          containing the <filename>slib.scm</filename> file.
+        </para>
+        <para>
+          The above should create a file <filename>slibcat</filename>
+          in the <envar>SISC_LIB</envar>. It is a good idea to check
+          that this has indeed happened.
+        </para>
+      </sect3>
+      <sect3>
+        <title>Using <application>SLIB</application></title>
+        <para>
+          Make sure the above environment variables are set. Start
+          &SISC; as you normally would. At the prompt load
+          <filename>slib.scm</filename> as described above, i.e.
+<programlisting>
+(load "<parameter>path</parameter>/slib.scm")
+</programlisting>
+          You can now load <application>SLIB</application> modules
+          using <function>require</function>, e.g.
+<programlisting>
+(require 'tsort)
+(tsort '((shirt tie belt)
+         (tie jacket)
+         (belt jacket)
+         (watch)
+         (pants shoes belt)
+         (undershorts pants shoes)
+         (socks shoes))
+       eq?)
+</programlisting>
+          loads the topological sorting module and invokes one of the
+          procedures defined by it.
+        </para>
+        <para>
+          Please refer to the <application>SLIB</application> manual
+          for further details of what modules are available. Note
+          however that, as with most other Schemes supported by
+          <application>SLIB</application>, there will be some modules
+          that are not available / do not work in &SISC;.
+        </para>
+      </sect3>
+    </sect2>
   </sect1>
 </chapter>
 <!-- Keep this comment at the end of the file
