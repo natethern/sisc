@@ -72,7 +72,11 @@ public class TestR5RS
         AppContext ctx = new AppContext();
         Context.register("main", ctx);
         interpreter = Context.enter("main");
-        REPL.initializeInterpreter(interpreter,new String[0]);
+        REPL.initializeInterpreter(
+            interpreter,
+            new String[0],
+            REPL.findHeap()
+        );
     }
 
     protected void tearDown()
