@@ -958,6 +958,17 @@
         than once then the initial value is the one found earlier in
         the list.
       </para>
+      <example>
+        <title>Class Definition</title>
+        <programlisting>
+(define-class (&lt;foo&gt;) (x #f) (y 1))
+(define-class (&lt;bar&gt;) (y 2)  (z #f))
+(define-class (&lt;baz&gt; &lt;foo&gt; &lt;bar&gt;) (a 1) (b 2) (c #f))
+(type&lt;= &lt;baz&gt; &lt;foo&gt;) ;=&gt; #t
+(type&lt;= &lt;baz&gt; &lt;bar&gt;) ;=&gt; #t
+(type&lt;= &lt;foo&gt; &lt;bar&gt;) ;=> #f
+        </programlisting>
+      </example>
     </sect2>
     <sect2>
       <title>Instantiating Classes</title>
@@ -976,6 +987,21 @@
         post-creation object initialisation carried out by the
         <function>initialize</function> generic procedure suffices.
       </para>
+      <example>
+        <title>Class Instantiation</title>
+        <programlisting>
+(define-method (initialize (&lt;foo&gt; o) (&lt;top&gt; v))
+  (o 'x v))
+(define-method (initialize (&lt;bar&gt; o) (&lt;top&gt; v))
+  (o 'z v))
+(define-method (initialize (&lt;baz&gt; o) (&lt;top&gt; v))
+  (o 'c v))
+
+(define foo (make &lt;foo&gt; 1))
+(define bar (make &lt;bar&gt; 2))
+(define baz (make &lt;baz&gt; 3))
+        </programlisting>
+      </example>
       <para>
         Scheme objects can also be created directly using
         <blockquote>
@@ -1006,6 +1032,91 @@
           </para>
         </blockquote> 
       </para>
+    </sect2>
+    <sect2>
+      <title>Slot Access</title>
+      <para>
+        The slots of a Scheme object can be accessed by invoking the
+        object as a procedure.
+        <blockquote>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname></methodname>
+              <methodparam><parameter>sobj</parameter></methodparam>
+              <methodparam><parameter>fieldname</parameter></methodparam>
+              <methodparam choice="opt">
+                <parameter>value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Gets or sets the value of the Scheme object
+                <parameter>sobj</parameter>'s slot
+                <parameter>fieldname</parameter> (a symbol).
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+      <example>
+        <title>Simple Slot Access</title>
+        <programlisting>
+(foo 'x) ;=&gt; 1
+(bar 'y) ;=&gt; 2
+(baz 'z) ;=&gt; #f
+(map foo '(x y)) ;=&gt; (1 1)
+(map bar '(y z)) ;=&gt; (2 2)
+(map baz '(x y z a b c)) ;=&gt; (#f 1 #f 1 2 3)
+        </programlisting>
+      </example>
+      <para>
+        Often programs require access to object fields that are deeply
+        nested inside some containment hierarchy or reference
+        chain. This can be accomplished succinctly using the following
+        operation:
+        <blockquote>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname></methodname>
+              <methodparam><parameter>sobj</parameter></methodparam>
+              <methodparam><parameter>slot-list</parameter></methodparam>
+              <methodparam choice="opt">
+                <parameter>value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Gets or sets the value of nested Scheme object's slot.
+                <parameter>sobj</parameter> is the Scheme object on
+                which to start the
+                lookup. <parameter>slot-list</parameter> is a list of
+                slot, supplied as symbols, and must contain at least
+                one element. If <parameter>slot-list</parameter>
+                contains more than one element then a nested lookup is
+                performed, i.e. the first slot name is looked up on
+                the <parameter>sobj</parameter>, the second slot nanme
+                is looked up on the resulting object, and so on until
+                the final slot name in the list, which is retrieved
+                from or set on the object resulting from the preceding
+                lookup.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+      <example>
+        <title>Nested Slot Access</title>
+        <programlisting>
+(baz '(c) bar)
+(bar '(z) foo)
+(baz '(c z x) 2) ;=&gt; 1
+(baz '(c z x)) ;=&gt; 2
+        </programlisting>
+      </example>
     </sect2>
     <sect2>
       <title>Predicates</title>
