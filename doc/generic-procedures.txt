@@ -76,8 +76,8 @@ disambiguation. <types> must be applicable (as determined by
 METHOD-APPLICABLE?) to both <method1> and <method2>.
 
 The result is computed by a triple-wise comparison on successive
-elements of the type method signatures and <types>, using the
-COMPARE-TYPES procedure:
+elements of the method signatures and <types>, using the COMPARE-TYPES
+procedure:
 
 * If we run out of elements in both method signatures then
   - if both or neither method return rest arguments then we return
