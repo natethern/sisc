@@ -1,3 +1,9 @@
+2002-1-22 Scott G. Miller <scgmille@freenetproject.org>
+
+	* Fixed a bug in Symbol serialization that affected
+          improper deserialization of uninterned or case sensitive
+          symbols
+
 2002-1-11 Scott G. Miller <scgmille@freenetproject.org>
 
 	* java/import can now take a String as the class/object
