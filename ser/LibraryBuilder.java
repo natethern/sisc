@@ -124,6 +124,7 @@ public class LibraryBuilder extends SerializerImpl {
         
         //Pass 3
         System.err.println("Pass 3: Write index");
+        datout.writeUTF(Library.LIBRARY_VERSION);
         datout.writeUTF(name);
         writeBer(classes.size(), datout);
         for (int i=0; i<classv.size(); i++) {
