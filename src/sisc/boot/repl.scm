@@ -32,6 +32,9 @@
 ;;
 ;; The SISC read-eval-print-loop
 
+; Most of the REPL is parameterized, here we define those
+; parameters
+(define _exit-handler (make-parameter '()))
 (define current-exit-handler (make-parameter (lambda (rv) rv)))
 
 (define current-default-error-handler
@@ -40,6 +43,19 @@
      (let ([exception (make-exception m e)])
        (putprop 'last-exception '*debug* exception)
        (print-exception exception (stack-trace-on-error))))))
+
+(define current-writer
+  (make-parameter (lambda (v)
+                    (if (and (getprop 'pretty-print)
+                             (not (getprop '*sisc* 'LITE))
+                             (not (circular? v)))
+                        (pretty-print v)
+                        ;;dynamic wind would be better here, but
+                        ;;we don't want to use it in core code
+                        (let ([ps (print-shared)])
+                          (print-shared #t)
+                          (write v)
+                          (print-shared ps))))))
 
 (define repl-prompt
   (make-config-parameter "replPrompt" (lambda (repl-depth)
@@ -52,7 +68,6 @@
 (define (get-last-exception)
   (getprop 'last-exception '*debug*))
 
-(define _exit-handler (make-parameter '()))
 
 (define make-interrupt-handler
   (let ()
@@ -67,7 +82,7 @@
 
 (define repl
   (letrec ([repl/read
-            (lambda (writer)
+            (lambda ()
               ; Display the prompt
               (let ([rp (repl-prompt)]
                     [repl-depth (- (length (_exit-handler)) 1)])
@@ -81,7 +96,7 @@
                 (if (eof-object? exp) 
                     (if ((current-exit-handler) exp)
                         (exit exp)
-                        (repl/read writer))
+                        (repl/read))
                     (begin
                       ;; Consume any whitespace
                       (let loop ()
@@ -101,8 +116,8 @@
                            (let ([val (eval exp (interaction-environment))])
                              (when (permit-interrupts) (_signal-unhook! "INT" handler))
                              (if (not (void? val))
-                                 (begin (writer val) (newline)))))))
-                      (repl/read writer)))))])
+                                 (begin ((current-writer) val) (newline)))))))
+                      (repl/read)))))])
     (lambda ()
       (current-url
        (string-append
@@ -125,18 +140,7 @@
                                 ((current-default-error-handler) m e)
                                 (loop))
                        (lambda ()
-                         (repl/read
-                          (lambda (v)
-                            (if (and (getprop 'pretty-print)
-                                     (not (getprop '*sisc* 'LITE))
-                                     (not (circular? v)))
-                                (pretty-print v)
-                                ;;dynamic wind would be better here, but
-                                ;;we don't want to use it in core code
-                                (let ([ps (print-shared)])
-                                  (print-shared #t)
-                                  (write v)
-                                  (print-shared ps)))))
+                         (repl/read)
                          (void))))))))
             (repl-start))))))
 
