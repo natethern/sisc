@@ -2,6 +2,13 @@
 
 	* made literal strings, vectors and lists immutable
 
+2001-12-04  Scott G. Miller  <scgmille@freenetproject.org>
+	
+	* Fixed string->number, which should have been able to accept
+	  #[xobd]num format numbers as well as ordinary ones.
+
+        * Fixed error in lexer's handling of EOF.
+
 r1.3.0  Major changes
 
 	* Removed BeginExp, DefineExp, FreeSetExp, IfExp, and LexicalSetExp,
