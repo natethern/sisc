@@ -1,14 +1,3 @@
-(define $sc-put-cte (void))
-(define identifier? (void))
-(define sc-expand (void))
-(define datum->syntax-object (void))
-(define syntax-object->datum (void))
-(define generate-temporaries (void))
-(define free-identifier=? (void))
-(define bound-identifier=? (void))
-(define literal-identifier=? (void))
-(define syntax-error (void))
-(define $syntax-dispatch (void))
 ((lambda ()
    ((lambda (%_1014
              %_1078

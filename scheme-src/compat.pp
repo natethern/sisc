@@ -98,11 +98,17 @@
        (proc (car list1)))
       '#f)))
  
-;(define remprop
-;  (lambda (symbol key)
-;    (putprop symbol key #f)))
-
-(define sc-expand (lambda (x) x))
+(define $sc-put-cte (void))
+(define identifier? (void))
+(define sc-expand (void))
+(define datum->syntax-object (void))
+(define syntax-object->datum (void))
+(define generate-temporaries (void))
+(define free-identifier=? (void))
+(define bound-identifier=? (void))
+(define literal-identifier=? (void))
+(define syntax-error (void))
+(define $syntax-dispatch (void))
 
 (define $old-eval (current-evaluator))
 
@@ -110,10 +116,9 @@
   ((lambda (old-eval)
      (lambda (x . env)
        (if (if (pair? x) (eq? (car x) "noexpand") #f)
-	   (apply old-eval (cons (cadr x) env))
-	   ((lambda (e)  
-	     (apply old-eval (cons e env)))
-	    (sc-expand x)))))
+           (apply old-eval (cons (cadr x) env))
+           ((lambda (e) (apply old-eval (cons e env)))
+            (sc-expand x)))))
    (current-evaluator)))
 
 (define make-false
