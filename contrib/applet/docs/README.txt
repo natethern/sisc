@@ -2,7 +2,7 @@ SISC Applet
 -----------
 
 This contributed module builds a .jar that can be placed on a webpage along
-with a corresponding sisc.jar and sisc.heap built from the official SISC
+with a corresponding sisc.jar and sisc.shp built from the official SISC
 module (or from a pre-built release).  To add SISC to your webpage, you want
 to place the following tag on your site:
 
