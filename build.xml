@@ -8,9 +8,9 @@
   </path>
 
   <target name="prepare">
-    <property name="specver" value="1.8.0-beta"/>
-    <property name="version" value="1.8.0-beta"/>
-    <property name="cvsversion" value="b1_8_0"/> 
+    <property name="specver" value="1.8.0-alpha"/>
+    <property name="version" value="1.8.0-alpha"/>
+    <property name="cvsversion" value="a1_8_0"/> 
 <!--    <property name="releasecandidate" value="yes"/>-->
     <property name="beta" value="yes"/>
     <property file="${basedir}/build.properties"/>    
@@ -27,14 +27,14 @@
     <property name="optjar" value="sisc-opt.jar"/>
     <property name="libjar" value="sisc-lib.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.shp"/>
-    <property name="quantity-type" value="64float"/>
+    <property name="quantity-type" value="apfloat"/>
     <condition property="debugging" value="on">
       <or> 
         <isset property="releasecandidate"/>
         <isset property="beta"/>
       </or>
     </condition>
-    <condition property="debugging" value="on">
+    <condition property="debugging" value="off">
       <and>
         <not>
           <isset property="releasecandidate"/>
