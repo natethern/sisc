@@ -317,57 +317,51 @@
     <sect2>
       <title>Adding Native Bindings</title>
       <para>
-        Adding native functions or values implemented in native code
-        is accomplished by creating a Java class that extends the
-        abstract class <classname>sisc.nativefun.Module</classname>, or,
-        more commonly, the helper class
-        <classname>sisc.nativefun.ModuleAdapter</classname>.  This should
-        not be confused with a Scheme module, which is a scoped
-        package for bindings.  Natively defined functions in a &SISC;
-        <classname>Module</classname> can be packaged into a Scheme module
-        however.  The following methods must be defined in a proper
-        <classname>Module</classname> subclass:
+        One can add native bindings to the Scheme environment by 
+        implementing a subclass of the abstract class
+        <classname>sisc.nativefun.NativeLibrary</classname>.  Such a
+        subclass needs to implement four methods:
         <blockquote>
           <para>
-            <indexterm><primary>getModuleName</primary>
+            <indexterm><primary>getLibraryName</primary>
             </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
               <type>String</type>
-              <methodname>getModuleName</methodname>        
+              <methodname>getLibraryName</methodname>        
               <void/>
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns the name of this module.  The name should also
+                Returns the name of this library.  The name should also
                 be acceptable for use in filenames.
               </para>
             </blockquote>
-            <indexterm><primary>getModuleVersion</primary>
+            <indexterm><primary>getLibraryVersion</primary>
             </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
               <type>float</type>
-              <methodname>getModuleVersion</methodname>        
+              <methodname>getLibraryVersion</methodname>        
               <void/>
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns the version of this module.
+                Returns the version of this library.
               </para>
             </blockquote>
-            <indexterm><primary>getModuleBindingNames</primary>
+            <indexterm><primary>getLibraryBindingNames</primary>
             </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
               <type>sisc.data.Symbol[]</type>
-              <methodname>getModuleBindingNames</methodname>        
+              <methodname>getLibraryBindingNames</methodname>        
               <void/>
             </methodsynopsis>
             <blockquote>
               <para>
                 Returns an array of the names of the bindings
-                exported by this module.  Each name is a Scheme symbol.
+                exported by this library.  Each name is a Scheme symbol.
               </para>
             </blockquote>
             <indexterm><primary>getBindingValue</primary>
@@ -383,87 +377,163 @@
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns the value of a given binding exported by this module.
+                Returns the value of a given binding exported by this library.
               </para>
             </blockquote>
-            <indexterm><primary>eval</primary>
-            </indexterm>
+          </para>
+        </blockquote>
+      </para>
+      <sect3>
+        <title>Native Procedures</title>
+        <para>
+	  It is possible to implement Scheme functions whose behavior
+	  is implemented natively in Java code.  Many of &SISC;'s
+	  procedures are implemented this way.  Native procedures extend
+	  the <classname>sisc.nativefun.NativeProcedure</classname>
+	  abstract class.  Working NativeProcedure subclasses must
+	  implement the <functionname>doApply<functionname> method, as
+          described below.
+	  <blockquote>
+	  <para>
+	    <indexterm><primary>doApply</primary>
+	     </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
               <type>Value</type>
-              <methodname>eval</methodname>        
+              <methodname>doApply</methodname>        
               <methodparam>
-                <type>int</type>
-                <parameter>primid</parameter>
+                <type>sisc.interpreter.Interpreter</type>
+                <parameter>interp</parameter>
               </methodparam>
-              <methodparam>
-                <type>sisc.Interpreter</type>
-                <parameter>interpreter</parameter>
-              </methodparam>
-              <exceptionname>sisc.ContinuationException</exceptionname>
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns the value of evaluating a function defined in
-                this module with the given primitive id.  
+	        Perform the necessary computations of the
+		NativeProcedure, returning a Value as the result of
+		the procedure call.  The arguments to the procedure
+                can be found in the value rib array field,
+                <literal>vlr</literal>, of the Interpreter passed 
+                as an argument.  The number of arguments to the
+                procedure can be found from the length of the array
+                (<literal>vlr.length</literal>).
               </para>
             </blockquote>
           </para>
-        </blockquote>
-      </para>
+        </para>
+        <para> 
+	  If the native procedure wishes to raise an error, it may do
+          so by throwing any Java runtime exception (subclass of
+	  <classname>java.lang.Runtime</classname>).
+	  For a more descriptive error, one may raise a &SISC; error 
+	  using any of a number of <functionname>error</functionname>
+	  forms in <classname>sisc.util.Util</classname>.  Consult the
+	  source of Util or inquire on the sisc-devel mailinglist for
+          assistance.
+       </para>
+     </sect3>
+     <sect3>
+      <title>Indexed Native Libraries</title>
       <para>
-        In the most common case, a Module is created to define one or
-        more primitive functions whose implementations are in Java
-        code.  Each such function must be referenced by an integer
-        unique to the function within this module.  The integer and
-        the module are wrapped in a
-        <classname>sisc.nativefun.BuiltinProcedure</classname>.  When the
-        procedure is applied in Scheme, the <function>eval</function>
-        method will be called with the primitive id and the calling
-        Interpreter.  The <classname>Value[]</classname>
-        <literal>vlr</literal> in the Interpreter will contain the
-        evaluated arguments to the primitive.
-      </para>
+        In the most common case, a Library is created to define several
+        bindings, including procedures whose implementations are in Java
+        code.  For this common case, a skeleton subclass of
+	<classname>NativeLibrary</classname>,
+	<classname>sisc.nativefun.IndexedLibraryAdapter</classname>
+	is provided.  The IndexedLibraryAdapter class provides
+	implementations for all four required NativeLibrary methods, and
+	introduces a new abstract method which must be implemented, called
+	<functionname>construct</functionname>.  In addition, the method
+	<functionname>define</functionname> is provided.
+       </para>
       <para>
-        The simplest way to define a Module that exports functions is
-        to subclass
-        <classname>sisc.nativefun.ModuleAdapter</classname>.  If done
-        this way, only the <function>eval</function> methods must be
-        implemented.  Each function that one wishes to export is then
-        described with the <function>define</function> method
-        available in <classname>ModuleAdapter</classname>:
-        <blockquote>
-          <para>
-            <indexterm><primary>define</primary>
+        In an indexed native library, each binding is associated with
+        a Java <literal>int</literal> unique to that binding within
+	the library.  The IndexedLibraryAdapter subclass should in its
+	constructor call <functionname>define</functionname> for each
+	binding provided by the library, according to the
+	contract of the method:
+	<blockquote>
+	  <para>
+	    <indexterm><primary>define</primary>
             </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
-              <void/>
+              <type>void</type>
               <methodname>define</methodname>        
               <methodparam>
                 <type>String</type>
-                <parameter>functionName</parameter>
+                <parameter>name</parameter>
               </methodparam>
               <methodparam>
                 <type>int</type>
-                <parameter>primitiveId</parameter>
+                <parameter>id</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Advertises that this Module implements a function
-                called <parameter>functionName</parameter>, and that
-                its primitive id is <parameter>primitiveId</parameter>
+	        Register the native binding with the given name,
+                and assign it the given library-unique id.
               </para>
             </blockquote>
           </para>
-        </blockquote>
+	</blockquote>
       </para>
       <para>
-        The reader is directed to the source code of any of the &SISC;
-        modules for further examples. 
+        In implementing the
+	<functionname>getBindingValue</functionname> method of the 
+	<classname>NativeLibrary</classname> class, an
+	<classname>IndexedLibraryAdapter</classname> will call the
+	abstract method <functionname>construct</functionname> 
+	required by the its subclasses:
+	<blockquote>
+	  <para>
+	    <indexterm><primary>construct</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>sisc.data.Value</type>
+              <methodname>construct</methodname>        
+              <methodparam>
+                <type>int</type>
+                <parameter>id</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+	        Return an instance of the indexed binding.
+              </para>
+            </blockquote>
+          </para>
+	</blockquote>
       </para>
-    </sect2>
+      <para>
+        Most frequently, the bindings created in an indexed library
+	are native procedures.  In such a case, a second class is
+        created which subclasses
+	<classname>sisc.nativefun.IndexedProcedure</classname>.
+	IndexedProcedure is subclass of
+	<classname>NativeProcedure</classname>.
+	An IndexedProcedure subclass' constructor must call the
+	superconstructor with an <literal>int</literal>, the unique id
+	for that binding.  That <literal>int</literal> is stored in
+	the <literal>id</literal> field of
+	<classname>IndexedProcedure</classname>.  A subclass can 
+	then use the <literal>id</literal> instance variable to
+	dispatch to many native procedures in the body of the
+	<functionname>doApply</functionname> method required by native 
+	procedures.
+      </para>
+      <para>
+        So, typically, an IndexedNativeLibrary subclass is created
+	whose <functionname>construct</functionname> method creates 
+	instances of IndexedProcedure subclasses.  The
+	IndexedNativeLibrary subclass its itself nested in the
+	IndexedProcedure class which it is constructing.  See the
+	various indexed libraries in
+	<classname>sisc.modules</classname>
+	for concrete examples.
+      </para>
+     </sect2>
     <sect2 id="serialization">
       <title>Serialization</title>
       <para>
@@ -629,6 +699,28 @@
                 </para>
               </blockquote>
             </para>
+
+            <para>
+              <indexterm><primary>readInitializedExpression</primary>
+              </indexterm>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>Expression</type>
+                <methodname>readInitializedExpression</methodname>
+                <void/>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Reads a &SISC; Expression from the stream, fully
+                  initialized. This method should
+                  <emphasis>only</emphasis> be used if fields internal
+                  to the Expression returned must be available during
+                  deserialization.
+                </para>
+              </blockquote>
+            </para>
+
             <para>
               <indexterm><primary>readModule</primary>
               </indexterm>
@@ -744,6 +836,30 @@
                 </para>
               </blockquote>
             </para>
+            <para>
+              <indexterm><primary>writeInitializedExpression</primary>
+              </indexterm>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>void</type>
+                <methodname>writeInitializedExpression</methodname>
+                <methodparam>
+                  <type>Expression</type>
+                  <parameter>expr</parameter>
+                </methodparam>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Writes a &SISC; Expression to the stream.
+                  This method should
+                  <emphasis>only</emphasis> be used if fields internal
+                  to the Expression returned must be available during
+                  deserialization.            <para>
+                </para>
+              </blockquote>
+            </para>
+
             <para>
               <indexterm><primary>writeModule</primary>
               </indexterm>
