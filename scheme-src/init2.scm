@@ -32,7 +32,7 @@
 ;;
 		 
 (current-evaluator eval)
-;(emit-annotations #t)
+(emit-annotations #t)
 
 (define (parameterize . args)
   (let ([initial-value (if (null? args) #f (car args))]
@@ -330,7 +330,7 @@
     (lambda (port) (with-output-to-port port thunk))))
 
 (define (call-with-input-string str proc)
-  (let* ([port (open-input-string s)]
+  (let* ([port (open-input-string str)]
          [result (proc port)])
     (close-input-port port)
     result))
