@@ -1,7 +1,6 @@
 (import s2j)
 (import generic-procedures)
 (define-generic value-of)
-(define-generic index-of)
 (define-generic app (generic-java-procedure 'append)) ;;do not overwrite Scheme's append
 (define-generic to-string)
 ;;test calling of constructor
@@ -12,17 +11,11 @@
 ;;test calling of static methods
 (value-of <jstring> (->jint 1234))
 ;;test overloading of Java methods and constructors in Scheme...
-;;Wouldn't it be nice if StringBuffer.indexOf could take a char as an
-;;argument? Well, now it can - as long as we call it from Scheme :)
 (define-constructor (<jstring> (next: next-method)
                                (<jchar> c))
   (next-method (->jarray (list c) <jchar>)))
-(define-method (index-of (next: next-method)
-                         (<jstringbuffer> buf)
-                         (<jchar> c))
-  (next-method buf (make <jstring> c)))
-(index-of sb (->jstring "oo")) ;calls java method
-(index-of sb (->jchar #\o)) ;calls scheme method
+(make <jstring>) ;calls Java method
+(make <jstring> (->jchar #\o)) ;calls scheme method
 ;;test rest arg handling
 ;;Wouldn't it be nice if StringBuffer.append could take any number of
 ;;arguments? Well, now it can - as long as we call it from Scheme :)
