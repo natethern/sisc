@@ -20,7 +20,7 @@
 
 	* Fixed access violation problems in generic functions when
 	  sub-classes have more restrictive permissions than base
-	  classes. The fix is restricts the visiblity of non-public
+	  classes. The fix restricts the visiblity of non-public
 	  classes/interfaces/methods.
 
 	* Added mechanism to throw Java exceptions from Scheme code and
