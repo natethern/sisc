@@ -13,8 +13,8 @@ General
 Features
 * produce code that is safe-for-space rather than just tail-recursive
 * rationalize/integrate modules, libraries, slib
-* implement character ports
-* add type and object system that is tightly integrated with S2J
+* implement random-access files
+* add type and object system that is tightly integrated with S2J (done?)
 * write a debugger
 * port scsh's SREs
 * mechanism to construct immutable objects other than literals
