@@ -434,7 +434,9 @@
   proc)
 
 (define (generic-java-procedure name . rest)
-  (apply _make-generic-procedure (java-methods name) rest))
+  (apply _make-generic-procedure
+         (java-methods (java/mangle-method-name name))
+         rest))
 (define (generic-java-constructor . rest)
   (apply _make-generic-constructor java-constructor-methods rest))
 (define (make-generic-procedure . rest)
@@ -448,8 +450,7 @@
      (define ?name (make-generic-procedure ?next)))
     ((_ ?name)
      (define ?name (make-generic-procedure
-                    (generic-java-procedure
-                     (java/mangle-method-name '?name)))))))
+                    (generic-java-procedure '?name))))))
 (define-syntax define-method
   (syntax-rules (next:)
     ((_ (?name (next: ?next) (?type ?arg) ...) . ?body)

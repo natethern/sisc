@@ -589,8 +589,8 @@ Context.exit()
               <blockquote>
                 <para>
                   Creates a generic procedure that contains all Java
-                  methods of all classes whose name is
-                  <parameter>name</parameter>.
+                  methods of name <parameter>method-name</parameter>
+                  of all classes.
                 </para>
                 <para>
                   If the <parameter>next-proc</parameter> parameter is
@@ -601,13 +601,12 @@ Context.exit()
           </blockquote>
         </para>
         <para>
-          <function>define-generic</function> mangles the name of the
-          defined procedure when calling the
-          <function>generic-java-procedure</function>. This way,
-          generic procedures following the usual Scheme naming
-          conventions get chained to generic procedures that invoke
-          Java methods with names following usual Java naming
-          conventions. The name mangling is performed by 
+          <function>generic-java-procedure</function> mangles the name
+          of the methods so. This way, generic procedures can follow
+          the usual Scheme naming conventions and get chained to
+          generic procedures that invoke Java methods with names
+          following usual Java naming conventions. The name mangling
+          is performed by
           <blockquote>
             <para>
               &procedure;

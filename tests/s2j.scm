@@ -115,9 +115,10 @@
 
 ;;exception handling
 (define-generic char-at)
-;;chain Scheme print-stack-trace to Java printStackTrace
+;;redefine Scheme print-stack-trace as a generic procedure that calls
+;;Java's printStackTrace and is chained to the original Scheme procedure.
 (define-generic print-stack-trace
-  (generic-java-procedure '|printStackTrace| print-stack-trace))
+  (generic-java-procedure 'print-stack-trace print-stack-trace))
 (with/fc (lambda (m e) (print-stack-trace m) #f)
   (lambda () (char-at (->jstring "foo") (->jint 3))))
 ;;throwing exceptions from within proxy
