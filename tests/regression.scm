@@ -119,3 +119,6 @@
                  (lambda (out) (serialize x out)))
                (->string (call-with-serial-input-file "test.ser"
                           (lambda (in) (deserialize in)))))))
+
+;;Used to be true
+(should-be 870845 #f (char>? #\c #\a #\b))
