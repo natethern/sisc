@@ -31,9 +31,10 @@
                                 (string-append 
                                  segment-str
                                  (symbol->string symenv)))))
-                (add lib symenv-id (java-wrap bindings))
+                (add lib (java-wrap symenv-id) (java-wrap bindings))
                 (for-each (lambda (binding)
-                            (add lib binding 
+                            (add lib
+                                 (java-wrap binding)
                                  (java-wrap 
                                   (cdr (assoc binding (cdr segment1))))))
                           bindings)
@@ -42,41 +43,38 @@
 (define (create-library name filename segment1 . segments)
   (let* ((lib (make <sisc.ser.LibraryBuilder> (->jboolean #f)))
          (index (apply _create-lib (cons lib (cons segment1 segments)))))
-    (add lib index-sym index)
+    (add lib (java-wrap index-sym) (java-wrap index))
     (call-with-output-file filename
       (lambda (out)
-        (build-library lib (->jstring (symbol->string name)) 
-                       ((java-wrap out) 'out))))))
+        (build-library lib (->jstring name) ((java-wrap out) 'out))))))
 
 (define (open-library filename)
-  (load <sisc.ser.Library> (make <sisc.ser.SeekableDataInputStream>
-                                 (make <sisc.ser.BufferedRandomAccessInputStream>
-                                       (->jstring filename) 
-                                       (->jstring "r")))))
+  (load <sisc.ser.Library>
+        (make <sisc.ser.SeekableDataInputStream>
+              (make <sisc.ser.BufferedRandomAccessInputStream>
+                    (->jstring filename) 
+                    (->jstring "r")))))
 
 (define (link-library lib)
-  (let ((index (java-unwrap (get-local-expression lib index-sym))))
-    (for-each (lambda (symenv-id)
-                (let* ((symenv-id-str (symbol->string symenv-id))
-                       (symenv (string->symbol
-                                (substring 
-                                 symenv-id-str
-                                 (string-length segment-str)
-                                 (string-length symenv-id-str))))
-                       (bindings (java-unwrap (get-local-expression lib symenv-id))))
+  (for-each
+   (lambda (symenv-id)
+     (let* ((symenv-id-str (symbol->string symenv-id))
+            (symenv (string->symbol
+                     (substring 
+                      symenv-id-str
+                      (string-length segment-str)
+                      (string-length symenv-id-str)))))
+       (for-each 
+        (lambda (binding)
+          (putprop binding symenv 
+                   ;;fixme, eventually we want to register
+                   ;;the binding for lazy-load
+                   (java-unwrap
+                    (get-local-expression lib (java-wrap binding)))))
+        (java-unwrap
+         (get-local-expression lib (java-wrap symenv-id))))))
+   (java-unwrap (get-local-expression lib (java-wrap index-sym)))))
 
-                  (for-each 
-                   (lambda (binding)
-                     (putprop binding symenv 
-                                        ;fixme, eventually we want to register
-                                        ;the binding for lazy-load
-                              (let ((jobj (get-local-expression lib binding)))
-                                (if (and (java-object? jobj)
-                                         (not (java-null? jobj)))
-                                    (java-unwrap jobj)
-                                    jobj))))
-                   bindings)))
-              index)))
 (define (interface-exports i) (vector-ref i 1))
 (define (syntax-object-sym i) (vector-ref i 1))
 (define (classify-bindings bindings)
@@ -105,35 +103,18 @@
         (error 'get-referenced-bindings "'~a' does not name a module." 
                modulename))))
 
+(define (getprops props table)
+  (map (lambda (p) (cons p (getprop p table))) props))
 (define (create-library-from-module libname filename . modules)
   (let ((modules (if (null? modules) (list libname) modules)))
     (call-with-values
         (lambda () 
-          (classify-bindings (apply append
-                                    (map get-referenced-bindings
-                                         modules))))
+          (classify-bindings
+           (apply append (map get-referenced-bindings modules))))
       (lambda (sc-expander toplevel)
-        (create-library libname filename 
-                        (cons '*toplevel* (map cons toplevel 
-                                               (map (lambda (b) 
-                                                      (getprop b '*toplevel*))
-                                                    toplevel)))
-                        (let ((rv
-                               `(*sc-expander* 
-                                 . (,@(map cons modules
-                                           (map (lambda (m)
-                                                  (getprop m '*sc-expander*))
-                                                modules))
-                                    ,@(map cons sc-expander
-                                           (map (lambda (b) 
-                                                  (getprop b '*sc-expander*))
-                                                sc-expander))))))
-                          rv))))))
-
-;(import loadable-libraries)
-;(module bar ((foo))
-;  (define-syntax foo
-;    (syntax-rules ()
-;      ((_ x)
-;       (+ x 1)))))
-;(create-library-from-module 'bar "bar.sll")
+        (create-library
+         libname filename 
+         (cons '*toplevel* (getprops toplevel '*toplevel*))
+         `(*sc-expander* 
+           . (,@(getprops modules '*sc-expander*)
+              ,@(getprops sc-expander '*sc-expander*))))))))
