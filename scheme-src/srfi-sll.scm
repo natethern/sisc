@@ -3,6 +3,7 @@
 (create-library-from-module 'sisc/libs/srfi "../tmp/sisc/libs/srfi.sll"
  'r5rs
  'srfi-0
+ 'srfi-22
  'srfi-8
  '_srfi-23
  'srfi-23
