@@ -43,8 +43,17 @@ public class SchemeString extends Value {
         this(s.toCharArray());
     }
 
+    public SchemeString(String s, boolean imm) {
+        this(s.toCharArray(), imm);
+    }
+
     public SchemeString(char[] data) {
         stringdata=data;
+    }
+
+    public SchemeString(char[] data, boolean imm) {
+        stringdata = data;
+	immutable = imm;
     }
 
     public boolean valueEqual(Value v) {
