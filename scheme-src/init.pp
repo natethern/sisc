@@ -856,7 +856,11 @@
                        (%_747 '"Error."))))))
               (if (not %_750)
                 '#f
-                (if (not %_749) (cdr %_748) (cddr %_748)))))
+                (if (not %_749)
+                  (if (not (null? %_748))
+                    (if (not (car %_748)) (cddr %_748) (cdr %_748))
+                    (cdr %_748))
+                  (cddr %_748)))))
            (if (not %_749)
              (if (not (null? %_748))
                (if (not (car %_748)) (cadr %_748) (car %_748))

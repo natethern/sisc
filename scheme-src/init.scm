@@ -589,6 +589,8 @@
 
 ;;;;;;;;;;;;;; Runtime system
 
+;;we try to accomodate syntax-case's way of reporting errors.
+;;This code is pretty horrible and should be cleaned up at some point.
 (define error
   (let ((oerror error))
     (lambda args
@@ -608,7 +610,11 @@
 	     [objects (if (not message) 
 			  #f
 			  (if (not location)
-			      (cdr args)
+                              (if (not (null? args))
+                                  (if (not (car args))
+                                      (cddr args)
+                                      (cdr args))
+                                  (cdr args))
 			      (cddr args)))])
 	(if location
 	    (if message
