@@ -125,8 +125,18 @@ public class SNative extends IndexedFixableProcedure {
 
     public final Value apply(Value v1, Value v2) throws ContinuationException {
         switch(id) {
-        case MAX: return (num(v1).comp(num(v2),1) ? v1 : v2);
-        case MIN: return (num(v1).comp(num(v2),1) ? v2 : v1);
+        case MAX:
+            Quantity q1=num(v1);
+            Quantity q2=num(v2);
+            Quantity rv=(q1.comp(q2,1) ? q1 : q2);
+            if (rv.is(Quantity.EXACT) && (q1.is(Quantity.INEXACT) || q2.is(Quantity.INEXACT)))
+                return rv.toInexact();
+        case MIN: 
+            q1=num(v1);
+            q2=num(v2);
+            rv=(q1.comp(q2,-1) ? q1 : q2);
+            if (rv.is(Quantity.EXACT) && (q1.is(Quantity.INEXACT) || q2.is(Quantity.INEXACT)))
+                return rv.toInexact();
         case CHARLESSTHAN: return truth(character(v1)<character(v2));
         case CHARGRTRTHAN: return truth(character(v1)>character(v2));
         case CHAREQUALCI: return truth(Character.toLowerCase(character(v1))==
@@ -202,28 +212,37 @@ public class SNative extends IndexedFixableProcedure {
             Quantity q1=num(v1);
             Quantity q2=num(v2);
             Quantity q3=num(v3);
+            Quantity rv;
             if (q1.comp(q2,1)) {
                 if (q1.comp(q3,1)) 
-                    return q1;
+                    rv=q1;
                 else 
-                    return q3;
+                    rv=q3;
             } else if (q2.comp(q3,1)) 
-                return q2;
+                rv=q2;
             else
-                return q3;
+                rv=q3;
+            if (rv.is(Quantity.EXACT) && (q1.is(Quantity.INEXACT) || 
+                                          q2.is(Quantity.INEXACT) ||
+                                          q3.is(Quantity.INEXACT)))
+                return rv.toInexact();
         case MIN: 
             q1=num(v1);
             q2=num(v2);
             q3=num(v3);
             if (q1.comp(q2,-1)) {
                 if (q1.comp(q3,-1)) 
-                    return q1;
+                    rv=q1;
                 else 
-                    return q3;
+                    rv=q3;
             } else if (q2.comp(q3,-1)) 
-                return q2;
+                rv=q2;
             else
-                return q3;
+                rv=q3;
+            if (rv.is(Quantity.EXACT) && (q1.is(Quantity.INEXACT) || 
+                    q2.is(Quantity.INEXACT) ||
+                    q3.is(Quantity.INEXACT)))
+                return rv.toInexact();
         case CHARLESSTHAN: char c2=character(v2);
             return truth(character(v1)<c2 && c2<character(v3));
         case CHARGRTRTHAN: c2=character(v2);
@@ -266,20 +285,24 @@ public class SNative extends IndexedFixableProcedure {
         switch(id) {
         case MAX:
             Quantity q1=num(vlr[0]);
+            boolean exact=q1.is(Quantity.EXACT);
             for (int i=vlr.length-1; i>0; i--) {
                 Quantity q2=num(vlr[i]);
+                exact = exact && q2.is(Quantity.EXACT);
                 if (q1.comp(q2,-1))
                     q1=q2;
             }
-            return q1;
+            return (exact ? q1 : q1.toInexact());
         case MIN:
             q1=num(vlr[0]);
+            exact=q1.is(Quantity.EXACT);
             for (int i=vlr.length-1; i>0; i--) {
                 Quantity q2=num(vlr[i]);
+                exact = exact && q2.is(Quantity.EXACT);
                 if (q1.comp(q2,1))
                     q1=q2;
             }
-            return q1;
+            return (exact ? q1 : q1.toInexact());
         case CHARLESSTHAN:
             char c1=character(vlr[0]);
             char c2;
