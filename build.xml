@@ -9,8 +9,8 @@
   </path>
 
   <target name="prepare">
-    <property name="version" value="1.6.3-rc"/>
-    <property name="cvsversion" value="rc1_6_3"/>
+    <property name="version" value="1.6.3"/>
+    <property name="cvsversion" value="r1_6_3"/>
     <property file="${basedir}/build.properties"/>    
     <property name="srcdir" value="${basedir}/.."/>
     <property name="classdir" value="${basedir}/classes"/>
@@ -20,11 +20,12 @@
     <property name="schemedir" value="${basedir}/scheme-src"/>
     <property name="packagename" value="sisc"/>
     <property name="basejar" value="sisc.jar"/>
+    <property name="classopt" value="yes"/>
     <property name="optjar" value="sisc-opt.jar"/>
     <property name="srfisll" value="srfi.sll"/>
     <property name="heap" value="${basedir}/boot/sisc.shp"/>
     <property name="quantity-type" value="apfloat"/>
-    <property name="releasecandidate" value="yes"/> 
+    <!--<property name="releasecandidate" value="yes"/> -->
     <condition property="debugging" value="on">
       <isset property="releasecandidate"/>
     </condition>
@@ -93,7 +94,33 @@
     </copy>
   </target> 
 
-  <target name="jars" depends="compile,i18n">
+  <target name="class-opt" depends="compile" if="classopt">
+    <delete>
+      <fileset dir="${classdir}">
+        <include name="**/*_o.class"/>
+      </fileset>
+    </delete>
+    
+    <fileset dir="${classdir}" id="allclasses">
+      <include name="**/*.class"/>
+    </fileset>
+  
+    <pathconvert pathsep=" " property="allclassfiles" refid="allclasses"/>
+
+    <property name="allclasses" value="${classdir}/**/*.class"/>
+    <java jar="/home/scgmille/lib/jopt.jar" fork="true">
+      <arg line="${allclassfiles}"/>
+    </java>   
+
+    <move todir="${classdir}"> 
+      <fileset dir="${classdir}">
+        <include name="**/*_o.class"/>
+      </fileset>
+      <mapper type="glob" from="*_o.class" to="*.class"/>
+    </move>   
+  </target>
+
+  <target name="jars" depends="compile,class-opt,i18n"> 
     <jar jarfile="${basedir}/${basejar}"
 	 manifest="${basedir}/boot/Manifest">
       <fileset dir="${classdir}">
