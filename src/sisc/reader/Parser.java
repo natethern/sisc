@@ -91,7 +91,7 @@ public class Parser extends Util implements Tokens {
 
     protected void potentialError(int flags, String message, InputPort is) throws IOException {
         if (permissiveParsing(flags))
-            if (is==null) warn(message);
+            if (is==null) System.err.println(warn(message));
             else warn(message, is);
         else
             throw new IOException(liMessage(SISCB, message));
@@ -99,7 +99,7 @@ public class Parser extends Util implements Tokens {
 
     protected void potentialError(int flags, String message, String arg, InputPort is) throws IOException {
         if (permissiveParsing(flags))
-            if (is==null) warn(message, arg);
+            if (is==null) System.err.println(warn(message, arg));
             else warn(liMessage(SISCB, message, arg));
         else
             throw new IOException(liMessage(SISCB, message));
@@ -485,7 +485,7 @@ public class Parser extends Util implements Tokens {
         Parser p=new Parser(new Lexer());
         InputPort is=new sisc.io.StreamInputPort(System.in);
         Expression e;
-        while (EOF != (e=p.nextExpression(is, 0))) {
+        while (EOF != (e=p.nextExpression(is, PERMISSIVE_PARSING))) {
             System.err.println(e);
         }
     }
