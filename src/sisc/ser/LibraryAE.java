@@ -48,7 +48,7 @@ public class LibraryAE extends MemorySymEnv {
     /**
      * Operate in "observe" mode.
      *
-     * @param name the name of the SymEnv
+     * @param parent the name of the parent SymEnv
      * @param lb the library serializer
      */
     public LibraryAE(SymbolicEnvironment parent, LibraryBuilder lb) {

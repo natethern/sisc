@@ -69,9 +69,9 @@ public class Parser extends Util implements Tokens {
     /**
      * Reads an s-expression from the given input port.
      *
+     * @param is InputPort from which to read
      * @param radix Specifies the radix of any numbers that are read
-     * @param read If true, this is a Scheme read call, no annotations
-     *             will be emitted even if annotations are enabled
+     * @param flags Specifies attributes for the returned values (PRODUCE_IMMUTABLES, PRODUCE_ANNOTATIONS, STRICT_R5RS)
      * @return the read expression
      * @exception IOException if an error occurs
      */
