@@ -17,7 +17,7 @@ SISC has the following general features:
 Installation
 ------------
   Define SISC_HOME in your environment variables to point the directory 
-in which you wish to store the "sisc.heap" and "sisc.jar" files, and
+in which you wish to store the "sisc.shp" and the various ".jar" files.
 install "sisc" or "sisc.bat" in your path.
   To run SISC, just type "sisc" or "sisc.bat", followed by any scheme 
 source files you wish to load.
