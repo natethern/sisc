@@ -348,12 +348,14 @@
   (include "type-system.scm"))
 
 (module record
-    ((define-record-type
-       make-record-type record-constructor record-predicate
-       define-record-field record-accessor record-modifier)
+    ((define-record-type define-record-field)
      define-struct
      record?
      record-type
+     record-constructor
+     record-predicate
+     record-accessor
+     record-modifier
      make-record-type
      record-type?
      record-type-name
