@@ -24,23 +24,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;; TYPE SYSTEM ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;classes - this is still VERY incomplete
-;;Scheme objects (incl classes) are not a distinct type from
-;;procedures. We put no heroic effort into distinguishing between the
-;;two.
-(define (scheme-object? o)
-  (and (procedure? o)
-       (procedure-property o 'class) 
-       (procedure-property o 'slots)))
-(define (scheme-class? o)
-  (and (scheme-object? o)
-       (o 'superclasses)
-       (o 'slots)))
-(define (class? o)
-  (or (java/class? o) (scheme-class? o)))
-(define (object? o)
-  (or (java/object? o) (scheme-object? o)))
-
 (define <bot> (void))
 (define <top> (void))
 (define <java.lang.Class> (java/class '|java.lang.Class|))
@@ -84,7 +67,7 @@
               (java/assignable? y x)))
         ((or (class? x) (class? y))
          (and (class? x) (class? y)
-              (memq x (class-precedence-list y))))
+              (memq y (class-precedence-list x))))
         (else #f)))
 
 (define (instance-of? x y)
@@ -92,6 +75,47 @@
 
 (define (types<= x y) (every2 type<= x y))
 (define (instances-of? x y) (every2 instance-of? x y))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;; OBJECT SYSTEM ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;classes - this is still VERY incomplete
+;;Scheme objects (incl classes) are not a distinct type from
+;;procedures. We put no heroic effort into distinguishing between the
+;;two.
+(define <class> (void))
+(define (scheme-object? o)
+  (and (procedure? o)
+       (procedure-property o 'class))) 
+(define (scheme-class? o)
+  (and (scheme-object? o)
+       (o 'superclasses)
+       (o 'slots)))
+(define (class? o)
+  (or (java/class? o) (scheme-class? o)))
+(define (object? o)
+  (or (java/object? o) (scheme-object? o)))
+
+(define (make-object class slots)
+  (let ([slots (alist->hashtable slots)])
+    (define (res . args) (apply slots args))
+    (set-procedure-property! res 'class class)
+    res))
+(define (make-class superclasses slots)
+  (let ([res (make-object <class> `((superclasses . ,superclasses)
+                                    (slots . ,(alist->hashtable slots))))])
+    (add-method-to-list
+     (java-constructor-methods res)
+     (make-method (object-initializer res) '() #t))
+    res))
+(define (object-initializer class)
+  (let ([slots (make-hashtable)])
+    (for-each (lambda (c)
+                (if (scheme-class? c)
+                    (hashtable/for-each slots (c 'slots))))
+              (reverse (class-precedence-list class)))
+    (let ([slots (hashtable->alist slots)])
+      (lambda res (make-object class slots)))))
 
 (define (class-direct-superclasses class)
   (cond ((java/class? class)
@@ -493,6 +517,12 @@
   (syntax-rules ()
     ((_ (?class . ?rest) . ?body)
      (define-method ((constructor c-proc ?class) . ?rest) . ?body))))
+  
+(define-syntax define-class
+  (syntax-rules ()
+    ((_ (?name . ?superclasses) (?key ?val) ...)
+     (define ?name (make-class (list . ?superclasses)
+                               (list (cons '?key ?val) ...))))))
 
 (define c-proc (void))
 (define initialize (void))
@@ -507,3 +537,11 @@
 
 (set! <bot> (special-type '<bot>))
 (set! <top> (special-type '<top>))
+(set! <class>
+  (let ([res (make-object <class>
+                          '((superclasses)
+                            (slots . ,(alist->hashtable
+                                       `((superclasses)
+                                         (slots . ,(make-hashtable)))))))])
+    (set-procedure-property! res 'class res)
+    res))
