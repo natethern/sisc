@@ -49,6 +49,7 @@
     <property name="optimization" value="on"/>
     <property name="dist" value="${basedir}/dist"/>
     <property name="doc.style" value="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl"/>
+    <available file="${doc.style}" property="docstyle.present"/>
     <mkdir dir="${libdir}"/>
     <available classname="junit.framework.TestCase"
                property="junit.present"
@@ -332,11 +333,19 @@
     <mkdir dir="${gendocdir}/javadoc"/>
     <javadoc packagenames="${packagename}.*"
              sourcepath="${srcdir}"
-             destdir="${gendocdir}/javadoc"/>
+             destdir="${gendocdir}/javadoc">
+      <excludepackage name="${packagename}/tests"/>
+    </javadoc>
   </target>
 
-  <target name="manual" depends="prepare"
-          description="Generate Manual" unless="lite">
+  <target name="docstyletest" depends="prepare" unless="docstyle.present">
+    <echo>
+      The manual cannot be built because the doc.style property is set to ${doc.style} and that file does not exist.
+    </echo>
+  </target>
+  
+  <target name="manual" depends="docstyletest"
+          description="Generate Manual" unless="lite" if="docstyle.present">
     <copy file="${docdir}/sss/html.xsl" tofile="${docdir}/sss/style.xsl"/>
     <replace file="${docdir}/sss/style.xsl"
              token="@@@doc.style@@@"
@@ -480,7 +489,13 @@
          includes="sisc/**"/>
   </target>
 
-  <target name="check" depends="heap" if="junit.present">
+  <target name="junitcheck" depends="heap" unless="junit.present">
+    <echo>
+      The tests cannot be run because JUnit is not present on this system.
+    </echo>
+  </target>
+
+  <target name="check" depends="junitcheck" if="junit.present">
     <junit>
       <sysproperty key="HEAP" value="${heap}"/>
       <classpath>
