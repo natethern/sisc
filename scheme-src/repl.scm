@@ -113,6 +113,8 @@
 (define (sisc-cli)
   (with/fc (lambda (m e)
              (display (format "Uncaught error: ~a~%Please report this error to sisc-devel@lists.sourceforge.net~%" m))
+             (if (pair? (_exit-handler))
+                 (_exit-handler (cdr (_exit-handler))))
              (sisc-cli))
            repl))
 
