@@ -87,14 +87,6 @@ public class AppContext extends Util {
                 throw new IOException("Heap did not contain toplevel environment!");
             }
             evaluator=levaluator;
-            /*
-            TRUE=lTRUE;
-            FALSE=lFALSE;
-            VOID=lVOID;
-            EMPTYLIST=lEMPTYLIST;
-            EOF=lEOF;
-            setVoids();
-            */
         } catch (Exception e) {
             e.printStackTrace();
             throw new IOException(e.getMessage());
@@ -109,7 +101,7 @@ public class AppContext extends Util {
         lb.add(r.stk);
         lb.add(evaluator);
         lb.add(SYMENV, symenv);
-        lb.add(TOPLEVEL, toplevel_env)
+        lb.add(TOPLEVEL, toplevel_env);
 
         lb.buildLibrary("sisc", o);
         r.pop(r.stk);
