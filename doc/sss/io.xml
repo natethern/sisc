@@ -1870,8 +1870,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
         </blockquote>
-        Note that <literal>current-class-path</literal> is a <xref
-          linkend="Parameters">parameter</xref>, so each thread has
+        Note that <literal>current-class-path</literal> is a 
+        <link linkend="Parameters">parameter</link>, so each thread has
         it's own setting, initially inherited from the parent thread.
       </para>
     </sect2>

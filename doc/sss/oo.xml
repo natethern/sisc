@@ -433,7 +433,7 @@
               <methodparam><parameter>body</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
-              <simplelist spacing="compact">
+              <simplelist>
                 <member>
                   where <parameter>signature</parameter> is of the
                   form <literal>(</literal><parameter>name</parameter>
@@ -605,7 +605,7 @@
               <methodparam><parameter>body</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
-              <simplelist spacing="compact">
+              <simplelist>
                 <member>
                   where <parameter>signature</parameter> is of the
                   form <literal>(</literal><parameter>type</parameter>

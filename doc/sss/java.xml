@@ -722,7 +722,7 @@ Context.exit()
                   Converts a Scheme procedure name, supplied as a
                   symbol in <parameter>name</parameter> into a Java
                   method name in accordance with the following rules:
-                  <orderedlist spacing="compact">
+                  <orderedlist>
                     <listitem>
                       <para>
                         Any trailing <literal>!</literal> is removed.
@@ -1313,7 +1313,7 @@ Context.exit()
               </methodparam>
             </methodsynopsis>
             <blockquote>
-              <simplelist spacing="compact">
+              <simplelist>
                 <member>
                   where <parameter>func-spec</parameter> is of the form
                   <literal>(</literal><parameter>name</parameter>

@@ -47,7 +47,7 @@
           </indexterm>
 	  &procedure; 
 	  <methodsynopsis language="scheme">
-            <type><emphasis>does not return</emphasis></type>
+            <type>does not return</type>
             <methodname>exit</methodname>
             <void/>
           </methodsynopsis>
