@@ -120,11 +120,11 @@
     (and (> (string-length s1) mpl)
          (string=? module-prefix (substring s1 0 mpl)))))
 
-(define (search-for-implicits modulename bindings-so-far)
+(define (search-for-implicits modulename bindings-so-far env)
   (let ([module-prefix (string-append "@" (symbol->string modulename) "::")]
         [iterator (iterator 
                    (binding-keys 
-                    (get-symbolic-environment '*toplevel*)))])
+                    (get-symbolic-environment env)))])
     (let loop ([acc bindings-so-far])
       (if (->boolean (has-next iterator))
           (let ([b (java-unwrap (next iterator))])
@@ -143,11 +143,15 @@
     (if (and (pair? mod) (eq? (car mod) 'module))
         (search-for-implicits 
          modulename
-         (apply append
-                (map (lambda (e)
-                       (vector->list (vector-ref (cadr (vector-ref e 2))
-                                                 3)))
-                     (vector->list (interface-exports (cdr mod))))))
+         (search-for-implicits 
+          modulename
+          (apply append
+                 (map (lambda (e)
+                        (vector->list (vector-ref (cadr (vector-ref e 2))
+                                                  3)))
+                      (vector->list (interface-exports (cdr mod)))))
+          '*sc-expander*)
+         '*toplevel*)
         (error 'get-referenced-bindings "'~a' does not name a module." 
                modulename))))
 
