@@ -74,6 +74,7 @@ public class Quantity extends Value {
 	COMPLEX  = INEXACT | IMAGINARY,
 	DECIM = INEXACT | DECIMAL;
 
+    public static Quantity valueOf(int val) { return new Quantity(val); }
     public static Quantity valueOf(long val) { return new Quantity(val); }
     public static Quantity valueOf(double val) { return new Quantity(val); }
     public static Quantity valueOf(BigInteger val) { return new Quantity(val); }
