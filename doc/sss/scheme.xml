@@ -873,7 +873,7 @@
         </programlisting>
       </para>
     </sect2>
-    <sect2>
+    <sect2 id="ErrorRecords">
       <title>Error Records</title>
       <para>
         An error record is the value usually propogated with an error
@@ -1533,7 +1533,7 @@
               </programlisting>
               where <emphasis>n</emphasis> is the number of
               milliseconds taken to evaluate the expression.  If more
-              than one iteration ocurred, then the average number of
+              than one iteration occurred, then the average number of
               milliseconds elapsed is returned.
             </para>
           </blockquote>

@@ -67,22 +67,40 @@
       result which is displayed during the Print phase.  However,
       two other message types may be displayed.  First, if an error
       is raised that is not handled by the running program, the
-      message will be described in one of three forms:
+      message will be described in one of several forms, depending on what
+      combinations of a location, a message, and a parent message the
+      error has:
     </para>
     <programlisting>
+      Error.
+
+      Error in &lt;error-location&gt;.
+
       Error: &lt;description&gt;
       
       Error in &lt;error-location&gt;: &lt;description&gt;
       
-      Error.
+      Error in nested call.
+       &lt;nested-error&gt;
+
+      Error in nested call: &lt;description&gt;
+       &lt;nested-error&gt;
+
+      Error in nested call from &lt;error-location&gt;.
+       &lt;nested-error&gt;
+
+      Error in nested call from &lt;error-location&gt;: &lt;description&gt;
+       &lt;nested-error&gt;
     </programlisting>
     <para>
-      The first form describes an error that was raised in an
-      anonymous procedure or syntax.  The second describes an error
-      that was raised in a named procedure or syntax definition.
-      The error-location indicates which procedure encountered
-      the error.  The final form is produced by an explicit call
-      to the error function with no arguments.
+      The location of an error often refers to the name of a procedure,
+      syntax, or parameter.  Errors that do not contain a location often
+      originate in an anonymous function.  Nested errors occur when
+      one function makes a call to another function and the second raises an
+      error.  If the first function wishes, it may catch this error and
+      generate its own, with the second functions error as a parent.  Thus
+      a nested error consists of an error message on the first line,
+      and the nested error message or messages on following lines.
     </para>
     <para>
       In addition to errors, it is possible for code to produce
@@ -94,7 +112,6 @@
       during execution.  Warnings are always distinguished from
       ordinary messages by surrounding braces ({}) and starting
       with the word 'warning'.
-      
     </para>
     <programlisting>
       {warning: &lt;description&gt;}

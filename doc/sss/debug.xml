@@ -6,7 +6,7 @@
     No Scheme system would be complete without facilities to assist
     the programmer in debugging his or her code.  &SISC; provides aid
     for passive debugging (requiring no action on the part of the
-    programmer) and active debugging (requiring code modification to
+    programmer) and active debugging (requiring code instrumentation to
     facilitate debugging).  
   </para>
   <sect1 id="passive-debugging">
@@ -37,13 +37,12 @@
       </para>
     </blockquote>
     <para> 
-      An error record is an association list that contains the
-      error-continuation and error-value (as described in <xref
-      linkend="ErrorHandlers"/>), referenced by the keys
-      <literal>'cont</literal> and <literal>'value</literal>
-      respectively.  With these two values, one may perform many of
+      An error record is a structure containing properties of the error 
+      that occurred (as described in <xref linkend="ErrorRecords"/>), 
+      including the error continuation and the error value or message.
+      With these two values, one may perform many of
       the actions that can be accomplished in the error-handler of a
-      <literal>call-with-failure-continuation</literal> expression.
+      <literal>with-failure-continuation</literal> expression.
     </para>
     <para>
       One of the most common desires is to obtain a trace of the
@@ -76,7 +75,7 @@
       <emphasis>annotations</emphasis> enabled.  Annotations are a
       means of attaching metadata to compiled Scheme code.  To allow
       the reader to attach annotations related to the source file
-      position to the code it reads, enable the emission of
+      position of the code it reads, enable the emission of
       annotations with the <function>emit-annotations</function>
       parameter.
     </para>

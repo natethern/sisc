@@ -168,8 +168,8 @@
         the semantics of the expected argument.  The type of an argument, 
         when not clear, should be described in the procedure summary
 	paragraph that follows the prototype.  If the argument is
-	enclosed in square brackets ([]), that parameter is optional,
-	and may be omitted.  If a parameter is optional and is followed by 
+	enclosed in square brackets ([]), that argument is optional,
+	and may be omitted.  If an argument is optional and is followed by 
 	ellipses (...), then the argument is a
 	<emphasis>rest</emphasis> argument, and may be satisfied by
 	zero or more values.
@@ -179,7 +179,7 @@
 	encapsulated in <emphasis>modules</emphasis> (see <xref
 	linkend="Modules"/>).  Sections that describe functions in
 	modules will have a <emphasis>requires</emphasis> statement
-	indicating the statement that must be evaluated to make those
+	indicating the expression that must be evaluated to make those
 	functions available in the Scheme environment.  The requires
 	statement will appear as follows:
       </para>
