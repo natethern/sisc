@@ -32,7 +32,7 @@
     <property name="packagename" value="sisc"/>
     <property name="jarname" value="sisc.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
-    <property name="quantity-type" value="32float"/>
+    <property name="quantity-type" value="apfloat"/>
     <property name="debugging" value="on"/>
     <property name="optimization" value="off"/>
     <property name="dist" value="${basedir}/dist"/>
@@ -46,6 +46,9 @@
 	       classpathref="classpath"/>
     <available property="oro.present"
 	       classname="org.apache.oro.text.regex.Pattern"
+	       classpathref="classpath"/>
+    <available property="servlets.present"
+	       classname="javax.servlet.Servlet"
 	       classpathref="classpath"/>
   </target>
 
@@ -93,6 +96,7 @@
       <exclude name="${packagename}/*/Quantity-*.java"/>
       <exclude name="${packagename}/tests/**" unless="junit.present"/>
       <exclude name="${packagename}/modules/Regexp.java" unless="oro.present"/>
+      <exclude name="${packagename}/modules/servlets/**" unless="servlets.present"/>
       <exclude name="${packagename}/modules/**" if="lite"/>
     </javac>      
   </target>
@@ -105,15 +109,14 @@
     </copy>
   </target> 
 
-  <target name="jars" depends="compiler,i18n,heap">
+  <target name="jars" depends="compiler,i18n">
     <jar jarfile="${basedir}/${jarname}"
 	 manifest="${basedir}/boot/Manifest">
       <fileset dir="${classdir}" includes="*/**"/>
-<!--      <fileset dir="${basedir}/boot" includes="sisc.heap"/>-->
     </jar>
   </target>
   
-  <target name="heap" depends="compiler,i18n">
+  <target name="heap" depends="jars">
     <java classname="sisc.boot.GenerateHeap"
           classpath="${classdir}"
           dir="${schemedir}"
