@@ -233,7 +233,9 @@ Examples
 (define-class (<Moo2> <Bar> <Baz> <Foo> <Goo>))
 (map class-name (class-precedence-list <Moo2>))
 ;=> (<moo1> <bar> <baz> <foo> <goo> <object>)
-(define-class (<Moo3> <Bar> <Foo> <Baz> <Goo>)) ;=> error
+(define-class (<Moo3> <Bar> <Foo> <Baz> <Goo>))
+(map class-name (class-precedence-list <Moo3>))
+;=> (<moo3> <bar> <baz> <foo> <goo> <object>)
 
 ;;inheritance restriction on slots
 (define-class (<Moo4> <Bar> <Boo> <Goo>)) ;=> error
