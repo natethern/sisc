@@ -471,7 +471,6 @@ public class Primitives extends ModuleAdapter {
             case UNBOX: return (Value)box(f.vlr[0]).val;
             case BOXQ: return truth(f.vlr[0] instanceof Box);
             case LOAD:
-                CallFrame before=f.stk.capture(f);
                 InputPort p=null;
                 url = makeURL(f.vlr[0]);
                 try {
@@ -480,9 +479,9 @@ public class Primitives extends ModuleAdapter {
                     conn.setDoOutput(false);
                     p=new SourceInputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())), url.toString());
                 } catch (IOException e) {
-		    f.pop(before);
                     throwPrimException( "error opening " + url);
                 }
+                CallFrame before=f.stk.capture(f);
                 v=null;
                 do {
                     try {
@@ -497,7 +496,7 @@ public class Primitives extends ModuleAdapter {
                         try {
                             f.eval(v);
                         } catch (SchemeException se) {
-			    f.pop(before);
+                            f.pop(before);
                             throwNestedPrimException(se);
                         }
                     }
