@@ -178,14 +178,6 @@ public class GenerateHeap {
         }
         
         r.define(Symbol.get("version"), new SchemeString(Util.VERSION), Util.SISC);
-        Properties sysProps=System.getProperties();
-        Iterator ir;
-        for (ir=sysProps.keySet().iterator(); ir.hasNext();) {
-            String key=(String)ir.next();
-            Symbol s=Symbol.get(key);
-            r.define(s, new SchemeString(sysProps.getProperty(key)),
-                     Util.ENVVARS);
-        }
 
         System.out.println("Generating heap: "+outHeap);
 
@@ -199,13 +191,6 @@ public class GenerateHeap {
             }
         }
         
-        //clearing env vars
-        for (ir=sysProps.keySet().iterator(); ir.hasNext();) {
-            String key=(String)ir.next();
-            Symbol s=Symbol.get(key);
-            r.define(s, Util.FALSE, Util.ENVVARS);
-        }
-
         System.err.println("Partitioning bindings...");
         SymbolicEnvironment[] results=classify(r.lookupContextEnv(Util.TOPLEVEL), lb);
         SymbolicEnvironment sisc_specific, r5rs, top_level;
