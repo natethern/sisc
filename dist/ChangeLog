@@ -1,3 +1,8 @@
+2003-05-01  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Fixed serialization problem with Hashtables requiring 
+	  initialized expressions
+
 2003-04-28  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed race condition in generic procedure method cache.
