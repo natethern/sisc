@@ -6,10 +6,10 @@
 ;;; Revised^4 Report on the Algorithmic Language Scheme
 ;;; and the IEEE specification.
 
-;;; The input tests read this file expecting it to be named "test.scm".
+;;; The input tests read this file expecting it to be named "r4rs-test.scm".
 ;;; Files `tmp1', `tmp2' and `tmp3' will be created in the course of running
 ;;; these tests.  You may need to delete them in order to run
-;;; "test.scm" more than once.
+;;; "r4rs-test.scm" more than once.
 
 ;;;   There are three optional tests:
 ;;; (TEST-CONT) tests multiple returns from call-with-current-continuation
@@ -895,8 +895,8 @@
 (SECTION 6 10 1)
 (test #t input-port? (current-input-port))
 (test #t output-port? (current-output-port))
-(test #t call-with-input-file "test.scm" input-port?)
-(define this-file (open-input-file "test.scm"))
+(test #t call-with-input-file "r4rs-test.scm" input-port?)
+(define this-file (open-input-file "r4rs-test.scm"))
 (test #t input-port? this-file)
 (SECTION 6 10 2)
 (test #\; peek-char this-file)
