@@ -1,3 +1,8 @@
+2003-10-06	Scott G. Miller  <scgmille@freenetproject.org>
+   
+    * Partially fixed a bug where delay couldn't resolve make-promise
+      in the report environment.
+      
 2003-09-25  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed a bug which caused a custom environment to replace toplevel
