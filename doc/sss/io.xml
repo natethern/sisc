@@ -790,7 +790,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </methodparam>
               <methodparam>
                 <parameter>
-                  thunk
+                  procedure
                 </parameter>
               </methodparam>
             </methodsynopsis>
@@ -814,7 +814,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </methodparam>
               <methodparam>
                 <parameter>
-                  thunk
+                  procedure
                 </parameter>
               </methodparam>
             </methodsynopsis>
@@ -838,7 +838,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </methodparam>
               <methodparam>
                 <parameter>
-                  thunk
+                  procedure
                 </parameter>
               </methodparam>
             </methodsynopsis>
@@ -857,7 +857,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <methodname>call-with-output-string</methodname>
               <methodparam>
                 <parameter>
-                  thunk
+                  procedure
                 </parameter>
               </methodparam>
             </methodsynopsis>
