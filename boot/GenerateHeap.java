@@ -210,7 +210,7 @@ public class GenerateHeap {
         r5rs=results[0];
         sisc_specific=results[1];
 
-        r.ctx.toplevel_env=top_level=new MemorySymEnv(sisc_specific, Util.TOPLEVEL);
+        r.ctx.toplevel_env=top_level=new MemorySymEnv(new LibraryAE(sisc_specific, lb), Util.TOPLEVEL);
         r5rs.setName(Util.REPORT);
         sisc_specific.setName(Util.SISC_SPECIFIC);
         
