@@ -739,7 +739,7 @@
 (define char-upper-case?
   (lambda (%_3124)
     (if (char-alphabetic? %_3124)
-      (char>? %_3124 '#\a)
+      (char<? %_3124 '#\a)
       '#f)))
 (define char-lower-case?
   (lambda (%_3125)
