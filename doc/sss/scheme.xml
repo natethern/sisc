@@ -43,7 +43,14 @@
       <para>
 	Depending on the numeric library compiled into &SISC;,
 	floating point numbers have either 32 or 64 bit IEEE
-	precision, or arbitrary precision. Regardless, &SISC;'s
+	precision, or arbitrary
+        <footnote>
+          <para>
+            Essentially arbitrary, see <xref linkend="Limits"/> for a
+            discussion of the physical limits of number representation
+          </para>
+        </footnote>
+        precision. Regardless, &SISC;'s
 	complex numbers have floating point components of the same
 	precision as the reals. Integers have arbitrary precision in
 	all numeric libraries, and rational numbers are built with
@@ -66,7 +73,8 @@
 	  precision. The parameterized functions
 	  <function>min-precision</function> and
 	  <function>max-precision</function> specify the
-	  constraints:
+	  constraints, the value of each specifying the number of
+          allowed decimal digits:
 	</para>
 	<para>
 	  <blockquote>
@@ -83,8 +91,8 @@
 	      </methodsynopsis>
 	      <blockquote>
 		<para>
-		  Sets or displays the minimum precision constraint, an
-		  integer.
+		  Sets or displays the minimum precision constraint in
+		  decimal digits, an integer.
 		</para>
 	      </blockquote>
 	    </para>
@@ -101,8 +109,8 @@
 	      </methodsynopsis>
 	      <blockquote>
 		<para>
-		  Sets or displays the maximum precision constraint,
-		  an integer.
+		  Sets or displays the maximum precision constraint in
+		  decimal digits, an integer.
 		</para>
 	      </blockquote>
 	    </para>
@@ -147,11 +155,14 @@
 	are capable of representing the full range of unicode characters. 
         Unicode characters can be created with
 	<function>number-&gt;character</function>;
-	<literal>&num;&bsol;nnnnnn</literal>, where <literal>nnnn</literal> is an
-	octal number in the range 000000 -&gt; 177777; or <literal>&num;&bsol;uxxxx</literal>, where <literal>xxxx</literal> is a hexadecimal number in the range 0000 -&gt; ffff.  At least two zeros must 
-        be specified to distinguish from the '0' character when using an
-        octal character literal.  At least one zero must be specified to 
-        distinguish a hexadecimal character from the 'u' character.  
+	<literal>&num;&bsol;nnnnnn</literal>, where
+	<literal>nnnnnn</literal> is an octal number in the range
+	000000 -&gt; 177777; or <literal>&num;&bsol;uxxxx</literal>,
+	where <literal>xxxx</literal> is a hexadecimal number in the
+	range 0000 -&gt; ffff.  At least two zeros must be specified
+	to distinguish from the '0' character when using an octal
+	character literal.  At least one zero must be specified to
+	distinguish a hexadecimal character from the 'u' character.  
       </para>
       <para>
         &SISC; also provides additional named characters, to add to
@@ -227,9 +238,8 @@
         There are a number of reasons why a full Unicode system is
         non-trivial, especially within the framework of the &R5RS;
         string and character functions.  Such a discussion is outside
-        the scope of this document.  A Unicode compliant processing
-        library may be made available in the future as a library,
-        however.
+        the scope of this document.  Unicode compliant processing
+        may be made available in the future as a library, however.
       </para>
     </sect2>
     <sect2 id="Symbols">
@@ -303,14 +313,14 @@
           &R5RS; grammar with the following production:
         </para>
         <programlisting>
-          &lt;cased symbol&gt; --> |&lt;identifier&gt;|
+&lt;cased symbol&gt; --> |&lt;identifier&gt;|
         </programlisting>
         <example>
           <title>Case sensitive Symbol literals</title>
           <programlisting>
-            (eq? 'a '|A|) ; => #f
-            (eq? 'a '|a|) ; => #t
-            (eq? '|A| '|a|) ; => #f
+(eq? 'a '|A|) ; => #f
+(eq? 'a '|a|) ; => #t
+(eq? '|A| '|a|) ; => #f
           </programlisting>
         </example>
       </sect3>

@@ -111,7 +111,7 @@
             <parameter>exception</parameter>. A stack trace is
             displayed if <parameter>stack-trace?</parameter> is absent
             or set to &num;t. Furthermore the procedure calls itself
-            recursively in order to displays that information for
+            recursively in order to display similar information for
             nested exceptions.
           </para>
         </blockquote>

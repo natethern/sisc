@@ -266,7 +266,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
       document.  However, this section still describes useful
       performance tips and limitations of &SISC;'s operation.
     </para>
-    <sect1>
+    <sect1 id="Limits">
       <title>Limits</title>
       <para>
         This appendix lays out the various limits in &SISC; running on a
@@ -419,11 +419,11 @@ for <function>sqrt</function>, it is not clear what other mathematical
           for fixed exact integers, as described in <xref
             linkend="JVMLimits"/>.  Fixed bitlength inexact numbers are
           only available in the <literal>64Float</literal> and
-          <literal>32Float</literal> libraries.  For &SISC; on Java,
-          the <literal>64Float</literal> library is generally more
-          efficient than the <literal>32Float</literal> library, while
-          both are more efficient than the <literal>APFloat</literal>
-          library.
+          <literal>32Float</literal> libraries.  For &SISC; on Java on
+          the x86 32-bit architecture, the <literal>64Float</literal>
+          library is generally more efficient than the
+          <literal>32Float</literal> library, while both are more
+          efficient than the <literal>APFloat</literal> library.
         </para>
         <para>
           Fixed bitlength exact integers are only used for whole
