@@ -40,7 +40,7 @@
 (include "plugins/schemechan.scm")
 (include "plugins/logging.scm")
 
-(define bot-metaphone (metaphone botname))
+(define bot-metaphone (metaphone bot-name))
 
 (define (random-elem ls)
   (list-ref ls (random-integer (length ls))))
