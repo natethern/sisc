@@ -1,10 +1,3 @@
-(define-record-type :plugin
-  (make-plugin crib help handler)
-  plugin?
-  (crib plugin-crib)
-  (help plugin-help)
-  (handler plugin-handler))
-
 (define-syntax make-infobot
   (syntax-rules ()
     ((_ (crib help handler) ...)
@@ -68,6 +61,7 @@
     pprint)
    ("expand " "\"expand <s-expression>\" causes me to expand all the macros in the s-expression, and pretty-print the vanilla Scheme form."
     expand)
+   ("dictionary" "\"dictionary <word>\" tells me to look up a word in Webster's dictionary." (dict "web1913"))
    ("yow" "A bit of randomness from Zippy the Pinhead." yow)
    ("join " "\"join <channel-name>\" asks me to join the channel as an infobot"
     join-chan)
