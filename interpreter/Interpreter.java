@@ -150,11 +150,11 @@ public class Interpreter extends Util {
         llcf=lcf;
         lcf=c;
     }
-
+    /*
     public final void push(Expression nxp) {
-        stk=createFrame(nxp, vlr, vlk, env, fk, stk, cap);
+        stk=createFrame(nxp);
     }
-
+    */
     public final void setVLR(int pos, Value v) {
         if (cap!=null) {
             for (int i=pos; i>=0; i--) {
@@ -312,42 +312,62 @@ public class Interpreter extends Util {
     //POOLING
     //STATIC --------------------
 
-    protected static final int FRAMEPOOLSIZE=24, FPMAX=FRAMEPOOLSIZE-1;
-    protected CallFrame deadFrames[]=new CallFrame[FRAMEPOOLSIZE];
-    protected int deadFramePointer=-1;
-    CallFrame rv;
+    protected static final int FRAMEPOOLMAX=128;
+    protected CallFrame frameFreeList;
+    protected int frameFreeListSize;
 
-    public CallFrame createFrame(Expression n, Value[] v,
+    public final CallFrame createFrame(Expression n, Value[] v,
                                  boolean vlk, 
                                  LexicalEnvironment e,
                                  CallFrame f,
                                  CallFrame p, 
                                  boolean[] cap) {
-        if (deadFramePointer < 0)
+        if (frameFreeList == null)
             return new CallFrame(n,v,vlk,e,f,p,cap);
         else {
-	    rv=deadFrames[deadFramePointer];
-            deadFrames[deadFramePointer--]=null;
+            frameFreeList.fk=f;
+            f=frameFreeList;
+            frameFreeList=frameFreeList.parent;
+            frameFreeListSize--;
+            f.nxp=n;
+            f.vlr=v;
+            f.vlk=vlk;
+            f.env=e;
+            f.parent=p;
+            f.cap=cap;
+            return f;
+        }
+    }
+
+    public final void push(Expression n) {
+        if (frameFreeList == null)
+            stk=new CallFrame(n,vlr,vlk,env,fk,stk,cap);
+        else {
+            CallFrame rv=frameFreeList;
+            frameFreeList=frameFreeList.parent;
+            frameFreeListSize--;
+            rv.fk=fk;
             rv.nxp=n;
-            rv.vlr=v;
+            rv.vlr=vlr;
             rv.vlk=vlk;
-            rv.env=e;
-            rv.fk=f;
-            rv.parent=p;
+            rv.env=env;
+            rv.parent=stk;
             rv.cap=cap;
-            return rv;
+            stk=rv;
         }
     }
     
     public final void returnFrame(CallFrame f) {
-        if (!f.vlk && (deadFramePointer < FPMAX)) {
-            deadFrames[++deadFramePointer]=f;
-        }
+        if (f.vlk || frameFreeListSize >= FRAMEPOOLMAX) return;
+        f.parent=frameFreeList;
+        frameFreeList = f;
+        frameFreeListSize++;
     }
 
-    protected static final int ENVPOOLSIZE=128, ENVMAX=ENVPOOLSIZE-1;
-    protected LexicalEnvironment deadEnvs[]=new LexicalEnvironment[ENVPOOLSIZE];
-    protected int deadEnvPointer=-1;
+    protected static final int ENVPOOLMAX=128;
+    protected LexicalEnvironment envFreeList;
+    protected int envFreeListSize;
+
     /*
     protected static int m, o, h;
     static {
@@ -360,11 +380,15 @@ public class Interpreter extends Util {
         }
     }
    */
+
     public final void returnEnv() {
         if (env != null && !env.locked) {
             returnValues(env.vals);
-            if (deadEnvPointer < ENVMAX)
-                deadEnvs[++deadEnvPointer]=env;
+            if (envFreeListSize < ENVPOOLMAX) {
+                env.parent = envFreeList;
+                envFreeList = env;
+                envFreeListSize++;
+            }
             //else 
             //    o++;
         }
@@ -372,13 +396,14 @@ public class Interpreter extends Util {
     
     public final void newEnv(Value[] vals, 
                              LexicalEnvironment p) {
-        if (deadEnvPointer < 0) {
+        if (envFreeList == null) {
 	    //m++;
             env=new LexicalEnvironment(vals, p);
         } else {
             //h++;
-            env=deadEnvs[deadEnvPointer--];
-            //            deadEnvs[deadEnvPointer--]=null;
+            env=envFreeList;
+            envFreeList = envFreeList.parent;
+            envFreeListSize--;
             env.vals=vals;
             env.parent=p;
         }
@@ -407,7 +432,7 @@ public class Interpreter extends Util {
     }
 
     public final void returnVLR() {
-        if (!vlk) {
+        if (!vlk && vlr!=null) {
             returnValues(vlr);
         }
         vlr=null;
@@ -415,13 +440,13 @@ public class Interpreter extends Util {
 
     public final void replaceVLR(int size) {
         if (!vlk) {
+            if (vlr.length == size) return;
             returnValues(vlr);
         }
         newVLR(size);
     }
 
     public final void returnValues(Value[] v) {
-        if (v == null) return;
         int size = v.length;
         if (size == 0 || size >= VALUESPOOLSIZE) return;
         deadValues[size] = v;
