@@ -42,32 +42,25 @@
 ;;more specific or incomparable (i.e. neither less or more specific)
 ;;than methods appearing later.
 (define (get-methods proc)
-  (procedure-property! proc 'methods
-                       (lambda () (cons (monitor/new) '()))
-                       #f))
+  (procedure-property proc 'methods))
+
 (define (generic-procedure-methods proc)
   (cdr (get-methods proc)))
 
 (define (generic-procedure-next proc)
   (procedure-property proc 'next))
 
-;;This maps classes to lists of constructors ordered by their
-;;"specificity". A constructor procedure maintains a hashtable of
-;;generic procedures, one for each class. The generic procedures can be
-;;chained to a generic procedure that is part of another constructor.
+;;constructors are chained by chaining their contained generic
+;;procedures
 (define (constructor proc class)
-  (let ([constr (procedure-property! proc 'generic-constructors
-                                     make-hashtable
-                                     #f)]
-        [next   (procedure-property proc 'next)])
-    (hashtable/get!
-     constr
-     class
-     (lambda ()
+  (hashtable/get!
+   (procedure-property proc 'generic-constructors)
+   class
+   (lambda ()
+     (let ([next (procedure-property proc 'next)])
        (if next
            (make-generic-procedure (constructor next class))
-           (make-generic-procedure)))
-     #f)))
+           (make-generic-procedure))))))
 
 (define (method<= m1 m2)
   (cond ((> (method-arity m1) (method-arity m2)) #t)
@@ -182,15 +175,20 @@
                       (procedure-property proc 'next)))
 
 (define (_make-generic-procedure . rest)
-  (letrec ([proc    (lambda args (find-and-call proc args methods))]
-           [methods (get-methods proc)])
+  (letrec ([methods   (cons (monitor/new) '())]
+           [proc      (lambda args (find-and-call proc args methods))])
+    (set-procedure-property! proc 'methods methods)
     (if (not (null? rest))
-        (set-procedure-property! proc ' next (car rest)))
+        (set-procedure-property! proc 'next (car rest)))
     proc))
 (define (_make-generic-constructor . rest)
   (letrec ([proc (lambda (class . args)
                    (if (java/class? class) (add-class class))
                    (apply (constructor proc class) args))])
+    ;;A constructor procedure maintains a hashtable of
+    ;;generic procedures, one for each class, that contain methods for
+    ;;each of the constructors defined for that class
+    (set-procedure-property! proc 'generic-constructors (make-hashtable))
     (if (not (null? rest))
         (set-procedure-property! proc 'next (car rest)))
     proc))
