@@ -161,19 +161,11 @@ public class IO extends ModuleAdapter {
             b.append(u.getPath());
             if (u.getRef()!=null) {
                 b.append("%23");
-                try {
-                    b.append(URLEncoder.encode(u.getRef()));
-                } catch (UnsupportedEncodingException e) {
-                    //Cannot happen
-                }
+		b.append(URLEncoder.encode(u.getRef()));
             }
             if (u.getQuery()!=null) {
                 b.append("%3F");
-                try {
-                    b.append(URLEncoder.encode(u.getQuery()));
-                } catch (UnsupportedEncodingException e) {
-                    //Cannot happen
-                }
+		b.append(URLEncoder.encode(u.getQuery()));
             }
             try {
                 u=new URL(b.toString());
