@@ -37,7 +37,7 @@
      <copy todir="${dist.home}/${deploy.name}/WEB-INF/lib"
            file="${sisc.home}/sisc-lib.jar"/>
      <copy todir="${dist.home}/${deploy.name}/WEB-INF"
-           file="${sisc.home}/boot/sisc.shp"/>
+           file="${sisc.home}/sisc.shp"/>
      <copy todir="${dist.home}/${deploy.name}/scheme">
        <fileset dir="../scheme" includes="*.scm"/>
      </copy>
