@@ -37,10 +37,10 @@ import sisc.data.*;
 
 public class LambdaExp extends Expression implements Immediate {
     public boolean infiniteArity;
-    public int fcount;
+    public short fcount;
     public Expression body;
 
-    public LambdaExp(int s, Expression body, boolean arity) {
+    public LambdaExp(short s, Expression body, boolean arity) {
 	infiniteArity=arity;
 	fcount=s;
 	this.body=body;

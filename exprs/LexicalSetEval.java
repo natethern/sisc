@@ -36,9 +36,9 @@ import sisc.*;
 import sisc.data.*;
 
 public class LexicalSetEval extends Expression {
-    public int depth, pos;
+    public short depth, pos;
 
-    public LexicalSetEval(int depth, int pos) {
+    public LexicalSetEval(short depth, short pos) {
 	this.depth=depth;
 	this.pos=pos;
     }

@@ -45,19 +45,19 @@ public class LexicalEnvironment extends Value {
     }
 
     public LexicalEnvironment(Value[] v) {
-	this(v.length, v, null);
+	this((short)v.length, v, null);
     }
 
-    public LexicalEnvironment(int s, Value[] v, LexicalEnvironment parent) {
+    public LexicalEnvironment(short s, Value[] v, LexicalEnvironment parent) {
 	this(s, v, parent, false);
     }
 
-    public LexicalEnvironment(int s, Value[] v, LexicalEnvironment parent,
+    public LexicalEnvironment(short s, Value[] v, LexicalEnvironment parent,
 			      boolean infiniteArity) throws IllegalArgumentException {
 	this.parent=parent;
 
 	if (infiniteArity) {
-	    int sm1=s-1;
+	    short sm1=(short)(s-1);
 	    if (v.length < sm1) 
 		throw new IllegalArgumentException();
 	    vals=new Value[s];
@@ -71,13 +71,13 @@ public class LexicalEnvironment extends Value {
 	}
     }
 
-    public Value lookup(int depth, int pos) {
+    public Value lookup(short depth, short pos) {
 	LexicalEnvironment e = this;
 	while(depth-- > 0) e = e.parent;
 	return e.vals[pos];
     }
 
-    public void set(int depth, int pos, Value v) {
+    public void set(short depth, short pos, Value v) {
 	LexicalEnvironment e = this;
 	while(depth-- > 0) e = e.parent;
 	e.vals[pos]=v;

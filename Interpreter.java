@@ -54,6 +54,7 @@ public class Interpreter extends Util {
 	    r.nxp=null;
 	    try {
 		Values v=(Values)r.acc;
+		System.err.println(v.values[0]);
 	    } catch (ClassCastException c) {
 		System.err.println("System error: invalid failure record in base failure continuation.");
 	    }

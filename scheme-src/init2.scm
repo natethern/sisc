@@ -30,6 +30,8 @@
 ;; may use your version of this file under either the MPL or the
 ;; GPL.
 ;;
+(current-evaluator eval)
+
 (define modulo
   (lambda (x y)
     (let ([r (remainder x y)])

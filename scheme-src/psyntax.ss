@@ -513,6 +513,10 @@
     ((_ source var exp)
      `(set! ,var ,exp))))
 
+(define build-global-assignment-func
+  (lambda (var exp)
+     `(set! ,var ,exp)))
+
 (define-syntax build-global-definition
   (syntax-rules ()
     ((_ source var exp)
@@ -549,13 +553,13 @@
         `(begin ,@exps))))
 
 (define build-letrec
-   (lambda (vars val-exps body-exp)
+   (lambda (src vars val-exps body-exp)
       (if (null? vars)
           body-exp
-	  (cons (list 'lambda vars 
-		      (append (cons 'begin (map build-global-assignment 
-					vars val-exps)) (list body-exp)))
-		  (map make-false vars)))))
+          (cons (list 'lambda vars
+                      (append (cons 'begin (map build-global-assignment-func
+                                        vars val-exps)) (list body-exp)))
+                  (map make-false vars)))))
 
 (define-syntax build-lexical-var
   (syntax-rules ()
@@ -563,11 +567,11 @@
 
 (define-syntax self-evaluating?
   (syntax-rules ()
-    ((_ e)	
-     (not (pair? e)))))
-
+    ((_ e)
+     (let ((x e))
+       (not (pair? e))))))
 ;       (or (boolean? x) (number? x) (string? x) (char? x) (null? x))))))
-;)
+)
 
 (define-structure (syntax-object expression wrap))
 
@@ -2806,7 +2810,7 @@
     (let ((message (if (null? messages)
                        "invalid syntax"
                        (apply string-append messages))))
-      (error-hook 'sc-expand message (strip object empty-wrap)))))
+      (error-hook #f message (strip object empty-wrap)))))
 
 ;;; syntax-dispatch expects an expression and a pattern.  If the expression
 ;;; matches the pattern a list of the matching expressions for each
@@ -3033,7 +3037,6 @@
                    (and (identifier? x)
                         (free-identifier=? x (syntax quote)))))
        (islist? (lambda (x)
-		  (display x) (newline)
                   (and (identifier? x)
                        (free-identifier=? x (syntax list)))))
        (iscons? (lambda (x)

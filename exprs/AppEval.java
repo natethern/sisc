@@ -42,7 +42,7 @@ public class AppEval extends Expression {
 	    ((Procedure)r.acc).apply(r);
 	} catch (ClassCastException c) {
 	    error(r, "Attempt to apply non-procedure '"+r.acc.write()+"'");
-	}
+	} 
     }
 
     public Value express() {

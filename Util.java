@@ -39,7 +39,7 @@ import java.util.*;
 import java.io.*;
 
 public abstract class Util {
-    public static final String VERSION = "r1.1.1";
+    public static final String VERSION = "r1.1.2";
 
     protected static final Quantity FIVE=new Quantity(5);
     protected static final Expression APPEVAL=new AppEval();

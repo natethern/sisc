@@ -68,7 +68,7 @@ public abstract class Value extends Expression implements Immediate {
 	r.nxp=null;
     }
 
-    public Value getValue(Interpreter r) throws ContinuationException {
+    public final Value getValue(Interpreter r) throws ContinuationException {
 	return this;
     }
 

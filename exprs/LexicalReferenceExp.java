@@ -37,9 +37,9 @@ import sisc.*;
 
 public class LexicalReferenceExp extends Expression implements Immediate {
 
-    public int depth, pos;
+    public short depth, pos;
 
-    public LexicalReferenceExp(int ribcount, int position) {
+    public LexicalReferenceExp(short ribcount, short position) {
 	depth=ribcount;
 	pos=position;
     }

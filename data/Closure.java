@@ -36,11 +36,11 @@ import sisc.*;
 
 public class Closure extends Procedure {
     public boolean arity;
-    public int fcount;
+    public short fcount;
     public LexicalEnvironment env;
     public Expression body;
    
-    public Closure(boolean arity, int fcount, Expression body,
+    public Closure(boolean arity, short fcount, Expression body,
 		   LexicalEnvironment env) {
 	this.arity=arity;
 	this.fcount=fcount;
