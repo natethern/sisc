@@ -112,6 +112,7 @@
      continue
      stack-trace
      print-stack-trace
+     stack-trace-on-error
      print-exception)
   (import debugging-native)
   (include "debug.scm"))

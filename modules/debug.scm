@@ -253,3 +253,8 @@
       (if p 
           (begin (display "Caused by ")
                  (apply print-exception p st))))))
+
+;; Always display stack traces
+(define stack-trace-on-error (parameterize '#f))
+
+           
