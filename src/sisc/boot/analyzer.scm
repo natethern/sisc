@@ -67,6 +67,10 @@
       (inc! (arecord-refs arec) var))
     (define-simple-syntax (inc-sets! arec var)
       (inc! (arecord-sets arec) var))
+    (define (arecord-add-free! arec newfree)
+      (let ([afrees (arecord-frees arec)])
+        (unless (memq newfree (cdr afrees))
+          (set-cdr! afrees (cons newfree (cdr afrees))))))
     (define (arecord-union-frees! arec newfrees)
       (set-cdr! (arecord-frees arec)
                 (union (cdr (arecord-frees arec))
@@ -102,6 +106,8 @@
       (lambda (v arec env lxs)
         (cond [(symbol? v)
                (inc-refs! arec v)
+               (unless (memq v lxs)
+                 (arecord-add-free! arec v))
                (list v)]
               [(pair? v)
                (analyze-app! v arec env lxs)]
