@@ -172,6 +172,18 @@ for <function>sqrt</function>, it is not clear what other mathematical
 	    causes &SISC; to revert to base 10.
 	  </para>
 	</listitem>
+        <listitem>
+          <para>6.5 -
+            Due to a bug 
+            <ulink url="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=543451&amp;group_id=23735&amp;atid=379534">
+              <citetitle>(Bug 543451)</citetitle>
+            </ulink>, the scheme report environment obtained using
+            <function>scheme-report-environment</function> can be
+            mutated, its bindings modified.  The standard isnt clear as
+            to whether this is allowed, but we suspect it isn't in the
+            spirit of the standard.
+          </para>
+        </listitem>
       </orderedlist>
     </para>
   </appendix>

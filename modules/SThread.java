@@ -188,7 +188,9 @@ public class SThread extends ModuleAdapter {
 	    while (true) {
 		try {
 		    synchronized(condvar) {
+                        unlock();
 			condvar.wait();
+                        acquire();
 		    }
 		    return;
 		} catch (InterruptedException e) {}
@@ -199,7 +201,9 @@ public class SThread extends ModuleAdapter {
 	    while (true) {
 		try {
 		    synchronized(condvar) {
+                        unlock();
 			condvar.wait(timeout);
+                        acquire();
 		    }
 		    return;
 		} catch (InterruptedException e) {}

@@ -587,7 +587,9 @@
         To wait on a monitor, the
         <function>monitor/wait</function> function is
         applied to a monitor.  This will cause the thread to block
-        until notified by another thread.
+        until notified by another thread.  While waiting, the lock on the 
+        monitor is released, and is reacquired before
+        <function>monitor/wait</function> returns. 
       </para>
       <blockquote>
         <para id="func-monitor-wait">
@@ -608,7 +610,9 @@
               thread.  This call will not return until notified, unless
               the optional timeout is specified and
               <parameter>timeout</parameter> milliseconds have elapsed
-              without a notification. 
+              without a notification.  While blocking, the lock on
+              <parameter>monitor</parameter> is released, and
+              reacquired before returning.
             </para>
           </blockquote>
         </para>
