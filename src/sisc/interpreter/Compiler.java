@@ -434,10 +434,12 @@ public class Compiler extends Util {
 
         public void deserialize(Deserializer s) throws IOException {
             synid=s.readInt();
+            setName((Symbol)s.readExpression());
         }
 
         public void serialize(Serializer s) throws IOException {
             s.writeInt(synid);
+            s.writeExpression(getName());
         }
 
         public Value singletonValue() {
