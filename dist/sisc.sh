@@ -5,4 +5,4 @@ then
 fi
 
 EXTENSIONS=""
-java $JAVAOPT -classpath $CLASSPATH:$SISC_HOME/sisc-opt.jar -Dsisc.home=$SISC_HOME -Dsisc.heapfile=$SISC_HOME/sisc.heap -jar $SISC_HOME/sisc-base.jar $EXTENSIONS "$@"
+java $JAVAOPT -classpath $CLASSPATH:$SISC_HOME/sisc-opt.jar:$SISC_HOME/sisc-base.jar -Dsisc.home=$SISC_HOME -Dsisc.heapfile=$SISC_HOME/sisc.heap sisc.REPL $EXTENSIONS "$@"
