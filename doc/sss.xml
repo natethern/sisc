@@ -526,7 +526,8 @@
 	  constants. Quoted lists and vectors are
 	  immutable. Attempting to modify elements in these constants
 	  will raise an error. String constants are immutable as well
-	  when created with <computeroutput>symbol-&gt;string</computeroutput>.
+	  when created with
+	  <computeroutput>symbol-&gt;string</computeroutput>.
 	</para>
       </sect2>
     </sect1>
@@ -535,9 +536,107 @@
 	Error handling
       </title>
       <para>
-	Errors or exceptions are unusual program conditions that cause
-	the immediate termination of the program.  
+	&SISC; provides a sophisticated mechanism for handling errors
+	raised during the execution of a program.  During the
+	execution of any program, there is always a continuation that
+	represents the <emphasis>rest</emphasis> of a computation.  In
+	addition, one can imagine all the activities that will occur
+	as a result of an error.  This sequence of actions is
+	explicitly represented in &SISC; as a <emphasis>failure
+	continuation</emphasis>. 
       </para>
+      <sect2>
+	<title>
+	  Failure continuations
+	</title>
+	<para>
+	  Similar to
+	  <computeroutput>call-with-current-continuation</computeroutput>,
+	  &SISC; provides a function,
+	  <computeroutput>call-with-failure-continuation</computeroutput>,
+	  that allows a programmer to define the sequence of actions
+	  that should occur as a result of an error in a called expression.
+	</para>
+	<programlisting>
+	  &procedure; (call-with-failure-continuation thunk handler)
+	  &procedure; (call/fc thunk handler)
+	</programlisting>
+	<blockquote>
+	  <para>
+	    call-with-failure-continuation takes as arguments a thunk (a
+	    zero-argument procedure) to be evaluated.  If during the
+	    evaluation of the thunk an error is raised, the second,
+	    three argument procedure is called with values describing
+	    the error and its context.  If no error occurs, the
+	    value of evaluating the thunk becomes the value of the
+	    call/fc expression.
+	  </para>
+	</blockquote>
+      </sect2>
+      <sect2>
+	<title>
+	  Error handlers
+	</title>
+	<para>
+	  The error handler required as an argument to
+	  <computeroutput>call-with-failure-continuation</computeroutput>
+	  must take three parameters.  The first, a string, is a human
+	  readable message describing the error that occured.  The
+	  second is a procedure encapsulating the continuation that was
+	  in place at the site of the error.  This continuation is
+	  refered to as the <emphasis>error continuation</emphasis>
+	  The third, the <emphasis>failure-continuation</emphasis> is
+	  a procedure that when invoked calls the failure continuation
+	  of the <computeroutput>call/fc</computeroutput> expression.  
+	</para>
+	<para>
+	  When an error occurs, the error handler may choose one of
+	  three courses in dealing with the error.  First, the handler
+	  may choose to return an alternate value as the result of the
+	  <computeroutput>call/fc</computeroutput> expression.
+	  Second, the handler may restart the computation from the
+	  error site by invoking the error continuation with a value
+	  that should be returned in place of the expression that
+	  caused the error.  Finally, the handler may choose to
+	  propogate the error (or a new error) to the failure
+	  continuation of the <computeroutput>call/fc</computeroutput>
+	  expression.  To do this, the handler invokes the
+	  failure-continuation with the provided or new message and
+	  the provided error-continuation or a different continuation
+	  captured by other means.
+	</para>
+	<para>
+	  At this point, a few examples may be helpful:
+	</para>
+	<programlisting>
+	  (+ 1 (/ 1 0) 3)) 
+   	    ; => <emphasis>A divide by zero error is raised</emphasis>
+
+	  ; Return a new value
+	  (call-with-failure-continuation
+	    (lambda ()
+              (+ 1 (/ 1 0) 3))
+	    (lambda (message error-k failure-k)
+	      'error))     
+            ; => <emphasis>The symbol</emphasis> 'error
+
+	  ; Restart with a different value
+	  (call-with-failure-continuation
+  	    (lambda ()
+              (+ 1 (/ 1 0) 3))
+	    (lambda (message error-k failure-k)
+	      (error-k 2)))
+            ; => 6
+
+	  ; Propogate the error
+	  (call-with-failure-continuation
+  	    (lambda ()
+              (+ 1 (/ 1 0) 3))
+	    (lambda (message error-k failure-k)
+	      (failure-k message error-k)))
+	    ; => <emphasis>A divide by zero error is raised</emphasis>
+	</programlisting>
+      </sect2>
     </sect1>
     <sect1>
       <title>
