@@ -109,9 +109,8 @@
                              1)
                           cache))
              (set-cdr! methods mlist)))
-       (let* ([otypes (get-types args (method-list-arity mlist))]
-              [res (method-cache-get cache otypes)])
-         (or res
+       (let ([otypes (get-types args (method-list-arity mlist))])
+         (or (method-cache-get cache otypes)
              (let ([res (applicable-methods-helper
                          (method-list-methods mlist)
                          otypes)])
@@ -150,7 +149,12 @@
          args))
 
 (define (limited-type-of args count)
-  (map type-of (take args count)))
+  ;;The unoptimized version of this is
+  ;; (map type-of (take args count)
+  (if (or (null? args) (zero? count))
+      '()
+      (cons (type-of (car args))
+            (limited-type-of (cdr args) (- count 1)))))
 
 (define (invoke-generic-procedure proc args)
   (let ([applicable (applicable-methods-wrapper (get-methods proc)
