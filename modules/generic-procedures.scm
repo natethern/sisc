@@ -37,19 +37,21 @@
 (define (types<= x y) (every2 type<= x y))
 (define (instances-of? x y) (every2 instance-of? x y))
 
-(define (assert-proc proc thunk)
+(define (assert-proc proc thunk safe?)
   (if (procedure? proc)
-      (synchronized proc thunk)
+      ((if safe? synchronized synchronized-unsafe) proc thunk)
       (error "expected procedure")))
 (define (procedure-property proc key . rest)
   (assert-proc proc
                (lambda ()
-                 (apply annotation proc key rest))))
+                 (apply annotation proc key rest))
+               #f))
 (define (set-procedure-property! proc key val . rest)
   (assert-proc proc
                (lambda ()
-                 (apply set-annotation! proc key val rest))))
-(define (procedure-property! proc key thunk)
+                 (apply set-annotation! proc key val rest))
+               #f))
+(define (procedure-property! proc key thunk . rest)
   (assert-proc proc
                (lambda ()
                  (let* ([def (list #f)]
@@ -58,7 +60,8 @@
                        (let ([res (thunk)])
                          (set-annotation! proc key res)
                          res)
-                       res)))))
+                       res)))
+               (or (null? rest) (car rest))))
 
 ;;This maps procedure to lists of methods ordered by their
 ;;"specificity", i.e. methods appearing earlier in the list are always
@@ -66,7 +69,8 @@
 ;;than methods appearing later.
 (define (get-methods proc)
   (procedure-property! proc 'methods
-                       (lambda () (cons (monitor/new) '()))))
+                       (lambda () (cons (monitor/new) '()))
+                       #f))
 (define (generic-procedure-methods proc)
   (cdr (get-methods proc)))
 
@@ -79,7 +83,8 @@
 ;;chained to a generic procedure that is part of another constructor.
 (define (constructor proc class)
   (let ([constr (procedure-property! proc 'generic-constructors
-                                     make-hashtable)]
+                                     make-hashtable
+                                     #f)]
         [next   (procedure-property proc 'next)])
     (hashtable/get!
      constr
@@ -87,7 +92,8 @@
      (lambda ()
        (if next
            (make-generic-procedure (constructor next class))
-           (make-generic-procedure))))))
+           (make-generic-procedure)))
+     #f)))
 
 (define (method<= m1 m2)
   (cond ((> (method-arity m1) (method-arity m2)) #t)
@@ -219,7 +225,7 @@
 ;;procedure.
 (define *JAVA-METHODS* (make-hashtable))
 (define (generic-java-procedure name)
-  (hashtable/get! *JAVA-METHODS* name _make-generic-procedure))
+  (hashtable/get! *JAVA-METHODS* name _make-generic-procedure #f))
 ;;There is *one* generic java constructor
 (define *JAVA-CONSTRUCTOR* (_make-generic-constructor))
 (define (generic-java-constructor) *JAVA-CONSTRUCTOR*)

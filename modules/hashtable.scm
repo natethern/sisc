@@ -1,5 +1,5 @@
-(define (hashtable/get! ht key thunk)
-  (synchronized
+(define (hashtable/get! ht key thunk . rest)
+  ((if (or (null? rest) (car rest)) synchronized synchronized-unsafe)
    ht
    (lambda ()
      (let* ([def (list #f)]
