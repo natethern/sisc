@@ -13,7 +13,7 @@
                     (string-append
                       "SELECT knowledge.key, knowledge.data FROM knowledge LEFT JOIN aka ON "
                       "    (aka.key ilike '~a' AND aka.data ilike knowledge.key)"
-                      " WHERE ((aka.key IS NULL AND knowledge.key ilike '%~a%') "
+                      " WHERE ((aka.key IS NULL AND knowledge.key ilike '~a') "
                       "    OR (aka.key IS NOT NULL)) "
                       "   ~a") 
                      key key (if type (sisc:format "AND type='~a'"

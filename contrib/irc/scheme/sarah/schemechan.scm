@@ -1,5 +1,6 @@
 (import old-s2j)
 (import old-generic-procedures)
+(import srfi-1)
 (import file-manipulation)
 (define-generic dcc-accept-chat)
 (define-generic exit)
@@ -15,7 +16,7 @@
 (define <java.io.PipedInputStream> (java-class "java.io.PipedInputStream"))
 
 (define (forbidden-procedure name)
-  (lambda (args)
+  (lambda args
     (error name "use is forbidden in this environment.")))
 
 (define schemechan-env #f)
@@ -43,6 +44,8 @@
       (set! x (+ x 1))
       (string->symbol (format "~a_~a" var x)))))
 (define gen-sym simple-gen-sym)
+
+(define etmp (scheme-report-environment 5))
 	
 (define (make-schemechan channel-name)
   (let* ([parser (let* ([interp (enter <sisc.interpreter.Context>)]
@@ -50,7 +53,6 @@
 		   (exit <sisc.interpreter.Context>)
 		   i)]
 	 [pipeout (make <java.io.PipedOutputStream>)]
-         [etmp (scheme-report-environment 5)]
          [load-from-url
            (lambda (url)
              (with/fc (lambda (m e)  
@@ -60,14 +62,21 @@
                 (lambda ()
                  (when (file-is-file? url) 
                   (error 'load "Loading from local files not permitted.")))))]
-	 [env (begin 
+	 [env (begin
 		(for-each (lambda (proc)
 			    (putprop proc etmp (forbidden-procedure proc)))
                           forbidden-bindings)
                 (putprop '$sc-put-cte etmp $sc-put-cte)
 		(putprop '_load etmp my-load)
 		(putprop 'gen-sym etmp simple-gen-sym)
-		(putprop 'sc-expand etmp sc-expand)
+		(putprop 'sc-expand etmp 
+                         (lambda (v) 
+			   (let ((old-env (interaction-environment etmp)))
+                             (dynamic-wind
+                               void
+                               (lambda () (sc-expand v '(e) '(e)))
+   		               (lambda () (interaction-environment
+old-env))))))
                 (putprop 'load etmp load-from-url)
 		etmp)]
 	 [parserinput (java-unwrap (make <sisc.io.SourceInputPort> 

@@ -1,3 +1,5 @@
+
+(import srfi-1)
 (import srfi-2)
 (import srfi-11)
 (import threading)
@@ -23,6 +25,11 @@
   (cond [(null? ls) (error 'rac "Expected type pair, got '()")]
 	[(null? (cdr ls)) (car ls)]
 	[else (rac (cdr ls))]))
+
+(define (safe-pp-to-string value)
+  (if (circular? value)
+      (with-output-to-string (lambda () (write value)))
+      (pretty-print-to-string value)))
 
 (define somewhat-clean
   (string->list "abcdefghijklmnopqrstuvwxyz()[]->+-*/_01234567890?!."))
@@ -243,19 +250,21 @@
   "Okay, I'm listening.")
 
 (define (eval-within-n-ms datum ms . env)
-    (let* ([env (if (null? env) 
+    (let* ([nenv (if (null? env) 
                     (scheme-report-environment 5)
                     (car env))]
            [os (open-output-string)]
 	   [evaluation-thread
             (begin
-              (putprop 'call/cc env call/cc)
-              (putprop '$sc-put-cte env $sc-put-cte)
-	      (strict-r5rs-compliance #t)
+              (unless (null? env)
+                (for-each (lambda (k v) (putprop k nenv v))
+                          '(call/cc $sc-put-cte fold error)
+ 			  (list call/cc $sc-put-cte fold error))
+                (strict-r5rs-compliance #t))
               (thread/new 
                (lambda ()
                  (with-output-to-port os
-                   (lambda () (eval datum env))))))]
+                   (lambda () (eval datum nenv))))))]
            [watchdog-thread
             (thread/new
              (lambda ()
@@ -269,11 +278,12 @@
                              (begin 
                                (thread/interrupt evaluation-thread)
                                (display 
-                                 "Sorry, I couldn't evaluate your expression in the given time.")
-                               (print-exception (make-exception m e) #f))))
+                                 "Sorry, I couldn't evaluate your expression in the given time."))
+                             (print-exception (make-exception m e) #f)))
                      (lambda ()
                        (let ([result (thread/result evaluation-thread)])
-                         (putprop '! env result)
+                         (unless (void? result) 
+                           (putprop '! nenv result))
                          (if (circular? result) 
                              (write result)
                              (pretty-print result)))))))))])
@@ -478,20 +488,20 @@
     (lambda ()
       (let loop ([x (read)] [l #f])
 	(if (eof-object? x)
-	    (and l (pretty-print-to-string l))
+	    (and l (safe-pp-to-string l))
 	    (loop (read) x))))))
 
 (define (expand from channel message st)
   (let-values ([(ignoreables expr) (string-split message "expand ")])
     (with-input-from-string expr
       (lambda ()
-	(pretty-print-to-string (sc-expand (read-code) '(e) '(e)))))))
+	(safe-pp-to-string (sc-expand (read-code) '(e) '(e)))))))
 
 (define (optimize from channel message st)
   (let-values ([(ignoreables expr) (string-split message "optimize ")])
     (with-input-from-string expr
       (lambda ()
-	(pretty-print-to-string (optimize (sc-expand (read-code))))))))
+	(safe-pp-to-string (optimize (sc-expand (read-code))))))))
 
 (define (join from channel message st) 
   (let-values ([(ignoreables chan) (string-split message "join ")])
