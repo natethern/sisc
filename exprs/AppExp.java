@@ -51,36 +51,40 @@ public class AppExp extends Expression {
 
         if (nonTail) 
             r.push(null);
-        r.vlr = r.createValues(rands.length);
 
-        // Load the immediates from right to left, stop
-        // on the first non-immediate
-        int i=rands.length-1;
-        for (; i>=0; i--) {
-            tmp=rands[i].getValue(r);
-            if (tmp==null) break;
-            r.vlr[i]=tmp;
-        }
+	r.vlr = r.createValues(rands.length);
+	if (rands.length > 0) {
+	    
+	    // Load the immediates from right to left, stop
+	    // on the first non-immediate
+	    int i=rands.length-1;
+	    for (; i>=0; i--) {
+		tmp=rands[i].getValue(r);
+		if (tmp==null) break;
+		r.vlr[i]=tmp;
+	    }
         
-        if (i<0) {
-            // All the operands were immediate, work on
-            // the operator
-            tmp=rator.getValue(r);
-            
-            if (tmp!=null) {
-                r.nxp=APPEVAL;
-                r.acc=tmp;
-            } else { 
-                r.nxp=rator;
-                r.push(APPEVAL);
-            }
-        } else {
-            // We have some non-immediates, so set up 
-            // a FillRib for cleanup and set the first operand
-            // in the nxp
-            r.push(r.createFillRib(i, rands, rator, APPEVAL));
-            r.nxp=rands[i];
-        }
+	    if (i>=0) {
+		// We have some non-immediates, so set up 
+		// a FillRib for cleanup and set the first operand
+		// in the nxp
+		r.push(r.createFillRib(i, rands, rator, APPEVAL));
+		r.nxp=rands[i];
+		return;
+	    }
+	}
+
+	// No (non-immediate) operands, go straight to the
+	// the operator
+	tmp=rator.getValue(r);
+	
+	if (tmp!=null) {
+	    r.nxp=APPEVAL;
+	    r.acc=tmp;
+	} else { 
+	    r.nxp=rator;
+	    r.push(APPEVAL);
+	}
     }
 
     public Value express() {
