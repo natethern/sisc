@@ -38,7 +38,7 @@ import sisc.*;
 public class InputPort extends NamedValue {
     protected static final Symbol READ=Symbol.get("read");
     protected BufferedReader r;
-    protected int pushback;
+    protected int pushback = -1;
 
     public InputPort(BufferedReader r) {
         this.r=r;
@@ -60,8 +60,8 @@ public class InputPort extends NamedValue {
 
     public int read() throws IOException {
         int c=pushback;
-        if (pushback!=0)
-            pushback=0;
+        if (pushback!=-1)
+            pushback=-1;
         else
             c=r.read();
 
