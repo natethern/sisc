@@ -25,6 +25,12 @@ DEFINE-JAVA-CLASS <scheme-name> [<java-name>]
 Binds <scheme-name> to the Java class named by <java-name>, or if no
 such parameter is supplied, by the mangled <scheme-name>.
 
+
+DEFINE-JAVA-CLASSES [<scheme-name> | (<scheme-name> <java-name>)] ...
+Creates bindings for several Java classes. This form expands into
+several DEFINE-JAVA-CLASS forms.
+
+
 Mangling of class names checks for the presence of angle brackets
 around the <scheme-name>. If they are present they are stripped.  All
 the identifiers between the dots are passed through field name
@@ -42,29 +48,43 @@ corresponds to the Java type
 (note that GetField is a nested class).
 
 
-DEFINE-JAVA-CLASSES [<scheme-name> | (<scheme-name> <java-name>)] ...
-Creates bindings for several Java classes. This form expands into
-several DEFINE-JAVA-CLASS forms.
+There are predicates for determining whether a Scheme value is a Java
+class or interface. All Java interfaces are also Java classes.
+
+JAVA-CLASS? <value> => #t/#f
+Determines whether <value> is a Java class.
+
+
+JAVA-INTERFACE? <value> => #t/#f
+Determines whether <value> is a Java interface. All interfaces are
+also Java classes.
 
 
 Methods
 -------
+
+Java methods are made accessible to Scheme code as procedures that can
+invoke any method of a given name on any Java object. Method selection
+is performed based on the types of the arguments to the procedure call.
+Static Java methods can be invoked by passing a typed null object (see
+JAVA-NULL) as the first argument to the procedures.
 
 GENERIC-JAVA-METHOD <method-name> => <procedure>
 Returns a procedure that when invoked with a java object as the first
 argument and java values as the remaining arguments, invokes the best
 matching named method on the java object and returns the result.
 
-Method selection is performed based on the types of the arguments to
-the procedure call.
-
-Static Java methods can be invoked by passing a typed null object (see
-JAVA-NULL) as the first argument to the procedure.
-
 
 DEFINE-GENERIC-JAVA-METHOD <scheme-name> [<java-name>]
 Binds <scheme-name> to the Java method named by <java-name>, or if no
 such parameter is supplied, by the mangled <scheme-name>.
+
+
+DEFINE-GENERIC-JAVA-METHODS [<scheme-name> |
+                             (<scheme-name> <java-name>)] ...
+Creates bindings for several Java methods. This form expands into
+several DEFINE-GENERIC-JAVA-METHOD forms.
+
 
 Mangling of method names removes trailing '!' characters and replaces
 trailing '?' characters with a leading "is-". The result of the
@@ -75,14 +95,17 @@ schemely, e.g. empty-list? corresponds to the Java method name
 isEmptyList.
 
 
-DEFINE-GENERIC-JAVA-METHODS [<scheme-name> |
-                             (<scheme-name> <java-name>)] ...
-Creates bindings for several Java methods. This form expands into
-several DEFINE-GENERIC-JAVA-METHOD forms.
-
 
 Fields
 ------
+
+Fields are made accessible to Scheme code as procedures that can
+get/set any field of a given name on any Java object.  If several
+fields of the same name are present in the object due to the object
+class's inheritance chain, the most specific field, i.e. the one
+bottommost in the inheritance hierarchy, is selected. Static fields
+can be accessed by passing a typed null object (see JAVA-NULL) as the
+first argument to the procedures.
 
 GENERIC-JAVA-FIELD-ACCESSOR <field-name>
 GENERIC-JAVA-FIELD-MODIFIER <field-name>
@@ -91,9 +114,6 @@ argument (and in case of JAVA-FIELD-MODIFIER a java value as the
 second argument) retrieves / sets the value of the field <field-name>
 on the object.
 
-If several fields of the name <field-name> are present in the object
-due to the object class's inheritance chain, the most specific field,
-i.e. the one bottommost in the inheritance hierarchy, is selected.
 
 Static fields can be accessed/modified by passing a typed null object
 (see JAVA-NULL) as the first argument to the procedure.
@@ -105,14 +125,6 @@ Binds <scheme-name> to the accessor/modifier for the Java field named
 by <java-name>, or if no such parameter is supplied, by the mangled
 <scheme-name>.
 
-Mangling of field names upcases any character following a dash ('-')
-and removes all characters that are not legal as part of Java
-identifiers. In essence, the mangling allows fields to be identified
-more schemely. By convention field accessors should be named with a
-leading ':' followed by the field name and field modifiers should be
-named with a leading ':' followed by the field name followed by '!',
-e.g. :foo-bar, :foo-bar!
-
 
 DEFINE-GENERIC-JAVA-FIELD-ACCESSORS [<scheme-name> |
                                      (<scheme-name> <java-name>)] ...
@@ -122,15 +134,32 @@ Creates bindings for several Java field accessors/modifiers. This form
 expands into several DEFINE-GENERIC-JAVA-FIELD-{ACCESSOR/MODIFIER}
 forms.
 
+Mangling of field names upcases any character following a dash ('-')
+and removes all characters that are not legal as part of Java
+identifiers. In essence, the mangling allows fields to be identified
+more schemely. By convention field accessors should be named with a
+leading ':' followed by the field name and field modifiers should be
+named with a leading ':' followed by the field name followed by '!',
+e.g. :foo-bar, :foo-bar!
+
 
 Instances
 ---------
+Scheme code can instantiate Java classes with a call to the following
+procedure:
 
 JAVA-NEW <jclass> <jvalue> ... -> <jobject>
 Selects & calls a constructor of <jclass>, returning the newly created
 object. Constructor selection is performed based on the types of the
 <jvalue> arguments.
 
+There is a predicate for determining whether a value is a Java object:
+
+JAVA-OBJECT? <value> => #t/#f
+Determines whether <value> is a Java object.
+
+Unlike in Java, null objects are typed. Typed null objects play a key
+role in invoking static methods an accessing/modifying static fields.
 
 JAVA-NULL <jclass> -> <jnull>
 Returns a Java null object of type <jclass>. Typed null objects can be
@@ -140,257 +169,35 @@ Any invocation of a Java method, or access to a Java fields that
 returns a Java null does so typed based on the declared return/field
 type.
 
-JNULL
-This is the typed null object obtained by calling JAVA-NULL on
-java.lang.Object.
+For convenience, JNULL is bound to the typed null object obtained by
+calling JAVA-NULL on java.lang.Object.
 
-JAVA-OBJECT? <value> => #t/#f
-Determines whether <value> is a Java object.
+There is a predicate for determining whether a value is a Java null
+object:
 
 JAVA-NULL? <value> => #t/#f
 Determines whether <value> is a Java null. Nulls Java objects.
 
 
-Reflection API
-==============
-
-There are Scheme procedures covering the full spectrum of Java's class
-reflection capability. Normal use of S2J does not require knowledge of
-these procedures, just like normal use of Java does not require
-knowledge of the Java reflection API.
-
-Classes
--------
-
-JAVA-CLASS? <value> => #t/#f
-Determines whether <value> is a Java class.
-
-
-JAVA-INTERFACE? <value> => #t/#f
-Determines whether <value> is a Java interface. All interfaces are
-also Java classes.
-
-
-JAVA-CLASS-NAME <jclass> => <symbol>
-Returns the name of <jclass>.
-
-
-JAVA-CLASS-FLAGS <jclass> => (list <symbol>)
-Returns the modifiers of <jclass>, e.g. public static final;
-
-
-JAVA-CLASS-DECLARING-CLASS <jclass> => <jclass>
-Returns the Java class in which <jclass> was declared, or null if it
-was declared at the top-level.
-
-
-JAVA-CLASS-DECLARED-SUPERCLASSES <jclass> -> (list <jclass>)
-Returns the direct superclasses of <jclass>.
-
-For ordinary classes this is the class' superclass followed by all its
-interfaces in the order they were specified in the class
-declaration. For primitive types and array types, the direct
-superclass(es) reflect the widening conversions performed by Java
-e.g. <jint>'s superclass is <jlong> and <java.util.array-list[][]>'s
-superclasses are:
-<java.util.abstract-list[][]>
-<java.util.list[][]>
-<java.util.random-access[][]>
-<java.lang.cloneable[][]>
-<java.io.serializable[][]>)
-Note that this behaviour is different from the corresponding method in
-the Java reflection API.
-
-
-JAVA-CLASS-DECLARED-CLASSES <jclass> => (list <jclass>)/#f
-Returns all the classes declared by <jclass>, or #f if access to this
-information is prohibited.
-
-
-JAVA-CLASS-DECLARED-CONSTRUCTORS <jclass> => (list <jconstructor>)/#f
-Returns all the constructors declared by <jclass>, or #f if access to
-this information is prohibited.
-
-
-JAVA-CLASS-DECLARED-METHODS <jclass> => (list <jmethod>)/#f
-Returns all the methods declared by <jclass>, or #f if access to this
-information is prohibited.
-
-
-JAVA-CLASS-DECLARED-FIELDS <jclass> -> (list <jfield>)/#f
-Returns all the fields declared by <jclass>, or #f if access to this
-information is prohibited.
-
-
-JAVA-CLASS-PRECEDENCE-LIST <jclass> -> (list <jclass>)
-Returns the total order of <jclass> and all direct & indirect
-superclasses, as determined by the partial orders obtained from
-calling JAVA-CLASS-DECLARED-SUPERCLASSES.
-
-The ordering of classes returned by JAVA-CLASS-DECLARED-SUPERCLASSES
-is considered "weak" whereas the ordering of the class itself with
-respect to its direct superclasses is considered strong. The
-significance of this is that when computing the class precedence list
-weak orderings are re-arranged if that is the only way to obtain a
-total order. By contrast, strong orderings are never rearranged.
-
-The class precedence list is important when comparing types using the
-type system's COMPARE-TYPES procedure, which is used by the generic
-procedure method selection algorithm. See COMPARE-METHODS. Since
-generic Java methods and field accessors/mutators are implemented in
-terms of generic procedures they are all affected by the class
-precedence list.
-
-
-Constructors
-------------
-
-JAVA-CONSTRUCTOR? <value> => #t/#f
-Determines whether <value> is a Java constructor.
-
-JAVA-CONSTRUCTOR-NAME <jconstructor> => <symbol>
-Returns the name of <jconstructor>.
-
-
-JAVA-CONSTRUCTOR-FLAGS <jconstructor> => (list <symbol>)
-Returns the modifiers of <jconstructor>, e.g. public static final;
-
-
-JAVA-CONSTRUCTOR-DECLARING-CLASS <jconstructor> => <jclass>
-Returns the Java class in which <jconstructor> was declared.
-
-
-JAVA-CONSTRUCTOR-PARAMETER-TYPES <jconstructor> => (list <jclass>)
-Returns the declared types of the parameters of <jconstructor>.
-
-
-JAVA-CONSTRUCTOR-PROCEDURE <jconstructor> => <procedure>
-Returns a procedure that when called invokes the constructor with the
-passed arguments, returning the newly created object.
-
-
-JAVA-CONSTRUCTOR-METHOD <jconstructor> => <method>
-Returns a method suitable for adding to generic procedures that, when
-called invokes the underlying Java constructor with the passed
-arguments. The resulting newly created object is returned.
-
-
-Methods
--------
-
-JAVA-METHOD? <value> => #t/#f
-Determines whether <value> is a Java method.
-
-
-JAVA-METHOD-NAME <jmethod> => <symbol>
-Returns the name of <jmethod>.
-
-
-JAVA-METHOD-FLAGS <jmethod> => (list <symbol>)
-Returns the modifiers of <jmethod>, e.g. public static final;
-
-
-JAVA-METHOD-DECLARING-CLASS <jmethod> => <jclass>
-Returns the Java class in which <jmethod> was declared.
-
-
-JAVA-METHOD-PARAMETER-TYPES <jmethod> => (list <jclass>)
-Returns the declared types of the parameters of <jmethod>.
-
-
-JAVA-METHOD-RETURN-TYPE <jmethod> => <jclass>
-Returns the declared return type of <jmethod>.
-
-
-JAVA-METHOD-PROCEDURE <jmethod> => <procedure>
-Returns a procedure that when called invokes the method on the object
-passed as the first argument, with the remaining arguments passed as
-the parameters. The result of the method invocation is returned the
-result of the method invocation. Static methods can be invoked by
-passing a null object as the first parameter.
-
-
-JAVA-METHOD-METHOD <jmethod> => <method>
-Returns a method suitable for adding to generic procedures that, when
-called invokes the underlying Java method on the object passed as the
-first argument, with the remaining arguments passed as parameters. The
-result of the method invocation is returned.  Static methods can be
-invoked by passing a typed null object as the first parameter to the
-generic procedure.
-
-
-Fields
-------
-
-JAVA-FIELD? <value> => #t/#f
-Determines whether <value> is a Java field.
-
-JAVA-FIELD-NAME <jfield> => <symbol>
-Returns the name of <jfield>.
-
-
-JAVA-FIELD-FLAGS <jfield> => (list <symbol>)
-Returns the modifiers of <jfield>, e.g. public static final;
-
-
-JAVA-FIELD-DECLARING-CLASS <jfield> => <jclass>
-Returns the Java class in which <jfield> was declared.
-
-
-JAVA-FIELD-TYPE <jfield> => <jclass>
-Returns the declared type of <jmethod>.
-
-
-JAVA-FIELD-ACCESSOR-PROCEDURE <jfield> => <procedure>
-JAVA-FIELD-MODIFIER-PROCEDURE <jfield> => <procedure>
-Returns a procedure that when called returns/sets the value of the
-field on the object specified by the first parameter to the
-invocation. Static fields can be accessed/modified by passing a null
-object.
-
-JAVA-FIELD-ACCESSOR-METHOD <jfield> => <method>
-JAVA-FIELD-MODIFIER-METHOD <jfield> => <method>
-Returns a method suitable for adding to generic procedures that, when
-called returns/sets the value of the field on the object specified by
-the first argument to the generic procedure invocation. Static fields
-can be accessed/modified by passing a typed null object as the first
-parameter to the generic procedure.
-
-
-
-Miscellaneous
-=============
-
 Arrays
 ------
 
-JAVA-ARRAY? <value> => #t/#f
-Determines whether <value> is an array.
-
-JAVA-ARRAY-CLASS <jclass> <dimensions> => <jclass>
-Returns a class representing the array type that has <jclass> as the
-component type and <dimensions> as the number of dimensions, e.g.
-  (java-array-class <jint> 2)
-is the same as
-  (java-class '|int[][]|)
-
-The list of direct superclasses returned by
-JAVA-CLASS-DECLARED-SUPERCLASSES for an array class is consistent with
-the widening conversions performed by Java, e.g. the direct
-superclasses of java.util.ArrayList[][] are
-  java.util.AbstractList[][]
-  java.util.List[][]
-  java.util.RandomAccess[][]
-  java.lang.Cloneable[][]
-  java.io.Serializable[][]
-This is different from what the Java reflection APIs returns.
-
+Scheme code can create Java arrays using the following procedure:
 
 JAVA-ARRAY-NEW <jclass> <size> => <jvalue>
 Creates an array of component type <jclass> with dimensions
 <size>. <size> can be a number (for a single-dimensional array), or a
 vector/list of numbers (for multi-dimensional arrays).
 
+
+There is a predicate for determining whether a value is a Java
+array. All Java arrays are also Java objects.
+
+JAVA-ARRAY? <value> => #t/#f
+Determines whether <value> is an array.
+
+
+Elements of the array are accessed and modified with:
 
 JAVA-ARRAY-REF <jarray> <index> => <jvalue>
 Returns the element at index <index> of <jarray>. <index> can be a
@@ -404,9 +211,13 @@ be a number, for indexing into the first dimension of the array, or
 vector/list of numbers for multi-dimensional indexing.
 
 
+The length of a Java array is determined with:
+
 JAVA-ARRAY-LENGTH <jarray> => <number>
 Returns the length of the array.
 
+Scheme vectors and lists can be converted to Java array and vice
+versa:
 
 ->JARRAY <vector-or-list> <jclass> => <jarray>
 Creates a one-dimensional array of type <jclass> and fills it with the
@@ -421,24 +232,13 @@ Creates a vector/list containing the elements of <jarray>.
 Proxies
 -------
 
-JAVA-PROXY-CLASS <jinterface> ... => <jclass>
-Creates a Java class that implements the specified interfaces. The
-class can be instantiated with an invocation handler, such as the one
-returned by JAVA-PROXY-DISPATCHER below, that delegates method
-invocation to Scheme code.
-
-
-JAVA-PROXY-DISPATCHER <alist> => <invocation-handler>
-Creates an invocation handler suitable for use in the instantiation of
-a proxy (see JAVA-PROXY-CLASS). The keys in <alist> are Java method
-names and the values are procedures.
-
-When a method is invoked on a proxy, the procedure matching method's
-name is invoked with the proxy object and the parameters of the method
+Scheme code cannot create sub-classes of existing Java classes. It is,
+however, possible to create classes implementing existing Java
+interfaces. These classes are called proxies. Calling a method on a
+proxy invokes a user-definable Scheme procedure, based on the name of
+the method, passing the proxy object and the parameters of the method
 invocation as arguments. The result of the invocation is returned as
-the result of the method call.  If <alist> does not contain a binding
-for the method name, an error is returned.
-
+the result of the method call.
 
 DEFINE-JAVA-PROXY (<name> . <args>)
  (<interface> ...)
@@ -462,12 +262,20 @@ The second kind of definition form is equivalent to the following
 first-type form:
   (define <method-name> (lambda <method-args> . <body>))
 
+If a method is invoked on a proxy for which no method handler exists
+and error is returned to the caller.
+
 
 Primitive Types and Conversions
 -------------------------------
 For convenience, all the primitive Java types, i.e. void, boolean,
 double, float, long, int, short, byte, char, are predefined and bound
 to <j...>, e.g. <jvoid>.
+
+When calling Java methods, invoking Java constructors, accessing or
+modifying Java fields, no automatic conversion is performed between
+ordinary Scheme values and Java values. Instead explicit conversion of
+arguments and results is required.
 
 Conversion functions are provided for converting between primitive
 Java types and standard Scheme types. These functions are consistently
@@ -490,7 +298,7 @@ arguments in Java method or constructor invocations or when setting
 Java fields. However, all Scheme values are *internally* represented
 by instances of classes in the SISC runtime. S2J provides a mechanism
 to get hold of this internal representation as an S2J Java object. The
-converse operation is also support - a Java instance obtained via a
+converse operation is also supported - a Java instance obtained via a
 Java method or constructor invocation or field access in S2J can be
 turned into a Scheme value if it is an instance of an appropriate SISC
 runtime class. These two operations are called "wrapping" and
@@ -685,8 +493,250 @@ Scheme: (define-java-proxy (foo x y)
         (define foo-obj (foo 1 2))
 
 
+
+Reflection API
+==============
+
+There are Scheme procedures covering the full spectrum of Java's class
+reflection capability. Normal use of S2J does not require knowledge of
+these procedures, just like normal use of Java does not require
+knowledge of the Java reflection API.
+
+Classes
+-------
+
+JAVA-CLASS-NAME <jclass> => <symbol>
+Returns the name of <jclass>.
+
+
+JAVA-CLASS-FLAGS <jclass> => (list <symbol>)
+Returns the modifiers of <jclass>, e.g. public static final;
+
+
+JAVA-CLASS-DECLARING-CLASS <jclass> => <jclass>
+Returns the Java class in which <jclass> was declared, or null if it
+was declared at the top-level.
+
+
+JAVA-CLASS-DECLARED-SUPERCLASSES <jclass> -> (list <jclass>)
+Returns the direct superclasses of <jclass>.
+
+For ordinary classes this is the class' superclass followed by all its
+interfaces in the order they were specified in the class
+declaration. For primitive types and array types, the direct
+superclass(es) reflect the widening conversions performed by Java
+e.g. <jint>'s superclass is <jlong> and <java.util.array-list[][]>'s
+superclasses are:
+<java.util.abstract-list[][]>
+<java.util.list[][]>
+<java.util.random-access[][]>
+<java.lang.cloneable[][]>
+<java.io.serializable[][]>)
+Note that this behaviour is different from the corresponding method in
+the Java reflection API.
+
+
+JAVA-CLASS-DECLARED-CLASSES <jclass> => (list <jclass>)/#f
+Returns all the classes declared by <jclass>, or #f if access to this
+information is prohibited.
+
+
+JAVA-CLASS-DECLARED-CONSTRUCTORS <jclass> => (list <jconstructor>)/#f
+Returns all the constructors declared by <jclass>, or #f if access to
+this information is prohibited.
+
+
+JAVA-CLASS-DECLARED-METHODS <jclass> => (list <jmethod>)/#f
+Returns all the methods declared by <jclass>, or #f if access to this
+information is prohibited.
+
+
+JAVA-CLASS-DECLARED-FIELDS <jclass> -> (list <jfield>)/#f
+Returns all the fields declared by <jclass>, or #f if access to this
+information is prohibited.
+
+
+JAVA-CLASS-PRECEDENCE-LIST <jclass> -> (list <jclass>)
+Returns the total order of <jclass> and all direct & indirect
+superclasses, as determined by the partial orders obtained from
+calling JAVA-CLASS-DECLARED-SUPERCLASSES.
+
+The ordering of classes returned by JAVA-CLASS-DECLARED-SUPERCLASSES
+is considered "weak" whereas the ordering of the class itself with
+respect to its direct superclasses is considered strong. The
+significance of this is that when computing the class precedence list
+weak orderings are re-arranged if that is the only way to obtain a
+total order. By contrast, strong orderings are never rearranged.
+
+The class precedence list is important when comparing types using the
+type system's COMPARE-TYPES procedure, which is used by the generic
+procedure method selection algorithm. See COMPARE-METHODS. Since
+generic Java methods and field accessors/mutators are implemented in
+terms of generic procedures they are all affected by the class
+precedence list.
+
+
+Constructors
+------------
+
+JAVA-CONSTRUCTOR? <value> => #t/#f
+Determines whether <value> is a Java constructor.
+
+JAVA-CONSTRUCTOR-NAME <jconstructor> => <symbol>
+Returns the name of <jconstructor>.
+
+
+JAVA-CONSTRUCTOR-FLAGS <jconstructor> => (list <symbol>)
+Returns the modifiers of <jconstructor>, e.g. public static final;
+
+
+JAVA-CONSTRUCTOR-DECLARING-CLASS <jconstructor> => <jclass>
+Returns the Java class in which <jconstructor> was declared.
+
+
+JAVA-CONSTRUCTOR-PARAMETER-TYPES <jconstructor> => (list <jclass>)
+Returns the declared types of the parameters of <jconstructor>.
+
+
+JAVA-CONSTRUCTOR-PROCEDURE <jconstructor> => <procedure>
+Returns a procedure that when called invokes the constructor with the
+passed arguments, returning the newly created object.
+
+
+JAVA-CONSTRUCTOR-METHOD <jconstructor> => <method>
+Returns a method suitable for adding to generic procedures that, when
+called invokes the underlying Java constructor with the passed
+arguments. The resulting newly created object is returned.
+
+
+Methods
+-------
+
+JAVA-METHOD? <value> => #t/#f
+Determines whether <value> is a Java method.
+
+
+JAVA-METHOD-NAME <jmethod> => <symbol>
+Returns the name of <jmethod>.
+
+
+JAVA-METHOD-FLAGS <jmethod> => (list <symbol>)
+Returns the modifiers of <jmethod>, e.g. public static final;
+
+
+JAVA-METHOD-DECLARING-CLASS <jmethod> => <jclass>
+Returns the Java class in which <jmethod> was declared.
+
+
+JAVA-METHOD-PARAMETER-TYPES <jmethod> => (list <jclass>)
+Returns the declared types of the parameters of <jmethod>.
+
+
+JAVA-METHOD-RETURN-TYPE <jmethod> => <jclass>
+Returns the declared return type of <jmethod>.
+
+
+JAVA-METHOD-PROCEDURE <jmethod> => <procedure>
+Returns a procedure that when called invokes the method on the object
+passed as the first argument, with the remaining arguments passed as
+the parameters. The result of the method invocation is returned the
+result of the method invocation. Static methods can be invoked by
+passing a null object as the first parameter.
+
+
+JAVA-METHOD-METHOD <jmethod> => <method>
+Returns a method suitable for adding to generic procedures that, when
+called invokes the underlying Java method on the object passed as the
+first argument, with the remaining arguments passed as parameters. The
+result of the method invocation is returned.  Static methods can be
+invoked by passing a typed null object as the first parameter to the
+generic procedure.
+
+
+Fields
+------
+
+JAVA-FIELD? <value> => #t/#f
+Determines whether <value> is a Java field.
+
+JAVA-FIELD-NAME <jfield> => <symbol>
+Returns the name of <jfield>.
+
+
+JAVA-FIELD-FLAGS <jfield> => (list <symbol>)
+Returns the modifiers of <jfield>, e.g. public static final;
+
+
+JAVA-FIELD-DECLARING-CLASS <jfield> => <jclass>
+Returns the Java class in which <jfield> was declared.
+
+
+JAVA-FIELD-TYPE <jfield> => <jclass>
+Returns the declared type of <jmethod>.
+
+
+JAVA-FIELD-ACCESSOR-PROCEDURE <jfield> => <procedure>
+JAVA-FIELD-MODIFIER-PROCEDURE <jfield> => <procedure>
+Returns a procedure that when called returns/sets the value of the
+field on the object specified by the first parameter to the
+invocation. Static fields can be accessed/modified by passing a null
+object.
+
+JAVA-FIELD-ACCESSOR-METHOD <jfield> => <method>
+JAVA-FIELD-MODIFIER-METHOD <jfield> => <method>
+Returns a method suitable for adding to generic procedures that, when
+called returns/sets the value of the field on the object specified by
+the first argument to the generic procedure invocation. Static fields
+can be accessed/modified by passing a typed null object as the first
+parameter to the generic procedure.
+
+
+Arrays
+------
+
+JAVA-ARRAY-CLASS <jclass> <dimensions> => <jclass>
+Returns a class representing the array type that has <jclass> as the
+component type and <dimensions> as the number of dimensions, e.g.
+  (java-array-class <jint> 2)
+is the same as
+  (java-class '|int[][]|)
+
+The list of direct superclasses returned by
+JAVA-CLASS-DECLARED-SUPERCLASSES for an array class is consistent with
+the widening conversions performed by Java, e.g. the direct
+superclasses of java.util.ArrayList[][] are
+  java.util.AbstractList[][]
+  java.util.List[][]
+  java.util.RandomAccess[][]
+  java.lang.Cloneable[][]
+  java.io.Serializable[][]
+This is different from what the Java reflection APIs returns.
+
+
+Proxies
+-------
+
+JAVA-PROXY-CLASS <jinterface> ... => <jclass>
+Creates a Java class that implements the specified interfaces. The
+class can be instantiated with an invocation handler, such as the one
+returned by JAVA-PROXY-DISPATCHER below, that delegates method
+invocation to Scheme code.
+
+
+JAVA-PROXY-DISPATCHER <alist> => <invocation-handler>
+Creates an invocation handler suitable for use in the instantiation of
+a proxy (see JAVA-PROXY-CLASS). The keys in <alist> are Java method
+names and the values are Scheme procedures.
+
+When a method is invoked on a proxy, the procedure matching method's
+name is invoked with the proxy object and the parameters of the method
+invocation as arguments. The result of the invocation is returned as
+the result of the method call.  If <alist> does not contain a binding
+for the method name, an error is returned.
+
+
 What's Changed?
----------------
+===============
 
 The major changes in the Scheme-to-Java FFI since the previous version
 are as follows:
