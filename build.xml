@@ -1,5 +1,4 @@
 <project name="sisc" default="all">
-  <property name="build.compiler" value="jikes" />
 
   <path id="classpath">
     <fileset dir="./lib">
@@ -27,7 +26,7 @@
     <property name="srcdir" value="${basedir}/.."/>
     <property name="classdir" value="${basedir}/classes"/>
     <property name="libdir" value="${basedir}/lib"/>
-    <property name="docdir" value="${basedir}/doc/javadoc"/>
+    <property name="docdir" value="${basedir}/doc"/>
     <property name="schemedir" value="${basedir}/scheme-src"/>
     <property name="packagename" value="sisc"/>
     <property name="jarname" value="sisc.jar"/>
@@ -50,10 +49,14 @@
 
   <target name="docs" depends="init"
           description="Generate Documentation">
-    <mkdir dir="${docdir}"/>
+    <mkdir dir="${docdir}/javadoc"/>
     <javadoc packagenames="${packagename}.*"
 	     sourcepath="${srcdir}"
-	     destdir="${docdir}"/>
+	     destdir="${docdir}/javadoc"/>
+    <mkdir dir="${docdir}/manual"/>
+    <style basedir="${docdir}" includes="sss.xml"
+        destdir="${docdir}/manual" style="${docbookdir}/html/docbook.xsl">
+    </style>
   </target>
 
   <target name="quantity" depends="init">
@@ -133,7 +136,8 @@
   <target name="clean" depends="init"
           description="Remove generated sources, class files and jar files">
     <delete dir="${classdir}"/>
-    <delete dir="${docdir}"/>
+    <delete dir="${docdir}/javadoc"/>
+    <delete dir="${docdir}/manual"/>
     <delete file="${basedir}/${jarname}"/>
     <delete file="${heap}"/>
     <delete file="${basedir}/data/Quantity.java"/>
