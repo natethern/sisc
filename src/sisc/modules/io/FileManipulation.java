@@ -86,7 +86,7 @@ public class FileManipulation extends IndexedProcedure {
                 Pair p=EMPTYLIST;
                 String[] contents=fileHandle(f.vlr[0]).list();
                 if (contents == null)
-                    throwPrimException(liMessage("nosuchdirectory",
+                    throwPrimException(liMessage(IO.IOB, "nosuchdirectory",
                                                  string(f.vlr[0])));
                 for (int i=contents.length-1; i>=0; i--) 
                     p=new Pair(new SchemeString(contents[i]), p);
