@@ -181,15 +181,6 @@
 (define (vector . elems) (list->vector elems))
 (define (string . elems) (list->string elems))
 
-;;;;;;;;;;;;; Error handling
-
-(define (throw error . args)
-  (call-with-failure-continuation
-      (lambda (fk)
-        (if (null? args)
-            (call-with-current-continuation (lambda (k) (fk error k)))
-            (fk error (car args))))))
-
 ;;;;;;;;;;;;; OS Detection
 
 (define (detect-os)
@@ -245,13 +236,13 @@
       (let ([previous-url (current-url)])
         (current-url (normalize-url previous-url file))
         (with-failure-continuation
-          (lambda (m e)
-            (current-url previous-url)
-            (throw m e))
-            (lambda () 
-              (let ((fe (file-extension (current-url))))
-                ((file-handler (if fe fe "scm"))
-                 (current-url)))))
+            (lambda (m e)
+              (current-url previous-url)
+              (call-with-failure-continuation (lambda (fk) (fk m e))))
+          (lambda () 
+            (let ((fe (file-extension (current-url))))
+              ((file-handler (if fe fe "scm"))
+               (current-url)))))
         (current-url previous-url))
       (void)))))
 

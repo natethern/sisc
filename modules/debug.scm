@@ -1,14 +1,3 @@
-(define (get-last-error)
-  (let* ([err (getprop 'last-error '*debug*)]
-         [m   (car err)])
-    (cons `(error-continuation 
-            . ,(error-continuation-k (cdr err)))
-          (if m 
-              (cond [(null? m) '()]
-                    [(pair? m) m]
-                    [else (list (cons 'message m))]) 
-              '()))))
-
 (define (annotated? obj)
   (not (null? (annotation-keys obj))))
 
@@ -135,22 +124,48 @@
      (cons proc1 procs))
     (putprop 'traced-procedures '*debug* traced-procedures)))
 
+(define (set-breakpoint! function-id)
+  (define (make-breakpoint proc)
+    (lambda args
+      (call/cc (lambda (k)
+                 (display (format "{break: ~s}~%" 
+                                  (cons function-id args)))
+                 (putprop 'continue-point '*debug* 
+                          (delay (k (apply proc args))))
+                 (((getprop 'repl '*debug*)))))))
+  (let ([breakpoints (cond [(getprop 'breakpoints '*debug*) => 
+                            (lambda (x) x)]
+                           [else '()])])
+    (if (not (assq function-id breakpoints))
+        (let* ([function (getprop function-id '*toplevel*)]
+               [breakpointed-function (make-breakpoint function)])
+          (if function 
+              (begin
+                (putprop 'breakpoints '*debug* 
+                         (cons (cons function-id function) breakpoints))
+                (putprop function-id '*toplevel* breakpointed-function))
+              (error 'set-breakpoint! "no such function."))))))
 
-(define (_k-stack e)
-  (let* ([k (cdr (assoc 'error-continuation e))]
-         [st (let loop ((k k))
-               (cond [(null? k) (values '() '())]
-                     [(null? (continuation-nxp k)) 
-                      (loop (continuation-stk k))]
-                     [else 
-                       (let ([nxp (continuation-nxp k)])
-                         (cons nxp (loop (continuation-stk k))))]))])
-    st))
+(define (clear-breakpoint! function-id) 
+  (let ([breakpoints (cond [(getprop 'breakpoints '*debug*) => 
+                            (lambda (x) x)]
+                           [else '()])])
+    (cond [(assq function-id breakpoints) =>
+           (lambda (v)
+             (putprop function-id '*toplevel* (cdr v))
+             (putprop 'breakpoints '*debug* 
+                      (remove-from-assoc function-id breakpoints)))]
+          [else (error 'clear-breakpoint! "no such function or function is not a breakpoint.")])))
 
-(define (assoc-val x ls)
-  (cond [(assoc x ls) => cdr]
-        [else #f]))
+(define (continue)
+  (cond [(getprop 'continue-point '*debug*) =>
+         (lambda (c)
+           (putprop 'continue-point '*debug* #f)
+           (c))]
+        [else (error 'continue "nowhere to continue to.")]))
 
+;;;;;;;;;;;;;; exception display ;;;;;;;;;;;;;;;;;;;;
+          
 (define (annotations-to-assoc expr)
   (let loop ([x ()] [keys (annotation-keys expr)])
     (if (null? keys) x
@@ -212,61 +227,18 @@
           "Error.")))
 
 (define (display-error e)
-  (display (make-error-message (assoc-val 'location e)
-                               (assoc-val 'message e)))
+  (display (if (or (null? e) (pair? e))
+               (make-error-message (error-location e)
+                                   (error-message e))
+               (make-error-message #f e)))
   (newline))
 
-(define (print-error e . ec)
-  (display-error e)
-  (let ([k (if (null? ec)
-               (cond [(assoc 'error-continuation e) => cdr]
-                     [else #f])
-               (car ec))])
-    (if k
-        (print-stack-trace k)
-        (display (format "{no stack trace available}~%")))
-    (let ([p (assoc-val 'parent e)])
+(define (print-exception e . st)
+  (let ([error (exception-error e)])
+    (display-error error)
+    (if (or (null? st) (car st))
+        (print-stack-trace (exception-continuation e)))
+    (let ([p (and (pair? error) (error-parent error))])
       (if p 
-          (begin (display "Nested ")
-                 (print-error p))))))
-  
-(define (set-breakpoint! function-id)
-  (define (make-breakpoint proc)
-    (lambda args
-      (call/cc (lambda (k)
-                 (display (format "{break: ~s}~%" 
-                                  (cons function-id args)))
-                 (putprop 'continue-point '*debug* 
-                          (delay (k (apply proc args))))
-                 (((getprop 'repl '*debug*)))))))
-  (let ([breakpoints (cond [(getprop 'breakpoints '*debug*) => 
-                            (lambda (x) x)]
-                           [else '()])])
-    (if (not (assq function-id breakpoints))
-        (let* ([function (getprop function-id '*toplevel*)]
-               [breakpointed-function (make-breakpoint function)])
-          (if function 
-              (begin
-                (putprop 'breakpoints '*debug* 
-                         (cons (cons function-id function) breakpoints))
-                (putprop function-id '*toplevel* breakpointed-function))
-              (error 'set-breakpoint! "no such function."))))))
-
-(define (clear-breakpoint! function-id) 
-  (let ([breakpoints (cond [(getprop 'breakpoints '*debug*) => 
-                            (lambda (x) x)]
-                           [else '()])])
-    (cond [(assq function-id breakpoints) =>
-           (lambda (v)
-             (putprop function-id '*toplevel* (cdr v))
-             (putprop 'breakpoints '*debug* 
-                      (remove-from-assoc function-id breakpoints)))]
-          [else (error 'clear-breakpoint! "no such function or function is not a breakpoint.")])))
-
-(define (continue)
-  (cond [(getprop 'continue-point '*debug*) =>
-         (lambda (c)
-           (putprop 'continue-point '*debug* #f)
-           (c))]
-        [else (error 'continue "nowhere to continue to.")]))
-          
+          (begin (display "Caused by ")
+                 (apply print-exception p st))))))

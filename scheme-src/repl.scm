@@ -39,8 +39,12 @@
 (define current-default-error-handler
   (parameterize
    (lambda (m e)
-     (putprop 'last-error '*debug* (cons m e))
-     (display-error (get-last-error)))))
+     (let ([exception (make-exception m e)])
+       (putprop 'last-exception '*debug* exception)
+       (print-exception exception #f)))))
+
+(define (get-last-exception)
+  (getprop 'last-exception '*debug*))
 
 (define _exit-handler (parameterize))
 

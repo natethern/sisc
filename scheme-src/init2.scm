@@ -40,11 +40,32 @@
 ;; producing, which is then applied into SISC's failure-continuation
 ;; model.
 
+(define (make-exception error error-k)
+  `((error-continuation . ,error-k) . ,error))
+(define (exception? e)
+  (and (pair? e) (pair (car e)) (eq? (caar e) 'error-continuation)))
+(define (exception-continuation exception)
+  (cdar exception))
+(define (exception-error exception)
+  (cdr exception))
+
+(define (throw error . error-k)
+  (call-with-failure-continuation
+      (lambda (fk)
+        (cond ([(not (null? error-k))
+                (fk error error-k)]
+               [(exception? error)
+                (fk (exception-error error)
+                    (exception-continuation error))]
+               [else
+                 (call-with-current-continuation
+                     (lambda (k) (fk error k)))])))))
+
 (define (error . args)
   (throw (apply make-error args)))
 
 (define (make-nested-error error-record parent-record)
-  (cons (cons 'parent parent-record) error-record))
+  `((parent . ,parent-record) . ,error-record))
 
 (define (make-error . args)
   (let ([error-record '()])
@@ -73,17 +94,17 @@
     error-record))
 
 (define (error-location error-record)
-  (cond [(and (pair? error-record) (assoc 'location error-record))
+  (cond [(and (pair? error-record) (assq 'location error-record))
          => cdr]
         [else #f]))
 
 (define (error-message error-record)
-  (cond [(and (pair? error-record) (assoc 'message error-record))
+  (cond [(and (pair? error-record) (assq 'message error-record))
          => cdr]
         [else #f]))
 
 (define (error-parent error-record)
-  (cond [(and (pair? error-record) (assoc 'parent error-record))
+  (cond [(and (pair? error-record) (assq 'parent error-record))
          => cdr]
         [else #f]))
 
@@ -334,7 +355,7 @@
               (begin 
                 ;(pretty-print e) (newline)
                 (let ([source ((current-optimizer)
-                               (apply sc-expand `(,e ,@scexpopts)))])
+                               (apply sc-expand e scexpopts))])
                   ;(pretty-print source) (newline)
                   (pretty-print source outf) (newline outf)
                   (loop (read inf))))))))

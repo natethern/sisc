@@ -97,13 +97,8 @@
     (show
      express
      compile
-     get-last-error
      error-continuation-k
      annotated?
-     stack-trace
-     print-stack-trace
-     display-error
-     print-error
      trace-depth
      trace-call
      trace-lambda
@@ -113,7 +108,11 @@
      stack-trace
      set-breakpoint!
      clear-breakpoint!
-     continue)
+     continue
+     stack-trace
+     print-stack-trace
+     display-error
+     print-exception)
   (import debugging-native)
   (include "debug.scm"))
 
