@@ -14,7 +14,7 @@
     <property name="spectitle" value="Second Interpreter of Scheme Code"/>
     <!-- Got a better idea?: -->
     <property name="specvendor" value="SISC Development Group"/>
-<!--    <property name="beta" value="yes"/>-->
+    <property name="beta" value="yes"/>
     <property file="${basedir}/build.properties"/>    
     <property name="srcdir" value="${basedir}/src"/>
     <property name="classdir" value="${basedir}/classes"/>
@@ -529,13 +529,14 @@
   </target>
 
   <target name="check" depends="junitcheck" if="junit.present">
-    <junit>
+    <junit fork="yes">
+      <jvmarg value="-Xmx256M"/>
       <sysproperty key="HEAP" value="${heap}"/>
       <classpath>
         <pathelement location="${classdir}" />
         <pathelement path="${java.class.path}" />
       </classpath>
-      <formatter type="plain"/>
+      <formatter type="brief"/>
       <test name="sisc.tests.TestR5RS"/>
     </junit>
   </target>
