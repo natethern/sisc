@@ -72,7 +72,10 @@ public class SignalHook implements InvocationHandler {
             addHandler(signame, proc);
             try {
                 handle.invoke(null, new Object[] {signal,sigHook});
-            } catch (IllegalArgumentException ill) {
+            } catch (InvocationTargetException it) {
+                if (!(it.getTargetException() instanceof IllegalArgumentException)) {
+                    it.getTargetException().printStackTrace();
+                }
                 // The underlying VM doesn't support overriding this
                 // signal, so we ignore it.
             } catch (Exception e) {
