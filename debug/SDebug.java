@@ -37,6 +37,7 @@ import sisc.data.*;
 import sisc.exprs.AnnotatedExpr;
 import java.awt.*;
 import java.util.Set;
+import java.util.Iterator;
 
 public class SDebug extends ModuleAdapter {
     public String getModuleName() {
@@ -66,6 +67,8 @@ public class SDebug extends ModuleAdapter {
 	define("annotation-keys", ANNOTATIONKEYS);
 	define("annotation", ANNOTATION);
 	define("set-annotation!", SETANNOTATION);
+        define("annotation-source", ANNOTATIONSRC);
+        define("annotation-expression", ANNOTATIONEXPR);
 	define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
         define("annotation-stripped", ANNOTATIONSTRIPPED);
     }
@@ -112,6 +115,12 @@ public class SDebug extends ModuleAdapter {
 	    }
         case 1:
             switch(primid) {
+            case ANNOTATIONKEYS:
+                Set s=f.vlr[0].getAnnotationKeys();
+                Pair p=EMPTYLIST;
+                for (Iterator i=s.iterator(); i.hasNext();) 
+                    p=new Pair((Symbol)i.next(), p);
+                return p;
             case ANNOTATIONSTRIPPED:
                 return annotated(f.vlr[0]).stripped;
 	    case EMITANNOTATIONS:

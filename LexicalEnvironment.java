@@ -69,7 +69,7 @@ public class LexicalEnvironment extends Value {
 		vals=r.createValues(s);
 		System.arraycopy(v, 0, vals, 0, sm1);
 		vals[sm1]=valArrayToList(v, sm1, v.length-sm1);
-                r.returnValues(v);
+                //r.returnValues(v);
 	    }
         } else {
 	    //r.returnValues(vals);

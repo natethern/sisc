@@ -38,7 +38,7 @@ import java.io.*;
 
 public class AnnotatedExpr extends Value {
     public Expression expr;
-    public Value annotation, stripped;
+    public Value annotation, stripped=FALSE;
 
     public AnnotatedExpr(Expression expr, Value annotation) {
 	this.expr=expr;

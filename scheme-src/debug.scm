@@ -1,5 +1,9 @@
 (load-module "sisc.debug.SDebug")
 
+(define annotated?
+  (lambda (obj)
+    (not (null? (annotation-keys obj)))))
+
 (define-syntax show
   (lambda (e)
     (syntax-case e ()
@@ -78,11 +82,6 @@
 
 (emit-annotations #t)
 
-(define last-m #f)
-(define e (call/fc (lambda () (+ 1 (/ 1 0))) (lambda (m e c) 
-					       (set! last-m m)
-					       e)))
-
 (define (stack-trace k)
   (let loop ((k k))
     (cond [(null? k) '()]
@@ -91,8 +90,6 @@
 	   (let ([nxp (continuation-nxp k)])
 	     (cons nxp 
 		   (loop (continuation-stk k))))])))
-
-(define y (stack-trace e))
 
 (define (emacs-stack-trace e) 
   (let* ([k (cdr (assoc 'cont e))]
@@ -126,6 +123,3 @@
 				    line column)))))
 	   st)))))
 
-(define annotated? 
-  (lambda (obj)
-    (not (null? (annotation-keys obj)))))

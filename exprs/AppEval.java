@@ -56,13 +56,13 @@ public class AppEval extends Expression {
     public boolean equals(Object o) {
         if (!(o instanceof AppEval)) return false;
         AppEval other=(AppEval)o;
-        return (annotation!=null ? 
-                annotation.equals(other.annotation) :
-                other.annotation == null);
+        return (annotations!=null ? 
+                annotations.equals(other.annotations) :
+                other.annotations == null);
     }
 
     public int hashCode() {
-        return 0x37895f61 ^ (annotation == null ? 0 : 
-                             annotation.hashCode());
+        return 0x37895f61 ^ (annotations == null ? 0 : 
+                             annotations.hashCode());
     }
 }
