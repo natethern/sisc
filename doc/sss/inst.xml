@@ -194,7 +194,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
             </row>
             <row>
               <entry><literal>--heap &lt;heap-file&gt;</literal></entry>
-              <entry><literal>-i &lt;heap-file&gt;</literal></entry>
+              <entry><literal>-h &lt;heap-file&gt;</literal></entry>
               <entry>
                 File containing pre-compiled code and data for a
                 complete Scheme top-level environment. This parameter
@@ -202,14 +202,23 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
               </entry>
             </row>
             <row>
-              <entry><literal>--config &lt;config-file&gt;</literal></entry>
-              <entry><literal>-c &lt;config-file&gt;</literal></entry>
+              <entry><literal>--properties &lt;config-file&gt;</literal></entry>
+              <entry><literal>-p &lt;config-file&gt;</literal></entry>
               <entry>
                 Specifies a Java properties file that contains
                 application properties. Typically some of these
                 properties defined defaults for <xref
                 linkend="config-parameters">configuration
                 parameters</xref>. The file can be specified as a URL.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>--listen [&lt;host&gt;:]&lt;port&gt;</literal></entry>
+              <entry><literal>-l [&lt;host&gt;:]&lt;port&gt;</literal></entry>
+              <entry>
+                Listen on host/port for REPL connections,
+                i.e. connecting to the specified host/port will create
+                a new REPL.
               </entry>
             </row>
           </tbody>

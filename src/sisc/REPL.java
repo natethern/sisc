@@ -143,7 +143,7 @@ public class REPL {
         }
 
         Properties props = new Properties();
-        String configFile = (String)args.get("config");
+        String configFile = (String)args.get("properties");
         if (configFile != null) {
             try {
                 URL url = Util.url(configFile);
@@ -152,11 +152,9 @@ public class REPL {
                 conn.setDoOutput(false);
                 props.load(conn.getInputStream());
             } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return;
+                System.err.println("WARNING: " + e.getMessage());
             } catch (IOException e) {
-                e.printStackTrace();
-                return;
+                System.err.println("WARNING: " + e.getMessage());
             }
         }
 
@@ -198,9 +196,13 @@ public class REPL {
         Context.exit();
         if (noRepl) return;
 
-        if (args.get("server")!=null) {
-            ServerSocket ssocket = new ServerSocket(Integer.parseInt((String)args.get("port")), 50, 
-                                                    InetAddress.getByName((String)args.get("host")));
+        String listen = (String)args.get("listen");
+        if (listen!=null) {
+            int cidx = listen.indexOf(':');
+            ServerSocket ssocket = cidx == -1 ?
+                new ServerSocket(Integer.parseInt(listen), 50) :
+                new ServerSocket(Integer.parseInt(listen.substring(cidx+1)), 50, 
+                                 InetAddress.getByName(listen.substring(0, cidx)));
             System.out.println("Listening on " + ssocket.getInetAddress().toString() + ":" + ssocket.getLocalPort());
             System.out.flush();
             listen("main", ssocket);
@@ -248,17 +250,15 @@ public class REPL {
 
     static final int SWITCH=0, OPTION=1;
     static final String[][] opts=new String[][] {
-        {"s","server"},
-        {"i","heap"},
-        {"c","config"},
-        {"h","host"},
-        {"p","port"},
+        {"l","listen"},
+        {"h","heap"},
+        {"p","properties"},
         {"e","eval"},
         {"c","call-with-args"},
         {"x","no-repl"},
     };
     static final int optTypes[]=new int[] {
-        SWITCH, OPTION, OPTION, OPTION, OPTION, OPTION, OPTION, SWITCH};
+        OPTION, OPTION, OPTION, OPTION, OPTION, SWITCH};
                                                   
     public static Map parseOpts(String[] args) {
         Map m=new HashMap();

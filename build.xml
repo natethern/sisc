@@ -210,10 +210,12 @@
           classpath="${classdir}"
           dir="${srfidir}"
           fork="yes">
-        <arg value="-i"/>
+        <arg value="-h"/>
         <arg value="${heap}"/>
         <arg value="-x"/>
         <arg value="${srfidir}/srfi-sll.scm"/>
+        <arg value="-p"/>
+        <arg value="~/sisc.properties"/>
     </java>
   </target> 
 
@@ -223,10 +225,12 @@
           classpath="${classdir}"
           dir="${srfidir}"
           fork="yes">
-        <arg value="-i"/>
+        <arg value="-h"/>
         <arg value="${heap}"/>
         <arg value="-x"/>
         <arg value="${srfidir}/srfi-slt.scm"/>
+        <arg value="-p"/>
+        <arg value="~/sisc.properties"/>
     </java>
   </target>
 
