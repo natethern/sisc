@@ -30,8 +30,7 @@ public class Record extends Value {
     public boolean valueEqual(Value v) {
         if (!(v instanceof Record)) return false;
         Record r = (Record)v;
-        if (size() != r.size()) return false;
-        if (!type.valueEqual(r.getType())) return false;
+        if (type != r.getType() || size() != r.size()) return false;
         for (int i=0; i<slots.length; i++) {
             if (!slots[i].valueEqual(r.getSlot(i))) return false;
         }
@@ -39,7 +38,7 @@ public class Record extends Value {
     }
 
     public int valueHashCode() {
-        int res = type.valueHashCode();
+        int res = System.identityHashCode(type);
         for (int i=0; i<slots.length; i++) {
             res ^= slots[i].valueHashCode();
         }

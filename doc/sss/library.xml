@@ -206,6 +206,13 @@ r / 2<superscript>s</superscript>
           </para>
         </blockquote>
       </para>
+      <para>
+        Records are <function>eq?</function> and
+        <function>eqv?</function> if and only if they are
+        identical. Records are <function>equal?</function> if and only
+        if they are instances of the same record type and all their
+        fields are <function>equal?</function>.
+      </para>
     </sect2>
     <sect2 id="Hashtables">
       <title>Hash Tables</title>
