@@ -3,7 +3,15 @@
     Introduction
   </title>
   <para>
-    &SISC; is a lightweight, platform independent
+    &SISC;
+    <footnote> 
+      <para>
+	The pronunciation is written as <literal>sIsk</literal> in
+	the International Phonetic Alphabet.  This is similar to the
+	English word 'whisk'.
+      </para>
+    </footnote>
+    is a lightweight, platform independent
     Scheme system whose primary goals are rapid execution of the
     complete &R5RS; and future Scheme
     standards, plus a useful superset for real-world application
@@ -47,7 +55,7 @@
       <listitem>
 	<para>
 	  Lightweight Scheme engine, implementing all &R5RS; functionality
-	  in approximately 16,000 lines of native code plus
+	  in appoximately 10,000 lines of native code plus
 	  approximately 5,000 lines of Scheme code.
 	</para>
       </listitem>
