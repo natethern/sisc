@@ -309,8 +309,9 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
               </thead>
               <tbody> 
                 <row>
-                  <indexterm><primary>case-sensitive</primary></indexterm>
-                  <entry><envar>caseSensitive</envar></entry>
+                  <entry>
+                    <indexterm><primary>case-sensitive</primary></indexterm>
+                    <envar>caseSensitive</envar></entry>
                   <entry><function>case-sensitive</function></entry>
                   <entry>false</entry>
                   <entry>
@@ -319,8 +320,9 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                   </entry>
                 </row>
                 <row>
-                  <indexterm><primary>permit-interrupts</primary></indexterm>
-                  <entry><envar>permitInterrupts</envar></entry>
+                  <entry>
+                    <indexterm><primary>permit-interrupts</primary></indexterm>
+                    <envar>permitInterrupts</envar></entry>
                   <entry><function>permit-interrupts</function></entry>
                   <entry>false</entry>
                   <entry>
@@ -332,8 +334,9 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                   </entry>
                 </row>
                 <row>
-                  <indexterm><primary>min-float-precision</primary></indexterm>
-                  <entry><envar>minFloatPrecision</envar></entry>
+                  <entry>
+                    <indexterm><primary>min-float-precision</primary></indexterm>
+                    <envar>minFloatPrecision</envar></entry>
                   <entry><function>min-float-precision</function></entry>
                   <entry>16</entry>
                   <entry>
@@ -343,8 +346,9 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                   </entry>
                 </row>
                 <row>
-                  <indexterm><primary>max-float-precision</primary></indexterm>
-                  <entry><envar>maxFloatPrecision</envar></entry>
+                  <entry>
+                    <indexterm><primary>max-float-precision</primary></indexterm>
+                    <envar>maxFloatPrecision</envar></entry>
                   <entry><function>max-float-precision</function></entry>
                   <entry>32</entry>
                   <entry>
@@ -430,8 +434,10 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
               </thead>
               <tbody> 
                 <row>
-                  <indexterm><primary>strict-r5rs-compliance</primary></indexterm>
-                  <entry><envar>strictR5RSCompliance</envar></entry>
+                  <entry>
+                    <indexterm><primary>strict-r5rs-compliance</primary></indexterm>
+
+                    <envar>strictR5RSCompliance</envar></entry>
                   <entry><function>strict-r5rs-compliance</function></entry>
                   <entry>false</entry>
                   <entry>
@@ -445,8 +451,10 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                   </entry>
                 </row>
                 <row>
-                  <indexterm><primary>print-shared</primary></indexterm>
-                  <entry><envar>printShared</envar></entry>
+                  <entry>
+                    <indexterm><primary>print-shared</primary></indexterm>
+                    
+                    <envar>printShared</envar></entry>
                   <entry><function>print-shared</function></entry>
                   <entry>true</entry>
                   <entry>
@@ -464,8 +472,9 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                   </entry>
                 </row>
                 <row>
-                  <indexterm><primary>vector-length-prefixing</primary></indexterm>
-                  <entry><envar>vectorLengthPrefixing</envar></entry>
+                  <entry>
+                    <indexterm><primary>vector-length-prefixing</primary></indexterm>
+                    <envar>vectorLengthPrefixing</envar></entry>
                   <entry><function>vector-length-prefixing</function></entry>
                   <entry>true</entry>
                   <entry>
@@ -478,8 +487,10 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                   </entry>
                 </row>
                 <row>
-                  <indexterm><primary>emit-annotations</primary></indexterm>
-                  <entry><envar>emitAnnotations</envar></entry>
+                  <entry>
+                    <indexterm><primary>emit-annotations</primary></indexterm>
+
+                    <envar>emitAnnotations</envar></entry>
                   <entry><function>emit-annotations</function></entry>
                   <entry>false</entry>
                   <entry>
@@ -494,8 +505,10 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                   </entry>
                 </row>
                 <row>
-                  <indexterm><primary>emit-debugging-symbols</primary></indexterm>
-                  <entry><envar>emitDebuggingSymbols</envar></entry>
+                  <entry>
+                    <indexterm><primary>emit-debugging-symbols</primary></indexterm>
+
+                    <envar>emitDebuggingSymbols</envar></entry>
                   <entry><function>emit-debugging-symbols</function></entry>
                   <entry>false</entry>
                   <entry>
@@ -506,8 +519,10 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                   </entry>
                 </row>
                 <row>
-                  <indexterm><primary>stack-trace-on-error</primary></indexterm>
-                  <entry><envar>stackTraceOnError</envar></entry>
+                  <entry>
+                    <indexterm><primary>stack-trace-on-error</primary></indexterm>
+
+                    <envar>stackTraceOnError</envar></entry>
                   <entry><function>stack-trace-on-error</function></entry>
                   <entry>false</entry>
                   <entry>
@@ -518,8 +533,10 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                   </entry>
                 </row>                 
                 <row>
-                  <indexterm><primary>repl-prompt</primary></indexterm>
-                  <entry><envar>replPrompt</envar></entry>
+                  <entry>
+                    <indexterm><primary>repl-prompt</primary></indexterm>
+
+                    <envar>replPrompt</envar></entry>
                   <entry><function>repl-prompt</function></entry>
                   <entry></entry>
                   <entry>

@@ -461,8 +461,7 @@ r / 2<superscript>s</superscript>
                 Setting <parameter>unsafe?</parameter> to &num;f
                 results in more efficient execution but may cause
                 deadlocks if <parameter>thunk</parameter> is unsafe.
-                See also <xref
-                  linkend="func-mutex-synchronize-unsafe"/>.
+                See also <xref linkend="func-mutex-synchronize-unsafe"/>.
               </para>
             </blockquote>
           </para>

@@ -1954,7 +1954,7 @@
             </methodparam>
           </methodsynopsis>
           &syntax;
-          <methodsynopsis language="scheme" id="define-macro">    
+          <methodsynopsis language="scheme" id="define-macro2">    
             <methodname>define-macro</methodname>
             <methodparam><parameter>name</parameter>
             </methodparam>
@@ -1989,7 +1989,7 @@
           <indexterm><primary>defmacro</primary>
           </indexterm>
           &syntax;
-          <methodsynopsis language="scheme" id="define-macro">    
+          <methodsynopsis language="scheme" id="defmacro">    
             <methodname>defmacro</methodname>
             <methodparam><parameter>name</parameter>
             </methodparam>
@@ -2006,6 +2006,7 @@
               <programlisting>
 (define-macro (name . args) body ...)
               </programlisting>
+            </para>
           </blockquote>
         </para>
       </blockquote>

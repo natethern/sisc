@@ -909,11 +909,11 @@
             </para>
           </blockquote>
         </para>
-        <para id="func-mutex-synchronize-unsafe">
+        <para>
           <indexterm><primary>mutex/synchronize-unsafe</primary>
           </indexterm>
           &procedure;
-          <methodsynopsis language="scheme">
+          <methodsynopsis language="scheme" id="func-mutex-synchronize-unsafe">
             <type>value</type>
             <methodname>mutex/synchronize-unsafe</methodname>
             <methodparam>
