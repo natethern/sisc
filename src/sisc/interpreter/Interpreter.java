@@ -389,6 +389,7 @@ public class Interpreter extends Util {
     }
    
 */
+
     public final void returnEnv() {
         if (env != null && !env.locked) {
             returnValues(env.vals);
@@ -417,9 +418,8 @@ public class Interpreter extends Util {
         }
     }
 
-    protected static final int VALUESPOOLWIDTH=8;
-    protected Value deadValues[][]=
-    	new Value[VALUESPOOLWIDTH][];
+    protected static final int VALUESPOOLWIDTH=4;
+    protected Value deadValues[][]=new Value[VALUESPOOLWIDTH][];
 
     //static int sizemiss, miss, hit, zerohit;
     public final Value[] createValues(int size) {
@@ -431,13 +431,14 @@ public class Interpreter extends Util {
          	//sizemiss++; 
             return new Value[size]; 
         }
-      
-        Value[] res = deadValues[size];
+        int slot=size-1;
+        Value[] res = deadValues[slot];
         if (res == null) { 
             return new Value[size]; 
+        } else {
+            deadValues[slot] = null;
+            return res;
         }
-        deadValues[size] = null;
-        return res;
      }
 
     public final void returnVLR() {
@@ -448,7 +449,7 @@ public class Interpreter extends Util {
         }
     }
 	
-	public final void forceReturnVLR() {
+    public final void forceReturnVLR() {
         if (vlr != null) {
             returnValues(vlr);
         }
@@ -463,9 +464,14 @@ public class Interpreter extends Util {
     }
 
     public final void returnValues(Value[] v) {
-        int size = v.length;
-        if (size == 0 || size >= VALUESPOOLWIDTH) return;
-            deadValues[size]=v;
+        int slot = v.length-1;
+        switch(slot) {
+        case 3: v[3]=null;
+        case 2: v[2]=null;
+        case 1: v[1]=null;
+        case 0: v[0]=null;
+            deadValues[slot]=v;
+        }
     }
 }
 /*
