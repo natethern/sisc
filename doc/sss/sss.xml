@@ -94,15 +94,15 @@
 	  </para>
 	</listitem>
         <listitem>
-          <para>
-            (<xref linkend="annotation-property"/>) The
+          <para>            
+            (<xref linkend="system-properties"/>) The
             <literal>emitannotations</literal> property is not yet
             supported by &SISC; at the time of this writing.
           </para>
         </listitem>
         <listitem>
           <para>
-            (<xref linkend="annotation-property"/>) The
+            (<xref linkend="system-properties"/>) The
             <literal>heapfile</literal> property is actually named
             <literal>HEAP</literal> in current releases of &SISC;.
           </para>
@@ -182,7 +182,6 @@ for <function>sqrt</function>, it is not clear what other mathematical
       Below are the properties and their semantics.
     </para>
     <variablelist>
-      <title>System Properties</title>
       <varlistentry>
         <term>minprecision</term>
         <listitem>
@@ -219,7 +218,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
           <para>
             Specifies the default value of the
             <function>emit-annotations</function> parameter (see <xref
-            linkend="emit-annotations"/>).  If
+            linkend="passive-debugging"/>).  If
             <literal>true</literal>, annotations will be enabled
             before loading any source files on the command prompt and
             will stay enabled until set via the

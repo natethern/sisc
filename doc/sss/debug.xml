@@ -9,7 +9,7 @@
     programmer) and active debugging (requiring code modification to
     facilitate debugging).  
   </para>
-  <sect1>
+  <sect1 id="passive-debugging">
     <title>
       Passive Debugging
     </title>
@@ -83,7 +83,7 @@
     <blockquote>
       <para>
         &parameter;
-        <methodsynopsis language="scheme" id="emit-annotations">
+        <methodsynopsis language="scheme">
           <type>&num;t/&num;f</type>
           <methodname>emit-annotations</methodname>
           <methodparam choice="opt">
