@@ -14,13 +14,24 @@ public class SchemeRuntimeException extends RuntimeException {
         f=parent_fk;
     }
 
+    /**
+     * @return the Scheme message Pair as String
+     */
     public String getMessage() {
-        return m.cdr.toString();
+    	return m.toString();
+    }
+
+    /**
+     * @return the bare Scheme message text 
+     */
+    public String getMessageText() {
+    	return ((Pair)m.car).cdr.toString();
     }
 
     public SchemeException promote() {
         return new SchemeException(m,e,f);
     }
+    
 }
     
 /*

@@ -14,8 +14,18 @@ public class SchemeException extends Exception {
         f=parent_fk;
     }
 
+    /**
+     * @return the Scheme message Pair as String
+     */
     public String getMessage() {
-        return m.cdr.toString();
+    	return m.toString();
+    }
+
+    /**
+     * @return the bare Scheme message text 
+     */
+    public String getMessageText() {
+    	return ((Pair)m.car).cdr.toString();
     }
 
 }
