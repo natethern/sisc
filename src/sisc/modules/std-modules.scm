@@ -168,7 +168,10 @@
    buffer-ref
    buffer-set!
    buffer-length
-   buffer-copy!)
+   buffer-copy!
+   open-input-buffer
+   open-output-buffer
+   get-output-buffer)
   (import binary-io-native)
   (include "io/buffer.scm"))
 

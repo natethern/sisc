@@ -6,6 +6,8 @@ import sisc.data.*;
 import java.io.IOException;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import sisc.io.StreamOutputPort;
 import sisc.io.StreamInputPort;
@@ -21,7 +23,8 @@ public class BinaryIO extends IndexedProcedure {
         BLOCKREAD=1, BLOCKWRITE=2, MAKEBUFFER=3, BUFFERQ=4,
         BUFFERLENGTH=5, BUFFERREF=6, BUFFERSET=7, BUFFERCOPY=8,
         OPENBINARYINPUTFILE = 9, OPENBINARYOUTPUTFILE= 10,
-        BINARYINPUTPORTQ = 11, BINARYOUTPUTPORTQ = 12;
+        BINARYINPUTPORTQ = 11, BINARYOUTPUTPORTQ = 12, 
+        OPENINPUTBUFFER=13, OPENOUTPUTBUFFER=14, GETOUTPUTBUFFER=15;
 
 
     public static class Index extends IndexedLibraryAdapter {
@@ -31,7 +34,7 @@ public class BinaryIO extends IndexedProcedure {
         }
         
       	public Index() {
-           	define("block-read",    BLOCKREAD);
+            define("block-read",    BLOCKREAD);
             define("block-write",   BLOCKWRITE);
             define("make-buffer",   MAKEBUFFER);
             define("buffer?",       BUFFERQ);
@@ -39,8 +42,11 @@ public class BinaryIO extends IndexedProcedure {
             define("buffer-ref",    BUFFERREF);
             define("buffer-set!",   BUFFERSET);
             define("buffer-copy!",  BUFFERCOPY);
+            define("get-output-buffer", GETOUTPUTBUFFER);
             define("open-binary-input-file",  OPENBINARYINPUTFILE);
             define("open-binary-output-file", OPENBINARYOUTPUTFILE);
+            define("open-input-buffer", OPENINPUTBUFFER);
+            define("open-output-buffer", OPENOUTPUTBUFFER);
             define("binary-input-port?",  BINARYINPUTPORTQ);
             define("binary-output-port?", BINARYOUTPUTPORTQ);
         }   
@@ -99,6 +105,13 @@ public class BinaryIO extends IndexedProcedure {
 
     public Value doApply(Interpreter f) throws ContinuationException {
         switch (f.vlr.length) {
+        case 0:
+            switch (id) {
+            case OPENOUTPUTBUFFER:
+                return new StreamOutputPort(new ByteArrayOutputStream(), false);
+            default:
+                throwArgSizeException();
+            }
         case 1:
             switch (id) {
             case MAKEBUFFER:
@@ -107,10 +120,27 @@ public class BinaryIO extends IndexedProcedure {
                 return Quantity.valueOf(buffer(f.vlr[0]).buf.length);
             case BUFFERQ:
                 return truth(f.vlr[0] instanceof Buffer);
+            case GETOUTPUTBUFFER:
+                StreamOutputPort sop=(StreamOutputPort)f.vlr[0];
+                ByteArrayOutputStream bos=(ByteArrayOutputStream)sop.out;
+                try {
+                    sop.flush();
+                } catch (IOException e) {
+                    error(f, liMessage(BINARYB, "errorflushing", 
+                                       sop.toString(),
+                                       e.getMessage()));
+                }
+                Buffer rv=new Buffer(bos.toByteArray());
+                bos.reset();
+                return rv;
             case OPENBINARYINPUTFILE:
                 return openBinInFile(f, url(f.vlr[0]));
             case OPENBINARYOUTPUTFILE:
                 return openBinOutFile(f, url(f.vlr[0]), false);
+            case OPENINPUTBUFFER:
+                return new StreamInputPort(new ByteArrayInputStream(buffer(f.vlr[0]).buf));
+            case OPENOUTPUTBUFFER:
+                return new StreamOutputPort(new ByteArrayOutputStream(num(f.vlr[0]).indexValue()), false);
             case BINARYINPUTPORTQ:
                 return truth(f.vlr[0] instanceof BinaryInputPort);
             case BINARYOUTPUTPORTQ:

@@ -12,13 +12,17 @@ public class Buffer extends Value implements NamedValue {
     public byte[] buf;
 
     public Buffer(int size) {
-        buf=new byte[size];
+        this(new byte[size]);
     }
 
     public Buffer(int size, byte b) {
         this(size);
         for (int i=0; i<buf.length; i++) 
             buf[i]=b;
+    }
+
+    public Buffer(byte[] b) {
+        buf=b;
     }
 
     public final byte ref(int idx) {
