@@ -2,7 +2,7 @@
 
 	* Fixed a bug in Symbol serialization that affected
           improper deserialization of uninterned or case sensitive
-          symbols
+          symbols (SGM)
 
 2002-1-11 Scott G. Miller <scgmille@freenetproject.org>
 

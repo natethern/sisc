@@ -1,4 +1,8 @@
 #!/bin/sh
-LIBDIR=. #/usr/local/lib/sisc
+if [ -z "$SISC_LIB" ]
+then
+   SISC_LIB="." #/usr/local/lib/sisc
+fi
+
 EXTENSIONS=""
-java $JAVAOPT -DHEAP=$LIBDIR/sisc.heap -jar $LIBDIR/sisc.jar $EXTENSIONS "$@"
+java $JAVAOPT -DHEAP=$SISC_LIB/sisc.heap -jar $SISC_LIB/sisc.jar $EXTENSIONS "$@"
