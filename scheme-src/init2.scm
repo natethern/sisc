@@ -264,9 +264,9 @@
 	      (apply values results)))))
     (define dynamic-wind-loader
       (lambda (in body out)
-        (set! call-with-current-continuation dynwind-call/cc)
-        (set! call/cc dynwind-call/cc)
-        (set! dynamic-wind dynamic-wind/impl)
+        (putprop 'call-with-current-continuation '*toplevel* dynwind-call/cc)
+        (putprop 'call/cc '*toplevel* dynwind-call/cc)
+        (putprop 'dynamic-wind '*toplevel* dynamic-wind/impl)
         (dynamic-wind in body out)))
     ;;finally, the install the dynamic-wind hooks
     (set! dynamic-wind dynamic-wind-loader)
