@@ -18,10 +18,11 @@
 ;;     java -classpath kawa:kawa.jar kawa.repl
 
 ;;the following steps are required for the compiled-JScheme test
-;;1) cat runbenchmark_jscheme_c.sch tak.sch ... jscheme_final.sch >
+;;1) cat prop.scm runbenchmark_jscheme_c.sch tak.sch ... jscheme_final.sch >
 ;;   jscheme_gabriel.sch
-;;2) javac -classpath jscheme.jar -O -g:none jscheme_gabriel.java
-;;3) java -classpath .:jscheme.jar jscheme_gabriel
+;;2) java -classpath jscheme.jar silk.Compile jscheme_gabriel.sch
+;;3) javac -classpath jscheme.jar -O -g:none jscheme_gabriel.java
+;;4) java -classpath .:jscheme.jar jscheme_gabriel
 
 (for-each load-test
           '(
@@ -33,8 +34,8 @@
             dderiv
             div
             destruct
-            fread
             fprint	;Kawa-(C)TC
+            fread
             tprint	;Kawa-(C)TC
             fft		;Kawa-(C)TC, JScheme
             puzzle	;Kawa-(C)TC
