@@ -1,4 +1,4 @@
-2005-01-16  Scott G. Miller  <sgmiller@gmail.com>
+b2005-01-16  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Removed inline-primitives and inline-usual-primitives, as 
 	  this is done automatically and safely now.
@@ -6,7 +6,7 @@
 	* Applied two contributed patches: one which fixes the 
 	  project's Maven description, and another that searches
 	  for sisc.shp in the SISC jar library if not found through
-	  other means.  Both are curtesy of Matthew Daniel.
+	  other means.  Both are courtesy of Matthew Daniel.
 	
 2005-01-15  Scott G. Miller  <sgmiller@gmail.com>
 
