@@ -163,14 +163,13 @@
                  (java-wrap res)))))
   (define (remove i)
     (error (java-new <java.lang.unsupported-operation-exception>)))
-  (define (to-string) (->jstring 'list-iterator)))
+  (define (to-string i) (->jstring 'list-iterator)))
 (define-generic-java-methods
   has-next
   next
   remove)
 (define i (list-iterator '(1 2 3)))
 (has-next i)
-(next i)
 (next i)
 (next i)
 (next i)
