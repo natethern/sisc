@@ -36,10 +36,7 @@ public class LexicalEnvironment extends Value {
 
     public final void set(int depth, int pos, Value v) {
         LexicalEnvironment e = this;
-        while(depth > 0) {
-            depth--;
-            e = e.parent;
-        }
+        while(depth-- > 0)  e = e.parent;
         e.vals[pos]=v;
     }
 
