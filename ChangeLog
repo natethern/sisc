@@ -1,3 +1,9 @@
+2004-11-5  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Define the I/O procedures as toplevel with psyntax,
+	  so that they aren't syntax-expanded as references
+	  to the generic-io module.  
+	  
 2004-11-4  Released SISC 1.9.2-rc
 
 2004-11-4  Scott G. Miller  <sgmiller@gmail.com>

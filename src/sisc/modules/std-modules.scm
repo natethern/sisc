@@ -664,7 +664,9 @@
 
 ; Good Lord what a hack!
 (for-each 
-  (lambda (x) (putprop x (eval (sc-expand x))))
+  (lambda (x) 
+    (putprop x (eval (sc-expand x)))
+    ($sc-put-cte x `(global . ,x)))
  '(char-ready?
    read
    peek-char
@@ -676,20 +678,13 @@
    display
    newline
    write-char
-   write-block
    write-string
    open-input-file
    open-output-file
-   open-binary-input-file
-   open-binary-output-file
    close-input-port
    close-output-port
    input-port?
-   output-port?
-   character-input-port?
-   character-output-port?
-   binary-input-port?
-   binary-output-port?))
+   output-port?))
    
 (let ()
   (import type-system)
