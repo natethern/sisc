@@ -17,6 +17,8 @@ import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
 import sisc.env.MemorySymEnv;
 import sisc.env.Parameter;
+import sisc.env.SchemeParameter;
+import sisc.env.NativeParameter;
 import sisc.util.*;
 
 public class Primitives extends IndexedProcedure {
@@ -94,6 +96,7 @@ public class Primitives extends IndexedProcedure {
             define("load-native-library", LOADNL);
             define("log", LOG);
             define("make-parameter", MAKEPARAM);
+            define("make-native-parameter", MAKENATIVEPARAM);
             define("make-rectangular", MAKERECTANGULAR);
             define("make-string", MAKESTRING);
             define("make-vector", MAKEVECTOR);
@@ -388,7 +391,9 @@ public class Primitives extends IndexedProcedure {
             case CIRCULARQ:
                 return truth(new CircularityDetector().isCircular(vlr[0]));
             case MAKEPARAM:
-                return new Parameter(vlr[0]);
+                return new SchemeParameter(vlr[0]);
+            case MAKENATIVEPARAM:
+                return new NativeParameter(string(vlr[0]));
             case MAKESTRING:
                 return new SchemeString(new char[num(vlr[0]).indexValue()]);
             case MAKEVECTOR:
@@ -720,7 +725,7 @@ public class Primitives extends IndexedProcedure {
         return VOID;
     }
 
-    //next: 123
+    //next: 124
     static final int
         ACOS = 23,
         ADD = 114,
@@ -778,6 +783,7 @@ public class Primitives extends IndexedProcedure {
         LOG = 24,
         LT = 117,
         MAKEPARAM = 63,
+        MAKENATIVEPARAM = 123,
         MAKERECTANGULAR = 101,
         MAKESTRING = 99,
         MAKEVECTOR = 65,

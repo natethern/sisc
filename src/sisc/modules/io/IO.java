@@ -14,19 +14,16 @@ public class IO extends IndexedProcedure {
         Symbol.intern("sisc.modules.io.Messages");
 
     protected static final int
-        //NEXT = 32,
+        //NEXT = 27,
 
         ABSPATHQ            = 0,
         CHARREADY           = 3,
         CLOSEINPUTPORT      = 4,
         CLOSEOUTPUTPORT     = 5,
-        CURRENTCLASSPATH    = 31,
-        CURRENTINPUTPORT    = 6,
-        CURRENTOUTPUTPORT   = 7,
         DISPLAY             = 8,
         FILEEXISTSQ         = 9,
-        FINDRESOURCE        = 29,
-        FINDRESOURCES       = 30,
+        FINDRESOURCE        = 6,
+        FINDRESOURCES       = 2,
         FLUSHOUTPUTPORT     = 10,
         GETOUTPUTSTRING     = 11,
         INPORTQ             = 12,
@@ -41,13 +38,11 @@ public class IO extends IndexedProcedure {
         OPENOUTPUTSTRING    = 21,
         OUTPORTQ            = 22,
         PEEKCHAR            = 23,
-        PRINTSHARED         = 1,
         READ                = 24,
         READCHAR            = 25,
         READCODE            = 26,
-        VECTORLPREFIXING    = 2,
-        WRITE               = 27,
-        WRITECHAR           = 28;
+        WRITE               = 1,
+        WRITECHAR           = 7;
 
     public static class Index extends IndexedLibraryAdapter { 
 
@@ -60,9 +55,6 @@ public class IO extends IndexedProcedure {
         define("char-ready?"        , CHARREADY);
         define("close-input-port"   , CLOSEINPUTPORT);
         define("close-output-port"  , CLOSEOUTPUTPORT);
-        define("current-class-path" , CURRENTCLASSPATH);
-        define("current-input-port" , CURRENTINPUTPORT);
-        define("current-output-port", CURRENTOUTPUTPORT);
         define("display"            , DISPLAY);
         define("file-exists?"       , FILEEXISTSQ);
         define("find-resource"      , FINDRESOURCE);
@@ -80,14 +72,12 @@ public class IO extends IndexedProcedure {
         define("open-source-input-file", OPENSOURCEINPUTFILE);
         define("output-port?"       , OUTPORTQ);
         define("peek-char"          , PEEKCHAR);
-        define("print-shared"       , PRINTSHARED);
         define("read"               , READ);
         define("read-char"          , READCHAR);
         define("read-code"          , READCODE);
-        define("vector-length-prefixing", VECTORLPREFIXING);
         define("write"              , WRITE);
         define("write-char"         , WRITECHAR);
-    }
+        }
     }
     
     public IO(int id) {
@@ -217,31 +207,18 @@ public class IO extends IndexedProcedure {
         switch (f.vlr.length) {
         case 0:
             switch (id) {
-            case CURRENTCLASSPATH:
-                URL[] urls = f.dynenv.getClassPath();
-                Pair p = EMPTYLIST;
-                for (int i=urls.length-1; i>=0; i--) {
-                    p = new Pair(new SchemeString(urls[i].toString()), p);
-                }
-                return p;
-            case CURRENTOUTPUTPORT: return f.dynenv.out;
-            case CURRENTINPUTPORT: return f.dynenv.in;
             case OPENOUTPUTSTRING: return new WriterOutputPort(new StringWriter(), false);
             case PEEKCHAR:
                 Value v=readChar(f, f.dynenv.in);
                 if (v instanceof SchemeCharacter)
                     f.dynenv.in.pushback(((SchemeCharacter)v).c);
                 return v;
-            case PRINTSHARED:
-                return truth(f.dynenv.printShared);
             case READ:
                 return read(f, f.dynenv.in);
             case READCHAR:
                 return readChar(f, f.dynenv.in);
             case READCODE:
                 return readCode(f, f.dynenv.in);
-            case VECTORLPREFIXING:
-                return truth(f.dynenv.vectorLengthPrefixing);
             default:
                 throwArgSizeException();
             }
@@ -268,9 +245,6 @@ public class IO extends IndexedProcedure {
                 if (v instanceof SchemeCharacter)
                     inport.pushback(((SchemeCharacter)v).c);
                 return v;
-            case PRINTSHARED:
-                f.dynenv.printShared = truth(f.vlr[0]);
-                return VOID;
             case READ:
                 inport=inport(f.vlr[0]);
                 return read(f, inport);
@@ -280,9 +254,6 @@ public class IO extends IndexedProcedure {
             case READCODE:
                 inport=inport(f.vlr[0]);
                 return readCode(f, inport);
-            case VECTORLPREFIXING:
-                f.dynenv.vectorLengthPrefixing = truth(f.vlr[0]);
-                return VOID;
             case GETOUTPUTSTRING:
                 SchemeOutputPort port=outport(f.vlr[0]);
                 if (!(port instanceof WriterOutputPort) ||
@@ -415,20 +386,6 @@ public class IO extends IndexedProcedure {
                                                   e.getMessage()), e);
                 }
                 return VOID;
-            case CURRENTCLASSPATH:
-                Pair pa = pair(f.vlr[0]);
-                URL[] urls = new URL[length(pa)];
-                for (int i=0; pa != EMPTYLIST; i++, pa = (Pair)pa.cdr) {
-                    urls[i] = url(pa.car);
-                }
-                f.dynenv.setClassPath(urls);
-                return VOID;
-            case CURRENTOUTPUTPORT:
-                f.dynenv.out= outport(f.vlr[0]);
-                return VOID;
-            case CURRENTINPUTPORT:
-                f.dynenv.in = inport(f.vlr[0]);
-                return VOID;
             case FILEEXISTSQ:
                 try {
                     url(f.vlr[0]).openConnection().getInputStream().close();
@@ -449,7 +406,7 @@ public class IO extends IndexedProcedure {
                     return EMPTYLIST;
                 }
                 if (!e.hasMoreElements()) return EMPTYLIST;
-                pa = new Pair();
+                Pair pa = new Pair();
                 while(true) {
                     pa.setCar(new SchemeString((String)e.nextElement()));
                     if (!e.hasMoreElements()) break;

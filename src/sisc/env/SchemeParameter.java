@@ -2,34 +2,52 @@ package sisc.env;
 
 import sisc.data.*;
 import sisc.interpreter.*;
+import java.io.IOException;
+import sisc.io.ValueWriter;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
-public abstract class Parameter extends Procedure {
- 
-    public abstract Value getDefault(DynamicEnvironment dynenv);
-    public abstract void setDefault(DynamicEnvironment dynenv, Value v);
-    public abstract Value getValue(DynamicEnvironment dynenv);
-    public abstract void setValue(DynamicEnvironment dynenv, Value v);
+public class SchemeParameter extends Parameter {
 
-    public void apply(Interpreter r)
-        throws ContinuationException {
-        r.nxp = null;
-        Value res = null;
-        synchronized (r.dynenv) {
-            switch (r.vlr.length) {
-            case 0:
-                res = getValue(r.dynenv);
-                if (null == res) res = getDefault(r.dynenv);
-                break;
-            case 1:
-                res = getValue(r.dynenv);
-                setValue(r.dynenv, r.vlr[0]);
-                if (null == res) res = FALSE;
-                break;
-            default:
-                throw new RuntimeException(liMessage(SISCB, "parameterargs", synopsis()));
-        }
-        r.acc = res;
-        }
+    private Value v;
+
+    public SchemeParameter() {}
+
+    public SchemeParameter(Value v) {
+        this.v = v;
+    }
+
+    public Value getDefault(DynamicEnvironment dynenv) {
+        return v;
+    }
+
+    public void setDefault(DynamicEnvironment dynenv, Value v) {
+        this.v = v;
+    }
+
+    public Value getValue(DynamicEnvironment dynenv) {
+        return (Value)dynenv.parameters.get(this);
+    }
+
+    public void setValue(DynamicEnvironment dynenv, Value v) {
+        dynenv.parameters.put(this,v);
+    }
+
+    public void display(ValueWriter w) throws IOException {
+        displayNamedOpaque(w, "parameter");
+    }
+
+    public void serialize(Serializer s) throws IOException {
+        s.writeExpression(v);
+    }
+
+    public void deserialize(Deserializer s) throws IOException {
+        v = (Value)s.readExpression();
+    }
+
+    public boolean visit(ExpressionVisitor v) {
+        return v.visit(this.v);
     }
 }
     

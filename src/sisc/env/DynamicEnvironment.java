@@ -76,14 +76,64 @@ public class DynamicEnvironment extends Util implements Cloneable {
         return (urlClassLoader == null) ? classLoader : urlClassLoader;
     }
 
-    public URL[] getClassPath() {
-        return (urlClassLoader == null) ? new URL[] {} : urlClassLoader.getURLs();
+    public Value getClassPath() {
+        URL[] urls = (urlClassLoader == null) ? new URL[] {} : urlClassLoader.getURLs();
+        Pair p = EMPTYLIST;
+        for (int i=urls.length-1; i>=0; i--) {
+            p = new Pair(new SchemeString(urls[i].toString()), p);
+        }
+        return p;
     }
 
-    public void setClassPath(URL[] urls) {
+    public void setClassPath(Value v) {
+        Pair pa = pair(v);
+        URL[] urls = new URL[length(pa)];
+        for (int i=0; pa != EMPTYLIST; i++, pa = (Pair)pa.cdr) {
+            urls[i] = url(pa.car);
+        }
         try {
             urlClassLoader =  new URLClassLoader(urls, classLoader);
         } catch (AccessControlException e) {}
+    }
+
+    public Value getInputPort() {
+        return in;
+    }
+
+    public void setInputPort(Value v) {
+        in = inport(v);
+    }
+
+    public Value getOutputPort() {
+        return out;
+    }
+
+    public void setOutputPort(Value v) {
+        out = outport(v);
+    }
+
+    public Value getPrintShared() {
+        return truth(printShared);
+    }
+
+    public void setPrintShared(Value v) {
+        printShared = truth(v);
+    }
+
+    public Value getVectorLengthPrefixing() {
+        return truth(vectorLengthPrefixing);
+    }
+
+    public void setVectorLengthPrefixing(Value v) {
+        vectorLengthPrefixing = truth(v);
+    }
+
+    public Value getEmitDebuggingSymbols() {
+        return truth(emitDebuggingSymbols);
+    }
+
+    public void setEmitDebuggingSymbols(Value v) {
+        emitDebuggingSymbols = truth(v);
     }
 
 }

@@ -33,6 +33,12 @@
 
 (current-evaluator eval)
 
+(define current-input-port      (make-native-parameter "inputPort"))
+(define current-output-port     (make-native-parameter "outputPort"))
+(define current-class-path      (make-native-parameter "classPath"))
+(define print-shared            (make-native-parameter "printShared"))
+(define vector-length-prefixing (make-native-parameter "vectorLengthPrefixing"))
+
 (if (equal? (getprop 'beta '*environment-variables*) "yes")
     (begin
       (emit-annotations #t)
