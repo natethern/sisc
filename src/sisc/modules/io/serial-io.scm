@@ -29,12 +29,12 @@
     (lambda (port) (with-output-to-port port thunk))))
 
 (define (call-with-serial-input-file url proc)
-  (call-with-input-file url
+  (call-with-binary-input-file url
     (lambda (in)
       (call-with-serial-input-port in proc))))
 
 (define (call-with-serial-output-file url proc)
-  (call-with-output-file url
+  (call-with-binary-output-file url
     (lambda (out)
       (call-with-serial-output-port
        out
