@@ -305,11 +305,6 @@ public class S2J extends ModuleAdapter {
             this.objType = JUNKN;
         }
 
-        public Object javaValue()
-        {
-            return obj;
-        }
-
         public String display() {
             StringBuffer b=new StringBuffer();
             b.append("#<java ");
