@@ -206,75 +206,71 @@
 (define dynamic-wind #f)
 (define unload-dynamic-wind #f)
 (let ((original-call/cc call-with-current-continuation))
-    ;;the dynamic wind stack
-    (define get-dynamic-point current-wind)
-    (define set-dynamic-point! current-wind)
-    ;;a point in the dynamic wind stack
-    ;;-this would be easier if we had structures
-    (define (make-point depth in out parent)
-      (vector depth in out parent))
-    (define (point-depth point) (vector-ref point 0))
-    (define (point-in point) (vector-ref point 1))
-    (define (point-out point) (vector-ref point 2))
-    (define (point-parent point) (vector-ref point 3))
-    ;;
-    (define (travel-between-points here target)
-      (cond ((eq? here target)
-	     (set-dynamic-point! here))
-	    ((or (not here)             ; HERE has reached the root.
-		 (and target
-		      (< (point-depth here)
-			 (point-depth target))))
-	     (travel-between-points here (point-parent target))
-	     ((point-in target))
-	     (set-dynamic-point! target))
-	    (else
-	     (set-dynamic-point! (point-parent here))
-	     ((point-out here))
-	     (travel-between-points (point-parent here) target))))
-    ;;wind-safe call/cc
-    (define (dynwind-call/cc proc)
-      (original-call/cc
-       (lambda (cont)
-	 (let* ((point (get-dynamic-point))
-                (safe-k
-                 (lambda results
-		   (travel-between-points (get-dynamic-point) point)
-		   (apply cont results))))
-           (set-annotation! safe-k 'unsafe-cont cont)
-           (proc safe-k)))))
-    (define (dynamic-wind/impl in body out)
-      (let* ((here (get-dynamic-point))
-	     (point (make-point 
-		     (if here (+ (point-depth here) 1) 1)
-		     in out here)))
-	(in)
-	(set-dynamic-point! point)
-	(call-with-values
-	    (lambda ()
-	      (with/fc
-	       (lambda (m e)
-		 (set-dynamic-point! here)
-		 (out)
-		 (throw m e))
-	       body))
+  ;;the dynamic wind stack
+  (define get-dynamic-point current-wind)
+  (define set-dynamic-point! current-wind)
+  ;;a point in the dynamic wind stack
+  ;;-this would be easier if we had structures
+  (define (make-point depth in out parent)
+    (vector depth in out parent))
+  (define (point-depth point) (vector-ref point 0))
+  (define (point-in point) (vector-ref point 1))
+  (define (point-out point) (vector-ref point 2))
+  (define (point-parent point) (vector-ref point 3))
+  ;;
+  (define (travel-between-points here target)
+    (cond ((eq? here target)
+           (set-dynamic-point! here))
+          ((or (not here)               ; HERE has reached the root.
+               (and target
+                    (< (point-depth here) (point-depth target))))
+           (travel-between-points here (point-parent target))
+           ((point-in target))
+           (set-dynamic-point! target))
+          (else
+            (set-dynamic-point! (point-parent here))
+            ((point-out here))
+            (travel-between-points (point-parent here) target))))
+  ;;wind-safe call/cc
+  (define (dynwind-call/cc proc)
+    (original-call/cc
+     (lambda (cont)
+       (let* ((point (get-dynamic-point))
+              (safe-k
+               (lambda results
+                 (travel-between-points (get-dynamic-point) point)
+                 (apply cont results))))
+         (set-annotation! safe-k 'unsafe-cont cont)
+         (proc safe-k)))))
+  (define (dynamic-wind/impl in body out)
+    (let* ((here (get-dynamic-point))
+           (point (make-point (if here (+ (point-depth here) 1) 1)
+                              in out here)))
+      (in)
+      (set-dynamic-point! point)
+      (call-with-values
+          (lambda () (with/fc (lambda (m e)
+                                (set-dynamic-point! here)
+                                (out)
+                                (throw m e))
+                       body))
    	    (lambda results
 	      (set-dynamic-point! here)
 	      (out)
 	      (apply values results)))))
-    (define dynamic-wind-loader
-      (lambda (in body out)
-        (putprop 'call-with-current-continuation '*toplevel* dynwind-call/cc)
-        (putprop 'call/cc '*toplevel* dynwind-call/cc)
-        (putprop 'dynamic-wind '*toplevel* dynamic-wind/impl)
-        (dynamic-wind in body out)))
-    ;;finally, the install the dynamic-wind hooks
-    (set! dynamic-wind dynamic-wind-loader)
-    (set! unload-dynamic-wind
-          (lambda ()
-            (putprop 'call-with-current-continuation '*toplevel* original-call/cc)
-            (putprop 'call/cc '*toplevel* original-call/cc)
-            (putprop 'dynamic-wind '*toplevel* dynamic-wind-loader))))
+  (define dynamic-wind-loader
+    (lambda (in body out)
+      (putprop 'call-with-current-continuation '*toplevel* dynwind-call/cc)
+      (putprop 'call/cc '*toplevel* dynwind-call/cc)
+      (putprop 'dynamic-wind '*toplevel* dynamic-wind/impl)
+      (dynamic-wind in body out)))
+  ;;finally, the install the dynamic-wind hooks
+  (set! dynamic-wind dynamic-wind-loader)
+  (set! unload-dynamic-wind
+    (lambda ()
+      (putprop 'call-with-current-continuation '*toplevel* original-call/cc)
+      (putprop 'call/cc '*toplevel* original-call/cc)
+      (putprop 'dynamic-wind '*toplevel* dynamic-wind-loader))))
 
 ;;;; "ratize.scm" Convert number to rational number (ported from SLIB)
 
