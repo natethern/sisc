@@ -7,6 +7,19 @@ import sisc.io.InputPort;
 import sisc.Util;
 
 public class Lexer implements Tokens {
+
+    /* Strict R5RS Syntax Helper Functions */
+    public static final boolean isIdentifierStart(char c) {
+        return Character.isLetter(c) ||
+            in(c, special_initials);
+    }
+
+    public static final boolean isIdentifierSubsequent(char c) {
+        return isIdentifierStart(c) ||
+            Character.isDigit(c) ||
+            in(c, special_subsequents);
+    }
+
     static final char
 	STRING_CONST='"',
 	COMMENT     =';',
@@ -36,17 +49,6 @@ public class Lexer implements Tokens {
         {'!','$','%','&','*','/',':','<','=','>','?','^','_','~'},
         special_subsequents = new char[] 
         {'+','-','.','@'};
-
-    public static final boolean isIdentifierStart(char c) {
-        return Character.isLetter(c) ||
-            in(c, special_initials);
-    }
-
-    public static final boolean isIdentifierSubsequent(char c) {
-        return isIdentifierStart(c) ||
-            Character.isDigit(c) ||
-            in(c, special_subsequents);
-    }
 
     public String sval;
     public Quantity nval;

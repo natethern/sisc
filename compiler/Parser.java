@@ -13,6 +13,11 @@ import java.util.*;
  * s-expressions.
  */
 public class Parser extends Util implements Tokens {
+    
+    /* Strict R5RS Syntax Helper Functions */
+    public static boolean isPeculiarIdentifier(String s) {
+        return (s.equals("+") || s.equals("-") || s.equals("..."));
+    }
 
     public static final int 
         PRODUCE_IMMUTABLES= 0x1,
