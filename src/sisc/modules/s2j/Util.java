@@ -114,7 +114,7 @@ public abstract class Util extends IndexedProcedure {
     public static final Pair objectsToList(Object[] objs) {
         Class c = objs.getClass().getComponentType();
         Pair res = EMPTYLIST;
-        for (int i=0; i < objs.length; i++) {
+        for (int i=objs.length-1; i >= 0; i--) {
             res = new Pair(makeJObj(objs[i], c), res);
         }
         return res;
