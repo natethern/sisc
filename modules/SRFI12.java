@@ -45,12 +45,11 @@ public class SRFI12 extends ModuleAdapter {
     protected static final int 
 	CONDITIONQ=0, MAKEPROPERTYCONDITION=1, 
 	MAKECOMPOSITECONDITION=2, HASCONDITIONKIND=3,
-	CONDPROPERTYACCESSOR=4, GETCONDITIONPROPERTIES=5;
+	GETCONDITIONPROPERTIES=4;
     
     public SRFI12() {
         define("condition?", CONDITIONQ);
 	define("has-condition-kind", HASCONDITIONKIND);
-	define("condition-property-accessor", CONDPROPERTYACCESSOR);
 	define("make-composite-condition", MAKECOMPOSITECONDITION);
         define("sisc-make-property-condition", MAKEPROPERTYCONDITION);
         define("sisc-get-condition-properties", GETCONDITIONPROPERTIES);
