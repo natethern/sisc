@@ -31,9 +31,10 @@
                         (string-downcase person)))]
          [result
           (jdbc/execute-query stmt)])
-    (and (not (null? result)) 
-         (values ((car result) '1)
-                 ((car result) '2)))))
+    (if (not (null? result)) 
+        (values ((car result) '1)
+                ((car result) '2))
+        (values #f #f))))
 
 (define (store-seen conn person message)
   (let ([pstmt (if (lookup-seen conn person)
