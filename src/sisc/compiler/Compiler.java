@@ -453,8 +453,6 @@ public class Compiler extends CompilerConstants {
                 allImmediate=false;
             }
         }
-        addAnnotations(nxp, lastRand.annotations);
-
         if (allImmediate) {
             if (rator instanceof FreeReferenceExp) {
                 Symbol ratorsym=((FreeReferenceExp)rator).getSym();
@@ -464,24 +462,41 @@ public class Compiler extends CompilerConstants {
                     Value ratorval=env.lookup(ratorsym);
                     if (ratorval instanceof FixableProcedure) {
                         FixableProcedure proc=(FixableProcedure)ratorval;
+                        Expression fixedCall=null;
+
                         switch (rands.length) {
-                        case 0: return new FixedAppExp_0(proc);
-                        case 1: return new FixedAppExp_1(proc, 
-                                                         (Immediate)rands[0]); 
-                        case 2: return new FixedAppExp_2(proc, 
-                                                         (Immediate)rands[0],
-                                                         (Immediate)rands[1]); 
-                        case 3: return new FixedAppExp_3(proc, 
-                                                         (Immediate)rands[0],
-                                                         (Immediate)rands[1],
-                                                         (Immediate)rands[2]);
+                        case 0: 
+                            fixedCall = new FixedAppExp_0(proc); 
+                            break;
+                        case 1: 
+                            fixedCall = new FixedAppExp_1(proc, 
+                                                          (Immediate)rands[0]); 
+                            break;
+                        case 2: 
+                            fixedCall = new FixedAppExp_2(proc, 
+                                                          (Immediate)rands[0],
+                                                          (Immediate)rands[1]); 
+                            break;
+                        case 3: 
+                            fixedCall = new FixedAppExp_3(proc, 
+                                                          (Immediate)rands[0],
+                                                          (Immediate)rands[1],
+                                                          (Immediate)rands[2]);
+                            break;
+                        }
+                        if (fixedCall != null) {
+                            addAnnotations(fixedCall, lastRand.annotations);
+                            return fixedCall;
                         }
                     }
                 }
             } 
+            addAnnotations(nxp, lastRand.annotations);
             return new AppExp(lastRand, rands, nxp, true);
-        } else 
+        } else {
+            addAnnotations(nxp, lastRand.annotations);
             return new AppExp(lastRand, rands, nxp, false);
+        }
     }
 
     void compileExpressions(Interpreter r, Expression exprs[], 
