@@ -342,8 +342,8 @@ public class Quantity extends Value {
             }
         }
         if (type==INTEG) {
-            if (i.compareTo(_INT_MAX)==-1 &&
-                    i.compareTo(_INT_MIN)==1) {
+            if (i.compareTo(_INT_MAX)<=0 &&
+                    i.compareTo(_INT_MIN)>=0) {
                 val=i.intValue();
                 type=FIXEDINT;
             }

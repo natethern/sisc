@@ -17,7 +17,7 @@
       numbers, &SISC; provides operators for performing bitwise
       logic operations on a limited range of integers.  The domain of the
       logical operators are exact real integers of the range
-      -2,147,483,647 to 2,147,483,646 inclusive.  An error is raised
+      -2,147,483,648 to 2,147,483,647 inclusive.  An error is raised
       if the logical operators are applied to integers outside this
       range, to a non-integer, or a non-real.
     </para>

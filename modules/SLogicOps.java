@@ -57,7 +57,7 @@ public class SLogicOps extends ModuleAdapter {
             Quantity q=(Quantity)v;
             if (q.type==Quantity.FIXEDINT) return q.val;
             else throw new ClassCastException();
-        } catch (ClassCastException e) { typeError("fixed integer", v); }
+        } catch (ClassCastException e) { typeError("fixedinteger", v); }
 	return -1;
     }
 

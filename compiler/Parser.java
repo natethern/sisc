@@ -39,9 +39,20 @@ import sisc.exprs.AnnotatedExpr;
 import java.io.*;
 import java.util.*;
 
+
+/**
+ * Receives tokens from the Lexer and parses them into valid
+ * s-expressions.
+ */
 public class Parser extends Util implements Tokens {
+    
+    /**
+     * When set, annotations will be emitted.  Requires that
+     * the given InputPort be a SourceInputPort
+     */
     public boolean annotate=getSystemProperty("sisc.emitannotations", "false").equalsIgnoreCase("true");
     Lexer lexer;
+
     static final Object DOT=new Object();
     static final Object ENDPAIR=new Object();
     static final Symbol SYNTAX=Symbol.get("syntax"),
@@ -66,10 +77,19 @@ public class Parser extends Util implements Tokens {
         this.lexer=l;
     }
 
+    /**
+     * Reads an s-expression from the given input port.
+     * 
+     * @param read If true, this is a Scheme read call, no annotations 
+     *             will be emitted even if annotations are enabled
+     */
     public final Value nextExpression(InputPort is, boolean read) throws IOException {
         return nextExpression(is, 10, read);
     }
 
+    /**
+     * Reads an s-expression from the given input port
+     */
     public final Value nextExpression(InputPort is) throws IOException {
 	return nextExpression(is, 10, false);
     }
@@ -79,7 +99,13 @@ public class Parser extends Util implements Tokens {
 	throws IOException {
 	return (Value)_nextExpression(is, state, null, read);
     }
-	
+
+    /**
+     * Reads an s-expression from the given input port.
+     *
+     * @param radix Specifies the radix of any numbers that are read
+     * @param read If true, no annotations will be emitted
+     */
     public Value nextExpression(InputPort is, int radix,
                                 boolean read) throws IOException {
         Object n=VOID;
@@ -182,6 +208,7 @@ public class Parser extends Util implements Tokens {
         case TT_SHARP:
             int c=is.read();
             char dc=Character.toLowerCase((char)c);
+            //Which type of sharp do we have?
             switch (dc) {
             case 't':
                 o=TRUE;
@@ -189,6 +216,7 @@ public class Parser extends Util implements Tokens {
             case 'f':
                 o=FALSE;
                 break;
+                //SISC supports s-expression commenting
             case ';':
                 nextExpression(is);
                 o=_nextExpression(is, state, def, read);
