@@ -101,48 +101,51 @@ public class SThread extends ModuleAdapter {
 	    Thread thisThread=null;
 
 	    synchronized(this) {
-		do {
-		    if (owner == null || owner == (thisThread=Thread.currentThread())) {
-			owner=thisThread;
-			lockCount++;
-			return TRUE;
-		    } else {
-			long lastAwoken=System.currentTimeMillis();
+		if (owner == null) {
+		    owner=Thread.currentThread();
+		    
+		} else if ((thisThread=Thread.currentThread())!= 
+			   owner) {
+		    
+		    long lastAwoken=System.currentTimeMillis();
+		    
+		    while (lockCount>0) {
+			try {
+			    this.wait(timeout);
+			} catch (InterruptedException ie) {}
 
-			while (lockCount>0) {
-			    try {
-				this.wait(timeout);
-			    } catch (InterruptedException ie) {}
-
-			    long now=System.currentTimeMillis();
-			    timeout-=(now-lastAwoken);
-			    if (timeout <= 0)
-				return FALSE;
-			    else
-				lastAwoken=now;
-			}
+			long now=System.currentTimeMillis();
+			timeout-=(now-lastAwoken);
+			if (timeout <= 0)
+			    return FALSE;
+			else
+			    lastAwoken=now;
 		    }
-		} while (true);
+		    owner=thisThread;
+		}
+		lockCount++;
+		return TRUE;
 	    }
 	}
 
 	public Value lock() {
+	    Thread thisThread=null;
+
 	    synchronized(this) {
-		Thread thisThread=null;
-		
-		do {
-		    if (owner == null || owner == (thisThread=Thread.currentThread())) {
-			owner=thisThread;
-			lockCount++;
-			return TRUE;
-		    } else {
-			while (lockCount>0) {
-			    try {
-				this.wait();
-			    } catch (InterruptedException ie) {}
-			}
+		if (owner == null) {
+		    owner=Thread.currentThread();
+		} else if ((thisThread=Thread.currentThread())!= 
+			   owner) {
+		    while (lockCount>0) {
+			try {
+			    this.wait();
+			} catch (InterruptedException ie) {}
+
 		    }
-		} while (true);
+		    owner=thisThread;
+		}
+		lockCount++;
+		return TRUE;
 	    }
 	}
 
