@@ -1,3 +1,12 @@
+2004-11-4  Released SISC 1.9.2-rc
+
+2004-11-4  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Fixed bug in error handling of load causing a null pointer
+	  exception.
+	  
+	* Fixed CTL-C in the REPL.
+
 2004-10-27  Matthias Radestock  <matthias@sorted.org>
 
 	* Added srfi-43.
