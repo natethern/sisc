@@ -123,6 +123,7 @@ public class Interpreter extends Util {
     }
 
     public final Value[] newVLR(int size) {
+        vlk=false;
         cap=null;
         return (vlr=createValues(size));
     }
