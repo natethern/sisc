@@ -533,50 +533,50 @@
   (syntax-rules ()
     ((_ source fun-exp arg-exps)
      (if source 
-         `(annotate (,fun-exp . ,arg-exps) ,source)
+         `(#%annotate (,fun-exp . ,arg-exps) ,source)
          `(,fun-exp . ,arg-exps)))))
 
 (define-syntax build-conditional
   (syntax-rules ()
     ((_ source test-exp then-exp else-exp)
      (if source
-       	 `(annotate (if ,test-exp ,then-exp ,else-exp) ,source)
-         `(if ,test-exp ,then-exp ,else-exp)))))
+       	 `(#%annotate (#%if ,test-exp ,then-exp ,else-exp) ,source)
+         `(#%if ,test-exp ,then-exp ,else-exp)))))
 
 (define-syntax build-lexical-reference
   (syntax-rules ()
     ((_ type source var)
      (if source 
-         `(annotate ,var ,source)
+         `(#%annotate ,var ,source)
          var))))
 
 (define-syntax build-lexical-assignment
   (syntax-rules ()
     ((_ source var exp)
      (if source
-         `(annotate (set! ,var ,exp) ,source)
-         `(set! ,var ,exp)))))
+         `(#%annotate (#%set! ,var ,exp) ,source)
+         `(#%set! ,var ,exp)))))
 
 (define-syntax build-global-reference
   (syntax-rules ()
     ((_ source var)
      (if source 
-         `(annotate ,var ,source)
+         `(#%annotate ,var ,source)
          var))))
 
 (define-syntax build-global-assignment
   (syntax-rules ()
     ((_ source var exp)
      (if source
-         `(annotate (set! ,var ,exp) ,source)
-         `(set! ,var ,exp)))))
+         `(#%annotate (#%set! ,var ,exp) ,source)
+         `(#%set! ,var ,exp)))))
 
 (define-syntax build-global-definition
   (syntax-rules ()
     ((_ source var exp)
      (if source
-         `(annotate (define ,var ,exp) ,source)
-         `(define ,var ,exp)))))
+         `(#%annotate (#%define ,var ,exp) ,source)
+         `(#%define ,var ,exp)))))
 
 (define-syntax build-module-definition
  ; should have the effect of a global definition but may not appear at top level
@@ -604,8 +604,8 @@
   (syntax-rules ()
     ((_ src vars exp)
      (if src 
-         `(annotate (lambda ,vars ,exp) ,src)
-         `(lambda ,vars ,exp)))))
+         `(#%annotate (#%lambda ,vars ,exp) ,src)
+         `(#%lambda ,vars ,exp)))))
 
 (define-syntax build-primref
   (syntax-rules ()
@@ -623,7 +623,7 @@
   (syntax-rules ()
     ((_ src exp) 
      (if src
-         `(annotate ,(do-build-data exp) ,src)
+         `(#%annotate ,(do-build-data exp) ,src)
          (do-build-data exp)))))
 
 (define build-sequence
@@ -638,20 +638,20 @@
                (car exps))]
           [else
             (if src
-                `(annotate (begin ,@exps) ,src)
-                `(begin ,@exps))])))
+                `(#%annotate (#%begin ,@exps) ,src)
+                `(#%begin ,@exps))])))
 
 (define build-letrec
   (lambda (src vars val-exps body-exp)
     (if (null? vars)
         (if src
-            `(annotate ,body-exp ,src)
+            `(#%annotate ,body-exp ,src)
             body-exp)
         (if src
-            `(annotate 
-              (letrec ,(map list vars val-exps) ,body-exp)
+            `(#%annotate 
+              (#%letrec ,(map list vars val-exps) ,body-exp)
               ,src)
-            `(letrec ,(map list vars val-exps) ,body-exp)))))
+            `(#%letrec ,(map list vars val-exps) ,body-exp)))))
 
 (define build-body
   (lambda (src vars val-exps body-exp)
@@ -1310,6 +1310,56 @@
              (else (syntax-error (wrap x w) "invalid eval-when situation"))))
          when-list)))
 
+; The subsequent core definitions must be bound in psyntax as they
+; need to be available to pass the appropriate implementation to
+; the immutable syntax forms
+
+(define core-quote
+   (lambda (e r w s)
+      (syntax-case e ()
+         ((_ e) (build-data s (strip (syntax e) w)))
+         (_ (syntax-error (source-wrap e w s))))))
+
+(define core-if
+   (lambda (e r w s)
+      (syntax-case e ()
+         ((_ test then)
+          (build-conditional s
+             (chi (syntax test) r w)
+             (chi (syntax then) r w)
+             (chi-void)))
+         ((_ test then else)
+          (build-conditional s
+             (chi (syntax test) r w)
+             (chi (syntax then) r w)
+             (chi (syntax else) r w)))
+         (_ (syntax-error (source-wrap e w s))))))
+
+(define core-lambda   
+  (lambda (e r w s)
+     (syntax-case e ()
+        ((_ . c)
+         (chi-lambda-clause (source-wrap e w s) (syntax c) r w
+           (lambda (vars body) (build-lambda s vars body)))))))
+
+(define core-letrec
+  (lambda (e r w s)
+    (syntax-case e ()
+      ((_ ((id val) ...) e1 e2 ...)
+       (let ((ids (syntax (id ...))))
+         (if (not (valid-bound-vars? ids))
+             (invalid-ids-error (map (lambda (x) (wrap x w)) ids)
+               (source-wrap e w s) "bound variable")
+             (let ((labels (gen-labels ids))
+                   (new-vars (map gen-var ids)))
+               (let ((w (make-binding-wrap ids labels w))
+                    (r (extend-var-env* labels new-vars r)))
+                 (build-letrec s
+                   new-vars
+                   (map (lambda (x) (chi x r w)) (syntax (val ...)))
+                   (chi-body (syntax (e1 e2 ...)) (source-wrap e w s) r w)))))))
+      (_ (syntax-error (source-wrap e w s))))))
+
 ;;; syntax-type returns five values: type, value, e, w, and s.  The first
 ;;; two are described in the table below.
 ;;;
@@ -1358,27 +1408,37 @@
            (else (values type (binding-value b) e w s)))))
       ((pair? e)
        (let ((first (car e)))
-         (if (id? first)
-             (let* ((n (id-var-name first w))
-                    (b (lookup n r))
-                    (type (binding-type b)))
-               (case type
-                 ((lexical) (values 'lexical-call (binding-value b) e w s))
-                 ((macro macro!)
-                  (syntax-type (chi-macro (binding-value b) e r w s rib)
-                    r empty-wrap #f rib))
-                 ((core) (values type (binding-value b) e w s))
-                 ((local-syntax)
-                  (values 'local-syntax-form (binding-value b) e w s))
-                 ((begin) (values 'begin-form #f e w s))
-                 ((eval-when) (values 'eval-when-form #f e w s))
-                 ((define) (values 'define-form #f e w s))
-                 ((define-syntax) (values 'define-syntax-form #f e w s))
-                 ((module-key) (values 'module-form #f e w s))
-                 ((import) (values 'import-form (and (binding-value b) (wrap first w)) e w s))
-                 ((set!) (chi-set! e r w s rib))
+         (cond ((id? first)
+                (let* ((n (id-var-name first w))
+                       (b (lookup n r))
+                       (type (binding-type b)))
+                  (case type
+                    ((lexical) (values 'lexical-call (binding-value b) e w s))
+                    ((macro macro!)
+                     (syntax-type (chi-macro (binding-value b) e r w s rib)
+                       r empty-wrap #f rib))
+                    ((core) (values type (binding-value b) e w s))
+                    ((local-syntax)
+                     (values 'local-syntax-form (binding-value b) e w s))
+                    ((begin) (values 'begin-form #f e w s))
+                    ((eval-when) (values 'eval-when-form #f e w s))
+                    ((define) (values 'define-form #f e w s))
+                    ((define-syntax) (values 'define-syntax-form #f e w s))
+                    ((module-key) (values 'module-form #f e w s))
+                    ((import) (values 'import-form (and (binding-value b) (wrap first w)) e w s))
+                    ((set!) (chi-set! e r w s rib))
+                    (else (values 'call #f e w s)))))
+               ((syntactic-token? first)
+                (case first
+                 ((#%begin) (values 'begin-form #f e w s))
+                 ((#%define) (values 'define-form #f e w s))
+                 ((#%set!) (chi-set! e r w s rib))
+                 ((#%quote) (values 'core core-quote e w s))
+                 ((#%if) (values 'core core-if e w s))
+                 ((#%lambda) (values 'core core-lambda e w s))
+                 ((#%letrec) (values 'core core-letrec e w s))
                  (else (values 'call #f e w s))))
-             (values 'call #f e w s))))
+               (else (values 'call #f e w s)))))
       ((syntax-object? e)
        ;; s can't be valid source if we've unwrapped
        (syntax-type (syntax-object-expression e)
@@ -2565,11 +2625,10 @@
            w)))
       (_ (syntax-error (source-wrap e w s))))))
 
-(global-extend 'core 'quote
-   (lambda (e r w s)
-      (syntax-case e ()
-         ((_ e) (build-data s (strip (syntax e) w)))
-         (_ (syntax-error (source-wrap e w s))))))
+(global-extend 'core 'quote core-quote)
+(global-extend 'core 'lambda core-lambda)
+(global-extend 'core 'letrec core-letrec)
+(global-extend 'core 'if core-if)
 
 (global-extend 'core 'syntax
   (let ()
@@ -2729,51 +2788,6 @@
            (let-values (((e maps) (gen-syntax e (syntax x) r '() ellipsis?)))
              (regen e)))
           (_ (syntax-error e)))))))
-
-
-(global-extend 'core 'lambda
-   (lambda (e r w s)
-      (syntax-case e ()
-         ((_ . c)
-          (chi-lambda-clause (source-wrap e w s) (syntax c) r w
-            (lambda (vars body) (build-lambda s vars body)))))))
-
-
-(global-extend 'core 'letrec
-  (lambda (e r w s)
-    (syntax-case e ()
-      ((_ ((id val) ...) e1 e2 ...)
-       (let ((ids (syntax (id ...))))
-         (if (not (valid-bound-vars? ids))
-             (invalid-ids-error (map (lambda (x) (wrap x w)) ids)
-               (source-wrap e w s) "bound variable")
-             (let ((labels (gen-labels ids))
-                   (new-vars (map gen-var ids)))
-               (let ((w (make-binding-wrap ids labels w))
-                    (r (extend-var-env* labels new-vars r)))
-                 (build-letrec s
-                   new-vars
-                   (map (lambda (x) (chi x r w)) (syntax (val ...)))
-                   (chi-body (syntax (e1 e2 ...)) (source-wrap e w s) r w)))))))
-      (_ (syntax-error (source-wrap e w s))))))
-
-
-(global-extend 'core 'if
-   (lambda (e r w s)
-      (syntax-case e ()
-         ((_ test then)
-          (build-conditional s
-             (chi (syntax test) r w)
-             (chi (syntax then) r w)
-             (chi-void)))
-         ((_ test then else)
-          (build-conditional s
-             (chi (syntax test) r w)
-             (chi (syntax then) r w)
-             (chi (syntax else) r w)))
-         (_ (syntax-error (source-wrap e w s))))))
-
-
 
 (global-extend 'set! 'set! '())
 
