@@ -371,3 +371,14 @@
 (java/array-set! (->jint 1) 1 (->jint 1)) ;;not an array
 (java/array-set! ar 0 (->jstring "foo")) ;;type incompatible
 (java/array-set! ar 2 (->jint 1)) ;;out of bounds
+
+;;micro benchmark for method invocation
+
+(define-generic-java-method trim-to-size)
+(define-java-class <java.util.Vector>)
+(let ([v (java-new <java.util.Vector> (->jint 0))])
+  (time (let loop ([i 10000])
+          (or (zero? i)
+              (begin
+                (trim-to-size v)
+                (loop (- i 1)))))))
