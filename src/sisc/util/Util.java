@@ -214,15 +214,6 @@ public abstract class Util extends Defaults implements Version {
         return vs;
     }
 
-    public static Symbol[] pairToSymbols(Pair p) {
-        if (p==EMPTYLIST) return new Symbol[0];
-
-        Vector v=pairToExpVect(p);
-        Symbol[] vs=new Symbol[v.size()];
-        v.copyInto(vs);
-        return vs;
-    }
-
     public static Symbol[] argsToSymbols(Pair p) {
         if (p==EMPTYLIST) return new Symbol[0];
         Vector v=new Vector();
