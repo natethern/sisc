@@ -4,6 +4,7 @@ import java.util.*;
 import java.io.*;
 import java.math.*;
 import java.lang.reflect.*;
+import java.net.URL;
 import sisc.*;
 import sisc.data.*;
 
@@ -14,6 +15,16 @@ public class Library extends Util {
     protected BinaryDeserializer lib;
     protected Map names;
 
+    public static Library load(URL u) throws IOException, ClassNotFoundException {
+        if (u.getProtocol().equalsIgnoreCase("file")) {
+            String path=u.getPath();
+            System.err.println(path);
+            return load(new SeekableDataInputStream(new BufferedRandomAccessInputStream(path, "r")));
+        } else {
+            return load(new SeekableDataInputStream(new MemoryRandomAccessInputStream(u.openStream())));
+        }
+    }
+       
     public static Library load(SeekableDataInput di) throws IOException, ClassNotFoundException {
         String libver=di.readUTF();
         if (!libver.equals(LIBRARY_VERSION))
