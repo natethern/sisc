@@ -111,7 +111,7 @@
 
 (define (record-predicate type)
   (lambda (thing)
-    (eq? (record-type thing) type)))
+    (and (record? thing) (eq? (record-type thing) type))))
 
 (define (record-accessor type tag)
   (let ((index (field-index type tag)))
