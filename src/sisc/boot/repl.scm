@@ -46,7 +46,7 @@
 
 (define current-writer
   (make-parameter (lambda (v)
-                    (if (and (getprop 'pretty-print)
+                    (if (and (procedure? (getprop 'pretty-print))
                              (not (getprop '*sisc* 'LITE))
                              (not (circular? v)))
                         (pretty-print v)
@@ -70,54 +70,57 @@
 
 
 (define make-interrupt-handler
-  (let ()
-    (import threading)
-    (lambda ()
-      (letrec ([thread (thread/current)]
-              [handler
-                (lambda ()
-                  (_signal-unhook! "INT" handler)
-                  (thread/interrupt thread))])
-        handler))))
+  (if (not (getprop 'LITE (get-symbolic-environment '*sisc*)))
+      (lambda ()
+        ; We use absolute references to threading here so that this can
+        ; coexist with the lite and full dists without using import
+        (letrec ([thread (@threading::thread/current)]
+                 [handler
+                  (lambda ()
+                    (_signal-unhook! "INT" handler)
+                    (@threading::thread/interrupt thread))])
+          handler))
+      (lambda () #f)))
 
 (define repl
   (letrec ([repl/read
             (lambda ()
-              ; Display the prompt
-              (let ([rp (repl-prompt)]
-                    [repl-depth (- (length (_exit-handler)) 1)])
-                (display
-                 (if (procedure? rp)
-                     (rp repl-depth)
-                     rp)))
-
-              ;;read
-              (let ([exp (read-code (current-input-port))])
-                (if (eof-object? exp) 
-                    (if ((current-exit-handler) exp)
-                        (exit exp)
-                        (repl/read))
-                    (begin
-                      ;; Consume any whitespace
-                      (let loop ()
-                        (when (and (char-ready? (current-input-port))
-                                   (char-whitespace? (peek-char)))
-                          (read-char)
-                          (loop)))
-
-                      ;;eval                      
-                      (let ([handler (make-interrupt-handler)])
-                        (when (permit-interrupts) (_signal-hook! "INT" handler))
+              (let ([handler (and (permit-interrupts)
+                                  (make-interrupt-handler))])
+                ; Display the prompt
+                (let ([rp (repl-prompt)]
+                      [repl-depth (- (length (_exit-handler)) 1)])
+                  (display
+                   (if (procedure? rp)
+                       (rp repl-depth)
+                       rp)))
+                
+                ;;read
+                (let ([exp (read-code (current-input-port))])
+                  (if (eof-object? exp) 
+                      (if ((current-exit-handler) exp)
+                          (exit exp)
+                          (repl/read))
+                      (begin
+                        ;; Consume any whitespace
+                        (let loop ()
+                          (when (and (char-ready? (current-input-port))
+                                     (char-whitespace? (peek-char)))
+                            (read-char)
+                            (loop)))
+                        
+                        ;;eval                      
+                        (when handler (_signal-hook! "INT" handler))
                         (with/fc
                          (lambda (m e)
-                           (when (permit-interrupts) (_signal-unhook! "INT" handler))
+                           (when handler (_signal-unhook! "INT" handler))
                            (throw m e))
                          (lambda () 
                            (let ([val (eval exp (interaction-environment))])
-                             (when (permit-interrupts) (_signal-unhook! "INT" handler))
+                             (when handler (_signal-unhook! "INT" handler))
                              (if (not (void? val))
-                                 (begin ((current-writer) val) (newline)))))))
-                      (repl/read)))))])
+                                 (begin ((current-writer) val) (newline))))))
+                      (repl/read))))))])
     (lambda ()
       (let ([repl-start #f])
         (repl-initialize)
