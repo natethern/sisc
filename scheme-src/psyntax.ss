@@ -821,17 +821,22 @@
 ;; Enforces <variable> in the R5RS lexical structure.  This
 ;; is more strict than <identifier>, as it excludes syntactic keywords
 ;; (sgm)
-(define var?
-  (lambda (x)
-    (cond
-      ((and (symbol? x)
-            (not (memq x '(quote lambda if set! begin cond and or case
-                                 let let* letrec do delay quasiquote
-                                 else => define unquote unquote-splicing))))
-       #t)
-      ((syntax-object? x) (var? (unannotate (syntax-object-expression x))))
-      ((annotation? x) (var? (annotation-expression x)))
-      (else #f))))
+(define-syntax var? 
+  (syntax-rules () 
+    ((_ v)
+     (id? v))))
+
+;(define var?
+ ; (lambda (x)
+  ;  (cond
+   ;   ((and (symbol? x)
+    ;        (not (memq x '(quote lambda if set! begin cond and or case
+     ;                            let let* letrec do delay quasiquote
+      ;                           else => define unquote unquote-splicing))))
+;       #t)
+ ;     ((syntax-object? x) (var? (unannotate (syntax-object-expression x))))
+  ;    ((annotation? x) (var? (annotation-expression x)))
+   ;   (else #f))))
 
 (define id?
   (lambda (x)
@@ -1177,13 +1182,17 @@
 ;; "valid-bound-vars?" returns #t in the same conditions as 
 ;; valid-bound-ids?, except that it also enforces <variable>
 ;; instead of just <identifier>,  see vars? (sgm)
-(define valid-bound-vars?
-  (lambda (vars)
-     (and (let all-vars? ((vars vars))
-            (or (null? vars)
-                (and (var? (car vars))
-                     (all-vars? (cdr vars)))))
-          (distinct-bound-ids? vars))))
+(define-syntax valid-bound-vars?
+  (syntax-rules () 
+    ((_ v)
+     (valid-bound-ids? v))))
+
+;  (lambda (vars)
+ ;    (and (let all-vars? ((vars vars))
+  ;          (or (null? vars)
+   ;             (and (var? (car vars))
+    ;                 (all-vars? (cdr vars)))))
+     ;     (distinct-bound-ids? vars))))
 
 ;;; distinct-bound-ids? expects a list of ids and returns #t if there are
 ;;; no duplicates.  It is quadratic on the length of the id list; long
