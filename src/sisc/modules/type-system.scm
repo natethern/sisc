@@ -22,7 +22,7 @@
   (make-hook (lambda (x y c)
                (error (string-append
                        "unable to compare types ~s and ~s "
-                       "with respect to type ~c")
+                       "with respect to type ~s")
                       x y c))))
 (define (compare-types x y c)
   (let ([x<y? (type<= x y)]
