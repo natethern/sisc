@@ -11,9 +11,6 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
 public class SThread extends ModuleAdapter {
-    public String getModuleName() {
-        return "Threading";
-    }
 
     static final Symbol THREADB=Symbol.intern("Threading"),
         MONITOR=Symbol.get("monitor");

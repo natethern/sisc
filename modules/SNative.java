@@ -8,9 +8,6 @@ import sisc.interpreter.*;
 import sisc.nativefun.*;
 
 public class SNative extends ModuleAdapter {
-    public String getModuleName() {
-	return "NativeProcedures";
-    }
 
     protected static final int
 	ASSQ=0, MEMQ=1, ASSOC=6, MEMBER=7,

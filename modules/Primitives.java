@@ -16,10 +16,6 @@ import sisc.env.MemorySymEnv;
 
 public class Primitives extends ModuleAdapter {
 
-    public String getModuleName() {
-        return "Primitives";
-    }
-
     public Primitives() {
         define("list", LIST);
         define("*", MUL);

@@ -9,10 +9,6 @@ import sisc.exprs.AnnotatedExpr;
 
 public class Annotations extends ModuleAdapter {
 
-    public String getModuleName() {
-        return "Annotations";
-    }
-
     protected static final int
         ANNOTATION              = 0,
         ANNOTATIONQ             = 1,

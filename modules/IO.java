@@ -9,10 +9,6 @@ import sisc.data.*;
 
 public class IO extends ModuleAdapter {
 
-    public String getModuleName() {
-        return "IO";
-    }
-
     protected static final int
         //NEXT = 31,
         ABSPATHQ            = 0,

@@ -245,8 +245,9 @@ Context.exit()
         <para>
           Scheme code can throw Java exceptions (see <xref
           linkend="S2JExceptions"/>). The
-          <literal>s2j</literal>. module contains a static method
-          <literal>S2J.javaException(</literal><parameter>schemeException</parameter><literal>)</literal>
+          <classname>sisc.modules.s2j.Util</classname> class contains
+          a static method
+          <literal>javaException(</literal><parameter>schemeException</parameter><literal>)</literal>
           that extracts the Java exception from a
           <literal>SchemeException</literal>, or, if no Java exception
           is present, returns the <literal>SchemeException</literal>.

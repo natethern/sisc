@@ -7,12 +7,9 @@ import sisc.interpreter.*;
 import sisc.nativefun.*;
 
 public class SLogicOps extends ModuleAdapter {
+
     protected static final int
 	LOGAND=1, LOGOR=2, LOGXOR=3, LOGNOT=4;
-
-    public String getModuleName() {
-	return "LogicalOps";
-    }
 
     public SLogicOps() {
         define("logand", LOGAND);

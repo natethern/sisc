@@ -13,6 +13,10 @@ public abstract class ModuleAdapter extends Module {
         bindings.put(name, new Integer(id));
     }
 
+    public String getModuleName() {
+        return getClass().getName();
+    }
+
     public Symbol[] getModuleBindingNames(Interpreter r) {
         Symbol[] slist=new Symbol[bindings.size()];
         int x=0;

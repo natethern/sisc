@@ -12,11 +12,8 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
 public class SHashtable extends ModuleAdapter {
-    static Symbol SHASHB = Symbol.get("Hashtable");
 
-    public String getModuleName() {
-        return "SHashtable";
-    }
+    static Symbol SHASHB = Symbol.intern("Hashtable");
 
     protected static final int 
         HT_MAKE		=1,

@@ -10,10 +10,6 @@ import sisc.nativefun.*;
 
 public class SDebug extends ModuleAdapter {
 
-    public String getModuleName() {
-        return "Debugging";
-    }
-
     protected static final int 
         EXPRESSV=0, COMPILE=1,
         CONT_VLR=2, CONT_NXP=3, CONT_ENV=4, CONT_FK=5,

@@ -41,9 +41,7 @@ import sisc.nativefun.*;
  */
 
 public class SNetwork extends ModuleAdapter {
-    public String getModuleName() {
-	return "Networking";
-    }
+
     static final Symbol SNETB=Symbol.intern("Networking");
 
     protected static final int

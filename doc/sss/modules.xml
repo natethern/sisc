@@ -253,12 +253,12 @@
       </para>
       <para>
         The simplest way to define a Module that exports functions is
-        to subclass <classname>sisc.nativefun.ModuleAdapter</classname>.
-        If done this way, only the <function>getModuleName</function>
-        and <function>eval</function> methods must be implemented.
-        Each function that one wishes to export is then described with
-        the <function>define</function> method available in
-        <classname>ModuleAdapter</classname>:
+        to subclass
+        <classname>sisc.nativefun.ModuleAdapter</classname>.  If done
+        this way, only the <function>eval</function> methods must be
+        implemented.  Each function that one wishes to export is then
+        described with the <function>define</function> method
+        available in <classname>ModuleAdapter</classname>:
         <blockquote>
           <para>
             <methodsynopsis language="java">
