@@ -912,8 +912,8 @@ com/foo/bar/baz/baz3.scm
                 located by the <link
                 linkend="Resources"><function>find-resource</function>
                 procedure</link>.  The name of the resource is derived
-                from the name of the library by appending ".sll",
-                ".sce" and, if that does not succeed, ".scm".
+                from the name of the library by appending ".slt",
+                ".sll", ".sce" and, if that does not succeed, ".scm".
               </para>
             </blockquote>
           </para>
@@ -927,7 +927,7 @@ com/foo/bar/baz/baz3.scm
         <filename>com/foo/bar/baz.scm</filename> from the above
         example might contain the following:
         <programlisting>
-(require-library "com/foo/bar/boo")
+(require-library 'com/foo/bar/boo)
 (load "baz/baz1.scm")
 (load "baz/baz2.scm")
 (load "baz/baz3.scm")
@@ -1016,14 +1016,14 @@ com/foo/bar/baz/baz3.scm
           linkend="Modules"/> for details of &SISC;'s module system.
           The definitions for SRFI modules are not included in the
           standard &SISC; heap build and hence must be loaded
-          separately from the compiled library
-          <filename>srfi.sll</filename>, which is contained in the
+          separately from the thunk library
+          <filename>srfi.slt</filename>, which is contained in the
           <filename>sisc-lib.jar</filename> jar file in the root
           directory of the &SISC; binary distribution. As long as this
           jar file is on the classpath, which is the case by default,
           the following command makes the SRFI modules available:
           <programlisting>
-(require-library "sisc/libs/srfi")
+(require-library 'sisc/libs/srfi)
           </programlisting>
         </para>
       </sect3>
