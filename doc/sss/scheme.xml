@@ -1141,10 +1141,10 @@
                 <para>
                   Constructs an error record.  If present, a symbol,
                   and not <literal>#f</literal>, the first argument is
-                  the location of the error.  If present, the second
-                  argument is an arbitrary Scheme value that will be
-                  the error value.  This value will be accessible with
-                  the <function>error-message</function> function.  
+                  the location of the error. The second argument is an
+                  arbitrary Scheme value that will be the error value.
+                  This value will be accessible with the
+                  <function>error-message</function> function.
                 </para>
               </blockquote>
             </para>
@@ -1190,9 +1190,8 @@
         </para>
         <para>
           <blockquote>
+            <indexterm><primary>make-nested-error</primary></indexterm>
             <para>
-              <indexterm><primary>make-nested-error</primary>
-              </indexterm>
               &procedure;
               <methodsynopsis language="scheme" id="make-nested-error">
                 <type>error-record</type>
@@ -1207,6 +1206,9 @@
                   <parameter>parent-error-continuation</parameter>
                 </methodparam>
               </methodsynopsis>
+            </para>
+            <para>
+              &procedure;
               <methodsynopsis language="scheme">
                 <type>error-record</type>
                 <methodname>make-nested-error</methodname>
@@ -1357,9 +1359,8 @@
         </para>
         <para>
           <blockquote>
+            <indexterm><primary>throw</primary></indexterm>
             <para>
-              <indexterm><primary>throw</primary>
-              </indexterm>
               &procedure;
               <methodsynopsis language="scheme" id="throw">
                 <type>does not return</type>
@@ -1371,6 +1372,9 @@
                   <parameter>error-continuation</parameter>
                 </methodparam>
               </methodsynopsis>
+            </para>
+            <para>
+              &procedure;
               <methodsynopsis language="scheme">
                 <type>does not return</type>
                 <methodname>throw</methodname>
