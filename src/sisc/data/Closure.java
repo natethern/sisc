@@ -28,38 +28,23 @@ public class Closure extends Procedure implements NamedValue {
     private final Value[] matchArgs(Interpreter r)
         throws ContinuationException {
         /**
-           As an optimization, we try to use the vlr as the args array
-           of the closure invocation, and avoid copying it. For that
-           to be possible, the vlr's frame must not have been
-           captured, since a captured vlr can be modified by the k
-           that captured it.
-
-           We do not need to worry about protecting from
-           modification/recycling any vlr that we use (rather than
-           copy), because closure application, which this code is part
-           of, will always either end up creating new vlrs for its
-           computations, or else not touch the vlr at all. That's
-           because the whole point of creating the vlr in the first
-           place is to collect arguments for the very closure
-           application we are currently executing, and nothing else.
+           It is safe to use the vlr directly as our arg array,
+           without copying. That is because any future or concurrent
+           modification of the vlr is impossible since a) this code is
+           the *application* of a function, so all writing to vlr in
+           order to supply the arguments will have been done, b) k
+           invocations copy the vlr before modification.
         **/
         Value[] vals;
         final Value[] vlr = r.vlr;
         final int vl = vlr.length;
         if (!arity) {
-            if (vl == fcount) {
-                /** see comment above **/
-                if (r.vlk) {
-                    vals=r.createValues(vl);
-                    System.arraycopy(vlr, 0, vals, 0, vl);
-                } else {
-                    vals=vlr;
-                }
-            } else {
+            if (vl != fcount) {
                 error(r, liMessage(SISCB,"notenoughargsto", toString(),
-                                             fcount, vl));
+                                   fcount, vl));
                 return null;
             }
+            vals=vlr;
         } else {        
             final int sm1=fcount-1;
             if (vl < sm1) {
@@ -67,9 +52,7 @@ public class Closure extends Procedure implements NamedValue {
                                    sm1, vl));
                 return null;
             }
-
-            /** see comment above **/
-            if (r.vlk || vl < fcount) {
+            if (vl < fcount) {
                 vals=r.createValues(fcount);
                 System.arraycopy(vlr, 0, vals, 0, sm1);
                 r.returnVLR(); //NB: this checks vlk first
