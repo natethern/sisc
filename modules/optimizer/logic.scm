@@ -77,8 +77,8 @@
                     ;; do a simple variable renaming.
                     [(and (symbol? cy) 
                           (or (and rec (memq cy formals))
-                              (memq cy (or (get-state-entry state 'lvars)) 
-                                    '())))
+                              (memq cy (or (get-state-entry state 'lvars)
+                                           '()))))
                      (cp-helper (cdr x)
                                 (cdr y) 
                                 (cons (cons cx cy) acc))]
