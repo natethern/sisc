@@ -114,10 +114,10 @@
 		 (set-dynamic-point! here)
 		 (out)
 		 (fk m e))))
-	  (lambda results
-	    (set-dynamic-point! here)
-	    (out)
-	    (apply values results)))))
+   	    (lambda results
+	      (set-dynamic-point! here)
+	      (out)
+	      (apply values results)))))
     ;;finally, the dynamic-wind code
     (lambda (in body out)
 	(set! call-with-current-continuation dynwind-call/cc)

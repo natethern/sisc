@@ -679,6 +679,31 @@
 	    ; => <emphasis>A divide by zero error is raised</emphasis>
 	</programlisting>
       </sect2>
+      <sect2>
+	<title><computeroutput>dynamic-wind</computeroutput></title>
+	<para>
+	  &R5RS; does not specify the behavior of
+	  <computeroutput>dynamic-wind</computeroutput> in the case
+	  where an error is raised somewhere in a call to the
+	  <emphasis>during</emphasis> thunk.  &SISC; chooses to view
+	  an error raised in that section as an instance of the
+	  dynamic extent being exited.  In other words, if an error is
+	  raised in the dynamic extent of a dynamic-wind expression,
+	  &SISC will ensure that the <emphasis>after</emphasis> thunk
+	  is exited before the error is propogated to the
+	  failure-continuation of the dynamic-wind expression.
+	</para>
+	<para>
+	  Here is an example:
+	</para>
+	<programlisting>
+	  (define x 0)
+	  (dynamic-wind (lambda () (set! x (+ x 1)))
+	                (lambda () (/ 1 0))
+	                (lambda () (set! x (+ x 1))))
+	  ; => A divide by zero error is raised, and the value of x is 2
+	</programlisting>
+      </sect2>
     </sect1>
     <sect1 id="SymbolicEnvironments">
       <title>
