@@ -77,17 +77,6 @@ public class IO extends ModuleAdapter {
         define("write-char"         , WRITECHAR);
     }
 
-    public ClassLoader getClassLoader() {
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        if (cl == null) {
-            cl = ClassLoader.getSystemClassLoader();
-        }
-        if (cl == null) {
-            throwPrimException(liMessage(SISCB, "noclassloader"));
-        }
-        return cl;
-    }
-
     private static Value readChar(SchemeInputPort i) throws ContinuationException {
         try {
             int c=i.read();

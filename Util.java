@@ -97,6 +97,17 @@ public abstract class Util extends Defaults implements Version {
 	error(r, list(new Pair(MESSAGE, new SchemeString(errormessage))));
     }
 
+    public static ClassLoader getClassLoader() {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        if (cl == null) {
+            cl = ClassLoader.getSystemClassLoader();
+        }
+        if (cl == null) {
+            throw new RuntimeException(liMessage(SISCB, "notclassloader"));
+        }
+        return cl;
+    }
+
     public static void error(Interpreter r, Value error)
     throws ContinuationException {
         r.acc=new Values(new Value[] {

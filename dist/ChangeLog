@@ -2,6 +2,10 @@
 
 	* Fixed bug in serialization of references to classes in S2J.
 
+	* Changed implementation of S2J's java/proxy procedure to try
+	  the current thread's class loader before the system class
+	  loader.
+
 2002-10-15  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed bug in parser that caused infinite loop in expander when

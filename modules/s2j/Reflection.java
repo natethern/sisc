@@ -348,7 +348,7 @@ public class Reflection extends Util {
                 for (int i=0; i<f.vlr.length; i++) {
                     interfaces[i] = jclass(f.vlr[i]);
                 }
-                return makeJObj(Proxy.getProxyClass(ClassLoader.getSystemClassLoader(), interfaces), Class.class);
+                return makeJObj(Proxy.getProxyClass(getClassLoader(), interfaces), Class.class);
             default:
                 throwArgSizeException();
             }
