@@ -100,6 +100,10 @@ public class GenerateHeap {
         SymbolicEnvironment[] rv=new SymbolicEnvironment[2];
         rv[0]=new LibraryAE((Symbol)null, lb);
         rv[1]=base;
+        // Now move the syntax
+        ((MemorySymEnv)rv[0]).sidecars=((MemorySymEnv)base).sidecars;
+        ((MemorySymEnv)base).sidecars=new HashMap();
+
         rv[1].setParent(rv[0]);
 
         HashMap r5rs=new HashMap();
@@ -115,6 +119,7 @@ public class GenerateHeap {
             }
         }
 
+        
         Map baseMap=base.getSymbolMap();
         for (Iterator i=r5rs.keySet().iterator(); i.hasNext();) {
             Symbol n=(Symbol)i.next();
@@ -150,11 +155,9 @@ public class GenerateHeap {
         LibraryBuilder lb=new LibraryBuilder();
         MemorySymEnv symenv=new LibraryAE(Symbol.get("symenv"), lb);
         MemorySymEnv toplevel=new LibraryAE((Symbol)null, lb);
-        MemorySymEnv scexpander=new LibraryAE((Symbol)null, lb);
         toplevel.setName(Util.TOPLEVEL);
         sisc.interpreter.Compiler.addSpecialForms(toplevel);
         symenv.define(Util.TOPLEVEL, toplevel);
-        symenv.define(Util.EXPSC, scexpander);
         //we do the following so that code can explictly refer to the r5rs env during boot
         symenv.define(Util.REPORT, toplevel);
 
@@ -197,8 +200,10 @@ public class GenerateHeap {
         SymbolicEnvironment sisc_specific, r5rs, top_level;
         r5rs=results[0];
         sisc_specific=results[1];
-
-        r.getCtx().toplevel_env=top_level=new MemorySymEnv(new LibraryAE(sisc_specific, lb), Util.TOPLEVEL);
+        sisc_specific=new LibraryAE(sisc_specific, lb);
+        sisc_specific.setName(Util.SISC_SPECIFIC);
+        
+        r.getCtx().toplevel_env=top_level=new MemorySymEnv(sisc_specific, Util.TOPLEVEL);
         r5rs.setName(Util.REPORT);
         sisc_specific.setName(Util.SISC_SPECIFIC);
         

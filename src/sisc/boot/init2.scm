@@ -33,18 +33,58 @@
 
 ;;turn on syntax expansion and optimization
 
-(define current-optimizer
-  (_make-parameter (lambda (x) x)))
+(define current-optimizer (_make-parameter (lambda (x) x)))
+  
+;; source to eval:
+#;(set! eval (let ([old-eval eval]
+		 [apply apply]
+		 [current-cte current-cte]
+		 [sc-expand sc-expand]
+		 [interaction-environment interaction-environment])
+	     (lambda (x . env)
+	       (if (and (pair? x) (equal? (car x) "noexpand"))
+		   (apply old-eval (cadr x) env)
+		   (let* ([optimizer (current-optimizer)]
+			  [old-ie (apply interaction-environment env)]
+			  [source (optimizer
+				   (sc-expand x '(e) '(e)))])
+		     (interaction-environment old-ie)
+		     (apply old-eval source env))))))
 
-(set! eval 
-  ((lambda (old-eval)
-     (lambda (x . env)
-       (if (if (pair? x) (equal? (car x) "noexpand") '#f)
-           (apply old-eval (cons (cadr x) env))
-           ((lambda (e) (apply old-eval (cons e env)))
-            ((current-optimizer) (sc-expand x '(E) '(E)))))))
+(set! eval
+  ((lambda (|interaction-environment_fglBCWfWB|
+            |sc-expand_fg_EEtfWB|
+            |apply_fgjMIzeWB|
+            |old-eval_fgZPK6eWB|)
+     (lambda (|x_fg1uyQgWB| . |env_fgHxAngWB|)
+       (if (if (pair? |x_fg1uyQgWB|)
+             (equal? (car |x_fg1uyQgWB|) '"noexpand")
+             '#f)
+         (|apply_fgjMIzeWB|
+           |old-eval_fgZPK6eWB|
+           (cadr |x_fg1uyQgWB|)
+           |env_fgHxAngWB|)
+         ((lambda (|optimizer_fgnqwhhWB|)
+            ((lambda (|old-ie_fgJmuKhWB|)
+               ((lambda (|source_fg3jsbiWB|)
+                  (begin
+                    (|interaction-environment_fglBCWfWB|
+                      |old-ie_fgJmuKhWB|)
+                    (|apply_fgjMIzeWB|
+                      |old-eval_fgZPK6eWB|
+                      |source_fg3jsbiWB|
+                      |env_fgHxAngWB|)))
+                (|optimizer_fgnqwhhWB|
+                  (|sc-expand_fg_EEtfWB| |x_fg1uyQgWB| '(e) '(e)))))
+             (|apply_fgjMIzeWB|
+               |interaction-environment_fglBCWfWB|
+               |env_fgHxAngWB|)))
+          (current-optimizer)))))
+   interaction-environment
+   sc-expand
+   apply
    eval))
-
+   
 ;; Parameter Support, compatible with SRFI-39
 
 (define (make-parameter value . converter)
@@ -629,7 +669,7 @@
 
 ;;;;;;;;;;;;;;;; native functions ;;;;;;;;;;;;;
 
-(if (getprop 'string-order '*toplevel*)
+(if (getprop 'string-order)
     (let ((string-order-predicate 
            (lambda (p o)
              (lambda (str1 str2)

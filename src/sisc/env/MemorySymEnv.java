@@ -57,8 +57,8 @@ public class MemorySymEnv extends Value
         synchronized(symbolMap) {
             res.addAll(symbolMap.keySet());
         }
-        if (parent != null) {
-            res.addAll(parent.bindingKeys());
+        if (getParent() != null) {
+            res.addAll(getParent().bindingKeys());
         }
         return res;
     }
@@ -74,9 +74,10 @@ public class MemorySymEnv extends Value
         synchronized(sidecars) {
             SymbolicEnvironment sc=(SymbolicEnvironment)sidecars.get(name);
             if (sc==null) {
-                SymbolicEnvironment p=(parent == null ? 
+                SymbolicEnvironment mp=getParent();
+                SymbolicEnvironment p=(mp == null ? 
                                       (SymbolicEnvironment)null :
-                                      parent.getSidecarEnvironment(name));
+                                      mp.getSidecarEnvironment(name));
                 sidecars.put(name, sc=new MemorySymEnv(p));
             }
             return sc;
@@ -85,6 +86,11 @@ public class MemorySymEnv extends Value
               
     public void setParent(SymbolicEnvironment e) {
         parent=e;
+        for (Iterator i=sidecars.keySet().iterator(); i.hasNext();) {
+            Symbol key=(Symbol)i.next();
+            SymbolicEnvironment env=(SymbolicEnvironment)sidecars.get(key);
+            env.setParent(parent.getSidecarEnvironment(key));
+        }
     }
 
     public SymbolicEnvironment getParent() {
@@ -140,10 +146,10 @@ public class MemorySymEnv extends Value
         synchronized(symbolMap) {
             Integer i=(Integer)symbolMap.get(s);
             if (i!=null) return i.intValue();
-            if (parent == null) return -1;
-            int pi=parent.getLoc(s);
+            if (getParent() == null) return -1;
+            int pi=getParent().getLoc(s);
             if (pi==-1) return -1;
-            return store(s, parent.lookup(pi));
+            return store(s, getParent().lookup(pi));
         }
     }
 
@@ -175,39 +181,48 @@ public class MemorySymEnv extends Value
 
     public void serialize(Serializer s) throws IOException {
         s.writeInt(symbolMap.size());
-        s.writeInt(sidecars.size());
         for (Iterator i=symbolMap.keySet().iterator(); i.hasNext();) {
             Symbol key=(Symbol)i.next();
             s.writeExpression(key);
             int loc=((Integer)symbolMap.get(key)).intValue();
             s.writeExpression(env[loc]);
         }
+        serializeSidecar(s);
+        s.writeSymbolicEnvironment(getParent());
+    }
+    
+    public void serializeSidecar(Serializer s) throws IOException {    
+        s.writeInt(sidecars.size());
+
         for (Iterator i=sidecars.keySet().iterator(); i.hasNext();) {
             Symbol key=(Symbol)i.next();
             s.writeExpression(key);
             s.writeSymbolicEnvironment((SymbolicEnvironment)sidecars.get(key));
         }
-        s.writeSymbolicEnvironment(parent);
     }
 
     public void deserialize(Deserializer s) throws IOException {
         int smsize=s.readInt();
-        int scsize=s.readInt();
         env=new Value[smsize];
         symbolMap=new HashMap(smsize);
-        sidecars=new HashMap(scsize);
         for (int i=0; i<smsize; i++) {
             Symbol id=(Symbol)s.readExpression();
             env[i]=(Value)s.readExpression();
             symbolMap.put(id, new Integer(i));
         }
+
+        deserializeSidecar(s);
+        nextFree=smsize;
+        
+        parent=s.readSymbolicEnvironment();
+    }
+    
+    public void deserializeSidecar(Deserializer s) throws IOException {    
+        int scsize=s.readInt();
         for (int i=0; i<scsize; i++) {
             Symbol key=(Symbol)s.readExpression();
             sidecars.put(key, s.readSymbolicEnvironment());
         }
-        nextFree=smsize;
-        
-        parent=s.readSymbolicEnvironment();
     }
 
     public boolean visit(ExpressionVisitor v) {
@@ -218,6 +233,10 @@ public class MemorySymEnv extends Value
             int loc=((Integer)symbolMap.get(key)).intValue();
             if (!v.visit(env[loc])) return false;
         }
+        return visitSidecar(v);
+    }
+    
+    public boolean visitSidecar(ExpressionVisitor v) {
         for (Iterator i=sidecars.keySet().iterator(); i.hasNext();) {
             Symbol key=(Symbol)i.next();
             if (!v.visit(key) || 

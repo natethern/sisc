@@ -114,6 +114,14 @@
 (define $syntax-dispatch (void))
 (define $make-environment (void))
 
+(define error
+  (lambda args
+    (begin
+      (for-each (lambda (arg)
+                   (begin (display arg) (display #\space)))
+                args)
+      (newline))))
+
 (define strict-r5rs-compliance (_make-native-parameter "strictR5RSCompliance"))
   
 (define make-false

@@ -103,7 +103,7 @@
                  (lambda ()
                    (repl/read
                     (lambda (v)
-                      (if (and (getprop 'pretty-print '*toplevel*)
+                      (if (and (getprop 'pretty-print)
                                (not (getprop '*sisc* 'LITE))
                                (not (circular? v)))
                           (pretty-print v)

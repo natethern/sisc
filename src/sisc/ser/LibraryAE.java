@@ -68,11 +68,17 @@ public class LibraryAE extends MemorySymEnv {
         addressMap=new HashMap();
     }
 
+    public SymbolicEnvironment getParent() {
+        if (parent == null && parentIdx > -1)
+           loadParent();
+        return parent;
+    }
+     
     public void addSymbolicBindings(Library lib, Pair s) {
-	for (;s!=EMPTYLIST; s=(Pair)s.cdr) {
-	    Symbol nsym=(Symbol)s.car;
-	    addBinding(lib, nsym, lib.getEntryPoint(nsym));
-	}
+	   for (;s!=EMPTYLIST; s=(Pair)s.cdr) {
+	      Symbol nsym=(Symbol)s.car;
+	      addBinding(lib, nsym, lib.getEntryPoint(nsym));
+	   }
     }
 
     public void addBinding(Library lib, Symbol sym, int ep) {
@@ -85,11 +91,12 @@ public class LibraryAE extends MemorySymEnv {
     }
 
     private void loadParent() {
-        if (parent != null || parentIdx == -1) return;
-        try {
-            parent=(SymbolicEnvironment)base.getExpression(parentIdx);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (parent == null || parentIdx > -1) {
+            try {
+                parent=(SymbolicEnvironment)base.getExpression(parentIdx);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -101,9 +108,9 @@ public class LibraryAE extends MemorySymEnv {
             synchronized(symbolMap) {
                 res.addAll(addressMap.keySet());
             }
-            loadParent();
-            if (parent != null) {
-                res.addAll(parent.bindingKeys());
+            
+            if (getParent() != null) {
+                res.addAll(getParent().bindingKeys());
             }
             return res;
         }
@@ -162,6 +169,7 @@ public class LibraryAE extends MemorySymEnv {
             addBinding(base, name, d.readInt());
         }
         parentIdx=d.readInt();
+        deserializeSidecar(d);        
     }
 
     public void serialize(Serializer s) throws IOException {
@@ -191,9 +199,11 @@ public class LibraryAE extends MemorySymEnv {
             }
             s.writeInt(parentIdx);
         }
+        serializeSidecar(s);
     }
 
     public boolean visit(ExpressionVisitor v) {
+        visitSidecar(v);
         if (!v.visit(parent)) return false;
         if (base == null) {
             if (getName()!=null && v==lb)

@@ -82,7 +82,7 @@
         '()
         (let ([traced-procedure (car x)])
           (if (eq? (cdr traced-procedure)
-                   (getprop (car traced-procedure) '*toplevel*))
+                   (getprop (car traced-procedure)))
               (loop (cdr x))
               (cons traced-procedure (loop (cdr x))))))))
               
@@ -102,7 +102,7 @@
           (for-each 
            (lambda (procedure-symbol)
              (let* ([real-ps (sc-expand procedure-symbol)]
-                    [proc (getprop real-ps '*toplevel*)])
+                    [proc (getprop real-ps)])
                (cond [(not (procedure? proc))
                       (error 'trace "'~s' is not bound to a procedure." 
                              procedure-symbol)]
@@ -111,7 +111,7 @@
                         (set! traced-procedures 
                           (cons (cons real-ps (list proc traced-proc)) 
                                 traced-procedures))
-                        (putprop real-ps '*toplevel* traced-proc))])))
+                        (putprop real-ps traced-proc))])))
            procs)))
     (putprop 'traced-procedures '*debug* traced-procedures)))
 
@@ -133,8 +133,8 @@
               [proc (assq real-ps traced-procedures)])
          (if proc
              (begin
-               (when (eq? (caddr proc) (getprop real-ps '*toplevel*))
-                 (putprop real-ps '*toplevel* (cadr proc)))
+               (when (eq? (caddr proc) (getprop real-ps))
+                 (putprop real-ps (cadr proc)))
                (set! traced-procedures 
                  (remove-from-assoc real-ps traced-procedures))))))
      (cons proc1 procs))
@@ -156,13 +156,13 @@
                             (lambda (x) x)]
                            [else '()])])
     (if (not (assq function-id breakpoints))
-        (let* ([function (getprop function-id '*toplevel*)]
+        (let* ([function (getprop function-id)]
                [breakpointed-function (make-breakpoint function)])
           (if function 
               (begin
                 (putprop 'breakpoints '*debug* 
                          (cons (cons function-id function) breakpoints))
-                (putprop function-id '*toplevel* breakpointed-function))
+                (putprop function-id breakpointed-function))
               (error 'set-breakpoint! "no such function."))))))
 
 (define (clear-breakpoint! function-id) 
@@ -172,7 +172,7 @@
                             [else '()])])
     (cond [(assq function-id breakpoints) =>
            (lambda (v)
-             (putprop function-id '*toplevel* (cdr v))
+             (putprop function-id (cdr v))
              (putprop 'breakpoints '*debug* 
                       (remove-from-assoc function-id breakpoints)))]
           [else (error 'clear-breakpoint! "no such function or function is not a breakpoint.")])))
