@@ -109,23 +109,28 @@
   (let ([traced-procedures (cond [(getprop 'traced-procedures '*sisc*) => 
                                   (lambda (x) x)]
                                  [else '()])])
-    (for-each 
-     (lambda (procedure-symbol)
-       (cond [(not (procedure? (getprop procedure-symbol))) 
-              (error 'trace "'~s' is not bound to a procedure." 
-                     procedure-symbol)]
-             [(not (assq procedure-symbol traced-procedures))
-              (begin
-                (set! traced-procedures (cons (cons procedure-symbol
-                                                    (getprop procedure-symbol))
-                                              traced-procedures))
-                (putprop procedure-symbol '*toplevel*
-                         (make-traced procedure-symbol 
-                                      (getprop procedure-symbol))))]))
-     procs)
-    (putprop 'traced-procedures '*sisc* traced-procedures)))
+    (if (null? procs)
+        (display (format "{currently traced procedures: ~a}~%" 
+                         (map car traced-procedures)))
+        (begin
+          (for-each 
+           (lambda (procedure-symbol)
+             (cond [(not (procedure? (getprop procedure-symbol))) 
+                    (error 'trace "'~s' is not bound to a procedure." 
+                           procedure-symbol)]
+                   [(not (assq procedure-symbol traced-procedures))
+                    (begin
+                      (set! traced-procedures 
+                            (cons (cons procedure-symbol
+                                        (getprop procedure-symbol))
+                                  traced-procedures))
+                      (putprop procedure-symbol '*toplevel*
+                               (make-traced procedure-symbol 
+                                            (getprop procedure-symbol))))]))
+           procs)
+          (putprop 'traced-procedures '*sisc* traced-procedures)))))
 
-(define (untrace . procs)
+(define (untrace proc1 . procs)
   (define (remove-from-assoc procedure-name assoc)
     (cond [(null? assoc) '()]
           [(eq? (caar assoc) procedure-name)
@@ -143,7 +148,7 @@
                (putprop procedure-symbol '*toplevel* (cdr proc))
                (set! traced-procedures 
                      (remove-from-assoc procedure-symbol traced-procedures))))))
-     procs)
+     (cons proc1 procs))
     (putprop 'traced-procedures '*sisc* traced-procedures)))
 
 
@@ -182,13 +187,18 @@
                       [else 
                        (let* ([nxp (continuation-nxp k)]
                               [nxp-annot (annotations-to-assoc nxp)])
-                         (if (null? nxp-annot)
-                             (loop (continuation-stk k))
-                             (call-with-values 
-                               (lambda () (loop (continuation-stk k)))
-                               (lambda (exprs annots)
-                                 (values (cons nxp exprs)
-                                         (cons nxp-annot annots))))))])))
+                         (call-with-values 
+                           (lambda () (loop (continuation-stk k)))
+                           (lambda (exprs annots)
+                             (values 
+                              (cons nxp exprs)
+                              (cons 
+                               (if (null? nxp-annot)
+                                   '((line-number . ?)
+                                     (column-number . ?)
+                                     (source-file . ?))
+                                   nxp-annot)
+                               annots)))))])))
           (lambda (exprs ants)
             (set! st exprs)
             (set! annots ants)))
@@ -220,7 +230,7 @@
                                     (_free-reference-symbol
                                      (_fill-rib-exp expr))))
                            (display 
-                            (format "~a:~a:~a:~a:~a: <called from>~%" 
+                            (format "~a:~a:~a:~a:~a: <indeterminate call>~%" 
                                     sourcefile
                                     line column
                                     line column))))))

@@ -100,7 +100,7 @@
 
 (define top-level-bound?
   (lambda (x)
-    (getprop 'x '*toplevel*)))
+    (getprop x '*toplevel*)))
 
 (define ormap
   (lambda (proc list1)
