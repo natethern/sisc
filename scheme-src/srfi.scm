@@ -131,15 +131,20 @@
 
 (display "srfi-9 ")
 (module srfi-9
-  ((define-record-type
-     make-record-type record-constructor record-predicate
-     define-record-field record-accessor record-modifier)
-   record?
-   vector?)
+    ((define-record-type
+       make-record-type record-constructor record-predicate
+       define-record-field record-accessor record-modifier)
+     record?
+     vector?)
   (import* r5rs (real-vector? vector?))
   (import srfi-23) ;ERROR
   (include "srfi/srfi-9.scm")
   (add-feature 'srfi-9))
+(module srfi-9-lib
+    ((define-struct define-record-type))
+  (import srfi-9)
+  (import misc)
+  (include "srfi/srfi-9-lib.scm"))
 
 (display "srfi-11 ")
 (module srfi-11
@@ -244,10 +249,107 @@
   (include "srfi/srfi-16.scm")
   (add-feature 'srfi-16))
 
+(display "srfi-19 ")
+(module srfi-19
+    (time-tai
+     time-utc time-monotonic time-thread time-process
+     time-duration time-gc
+     make-time time?
+     time-type time-second time-nanosecond
+     set-time-type! set-time-second! set-time-nanosecond!
+     copy-time current-time time-resolution
+     time=? time>? time<? time>=? time<=?
+     time-difference time-difference!
+     add-duration add-duration!
+     subtract-duration subtract-duration!
+     time-utc->time-tai time-utc->time-tai!
+     time-utc->time-monotonic time-utc->time-monotonic!
+     time-tai->time-utc time-tai->time-utc!
+     time-tai->time-monotonic time-tai->time-monotonic!
+     time-monotonic->time-utc time-monotonic->time-utc!
+     time-monotonic->time-tai time-monotonic->time-tai!
+     make-date date?
+     date-nanosecond date-second date-minute date-hour
+     date-day date-month date-year date-zone-offset
+     ;;set-date-nanosecond! set-date-second! set-date-minute! set-date-hour!
+     ;;set-date-day! set-date-month! set-date-year! set-date-zone-offset!
+     time-utc->date time-tai->date time-monotonic->date
+     date->time-utc date->time-tai date->time-monotonic
+     date-year-day date-week-day date-week-number
+     current-date current-julian-day current-modified-julian-day
+     date->julian-day date->modified-julian-day
+     time-utc->julian-day time-utc->modified-julian-day
+     time-tai->julian-day time-tai->modified-julian-day
+     time-monotonic->julian-day time-monotonic->modified-julian-day
+     julian-day->time-utc julian-day->time-tai julian-day->time-monotonic
+     julian-day->date modified-julian-day->date
+     modified-julian-day->time-utc
+     modified-julian-day->time-tai
+     modified-julian-day->time-monotonic
+     date->string string->date)
+  (import srfi-8)
+  (import srfi-9-lib)
+  (import optional-args)
+  (include "srfi/srfi-19.scm"))
+
 (display "srfi-24 ")
 (module srfi-24 ()
   ;;this srfi is natively supported by our syntax expander
   (add-feature 'srfi-24))
+
+(display "srfi-25 ")
+(module srfi-25
+    (array?
+     make-array
+     shape
+     array
+     array-rank
+     array-start
+     array-end
+     array-ref
+     array-set!
+     share-array)
+  (import srfi-9)
+  (include "srfi/srfi-25/as-srfi-9-record.scm")
+  ;;pick one of three alternative implementations
+  (include "srfi/srfi-25/ix-ctor.scm")
+  (include "srfi/srfi-25/op-ctor.scm")
+  ;;(include "srfi/srfi-25/ix-mbda.scm")
+  ;;(include "srfi/srfi-25/op-mbda.scm")
+  ;;(include "srfi/srfi-25/ix-tter.scm")
+  ;;(include "srfi/srfi-25/op-tter.scm")
+  (include "srfi/srfi-25/array.scm"))
+(module srfi-25-lib
+    (array?
+     make-array
+     shape
+     array
+     array-rank
+     array-start
+     array-end
+     array-ref
+     array-set!
+     share-array
+     ;;the above are all re-exported from srfi-25
+     array-shape
+     array-length
+     array-size
+     array-equal?
+     shape-for-each
+     array-for-each-index
+     tabulate-array
+     tabulate-array!
+     array-retabulate!
+     array-map
+     array-map!
+     array->vector
+     share-array/prefix
+     share-array/origin
+     array-append
+     transpose
+     share-nths)
+  (import srfi-25)
+  (include "srfi/srfi-25/arlib.scm"))
 
 (display "srfi-26 ")
 (module srfi-26
@@ -263,6 +365,8 @@
   (import _srfi-28)
   (define format _format)
   (add-feature 'srfi-28))
+
+(newline)
 
 ;; 
 ;; The contents of this file are subject to the Mozilla Public

@@ -607,14 +607,24 @@
 </programlisting>
           Loading this takes quite a while, which is one reason why
           the module definitions are not included in the standard heap
-          build.
+          build. One way to significantly reduce the load time is to
+          produce and load a pre-expanded version:
+<programlisting>
+(expand-file "<parameter>path</parameter>/srfi.scm" "<parameter>path</parameter>/srfi.sce")
+(load-expanded "<parameter>path</parameter>/srfi.sce")
+</programlisting>
+          The first line, which only needs to run once, produces a
+          single file containing all SRFI code with all macros
+          expanded already. The file must be loaded with
+          <function>load-expanded</function> rather than
+          <function>load</function>.
         </para>
       </sect3>
       <sect3>
         <title>Using SRFIs</title>
         <para>
           &SISC; currently supports SRFIs
-          0,1,2,5,6,7,8,9,11,13,14,16,23,24,28.
+          0,1,2,5,6,7,8,9,11,13,14,16,23,24,25,26,28.
           Once the SRFI module definitions have been loaded as
           described above, an SRFI <parameter>n</parameter> can be
           imported using
