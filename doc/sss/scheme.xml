@@ -61,60 +61,15 @@
 	  Numeric constants
 	</title>
 	<para>
-	  The precision specifying exponents (<computeroutput>S, F,
-	    L, </computeroutput>and
-	  <computeroutput>D</computeroutput>) 
-	  are ignored in &SISC;, all inexact numbers are kept
-	  in the precision of the numeric library.  The exponents
-	  are read and used to scale the real number as expected.
-	  In the case of
-	  arbitrary precision floats, specific precision constraints
-	  are maintained to prevent a runaway increase of
-	  precision. The parameterized functions
-	  <function>min-precision</function> and
-	  <function>max-precision</function> specify the
-	  constraints, the value of each specifying the number of
-          allowed decimal digits:
-	</para>
-	<para>
-	  <blockquote>
-	    <para>
-              <indexterm><primary>min-precision</primary>
-              </indexterm>
-	      &parameter;
-	      <methodsynopsis language="scheme" id="min-precision">
-		<type>integer</type>
-		<methodname>min-precision</methodname>
-		<methodparam choice="opt">
-		  <parameter>digits</parameter>
-		</methodparam>
-	      </methodsynopsis>
-	      <blockquote>
-		<para>
-		  Sets or displays the minimum precision constraint in
-		  decimal digits, an integer.
-		</para>
-	      </blockquote>
-	    </para>
-	    <para>
-              <indexterm><primary>max-precision</primary>
-              </indexterm>
-	      &parameter;
-	      <methodsynopsis language="scheme" id="max-precision">
-		<type>integer</type>
-		<methodname>max-precision</methodname>
-		<methodparam choice="opt">
-		  <parameter>digits</parameter>
-		</methodparam>
-	      </methodsynopsis>
-	      <blockquote>
-		<para>
-		  Sets or displays the maximum precision constraint in
-		  decimal digits, an integer.
-		</para>
-	      </blockquote>
-	    </para>
-	  </blockquote>
+	  The precision specifying exponents (<computeroutput>S, F, L,
+	  </computeroutput>and <computeroutput>D</computeroutput>) are
+	  ignored in &SISC;, all inexact numbers are kept in the precision
+	  of the numeric library. The exponents are read and used to
+	  scale the real number as expected.  In the case of arbitrary
+	  precision floats, specific precision constraints are maintained
+	  to prevent a runaway increase of precision. The constraints can
+	  be set at system startup. See <xref
+	  linkend="system-properties"/>.
 	</para>
 	<para>
 	  All four base specifiers (<computeroutput>&num;x, &num;o,

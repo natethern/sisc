@@ -17,7 +17,7 @@ public class AppEval extends Expression {
     public final void eval(Interpreter r) throws ContinuationException {
         /* To allow break of execution (turadg)
          */
-        if (PERMITINTERRUPTS && r.tctx.interrupt) {
+        if (permitInterrupts && r.tctx.interrupt) {
            r.push(this);
            r.push(r.acc);
            r.nxp=null;

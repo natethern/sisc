@@ -245,34 +245,37 @@ for <function>sqrt</function>, it is not clear what other mathematical
         <term><envar>sisc.heapfile</envar></term>
         <listitem>
           <para>
-            Specifies the path to a &SISC; serialized heap file to use 
+            Specifies the path to a &SISC; serialized heap file to use
             to initialize the interpreter's heap on startup.
-            Overrides the default heap file.
+            Overrides the default heap file. <emphasis role="bold">Can
+            only be set on the command-line</emphasis>.
           </para>
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><envar>sisc.maxprecision</envar></term>
+        <term><envar>sisc.maxFloatPrecision</envar></term>
         <listitem>
           <para>
             Specifies the maximum precision, in decimal places, to be
             maintained by the Quantity lib if using arbitrary
-            precision floats.
+            precision floats. <emphasis role="bold">Can only be set on
+            the command-line</emphasis>.
           </para>
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><envar>sisc.minprecision</envar></term>
+        <term><envar>sisc.minFloatPrecision</envar></term>
         <listitem>
           <para>
             Specifies the minimum precision, in decimal places, to be
             maintained by the Quantity lib if using arbitrary
-            precision floats.
+            precision floats. <emphasis role="bold">Can only be set on the
+            command-line</emphasis>.
           </para>
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><envar>sisc.permitinterrupts</envar></term>
+        <term><envar>sisc.permitInterrupts</envar></term>
         <listitem>
           <para>
             If set to <literal>true</literal>,
@@ -290,7 +293,8 @@ for <function>sqrt</function>, it is not clear what other mathematical
           <para>
             Specifies the property file that will be loaded, which may
             define additional properties that are superceded by those
-            issued on the command-line.
+            issued on the command-line. <emphasis role="bold">Can only
+            be set on the command-line</emphasis>.
           </para>
         </listitem>
       </varlistentry>
@@ -554,7 +558,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
           error.  The interrupt signal handling code does add an
           appreciable overhead (usually between 2-10% depending on the
           JVM) to execution, and is thus disabled by default.  It can
-          be enabled using the <envar>sisc.permitinterrupts</envar>
+          be enabled using the <envar>sisc.permitInterrupts</envar>
           system property.
         </para>
       </sect2>

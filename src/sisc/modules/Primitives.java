@@ -96,8 +96,8 @@ public class Primitives extends IndexedProcedure {
             define("make-rectangular", MAKERECTANGULAR);
             define("make-string", MAKESTRING);
             define("make-vector", MAKEVECTOR);
-            define("max-precision", MAX_PRECISION);
-            define("min-precision", MIN_PRECISION);
+            define("max-float-precision", MAXFLOATPRECISION);
+            define("min-float-precision", MINFLOATPRECISION);
             define("null-environment", NULLENVIRONMENT);
             define("null?", NULLQ);
             define("number->string", NUMBER2STRING);
@@ -105,6 +105,7 @@ public class Primitives extends IndexedProcedure {
             define("numerator", NUMERATOR);
             define("pair?", PAIRQ);
             define("parameter?", PARAMETERQ);
+            define("permit-interrupts", PERMITINTERRUPTS);
             define("procedure?", PROCEDUREQ);
             define("putprop", PUTPROP);
             define("quotient", QUOTIENT);
@@ -303,9 +304,10 @@ public class Primitives extends IndexedProcedure {
                 return Symbol.intern(base64encode(unv));
             case INTERACTIONENVIRONMENT:
                 return r.ctx.toplevel_env.asValue();
-            case MAX_PRECISION: return Quantity.valueOf(Quantity.max_precision);
-            case MIN_PRECISION: return Quantity.valueOf(Quantity.min_precision);
+            case MAXFLOATPRECISION: return Quantity.valueOf(maxFloatPrecision);
+            case MINFLOATPRECISION: return Quantity.valueOf(minFloatPrecision);
             case MUL: return Quantity.ONE;
+            case PERMITINTERRUPTS: return truth(permitInterrupts);
             case SISCINITIAL: 
                 try {
                     return new MemorySymEnv(r.lookupContextEnv(Util.SISC_SPECIFIC));
@@ -485,12 +487,6 @@ public class Primitives extends IndexedProcedure {
                 } catch (Exception e) {
                     throwPrimException(e.getMessage());
                 }
-            case MAX_PRECISION:
-                Quantity.max_precision=num(vlr[0]).indexValue();
-                return VOID;
-            case MIN_PRECISION:
-                Quantity.min_precision=num(vlr[0]).indexValue();
-                return VOID;
             case SLEEP:
                 try {
                     Thread.sleep(num(vlr[0]).longValue());
@@ -769,6 +765,7 @@ public class Primitives extends IndexedProcedure {
         return VOID;
     }
 
+    //next: 123
     static final int
         ACOS = 23,
         ADD = 114,
@@ -829,8 +826,8 @@ public class Primitives extends IndexedProcedure {
         MAKERECTANGULAR = 101,
         MAKESTRING = 99,
         MAKEVECTOR = 65,
-        MAX_PRECISION = 9,
-        MIN_PRECISION = 10,
+        MAXFLOATPRECISION = 9,
+        MINFLOATPRECISION = 10,
         MUL = 11,
         NEQ = 116,
         NLBINDING = 104,
@@ -844,6 +841,7 @@ public class Primitives extends IndexedProcedure {
         NUMERATOR = 66,
         PAIRQ = 17,
         PARAMETERQ = 40,
+        PERMITINTERRUPTS = 122,
         PROCEDUREQ = 35,
         PUTPROP = 110,
         QUOTIENT = 90,

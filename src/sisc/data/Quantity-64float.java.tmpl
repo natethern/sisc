@@ -8,15 +8,6 @@ import sisc.ser.Deserializer;
 
 public class Quantity extends Value implements Singleton {
 
-    public static int min_precision, max_precision;
-
-    static {
-        String x=getSystemProperty("sisc.minprecision", null);
-        String y=getSystemProperty("sisc.maxprecision", null);
-        min_precision=(x==null ? 16 : Integer.parseInt(x));
-        max_precision=(y==null ? 32 : Integer.parseInt(y));
-    }
-
     public static final BigInteger
         _BI_NEGONE=BigInteger.valueOf(-1),
         _BI_ZERO = BigInteger.valueOf(0),
@@ -1236,8 +1227,8 @@ public class Quantity extends Value implements Singleton {
     }
 
     protected static int scale(int scale1, int scale2) {
-        return Math.min(Math.max(min_precision, Math.max(scale1, scale2)),
-                        max_precision);
+        return Math.min(Math.max(minFloatPrecision, Math.max(scale1, scale2)),
+                        maxFloatPrecision);
     }
 
     protected final Quantity intBound(long v) {

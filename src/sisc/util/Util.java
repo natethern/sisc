@@ -10,8 +10,15 @@ import sisc.interpreter.*;
 
 public abstract class Util extends Defaults implements Version {
 
-    protected static final boolean PERMITINTERRUPTS=
-        getSystemProperty("sisc.permitinterrupts", "false").equals("true");
+    public static final boolean permitInterrupts =
+        getSystemProperty("sisc.permitInterrupts",
+                          DEFAULT_PERMIT_INTERRUPTS).equals("true");
+    public static final int minFloatPrecision =
+        Integer.parseInt(getSystemProperty("sisc.minFloatPrecision",
+                                           DEFAULT_MIN_FLOAT_PRECISION));
+    public static final int maxFloatPrecision =
+        Integer.parseInt(getSystemProperty("sisc.maxFloatPrecision",
+                                           DEFAULT_MAX_FLOAT_PRECISION));
 
     protected static final Value[] ZV=new Value[0];
     protected static final Quantity FIVE=Quantity.valueOf(5);

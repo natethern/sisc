@@ -409,9 +409,7 @@
 ;;perform macro expansion on a file
 (define (expand-file from to . scexpopts)
   (let ([inf (open-source-input-file from)]
-        [outf (open-output-file to)]
-        [precision (max-precision)])
-    (max-precision 1500)
+        [outf (open-output-file to)])
     (with-current-url from
       (lambda ()
         (let loop ([e (read-code inf)])
@@ -424,8 +422,7 @@
                   (pretty-print source outf) (newline outf)
                   (loop (read inf))))))))
     (close-output-port outf)
-    (close-input-port inf)
-    (max-precision precision)))
+    (close-input-port inf)))
 
 ;; I/O ;;
 

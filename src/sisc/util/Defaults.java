@@ -2,10 +2,10 @@ package sisc.util;
 
 public abstract class Defaults {
 
-    public static final int DEFAULT_SYNOPSIS_LENGTH=30;
-    
-    public static String permitinterrupts="false";
-
+    public static final int DEFAULT_SYNOPSIS_LENGTH = 30;
+    public static final String DEFAULT_PERMIT_INTERRUPTS = "false";
+    public static final String DEFAULT_MIN_FLOAT_PRECISION = "16";
+    public static final String DEFAULT_MAX_FLOAT_PRECISION = "32";
 }
  
 /*

@@ -9,18 +9,6 @@ import sisc.util.Util;
 
 public class Quantity extends Value implements Singleton {
     
-    public static int min_precision, max_precision;
-    //    static Quantity[] ints=new Quantity[2048+100];
-
-    static {
-        String x=getSystemProperty("sisc.minprecision", null);
-        String y=getSystemProperty("sisc.maxprecision", null);
-        min_precision=(x==null ? 16 : Integer.parseInt(x));
-        max_precision=(y==null ? 32 : Integer.parseInt(y));
-        //  for (int i=-100; i<2048; i++) 
-        //  ints[i+100]=new Quantity(i);
-    }
-
     public static final BigInteger
         _BI_NEGONE=BigInteger.valueOf(-1),
         _BI_ZERO = BigInteger.valueOf(0),
@@ -58,11 +46,7 @@ public class Quantity extends Value implements Singleton {
         DECIM = INEXACT | DECIMAL;
 
     public static final Quantity valueOf(int val) { 
-        /*        int i=val+100;
-        if (i > 0 && i < 2148)
-            return ints[i];
-            else*/
-            return new Quantity(val); 
+        return new Quantity(val); 
     }
 
     public static Quantity valueOf(long val) { 
@@ -327,19 +311,19 @@ public class Quantity extends Value implements Singleton {
                 type=INTEG;
             }
         } else if (type==COMPLEX) {
-            if (d.scale()>max_precision) {
-                d=d.setScale(max_precision, BigDecimal.ROUND_HALF_EVEN);
+            if (d.scale()>maxFloatPrecision) {
+                d=d.setScale(maxFloatPrecision, BigDecimal.ROUND_HALF_EVEN);
             }
             if (im.compareTo(_BD_ZERO)==0) {
 	        im = _BD_ZERO;
                 type=DECIM;
             }
-            if (im!=_BD_ZERO && im.scale()>max_precision) {
-                im=im.setScale(max_precision, BigDecimal.ROUND_HALF_EVEN);
+            if (im!=_BD_ZERO && im.scale()>maxFloatPrecision) {
+                im=im.setScale(maxFloatPrecision, BigDecimal.ROUND_HALF_EVEN);
             }
         } else if (type==DECIM) {
-            if (d.scale()>max_precision) {
-                d=d.setScale(max_precision, BigDecimal.ROUND_HALF_EVEN);
+            if (d.scale()>maxFloatPrecision) {
+                d=d.setScale(maxFloatPrecision, BigDecimal.ROUND_HALF_EVEN);
             }
         }
         if (type==INTEG) {
@@ -1271,8 +1255,8 @@ public class Quantity extends Value implements Singleton {
     }
 
     protected static int scale(int scale1, int scale2) {
-        return Math.min(Math.max(min_precision, Math.max(scale1, scale2)),
-                        max_precision);
+        return Math.min(Math.max(minFloatPrecision, Math.max(scale1, scale2)),
+                        maxFloatPrecision);
     }
 
     protected final Quantity intBound(long v) {
