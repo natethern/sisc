@@ -152,7 +152,7 @@ public class GenerateHeap {
         MemorySymEnv toplevel=new LibraryAE((Symbol)null, lb);
         MemorySymEnv scexpander=new LibraryAE((Symbol)null, lb);
         toplevel.setName(Util.TOPLEVEL);
-        sisc.compiler.Compiler.addSpecialForms(toplevel);
+        sisc.interpreter.Compiler.addSpecialForms(toplevel);
         symenv.define(Util.TOPLEVEL, toplevel);
         symenv.define(Util.EXPSC, scexpander);
         //we do the following so that code can explictly refer to the r5rs env during boot

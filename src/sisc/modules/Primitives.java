@@ -419,7 +419,7 @@ public class Primitives extends IndexedProcedure {
                 switch (num(vlr[0]).indexValue()) {
                 case 5:
                     MemorySymEnv ae = new MemorySymEnv();
-                    sisc.compiler.Compiler.addSpecialForms(ae);
+                    sisc.interpreter.Compiler.addSpecialForms(ae);
                     return ae;
                 case 0:
                     return new MemorySymEnv();

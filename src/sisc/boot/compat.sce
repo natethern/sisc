@@ -112,6 +112,7 @@
 (define literal-identifier=? (void))
 (define syntax-error (void))
 (define $syntax-dispatch (void))
+(define $make-environment (void))
 
 (define strict-r5rs-compliance (make-native-parameter "strictR5RSCompliance"))
   

@@ -152,8 +152,8 @@ public class IO extends IndexedProcedure {
 
     public static Value readCode(Interpreter r, SchemeInputPort i) 
         throws ContinuationException {
-        return read(r, i, sisc.compiler.Parser.PRODUCE_ANNOTATIONS |
-                    sisc.compiler.Parser.PRODUCE_IMMUTABLES);
+        return read(r, i, sisc.reader.Parser.PRODUCE_ANNOTATIONS |
+                    sisc.reader.Parser.PRODUCE_IMMUTABLES);
     }
 
     public Value displayOrWrite(Interpreter r,

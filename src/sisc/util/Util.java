@@ -7,10 +7,10 @@ import sisc.data.*;
 import sisc.exprs.*;
 import sisc.io.*;
 import sisc.interpreter.*;
+import sisc.reader.Lexer;
+import sisc.reader.Parser;
 import java.io.IOException;
 import java.io.StringReader;
-import sisc.compiler.Parser;
-import sisc.compiler.Lexer;
 
 public abstract class Util implements Defaults, Version {
 

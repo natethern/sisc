@@ -1,4 +1,4 @@
-package sisc.compiler;
+package sisc.reader;
 
 import java.io.*;
 import sisc.data.*;
@@ -19,6 +19,11 @@ public class Lexer implements Tokens {
             in(c, special_subsequents);
     }
 
+    /* Other Syntax helper functions */
+    public static final boolean isPrintable(char c) {
+        return !((c < ' ')  || (c > '~') || in(c, unprintable_characters));
+    }
+    
     static final char
         STRING_CONST='"',
         COMMENT     =';',
@@ -52,8 +57,10 @@ public class Lexer implements Tokens {
         {'!','$','%','&','*','/',':','<','=','>','?','^','_','~'},
         special_subsequents = new char[] 
         {'+','-','.','@'},
-        literal_symbol_barrier = new char[] 
-        {'|'};
+        protected_literal_barrier = new char[] 
+        {'|'},
+        unprintable_characters = new char[] 
+        {};
         
 
     public boolean strictR5RS = Util.DEFAULT_STRICT_R5RS;
@@ -155,32 +162,7 @@ public class Lexer implements Tokens {
 
         if (!handleEscapes || c!='\\') return c;
 
-        int rv;
-        //escaping rules are those defined by Java, except we don't
-        //handle octal escapes.
-        switch (c = is.read()) {
-        case '"': rv = c | 0x80000000; break;
-        case 'b': rv = '\b'; break; 
-        case 't': rv = '\t'; break;
-        case 'n': rv = '\n'; break;
-        case 'f': rv = '\f'; break;
-        case 'r': rv = '\r'; break;
-        case 'u': 
-            char[] hexChars=new char[4];
-            for (int i=0; i<hexChars.length; i++) {
-                int rc=is.read();
-                if (rc==-1) throw new EOFException("End of file on hex-literal");
-                hexChars[i]=(char)rc;
-            }
-            try {
-                rv = Integer.parseInt(new String(hexChars), 16);
-            } catch (NumberFormatException nfe) {
-                throw new IOException(Util.liMessage(Util.SISCB,
-                                                     "invalidcharconst"));
-            }
-            break;
-        default: rv = c;
-        }
+        int rv=CharUtil.escapeSequenceToChar(is);
         return (invertEscaped ? -rv : rv);
     }
 

@@ -1,7 +1,8 @@
-package sisc.compiler;
+package sisc.reader;
 
 import java.io.*;
 import java.util.*;
+
 import sisc.data.*;
 import sisc.util.Util;
 import sisc.io.InputPort;
@@ -179,7 +180,7 @@ public class Parser extends Util implements Tokens {
             o=ENDPAIR;
             break;
         case TT_PIPE:
-            Symbol sym=Symbol.intern(lexer.readToBreak(is, Lexer.literal_symbol_barrier, true, true));
+            Symbol sym=Symbol.intern(lexer.readToBreak(is, Lexer.protected_literal_barrier, true, true));
             // Discard the closing PIPE
             is.read();
             return sym;
@@ -216,16 +217,16 @@ public class Parser extends Util implements Tokens {
                 is.pushback(c);
                 String cn=lexer.readToBreak(is, Lexer.special, false, false);
                 String cnl=cn.toLowerCase();
-                Object cs=chars.get(cnl);
+                Object cs=CharUtil.namedConstToChar(cnl);
                 try {
                     if (cs!=null) {
                         o=cs;
                     } else if (cn.length()==1) {
                         o=new SchemeCharacter(cn.charAt(0));
                     } else if (cn.charAt(0)=='u') {
-                        o=new SchemeCharacter((char)Integer.parseInt(cn.substring(1), 16));
+                        o=new SchemeCharacter(CharUtil.hexToChar(cnl.substring(1)));
                     } else {
-                        o=new SchemeCharacter((char)Integer.parseInt(cn, 8));
+                        o=new SchemeCharacter(CharUtil.octToChar(cnl));
                     }
                 } catch (NumberFormatException nfe) {
                     throw new IOException(Util.liMessage(Util.SISCB,

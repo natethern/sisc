@@ -1,4 +1,4 @@
-package sisc.compiler;
+package sisc.reader;
 
 public interface Tokens {
     int
