@@ -1,6 +1,9 @@
 (define (annotated? obj)
   (not (null? (annotation-keys obj))))
 
+(define (compile x . env)
+  (apply _compile ((current-optimizer) (sc-expand x)) env))
+
 (define-syntax show
   (lambda (e)
     (syntax-case e ()
@@ -16,7 +19,7 @@
             (newline)
             (display "=>")
             (newline)
-            (let ([compiled (compile optimized)])
+            (let ([compiled (_compile optimized)])
               (pretty-print (express compiled))
               (newline)
               (display "=>")

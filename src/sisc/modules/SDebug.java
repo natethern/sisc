@@ -37,7 +37,7 @@ public class SDebug extends IndexedProcedure {
         
         public Index() {
             define("express", EXPRESSV);
-            define("compile", COMPILE);
+            define("_compile", COMPILE);
             define("error-continuation-k", ERROR_CONT_K);
             define("continuation-vlr", CONT_VLR);
             define("continuation-nxp", CONT_NXP);
@@ -157,14 +157,12 @@ public class SDebug extends IndexedProcedure {
                 throwArgSizeException();
             }
         case 2:
-            /*
-            switch (primid) {
+            switch (id) {
             case COMPILE:
-                return new Box(f.compile(f.vlr[0], (CompilerState)f.vlr[1]));
+                return new Closure(false, (short)0, f.compile(f.vlr[0], env(f.vlr[1])), f.env);
             default:
                 throwArgSizeException();
             }
-            */
         default:
             throwArgSizeException();
         }
