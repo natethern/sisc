@@ -335,7 +335,7 @@
           <para>
             Attempts to join with the indicated thread.  If the thread
             terminates, thread/join will return
-            <literal>&num;t</literal>.  If a timeout is specified
+            a non-false value.  If a timeout is specified
             thread/join will only wait <parameter>timeout</parameter>
             milliseconds for the thread to complete.  If the thread
             does not terminate before the timeout,
