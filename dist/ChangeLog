@@ -1,3 +1,9 @@
+2002-04-15  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Gave associative environments the ability to delegate
+	  to a parent, copying the parents binding whenever the child's
+	  is touched.  This fixes bug 543451.
+
 2002-04-13  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* load now sets the current directory to the directory

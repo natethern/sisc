@@ -174,14 +174,11 @@ for <function>sqrt</function>, it is not clear what other mathematical
 	</listitem>
         <listitem>
           <para>6.5 -
-            Due to a bug 
-            <ulink url="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=543451&amp;group_id=23735&amp;atid=379534">
-              <citetitle>(Bug 543451)</citetitle>
-            </ulink>, the scheme report environment obtained using
-            <function>scheme-report-environment</function> can be
-            mutated, its bindings modified.  The standard isnt clear as
-            to whether this is allowed, but we suspect it isn't in the
-            spirit of the standard.
+            The environment returned by the
+            <function>scheme-report-environment</function> contains
+            more bindings than specified in &R5RS;.  The standard
+            doesn't specify whether this is allowed or not, but we
+            suspect it isn't in the spirit of the standard.
           </para>
         </listitem>
       </orderedlist>
