@@ -254,8 +254,7 @@
    java-null?
    java-class-of
    java-array-new
-   java-new
-   java-set!
+   java-null
    java-mangle-field-name
    java-mangle-method-name
    jnull
@@ -329,11 +328,10 @@
   (define java-null? 		java/null?)
   (define java-class-of		java/class-of)
   (define java-array-new  	java/array-new)
-  (define java-new          java/new)
-  (define java-set!         java/set!)
+  (define java-null         java/null)
   (define java-mangle-field-name    java/mangle-field-name)
   (define java-mangle-method-name   java/mangle-method-name)
-  (define jnull             (java/new))
+  (define jnull             (java/null))
   (define-generic ->)
   (define-method (-> ((meta <jboolean>) _)) ->jboolean)
   (define-method (-> ((meta <jchar>)_))     ->jchar)

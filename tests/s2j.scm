@@ -59,13 +59,6 @@
 (a '(1 1 1))
 (map ->number (->list (->jarray (map ->jint (iota 10)) <jint>)))
 
-;assignment
-(define v (java-new))
-(eq? v jnull)  ;#t
-(java-null? v) ;#t
-(java-set! v a)
-(java-null? v) ;#f
-(eq? v a)      ;#t
 ;;access to static and instance fields
 ;;the only reason we use sisc's symbol class for testing is that the
 ;;JDK has no classes with public instance fields and I didn't want to
@@ -79,6 +72,37 @@
 (define <java.io.File> (java-class "java.io.File"))
 (define file (make <java.io.File> (->jstring "/foo/bar.baz")))
 (file '(canonical-file name)) ;=> bar.baz
+
+;;equality
+(define jstring-null (java-null <jstring>))
+(eq? jstring-null jnull) ;=> #f
+(equal? jstring-null jnull) ;=> #t
+(eq? <jstring> jstring-null) ;=> #f
+(equal? <jstring> jstring-null) ;=> #f
+(define <java.util.Date> (java-class "java.util.Date"))
+(define d (make <java.util.Date>))
+(define time (d '(time)))
+(define d1 (make <java.util.Date> time))
+(define d2 (make <java.util.Date> time))
+(eq? d1 d2) ;=> #f
+(equal? d1 d2) ;=> #t
+
+;;special handling of jnull
+(value-of <jstring> jnull) ;=> #<java java.lang.String null>
+(type-of jnull) ;=> <java.lang.Object>
+(instance-of? jstring-null <jstring>) ;=> #t
+
+;;<bot>, <top>, <jclass>
+(define-generic top-bot-test)
+(define-method (top-bot-test (<top> x)) 'top)
+(define-method (top-bot-test (<jclass> x)) 'class)
+(define-method (top-bot-test (<number> x)) 'number)
+(define-method (top-bot-test (<bot> x)) 'bot)
+(top-bot-test 'foo) ;=> 'top
+(top-bot-test <jstring>) ;=> 'class
+(top-bot-test 1) ;=> 'number
+(top-bot-test jnull) ;=> 'top
+(top-bot-test (java-null <number>)) ;=> 'number
 
 ;;generic type conversions
 ((-> <list>) a)
@@ -192,16 +216,3 @@
 (define-generic remove-all)
 (applicable-methods (generic-procedure-next remove-all)
                     (list <java.util.TreeSet> <java.util.TreeSet>))
-
-;;special handling of jnull, <bot>, <top>, <jclass>
-(value-of <jstring> jnull) ;=> #<java java.lang.String null>
-(type-of jnull) ;=> <bot>
-(define-generic top-bot-test)
-(define-method (top-bot-test (<top> x)) 'top)
-(define-method (top-bot-test (<jclass> x)) 'class)
-(define-method (top-bot-test (<number> x)) 'number)
-(define-method (top-bot-test (<bot> x)) 'bot)
-(top-bot-test 'foo) ;=> 'top
-(top-bot-test <jstring>) ;=> 'class
-(top-bot-test 1) ;=> 'number
-(top-bot-test jnull) ;=> 'bot

@@ -19,12 +19,13 @@ public class Reflection extends Util {
         JAVA_CONSTRUCTORS   =13,
         JAVA_METHODS        =14,
         JAVA_FIELDS         =15,
-        JAVA_DECL_CONSTRUCTOR   =16,
-        JAVA_DECL_METHOD    =17,
-        JAVA_DECL_FIELD     =18,
-        JAVA_DECL_CONSTRUCTORS  =19,
-        JAVA_DECL_METHODS   =20,
-        JAVA_DECL_FIELDS    =21,
+
+        JAVA_DECL_CONSTRUCTOR   =20,
+        JAVA_DECL_METHOD    =21,
+        JAVA_DECL_FIELD     =22,
+        JAVA_DECL_CONSTRUCTORS  =23,
+        JAVA_DECL_METHODS   =24,
+        JAVA_DECL_FIELDS    =25,
 
         JAVA_CLASSES        =30,
         JAVA_DECL_CLASSES   =31,
@@ -57,10 +58,9 @@ public class Reflection extends Util {
         JAVA_ARRAY_NEW      =62,
         JAVA_INV_HANDLER    =63,
         JAVA_PROXY          =64,
-        JAVA_NEW            =65,
-        JAVA_SET            =66,
-        JAVA_MANGLE_FIELD_NAME  =67,
-        JAVA_MANGLE_METHOD_NAME =68;
+        JAVA_NULL           =66,
+        JAVA_MANGLE_FIELD_NAME  =68,
+        JAVA_MANGLE_METHOD_NAME =69;
 
     public Reflection() {
 
@@ -113,8 +113,7 @@ public class Reflection extends Util {
         define("java/array-new"     ,JAVA_ARRAY_NEW);
         define("java/invocation-handler",JAVA_INV_HANDLER);
         define("java/proxy"         ,JAVA_PROXY);
-        define("java/new"           ,JAVA_NEW);
-        define("java/set!"          ,JAVA_SET);
+        define("java/null"          ,JAVA_NULL);
         define("java/mangle-field-name"	,JAVA_MANGLE_FIELD_NAME);
         define("java/mangle-method-name",JAVA_MANGLE_METHOD_NAME);
 
@@ -124,7 +123,7 @@ public class Reflection extends Util {
         switch(f.vlr.length) {
         case 0:
             switch(primid) {
-            case JAVA_NEW:
+            case JAVA_NULL:
                 return makeJObj(null);
             }
         case 1:
@@ -242,9 +241,11 @@ public class Reflection extends Util {
                              jtype(f.vlr[0]) == JavaObject.JCLASS &&
                              jclass(f.vlr[0]).isArray());
             case JAVA_CLASS_OF:
-                return makeJObj(jobj(f.vlr[0]).getClass());
+                return makeJObj(sjobj(f.vlr[0]).classOf());
             case JAVA_INV_HANDLER:
                 return makeJObj(new SchemeInvocation(f.ctx, proc(f.vlr[0])));
+            case JAVA_NULL:
+                return makeJObj(null, jclass(f.vlr[0]));
             case JAVA_MANGLE_FIELD_NAME:
                 return Symbol.intern(mangleFieldName(symval(f.vlr[0])));
             case JAVA_MANGLE_METHOD_NAME:
@@ -280,9 +281,6 @@ public class Reflection extends Util {
                 return truth(fixClass(jclass(f.vlr[0])).isInstance(jobj(f.vlr[1])));
             case JAVA_ASSIGNABLEQ:
                 return truth(fixClass(jclass(f.vlr[0])).isAssignableFrom(fixClass(jclass(f.vlr[1]))));
-            case JAVA_SET:
-                sjobj(f.vlr[0]).set(jobj(f.vlr[1]));
-                return VOID;
             case JAVA_ARRAY_CLASS:
                 return makeJObj(makeArrayClass(jclass(f.vlr[0]), num(f.vlr[1]).intValue()));
             case JAVA_ARRAY_NEW:

@@ -47,13 +47,13 @@ public class SchemeInvocation implements InvocationHandler {
         Pair p = sisc.Util.EMPTYLIST;
         if (args != null) { //for some reason args can be null
             for (int i=args.length-1; i>=0; i--) {
-                p = new Pair(new JavaObject(args[i]), p);
+                p = new Pair(Util.makeJObj(args[i]), p);
             }
         }
         Value res = null;
         try {
-            res = r.eval(proc, new Value[] {new JavaObject(proxy),
-                                            new JavaObject(m),
+            res = r.eval(proc, new Value[] {Util.makeJObj(proxy),
+                                            Util.makeJObj(m),
                                             p});
         } catch (SchemeException e) {
             throw Util.javaException(e);

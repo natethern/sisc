@@ -64,7 +64,6 @@
 
 (define (type-of o)
   (cond ((class? o) (meta o))
-        ((java/null? o) <bot>)
         ((java/object? o) (java/class-of o))
         ((scheme-object? o) (procedure-property o 'class))
         (else

@@ -13,7 +13,7 @@ import sisc.ser.Deserializer;
 
 public class JavaObject extends Procedure {
 
-    public Object obj;
+    protected Object obj;
 
     public static final byte
         JUNKN   = 0,
@@ -27,11 +27,11 @@ public class JavaObject extends Procedure {
 
     protected byte objType = JUNKN;
 
-    public final byte getObjType() {
+    public byte getObjType() {
         //we do not need to make this synchronized since we are only
         //accessing a byte
         if (objType == JUNKN)
-            objType = obj == null ? JNULL:
+            objType = 
                 (obj instanceof Class ? JCLASS :
                  (obj instanceof Field ? JFIELD :
                   (obj instanceof Method ? JMETHOD :
@@ -47,8 +47,6 @@ public class JavaObject extends Procedure {
         byte ty = getObjType();
         s.writeByte(ty);
         switch (ty) {
-        case JNULL:
-            break;
         case JCLASS: {
             s.writeUTF(((Class)obj).getName());
             break;
@@ -88,10 +86,6 @@ public class JavaObject extends Procedure {
     public void deserialize(Deserializer s) throws IOException {
         byte ty = s.readByte();
         switch (ty) {
-        case JNULL: {
-            obj = null;
-            break;
-        }
         case JCLASS: {
             obj = Util.resolveType(s.readUTF());
             break;
@@ -145,39 +139,40 @@ public class JavaObject extends Procedure {
         this.obj = o;
     }
 
-    public void set(Object o) {
-        this.obj = o;
-        this.objType = JUNKN;
+    public Object get() {
+        return obj;
+    }
+
+    public Class classOf() {
+        return obj.getClass();
     }
 
     public String display() {
         StringBuffer b=new StringBuffer();
         b.append("#<java ");
-        if (obj==null)
-            b.append("null");
-        else {
-            b.append(obj.getClass().getName());
-            b.append(" ");
-            b.append(obj);
-        }
+        b.append(obj.getClass().getName());
+        b.append(" ");
+        b.append(obj);
         b.append('>');
         return b.toString();
     }
 
     public int hashCode() {
-        return (obj == null) ? 0 : obj.hashCode();
+        return obj.hashCode();
     }
 
     public boolean eq(Object v) {
         return super.eq(v) || (v instanceof JavaObject
-                               && ((JavaObject)v).obj == obj);
+                               && obj == ((JavaObject)v).get());
+    }
+
+    public boolean valueEqual(Value v) {
+        return eq(v) || (v instanceof JavaObject
+                         && obj.equals(((JavaObject)v).get()));
     }
 
     public boolean equals(Object v) {
-        if (!(v instanceof JavaObject)) return false;
-        if (obj == null)
-            return ((JavaObject)v).obj == null;
-        return obj.equals(((JavaObject)v).obj);
+        return (v instanceof JavaObject) && valueEqual((Value)v);
     }
 
     public void apply(Interpreter r)
@@ -197,7 +192,7 @@ public class JavaObject extends Procedure {
                 error(r, liMessage(Util.S2JB, "cannotapplyobject", obj.toString()));
             }
         } catch (InvocationTargetException e) {
-            error(r, new JavaObject(e.getTargetException()));
+            error(r, Util.makeJObj(e.getTargetException()));
         } catch (RuntimeException e) {
             e.printStackTrace(System.err);
             error(r, e.getMessage());
@@ -211,9 +206,9 @@ public class JavaObject extends Procedure {
         try {
             switch (arg.length) {
             case 0: //instantiate class
-                return new JavaObject(obj.newInstance());
+                return Util.makeJObj(obj.newInstance());
             case 1: //get value of static field
-                return new JavaObject(obj.getField(Util.mangleFieldName(symval(arg[0]))).get(null));
+                return Util.makeJObj(obj.getField(Util.mangleFieldName(symval(arg[0]))).get(null));
             case 2: //set value of static field
                 obj.getField(Util.mangleFieldName(symval(arg[0]))).set(null,Util.jobj(arg[1]));
                 return VOID;
@@ -237,7 +232,7 @@ public class JavaObject extends Procedure {
         try {
             switch (args.length) {
             case 1: //get value
-                return new JavaObject(obj.get(Util.jobj(args[0])));
+                return Util.makeJObj(obj.get(Util.jobj(args[0])));
             case 2: //set value
                 obj.set(Util.jobj(args[0]), Util.jobj(args[1]));
                 return VOID;
@@ -261,7 +256,7 @@ public class JavaObject extends Procedure {
             params[i] = Util.jobj(args[i+1]);
         }
         try {
-            return new JavaObject(obj.invoke(o,params));
+            return Util.makeJObj(obj.invoke(o,params));
         } catch (IllegalAccessException e) {
             throw new RuntimeException(liMessage(Util.S2JB, "illegalaccess", 
                                                  new Object[] {
@@ -278,7 +273,7 @@ public class JavaObject extends Procedure {
             params[i] = Util.jobj(args[i]);
         }
         try {
-            return new JavaObject(obj.newInstance(params));
+            return Util.makeJObj(obj.newInstance(params));
         } catch (InstantiationException e) {
             throw new RuntimeException(liMessage(Util.S2JB, "constructorerror", obj.toString(), obj.getDeclaringClass().getName()));
         } catch (IllegalAccessException e) {
@@ -305,7 +300,7 @@ public class JavaObject extends Procedure {
             } else {
                 obj = Array.get(obj,num(args[0]).intValue());
             }
-            return new JavaObject(obj);
+            return Util.makeJObj(obj);
         case 2: //set element
             Value idx = null;
             if (args[0] instanceof Pair) {
@@ -412,7 +407,7 @@ public class JavaObject extends Procedure {
 
             switch (args.length) {
             case 1: //get value of bean field
-                return new JavaObject(fa.get(obj));
+                return Util.makeJObj(fa.get(obj));
             case 2: //set value of bean field
                 fa.set(obj, Util.jobj(args[1]));
                 return VOID;
@@ -440,7 +435,7 @@ public class JavaObject extends Procedure {
         try {
             switch (args.length) {
             case 1: //get value of field
-                return new JavaObject(obj.getClass().getField(fieldName).get(obj));
+                return Util.makeJObj(obj.getClass().getField(fieldName).get(obj));
             case 2: //set value of field
                 obj.getClass().getField(fieldName).set(obj, Util.jobj(args[1]));
                 return VOID;

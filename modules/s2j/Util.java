@@ -35,7 +35,7 @@ public class Util extends ModuleAdapter {
             }
         }
         if (m instanceof JavaObject) {
-            Object eo = ((JavaObject)m).obj;
+            Object eo = ((JavaObject)m).get();
             if (eo instanceof Throwable)
                 ex = (Throwable)eo;
         }
@@ -58,41 +58,45 @@ public class Util extends ModuleAdapter {
 
     public static final Object jobj(Value o) {
         try {
-            return ((JavaObject)o).obj;
+            return ((JavaObject)o).get();
         } catch (ClassCastException e) { typeError(S2JB, "jobject", o); }
         return null;
     }
 
     public static final Class jclass(Value o) {
         try {
-            return (Class)((JavaObject)o).obj;
+            return (Class)((JavaObject)o).get();
         } catch (ClassCastException e) { typeError(S2JB, "jclass", o); }
         return null;
     }
 
     public static final Constructor jconstr(Value o) {
         try {
-            return (Constructor)((JavaObject)o).obj;
+            return (Constructor)((JavaObject)o).get();
         } catch (ClassCastException e) { typeError(S2JB, "jmethod", o); }
         return null;
     }
 
     public static final Method jmethod(Value o) {
         try {
-            return (Method)((JavaObject)o).obj;
+            return (Method)((JavaObject)o).get();
         } catch (ClassCastException e) { typeError(S2JB, "jconstructor", o); }
         return null;
     }
 
     public static final Field jfield(Value o) {
         try {
-            return (Field)((JavaObject)o).obj;
+            return (Field)((JavaObject)o).get();
         } catch (ClassCastException e) { typeError(S2JB, "jfield", o); }
         return null;
     }
 
     public static final JavaObject makeJObj(Object o) {
-        return new JavaObject(o);
+        return makeJObj(o, Object.class);
+    }
+
+    public static final JavaObject makeJObj(Object o, Class c) {
+        return (o == null) ? new JavaNull(c) : new JavaObject(o);
     }
 
     public static final Value objArrayToVec(Object[] objs) {
