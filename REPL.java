@@ -1,4 +1,4 @@
-/* 
+/*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
@@ -30,6 +30,7 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
+
 package sisc;
 
 import sisc.compiler.*;
@@ -38,21 +39,17 @@ import sisc.exprs.*;
 import java.io.*;
 import java.util.zip.*;
 import java.util.*;
+import java.net.*;
 
 public class REPL extends Thread {
     public Interpreter r;
-    protected Procedure writeFunc;
-    protected PrintWriter out,err;
-    protected InputStream in;
 
-    public REPL(InputStream in, OutputStream out, OutputStream err, 
-		String[] args) {
-	this.in=in;
-	this.out=new PrintWriter(out);
-	this.err=new PrintWriter(err);
-	this.out.print("SISC");
-	this.out.flush();
-	r=new Interpreter(in, out);
+    public REPL(Interpreter r) {
+	this.r = r;
+    }
+
+    public static Interpreter createInterpreter(String[] args) {
+	Interpreter r = new Interpreter(System.in, System.out);
 	r.setEvaluator("eval");
 	try {
 	    r.loadEnv(new DataInputStream(
@@ -67,6 +64,7 @@ public class REPL extends Thread {
 	    System.err.println("Error loading heap!");
 	    e.printStackTrace();
 	}
+
 	FreeReferenceExp load=new FreeReferenceExp(Symbol.get("load"),
 						   -1, r.toplevel_env);
 	for (int i=0; i<args.length; i++) {
@@ -93,8 +91,7 @@ public class REPL extends Thread {
 							     0, rootss.length), 
 		 Util.SISC);
 
-	this.out.println(" ("+Util.VERSION+")");
-	this.out.flush();
+	return r;
     }
 
     public void run() {
@@ -107,7 +104,7 @@ public class REPL extends Thread {
 		r.interpret(new AppExp(repl, new Expression[0],
 				       false));
 	    } catch (Exception e) {
-		err.println("System error: "+e.toString());
+		System.err.println("System error: "+e.toString());
 		continue start;
 	    }
 	} while (false);
@@ -115,7 +112,77 @@ public class REPL extends Thread {
     }
 
     public static void main(String[] args) throws Exception {
-	REPL r=new REPL(System.in, System.out, System.err, args);
-	r.start();
+
+	boolean server = false;
+	InetAddress bindAddr = null;
+	int port = 0;
+
+	java.util.Vector fargs = new java.util.Vector();
+
+	for (int iArg=0; iArg < args.length; iArg++) {
+	    String arg = args[iArg];
+	    if (arg.equals("--server")) {
+		server = true;
+		continue;
+	    }
+	    if (arg.equals("--host")) {
+		iArg++;
+		bindAddr = InetAddress.getByName(args[iArg]);
+		continue;
+	    }
+	    if (arg.equals("--port")) {
+		iArg++;
+		port = Integer.parseInt(args[iArg]);
+		continue;
+	    }
+	    fargs.add(arg);
+	}
+	
+	PrintWriter pout=new PrintWriter(System.out);
+	PrintWriter perr=new PrintWriter(System.err);
+	pout.print("SISC");
+	pout.flush();
+
+	Interpreter r = createInterpreter((String[])fargs.toArray(new String[0]));
+
+	pout.println(" ("+Util.VERSION+")");
+	pout.flush();
+
+	if (server) {
+	    ServerSocket ssocket = new ServerSocket(port, 50, bindAddr);
+	    pout.println("Listening on " + ssocket.getInetAddress().toString() + ":" + ssocket.getLocalPort());
+	    pout.flush();
+	    for (;;) {
+		Socket client = ssocket.accept();
+		Interpreter cr = Interpreter.newContext(r);
+		cr.console_in = new InputPort(new BufferedReader(new InputStreamReader(client.getInputStream())));
+		cr.console_out = new OutputPort(new PrintWriter(client.getOutputStream()));
+		REPL repl = new SocketREPL(cr, client);
+		repl.start();
+	    }
+	}
+	else {
+	    REPL repl=new REPL(r);
+	    repl.start();
+	}
     }
 }
+
+class SocketREPL extends REPL {
+
+    public Socket s;
+
+    public SocketREPL(Interpreter r, Socket s) {
+	super(r);
+	this.s = s;
+    }
+
+    public void run() {
+	super.run();
+	try {
+	    s.close();
+	}
+	catch(IOException e) {}
+    }
+}
+
