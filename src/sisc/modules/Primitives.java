@@ -137,7 +137,6 @@ public class Primitives extends IndexedProcedure implements InlinableProcedure {
             define("string?", STRINGQ);
             define("symbol->string", SYMBOL2STRING);
             define("symbol?", SYMBOLQ);
-            define("_syntax", SYNTAX);
             define("system-time", SYSTIME);
             define("tan", TAN);
             define("time-zone-offset", TIMEZONEOFFSET);
@@ -239,107 +238,6 @@ public class Primitives extends IndexedProcedure implements InlinableProcedure {
             v>>>=6;
         }
         return b.toString();
-    }
-
-    public final Value doApply_1(Value v1) {
-        switch(id) {
-        case NULLQ: return truth(v1==EMPTYLIST);
-        case CAR: return truePair(v1).car;
-        case CDR: return truePair(v1).cdr;
-        default:
-            throw new RuntimeException("Inlining not supported by this proc.");
-        }
-    }
-
-    public final Value doApply_2(Value v1, Value v2) {
-        switch (id) {
-        case EQ: return truth(v1 == v2);
-        case EQV: return truth(v1.eqv(v2));
-        case EQUAL:
-                return truth(v1.valueEqual(v2));
-        case ADD: return num(v1).add(num(v2));
-        case MUL: return num(v1).mul(num(v2));
-        case SUB: return num(v1).sub(num(v2));
-        case DIV: return num(v1).div(num(v2));
-        case NEQ: return truth(num(v1).comp(num(v2),0));
-        case REMAINDER:
-                return num(v1).remainder(num(v2));
-        case QUOTIENT:
-            return num(v1).quotient(num(v2));
-        case LCM:
-            return num(v1).lcm(num(v2));
-        case GCD:
-            return num(v1).gcd(num(v2));
-        case ATAN:
-            return num(v1).atan(num(v2));
-        case STRINGREF:
-            int index=num(v2).indexValue();
-            try {
-                return new SchemeCharacter(str(v1).charAt(index));
-            } catch (ArrayIndexOutOfBoundsException e) {
-                throwPrimException(liMessage(SISCB, "indexoob", 
-                                             new Object[] {
-                                                 new Integer(index),
-                                                 v1.synopsis()}));
-            }
-        case VECTORREF:
-            index=num(v2).indexValue();
-            try {
-                return vec(v1).vals[index];
-            } catch (ArrayIndexOutOfBoundsException e) {
-                throwPrimException(liMessage(SISCB, "indexoob", 
-                                             new Object[] {
-                                                 new Integer(index),
-                                                 v1.synopsis()}));
-            }
-        case ASHL: return Quantity.valueOf(num(v1).integer()
-                                           .shiftLeft(num(v2)
-                                                      .indexValue()));
-        case ASHR: return Quantity.valueOf(num(v1).integer()
-                                           .shiftRight(num(v2)
-                                                       .indexValue()));
-        default:
-            throw new RuntimeException("Inlining not supported by this proc.");
-        }
-    }
-
-    public void apply_1(Interpreter r, Value v1) throws ContinuationException {
-        try {
-            r.acc = doApply_1(v1);
-        } catch (ClassCastException cc) {
-            error(
-                r,
-                getName(),
-                liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()));
-        } catch (NestedPrimRuntimeException npr) {
-            error(r, getName(), npr);
-        } catch (RuntimeException re) {
-            //re.printStackTrace();
-            String msg = re.getMessage();
-            if (msg == null)
-                msg = re.toString();
-            error(r, getName(), msg);
-        }
-    }
-
-    public void apply_2(Interpreter r, Value v1, Value v2) 
-        throws ContinuationException {
-        try {
-            r.acc = doApply_2(v1, v2);
-        } catch (ClassCastException cc) {
-            error(
-                r,
-                getName(),
-                liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()));
-        } catch (NestedPrimRuntimeException npr) {
-            error(r, getName(), npr);
-        } catch (RuntimeException re) {
-            //re.printStackTrace();
-            String msg = re.getMessage();
-            if (msg == null)
-                msg = re.toString();
-            error(r, getName(), msg);
-        }
     }
 
     public final Value doApply(Interpreter r)
@@ -831,7 +729,7 @@ public class Primitives extends IndexedProcedure implements InlinableProcedure {
         return VOID;
     }
 
-    //next: 125
+    //next: 124
     static final int
         ACOS = 23,
         ADD = 114,
@@ -938,7 +836,6 @@ public class Primitives extends IndexedProcedure implements InlinableProcedure {
         SUB = 119,
         SYMBOL2STRING = 41,
         SYMBOLQ = 29,
-        SYNTAX = 124,
         SYSTIME = 3,
         TAN = 21,
         TIMEZONEOFFSET = 4,
