@@ -1,3 +1,13 @@
+2003-03-25  Matthias Radestock  <matthias@sorted.org>
+
+	* Changed eq?-based hashtable to match new semantics of eq?.
+
+	* Added eqv?-based hashtable.
+
+2003-03-25  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Changed eq? to pointer equality.
+
 2003-03-10  SISC 1.7.7 Released
 	
 2003-03-10  Scott G. Miller  <scgmille@freenetproject.org>
