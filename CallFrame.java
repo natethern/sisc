@@ -40,26 +40,28 @@ import java.lang.ref.*;
 
 public class CallFrame extends Procedure {
 
-    public boolean lock;
     public Expression            nxp;
     public Value[]               vlr;
+    public boolean               vlk;
     public LexicalEnvironment    env;
     public CallFrame              fk;
     public CallFrame          parent;
     
     public CallFrame(Expression n, Value[] v,
+                     boolean vlk,
                      LexicalEnvironment e,
                      CallFrame f, CallFrame p) {
         nxp=n;
         vlr=v;
+        this.vlk=vlk;
         env=e;
         fk=f;
         parent=p;
     }
 
     public CallFrame capture(Interpreter r) {
-        if (!lock) {
-            lock=true;
+        if (!vlk) {
+            vlk=true;
 
             if (vlr!=null) {
                 Value[] nvlr=r.createValues(vlr.length);
@@ -108,7 +110,7 @@ public class CallFrame extends Procedure {
 
             s.serialize(parent, dos);
             s.serialize(env, dos);
-            dos.writeBoolean(lock);
+            dos.writeBoolean(vlk);
         }
     }
 
@@ -128,7 +130,7 @@ public CallFrame() {}
             fk=(CallFrame)s.deserialize(dis);
             parent=(CallFrame)s.deserialize(dis);
             env=(LexicalEnvironment)s.deserialize(dis);
-            lock=dis.readBoolean();
+            vlk=dis.readBoolean();
         }
     }
 }

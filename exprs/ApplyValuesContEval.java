@@ -49,7 +49,7 @@ public class ApplyValuesContEval extends Expression {
         } catch (ClassCastException c) {
             r.vlr=new Value[] {r.acc};
         }
-	r.lck=true;
+	r.vlk=true;
         r.nxp=APPEVAL;
         r.acc=(Value)consumer;
     }

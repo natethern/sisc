@@ -83,19 +83,20 @@ public class Interpreter extends Util {
     public DynamicEnv dynenv;
 
     //REGISTERS
-    public boolean               lck;
     public Value                 acc;
     public Expression            nxp, lxp; //lxp used only for debugging
     public Value[]               vlr;
-    public LexicalEnvironment    env;
-    public CallFrame             stk, fk;
+    public boolean               vlk;      //vlk, when true, indicates the
+    public LexicalEnvironment    env;      //vlr register is locked
+    public CallFrame             stk, 
+                                  fk;
 
     //Scheme->Java exception conversion FK
     static CallFrame top_fk = new CallFrame(new ThrowSchemeException(),
-                                            null, null, null, null);
+                                            null, false, null, null, null);
     static {
         top_fk.fk = top_fk;
-        top_fk.lock = true;
+        top_fk.vlk = true;
     }
 
     /**
@@ -139,7 +140,7 @@ public class Interpreter extends Util {
      * @exception SchemeException 
      */
     protected Value interpret(Expression e) throws SchemeException {
-        stk=createFrame(null, null, null, fk, null);
+        stk=createFrame(null, null, false, null, fk, null);
         nxp=e;
         interpret();
         return acc;
@@ -170,22 +171,27 @@ public class Interpreter extends Util {
 	}
     }
 
+    public final Value[] newVLR(int size) {
+        vlk=false;
+        return (vlr=createValues(size));
+    }
+
     public final void pop(CallFrame c) {
         nxp=c.nxp;
         vlr=c.vlr;
         env=c.env;
         fk=c.fk;
         stk=c.parent;
-	lck=c.lock;
+	vlk=c.vlk;
         returnFrame(c);
     }
 
     public final void push(Expression nxp) {
-	stk=createFrame(nxp, vlr, env, fk, stk);
+	stk=createFrame(nxp, vlr, vlk, env, fk, stk);
     }
 
     public final void save() {
-        stk=createFrame(nxp,vlr,env,fk,stk);
+        stk=createFrame(nxp, vlr, vlk, env, fk, stk);
     }
 
     /**
@@ -307,15 +313,17 @@ public class Interpreter extends Util {
     CallFrame returnRegister;
 
     public CallFrame createFrame(Expression n, Value[] v,
-                                       LexicalEnvironment e,
-                                       CallFrame f,
-                                       CallFrame p) {
+                                 boolean vlk, 
+                                 LexicalEnvironment e,
+                                 CallFrame f,
+                                 CallFrame p) {
         if (deadFramePointer < 0)
-            return new CallFrame(n,v,e,f,p);
+            return new CallFrame(n,v,vlk,e,f,p);
         else {
 	    returnRegister=deadFrames[deadFramePointer--];
             returnRegister.nxp=n;
             returnRegister.vlr=v;
+            returnRegister.vlk=vlk;
             returnRegister.env=e;
             returnRegister.fk=f;
             returnRegister.parent=p;
@@ -324,7 +332,7 @@ public class Interpreter extends Util {
     }
 
     public final void returnFrame(CallFrame f) {
-	if (!f.lock && (deadFramePointer < FPMAX)) {
+	if (!f.vlk && (deadFramePointer < FPMAX)) {
 	    deadFrames[++deadFramePointer]=f;
 	}
     }
@@ -355,7 +363,7 @@ public class Interpreter extends Util {
     }
 
     public final void returnValues() {
-        if (!lck) returnValues(vlr);
+        if (!vlk) returnValues(vlr);
         vlr=null;
     }
 

@@ -404,7 +404,8 @@ public class Primitives extends ModuleAdapter {
             case CALLCC:
                 Procedure kproc=(Procedure)f.vlr[0];
                 f.returnValues();
-                f.vlr = new Value[] {f.stk.capture(f)};
+                f.newVLR(1);
+                f.vlr[0]=f.stk.capture(f);
                 f.nxp = APPEVAL;
                 return kproc;
             case GETOUTPUTSTRING:
@@ -731,7 +732,7 @@ public class Primitives extends ModuleAdapter {
                 Procedure proc=proc(f.vlr[0]);
                 Procedure ehandler=new CurriedFC(proc(f.vlr[1]), f.fk);
                 f.fk=f.createFrame(new ApplyValuesContEval(ehandler),
-                                   null, f.env, f.fk, f.stk);
+                                   null, false, f.env, f.fk, f.stk);
                 f.returnValues();
                 f.vlr = ZV;
                 f.nxp = APPEVAL;
@@ -824,19 +825,17 @@ public class Primitives extends ModuleAdapter {
                 //this might get us back the just recycled f.vlr,
                 //which is fine since we only shift its contents to
                 //the left by one
-                Value newvlr[] = f.createValues(l + length(args));
+                Value oldvlr[] = f.vlr;
+                Value newvlr[] = f.newVLR(l + length(args));
+
                 int j;
                 for (j=0; j < l; j++) {
-                    newvlr[j] = f.vlr[j+1];
+                    newvlr[j] = oldvlr[j+1];
                 }
                 for (; args != EMPTYLIST; args = (Pair)args.cdr, j++) {
                     newvlr[j] = args.car;
                 }
 
-                //f.vlr can be recycled
-                f.returnValues();
-
-                f.vlr = newvlr;
                 f.nxp = APPEVAL;
                 return proc;
             case LIST: return valArrayToList(f.vlr,0,f.vlr.length);

@@ -50,7 +50,7 @@ public class AppExp extends Expression {
 
     public void eval(Interpreter r) throws ContinuationException {
 
-        r.vlr = r.createValues(rands.length);
+        r.newVLR(rands.length);
 
         if (allImmediate) {
             r.nxp=nxp;

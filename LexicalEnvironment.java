@@ -67,7 +67,7 @@ public class LexicalEnvironment extends Value {
             return;
         }
 
-        if (vl > sm1) {
+        if (vl > sm1 && !r.vlk) {
             vals=v;
         } else {
             vals=r.createValues(sm1+1);

@@ -158,7 +158,7 @@ public class SDebug extends ModuleAdapter {
                 if (f.vlr[0] instanceof ApplyParentFrame)
                     f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
                 CallFrame cn=cont(f.vlr[0]);
-                return truth(cn.lock);
+                return truth(cn.vlk);
             case CONT_NXP:
                 if (f.vlr[0] instanceof ApplyParentFrame)
                     f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
