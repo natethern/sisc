@@ -13,66 +13,70 @@ import sisc.env.LexicalEnvironment;
 
 public class CallFrame extends Procedure {
 
+    //public static final int ALLSET=0x55;
+    //test for vlr cap: ((cap[pos>>2] >> ((pos%4) << 1)) & 0x1) != 0
     public Expression            nxp;
     public Value[]               vlr;
     public boolean               vlk;
     public LexicalEnvironment    env;
     public CallFrame              fk;
     public CallFrame          parent;
+    public boolean[]             cap;
+
+    //public byte[] cap2;
 
     public CallFrame(Expression n, Value[] v,
                      boolean vlk,
                      LexicalEnvironment e,
-                     CallFrame f, CallFrame p) {
+                     CallFrame f, CallFrame p,
+                     boolean[] cap) {
         nxp=n;
         vlr=v;
         this.vlk=vlk;
         env=e;
         fk=f;
         parent=p;
+        this.cap=cap;
+    }
+
+    public final void copyVLR(Interpreter r) {
+        if (vlr!=null) {
+            int l=vlr.length;
+            Value[] nvlr=r.createValues(l);
+            System.arraycopy(vlr, 0, nvlr, 0, l);
+            vlr=nvlr;
+            cap=new boolean[l];
+            //cap=new byte[(l>>2) + 1];
+        }
+    }
+
+    public final CallFrame capture(Interpreter r) {
+        CallFrame toReturn=makeSafe(r);
+
+        // Set the captured flags all the way to the root,
+        // including our unsafe doppleganger
+        CallFrame w=this;
+        do {
+            w.vlk=true;
+            if (w.nxp!=null)
+                w.nxp.setCaptured(w);
+            w=w.parent;
+        } while (w!=null); 
+        // Checking for a locked frame as a stop-fast 
+        // doesnt work
+
+        return toReturn;
     }
     
-    public CallFrame capture(Interpreter r) {
-        CallFrame rv;
-        if (vlk) {
-            rv=clone(r);
-        } else {
-            vlk=true;
-            rv=this;
-        }
-        rv.capture(r, null, null);
-
-        return rv;
+    public final CallFrame makeSafe(Interpreter r) {
+        CallFrame cv=cloneFrame();
+        cv.vlk=true;
+        cv.copyVLR(r);
+        return cv;
     }
-
-    protected void capture(Interpreter r, 
-                           Value[] parentOld, Value[] parentNew) {
-        vlk=true;
-        Value[] vo=vlr;
-
-        if (vlr==parentOld)
-            vlr=parentNew;
-        else if (vlr!=null) {
-            Value[] nvlr=r.createValues(vlr.length);
-            System.arraycopy(vlr, 0, nvlr, 0, vlr.length);
-            vlr=nvlr;
-        }
-        
-        if (parent!=null) {
-            if (parent.vlk)
-                parent=parent.clone(r);
-            parent.capture(r, vo, vlr);
-        }
-        
-        if (fk!=null) {
-            if (fk.vlk)
-                fk=fk.clone(r);
-            fk.capture(r, vo, vlr);
-        }
-    }
-
-    protected CallFrame clone(Interpreter r) {
-        return new CallFrame(nxp, vlr, vlk, env, fk, parent);
+    
+    protected final CallFrame cloneFrame() {
+        return new CallFrame(nxp, vlr, vlk, env, fk, parent, cap);
     }
 
     public void display(ValueWriter w) throws IOException {    

@@ -114,7 +114,8 @@ public abstract class Util extends Defaults implements Version {
 	    error,
 	    new ApplyParentFrame(new CallFrame((r.nxp==null?r.lxp:r.nxp), 
                                                r.vlr, r.vlk,
-					       r.env, r.fk, r.stk).capture(r))});
+					       r.env, r.fk, r.stk,
+                                               r.cap).capture(r))});
         throw new ContinuationException(r.fk);
     }
 

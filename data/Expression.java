@@ -132,6 +132,8 @@ public abstract class Expression extends Util
     public boolean visit(ExpressionVisitor v) {
         return true;
     }
+
+    public void setCaptured(CallFrame onFrame) {}
 }
 /*
  * The contents of this file are subject to the Mozilla Public

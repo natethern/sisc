@@ -22,7 +22,8 @@ public class FillRibExp extends Expression {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        r.vlr[pos]=r.acc;
+        r.setVLR(pos, r.acc);
+        //r.vlr[pos]=r.acc;
         if (lastAndRatorImmediate) {
             r.nxp=nxp;
             r.acc=exp.getValue(r);
@@ -34,6 +35,11 @@ public class FillRibExp extends Expression {
 
     public Value express() {
         return new Pair(sym("FillRib-exp"), new Pair(exp.express(), nxp.express()));
+    }
+
+    public void setCaptured(CallFrame onFrame) {
+        if ((pos+1) < onFrame.vlr.length)
+            onFrame.cap[pos+1]=true;
     }
 
     public void serialize(Serializer s) throws IOException {

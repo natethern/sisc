@@ -49,18 +49,26 @@ public class Interpreter extends Util {
     public ThreadContext tctx;
     public DynamicEnvironment dynenv;
 
-    //REGISTERS
-    public Value                 acc;
-    public Expression            nxp, lxp; //lxp used only for debugging
-    public Value[]               vlr;
+    //ACCOUNTING REGISTERS
+    public CallFrame             lcf, llcf;//used for continuation capture
+    public Expression            lxp;      //used only for debugging
     public boolean               vlk;      //vlk, when true, indicates the
-    public LexicalEnvironment    env;      //vlr register is locked
+                                           //frame was captured.
+    public boolean[]             cap;      //Indicates which vlr positions
+                                           //contained a k capture.
+
+    //ACTIVITY REGISTERS
+    public Value                 acc;
+    public Expression            nxp;
+    public Value[]               vlr;
+    public LexicalEnvironment    env;     
     public CallFrame             stk, 
                                   fk;
 
     //Scheme->Java exception conversion FK
     static CallFrame top_fk = new CallFrame(new ThrowSchemeException(),
-                                            null, false, null, null, null);
+                                            null, false, null, null, null,
+                                            null);
     static {
         top_fk.vlk = true;
     }
@@ -82,7 +90,7 @@ public class Interpreter extends Util {
     }
 
     protected Value interpret(Expression e) throws SchemeException {
-        stk=createFrame(null, null, false, null, fk, null);
+        stk=createFrame(null, null, false, null, fk, null, null);
         nxp=e;
         interpret();
         return acc;
@@ -95,7 +103,15 @@ public class Interpreter extends Util {
                     do {
                         while (nxp==null) 
                             pop(stk);
-			
+
+                        /*
+                          System.err.print(nxp);		
+                          if (vlr!=null) {
+                          for (int i=0; i<vlr.length; i++)
+                          System.err.print(" "+vlr[i]);
+                          System.err.println();
+                          }
+                        */
                         nxp.eval(this);
                     } while (true);
                 } catch (ContinuationException ce) {
@@ -112,25 +128,42 @@ public class Interpreter extends Util {
 
     public final Value[] newVLR(int size) {
         vlk=false;
+        cap=createBoolArray(size);
         return (vlr=createValues(size));
     }
 
     public final void pop(CallFrame c) {
+        cap=c.cap;
         nxp=c.nxp;
         vlr=c.vlr;
         env=c.env;
         fk=c.fk;
         stk=c.parent;
         vlk=c.vlk;
-        returnFrame(c);
+        returnFrame(llcf);
+        llcf=lcf;
+        lcf=c;
     }
 
     public final void push(Expression nxp) {
-        stk=createFrame(nxp, vlr, vlk, env, fk, stk);
+        stk=createFrame(nxp, vlr, vlk, env, fk, stk, cap);
     }
 
     public final void save() {
-        stk=createFrame(nxp, vlr, vlk, env, fk, stk);
+        stk=createFrame(nxp, vlr, vlk, env, fk, stk, cap);
+    }
+
+    public final void setVLR(int pos, Value v) {
+        for (int i=pos; i>=0; i--)
+            if (cap[i]) {
+                llcf.parent=lcf=lcf.makeSafe(this);
+                
+                vlr=lcf.vlr;
+                if ((pos+1)<vlr.length)
+                    cap[pos+1]=false;
+                break;
+            }
+        vlr[pos]=v;
     }
 
     /**
@@ -284,9 +317,10 @@ public class Interpreter extends Util {
                                  boolean vlk, 
                                  LexicalEnvironment e,
                                  CallFrame f,
-                                 CallFrame p) {
+                                 CallFrame p, 
+                                 boolean[] cap) {
         if (deadFramePointer < 0)
-            return new CallFrame(n,v,vlk,e,f,p);
+            return new CallFrame(n,v,vlk,e,f,p,cap);
         else {
 	    returnRegister=deadFrames[deadFramePointer--];
             returnRegister.nxp=n;
@@ -295,15 +329,18 @@ public class Interpreter extends Util {
             returnRegister.env=e;
             returnRegister.fk=f;
             returnRegister.parent=p;
+            returnRegister.cap=cap;
             return returnRegister;
         }
     }
 
     public final void returnFrame(CallFrame f) {
-        if (!f.vlk && (deadFramePointer < FPMAX)) {
+        if (f!=null &&
+            !f.vlk && (deadFramePointer < FPMAX)) {
             deadFrames[++deadFramePointer]=f;
         }
     }
+
 
     protected static final int VALUESPOOLSIZE=8;
     protected Value deadValues[][] = new Value[VALUESPOOLSIZE][];
@@ -328,12 +365,18 @@ public class Interpreter extends Util {
     }
 
     public final void returnVLR() {
-        if (!vlk) returnValues(vlr);
+        if (!vlk) {
+            returnValues(vlr);
+            returnBools(cap);
+        }
         vlr=null;
     }
 
     public final Value[] replaceVLR(int size) {
-        if (!vlk) returnValues(vlr);
+        if (!vlk) {
+            returnValues(vlr);
+            returnBools(cap);
+        }
         return newVLR(size);
     }
 
@@ -343,8 +386,34 @@ public class Interpreter extends Util {
         if (size == 0 || size >= VALUESPOOLSIZE) return;
         deadValues[size] = v;
     }
-}
 
+    protected static final int BOOLSPOOLSIZE=8;
+    protected boolean deadBools[][] = new boolean[BOOLSPOOLSIZE][];
+    protected static final boolean[] ZB=new boolean[0];
+
+    //static int sizemiss, miss, hit, zerohit;
+    public final boolean[] createBoolArray(int size) {
+        if (size == 0) 
+            return ZB; 
+
+        if (size >= BOOLSPOOLSIZE) 
+            return new boolean[size]; 
+        
+        boolean[] res = deadBools[size];
+        if (res == null) 
+            return new boolean[size]; 
+
+        deadBools[size] = null;
+        return res;
+    }
+
+    public final void returnBools(boolean[] v) {
+        if (v == null) return;
+        int size = v.length;
+        if (size == 0 || size >= BOOLSPOOLSIZE) return;
+        deadBools[size] = v;
+    }
+}
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file

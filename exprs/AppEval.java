@@ -20,6 +20,10 @@ public class AppEval extends Expression {
         r.acc.apply(r);
     }
 
+    public void setCaptured(CallFrame onFrame) {
+        onFrame.cap[0]=true;
+    }
+
     public Value express() {
         return list(sym("App-Eval"));
     }

@@ -25,7 +25,7 @@
          (+ x y)))))
 
 ;;Credits to Al Petrofsky
-(should-be 1.2 #f
+(should-be 1.2 #t
   (letrec ((x (call/cc list)) (y (call/cc list)))
     (cond ((procedure? x) (x (pair? y)))
 	  ((procedure? y) (y (pair? x))))
@@ -69,7 +69,7 @@
        (cond (else (foo x))) 
        x)))
 
-;; Me
+;; Scott Miller
 (should-be 6.1 #f
   (eq? #f '()))
 (should-be 6.2 #f
@@ -80,6 +80,27 @@
 ;; Jens Axel S?gaard
 (should-be 7.1 #f
   (eq? (string->symbol "f") (string->symbol "F")))
+
+;; Scott Miller
+(define r #f)
+(define a #f)
+(define b #f)
+(define c #f)
+(define i 0)
+(should-be 8.1 28
+  (let () 
+    (set! r (+ 1 (+ 2 (+ 3 (call/cc (lambda (k) (set! a k) 4))))
+               (+ 5 (+ 6 (call/cc (lambda (k) (set! b k) 7))))))
+    (if (not c) 
+        (set! c a))
+    (set! i (+ i 1))
+    (case i
+      ((1) (a 5))
+      ((2) (b 8))
+      ((3) (a 6))
+      ((4) (c 4)))
+    r))
+
 
 ;;Not really an error to fail this (Matthias Radestock)
 ;;If this returns (0 1 0), your map isn't call/cc safe, but is probably

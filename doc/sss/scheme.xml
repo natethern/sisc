@@ -764,8 +764,8 @@
       <title>Comments</title>
       <para>
         In addition to the single line comments of the Scheme
-        standard, &SISC; supports <emphasis>s-expression
-        commenting</emphasis>.  An s-expression comment is used to
+        standard, &SISC; supports both <emphasis>s-expression
+        commenting</emphasis> and <emphasis>nested, multiline comments</emphasis>.  An s-expression comment is used to
         comment out an entire s-expression.  To do this, the sharp
         sequence <literal>#;</literal> is used.  It extends the &R5RS;
         grammar with the following production:
@@ -776,6 +776,14 @@
       <para>
         The reader, upon encountering this sharp sequence, will read
         and discard the next datum.
+      </para>
+      <para>
+        Nested, multiline comments are as defined in SRFI-30.
+        Briefly, a multiline comment begins with the sharp sequence
+        <literal>#|</literal> and ends with the sequence
+        <literal>|#</literal>.  The comment may contain nested
+        comments as well.  Unfortunately, this extension cannot be
+        represented in a stateless grammar for the lexical structure.
       </para>
     </sect2>
   </sect1>
