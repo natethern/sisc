@@ -68,7 +68,7 @@
                     ;; If the right hand side is a var-ref, 
                     ;; but its set!'ed, skip it.
                     [(and (symbol? cy) 
-                          (memq cy (get-state-entry state 'set-vars)))]
+                          (memq cy (get-state-entry state 'set-vars)))
                      (set! nf (cons cx nf))
                      (set! nv (cons cy nv))
                      (cp-helper (cdr x) (cdr y) acc)]
