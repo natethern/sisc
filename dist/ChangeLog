@@ -1,3 +1,13 @@
+2002-04-13  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* load now sets the current directory to the directory
+	  of the source file its loading, and resets it when done.
+
+	* current-directory is now an actual parameter.
+
+	* Added file/parent and file/name, and renamed file-type to
+	  file/type.
+
 2002-04-12  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed real?, which was returning #t for non-numbers
