@@ -86,7 +86,12 @@
 		     (let ((here *here*))
 		       (reroot! (cons (cons before after) here))
 		       (call-with-values
-			   during
+			   (lambda ()
+			     (call/fc 
+			      during
+			      (lambda (m e c)
+				(reroot! here)
+				(c m e (current-failure-continuation)))))
 			 (lambda results
 			   (reroot! here)
 			   (apply values results))))))
