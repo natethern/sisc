@@ -50,7 +50,8 @@ public class StringIO extends IndexedProcedure {
         switch (f.vlr.length) {
         case 0:
             switch (id) {
-            case OPENOUTPUTSTRING: return new WriterOutputPort(new StringWriter(), false);
+            case OPENOUTPUTSTRING:
+                return new WriterOutputPort(new StringWriter(), false);
             default:
                 throwArgSizeException();
             }
