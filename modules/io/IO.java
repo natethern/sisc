@@ -392,7 +392,7 @@ public class IO extends ModuleAdapter {
                 try {
                     if (url.getProtocol().equals("file")) {
                         //the JDK does not permit write access to file URLs
-                        return new StreamOutputPort(new FileOutputStream(url.getPath()),
+                        return new StreamOutputPort(new BufferedOutputStream(new FileOutputStream(url.getPath())),
                                                     truth(f.vlr[1]));
                     }
                     URLConnection conn = url.openConnection();
