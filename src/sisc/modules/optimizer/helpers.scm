@@ -16,11 +16,6 @@
   (if (null? lses) ls1
       (apply union (union-2 ls1 (car lses)) (cdr lses))))
 
-(define (truth e)
-  (cond [(atom? e) e]
-        [(constant? e) (cadr e)]
-        [else #f]))
-
 (define (constant? e)
   (or (atom? e) 
       (and (pair? e) (= (length e) 2) (eq? (car e) #%quote))))
