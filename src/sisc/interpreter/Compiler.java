@@ -447,7 +447,7 @@ public class Compiler extends Util {
         }
 
         public Value singletonValue() {
-            return (Value)SYNTACTIC_TOKENS.get(getName());
+            return (Value)SYNTACTIC_TOKENS.get(getName().symval);
         }
     }
 
