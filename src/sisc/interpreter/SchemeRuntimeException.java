@@ -15,7 +15,7 @@ public class SchemeRuntimeException extends RuntimeException {
     }
 
     public String getMessage() {
-        return m.toString();
+        return m.cdr.toString();
     }
 
     public SchemeException promote() {
