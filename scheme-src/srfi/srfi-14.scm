@@ -108,8 +108,6 @@
 
 (define (si=0? s i) (zero? (%char->latin1 (string-ref s i))))
 (define (si=1? s i) (not (si=0? s i)))
-(define c0 (%latin1->char 0))
-(define c1 (%latin1->char 1))
 (define (si s i) (%char->latin1 (string-ref s i)))
 (define (%set0! s i) (string-set! s i c0))
 (define (%set1! s i) (string-set! s i c1))
@@ -599,6 +597,8 @@
 ;;; as immutable, you should do so -- it would be very, very bad if a client's
 ;;; buggy code corrupted these constants.
 
+(define c0                  (void))
+(define c1                  (void))
 (define char-set:empty		(void))
 (define char-set:full		(void))
 (define char-set:lower-case	(void))
@@ -616,6 +616,9 @@
 (define char-set:blank		(void))
 (define char-set:iso-control	(void))
 (define char-set:ascii		(void))
+
+(set! c0 (%latin1->char 0))
+(set! c1 (%latin1->char 1))
 
 (set! char-set:empty (char-set))
 (set! char-set:full (char-set-complement char-set:empty))

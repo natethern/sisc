@@ -1,9 +1,11 @@
 (native-module r5rs "sisc.modules.R5RS")
 
+(display "srfi-0\n")
 (module srfi-0 (cond-expand)
   (include "srfi/srfi-0.scm")
   (add-feature 'srfi-0))
 
+(display "srfi-8\n")
 (module srfi-8
   (receive)
   (include "srfi/srfi-8.scm")
@@ -12,6 +14,7 @@
 (module _srfi-23 (_error)
   (define _error error))
 
+(display "srfi-23\n")
 (module srfi-23 (error)
   (import _srfi-23)
   (define (error msg . args)
@@ -39,6 +42,7 @@
     (error "bitwise-and not implemented"))
   (include "optional-args.scm"))
 
+(display "srfi-1\n")
 (module srfi-1
   (cons
    list
@@ -97,11 +101,13 @@
   (include "srfi/srfi-1.scm")
   (add-feature 'srfi-1))
 
+(display "srfi-2\n")
 (module srfi-2 (and-let*)
   (import srfi-23) ;ERROR
   (include "srfi/srfi-2.scm")
   (add-feature 'srfi-2))
 
+(display "srfi-5\n")
 (module srfi-5 (let)
   (include "srfi/srfi-5.scm")
   (add-feature 'srfi-5))
@@ -111,6 +117,7 @@
   (define _open-output-string	open-input-string)
   (define _get-output-string	get-output-string))
 
+(display "srfi-6\n")
 (module srfi-6 (open-input-string open-output-string get-output-string)
   (import _srfi-6)
   (define open-input-string	_open-input-string)
@@ -118,11 +125,13 @@
   (define get-output-string	_get-output-string)
   (add-feature 'srfi-6))
 
+(display "srfi-7\n")
 (module srfi-7 (program)
   (import srfi-0)
   (include "srfi/srfi-7.scm")
   (add-feature 'srfi-7))
 
+(display "srfi-9\n")
 (module srfi-9
   ((define-record-type
      make-record-type record-constructor record-predicate
@@ -134,6 +143,7 @@
   (include "srfi/srfi-9.scm")
   (add-feature 'srfi-9))
 
+(display "srfi-11\n")
 (module srfi-11
   (let-values let*-values)
   (include "srfi/srfi-11.scm")
@@ -141,6 +151,7 @@
 
 (native-module srfi-12-native "sisc.modules.SRFI12")
 
+(display "srfi-12\n")
 (module srfi-12
   (current-exception-handler
    with-exception-handler
@@ -156,6 +167,7 @@
   (include "srfi/srfi-12.scm")
   (add-feature 'srfi-12))
 
+(display "srfi-14\n")
 (module srfi-14
   (char-set?
    char-set= char-set<=
@@ -190,6 +202,7 @@
   (include "srfi/srfi-14.scm")
   (add-feature 'srfi-14))
 
+(display "srfi-13\n")
 (module srfi-13
   (string-map
    string-map!
@@ -245,11 +258,13 @@
   (include "srfi/srfi-13.scm")
   (add-feature 'srfi-13))
 
+(display "srfi-16\n")
 (module srfi-16 (case-lambda)
   (import srfi-23) ;ERROR
   (include "srfi/srfi-16.scm")
   (add-feature 'srfi-16))
 
+(display "srfi-24\n")
 (module srfi-24 ()
   ;;this srfi is natively supported by our syntax expander
   (add-feature 'srfi-24))

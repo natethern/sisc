@@ -114,10 +114,7 @@
 ;    (field-tags record-type-field-tags))
 ; As it is, we need to define everything by hand.
 
-(define :record-type (make-record 3))
-;(record-set! :record-type 0 :record-type); Its type is itself.
-;(record-set! :record-type 1 ':record-type)
-;(record-set! :record-type 2 '(name field-tags))
+(define :record-type (void))
 
 ; Now that :record-type exists we can define a procedure for making more
 ; record types.
@@ -195,3 +192,7 @@
           (record-set! thing index value)
           (error "modifier applied to bad value" type tag thing)))))
 
+(set! :record-type (make-record 3))
+(record-set! :record-type 0 :record-type); Its type is itself.
+(record-set! :record-type 1 ':record-type)
+(record-set! :record-type 2 '(name field-tags))
