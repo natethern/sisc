@@ -1,3 +1,7 @@
+2003-06-02  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Fixed wide character handling in the console ports.
+	
 2003-06-02  Matthias Radestock  <matthias@sorted.org>
 
 	* Revised s2j, making several significant changes and
