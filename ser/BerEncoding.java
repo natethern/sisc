@@ -27,7 +27,7 @@ public abstract class BerEncoding {
         dos.write(b, p+1, b.length-(p+1));
     }
 
-    protected long readBerLong(DataInput in) throws IOException {
+    public static long readBerLong(DataInput in) throws IOException {
         int b=in.readUnsignedByte();
         long val=b & BER_MASK;
         while ((b & BER_CONT) != 0) {

@@ -22,7 +22,7 @@ public abstract class DeserializerImpl extends BerEncoding implements Deserializ
     }
 
     public Object readObject() throws IOException, ClassNotFoundException {
-        throw new IOException(liMessage(SISCB, "cannotdeserialize"));
+        throw new IOException(liMessage(Util.SISCB, "cannotdeserialize"));
     }
 
     public long skip(long n) throws IOException {

@@ -147,7 +147,7 @@ public class BinaryDeserializer extends DeserializerImpl {
             }
             return e;
         } catch (ArrayIndexOutOfBoundsException aib) {
-            throw new FileNotFoundException(liMessage(SISCB, "invalidentrypoint", new Object[] {new Integer(oid)}));
+            throw new FileNotFoundException(liMessage(Util.SISCB, "invalidentrypoint", new Object[] {new Integer(oid)}));
         }
     }            
 
