@@ -77,6 +77,8 @@ public class StringIO extends IndexedProcedure {
                 SchemeString s=new SchemeString(sw.getBuffer().toString());
                 sw.getBuffer().setLength(0);
                 return s;
+	    case OPENINPUTSTRING:
+		return new ReaderInputPort(new StringReader(f.vlr[0]));
             case OPENSOURCEINPUTSTRING:
                 return new SourceInputPort(
                         new StringReader(string(f.vlr[0])), "<string>");
