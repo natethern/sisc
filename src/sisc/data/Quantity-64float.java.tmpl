@@ -18,6 +18,7 @@ public class Quantity extends Value implements Singleton {
 
     public static final Quantity
         ZERO = Quantity.valueOf(0),
+        IZERO = ZERO.toInexact(),
         ONE  = Quantity.valueOf(1),
         NEGONE  = Quantity.valueOf(-1),
         TWO  = Quantity.valueOf(2),
@@ -1206,9 +1207,11 @@ public class Quantity extends Value implements Singleton {
     }
 
     public Quantity imagpart() {
-        if (type==COMPLEX)
-            return new Quantity(im);
-        else return ZERO;
+        switch(type) {
+        case DECIM: return IZERO;
+        case COMPLEX: return new Quantity(im);
+        default: return ZERO;
+        }
     }
 
     public Quantity numerator() throws NumberFormatException {
