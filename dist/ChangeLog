@@ -1,3 +1,7 @@
+2002-08-06  Matthias Radestock  <matthias@sorted.org>
+
+	* Updated slib.scm to work with latest version of slib (2d4).
+
 2002-08-05  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed handling of AnnotatedExprs when written to expanded source
