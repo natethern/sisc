@@ -7,6 +7,7 @@ import sisc.interpreter.*;
 import sisc.data.*;
 
 import java.util.HashMap;
+import java.util.Vector;
 
 public abstract class Util extends IndexedProcedure {
 
@@ -70,14 +71,14 @@ public abstract class Util extends IndexedProcedure {
     public static final Constructor jconstr(Value o) {
         try {
             return (Constructor)((JavaObject)o).get();
-        } catch (ClassCastException e) { typeError(S2JB, "jmethod", o); }
+        } catch (ClassCastException e) { typeError(S2JB, "jconstructor", o); }
         return null;
     }
 
     public static final Method jmethod(Value o) {
         try {
             return (Method)((JavaObject)o).get();
-        } catch (ClassCastException e) { typeError(S2JB, "jconstructor", o); }
+        } catch (ClassCastException e) { typeError(S2JB, "jmethod", o); }
         return null;
     }
 
@@ -110,6 +111,29 @@ public abstract class Util extends IndexedProcedure {
         return new SchemeVector(res);
     }
 
+    public static final Pair objectsToList(Object[] objs) {
+        Class c = objs.getClass().getComponentType();
+        Pair res = EMPTYLIST;
+        for (int i=0; i < objs.length; i++) {
+            res = new Pair(makeJObj(objs[i], c), res);
+        }
+        return res;
+    }
+
+    public static Vector pairToObjVect(Pair p) {
+        Vector v=new Vector();
+        for (; p!=EMPTYLIST; p=(Pair)p.cdr) {
+            v.addElement(jobj(p.car));
+        }
+        return v;
+    }
+
+    public static final Object[] pairToObjects(Pair p) {
+        Vector v = pairToObjVect(p);
+        Object[] vs = new Object[v.size()];
+        v.copyInto(vs);
+        return vs;
+    }
     
     /**
      * Construct a class representing an array type for an array with
