@@ -177,6 +177,462 @@ either <function>eq?</function> or <function>equal?</function> to a
 mixture of Java objects and other Scheme objects returns &num;f.
 </para>
       </sect3>
+      <sect3>
+        <title>Object Serialization</title>
+        <para>
+The objects representing Java classes, fields, methods and
+constructors can be (de)serialized. Ordinary Java objects cannot be
+(de)serialized.
+</para>
+      </sect3>
+    </sect2>
+    <sect2>
+      <title>Instantiating Java Classes and Invoking Methods</title>
+      <para>
+
+</para>
+      <sect3>
+        <title>Object Creation</title>
+        <para>
+Java objects can be created by Scheme code by invoking the
+<function>make</function> generic function with a class object as the
+first parameter followed by any number of Java objects, e.g.
+<informalexample>
+          <programlisting>
+(define sb (make &lt;jstringbuffer&gt; (-&gt;jstring "foo")))
+</programlisting>
+        </informalexample>
+<constant>&lt;jstringbuffer&gt;</constant> is bound to the object
+represting the Java class
+<classname>java.lang.StringBuffer</classname>. The angle brackets are
+only a notational convention for denoting variables bound to class
+objects. The <function>-&gt;jstring</function> converts a Scheme
+string into a Java string. In <xref linkend="JavaClasses"/> we explain
+how to get hold of class objects and in <xref
+linkend="S2JConversions"/> we show how to convert between Scheme and
+Java objects.
+</para>
+        <para>
+The types of the parameters passed to <function>make</function>
+determine which constructor is invoked. Normally this is a constructor
+defined in Java. Note however that that Scheme code can define new
+constructors or overload/override existing constructors via the
+<function>define-constructor</function> macro defined in
+<xref linkend="GenericFunctions"/>. Constructors defined in Scheme take
+precedence over constructors of the same type signature defined in
+Java. They are not visible to Java code. They must invoke a Java
+constructor in order to actually create a Java object. Typically this
+is done via the <function>next-method</function> feature of the
+generic function mechanism.
+</para>
+        <para>
+Note that <function>make</function> cannot create Java arrays. This is
+done by a special function instead.
+<para>
+<methodsynopsis language="scheme">
+            <type>jarray</type>
+            <methodname>java-array-new</methodname>
+            <methodparam><parameter>jclass</parameter></methodparam>
+            <methodparam><parameter>dimensions</parameter></methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Creates a Java array. <parameter>jclass</parameter> determines the
+type of array elements. <parameter>dimensions</parameter> determines
+the size of the array and can be either a number or, for
+multi-dimensional arrays, a list or vector of numbers.
+</para>
+          </blockquote>
+</para>
+      </para>
+      </sect3>
+      <sect3>
+        <title>Method Invocation</title>
+        <para>
+Scheme code can invoke Java methods via generic functions, e.g.
+<informalexample>
+            <programlisting>
+(define-generic to-string)
+(to-string sb)
+</programlisting>
+          </informalexample>
+which calls the <function>toString</function> method on the
+<classname>java.lang.StringBuffer</classname> instance defined above.
+</para>
+        <para>
+Generic functions implicitly include all Java methods in all classes
+whose mangled name matches that of the function. The name mangling is
+performed in order to give Java method names a more Scheme-like
+appearance. The rules are as follows:
+<orderedlist spacing="compact">
+<listitem>
+              <para>
+A <literal>-</literal> is inserted between a lower-case character and
+an upper-case character. Non-alphabetic characters are considered to
+be lower-case characters.
+</para>
+            </listitem>
+<listitem>
+              <para>
+The whole name is down-cased, e.g. <function>fooBarBaz</function>
+becomes <function>foo-bar-baz</function>, and
+<function>FooBar</function> becomes <function>foo-bar</function>.
+</para>
+              </listitem>
+<listitem>
+              <para>
+A <literal>!</literal> is appended if the original name started with
+<function>set</function> followed by an upper-case character,
+e.g. <function>setFoo</function> becomes <function>set-foo!</function>.
+</para>
+              </listitem>
+</orderedlist>
+The names of some Java methods, when mangled, clash with names of
+standard Scheme functions. <function>define-generic</function> can
+therefore take an explicit internal name as the second argument, e.g.
+<informalexample>
+              <programlisting>
+(define-generic app append)
+(app sb (->jstring "foo"))
+</programlisting>
+            </informalexample>
+The invocation of <function>app</function> selects the appropriate
+<function>append</function> method on
+<classname>java.lang.StringBuffer</classname>
+</para>
+        <para>
+The types of the parameters passed when invoking a generic function
+determine which method is invoked. Unlike Java, method selection is
+completely dynamic depending on the types of all parameters, including
+the first one, which, in the Java world, corresponds to the target
+object of a method invocation. Also, note that Scheme code can define
+new methods and overload/override existing methods via the
+<function>define-method</function> macro defined in
+<xref linkend="GenericFunctions"/>. Methods defined in Scheme take
+precedence over methods of the same type signature defined in
+Java. They are not visible to Java code.
+</para>
+        <para>
+Static Java methods can be invoked by generic functions either when
+supplying an ordinary Java object (i.e. the same as for normal method
+invocation) or a Java class as the first parameter. In both cases, the
+generic function mechanism will first try to locate an ordinary method
+matching the type signature and, when that fails, attempt to locate a
+matching static method. Thus, for instance, calling
+<literal>(to-string &lt;jstring&gt;)</literal> will invoke the
+normal <function>toString</function> method on
+<classname>java.lang.Class</classname> whereas calling
+<literal>(value-of &lt;jstring&gt; (-&gt;jint 1))</literal> will
+invoke the static <function>valueOf</function> method on
+<classname>java.lang.String</classname>.
+</para>
+      </sect3>
+      <sect3 id="JavaClasses">
+        <title>Classes</title>
+        <para>
+The primary means of getting hold of a Java class is
+<para>
+<methodsynopsis language="scheme">
+            <type>jclass</type>
+            <methodname>java-class</methodname>
+            <methodparam><parameter>classname</parameter></methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Resolves <parameter>classname</parameter> to a Java
+class. <parameter>classname</parameter> can be a string or symbol and
+must be one of the following:
+<itemizedlist spacing="compact">
+                <listitem>
+                  <para>
+a fully-qualified name of a Java class or interface
+</para>
+                </listitem>
+                <listitem>
+                  <para>
+the name of a primitive type, e.g. <literal>"int"</literal>
+</para>
+                </listitem>
+                <listitem>
+                  <para>
+one of the above followed by any number of <literal>[]</literal>,
+denoting an array type
+</para>
+                </listitem>
+              </itemizedlist>
+</para>
+          </blockquote>
+</para>
+      </para>
+<para>
+By convention, names of constants bound to class objects are
+constructed by enclosing the fully qualified class name in angle
+brackets, e.g.
+<informalexample>
+            <programlisting>
+(define &lt;java.util.Comparator&gt; (java-class "java.util.Comparator"))
+</programlisting>
+          </informalexample>
+An exception are primitive types and classes defined in the
+<classname>java.lang</classname> (excluding the wrapper classes for
+primitive types, such as
+<classname>java.lang.Integer</classname>). The <literal>s2j</literal>
+module exports pre-defined bindings for these in an abbreviated
+notation that only uses the type name or down-cased unqualified class
+name prefixed with the letter <literal>j</literal>,
+e.g. <literal>&lt;jint&gt;</literal>,
+<literal>&lt;jobject&gt;</literal>.
+</para>
+        <para>
+The class of an object can be obtained with
+<para>
+<methodsynopsis language="scheme">
+            <type>jclass</type>
+            <methodname>java-class-of</methodname>
+            <methodparam><parameter>jobj</parameter></methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Returns the class of which <parameter>jobj</parameter> is an instance.
+</para>
+          </blockquote>
+</para>
+        </para>
+        <para>
+It is also possible to check whether a Java object is an instance of a
+particular Java class and whether instances of one Java class can be
+assigned to variables whose declared type is that of another.
+<para>
+<methodsynopsis language="scheme">
+            <type>&num;t/&num;f</type>
+            <methodname>java-instance?</methodname>
+            <methodparam><parameter>jclass</parameter></methodparam>
+            <methodparam><parameter>jobj</parameter></methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Returns &num;t if <parameter>jobj</parameter> is an instance of
+<parameter>jclass</parameter> or one of its sub-classes, or, if
+<parameter>jclass</parameter> is an interface, implements
+<parameter>jclass</parameter>.
+</para>
+          </blockquote>
+</para>
+        <para>
+<methodsynopsis language="scheme">
+            <type>&num;t/&num;f</type>
+            <methodname>java-assignable?</methodname>
+            <methodparam><parameter>jclass1</parameter></methodparam>
+            <methodparam><parameter>jclass2</parameter></methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Returns &num;t if instances of <parameter>jclass2</parameter> can be
+assigned to variables, fields, parameters whose type has been declared
+as <parameter>jclass1</parameter>.
+</para>
+          </blockquote>
+</para>
+        <para>
+Primitive types are mapped to their respective
+<classname>java.lang</classname> classes. This means, amongst other
+things, that, unlike in Java, primitive types are indirect sub-classes
+of <classname>java.lang.Object</classname> and primitive types are
+assignable to their respective <classname>java.lang</classname>
+classes (and visa versa). Note however that no widening conversion
+takes place, because Java does not define widening conversions for the
+java.lang classes corresponding to the primitive types, e.g. a
+<classname>java.lang.Byte</classname> is not assignable to a
+<classname>java.lang.Integer</classname> and thus, unlike in Java,
+<classname>byte</classname> is not assignable to
+<classname>int</classname>.
+</para>
+      </para>
+      </sect3>
+      <sect3 id="S2JConversions">
+        <title>Converting between Scheme and Java Types</title>
+        <para>
+When calling Java methods and constructors through generic functions,
+or when setting/getting fields of Java objects and classes,
+<emphasis>no</emphasis> automatic conversion between Scheme types and
+Java types is performed, e.g. one cannot simply call a Java method
+that takes an <classname>int</classname> with a Scheme number or expect a
+<classname>java.lang.String</classname> returned from a method invocation
+to be converted to a Scheme string. Automatic conversion is not done
+for the following reasons:
+<itemizedlist spacing="compact">
+            <listitem>
+              <para>
+For some Scheme types, such as numbers, the mapping to Java types is
+one-to-many, e.g. a Scheme number could be converted to a
+<classname>byte</classname>, <classname>short</classname>,
+<classname>int</classname>, etc. This causes ambiguities when
+automatic conversion of parameters is attempted.
+</para>
+            </listitem>
+            <listitem>
+              <para>
+Some Java types have several corresponding Scheme types, e.g. a Java
+array could be represented as Scheme list or vector - this causes
+ambiguities when automatic conversion of results is attempted.
+</para>
+            </listitem>
+            <listitem>
+              <para>
+Conversion carries an overhead that can be significant. For instance,
+Java strings have to be copied "by value" to Scheme strings since the
+former are immutable and the latter aren't. In a chained-call
+scenario, i.e. where the results of one method invocation are passed
+as arguments to another, the conversion is unnecessary and a wasted
+effort.
+</para>
+            </listitem>
+            <listitem>
+              <para>
+Conversion breaks the object identity relationship. In a chained-call
+scenario, the identities of the objects passed to the second call are
+different from the ones returned by the first. This causes problems if
+the called Java code relies on the object identity being preserved.
+</para>
+            </listitem>
+            <listitem>
+              <para>
+Conversion conflicts with generic functions. The method selection
+mechanism employed by generic functions relies on objects having
+exactly one type. Automatic conversion effectively gives objects more
+than one type - their original type and the type of the objects they
+can be converted to. While it would be technically possible do devise
+a method selection algorithm that accommodates this, the algorithm
+would impose a substantial overhead on generic function invocation and
+also make it significantly harder for users to predict which method
+will be selected when invoking a generic function with a particular
+set of arguments.
+</para>
+            </listitem>
+          </itemizedlist>
+</para>
+        <para>
+Instead of implicit conversion, the <literal>s2j</literal> module
+provides a general explicit conversion mechanism that can be used to
+explicitly convert from Scheme to Java types and visa versa. In fact
+this function can in principle also be used to convert between Scheme
+types and between Java types in a future version. The general
+conversion function is
+</para>
+<para>
+<methodsynopsis language="scheme">
+            <type>proc</type>
+            <methodname>-&gt;</methodname>
+            <methodparam><parameter>type</parameter></methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Returns a function that when invoked will convert its argument into an
+object of type <parameter>type</parameter>. For example
+<informalexample>
+                <programlisting>
+((-&gt; &lt;jstring&gt;) "foo")
+</programlisting>
+              </informalexample>
+converts the Scheme string <literal>"foo"</literal> into a Java
+string. Typically the returned function takes just one argument - the
+object to be converted. There are however some special cases where
+additional information is needed in order to perform a conversion and
+this would be supplied in additional arguments.
+</para>
+          </blockquote>
+<function>-&gt;</function> is an ordinary generic function, so it is
+actually possible to define custom conversion.
+</para>
+        <para>
+For most of the conversion functions returned by
+<function>-&gt;</function> there are top-level bindings consisting of
+the type name prefixed with <literal>-&gt;</literal>,
+e.g. <literal>(-&gt;jint 2)</literal>. Note that doing this is a lot
+more efficient than using <function>-&gt;</function> since
+<function>-&gt;</function> is defined in terms of the specialised
+conversion functions. Also, there are some conversion that cannot be
+accomplished with <function>-&gt;</function>. One such case is
+conversion to Java arrays since there is no general array type in Java
+and hence no type object that could be used as the parameter to
+<function>-&gt;</function>. Instead there is
+</para>
+        <para>
+<methodsynopsis language="scheme">
+            <type>jarray</type>
+            <methodname>-&gt;jarray</methodname>
+            <methodparam><parameter>list-or-vector</parameter></methodparam>
+            <methodparam><parameter>jclass</parameter></methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Converts <parameter>list-or-vector</parameter> into a Java array whose
+element type is <parameter>jclass</parameter>.
+</para>
+            </blockquote>
+</para>
+        <para>
+All Scheme types have a corresponding type objects, which are bound to
+identifiers in the top-level environment,
+eg. <literal>&lt;void&gt;</literal>,
+<literal>&lt;boolean&gt;</literal>, <literal>&lt;number&gt;</literal>
+etc. Hence, for instance
+<informalexample>
+          <programlisting>
+((-&gt; &lt;number&gt;) (-&gt;jint 1))
+(-&gt;number (-&gt;jint 1))
+</programlisting>
+          </informalexample>
+both convert the Scheme number <literal>1</literal> into a Java
+<classname>int</classname> and back into a Scheme number.
+</para>
+      </sect3>
+      <sect3>
+        <title>Exceptions</title>
+        <para>
+Java exceptions are propagated to scheme and can be caught like any
+other exception, e.g. with <function>call/fc</function> as defined in
+<xref linkend="FailureContinuations"/>. For example
+<informalexample>
+            <programlisting>
+(define-generic char-at)
+(define-generic print-stack-trace)
+(call-with-failure-continuation
+ (lambda () (char-at (-&gt;jstring "foo") (-&gt;jint 3)))
+ (lambda (m e f)
+   (print-stack-trace m)
+   #f))
+</programlisting>
+          </informalexample>
+will catch the <classname>IndexOutOfBoundsException</classname>, print
+its stack trace and return &num;f.
+</para>
+      </sect3>
+    </sect2>
+    <sect2>
+      <title>Miscellaneous Features</title>
+      <para>
+</para>
+      <sect3>
+        <title>Wrapping Scheme Objects</title>
+        <para>
+</para>
+      </sect3>
+      <sect3>
+        <title>Proxies</title>
+        <para>
+</para>
+      </sect3>
+      <sect3>
+        <title>Synchronisation</title>
+        <para>
+</para>
+        </sect3>
+      <sect3>
+        <title>Under The Hood</title>
+        <para>
+</para>
+      </sect3>
     </sect2>
   </sect1>
 </chapter>
