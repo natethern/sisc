@@ -1,3 +1,4 @@
+
 ;; 
 ;; The contents of this file are subject to the Mozilla Public
 ;; License Version 1.1 (the "License"); you may not use this file
@@ -50,6 +51,17 @@
 ; "andmap" is like "map" except instead of "consing" the results it
 ; "ands" them, quitting early if #f" is obtained.
 ; The following does no error checking.
+(load-module "sisc.debug.SDebug")
+
+(define annotation-stripped
+  (lambda (x)
+    (not (annotation? x))))
+
+(define set-annotation-stripped!
+  (lambda (what huh)
+    ;Just going to ignore this since I have *no* idea what its supposed
+    ;to do
+    (void)))
 
 (define andmap
    (lambda (f first . rest)
@@ -118,7 +130,8 @@
      (lambda (x . env)
        (if (if (pair? x) (eq? (car x) "noexpand") #f)
 	   (apply old-eval (cons (cadr x) env))
-	   ((lambda (e) (apply old-eval (cons e env)))
+	   ((lambda (e)  
+	     (apply old-eval (cons e env)))
 	    (sc-expand x)))))
    (current-evaluator)))
 

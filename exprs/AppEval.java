@@ -51,4 +51,8 @@ public class AppEval extends Expression {
     }
 
     public AppEval() {}
+
+    public AppEval(Value annotation) {
+	this.annotation=annotation;
+    }
 }

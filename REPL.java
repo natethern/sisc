@@ -193,7 +193,7 @@ public class REPL extends Thread {
 		    Socket client = ssocket.accept();
 		    pout.println("Accepting connection from " + client.getInetAddress().toString());
 		    pout.flush();
-		    DynamicEnv dynenv = new DynamicEnv(new InputPort(new BufferedReader(new InputStreamReader(client.getInputStream()))),
+		    DynamicEnv dynenv = new DynamicEnv(new SourceInputPort(new BufferedReader(new InputStreamReader(client.getInputStream())), "console"),
 						       new OutputPort(new PrintWriter(client.getOutputStream()), true));
 		    REPL repl = new SocketREPL(dynenv, client);
 		    repl.start();

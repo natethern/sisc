@@ -1,6 +1,15 @@
+2002-03-09  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Fixed equality problems with Immutables
+
+	* Modified REPL to allow third party applications to load 
+	  heaps easier.
+
+	* Pervasive localization effort.  See the manual for details.
+
 2002-03-08  Matthias Radestock  <matthias@sorted.org>
 
-	* Fxied access violation problems in generic functions when
+	* Fixed access violation problems in generic functions when
 	  sub-classes have more restrictive permissions than base
 	  classes. The fix is restricts the visiblity of non-public
 	  classes/interfaces/methods.

@@ -175,8 +175,11 @@ public class Serializer implements Conf {
                     } else {
                         e=(Expression)clazz.newInstance();
                         deserState.put(serialId, e);
-                        if (callDeser)
+                        if (callDeser) {
 			    DESM.invoke(e, new Object[] { this, dis });
+			    if (dis.readBoolean())
+				e.annotation=(Value)deserialize(dis);
+			}
                     }
                 } catch (Exception e1) {
                     if (e1 instanceof IOException)
@@ -209,6 +212,11 @@ public class Serializer implements Conf {
                 writeBer(serialId.intValue(), dos);
                 putClass(e.getClass(), dos);
                 e.serialize(this, dos);
+		if (!(e instanceof Singleton)) {
+		    dos.writeBoolean(e.annotation!=null);
+		    if (e.annotation!=null)
+			serialize(e.annotation, dos);
+		}
             } else
                 writeBer(serialId.intValue(), dos);
         }

@@ -37,6 +37,12 @@ import java.io.*;
 
 public abstract class Expression extends Util implements Serializable {
 
+    public Value getAnnotation() {
+	return annotation;
+    }
+
+    public Value annotation;
+    
     public abstract void eval(Interpreter r) throws ContinuationException;
     public Value getValue(Interpreter r) throws ContinuationException {
         return null;

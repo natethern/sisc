@@ -77,6 +77,8 @@ public class Compiler extends Util {
 
     static final int
 	APP=-1, LAMBDA = 0, _IF=1, BEGIN=2, QUOTE=3, SET=4, DEFINE=5,
+	MAKEANNOTATION=6,
+	
 	TAIL=1, COMMAND=2, PREDICATE=4;
 
     public Compiler() {}
@@ -88,6 +90,7 @@ public class Compiler extends Util {
         extendenv(menv,"quote", QUOTE);
         extendenv(menv,"set!", SET);
         extendenv(menv,"define", DEFINE);
+	extendenv(menv,"make-annotation", MAKEANNOTATION);
         return menv;
     }
 
@@ -125,6 +128,8 @@ public class Compiler extends Util {
     public Expression compile(Interpreter r, Expression v, ReferenceEnv rt,
                               int context, AssociativeEnvironment env)
     throws ContinuationException {
+	//	System.err.println("C"+v);
+	//	System.err.println(v.getClass());
         if (v==EMPTYLIST) {
 	    //error(r, liMessage(SISCB, "invnullexpr"));
 	    //return null;
@@ -168,7 +173,9 @@ public class Compiler extends Util {
                                  Pair expr, ReferenceEnv rt,
                                  int context, AssociativeEnvironment env)
     throws ContinuationException {
+
         Expression tmp;
+
         if (expr.car instanceof Symbol) {
             Symbol s=(Symbol)expr.car;
             int t=getExpType(env, s);
@@ -244,6 +251,18 @@ public class Compiler extends Util {
 
                 return new EvalExp(compile(r, expr.car, rt, 0, env),
 				   new DefineEval(lhs));
+	    case MAKEANNOTATION:
+		Value aexpr=expr.car;
+		expr=(Pair)expr.cdr;
+
+		rhs=compile(r, aexpr, rt, context, env);
+		if (rhs instanceof EvalExp) {
+		    EvalExp eve=(EvalExp)rhs;
+		    eve.post.annotation=expr.car;
+		} else if (rhs instanceof AppExp) {
+		    ((AppExp)rhs).appEval=new AppEval(expr.car);
+		} else rhs.annotation=expr.car;
+		return rhs;
             default:
                 Expression[] exps=pairToExpressions(expr);
                 compileExpressions(r, exps, rt, 0, env);
@@ -265,7 +284,10 @@ public class Compiler extends Util {
     }
 
     public final Expression application(Expression rator, Expression rands[], boolean nonTail) {
-        if (rator instanceof Value && !(rator instanceof Procedure))
+        if (rator instanceof Value && 
+	    !(rator instanceof Procedure) &&
+	    !(rator instanceof AnnotatedExpr))
+
             System.err.println(warn("nonprocappdetected",((Value)rator).synopsis()));
 	return new AppExp(rator, rands, nonTail);
     }

@@ -49,7 +49,7 @@ public class Interpreter extends Util {
 	    r.nxp=null;
 	    Values v=(Values)r.acc;
 	    throw new SchemeRuntimeException(v.values[0], 
-					     cont(v.values[1]), 
+					     proc(v.values[1]), 
 					     proc(v.values[2]));
 	}
 
@@ -286,3 +286,4 @@ public class Interpreter extends Util {
         deadValues[size] = v;
     }
 }
+

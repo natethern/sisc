@@ -372,7 +372,7 @@ public class Primitives extends ModuleAdapter {
             case EVAL:
                 f.nxp=f.compile(f.vlr[0]);
                 f.returnValues(f.vlr);
-                return VOID;
+                return BuiltinProcedure.CONTINUE;
             case OPENINPUTSTRING:
                 return new InputPort(new BufferedReader(
                                                         new StringReader(string(f.vlr[0]))));
@@ -441,6 +441,7 @@ public class Primitives extends ModuleAdapter {
                     } catch (EOFException eof) {
                         v=EOF;
                     } catch (IOException e) {
+			e.printStackTrace();
                         f.pop(before);
                         throwPrimException( "error reading from "+p.write());
                     }

@@ -40,11 +40,15 @@ import java.io.*;
 import java.util.*;
 
 public class Parser extends Util implements Tokens {
+    public boolean annotate=false;
     Lexer lexer;
     static final Object DOT=new Object();
     static final Object ENDPAIR=new Object();
     static final Symbol SYNTAX=Symbol.get("syntax"),
-	ANNOTATION=Symbol.get("make-annotation");
+	ANNOTATION=Symbol.get("make-annotation"),
+	LINE=Symbol.get("line-number"),
+	COLUMN=Symbol.get("column-number"),
+	FILE=Symbol.get("source-file");
 
     static final HashMap chars=new HashMap (8);
     static {
@@ -73,6 +77,7 @@ public class Parser extends Util implements Tokens {
 	
     public Value nextExpression(InputPort is, int radix) throws IOException {
         Object n=VOID;
+
         try {
             n=_nextExpression(is, new HashMap (), null, radix);
             return (Value)n;
@@ -83,7 +88,7 @@ public class Parser extends Util implements Tokens {
             } else if (n==DOT)
                 throw new IOException(liMessage(SISCB, "unexpecteddot"));
         }
-        return (Value)n;
+	return (Value)n;
     }
 
     protected Object _nextExpression(InputPort is, HashMap state, Integer def) throws IOException {
@@ -110,7 +115,9 @@ public class Parser extends Util implements Tokens {
 
     protected Object _nextExpression(InputPort is, HashMap state, Integer def, int radix)
     throws IOException {
-
+	int line=-1, col=-1;
+	String file=null;
+	
         int token=lexer.nextToken(is, radix);
         Object o;
         switch (token) {
@@ -138,8 +145,21 @@ public class Parser extends Util implements Tokens {
             o=new ImmutableString(lexer.sval);
             break;
         case TT_PAIR:
+	    //Annotation support
+	    if (is instanceof SourceInputPort) {
+		SourceInputPort sip=(SourceInputPort)is;
+		line=sip.line;
+		col=sip.column-1;
+		file=sip.sourceFile;
+	    }
+
             o=readList(is, state, def);
-            return o;
+	    if (annotate && o instanceof Pair && line>=0) 
+		o=new AnnotatedExpr((Expression)o, 
+				    list(new Pair(LINE, Quantity.valueOf(line)),
+					 new Pair(COLUMN, Quantity.valueOf(col)),
+					 new Pair(FILE, new SchemeString(file))));
+	    return o;
         case TT_ENDPAIR:
             o=ENDPAIR;
             break;
@@ -244,6 +264,8 @@ public class Parser extends Util implements Tokens {
 		def=null;
 
                 Object expr=_nextExpression(is, state, def);
+		if (expr instanceof AnnotatedExpr)
+		    expr=((AnnotatedExpr)expr).expr;
                 if (expr==null && v==null) {
 		    iv.vals=new Value[0];
                     break;
@@ -272,15 +294,14 @@ public class Parser extends Util implements Tokens {
         default:
             throw new IOException(liMessage(SISCB, "unknowntoken"));
         }
-        if (def!=null) 
+	if (def!=null) 
             state.put(def, o);
 	return o;
-
     }
 
     public Value readList(InputPort is, HashMap state, Integer def)
-    throws IOException, EOFException {
-
+	throws IOException, EOFException {
+	
 	int line=0, column=0;
 	if (is instanceof SourceInputPort) {
 	    line=((SourceInputPort)is).line;

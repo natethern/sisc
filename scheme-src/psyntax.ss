@@ -430,8 +430,6 @@
 (define-syntax fx= (identifier-syntax =))
 (define-syntax fx< (identifier-syntax <))
 
-(define annotation? (lambda (x) #f))
-
 (define top-level-eval-hook
   (lambda (x)
     (eval `(,noexpand ,x))))
@@ -489,37 +487,51 @@
 (define-syntax build-application
   (syntax-rules ()
     ((_ source fun-exp arg-exps)
-     `(,fun-exp . ,arg-exps))))
+     (if source 
+	 `(make-annotation (,fun-exp . ,arg-exps) ,source)
+	 `(,fun-exp . ,arg-exps)))))
 
 (define-syntax build-conditional
   (syntax-rules ()
     ((_ source test-exp then-exp else-exp)
-     `(if ,test-exp ,then-exp ,else-exp))))
+     (if source
+       	 `(make-annotation (if ,test-exp ,then-exp ,else-exp) ,source)
+	 `(if ,test-exp ,then-exp ,else-exp)))))
 
 (define-syntax build-lexical-reference
   (syntax-rules ()
     ((_ type source var)
-     var)))
+     (if source 
+	 `(make-annotation ,var ,source)
+	 var))))
 
 (define-syntax build-lexical-assignment
   (syntax-rules ()
     ((_ source var exp)
-     `(set! ,var ,exp))))
+     (if source
+	 `(make-annotation (set! ,var ,exp) ,source)
+	 `(set! ,var ,exp)))))
 
 (define-syntax build-global-reference
   (syntax-rules ()
     ((_ source var)
-     var)))
+     (if source 
+	 `(make-annotation ,var ,source)
+	 var))))
 
 (define-syntax build-global-assignment
   (syntax-rules ()
     ((_ source var exp)
-     `(set! ,var ,exp))))
+     (if source
+	 `(make-annotation (set! ,var ,exp) ,source)
+	 `(set! ,var ,exp)))))
 
 (define-syntax build-global-definition
   (syntax-rules ()
     ((_ source var exp)
-     `(define ,var ,exp))))
+     (if source
+	 `(make-annotation (define ,var ,exp) ,source)
+	 `(define ,var ,exp)))))
 
 (define-syntax build-module-definition
  ; should have the effect of a global definition but may not appear at top level
@@ -546,7 +558,9 @@
 (define-syntax build-lambda
   (syntax-rules ()
     ((_ src vars exp)
-     `(lambda ,vars ,exp))))
+     (if src 
+	 `(make-annotation (lambda ,vars ,exp) ,src)
+	 `(lambda ,vars ,exp)))))
 
 (define-syntax build-primref
   (syntax-rules ()
@@ -555,29 +569,46 @@
 
 (define-syntax build-data
   (syntax-rules ()
-    ((_ src exp) `',exp)))
+    ((_ src exp) 
+	`',exp)))
 
 (define build-sequence
   (lambda (src exps)
     (if (null? (cdr exps))
-        (car exps)
-        `(begin ,@exps))))
+	(if src
+	    `(make-annotation ,(car exps) ,src)
+	    (car exps))
+	(if src
+	    `(make-annotation (begin ,@exps) ,src)
+	    `(begin ,@exps)))))
 
 (define build-letrec
   (lambda (src vars val-exps body-exp)
     (if (null? vars)
-        body-exp
-	(cons (list 'lambda vars
-		    (append (cons 'begin
-				  (map (lambda (v e)
-					 (list 'set! v e))
-				       vars val-exps))
-			    (list body-exp)))
-	      (map (lambda (x) #f) vars)))))
+	(if src
+	    `(make-annotation ,body-exp ,src)
+	    body-exp)
+	(if src
+	    `(make-annotation 
+			      ,(cons (list 'lambda vars
+					   (append (cons 'begin
+							 (map (lambda (v e)
+								(list 'set! v e))
+							      vars val-exps))
+						   (list body-exp)))
+				     (map (lambda (x) #f) vars))
+			      ,src)
+	    (cons (list 'lambda vars
+			(append (cons 'begin
+				      (map (lambda (v e)
+					     (list 'set! v e))
+					   vars val-exps))
+				(list body-exp)))
+		  (map (lambda (x) #f) vars))))))
 
 (define-syntax build-lexical-var
   (syntax-rules ()
-    ((_ src id) (gensym))))
+    ((_ src id) (if src `(make-annotation ,(gensym) ,src) (gensym)))))
 
 (define-syntax self-evaluating?
   (syntax-rules ()
@@ -2309,15 +2340,15 @@
 (define strip-annotation
   (lambda (x parent)
     (cond
+      ((annotation? x)
+       (or (annotation-stripped x)
+           (strip-annotation (annotation-expression x) x)))
       ((pair? x)
        (let ((new (cons #f #f)))
          (when parent (set-annotation-stripped! parent new))
          (set-car! new (strip-annotation (car x) #f))
          (set-cdr! new (strip-annotation (cdr x) #f))
          new))
-      ((annotation? x)
-       (or (annotation-stripped x)
-           (strip-annotation (annotation-expression x) x)))
       ((vector? x)
        (let ((new (make-vector (vector-length x))))
          (when parent (set-annotation-stripped! parent new))

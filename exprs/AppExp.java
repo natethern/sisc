@@ -37,6 +37,7 @@ import sisc.data.*;
 import java.io.*;
 
 public class AppExp extends Expression {
+    public AppEval appEval=(AppEval)APPEVAL;
     public Expression rator, rands[];
     public boolean nonTail;
 
@@ -68,7 +69,7 @@ public class AppExp extends Expression {
 		// We have some non-immediates, so set up 
 		// a FillRib for cleanup and set the first operand
 		// in the nxp
-		r.push(r.createFillRib(i, rands, rator, APPEVAL));
+		r.push(r.createFillRib(i, rands, rator, appEval));
 		r.nxp=rands[i];
 		return;
 	    }
@@ -79,11 +80,11 @@ public class AppExp extends Expression {
 	tmp=rator.getValue(r);
 	
 	if (tmp!=null) {
-	    r.nxp=APPEVAL;
+	    r.nxp=appEval;
 	    r.acc=tmp;
 	} else { 
 	    r.nxp=rator;
-	    r.push(APPEVAL);
+	    r.push(appEval);
 	}
     }
 
@@ -103,6 +104,7 @@ public class AppExp extends Expression {
                 s.serialize(rands[i], dos);
 	    }
             s.serialize(rator, dos);
+	    s.serialize(appEval, dos);
             dos.writeBoolean(nonTail);
         }
     }
@@ -120,6 +122,7 @@ public class AppExp extends Expression {
             }
 
             rator=s.deserialize(dis);
+	    appEval=(AppEval)s.deserialize(dis);
             nonTail=dis.readBoolean();
         }
     }

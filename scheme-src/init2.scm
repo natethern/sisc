@@ -32,6 +32,7 @@
 ;;
 		 
 (current-evaluator eval)
+(emit-annotations #t)
 
 (define (parameterize . default)
   (make-parameter (if (not (null? default)) (car default) #f)))

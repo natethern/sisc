@@ -67,22 +67,24 @@ public class AnnotatedExpr extends Value {
     }
 
     public String display() {
-	StringBuffer b=new StringBuffer("#@");
-	b.append(annotation.display()).append(',');
+	StringBuffer b=new StringBuffer("#@(");
+	b.append(annotation.display()).append(" . ");
 	if (expr instanceof Value) 
 	    b.append(((Value)expr).display());
 	else 
 	    b.append(expr.express());
+	b.append(')');
 	return b.toString();
     }
 
     public String write() {
-	StringBuffer b=new StringBuffer("#@");
-	b.append(annotation.write()).append(',');
+	StringBuffer b=new StringBuffer("#@(");
+	b.append(annotation.write()).append(" . ");
 	if (expr instanceof Value) 
 	    b.append(((Value)expr).write());
 	else 
 	    b.append(expr.express());
+	b.append(')');
 	return b.toString();
     }
 

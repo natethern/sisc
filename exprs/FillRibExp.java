@@ -92,6 +92,10 @@ public class FillRibExp extends Expression implements Volatile {
         return list(sym("FillRib-exp"), rands[pos].express(), last.express());
     }
 
+    public Value getAnnotation() {
+	return cleanup.getAnnotation();
+    }
+
     public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.writeBer(rands.length, dos);

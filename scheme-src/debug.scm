@@ -17,6 +17,8 @@
               (newline)
               (compiled))))))))
 
+(define annotation? annotated?)
+
 (putprop 'trace-depth '*sisc* -1)
 
 (define-syntax trace-lambda
@@ -74,4 +76,52 @@
 	   (lambda () (putprop 'trace-depth '*sisc* 
 			       (- (getprop 'trace-depth '*sisc*) 1))))))))
 
+(emit-annotations #t)
 
+(define last-m #f)
+(define e (call/fc (lambda () (+ 1 (/ 1 0))) (lambda (m e c) 
+					       (set! last-m m)
+					       e)))
+
+(define (stack-trace k)
+  (let loop ((k k))
+    (cond [(null? k) '()]
+	  [(null? (continuation-nxp k)) (loop (continuation-stk k))]
+	  [else 
+	   (let ([nxp (continuation-nxp k)])
+	     (cons nxp 
+		   (loop (continuation-stk k))))])))
+
+(define y (stack-trace e))
+
+(define (emacs-stack-trace e) 
+  (let* ([k (cdr (assoc 'cont e))]
+	 [m (cdr (assoc 'message e))]
+	 [st 
+	 (let loop ((x (map annotation-source (stack-trace k))))
+	   (cond [(null? x) '()]
+		 [(not (car x)) (loop (cdr x))]
+		 [else (cons (car x) (loop (cdr x)))]))])
+    (if (not (null? st))
+	(begin
+	  (let ([data (car st)])
+	    (let ([line (cdr (assoc 'line-number data))]
+		  [column (cdr (assoc 'column-number data))]
+		  [sourcefile (cdr (assoc 'source-file data))])
+	      (display (format "~a:~a:~a:~a:~a: ~a~%"
+			       sourcefile
+			       line column
+			       line column
+			       m)))
+	    (set! st (cdr st)))
+	  (for-each
+	   (lambda (data)
+	     (if data
+		 (let ([line (cdr (assoc 'line-number data))]
+		       [column (cdr (assoc 'column-number data))]
+		       [sourcefile (cdr (assoc 'source-file data))])
+		   (display (format "~a:~a:~a:~a:~a: <called from>~%" 
+				    sourcefile
+				    line column
+				    line column)))))
+	   st)))))

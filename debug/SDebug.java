@@ -46,11 +46,14 @@ public class SDebug extends ModuleAdapter {
 	EXPRESSV=0, COMPILE=1,
 	CONT_VLR=2, CONT_NXP=3, CONT_ENV=4, CONT_FK=5,
 	CONT_LOCKQ=6, CONT_PARENT=7, ANNOTATEDQ=8,
-	ANNOTATIONSRC=9, ANNOTATIONEXPR=10;
+	ANNOTATIONSRC=9, ANNOTATIONEXPR=10, ANNOTATIONQ=11,
+	EMITANNOTATIONS=12, ERROR_CONT_K=13;
 
     public SDebug() {
+	define("emit-annotations", EMITANNOTATIONS);
         define("express", EXPRESSV);
         define("compile", COMPILE);
+	define("error-continuation-k", ERROR_CONT_K);
         define("continuation-vlr", CONT_VLR);
         define("continuation-nxp", CONT_NXP);
         define("continuation-env", CONT_ENV);
@@ -58,6 +61,7 @@ public class SDebug extends ModuleAdapter {
 	define("continuation-stk", CONT_PARENT);
         define("continuation-captured?", CONT_LOCKQ);
 	define("annotated?", ANNOTATEDQ);
+	define("annotation?", ANNOTATIONQ);
 	define("annotation-source", ANNOTATIONSRC);
 	define("annotation-expression", ANNOTATIONEXPR);
     }
@@ -68,6 +72,10 @@ public class SDebug extends ModuleAdapter {
         SISCExpression(Expression e) {
             this.e=e;
         }
+
+	public Value getAnnotation() {
+	    return e.getAnnotation();
+	}
 
         public String display() {
             return "#<expression "+e.express().write()+'>';
@@ -83,14 +91,30 @@ public class SDebug extends ModuleAdapter {
 
     public Value eval(int primid, Interpreter f) throws ContinuationException {
         switch(f.vlr.length) {
+	case 0:
+	    switch(primid) {
+	    case EMITANNOTATIONS:
+		return truth(f.dynenv.parser.annotate);
+	    default:
+                throwArgSizeException();
+	    }
         case 1:
             switch(primid) {
+	    case EMITANNOTATIONS:
+		f.dynenv.parser.annotate=truth(f.vlr[0]);
+		return VOID;
             case EXPRESSV:
-                Closure c=(Closure)f.vlr[0];
-                return list(c.arity ? sym("infinite") : sym("finite"),
-                            Quantity.valueOf(c.fcount), c.body.express());
+		if (f.vlr[0] instanceof SISCExpression) {
+		    return ((SISCExpression)f.vlr[0]).e.express();
+		} else {
+		    Closure c=(Closure)f.vlr[0];
+		    return list(c.arity ? sym("infinite") : sym("finite"),
+				Quantity.valueOf(c.fcount), c.body.express());
+		}
             case COMPILE:
                 return new Closure(false, (short)0, f.compile(f.vlr[0]), f.env);
+	    case ERROR_CONT_K:
+		return ((ApplyParentFrame)f.vlr[0]).c;
             case CONT_LOCKQ:
                 CallFrame cn=cont(f.vlr[0]);
                 return truth(cn.lock);
@@ -106,13 +130,24 @@ public class SDebug extends ModuleAdapter {
                 return cn.env;
 	    case CONT_PARENT: 
 		cn=cont(f.vlr[0]);
+		if (cn.parent==null) return EMPTYLIST;
                 return cn.parent;
-	    case ANNOTATEDQ:
+	    case ANNOTATIONQ:
 		return truth(f.vlr[0] instanceof AnnotatedExpr);
+	    case ANNOTATEDQ:
+		return truth(f.vlr[0].getAnnotation()!=null);
 	    case ANNOTATIONSRC:
-		return annotated(f.vlr[0]).annotation;
+		Value rv;
+		if (f.vlr[0] instanceof AnnotatedExpr) 
+		    rv=annotated(f.vlr[0]).annotation;
+		else if (f.vlr[0].getAnnotation()!=null)
+		    rv=f.vlr[0].getAnnotation();
+		else rv=FALSE;
+		return rv;
 	    case ANNOTATIONEXPR:
-		return new SISCExpression(annotated(f.vlr[0]).expr);
+		if (f.vlr[0] instanceof AnnotatedExpr) 
+		    return (Value)annotated(f.vlr[0]).expr;
+		else return f.vlr[0];
             default:
                 throwArgSizeException();
             }

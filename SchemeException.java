@@ -4,10 +4,9 @@ import sisc.data.*;
 
 public class SchemeException extends Exception {
     public Value m;
-    public CallFrame e;
-    public Procedure f;
+    public Procedure e, f;
 
-    public SchemeException(Value message, CallFrame exception_k, 
+    public SchemeException(Value message, Procedure exception_k, 
 			   Procedure parent_fk) {
 	m=message;
 	e=exception_k;
