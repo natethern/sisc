@@ -198,9 +198,13 @@ public abstract class Util implements Conf {
 
     /* Casting checks */
     public static void typeError(String type, Value o) {
+	typeError(SISCB, type, o);
+    }
+
+    public static void typeError(Symbol bundleName, String type, Value o) {
         if (o instanceof Values)
-            throw new RuntimeException(liMessage(SISCB, "multiplevalues"));
-        throw new RuntimeException(liMessage(SISCB, "unexpectedarg", liMessage(SISCB, type), 
+            throw new RuntimeException(liMessage(bundleName, "multiplevalues"));
+        throw new RuntimeException(liMessage(bundleName, "unexpectedarg", liMessage(SISCB, type), 
 					     o.synopsis(DEFAULT_SYNOPSIS_LENGTH)));
     }
 
