@@ -15291,7 +15291,7 @@
                                (%_3181
                                  (cons (datum->syntax-object %_3179 %_3183)
                                        %_3182))))
-                           (read-with-annotations %_3180))))
+                           (read-with-annotations %_3180 '#t))))
                       %_3181))
                   #f)
                  '()))

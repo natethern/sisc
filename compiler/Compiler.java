@@ -129,8 +129,6 @@ public class Compiler extends Util {
                               int context, AssociativeEnvironment env, 
                               Pair an)
     throws ContinuationException {
-	//	System.err.println("C"+v);
-	//	System.err.println(v.getClass());
         if (v==EMPTYLIST) {
 	    //error(r, liMessage(SISCB, "invnullexpr"));
 	    //return null;

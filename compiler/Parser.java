@@ -114,7 +114,11 @@ public class Parser extends Util implements Tokens {
 				 HashMap state, Integer def, 
                                  boolean read) throws IOException {
 	Pair t=new Pair();
-	Pair p=new Pair(car, t);
+        Pair p;
+        if (read)
+            p=new Pair(car, t);
+        else
+            p=new ImmutablePair(car, t);
 	if (def!=null)
 	    state.put(def, p);
 	t.setCar(nextExpression(is, state, read));
