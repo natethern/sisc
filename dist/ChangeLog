@@ -1,3 +1,13 @@
+2002-05-16  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Fixed a compiler bug that was setting lastAndRatorImmediate
+          incorrectly, causing call/cc problems.
+
+	* Fixed handling of locked vlrs, which was breaking call/cc in
+	  some cases.
+
+	* Renamed lck to vlk and made it a first class register.
+
 2002-05-14  Matthias Radestock  <matthias@sorted.org>
 
 	* Added loadable configuration file.
