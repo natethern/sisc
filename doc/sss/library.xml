@@ -961,14 +961,17 @@ com/foo/bar/baz/baz3.scm
         <title>SRFI Modules</title>
         <para>
           In &SISC; each SRFI is encapsulated in a module. See <xref
-          linkend="Modules"/> for details of &SISC;'s module system. 
+          linkend="Modules"/> for details of &SISC;'s module system.
           The definitions for SRFI modules are not included in the
           standard &SISC; heap build and hence must be loaded
           separately from the compiled library
-          <filename>srfi.sll</filename>, which can be found in the
-          root directory of the &SISC; binary distribution:
+          <filename>srfi.sll</filename>, which is contained in the
+          <filename>sisc-lib.jar</filename> jar file in the root
+          directory of the &SISC; binary distribution. As long as this
+          jar file is on the classpath, which is the case by default,
+          the following command makes the SRFI modules available:
           <programlisting>
-(load "<parameter>install-path</parameter>/srfi.sll")
+(require-library "sisc/libs/srfi")
           </programlisting>
         </para>
       </sect3>
