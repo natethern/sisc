@@ -12,7 +12,7 @@ public class LetrecExp extends AppExp {
     static {
         for (int i=MANY_VOIDS.length-1; i>=0; i--)
             MANY_VOIDS[i]=VOID;
-    };
+    }
 
     public LetrecExp(Expression exp, Expression rands[], Expression nxp, 
                      boolean allImmediate) {

@@ -9,7 +9,7 @@ import sisc.data.*;
 import sisc.util.Util;
 
 public class Library extends Util {
-    final static String LIBRARY_VERSION="SLL2";
+    static final String LIBRARY_VERSION="SLL2";
     
     protected String name;
     protected BinaryDeserializer lib;

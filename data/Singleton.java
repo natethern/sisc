@@ -8,7 +8,7 @@ package sisc.data;
  */
 public interface Singleton {
 
-    public Value singletonValue();
+    Value singletonValue();
 
 }
 

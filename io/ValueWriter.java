@@ -6,15 +6,15 @@ import java.io.IOException;
 
 public interface ValueWriter {
 
-    public void display(Value v)        throws IOException;
-    public void write(Value v)          throws IOException;
-    public ValueWriter append(Value v)  throws IOException;
-    public ValueWriter append(char c)   throws IOException;
-    public ValueWriter append(String s) throws IOException;
-    public ValueWriter append(byte[] b, int offset, int length)
+    void display(Value v)        throws IOException;
+    void write(Value v)          throws IOException;
+    ValueWriter append(Value v)  throws IOException;
+    ValueWriter append(char c)   throws IOException;
+    ValueWriter append(String s) throws IOException;
+    ValueWriter append(byte[] b, int offset, int length)
         throws IOException;
-    public boolean isInlinable(Value v);
-    public boolean vectorLengthPrefixing();
+    boolean isInlinable(Value v);
+    boolean vectorLengthPrefixing();
 }
 
 /*

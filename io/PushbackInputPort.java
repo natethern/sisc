@@ -4,7 +4,7 @@ import java.io.*;
 import sisc.data.SchemeInputPort;
 import sisc.interpreter.*;
 
-abstract public class PushbackInputPort extends SchemeInputPort {
+public abstract class PushbackInputPort extends SchemeInputPort {
 
     protected int pushback = -1;
 
@@ -24,7 +24,7 @@ abstract public class PushbackInputPort extends SchemeInputPort {
         return c;
     }
 
-    abstract protected int readHelper() throws IOException;
+    protected abstract int readHelper() throws IOException;
 
     public void pushback(int c) {
         pushback=c;
@@ -41,7 +41,7 @@ abstract public class PushbackInputPort extends SchemeInputPort {
         return readHelper(buff, offs, count);
     }
 
-    abstract public int readHelper(byte[] buff, int offs, 
+    public abstract int readHelper(byte[] buff, int offs, 
                                    int count) throws IOException;
 
 }

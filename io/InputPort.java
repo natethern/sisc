@@ -9,24 +9,24 @@ public interface InputPort extends Port {
      * Returns one byte from the port.  This function must
      * return the pushback byte if available.
      */
-    public int read() throws IOException;
+    int read() throws IOException;
 
     /**
      * Pushes one byte back onto the stream.  An input port is
      * required to support only one such byte.
      */
-    public void pushback(int c);
+    void pushback(int c);
 
     /**
      * Returns true if a byte is available for reading
      */
-    public boolean ready() throws IOException;
+    boolean ready() throws IOException;
 
     /**
      * Reads up to count bytes into the specified buffer, and 
      * must include the pushback byte
      */
-    public int read(byte[] buff, int off, int count) throws IOException;
+    int read(byte[] buff, int off, int count) throws IOException;
 
 }
 /*

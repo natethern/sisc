@@ -4,8 +4,8 @@ import java.io.IOException;
 
 public interface Seekable {
 
-    public void seek(long pos) throws IOException;
-    public long getFilePointer() throws IOException;
+    void seek(long pos) throws IOException;
+    long getFilePointer() throws IOException;
 }
 
 /*

@@ -5,26 +5,26 @@ import sisc.util.ExpressionVisitee;
 
 public interface SymbolicEnvironment extends ExpressionVisitee {
 
-    public void setName(Symbol s);
-    public Symbol getName();
+    void setName(Symbol s);
+    Symbol getName();
 
-    public void setParent(SymbolicEnvironment e);
-    public SymbolicEnvironment getParent();
+    void setParent(SymbolicEnvironment e);
+    SymbolicEnvironment getParent();
 
-    public sisc.data.Value asValue();
+    sisc.data.Value asValue();
 
-    public java.util.Iterator keys();
-    public java.util.Set bindingKeys();
-    public java.util.Map getSymbolMap();
-    public void set(int envLoc, Value v);
-    public int define(Symbol s, Value v);
-    public int getLoc(Symbol s);
-    public Value lookup(Symbol s);
-    public Value lookup(int pi);
-    public void undefine(Symbol s);
+    java.util.Iterator keys();
+    java.util.Set bindingKeys();
+    java.util.Map getSymbolMap();
+    void set(int envLoc, Value v);
+    int define(Symbol s, Value v);
+    int getLoc(Symbol s);
+    Value lookup(Symbol s);
+    Value lookup(int pi);
+    void undefine(Symbol s);
 
-    public void serialize(sisc.ser.Serializer s) throws java.io.IOException;
-    public void deserialize(sisc.ser.Deserializer s) throws java.io.IOException;
+    void serialize(sisc.ser.Serializer s) throws java.io.IOException;
+    void deserialize(sisc.ser.Deserializer s) throws java.io.IOException;
 }
 /*
  * The contents of this file are subject to the Mozilla Public

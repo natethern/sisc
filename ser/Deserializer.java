@@ -12,14 +12,14 @@ import sisc.env.SymbolicEnvironment;
 public interface Deserializer extends ObjectInput {
 
     
-    public abstract BigInteger readBigInteger() throws IOException;
-    public abstract BigDecimal readBigDecimal() throws IOException;
+    BigInteger readBigInteger() throws IOException;
+    BigDecimal readBigDecimal() throws IOException;
 
-    public abstract Expression readExpression() throws IOException;
-    public abstract SymbolicEnvironment readSymbolicEnvironment() throws IOException;
-    public abstract Class readClass() throws IOException;
-    public abstract Module readModule() throws IOException;
-    public abstract Library getLibrary();
+    Expression readExpression() throws IOException;
+    SymbolicEnvironment readSymbolicEnvironment() throws IOException;
+    Class readClass() throws IOException;
+    Module readModule() throws IOException;
+    Library getLibrary();
 }
 
 /*

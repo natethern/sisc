@@ -11,17 +11,17 @@ import sisc.env.SymbolicEnvironment;
 
 public interface Serializer extends ObjectOutput {
 
-    public abstract void writeBigDecimal(BigDecimal d) throws IOException;
+    void writeBigDecimal(BigDecimal d) throws IOException;
 
-    public abstract void writeBigInteger(BigInteger i) throws IOException;
+    void writeBigInteger(BigInteger i) throws IOException;
 
-    public abstract void writeExpression(Expression e) throws IOException;
-    public abstract void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException;
-    public abstract void writeClass(Class c) throws IOException;
-    public abstract void writeModule(Module m) throws IOException;
+    void writeExpression(Expression e) throws IOException;
+    void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException;
+    void writeClass(Class c) throws IOException;
+    void writeModule(Module m) throws IOException;
 
-    public abstract boolean seen(Expression e);
-    public abstract void forceSeen(Expression e);
+    boolean seen(Expression e);
+    void forceSeen(Expression e);
 }
 
 /*

@@ -72,7 +72,7 @@ public class SThread extends ModuleAdapter {
 
     public static class CondVar extends Value implements NamedValue {
 
-        public CondVar() {};
+        public CondVar() {}
 
         public void display(ValueWriter w) throws IOException {
             displayNamedOpaque(w, "condvar");

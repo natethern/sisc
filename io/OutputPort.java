@@ -5,10 +5,10 @@ import java.io.IOException;
 
 public interface OutputPort extends Port {
 
-    public void write(byte[] b, int offset, int length) throws IOException;
-    public void write(char v) throws IOException;
-    public void write(String v) throws IOException;
-    public void flush() throws IOException;
+    void write(byte[] b, int offset, int length) throws IOException;
+    void write(char v) throws IOException;
+    void write(String v) throws IOException;
+    void flush() throws IOException;
 }
 /*
  * The contents of this file are subject to the Mozilla Public

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public interface Port { 
 
-    public void close() throws IOException;
+    void close() throws IOException;
 
 }
 /*

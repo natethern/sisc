@@ -333,7 +333,7 @@ public class JavaObject extends Procedure {
         }
     }
 
-    public static interface FieldAccessor {
+    public interface FieldAccessor {
         Object get(Object o)
             throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
         void set(Object o, Object v)

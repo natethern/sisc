@@ -12,23 +12,28 @@ public class BufferedRandomAccessInputStream extends SeekableInputStream {
     protected int bufferPtr;
 
     public BufferedRandomAccessInputStream(String name, String mode) 
-        throws FileNotFoundException, IOException {
+        throws IOException {
+
         this(name, mode, 4096);
     }
 
     public BufferedRandomAccessInputStream(String name, String mode, int bufferSize) 
-        throws FileNotFoundException, IOException {
+        throws IOException {
+
         this(name, mode, 3, bufferSize);
     }
 
     public BufferedRandomAccessInputStream(String name, String mode, 
                                     int stackDepth, int bufferSize) 
-        throws FileNotFoundException, IOException {
+        throws IOException {
+
         this(new File(name), mode, stackDepth, bufferSize);
     }
 
     public BufferedRandomAccessInputStream(File f, String mode, int stackDepth,
-                                    int bufferSize) throws FileNotFoundException, IOException {
+                                           int bufferSize)
+        throws IOException {
+
         raf=new RandomAccessFile(f, mode);
         this.stackDepth=stackDepth;
         this.bufferSize=bufferSize;
