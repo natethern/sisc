@@ -78,9 +78,9 @@
                                       (format "Error in nested call:~% ~a"
                                               submessage)])))))]
                      [else (make-error-message #f #f)]))))
-     (lambda (m e o)
-       (display (eh m e) o)
-       (newline o)
+     (lambda (m e)
+       (display (eh m e))
+       (newline)
        (putprop 'last-error '*debug* (cons m e))))))
 
 (define _exit-handler (parameterize))
@@ -88,35 +88,34 @@
 (define repl
   (letrec ([repl-k (parameterize)]
            [repl/eval-print-loop
-            (lambda (exp console-in console-out writer)
+            (lambda (exp writer)
               ;;eval
               (let ([val (eval exp)])
-                (cond [(void? val) (repl/read console-in console-out writer)]
+                (cond [(void? val) (repl/read writer)]
                       [(circular? val)
                        (begin 
                          (display "{Refusing to print non-terminating structure}")
                          (newline)
-                         (repl/read console-in console-out writer))]
+                         (repl/read writer))]
                       [else 
                        (begin 
                          ;;print
-                         (writer val console-out)
-                         (newline console-out)
+                         (writer val)
+                         (newline)
                          ;;loop
-                         (repl/read console-in console-out writer))])))]
+                         (repl/read writer))])))]
            [repl/read
-            (lambda (console-in console-out writer)
-              (display "> " console-out)
+            (lambda (writer)
+              (display "> ")
               ;;read
-              (let ([exp (read-code console-in)])
+              (let ([exp (read-code (current-input-port))])
                 (if (eof-object? exp) 
                     (if ((current-exit-handler))
                         (void)
-                        (repl/read console-in console-out writer))
-                    (repl/eval-print-loop exp console-in 
-                                          console-out writer))))])
+                        (repl/read writer))
+                    (repl/eval-print-loop exp writer))))])
     (putprop 'repl '*debug* repl-k)
-    (lambda args
+    (lambda ()
       (current-url
        (string-append
         "file:"
@@ -126,29 +125,25 @@
                                           '*environment-variables*))
               "."))))
       (let ([repl-start #f])
-        (letrec ([console-in (if (null? args) (current-input-port)
-                                 (car args))]
-                 [console-out (if (null? args) (current-output-port)
-                                  (cadr args))])
-          (call/cc
-           (lambda (k)
-             (_exit-handler k)
-             (begin
-               (call/cc 
-                (lambda (k)
-                  (set! repl-start k)
-                  (repl-k k)))
-               (let loop ()
-                 (with/fc
-                  (lambda (m e)
-                    ((current-default-error-handler) m e console-out)
-                    (loop))
-                  (lambda ()
-                    (repl/read console-in console-out pretty-print)
-                    (void)))))))
-          (if ((current-exit-handler))
-              (void)
-              (repl-start)))))))
+        (call/cc
+         (lambda (k)
+           (_exit-handler k)
+           (begin
+             (call/cc 
+              (lambda (k)
+                (set! repl-start k)
+                (repl-k k)))
+             (let loop ()
+               (with/fc
+                (lambda (m e)
+                  ((current-default-error-handler) m e)
+                  (loop))
+                (lambda ()
+                  (repl/read pretty-print)
+                  (void)))))))
+        (if ((current-exit-handler))
+            (void)
+            (repl-start))))))
 
 (define (exit)
   (let ([k (_exit-handler)])
