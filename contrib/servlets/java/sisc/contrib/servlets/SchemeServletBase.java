@@ -10,6 +10,8 @@ import sisc.interpreter.*;
 
 import java.util.Hashtable;
 
+import sisc.util.Util;
+
 public class SchemeServletBase extends HttpServlet {
 
     protected String appName;
@@ -54,7 +56,8 @@ public class SchemeServletBase extends HttpServlet {
         if (expr == null) return;
         Interpreter r = Context.enter(appName);
         try {
-            r.eval("(current-directory \"" + getServletContext().getRealPath("/")+"\")");
+            Procedure currDir = (Procedure)r.lookup(Symbol.get("current-directory"), Util.TOPLEVEL);
+            r.eval(currDir, new Value[] {new SchemeString(getServletContext().getRealPath("/"))});
             Procedure p = (Procedure)r.eval(expr);
             r.eval(p, new Value[] { sisc.modules.s2j.Util.makeJObj(this) });
         } catch (IOException e) {
