@@ -102,10 +102,34 @@
 (define emit-annotations        (make-native-parameter "emitAnnotations"))
 (define character-set           (make-native-parameter "characterSet"))
 
-;(if (equal? (getenv "sisc.debugging") "true")
-;    (begin
-;      (emit-annotations #t)
-;      (emit-debugging-symbols #t)))
+; Enable inlining and optimizer assumptions while expanding libraries
+ 
+(putprop 'assumptive-procedures '*opt*
+         '(not + - * / car cdr caar cadr cdar cddr zero?
+               null? pair? number? procedure?))
+ 
+(define (inline-usual-primitives)
+  (inline-primitives
+    '(* + - / < <= = > >= abs acos angle asin assoc assq assv atan boolean?
+      car cdr caar cadr cdar cddr ceiling char-alphabetic? char-ci<=?
+      char-ci<? char-ci=? char-ci>=? char-ci>? char-lower-case?
+      char-numeric? char-ready? char-upcase char-upper-case? char-whitespace?
+      char<=? char<? char=? char>=? char>? char? complex? cos denominator
+      eof-object? eq? equal? eqv? even? exact? exp expt floor gcd imag-part
+      inexact? input-port? integer? lcm length list-ref list? log magnitude
+      max member memq memv min modulo negative? not null? number? numerator
+      odd? output-port? pair? positive? procedure? quotient rational? real-part
+      real? remainder round sin sqrt string-ci<=? string-ci<? string-ci=?
+      string-ci>=? string-ci>? string-length string<=? string<? string=?
+      string>=? string>? string? symbol? tan truncate vector-length vector?
+      zero?)))
+ 
+(inline-usual-primitives)
+
+(if (equal? (getenv "sisc.debugging") "true")
+    (begin
+      (emit-annotations #t)
+      (emit-debugging-symbols #t)))
 
 ;;;;;;;;;; hooks ;;;;;;;;;;
 
@@ -126,13 +150,16 @@
     (set-hook-items! hook items)
     hook))
 
-(define (invoke-hook hook . args)
-  (let ([all-items (hook-items hook)])
-    (let loop ([items (cdr all-items)])
-      (if (null? items)
-          (apply (car all-items) args)
-          (apply (cdar items)
-                 (lambda args (loop (cdr items))) args)))))
+(define invoke-hook 
+  (letrec ([loop (lambda (all-items items args)
+                   (if (null? items)
+                       (apply (car all-items) args)
+                       (apply (cdar items)
+                              (lambda args (loop all-items (cdr items) args))
+                              args)))])
+    (lambda (hook . args)
+      (let ([all-items (hook-items hook)])
+        (loop all-items (cdr all-items) args)))))
 
 ;;;;;;;;;;;;;;;; error handling ;;;;;;;;;;;;;;;
 
@@ -936,3 +963,7 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
 
 ;;some init code (e.g. s2j) pulls in d/w
 (unload-dynamic-wind)
+
+;;And disable inlining/assumptions
+(putprop 'assumptions '*opt* '())
+(inline-primitives '())
