@@ -72,10 +72,12 @@
         (else (types<= (method-types m1) (method-types m2)))))
 
 (define (add-method proc m)
-  (let ([methods (get-methods proc)])
-    (monitor/synchronize-unsafe
-     (car methods)
-     (lambda () (add-method-helper m methods)))))
+  (add-method-to-list (get-methods proc) m))
+(define (add-method-to-list methods m)
+  (monitor/synchronize-unsafe
+   (car methods)
+   (lambda () (add-method-helper m methods))))
+
 (define (add-method-helper m methods)
   (let ([meths (cdr methods)])
     (if (null? meths)
@@ -90,6 +92,15 @@
                   (set-cdr! methods (cons m meths)))
               (add-method-helper m meths))))))
 
+;;we keep track of all the classes whose methods we have already
+;;learned about
+(define *CLASSES* (make-hashtable))
+;;for each java method name we maintain a method list which is shared
+;;by all the generic procedures representing java methods of that name
+(define *JAVA-METHODS* (make-hashtable))
+(define (java-methods name)
+  (hashtable/get! *JAVA-METHODS* name make-method-list))
+
 (define (add-java-constructors proc constructors)
   (for-each (lambda (c)
               (if (memq 'public (java/modifiers c))
@@ -100,11 +111,11 @@
                     (vector->list (java/parameter-types c))
                     #f))))
             constructors))
-(define (add-java-methods proc methods)
+(define (add-java-methods methods new-methods)
   (for-each (lambda (m)
               (if (memq 'public (java/modifiers m))
-                  (add-method
-                   proc
+                  (add-method-to-list
+                   methods
                    (make-method
                     m
                     (cons (if (memq 'static (java/modifiers m))
@@ -112,7 +123,7 @@
                               (java/declaring-class m))
                           (vector->list (java/parameter-types m)))
                     #f))))
-            methods))
+            new-methods))
 (define (add-class class)
   (if (and (not (java/null? class))
            (not (hashtable/put! *CLASSES* class #t)))
@@ -133,9 +144,7 @@
                         (vector->list (java/decl-methods class)))
               (hashtable/for-each
                (lambda (name meths)
-                 (add-java-methods
-                  (generic-java-procedure name)
-                  meths))
+                 (add-java-methods (java-methods name) meths))
                methods))))))
 
 ;;SYNC: we don't care if methods gets modified while we do this
@@ -174,9 +183,10 @@
                       args
                       (procedure-property proc 'next)))
 
-(define (_make-generic-procedure . rest)
-  (letrec ([methods   (cons (monitor/new) '())]
-           [proc      (lambda args (find-and-call proc args methods))])
+(define (make-method-list) (list (monitor/new)))
+
+(define (_make-generic-procedure methods . rest)
+  (letrec ([proc      (lambda args (find-and-call proc args methods))])
     (set-procedure-property! proc 'methods methods)
     (if (not (null? rest))
         (set-procedure-property! proc 'next (car rest)))
@@ -193,21 +203,16 @@
         (set-procedure-property! proc 'next (car rest)))
     proc))
 
-;;for each java method name there is a corresponding generic
-;;procedure.
-(define *JAVA-METHODS* (make-hashtable))
-(define (generic-java-procedure name)
-  (hashtable/get! *JAVA-METHODS* name _make-generic-procedure #f))
+(define (generic-java-procedure name . rest)
+  (apply _make-generic-procedure (java-methods name) rest))
 ;;There is *one* generic java constructor
 (define *JAVA-CONSTRUCTOR* (_make-generic-constructor))
 (define (generic-java-constructor) *JAVA-CONSTRUCTOR*)
-;;we keep track of all the classes whose methods we have already
-;;learned about
-(define *CLASSES* (make-hashtable))
 ;;The global generic constructor chains the generic java constructor
 (define make (_make-generic-constructor (generic-java-constructor)))
 
-(define make-generic-procedure _make-generic-procedure)
+(define (make-generic-procedure . rest)
+  (apply _make-generic-procedure (make-method-list) rest))
 (define make-generic-constructor _make-generic-constructor)
 
 (define-syntax define-generic
