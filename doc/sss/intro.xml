@@ -53,7 +53,7 @@
       </listitem>
       <listitem>
 	<para>
-	  Flexible runtime extensiblity through a scopeable module
+	  Flexible runtime extensibility through a scopeable module
 	  system, which may add new functions and first-class types.
 	</para>
       </listitem>

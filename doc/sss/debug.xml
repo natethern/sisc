@@ -76,7 +76,7 @@
       <emphasis>annotations</emphasis> enabled.  Annotations are a
       means of attaching metadata to compiled Scheme code.  To allow
       the reader to attach annotations related to the source file
-      position to the code it reads, enable the emittion of
+      position to the code it reads, enable the emission of
       annotations with the <function>emit-annotations</function>
       parameter.
     </para>
@@ -103,7 +103,7 @@
       </para>
     </blockquote>
     <para>
-      In addition, setting the Java system propery
+      In addition, setting the Java system property
       <literal>EMITANNOTATIONS</literal> to <literal>true</literal>
       will enable annotations.  This method must be used to annotate
       any source passed to &SISC; on the command line.  See <xref

@@ -344,7 +344,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         by calling a given procedure with that port.  When the
         procedure returns, the port is closed. Invoking escaping
         continuations from inside the procedure does not close the
-        port, and invoking a continuation captured inside the procedue
+        port, and invoking a continuation captured inside the procedure
         does not open the port.
       </para>
       <para>
@@ -633,7 +633,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       be integers in the proper range.
     </para>
     <sect2 id="netutils">
-      <title>Adresss Functions</title>
+      <title>Address Functions</title>
       <para>
 	Several utility functions are provided for manipulating IP
 	addresses.  These are described below.

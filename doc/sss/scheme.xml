@@ -1007,7 +1007,7 @@
       Syntactic Extension
     </title>
     <para>
-      &SISC; provides a hygenic macro system that fully conforms to
+      &SISC; provides a hygienic macro system that fully conforms to
       the &R5RS; standard.  The macro system is provided by the
       portable syntax-case macro expander
       <citation>Expander</citation>, and as such also a more flexible 
@@ -1118,7 +1118,7 @@
               </programlisting>
               where <emphasis>n</emphasis> is the number of
               milliseconds taken to evaluate the expression.  If more
-              than one iteration occured, then the average number of
+              than one iteration ocurred, then the average number of
               milliseconds elapsed is returned.
             </para>
           </blockquote>
