@@ -11,11 +11,11 @@
 (define raise error)
 
 ; NB: In deviation from the spec, in the fall-through case |raise| is
-; re-invoked raise in the dynamic environment of the call to
-; |guard|. By contrast the spec states that it should be "re-invoked
-; on the raised object within the dynamic environment of the original
-; call to raise except that the current exception handler is that of
-; the guard expression."
+; re-invoked in the dynamic environment of the call to |guard|. By
+; contrast the spec states that it should be "re-invoked on the raised
+; object within the dynamic environment of the original call to raise
+; except that the current exception handler is that of the guard
+; expression."
 (define-syntax guard
   (syntax-rules ()
     ((guard (var clause ...) e1 e2 ...)
