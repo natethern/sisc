@@ -20,3 +20,8 @@
 (map bar '(y z)) ;=> (2 2)
 (map baz '(x y z a b c)) ;=> (#f 1 #f 1 2 3)
 
+(baz '(c) bar)
+(bar '(z) foo)
+(baz '(c z x) 2) ;=> 1
+(baz '(c z x)) ;=> 2
+(foo 'x) ;=> 2

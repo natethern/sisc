@@ -98,7 +98,12 @@
 
 (define (make-object class slots)
   (let ([slots (alist->hashtable slots)])
-    (define (res . args) (apply slots args))
+    (define (res keys . rest)
+      (if (pair? keys)
+          (if (null? (cdr keys))
+              (apply slots (car keys) rest)
+              (apply (slots (car keys)) (cdr keys) rest))
+          (apply slots keys rest)))
     (set-procedure-property! res 'class class)
     res))
 (define (make-class superclasses slots)
