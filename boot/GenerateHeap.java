@@ -52,7 +52,7 @@ public class GenerateHeap {
     static String[] bindingNames = new String[] {
         //core forms
         "lambda", "quote", "letrec", "if", "begin", "set!", "define",
-        "compile-in-annotation",
+
         //procedures
         "*", "+", "-", "/", "<", "<=", "=", ">", ">=", "abs", "acos", "angle",
         "append", "apply", "asin", "assoc", "assq", "assv", "atan", "boolean?",

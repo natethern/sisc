@@ -277,7 +277,7 @@
       </title>
       <para>
 	&SISC; supports the length prefix method of creating Vector
-	constants. For example, '<computeroutput>&num;5(x)</computeroutput>'
+	constants. For example, '<computeroutput>&num;5(x)</computeroutput>
 	creates a vector constant containing five identical
 	symbols.  In addition, the length-prefix form is used when
 	printing vectors, and if elements repeat at the end of a
