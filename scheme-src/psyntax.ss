@@ -2382,7 +2382,7 @@
 
 (define chi-void
   (lambda ()
-    (build-application no-source (build-primref no-source 'void) '())))
+    ''#!void))
 
 (define ellipsis?
   (lambda (x)

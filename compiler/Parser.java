@@ -257,8 +257,11 @@ public class Parser extends Util implements Tokens {
                 o=numberCheck(_nextExpression(is, state, null, radix, flags)).toExact();
                 break;
             case '!':
-                if (lexer.readToBreak(is, Lexer.special, false).equals("eof"))
+                String bv=lexer.readToBreak(is, Lexer.special, false);
+                if (bv.equals("eof"))
                     return EOF;
+                else if (bv.equals("void"))
+                    return VOID;
                 else throw new IOException(liMessage(SISCB, "invalidsharpc"));
             case '\'':
                 o=listSpecial(SYNTAX, is, state, def, flags);

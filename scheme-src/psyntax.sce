@@ -716,7 +716,7 @@
                         "i"))
                      #(ribcage (#(import-token *top*)) () ()))))
                '#f)))
-         (chi-void_em (lambda () (list 'void)))
+         (chi-void_em (lambda () '(quote #!void)))
          (chi-local-syntax_el
            (lambda (rec?_1t0 e_1t1 r_1t2 w_1t3 s_1t4 k_1t5)
              ((lambda (tmp_1t7)
