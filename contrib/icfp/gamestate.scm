@@ -11,13 +11,13 @@
 (define package-owners (make-hashtable))
 
 (define (robot-capacity id)
-  (hashtable/get robot-capacities id 0))
+  (hashtable/get! robot-capacities id (lambda () 0)))
 
 (define (robot-capacity! id v)
   (hashtable/put! robot-capacities id v))
 
 (define (robot-load id)
-  (hashtable/get robot-loads id 0))
+  (hashtable/get! robot-loads id (lambda () 0)))
 
 (define (robot-load-incr! id v)
   (when v
@@ -27,6 +27,7 @@
   (when v
 	(hashtable/put! robot-loads id (- (robot-load id) v))))
 
+(trace 'robot-load-incr! 'robot-load-decr! 'robot-capacity!)
 (define (robot-capacity-remaining id)
   (- (robot-capacity id)
      (robot-load id)))
@@ -81,8 +82,10 @@
     (else 
      (let ((arg (read in)))
        (case command
-	 ((P) (apply package-pickup! `(,(package-lookup arg) ,id ,@(robot-location id))))
-	 ((D) (apply package-drop! `(,(package-lookup arg) ,id ,@(robot-location id))))
+	 ((P) (apply package-pickup! `(,(package-lookup arg) 
+                                       ,id ,@(robot-position id))))
+	 ((D) (apply package-drop! `(,(package-lookup arg) 
+                                     ,id ,@(robot-position id))))
 	 ((X) (set-robot-x! id arg))
 	 ((Y) (set-robot-y! id arg)))))))
 	       

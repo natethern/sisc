@@ -40,7 +40,7 @@
     (robot-money! id money)
     id))
 
-(define (receive-package in)
+(define (receive-package in id)
   (and (not (eq? (peek-char in) #\newline))
       (let* ((id (read in))
 	     (x (read in))
@@ -48,6 +48,7 @@
 	     (weight (read in)))
         (let ((p (make-package id)))
           (package-details! p x y weight)
+          (apply package-location! (cons p (robot-position id)))
           (package-add! p)
           p))))
 
@@ -60,11 +61,11 @@
 (define more-responses? more-packages?)
 (define more-robots? more-packages?)
 
-(define (receive-packages in)
-  (let ((package (receive-package in)))
+(define (receive-packages in id)
+  (let ((package (receive-package in id)))
     (cond [(not package) (begin (check-newline in) '())]
 	  [(more-packages? in)
-	   (cons package (receive-packages in))]
+	   (cons package (receive-packages in id))]
 	  [else 
 	   (list package)])))
 

@@ -57,7 +57,7 @@
 (define (identity x) x)
 (define a* 
   (letrec ((unwind 
-	    (lambda (return next)
+	    (trace-lambda unwind (return next)
 	      (if (equal? '(false) (node-move (node-parent next)))
 		  (return (node-move next))
 		  (unwind return (node-parent next)))))
@@ -116,7 +116,6 @@
                          (set! node-current (highest-rated cost-cache id
                                              (cons node-current closed)
                                              root-node -1000.0))
-                         (debug "Path: ~a" node-current)
                          (set! last-path (let loop ((n node-current))
                                            (if (null? n) '()
                                                (cons (node-pos n)

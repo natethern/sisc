@@ -8,6 +8,7 @@
 
 (define unclaimed-packages (make-hashtable))
 (define claimed-packages (make-hashtable))
+(define all-packages (make-hashtable))
 
 (define (make-package id)
   (let ((p (make-hashtable)))
@@ -27,7 +28,7 @@
   (hashtable/put! p 'location loc))
 
 (define (package-lookup id)
-  (hashtable/get unclaimed-packages id))
+  (hashtable/get all-packages id)))
 
 ; Called when we observe a drop action.  This does nothing if the package
 ; was delivered (we knew its destination and it was dropped at that destination)
@@ -36,17 +37,24 @@
 (define (package-drop! p id . droploc)
   (when p
 	(let ((loc (package-destination p)))
-	  (and (not (and loc (equal? loc droploc)))
-	       (begin (hashtable/put! unclaimed-packages (package-id p) p)
+          (debug "loc: ~a" loc)
+          (if (and loc (equal? loc droploc))
+	  (and 
+	       (begin (if (not (and loc (equal? loc droploc)))
+                          (hashtable/put! unclaimed-packages (package-id p) p)
+                          (begin 
+                            (hashtable/put! 
+                             claimed-packages id 
+                             (remove p (hashtable/get claimed-packages id '())))
+                            (hashtable/remove! all-packages (package-id p))))
 		      (robot-load-decr! id (package-weight p))
-		      (hashtable/put! claimed-packages id 
-				      (remove p (hashtable/get claimed-packages id '())))
 		      (apply package-location! `(,p ,@droploc))
-		      droploc)))))
+		      droploc))))))
 
 
 (define (package-add! p)
-  (hashtable/put! unclaimed-packages (package-id p) p))
+  (hashtable/put! unclaimed-packages (package-id p) p)
+  (hashtable/put! all-packages (package-id p) p))
     
 ; Called when we observe a pickup action.  This removes the package
 ; from those we know about that are unclaimed.
@@ -54,7 +62,8 @@
   (when p
 	(hashtable/remove! unclaimed-packages (package-id p))
 	(robot-load-incr! id (package-weight p))
-	(hashtable/put! claimed-packages id (cons p (hashtable/get claimed-packages id '())))))
+	(hashtable/put! claimed-packages id
+                        (cons p (hashtable/get claimed-packages id '())))))
 
 (define (robots-packages id)
   (hashtable/get claimed-packages id '()))

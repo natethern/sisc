@@ -25,9 +25,7 @@
 			       
  ; Receive the currently available packages
   (debug "Receiving packages...")
-  (for-each (lambda (package)
-	      (apply package-drop! (cons package (cons id (robot-position id)))))
-	    (receive-packages in))
+  (receive-packages in id)
 
   (debug "Thinking...")
   ; Decide on our move and send it to the server

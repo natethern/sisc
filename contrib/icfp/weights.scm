@@ -32,14 +32,15 @@
 		  type val))
 
 (define initial-weights
-  '((return-to-base . 10)
+  '((return-to-base . 5)
     (danger . 2)
     (crowd . 1)
-    (delivery . 3)
+    (delivery . 300)
+    (delivery-transit . 6)
     (search . 1)
-    (revisit . -3)
+    (revisit . -4)
     (visit . 1)
-    (pickup . 5)
+    (pickup . 100)
     (go-nowhere . -30)))
 
 (define (weight id type)
@@ -63,12 +64,16 @@
     (let loop ((packages (robots-packages id)) (acc 0.0))
       (if (null? packages) acc
 	  (loop (cdr packages)
-		(+ (/ delivery-weight 
-		      (apply dist `(,x ,y ,@(package-destination (car packages)))))
+		(+ (* (/ (package-weight (car packages))
+                         (zeroguard (apply dist `(,x ,y ,@(package-destination (car packages))))))
+                      (weight id 'delivery-transit))
 		   acc))))))
 
 (define (all-unclaimed-packages)
   (hashtable/map (lambda (key val) val) unclaimed-packages))
+
+(define (zeroguard n) (if (zero? n) 1 n))
+
 
 (define (pickup-distance-weight id x y)
   (let ((pickup-weight (weight id 'pickup))
@@ -77,7 +82,7 @@
       (if (null? packages) acc
 	  (loop (cdr packages)
 		(+ (/ pickup-weight 
-		      (apply dist `(,x ,y ,@(package-location (car packages)))))
+		      (zeroguard (apply dist `(,x ,y ,@(package-location (car packages))))))
 		   acc))))))
 
 (define (base-weight id x y)
@@ -118,7 +123,7 @@
 		  (map (lambda (v)
 			 (v id x y)) 
 		       (list danger-weight crowd-weight 
-			     pickup-distance-weight delivery-distance-weight
+			     #;pickup-distance-weight delivery-distance-weight
 			     search-weight base-weight
 			     barrier-weight))))
 #;	     (debug "Resulting weights for move ~a to ~a: ~a [~a]" 

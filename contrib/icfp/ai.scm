@@ -148,7 +148,7 @@
 		(map (lambda (packages)
                        (debug "~a vs ~a" (package-weight packages)
                               (robot-capacity-remaining id))
-		       (if (<= (package-weight packages)
+		       (if (< (package-weight packages)
 			       (robot-capacity-remaining id))
 			 `((|Pick| ,(package-id packages)))
 			 '()))
@@ -160,8 +160,6 @@
 		(map (lambda (packages)
 			 `((|Drop| ,(package-id packages))))
 		     my-packages)))))))
-
-(define (zeroguard n) (if (zero? n) 1 n))
 
 (define calculate-fitness 
 (letrec
@@ -185,20 +183,21 @@
          (apply + (map (lambda (p)
                          (let ((dist-to-deliver 
                                 (apply dist `(,@pos
-                                              ,@(package-location p)))))
+                                              ,@(package-destination p)))))
                            (if (zero? dist-to-deliver)
-                               (weight id 'deliver)
-                               (- dist-to-deliver))))
+                               (weight id 'delivery)
+                               (weight id 'go-nowhere))))
                        (map package-lookup (cdr move))))))
     ((|Pick|)
      (if (null? (cadr move))
          (weight id 'go-nowhere)
-         (apply + (map (lambda (p)
+         (apply + (map (trace-lambda pp (p)
                          (let ((dist-to-deliver 
                                 (apply dist `(,@pos
                                               ,@(package-location p))))
-                               (weight (package-weight p)))
-                           (/ weight (zeroguard dist-to-deliver))))
+                               (wght (package-weight p)))
+                           (* (weight id 'pickup) world-scale
+                              (/ wght (zeroguard dist-to-deliver)))))
                        (map package-lookup (cdr move))))))
     ((|Move|)
      (let* ((myx (car pos))
