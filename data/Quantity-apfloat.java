@@ -122,11 +122,11 @@ public class Quantity extends Value {
         } else if ((x=v.indexOf('i'))!=-1) {
 	    BigDecimal d,im;
             if (x!=v.length()-1)
-                throw new NumberFormatException(liMessage("invalidcomplex"));
+                throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
             x=v.lastIndexOf('+');
             if (x==-1) {
                 x=v.lastIndexOf('-');
-                if (x==-1) throw new NumberFormatException(liMessage("invalidcomplex"));
+                if (x==-1) throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
 
                 if (x==0)
                     d=_BD_ZERO;
@@ -281,7 +281,7 @@ public class Quantity extends Value {
             } else if (asDecimal)
                 return new BigDecimal(dv);
             else
-                throw new NumberFormatException(liMessage("notadecimal"));
+                throw new NumberFormatException(liMessage(SISCB,"notadecimal"));
         } else {
             int x;
             if ((x=dv.indexOf('.'))==-1)
@@ -292,7 +292,7 @@ public class Quantity extends Value {
                 } else if (asDecimal)
                     return new BigDecimal(dv);
                 else
-                    throw new NumberFormatException(liMessage("notadecimal"));
+                    throw new NumberFormatException(liMessage(SISCB,"notadecimal"));
             else {
                 BigDecimal ipart;
                 BigInteger fpart;
@@ -310,7 +310,7 @@ public class Quantity extends Value {
     protected void simplify() {
         if (type==RATIO) {
             if (de.equals(_BI_ZERO))
-                throw new ArithmeticException(liMessage("divisionbyzero"));
+                throw new ArithmeticException(liMessage(SISCB,"division by zero"));
             BigInteger gcd=i.gcd(de);
             if (!gcd.equals(_BI_ONE)) {
                 i=i.divide(gcd);
@@ -354,7 +354,7 @@ public class Quantity extends Value {
         case FIXEDINT: return new Quantity((long)val).lsh(num);
         case INTEG: return new Quantity(i.shiftLeft(num));
         default:
-            throw new NumberFormatException(liMessage("onlyshiftintegers"));
+            throw new NumberFormatException(liMessage(SISCB,"onlyshiftintegers"));
         }
     }
 
@@ -363,7 +363,7 @@ public class Quantity extends Value {
         case FIXEDINT: return new Quantity((long)val).rsh(num);
         case INTEG: return new Quantity(i.shiftRight(num));
         default:
-            throw new NumberFormatException(liMessage("onlyshiftintegers"));
+            throw new NumberFormatException(liMessage(SISCB,"onlyshiftintegers"));
         }
     }
 
@@ -402,7 +402,7 @@ public class Quantity extends Value {
                     return new Quantity(i.gcd(o2)).toInexact();
             }
         }
-        throw new ArithmeticException(liMessage("isnotaninteger", this.toString()));
+        throw new ArithmeticException(liMessage(SISCB,"isnotaninteger", this.toString()));
     }
 
     public Quantity lcm(Quantity o) {
@@ -433,7 +433,7 @@ public class Quantity extends Value {
             return (inexact? new Quantity(L).toInexact():
                     new Quantity(L));
         }
-        throw new ArithmeticException(liMessage("isnotaninteger", this.toString()));
+        throw new ArithmeticException(liMessage(SISCB,"isnotaninteger", this.toString()));
     }
 
     public Quantity round(int rtype) {
@@ -441,7 +441,7 @@ public class Quantity extends Value {
         case DECIM:
             return new Quantity(d.setScale(0, rtype));
         case COMPLEX:
-            throw new ArithmeticException(liMessage("isnotareal", this.toString()));
+            throw new ArithmeticException(liMessage(SISCB,"isnotareal", this.toString()));
         case RATIO:
             return toInexact().round(rtype).toExact();
         default:
@@ -470,7 +470,7 @@ public class Quantity extends Value {
             if (new BigDecimal(o2).compareTo(d)==0)
                 return new Quantity(o2).modulo(o).toInexact();
         default:
-            throw new NumberFormatException(liMessage("expectedintegers"));
+            throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
         }
     }
 
@@ -495,7 +495,7 @@ public class Quantity extends Value {
             if (new BigDecimal(o2).compareTo(d)==0)
                 return new Quantity(o2).quotient(o).toInexact();
         default:
-            throw new NumberFormatException(liMessage("expectedintegers"));
+            throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
         }
     }
 
@@ -518,7 +518,7 @@ public class Quantity extends Value {
             if (new BigDecimal(o2).compareTo(d)==0)
                 return new Quantity(o2).remainder(o).toInexact();
         default:
-            throw new NumberFormatException(liMessage("expectedintegers"));
+            throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
         }
     }
 
@@ -577,9 +577,9 @@ public class Quantity extends Value {
 
     public Quantity atan(Quantity other) {
         if (type==COMPLEX)
-            throw new ArithmeticException(liMessage("isnotareal", this.toString()));
+            throw new ArithmeticException(liMessage(SISCB,"isnotareal", this.toString()));
         if (other.type==COMPLEX)
-            throw new ArithmeticException(liMessage("isnotareal", other.toString()));
+            throw new ArithmeticException(liMessage(SISCB,"isnotareal", other.toString()));
         return new Quantity(Math.atan2(doubleValue(), other.doubleValue()));
     }
 
@@ -1056,7 +1056,7 @@ public class Quantity extends Value {
             } else {
                 return o.comp(this, test);}
         }
-        throw new NumberFormatException(liMessage("nocomplexcomparison"));
+        throw new NumberFormatException(liMessage(SISCB,"nocomplexcomparison"));
     }
 
     public final boolean is(int mask) {
@@ -1221,7 +1221,7 @@ public class Quantity extends Value {
     public Quantity numerator() throws NumberFormatException {
         switch (type) {
         case COMPLEX:
-            throw new NumberFormatException(liMessage("isnotrational", toString()));
+            throw new NumberFormatException(liMessage(SISCB,"isnotrational", toString()));
         case DECIM:
             return toExact().numerator().toInexact();
         case RATIO:
@@ -1234,7 +1234,7 @@ public class Quantity extends Value {
     public Quantity denominator() throws NumberFormatException {
         switch (type) {
         case COMPLEX:
-            throw new NumberFormatException(liMessage("isnotrational", toString()));
+            throw new NumberFormatException(liMessage(SISCB,"isnotrational", toString()));
         case DECIM:
             return toExact().denominator().toInexact();
         case RATIO:

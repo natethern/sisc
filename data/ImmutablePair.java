@@ -45,11 +45,11 @@ public class ImmutablePair extends Pair {
     }
 
     public void setCar(Value v) {
-	throw new RuntimeException(liMessage("pairisimmutable"));
+	throw new RuntimeException(liMessage(SISCB,"pairisimmutable"));
     }
 
     public void setCdr(Value v) {
-	throw new RuntimeException(liMessage("pairisimmutable"));
+	throw new RuntimeException(liMessage(SISCB,"pairisimmutable"));
     }
 
     public boolean equals(Object o) {

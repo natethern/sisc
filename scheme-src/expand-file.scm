@@ -8,7 +8,7 @@
 	     (if (and (pair? res)
 		      (eq? (car res) 'begin)
 		      (pair? (cdr res))
-		      (equal? (cadr res) '(void)))
+		      (equal? (caadr res) '$sc-put-cte))
 		 (caddr res)
 		 res)
 	     outf)

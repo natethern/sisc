@@ -139,11 +139,25 @@
       <indexterm>
 	<primary>string-&gt;uninterned-symbol</primary>
       </indexterm>
-      <programlisting>
-	&procedure; (string-&gt;uninterned-symbol string)
-	&returns; an uninterned, pointer distinct symbol
-	
-      </programlisting>
+      <para>
+	<blockquote>
+	  <para>
+	    <methodsynopsis language="scheme">
+	      <methodtype>symbol</methodtype>
+	      <methodname>string-&gt;uninterned-symbol</methodname>
+	      <methodparam>
+		<parameter>string</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Converts the provided string into an uninterned, pointer
+		distinct symbol.
+	      </para>
+	    </blockquote>
+	  </para>
+	</blockquote>
+      </para>
       <para>
 	&SISC; also allows symbols to be created that
 	<emphasis>are</emphasis> case-sensitive. This can be done
@@ -335,22 +349,48 @@
 	that allows a programmer to define the sequence of actions
 	that should occur as a result of an error in a called expression.
       </para>
-      <programlisting>
-	&procedure; (call-with-failure-continuation thunk handler)
-	&procedure; (call/fc thunk handler)
-      </programlisting>
-      <blockquote>
-	<para>
-	  <function>call-with-failure-continuation</function>
-	  takes as arguments a thunk (a zero-argument procedure) to
-	  be evaluated.  If during the
-	  evaluation of the thunk an error is raised, the second,
-	  three argument procedure is called with values describing
-	  the error and its context.  If no error occurs, the
-	  value of evaluating the thunk becomes the value of the
-	  call/fc expression.
-	</para>
-      </blockquote>
+      <para>
+	<blockquote>
+	  <para>
+	    &procedure;
+	    <methodsynopsis language="scheme">
+	      <type>value</type>
+	      <methodname>call-with-failure-continuation</methodname>
+	      <methodparam>
+		<parameter>thunk</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>handler</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	  </para>
+	  <para>
+	    &procedure;
+	    <methodsynopsis language="scheme">
+	      <type>value</type>
+	      <methodname>call/fc</methodname>
+	      <methodparam>
+		<parameter>thunk</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>handler</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		<function>call-with-failure-continuation</function>
+		takes as arguments a thunk (a zero-argument procedure) to
+		be evaluated.  If during the
+		evaluation of the thunk an error is raised, the second,
+		three argument procedure is called with values describing
+		the error and its context.  If no error occurs, the
+		value of evaluating the thunk becomes the value of the
+		call/fc expression.
+	      </para>
+	    </blockquote>
+	  </para>
+	</blockquote>
+      </para>
     </sect2>
     <sect2 id="ErrorHandlers">
       <title>
@@ -387,34 +427,45 @@
       <para>
 	At this point, a few examples may be helpful:
       </para>
-      <programlisting>
-	(+ 1 (/ 1 0) 3)
-	  ; => <emphasis>A divide by zero error is raised</emphasis>
-
-	; Return a new value
-	(call-with-failure-continuation
-	  (lambda ()
-            (+ 1 (/ 1 0) 3))
-	  (lambda (message error-k failure-k)
-	    'error))     
-          ; => <emphasis>The symbol</emphasis> 'error
-
-	; Restart with a different value
-	(call-with-failure-continuation
-  	  (lambda ()
-            (+ 1 (/ 1 0) 3))
-	  (lambda (message error-k failure-k)
-	    (error-k 2)))
-          ; => 6
-
-	; Propagate the error
-	(call-with-failure-continuation
-  	  (lambda ()
-            (+ 1 (/ 1 0) 3))
-	  (lambda (message error-k failure-k)
-	    (failure-k message error-k)))
-	  ; => <emphasis>A divide by zero error is raised</emphasis>
-      </programlisting>
+      <informalexample>
+	<programlisting>
+(+ 1 (/ 1 0) 3)
+; => <emphasis>A divide by zero error is raised</emphasis>
+	</programlisting>
+      </informalexample>
+      <example>
+	<title>Return a new value</title>
+<programlisting>
+(call-with-failure-continuation
+  (lambda ()
+    (+ 1 (/ 1 0) 3))
+  (lambda (message error-k failure-k)
+    'error))     
+; => <emphasis>The symbol</emphasis> 'error
+	</programlisting>
+      </example>
+      <example>
+	<title>Restart with a different value</title>
+	<programlisting>
+(call-with-failure-continuation
+   (lambda ()
+     (+ 1 (/ 1 0) 3))
+   (lambda (message error-k failure-k)
+    (error-k 2)))
+; => 6
+	</programlisting>
+      </example>
+      <example>
+	<title>Propagate the error</title>
+	<programlisting>
+(call-with-failure-continuation
+  (lambda ()
+    (+ 1 (/ 1 0) 3))
+  (lambda (message error-k failure-k)
+    (failure-k message error-k)))
+; => <emphasis>A divide by zero error is raised</emphasis>
+	</programlisting>
+      </example>
     </sect2>
     <sect2>
       <title>Raising Errors</title>
@@ -424,6 +475,7 @@
       </para>
       <blockquote>
 	<para>
+	  &procedure;
 	  <methodsynopsis language="scheme">
 	    <type>undefined</type>
 	    <methodname>error</methodname>
@@ -448,6 +500,7 @@
 	      <function>format</function> in <!--<xref linkend="format"/> -->.
 	    </para>
 	  </blockquote>
+	  &procedure;
 	  <methodsynopsis language="scheme">
 	    <type>undefined</type>
 	    <methodname>error</methodname>
@@ -468,6 +521,7 @@
 	      <function>format</function> in <!--<xref linkend="format"/> -->.
 	    </para>
 	  </blockquote>
+	  &procedure;
 	  <methodsynopsis language="scheme">
 	    <type>undefined</type>
 	    <methodname>error</methodname>
@@ -499,16 +553,17 @@
       is evaluated before the error is propagated to the
       failure-continuation of the dynamic-wind expression.
     </para>
-    <para>
-      Here is an example:
-    </para>
-    <programlisting>
-      (define x 0)
-      (dynamic-wind (lambda () (set! x (+ x 1)))
-                    (lambda () (/ 1 0))
-                    (lambda () (set! x (+ x 1))))
-      ; => A divide by zero error is raised, and the value of x is 2
-    </programlisting>
+    <example>
+      <title>Errors and <function>dynamic-wind</function></title>
+      <programlisting>
+(define x 0)
+(dynamic-wind (lambda () (set! x (+ x 1)))
+              (lambda () (/ 1 0))
+              (lambda () (set! x (+ x 1))))
+
+; => A divide by zero error is raised, and the value of x is 2
+      </programlisting>
+    </example>
     <para>
       If an error is raised in either the
       <emphasis>before</emphasis> or <emphasis>after</emphasis>
@@ -554,39 +609,98 @@
       program specific data without exposing it to the general
       purpose top-level environment.
     </para>
-    <programlisting>
-      &procedure; (getprop variable-name environment-name)
-      &returns; a value, or &num;f if unbound
-      
-      Attempts a lookup of variable-name in the symbolic environment
-      named by environment-name.  If found, the value is returned.
-      If not bound, &num;f is returned.
-      
-      &procedure; (putprop variable-name environment-name value)
-      &returns; undefined
-      
-      Sets the value of the variable named by variable name in the
-      symbolic environment named by environment-value to the provided
-      value.  Any previous value is forgotten.
-    </programlisting>
+    <para>
+      <blockquote>
+	<para>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>a value, or &num;f if unbound</type>
+	    <methodname>getprop</methodname>
+	    <methodparam>
+	      <parameter>variable-name</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>environment-name</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Attempts a lookup of variable-name in the symbolic environment
+	      named by environment-name.  If found, the value is returned.
+	      If not bound, &num;f is returned.
+	    </para>
+	  </blockquote>
+	</para>
+	<para>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>undefined</type>
+	    <methodname>putprop</methodname>
+	    <methodparam>
+	      <parameter>variable-name</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>environment-name</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>value</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Sets the value of the variable named by variable name in the
+	      symbolic environment named by environment-value to the provided
+	      value.  Any previous value is forgotten.
+	    </para>
+	  </blockquote>
+	</para>
+      </blockquote>
+    </para>
     <para>
       In addition, the top-level Scheme environment is a symbolic
       environment in &SISC; that can be accessed using getprop and putprop, 
-      by ommitting the <emphasis>environment-name</emphasis> parameter.  
+      by ommitting the <parameter>environment-name</parameter> parameter.  
     </para>
-    <programlisting>
-      &procedure; (getprop variable-name)
-      &returns; a value, or &num;f if unbound
-      
-      Attempts a lookup of variable-name in the top-level environment.
-      If found, the value is returned.  If not bound, &num;f is returned.
-      
-      &procedure; (putprop variable-name value)
-      &returns; undefined
-      
-      Sets the value of the variable named by variable name in the
-      top-level environment to the provided value.  
-    </programlisting>
+    <para>
+      <blockquote>
+	<para>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>a value, or &num;f if unbound</type>
+	    <methodname>getprop</methodname>
+	    <methodparam>
+	      <parameter>variable-name</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Attempts a lookup of variable-name in the top-level environment.
+	      If found, the value is returned.  If not bound, &num;f
+	      is returned.
+	    </para>
+	  </blockquote>
+	</para>
+	<para>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>undefined</type>
+	    <methodname>putprop</methodname>
+	    <methodparam>
+	      <parameter>variable-name</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>value</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Sets the value of the variable named by variable name in the
+	      top-level environment to the provided value.  
+	    </para>
+	  </blockquote>
+	</para>
+      </blockquote>
+    </para>
     <para>
       Finally, &SISC; adheres strictly to &R5RS; when it comes to
       using <function>set!</function> to modify the
@@ -606,23 +720,73 @@
       call-by-reference semantics. Boxes are created and accessed
       using the following three functions:
     </para>
+    <para>
+      <blockquote>
+	<para>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>undefined</type>
+	    <methodname>box</methodname>
+	    <methodparam>
+	      <parameter>value</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Creates a box filled with the given value.
+	    </para>
+	  </blockquote>
+	</para>
+	<para>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>value</type>
+	    <methodname>unbox</methodname>
+	    <methodparam>
+	      <parameter>box</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Returns the value contained in the given box.
+	    </para>
+	  </blockquote>
+	</para>
+	<para>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>undefined</type>
+	    <methodname>set-box!</methodname>
+	    <methodparam>
+	      <parameter>box</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>value</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Replaces the value contained in the given box with the
+	      value provided.
+	    </para>
+	  </blockquote>
+	</para>
+      </blockquote>
+    </para>
+    <para>
+      In addition to the <function>box</function> function for
+      creating boxes, &SISC; provides an external representation for
+      boxes and boxed values. It extends the &R5RS; grammer with the 
+      following:
+    </para>
     <programlisting>
-      &procedure; (box value)
-      &returns; a box containing the given value
-      
-      Creates a box filled with the given value.
-      
-      &procedure; (unbox box)
-      &returns; the value contained in the given box
-      
-      Returns the contents of a box.
-      
-      &procedure; (set-box! box value)
-      &returns; undefined
-      
-      Replaces the value contained in the given box with a given
-      value.
+      &lt;boxed value&gt; --&gt; &num;&amp;&lt;datum&gt;
     </programlisting>
+    <para>
+      This syntax denotes a boxed value, with
+      <computeroutput>&lt;datum&gt;</computeroutput> as the contained
+      value.
+    </para>
   </sect1>
 </chapter>
 <!-- Keep this comment at the end of the file

@@ -32,7 +32,7 @@
     <property name="packagename" value="sisc"/>
     <property name="jarname" value="sisc.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
-    <property name="quantity-type" value="64float"/>
+    <property name="quantity-type" value="32float"/>
     <property name="debugging" value="off"/>
     <property name="optimization" value="on"/>
     <property name="dist" value="${basedir}/dist"/>
@@ -105,11 +105,12 @@
     </copy>
   </target> 
 
-  <target name="jars" depends="compiler,i18n">
+  <target name="jars" depends="compiler,i18n,heap">
     <jar jarfile="${basedir}/${jarname}"
-	 manifest="${basedir}/boot/Manifest"
-         basedir="${classdir}"
-         includes="*/**"/>
+	 manifest="${basedir}/boot/Manifest">
+      <fileset dir="${classdir}" includes="*/**"/>
+<!--      <fileset dir="${basedir}/boot" includes="sisc.heap"/>-->
+    </jar>
   </target>
   
   <target name="heap" depends="compiler,i18n">

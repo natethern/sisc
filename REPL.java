@@ -49,18 +49,30 @@ public class REPL extends Thread {
     public REPL(Interpreter r) {
         this.r = r;
     }
+    
+    public static InputStream findHeap() {
+	try {
+	    String heapLocation=System.getProperty("HEAP", null);
+	    InputStream heap=null;
+	    if (heapLocation==null) 
+		heap=ClassLoader.getSystemResource("sisc.heap").openStream();
+	    else 
+		heap=new FileInputStream(heapLocation);
+	    heap=new BufferedInputStream(new GZIPInputStream(new BufferedInputStream(heap)), 65536);
+
+	    return heap;
+	} catch (IOException e) {
+	    return null;
+	}
+    }
 
     public static boolean initializeInterpreter(Interpreter r, String[] args) throws ClassNotFoundException {
+	return initializeInterpreter(r, args, new DataInputStream(findHeap()));
+    }
+
+    public static boolean initializeInterpreter(Interpreter r, String[] args, DataInputStream in) throws ClassNotFoundException {
         try {
-            r.ctx.loadEnv(r,
-			  new DataInputStream(
-                            new BufferedInputStream(
-                               new GZIPInputStream(
-                                  new BufferedInputStream(
-                                      new FileInputStream(
-                                          System.getProperty("HEAP","sisc.heap")),
-                                      90000))
-			       )));
+            r.ctx.loadEnv(r, in);
         } catch (IOException e) {
             System.err.println("\nError loading heap!");
             e.printStackTrace();

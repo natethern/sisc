@@ -51,15 +51,23 @@ public class LexicalEnvironment extends Value {
 	int s=c.fcount;
 	Value[] v=r.vlr;
         if (c.arity) {
-            vals=r.createValues(s--);
-            if (v.length < s) 
-		error(r, liMessage("notenoughargsto", c.write(), s, v.length));
-            System.arraycopy(v, 0, vals, 0, s);
-            vals[s]=valArrayToList(v, s, v.length-s);
-	    r.returnValues(v);
+	    int sm1=s-1;
+            if (v.length < sm1) 
+		error(r, liMessage(SISCB,"notenoughargsto", c.write(), sm1, 
+				   v.length));
+
+	    if (v.length < s) {
+		vals=r.createValues(s);
+		System.arraycopy(v, 0, vals, 0, sm1);
+		vals[sm1]=valArrayToList(v, sm1, v.length-sm1);
+		r.returnValues(v);
+	    } else {
+		vals=v;
+		vals[sm1]=valArrayToList(v, sm1, v.length-sm1);
+	    }
         } else {
             if (v.length!=s)
-		error(r, liMessage("notenoughargsto", c.write(), s, v.length));
+		error(r, liMessage(SISCB,"notenoughargsto", c.write(), s, v.length));
             vals=v;
         }
     }

@@ -63,7 +63,7 @@ public class Values extends Value {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        error(r, liMessage("multiplevalues"));
+        error(r, liMessage(SISCB,"multiplevalues"));
     }
 
     public int hashCode() {
