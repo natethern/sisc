@@ -36,9 +36,12 @@ public class Quantity extends Value implements Singleton {
     public static final int
         FIXEDINT = 0,
         DECIM = 1,
-	INTEG = 2,
+        INTEG = 2,
         RATIO = 3,
-        COMPLEX = 4;
+        COMPLEX = 4,
+        POSINF  = 5,
+        NEGINF  = 6,
+        NAN     = 7;
 
     public static final int[] characteristics = new int[] {
 	( EXACT | FIXED | INTEGER | RATIONAL ), //FIXEDINT
