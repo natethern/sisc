@@ -33,11 +33,15 @@
                ,@(map scheme-name field-accessors)
                ,@(map scheme-name field-modifiers)
                ,@(map scheme-name methods))
-              (define-java-classes ,@classes)
-              (define-generic-java-field-accessors ,@field-accessors)
-              (define-generic-java-field-modifiers ,@field-modifiers)
-              (define-generic-java-methods ,@methods))))
-  
+              ,@(if (null? classes) '()
+                    `((define-java-classes ,@classes)))
+              ,@(if (null? field-accessors) '()
+                    `((define-generic-java-field-accessors ,@field-accessors)))
+              ,@(if (null? field-modifiers) '()
+                    `((define-generic-java-field-modifiers ,@field-modifiers)))
+              ,@(if (null? methods) '()
+                    `((define-generic-java-methods ,@methods))))))
+    
   (define (union ls1 ls2)
     (cond [(null? ls1) ls2]
           [(member (car ls1) ls2)
@@ -140,7 +144,7 @@
                                          (java-unmangle-method-name jfname)))])
                         (set! smethods (union-elem fname smethods))))))
                 (->list (get-methods class)))
-      (values sclasses saccessors smodifiers smethods)))
+      (values (union-elem (generate-class-name class) sclasses) saccessors smodifiers smethods)))
   
   (define (generate-generic-java-field-accessors fields)
     `(define-generic-field-accessors ,@(map generate-generic-accessor fields)))
