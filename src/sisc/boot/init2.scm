@@ -965,5 +965,5 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
 (unload-dynamic-wind)
 
 ;;And disable inlining/assumptions
-(putprop 'assumptions '*opt* '())
+(putprop 'assumptive-procedures '*opt* '())
 (inline-primitives '())
