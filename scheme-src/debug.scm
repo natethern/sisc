@@ -1,7 +1,7 @@
 ;(import debugging)
 
 (define (get-last-error)
-  (getprop 'last-error '*sisc*))
+  (getprop 'last-error '*debug*))
 
 (define annotated?
   (lambda (obj)
@@ -75,7 +75,7 @@
     (lambda args
       (trace-call (lambda () (cons procedure-name args))
                   (lambda () (apply procedure args)))))
-  (let ([traced-procedures (cond [(getprop 'traced-procedures '*sisc*) => 
+  (let ([traced-procedures (cond [(getprop 'traced-procedures '*debug*) => 
                                   (lambda (x) x)]
                                  [else '()])])
     (if (null? procs)
@@ -96,16 +96,18 @@
                         (putprop procedure-symbol '*toplevel*
                                  (make-traced procedure-symbol proc)))])))
            procs)
-          (putprop 'traced-procedures '*sisc* traced-procedures)))))
+          (putprop 'traced-procedures '*debug* traced-procedures)))))
+
+
+(define (remove-from-assoc procedure-name assoc)
+  (cond [(null? assoc) '()]
+        [(eq? (caar assoc) procedure-name)
+         (cdr assoc)]
+        [else (cons (car assoc) 
+                    (remove-from-assoc procedure-name (cdr assoc)))]))
 
 (define (untrace proc1 . procs)
-  (define (remove-from-assoc procedure-name assoc)
-    (cond [(null? assoc) '()]
-          [(eq? (caar assoc) procedure-name)
-           (cdr assoc)]
-          [else (cons (car assoc) 
-                      (remove-from-assoc procedure-name (cdr assoc)))]))
-  (let ([traced-procedures (cond [(getprop 'traced-procedures '*sisc*) => 
+  (let ([traced-procedures (cond [(getprop 'traced-procedures '*debug*) => 
                                   (lambda (x) x)]
                                  [else '()])])
     (for-each 
@@ -117,7 +119,7 @@
                (set! traced-procedures 
                      (remove-from-assoc procedure-symbol traced-procedures))))))
      (cons proc1 procs))
-    (putprop 'traced-procedures '*sisc* traced-procedures)))
+    (putprop 'traced-procedures '*debug* traced-procedures)))
 
 
 (define _k-stack 
@@ -212,3 +214,43 @@
             (begin (display (format "~%While calling:~%~%"))
                    (stack-trace p)))))))
 
+(define (set-breakpoint! function-id)
+  (define (make-breakpoint proc)
+    (lambda args
+      (call/cc (lambda (k)
+                 (display (format "{break: ~s}~%" 
+                                  (cons function-id args)))
+                 (putprop 'continue-point '*debug* 
+                          (delay (k (apply proc args))))
+                 ((getprop 'repl '*debug*))))))
+  (let ([breakpoints (cond [(getprop 'breakpoints '*debug*) => 
+                            (lambda (x) x)]
+                           [else '()])])
+    (if (not (assq function-id breakpoints))
+        (let* ([function (getprop function-id '*toplevel*)]
+               [breakpointed-function (make-breakpoint function)])
+          (if function 
+              (begin
+                (putprop 'breakpoints '*debug* 
+                         (cons (cons function-id function) breakpoints))
+                (putprop function-id '*toplevel* breakpointed-function))
+              (error 'set-breakpoint! "no such function."))))))
+
+(define (clear-breakpoint! function-id) 
+  (let ([breakpoints (cond [(getprop 'breakpoints '*debug*) => 
+                            (lambda (x) x)]
+                           [else '()])])
+    (cond [(assq function-id breakpoints) =>
+           (lambda (v)
+             (putprop function-id '*toplevel* (cdr v))
+             (putprop 'breakpoints '*debug* 
+                      (remove-from-assoc function-id breakpoints)))]
+          [else (error 'clear-breakpoint! "no such function or function is not a breakpoint.")])))
+
+(define (continue)
+  (cond [(getprop 'continue-point '*debug*) =>
+         (lambda (c)
+           (putprop 'continue-point '*debug* #f)
+           (c))]
+        [else (error 'continue "nowhere to continue to.")]))
+          

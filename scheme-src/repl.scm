@@ -81,7 +81,7 @@
      (lambda (m e o)
        (display (eh m e) o)
        (newline o)
-       (putprop 'last-error '*sisc* 
+       (putprop 'last-error '*debug* 
                 (cons `(error-continuation 
                         . ,(error-continuation-k e))
                       (if m 
@@ -141,7 +141,8 @@
              (begin
                (call/cc 
                 (lambda (k)
-                  (set! repl-start k)))
+                  (set! repl-start k)
+                  (putprop 'repl '*debug* k)))
                (let loop ()
                  (with/fc
                   (lambda (m e)
