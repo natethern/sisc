@@ -289,9 +289,6 @@
       and modify these files and directories.
     </para>
     <note>
-      <title>
-        API Incomplete
-      </title>
       <para>
         The interface to the filesystem is a work in progress.
         Documentation and a corresponding implementation will appear
@@ -557,7 +554,7 @@
 	      </para>
 	    </blockquote>
 	  </para>
-	  <para id="func-set-so-timeout!">
+	  <para id="func-set-so-timeout">
 	    &procedure;
 	    <methodsynopsis language="scheme">
 	      <type>undefined</type>

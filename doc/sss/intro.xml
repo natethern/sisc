@@ -86,7 +86,8 @@
       <para>
 	<blockquote>
 	  <para>
-	    &procedure; <methodsynopsis language="scheme">
+	    &procedure; 
+            <methodsynopsis language="scheme">
 	      <type>return value</type>
 	      <methodname>function-name</methodname>
 	      <methodparam>

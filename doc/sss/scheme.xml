@@ -73,7 +73,7 @@
 	    <para>
 	      &parameter;
 	      <methodsynopsis language="scheme">
-		<methodtype>integer</methodtype>
+		<type>integer</type>
 		<methodname>min-precision</methodname>
 		<methodparam choice="opt">
 		  <parameter>digits</parameter>
@@ -89,7 +89,7 @@
 	    <para>
 	      &parameter;
 	      <methodsynopsis language="scheme">
-		<methodtype>integer</methodtype>
+		<type>integer</type>
 		<methodname>max-precision</methodname>
 		<methodparam choice="opt">
 		  <parameter>digits</parameter>
@@ -172,7 +172,7 @@
 	  <para>
 	    &procedure;
 	    <methodsynopsis language="scheme">
-	      <methodtype>symbol</methodtype>
+	      <type>symbol</type>
 	      <methodname>string-&gt;uninterned-symbol</methodname>
 	      <methodparam>
 		<parameter>string</parameter>
@@ -198,7 +198,7 @@
 	  <para>
 	    &parameter;
 	    <methodsynopsis language="scheme">
-	      <methodtype>#t/#f</methodtype>
+	      <type>#t/#f</type>
 	      <methodname>case-sensitive</methodname>
 	      <methodparam choice="opt">
 		<parameter>boolean</parameter>
@@ -279,7 +279,7 @@
 	  <para>
 	    &parameter;
 	    <methodsynopsis language="scheme">
-	      <methodtype>#t/#f</methodtype>
+	      <type>#t/#f</type>
 	      <methodname>vector-length-prefixing</methodname>
 	      <methodparam choice="opt">
 		<parameter>boolean</parameter>

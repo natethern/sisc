@@ -100,7 +100,6 @@
               <type>int</type>
               <parameter>limit</parameter>
             </methodparam>
-            <void/>
           </methodsynopsis>
           <blockquote>
             <para>
@@ -123,7 +122,6 @@
               <type>Object</type>
               <parameter>other</parameter>
             </methodparam>
-            <void/>
           </methodsynopsis>
           <blockquote>
             <para>
@@ -143,7 +141,6 @@
               <type>Value</type>
               <parameter>other</parameter>
             </methodparam>
-            <void/>
           </methodsynopsis>
           <blockquote>
             <para>

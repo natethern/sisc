@@ -145,7 +145,7 @@
       the code that the thread will execute when started.  
     </para>
     <blockquote>
-      <para id="func-thread/new">
+      <para id="func-thread-new">
         &procedure;
         <methodsynopsis language="scheme">
           <type>thread-handle</type>
@@ -168,7 +168,7 @@
       <function>thread/start</function>.
     </para>
     <blockquote>
-      <para id="func-thread/start">
+      <para id="func-thread-start">
         &procedure;
         <methodsynopsis language="scheme">
           <type>undefined</type>
@@ -195,7 +195,7 @@
       The state can be read using <function>thread/state</function>.
     </para>
     <blockquote>
-      <para id="func-thread/state">
+      <para id="func-thread-state">
         &procedure;
         <methodsynopsis language="scheme">
           <type>symbol</type>
@@ -226,7 +226,7 @@
       return with <literal>&num;f</literal>.
     </para>
     <blockquote>
-      <para id="func-thread/join">
+      <para id="func-thread-join">
         &procedure;
         <methodsynopsis language="scheme">
           <type>boolean</type>
@@ -269,7 +269,7 @@
       <function>thread/result</function> function.  
     </para>
     <blockquote>
-      <para id="func-thread/result">
+      <para id="func-thread-result">
         &procedure;
         <methodsynopsis language="scheme">
           <type>value</type>
@@ -369,7 +369,7 @@
       undefined.
     </para>
     <blockquote>
-      <para id="func-thread/priority">
+      <para id="func-thread-priority">
         &procedure;
         <methodsynopsis language="scheme">
           <type>integer</type>
@@ -384,7 +384,7 @@
           </para>
         </blockquote>
       </para>
-      <para id="func-thread/priority!">
+      <para id="func-thread-priority-bang">
         &procedure;
         <methodsynopsis language="scheme">
           <type>undefined</type>
@@ -413,7 +413,7 @@
       or another thread may be chosen.
     </para>
     <blockquote>
-      <para id="func-thread/yield">
+      <para id="func-thread-yield">
         &procedure;
         <methodsynopsis language="scheme">
           <type>undefined</type>
@@ -435,7 +435,7 @@
     </title>
     <warning>
       <para>
-	This section is likely to change in the not-to distant future,
+	This section is likely to change in the not-to-distant future,
 	as &SISC; moves to a separation of locks and condition
 	variables more akin to that described by SRFI-12.
       </para>
@@ -469,7 +469,7 @@
       threads using monitor functionality.
     </para>
     <blockquote>
-      <para id="func-monitor/new">
+      <para id="func-monitor-new">
         &procedure;
         <methodsynopsis language="scheme">
           <type>monitor</type>
@@ -498,7 +498,7 @@
 	is called.
       </para>
       <blockquote>
-        <para id="func-monitor/lock">
+        <para id="func-monitor-lock">
           &procedure;
           <methodsynopsis language="scheme">
             <type>undefined</type>
@@ -514,7 +514,7 @@
             </para>
           </blockquote>
         </para>
-        <para id="func-monitor/unlock">
+        <para id="func-monitor-unlock">
           &procedure;
           <methodsynopsis language="scheme">
             <type>undefined</type>
@@ -571,7 +571,7 @@
         until notified by another thread.
       </para>
       <blockquote>
-        <para id="func-monitor/wait">
+        <para id="func-monitor-wait">
           &procedure;
           <methodsynopsis language="scheme">
             <type>undefined</type>
@@ -606,7 +606,7 @@
         <function>monitor/notify-all</function> function.
       </para>
       <blockquote>
-        <para id="func-monitor/notify">
+        <para id="func-monitor-notify">
           &procedure;
           <methodsynopsis language="scheme">
             <type>undefined</type>
@@ -622,7 +622,7 @@
             </para>
           </blockquote>
         </para>
-        <para id="func-monitor/notify-all">
+        <para id="func-monitor-notify-all">
           &procedure;
           <methodsynopsis language="scheme">
             <type>undefined</type>
@@ -650,7 +650,7 @@
 	  construction and readability of thread-safe code.
 	</para>
       <blockquote>
-        <para id="func-monitor/synchronize">
+        <para id="func-monitor-synchronize">
           &procedure;
           <methodsynopsis language="scheme">
             <type>value</type>
@@ -671,7 +671,7 @@
             </para>
           </blockquote>
         </para>
-        <para id="func-monitor/synchronize-unsafe">
+        <para id="func-monitor-synchronize-unsafe">
           &procedure;
           <methodsynopsis language="scheme">
             <type>value</type>
