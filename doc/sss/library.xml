@@ -13,6 +13,12 @@
     <sect2 id="Definitions">
       <title>Definitions</title>
       <para>
+        &requires; 
+        <emphasis role="bold">
+          (import <emphasis>misc</emphasis>)
+        </emphasis>
+      </para>
+      <para>
         In addition to the standard &R5RS; definition syntaxes, &SISC;
         provides an additional value definition and syntax definition form.
       </para>
