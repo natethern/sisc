@@ -1,3 +1,8 @@
+2004-06-17  Matthias Radestock  <matthias@sorted.org>
+
+	* Improved s2j error reporting - the generic procedures used by
+	  s2j now have proper names.
+
 2004-06-12  Matthias Radestock  <matthias@sorted.org>
 
 	* Updated srfi-45 to latest version.

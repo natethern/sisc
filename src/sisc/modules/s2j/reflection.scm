@@ -158,6 +158,11 @@
   (hashtable/clear! *REFLECTED-FIELD-ACCESSORS*)
   (hashtable/clear! *REFLECTED-FIELD-MODIFIERS*))
 
+(define (make-named-generic-procedure name)
+  (let ([gproc (make-generic-procedure)])
+    (set-annotation! gproc 'name name)
+    gproc))
+
 (define (reflect-java-class-members jclass)
   (define (helper fetch create)
     (filter-map (lambda (m) (and (memq 'public (java/modifiers m))
@@ -166,7 +171,7 @@
   (hashtable/put!
    *REFLECTED-CONSTRUCTORS*
    jclass
-   (let ([gproc (make-generic-procedure)])
+   (let ([gproc (make-named-generic-procedure (java/name jclass))])
      (add-methods gproc (map cdr (helper java/constructors
                                          java-constructor-method)))
      gproc))
@@ -209,7 +214,10 @@
    (lambda ()
      (let ([gproc (hashtable/get! table
                                   name
-                                  make-generic-procedure)])
+                                  (lambda ()
+                                    (let ([p (make-generic-procedure)])
+                                      (set-annotation! p 'name name)
+                                      p)))])
        (lambda args
          (if (not (null? args))
              (let ([o (car args)])
