@@ -74,7 +74,7 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     public String toString() {
-        return display();
+        return write();
     }
 
     /**
