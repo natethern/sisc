@@ -8,8 +8,8 @@
   </path>
 
   <target name="prepare">
-    <property name="version" value="1.6.2-rc"/>
-    <property name="cvsversion" value="rc1_6_2"/>
+    <property name="version" value="1.6.2"/>
+    <property name="cvsversion" value="r1_6_2"/>
     <property file="${basedir}/build.properties"/>    
     <property name="srcdir" value="${basedir}/.."/>
     <property name="classdir" value="${basedir}/classes"/>
@@ -23,7 +23,7 @@
     <property name="srfisll" value="srfi.sll"/>
     <property name="heap" value="${basedir}/boot/sisc.shp"/>
     <property name="quantity-type" value="apfloat"/>
-    <property name="releasecandidate" value="yes"/> 
+<!--    <property name="releasecandidate" value="yes"/> -->
     <condition property="debugging" value="on">
       <isset property="releasecandidate"/>
     </condition>
