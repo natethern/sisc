@@ -20,8 +20,7 @@
           (nv '())
           (sec '())
           (refv (state-get state refv))
-          (setv (state-get state setv))
-          (lexv (state-get state lexv))
+          (lsetv (state-get state setv))
           (freev (state-get state freev)))
       (define (cp-helper x y acc)
         ;Watch for null? x but not null? y, or vice versa, indicating
@@ -42,8 +41,8 @@
 		    ;; skip it
                     [(or (not (immediate? cy))
                          (if rec
-                             (> (reference-count cx setv) 1)
-                             (assq cx setv))
+                             (> (reference-count cx lsetv) 1)
+                             (assq cx lsetv))
 			 (and rec (eq? cx cy)))
                      (set! nf (cons cx nf))
                      (set! nv (cons cy nv))
@@ -75,21 +74,29 @@
                     ;; but its set!'ed or a free variable, skip it.
                     [(and (symbol? cy) 
                           (or  (if rec
-                                   (> (reference-count cy setv) 1)
-                                   (assq cy setv))
+                                   (> (reference-count cy lsetv) 1)
+                                   (assq cy lsetv))
                                (memq cy freev)))
                      (set! nf (cons cx nf))
                      (set! nv (cons cy nv))
                      (cp-helper (cdr x) (cdr y) acc)]
-                    ;; If the right-hand-side is a var-ref and 
-                    ;; that var is not set! in the body, we can
-                    ;; do a simple variable renaming.
-                    [(and (symbol? cy) 
-                          (or (and rec (memq cy formals))
-                              (memq cy lexv)))
-                     (cp-helper (cdr x)
-                                (cdr y) 
-                                (cons (cons cx cy) acc))]
+;                    ;; If the right-hand-side is a lexical var-ref and 
+;                    ;; that var is not set! in the body, we can
+ ;                   ;; do a simple variable renaming.
+                    [(and (symbol? cy)
+                          (and rec (memq cy formals)))
+  ;                  [(and (symbol? cy) 
+  ;                        (or (and rec (memq cy formals))
+   ;                           (not (memq cy freev))))
+                               (cp-helper (cdr x)
+                                          (cdr y) 
+                                          (cons (cons cx cy) acc))]
+                    ;; Due to recent problems, don't do variable to variable
+                    ;; copies from outer scopes
+                    [(symbol? cy)
+                     (set! nf (cons cx nf))
+                     (set! nv (cons cy nv))
+                     (cp-helper (cdr x) (cdr y) acc)]
                     [else 
                       (if rec
                           (begin
@@ -97,8 +104,9 @@
                               (unless (null? v) 
                                 (if (eq? (cdar v) cx)
                                     (set-cdr! (car v) cy))))
-                            (set! nf (cons cx nf))
-                            (set! nv (cons cy nv))))
+                            (varcount-decr! state setv cx)
+                            #;(set! nf (cons cx nf))
+                            #;(set! nv (cons cy nv))))
                       (cp-helper (cdr x)
                                  (cdr y) 
                                  (cons (cons cx cy) acc))])))])
@@ -108,24 +116,23 @@
             (values nf nv cpc sec))))))
 
 (define (opt:letrec-helper formals values* state)
-  (let ((state (state-union-ls state lexv formals)))
-    (let-values ([(nf nvo cpcs sec)
-                  (cp-candidates formals values* #t state)])
-      (let ([state (if (null? cpcs)
-                       state
-                       (state-union-ls state cpc cpcs))])
-        (if (null? cpcs)
-            (values nf nvo sec state)
-            (let ([nv (map (lambda (e) (opt e state)) nvo)])
-              (if (= (length nv) (length values*))
-                  (values nf nvo sec state)
-                  (opt:letrec-helper nf nv state))))))))
+  (let-values ([(nf nvo cpcs sec)
+                (cp-candidates formals values* #t state)])
+    (if (null? cpcs)
+        (values nf nvo sec state)
+        (begin
+          (for-each (lambda (var) (varcount-decr! state refv (car var)))
+                    cpcs)
+          (state-union-ls state cpc cpcs)
+          (let ([nv (map (lambda (e) (opt e state)) nvo)])
+            (if (= (length nv) (length values*))
+                (values nf nvo sec state)
+                (opt:letrec-helper nf nv state)))))))
 
 (define (opt:letrec keyword formals values* lexicals body state)
   (let-values ([(nf nv sec state) (opt:letrec-helper formals values* state)])
     (let ([newbody (opt body state)])
-      (varcount-clear-all! state refv (map car (state-get state cpc)))
-      (apply make-begin 
+      (apply make-begin state 
              (append sec 
                      (list
                       (if (null? nf)
@@ -134,35 +141,29 @@
                                       ,(remove-unreferenced lexicals (state-get state refv))
                                       ,newbody))))))))
 
-(define (varcount-clear-all! state type vars)
-  (state-set! state type
-              (let loop ([ls (state-get state type)])
-                (cond [(null? ls) '()]
-                      [(memq (caar ls) vars)
-                       (loop (cdr ls))]
-                      [else (cons (car ls) (loop (cdr ls)))]))))
-
 (define (opt:let keyword formals lexicals values* body state)
-  (let ((state (state-union-ls state lexv formals)))
-    (let-values ([(nf nv cpcs sec) (cp-candidates formals values* #f state)])
-      (let ([rv (opt body (if (null? cpcs)
-                              state
-                              (state-union-ls state cpc cpcs)))]
-            [nrefv (varcount-clear-all! state refv (map car cpcs))])
-        (apply make-begin 
-               (append sec
-                       (list
-                        (if (null? nf)
-                            rv
-                            `(,(opt:lambda keyword nf lexicals rv state)
-                              ,@nv)))))))))
+  (let-values ([(nf nv cpcs sec) (cp-candidates formals values* #f state)])
+    (for-each (lambda (var) (varcount-decr! state refv (car var)))
+              cpcs)
+    (let* ([state (if (null? cpcs) state (state-union-ls state cpc cpcs))]
+           [rv (opt body state)])
+      (apply make-begin state
+             (append sec
+                     (list
+                      (if (null? nf)
+                          rv
+                          `(,(opt:lambda keyword nf lexicals rv state)
+                            ,@nv))))))))
 
 (define (opt:ref ref state)
   (let ((cp (state-get state cpc)))
     (cond [(and cp (assq ref cp)) =>
            (lambda (v)
-             (varcount-decr! state refv ref)
-             (opt (cdr v) state))]
+             (let ([rv (opt (cdr v) state)])
+               (if (symbol? rv)
+                   (varcount-incr! state refv rv)
+                   (varcount-decr! state refv ref))
+               rv))]
           [else ref])))
 
 (define (opt:if keyword test conseq altern state)
@@ -174,7 +175,7 @@
     ;;Various lookahead opts
     ((,?if ,B #f #f)     
      (guard (core-form-eq? ?if 'if #%if))
-     (make-begin B altern))
+     (make-begin state B altern))
     ((,?if ,B #f ,x)
      (guard (and (constant? x)
                  (core-form-eq? ?if 'if #%if)))
@@ -184,7 +185,7 @@
      (opt:if keyword B conseq altern state))
     ((,?if ,B ,x ,y)
      (guard (and (constant? x) (constant? y) (core-form-eq? ?if 'if #%if)))
-     (make-begin B conseq))
+     (make-begin state B conseq))
     ;;Or optimization
     (((,?lambda (,var) (,?if ,itest ,iconseq ,ialtern))
       ,val)
@@ -198,7 +199,7 @@
     ((,?begin ,e* ... ,el)
      (guard (core-form-eq? ?begin 'begin #%begin))
      (let-values ([(rv state) (opt:if keyword el conseq altern state)])
-       (apply make-begin (append e* `(,rv)))))
+       (apply make-begin state (append e* `(,rv)))))
     (,other `(,keyword ,other ,conseq ,altern))))
 
 ;; Applications and constant folding (possibly unsafe)
@@ -223,33 +224,37 @@
            `(,rator ,@rands)])))
 
 ;; begin flattening, constant elimination, and collapse
-(define (mb-helper exp1 . exps*)
+(define (mb-helper state exp1 . exps*)
   (if (null? exps*)
       (if (and (pair? exp1)
                (core-form-eq? (car exp1) 'begin '#%begin))
-          (apply mb-helper (cdr exp1))
+          (apply mb-helper state (cdr exp1))
           (list exp1))
       (match exp1
         ;; Eliminate constants and variable references
         ;; in command context.
         (,x
-         (guard (or (constant? x) (symbol? x)))
-         (apply mb-helper exps*))
+         (guard (symbol? x))
+         (varcount-decr! state refv x)
+         (apply mb-helper state exps*))
+        (,x
+         (guard (constant? x))
+         (apply mb-helper state exps*))
         ;; Eliminate procedures in command context
         ((lambda ,formals ,body)
-         (apply mb-helper exps*))
+         (apply mb-helper state exps*))
         ;; Flatten nested begins
         ((,?begin ,sexps* ...)
          (guard (core-form-eq? ?begin 'begin #%begin))
-         (let ((sub-begin (apply mb-helper sexps*)))
+         (let ((sub-begin (apply mb-helper state sexps*)))
            (append sub-begin 
-                   (apply mb-helper exps*))))
-        (,other (cons other (apply mb-helper exps*))))))
+                   (apply mb-helper state exps*))))
+        (,other (cons other (apply mb-helper state exps*))))))
 
-(define (make-begin exp1 . exps*)
+(define (make-begin state exp1 . exps*)
   (if (null? exps*) 
       exp1
-      (let ((result (apply mb-helper exp1 exps*)))
+      (let ((result (apply mb-helper state exp1 exps*)))
         (if (and (pair? result)
                  (= (length result) 1))
             (car result)
@@ -257,13 +262,13 @@
                    
 
 (define (opt:begin exp1 exps* state)
-  (apply make-begin exp1 exps*))
+  (apply make-begin state exp1 exps*))
 
 (define (opt:set! keyword lhs rhs state)
   (match rhs
     ;; Begin lifting
     ((begin ,e* ... ,el)
 ;     (guard (core-form-not-redefined? 'begin))
-     (apply make-begin (append e* `((,keyword ,lhs ,el)))))
+     (apply make-begin state (append e* `((,keyword ,lhs ,el)))))
     (,else
      `(,keyword ,lhs ,else))))
