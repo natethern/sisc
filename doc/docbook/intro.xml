@@ -64,6 +64,7 @@
 	be written in terms of other Scheme code, or code that
 	benefits by running natively on the Runtime.
       </para>
+	</section>
   </chapter>
   
 

@@ -1,0 +1,453 @@
+#LyX 1.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 218
+\textclass docbook-book
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+
+\emph on 
+SISC
+\emph default 
+ 
+\emph on 
+for Seasoned Schemers
+\layout Author
+
+\layout FirstName
+
+Scott
+\layout Surname
+
+Miller
+\layout Date
+
+Jan 2002
+\layout Chapter
+
+Introduction
+\layout Standard
+
+
+\emph on 
+SISC
+\emph default 
+ is a lightweight, platform independent Scheme system whose primary goals
+ are rapid execution of the complete 
+\begin_inset Formula \( R^{5}RS \)
+\end_inset 
+
+ and future Scheme standards, plus a useful superset for real-world application
+ development.
+ 
+\layout Section
+
+Features
+\layout Itemize
+
+Full 
+\begin_inset Formula \( R^{5}RS \)
+\end_inset 
+
+ compliance
+\layout Itemize
+
+Efficient number tower, with support for integers, floating-point numbers,
+ rationals, and complex numbers of arbitrary precision
+\layout Itemize
+
+Lightweight Scheme engine, requiring less than 200 kilobytes of code.
+\layout Itemize
+
+Runtime extensiblity through a scopable module system, which may add new
+ functions and first-class types.
+\layout Section
+
+About this document
+\layout Standard
+
+This document explains the SISC Scheme system.
+ It assumes knowledge of the Scheme language.
+ As such, when discussing the Scheme language, we will focus primarily on
+ differences between the Scheme standard and the language implemented by
+ SISC.
+ 
+\layout Standard
+
+Secondly, SISC implements the R5RS standard.
+ As such, any code written to that standard should run without reading any
+ further.
+\layout Chapter
+
+Installation and Invocation
+\layout Section
+
+Required Environment
+\layout Section
+
+The Read-Eval-Print-Loop
+\layout Chapter
+
+Scheme Language
+\layout Section
+
+Types
+\layout Subsection
+
+Numbers
+\layout Standard
+
+The full Scheme number tower is supported:
+\layout Itemize
+
+Integers
+\layout Itemize
+
+Floating Point numbers 
+\layout Itemize
+
+Rational numbers
+\layout Itemize
+
+Complex numbers
+\layout Standard
+
+Depending on the numeric library compiled into SISC, floating point numbers
+ have either 32 or 64 bit IEEE precision, or arbitrary precision.
+ Regardless, SISC's complex numbers have floating point components of the
+ same precision as the reals.
+ Integers have arbitrary precision in all numeric libraries, and rational
+ numbers are built with arbitrary precision components.
+\layout Subsubsection
+
+Numeric constants
+\layout Standard
+
+Precision specifiers (#e, #s, #f, #d, #l) are ignored in SISC, all inexact
+ numbers are kept in the precision of the numeric library.
+ In the case of arbitrary precision floats, specific precision constraints
+ are maintained to prevent runaway expansion of precision.
+ The parameterized functions 
+\noun on 
+min-precision 
+\noun default 
+and 
+\noun on 
+max-precision
+\noun default 
+ specify the constraints.
+\layout Standard
+
+All four base specifiers (#x, #o, #d, #b) are supported for integers and
+ rationals.
+ Only decimal (#d), the default, is supported for floating point and complex
+ numbers.
+\layout Subsubsection
+
+Exactness
+\layout Standard
+
+Exactness and inexactness contagion behaves as expected.
+ Rational's are made inexact through division.
+ Floats are made exact by conversion to a rational number.
+ SISC attempts as accurate a conversion as possible, by converting the decimal
+ portion of the number to a ratio with a denominator of the form 10^n, where
+ n is the scale of the floating point number.
+ Then the fraction is reduced as usual.
+\layout Standard
+
+Since complex numbers must have floating point components currently, conversion
+ to an exact merely rounds the components to integers.
+ 
+\layout Subsection
+
+Characters
+\layout Standard
+
+SISC's characters are based on the Java character type.
+ As such, the full range of unicode characters are supported.
+ Unicode characters can be created with number->character or #
+\backslash 
+nnnn, where nnnn is an octal number in the range 0000 -> ffff.
+ 
+\layout Standard
+
+Characters are compared with respect to the locale detected by the Java
+ VM.
+\layout Subsection
+
+Symbols
+\layout Standard
+
+SISC's symbols are case-insensitive.
+ An uninterned symbol (one which is distinct from all other symbols including
+ those with the same characters) can be created using string->uninterned-symbol.
+\layout Subsection
+
+Strings
+\layout Standard
+
+Strings are built from unicode characters, and are compared according to
+ the locale's rules.
+\layout Subsection
+
+Lists
+\layout Subsection
+
+Vectors
+\layout Standard
+
+SISC supports the length prefix method of creating Vector constants.
+ For example:
+\layout Code
+
+#5(x)
+\layout Standard
+
+creates a vector constant containing five identical symbols.
+\layout Subsection
+
+Immutable types
+\layout Standard
+
+SISC follows the R5RS recommendation of immutable list, string, and vector
+ constants.
+ Quoted lists and vectors are immutable.
+ Attempting to modify elements in these constants will raise an error.
+ String constants are immutable as well when created with symbol->string.
+\layout Section
+
+Error handling
+\layout Section
+
+Symbolic Environments
+\layout Section
+
+Boxing
+\layout Standard
+
+
+\emph on 
+SISC 
+\emph default 
+supports boxes, a container for a Scheme value.
+ Boxing is often used to implement call-by-reference semantics.
+ Boxes are created and accessed using the following three functions:
+\layout Code
+
+
+\series bold 
+\emph on 
+
+\begin_inset LatexCommand \label{box}
+
+\end_inset 
+
+procedure
+\series default 
+\emph default 
+: 
+\series bold 
+(box value)
+\layout Code
+
+
+\series bold 
+\emph on 
+returns
+\series default 
+\emph default 
+: a box containing the given value
+\layout Code
+
+ 
+\layout Code
+
+Creates a box filled with the given value.
+\layout Code
+
+ 
+\layout Code
+
+
+\series bold 
+\emph on 
+
+\begin_inset LatexCommand \label{unbox}
+
+\end_inset 
+
+procedure: 
+\emph default 
+(unbox box)
+\layout Code
+
+
+\series bold 
+\emph on 
+returns: 
+\series default 
+\emph default 
+the value contained in the given box
+\layout Code
+
+ 
+\layout Code
+
+Returns the contents of a box.
+\layout Code
+
+ 
+\layout Code
+
+
+\series bold 
+\emph on 
+
+\begin_inset LatexCommand \label{set-box!}
+
+\end_inset 
+
+procedure: 
+\emph default 
+(set-box! box value)
+\layout Code
+
+
+\series bold 
+\emph on 
+returns: 
+\series default 
+\emph default 
+undefined
+\layout Code
+
+ 
+\layout Code
+
+Replaces the value contained in the given box with a given value.
+\layout Chapter
+
+
+\emph on 
+SISC 
+\emph default 
+Library Functions
+\layout Section
+
+Debugging
+\layout Section
+
+Logical Operations
+\layout Section
+
+Operating System interface
+\layout Chapter
+
+I/O
+\layout Section
+
+Port Input/Output
+\layout Section
+
+File-system interface
+\layout Section
+
+
+\begin_inset LatexCommand \label{NetIO}
+
+\end_inset 
+
+Networking
+\layout Chapter
+
+Threads and Concurrency
+\layout Chapter
+
+The Module System
+\layout Standard
+
+The Module system consists of two components.
+ The first is the module syntax extension provided by R.
+ Kent Dybvig's syntax expander [REF].
+ This level provides the ability to scope Scheme code into importable modules
+ with selectable exports.
+ 
+\layout Standard
+
+The second is the Java level 
+\emph on 
+SISC
+\emph default 
+ API for native extensions to the language.
+ A 
+\emph on 
+SISC
+\emph default 
+ module defines new types and functions.
+ Each 
+\emph on 
+SISC
+\emph default 
+ module can be queried from Scheme, and imported into the runtime environment
+ as a whole, or packaged via the same export mechanism as native Scheme
+ code.
+\layout Chapter
+
+
+\begin_inset LatexCommand \label{Java Interaction}
+
+\end_inset 
+
+Java Interaction
+\layout Standard
+
+
+\emph on 
+SISC
+\emph default 
+ can be used as a scripting language for Java, or Java may be used to provide
+ functionality to Scheme.
+ Such activity is collectively termed 'bridging'.
+ 
+\emph on 
+SISC 
+\emph default 
+provides an API that may be called from Java to execute Scheme code or evaluate
+ Scheme expressions.
+ In addition, the J2S module provides Scheme level control of Java objects,
+ methods, and fields.
+ Finally, the two can be combined in a number of complex ways to intertwine
+ the two languages.
+\layout Section
+
+Java to Scheme call API
+\layout Subsection
+
+Error Handling
+\layout Subsection
+
+Continuations
+\layout Section
+
+Scheme level Java manipulation
+\the_end
