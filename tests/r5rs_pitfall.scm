@@ -11,6 +11,8 @@
 
 (define call/cc call-with-current-continuation)
 
+;; Section 1: Proper letrec implementation
+
 ;;Credits to Al Petrofsky
 (should-be 1.1 0
  (let ((cont #f))
@@ -41,9 +43,33 @@
 	  ((cadr x) (list #F (lambda () x)))
 	  (eq? x ((cadr x))))))
 
+;; Section 2: Proper call/cc and procedure application
+
 ;;Credits to ???, (and a wink to Matthias Blume)
 (should-be 2.1 1
  (call/cc (lambda (c) (0 (c 1)))))
+
+;; Section 3: Hygenic macros
+
+;; Eli Barzilay 
+(should-be 3.1 4
+  (let-syntax ((foo
+                (syntax-rules ()
+                  ((foo expr) (+ expr 1)))))
+    (let ((+ *))
+      (foo 3))))
+
+
+;; Al Petrofsky again
+(should-be 3.2 2
+ (let-syntax ((foo (syntax-rules ()
+                       ((_ var) (define var 1)))))
+     (let ((x 2))
+       (begin (define foo +))
+       (cond (else (foo x))) 
+       x)))
+
+;; Setion 4: No identifiers are reserved
 
 ;;(Brian M. Moore)
 (should-be 4.1 '(x)
@@ -52,34 +78,23 @@
 (should-be 4.2 '(1 2 3)
  ((lambda (begin) (begin 1 2 3)) (lambda lambda lambda)))
 
-;; Eli Barzilay 
-(should-be 4.3 4
-  (let-syntax ((foo
-                (syntax-rules ()
-                  ((foo expr) (+ expr 1)))))
-    (let ((+ *))
-      (foo 3))))
-
-;; Al Petrofsky again
-(should-be 5.1 2
- (let-syntax ((foo (syntax-rules ()
-                       ((_ var) (define var 1)))))
-     (let ((x 2))
-       (begin (define foo +))
-       (cond (else (foo x))) 
-       x)))
+;; Section 5: #f/() distinctness
 
 ;; Scott Miller
-(should-be 6.1 #f
+(should-be 5.1 #f
   (eq? #f '()))
-(should-be 6.2 #f
+(should-be 5.2 #f
   (eqv? #f '()))
-(should-be 6.3 #f
+(should-be 5.3 #f
   (equal? #f '()))
 
+;; Section 6: string->symbol case sensitivity
+
 ;; Jens Axel S?gaard
-(should-be 7.1 #f
+(should-be 6.1 #f
   (eq? (string->symbol "f") (string->symbol "F")))
+
+;; Section 7: First class continuations
 
 ;; Scott Miller
 (define r #f)
@@ -87,7 +102,7 @@
 (define b #f)
 (define c #f)
 (define i 0)
-(should-be 8.1 28
+(should-be 7.1 28
   (let () 
     (set! r (+ 1 (+ 2 (+ 3 (call/cc (lambda (k) (set! a k) 4))))
                (+ 5 (+ 6 (call/cc (lambda (k) (set! b k) 7))))))
@@ -101,7 +116,7 @@
       ((4) (c 4)))
     r))
 
-(should-be 8.2 '((-1 4 5 3)
+(should-be 7.2 '((-1 4 5 3)
                  (4 -1 5 3)
                  (-1 5 4 3)
                  (5 -1 4 3)
@@ -136,6 +151,8 @@
                      ((2) (k2 2))
                      ((3) (k1 -)))))))
     (map check '((1 2 3) (1 3 2) (2 1 3) (2 3 1) (3 1 2) (3 2 1)))))
+
+;; Miscellaneous 
 
 ;;Not really an error to fail this (Matthias Radestock)
 ;;If this returns (0 1 0), your map isn't call/cc safe, but is probably
