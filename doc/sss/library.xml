@@ -913,7 +913,7 @@ com/foo/bar/baz/baz3.scm
                 linkend="Resources"><function>find-resource</function>
                 procedure</link>.  The name of the resource is derived
                 from the name of the library by appending ".scc",
-                ".sll", ".sce" and, if that does not succeed, ".scm".
+                ".sce" and, if that does not succeed, ".scm".
               </para>
             </blockquote>
           </para>

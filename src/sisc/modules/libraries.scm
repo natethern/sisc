@@ -4,7 +4,6 @@
   (define (suffixed-lib ext)
     (find-resource (string-append (symbol->string lib) "." ext)))
   (or (suffixed-lib "scc")
-      (suffixed-lib "sll")
       (suffixed-lib "sce")
       (suffixed-lib "scm")))
 

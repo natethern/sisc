@@ -656,13 +656,6 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
         </listitem>
         <listitem>
           <para>
-            <literal>sll</literal> - &SISC; Compiled Library.  This
-            contains expanded and compiled Scheme definitions in a
-            &SISC; specific representation.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
             <literal>scc</literal> - &SISC; Compiled Code.  This
             contains expanded and compiled code in a &SISC; specific
             representation. The code gets executed when loaded.

@@ -1,9 +1,15 @@
+2004-11-14  Matthias Radestock  <matthias@sorted.org>
+
+	* Removed compiledlibs module and support for .sll libraries,
+	  because their functionality turned out to be too fragile. scc
+	  libraries are much better behaved.
+
 2004-11-14  Released SISC 1.9.3-rc
 
 2004-11-13  Scott G. Miller  <sgmiller@gmail.com>
 	
 	* Deprecated .sll support, which seems incompatible
-      with the engine changes in 1.9.
+          with the engine changes in 1.9.
 
 2004-11-13  Matthias Radestock  <matthias@sorted.org>
 
