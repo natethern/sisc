@@ -50,12 +50,12 @@ public class Compiler extends Util {
                               int context, SymbolicEnvironment env, 
                               Pair an)
     throws ContinuationException {
-        if (v==Expression.EMPTYLIST) {
+        if (v==EMPTYLIST) {
 	    //we evaluate () to the empty list, which is an "ignorable
 	    //error", according to R5RS. Note that presently we never
 	    //actually end up in this code since the macro expander
 	    //expands () to '().
-	    return Expression.EMPTYLIST;
+	    return EMPTYLIST;
 	} else if (v instanceof Pair) {
             Pair expr=(Pair)v;
             return compileApp(r,expr,rt,context,env,an);
@@ -92,9 +92,9 @@ public class Compiler extends Util {
     }
 
     void setAnnotations(Expression e, Pair p) {
-        while (p!=Expression.EMPTYLIST) {
+        while (p!=EMPTYLIST) {
             Pair kv=(Pair)p.car;
-            e.setAnnotation(Expression.symbol(kv.car), kv.cdr);
+            e.setAnnotation(symbol(kv.car), kv.cdr);
             p=(Pair)p.cdr;
         }
     }
@@ -134,9 +134,9 @@ public class Compiler extends Util {
                     formals=argsToSymbols((Pair)expr.car);
                     Pair tmpp=(Pair)expr.car;
                     while (tmpp.cdr instanceof Pair
-                            && tmpp.cdr!=Expression.EMPTYLIST)
+                            && tmpp.cdr!=EMPTYLIST)
                         tmpp=(Pair)tmpp.cdr;
-                    infArity=(tmpp.cdr!=Expression.EMPTYLIST);
+                    infArity=(tmpp.cdr!=EMPTYLIST);
                 } else {
                     infArity=true;
                     formals=new Symbol[] {(Symbol)expr.car};
@@ -154,7 +154,7 @@ public class Compiler extends Util {
                 Vector formv=new Vector();
                 Vector expv=new Vector();
 
-                while (tmpp != Expression.EMPTYLIST) {
+                while (tmpp != EMPTYLIST) {
                     Pair bp=(Pair)tmpp.car;
                     formv.add(bp.car);
                     expv.add(((Pair)bp.cdr).car);
@@ -199,7 +199,7 @@ public class Compiler extends Util {
                     
                     rv=new FreeSetEval(fre.sym, env);
                 } else {
-                    Expression.error(r, liMessage(SISCB, "setlhsnotsymbol"));
+                    error(r, liMessage(SISCB, "setlhsnotsymbol"));
                     return null;
                 }
                 rv.annotations = rhs.annotations;
@@ -218,9 +218,9 @@ public class Compiler extends Util {
                 expr=(Pair)expr.cdr;
                 Pair annot=null;
                 if (expr.car instanceof Pair)
-                    annot=Expression.pair(expr.car);
+                    annot=pair(expr.car);
                 else
-                    annot=Expression.list(new Pair(OTHER, expr.car));
+                    annot=list(new Pair(OTHER, expr.car));
                 rv=compile(r, aexpr, rt, context, env, annot);
                 an=null;
                 break;
@@ -261,7 +261,7 @@ public class Compiler extends Util {
         if (r.dynenv.emitDebuggingSymbols)
             nxp.setAnnotation(PROCNAME, _LETREC);
 
-        Expression lastRand = Expression.VOID;
+        Expression lastRand = VOID;
 
         for (int i= 0; i<rands.length; i++) {
             if (!isImmediate(rands[i])) {
@@ -390,7 +390,7 @@ public class Compiler extends Util {
         }
 
         public void eval(Interpreter r) throws ContinuationException {
-            Expression.error(r, Util.liMessage(SISCB, "invalidsyncontext", getName().toString()));
+            error(r, Util.liMessage(SISCB, "invalidsyncontext", getName().toString()));
         }
 
         public void display(ValueWriter w) throws IOException {
