@@ -136,31 +136,6 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
           </para>
         </blockquote>
       </para>
-      <para>
-        A convenience procedure exists for executing a procedure while
-        the <function>current-url</function> is temporarily set to a
-        different value:
-        <blockquote>
-          <para>
-              &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>with-current-url</methodname>
-              <methodparam><parameter>url</parameter></methodparam>
-              <methodparam><parameter>thunk</parameter></methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Sets the current URL to the URL obtained by
-                normalizing <parameter>url</parameter> in relation to
-                the current URL, then executes
-                <parameter>thunk</parameter>, and then sets
-                the current URL back to the previous value.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
-      </para>
     </sect2>
     <sect2>
       <title>Buffered I/O</title>
