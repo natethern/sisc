@@ -36,7 +36,6 @@
     <property name="debugging" value="on"/>
     <property name="optimization" value="off"/>
     <property name="dist" value="${basedir}/dist"/>
-	
   </target>
 
   <target name="init" depends="prepare">
@@ -102,7 +101,6 @@
       <arg value="${schemedir}/repl.scm"/>
       <arg value="${schemedir}/j2s.scm"/>
       <arg value="${schemedir}/debug.scm"/>
-      <arg value="${schemedir}/ppts.scm"/>
     </java>
   </target>
 
