@@ -45,7 +45,7 @@ public class Interpreter extends Util {
     public DynamicEnvironment dynenv;
     
     //FLAGS
-    public boolean vlrConsumed;
+    public boolean saveVLR;
         
     //ACCOUNTING REGISTERS
     public CallFrame             lcf, llcf;//used for continuation capture
