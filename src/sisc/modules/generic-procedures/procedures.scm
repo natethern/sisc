@@ -19,12 +19,17 @@
 
 (define-struct method-list (methods arity cache))
 
+(define (make-method-list-from-methods methods)
+  (make-method-list methods
+                    (+ (apply max 0 (map method-arity methods)) 1)
+                    (make-method-cache)))
+
 (define (generic-procedure-methods proc)
   (method-list-methods (cdr (get-methods proc))))
 
 (define (set-generic-procedure-methods! proc methods)
   (set-methods! proc (cons (mutex/new)
-                           (make-method-list methods 0 #f))))
+                           (make-method-list-from-methods methods))))
 
 (define (add-method proc method)
   (add-methods proc (list method)))
@@ -37,7 +42,7 @@
    (car methods)
    (lambda ()
      (set-cdr! methods
-               (make-method-list
+               (make-method-list-from-methods
                 (let loop ([meths (method-list-methods
                                    (cdr methods))]
                            [new-methods new-methods])
@@ -45,10 +50,7 @@
                       meths
                       (loop (add-method-helper meths
                                                (car new-methods))
-                            (cdr new-methods))))
-                0
-                #f)))))
-
+                            (cdr new-methods)))))))))
 (define (add-method-helper methods m)
   (let loop ([meths methods])
     (if (null? meths)
@@ -95,30 +97,18 @@
 (define (applicable-methods proc otypes)
   (applicable-methods-wrapper (get-methods proc) otypes take))
 (define (applicable-methods-wrapper methods args get-types)
-  (define (lookup mlist cache)
-    (let ([otypes (get-types args (method-list-arity mlist))])
-      (or (method-cache-get cache otypes)
-          (let ([res (applicable-methods-helper
-                      (method-list-methods mlist)
-                      otypes)])
-               (method-cache-put! cache otypes res)
-               res))))
   (mutex/synchronize-unsafe
    (car methods)
    (lambda ()
-     (let* ([mlist (cdr methods)]
-            [cache (method-list-cache mlist)])
-       (if cache
-           (lookup mlist cache)
-           (let ([meths (method-list-methods mlist)]
-                 [cache (make-method-cache)])
-             (let ([mlist (make-method-list
-                           meths
-                           (+ (apply max 0 (map method-arity meths))
-                              1)
-                           cache)])
-               (set-cdr! methods mlist)
-               (lookup mlist cache))))))))
+     (let ([mlist (cdr methods)])
+       (let ([cache  (method-list-cache mlist)]
+             [otypes (get-types args (method-list-arity mlist))])
+         (or (method-cache-get cache otypes)
+             (let ([res (applicable-methods-helper
+                         (method-list-methods mlist)
+                         otypes)])
+               (method-cache-put! cache otypes res)
+               res)))))))
 (define (applicable-methods-helper methods otypes)
   (define (insert applicable m)
     (if (null? applicable)
