@@ -632,6 +632,11 @@ public class Quantity extends Value {
                                     new BigDecimal(Math
                                                    .sqrt(-1*doubleValue())));
             break;
+	case DECIM:
+	case RATIO:
+	    double dv=doubleValue();
+            if (dv<0) return new Quantity(_BD_ZERO, new BigDecimal(Math.sqrt(-dv)));
+	    else return new Quantity(Math.sqrt(dv));
         case COMPLEX:
             // Take r=sqrt(a^2 + b^2)
             BigDecimal a2=d.multiply(d);

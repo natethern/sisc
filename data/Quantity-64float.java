@@ -671,6 +671,13 @@ public class Quantity extends Value {
             if (i.compareTo(_BI_ZERO)==-1)
                 return new Quantity(0.0, Math.sqrt(-1*doubleValue()));
             break;
+	case DECIM:
+            if (d<0) return new Quantity(0.0, Math.sqrt(-d));
+	    break;
+	case RATIO:
+	    double dv=doubleValue();
+            if (dv<0) return new Quantity(0.0, Math.sqrt(-dv));
+	    else return new Quantity(Math.sqrt(dv));
         case COMPLEX:
             // Take r=sqrt(a^2 + b^2)
             double a2=d*d;

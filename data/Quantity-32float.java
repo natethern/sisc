@@ -619,6 +619,13 @@ public class Quantity extends Value {
             if (i.compareTo(_BI_ZERO)==-1)
                 return new Quantity(0.0f, (float)Math.sqrt(-1*floatValue()));
             break;
+	case DECIM:
+            if (d<0) return new Quantity(0.0, Math.sqrt(-d));
+	    break;
+	case RATIO:
+	    float dv=floatValue();
+            if (dv<0) return new Quantity(0.0, Math.sqrt(-dv));
+	    else return new Quantity(Math.sqrt(dv));
         case COMPLEX:
             // Take r=sqrt(a^2 + b^2)
             float a2=d*d;
