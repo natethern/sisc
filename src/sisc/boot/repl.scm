@@ -68,7 +68,14 @@
 (define (get-last-exception)
   (getprop 'last-exception '*debug*))
 
-(define repl-thread (make-parameter #f))
+(define repl-thread
+  (let ((thread #f))
+    (lambda arg
+      (if (null? arg)
+          thread
+          (let ((old thread))
+            (set! thread (car arg))
+            old)))))
   
 (define make-interrupt-handler
   (if (not (getprop 'LITE (get-symbolic-environment '*sisc*)))
@@ -79,7 +86,7 @@
         (letrec ([handler
                   (lambda ()
                     (_signal-unhook! "INT" handler)
-                    (if (repl-thread) 
+                    (if (repl-thread)
                         (|@threading-native::thread/interrupt| (repl-thread))))])
           handler))
       (lambda () #f)))
