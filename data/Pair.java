@@ -87,48 +87,14 @@ public class Pair extends Value {
 	else return false;
     }
 
-    protected final static int CONT=1, MUTABLE=2;
-
     public void serialize(Serializer s) throws IOException {
         s.writeExpression(car);
         s.writeExpression(cdr);
-        /*
-        Pair p=this;
-        boolean cont;
-        do {
-            s.writeExpression(p.car);
-            cont=p.cdr != null &&
-                p.cdr instanceof Pair &&
-                p.cdr != EMPTYLIST &&
-                !s.seen(p.cdr);
-            s.writeBoolean(cont);
-            if (cont) {
-                s.writeBoolean(p.cdr instanceof ImmutablePair);
-                p=(Pair)p.cdr;
-            }
-        } while (cont);
-        s.writeExpression(p.cdr);*/
     }
 
     public void deserialize(Deserializer s) throws IOException {
         car=(Value)s.readExpression();
         cdr=(Value)s.readExpression();
-        /*        Pair p=this;
-        boolean cont;
-        do {
-            p.car=(Value)s.readExpression();
-            cont=s.readBoolean();
-            if (cont) {
-                Pair n;
-                if (s.readBoolean()) 
-                    n=new ImmutablePair();
-                else
-                    n=new Pair();
-                p.cdr=n;
-                p=n;
-            }
-        } while (cont);
-        p.cdr=(Value)s.readExpression();*/
     }
 }
 
