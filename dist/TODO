@@ -9,9 +9,11 @@ Features
 * implement binary ports
 * port scsh's SREs
 * add type and object system that is tightly integrated with S2J
+* optimize S2J method dispatch
 * write a debugger
-* add mechanism for dynamic loading of scheme modules
-* add support for loading pre-expanded and pre-compiled modules
+* mechanism to construct immutable objects other than literals
+* mechanism for dynamic loading of scheme modules
+* support for loading pre-expanded and pre-compiled modules
 * rationalize/integrate modules, libraries, slib
 * framework for doing source-level optimizations that are automatically
   rolled back when assumptions are invalidated.
