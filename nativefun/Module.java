@@ -41,7 +41,7 @@ public abstract class Module extends NamedValue
     }
 
     public static void throwArgSizeException() {
-        throw new ArrayIndexOutOfBoundsException();
+        throwPrimException(liMessage(SISCB, "incorrectargcount"));
     }
 
     public static final Module module(Value o) {

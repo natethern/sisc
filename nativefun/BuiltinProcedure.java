@@ -40,8 +40,6 @@ public class BuiltinProcedure extends Procedure {
             if (r.nxp == null) {
                 r.returnVLR();
             }
-        } catch (ArrayIndexOutOfBoundsException np) {
-            error(r, name, liMessage(SISCB, "incorrectargcount"));
         } catch (ClassCastException cc) {
             error(r, name, liMessage(SISCB,"gotunexpectedvalue",
                                      cc.getMessage()));
