@@ -299,7 +299,7 @@ public class Primitives extends Module {
                 return new ImmutableString(symbol(f,f.vlr[0]).symval);
             case STRING2NUMBER:
                 try {
-                    return (Quantity)f.parser.nextExpression(new InputPort(new BufferedReader(new StringReader(string(f,f.vlr[0])))));
+                    return (Quantity)f.dynenv.parser.nextExpression(new InputPort(new BufferedReader(new StringReader(string(f,f.vlr[0])))));
                 } catch (NumberFormatException nf) {
                     return FALSE;
                 } catch (IOException e) {
@@ -406,7 +406,7 @@ public class Primitives extends Module {
                 v=null;
                 do {
                     try {
-                        v=f.parser.nextExpression(p);
+                        v=f.dynenv.parser.nextExpression(p);
                     } catch (EOFException eof) {
                         v=EOF;
                     } catch (IOException e) {
@@ -554,7 +554,7 @@ public class Primitives extends Module {
                 return new SchemeString(newStr);
             case STRING2NUMBER:
 		try {
-                    return (Quantity)f.parser.nextExpression(new InputPort(new BufferedReader(new StringReader(string(f,f.vlr[0])))), num(f,f.vlr[1]).intValue());
+                    return (Quantity)f.dynenv.parser.nextExpression(new InputPort(new BufferedReader(new StringReader(string(f,f.vlr[0])))), num(f,f.vlr[1]).intValue());
 		} catch (NumberFormatException nf) {
 		    return FALSE;
 		} catch (IOException e) {

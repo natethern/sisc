@@ -95,7 +95,7 @@ public class InputPort extends NamedValue {
 
     public Value read(Interpreter r) throws ContinuationException {
         try {
-            return r.parser.nextExpression(this);
+            return r.dynenv.parser.nextExpression(this);
         } catch (EOFException e) {
             return Util.EOF;
         } catch (IOException e) {

@@ -42,9 +42,8 @@ import java.util.*;
 
 public class Interpreter extends Util {
 
-    //the lexer, parser and compiler are stateless; if that ever
-    // changes they'd  need to be moved to the dynenv
-    public static Parser parser=new Parser(new Lexer());
+    //the compiler is stateless; if that ever changes it would need to
+    //be moved to the dynenv
     public static Compiler compiler = new Compiler();
 
     protected Procedure evaluator;
@@ -167,7 +166,7 @@ public class Interpreter extends Util {
 
         do {
             try {
-                rv=eval(parser.nextExpression(ip));
+                rv=eval(dynenv.parser.nextExpression(ip));
             } catch (EOFException e) {
                 return rv;
             }

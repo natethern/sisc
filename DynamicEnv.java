@@ -33,6 +33,7 @@
 package sisc;
 
 import sisc.data.*;
+import sisc.compiler.*;
 import java.io.*;
 
 public class DynamicEnv extends Util implements Cloneable {
@@ -40,13 +41,16 @@ public class DynamicEnv extends Util implements Cloneable {
     public InputPort in;
     public OutputPort out;
 
+    //the lexer is stateful
+    public Parser parser = new Parser(new Lexer());
+
     public DynamicEnv(InputPort in, OutputPort out) {
 	this.in = in;
 	this.out = out;
     }
 
     public DynamicEnv(InputStream in, OutputStream out) {
-	this.in = new InputPort(new BufferedReader(new InputStreamReader(in)));
-	this.out = new OutputPort(new PrintWriter(out), true);
+	this(new InputPort(new BufferedReader(new InputStreamReader(in))),
+	     new OutputPort(new PrintWriter(out), true));
     }
 }
