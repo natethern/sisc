@@ -89,3 +89,19 @@ Before returning from the code that is making the internal calls
   Context.exit()
 
 must be called.
+
+Continuations
+-------------
+Continuations do not cross the Scheme/Java boundary.
+
+In the embedded call scenario invoking a continuation inside the
+embedded call will not discard the computation of the caller. The
+embedded call will return when the continuation returns. If the
+continuation contains the repl the return will never happen.
+
+Similarly, capturing a continuation inside a call (embedded or
+external) will only capture the continuation to point where the call
+was made.
+
+Note that capturing and invoking a continuation within the *same* call
+works "correctly".
