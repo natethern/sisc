@@ -921,7 +921,8 @@ public class Quantity extends Value {
         case FIXEDINT:
             switch (o.type) {
             case FIXEDINT:
-                return intBound((long)val/o.val);
+                return new Quantity(BigInteger.valueOf(val), 
+				    BigInteger.valueOf(o.val));
             case DECIM:
                 return new Quantity(val/o.d);
             case COMPLEX:
