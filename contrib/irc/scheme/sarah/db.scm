@@ -1,14 +1,15 @@
+(import srfi-11)
 (import srfi-19)
 (import jdbc)
 (import s2j)
 (import streams)
 
 (define (dbconnect host)
-  (jdbc/connect (format "jdbc:postgresql://~a/sarah?user=scgmille" host)))
+  (jdbc/connect (sisc:format "jdbc:postgresql://~a/sarah?user=scgmille" host)))
 
 (define (lookup-item conn type key)
   (let* ([stmt (jdbc/prepare-statement conn
-                (format "SELECT key, data FROM knowledge WHERE type='~a' AND lower(key)='~a'" 
+                (sisc:format "SELECT key, data FROM knowledge WHERE type='~a' AND lower(key)='~a'" 
                         type (string-downcase key)))]
          [results
           (jdbc/execute-query stmt)])
@@ -27,8 +28,8 @@
 
 (define (lookup-seen conn person)
   (let* ([stmt (jdbc/prepare-statement conn
-                (format "SELECT to_char(seenon, 'Mon DD at HH:MI pm'),message FROM seen WHERE lower(nick)='~a'" 
-                        (string-downcase person)))]
+                (sisc:format "SELECT to_char(seenon, 'Mon DD at HH:MI pm'),message FROM seen WHERE id='~a'" 
+                             person))]
          [result
           (jdbc/execute-query stmt)])
     (if (not (null? result)) 
@@ -36,34 +37,43 @@
                 ((car result) '2))
         (values #f #f))))
 
-(define (store-seen conn person message)
-  (let ([pstmt (if (lookup-seen conn person)
+(define (store-seen conn id person message)
+  (let ([pstmt (if (let-values ([(a b) (lookup-seen conn id)]) a)
                    (let ([stmt
-                          (jdbc/prepare-statement conn "UPDATE seen SET seenon=NOW(), message=? WHERE lower(nick)=?")])
+                          (jdbc/prepare-statement conn 
+               "UPDATE seen SET seenon=NOW(), message=?, nick=? WHERE id=?")])
                      (set-string stmt (->jint 1) (->jstring message))
                      (set-string stmt (->jint 2) (->jstring (string-downcase 
                                                              person)))
+                     (set-string stmt (->jint 3) (->jstring id))
                      stmt)
                    (let ([stmt
-                          (jdbc/prepare-statement conn "INSERT INTO seen(nick,seenon,message) VALUES(?,NOW(),?)")])
-                     (set-string stmt (->jint 1) (->jstring (string-downcase person)))
+                          (jdbc/prepare-statement conn 
+                   "INSERT INTO seen(nick,seenon,message, id) VALUES(?,NOW(),?,?)")])
+                     (set-string stmt (->jint 1) 
+                                 (->jstring (string-downcase person)))
                      (set-string stmt (->jint 2) (->jstring message))
+                     (set-string stmt (->jint 3) (->jstring id))
                      stmt))])
-    (with/fc (lambda (m e) #f) (lambda () (jdbc/execute pstmt)))))
+    (with/fc (lambda (m e) #f) (lambda () 
+                                 (display pstmt) 
+                                 (newline)
+                                 (jdbc/execute pstmt)))))
 
 
-(define (store-message conn sender recipient message) 
+(define (store-message conn sender id recipient message) 
   (let ([pstmt (jdbc/prepare-statement conn
-                "INSERT INTO tell VALUES(?,?,?)")])
+                "INSERT INTO tell(recipient, sender, message, id) VALUES(?,?,?,?)")])
     (set-string pstmt (->jint 1) (->jstring recipient))
     (set-string pstmt (->jint 2) (->jstring sender))
     (set-string pstmt (->jint 3) (->jstring message))
+    (set-string pstmt (->jint 4) (->jstring id))
     (with/fc (lambda (m e) #f) (lambda () (jdbc/execute pstmt)))))
 
 (define (fetch-messages! conn recipient)
   (let* ([stmt (jdbc/prepare-statement conn
-                                       (format "SELECT sender, message FROM tell WHERE lower(recipient)='~a'"
-                                               (string-downcase recipient)))]
+                                       (sisc:format "SELECT sender, message FROM tell WHERE id='~a'"
+                                                    recipient))]
          [results
           (jdbc/execute-query stmt)])
     (and (not (null? results)) 
@@ -73,7 +83,7 @@
                                                             (item '2)))
                                       results)])
              (jdbc/execute (jdbc/prepare-statement 
-                            conn (format "DELETE FROM tell WHERE lower(recipient)='~a'" 
-                                         (string-downcase recipient))))
+                            conn (sisc:format "DELETE FROM tell WHERE id='~a'" 
+                                              recipient)))
              rv)))))
 

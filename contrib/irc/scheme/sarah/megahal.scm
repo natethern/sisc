@@ -34,7 +34,7 @@
 
 
 (define (say hal msg)
-  (display (format "~a~%~%" msg) (vector-ref hal 2))
+  (display (sisc:format "~a~%~%" msg) (vector-ref hal 2))
 
   (let ([inp (vector-ref hal 1)])
     (if (char-ready? inp)
@@ -53,5 +53,5 @@
                 (loop (cons c acc))))))))
 
 (define (close-hal h)
-  (display (format "#QUIT~%~%~%") (vector-ref h 2)))
+  (display (sisc:format "#QUIT~%~%~%") (vector-ref h 2)))
 

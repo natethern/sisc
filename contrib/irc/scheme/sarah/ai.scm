@@ -143,7 +143,7 @@
                                      0 (- (string-length term) 1))))
            (and-let* ([results (lookup-item dbcon type term)])
              (let ([random-result (random-elem results)])
-               (format "~a ~a ~a ~a" 
+               (sisc:format "~a ~a ~a ~a" 
                        (random-elem whatis-preludes) 
                        (car random-result)
                        (cdr (assq type '((what . is) (where . "is at"))))
@@ -172,28 +172,45 @@
 
 (define (onJoin channel sender login hostname)
   (add-nick (string->symbol (->string channel))
-            (string->symbol (string-downcase (->string sender))))
-  (let ([messages (fetch-messages! dbcon (->string sender))])
+            (normalize-nick sender))
+  (let ([messages (fetch-messages! dbcon (normalize-nick sender))])
     (when messages 
          (send-message bot channel 
-                       (->jstring (format (random-elem deliver-preludes)
+                       (->jstring (sisc:format (random-elem deliver-preludes)
                                           (->string sender) 
                                           (let ([l (length messages)])
-                                            (format "~a ~a" l
+                                            (sisc:format "~a ~a" l
                                                     (if (> l 1) "messages."
                                                         "message."))))))
          (for-each (lambda (m)
-                     (do-tell (->string sender) (car m) (cdr m)))
+                     (do-tell (->string sender) (->string channel)
+                              (car m) (cdr m)))
                    messages))))
 
+;; Nick Management
 (define (onPart channel sender login hostname)
   (remove-nick (string->symbol (->string channel))
-               (string->symbol (string-downcase (->string sender)))))
+               (normalize-nick sender)))
+(define onQuit onPart)
+(define (onNickChange oldnick login hostname newnick)
+  (remove-nick (string->symbol channel) (normalize-nick oldnick))
+  (onJoin (->jstring channel) 
+          newnick newnick (->jstring "unknown.net")))
 
-(define (do-tell recipient sender message)
+(define (onUserList channel users)
+  (let ([channel (string->symbol (->string channel))])
+    (putprop 'members channel '())
+    (for-each (lambda (nick)
+                (onJoin (->jstring channel) 
+                        nick nick (->jstring "unknown.net")))
+              (map (lambda (arrayelem)
+                     (get-nick arrayelem))
+                   (->list users)))))
+
+(define (do-tell recipient channel sender message)
   (send-message bot (->jstring channel)
                 (->jstring 
-                 (format "~a, ~a says: ~a" recipient sender message))))
+                 (sisc:format "~a, ~a says: ~a" recipient sender message))))
   
 (define (tell from message)
   (let-values ([(ignoreables message) (string-split message "tell ")])
@@ -202,12 +219,12 @@
                     [recipient (substring message 0 spidx)])
            (let ([message (substring message (+ spidx 1)
                                      (string-length message))])
-             (if (member (string->symbol
-                          (string-downcase recipient))
+             (if (member (soundex recipient)
                          (get-present (string->symbol channel)))
-                 (begin (do-tell recipient from message) #t)
+                 (begin (do-tell recipient channel from message) #t)
                  (begin 
-                   (store-message dbcon from (string-downcase recipient) message)
+                   (store-message dbcon from (soundex recipient)
+                                  (string-downcase recipient) message)
                    (random-elem tell-responses))))))))
   
 
@@ -219,9 +236,9 @@
            (if (eq? #\? (string-ref person (- (string-length person) 1)))
                (set! person (substring person 
                                      0 (- (string-length person) 1))))
-           (let-values ([(seen message) (lookup-seen dbcon person)])
-             (if seen (format "~a, saying: ~a."
-                              (format (random-elem seen-phrases) person seen)
+           (let-values ([(seen message) (lookup-seen dbcon (soundex person))])
+             (if seen (sisc:format "~a, saying: ~a."
+                              (sisc:format (random-elem seen-phrases) person seen)
                               message)
                  (random-elem haventseen-responses)))))))
                               

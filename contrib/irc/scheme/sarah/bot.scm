@@ -1,17 +1,18 @@
   (display "Connecting to database...\n")
   (define dbcon (dbconnect "minstrel"))
 
-  (display (format "Creating bot...~%"))
+  (display (sisc:format "Creating bot...~%"))
   (define bot-name 'sarahbot)
   (define bot-name-length (string-length (symbol->string bot-name)))
   (define bot (make-bot (symbol->string bot-name)))
+;  (set-version bot (->jstring "Sarah - Scheme InfoBot (SISC) v0.6"))
   
-  (display (format "Connecting...~%"))
+  (display (sisc:format "Connecting...~%"))
   (with/fc 
    (lambda (m e)
      (display m)(newline))
    (lambda ()
-     (connect bot (->jstring "irc.openprojects.net"))))
+     (connect bot (->jstring "irc.freenode.net"))))
   
   (define channel "#sisc")
 
@@ -22,12 +23,12 @@
           (send-message bot nick (->jstring response)))))
 
   (define (onMessage channel nick login host message)
-    (store-seen dbcon (->string nick) (->string message))
+    (store-seen dbcon (normalize-nick nick) (->string nick) (->string message))
     (unless (equal? (symbol->string bot-name) nick)
       (let ([response (answer (->string nick) (->string message))])
         (if response
             (send-message bot channel (->jstring response))))))
-  (display (format "Starting Hal...~%"))
+  (display (sisc:format "Starting Hal...~%"))
   (define hal (make-hal))
-  (display (format "Joining ~a...~%" channel))
+  (display (sisc:format "Joining ~a...~%" channel))
   (join-channel bot (->jstring channel))
