@@ -223,8 +223,19 @@
       <function>require-library</function> calls, followed by the
       module definition.  When loaded, this will cause the necessary
       libraries to be loaded, and then define the module
-      into the environment.
+      into the environment.  For example, the source file may resemble:
     </para>
+    <programlisting>
+(require-library 'sisc/libs/srfi/srfi-1)
+(require-library 'com/foo/lib2)
+
+(module lib3
+    (foo)
+  (import srfi-1)
+  (import com/foo/lib2)
+  (define (a-function) (do-something))
+  (define (another-function) (something-else)))
+    </programlisting>
     <para>
      Libraries should not depend on any top-level definitions outside
      the standard &SISC; top-level, except the definition of other library
@@ -247,7 +258,7 @@ com/foo/lib3/Class1.class
 com/foo/lib3/Class2.class
     </programlisting>
     <para>
-     It is usually a good idea to name the library after the
+     It is usually a good idea to name a module after the
      path names in the jar, for example
      <literal>com/foo/lib{1,2,3}</literal> in the above example.
     </para> 
