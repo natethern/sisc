@@ -176,10 +176,276 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         </blockquote>
       </para>
     </sect2>
-    <sect2 id="redirectedio">
-      <title>Redirected I/O</title>
+    <sect2 id="BlockIO">
+      <title>Block I/O</title>
       <para>
-        Redirected I/O functions wrap a thunk, redirecting the input
+        In addition to the standard operations on ports
+        (<computeroutput>read, read-char, char-ready?,
+          display,</computeroutput> and
+        <computeroutput>write</computeroutput>), &SISC; provides block
+        input/output functions, that allow a Scheme program to read
+        blocks of more than one byte or character of data at a time.
+          &SISC; stores data that is read or is to be written in a
+        string.  Binary data in strings is fully supported throughout
+          &SISC;.  Such strings may be read and written as usual, though
+        undisplayable characters will often be escaped when printed to
+        the console.
+      </para>
+      <para>
+        <blockquote>
+          <para id="func-block-read">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>integer</type>
+              <methodname>block-read</methodname>
+              <methodparam>
+                <parameter>
+                  buffer
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  input-port
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  count
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Reads up to <parameter>count</parameter> bytes of data
+                from the provided <parameter>input-port</parameter>
+                into <parameter>buffer</parameter>.  Note that less
+                than <parameter>count</parameter> bytes may be read.
+                The number of bytes actually read is returned.  If the
+                end-of-file is encountered before any bytes could be
+                read, <literal>&num;!eof</literal> will be returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-block-write">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>block-write</methodname>
+              <methodparam>
+                <parameter>
+                  buffer
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  output-port
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  count
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Writes <parameter>count</parameter> bytes of data from
+                the provided <parameter>buffer</parameter> to the
+                given <parameter>output-port</parameter>.  Exactly
+                <parameter>count</parameter> bytes will be written.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
+    <sect2 id="StringPorts"> <title>String Ports</title>
+      <para>
+        String ports are input or output ports that read or write to a
+        string rather than a file or other stream.  String ports can
+        be used to parse or emit formatted strings using the standard
+        Scheme port operations.  A String Input port will read from a
+        given string until the end of string is reached, at which
+        point <computeroutput>&num;!eof</computeroutput> is returned.
+      </para>
+      <para>
+        <blockquote>
+          <para id="func-open-input-string">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>input-port</type>
+              <methodname>open-input-string</methodname>
+              <methodparam>
+                <parameter>
+                  string
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates a string input port whose characters are read
+                from the provided string.  Characters will be returned
+                from any read operation on the port until the end of
+                the string is reached.  Read calls after reaching the
+                end of the string will return &num;!eof.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-open-output-string">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>output-port</type>
+              <methodname>open-output-string</methodname> <void/>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates a string output port, which behaves as an
+                ordinary output port, except that writes are used to
+                create a string as output.  The results of all the
+                write operations are retrieved using
+                <function>get-output-string</function>.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-get-output-string">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>string</type> <methodname>get-output-string</methodname>
+              <methodparam>
+                <parameter>
+                  string-output-port
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the string that was created by zero or more
+                writes to a string output port.  If no writes were
+                performed on the string output port, an empty string
+                ("") is returned.  After this call, the provided
+                string output port is reset to its initial, empty
+                state.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+      <note>
+        <para>
+          This interface complies with SRFI-6 (Basic String Ports).
+        </para>
+      </note>
+    </sect2>
+    <sect2 id="iodelegate">
+      <title>Port Creation Wrappers</title>
+      <para>
+        The next set of procedures assists in creating a port,
+        followed by calling a given procedure with that port.  When
+        the procedure returns, the port is closed. Invoking escaping
+        continuations from inside the procedure does not close the
+        port, and invoking a continuation captured inside the
+        procedure does not open the port.
+      </para>
+      <para>
+        <blockquote>
+          <para id="func-call-with-input-file">
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>call-with-input-file</methodname>
+              <methodparam>
+                <parameter>
+                  url
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  procedure
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>   
+                Calls <parameter>procedure</parameter> with a new input port attached to
+                <parameter>url</parameter>.  The result of the thunk
+                is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-call-with-output-file">
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>call-with-output-file</methodname>
+              <methodparam>
+                <parameter>
+                  url
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  procedure
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>   
+                Calls <parameter>procedure</parameter> with a new output port attached to
+                <parameter>url</parameter>.  The result of the thunk
+                is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-call-with-input-string">
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>call-with-input-string</methodname>
+              <methodparam>
+                <parameter>
+                  string
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  procedure
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>   
+                Calls <parameter>procedure</parameter> with a new string input port created from
+                <parameter>string</parameter>.  The result of the
+                thunk is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-call-with-output-string">
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>string</type>
+              <methodname>call-with-output-string</methodname>
+              <methodparam>
+                <parameter>
+                  procedure
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>   
+                Calls <parameter>procedure</parameter> with a new string output port.  The
+                contents of the string-output-port are returned when 
+                the procedure returns.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
+    <sect2 id="redirectedio">
+      <title>Replacing Standard Ports</title>
+      <para>
+        The following procedures wrap a thunk, redirecting the input
         and output of the thunk while it is evaluating to an input or
         output port other than the
         <literal>current-input-port</literal> 
@@ -343,272 +609,6 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         </blockquote>
       </para>
     </sect2>
-    <sect2 id="iodelegate">
-      <title>I/O Delegate Functions</title>
-      <para>
-        The next set of functions assists in creating a port, followed
-        by calling a given procedure with that port.  When the
-        procedure returns, the port is closed. Invoking escaping
-        continuations from inside the procedure does not close the
-        port, and invoking a continuation captured inside the procedure
-        does not open the port.
-      </para>
-      <para>
-        <blockquote>
-          <para id="func-call-with-input-file">
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>call-with-input-file</methodname>
-              <methodparam>
-                <parameter>
-                  url
-                </parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>
-                  procedure
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>   
-                Calls <parameter>procedure</parameter> with a new input port attached to
-                <parameter>url</parameter>.  The result of the thunk
-                is returned.
-              </para>
-            </blockquote>
-          </para>
-          <para id="func-call-with-output-file">
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>call-with-output-file</methodname>
-              <methodparam>
-                <parameter>
-                  url
-                </parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>
-                  procedure
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>   
-                Calls <parameter>procedure</parameter> with a new output port attached to
-                <parameter>url</parameter>.  The result of the thunk
-                is returned.
-              </para>
-            </blockquote>
-          </para>
-          <para id="func-call-with-input-string">
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>call-with-input-string</methodname>
-              <methodparam>
-                <parameter>
-                  string
-                </parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>
-                  procedure
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>   
-                Calls <parameter>procedure</parameter> with a new string input port created from
-                <parameter>string</parameter>.  The result of the
-                thunk is returned.
-              </para>
-            </blockquote>
-          </para>
-          <para id="func-call-with-output-string">
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>string</type>
-              <methodname>call-with-output-string</methodname>
-              <methodparam>
-                <parameter>
-                  procedure
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>   
-                Calls <parameter>procedure</parameter> with a new string output port.  The
-                contents of the string-output-port are returned when 
-                the procedure returns.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
-      </para>
-    </sect2>
-    <sect2 id="BlockIO">
-      <title>Block I/O</title>
-      <para>
-        In addition to the standard operations on ports
-        (<computeroutput>read, read-char, char-ready?,
-          display,</computeroutput> and
-        <computeroutput>write</computeroutput>), &SISC; provides block
-        input/output functions, that allow a Scheme program to read
-        blocks of more than one byte or character of data at a time.
-          &SISC; stores data that is read or is to be written in a
-        string.  Binary data in strings is fully supported throughout
-          &SISC;.  Such strings may be read and written as usual, though
-        undisplayable characters will often be escaped when printed to
-        the console.
-      </para>
-      <para>
-        <blockquote>
-          <para id="func-block-read">
-              &procedure;
-            <methodsynopsis language="scheme">
-              <type>integer</type>
-              <methodname>block-read</methodname>
-              <methodparam>
-                <parameter>
-                  buffer
-                </parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>
-                  input-port
-                </parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>
-                  count
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Reads up to <parameter>count</parameter> bytes of data
-                from the provided <parameter>input-port</parameter>
-                into <parameter>buffer</parameter>.  Note that less
-                than <parameter>count</parameter> bytes may be read.
-                The number of bytes actually read is returned.  If the
-                end-of-file is encountered before any bytes could be
-                read, <literal>&num;!eof</literal> will be returned.
-              </para>
-            </blockquote>
-          </para>
-          <para id="func-block-write">
-              &procedure;
-            <methodsynopsis language="scheme">
-              <type>undefined</type>
-              <methodname>block-write</methodname>
-              <methodparam>
-                <parameter>
-                  buffer
-                </parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>
-                  output-port
-                </parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>
-                  count
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Writes <parameter>count</parameter> bytes of data from
-                the provided <parameter>buffer</parameter> to the
-                given <parameter>output-port</parameter>.  Exactly
-                <parameter>count</parameter> bytes will be written.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
-      </para>
-    </sect2>
-    <sect2 id="StringPorts"> <title>String Ports</title>
-      <para>
-        String ports are input or output ports that read or write to a
-        string rather than a file or other stream.  String ports can
-        be used to parse or emit formatted strings using the standard
-        Scheme port operations.  A String Input port will read from a
-        given string until the end of string is reached, at which
-        point <computeroutput>&num;!eof</computeroutput> is returned.
-      </para>
-      <para>
-        <blockquote>
-          <para id="func-open-input-string">
-              &procedure;
-            <methodsynopsis language="scheme">
-              <type>input-port</type>
-              <methodname>open-input-string</methodname>
-              <methodparam>
-                <parameter>
-                  string
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Creates a string input port whose characters are read
-                from the provided string.  Characters will be returned
-                from any read operation on the port until the end of
-                the string is reached.  Read calls after reaching the
-                end of the string will return &num;!eof.
-              </para>
-            </blockquote>
-          </para>
-          <para id="func-open-output-string">
-              &procedure;
-            <methodsynopsis language="scheme">
-              <type>output-port</type>
-              <methodname>open-output-string</methodname> <void/>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Creates a string output port, which behaves as an
-                ordinary output port, except that writes are used to
-                create a string as output.  The results of all the
-                write operations are retrieved using
-                <function>get-output-string</function>.
-              </para>
-            </blockquote>
-          </para>
-          <para id="func-get-output-string">
-              &procedure;
-            <methodsynopsis language="scheme">
-              <type>string</type> <methodname>get-output-string</methodname>
-              <methodparam>
-                <parameter>
-                  string-output-port
-                </parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Returns the string that was created by zero or more
-                writes to a string output port.  If no writes were
-                performed on the string output port, an empty string
-                ("") is returned.  After this call, the provided
-                string output port is reset to its initial, empty
-                state.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
-      </para>
-      <note>
-        <para>
-          This interface complies with SRFI-6 (Basic String Ports).
-        </para>
-      </note>
-    </sect2>
   </sect1>
   <sect1 id="netio">
     <title>Networking</title>
@@ -640,7 +640,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       be integers in the proper range.
     </para>
     <sect2 id="netutils">
-      <title>Address Functions</title>
+      <title>IP Addressing</title>
       <para>
 	Several utility functions are provided for manipulating IP
 	addresses.  These are described below.
