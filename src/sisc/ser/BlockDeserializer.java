@@ -186,7 +186,14 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
     }
 
     public String readUTF() throws IOException {
-        return raf.readUTF();
+        try {
+            byte[] sb=new byte[readInt()];
+            raf.readFully(sb);
+            return new String(sb, "UTF8");
+        } catch (UnsupportedEncodingException use) {
+            //Not possible
+            throw new IOException("UTF8 Unsupported");
+        }
     }
 
     public void readFully(byte[] b) throws IOException {

@@ -180,7 +180,14 @@ public class StreamDeserializer extends DeserializerImpl {
     }
 
     public String readUTF() throws IOException {
-        return in.readUTF();
+        try {
+            byte[] sb=new byte[readInt()];
+            in.readFully(sb);
+            return new String(sb, "UTF8");
+        } catch (UnsupportedEncodingException use) {
+            //Not possible
+            throw new IOException("UTF8 Unsupported");
+        }
     }
 
     public void readFully(byte[] b) throws IOException {
