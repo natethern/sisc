@@ -65,10 +65,6 @@
 ;;The algorithm used here is the same as the one employed by Goo
 ;;(http://www.googoogaga.org/), Dylan and others.
 ;;
-;;ATM the cpl isn't used for anything, but in future it will serve as
-;;a tie breaker when sorting applicable methods by specificity during
-;;the invocation of generic procedures.
-;;
 ;;Because computing the cpl is expensive we cache the results.
 (define *CLASS-PRECEDENCE-LISTS* (make-hashtable))
 (define (class-precedence-list class)
