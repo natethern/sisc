@@ -113,8 +113,8 @@
                         |interaction-environment_PinAPG63x|)
                       (#%begin
                         (#%set! |source_Pi5iFX83x|
-                          (|optimizer_PippJ183x|
-                            (|_analyze!_PiHHTM53x|
+                          (|_analyze!_PiHHTM53x|
+                            (|optimizer_PippJ183x|
                               (|sc-expand_Pi1ERd63x|
                                 |x_Pi3tLA73x|
                                 (#%quote (e))
