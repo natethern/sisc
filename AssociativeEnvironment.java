@@ -143,7 +143,6 @@ public class AssociativeEnvironment extends NamedValue {
             //otherwise a lookup taking place concurrently might get garbage
             env[nextFree]=v;
             symbolMap.put(s, new Integer(nextFree));
-            if (parent!=null) parent.store(s, v);
             return nextFree++;
         }
     }

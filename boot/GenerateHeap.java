@@ -96,7 +96,7 @@ public class GenerateHeap {
     static AssociativeEnvironment[] classify(AssociativeEnvironment base, 
                                              LibraryBuilder lb) {
         AssociativeEnvironment[] rv=new AssociativeEnvironment[2];
-        rv[0]=new AssociativeEnvironment(new LibraryAE(null, lb));//new AssociativeEnvironment();
+        rv[0]=new LibraryAE(null, lb);
         rv[1]=base;
         rv[1].setParent(rv[0]);
 
