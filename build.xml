@@ -13,7 +13,6 @@
     <property name="classdir" value="${basedir}/classes"/>
     <property name="docdir" value="${basedir}/doc/javadoc"/>
     <property name="schemedir" value="${basedir}/scheme-src"/>
-    <property name="modulesdir" value="${basedir}/modules"/>
     <property name="packagename" value="sisc"/>
     <property name="jarname" value="sisc.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
@@ -22,7 +21,8 @@
 
   <target name="init" depends="prepare">
     <available classname="junit.framework.TestCase"
-               property="junit.present"/>
+               property="junit.present"
+	       classpathref="classpath"/>
     <available property="oro.present"
 	       classname="org.apache.oro.text.regex.Pattern"
 	       classpathref="classpath"/>
@@ -51,7 +51,7 @@
       <include name="${packagename}/**"/>
       <exclude name="${packagename}/*/Quantity-*.java"/>
       <exclude name="${packagename}/tests/**" unless="junit.present"/>
-      <exclude name="${modulesdir}/Regexp.java" unless="oro.present"/>
+      <exclude name="${packagename}/modules/Regexp.java" unless="oro.present"/>
     </javac>      
   </target>
   
