@@ -134,12 +134,13 @@
 
 (define (generic-java-constructor jclass)
   (let ([gproc (make-generic-procedure)])
-    (add-methods gproc
-                 (filter-map
-                  (lambda (c)
-                    (and (memq 'public (java/modifiers c))
-                         (java-constructor-method c)))
-                  (java/constructors jclass)))
+    (if (memq 'public (java/modifiers jclass))
+        (add-methods gproc
+                     (filter-map
+                      (lambda (c)
+                        (and (memq 'public (java/modifiers c))
+                             (java-constructor-method c)))
+                      (java/constructors jclass))))
     gproc))
 
 (define (generic-java-procedure name fetch reflect)
