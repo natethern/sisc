@@ -57,7 +57,7 @@
 	       (if (null? arg)
 		   (param)
 		   (param (converter (car arg))))))]
-	  [else (error 'make-parameter "too many arguments.")])])
+	  [else (error 'make-parameter "too many arguments.")]))
 
 (define (make-config-parameter name value . converter)
     (cond [(null? converter) 
@@ -69,37 +69,41 @@
 	       (if (null? arg)
 		   (param)
 		   (param (converter (car arg))))))]
-	  [else (error 'make-config-parameter "too many arguments.")])])
+	  [else (error 'make-config-parameter "too many arguments.")]))
 
-(define (make-native-parameter . converter)
+(define (make-native-parameter name . converter)
     (cond [(null? converter) 
-	   (_make-native-parameter)]
+	   (_make-native-parameter name)]
 	  [(null? (cdr converter))
-	   (let ([param (_make-native-parameter)]
+	   (let ([param (_make-native-parameter name)]
 		 [converter (car converter)])
 	     (lambda arg
 	       (if (null? arg)
 		   (param)
 		   (param (converter (car arg))))))]
-	  [else (error 'make-config-parameter "too many arguments.")])])
+	  [else (error 'make-config-parameter "too many arguments.")]))
 
 (define-syntax parameterize
-  (syntax-rules ()
-    ((_ () . body)
-     body)
-    ((_ ((param-name new-value) ...)
-	body)
-     (let ([old-values #f]
-	   [tmp new-value] ...)
-       (dynamic-wind 
-	   (lambda () 
-	     (set! old-values (list (param-name) ...))
-	     (param-name tmp) ...)
-	   (lambda () body)
-	   (lambda () 
-	     (for-each (lambda (p l) (p l))
-		       (list param-name ...)
-		       old-values)))))))
+  (lambda (expr)
+    (syntax-case expr ()
+      ((_ () body)
+       (syntax body))
+      ((_ ((param-name new-value) ...)
+          body)
+       (with-syntax ([(tmps ...) 
+                      (generate-temporaries (syntax (param-name ...)))])
+         (syntax 
+           (let ([old-values #f]
+                 [tmps new-value] ...)
+             (dynamic-wind 
+               (lambda () 
+                 (set! old-values (list (param-name) ...))
+                 (param-name tmps) ...)
+               (lambda () body)
+               (lambda () 
+	             (for-each (lambda (p l) (p l))
+		               (list param-name ...)
+		               old-values))))))))))
 
 ;; native parameters
 
@@ -306,20 +310,6 @@
       (do ((x (read port) (read port)))
           ((eof-object? x))
         (eval (list "noexpand" x))))))
-
-(define (parameterize . args)
-  (let ([initial-value (if (null? args) #f (car args))]
-        [constraint? (if (or (null? args) (null? (cdr args)))
-                        (lambda (x) #t)
-                        (if (not (procedure? (cadr args)))
-                            (error 'parameterize "constraint is not a procedure/")
-                            (cadr args)))])
-    (let ([parameter (make-parameter initial-value)])
-      (lambda arg
-        (cond [(null? arg) (parameter)]
-              [(constraint? (car arg)) 
-               (parameter (car arg))]
-              [else (error "new parameter value does not meet the parameter's type constraints")])))))
 
 (define call/fc call-with-failure-continuation)
 (define with/fc with-failure-continuation)
