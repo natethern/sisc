@@ -830,6 +830,8 @@
            write-block
            open-binary-input-file
            open-binary-output-file
+           close-input-port
+           close-output-port
            binary-input-port?
            binary-output-port?)
   (include "io/binary-io.scm"))
@@ -888,6 +890,7 @@
            (_open-serial-output-port open-serial-output-port))
   (import oo)
   (import generic-io)
+  (import* binary-io call-with-binary-input-file call-with-binary-output-file)
   (import* type-system instance-of?)
   (include "io/serial-io.scm"))
 
