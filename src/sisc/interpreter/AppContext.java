@@ -113,11 +113,17 @@ public class AppContext extends Util {
     }
 
     public String getProperty(String name) {
-        return props.getProperty(name, System.getProperty(name));
+        String res = props.getProperty(name);
+        if (res != null) return res;
+        try {
+            res = System.getProperty(name);
+        } catch (SecurityException e) {}
+        return res;
     }
 
     public String getProperty(String name, String def) {
-        return props.getProperty(name, System.getProperty(name, def));
+        String res = getProperty(name);
+        return (res == null) ? def : res;
     }
 
 }
