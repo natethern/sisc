@@ -2,13 +2,18 @@ package sisc.exprs;
 
 import java.io.*;
 import sisc.data.*;
+import sisc.exprs.fp.OptimismUnwarrantedException;
+import sisc.exprs.fp.OptimisticExpression;
+import sisc.exprs.fp.OptimisticHost;
+import sisc.exprs.fp.Utils;
 import sisc.interpreter.*;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 
-public class AnnotatedExpr extends Value {
+public class AnnotatedExpr extends Value implements OptimisticHost {
+
     public Expression expr;
     public Value annotation, stripped=FALSE;
 
@@ -17,12 +22,21 @@ public class AnnotatedExpr extends Value {
         this.annotation=annotation;
     }
 
+    public void setHosts() {
+        Utils.linkOptimistic(this, expr, 0);
+    }
+
     public final void eval(Interpreter r) throws ContinuationException {
         expr.eval(r);
     }
     
     public final Value getValue(Interpreter r) throws ContinuationException {
-        return expr.getValue(r);
+    	try {
+    		return expr.getValue(r);
+    	} catch (OptimismUnwarrantedException uwe) {
+    		return getValue(r);
+    	}
+    
     }
 
     public Value express() {
@@ -55,6 +69,16 @@ public class AnnotatedExpr extends Value {
     public boolean visit(ExpressionVisitor v) {
         return v.visit(expr) && v.visit(annotation) && v.visit(stripped);
     }
+
+	/* (non-Javadoc)
+	 * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
+	 */
+	public void alter(int uexpPosition, Expression replaceWith) {
+		expr=replaceWith;
+        if (replaceWith instanceof OptimisticExpression) {
+            ((OptimisticExpression)replaceWith).setHost(this, uexpPosition);
+        }
+	}
 }
 /*
  * The contents of this file are subject to the Mozilla Public

@@ -2,12 +2,17 @@ package sisc.exprs;
 
 import java.io.*;
 import sisc.data.*;
+import sisc.exprs.fp.OptimismUnwarrantedException;
+import sisc.exprs.fp.OptimisticExpression;
+import sisc.exprs.fp.OptimisticHost;
+import sisc.exprs.fp.Utils;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 
-public class FillRibExp extends Expression {
+public class FillRibExp extends Expression implements OptimisticHost {
+	static final int POS_EXP=0, POS_NXP=1;
 
     public Expression exp, nxp;
     public int pos;
@@ -20,15 +25,24 @@ public class FillRibExp extends Expression {
         lastAndRatorImmediate=lari;
     }
 
+    public void setHosts() {
+        Utils.linkOptimistic(this, exp, POS_EXP);
+        Utils.linkOptimistic(this, exp, POS_NXP);
+    }
+    
     public void eval(Interpreter r) throws ContinuationException {
-        r.setVLR(pos, r.acc);
-        if (lastAndRatorImmediate) {
-            r.acc=exp.getValue(r);
-            r.next(nxp);
-        } else {
-            r.push(nxp);
-            r.next(exp);
-        }
+    	try {
+        	r.setVLR(pos, r.acc);
+            if (lastAndRatorImmediate) {
+                r.acc=exp.getValue(r);
+                r.next(nxp);
+            } else {
+                r.push(nxp);
+                r.next(exp);
+            }    		
+    	} catch (OptimismUnwarrantedException uwe) {
+    		eval(r);
+    	}	
     }
 
     public Value express() {
@@ -54,6 +68,23 @@ public class FillRibExp extends Expression {
     public boolean visit(ExpressionVisitor v) {
         return v.visit(exp) &&  v.visit(nxp);
     }
+
+	public void alter(int uexpPosition, Expression replaceWith) {
+		switch(uexpPosition) {
+		case POS_NXP:
+			nxp=replaceWith;
+			break;
+		case POS_EXP:
+			exp=replaceWith;
+			if (lastAndRatorImmediate && !(replaceWith instanceof Immediate)) {
+				lastAndRatorImmediate=false;
+			}
+			break;
+		}
+        if (replaceWith instanceof OptimisticExpression) {
+            ((OptimisticExpression)replaceWith).setHost(this, uexpPosition);
+        }        
+	}
 }
 
 /*

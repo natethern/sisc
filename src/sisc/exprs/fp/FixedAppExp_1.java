@@ -8,37 +8,38 @@ import sisc.nativefun.NestedPrimRuntimeException;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
+import sisc.util.FreeReference;
 
-public class FixedAppExp_1 extends FixedAppExp_0 {
+public class FixedAppExp_1 extends FixedAppExp_0 implements OptimisticHost {
     public Immediate op0;
 
-    public FixedAppExp_1(FixableProcedure p, Immediate op0) {
-        super(p);
+    public FixedAppExp_1(Immediate op0, 
+    		             FreeReference ref) {
+        super(ref);
         this.op0=op0;
     }
 
-    public Value getValue(Interpreter r) throws ContinuationException {
-    	try {
-            return proc.apply(op0.getValue(r));
-        } catch (ClassCastException cc) {
-            error(r, getName(),
-                  liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()),
-	  					    cc);
-        } catch (NestedPrimRuntimeException npr) {
-            Procedure.error(r, getName(), npr);
-        } catch (RuntimeException re) {
-            //re.printStackTrace();
-            String msg = re.getMessage();
-            if (msg == null)
-                msg = re.toString();
-            error(r, proc.getName(), msg, re);
-        }
-        // Should be unreachable;
-        return null;
+    public void setHosts() {
+        Utils.linkOptimistic(this, (Expression)op0, 0);
+    }
+    
+    /* (non-Javadoc)
+     * @see sisc.exprs.fp.OptimisticHost#alter(int, sisc.data.Expression)
+     */
+    public void alter(int uexpPosition, Expression replaceWith) {
+        revert();
+    }
+
+    protected void revert() {
+        revert(new Expression[] {(Expression)op0});
+    }
+    
+    public Value doGetValue(FixableProcedure proc, Interpreter r) throws ContinuationException {
+        return proc.apply(op0.getValue(r));
     }
 
     public Value express() {
-        return list(sym("FixedAppExp"), proc.express(), 
+        return list(sym("FixedAppExp"), ref.getName(), 
                     ((Expression)op0).express());
     }
 

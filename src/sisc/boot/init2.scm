@@ -125,6 +125,7 @@
       zero?)))
  
 (inline-usual-primitives)
+;(hedged-inlining #f)
 
 (if (equal? (getenv "sisc.debugging") "true")
     (begin
@@ -996,3 +997,4 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
 ;;And disable inlining/assumptions
 (putprop 'assumptive-procedures '*opt* '())
 (inline-primitives '())
+;(hedged-inlining #t)

@@ -35,6 +35,7 @@
 ;; something you wrote, let me know.
 ;;;;;;
 
+(define hedged-inlining       (_make-native-parameter "hedgedInlining"))
 (define inline-primitives       (_make-native-parameter "inlinePrimitives"))
 
 (define (inline-usual-primitives)
@@ -54,6 +55,7 @@
         zero?)))
 
 (inline-usual-primitives)
+(hedged-inlining #f)
 
 (define-syntax boolean-or
   (syntax-rules ()
@@ -374,7 +376,7 @@
   (lambda (n)
     (boolean-or (_integer? n) 
                 (and (real? n)
-                     (= (round n) n))))))
+                     (= (round n) n)))))
 
 (define real? 
  (let ((oldcomp? complex?))

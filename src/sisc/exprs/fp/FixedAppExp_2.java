@@ -8,38 +8,33 @@ import sisc.nativefun.NestedPrimRuntimeException;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
+import sisc.util.FreeReference;
 
 public class FixedAppExp_2 extends FixedAppExp_1 {
     public Immediate op1;
 
-    public FixedAppExp_2(FixableProcedure p, Immediate op0, Immediate op1) {
-        super(p, op0);
-        this.op1=op1;
+    public FixedAppExp_2(Immediate op0, Immediate op1,
+            			 FreeReference ref) {
+    	super(op0, ref);
+    	this.op1=op1;
     }
 
-    public Value getValue(Interpreter r) throws ContinuationException {
-    	try {
-            return proc.apply(op0.getValue(r), op1.getValue(r));
-        } catch (ClassCastException cc) {
-            error(r, getName(),
-                  liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()),
-	  					    cc);
-        } catch (NestedPrimRuntimeException npr) {
-            Procedure.error(r, getName(), npr);
-        } catch (RuntimeException re) {
-            //re.printStackTrace();
-            String msg = re.getMessage();
-            if (msg == null)
-                msg = re.toString();
-            error(r, proc.getName(), msg, re);
-        }
-        // Should be unreachable;
-        return null;
+    public void setHosts() {
+        super.setHosts();
+        Utils.linkOptimistic(this, (Expression)op1, 1);
     }
 
+    public Value doGetValue(FixableProcedure proc, Interpreter r) throws ContinuationException {
+        return proc.apply(op0.getValue(r), op1.getValue(r));
+    }
+
+    protected void revert() {
+        revert(new Expression[] {(Expression)op0, (Expression)op1});
+    }
+    
     public Value express() {
         return new Pair(sym("FixedAppExp"), 
-                        list(proc.express(), ((Expression)op0).express(),
+                        list(ref.getName(), ((Expression)op0).express(),
                              ((Expression)op1).express()));            
     }
 

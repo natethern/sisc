@@ -2,12 +2,18 @@ package sisc.exprs;
 
 import java.io.*;
 import sisc.data.*;
+import sisc.exprs.fp.OptimismUnwarrantedException;
+import sisc.exprs.fp.OptimisticExpression;
+import sisc.exprs.fp.OptimisticHost;
+import sisc.exprs.fp.Utils;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 
-public class AppExp extends Expression {
+public class AppExp extends Expression implements OptimisticHost {
+	public static final int POS_EXP=-1, POS_NXP=-2;
+	
     public Expression exp, rands[], nxp;
     public boolean allImmediate;
     protected int l;
@@ -21,26 +27,38 @@ public class AppExp extends Expression {
         this.allImmediate=allImmediate;
     }
 
+    public void setHosts() {
+        Utils.linkOptimistic(this, exp, POS_EXP);
+        Utils.linkOptimistic(this, nxp, POS_NXP);
+        for (int i=0; i<rands.length; i++) {
+            Utils.linkOptimistic(this, rands[i], i);
+        }
+    }
+    
     public void eval(Interpreter r) throws ContinuationException {
-        r.newVLR(l);
+        try {
+        	r.newVLR(l);
 
-        if (allImmediate) {
-            r.acc=exp.getValue(r);
-            // Load the immediates from right to left
-            for (int i = l-1; i>=0; i--) {
-                r.vlr[i] = rands[i].getValue(r);
-            }
-            r.next(nxp);
-        } else {
-            r.push(nxp);
-            // Load the immediates from right to left
-            Expression ex;
-            for (int i = l-1; i>=0; i--) {
-                ex=rands[i];
-                if (ex != null)
-                    r.vlr[i] = ex.getValue(r);
-            }
-            r.next(exp);
+            if (allImmediate) {
+                r.acc=exp.getValue(r);
+                // Load the immediates from right to left
+                for (int i = l-1; i>=0; i--) {
+                    r.vlr[i] = rands[i].getValue(r);
+                }
+                r.next(nxp);
+            } else {
+                r.push(nxp);
+                // Load the immediates from right to left
+                Expression ex;
+                for (int i = l-1; i>=0; i--) {
+                    ex=rands[i];
+                    if (ex != null)
+                        r.vlr[i] = ex.getValue(r);
+                }
+                r.next(exp);
+            }        	
+        } catch (OptimismUnwarrantedException uwe) {
+        	eval(r);
         }
     }
 
@@ -83,6 +101,27 @@ public class AppExp extends Expression {
         }
         return v.visit(nxp);
     }
+
+	/* (non-Javadoc)
+	 * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
+	 */
+	public void alter(int uexpPosition, Expression replaceWith) {
+		switch(uexpPosition) {
+		case POS_EXP:
+			exp=replaceWith;
+			break;
+        case POS_NXP:
+        	nxp=replaceWith;
+        	break;
+        default:
+        	rands[uexpPosition]=replaceWith;
+		}
+		if (allImmediate && !(replaceWith instanceof Immediate)) 
+			allImmediate=false;
+        if (replaceWith instanceof OptimisticHost) 
+            ((OptimisticHost)replaceWith).setHosts();
+
+	}
 }
 
 /*

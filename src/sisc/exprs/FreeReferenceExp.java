@@ -14,8 +14,12 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     private FreeReference ref;
 
+    public FreeReferenceExp(FreeReference ref) {
+        this.ref = ref;
+    }
+    
     public FreeReferenceExp(Symbol sym, SymbolicEnvironment senv) {
-        ref = new FreeReference(sym, senv);
+        this(new FreeReference(sym, senv));
     }
 
     public Symbol getSym() {
@@ -65,6 +69,10 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public boolean visit(ExpressionVisitor v) {
         return ref.visit(v);
+    }
+
+    public FreeReference getReference() {
+        return ref;
     }
 }
 /*

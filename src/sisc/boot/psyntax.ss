@@ -3401,7 +3401,7 @@
                   ; then output the input, to preserve pointer equality and
                   ; immutability.
                   (let ([dxdy (syntax (quote (dx . dy)))])
-                    (if (and p (equal? p dxdy))
+                    (if (equal? p dxdy)
                         (syntax (quote ps))
                         dxdy)))
                  (_ (if (null? (syntax dy))

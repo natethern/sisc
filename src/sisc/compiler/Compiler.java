@@ -13,6 +13,7 @@ import sisc.interpreter.ContinuationException;
 import sisc.interpreter.Interpreter;
 import sisc.io.*;
 import sisc.reader.*;
+import sisc.util.FreeReference;
 
 /**
  * Compiler - Compiles regularized Scheme s-expressions into an
@@ -123,7 +124,9 @@ public class Compiler extends CompilerConstants {
     }
 
     Expression makeEvalExp(Expression pre, Expression post) {
-        return new EvalExp(pre, post, isImmediate(pre));
+        EvalExp ee=new EvalExp(pre, post, isImmediate(pre));
+        ee.setHosts();
+        return ee;
     }
 
     protected int[][] resolveCopies(ReferenceFactory rf, 
@@ -190,21 +193,6 @@ public class Compiler extends CompilerConstants {
             rv=compile(r, expr.car, sets, rf, TAIL | LAMBDA | REALTAIL, 
                        env, null);
             break;
-        case FIX:
-            FixableProcedure proc=(FixableProcedure)env.lookup(symbol(expr.car));
-            expr=(Pair)expr.cdr;            
-            Expression[] exps=pairToExpressions(expr);
-            compileExpressions(r, exps, sets, rf, 0, env);
-            switch(exps.length) {
-            case 0: rv=new FixedAppExp_0(proc); break;
-            case 1: rv=new FixedAppExp_1(proc,(Immediate)exps[0]); break;
-            case 2: rv=new FixedAppExp_2(proc,(Immediate)exps[0],(Immediate)exps[1]); break;
-            case 3: rv=new FixedAppExp_3(proc,(Immediate)exps[0],(Immediate)exps[1],(Immediate)exps[2]); break;
-            default:
-                error(r, "Compiler error: cannot fix procedure of argcount > 3");
-                rv=null;
-            }
-            break;
         case LAMBDA:
         	{
 	            boolean infArity=false;
@@ -230,8 +218,7 @@ public class Compiler extends CompilerConstants {
 	
 	            Symbol[] lexicalSyms=argsToSymbols((Pair)expr.car);
 	            expr=(Pair)expr.cdr;
-	            
-	            ReferenceFactory nf=new ReferenceFactory(formals, lexicalSyms);
+	            	            ReferenceFactory nf=new ReferenceFactory(formals, lexicalSyms);
 	
 	            tmp=compile(r, expr.car, sets, nf, TAIL | LAMBDA | REALTAIL, 
 	                        env, null);
@@ -240,6 +227,9 @@ public class Compiler extends CompilerConstants {
 	            rv=new LambdaExp(formals.length, 
 	                             tmp, infArity, copies[0], copies[1], 
 	                             (boxes.length==0 ? null :boxes));
+                if (tmp instanceof OptimisticExpression) {
+                    ((OptimisticExpression)tmp).setHost((LambdaExp)rv, 0);
+                }
         	}
             break;
         case LETREC:
@@ -271,6 +261,7 @@ public class Compiler extends CompilerConstants {
 	            
 	            rv=compileLetrec(r, formals, lexicalSyms, rhses, expr.car, 
 	                             sets, rf, env, context);
+                ((OptimisticHost)rv).setHosts();
         	}
 	        break;
         case _IF:
@@ -326,10 +317,12 @@ public class Compiler extends CompilerConstants {
             break;
         case APPLICATION:
         case UNKNOWN:
-            exps=pairToExpressions(expr);
+            Expression[] exps=pairToExpressions(expr);
             compileExpressions(r, exps, sets, rf, 0, env);
             Expression operout=compile(r,oper,sets, rf,0,env,an);
             rv = application(r, operout, exps, context, an, env);
+            if (rv instanceof AppExp) 
+                ((AppExp)rv).setHosts();
             break;
         default:
             error(r, "Unsupported syntactic type ["+eType+"].  Should never happen!");
@@ -454,50 +447,50 @@ public class Compiler extends CompilerConstants {
                 allImmediate=false;
             }
         }
-        if (allImmediate) {
-            if (rator instanceof FreeReferenceExp) {
-                Symbol ratorsym=((FreeReferenceExp)rator).getSym();
-                if ((r.dynenv.inlinePrimitives == TRUE) ||
-                    (r.dynenv.inlinePrimitives instanceof Pair && 
-                     truth(memq(ratorsym, (Pair)r.dynenv.inlinePrimitives)))) {
-                    Value ratorval=env.lookup(ratorsym);
-                    if (ratorval instanceof FixableProcedure) {
-                        FixableProcedure proc=(FixableProcedure)ratorval;
-                        Expression fixedCall=null;
+        addAnnotations(nxp, lastRand.annotations);
+        AppExp safeExpr=new AppExp(lastRand, rands, nxp, allImmediate);
 
-                        switch (rands.length) {
-                        case 0: 
-                            fixedCall = new FixedAppExp_0(proc); 
-                            break;
-                        case 1: 
-                            fixedCall = new FixedAppExp_1(proc, 
-                                                          (Immediate)rands[0]); 
-                            break;
-                        case 2: 
-                            fixedCall = new FixedAppExp_2(proc, 
-                                                          (Immediate)rands[0],
-                                                          (Immediate)rands[1]); 
-                            break;
-                        case 3: 
-                            fixedCall = new FixedAppExp_3(proc, 
-                                                          (Immediate)rands[0],
-                                                          (Immediate)rands[1],
-                                                          (Immediate)rands[2]);
-                            break;
-                        }
-                        if (fixedCall != null) {
-                            addAnnotations(fixedCall, lastRand.annotations);
-                            return fixedCall;
-                        }
+        if (allImmediate) {
+            //The realtail check is necessary since an Optimistic Expression
+            //in real tail has no parent uExp
+            if (rator instanceof FreeReferenceExp && (context & REALTAIL)== 0) {
+                FreeReference ref=((FreeReferenceExp)rator).getReference();
+                Symbol ratorsym=ref.getName();
+                Value ratorval=env.lookup(ratorsym);
+                if (ratorval instanceof FixableProcedure) {
+                    Expression fixedCall=null;
+
+                    switch (rands.length) {
+                    case 0: 
+                        fixedCall = new FixedAppExp_0(ref);
+                        break;
+                    case 1: 
+                        fixedCall = new FixedAppExp_1((Immediate)rands[0],
+                                                      ref);
+                        break;
+                    case 2: 
+                        fixedCall = new FixedAppExp_2((Immediate)rands[0],
+                                                      (Immediate)rands[1],
+                                                      ref);
+                        break;
+                    case 3: 
+                        fixedCall = new FixedAppExp_3((Immediate)rands[0],
+                                                      (Immediate)rands[1],
+                                                      (Immediate)rands[2],
+                                                      ref);
+                        break;
+                    }
+                    if (fixedCall != null) {
+                        if (fixedCall instanceof OptimisticHost)
+                            ((OptimisticHost)fixedCall).setHosts();
+                        if (!r.dynenv.hedgedInlining)
+                        addAnnotations(fixedCall, lastRand.annotations);
+                        return fixedCall;
                     }
                 }
             } 
-            addAnnotations(nxp, lastRand.annotations);
-            return new AppExp(lastRand, rands, nxp, true);
-        } else {
-            addAnnotations(nxp, lastRand.annotations);
-            return new AppExp(lastRand, rands, nxp, false);
-        }
+        } 
+        return safeExpr;
     }
 
     void compileExpressions(Interpreter r, Expression exprs[], 
