@@ -39,20 +39,9 @@ import java.io.IOException;
 
 import junit.framework.*;
 
-import sisc.Interpreter;
-import sisc.Context;
-import sisc.AppContext;
+import sisc.interpreter.*;
+import sisc.data.*;
 import sisc.REPL;
-import sisc.CallFrame;
-import sisc.Util;
-import sisc.ContinuationException;
-import sisc.SchemeException;
-
-import sisc.data.Value;
-import sisc.data.Expression;
-import sisc.data.InputPort;
-import sisc.data.Procedure;
-
 
 public class TestR5RS
     extends TestCase
