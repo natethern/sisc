@@ -346,7 +346,7 @@
             ((char=? (car format-list) #\~)
              (if (null? (cdr format-list))
                  (error 'format "Incomplete escape sequence")
-                 (case (cadr format-list)
+                 (case (char-downcase (cadr format-list))
                    ((#\a)
                     (if (null? objects)
                         (error 'format "No value for escape sequence")
