@@ -101,7 +101,10 @@ public abstract class Util extends Defaults implements Version {
     }
 
     public static ClassLoader currentClassLoader() {
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        ClassLoader cl = null;
+	try {
+	    Thread.currentThread().getContextClassLoader();
+        } catch (AccessControlException e) {}
         if (cl == null) {
             cl = ClassLoader.getSystemClassLoader();
         }
