@@ -1141,7 +1141,7 @@ public class Quantity extends Value implements Singleton {
         case RATIO:
             return ratioToDecimal(i,de);
         default:
-            throw new NumberFormatException(liMessage(SISCB, "isnotreal", toString()));
+            throw new NumberFormatException(liMessage(SISCB, "isnotareal", toString()));
         }
     }
 
