@@ -129,7 +129,7 @@
 
 (display "srfi-9 ")
 (module srfi-9
-    (define-record-type record?)
+    (define-record-type)
   (import record)
   (add-feature 'srfi-9))
 
