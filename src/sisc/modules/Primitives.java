@@ -67,7 +67,7 @@ public class Primitives extends IndexedProcedure {
             define("eq?", EQ);
             define("eqv?", EQV);
             define("equal?", EQUAL);
-            define("_eval", EVALUATE);
+            define("eval", EVALUATE);
             define("exact->inexact", EXACT2INEXACT);
             define("exact?", EXACTQ);
             define("exp", EXP);

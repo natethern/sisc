@@ -36,7 +36,7 @@
 (define current-optimizer (_make-parameter (lambda (x) x)))
   
 ;; source to eval:
-#;(set! eval (let ([old-eval _eval]
+#;(set! eval (let ([old-eval eval]
                  [apply apply]
                  [current-cte current-cte]
                  [sc-expand sc-expand]
@@ -93,7 +93,7 @@
    interaction-environment
    sc-expand
    apply
-   _eval))
+   eval))
    
 ;; Parameter Support, compatible with SRFI-39
 
