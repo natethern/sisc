@@ -1203,14 +1203,11 @@ public class Quantity extends Value {
         switch (type) {
         case FIXEDINT:
             return BigInteger.valueOf(val);
-        case DECIM:
-            return d.toBigInteger();
         case INTEG:
             return i;
-        case RATIO:
-            return i.divide(de);
+        default:
+            throw new NumberFormatException(liMessage(SISCB, "notaninteger"));
         }
-        return null;
     }
 
     public Quantity toExact() {

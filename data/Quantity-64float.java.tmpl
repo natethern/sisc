@@ -339,7 +339,7 @@ public class Quantity extends Value {
         case INTEG:
             return i;
         default:
-            throw new NumberFormatException("Value was not an integer");
+            throw new NumberFormatException(liMessage(SISCB, "notaninteger"));
         }
     }
 
