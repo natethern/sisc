@@ -347,7 +347,7 @@
     <copy todir="${dist}/lite/sisc"
           file="${heap}"/>
     <copy todir="${dist}/lite/sisc">
-      <fileset dir="${dist}">
+      <fileset dir="${basedir}">
         <include name="ChangeLog"/>
         <include name="README"/>
         <include name="COPYING"/>
@@ -357,7 +357,7 @@
       </fileset>
     </copy>
 
-    <copy file="${dist}/sisc.sh"
+    <copy file="${basedir}/sisc.sh"
           tofile="${dist}/lite/sisc/sisc"/>
     <chmod file="${dist}/lite/sisc/sisc"
            perm="ugo+rx"/>
@@ -397,7 +397,7 @@
     <chmod file="${dist}/full/sisc/scheme-src/srfi-22/srfi-22.sh"
            perm="ugo+rx"/>
     <copy todir="${dist}/full/sisc/"
-          file="${basedir}/dist/install-srfi22.sh"/>
+          file="${basedir}/install-srfi22.sh"/>
     <chmod file="${dist}/full/sisc/install-srfi22.sh"
            perm="ugo+rx"/>
 
@@ -410,7 +410,7 @@
     <copy todir="${dist}/full/sisc"
           file="${heap}"/>
     <copy todir="${dist}/full/sisc">
-      <fileset dir="${dist}">
+      <fileset dir="${basedir}">
         <include name="ChangeLog"/>
         <include name="README"/>
         <include name="COPYING"/>
@@ -420,7 +420,7 @@
       </fileset>
     </copy>
 
-    <copy file="${dist}/sisc.sh"
+    <copy file="${basedir}/sisc.sh"
           tofile="${dist}/full/sisc/sisc"/>
 
     <tar tarfile="${dist}/sisc-${version}.tar">
