@@ -163,7 +163,7 @@
     ((begin e* ... el)
 ;     (guard (not-redefined? 'begin))
      (values
-      `(begin e* (set! ,lhs el))
+      `(begin ,@e* (set! ,lhs el))
       '((new-assumptions 'begin))))
     (,else
       (values
