@@ -148,11 +148,13 @@ public class GenerateHeap {
         }
 
         LibraryBuilder lb=new LibraryBuilder();
-        MemorySymEnv symenv=new MemorySymEnv(Symbol.get("symenv"));
+        MemorySymEnv symenv=new LibraryAE(Symbol.get("symenv"), lb);
         MemorySymEnv toplevel=new LibraryAE((Symbol)null, lb);
+        MemorySymEnv scexpander=new LibraryAE((Symbol)null, lb);
         toplevel.setName(Util.TOPLEVEL);
         sisc.compiler.Compiler.addSpecialForms(toplevel);
         symenv.define(Util.TOPLEVEL, toplevel);
+        symenv.define(Util.EXPSC, scexpander);
         
         // Set this initially, so the optimizer can do its core forms
         // check without error

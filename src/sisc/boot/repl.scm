@@ -61,7 +61,7 @@
               (when (current-prompt)
                 (display #\-)
                 (display (current-prompt)))
-              (display #\>)
+              (display "> ")
               ;;read
               (let ([exp (read-code (current-input-port))])
                 (if (eof-object? exp) 
