@@ -44,7 +44,7 @@ public class SThread extends ModuleAdapter {
     protected static final int 
 	THREADNEW=0, THREADSTART=1, THREADYIELD=2, THREADSLEEP=3,
 	THREADINTERRUPT=4, THREADJOIN=5, THREADCURRENT=6,
-	THREADSYNCHRONIZED=7, THREADNOTIFY=8, THREADNOTIFYALL=9,
+	/*<7>*/ THREADNOTIFY=8, THREADNOTIFYALL=9,
 	THREADWAIT=10, THREADNAME=11, THREADPRIORITY=12, 
 	THREADDAEMONQ=13, SETTHREADNAME=14, SETTHREADPRIORITY=15,
 	SETTHREADDAEMON=16, THREADSTATE=17, THREADINTERRUPTEDQ=18,
@@ -69,7 +69,6 @@ public class SThread extends ModuleAdapter {
 	define("thread/join", THREADJOIN);
 	define("thread/result", THREADRESULT);
 	define("thread/current", THREADCURRENT);
-	define("thread/synchronized", THREADSYNCHRONIZED);
 	define("thread/notify", THREADNOTIFY);
 	define("thread/notify-all", THREADNOTIFYALL);
 	define("thread/wait", THREADWAIT);
@@ -99,13 +98,14 @@ public class SThread extends ModuleAdapter {
 	private Object condvar=new Object();
 
 	public Value lock(long timeout) {
-	    Thread thisThread=Thread.currentThread();
+	    Thread thisThread=null;
 
 	    synchronized(this) {
 		do {
-		    if (owner == null || owner == thisThread) {
+		    if (owner == null || owner == (thisThread=Thread.currentThread())) {
 			owner=thisThread;
-			return Quantity.valueOf(lockCount++);
+			lockCount++;
+			return TRUE;
 		    } else {
 			long lastAwoken=System.currentTimeMillis();
 
@@ -128,12 +128,13 @@ public class SThread extends ModuleAdapter {
 
 	public Value lock() {
 	    synchronized(this) {
-		Thread thisThread=Thread.currentThread();
+		Thread thisThread=null;
 		
 		do {
-		    if (owner == null || owner == thisThread) {
+		    if (owner == null || owner == (thisThread=Thread.currentThread())) {
 			owner=thisThread;
-			return Quantity.valueOf(lockCount++);
+			lockCount++;
+			return TRUE;
 		    } else {
 			while (lockCount>0) {
 			    try {
@@ -231,6 +232,9 @@ public class SThread extends ModuleAdapter {
 	public void run() {
 	    Interpreter r = Context.enter(parent.ctx, parent.dynenv.copy());
 	    state=RUNNING;
+	    synchronized(this) {
+		this.notify();
+	    }
 	    try {
 		rv=r.eval(thunk,new Value[]{});
 		state=FINISHED;
@@ -313,6 +317,13 @@ public class SThread extends ModuleAdapter {
 	    case THREADSTART:
 		ThreadContext c=tcont(f.vlr[0]);
 		c.start();
+		while (c.state==READY) {
+		    synchronized(c) {
+			try {
+			    c.wait(500);
+			} catch (InterruptedException e) {}
+		    }
+		}
 		return VOID;
 	    case THREADINTERRUPT:
 		c=tcont(f.vlr[0]);

@@ -1,4 +1,4 @@
-(load-module "sisc.modules.SThread")
+(import threading-module)
 
 (define-syntax monitor/synchronize
   (lambda (e)
