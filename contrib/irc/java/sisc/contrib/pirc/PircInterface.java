@@ -23,7 +23,6 @@ public class PircInterface extends PircBot {
     }
 
     void call(Symbol functionName, JavaObject[] args) {
-        System.err.println("Call: "+functionName);
         try {
             Value[] v=new Value[args.length+1];
             v[0]=functionName;
