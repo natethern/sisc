@@ -54,6 +54,10 @@ public class Context extends Util {
         Interpreter r = currentInterpreter();
         return enter(r.ctx, r.dynenv);
     }
+
+    public static Interpreter enter(Interpreter r) {
+        return enter(r.ctx, r.dynenv);
+    }
     
     public static Interpreter enter(String appName) {
         return enter(lookup(appName), new DynamicEnvironment());
