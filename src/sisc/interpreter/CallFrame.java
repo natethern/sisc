@@ -45,6 +45,17 @@ public class CallFrame extends Procedure {
     }
 
     public final CallFrame capture(Interpreter r) {
+        //Returning a safe frame is an optimization. k invocation
+        //makes frames safe as necessary but it cannot make the top
+        //frame safe. That's because frames are made safe by cloning
+        //them and then swivelling the child frame's parent pointer,
+        //but the top frame has no child frame. So without this
+        //optimization, any invocation of the k potentially requires a
+        //cloning of the captured frame in order to obtain a safe vlr.
+        //NB: this is not a cost-free optimization: if no further ks
+        //were captured from the same frame then the cloning is
+        //unnecessary (and wouldn't occur without this "optimization").
+
         CallFrame toReturn=makeSafe(r);
 
         // Set the captured flags all the way to the root,
@@ -72,17 +83,17 @@ public class CallFrame extends Procedure {
 
     public final void setCaptured(Interpreter r, int pos) {
         if (vlr!=null) {
+            if (cap==null) {
+                cap=new boolean[vlr.length];
+            }
             if (pos<vlr.length) {
-                if (cap==null) {
-                    cap=new boolean[vlr.length];
-                }
                 cap[pos]=true;
             }
         }
     }
 
     protected final CallFrame cloneFrame(Interpreter r) {
-        return r.createFrame(nxp, vlr, vlk, env, fk, parent, cap);
+        return r.createFrame(nxp, vlr, vlk, env, fk, parent);
     }
 
     public void display(ValueWriter w) throws IOException {    
