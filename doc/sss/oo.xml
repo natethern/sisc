@@ -72,7 +72,7 @@
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns &t; if <parameter>type1</parameter> is a a
+                Returns &t; if <parameter>type1</parameter> is a
                 sub-type of <parameter>type2</parameter>.
               </para>
               <para>
