@@ -1020,6 +1020,7 @@
 ;; Standard imports
 (import libraries)
 (import optimizer)
+(putprop 'pretty-print @pretty-printing::pretty-print)
 (import pretty-printing)
 
 (initialize)

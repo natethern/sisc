@@ -163,6 +163,9 @@
 
 ;;;;;;;;;;;;;;;; error handling ;;;;;;;;;;;;;;;
 
+; Needed later
+(define pretty-print)
+
 ;; Most of the code here is for providing SRFI-23 style error
 ;; producing, which is then applied into SISC's failure-continuation
 ;; model.
@@ -494,8 +497,7 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
                                  (write-char #\tab port)          
                                  (anychar-dispatch (+ pos 1) arglist #f))
                                 ((#\Y)       ; Pretty-print
-                                 (@pretty-printing::pretty-print
-                                  (car arglist) port) 
+                                 (pretty-print (car arglist) port) 
                                  (anychar-dispatch (+ pos 1) (cdr arglist) #f))
                                 ((#\F)
                                  (display (format-fixed (car arglist) 0 #f) port)
@@ -786,7 +788,7 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
                          ((current-optimizer)
                           (apply sc-expand e scexpopts))
                          (interaction-environment))])
-            (@pretty-printing::pretty-print source outf)
+            (pretty-print source outf)
             (newline outf)
             (loop (read inf)))))
     (close-output-port outf)
