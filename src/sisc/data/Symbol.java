@@ -8,8 +8,6 @@ import sisc.ser.Deserializer;
 
 public class Symbol extends Value {
 
-    public static boolean caseSensitive;
-
     public static Symbol getUnique(String str) {
         return new Symbol(str);
     }
