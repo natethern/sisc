@@ -22,6 +22,7 @@
     <property name="quantity-type" value="64float"/>
     <property name="debugging" value="off"/>
     <property name="optimization" value="on"/>
+    <property name="releasecandidate" value="yes"/>
     <property name="dist" value="${basedir}/dist"/>
     <property name="doc.style" value="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/docbook.xsl"/>
     <mkdir dir="${libdir}"/>
@@ -190,6 +191,7 @@
 	<include name="ChangeLog"/>
 	<include name="README"/>
 	<include name="COPYING"/>
+        <include name="ReleaseCandidate" if="releasecandidate"/>
 	<include name="sisc.bat"/>
       </fileset>
     </copy>
@@ -197,6 +199,7 @@
       <fileset dir="${dist}">
 	<include name="ChangeLog"/>
 	<include name="README"/>
+        <include name="ReleaseCandidate" if="releasecandidate"/>
 	<include name="COPYING"/>
       </fileset>
     </copy>
@@ -244,6 +247,7 @@
     <copy todir="${dist}/full/win/sisc">
       <fileset dir="${dist}">
 	<include name="ChangeLog"/>
+        <include name="ReleaseCandidate" if="releasecandidate"/>
 	<include name="README"/>
 	<include name="COPYING"/>
 	<include name="sisc.bat"/>
@@ -254,6 +258,7 @@
 	<include name="ChangeLog"/>
 	<include name="README"/>
 	<include name="COPYING"/>
+        <include name="ReleaseCandidate" if="releasecandidate"/>
       </fileset>
     </copy>
 

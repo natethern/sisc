@@ -266,7 +266,7 @@ public class Primitives extends ModuleAdapter {
                     f.dynenv.in.pushback(((SchemeCharacter)v).c);
                 return v;
             case READ: case READCHAR:
-                return (primid==READ ? f.dynenv.in.read(f) :
+                return (primid==READ ? f.dynenv.in.read(f, false) :
                         f.dynenv.in.readchar());
             case CURRENTEVAL: return (Value)f.ctx.evaluator;
             case INTERACTIONENVIRONMENT:
@@ -366,7 +366,7 @@ public class Primitives extends ModuleAdapter {
                 }
             case READ: case READCHAR:
                 inport=inport(f.vlr[0]);
-                return (primid==READ ? inport.read(f) :
+                return (primid==READ ? inport.read(f, false) :
                         inport.readchar());
             case EVAL:
                 f.nxp=f.compile(f.vlr[0]);
@@ -618,7 +618,7 @@ public class Primitives extends ModuleAdapter {
                 return new SchemeString(newStr);
             case STRING2NUMBER:
                 try {
-                    return (Quantity)f.dynenv.parser.nextExpression(new InputPort(new BufferedReader(new StringReader(string(f.vlr[0])))), num(f.vlr[1]).intValue());
+                    return (Quantity)f.dynenv.parser.nextExpression(new InputPort(new BufferedReader(new StringReader(string(f.vlr[0])))), num(f.vlr[1]).intValue(), false);
                 } catch (NumberFormatException nf) {
                     return FALSE;
                 } catch (IOException e) {
@@ -708,6 +708,9 @@ public class Primitives extends ModuleAdapter {
             }
         case 3:
             switch(primid) {
+            case READ: 
+                InputPort inport=inport(f.vlr[0]);
+                return inport.read(f, truth(f.vlr[1]));
             case PUTPROP:
                 Symbol lhs=symbol(f.vlr[0]);
                 Symbol context=symbol(f.vlr[1]);
@@ -741,7 +744,7 @@ public class Primitives extends ModuleAdapter {
                 return VOID;
             case BLOCKREAD:
                 int count=num(f.vlr[2]).intValue();
-                InputPort inport=inport(f.vlr[1]);
+                inport=inport(f.vlr[1]);
                 char[] buff=str(f.vlr[0]).stringdata;
                 return inport.read(buff, count);
             case BLOCKWRITE:

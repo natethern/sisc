@@ -47,7 +47,7 @@
   (letrec ([repl-loop
 	    (lambda (console-in console-out writer)
 	      (display "> " console-out)
-	      (let* ([exp (read-with-annotations console-in)]
+	      (let* ([exp (read-with-annotations console-in #t)]
 		     [val (eval exp)])
 		(cond [(void? val) (repl-loop console-in console-out writer)]
 		      [(eof-object? val) 
