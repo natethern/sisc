@@ -40,7 +40,7 @@ public class Symbol extends Value {
     }
 
     public static StringBuffer slashProcess(StringBuffer b, String s) {
-        for (int i=1; i<s.length(); i++) {
+        for (int i=0; i<s.length(); i++) {
             char c=s.charAt(i);
             if ((i>0 && Lexer.isIdentifierSubsequent(c)) ||
                 (i==0 && Lexer.isIdentifierStart(c)))
