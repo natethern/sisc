@@ -248,15 +248,19 @@ public class Compiler extends Util {
         } else if (expr.car instanceof Pair) {
             Expression[] exps=pairToExpressions((Pair)expr.cdr);
             compileExpressions(r, exps, rt, 0, env);
-            return new AppExp(compile(r, expr.car, rt, 0, env),
-                              exps, (context & TAIL)==0);
+	    return application(compile(r, expr.car, rt, 0, env),
+			       exps, (context & TAIL)==0);
         } else {
             Expression[] exps=pairToExpressions((Pair)expr.cdr);
             compileExpressions(r, exps, rt, 0, env);
-            return new AppExp(compile(r, expr.car, rt, 0, env),
-                              exps, (context & TAIL)==0);
+	    return application(compile(r, expr.car, rt, 0, env),
+			       exps, (context & TAIL)==0);
         }
 
+    }
+
+    final Expression application(Expression rator, Expression rands[], boolean tail) {
+	return new AppExp(rator, rands, tail);
     }
 
     void compileExpressions(Interpreter r, Expression exprs[], ReferenceEnv rt,
@@ -269,7 +273,7 @@ public class Compiler extends Util {
     Expression compileBegin(Interpreter r, Vector v, int context,
                             ReferenceEnv rt, AssociativeEnvironment env)
     throws ContinuationException {
-        Expression last=compile(r, (Expression)v.lastElement(), rt,
+	Expression last=compile(r, (Expression)v.lastElement(), rt,
                                 TAIL | context, env);
         if (v.size()==1) return last;
 
@@ -280,8 +284,19 @@ public class Compiler extends Util {
             if (!(e instanceof Immediate))
 		be=new EvalExp(e, be);
         }
-
 	return be;
+
+	/*
+	Vector ev=new Vector(v.size()-1);
+	for (int i=0; i<v.size()-1; i++) {
+            Expression e=compile(r, (Expression)v.elementAt(i),
+                                 rt, COMMAND, env);
+	    if (!(e instanceof Immediate))
+		ev.addElement(e);
+	}
+	Expression[] cexprs=new Expression[ev.size()];
+	ev.copyInto(cexprs);
+	return new BeginExp(cexprs, last);*/
     }
 }
 

@@ -60,15 +60,19 @@ public class Parser extends Util implements Tokens {
         this.lexer=l;
     }
 
-    public Value nextExpression(InputPort is) throws IOException {
+    public final Value nextExpression(InputPort is) throws IOException {
+	return nextExpression(is, 10);
+    }
+
+    public Value nextExpression(InputPort is, int radix) throws IOException {
         Object n=VOID;
         try {
-            n=_nextExpression(is, new HashMap (), null);
+            n=_nextExpression(is, new HashMap (), null, radix);
             return (Value)n;
         } catch (ClassCastException ce) {
             if (n==ENDPAIR) {
                 System.err.println("{warning: ignored orphaned close-parenthesis ')'}");
-                return nextExpression(is);
+                return nextExpression(is, radix);
             } else if (n==DOT)
                 throw new IOException("unexpected dot '.'.");
         }

@@ -301,10 +301,12 @@ public class Primitives extends Module {
                 return new ImmutableString(symbol(f,f.vlr[0]).symval);
             case STRING2NUMBER:
                 try {
-                    return Quantity.valueOf(string(f,f.vlr[0]));
+                    return (Quantity)f.parser.nextExpression(new InputPort(new BufferedReader(new StringReader(string(f,f.vlr[0])))));
                 } catch (NumberFormatException nf) {
                     return FALSE;
-                }
+                } catch (IOException e) {
+		    return FALSE;
+		}
             case NUMBER2STRING: return new SchemeString(num(f,f.vlr[0])
                                            .toString());
             case STRING2SYMBOL: return Symbol.intern(string(f,f.vlr[0]));
@@ -556,8 +558,13 @@ public class Primitives extends Module {
                 }
                 return new SchemeString(newStr);
             case STRING2NUMBER:
-                return Quantity.valueOf(string(f,f.vlr[0]),
-                                    num(f,f.vlr[1]).intValue());
+		try {
+                    return (Quantity)f.parser.nextExpression(new InputPort(new BufferedReader(new StringReader(string(f,f.vlr[0])))), num(f,f.vlr[1]).intValue());
+		} catch (NumberFormatException nf) {
+		    return FALSE;
+		} catch (IOException e) {
+		    return FALSE;
+		}
             case NUMBER2STRING:
                 return new SchemeString(num(f,f.vlr[0])
                                         .toString(num(f,f.vlr[1]).intValue()));

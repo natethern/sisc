@@ -180,9 +180,12 @@ public class Lexer implements Tokens {
     throws IOException {
         StringBuffer b=new StringBuffer();
         char c;
-        while (!in((c=(char)is.read()), stops))
-            b.append(c);
-        is.pushback(c);
+	try {
+	    while (!in((c=(char)is.read()), stops))
+		b.append(c);
+	    is.pushback(c);
+	} catch (EOFException e) {
+	}
         return b.toString();
     }
 
