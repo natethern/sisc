@@ -418,30 +418,28 @@
             (set! first (meta-type first)))
         (if (java/class? first)
             (add-class first))))
-  ;;(applicable-methods-helper (generic-procedure-methods proc)
-  (let* ([methods       (get-methods proc)]
-         [cache         (vector-ref methods 0)]
-         [max-arity     (vector-ref methods 1)]
-         [meths         (cdr (vector-ref methods 2))])
-    (if (not cache)
-        (begin
-          (set! cache (make-hashtable equal?))
-          (vector-set! methods 0 cache)
-          (set! max-arity
-            (apply max 0 (map method-arity meths)))
-          (if (any method-rest? meths)
-              (set! max-arity (+ max-arity 1)))
-          (vector-set! methods 1 max-arity)
-          ))
-    (set! otypes (take otypes max-arity))
-    (let ([res (cache otypes)])
-      (if res
-          (values (car res) (cdr res))
-          (call-with-values
-              (lambda () (applicable-methods-helper meths otypes))
-            (lambda (applicable ambiguous)
-              (cache otypes (cons applicable ambiguous))
-              (values applicable ambiguous)))))))
+  (let ([methods       (get-methods proc)])
+    (let ([cache       (vector-ref methods 0)]
+          [max-arity   (vector-ref methods 1)]
+          [meths       (cdr (vector-ref methods 2))])
+      (if (not cache)
+          (begin
+            (set! cache (make-hashtable equal?))
+            (vector-set! methods 0 cache)
+            (set! max-arity
+              (apply max 0 (map method-arity meths)))
+            (if (any method-rest? meths)
+                (set! max-arity (+ max-arity 1)))
+            (vector-set! methods 1 max-arity)))
+      (set! otypes (take otypes max-arity))
+      (let ([res (cache otypes)])
+        (if res
+            (values (car res) (cdr res))
+            (call-with-values
+                (lambda () (applicable-methods-helper meths otypes))
+              (lambda (applicable ambiguous)
+                (cache otypes (cons applicable ambiguous))
+                (values applicable ambiguous))))))))
 (define (applicable-methods-helper methods otypes)
   (define (insert applicable ambiguous m)
     (if (null? applicable)
