@@ -6,6 +6,8 @@
 
 	* Fixed a bug in reading elements that shouldn't support escaping.
 
+2002-10-18 Released SISC 1.6.1-beta
+
 2002-10-18  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Modified open-library to support arbitrary URLs.
