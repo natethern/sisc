@@ -318,87 +318,6 @@
               (null? x)))
         (null? x))))
 
-;; Credits to Al Petrofsky for the following code, modified to support
-;; boxes
-
-;; Return #t if the object has any circularities (that is, if ordinary
-;; printing of the object would not terminate).
-;; Uses O(n) time.
-(define (circular? obj)
-  (define (pv? x)
-    (or (pair? x) 
-        (box? x)
-        (and (vector? x) (not (zero? (vector-length x))))))
-  (define (pv-length x)
-    (cond [(pair? x) 2]
-          [(box? x) 1]
-          [else (vector-length x)]))
-  (define (pv-ref x n)
-    (cond [(vector? x) (vector-ref x n)]
-          [(box? x) (unbox x)]
-;          [(pair? (cdr x)) ((if (zero? n) car cadr) x)]
-          [else ((if (zero? n) car cdr) x)]))
-  ;; A path is either #f, or an odd-length list in which each even
-  ;; element is a pair or vector somewhere in the object, and each odd
-  ;; element is the index, in the following element, of the preceeding
-  ;; element.  Next returns the path of the next pair or vector in a
-  ;; depth-first right-to-left traversal.  If obj is ((a) b . #(c d
-  ;; (e))), then the starting path and the successive values returned by
-  ;; next are as follows:
-  ;;
-  ;;                                         (((a) b . #(c d (e))))
-  ;;                      ((b . #(c d (e))) 1 ((a) b . #(c d (e))))
-  ;;         (#(c d (e)) 1 (b . #(c d (e))) 1 ((a) b . #(c d (e))))
-  ;;   ((e) 2 #(c d (e)) 1 (b . #(c d (e))) 1 ((a) b . #(c d (e))))
-  ;;                                   ((a) 0 ((a) b . #(c d (e))))
-  ;;                                                             #f
-  (define (next path)
-    (let ((head (car path)))
-      (let scan ((head head) (i (- (pv-length head) 1)) (path path))
-        (if (>= i 0)
-            (let ((new-head (pv-ref head i)))
-              (if (pv? new-head)
-                  (cons new-head (cons i path))
-                  (scan head (- i 1) path)))
-            (let ((path (cdr path)))
-              (and (pair? path)
-                   (let ((i (car path)) (path (cdr path)))
-                     (scan (car path) (- i 1) path))))))))
-  ;; Race advances the tortoise and hare paths, with hare running twice
-  ;; as fast as tortoise.  If the hare catches the tortoise, we must
-  ;; determine whether we have found a circularity or just a shared
-  ;; substructure.  To do this, we backtrack to the point where the hare
-  ;; stepped into the tortoise's footprints.  We then send a single
-  ;; runner down this subtree, comparing each node to the top of the
-  ;; subtree.  If something wraps around to the top, then we have found
-  ;; a cycle.  If the traversal completes, then the subtree is
-  ;; cycle-free, so we step hare and tortoise past it and continue.  We
-  ;; know the traversal won't get stuck in a subcycle, because if there
-  ;; were one, then hare would never have managed to get back to the
-  ;; top.
-  (define (race tortoise hare)
-    (define (advance tortoise hare)
-      (let ((hare (next hare)))
-        (and hare
-             (race (next tortoise) (next hare)))))
-    (and hare
-         (if (not (eq? (car hare) (car tortoise)))
-             (advance tortoise hare)
-             (let unroll ((tortoise tortoise) (hare hare))
-               (or (null? (cdr tortoise))
-                   (if (and (= (cadr tortoise) (cadr hare))
-                            (eq? (caddr tortoise) (caddr hare)))
-                       (unroll (cddr tortoise) (cddr hare))
-                       (let ((top (car tortoise)))
-                         (let check ((path (next (list top))))
-                           (if path
-                               (or (eq? (car path) top)
-                                   (check (next path)))
-                               (advance tortoise hare))))))))))
-  (and (pv? obj)
-       (let ((start (list obj)))
-         (race start (next start)))))
-
 (define list? proper-list?)
 
 ;  (letrec [(list-h? 
@@ -687,39 +606,6 @@
 	(fill-string str newstr 0 start end)
 	newstr))))
 
-(define format
-  (lambda (format-string . objects)
-    (let ((buffer (open-output-string)))
-      (let loop ((format-list (string->list format-string))
-                 (objects objects))
-        (cond ((null? format-list) (get-output-string buffer))
-              ((char=? (car format-list) #\~)
-               (if (null? (cdr format-list))
-                   (error 'format "Incomplete escape sequence")
-                   (case (cadr format-list)
-                     ((#\a)
-                      (if (null? objects)
-                          (error 'format "No value for escape sequence")
-                          (begin
-                            (display (car objects) buffer)
-                            (loop (cddr format-list) (cdr objects)))))
-                          ((#\s)
-                      (if (null? objects)
-                          (error 'format "No value for escape sequence")
-                          (begin
-                            (write (car objects) buffer)
-                            (loop (cddr format-list) (cdr objects)))))
-                     ((#\%)
-                      (display #\newline buffer)
-                      (loop (cddr format-list) objects))
-                     ((#\~)
-                      (display #\~ buffer)
-                      (loop (cddr format-list) objects))
-                     (else
-                      (error 'format "Unrecognized escape sequence")))))
-              (else (display (car format-list) buffer)                        
-                    (loop (cdr format-list) objects)))))))
-    
 ;;;;;;;;;;;;; Miscellaneous
 
 (define (list-ref list n)
