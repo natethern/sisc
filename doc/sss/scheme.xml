@@ -1140,7 +1140,7 @@
 (with-failure-continuation
   (lambda (m e)
     (throw (make-nested-error 
-            (make-error 'foo "could not call bar.")) m))
+            (make-error 'foo "could not call bar.") m)))
   (lambda ()
     (error 'bar "something went wrong.")))
 ;=> Error in nested call from foo: could not call bar.
