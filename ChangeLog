@@ -1,3 +1,7 @@
+2003-10-08  Scott G. Miller  <scgmille@freenetproject.org>
+
+    * Fixed a space leak in ThreadContext/Context.
+      
 2003-10-06	Scott G. Miller  <scgmille@freenetproject.org>
    
     * Partially fixed a bug where delay couldn't resolve make-promise
