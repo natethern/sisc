@@ -79,7 +79,11 @@ public abstract class Util implements Version {
         SISC_SPECIFIC=Symbol.get("*sisc-specific*"),
         OTHER=Symbol.get("other"),
         MESSAGE=Symbol.get("message"),
-        LOCATION=Symbol.get("location");
+        LOCATION=Symbol.get("location"),
+        ERRORK=Symbol.get("error-continuation"),
+        FCONT=Symbol.get("failure-continuation"),
+        PARENT=Symbol.get("parent");
+    
 
     public static final int DEFAULT_SYNOPSIS_LENGTH=30;
 
@@ -107,6 +111,18 @@ public abstract class Util implements Version {
 	b.append(liMessage(SISCB, messageClass, arg));
 	b.append(')');
 	return b.toString();
+    }
+
+    public static void error(Interpreter r, Value where, 
+                             NestedPrimRuntimeException parent) 
+        throws ContinuationException {
+        SchemeException rootCauseException=parent.getRootCause();
+        Pair rootCause=list(new Pair(MESSAGE, rootCauseException.m),
+                            new Pair(ERRORK, rootCauseException.e),
+                            new Pair(FCONT, rootCauseException.f));
+
+        error(r, list(new Pair(LOCATION, where),
+                      new Pair(PARENT, rootCause)));
     }
 
     public static void error(Interpreter r, Value where, String errormessage)

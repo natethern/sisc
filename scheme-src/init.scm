@@ -646,27 +646,38 @@
 	newstr))))
 
 (define format
-  (letrec ([make-format
-	    (lambda (f-l objects sb)
-	      (cond [(null? f-l) (get-output-string sb)]
-		    [(eq? (car f-l) #\~)
-		     (begin
-		       (case (cadr f-l)
-			 ((#\s) (write (car objects) sb))
-			 ((#\a) (display (car objects) sb))
-			 ((#\%) (display #\newline sb))
-			 ((#\~) (display #\~ sb)))
-		       (make-format (cddr f-l) (if (not (null? objects))
-						   (cdr objects) ())
-				    sb))]
-		    [else (begin
-			    (display (car f-l) sb)
-			    (make-format (cdr f-l) objects sb))]))])
-    (lambda (format-string . objects)
-      (make-format (string->list format-string) 
-		   objects (open-output-string)))))
-
-
+  (lambda (format-string . objects)
+    (let ((buffer (open-output-string)))
+      (let loop ((format-list (string->list format-string))
+                 (objects objects))
+        (cond ((null? format-list) (get-output-string buffer))
+              ((char=? (car format-list) #\~)
+               (if (null? (cdr format-list))
+                   (error 'format "Incomplete escape sequence")
+                   (case (cadr format-list)
+                     ((#\a)
+                      (if (null? objects)
+                          (error 'format "No value for escape sequence")
+                          (begin
+                            (display (car objects) buffer)
+                            (loop (cddr format-list) (cdr objects)))))
+                          ((#\s)
+                      (if (null? objects)
+                          (error 'format "No value for escape sequence")
+                          (begin
+                            (write (car objects) buffer)
+                            (loop (cddr format-list) (cdr objects)))))
+                     ((#\%)
+                      (display #\newline buffer)
+                      (loop (cddr format-list) objects))
+                     ((#\~)
+                      (display #\~ buffer)
+                      (loop (cddr format-list) objects))
+                     (else
+                      (error 'format "Unrecognized escape sequence")))))
+              (else (display (car format-list) buffer)                        
+                    (loop (cdr format-list) objects)))))))
+    
 ;;;;;;;;;;;;;; Runtime system
 
 ;;we try to accomodate syntax-case's way of reporting errors.

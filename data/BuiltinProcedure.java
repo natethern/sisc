@@ -39,6 +39,13 @@ import java.io.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
+/**
+ * A Builtin procedure is a Scheme procedure whose behavior when
+ * applied is implemented in a host-language Module.  A Builtin procedure
+ * contains a host module, and an integer identifying a specific
+ * set of behavior in the host module (ie the implementation for one
+ * procedure).  
+ */
 public class BuiltinProcedure extends Procedure {
     public int id;
     public Module host;
@@ -68,7 +75,7 @@ public class BuiltinProcedure extends Procedure {
             error(r, name, liMessage(SISCB,"gotunexpectedvalue",
 				     cc.getMessage()));
 	} catch (NestedPrimRuntimeException npr) {
-	    error(r, name, npr.getMessage() + "\n  " + npr.getRootCause().getMessage());
+	    error(r, name, npr);
         } catch (RuntimeException re) {
             error(r, name, re.getMessage());
         } 

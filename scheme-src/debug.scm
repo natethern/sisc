@@ -57,6 +57,10 @@
     ((trace-lambda name (formal ...) body ...)
      (lambda (formal ...)
        (trace-call (lambda () (list 'name formal ...))
+                   (lambda () (begin body ...)))))
+    ((trace-lambda name formal body ...)
+     (lambda formal
+       (trace-call (lambda () (list 'name formal))
                    (lambda () (begin body ...)))))))
 
 (define-syntax trace-let
@@ -138,8 +142,9 @@
                            x)
                      (cdr keys)))))])
     (lambda (e)
-      (let* ([k (cdr (assoc 'cont e))]
-             [m (cdr (assoc 'value e))]
+      (let* ([k (cdr (assoc 'error-continuation e))]
+             [m (cond [(assoc 'message e) => cdr] [else #f])]
+             [p (cond [(assoc 'parent e) => cdr] [else #f])]
              [st #f]
              [annots #f])
         (call-with-values 
@@ -173,11 +178,16 @@
                       [column (cdr (assoc 'column-number data))]
                       [sourcefile (cdr (assoc 'source-file data))])
                       (display 
-                       (format "~a:~a:~a:~a:~a: ~a~%" 
+                       (format "~a:~a:~a: ~a~%" 
                                sourcefile
                                line column
-                               line column
-                               m))))
+                               (make-error-message 
+                                (cond [(and (pair? m) (assoc 'location m)) 
+                                       => cdr] 
+                                      [else #f])
+                                (cond [(and (pair? m) (assoc 'message m)) 
+                                       => cdr]
+                                      [else "{no error message}"]))))))
               (for-each
                (lambda (data expr)
                  (if data
@@ -187,17 +197,18 @@
                        (if (and (_fill-rib? expr)
                                 (_free-reference-exp? (_fill-rib-exp expr)))
                            (display 
-                            (format "~a:~a:~a:~a:~a: <called from ~a>~%" 
+                            (format "~a:~a:~a: <called from ~a>~%" 
                                     sourcefile
-                                    line column
                                     line column
                                     (_free-reference-symbol
                                      (_fill-rib-exp expr))))
                            (display 
-                            (format "~a:~a:~a:~a:~a: <indeterminate call>~%" 
+                            (format "~a:~a:~a: <indeterminate call>~%" 
                                     sourcefile
-                                    line column
                                     line column))))))
                (cdr annots) (cdr st)))
-              (display (format "{No stack trace available.}~%")))))))
+              (display (format "{No stack trace available.}~%")))
+        (if p 
+            (begin (display (format "~%While calling:~%~%"))
+                   (stack-trace p)))))))
 

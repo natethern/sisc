@@ -33,29 +33,52 @@
 ;; The SISC read-eval-print-loop
 
 (define current-exit-handler (parameterize void))
+(load "debug.scm")
+
+(define (make-error-message location message)
+  (if location
+      (format "Error in ~a: ~a" location message)
+      (format "Error: ~a" message)))
 
 (define current-default-error-handler
   (parameterize
-   (lambda (message error-cont failure-cont output-port)
-     (display 
-      (cond [(not (pair? message)) message]
-            [(assoc 'message message) => 
-             (lambda (mr)
-               (cond [(assoc 'location message) =>
-                      (lambda (lr)
-                        (format "Error in ~a: ~a" 
-                                (cdr lr) (cdr mr)))]
-                     [else 
-                       (format "Error: ~a"
-                               (cdr mr))]))]
-            [else message])
-      output-port)
-     (newline output-port)
-     (putprop 'last-error '*sisc* 
-              (cons `(cont . ,(error-continuation-k error-cont))
-                    (if (pair? message) 
-                        message 
-                        (list (cons 'message message))))))))
+   (letrec ((eh
+             (lambda (message error-cont failure-cont)
+               (cond [(not (pair? message)) message]
+                     [(assoc 'message message) => 
+                      (lambda (mr)
+                        (make-error-message 
+                         (cond [(assoc 'location message) => cdr] 
+                               [else #f])
+                         (cdr mr)))]
+                     [(assoc 'parent message) =>
+                      (lambda (p)
+                        (let ((p (cdr p)))
+                          (let ((m (assoc 'message p))
+                                (e (assoc 'error-continuation p))
+                                (c (assoc 'failure-continuation p)))
+                            (let ((submessage
+                                   (eh (and m (cdr m)) 
+                                       (and e (cdr e))
+                                       (and c (cdr c)))))
+                              (cond [(assoc 'location message) =>
+                                     (lambda (lr)
+                                        (format 
+                                         "Error in nested call from ~a:~% ~a"
+                                         (cdr lr) submessage))]
+                                    [else
+                                      (format "Error in nested call:~% ~a"
+                                              submessage)])))))]
+                     [else message]))))
+     (lambda (m e c o)
+       (display (eh m e c) o)
+       (newline o)
+       (putprop 'last-error '*sisc* 
+                (cons `(error-continuation . ,(error-continuation-k e))
+                      (if m 
+                          (cond [(pair? m) m]
+                                [else (list (cons 'message m))]) 
+                          '())))))))
 
 (define _exit-handler (parameterize))
 
