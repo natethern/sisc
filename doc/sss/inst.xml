@@ -212,7 +212,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                 Specifies a Java properties file that contains
                 application properties. Typically some of these
                 properties define defaults for <xref
-                linkend="config-parameters">configuration
+                linkend="config-parameters"> configuration
                 parameters</xref>. The file can be specified as a URL.
               </entry>
             </row>
@@ -280,7 +280,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
           	return code supporting step above was run, return
           	the most recent return code.  If no return code step
           	was performed, but a success/failure step was performed,
-          	return 1 if any failures occured, zero otherwise.
+          	return 1 if any failures occured, 0 otherwise.
           </para>
         </listitem>
       </orderedlist>
@@ -292,9 +292,11 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
         parameters. These fall into two categories:
         <simplelist>
           <member>
-            Static configuration parameters that can only be specified
-            at system startup and apply across all &SISC; applications
-            that use the same classloader.
+           <para>
+              Static configuration parameters that can only be specified
+              at system startup and apply across all &SISC; applications
+              that use the same classloader.
+           </para>
           </member>
           <member>
             Dynamic configuration parameters that can be altered on a

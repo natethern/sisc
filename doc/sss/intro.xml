@@ -208,6 +208,10 @@
       </ulink>.
     </para>
     <para>
+      Starting with &SISC; version 1.8.4, the HTML render of this
+      manual is included in full binary distributions of &SISC;.
+    </para>
+    <para>
       The DocBook sources are available from the same site, packaged in 
       the source distribution of &SISC;, and available from the project's CVS
       tree.  Details for accessing both are linked off the project site.
