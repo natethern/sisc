@@ -10,6 +10,11 @@
 
 ;;An SRFI-28 and SRFI-29 compliant version of format.  It requires
 ;;SRFI-23 for error reporting.
+(define <sisc.util.Util> (java-class "sisc.util.Util"))
+(define-generic get)
+(define-generic register-bundle)
+(define-generic get-string)
+
 (define format
   (lambda (format-string . objects)
     (let ((buffer (open-output-string)))
@@ -152,17 +157,26 @@
     (string->symbol bundle-name)))
 
 (define (localized-template package-name message-template-name)
-  (let loop ((bundle-specifier `(,package-name ,@(current-locale-specifier))))
-    (if (null? bundle-specifier)
-        #f
-        (let ((bundle-name (bundle-specifier->symbol bundle-specifier)))
-          (cond [(getprop bundle-name '*i18n*) =>
-                 (lambda (bundle)
-                   (let ((template (assq message-template-name bundle)))
-                     (if template (cdr template)
-                         (loop (rdc bundle-specifier)))))]
-                [else (loop (rdc bundle-specifier))])))))
-
+  (or (cond [(get-native-bundle package-name) =>
+             (lambda (bundle)
+                                        ;Native bundle
+               (->string 
+                (get-string bundle (->jstring message-template-name))))]
+            [else #f])
+      
+      (let loop ((bundle-specifier 
+                  `(,package-name ,@(current-locale-specifier))))
+        (if (null? bundle-specifier)
+            #f
+            (let ((bundle-name (bundle-specifier->symbol bundle-specifier)))
+              (cond [(getprop bundle-name '*i18n*) =>
+                     (lambda (bundle)
+                       (let ((template (assq message-template-name bundle)))
+                         (if template (cdr template)
+                             (loop (rdc bundle-specifier)))))]
+                    
+                    [else (loop (rdc bundle-specifier))]))))))
+  
 (define (declare-bundle! bundle-specifier association-list)
   (putprop (bundle-specifier->symbol bundle-specifier) 
            '*i18n* association-list))
@@ -170,5 +184,17 @@
 (define (store-bundle bundle-specifier)
   #f)
 
-(define (load-bundle! bundle-specifier)
+(define (load-bundle! bundle-specifier)  
   #f)
+
+(define (get-native-bundle package)
+  (with/fc 
+   (lambda (m e) #f)
+   (lambda ()
+     (let ([rb (get (<sisc.util.Util> 'bundles) package)])
+       (if (java-null? rb)
+           (begin
+             (register-bundle <sisc.util.Util> package)
+             (get (<sisc.util.Util> 'bundles) package))
+           rb)))))
+               
