@@ -1181,8 +1181,8 @@
 	<title>Return a new value</title>
 <programlisting>
 (with-failure-continuation
-  (lambda (error-record error-k)
-    'error)
+    (lambda (error-record error-k)
+      'error)
   (lambda ()
     (+ 1 (/ 1 0) 3)))
 ; => <emphasis>The symbol</emphasis> 'error
@@ -1192,9 +1192,9 @@
 	<title>Restart with a different value</title>
 	<programlisting>
 (with-failure-continuation
-   (lambda (error-record error-k)
-    (error-k 2))
-   (lambda ()
+    (lambda (error-record error-k)
+      (error-k 2))
+  (lambda ()
      (+ 1 (/ 1 0) 3)))
 ; => 6
 	</programlisting>
@@ -1203,13 +1203,45 @@
 	<title>Propagate the error</title>
 	<programlisting>
 (with-failure-continuation
-  (lambda (error-record error-k)
-    (rethrow error-record error-k))
+    (lambda (error-record error-k)
+      (throw error-record error-k))
   (lambda ()
     (+ 1 (/ 1 0) 3)))
 ; => <emphasis>A divide by zero error is raised</emphasis>
 	</programlisting>
       </example>
+      <example>
+	<title>Propogate a different error with the same error continuation</title>
+	<programlisting>
+(with-failure-continuation
+    (lambda (error-record error-k)
+      (throw (make-error '/ "could not perform the division.") error-k))
+  (lambda ()
+    (+ 1 (/ 1 0) 3)))
+; => <emphasis>An error is raised: Error in /: could not perform the division.</emphasis>
+	</programlisting>
+      </example>
+      <example>
+	<title>Raise a new error</title>
+	<programlisting>
+(with-failure-continuation
+    (lambda (error-record error-k)
+      (error 'example-function "could not evaluate the expression.")
+  (lambda ()
+    (+ 1 (/ 1 0) 3)))
+; => <emphasis>An error is raised: Error in example-function: could not evaluate the expression.</emphasis>
+	</programlisting>
+      </example>
+      <para>
+        Note that the difference between the last and next-to-last
+        example is that in the next-to-last example, the computation
+        can still be restarted from the second argument of the
+        addition if an outside handler catches the newly raised
+        exception and applies the continuation.  This is not true in
+        the last example, as its a new error whose continuation is the
+        same as the <function>with-failure-continuation</function>
+        expression.
+      </para>
     </sect2>
   </sect1>
   <sect1>
