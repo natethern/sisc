@@ -5,6 +5,8 @@ import java.lang.ref.*;
 import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
+import sisc.io.ValueWriter;
+import sisc.util.ExpressionVisitor;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.LexicalEnvironment;
@@ -72,7 +74,20 @@ public class CallFrame extends Procedure {
     protected CallFrame clone(Interpreter r) {
         return new CallFrame(nxp, vlr, vlk, env, fk, parent);
     }
-            
+
+    public void display(ValueWriter w) throws IOException {    
+        displayNamedOpaque(w, "continuation"); 
+    }
+
+    public boolean visit(ExpressionVisitor v) {
+        if (vlr!=null)
+            for (int i=0; i<vlr.length; i++) {  
+                if (!v.visit(vlr[i])) return false; 
+            }      
+        return v.visit(nxp) && v.visit(fk) && v
+            .visit(parent) && v.visit(env); 
+    }
+
     public void apply(Interpreter r) throws ContinuationException {
         if (r.vlr.length==1) 
             r.acc=r.vlr[0];
