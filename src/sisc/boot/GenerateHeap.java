@@ -68,10 +68,8 @@ public class GenerateHeap {
         "floor", "for-each", "force", "gcd", "imag-part", "inexact->exact",
         "inexact?", "input-port?", "integer->char", "integer?",
         "interaction-environment", "lcm", "length", "list", "list->string",
-        "list->vector", "list-ref", "list-tail", "list?", "load", "log",
-        //Yes, I know, shouldn't be here, but delay/force break without it
-        "make-promise",
-        "magnitude", "make-polar", "make-rectangular", "make-string",
+        "list->vector", "list-ref", "list-tail", "list?", "load", "log",        
+		"magnitude", "make-polar", "make-rectangular", "make-string",
         "make-vector", "map", "max", "member", "memq", "memv", "min", "modulo",
         "negative?", "newline", "not", "null-environment", "null?",
         "number->string", "number?", "numerator", "odd?", "open-input-file",
@@ -88,7 +86,11 @@ public class GenerateHeap {
         "vector->list", "vector-fill!", "vector-length", "vector-ref",
         "vector-set!", "vector?", 
         "with-input-from-file", "with-output-to-file",
-        "write", "write-char", "zero?"
+        "write", "write-char", "zero?",
+
+		//Yes, I know, these shouldn't be here, but we have problems without them
+		"make-promise", "$syntax-dispatch", "$sc-put-cte", "syntax-error"
+
         };
 
     static {
