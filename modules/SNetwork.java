@@ -72,7 +72,9 @@ public class SNetwork extends ModuleAdapter {
         }
 
         public String display() {
-            return "#<tcp listen socket>";
+            StringBuffer b=new StringBuffer("#<");
+            b.append(liMessage(SNETB, "tcplistensocket")).append('>');
+            return b.toString();
         }
 
         public void close() throws IOException {
@@ -89,7 +91,9 @@ public class SNetwork extends ModuleAdapter {
         }
 
         public String display() {
-            return "#<tcp socket>";
+            StringBuffer b=new StringBuffer("#<");
+            b.append(liMessage(SNETB, "tcpsocket")).append('>');
+            return b.toString();
         }
 
         public void close() throws IOException {
@@ -231,7 +235,9 @@ public class SNetwork extends ModuleAdapter {
 	}
 
         public String display() {
-            return "#<udp socket>";
+            StringBuffer b=new StringBuffer("#<");
+            b.append(liMessage(SNETB, "udpsocket")).append('>');
+            return b.toString();
         }
 
         public void close() throws IOException {
@@ -279,7 +285,9 @@ public class SNetwork extends ModuleAdapter {
         }
 
         public String display() {
-            return "#<multicast udp socket>";
+            StringBuffer b=new StringBuffer("#<");
+            b.append(liMessage(SNETB, "multicastudpsocket")).append('>');
+            return b.toString();
         }
 
         public void joinGroup(InetAddress group) throws IOException {

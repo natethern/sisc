@@ -84,7 +84,8 @@ public class REPL extends Thread {
         try {
             r.ctx.loadEnv(r, new SeekableDataInputStream(in));
         } catch (IOException e) {
-            System.err.println("\nError loading heap!");
+            System.err.println("\n"+Util.liMessage(Util.SISCB, 
+                                                   "errorloadingheap"));
             e.printStackTrace();
             return false;
         }

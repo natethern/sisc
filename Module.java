@@ -12,7 +12,7 @@ public abstract class Module extends NamedValue implements java.io.Serializable 
     public abstract float getModuleVersion();
 
     public String display() {
-	return displayNamedOpaque("native library");
+	return displayNamedOpaque(liMessage(SISCB, "nativelibrary"));
     }
 
     public abstract Value eval(int primid, Interpreter f)

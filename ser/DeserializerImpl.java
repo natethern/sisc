@@ -35,7 +35,7 @@ public abstract class DeserializerImpl extends Util implements Deserializer {
     }
 
     public Object readObject() throws IOException, ClassNotFoundException {
-        throw new IOException("cannot deserialize");
+        throw new IOException(liMessage(SISCB, "cannotdeserialize"));
     }
 
     public long skip(long n) throws IOException {

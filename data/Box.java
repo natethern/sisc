@@ -19,8 +19,11 @@ public class Box extends Value {
 
     public String display() {
         StringBuffer b=new StringBuffer();
-        b.append("#&").append((val instanceof Value ?
-                               ((Value)val).write() : "#<expression>"));
+        b.append("#&");
+        if (val instanceof Value) 
+            b.append(((Value)val).write());
+        else
+            b.append("#<").append(liMessage(SISCB, "expression")).append('>');
         return b.toString();
     }
 

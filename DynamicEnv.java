@@ -28,7 +28,7 @@ public class DynamicEnv extends Util implements Cloneable {
     }
 
     public DynamicEnv(InputStream in, OutputStream out) {
-        this(new SourceInputPort(new BufferedReader(new InputStreamReader(in)), "console"),
+        this(new SourceInputPort(new BufferedReader(new InputStreamReader(in)), liMessage(SISCB, "console")),
              new OutputPort(new PrintWriter(out), true));
     }
 

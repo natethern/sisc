@@ -58,7 +58,8 @@ public class SDebug extends ModuleAdapter {
         }
 
         public String display() {
-            return "#<expression "+e.express().write()+'>';
+            return "#<"+liMessage(SISCB, "expression")+' '+
+                e.express().write()+'>';
         }
     }
 

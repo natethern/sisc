@@ -10,6 +10,8 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
 public class SHashtable extends ModuleAdapter {
+    static Symbol SHASHB = Symbol.get("Hashtable");
+
     public String getModuleName() {
         return "SHashtable";
     }
@@ -79,7 +81,10 @@ public class SHashtable extends ModuleAdapter {
         }
 
         public String display() {
-            return "#<hashtable " + ht.size() + ">";
+            StringBuffer b=new StringBuffer("#<");
+            b.append(Util.liMessage(SHASHB, "hashtable")).append(' ');
+            b.append(ht.size()).append('>');
+            return b.toString();
         }
 
         public void apply(Interpreter r)

@@ -19,11 +19,11 @@ public class ImmutableVector extends SchemeVector {
     }
 
     public void set(int idx, Value v) {
-	throw new RuntimeException("vector is immutable");
+	throw new RuntimeException(liMessage(SISCB, "vectorisimmutable"));
     }
 
     public void fill(Value v) {
-	throw new RuntimeException("vector is immutable");
+	throw new RuntimeException(liMessage(SISCB, "vectorisimmutable"));
     }
 
     public boolean equals(Object o) {

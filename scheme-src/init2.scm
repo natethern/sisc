@@ -32,7 +32,7 @@
 ;;
 		 
 (current-evaluator eval)
-(emit-annotations #t)
+;(emit-annotations #t)
 
 ;;;;;;;;;;;;;;;; error handling ;;;;;;;;;;;;;;;
 

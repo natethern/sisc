@@ -25,7 +25,10 @@ public class ApplyValuesContEval extends Expression {
     }
 
     public String display() {
-        return "#<system continuation>";
+        StringBuffer sb=new StringBuffer("#<");
+        sb.append(liMessage(SISCB, "systemcontinuation"));
+        sb.append('>');
+        return sb.toString();
     }
 
     public Value express() {

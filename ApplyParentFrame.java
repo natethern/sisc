@@ -20,7 +20,7 @@ public class ApplyParentFrame extends Procedure {
     }
 
     public String display() {
-        return displayNamedOpaque("error continuation");
+        return displayNamedOpaque(liMessage(SISCB, "errorcontinuation"));
     }
 }
 

@@ -69,7 +69,10 @@ public class LexicalEnvironment extends Value {
     }
 
     public String display() {
-        return "#<environment>";
+        StringBuffer b=new StringBuffer("#<");
+        b.append(liMessage(SISCB, "environment"));
+        b.append('>');
+        return b.toString();
     }
 
     public void serialize(Serializer s) throws IOException {
