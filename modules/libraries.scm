@@ -1,4 +1,4 @@
-(define *libraries* (make-hashtable))
+(define *libraries* (make-hashtable eq?))
 
 (define (locate-library lib)
   (define (suffixed-lib ext)

@@ -12,21 +12,24 @@ public class Primitives extends ModuleAdapter {
 
     protected static final int 
         HT_MAKE_EQ              =1,
-        HT_MAKE_EQUAL           =2,
-        HTQ                     =3,
-        HT_PUT                  =4,
-        HT_GET                  =5,
-        HT_REMOVE               =6,
-        HT_CLEAR                =7,
-        HT_SIZE                 =8,
-        HT_TO_ALIST             =9,
-        ALIST_TO_HT_EQ          =10,
-        ALIST_TO_HT_EQUAL       =11,
-        HT_KEYS                 =12;
+        HT_MAKE_EQV             =2,
+        HT_MAKE_EQUAL           =3,
+        HTQ                     =4,
+        HT_PUT                  =5,
+        HT_GET                  =6,
+        HT_REMOVE               =7,
+        HT_CLEAR                =8,
+        HT_SIZE                 =9,
+        HT_TO_ALIST             =10,
+        ALIST_TO_HT_EQ          =11,
+        ALIST_TO_HT_EQV         =12,
+        ALIST_TO_HT_EQUAL       =13,
+        HT_KEYS                 =14;
 	
     public Primitives() {
 
         define("make-eq-hashtable"      ,HT_MAKE_EQ);
+        define("make-eqv-hashtable"     ,HT_MAKE_EQV);
         define("make-equal-hashtable"   ,HT_MAKE_EQUAL);
         define("hashtable?"             ,HTQ);
         define("hashtable/put!"         ,HT_PUT);
@@ -36,6 +39,7 @@ public class Primitives extends ModuleAdapter {
         define("hashtable/size"         ,HT_SIZE);
         define("hashtable->alist"       ,HT_TO_ALIST);
         define("alist->eq-hashtable"    ,ALIST_TO_HT_EQ);
+        define("alist->eqv-hashtable"   ,ALIST_TO_HT_EQV);
         define("alist->equal-hashtable" ,ALIST_TO_HT_EQUAL);
         define("hashtable/keys"         ,HT_KEYS);
     }
@@ -53,6 +57,8 @@ public class Primitives extends ModuleAdapter {
             switch (primid) {
             case HT_MAKE_EQ:
                 return new EqHashtable();
+            case HT_MAKE_EQV:
+                return new EqvHashtable();
             case HT_MAKE_EQUAL:
                 return new EqualHashtable();
             default:
@@ -66,6 +72,11 @@ public class Primitives extends ModuleAdapter {
                 return Quantity.valueOf(shash(f.vlr[0]).size());
             case ALIST_TO_HT_EQ: {
                 Hashtable res = new EqHashtable();
+                res.addAList(pair(f.vlr[0]));
+                return res;
+            }
+            case ALIST_TO_HT_EQV: {
+                Hashtable res = new EqvHashtable();
                 res.addAList(pair(f.vlr[0]));
                 return res;
             }

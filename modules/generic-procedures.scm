@@ -39,11 +39,11 @@
 ;;There is a special hack to make java.lang.Class a meta type
 (define (meta x) (cons 'meta x))
 (define (meta-type m)
-  (if (eq? m <java.lang.Class>)
+  (if (eqv? m <java.lang.Class>)
       <java.lang.Object>
       (cdr m)))
 (define (meta? x)
-  (or (eq? x <java.lang.Class>)
+  (or (eqv? x <java.lang.Class>)
       (and (pair? x) (eq? (car x) 'meta))))
 
 ;;special types
@@ -73,7 +73,7 @@
               (java/assignable? y x)))
         ((or (class? x) (class? y))
          (and (class? x) (class? y)
-              (memq y (class-precedence-list x))))
+              (memv y (class-precedence-list x))))
         (else #f)))
 
 (define (instance-of? x y)
@@ -103,7 +103,7 @@
   (or (java/object? o) (scheme-object? o)))
 
 (define (make-object class slots)
-  (let ([slots (alist->hashtable slots)])
+  (let ([slots (alist->hashtable slots eq?)])
     (define (res keys . rest)
       (if (pair? keys)
           (if (null? (cdr keys))
@@ -114,13 +114,13 @@
     res))
 (define (make-class superclasses slots)
   (let ([res (make-object <class> `((superclasses . ,superclasses)
-                                    (slots . ,(alist->hashtable slots))))])
+                                    (slots . ,(alist->hashtable slots eq?))))])
     (add-method-to-list
      (java-constructor-methods res)
      (make-method (object-initializer res) '() #t))
     res))
 (define (object-initializer class)
-  (let ([slots (make-hashtable)])
+  (let ([slots (make-hashtable eq?)])
     (for-each (lambda (c)
                 (if (scheme-class? c)
                     (hashtable/for-each slots (c 'slots))))
@@ -158,7 +158,7 @@
 ;;(http://www.googoogaga.org/), Dylan and others.
 ;;
 ;;Because computing the cpl is expensive we cache the results.
-(define *CLASS-PRECEDENCE-LISTS* (make-hashtable))
+(define *CLASS-PRECEDENCE-LISTS* (make-hashtable eqv?))
 (define (class-precedence-list class)
   (hashtable/get! *CLASS-PRECEDENCE-LISTS* class
                   (lambda () (compute-class-precedence-list class))))
@@ -169,7 +169,7 @@
         (reverse partial-cpl)
         (let* ([candidate
                 (lambda (c)
-                  (and (not (any (lambda (l) (memq c (cdr l)))
+                  (and (not (any (lambda (l) (memv c (cdr l)))
                                  remaining-lists))
                        c))]
                [next (any (lambda (l) (candidate (car l)))
@@ -177,7 +177,7 @@
           (if next
               (merge-lists
                (cons next partial-cpl)
-               (map (lambda (l) (if (eq? (car l) next) (cdr l) l))
+               (map (lambda (l) (if (eqv? (car l) next) (cdr l) l))
                     remaining-lists))
               (error "inconsistent class precedence graph for ~a"
                      class)))))
@@ -205,8 +205,8 @@
               (if (null? cpl)
                   'ambiguous;;shouldn't happen
                   (let ([p (car cpl)])
-                    (cond ((eq? p x) 'more-specific)
-                          ((eq? p y) 'less-specific)
+                    (cond ((eqv? p x) 'more-specific)
+                          ((eqv? p y) 'less-specific)
                           (else (loop (cdr cpl)))))))))))
 
 
@@ -301,14 +301,14 @@
 
 ;;we keep track of all the classes whose methods we have already
 ;;learned about
-(define *CLASSES* (make-hashtable))
+(define *CLASSES* (make-hashtable eqv?))
 ;;for each Java method name we maintain a method list which is shared
 ;;by all the generic procedures representing java methods of that name
-(define *JAVA-METHODS* (make-hashtable))
+(define *JAVA-METHODS* (make-hashtable eq?))
 (define (java-methods name)
   (hashtable/get! *JAVA-METHODS* name make-method-list))
 ;;Java constructors are stored in per-class method lists
-(define *JAVA-CONSTRUCTORS* (make-hashtable))
+(define *JAVA-CONSTRUCTORS* (make-hashtable eqv?))
 (define (java-constructor-methods class)
   (hashtable/get! *JAVA-CONSTRUCTORS* class make-method-list))
 
@@ -376,7 +376,7 @@
         (add-class (java/superclass class))
         (for-each add-class (vector->list (java/interfaces class)))
         (if (memq 'public (java/modifiers class))
-            (let ([methods (make-hashtable)])
+            (let ([methods (make-hashtable eqv?)])
               (add-java-constructors
                (java-constructor-methods class)
                (vector->list (java/decl-constructors class)))
@@ -510,7 +510,7 @@
   ;;A constructor procedure maintains a hashtable of
   ;;generic procedures, one for each class, that contain methods for
   ;;each of the constructors defined for that class
-  (set-procedure-property! proc 'generic-constructors (make-hashtable))
+  (set-procedure-property! proc 'generic-constructors (make-hashtable eqv?))
   (set-procedure-property! proc 'constructor-methods cproc)
   (if (not (null? rest))
       (set-procedure-property! proc 'next (car rest)))
@@ -588,6 +588,7 @@
                           '((superclasses)
                             (slots . ,(alist->hashtable
                                        `((superclasses)
-                                         (slots . ,(make-hashtable)))))))])
+                                         (slots . ,(make-hashtable eq?)))
+                                       eq?))))])
     (set-procedure-property! res 'class res)
     res))

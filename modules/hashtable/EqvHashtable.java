@@ -2,9 +2,9 @@ package sisc.modules.hashtable;
 
 import sisc.data.*;
 
-public class EqHashtable extends Hashtable {
+public class EqvHashtable extends Hashtable {
 
-    public EqHashtable() {
+    public EqvHashtable() {
         super();
     }
 
@@ -25,11 +25,11 @@ public class EqHashtable extends Hashtable {
         }
 
         public boolean equals(Object o) {
-            return (o instanceof Key) && (key == ((Key)o).value());
+            return (o instanceof Key) && key.eqv(((Key)o).value());
         }
 
         public int hashCode() {
-            return System.identityHashCode(key);
+            return key.hashCode();
         }
     }
 }
