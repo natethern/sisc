@@ -43,7 +43,10 @@
           (format "Error: ~a" message)
           "Error.")))
 
-(define current-optimizer (parameterize (lambda (x) x)))
+(define current-optimizer (parameterize (cond [(getprop 'opt:optimize
+                                                        '*toplevel*) =>
+                                                (lambda (x) x)]
+                                              [else (lambda (x) x)])))
 
 (define current-default-error-handler
   (parameterize

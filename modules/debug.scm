@@ -22,13 +22,18 @@
           (newline)
           (display "=>")
           (newline)
-          (let ([compiled (compile source)])
-            (pretty-print (express compiled))
+          (let ([optimized ((current-optimizer) source)])
+            (pretty-print optimized)
             (newline)
             (display "=>")
             (newline)
-            (compiled))))))))
-
+            (let ([compiled (compile optimized)])
+              (pretty-print (express compiled))
+              (newline)
+              (display "=>")
+              (newline)
+              (compiled)))))))))
+  
 (define trace-depth (parameterize -1))
 
 (define (indent n)
