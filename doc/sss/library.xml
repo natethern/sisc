@@ -157,7 +157,7 @@
     <para>
       Hash tables store mappings of keys to values. Hence they are
       similar to association lists, except that hash tables allow
-      retrieval, addition and modification in constant whereas
+      retrieval, addition and modification in constant time whereas
       association lists typically perform these operations in linear
       time based on the number of elements.
     </para>
@@ -190,6 +190,7 @@
           </methodsynopsis>
           <blockquote>
             <para>
+              Creates an empty hash table.
             </para>
           </blockquote>
         </para>
@@ -202,6 +203,8 @@
           </methodsynopsis>
           <blockquote>
             <para>
+              Returns &num;t if <parameter>obj</parameter> is a hash
+              table, &num;f otherwise.
             </para>
           </blockquote>
         </para>
@@ -214,6 +217,16 @@
           </methodsynopsis>
           <blockquote>
             <para>
+              Creates a hashtable and initializes it with the keys and
+              values found in
+              <parameter>alist</parameter>. <parameter>alist</parameter>
+              must be a list of pairs, with the <function>car</function>
+              of each pair representing a key and the
+              <function>cdr</function> representing its associated
+              value. If there are multiple pairs which contain the
+              same key (with respect to <function>eqv?</function>)
+              then the resulting hash table will associate the key
+              with the value of the last such pair.
             </para>
           </blockquote>
         </para>
@@ -226,6 +239,12 @@
           </methodsynopsis>
           <blockquote>
             <para>
+              Returns an association list comprising the elements of
+              <parameter>hashtable</parameter>. The list contains
+              pairs whose <function>car</function>s are they keys
+              found in <parameter>hashtable</parameter> and whose
+              <function>cdr</function>s contain the associated
+              values.
             </para>
           </blockquote>
         </para>
@@ -257,6 +276,13 @@
           </methodsynopsis>
           <blockquote>
             <para>
+              Associates <parameter>key</parameter> with
+              <parameter>val</parameter> in
+              <parameter>hashtable</parameter>. Returns the previous
+              association of <parameter>key</parameter> or
+              <parameter>nobinding</parameter>, which defaults to
+              &num;f, if <parameter>key</parameter> has no previous
+              association.
             </para>
           </blockquote>
         </para>
@@ -273,6 +299,12 @@
           </methodsynopsis>
           <blockquote>
             <para>
+              Returns the value associated with
+              <parameter>key</parameter> in
+              <parameter>hashtable</parameter>, or
+              <parameter>nobinding</parameter>, which defaults to
+              &num;f, if <parameter>key</parameter> has no
+              association.
             </para>
           </blockquote>
         </para>
@@ -284,12 +316,16 @@
             <methodparam><parameter>hashtable</parameter></methodparam>
             <methodparam><parameter>key</parameter></methodparam>
             <methodparam><parameter>thunk</parameter></methodparam>
-            <methodparam choice="opt">
-              <parameter>nobinding</parameter>
-            </methodparam>
           </methodsynopsis>
           <blockquote>
             <para>
+              Returns the value associated with
+              <parameter>key</parameter> in
+              <parameter>hashtable</parameter>. If
+              <parameter>key</parameter> has no association then
+              <parameter>thunk</parameter> is evaluated and the result
+              is associated with <parameter>key</parameter> in
+              <parameter>hashtable</parameter> and also returned.
             </para>
           </blockquote>
         </para>
@@ -307,6 +343,44 @@
           </methodsynopsis>
           <blockquote>
             <para>
+              Removes the association of <parameter>key</parameter> in
+              <parameter>hashtable</parameter>. Returns the associated
+              value of <parameter>key</parameter> or
+              <parameter>nobinding</parameter>, which defaults to
+              &num;f, if <parameter>key</parameter> has no
+              association.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+      <para>
+        Hash tables can be invoked as procedures. This provides
+        convenient short-cuts for the very common
+        <function>hashtable/get</function> and
+        <function>hashtable/put!</function> operations:
+      </para>
+      <blockquote>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>obj</type>
+            <methodname></methodname>
+            <methodparam><parameter>hashtable</parameter></methodparam>
+            <methodparam><parameter>key</parameter></methodparam>
+            <methodparam choice="opt">
+              <parameter>val</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              If <parameter>val</parameter> is present, then this is
+              equivalent to calling <literal>(hashtable/put!</literal>
+              <parameter>hashtable</parameter>
+              <parameter>key</parameter>
+              <parameter>value</parameter><literal>)</literal>,
+              otherwise <literal>(hashtable/get</literal>
+              <parameter>hashtable</parameter>
+              <parameter>key</parameter><literal>)</literal>.
             </para>
           </blockquote>
         </para>
@@ -328,6 +402,7 @@
           </methodsynopsis>
           <blockquote>
             <para>
+              Removes all elements from <parameter>hashtable</parameter>.
             </para>
           </blockquote>
         </para>
@@ -340,6 +415,7 @@
           </methodsynopsis>
           <blockquote>
             <para>
+              Returns the keys contained in <parameter>hashtable</parameter>.
             </para>
           </blockquote>
         </para>
@@ -353,6 +429,10 @@
           </methodsynopsis>
           <blockquote>
             <para>
+              Applies <parameter>thunk</parameter> to each element of
+              <parameter>hashtable</parameter>. <parameter>thunk</parameter>
+              is invoked with two parameters - the key and the value
+              of the element.
             </para>
           </blockquote>
         </para>
@@ -366,6 +446,11 @@
           </methodsynopsis>
           <blockquote>
             <para>
+              Applies <parameter>thunk</parameter> to each element of
+              <parameter>hashtable</parameter>. <parameter>thunk</parameter>
+              is invoked with two parameters - the key and the value
+              of the element. The results of evaluating
+              <parameter>thunk</parameter> are returned as a list.
             </para>
           </blockquote>
         </para>
@@ -382,5 +467,16 @@
 <!-- Keep this comment at the end of the file
 Local variables:
 sgml-parent-document:("sss.xml" "chapter")
+sgml-omittag:nil
+sgml-shorttag:nil
+sgml-namecase-general:nil
+sgml-general-insert-case:lower
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:2
+sgml-indent-data:t
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
 End:
 -->
