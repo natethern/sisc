@@ -14,7 +14,7 @@ public class MemoizedSymbol extends Symbol implements Singleton {
     public static Symbol intern(String str) {
         synchronized(memo) {
             WeakReference wr=(WeakReference)memo.get(str);
-            Symbol s=(wr == null ? null : wr.get());
+            Symbol s=(wr == null ? null : (Symbol)wr.get());
             if (s==null) {
                 s=new MemoizedSymbol(str);
                 memo.put(str, new WeakReference(s));
