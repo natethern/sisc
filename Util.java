@@ -386,7 +386,7 @@ public abstract class Util implements Conf {
 	    if (!bundleName.equals(SISCB))
 		return liMessage(SISCB, messageName);
 	    else
-		return "<localized message not found: "+messageName;
+		return "<localized message not found: "+messageName+">";
 	}
     }
 

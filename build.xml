@@ -126,7 +126,7 @@
       <arg value="-files"/>
       <arg value="${schemedir}/init.pp"/>
       <arg value="${schemedir}/compat.pp"/>
-      <arg value="${schemedir}/p.pp"/>
+      <arg value="${schemedir}/psyntax.pp"/>
       <arg value="${schemedir}/init2.scm"/>
       <arg value="${schemedir}/pp.scm"/>
       <arg value="${schemedir}/repl.scm"/>
