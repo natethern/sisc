@@ -36,8 +36,6 @@ import sisc.data.*;
 import sisc.compiler.*;
 import java.io.*;
 
-import java.util.WeakHashMap;
-
 public class DynamicEnv extends Util implements Cloneable {
 
     public InputPort in;
@@ -50,7 +48,7 @@ public class DynamicEnv extends Util implements Cloneable {
 
     //user-defined thread variables; this map is weak so that we don't
     //hang on to vars that are no longer in use.
-    public WeakHashMap parameters = new WeakHashMap();
+    public java.util.Map parameters = new java.util.WeakHashMap(0);
 
     public DynamicEnv() {
         this(System.in, System.out);
