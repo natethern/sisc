@@ -452,8 +452,11 @@
 ;Still draft
 (display "srfi-38 ")
 (module srfi-38
-  (read-with-shared-structure write-with-shared-structure)
+  (read-with-shared-structure write-with-shared-structure
+                              read/ss write/ss)
   (include "srfi-38.scm")
+  (define read/ss read-with-shared-structure)
+  (define write/ss write-with-shared-structure)
   (add-feature 'srfi-38))
 
 (newline)
