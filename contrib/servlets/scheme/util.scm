@@ -17,7 +17,7 @@
 (define (get-k-data session)
   (let ([k-data (get-attribute session (->jstring "kData"))])
     (if (java-null? k-data)
-        (let ([k-data (cons 0 (make-hashtable))])
+        (let ([k-data (cons 0 (make-hashtable eq?))])
           (set-attribute session
                          (->jstring "kData")
                          (java-wrap k-data))

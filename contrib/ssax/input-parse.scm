@@ -183,7 +183,7 @@
 (define-opt (assert-curr-char expected-chars comment
 			      (optional (port (current-input-port))))
   (let ((c (read-char port)))
-    (if (memq c expected-chars) c
+    (if (memv c expected-chars) c
     (parser-error port "Wrong character " c
     	   " (0x" (if (eof-object? c) "*eof*"
     	   	    (number->string (char->ascii c) 16)) ") "
@@ -285,7 +285,7 @@
 	 (curr-buf-len (string-length buffer)) (quantum 16))
     (let loop ((i 0) (c (skip-while prefix-skipped-chars port)))
       (cond
-        ((memq c break-chars) (substring buffer 0 i))
+        ((memv c break-chars) (substring buffer 0 i))
     	((eof-object? c)
     	  (if (memq '*eof* break-chars)
     	    (substring buffer 0 i)		; was EOF expected?
@@ -317,12 +317,12 @@
         (if (memq '*eof* break-chars) ""
           (parser-error port "EOF while skipping before reading token "
 		       comment)))
-      ((memq first-char break-chars) "")
+      ((memv first-char break-chars) "")
       (else
         (read-char port)		; consume the first-char
         (let loop ((tail accum-chars) (c (peek-char port)))
           (cond
-            ((memq c break-chars) (list->string accum-chars))
+            ((memv c break-chars) (list->string accum-chars))
             ((eof-object? c)
               (if (memq '*eof* break-chars)
                 (list->string accum-chars)		; was EOF expected?
@@ -390,7 +390,7 @@
 			; incl-list/pred is a list of allowed characters
     (let loop ((i 0) (c (peek-char port)))
       (cond
-        ((not (memq c incl-list/pred)) (substring buffer 0 i))
+        ((not (memv c incl-list/pred)) (substring buffer 0 i))
     	(else
     	  (if (>= i curr-buf-len)	; make space for i-th char in buffer
     	    (begin			; -> grow the buffer by the quantum

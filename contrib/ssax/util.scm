@@ -367,7 +367,7 @@
       (cond
         ((>= i (string-length str))
           (cons (substring str from i) '()))
-        ((memq (string-ref str i) delimeters)
+        ((memv (string-ref str i) delimeters)
           (cons (substring str from i) 
             (scan-beg-word (+ 1 i) (- yet-to-split-count 1))))
         (else (scan-word (+ 1 i) from yet-to-split-count))))

@@ -47,8 +47,8 @@
                [substridx 0])
       (cond [(= substridx substrlen) (- sidx substrlen)]
             [(= sidx strlen) #f]
-            [(eq? (string-ref str sidx)
-                  (string-ref substr substridx))
+            [(eqv? (string-ref str sidx)
+                   (string-ref substr substridx))
              (loop (+ sidx 1) (+ substridx 1))]
             [else (loop (+ sidx 1) 0)]))))
 
@@ -56,7 +56,7 @@
   (if (null? word) 
       '()
       (let ((c (char-downcase (car word))))
-        (if (memq c charset)
+        (if (memv c charset)
             (cons c (clean (cdr word) charset))
             (clean (cdr word) charset)))))
 
@@ -68,7 +68,7 @@
                              (list (string->symbol  
                                     (list->string (clean (reverse acc) somewhat-clean)))))
                         '())]
-        [(memq (car ls) '(#\newline #\tab #\space))
+        [(memv (car ls) '(#\newline #\tab #\space))
          (if (not (null? acc))
              (cons (string->symbol
                     (list->string (clean (reverse acc) somewhat-clean)))
@@ -140,7 +140,7 @@
     (cond [(or (= x (string-length message))
                (> x (+ bot-name-length 1)))
            message]
-          [(eq? (string-ref message x) #\:)
+          [(eqv? (string-ref message x) #\:)
            (substring message (+ x 1) (string-length message))]
           [else (loop (+ x 1))])))
 
@@ -187,7 +187,7 @@
   (let-values ([(ignoreables term) (string-split message " is ")])
     (and term 
          (begin 
-           (if (eq? #\? (string-ref term (- (string-length term) 1)))
+           (if (eqv? #\? (string-ref term (- (string-length term) 1)))
                (set! term (substring term 
                                      0 (- (string-length term) 1))))
            (and-let* ([results (lookup-item dbcon type term)])
@@ -374,7 +374,7 @@
   (let-values ([(ignoreables person) (string-split message "seen ")])
     (and person 
          (begin 
-           (if (eq? #\? (string-ref person (- (string-length person) 1)))
+           (if (eqv? #\? (string-ref person (- (string-length person) 1)))
                (set! person (substring person 
                                      0 (- (string-length person) 1))))
            (let-values ([(seen message) (lookup-seen dbcon (soundex person))])
