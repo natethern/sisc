@@ -198,24 +198,41 @@
       (normalize-url (current-url) ".")
       (current-url (normalize-url (current-url) (car rest)))))
 
-(let ([normalize (lambda (proc)
-                   (lambda (file . rest)
-                     (apply proc (normalize-url (current-url) file) rest)))])
+;Will be redefined later
+(define load-expanded load)
+
+(let ([_load load])
+  (let ([normalize (lambda (proc)
+                     (lambda (file . rest)
+                       (apply proc (normalize-url (current-url) file) rest)))]
+        [file-handler (lambda (extension)
+                        (case extension
+                          ((sce pp) load-expanded)
+                          (else _load)))]
+        [file-extension (lambda (url)
+                          (let loop ((x (reverse (string->list url)))
+                                     (acc '()))
+                            (cond [(null? x) #f]
+                                  [(equal? (car x) #\.)
+                                   (list->string acc)]
+                                  [else (loop (cdr x) (cons (car x) acc))])))])
   (set! open-input-file (normalize open-input-file))
   (set! open-source-input-file (normalize open-source-input-file))
   (set! open-output-file (normalize open-output-file))
   (set! load
-        (let ((_load load))
-          (lambda (file)
-            (let ([previous-url (current-url)])
-              (current-url (normalize-url previous-url file))
-              (call-with-failure-continuation
-               (lambda () (_load (current-url)))
-               (lambda (m e c)
-                 (current-url previous-url)
-                 (c m e)))
-              (current-url previous-url))
-            (void)))))
+    (lambda (file)
+      (let ([previous-url (current-url)])
+        (current-url (normalize-url previous-url file))
+        (call-with-failure-continuation
+            (lambda () 
+              ((file-handler (string->symbol
+                              (file-extension (current-url))))
+               (current-url)))
+          (lambda (m e c)
+            (current-url previous-url)
+            (c m e)))
+        (current-url previous-url))
+      (void)))))
 
 (define (load-module str)
   (let* ([nl (load-native-library str)]

@@ -34,6 +34,14 @@
 (current-evaluator eval)
 ;(emit-annotations #t)
 
+;Loads an already expanded file (ie does not run it through the expander)
+(define (load-expanded file)
+  (call-with-input-file file
+    (lambda (port) 
+      (do ((x (read port) (read port)))
+          ((eof-object? x) (void))
+        (eval (list "noexpand" x))))))
+
 (define (parameterize . args)
   (let ([initial-value (if (null? args) #f (car args))]
         [constraint? (if (or (null? args) (null? (cdr args)))

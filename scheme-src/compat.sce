@@ -115,7 +115,7 @@
 (define eval 
   ((lambda (old-eval)
      (lambda (x . env)
-       (if (if (pair? x) (eq? (car x) "noexpand") #f)
+       (if (if (pair? x) (equal? (car x) "noexpand") #f)
            (apply old-eval (cons (cadr x) env))
            ((lambda (e) (apply old-eval (cons e env)))
             (sc-expand x)))))
