@@ -293,6 +293,8 @@
       (close-output-port outp)
       (max-precision precision))))
 
+;; I/O ;;
+
 (define (call-with-input-file file proc)
   (let* ([port (open-input-file file)]
          [result (proc port)])
@@ -305,23 +307,48 @@
     (close-output-port port)
     result))
 
+(define (with-input-from-port port thunk)
+  (let ([cip (current-input-port)])
+    (dynamic-wind
+     (lambda () (current-input-port port))
+     thunk
+     (lambda () (current-input-port cip)))))
+
+(define (with-output-to-port port thunk)
+  (let ([cop (current-output-port)])
+    (dynamic-wind
+     (lambda () (current-output-port port))
+     thunk
+     (lambda () (current-output-port cop)))))
+
 (define (with-input-from-file file thunk)
   (call-with-input-file file
-    (lambda (port)
-      (let ([cip (current-input-port)])
-        (dynamic-wind
-         (lambda () (current-input-port port))
-         thunk
-         (lambda () (current-input-port cip)))))))
+    (lambda (port) (with-input-form-port port thunk))))
 
-(define (with-output-to-file str thunk)
+(define (with-output-to-file file thunk)
   (call-with-output-file file
-    (lambda (port)
-      (let ([cop (current-output-port)])
-        (dynamic-wind
-         (lambda () (current-output-port port))
-         thunk
-         (lambda () (current-output-port cop)))))))
+    (lambda (port) (with-output-to-port port thunk))))
+
+(define (call-with-input-string str proc)
+  (let* ([port (open-input-string s)]
+         [result (proc port)])
+    (close-input-port port)
+    result))
+
+(define (call-with-output-string proc)
+  (let ([outsp (open-output-string)])
+    (proc outsp)
+    (let ([s (get-output-string outsp)])
+      (close-output-port outsp)
+      s)))
+
+(define (with-input-from-string str thunk)
+  (call-with-input-string str
+    (lambda (port) (with-input-from-port port thunk))))
+
+(define (with-output-to-string thunk)
+  (call-with-output-string
+    (lambda (port) (with-output-to-port port thunk))))
 
 ;;;;;;;;;;;;; legacy macro support ;;;;;;;;;;;;
 

@@ -225,24 +225,6 @@
 ;unsupported in sisc
 (define force-output void)
 
-;; CALL-WITH-INPUT-STRING and CALL-WITH-OUTPUT-STRING are the string
-;; port versions of CALL-WITH-INPUT-FILE and CALL-WITH-OUTPUT-FILE.
-
-(define call-with-output-string
-  (lambda (f)
-    (let ((outsp (open-output-string)))
-      (f outsp)
-      (let ((s (get-output-string outsp)))
-        (close-output-port outsp)
-        s))))
-
-(define call-with-input-string
-  (lambda (s f)
-    (let* ((insp (open-input-string s))
-           (res (f insp)))
-      (close-input-port insp)
-      res)))
-
 ;; CHAR-CODE-LIMIT is the number of characters in the character set; only
 ;; non-negative integers less than CHAR-CODE-LIMIT are eligible as
 ;; arguments to INTEGER->CHAR.

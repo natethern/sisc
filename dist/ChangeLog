@@ -3,6 +3,11 @@
 	* Gave all file-based operations the ability to access data via a
 	  URL.
 
+	* Added string I/O functions to core
+
+	* Rationalized behaviour of I/O functions when capturing/invoking
+	  continuations
+
 2002-04-21  Scott G. Miller  <scgmille@freenetproject.org>
 	
 	* Implemented a three level (empty->sisc-bindings->r5rs) chained
