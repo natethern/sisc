@@ -98,7 +98,7 @@
 (define-java-class <java.util.array-list**>)
 (java-class-precedence-list <java.util.array-list**>)
 ;;=>
-;#(#<java java.lang.Class java.util.ArrayList[][]>
+#|(#<java java.lang.Class java.util.ArrayList[][]>
    #<java java.lang.Class java.util.AbstractList[][]>
    #<java java.lang.Class java.util.AbstractCollection[][]>
    #<java java.lang.Class java.util.List[][]>
@@ -112,7 +112,7 @@
    #<java java.lang.Class java.lang.Cloneable[]>
    #<java java.lang.Class java.lang.Object>
    #<java java.lang.Class java.io.Serializable>
-   #<java java.lang.Class java.lang.Cloneable>)
+   #<java java.lang.Class java.lang.Cloneable>)|#
 
 ;;wrapping and unwrapping of Scheme objects
 (define a (java-array-new <java.lang.object> '#(1)))
