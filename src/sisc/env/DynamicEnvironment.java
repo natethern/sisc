@@ -67,7 +67,6 @@ public class DynamicEnvironment extends Util implements Cloneable {
         this.out = out;
         this.parser.annotate =
             ctx.getProperty("sisc.emitAnnotations", defaultEmitAnnotations).equals("true");
-        System.err.println("defaultEmitAnnotations = " + defaultEmitAnnotations);
         this.parser.lexer.strictR5RS =
             ctx.getProperty("sisc.strictR5RS", defaultStrictR5RS).equals("true");
         this.printShared =
