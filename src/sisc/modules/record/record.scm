@@ -73,7 +73,7 @@
     res))
 
 (define (record-type? thing)
-  (and (record? thing) (eq? (record-type thing) type)))
+  (and (record? thing) (eq? (record-type thing) :record-type)))
 
 ; Accessors for record types.
 
