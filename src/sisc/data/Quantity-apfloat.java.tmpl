@@ -439,6 +439,28 @@ public class Quantity extends Value implements Singleton {
         return new Quantity(a.xor(b));
     }
 
+    public Quantity not() throws NumberFormatException {
+        switch(type) {
+        case FIXEDINT:
+            return new Quantity(~val);
+        case INTEG:
+            return new Quantity(i.not());
+        default:
+            throw new NumberFormatException(liMessage(SISCB,"logicoprequiresint"));
+        }
+    }
+
+    public Quantity bitCount() throws NumberFormatException {
+        switch(type) {
+        case FIXEDINT:
+            return Quantity.valueOf(integer().bitCount());
+        case INTEG:
+            return Quantity.valueOf(i.bitCount());
+        default:
+            throw new NumberFormatException(liMessage(SISCB,"logicoprequiresint"));
+        }
+    }
+
     public Quantity lsh(int num) throws NumberFormatException {
         switch (type) {
         case FIXEDINT: return new Quantity((long)val).lsh(num);
