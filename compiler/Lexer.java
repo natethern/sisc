@@ -184,28 +184,34 @@ public class Lexer implements Tokens {
         throws IOException {
         boolean seenSharp=false, seenPipe=false;
         int depth=0;
-        do {
-            switch (readChar(in)) {
-            case PIPE:
-                if (seenSharp) {
-                    seenSharp=false;
-                    depth++;
-                } else {
-                    seenPipe=true;
+        try {
+            do {
+                switch (readChar(in)) {
+                case PIPE:
+                    if (seenSharp) {
+                        seenSharp=false;
+                        depth++;
+                    } else {
+                        seenPipe=true;
+                    }
+                    break;
+                case SHARP:
+                    if (seenPipe) {
+                        seenPipe=false;
+                        depth--;
+                    } else {
+                        seenSharp=true;
+                    }
+                    break;
+                default:
+                    seenPipe=seenSharp=false;
                 }
-                break;
-            case SHARP:
-                if (seenPipe) {
-                    seenPipe=false;
-                    depth--;
-                } else {
-                    seenSharp=true;
-                }
-                break;
-            default:
-                seenPipe=seenSharp=false;
-            }
-        } while (depth >= 0);
+            } while (depth >= 0);
+        } catch (EOFException e) {
+            System.err.println(Util.warn("eofbeforeeoc"));
+            throw e;
+        }
+
     }
 }
 /*
