@@ -1,0 +1,150 @@
+(require-library 'sisc/libs/srfi)
+(import srfi-1)
+
+(define metaphone
+  (letrec ((vowels '(#\a #\e #\i #\o #\u))
+           (frontv '(#\e #\i #\y))
+           (varson '(#\c #\s #\p #\t #\g))
+           (has-next? (lambda (ls) (not (null? (cdr ls)))))
+           (has-n+1? (lambda (ls) (not (null? (cddr ls)))))
+           (x->s (lambda (e) (if (char=? (car e) #\x) (cons #\s (cdr e)) e)))
+           (?n->n (lambda (e)
+                    (if (member (take e 2)
+                                '((#\p #\n) (#\a #\e) (#\k #\n) (#\w #\r)
+                                  (#\g #\n))) (cdr e) e)))
+           (wh->w (lambda (e)
+                    (if (and (char=? (car e) #\w) (char=? (cadr e) #\h))
+                        (cons #\w (cddr e)) e)))
+           (metaphone-rules
+            (lambda (sym e metaph size)
+              (case sym
+                ((#\b)
+                 (if (and (char=? last #\m) (not (has-next? (cdr e))))
+                     metaph
+                     (cons sym metaph)))
+                ((#\c)
+                 (if (not (and last (char=? last #\s) (has-next? e)
+                               (memv (second e) frontv)))
+                     (cond ((and (not (has-n+1? e)) (char=? (second e) #\i)
+                                 (char=? (third e) #\a))
+                            (cons #\x metaph))
+                           ((and (has-next? e) (memv (second e) frontv))
+                            (cons #\s metaph))
+                           ((and last (has-next? e)
+                                 (char=? (second e) #\h) (char=? last #\s))
+                            (cons #\k metaph))
+                           ((and (has-next? e) (char=? (second e) #\h))
+                            (cons 
+                             (if (and (not last) (not (has-n+1? e))
+                                      (memv (third e) vowels))
+                                 #\k #\x) metaph))
+                           (else (cons #\k metaph)))))
+                ((#\d)
+                 (cons 
+                  (if (and (not (has-n+1? e)) (char=? (second e) #\g)
+                           (memv (third e) frontv))
+                      #\j #\t)
+                  metaph))
+                ((#\g)
+                 (if (or (and (has-n+1? e)
+                              (char=? (second e) #\h)
+                              (memv (third e) vowels))
+                         (and last (or (null? (cddr e))
+                                       (and (char=? (second e) #\n)
+                                            (char=? (third e) #\e)
+                                            (char=? (fourth e) #\d)
+                                            (null? (cddddr e))))
+                              (char=? (second e) #\n))
+                         (and last (has-next? e) (char=? last #\d)
+                              (memv (second e) frontv)))
+                     metaph
+                     (cons 
+                      (if (or (and last (char=? last #\g)) ;hard
+                              (not (and (has-next? e)
+                                        (memv (second e) frontv))))
+                          #\k #\j) metaph)))
+                ((#\h)
+                 (if (and (not (and (or (not (has-next? e))
+                                        (and last (memv last varson)))))
+                          (memv (second e) vowels))
+                     (cons #\h metaph)
+                     metaph))
+                ((#\f #\j #\l #\m #\n #\r)
+                 (cons sym metaph))
+                ((#\k)
+                 (if last
+                     (if (char=? last #\c)
+                         (cons #\k metaph))
+                     '(#\k)))
+                ((#\p)
+                 (cons 
+                  (if (and (has-next? e) (char=? (second e) #\h)) #\f #\p)
+                  metaph))
+                ((#\q)
+                 (cons #\k metaph))
+                ((#\s)
+                 (cons 
+                  (if (or (and (has-n+1? e)
+                               (or (and (char=? (second e) #\i)
+                                        (char=? (third e) #\o))
+                                   (char=? (third e) #\a)))
+                          (and (has-next? e) (char=? (second e) #\h)))
+                      #\x #\s) metaph))
+                ((#\t) (cond ((and last (has-n+1? e)
+                                   (or (and (char=? (second e) #\i)
+                                            (char=? (third e) #\o))
+                                       (char=? (third e) #\a)))
+                              (cons #\x metaph))
+                             ((and (has-next? e) (char=? (second e) #\h))
+                              (if (not (and last (char=? last #\t)))
+                                  (cons #\0 metaph)
+                                  metaph))
+                             ((not (and (char=? (second e) #\c)
+                                        (char=? (third e) #\h)))
+                              (cons #\t metaph))
+                             (else metaph)))
+                ((#\v) (cons #\f metaph))
+                ((#\w #\y)
+                 (if (and (has-next? e) (memv (second e) vowels))
+                     (cons sym metaph)
+                     metaph))
+                ((#\x)
+                 (if (< (length metaph) (- size 1))
+                     (cons #\s (cons #\k metaph))
+                     (cons #\k metaph)))
+                ((#\z)
+                 (cons #\s metaph))
+                (else metaph)))))
+    (lambda (name . size)
+      (let ((size (if (null? size) 6 (car size))))
+        (let loop ((e (wh->w
+                       (x->s
+                        (?n->n
+                         (filter char-alphabetic?
+                                 (string->list (string-downcase name)))))))
+                   (metaph '()) (last #f))
+          (if (or (null? e) (>= (length metaph) size))
+              (list->string (reverse metaph))
+              (let ((sym (car e)))
+                (loop (cdr e)
+                      (if (and (not (char=? sym #\c)) last (char=? last sym))
+                          metaph
+                          (if (and (not last) (memv sym vowels))
+                              (list sym)
+                              (metaphone-rules sym e metaph size)))
+                        sym))))))))                                           
+                                   
+                                       
+                                   
+                                        
+                              
+                                     
+                                   
+                                       
+                                                      
+
+                                       
+                       
+            
+          
+            
