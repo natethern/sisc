@@ -136,6 +136,11 @@ public class REPL {
     public static void main(String[] argv) throws Exception {
         Map args=parseOpts(argv);
 
+        if (args.get("help")!=null) {
+            printUsage();
+            System.exit(0);
+        }
+
         SeekableInputStream heap = findHeap((String)args.get("heap"));
         if (heap==null) {
             System.err.println(Util.liMessage(Util.SISCB, "noheap"));
@@ -266,8 +271,15 @@ public class REPL {
 
     }
 
+    public static void printUsage() {
+        System.out.println("SISC - Second Interpreter of Scheme Code\n");
+        System.out.println("usage: sisc [-?x] [-l port] [-h heapfile] [-p property-file]");
+        System.out.println("            [-e s-expression] [-c function] [source-file ...] [-- arguments ...]");
+    }
+
     static final int SWITCH=0, OPTION=1;
     static final String[][] opts=new String[][] {
+        {"?","help"},
         {"l","listen"},
         {"h","heap"},
         {"p","properties"},
