@@ -1,8 +1,8 @@
 package sisc.data;
 
 import java.io.*;
-import sisc.compiler.*;
 import sisc.io.ValueWriter;
+import sisc.reader.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -34,11 +34,18 @@ public class Symbol extends Value {
         w.append(symval);
     }
 
-    private void slashify(ValueWriter w) throws IOException {
+    private void slashify(ValueWriter w, boolean protectedLiteral) throws IOException {
         for (int i=0; i<symval.length(); i++) {
             char c=symval.charAt(i);
-            if (!Lexer.isIdentifierSubsequent(c)) w.append('\\');
-            w.append(c);
+            if (protectedLiteral) {
+                if (c=='|' || !Lexer.isPrintable(c)) 
+                    w.append('\\').append(CharUtil.charToEscaped(c));
+                else w.append(c);
+            } else {
+                if (!Lexer.isIdentifierSubsequent(c)) {
+                    w.append('\\').append(CharUtil.charToEscaped(c));                     
+                } else w.append(c);
+            }                  
         }
     }
 
@@ -53,10 +60,10 @@ public class Symbol extends Value {
             && (Parser.isPeculiarIdentifier(symval)
                 || (symval.length()>0
                     && Lexer.isIdentifierStart(symval.charAt(0)))))
-            slashify(w);
+            slashify(w, false);
         else {
             w.append('|');
-            slashify(w);
+            slashify(w, true);
             w.append('|');
         }
     }

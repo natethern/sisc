@@ -1,25 +1,13 @@
 package sisc.data;
 
-import java.util.Hashtable;
+import sisc.reader.CharUtil;
 import java.io.*;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
 public class SchemeCharacter extends Value {
-    static final Hashtable humanReadables=new Hashtable(8);
-
-    static {
-        humanReadables.put(new SchemeCharacter(' '), "#\\space");
-        humanReadables.put(new SchemeCharacter('\u0008'), "#\\backspace");
-        humanReadables.put(new SchemeCharacter('\u007f'), "#\\rubout");
-        humanReadables.put(new SchemeCharacter('\u000c'), "#\\page");
-        humanReadables.put(new SchemeCharacter('\t'), "#\\tab");
-        humanReadables.put(new SchemeCharacter('\n'), "#\\newline");
-        humanReadables.put(new SchemeCharacter('\r'), "#\\return");
-        humanReadables.put(new SchemeCharacter((char)0), "#\\nul");
-    }
-
+    
     public char c;
 
     public SchemeCharacter(char c) {
@@ -31,14 +19,14 @@ public class SchemeCharacter extends Value {
     }
 
     public void write(ValueWriter w) throws IOException {
-        String hr=(String)humanReadables.get(this);
+        String hr=CharUtil.charToNamedConst(this);
+        w.append("#\\");
         if (hr!=null) {
             w.append(hr);
-        } else {
-            w.append("#\\");
-            if (c<128 && c>31)
+        } else {            
+            if (c<='~' && c>=' ')
                 w.append(c);
-            else w.append(justify(Integer.toOctalString(c),3,'0'));
+            else w.append(CharUtil.charToOct(c));
         }
     }
 
