@@ -296,7 +296,7 @@
 
 (define (make-method-list)
   ;;#(method-lookup-cache max-arity (monitor . methods))
-  (vector #f 0 (list (monitor/new))))
+  (vector #f 0 (list (mutex/new))))
 (define (constructor-methods class) (make-method-list))
 
 ;;we keep track of all the classes whose methods we have already
@@ -330,7 +330,7 @@
   (add-method-to-list (get-methods proc) m))
 (define (add-method-to-list methods m)
   (let ([meths (vector-ref methods 2)])
-    (monitor/synchronize
+    (mutex/synchronize
      (car meths)
      (lambda ()
        (vector-set! methods 0 #f) ;;clear applicable-methods cache

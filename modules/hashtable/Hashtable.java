@@ -11,7 +11,7 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 import sisc.util.Util;
-import sisc.modules.SThread.Monitor;
+import sisc.modules.SThread.Mutex;
 
 public abstract class Hashtable extends Procedure {
 
@@ -151,7 +151,7 @@ public abstract class Hashtable extends Procedure {
 
         r.nxp = null;
 
-        Monitor m = Monitor.of(this);
+        Mutex m = Mutex.of(this);
         m.acquire();
         try {
             switch (r.vlr.length) {

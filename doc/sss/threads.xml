@@ -597,27 +597,32 @@
       </para>
     </blockquote>
   </sect1>
-  <sect1 id="Monitors">
+  <sect1 id="Synchronization">
     <title>
-      Monitors and Synchronization
+      Synchronization Primitives
     </title>
-    <warning>
-      <para>
-	This section may change in the future,
-	if &SISC; moves to a separation of locks and condition
-	variables more akin to that described by SRFI-12.
-      </para>
-    </warning>
     <para>
-      &SISC; provides an implementation of the monitor data structure
-      for concurrency protection and inter-thread communication.
-      Monitors provide mutual exclusion locking and implicitly include
-      an associated condition variable to facilitate synchronization
-      of threads with the change in state of monitored data.
-      Unlike simple mutexes, monitors can be re-entered by the
-      thread that currently holds them.  The monitor is not unlocked
-      until the holding thread has exited (unlocked) the monitor as
-      many times as it was entered (locked).
+      &SISC; provides an implementation of mutexes and condition variables
+      designed to support a wide range of synchronization models, including the
+      monitor paradigm previously found in &SISC.  The implementation provides
+      both a <emphasis>mutex</emphasis> and
+      <emphasis>condition-variable</emphasis> first-class value for
+      concurrency protection and inter-thread communication.
+      Mutexes provide mutual exclusion locking, while condition
+      variables faciliate synchronization of threads with the change
+      in state of monitored data.  
+      &SISC;'s mutexes are reentrant, that is, if a thread locks a
+      mutex and then attempts to lock it again, the lock is granted
+      immediately- it does not block.  Correspondingly, the mutex is
+      not unlocked until the same number of unlock operations as
+      previous lock operations is performed by the owning thread.
+    </para>
+    <para>
+      &SISC;'s synchronization primitives map very closely to SRFI-18,
+      which is supported by &SISC;.  In fact, it is recommended that
+      programmers write to SRFI-18 if at all possible, as they will
+      gain maximum portability with little or no loss in efficiency on
+      &SISC;.
     </para>
     <para>
       Throughout the following sections, a thread is often said to
@@ -627,117 +632,117 @@
     </para>
     <para>
       Several functions exist for performing low level operations 
-      such as creating a monitor.  All require a monitor object.
-      Monitors are represented in Scheme as opaque values displayed as
-      <literal>&num;&lt;monitor&gt;</literal>.  To
-      obtain a monitor, the
-      <function>monitor/new</function> or
-      <function>monitor-of</function> function can be used
-      used.  It is important to understand that all the monitor
-      operations depend on the same monitor being shared between any
-      threads using monitor functionality.
+      such as creating mutexes and condition variables.  All require
+      the mutex or condition variable as the first parameter.
+      Mutexes are represented in Scheme as opaque values displayed as
+      <literal>&num;&lt;mutex&gt;</literal> while condition variables
+      are represented as
+      <literal>&num;&lt;condition-variable&gt;</literal>.  
+      It is important to understand that all the synchronization 
+      operations depend on the same mutex and/or condition variable 
+      being shared between any threads using the functionality.
     </para>
-    <blockquote>
-      <para>
-        <indexterm><primary>monitor?</primary>
-        </indexterm>
-        &procedure;
-        <methodsynopsis language="scheme">
-          <type>&num;t/&num;f</type>
-          <methodname>monitor?</methodname>
-          <methodparam><parameter>value</parameter>
-          </methodparam>
-        </methodsynopsis>
-        <blockquote>
-          <para>
-            Returns true if and only if the provided value is a monitor.
-          </para>
-        </blockquote>
-      </para>
-      <para id="func-monitor-new">
-        <indexterm><primary>monitor/new</primary>
-        </indexterm>
-        &procedure;
-        <methodsynopsis language="scheme">
-          <type>monitor</type>
-          <methodname>monitor/new</methodname>
-          <void/>
-        </methodsynopsis>
-        <blockquote>
-          <para>
-            Creates and returns a new monitor object.
-          </para>
-        </blockquote>
-      </para>
-      <para>
-        <indexterm><primary>monitor-of</primary>
-        </indexterm>
-        &procedure;
-        <methodsynopsis language="scheme">
-          <type>monitor</type>
-          <methodname>monitor-of</methodname>
-          <methodparam>
-            <parameter>value</parameter>
-          </methodparam>
-        </methodsynopsis>
-        <blockquote>
-          <para>
-            Returns a monitor that is uniquely associated to the given
-            value.  Subsequent (or concurrent) calls to this function
-            are guaranteed to return the same monitor if given the
-            same value.
-          </para>
-        </blockquote>
-      </para>
-    </blockquote>
     <sect2>
       <title>
-	Lock Operations
+	Mutex Operations
       </title>
       <para>
 	In order to protect a segment of Scheme code from concurrent
-	access, one can create a monitor that is shared by all
+	access, one can create a mutex that is shared by all
 	threads that may access the segment.  When entering the
 	contested region of code (the <emphasis>critical
 	  section</emphasis>), a thread would call
-	<function>monitor/lock</function>.  Upon exiting
-	the region, <function>monitor/unlock</function>
+	<function>mutex/lock</function>.  Upon exiting
+	the region, <function>mutex/unlock</function>
 	is called.
       </para>
       <blockquote>
-        <para id="func-monitor-lock">
-          <indexterm><primary>monitor/lock</primary>
+        <para>
+          <indexterm><primary>mutex?</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>&num;t/&num;f</type>
+            <methodname>mutex?</methodname>
+            <methodparam><parameter>value</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Returns true if and only if the provided value is a mutex.
+            </para>
+          </blockquote>
+        </para>
+        <para id="func-mutex-new">
+          <indexterm><primary>mutex/new</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>mutex</type>
+            <methodname>mutex/new</methodname>
+            <void/>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Creates and returns a new mutex object.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>mutex-of</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>mutex</type>
+            <methodname>mutex-of</methodname>
+            <methodparam>
+              <parameter>value</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Returns a mutex that is uniquely associated to the given
+              value.  Subsequent (or concurrent) calls to this function
+              are guaranteed to return the same mutex if given the
+              same value.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+      <blockquote>
+        <para id="func-mutex-lock">
+          <indexterm><primary>mutex/lock!</primary>
           </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
             <type>undefined</type>
-            <methodname>monitor/lock</methodname>
+            <methodname>mutex/lock!</methodname>
             <methodparam>
-              <parameter>monitor</parameter>
+              <parameter>mutex</parameter>
             </methodparam>            
           </methodsynopsis>
           <blockquote>
             <para>
-              Attempts to acquire the lock on the given monitor.  Returns
+              Attempts to acquire the lock on the given mutex.  Returns
               only when the lock has been successfully acquired.
             </para>
           </blockquote>
         </para>
-        <para id="func-monitor-unlock">
-          <indexterm><primary>monitor/unlock</primary>
+        <para id="func-mutex-unlock">
+          <indexterm><primary>mutex/unlock!</primary>
           </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
             <type>undefined</type>
-            <methodname>monitor/unlock</methodname>
+            <methodname>mutex/unlock!</methodname>
             <methodparam>
-              <parameter>monitor</parameter>
+              <parameter>mutex</parameter>
             </methodparam>            
           </methodsynopsis>
           <blockquote>
             <para>
-              Releases the lock on the given monitor.  The behavior when
-              unlocking a monitor when the running thread does not have
+              Releases the lock on the given mutex.  The behavior when
+              unlocking a mutex when the running thread does not have
               the lock is undefined, and may raise an error.
             </para>
           </blockquote>
@@ -745,14 +750,14 @@
       </blockquote>
       <para> 
 	The semantics of
-	<function>monitor/lock</function> ensure that
+	<function>mutex/lock!</function> ensure that
 	only one thread can execute beyond the lock call at any one
 	time.  The first thread that reaches the call
-	<emphasis>acquires</emphasis> the lock on the monitor.  Any
+	<emphasis>acquires</emphasis> the lock on the mutex.  Any
         later threads will block at the call to
-        <function>monitor/lock</function> until the
+        <function>mutex/lock!</function> until the
         thread that owns the lock releases the lock with
-        <function>monitor/unlock</function>.  
+        <function>mutex/unlock!</function>.  
       </para>
     </sect2>
     <sect2>
@@ -760,9 +765,6 @@
         Condition Variable Operations
       </title>
       <para>
-        In addition to locking functionality, a monitor also
-        has an implicitly associated <emphasis>condition
-        variable</emphasis>.
         A condition variable allows one thread
         to sleep until another wakes it.  A common situation is for
         one thread to check the status of a variable, and sleep if
@@ -770,29 +772,34 @@
         thread sleeps, one or more separate threads may execute and
         satisfy the condition (by changing the state of the
         variable) and then <emphasis>notify</emphasis> the sleeping
-        thread.  The thread then awakes, checks the variable, and
+        thread via the condition variable.  
+        The thread then awakes, checks the state variable, and
         proceeds if the condition is met.  If not, it sleeps again.  
         This construct allows for cooperation between multiple threads
         on a computation.
       </para>
       <para>
-        To wait on a monitor, the
-        <function>monitor/wait</function> function is
-        applied to a monitor.  This will cause the thread to block
-        until notified by another thread.  While waiting, the lock on the 
-        monitor is released, and is reacquired before
-        <function>monitor/wait</function> returns. 
+        To wait on a condition variable, the
+        <function>mutex/unlock!</function> function is again used with 
+        a condition variable as an additional argument.
+        applied to a monitor.  This will cause the thread to unlock 
+        the given mutex, then block until notified by another thread.  
+        When it is notified, or the provided timeout expires, the lock
+        is <emphasis>not</emphasis> reacquired.
       </para>
       <blockquote>
-        <para id="func-monitor-wait">
-          <indexterm><primary>monitor/wait</primary>
+        <para id="func-mutex-wait">
+          <indexterm><primary>mutex/unlock!</primary>
           </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
-            <type>undefined</type>
-            <methodname>monitor/wait</methodname>
+            <type>&num;t/&num;f</type>
+            <methodname>mutex/unlock!</methodname>
             <methodparam>
-              <parameter>monitor</parameter>
+              <parameter>mutex</parameter>
+            </methodparam>            
+            <methodparam>
+              <parameter>condvar</parameter>
             </methodparam>            
             <methodparam choice="opt">
               <parameter>timeout</parameter>
@@ -800,65 +807,68 @@
           </methodsynopsis>
           <blockquote>
             <para>
-              Causes the thread to sleep until notified by another
+              Causes the thread to sleep until notified on the
+              provided condition variable by another
               thread.  This call will not return until notified, unless
               the optional timeout is specified and
               <parameter>timeout</parameter> milliseconds have elapsed
-              without a notification.  While blocking, the lock on
-              <parameter>monitor</parameter> is released, and
-              reacquired before returning.
+              without a notification.  Before blocking, the lock on
+              <parameter>mutex</parameter> is released.
+              If the timeout is reached
+              before notification, <literal>&num;f</literal> is
+              returned, otherwise <literal>&num;t</literal> is returned.
             </para>
           </blockquote>
         </para>
       </blockquote>
       <para>
         Another thread may wake a single waiting thread with the
-        <function>monitor/notify</function> operation.
-        When called, one thread waiting on the monitor is
+        <function>condvar/notify</function> operation.
+        When called, one thread waiting on the condition variable is
         woken.  If no threads are waiting this call has no effect.
         If more than one thread is waiting, exactly one will
         be woken.  Which is woken is unspecified.  If a thread
         wishes to wake <emphasis>all</emphasis> threads waiting on a
         given monitor, it may use the
-        <function>monitor/notify-all</function> function.
+        <function>condvar/notify-all</function> function.
       </para>
       <blockquote>
-        <para id="func-monitor-notify">
-          <indexterm><primary>monitor/notify</primary>
+        <para id="func-condvar-notify">
+          <indexterm><primary>condvar/notify</primary>
           </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
             <type>undefined</type>
-            <methodname>monitor/notify</methodname>
+            <methodname>condvar/notify</methodname>
             <methodparam>
-              <parameter>monitor</parameter>
+              <parameter>condvar</parameter>
             </methodparam>            
           </methodsynopsis>
           <blockquote>
             <para>
-              Wakes exactly one thread waiting on the monitor, if any such
+              Wakes exactly one thread waiting on the condition variable, if any such
               threads exist.  If the notifying thread holds the lock
-              on <parameter>monitor</parameter>, the waiting thread
+              on <parameter>condvar</parameter>, the waiting thread
               will not proceed until the notifying thread releases the lock.
             </para>
           </blockquote>
         </para>
-        <para id="func-monitor-notify-all">
-          <indexterm><primary>monitor/notify-all</primary>
+        <para id="func-condvar-notify-all">
+          <indexterm><primary>condvar/notify-all</primary>
           </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
             <type>undefined</type>
-            <methodname>monitor/notify-all</methodname>
+            <methodname>condvar/notify-all</methodname>
             <methodparam>
-              <parameter>monitor</parameter>
+              <parameter>condvar</parameter>
             </methodparam>            
           </methodsynopsis>
           <blockquote>
             <para>	  
-              Wakes all threads waiting on the monitor, if any waiting
+              Wakes all threads waiting on the condition variable, if any waiting
               threads exist.  If the notifying thread holds the lock
-              on <parameter>monitor</parameter>, the waiting thread
+              on <parameter>condvar</parameter>, the waiting thread
               will not procede until the notifying thread releases the lock.
             </para>
           </blockquote>
@@ -870,20 +880,21 @@
 	  High-level Concurrency
 	</title>
 	<para>
-	  In addition to the low-level operations on monitors, two
+	  In addition to the low-level operations on mutexes and
+	  condition variables, two
 	  library functions are provided to greatly ease the
 	  construction and readability of thread-safe code.
 	</para>
       <blockquote>
-        <para id="func-monitor-synchronize">
-          <indexterm><primary>monitor/synchronize</primary>
+        <para id="func-mutex-synchronize">
+          <indexterm><primary>mutex/synchronize</primary>
           </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
             <type>value</type>
-            <methodname>monitor/synchronize</methodname>
+            <methodname>mutex/synchronize</methodname>
             <methodparam>
-              <parameter>monitor</parameter>
+              <parameter>mutex</parameter>
             </methodparam>            
             <methodparam>
               <parameter>thunk</parameter>
@@ -892,21 +903,21 @@
           <blockquote>
             <para>
               Protects execution of thunk as a critical section by holding the
-              monitor's lock during evaluation of the thunk.  The
+              mutex's lock during evaluation of the thunk.  The
               result of the thunk's evaluation becomes the result of
-              the <function>monitor/synchronize</function> expression.
+              the <function>mutex/synchronize</function> expression.
             </para>
           </blockquote>
         </para>
-        <para id="func-monitor-synchronize-unsafe">
-          <indexterm><primary>monitor/synchronize-unsafe</primary>
+        <para id="func-mutex-synchronize-unsafe">
+          <indexterm><primary>mutex/synchronize-unsafe</primary>
           </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
             <type>value</type>
-            <methodname>monitor/synchronize-unsafe</methodname>
+            <methodname>mutex/synchronize-unsafe</methodname>
             <methodparam>
-              <parameter>monitor</parameter>
+              <parameter>mutex</parameter>
             </methodparam>            
             <methodparam>
               <parameter>thunk</parameter>
@@ -914,7 +925,7 @@
           </methodsynopsis>
           <blockquote>
             <para>
-              Behaves exactly as monitor/synchronize without automatic
+              Behaves exactly as mutex/synchronize without automatic
               unlocking when an error is raised or a continuation escapes when
               executing thunk.
             </para>
@@ -922,25 +933,25 @@
         </para>
       </blockquote>
       <para>
-        <function>monitor/synchronize</function> locks
-        the monitor while the thunk provided is being
+        <function>mutex/synchronize</function> locks
+        the mutex while the thunk provided is being
         executed.  The lock is automatically released when the
         expression has completed.  Also, if an error is raised or a
         continuation is invoked that escapes the call to
-        <function>monitor/synchronize</function>, the
+        <function>mutex/synchronize</function>, the
         lock is automatically released.
       </para>
       <para>
         The added safety provided by 
-        <function>monitor/synchronize</function> may
+        <function>mutex/synchronize</function> may
         slow the execution of code that repeatedly calls a critical
         section.  If the programmer is absolutely sure that no error
         can be raised and that no continuations will be applied to
         escape the call,
-        <function>monitor/synchronize-unsafe</function>
+        <function>mutex/synchronize-unsafe</function>
         may be used.  It provides no safety guarantees in those
         situations.  If an error is raised or an escaping
-        continuation invoked, the monitor will remain locked which
+        continuation invoked, the mutex will remain locked which
         could cause a deadlock if another thread attempts to acquire
         the lock.  
       </para>

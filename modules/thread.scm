@@ -7,36 +7,36 @@
     thread))
 
 ;;
-; monitor/synchronize-unsafe will synchronize the execution of a thunk
-; on a given monitor, but will *not* safely unlock the monitor when
+; mutex/synchronize-unsafe will synchronize the execution of a thunk
+; on a given mutex, but will *not* safely unlock the mutex when
 ; execution of the thunk raises an error or escapes the thunk by
 ; invoking a continuation.
 ;
-; The only advantage over monitor/synchronize is a profound 
+; The only advantage over mutex/synchronize is a profound 
 ; difference in speed. USE WITH CARE.
 ;;
-(define (monitor/synchronize-unsafe monitor thunk)
-  (monitor/lock monitor)
+(define (mutex/synchronize-unsafe mutex thunk)
+  (mutex/lock! mutex)
   (let ([result (thunk)])
-    (monitor/unlock monitor)
+    (mutex/unlock! mutex)
     result))
 
 (define (synchronized-unsafe obj thunk)
-  (monitor/synchronize-unsafe (monitor-of obj) thunk))
+  (mutex/synchronize-unsafe (mutex-of obj) thunk))
 
 ;;
-; monitor/synchronize will synchronize the execution of a thunk on a
-; given monitor and will safely unlock the monitor if the synchronized
+; mutex/synchronize will synchronize the execution of a thunk on a
+; given mutex and will safely unlock the mutex if the synchronized
 ; thunk is left due to error or a non-local exit.
 ;;
-(define (monitor/synchronize monitor thunk)
+(define (mutex/synchronize mutex thunk)
   (dynamic-wind
-   (lambda () (monitor/lock monitor))
+   (lambda () (mutex/lock! mutex))
    thunk
-   (lambda () (monitor/unlock monitor))))
+   (lambda () (mutex/unlock! mutex))))
 
 (define (synchronized obj thunk)
-  (monitor/synchronize (monitor-of obj) thunk))
+  (mutex/synchronize (mutex-of obj) thunk))
 
 ;;
 

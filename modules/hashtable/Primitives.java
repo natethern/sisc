@@ -3,7 +3,7 @@ package sisc.modules.hashtable;
 import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
-import sisc.modules.SThread.Monitor;
+import sisc.modules.SThread.Mutex;
 
 public class Primitives extends ModuleAdapter {
 
@@ -76,7 +76,7 @@ public class Primitives extends ModuleAdapter {
             }
             default:
                 Hashtable h = shash(f.vlr[0]);
-                Monitor m = Monitor.of(h);
+                Mutex m = Mutex.of(h);
                 m.acquire();
                 try {
                     switch(primid) {
@@ -99,7 +99,7 @@ public class Primitives extends ModuleAdapter {
             Value def = FALSE;
             Value res = null;
             Hashtable h = shash(f.vlr[0]);
-            Monitor m = Monitor.of(h);
+            Mutex m = Mutex.of(h);
             m.acquire();
             try {
                 switch(primid) {

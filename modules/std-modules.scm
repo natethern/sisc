@@ -140,16 +140,17 @@
    thread/interrupted?
    thread/holds-lock?
    thread/_active-thread-count
-   monitor?
-   monitor-of
-   monitor/new
-   monitor/lock
-   monitor/unlock
-   monitor/wait
-   monitor/notify
-   monitor/notify-all
-   monitor/synchronize
-   monitor/synchronize-unsafe
+   mutex?
+   mutex-of
+   mutex/new
+   mutex/lock!
+   mutex/unlock!
+   condvar?
+   condvar/new
+   condvar/notify
+   condvar/notify-all
+   mutex/synchronize
+   mutex/synchronize-unsafe
    synchronized
    synchronized-unsafe
    parallel)

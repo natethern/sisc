@@ -16,7 +16,7 @@ public class SThread extends ModuleAdapter {
     protected static final Symbol THREADB =
         Symbol.intern("sisc.modules.Messages");
 
-    protected static final Symbol MONITOR=Symbol.get("monitor");
+    protected static final Symbol MUTEX=Symbol.get("mutex");
 
     protected static final int 
         THREADNEW=0, THREADSTART=1, THREADYIELD=2, THREADSLEEP=3,
@@ -26,9 +26,9 @@ public class SThread extends ModuleAdapter {
         THREADDAEMONQ=13, SETTHREADNAME=14, SETTHREADPRIORITY=15,
         SETTHREADDAEMON=16, THREADSTATE=17, THREADINTERRUPTEDQ=18,
         THREADHOLDSLOCKQ=19, THREADSRUNNING=20, THREADRESULT=21,
-        MONITORNEW=22, MONITORLOCK=23, MONITORUNLOCK=24, 
-        MONITORNOTIFY=25, MONITORNOTIFYALL=26, MONITORWAIT=27,
-        MONITORFOR=28, MONITORQ=29;
+        MUTEXNEW=22, MUTEXLOCK=23, MUTEXUNLOCK=24, 
+        CONDVARNOTIFY=25, CONDVARNOTIFYALL=26, 
+        MUTEXOF=28, MUTEXQ=29, CONDVARQ=30, CONDVARNEW=31;
 
 
     protected static Symbol 
@@ -60,14 +60,16 @@ public class SThread extends ModuleAdapter {
 
         define("thread/_active-thread-count", THREADSRUNNING);
 
-        define("monitor?", MONITORQ);
-        define("monitor-of", MONITORFOR);
-        define("monitor/new", MONITORNEW);
-        define("monitor/lock", MONITORLOCK);
-        define("monitor/unlock", MONITORUNLOCK);
-        define("monitor/wait", MONITORWAIT);
-        define("monitor/notify", MONITORNOTIFY);
-        define("monitor/notify-all", MONITORNOTIFY);
+        define("condvar?", CONDVARQ);
+        define("condvar/new", CONDVARNEW);
+        define("condvar/notify", CONDVARNOTIFY);
+        define("condvar/notify-all", CONDVARNOTIFYALL);
+
+        define("mutex?", MUTEXQ);
+        define("mutex-of", MUTEXOF);
+        define("mutex/new", MUTEXNEW);
+        define("mutex/lock!", MUTEXLOCK);
+        define("mutex/unlock!", MUTEXUNLOCK);
     }
 
     public static class CondVar extends Value implements NamedValue {
@@ -77,12 +79,23 @@ public class SThread extends ModuleAdapter {
         public void display(ValueWriter w) throws IOException {
             displayNamedOpaque(w, "condvar");
         }
+
+        public void c_notify() {
+            synchronized(this) {
+                notify();
+            }
+        }
+
+        public void c_notifyall() {
+            synchronized(this) {
+                notifyAll();
+            }
+        }
     }
 
-    public static class Monitor extends Value implements NamedValue {
+    public static class Mutex extends Value implements NamedValue {
         private transient int lockCount=0;
         private transient Thread owner=null;
-        private CondVar condvar=new CondVar();
 
         public Value lock(long timeout) {
             Thread thisThread=null;
@@ -140,11 +153,9 @@ public class SThread extends ModuleAdapter {
         public final void unlock() {
             if (owner==Thread.currentThread()) {
                 synchronized(this) {
-                    synchronized(condvar) {
-                        if ((--lockCount)==0) {
-                            owner=null;
-                            this.notify();
-                        }
+                    if ((--lockCount)==0) {
+                        owner=null;
+                        this.notify();
                     }
                 }
             }
@@ -153,96 +164,89 @@ public class SThread extends ModuleAdapter {
         public final void unlockAll() {
             if (owner==Thread.currentThread()) {
                 synchronized(this) {
-                    synchronized(condvar) {
-                        lockCount=0;
-                        owner=null;
-                        this.notify();
-                    }
+                    lockCount=0;
+                    owner=null;
+                    this.notify();
                 }
             }
         }
 
-        public void m_notify() {
-            synchronized(condvar) {
-                condvar.notify();
-            }
-        }
-
-        public void m_notifyall() {
-            synchronized(condvar) {
-                condvar.notifyAll();
-            }
-        }
-
-        public void m_wait() {
+        public void unlock(CondVar condvar) {
             while (true) {
                 try {
                     synchronized(condvar) {
                         unlockAll();
                         condvar.wait();
                     }
-                    acquire();
                     return;
                 } catch (InterruptedException e) {}
             }
         }
 
-        public void m_wait(long timeout) {
+        public Value unlock(CondVar condvar, long timeout) {
             while (true) {
                 try {
                     synchronized(condvar) {
                         unlockAll();
+                        long start=System.currentTimeMillis();
                         condvar.wait(timeout);
-                        acquire();
+                        // This is only a best guess.
+                        if ((System.currentTimeMillis() - start) >= timeout)
+                            return FALSE;
                     }
-                    return;
+                    return TRUE;
                 } catch (InterruptedException e) {}
             }
         }
 
         public void display(ValueWriter w) throws IOException {
-            displayNamedOpaque(w, "monitor");
+            displayNamedOpaque(w, "mutex");
         }
 
-        public static Monitor of(Value v) {
+        public static Mutex of(Value v) {
             synchronized(v) {
-                Value m = v.getAnnotation(MONITOR);
+                Value m = v.getAnnotation(MUTEX);
                 if (m==FALSE) {
-                    m=new Monitor();
-                    v.setAnnotation(MONITOR, m);
+                    m=new Mutex();
+                    v.setAnnotation(MUTEX, m);
                 }
-                return monitor(m);
+                return mutex(m);
             }
         }
 
-        public Monitor() {}
+        public Mutex() {}
 
         public void serialize(Serializer ser) throws IOException {
             if (lockCount > 0 || owner != null)
-                warn("serializinglockedmonitor");
-            ser.writeExpression(condvar);
-        }
-
-        public void deserialize(Deserializer ser) throws IOException {
-            condvar=(CondVar)ser.readExpression();
+                warn("serializinglockedmutex");
         }
 
         public boolean visit(ExpressionVisitor v) {
-            return super.visit(v) && v.visit(condvar);
+            return super.visit(v);
         }
     }
 
     public static final SchemeThread sthread(Value o) {
         try {
             return (SchemeThread)o;
-        } catch (ClassCastException e) { typeError("sthread", o); }
+        } catch (ClassCastException e) { typeError(THREADB, 
+                                                   "sthread", o); }
         return null;
     }
 
-    public static final Monitor monitor(Value o) {
+    public static final Mutex mutex(Value o) {
         try {
-            return (Monitor)o;
-        } catch (ClassCastException e) { typeError("monitor", o); }
+            return (Mutex)o;
+        } catch (ClassCastException e) { typeError(THREADB,
+                                                   "mutex", o); }
+        return null;
+    }
+
+    public static final CondVar condvar(Value o) {
+        try {
+            return (CondVar)o;
+        } catch (ClassCastException e) { typeError(THREADB, 
+                                                   "condvar", o); }
         return null;
     }
 
@@ -265,8 +269,10 @@ public class SThread extends ModuleAdapter {
         switch(f.vlr.length) {
         case 0:
             switch(primid) {
-            case MONITORNEW:
-                return new Monitor();
+            case MUTEXNEW:
+                return new Mutex();
+            case CONDVARNEW:
+                return new CondVar();
             case THREADCURRENT:
                 SchemeThread t=Context.lookupThreadContext().hostThread;
                 if (t==null) return FALSE;
@@ -283,23 +289,22 @@ public class SThread extends ModuleAdapter {
             switch(primid) {
             case THREADQ:
                 return truth(f.vlr[0] instanceof SchemeThread);
-            case MONITORQ:
-                return truth(f.vlr[0] instanceof Monitor);
-            case MONITORFOR:
-                return Monitor.of(f.vlr[0]);
-            case MONITORLOCK:
-                return monitor(f.vlr[0]).acquire();
-            case MONITORUNLOCK:
-                monitor(f.vlr[0]).unlock();
+            case MUTEXQ:
+                return truth(f.vlr[0] instanceof Mutex);
+            case CONDVARQ:
+                return truth(f.vlr[0] instanceof CondVar);
+            case MUTEXOF:
+                return Mutex.of(f.vlr[0]);
+            case MUTEXLOCK:
+                return mutex(f.vlr[0]).acquire();
+            case MUTEXUNLOCK:
+                mutex(f.vlr[0]).unlock();
+                return TRUE;
+            case CONDVARNOTIFY:
+                condvar(f.vlr[0]).c_notify();
                 return VOID;
-            case MONITORNOTIFY:
-                monitor(f.vlr[0]).m_notify();
-                return VOID;
-            case MONITORNOTIFYALL:
-                monitor(f.vlr[0]).m_notifyall();
-                return VOID;
-            case MONITORWAIT:
-                monitor(f.vlr[0]).m_wait();
+            case CONDVARNOTIFYALL:
+                condvar(f.vlr[0]).c_notifyall();
                 return VOID;
             case THREADNEW:
                 return new SchemeThread(f,proc(f.vlr[0]));
@@ -344,12 +349,12 @@ public class SThread extends ModuleAdapter {
             }
         case 2:
             switch(primid) {
-            case MONITORLOCK:
+            case MUTEXUNLOCK:
+                mutex(f.vlr[0]).unlock(condvar(f.vlr[1]));
+                return TRUE;
+            case MUTEXLOCK:
                 long timeout=num(f.vlr[1]).longValue();
-                return monitor(f.vlr[0]).lock(timeout);
-            case MONITORWAIT:
-                monitor(f.vlr[0]).m_wait(num(f.vlr[1]).longValue());
-                return VOID;
+                return mutex(f.vlr[0]).lock(timeout);
             case THREADJOIN:
                 SchemeThread c=sthread(f.vlr[0]);
 
@@ -364,7 +369,7 @@ public class SThread extends ModuleAdapter {
                     throw new RuntimeException(liMessage(THREADB,"threadnotstarted"));
                 }
             case THREADHOLDSLOCKQ:
-                return truth(monitor(f.vlr[0]).owner==sthread(f.vlr[0]).thread);
+                return truth(mutex(f.vlr[0]).owner==sthread(f.vlr[0]).thread);
             case SETTHREADPRIORITY:
                 sthread(f.vlr[0]).thread.setPriority(num(f.vlr[1]).indexValue());
                 return VOID;
@@ -375,6 +380,14 @@ public class SThread extends ModuleAdapter {
                 c=sthread(f.vlr[0]);
                 c.thread.setName(string(f.vlr[1]));
                 return VOID;
+            default:
+                throwArgSizeException();
+            } 
+        case 3:
+            switch(primid) {
+            case MUTEXUNLOCK:
+                return mutex(f.vlr[0]).unlock(condvar(f.vlr[1]), 
+                                              num(f.vlr[2]).longValue());
             default:
                 throwArgSizeException();
             }
