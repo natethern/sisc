@@ -19,9 +19,7 @@
 (define-generic add)
 (define-generic build-library)
 (define-generic get-local-expression)
-(define-generic add-binding)
 (define-generic add-symbolic-bindings)
-(define-generic get-entry-point)
 (define-generic url)
 (define-generic next)
 (define-generic has-next)
@@ -84,30 +82,30 @@
     (lambda () (get-symbolic-environment symenv-sym))))
 
 (define (link-library lib)
-  (for-each
-   (lambda (symenv-id)
-     (call-with-values
-         (lambda ()
-           (find-base-library
-            (java-wrap
-             (find-symbolic-environment
-              (let ((symenv-id-str (symbol->string symenv-id)))
-                (string->symbol
-                 (substring symenv-id-str
-                            (string-length segment-str)
-                            (string-length symenv-id-str))))))))
-       (lambda (symenv lae?)
-	 (let ([symlist (get-local-expression lib (java-wrap symenv-id))])
-	   (if lae?
-	       (add-symbolic-bindings symenv lib symlist)
-	       (for-each 
-		(lambda (binding)
-		  (putprop binding
-			   (java-unwrap symenv)
-			   (java-unwrap
-			    (get-local-expression lib (java-wrap binding)))))
-		(java-unwrap symlist)))))))
-   (java-unwrap (get-local-expression lib (java-wrap index-sym)))))
+  (define (get-lib-expression id)
+    (get-local-expression lib (java-wrap id)))
+  (define (link-symenv symenv-id)
+    (call-with-values
+        (lambda ()
+          (find-base-library
+           (java-wrap
+            (find-symbolic-environment
+             (let ([symenv-id-str (symbol->string symenv-id)])
+               (string->symbol
+                (substring symenv-id-str
+                           (string-length segment-str)
+                           (string-length symenv-id-str))))))))
+      (lambda (symenv lae?)
+        (let ([symlist (get-lib-expression symenv-id)])
+          (if lae?
+              (add-symbolic-bindings symenv lib symlist)
+              (for-each (lambda (binding)
+                          (putprop binding
+                                   (java-unwrap symenv)
+                                   (java-unwrap
+                                    (get-lib-expression binding))))
+                        (java-unwrap symlist)))))))
+  (for-each link-symenv (java-unwrap (get-lib-expression index-sym))))
 
 (define (find-bindings prefix env)
   (define (binding-matches? binding)
