@@ -2,7 +2,7 @@ package sisc.io;
 
 import java.io.*;
 import sisc.*;
-import sisc.data.NamedValue;
+import sisc.data.SchemeInputPort;
 import sisc.interpreter.*;
 
 public class StreamInputPort extends SchemeInputPort {
