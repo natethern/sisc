@@ -33,6 +33,11 @@
                       (eval '(import foobarbaz) 
                             (scheme-report-environment 5))))
                   (eval '(identity 3))))
+
+(should-be 818786 'okay
+           (with/fc (lambda (m e) 'error)
+             (lambda ()
+               (eval '(delay 'okay) (scheme-report-environment 5)))))
                    
 ;; Used to cause an out of memory error
 (import threading)
