@@ -224,3 +224,5 @@
                 (lambda (port) (serialize "\u0e10\u0e1f\u0e2b\u0e01\u0e14" 
                                           port)))
               (call-with-serial-input-file "test.ser" deserialize)))
+
+(should-be 1096047 '#(1 2 unquote (list 3 4)) #(1 2 unquote (list 3 4)))

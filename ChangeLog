@@ -1,3 +1,7 @@
+2005-03-22  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Fixed the vector quasiquotation bug.  See bug 1096048.
+
 2005-03-15  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Changed stack trace printing to condense duplicate lines.
