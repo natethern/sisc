@@ -432,58 +432,17 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                   <entry>description</entry>
                 </row>
               </thead>
-              <tbody> 
+              <tbody>
                 <row>
                   <entry>
-                    <indexterm><primary>strict-r5rs-compliance</primary></indexterm>
-
-                    <envar>strictR5RSCompliance</envar></entry>
-                  <entry><function>strict-r5rs-compliance</function></entry>
-                  <entry>false</entry>
-                  <entry>
-                    If set to <literal>true</literal>,
-                    <emphasis>strict</emphasis> &R5RS; syntax and
-                    semantics are followed.  This will cause SISC to
-                    raise errors in all situations described as "an
-                    error" in the Scheme standard.  This will override
-                    and invalidate all the interpretation liberties
-                    described in <xref linkend="R5RSViolations"/>.
+                    <indexterm><primary>character-set</primary></indexterm>
+                    <envar>characterSet</envar>
                   </entry>
-                </row>
-                <row>
+                  <entry>"UTF8"</entry>
                   <entry>
-                    <indexterm><primary>print-shared</primary></indexterm>
-                    
-                    <envar>printShared</envar></entry>
-                  <entry><function>print-shared</function></entry>
-                  <entry>true</entry>
-                  <entry>
-                    If set to <literal>true</literal>,
-                    <function>write</function> and the REPL detect
-                    shared structures in data and invoke a version of
-                    <function>write</function> capable of emitting the
-                    shared structure's external representation of
-                    data. See <xref linkend="Writing"/>. The user may
-                    wish to set this parameter to
-                    <literal>false</literal> because of the overhead
-                    of both scanning all data, and constructing this
-                    representation when shared structures are
-                    detected.
-                  </entry>
-                </row>
-                <row>
-                  <entry>
-                    <indexterm><primary>vector-length-prefixing</primary></indexterm>
-                    <envar>vectorLengthPrefixing</envar></entry>
-                  <entry><function>vector-length-prefixing</function></entry>
-                  <entry>true</entry>
-                  <entry>
-                    If set to <literal>true</literal>, this parameter
-                    will instruct the pretty-printer to emit length
-                    prefixed, trailing-duplicate-eliminated vectors in
-                    its output.  If <literal>false</literal>, ordinary
-                    full-length vectors without prefixes will be
-                    emitted. See <xref linkend="Vectors"/>.
+                    Defines the default character set used by character
+                    ports (see <xref linkend="charports/>) if no character
+                    set is otherwise specified.
                   </entry>
                 </row>
                 <row>
@@ -517,6 +476,39 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                     and variable names, are produced by &SISC;'s
                     compiler. See <xref linkend="passive-debugging"/>.
                   </entry>
+                </row>                         
+                <row>
+                  <entry>
+                    <indexterm><primary>print-shared</primary></indexterm>
+                    
+                    <envar>printShared</envar></entry>
+                  <entry><function>print-shared</function></entry>
+                  <entry>true</entry>
+                  <entry>
+                    If set to <literal>true</literal>,
+                    <function>write</function> and the REPL detect
+                    shared structures in data and invoke a version of
+                    <function>write</function> capable of emitting the
+                    shared structure's external representation of
+                    data. See <xref linkend="Writing"/>. The user may
+                    wish to set this parameter to
+                    <literal>false</literal> because of the overhead
+                    of both scanning all data, and constructing this
+                    representation when shared structures are
+                    detected.
+                  </entry>
+                </row>
+                <row>
+                  <entry>
+                    <indexterm><primary>repl-prompt</primary></indexterm>
+
+                    <envar>replPrompt</envar></entry>
+                  <entry><function>repl-prompt</function></entry>
+                  <entry></entry>
+                  <entry>
+                    String to be displayed as part of &SISC;'s REPL
+                    prompt.
+                  </entry>
                 </row>
                 <row>
                   <entry>
@@ -531,17 +523,39 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                     is displayed automatically. See <xref
                     linkend="passive-debugging"/>.
                   </entry>
-                </row>                 
+                </row>
+                                
                 <row>
                   <entry>
-                    <indexterm><primary>repl-prompt</primary></indexterm>
+                    <indexterm><primary>strict-r5rs-compliance</primary></indexterm>
 
-                    <envar>replPrompt</envar></entry>
-                  <entry><function>repl-prompt</function></entry>
-                  <entry></entry>
+                    <envar>strictR5RSCompliance</envar></entry>
+                  <entry><function>strict-r5rs-compliance</function></entry>
+                  <entry>false</entry>
                   <entry>
-                    String to be displayed as part of &SISC;'s REPL
-                    prompt.
+                    If set to <literal>true</literal>,
+                    <emphasis>strict</emphasis> &R5RS; syntax and
+                    semantics are followed.  This will cause SISC to
+                    raise errors in all situations described as "an
+                    error" in the Scheme standard.  This will override
+                    and invalidate all the interpretation liberties
+                    described in <xref linkend="R5RSViolations"/>.
+                  </entry>
+                </row>
+                 
+                <row>
+                  <entry>
+                    <indexterm><primary>vector-length-prefixing</primary></indexterm>
+                    <envar>vectorLengthPrefixing</envar></entry>
+                  <entry><function>vector-length-prefixing</function></entry>
+                  <entry>true</entry>
+                  <entry>
+                    If set to <literal>true</literal>, this parameter
+                    will instruct the pretty-printer to emit length
+                    prefixed, trailing-duplicate-eliminated vectors in
+                    its output.  If <literal>false</literal>, ordinary
+                    full-length vectors without prefixes will be
+                    emitted. See <xref linkend="Vectors"/>.
                   </entry>
                 </row>
               </tbody>

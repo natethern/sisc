@@ -42,7 +42,11 @@ public class IO extends IndexedProcedure {
         READCHAR            = 25,
         READCODE            = 26,
         WRITE               = 1,
-        WRITECHAR           = 7;
+        WRITECHAR           = 7,
+        OPENBINARYINPUTFILE = 27,
+        OPENBINARYOUTPUTFILE= 28;
+
+        
 
     public static class Index extends IndexedLibraryAdapter { 
 
@@ -68,6 +72,8 @@ public class IO extends IndexedProcedure {
         define("open-input-file"    , OPENINPUTFILE);
         define("open-input-string"  , OPENINPUTSTRING);
         define("open-output-file"   , OPENOUTPUTFILE);
+        define("open-binary-output-file", OPENBINARYOUTPUTFILE);
+        define("open-binary-input-file",  OPENBINARYINPUTFILE);        
         define("open-output-string" , OPENOUTPUTSTRING);
         define("open-source-input-file", OPENSOURCEINPUTFILE);
         define("output-port?"       , OUTPORTQ);
@@ -200,14 +206,71 @@ public class IO extends IndexedProcedure {
         return u;
     }
 
-	public SchemeOutputPort openOutPort(OutputStream out, String encoding, boolean autoflush) throws IOException {
-		return new WriterOutputPort(new BufferedWriter(new OutputStreamWriter(out, encoding)), autoflush);
-	}
-	
-	public SchemeInputPort openInPort(InputStream in, String encoding) throws IOException {
-			return new ReaderInputPort(new BufferedReader(new InputStreamReader(in, encoding)));
-	}
-		
+    SchemeOutputPort openCharOutFile(Interpreter f, 
+                                  URL url, String encoding, boolean aflush) 
+    throws ContinuationException {
+        try {          
+          return new WriterOutputPort(getURLOutputStream(url),
+                                      encoding, aflush);
+        } catch (UnsupportedEncodingException u) {
+            throwIOException(f, liMessage(IOB, "unsupencoding", encoding), u);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throwIOException(f, liMessage(IOB, "erroropening",
+                             url.toString()), e);
+        }
+        return null;
+    }
+    
+    SchemeOutputPort openBinOutFile(Interpreter f, 
+                                    URL url, boolean aflush) 
+        throws ContinuationException {
+        try {          
+          return new StreamOutputPort(
+                  new BufferedOutputStream(getURLOutputStream(url)),
+                  aflush);
+        } catch (IOException e) {
+          throwIOException(f, liMessage(IOB, "erroropening",
+                           url.toString()), e);
+        }
+        return null;
+    }
+
+    InputStream getURLInputStream(URL u) throws IOException {
+        URLConnection conn = u.openConnection();
+        conn.setDoInput(true);
+        conn.setDoOutput(false);
+        return conn.getInputStream();
+    }
+ 
+    OutputStream getURLOutputStream(URL u) throws IOException {
+        if (u.getProtocol().equals("file")) {
+           //the JDK does not permit write access to file URLs
+           return new FileOutputStream(u.getPath());
+        }        
+        URLConnection conn = u.openConnection();
+        conn.setDoInput(false);
+        conn.setDoOutput(true);
+        return conn.getOutputStream();
+    }
+        
+    SchemeInputPort openCharInFile(Interpreter f, URL u, String encoding) 
+    throws ContinuationException {    
+      try {
+        return new SourceInputPort(
+                new BufferedReader(
+                 new InputStreamReader(getURLInputStream(u), encoding)), 
+                u.toString());
+      } catch (UnsupportedEncodingException us) {
+        throwIOException(f, liMessage(IOB, "unsupencoding", encoding), us);                
+      } catch (IOException e) {
+        throwIOException(f, liMessage(IOB, "erroropening", 
+                                   u.toString()), e);
+      }
+      return null;
+    }
+
+
     public Value doApply(Interpreter f)
         throws ContinuationException {
         switch (f.vlr.length) {
@@ -277,40 +340,32 @@ public class IO extends IndexedProcedure {
             case OPENSOURCEINPUTFILE:
                 URL url = url(f.vlr[0]);
                 try {
-                    URLConnection conn = url.openConnection();
-                    conn.setDoInput(true);
-                    conn.setDoOutput(false);
-                    return new SourceInputPort(new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF8")), url.toString());
+                   return new SourceInputPort(
+                           new BufferedReader(
+                             new InputStreamReader(getURLInputStream(url), f.dynenv.characterSet)), 
+                           url.toString());
                 } catch (IOException e) {
-                    throwIOException(f, liMessage(IOB, "erroropening", 
-                                               url.toString()), e);
+                   throwIOException(f, liMessage(IOB, "erroropening", 
+                                    url.toString()), e);
+                }
+            case OPENBINARYINPUTFILE:
+                url = url(f.vlr[0]);
+                try {
+                  return new StreamInputPort(
+                          new BufferedInputStream(getURLInputStream(url))); 
+                } catch (IOException e) {
+                  throwIOException(f, liMessage(IOB, "erroropening", 
+                                   url.toString()), e);
                 }
             case OPENINPUTFILE:
                 url = url(f.vlr[0]);
-                try {
-                    URLConnection conn = url.openConnection();
-                    conn.setDoInput(true);
-                    conn.setDoOutput(false);
-                    return openInPort(conn.getInputStream(), "UTF8");
-                } catch (IOException e) {
-                    throwIOException(f, liMessage(IOB, "erroropening", 
-                                               url.toString()), e);
-                }
+                return openCharInFile(f, url, f.dynenv.characterSet);
             case OPENOUTPUTFILE:
                 url = url(f.vlr[0]);
-                try {
-                    if (url.getProtocol().equals("file")) {
-                        //the JDK does not permit write access to file URLs
-                        return openOutPort(new FileOutputStream(url.getPath()), "UTF8", false);
-                    }
-                    URLConnection conn = url.openConnection();
-                    conn.setDoInput(false);
-                    conn.setDoOutput(true);
-                    return openOutPort(conn.getOutputStream(), "UTF8", false);
-                } catch (IOException e) {
-                    throwIOException(f, liMessage(IOB, "erroropening", 
-                                               url.toString()), e);
-                }
+                return openCharOutFile(f, url, f.dynenv.characterSet, false);
+            case OPENBINARYOUTPUTFILE:
+                url = url(f.vlr[0]);
+                return openBinOutFile(f, url, false);
             case FLUSHOUTPUTPORT:
                 SchemeOutputPort op=outport(f.vlr[0]);
                 try {
@@ -448,25 +503,32 @@ public class IO extends IndexedProcedure {
                 return displayOrWrite(f, outport(f.vlr[1]), f.vlr[0], true);
             case WRITE:
                 return displayOrWrite(f, outport(f.vlr[1]), f.vlr[0], false);
-            case OPENOUTPUTFILE:
+            case OPENINPUTFILE:
                 URL url = url(f.vlr[0]);
-                try {
-                    if (url.getProtocol().equals("file")) {
-                        //the JDK does not permit write access to file URLs
-                        return openOutPort(new FileOutputStream(url.getPath()),
-						                   "UTF8", truth(f.vlr[1]));
-                    }
-                    URLConnection conn = url.openConnection();
-                    conn.setDoInput(false);
-                    conn.setDoOutput(true);
-                    return openOutPort(conn.getOutputStream(),
-                                      "UTF8", truth(f.vlr[1]));
-                } catch (IOException e) {
-                    throwIOException(f, liMessage(IOB, "erroropening",
-                                                  url.toString()), e);
-                }
+                return openCharInFile(f, url, string(f.vlr[1]));
+            case OPENOUTPUTFILE:
+                url = url(f.vlr[0]);
+                boolean aflush=false;
+                String encoding=f.dynenv.characterSet;
+                if (f.vlr[1] instanceof SchemeString)
+                   encoding=string(f.vlr[1]);
+                else
+                   aflush=truth(f.vlr[1]);
+                return openCharOutFile(f, url, encoding, aflush);
+            case OPENBINARYOUTPUTFILE:
+                url = url(f.vlr[0]);
+                return openBinOutFile(f, url, truth(f.vlr[1]));
             case NORMALIZEURL:
                 return new SchemeString(urlClean(url(f.vlr[0], f.vlr[1])).toString());
+            default:
+                throwArgSizeException();
+            }
+        case 3:
+            switch (id) {
+            case OPENOUTPUTFILE:
+                URL url = url(f.vlr[0]);
+                return openCharOutFile(f, url, string(f.vlr[1]), 
+                                    truth(f.vlr[2]));
             default:
                 throwArgSizeException();
             }

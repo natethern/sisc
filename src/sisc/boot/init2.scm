@@ -54,6 +54,7 @@
 (define vector-length-prefixing (make-native-parameter "vectorLengthPrefixing"))
 (define emit-debugging-symbols  (make-native-parameter "emitDebuggingSymbols"))
 (define emit-annotations        (make-native-parameter "emitAnnotations"))
+(define character-set           (make-native-parameter "characterSet"))
 
 (if (equal? (getenv "beta") "yes")
     (begin
@@ -448,17 +449,39 @@
 
 ;; I/O ;;
 
-(define (call-with-input-file file proc)
-  (let* ([port (open-input-file file)]
+(define (call-with-input-file file procOrEncoding . proc)
+  (if (null? proc) 
+      (let* ([port (open-input-file file)]
+             [result (procOrEncoding port)])
+        (close-input-port port)
+        result)
+      (let* ([port (open-input-file file procOrEncoding)]
+             [result ((car proc) port)])
+        (close-input-port port)
+        result)))
+
+(define (call-with-output-file file procOrEncoding . proc)
+  (if (null? proc) 
+      (let* ([port (open-output-file file)]
+             [result (procOrEncoding port)])
+        (close-input-port port)
+        result)
+      (let* ([port (open-output-file file procOrEncoding)]
+             [result ((car proc) port)])
+        (close-output-port port)
+        result)))
+        
+(define (call-with-binary-input-file file proc)
+  (let* ([port (open-binary-input-file file)]
          [result (proc port)])
     (close-input-port port)
     result))
 
-(define (call-with-output-file file proc)
-  (let* ([port (open-output-file file)]
+(define (call-with-binary-output-file file proc)
+  (let* ([port (open-binary-output-file file)]
          [result (proc port)])
     (close-output-port port)
-    result))
+    result))        
 
 (define (with-input-from-port port thunk)
   (let ([cip (current-input-port)])
@@ -474,13 +497,34 @@
      thunk
      (lambda () (current-output-port cop)))))
 
-(define (with-input-from-file file thunk)
-  (call-with-input-file file
-    (lambda (port) (with-input-from-port port thunk))))
+(define (with-binary-input-from-file file thunk)
+  (call-with-binary-input-file file 
+    (lambda (port) (with-input-from-port port (if port thunk)))))
 
-(define (with-output-to-file file thunk)
-  (call-with-output-file file
-    (lambda (port) (with-output-to-port port thunk))))
+(define (with-binary-output-to-file file thunk)
+  (call-with-binary-output-file file 
+    (lambda (port) (with-output-to-port port (if port thunk)))))
+        
+(define (with-input-from-file file thunkOrEncoding . thunk)
+  (if (null? thunk)
+      (call-with-input-file file 
+        (lambda (port) (with-input-from-port port (if port thunkOrEncoding))))
+      (call-with-input-file file thunkOrEncoding
+        (lambda (port) (with-input-from-port port (if port (car thunk)))))))
+
+(define (with-output-to-file file thunkOrEncoding . thunk)
+  (if (null? thunk)
+      (call-with-output-file file 
+        (lambda (port) (with-output-to-port port (if port thunkOrEncoding))))
+      (call-with-output-file file thunkOrEncoding
+        (lambda (port) (with-output-to-port port (if port (car thunk)))))))
+
+(define (with-character-set set thunk)
+ (let ([previous-set (character-set)])
+    (dynamic-wind
+     (lambda () (character-set set))
+     thunk
+     (lambda () (character-set previous-set)))))
 
 (define (call-with-input-string str proc)
   (let* ([port (open-input-string str)]

@@ -1,6 +1,8 @@
-2003-06-02  Scott G. Miller  <scgmille@freenetproject.org>
+2003-06-04  Scott G. Miller  <scgmille@freenetproject.org>
 
-	* Fixed wide character handling in the console ports.
+	* Separated character from binary IO. 
+	
+	* Means to use multiple character sets in Scheme.
 	
 2003-06-02  Matthias Radestock  <matthias@sorted.org>
 

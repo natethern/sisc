@@ -1,12 +1,16 @@
 package sisc.io;
 
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 
 public class WriterOutputPort extends AutoflushOutputPort {
 
     protected Writer out;
 
+	public WriterOutputPort(OutputStream out, String encoding, boolean aflush) 
+	throws UnsupportedEncodingException {
+        this(new BufferedWriter(new OutputStreamWriter(out, encoding)), aflush);
+	}
+	
     public WriterOutputPort(Writer out, boolean aflush) {
         super(aflush);
         this.out=out;

@@ -55,13 +55,15 @@ public class SNetwork extends IndexedProcedure {
         ACCEPT_TCP_SOCKET = 7,
         OPEN_SOCKET_OUTPUT_PORT = 10,
         OPEN_SOCKET_INPUT_PORT = 11,
-        OPEN_TCP_SOCKET = 12,
-        OPEN_TCP_LISTENER = 13,
-        CLOSE_SOCKET = 14,
-        SET_SO_TIMEOUT = 15,
-        OPEN_UDP_LISTEN_SOCKET = 16,
-        SOCKETQ = 17,
-        SERVERSOCKETQ = 18;
+   	    OPEN_BINARY_SOCKET_OUTPUT_PORT = 12,
+	    OPEN_BINARY_SOCKET_INPUT_PORT = 13,
+        OPEN_TCP_SOCKET = 14,
+        OPEN_TCP_LISTENER = 15,
+        CLOSE_SOCKET = 16,
+        SET_SO_TIMEOUT = 17,
+        OPEN_UDP_LISTEN_SOCKET = 18,
+        SOCKETQ = 19,
+        SERVERSOCKETQ = 20;
 
     interface Closable {
         void close() throws IOException;
@@ -69,12 +71,35 @@ public class SNetwork extends IndexedProcedure {
 
     abstract class SchemeSocket extends Value implements Closable {
         public abstract void close() throws IOException;
-        abstract SchemeInputPort getInputPort(Interpreter r)
+        SchemeInputPort getInputPort(Interpreter r)
+            throws IOException, ContinuationException {
+                return getInputPort(r, r.dynenv.characterSet);
+            }
+        abstract SchemeInputPort getInputPort(Interpreter r, String encoding)
             throws IOException, ContinuationException;
-        abstract SchemeOutputPort getOutputPort(
+        abstract SchemeInputPort getBinaryInputPort(Interpreter r)
+            throws IOException, ContinuationException;
+        abstract SchemeOutputPort getBinaryOutputPort(
+            Interpreter r, boolean autoflush)
+            throws IOException, ContinuationException;
+        SchemeOutputPort getOutputPort(
             Interpreter r,
             boolean autoflush)
-            throws IOException, ContinuationException;
+            throws IOException, ContinuationException {
+            	return getOutputPort(r, r.dynenv.characterSet, autoflush); 
+            }
+		SchemeOutputPort getOutputPort(
+			Interpreter r,
+			String encoding)
+			throws IOException, ContinuationException {
+				return getOutputPort(r, encoding, false);
+			}
+			
+		abstract SchemeOutputPort getOutputPort(
+			Interpreter r,
+			String encoding, boolean autoflush)
+			throws IOException, ContinuationException;
+            
     }
 
     class SchemeServerSocket extends Value implements Closable {
@@ -117,15 +142,30 @@ public class SNetwork extends IndexedProcedure {
             s.setSoTimeout(ms);
         }
 
-        public SchemeInputPort getInputPort(Interpreter r)
+        public SchemeInputPort getBinaryInputPort(Interpreter r)
             throws IOException, ContinuationException {
             return new StreamInputPort(
                 new BufferedInputStream(s.getInputStream()));
         }
 
-        public SchemeOutputPort getOutputPort(Interpreter r, boolean autoflush)
+        public SchemeInputPort getInputPort(Interpreter r, String encoding)
+                   throws IOException, ContinuationException {
+            return new ReaderInputPort(s.getInputStream(), encoding);
+        }
+         
+        public SchemeOutputPort getOutputPort(Interpreter r,
+                                              String encoding,
+                                              boolean autoflush) 
             throws IOException, ContinuationException {
-            return new StreamOutputPort(s.getOutputStream(), autoflush);
+            return new WriterOutputPort(s.getOutputStream(), encoding,
+                                        autoflush);
+        }
+                               
+        public SchemeOutputPort getBinaryOutputPort(Interpreter r,
+                                                    boolean autoflush) 
+            throws IOException, ContinuationException {
+            return new StreamOutputPort(new BufferedOutputStream(s.getOutputStream()),
+                                        autoflush);
         }
     }
 
@@ -258,7 +298,7 @@ public class SNetwork extends IndexedProcedure {
             s.close();
         }
 
-        public SchemeInputPort getInputPort(Interpreter r)
+        public SchemeInputPort getBinaryInputPort(Interpreter r)
             throws IOException, ContinuationException {
             if ((mode & LISTEN) == 0)
                 error(r, liMessage(SNETB, "inputonoutputudp"));
@@ -266,7 +306,7 @@ public class SNetwork extends IndexedProcedure {
                 new BufferedInputStream(new UDPInputStream(s, packet_size)));
         }
 
-        public SchemeOutputPort getOutputPort(Interpreter r, boolean autoflush)
+        public SchemeOutputPort getBinaryOutputPort(Interpreter r, boolean autoflush)
             throws IOException, ContinuationException {
             if ((mode & SEND) == 0)
                 error(r, liMessage(SNETB, "outputoninputudp"));
@@ -274,6 +314,25 @@ public class SNetwork extends IndexedProcedure {
                 new UDPOutputStream(s, remoteHost, dport),
                 autoflush);
         }
+        
+        public SchemeInputPort getInputPort(Interpreter r, String encoding)
+            throws IOException, ContinuationException {
+            if ((mode & LISTEN) == 0)
+                error(r, liMessage(SNETB, "inputonoutputudp"));
+            return new ReaderInputPort(new UDPInputStream(s, packet_size),
+                                       encoding);
+        }
+
+        public SchemeOutputPort getOutputPort(Interpreter r, 
+                                              String encoding,
+                                              boolean autoflush)
+            throws IOException, ContinuationException {
+            if ((mode & SEND) == 0)
+                error(r, liMessage(SNETB, "outputoninputudp"));
+            return new WriterOutputPort(
+                new UDPOutputStream(s, remoteHost, dport), encoding,
+                autoflush);
+        }        
     }
 
     class SchemeMulticastUDPSocket extends SchemeUDPSocket {
@@ -334,6 +393,8 @@ public class SNetwork extends IndexedProcedure {
             define("open-tcp-listener", OPEN_TCP_LISTENER);
             define("accept-tcp-socket", ACCEPT_TCP_SOCKET);
             define("open-tcp-socket", OPEN_TCP_SOCKET);
+			define("open-binary-socket-input-port", OPEN_BINARY_SOCKET_INPUT_PORT);
+			define("open-binary-socket-output-port", OPEN_BINARY_SOCKET_OUTPUT_PORT);
             define("open-socket-input-port", OPEN_SOCKET_INPUT_PORT);
             define("open-socket-output-port", OPEN_SOCKET_OUTPUT_PORT);
             define("close-socket", CLOSE_SOCKET);
@@ -401,6 +462,12 @@ public class SNetwork extends IndexedProcedure {
                 case OPEN_SOCKET_OUTPUT_PORT:
                     SchemeSocket ssock=sock(f.vlr[0]);
                     return ssock.getOutputPort(f, false);
+  			    case OPEN_BINARY_SOCKET_INPUT_PORT:
+				    ss=sock(f.vlr[0]);
+					return ss.getBinaryInputPort(f);
+				case OPEN_BINARY_SOCKET_OUTPUT_PORT:
+					ssock=sock(f.vlr[0]);
+					return ssock.getBinaryOutputPort(f,false);                   
                 case CLOSE_SOCKET:
                     Closable c=(Closable)f.vlr[0];
                     c.close();
@@ -472,9 +539,18 @@ public class SNetwork extends IndexedProcedure {
                         s.setMode(LISTEN);
                         return s;
                     }
-                case OPEN_SOCKET_OUTPUT_PORT:
+                case OPEN_BINARY_SOCKET_OUTPUT_PORT:
                     SchemeSocket ssock=sock(f.vlr[0]);
-                    return ssock.getOutputPort(f, truth(f.vlr[1]));
+                    return ssock.getBinaryOutputPort(f, truth(f.vlr[1]));
+				case OPEN_SOCKET_INPUT_PORT:
+					SchemeSocket ss=sock(f.vlr[0]);
+					return ss.getInputPort(f, string(f.vlr[1]));
+				case OPEN_SOCKET_OUTPUT_PORT:
+					ssock=sock(f.vlr[0]);
+					if (f.vlr[1] instanceof SchemeString)
+					   return ssock.getOutputPort(f, string(f.vlr[1]));
+					else
+					   return ssock.getBinaryOutputPort(f, truth(f.vlr[1]));
                 case SET_MULTICAST_TTL:
                     SchemeMulticastUDPSocket ms=mcastsock(f.vlr[0]);
                     int ttl=num(f.vlr[1]).indexValue();
@@ -519,7 +595,11 @@ public class SNetwork extends IndexedProcedure {
 int dgramsize=num(f.vlr[2]).indexValue();
                     s=new SchemeMulticastUDPSocket(new MulticastSocket(dport), host, dgramsize);
                     s.setMode(SEND | LISTEN);
-                    return s;
+                    return s; 
+				case OPEN_SOCKET_OUTPUT_PORT:
+					SchemeSocket ssock=sock(f.vlr[0]);
+ 				    return ssock.getOutputPort(f, string(f.vlr[1]), 
+ 				                               truth(f.vlr[2]));                   
                 default:
                     throwArgSizeException();
                 }

@@ -208,18 +208,23 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
 	</para>
       </blockquote>
     </sect2>
-    <sect2>
+    <sect2 id="charports">
       <title>Character Ports</title>
       <para>
 	The &R5RS; I/O primitives implemented by &SISC; create
 	<emphasis>character ports</emphasis>.  Character ports read
 	characters from input sources and treat the data as characters
-	in a given character set.  By default, input data is handled
-	as UTF-8 from RFC 2279.   Correspondingly, character ports
-	output bytes from characters according to a given character
-	set's conversion rules, again, using the UTF-8 character set 
-	by default.  
+	in a given character set.   
+	Correspondingly, character ports output bytes from characters 
+	according to a given character set's encoding rules. 
       </para> 
+      <para>
+        By default character ports use the value of the string parameter 
+        <function>character-set</function> as the character encoding name.
+        A list of many possible encoding names can be found in the  
+        <ulink url="http://java.sun.com/j2se/1.4.1/docs/guide/intl/encoding.doc.html">
+        Java Platform Documentation</ulink>
+      </para>
       <para>
         <blockquote>
           <para>
@@ -233,13 +238,19 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <parameter>url</parameter>
               </methodparam>
               <methodparam choice="opt">
+                <parameter>encoding</parameter>
+              </methodparam>
+              <methodparam choice="opt">
                 <parameter>auto-flush</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
                 Creates an output port to the specified
-                <parameter>url</parameter> If the optional
+                <parameter>url</parameter>.  If the optional 
+                <parameter>encoding</parameter> parameter, a string,
+                is supplied output will be encoded in the specified encoding
+                rather than the default.  If the optional
                 <parameter>auto-flush</parameter> argument is provided
                 and is non-false, the port will automatically flush after
                 each write call.  If the specified file exists, it
@@ -247,7 +258,62 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </para>
             </blockquote>
           </para>
+          <para>
+            <indexterm><primary>open-input-file</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>input port</type>
+              <methodname>open-input-file</methodname>
+              <methodparam>
+                <parameter>url</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>encoding</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates an input port from the specified
+                <parameter>url</parameter>.  If the optional 
+                <parameter>encoding</parameter> parameter, a string,
+                is supplied input will be decoded from the specified encoding
+                rather than the default.  
+              </para>
+            </blockquote>
+          </para>     
         </blockquote>
+      </para>
+      <para>
+	One may also temporarily reset the default character set using
+	the <function>with-character-set</function> function.
+      </para>
+      <para>
+        <blockquote>
+          <para>
+            <indexterm><primary>with-character-set</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>with-character-set</methodname>
+              <methodparam>
+                <parameter>encoding</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>thunk</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+		Changes the value of the
+                <function>character-set</function> parameter, and
+		the default character set to the named encoding while
+		executing the body of <parameter>thunk</parameter>.
+              </para>
+            </blockquote>
+          </para>
+	</blockquote>
       </para>
     </sect2>
     <sect2 id="BinaryIO">
@@ -276,9 +342,9 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>
-		Creates an input port in the same manner as &R5RS;
+		        Creates an input port in the same manner as &R5RS;
                 <function>open-input-file</function>, producing an
-		input port that does no character-set decoding on the
+		        input port that does no character-set decoding on the
                 bytes read as input.              </para>
             </blockquote>
           </para>
@@ -323,7 +389,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
           display,</computeroutput> and
         <computeroutput>write</computeroutput>), &SISC; provides block
         input/output functions, that allow a Scheme program to read
-        blocks of more than one byte of data at a time.
+        blocks of more than one byte of data at a time from binary ports.
         &SISC; stores data that is read or is to be written in a 
         binary buffer (see <xref linkend="Buffers"/>).
       </para>
@@ -396,6 +462,10 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         Scheme port operations.  A String Input port will read from a
         given string until the end of string is reached, at which
         point <computeroutput>&num;!eof</computeroutput> is returned.
+      </para>
+      <para>
+        String ports deal with characters as the atomic unit, and as such
+        preserve full unicode width characters at all times.
       </para>
       <para>
         <blockquote>
@@ -487,6 +557,24 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <methodparam>
                 <parameter>url</parameter>
               </methodparam>
+              <methodparam choice="opt">
+                <parameter>encoding</parameter>
+              </methodparam>              
+              <methodparam>
+                <parameter>procedure</parameter>
+              </methodparam>
+            </methodsynopsis>
+	  </para>
+          <para id="func-call-with-binary-input-file">
+            <indexterm><primary>call-with-binary-input-file</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>call-with-binary-input-file</methodname>
+              <methodparam>
+                <parameter>url</parameter>
+              </methodparam>
               <methodparam>
                 <parameter>procedure</parameter>
               </methodparam>
@@ -494,9 +582,15 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             <blockquote>
               <para>   
                 Calls <parameter>procedure</parameter> with a new input port attached to
-                <parameter>url</parameter>.  The result of the thunk
-                is returned.
+                <parameter>url</parameter>.
+                The result of the thunk is returned.
               </para>
+	      <para>
+		In the non-binary form, if the optional 
+		<parameter>encoding</parameter>
+                parameter is provided, the character port created will
+                use the specified encoding rather than the default.
+	      </para>
             </blockquote>
           </para>
           <para id="func-call-with-output-file">
@@ -509,16 +603,42 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <methodparam>
                 <parameter>url</parameter>
               </methodparam>
+              <methodparam choice="opt">
+                <parameter>encoding</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>procedure</parameter>
+              </methodparam>
+            </methodsynopsis>
+	  </para>
+          <para id="func-call-with-binary-output-file">
+            <indexterm><primary>call-with-binary-output-file</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>call-with-binary-output-file</methodname>
+              <methodparam>
+                <parameter>url</parameter>
+              </methodparam>
               <methodparam>
                 <parameter>procedure</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>   
-                Calls <parameter>procedure</parameter> with a new output port attached to
-                <parameter>url</parameter>.  The result of the thunk
-                is returned.
+                Calls <parameter>procedure</parameter> with a new character
+                output port attached to
+                <parameter>url</parameter>. 
+                The result of the thunk is returned.  
               </para>
+	      <para>
+	      <para>
+		In the non-binary form, if the optional 
+		<parameter>encoding</parameter>
+                parameter is provided, the character port created will
+                use the specified encoding rather than the default.
+	      </para>
             </blockquote>
           </para>
           <para id="func-call-with-input-string">
@@ -598,7 +718,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 Evaluates <parameter>thunk</parameter> with
                 <parameter>port</parameter> as the
                 <literal>current-input-port</literal> for the duration
-                of the evaluation.
+                of the evaluation.  
               </para>
             </blockquote>
           </para>
@@ -621,7 +741,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 Evaluates <parameter>thunk</parameter> with
                 <parameter>port</parameter> as the
                 <literal>current-output-port</literal> for the duration
-                of the evaluation.
+                of the evaluation.  
               </para>
             </blockquote>
           </para>
@@ -635,6 +755,24 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <methodparam>
                 <parameter>url</parameter>
               </methodparam>
+              <methodparam choice="opt">
+                <parameter>encoding</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>thunk</parameter>
+              </methodparam>
+            </methodsynopsis>
+	  </para>
+          <para id="func-with-binary-input-from-file">
+            <indexterm><primary>with-binary-input-from-file</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>with-binary-input-from-file</methodname>
+              <methodparam>
+                <parameter>url</parameter>
+              </methodparam>
               <methodparam>
                 <parameter>thunk</parameter>
               </methodparam>
@@ -644,9 +782,16 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 input port attached to a file opened for reading from
                 <parameter>url</parameter> as the
                 <literal>current-input-port</literal> for the duration
-                of the evaluation. The port is closed when
+                of the evaluation. 
+                The port is closed when
                 <parameter>thunk</parameter> returns normally.
               </para>
+	      <para>
+		In the non-binary form,
+		if the optional <parameter>encoding</parameter>
+                parameter is provided, the character port created will
+                use the specified encoding rather than the default.
+	      </para>
             </blockquote>
           </para>
           <para id="func-with-output-to-file">
@@ -656,6 +801,24 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>with-output-to-file</methodname>
+              <methodparam>
+                <parameter>url</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>encoding</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>thunk</parameter>
+              </methodparam>
+            </methodsynopsis>
+	  </para>
+          <para id="func-with-binary-output-to-file">
+            <indexterm><primary>with-binary-output-to-file</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>with-binary-output-to-file</methodname>
               <methodparam>
                 <parameter>url</parameter>
               </methodparam>
@@ -669,9 +832,16 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 an input port attached to a file opened for writing
                 to <parameter>url</parameter> as the
                 <literal>current-output-port</literal> for the duration
-                of the evaluation. The port is closed when
+                of the evaluation. 
+                The port is closed when
                 <parameter>thunk</parameter> returns normally.
               </para>
+	      <para>
+		In the non-binary form, 
+		if the optional <parameter>encoding</parameter>
+                parameter is provided, the character port created will
+                use the specified encoding rather than the default.
+	      </para>
             </blockquote>
           </para>
           <para id="func-with-input-from-string">
@@ -875,10 +1045,15 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <methodname>open-socket-input-port</methodname>
               <methodparam><parameter>socket</parameter>
               </methodparam>
+              <methodparam choice="opt">
+                <parameter>encoding</parameter>
+              </methodparam>              
             </methodsynopsis>
             <blockquote>
               <para>
-                Opens a Scheme input port to the socket.  
+                Opens a character input port to the socket.  If the optional <parameter>encoding</parameter>
+                parameter is provided, the character port created will
+                use the specified encoding rather than the default.
               </para>
             </blockquote>
           </para>
@@ -892,18 +1067,62 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <methodparam><parameter>socket</parameter>
               </methodparam>
               <methodparam choice="opt">
+                <parameter>encoding</parameter>
+              </methodparam>                                          
+              <methodparam choice="opt">
                 <parameter>auto-flush</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Opens a Scheme output port to the socket.  If provided, the
+                Opens a character output port to the socket.  If provided, the
+                boolean argument specifies whether the given port should be
+                set to auto-flush mode.  If unspecified, the port does
+                <emphasis>not</emphasis> auto-flush.
+                If the optional <parameter>encoding</parameter>
+                parameter is provided, the character port created will
+                use the specified encoding rather than the default.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-open-binary-socket-input-port">
+            <indexterm><primary>open-binary-socket-input-port</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>input-port</type>
+              <methodname>open-binary-socket-input-port</methodname>
+              <methodparam><parameter>socket</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Opens a binary input port to the socket.  
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-open-binary-socket-output-port">
+            <indexterm><primary>open-binary-socket-output-port</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>output-port</type>
+              <methodname>open-binary-socket-output-port</methodname>
+              <methodparam><parameter>socket</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>auto-flush</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Opens a character output port to the socket.  If provided, the
                 boolean argument specifies whether the given port should be
                 set to auto-flush mode.  If unspecified, the port does
                 <emphasis>not</emphasis> auto-flush.
               </para>
             </blockquote>
-          </para>
+          </para>          
           <para id="func-close-socket">
             <indexterm><primary>close-socket</primary>
             </indexterm>

@@ -21,7 +21,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public boolean printShared = DEFAULT_PRINT_SHARED;
     public boolean vectorLengthPrefixing = DEFAULT_VECTOR_LENGTH_PREFIXING;
     public boolean emitDebuggingSymbols = DEFAULT_EMIT_DEBUGGING_SYMBOLS;
-
+    public String characterSet = getDefaultCharacterSet();
+    
     private static String defaultPrintShared =
         new Boolean(DEFAULT_PRINT_SHARED).toString();
     private static String defaultVectorLengthPrefixing =
@@ -143,6 +144,14 @@ public class DynamicEnvironment extends Util implements Cloneable {
         printShared = truth(v);
     }
 
+    public Value getCharacterSet() {
+        return new SchemeString(characterSet);
+    }
+    
+    public void setCharacterSet(Value v) {
+        characterSet=string(v);
+    }
+    
     public Value getVectorLengthPrefixing() {
         return truth(vectorLengthPrefixing);
     }
@@ -174,7 +183,12 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public void setStrictR5RSCompliance(Value v) {
         parser.lexer.strictR5RS = truth(v);
     }
-
+    
+    protected static String getDefaultCharacterSet() {
+        // I wish there were a better way to do this
+        OutputStreamWriter p=new OutputStreamWriter(System.out);
+        return p.getEncoding();
+    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public
