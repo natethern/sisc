@@ -15,9 +15,9 @@
   <target name="docs" depends="init"
           description="Generate Documentation">
     <mkdir dir="${docdir}"/>
-    <javadoc sourcepath="${srcdir}"
-             packagenames="${packagename}.*"
-             destdir="${docdir}"/>
+    <javadoc packagenames="${packagename}.*"
+	     sourcepath="${srcdir}"
+	     destdir="${docdir}"/>
   </target>
 
   <target name="compiler" depends="init">
@@ -26,12 +26,14 @@
            destdir="${classdir}"
 	   classpath=".."
            includes="${packagename}/**"
+	   excludes="${packagename}/*/Quantity-*.java"
 	   optimize="on"
-    />      
+	   />      
   </target>
   
   <target name="jars" depends="compiler">
     <jar jarfile="${basedir}/${jarname}"
+	 manifest="${basedir}/boot/Manifest"
          basedir="${classdir}"
          includes="*/**"/>
   </target>
@@ -39,11 +41,12 @@
   <target name="heap" depends="compiler">
     <java classname="sisc.boot.GenerateHeap"
 	  classpath="${classdir}"
-	  dir="${schemedir}/syntax-case"
+	  dir="${schemedir}"
 	  fork="yes">
       <arg value="${heap}"/>
       <arg value="${schemedir}/init.pp"/>
-      <arg value="${schemedir}/syntax-case/loadpp.ss"/>
+      <arg value="${schemedir}/compat.pp"/>
+      <arg value="${schemedir}/psyntax.pp"/>
       <arg value="${schemedir}/init2.scm"/>
       <arg value="${schemedir}/pp.scm"/>
       <arg value="${schemedir}/repl.scm"/>
