@@ -1,6 +1,40 @@
+/* 
+ * The contents of this file are subject to the Mozilla Public
+ * License Version 1.1 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS
+ * IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * rights and limitations under the License.
+ * 
+ * The Original Code is the Second Interpreter of Scheme Code (SISC).
+ * 
+ * The Initial Developer of the Original Code is Scott G. Miller.
+ * Portions created by Scott G. Miller are Copyright (C) 2000-2001
+ * Scott G. Miller.  All Rights Reserved.
+ * 
+ * Contributor(s):
+ * Matthias Radestock 
+ * 
+ * Alternatively, the contents of this file may be used under the
+ * terms of the GNU General Public License Version 2 or later (the
+ * "GPL"), in which case the provisions of the GPL are applicable 
+ * instead of those above.  If you wish to allow use of your 
+ * version of this file only under the terms of the GPL and not to
+ * allow others to use your version of this file under the MPL,
+ * indicate your decision by deleting the provisions above and
+ * replace them with the notice and other provisions required by
+ * the GPL.  If you do not delete the provisions above, a recipient
+ * may use your version of this file under either the MPL or the
+ * GPL.
+ */
 package sisc.data;
 
 import java.math.*;
+import java.io.*;
+import sisc.Serializer;
 
 public class Quantity extends Value {
     public static int min_precision; 
@@ -11,7 +45,10 @@ public class Quantity extends Value {
 	String y=System.getProperty("maxprecision");
 	min_precision=(x==null ? 16 : Integer.parseInt(x));
 	max_precision=(y==null ? 32 : Integer.parseInt(y));
-	System.err.println("Quantity-lib: Arbitrary precision floating point");
+    }
+
+    public static String reportLibraryType() {
+	return "Quantity-lib: Arbitrary precision floating point";
     }
 
     public final static BigInteger 
@@ -53,14 +90,22 @@ public class Quantity extends Value {
     public int val;
     public BigDecimal d, im;
     public BigInteger i, de;
-    public String out_cache;
-    public byte out_cache_radix;
+    public transient String out_cache;
+    public transient byte out_cache_radix;
 
     public Quantity() {} 
 
     public Quantity (int l) {
 	val=l;
 	type=FIXEDINT;
+    }
+
+    public Quantity (short s) {
+	this((int)s);
+    }
+
+    public Quantity (float l) {
+	this((double)l);
     }
 
     public Quantity (double l) {
@@ -228,7 +273,7 @@ public class Quantity extends Value {
 		try {
 		    val=Integer.parseInt(v, radix);
 		    type=FIXEDINT;
-		} catch (Exception e) {
+		} catch (NumberFormatException e) {
 		    i=new BigInteger(v, radix);
 		    type=INTEG;
 		}
@@ -236,11 +281,6 @@ public class Quantity extends Value {
 	}
 	simplify();
     }
-
-     
-
-
-
 
     protected void simplify() {
 	if (type==RATIO) {
@@ -1188,6 +1228,108 @@ public class Quantity extends Value {
 	out_cache_radix=(byte)radix;
 	return out_cache=b.toString();
     }
+
+    public Object javaValue() {
+	switch(type) {
+	case FIXEDINT:
+	    return new Integer(intValue());
+	case INTEG:
+	    return i;
+	case DECIM: case RATIO:
+	    return new Double(doubleValue());
+	case COMPLEX:
+	    return this;
+	}
+	return null;
+    }
+
+    public void deserialize(Serializer s,
+			    DataInputStream dis) throws IOException {
+	type=s.readBer(dis);
+	switch (type) {
+	case FIXEDINT:
+	    val=s.readBer(dis);
+	    break;
+	case INTEG:
+	    byte[] buffer=new byte[s.readBer(dis)];
+	    dis.readFully(buffer);
+	    i=new BigInteger(buffer);
+	    break;
+	case DECIM:
+	    buffer=new byte[s.readBer(dis)];
+	    int scale=s.readBer(dis);
+	    dis.readFully(buffer);
+
+	    d=new BigDecimal(new BigInteger(buffer), scale);
+	    break;
+	case RATIO:
+	    buffer=new byte[s.readBer(dis)];
+	    dis.readFully(buffer);
+	    i=new BigInteger(buffer);
+	    buffer=new byte[s.readBer(dis)];
+	    dis.readFully(buffer);
+	    de=new BigInteger(buffer);
+	    break;
+	case COMPLEX:
+	    buffer=new byte[s.readBer(dis)];
+	    dis.readFully(buffer);
+	    scale=s.readBer(dis);
+	    d=new BigDecimal(new BigInteger(buffer), scale);
+	    buffer=new byte[s.readBer(dis)];
+	    dis.readFully(buffer);
+	    scale=s.readBer(dis);
+	    im=new BigDecimal(new BigInteger(buffer), scale);
+	    break;
+	}
+	simplify();
+    }
+
+    protected BigInteger unscaledValue(BigDecimal d) {
+	return d.setScale(0, BigDecimal.ROUND_HALF_EVEN).toBigInteger();
+    }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.writeBer(type, dos);
+	switch (type) {
+	case FIXEDINT:
+	    s.writeBer(val, dos);
+	    break;
+	case INTEG:
+	    byte[] buffer=i.toByteArray();
+	    s.writeBer(buffer.length, dos);
+	    dos.write(buffer);
+	    break;
+	case DECIM:
+	    int scale=d.scale();
+	    buffer=unscaledValue(d).toByteArray();
+	    s.writeBer(buffer.length, dos);
+	    s.writeBer(scale, dos);
+	    dos.write(buffer);
+	    break;
+	case RATIO:
+	    buffer=i.toByteArray();
+	    s.writeBer(buffer.length, dos);
+	    dos.write(buffer);
+	    buffer=de.toByteArray();
+	    s.writeBer(buffer.length, dos);
+	    dos.write(buffer);
+	    break;
+	case COMPLEX:
+	    buffer=unscaledValue(d).toByteArray();
+	    scale=d.scale();
+	    s.writeBer(buffer.length, dos);
+	    s.writeBer(scale, dos);
+	    dos.write(buffer);
+
+	    buffer=unscaledValue(d).toByteArray();
+	    scale=im.scale();
+	    s.writeBer(buffer.length, dos);
+	    s.writeBer(scale, dos);
+	    dos.write(buffer);
+	    break;
+	}
+    }
 }
+
 
 

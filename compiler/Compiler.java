@@ -92,16 +92,16 @@ public class Compiler extends Util {
 	public ReferenceEnv(Symbol[] s, ReferenceEnv parent) {
 	    this.parent=parent;
 	    for (int i=0; i<s.length; i++) {
-		ref.put(s[i], new Short((short)i));
+		ref.put(s[i], new Integer(i));
 	    }
 	}
 
 	public Expression createReference(Symbol s, AssociativeEnvironment env) {
-	    short lev=-1;
+	    int lev=-1;
 	    ReferenceEnv ctx=this;
-	    Short r=null;
+	    Integer r=null;
 	    while (r==null && ctx!=null) {
-		r=(Short)ctx.ref.get(s);
+		r=(Integer)ctx.ref.get(s);
 		ctx=ctx.parent;
 		lev++;
 	    }
@@ -109,7 +109,7 @@ public class Compiler extends Util {
 	    if (r==null) 
 		return new FreeReferenceExp(s, env.getLoc(s), env);
 	    else 
-		return new LexicalReferenceExp(lev, r.shortValue());
+		return new LexicalReferenceExp(lev, r.intValue());
 	}    
     }
 
@@ -184,7 +184,7 @@ public class Compiler extends Util {
 		    expr=list(new Pair(Util.BEGIN, expr));
 		tmp=compile(r, expr.car, new ReferenceEnv(formals, rt),  
 			    TAIL | LAMBDA, env);
-		return new LambdaExp((short)formals.length, tmp, infArity);
+		return new LambdaExp(formals.length, tmp, infArity);
 	    case _IF:
 		tmp=compile(r, expr.car, rt, PREDICATE, env);
 		expr=(Pair)expr.cdr;

@@ -37,9 +37,9 @@ import sisc.data.*;
 import java.io.*;
 
 public class LexicalSetEval extends Expression {
-    public short depth, pos;
+    public int depth, pos;
 
-    public LexicalSetEval(short depth, short pos) {
+    public LexicalSetEval(int depth, int pos) {
 	this.depth=depth;
 	this.pos=pos;
     }
@@ -64,7 +64,7 @@ public class LexicalSetEval extends Expression {
 
     public void deserialize(Serializer s, DataInputStream dis) 
 	throws IOException {
-	depth=s.readBerShort(dis);
-	pos=s.readBerShort(dis);
+	depth=s.readBer(dis);
+	pos=s.readBer(dis);
     }
 }

@@ -1,40 +1,8 @@
-/* 
- * The contents of this file are subject to the Mozilla Public
- * License Version 1.1 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a copy of
- * the License at http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS
- * IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
- * implied. See the License for the specific language governing
- * rights and limitations under the License.
- * 
- * The Original Code is the Second Interpreter of Scheme Code (SISC).
- * 
- * The Initial Developer of the Original Code is Scott G. Miller.
- * Portions created by Scott G. Miller are Copyright (C) 2000-2001
- * Scott G. Miller.  All Rights Reserved.
- * 
- * Contributor(s):
- * Matthias Radestock 
- * 
- * Alternatively, the contents of this file may be used under the
- * terms of the GNU General Public License Version 2 or later (the
- * "GPL"), in which case the provisions of the GPL are applicable 
- * instead of those above.  If you wish to allow use of your 
- * version of this file only under the terms of the GPL and not to
- * allow others to use your version of this file under the MPL,
- * indicate your decision by deleting the provisions above and
- * replace them with the notice and other provisions required by
- * the GPL.  If you do not delete the provisions above, a recipient
- * may use your version of this file under either the MPL or the
- * GPL.
- */
 package sisc.data;
 
 import java.math.*;
-import java.io.*;
 import sisc.Serializer;
+import java.io.*;
 
 public class Quantity extends Value {
     public static int min_precision; 
@@ -47,10 +15,6 @@ public class Quantity extends Value {
 	max_precision=(y==null ? 32 : Integer.parseInt(y));
     }
 
-    public static String reportLibraryType() {
-	return "Quantity-lib: Arbitrary precision floating point";
-    }
-
     public final static BigInteger 
 	_BI_NEGONE=BigInteger.valueOf(-1),
 	_BI_ZERO = BigInteger.valueOf(0),
@@ -59,6 +23,7 @@ public class Quantity extends Value {
 	_INT_MAX = BigInteger.valueOf(Integer.MAX_VALUE),
 	_INT_MIN = BigInteger.valueOf(Integer.MIN_VALUE);
 
+    /*
     public final static BigDecimal 
 	_BD_NEGONE = BigDecimal.valueOf(-1),
 	_BD_ZERO   = BigDecimal.valueOf(0),
@@ -66,13 +31,14 @@ public class Quantity extends Value {
 	_BD_TWO    = BigDecimal.valueOf(2),
 	_BD_TEN    = BigDecimal.valueOf(10),
 	_BD_HUNDRED= BigDecimal.valueOf(100);
+    */
 
     public final static Quantity 
 	ZERO = new Quantity(0),
 	ONE  = new Quantity(1),
 	TWO  = new Quantity(2),
-	I    = new Quantity(_BD_ZERO, _BD_ONE),
-	TWO_I= new Quantity(_BD_ZERO, _BD_TWO),
+	I    = new Quantity(0.0, 1.0),
+	TWO_I= new Quantity(0.0, 2.0),
 	HALF_PI = new Quantity(Math.PI/2);
 
     public static final int 
@@ -88,10 +54,10 @@ public class Quantity extends Value {
 
     public int type;
     public int val;
-    public BigDecimal d, im;
+    public double d, im;
     public BigInteger i, de;
-    public transient String out_cache;
-    public transient byte out_cache_radix;
+    public String out_cache;
+    public byte out_cache_radix;
 
     public Quantity() {} 
 
@@ -100,16 +66,8 @@ public class Quantity extends Value {
 	type=FIXEDINT;
     }
 
-    public Quantity (short s) {
-	this((int)s);
-    }
-
-    public Quantity (float l) {
-	this((double)l);
-    }
-
     public Quantity (double l) {
-	d=new BigDecimal(Double.toString(l));
+	d=l;
 	type=DECIM;
     }
 
@@ -120,12 +78,6 @@ public class Quantity extends Value {
 
     public Quantity(String v) throws NumberFormatException {
 	this(v, 10);
-    }
-
-    public Quantity(BigDecimal d) {
-	type=DECIM;
-	this.d=d;
-	simplify();
     }
 
     public Quantity(BigInteger i) {
@@ -149,13 +101,21 @@ public class Quantity extends Value {
      
 
 
-    public Quantity (BigDecimal real, BigDecimal imag) {
+    public Quantity (double real, double imag) {
 	d=real;
 	im=imag;
 	type=COMPLEX;
 	simplify();
     }
-    
+
+    protected static int sign(double d) {
+	if (d<0) 
+	    return -1;
+	else if (d>0) 
+	    return 1;
+	else return 0;
+    }
+
     protected static boolean parsePounds(char[] c) {
 	boolean rv=false;
 	for (int i=c.length-1; i>=0; i--) {
@@ -168,11 +128,11 @@ public class Quantity extends Value {
 	return rv;
     }
 
-    protected static BigDecimal parseDecimal(String dv, int radix) {
+    protected static double parseDecimal(String dv, int radix) {
 	return parseDecimal(dv, radix, false);
     }
 
-    protected static BigDecimal parseDecimal(String dv, int radix,
+    protected static double parseDecimal(String dv, int radix,
 					     boolean asDecimal) {
 	if (radix==10) {
 	    int x;
@@ -183,8 +143,7 @@ public class Quantity extends Value {
 		b.append(c);
 		b.append(dv.substring(x));
 		dv=b.toString();
-		Double.parseDouble(dv);
-		return new BigDecimal(dv);
+		return Double.parseDouble(dv);
 	    } else if ((x=dv.indexOf('s'))!=-1 ||
 		       (x=dv.indexOf('f'))!=-1 ||
 		       (x=dv.indexOf('d'))!=-1 ||
@@ -192,16 +151,15 @@ public class Quantity extends Value {
 		StringBuffer b=new StringBuffer(dv.substring(0,x));
 		b.append('e').append(dv.substring(x+1));
 		dv=b.toString();
-		Double.parseDouble(dv);
-		return new BigDecimal(dv);
+		return Double.parseDouble(dv);
 	    } else if (dv.indexOf('.')!=-1) 
-		return new BigDecimal(dv);
+		return Double.parseDouble(dv);
 	    else if (dv.indexOf('#')!=-1) {
 		char[] c=dv.toCharArray();
 		parsePounds(c);
-		return new BigDecimal(new String(c));
+		return Double.parseDouble(new String(c));
 	    } else if (asDecimal) 
-		return new BigDecimal(dv);
+		return Double.parseDouble(dv);
 	    else 
 		throw new NumberFormatException("not a decimal value");
 	} else {
@@ -210,21 +168,20 @@ public class Quantity extends Value {
 		if (dv.indexOf('#')!=-1) {
 		    char[] c=dv.toCharArray();
 		    parsePounds(c);
-		    return new BigDecimal(new String(c));
+		    return Double.parseDouble(new String(c));
 		} else if (asDecimal)
-		    return new BigDecimal(dv);
+		    return Double.parseDouble(dv);
 		else
 		    throw new NumberFormatException("not a decimal value");
 	    else {
 		BigDecimal ipart;
 		BigInteger fpart;
-		ipart=new BigDecimal(new BigInteger(dv.substring(0, x), 
-						    radix));
+		ipart=new BigDecimal(new BigInteger(dv.substring(0, x), radix));
+					
 		String fpartstr=dv.substring(x+1);
 		fpart=new BigInteger(fpartstr, radix);
-		return ipart
-		    .add(div(new BigDecimal(fpart), 
-			     new BigDecimal(Math.pow(radix, fpartstr.length()))));
+		return ipart.add(new BigDecimal(Double.toString(fpart.doubleValue() /
+								Math.pow(radix, fpartstr.length())))).doubleValue();
 	    }
 	}
     }
@@ -236,10 +193,10 @@ public class Quantity extends Value {
 	    de=new BigInteger(v.substring(x+1), radix);
 	    type=RATIO;
 	} else if ((x=v.indexOf('@'))!=-1) {
-	    double xd=parseDecimal(v.substring(0,x), radix, true).doubleValue();
-	    double yd=parseDecimal(v.substring(x+1), radix, true).doubleValue();
-	    d=new BigDecimal(xd * Math.cos(yd));
-	    im=new BigDecimal(xd * Math.sin(yd));
+	    double xd=parseDecimal(v.substring(0,x), radix, true);
+	    double yd=parseDecimal(v.substring(x+1), radix, true);
+	    d=xd * Math.cos(yd);
+	    im=xd * Math.sin(yd);
 	    type=COMPLEX;
 	} else if ((x=v.indexOf('i'))!=-1) {
 	    if (x!=v.length()-1)
@@ -249,19 +206,18 @@ public class Quantity extends Value {
 		x=v.lastIndexOf('-');
 		if (x==-1) throw new NumberFormatException("invalid complex number format");
 		if (x==0) 
-		    d=_BD_ZERO;
+		    d=0.0;
 		else
 		    d=parseDecimal(v.substring(0,x), radix, true);
-		im = ( (x+2)==v.length() ?
-		       _BD_NEGONE :
+		im = ( (x+2)==v.length() ? -1.0 :
 		       parseDecimal(v.substring(x, v.length()-1), radix, true));
 	    } else {
 		if (x==0) 
-		    d=_BD_ZERO;
+		    d=0.0;
 		else
 		    d=parseDecimal(v.substring(0,x), radix, true);
 		im = ( (x+2)==v.length() ?
-		       _BD_ONE :
+		       1.0 :
 		       parseDecimal(v.substring(x+1, v.length()-1), radix, true));
 	    }
 	    type=COMPLEX;
@@ -273,7 +229,7 @@ public class Quantity extends Value {
 		try {
 		    val=Integer.parseInt(v, radix);
 		    type=FIXEDINT;
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 		    i=new BigInteger(v, radix);
 		    type=INTEG;
 		}
@@ -281,6 +237,11 @@ public class Quantity extends Value {
 	}
 	simplify();
     }
+
+     
+
+
+
 
     protected void simplify() {
 	if (type==RATIO) {
@@ -296,20 +257,10 @@ public class Quantity extends Value {
 		type=INTEG;
 	    }
 	} else if (type==COMPLEX) {
-	    if (d.scale()>max_precision) {
-		d=d.setScale(max_precision, BigDecimal.ROUND_HALF_EVEN);
-	    }
-	    if (im.compareTo(_BD_ZERO)==0) {
-		im=null;
+	    if (im==0.0) {
 		type=DECIM;
 	    }
-	    if (im!=null && im.scale()>max_precision) {
-		im=im.setScale(max_precision, BigDecimal.ROUND_HALF_EVEN);
-	    } 
 	} else if (type==DECIM) {
-	    if (d.scale()>max_precision) {
-		d=d.setScale(max_precision, BigDecimal.ROUND_HALF_EVEN);
-	    }
 	}
     }
 
@@ -347,23 +298,35 @@ public class Quantity extends Value {
 	return round(BigDecimal.ROUND_HALF_EVEN);
     }
 
+    protected static BigInteger d2i(double d) {
+	return new BigDecimal(d).toBigInteger();
+    }
+    
+    protected static double round(double d) {
+	double f=Math.floor(d);
+	if (Math.abs(f-d)==0.5)
+	    if (((int)f) % 2 == 0) 
+		return f;
+	    else return f+1;
+	else
+	    return Math.round(d);
+    }
+
     public Quantity gcd(Quantity o) {
 	switch (type) {
 	case FIXEDINT:
 	    return o.gcd(new Quantity((long)val));
 	case DECIM:
-	    BigInteger o2=d.toBigInteger();
-	    if (new BigDecimal(o2).compareTo(d)==0)
-		return new Quantity(o2).gcd(o);
+	    if (Math.floor(d)==d)
+		return new Quantity(d2i(d)).gcd(o);
 	case INTEG:
 	    if (o.type==FIXEDINT) 
 		o=new Quantity((long)o.val);
 	    if (o.type==INTEG) 
 		return new Quantity(i.gcd(o.i));
 	    if (o.type==DECIM) {
-		o2=o.d.toBigInteger();
-		if (new BigDecimal(o2).compareTo(o.d)==0)
-		    return new Quantity(i.gcd(o2)).decimalVal();
+		if (Math.floor(d)==d)
+		    return new Quantity(i.gcd(d2i(d))).decimalVal();
 	    }
 	}
 	throw new ArithmeticException(this+" is not an integer.");
@@ -374,19 +337,17 @@ public class Quantity extends Value {
 	case FIXEDINT:
 	    return o.lcm(new Quantity((long)val));
 	case DECIM:
-	    BigInteger o2=d.toBigInteger();
-	    if (new BigDecimal(o2).compareTo(d)==0)
-		return new Quantity(o2).lcm(o).decimalVal();
+	    if (Math.floor(d)==d) 
+		return new Quantity(d2i(d)).lcm(o).decimalVal();
 	case INTEG:
-	    o2=null;
+	    BigInteger o2=null;
 	    boolean inexact=false;
 	    if (o.type==FIXEDINT) 
-		o2=BigInteger.valueOf((long)o.val);
+		o2=BigInteger.valueOf(o.val);
 	    if (o.type==INTEG) 
 		o2=o.i;
 	    if (o.type==DECIM) {
-		o2=o.d.toBigInteger();
-		if (new BigDecimal(o2).compareTo(o.d)!=0)
+		if (Math.floor(o.d)==o.d) 
 		    inexact=true;
 	    }
 	    BigInteger L=o2.abs(), g=_BI_ONE;
@@ -403,7 +364,17 @@ public class Quantity extends Value {
     public Quantity round(int rtype) {
 	switch (type) {
 	case DECIM:
-	    return new Quantity(d.setScale(0, rtype));
+	    switch (rtype) {
+	    case BigDecimal.ROUND_FLOOR: 
+		return new Quantity((double)Math.floor(d));
+	    case BigDecimal.ROUND_CEILING:
+		return new Quantity((double)Math.ceil(d));
+	    case BigDecimal.ROUND_HALF_EVEN:
+		return new Quantity(round(d));
+	    case BigDecimal.ROUND_DOWN:
+		return new Quantity(d2i(d).doubleValue());
+	    } 
+	    return this;
 	case COMPLEX:
 	    throw new ArithmeticException(this+" is not a real number");
 	case RATIO:
@@ -425,14 +396,12 @@ public class Quantity extends Value {
 	    if (o.type==INTEG) 
 		return new Quantity(i.mod(o.i));
 	    if (o.type==DECIM) {
-		BigInteger o2=o.d.toBigInteger();
-		if (new BigDecimal(o2).compareTo(o.d)==0)
-		    return new Quantity(i.mod(o2)).decimalVal();
+		if (Math.floor(d)==d) 
+		    return new Quantity(i.mod(d2i(d))).decimalVal();
 	    }
 	case DECIM:
-	    BigInteger o2=d.toBigInteger();
-	    if (new BigDecimal(o2).compareTo(d)==0)
-		return new Quantity(o2).modulo(o).decimalVal();
+	    if (Math.floor(d)==d) 
+		return new Quantity(d2i(d)).modulo(o).decimalVal();
 	default:
 	    throw new NumberFormatException("expected integral quantities");
 	}
@@ -450,14 +419,12 @@ public class Quantity extends Value {
 	    if (o.type==INTEG) 
 		return new Quantity(i.divide(o.i));
 	    if (o.type==DECIM) {
-		BigInteger o2=o.d.toBigInteger();
-		if (new BigDecimal(o2).compareTo(o.d)==0)
-		    return new Quantity(i.divide(o2)).decimalVal();
+		if (Math.floor(o.d)==o.d) 
+		    return new Quantity(i.divide(d2i(o.d))).decimalVal();
 	    }
 	case DECIM:
-	    BigInteger o2=d.toBigInteger();
-	    if (new BigDecimal(o2).compareTo(d)==0)
-		return new Quantity(o2).quotient(o).decimalVal();
+	    if (Math.floor(d)==d) 
+		return new Quantity(d2i(d)).quotient(o).decimalVal();
 	default:
 	    throw new NumberFormatException("expected integral quantities");
 	}
@@ -473,14 +440,12 @@ public class Quantity extends Value {
 	    if (o.type==INTEG) 
 		return new Quantity(i.remainder(o.i));
 	    if (o.type==DECIM) {
-		BigInteger o2=o.d.toBigInteger();
-		if (new BigDecimal(o2).compareTo(o.d)==0)
-		    return new Quantity(i.remainder(o2)).decimalVal();
+		if (Math.floor(o.d)==o.d) 
+		    return new Quantity(i.remainder(d2i(o.d))).decimalVal();
 	    }
 	case DECIM:
-	    BigInteger o2=d.toBigInteger();
-	    if (new BigDecimal(o2).compareTo(d)==0)
-		return new Quantity(o2).remainder(o).decimalVal();
+	    if (Math.floor(d)==d)
+		return new Quantity(d2i(d)).remainder(o).decimalVal();
 	default:
 	    throw new NumberFormatException("expected integral quantities");
 	}
@@ -551,10 +516,10 @@ public class Quantity extends Value {
 	if (type==COMPLEX) {
 	    //e^(x+I*y) = e^x (Cos[y]+I*Sin[y])
 	    //          = e^x*Cos[y] + I*e^x*Sin[y] 
-	    double etox=Math.exp(d.doubleValue());
-	    double y=im.doubleValue();
-	    return new Quantity(new BigDecimal(etox*Math.cos(y)),
-				new BigDecimal(etox*Math.sin(y)));
+	    double etox=Math.exp(d);
+	    double y=im;
+	    return new Quantity(etox*Math.cos(y),
+				etox*Math.sin(y));
 	} else 
 	    return new Quantity(Math.exp(doubleValue()));
     }
@@ -567,12 +532,11 @@ public class Quantity extends Value {
             // select k=0 for principal value, giving:
             // Log[w] = Log[|w|]+I*Arg[w]
             //        = Log[sqrt(a^2 + b^2)] + I * ArcTan(b/a)
-            BigDecimal a2=d.multiply(d);
-            BigDecimal b2=im.multiply(im);
-            double arctan=Math.atan2(im.doubleValue(),d.doubleValue());
-            BigDecimal x=new BigDecimal(Math.log(Math.sqrt(a2.add(b2).doubleValue())));
-            BigDecimal y=new BigDecimal(arctan);
-            return new Quantity(x,y);
+            double a2=d*d;
+            double b2=im*im;
+            double arctan=Math.atan2(im,d);
+	    double x=Math.log(Math.sqrt(a2+b2));
+            return new Quantity(x,arctan);
         } else
             return new Quantity(Math.log(doubleValue()));
     }
@@ -585,11 +549,11 @@ public class Quantity extends Value {
 	    return new Quantity(i.negate());
 	case DECIM:
 
-	    return new Quantity(d.negate());
+	    return new Quantity(-d);
 	case RATIO:
 	    return new Quantity(i.negate(), de.negate());
 	case COMPLEX:
-	    return new Quantity(d.negate(), im.negate());
+	    return new Quantity(-d, -im);
 	}
 	return null;
     }
@@ -598,28 +562,23 @@ public class Quantity extends Value {
 	switch (type) {
 	case FIXEDINT:
 	    if (val<0) 
-		return new Quantity(_BD_ZERO, 
-				    new BigDecimal(Math.sqrt(-val)));
+		return new Quantity(0.0, Math.sqrt(-val));
 	    break;
 	case INTEGER:
 	    if (i.compareTo(_BI_ZERO)==-1) 
-		return new Quantity(_BD_ZERO,
-				    new BigDecimal(Math
-						   .sqrt(-1*doubleValue())));
+		return new Quantity(0.0, Math.sqrt(-1*doubleValue()));
 	    break;
 	case COMPLEX:
 	    // Take r=sqrt(a^2 + b^2)
-            BigDecimal a2=d.multiply(d);
-            BigDecimal b2=im.multiply(im);
-            BigDecimal r=new BigDecimal(Math.sqrt(a2.add(b2).doubleValue()));
+	    double a2=d*d;
+	    double b2=im*im;
+	    double r=Math.sqrt(a2 + b2);
             
             // The two square roots of a+bi are (x +yi) and -(x +yi) with
             //           y = sqrt((r - a)/2) and x = b/(2.y)
-            BigDecimal y=
-                new BigDecimal(Math.sqrt(div(r.subtract(d),
-                                             _BD_TWO).doubleValue()));
-            BigDecimal x=div(im,_BD_TWO.multiply(y));
-	    if (x.signum()==-1) {
+	    double y=Math.sqrt((r-d)/2);
+	    double x=im/(2*y);
+	    if (x < 0) {
 		return new Quantity(x,y).negate();
 	    } else
 		return new Quantity(x, y);
@@ -636,13 +595,13 @@ public class Quantity extends Value {
 	case DECIM:
 	    switch (o.type) {
 	    case FIXEDINT:		
-		return new Quantity(d.add(BigDecimal.valueOf(o.val)));
+		return new Quantity(d+o.val);
 	    case DECIM:
-		return new Quantity(d.add(o.d));
+		return new Quantity(d+o.d);
 	    case INTEG:
-		return new Quantity(d.add(new BigDecimal(o.i)));
+		return new Quantity(d+o.i.doubleValue());
 	    case RATIO:
-		return new Quantity(ratioToDecimal(o.i, o.de).add(d));
+		return new Quantity(ratioToDecimal(o.i, o.de) + d);
 	    case COMPLEX:
 		return o.add(this);
 	    }
@@ -651,7 +610,7 @@ public class Quantity extends Value {
 	    case FIXEDINT:
 		return new Quantity(i.add(BigInteger.valueOf(o.val)));
 	    case DECIM:
-		return new Quantity(new BigDecimal(i).add(o.d));
+		return new Quantity(i.doubleValue()+o.d);
 	    case INTEG:
 		return new Quantity(i.add(o.i));
 	    case RATIO:
@@ -667,7 +626,7 @@ public class Quantity extends Value {
 		BigInteger ores=de.multiply(BigInteger.valueOf(o.val));
 		return new Quantity(i.add(ores), de);
 	    case DECIM:
-		return new Quantity(ratioToDecimal(i, de).add(o.d));
+		return new Quantity(ratioToDecimal(i, de)+o.d);
 	    case INTEG:
 		ores=o.i.multiply(de);
 		return new Quantity(i.add(ores), de);
@@ -683,15 +642,15 @@ public class Quantity extends Value {
 	case COMPLEX:
 	    switch (o.type) {
 	    case FIXEDINT:
-		return new Quantity(d.add(BigDecimal.valueOf(o.val)), im);
+		return new Quantity(d+o.val, im);
 	    case DECIM:
-		return new Quantity(d.add(o.d), im);
+		return new Quantity(d+o.d, im);
 	    case INTEG:
-		return new Quantity(d.add(new BigDecimal(o.i)), im);
+		return new Quantity(d+o.i.doubleValue(),im);
 	    case RATIO:
-		return new Quantity(d.add(ratioToDecimal(o.i, o.de)), im);
+		return new Quantity(d+ratioToDecimal(o.i, o.de), im);
 	    case COMPLEX:
-		return new Quantity(d.add(o.d), im.add(o.im));
+		return new Quantity(d+o.d, im+o.im);
 	    }
 	}
 	return null;
@@ -706,13 +665,13 @@ public class Quantity extends Value {
 	case DECIM:
 	    switch (o.type) {
 	    case FIXEDINT:
-		return new Quantity(d.multiply(BigDecimal.valueOf(o.val)));
+		return new Quantity(d*o.val);
 	    case DECIM:
-		return new Quantity(d.multiply(o.d));
+		return new Quantity(d*o.d);
 	    case INTEG:
-		return new Quantity(d.multiply(new BigDecimal(o.i)));
+		return new Quantity(d*o.i.doubleValue());
 	    case RATIO:
-		return new Quantity(ratioToDecimal(o.i,o.de).multiply(d));
+		return new Quantity(ratioToDecimal(o.i,o.de) * d);
 	    case COMPLEX:
 		return o.mul(this);
 	    }
@@ -721,7 +680,7 @@ public class Quantity extends Value {
 	    case FIXEDINT:
 		return new Quantity(i.multiply(BigInteger.valueOf(o.val)));
 	    case DECIM:
-		return new Quantity(new BigDecimal(i).multiply(o.d));
+		return new Quantity(i.doubleValue()*o.d);
 	    case INTEG:
 		return new Quantity(i.multiply(o.i));
 	    case RATIO:
@@ -736,7 +695,7 @@ public class Quantity extends Value {
 		BigInteger new_n=i.multiply(BigInteger.valueOf(o.val));
 		return new Quantity(new_n, de);
 	    case DECIM:
-		return new Quantity(ratioToDecimal(i, de).multiply(o.d));
+		return new Quantity(ratioToDecimal(i, de)*o.d);
 	    case INTEG:
 		new_n=i.multiply(o.i);
 		return new Quantity(new_n, de);
@@ -746,10 +705,10 @@ public class Quantity extends Value {
 		return o.mul(this);
 	    }
 	case COMPLEX:
-	    BigDecimal g=null, h=_BD_ZERO;
+	    double g=0, h=0;
 	    switch (o.type) {
 	    case FIXEDINT:
-		g=BigDecimal.valueOf(o.val);
+		g=(double)o.val;
 		break;
 	    case COMPLEX:
 		g=o.d;
@@ -759,14 +718,14 @@ public class Quantity extends Value {
 		g=o.d;
 		break;
 	    case INTEG:
-		g=new BigDecimal(o.i);
+		g=o.i.doubleValue();
 		break;
 	    case RATIO:
 		g=ratioToDecimal(o.i, o.de);
 		break;
 	    }
-	    BigDecimal nd=d.multiply(g).subtract(im.multiply(h));
-	    BigDecimal nim=d.multiply(h).add(im.multiply(g));
+	    double nd=(d*g)-(im*h);
+	    double nim=(d*h)+(im*g);
 	    return new Quantity(nd, nim);
 	}
 	return null;
@@ -781,22 +740,22 @@ public class Quantity extends Value {
 	case DECIM:
 	    switch (o.type) {
 	    case FIXEDINT:
-		return new Quantity(d.subtract(BigDecimal.valueOf(o.val)));
+		return new Quantity(d-o.val);
 	    case DECIM:
-		return new Quantity(d.subtract(o.d));
+		return new Quantity(d-o.d);
 	    case INTEG:
-		return new Quantity(d.subtract(new BigDecimal(o.i)));
+		return new Quantity(d-o.i.doubleValue());
 	    case RATIO:
-		return new Quantity(d.subtract(ratioToDecimal(o.i, o.de)));
+		return new Quantity(d-ratioToDecimal(o.i, o.de));
 	    case COMPLEX:
-		return new Quantity(d.subtract(o.d), o.im.negate());
+		return new Quantity(d-o.d, -o.im);
 	    }
 	case INTEG:
 	    switch (o.type) {
 	    case FIXEDINT:
 		return new Quantity(i.subtract(BigInteger.valueOf(o.val)));
 	    case DECIM:
-		return new Quantity(new BigDecimal(i).subtract(o.d));
+		return new Quantity(i.doubleValue()-o.d);
 	    case INTEG:
 		return new Quantity(i.subtract(o.i));
 	    case RATIO:
@@ -804,8 +763,8 @@ public class Quantity extends Value {
 		BigInteger new_n=ores.subtract(o.i);
 		return new Quantity(new_n, o.de);
 	    case COMPLEX:
-		return new Quantity(new BigDecimal(i).subtract(o.d), 
-				    o.im.negate());
+		return new Quantity(i.doubleValue()-o.d, -o.im);
+
 	    }
 	case RATIO:
 	    switch (o.type) {
@@ -814,7 +773,7 @@ public class Quantity extends Value {
 		BigInteger new_n=i.subtract(ores);
 		return new Quantity(new_n, de);
 	    case DECIM:
-		return new Quantity(ratioToDecimal(i, de).subtract(o.d));
+		return new Quantity(ratioToDecimal(i, de)-o.d);
 	    case INTEG:
 		ores=o.i.multiply(de);
 		new_n=i.subtract(ores);
@@ -826,33 +785,28 @@ public class Quantity extends Value {
 		BigInteger res_n=common_n1.subtract(common_n2);
 		return new Quantity(res_n, common_d);
 	    case COMPLEX:
-		return new Quantity(ratioToDecimal(i, de).subtract(o.d), 
-				    o.im.negate());
+		return new Quantity(ratioToDecimal(i, de)-o.d, -o.im);
 	    }
 	case COMPLEX:
             switch (o.type) {
             case FIXEDINT:
-                return new Quantity(d.subtract(BigDecimal.valueOf(o.val)), 
-				    im);
+                return new Quantity(d-o.val, im);
             case DECIM:
-                return new Quantity(d.subtract(o.d), im);
+                return new Quantity(d-o.d, im);
             case INTEG:
-                return new Quantity(d.subtract(new BigDecimal(o.i)), 
-				    im);
+                return new Quantity(d-o.i.doubleValue(), im);
             case RATIO:
-                return new Quantity(d.subtract(ratioToDecimal(o.i, o.de)), 
-				    im);
+                return new Quantity(d-ratioToDecimal(o.i, o.de), im);
             case COMPLEX:
-                return new Quantity(d.subtract(o.d), im.subtract(o.im));
+                return new Quantity(d-o.d, im-o.im);
             }
 
 	}
 	return null;
     }
 
-    protected static BigDecimal div(BigDecimal d1, BigDecimal d2) {
-	return d1.divide(d2, scale(d1.scale(), d2.scale()), 
-			 BigDecimal.ROUND_HALF_UP);
+    protected static double div(double d1, double d2) {
+	return d1/d2;
     }
 
     public Quantity div(Quantity o) {
@@ -862,17 +816,17 @@ public class Quantity extends Value {
 	case DECIM:
 	    switch (o.type) {
 	    case FIXEDINT:
-		return new Quantity(div(d, BigDecimal.valueOf(o.val)));
+		return new Quantity(d / o.val);
 	    case DECIM:
-		return new Quantity(div(d, o.d));
+		return new Quantity(d/o.d);
 	    case INTEG:
-		return new Quantity(div(d, new BigDecimal(o.i)));
+		return new Quantity(d/o.i.doubleValue());
 	    case RATIO:
 		return mul(new Quantity(o.de, o.i));
 	    case COMPLEX:
 		Quantity q=new Quantity();
 		q.d=d;
-		q.im=_BD_ZERO;
+		q.im=0.0;
 		q.type=COMPLEX;
 		return q.div(o);
 	    }
@@ -881,7 +835,7 @@ public class Quantity extends Value {
 	    case FIXEDINT:
 		return new Quantity(i, BigInteger.valueOf(o.val));
 	    case DECIM:
-		return new Quantity(div(new BigDecimal(i), o.d));
+		return new Quantity(i.doubleValue()/o.d);
 	    case INTEG:
 		return new Quantity(i, o.i);
 	    case RATIO:
@@ -889,8 +843,8 @@ public class Quantity extends Value {
 		return new Quantity(ores, o.i);
 	    case COMPLEX:
 		Quantity q=new Quantity();
-		q.d=new BigDecimal(i);
-		q.im=_BD_ZERO;
+		q.d=i.doubleValue();
+		q.im=0.0;
 		q.type=COMPLEX;
 		return q.div(o);
 	    }
@@ -899,7 +853,7 @@ public class Quantity extends Value {
 	    case FIXEDINT:
 		return new Quantity(i, de.multiply(BigInteger.valueOf(o.val)));
 	    case DECIM:
-		BigDecimal r=ratioToDecimal(i,de);
+		double r=ratioToDecimal(i,de);
 		return new Quantity(div(r, o.d));
 	    case INTEG:
 		BigInteger ores=de.multiply(o.i);
@@ -913,15 +867,15 @@ public class Quantity extends Value {
 		return new Quantity(div(r, o.d), o.im);
 	    }
 	case COMPLEX:
-	    BigDecimal g=null, h=_BD_ZERO;
+	    double g=0.0, h=0.0;
 	    switch (o.type) {
 	    case FIXEDINT: 
-		BigDecimal oval=BigDecimal.valueOf(o.val);
+		double oval=(double)o.val;
 		return new Quantity(div(d,oval), div(im,oval));
 	    case DECIM:
 		return new Quantity(div(d,o.d), div(im,o.d));
 	    case INTEG:
-		oval=new BigDecimal(o.i);
+		oval=o.i.doubleValue();
 		return new Quantity(div(d,oval), div(im,oval));
 	    case RATIO:
 		oval=ratioToDecimal(o.i, o.de);
@@ -933,16 +887,16 @@ public class Quantity extends Value {
 
 	    // (a+ib)/(c+id)=(ac+bd+i(bc-ad))/(c^2+d^2)
 	    
-	    BigDecimal c2=g.multiply(g);
-	    BigDecimal d2=h.multiply(h);
-	    Quantity c2_p_d2 = new Quantity(c2.add(d2));
-	    BigDecimal bd=im.multiply(h);
-	    BigDecimal ac=d.multiply(g);
-	    BigDecimal bc=im.multiply(g);
-	    BigDecimal ad=d.multiply(h);
+	    double c2=g*g;
+	    double d2=h*h;
+	    Quantity c2_p_d2 = new Quantity(c2+d2);
+	    double bd=im*h;
+	    double ac=d*g;
+	    double bc=im*g;
+	    double ad=d*h;
 
-	    Quantity rc1=new Quantity(ac.add(bd));
-	    Quantity rc2=new Quantity(bc.subtract(ad));
+	    Quantity rc1=new Quantity(ac+bd);
+	    Quantity rc2=new Quantity(bc-ad);
 	    return rc1.add(I.mul(rc2)).div(c2_p_d2);
 	}
 	return null;
@@ -957,24 +911,23 @@ public class Quantity extends Value {
 	case DECIM:
 	    switch (o.type) {
 	    case FIXEDINT:
-		return d.compareTo(BigDecimal.valueOf(o.val))==test;
+		return sign(d-o.val)==test;
 	    case DECIM:
-		return d.compareTo(o.d)==test;
+		return sign(d-o.d)==test;
 	    case INTEG:
-		return d.compareTo(new BigDecimal(o.i))==test;
+		return sign(d-o.i.doubleValue())==test;
 	    case RATIO:
-		return d.compareTo(ratioToDecimal(o.i, o.de))==test;
+		return sign(d-ratioToDecimal(o.i, o.de))==test;
 	    case COMPLEX:
 		if (test==0) 
-		    return o.im.compareTo(_BD_ZERO)==0 &&
-			o.d.compareTo(d)==0;
+		    return (o.im==0) && d==o.d;
 	    }
 	case INTEG:
 	    switch (o.type) {
 	    case FIXEDINT:
 		return i.compareTo(BigInteger.valueOf(o.val))==test;
 	    case DECIM:
-		return new BigDecimal(i).compareTo(o.d)==test;
+		return sign(i.doubleValue()-o.d)==test;
 	    case INTEG:
 		return i.compareTo(o.i)==test;
 	    case RATIO:
@@ -982,7 +935,7 @@ public class Quantity extends Value {
 		return cnum.compareTo(o.i)==test;
 	    case COMPLEX:
 		if (test==0) 
-		    return o.im.compareTo(_BD_ZERO)==0 &&
+		    return o.im==0 &&
 			comp(new Quantity(o.d), 0);
 	    }
 	    break;
@@ -992,7 +945,7 @@ public class Quantity extends Value {
 		BigInteger cnum=BigInteger.valueOf(o.val).multiply(de);
 		return i.compareTo(cnum)==test;
 	    case DECIM:
-		return ratioToDecimal(i, de).compareTo(o.d)==test;
+		return sign(ratioToDecimal(i, de)-o.d)==test;
 	    case INTEG:
 		cnum=o.i.multiply(de);
 		return i.compareTo(cnum)==test;
@@ -1002,15 +955,15 @@ public class Quantity extends Value {
 		return common_n1.compareTo(common_n2)==test;
 	    case COMPLEX:
 		if (test==0) 
-		    return o.im.compareTo(_BD_ZERO)==0 &&
+		    return o.im==0 &&
 			comp(new Quantity(o.d), 0);
 	    }
 	    break;
 	case COMPLEX:
 	    if (o.type==COMPLEX) {
 		int x=0;
-		if ((x=d.compareTo(o.d))==0)
-		    return im.compareTo(o.im)==test;
+		if ((x=sign(d-o.d))==0)
+		    return sign(im-o.im)==test;
 		else return x==test;
 	    } else {
 		return o.comp(this, test);}
@@ -1046,13 +999,27 @@ public class Quantity extends Value {
 	case FIXEDINT:
 	    return (double)val;
 	case DECIM:
-	    return d.doubleValue();
+	    return d;
 	case INTEG:
 	    return (double)i.intValue();
 	case RATIO:
-	    return ratioToDecimal(i,de).doubleValue();
+	    return ratioToDecimal(i,de);
 	}
 	return 0.0;
+    }
+    
+    public long longValue() {
+	switch (type) {
+	case FIXEDINT:
+	    return val;
+	case DECIM:
+	    return (long)d;
+	case INTEG:
+	    return i.longValue();
+	case RATIO:
+	    return i.divide(de).longValue();
+	}
+	return 0;
     }
 
     public int intValue() {
@@ -1060,7 +1027,7 @@ public class Quantity extends Value {
 	case FIXEDINT:
 	    return val;
 	case DECIM:
-	    return d.intValue();
+	    return (int)d;
 	case INTEG:
 	    return i.intValue();
 	case RATIO:
@@ -1074,7 +1041,7 @@ public class Quantity extends Value {
 	case FIXEDINT:
 	    return BigInteger.valueOf(val);
 	case DECIM:
-	    return d.toBigInteger();
+	    return d2i(d);
 	case INTEG:
 	    return i;
 	case RATIO:
@@ -1086,16 +1053,15 @@ public class Quantity extends Value {
     public Quantity exactVal() {
 	switch (type) {
 	case DECIM:
-	    BigInteger ipart=d.toBigInteger();
-	    BigDecimal fpart=d.subtract(new BigDecimal(ipart));
+	    BigInteger ipart=d2i(d);
+	    BigDecimal fpart=new BigDecimal(Double.toString(d-ipart.doubleValue()));
 	    int scale=fpart.scale();
 	    fpart=fpart.movePointRight(scale);
 	    BigInteger denominator=_BI_TEN.pow(scale);
 	    BigInteger numerator=ipart.multiply(denominator).add(fpart.toBigInteger());;
 	    return new Quantity(numerator, denominator);
 	case COMPLEX:
-	    return new Quantity(d.setScale(0, BigDecimal.ROUND_HALF_EVEN), 
-				im.setScale(0, BigDecimal.ROUND_HALF_EVEN));
+	    return new Quantity(Math.round(d), Math.round(im));
 	default:
 	    return this;
 	}
@@ -1107,7 +1073,7 @@ public class Quantity extends Value {
 	case FIXEDINT:
 	    return new Quantity((double)val);
 	case INTEG:
-	    return new Quantity(new BigDecimal(i.multiply(BigInteger.valueOf(10)), 1));
+	    return new Quantity(i.doubleValue());
 	case RATIO:
 	    return new Quantity(ratioToDecimal(i, de));
 	default:
@@ -1153,12 +1119,9 @@ public class Quantity extends Value {
 	}
     }
 
-    protected BigDecimal ratioToDecimal(BigInteger numerator,
+    protected double ratioToDecimal(BigInteger numerator,
 					BigInteger denominator) {
-	int precision=numerator.bitLength()+denominator.bitLength();
-	BigDecimal d1=new BigDecimal(numerator);
-	BigDecimal d2=new BigDecimal(denominator);
-	return div(d1, d2);
+	return numerator.doubleValue() / denominator.doubleValue();
     }
 
     protected static int scale(int scale1, int scale2) {
@@ -1189,7 +1152,7 @@ public class Quantity extends Value {
     protected static String zeroTrim(String s) {
 	int y=s.indexOf('.');
 	char c;	
-	if (y!=-1) {
+	if (y!=-1 && s.indexOf('e')==-1) {
 	    for (int x=s.length()-1; x>1; x--) 
 		if ((c=s.charAt(x))!='0') 
 		    return (c=='.' ? s.substring(0,x+2) : s.substring(0,x+1));
@@ -1204,7 +1167,7 @@ public class Quantity extends Value {
 	if (type==FIXEDINT)
 	    b.append(Integer.toString(val,radix));
 	else if (type==DECIM) {
-	    String s=zeroTrim(d.toString());
+	    String s=zeroTrim(Double.toString(d).toLowerCase());
 	    b.append(s);
 	    if (s.indexOf('.')==-1) b.append(".0");
 	} else if (type==INTEG)
@@ -1212,35 +1175,21 @@ public class Quantity extends Value {
 	else if (type==RATIO)
 	    b.append(i.toString(radix)).append('/').append(de.toString(radix));
 	else if (type==COMPLEX) {
-	    b.append(zeroTrim(d.toString()));
-	    if (im.compareTo(_BD_ZERO)>=0) {
+	    b.append(zeroTrim(Double.toString(d).toLowerCase()));
+	    if (im>0) {
 		b.append('+');
-		if (im.compareTo(_BD_ONE)!=0)
-		    b.append(im.toString());
+		if (im!=1.0)
+		    b.append(Double.toString(im).toLowerCase());
 	    } else {
-		if (im.compareTo(_BD_NEGONE)==0) 
+		if (im==-1.0)
 		    b.append('-');
 		else 
-		    b.append(zeroTrim(im.toString()));
+		    b.append(zeroTrim(Double.toString(im).toLowerCase()));
 	    }
 	    b.append('i');
 	}
 	out_cache_radix=(byte)radix;
 	return out_cache=b.toString();
-    }
-
-    public Object javaValue() {
-	switch(type) {
-	case FIXEDINT:
-	    return new Integer(intValue());
-	case INTEG:
-	    return i;
-	case DECIM: case RATIO:
-	    return new Double(doubleValue());
-	case COMPLEX:
-	    return this;
-	}
-	return null;
     }
 
     public void deserialize(Serializer s,
@@ -1256,11 +1205,7 @@ public class Quantity extends Value {
 	    i=new BigInteger(buffer);
 	    break;
 	case DECIM:
-	    buffer=new byte[s.readBer(dis)];
-	    int scale=s.readBer(dis);
-	    dis.readFully(buffer);
-
-	    d=new BigDecimal(new BigInteger(buffer), scale);
+	    d=dis.readDouble();
 	    break;
 	case RATIO:
 	    buffer=new byte[s.readBer(dis)];
@@ -1271,14 +1216,8 @@ public class Quantity extends Value {
 	    de=new BigInteger(buffer);
 	    break;
 	case COMPLEX:
-	    buffer=new byte[s.readBer(dis)];
-	    dis.readFully(buffer);
-	    scale=s.readBer(dis);
-	    d=new BigDecimal(new BigInteger(buffer), scale);
-	    buffer=new byte[s.readBer(dis)];
-	    dis.readFully(buffer);
-	    scale=s.readBer(dis);
-	    im=new BigDecimal(new BigInteger(buffer), scale);
+	    d=dis.readDouble();
+	    im=dis.readDouble();
 	    break;
 	}
 	simplify();
@@ -1300,11 +1239,7 @@ public class Quantity extends Value {
 	    dos.write(buffer);
 	    break;
 	case DECIM:
-	    int scale=d.scale();
-	    buffer=unscaledValue(d).toByteArray();
-	    s.writeBer(buffer.length, dos);
-	    s.writeBer(scale, dos);
-	    dos.write(buffer);
+	    dos.writeDouble(d);
 	    break;
 	case RATIO:
 	    buffer=i.toByteArray();
@@ -1315,21 +1250,12 @@ public class Quantity extends Value {
 	    dos.write(buffer);
 	    break;
 	case COMPLEX:
-	    buffer=unscaledValue(d).toByteArray();
-	    scale=d.scale();
-	    s.writeBer(buffer.length, dos);
-	    s.writeBer(scale, dos);
-	    dos.write(buffer);
-
-	    buffer=unscaledValue(d).toByteArray();
-	    scale=im.scale();
-	    s.writeBer(buffer.length, dos);
-	    s.writeBer(scale, dos);
-	    dos.write(buffer);
+	    dos.writeDouble(d);
+	    dos.writeDouble(im);
 	    break;
 	}
     }
-}
 
+}
 
 

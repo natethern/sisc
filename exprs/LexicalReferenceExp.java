@@ -38,9 +38,9 @@ import java.io.*;
 
 public class LexicalReferenceExp extends Expression implements Immediate {
 
-    public short depth, pos;
+    public int depth, pos;
 
-    public LexicalReferenceExp(short ribcount, short position) {
+    public LexicalReferenceExp(int ribcount, int position) {
 	depth=ribcount;
 	pos=position;
     }
@@ -78,8 +78,8 @@ public class LexicalReferenceExp extends Expression implements Immediate {
 
     public void deserialize(Serializer s, DataInputStream dis) 
 	throws IOException {
-	depth=s.readBerShort(dis);
-	pos=s.readBerShort(dis);
+	depth=s.readBer(dis);
+	pos=s.readBer(dis);
     }
 }
 

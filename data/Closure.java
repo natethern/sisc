@@ -37,11 +37,11 @@ import java.io.*;
 
 public class Closure extends Procedure {
     public boolean arity;
-    public short fcount;
+    public int fcount;
     public LexicalEnvironment env;
     public Expression body;
     
-    public Closure(boolean arity, short fcount, Expression body,
+    public Closure(boolean arity, int fcount, Expression body,
 		   LexicalEnvironment env) {
 	this.arity=arity;
 	this.fcount=fcount;
@@ -50,13 +50,8 @@ public class Closure extends Procedure {
     }
 
     public void apply(Interpreter r) throws ContinuationException {	
-	try {
-	    r.env=new LexicalEnvironment(fcount, r.vlr, 
-					 env, arity);
-	} catch (IllegalArgumentException e) {
-	    error(r, "expected "+(arity ? fcount - 1 : fcount)
-		  +" arguments to "+this+", got "+r.vlr.length);
-	}
+	r.env=new LexicalEnvironment(fcount, r.vlr, 
+				     env, arity, r, this);
 	r.nxp=body;
     }
 
@@ -78,7 +73,7 @@ public class Closure extends Procedure {
 	throws IOException {
 	name=(Symbol)s.deserialize(dis);
 	arity=dis.readBoolean();
-	fcount=s.readBerShort(dis);
+	fcount=s.readBer(dis);
 	env=(LexicalEnvironment)s.deserialize(dis);
 	body=s.deserialize(dis);
     }

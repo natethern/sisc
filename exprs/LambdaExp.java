@@ -38,10 +38,10 @@ import java.io.*;
 
 public class LambdaExp extends Expression implements Immediate {
     public boolean infiniteArity;
-    public short fcount;
+    public int fcount;
     public Expression body;
 
-    public LambdaExp(short s, Expression body, boolean arity) {
+    public LambdaExp(int s, Expression body, boolean arity) {
 	infiniteArity=arity;
 	fcount=s;
 	this.body=body;
@@ -71,7 +71,7 @@ public class LambdaExp extends Expression implements Immediate {
     public void deserialize(Serializer s, DataInputStream dis) 
 	throws IOException {
 	infiniteArity=dis.readBoolean();
-	fcount=s.readBerShort(dis);
+	fcount=s.readBer(dis);
 	body=s.deserialize(dis);
     }
 }

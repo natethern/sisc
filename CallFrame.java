@@ -36,6 +36,7 @@ import sisc.data.*;
 import sisc.exprs.*;
 import java.util.Stack;
 import java.io.*;
+import java.lang.ref.*;
 
 public class CallFrame extends Procedure {
 
@@ -46,11 +47,15 @@ public class CallFrame extends Procedure {
     public CallFrame              fk;
     public CallFrame          parent;
 
+    protected static ReferenceQueue vlrQ=new ReferenceQueue();
+    protected SoftReference vlrCap;
+
     public CallFrame(Expression n, Value[] v, 
 		     LexicalEnvironment e, 
 		     CallFrame f, CallFrame p) {
 	nxp=n;
 	vlr=v;
+	vlrCap=new SoftReference(v, vlrQ);
 	env=e;
 	fk=f;
 	parent=p;

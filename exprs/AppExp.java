@@ -37,7 +37,7 @@ import sisc.data.*;
 import java.io.*;
 
 public class AppExp extends Expression {
-    static Value[] ZV=new Value[0];
+    protected static final Value[] ZV=new Value[0];
     public Expression rator, rands[];
     public boolean nonTail;
 

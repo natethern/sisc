@@ -32,6 +32,7 @@
  */
 package sisc;
 
+import java.lang.ref.*;
 import sisc.data.*;
 import sisc.compiler.*;
 import sisc.exprs.*;
@@ -312,7 +313,8 @@ public class Interpreter extends Util {
 
     //POOLING
     //STATIC --------------------
-    protected static final int FRAMEPOOLSIZE=20, FPMAX=FRAMEPOOLSIZE-1;
+    
+    protected static final int FRAMEPOOLSIZE=25, FPMAX=FRAMEPOOLSIZE-1;
     protected CallFrame deadFrames[]=new CallFrame[FRAMEPOOLSIZE];
     protected int deadFramePointer=-1;
 
@@ -338,8 +340,8 @@ public class Interpreter extends Util {
 	    deadFrames[++deadFramePointer]=f;
     }
 
-    protected static final int RIBPOOLSIZE=8, RPMAX=RIBPOOLSIZE-1;
-    protected FillRibExp deadFillRibs[]=new FillRibExp[RIBPOOLSIZE];
+    protected static final int FILLRIBPOOLSIZE=8, FRPMAX=FILLRIBPOOLSIZE-1;
+    protected FillRibExp deadFillRibs[]=new FillRibExp[FILLRIBPOOLSIZE];
     protected int deadFillRibsPointer=-1;
     
     public final FillRibExp createFillRib(int pos,
@@ -359,7 +361,7 @@ public class Interpreter extends Util {
     }
 
     public final void returnFillRib(FillRibExp f) {
-	if (!f.locked && (deadFillRibsPointer < RPMAX)) 
+	if (!f.locked && (deadFillRibsPointer < FRPMAX)) 
 	    deadFillRibs[++deadFillRibsPointer]=f;
     }
 

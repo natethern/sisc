@@ -40,7 +40,7 @@ public class LexicalSetExp extends Expression {
     public Expression rhs;
     public LexicalSetEval eexpr;
 
-    public LexicalSetExp(short depth, short pos, Expression rhs) {
+    public LexicalSetExp(int depth, int pos, Expression rhs) {
 	this.rhs=rhs;
 	this.eexpr = new LexicalSetEval(depth, pos);
     }
