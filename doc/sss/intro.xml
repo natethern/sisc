@@ -196,6 +196,23 @@
       </para>
     </sect2>
   </sect1>
+  <sect1>
+    <title>Where to obtain this document</title>
+    <para>
+      This document is produced from DocBook sources and is made available in
+      HTML, Adobe Acrobat (PDF), and PostScript forms.  Other formats, and
+      up-to-date versions of this document should be available from the
+      &SISC; website, 
+      <ulink url="http://sisc.sourceforge.net">
+	<citetitle>http://sisc.sourceforge.net</citetitle>
+      </ulink>.
+    </para>
+    <para>
+      The DocBook sources are available from the same site, packaged in 
+      the source distribution of &SISC;, and available from the project's CVS
+      tree.  Details for accessing both are linked off the project site.
+    </para>
+  </sect1>
 </chapter>
 <!-- Keep this comment at the end of the file
 Local variables:
