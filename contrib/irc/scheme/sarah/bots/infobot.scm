@@ -1,0 +1,122 @@
+(define-record-type :plugin
+  (make-plugin crib help handler)
+  plugin?
+  (crib plugin-crib)
+  (help plugin-help)
+  (handler plugin-handler))
+
+(define-syntax make-infobot
+  (syntax-rules ()
+    ((_ (crib help handler) ...)
+        (infobot (make-plugin crib help handler) ...))))
+
+(define listen-phrases
+  '("Okay."
+    "Sure."
+    "I'm listening."
+    "I'm all ears."))
+
+(define quiet-phrases
+  '("Fine, shutting up."
+    "Consider my lips sealed."
+    "Okay."
+    "No problem."))
+
+(define (be-quiet channel message left right)
+  (if (and (equal? left "") (equal? right ""))
+      (begin 
+        (set-channel-bot-listening! channel #f)
+        (random-elem quiet-phrases))
+      #t))
+      
+(define (listen-up channel message left right)
+  (if (and (equal? left "") (equal? right ""))
+      (begin 
+        (set-channel-bot-listening! channel #t)
+        (random-elem listen-phrases))
+      #t))
+
+(define (make-standard-infobot)
+  (make-infobot
+    ; Plugins go here, in the form:
+    ; (crib help handler)
+   ("what is "
+    "\"What is <something>\" asks for information about the something."
+    (*-is? 'what))
+   ("where is "
+    "\"Where is <something>\" asks for the location of the something."
+    (*-is? 'where))
+   ("who is "
+    "\"Who is <someone>\" asks for information about someone."
+    (*-is? 'what))
+   (" is at " "\"<something> is at <somewhere>\" defines the location of a term for later recollection by \"where is\"."
+    (learn 'where))
+   (" is " "\"<something> is <something else>\" defines a term for later recollection by \"what is\"."
+    (learn 'what))
+   ("later tell " "\"tell <someone> <something>\" asks me to deliver a message to someone next time they speak."
+    (tell 'later))   
+   ("tell " "\"tell <someone> <something>\" asks me to deliver a message to someone as soon as I see them in a channel."
+    (tell 'now))
+   ("seen " "\"seen <someone>\" asks for the last time I saw someone speak."
+    seen)
+   ("be quiet" "Asks me to only speak when spoken to" be-quiet)
+   ("shut up" "Same as above." be-quiet)
+   ("listen up" "I'll start conversing to any message I see." listen-up)
+   ("eval" "\"eval <s-expression>\" causes me to evaluate the given s-expression in R5RS Scheme and return the result"
+    stateless-eval)
+   ("pretty-print " "\"pretty-print <s-expression>\" causes me to format the given expression in nice way."
+    pprint)
+   ("expand " "\"expand <s-expression>\" causes me to expand all the macros in the s-expression, and pretty-print the vanilla Scheme form."
+    expand)
+   ("yow" "A bit of randomness from Zippy the Pinhead." yow)
+   ("join " "\"join <channel-name>\" asks me to join the channel as an infobot"
+    join-chan)
+   ("scheme-channel " "\"scheme-channel <channel-name>\" creates a scheme channel with the given name" make-schemechan)
+   ("part " "\"part <channel-name>\" creates a scheme channel with the given name" request-part)
+))
+
+(define (infobot . plugins)
+  (lambda (channel message)
+    (let-values ([(to-bot cleaned-message strict-tokens)
+                  (full-parse (->string
+                               (get-name (channel-bot channel)))
+                              message)])
+      (cond [(equal? cleaned-message "help")
+             ; display help
+             (send-messages
+              (channel-bot channel) (message-nick message)
+              (string-append
+               (sisc:format "Hello, I'm ~a, a SISC Scheme Multibot.\n"
+                            (->string (get-name (channel-bot channel))))
+               "I respond to some natural language commands, such as:\n"
+               "help - You're doing it.\n\n"))
+             (for-each (lambda (p)
+                         (send-message bot
+                                       (->jstring (message-nick message))
+                                       (->jstring (string-append
+                                                   (plugin-crib p)
+                                                   " - "
+                                                   (plugin-help p)))))
+                       plugins)
+             #f]
+            [(or (channel-bot-listens? channel) to-bot)
+             (let loop ([p plugins])
+               (cond [(null? p) #t]
+                     [(crib-match? (plugin-crib (car p))
+                                   (message-text message))
+                      (let ([rv
+                             (apply (plugin-handler (car p))
+                                    channel message
+                                    (crib-split (plugin-crib (car p))
+                                                cleaned-message))])
+                        (cond [(string? rv)
+                               (begin (send-messages (channel-bot channel)
+                                                     (message-source message)
+                                                     rv)
+                                      #f)]
+                              [(eqv? rv 'continue)
+                               (loop (cdr p))]
+                              [else rv]))]
+                     [else (loop (cdr p))]))]
+            [else #f]))))
+             

@@ -1,3 +1,7 @@
+(stack-trace-on-error #t)
 (require-library "sisc/libs/srfi")
-(putprop 'home '*config-parameters* "/home/scgmille/lib")
+(putprop 'home '*config-parameters* (normalize-url (current-url) "sisc/"))
 (putprop 'slib '*config-parameters* "/usr/share/slib")
+(putprop 'sisc.slib '*config-parameters* "/usr/share/slib")
+(load "sisc/scheme-src/slib.scm")
+(current-class-path '("../../lib/pircbot.jar" "../../sisc-pirc.jar"))
