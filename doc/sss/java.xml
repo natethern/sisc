@@ -10,18 +10,231 @@ implementation of Java interfaces in Scheme.
 </para>
   <sect1 id="JavaToScheme">
     <title>Java-to-Scheme Interface</title>
-    <para></para>
-    <sect2 id="JErrorHandling">
-      <title>
-	  Error Handling
-	</title>
-      <para></para>
+    <para>
+Multiple Scheme applications can run within a single &SISC;
+runtime. Each application has its own top level environment and
+evaluator. An application is represented by instances of the
+<classname>AppContext</classname> class.
+
+A Scheme application can execute in multiple threads. Each thread must
+have its own dynamic environment, containing things like the current
+input and output ports. Dynamic environments are represented by
+instances of the <classname>DynamicEnv</classname> class.
+
+A thread can be associated with multiple interpreters. The reason for
+there being multiple interpreters is that internal calls need to be
+executed by an interpreter different from the one that initiated the
+internal call so that the state of the latter can be preserved.
+
+</para>
+    <sect2>
+      <title>Calling Scheme From Java</title>
+      <para>
+A call from Scheme to Java can occur in one of two places:
+      <itemizedlist>
+          <listitem>
+            <para>
+Within a call from Scheme to Java - we shall call this an
+<quote>internal call</quote>.
+</para>
+          </listitem>
+          <listitem>
+            <para>
+Elsewhere, e.g. as the result of a timer expiration or as part of a
+thread created by Java - we shall call this an <quote>external
+call</quote>.
+</para>
+          </listitem>
+        </itemizedlist>
+The <classname>Context</classname> class is the key point where both
+the above call scenarios are managed.
+</para>
+      <sect3>
+        <title>Internal Calls</title>
+        <para>
+When making an internal call, one typically wants to do that in an
+interpreter that shares the same AppContext and DynamicEnv as the
+calling interpreter. One can get hold of such an interpreter using
+<programlisting>
+Interpreter r = Context.enter();
+</programlisting>
+If one isn't sure whether the call is internal, one can check this
+using
+<programlisting>
+Interpreter current = Context.currentInterpreter();
+if (current == null) { ...make external call...}
+else { ...make internal call... }
+</programlisting>
+The calls themselves are made using one of the three
+<function>eval</function> methods on the
+<classname>Interpreter</classname>:
+<itemizedlist>
+            <listitem>
+<methodsynopsis language="java">
+                <type>Value</type>
+                <methodname>eval</methodname>
+                <methodparam>
+                  <type>String</type>
+                  <parameter>expr</parameter>
+                </methodparam>
+              </methodsynopsis>
+            </listitem>
+            <listitem>
+<methodsynopsis language="java">
+                <type>Value</type>
+                <methodname>eval</methodname>
+                <methodparam>
+                  <type>Value</type>
+                  <parameter>val</parameter>
+                </methodparam>
+              </methodsynopsis>
+<blockquote><para>This is the same as calling <literal>(eval
+</literal><parameter>val</parameter><literal>)</literal> in
+Scheme.</para></blockquote>
+            </listitem>
+            <listitem>
+<methodsynopsis language="java">
+                <type>Value</type>
+                <methodname>eval</methodname>
+                <methodparam>
+                  <type>Procedure</type>
+                  <parameter>proc</parameter>
+                </methodparam>
+                <methodparam>
+                  <type>Value[]</type>
+                  <parameter>args</parameter>
+                </methodparam>
+              </methodsynopsis>
+<blockquote><para>This is the same as calling
+<literal>(</literal><parameter>proc</parameter>
+<parameter>arg</parameter> ...<literal>)</literal> in
+Scheme.</para></blockquote>
+</listitem>
+            </itemizedlist>
+Several such calls can be made on the same interpreter.
+</para>
+        <para>
+Before returning from the code that is making the internal calls one
+must call
+<programlisting>
+Context.exit()
+</programlisting>
+in order to release the resources associated with the call context.
+</para>
+      </sect3>
+      <sect3>
+        <title>External Calls</title>
+        <para>
+The main challenge when making external calls is what application and
+dynamic environment to make them in. <classname>Context</classname>
+maintains an application registry. To register an application call
+<programlisting>
+Context.register("appname", appContext)
+</programlisting>
+The application registry can be used to obtain new interpreters that
+are associated with specific applications and have a fresh dynamic
+environment:
+<programlisting>
+Interpreter r = Context.enter("appname");
+</programlisting>
+<classname>AppContext</classname>s are usually created by calling their
+argument-less constructor and are later modified by loading a heap
+image into them. So a typical context initialisation sequence would
+be:
+<programlisting>
+AppContext ctx = new AppContext();
+Context.register("myapp", ctx);
+Interpreter r = Context.enter("myapp");
+ctx.loadEnv(r, dataInputStream);
+Context.exit();
+</programlisting> 
+</para>
+<para>
+Sometimes one may want to use a different mechanism for finding
+applications and dynamic environments. For instance, threads created
+from Scheme should probably execute within the application that
+created them and using a dynamic environment that is cloned from the
+dynamic environment present when the thread is started. There is
+therefore a general mechanism for obtaining a new interpreter that
+uses a specific application and dynamic environment:
+<programlisting>
+Interpreter r = Context.enter(appContext, dynamicEnv);
+</programlisting>
+External calls are made in the same way as internal calls, e.g. using
+one of the eval methods. Before returning from the code that is making
+the external calls one must call
+<programlisting>
+Context.exit()
+</programlisting>
+in order to release the resources associated with the call context.
+</para>
+      </sect3>
     </sect2>
-    <sect2 id="JContinuations">
-      <title>
-	  Continuations
-	</title>
-      <para></para>
+    <sect2>
+      <title>Miscellaneous Features</title>
+      <sect3 id="JErrorHandling">
+        <title>Error Handling</title>
+        <para>
+<literal>Interpreter.eval()</literal> throws a
+<classname>SchemeException</classname> when an evaluation causes an
+exception that is not caught inside the evaluation. When making
+internal calls the exception can be propagted to the calling
+interpreter in one of four ways:
+<itemizedlist>
+            <listitem>
+              <para>
+by throwing a <classname>RuntimeException</classname> - this will be
+reported as<literal>"Error in
+"</literal><parameter>prim-name</parameter><literal>:
+</literal><parameter>description</parameter><literal>"</literal>.
+</para>
+            </listitem>
+            <listitem>
+              <para>
+by calling
+<literal>Module.throwPrimException("</literal><parameter>description</parameter><literal>")</literal>
+- this will be
+reported as <literal>"Error in
+</literal><parameter>prim-name</parameter><literal>:
+</literal><parameter>description</parameter><literal>"</literal>.
+</para>
+            </listitem>
+            <listitem>
+              <para>
+by calling
+<literal>throwNestedPrimException("</literal><parameter>description</parameter><literal>",
+</literal><parameter>schemeException</parameter><literal>)</literal> - this will be reported as <literal>"Error in
+</literal><parameter>prim-name</parameter><literal>:
+</literal><parameter>description</parameter><literal>\n</literal><parameter>nested-description</parameter><literal>"</literal>.
+</para>
+            </listitem>
+            <listitem>
+              <para>
+by calling <literal>throwNestedPrimException(</literal><parameter>schemeException</parameter><literal>)</literal> - this will
+be reported as <literal>"Error in
+</literal><parameter>prim-name</parameter><literal>:
+exception during nested call\n</literal><parameter>nested-description</parameter><literal>"</literal>.
+</para>
+            </listitem>
+          </itemizedlist>
+</para>
+      </sect3>
+    <sect3 id="JContinuations">
+        <title>Continuations</title>
+        <para>
+Continuations do not cross the Scheme/Java boundary. In the embedded
+call scenario invoking a continuation inside the embedded call will
+not discard the computation of the caller. The embedded call will
+return when the continuation returns. If the continuation contains the
+read-eval-print loop the return will never happen. Similarly,
+capturing a continuation inside a call (embedded or external) will
+only capture the continuation to point where the call was made.
+</para>
+<para>
+Capturing and invoking a continuation within the
+<emphasis>same</emphasis> call works correctly.
+</para>
+      </sect3>
     </sect2>
   </sect1>
   <sect1 id="SchemeToJava">
