@@ -68,3 +68,22 @@
 (import serial-io)
 (define k (call-with-serial-input-file "/tmp/rade/foo.ser" deserialize))
 (k 2) ;=> 12
+
+(define ser-file "/tmp/rade/foo.ser")
+(import record)
+(import serial-io)
+(define-struct test-struct (f1 f2 f3))
+(define a (make-test-struct 1 2 3))
+(test-struct-f1 a) ;;(A)
+(call-with-serial-output-file ser-file
+  (lambda (port) (serialize a port)))
+(define b (call-with-serial-input-file ser-file deserialize))
+(test-struct-f1 b) ;;(B) FAILS!
+
+(define l (let ((foo (list 1)))
+            (list foo (lambda () foo))))
+(eq? (car l) ((cadr l))) ;=> #t
+(call-with-serial-output-file ser-file
+  (lambda (port) (serialize (cadr l) port)))
+(define ll (call-with-serial-input-file ser-file deserialize))
+(eq? (car l) (ll)) ;=> #f
