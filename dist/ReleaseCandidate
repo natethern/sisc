@@ -1,0 +1,17 @@
+This build of SISC is a Release Candidate, as such, it may contain
+bugs.  Also, it has been built with debugging symbols in the heap, which
+is why it is larger than ordinary builds.  If you encounter an unexpected
+error, please send an email to sisc-devel@lists.sourceforge.net, with the
+following information:
+
+1. Build version
+2. Steps to reproduce the error
+3. A stack trace, 
+  (stack-trace (get-last-error))
+
+If you're running the Lite build, you will not be able to perform step 3. 
+Please obtain the full build and see if your error occurs there as well,
+then submit a report with the stack trace from the full build.  
+
+Thanks!
+
