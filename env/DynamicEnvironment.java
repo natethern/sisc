@@ -4,6 +4,7 @@ import java.io.*;
 import sisc.data.*;
 import sisc.compiler.*;
 import sisc.io.*;
+import java.util.WeakHashMap;
 import sisc.util.Util;
 
 public class DynamicEnvironment extends Util implements Cloneable {
@@ -18,7 +19,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
 
     //user-defined thread variables; this map is weak so that we don't
     //hang on to vars that are no longer in use.
-    public java.util.Map parameters = new java.util.WeakHashMap(0);
+    public java.util.Map parameters = new WeakHashMap(0);
 
     public DynamicEnvironment() {
         this(System.in, System.out);
@@ -34,11 +35,17 @@ public class DynamicEnvironment extends Util implements Cloneable {
              new StreamOutputPort(out, true));
     }
 
+    public Object clone() throws CloneNotSupportedException {
+        DynamicEnvironment res = (DynamicEnvironment)super.clone();
+        res.parser = new Parser(new Lexer());
+        res.parameters = new WeakHashMap(res.parameters);
+        return res;
+    }
+
     public DynamicEnvironment copy() {
         try {
-            return (DynamicEnvironment)super.clone();
-        }
-        catch (CloneNotSupportedException e) {
+            return (DynamicEnvironment)clone();
+        } catch (CloneNotSupportedException e) {
             return this;
         }
     }
