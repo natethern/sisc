@@ -84,7 +84,7 @@
 (native-module threading-native  "sisc.modules.SThread")
 (native-module s2j-reflection    "sisc.modules.s2j.Reflection")
 (native-module s2j-conversion    "sisc.modules.s2j.Conversion")
-(native-module hashtable-native  "sisc.modules.SHashtable")
+(native-module hashtable-native  "sisc.modules.hashtable.Primitives")
 (native-module block-io-native   "sisc.modules.io.BlockIO")
 (native-module file-manipulation-native "sisc.modules.io.FileManipulation")
 
@@ -235,21 +235,22 @@
   (include "io/buffer.scm"))
 
 (module hashtable
-  (make-hashtable
-   hashtable?
-   hashtable/put!
-   hashtable/get
-   hashtable/get!
-   hashtable/remove!
-   hashtable/clear!
-   hashtable->alist
-   alist->hashtable
-   hashtable/keys
-   hashtable/for-each
-   hashtable/map)
+    (make-hashtable
+     hashtable?
+     hashtable/put!
+     hashtable/get
+     hashtable/get!
+     hashtable/remove!
+     hashtable/clear!
+     hashtable/size
+     hashtable->alist
+     alist->hashtable
+     hashtable/keys
+     hashtable/for-each
+     hashtable/map)
   (import hashtable-native)
   (import threading)
-  (include "hashtable.scm"))
+  (include "hashtable/hashtable.scm"))
 
 (module procedure-properties
   (procedure-property

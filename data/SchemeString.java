@@ -71,6 +71,10 @@ public class SchemeString extends Value {
         }
     }
 
+    public int valueHashCode() {
+        return asString().hashCode();
+    }
+
     public SchemeString append(SchemeString other) {
         if (data_c != null && other.charRepAvailable()) {
             char[] oc=other.asCharArray();

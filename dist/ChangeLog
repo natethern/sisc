@@ -1,3 +1,9 @@
+2002-12-24  Matthias Radestock  <matthias@sorted.org>
+
+	* Added |equal?|-based hashtables.
+
+	* Added |hashtable/size| procedure.
+
 2002-12-16  Matthias Radestock  <matthias@sorted.org>
 
 	* Changed |eq?| and |eqv?| on immutable pairs, vectors, strings to

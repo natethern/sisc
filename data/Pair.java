@@ -75,6 +75,10 @@ public class Pair extends Value {
         else return false;
     }
 
+    public int valueHashCode() {
+        return car.valueHashCode() ^ cdr.valueHashCode();
+    }
+
     public void serialize(Serializer s) throws IOException {
         s.writeExpression(car);
         s.writeExpression(cdr);

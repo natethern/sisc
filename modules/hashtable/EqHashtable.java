@@ -1,52 +1,18 @@
-package sisc.data;
+package sisc.modules.hashtable;
 
-import java.io.*;
-import sisc.io.ValueWriter;
-import sisc.ser.Deserializer;
-import sisc.ser.Serializer;
-import sisc.util.ExpressionVisitor;
+import sisc.data.*;
 
-public class EmptyList extends Pair implements Singleton {
-    public static EmptyList EMPTYLIST=new EmptyList();
+public class EqHashtable extends Hashtable {
 
-    static {
-        EMPTYLIST.car=EMPTYLIST.cdr=EMPTYLIST;
+    public EqHashtable() {
+        super();
     }
 
-    public EmptyList() {}
+    protected Object makeKey(Value k) { return k; }
 
-    public void display(ValueWriter w) throws IOException {
-        w.append("()");
-    }
+    protected Value getKey(Object o) { return (Value)o; }
 
-    public boolean valueEqual(Value o) {
-        return o instanceof EmptyList;
-    }
-
-    public int valueHashCode() {
-        return 0x9abcdef0;
-    }
-
-    public int hashCode() {
-        return 0x9abcdef0;
-    }
-
-    public void serialize(Serializer s) throws IOException {
-    }
-
-    public void deserialize(Deserializer s) throws IOException {
-    }
-
-    public Value singletonValue() {
-        return EMPTYLIST;
-    }
-
-    public boolean visit(ExpressionVisitor v) {
-        return true;
-    }
 }
-
-
 
 /*
  * The contents of this file are subject to the Mozilla Public
@@ -62,7 +28,7 @@ public class EmptyList extends Pair implements Singleton {
  * The Original Code is the Second Interpreter of Scheme Code (SISC).
  * 
  * The Initial Developer of the Original Code is Scott G. Miller.
- * Portions created by Scott G. Miller are Copyright (C) 2000-2001
+ * Portions created by Scott G. Miller are Copyright (C) 2000-2002
  * Scott G. Miller.  All Rights Reserved.
  * 
  * Contributor(s):

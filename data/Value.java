@@ -70,6 +70,15 @@ public abstract class Value extends Expression implements Immediate {
         return eq(v) || equals(v);
     }
 
+    /**
+     * a hashCode function consistent with valueEqual
+     *
+     * @return hash code
+     */
+    public int valueHashCode() {
+        return hashCode();
+    }
+
     public String toString() {
         StringWriter sw = new StringWriter();
         WriterOutputPort p = new WriterOutputPort(sw, false);

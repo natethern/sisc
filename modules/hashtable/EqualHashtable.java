@@ -1,52 +1,38 @@
-package sisc.data;
+package sisc.modules.hashtable;
 
-import java.io.*;
-import sisc.io.ValueWriter;
-import sisc.ser.Deserializer;
-import sisc.ser.Serializer;
-import sisc.util.ExpressionVisitor;
+import sisc.data.*;
 
-public class EmptyList extends Pair implements Singleton {
-    public static EmptyList EMPTYLIST=new EmptyList();
+public class EqualHashtable extends Hashtable {
 
-    static {
-        EMPTYLIST.car=EMPTYLIST.cdr=EMPTYLIST;
+    public EqualHashtable() {
+        super();
     }
 
-    public EmptyList() {}
+    protected Object makeKey(Value k) { return new Key(k); }
 
-    public void display(ValueWriter w) throws IOException {
-        w.append("()");
-    }
+    protected Value getKey(Object o) { return ((Key)o).value(); }
 
-    public boolean valueEqual(Value o) {
-        return o instanceof EmptyList;
-    }
+    public static class Key {
 
-    public int valueHashCode() {
-        return 0x9abcdef0;
-    }
+        private Value key;
 
-    public int hashCode() {
-        return 0x9abcdef0;
-    }
+        public Key(Value k) {
+            key = k;
+        }
 
-    public void serialize(Serializer s) throws IOException {
-    }
+        public Value value() {
+            return key;
+        }
 
-    public void deserialize(Deserializer s) throws IOException {
-    }
+        public boolean equals(Object o) {
+            return (o instanceof Key) && key.valueEqual(((Key)o).value());
+        }
 
-    public Value singletonValue() {
-        return EMPTYLIST;
-    }
-
-    public boolean visit(ExpressionVisitor v) {
-        return true;
+        public int hashCode() {
+            return key.valueHashCode();
+        }
     }
 }
-
-
 
 /*
  * The contents of this file are subject to the Mozilla Public
@@ -62,7 +48,7 @@ public class EmptyList extends Pair implements Singleton {
  * The Original Code is the Second Interpreter of Scheme Code (SISC).
  * 
  * The Initial Developer of the Original Code is Scott G. Miller.
- * Portions created by Scott G. Miller are Copyright (C) 2000-2001
+ * Portions created by Scott G. Miller are Copyright (C) 2000-2002
  * Scott G. Miller.  All Rights Reserved.
  * 
  * Contributor(s):

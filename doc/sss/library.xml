@@ -182,14 +182,6 @@ r / 2<superscript>s</superscript>
         time based on the number of elements.
       </para>
       <para>
-        &SISC; hash tables use <function>eqv?</function> for element
-        comparison, which implies that keys generally ought to be of a
-        type for which comparison with <function>eqv?</function> is
-        meaningful. Note that most Scheme objects, including strings,
-        vectors, pairs and their immutable variants, are not
-        <function>eqv?</function> unless they are identical.
-      </para>
-      <para>
           &SISC; hash tables are thread-safe, i.e. multiple threads can
         concurrently access and modify the same hash table.
       </para>
@@ -210,14 +202,20 @@ r / 2<superscript>s</superscript>
               <type>hashtable</type>
               <methodname>make-hashtable</methodname>
               <methodparam choice="opt">
-                <parameter>hashtable</parameter>
+                <parameter>eq?/eqv?/equal?</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Creates a hash table. When called without an argument,
-                the new hash table is empty, otherwise it is initialized
-                with the elements of <parameter>hashtable</parameter>.
+                Creates a hash table. The optional argument supplies
+                the equality test procedure that the hashtable should
+                use. It must be one of <function>eq?</function>,
+                <function>eqv?</function>, or
+                <function>equal?</function>.
+              </para>
+              <para>
+                  The keys of hash tables using
+                  <function>equal?</function> must not be mutated.
               </para>
             </blockquote>
           </para>
@@ -234,6 +232,22 @@ r / 2<superscript>s</superscript>
               <para>
                 Returns &num;t if <parameter>value</parameter> is a hash
                 table, &num;f otherwise.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>hashtable/size</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>number</type>
+              <methodname>hashtable/size</methodname>
+              <methodparam><parameter>hashtable</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the number of key/value pairs stored in
+                <parameter>hashtable</parameter>.
               </para>
             </blockquote>
           </para>

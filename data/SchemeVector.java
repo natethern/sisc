@@ -40,6 +40,14 @@ public class SchemeVector extends Value {
         return true;
     }
 
+    public int valueHashCode() {
+        int res = 0;
+        for (int i=0; i<vals.length; i++) {
+            res ^= vals[i].valueHashCode();
+        }
+        return res;
+    }
+
     public int findEnd() {
         if (lastUnique > -1) return lastUnique;
         if (vals.length>1) {
