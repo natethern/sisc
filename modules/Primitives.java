@@ -411,7 +411,7 @@ public class Primitives extends ModuleAdapter {
                     box(f.vlr[0]).set(f.vlr[1]);
                 } catch (ImmutableException e) {
                     throwPrimException(liMessage(SISCB, "isimmutable", "box",
-                                                 f.vlr[0].write()));
+                                                 f.vlr[0].synopsis()));
                 }
                 return VOID;
             case STRINGREF:

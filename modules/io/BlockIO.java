@@ -92,7 +92,7 @@ public class BlockIO extends ModuleAdapter {
                 } catch (IOException e) {
                     error(f, liMessage(SISCB, "errorreading", 
                                        e.getMessage(),
-                                       inport.synopsis()));
+                                       inport.toString()));
                 }
                 break;
             case BLOCKWRITE:
@@ -103,7 +103,7 @@ public class BlockIO extends ModuleAdapter {
                     outport.write(buf, 0, count);
                 } catch (IOException e) {
                     error(f, liMessage(SISCB, "errorwriting", e.getMessage(),
-                                       outport.synopsis()));
+                                       outport.toString()));
                 }
                 return VOID;
             default:

@@ -86,7 +86,7 @@ public class IO extends ModuleAdapter {
         } catch (IOException e2) {
             e2.printStackTrace();
             throw new RuntimeException(liMessage(SISCB, "errorreading",
-                                                 i.synopsis(),
+                                                 i.toString(),
                                                  e2.getMessage()));
         }
     }
@@ -99,7 +99,7 @@ public class IO extends ModuleAdapter {
         } catch (IOException e2) {
             e2.printStackTrace();
             throw new RuntimeException(liMessage(SISCB, "errorreading",
-                                                 i.synopsis(),
+                                                 i.toString(),
                                                  e2.getMessage()));
         }
     }
@@ -116,7 +116,7 @@ public class IO extends ModuleAdapter {
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(liMessage(SISCB, "errorreading",
-                                                 is.synopsis(),
+                                                 is.toString(),
                                                  e.getMessage()));
         }
     }
@@ -170,7 +170,7 @@ public class IO extends ModuleAdapter {
                                         f.vlr[0].display()));
                 } catch (IOException e) {
                     throwPrimException(liMessage(SISCB, "errorwriting",
-                                                 f.dynenv.out.write()));
+                                                 f.dynenv.out.toString()));
                 }
                 return VOID;
             case OPENINPUTSTRING:
@@ -251,7 +251,7 @@ public class IO extends ModuleAdapter {
                 try {
                     if (inp!=f.dynenv.in) inp.close();
                 } catch (IOException e) {
-                    error(f, liMessage(SISCB, "errorclosing", inp.synopsis()));
+                    error(f, liMessage(SISCB, "errorclosing", inp.toString()));
                 }
                 return VOID;
             case CLOSEOUTPUTPORT:
@@ -259,7 +259,7 @@ public class IO extends ModuleAdapter {
                 try {
                     if (op!=f.dynenv.out) op.close();
                 } catch (IOException e) {
-                    error(f, liMessage(SISCB, "errorclosing", op.synopsis()));
+                    error(f, liMessage(SISCB, "errorclosing", op.toString()));
                 }
                 return VOID;
             case INPORTLOCATION:
@@ -308,7 +308,7 @@ public class IO extends ModuleAdapter {
                     f.dynenv.out.write(character(f.vlr[0]));
                 } catch (IOException e) {
                     throwPrimException(liMessage(SISCB, "errorwriting",
-                                                 f.dynenv.out.synopsis()));
+                                                 f.dynenv.out.toString()));
                 }
                 return VOID;
             case CURRENTOUTPUTPORT:
@@ -364,7 +364,7 @@ public class IO extends ModuleAdapter {
                     port.write(character(f.vlr[0]));
                 } catch (IOException e) {
                     throwPrimException(liMessage(SISCB, "errorwriting",
-                                                 port.synopsis()));
+                                                 port.toString()));
                 }
                 return VOID;
             case DISPLAY: case WRITE:
@@ -374,7 +374,7 @@ public class IO extends ModuleAdapter {
                                 f.vlr[0].display()));
                 } catch (IOException e) {
                     throwPrimException(liMessage(SISCB, "errorwriting",
-                                                 port.synopsis()));   
+                                                 port.toString()));   
                 }
                 return VOID;
             case MAKEPATH:

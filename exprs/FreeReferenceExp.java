@@ -28,7 +28,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
             senv = (SymbolicEnvironment)senv.asValue();
             envLoc=senv.getLoc(sym);
             if (envLoc==-1)
-                error(r, liMessage(SISCB,"undefinedvar", sym.write()));
+                error(r, liMessage(SISCB,"undefinedvar", sym.toString()));
             r.acc=senv.lookup(envLoc);
         } 
     }
@@ -44,7 +44,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
                 envLoc=senv.getLoc(sym);
             } catch (Exception e) {}
             if (envLoc==-1)
-                error(r, liMessage(SISCB,"undefinedvar", sym.write()));
+                error(r, liMessage(SISCB,"undefinedvar", sym.toString()));
             return senv.lookup(envLoc);
         }
     }

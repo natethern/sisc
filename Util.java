@@ -149,7 +149,7 @@ public abstract class Util extends Defaults implements Version {
                 p=(Pair)p.cdr;
             return i;
         } catch (ClassCastException ce) {
-            throw new RuntimeException(liMessage(SISCB, "notaproperlist", s.synopsis(DEFAULT_SYNOPSIS_LENGTH)));
+            throw new RuntimeException(liMessage(SISCB, "notaproperlist", s.synopsis()));
         }
     }
 
@@ -212,7 +212,7 @@ public abstract class Util extends Defaults implements Version {
             throw new RuntimeException(liMessage(SISCB, "multiplevalues"));
         throw new RuntimeException(liMessage(SISCB, "unexpectedarg",
                                              liMessage(bundleName, type), 
-                                             o.write()));
+                                             o.synopsis()));
     }
 
     public static final Symbol sym(String s) {

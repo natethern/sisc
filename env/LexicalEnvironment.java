@@ -31,14 +31,14 @@ public class LexicalEnvironment extends Value {
                 vals=v;
                 return this;
             }
-            error(r, liMessage(SISCB,"notenoughargsto", c.write(),
+            error(r, liMessage(SISCB,"notenoughargsto", c.toString(),
                                c.fcount, vl));
             return this;
         }
         
         int sm1=c.fcount-1;
         if (vl < sm1) {
-            error(r, liMessage(SISCB,"notenoughargstoinf", c.write(),
+            error(r, liMessage(SISCB,"notenoughargstoinf", c.toString(),
                                sm1, vl));
             return this;
         }

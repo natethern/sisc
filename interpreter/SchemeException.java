@@ -15,7 +15,7 @@ public class SchemeException extends Exception {
     }
 
     public String getMessage() {
-	return m.display();
+        return m.toString();
     }
 
 }

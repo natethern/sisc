@@ -311,7 +311,7 @@ public class Compiler extends Util {
         }
 
         public void eval(Interpreter r) throws ContinuationException {
-            error(r, liMessage(SISCB, "invalidsyncontext", name.write()));
+            error(r, liMessage(SISCB, "invalidsyncontext", name.toString()));
         }
 
         public String display() {

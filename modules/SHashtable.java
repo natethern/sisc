@@ -113,7 +113,7 @@ public class SHashtable extends ModuleAdapter {
                     r.acc = (Value)ht.put(r.vlr[0], r.vlr[1]);
                     break;
                 default:
-                    throw new RuntimeException(liMessage(SISCB, "hashtableargs", display()));
+                    throw new RuntimeException(liMessage(SISCB, "hashtableargs", synopsis()));
                 }
             } finally {
                 m.unlock();
