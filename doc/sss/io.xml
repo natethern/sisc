@@ -251,9 +251,16 @@
       information about files or directories, and to delete, rename, 
       and modify these files and directories.
     </para>
-    <para>
-      This API is incomplete... please stay tuned.
-    </para>
+    <note>
+      <title>
+        API Incomplete
+      </title>
+      <para>
+        The interface to the filesystem is a work in progress.
+        Documentation and a corresponding implementation will appear
+        in future revisions.
+      </para>
+    </note>
   </sect1>
   <sect1 id="netio">
     <title>

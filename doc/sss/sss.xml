@@ -88,14 +88,6 @@
 	    compared according to locale rules (bug &num;493773)
 	  </para>
 	</listitem>
-	<listitem>
-	  <para>
-	    (<xref linkend="Debugging"/>) The debugging functions
-	     functions <computeroutput>trace</computeroutput> and
-	    <computeroutput>untrace</computeroutput> are not yet
-	    implemented.
-	  </para>
-	</listitem>
       </orderedlist>
     </para>
   </appendix>
