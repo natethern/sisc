@@ -53,6 +53,7 @@ public class Symbol extends Value {
 
     public void write(ValueWriter w) throws IOException {
         if ((caseSensitive || symval.toLowerCase().equals(symval))
+            && !Lexer.contains(symval, Lexer.special_and_reserved) 
             && (Parser.isPeculiarIdentifier(symval)
                 || (symval.length()>0
                     && Lexer.isIdentifierStart(symval.charAt(0)))))

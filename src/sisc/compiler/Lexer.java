@@ -35,7 +35,7 @@ public class Lexer implements Tokens {
         DOT        ='.',
         PIPE       ='|';
     
-    static final char[]
+    public static final char[]
         special = new char[]
         {'\t', '\n', '\r', ' ', '"', '(', ')', ';', '[', ']'},
         sharp_special = new char[]
@@ -46,10 +46,15 @@ public class Lexer implements Tokens {
         {'+','-','.','A','B','C','D','E','F','a','b','c','d','e','f'},
         reserved = new char[] 
         {'[', ']', '{', '|', '}'},
+        special_and_reserved = new char[]
+        {'\t', '\n', '\r', ' ', '"', '(', ')', ';', '[', ']', '{', '|', '}'},
         special_initials = new char[] 
         {'!','$','%','&','*','/',':','<','=','>','?','^','_','~'},
         special_subsequents = new char[] 
-        {'+','-','.','@'};
+        {'+','-','.','@'},
+        literal_symbol_barrier = new char[] 
+        {'|'};
+        
 
     public boolean strictR5RS = Util.DEFAULT_STRICT_R5RS;
     public String sval;
@@ -85,6 +90,8 @@ public class Lexer implements Tokens {
             case LIST_CLOSE:
             case LIST_CLOSE_ALT:
                 return TT_ENDPAIR;
+            case PIPE:
+                return TT_PIPE;
             case QUOTE:
                 return TT_QUOTE;
             case SHARP:
@@ -106,7 +113,7 @@ public class Lexer implements Tokens {
                 return TT_UNQUOTE;
             default:
                 is.pushback(c);
-                String v=readToBreak(is, special, true);
+                String v=readToBreak(is, special, true, false);
                 Object result=v;
                 if (numberStart(v.charAt(0), radix))
                     result=readNum(v, radix);
@@ -134,10 +141,10 @@ public class Lexer implements Tokens {
     }
 
     public int readChar(InputPort is) throws IOException {
-        return readChar(is, true); 
+        return readChar(is, true, false); 
     }
 
-    public int readChar(InputPort is, boolean handleEscapes) 
+    public int readChar(InputPort is, boolean handleEscapes, boolean invertEscaped) 
         throws IOException {
         int c=is.read();
 
@@ -148,15 +155,16 @@ public class Lexer implements Tokens {
 
         if (!handleEscapes || c!='\\') return c;
 
+        int rv;
         //escaping rules are those defined by Java, except we don't
         //handle octal escapes.
         switch (c = is.read()) {
-        case '"': return c | 0x80000000;
-        case 'b': return '\b';
-        case 't': return '\t';
-        case 'n': return '\n';
-        case 'f': return '\f';
-        case 'r': return '\r';
+        case '"': rv = c | 0x80000000; break;
+        case 'b': rv = '\b'; break; 
+        case 't': rv = '\t'; break;
+        case 'n': rv = '\n'; break;
+        case 'f': rv = '\f'; break;
+        case 'r': rv = '\r'; break;
         case 'u': 
             char[] hexChars=new char[4];
             for (int i=0; i<hexChars.length; i++) {
@@ -165,13 +173,15 @@ public class Lexer implements Tokens {
                 hexChars[i]=(char)rc;
             }
             try {
-                return (char)Integer.parseInt(new String(hexChars), 16);
+                rv = Integer.parseInt(new String(hexChars), 16);
             } catch (NumberFormatException nfe) {
                 throw new IOException(Util.liMessage(Util.SISCB,
                                                      "invalidcharconst"));
             }
-        default: return c;
+            break;
+        default: rv = c;
         }
+        return (invertEscaped ? -rv : rv);
     }
 
     public String readToEndOfString(InputPort is)
@@ -184,14 +194,23 @@ public class Lexer implements Tokens {
     }
 
     public String readToBreak(InputPort is, char[] stops, 
-                              boolean handleEscapes)
+                              boolean handleEscapes, boolean ignoreEscapedBreaks)
     throws IOException {
         StringBuffer b=new StringBuffer();
         char c;
         try {
-            while (!in((c=(char)readChar(is, handleEscapes)),
-                       stops)) 
+            do {            
+                int x=readChar(is, handleEscapes, true);
+                boolean escaped=(x < 0);
+                if (escaped) 
+                   //Escaped character
+                    c=(char)-x;
+                else
+                    c=(char)x;
+                if (in(c, stops) && !(ignoreEscapedBreaks && escaped))
+                    break;
                 b.append(c);
+            } while (true);
             is.pushback(c);
         } catch (EOFException e) {
         }
@@ -211,6 +230,11 @@ public class Lexer implements Tokens {
         return false;
     }
 
+    public static boolean contains(String c, char[] set) {
+        for (int i=0; i<c.length(); i++)
+            if (in(c.charAt(i), set)) return true;
+        return false;
+    }
     public void skipMultilineComment(InputPort in) 
         throws IOException {
         boolean seenSharp=false, seenPipe=false;

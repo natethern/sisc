@@ -178,6 +178,11 @@ public class Parser extends Util implements Tokens {
         case TT_ENDPAIR:
             o=ENDPAIR;
             break;
+        case TT_PIPE:
+            Symbol sym=Symbol.intern(lexer.readToBreak(is, Lexer.literal_symbol_barrier, true, true));
+            // Discard the closing PIPE
+            is.read();
+            return sym;
         case TT_SYMBOL:
             if (lexer.strictR5RS &&
                 lexer.sval.length() > 1 &&
@@ -209,7 +214,7 @@ public class Parser extends Util implements Tokens {
                     break;
                 }
                 is.pushback(c);
-                String cn=lexer.readToBreak(is, Lexer.special, false);
+                String cn=lexer.readToBreak(is, Lexer.special, false, false);
                 String cnl=cn.toLowerCase();
                 Object cs=chars.get(cnl);
                 try {
@@ -251,7 +256,7 @@ public class Parser extends Util implements Tokens {
                 o=numberCheck(_nextExpression(is, state, null, radix, flags)).toExact();
                 break;
             case '!':
-                String bv=lexer.readToBreak(is, Lexer.special, false);
+                String bv=lexer.readToBreak(is, Lexer.special, false, false);
                 if (bv.equals("eof"))
                     return EOF;
                 else if (bv.equals("void"))
@@ -280,7 +285,7 @@ public class Parser extends Util implements Tokens {
                                               .readToBreak(is,
                                                            Lexer
                                                            .sharp_special,
-                                                           false)));
+                                                           false, false)));
 
                     c=is.read();
                     if (c=='=') {
