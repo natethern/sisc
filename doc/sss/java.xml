@@ -1210,7 +1210,7 @@ Context.exit()
             </methodsynopsis>
             <blockquote>
               <para>
-                Casts a java object into a Scheme object, so a Scheme
+                Casts a Java object into a Scheme object, so a Scheme
                 object returned by a Java method or when accessing a Java
                 field can be used in Scheme code.
               </para>
