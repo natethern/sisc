@@ -185,3 +185,8 @@
 (should-be 1094233 3.0 (min 3 4.9))
 
 (should-be 1093762 '((quasiquote (b (unquote (+ 1 2))))) `(`(b ,(+ 1 2))))
+
+(should-be 1093699 #f (begin
+			(putprop 'foo 'bar 'baz)
+			(remprop 'foo 'bar)
+			(getprop 'foo 'bar)))
