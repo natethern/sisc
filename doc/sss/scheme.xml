@@ -850,21 +850,14 @@
       <function>equal?</function>.  
     </para>
     <para>
-      Numbers are conceptually represented as unique objects who are
-      pointer equal (produce <literal>#t</literal> with
-      <function>eq?</function>) if two numbers are both exact, or both 
-      inexact, and are numerically equal.  This is the behavior
-      specified by &R5RS; to hold true for the
-      <function>eqv?</function> predicate.  In &SISC;,
-      <function>eqv?</function> and <function>eq?</function> are
-      equivalent for numbers.
-    </para>
-    <para>
-      Characters too are represented conceptually as objects that are
-      pointer equal if their values are equal.
-      <function>eq?</function>, <function>eqv?</function>, and
-      <function>equal?</function> are equivalent for characters in
-      &SISC;.
+      Numbers and characters are not pointer equal ordinarily (unless actually
+      occupying the same storage).  &SISC; will return 
+      <literal>#t</literal> from <function>eqv?</function>
+      if two numbers are both exact, or both 
+      inexact, and are numerically equal.  Two characters are
+      equivalent from <function>eqv?</function> if they occupy the
+      same code-point in the unicode character set.  This is the behavior
+      specified by &R5RS;.  
     </para>
     <para>
       Strings, vectors, lists, and boxes are containers for other
