@@ -95,9 +95,16 @@
 	</listitem>
         <listitem>
           <para>
-            (<xref linkend="Debugging"/>) The
-            <literal>EMITANNOTATIONS</literal> property is not yet
+            (<xref linkend="annotation-property"/>) The
+            <literal>emitannotations</literal> property is not yet
             supported by &SISC; at the time of this writing.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            (<xref linkend="annotation-property"/>) The
+            <literal>heapfile</literal> property is actually named
+            <literal>HEAP</literal> in current releases of &SISC;.
           </para>
         </listitem>
       </orderedlist>
@@ -167,6 +174,62 @@ for <function>sqrt</function>, it is not clear what other mathematical
 	</listitem>
       </orderedlist>
     </para>
+  </appendix>
+  <appendix id="system-properties">
+    <title>Runtime System Properties</title>
+    <para>
+      Several Java System properties affect the operation of &SISC;.
+      Below are the properties and their semantics.
+    </para>
+    <variablelist>
+      <title>System Properties</title>
+      <varlistentry>
+        <term>minprecision</term>
+        <listitem>
+          <para>
+            Specifies the minimum precision, in decimal places, to be
+            maintained by the Quantity lib if using arbitrary
+            precision floats.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>maxprecision</term>
+        <listitem>
+          <para>
+            Specifies the maximum precision, in decimal places, to be
+            maintained by the Quantity lib if using arbitrary
+            precision floats.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>heapfile</term>
+        <listitem>
+          <para>
+            Specifies the path to a &SISC; serialized heap file to use 
+            to initialize the interpreter's heap on startup.
+            Overrides the default heap file.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>emitannotations</term>
+        <listitem>
+          <para>
+            Specifies the default value of the
+            <function>emit-annotations</function> parameter (see <xref
+            linkend="emit-annotations"/>).  If
+            <literal>true</literal>, annotations will be enabled
+            before loading any source files on the command prompt and
+            will stay enabled until set via the
+            <function>emit-annotations</function> parameter.  If
+            <literal>false</literal>, annotations will be disabled
+            (the default).
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
   </appendix>
 <!--
   <bibliography>

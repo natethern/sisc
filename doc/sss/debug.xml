@@ -83,7 +83,7 @@
     <blockquote>
       <para>
         &parameter;
-        <methodsynopsis language="scheme">
+        <methodsynopsis language="scheme" id="emit-annotations">
           <type>&num;t/&num;f</type>
           <methodname>emit-annotations</methodname>
           <methodparam choice="opt">
