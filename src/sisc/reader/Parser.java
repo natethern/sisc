@@ -152,7 +152,7 @@ public class Parser extends Util implements Tokens {
             o=listSpecial(UNQUOTE_SPLICING, is, state, def, flags);
             break;
         case TT_QUOTE:
-            o=listSpecial(QUOTESYM, is, state, def, flags);
+            o=listSpecial(QUOTESYM, is, state, def, flags&(~PRODUCE_ANNOTATIONS));
             break;
         case TT_BACKQUOTE:
             o=listSpecial(BACKQUOTE, is, state, def, flags);
