@@ -129,7 +129,7 @@
       ((_ () body ...)
        (syntax body ...))
       ((_ ((param-name new-value) ...)
-          body)
+          body ...)
        (with-syntax ([(tmps ...) 
                       (generate-temporaries (syntax (param-name ...)))])
          (syntax 
