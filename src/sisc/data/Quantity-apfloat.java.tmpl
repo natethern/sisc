@@ -72,7 +72,7 @@ public class Quantity extends Value implements Singleton {
         return valueOf(v, 10);
     }
 
-	public static final Quantity valueOf(String v, int radix, boolean handleComplex) {
+	public static final Quantity valueOf(String v, int radix) {
 		return valueOf(v, radix, true);
 	}
 	
