@@ -272,9 +272,9 @@
     (set! dynamic-wind dynamic-wind-loader)
     (set! unload-dynamic-wind
           (lambda ()
-            (set! call-with-current-continuation original-call/cc)
-            (set! call/cc original-call/cc)
-            (set! dynamic-wind dynamic-wind-loader))))
+            (putprop 'call-with-current-continuation '*toplevel* original-call/cc)
+            (putprop 'call/cc '*toplevel* original-call/cc)
+            (putprop 'dynamic-wind '*toplevel* dynamic-wind-loader))))
 
 ;;;; "ratize.scm" Convert number to rational number (ported from SLIB)
 
