@@ -34,12 +34,12 @@
             dderiv
             div
             destruct
-            fprint	;Kawa-(C)TC
-            fread
-            tprint	;Kawa-(C)TC
             fft		;Kawa-(C)TC, JScheme
             puzzle	;Kawa-(C)TC
             cpstack	;Kawa
+            fprint	;Kawa-(C)TC
+            fread
+            ;tprint	;Kawa-(C)TC
             ))
 
 ;Kawa		- breaks in Kawa non-tailcall mode
