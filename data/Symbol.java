@@ -58,7 +58,11 @@ public class Symbol extends Value implements Singleton, Comparable {
     }
 
     public static Symbol get(String str) {
-        return intern(caseSensitive ? str : str.toLowerCase());
+	int l = str.length();
+	if (l>1 && str.charAt(0)=='|' && str.charAt(l-1) == '|')
+	    return intern(str.substring(1,l-1));
+	else
+	    return intern(caseSensitive ? str : str.toLowerCase());
     }
 
     public String symval;

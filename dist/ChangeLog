@@ -1,3 +1,8 @@
+2002-01-27  Matthias Radestock <matthias@sorted.org>
+
+	* Added support for reading case sensitive symbols using the
+	  |<symbol>| notation
+
 2002-1-22 Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed a bug in Symbol serialization that affected
