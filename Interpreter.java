@@ -271,10 +271,8 @@ public class Interpreter extends Util {
     */
 
     public final void returnValues() {
-        if (!lck) {
-            returnValues(vlr);
-            vlr=ZV;
-        }
+        if (!lck) returnValues(vlr);
+        vlr=ZV;
     }
 
     public final void returnValues(Value[] v) {
