@@ -1303,13 +1303,27 @@
 (define (string-contains text pattern . maybe-starts+ends)
   (let-string-start+end2 (t-start t-end p-start p-end)
                          string-contains text pattern maybe-starts+ends
-    (%kmp-search pattern text char=? p-start p-end t-start t-end)))
+    (%stopgap-search pattern text char=? p-start p-end t-start t-end)))
 
 (define (string-contains-ci text pattern . maybe-starts+ends)
   (let-string-start+end2 (t-start t-end p-start p-end)
                          string-contains-ci text pattern maybe-starts+ends
-    (%kmp-search pattern text char-ci=? p-start p-end t-start t-end)))
+    (%stopgap-search pattern text char-ci=? p-start p-end t-start t-end)))
 
+; Temporary solution until an official one comes out of Olin
+(define %stopgap-search
+  (let ()
+    (import s2j)
+    (define-generic-java-method index-of)
+    (lambda (pattern text c= p-start p-end t-start t-end)
+      (let* ([pat (if (= (- p-end p-start) (string-length pattern))
+                      pattern
+                      (substring pattern p-start p-end))]
+             [patlen (string-length pattern)]
+             [pattern (->jstring (if (eq? c= char=?)
+                                     pat (string-downcase pat)))]
+             [i (->number (index-of (->jstring text) pattern))])
+        (and (> i -1) (<= i (- t-end patlen)) i)))))
 
 ;;; Knuth-Morris-Pratt string searching
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
