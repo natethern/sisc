@@ -205,7 +205,7 @@
       (file/rename (normalize-url f1) (normalize-url f2))))
   (set! file-set-last-modified! 
     (lambda (f1 v)
-      (file/set-last-modified! (normalize f1) v)))
+      (file/set-last-modified! (normalize-url f1) v)))
   (set! file-set-read-only! (normalize file/set-read-only!))
   (set! get-parent-url (normalize _get-parent-url))
   (set! make-directory! (normalize _make-directory!))
