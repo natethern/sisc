@@ -1,3 +1,15 @@
+package sisc;
+
+import sisc.data.*;
+
+public class ContinuationException extends Exception {
+    public CallFrame k;
+
+    public ContinuationException(CallFrame k) {
+        this.k=k;
+    }
+}
+
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -30,15 +42,3 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-package sisc;
-
-import sisc.data.*;
-
-public class ContinuationException extends Exception {
-    public CallFrame k;
-
-    public ContinuationException(CallFrame k) {
-        this.k=k;
-    }
-}
-

@@ -1,3 +1,11 @@
+package sisc;
+
+public interface Version {
+
+    String VERSION = "b1.5.5rc2";
+
+}
+
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -29,10 +37,3 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-package sisc;
-
-public interface Version {
-
-    String VERSION = "b1.5.5rc2";
-
-}

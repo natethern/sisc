@@ -1,3 +1,25 @@
+package sisc.data;
+
+import java.io.*;
+import sisc.ser.Deserializer;
+
+public class SchemeVoid extends Value implements Singleton {
+    public static SchemeVoid VOID=new SchemeVoid();
+
+    public SchemeVoid() {}
+
+    public String display() {
+        return "#<void>";
+    }
+
+    public int hashCode() {
+	return 0x56789abc;
+    }
+
+    public Value singletonValue() {
+        return VOID;
+    }
+}
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -30,25 +52,3 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-package sisc.data;
-
-import java.io.*;
-import sisc.ser.Deserializer;
-
-public class SchemeVoid extends Value implements Singleton {
-    public static SchemeVoid VOID=new SchemeVoid();
-
-    public SchemeVoid() {}
-
-    public String display() {
-        return "#<void>";
-    }
-
-    public int hashCode() {
-	return 0x56789abc;
-    }
-
-    public Value singletonValue() {
-        return VOID;
-    }
-}

@@ -1095,7 +1095,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <methodparam>
                 <parameter>multicast-socket</parameter>
               </methodparam>
-              <methodparam choice="opt">
+              <methodparam>
                 <parameter>group</parameter>
               </methodparam>
             </methodsynopsis>
@@ -1117,7 +1117,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <methodparam>
                 <parameter>multicast-socket</parameter>
               </methodparam>
-              <methodparam choice="opt">
+              <methodparam>
                 <parameter>group</parameter>
               </methodparam>
             </methodsynopsis>

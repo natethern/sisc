@@ -1,3 +1,28 @@
+package sisc;
+
+import sisc.data.*;
+
+public interface SymbolicEnvironment {
+
+    public void setName(Symbol s);
+    public Symbol getName();
+
+    public void setParent(SymbolicEnvironment e);
+    public sisc.data.Value asValue();
+
+    public java.util.Iterator keys();
+    public java.util.Set bindingKeys();
+    public java.util.Map getSymbolMap();
+    public void set(int envLoc, Value v);
+    public int define(Symbol s, Value v);
+    public int getLoc(Symbol s);
+    public Value lookup(Symbol s);
+    public Value lookup(int pi);
+    public void undefine(Symbol s);
+
+    public void serialize(sisc.ser.Serializer s) throws java.io.IOException;
+    public void deserialize(sisc.ser.Deserializer s) throws java.io.IOException;
+}
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -30,28 +55,3 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-package sisc;
-
-import sisc.data.*;
-
-public interface SymbolicEnvironment {
-
-    public void setName(Symbol s);
-    public Symbol getName();
-
-    public void setParent(SymbolicEnvironment e);
-    public sisc.data.Value asValue();
-
-    public java.util.Iterator keys();
-    public java.util.Set bindingKeys();
-    public java.util.Map getSymbolMap();
-    public void set(int envLoc, Value v);
-    public int define(Symbol s, Value v);
-    public int getLoc(Symbol s);
-    public Value lookup(Symbol s);
-    public Value lookup(int pi);
-    public void undefine(Symbol s);
-
-    public void serialize(sisc.ser.Serializer s) throws java.io.IOException;
-    public void deserialize(sisc.ser.Deserializer s) throws java.io.IOException;
-}

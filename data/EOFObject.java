@@ -1,3 +1,25 @@
+package sisc.data;
+
+import java.io.*;
+import sisc.ser.Deserializer;
+
+public class EOFObject extends Value implements Singleton {
+    public static EOFObject EOF=new EOFObject();
+
+    public EOFObject() {}
+
+    public String display() {
+        return "#!eof";
+    }
+
+    public int hashCode() {
+	return 0x12345678;
+    }
+
+    public Value singletonValue() {
+        return EOF;
+    }
+}
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -30,25 +52,3 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-package sisc.data;
-
-import java.io.*;
-import sisc.ser.Deserializer;
-
-public class EOFObject extends Value implements Singleton {
-    public static EOFObject EOF=new EOFObject();
-
-    public EOFObject() {}
-
-    public String display() {
-        return "#!eof";
-    }
-
-    public int hashCode() {
-	return 0x12345678;
-    }
-
-    public Value singletonValue() {
-        return EOF;
-    }
-}

@@ -1,3 +1,6 @@
+package sisc.data;
+
+public class ImmutableException extends Exception {}
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -30,6 +33,3 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-package sisc.data;
-
-public class ImmutableException extends Exception {}

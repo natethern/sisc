@@ -1,3 +1,32 @@
+package sisc;
+
+import sisc.*;
+import sisc.data.*;
+import java.util.*;
+
+public class ThreadContext extends Util {
+
+    protected Stack interpreters = new Stack();
+
+    public boolean interrupt = false;
+
+    public ThreadContext() {}
+
+    /*********** interpreter stack maintenance ***********/
+
+    public Interpreter currentInterpreter() {
+        return (Interpreter)interpreters.peek();
+    }
+
+    protected void pushInterpreter(Interpreter r) {
+        interpreters.push(r);
+    }
+
+    protected Interpreter popInterpreter() {
+        return (Interpreter)interpreters.pop();
+    }
+
+}
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -30,32 +59,3 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-package sisc;
-
-import sisc.*;
-import sisc.data.*;
-import java.util.*;
-
-public class ThreadContext extends Util {
-
-    protected Stack interpreters = new Stack();
-
-    public boolean interrupt = false;
-
-    public ThreadContext() {}
-
-    /*********** interpreter stack maintenance ***********/
-
-    public Interpreter currentInterpreter() {
-        return (Interpreter)interpreters.peek();
-    }
-
-    protected void pushInterpreter(Interpreter r) {
-        interpreters.push(r);
-    }
-
-    protected Interpreter popInterpreter() {
-        return (Interpreter)interpreters.pop();
-    }
-
-}

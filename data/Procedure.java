@@ -1,3 +1,28 @@
+package sisc.data;
+
+import sisc.*;
+
+/**
+ * The Procedure class is the base class for any Scheme Procedure.  
+ *
+ * A procedure is an entity that can be applied to zero or more
+ * arguments to return a value or cause additional expressions to be
+ * evaluated.
+ */
+public abstract class Procedure extends NamedValue {
+
+    /**
+     * Called when applying this procedure to a number of arguments in 
+     * the Interpreter's <tt>vlr</tt> register. The code can return a
+     * value by setting the Interpreter's <tt>acc</tt> register and/or
+     * cause additional expressions to be evaluated by setting the
+     * Interpreter's <tt>nxp</tt> register.
+     * 
+     * @param r the Interpreter 
+     * @exception ContinuationException 
+     */
+    public abstract void apply(Interpreter r) throws ContinuationException;
+}
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -30,28 +55,3 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-package sisc.data;
-
-import sisc.*;
-
-/**
- * The Procedure class is the base class for any Scheme Procedure.  
- *
- * A procedure is an entity that can be applied to zero or more
- * arguments to return a value or cause additional expressions to be
- * evaluated.
- */
-public abstract class Procedure extends NamedValue {
-
-    /**
-     * Called when applying this procedure to a number of arguments in 
-     * the Interpreter's <tt>vlr</tt> register. The code can return a
-     * value by setting the Interpreter's <tt>acc</tt> register and/or
-     * cause additional expressions to be evaluated by setting the
-     * Interpreter's <tt>nxp</tt> register.
-     * 
-     * @param r the Interpreter 
-     * @exception ContinuationException 
-     */
-    public abstract void apply(Interpreter r) throws ContinuationException;
-}

@@ -1,3 +1,32 @@
+package sisc.data;
+
+import java.util.WeakHashMap;
+
+public class MemoizedSymbol extends Symbol implements Singleton {
+
+    public static WeakHashMap memo=new WeakHashMap(100);
+
+    public MemoizedSymbol(String symval) {
+        super(symval);
+    }
+
+    public static Symbol intern(String str) {
+        synchronized(memo) {
+            Symbol s=(Symbol)memo.get(str);
+            if (s==null) {
+                s=new MemoizedSymbol(str);
+                memo.put(str, s);
+            }
+            return s;
+        }
+    }
+
+    public MemoizedSymbol() {}
+
+    public Value singletonValue() {
+        return intern(symval);
+    }
+}
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -30,32 +59,3 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-package sisc.data;
-
-import java.util.WeakHashMap;
-
-public class MemoizedSymbol extends Symbol implements Singleton {
-
-    public static WeakHashMap memo=new WeakHashMap(100);
-
-    public MemoizedSymbol(String symval) {
-        super(symval);
-    }
-
-    public static Symbol intern(String str) {
-        synchronized(memo) {
-            Symbol s=(Symbol)memo.get(str);
-            if (s==null) {
-                s=new MemoizedSymbol(str);
-                memo.put(str, s);
-            }
-            return s;
-        }
-    }
-
-    public MemoizedSymbol() {}
-
-    public Value singletonValue() {
-        return intern(symval);
-    }
-}
