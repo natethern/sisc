@@ -132,20 +132,14 @@ public class AppContext extends Util {
      * 
      * @param libName
      * @param epid
-     * @return
      */
     public Expression getExpression(String libName, int epid) throws IOException {
         return libraries.getExpression(libName, epid);
     }
 
-    /**
-     * @param e
-     * @return
-     */
     public LibraryBinding reverseLookup(Expression e) throws IOException {
         return libraries.getBindingReference(e);
     }
-
 }
 
 /*

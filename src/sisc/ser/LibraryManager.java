@@ -73,9 +73,6 @@ public class LibraryManager extends Util {
     /**
      * Returns the reference to a binding in the active libraries, or null
      * if the provided expression isn't an entry point in any library.
-     * 
-     * @param e
-     * @return
      */
     public LibraryBinding getBindingReference(Expression e) throws IOException {
         for (Iterator i=loadedLibraries.entrySet().iterator(); i.hasNext();) {
@@ -114,10 +111,6 @@ public class LibraryManager extends Util {
     /** 
      * Returns an expression from an external library named by
      * the given name and entry point.
-     * 
-     * @param libName
-     * @param epid
-     * @return
      */
     public Expression getExpression(String libName, int epid) throws IOException {
         LoadableLibrary ll=(LoadableLibrary)loadedLibraries.get(libName);

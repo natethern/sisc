@@ -99,9 +99,6 @@ public class Library extends Util {
 
     /**
      * Given an expression, return the entry point id of the expression if any, -1 otherwise.
-     * 
-     * @param e
-     * @return
      */
     public int reverseLookup(Expression e) {
         for (int i=lib.alreadyReadObjects.length-1; i>=0; i--) {
