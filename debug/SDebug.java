@@ -47,7 +47,7 @@ public class SDebug extends ModuleAdapter {
 	CONT_VLR=2, CONT_NXP=3, CONT_ENV=4, CONT_FK=5,
 	CONT_LOCKQ=6, CONT_PARENT=7, ANNOTATEDQ=8,
 	ANNOTATIONSRC=9, ANNOTATIONEXPR=10, ANNOTATIONQ=11,
-	EMITANNOTATIONS=12, ERROR_CONT_K=13;
+	EMITANNOTATIONS=12, ERROR_CONT_K=13, SETANNOTATIONSRC=14;
 
     public SDebug() {
 	define("emit-annotations", EMITANNOTATIONS);
@@ -64,6 +64,7 @@ public class SDebug extends ModuleAdapter {
 	define("annotation?", ANNOTATIONQ);
 	define("annotation-source", ANNOTATIONSRC);
 	define("annotation-expression", ANNOTATIONEXPR);
+	define("set-annotation-source!", SETANNOTATIONSRC);
     }
 
     class SISCExpression extends Value {
@@ -148,6 +149,14 @@ public class SDebug extends ModuleAdapter {
 		if (f.vlr[0] instanceof AnnotatedExpr) 
 		    return (Value)annotated(f.vlr[0]).expr;
 		else return f.vlr[0];
+            default:
+                throwArgSizeException();
+            }
+        case 2:
+            switch(primid) {
+	    case SETANNOTATIONSRC:
+                f.vlr[0].annotation=f.vlr[1];
+                return VOID;
             default:
                 throwArgSizeException();
             }
