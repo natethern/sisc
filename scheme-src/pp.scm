@@ -125,14 +125,13 @@
 
     (cond ((pair? obj)        (wr-expr obj col))
           ((vector? obj)      (wr-lst 
-		;	       (if (> (vector-length obj) *MAX_PPV*)
-			;	   (vector->list obj)
-				   (vector->list-n 
-				    obj 0 
-				    (vector-find-endpoint obj));)
+					;(if (> (vector-length obj) *MAX_PPV*)
+					; (vector->list obj)
+			       (vector->list-n 
+				obj 0 
+				(vector-find-endpoint obj));)
 			       (wr (vector-length obj)
 				   (out "#" col))))
-;	  ((box? obj)         (wr (unbox obj) (out "#&" col)))
           (else               (out (generic-display display? obj) col))))
 
   (define (pp obj col)
@@ -161,7 +160,8 @@
             (out (reverse-string-append result) col)
             (if (pair? obj)
               (pp-pair obj col extra)
-              (pp-list (vector->list obj) (out "#" col) extra pp-expr))))
+              (pp-list (vector->list obj) (wr (vector-length obj) 
+					      (out "#" col)) extra pp-expr))))
         (wr obj col)))
 
     (define (pp-expr expr col extra)
