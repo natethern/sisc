@@ -1,6 +1,7 @@
-(define (hashtable/get! ht key thunk . rest)
-  (let ([res (apply hashtable/get ht key rest)])
-    (if (eqv? res (if (null? rest) #f (car rest)))
+(define (hashtable/get! ht key thunk)
+  (let* ([def (list #f)]
+         [res (hashtable/get ht key def)])
+    (if (eqv? res def)
         (let ([res (thunk)])
           (hashtable/put! ht key res)
           res)

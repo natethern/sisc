@@ -49,11 +49,12 @@
   (assert-proc proc
                (lambda ()
                  (apply set-annotation! proc key val rest))))
-(define (procedure-property! proc key thunk . rest)
+(define (procedure-property! proc key thunk)
   (assert-proc proc
                (lambda ()
-                 (let ([res (apply annotation proc key rest)])
-                   (if (eqv? res (if (null? rest) #f (car rest)))
+                 (let* ([def (list #f)]
+                        [res (annotation proc key def)])
+                   (if (eq? res def)
                        (let ([res (thunk)])
                          (set-annotation! proc key res)
                          res)
