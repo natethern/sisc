@@ -361,6 +361,109 @@ public class Quantity extends Value implements Singleton {
         }
     }
 
+    public Quantity and(Quantity o) throws NumberFormatException {
+        BigInteger a, b;
+        switch(type) {
+        case FIXEDINT: 
+            if (o.type==FIXEDINT)
+                return new Quantity(val & o.val);
+            a=BigInteger.valueOf(val);
+            break;
+        case INTEG:
+            a=i;
+            break;
+        default:
+            throw new NumberFormatException(liMessage(SISCB,"logicoprequiresint"));
+        }
+        switch(o.type) {
+        case FIXEDINT:
+            b=BigInteger.valueOf(o.val);
+            break;
+        case INTEG:
+            b=o.i;
+            break;
+        default:
+            throw new NumberFormatException(liMessage(SISCB,"logicoprequiresint"));
+        }
+        return new Quantity(a.and(b));
+    }
+
+    public Quantity or(Quantity o) throws NumberFormatException {
+        BigInteger a, b;
+        switch(type) {
+        case FIXEDINT: 
+            if (o.type==FIXEDINT)
+                return new Quantity(val | o.val);
+            a=BigInteger.valueOf(val);
+            break;
+        case INTEG:
+            a=i;
+            break;
+        default:
+            throw new NumberFormatException(liMessage(SISCB,"logicoprequiresint"));
+        }
+        switch(o.type) {
+        case FIXEDINT:
+            b=BigInteger.valueOf(o.val);
+            break;
+        case INTEG:
+            b=o.i;
+            break;
+        default:
+            throw new NumberFormatException(liMessage(SISCB,"logicoprequiresint"));
+        }
+        return new Quantity(a.or(b));
+    }
+
+    public Quantity xor(Quantity o) throws NumberFormatException {
+        BigInteger a, b;
+        switch(type) {
+        case FIXEDINT: 
+            if (o.type==FIXEDINT)
+                return new Quantity(val ^ o.val);
+            a=BigInteger.valueOf(val);
+            break;
+        case INTEG:
+            a=i;
+            break;
+        default:
+            throw new NumberFormatException(liMessage(SISCB,"logicoprequiresint"));
+        }
+        switch(o.type) {
+        case FIXEDINT:
+            b=BigInteger.valueOf(o.val);
+            break;
+        case INTEG:
+            b=o.i;
+            break;
+        default:
+            throw new NumberFormatException(liMessage(SISCB,"logicoprequiresint"));
+        }
+        return new Quantity(a.xor(b));
+    }
+
+    public Quantity not() throws NumberFormatException {
+        switch(type) {
+        case FIXEDINT:
+            return new Quantity(~val);
+        case INTEG:
+            return new Quantity(i.not());
+        default:
+            throw new NumberFormatException(liMessage(SISCB,"logicoprequiresint"));
+        }
+    }
+
+    public Quantity bitCount() throws NumberFormatException {
+        switch(type) {
+        case FIXEDINT:
+            return Quantity.valueOf(integer().bitCount());
+        case INTEG:
+            return Quantity.valueOf(i.bitCount());
+        default:
+            throw new NumberFormatException(liMessage(SISCB,"logicoprequiresint"));
+        }
+    }
+
     public Quantity lsh(int num) throws NumberFormatException {
         switch (type) {
         case FIXEDINT: return new Quantity((long)val).lsh(num);
