@@ -1,3 +1,9 @@
+2005-01-11  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Added permissive-parsing parameter, which when true, causes
+	  the parser to issue warnings and continue on most errors. The
+	  default is false.
+
 2005-01-09  Matthias Radestock  <matthias@sorted.org>
 
 	* Added missing gio/peek-char procedure to generic-io module
@@ -8,12 +14,6 @@
 
 	* Fixed bug in gio/read-block - it wasn't accepting generic ports.
 	
-2005-01-08  Scott G. Miller  <sgmiller@gmail.com>
-
-	* Added orphaned-paren-is-error parameter, which
-          when true, causes orphaned parenthesis in read to 
-          trigger an error.
-
 2005-01-05  Magnus Jonsson <magnus@smartelectronix.com>
 	* Fix complex division bug (#1096496)
 
