@@ -2,6 +2,7 @@
   (logand 
    logxor
    lognot 
+   logior
    logcount
    bitwise-if 
    logtest 
@@ -18,6 +19,7 @@
    list->integer
    booleans->integer)
   (import logicops)
+  (define logior logor)
   (include "../../modules/srfi/srfi-60.scm"))
 
 (module srfi-60
@@ -41,9 +43,8 @@
           list->integer
           booleans->integer)
   (import srfi-60-defs)
-  (define logior logor)
   (define ash arithmetic-shift)
-  (define bitwise-ior logor)
+  (define bitwise-ior logior)
   (define bitwise-xor logxor)
   (define bitwise-and logand)
   (define bitwise-not lognot)
