@@ -84,6 +84,6 @@
 		(display (sisc:format "Joining ~a...~%" channel))
 		(do-join channel))
 	      channels)
-    (make-schemechan "#schemerepl"))
+#;    (make-schemechan "#schemerepl"))
 
   (onDisconnect)

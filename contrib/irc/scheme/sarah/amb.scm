@@ -20,5 +20,6 @@
                           (set! amb-fail last-amb)
                           (fk 'fail)))
                       (sk arg))))
-                 choices)))))
+                 choices)
+       (last-amb)))))
 

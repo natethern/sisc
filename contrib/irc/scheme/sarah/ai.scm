@@ -131,7 +131,15 @@
 		      (eqv? bot-name (rac strict-tokens)))]
           [cleaned-message (bot-clean message)]
           [pattern (find-pattern strict-tokens)]
-          [response (and-let* ([handler (assq (or pattern 'EXPLAIN)
+          [response (and-let* ([handler 
+                                (assq (or pattern 
+  				       (and (let ([last-token (symbol->string 
+							       (rac tokens))])
+                                              (eqv? (string-ref last-token
+                                                      (- (string-length 
+                                                           last-token) 1))
+                                                    #\?))
+                                            'EXPLAIN))
                                               pattern-handlers)])
                         (display (car handler))
                         ((cdr handler) from channel
@@ -143,8 +151,7 @@
         (and (or (and channel
 		      (not (bot-quiet (string->symbol channel))))
 		 to-bot)
-	     (or (explain #f from channel cleaned-message to-bot)
-                 (ask-alice from cleaned-message))))))
+                 (ask-alice from cleaned-message)))))
     
 (define (bot-clean message)
   (trim 
@@ -242,6 +249,7 @@
                             (car env))])
               (putprop 'call/cc env call/cc)
               (putprop '$sc-put-cte env $sc-put-cte)
+	      (strict-r5rs-compliance #t)
               (thread/new 
                (lambda ()
                  (with-output-to-string 
