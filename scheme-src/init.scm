@@ -166,7 +166,7 @@
                    (begin (vector-set! v n (car l))
                           (l2v (cdr l) v (+ n 1))))))]
      (lambda (l)
-       (if (not (proper-list? l))
+       (if (proper-list? l)
 	   (l2v l (make-vector (length l)) 0)
 	   (error 'list->vector "can only convert a proper list." l)))))
 
