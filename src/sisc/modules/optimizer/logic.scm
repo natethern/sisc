@@ -37,9 +37,11 @@
                      (set! sec (cons cy sec))
                      (cp-helper (cdr x) (cdr y) acc)]
                     ;; If this var gets set!'ed, or its right-hand side
-                    ;; is non-immediate, skip it
+                    ;; is non-immediate, or is the same var in a letrec,
+		    ;; skip it
                     [(or (not (immediate? cy))
-                         (and set-vars (memq cx set-vars)))
+                         (and set-vars (memq cx set-vars))
+			 (and rec (eq? cx cy)))
                      (set! nf (cons cx nf))
                      (set! nv (cons cy nv))
                      (cp-helper (cdr x) (cdr y) acc)]
