@@ -3333,7 +3333,7 @@
       (lambda (fn k)
         (let ((p (open-source-input-file fn)))
           (let f ((acc '()))
-            (let ((x (read-code p #t)))
+            (let ((x (read-code p)))
               (if (eof-object? x)
                   (begin (close-input-port p) (reverse acc))
                   (f (cons (datum->syntax-object k x) acc))))))))
