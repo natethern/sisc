@@ -119,7 +119,7 @@ public class Compiler extends Util {
             }
 
             if (r==null)
-                return new FreeReferenceExp(s, env.getLoc(s), env);
+                return new FreeReferenceExp(s, env);
             else
                 return new LexicalReferenceExp(lev, r.intValue());
         }
@@ -265,7 +265,7 @@ public class Compiler extends Util {
                 } else if (tmp instanceof FreeReferenceExp) {
                     FreeReferenceExp fre=(FreeReferenceExp)tmp;
                     
-                    rv=new FreeSetEval(fre.sym, fre.envLoc, env);
+                    rv=new FreeSetEval(fre.sym, env);
                 } else {
                     error(r, liMessage(SISCB, "setlhsnotsymbol"));
                     return null;

@@ -39,12 +39,12 @@ import java.io.*;
 public class FreeSetEval extends Expression {
     public Symbol lhs;
     public AssociativeEnvironment senv;
-    public transient int envLoc;
+    private transient int envLoc;
 
-    public FreeSetEval(Symbol lhs, int e, AssociativeEnvironment senv) {
+    public FreeSetEval(Symbol lhs, AssociativeEnvironment senv) {
         this.lhs=lhs;
-        envLoc=e;
         this.senv=senv;
+        this.envLoc=senv.getLoc(lhs);
     }
 
     public void eval(Interpreter r) throws ContinuationException {

@@ -39,13 +39,12 @@ import java.io.*;
 public class FreeReferenceExp extends Expression implements Immediate {
     public Symbol sym;
     public AssociativeEnvironment lenv;
-    public transient int envLoc;
+    private transient int envLoc;
 
-    public FreeReferenceExp(Symbol s, int envLoc,
-                            AssociativeEnvironment lenv) {
+    public FreeReferenceExp(Symbol s, AssociativeEnvironment lenv) {
         this.lenv=lenv;
         sym=s;
-        this.envLoc=envLoc;
+        this.envLoc=lenv.getLoc(s);
     }
 
     public void eval(Interpreter r) throws ContinuationException {
