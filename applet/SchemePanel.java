@@ -36,12 +36,13 @@ public class SchemePanel extends JScrollPane {
 	try {
 	    iis=new PipedInputStream(interpin);
 	} catch (IOException e) {}
-	interp.dynenv.out=new OutputPort(new PrintWriter(dos), true);
+	interp.dynenv.out=new OutputPort(new PrintWriter(new BufferedOutputStream(dos)), true);
         interp.dynenv.in=new InputPort(new BufferedReader(new InputStreamReader(iis)));
 	addMessage(RESULT, "SISC "+Util.VERSION);
 	disp.setEditable(false);
 	currentEditablePos=sd.getLength()-1;
 	repl=new REPL(interp);
+	repl.setPriority(repl.getPriority()+1);
 	repl.start();
     }
 
@@ -58,12 +59,13 @@ public class SchemePanel extends JScrollPane {
     }
 
     public void eval(String s) {
+	addMessage(USER, s);
 	try {
 	    interpin.write((s+" ").getBytes());
+	    interpin.flush();
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
-	addMessage(USER, s);
     }
 
     static class DocumentOutputStream extends OutputStream {
@@ -105,6 +107,8 @@ public class SchemePanel extends JScrollPane {
             siscResultText=addStyle(null,masterSettings);
             siscErrorText=addStyle(null,masterSettings);
 
+	    StyleConstants.setFontFamily(siscText, "Courier");
+	    StyleConstants.setFontFamily(siscResultText, "Helvetica");
             StyleConstants.setForeground(userText, Color.gray);
             StyleConstants.setForeground(siscText, Color.black);
             StyleConstants.setForeground(siscResultText, Color.blue);
