@@ -14,7 +14,7 @@
 	       (set! todeliver
 		     (translate-for-third-party todeliver 'male)))
 	   (if (and (not later) (not (null? (channels-user-occupies 
-					     (soundex todeliver)))))
+					     (soundex recipient)))))
                  (begin (do-tell recipient 
 				 (car (channels-user-occupies 
 				       (message-soundex-nick message)))
