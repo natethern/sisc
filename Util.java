@@ -70,25 +70,25 @@ public abstract class Util implements Conf {
 
     public static String warn(String messageClass) {
 	StringBuffer b=new StringBuffer("{");
-	b.append(liMessage("warning"));
+	b.append(liMessage(SISCB, "warning"));
 	b.append(": ");
-	b.append(liMessage(messageClass));
+	b.append(liMessage(SISCB, messageClass));
 	b.append(')');
 	return b.toString();
     }
 
     public static String warn(String messageClass, String arg) {
 	StringBuffer b=new StringBuffer("{");
-	b.append(liMessage("warning"));
+	b.append(liMessage(SISCB, "warning"));
 	b.append(": ");
-	b.append(liMessage(messageClass, arg));
+	b.append(liMessage(SISCB, messageClass, arg));
 	b.append(')');
 	return b.toString();
     }
 
     public static void error(Interpreter r, Value where, String errormessage)
     throws ContinuationException {
-	error(r, liMessage("errorinwhere", where.toString())+": "+errormessage, false);
+	error(r, liMessage(SISCB, "errorinwhere", where.toString())+": "+errormessage, false);
     }
 
     public static void error(Interpreter r, String errormessage)
@@ -99,7 +99,7 @@ public abstract class Util implements Conf {
     public static void error(Interpreter r, String errormessage,
                              boolean prependError)
     throws ContinuationException {
-	error(r, new SchemeString((prependError ? liMessage("error")+": "+errormessage :
+	error(r, new SchemeString((prependError ? liMessage(SISCB, "error")+": "+errormessage :
 				   errormessage)));
     }
 
@@ -130,7 +130,7 @@ public abstract class Util implements Conf {
     throws Exception {
         int x=length(argl);
         if (x!=arity && arity!=-1)
-            throw new RuntimeException(liMessage("notenoughargs", arity, x));
+            throw new RuntimeException(liMessage(SISCB, "notenoughargs", arity, x));
     }
 
     public static int length(Pair p) {
@@ -141,7 +141,7 @@ public abstract class Util implements Conf {
                 p=(Pair)p.cdr;
             return i;
         } catch (ClassCastException ce) {
-            throw new RuntimeException(liMessage("notaproperlist", s.synopsis(DEFAULT_SYNOPSIS_LENGTH)));
+            throw new RuntimeException(liMessage(SISCB, "notaproperlist", s.synopsis(DEFAULT_SYNOPSIS_LENGTH)));
         }
     }
 
@@ -201,7 +201,7 @@ public abstract class Util implements Conf {
         if (o instanceof Values)
             throw new RuntimeException(((Values)o).values.length+
                                        " values received in single-value context");
-        throw new RuntimeException(liMessage("unexpectedarg", liMessage(type), 
+        throw new RuntimeException(liMessage(SISCB, "unexpectedarg", liMessage(SISCB, type), 
 					     o.synopsis(DEFAULT_SYNOPSIS_LENGTH)));
     }
 
@@ -357,45 +357,70 @@ public abstract class Util implements Conf {
     }
 
     /* Localization and Internationalization */
+    static Symbol SISCB=Symbol.intern("SISC");
+    static WeakHashMap bundles=new WeakHashMap();
     static Locale myLocale=Locale.getDefault();
     static MessageFormat formatter=new MessageFormat("");
-    static ResourceBundle liMessages=ResourceBundle.getBundle("Messages");
 
     static {
 	formatter.setLocale(myLocale);
     }
 
-    public static String liMessage(String messageName) {
-	return liMessages.getString(messageName);
+    public static void registerBundle(Symbol bundleName) 
+	throws MissingResourceException {
+	ResourceBundle b=ResourceBundle.getBundle(bundleName.symval);
+	bundles.put(bundleName, b);
     }
 
-    public static String liMessage(String messageName, String arg1) {
-	return formatter.format(liMessages.getString(messageName),
+    public static String liMessage(Symbol bundleName, String messageName) {
+	ResourceBundle bundle=(ResourceBundle)bundles.get(bundleName);
+	if (bundle==null) {
+	    try {
+		registerBundle(bundleName);
+	    } catch (MissingResourceException mr) {
+		return null;
+	    }
+	    bundle=(ResourceBundle)bundles.get(bundleName);
+	}
+	try {
+	    return bundle.getString(messageName);
+	} catch (MissingResourceException mr) {
+	    if (!bundle.equals(SISCB))
+		return liMessage(SISCB, messageName);
+	    else
+		return null;
+	}
+    }
+
+    public static String liMessage(Symbol bundle, 
+				   String messageName, String arg1) {
+	return formatter.format(liMessage(bundle, messageName),
 				new Object[] { arg1 });
     }
 
-    public static String liMessage(String messageName, String arg1, 
-				   String arg2) {
-	return formatter.format(liMessages.getString(messageName),
+    public static String liMessage(Symbol bundle, String messageName, 
+				   String arg1, String arg2) {
+	return formatter.format(liMessage(bundle, messageName),
 				new Object[] { arg1, arg2 });
     }
 
-    public static String liMessage(String messageName, String arg1,
-				   String arg2, String arg3) {
-	return formatter.format(liMessages.getString(messageName),
+    public static String liMessage(Symbol bundle, String messageName, 
+				   String arg1, String arg2, String arg3) {
+	return formatter.format(liMessage(bundle, messageName),
 				new Object[] { arg1, arg2, arg3 });
     }
 
 
-    public static String liMessage(String messageName, int arg1, int arg2) {
-	return formatter.format(liMessages.getString(messageName),
+    public static String liMessage(Symbol bundle, String messageName, 
+				   int arg1, int arg2) {
+	return formatter.format(liMessage(bundle, messageName),
 				new Object[] { new Integer(arg1), 
 					       new Integer(arg2) });
     }
 
-    public static String liMessage(String messageName, String arg1, 
-				   int arg2, int arg3) {
-	return formatter.format(liMessages.getString(messageName),
+    public static String liMessage(Symbol bundle, String messageName, 
+				   String arg1, int arg2, int arg3) {
+	return formatter.format(liMessage(bundle, messageName),
 				new Object[] { arg1,
 					       new Integer(arg2), 
 					       new Integer(arg3) });
