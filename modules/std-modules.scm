@@ -130,7 +130,9 @@
   (include "procedure-properties.scm"))
 
 (module generic-procedures
-  (meta
+  (class?
+   object?
+   meta
    type-of
    type<=
    instance-of?

@@ -24,25 +24,51 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;; TYPE SYSTEM ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;classes - this is still VERY incomplete
+;;Scheme objects (incl classes) are not a distinct type from
+;;procedures. We put no heroic effort into distinguishing between the
+;;two.
+(define (scheme-object? o)
+  (and (procedure? o)
+       (procedure-property o 'class) 
+       (procedure-property o 'slots)))
+(define (scheme-class? o)
+  (and (scheme-object? o)
+       (o 'superclasses)
+       (o 'slots)))
+(define (class? o)
+  (or (java/class? o) (scheme-class? o)))
+(define (object? o)
+  (or (java/object? o) (scheme-object? o)))
+
 ;;meta types
 (define (meta x) (cons 'meta x))
 (define (meta-type m) (cdr m))
 (define (meta? x) (and (pair? x) (eq? (car x) 'meta)))
 
 (define (type-of o)
-  (cond ((java/class? o) (meta o))
+  (cond ((class? o) (meta o))
         ((java/object? o) (java/class-of o))
+        ((scheme-object? o) (procedure-property o 'class))
         (else
           ;;hack
           (java/class-of (java/wrap o)))))
 
-  ;;this will need to change once we support non-java types
 (define (type<= x y)
-  (cond ((and (meta? x) (meta? y))
-         (type<= (meta-type x) (meta-type y)))
-        ((meta? x) #f)
-        ((meta? y) #f)
-        (else (java/assignable? y x))))
+  (cond ((or (meta? x) (meta? y))
+         (and (meta? x) (meta? y)
+              (type<= (meta-type x) (meta-type y))))
+        ((or (java/class? x) (java/class? y))
+         ;;we need this special case because the cpl of primitive
+         ;;types does not contain their corresponding java.lang
+         ;;classes
+         (and (java/class? x) (java/class? y)
+              (java/assignable? y x)))
+        ((or (class? x) (class? y))
+         (and (class? x) (class? y)
+              (memq x (class-precedence-list y))))
+        (else #f)))
+
 (define (instance-of? x y)
   (type<= (type-of x) y))
 
@@ -50,14 +76,27 @@
 (define (instances-of? x y) (every2 instance-of? x y))
 
 (define (class-direct-superclasses class)
-  (let ([sc (java/superclass class)]
-        [intfs (vector->list (java/interfaces class))])
-    (if (java/null? sc)
-        intfs
-        (cons sc intfs))))
+  (cond ((java/class? class)
+         (let ([sc (java/superclass class)]
+               [intfs (vector->list (java/interfaces class))])
+           (if (java/null? sc)
+               intfs
+               (cons sc intfs))))
+        ((scheme-class? class)
+         (class 'superclasses))
+        (else
+          (error "~a is not a class" class))))
+
 (define (class-direct-slot-names class)
-  (map java/name (filter (lambda (f) (memq 'public (java/modifiers f)))
-                         (vector->list (java/decl-fields class)))))
+  (cond ((java/class? class)
+         (map java/name
+              (filter (lambda (f)
+                        (memq 'public (java/modifiers f)))
+                      (vector->list (java/decl-fields class)))))
+        ((scheme-class? class)
+         (class 'slots))
+        (else
+          (error "~a is not a class" class))))
 
 ;;The class precedence list of a class is a total ordering on the
 ;;class and its superclasses/interfaces that is consistent with the
@@ -102,8 +141,8 @@
         ((or (meta? x) (meta? y))
          'ambiguous)
         (else
-          (let ([x<y? (java/assignable? y x)]
-                [y<x? (java/assignable? x y)])
+          (let ([x<y? (type<= y x)]
+                [y<x? (type<= x y)])
             (cond ((and x<y? y<x?) 'equal)
                   (x<y? 'more-specific)
                   (y<x? 'less-specific)
