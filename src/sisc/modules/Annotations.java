@@ -14,11 +14,9 @@ public class Annotations extends IndexedProcedure {
 		ANNOTATIONSRC = 3,
 		ANNOTATIONEXPR = 4,
 		ANNOTATIONSTRIPPED = 5,
-		EMITANNOTATIONS = 6,
 		MAKEANNOTATION = 7,
 		SETANNOTATION = 8,
-		SETANNOTATIONSTRIPPED = 9,
-		EMITDEBUGGINGSYMS = 10;
+		SETANNOTATIONSTRIPPED = 6;
 
 	public static class Index extends IndexedLibraryAdapter {
 
@@ -33,8 +31,6 @@ public class Annotations extends IndexedProcedure {
 			define("annotation-source", ANNOTATIONSRC);
 			define("annotation-expression", ANNOTATIONEXPR);
 			define("annotation-stripped", ANNOTATIONSTRIPPED);
-			define("emit-annotations", EMITANNOTATIONS);
-			define("emit-debugging-symbols", EMITDEBUGGINGSYMS);
 			define("make-annotation", MAKEANNOTATION);
 			define("set-annotation!", SETANNOTATION);
 			define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
@@ -52,19 +48,11 @@ public class Annotations extends IndexedProcedure {
         switch (f.vlr.length) {
         case 0:
             switch (id) {
-            case EMITANNOTATIONS: return truth(f.dynenv.parser.annotate);
-            case EMITDEBUGGINGSYMS: return truth(f.dynenv.emitDebuggingSymbols);
             default:
                 throwArgSizeException();
             }
         case 1:
             switch (id) {
-            case EMITANNOTATIONS:
-                f.dynenv.parser.annotate=truth(f.vlr[0]);
-                return VOID;
-            case EMITDEBUGGINGSYMS:
-                f.dynenv.emitDebuggingSymbols=truth(f.vlr[0]);
-                return VOID;
             case ANNOTATIONKEYS: {
                 Pair akl=EMPTYLIST;
                 for (Iterator i=f.vlr[0].getAnnotationKeys().iterator(); i.hasNext();) 

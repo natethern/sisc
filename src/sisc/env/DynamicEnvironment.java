@@ -59,6 +59,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public Object clone() throws CloneNotSupportedException {
         DynamicEnvironment res = (DynamicEnvironment)super.clone();
         res.parser = new Parser(new Lexer());
+        res.parser.annotate = parser.annotate;
+        res.parser.lexer.strictR5RS = parser.lexer.strictR5RS;
         res.setClassPath(getClassPath());
         res.parameters = new WeakHashMap(res.parameters);
         return res;
@@ -134,6 +136,22 @@ public class DynamicEnvironment extends Util implements Cloneable {
 
     public void setEmitDebuggingSymbols(Value v) {
         emitDebuggingSymbols = truth(v);
+    }
+
+    public Value getEmitAnnotations() {
+        return truth(parser.annotate);
+    }
+
+    public void setEmitAnnotations(Value v) {
+        parser.annotate = truth(v);
+    }
+
+    public Value getStrictR5RSCompliance() {
+        return truth(parser.lexer.strictR5RS);
+    }
+
+    public void setStrictR5RSCompliance(Value v) {
+        parser.lexer.strictR5RS = truth(v);
     }
 
 }

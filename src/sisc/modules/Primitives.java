@@ -125,7 +125,6 @@ public class Primitives extends IndexedProcedure {
             define("sisc-initial-environment", SISCINITIAL);
             define("sqrt", SQRT);
             define("sleep", SLEEP);
-            define("strict-r5rs-compliance", STRICTR5RS);
             define("string->number", STRING2NUMBER);
             define("string->symbol", STRING2SYMBOL);
             define("string->uninterned-symbol", STRING2UNINTERNEDSYMBOL);
@@ -272,7 +271,6 @@ public class Primitives extends IndexedProcedure {
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throwPrimException(liMessage(SISCB, "nosiscspecificenv"));
                 }
-            case STRICTR5RS: return truth(r.dynenv.parser.lexer.strictR5RS);
             case SYSTIME: return Quantity.valueOf(System.currentTimeMillis());
             case TIMEZONEOFFSET:
                 Calendar cal = Calendar.getInstance();
@@ -427,9 +425,6 @@ public class Primitives extends IndexedProcedure {
                     throwPrimException(liMessage(SISCB, "unsupportedstandardver"));
                     return VOID;
                 }
-            case STRICTR5RS: 
-                r.dynenv.parser.lexer.strictR5RS=truth(vlr[0]);
-                return VOID;
             case CURRENTEVAL:
                 r.getCtx().evaluator=proc(vlr[0]);
                 return VOID;
@@ -783,7 +778,7 @@ public class Primitives extends IndexedProcedure {
         LOG = 24,
         LT = 117,
         MAKEPARAM = 63,
-        MAKENATIVEPARAM = 123,
+        MAKENATIVEPARAM = 12,
         MAKERECTANGULAR = 101,
         MAKESTRING = 99,
         MAKEVECTOR = 65,
@@ -819,7 +814,6 @@ public class Primitives extends IndexedProcedure {
         SISCINITIAL = 2,
         SLEEP = 78,
         SQRT = 26,
-        STRICTR5RS = 12,
         STRING2NUMBER = 79,
         STRING2SYMBOL = 42,
         STRING2UNINTERNEDSYMBOL = 71,

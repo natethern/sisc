@@ -118,6 +118,8 @@
 (define current-optimizer 
   (lambda args
     (lambda (x) x)))
+
+(define strict-r5rs-compliance (make-native-parameter "strictR5RSCompliance"))
   
 (define eval 
   ((lambda (old-eval)

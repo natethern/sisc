@@ -38,6 +38,8 @@
 (define current-class-path      (make-native-parameter "classPath"))
 (define print-shared            (make-native-parameter "printShared"))
 (define vector-length-prefixing (make-native-parameter "vectorLengthPrefixing"))
+(define emit-debugging-symbols  (make-native-parameter "emitDebuggingSymbols"))
+(define emit-annotations        (make-native-parameter "emitAnnotations"))
 
 (if (equal? (getprop 'beta '*environment-variables*) "yes")
     (begin
