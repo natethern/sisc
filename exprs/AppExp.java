@@ -45,13 +45,13 @@ public class AppExp extends Expression {
         this.rands=rands;
         this.nonTail=nontail;
     }
-
+    
     public void eval(Interpreter r) throws ContinuationException {
         Value tmp;
 
         if (nonTail) 
             r.push(null);
-	/*
+
 	if (rands.length==0) {
 	    // No arguments, just set the VLR empty, and 
 	    // work on the operator
@@ -66,7 +66,7 @@ public class AppExp extends Expression {
 		r.nxp=rator;
 		r.push(APPEVAL);
 	    }
-	    } else {*/
+	} else {
 	    // Create the VLR
 	    r.vlr=new Value[rands.length];
 
@@ -78,7 +78,7 @@ public class AppExp extends Expression {
 		if (tmp==null) break;
 		r.vlr[i]=tmp;
 	    }
-
+	    
 	    if (i<0) {
 		// All the operands were immediate, work on
 		// the operator
@@ -98,9 +98,9 @@ public class AppExp extends Expression {
 		r.push(r.createFillRib(i, rands, rator, APPEVAL));
 		r.nxp=rands[i];
 	    }
-	    //	}
+	}
     }
-
+    
     public Value express() {
         Pair args=EMPTYLIST;
         for (int i=rands.length-1; i>=0; i--) {
