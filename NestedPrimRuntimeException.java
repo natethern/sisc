@@ -10,7 +10,7 @@ public class NestedPrimRuntimeException extends PrimRuntimeException {
     }
 
     public NestedPrimRuntimeException(SchemeException e) {
-	super("exception during nested call");
+	super();
 	this.e=e;
     }
 

@@ -84,7 +84,8 @@ public class InputPort extends NamedValue {
             return (s==-1 ? (Value)EOFObject.EOF : (Value)Quantity.valueOf(s));
 
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(liMessage(SISCB, "errorreading",
+                                                 synopsis()));
         }
     }
 
@@ -94,7 +95,8 @@ public class InputPort extends NamedValue {
         } catch (EOFException e) {
             return Util.EOF;
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(liMessage(SISCB, "errorreading",
+                                                 synopsis()));
         }
     }
 

@@ -516,14 +516,8 @@ public class Primitives extends ModuleAdapter {
                 try {
                     v=null;
                     do {
-                        try {
-                            v=r.dynenv.parser.nextExpression(p);
-                        } catch (EOFException eof) {
-                            v=EOF;
-                        } catch (IOException e) {
-                            throwPrimException(liMessage(SISCB, "errorreading",
-                                                         p.synopsis()));
-                        }
+                        v=p.readCode(r);
+
                         if (v!=EOF) {
                             try {
                                 r.eval(v);
@@ -1052,7 +1046,7 @@ public class Primitives extends ModuleAdapter {
         ENVIRONMENTQ = 39,
         EQ = 112,
         EQUAL = 113,
-        ERROR = 114,
+        //ERROR = 114,
         EVAL = 115,
         READCODE = 40,
         EXACT2INEXACT = 41,

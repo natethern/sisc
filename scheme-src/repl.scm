@@ -51,6 +51,28 @@
              (lambda (message error-cont)
                (cond [(null? message) "Error."]
                      [(not (pair? message)) message]
+                     [(assoc 'parent message) =>
+                      (lambda (p)
+                        (let ((p (cdr p)))
+                          (let ((e (assoc 'error-continuation p))
+                                (mm (assoc 'message message)))
+                            (let ((submessage
+                                   (eh p (and e (cdr e)))))
+                              (cond [(assoc 'location message) =>
+                                     (lambda (lr)
+                                       (if mm
+                                           (format 
+                                            "Error in nested call from ~a: ~a~% ~a"
+                                            (cdr lr) (cdr mm) submessage)
+                                           (format 
+                                            "Error in nested call from ~a:~% ~a"
+                                            (cdr lr) submessage)))]
+                                    [else
+                                      (if mm
+                                          (format "Error in nested call: ~a~% ~a" 
+                                                  (cdr mm) submessage)
+                                          (format "Error in nested call:~% ~a"
+                                                  submessage))])))))]
                      [(assoc 'message message) => 
                       (lambda (mr)
                         (make-error-message 
@@ -60,23 +82,6 @@
                      [(assoc 'location message) =>
                       (lambda (lr)
                         (make-error-message (cdr lr) #f))]
-                     [(assoc 'parent message) =>
-                      (lambda (p)
-                        (let ((p (cdr p)))
-                          (let ((m (assoc 'message p))
-                                (e (assoc 'error-continuation p)))
-                            (let ((submessage
-                                   (eh (and m (cdr m)) 
-                                       (and e (cdr e))
-                                       (and c (cdr c)))))
-                              (cond [(assoc 'location message) =>
-                                     (lambda (lr)
-                                        (format 
-                                         "Error in nested call from ~a:~% ~a"
-                                         (cdr lr) submessage))]
-                                    [else
-                                      (format "Error in nested call:~% ~a"
-                                              submessage)])))))]
                      [else (make-error-message #f #f)]))))
      (lambda (m e)
        (display (eh m e))

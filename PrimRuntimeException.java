@@ -7,6 +7,8 @@ public class PrimRuntimeException extends RuntimeException {
     public PrimRuntimeException(String message) {
 	super(message);
     }
+
+    public PrimRuntimeException() {}
 }
     
 /*

@@ -117,12 +117,16 @@ public abstract class Util implements Version {
                              NestedPrimRuntimeException parent) 
         throws ContinuationException {
         SchemeException rootCauseException=parent.getRootCause();
-        Pair rootCause=list(new Pair(MESSAGE, rootCauseException.m),
-                            new Pair(ERRORK, rootCauseException.e),
-                            new Pair(FCONT, rootCauseException.f));
-
-        error(r, list(new Pair(LOCATION, where),
-                      new Pair(PARENT, rootCause)));
+        Pair rootCause=new Pair(new Pair(ERRORK, rootCauseException.e),
+                                new Pair(new Pair(FCONT, rootCauseException.f),
+                                         rootCauseException.m));
+        String parentMessage=parent.getMessage();
+        error(r, (parentMessage == null ?
+                  list(new Pair(LOCATION, where),
+                       new Pair(PARENT, rootCause)) :
+                  list(new Pair(MESSAGE, new SchemeString(parent.getMessage())),
+                       new Pair(LOCATION, where),
+                       new Pair(PARENT, rootCause))));
     }
 
     public static void error(Interpreter r, Value where, String errormessage)

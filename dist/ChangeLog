@@ -1,4 +1,11 @@
-2002-07-16  Released SISC b1.5.5rc1
+2002-07-17  Released SISC b1.5.5rc1
+
+2002-07-16  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Much improved handling of nested errors.
+
+	* Fixed a bug causing code not to be annotated when loaded
+	  using LOAD.
 
 2002-07-15  Scott G. Miller  <scgmille@freenetproject.org>
 
