@@ -36,6 +36,8 @@ import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 public class SThread extends ModuleAdapter {
     public String getModuleName() {
@@ -98,13 +100,17 @@ public class SThread extends ModuleAdapter {
 	define("monitor/notify-all", MONITORNOTIFY);
     }
 
-    public static class CondVar implements Serializable {
+    public static class CondVar extends NamedValue {
         public CondVar() {};
+
+        public String display() {
+            return displayNamedOpaque("condvar");
+        }
     }
 
     public static class Monitor extends NamedValue {
-	private int lockCount=0;
-	private Thread owner=null;
+	private transient int lockCount=0;
+	private transient Thread owner=null;
 	private CondVar condvar=new CondVar();
 
 	public Value lock(long timeout) {
@@ -240,6 +246,15 @@ public class SThread extends ModuleAdapter {
 
         public Monitor() {}
 
+        public void serialize(Serializer ser) throws IOException {
+            if (lockCount > 0 || owner != null)
+                warn("serializinglockedmonitor");
+            ser.writeExpression(condvar);
+        }
+
+        public void deserialize(Deserializer ser) throws IOException {
+            condvar=(CondVar)ser.readExpression();
+        }
     }
 
     public static class ThreadContext extends NamedValue implements Runnable {
