@@ -1,3 +1,8 @@
+2002-07-13  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Enforce the R5RS lexical syntax for <variable>.
+	  (define define 3) is now an error.
+
 2002-07-07  Matthias Radestock  <matthias@sorted.org>
 
 	* Implemented Java (de)serialization, including object graphs
