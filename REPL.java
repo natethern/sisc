@@ -193,32 +193,8 @@ public class REPL extends Thread {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-
-        boolean server = false;
-        InetAddress bindAddr = null;
-        int port = 0;
-
-        java.util.Vector fargs = new java.util.Vector();
-
-        for (int iArg=0; iArg < args.length; iArg++) {
-            String arg = args[iArg];
-            if (arg.equals("--server")) {
-                server = true;
-                continue;
-            }
-            if (arg.equals("--host")) {
-                iArg++;
-                bindAddr = InetAddress.getByName(args[iArg]);
-                continue;
-            }
-            if (arg.equals("--port")) {
-                iArg++;
-                port = Integer.parseInt(args[iArg]);
-                continue;
-            }
-            fargs.add(arg);
-        }
+    public static void main(String[] argv) throws Exception {
+        Map args=parseOpts(argv);
 
         SeekableInputStream heap = findHeap();
         if (heap==null) {
@@ -229,14 +205,44 @@ public class REPL extends Thread {
         AppContext ctx = new AppContext();
         Context.register("main", ctx);
         Interpreter r = Context.enter("main");
-        if (!initializeInterpreter(r,
-                                   (String[])fargs.toArray(new String[0]),
+        if (!initializeInterpreter(r, 
+                                   (String[])((Vector)args.get("files")).toArray(new String[0]),
                                    heap))
             return;
         Context.exit();
-        
-        if (server) {
-            ServerSocket ssocket = new ServerSocket(port, 50, bindAddr);
+
+        boolean noRepl=args.get("no-repl")!=null;
+        boolean call=args.get("call-with-args")!=null;
+
+        String expr=(String)args.get("eval");
+        if (expr!=null) {
+            if (!call)
+                System.out.println(r.eval(expr));
+            else r.eval(expr);
+        }
+
+        String func=(String)args.get("call-with-args");
+        if (func!=null) {
+            Procedure fun=Util.proc(r.eval(func));
+            Vector av=(Vector)args.get("argv");
+            SchemeString[] sargs=new SchemeString[av.size()];
+            for (int i=0; i<sargs.length; i++) 
+                sargs[i]=new SchemeString((String)av.elementAt(i));
+            Value v=r.eval(fun, sargs);
+            if (noRepl) {
+                if (v instanceof Quantity)
+                    System.exit(((Quantity)v).intValue());
+                else if (v instanceof SchemeVoid)
+                    System.exit(0);
+                else System.out.println(v);
+            }
+        }
+            
+        if (noRepl) return;
+
+        if (args.get("server")!=null) {
+            ServerSocket ssocket = new ServerSocket(Integer.parseInt((String)args.get("port")), 50, 
+                                                    InetAddress.getByName((String)args.get("host")));
             System.out.println("Listening on " + ssocket.getInetAddress().toString() + ":" + ssocket.getLocalPort());
             System.out.flush();
             SocketREPL.listen("main", ssocket);
@@ -272,6 +278,66 @@ public class REPL extends Thread {
                 repl.start();
             }
         }
+    }
+
+    static final int SWITCH=0, OPTION=1;
+    static final String[][] opts=new String[][] {
+        {"s","server"},
+        {"h","host"},
+        {"p","port"},
+        {"e","eval"},
+        {"c","call-with-args"},
+        {"x","no-repl"},
+    };
+    static final int optTypes[]=new int[] {
+        OPTION, OPTION, OPTION, OPTION, OPTION, SWITCH};
+                                                  
+    public static Map parseOpts(String[] args) {
+        Map m=new HashMap();
+        Vector files=new Vector();
+        int x=0;
+        while (x<args.length) {
+            String a=args[x];
+            int y;
+            if (a.startsWith("-")) {
+                if (a.startsWith("--")) 
+                    y=1;
+                else 
+                    y=0;
+                a=a.substring(y+1);
+                if ("".equals(a)) {
+                    Vector params=new Vector();
+                    if (y==0) 
+                        params.addElement("-");
+                    else {
+                        while (++x<args.length) {
+                            params.addElement(args[x]);
+                        }
+                    }
+                    m.put("argv", params);
+                    break;
+                } else {
+                    for (int i=0; i<opts.length; i++) {
+                        if (opts[i][y].equals(a)) {
+                            switch (optTypes[i]) {
+                            case OPTION:
+                                m.put(opts[i][1], args[++x]);
+                                break;
+                            case SWITCH:
+                                m.put(opts[i][1], Boolean.TRUE);
+                                break;
+                            }
+                            break;
+                        }
+                    }
+                }
+            } else {
+                files.addElement(args[x]);
+            }
+            x++;
+        }
+        m.put("files", files);
+        return m;
     }
 }
 /*
