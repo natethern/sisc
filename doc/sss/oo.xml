@@ -877,6 +877,7 @@
       define-class
       &lt;class&gt;
       -->
+      <para></para>
     </sect2>
     <sect2>
       <title>Instantiating Classes</title>
@@ -886,6 +887,7 @@
       own constructor
       make-object
       -->
+      <para></para>
     </sect2>
     <sect2>
       <title>Predicates</title>
@@ -893,6 +895,7 @@
       scheme-class?
       scheme-object?
       -->
+      <para></para>
     </sect2>
   </sect1>
   <sect1>
