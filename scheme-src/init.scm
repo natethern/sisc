@@ -217,9 +217,20 @@
   (let ([normalize (lambda (proc)
                      (lambda (file . rest)
                        (apply proc (normalize-url (current-url) file) rest)))]
-        [file-handler (lambda (extension)
+        [file-handler 
+         (lambda (extension)
                         (case (string->symbol (string-downcase extension))
                           ((sce pp) load-expanded)
+                          ((sll) 
+                           (with-failure-continuation
+                               (lambda (m e)
+                                 (lambda (name) 
+                                   (error 'load "shared libraries not supported in this build.")))
+                             (lambda ()
+                               (eval '(lambda (name)
+                                        (import loadable-libraries)
+                                        (link-library (open-library name)))))))
+
                           (else _load)))]
         [file-extension (lambda (url)
                           (let loop ((x (reverse (string->list url)))
