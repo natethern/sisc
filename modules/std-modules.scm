@@ -87,11 +87,6 @@
 (native-module hashtable-native  "sisc.modules.SHashtable")
 (native-module block-io-native  "sisc.modules.io.BlockIO")
 
-(module loadable-libraries
-    (create-library create-library-from-module
-     open-library link-library)
-    (include "loadablelibs.scm"))
-
 (module misc
     (wrap-symbol
      dynamic-freeze
@@ -363,6 +358,15 @@
   (import threading)
   (import hashtable)
   (include "libraries.scm"))
+
+(module loadable-libraries
+    (create-library
+     create-library-from-module
+     open-library
+     link-library)
+  (import s2j)
+  (import generic-procedures)
+  (include "loadablelibs.scm"))
 
 (module pattern-matching
     ((match
