@@ -1,6 +1,7 @@
 2004-08-27  Scott G. Miller   <scott@sgmiller.org>
 
-	* Fixed state bugs in SRFI-18 related to unowned mutexes.
+	* Fixed state bugs in SRFI-18 related to unowned mutexes and
+          mutex unlocking with condition variables.
 
 2004-08-24  Released SISC 1.9.0-alpha
 
