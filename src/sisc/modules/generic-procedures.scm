@@ -464,13 +464,12 @@
       (if next
           (apply next args)
           (error (format "no matching method for ~s" args)))
-      (let ([meth (method-procedure (car applicable))])
-        (apply meth
-               (lambda args
-                 (call-method-helper (cdr applicable)
-                                     args
-                                     next))
-               args))))
+      (apply (method-procedure (car applicable))
+             (lambda args
+               (call-method-helper (cdr applicable)
+                                   args
+                                   next))
+             args)))
 
 (define (_make-generic-procedure methods . rest)
   (define (proc . args)
