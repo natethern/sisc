@@ -1,3 +1,7 @@
+2002-10-21  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Fixed FIXEDINT overflow (thanks to Mark Rose for spotting it)
+
 2002-10-20  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Compiled-library bindings are now lazy loaded.
