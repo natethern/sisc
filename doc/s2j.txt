@@ -111,6 +111,9 @@ weak orderings are re-arranged if that is the only way to obtain a
 total order. By contrast, strong orderings are never rearranged.
 
 
+Instances
+---------
+
 JAVA-NEW <jclass> <jvalue> ... -> <jobject>
 Selects & calls a constructor of <jclass>, returning the newly created
 object. Constructor selection is performed based on the types of the
