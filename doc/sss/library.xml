@@ -595,7 +595,7 @@ r / 2<superscript>s</superscript>
             </methodsynopsis>
             <blockquote>
               <para>
-                Creates a new buffer capable whose size is equal to
+                Creates a new buffer whose size is equal to
                 the number of arguments given and whose contents are
                 the bytes given as arguments.
               </para>
