@@ -140,8 +140,7 @@
      clear-breakpoint!
      continue
      stack-trace
-     print-stack-trace
-     expression-annotations)
+     print-stack-trace)
   (import debugging-native)
   (include "debug.scm"))
 
