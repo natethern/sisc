@@ -33,4 +33,16 @@
                       (eval '(import foobarbaz) 
                             (scheme-report-environment 5))))
                   (eval '(identity 3))))
-                        
+                   
+;; Used to cause an out of memory error
+(import threading)
+(should-be 820401 'okay
+             (let loop ([x 20])
+               (if (zero? x)
+                   'okay
+                   (let ([t (thread/new (lambda () (force (let loop () 
+                                                           (delay (force (loop)))))))])
+                     (thread/start t)
+                     (sleep 1000)
+                     (thread/interrupt t)
+                     (loop (- x 1))))))
