@@ -204,11 +204,11 @@
           <methodsynopsis language="scheme">
             <type>&num;t/&num;f</type>
             <methodname>hashtable?</methodname>
-            <methodparam><parameter>obj</parameter></methodparam>
+            <methodparam><parameter>value</parameter></methodparam>
           </methodsynopsis>
           <blockquote>
             <para>
-              Returns &num;t if <parameter>obj</parameter> is a hash
+              Returns &num;t if <parameter>value</parameter> is a hash
               table, &num;f otherwise.
             </para>
           </blockquote>
@@ -270,7 +270,7 @@
         <para>
           &procedure;
           <methodsynopsis language="scheme">
-            <type>obj</type>
+            <type>value</type>
             <methodname>hashtable/put!</methodname>
             <methodparam><parameter>hashtable</parameter></methodparam>
             <methodparam><parameter>key</parameter></methodparam>
@@ -294,7 +294,7 @@
         <para>
           &procedure;
           <methodsynopsis language="scheme">
-            <type>obj</type>
+            <type>value</type>
             <methodname>hashtable/get</methodname>
             <methodparam><parameter>hashtable</parameter></methodparam>
             <methodparam><parameter>key</parameter></methodparam>
@@ -316,7 +316,7 @@
         <para>
           &procedure;
           <methodsynopsis language="scheme">
-            <type>obj</type>
+            <type>value</type>
             <methodname>hashtable/get!</methodname>
             <methodparam><parameter>hashtable</parameter></methodparam>
             <methodparam><parameter>key</parameter></methodparam>
@@ -340,7 +340,7 @@
         <para>
           &procedure;
           <methodsynopsis language="scheme">
-            <type>obj</type>
+            <type>value</type>
             <methodname>hashtable/remove!</methodname>
             <methodparam><parameter>hashtable</parameter></methodparam>
             <methodparam><parameter>key</parameter></methodparam>
@@ -371,7 +371,7 @@
         <para>
           &procedure;
           <methodsynopsis language="scheme">
-            <type>obj</type>
+            <type>value</type>
             <methodname></methodname>
             <methodparam><parameter>hashtable</parameter></methodparam>
             <methodparam><parameter>key</parameter></methodparam>
@@ -480,15 +480,15 @@
       store their methods in a procedure property.
     </para>
     <para>
-      Keys must be symbols. Values can be anything. All operations are
-      thread-safe.
+      Keys must be symbols. Values are any valid Scheme value. 
+      All operations are thread-safe.
     </para>
     <para>
       <blockquote>
         <para>
           &procedure;
           <methodsynopsis language="scheme">
-            <type>obj</type>
+            <type>value</type>
             <methodname>procedure-property</methodname>
             <methodparam><parameter>proc</parameter></methodparam>
             <methodparam><parameter>symbol</parameter></methodparam>
@@ -511,7 +511,7 @@
         <para>
           &procedure;
           <methodsynopsis language="scheme">
-            <type>obj</type>
+            <type>value</type>
             <methodname>set-procedure-property!</methodname>
             <methodparam><parameter>proc</parameter></methodparam>
             <methodparam><parameter>symbol</parameter></methodparam>
@@ -535,7 +535,7 @@
         <para>
           &procedure;
           <methodsynopsis language="scheme">
-            <type>obj</type>
+            <type>value</type>
             <methodname>procedure-property!</methodname>
             <methodparam><parameter>proc</parameter></methodparam>
             <methodparam><parameter>symbol</parameter></methodparam>
