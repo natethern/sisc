@@ -97,10 +97,6 @@ public class CallFrame extends Procedure {
         r.pop(this);
     }
 
-    public String display() {
-        return displayNamedOpaque("continuation");
-    }
-
     public void serialize(Serializer s) throws IOException {
         if (vlr==null)
             s.writeBoolean(false);
