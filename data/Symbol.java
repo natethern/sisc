@@ -39,7 +39,7 @@ public class Symbol extends Value {
     }
     
     public String write() {
-        if (symval.toLowerCase().equals(symval))
+        if (caseSensitive || symval.toLowerCase().equals(symval))
             return symval;
         else {
             StringBuffer b=new StringBuffer("|");
