@@ -3,6 +3,9 @@ package sisc.interpreter;
 import java.io.*;
 import sisc.ser.*;
 import sisc.data.*;
+import java.util.Properties;
+import java.util.Map;
+import java.util.HashMap;
 import sisc.env.SymbolicEnvironment;
 import sisc.util.Util;
 
@@ -10,6 +13,7 @@ public class AppContext extends Util {
 
     public SymbolicEnvironment symenv;
     public SymbolicEnvironment toplevel_env;
+
     /*
     protected void finalize() {
         SymbolicEnvironment ct=lookupContextEnv(Symbol.get("*prof*"));
@@ -31,11 +35,18 @@ public class AppContext extends Util {
     */
     
     private LibraryManager libraries;
+    private Properties props;
 
     public AppContext() {
+        this(new Properties());
+    }
+
+    public AppContext(Properties props) {
+        this.props = props;
     }
 
     public AppContext(SymbolicEnvironment symenv) {
+        this();
         this.symenv = symenv;
         try {
             toplevel_env=lookupContextEnv(TOPLEVEL);
@@ -101,7 +112,16 @@ public class AppContext extends Util {
         symenv.define(s, env.asValue());
     }
 
+    public String getProperty(String name) {
+        return props.getProperty(name, System.getProperty(name));
+    }
+
+    public String getProperty(String name, String def) {
+        return props.getProperty(name, System.getProperty(name, def));
+    }
+
 }
+
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
