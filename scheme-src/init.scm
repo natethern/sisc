@@ -181,6 +181,15 @@
 (define (vector . elems) (list->vector elems))
 (define (string . elems) (list->string elems))
 
+;;;;;;;;;;;;; Error handling
+
+(define (throw error . args)
+  (call-with-failure-continuation
+      (lambda (fk)
+        (if (null? args)
+            (call-with-current-continuation (lambda (k) (fk error k)))
+            (fk error (car args))))))
+
 ;;;;;;;;;;;;; OS Detection
 
 (define (detect-os)
