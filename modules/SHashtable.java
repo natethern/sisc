@@ -6,6 +6,7 @@ import sisc.exprs.*;
 import java.io.*;
 import java.util.*;
 import sisc.Serializer;
+import sisc.modules.SThread.Monitor;
 
 public class SHashtable extends ModuleAdapter {
     public String getModuleName() {
@@ -86,15 +87,21 @@ public class SHashtable extends ModuleAdapter {
 
             r.nxp = null;
 
-            switch (r.vlr.length) {
-            case 1:
-                r.acc = (Value)ht.get(r.vlr[0]);
-                break;
-            case 2:
-                r.acc = (Value)ht.put(r.vlr[0], r.vlr[1]);
-                break;
-            default:
-                throw new RuntimeException(liMessage(SISCB, "hashtableargs", display()));
+            Monitor m = Monitor.of(this);
+            m.acquire();
+            try {
+                switch (r.vlr.length) {
+                case 1:
+                    r.acc = (Value)ht.get(r.vlr[0]);
+                    break;
+                case 2:
+                    r.acc = (Value)ht.put(r.vlr[0], r.vlr[1]);
+                    break;
+                default:
+                    throw new RuntimeException(liMessage(SISCB, "hashtableargs", display()));
+                }
+            } finally {
+                m.unlock();
             }
             if (r.acc == null) r.acc = FALSE;
         }
@@ -117,65 +124,85 @@ public class SHashtable extends ModuleAdapter {
             switch (primid) {
             case HT_MAKE:
                 return new SchemeHashtable();
+            default:
+                throwArgSizeException();
             }
         case 1:
             switch(primid) {
             case HTQ:
                 return truth(f.vlr[0] instanceof SchemeHashtable);
-            case HT_CLEAR:
-                hash(f.vlr[0]).clear();
-                return VOID;
-            case HT_TO_ALIST: {
-                return shash(f.vlr[0]).toAList();
-            }
             case ALIST_TO_HT: {
                 SchemeHashtable res = new SchemeHashtable();
                 res.addAList(pair(f.vlr[0]));
                 return res;
             }
-            case HT_KEYS: {
-                Iterator i = hash(f.vlr[0]).keySet().iterator();
-                Pair res = EMPTYLIST;
-                while(i.hasNext()) {
-                    Value k = (Value)i.next();
-                    res = new Pair(k, res);
+            default:
+                SchemeHashtable h = shash(f.vlr[0]);
+                Monitor m = Monitor.of(h);
+                m.acquire();
+                try {
+                    switch(primid) {
+                    case HT_CLEAR:
+                        h.ht.clear();
+                        return VOID;
+                    case HT_TO_ALIST:
+                        return h.toAList();
+                    case HT_KEYS: {
+                        Iterator i = h.ht.keySet().iterator();
+                        Pair res = EMPTYLIST;
+                        while(i.hasNext()) {
+                            Value k = (Value)i.next();
+                            res = new Pair(k, res);
+                        }
+                        return res;
+                    }
+                    default:
+                        throwArgSizeException();
+                    }
+                } finally {
+                    m.unlock();
                 }
-                return res;
-            }
             }
         default:
             Value def = FALSE;
             Value res = null;
-            switch(primid) {
-            case HT_PUT:
-                switch (f.vlr.length) {
-                case 3: break;
-                case 4: def = f.vlr[3]; break;
+            SchemeHashtable h = shash(f.vlr[0]);
+            Monitor m = Monitor.of(h);
+            m.acquire();
+            try {
+                switch(primid) {
+                case HT_PUT:
+                    switch (f.vlr.length) {
+                    case 3: break;
+                    case 4: def = f.vlr[3]; break;
+                    default:
+                        throwArgSizeException();
+                    }
+                    res = (Value)h.ht.put(f.vlr[1], f.vlr[2]);
+                    break;
+                case HT_GET:
+                    switch (f.vlr.length) {
+                    case 2: break;
+                    case 3: def = f.vlr[2]; break;
+                    default:
+                        throwArgSizeException();
+                    }
+                    res = (Value)h.ht.get(f.vlr[1]);
+                    break;
+                case HT_REMOVE:
+                    switch (f.vlr.length) {
+                    case 2: break;
+                    case 3: def = f.vlr[2];
+                    default:
+                        throwArgSizeException();
+                    }
+                    res = (Value)h.ht.remove(f.vlr[1]);
+                    break;
                 default:
                     throwArgSizeException();
                 }
-                res = (Value)hash(f.vlr[0]).put(f.vlr[1], f.vlr[2]);
-                break;
-            case HT_GET:
-                switch (f.vlr.length) {
-                case 2: break;
-                case 3: def = f.vlr[2]; break;
-                default:
-                    throwArgSizeException();
-                }
-                res = (Value)hash(f.vlr[0]).get(f.vlr[1]);
-                break;
-            case HT_REMOVE:
-                switch (f.vlr.length) {
-                case 2: break;
-                case 3: def = f.vlr[2];
-                default:
-                    throwArgSizeException();
-                }
-                res = (Value)hash(f.vlr[0]).remove(f.vlr[1]);
-                break;
-            default:
-                throwArgSizeException();
+            } finally {
+                m.unlock();
             }
             return (res == null) ? def : res;
         }

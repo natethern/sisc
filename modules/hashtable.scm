@@ -1,11 +1,14 @@
 (define (hashtable/get! ht key thunk)
-  (let* ([def (list #f)]
-         [res (hashtable/get ht key def)])
-    (if (eqv? res def)
-        (let ([res (thunk)])
-          (hashtable/put! ht key res)
-          res)
-        res)))
+  (synchronized
+   ht
+   (lambda ()
+     (let* ([def (list #f)]
+            [res (hashtable/get ht key def)])
+       (if (eqv? res def)
+           (let ([res (thunk)])
+             (hashtable/put! ht key res)
+             res)
+           res)))))
 
 ;;The following are quite inefficient. To get around that we'd have
 ;;to expose java collection iterators.
