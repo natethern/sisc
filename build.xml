@@ -8,9 +8,9 @@
   </path>
 
   <target name="prepare">
-    <property name="specver" value="1.9.0-alpha"/>
-    <property name="version" value="1.9.0-alpha"/>
-    <property name="cvsversion" value="a1_9_0"/> 
+    <property name="specver" value="1.9.0.1-alpha"/>
+    <property name="version" value="1.9.0.1-alpha"/>
+    <property name="cvsversion" value="a1_9_0_1"/> 
     <property name="spectitle" value="Second Interpreter of Scheme Code"/>
     <!-- Got a better idea?: -->
     <property name="specvendor" value="SISC Development Group"/>
@@ -115,6 +115,8 @@
       <include name="${packagename}/modules/io/StringIO.java"/>
       <include name="${packagename}/modules/Annotations.java"/>
       <include name="${packagename}/modules/Primitives.java"/>
+      <include name="${packagename}/modules/SimplePrimitives.java"/>
+      <include name="${packagename}/modules/ComplexPrimitives.java"/>
       <include name="${packagename}/modules/R5RS.java"/>
     </javac>      
   </target>
@@ -165,7 +167,7 @@
       <fileset dir="${classdir}">
         <include name="sisc/modules/io/IO*.class"/>
         <include name="sisc/modules/io/StringIO*.class"/>
-        <include name="sisc/modules/Primitives*.class"/>
+        <include name="sisc/modules/*Primitives*.class"/>
         <include name="sisc/modules/Annotations*.class"/>
         <include name="sisc/modules/R5RS*.class"/>
       </fileset>
@@ -186,7 +188,7 @@
         <include name="sisc/modules/**"/>
         <exclude name="sisc/modules/io/IO*.class"/>
         <exclude name="sisc/modules/io/StringIO*.class"/>
-        <exclude name="sisc/modules/Primitives*.class"/>
+        <exclude name="sisc/modules/*Primitives*.class"/>
         <exclude name="sisc/modules/R5RS*.class"/>
       </fileset>
       <manifest>
@@ -417,6 +419,7 @@
     <copy todir="${dist}/full/sisc/doc">
       <fileset dir="${gendocdir}/sss">
         <include name="*.html"/>
+        <include name="*.css"/>
       </fileset>
     </copy>
     <copy todir="${dist}/full/sisc/scheme-src/srfi-22/"

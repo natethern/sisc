@@ -74,11 +74,11 @@
       (lambda ()
         ; We use absolute references to threading here so that this can
         ; coexist with the lite and full dists without using import
-        (letrec ([thread (@threading::thread/current)]
+        (letrec ([thread (|@threading-native::thread/current|)]
                  [handler
                   (lambda ()
                     (_signal-unhook! "INT" handler)
-                    (@threading::thread/interrupt thread))])
+                    (|@threading-native::thread/interrupt| thread))])
           handler))
       (lambda () #f)))
 
