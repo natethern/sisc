@@ -207,7 +207,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
               <entry>
                 Specifies a Java properties file that contains
                 application properties. Typically some of these
-                properties defined defaults for <xref
+                properties define defaults for <xref
                 linkend="config-parameters">configuration
                 parameters</xref>. The file can be specified as a URL.
               </entry>
@@ -605,9 +605,9 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
       <title>Loading</title>
       <para>
         &SISC; supports loading Scheme programs using the &R5RS;
-        optional procedure <function>load</function>.  A number of file 
-        types for loading Scheme code are supported.  
-        The common extensions are:
+        optional procedure <function>load</function>.  A number of
+        file types for loading Scheme code are supported.  The common
+        extensions are:
       </para>
       <itemizedlist>
         <listitem>
@@ -617,23 +617,30 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
         </listitem>
         <listitem>
           <para>
-            <literal>sce</literal> - Scheme code expanded.  This type of
-            code has been processed by the syntax expander and contains
-            only core Scheme forms.
+            <literal>sce</literal> - Scheme code expanded.  This type
+            of code has been processed by the syntax expander and
+            contains only core Scheme forms.
           </para>
         </listitem>
         <listitem>
           <para>
             <literal>sll</literal> - &SISC; Compiled Library.  This
-            contains expanded and compiled code in a &SISC; specific
-            representation.
+            contains expanded and compiled Scheme definitions in a
+            &SISC; specific representation.
           </para>
         </listitem>
         <listitem>
           <para>
-            <literal>shp</literal> - (Pronounced sheep) &SISC; heap file.
-            This file contains all the compiled code loaded when &SISC; 
-            starts up.
+            <literal>slt</literal> - &SISC; Loadable Thunk.  This
+            contains expanded and compiled code in a &SISC; specific
+            representation. The code gets executed when loaded.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>shp</literal> - (Pronounced sheep) &SISC; heap
+            file.  This file contains all the compiled code loaded
+            when &SISC; starts up.
           </para>
         </listitem>
       </itemizedlist>
