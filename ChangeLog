@@ -1,3 +1,8 @@
+2004-04-08  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Fixed bugs in the native versions of c??r which
+	  weren't checking for the empty list.
+
 2004-04-08  Matthias Radestock  <matthias@sorted.org>
 
 	* Moved srfis into separate libraries.
