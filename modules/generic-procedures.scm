@@ -153,6 +153,29 @@
                   (set-cdr! methods (cons m meths)))
               (add-method-helper m meths))))))
 
+(define (add-java-constructors proc constructors)
+  (for-each (lambda (c)
+              (if (memq 'public (java/modifiers c))
+                  (add-method
+                   proc
+                   (make-method
+                    c
+                    (vector->list (java/parameter-types c))
+                    #f))))
+            constructors))
+(define (add-java-methods proc methods)
+  (for-each (lambda (m)
+              (if (memq 'public (java/modifiers m))
+                  (add-method
+                   proc
+                   (make-method
+                    m
+                    (cons (if (memq 'static (java/modifiers m))
+                              (meta (java/declaring-class m))
+                              (java/declaring-class m))
+                          (vector->list (java/parameter-types m)))
+                    #f))))
+            methods))
 (define (add-class class)
   (if (and (not (java/null? class))
            (not (hashtable/put! *CLASSES* class #t)))
@@ -160,32 +183,23 @@
         (add-class (java/superclass class))
         (for-each add-class (vector->list (java/interfaces class)))
         (if (memq 'public (java/modifiers class))
-            (begin
-              (for-each
-               (lambda (c)
-                 (if (memq 'public (java/modifiers c))
-                     (add-method
-                      (constructor (generic-java-constructor) class)
-                      (make-method
-                       c
-                       (vector->list (java/parameter-types c))
-                       #f))))
+            (let ([methods (make-hashtable)])
+              (add-java-constructors
+               (constructor (generic-java-constructor) class)
                (vector->list (java/decl-constructors class)))
-              (for-each
-               (lambda (m)
-                 (if (memq 'public (java/modifiers m))
-                     (add-method
-                      (generic-java-procedure (mangle-name
-                                              (java/name m)))
-                      (make-method
-                       m
-                       (cons (if (memq 'static (java/modifiers m))
-                                 (meta (java/declaring-class m))
-                                 (java/declaring-class m))
-                             (vector->list
-                              (java/parameter-types m)))
-                       #f))))
-               (vector->list (java/decl-methods class))))))))
+              (for-each (lambda (m)
+                          (let ([name (java/name m)])
+                            (hashtable/put!
+                             methods name
+                             (cons m (hashtable/get methods name
+                                                    '())))))
+                        (vector->list (java/decl-methods class)))
+              (hashtable/for-each
+               (lambda (name meths)
+                 (add-java-methods
+                  (generic-java-procedure (mangle-name name))
+                  meths))
+               methods))))))
 
 ;;SYNC: we don't care if methods gets modified while we do this
 (define (find-method-helper proc args methods)
