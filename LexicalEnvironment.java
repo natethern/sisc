@@ -57,36 +57,19 @@ public class LexicalEnvironment extends Value {
 				   v.length));
 
 	    if (v.length>=s) {
-		//if (vals!=null) r.returnValues(vals);
 		vals=v;
 		vals[sm1]=valArrayToList(v, sm1, v.length-sm1);
-                /*	    } else if (vals!=null && vals.length>=s) {
-		System.arraycopy(v, 0, vals, 0, sm1);
-		vals[sm1]=valArrayToList(v, sm1, v.length-sm1);
-		r.returnValues(r.vlr);
-                */
 	    } else {
 		vals=r.createValues(s);
 		System.arraycopy(v, 0, vals, 0, sm1);
 		vals[sm1]=valArrayToList(v, sm1, v.length-sm1);
-                //r.returnValues(v);
 	    }
         } else {
-	    //r.returnValues(vals);
             vals=v;
             if (vals.length!=s)
 		error(r, liMessage(SISCB,"notenoughargsto", c.write(), s, v.length));
         }
     }
-
-    /*    public final void lock() {
-        if (!locked) {
-            locked=true;
-            if (parent!=null)
-                parent.lock();
-        }
-    }
-    */
 
     public final Value lookup(int depth, int pos) {
         LexicalEnvironment e = this;
