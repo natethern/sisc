@@ -1,18 +1,18 @@
 2003-10-08  Scott G. Miller  <scgmille@freenetproject.org>
 
-    * Fixed a space leak in ThreadContext/Context.
+	* Fixed a space leak in ThreadContext/Context.
       
-2003-10-06	Scott G. Miller  <scgmille@freenetproject.org>
-   
-    * Partially fixed a bug where delay couldn't resolve make-promise
-      in the report environment.
+2003-10-06  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Partially fixed a bug where delay couldn't resolve make-promise
+	  in the report environment.
       
 2003-09-25  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed a bug which caused a custom environment to replace toplevel
 	  if it was called in eval and had an expansion error.
 	  
-2003-09-23	Released SISC 1.8.4-rc
+2003-09-23  SISC 1.8.4-rc Released
 
 2003-09-21  Matthias Radestock  <matthias@sorted.org>
 
@@ -51,8 +51,8 @@
 
 2003-09-08  Scott G. Miller  <scgmille@freenetproject.org>
 	
-	* Modified the pretty-printer to properly print expressions containing
-	  syntactic tokens.
+	* Modified the pretty-printer to properly print expressions
+	  containing syntactic tokens.
 	  
 2003-09-07  Matthias Radestock  <matthias@sorted.org>
 
@@ -75,7 +75,7 @@
 
 2003-08-10  Scott G. Miller  <scgmille@freenetproject.org>
 
-	* Sane underpinnings for explicit syntax (#%quote, etc).
+	* Added sane underpinnings for explicit syntax (#%quote, etc).
 	
 2003-08-04  Matthias Radestock  <matthias@sorted.org>
 
@@ -133,9 +133,9 @@
 	  serial-io to use it.
 	  
 2003-06-20  Scott G. Miller <scgmille@freenetproject.org>
- 
-    * Retooled the evaluation pipeline so that syntax is expanded
-      in the interaction, rather than a global environment.
+
+	* Retooled the evaluation pipeline so that syntax is expanded
+	  in the interaction, rather than a global environment.
       
 2003-06-18  Matthias Radestock  <matthias@lshift.net>
 
@@ -160,7 +160,7 @@
 
 	* Separated character from binary IO. 
 	
-	* Added means to use multiple character sets in Scheme.
+	* Added ability to choose character sets for I/O.
 	
 2003-06-02  Matthias Radestock  <matthias@sorted.org>
 
