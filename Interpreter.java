@@ -42,31 +42,31 @@ import java.util.*;
 
 public class Interpreter extends Util {
 
+    static class ThrowSchemeException extends Expression {
+	
+	public void eval(Interpreter r) 
+	    throws ContinuationException, SchemeRuntimeException {
+	    r.nxp=null;
+	    Values v=(Values)r.acc;
+	    throw new SchemeRuntimeException(v.values[0], 
+					     cont(v.values[1]), 
+					     cont(v.values[2]));
+	}
+
+	public Value express() {
+	    return list(Symbol.get("TSException"));
+	}
+    }
+
+    //Scheme->Java exception conversion FK
+    protected static Expression THROW_SCHEME_EXCEPTION=new ThrowSchemeException();
+
     //the compiler is stateless; if that ever changes it would need to
     //be moved to the dynenv
     public static Compiler compiler = new Compiler();
 
     public AppContext ctx;
     public DynamicEnv dynenv;
-
-    static class DisplaylnExp extends Expression {
-
-        public void eval(Interpreter r) throws ContinuationException {
-            r.nxp=null;
-            try {
-                Values v=(Values)r.acc;
-                System.err.println("Untrapped error: "+v.values[0].display());
-            } catch (ClassCastException c) {
-                System.err.println("System error: invalid failure record in base failure continuation.");
-            }
-            r.acc=VOID;
-
-        }
-
-        public Value express() {
-            return list(sym("DisplayLn-exp"));
-        }
-    }
 
     //REGISTERS
     public Value                 acc;
@@ -76,10 +76,10 @@ public class Interpreter extends Util {
     public CallFrame             stk, fk;
 
     public Interpreter(AppContext ctx, DynamicEnv dynenv) {
-        fk=new CallFrame(new DisplaylnExp(), null, null, null, stk);
-        fk.capture();
-        fk.fk=fk;
         env=new LexicalEnvironment();
+	fk=createFrame(THROW_SCHEME_EXCEPTION, null, null, null, stk);
+	fk.fk=fk;
+	fk.capture();
 	this.ctx = ctx;
 	this.dynenv = dynenv;
     }

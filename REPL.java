@@ -68,8 +68,12 @@ public class REPL extends Thread {
 
 	Symbol loadSymb = Symbol.get("load");
         for (int i=0; i<args.length; i++) {
-            r.eval((Procedure)r.ctx.toplevel_env.lookup(loadSymb),
-		   new Value[]{new SchemeString(args[i])});
+	    try {
+		r.eval((Procedure)r.ctx.toplevel_env.lookup(loadSymb),
+		       new Value[]{new SchemeString(args[i])});
+	    } catch (SchemeException se) {
+		System.err.println("Error during load: "+se.getMessage());
+	    }
         }
 
         Properties sysProps=System.getProperties();
@@ -94,16 +98,17 @@ public class REPL extends Thread {
 
     public void run() {
 	Symbol replSymb = Symbol.get("repl");
-	start:
         do {
             try {
 		r.eval((Procedure)r.ctx.toplevel_env.lookup(replSymb),
 		       new Values[]{});
+		break;
+	    } catch (SchemeException e) {
+		System.err.println("Uncaught error: "+e.getMessage());
             } catch (Exception e) {
                 System.err.println("System error: "+e.toString());
-                continue start;
             }
-        } while (false);
+        } while (true);
 
 	Context.exit();
     }

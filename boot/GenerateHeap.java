@@ -101,8 +101,12 @@ public class GenerateHeap {
 
         for (; i<args.length; i++) {
             System.out.println("Expanding and compiling "+args[i]+"...");
-            r.eval((Procedure)r.ctx.toplevel_env.lookup(loadSymb),
-		   new Value[] {new SchemeString(args[i])});
+	    try {
+		r.eval((Procedure)r.ctx.toplevel_env.lookup(loadSymb),
+		       new Value[] {new SchemeString(args[i])});
+	    } catch (SchemeException se) {
+		System.err.println("Error during expand: "+se.getMessage());
+	    }
         }
 
         // Lock in the R5RS environment

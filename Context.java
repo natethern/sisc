@@ -37,32 +37,10 @@ import sisc.data.*;
 import java.util.*;
 
 public class Context extends Util {
-
-    static class ThrowSchemeException extends Expression {
-	
-	public void eval(Interpreter r) 
-	    throws ContinuationException, SchemeRuntimeException {
-	    r.nxp=null;
-	    Values v=(Values)r.acc;
-	    throw new SchemeRuntimeException(v.values[0], 
-					     cont(v.values[1]), 
-					     cont(v.values[2]));
-	}
-
-	public Value express() {
-	    return list(Symbol.get("TSException"));
-	}
-    }
-	
-	
     //"appname" -> AppContext
     protected static Hashtable apps = new Hashtable();
     //Thread -> Stack{Interpreter}
     protected static Hashtable threads = new Hashtable();
-    //Scheme->Java exception conversion FK
-    protected static Expression THROW_SCHEME_EXCEPTION=new ThrowSchemeException();
-
-    
     
     /*********** application table maintenance ***********/
 
@@ -119,7 +97,6 @@ public class Context extends Util {
 
     public static Interpreter enter(AppContext ctx, DynamicEnv dynenv) {
 	Interpreter res = createInterpreter(ctx, dynenv);
-	res.fk=res.createFrame(THROW_SCHEME_EXCEPTION, null, null, res.fk, res.stk);
 	pushInterpreter(res);
 	return res;
     }
