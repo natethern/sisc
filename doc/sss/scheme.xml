@@ -2045,9 +2045,9 @@
           <blockquote>
             <para>
               <function>compose</function> takes zero or more
-              functions and returns a new procedure that will apply to
-              its arguments the arguments to
-              <function>compose</function> in reverse order.  If no
+              functions of one argument and returns a new function of
+              one argument that will apply to that argument to the
+              selected functions in reverse order.  If no
               functions are provided, the identity function is
               returned.
             </para>
