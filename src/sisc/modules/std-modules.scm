@@ -886,6 +886,7 @@
            (_open-serial-output-port open-serial-output-port))
   (import oo)
   (import generic-io)
+  (import* binary-io call-with-binary-output-file call-with-binary-input-file)
   (import* type-system instance-of?)
   (include "io/serial-io.scm"))
 
