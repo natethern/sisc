@@ -534,8 +534,8 @@
     </title>
     <warning>
       <para>
-	This section is likely to change in the future,
-	as &SISC; moves to a separation of locks and condition
+	This section may change in the future,
+	if &SISC; moves to a separation of locks and condition
 	variables more akin to that described by SRFI-12.
       </para>
     </warning>

@@ -36,8 +36,9 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         <footnote>
           <para>
             Handling of JAR files in URLS may be dependent on the
-              &SISC; host language, as well as some uncommon protocols.  
-            HTTP and FTP should be expected to work with any host language.
+            &SISC; host language, as well as some uncommon protocols.  
+            FILE, HTTP and FTP should be expected to work with any
+            host language.
           </para>
         </footnote>
       </para>
@@ -1507,15 +1508,312 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         </blockquote>
       </para>
     </sect2>
-    <sect2 id="FileSystem">
-      <title>File-System Interface</title>
-      <note>
+    <sect2 id="FileManipulation">
+      <title>File Manipulation</title>
+      <para>
+        &requires; 
+        <emphasis role="bold">
+          (import <emphasis>file-manipulation</emphasis>)
+        </emphasis>
+      </para>
+      <para>
+        The file-manipulation library provides access to a number of
+        functions for reading and manipulating files and their
+        attributes.  The file-manipulation library acts on filenames
+        in the same manner as other Scheme file related functions,
+        e.g. it accepts file and directory names as strings, which are
+        resolved relative to the current URL.  
+      </para>
+      <para> 
+        The following functions act on both files and directories.
+        With the exception of <function>file-exists?</function> and
+        <function>get-parent-url</function>, the  behavior when
+        applying these to non-existant files or directories is
+        undefined.
+      </para>
+      <blockquote>
         <para>
-          The interface to the filesystem is a work in progress.
-          Documentation and a corresponding implementation will appear
-          in future revisions.
+          <indexterm><primary>file-delete!</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>#t/#f</type>
+            <methodname>file-delete!</methodname>
+            <methodparam>
+              <parameter>filename</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>      
+              Attempts to remove the given file or directory.  If
+              successful, <literal>#t</literal> is returned.
+            </para>
+          </blockquote>
         </para>
-      </note>
+        <para>
+          <indexterm><primary>file-hidden?</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>#t/#f</type>
+            <methodname>file-exists?</methodname>
+            <methodparam>
+              <parameter>filename</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>      
+              Returns true if the given file or directory exists.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>file-is-directory?</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>#t/#f</type>
+            <methodname>file-is-directory?</methodname>
+            <methodparam>
+              <parameter>filename</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>      
+              Returns true if the given string names an existing
+              directory.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>file-is-file?</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>#t/#f</type>
+            <methodname>file-is-file?</methodname>
+            <methodparam>
+              <parameter>filename</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>      
+              Returns true if the given string names an existing
+              file.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>file-last-modified</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>integer</type>
+            <methodname>file-last-modified</methodname>
+            <methodparam>
+              <parameter>filename</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>      
+              Returns the number of milliseconds since the Unix
+              epoch (Jan 1, 1970) of the date the file or directory
+              was last modified.  
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>file-rename!</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>#t/#f</type>
+            <methodname>file-rename!</methodname>
+            <methodparam>
+              <parameter>source-filename</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>dest-filename</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>      
+              Renames the given source file or directory to the
+              destination.  This can be used both to rename a file
+              or directory or to move a file/directory in the same
+              filesystem.  If successful, <literal>#t</literal> is
+              returned.  
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>file-set-last-modified!</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>#t/#f</type>
+            <methodname>file-set-last-modified!</methodname>
+            <methodparam>
+              <parameter>filename</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>unixtime</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>      
+              Sets the last modified date of the given filename to
+              the given integer (in number of milliseconds since the
+              epoch).  Returns <literal>#t</literal> if successful.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>get-parent-url</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>string</type>
+            <methodname>get-parent-url</methodname>
+            <methodparam>
+              <parameter>filename</parameter>
+            </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>      
+                Given any URL, returns the URL of its parent.  For
+                filenames, as an example, the parent directory is
+                returned.
+              </para>
+            </blockquote>
+          </para>
+      </blockquote>
+      <para>
+        The following functions operate only on files.  Their behavior
+        when applied to directories or non-existant files is undefined.
+      </para>
+      <blockquote>
+        <para>
+          <indexterm><primary>file-is-readable?</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>#t/#f</type>
+            <methodname>file-is-readable?</methodname>
+            <methodparam>
+              <parameter>filename</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>     
+              Returns <literal>#t</literal> if the file can be opened
+              for reading.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>file-is-writeable?</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>#t/#f</type>
+            <methodname>file-is-writeable?</methodname>
+            <methodparam>
+              <parameter>filename</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>     
+              Returns <literal>#t</literal> if the file can be opened
+              for writing.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>file-length</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>integer</type>
+            <methodname>file-length</methodname>
+            <methodparam>
+              <parameter>filename</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>      
+              Returns the length, in bytes, of the given file.  
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>file-set-read-only!</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>#t/#f</type>
+            <methodname>file-set-read-only!</methodname>
+            <methodparam>
+              <parameter>filename</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>      
+              Sets the given file read-only.  Returns
+              <literal>#t</literal> if successful.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+      <para>
+        Finally, the following functions are specific to directories.
+        Their behavior on files is undefined.  The behavior of
+        <function>directory-list</function> is undefined on
+        non-existant directories.
+      </para>
+      <blockquote>
+        <para>
+          <indexterm><primary>directory-list</primary></indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>list of strings</type>
+            <methodname>directory-list</methodname>
+            <methodparam>
+              <parameter>directory</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>      
+              Retrieves the children of the given directory, as a
+              list of strings.  Each string names one child, and is
+              a filename relative to the given directory.
+            </para>
+          </blockquote>
+        </para>
+          <para>
+	    <indexterm><primary>make-directory!</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>#t/#f</type>
+              <methodname>make-directory!</methodname>
+              <methodparam>
+                <parameter>directoryname</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>      
+                Attempts to creates the given directory.  Returns
+                <literal>#t</literal> if successful.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+	    <indexterm><primary>make-directories!</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>#t/#f</type>
+              <methodname>make-directories!</methodname>
+              <methodparam>
+                <parameter>directoryname</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>      
+                Attempts to creates the given directory and all
+                non-existing parent directories.  Returns
+                <literal>#t</literal> if successful.
+              </para>
+            </blockquote>
+          </para>
+      </blockquote>
     </sect2>
   </sect1>
 </chapter>
