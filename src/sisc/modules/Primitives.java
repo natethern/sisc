@@ -16,6 +16,7 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
 import sisc.env.MemorySymEnv;
+import sisc.env.Parameter;
 import sisc.util.*;
 
 public class Primitives extends IndexedProcedure {
@@ -222,52 +223,6 @@ public class Primitives extends IndexedProcedure {
         }
     }
 
-    public static class Parameter extends Procedure {
-
-        private Value v;
-
-        public Parameter() {}
-
-        public Parameter(Value v) {
-            this.v = v;
-        }
-
-        public void apply(Interpreter r)
-            throws ContinuationException {
-            r.nxp = null;
-            Value res = null;
-            switch (r.vlr.length) {
-            case 0:
-                res = (Value)r.dynenv.parameters.get(this);
-                if (null == res) res = v;
-                break;
-            case 1:
-                res = (Value)r.dynenv.parameters.put(this,r.vlr[0]);
-                if (null == res) res = FALSE;
-                break;
-            default:
-                throwArgSizeException();
-            }
-            r.acc = res;
-        }
-
-        public void display(ValueWriter w) throws IOException {
-            displayNamedOpaque(w, "parameter");
-        }
-
-        public void serialize(Serializer s) throws IOException {
-            s.writeExpression(v);
-        }
-
-        public void deserialize(Deserializer s) throws IOException {
-            v = (Value)s.readExpression();
-        }
-
-        public boolean visit(ExpressionVisitor v) {
-            return v.visit(this.v);
-        }
-    }
-    
     static final char[] b64cs=
         ("0123456789abcdefghijklmnopqrstuvwxyz"+
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ-_").toCharArray();
