@@ -75,10 +75,10 @@
                    (if (null? list1)
                        (reverse c)
                        (loop proc (cdr list1)
-                             (_maphelp1 lists '())
+                             (map-cdar lists)
                              (cons (apply proc
                                           (car list1)
-                                          (_maphelp2 lists '()))
+                                          (map-caar lists))
                                    c))))])
     (lambda (proc list1 . lists)
       (if (null? lists)

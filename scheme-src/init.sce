@@ -54,10 +54,10 @@
                  (|loop_LvkGIQ9hE|
                    |proc_LvKgu_chE|
                    (cdr |list1_Lv4dssdhE|)
-                   (_maphelp1 |lists_Lvq9qVdhE| '())
+                   (map-cdar |lists_Lvq9qVdhE|)
                    (cons (apply |proc_LvKgu_chE|
                                 (car |list1_Lv4dssdhE|)
-                                (_maphelp2 |lists_Lvq9qVdhE| '()))
+                                (map-caar |lists_Lvq9qVdhE|))
                          |c_LvM5omehE|))))))
     (lambda (|proc_LvmvCbbhE|
              |list1_Lv0zEKahE|
