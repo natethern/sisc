@@ -28,6 +28,7 @@
           description="Remove generated sources, class files and jar files">
     <delete dir="${classdir}"/>
     <delete file="${jarfile}"/>
+    <ant dir="examples" target="clean"/>
   </target> 
 
   <target name="compile" depends="prepare">
@@ -70,7 +71,12 @@
   <target name="docs" depends="javadocs"
           description="Generate Documentation"/>
 
-  <target name="all" depends="jars,docs"
+  <target name="examples" depends="jars"
+          description="Build Example Code">
+    <ant dir="examples" target="dist"/>
+  </target>
+
+  <target name="all" depends="jars,docs,examples"
           description="Build everything">
   </target>
 </project>
