@@ -72,10 +72,11 @@ public class Interpreter extends Util {
                                  env;    //Lexical Variables
     public CallFrame             stk,    //Continuation (Stack)
                                   fk;    //Failure Continuation
-
+    public SymbolicEnvironment   tpl;    //Top-level environment
+    
     //Scheme->Java exception conversion FK
     static CallFrame top_fk = new CallFrame(new ThrowSchemeException(),
-                                            null, false, null, null, null, null);
+                                            null, false, null, null, null, null, null);
     static {
         top_fk.vlk = true;
         // This creates a loop in the stack, which will be a problem for
@@ -89,6 +90,7 @@ public class Interpreter extends Util {
         fk=top_fk;
         this.tctx = tctx;
         this.dynenv = dynenv;
+        tpl=getCtx().toplevel_env;
     }
 
     public AppContext getCtx() {
@@ -109,8 +111,11 @@ public class Interpreter extends Util {
     }
 
     public Value interpret(Expression e) throws SchemeException {
-        stk=createFrame(null, null, false, null, null, top_fk, null);
+        SymbolicEnvironment tpl=getCtx().toplevel_env;
+        
+        stk=createFrame(null, null, false, null, null, tpl, top_fk, null);
         nxp=e;
+        this.tpl=tpl;
         interpret();
         return acc;
     }
@@ -161,6 +166,7 @@ public class Interpreter extends Util {
         vlr=c.vlr;
         lcl=c.lcl;
         env=c.env;
+        tpl=c.tpl;
         fk=c.fk;
         stk=c.parent;
         vlk=c.vlk;
@@ -194,7 +200,7 @@ public class Interpreter extends Util {
                              new ApplyParentFrame(new CallFrame(last, 
                                                                 vlr, vlk,
                                                                 lcl, env,
-                                                                fk, stk).capture(this))});
+                                                                tpl, fk, stk).capture(this))});
         throw new ContinuationException(fk);
     }
 
@@ -259,6 +265,20 @@ public class Interpreter extends Util {
      */
     public Value eval(Value v) throws SchemeException {
         return eval((Procedure)lookup(EVAL, REPORT), new Value[] {v, (Value)getCtx().toplevel_env});
+    }
+
+    /**
+     * Evaluates a Scheme value as code.  This is equivalent to
+     * <tt>(eval <i>v</i> <i>e</i>)</tt> in Scheme.
+     * 
+     * @param v A Scheme Value
+     * @param env The environment in which to evaluate the value
+     * @return The resulting value
+     * @exception SchemeException Raised if the evaluation of the  
+     *     expression  results in an error
+     */
+    public Value eval(Value v, SymbolicEnvironment env) throws SchemeException {
+        return eval((Procedure)lookup(EVAL, REPORT), new Value[] {v, env.asValue()});
     }
 
     /**
@@ -349,6 +369,7 @@ public class Interpreter extends Util {
                                        boolean vlk,
                                        Value[] l,
                                        Value[] e,
+                                       SymbolicEnvironment t,
                                        CallFrame f,
                                        CallFrame p) {
         CallFrame rv;
@@ -364,6 +385,7 @@ public class Interpreter extends Util {
         rv.nxp=n;
         rv.vlr=v;
         rv.vlk=vlk;
+        rv.tpl=t;
         rv.env=e;
         rv.lcl=l;
         return rv;
@@ -386,6 +408,7 @@ public class Interpreter extends Util {
         stk.vlr=vlr;
         stk.vlk=vlk;
         stk.env=env;
+        stk.tpl=tpl;
         stk.lcl=lcl;
     }
     
@@ -396,7 +419,7 @@ public class Interpreter extends Util {
         //garbage collectable data for too long
         
         f.lcl=f.vlr=f.env=null;
-        
+        f.tpl=null;
 
         f.parent=frameFreeList;
         frameFreeList = f;

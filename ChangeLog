@@ -1,3 +1,9 @@
+2005-03-31  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Added the "tpl" register to the Interpreter, which
+	  contains the toplevel environment for all implicit uses
+	  such as load, getprop, putprop.
+	  
 2005-03-29  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed bug in SRFI-27 which was causing the secure-random-source

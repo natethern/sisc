@@ -389,7 +389,7 @@ public class IO extends IndexedProcedure {
 
                         if (v!=EOF) {
                             try {
-                                r.eval(v);
+                                r.eval(v, f.tpl);
                             } catch (SchemeException se) {
                                 annotateException(se, startLine, startColumn, p.sourceFile, 
                                         Symbol.get("load"));
