@@ -132,6 +132,10 @@ public class SNetwork extends ModuleAdapter {
             p=new DatagramPacket(buffer, buffer.length);
         }
 
+	public int available() {
+	    return blen-bp;
+	}
+
         public int read() throws IOException {
             if (bp<blen)
                 return buffer[bp++];
@@ -154,52 +158,58 @@ public class SNetwork extends ModuleAdapter {
         }
     }
 
-
+    
     class UDPOutputStream extends OutputStream {
         protected DatagramPacket p;
         protected DatagramSocket ds;
+	protected InetAddress host;
+	protected int port;
         byte[] buffer=new byte[4096];
 
         public UDPOutputStream(DatagramSocket ds, InetAddress host, int port) {
             this.ds=ds;
-            p=new DatagramPacket(buffer, buffer.length,
-                                 host, port);
+	    this.host=host;
+	    this.port=port;
+            p=new DatagramPacket(buffer, buffer.length, host, port);
         }
 
         public void write(int b) throws IOException {
             buffer[0]=(byte)b;
-            p.setData(buffer, 0, 1);
+            p.setData(buffer, 0, 1);	    
             ds.send(p);
         }
 
         public void write(byte[] b, int off, int len) throws IOException {
             p.setData(b, off, len);
-            ds.send(p);
+	    ds.send(p);
         }
     }
 
+    static final int LISTEN=1, SEND=2;
+
     class SchemeUDPSocket extends SchemeSocket {
-	protected boolean listen;
+	protected int mode;
         protected DatagramSocket s;
         protected int packet_size;
         protected InetAddress remoteHost;
         protected int dport;
 
+	protected void setMode(int m) {
+	    mode=m;
+	}
+
         public SchemeUDPSocket(DatagramSocket s) {
             this(s, 1500);
-	    listen=true;
         }
 
         public SchemeUDPSocket(DatagramSocket s, String dhost) throws IOException {
             this(s, 1500);
 	    remoteHost=InetAddress.getByName(dhost);
-	    listen=false;
 	}
 
         public SchemeUDPSocket(DatagramSocket s, int ps) {
             this.s=s;
             packet_size=ps;
-	    listen=true;
         }
 
 	public SchemeUDPSocket(DatagramSocket s, int port, int ds) {
@@ -214,6 +224,12 @@ public class SNetwork extends ModuleAdapter {
 	    this.s=s;
 	}
 
+	public SchemeUDPSocket(DatagramSocket s, int port, String dhost) throws IOException {
+	    this.dport=port;
+	    remoteHost=InetAddress.getByName(dhost);
+	    this.s=s;
+	}
+
         public String display() {
             return "#<udp socket>";
         }
@@ -223,13 +239,13 @@ public class SNetwork extends ModuleAdapter {
         }
 
         public InputPort getInputPort(Interpreter r) throws IOException, ContinuationException {
-	    if (!listen)
+	    if ((mode & LISTEN)==0)
 		error(r, liMessage(SNETB, "inputonoutputudp"));
             return new InputPort(new BufferedReader(new InputStreamReader(new UDPInputStream(s, packet_size))));
         }
 
         public OutputPort getOutputPort(Interpreter r, boolean autoflush) throws IOException, ContinuationException {
-	    if (listen)
+	    if ((mode & SEND)==0)
 		error(r, liMessage(SNETB, "outputoninputudp"));
             return new OutputPort(new PrintWriter(new UDPOutputStream(s, remoteHost, dport)),
                                   autoflush);
@@ -249,6 +265,12 @@ public class SNetwork extends ModuleAdapter {
         public SchemeMulticastUDPSocket(MulticastSocket s, String host, 
 					int ps) throws IOException {
             super(s, host, ps);
+        }
+
+        public SchemeMulticastUDPSocket(MulticastSocket s, int port, 
+					String host) throws IOException {
+					
+            super(s, port, host);
         }
 
         public SchemeMulticastUDPSocket(MulticastSocket s, String host)
@@ -295,21 +317,21 @@ public class SNetwork extends ModuleAdapter {
     public static SchemeSocket sock(Value o) {
         try {
             return (SchemeSocket)o;
-        } catch (ClassCastException e) { typeError("socket", o); }
+        } catch (ClassCastException e) { typeError(SNETB, "socket", o); }
 	return null;
     }
 
     public static SchemeMulticastUDPSocket mcastsock(Value o) {
         try {
             return (SchemeMulticastUDPSocket)o;
-        } catch (ClassCastException e) { typeError("multicast udp socket", o); } 
+        } catch (ClassCastException e) { typeError(SNETB, "multicastudpsocket", o); } 
 	return null;
     }
 
     public static SchemeServerSocket serversock(Value o) {
         try {
             return (SchemeServerSocket)o;
-        } catch (ClassCastException e) { typeError("tcp listen socket", o); } 
+        } catch (ClassCastException e) { typeError(SNETB, "tcplistensocket", o); } 
 	return null;
     }
 
@@ -347,14 +369,18 @@ public class SNetwork extends ModuleAdapter {
                     int port=num(f.vlr[0]).intValue();
                     return new SchemeServerSocket(new ServerSocket(port));
                 case ACCEPT_TCP_SOCKET:
-                    Socket s=serversock(f.vlr[0]).s.accept();
-                    return new SchemeTCPSocket(s);
+                    Socket sock=serversock(f.vlr[0]).s.accept();
+                    return new SchemeTCPSocket(sock);
                 case OPEN_UDP_LISTEN_SOCKET:
                     port=num(f.vlr[0]).intValue();
-                    return new SchemeUDPSocket(new DatagramSocket(port));
+                    SchemeUDPSocket s=new SchemeUDPSocket(new DatagramSocket(port));
+		    s.setMode(LISTEN);
+		    return s;
                 case OPEN_MULTICAST_SOCKET:
                     port=num(f.vlr[0]).intValue();
-                    return new SchemeMulticastUDPSocket(new MulticastSocket(port));
+                    s=new SchemeMulticastUDPSocket(new MulticastSocket(port));
+		    s.setMode(LISTEN);
+		    return s;
                 default:
 		    throwArgSizeException();
                 }
@@ -367,26 +393,36 @@ public class SNetwork extends ModuleAdapter {
 		case OPEN_UDP_SOCKET:
 		    host=string(f.vlr[0]);
 		    port=num(f.vlr[1]).intValue();
-		    return new SchemeUDPSocket(new DatagramSocket(port), host);
+		    SchemeUDPSocket s=new SchemeUDPSocket(new DatagramSocket(), port, host);
+		    s.setMode(SEND);
+		    return s;
                 case OPEN_UDP_LISTEN_SOCKET:
                     port=num(f.vlr[0]).intValue();
                     int ps=num(f.vlr[1]).intValue();
-                    return new SchemeUDPSocket(new DatagramSocket(port), ps);
+                    s=new SchemeUDPSocket(new DatagramSocket(port), ps);
+		    s.setMode(LISTEN);
+		    return s;
 		case OPEN_MULTICAST_SOCKET:
 		    if (f.vlr[0] instanceof SchemeString) {
 			host=string(f.vlr[0]);
 			int dport=num(f.vlr[1]).intValue();
-			return new SchemeMulticastUDPSocket(new MulticastSocket(dport), host);
+			s=new SchemeMulticastUDPSocket(new MulticastSocket(dport), dport, host);
+			s.setMode(SEND | LISTEN);
+			return s;
 		    } else if (f.vlr[1] instanceof SchemeString) {
 			String iface=string(f.vlr[1]);
 			port=num(f.vlr[0]).intValue();
 			MulticastSocket ms=new MulticastSocket(port);
 			ms.setInterface(InetAddress.getByName(iface));
-			return new SchemeMulticastUDPSocket(ms);
+			s=new SchemeMulticastUDPSocket(ms);
+			s.setMode(LISTEN);
+			return s;
 		    } else {
 			port=num(f.vlr[0]).intValue();
 			ps=num(f.vlr[1]).intValue();
-			return new SchemeMulticastUDPSocket(new MulticastSocket(port), ps);
+			s=new SchemeMulticastUDPSocket(new MulticastSocket(port), ps);
+			s.setMode(LISTEN);
+			return s;
 		    }
                 case OPEN_SOCKET_OUTPUT_PORT:
                     SchemeSocket ssock=sock(f.vlr[0]);
@@ -400,10 +436,12 @@ public class SNetwork extends ModuleAdapter {
                     ms=mcastsock(f.vlr[0]);
                     host=string( f.vlr[1]);
                     ms.joinGroup(InetAddress.getByName(host));
+		    return VOID;
                 case LEAVE_MULTICAST_GROUP:
                     ms=mcastsock(f.vlr[0]);
                     host=string( f.vlr[1]);
                     ms.leaveGroup(InetAddress.getByName(host));
+		    return VOID;
                 case SET_SO_TIMEOUT:
                     SchemeTCPSocket tcps=(SchemeTCPSocket)sock(f.vlr[0]);
                     tcps.setSoTimeout(num(f.vlr[1]).intValue());
@@ -413,18 +451,22 @@ public class SNetwork extends ModuleAdapter {
                 }
 	    case 3:
 		switch(primid) {
-		case OPEN_UDP_SOCKET:
+		case OPEN_UDP_LISTEN_SOCKET:
 		    int dport=num(f.vlr[0]).intValue();
 		    String host=string(f.vlr[0]);
 		    int ps=num(f.vlr[2]).intValue();
-		    DatagramSocket s=new DatagramSocket(dport, InetAddress.getByName(host));
-		    return new SchemeUDPSocket(s, ps);
+		    DatagramSocket ds=new DatagramSocket(dport, InetAddress.getByName(host));
+		    SchemeUDPSocket s=new SchemeUDPSocket(ds, ps);
+		    s.setMode(SEND | LISTEN);
+		    return s;
                 case OPEN_MULTICAST_SOCKET:
                     host=string(f.vlr[0]);
                     dport=num(f.vlr[1]).intValue();
 		    
 int dgramsize=num(f.vlr[2]).intValue();
-                    return new SchemeMulticastUDPSocket(new MulticastSocket(dport), host, dgramsize);
+                    s=new SchemeMulticastUDPSocket(new MulticastSocket(dport), host, dgramsize);
+		    s.setMode(SEND | LISTEN);
+		    return s;
 		default:
 		    throwArgSizeException();
 		}
@@ -437,7 +479,8 @@ int dgramsize=num(f.vlr[2]).intValue();
 		    int dgramsize=num(f.vlr[3]).intValue();
 		    MulticastSocket ms=new MulticastSocket(dport);
 		    ms.setInterface(InetAddress.getByName(iface));
-                    return new SchemeMulticastUDPSocket(ms, host, dgramsize);
+                    SchemeUDPSocket s=new SchemeMulticastUDPSocket(ms, host, dgramsize);
+		    s.setMode(SEND | LISTEN);
 		default:
 		    throwArgSizeException();
 		}

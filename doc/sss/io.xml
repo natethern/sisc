@@ -885,6 +885,15 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
 	UDP sockets can be obtained for both receive only and
 	send/receive sessions. 
       </para>
+      <note>
+	<para>
+	  The behavior of the <function>char-ready?</function>
+	  function is somewhat more difficult to predict on a UDP
+	  input port.  The function will return <literal>#t</literal>
+	  only when a previous datagram contained more bytes than were
+	  requested by the read operation that received it.
+	</para>
+      </note>
       <para>
         <blockquote>
           <para>
@@ -970,15 +979,17 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       </para>
     </sect2>
     <sect2>
-      <title>UDP Multicast</title>
+      <title>Multicast UDP</title>
       <para>
 	&SISC; provides support for IP multicast UDP datagrams as
 	well.  This allows a program to both send and receive to an IP
-	multicast group. 
+	multicast group.  Multicast UDPs are an extension of ordinary
+	UDP.  Thus all I/O operations on a Multicast UDP socket are
+	subject to the same semantics as an ordinary UDP socket.
       </para>
       <note>
 	<para>
-	  The UDP Multicast feature requires that the underlying
+	  The Multicast UDP library requires that the underlying
 	  operating system's IP networking stack support Multicast.
 	  The functions described here may produce an error if the
 	  operating system does not.
