@@ -102,6 +102,11 @@
                          (bar))))))
       (foo x))))
 
+;; Al Petrofsky
+;; Contributed directly
+(should-be 3.4 1
+  (let-syntax ((x (syntax-rules ()))) 1))
+
 ;; Setion 4: No identifiers are reserved
 
 ;;(Brian M. Moore)
