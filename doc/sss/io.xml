@@ -120,10 +120,10 @@
 	  </methodsynopsis>
 	  <blockquote>
 	    <para>
-	      Reads up to <parameter>integer</parameter> bytes of data from
+	      Reads up to <parameter>bytes</parameter> bytes of data from
 	      the provided <parameter>input-port</parameter> into
 	      <parameter>buffer</parameter>.  Note that less than
-	      <parameter>integer</parameter> bytes may be read.  The number 
+	      <parameter>bytes</parameter> bytes may be read.  The number 
 	      of bytes actually read is returned.
 	    </para>
 	  </blockquote>
