@@ -324,6 +324,7 @@
            style="${docdir}/sss/style.xsl">
     </style>
     <copy file="${docdir}/sss/sss.css" tofile="${gendocdir}/sss/sss.css"/>
+    <delete file="${gendocdir}/sss/sss.html"/>
   </target>
 
   <target name="docs" depends="javadocs,manual"
