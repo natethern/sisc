@@ -96,6 +96,12 @@ public class SchemeVector extends Value {
         return b.toString();
     }
 
+    public void fill(Value v) {
+	for (int i=0; i<vals.length; i++)
+	    vals[i]=v;
+	lastUnique=-1;
+    }
+
     public void set(int idx, Value v) {
         lastUnique=-1;
         vals[idx]=v;

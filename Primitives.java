@@ -188,7 +188,9 @@ public class Primitives extends ModuleAdapter {
         define("system-time", SYSTIME);
         define("system-time",SYSTIME);
         define("tan", TAN);
+	define("truncate", TRUNCATE);
         define("unbox", UNBOX);
+	define("vector-fill!", VECTORFILL);
         define("vector->list", VECTOR2LIST);
         define("vector-length", VECTORLENGTH);
         define("vector-ref", VECTORREF);
@@ -294,6 +296,7 @@ public class Primitives extends ModuleAdapter {
             case FLOOR: return num(f.vlr[0]).floor();
             case CEILING: return num(f.vlr[0]).ceiling();
             case ROUND: return num(f.vlr[0]).round();
+	    case TRUNCATE: return num(f.vlr[0]).truncate();
             case INTEGER2CHAR: return new SchemeCharacter((char)num(f.vlr[0]).
 							  intValue());
             case VECTORFINDLASTUNIQUE: return Quantity.valueOf(vec(f.vlr[0]).findEnd());
@@ -663,6 +666,9 @@ public class Primitives extends ModuleAdapter {
                     throwPrimException("index "+index+" out of bounds for '"+f.vlr[0].synopsis()+"'");
                 }
                 return VOID;
+	    case VECTORFILL:
+		vec(f.vlr[0]).fill(f.vlr[1]);
+		return VOID;
             case VECTORSET:
                 index=num(f.vlr[1]).intValue();
                 try {
@@ -759,7 +765,7 @@ public class Primitives extends ModuleAdapter {
     static final int
 	ABSPATHQ = 13,
 	ACOS = 14,
-	ADD = 143,
+	ADD = 152,
 	APPLY = 137,
 	ASHL = 104,
 	ASHR = 105,
@@ -896,6 +902,7 @@ public class Primitives extends ModuleAdapter {
 	SYMBOLQ = 95,
 	SYSTIME = 11,
 	TAN = 96,
+	TRUNCATE = 12,
 	UNBOX = 97,
 	VECTOR2LIST = 98,
 	VECTORFINDLASTUNIQUE = 99,
@@ -903,6 +910,7 @@ public class Primitives extends ModuleAdapter {
 	VECTORQ = 101,
 	VECTORREF = 135,
 	VECTORSET = 142,
+	VECTORFILL = 145,
 	VOIDQ = 102,
 	WRITE = 111,
 	//	WRITE = 38,

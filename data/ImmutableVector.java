@@ -54,6 +54,10 @@ public class ImmutableVector extends SchemeVector {
 	throw new RuntimeException("vector is immutable");
     }
 
+    public void fill(Value v) {
+	throw new RuntimeException("vector is immutable");
+    }
+
     public boolean equals(Object o) {
 	if (!(o instanceof ImmutableVector)) return false;
 	ImmutableVector v=(ImmutableVector)o;
