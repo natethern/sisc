@@ -144,7 +144,7 @@
 	supported. Unicode characters can be created with
 	<function>number-&gt;character</function> or 
 	<computeroutput>&num;&bsol;nnnn</computeroutput>, where <computeroutput>nnnn</computeroutput> is an
-	octal number in the range 0000 -&gt; ffff. 
+	hexadecimal number in the range 0000 -&gt; ffff. 
       </para>
       <para>
 	Characters are compared with respect to the locale detected
@@ -714,7 +714,7 @@
       <para>
 	The error handler required as an argument to
 	<function>call-with-failure-continuation</function>
-	must take three parameters.  The first, a string, is a value
+	must take three parameters.  The first is a value
 	containing information about the error that occurred.  This is
 	often a string containing the error message.  The
 	second is a procedure encapsulating the continuation that was
