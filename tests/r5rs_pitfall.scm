@@ -252,6 +252,10 @@
 (should-be 8.1 -1
   (let - ((n (- 1))) n))
 
+(should-be 8.2 '(1 2 3 4 1 2 3 4 5)
+  (let ((ls (list 1 2 3 4)))
+    (append ls ls '(5))))
+
 ;;Not really an error to fail this (Matthias Radestock)
 ;;If this returns (0 1 0), your map isn't call/cc safe, but is probably
 ;;tail-recursive.  If its (0 0 0), the opposite is true.
