@@ -27,7 +27,8 @@ public class Parser extends Util implements Tokens {
         PRODUCE_ANNOTATIONS=0x2,
         STRICT_R5RS        =0x4,
         CASE_SENSITIVE     =0x8,
-        READING_VECTOR     =0x10;
+        READING_VECTOR     =0x10,
+        ORPHANED_PAREN_IS_ERROR=0x20;
 
     public boolean annotate = Defaults.EMIT_ANNOTATIONS;
 
@@ -106,7 +107,10 @@ public class Parser extends Util implements Tokens {
             return (Value)n;
         } catch (ClassCastException ce) {
             if (n==ENDPAIR) {
-                warn("orphanedparen", is);
+                if (orphanedParenIsError(flags))
+                    throw new IOException(liMessage(SISCB, "orphanedparen"));
+                else
+                    warn("orphanedparen", is);
                 return nextExpression(is, radix, flags);
             } else if (n==DOT)
                 throw new IOException(liMessage(SISCB, "unexpecteddot"));
@@ -449,6 +453,10 @@ public class Parser extends Util implements Tokens {
 
     protected final boolean readingVector(int flags) {
         return (flags & READING_VECTOR) != 0;
+    }
+
+    protected final boolean orphanedParenIsError(int flags) {
+        return (flags & ORPHANED_PAREN_IS_ERROR) != 0;
     }
 }
 /*

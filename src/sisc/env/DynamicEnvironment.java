@@ -30,6 +30,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public String characterSet = getDefaultCharacterSet();
     public Value inlinePrimitives = Defaults.INLINE_PRIMITIVES;
     public boolean hedgedInlining = Defaults.HEDGED_INLINING;
+    public boolean orphanedParenIsError = Defaults.ORPHANED_PAREN_IS_ERROR;
     
     private static String defaultPrintShared =
         new Boolean(Defaults.PRINT_SHARED).toString();
@@ -45,7 +46,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
         new Boolean(Defaults.CASE_SENSITIVE).toString();
     private static String defaultInlinePrimitives = Defaults.INLINE_PRIMITIVES.toString();
     private static String defaultHedgedInlining = new Boolean(Defaults.HEDGED_INLINING).toString();
-    
+    private static String defaultOrphanedParenIsError = new Boolean(Defaults.ORPHANED_PAREN_IS_ERROR).toString();
+
     public Value wind = FALSE; //top of wind stack
 
     //the lexer is stateful
@@ -88,6 +90,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
             ctx.getProperty("sisc.emitDebuggingSymbols", defaultEmitDebuggingSymbols).equals("true");
         this.characterSet =
             ctx.getProperty("sisc.characterSet", getDefaultCharacterSet());
+        this.orphanedParenIsError = 
+            ctx.getProperty("sisc.orphanedParenIsError", defaultOrphanedParenIsError).equals("true");
 
         classLoader = currentClassLoader();
         try {
@@ -234,7 +238,15 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public void setHedgedInlining(Value v) {
         hedgedInlining=truth(v);
     }
-    
+
+    public Value getOrphanedParenIsError() {
+        return truth(orphanedParenIsError);
+    }
+
+    public void setOrphanedParenIsError(Value v) {
+        orphanedParenIsError=truth(v);
+    }
+
     protected static String getDefaultCharacterSet() {
         // I wish there were a better way to do this
         InputStreamReader r=new InputStreamReader(new ByteArrayInputStream(new byte[0]));

@@ -101,6 +101,7 @@
 (define emit-debugging-symbols  (make-native-parameter "emitDebuggingSymbols"))
 (define emit-annotations        (make-native-parameter "emitAnnotations"))
 (define character-set           (make-native-parameter "characterSet"))
+(define orphaned-paren-is-error    (make-native-parameter "orphanedParenIsError"))
 
 ; Enable inlining and optimizer assumptions while expanding libraries
  
