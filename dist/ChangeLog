@@ -1,3 +1,8 @@
+2002-06-26  Matthias Radestock  <matthias@sorted.org>
+
+	* Improved object initialisation support provided by generic
+	  procedures, facilitating post-creation initialisation.
+
 2002-06-24  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Added support for Java-style unicode characters in character

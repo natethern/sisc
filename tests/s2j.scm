@@ -1,5 +1,6 @@
 (import s2j)
 (import generic-procedures)
+
 (define-generic value-of)
 (define-generic app (generic-java-procedure 'append)) ;;do not overwrite Scheme's append
 (define-generic to-string)
@@ -24,6 +25,12 @@
   (for-each (lambda (x) (next-method buf x)) rest)
   buf)
 (app sb (->jstring "foo") (->jint 1) (->jstring "bar"))
+;;test object initialization
+(define-constructor (<jstringbuffer> (next: next-method) . rest)
+  (next-method))
+(define-method (initialize (<jstringbuffer> sb) . rest)
+  (apply app sb rest))
+(make <jstringbuffer> (->jstring "foo") (->jint 1) (->jstring "bar"))
 ;scoping
 (let ()
   (define-generic value-of)

@@ -473,8 +473,9 @@ Context.exit()
           Scheme and Java objects.
         </para>
         <para>
-          The <function>make</function> generic constructor is chained
-          to a generic constructor that is obtained as follows
+          The <function>make</function> procedure calls a generic
+          constructor which is chained to a generic constructor that
+          is obtained as follows
           <blockquote>
             <para>
               &procedure;
@@ -509,15 +510,21 @@ Context.exit()
           invoked. Normally this is a constructor defined in
           Java. Note however that that Scheme code can define new
           constructors or overload/override existing constructors via
-          the <function>define-constructor</function> macro defined in
-          <xref linkend="GenericProcedures"/>. Due to the implicit or
-          explicit chaining of <function>make</function> to
-          generic Java constructors, constructors defined in
-          Scheme take precedence over constructors defined in
-          Java. They are not visible to Java code. They must invoke a
-          Java constructor in order to actually create a Java
-          object. Typically this is done via the
-          <function>next-method</function> feature of the generic
+          the <function>define-constructor</function> macro, and
+          add post-creation initialization code by defining methods on
+          the <function>initialize</function> generic procedure. See
+          <xref linkend="GenericProcedures"/> for details of the
+          object creation/initialization mechanism.
+        </para>
+        <para>
+          Due to the implicit or
+          chaining of the generic constructor invoked by
+          <function>make</function> to the generic Java constructor,
+          constructors defined in Scheme take precedence over
+          constructors defined in Java. They are not visible to Java
+          code. They must invoke a Java constructor in order to
+          actually create a Java object. Typically this is done via
+          the <function>next-method</function> feature of the generic
           procedures mechanism.
         </para>
         <para>
@@ -1876,6 +1883,33 @@ Class.getSigners()
           </blockquote>
         </para>
         <para>
+          An example might be helpful at this stage.
+          <programlisting>
+(define-generic app (generic-java-procedure 'append))
+(define-method (app (next: next-method)
+                    (&lt;jstringbuffer&gt; buf) . rest)
+  (for-each (lambda (x) (next-method buf x)) rest)
+  buf)
+(define sb (make &lt;jstringbuffer&gt;))
+(-&gt;string (app sb (-&gt;jstring "foo") (-&gt;jint 1) (-&gt;jstring "bar")))
+;=&gt; "foo1bar"
+          </programlisting>
+          This defines a new generic procedure
+          <function>app</function> which is chained to a generic
+          procedure representing the Java <function>append</function>
+          methods. The explict chaining is done in order to avoid a
+          name clash with Scheme's <function>append</function>
+          procedure. A method is defined on the generic procedure that
+          appends the contents of any number of arguments to a
+          <classname>java.lang.StringBuffer</classname>. It does this
+          by calling the Java method for appending a single object
+          using the <function>next-method</function> mechanism which
+          we will describe later.
+        </para>
+      </sect3>
+      <sect3 id="genconstrdef">
+        <title>Defining Constructors</title>
+        <para>
           Constructors are defined with
           <blockquote>
             <para>
@@ -1908,7 +1942,7 @@ Class.getSigners()
                   <function>define-method</function> form except it
                   defines a "constructor" method for a specific
                   type. All constructor methods are part of the single
-                  generic constructor <function>make</function>.
+                  generic constructor called by <function>make</function>.
                 </para>
               </blockquote>
             </para>
@@ -1927,10 +1961,11 @@ Class.getSigners()
               <blockquote>
                 <para>
                   Creates a generic constructor which is chained to
-                  <parameter>next-proc</parameter>, which must be another
-                  generic constructor. This procedure is rarely used since
-                  the pre-defined <function>make</function> generic
-                  constructor typically suffices.
+                  <parameter>next-proc</parameter>, which must be
+                  another generic constructor. This procedure is
+                  rarely used since the pre-defined generic
+                  constructor called by <function>make</function>
+                  typically suffices.
                 </para>
               </blockquote>
             </para>
@@ -1958,33 +1993,59 @@ Class.getSigners()
           </blockquote>
         </para>
         <para>
+          After <function>make</function> has invoked the generic
+          constructor, it calls the <function>initialize</function>
+          generic procedure with the result of the constructor
+          invocation an the arguments supplied to
+          <function>make</function>. The main purpose of
+          <function>initialize</function> is to facilitate the
+          definition of post-creation object initialization,
+          particularly the invocation of initialisation code for
+          superclasses.
+        </para>
+        <para>
+          The <function>initialize</function> generic procedure is
+          chained to a procedure that accepts any number of arguments
+          and returns nothing. As a result it is not necessary to
+          define methods for <function>initialize</function> unless
+          post-creation initialization is required. Furthermore, it is
+          always possible to invoke the "next best" matching method
+          (as described below) from the body of an
+          <function>initialize</function> method.
+        </para>
+        <para>
           An example might be helpful at this stage.
           <programlisting>
 (define-constructor (&lt;jstring&gt; (&lt;jchar&gt; c))
   (make &lt;jstring&gt; (-&gt;jarray (list c) &lt;jchar&gt;)))
-(define-generic app (generic-java-procedure 'append))
-(define-method (app (next: next-method)
-                    (&lt;jstringbuffer&gt; buf) . rest)
-  (for-each (lambda (x) (next-method buf x)) rest)
-  buf)
-(define sb (make &lt;jstringbuffer&gt; (make &lt;jstring&gt; (-&gt;jchar #\o))))
-(->string (app sb (-&gt;jstring "foo") (-&gt;jint 1) (-&gt;jstring "bar")))
-;=> "ofoo1bar"
+(-&gt;string (make &lt;jstring&gt; (-&gt;jchar #\o)))
+;=&gt; "o"
+(define-constructor (&lt;jstringbuffer&gt; (next: next-method) . rest)
+  (next-method))
+(define-method (initialize (&lt;jstringbuffer&gt; sb) . rest)
+  (apply app sb rest))
+(-&gt;string (make &lt;jstringbuffer&gt; (-&gt;jstring "foo") (-&gt;jint 1) (-&gt;jstring "bar")))
+;=&gt; "foo1bar"
           </programlisting>
-          This defines a method new constructor on
+          First this defines a method new constructor on
           <classname>java.lang.String</classname> that constructs a
           string from a single character by constructing a
           single-element array of characters and invoking the existing
-          Java constructor with it. Furthermore, a new generic procedure
-          <function>app</function> is defined which is chained to a
-          generic procedure representing the Java
-          <function>append</function> methods. A method is defined on
-          the generic procedure that appends the contents of any
-          number of arguments to a
-          <classname>java.lang.StringBuffer</classname>. It does this
-          by calling the Java method for appending a single object
-          using the <function>next-method</function> mechanism which
-          we will describe later.
+          Java constructor with it. Second, a new constructor is
+          defined for <classname>java.lang.StringBuffer</classname>
+          that takes any number of arguments and calls
+          <classname>StringBuffer</classname>'s the null-arg
+          constructor. An initialization method is defined that
+          appends all the arguments to a
+          <classname>StringBuffer</classname> instance. The subsequent
+          call to <function>make</function> invokes the defined
+          constructor method which in turn invokes the null-arg
+          constructor defined in Java. Then <function>make</function>
+          calls <function>initialize</function>, resulting in the
+          invocation of the defined method. The end result is a
+          <classname>StringBuffer</classname> instance containing the
+          concatenation of the three arguments passed to
+          <function>make</function>.
         </para>
       </sect3>
       <sect3>

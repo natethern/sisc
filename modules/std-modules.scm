@@ -138,7 +138,7 @@
    instance-of?
    define-generic
    define-method
-   define-constructor
+   (define-constructor c-proc)
    make-generic-procedure
    make-generic-constructor
    make-method
@@ -156,7 +156,8 @@
    applicable-methods
    generic-java-procedure
    generic-java-constructor
-   make)
+   make
+   initialize)
   (import s2j-native)
   (import hashtable)
   (import threading)

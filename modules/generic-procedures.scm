@@ -437,10 +437,6 @@
   (apply _make-generic-procedure (java-methods name) rest))
 (define (generic-java-constructor . rest)
   (apply _make-generic-constructor java-constructor-methods rest))
-;;The global generic constructor chains the generic java constructor
-(define make (_make-generic-constructor constructor-methods
-                                        (generic-java-constructor)))
-
 (define (make-generic-procedure . rest)
   (apply _make-generic-procedure (make-method-list) rest))
 (define (make-generic-constructor . rest)
@@ -476,4 +472,15 @@
 (define-syntax define-constructor
   (syntax-rules ()
     ((_ (?class . ?rest) . ?body)
-     (define-method ((constructor make ?class) . ?rest) . ?body))))
+     (define-method ((constructor c-proc ?class) . ?rest) . ?body))))
+
+(define c-proc (void))
+(define initialize (void))
+;;The global generic constructor chains the generic java constructor
+(define (make class . args)
+  (let ([res (apply c-proc class args)])
+    (apply initialize res args)
+    res))
+(set! c-proc (_make-generic-constructor constructor-methods
+                                        (generic-java-constructor)))
+(set! initialize (make-generic-procedure (lambda args (void))))
