@@ -35,6 +35,8 @@ package sisc.exprs;
 import sisc.*;
 import sisc.data.*;
 import java.io.*;
+import java.util.Set;
+import java.util.Iterator;
 
 public class EvalExp extends Expression {
     public Expression pre, post;
@@ -42,6 +44,12 @@ public class EvalExp extends Expression {
     public EvalExp(Expression pre, Expression post) {
 	this.pre=pre;
 	this.post=post;
+        Set s=pre.getAnnotationKeys();
+        for (Iterator i=s.iterator(); i.hasNext();) {
+            Symbol key=(Symbol)i.next();
+            post.setAnnotation(key, pre.getAnnotation(key));
+            i.remove();
+        }
     }
 
     public void eval(Interpreter r) throws ContinuationException {
