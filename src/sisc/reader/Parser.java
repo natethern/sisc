@@ -3,13 +3,13 @@ package sisc.reader;
 import java.io.*;
 import java.util.*;
 
-import sisc.compiler.*;
 import sisc.data.*;
 import sisc.util.Util;
 import sisc.io.InputPort;
 import sisc.io.SourceInputPort;
 import sisc.exprs.AnnotatedExpr;
 import sisc.util.Defaults;
+import sisc.interpreter.Compiler;
 
 /**
  * Receives tokens from the Lexer and parses them into valid
@@ -278,7 +278,7 @@ public class Parser extends Util implements Tokens {
 			case '%': 
 				// Syntactic tokens
                 bv=lexer.readToBreak(is, Lexer.special, false, false).toLowerCase();
-                Syntax s=(Syntax)CompilerConstants.SYNTACTIC_TOKENS.get(bv);
+                Compiler.Syntax s=(Compiler.Syntax)Compiler.SYNTACTIC_TOKENS.get(bv);
                 if (s==null)
                 	throw new IOException(liMessage(SISCB, "invalidsyntoken", bv));
                 return s;				
