@@ -79,13 +79,16 @@ public abstract class Util implements Conf {
     public static void error(Interpreter r, String errormessage,
                              boolean prependError)
     throws ContinuationException {
-        r.acc=new Values(new Value[] {
-                             new SchemeString((prependError ? "Error: "+errormessage :
-                                               errormessage)),
-                             new CallFrame(r.nxp, r.vlr, r.env, 
-					   r.fk, r.stk).capture(),
-                             r.fk.fk});
+	error(r, new SchemeString((prependError ? "Error: "+errormessage :
+				   errormessage)));
+    }
 
+    public static void error(Interpreter r, Value error)
+    throws ContinuationException {
+        r.acc=new Values(new Value[] {
+	    error,
+	    new CallFrame(r.nxp, r.vlr, r.env, r.fk, r.stk).capture(),
+	    r.fk.fk});
         throw new ContinuationException(r.fk);
     }
 
