@@ -77,13 +77,12 @@ public abstract class Expression extends Util
 
     public boolean visitAnnotations(ExpressionVisitor v) {
         if (annotations == null) return true;
-        boolean res = true;
         for (Iterator i=annotations.entrySet().iterator(); i.hasNext();) {
             Map.Entry en = (Map.Entry)i.next();
-            if (!v.visit((Expression)en.getKey())) res = false;
-            if (!v.visit((Expression)en.getValue())) res = false;
+            if (!v.visit((Expression)en.getKey())) return false;
+            if (!v.visit((Expression)en.getValue())) return false;
         }
-        return res;
+        return true;
     }
 
     /**
