@@ -9,150 +9,155 @@ import java.util.*;
 import sisc.Serializer;
 
 public class S2J extends ModuleAdapter {
+
+    private static final String moduleName = "S2J";
+
+    private static final Symbol S2JB = Symbol.intern(moduleName);
+
     public String getModuleName() {
-	return "S2J";
+        return moduleName;
     }
 
     protected static final int 
-	JAVA_WRAP		=1,
-	JAVA_UNWRAP		=2,
-	JAVA_CLASS		=3,
-        JAVA_SYNC		=4,
+        JAVA_WRAP           =1,
+        JAVA_UNWRAP         =2,
+        JAVA_CLASS          =3,
+        JAVA_SYNC           =4,
 
-	JAVA_CONSTRUCTOR	=10,
-	JAVA_METHOD		=11,
-	JAVA_FIELD		=12,
-	JAVA_CONSTRUCTORS	=13,
-	JAVA_METHODS		=14,
-	JAVA_FIELDS		=15,
-	JAVA_DECL_CONSTRUCTOR	=16,
-	JAVA_DECL_METHOD	=17,
-	JAVA_DECL_FIELD		=18,
-	JAVA_DECL_CONSTRUCTORS	=19,
-	JAVA_DECL_METHODS	=20,
-	JAVA_DECL_FIELDS	=21,
+        JAVA_CONSTRUCTOR    =10,
+        JAVA_METHOD         =11,
+        JAVA_FIELD          =12,
+        JAVA_CONSTRUCTORS   =13,
+        JAVA_METHODS        =14,
+        JAVA_FIELDS         =15,
+        JAVA_DECL_CONSTRUCTOR=16,
+        JAVA_DECL_METHOD    =17,
+        JAVA_DECL_FIELD     =18,
+        JAVA_DECL_CONSTRUCTORS=19,
+        JAVA_DECL_METHODS   =20,
+        JAVA_DECL_FIELDS    =21,
 
-	JAVA_CLASSES		=30,
-	JAVA_DECL_CLASSES	=31,
-	JAVA_INTERFACES		=32,
-	JAVA_SUPERCLASS		=33,
-	JAVA_COMPONENT_TYPE	=34,
-        JAVA_INSTANCEQ		=35,
-        JAVA_ASSIGNABLEQ	=36,
+        JAVA_CLASSES        =30,
+        JAVA_DECL_CLASSES   =31,
+        JAVA_INTERFACES     =32,
+        JAVA_SUPERCLASS     =33,
+        JAVA_COMPONENT_TYPE =34,
+        JAVA_INSTANCEQ      =35,
+        JAVA_ASSIGNABLEQ    =36,
 
-	JAVA_NAME		=40,
-	JAVA_MODIFIERS		=41,
-	JAVA_DECLARING_CLASS	=42,
-	JAVA_EXCEPTION_TYPES	=43,
-	JAVA_PARAMETER_TYPES	=44,
-	JAVA_RETURN_TYPE	=45,
-	JAVA_FIELD_TYPE		=46,
+        JAVA_NAME           =40,
+        JAVA_MODIFIERS      =41,
+        JAVA_DECLARING_CLASS=42,
+        JAVA_EXCEPTION_TYPES=43,
+        JAVA_PARAMETER_TYPES=44,
+        JAVA_RETURN_TYPE    =45,
+        JAVA_FIELD_TYPE     =46,
         
-        JAVA_OBJECTQ		=50,
-        JAVA_CLASSQ		=51,
-        JAVA_FIELDQ		=52,
-        JAVA_METHODQ		=53,
-        JAVA_CONSTRUCTORQ	=54,
-        JAVA_INTERFACEQ		=55,
-        JAVA_ARRAYQ		=56,
-        JAVA_ARRAY_CLASSQ	=57,
-        JAVA_NULLQ		=58,
+        JAVA_OBJECTQ        =50,
+        JAVA_CLASSQ         =51,
+        JAVA_FIELDQ         =52,
+        JAVA_METHODQ        =53,
+        JAVA_CONSTRUCTORQ   =54,
+        JAVA_INTERFACEQ     =55,
+        JAVA_ARRAYQ         =56,
+        JAVA_ARRAY_CLASSQ   =57,
+        JAVA_NULLQ          =58,
 
-	JAVA_CLASS_OF		=60,
-        JAVA_ARRAY_CLASS	=61,
-	JAVA_ARRAY_NEW		=62,
-	JAVA_INV_HANDLER	=63,
-	JAVA_PROXY		=64,
+        JAVA_CLASS_OF       =60,
+        JAVA_ARRAY_CLASS    =61,
+        JAVA_ARRAY_NEW      =62,
+        JAVA_INV_HANDLER    =63,
+        JAVA_PROXY          =64,
 
-	CONV_JBOOLEAN		=100,
-	CONV_JCHAR		=101,
-	CONV_JBYTE		=102,
-	CONV_JSHORT		=103,
-	CONV_JINT		=104,
-	CONV_JLONG		=105,
-	CONV_JFLOAT		=106,
-	CONV_JDOUBLE		=107,
-	CONV_JSTRING		=108,
-	CONV_JARRAY		=109,
+        CONV_JBOOLEAN       =100,
+        CONV_JCHAR          =101,
+        CONV_JBYTE          =102,
+        CONV_JSHORT         =103,
+        CONV_JINT           =104,
+        CONV_JLONG          =105,
+        CONV_JFLOAT         =106,
+        CONV_JDOUBLE        =107,
+        CONV_JSTRING        =108,
+        CONV_JARRAY         =109,
 
-	CONV_BOOLEAN		=120,
-	CONV_CHARACTER		=121,
-	CONV_NUMBER		=122,
-	CONV_STRING		=123,
-	CONV_SYMBOL		=124,
-	CONV_VECTOR		=125,
-	CONV_LIST		=126;    
-	
+        CONV_BOOLEAN        =120,
+        CONV_CHARACTER      =121,
+        CONV_NUMBER         =122,
+        CONV_STRING         =123,
+        CONV_SYMBOL         =124,
+        CONV_VECTOR         =125,
+        CONV_LIST           =126;    
+
     public S2J() {
 
-        define("java/wrap"		,JAVA_WRAP);
-        define("java/unwrap"		,JAVA_UNWRAP);
-        define("java/class"		,JAVA_CLASS);
-        define("java/synchronized"	,JAVA_SYNC);
+        define("java/wrap"          ,JAVA_WRAP);
+        define("java/unwrap"        ,JAVA_UNWRAP);
+        define("java/class"         ,JAVA_CLASS);
+        define("java/synchronized"  ,JAVA_SYNC);
 
-        define("java/constructor"	,JAVA_CONSTRUCTOR);
-        define("java/method"		,JAVA_METHOD);
-        define("java/field"		,JAVA_FIELD);
-	define("java/constructors"	,JAVA_CONSTRUCTORS);
-	define("java/methods"		,JAVA_METHODS);
-	define("java/fields"		,JAVA_FIELDS);
-        define("java/decl-constructor"	,JAVA_DECL_CONSTRUCTOR);
-        define("java/decl-method"	,JAVA_DECL_METHOD);
-        define("java/decl-field"	,JAVA_DECL_FIELD);
-	define("java/decl-constructors"	,JAVA_DECL_CONSTRUCTORS);
-	define("java/decl-methods"	,JAVA_DECL_METHODS);
-	define("java/decl-fields"	,JAVA_DECL_FIELDS);
+        define("java/constructor"   ,JAVA_CONSTRUCTOR);
+        define("java/method"        ,JAVA_METHOD);
+        define("java/field"         ,JAVA_FIELD);
+        define("java/constructors"  ,JAVA_CONSTRUCTORS);
+        define("java/methods"       ,JAVA_METHODS);
+        define("java/fields"        ,JAVA_FIELDS);
+        define("java/decl-constructor",JAVA_DECL_CONSTRUCTOR);
+        define("java/decl-method"   ,JAVA_DECL_METHOD);
+        define("java/decl-field"    ,JAVA_DECL_FIELD);
+        define("java/decl-constructors",JAVA_DECL_CONSTRUCTORS);
+        define("java/decl-methods"  ,JAVA_DECL_METHODS);
+        define("java/decl-fields"   ,JAVA_DECL_FIELDS);
 
-	define("java/classes"		,JAVA_CLASSES);
-	define("java/decl-classes"     	,JAVA_DECL_CLASSES);
-	define("java/interfaces"	,JAVA_INTERFACES);
-	define("java/superclass"	,JAVA_SUPERCLASS);
-	define("java/component-type"	,JAVA_COMPONENT_TYPE);
-        define("java/instance?"		,JAVA_INSTANCEQ);
-        define("java/assignable?"	,JAVA_ASSIGNABLEQ);
+        define("java/classes"       ,JAVA_CLASSES);
+        define("java/decl-classes"  ,JAVA_DECL_CLASSES);
+        define("java/interfaces"    ,JAVA_INTERFACES);
+        define("java/superclass"    ,JAVA_SUPERCLASS);
+        define("java/component-type",JAVA_COMPONENT_TYPE);
+        define("java/instance?"     ,JAVA_INSTANCEQ);
+        define("java/assignable?"   ,JAVA_ASSIGNABLEQ);
 
-	define("java/name"		,JAVA_NAME);
-	define("java/modifiers"		,JAVA_MODIFIERS);
-	define("java/declaring-class"	,JAVA_DECLARING_CLASS);
-	define("java/exception-types"	,JAVA_EXCEPTION_TYPES);
-	define("java/parameter-types"	,JAVA_PARAMETER_TYPES);
-	define("java/return-type"	,JAVA_RETURN_TYPE);
-	define("java/field-type"	,JAVA_FIELD_TYPE);
+        define("java/name"          ,JAVA_NAME);
+        define("java/modifiers"     ,JAVA_MODIFIERS);
+        define("java/declaring-class",JAVA_DECLARING_CLASS);
+        define("java/exception-types",JAVA_EXCEPTION_TYPES);
+        define("java/parameter-types",JAVA_PARAMETER_TYPES);
+        define("java/return-type"   ,JAVA_RETURN_TYPE);
+        define("java/field-type"    ,JAVA_FIELD_TYPE);
 
-        define("java/object?"		,JAVA_OBJECTQ);
-        define("java/class?"		,JAVA_CLASSQ);
-        define("java/field?"		,JAVA_FIELDQ);
-        define("java/method?"		,JAVA_METHODQ);
-        define("java/constructor?"	,JAVA_CONSTRUCTORQ);
-        define("java/interface?"	,JAVA_INTERFACEQ);
-        define("java/array?"		,JAVA_ARRAYQ);
-        define("java/array-class?"	,JAVA_ARRAY_CLASSQ);
-        define("java/null?"		,JAVA_NULLQ);
+        define("java/object?"       ,JAVA_OBJECTQ);
+        define("java/class?"        ,JAVA_CLASSQ);
+        define("java/field?"        ,JAVA_FIELDQ);
+        define("java/method?"       ,JAVA_METHODQ);
+        define("java/constructor?"  ,JAVA_CONSTRUCTORQ);
+        define("java/interface?"    ,JAVA_INTERFACEQ);
+        define("java/array?"        ,JAVA_ARRAYQ);
+        define("java/array-class?"  ,JAVA_ARRAY_CLASSQ);
+        define("java/null?"         ,JAVA_NULLQ);
 
-	define("java/class-of"		,JAVA_CLASS_OF);
-        define("java/array-class"	,JAVA_ARRAY_CLASS);
-	define("java/array-new"		,JAVA_ARRAY_NEW);
-	define("java/invocation-handler",JAVA_INV_HANDLER);
-	define("java/proxy"		,JAVA_PROXY);
+        define("java/class-of"      ,JAVA_CLASS_OF);
+        define("java/array-class"   ,JAVA_ARRAY_CLASS);
+        define("java/array-new"     ,JAVA_ARRAY_NEW);
+        define("java/invocation-handler",JAVA_INV_HANDLER);
+        define("java/proxy"         ,JAVA_PROXY);
 
-	define("->jboolean"		,CONV_JBOOLEAN);
-	define("->jchar"		,CONV_JCHAR);
-	define("->jbyte"		,CONV_JBYTE);
-	define("->jshort"		,CONV_JSHORT);
-	define("->jint"			,CONV_JINT);
-	define("->jlong"		,CONV_JLONG);
-	define("->jfloat"		,CONV_JFLOAT);
-	define("->jdouble"		,CONV_JDOUBLE);
-	define("->jstring"		,CONV_JSTRING);
-	define("->jarray"		,CONV_JARRAY);
+        define("->jboolean"         ,CONV_JBOOLEAN);
+        define("->jchar"            ,CONV_JCHAR);
+        define("->jbyte"            ,CONV_JBYTE);
+        define("->jshort"           ,CONV_JSHORT);
+        define("->jint"             ,CONV_JINT);
+        define("->jlong"            ,CONV_JLONG);
+        define("->jfloat"           ,CONV_JFLOAT);
+        define("->jdouble"          ,CONV_JDOUBLE);
+        define("->jstring"          ,CONV_JSTRING);
+        define("->jarray"           ,CONV_JARRAY);
 
-	define("->boolean"		,CONV_BOOLEAN);
-	define("->character"		,CONV_CHARACTER);
-	define("->number"		,CONV_NUMBER);
-	define("->string"		,CONV_STRING);
-	define("->symbol"		,CONV_SYMBOL);
-	define("->vector"		,CONV_VECTOR);
-	define("->list"			,CONV_LIST);
+        define("->boolean"          ,CONV_BOOLEAN);
+        define("->character"        ,CONV_CHARACTER);
+        define("->number"           ,CONV_NUMBER);
+        define("->string"           ,CONV_STRING);
+        define("->symbol"           ,CONV_SYMBOL);
+        define("->vector"           ,CONV_VECTOR);
+        define("->list"             ,CONV_LIST);
 
     }
 
@@ -161,14 +166,14 @@ public class S2J extends ModuleAdapter {
         public Object obj;
 
         public static final byte
-            JUNKN	= 0,
-            JNULL	= 1,
-            JCLASS	= 2,
-            JFIELD	= 3,
-            JMETHOD	= 4,
-            JCONSTR	= 5,
-            JARRAY	= 6,
-            JOBJ	= 7;
+            JUNKN   = 0,
+            JNULL   = 1,
+            JCLASS  = 2,
+            JFIELD  = 3,
+            JMETHOD = 4,
+            JCONSTR = 5,
+            JARRAY  = 6,
+            JOBJ    = 7;
 
         protected byte objType = JUNKN;
 
@@ -187,7 +192,7 @@ public class S2J extends ModuleAdapter {
                          JOBJ)))));
             return objType;
         }
-	    
+
         public JavaObject() {}
 
         public void serialize(Serializer s, DataOutput dos)
@@ -230,7 +235,7 @@ public class S2J extends ModuleAdapter {
                     break;
                 }
                 default:
-                    throw new RuntimeException("cannot serialize java object");
+                    throw new RuntimeException(liMessage(S2JB, "cannotserialize"));
                 }
             }
         }
@@ -254,7 +259,7 @@ public class S2J extends ModuleAdapter {
                         Class c = resolveType(dis.readUTF());
                         obj = c.getDeclaredField(dis.readUTF());
                     } catch (NoSuchFieldException e) {
-                        throw new RuntimeException("cannot deserialize field");
+                        throw new RuntimeException(liMessage(S2JB, "cannotdeserialize"));
                     }
                     break;
                 case JMETHOD:
@@ -268,7 +273,7 @@ public class S2J extends ModuleAdapter {
                         }
                         obj = c.getDeclaredMethod(n, types);
                     } catch (NoSuchMethodException e) {
-                        throw new RuntimeException("cannot deserialize method");
+                        throw new RuntimeException(liMessage(S2JB, "cannotdeserialize"));
                     }
                     break;
                 case JCONSTR:
@@ -281,11 +286,11 @@ public class S2J extends ModuleAdapter {
                         }
                         obj = c.getDeclaredConstructor(types);
                     } catch (NoSuchMethodException e) {
-                        throw new RuntimeException("cannot deserialize constructor");
+                        throw new RuntimeException(liMessage(S2JB, "cannotdeserialize"));
                     }
                     break;
                 default:
-                    throw new RuntimeException("cannot deserialize java object");
+                    throw new RuntimeException(liMessage(S2JB, "cannotdeserialize"));
                 }
             }
         }
@@ -336,16 +341,16 @@ public class S2J extends ModuleAdapter {
             r.nxp = null;
             try {
                 switch(getObjType()) {
-                case JCLASS:	r.acc = apply((Class)obj, r.vlr); break;
-                case JFIELD:	r.acc = apply((Field)obj, r.vlr); break;
-                case JMETHOD:	r.acc = apply((Method)obj, r.vlr); break;
-                case JCONSTR:	r.acc = apply((Constructor)obj, r.vlr); break;
-                case JARRAY:	r.acc = applyArray(obj, r.vlr); break;
-                case JOBJ:		r.acc = apply(obj, r.vlr); break;
+                case JCLASS:    r.acc = apply((Class)obj, r.vlr); break;
+                case JFIELD:    r.acc = apply((Field)obj, r.vlr); break;
+                case JMETHOD:   r.acc = apply((Method)obj, r.vlr); break;
+                case JCONSTR:   r.acc = apply((Constructor)obj, r.vlr); break;
+                case JARRAY:    r.acc = applyArray(obj, r.vlr); break;
+                case JOBJ:      r.acc = apply(obj, r.vlr); break;
                 case JNULL:
-                    error(r, "cannot apply Java null");
+                    error(r, liMessage(S2JB, "cannotapplynull"));
                 default:
-                    error(r, "cannot apply Java object " + obj.toString());
+                    error(r, liMessage(S2JB, "cannotapplyobject", obj.toString()));
                 }
             } catch (InvocationTargetException e) {
                 e.printStackTrace(System.err);
@@ -370,14 +375,14 @@ public class S2J extends ModuleAdapter {
                     obj.getField(symval(arg[0])).set(null,jobj(arg[1]));
                     return VOID;
                 default:
-                    throw new RuntimeException("applying java class " + obj + " requires between zero and two args");
+                    throw new RuntimeException(liMessage(S2JB, "zerotwoargs", liMessage(S2JB, "jclass"), obj.toString()));
                 }
             } catch (InstantiationException e) {
-                throw new RuntimeException("error during instantiation of class " + obj);
+                throw new RuntimeException(liMessage(S2JB, "errorinstantiating", obj.toString()));
             } catch (IllegalAccessException e) {
-                throw new RuntimeException("invocation of default constructor of class " + obj + " not permitted");
+                throw new RuntimeException(liMessage(S2JB, "illegalaccess", liMessage(S2JB, "jconstructor"), "default", obj.toString()));
             } catch (NoSuchFieldException e) {
-                throw new RuntimeException("no static field " + arg[0] + " in class " + obj);
+                throw new RuntimeException(liMessage(S2JB, "nosuchfield", arg[0].toString(), obj.toString()));
             }
         }
 
@@ -390,10 +395,10 @@ public class S2J extends ModuleAdapter {
                     obj.set(jobj(args[0]), jobj(args[1]));
                     return VOID;
                 default:
-                    throw new RuntimeException("applying java field " + obj + " requires one or two args");
+                    throw new RuntimeException(liMessage(S2JB, "onetwoargs", liMessage(S2JB, "jfield"), obj.toString()));
                 }
             } catch (IllegalAccessException e) {
-                throw new RuntimeException("access to field " + obj + " in class " + args[0] + " not permitted");
+                throw new RuntimeException(liMessage(S2JB, "illegalaccess", liMessage(S2JB, "jfield"), obj.toString(), args[0].toString()));
             }
         }
 
@@ -407,7 +412,7 @@ public class S2J extends ModuleAdapter {
             try {
                 return create(obj.invoke(o,params));
             } catch (IllegalAccessException e) {
-                throw new RuntimeException("invocation of method " + obj + " on " + o + " not permitted");
+                throw new RuntimeException(liMessage(S2JB, "illegalaccess", liMessage(S2JB, "jmethod"), obj.toString(), o.toString()));
             }
         }
 
@@ -420,9 +425,9 @@ public class S2J extends ModuleAdapter {
             try {
                 return create(obj.newInstance(params));
             } catch (InstantiationException e) {
-                throw new RuntimeException("error during invocation of constructor " + obj + " of class " + obj.getDeclaringClass().getName());
+                throw new RuntimeException(liMessage(S2JB, "constructorerror", obj.toString(), obj.getDeclaringClass().getName()));
             } catch (IllegalAccessException e) {
-                throw new RuntimeException("invocation of constructor " + obj + " of class " + obj.getDeclaringClass().getName() + " not permitted");
+                throw new RuntimeException(liMessage(S2JB, "illegalaccess", liMessage(S2JB, "jconstructor"), obj.toString(), obj.getDeclaringClass().getName()));
             }
         }
 
@@ -463,7 +468,7 @@ public class S2J extends ModuleAdapter {
                 Array.set(obj, num(idx).intValue(), jobj(args[1]));
                 return VOID;
             default:
-                throw new RuntimeException("applying java array " + obj + " requires one or two args");
+                throw new RuntimeException(liMessage(S2JB, "onetwoargs", liMessage(S2JB, "jarray"), obj.toString()));
             }
         }
 
@@ -476,12 +481,12 @@ public class S2J extends ModuleAdapter {
                     obj.getClass().getField(symval(args[0])).set(obj, jobj(args[1]));
                     return VOID;
                 default:
-                    throw new RuntimeException("applying java object " + obj + " requires one or two args");
+                    throw new RuntimeException(liMessage(S2JB, "onetwoargs", liMessage(S2JB, "jobject"), obj.toString()));
                 }
             } catch (IllegalAccessException e) {
-                throw new RuntimeException("access to field " + args[0] + " of istance of class " + obj.getClass() + " not permitted");
+                throw new RuntimeException(liMessage(S2JB, "illegalaccess", liMessage(S2JB, "jobject"), args[0].toString(), obj.toString()));
             } catch (NoSuchFieldException e) {
-                throw new RuntimeException("no field " + args[0] + " in instance of class " + obj.getClass());
+                throw new RuntimeException(liMessage(S2JB, "nosuchfield", args[0].toString(), obj.toString()));
             }
         }
     }
@@ -501,7 +506,7 @@ public class S2J extends ModuleAdapter {
                 equalsMeth = Object.class.getMethod("equals", new Class[]{java.lang.Object.class});
                 toStringMeth = Object.class.getMethod("toString", new Class[]{});
             } catch (NoSuchMethodException e) {
-                throw new RuntimeException("could not find method");
+                throw new RuntimeException(liMessage(S2JB, "reqmethodnotfound"));
             }
         }
 
@@ -559,55 +564,55 @@ public class S2J extends ModuleAdapter {
     public static final int jtype(Value o) {
         try {
             return ((JavaObject)o).getObjType();
-        } catch (ClassCastException e) { typeError("java object", o); }
-	return JavaObject.JUNKN;
+        } catch (ClassCastException e) { typeError(S2JB, "jobject", o); }
+        return JavaObject.JUNKN;
     }
 
     public static final Object jobj(Value o) {
         try {
             return ((JavaObject)o).obj;
-        } catch (ClassCastException e) { typeError("java object", o); }
-	return null;
+        } catch (ClassCastException e) { typeError(S2JB, "jobject", o); }
+        return null;
     }
 
     public static final Class jclass(Value o) {
         try {
             return (Class)((JavaObject)o).obj;
-        } catch (ClassCastException e) { typeError("java class", o); }
-	return null;
+        } catch (ClassCastException e) { typeError(S2JB, "jclass", o); }
+        return null;
     }
 
     public static final Constructor jconstr(Value o) {
         try {
             return (Constructor)((JavaObject)o).obj;
-        } catch (ClassCastException e) { typeError("java constructor", o); }
-	return null;
+        } catch (ClassCastException e) { typeError(S2JB, "jmethod", o); }
+        return null;
     }
 
     public static final Method jmethod(Value o) {
         try {
             return (Method)((JavaObject)o).obj;
-        } catch (ClassCastException e) { typeError("java method", o); }
-	return null;
+        } catch (ClassCastException e) { typeError(S2JB, "jconstructor", o); }
+        return null;
     }
 
     public static final Field jfield(Value o) {
         try {
             return (Field)((JavaObject)o).obj;
-        } catch (ClassCastException e) { typeError("java field", o); }
-	return null;
+        } catch (ClassCastException e) { typeError(S2JB, "jfield", o); }
+        return null;
     }
 
     public static final JavaObject makeJObj(Object o) {
-	return JavaObject.create(o);
+        return JavaObject.create(o);
     }
 
     public static final Value objArrayToVec(Object[] objs) {
-	JavaObject[] res = new JavaObject[objs.length];
-	for (int i=0; i < objs.length; i++) {
-	    res[i] = makeJObj(objs[i]);
-	}
-	return new SchemeVector(res);
+        JavaObject[] res = new JavaObject[objs.length];
+        for (int i=0; i < objs.length; i++) {
+            res[i] = makeJObj(objs[i]);
+        }
+        return new SchemeVector(res);
     }
 
     
@@ -639,16 +644,16 @@ public class S2J extends ModuleAdapter {
     public static Class resolvePrimitiveType(String name) {
         //a hashtable might be faster here, but probably won't be.
         return
-            name.equals("void")		? Void.TYPE :
-            name.equals("boolean")	? Boolean.TYPE:
-            name.equals("char")		? Character.TYPE:
-            name.equals("byte")		? Byte.TYPE :
-            name.equals("char")		? Character.TYPE :
-            name.equals("short")	? Short.TYPE :
-            name.equals("int")		? Integer.TYPE :
-            name.equals("long")		? Long.TYPE :
-            name.equals("float")	? Float.TYPE :
-            name.equals("double")	? Double.TYPE :
+            name.equals("void")     ? Void.TYPE :
+            name.equals("boolean")  ? Boolean.TYPE:
+            name.equals("char")     ? Character.TYPE:
+            name.equals("byte")     ? Byte.TYPE :
+            name.equals("char")     ? Character.TYPE :
+            name.equals("short")    ? Short.TYPE :
+            name.equals("int")      ? Integer.TYPE :
+            name.equals("long")     ? Long.TYPE :
+            name.equals("float")    ? Float.TYPE :
+            name.equals("double")   ? Double.TYPE :
             null;
     }
 
@@ -692,15 +697,15 @@ public class S2J extends ModuleAdapter {
      */
     public static Class fixClass(Class c) {
         return
-            c == Void.TYPE	? Void.class :
-            c == Boolean.TYPE	? Boolean.class :
-            c == Character.TYPE	? Character.class :
-            c == Byte.TYPE	? Byte.class :
-            c == Short.TYPE	? Short.class :
-            c == Integer.TYPE	? Integer.class :
-            c == Long.TYPE	? Long.class :
-            c == Float.TYPE	? Float.class :
-            c == Double.TYPE	? Double.class :
+            c == Void.TYPE      ? Void.class :
+            c == Boolean.TYPE   ? Boolean.class :
+            c == Character.TYPE ? Character.class :
+            c == Byte.TYPE      ? Byte.class :
+            c == Short.TYPE     ? Short.class :
+            c == Integer.TYPE   ? Integer.class :
+            c == Long.TYPE      ? Long.class :
+            c == Float.TYPE     ? Float.class :
+            c == Double.TYPE    ? Double.class :
             c;
     }
 
@@ -708,90 +713,90 @@ public class S2J extends ModuleAdapter {
         switch(f.vlr.length) {
         case 1:
             switch(primid) {
-	    case JAVA_WRAP:
-		return makeJObj(f.vlr[0]);
-	    case JAVA_UNWRAP:
-		return (Value)jobj(f.vlr[0]);
-	    case JAVA_CLASS:
+            case JAVA_WRAP:
+                return makeJObj(f.vlr[0]);
+            case JAVA_UNWRAP:
+                return (Value)jobj(f.vlr[0]);
+            case JAVA_CLASS:
                 String cname = symval(f.vlr[0]);
-		Class c = resolveType(cname);
-		if (c == null)
-		    throw new RuntimeException("class " + cname + " not found");
+                Class c = resolveType(cname);
+                if (c == null)
+                    throw new RuntimeException(liMessage(S2JB, "classnotfound", cname));
                 else return makeJObj(c);
-	    case JAVA_CONSTRUCTORS:
-		return objArrayToVec(jclass(f.vlr[0]).getConstructors());
-	    case JAVA_METHODS:
-		return objArrayToVec(jclass(f.vlr[0]).getMethods());
-	    case JAVA_FIELDS:
-		return objArrayToVec(jclass(f.vlr[0]).getFields());
-	    case JAVA_DECL_CONSTRUCTORS:
-		return objArrayToVec(jclass(f.vlr[0]).getDeclaredConstructors());
-	    case JAVA_DECL_METHODS:
-		return objArrayToVec(jclass(f.vlr[0]).getDeclaredMethods());
-	    case JAVA_DECL_FIELDS:
-		return objArrayToVec(jclass(f.vlr[0]).getDeclaredFields());
-	    case JAVA_CLASSES:
-		return objArrayToVec(jclass(f.vlr[0]).getClasses());
-	    case JAVA_DECL_CLASSES:
-		return objArrayToVec(jclass(f.vlr[0]).getDeclaredClasses());
-	    case JAVA_INTERFACES:
-		return objArrayToVec(jclass(f.vlr[0]).getInterfaces());
-	    case JAVA_SUPERCLASS:
-		return makeJObj(jclass(f.vlr[0]).getSuperclass());
-	    case JAVA_COMPONENT_TYPE:
-		return makeJObj(jclass(f.vlr[0]).getComponentType());
-	    case JAVA_NAME:
-		switch (jtype(f.vlr[0])) {
-		case JavaObject.JCLASS:
-		    return Symbol.intern(jclass(f.vlr[0]).getName());
-		default:
-		    return Symbol.intern(((Member)jobj(f.vlr[0])).getName());
-		}
-	    case JAVA_MODIFIERS:
-		int mods = 0;
-		switch (jtype(f.vlr[0])) {
-		case JavaObject.JCLASS:
-		    mods = jclass(f.vlr[0]).getModifiers();
-		    break;
-		default:
-		    mods = ((Member)jobj(f.vlr[0])).getModifiers();
-		    break;
-		}
-		String smods = Modifier.toString(mods);
-		Pair p = EMPTYLIST;
-		if (smods.length() == 0) return p;
-		for(int idx = smods.length(), nidx=0; nidx>=0; idx = nidx) {
-		    nidx = smods.lastIndexOf(' ', idx-1);
-		    p = new Pair(Symbol.intern(smods.substring(nidx+1, idx)), p);
-		}
-		return p;
-	    case JAVA_DECLARING_CLASS:
-		switch (jtype(f.vlr[0])) {
-		case JavaObject.JCLASS:
-		    return makeJObj(jclass(f.vlr[0]).getDeclaringClass());
-		default:
-		    return makeJObj(((Member)jobj(f.vlr[0])).getDeclaringClass());
-		}
-	    case JAVA_EXCEPTION_TYPES:
-		switch (jtype(f.vlr[0])) {
-		case JavaObject.JCONSTR:
-		    return objArrayToVec(jconstr(f.vlr[0]).getExceptionTypes());
-		case JavaObject.JMETHOD:
-		default:
-		    return objArrayToVec(jmethod(f.vlr[0]).getExceptionTypes());
-		}
-	    case JAVA_PARAMETER_TYPES:
-		switch (jtype(f.vlr[0])) {
-		case JavaObject.JCONSTR:
-		    return objArrayToVec(jconstr(f.vlr[0]).getParameterTypes());
-		case JavaObject.JMETHOD:
-		default:
-		    return objArrayToVec(jmethod(f.vlr[0]).getParameterTypes());
-		}
-	    case JAVA_RETURN_TYPE:
-		return makeJObj(jmethod(f.vlr[0]).getReturnType());
-	    case JAVA_FIELD_TYPE:
-		return makeJObj(jfield(f.vlr[0]).getType());
+            case JAVA_CONSTRUCTORS:
+                return objArrayToVec(jclass(f.vlr[0]).getConstructors());
+            case JAVA_METHODS:
+                return objArrayToVec(jclass(f.vlr[0]).getMethods());
+            case JAVA_FIELDS:
+                return objArrayToVec(jclass(f.vlr[0]).getFields());
+            case JAVA_DECL_CONSTRUCTORS:
+                return objArrayToVec(jclass(f.vlr[0]).getDeclaredConstructors());
+            case JAVA_DECL_METHODS:
+                return objArrayToVec(jclass(f.vlr[0]).getDeclaredMethods());
+            case JAVA_DECL_FIELDS:
+                return objArrayToVec(jclass(f.vlr[0]).getDeclaredFields());
+            case JAVA_CLASSES:
+                return objArrayToVec(jclass(f.vlr[0]).getClasses());
+            case JAVA_DECL_CLASSES:
+                return objArrayToVec(jclass(f.vlr[0]).getDeclaredClasses());
+            case JAVA_INTERFACES:
+                return objArrayToVec(jclass(f.vlr[0]).getInterfaces());
+            case JAVA_SUPERCLASS:
+                return makeJObj(jclass(f.vlr[0]).getSuperclass());
+            case JAVA_COMPONENT_TYPE:
+                return makeJObj(jclass(f.vlr[0]).getComponentType());
+            case JAVA_NAME:
+                switch (jtype(f.vlr[0])) {
+                case JavaObject.JCLASS:
+                    return Symbol.intern(jclass(f.vlr[0]).getName());
+                default:
+                    return Symbol.intern(((Member)jobj(f.vlr[0])).getName());
+                }
+            case JAVA_MODIFIERS:
+                int mods = 0;
+                switch (jtype(f.vlr[0])) {
+                case JavaObject.JCLASS:
+                    mods = jclass(f.vlr[0]).getModifiers();
+                    break;
+                default:
+                    mods = ((Member)jobj(f.vlr[0])).getModifiers();
+                    break;
+                }
+                String smods = Modifier.toString(mods);
+                Pair p = EMPTYLIST;
+                if (smods.length() == 0) return p;
+                for(int idx = smods.length(), nidx=0; nidx>=0; idx = nidx) {
+                    nidx = smods.lastIndexOf(' ', idx-1);
+                    p = new Pair(Symbol.intern(smods.substring(nidx+1, idx)), p);
+                }
+                return p;
+            case JAVA_DECLARING_CLASS:
+                switch (jtype(f.vlr[0])) {
+                case JavaObject.JCLASS:
+                    return makeJObj(jclass(f.vlr[0]).getDeclaringClass());
+                default:
+                    return makeJObj(((Member)jobj(f.vlr[0])).getDeclaringClass());
+                }
+            case JAVA_EXCEPTION_TYPES:
+                switch (jtype(f.vlr[0])) {
+                case JavaObject.JCONSTR:
+                    return objArrayToVec(jconstr(f.vlr[0]).getExceptionTypes());
+                case JavaObject.JMETHOD:
+                default:
+                    return objArrayToVec(jmethod(f.vlr[0]).getExceptionTypes());
+                }
+            case JAVA_PARAMETER_TYPES:
+                switch (jtype(f.vlr[0])) {
+                case JavaObject.JCONSTR:
+                    return objArrayToVec(jconstr(f.vlr[0]).getParameterTypes());
+                case JavaObject.JMETHOD:
+                default:
+                    return objArrayToVec(jmethod(f.vlr[0]).getParameterTypes());
+                }
+            case JAVA_RETURN_TYPE:
+                return makeJObj(jmethod(f.vlr[0]).getReturnType());
+            case JAVA_FIELD_TYPE:
+                return makeJObj(jfield(f.vlr[0]).getType());
             case JAVA_OBJECTQ:
                 return truth(f.vlr[0] instanceof JavaObject);
             case JAVA_CLASSQ:
@@ -820,205 +825,205 @@ public class S2J extends ModuleAdapter {
                 return truth(f.vlr[0] instanceof JavaObject &&
                              jtype(f.vlr[0]) == JavaObject.JCLASS &&
                              jclass(f.vlr[0]).isArray());
-	    case JAVA_CLASS_OF:
-		return makeJObj(jobj(f.vlr[0]).getClass());
-	    case JAVA_INV_HANDLER:
-		return makeJObj(new SchemeInvocation(f.ctx, proc(f.vlr[0])));
-	    case CONV_JBOOLEAN:
-		return makeJObj(truth(f.vlr[0]) ? Boolean.TRUE : Boolean.FALSE);
-	    case CONV_JCHAR:
-		return makeJObj(new Character(character(f.vlr[0])));
-	    case CONV_JBYTE:
-		return makeJObj(new Byte((byte)num(f.vlr[0]).intValue()));
-	    case CONV_JSHORT:
-		return makeJObj(new Short((short)num(f.vlr[0]).intValue()));
-	    case CONV_JINT:
-		return makeJObj(new Integer(num(f.vlr[0]).intValue()));
-	    case CONV_JLONG:
-		return makeJObj(new Long(num(f.vlr[0]).longValue()));
-	    case CONV_JFLOAT:
-		return makeJObj(new Float((float)num(f.vlr[0]).doubleValue()));
-	    case CONV_JDOUBLE:
-		return makeJObj(new Double(num(f.vlr[0]).doubleValue()));
-	    case CONV_JSTRING:
-		byte b = 1;
-		java.lang.Integer.toString(b);
-		Value v = f.vlr[0];
-		if (v instanceof Symbol)
-		    return makeJObj(symval(v));
-		else if (v instanceof SchemeString)
-		    return makeJObj(string(v));
-		else
-		    typeError("string or symbol", v);
-	    case CONV_BOOLEAN:
-		return truth(((Boolean)jobj(f.vlr[0])).booleanValue());
-	    case CONV_CHARACTER:
-		return new SchemeCharacter(((Character)jobj(f.vlr[0])).charValue());
-	    case CONV_NUMBER:
-		Object o = jobj(f.vlr[0]);
-		if (o instanceof Byte ||
-		    o instanceof Short ||
-		    o instanceof Integer ||
-		    o instanceof Long)
-		    return Quantity.valueOf(((Number)o).longValue());
-		else if (o instanceof Float ||
-			 o instanceof Double)
-		    return Quantity.valueOf(((Number)o).doubleValue());
-		else if (o instanceof java.math.BigInteger)
-		    return Quantity.valueOf((java.math.BigInteger)o);
-		else if (o instanceof java.math.BigDecimal)
-		    return Quantity.valueOf((java.math.BigDecimal)o);
-		else
-		    typeError("numeric java type", f.vlr[0]);
-	    case CONV_STRING:
-		o = jobj(f.vlr[0]);
-		if (o instanceof String)
-		    return new SchemeString((String)o);
-		else
-		    return new SchemeString(o.toString());
-	    case CONV_SYMBOL:
-		o = jobj(f.vlr[0]);
-		if (o instanceof String)
-		    return Symbol.intern((String)o);
-		else
-		    return Symbol.intern(o.toString());
-	    case CONV_VECTOR:
-		o = jobj(f.vlr[0]);
-		if (o.getClass().isArray()) {
-		    Value[] vals = new Value[Array.getLength(o)];
-		    for (int i=0; i < vals.length; i++) {
-			vals[i] = makeJObj(Array.get(o, i));
-		    }
-		    return new SchemeVector(vals);
-		} else
-		    typeError("java array", f.vlr[0]);
-	    case CONV_LIST:
-		o = jobj(f.vlr[0]);
-		if (o.getClass().isArray()) {
-		    p = EMPTYLIST;
-		    for (int i=Array.getLength(o)-1; i>=0; i--) {
-			p = new Pair(makeJObj(Array.get(o, i)), p);
-		    }
-		    return p;
-		} else
-		    typeError("java array", f.vlr[0]);
+            case JAVA_CLASS_OF:
+                return makeJObj(jobj(f.vlr[0]).getClass());
+            case JAVA_INV_HANDLER:
+                return makeJObj(new SchemeInvocation(f.ctx, proc(f.vlr[0])));
+            case CONV_JBOOLEAN:
+                return makeJObj(truth(f.vlr[0]) ? Boolean.TRUE : Boolean.FALSE);
+            case CONV_JCHAR:
+                return makeJObj(new Character(character(f.vlr[0])));
+            case CONV_JBYTE:
+                return makeJObj(new Byte((byte)num(f.vlr[0]).intValue()));
+            case CONV_JSHORT:
+                return makeJObj(new Short((short)num(f.vlr[0]).intValue()));
+            case CONV_JINT:
+                return makeJObj(new Integer(num(f.vlr[0]).intValue()));
+            case CONV_JLONG:
+                return makeJObj(new Long(num(f.vlr[0]).longValue()));
+            case CONV_JFLOAT:
+                return makeJObj(new Float((float)num(f.vlr[0]).doubleValue()));
+            case CONV_JDOUBLE:
+                return makeJObj(new Double(num(f.vlr[0]).doubleValue()));
+            case CONV_JSTRING:
+                byte b = 1;
+                java.lang.Integer.toString(b);
+                Value v = f.vlr[0];
+                if (v instanceof Symbol)
+                    return makeJObj(symval(v));
+                else if (v instanceof SchemeString)
+                    return makeJObj(string(v));
+                else
+                    typeError(S2JB, "stringorsymbol", v);
+            case CONV_BOOLEAN:
+                return truth(((Boolean)jobj(f.vlr[0])).booleanValue());
+            case CONV_CHARACTER:
+                return new SchemeCharacter(((Character)jobj(f.vlr[0])).charValue());
+            case CONV_NUMBER:
+                Object o = jobj(f.vlr[0]);
+                if (o instanceof Byte ||
+                    o instanceof Short ||
+                    o instanceof Integer ||
+                    o instanceof Long)
+                    return Quantity.valueOf(((Number)o).longValue());
+                else if (o instanceof Float ||
+                         o instanceof Double)
+                    return Quantity.valueOf(((Number)o).doubleValue());
+                else if (o instanceof java.math.BigInteger)
+                    return Quantity.valueOf((java.math.BigInteger)o);
+                else if (o instanceof java.math.BigDecimal)
+                    return Quantity.valueOf((java.math.BigDecimal)o);
+                else
+                    typeError(S2JB, "jnumber", f.vlr[0]);
+            case CONV_STRING:
+                o = jobj(f.vlr[0]);
+                if (o instanceof String)
+                    return new SchemeString((String)o);
+                else
+                    return new SchemeString(o.toString());
+            case CONV_SYMBOL:
+                o = jobj(f.vlr[0]);
+                if (o instanceof String)
+                    return Symbol.intern((String)o);
+                else
+                    return Symbol.intern(o.toString());
+            case CONV_VECTOR:
+                o = jobj(f.vlr[0]);
+                if (o.getClass().isArray()) {
+                    Value[] vals = new Value[Array.getLength(o)];
+                    for (int i=0; i < vals.length; i++) {
+                        vals[i] = makeJObj(Array.get(o, i));
+                    }
+                    return new SchemeVector(vals);
+                } else
+                    typeError(S2JB, "jarray", f.vlr[0]);
+            case CONV_LIST:
+                o = jobj(f.vlr[0]);
+                if (o.getClass().isArray()) {
+                    p = EMPTYLIST;
+                    for (int i=Array.getLength(o)-1; i>=0; i--) {
+                        p = new Pair(makeJObj(Array.get(o, i)), p);
+                    }
+                    return p;
+                } else
+                    typeError(S2JB, "jarray", f.vlr[0]);
             }
-	case 2:
-	    switch(primid) {
+        case 2:
+            switch(primid) {
             case JAVA_SYNC:
                 synchronized(jobj(f.vlr[0])) {
-		    Interpreter i=Context.enter();
-		    try {
-			return i.eval(proc(f.vlr[1]), new Value[0]);
-		    } catch (SchemeException se) {
-			throwNestedPrimException(se);
-		    } finally {
+                    Interpreter i=Context.enter();
+                    try {
+                        return i.eval(proc(f.vlr[1]), new Value[0]);
+                    } catch (SchemeException se) {
+                        throwNestedPrimException(se);
+                    } finally {
                         Context.exit();
                     }
-		}
-		return VOID;
-	    case JAVA_FIELD:
-		try {
-		    return makeJObj(jclass(f.vlr[0]).getField(symval(f.vlr[1])));
-		} catch (NoSuchFieldException e) {
-		    return FALSE;
-		}
-	    case JAVA_DECL_FIELD:
-		try {
-		    return makeJObj(jclass(f.vlr[0]).getDeclaredField(symval(f.vlr[1])));
-		} catch (NoSuchFieldException e) {
-		    return FALSE;
-		}
+                }
+                return VOID;
+            case JAVA_FIELD:
+                try {
+                    return makeJObj(jclass(f.vlr[0]).getField(symval(f.vlr[1])));
+                } catch (NoSuchFieldException e) {
+                    return FALSE;
+                }
+            case JAVA_DECL_FIELD:
+                try {
+                    return makeJObj(jclass(f.vlr[0]).getDeclaredField(symval(f.vlr[1])));
+                } catch (NoSuchFieldException e) {
+                    return FALSE;
+                }
             case JAVA_INSTANCEQ:
                 return truth(fixClass(jclass(f.vlr[0])).isInstance(jobj(f.vlr[1])));
             case JAVA_ASSIGNABLEQ:
                 return truth(fixClass(jclass(f.vlr[0])).isAssignableFrom(fixClass(jclass(f.vlr[1]))));
             case JAVA_ARRAY_CLASS:
                 return makeJObj(makeArrayClass(jclass(f.vlr[0]), num(f.vlr[1]).intValue()));
-	    case JAVA_ARRAY_NEW:
-		Value dims = f.vlr[1];
-		Value[] dimensions;
-		if (dims instanceof Pair) {
-		    dimensions = pairToValues(pair(dims));
-		} else if (dims instanceof SchemeVector) {
-		    dimensions = vec(dims).vals;
-		} else {
-		    dimensions = new Value[]{dims};
-		}
-		int[] intDims = new int[dimensions.length];
-		for (int i=0; i< dimensions.length; i++) {
-		    intDims[i] = num(dimensions[i]).intValue();
-		}
-		return makeJObj(Array.newInstance(jclass(f.vlr[0]), intDims));
-	    case CONV_JARRAY:
-		Value o = f.vlr[0];
-		Value[] vals = null;
-		if (o instanceof Pair)
-		    vals = pairToValues(pair(o));
-		else if (o instanceof SchemeVector)
-		    vals = vec(o).vals;
-		else {
-		    typeError("list or vector", o);
-		}
-		Object res = Array.newInstance(jclass(f.vlr[1]), vals.length);
-		for (int i=0; i< vals.length; i++) {
-		    Array.set(res, i, jobj(vals[i]));
-		}
-		return makeJObj(res);
-	    }
+            case JAVA_ARRAY_NEW:
+                Value dims = f.vlr[1];
+                Value[] dimensions;
+                if (dims instanceof Pair) {
+                    dimensions = pairToValues(pair(dims));
+                } else if (dims instanceof SchemeVector) {
+                    dimensions = vec(dims).vals;
+                } else {
+                    dimensions = new Value[]{dims};
+                }
+                int[] intDims = new int[dimensions.length];
+                for (int i=0; i< dimensions.length; i++) {
+                    intDims[i] = num(dimensions[i]).intValue();
+                }
+                return makeJObj(Array.newInstance(jclass(f.vlr[0]), intDims));
+            case CONV_JARRAY:
+                Value o = f.vlr[0];
+                Value[] vals = null;
+                if (o instanceof Pair)
+                    vals = pairToValues(pair(o));
+                else if (o instanceof SchemeVector)
+                    vals = vec(o).vals;
+                else {
+                    typeError(S2JB, "listorvector", o);
+                }
+                Object res = Array.newInstance(jclass(f.vlr[1]), vals.length);
+                for (int i=0; i< vals.length; i++) {
+                    Array.set(res, i, jobj(vals[i]));
+                }
+                return makeJObj(res);
+            }
         default:
-	    switch(primid) {
-	    case JAVA_CONSTRUCTOR:
-		try {
-		    Class[] paramTypes = new Class[f.vlr.length-1];
-		    for (int i=0; i<f.vlr.length-1; i++) {
-			paramTypes[i] = jclass(f.vlr[i+1]);
-		    }
-		    return makeJObj(jclass(f.vlr[0]).getConstructor(paramTypes));
-		} catch (NoSuchMethodException e) {
-		    return FALSE;
-		}
-	    case JAVA_METHOD:
-		try {
-		    Class[] paramTypes = new Class[f.vlr.length-2];
-		    for (int i=0; i<f.vlr.length-2; i++) {
-			paramTypes[i] = jclass(f.vlr[i+2]);
-		    }
-		    return makeJObj(jclass(f.vlr[0]).getMethod(symval(f.vlr[1]),paramTypes));
-		} catch (NoSuchMethodException e) {
-		    return FALSE;
-		}
-	    case JAVA_DECL_CONSTRUCTOR:
-		try {
-		    Class[] paramTypes = new Class[f.vlr.length-1];
-		    for (int i=0; i<f.vlr.length-1; i++) {
-			paramTypes[i] = jclass(f.vlr[i+1]);
-		    }
-		    return makeJObj(jclass(f.vlr[0]).getDeclaredConstructor(paramTypes));
-		} catch (NoSuchMethodException e) {
-		    return FALSE;
-		}
-	    case JAVA_DECL_METHOD:
-		try {
-		    Class[] paramTypes = new Class[f.vlr.length-2];
-		    for (int i=0; i<f.vlr.length-2; i++) {
-			paramTypes[i] = jclass(f.vlr[i+2]);
-		    }
-		    return makeJObj(jclass(f.vlr[0]).getDeclaredMethod(symval(f.vlr[1]),paramTypes));
-		} catch (NoSuchMethodException e) {
-		    return FALSE;
-		}
-	    case JAVA_PROXY:
-		Class[] interfaces = new Class[f.vlr.length];
-		for (int i=0; i<f.vlr.length; i++) {
-		    interfaces[i] = jclass(f.vlr[i]);
-		}
-		return makeJObj(Proxy.getProxyClass(ClassLoader.getSystemClassLoader(), interfaces));
-	    default:
-		throwArgSizeException();
-	    }
+            switch(primid) {
+            case JAVA_CONSTRUCTOR:
+                try {
+                    Class[] paramTypes = new Class[f.vlr.length-1];
+                    for (int i=0; i<f.vlr.length-1; i++) {
+                        paramTypes[i] = jclass(f.vlr[i+1]);
+                    }
+                    return makeJObj(jclass(f.vlr[0]).getConstructor(paramTypes));
+                } catch (NoSuchMethodException e) {
+                    return FALSE;
+                }
+            case JAVA_METHOD:
+                try {
+                    Class[] paramTypes = new Class[f.vlr.length-2];
+                    for (int i=0; i<f.vlr.length-2; i++) {
+                        paramTypes[i] = jclass(f.vlr[i+2]);
+                    }
+                    return makeJObj(jclass(f.vlr[0]).getMethod(symval(f.vlr[1]),paramTypes));
+                } catch (NoSuchMethodException e) {
+                    return FALSE;
+                }
+            case JAVA_DECL_CONSTRUCTOR:
+                try {
+                    Class[] paramTypes = new Class[f.vlr.length-1];
+                    for (int i=0; i<f.vlr.length-1; i++) {
+                        paramTypes[i] = jclass(f.vlr[i+1]);
+                    }
+                    return makeJObj(jclass(f.vlr[0]).getDeclaredConstructor(paramTypes));
+                } catch (NoSuchMethodException e) {
+                    return FALSE;
+                }
+            case JAVA_DECL_METHOD:
+                try {
+                    Class[] paramTypes = new Class[f.vlr.length-2];
+                    for (int i=0; i<f.vlr.length-2; i++) {
+                        paramTypes[i] = jclass(f.vlr[i+2]);
+                    }
+                    return makeJObj(jclass(f.vlr[0]).getDeclaredMethod(symval(f.vlr[1]),paramTypes));
+                } catch (NoSuchMethodException e) {
+                    return FALSE;
+                }
+            case JAVA_PROXY:
+                Class[] interfaces = new Class[f.vlr.length];
+                for (int i=0; i<f.vlr.length; i++) {
+                    interfaces[i] = jclass(f.vlr[i]);
+                }
+                return makeJObj(Proxy.getProxyClass(ClassLoader.getSystemClassLoader(), interfaces));
+            default:
+                throwArgSizeException();
+            }
         }
-	return VOID;
+        return VOID;
     }
 }
 
