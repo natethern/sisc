@@ -217,7 +217,7 @@
         <include name="slib.scm"/>
         <include name="srfi.scm"/>
         <include name="optional-args.scm"/>
-	<include name="srfi/*.scm"/>
+	<include name="srfi/**"/>
       </fileset>
     </copy>
 
