@@ -328,7 +328,7 @@
   </target>
 
   <target name="docs" depends="javadocs,manual"
-          description="Generate Documentation"/>
+          description="Generate Documentation" unless="lite"/>
 
   <target name="all" depends="sisc-lib,docs"
           description="Build lite edition">
