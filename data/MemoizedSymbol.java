@@ -1,6 +1,7 @@
 package sisc.data;
 
 import java.util.WeakHashMap;
+import java.ref.WeakReference;
 
 public class MemoizedSymbol extends Symbol implements Singleton {
 
@@ -12,10 +13,11 @@ public class MemoizedSymbol extends Symbol implements Singleton {
 
     public static Symbol intern(String str) {
         synchronized(memo) {
-            Symbol s=(Symbol)memo.get(str);
+            WeakReference wr=(WeakReference)memo.get(str);
+            Symbol s=(wr == null ? null : wr.get());
             if (s==null) {
                 s=new MemoizedSymbol(str);
-                memo.put(str, s);
+                memo.put(str, new WeakReference(s));
             }
             return s;
         }
