@@ -34,15 +34,10 @@
            file="${sisc.home}/sisc-opt.jar"/>
      <copy todir="${dist.home}/${deploy.name}/WEB-INF/lib"
            file="../sisc-servlets.jar"/>
+     <copy todir="${dist.home}/${deploy.name}/WEB-INF/lib"
+           file="${sisc.home}/sisc-lib.jar"/>
      <copy todir="${dist.home}/${deploy.name}/WEB-INF"
            file="${sisc.home}/boot/sisc.shp"/>
-     <jar jarfile="${dist.home}/${deploy.name}/WEB-INF/lib/srfi.jar">
-       <fileset dir="${sisc.home}/scheme-src">
-	     <include name="srfi.scm"/>
-	     <include name="optional-args.scm"/>
-         <include name="srfi/**"/>
-       </fileset>
-     </jar>
      <copy todir="${dist.home}/${deploy.name}/scheme">
        <fileset dir="../scheme" includes="*.scm"/>
      </copy>
