@@ -105,9 +105,10 @@
       <emphasis>finished</emphasis>, or
       <emphasis>finished-with-error</emphasis>.  The first two
       states indicate a newly created thread and a running thread,
-      repectively.  The last represent the end stages of a thread, the
-      former indicating a thread that has exited cleanly, the latter
-      exiting with an error.
+      repectively.  The last two represent the end stages of a thread,
+      <emphasis>finished</emphasis> indicating a thread that has
+      exited cleanly, and <emphasis>finished-with-error</emphasis>
+      indicating exit with an error.
     </para>
     <para>
       There are no guarantees that a Scheme thread will ever exit.
@@ -182,7 +183,9 @@
     <para>
       Once a thread-handle is created, the thread is in the ready
       state, and can be started at any time by calling
-      <function>thread/start</function>.
+      <function>thread/start</function>.  At this point one can also
+      set various thread parameters, such as thread priority and
+      daemon status.
     </para>
     <blockquote>
       <para id="func-thread-start">
@@ -202,6 +205,46 @@
             <parameter>thread-handle</parameter>.  The thread must be
             in the ready state.  It is an error to start a thread in
             any other state.
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        <indexterm><primary>thread/daemon!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>thread/daemon!</methodname>
+          <methodparam>
+            <parameter>thread-handle</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>boolean</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Sets the daemon status of a thread.  It is an error to
+            change the status of a thread that is not in the
+            <literal>'ready</literal> state.
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        <indexterm><primary>thread/daemon?</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#t/#f</type>
+          <methodname>thread/daemon?</methodname>
+          <methodparam>
+            <parameter>thread-handle</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Returns <literal>#t</literal> if the given thread is a
+            daemon thread.
           </para>
         </blockquote>
       </para>
