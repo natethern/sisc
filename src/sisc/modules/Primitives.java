@@ -451,6 +451,8 @@ public class Primitives extends IndexedProcedure {
             case COMPACTSTRINGREP:
                 SchemeString.compactRepresentation=truth(vlr[0]);
                 return VOID;
+            case GETPROP:
+                return r.getCtx().toplevel_env.lookup(symbol(vlr[0]));
             default:
                 break SIZESWITCH;
             }
@@ -589,7 +591,8 @@ public class Primitives extends IndexedProcedure {
                 if (vlr[1] instanceof SymbolicEnvironment) {
                     ret = (Value)env(vlr[1]).lookup(symbol(vlr[0]));
                 } else {
-                    ret = (Value)r.lookup(symbol(vlr[0]), symbol(vlr[1]));
+                    ret = (Value)r.getCtx().toplevel_env.getSidecarEnvironment(
+                             symbol(vlr[1])).lookup(symbol(vlr[0]));
                 }
                 return (ret == null) ? FALSE : ret;
             case REMPROP:
@@ -598,6 +601,9 @@ public class Primitives extends IndexedProcedure {
                 } else {
                     r.undefine(symbol(vlr[0]), symbol(vlr[1]));
                 }
+                return VOID;
+            case PUTPROP:
+                r.getCtx().toplevel_env.define(symbol(vlr[0]), vlr[1]);
                 return VOID;
             case SETENVIRONMENT:
                 r.getCtx().defineContextEnv(symbol(vlr[0]), env(vlr[1]));
@@ -612,7 +618,8 @@ public class Primitives extends IndexedProcedure {
                 if (vlr[1] instanceof SymbolicEnvironment) {
                     ret = (Value)env(vlr[1]).lookup(symbol(vlr[0]));
                 } else {
-                    ret = (Value)r.lookup(symbol(vlr[0]), symbol(vlr[1]));
+                    ret = (Value)r.getCtx().toplevel_env.getSidecarEnvironment(
+                          symbol(vlr[1])).lookup(symbol(vlr[0]));
                 }
                 return (ret == null) ? vlr[2] : ret;
             case PUTPROP:
@@ -622,10 +629,10 @@ public class Primitives extends IndexedProcedure {
                 if (vlr[1] instanceof SymbolicEnvironment) {
                     env=(SymbolicEnvironment)vlr[1];
                 } else {
-                    env=r.getContextEnv(symbol(vlr[1]));
+                    env=r.getCtx().toplevel_env.getSidecarEnvironment((Symbol)vlr[1]);
                 }
                 updateName(rhs, lhs);
-                env.define(lhs, rhs);
+                env.define(lhs, rhs);               
                 return VOID;
             case STRINGSET:
                 int index=num(vlr[1]).indexValue();

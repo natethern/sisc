@@ -185,7 +185,7 @@ public class GenerateHeap {
         for (; i<args.length; i++) {
             System.out.println("Expanding and compiling "+args[i]+"...");
             try {
-                r.eval((Procedure)r.lookup(loadSymb, Util.TOPLEVEL),
+                r.eval((Procedure)r.getCtx().toplevel_env.lookup(loadSymb),
                        new Value[] {new SchemeString(args[i])});
             } catch (SchemeException se) {
                 System.err.println("Error during expand: "+se.getMessage());

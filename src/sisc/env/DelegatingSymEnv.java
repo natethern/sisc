@@ -1,6 +1,7 @@
 package sisc.env;
 
 import sisc.data.*;
+
 import java.io.IOException;
 import sisc.io.ValueWriter;
 import sisc.util.ExpressionVisitor;
@@ -33,6 +34,10 @@ public class DelegatingSymEnv extends Value
     
     public SymbolicEnvironment getParent() {
         return getEnv().getParent();
+    }
+    
+    public SymbolicEnvironment getSidecarEnvironment(Symbol env) {
+        return getEnv().getSidecarEnvironment(env);
     }
 
     public sisc.data.Value asValue() {

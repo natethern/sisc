@@ -1631,13 +1631,22 @@
   </sect1>
   <sect1 id="SymbolicEnvironments">
     <title>
-      Symbolic Environments
+      Symbolic Environments and Property Maps
     </title>
     <para>
-      Symbolic environments (sometimes referred to as property lists) 
+      Symbolic environments and property maps 
       provide additional named global environments useful for storing 
       program specific data without exposing it to the general
       purpose top-level environment.
+    </para>
+    <para>
+      A property map is dictionary structure tied
+      to the interaction environment which maps symbolic
+      names to Scheme values.  First-class symbolic environments provide
+      a similar mapping, but can be used
+      as first class values (including as an argument to <function>eval</function>).
+      Symbolic environments are used to implement &SISC;'s global (top level)and
+      report environments.
     </para>
     <sect2 id="AccessingSymbolicEnvironments">
       <title>
@@ -1662,7 +1671,7 @@
                 <parameter>binding-name</parameter>
               </methodparam>
               <methodparam>
-                <parameter>environment-name</parameter>
+                <parameter>plist-name</parameter>
               </methodparam>
               <methodparam choice="opt"> 
                 <parameter>default-value</parameter>
@@ -1690,22 +1699,17 @@
                 in an environment.
               </para>
               <para>
-                In the first form, the environment
-                in which to retrieve the binding is resolved up using a 
-                symbolic name 
-                (<parameter>environment-name</parameter>).  If the
-                environment is not found,
+                In the first form, the the binding is resolved in
+                the interaction-environment's property list named
+                <parameter>plist-name</parameter>, a symbol.  If the
+                environment is not found or the binding doesn't exist,
                 <parameter>default-value</parameter> is returned if
                 provided, otherwise <literal>&num;f</literal> is
                 returned.
-                In the second form, the environment is provided as a 
-                first-class value.
               </para>
               <para>
-                If found, the value is returned.  If not bound,
-                <parameter>default-value</parameter> is returned, or
-                <literal>&num;f</literal> if
-                <parameter>default-value</parameter> is not specified.
+                In the second form, the binding is resolved in a first-class
+                symbolic environment.
               </para>
             </blockquote>
           </para>
@@ -1720,7 +1724,7 @@
                 <parameter>binding-name</parameter>
               </methodparam>
               <methodparam>
-                <parameter>environment-name</parameter>
+                <parameter>plist-name</parameter>
               </methodparam>
               <methodparam>
                 <parameter>value</parameter>
@@ -1744,19 +1748,21 @@
             </methodsynopsis>
             <blockquote>
               <para>
-                Sets the value of a binding named with the symbol <parameter>binding-name</parameter> in a symbolic environment.
+                Sets the value of a binding named with the 
+                symbol <parameter>binding-name</parameter> in a
+                property list or first class symbolic environment.
               </para>
               <para>
-                In the first form, the environment is resolved using a 
+                In the first form, the binding is resolved using a 
                 symbolic name
-                (<parameter>environment-name</parameter>). If the
-                environment does not yet exist, it is created as an 
-                empty environment (as if returned by
-                <function>null-environment</function>).  In the second
-                form, the environment is provided as a first-class
-                value.
+                (<parameter>plist-name</parameter>) in the interaction
+                environment's property lists. If the
+                map does not yet exist, it is created as an 
+                empty map.
               </para>
               <para>
+                In the second form, the binding is resolved in the
+                provided first class symbolic environment.
                 If the binding does not yet exist in the given
                 environment, it is created.  If a binding previously
                 existed, its previous value is discarded.
@@ -1817,67 +1823,6 @@
         in each environment that can use the full &SISC; language but
         cannot see any bindings in other environments.
       </para>
-      <para> 
-        A programmer may also wish to get a named environment created
-        as a side effect of <function>putprop</function>, or to 
-        define or set an existing first-class environment as a named
-        environment.  The functions
-        <function>get-symbolic-environment</function> and
-        <function>set-symbolic-environment!</function> address these
-        needs.
-      </para>
-      <para>
-        <blockquote>
-          <para>
-            <indexterm><primary>get-symbolic-environment</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme" id="get-symbolic-environment">
-              <type>environment</type>
-              <methodname>get-symbolic-environment</methodname>
-              <methodparam>
-                <parameter>environment-name</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Retrieves the symbolic environment named by the symbol
-                <parameter>environment-name</parameter>.  If no such
-                symbolic environment exists with that name,
-                <literal>&num;f</literal> is returned instead.
-              </para>
-            </blockquote>
-          </para>
-          <para>
-            <indexterm><primary>set-symbolic-environment!</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme" id="set-symbolic-environment-bang">
-              <type>undefined</type>
-              <methodname>set-symbolic-environment!</methodname>
-              <methodparam>
-                <parameter>environment-name</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>environment</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Creates or replaces a named symbolic environment.  The
-                name of the new symbolic environment is that of the
-                symbol <parameter>environment-name</parameter>.  The
-                name from then on can be used to identify the
-                first-class environment
-                <parameter>environment</parameter>.  If a previous
-                environment occupied the provided name, it is
-                disassociated from that name and the association is
-                assigned to the passed environment.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
-      </para>                
       <para>
         Finally, &R5RS; states that it is an error to modify the
         contents of a top-level variable that has not yet been created.

@@ -121,5 +121,5 @@
 
 ;;;;;;;;;;;;; Module loading
 
-(if (not (getprop 'LITE '*sisc*))
+(if (not (getprop 'LITE (get-symbolic-environment '*sisc*)))
     (for-each load-module '("sisc.modules.SNative$Index")))

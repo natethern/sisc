@@ -372,7 +372,6 @@
             (lambda (|name_KOArKYUUv|)
               (putprop
                 |name_KOArKYUUv|
-                '*toplevel*
                 (native-library-binding
                   |nl_KOUyO2UUv|
                   |name_KOArKYUUv|)))

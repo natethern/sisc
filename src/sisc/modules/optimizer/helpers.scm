@@ -29,11 +29,11 @@
       (and (pair? e) (= (length e) 2) (eq? (car e) 'quote))))
 
 (define (not-redefined? proc)
-  (memq proc (getprop 'assumptive-procedures '*opt*)))
+  (memq proc (getprop 'assumptive-procedures '*opt* '())))
 
 (define-syntax core-form-not-redefined? 
   (syntax-rules ()
     ((_ proc)
-     (eq? (getprop proc '*sisc-specific*)
-          (getprop proc (interaction-environment))))))
+     (eq? (getprop proc (get-symbolic-environment '*sisc-specific*))
+          (getprop proc)))))
 

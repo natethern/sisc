@@ -380,17 +380,17 @@
 	      (apply values results)))))
   (define dynamic-wind-loader
     (lambda (in body out)
-      (putprop 'call-with-current-continuation '*toplevel* dynwind-call/cc)
-      (putprop 'call/cc '*toplevel* dynwind-call/cc)
-      (putprop 'dynamic-wind '*toplevel* dynamic-wind/impl)
+      (putprop 'call-with-current-continuation dynwind-call/cc)
+      (putprop 'call/cc dynwind-call/cc)
+      (putprop 'dynamic-wind dynamic-wind/impl)
       (dynamic-wind in body out)))
   ;;finally, the install the dynamic-wind hooks
   (set! dynamic-wind dynamic-wind-loader)
   (set! unload-dynamic-wind
     (lambda ()
-      (putprop 'call-with-current-continuation '*toplevel* original-call/cc)
-      (putprop 'call/cc '*toplevel* original-call/cc)
-      (putprop 'dynamic-wind '*toplevel* dynamic-wind-loader))))
+      (putprop 'call-with-current-continuation original-call/cc)
+      (putprop 'call/cc original-call/cc)
+      (putprop 'dynamic-wind dynamic-wind-loader))))
 
 ;;;; "ratize.scm" Convert number to rational number (ported from SLIB)
 
@@ -516,8 +516,8 @@
 (define (expand-file from to . scexpopts)
   (let ([inf (open-source-input-file from)]
         [outf (open-output-file to)])
-    (with-current-url from
-      (lambda ()
+    ;(with-current-url from
+     ; (lambda ()
         (let loop ([e (read-code inf)])
           (or (eof-object? e)
               (begin 
@@ -526,7 +526,7 @@
                                (apply sc-expand e scexpopts))])
                   ;(pretty-print source) (newline)
                   (pretty-print source outf) (newline outf)
-                  (loop (read inf))))))))
+                  (loop (read inf))))));))
     (close-output-port outf)
     (close-input-port inf)))
 

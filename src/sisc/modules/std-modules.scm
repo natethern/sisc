@@ -797,8 +797,6 @@
       convert-pat mapper my-backquote extend-backquote sexp-dispatch))
   (include "match.ss"))
 
-(putprop 'assumptive-procedures '*opt* '())
-
 (module optimizer
     (optimize)
   (import pattern-matching)

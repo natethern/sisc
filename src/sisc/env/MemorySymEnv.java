@@ -15,7 +15,7 @@ public class MemorySymEnv extends Value
     implements SymbolicEnvironment, NamedValue {
 
     protected static final float EXPFACT=1.5F;
-    public Map symbolMap;
+    public Map symbolMap, sidecars;
     public Value[] env;
     public SymbolicEnvironment parent;
     protected int nextFree;
@@ -45,6 +45,7 @@ public class MemorySymEnv extends Value
         env=new Value[1];
         nextFree=0;
         symbolMap=new HashMap(1);
+        sidecars=new HashMap(1);
     }
 
     public Value asValue() {
@@ -69,6 +70,19 @@ public class MemorySymEnv extends Value
         return symbolMap;
     }
 
+    public SymbolicEnvironment getSidecarEnvironment(Symbol name) {
+        synchronized(sidecars) {
+            SymbolicEnvironment sc=(SymbolicEnvironment)sidecars.get(name);
+            if (sc==null) {
+                SymbolicEnvironment p=(parent == null ? 
+                                      (SymbolicEnvironment)null :
+                                      parent.getSidecarEnvironment(name));
+                sidecars.put(name, sc=new MemorySymEnv(p));
+            }
+            return sc;
+        }
+    }
+              
     public void setParent(SymbolicEnvironment e) {
         parent=e;
     }
@@ -161,25 +175,37 @@ public class MemorySymEnv extends Value
 
     public void serialize(Serializer s) throws IOException {
         s.writeInt(symbolMap.size());
+        s.writeInt(sidecars.size());
         for (Iterator i=symbolMap.keySet().iterator(); i.hasNext();) {
             Symbol key=(Symbol)i.next();
             s.writeExpression(key);
             int loc=((Integer)symbolMap.get(key)).intValue();
             s.writeExpression(env[loc]);
         }
+        for (Iterator i=sidecars.keySet().iterator(); i.hasNext();) {
+            Symbol key=(Symbol)i.next();
+            s.writeExpression(key);
+            s.writeSymbolicEnvironment((SymbolicEnvironment)sidecars.get(key));
+        }
         s.writeSymbolicEnvironment(parent);
     }
 
     public void deserialize(Deserializer s) throws IOException {
-        int size=s.readInt();
-        env=new Value[size];
-        symbolMap=new HashMap();
-        for (int i=0; i<size; i++) {
+        int smsize=s.readInt();
+        int scsize=s.readInt();
+        env=new Value[smsize];
+        symbolMap=new HashMap(smsize);
+        sidecars=new HashMap(scsize);
+        for (int i=0; i<smsize; i++) {
             Symbol id=(Symbol)s.readExpression();
             env[i]=(Value)s.readExpression();
             symbolMap.put(id, new Integer(i));
         }
-        nextFree=size;
+        for (int i=0; i<scsize; i++) {
+            Symbol key=(Symbol)s.readExpression();
+            sidecars.put(key, s.readSymbolicEnvironment());
+        }
+        nextFree=smsize;
         
         parent=s.readSymbolicEnvironment();
     }
@@ -191,6 +217,11 @@ public class MemorySymEnv extends Value
             if (!v.visit(key)) return false;
             int loc=((Integer)symbolMap.get(key)).intValue();
             if (!v.visit(env[loc])) return false;
+        }
+        for (Iterator i=sidecars.keySet().iterator(); i.hasNext();) {
+            Symbol key=(Symbol)i.next();
+            if (!v.visit(key) || 
+                !v.visit((SymbolicEnvironment)sidecars.get(key))) return false;
         }
         return v.visit(parent);
     }

@@ -10,18 +10,21 @@ public interface SymbolicEnvironment extends ExpressionVisitee {
 
     void setParent(SymbolicEnvironment e);
     SymbolicEnvironment getParent();
-
+    SymbolicEnvironment getSidecarEnvironment(Symbol name);
+    
     sisc.data.Value asValue();
 
     java.util.Iterator keys();
     java.util.Set bindingKeys();
     java.util.Map getSymbolMap();
+    
     void set(int envLoc, Value v);
     int define(Symbol s, Value v);
+    void undefine(Symbol s);
+    
     int getLoc(Symbol s);
     Value lookup(Symbol s);
     Value lookup(int pi);
-    void undefine(Symbol s);
 
     void serialize(sisc.ser.Serializer s) throws java.io.IOException;
     void deserialize(sisc.ser.Deserializer s) throws java.io.IOException;

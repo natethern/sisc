@@ -264,7 +264,7 @@
   (let* ([nl (load-native-library str)]
 	 [binding-names (native-library-binding-names nl)])
     (for-each (lambda (name)
-		(putprop name '*toplevel* (native-library-binding nl name)))
+		(putprop name (native-library-binding nl name)))
 	      binding-names)))
     
 ;;;;;;;;;;;;; Optimized functions
