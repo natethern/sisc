@@ -70,6 +70,15 @@ public class AssociativeEnvironment extends NamedValue {
         symbolMap=new HashMap(50);
     }
 
+    protected void expand(int newSize) {
+        synchronized(symbolMap) {
+            Value[] newenv=new Value[newSize];
+            System.arraycopy(env, 0, newenv, 0, env.length);
+            nextFree=newSize;
+            env=newenv;
+        }
+    }
+
     protected void expand() {
         synchronized(symbolMap) {
             Value[] newenv=new Value[(int)(env.length*EXPFACT)];
@@ -129,6 +138,8 @@ public class AssociativeEnvironment extends NamedValue {
                 synchronized(symbolMap) {
                     symbolMap.put(s, i=new Integer(pi));
                 }
+                if (pi>env.length) 
+                    expand(parent.nextFree);
                 env[pi]=parent.lookup(pi);
             }
         }
