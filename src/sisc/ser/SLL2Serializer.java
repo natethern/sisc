@@ -21,13 +21,13 @@ public abstract class SLL2Serializer extends SerializerImpl {
         offsets=new HashMap();
     }
    
-   /**
-    * Required call which actually writes out the bytes of an expression
-    * 
-    * @param e
-    * @param flush
-    * @throws IOException
-    */     
+    /**
+     * Required call which actually writes out the bytes of an expression
+     * 
+     * @param e
+     * @param flush
+     * @throws IOException
+     */     
     protected abstract void writeExpression(Expression e, boolean flush) throws IOException;
    
     /**
@@ -138,19 +138,16 @@ public abstract class SLL2Serializer extends SerializerImpl {
 
     
     public void close() throws IOException {
-	flush();
-	cos.close();
+        flush();
+        cos.close();
     }
 
     public void flush() throws IOException {
-	if (serQueue.size() > 0) {
-	    serLoop(0);
-	}
+        if (serQueue.size() > 0) {
+            serLoop(0);
+        }
     }
 
-    /**
-         * @param posi
-         */
     protected void writeSeenEntryPoint(int posi) throws IOException {
         writeInt(posi+16);
     }
@@ -171,11 +168,6 @@ public abstract class SLL2Serializer extends SerializerImpl {
         writeInt(0);
     }
 
-    /**
-         * @param e
-         * @param end
-         * @return
-         */
     protected boolean writeExpressionSerialization(Expression e, SerJobEnd end, boolean flush) throws IOException {
         writeClass(e.getClass());
         if (e instanceof Singleton) {
