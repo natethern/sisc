@@ -54,21 +54,9 @@
             (lambda (exp writer)
               ;;eval
               (let ([val (eval exp)])
-                (cond [(void? val) (repl/read writer)]
-                      [(circular? val)
-                       (begin
-                         (if (print-shared)
-                             (write val)
-                             (display "{Refusing to print non-terminating structure}"))
-                         (newline)
-                         (repl/read writer))]
-                      [else 
-                       (begin 
-                         ;;print
-                         (writer val)
-                         (newline)
-                         ;;loop
-                         (repl/read writer))])))]
+                (if (not (void? val))
+                    (begin (writer val) (newline)))
+                (repl/read writer)))]
            [repl/read
             (lambda (writer)
               (display (format "#;~a> " (let ((len (- (length (_exit-handler))
@@ -106,9 +94,17 @@
                   ((current-default-error-handler) m e)
                   (loop))
                 (lambda ()
-                  (repl/read (if (getprop 'pretty-print '*toplevel*)
-                                 pretty-print
-                                 write))
+                  (repl/read
+                   (lambda (v)
+                     (if (and (getprop 'pretty-print '*toplevel*)
+                              (not (circular? v)))
+                         (pretty-print v)
+                         ;;dynamic wind would be better here, but
+                         ;;we don't want to use it in core code
+                         (let ([ps (print-shared)])
+                           (print-shared #t)
+                           (write v)
+                           (print-shared ps)))))
                   (void)))))))
         (if ((current-exit-handler))
             (void)
