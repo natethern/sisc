@@ -13,7 +13,7 @@ import sisc.util.*;
 
 public class ComplexPrimitives extends IndexedProcedure implements Primitives {
 
-    final static String GENSYM_MAGIC_PREFIX = "%%gensym_";
+    final static String GENSYM_MAGIC_PREFIX = "%%_";
 
     public static class Index extends IndexedLibraryAdapter {
         
