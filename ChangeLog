@@ -1,3 +1,9 @@
+2005-02-19  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Made the default serialization for Expressions to throw
+	  an error.  This will trickle down to non-serializable expressions
+	  like threads, I/O ports, etc.
+	  
 2005-02-14  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed a bug in syntax-object->datum and hence define-macro. See
