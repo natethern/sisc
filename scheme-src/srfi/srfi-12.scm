@@ -1,4 +1,7 @@
-(load-module "sisc.modules.SRFI12")
+;; SRFI-12
+;;
+;;This isn't fully compliant yet because internal exceptions do not
+;;raise conditions as demanded by this SRFI's spec.
 
 (define (current-exception-handler)
   (let ([cfc (current-failure-continuation)])
@@ -61,9 +64,6 @@
 
 (define (signal exn)
   ((current-exception-handler) exn))
-
-(add-feature 'srfi-12)
-
 
 
   

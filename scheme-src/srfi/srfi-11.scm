@@ -1,7 +1,5 @@
 ;;;; srfi-11.scm --- SRFI-11 procedures for SISC
 
-(add-feature 'srfi-11)
-
 (define-syntax let-values
   (syntax-rules ()
     ((let-values (?binding ...) ?body0 ?body1 ...)
@@ -35,5 +33,5 @@
     
     ((let*-values (?binding0 ?binding1 ...) ?body0 ?body1 ...)
      (let-values (?binding0)
-		 (let*-values (?binding1 ...) ?body0 ?body1 ...))))))
+		 (let*-values (?binding1 ...) ?body0 ?body1 ...)))))
 

@@ -48,7 +48,7 @@
 
 (define record-marker (list 'record-marker))
 
-(define real-vector? vector?)
+;(define real-vector? vector?)
 
 (define (vector? x)
   (and (real-vector? x)
@@ -59,11 +59,11 @@
 ; This won't work if ENV is the interaction environment and someone has
 ; redefined LAMBDA there.
 
-(define eval
-  (let ((real-eval eval))
-    (lambda (exp . env)
-      ((real-eval `(lambda (vector?) ,exp))
-       vector?))))
+;(define eval
+;  (let ((real-eval eval))
+;    (lambda (exp . env)
+;      ((real-eval `(lambda (vector?) ,exp))
+;       vector?))))
 
 ; Definitions of the record procedures.
 
@@ -115,9 +115,9 @@
 ; As it is, we need to define everything by hand.
 
 (define :record-type (make-record 3))
-(record-set! :record-type 0 :record-type); Its type is itself.
-(record-set! :record-type 1 ':record-type)
-(record-set! :record-type 2 '(name field-tags))
+;(record-set! :record-type 0 :record-type); Its type is itself.
+;(record-set! :record-type 1 ':record-type)
+;(record-set! :record-type 2 '(name field-tags))
 
 ; Now that :record-type exists we can define a procedure for making more
 ; record types.
@@ -195,4 +195,3 @@
           (record-set! thing index value)
           (error "modifier applied to bad value" type tag thing)))))
 
-(add-feature 'srfi-9)

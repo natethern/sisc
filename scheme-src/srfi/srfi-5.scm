@@ -1,6 +1,5 @@
 ;; SRFI-5
 
-(module srfi-5 (let)
 (define-syntax let
   (syntax-rules ()
 
@@ -44,6 +43,4 @@
      (let 0 name () () () (body ...) (bindings ...)))
     ;; Non-signature-style named let
     ((let name bindings body ...)
-     (let 0 name () () () (body ...) bindings)))))
-
-(add-feature 'srfi-5)
+     (let 0 name () () () (body ...) bindings))))

@@ -23,5 +23,3 @@
     ((receive formals expression body ...)
      (call-with-values (lambda () expression)
        (lambda formals body ...)))))
-
-(add-feature 'srfi-8)

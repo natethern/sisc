@@ -20,5 +20,3 @@
               more ...)
      (begin (cond-expand (requirement (program stuff ...)) ...)
             (program more ...)))))
-
-(add-feature 'srfi-7)

@@ -1,7 +1,14 @@
+2002-02-16  Matthias Radestock  <matthias@sorted.org>
+
+	* Defined modules for SRFIs 0,1,2,5,6,7,8,9,11,12,13,14,16,23,24.
+
+	* Added the DEFINE-ALIAS, FROM, and IMPORT* forms as defined in
+	  Chez Scheme.
+
 2002-02-16  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed two bugs in SNative's append.  First is that the last 
-	  (in this case second) argument to append can be any object.  Second
+	  (in this case second) argument to append can be any object. Second
 	  is that that R5RS mandates that everything *but* the last is
 	  newly allocated.
 	
