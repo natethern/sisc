@@ -481,9 +481,15 @@
 ;; A SISC Specific modification, generate-module-id deliberately does not
 ;; create a unique id, but rather one based on the module-id, so that 
 ;; code dependent on a module won't depend on a specific compilation of 
-;; that module
-(define (generate-module-id module-id id)
-  (string->symbol (format "_~a_ ~a" module-id id)))
+;; that module.
+(define (generate-module-id id1 . id2)
+  (or (and id1
+           (string->symbol 
+            (if (and (not (null? id2))
+                     (car id2))
+                (format "@~a::~a" id1 (car id2))
+                (format "@~a" id1))))
+      (generate-id id)))
 
 ;  (let ((digits "0123456789abcdefghijklmnopqrstuvwxyz"))
 ;    (let ((base (string-length digits)) (session-key "_"))
@@ -1499,8 +1505,7 @@
 
 (define chi-top-module
   (lambda (e r ribcage w s ctem rtem id exports forms)
-    (let ((fexports (flatten-exports exports))
-          (module-id (if id (id-sym-name id) (gensym-hook))))
+    (let ((fexports (flatten-exports exports)))
       (chi-external ribcage (source-wrap e w s)
         (map (lambda (d) (cons r d)) forms) r exports fexports ctem
         (lambda (bindings inits)
@@ -1541,7 +1546,7 @@
                                 (ct-eval/residualize ctem
                                   (lambda ()
                                     (let ((n (if id (id-sym-name id) #f)))
-                                      (let* ((token (generate-id n))
+                                      (let* ((token (generate-module-id n))
                                              (b (build-data no-source
                                                   (make-binding 'module
                                                     (make-resolved-interface exports token)))))
@@ -1553,7 +1558,7 @@
                                                     (make-syntax-object n
                                                       (make-wrap marks
                                                         (list (make-ribcage (vector n)
-                                                                (vector marks) (vector (generate-id n))))))))
+                                                                (vector marks) (vector (generate-module-id n))))))))
                                               b)
                                             (let ((n (generate-id 'tmp)))
                                               (build-sequence no-source
@@ -1593,7 +1598,8 @@
                                (cons (module-binding-val b) des))))
                           ((define-syntax-form module-form) (partition (cdr bs) dvs des))
                           (else (error 'sc-expand-internal "unexpected module binding type"))))))
-                (let ((id (car fexports)) (fexports (cdr fexports)))
+                (let ((module-id (and id (id-sym-name id)))
+		      (id (car fexports)) (fexports (cdr fexports)))
                   (define pluck-binding
                     (lambda (id bs succ fail)
                       (let loop ((bs bs) (new-bs '()))
