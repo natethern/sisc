@@ -57,7 +57,7 @@
 (define (initialize)
   (set! union-state-entry*
     (generic-modify-state-entry*
-     (lambda (entry value*)
+    (lambda (entry value*)
        (union value* entry))))
   (set! union-state-entry
     (generic-modify-state-entry 

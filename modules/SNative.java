@@ -24,7 +24,7 @@ public class SNative extends ModuleAdapter {
     static long symid=0;
 
     public SNative() {
-        define("append2", APPEND);
+        define("append", APPEND);
         define("assq", ASSQ);
         define("assoc", ASSOC);
         define("assv", ASSV);
@@ -74,6 +74,34 @@ public class SNative extends ModuleAdapter {
                 f.vlr = null;
                 return res;
             }
+        case APPEND:
+            switch (f.vlr.length) {
+            case 0: return EMPTYLIST;
+            case 1: return pair(f.vlr[0]);
+            default:
+                Pair head_pair=null, tmp_pair, current_pair=null;
+                
+                int x=0;
+                do {
+                    Pair working_pair = pair(f.vlr[x]);
+                    while (working_pair != EMPTYLIST) {
+                        if (current_pair == null) {
+                            head_pair=current_pair=new Pair(working_pair.car, 
+                                                            null);
+                        } else {
+                            tmp_pair=new Pair(working_pair.car, EMPTYLIST);
+                            current_pair.cdr=tmp_pair;
+                            current_pair=tmp_pair;
+                        }
+                        working_pair=(Pair)working_pair.cdr;
+                    }
+                } while (((++x) + 1) < f.vlr.length);
+                if (head_pair == null)
+                    return f.vlr[x];
+                else 
+                    current_pair.cdr=f.vlr[x];
+                return head_pair;
+            }
         default:
             switch(f.vlr.length) {
             case 0:
@@ -119,23 +147,8 @@ public class SNative extends ModuleAdapter {
                 }
             case 2:
                 switch(primid) {
-                case APPEND:
-                    Pair p1=pair(f.vlr[0]);
-                    Value v=f.vlr[1];
-                    if (p1==EMPTYLIST)
-                        return v;
-                    Pair p3=list(p1.car);
-                    p1=(Pair)p1.cdr;
-                    Pair p4=p3;
-                    while (p1!=EMPTYLIST) {
-                        p3=(Pair)(p3.cdr=new Pair());
-                        p3.car=p1.car;
-                        p1=(Pair)p1.cdr;
-                    }
-                    p3.cdr=v;
-                    return p4;
                 case LISTREF:
-                    p1=pair(f.vlr[0]);
+                    Pair p1=pair(f.vlr[0]);
                     for (int l=num(f.vlr[1]).intValue(); l>0; l--) {
                         p1=(Pair)p1.cdr;
                     }

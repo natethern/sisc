@@ -4,14 +4,11 @@
                      (union-state-entry*
                       state
                       'vars
-                      (match formals
-                        ((,formal* ... . ,lastf)
-                         (guard (symbol? lastf))
-                         `(,lastf ,@formal*))
-                        ((,formal* ...)
-                         formal*)
-                        (,formal
-                         (list formal)))))])
+                      (cond [(list? formals)
+                             formals]
+                            [(pair? formals)
+                             (make-proper formals)]
+                            [else (list formals)])))])
     (values `(lambda ,formals ,rv) state)))
 
 ;;Constant Propogation (always safe)
@@ -61,10 +58,13 @@
                    (cp-helper (cdr x) (cdr y) acc)]
                   [else 
                     (if rec
-                        (let vloop ((v acc))
-                          (unless (null? v) 
-                            (if (eq? (cdr v) cx)
-                                (set-cdr! v cy)))))
+                        (begin
+                          (let vloop ((v acc))
+                            (unless (null? v) 
+                              (if (eq? (cdr v) cx)
+                                  (set-cdr! v cy))))
+                          (set! nf (cons cx nf))
+                          (set! nv (cons cy nv))))
                     (cp-helper (cdr x)
                                (cdr y) 
                                (cons (cons cx cy) acc))]))))
@@ -77,18 +77,19 @@
     (let ([state (if (null? cpc)
                      state
                      (union-state-entry* state 'constant-prop cpc))])
-      (let-values ([(nv fstate*)
-                    (let ([x (map (lambda (e)
-                                    (let-values ([(rv state) (opt e state)])
-                                      (cons rv state)))
-                                  nvo)])
-                      (values (map car x) (map cdr x)))])
-        (if (= (length nv) (length values*))
-            (values nf nv state)
-            (opt:letrec-helper
-             nf nv (merge-states 
-                    state 
-                    (apply merge-states fstate*))))))))
+;      (let-values ([(nv fstate*)
+;                    (let ([x (map (lambda (e)
+;                                    (let-values ([(rv state) (opt e state)])
+;                                      (cons rv state)))
+;                                  nvo)])
+;                      (values (map car x) (map cdr x)))])
+;        (if (= (length nv) (length values*))
+            (values nf nvo state)
+;            (opt:letrec-helper
+;             nf nv (merge-states 
+;                    state 
+;                    (apply merge-states fstate*)))))
+)))
 
 (define (opt:letrec formals values* body state)
   (let-values ([(nf nv state) (opt:letrec-helper formals values* state)])
@@ -151,30 +152,35 @@
     (,other (values `(if ,other ,conseq ,altern) (new-state)))))
 
 ;; Applications and constant folding (possibly unsafe)
-(define (opt:application rator rands state)
-  (match rator
-    (not
-     (guard (and (not-redefined? 'not)
-                 (= (length rands) 1)))
-     (values `(if ,@rands '#f '#t) '((new-assumptions not))))
-    (,x
-     (guard (and (symbol? x)
-                 (not-redefined? x)
-                 (andmap immediate? rands)))
-     (values `',(eval `("noexpand" (,x ,@rands)))
-             `((new-assumptions ,x))))
-    ((lambda () ,E)
-     (values E (new-state)))
-    (,else
-      (values `(,else ,@rands) (new-state)))))
+(define opt:application 
+  (lambda (rator rands state)
+    (cond [(and (eq? rator 'not)
+                (not-redefined? 'not)
+                (= (length rands) 1))
+           
+           (values `(if ,@rands '#f '#t) '((new-assumptions not)))]
+          [(and (symbol? rator)
+                (not-redefined? rator)
+                (andmap immediate? rands))
+           (values `',(eval `("noexpand" (,rator ,@rands)))
+                   `((new-assumptions ,rator)))]
+          [(and (pair? rator)
+                (eq? (car rator) 'lambda)
+                (pair? (cdr rator))
+                (null? (cadr rator))
+                (pair? (cddr rator))
+                (null? (cdddr rator)))
+           (values E (new-state))]
+          [else 
+            (values `(,rator ,@rands) (new-state))))))
 
 ;; begin flattening, constant elimination, and collapse
 (define (mb-helper exp1 . exps*)
   (if (null? exps*)
-      (match exp1
-        ((begin ,exps* ...)
-         (apply mb-helper exps*))
-        (,other (list other)))
+      (if (and (pair? exp1)
+               (eq? (car exp1) 'begin))
+          (apply mb-helper (cdr exp1))
+          (list exp1))
       (match exp1
         ;; Eliminate constants in command context
         ((quote ,x) 

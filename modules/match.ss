@@ -36,19 +36,19 @@
   (if (zero? n) '()
       (cons v (make-list (- n 1) v))))
 
-;(module ((match+ match-help match-help1 clause-body let-values**
-;           guard-body convert-pat mapper my-backquote extend-backquote
-;           sexp-dispatch)
- ;        (trace-match+ match-help match-help1 clause-body let-values**
- ;          guard-body convert-pat mapper my-backquote extend-backquote
-  ;         sexp-dispatch)
-   ;      (match match-help match-help1 clause-body let-values**
-    ;       guard-body convert-pat mapper my-backquote extend-backquote
-     ;      sexp-dispatch)
-      ;   (trace-match match-help match-help1 clause-body let-values**
-       ;    guard-body convert-pat mapper my-backquote extend-backquote
-        ;   sexp-dispatch))
-#;(import scheme)
+;(module match ((match+ match-help match-help1 clause-body let-values**
+;                guard-body convert-pat mapper my-backquote extend-backquote
+;                sexp-dispatch)
+;               (trace-match+ match-help match-help1 clause-body let-values**
+;                guard-body convert-pat mapper my-backquote extend-backquote
+;                sexp-dispatch)
+;               (match match-help match-help1 clause-body let-values**
+;                guard-body convert-pat mapper my-backquote extend-backquote
+;                sexp-dispatch)
+;               (trace-match match-help match-help1 clause-body let-values**
+;                guard-body convert-pat mapper my-backquote extend-backquote
+;                sexp-dispatch))
+ ;(import scheme)
 
 (define-syntax match+
   (lambda (x)
@@ -458,94 +458,85 @@
 (define sexp-dispatch
   (lambda (obj pat);; #f or list of vars
     (letcc escape
-      (let ((fail (lambda () (escape #f))))
-        (let f ((pat pat) (obj obj) (vals '()))
-          (cond
-            ((eq? pat 'any)
-             (cons obj vals))
-            ((eq? pat 'each-any)
-             ;; handle infinities
-             (case (classify-list obj)
-               ((proper infinite) (cons obj vals))
-               ((improper) (fail))))
-            ((pair? pat)
+      (let f ((pat pat) (obj obj) (vals '()))
+        (cond
+          ((eq? pat 'any)
+           (cons obj vals))
+          ((eq? pat 'each-any)
+           ;; handle infinities
+           (case (classify-list obj)
+             ((proper infinite) (cons obj vals))
+             ((improper) (escape #f))))
+          ((pair? pat)
              (if (pair? obj)
                  (f (car pat) (car obj) (f (cdr pat) (cdr obj) vals))
-                 (fail)))
-            ((vector? pat)
-             (case (vector-ref pat 0)
-               ((atom)
-                (let ((a (vector-ref pat 1)))
-                  (if (eqv? obj a)
-                      vals
-                      (fail))))
-	       ((vector)
-		(if (vector? obj)
-		    (let ((vec-pat (vector-ref pat 1)))
-		      (f vec-pat (vector->list obj) vals))
-		    (fail)))
-               ((each)
-                ;; if infinite, copy the list as flat, then do the matching,
-                ;; then do some set-cdrs. 
-                (let ((each-pat (vector-ref pat 1))
-                      (each-size (vector-ref pat 2)))
-                  (case (classify-list obj)
-                    ((improper) (fail))
-                    ((infinite)
-                     (let ((each-vals (f pat (ilist-copy-flat obj) '())))
-                       (for-each (lambda (x) (set-cdr! (last-pair x) x))
-                         each-vals)
-                       (append each-vals vals)))
-                    ((proper)
-                     (append
-                       (let g ((obj obj))
-                         (if (null? obj)
-                             (make-list each-size '())
-                             (let ((hd-vals (f each-pat (car obj) '()))
-                                   (tl-vals (g (cdr obj))))
-                               (map cons hd-vals tl-vals))))
-                       vals)))))
-               ((tail-each)
-                (let ((each-pat (vector-ref pat 1))
-                      (each-size (vector-ref pat 2))
-                      (revtail-pat (vector-ref pat 3))
-                      (revtail-tail-pat (vector-ref pat 4)))
-                  (when (eq? (classify-list obj) 'infinite) (fail))
-                  (with-values
-                      (let g ((obj obj))
-                        ;; in-tail?, vals, revtail-left/ls
-                        (cond
-                          ((pair? obj)
-                           (with-values (g (cdr obj))
-                             (lambda (in-tail? vals tail-left/ls)
-                               (if in-tail?
-                                   (if (null? tail-left/ls)
-                                       (values #f vals (list (car obj)))
-                                       (values #t (f (car tail-left/ls)
-                                                    (car obj)
-                                                    vals)
-                                               (cdr tail-left/ls)))
-                                   (values #f vals
-                                           (cons (car obj) tail-left/ls))))))
-                          (else
-                            (values #t
-                                    (f revtail-tail-pat obj '())
-                                    revtail-pat))))
-                    (lambda (in-tail? vals tail-left/ls)
-                      (if in-tail?
-                          (if (null? tail-left/ls)
-                              (append (make-list each-size '())
-                                vals)
-                              (fail))
-                          (f each-pat tail-left/ls vals))))))))
-            (else
-              (if (eqv? obj pat)
+                 (escape #f)))
+          ((vector? pat)
+           (case (vector-ref pat 0)
+             ((atom)
+              (if (eqv? obj (vector-ref pat 1))
                   vals
-                  (fail)))))))))
+                  (escape #f)))
+             ((vector)
+              (if (vector? obj)
+                  (f (vector-ref pat 1) (vector->list obj) vals)
+                  (escape #f)))
+             ((each)
+              ;; if infinite, copy the list as flat, then do the matching,
+              ;; then do some set-cdrs. 
+              (case (classify-list obj)
+                ((improper) (escape #f))
+                ((infinite)
+                 (let ((each-vals (f pat (ilist-copy-flat obj) '())))
+                   (for-each (lambda (x) (set-cdr! (last-pair x) x))
+                             each-vals)
+                   (append each-vals vals)))
+                ((proper)
+                 (append
+                  (let g ((obj obj))
+                    (if (null? obj)
+                        (make-list (vector-ref pat 2) '())
+                        (map cons 
+                             (f (vector-ref pat 1) (car obj) '())
+                             (g (cdr obj)))))
+                  vals))))
+             ((tail-each)
+              (when (eq? (classify-list obj) 'infinite) (escape #f))
+              (with-values
+                  (let g ((obj obj))
+                    ;; in-tail?, vals, revtail-left/ls
+                    (cond
+                      ((pair? obj)
+                       (with-values (g (cdr obj))
+                         (lambda (in-tail? vals tail-left/ls)
+                           (if in-tail?
+                               (if (null? tail-left/ls)
+                                   (values #f vals (list (car obj)))
+                                   (values #t (f (car tail-left/ls)
+                                                 (car obj)
+                                                 vals)
+                                           (cdr tail-left/ls)))
+                               (values #f vals
+                                       (cons (car obj) tail-left/ls))))))
+                      (else
+                        (values #t
+                                (f (vector-ref pat 4) obj '())
+                                (vector-ref pat 3)))))
+                (lambda (in-tail? vals tail-left/ls)
+                  (if in-tail?
+                      (if (null? tail-left/ls)
+                          (append (make-list (vector-ref pat 2) '())
+                                  vals)
+                          (escape #f))
+                      (f (vector-ref pat 1) tail-left/ls vals)))))))
+          (else
+            (if (eqv? obj pat)
+                vals
+                (escape #f))))))))
 ;)
 
 
-; #!eof
+#!eof
 
 ;;; examples of passing along threaded information.
 

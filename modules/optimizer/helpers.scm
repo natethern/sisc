@@ -1,5 +1,11 @@
 ; Helper functions
 
+(define (make-proper p)
+  (cond [(null? p) '()]
+        [(not (pair? p)) (list p)]
+        [else (cons (car p) (make-proper (cdr p)))]))
+        
+      
 (define (union-2 ls1 ls2)
   (cond [(null? ls1) ls2]
         [(memq (car ls1) ls2)
