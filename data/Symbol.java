@@ -46,19 +46,15 @@ public class Symbol extends Value implements Singleton {
         return new Symbol(str);
     }
 
-    public static Symbol intern(String str) {
-	Symbol s;
-	s=(Symbol)memo.get(str);
+    public synchronized static Symbol intern(String str)
+    {
+	Symbol s = (Symbol)memo.get(str);
 	if (s==null) {
-	    synchronized(memo) {
-		s=(Symbol)memo.get(str);
-		if (s==null) {
-		    s=new Symbol(str);
-		    memo.put(str, s);
-		}
-	    }
-	}
-	return s;
+            s=new Symbol(str);
+            memo.put(str, s);
+        }
+
+        return s;
     }
 
     public static Symbol get(String str) {
