@@ -21,8 +21,6 @@
               (newline)
               (compiled))))))))
 
-(define annotation? annotated?)
-
 (putprop 'trace-depth '*sisc* -1)
 
 (define-syntax trace-lambda

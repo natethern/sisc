@@ -185,6 +185,7 @@ public class SDebug extends ModuleAdapter {
             switch(primid) {
 	    case SETANNOTATION:
                 f.vlr[0].setAnnotation(symbol(f.vlr[1]), f.vlr[2]);
+                return VOID;
             default:
                 throwArgSizeException();
             }

@@ -133,8 +133,7 @@
       <arg value="${schemedir}/init2.scm"/>
       <arg value="${schemedir}/pp.scm"/>
       <arg value="${schemedir}/repl.scm"/>
-      <arg value="${schemedir}/j2s.scm"/>
-<!--      <arg value="${schemedir}/debug.scm"/>-->
+      <arg value="${schemedir}/debug.scm"/>
     </java>
   </target>
 
