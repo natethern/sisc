@@ -1,3 +1,8 @@
+2004-10-15  Scott G. Miller   <scott@sgmiller.org>
+
+	* Created a dedicated flag for marking call frames as captured.  
+	  Previously, vlk was overloaded, causing rare continuation bugs.
+	  
 2004-10-14  Scott G. Miller   <scott@sgmiller.org>
 
 	* Fixed a bug in REPL that was passing the wrong array type to 

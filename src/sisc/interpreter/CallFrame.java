@@ -11,7 +11,7 @@ public class CallFrame extends Procedure {
 
     public Expression            nxp;
     public Value[]               vlr, lcl, env;
-    public boolean               vlk, cap[];
+    public boolean               flk=false, vlk, cap[];
     public CallFrame              fk, parent;
 
     public CallFrame(Expression n, Value[] v,
@@ -57,8 +57,8 @@ public class CallFrame extends Procedure {
         CallFrame w=this;
         boolean lastWasLocked=false;
         do {
-            lastWasLocked=w.vlk;
-            w.vlk=true;
+            lastWasLocked=w.flk;
+            w.vlk=w.flk=true;
             if (w.nxp!=null)
                 w.nxp.setCaptured(r, w);
             w=w.parent;
