@@ -47,7 +47,7 @@ public class LetrecEval extends Expression {
 
     public void eval(Interpreter r) throws ContinuationException {
         r.nxp=body;
-        r.env.vals=r.vlr;
+        System.arraycopy(r.vlr, 0, r.env.vals, 0, r.vlr.length);
     }
 
     public Value express() {
