@@ -2,6 +2,8 @@
 
 	* Added native support for srfi-9 records and |define-struct|.
 
+	* Fixed a major performance problem in records implementation.
+
 2003-05-11  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed handling of thunks returning multiple values in

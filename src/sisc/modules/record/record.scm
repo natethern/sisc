@@ -11,9 +11,12 @@
      (begin
        (define type (make-record-type 'type '(field-tag ...)))
        (define (constructor . args)
-         (apply (record-constructor type '(constructor-tag ...)) args))
+         (set! constructor
+           (record-constructor type '(constructor-tag ...)))
+         (apply constructor args))
        (define (predicate thing)
-         ((record-predicate type) thing))
+         (set! predicate (record-predicate type))
+         (predicate thing))
        (define-record-field type field-tag accessor . more)
        ...))))
 
@@ -24,13 +27,16 @@
   (syntax-rules ()
     ((define-record-field type field-tag accessor)
      (define (accessor thing)
-       ((record-accessor type 'field-tag) thing)))
+       (set! accessor (record-accessor type 'field-tag))
+       (accessor thing)))
     ((define-record-field type field-tag accessor modifier)
      (begin
        (define (accessor thing)
-         ((record-accessor type 'field-tag) thing))
+         (set! accessor (record-accessor type 'field-tag))
+         (accessor thing))
        (define (modifier thing value)
-         ((record-modifier type 'field-tag) thing value))))))
+         (set! modifier (record-modifier type 'field-tag))
+         (modifier thing value))))))
 
 ; We define the following procedures:
 ; 
@@ -100,25 +106,19 @@
 
 (define (record-predicate type)
   (lambda (thing)
-    (and (record? thing)
-         (eq? (record-type thing)
-              type))))
+    (eq? (record-type thing) type)))
 
 (define (record-accessor type tag)
   (let ((index (field-index type tag)))
     (lambda (thing)
-      (if (and (record? thing)
-               (eq? (record-type thing)
-                    type))
+      (if (eq? (record-type thing) type)
           (record-ref thing index)
           (error "accessor applied to bad value" type tag thing)))))
 
 (define (record-modifier type tag)
   (let ((index (field-index type tag)))
     (lambda (thing value)
-      (if (and (record? thing)
-               (eq? (record-type thing)
-                    type))
+      (if (eq? (record-type thing) type)
           (record-set! thing index value)
           (error "modifier applied to bad value" type tag thing)))))
 
