@@ -1,3 +1,8 @@
+2005-03-25  Scott G. Miller  <sgmiller@gmail.com>
+
+	* New implementation of SRFI-14 based on SRFI-60 for bitvectors. 
+	  Should be much faster, and Unicode compliant.
+	
 2005-03-23  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Added support for SRFI-55 (and build it in by default)
