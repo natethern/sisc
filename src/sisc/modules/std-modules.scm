@@ -724,7 +724,6 @@
      open-library
      link-library)
   (import s2j)
-  (import generic-procedures)
   (import type-system)
   (include "compiledlibs.scm"))
 
