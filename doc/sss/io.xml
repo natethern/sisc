@@ -1457,11 +1457,11 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <title>Locating Resources</title>
       <para>
           &SISC; provides a mechanism for locating and subsequently
-        loading named resources, such as Scheme source files, Scheme
-        data files, property files. The resources are located on the
-        Java class path associated with the class loader of the
-        currently executing thread. This allows Scheme programs to
-        load resources in a portable, J2EE-compliant manner.
+          loading named resources, such as Scheme source files, Scheme
+          data files, property files. The resources are located using
+          the mechanism described in <xref
+          linkend="ClassLoading"/>. This allows Scheme programs to
+          load resources in a portable, J2EE-compliant manner.
       </para>
       <para>
         <blockquote>
@@ -1477,11 +1477,10 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             <blockquote>
               <para>
                 Locates the resource named by
-                <parameter>string</parameter> on the Java class path
-                associated with the current thread's class loader. The
-                resource location is returned as a URL suitable for
-                &SISC; I/O operations. If the resource cannot be
-                found, &num;f is returned.
+                <parameter>string</parameter> on the Java class
+                path. The resource location is returned as a URL
+                suitable for &SISC; I/O operations. If the resource
+                cannot be found, &num;f is returned.
               </para>
             </blockquote>
           </para>
@@ -1497,9 +1496,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             <blockquote>
               <para>
                 Locates the resource named by
-                <parameter>string</parameter> on the Java class path
-                associated with the current thread's class loader. The
-                resource locations are returned as a list of URLs
+                <parameter>string</parameter> on the Java class path.
+                The resource locations are returned as a list of URLs
                 suitable for &SISC; I/O operations. If the resource
                 cannot be found, an empty list is returned.
               </para>
@@ -1814,6 +1812,68 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
       </blockquote>
+    </sect2>
+    <sect2 id="ClassLoading">
+      <title>Class Loading</title>
+      <para>
+        Some &SISC; features require classes and other resources to be
+        loaded. By default, &SISC; will use the current thread's class
+        loader, or, if none is present, the system class loader. This
+        can be augmented using the following functions:
+        <blockquote>
+          <para>
+            <indexterm><primary>current-class-path</primary></indexterm>
+            &parameter;
+            <methodsynopsis language="scheme">
+              <type>string-list</type>
+              <methodname>current-class-path</methodname>
+              <methodparam choice="opt">
+                <parameter>class-path</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Retrieves or sets the current class path. The class
+                path is a list of strings representing URLs, typically
+                pointing to jar files. When &SISC; attempts to load a
+                class or other resource, it searches these locations
+                before falling back on the default class loader.
+              </para>
+              <para>
+                The elements of the <parameter>class-path</parameter>
+                list are normalized using the
+                <parameter>current-url</parameter> (see <xref
+                  linkend="urlfile"/>), thus permitting the usage of
+                relative URLs.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>with-class-path</primary></indexterm>
+            &parameter;
+            <methodsynopsis language="scheme">
+              <type>value</type>
+              <methodname>with-class-path</methodname>
+              <methodparam>
+                <parameter>string-list</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>thunk</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>   
+                Evaluates <parameter>thunk</parameter> with a
+                <parameter>string-list</parameter> as the setting for
+                the <literal>current-class-path</literal>.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+        Note that <literal>current-class-path</literal> is a <xref
+          linkend="Parameters">parameter</xref>, so each thread has
+        it's own setting, initially inherited from the parent thread.
+      </para>
     </sect2>
   </sect1>
 </chapter>

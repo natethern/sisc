@@ -5,6 +5,8 @@ import sisc.data.*;
 import sisc.compiler.*;
 import sisc.io.*;
 import java.util.WeakHashMap;
+import java.net.URLClassLoader;
+import java.net.URL;
 import sisc.util.Util;
 
 public class DynamicEnvironment extends Util implements Cloneable {
@@ -21,6 +23,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
     //the lexer is stateful
     public Parser parser = new Parser(new Lexer());
 
+    public URLClassLoader classLoader;
+
     //user-defined thread variables; this map is weak so that we don't
     //hang on to vars that are no longer in use.
     public java.util.Map parameters = new WeakHashMap(0);
@@ -34,6 +38,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
         this.out = out;
         printShared = false;
         vectorLengthPrefixing = false;
+        classLoader = new URLClassLoader(new URL[]{}, getClassLoader());
     }
 
     public DynamicEnvironment(InputStream in, OutputStream out) {
@@ -44,6 +49,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public Object clone() throws CloneNotSupportedException {
         DynamicEnvironment res = (DynamicEnvironment)super.clone();
         res.parser = new Parser(new Lexer());
+        res.classLoader = new URLClassLoader(res.classLoader.getURLs(),
+                                             getClassLoader());
         res.parameters = new WeakHashMap(res.parameters);
         return res;
     }

@@ -858,10 +858,9 @@ com/foo/bar/baz/baz3.scm
                 <function>load</function> procedure from a resource
                 located by the <link
                 linkend="Resources"><function>find-resource</function>
-                procedure</link>.
-                The name of the resource is derived from the name of
-                the library by appending ".sce" and, if that does not
-                succeed, ".scm".
+                procedure</link>.  The name of the resource is derived
+                from the name of the library by appending ".sll",
+                ".sce" and, if that does not succeed, ".scm".
               </para>
             </blockquote>
           </para>

@@ -134,7 +134,7 @@ public class Reflection extends Util {
                 return (Value)jobj(f.vlr[0]);
             case JAVA_CLASS:
                 String cname = symval(f.vlr[0]);
-                Class c = resolveType(cname);
+                Class c = resolveType(cname, f.dynenv.classLoader);
                 if (c == null)
                     throw new RuntimeException(liMessage(S2JB, "classnotfound", cname));
                 else return makeJObj(c, Class.class);
@@ -354,7 +354,7 @@ public class Reflection extends Util {
                 for (int i=0; i<f.vlr.length; i++) {
                     interfaces[i] = jclass(f.vlr[i]);
                 }
-                return makeJObj(Proxy.getProxyClass(getClassLoader(), interfaces), Class.class);
+                return makeJObj(Proxy.getProxyClass(f.dynenv.classLoader, interfaces), Class.class);
             default:
                 throwArgSizeException();
             }

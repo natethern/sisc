@@ -836,8 +836,10 @@ Context.exit()
               <blockquote>
                 <para>
                   Resolves <parameter>classname</parameter> to a Java
-                  class. <parameter>classname</parameter> can be a string
-                  or symbol and must be one of the following:
+                  class. Classes are loaded as described in <xref
+                  linkend="ClassLoading"/>. <parameter>classname</parameter>
+                  can be a string or symbol and must be one of the
+                  following:
                   <itemizedlist spacing="compact">
                     <listitem>
                       <para>

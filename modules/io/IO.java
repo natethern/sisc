@@ -14,12 +14,13 @@ public class IO extends ModuleAdapter {
         Symbol.intern("sisc.modules.io.Messages");
 
     protected static final int
-        //NEXT = 31,
+        //NEXT = 32,
 
         ABSPATHQ            = 0,
         CHARREADY           = 3,
         CLOSEINPUTPORT      = 4,
         CLOSEOUTPUTPORT     = 5,
+        CURRENTCLASSPATH    = 31,
         CURRENTINPUTPORT    = 6,
         CURRENTOUTPUTPORT   = 7,
         DISPLAY             = 8,
@@ -53,6 +54,7 @@ public class IO extends ModuleAdapter {
         define("char-ready?"        , CHARREADY);
         define("close-input-port"   , CLOSEINPUTPORT);
         define("close-output-port"  , CLOSEOUTPUTPORT);
+        define("current-class-path" , CURRENTCLASSPATH);
         define("current-input-port" , CURRENTINPUTPORT);
         define("current-output-port", CURRENTOUTPUTPORT);
         define("display"            , DISPLAY);
@@ -181,6 +183,13 @@ public class IO extends ModuleAdapter {
         switch (f.vlr.length) {
         case 0:
             switch (primid) {
+            case CURRENTCLASSPATH:
+                URL[] urls = f.dynenv.classLoader.getURLs();
+                Pair p = EMPTYLIST;
+                for (int i=urls.length-1; i>=0; i--) {
+                    p = new Pair(new SchemeString(urls[i].toString()), p);
+                }
+                return p;
             case CURRENTOUTPUTPORT: return f.dynenv.out;
             case CURRENTINPUTPORT: return f.dynenv.in;
             case OPENOUTPUTSTRING: return new WriterOutputPort(new StringWriter(), false);
@@ -362,6 +371,15 @@ public class IO extends ModuleAdapter {
                                                  e.getMessage()));
                 }
                 return VOID;
+            case CURRENTCLASSPATH:
+                Pair pa = pair(f.vlr[0]);
+                URL[] urls = new URL[length(pa)];
+                for (int i=0; pa != EMPTYLIST; i++, pa = (Pair)pa.cdr) {
+                    urls[i] = url(pa.car);
+                }
+                f.dynenv.classLoader =
+                    new URLClassLoader(urls, f.dynenv.classLoader.getParent());
+                return VOID;
             case CURRENTOUTPUTPORT:
                 f.dynenv.out= outport(f.vlr[0]);
                 return VOID;
@@ -376,21 +394,19 @@ public class IO extends ModuleAdapter {
                     return FALSE;
                 }
             case FINDRESOURCE:
-                ClassLoader cl = getClassLoader();
-                url = cl.getResource(string(f.vlr[0]));
+                url = f.dynenv.classLoader.getResource(string(f.vlr[0]));
                 if (url == null) 
                     return FALSE;
                 else return new SchemeString(url.toString());
             case FINDRESOURCES:
-                cl = getClassLoader();
                 java.util.Enumeration e;
                 try {
-                    e = cl.getResources(string(f.vlr[0]));
+                    e = f.dynenv.classLoader.getResources(string(f.vlr[0]));
                 } catch (IOException ex) {
                     return EMPTYLIST;
                 }
                 if (!e.hasMoreElements()) return EMPTYLIST;
-                Pair pa = new Pair();
+                pa = new Pair();
                 while(true) {
                     pa.setCar(new SchemeString((String)e.nextElement()));
                     if (!e.hasMoreElements()) break;

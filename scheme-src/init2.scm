@@ -33,6 +33,7 @@
 		 
 (current-evaluator eval)
 ;(emit-annotations #t)
+;(emit-debugging-symbols #t)
 
 ;;;;;;;;;;;;;;;; error handling ;;;;;;;;;;;;;;;
 
@@ -483,6 +484,23 @@
      (lambda () (current-url (normalize-url previous-url url)))
      thunk
      (lambda () (current-url previous-url)))))
+
+(set! current-class-path
+  (let ([original-ccp current-class-path])
+    (lambda rest
+      (if (null? rest)
+          (original-ccp)
+          (let ([c-url (current-url)])
+            (original-ccp (map (lambda (url)
+                                 (normalize-url c-url url))
+                               (car rest))))))))
+
+(define (with-class-path classpath thunk)
+  (let ([previous-classpath (current-class-path)])
+    (dynamic-wind
+     (lambda () (current-class-path classpath))
+     thunk
+     (lambda () (current-class-path previous-classpath)))))
 
 ;; needed in a few places; cut-down version from SRFI-1
 (define (iota count)

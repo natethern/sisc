@@ -1,3 +1,8 @@
+2003-02-03  Matthias Radestock  <matthias@sorted.org>
+
+	* Added mechanism to augment the class path for loading classes
+	  and resources.
+
 2003-01-31  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Modified the syntax expander to generate non-unique symbols

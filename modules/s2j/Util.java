@@ -197,20 +197,31 @@ public class Util extends ModuleAdapter {
      * coding scheme), so we handle these case separately.
      *
      * @param name type name
+     * @param cl classloader to use
      * @return a <code>Class</code> value
      */
-    public static Class resolveType(String name) {
+    public static Class resolveType(String name, ClassLoader cl) {
         int idx = name.indexOf('[');
         if (idx != -1) {
-            Class c = resolveType(name.substring(0, idx));
+            Class c = resolveType(name.substring(0, idx), cl);
             return (c == null) ?
                 null : makeArrayClass(c, (name.length()-idx)/2);
         }
         try {
-            return Class.forName(name);
+            return Class.forName(name, true, cl);
         } catch (ClassNotFoundException e) {
             return resolvePrimitiveType(name);
         }
+    }
+
+    /**
+     * Map a type name to its corresponding class.
+     *
+     * This just calls <code>resolveType(name,
+     * getClassLoader())</code>.
+     */
+    public static Class resolveType(String name) {
+        return resolveType(name, getClassLoader());
     }
 
     /**
