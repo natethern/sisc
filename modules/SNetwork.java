@@ -42,6 +42,7 @@ public class SNetwork extends ModuleAdapter {
     public String getModuleName() {
 	return "Networking";
     }
+    static final Symbol SNETB=Symbol.intern("Networking");
 
     protected static final int
 	GET_LOCAL_HOST=0, GET_HOST_NAME_BY_IP=1, GET_HOST_IP_BY_NAME=2,
@@ -373,7 +374,7 @@ public class SNetwork extends ModuleAdapter {
                     tcps.setSoTimeout(num(f.vlr[1]).intValue());
                     return VOID;
                 default:
-		    throw new RuntimeException(localizedMessage("incorrectargcount"));
+		    throw new RuntimeException(liMessage(SNETB,"incorrectargcount"));
                 }
             case 3:
                 switch(primid) {

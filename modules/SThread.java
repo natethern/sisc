@@ -43,6 +43,8 @@ public class SThread extends ModuleAdapter {
 	return "Threading";
     }
 
+    static final Symbol THREADB=Symbol.intern("Threading");
+
     protected static final int 
 	THREADNEW=0, THREADSTART=1, THREADYIELD=2, THREADSLEEP=3,
 	THREADINTERRUPT=4, THREADJOIN=5, THREADCURRENT=6,
@@ -365,7 +367,7 @@ public class SThread extends ModuleAdapter {
 			c.thread.join();
 		    } catch (InterruptedException ie) {}
 		} else {
-		    error(f, localizedMessage("threadnotstarted"));
+		    error(f, liMessage(THREADB,"threadnotstarted"));
 		}
 	    case THREADSTATE:
 		c=tcont(f.vlr[0]);
@@ -392,7 +394,7 @@ public class SThread extends ModuleAdapter {
 			return FALSE;
 		    else return stateOf(c);
 		} else {
-		    throw new RuntimeException(localizedMessage("threadnotstarted"));
+		    throw new RuntimeException(liMessage(THREADB,"threadnotstarted"));
 		}
 	    case THREADHOLDSLOCKQ:
 		return truth(monitor(f.vlr[0]).owner==tcont(f.vlr[0]).thread);
