@@ -1060,6 +1060,25 @@ public class Quantity extends Value {
         return comp((Quantity)ob, 0);
     }
 
+    public int hashCode() {
+	int hc=type;
+	switch (type) {
+	case FIXEDINT:
+	    return hc^val;
+	case DECIM:
+	    int bits=Float.doubleToIntBits(d);
+	    return hc^bits;
+	case INTEG:
+	    return hc^i.hashCode();
+	case RATIO:
+	    return hc^i.hashCode()^de.hashCode();
+	case COMPLEX:
+	    return hc^Float.floatToIntBits(d)^Float.floatToIntBits(im);
+	default:
+	    return hc;
+	}
+    }
+
     public float floatValue() {
         switch (type) {
         case FIXEDINT:

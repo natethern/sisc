@@ -60,6 +60,10 @@ public class EmptyList extends Pair implements Singleton {
 	return o instanceof EmptyList;
     }
 
+    public int hashCode() {
+	return 0x9abcdef0;
+    }
+
     public void serialize(Serializer s, DataOutput dos) throws IOException {}
 
     public static Value getValue(DataInput dis) {

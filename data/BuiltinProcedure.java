@@ -76,6 +76,10 @@ public class BuiltinProcedure extends Procedure {
                ((BuiltinProcedure)v).host==host;
     }
 
+    public int hashCode() {
+	return host.hashCode() ^ id;
+    }
+
     public void serialize(Serializer s,
                           DataOutput dos) throws IOException {
         if (SERIALIZATION) {

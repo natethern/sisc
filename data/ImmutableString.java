@@ -56,19 +56,14 @@ public class ImmutableString extends SchemeString {
     }
     
     public int hashCode() {
-	boolean complete=true;
-	int rv=0, reg=0;
+	int hc=0;
 	for (int i=0; i<stringdata.length; i++) {
-	    if (complete) {
-		rv^=reg;
-		reg=(stringdata[i]<<16);
-	    } else {
-		reg|=stringdata[i];
-	    }
-	    complete=!complete;
+	    if (i%2==0)
+		hc^=stringdata[i]<<16;
+	    else
+		hc^=stringdata[i];
 	}
-	rv^=reg;
-	return rv;
+	return hc;
     }
 }
 

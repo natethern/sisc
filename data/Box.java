@@ -71,6 +71,10 @@ public class Box extends Value {
         if (val==null && b.val!=null) return false;
         return ((Value)val).valueEqual((Value)b.val);
     }
+    
+    public int hashCode() {
+	return val.hashCode();
+    }
 
     public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {

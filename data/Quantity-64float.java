@@ -1373,6 +1373,27 @@ public class Quantity extends Value {
         return comp((Quantity)ob, 0);
     }
 
+    public int hashCode() {
+	int hc=type;
+	switch (type) {
+	case FIXEDINT:
+	    return hc^val;
+	case DECIM:
+	    long bits=Double.doubleToLongBits(d);
+	    return hc^(bits & 0xffffffff)^((bits>>>32)&0xffffffff);
+	case INTEG:
+	    return hc^i.hashCode();
+	case RATIO:
+	    return hc^i.hashCode()^de.hashCode();
+	case COMPLEX:
+	    bits=Double.doubleToLongBits(d);
+	    long bits2=Double.doubleToLongBits(im);
+	    return hc^(bits & 0xffffffff)^((bits>>>32)&0xffffffff)^
+		(bits2 & 0xffffffff)^((bits2>>>32)&0xffffffff);
+	default:
+	    return hc;
+	}
+    }
 
     public final String display() {
 	return toString();

@@ -44,6 +44,10 @@ public class SchemeVoid extends Value implements Singleton {
         return "#<void>";
     }
 
+    public int hashCode() {
+	return 0x56789abc;
+    }
+
     public static Value getValue(DataInput dis) {
         return VOID;
     }

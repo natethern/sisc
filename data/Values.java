@@ -66,6 +66,13 @@ public class Values extends Value {
         error(r, liMessage("multiplevalues"));
     }
 
+    public int hashCode() {
+	int hc=0;
+	for (int i=0; i<values.length; i++)
+	    hc^=values[i].hashCode();
+	return hc;
+    }
+	
     public void serialize(Serializer s, DataOutput dos) throws IOException {
         if (SERIALIZATION) {
             s.writeBer(values.length, dos);

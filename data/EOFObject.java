@@ -48,6 +48,10 @@ public class EOFObject extends Value implements Singleton {
         return new EOFException();
     }
 
+    public int hashCode() {
+	return 0x12345678;
+    }
+
     public static Value getValue(DataInput dis) {
         return EOF;
     }

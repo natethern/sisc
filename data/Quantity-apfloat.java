@@ -1086,6 +1086,24 @@ public class Quantity extends Value {
         return comp((Quantity)ob, 0);
     }
 
+    public int hashCode() {
+	int hc=type;
+	switch (type) {
+	case FIXEDINT:
+	    return hc^val;
+	case DECIM:
+	    return hc^d.hashCode();
+	case INTEG:
+	    return hc^i.hashCode();
+	case RATIO:
+	    return hc^i.hashCode()^de.hashCode();
+	case COMPLEX:
+	    return hc^d.hashCode()^im.hashCode();
+	default:
+	    return hc;
+	}
+    }
+
     public double doubleValue() {
         switch (type) {
         case FIXEDINT:
