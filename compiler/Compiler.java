@@ -212,7 +212,7 @@ public class Compiler extends Util {
                     expr=(Pair)expr.cdr;
                     Expression altern=compile(r, expr.car, rt, TAIL | context,
                                               env);
-                    return new IfExp(tmp, conseq, altern);
+                    return new EvalExp(tmp, new IfEval(conseq, altern));
                 }
             case BEGIN:
                 return compileBegin(r, pairToExpVect(expr), context, rt,
@@ -224,11 +224,11 @@ public class Compiler extends Util {
                 if (tmp instanceof LexicalReferenceExp) {
                     LexicalReferenceExp lre=(LexicalReferenceExp)tmp;
 
-                    return new LexicalSetExp(lre.depth, lre.pos, rhs);
+                    return new EvalExp(rhs, new LexicalSetEval(lre.depth, lre.pos));
                 } else if (tmp instanceof FreeReferenceExp) {
                     FreeReferenceExp fre=(FreeReferenceExp)tmp;
 
-                    return new FreeSetExp(fre.sym, fre.envLoc, rhs, env);
+                    return new EvalExp(rhs, new FreeSetEval(fre.sym, fre.envLoc, env));
                 } else {
                     error(r, "left-hand-side of set! is not a symbol");
                     return null;
@@ -237,7 +237,8 @@ public class Compiler extends Util {
                 Symbol lhs=(Symbol)expr.car;
                 expr=(Pair)expr.cdr;
 
-                return new DefineExp(lhs, compile(r, expr.car, rt, 0, env));
+                return new EvalExp(compile(r, expr.car, rt, 0, env),
+				   new DefineEval(lhs));
             default:
                 Expression[] exps=pairToExpressions(expr);
                 compileExpressions(r, exps, rt, 0, env);
@@ -270,24 +271,17 @@ public class Compiler extends Util {
     throws ContinuationException {
         Expression last=compile(r, (Expression)v.lastElement(), rt,
                                 TAIL | context, env);
+        if (v.size()==1) return last;
 
-        v.removeElementAt(v.size()-1);
-
-        if (v.size()==0) return last;
-        int vs=v.size();
-        Vector v2=new Vector(vs);
-        for (int i=0; i<vs; i++) {
+	Expression be=last;
+        for (int i=v.size()-2; i>=0; i--) {
             Expression e=compile(r, (Expression)v.elementAt(i),
                                  rt, COMMAND, env);
             if (!(e instanceof Immediate))
-                v2.addElement(e);
+		be=new EvalExp(e, be);
         }
 
-        if (v2.size()==0) return last;
-        Expression[] exprs=new Expression[v2.size()];
-        v2.copyInto(exprs);
-
-        return new BeginExp(exprs, last);
+	return be;
     }
 }
 

@@ -96,7 +96,7 @@ public class Primitives extends Module {
     public static SchemeBoolean numQuery(Value v, int mask)
     throws ContinuationException {
         return truth(v instanceof Quantity &&
-                     (((Quantity)v).type & mask)!=0);
+                     (((Quantity)v).is(mask)));
     }
 
     public void initialize(Interpreter r) {
@@ -251,9 +251,9 @@ public class Primitives extends Module {
             case CURRENTWRITE: return (Value)f.writer;
             case INTERACTIONENVIRONMENT:
                 return f.toplevel_env;
-            case SYSTIME: return new Quantity(System.currentTimeMillis());
-            case MAX_PRECISION: return new Quantity(Quantity.max_precision);
-            case MIN_PRECISION: return new Quantity(Quantity.min_precision);
+            case SYSTIME: return Quantity.valueOf(System.currentTimeMillis());
+            case MAX_PRECISION: return Quantity.valueOf(Quantity.max_precision);
+            case MIN_PRECISION: return Quantity.valueOf(Quantity.min_precision);
             }
         case 1:
             switch (primid) {
@@ -304,14 +304,14 @@ public class Primitives extends Module {
                 return st;
             case STRING2NUMBER:
                 try {
-                    return new Quantity(string(f,f.vlr[0]));
+                    return Quantity.valueOf(string(f,f.vlr[0]));
                 } catch (NumberFormatException nf) {
                     return FALSE;
                 }
             case NUMBER2STRING: return new SchemeString(num(f,f.vlr[0])
                                            .toString());
             case STRING2SYMBOL: return Symbol.intern(string(f,f.vlr[0]));
-            case CHAR2INTEGER: return new Quantity(chr(f,f.vlr[0]).c);
+            case CHAR2INTEGER: return Quantity.valueOf(chr(f,f.vlr[0]).c);
             case LIST2VECTOR: return new SchemeVector(pairToValues(pair(f,f.vlr[0])));
             case VECTOR2LIST:
                 Value[] vals=vec(f,f.vlr[0]).vals;
@@ -323,7 +323,7 @@ public class Primitives extends Module {
             case ROUND: return num(f,f.vlr[0]).round();
             case INTEGER2CHAR: return new SchemeCharacter((char)num(f,f.vlr[0]).
                                           intValue());
-            case VECTORFINDLASTUNIQUE: return new Quantity(vec(f,f.vlr[0]).findEnd());
+            case VECTORFINDLASTUNIQUE: return Quantity.valueOf(vec(f,f.vlr[0]).findEnd());
             case PEEKCHAR:
                 InputPort inport=inport(f,f.vlr[0]);
                 Value v=inport.readchar(f);
@@ -422,11 +422,11 @@ public class Primitives extends Module {
                 f.pop(before);
                 return VOID;
             case LENGTH:
-                return new Quantity(length(pair(f,f.vlr[0])));
+                return Quantity.valueOf(length(pair(f,f.vlr[0])));
             case STRINGLENGTH:
-                return new Quantity(str(f,f.vlr[0]).stringdata.length);
+                return Quantity.valueOf(str(f,f.vlr[0]).stringdata.length);
             case VECTORLENGTH:
-                return new Quantity(vec(f,f.vlr[0]).vals.length);
+                return Quantity.valueOf(vec(f,f.vlr[0]).vals.length);
             case MAKESTRING:
                 return new SchemeString(new char[num(f,f.vlr[0]).intValue()]);
             case MAKEVECTOR:
@@ -559,7 +559,7 @@ public class Primitives extends Module {
                 }
                 return new SchemeString(newStr);
             case STRING2NUMBER:
-                return new Quantity(string(f,f.vlr[0]),
+                return Quantity.valueOf(string(f,f.vlr[0]),
                                     num(f,f.vlr[1]).intValue());
             case NUMBER2STRING:
                 return new SchemeString(num(f,f.vlr[0])
@@ -575,12 +575,12 @@ public class Primitives extends Module {
                 }
                 return VOID;
             case MAKERECTANGULAR:
-                return new Quantity(num(f,f.vlr[0]).toInexact().d,
-                                    num(f,f.vlr[1]).toInexact().d);
-            case ASHL: return new Quantity(num(f,f.vlr[0]).integerVal()
+                return Quantity.valueOf(num(f,f.vlr[0]).toInexact().doubleValue(),
+                                    num(f,f.vlr[1]).toInexact().doubleValue());
+            case ASHL: return Quantity.valueOf(num(f,f.vlr[0]).integerVal()
                                                .shiftLeft(num(f,f.vlr[1])
                                                           .intValue()));
-            case ASHR: return new Quantity(num(f,f.vlr[0]).integerVal()
+            case ASHR: return Quantity.valueOf(num(f,f.vlr[0]).integerVal()
                                                .shiftRight(num(f,f.vlr[1])
                                                            .intValue()));
         case DISPLAY: case WRITE:

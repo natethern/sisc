@@ -54,7 +54,7 @@ public class SExec extends Module {
             int rc=p.waitFor();
             String sol=stdout.readLine();
             String sel=stdout.readLine();
-            return list(new Quantity(rc),
+            return list(Quantity.valueOf(rc),
                         (sol == null ? new SchemeString("") :
                          new SchemeString(sol)),
                         (sel == null ? new SchemeString("") :

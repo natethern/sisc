@@ -84,7 +84,7 @@ public class InputPort extends NamedValue {
                       char[] buff, int count) throws ContinuationException {
         try {
             int s=r.read(buff, 0, count);
-            return (s==-1 ? (Value)EOFObject.EOF : (Value)new Quantity(s));
+            return (s==-1 ? (Value)EOFObject.EOF : (Value)Quantity.valueOf(s));
 
         } catch (IOException e) {
             error(i, "I/O error reading from "+display());

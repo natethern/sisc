@@ -99,9 +99,9 @@ public class AssociativeEnvironment extends NamedValue {
 
     public int define(Symbol s, Value v) {
         synchronized(symbolMap) {
-            if (nextFree >= env.length) {
+            if (nextFree >= env.length) 
                 expand();
-            }
+
             symbolMap.put(s, new Integer(nextFree));
             env[nextFree]=v;
             return nextFree++;

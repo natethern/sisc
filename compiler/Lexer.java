@@ -139,7 +139,7 @@ public class Lexer implements Tokens {
 
     static Object readNum(String v, int radix) {
         try {
-            Quantity q=new Quantity(v, radix);
+            Quantity q=Quantity.valueOf(v, radix);
             return q;
         } catch (NumberFormatException n) {
             return v;

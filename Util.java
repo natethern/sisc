@@ -36,13 +36,13 @@ import sisc.data.*;
 import sisc.exprs.*;
 import sisc.compiler.*;
 import java.util.*;
+import java.util.jar.*;
 import java.io.*;
 
 public abstract class Util implements Conf {
 
-    protected static final Quantity FIVE=new Quantity(5);
+    protected static final Quantity FIVE=Quantity.valueOf(5);
     protected static final Expression APPEVAL=new AppEval();
-
     public static EOFObject EOF=EOFObject.EOF;
     public static EmptyList EMPTYLIST=EmptyList.EMPTYLIST;
     public static SchemeVoid VOID=SchemeVoid.VOID;

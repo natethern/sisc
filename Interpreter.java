@@ -151,7 +151,8 @@ public class Interpreter extends Util {
                     do {
                         while (nxp==null)
                             pop(stk);
-                        nxp.eval(this);
+
+			nxp.eval(this);
                     } while (true);
                 } catch (ContinuationException ce) {
                     pop(ce.k);

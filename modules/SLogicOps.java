@@ -60,7 +60,7 @@ public class SLogicOps extends Module {
         if (primid==LOGNOT) {
             if (f.vlr.length > 1)
                 error(f, "Incorrect number of arguments to procedure "+f.acc);
-            return new Quantity(~fixed(f,f.vlr[0]));
+            return Quantity.valueOf(~fixed(f,f.vlr[0]));
         } else {
             int v=fixed(f,f.vlr[0]);
             switch(primid) {
@@ -77,7 +77,7 @@ public class SLogicOps extends Module {
                     v^=fixed(f,f.vlr[i]);
                 break;
             }
-            return new Quantity(v);
+            return Quantity.valueOf(v);
         }
     }
 }
