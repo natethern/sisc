@@ -142,7 +142,7 @@ public class Interpreter extends Util {
     }
 
     public final void push(Expression nxp) {
-        stk=createFrame(nxp, vlr, vlk, env, fk, stk, cap);
+        stk=createFrame(nxp, vlr, false, env, fk, stk, cap);
     }
 
     public final void setVLR(int pos, Value v) {
