@@ -1,3 +1,8 @@
+2003-07-27  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed runtime error message construction to handle circular data
+	  without crashing.
+
 2003-07-18  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed StackOverflowError when building srfi.slt under JDK1.4.2

@@ -15,10 +15,6 @@ public class PortValueWriter extends Util
 
     private boolean vectorLengthPrefixing, caseSensitive;
 
-    public PortValueWriter(OutputPort port) {
-        this(port, false, false);
-    }
-
     public PortValueWriter(OutputPort port,
                            boolean vectorLengthPrefixing,
 			   boolean caseSensitive) {

@@ -4,7 +4,7 @@ import java.io.*;
 import sisc.interpreter.*;
 import sisc.io.ValueWriter;
 import sisc.io.WriterOutputPort;
-import sisc.io.PortValueWriter;
+import sisc.io.SharedValueWriter;
 import sisc.util.Defaults;
 
 /**
@@ -83,7 +83,7 @@ public abstract class Value extends Expression implements Immediate {
     public String toString() {
         StringWriter sw = new StringWriter();
         WriterOutputPort p = new WriterOutputPort(sw, false);
-        ValueWriter w = new PortValueWriter(p);
+        ValueWriter w = new SharedValueWriter(p, false, false);
         try {
             w.write(this);
             p.close();
