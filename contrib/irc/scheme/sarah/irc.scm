@@ -4,12 +4,12 @@
 (define (send-messages bot destination response)
   (let ([tokenizer (java-new <java.util.string-tokenizer> 
                              (->jstring response)
-                             (->jstring (string #\newline)))])
+                             (->jstring (string #\newline #\return)))])
     (let loop ()
       (when (->boolean (has-more-tokens tokenizer))
         (let ([tok (->string (next-token tokenizer))])
-        (display (sisc:format "[to: ~a] ~a~%" destination tok))
-        (send-message bot (->jstring destination) (->jstring tok))
+          (display (sisc:format "[to: ~a] ~a~%" destination tok))
+          (send-message bot (->jstring destination) (->jstring tok))
         (loop))))))
 
 (define join-hooks '())
