@@ -1,50 +1,13 @@
-package sisc.exprs;
+package sisc;
 
-import sisc.*;
-import sisc.data.*;
+public abstract class Defaults {
 
-public class LetrecExp extends AppExp {
+    public static final int DEFAULT_SYNOPSIS_LENGTH=30;
+    
+    static String permitinterrupts="false";
 
-    protected static Value[] MANY_VOIDS=new Value[32];
-
-    static {
-        for (int i=MANY_VOIDS.length-1; i>=0; i--)
-            MANY_VOIDS[i]=VOID;
-    };
-
-    public LetrecExp(Expression exp, Expression rands[], Expression nxp, 
-                     boolean allImmediate) {
-        super(exp, rands, nxp, allImmediate);
-    }
-
-    public void eval(Interpreter r) throws ContinuationException {
-        Value[] envv=r.createValues(rands.length);
-
-        int csf=0;
-        do {
-            int cc=Math.min(MANY_VOIDS.length, rands.length-csf);
-            System.arraycopy(MANY_VOIDS, 0, envv, csf, cc);
-            csf+=cc;
-        } while (csf < rands.length);
-
-        r.env=new LexicalEnvironment(envv, r.env);
-        super.eval(r);
-    }
-
-    public Value express() {
-        Pair args=EMPTYLIST;
-        for (int i=rands.length-1; i>=0; i--) {
-            args=new Pair(((rands[i]==null) ? FALSE : rands[i].express()), args);
-        }
-        args = new Pair(exp.express(), new Pair(nxp.express(), args));
-        return new Pair(sym("Letrec-exp"), args);
-    }
-
-    public LetrecExp() {}
 }
-
-
-
+ 
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -77,3 +40,4 @@ public class LetrecExp extends AppExp {
  * may use your version of this file under either the MPL or the
  * GPL.
  */
+   

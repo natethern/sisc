@@ -8,12 +8,12 @@ import java.util.*;
 import java.util.jar.*;
 import java.io.*;
 import java.text.*;
+import java.lang.reflect.Field;
 
-public abstract class Util implements Version {
+public abstract class Util extends Defaults implements Version {
 
     protected static final boolean PERMITINTERRUPTS=
-        System.getProperty("sisc.permitinterrupts","false")
-          .equalsIgnoreCase("true");
+        getSystemProperty("sisc.permitinterrupts", "false").equals("true");
 
     protected static final Value[] ZV=new Value[0];
     protected static final Quantity FIVE=Quantity.valueOf(5);
@@ -24,14 +24,7 @@ public abstract class Util implements Version {
     public static SchemeVoid VOID=SchemeVoid.VOID;
     public static SchemeBoolean
         TRUE=SchemeBoolean.TRUE,
-         FALSE=SchemeBoolean.FALSE;
-
-    protected static Value[] MANY_VOIDS=new Value[32];
-
-    static {
-        for (int i=MANY_VOIDS.length-1; i>=0; i--)
-            MANY_VOIDS[i]=VOID;
-    };
+        FALSE=SchemeBoolean.FALSE;
 
     public static Symbol
         SETBANG=Symbol.get("set!"),
@@ -56,13 +49,15 @@ public abstract class Util implements Version {
         FCONT=Symbol.get("failure-continuation"),
         PARENT=Symbol.get("parent");
     
-
-    public static final int DEFAULT_SYNOPSIS_LENGTH=30;
-
     public static String getSystemProperty(String name, String def) {
         try {
             return System.getProperty(name, def);
         } catch (RuntimeException e) {
+            try {
+                String propname=name.substring(name.indexOf('.')+1);
+                Field f=Defaults.class.getField(propname);
+                return (String)f.get(null);
+            } catch (Exception e2) {}
             return def;
         }
     }
@@ -439,10 +434,6 @@ public abstract class Util implements Version {
         return formatter.format(liMessage(bundle, messageName), args);
     }
 }
-
-
-
-
 
 /*
  * The contents of this file are subject to the Mozilla Public
