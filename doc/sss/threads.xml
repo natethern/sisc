@@ -615,7 +615,7 @@
       mutex and then attempts to lock it again, the lock is granted
       immediately- it does not block.  Correspondingly, the mutex is
       not unlocked until the same number of unlock operations as
-      previous lock operations is performed by the owning thread.
+      previous lock operations are performed by the owning thread.
     </para>
     <para>
       &SISC;'s synchronization primitives map very closely to SRFI-18,
