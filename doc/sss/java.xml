@@ -1844,7 +1844,7 @@ Class.getSigners()
                          (&lt;jstringbuffer&gt; buf)
                          (&lt;jchar&gt; c))
 (define sb (make &lt;jstringbuffer&gt; (-&gt;jstring "foo")))
-(-&gt;number (index-of sb (-&lt;jchar #\o))) ;=> 1
+(-&gt;number (index-of sb (-&gt;jchar #\o))) ;=> 1
           </programlisting>
           This defines a method new constructor on
           <classname>java.lang.String</classname> that constructs a
