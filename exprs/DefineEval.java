@@ -53,7 +53,7 @@ public class DefineEval extends Expression {
 
     public void visit(ExpressionVisitor v) {
         v.visit(lhs);
-        v.visit((Expression)env);
+        v.visit(env);
     }
 }
 

@@ -6,6 +6,7 @@ import sisc.ser.*;
 import sisc.interpreter.*;
 import sisc.util.Util;
 import sisc.util.ExpressionVisitor;
+import sisc.util.ExpressionVisitee;
 
 /**
  * The base class for any and all expressions.  An expression is anything 
@@ -16,7 +17,9 @@ import sisc.util.ExpressionVisitor;
  * lifetime.  Annotations are used to implement procedure properties 
  * and source-tracked debugging.
  */
-public abstract class Expression extends Util implements Externalizable {
+public abstract class Expression extends Util 
+    implements Externalizable, ExpressionVisitee {
+    
     protected static Set EMPTYSET=new TreeSet();
 
     public Map annotations;
@@ -127,7 +130,6 @@ public abstract class Expression extends Util implements Externalizable {
     }
 
     public void visit(ExpressionVisitor v) {}
-    //public abstract void visit(ExpressionVisitor v);
 }
 /*
  * The contents of this file are subject to the Mozilla Public

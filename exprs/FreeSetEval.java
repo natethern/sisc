@@ -70,7 +70,7 @@ public class FreeSetEval extends Expression {
 
     public void visit(ExpressionVisitor v) {
         v.visit(lhs);
-        v.visit((Expression)senv);
+        v.visit(senv);
     }
 }
 /*

@@ -1,8 +1,9 @@
 package sisc.env;
 
 import sisc.data.*;
+import sisc.util.ExpressionVisitee;
 
-public interface SymbolicEnvironment {
+public interface SymbolicEnvironment extends ExpressionVisitee {
 
     public void setName(Symbol s);
     public Symbol getName();
