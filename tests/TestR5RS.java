@@ -109,7 +109,7 @@ public class TestR5RS
         throws IOException, SchemeException
     {
         Value   value   = eval(in);
-        boolean success = value.equals(quote(out));
+        boolean success = value.valueEqual(quote(out));
 
         if (!success)
         {
