@@ -924,7 +924,7 @@ public class S2J extends ModuleAdapter {
                 synchronized(jobj(f.vlr[0])) {
                     Interpreter i=Context.enter();
                     try {
-                        return i.eval(proc(f.vlr[1]), new Value[0]);
+                        return i.eval(proc(f.vlr[1]), ZV);
                     } catch (SchemeException se) {
                         throwNestedPrimException(se);
                     } finally {
