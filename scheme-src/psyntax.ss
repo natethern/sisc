@@ -489,7 +489,7 @@
                      (car id2))
                 (format "@~a::~a" id1 (car id2))
                 (format "@~a" id1))))
-      (generate-id id)))
+      (generate-id id1)))
 
 ;; SISC contains native functions map-car and map-cdr.  The following macro
 ;; translates these into ordinary maps when its not present
