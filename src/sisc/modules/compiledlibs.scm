@@ -25,6 +25,8 @@
   binding-keys
   iterator)
 
+(define-generic-java-field-accessor :out)
+
 (define index-sym (string->symbol "library index"))
 (define segment-str "segment ")
 
@@ -55,7 +57,7 @@
     (add lib (java-wrap index-sym) (java-wrap index))
     (call-with-binary-output-file filename
       (lambda (out)
-        (build-library lib (->jstring name) ((java-wrap out) 'out))))))
+        (build-library lib (->jstring name) (:out (java-wrap out)))))))
 
 (define (open-library filename)
   (load (java-null <sisc.ser.library>)
