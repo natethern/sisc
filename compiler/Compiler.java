@@ -6,32 +6,47 @@ import sisc.exprs.*;
 import java.util.*;
 
 public class Compiler extends Util {
-    static HashMap expenv=new HashMap();
     
-    static void extendenv(String s, int i) {
-	expenv.put(Symbol.get(s), new Integer(i));
+    static class Syntax extends NamedValue {
+	int synid;
+
+	public Syntax(int synid) {
+	    this.synid=synid;
+	}
+
+	public void eval(Interpreter r) throws ContinuationException {
+	    error(r, "invalid context for syntax-identifier "+name);
+	}
+
+	public String display() {
+	    return "#!"+synid;
+	}
+    }
+
+    static void extendenv(AssociativeEnvironment env, String s, int i) {
+	Symbol name=Symbol.get(s);
+	env.set(name, new Syntax(i));
     }
     
     static final int 
 	APP=-1, LAMBDA = 1, _IF=2, BEGIN=3, QUOTE=4, SET=5, 
-	DEFINE=7, _VOID=8, 
-	//	PUTPROP=13,
-
+	DEFINE=7, 
 	TAIL=1, COMMAND=2, PROCEDURE=4, PREDICATE=8;
 
-    static {
-	extendenv("lambda", LAMBDA);
-	extendenv("if", _IF);
-	extendenv("begin", BEGIN);
-	extendenv("quote", QUOTE);
-	extendenv("set!", SET);
-	extendenv("define", DEFINE);
-	//	extendenv("putprop", PUTPROP);
+    public Compiler(Interpreter r) {
+	extendenv(r.toplevel_env,"lambda", LAMBDA);
+	extendenv(r.toplevel_env,"if", _IF);
+	extendenv(r.toplevel_env,"begin", BEGIN);
+	extendenv(r.toplevel_env,"quote", QUOTE);
+	extendenv(r.toplevel_env,"set!", SET);
+	extendenv(r.toplevel_env,"define", DEFINE);
+	//	extendenv(r.toplevel_env,"void", _VOID);
     }
 
     static class ReferenceEnv {
 	ReferenceEnv parent;
 	HashMap ref=new HashMap();
+	int[] rv=new int[2];
 	
 	public ReferenceEnv() {}
 	public ReferenceEnv(ReferenceEnv parent) {
@@ -45,20 +60,21 @@ public class Compiler extends Util {
 	    }
 	}
 
-	public int[] lookup(Symbol s) {
-	    Integer r=(Integer)ref.get(s);
-	    if (r==null) {
-		if (parent!=null) {
-		    int[] addr=parent.lookup(s);
-		    if (addr!=null) {
-			int[] rv=new int[] {addr[0]+1, addr[1]};
-			return rv;
-		    }
-		}
-		return null;
+	public Expression createReference(Symbol s, AssociativeEnvironment env) {
+	    int lev=-1;
+	    ReferenceEnv ctx=this;
+	    Integer r=null;
+	    while (r==null && ctx!=null) {
+		r=(Integer)ctx.ref.get(s);
+		ctx=ctx.parent;
+		lev++;
 	    }
-	    return new int[] {0, r.intValue()};
-	}
+	    
+	    if (r==null) 
+		return new FreeReferenceExp(s, env.getLoc(s), env);
+	    else 
+		return new LexicalReferenceExp(lev, r.intValue());
+	}    
     }
 
     public Expression compile(Interpreter r, Expression v, ReferenceEnv rt,
@@ -72,17 +88,7 @@ public class Compiler extends Util {
 	} else if (v instanceof Symbol) {
 	    Symbol sym=(Symbol)v;
 
-	    int[] ra=rt.lookup(sym);
-	    if (ra==null) {
-		try {
-		    return new FreeReferenceExp(sym, env.getLoc(sym),
-						env);
-		} catch (UndefinedException e) {
-		    return new FreeReferenceExp(sym, -1, env);
-		} catch (ClassCastException e) {
-		    return new FreeReferenceExp(sym, -1, env);
-		}
-	    } else return new LexicalReferenceExp(ra[0],ra[1]);
+	    return rt.createReference(sym, env);
 	}
 	else return v;
     }
@@ -90,13 +96,19 @@ public class Compiler extends Util {
     public Expression compile(Interpreter r, Expression v, 
 			      AssociativeEnvironment env) 
 	throws ContinuationException {
-	return compile(r, v, new ReferenceEnv(), TAIL, env);
+	Expression e= compile(r, v, new ReferenceEnv(), TAIL, env);
+	return e;
     }
     
-    int getExpType(Symbol s) {
-	Integer i=(Integer)expenv.get(s);
-	if (i==null) return APP;
-	return i.intValue();
+    int getExpType(AssociativeEnvironment env, Symbol s) {
+	try {
+	    Object h=env.lookup(s);
+	    
+	    if (h instanceof Syntax)  
+		return ((Syntax)h).synid;
+	} catch (ArrayIndexOutOfBoundsException ab) {
+	}
+	return APP;
     }			 
 
     public Expression compileApp(Interpreter r,
@@ -105,12 +117,14 @@ public class Compiler extends Util {
 	throws ContinuationException {
 	if (expr.car instanceof Symbol) {
 	    Symbol s=(Symbol)expr.car;
-	    int t=getExpType(s);
+	    int t=getExpType(env, s);
 	    expr=(Pair)expr.cdr;
 
 	    switch (t) {
 	    case QUOTE:
 		return expr.car;
+		//	    case _VOID:
+		//return VOID;
 	    case LAMBDA: 
 		boolean infArity=false;
 		Symbol[] formals=null;
@@ -182,20 +196,20 @@ public class Compiler extends Util {
 		Expression[] exps=pairToExpressions(expr);
 		compileExpressions(r, exps, rt, 0, env);
 		return new AppExp(compile(r, s, rt, 0, env),
-				  exps, (context & TAIL)!=0);
+				  exps, (context & TAIL)==0);
 	    }
 	} else if (expr.car instanceof Pair) {
 	    Expression[] exps=pairToExpressions((Pair)expr.cdr);
 	    compileExpressions(r, exps, rt, 0, env);
 	    return new AppExp(compile(r, expr.car, rt, 0, env), 
-			      exps, (context & TAIL)!=0);
+			      exps, (context & TAIL)==0);
 	} else {
 	    System.err.println("{warning: compiler detected application of non-procedure '"+
 			       expr.write()+"'}");
 	    Expression[] exps=pairToExpressions((Pair)expr.cdr);
 	    compileExpressions(r, exps, rt, 0, env);
 	    return new AppExp(compile(r, expr.car, rt, 0, env),
-			      exps, (context & TAIL)!=0);
+			      exps, (context & TAIL)==0);
 	}
 	    
     }
@@ -211,14 +225,14 @@ public class Compiler extends Util {
 			    ReferenceEnv rt, AssociativeEnvironment env)
 	throws ContinuationException {
 	Expression last=compile(r, (Expression)v.lastElement(), rt, 
-				TAIL|context, env);
+				TAIL & context, env);
 	v.removeElementAt(v.size()-1);
 
 	if (v.size()==0) return last;
 	Vector v2=new Vector(v.size());
 	for (int i=0; i<v.size(); i++) {
 	    Expression e=compile(r, (Expression)v.elementAt(i), 
-				 rt, context, env);
+				 rt, COMMAND, env);
 	    if (!(e instanceof Immediate)) 
 		v2.addElement(e);
 	}

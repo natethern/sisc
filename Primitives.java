@@ -31,7 +31,7 @@ public class Primitives extends Module {
         ASIN=101, SETBOX=117,      CEILING=84,    INEXACT2EXACT=82, 
         ACOS=102, QUOTIENT=86,     WRITECHAR=87,  INPORTQ=88, 
         ATAN=103, OUTPORTQ=89,	   PEEKCHAR=90,   CALLWITHVALUES=91, 
-        _VOID=77, REALPART=95,     IMAGPART=96,   MAKERECTANGULAR=94, 
+        REALPART=95,     IMAGPART=96,   MAKERECTANGULAR=94, 
         VOIDQ=93, STRINGFILL=107,  CHARREADY=108, BLOCKREAD=110, 
         ASHL=97,  LOADMODULE=109,  CALLFC=92,     BLOCKWRITE=111, 
 	LOG=104,  OPENOUTPUTFILE=54, 	       CLOSEINPUTPORT=79, 
@@ -42,7 +42,7 @@ public class Primitives extends Module {
 	UNBOX=116,CURRENTINPUTPORT=46,         CURRENTOUTPUTPORT=47,      
         FLOOR=83, OPENOUTPUTSTRING=48,         GETOUTPUTSTRING=49, 
 	PUTPROP=121, STRING2UNINTERNEDSYMBOL=66,  OPENINPUTSTRING=50,
-	LIST=122;
+	LIST=122, _VOID=123;
 
     public void initialize(Interpreter r) {
 	define(r, "list", LIST);
@@ -169,12 +169,6 @@ public class Primitives extends Module {
 	define(r, "write-char", WRITECHAR);
     }
 
-    static SchemeBoolean numQuery(Value v, int mask) 
-	throws ContinuationException {
-	return truth(v instanceof Quantity &&
-		     (((Quantity)v).type & mask)!=0);
-    }
-
     public Value eval(int primid, Interpreter f) 
 	throws ContinuationException {
 	switch (f.vlr.length) {
@@ -202,12 +196,18 @@ public class Primitives extends Module {
 	    }
 	case 1:
 	    switch (primid) {
-	    case CAR: return truePair(f, f.vlr[0]).car;
 	    case NULLQ: return truth(f.vlr[0]==EMPTYLIST);
+	    case CAR: return truePair(f, f.vlr[0]).car;
 	    case CDR: return truePair(f, f.vlr[0]).cdr;
 	    case PAIRQ: 
 		return truth(f.vlr[0] instanceof Pair &&
 				     f.vlr[0]!=EMPTYLIST);
+	    case LOOKUP:		
+		try {
+		    return f.toplevel_env.lookup(symbol(f,f.vlr[0]));
+		} catch (ArrayIndexOutOfBoundsException e) {
+		    return FALSE;
+		}
 	    case SIN: return num(f,f.vlr[0]).sin();
 	    case COS: return num(f,f.vlr[0]).cos();
 	    case TAN: return num(f,f.vlr[0]).tan();
@@ -337,6 +337,8 @@ public class Primitives extends Module {
 			v=f.parser.nextExpression(p);
 		    } catch (IOException e) {
 			f.pop(before);
+			e.printStackTrace();
+
 			throw new RuntimeException( "error reading from "+p.write());
 		    }
 		    if (v!=EOF)
@@ -390,8 +392,8 @@ public class Primitives extends Module {
 	    case REPORTENVIRONMENT:
 		if (FIVE.equals(num(f,f.vlr[0]))) 
 		    try {
-			return (Value)f.symenv.lookup(REPORT);
-		    } catch (UndefinedException e) {
+			return f.symenv.lookup(REPORT);
+		    } catch (ArrayIndexOutOfBoundsException e) {
 			throw new RuntimeException("Standard environment not present");
 		    }
 		else throw new RuntimeException("Unsupported standard version");
@@ -408,12 +410,6 @@ public class Primitives extends Module {
 		/*	    case SYNTRANS:
 		f.compiler.syntaxTransform=truth(f.vlr[0]);
 		return VOID;*/
-	    case LOOKUP:		
-		try {
-		    return (Value)f.toplevel_env.lookup(symbol(f,f.vlr[0]));
-		} catch (UndefinedException e) {
-		    return FALSE;
-		}
 	    case LOADMODULE:
 		try {
 		    Class clazz=Class.forName(string(f,f.vlr[0]));
@@ -421,6 +417,7 @@ public class Primitives extends Module {
 		    m.initialize(f);
 		    return VOID;
 		} catch (Exception e) {
+		    e.printStackTrace();
 		    throw new RuntimeException(e.getMessage());
 		}
 	    case SAVEENV:
@@ -547,9 +544,12 @@ public class Primitives extends Module {
 	    case ERROR:
 		error(f, string(f,f.vlr[0]), false);
 	    case LOOKUP: 
-		Value rv=(Value)f.lookup(symbol(f,f.vlr[0]), symbol(f,f.vlr[1]));
-		return (rv==null) ? FALSE : rv;
-
+		try {
+		    return (Value)f.lookup(symbol(f,f.vlr[0]), 
+					   symbol(f,f.vlr[1]));
+		} catch (ArrayIndexOutOfBoundsException e) {
+		    return FALSE;
+		}
 	    }
 	case 3:
 	    switch(primid) {
@@ -571,7 +571,7 @@ public class Primitives extends Module {
 				    character(f,f.vlr[2]));
 		return VOID;
 	    case VECTORSET:
-		vec(f,f.vlr[0]).vals[num(f,f.vlr[1]).intValue()]=f.vlr[2];
+		vec(f,f.vlr[0]).set(num(f,f.vlr[1]).intValue(),f.vlr[2]);
 		return VOID;
 	    case BLOCKREAD:
 		int count=num(f,f.vlr[2]).intValue();

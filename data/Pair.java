@@ -79,15 +79,8 @@ public class Pair extends Value {
     public boolean valueEqual(Value v) {
 	if (!(v instanceof Pair)) return false;
 	Pair p=(Pair)v;
-	if (car==null && p.car!=null) 
-	    return false;
-	if (!car.equals(p.car))
-	    return false;
-	if (cdr==null && p.cdr!=null)
-	    return false;
-	if (!cdr.equals(p.cdr))
-	    return false;
-	return true;
+	return car.equals(p.car) &&
+	    cdr.equals(p.cdr);
     }
 }
     

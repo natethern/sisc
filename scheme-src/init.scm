@@ -25,11 +25,23 @@
 (define (newline . port)
   (apply display (cons #\newline port)))
 
-(define (list . args) args)
+(define map1 
+  (letrec ([iter (lambda (proc head acc ls)
+		   (if (null? ls) 
+		       head
+		       (begin
+			 (set-cdr! acc (cons (proc (car ls)) ()))
+			 (iter proc head (cdr acc) (cdr ls)))))])
+    
+    (lambda (proc ls)
+      (if (null? ls) 
+	  ()
+	  (let ([sv (cons (proc (car ls)) ())])
+	    (iter proc sv sv (cdr ls)))))))
 
-(define (map proc ls)
-  (if (null? ls) ()
-      (cons (proc (car ls)) (map proc (cdr ls)))))
+;  (if (null? ls) ()
+;      (cons (proc (car ls)) (map proc (cdr ls)))))
+(define map map1)
 
 (define (compose f g)
   (lambda (x)
@@ -82,11 +94,10 @@
 (define cdddar (compose cdr cddar))
 (define cddddr (compose cdr cdddr))
 
-(define (append ls1 ls2)
+(define (append2 ls1 ls2)
   (if (null? ls1) ls2
       (cons (car ls1) (append (cdr ls1) ls2))))
-
-(define eqv? eq?) ;fixme
+(define append append2)
    
 ;;;;;;;;; Extensions: new names for old procedures
 
@@ -99,19 +110,20 @@
 
 ;;;;;;;;;;;;;;; Conversion functions
 
-(define list->string
-  (letrec [(l2s
-             (lambda (l s n)
-               (if (null? l) s
-                   (begin (string-set! s n (car l))
-                          (l2s (cdr l) s (+ n 1))))))]
-     (lambda (l)
-        (l2s l (make-string (length l)) 0))))
+(define (list->string l)
+  (letrec ([l2s
+	    (lambda (l s n)
+	      (if (null? l) 
+		  s 
+		  (begin (string-set! s n (car l))
+			 (l2s (cdr l) s (+ n 1)))))])
+    (l2s l (make-string (length l)) 0)))
 
 (define string->list
   (letrec [(s2l
              (lambda (s h n)
-               (if (< n 0) h
+               (if (< n 0) 
+		   h
                    (s2l s (cons (string-ref s n) h) (- n 1)))))]
      (lambda (s)
         (s2l s '() (- (string-length s) 1)))))
@@ -125,9 +137,10 @@
      (lambda (l)
         (l2v l (make-vector (length l)) 0))))
 
-
 ;;;;;;;;;;;;; Constructors
 
+(if (not (lookup 'list))
+    (define (list . args) args)
 (define (vector . elems) (list->vector elems))
 (define (string . elems) (list->string elems))
 
@@ -231,54 +244,48 @@
 	[(equal? (car ls) elem) (remove elem (cdr ls))]
 	[else
 	 (cons (car ls) (remove elem (cdr ls)))]))
-
 (define append
-  (letrec ([real-append
-	    (lambda (ls1 ls2 . lses)
-	      (cond [(null? ls1)
-		     (if (null? lses)
-			 ls2
-			 (apply append (cons ls2 lses)))]
-		    [else (cons (car ls1) 
-				(apply real-append 
-				       `(,(cdr ls1) ,ls2 . ,lses)))]))])
+  (letrec ([real-append 
+	    (lambda (ls1 . lses)
+	      (cond [(null? lses) ls1]
+		    [(null? ls1)
+		     (apply real-append lses)]
+		    [else (apply real-append 
+				 (cons (append2 ls1 (car lses))
+				       (cdr lses)))]))])
     (lambda lses
       (cond [(null? lses) ()]
 	    [(null? (cdr lses)) (car lses)]
-	    [else (apply real-append `(,(car lses) ,(cadr lses) . 
-				       ,(cddr lses)))]))))
+	    [else (apply real-append `(,(car lses) . ,(cdr lses)))]))))
 (define map
-  ((lambda (map1 iter)
-     (set! map1 (lambda (proc ls)
-		  (cond [(null? ls) ()]
-			[else (cons (proc (car ls)) (map1 proc (cdr ls)))])))
-     (set! iter (lambda (proc lists head acc)
-		  (if (null? (car lists)) 
-		      (if (andmap null? lists)
-                          head
-                          (error 'map "lists are not of equal length"))
-		      ((lambda (newres rest)
-			 (if (not (null? acc)) (set-cdr! acc newres))
-			 (if (null? head)
-			     (iter proc rest newres newres)
-			     (iter proc rest head newres)))
-		       (cons (apply proc (map1 car lists)) ())
-		       (map1 cdr lists)))))
-     (lambda (proc ls . lses)
-       (iter proc (cons ls lses) () ())))
-   #f #f))
+  (letrec ([iter
+	    (lambda (proc lists head acc)
+	      (if (null? (car lists)) 
+		  (if (andmap null? lists)
+		      head
+		      (error 'map "lists are not of equal length"))
+		  (let ([newres (cons (apply proc (map1 car lists)) ())]
+			[rest (map1 cdr lists)])
+		    (if (not (null? acc)) (set-cdr! acc newres))
+		    (if (null? head)
+			(iter proc rest newres newres)
+			(iter proc rest head newres)))))])
+    (lambda (proc ls . lses)
+      (if (null? lses)
+	  (map1 proc ls)
+	  (iter proc (cons ls lses) () ())))))
 
 (define list? 
-  (letrec [(circular? 
-             (lambda (ls backlist)
-               (and (pair? ls)
-                    (or (memq ls backlist)
-                        (circular? (cdr ls) (cons ls backlist))))))]
+  (letrec [(list-h? 
+             (lambda (lsp1 lsp2)
+	       (or (null? lsp1)
+		   (null? lsp2)
+		   (null? (cdr lsp2))
+		   (and (not (eq? lsp1 lsp2))
+			(list-h? (cdr lsp1) (cddr lsp2))))))]
    (lambda (lsc)
-     (and (pair? lsc) 
-          (not (circular? lsc ()))
-          (or (list? (cdr lsc))
-              (null? (cdr lsc)))))))
+     (and (pair? lsc) (list-h? lsc (cdr lsc))))))
+
 
 ;;;;;;;;;;;;;; Math functions/constants
 (define (expt base exponent)
@@ -373,6 +380,7 @@
          [else (_lcm (car args) (cadr args))]))
 
 ;pi
+(max-precision 1500)
 (define pi-10 3.1415926536)
 (define pi-70
   3.1415926535897932384626433832795028841971693993751058209749445923078164)
@@ -387,6 +395,7 @@
 (define e-1000
  2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274274663919320030599218174135966290435729003342952605956307381323286279434907632338298807531952510190115738341879307021540891499348841675092447614606680822648001684774118537423454424371075390777449920695517027618386062613313845830007520449338265602976067371132007093287091274437470472306969772093101416928368190255151086574637721112523897844250569536967707854499699679468644549059879316368892300987931277361782154249992295763514822082698951936680331825288693984964651058209392398294887933203625094431173012381970684161403970198376793206832823764648042953118023287825098194558153017567173613320698112509961818815930416903515988885193458072738667385894228792284998920868058257492796104841984443634632449684875602336248270419786232090021609902353043699418491463140934317381436405462531520961836908887070167683964243781405927145635490613031072085103837505101157477041718986106873969655212671546889570350354)
 (define e e-10)
+(max-precision 16)
 
 ;;;;;;;;;;;;;; String functions
 
@@ -550,3 +559,17 @@
 
 (define (list-ref list n)
   (if (zero? n) (car list) (list-ref (cdr list) (- n 1))))
+(define iota
+  (letrec ([iota-help
+	    (lambda (n h) 
+	      (if (> n h)
+		  ()
+		  (cons n (iota-help (+ n 1) h))))])
+    (lambda (n) 
+      (iota-help 0 n))))
+
+
+(define (values . args)
+  (call-with-current-continuation
+   (lambda (k) 
+     (apply k args))))

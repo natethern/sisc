@@ -9,4 +9,6 @@ public abstract class Expression extends Util implements Serializable {
     public Value getValue(Interpreter r) throws ContinuationException {
 	return null;
     }
+
+    public abstract Value express();
 }

@@ -46,12 +46,13 @@
 
   (define (vector-find-endpoint v)
     (let ([lastelem (- (vector-length v) 1)])
-      (if (= lastelem -1) -1
-	  (let loop ([x lastelem]
-		     [base (vector-ref v lastelem)])
-	    (if (and (> x -1) (eq? base (vector-ref v x)))
-		(loop (- x 1) base)
-		(+ x 2))))))
+      (if (= lastelem -1) 
+	  -1
+	  (let ([base (vector-ref v lastelem)])
+	    (let loop ([x lastelem])
+	      (if (and (> x -1) (eq? base (vector-ref v x)))
+		  (loop (- x 1))
+		  (+ x 2)))))))
 
   (define (read-macro? l)
     (define (length1? l) (and (pair? l) (null? (cdr l))))
@@ -108,12 +109,6 @@
       (if (> n 0)
         (out (make-string n #\space) col)
         col))
-
-;      (if (> n 0)
- ;       (if (> n 7)
-  ;        (spaces (- n 8) (out "        " col))
-   ;       (out (substring "        " 0 n) col))
-    ;    col))
 
     (define (indent to col)
       (and col

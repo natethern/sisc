@@ -5,38 +5,38 @@ import sisc.data.*;
 
 public class AppExp extends Expression {
     public Expression rator, rands[];
-    public boolean tailPos;
+    public boolean nonTail;
 
-    public AppExp(Expression rator, Expression rands[], boolean tail) {
+    public AppExp(Expression rator, Expression rands[], boolean nontail) {
 	this.rator=rator;
 	this.rands=rands;
-	tailPos=tail;
+	this.nonTail=nontail;
     }
 
 
     public void eval(Interpreter r) throws ContinuationException { 
-	if (!tailPos) {
+	if (nonTail) {
 	    r.nxp=null;
 	    r.save();
 	}
+
 	r.vlr=new Value[rands.length];
 
-	int i;
-	//	S%ystem.err.println(rator);
+	// Fill the rib right to left with immediates until non-imm.
+	// encountered
+	int i=rands.length-1;
 	Value tmp;
-	for (i=rands.length-1;
-	     i>=0 && ((tmp=rands[i].getValue(r)) != null);
-	     i--) {
+	for (; i>=0 && ((tmp=rands[i].getValue(r)) != null); i--)
 	    r.vlr[i]=tmp;
-	}
-
 	
+	// If not all were immediate, push a fillrib, otherwise
+	// go straight to eval
 	if (i>-1) {
 	    r.push(r.createFillRib(i, rands, rator, APPEVAL));
 	    r.nxp=rands[i];
 	} else {
 	    tmp=rator.getValue(r);
-	    if (tmp==null) {
+	    if (tmp==null) { 
 		r.push(APPEVAL);
 		r.nxp=rator;
 	    } else {
@@ -46,14 +46,12 @@ public class AppExp extends Expression {
 	}
     }
 
-    public String toString() {
-	StringBuffer b=new StringBuffer();
-	b.append(tailPos ? "(TailApp-exp " :"(App-exp ");
-	b.append(rator).append(' ');
-	for (int i=0; i<rands.length; i++) {
-	    b.append(rands[i]).append(' ');
+    public Value express() {
+	Pair args=EMPTYLIST;
+	for (int i=rands.length-1; i>=0; i--) {
+	    args=new Pair(rands[i].express(), args);
 	}
-	b.append(')');
-	return b.toString();
+	args=new Pair(rator.express(), args);
+	return new Pair(nonTail ? sym("App-exp") : sym("TailApp-exp"), args);
     }
 }

@@ -17,11 +17,7 @@ public class LexicalSetExp extends Expression {
 	r.nxp=rhs;
     }
 
-    public String toString(){
-	StringBuffer b=new StringBuffer();
-	b.append("(Lexical-set-exp ");
-	b.append(eexpr.depth).append(':').append(eexpr.pos).append(' ');
-	b.append(rhs).append(')');
-	return b.toString();
+    public Value express() {
+	return list(sym("LexicalSet-exp"), eexpr.express(), rhs.express());
     }
 }

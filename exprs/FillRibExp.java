@@ -54,10 +54,8 @@ public class FillRibExp extends Expression implements Volatile {
 	locked=true;
     }
 
-    public String toString() {
-	StringBuffer b=new StringBuffer();
-	b.append("(FillRib-exp)");
-	return b.toString();
+    public Value express() {
+	return list(sym("FillRib-exp"));
     }
 }
 

@@ -46,6 +46,10 @@ public abstract class Util {
 	throw new ContinuationException(r.fk);
     }
 
+    public static Symbol sym(String s) {
+	return Symbol.get(s);
+    }
+
     public static void error(Interpreter r, String errormessage) 
 	throws ContinuationException {
 	error(r, errormessage, true);
@@ -286,6 +290,17 @@ public abstract class Util {
 	    p=new Pair(r[(offset+len)-i-1], p);
 	}
 	return p;
+    }
+
+    public static SchemeBoolean numQuery(Value v, int mask) 
+	throws ContinuationException {
+	return truth(v instanceof Quantity &&
+		     (((Quantity)v).type & mask)!=0);
+    }
+
+    public static boolean jnumQuery(Value v, int mask) {
+	return v instanceof Quantity &&
+	    (((Quantity)v).type & mask)!=0;
     }
 }
 

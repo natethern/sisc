@@ -23,10 +23,8 @@ public class DefineEval extends Expression {
 	r.nxp=null;
     }
 
-    public String toString(){
-	StringBuffer b=new StringBuffer();
-	b.append("(Define-eval").append(' ').append(lhs).append(')');
-	return b.toString();
+    public Value express() {
+	return list(sym("Define-eval"), lhs);
     }
 }
 

@@ -22,12 +22,7 @@ public class IfExp extends Expression {
 	}
     }
 
-    public String toString(){
-	StringBuffer b=new StringBuffer();
-	b.append("(If-exp ");
-	b.append(test).append(' ');
-	b.append(eexp.conseq).append(' ');
-	b.append(eexp.altern).append(')');
-	return b.toString();
+    public Value express() {
+	return list(sym("If-exp"), test.express(), eexp.express());
     }
 }

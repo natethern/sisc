@@ -17,7 +17,7 @@ public class REPL extends Thread {
 	r=new Interpreter(in, out);
 	r.setEvaluator("eval");
 	try {
-	    r.loadEnv(new BufferedInputStream(new GZIPInputStream(new FileInputStream(System.getProperty("HEAP","sisc.heap"))),65535));
+	    r.loadEnv(new BufferedInputStream(new GZIPInputStream(new BufferedInputStream(new FileInputStream(System.getProperty("HEAP","sisc.heap"))),48000), 65536));
 	} catch (IOException e) {
 	    System.err.println("Error loading heap!");
 	    e.printStackTrace();
@@ -56,6 +56,7 @@ public class REPL extends Thread {
 		continue start;
 	    }
 	} while (false);
+	//System.runFinalizersOnExit(true);
     }
 
     public static void main(String[] args) throws Exception {

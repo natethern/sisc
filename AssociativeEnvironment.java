@@ -66,20 +66,19 @@ public class AssociativeEnvironment extends NamedValue {
 	}
     }
 
-    public int getLoc(Symbol s) throws UndefinedException {
-	try {
-	    Integer i=(Integer)symbolMap.get(s);
-	    return i.intValue();
-	} catch (NullPointerException np) {
-	    throw new UndefinedException();
-	}
+    public int getLoc(Symbol s) {
+	Integer i=(Integer)symbolMap.get(s);
+	return (i==null ? -1 : i.intValue());
     }
 
-    public Value lookup(Symbol s) throws UndefinedException {
-	return env[getLoc(s)];
+    public Value lookup(Symbol s) {
+	Integer i=(Integer)symbolMap.get(s);
+	if (i==null)
+	    throw new ArrayIndexOutOfBoundsException();
+	else return env[i.intValue()];
     }
 
-    public Value lookup(int envLoc) throws UndefinedException {
+    public Value lookup(int envLoc) {
 	return env[envLoc];
     }
 

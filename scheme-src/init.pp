@@ -8,6 +8,9 @@
           (apply proc (map car lists))
           (apply for-each (cons proc (map cdr lists))))
         (void)))))
+(define exit (lambda () '#!eof))
+(define eof-object? (lambda (x) (eq? x '#!eof)))
+(define not (lambda (x) (if x '#f '#t)))
 (define eqv?
   (lambda (x y)
     ((lambda (t)
@@ -19,18 +22,28 @@
            (= x y)
            '#f)))
      (eq? x y))))
-(define not (lambda (x) (if x #f #t)))
-(define eof-object? (lambda (x) (eq? x #!eof)))
-(define exit (lambda () '#!eof))
 (define newline
   (lambda port
     (apply display (cons '#\newline port))))
-;(define list (lambda args args))
-(define map
-  (lambda (proc ls)
-    (if (null? ls)
-      '()
-      (cons (proc (car ls)) (map proc (cdr ls))))))
+(define map1
+  ((lambda (iter)
+     ((lambda (%_14)
+        (begin
+          (set! iter %_14)
+          ((lambda ()
+             (lambda (proc ls)
+               (if (null? ls)
+                 '()
+                 ((lambda (sv) (iter proc sv sv (cdr ls)))
+                  (cons (proc (car ls)) '()))))))))
+      (lambda (proc head acc ls)
+        (if (null? ls)
+          head
+          (begin
+            (set-cdr! acc (cons (proc (car ls)) '()))
+            (iter proc head (cdr acc) (cdr ls)))))))
+   '#f))
+(define map map1)
 (define compose
   (lambda (f g) (lambda (x) (f (g x)))))
 (define _assn
@@ -87,11 +100,12 @@
 (define cddadr (compose cdr cdadr))
 (define cdddar (compose cdr cddar))
 (define cddddr (compose cdr cdddr))
-(define append
+(define append2
   (lambda (ls1 ls2)
     (if (null? ls1)
       ls2
       (cons (car ls1) (append (cdr ls1) ls2)))))
+(define append append2)
 (define first car)
 (define second cadr)
 (define third caddr)
@@ -142,17 +156,14 @@
   (lambda elems (list->vector elems)))
 (define string
   (lambda elems (list->string elems)))
-(define _cd
-  (_string-append (getprop 'user.dir '*environment-variables*) 
-                 (getprop 'file.separator '*environment-variables*)))
+(define _cd '"")
+(define _separator '"/")
 (define current-directory (void))
-(define _cd "")
-(define _separator "/")
 ((lambda (gen-path is)
-   ((lambda (%_19 %_20)
+   ((lambda (%_18 %_19)
       (begin
-        (set! gen-path %_19)
-        (set! is %_20)
+        (set! gen-path %_18)
+        (set! is %_19)
         ((lambda ()
            ((lambda (*load
                      *open-output-file
@@ -258,9 +269,9 @@
      (open-output-file file))))
 (define reverse
   ((lambda (iter)
-     ((lambda (%_21)
+     ((lambda (%_20)
         (begin
-          (set! iter %_21)
+          (set! iter %_20)
           ((lambda () (lambda (ls) (iter ls '()))))))
       (lambda (ls acc)
         (if (null? ls)
@@ -276,74 +287,73 @@
         (cons (car ls) (remove elem (cdr ls)))))))
 (define append
   ((lambda (real-append)
-     ((lambda (%_22)
+     ((lambda (%_21)
         (begin
-          (set! real-append %_22)
+          (set! real-append %_21)
           ((lambda ()
              (lambda lses
                (if (null? lses)
                  '()
                  (if (null? (cdr lses))
                    (car lses)
-                   (apply real-append
-                          (cons (car lses)
-                                (cons (cadr lses) (cddr lses)))))))))))
-      (lambda (ls1 ls2 . lses)
-        (if (null? ls1)
-          (if (null? lses)
-            ls2
-            (apply append (cons ls2 lses)))
-          (cons (car ls1)
-                (apply real-append
-                       (cons (cdr ls1) (cons ls2 lses))))))))
+                   (apply real-append (cons (car lses) (cdr lses))))))))))
+      (lambda (ls1 . lses)
+        (if (null? lses)
+          ls1
+          (if (null? ls1)
+            (apply real-append lses)
+            (apply real-append
+                   (cons (append2 ls1 (car lses)) (cdr lses))))))))
    '#f))
-(define map
-  ((lambda (map1 iter)
-     (begin
-       (set! map1
-         (lambda (proc ls)
-           (if (null? ls)
-             '()
-             (cons (proc (car ls)) (map1 proc (cdr ls))))))
-       (set! iter
-         (lambda (proc lists head acc)
-           (if (null? (car lists))
-             (if (andmap null? lists)
-               head
-               (error 'map '"lists are not of equal length"))
-             ((lambda (newres rest)
-                (begin
-                  (if (not (null? acc))
-                    (set-cdr! acc newres)
-                    (void))
-                  (if (null? head)
-                    (iter proc rest newres newres)
-                    (iter proc rest head newres))))
-              (cons (apply proc (map1 car lists)) '())
-              (map1 cdr lists)))))
-       (lambda (proc ls . lses)
-         (iter proc (cons ls lses) '() '()))))
-   '#f
+(define map 
+  ((lambda (iter) 
+     ((lambda (%_15) 
+	(begin (set! iter %_15) 
+	       ((lambda () 
+		  (lambda (proc ls . lses) 
+		    (if (null? lses) 
+			(map1 proc ls) 
+			(iter proc (cons ls lses) '() '()))))))) 
+      (lambda (proc lists head acc) 
+	(if (null? (car lists)) 
+	    (if (andmap null? lists) 
+		head 
+		(error 'map '"lists are not of equal length")) 
+	    ((lambda (newres rest) 
+	       (begin 
+		 (if (not (null? acc)) 
+		     (set-cdr! acc newres) 
+		     (void)) 
+		 (if (null? head) 
+		     (iter proc rest newres newres) 
+		     (iter proc rest head newres)))) 
+	     (cons (apply proc (map1 car lists)) '()) 
+	     (map1 cdr lists)))))) 
    '#f))
 (define list?
-  ((lambda (circular?)
+  ((lambda (list-h?)
      ((lambda (%_23)
         (begin
-          (set! circular? %_23)
+          (set! list-h? %_23)
           ((lambda ()
              (lambda (lsc)
-               (if (pair? lsc)
-                 (if (not (circular? lsc '()))
-                   ((lambda (t) (if t t (null? (cdr lsc))))
-                    (list? (cdr lsc)))
-                   '#f)
-                 '#f))))))
-      (lambda (ls backlist)
-        (if (pair? ls)
-          ((lambda (t)
-             (if t t (circular? (cdr ls) (cons ls backlist))))
-           (memq ls backlist))
-          '#f))))
+               (if (pair? lsc) (list-h? lsc (cdr lsc)) '#f))))))
+      (lambda (lsp1 lsp2)
+        ((lambda (t)
+           (if t
+             t
+             ((lambda (t)
+                (if t
+                  t
+                  ((lambda (t)
+                     (if t
+                       t
+                       (if (not (eq? lsp1 lsp2))
+                         (list-h? (cdr lsp1) (cddr lsp2))
+                         '#f)))
+                   (null? (cdr lsp2)))))
+              (null? lsp2))))
+         (null? lsp1)))))
    '#f))
 (define expt
   (lambda (base exponent)
@@ -475,18 +485,18 @@
       (if (null? (cdr args))
         (car args)
         (_lcm (car args) (cadr args))))))
+(max-precision '1500)
 (define pi-10 '3.1415926536)
-(define pi-70
-  '3.1415926535897932384626433832795028841971693993751058209749445923078164)
+(define pi-70 '3.1415926535897932384626433832795)
 (define pi-1000
-  '3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091456485669234603486104543266482133936072602491412737245870066063155881748815209209628292540917153643678925903600113305305488204665213841469519415116094330572703657595919530921861173819326117931051185480744623799627495673518857527248912279381830119491298336733624406566430860213949463952247371907021798609437027705392171762931767523846748184676694051320005681271452635608277857713427577896091736371787214684409012249534301465495853710507922796892589235420199561121290219608640344181598136297747713099605187072113499999983729780499510597317328160963185950244594553469083026425223082533446850352619311881710100031378387528865875332083814206171776691473035982534904287554687311595628638823537875937519577818577805321712268066130019278766111959092164201989)
+  '3.1415926535897932384626433832795)
 (define pi pi-10)
 (define e-10 '2.7182818285)
-(define e-70
-  '2.7182818284590452353602874713526624977572470936999595749669676277240766)
+(define e-70 '2.71828182845904523536028747135266)
 (define e-1000
-  '2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274274663919320030599218174135966290435729003342952605956307381323286279434907632338298807531952510190115738341879307021540891499348841675092447614606680822648001684774118537423454424371075390777449920695517027618386062613313845830007520449338265602976067371132007093287091274437470472306969772093101416928368190255151086574637721112523897844250569536967707854499699679468644549059879316368892300987931277361782154249992295763514822082698951936680331825288693984964651058209392398294887933203625094431173012381970684161403970198376793206832823764648042953118023287825098194558153017567173613320698112509961818815930416903515988885193458072738667385894228792284998920868058257492796104841984443634632449684875602336248270419786232090021609902353043699418491463140934317381436405462531520961836908887070167683964243781405927145635490613031072085103837505101157477041718986106873969655212671546889570350354)
+  '2.71828182845904523536028747135266)
 (define e e-10)
+(max-precision '16)
 (define string-append
   (lambda args
     (if (null? args)
@@ -745,8 +755,17 @@
           (car args)
           '#f))))
    error))
+
 (define list-ref
   (lambda (list n)
     (if (zero? n)
       (car list)
       (list-ref (cdr list) (- n '1)))))
+
+(define values
+  (lambda args
+    (call-with-current-continuation
+     (lambda (k) 
+       (apply k args)))))
+
+(load-module "sisc.modules.SNative")

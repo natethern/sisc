@@ -17,37 +17,24 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public void eval(Interpreter r) throws ContinuationException { 
 	r.nxp=null;
-	try {
-	    r.acc=lenv.env[envLoc];
-	} catch (ArrayIndexOutOfBoundsException aie) {
-	    try {
-		envLoc=lenv.getLoc(sym);
-		r.acc= lenv.env[envLoc];
-	    } catch (UndefinedException e2) {
+	if (envLoc==-1) { 
+	    envLoc=lenv.getLoc(sym);
+	    if (envLoc==-1)
 		error(r, "undefined variable '"+sym+"'");
-		return;
-	    }
 	}
+	r.acc= lenv.env[envLoc];
     }
 
     public Value getValue(Interpreter r) throws ContinuationException {
-	try {
-	    return lenv.env[envLoc];
-	} catch (ArrayIndexOutOfBoundsException aie) {
-	    try {
-		envLoc=lenv.getLoc(sym);
-		return lenv.env[envLoc];
-	    } catch (UndefinedException e2) {
+	if (envLoc==-1) { 
+	    envLoc=lenv.getLoc(sym);
+	    if (envLoc==-1)
 		error(r, "undefined variable '"+sym+"'");
-		return null;
-	    }
 	}
+	return lenv.env[envLoc];
     }
 
-    public String toString(){
-	StringBuffer b=new StringBuffer();
-	b.append("(FreeReference-exp ");
-	b.append(sym).append(')');
-	return b.toString();
+    public Value express() {
+	return list(sym("FreeReference-exp"), sym);
     }
 }

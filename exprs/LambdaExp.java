@@ -23,14 +23,11 @@ public class LambdaExp extends Expression implements Immediate {
 	return new Closure(infiniteArity, fcount, body, r.env);
     }
 
-    public String toString() {
-	StringBuffer b=new StringBuffer();
-	b.append("(Lambda-exp ");
-	b.append(fcount);
-	b.append("\n\t").append(body).append(')');
-	return b.toString();
+    public Value express() {
+	return list(sym("Lambda-exp"), new Quantity(fcount), body.express());
     }
 }
+
 
 
 

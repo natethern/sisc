@@ -1,16 +1,18 @@
+;; The SISC read-eval-print-loop
+
 (define repl
   (letrec ([repl-loop
 	    (lambda (console-in console-out writer)
 	      (display "> " console-out)
-	      (let ([exp (read console-in)])
-		(let ([val (eval exp)])
-		  (cond [(void? val) (repl-loop console-in console-out writer)]
-			[(eof-object? val) (void)]
-			[else 
-			 (begin 
-			   (writer val console-out)
-			   (newline console-out)
-			   (repl-loop console-in console-out writer))]))))])
+	      (let* ([exp (read console-in)]
+		     [val (eval exp)])
+		(cond [(void? val) (repl-loop console-in console-out writer)]
+		      [(eof-object? val) (void)]
+		      [else 
+		       (begin 
+			 (writer val console-out)
+			 (newline console-out)
+			 (repl-loop console-in console-out writer))])))])
     (lambda args
       (set! _separator (getprop 'file.separator '*environment-variables*))
       (current-directory (getprop 'user.dir '*environment-variables*))

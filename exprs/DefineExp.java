@@ -17,12 +17,7 @@ public class DefineExp extends Expression {
 	r.nxp=rhs;
     }
 
-    public String toString(){
-	StringBuffer b=new StringBuffer();
-	b.append("(Define-exp ");
-	b.append(defineEval).append(' ');
-	b.append(rhs);
-	b.append(')');
-	return b.toString();
+    public Value express() {
+	return list(sym("Define-exp"), defineEval.express(), rhs.express());
     }
 }

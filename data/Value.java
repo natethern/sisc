@@ -36,7 +36,12 @@ public abstract class Value extends Expression implements Immediate {
     public Value getValue(Interpreter r) throws ContinuationException {
 	return this;
     }
+
+    public Value express() {
+	return this;
+    }
 }
+
 
 
 

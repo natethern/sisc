@@ -66,3 +66,34 @@
   (lambda (x)
     (getprop 'x '*toplevel*)))
 
+(define ormap
+  (lambda (proc list1)
+    (if (not (null? list1))
+      ((lambda (t) (if t t (ormap proc (cdr list1))))
+       (proc (car list1)))
+      '#f)))
+ 
+(define remprop
+  (lambda (symbol key)
+    (putprop symbol key #f)))
+
+(define sc-expand (lambda (x) x))
+
+(define $old-eval (current-evaluator))
+
+(define eval 
+  ((lambda (old-eval)
+     (lambda (x)	
+       (if (if (pair? x) (eq? (car x) "noexpand") #f)
+  	   (old-eval (cadr x)) 
+           ((lambda (e) 
+	      (begin 
+;		(display e)
+;		(newline)
+		(old-eval e)))
+	    (sc-expand x))
+           (old-eval (sc-expand x)))))
+   (current-evaluator)))
+
+
+  

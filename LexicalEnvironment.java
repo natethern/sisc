@@ -26,12 +26,12 @@ public class LexicalEnvironment extends Value {
 
 	if (infiniteArity) {
 	    int sm1=s-1;
-	    if (v.length < sm1 ) 
+	    if (v.length < sm1) 
 		throw new IllegalArgumentException();
 	    vals=new Value[s];
-	    System.arraycopy(v,0,vals,0, sm1);
-	    vals[vals.length-1]=valArrayToList(v, sm1, 
-					       v.length-sm1);
+	    System.arraycopy(v, 0, vals, 0, sm1);
+	    vals[sm1]=valArrayToList(v, sm1, v.length-sm1);
+
 	} else {
 	    if (v.length!=s) 
 		throw new IllegalArgumentException();

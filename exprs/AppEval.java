@@ -9,13 +9,12 @@ public class AppEval extends Expression {
 	try {
 	    ((Procedure)r.acc).apply(r);
 	} catch (ClassCastException c) {
+	    c.printStackTrace();
 	    error(r, "Attempt to apply non-procedure '"+r.acc.write()+"'");
 	}
     }
 
-    public String toString() {
-	StringBuffer b=new StringBuffer();
-	b.append("(App-eval)");
-	return b.toString();
+    public Value express() {
+	return list(sym("App-Eval"));
     }
 }

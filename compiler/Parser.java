@@ -36,85 +36,107 @@ public class Parser extends Util implements Tokens {
 		return nextExpression(is);
 	    } else if (n==DOT)
 		throw new IOException("unexpected dot (.).");
-	} catch (EOFException e) {
-	    return EOF;
-	}
+	} 
 	return (Value)n;
     }
     
     protected Object _nextExpression(InputPort is, HashMap  state, Integer def) 
-	throws IOException, EOFException {
+	throws IOException {
+
 	int token=lexer.nextToken(is);
+
+	Object o;
 	switch (token) {
+	case TT_EOF:
+	    return EOF;
 	case TT_DOT:
-	    if (def==null) return  DOT ; else { Object o= DOT ; state.put(def, o); return o; } 
+	    o=DOT;
+	    break;
 	case TT_UNQUOTE:
-	    Pair pr=new Pair(UNQUOTE, 
-				     new Pair(nextExpression(is), 
-						      EMPTYLIST));
-	    if (def==null) return  pr ; else { Object o= pr ; state.put(def, o); return o; } 
+	    o=list(UNQUOTE, nextExpression(is));
+	    break;
 	case TT_UNQUOTE_SPLICING:
-	    pr=new Pair(UNQUOTE_SPLICING, new Pair(nextExpression(is), EMPTYLIST));
-	    if (def==null) return  pr ; else { Object o= pr ; state.put(def, o); return o; } 
+	    o=list(UNQUOTE_SPLICING, nextExpression(is));
+	    break;
 	case TT_QUOTE:
-	    pr=new Pair(QUOTE, new Pair(nextExpression(is), EMPTYLIST));
-	    if (def==null) return  pr ; else { Object o= pr ; state.put(def, o); return o; } 
+	    o=list(QUOTE, nextExpression(is));
+	    break;
 	case TT_BACKQUOTE:
-	    pr=new Pair(BACKQUOTE, new Pair(nextExpression(is), EMPTYLIST));
-	    if (def==null) return  pr ; else { Object o= pr ; state.put(def, o); return o; } 
+	    o=list(BACKQUOTE, nextExpression(is));
+	    break;
 	case TT_NUMBER:
-	    if (def==null) return  lexer.nval ; else { Object o= lexer.nval ; state.put(def, o); return o; } 
+	    o=lexer.nval;
+	    break;
 	case TT_STRING:
-	    if (def==null) return  new SchemeString(lexer.sval) ; else { Object o= new SchemeString(lexer.sval) ; state.put(def, o); return o; } 
+	    o=new SchemeString(lexer.sval);
+	    break;
 	case TT_PAIR:
 	    return readList(is, state, def);
 	case TT_ENDPAIR: 
-	    if (def==null) return  ENDPAIR ; else { Object o= ENDPAIR ; state.put(def, o); return o; } 
+	    o=ENDPAIR;
+	    break;
 	case TT_SYMBOL:
-	    if (def==null) return  Symbol.get(lexer.sval); else { 
-		Object o= Symbol.get(lexer.sval) ; state.put(def, o); return o; } 
+	    o=Symbol.get(lexer.sval);
+	    break;
 	case TT_SHARP:
 	    int c=is.read();
 	    switch (c) {
 	    case 't': case 'T':
-		if (def==null) return  TRUE ; else { Object o= TRUE ; state.put(def, o); return o; } 
+		o=TRUE;
+		break;
 	    case 'f': case 'F':
-		if (def==null) return  FALSE ; else { Object o= FALSE ; state.put(def, o); return o; } 
+		o=FALSE;
+		break;
+	    case ';':
+		nextExpression(is);
+		o=_nextExpression(is, state, def);
+		break;
 	    case '\\':
 		c=is.read();
-		if (lexer.in((char)c, lexer.special))
-		    if (def==null) return  new SchemeCharacter((char)c) ; else { Object o= new SchemeCharacter((char)c) ; state.put(def, o); return o; } 
+		if (lexer.in((char)c, lexer.special)) {
+		    o=new SchemeCharacter((char)c);
+		    break;
+		}
 		is.pushback(c);
 		String cn=lexer.readToBreak(is, Lexer.special);
 		String cnl=cn.toLowerCase();
 		Object cs=chars.get(cnl);
-	        if (cs!=null) if (def==null) return  cs ; else { Object o= cs ; state.put(def, o); return o; }  
-		else if (cn.length()==1) 
-		    if (def==null) return  new SchemeCharacter(cn.charAt(0)) ; else { Object o= new SchemeCharacter(cn.charAt(0)) ; state.put(def, o); return o; } 
-		else if (def==null) return  new SchemeCharacter((char)Integer.parseInt(cn, 8)) ; else { Object o= new SchemeCharacter((char)Integer.parseInt(cn, 8)) ; state.put(def, o); return o; } 
+		if (cs!=null) {
+		    o=cs;
+		} else if (cn.length()==1) {
+		    o=new SchemeCharacter(cn.charAt(0));
+		} else {
+		    o=new SchemeCharacter((char)Integer.parseInt(cn, 8));
+		}
+		break;
 	    case 'b': case 'B':
-		if (def==null) return  new Quantity(lexer.readToBreak(is, Lexer.special), 2) ; else { Object o= new Quantity(lexer.readToBreak(is, Lexer.special), 2) ; state.put(def, o); return o; } 
+		o=new Quantity(lexer.readToBreak(is, Lexer.special), 2);
+		break;
 	    case 'o': case 'O':
-		if (def==null) return  new Quantity(lexer.readToBreak(is, Lexer.special), 8) ; else { Object o= new Quantity(lexer.readToBreak(is, Lexer.special), 8) ; state.put(def, o); return o; } 
+		o=new Quantity(lexer.readToBreak(is, Lexer.special), 8);
+		break;
 	    case 'x': case 'X':
-		if (def==null) return  new Quantity(lexer.readToBreak(is, Lexer.special), 16) ; else { Object o= new Quantity(lexer.readToBreak(is, Lexer.special), 16) ; state.put(def, o); return o; } 
+		o=new Quantity(lexer.readToBreak(is, Lexer.special), 16);
+		break;
 	    case 'd': case 'D':
-		if (def==null) return  new Quantity(lexer.readToBreak(is, Lexer.special)) ; else { Object o= new Quantity(lexer.readToBreak(is, Lexer.special)) ; state.put(def, o); return o; } 
+		o=new Quantity(lexer.readToBreak(is, Lexer.special));
+		break;
 	    case '&':
-		if (def==null) return  new Box((Value)_nextExpression(is, state, null)) ; else { Object o= new Box((Value)_nextExpression(is, state, null)) ; state.put(def, o); return o; } 
-		
+		o=new Box((Value)_nextExpression(is, state, null));
+		break;
 	    case 'i': case 'I':
-		if (def==null) return  ((Quantity)_nextExpression(is, state, null)).decimalVal() ; else { Object o= ((Quantity)_nextExpression(is, state, null)).decimalVal() ; state.put(def, o); return o; } 
+		o=((Quantity)_nextExpression(is, state, null)).decimalVal();
+		break;
 	    case 'e': case 'E':
-		if (def==null) return  ((Quantity)_nextExpression(is, state, null)).exactVal() ; else { Object o= ((Quantity)_nextExpression(is, state, null)).exactVal() ; state.put(def, o); return o; } 
+		o=((Quantity)_nextExpression(is, state, null)).exactVal();
+		break;
 	    case '!': 
 		if (lexer.readToBreak(is, Lexer.special).equals("eof"))
 		    return EOF;
 		else throw new IOException("invalid sharp sequence");
 	    case '\'':
-		return new Pair(SYNTAX, 
-				new Pair(nextExpression(is), 
-					 EMPTYLIST));
+		o=list(SYNTAX, nextExpression(is));
+		break;
 	    default:
 		Value[] v=null;
 		is.pushback(c);
@@ -123,26 +145,22 @@ public class Parser extends Util implements Tokens {
 							       Lexer.sharp_special)));
 		    c=is.read();
 		    if (c=='=') {
-			Object r=_nextExpression(is, state, ref);
-			if (def==null) return  r ; else { Object o= r ; state.put(def, o); return o; } 
-		    } else if (c=='#')
-			if (def==null) return  ref ; else { Object o= ref ; state.put(def, o); return o; }  
-		    else {
+			o=_nextExpression(is, state, ref);
+			break;
+		    } else if (c=='#') {
+			o=state.get(ref);
+			break;
+		    } else {
 			is.pushback(c);
 			v=new Value[ref.intValue()];
 		    } 
 		}
 
 		Object expr=_nextExpression(is, state, def);
-		if (expr==null && v==null) 
-		    if (def==null) 
-			return new SchemeVector(new Value[0]); 
-		    else { 
-			Object o= new SchemeVector(new Value[0]); 
-			state.put(def, o); 
-			return o; 
-		    } 
-		else if (expr instanceof Pair) {
+		if (expr==null && v==null) {
+		    o=new SchemeVector(new Value[0]);
+		    break;
+		} else if (expr instanceof Pair) {
 		    if (v==null) 
 			v=new Value[length((Pair)expr)];
 		} else if (expr!=null)
@@ -160,16 +178,18 @@ public class Parser extends Util implements Tokens {
 			v[i]=(Value)(lastObject instanceof Integer ? 
 				     state.get(lastObject) : lastObject);
  		}
-		if (def==null) {
-		    return new SchemeVector(v); 
-		}else { 
-		    Object o= new SchemeVector(v); 
-		    state.put(def, o); 
-		    return o; 
-		} 
-	  }
-       }
-	if (def==null) return  nextExpression(is) ; else { Object o= nextExpression(is) ; state.put(def, o); return o; } 
+		o=new SchemeVector(v);
+		break;
+	    }
+	    break;
+	default:
+	    throw new IOException("Outrageous Error: unknown token "+token);
+	}
+	if (def==null) return o;
+	else {
+	    state.put(def, o);
+	    return o;
+	}
     }	    
 
     public Value readList(InputPort is, HashMap  state, Integer def) 

@@ -9,12 +9,12 @@ import java.util.*;
 public class Interpreter extends Util {
     
     public static Parser parser=new Parser(new Lexer());
-    public static sisc.compiler.Compiler compiler=new sisc.compiler.Compiler();
 
     protected Procedure evaluator, writer;
     public OutputPort console_out;
     public InputPort console_in;
     public AssociativeEnvironment symenv, toplevel_env;
+    public sisc.compiler.Compiler compiler;
 
     static class DisplaylnExp extends Expression {
 
@@ -28,6 +28,9 @@ public class Interpreter extends Util {
 	    }
 	    r.acc=VOID;
 
+	}
+	public Value express() {
+	    return list(sym("DisplayLn-exp"));
 	}
     }
 
@@ -49,7 +52,7 @@ public class Interpreter extends Util {
 	    try {
 		rnew.toplevel_env=
 		    (AssociativeEnvironment)rnew.symenv.lookup(TOPLEVEL);
-	    } catch (UndefinedException ue) {
+	    } catch (ArrayIndexOutOfBoundsException ue) {
 		rnew.toplevel_env=rnew.symenv;
 	    }
 
@@ -64,7 +67,7 @@ public class Interpreter extends Util {
 	this.symenv=symenv;
 	try {
 	    toplevel_env=(AssociativeEnvironment)symenv.lookup(TOPLEVEL);
-	} catch (UndefinedException ue) {
+	} catch (ArrayIndexOutOfBoundsException ue) {
 	    toplevel_env=symenv;
 	}
 	env=new LexicalEnvironment();
@@ -72,6 +75,7 @@ public class Interpreter extends Util {
 	console_out=cout;
 	console_in.name=Symbol.get("console");
 	console_out.name=Symbol.get("console");
+	compiler=new sisc.compiler.Compiler(this);
     }
 
     public Interpreter(InputStream in, OutputStream out) {
@@ -83,7 +87,7 @@ public class Interpreter extends Util {
 	else 
 	    try {
 		toplevel_env=(AssociativeEnvironment)symenv.lookup(TOPLEVEL);
-	    } catch (UndefinedException ue) {
+	    } catch (ArrayIndexOutOfBoundsException ue) {
 		toplevel_env=symenv;
 	    }
     
@@ -105,6 +109,7 @@ public class Interpreter extends Util {
 	interpret();
 	return acc;
     }
+
     public void interpret() {
 	try {
 	    do {
@@ -112,7 +117,6 @@ public class Interpreter extends Util {
 		    do {
 			while (nxp==null) 
 			    pop(stk);
-
 			nxp.eval(this);
 		    } while (true);
 		} catch (ContinuationException ce) {
@@ -141,7 +145,7 @@ public class Interpreter extends Util {
     }
 
     public void save() {
-	push(nxp,vlr,env,fk);
+	stk=createFrame(nxp,vlr,env,fk,stk);
     }
 
     public Value eval(String expr) throws ContinuationException, IOException {
@@ -165,7 +169,7 @@ public class Interpreter extends Util {
 	try {
 	    writer=(Procedure)toplevel_env.lookup(Symbol.get(s));
 	    return true;
-	} catch (UndefinedException e) {
+	} catch (ArrayIndexOutOfBoundsException e) {
 	    return false;
 	}
     }
@@ -174,20 +178,18 @@ public class Interpreter extends Util {
 	try {
 	    evaluator=(Procedure)toplevel_env.lookup(Symbol.get(s));
 	    return true;
-	} catch (UndefinedException e) {
+	} catch (ArrayIndexOutOfBoundsException e) {
 	    return false;
 	}
     }
 
-
     // Symbolic environment handling
-
     protected AssociativeEnvironment getContextEnv(Symbol s) {
 	AssociativeEnvironment contenv=null;
         try {
             contenv=(AssociativeEnvironment)
                 symenv.lookup(s);
-        } catch (UndefinedException e) {
+        } catch (ArrayIndexOutOfBoundsException e) {
             contenv=new AssociativeEnvironment();
 	    symenv.define(s, contenv);
         }
@@ -198,24 +200,6 @@ public class Interpreter extends Util {
         AssociativeEnvironment contenv=getContextEnv(context);	
 	contenv.set(s, v);
     }
-    /*
-	Box fr=null;
-	try {
-	    fr=(Box)contenv.lookup(s);
-	    fr.set(v);
-	} catch (ImmutableException e) {
-	    fr.shadow();
-	    contenv.define(s, new Box(v));
-	} catch (Exception e) {
-	    if (e instanceof UndefinedException || 
-		e instanceof ClassCastException)
-		contenv.define(s, new Box(v));
-	    
-	    else
-		throw (RuntimeException)e;
-	}
-    }
-    */
 
 
     public Expression lookup(Symbol s, Symbol context) {
@@ -223,8 +207,6 @@ public class Interpreter extends Util {
 	    AssociativeEnvironment contenv=(AssociativeEnvironment)
 		symenv.lookup(context);
 	    return (Expression)contenv.lookup(s);
-	} catch (UndefinedException e) {
-	    return null;
 	} catch (ClassCastException c) {
 	    return null;
 	}
@@ -232,7 +214,7 @@ public class Interpreter extends Util {
 
 
     // Heapfile loading/saving
-    public void loadEnv(BufferedInputStream i) throws IOException {
+    public void loadEnv(InputStream i) throws IOException {
 	ObjectInputStream in=new ObjectInputStream(i);
 
 	try {
@@ -251,7 +233,7 @@ public class Interpreter extends Util {
 	    symenv=lsymenv;
 	    try {
 		toplevel_env=(AssociativeEnvironment)symenv.lookup(TOPLEVEL);
-	    } catch (UndefinedException e) {
+	    } catch (ArrayIndexOutOfBoundsException e) {
 		throw new IOException("Heap did not contain toplevel environment!");
 	    }
 	    writer=lwriter;
@@ -268,7 +250,7 @@ public class Interpreter extends Util {
 	}
     }
 
-    public void saveEnv(BufferedOutputStream o) throws IOException {
+    public void saveEnv(OutputStream o) throws IOException {
 	ObjectOutputStream out=new ObjectOutputStream(o);
 	save();
 	out.writeObject(stk);
@@ -288,7 +270,8 @@ public class Interpreter extends Util {
 
     //POOLING
     //STATIC --------------------
-    protected CallFrame deadFrames[]=new CallFrame[20];
+    protected static final int FRAMEPOOLSIZE=20, FPMAX=FRAMEPOOLSIZE-1;
+    protected CallFrame deadFrames[]=new CallFrame[FRAMEPOOLSIZE];
     protected int deadFramePointer=-1;
 
     public final CallFrame createFrame(Expression n, Value[] v, 
@@ -298,8 +281,7 @@ public class Interpreter extends Util {
 	if (deadFramePointer<0) 
 	    return new CallFrame(n,v,e,f,p);
 	else {
-	    CallFrame toReturn;
-	    toReturn=deadFrames[deadFramePointer--];
+	    CallFrame toReturn=deadFrames[deadFramePointer--];
 	    toReturn.nxp=n;
 	    toReturn.vlr=v;
 	    toReturn.env=e;
@@ -310,23 +292,22 @@ public class Interpreter extends Util {
     }
 
     public final void returnFrame(CallFrame f) {
-	if (!f.lock && (deadFramePointer<deadFrames.length - 1)) {
+	if (!f.lock && (deadFramePointer < FPMAX))
 	    deadFrames[++deadFramePointer]=f;
-	}
     }
 
-    protected FillRibExp deadFillRibs[]=new FillRibExp[20];
+    protected static final int RIBPOOLSIZE=8, RPMAX=RIBPOOLSIZE-1;
+    protected FillRibExp deadFillRibs[]=new FillRibExp[RIBPOOLSIZE];
     protected int deadFillRibsPointer=-1;
     
     public final FillRibExp createFillRib(int pos,
-				Expression rands[],
-				Expression last,
-				Expression cleanup) {
+					  Expression rands[],
+					  Expression last,
+					  Expression cleanup) {
 	if (deadFillRibsPointer<0) 
 	    return new FillRibExp(pos,rands,last,cleanup);
 	else {
-	    FillRibExp toReturn;
-	    toReturn=deadFillRibs[deadFillRibsPointer--];
+	    FillRibExp toReturn=deadFillRibs[deadFillRibsPointer--];
 	    toReturn.pos=pos;
 	    toReturn.rands=rands;
 	    toReturn.last=last;
@@ -336,7 +317,7 @@ public class Interpreter extends Util {
     }
 
     public final void returnFillRib(FillRibExp f) {
-	if (!f.locked && (deadFillRibsPointer<deadFillRibs.length - 1)) 
+	if (!f.locked && (deadFillRibsPointer < RPMAX)) 
 	    deadFillRibs[++deadFillRibsPointer]=f;
     }
 

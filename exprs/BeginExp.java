@@ -24,14 +24,12 @@ public class BeginExp extends Expression {
 
     }
 
-    public String toString() {
-	StringBuffer b=new StringBuffer();
-	b.append("(begin-exp");
-	for (int i=0; i<exprs.length; i++) {
-	    b.append(' ').append(exprs[i]);
+    public Value express() {
+	Pair args=list(tail.express());
+	for (int i=exprs.length-1; i>=0; i--) {
+	    args=new Pair(exprs[i].express(), args);
 	}
-	b.append(' ').append(tail).append(')');
-	return b.toString();
+	return new Pair(sym("Begin-exp"), args);
     }
 }
 

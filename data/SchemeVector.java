@@ -43,6 +43,7 @@ public class SchemeVector extends Value {
 	
     void display(StringBuffer b, boolean write) {
 	int l=findEnd();
+	System.err.println(l);
 	for (int i=0; i<l; i++) {
 	    b.append((write ? vals[i].write() : vals[i].display()));
 	    if (i+1<l) b.append(' ');
@@ -55,6 +56,10 @@ public class SchemeVector extends Value {
 	display(b, false);
 	b.append(')');
 	return b.toString();
+    }
+
+    public void set(int idx, Value v) {
+	vals[idx]=v;
     }
 
     public String write() {

@@ -23,4 +23,9 @@ public class ApplyValuesContEval extends Expression {
     public String display() {
 	return "#<system continuation>";
     }
+
+    public Value express() {
+	return list(sym("ApplyValuesContEval"));
+    }
+
 }

@@ -18,11 +18,7 @@ public class FreeSetExp extends Expression {
 	r.nxp=rhs;
     }
 
-    public String toString(){
-	StringBuffer b=new StringBuffer();
-	b.append("(Set-exp ");
-	b.append(eexpr.lhs).append(' ');
-	b.append(rhs).append(')');
-	return b.toString();
+    public Value express() {
+	return list(sym("FreeSet-exp"), eexpr.express(), rhs.express());
     }
 }

@@ -17,10 +17,8 @@ public class LexicalSetEval extends Expression {
 	r.nxp=null;
     }
 
-    public String toString(){
-	StringBuffer b=new StringBuffer();
-	b.append("(LexicalSet-val ");
-	b.append(depth).append(':').append(pos).append(')');
-	return b.toString();
+    public Value express() {
+	return list(sym("LexicalSet-eval"), 
+		    new Pair(new Quantity(depth), new Quantity(pos)));
     }
 }

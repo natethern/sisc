@@ -31,10 +31,7 @@ public class FreeSetEval extends Expression {
 	r.nxp=null;
     }
 
-    public String toString(){
-	StringBuffer b=new StringBuffer();
-	b.append("(FreeSet-val ");
-	b.append(lhs).append(')');
-	return b.toString();
+    public Value express() {
+	return list(sym("FreeSet-eval"), lhs);
     }
 }

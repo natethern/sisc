@@ -13,8 +13,6 @@
 	     (define original-cwcc call-with-current-continuation)
 	     
 	     (define (reroot! there)
- (display (format "(reroot! ~s) Here: ~s~%" there *here*))
-
 	       (if (not (eq? *here* there))
 		   (begin
 		     (reroot! (cdr there))
@@ -75,9 +73,6 @@
 (define call/fc call-with-failure-continuation)
 (define call/cc call-with-current-continuation)
 
-(define (values . args)
-  (call/cc (lambda (k) (apply k args))))
-
 (define make-polar
   (lambda (x y)
     (make-rectangular (* x (cos y))
@@ -117,3 +112,50 @@
 (define (unquote-splicing x)
   (error 'unquote-splicing "expression ~s valid outside of a quasiquote."
 	 x))
+
+;;; macro-defs.ss
+;;; Robert Hieb & Kent Dybvig
+;;; 92/06/18
+
+
+;;; simple delay and force; also defines make-promise
+
+(define-syntax delay
+   (lambda (x)
+      (syntax-case x ()
+         ((delay exp)
+          (syntax (make-promise (lambda () exp)))))))
+
+(define make-promise
+  (lambda (proc)
+    ((lambda (result-ready? result)
+      (lambda ()
+        (if result-ready?
+            result
+	    ((lambda (x)
+	       (if result-ready?
+		   result
+		   (begin (set! result-ready? #t)
+			  (set! result x)
+			  result))) 
+	     (proc)))))
+      #f #f)))
+
+(define force
+   (lambda (promise)
+      (promise)))
+
+(define-syntax time
+  (lambda (x)
+    (syntax-case x ()
+      ((_ e)
+       (let ([st (gensym)]
+	     [et (gensym)])
+	 (syntax (let* ((st (system-time))
+			(val e)
+			(et (system-time)))
+		   (list val (list (- et st) 'ms)))))))))
+	 
+
+
+

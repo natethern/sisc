@@ -15,12 +15,8 @@ public class IfEval extends Expression {
 	r.nxp = (truth(r.acc) ? conseq : altern);
     }
 
-    public String toString(){
-	StringBuffer b=new StringBuffer();
-	b.append("(If-eval ");
-	b.append(conseq).append(' ');
-	b.append(altern).append(')');
-	return b.toString();
+    public Value express() {
+	return list(sym("If-eval"), conseq.express(), altern.express());
     }
 }
 

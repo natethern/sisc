@@ -23,7 +23,7 @@ public class Lexer implements Tokens {
 
     static final char[] 
 	special = new char[] 
-        {'\t', '\n', '\r', ' ', '"', '(', ')', '[', ']'},
+        {'\t', '\n', '\r', ' ', '"', '(', ')', ';', '[', ']'},
 	sharp_special = new char[] 
 	{'\t', '\n', ' ', '"', '#', '(', ')', '=', '[', ']'},
 	number_prefixes = new char[] 
@@ -36,18 +36,31 @@ public class Lexer implements Tokens {
     protected boolean ec;
 
     public int readIgnoringWhitespace(InputPort is) 
-	throws IOException, EOFException {
+	throws IOException {
 	char c=0;
+
 	do {
 	    c=(char)readChar(is);
 	} while (Character.isWhitespace(c));
+
 	return c;
     }
 
-    public int nextToken(InputPort is) 
-	throws IOException, EOFException {
+    public int nextToken(InputPort is) throws IOException {
+	try {
+	    return _nextToken(is);
+	} catch (EOFException e) {
+	    return TT_EOF;
+	}
+    }
+
+    public int _nextToken(InputPort is) 
+	throws IOException {
+
 	synchronized(is) {
+
 	    int c=readIgnoringWhitespace(is);
+
 	    switch (c) {
 	    case LIST_OPEN: 
 	    case LIST_OPEN_ALT:
@@ -104,7 +117,7 @@ public class Lexer implements Tokens {
     }
 
     public String readTo(InputPort is, int stop) 
-	throws IOException, EOFException {
+	throws IOException {
 	StringBuffer b=new StringBuffer();
 	int x;
 	while (stop!=(x=is.read()) && x>0) 
@@ -113,17 +126,19 @@ public class Lexer implements Tokens {
     }
 
 
-    public int readChar(InputPort is) throws IOException, EOFException {
-        int c=is.read();
+    public int readChar(InputPort is) throws IOException {
+	int c=is.read();
+
 	if (c=='\\') {
 	    escaped=true;
 	    return is.read() | 0x80000000;
 	}
+
 	return c;
     }
 
     public String readToEndOfString(InputPort is) 
-	throws IOException, EOFException {
+	throws IOException {
 	StringBuffer b=new StringBuffer();
 	int x;
 	while ('"'!=(x=readChar(is)) && x!=0) 

@@ -23,14 +23,16 @@ public class InputPort extends NamedValue {
 	}
     }
 
-    public int read() throws IOException, EOFException {
+    public int read() throws IOException {
 	int c=pushback;
 	if (pushback!=0) 
 	    pushback=0;
 	else
 	    c=r.read();
-	if (c==-1) 
+
+	if (c==-1)
 	    throw new EOFException();
+
 	return c;
     }
 

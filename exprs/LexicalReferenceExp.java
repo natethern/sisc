@@ -21,8 +21,8 @@ public class LexicalReferenceExp extends Expression implements Immediate {
 	return r.env.lookup(depth, pos);
     }
 
-    public String toString() {
-	return depth+":"+pos;
+    public Value express() {
+	return new Pair(new Quantity(depth), new Quantity(pos));
     }
 }
 
