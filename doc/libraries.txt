@@ -30,6 +30,20 @@ All the identifiers appearing in the export list must be
 define(-syntax)-ed in the body of the module or import-ed from another
 module.
 
+It is recommended to clearly separate modularization from the actual
+code. The best way to accomplish is is to
+
+* list all imports in the module body rather than included files
+
+* include all files directly from the module body, avoiding nested
+  includes
+
+* place all definitions and expressions in included files, avoiding
+  them in the module body
+
+
+Modularizing existing code
+--------------------------
 Since module bodies are treated like bodies of lambdas, the R5RS rules
 of how internal definitions are treated apply to all the
 define(-syntax)es in a module body, including code include-ed from
@@ -78,6 +92,8 @@ The concatenation of the resulting definition list with the expression
 list makes a suitable module body.
 
 
+Module Evaluation
+-----------------
 Modules are lexically scoped. It is possible to define modules inside
 lambdas and inside other modules and to export modules from
 modules. Example:
@@ -109,9 +125,9 @@ bindings from a module and renaming them rather then importing all
 bindings as is etc etc. For more details see the section on modules in
 the Chez Scheme user manual.
 
+
 Library Modules
 ---------------
-
 Libraries provide a means of encapsulating code that can be
 shared by many, independently developed applications.
 
