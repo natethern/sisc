@@ -6,33 +6,64 @@ import sisc.data.*;
 import sisc.io.ValueWriter;
 
 /**
- * A native procedure is a Scheme procedure whose behavior when
- * applied is implemented in Java code.
+ * A fixable procedure is a Scheme procedure similar to a NativeProcedure,
+ * but which does not need access to the Interpreter to be implemented, 
+ * and requires three or fewer arguments.
+ * In general, most purely functional procedures are fixable.
  */
-public abstract class NativeProcedure extends Procedure implements NamedValue {
+public abstract class FixableProcedure extends Procedure implements NamedValue {
 
     /**
-     * A NativeProcedure instance must implement this method, which
-     * performs the actual processing specific to that procedure, and
-     * returns a Value.
+     * A fixable procedure must subclass one of the following methods
      */
-    public abstract Value doApply(Interpreter r) throws ContinuationException;
+    public Value apply() throws ContinuationException {
+        throwArgSizeException();
+        return VOID;
+    }
 
+    public Value apply(Value v1) throws ContinuationException {
+        throwArgSizeException();
+        return VOID;
+    }
+
+    public Value apply(Value v1, Value v2) throws ContinuationException {
+        throwArgSizeException();
+        return VOID;
+    }
+
+    public Value apply(Value v1, Value v2, Value v3) 
+        throws ContinuationException {
+        throwArgSizeException();
+        return VOID;
+    }
+
+
+    public Value apply(Value v[]) 
+        throws ContinuationException {
+        throwArgSizeException();
+        return VOID;
+    }
+    
     public void apply(Interpreter r) throws ContinuationException {
         //long start=System.currentTimeMillis();
         r.lxp = r.nxp;
         r.nxp = null;
         try {
             r.saveVLR=r.vlk;
-            r.acc = doApply(r);
+            switch(r.vlr.length) {
+            case 0: r.acc=apply(); break;
+            case 1: r.acc=apply(r.vlr[0]); break;
+            case 2: r.acc=apply(r.vlr[0],r.vlr[1]); break;
+            case 3: r.acc=apply(r.vlr[0],r.vlr[1],r.vlr[2]); break;
+            default: r.acc=apply(r.vlr); break;
+            }
             if (!r.saveVLR) r.forceReturnVLR();
         } catch (ClassCastException cc) {
             cc.printStackTrace();
-            error(
-                r,
-                getName(),
-                liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()),
-		cc);
+            error(r,
+                  getName(),
+                  liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()),
+                  cc);
         } catch (NestedPrimRuntimeException npr) {
             error(r, getName(), npr);
         } catch (RuntimeException re) {
@@ -44,11 +75,12 @@ public abstract class NativeProcedure extends Procedure implements NamedValue {
         }
         //time+=System.currentTimeMillis()-start;
     }
-
+    
     public void display(ValueWriter w) throws IOException {
         displayNamedOpaque(w, "native procedure");
     }
 }
+
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file

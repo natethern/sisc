@@ -1,54 +1,32 @@
 package sisc.nativefun;
 
 import java.io.*;
-import sisc.interpreter.*;
-import sisc.data.*;
-import sisc.io.ValueWriter;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
 /**
- * A native procedure is a Scheme procedure whose behavior when
- * applied is implemented in Java code.
+ * An indexed procedure contains the implementation of many
+ * native procedures, indexed by an integer.
  */
-public abstract class NativeProcedure extends Procedure implements NamedValue {
+public abstract class IndexedFixableProcedure extends FixableProcedure {
 
-    /**
-     * A NativeProcedure instance must implement this method, which
-     * performs the actual processing specific to that procedure, and
-     * returns a Value.
-     */
-    public abstract Value doApply(Interpreter r) throws ContinuationException;
+    public int id;
 
-    public void apply(Interpreter r) throws ContinuationException {
-        //long start=System.currentTimeMillis();
-        r.lxp = r.nxp;
-        r.nxp = null;
-        try {
-            r.saveVLR=r.vlk;
-            r.acc = doApply(r);
-            if (!r.saveVLR) r.forceReturnVLR();
-        } catch (ClassCastException cc) {
-            cc.printStackTrace();
-            error(
-                r,
-                getName(),
-                liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()),
-		cc);
-        } catch (NestedPrimRuntimeException npr) {
-            error(r, getName(), npr);
-        } catch (RuntimeException re) {
-            re.printStackTrace();
-            String msg = re.getMessage();
-            if (msg == null)
-                msg = re.toString();
-            error(r, getName(), msg, re);
-        }
-        //time+=System.currentTimeMillis()-start;
+    public IndexedFixableProcedure() {}
+
+    public IndexedFixableProcedure(int id) {
+        this.id=id;
     }
 
-    public void display(ValueWriter w) throws IOException {
-        displayNamedOpaque(w, "native procedure");
+    public void serialize(Serializer s) throws IOException {
+        s.writeInt(id);
+    }
+
+    public void deserialize(Deserializer s) throws IOException {
+        id=s.readInt();
     }
 }
+
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
