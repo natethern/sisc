@@ -356,6 +356,8 @@ public class SThread extends IndexedProcedure {
                 c.thread.interrupt();
                 Context.lookupThreadContext(c.thread).interrupt=true;
                 return VOID;
+            case THREADINTERRUPTEDQ:
+                return truth(Context.lookupThreadContext(sthread(f.vlr[0]).thread).interrupt);
             case THREADNAME:
                 return new SchemeString(sthread(f.vlr[0]).thread.getName());
             case THREADPRIORITY:
