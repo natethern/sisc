@@ -2,6 +2,7 @@ package sisc.modules.io;
 
 import java.io.*;
 import java.net.URL;
+import java.net.MalformedURLException;
 
 import sisc.interpreter.*;
 import sisc.nativefun.*;
@@ -13,40 +14,34 @@ import sisc.io.*;
  */
 public class FileManipulation extends ModuleAdapter {
 
-    static class FileHandle extends NamedValue {
-        
-        File f;
-
-        public FileHandle(File f) {
-            this.f=f;
-        }
-
-        public void display(ValueWriter w) throws IOException {
-            super.displayNamedOpaque(w, "file-handle");
-        }
-    }
-
     protected static final int
-        MAKEFILEHANDLE = 0, DIRECTORYQ = 1, FILEQ = 2, HIDDENQ = 3,
-        EXISTSQ = 4, FILEHANDLEQ = 5, DIRLIST = 6;
+        DIRECTORYQ = 1, FILEQ = 2, HIDDENQ = 3,
+        EXISTSQ = 4, DIRLIST = 6, LASTMODIFIED = 7, SETLASTMODIFIED = 8,
+        SETREADONLY = 9, LENGTH = 10, GETPARENTURL = 11, MAKEDIRECTORY = 12,
+        MAKEDIRECTORIES = 13, RENAME = 14;
         
 
     public FileManipulation() {
-        define("_make-file-handle" , MAKEFILEHANDLE);
-        define("file-handle?"     , FILEHANDLEQ);
-        define("file-hidden?"     , HIDDENQ);
-        define("file-exists?"     , EXISTSQ);
-        define("file-is-directory?"  , DIRECTORYQ);
-        define("file-is-file?"       , FILEQ);
-        define("directory-list"   , DIRLIST);
+        define("file/hidden?"      , HIDDENQ);
+        define("file/exists?"      , EXISTSQ);
+        define("file/is-directory?", DIRECTORYQ);
+        define("file/is-file?"     , FILEQ);
+        define("directory/list"    , DIRLIST);
+        define("file/last-modified", LASTMODIFIED);
+        define("file/set-last-modified!", SETLASTMODIFIED);
+        define("file/set-read-only!", SETREADONLY);
+        define("file/length"       , LENGTH);
+        define("file/rename"       , RENAME);
+        define("_get-parent-url"    , GETPARENTURL);
+        define("_make-directory!"    , MAKEDIRECTORY);
+        define("_make-directories!"  , MAKEDIRECTORIES);
     }
 
-    public static final FileHandle fileHandle(Value o) 
-        throws ContinuationException {
-        try {
-            return (FileHandle)o;
-        } catch (ClassCastException e) { typeError("filehandle", o); }
-	return null;
+    public static final File fileHandle(Value o) {
+        URL u=url(o);
+        if (!"file".equals(u.getProtocol()))
+            throwPrimException(liMessage(IO.IOB, "notafileurl"));
+        return new File(u.getPath());
     }
 
     public Value eval(int primid, Interpreter f)
@@ -54,34 +49,53 @@ public class FileManipulation extends ModuleAdapter {
         switch (f.vlr.length) {
         case 1:
             switch(primid) {
-            case MAKEFILEHANDLE:
-                URL u=url(f.vlr[0]);
-                if (!"file".equals(u.getProtocol()))
-                    throwPrimException(liMessage(IO.IOB, 
-                                                 "nofilehandlefromurl"));
-                return new FileHandle(new File(u.getPath()));
-            case FILEHANDLEQ:
-                return truth(f.vlr[0] instanceof FileHandle);
             case DIRECTORYQ:
-                return truth(fileHandle(f.vlr[0]).f.isDirectory());
+                return truth(fileHandle(f.vlr[0]).isDirectory());
             case FILEQ:
-                return truth(fileHandle(f.vlr[0]).f.isFile());
+                return truth(fileHandle(f.vlr[0]).isFile());
             case EXISTSQ:
-                return truth(fileHandle(f.vlr[0]).f.exists());
+                return truth(fileHandle(f.vlr[0]).exists());
             case HIDDENQ:
-                return truth(fileHandle(f.vlr[0]).f.isHidden());
+                return truth(fileHandle(f.vlr[0]).isHidden());
             case DIRLIST:
                 Pair p=EMPTYLIST;
-                String[] contents=fileHandle(f.vlr[0]).f.list();
+                String[] contents=fileHandle(f.vlr[0]).list();
                 for (int i=contents.length-1; i>=0; i--) 
                     p=new Pair(new SchemeString(contents[i]), p);
                 return p;
+            case LENGTH:
+                return Quantity.valueOf(fileHandle(f.vlr[0]).length());
+            case LASTMODIFIED:
+                return Quantity.valueOf(fileHandle(f.vlr[0]).lastModified());
+            case SETREADONLY:
+                return truth(fileHandle(f.vlr[0]).setReadOnly());
+            case GETPARENTURL:
+                try {
+                    return new SchemeString(fileHandle(f.vlr[0])
+                                            .getParentFile().toURL().toString());
+                } catch (MalformedURLException m) {
+                    m.printStackTrace();
+                }
+                break;
+            case MAKEDIRECTORY:
+                return truth(fileHandle(f.vlr[0]).mkdir());
+            case MAKEDIRECTORIES:
+                return truth(fileHandle(f.vlr[0]).mkdirs());
             default:
                 throwArgSizeException();
             }
         case 2:
-                    default:
+            switch(primid) {
+            case SETLASTMODIFIED:
+                return truth(fileHandle(f.vlr[0]).setLastModified(num(f.vlr[1]).longValue()));
+            case RENAME:
+                return truth(fileHandle(f.vlr[0]).renameTo(fileHandle(f.vlr[1])));
+            default:
+                throwArgSizeException();
+            }
+        default:
             throwArgSizeException();
+
         }
         return VOID;
     }

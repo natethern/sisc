@@ -166,16 +166,51 @@
   (include "io/buffer.scm"))
 
 (module file-manipulation
-  (make-file-handle 
+  (directory-list
    file-exists? 
    file-hidden? 
    file-is-directory?
    file-is-file? 
-   directory-list)
+   file-length
+   file-last-modified
+   file-rename
+   file-set-last-modified!
+   file-set-read-only!
+   get-parent-url
+   make-directory!
+   make-directories!)
   (import file-manipulation-native)
-  (define make-file-handle
-    (lambda (filename)
-      (_make-file-handle (normalize-url (current-url) filename)))))
+  (define directory-list)
+  (define file-exists?)
+  (define file-hidden?)
+  (define file-is-directory?)
+  (define file-is-file?)
+  (define file-length)
+  (define file-last-modified)
+  (define file-rename)
+  (define file-set-last-modified!)
+  (define file-set-read-only!)
+  (define get-parent-url)
+  (define make-directory!)
+  (define make-directories!)
+  (define (normalize proc)
+    (lambda (path)
+      (proc (normalize-url path))))
+  (set! directory-list (normalize directory/list))
+  (set! file-exists? (normalize file/exists?))
+  (set! file-hidden? (normalize file/hidden?))
+  (set! file-is-directory? (normalize file/is-directory?))
+  (set! file-is-file? (normalize file/is-file?))
+  (set! file-length (normalize file/length))
+  (set! file-last-modified (normalize file/last-modified))
+  (set! file-rename 
+    (lambda (f1 f2)
+      (file/rename (normalize-url f1) (normalize-url f2))))
+  (set! file-set-last-modified! (normalize file/set-last-modified!))
+  (set! file-set-read-only! (normalize file/set-read-only!))
+  (set! get-parent-url (normalize _get-parent-url))
+  (set! make-directory! (normalize _make-directory!))
+  (set! make-directories! (normalize _make-directories!)))
 
 (module block-io
   (block-read
