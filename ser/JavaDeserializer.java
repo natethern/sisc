@@ -8,15 +8,17 @@ import sisc.data.Expression;
 import sisc.data.Symbol;
 import sisc.AssociativeEnvironment;
 
-public class JavaDeserializer extends ObjectInputStream implements Deserializer {
+public class JavaDeserializer implements Deserializer {
 
-    public JavaDeserializer(InputStream i) throws IOException {
-        super(i);
+    protected ObjectInputStream is;
+
+    public JavaDeserializer(ObjectInputStream i) throws IOException {
+        is=i;
     }
 
     protected Object readObjectIOExceptionOnly() throws IOException {
         try {
-            Object o=readObject();
+            Object o=is.readObject();
             return o;
         } catch (ClassNotFoundException cnf) {
             throw new IOException(cnf.getMessage());
@@ -54,6 +56,79 @@ public class JavaDeserializer extends ObjectInputStream implements Deserializer 
 
     public Library getLibrary() {
         //FIXME?
+        return null;
+    }
+
+    public int read(byte[] b) throws IOException {
+        return is.read(b);
+    }
+
+    public int read(byte[] b, int off, int len) throws IOException {
+        return is.read(b, off, len);
+    }
+
+    public int read() throws IOException {
+        return is.read();
+    }
+
+    public boolean readBoolean() throws IOException {
+        return is.readBoolean();
+    }
+
+    public byte readByte() throws IOException {
+        return is.readByte();
+    }
+
+
+    public char readChar() throws IOException {
+        return is.readChar();
+    }
+
+    public double readDouble() throws IOException {
+        return Double.longBitsToDouble(readLong());
+    }
+
+    public float readFloat() throws IOException {
+        return Float.intBitsToFloat(readInt());
+    }
+
+    public int readInt() throws IOException {
+        return is.readInt();
+    }
+
+    public long readLong() throws IOException {
+        return is.readLong();
+    }
+
+    public short readShort() throws IOException {
+        return is.readShort();
+    }
+
+    public String readUTF() throws IOException {
+        return is.readUTF();
+    }
+
+    public void readFully(byte[] b) throws IOException {
+        is.readFully(b, 0, b.length);
+    }
+
+    public void readFully(byte[] b, int offset, int len) throws IOException {
+        is.readFully(b, offset, len);
+    }
+
+    public int readUnsignedByte() throws IOException {
+        return is.readUnsignedByte();
+    }
+
+    public int readUnsignedShort() throws IOException {
+        return is.readUnsignedShort();
+    }
+
+    public int skipBytes(int bc) throws IOException {
+        return is.skipBytes(bc);
+    }
+
+    public String readLine() {
         return null;
     }
 }

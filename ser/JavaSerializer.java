@@ -6,14 +6,25 @@ import sisc.Module;
 import sisc.AssociativeEnvironment;
 import sisc.data.Expression;
 
-public class JavaSerializer extends ObjectOutputStream implements Serializer {
+public class JavaSerializer implements Serializer {
+    
+    protected ObjectOutputStream os;
 
-    public JavaSerializer(OutputStream o) throws IOException {
-        super(o);
+    public JavaSerializer(ObjectOutputStream o) throws IOException {
+        os=o;
+    }
+
+    public ObjectOutputStream getObjectOutputStream() {
+        return os;
     }
 
     public void writeExpression(Expression e) throws IOException {
-        writeObject(e);
+        try {
+            os.writeObject(e);
+        } catch (NotSerializableException nse) {
+            System.err.println(e);
+            nse.printStackTrace();
+        }
     }
 
     public void writeAssociativeEnvironment(AssociativeEnvironment e) throws IOException {
@@ -24,11 +35,11 @@ public class JavaSerializer extends ObjectOutputStream implements Serializer {
     }
 
     public void writeClass(Class c) throws IOException {
-        writeObject(c);
+        os.writeObject(c);
     }
 
     public void writeModule(Module m) throws IOException {
-        writeObject(m);
+        os.writeObject(m);
     }
 
     public boolean seen(Expression e) {
@@ -41,17 +52,66 @@ public class JavaSerializer extends ObjectOutputStream implements Serializer {
     }
 
     public void writeBigDecimal(BigDecimal d) throws IOException {
-        int scale=d.scale();
-	byte[] buffer=d.unscaledValue().toByteArray();
-        writeInt(buffer.length);
-        writeInt(scale);
-        write(buffer);
+        os.writeObject(d);
     }
 
     public void writeBigInteger(BigInteger i) throws IOException {
-        byte[] buffer=i.toByteArray();
-        writeInt(buffer.length);
-        write(buffer);
+        os.writeObject(i);
     }
 
+    public void write(byte[] b) throws IOException {
+        os.write(b);
+    }
+
+    public void write(byte[] b, int off, int len) throws IOException {
+        os.write(b, off, len);
+    }
+
+    public void write(int b) throws IOException {
+        os.write(b);
+    }
+
+    public void writeBoolean(boolean v) throws IOException {
+        os.writeBoolean(v);
+    }
+
+    public void writeByte(int v) throws IOException {
+        os.writeByte(v);
+    }
+
+    public void writeBytes(String s) throws IOException {
+        os.writeBytes(s);
+    }
+
+    public void writeChar(int v) throws IOException {
+        os.writeChar(v);
+    }
+
+    public void writeChars(String v) throws IOException {
+        os.writeChars(v);
+    }
+
+    public void writeDouble(double v) throws IOException {
+        writeLong(Double.doubleToLongBits(v));
+    }
+
+    public void writeFloat(float v) throws IOException {
+        writeInt(Float.floatToIntBits(v));
+    }
+
+    public void writeInt(int v) throws IOException {
+        os.writeInt(v);
+    }
+
+    public void writeLong(long v) throws IOException {
+        os.writeLong(v);
+    }
+
+    public void writeShort(int v) throws IOException {
+        os.writeShort(v);
+    }
+
+    public void writeUTF(String v) throws IOException {
+        os.writeUTF(v);
+    }
 }
