@@ -1,5 +1,6 @@
 package sisc.ser;
 
+import sisc.util.Util;
 import java.util.*;
 import java.io.*;
 import java.lang.ref.*;
@@ -9,8 +10,6 @@ import sisc.nativefun.Module;
 import sisc.env.SymbolicEnvironment;
 
 public class BinaryDeserializer extends DeserializerImpl {
-
-    static final boolean DEBUG = false;
 
     Map modules;
     Class[] classPool;
@@ -45,9 +44,6 @@ public class BinaryDeserializer extends DeserializerImpl {
         boolean flush=false;
 
         try {
-            if (DEBUG)
-                System.err.print(justify("",indent,' ')+Long.toHexString(pos)+" "+type+"]");
-
             //Read the stream object type, values above 15 of which represent
             //shared objects
             switch(type) {
@@ -63,32 +59,23 @@ public class BinaryDeserializer extends DeserializerImpl {
             case 0:
                 Expression e;
                 Class clazz=readClass();
-                if (DEBUG) {
-                    if (definingOid!=-1) System.err.println(clazz+" -> "+definingOid);
-                    else System.err.println(clazz);
-                }
-
                 e=(Expression)clazz.newInstance();
                 if (e instanceof Singleton) {
                     e.deserialize(this);
                     e = ((Singleton)e).singletonValue();
-                    if (DEBUG) System.err.println(" (S) ");
                     if (definingOid!=-1 && alreadyReadObjects[definingOid]==null)
-                        alreadyReadObjects[definingOid]=e;//new SoftReference(e);
+                        alreadyReadObjects[definingOid]=e;
                 } else {
-                    //System.err.println(" (NS) ");
                     if (definingOid!=-1 && alreadyReadObjects[definingOid]==null)             
-                        alreadyReadObjects[definingOid]=e;//new SoftReference(e);
+                        alreadyReadObjects[definingOid]=e;
                     int start=deserQueue.size();
                     deserQueue.addFirst(e);
                     if (flush) deserLoop(start);
                 }
                 return e;
             case 1:
-                if (DEBUG) System.err.println("null");
                 return null;
             default:
-                if (DEBUG) System.err.println("Fo:"+(type-2));
                 return fetchShared(type-16);
             }
         } catch (InstantiationException ie) {
@@ -111,13 +98,6 @@ public class BinaryDeserializer extends DeserializerImpl {
     
     void deserLoop(int start) throws IOException {
         while (deserQueue.size()>start) {
-            if (false && DEBUG) {
-                System.err.print('[');
-                for (Iterator i=deserQueue.iterator(); i.hasNext();) {
-                    System.err.print(i.next().getClass().toString()+",");
-                }
-                System.err.println(']');
-            }
             Object o=deserQueue.removeFirst();
             initializeExpression((Expression)o);
         }
@@ -126,9 +106,7 @@ public class BinaryDeserializer extends DeserializerImpl {
     void initializeExpression(Expression e) throws IOException {
         e.deserialize(this);
         int ac=readInt();
-        //if (ac>0) System.err.println("!!!"+ac);
         for (; ac>0; ac--) {
-            //System.err.println(pos);
             Expression key=readExpression();
             Expression value=readExpression();
             e.setAnnotation((Symbol)key, (Value)value);
@@ -140,14 +118,13 @@ public class BinaryDeserializer extends DeserializerImpl {
             Expression e=alreadyReadObjects[oid];
             if (e==null) {
                 long currentPos=raf.getFilePointer();
-                if (DEBUG) System.err.println("Seeking to "+ base +":"+ offsets[oid]+" ["+Long.toHexString(base+offsets[oid])+"]");
                 raf.seek(base + offsets[oid]);
                 e=deser();
                 raf.seek(currentPos);
             }
             return e;
         } catch (ArrayIndexOutOfBoundsException aib) {
-            throw new FileNotFoundException(liMessage(Util.SISCB, "invalidentrypoint", new Object[] {new Integer(oid)}));
+            throw new FileNotFoundException(Util.liMessage(Util.SISCB, "invalidentrypoint", new Object[] {new Integer(oid)}));
         }
     }            
 
