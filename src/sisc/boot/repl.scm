@@ -43,7 +43,7 @@
 
 (define repl-prompt
   (make-config-parameter "replPrompt" (lambda (repl-depth)
-                                        (format "#;~a>"
+                                        (format "#;~a> "
                                                 (if (zero? repl-depth)
                                                     "" repl-depth)))))
 (define stack-trace-on-error
