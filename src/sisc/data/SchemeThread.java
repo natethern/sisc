@@ -1,5 +1,6 @@
 package sisc.data;
 
+import java.lang.ref.WeakReference;
 import sisc.env.*;
 import sisc.interpreter.*;
 import sisc.io.ValueWriter;
@@ -52,7 +53,7 @@ public class SchemeThread extends Value implements Runnable, NamedValue {
     
     public void run() {
         Interpreter interp = Context.enter(env);
-        Context.lookupThreadContext().hostThread=this;
+        Context.lookupThreadContext().hostThread=new WeakReference(this);
 
         state=RUNNING;
         synchronized(this) {

@@ -306,11 +306,11 @@ public class SThread extends IndexedProcedure {
             case CONDVARNEW:
                 return new CondVar();
             case THREADCURRENT:
-                SchemeThread t=Context.lookupThreadContext().hostThread;
+                SchemeThread t=(SchemeThread)Context.lookupThreadContext().hostThread.get();
                 if (t==null) return FALSE;
                 else return t;
-            case THREADSRUNNING:
-                return Quantity.valueOf(SchemeThread.schemeThreads.activeCount());
+            //case THREADSRUNNING:
+            //    return Quantity.valueOf(SchemeThread.schemeThreads.activeCount());
             case THREADYIELD:
                 Thread.yield();
                 return VOID;
