@@ -835,3 +835,9 @@
   (include "srfi/srfi-22/srfi-22.scm")
   (add-feature 'srfi-22))
 (import srfi-22)
+
+;;Final initialization
+(let ()
+  (import s2j)
+  (s2j/clear-reflection-cache!))
+
