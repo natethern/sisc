@@ -100,6 +100,7 @@
     <javac srcdir="${srcdir}"
            destdir="${classdir}"
            classpathref="classpath"
+           target="1.2"
            debug="${debugging}"
            optimize="${optimization}">
       <include name="${packagename}/**"/>
