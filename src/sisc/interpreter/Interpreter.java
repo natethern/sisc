@@ -46,7 +46,6 @@ public class Interpreter extends Util {
 
     //ACCOUNTING REGISTERS
     public CallFrame             lcf, llcf;//used for continuation capture
-    public Expression            lxp;      //used only for debugging
     public boolean               vlk;      //vlk, when true, indicates the
                                            //frame was captured.
     public boolean             cap[];      //Indicates which vlr positions
