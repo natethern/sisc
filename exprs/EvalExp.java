@@ -42,14 +42,8 @@ public class EvalExp extends Expression {
     public Expression pre, post;
 
     public EvalExp(Expression pre, Expression post) {
-	this.pre=pre;
-	this.post=post;
-        Set s=pre.getAnnotationKeys();
-        for (Iterator i=s.iterator(); i.hasNext();) {
-            Symbol key=(Symbol)i.next();
-            post.setAnnotation(key, pre.getAnnotation(key));
-            i.remove();
-        }
+        this.pre=pre;
+        this.post=post;
     }
 
     public void eval(Interpreter r) throws ContinuationException {

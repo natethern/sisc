@@ -238,7 +238,11 @@ public class Compiler extends Util {
                     expr=(Pair)expr.cdr;
                     Expression altern=compile(r, expr.car, rt, TAIL | context,
                                               env, null);
-                    rv=new EvalExp(tmp, new IfEval(conseq, altern));
+                    rv = new IfEval(conseq, altern);
+                    if (an!=null) {
+                        setAnnotations(rv, an);
+                    }
+                    rv=new EvalExp(tmp, rv);
                     break;
                 }
             case BEGIN:
@@ -262,7 +266,6 @@ public class Compiler extends Util {
                 }
                 if (an!=null) {
                     setAnnotations(rv, an);
-                    an=null;
                 }
                 rv=new EvalExp(rhs, rv);
                 break;
@@ -274,7 +277,6 @@ public class Compiler extends Util {
 
                 if (an!=null) {
                     setAnnotations(rv, an);
-                    an=null;
                 }
 
                 rv=new EvalExp(compile(r, expr.car, rt, 0, env, null), rv);
@@ -359,19 +361,19 @@ public class Compiler extends Util {
     Expression compileBegin(Interpreter r, Vector v, int context,
                             ReferenceEnv rt, AssociativeEnvironment env)
     throws ContinuationException {
-	Expression last=compile(r, (Expression)v.lastElement(), rt,
+        Expression last=compile(r, (Expression)v.lastElement(), rt,
                                 TAIL | context, env, null);
         if (v.size()==1) return last;
-
-	Expression be=last;
+        
+        Expression be=last;
         for (int i=v.size()-2; i>=0; i--) {
             Expression e=compile(r, (Expression)v.elementAt(i),
                                  rt, COMMAND, env, null);
             if (!(e instanceof Immediate))
-		be=new EvalExp(e, be);
+                be=new EvalExp(e, be);
         }
 
-	return be;
+        return be;
 
 	/*
 	Vector ev=new Vector(v.size()-1);
