@@ -1,5 +1,5 @@
 @echo off
-set SISC_LIB="."
+set SISC_HOME="."
 set EXTENSIONS=""
-java %JAVAOPT% -DHEAP=%LIBDIR%\sisc.heap -jar %SISC_LIB%\sisc.jar %EXTENSIONS% %1 %2 %3 %4 %5 %6 %7 %8 %9
+java %JAVAOPT% -Dsisc.home=%SISC_HOME% -Dsisc.heapfile=%LIBDIR%\sisc.heap -jar %SISC_HOME%\sisc.jar %EXTENSIONS% %1 %2 %3 %4 %5 %6 %7 %8 %9
 

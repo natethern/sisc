@@ -65,16 +65,20 @@
 ;; Scheme implementation.
 
 (define implementation-vicinity
-  (let ((library-path (or (getenv "SISC_LIB")
-			  "/usr/local/lib/sisc/")))
+  (let ((library-path (string-append
+                       (or (getenv "sisc.home")
+                           (error "You must define the sisc.home property"))
+                       "/")))
     (lambda () library-path)))
 
 ;; The LIBRARY-VICINITY procedure returns the pathname of the directory
 ;; where Scheme library functions reside.
 
 (define library-vicinity
-  (let ((library-path (or (getenv "SCHEME_LIBRARY_PATH")
-			  "/usr/share/slib/")))
+  (let ((library-path (string-append
+                       (or (getenv "slib.path")
+                           (error "You must define the slib.path property"))
+                       "/")))
     (lambda () library-path)))
 
 ;;; (home-vicinity) should return the vicinity of the user's HOME

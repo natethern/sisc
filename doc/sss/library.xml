@@ -567,15 +567,19 @@
         <title>Environment</title>
         <para>
           Using <application>SLIB</application> in &SISC; requires two
-          environment variables to be set:
+          Java system properties to be set:
           <itemizedlist>
             <listitem>
               <formalpara>
-                <title><envar>SISC_HOME</envar></title>
+                <title><envar>sisc.home</envar></title>
                 <para>
                   This should (but does not actually
                   <emphasis>have</emphasis> to) point to the location
-                  where you have installed &SISC;.
+                  where you have installed &SISC;. If you are using
+                  one of the scripts from the binary &SISC;
+                  distribution in order to run &SISC; then this
+                  property will automatically be set to the value of
+                  the <envar>SISC_HOME</envar> environment variable.
                 </para>
               </formalpara>
             </listitem>
@@ -584,17 +588,27 @@
                 <title><envar>SCHEME_LIBRARY_PATH</envar></title>
                 <para>
                   This must point to the location where you installed
-                  <application>SLIB</application>.
+                  <application>SLIB</application>. Other Schemes
+                  supporting <application>SLIB</application> tend to
+                  use an environment variable
+                  <envar>SCHEME_LIBRARY_PATH</envar>, so it is
+                  advisable to define that (if it is not already
+                  defined) and run Java with a
+                  <computeroutput>-Dslib.path=...</computeroutput>
+                  option based on the environment variable. If you are
+                  using the scripts from the binary $SISC;
+                  distribution in order to run &SISC; then you can set
+                  the property by adding the
+                  <computeroutput>-Dslib.path=...</computeroutput> to
+                  the <envar>JAVAOPT</envar> environment variable.
                 </para>
               </formalpara>
             </listitem>
           </itemizedlist>
-          Note that you must specify a trailing separator, i.e. a
-          <literal>/</literal> if you are on a Unix system. You also
-          need to ensure that all potential users of
+          You need to ensure that all potential users of
           <application>SLIB</application> have
           <emphasis>read</emphasis> permissions to files in the
-          directories referred to by the above environment variables.
+          directories referred to by the above system properties.
         </para>
         <para>
           You also need access to the file
@@ -606,9 +620,9 @@
       <sect3>
         <title>Building the Catalog</title>
         <para>
-          Make sure that the above environment variables are set and
+          Make sure that the above system properties are set and
           that you have <emphasis>write</emphasis> permissions to the
-          <envar>SISC_HOME</envar> directory; often this means you
+          <envar>sisc.home</envar> directory; often this means you
           need to be logged in as a privileged user.
         </para>
         <para>
@@ -623,14 +637,14 @@
         </para>
         <para>
           The above should create a file <filename>slibcat</filename>
-          in the <envar>SISC_HOME</envar>. It is a good idea to check
-          that this has indeed happened.
+          in the <envar>sisc.home</envar> directory. It is a good idea
+          to check that this has indeed happened.
         </para>
       </sect3>
       <sect3>
         <title>Using <application>SLIB</application></title>
         <para>
-          Make sure the above environment variables are set. Start
+          Make sure the above system properties are set. Start
           &SISC; as you normally would. At the prompt load
           <filename>slib.scm</filename> as described above, i.e.
 <programlisting>
