@@ -101,16 +101,6 @@
             (remq o (cdr lst))
             (cons (car lst) (remq o (cdr lst)))))))
 
-(define compile-time-environment
-  (lambda ()
-    ((lambda (env)
-      (if env env 
-          (begin (set! env (null-environment 5))
-                 (set-annotation! (interaction-environment) 'cte
-                                  env)
-                 env)))                 
-     (annotation (interaction-environment) 'cte))))
-    
 (define $sc-put-cte (void))
 (define identifier? (void))
 (define sc-expand (void))
