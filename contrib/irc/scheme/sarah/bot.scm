@@ -2,8 +2,8 @@
   (define dbcon (dbconnect "minstrel"))
 
   (display (format "Creating bot...~%"))
-  (define bot (make-bot "sarahbot"))
   (define bot-name 'sarahbot)
+  (define bot (make-bot (symbol->string bot-name)))
   
   (display (format "Connecting...~%"))
   (with/fc 
@@ -12,7 +12,7 @@
    (lambda ()
      (connect bot (->jstring "irc.openprojects.net"))))
   
-  (define channel "#sarahtest")
+  (define channel "#sisc")
 
   (define (onPrivateMessage nick login host message)
     (let ([response (answer (->string nick) (->string message) #t)])
