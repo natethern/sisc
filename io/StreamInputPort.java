@@ -4,27 +4,27 @@ import java.io.*;
 import sisc.interpreter.*;
 
 public class StreamInputPort extends PushbackInputPort {
-    protected InputStream r;
+    public InputStream in;
 
     public StreamInputPort(InputStream in) {
-        this.r=in;
+        this.in=in;
     }
 
     public int readHelper() throws IOException {
-        return r.read();
+        return in.read();
     }
 
     public boolean ready() throws IOException {
-        return r.available()>0;
+        return in.available()>0;
     }
 
     public int readHelper(byte[] buff, int offs, 
                           int count) throws IOException {
-        return r.read(buff, offs, count);
+        return in.read(buff, offs, count);
     }
 
     public void close() throws IOException {
-        r.close();
+        in.close();
     }
 }
 /*
