@@ -31,38 +31,6 @@
 ;; GPL.
 ;;
 
-;;turn on syntax expansion and optimization
-
-(define current-optimizer (_make-parameter (lambda (x) x)))
-  
-;; source to eval:
-#;(set! eval (let ([old-eval eval]
-                 [apply apply]
-                 [_analyze! _analyze!]
-                 [sc-expand sc-expand]
-                 [interaction-environment interaction-environment])
-             (lambda (x . env)
-               (cond [(and (pair? x) (member (car x) '("noexpand" "analyzeonly")))
-                      (apply old-eval (cadr x) (append env (list (equal? (car x) "analyzeonly"))))]
-                     [(and (null? env) (strict-r5rs-compliance))
-                      (error 'eval "expected 2 arguments to procedure, got 1.")]
-                     [else 
-                       (let ([optimizer (current-optimizer)]
-                             [old-ie (apply interaction-environment env)]
-                             [source #f])
-                         (with-failure-continuation
-                           (lambda (m e)
-                             (interaction-environment old-ie)
-                             (throw m e))
-                           (lambda ()               
-                             (set! source (optimizer
-                                           (_analyze!
-                                            (sc-expand x '(e) '(e)))))
-                             (interaction-environment old-ie)))
-                         (apply old-eval source env))]))))
-
-(program ((error . 1) (current-optimizer . 1) (|_analyze!_2Q1RBvak61| . 1) (cadr . 1) (|old-ie_2Q5vpddk61| . 2) (|apply_2QHUD2ak61| . 3) (newline . 1) (|env_2Q3GvSbk61| . 4) (_analyze! . 1) (member . 1) (eval . 2) (pair? . 1) (equal? . 1) (list . 1) (|interaction-environment_2QJJxpbk61| . 3) (with-failure-continuation . 1) (|sc-expand_2QnNzYak61| . 1) (null? . 1) (write . 1) (sc-expand . 1) (car . 2) (throw . 1) (apply . 1) (|optimizer_2QLyrMck61| . 1) (|x_2QpCtjck61| . 5) (interaction-environment . 1) (|e_2Q7kjAek61| . 1) (append . 1) (|old-eval_2QlYFB9k61| . 2) (|source_2QrrnGdk61| . 3) (|m_2QNnl7ek61| . 1) (strict-r5rs-compliance . 1)) ((eval . 1) (|source_2QrrnGdk61| . 1)) (equal? list error current-optimizer with-failure-continuation cadr null? write car throw newline append member pair? strict-r5rs-compliance) (#%set! eval ((#%lambda #t (|old-eval_2QlYFB9k61| |apply_2QHUD2ak61| |_analyze!_2Q1RBvak61| |sc-expand_2QnNzYak61| |interaction-environment_2QJJxpbk61|) () (#%lambda #t (|x_2QpCtjck61| . |env_2Q3GvSbk61|) (|old-eval_2QlYFB9k61| |apply_2QHUD2ak61| |_analyze!_2Q1RBvak61| |sc-expand_2QnNzYak61| |interaction-environment_2QJJxpbk61|) (#%if (#%if (pair? |x_2QpCtjck61|) (member (car |x_2QpCtjck61|) (#%quote ("noexpand" "analyzeonly"))) #f) (|apply_2QHUD2ak61| |old-eval_2QlYFB9k61| (cadr |x_2QpCtjck61|) (append |env_2Q3GvSbk61| (list (equal? (car |x_2QpCtjck61|) "analyzeonly")))) (#%if (#%if (null? |env_2Q3GvSbk61|) (strict-r5rs-compliance) #f) (error (#%quote eval) "expected 2 arguments to procedure, got 1.") ((#%lambda #t (|optimizer_2QLyrMck61| |old-ie_2Q5vpddk61| |source_2QrrnGdk61|) (|x_2QpCtjck61| |env_2Q3GvSbk61| |old-eval_2QlYFB9k61| |apply_2QHUD2ak61| |_analyze!_2Q1RBvak61| |sc-expand_2QnNzYak61| |interaction-environment_2QJJxpbk61|) (#%begin (with-failure-continuation (#%lambda #t (|m_2QNnl7ek61| |e_2Q7kjAek61|) (|old-ie_2Q5vpddk61| |interaction-environment_2QJJxpbk61|) (#%begin (|interaction-environment_2QJJxpbk61| |old-ie_2Q5vpddk61|) (throw |m_2QNnl7ek61| |e_2Q7kjAek61|))) (#%lambda #t () (|optimizer_2QLyrMck61| |old-ie_2Q5vpddk61| |source_2QrrnGdk61| |x_2QpCtjck61| |_analyze!_2Q1RBvak61| |sc-expand_2QnNzYak61| |interaction-environment_2QJJxpbk61|) (#%begin (#%set! |source_2QrrnGdk61| (|optimizer_2QLyrMck61| (|_analyze!_2Q1RBvak61| (|sc-expand_2QnNzYak61| |x_2QpCtjck61| (#%quote (e)) (#%quote (e))))))  (|interaction-environment_2QJJxpbk61| |old-ie_2Q5vpddk61|)))) (|apply_2QHUD2ak61| |old-eval_2QlYFB9k61| |source_2QrrnGdk61| |env_2Q3GvSbk61|))) (current-optimizer) (|apply_2QHUD2ak61| |interaction-environment_2QJJxpbk61| |env_2Q3GvSbk61|) #f))))) eval apply _analyze! sc-expand interaction-environment)))
-
 ;; Parameter Support, compatible with SRFI-39
 
 (define (make-parameter value . converter)

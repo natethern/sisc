@@ -93,6 +93,46 @@ public class GenerateHeap {
 
         };
 
+	static String[] inlinedBindings = new String[] {
+		//core forms
+
+		//procedures
+		"*", "+", "-", "/", "<", "<=", "=", ">", ">=", "abs", "acos", "angle",
+		"asin", "assoc", "assq", "assv", "atan", "boolean?",
+        "car", "cdr", "caar",
+		"cadr", "cdar", "cddr", "caaar", "caadr", "cadar", "caddr", "cdaar",
+		"cdadr", "cddar", "cdddr", "caaaar", "caaadr", "caadar", "caaddr",
+		"cadaar", "cadadr", "caddar", "cadddr", "cdaaar", "cdaadr", "cdadar",
+		"cdaddr", "cddaar", "cddadr", "cdddar", "cddddr", "ceiling",
+		"char-alphabetic?", "char-ci<=?", "char-ci<?",
+		"char-ci=?", "char-ci>=?", "char-ci>?", 
+		"char-lower-case?", "char-numeric?", "char-ready?", "char-upcase",
+		"char-upper-case?", "char-whitespace?", "char<=?", "char<?", "char=?",
+		"char>=?", "char>?", "char?", 
+		"complex?", "cos", 
+		"denominator", "eof-object?", "eq?", "equal?",
+		"eqv?", "even?", "exact?", "exp", "expt",
+		"floor", "gcd", "imag-part",
+		"inexact?", "input-port?", "integer?",
+		"lcm", "length", 
+		"list-ref", "list?", "log",        
+		"magnitude",
+		"max", "member", "memq", "memv", "min", "modulo",
+		"negative?", "not", "null?",
+		"number?", "numerator", "odd?", 
+		"output-port?", "pair?", "positive?",
+		"procedure?", "quotient", "rational?", "real-part", "real?", 
+        "remainder", "round",
+		"sin", "sqrt",
+		"string-ci<=?", "string-ci<?", "string-ci=?",
+		"string-ci>=?", "string-ci>?",
+		"string-length",  "string<=?", "string<?",
+		"string=?", "string>=?", "string>?", "string?", 
+		"symbol?", "tan", "truncate", 
+		"vector-length", 
+		"vector?", "zero?"
+		};
+
     static {
         r5rs_bindings=new HashSet(bindingNames.length);
         for (int i=0; i<bindingNames.length; i++)
@@ -173,7 +213,10 @@ public class GenerateHeap {
         Context.register("main", ctx);
         
         Interpreter r = Context.enter(ctx);
-        new sisc.modules.SimplePrimitives.Index().bindAll(r, ctx.toplevel_env);
+        r.dynenv.inlinePrimitives=new Pair();
+        for (int j=0; j<inlinedBindings.length; j++) {
+        	r.dynenv.inlinePrimitives=new Pair(Symbol.get(inlinedBindings[j]), r.dynenv.inlinePrimitives);
+        }        new sisc.modules.SimplePrimitives.Index().bindAll(r, ctx.toplevel_env);
         new sisc.modules.ComplexPrimitives.Index().bindAll(r, ctx.toplevel_env);
         new sisc.modules.Annotations.Index().bindAll(r, ctx.toplevel_env);
         new sisc.modules.io.IO.Index().bindAll(r, ctx.toplevel_env);
