@@ -19,6 +19,7 @@ import sisc.env.MemorySymEnv;
 import sisc.env.Parameter;
 import sisc.env.SchemeParameter;
 import sisc.env.NativeParameter;
+import sisc.env.ConfigParameter;
 import sisc.util.*;
 
 public class Primitives extends IndexedProcedure {
@@ -76,10 +77,7 @@ public class Primitives extends IndexedProcedure {
             define("exp", EXP);
             define("find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
             define("floor", FLOOR);
-            define("native-library-binding", NLBINDING);
-            define("native-library-binding-names", NLBINDINGNAMES);
-            define("native-library-name", NLNAME);
-            define("native-library-version", NLVERSION);
+            define("getenv", GETENV);
             define("get-symbolic-environment", GETENVIRONMENT);
             define("set-symbolic-environment!", SETENVIRONMENT);
             define("gensym", GENSYM);
@@ -96,9 +94,14 @@ public class Primitives extends IndexedProcedure {
             define("log", LOG);
             define("make-parameter", MAKEPARAM);
             define("make-native-parameter", MAKENATIVEPARAM);
+            define("make-config-parameter", MAKECONFIGPARAM);
             define("make-rectangular", MAKERECTANGULAR);
             define("make-string", MAKESTRING);
             define("make-vector", MAKEVECTOR);
+            define("native-library-binding", NLBINDING);
+            define("native-library-binding-names", NLBINDINGNAMES);
+            define("native-library-name", NLNAME);
+            define("native-library-version", NLVERSION);
             define("max-float-precision", MAXFLOATPRECISION);
             define("min-float-precision", MINFLOATPRECISION);
             define("null-environment", NULLENVIRONMENT);
@@ -281,9 +284,6 @@ public class Primitives extends IndexedProcedure {
             switch (id) {
             case NULLQ: return truth(vlr[0]==EMPTYLIST);
             case CAR: return truePair( vlr[0]).car;
-            case CASESENSITIVE:
-                Symbol.caseSensitive = truth(vlr[0]);
-                return VOID;
             case CDR: return truePair( vlr[0]).cdr;
             case PAIRQ:
                 return truth(vlr[0] instanceof Pair &&
@@ -294,6 +294,13 @@ public class Primitives extends IndexedProcedure {
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throwPrimException(liMessage(SISCB, "noenv", vlr[0].synopsis()));
                     return VOID;
+                }
+            case GETENV:
+                String str = r.getCtx().getProperty(string(vlr[0]));
+                if (str == null) {
+                    return FALSE;
+                } else {
+                    return new SchemeString(str);
                 }
             case ADD: 
             case MUL: return num(vlr[0]);
@@ -554,6 +561,8 @@ public class Primitives extends IndexedProcedure {
                                                            .indexValue()));
             case NLBINDING:
                 return nlib(vlr[0]).getBindingValue(r, symbol(vlr[1]));
+            case MAKECONFIGPARAM:
+                return new ConfigParameter(string(vlr[0]), vlr[1]);
             case EVALUATE:
                 r.nxp=r.compile(vlr[0], env(vlr[1]));
                 r.env=null;
@@ -719,7 +728,7 @@ public class Primitives extends IndexedProcedure {
         return VOID;
     }
 
-    //next: 122
+    //next: 124
     static final int
         ACOS = 23,
         ADD = 114,
@@ -759,6 +768,7 @@ public class Primitives extends IndexedProcedure {
         FLOOR = 48,
         GCD = 92,
         GENSYM = 0,
+        GETENV = 123,
         GETENVIRONMENT = 18,
         GETPROP = 109,
         GRT = 118,
@@ -777,6 +787,7 @@ public class Primitives extends IndexedProcedure {
         LT = 117,
         MAKEPARAM = 63,
         MAKENATIVEPARAM = 12,
+        MAKECONFIGPARAM = 122,
         MAKERECTANGULAR = 101,
         MAKESTRING = 99,
         MAKEVECTOR = 65,
