@@ -1,31 +1,99 @@
 package sisc.io;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.List;
+import java.util.HashMap;
+import java.util.LinkedList;
 import sisc.data.Value;
 import sisc.data.Pair;
+import sisc.data.Expression;
 import sisc.util.Util;
+import sisc.util.ExpressionVisitor;
 
-public class PortValueWriter extends Util implements ValueWriter {
+public class PortValueWriter extends Util
+    implements ValueWriter, ExpressionVisitor {
 
     private OutputPort port;
 
     private boolean display;
 
+    private boolean handleSharing;
+    private Map shared;
+    private List visited;
+    private int count;
+
     public PortValueWriter(OutputPort port) {
+        this(port, false);
+    }
+
+    public PortValueWriter(OutputPort port, boolean handleSharing) {
         this.port = port;
+        this.handleSharing = handleSharing;
+        if (handleSharing) {
+            shared = new HashMap(1);
+            visited = new LinkedList();
+            count = 0;
+        }
+    }
+
+    private void displayOrWrite(Value v, boolean display)
+        throws IOException {
+
+        if (handleSharing) {
+            visit(v);
+            while(!visited.isEmpty()) {
+                ((Expression)visited.remove(0)).visit(this);
+            }
+        }
+
+        this.display = display;
+        append(v);
+
+        if (handleSharing) {
+            shared.clear();
+            visited.clear();
+            count = 0;
+        }
     }
 
     public void display(Value v) throws IOException {
-        display = true;
-        v.display(this);
+        displayOrWrite(v, true);
     }
 
     public void write(Value v) throws IOException {
-        display = false;
-        v.write(this);
+        displayOrWrite(v, false);
+    }
+
+    private static Integer seenMarker = new Integer(-1);
+    private static Integer sharedMarker = new Integer(-2);
+
+    public void visit(Expression e) {
+        Object i = shared.get(e);
+        if (i == null) {
+            shared.put(e, seenMarker);
+            visited.add(e);
+        } else {
+            shared.put(e, sharedMarker);
+        }
     }
 
     public ValueWriter append(Value v) throws IOException {
+        if (handleSharing) {
+            Integer i = (Integer)shared.get(v);
+            if (i == sharedMarker) {
+                append('#');
+                int shareIdx = count++;
+                shared.put(v, new Integer(shareIdx));
+                append(Integer.toString(shareIdx));
+                append('=');
+            } else if (i != null && i != seenMarker) {
+                append('#');
+                append(i.toString());
+                append('#');
+                return this;
+            }
+        }
         if (display)
             v.display(this);
         else
@@ -50,7 +118,9 @@ public class PortValueWriter extends Util implements ValueWriter {
     }
 
     public boolean isInlinable(Value v) {
-        return true;
+        if (!handleSharing) return true;
+        Object i = shared.get(v);
+        return (i == null || i == seenMarker);
     }
 }
 

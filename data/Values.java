@@ -5,6 +5,7 @@ import sisc.interpreter.*;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
 public class Values extends Value {
     public Value[] values;
@@ -55,6 +56,12 @@ public class Values extends Value {
         values=new Value[size];
         for (int i=0; i<size; i++) {
             values[i]=(Value)s.readExpression();
+        }
+    }
+
+    public void visit(ExpressionVisitor v) {
+        for (int i=0; i<values.length; i++) {
+            v.visit(values[i]);
         }
     }
 }

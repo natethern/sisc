@@ -4,6 +4,7 @@ import java.io.*;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
 public class Pair extends Value {
     public Value car, cdr;
@@ -82,6 +83,11 @@ public class Pair extends Value {
     public void deserialize(Deserializer s) throws IOException {
         car=(Value)s.readExpression();
         cdr=(Value)s.readExpression();
+    }
+
+    public void visit(ExpressionVisitor v) {
+        v.visit(car);
+        v.visit(cdr);
     }
 }
 

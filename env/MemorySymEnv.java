@@ -9,6 +9,7 @@ import java.util.Iterator;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
 public class MemorySymEnv extends NamedValue
     implements SymbolicEnvironment {
@@ -184,6 +185,18 @@ public class MemorySymEnv extends NamedValue
         
         parent=s.readSymbolicEnvironment();
     }
+
+    public void visit(ExpressionVisitor v) {
+        super.visit(v);
+        for (Iterator i=symbolMap.keySet().iterator(); i.hasNext();) {
+            Symbol key=(Symbol)i.next();
+            v.visit(key);
+            int loc=((Integer)symbolMap.get(key)).intValue();
+            v.visit(env[loc]);
+        }
+        //TODO: visit parent?
+    }
+
 }
 
 

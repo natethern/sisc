@@ -4,6 +4,7 @@ import java.io.IOException;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
 public abstract class NamedValue extends Value {
 
@@ -31,6 +32,10 @@ public abstract class NamedValue extends Value {
 
     public void deserialize(Deserializer s) throws IOException {
         name=(Symbol)s.readExpression();
+    }
+
+    public void visit(ExpressionVisitor v) {
+        v.visit(name);
     }
 }
 /*

@@ -6,6 +6,7 @@ import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.LexicalEnvironment;
+import sisc.util.ExpressionVisitor;
 
 public class Closure extends Procedure {
     public boolean arity;
@@ -53,6 +54,12 @@ public class Closure extends Procedure {
         arity=(attr&1)!=0;
         env=(LexicalEnvironment)s.readExpression();
         body=s.readExpression();
+    }
+
+    public void visit(ExpressionVisitor v) {
+        super.visit(v);
+        v.visit(env);
+        v.visit(body);
     }
 
     /*

@@ -9,6 +9,7 @@ import sisc.nativefun.*;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
 public class SThread extends ModuleAdapter {
 
@@ -219,13 +220,20 @@ public class SThread extends ModuleAdapter {
         public Monitor() {}
 
         public void serialize(Serializer ser) throws IOException {
+            super.serialize(ser);
             if (lockCount > 0 || owner != null)
                 warn("serializinglockedmonitor");
             ser.writeExpression(condvar);
         }
 
         public void deserialize(Deserializer ser) throws IOException {
+            super.deserialize(ser);
             condvar=(CondVar)ser.readExpression();
+        }
+
+        public void visit(ExpressionVisitor v) {
+            super.visit(v);
+            v.visit(condvar);
         }
     }
 

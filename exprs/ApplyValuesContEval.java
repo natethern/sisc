@@ -6,6 +6,7 @@ import sisc.interpreter.*;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
 public class ApplyValuesContEval extends Expression {
     public Procedure consumer;
@@ -41,6 +42,10 @@ public class ApplyValuesContEval extends Expression {
 
     public void deserialize(Deserializer s) throws IOException {
         consumer=(Procedure)s.readExpression();
+    }
+
+    public void visit(ExpressionVisitor v) {
+        v.visit(consumer);
     }
 }
 /*

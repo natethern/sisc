@@ -5,6 +5,7 @@ import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
 public class AppExp extends Expression {
     public Expression exp, rands[], nxp;
@@ -71,9 +72,15 @@ public class AppExp extends Expression {
         nxp=s.readExpression();
         allImmediate=s.readBoolean();
     }
+
+    public void visit(ExpressionVisitor v) {
+        v.visit(exp);
+        for (int i=0; i<rands.length; i++) {
+            v.visit(rands[i]);
+        }
+        v.visit(nxp);
+    }
 }
-
-
 
 /*
  * The contents of this file are subject to the Mozilla Public

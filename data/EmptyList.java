@@ -4,6 +4,7 @@ import java.io.*;
 import sisc.io.ValueWriter;
 import sisc.ser.Deserializer;
 import sisc.ser.Serializer;
+import sisc.util.ExpressionVisitor;
 
 public class EmptyList extends Pair implements Singleton {
     public static EmptyList EMPTYLIST=new EmptyList();
@@ -36,6 +37,7 @@ public class EmptyList extends Pair implements Singleton {
         return EMPTYLIST;
     }
 
+    public void visit(ExpressionVisitor v) {}
 }
 
 

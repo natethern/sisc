@@ -5,6 +5,7 @@ import java.io.*;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
 public class EvalExp extends Expression {
     public Expression pre, post;
@@ -42,6 +43,11 @@ public class EvalExp extends Expression {
         pre=s.readExpression();
         post=s.readExpression();
         preImmediate=s.readBoolean();
+    }
+
+    public void visit(ExpressionVisitor v) {
+        v.visit(pre);
+        v.visit(post);
     }
 }
 /*

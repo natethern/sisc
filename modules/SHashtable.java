@@ -11,6 +11,7 @@ import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.Util;
+import sisc.util.ExpressionVisitor;
 
 public class SHashtable extends ModuleAdapter {
 
@@ -88,6 +89,15 @@ public class SHashtable extends ModuleAdapter {
                 Expression key = s.readExpression();
                 Expression val = s.readExpression();
                 ht.put(key, val);
+            }
+        }
+
+        public void visit(ExpressionVisitor v) {
+            Iterator i = ht.entrySet().iterator();
+            while(i.hasNext()) {
+                Map.Entry e = (Map.Entry)i.next();
+                v.visit((Value)e.getKey());
+                v.visit((Value)e.getValue());
             }
         }
 

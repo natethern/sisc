@@ -1,3 +1,9 @@
+2002-11-21  Matthias Radestock  <matthias@sorted.org>
+
+	* Added missing serialization methods to some obscure data types -
+	  there absence would have cause continuation serialization to
+	  break in some unusual cases
+
 2002-11-19  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed a bug in |write| and |display| when writing lists

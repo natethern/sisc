@@ -17,14 +17,13 @@ public class IO extends ModuleAdapter {
         //NEXT = 31,
 
         ABSPATHQ            = 0,
-        //BLOCKREAD           = 1,
-        //BLOCKWRITE          = 2,
         CHARREADY           = 3,
         CLOSEINPUTPORT      = 4,
         CLOSEOUTPUTPORT     = 5,
         CURRENTINPUTPORT    = 6,
         CURRENTOUTPUTPORT   = 7,
         DISPLAY             = 8,
+        DISPLAYSHARED       = 1,
         FILEEXISTSQ         = 9,
         FINDRESOURCE        = 29,
         FINDRESOURCES       = 30,
@@ -46,7 +45,8 @@ public class IO extends ModuleAdapter {
         READCHAR            = 25,
         READCODE            = 26,
         WRITE               = 27,
-        WRITECHAR           = 28;
+        WRITECHAR           = 28,
+        WRITESHARED         = 2;
 
     public IO() {
         define("absolute-path?"     , ABSPATHQ);
@@ -56,6 +56,7 @@ public class IO extends ModuleAdapter {
         define("current-input-port" , CURRENTINPUTPORT);
         define("current-output-port", CURRENTOUTPUTPORT);
         define("display"            , DISPLAY);
+        define("display-shared"     , DISPLAYSHARED);
         define("file-exists?"       , FILEEXISTSQ);
         define("find-resource"      , FINDRESOURCE);
         define("find-resources"     , FINDRESOURCES);
@@ -78,6 +79,7 @@ public class IO extends ModuleAdapter {
         define("read-code"          , READCODE);
         define("write"              , WRITE);
         define("write-char"         , WRITECHAR);
+        define("write-shared"       , WRITESHARED);
     }
 
     private static Value readChar(SchemeInputPort i) throws ContinuationException {
@@ -130,7 +132,24 @@ public class IO extends ModuleAdapter {
                     sisc.compiler.Parser.PRODUCE_IMMUTABLES);
     }
 
-       
+    public Value displayOrWrite(OutputPort port,
+                                Value v,
+                                boolean display,
+                                boolean shared) {
+        try {
+            ValueWriter w = new PortValueWriter(port, shared);
+            if (display) w.display(v);
+            else w.write(v);
+        } catch (IOException e) {
+            throwPrimException(liMessage(IOB, "errorwriting",
+                                         port.toString(),
+                                         e.getMessage()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return VOID;
+    }
+
     public Value eval(int primid, Interpreter f)
         throws ContinuationException {
         switch (f.vlr.length) {
@@ -164,19 +183,14 @@ public class IO extends ModuleAdapter {
                 } catch (IOException e) {
                     return FALSE;
                 }
-            case DISPLAY: case WRITE:
-                try {
-                    ValueWriter w = new PortValueWriter(f.dynenv.out);
-                    if (primid == WRITE)
-                        w.write(f.vlr[0]);
-                    else
-                        w.display(f.vlr[0]);
-                } catch (IOException e) {
-                    throwPrimException(liMessage(IOB, "errorwriting",
-                                                 f.dynenv.out.toString(),
-                                                 e.getMessage()));
-                }
-                return VOID;
+            case DISPLAY:
+                return displayOrWrite(f.dynenv.out, f.vlr[0], true, false);
+            case WRITE:
+                return displayOrWrite(f.dynenv.out, f.vlr[0], false, false);
+            case DISPLAYSHARED:
+                return displayOrWrite(f.dynenv.out, f.vlr[0], true, true);
+            case WRITESHARED:
+                return displayOrWrite(f.dynenv.out, f.vlr[0], false, true);
             case OPENINPUTSTRING:
                 return new ReaderInputPort(new StringReader(string(f.vlr[0])));
             case PEEKCHAR:
@@ -373,20 +387,14 @@ public class IO extends ModuleAdapter {
                                                  e.getMessage()));
                 }
                 return VOID;
-            case DISPLAY: case WRITE:
-                port=outport(f.vlr[1]);
-                try {
-                    ValueWriter w = new PortValueWriter(port);
-                    if (primid == WRITE)
-                        w.write(f.vlr[0]);
-                    else
-                        w.display(f.vlr[0]);
-                } catch (IOException e) {
-                    throwPrimException(liMessage(IOB, "errorwriting",
-                                                 port.toString(),
-                                                 e.getMessage()));
-                }
-                return VOID;
+            case DISPLAY:
+                return displayOrWrite(outport(f.vlr[1]), f.vlr[0], true, false);
+            case WRITE:
+                return displayOrWrite(outport(f.vlr[1]), f.vlr[0], false, false);
+            case DISPLAYSHARED:
+                return displayOrWrite(outport(f.vlr[1]), f.vlr[0], true, true);
+            case WRITESHARED:
+                return displayOrWrite(outport(f.vlr[1]), f.vlr[0], false, true);
             case MAKEPATH:
                 String f1=string(f.vlr[0]);
                 String f2=string(f.vlr[1]);

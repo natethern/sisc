@@ -322,10 +322,12 @@ public class Compiler extends Util {
         public Syntax() {}
 
         public void deserialize(Deserializer s) throws IOException {
+            super.deserialize(s);
             synid=s.readInt();
         }
 
         public void serialize(Serializer s) throws IOException {
+            super.serialize(s);
             s.writeInt(synid);
         }
     }

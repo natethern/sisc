@@ -5,7 +5,7 @@ import java.util.*;
 import sisc.data.*;
 import sisc.env.MemorySymEnv;
 import sisc.env.SymbolicEnvironment;
-
+import sisc.util.ExpressionVisitor;
 
 /**
  * An SymEnv backed by a random-access library. It can operate in two
@@ -185,6 +185,10 @@ public class LibraryAE extends MemorySymEnv {
             }
             s.writeInt(parentIdx);
         }
+    }
+
+    public void visit(ExpressionVisitor v) {
+        //TODO: not quite sure what to do here
     }
 }
 

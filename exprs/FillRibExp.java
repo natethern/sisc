@@ -6,6 +6,7 @@ import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
 public class FillRibExp extends Expression {
 
@@ -50,8 +51,12 @@ public class FillRibExp extends Expression {
         nxp=s.readExpression();
 	    lastAndRatorImmediate=s.readBoolean();
     }
-}
 
+    public void visit(ExpressionVisitor v) {
+        v.visit(exp);
+        v.visit(nxp);
+    }
+}
 
 /*
  * The contents of this file are subject to the Mozilla Public

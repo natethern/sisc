@@ -6,6 +6,7 @@ import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
+import sisc.util.ExpressionVisitor;
 
 public class DefineEval extends Expression {
     public Symbol lhs;
@@ -50,10 +51,10 @@ public class DefineEval extends Expression {
         return lhs.hashCode() ^ env.hashCode();
     }
 
+    public void visit(ExpressionVisitor v) {
+        v.visit(lhs);
+    }
 }
-
-
-
 
 /*
  * The contents of this file are subject to the Mozilla Public

@@ -4,6 +4,7 @@ import java.io.*;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
 public class SchemeVector extends Value {
     public Value[] vals;
@@ -106,10 +107,13 @@ public class SchemeVector extends Value {
             vals[i]=(Value)s.readExpression();
         }
     }
+
+    public void visit(ExpressionVisitor v) {
+        for (int i=0; i<vals.length; i++) {
+            v.visit(vals[i]);
+        }
+    }
 }
-
-
-
 
 /*
  * The contents of this file are subject to the Mozilla Public

@@ -3,6 +3,7 @@ package sisc.env;
 import sisc.data.*;
 import java.io.IOException;
 import sisc.io.ValueWriter;
+import sisc.util.ExpressionVisitor;
 
 public class DelegatingSymEnv extends NamedValue
     implements SymbolicEnvironment {
@@ -74,17 +75,6 @@ public class DelegatingSymEnv extends NamedValue
         getEnv().undefine(s);
     }
 
-    public void serialize(sisc.ser.Serializer s)
-        throws java.io.IOException {
- 
-       s.writeExpression(name);
-    }
-
-    public void deserialize(sisc.ser.Deserializer s)
-        throws java.io.IOException {
-
-        name = (Symbol)s.readExpression();
-    }
 }
 
 /*

@@ -11,6 +11,8 @@ import java.io.IOException;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.data.Expression;
+import sisc.util.ExpressionVisitor;
 
 public class JavaObject extends Procedure {
 
@@ -134,6 +136,10 @@ public class JavaObject extends Procedure {
             }
             break;
         }
+    }
+
+    public void visit(ExpressionVisitor v) {
+        if (obj != null && obj instanceof Expression) v.visit((Expression)obj);
     }
 
     public JavaObject(Object o) {

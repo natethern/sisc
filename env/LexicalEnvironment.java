@@ -7,6 +7,7 @@ import sisc.interpreter.*;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
 public class LexicalEnvironment extends Value {
     public LexicalEnvironment parent;
@@ -94,6 +95,12 @@ public class LexicalEnvironment extends Value {
         for (int i=0; i<size; i++)
             vals[i]=(Value)s.readExpression();
         parent = (LexicalEnvironment)s.readExpression();
+    }
+
+    public void visit(ExpressionVisitor v) {
+        for (int i=0; i<vals.length; i++)
+            v.visit(vals[i]);
+        v.visit(parent);
     }
 }
 

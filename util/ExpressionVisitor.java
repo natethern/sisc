@@ -1,41 +1,12 @@
-package sisc.exprs;
+package sisc.util;
 
-import java.io.*;
-import sisc.data.*;
-import sisc.interpreter.*;
-import sisc.ser.Serializer;
-import sisc.ser.Deserializer;
-import sisc.util.ExpressionVisitor;
+import sisc.data.Expression;
 
-public class LetrecEval extends Expression {
+public interface ExpressionVisitor {
 
-    public Expression body;
-    public LetrecEval(Expression body) {
-        this.body=body;
-    }
-
-    public void eval(Interpreter r) throws ContinuationException {
-        r.nxp=body;
-        System.arraycopy(r.vlr, 0, r.env.vals, 0, r.vlr.length);
-    }
-
-    public Value express() {
-        return list(sym("Letrec-Eval"), body.express());
-    }
-
-    public LetrecEval() {}
-    public void serialize(Serializer s) throws IOException {
-        s.writeExpression(body);
-    }
-
-    public void deserialize(Deserializer s) throws IOException {
-        body=s.readExpression();
-    }
-
-    public void visit(ExpressionVisitor v) {
-        v.visit(body);
-    }
+    void visit(Expression e);
 }
+
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -50,7 +21,7 @@ public class LetrecEval extends Expression {
  * The Original Code is the Second Interpreter of Scheme Code (SISC).
  * 
  * The Initial Developer of the Original Code is Scott G. Miller.
- * Portions created by Scott G. Miller are Copyright (C) 2000-2001
+ * Portions created by Scott G. Miller are Copyright (C) 2000-2002
  * Scott G. Miller.  All Rights Reserved.
  * 
  * Contributor(s):

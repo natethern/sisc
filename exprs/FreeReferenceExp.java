@@ -6,6 +6,7 @@ import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
+import sisc.util.ExpressionVisitor;
 
 public class FreeReferenceExp extends Expression implements Immediate {
     public Symbol sym;
@@ -78,6 +79,9 @@ public class FreeReferenceExp extends Expression implements Immediate {
         return senv.hashCode() ^ sym.hashCode();
     }
 
+    public void visit(ExpressionVisitor v) {
+        v.visit(sym);
+    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public

@@ -7,7 +7,11 @@ import sisc.exprs.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
 import java.util.Set;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 import java.io.IOException;
+
+import sisc.util.ExpressionVisitor;
 
 public class SDebug extends ModuleAdapter {
 
@@ -58,6 +62,19 @@ public class SDebug extends ModuleAdapter {
         public void display(ValueWriter w) throws IOException {
             w.append("#<").append(liMessage(SISCB, "expression")).append(' ').append(e.express()).append('>');
         }
+
+        public void serialize(Serializer s) throws IOException {
+            s.writeExpression(e);
+        }
+
+        public void deserialize(Deserializer s) throws IOException {
+            e=s.readExpression();
+        }
+
+        public void visit(ExpressionVisitor v) {
+            v.visit(e);
+        }
+
     }
 
     public Value eval(int primid, Interpreter f) throws ContinuationException {

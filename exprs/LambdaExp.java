@@ -5,6 +5,7 @@ import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
 public class LambdaExp extends Expression implements Immediate {
     public boolean infiniteArity;
@@ -42,6 +43,10 @@ public class LambdaExp extends Expression implements Immediate {
         infiniteArity=s.readBoolean();
         fcount=s.readInt();
         body=s.readExpression();
+    }
+
+    public void visit(ExpressionVisitor v) {
+        v.visit(body);
     }
 }
 

@@ -5,6 +5,7 @@ import java.io.*;
 import sisc.ser.*;
 import sisc.interpreter.*;
 import sisc.util.Util;
+import sisc.util.ExpressionVisitor;
 
 /**
  * The base class for any and all expressions.  An expression is anything 
@@ -124,6 +125,9 @@ public abstract class Expression extends Util implements Externalizable {
         return (this instanceof Singleton) ?
             ((Singleton)this).singletonValue() : this;
     }
+
+    public void visit(ExpressionVisitor v) {}
+    //public abstract void visit(ExpressionVisitor v);
 }
 /*
  * The contents of this file are subject to the Mozilla Public

@@ -15,6 +15,7 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
 import sisc.env.MemorySymEnv;
+import sisc.util.ExpressionVisitor;
 
 public class Primitives extends ModuleAdapter {
 
@@ -181,6 +182,10 @@ public class Primitives extends ModuleAdapter {
 
         public void deserialize(Deserializer s) throws IOException {
             v = (Value)s.readExpression();
+        }
+
+        public void visit(ExpressionVisitor v) {
+            v.visit(this.v);
         }
     }
     

@@ -7,6 +7,7 @@ import sisc.data.*;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
 /**
  * A Builtin procedure is a Scheme procedure whose behavior when
@@ -96,6 +97,11 @@ public class BuiltinProcedure extends Procedure {
         super.deserialize(s);
         host=s.readModule();
         id=s.readInt();
+    }
+
+    public void visit(ExpressionVisitor v) {
+        super.visit(v);
+        v.visit(host);
     }
 
     /*

@@ -5,6 +5,7 @@ import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
 public class IfEval extends Expression {
     public Expression conseq, altern;
@@ -33,13 +34,12 @@ public class IfEval extends Expression {
         conseq=s.readExpression();
         altern=s.readExpression();
     }
+
+    public void visit(ExpressionVisitor v) {
+        v.visit(conseq);
+        v.visit(altern);
+    }
 }
-
-
-
-
-
-
 
 /*
  * The contents of this file are subject to the Mozilla Public

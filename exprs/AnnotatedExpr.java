@@ -6,6 +6,7 @@ import sisc.interpreter.*;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
 
 public class AnnotatedExpr extends Value {
     public Expression expr;
@@ -49,6 +50,12 @@ public class AnnotatedExpr extends Value {
         expr=s.readExpression();
         annotation=(Value)s.readExpression();
         stripped=(Value)s.readExpression();
+    }
+
+    public void visit(ExpressionVisitor v) {
+        v.visit(expr);
+        v.visit(annotation);
+        v.visit(stripped);
     }
 }
 /*

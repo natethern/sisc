@@ -34,12 +34,14 @@ public class Buffer extends NamedValue {
 
     public Buffer() {}
     
-    public void serializer(Serializer s) throws IOException {
+    public void serialize(Serializer s) throws IOException {
+        super.serialize(s);
         s.writeInt(buf.length);
         s.write(buf);
     }
 
     public void deserialize(Deserializer s) throws IOException {
+        super.deserialize(s);
         buf=new byte[s.readInt()];
         s.read(buf, 0, buf.length);
     }

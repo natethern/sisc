@@ -8,6 +8,7 @@ import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.LexicalEnvironment;
+import sisc.util.ExpressionVisitor;
 
 public class CallFrame extends Procedure {
 
@@ -96,6 +97,16 @@ public class CallFrame extends Procedure {
         parent=(CallFrame)s.readExpression();
         env=(LexicalEnvironment)s.readExpression();
         vlk=s.readBoolean();
+    }
+
+    public void visit(ExpressionVisitor v) {
+        if (vlr!=null)
+            for (int i=0; i<vlr.length; i++)
+                v.visit(vlr[i]);
+        v.visit(nxp);
+        v.visit(fk);
+        v.visit(parent);
+        v.visit(env);
     }
 }
 
