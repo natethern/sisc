@@ -63,7 +63,7 @@ public class BuiltinProcedure extends Procedure {
 	    error(r, name, npr.getMessage() + "\n  " + npr.getRootCause().getMessage());
         } catch (RuntimeException re) {
             error(r, name, re.getMessage());
-        }
+        } 
     }
 
     public String display() {

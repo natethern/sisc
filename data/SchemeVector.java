@@ -110,6 +110,18 @@ public class SchemeVector extends Value {
         return b.toString();
     }
 
+    public String synopsis(int length) {
+        StringBuffer b=new StringBuffer();
+        b.append('#').append(vals.length).append('(');
+        int l=findEnd(), i=0;
+        for (; i<l && b.length()<length; i++) {
+            b.append(vals[i].synopsis(length-b.length()));
+            if (i+1<l) b.append(' ');
+        }
+	if (i<l) b.append("...");
+	else b.append(')');
+	return b.toString();
+    }
 
     public Object javaValue() {
         Object[] v=new Object[vals.length];

@@ -42,6 +42,13 @@ public abstract class Value extends Expression implements Immediate {
         return this;
     }
 
+    public String synopsis() {
+	return synopsis(DEFAULT_SYNOPSIS_LENGTH);
+    }
+
+    /** 
+     * Only this function need be overridden
+     */
     public String synopsis(int limit) {
 	String v=write();
 	if (v.length() > limit)

@@ -263,11 +263,11 @@ public class Compiler extends Util {
 
     }
 
-    public final Expression application(Expression rator, Expression rands[], boolean tail) {
+    public final Expression application(Expression rator, Expression rands[], boolean nonTail) {
         if (rator instanceof Value && !(rator instanceof Procedure))
             System.err.println("{warning: compiler detected application of non-procedure '"+
                                ((Value)rator).write()+"'}");
-	return new AppExp(rator, rands, tail);
+	return new AppExp(rator, rands, nonTail);
     }
 
     void compileExpressions(Interpreter r, Expression exprs[], ReferenceEnv rt,

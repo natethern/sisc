@@ -227,10 +227,15 @@ public class Parser extends Util implements Tokens {
                         v=new Value[ref.intValue()];
                     }
                 }
+		
+		ImmutableVector iv=new ImmutableVector();
+		o=iv;
+		if (def!=null) state.put(def, iv);
+		def=null;
 
                 Object expr=_nextExpression(is, state, def);
                 if (expr==null && v==null) {
-                    o=new ImmutableVector(new Value[0]);
+		    iv.vals=new Value[0];
                     break;
                 } else if (expr instanceof Pair) {
                     if (v==null)
@@ -250,7 +255,7 @@ public class Parser extends Util implements Tokens {
                         v[i]=(Value)(lastObject instanceof Integer ?
                                      state.get(lastObject) : lastObject);
                 }
-                o=new ImmutableVector(v);
+		iv.vals=v;
                 break;
             }
             break;
