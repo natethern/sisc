@@ -1404,7 +1404,7 @@ com/foo/bar/baz/baz3.scm
       </sect3>
     </sect2>
   </sect1>
-  <sect1>
+  <sect1 id="CreatingLibraries">
     <title>Creating Libraries</title>
     <para>
       &requires; 

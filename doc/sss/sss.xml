@@ -18,6 +18,7 @@
  <!ENTITY io-chapter SYSTEM "io.xml">
  <!ENTITY threads-chapter SYSTEM "threads.xml">
  <!ENTITY modules-chapter SYSTEM "modules.xml">
+ <!ENTITY extensibility-chapter SYSTEM "extensibility.xml">
  <!ENTITY oo-chapter SYSTEM "oo.xml">
  <!ENTITY java-chapter SYSTEM "java.xml">
  <!ENTITY index SYSTEM "index.xml">
@@ -95,6 +96,7 @@
   &java-chapter;
   &library-chapter;
   &modules-chapter;
+  &extensibility-chapter;
   <appendix id="Errata">
     <title>Errata</title>
     <para>
