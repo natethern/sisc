@@ -15,35 +15,33 @@ import sisc.util.Util;
  * AST of SISC Expression objects.
  */
 public class Compiler extends Util {
-
-	//Various integer constants
-	public static final int 
-	 	  SYNTACTIC_TOKEN_COUNT = 9,
-	 	  
-		  APPLICATION=0, LAMBDA = 1, _IF=2, BEGIN=3, QUOTE=4, SET=5, DEFINE=6,
-		  MAKEANNOTATION=7, LETREC=8, UNKNOWN=-1, 
-        
-		  TAIL=1, COMMAND=2, PREDICATE=4, REALTAIL=8;
-
-	public static final Map SYNTACTIC_TOKENS=new HashMap(SYNTACTIC_TOKEN_COUNT);
-			  
-	//Define the core syntactic constructs of the interpreter
-	static final Syntax
-    	SYN_QUOTE  = syntax("quote", QUOTE),
-    	SYN_BEGIN  = syntax("begin", BEGIN),
-     	SYN_IF     = syntax("if", _IF),
-    	SYN_DEFINE = syntax("define", DEFINE),
+    
+    //Various integer constants
+    public static final int 
+        SYNTACTIC_TOKEN_COUNT = 9,
+        APPLICATION=0, LAMBDA = 1, _IF=2, BEGIN=3, QUOTE=4, SET=5, 
+        DEFINE=6, MAKEANNOTATION=7, LETREC=8, UNKNOWN=-1, 
+        TAIL=1, COMMAND=2, PREDICATE=4, REALTAIL=8;
+    
+    public static final Map SYNTACTIC_TOKENS=new HashMap(SYNTACTIC_TOKEN_COUNT);
+    
+    //Define the core syntactic constructs of the interpreter
+    static final Syntax
+        SYN_QUOTE  = syntax("quote", QUOTE),
+        SYN_BEGIN  = syntax("begin", BEGIN),
+        SYN_IF     = syntax("if", _IF),
+        SYN_DEFINE = syntax("define", DEFINE),
         SYN_SET    = syntax("set!", SET),	
-		SYN_LAMBDA = syntax("lambda", LAMBDA),
-		SYN_LETREC = syntax("letrec", LETREC),
-		SYN_ANNOT  = syntax("annotate", MAKEANNOTATION);
-		
-	static Syntax syntax(String name, int id) {
-		Syntax s=new Syntax(id);
-		s.setName(Symbol.get(name));
-		SYNTACTIC_TOKENS.put(name, s);
-		return s;
-	}
+        SYN_LAMBDA = syntax("lambda", LAMBDA),
+        SYN_LETREC = syntax("letrec", LETREC),
+        SYN_ANNOT  = syntax("annotate", MAKEANNOTATION);
+    
+    static Syntax syntax(String name, int id) {
+        Syntax s=new Syntax(id);
+        s.setName(Symbol.get(name));
+        SYNTACTIC_TOKENS.put(name, s);
+        return s;
+    }
 	
     static void extendenv(SymbolicEnvironment env, String s, int i) {
         Symbol name=Symbol.get(s);
@@ -417,7 +415,7 @@ public class Compiler extends Util {
         return be;
     }
 
-    public static class Syntax extends Value implements NamedValue {
+    public static class Syntax extends Value implements NamedValue, Singleton {
         int synid;
 
         public Syntax(int synid) {
@@ -440,6 +438,10 @@ public class Compiler extends Util {
 
         public void serialize(Serializer s) throws IOException {
             s.writeInt(synid);
+        }
+
+        public Value singletonValue() {
+            return (Value)SYNTACTIC_TOKENS.get(getName());
         }
     }
 
