@@ -1060,11 +1060,6 @@ public class Quantity extends Value {
 	return (ob instanceof Quantity) && comp((Quantity)ob, 0);
     }
 
-    public boolean equals(Object ob) {
-        if (!(ob instanceof Quantity)) return false;
-        return comp((Quantity)ob, 0);
-    }
-
     public int hashCode() {
 	int hc=type;
 	switch (type) {
