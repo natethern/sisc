@@ -246,9 +246,9 @@ public class Primitives extends Module {
         case READ: case READCHAR:
                 return (primid==READ ? f.dynenv.in.read(f) :
                         f.dynenv.in.readchar(f));
-            case CURRENTEVAL: return (Value)f.evaluator;
+            case CURRENTEVAL: return (Value)f.ctx.evaluator;
             case INTERACTIONENVIRONMENT:
-                return f.toplevel_env;
+                return f.ctx.toplevel_env;
             case SYSTIME: return Quantity.valueOf(System.currentTimeMillis());
             case MAX_PRECISION: return Quantity.valueOf(Quantity.max_precision);
             case MIN_PRECISION: return Quantity.valueOf(Quantity.min_precision);
@@ -263,7 +263,7 @@ public class Primitives extends Module {
                              f.vlr[0]!=EMPTYLIST);
             case LOOKUP:
                 try {
-                    return f.toplevel_env.lookup(symbol(f,f.vlr[0]));
+                    return f.ctx.toplevel_env.lookup(symbol(f,f.vlr[0]));
                 } catch (ArrayIndexOutOfBoundsException e) {
                     return FALSE;
                 }
@@ -473,7 +473,7 @@ public class Primitives extends Module {
                     return sisc.compiler.Compiler.addSpecialForms(new AssociativeEnvironment());
                 else throw new RuntimeException("Unsupported standard version");
             case CURRENTEVAL:
-                f.evaluator=proc(f,f.vlr[0]);
+                f.ctx.evaluator=proc(f,f.vlr[0]);
                 return VOID;
             case LOADMODULE:
                 try {

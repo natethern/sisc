@@ -51,12 +51,13 @@ public class REPL extends Thread {
     }
 
     public static Interpreter createInterpreter(String[] args) throws ClassNotFoundException {
+	AppContext ctx = new AppContext();
 	DynamicEnv d = new DynamicEnv(System.in, System.out);
-        Interpreter r = new Interpreter(d);
-        r.setEvaluator("eval");
+        Interpreter r = new Interpreter(ctx,d);
 
         try {
-            r.loadEnv(new DataInputStream(
+            ctx.loadEnv(r,
+			new DataInputStream(
                           new BufferedInputStream(
                               new GZIPInputStream(
                                   new BufferedInputStream(
@@ -70,7 +71,7 @@ public class REPL extends Thread {
         }
 
         FreeReferenceExp load=new FreeReferenceExp(Symbol.get("load"),
-                              -1, r.toplevel_env);
+                              -1, r.ctx.toplevel_env);
         for (int i=0; i<args.length; i++) {
             Value[] v=new Value[1];
             v[0]=new SchemeString(args[i]);
@@ -101,7 +102,7 @@ public class REPL extends Thread {
     public void run() {
         Value v=null;
         FreeReferenceExp repl=new FreeReferenceExp(Symbol.get("repl"),
-                              -1, r.toplevel_env);
+                              -1, r.ctx.toplevel_env);
 start:
         do {
             try {

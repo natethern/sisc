@@ -47,11 +47,14 @@ public class GenerateHeap {
 
         System.out.println("Generating heap: "+args[0]);
 
+	AppContext ctx = new AppContext(sisc.compiler.Compiler.addSpecialForms(new AssociativeEnvironment()));
 	DynamicEnv d = new DynamicEnv(System.in, System.out);
-        r=new Interpreter(d);
-        r.setEvaluator("eval");
+        r=new Interpreter(ctx,d);
+	new Primitives().initialize(r);
+        ctx.setEvaluator("eval");
+
         FreeReferenceExp load=new FreeReferenceExp(Symbol.get("load"),
-                              -1, r.toplevel_env);
+                              -1, r.ctx.toplevel_env);
 
 
         Properties sysProps=System.getProperties();
@@ -88,7 +91,7 @@ public class GenerateHeap {
                                      new GZIPOutputStream(
                                          new BufferedOutputStream(
                                              new FileOutputStream(args[0]))));
-            r.saveEnv(out);
+            ctx.saveEnv(r,out);
             out.flush();
             out.close();
         } catch (Exception e) {

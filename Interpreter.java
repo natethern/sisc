@@ -46,10 +46,7 @@ public class Interpreter extends Util {
     //be moved to the dynenv
     public static Compiler compiler = new Compiler();
 
-    protected Procedure evaluator;
-    protected AssociativeEnvironment symenv;
-    public AssociativeEnvironment toplevel_env;
-
+    public AppContext ctx;
     public DynamicEnv dynenv;
 
     static class DisplaylnExp extends Expression {
@@ -79,34 +76,20 @@ public class Interpreter extends Util {
     public CallFrame             stk, fk;
 
     public static Interpreter newContext(Interpreter parent) {
-        Interpreter rnew=new Interpreter(parent.symenv, parent.dynenv);
-        rnew.evaluator=parent.evaluator;
-        return rnew;
+        return new Interpreter(parent.ctx, parent.dynenv);
     }
 
-    protected Interpreter(AssociativeEnvironment symenv,
-		       DynamicEnv dynenv) {
+    public Interpreter(AppContext ctx, DynamicEnv dynenv) {
         fk=new CallFrame(new DisplaylnExp(), null, null, null, stk);
         fk.capture();
         fk.fk=fk;
-        this.symenv=symenv;
-        try {
-            toplevel_env=lookupContextEnv(TOPLEVEL);
-        } catch (ArrayIndexOutOfBoundsException ue) {
-            toplevel_env=symenv;
-            symenv.define(TOPLEVEL, toplevel_env);
-        }
         env=new LexicalEnvironment();
+	this.ctx = ctx;
 	this.dynenv = dynenv;
     }
 
-    public Interpreter(DynamicEnv dynenv) {
-        this(Compiler.addSpecialForms(new AssociativeEnvironment()), dynenv);
-        new Primitives().initialize(this);
-    }
-
     public Expression compile(Value v) throws ContinuationException {
-        return compiler.compile(this, v, toplevel_env);
+        return compiler.compile(this, v, ctx.toplevel_env);
     }
 
     public Expression compile(Value v, AssociativeEnvironment env)
@@ -174,26 +157,17 @@ public class Interpreter extends Util {
     }
 
     public Value eval(Value v) throws ContinuationException {
-        return interpret(new AppExp((Expression)evaluator,
+        return interpret(new AppExp((Expression)ctx.evaluator,
                                     new Expression[] {v}, true));
-    }
-
-    public boolean setEvaluator(String s) {
-        try {
-            evaluator=(Procedure)toplevel_env.lookup(Symbol.get(s));
-            return true;
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return false;
-        }
     }
 
     // Symbolic environment handling
     public AssociativeEnvironment lookupContextEnv(Symbol s) {
-	return (AssociativeEnvironment)symenv.lookup(s);
+	return ctx.lookupContextEnv(s);
     }
 
     public void defineContextEnv(Symbol s, AssociativeEnvironment env) {
-	symenv.define(s, env);
+	ctx.symenv.define(s, env);
     }
 
     protected AssociativeEnvironment getContextEnv(Symbol s) {
@@ -215,108 +189,11 @@ public class Interpreter extends Util {
 
     public Expression lookup(Symbol s, Symbol context) {
         try {
-            AssociativeEnvironment contenv=(AssociativeEnvironment)
-                                           symenv.lookup(context);
+            AssociativeEnvironment contenv = lookupContextEnv(context);
             return (Expression)contenv.lookup(s);
         } catch (ClassCastException c) {
             return null;
         }
-    }
-
-    // Heapfile loading/saving
-    public void loadEnv(DataInputStream i) throws IOException {
-        if (SERIALIZATION) {
-            Serializer s=new Serializer(this);
-            CallFrame lstk=(CallFrame)s.deserialize(i);
-            AssociativeEnvironment lsymenv=(AssociativeEnvironment)s.deserialize(i);
-            Procedure levaluator=(Procedure)s.deserialize(i);
-            SchemeBoolean lTRUE=(SchemeBoolean)s.deserialize(i),
-                                lFALSE=(SchemeBoolean)s.deserialize(i);
-            SchemeVoid lVOID=(SchemeVoid)s.deserialize(i);
-            EmptyList lEMPTYLIST=(EmptyList)s.deserialize(i);
-            EOFObject lEOF=(EOFObject)s.deserialize(i);
-
-            try {
-                stk=lstk;
-                symenv=lsymenv;
-                try {
-                    toplevel_env=lookupContextEnv(TOPLEVEL);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    throw new IOException("Heap did not contain toplevel environment!");
-                }
-                evaluator=levaluator;
-                TRUE=lTRUE;
-                FALSE=lFALSE;
-                VOID=lVOID;
-                EMPTYLIST=lEMPTYLIST;
-                EOF=lEOF;
-            } catch (Exception e) {
-                throw new IOException(e.getMessage());
-            } finally {
-                pop(stk);
-            }
-        } else {
-            ObjectInputStream ois=new ObjectInputStream(i);
-
-            try {
-                CallFrame lstk=(CallFrame)ois.readObject();
-                AssociativeEnvironment lsymenv=(AssociativeEnvironment)ois.readObject();
-                Procedure levaluator=(Procedure)ois.readObject();
-                SchemeBoolean lTRUE=(SchemeBoolean)ois.readObject(),
-                                    lFALSE=(SchemeBoolean)ois.readObject();
-                SchemeVoid lVOID=(SchemeVoid)ois.readObject();
-                EmptyList lEMPTYLIST=(EmptyList)ois.readObject();
-                EOFObject lEOF=(EOFObject)ois.readObject();
-
-
-                stk=lstk;
-                symenv=lsymenv;
-                try {
-                    toplevel_env=lookupContextEnv(TOPLEVEL);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    throw new IOException("Heap did not contain toplevel environment!");
-                }
-                evaluator=levaluator;
-                TRUE=lTRUE;
-                FALSE=lFALSE;
-                VOID=lVOID;
-                EMPTYLIST=lEMPTYLIST;
-                EOF=lEOF;
-            } catch (Exception e) {
-                throw new IOException(e.getMessage());
-            } finally {
-                pop(stk);
-            }
-        }
-    }
-
-    public void saveEnv(DataOutputStream o) throws IOException {
-        save();
-        if (SERIALIZATION) {
-            Serializer s=new Serializer(this);
-            s.serialize(stk, o);
-            s.serialize(symenv, o);
-            s.serialize(evaluator, o);
-            s.serialize(TRUE, o);
-            s.serialize(FALSE, o);
-            s.serialize(VOID,o);
-            s.serialize(EMPTYLIST,o);
-            s.serialize(EOF,o);
-            o.flush();
-        } else {
-            ObjectOutputStream out=new ObjectOutputStream(o);
-            out.writeObject(stk);
-            out.writeObject(symenv);
-            out.writeObject(evaluator);
-            out.writeObject(TRUE);
-            out.writeObject(FALSE);
-            out.writeObject(VOID);
-            out.writeObject(EMPTYLIST);
-            out.writeObject(EOF);
-            out.flush();
-        }
-
-        pop(stk);
     }
 
     //POOLING
