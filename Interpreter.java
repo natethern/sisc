@@ -182,12 +182,12 @@ public class Interpreter extends Util {
         env=c.env;
         fk=c.fk;
         stk=c.parent;
-	vlk=c.vlk;
+        vlk=c.vlk;
         returnFrame(c);
     }
 
     public final void push(Expression nxp) {
-	stk=createFrame(nxp, vlr, vlk, env, fk, stk);
+        stk=createFrame(nxp, vlr, vlk, env, fk, stk);
     }
 
     public final void save() {
@@ -332,9 +332,9 @@ public class Interpreter extends Util {
     }
 
     public final void returnFrame(CallFrame f) {
-	if (!f.vlk && (deadFramePointer < FPMAX)) {
-	    deadFrames[++deadFramePointer]=f;
-	}
+        if (!f.vlk && (deadFramePointer < FPMAX)) {
+            deadFrames[++deadFramePointer]=f;
+        }
     }
 
     protected static final int VALUESPOOLSIZE=8;
@@ -362,9 +362,14 @@ public class Interpreter extends Util {
         return res;
     }
 
-    public final void returnValues() {
+    public final void returnVLR() {
         if (!vlk) returnValues(vlr);
         vlr=null;
+    }
+
+    public final Value[] returnVLR(int size) {
+        if (!vlk) returnValues(vlr);
+        return newVLR(size);
     }
 
     public final void returnValues(Value[] v) {

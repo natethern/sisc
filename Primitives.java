@@ -396,15 +396,14 @@ public class Primitives extends ModuleAdapter {
                         inport.readchar());
             case EVAL:
                 f.nxp=f.compile(f.vlr[0]);
-                f.returnValues();
+                f.returnVLR();
                 return VOID;
             case OPENINPUTSTRING:
                 return new InputPort(new BufferedReader(
                                                         new StringReader(string(f.vlr[0]))));
             case CALLCC:
                 Procedure kproc=(Procedure)f.vlr[0];
-                f.returnValues();
-                f.newVLR(1);
+                f.returnVLR(1);
                 f.vlr[0]=f.stk.capture(f);
                 f.nxp = APPEVAL;
                 return kproc;
@@ -726,23 +725,21 @@ public class Primitives extends ModuleAdapter {
                 return module(f.vlr[0]).getBindingValue(f, symbol(f.vlr[1]));
             case EVAL:
                 f.nxp=f.compile(f.vlr[0], env(f.vlr[1]));
-                f.returnValues();
+                f.returnVLR();
                 return VOID;
             case CALLFC:
                 Procedure proc=proc(f.vlr[0]);
                 Procedure ehandler=new CurriedFC(proc(f.vlr[1]), f.fk);
                 f.fk=f.createFrame(new ApplyValuesContEval(ehandler),
                                    null, false, f.env, f.fk, f.stk);
-                f.returnValues();
-                f.vlr = ZV;
+                f.returnVLR(0);
                 f.nxp = APPEVAL;
                 return proc;
             case CALLWITHVALUES:
                 Procedure producer=proc(f.vlr[0]);
                 Procedure consumer=proc(f.vlr[1]);
                 f.push(new ApplyValuesContEval(consumer));
-                f.returnValues();
-                f.vlr = ZV;
+                f.returnVLR(0);
                 f.nxp = APPEVAL;
                 return producer;
             case ERROR:
@@ -822,18 +819,18 @@ public class Primitives extends ModuleAdapter {
                 Procedure proc=proc(f.vlr[0]);
                 int l = f.vlr.length-2;
                 Pair args=pair(f.vlr[l+1]);
+                Value oldvlr[] = f.vlr;
                 //this might get us back the just recycled f.vlr,
                 //which is fine since we only shift its contents to
                 //the left by one
-                Value oldvlr[] = f.vlr;
-                Value newvlr[] = f.newVLR(l + length(args));
+                Value newvlr[] = f.returnVLR(l + length(args));
 
                 int j;
                 for (j=0; j < l; j++) {
                     newvlr[j] = oldvlr[j+1];
                 }
-                for (; args != EMPTYLIST; args = (Pair)args.cdr, j++) {
-                    newvlr[j] = args.car;
+                for (; args != EMPTYLIST; args = (Pair)args.cdr) {
+                    newvlr[j++] = args.car;
                 }
 
                 f.nxp = APPEVAL;
