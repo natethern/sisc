@@ -9,6 +9,7 @@ import sisc.exprs.*;
 import sisc.io.*;
 import sisc.interpreter.*;
 import java.io.IOException;
+import java.io.EOFException;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import sisc.reader.Lexer;
@@ -174,9 +175,12 @@ public abstract class Util implements Version {
         InputPort ip = new ReaderInputPort(new StringReader(expr));
         Parser p = new Parser(new Lexer());
         Value res = p.nextExpression(ip);
-        if (p.nextExpression(ip) != EOF)
-            throw new IOException(liMessage(SISCB, "stringreaderror", expr));
-        return res;
+        try {
+            Value v=p.nextExpression(ip);
+        } catch (EOFException eof) {
+            return res;
+        }
+        throw new IOException(liMessage(SISCB, "stringreaderror", expr));
     }
 
     public static void error(Interpreter r, Pair error)
