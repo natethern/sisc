@@ -245,6 +245,17 @@
   (pack frame)
   (show frame))
 
+;;threading
+(define-java-class <java.lang.object>)
+(define mtx (java-new <java.lang.object>))
+(define v 0)
+(define (inc-v)
+  (java-synchronized mtx (lambda () (set! v (+ v 1)) v)))
+(define (dec-v)
+  (java-synchronized mtx (lambda () (set! v (- v 1)) v)))
+(import threading)
+(begin (parallel inc-v dec-v inc-v inc-v dec-v dec-v) v) ;=> 0
+
 ;;check exception handling in reflection api
 (define (find pred l)
   (and (not (null? l))
