@@ -1,3 +1,15 @@
+2004-12-01  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Allow arbitrary values as NamedValue names, 
+	  fixing a bug in SRFI-18.
+	 
+2004-11-29  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Fixed bug in quasiquote introduced with the immutability
+	  preservation
+
+2004-11-22  SISC 1.9.4 Released
+
 2004-11-19  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed mutex state management bug in SRFI-18.
