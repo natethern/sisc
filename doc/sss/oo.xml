@@ -1517,17 +1517,14 @@
     <para>
       The examples in this section follow a few naming conventions:
       <simplelist>
-        <listitem>
-          <para>
+        <member>
             Classes are types in the &SISC; type system and therefore
             class names follow the naming convention for type names
             (see
             <xref linkend="TypeSystem"/>), for example
             <literal>&lt;foo-bar-baz&gt;</literal>.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
+        </member>
+        <member>
             Generic procedures whose sole purpose it is to access
             slots of objects have names starting with
             <literal>:</literal> and otherwise follow the usual Scheme
@@ -1536,10 +1533,8 @@
             <literal>:foo-bar-baz</literal>. This helps to visually
             distinguish slot access from ordinary procedure
             invocations and avoids name clashes with other procedures.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
+        </member>
+        <member>
             Generic procedures whose sole purpose it is to modify
             slots of objects, are named after the corresponding
             accessor procedure (whether that exists or not) with a
@@ -1547,8 +1542,7 @@
             Scheme convention of denoting procedures that perform
             mutations on their arguments. For example
             <literal>:foo-bar-baz!</literal>.
-          </para>
-        </listitem>
+        </member>
       </simplelist>
     </para>
     <sect2>

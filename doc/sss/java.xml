@@ -2078,7 +2078,7 @@ Foo fooObj = new Foo(1, 2);
       knowledge of the Java reflection API.
     </para>
     <sect2>
-      <title>Classes</title>]
+      <title>Classes</title>
       <para>
         These functions access attributes and members of classes.
       </para>
@@ -2107,8 +2107,8 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns the modifiers of <parameter>jclass</parameter>, for 
-			  example <literal>public static final</literal>.			
+              Returns the modifiers of <parameter>jclass</parameter>, for 
+              example <literal>public static final</literal>.            
             </para>
           </blockquote>
         </para>
@@ -2122,8 +2122,8 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns the Java class in which <parameter>jclass</parameter>
-			  was declared, or null if it was declared at the top level.
+              Returns the Java class in which <parameter>jclass</parameter>
+              was declared, or null if it was declared at the top level.
             </para>
           </blockquote>
         </para>
@@ -2169,9 +2169,9 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns all the classes declared by <parameter>jclass</parameter>,
-			  or <literal>#f</literal> if access to this information is 
-			  prohibited.
+              Returns all the classes declared by <parameter>jclass</parameter>,
+              or <literal>#f</literal> if access to this information is 
+              prohibited.
             </para>
           </blockquote>
         </para>
@@ -2185,9 +2185,9 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns all the constructors declared by <parameter>jclass</parameter>,
-			  or <literal>#f</literal> if access to this information is 
-			  prohibited.
+              Returns all the constructors declared by <parameter>jclass</parameter>,
+              or <literal>#f</literal> if access to this information is 
+              prohibited.
             </para>
           </blockquote>
         </para>
@@ -2201,9 +2201,9 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns all the methods declared by <parameter>jclass</parameter>,
-			  or <literal>#f</literal> if access to this information is 
-			  prohibited.
+              Returns all the methods declared by <parameter>jclass</parameter>,
+              or <literal>#f</literal> if access to this information is 
+              prohibited.
             </para>
           </blockquote>
         </para>
@@ -2217,9 +2217,9 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns all the fields declared by <parameter>jclass</parameter>,
-			  or <literal>#f</literal> if access to this information is 
-			  prohibited.
+              Returns all the fields declared by <parameter>jclass</parameter>,
+              or <literal>#f</literal> if access to this information is 
+              prohibited.
             </para>
           </blockquote>
         </para>
@@ -2233,10 +2233,10 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns teh total order of <parameter>jclass</parameter> and
-			  all direct and indirect superclasses, as determined by the
-			  partial orders obtained from calling 
-			  <function>java-class-declared-superclasses</function>.
+              Returns teh total order of <parameter>jclass</parameter> and
+              all direct and indirect superclasses, as determined by the
+              partial orders obtained from calling 
+              <function>java-class-declared-superclasses</function>.
             </para>
             <para>
               The ordering of the classes returned by <function>
@@ -2249,12 +2249,12 @@ Foo fooObj = new Foo(1, 2);
               are never rearranged.
            </para>
            <para>
-           	  The class precedence list is important when comparing types 
-           	  using the type system's <function>compare-types</function> procedure,
-           	  which is used by the generic procedure method selection algorithm 
-           	  (see <xref linkend="comparemethods"/>).  Since generic Java methods
-           	  and field accessors/mutators are implemented in terms of generic 
-           	  procedures they are all affected by the class precedence list.
+                 The class precedence list is important when comparing types 
+                 using the type system's <function>compare-types</function> procedure,
+                 which is used by the generic procedure method selection algorithm 
+                 (see <xref linkend="comparemethods"/>).  Since generic Java methods
+                 and field accessors/mutators are implemented in terms of generic 
+                 procedures they are all affected by the class precedence list.
            </para>
           </blockquote>
         </para>      
@@ -2262,7 +2262,6 @@ Foo fooObj = new Foo(1, 2);
     </sect2>
     <sect2>
       <title>Constructors</title>
-    </sect2>
       <blockquote>
         <para>
          <indexterm><primary>java-constructor?</primary></indexterm>
@@ -2274,8 +2273,8 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Determines whether <parameter>value</parameter> is a Java 
-			  constructor.
+              Determines whether <parameter>value</parameter> is a Java 
+              constructor.
             </para>
           </blockquote>
         </para>
@@ -2289,7 +2288,7 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns the name of <parameter>jconstructor</parameter>.
+              Returns the name of <parameter>jconstructor</parameter>.
             </para>
           </blockquote>
         </para>
@@ -2303,8 +2302,8 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns the modifiers of <parameter>jconstructor<parameter>,
-			  such as <literal>public static final</literal>.			
+               Returns the modifiers of <parameter>jconstructor
+               </parameter>, such as <literal>public static final</literal>.
             </para>
           </blockquote>
         </para>
@@ -2318,8 +2317,8 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns the Java class in which <parameter>jconstructor</parameter>
-			  was declared.
+              Returns the Java class in which <parameter>jconstructor</parameter>
+              was declared.
             </para>
           </blockquote>
         </para>
@@ -2333,8 +2332,8 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns the declared types of the parameters of <parameter>
-			  jconstructor</parameter>.
+              Returns the declared types of the parameters of <parameter>
+              jconstructor</parameter>.
             </para>
           </blockquote>
         </para>
@@ -2348,9 +2347,9 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns a procedure that when called invokes the constructor
-			  with the passed arguments, returning the newly created
-			  objected.
+              Returns a procedure that when called invokes the constructor
+              with the passed arguments, returning the newly created
+              objected.
             </para>
           </blockquote>
         </para>
@@ -2364,14 +2363,15 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-	 		  Returns a method suitable for adding to generic procedures
-			  that, when called invokes the underlying Java constructor 
-			  with the passed arguments.  The resulting newly created
-			  object is returned.
+               Returns a method suitable for adding to generic procedures
+              that, when called invokes the underlying Java constructor 
+              with the passed arguments.  The resulting newly created
+              object is returned.
             </para>
           </blockquote>
         </para>
       </blockquote>
+    </sect2>
     <sect2>
       <title>Methods</title>
        <blockquote>
@@ -2385,8 +2385,8 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Determines whether <parameter>value</parameter> is a Java 
-			  method.
+              Determines whether <parameter>value</parameter> is a Java 
+              method.
             </para>
           </blockquote>
         </para>
@@ -2400,7 +2400,7 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns the name of <parameter>jmethod</parameter>.
+              Returns the name of <parameter>jmethod</parameter>.
             </para>
           </blockquote>
         </para>
@@ -2414,8 +2414,8 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns the modifiers of <parameter>jmethod<parameter>,
-			  such as <literal>public static final</literal>.			
+              Returns the modifiers of <parameter>jmethod</parameter>,
+              such as <literal>public static final</literal>.            
             </para>
           </blockquote>
         </para>
@@ -2429,8 +2429,8 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns the Java class in which <parameter>jmethod</parameter>
-			  was declared.
+              Returns the Java class in which <parameter>jmethod</parameter>
+              was declared.
             </para>
           </blockquote>
         </para>
@@ -2444,8 +2444,8 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns the declared types of the parameters of <parameter>
-			  jmethod</parameter>.
+              Returns the declared types of the parameters of <parameter>
+              jmethod</parameter>.
             </para>
           </blockquote>
         </para>
@@ -2459,9 +2459,9 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns a procedure that when called invokes the method
-			  with the passed arguments, returning the newly created
-			  objected.
+              Returns a procedure that when called invokes the method
+              with the passed arguments, returning the newly created
+              objected.
             </para>
           </blockquote>
         </para>
@@ -2475,13 +2475,13 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-	 		  Returns a method suitable for adding to generic procedures
-			  that, when called invokes the underlying Java method 
-			  on the object passed as the first argument, and with the 
-			  remaining arguments passed as parameters.  The result
-			  of the method invocation is returned.  Static methods
-			  can be invoked by passing a typed null object as the first
-			  parameter to the generic procedure.
+               Returns a method suitable for adding to generic procedures
+              that, when called invokes the underlying Java method 
+              on the object passed as the first argument, and with the 
+              remaining arguments passed as parameters.  The result
+              of the method invocation is returned.  Static methods
+              can be invoked by passing a typed null object as the first
+              parameter to the generic procedure.
             </para>
           </blockquote>
         </para>
@@ -2500,8 +2500,8 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Determines whether <parameter>value</parameter> is a Java 
-			  field.
+              Determines whether <parameter>value</parameter> is a Java 
+              field.
             </para>
           </blockquote>
         </para>
@@ -2515,7 +2515,7 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns the name of <parameter>jfield</parameter>.
+              Returns the name of <parameter>jfield</parameter>.
             </para>
           </blockquote>
         </para>
@@ -2529,8 +2529,8 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns the modifiers of <parameter>jfield<parameter>,
-			  such as <literal>public static final</literal>.			
+              Returns the modifiers of <parameter>jfield</parameter>,
+              such as <literal>public static final</literal>.            
             </para>
           </blockquote>
         </para>
@@ -2544,8 +2544,8 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns the Java class in which <parameter>jfield</parameter>
-			  was declared.
+              Returns the Java class in which <parameter>jfield</parameter>
+              was declared.
             </para>
           </blockquote>
         </para>
@@ -2559,8 +2559,8 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns the declared type of <parameter>
-			  jfield</parameter>.
+              Returns the declared type of <parameter>
+              jfield</parameter>.
             </para>
           </blockquote>
         </para>
@@ -2583,10 +2583,10 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-			  Returns a procedure that when called returns or sets (respectively)
-			  the value of the field on the object specified by the first parameter
-			  to the invocation.  Static fields can be accessed/modified by
-			  passing a null object.
+              Returns a procedure that when called returns or sets (respectively)
+              the value of the field on the object specified by the first parameter
+              to the invocation.  Static fields can be accessed/modified by
+              passing a null object.
             </para>
           </blockquote>
         </para>
@@ -2609,11 +2609,11 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>          
           <blockquote>
             <para>
-	 		  Returns a method suitable for adding to generic procedures that,
-	 		  when called returns/sets the value of the field on the object
-	 		  specified by the first argument to the generic procedure invocation.
-	 		  Static fields can be accessed/modified by passing a typed null
-	 		  object as the first parameter to the generic procedure.
+               Returns a method suitable for adding to generic procedures that,
+               when called returns/sets the value of the field on the object
+               specified by the first argument to the generic procedure invocation.
+               Static fields can be accessed/modified by passing a typed null
+               object as the first parameter to the generic procedure.
             </para>
           </blockquote>
         </para>
@@ -2621,7 +2621,6 @@ Foo fooObj = new Foo(1, 2);
     </sect2>
     <sect2>
       <title>Arrays</title>
-      <para>
       <blockquote>
         <para>
          <indexterm><primary>java-array-class</primary></indexterm>
@@ -2634,33 +2633,33 @@ Foo fooObj = new Foo(1, 2);
           </methodsynopsis>
           <blockquote>
             <para>
-      	  	  Returns a class representing the array type that has 
-      	  	  <parameter>jclass</parameter> as the component type and
-      	  	  <parameter>dimensions</parameter> as the number of dimensions.
-      	  	  For example, the following expressions are equivalent:
-      	  	  <programlisting>
+                  Returns a class representing the array type that has 
+                  <parameter>jclass</parameter> as the component type and
+                  <parameter>dimensions</parameter> as the number of dimensions.
+                  For example, the following expressions are equivalent:
+                  <programlisting>
 (java-array-class &lt;jint&gt; 2)
 (java-class '|int[][]|)
-			  </programlisting>
-			</para>
-			<para>
-			  The list of direct superclasses returned by <function>
-			  java-class-declared-superclasses</function> for an array
-			  class is consistent with the widening conversion performed
-			  by Java, e.g. the direct superclasses of <literal>
-			  java.util.ArrayList[][]</literal> are:
-			  <itemizedlist>
-			    <listitem><para><literal>java.util.AbstractList[][]</literal></para></listitem>
-			    <listitem><para><literal>java.util.List[][]</literal></para></listitem>
-			    <listitem><para><literal>java.util.RandomAccess[][]</literal></para></listitem>
-			    <listitem><para><literal>java.lang.Cloneable[][]</literal></para></listitem>
-			    <listitem><para><literal>java.io.Serializable[][]</literal></para></listitem>
-			  </itemizedlist>
-			  This is different from what the Java reflection APIs return.
-			</para>
-	      </blockquote>
-	    </para>
-	  </blockquote>
+              </programlisting>
+            </para>
+            <para>
+              The list of direct superclasses returned by <function>
+              java-class-declared-superclasses</function> for an array
+              class is consistent with the widening conversion performed
+              by Java, e.g. the direct superclasses of <literal>
+              java.util.ArrayList[][]</literal> are:
+              <itemizedlist>
+                <listitem><para><literal>java.util.AbstractList[][]</literal></para></listitem>
+                <listitem><para><literal>java.util.List[][]</literal></para></listitem>
+                <listitem><para><literal>java.util.RandomAccess[][]</literal></para></listitem>
+                <listitem><para><literal>java.lang.Cloneable[][]</literal></para></listitem>
+                <listitem><para><literal>java.io.Serializable[][]</literal></para></listitem>
+              </itemizedlist>
+              This is different from what the Java reflection APIs return.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
     </sect2>
     <sect2>
       <title>Proxies</title>
@@ -2693,10 +2692,10 @@ Foo fooObj = new Foo(1, 2);
             </methodsynopsis>
             <blockquote>
               <para>
-				Creates an invocation handler suitable for use in the
-				instantiation of a proxy (see <function>java-proxy-class
-				</function> above).  The keys in <parameter>alist</parameter>
-				are Java method names and the values are Scheme procedures.
+                Creates an invocation handler suitable for use in the
+                instantiation of a proxy (see <function>java-proxy-class
+                </function> above).  The keys in <parameter>alist</parameter>
+                are Java method names and the values are Scheme procedures.
               </para>
               <para>
                 When a method is invoked on a proxy, the procedure matching
