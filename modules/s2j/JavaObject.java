@@ -162,17 +162,13 @@ public class JavaObject extends Procedure {
     }
 
     public boolean eq(Object v) {
-        return super.eq(v) || (v instanceof JavaObject
-                               && obj == ((JavaObject)v).get());
+        return this == v || (v != null && v.getClass() == JavaObject.class
+                             && obj == ((JavaObject)v).obj);
     }
 
     public boolean valueEqual(Value v) {
         return eq(v) || (v instanceof JavaObject
                          && obj.equals(((JavaObject)v).get()));
-    }
-
-    public boolean equals(Object v) {
-        return (v instanceof JavaObject) && valueEqual((Value)v);
     }
 
     public void apply(Interpreter r)

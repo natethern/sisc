@@ -41,14 +41,14 @@ public class JavaNull extends JavaObject {
     public String display() {
         StringBuffer b=new StringBuffer();
         b.append("#<jnull ");
-        b.append(obj);
+        b.append(Util.nameType((Class)obj));
         b.append('>');
         return b.toString();
     }
 
     public boolean eq(Object v) {
-        return (this == v || (v instanceof JavaNull
-                              && obj == ((JavaNull)v).obj));
+        return (this == v) || (v != null && v.getClass() == JavaNull.class
+                               && obj == ((JavaNull)v).obj);
     }
 
     public boolean valueEqual(Value v) {
