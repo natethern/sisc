@@ -257,14 +257,14 @@ Context.exit()
   <sect1 id="SchemeToJava">
     <title>Scheme-to-Java Interface</title>
     <para>
-      The Scheme-to-Java Interface is encapsulated in the
-      <literal>s2j</literal> module and can be imported in the
-      usual manner, i.e.
-      <programlisting>
-        (import s2j)
-      </programlisting>
-      In addition to the core Scheme-to-Java functionality, the module also
-      re-exports the contents of the
+      &requires; 
+      <emphasis role="bold">
+        (import <emphasis>s2j</emphasis>)
+      </emphasis>
+    </para>
+    <para>
+      In addition to the core Scheme-to-Java functionality, the 
+      <literal>s2j</literal> module also re-exports the contents of the
       <literal>generic-functions</literal> module described in
       <xref linkend="GenericFunctions"/>, since a significant proportion of
       the module's functionality is offered through tight integration with
@@ -1193,6 +1193,12 @@ Class.getSigners()
     <sect2 id="GenericFunctions">
       <title>Generic Functions</title>
       <para>
+	&requires; 
+	<emphasis role="bold">
+	  (import <emphasis>generic-functions</emphasis>)
+	</emphasis>
+      </para>
+      <para>
         Generic functions provide a mechanism by which a Scheme function can
         select different bodies for execution depending on the types of the
         parameters it was called with. Languages like ANSI Lisp and Dylan
@@ -1223,14 +1229,6 @@ Class.getSigners()
             </para>
           </listitem>
         </itemizedlist>
-      </para>
-      <para>
-        In &SISC; the generic function mechanism is encapsulated in the
-        <literal>generic-functions</literal> module and can be imported in the
-        usual manner, i.e.
-        <programlisting>
-(import generic-functions)
-        </programlisting>
       </para>
       <sect3>
         <title>Defining Generic Functions</title>

@@ -139,14 +139,15 @@
       </para>
       <para>
 	Procedures, parameters, and syntax may take one or more
-	arguments.  The name of an argument in a description
-	indicates the expected type of the argument.  'value'
-	indicates any type.  If the argument is enclosed in square
-	brackets ([]), that parameter is optional, and may be
-	ommitted.  If a parameter is optional and is followed by 
-	ellipses (...), then the procedure is a
-	<emphasis>rest</emphasis> argument, and may encapsulate zero
-	or more values.
+	arguments.  The name of an argument in a description summarizes
+        the semantics of the expected argument.  The type of an argument, 
+        when not clear, should be described in the procedure summary
+	paragraph that follows the prototype.  If the argument is
+	enclosed in square brackets ([]), that parameter is optional,
+	and may be ommitted.  If a parameter is optional and is followed by 
+	ellipses (...), then the argument is a
+	<emphasis>rest</emphasis> argument, and may be satisfied by
+	zero or more values.
       </para>
       <para>
 	Finally, some of the functions described in this document are

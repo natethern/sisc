@@ -178,7 +178,7 @@
 	      Creates a string output port, which behaves as an ordinary
 	      output port, except that writes are used to create a string as
 	      output.  The results of all the write operations are retrieved
-	      using (get-output-string)
+	      using <function>get-output-string</function>.
 	    </para>
 	  </blockquote>
 	</para>
