@@ -49,29 +49,29 @@ public class IO extends IndexedProcedure {
 		}
 		    	
     	public Index() {
-        define("absolute-path?"     , ABSPATHQ);
-        define("char-ready?"        , CHARREADY);
-        define("close-input-port"   , CLOSEINPUTPORT);
-        define("close-output-port"  , CLOSEOUTPUTPORT);
-        define("display"            , DISPLAY);
-        define("file-exists?"       , FILEEXISTSQ);
-        define("find-resource"      , FINDRESOURCE);
-        define("find-resources"     , FINDRESOURCES);
-        define("flush-output-port"  , FLUSHOUTPUTPORT);
-        define("input-port?"        , INPORTQ);
-        define("input-port-location", INPORTLOCATION);
-        define("load"               , LOAD);
-        define("normalize-url"      , NORMALIZEURL);
-        define("open-input-file"    , OPENINPUTFILE);
-        define("open-output-file"   , OPENOUTPUTFILE);
-        define("open-source-input-file", OPENSOURCEINPUTFILE);
-        define("output-port?"       , OUTPORTQ);
-        define("peek-char"          , PEEKCHAR);
-        define("read"               , READ);
-        define("read-char"          , READCHAR);
-        define("read-code"          , READCODE);
-        define("write"              , WRITE);
-        define("write-char"         , WRITECHAR);
+            define("absolute-path?"     , ABSPATHQ);
+            define("char-ready?"        , CHARREADY);
+            define("close-input-port"   , CLOSEINPUTPORT);
+            define("close-output-port"  , CLOSEOUTPUTPORT);
+            define("display"            , DISPLAY);
+            define("file-exists?"       , FILEEXISTSQ);
+            define("find-resource"      , FINDRESOURCE);
+            define("find-resources"     , FINDRESOURCES);
+            define("flush-output-port"  , FLUSHOUTPUTPORT);
+            define("input-port?"        , INPORTQ);
+            define("input-port-location", INPORTLOCATION);
+            define("load"               , LOAD);
+            define("normalize-url"      , NORMALIZEURL);
+            define("open-input-file"    , OPENINPUTFILE);
+            define("open-output-file"   , OPENOUTPUTFILE);
+            define("open-source-input-file", OPENSOURCEINPUTFILE);
+            define("output-port?"       , OUTPORTQ);
+            define("peek-char"          , PEEKCHAR);
+            define("read"               , READ);
+            define("read-char"          , READCHAR);
+            define("read-code"          , READCODE);
+            define("write"              , WRITE);
+            define("write-char"         , WRITECHAR);
         }
     }
     
@@ -103,7 +103,7 @@ public class IO extends IndexedProcedure {
             return EOF;
         } catch (IOException e2) {
             throwIOException(f, liMessage(IOB, "errorreading", i.toString(),
-                                       e2.getMessage()), e2);
+                                          e2.getMessage()), e2);
         }
         return null; //Should never happen
     }
@@ -116,7 +116,7 @@ public class IO extends IndexedProcedure {
             return EOF;
         } catch (IOException e2) {
             throwIOException(r, liMessage(IOB, "errorreading", i.toString(),
-                                       e2.getMessage()), e2);
+                                          e2.getMessage()), e2);
         }
         return null; //Should never happen
 
@@ -124,16 +124,18 @@ public class IO extends IndexedProcedure {
     
     public static Value read(Interpreter r, InputPort i) 
         throws ContinuationException {
-        return read(r, i, r.dynenv.caseSensitive ? 
-		          sisc.reader.Parser.CASE_SENSITIVE : 0);
+        return read(r, i,
+                    r.dynenv.caseSensitive ? 
+                    sisc.reader.Parser.CASE_SENSITIVE : 0);
     }
 
     public static Value readCode(Interpreter r, InputPort i) 
         throws ContinuationException {
-        return read(r, i, sisc.reader.Parser.PRODUCE_ANNOTATIONS |
+        return read(r, i,
+                    sisc.reader.Parser.PRODUCE_ANNOTATIONS |
                     sisc.reader.Parser.PRODUCE_IMMUTABLES |
-		    (r.dynenv.caseSensitive ? 
-		     sisc.reader.Parser.CASE_SENSITIVE : 0));
+                    (r.dynenv.caseSensitive ? 
+                     sisc.reader.Parser.CASE_SENSITIVE : 0));
     }
 
     public Value displayOrWrite(Interpreter r,
@@ -144,15 +146,15 @@ public class IO extends IndexedProcedure {
         try {
             ValueWriter w = r.dynenv.printShared ?
                 new SharedValueWriter(port, r.dynenv.vectorLengthPrefixing,
-				      r.dynenv.caseSensitive):
+                                      r.dynenv.caseSensitive):
                 new PortValueWriter(port, r.dynenv.vectorLengthPrefixing,
-				    r.dynenv.caseSensitive);
+                                    r.dynenv.caseSensitive);
             if (display) w.display(v);
             else w.write(v);
         } catch (IOException e) {
             throwIOException(r, liMessage(IOB, "errorwriting", 
-                                       port.toString(),
-                                       e.getMessage()), e);
+                                          port.toString(),
+                                          e.getMessage()), e);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -185,35 +187,33 @@ public class IO extends IndexedProcedure {
     public static SchemeInputPort openCharInFile(Interpreter f,
                                                  URL u,
                                                  String encoding) 
-    throws ContinuationException {    
-      try {
-        return new SourceInputPort(
-                new BufferedReader(
-                 new InputStreamReader(getURLInputStream(u), encoding)), 
-                u.toString());
-      } catch (UnsupportedEncodingException us) {
-        throwIOException(f, liMessage(IOB, "unsupencoding", encoding), us);                
-      } catch (IOException e) {
-        throwIOException(f, liMessage(IOB, "erroropening", 
-                                   u.toString()), e);
-      }
-      return null;
+        throws ContinuationException {    
+        try {
+            return new SourceInputPort(new BufferedReader(new InputStreamReader(getURLInputStream(u), encoding)),
+                                       u.toString());
+        } catch (UnsupportedEncodingException us) {
+            throwIOException(f, liMessage(IOB, "unsupencoding", encoding), us);                
+        } catch (IOException e) {
+            throwIOException(f, liMessage(IOB, "erroropening", 
+                                          u.toString()), e);
+        }
+        return null;
     }
 
     public static SchemeOutputPort openCharOutFile(Interpreter f, 
                                                    URL url,
                                                    String encoding,
                                                    boolean aflush) 
-    throws ContinuationException {
+        throws ContinuationException {
         try {          
-          return new WriterOutputPort(getURLOutputStream(url),
-                                      encoding, aflush);
+            return new WriterOutputPort(getURLOutputStream(url),
+                                        encoding, aflush);
         } catch (UnsupportedEncodingException u) {
             throwIOException(f, liMessage(IOB, "unsupencoding", encoding), u);
         } catch (IOException e) {
             e.printStackTrace();
             throwIOException(f, liMessage(IOB, "erroropening",
-                             url.toString()), e);
+                                          url.toString()), e);
         }
         return null;
     }
@@ -227,8 +227,8 @@ public class IO extends IndexedProcedure {
  
     public static OutputStream getURLOutputStream(URL u) throws IOException {
         if (u.getProtocol().equals("file")) {
-           //the JDK does not permit write access to file URLs
-           return new FileOutputStream(u.getPath());
+            //the JDK does not permit write access to file URLs
+            return new FileOutputStream(u.getPath());
         }        
         URLConnection conn = u.openConnection();
         conn.setDoInput(false);
@@ -289,13 +289,11 @@ public class IO extends IndexedProcedure {
             case OPENSOURCEINPUTFILE:
                 URL url = url(f.vlr[0]);
                 try {
-                   return new SourceInputPort(
-                           new BufferedReader(
-                             new InputStreamReader(getURLInputStream(url), f.dynenv.characterSet)), 
-                           url.toString());
+                    return new SourceInputPort(new BufferedReader(new InputStreamReader(getURLInputStream(url), f.dynenv.characterSet)), 
+                                               url.toString());
                 } catch (IOException e) {
-                   throwIOException(f, liMessage(IOB, "erroropening", 
-                                    url.toString()), e);
+                    throwIOException(f, liMessage(IOB, "erroropening", 
+                                                  url.toString()), e);
                 }
             case OPENINPUTFILE:
                 url = url(f.vlr[0]);
@@ -309,7 +307,7 @@ public class IO extends IndexedProcedure {
                     op.flush();
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "errorflushing", 
-                                               op.toString()), e);
+                                                  op.toString()), e);
                 }
                 return VOID;
             case CLOSEINPUTPORT:
@@ -448,9 +446,9 @@ public class IO extends IndexedProcedure {
                 boolean aflush=false;
                 String encoding=f.dynenv.characterSet;
                 if (f.vlr[1] instanceof SchemeString)
-                   encoding=string(f.vlr[1]);
+                    encoding=string(f.vlr[1]);
                 else
-                   aflush=truth(f.vlr[1]);
+                    aflush=truth(f.vlr[1]);
                 return openCharOutFile(f, url, encoding, aflush);
             case NORMALIZEURL:
                 return new SchemeString(urlClean(url(f.vlr[0], 
@@ -463,7 +461,7 @@ public class IO extends IndexedProcedure {
             case OPENOUTPUTFILE:
                 URL url = url(f.vlr[0]);
                 return openCharOutFile(f, url, string(f.vlr[1]), 
-                                    truth(f.vlr[2]));
+                                       truth(f.vlr[2]));
             default:
                 throwArgSizeException();
             }
