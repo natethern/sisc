@@ -16,7 +16,7 @@ public abstract class Defaults {
     public static boolean EMIT_DEBUGGING_SYMBOLS      = true;
     public static Value   INLINE_PRIMITIVES           = Util.FALSE;
     public static boolean HEDGED_INLINING             = true;
-    public static boolean ORPHANED_PAREN_IS_ERROR     = false;
+    public static boolean PERMISSIVE_PARSING          = false;
 }
  
 /*

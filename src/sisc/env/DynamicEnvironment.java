@@ -30,7 +30,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public String characterSet = getDefaultCharacterSet();
     public Value inlinePrimitives = Defaults.INLINE_PRIMITIVES;
     public boolean hedgedInlining = Defaults.HEDGED_INLINING;
-    public boolean orphanedParenIsError = Defaults.ORPHANED_PAREN_IS_ERROR;
+    public boolean permissiveParsing = Defaults.PERMISSIVE_PARSING;
     
     private static String defaultPrintShared =
         new Boolean(Defaults.PRINT_SHARED).toString();
@@ -46,7 +46,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
         new Boolean(Defaults.CASE_SENSITIVE).toString();
     private static String defaultInlinePrimitives = Defaults.INLINE_PRIMITIVES.toString();
     private static String defaultHedgedInlining = new Boolean(Defaults.HEDGED_INLINING).toString();
-    private static String defaultOrphanedParenIsError = new Boolean(Defaults.ORPHANED_PAREN_IS_ERROR).toString();
+    private static String defaultPermissiveParsing = new Boolean(Defaults.PERMISSIVE_PARSING).toString();
 
     public Value wind = FALSE; //top of wind stack
 
@@ -90,8 +90,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
             ctx.getProperty("sisc.emitDebuggingSymbols", defaultEmitDebuggingSymbols).equals("true");
         this.characterSet =
             ctx.getProperty("sisc.characterSet", getDefaultCharacterSet());
-        this.orphanedParenIsError = 
-            ctx.getProperty("sisc.orphanedParenIsError", defaultOrphanedParenIsError).equals("true");
+        this.permissiveParsing = 
+            ctx.getProperty("sisc.permissiveParsing", defaultPermissiveParsing).equals("true");
 
         classLoader = currentClassLoader();
         try {
@@ -239,12 +239,12 @@ public class DynamicEnvironment extends Util implements Cloneable {
         hedgedInlining=truth(v);
     }
 
-    public Value getOrphanedParenIsError() {
-        return truth(orphanedParenIsError);
+    public Value getPermissiveParsing() {
+        return truth(permissiveParsing);
     }
 
-    public void setOrphanedParenIsError(Value v) {
-        orphanedParenIsError=truth(v);
+    public void setPermissiveParsing(Value v) {
+        permissiveParsing=truth(v);
     }
 
     protected static String getDefaultCharacterSet() {
