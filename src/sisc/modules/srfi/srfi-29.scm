@@ -106,8 +106,8 @@
                         old-lang))]
             [(symbol? (car args))
              (begin
-               (set! old-lang (car args)))
-            [else (error 'current-language "given language is not a symbol")])))))
+               (set! old-lang (car args)))]
+            [else (error 'current-language "given language is not a symbol")]))))
 
 (define current-country
   (let ([old-country #f])
@@ -127,7 +127,7 @@
              (or old-variant
                  (begin (set! old-variant (default-variant))
                         old-variant))]
-            [(and (list? (car arg))
+            [(and (list? (car args))
                   (andmap symbol? (car args)))
              (set! old-variant (car args))]
             [else (error 'current-locale-details "given variant is not a list of symbols")]))))
