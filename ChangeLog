@@ -1,3 +1,6 @@
+2005-01-05  Magnus Jonsson <magnus@smartelectronix.com>
+	* Fix complex division bug (#1096496)
+
 2005-01-02  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Raise errors when the dot character is encountered
