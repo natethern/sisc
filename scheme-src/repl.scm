@@ -141,7 +141,7 @@
                 (lambda ()
                   (repl/read (if (getprop 'pretty-print)
                                  pretty-print
-                                 write)
+                                 write))
                   (void)))))))
         (if ((current-exit-handler))
             (void)
