@@ -98,9 +98,9 @@
        (proc (car list1)))
       '#f)))
  
-(define remprop
-  (lambda (symbol key)
-    (putprop symbol key #f)))
+;(define remprop
+;  (lambda (symbol key)
+;    (putprop symbol key #f)))
 
 (define sc-expand (lambda (x) x))
 

@@ -165,6 +165,7 @@ public class Primitives extends ModuleAdapter {
         define("read-char", READCHAR);
         define("real-part", REALPART);
         define("remainder", REMAINDER);
+        define("remprop", REMPROP);
         define("round", ROUND);
         define("scheme-report-environment", REPORTENVIRONMENT);
         define("set-box!", SETBOX);
@@ -761,6 +762,9 @@ public class Primitives extends ModuleAdapter {
                 } catch (ArrayIndexOutOfBoundsException e) {
                     return FALSE;
                 }
+            case REMPROP:
+                f.undefine(symbol(f.vlr[0]), symbol(f.vlr[1]));
+                return VOID;
             case NORMALIZEURL:
                 return new SchemeString(makeURL(f.vlr[0], f.vlr[1]).toString());
             }
@@ -769,6 +773,13 @@ public class Primitives extends ModuleAdapter {
             case READ: 
                 InputPort inport=inport(f.vlr[0]);
                 return inport.read(f, truth(f.vlr[1]));
+            case LOOKUP:
+                try {
+                    return (Value)f.lookup(symbol(f.vlr[0]),
+                                           symbol(f.vlr[1]));
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    return f.vlr[2];
+                }
             case PUTPROP:
                 Symbol lhs=symbol(f.vlr[0]);
                 Symbol context=symbol(f.vlr[1]);
@@ -974,7 +985,6 @@ public class Primitives extends ModuleAdapter {
         LOADNL = 60,
         LOG = 61,
         LOOKUP = 119,
-        //	LOOKUP = 62,
         LT = 147,
         MAKEPARAM = 63,
         MAKEPATH = 120,
@@ -1015,6 +1025,7 @@ public class Primitives extends ModuleAdapter {
         READCHAR = 82,
         REALPART = 83,
         REMAINDER = 127,
+        REMPROP = 62,
         REPORTENVIRONMENT = 84,
         ROUND = 85,
         SETBOX = 128,

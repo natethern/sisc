@@ -294,14 +294,25 @@ public class Interpreter extends Util {
      * @param context The name of the environment from which   
      *      the  binding will be retrieved
      * @return A value or expression
+     * @exception ArrayIndexOutOfBoundsException if the binding does
+     * not exist
      */
-    public Expression lookup(Symbol s, Symbol context) {
+    public Expression lookup(Symbol s, Symbol context)
+        throws ArrayIndexOutOfBoundsException {
+        return lookupContextEnv(context).lookup(s);
+    }
+
+    /**
+     * Removes a binding in a named environment
+     * 
+     * @param s The name of the binding
+     * @param context The name of the environment from which   
+     *      the  binding will be retrieved
+     */
+    public void undefine(Symbol s, Symbol context) {
         try {
-            AssociativeEnvironment contenv = lookupContextEnv(context);
-            return (Expression)contenv.lookup(s);
-        } catch (ClassCastException c) {
-            return null;
-        }
+            lookupContextEnv(context).undefine(s);
+        } catch (ArrayIndexOutOfBoundsException e) {}
     }
 
     //POOLING

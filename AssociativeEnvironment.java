@@ -164,6 +164,14 @@ public class AssociativeEnvironment extends NamedValue {
         return env[envLoc];
     }
 
+    public void undefine(Symbol s) {
+        synchronized(symbolMap) {
+            Integer i=(Integer)symbolMap.remove(s);
+            if (i==null) return;
+            env[i.intValue()] = FALSE;
+        }
+    }
+
     public String display() {
         return displayNamedOpaque("environment");
     }
