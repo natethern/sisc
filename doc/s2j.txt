@@ -21,25 +21,27 @@ by an upper-case character.
 
 
 (define-method (<genf> [(next: <next-method>)]
-                       (<type> <param>) ...) . <body>)
+                       (<type> <param>) ... [ . <rest>]) . <body>)
 
 Adds a method the generic function <genf>. A method has a typed
 parameter list and a body. When a generic function is invoked, the
 method is called whose type signature best matches the types of the
 given parameters. An error is reported if there is no such method.
+<type> must be a java class object (see below).
 
 The <next-method> parameter, if supplied in the definition of a
 method, will be bound to the "next best" matching method. It can be
 invoked with parameters or without parameters, in which case the
 parameters of the orignal invocation are used.
 
-Scheme methods with the same signature as java methods *always* take
+The following precedence rules apply to method selection:
+* Scheme methods with the same signature as java methods *always* take
 precedence (i.e. are a better match) than the java methods.
-
-Defining a Scheme method with the same signature as an existing Scheme
+* Defining a Scheme method with the same signature as an existing Scheme
 method overwrites the existing method.
-
-<type> must be a java class object (see below).
+* Methods with n+1 mandatory parameters take precedence over methods
+with n mandatory parameters.
+* Methods without rest arg take precedence over methods with rest args.
 
 
 (define-constructor (<type> (<type> <param>) ...) . <body>)
@@ -252,11 +254,9 @@ will result from the introduction of a hashtable type into sisc
 tell what errors crop up frequently and we can then put some mechanism
 in place for reporting them in a meaningful way.
 
-* cannot handle rest arguments. FIX: need a more complex type
+* only operate on java objects. FIX: need a more complex type
 system. This is quite hard but I've got most of the code for that
 already written.
-
-* only operate on java objects. FIX: as above.
 
 * not thread-safe. FIX: use the threads module.
 

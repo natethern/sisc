@@ -18,13 +18,13 @@
   (index-of buf (make <jstring> (->jarray (list c) <jchar>))))
 (index-of sb (->jstring "oo")) ;calls java method
 (index-of sb (->jchar #\o)) ;calls scheme method
-;;
-(define-method (app (<jstring> x) (<jstring> y))
-  (let ([sb (make <jstringbuffer>)])
-    (app sb x)
-    (app sb y)
-    (to-string sb)))
-(app (->jstring "foo") (->jstring "bar"))
+;;test rest arg handling
+;;Wouldn't it be nice if StringBuffer.append could take any number of
+;;arguments? Well, now it can - as long as we call it from Scheme :)
+(define-method (app (<jstringbuffer> buf) . rest)
+  (for-each (lambda (x) (app buf x)) rest)
+  buf)
+(app sb (->jstring "foo") (->jint 1) (->jstring "bar"))
 ;test of "next-method" functionality.
 (define <java.lang.Character> (java-class "java.lang.Character"))
 (define-method (value-of (next: next-method)

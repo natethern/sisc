@@ -3,22 +3,21 @@
 ;;this code clean of any srfi dependencies.
 
 ;;a method is a function. It is associated with a generic function,
-;;has an arity and a signature (a list of parameter types)
-(define (make-method f genf arity sig)
-  (vector f genf arity sig))
+;;has an arity and a signature (a list of parameter types) and flag
+;;indicating whether it can take rest parameters
+(define (make-method f genf arity sig rest?)
+  (vector f genf arity sig rest?))
 (define (method-function m)	(vector-ref m 0))
 (define (method-generic m)	(vector-ref m 1))
 (define (method-arity m)	(vector-ref m 2))
 (define (method-sig m)		(vector-ref m 3))
+(define (method-rest? m)	(vector-ref m 4))
 
-;;we cannot use EVERY from srfi-1 because it returns #t when the lists
-;;are of unequal length.
+;;same as in srfi-1
 (define (every2 pred x y)
-  (if (null? x)
+  (or (null? x)
       (null? y)
-      (if (null? y)
-	  #f
-	  (and (pred (car x) (car y)) (every2 pred (cdr x) (cdr y))))))
+      (and (pred (car x) (car y)) (every2 pred (cdr x) (cdr y)))))
 
 (define (types<= x y) (every2 java/assignable? y x))
 (define (instances? x y) (every2 java/instance? y x))
@@ -105,18 +104,19 @@
 (define (mangle-name-phase3 name)
   name)
 (define (method<= m1 m2)
-  (and (= (method-arity m1) (method-arity m2))
-       (let ([sig1	(method-sig m1)]
-             [sig2	(method-sig m2)])
-         (and (types<= sig1 sig2)
-              (or (not (types<= sig2 sig1))
-                  (let ([fun1	(method-function m1)]
-                        [fun2	(method-function m2)])
-                    ;;scheme methods take precedence over java methods
-                    (or (java/method? fun2)
-                        (java/constructor? fun2)
-                        (not (or (java/method? fun1)
-                                 (java/constructor? fun1))))))))))
+  (cond ((> (method-arity m1) (method-arity m2)) #t)
+        ((> (method-arity m2) (method-arity m1)) #f)
+        ;;same arity
+        ((and (not (method-rest? m1)) (method-rest? m2)) #t)
+        ((and (not (method-rest? m2)) (method-rest? m1)) #f)
+        ;;both or neither have rest arg
+        (else
+         (and (types<= (method-sig m1) (method-sig m2))
+              (or (not (types<= (method-sig m2) (method-sig m1)))
+                  ;;scheme methods take precedence over java methods
+                  (java/object? (method-function m2))
+                  (not (java/object? (method-function m1))))))))
+
 (define (add-method-helper m methods)
   (let ([meths (cdr methods)])
     (if (null? meths)
@@ -132,11 +132,11 @@
                   ;;insert
                   (set-cdr! methods (cons m meths)))
               (add-method-helper m meths))))))
-(define (add-method genf name types m)
-  (add-method-helper (make-method m genf (length types) types)
+(define (add-method genf name m types rest?)
+  (add-method-helper (make-method m genf (length types) types rest?)
                      (get-methods name)))
-(define (add-constructor genf class types c)
-  (add-method-helper (make-method c genf (length types) types)
+(define (add-constructor genf class c types rest?)
+  (add-method-helper (make-method c genf (length types) types rest?)
                      (get-constructors class)))
 (define (add-class class)
   (if (and (not (java/null? class))
@@ -148,17 +148,19 @@
         (for-each (lambda (c)
                     (add-constructor #f
                                      class
+                                     c
                                      (vector->list
                                       (java/parameter-types c))
-                                     c))
+                                     #f))
                   (vector->list (java/decl-constructors class)))
         (for-each (lambda (m)
                     (add-method #f
                                 (mangle-name (java/name m))
+                                m
                                 (cons (java/declaring-class m)
                                       (vector->list
                                        (java/parameter-types m)))
-                                m))
+                                #f))
                   (vector->list (java/decl-methods class))))))
 (define (find-method genf args methods)
   (or (find-normal-method genf args methods)
@@ -169,6 +171,9 @@
       (let* ([current	(car methods)]
              [cgenf	(method-generic current)])
         (if (and (or (not cgenf) (eq? genf cgenf))
+                 ((if (method-rest? current) >= =)
+                  (length args)
+                  (method-arity current))
                  (pred args current))
             (cons (method-function current)
                   (lambda newargs
@@ -187,8 +192,7 @@
       (error (format "no matching method for ~s" args))))
 (define (find-constructor genf args constr)
   (find-method-helper (lambda (args m)
-                        (and (= (method-arity m) (length args))
-                             (instances? args (method-sig m))))
+                        (instances? args (method-sig m)))
                       find-constructor
                       genf
                       args
@@ -196,8 +200,7 @@
 (define (find-normal-method genf args methods)
   (add-class (java/class-of (car args)))
   (find-method-helper (lambda (args m)
-                        (and (= (method-arity m) (length args))
-                             (instances? args (method-sig m))))
+                        (instances? args (method-sig m)))
                       find-normal-method
                       genf
                       args
@@ -209,8 +212,7 @@
            (add-class class)
            (find-method-helper
             (lambda (args m)
-              (and (= (method-arity m) (length args))
-                   (java/assignable? (car (method-sig m)) class)
+              (and (java/assignable? (car (method-sig m)) class)
                    (instances? (cdr args) (cdr (method-sig m)))))
             find-static-method
             genf
@@ -236,18 +238,47 @@
      (define-generic ?name ?name))))
 (define-syntax define-method
   (syntax-rules (next:)
-    ((_ (?name (next: ?next-method) (?type ?arg) ...) . ?body)
+    ((_ (?name (next: ?next) (?type ?arg) ...) . ?body)
      (add-method ?name
                  (generic-function-name ?name)
+                 (lambda (?next ?arg ...) . ?body)
                  (list ?type ...)
-                 (lambda (?next-method ?arg ...) . ?body)))
-    ((_ (?name (?type ?arg) ...) . ?body)
-     (define-method (?name (next: dummy) (?type ?arg) ...) . ?body))))
+                 #f))
+    ((_ (?name (next: ?next) . ?rest) . ?body)
+     (define-method "rest" ?name ?next () ?rest ?body))
+    ((_ "rest" ?name ?next (?param ...) (?head . ?rest) ?body)
+     (define-method "rest" ?name ?next (?param ... ?head) ?rest ?body))
+    ((_ "rest" ?name ?next ((?type ?arg) ...) ?rest ?body)
+     (add-method ?name
+                 (generic-function-name ?name)
+                 (lambda (?next ?arg ... . ?rest) . ?body)
+                 (list ?type ...)
+                 #t))
+    ((_ (?name ?param ...) . ?body)
+     (define-method (?name (next: dummy) ?param ...) . ?body))
+    ((_ (?name . ?rest) . ?body)
+     (define-method (?name (next: dummy) . ?rest) . ?body))))
+
 (define make (generic-constructor))
 (define-syntax define-constructor
   (syntax-rules (next:)
-    ((_ (?class (next: ?next-method) (?type ?arg) ...) . ?body)
-     (add-constructor make ?class (list ?type ...)
-                      (lambda (?next-method ?arg ...) . ?body)))
-    ((_ (?class (?type ?arg) ...) . ?body)
-     (define-constructor (?class (next: dummy) (?type ?arg) ...) . ?body))))
+    ((_ (?class (next: ?next) (?type ?arg) ...) . ?body)
+     (add-constructor make
+                      ?class
+                      (lambda (?next ?arg ...) . ?body)
+                      (list ?type ...)
+                      #f))
+    ((_ (?class (next: ?next) . ?rest) . ?body)
+     (define-constructor "rest" ?class ?next () ?rest ?body))
+    ((_ "rest" ?class ?next (?param ...) (?head . ?rest) ?body)
+     (define-constructor "rest" ?class ?next (?param ... ?head) ?rest ?body))
+    ((_ "rest" ?class ?next ((?type ?arg) ...) ?rest ?body)
+     (add-constructor make
+                      ?class
+                      (lambda (?next ?arg ... . ?rest) . ?body)
+                      (list ?type ...)
+                      #t))
+    ((_ (?class ?param ...) . ?body)
+     (define-constructor (?class (next: dummy) ?param ...) . ?body))
+    ((_ (?class . ?rest) . ?body)
+     (define-constructor (?class (next: dummy) . ?rest) . ?body))))
