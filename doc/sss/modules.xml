@@ -222,7 +222,7 @@
       compile a source file which contains any necessary
       <function>require-library</function> calls, followed by the
       module definition.  When loaded, this will cause the necessary
-      libraries to be loaded if necessary, and then define the module
+      libraries to be loaded, and then define the module
       into the environment.
     </para>
     <para>
