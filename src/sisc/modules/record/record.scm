@@ -1,4 +1,4 @@
-;; SRFI-9
+;; records - mostly taken from SRFI-9
 
 ; Definition of DEFINE-RECORD-TYPE
 
@@ -32,60 +32,6 @@
        (define (modifier thing value)
          ((record-modifier type 'field-tag) thing value))))))
 
-; This implements a record abstraction that is identical to vectors,
-; except that they are not vectors (VECTOR? returns false when given a
-; record and RECORD? returns false when given a vector).  The following
-; procedures are provided:
-;   (record? <value>)                -> <boolean>
-;   (make-record <size>)             -> <record>
-;   (record-ref <record> <index>)    -> <value>
-;   (record-set! <record> <index> <value>) -> <unspecific>
-;
-; These can implemented in R5RS Scheme as vectors with a distinguishing
-; value at index zero, providing VECTOR? is redefined to be a procedure
-; that returns false if its argument contains the distinguishing record
-; value.  EVAL is also redefined to use the new value of VECTOR?.
-
-; Define the marker and redefine VECTOR? and EVAL.
-
-(define record-marker (list 'record-marker))
-
-;(define real-vector? vector?)
-
-(define (vector? x)
-  (and (real-vector? x)
-       (or (= 0 (vector-length x))
-	      (not (eq? (vector-ref x 0)
-			record-marker)))))
-
-; This won't work if ENV is the interaction environment and someone has
-; redefined LAMBDA there.
-
-;(define eval
-;  (let ((real-eval eval))
-;    (lambda (exp . env)
-;      ((real-eval `(lambda (vector?) ,exp))
-;       vector?))))
-
-; Definitions of the record procedures.
-
-(define (record? x)
-  (and (real-vector? x)
-       (< 0 (vector-length x))
-       (eq? (vector-ref x 0)
-            record-marker)))
-
-(define (make-record size)
-  (let ((new (make-vector (+ size 1))))
-    (vector-set! new 0 record-marker)
-    new))
-
-(define (record-ref record index)
-  (vector-ref record (+ index 1)))
-
-(define (record-set! record index value)
-  (vector-set! record (+ index 1) value))
-
 ; We define the following procedures:
 ; 
 ; (make-record-type <type-name <field-names>)    -> <record-type>
@@ -99,13 +45,6 @@
 ; (<accessor> <record>)                       -> <value>
 ; (<modifier> <record> <value>)         -> <unspecific>
 
-; Record types are implemented using vector-like records.  The first
-; slot of each record contains the record's type, which is itself a
-; record.
-
-(define (record-type record)
-  (record-ref record 0))
-
 ;----------------
 ; Record types are themselves records, so we first define the type for
 ; them.  Except for problems with circularities, this could be defined as:
@@ -116,31 +55,27 @@
 ;    (field-tags record-type-field-tags))
 ; As it is, we need to define everything by hand.
 
-(define :record-type (void))
-
 ; Now that :record-type exists we can define a procedure for making more
 ; record types.
 
+(define :record-type (void))
+
 (define (make-record-type name field-tags)
-  (let ((new (make-record 3)))
-    (record-set! new 0 :record-type)
-    (record-set! new 1 name)
-    (record-set! new 2 field-tags)
-    new))
+  (make-record :record-type (list name field-tags)))
 
 ; Accessors for record types.
 
 (define (record-type-name record-type)
-  (record-ref record-type 1))
+  (record-ref record-type 0))
 
 (define (record-type-field-tags record-type)
-  (record-ref record-type 2))
+  (record-ref record-type 1))
 
 ;----------------
 ; A utility for getting the offset of a field within a record.
 
 (define (field-index type tag)
-  (let loop ((i 1) (tags (record-type-field-tags type)))
+  (let loop ((i 0) (tags (record-type-field-tags type)))
     (cond ((null? tags)
            (error "record type has no such field" type tag))
           ((eq? tag (car tags))
@@ -159,15 +94,8 @@
                         (field-index type tag))
                       tags)))
     (lambda args
-      (if (= (length args)
-             arg-count)
-          (let ((new (make-record (+ size 1))))
-            (record-set! new 0 type)
-            (for-each (lambda (arg i)
-			(record-set! new i arg))
-                      args
-                      indexes)
-            new)
+      (if (= (length args) arg-count)
+          (make-record type args)
           (error "wrong number of arguments to constructor" type args)))))
 
 (define (record-predicate type)
@@ -194,7 +122,35 @@
           (record-set! thing index value)
           (error "modifier applied to bad value" type tag thing)))))
 
-(set! :record-type (make-record 3))
-(record-set! :record-type 0 :record-type); Its type is itself.
-(record-set! :record-type 1 ':record-type)
-(record-set! :record-type 2 '(name field-tags))
+;; define-struct ala MzScheme
+(define-syntax define-struct
+  (lambda (x)
+    (syntax-case x ()
+      ((_ name (field ...))
+       (let* ((name-syntax (syntax name))
+              (name-string (symbol->string (syntax-object->datum
+                                            name-syntax))))
+         (with-syntax ((make-name (wrap-symbol "make-" name-syntax ""))
+                       (name? (wrap-symbol "" name-syntax "?"))
+                       ((field-getter ...)
+                        (map (lambda (f)
+                               (wrap-symbol
+                                (string-append name-string "-")
+                                (datum->syntax-object name-syntax f)
+                                ""))
+                             (syntax-object->datum (syntax (field ...)))))
+                       ((field-setter ...)
+                        (map (lambda (f)
+                               (wrap-symbol
+                                (string-append "set-" name-string "-")
+                                (datum->syntax-object name-syntax f)
+                                "!"))
+                             (syntax-object->datum (syntax (field ...))))))
+           (syntax
+            (define-record-type name (make-name field ...)
+              name?
+              (field field-getter field-setter) ...))))))))
+
+(set! :record-type (make-record :record-type
+                                '(:record-type (name field-tags))))
+(record-type! :record-type :record-type)

@@ -85,6 +85,7 @@
 (native-module s2j-reflection    "sisc.modules.s2j.Reflection$Index")
 (native-module s2j-conversion    "sisc.modules.s2j.Conversion$Index")
 (native-module hashtable-native  "sisc.modules.hashtable.Primitives$Index")
+(native-module record-native     "sisc.modules.record.Primitives$Index")
 (native-module block-io-native   "sisc.modules.io.BlockIO$Index")
 (native-module file-manipulation-native "sisc.modules.io.FileManipulation$Index")
 
@@ -253,6 +254,16 @@
   (import hashtable-native)
   (import threading)
   (include "hashtable/hashtable.scm"))
+
+(module record
+    ((define-record-type
+       make-record-type record-constructor record-predicate
+       define-record-field record-accessor record-modifier)
+     record?
+     define-struct)
+  (import record-native)
+  (import misc)
+  (include "record/record.scm"))
 
 (module procedure-properties
   (procedure-property

@@ -1,3 +1,7 @@
+2003-05-16  Matthias Radestock  <matthias@sorted.org>
+
+	* Added native support for srfi-9 records and |define-struct|.
+
 2003-05-11  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed handling of thunks returning multiple values in

@@ -129,20 +129,9 @@
 
 (display "srfi-9 ")
 (module srfi-9
-    ((define-record-type
-       make-record-type record-constructor record-predicate
-       define-record-field record-accessor record-modifier)
-     record?
-     vector?)
-  (import* r5rs (real-vector? vector?))
-  (import srfi-23) ;ERROR
-  (include "srfi-9.scm")
+    (define-record-type record?)
+  (import record)
   (add-feature 'srfi-9))
-(module srfi-9-lib
-    ((define-struct define-record-type))
-  (import srfi-9)
-  (import misc)
-  (include "srfi-9-lib.scm"))
 
 (display "srfi-11 ")
 (module srfi-11
@@ -306,7 +295,7 @@
      modified-julian-day->time-monotonic
      date->string string->date)
   (import srfi-8)
-  (import srfi-9-lib)
+  (import record)
   (import optional-args)
   (include "srfi-19.scm"))
 
