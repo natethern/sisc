@@ -306,7 +306,8 @@
      make-record-type
      record-type?
      record-type-name
-     record-type-field-tags)
+     record-type-field-tags
+     <record>)
   (import record-native)
   (import misc)
   (import* type-system
