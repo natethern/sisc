@@ -210,6 +210,17 @@ public class SThread extends ModuleAdapter {
 	    return ((NamedValue)this).displayNamedOpaque("monitor");
 	}
 
+        public static Monitor of(Value v) {
+            synchronized(v) {
+                Value m = v.getAnnotation(MONITOR);
+                if (m==FALSE) {
+                    m=new Monitor();
+                    v.setAnnotation(MONITOR, m);
+                }
+                return monitor(m);
+            }
+        }
+
         public Monitor() {}
 
         public void serialize(Serializer s, DataOutput dos)
@@ -329,14 +340,7 @@ public class SThread extends ModuleAdapter {
         case 1:
             switch(primid) {
             case MONITORFOR:
-                synchronized(f.vlr[0]) {
-                    Value m = f.vlr[0].getAnnotation(MONITOR);
-                    if (m==FALSE) {
-                        m=new Monitor();
-                        f.vlr[0].setAnnotation(MONITOR, m);
-                    } 
-                    return m;
-                }
+                return Monitor.of(f.vlr[0]);
 	    case MONITORLOCK:
 		return monitor(f.vlr[0]).acquire();
 	    case MONITORUNLOCK:
