@@ -70,7 +70,7 @@ performing a pair-wise comparison using TYPE<= until a difference is
 found (in which ase #f is returned) or one (or both) of the lists has
 been exhausted (in which case #t is returned).
 
-INSTANCES=OF? <list values> <list types> => #t/#f
+INSTANCES-OF? <list values> <list types> => #t/#f
 Determines whether all of <values> are instances of <types> by
 performing a pair-wise test using INSTANCE-OF? until a test returns #f
 (in which case #f is returned) or one (or both) of the lists has been
