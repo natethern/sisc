@@ -994,16 +994,13 @@ Context.exit()
         <para>
           Java exceptions are propagated to scheme and can be caught
           like any other exception, e.g. with
-          <function>call/fc</function> as defined in <xref
+          <function>with/fc</function> as defined in <xref
           linkend="FailureContinuations"/>. For example
           <programlisting>
 (define-generic char-at)
 (define-generic print-stack-trace)
-(call-with-failure-continuation
- (lambda () (char-at (-&gt;jstring "foo") (-&gt;jint 3)))
- (lambda (m e f)
-   (print-stack-trace m)
-   #f))
+(with/fc (lambda (m e) (print-stack-trace m) #f)
+  (lambda () (char-at (-&gt;jstring "foo") (-&gt;jint 3))))
           </programlisting>
           will catch the
           <classname>IndexOutOfBoundsException</classname>, print its
@@ -1011,9 +1008,9 @@ Context.exit()
         </para>
         <para>
           In Scheme, Java exceptions can be thrown by passing them to
-          the <function>error</function> procedure, e.g.
+          the <function>throw</function> procedure, e.g.
           <programlisting>
-(error (make &lt;java.util.NoSuchElementException&gt;))
+(throw (make &lt;java.util.NoSuchElementException&gt;))
           </programlisting>
           If this occurs inside a proxy method (see <xref
           linkend="JavaProxies"/>), the exception is propagated to the
