@@ -2,7 +2,7 @@ package sisc.modules;
 
 interface Primitives {
 
-    //next: 136
+    //next: 137
     int ACOS = 23,
         ADD = 114,
         APPLY = 121,
@@ -48,6 +48,7 @@ interface Primitives {
         GETENVIRONMENT = 18,
         GETPROP = 109,
         GRT = 118,
+        HASHCODE = 136,
         IMAGPART = 69,
         IMMUTABLEPAIRQ = 132,
         IMMUTABLEVECTORQ = 133,

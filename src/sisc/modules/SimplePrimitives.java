@@ -65,6 +65,7 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define("exp", EXP);
             define("find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
             define("floor", FLOOR);
+            define("hash-code", HASHCODE);
             define("imag-part", IMAGPART);
             define("immutable-pair?", IMMUTABLEPAIRQ);
             define("immutable-vector?", IMMUTABLEVECTORQ);
@@ -364,6 +365,8 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
         case SEALIMMUTABLEVECTOR:
             immutableVector(v1).makeImmutable();
             return VOID;
+        case HASHCODE:
+            return Quantity.valueOf(v1.hashCode());
         default:
             throwArgSizeException();
             return VOID;
