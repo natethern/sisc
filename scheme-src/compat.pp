@@ -43,8 +43,8 @@
 ; REP loop.  It is returned whenever a "nonspecified" value is specified
 ; by the standard.  The following should pick up an appropriate value.
 
-#(define void
-   (let ((void-object (if #f #f)))
+;(define void
+;   (let ((void-object (if #f #f)))
 ;      (lambda () void-object)))
 
 ; "andmap" is like "map" except instead of "consing" the results it
@@ -115,16 +115,12 @@
 
 (define eval 
   ((lambda (old-eval)
-     (lambda (x)	
+     (lambda (x)
        (if (if (pair? x) (eq? (car x) "noexpand") #f)
 	   (old-eval (cadr x)) 
-	   ((lambda (e) 
-;	(begin (display e) (newline)
-	      (old-eval e));)
+	   ((lambda (e) (old-eval e))
 	    (sc-expand x)))))
    (current-evaluator)))
 
 (define make-false
   (lambda (v) #f))
-
-  
