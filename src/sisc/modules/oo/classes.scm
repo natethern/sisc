@@ -84,9 +84,10 @@
                         (slot-name (slot-prop-name slot-prop-val) ...)
                         ...)
   (module (name)
-      (define name
-        (make-class 'name
-                    (list . superclasses)
-                    '(slot-name ...)))
+      (define name)
+    (set! name
+      (make-class 'name
+                  (list . superclasses)
+                  '(slot-name ...)))
     (configure-slot name `(((slot-prop-name . ,slot-prop-val) ...) ...))))
 
