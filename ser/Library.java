@@ -18,7 +18,6 @@ public class Library extends Util {
     public static Library load(URL u) throws IOException, ClassNotFoundException {
         if (u.getProtocol().equalsIgnoreCase("file")) {
             String path=u.getPath();
-            System.err.println(path);
             return load(new SeekableDataInputStream(new BufferedRandomAccessInputStream(path, "r")));
         } else {
             return load(new SeekableDataInputStream(new MemoryRandomAccessInputStream(u.openStream())));
