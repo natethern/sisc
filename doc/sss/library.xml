@@ -1135,8 +1135,8 @@ com/foo/bar/baz/baz3.scm
       </emphasis>
     </para>
     <para>
-      &SISC; allows the creation of <emphasis>compiled
-      libraries</emphasis> which contain compiled scheme code.  These
+      &SISC; allows the creation of <emphasis>compiled libraries</emphasis> 
+      which contain compiled scheme code.  These
       libraries can then be linked into a running &SISC; session in
       order to extend the functionality without processing or
       possessing the original source.  Such libraries can be loaded
@@ -1188,7 +1188,7 @@ com/foo/bar/baz/baz3.scm
             </methodparam>
             <methodparam><parameter>module-name</parameter>
             </methodparam>
-            <methodparam><parameter choice="opt" rep="repeat">module-name</parameter>
+            <methodparam choice="opt" rep="repeat"><parameter>module-name</parameter>
             </methodparam>
           </methodsynopsis>
           <blockquote>
