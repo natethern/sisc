@@ -11,6 +11,8 @@
   <target name="prepare">
     <property name="version" value="1.7.2-beta"/>
     <property name="cvsversion" value="b1_7_2"/>
+    <!--<property name="releasecandidate" value="yes"/> -->
+    <property name="beta" value="yes"/>
     <property file="${basedir}/build.properties"/>    
     <property name="srcdir" value="${basedir}/.."/>
     <property name="classdir" value="${basedir}/classes"/>
@@ -26,14 +28,21 @@
     <property name="libjar" value="sisc-lib.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.shp"/>
     <property name="quantity-type" value="apfloat"/>
-    <!--<property name="releasecandidate" value="yes"/> -->
     <condition property="debugging" value="on">
-      <isset property="releasecandidate"/>
+      <or> 
+        <isset property="releasecandidate"/>
+        <isset property="beta"/>
+      </or>
     </condition>
     <condition property="debugging" value="off">
-      <not>
-        <isset property="releasecandidate"/>
-      </not>
+      <and>
+        <not>
+          <isset property="releasecandidate"/>
+        </not>
+        <not>
+          <isset property="beta"/>
+        </not>
+      </and>
     </condition>
     <property name="optimization" value="on"/>
     <property name="dist" value="${basedir}/dist"/>
@@ -204,12 +213,14 @@
           classpath="${classdir}"
           dir="${schemedir}"
 	  fork="yes">
+      <jvmarg value="-Dbeta=${beta}"/>
       <arg value="-out"/>
       <arg value="${heap}"/>
       <arg value="-files"/>
       <arg value="file:init.sce"/>
       <arg value="file:compat.sce"/>
       <arg value="file:psyntax.sce"/>
+      <arg value="file:beta.sce"/>
       <arg value="file:init2.scm"/>
       <arg value="file:pp.scm"/>
       <arg value="file:repl.scm"/>
@@ -246,7 +257,7 @@
   </target>
 
   <target name="manual" depends="prepare"
-          description="Generate Manual">
+          description="Generate Manual" unless="nomanual">
     <copy file="${docdir}/sss/html.xsl" tofile="${docdir}/sss/style.xsl"/>
     <replace file="${docdir}/sss/style.xsl"
              token="@@@doc.style@@@"
@@ -445,6 +456,6 @@
     </cvs>
   </target> 
  
-  <target name="release-full-dist" depends="clean,dist"/> 
+  <target name="release-full-dist" depends="clean,srfi-sll,dist"/> 
   <target name="release" depends="tag,source-dist"/> 
 </project>

@@ -32,8 +32,6 @@
 ;;
 		 
 (current-evaluator eval)
-;(emit-annotations #t)
-;(emit-debugging-symbols #t)
 
 ;;;;;;;;;;;;;;;; error handling ;;;;;;;;;;;;;;;
 
