@@ -1533,6 +1533,12 @@
         Access Functions
       </title>
       <para>
+        Access to symbolic environments is performed through the
+        <function>getprop</function> and <function>putprop</function>
+        functions.  All symbolic environment operations are thread
+        safe.
+      </para>
+      <para>
         <blockquote>
           <para>
             <indexterm><primary>getprop</primary>
