@@ -7,7 +7,7 @@ import sisc.nativefun.*;
 import sisc.data.*;
 import sisc.io.*;
 
-public class StringIO extends IndexedProcedure {
+public class StringIO extends IndexedFixableProcedure {
 
     static Symbol IOB =
         Symbol.intern("sisc.modules.io.Messages");
@@ -44,46 +44,43 @@ public class StringIO extends IndexedProcedure {
     
     public StringIO() {}
 
-    public Value doApply(Interpreter f)
-        throws ContinuationException {
-        switch (f.vlr.length) {
-        case 0:
-            switch (id) {
-            case OPENOUTPUTSTRING:
-                return new WriterOutputPort(new StringWriter(), false);
-            default:
-                throwArgSizeException();
-            }
-        case 1:
-            switch (id) {
-            case STRINGINPORTQ:
-                return truth((f.vlr[0] instanceof ReaderInputPort) &&
-                             (((ReaderInputPort)f.vlr[0]).getReader() instanceof StringReader));
+    public Value apply() throws ContinuationException {
+        switch (id) {
+        case OPENOUTPUTSTRING:
+            return new WriterOutputPort(new StringWriter(), false);
+        default:
+            throwArgSizeException();
+        }
+        return VOID;
+    }
+    
+    public Value apply(Value v1) throws ContinuationException {
+        switch (id) {
+        case STRINGINPORTQ:
+            return truth((v1 instanceof ReaderInputPort) &&
+                         (((ReaderInputPort)v1).getReader() instanceof StringReader));
 
-            case STRINGOUTPORTQ:
-                return truth((f.vlr[0] instanceof WriterOutputPort) &&
-                             (((WriterOutputPort)f.vlr[0]).getWriter() instanceof StringWriter));
-            case GETOUTPUTSTRING:
-                OutputPort port=outport(f.vlr[0]);
-                if (!(port instanceof WriterOutputPort) ||
-                    !(((WriterOutputPort)port).getWriter() 
-                      instanceof StringWriter))
-                    throwPrimException( liMessage(IOB, "outputnotastringport"));
-                try {
-                    port.flush();
-                } catch (IOException e) {}
+        case STRINGOUTPORTQ:
+            return truth((v1 instanceof WriterOutputPort) &&
+                         (((WriterOutputPort)v1).getWriter() instanceof StringWriter));
+        case GETOUTPUTSTRING:
+            OutputPort port=outport(v1);
+            if (!(port instanceof WriterOutputPort) ||
+                !(((WriterOutputPort)port).getWriter() 
+                  instanceof StringWriter))
+                throwPrimException( liMessage(IOB, "outputnotastringport"));
+            try {
+                port.flush();
+            } catch (IOException e) {}
 
-                StringWriter sw=(StringWriter)((WriterOutputPort)port).getWriter();
-                SchemeString s=new SchemeString(sw.getBuffer().toString());
-                sw.getBuffer().setLength(0);
-                return s;
-            case OPENINPUTSTRING:
-                return new ReaderInputPort(new StringReader(string(f.vlr[0])));
-            case OPENSOURCEINPUTSTRING:
-                return new SourceInputPort(new StringReader(string(f.vlr[0])), "<string>");
-            default:
-                throwArgSizeException();
-            }
+            StringWriter sw=(StringWriter)((WriterOutputPort)port).getWriter();
+            SchemeString s=new SchemeString(sw.getBuffer().toString());
+            sw.getBuffer().setLength(0);
+            return s;
+        case OPENINPUTSTRING:
+            return new ReaderInputPort(new StringReader(string(v1)));
+        case OPENSOURCEINPUTSTRING:
+            return new SourceInputPort(new StringReader(string(v1)), "<string>");
         default:
             throwArgSizeException();
         }
