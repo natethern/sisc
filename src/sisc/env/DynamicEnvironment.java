@@ -29,7 +29,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public boolean vectorLengthPrefixing = Defaults.VECTOR_LENGTH_PREFIXING;
     public boolean emitDebuggingSymbols = Defaults.EMIT_DEBUGGING_SYMBOLS;
     public String characterSet = getDefaultCharacterSet();
-    public Pair inlinePrimitives = Defaults.INLINE_PRIMITIVES;
+    public Value inlinePrimitives = Defaults.INLINE_PRIMITIVES;
 
     private static String defaultPrintShared =
         new Boolean(Defaults.PRINT_SHARED).toString();

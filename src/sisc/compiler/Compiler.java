@@ -456,7 +456,9 @@ public class Compiler extends CompilerConstants {
         if (allImmediate) {
             if (rator instanceof FreeReferenceExp) {
                 Symbol ratorsym=((FreeReferenceExp)rator).sym;
-                if (truth(memq(ratorsym, r.dynenv.inlinePrimitives))) {
+                if ((r.dynenv.inlinePrimitives == TRUE) ||
+                    (r.dynenv.inlinePrimitives instanceof Pair && 
+                     truth(memq(ratorsym, (Pair)r.dynenv.inlinePrimitives)))) {
                     Value ratorval=env.lookup(ratorsym);
                     if (ratorval instanceof FixableProcedure) {
                         FixableProcedure proc=(FixableProcedure)ratorval;
