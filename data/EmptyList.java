@@ -43,7 +43,7 @@ public class EmptyList extends Pair implements Singleton {
         EMPTYLIST.car=EMPTYLIST.cdr=EMPTYLIST;
     }
 
-    protected EmptyList() {}
+    public EmptyList() {}
 
     public String display() {
         return "()";
@@ -61,12 +61,17 @@ public class EmptyList extends Pair implements Singleton {
 	return 0x9abcdef0;
     }
 
-    public static Value getValue(Deserializer dis) {
-        return EMPTYLIST;
-    }
-    
     public void serialize(Serializer s) throws IOException {
     }
+
+    public void deserialize(Deserializer s) throws IOException {
+    }
+
+    public Value singletonValue() {
+        return EMPTYLIST;
+    }
+
 }
+
 
 

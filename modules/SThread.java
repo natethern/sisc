@@ -106,7 +106,6 @@ public class SThread extends ModuleAdapter {
 	private int lockCount=0;
 	private Thread owner=null;
 	private CondVar condvar=new CondVar();
-        private Object clock=new Object();
 
 	public Value lock(long timeout) {
 	    Thread thisThread=null;

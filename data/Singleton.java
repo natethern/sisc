@@ -6,5 +6,9 @@ package sisc.data;
  * anywhere in the Scheme System at any time.  Scheme #t, #f, #!eof, 
  * and the empty list are all examples of singletons.
  */
-public interface Singleton {}
+public interface Singleton {
+
+    public Value singletonValue();
+
+}
 

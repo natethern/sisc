@@ -238,7 +238,7 @@ public class S2J extends ModuleAdapter {
                 break;
             }
             default:
-                throw new RuntimeException(liMessage(S2JB, "cannotserialize"));
+                s.writeObject(obj);
             }
         }
 
@@ -289,7 +289,12 @@ public class S2J extends ModuleAdapter {
                 }
                 break;
             default:
-                throw new RuntimeException(liMessage(S2JB, "cannotdeserialize"));
+                try {
+                    obj = s.readObject();
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(liMessage(S2JB, "cannotdeserialize"));
+                }
+                break;
             }
         }
 

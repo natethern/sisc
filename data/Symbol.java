@@ -80,48 +80,22 @@ public class Symbol extends Value implements Singleton {
         return symval;
     }
 
-    private void writeObject(java.io.ObjectOutputStream out)
-    throws IOException {
-        out.writeObject(symval);
-        out.writeBoolean(memo.get(symval)!=null);
-    }
-
-    public Object readResolve() throws ObjectStreamException {
-        Object replacement=memo.get(symval);
-        if (replacement==null) return this;
-        return replacement;
-    }
-
-    private void readObject(java.io.ObjectInputStream in)
-    throws IOException, ClassNotFoundException {
-        String s=(String)in.readObject();
-        symval=(caseSensitive ? s : s.toLowerCase());
-        boolean interned=in.readBoolean();
-        if (interned) {
-            if (memo.get(symval)==null)
-                memo.put(symval, this);
-        }
-    }
-
     public void serialize(Serializer s) throws IOException {
 	    s.writeBoolean(memo.containsKey(this));
         s.writeUTF(symval);
     }
 
+    public void deserialize(Deserializer s) throws IOException {
+	    boolean memoized = s.readBoolean();
+        symval = s.readUTF();
+    }
+
     public Symbol() {}
 
-    public static Expression getValue(Deserializer dis) throws IOException {
-        if (dis.readBoolean()) {
-            return new Symbol(dis.readUTF());
-        } else {
-            return intern(dis.readUTF());
-        }
+    public Value singletonValue() {
+        //this isn't quite correct; we should only do this when Symbol
+        //is memoized. The cleanest way of fixing this would be to
+        //create a sub class of Symbol for memoized symbols.
+        return intern(symval);
     }
 }
-
-
-
-
-
-
-

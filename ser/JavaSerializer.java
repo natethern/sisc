@@ -8,23 +8,26 @@ import sisc.data.Expression;
 
 public class JavaSerializer implements Serializer {
     
-    protected ObjectOutputStream os;
+    protected ObjectOutput os;
 
-    public JavaSerializer(ObjectOutputStream o) throws IOException {
+    public JavaSerializer(ObjectOutput o) throws IOException {
         os=o;
     }
 
-    public ObjectOutputStream getObjectOutputStream() {
-        return os;
+    public void flush() throws IOException {
+        os.flush();
+    }
+
+    public void close() throws IOException {
+        os.close();
+    }
+
+    public void writeObject(Object o) throws IOException {
+        os.writeObject(o);
     }
 
     public void writeExpression(Expression e) throws IOException {
-        try {
-            os.writeObject(e);
-        } catch (NotSerializableException nse) {
-            System.err.println(e);
-            nse.printStackTrace();
-        }
+        os.writeObject(e);
     }
 
     public void writeAssociativeEnvironment(AssociativeEnvironment e) throws IOException {

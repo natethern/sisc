@@ -10,9 +10,9 @@ import sisc.AssociativeEnvironment;
 
 public class JavaDeserializer implements Deserializer {
 
-    protected ObjectInputStream is;
+    protected ObjectInput is;
 
-    public JavaDeserializer(ObjectInputStream i) throws IOException {
+    public JavaDeserializer(ObjectInput i) throws IOException {
         is=i;
     }
 
@@ -23,6 +23,22 @@ public class JavaDeserializer implements Deserializer {
         } catch (ClassNotFoundException cnf) {
             throw new IOException(cnf.getMessage());
         }
+    }
+
+    public Object readObject() throws IOException, ClassNotFoundException {
+        return is.readObject();
+    }
+
+    public long skip(long n) throws IOException {
+        return is.skip(n);
+    }
+
+    public int available() throws IOException {
+        return is.available();
+    }
+
+    public void close() throws IOException {
+        is.close();
     }
 
     public BigInteger readBigInteger() throws IOException {

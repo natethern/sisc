@@ -64,8 +64,12 @@ public class SchemeBoolean extends Value implements Singleton {
         s.writeBoolean(val);
     }
 
-    public static Value getValue(Deserializer dis) throws IOException {
-        return dis.readBoolean() ? TRUE : FALSE;
+    public void deserialize(Deserializer s) throws IOException {
+        val = s.readBoolean();
+    }
+
+    public Value singletonValue() {
+        return val ? TRUE : FALSE;
     }
 }
 

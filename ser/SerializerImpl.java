@@ -1,15 +1,15 @@
 package sisc.ser;
 
-import java.io.DataOutput;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import sisc.Module;
 import sisc.data.Expression;
+import sisc.Util;
 import sisc.AssociativeEnvironment;
 
-public abstract class SerializerImpl implements Serializer, DataOutput {
+public abstract class SerializerImpl extends Util implements Serializer {
 
     public void writeBigDecimal(BigDecimal d) throws IOException {
         int scale=d.scale();
@@ -23,6 +23,16 @@ public abstract class SerializerImpl implements Serializer, DataOutput {
         byte[] buffer=i.toByteArray();
         writeInt(buffer.length);
         write(buffer);
+    }
+
+    public void writeObject(Object o) throws IOException {
+        throw new IOException("cannot serialize " + o);
+    }
+
+    public void flush() throws IOException {
+    }
+
+    public void close() throws IOException {
     }
 
     public abstract void writeExpression(Expression e) throws IOException;

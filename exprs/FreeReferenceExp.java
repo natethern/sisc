@@ -106,10 +106,4 @@ public class FreeReferenceExp extends Expression implements Immediate {
         return lenv.hashCode() ^ sym.hashCode();
     }
 
-    private void readObject(java.io.ObjectInputStream in)
-	throws IOException, ClassNotFoundException {
-	in.defaultReadObject();
-	envLoc=-1;
-    }
-    
 }

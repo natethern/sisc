@@ -67,22 +67,18 @@ public class BinaryDeserializer extends DeserializerImpl {
                     else System.err.println(clazz);
                 }
 
-                if (Singleton.class.isAssignableFrom(clazz)) {
+                e=(Expression)clazz.newInstance();
+                if (e instanceof Singleton) {
+                    e.deserialize(this);
+                    e = ((Singleton)e).singletonValue();
                     //System.err.println(" (S) ");
-                    try {
-                        Method GVM=clazz.getMethod("getValue", DESER_PROTO);
-                        e=(Expression)GVM.invoke(null, thisArray);
-                        if (definingOid!=-1 && alreadyReadObjects[definingOid]==null)
-                            alreadyReadObjects[definingOid]=e;//new SoftReference(e);
-                    } catch (NoSuchMethodException nsm) {
-                        e=(Expression)clazz.newInstance();
-                    }
+                    if (definingOid!=-1 && alreadyReadObjects[definingOid]==null)
+                        alreadyReadObjects[definingOid]=e;//new SoftReference(e);
                 } else {
                     //System.err.println(" (NS) ");
-                    e=(Expression)clazz.newInstance();
                     if (definingOid!=-1 && alreadyReadObjects[definingOid]==null)             
                         alreadyReadObjects[definingOid]=e;//new SoftReference(e);
-                    DESM.invoke(e, thisArray);
+                    e.deserialize(this);
                     int ac=readInt();
                     //if (ac>0) System.err.println("!!!"+ac);
                     for (; ac>0; ac--) {
@@ -100,9 +96,6 @@ public class BinaryDeserializer extends DeserializerImpl {
                 if (DEBUG) System.err.println("Fo:"+(type-2));
                 return fetchShared(type-16);
             }
-        } catch (InvocationTargetException ite) {
-            ite.printStackTrace();
-            throw new IOException(ite.getMessage());
         } catch (InstantiationException ie) {
             ie.printStackTrace();
             throw new IOException(ie.getMessage());
@@ -263,17 +256,6 @@ public class BinaryDeserializer extends DeserializerImpl {
 
 
     static final int BER_MASK=0x7f, BER_CONT=0x80;
-    static Class[]
-	DESER_PROTO=new Class[] { Deserializer.class };
-
-    static Method DESM;
-
-    static {
-        try {
-            DESM=Expression.class.getMethod("deserialize", DESER_PROTO);
-        } catch (NoSuchMethodException nsm) {
-        }
-    }
     
     public static void main(String[] args) throws IOException {
         ByteArrayOutputStream bos=new ByteArrayOutputStream();

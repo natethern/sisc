@@ -1,6 +1,6 @@
 package sisc.ser;
 
-import java.io.DataInput;
+import java.io.ObjectInput;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -10,7 +10,7 @@ import sisc.data.Expression;
 import sisc.Util;
 import sisc.AssociativeEnvironment;
 
-public interface Deserializer extends DataInput {
+public interface Deserializer extends ObjectInput {
 
     
     public abstract BigInteger readBigInteger() throws IOException;

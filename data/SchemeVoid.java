@@ -38,7 +38,7 @@ import sisc.ser.Deserializer;
 public class SchemeVoid extends Value implements Singleton {
     public static SchemeVoid VOID=new SchemeVoid();
 
-    protected SchemeVoid() {}
+    public SchemeVoid() {}
 
     public String display() {
         return "#<void>";
@@ -48,7 +48,7 @@ public class SchemeVoid extends Value implements Singleton {
 	return 0x56789abc;
     }
 
-    public static Value getValue(Deserializer dis) {
+    public Value singletonValue() {
         return VOID;
     }
 }

@@ -168,8 +168,7 @@ public class LibraryBuilder extends SerializerImpl {
                 seen.add(e);
                 writeClass(e.getClass());
                 e.serialize(this);
-                for (Iterator i=e.getAnnotationKeys().iterator();
-                     i.hasNext();) {
+                for (Iterator i=e.getAnnotationKeys().iterator(); i.hasNext();) {
                     Symbol key=(Symbol)i.next();
                     writeExpression(key);
                     writeExpression(e.getAnnotation(key));

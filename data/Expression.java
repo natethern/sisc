@@ -36,8 +36,7 @@ import java.util.Set;
 import java.util.*;
 import sisc.*;
 import java.io.*;
-import sisc.ser.Serializer;
-import sisc.ser.Deserializer;
+import sisc.ser.*;
 
 /**
  * The base class for any and all expressions.  An expression is anything 
@@ -48,7 +47,7 @@ import sisc.ser.Deserializer;
  * lifetime.  Annotations are used to implement procedure properties 
  * and source-tracked debugging.
  */
-public abstract class Expression extends Util implements Serializable {
+public abstract class Expression extends Util implements Externalizable {
     protected static Set EMPTYSET=new TreeSet();
 
     public Map annotations;
@@ -144,12 +143,17 @@ public abstract class Expression extends Util implements Serializable {
      */
     public void deserialize(Deserializer s) throws IOException
         {}
+
+    public void writeExternal(ObjectOutput out) throws IOException {
+        serialize(new JavaSerializer(out));
+    }
+
+    public void readExternal(ObjectInput in) throws IOException {
+        deserialize(new JavaDeserializer(in));
+    }
+
+    public Object readResolve() throws ObjectStreamException {
+        return (this instanceof Singleton) ?
+            ((Singleton)this).singletonValue() : this;
+    }
 }
-
-
-
-
-
-
-
-

@@ -1,6 +1,6 @@
 package sisc.ser;
 
-import java.io.DataOutput;
+import java.io.ObjectOutput;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -9,7 +9,7 @@ import sisc.Module;
 import sisc.data.Expression;
 import sisc.AssociativeEnvironment;
 
-public interface Serializer extends DataOutput {
+public interface Serializer extends ObjectOutput {
 
     public abstract void writeBigDecimal(BigDecimal d) throws IOException;
 

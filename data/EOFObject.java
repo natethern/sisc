@@ -38,7 +38,7 @@ import sisc.ser.Deserializer;
 public class EOFObject extends Value implements Singleton {
     public static EOFObject EOF=new EOFObject();
 
-    protected EOFObject() {}
+    public EOFObject() {}
 
     public String display() {
         return "#!eof";
@@ -48,7 +48,7 @@ public class EOFObject extends Value implements Singleton {
 	return 0x12345678;
     }
 
-    public static Value getValue(Deserializer dis) {
+    public Value singletonValue() {
         return EOF;
     }
 }

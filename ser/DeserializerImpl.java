@@ -1,6 +1,5 @@
 package sisc.ser;
 
-import java.io.DataInput;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -10,7 +9,7 @@ import sisc.data.Expression;
 import sisc.Util;
 import sisc.AssociativeEnvironment;
 
-public abstract class DeserializerImpl extends Util implements Deserializer, DataInput {
+public abstract class DeserializerImpl extends Util implements Deserializer {
 
     
     protected long readBerLong() throws IOException {
@@ -31,9 +30,23 @@ public abstract class DeserializerImpl extends Util implements Deserializer, Dat
 
     public BigDecimal readBigDecimal() throws IOException {
         byte[] buffer=new byte[readInt()];
-	int scale=readInt();
-	readFully(buffer);
-        
-	return new BigDecimal(new BigInteger(buffer), scale);
+        int scale=readInt();
+        readFully(buffer);
+        return new BigDecimal(new BigInteger(buffer), scale);
+    }
+
+    public Object readObject() throws IOException, ClassNotFoundException {
+        throw new IOException("cannot deserialize");
+    }
+
+    public long skip(long n) throws IOException {
+        return 0;
+    }
+
+    public int available() throws IOException {
+        return 1;
+    }
+
+    public void close() throws IOException {
     }
 }

@@ -99,9 +99,4 @@ public class FreeSetEval extends Expression {
         return lhs.hashCode() ^ senv.hashCode();
     }
 
-    private void readObject(java.io.ObjectInputStream in)
-	throws IOException, ClassNotFoundException {
-	in.defaultReadObject();
-	envLoc=-1;
-    }
 }
