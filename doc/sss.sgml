@@ -1,443 +1,533 @@
 <!doctype book public "-//OASIS//DTD DocBook V3.1//EN">
 
 <book lang="en">
-<!-- DocBook file was created by LyX 1.1
+  <!-- DocBook file was created by LyX 1.1
   See http://www.lyx.org/ for more information -->
- <bookinfo>
-  <title>
-  SISC</emphasis> <emphasis>for Seasoned Schemers</emphasis>
- </title>
- <author>
-  
- </author>
- <firstname>
-  Scott
- </firstname>
- <surname>
-  Miller
- </surname>
- <date>
-  Jan 2002
- </date>
- </bookinfo>
- <chapter>
-  <title>
-  Introduction
- </title>
- <para>
-  SISC</emphasis> is a lightweight, platform independent Scheme system whose primary goals are rapid execution of the complete R^{5}RS and future Scheme standards, plus a useful superset for real-world application development. 
- </para>
-  <sect1>
-   <title>
-   Features
-  </title>
-  <itemizedlist>
-   <listitem>
-   <para>
-   Full R^{5}RS compliance
-   </para>
-  </listitem>
-   <listitem>
-   <para>
-   Efficient number tower, with support for integers, floating-point numbers, rationals, and complex numbers of arbitrary precision
-   </para>
-  </listitem>
-   <listitem>
-   <para>
-   Lightweight Scheme engine, requiring less than 200 kilobytes of code.
-   </para>
-  </listitem>
-   <listitem>
-   <para>
-   Runtime extensiblity through a scopable module system, which may add new functions and first-class types.
-   </para>
-  </listitem>
-  </itemizedlist>
-  </sect1>
-  <sect1>
-   <title>
-   About this document
-  </title>
-  <para>
-   This document explains the SISC Scheme system. It assumes knowledge of the Scheme language. As such, when discussing the Scheme language, we will focus primarily on differences between the Scheme standard and the language implemented by SISC. 
-  </para>
-  <para>
-   Secondly, SISC implements the R5RS standard. As such, any code written to that standard should run without reading any further.
-  </para>
-   <sect2>
+  <bookinfo>
     <title>
-    About procedure documentation
-   </title>
-   <para>
-    Throughout this document, procedures will be defined using the following syntax:
-   </para>
-   <programlisting>
-<![ CDATA [procedure: </emphasis>(procedure-name arguments ...)
-]]><![ CDATA [returns: </emphasis>type and description of the return value
-]]><![ CDATA [ 
-]]><![ CDATA [Description of the procedure's semantics.
-]]><![ CDATA [ 
-]]><![ CDATA [ 
-]]><![ CDATA [parameter: </emphasis>(parameter-name [new-value])
-]]><![ CDATA [Description of the parameter and its effects.
-]]><![ CDATA [ 
-]]><![ CDATA [ 
-]]><![ CDATA [syntax: </emphasis>(syntactic-keyword structure ...)
-]]><![ CDATA [Description of the syntax expressions semantics
-]]>   </programlisting>
-   <para>
-    A procedure is a function that takes a number of arguments and produces a result, which may be undefined. The arguments of a procedure are always evaluated before the procedure is invoked. A parameter is a value that effects the operation of part of the Scheme system. When a parameter is invoked with no arguments, the current value of the parameter is returned. With arguments, the value of the parameter is changed to the arguments given. 
-   </para>
-   <para>
-    Finally, syntax is any construct whose arguments are not necessarily other s-expressions. Arguments to a syntactic expression are not necessarily evaluated. Syntactic expressions are expanded at compile time to expressions that have the correct semantics but contain no additional syntactic expressions, and are often much more difficult to read then the unexpanded version.
-   </para>
-   </sect2>
-  </sect1>
- </chapter>
- <chapter>
-  <title>
-  Installation and Invocation
- </title>
-  <sect1>
-   <title>
-   Required Environment
-  </title>
-  </sect1>
-  <sect1>
-   <title>
-   The Read-Eval-Print-Loop
-  </title>
-  </sect1>
- </chapter>
- <chapter>
-  <title>
-  Scheme Language
- </title>
-  <sect1>
-   <title>
-   Types
-  </title>
-   <sect2>
+      <emphasis>SISC</emphasis> <emphasis>for Seasoned Schemers</emphasis>
+    </title>
+    <date>
+      Jan 2002
+    </date>
+  </bookinfo>
+  <chapter>
     <title>
-    Numbers
-   </title>
-   <para>
-    The full Scheme number tower is supported:
-   </para>
-   <itemizedlist>
-    <listitem>
-    <para>
-    Integers
-    </para>
-   </listitem>
-    <listitem>
-    <para>
-    Floating Point numbers 
-    </para>
-   </listitem>
-    <listitem>
-    <para>
-    Rational numbers
-    </para>
-   </listitem>
-    <listitem>
-    <para>
-    Complex numbers
-    </para>
-   </listitem>
-   </itemizedlist>
-   <para>
-    Depending on the numeric library compiled into SISC, floating point numbers have either 32 or 64 bit IEEE precision, or arbitrary precision. Regardless, SISC's complex numbers have floating point components of the same precision as the reals. Integers have arbitrary precision in all numeric libraries, and rational numbers are built with arbitrary precision components.
-   </para>
-    <sect3>
-     <title>
-     Numeric constants
+      Introduction
     </title>
     <para>
-     Precision specifiers (&num;e, &num;s, &num;f, &num;d, &num;l) are ignored in SISC, all inexact numbers are kept in the precision of the numeric library. In the case of arbitrary precision floats, specific precision constraints are maintained to prevent runaway expansion of precision. The parameterized functions <emphasis>min-precision</emphasis> and <emphasis>max-precision</emphasis> specify the constraints:
+      <emphasis>SISC</emphasis> is a lightweight, platform independent Scheme system whose primary goals are rapid execution of the complete R<superscript>5</superscript>RS and future Scheme standards, plus a useful superset for real-world application development. 
     </para>
-    <programlisting>
-<![ CDATA [parameter: </emphasis>(min-precision [digits])
-]]><![ CDATA [Sets or displays the minimum precision constraint, an integer.
-]]>    </programlisting>
     <para>
-     All four base specifiers (&num;x, &num;o, &num;d, &num;b) are supported for integers and rationals. Only decimal (&num;d), the default, is supported for floating point and complex numbers.
+      <emphasis>SISC</emphasis>'s development progresses in two
+      directions, to improvide the core interpreter to be simpler,
+      more elegant, and more efficient; and to add necessary
+      functionality through extensions that do not complicate the
+      core.
     </para>
-    </sect3>
-    <sect3>
-     <title>
-     Exactness
+    <sect1>
+      <title>
+	Features
+      </title>
+      <itemizedlist>
+	<listitem>
+	  <para>
+	    Full R<superscript>5</superscript>RS compliance
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Efficient number tower, with support for integers, floating-point numbers, rationals, and complex numbers of arbitrary precision
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Lightweight Scheme engine, requiring less than 200 kilobytes of code.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Runtime extensiblity through a scopable module system, which may add new functions and first-class types.
+	  </para>
+	</listitem>
+      </itemizedlist>
+    </sect1>
+    <sect1>
+      <title>
+	About this document
+      </title>
+      <para>
+	This document explains the SISC Scheme system. It assumes knowledge of the Scheme language. As such, when discussing the Scheme language, we will focus primarily on differences between the Scheme standard and the language implemented by SISC. 
+      </para>
+      <para>
+	Secondly, SISC implements the R5RS standard. As such, any code written to that standard should run without reading any further.
+      </para>
+      <sect2>
+	<title>
+	  About procedure documentation
+	</title>
+	<para>
+	  Throughout this document, procedures will be defined using the following syntax:
+	</para>
+	<programlisting>
+	  <emphasis>procedure:</emphasis> (procedure-name arguments ...)
+	  <emphasis>returns:</emphasis> type and description of the return value
+
+	  Description of the procedure's semantics.
+	   
+	   
+	  <emphasis>parameter:</emphasis> (parameter-name [new-value])
+	  Description of the parameter and its effects.
+	   
+	   
+	  <emphasis>syntax:</emphasis> (syntactic-keyword structure ...)
+	  Description of the syntax expressions semantics
+	</programlisting>
+	<para>
+	  A procedure is a function that takes a number of arguments
+	  and produces a result, which may be undefined. The arguments
+	  of a procedure are always evaluated before the procedure is
+	  invoked. 
+	<para>
+	  A parameter is a value that effects the operation of part of
+	  the Scheme system. When a parameter is invoked with no
+	  arguments, the current value of the parameter is
+	  returned. With arguments, the value of the parameter is
+	  changed to the arguments given. 
+	</para>
+	<para>
+	  Finally, syntax is any construct whose arguments are not
+	  necessarily other s-expressions. Arguments to a syntactic
+	  expression are not necessarily evaluated. Syntactic
+	  expressions are expanded at compile time to expressions that
+	  have the correct semantics but contain no additional
+	  syntactic expressions, and are often much more difficult to
+	  read then the unexpanded version.
+	</para>
+      </sect2>
+    </sect1>
+  </chapter>
+  <chapter>
+    <title>
+      Installation and Invocation
+    </title>
+    <sect1>
+      <title>
+	Required Environment
+      </title>
+      <para>
+	<emphasis>SISC</emphasis> primarily targets the Java Virtual
+	Machine, and the Java v1.2 and higher class libraries.  The
+	1.2 libraries and VM are required due to a reliance on memory
+	reference functionality used to properly garbage collect
+	unused symbols while still maining pointer equality between
+	those that remain active.
+      </para>
+      <para>
+	SISC does not require any particular operating system, though
+	the official distribution currently provides launching
+	assistance for Windows and Unix based systems.  Theoretically
+	any machine that supports Java 1.2 or higher should be able to
+	run SISC.
+      </para>
+    </sect1>
+    <sect1>
+      <title>
+	The Read-Eval-Print-Loop
+      </title>
+      <para>
+	As in most Scheme systems, <emphasis>SISC</emphasis>'s primary
+	human interface is a REPL, or Read-Eval-Print-Loop.  SISC
+	presents the user with a prompt ('>'), then reads an
+	s-expression from the console.  SISC then evaluates the
+	s-expression, producing a value or error, which it then
+	prints.  Finally a prompt is displayed and the process begins
+	again.
+      </para>
+      <para>
+	The process terminates with a forced kill of the JVM (with
+	Control-C or similar), or when an end of file is detected on
+	the console.
+      </para>
+    </sect1>
+  </chapter>
+  <chapter>
+    <title>
+      Scheme Language
     </title>
     <para>
-     Exactness and inexactness contagion behaves as expected. Rational's are made inexact through division. Floats are made exact by conversion to a rational number. SISC attempts as accurate a conversion as possible, by converting the decimal portion of the number to a ratio with a denominator of the form 10^n, where n is the scale of the floating point number. Then the fraction is reduced as usual.
+      In this chapter we will examine the language that SISC
+      interprets, which is a superset of the
+      R<superscript>5</superscript>RS Scheme Standard.
+    </para>
+    <sect1>
+      <title>
+	Types
+      </title>
+      <sect2>
+	<title>
+	  Numbers
+	</title>
+	<para>
+	  The full Scheme number tower is supported:
+	</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>
+	      Integers
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Floating Point numbers 
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Rational numbers
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Complex numbers
+	    </para>
+	  </listitem>
+	</itemizedlist>
+	<para>
+	  Depending on the numeric library compiled into SISC,
+	  floating point numbers have either 32 or 64 bit IEEE
+	  precision, or arbitrary precision. Regardless, SISC's
+	  complex numbers have floating point components of the same
+	  precision as the reals. Integers have arbitrary precision in
+	  all numeric libraries, and rational numbers are built with
+	  arbitrary precision components.
+	</para>
+	<sect3>
+	  <title>
+	    Numeric constants
+	  </title>
+	  <para>
+	    Precision specifiers (&num;e, &num;s, &num;f, &num;d,
+	    &num;l) are ignored in SISC, all inexact numbers are kept
+	    in the precision of the numeric library. In the case of
+	    arbitrary precision floats, specific precision constraints
+	    are maintained to prevent runaway expansion of
+	    precision. The parameterized functions
+	    <emphasis>min-precision</emphasis> and
+	    <emphasis>max-precision</emphasis> specify the
+	    constraints:
+
+	  </para>
+	  <programlisting>
+	    <emphasis>parameter: </emphasis>(min-precision [digits])
+	    Sets or displays the minimum precision constraint, an integer.
+	  </programlisting>
+	  <para>
+	    All four base specifiers (&num;x, &num;o, &num;d, &num;b) are supported for integers and rationals. Only decimal (&num;d), the default, is supported for floating point and complex numbers.
+	  </para>
+	</sect3>
+	<sect3>
+	  <title>
+	    Exactness
+	  </title>
+	  <para>
+	    Exactness and inexactness contagion behaves as
+	    expected. Rational's are made inexact through
+	    division. Floats are made exact by conversion to a
+	    rational number. SISC attempts as accurate a conversion as
+	    possible, by converting the decimal portion of the number
+	    to a ratio with a denominator of the form 10^n, where n is
+	    the scale of the floating point number. Then the fraction
+	    is reduced as usual.
+	  </para>
+	  <para>
+	    Since complex numbers must have floating point components
+	    currently, conversion to an exact merely rounds the
+	    components to integers. 
+	  </para>
+	</sect3>
+      </sect2>
+      <sect2>
+	<title>
+	  Characters
+	</title>
+	<para>
+	  SISC's characters are based on the Java character type. As
+	  such, the full range of unicode characters are
+	  supported. Unicode characters can be created with
+	  number-&gt;character or &num;&bsol;nnnn, where nnnn is an
+	  octal number in the range 0000 -&gt; ffff. 
+	</para>
+	<para>
+	  Characters are compared with respect to the locale detected
+	  by the Java VM.
+	</para>
+      </sect2>
+      <sect2>
+	<title>
+	  Symbols
+	</title>
+	<para>
+	  SISC's symbols are ordinarily case-insensitive. SISC
+	  maintains pointer equality between symbols with like
+	  contents, unless the symbol is created
+	  <emphasis>uninterned</emphasis>. An uninterned symbol is one
+	  which is guaranteed to be pointer distinct from any other
+	  symbol in the Scheme system, even another with the same
+	  contents. Uninterned symbols can be generated with:
+	</para>
+	<programlisting>
+	  <emphasis>procedure</emphasis>: (string-&gt;uninterned-symbol string)
+	  <emphasis>returns: </emphasis>an uninterned, pointer distinct symbol
+	  
+	</programlisting>
+	<para>
+	  SISC also allows symbols to be created that
+	  <emphasis>are</emphasis> case-sensitive. This can be done
+	  one of two ways. The first involves setting the reader to
+	  produce cased symbols via the procedure
+	</para>
+	<programlisting>
+	  <emphasis>parameter: </emphasis>(case-sensitive [boolean])
+	  Sets or retrieves the reader's case sensitivity.
+	</programlisting>
+	<para>
+	  The second method is via a non-standard symbol syntax. If a
+	  symbol is enclosed in pipe ('|') characters, the reader will
+	  treat that individual symbol as cased. For example:
+	</para>
+	<programlisting>
+	  (eq? 'a '|A|) ; => #f
+	  (eq? 'a '|a|) ; => #t
+	  (eq? '|A| '|a|) ; => #f
+	</programlisting>
+      </sect2>
+      <sect2>
+	<title>
+	  Strings
+	</title>
+	<para>
+	  Strings are built from unicode characters, and are compared
+	  according to the locale's rules.
+	</para>
+      </sect2>
+      <sect2>
+	<title>
+	  Lists
+	</title>
+	<para></para>
+      </sect2>
+      <sect2>
+	<title>
+	  Vectors
+	</title>
+	<para>
+	  SISC supports the length prefix method of creating Vector
+	  constants. For example:
+
+	  <programlisting>
+	    #5(x)
+	  </programlisting>
+	  creates a vector constant containing five identical symbols.
+	</para>
+      </sect2>
+      <sect2>
+	<title>
+	  Immutable types
+	</title>
+	<para>
+	  SISC follows the R5RS recommendation of immutable list,
+	  string, and vector constants. Quoted lists and vectors are
+	  immutable. Attempting to modify elements in these constants
+	  will raise an error. String constants are immutable as well
+	  when created with symbol-&gt;string.
+	</para>
+      </sect2>
+    </sect1>
+    <sect1>
+      <title>
+	Error handling
+      </title>
+      <para>
+      </para>
+    </sect1>
+    <sect1>
+      <title>
+	Symbolic Environments
+      </title>
+      <para>
+      </para>
+    </sect1>
+    <sect1>
+      <title>
+	Boxing
+      </title>
+      <para>
+	<emphasis>SISC</emphasis> supports boxes, a container for a
+	Scheme value. Boxing is often used to implement
+	call-by-reference semantics. Boxes are created and accessed
+	using the following three functions:
+      </para>
+      <programlisting>
+	<emphasis>procedure</emphasis>: (box value)
+	<emphasis>returns</emphasis>: a box containing the given value
+	 
+	Creates a box filled with the given value.
+
+	<emphasis>procedure: </emphasis>(unbox box)
+	<emphasis>returns: </emphasis>the value contained in the given box
+	 
+	Returns the contents of a box.
+
+	<emphasis>procedure: </emphasis>(set-box! box value)
+	<emphasis>returns: </emphasis>undefined
+	 
+	Replaces the value contained in the given box with a given
+	value.
+      </programlisting>
+    </sect1>
+  </chapter>
+  <chapter>
+    <title>
+      <emphasis>SISC</emphasis> Library Functions
+    </title>
+    <sect1>
+      <title>
+	Debugging
+      </title>
+      <para>
+	SISC provides debugging aids that can be added to Scheme source code, as well as limited support for debugging without modification. 
+      </para>
+      <programlisting>
+	<emphasis>syntax:</emphasis> (trace-lambda trace-name formals body)
+	When replaced with a trace-lambda, all calls to a lambda defined 
+	procedure are traced on the console.  <emphasis>trace-name</emphasis> 
+	is a symbol to identify the procedure in the trace. 
+	<emphasis>formals </emphasis>and <emphasis>body</emphasis> have
+	identical semantics to lambda.
+	 
+	<emphasis>syntax: </emphasis>(trace-let loop-name formal-bindings body)
+	Replaces a named-let expression in a similar manner to trace-lambda.  
+	 
+	<emphasis>procedure: </emphasis>(trace-top-level-procedures symbol ...)
+	returns: undefined
+	 
+	Begins traces on the procedures named by the symbols given.  The procedures must be defined in the top-level environment.
+	 
+	<emphasis>procedure: </emphasis>(untrace-top-level-procedures symbol ...)
+	returns: undefined
+	 
+	Stops tracing the top-level procedures named by the symbols given.
+      </programlisting>
+      <para>
+	Trace-lambda and trace-let are useful for debugging anonymous
+	lambdas and named-lets
+	respectively. Trace-top-level-procedures can be used to trace
+	calls to any procedure, including native procedures and stored
+	continuations.
+      </para>
+    </sect1>
+    <sect1>
+      <title>
+	Logical Operations
+      </title>
+      <para></para>
+    </sect1>
+    <sect1>
+      <title>
+	Operating System interface
+      </title>
+      <para></para>
+    </sect1>
+  </chapter>
+  <chapter>
+    <title>
+      I/O
+    </title>
+    <para></para>
+    <sect1>
+      <title>
+	Port Input/Output
+      </title>
+      <para></para>
+    </sect1>
+    <sect1>
+      <title>
+	File-system interface
+      </title>
+      <para></para>
+    </sect1>
+    <sect1 id="netio">
+      <title>
+	Networking
+      </title>
+      <para></para>
+    </sect1>
+  </chapter>
+  <chapter>
+    <title>
+      Threads and Concurrency
+    </title>
+    <para></para>
+  </chapter>
+  <chapter>
+    <title>
+      The Module System
+    </title>
+    <para>
+      The Module system consists of two components. The first is the
+      module syntax extension provided by R. Kent Dybvig's syntax
+      expander &lsqb;REF&rsqb;. This level provides the ability to
+      scope Scheme code into importable modules with selectable
+      exports. 
     </para>
     <para>
-     Since complex numbers must have floating point components currently, conversion to an exact merely rounds the components to integers. 
+      The second is the Java level <emphasis>SISC</emphasis> API for
+      native extensions to the language. A <emphasis>SISC</emphasis>
+      module defines new types and functions. Each
+      <emphasis>SISC</emphasis> module can be queried from Scheme, and
+      imported into the runtime environment as a whole, or packaged
+      via the same export mechanism as native Scheme code.
     </para>
-    </sect3>
-   </sect2>
-   <sect2>
+  </chapter>
+  <chapter id="javainteraction">
     <title>
-    Characters
-   </title>
-   <para>
-    SISC's characters are based on the Java character type. As such, the full range of unicode characters are supported. Unicode characters can be created with number-&gt;character or &num;&bsol;nnnn, where nnnn is an octal number in the range 0000 -&gt; ffff. 
-   </para>
-   <para>
-    Characters are compared with respect to the locale detected by the Java VM.
-   </para>
-   </sect2>
-   <sect2>
-    <title>
-    Symbols
-   </title>
-   <para>
-    SISC's symbols are ordinarily case-insensitive. SISC maintains pointer equality between symbols with like contents, unless the symbol is created <emphasis>uninterned</emphasis>. An uninterned symbol is one which is guaranteed to be pointer distinct from any other symbol in the Scheme system, even another with the same contents. Uninterned symbols can be generated with:
-   </para>
-   <programlisting>
-<![ CDATA [<anchor id="string->uninterned-symbol" ></anchor>procedure</emphasis>: (string->uninterned-symbol string)
-]]><![ CDATA [returns: </emphasis>an uninterned, pointer distinct symbol
-]]>   </programlisting>
-   <para>
-    SISC also allows symbols to be created that <emphasis>are</emphasis> case-sensitive. This can be done one of two ways. The first involves setting the reader to produce cased symbols via the procedure
-   </para>
-   <programlisting>
-<![ CDATA [<anchor id="case-sensitive" ></anchor>parameter: </emphasis>(case-sensitive [boolean])
-]]><![ CDATA [Sets or retrieves the reader's case sensitivity.
-]]>   </programlisting>
-   <para>
-    The second method is via a non-standard symbol syntax. If a symbol is enclosed in pipe ('|') characters, the reader will treat that individual symbol as cased. For example:
-   </para>
-   <programlisting>
-<![ CDATA [(eq? 'a '|A|) ; => #f
-]]><![ CDATA [(eq? 'a '|a|) ; => #t
-]]><![ CDATA [(eq? '|A| '|a|) ; => #f
-]]>   </programlisting>
-   </sect2>
-   <sect2>
-    <title>
-    Strings
-   </title>
-   <para>
-    Strings are built from unicode characters, and are compared according to the locale's rules.
-   </para>
-   </sect2>
-   <sect2>
-    <title>
-    Lists
-   </title>
-   </sect2>
-   <sect2>
-    <title>
-    Vectors
-   </title>
-   <para>
-    SISC supports the length prefix method of creating Vector constants. For example:
-   </para>
-   <programlisting>
-<![ CDATA [#5(x)
-]]>   </programlisting>
-   <para>
-    creates a vector constant containing five identical symbols.
-   </para>
-   </sect2>
-   <sect2>
-    <title>
-    Immutable types
-   </title>
-   <para>
-    SISC follows the R5RS recommendation of immutable list, string, and vector constants. Quoted lists and vectors are immutable. Attempting to modify elements in these constants will raise an error. String constants are immutable as well when created with symbol-&gt;string.
-   </para>
-   </sect2>
-  </sect1>
-  <sect1>
-   <title>
-   Error handling
-  </title>
-  </sect1>
-  <sect1>
-   <title>
-   Symbolic Environments
-  </title>
-  </sect1>
-  <sect1>
-   <title>
-   Boxing
-  </title>
-  <para>
-   SISC </emphasis>supports boxes, a container for a Scheme value. Boxing is often used to implement call-by-reference semantics. Boxes are created and accessed using the following three functions:
-  </para>
-  <programlisting>
-<![ CDATA [<anchor id="box" ></anchor>procedure</emphasis>: (box value)
-]]><![ CDATA [returns</emphasis>: a box containing the given value
-]]><![ CDATA [ 
-]]><![ CDATA [Creates a box filled with the given value.
-]]><![ CDATA [ 
-]]><![ CDATA [<anchor id="unbox" ></anchor>procedure: </emphasis>(unbox box)
-]]><![ CDATA [returns: </emphasis>the value contained in the given box
-]]><![ CDATA [ 
-]]><![ CDATA [Returns the contents of a box.
-]]><![ CDATA [ 
-]]><![ CDATA [<anchor id="set-box!" ></anchor>procedure: </emphasis>(set-box! box value)
-]]><![ CDATA [returns: </emphasis>undefined
-]]><![ CDATA [ 
-]]><![ CDATA [Replaces the value contained in the given box with a given value.
-]]>  </programlisting>
-  </sect1>
- </chapter>
- <chapter>
-  <title>
-  SISC </emphasis>Library Functions
- </title>
-  <sect1>
-   <title>
-   Debugging
-  </title>
-  <para>
-   SISC provides debugging aids that can be added to Scheme source code, as well as limited support for debugging without modification. 
-  </para>
-  <programlisting>
-<![ CDATA [syntax: (trace-lambda trace-name formals body)
-]]><![ CDATA [When replaced with a trace-lambda, all calls to a lambda defined procedure are traced on the console.  <emphasis>trace-name</emphasis> is a symbol to identify the procedure in the trace. <emphasis>formals </emphasis>and <emphasis>body</emphasis> have identical semantics to lambda.
-]]><![ CDATA [ 
-]]><![ CDATA [syntax: </emphasis>(trace-let loop-name formal-bindings body)
-]]><![ CDATA [Replaces a named-let expression in a similar manner to trace-lambda.  
-]]><![ CDATA [ 
-]]><![ CDATA [procedure: </emphasis>(trace-top-level-procedures symbol ...)
-]]><![ CDATA [returns: undefined
-]]><![ CDATA [ 
-]]><![ CDATA [Begins traces on the procedures named by the symbols given.  The procedures must be defined in the top-level environment.
-]]><![ CDATA [ 
-]]><![ CDATA [procedure: </emphasis>(untrace-top-level-procedures symbol ...)
-]]><![ CDATA [returns: undefined
-]]><![ CDATA [ 
-]]><![ CDATA [Stops tracing the top-level procedures named by the symbols given.
-]]>  </programlisting>
-  <para>
-   Trace-lambda and trace-let are useful for debugging anonymous lambdas and named-lets respectively. Trace-top-level-procedures can be used to trace calls to any procedure, including native procedures and stored continuations.
-  </para>
-  </sect1>
-  <sect1>
-   <title>
-   Logical Operations
-  </title>
-  </sect1>
-  <sect1>
-   <title>
-   Operating System interface
-  </title>
-  </sect1>
- </chapter>
- <chapter>
-  <title>
-  I/O
- </title>
-  <sect1>
-   <title>
-   Port Input/Output
-  </title>
-  </sect1>
-  <sect1>
-   <title>
-   File-system interface
-  </title>
-  </sect1>
-  <sect1 id="NetIO">
-   <title>
-   Networking
-  </title>
-  </sect1>
-  <sect1>
-   <title>
-   SQL interface
-  </title>
-  <para>
-   SISC's database interface is modeled after a mix of Perl's DBI and ODBC/JDBC. Accessing a database occurs in several steps; establishing a connection to a database source, creating a query, specifying any parameters, executing the query, then retrieving results.
-  </para>
-   <sect2>
-    <title>
-    Creating connections
-   </title>
-   <para>
-    (dbi/connect &ldquo;driver:database &lt;opts&gt;&rdquo;)
-   </para>
-   <para>
-    =&gt; connection
-   </para>
-   </sect2>
-   <sect2>
-    <title>
-    Types
-   </title>
-   <programlisting>
-<![ CDATA [(dbi/connect source)
-]]><![ CDATA [(dbi/query connection &ldquo;statement&rdquo;)
-]]><![ CDATA [
-]]><![ CDATA [(dbi/prepare connection &ldquo;statement&rdquo;)
-]]><![ CDATA [(dbi/set-string prepared-statement pos string)
-]]><![ CDATA [(dbi/set-boolean prepared-statement pos bool)
-]]><![ CDATA [(dbi/set-integer prepared-statement pos exact-integer)
-]]><![ CDATA [(dbi/set-float prepared-statement pos inexact-real)
-]]><![ CDATA [(dbi/set-input-port prepared-statement pos input-port)
-]]><![ CDATA [ 
-]]><![ CDATA [(dbi/execute prepared-statement)
-]]><![ CDATA [(dbi/get-string result pos) 
-]]><![ CDATA [(dbi/get-boolean result pos)
-]]><![ CDATA [(dbi/get-integer result pos)
-]]><![ CDATA [(dbi/get-float result pos)
-]]><![ CDATA [(dbi/get-input-port result pos)
-]]><![ CDATA [
-]]><![ CDATA [(dbi/execute-update prepared-statement)
-]]><![ CDATA [
-]]><![ CDATA [
-]]>   </programlisting>
-   </sect2>
-  </sect1>
- </chapter>
- <chapter>
-  <title>
-  Threads and Concurrency
- </title>
- </chapter>
- <chapter>
-  <title>
-  The Module System
- </title>
- <para>
-  The Module system consists of two components. The first is the module syntax extension provided by R. Kent Dybvig's syntax expander &lsqb;REF&rsqb;. This level provides the ability to scope Scheme code into importable modules with selectable exports. 
- </para>
- <para>
-  The second is the Java level <emphasis>SISC</emphasis> API for native extensions to the language. A <emphasis>SISC</emphasis> module defines new types and functions. Each <emphasis>SISC</emphasis> module can be queried from Scheme, and imported into the runtime environment as a whole, or packaged via the same export mechanism as native Scheme code.
- </para>
- </chapter>
- <chapter id="Java Interaction">
-  <title>
-  Java Interaction
- </title>
- <para>
-  SISC</emphasis> can be used as a scripting language for Java, or Java may be used to provide functionality to Scheme. Such activity is collectively termed 'bridging'. <emphasis>SISC </emphasis>provides an API that may be called from Java to execute Scheme code or evaluate Scheme expressions. In addition, the J2S module provides Scheme level control of Java objects, methods, and fields. Finally, the two can be combined in a number of complex ways to intertwine the two languages.
- </para>
-  <sect1>
-   <title>
-   Java to Scheme call API
-  </title>
-   <sect2>
-    <title>
-    Error Handling
-   </title>
-   </sect2>
-   <sect2>
-    <title>
-    Continuations
-   </title>
-   </sect2>
-  </sect1>
-  <sect1>
-   <title>
-   Scheme level Java manipulation
-  </title>
-  </sect1>
- </chapter>
-
-
+      Java Interaction
+    </title>
+    <para>
+      <emphasis>SISC</emphasis> can be used as a scripting language
+      for Java, or Java may be used to provide functionality to
+      Scheme. Such activity is collectively termed
+      'bridging'. <emphasis>SISC </emphasis>provides an API that may
+      be called from Java to execute Scheme code or evaluate Scheme
+      expressions. In addition, the J2S module provides Scheme level
+      control of Java objects, methods, and fields. Finally, the two
+      can be combined in a number of complex ways to intertwine the
+      two languages.
+    </para>
+    <sect1>
+      <title>
+	Java to Scheme call API
+      </title>
+      <para></para>
+      <sect2>
+	<title>
+	  Error Handling
+	</title>
+	<para></para>
+      </sect2>
+      <sect2>
+	<title>
+	  Continuations
+	</title>
+	<para></para>
+      </sect2>
+    </sect1>
+    <sect1>
+      <title>
+	Scheme level Java manipulation
+      </title>
+      <para></para>
+    </sect1>
+  </chapter>
 </book>
