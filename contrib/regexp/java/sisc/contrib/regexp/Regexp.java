@@ -65,6 +65,7 @@ import sisc.data.SchemeString;
 import sisc.data.SchemeVector;
 import sisc.data.Symbol;
 import sisc.data.Value;
+import sisc.io.ValueWriter;
 
 /**
  * <p>Implements an interface to the Jakarta ORO regular expression
@@ -428,10 +429,13 @@ public class Regexp extends ModuleAdapter
       }
     }
 
-    public String display()
+    public void display(ValueWriter w) throws IOException
     {
-      return "#<regexp " + pattern.getClass()
-        + " for pattern '" + pattern.getPattern() + "'>";
+        w.append("#<regexp ")
+            .append(pattern.getClass().getName())
+            .append(" '")
+            .append(pattern.getPattern().toString())
+            .append("'>");
     }
 
     public boolean valueEqual(Value ov)

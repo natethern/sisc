@@ -107,7 +107,7 @@ public class SchemeAppServlet extends SchemeServletBase {
         Interpreter r = Context.enter(appName);
         String resp;
         try {
-            resp = r.eval(req).write();
+            resp = r.eval(req).toString();
         } catch (SchemeException e) {
             resp = e.getMessage();
         } finally {
@@ -132,7 +132,9 @@ public class SchemeAppServlet extends SchemeServletBase {
             Value v = r.eval(p.nextExpression(inp));
             response.setContentType("application/x-scheme");
             OutputPort outp = new WriterOutputPort(response.getWriter(), true);
-            outp.write(v.write());
+            ValueWriter w = new PortValueWriter(outp);
+            w.write(v);
+            outp.flush();
         } catch (SchemeException e) {
             response.getWriter().print(e.getMessage());
         } finally {

@@ -1,8 +1,8 @@
 import org.jibble.pircbot.PircBot;
 import sisc.interpreter.*;
-import sisc.Util;
 import sisc.data.*;
 import sisc.modules.s2j.*;
+import sisc.util.Util;
 
 public class PircInterface extends PircBot {
 

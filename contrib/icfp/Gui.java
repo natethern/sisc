@@ -1,7 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 import sisc.data.*;
-import sisc.*;
+import sisc.util.Util;
 
 public class Gui extends JFrame {
 

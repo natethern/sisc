@@ -5,11 +5,11 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
 
-import sisc.*;
 import sisc.data.*;
 import sisc.io.*;
 
 import javax.swing.Box;
+import sisc.util.Util;
 
 public class SISCFrame extends JPanel implements ActionListener, KeyListener {
 

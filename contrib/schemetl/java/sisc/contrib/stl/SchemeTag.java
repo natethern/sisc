@@ -2,9 +2,9 @@ package sisc.contrib.stl;
 
 import javax.servlet.jsp.tagext.*;
 import javax.servlet.jsp.*;
-import sisc.*;
-import sisc.data.Value;
 import java.io.IOException;
+import sisc.data.Value;
+import sisc.util.Util;
 
 public class SchemeTag extends BodyTagSupport {
 
