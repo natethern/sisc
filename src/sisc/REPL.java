@@ -38,11 +38,6 @@ public class REPL {
         }
     }
 
-    public static Value read(Interpreter r, String expr) throws IOException {
-        InputPort ip=new ReaderInputPort(new StringReader(expr));
-        return r.dynenv.parser.nextExpression(ip);
-    }
-
     public static String simpleErrorToString(Pair p) {
         StringBuffer b=new StringBuffer();
         String location=null;
@@ -85,16 +80,6 @@ public class REPL {
             return false;
         }
 
-        try {
-            Properties sysProps=System.getProperties();
-            for (Iterator ir=sysProps.keySet().iterator(); ir.hasNext();) {
-                String key=(String)ir.next();
-                Symbol s=Symbol.get(key);
-                r.define(s, new SchemeString(sysProps.getProperty(key)),
-                         Util.ENVVARS);
-            }
-        } catch (java.security.AccessControlException ace) {}
-
         Symbol loadSymb = Symbol.get("load");
         for (int i=0; i<args.length; i++) {
             try {
@@ -112,25 +97,6 @@ public class REPL {
         }
 
         try {
-            Properties sysProps=System.getProperties();
-            for (Iterator ir=sysProps.keySet().iterator(); ir.hasNext();) {
-                String key=(String)ir.next();
-                String val=sysProps.getProperty(key);
-                r.define(Symbol.get(key),
-                         new SchemeString(val),
-                         Util.ENVVARS);
-                if (key.startsWith("sisc.")) {
-                    try {
-                        r.define(Symbol.get(key.substring(5)),
-                                 read(r, val),
-                                 Util.SISCCONF);
-                    } catch (IOException e) {
-                        r.define(Symbol.get(key.substring(5)),
-                                 new SchemeString(val),
-                                 Util.SISCCONF);
-                    }
-                }
-            }
             File[] roots=File.listRoots();
             SchemeString[] rootss=new SchemeString[roots.length];
             for (int i=0; i<roots.length; i++)
@@ -176,7 +142,25 @@ public class REPL {
             return;
         }
 
-        AppContext ctx = new AppContext();
+        Properties props = new Properties();
+        String configFile = (String)args.get("config");
+        if (configFile != null) {
+            try {
+                URL url = Util.url(configFile);
+                URLConnection conn = url.openConnection();
+                conn.setDoInput(true);
+                conn.setDoOutput(false);
+                props.load(conn.getInputStream());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
+
+        AppContext ctx = new AppContext(props);
         Context.register("main", ctx);
         Interpreter r = Context.enter(ctx);
         if (!initializeInterpreter(r, 
@@ -265,15 +249,16 @@ public class REPL {
     static final int SWITCH=0, OPTION=1;
     static final String[][] opts=new String[][] {
         {"s","server"},
-        {"h","host"},
         {"i","heap"},
+        {"c","config"},
+        {"h","host"},
         {"p","port"},
         {"e","eval"},
         {"c","call-with-args"},
         {"x","no-repl"},
     };
     static final int optTypes[]=new int[] {
-        SWITCH, OPTION, OPTION, OPTION, OPTION, OPTION, SWITCH};
+        SWITCH, OPTION, OPTION, OPTION, OPTION, OPTION, OPTION, SWITCH};
                                                   
     public static Map parseOpts(String[] args) {
         Map m=new HashMap();
