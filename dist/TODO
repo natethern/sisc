@@ -1,4 +1,3 @@
-* add support for Unicode character and string literals
 * make continuations serializable in a compact form
 * do a code walk to weed out anything that breaks thread-safety
 * produce a validation testing framework that is invokable from ant
