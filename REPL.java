@@ -100,26 +100,28 @@ public class REPL extends Thread {
 
     public void run() {
 	r= Context.enter("main");
-	Symbol replSymb = Symbol.get("repl");
 	try {
-	    r.ctx.toplevel_env.lookup(replSymb);
-	} catch (ArrayIndexOutOfBoundsException aiob) {
-	    System.err.println("Fatal error: Heap not found or does not contain repl.");
-	    return;
+	    Symbol replSymb = Symbol.get("repl");
+	    try {
+		r.ctx.toplevel_env.lookup(replSymb);
+	    } catch (ArrayIndexOutOfBoundsException aiob) {
+		System.err.println("Fatal error: Heap not found or does not contain repl.");
+		return;
+	    }
+	    do {
+		try {
+		    r.eval((Procedure)r.ctx.toplevel_env.lookup(replSymb),
+			   new Values[]{});
+		    break;
+		} catch (SchemeException e) {
+		    System.err.println("Uncaught error: "+e.getMessage());
+		} catch (Exception e) {
+		    System.err.println("System error: "+e.toString());
+		}
+	    } while (true);
+	} finally {
+	    Context.exit();
 	}
-        do {
-            try {
-		r.eval((Procedure)r.ctx.toplevel_env.lookup(replSymb),
-		       new Values[]{});
-		break;
-	    } catch (SchemeException e) {
-		System.err.println("Uncaught error: "+e.getMessage());
-            } catch (Exception e) {
-                System.err.println("System error: "+e.toString());
-            }
-        } while (true);
-
-	Context.exit();
     }
 
     public static void main(String[] args) throws Exception {
