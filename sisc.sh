@@ -7,7 +7,7 @@ fi
 if [ -r "$HOME/sisc.properties" ]
 then
   PROPERTIES="-p $HOME/sisc.properties"
-elif [-r "$SISC_HOME/sisc.properties" ]
+elif [ -r "$SISC_HOME/sisc.properties" ]
 then
   PROPERTIES="-p $SISC_HOME/sisc.properties"
 fi
