@@ -21,6 +21,7 @@ public class SchemeThread extends Value implements Runnable, NamedValue {
     public SchemeThread(String appName,
                         Procedure thunk) {
         this(Context.enter(appName), thunk);
+        Context.exit();
     }
 
     public SchemeThread(Interpreter r, Procedure thunk) {
