@@ -190,7 +190,7 @@
     </java>
   </target> 
 
-  <target name="sisc-lib" depends="srfi-sll">
+  <target name="sisc-lib" depends="srfi-sll" unless="lite">
     <jar jarfile="${basedir}/${libjar}">
       <fileset dir="${tmpdir}">
     	<include name="*/**"/>
@@ -278,7 +278,7 @@
           description="Build lite edition">
   </target>
 
-  <target name="lite-dist" depends="all" if="lite">
+  <target name="lite-dist" depends="all,heap" if="lite">
 <!--    <java jar="jarg.jar" fork="true">
       <arg line="-nobco sisc.jar"/>
     </java>
