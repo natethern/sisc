@@ -1,6 +1,5 @@
 package sisc.ser;
 
-import java.io.DataInput;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;

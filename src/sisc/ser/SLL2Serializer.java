@@ -1,9 +1,3 @@
-/*
- * Created on Jun 23, 2003
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
 package sisc.ser;
 
 import java.io.*;
@@ -12,12 +6,6 @@ import sisc.data.Expression;
 import sisc.data.Singleton;
 import sisc.env.SymbolicEnvironment;
 
-/**
- * @author scgmille
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
 public abstract class SLL2Serializer extends SerializerImpl {
 
     private Map offsets;

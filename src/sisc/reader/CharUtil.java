@@ -1,9 +1,3 @@
-/*
- * Created on May 29, 2003
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
 package sisc.reader;
 
 import java.io.*;
@@ -12,11 +6,6 @@ import sisc.io.InputPort;
 import java.util.Hashtable;
 import sisc.data.SchemeCharacter;
 
-/**
- * @author scomill
- *
- * Handles conversion of escape sequences to and from real characters
- */
 public abstract class CharUtil {
 
     private static final Hashtable humanReadables=new Hashtable(8);
