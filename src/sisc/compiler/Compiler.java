@@ -377,7 +377,7 @@ public class Compiler extends CompilerConstants {
                     AppExp ae=(AppExp)rands[i];
                     if (ae.exp instanceof FreeReferenceExp) {
                         nxp.setAnnotation(PROCNAME, 
-                                          ((FreeReferenceExp)ae.exp).sym);
+                                          ((FreeReferenceExp)ae.exp).getSym());
                     } else if (ae.exp instanceof LexicalReferenceExp) {
                         Symbol varName=(Symbol)((LexicalReferenceExp)ae.exp)
                             .getAnnotation(VARNAME, null);
@@ -415,7 +415,7 @@ public class Compiler extends CompilerConstants {
         */
         if (r.dynenv.emitDebuggingSymbols)
             if (rator instanceof FreeReferenceExp) {
-                nxp.setAnnotation(PROCNAME, ((FreeReferenceExp)rator).sym);
+                nxp.setAnnotation(PROCNAME, ((FreeReferenceExp)rator).getSym());
             } else if (rator instanceof LexicalReferenceExp &&
                        rator.getAnnotation(VARNAME, null) !=null) {
                 nxp.setAnnotation(PROCNAME, rator.getAnnotation(VARNAME));
@@ -439,7 +439,7 @@ public class Compiler extends CompilerConstants {
                     AppExp ae=(AppExp)rands[i];
                     if (ae.exp instanceof FreeReferenceExp) {
                         nxp.setAnnotation(PROCNAME, 
-                                          ((FreeReferenceExp)ae.exp).sym);
+                                          ((FreeReferenceExp)ae.exp).getSym());
                     } else if (ae.exp instanceof LexicalReferenceExp) {
                         Symbol varName=(Symbol)((LexicalReferenceExp)ae.exp)
                             .getAnnotation(VARNAME, null);
@@ -457,7 +457,7 @@ public class Compiler extends CompilerConstants {
 
         if (allImmediate) {
             if (rator instanceof FreeReferenceExp) {
-                Symbol ratorsym=((FreeReferenceExp)rator).sym;
+                Symbol ratorsym=((FreeReferenceExp)rator).getSym();
                 if ((r.dynenv.inlinePrimitives == TRUE) ||
                     (r.dynenv.inlinePrimitives instanceof Pair && 
                      truth(memq(ratorsym, (Pair)r.dynenv.inlinePrimitives)))) {

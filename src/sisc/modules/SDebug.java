@@ -106,7 +106,7 @@ public class SDebug extends IndexedProcedure {
                 return truth(((SISCExpression)f.vlr[0]).e
                              instanceof FreeReferenceExp);
             case FRESYM:
-                return ((FreeReferenceExp)((SISCExpression)f.vlr[0]).e).sym;
+                return ((FreeReferenceExp)((SISCExpression)f.vlr[0]).e).getSym();
             case FILLRIBQ:
                 return truth(f.vlr[0] instanceof SISCExpression &&
                              ((SISCExpression)f.vlr[0]).e instanceof FillRibExp);

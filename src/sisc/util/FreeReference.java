@@ -1,67 +1,77 @@
-package sisc.exprs;
+package sisc.util;
 
-import java.io.*;
 import sisc.data.*;
+import java.io.*;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
 import sisc.util.ExpressionVisitor;
-import sisc.util.FreeReference;
-import sisc.util.UndefinedVarException;
 
-public class FreeSetEval extends Expression {
+public class FreeReference implements ExpressionVisitee {
 
-    private FreeReference ref;
+    private Symbol sym;
+    private SymbolicEnvironment senv;
+    private transient int envLoc=-1;
 
-    public FreeSetEval(Symbol sym, SymbolicEnvironment senv) {
-        ref = new FreeReference(sym, senv);
+    public FreeReference(Symbol sym, SymbolicEnvironment senv) {
+        this.senv = senv;
+        this.sym = sym;
     }
 
-    public void eval(Interpreter r) throws ContinuationException {
-        setValue(r, r.acc);
-        r.acc=VOID;
-        r.nxp=null;
+    public Symbol getName() {
+        return sym;
     }
 
-    public void setValue(Interpreter r, Value v) throws ContinuationException {
-        try {
-            ref.setValue(v);
-        } catch (UndefinedVarException e) {
-            error(r, liMessage(SISCB,"undefinedvar", e.var));
+    private void resolve() throws UndefinedVarException {
+        if (envLoc<0) {
+            //this is an optimization that ensures we short-circuit
+            //any DelegatingSymEnvs
+            senv = (SymbolicEnvironment)senv.asValue();
+            envLoc=senv.getLoc(sym);
+            if (envLoc<0) throw new UndefinedVarException(sym.toString());
         }
     }
 
-    public void serialize(Serializer s) throws IOException {
-        ref.serialize(s);
+    public Value getValue() throws UndefinedVarException {
+        resolve();
+        return senv.lookup(envLoc);
     }
 
-    public Value express() {
-        return list(sym("FreeSet-eval"), ref.getName());
+    public void setValue(Value v) throws UndefinedVarException {
+        resolve();
+        senv.set(envLoc, v);
+        Util.updateName(v, sym);
     }
+
+    public void serialize(Serializer s) throws IOException {
+        s.writeExpression(sym);
+        s.writeSymbolicEnvironment(senv);
+    }
+
+    public FreeReference() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        ref.deserialize(s);
-    }
-
-    public FreeSetEval() {
-        ref = new FreeReference();
+        sym=(Symbol)s.readExpression();
+        senv=s.readSymbolicEnvironment();
+        envLoc=-1;
     }
 
     public boolean equals(Object o) {
-        if (!(o instanceof FreeSetEval))
+        if (!(o instanceof FreeReference))
             return false;
-        FreeSetEval e = (FreeSetEval)o;
-        return ref.equals(e.ref);
+        FreeReference e=(FreeReference)o;
+        return sym.equals(e.sym) && senv.equals(e.senv);
     }
 
     public int hashCode() {
-        return ref.hashCode();
+        return sym.hashCode() ^ senv.hashCode();
     }
 
     public boolean visit(ExpressionVisitor v) {
-        return ref.visit(v);
+        return v.visit(sym) && v.visit(senv);
     }
+
 }
 /*
  * The contents of this file are subject to the Mozilla Public
