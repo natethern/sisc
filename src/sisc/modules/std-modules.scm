@@ -268,6 +268,7 @@
     (make-type
      type-of
      type<=
+     type=
      instance-of?
      types<=
      types=

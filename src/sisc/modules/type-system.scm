@@ -23,18 +23,23 @@
           (apply (cdar items)
                  (lambda args (loop (cdr items))) args)))))
 
+
+;;;;;;;;;; PROCEDURES AND PREDICATES ;;;;;;;;;;
+
+(define type-of-hook (make-hook native-type-of))
+(define type<=-hook (make-hook native-type<=))
+(define (type-of o) (invoke-hook type-of-hook o))
+(define (type<= x y) (invoke-hook type<=-hook x y))
+(define (type= x y) (and (type<= x y) (type<= y x)))
+(define (instance-of? x y) (type<= (type-of x) y))
+
 (define (every2 pred x y)
   (or (null? x)
       (null? y)
       (and (pred (car x) (car y)) (every2 pred (cdr x) (cdr y)))))
 
-(define type-of-hook (make-hook native-type-of))
-(define (type-of o) (invoke-hook type-of-hook o))
-(define type<=-hook (make-hook native-type<=))
-(define (type<= x y) (invoke-hook type<=-hook x y))
-(define (instance-of? x y) (type<= (type-of x) y))
-(define (types<= x y) (every2 type<= x y))
-(define (types= x y) (and (types<= x y) (types<= y x)))
+(define (types<= x y)       (every2 type<= x y))
+(define (types= x y)        (every2 type= x y))
 (define (instances-of? x y) (every2 instance-of? x y))
 
 ;;compare two types taking into account the cpl of c
@@ -47,6 +52,9 @@
           [x<y? 'more-specific]
           [y<x? 'less-specific]
           [else (invoke-hook compare-types-hook x y c)])))
+
+
+;;;;;;;;;; R5RS TYPES ;;;;;;;;;;
 
 (define-syntax define-scheme-type
   (lambda (x)
