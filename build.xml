@@ -96,7 +96,7 @@
       <arg value="-files"/>
       <arg value="file:init.sce"/>
       <arg value="file:compat.sce"/>
-      <arg value="file:psyntax.sce"/>
+      <arg value="file:psyntax.pp"/>
       <arg value="file:init2.scm"/>
       <arg value="file:pp.scm"/>
       <arg value="file:repl.scm"/>
@@ -115,7 +115,7 @@
       <arg value="file:lite.scm"/>
       <arg value="file:init.sce"/>
       <arg value="file:compat.sce"/>
-      <arg value="file:psyntax.sce"/>
+      <arg value="file:psyntax.pp"/>
       <arg value="file:init2.scm"/>
       <arg value="file:pp.scm"/>
       <arg value="file:repl.scm"/>
