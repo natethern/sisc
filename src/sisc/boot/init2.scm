@@ -157,7 +157,7 @@
 (define emit-annotations        (make-native-parameter "emitAnnotations"))
 (define character-set           (make-native-parameter "characterSet"))
 
-(if (equal? (getenv "beta") "yes")
+(if (equal? (getenv "sisc.debugging") "true")
     (begin
       (emit-annotations #t)
       (emit-debugging-symbols #t)))
