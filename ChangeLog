@@ -1,3 +1,11 @@
+2004-04-07  Matthias Radestock  <matthias@sorted.org>
+
+	* Implemented srfi-45.
+
+2004-03-16  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Implemented srfi-48.
+
 2004-02-03  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Workaround for a BigDecimal parsing bug on the IBM

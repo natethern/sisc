@@ -518,6 +518,16 @@
   (import srfi-23)
   (include "srfi-42/ec.scm"))
 
+(display "srfi-45 ")
+(module srfi-45
+    ((lazy make-promise)
+     eager
+     (delay make-promise)
+     force)
+  (import misc)
+  (import record)
+  (include "srfi-45.scm"))
+
 (display "srfi-48 ")
 (module _srfi-48 (_format)
   (define _format format))
