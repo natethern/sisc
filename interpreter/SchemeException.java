@@ -1,14 +1,14 @@
 package sisc.interpreter;
 
-import sisc.data.Value;
+import sisc.data.Pair;
 import sisc.data.Procedure;
 
 public class SchemeException extends Exception {
-    public Value m;
+    public Pair m;
     public Procedure e, f;
 
-    public SchemeException(Value message, Procedure exception_k, 
-			   Procedure parent_fk) {
+    public SchemeException(Pair message, Procedure exception_k, 
+                           Procedure parent_fk) {
 	m=message;
 	e=exception_k;
 	f=parent_fk;

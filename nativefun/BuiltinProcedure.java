@@ -60,14 +60,12 @@ public class BuiltinProcedure extends Procedure implements NamedValue {
         SchemeException rootCauseException=parent.getRootCause();
         Pair rootCause=new Pair(new Pair(ERRORK, rootCauseException.e),
                                 new Pair(new Pair(FCONT, rootCauseException.f),
-                                         ((rootCauseException.m instanceof Pair) ?
-                                          rootCauseException.m :
-                                          list(new Pair(MESSAGE, rootCauseException.m)))));
+                                         rootCauseException.m));
         String parentMessage=parent.getMessage();
         error(r, (parentMessage == null ?
                   list(new Pair(LOCATION, where),
                        new Pair(PARENT, rootCause)) :
-                  list(new Pair(MESSAGE, new SchemeString(parent.getMessage())),
+                  list(new Pair(MESSAGE, new SchemeString(parentMessage)),
                        new Pair(LOCATION, where),
                        new Pair(PARENT, rootCause))));
     }

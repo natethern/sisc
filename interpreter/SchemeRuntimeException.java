@@ -1,13 +1,13 @@
 package sisc.interpreter;
 
-import sisc.data.Value;
+import sisc.data.Pair;
 import sisc.data.Procedure;
  
 public class SchemeRuntimeException extends RuntimeException {
-    Value m;
+    Pair m;
     Procedure e, f;
 
-    public SchemeRuntimeException(Value message, Procedure exception_k, 
+    public SchemeRuntimeException(Pair message, Procedure exception_k, 
 				  Procedure parent_fk) {
 	m=message;
 	e=exception_k;

@@ -28,7 +28,7 @@ public class Interpreter extends Util {
             throws ContinuationException, SchemeRuntimeException {
             r.nxp=null;
             Values v=(Values)r.acc;
-            throw new SchemeRuntimeException(v.values[0], 
+            throw new SchemeRuntimeException(pair(v.values[0]), 
                                              proc(v.values[1]), 
                                              v.values.length>2 ? 
                                              proc(v.values[2]) :

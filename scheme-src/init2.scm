@@ -136,10 +136,8 @@
           "Error.")))
 
 (define (display-error e)
-  (display (if (or (null? e) (pair? e))
-               (make-error-message (error-location e)
-                                   (error-message e))
-               (make-error-message #f e)))
+  (display (make-error-message (error-location e)
+                               (error-message e)))
   (newline))
 
 (define (print-exception e . st)

@@ -101,7 +101,7 @@ public abstract class Util extends Defaults implements Version {
 
     public static void error(Interpreter r, Value where, String errormessage)
         throws ContinuationException {
-	error(r, list(new Pair(MESSAGE, new SchemeString(errormessage)),
+        error(r, list(new Pair(MESSAGE, new SchemeString(errormessage)),
                       new Pair(LOCATION, where)));
     }
 
@@ -113,7 +113,12 @@ public abstract class Util extends Defaults implements Version {
                              
     public static void error(Interpreter r, String errormessage) 
         throws ContinuationException {
-	error(r, list(new Pair(MESSAGE, new SchemeString(errormessage))));
+        error(r, list(new Pair(MESSAGE, new SchemeString(errormessage))));
+    }
+
+    public static void error(Interpreter r, Value errormessage) 
+        throws ContinuationException {
+        error(r, list(new Pair(MESSAGE, errormessage)));
     }
 
     public static ClassLoader currentClassLoader() {
@@ -130,13 +135,13 @@ public abstract class Util extends Defaults implements Version {
         return cl;
     }
 
-    public static void error(Interpreter r, Value error)
+    public static void error(Interpreter r, Pair error)
     throws ContinuationException {
         r.acc=new Values(new Value[] {
-	    error,
-	    new ApplyParentFrame(new CallFrame((r.nxp==null?r.lxp:r.nxp), 
+            error,
+            new ApplyParentFrame(new CallFrame((r.nxp==null?r.lxp:r.nxp), 
                                                r.vlr, r.vlk,
-					       r.env, r.fk, r.stk,
+                                               r.env, r.fk, r.stk,
                                                r.cap).capture(r))});
         throw new ContinuationException(r.fk);
     }

@@ -21,24 +21,19 @@ public class Util extends ModuleAdapter {
 
     public static Throwable javaException(SchemeException e) {
         Throwable ex = e;
-        Value m = e.m;
-        if (m instanceof Pair) {
-            //we should always get here since error messages are meant
-            //to be alists
-            //locate the error message
-            Pair l = (Pair)m;
-            for (;l != EMPTYLIST; l = (Pair)l.cdr) {
-                if (l.car instanceof Pair) {
-                    Pair el = (Pair)l.car;
-                    if (el.car == MESSAGE) {
-                        m = el.cdr;
-                        break;
-                    }
+        Value message = null;
+        for (Pair l = e.m; l != EMPTYLIST; l = (Pair)l.cdr) {
+            if (l.car instanceof Pair) {
+                Pair el = (Pair)l.car;
+                if (el.car == MESSAGE) {
+                    message = el.cdr;
+                    break;
                 }
             }
         }
-        if (m instanceof JavaObject) {
-            Object eo = ((JavaObject)m).get();
+
+        if (message != null && message instanceof JavaObject) {
+            Object eo = ((JavaObject)message).get();
             if (eo instanceof Throwable)
                 ex = (Throwable)eo;
         }

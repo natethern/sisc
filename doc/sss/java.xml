@@ -1144,7 +1144,7 @@ Context.exit()
 ;;chain Scheme print-stack-trace to Java printStackTrace
 (define-generic print-stack-trace
   (generic-java-procedure '|printStackTrace| print-stack-trace))
-(with/fc (lambda (m e) (print-stack-trace m) #f)
+(with/fc (lambda (m e) (print-stack-trace (error-message m)) #f)
   (lambda () (char-at (-&gt;jstring "foo") (-&gt;jint 3))))
           </programlisting>
           will catch the

@@ -158,7 +158,7 @@
 ;;Java's printStackTrace and is chained to the original Scheme procedure.
 (define-generic print-stack-trace
   (generic-java-procedure 'print-stack-trace print-stack-trace))
-(with/fc (lambda (m e) (print-stack-trace m) #f)
+(with/fc (lambda (m e) (print-stack-trace (error-message m)) #f)
   (lambda () (char-at (->jstring "foo") (->jint 3))))
 ;;throwing exceptions from within proxy
 (define <java.util.Iterator> (java-class "java.util.Iterator"))
@@ -191,7 +191,7 @@
 (next i)
 (next i)
 ;;catching an exception thrown by a proxy.
-(with/fc (lambda (m e) (print-stack-trace m) #f)
+(with/fc (lambda (m e) (print-stack-trace (error-message m)) #f)
   (lambda () (remove i)))
 
 ;garbage collection
