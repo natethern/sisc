@@ -773,7 +773,7 @@ public class Quantity extends Value {
             case COMPLEX:
                 return o.mul(this);
             default:
-                return new Quantity((long)val).mul(o);
+                return new Quantity(d*o.doubleValue());
             }
         case INTEG:
             switch (o.type) {
