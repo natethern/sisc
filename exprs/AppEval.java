@@ -39,7 +39,7 @@ import java.io.*;
 public class AppEval extends Expression {
 
     public void eval(Interpreter r) throws ContinuationException {
-        /* To allow break of executtion (turadg)
+        /* To allow break of execution (turadg)
          */
         if (PERMITINTERRUPTS && r.abortEvaluation) {
            r.abortEvaluation=false;
