@@ -69,6 +69,8 @@ public class GenerateHeap {
         "inexact?", "input-port?", "integer->char", "integer?",
         "interaction-environment", "lcm", "length", "list", "list->string",
         "list->vector", "list-ref", "list-tail", "list?", "load", "log",
+        //Yes, I know, shouldn't be here, but delay/force break without it
+        "make-promise",
         "magnitude", "make-polar", "make-rectangular", "make-string",
         "make-vector", "map", "max", "member", "memq", "memv", "min", "modulo",
         "negative?", "newline", "not", "null-environment", "null?",
