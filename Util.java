@@ -65,18 +65,7 @@ public abstract class Util implements Conf {
 
     public static void error(Interpreter r, Value where, String errormessage)
     throws ContinuationException {
-        r.acc=new Values(new Value[] {
-                             new SchemeString("Error in "+where
-                                              +": "+ errormessage),
-                             new CallFrame(r.nxp, r.vlr, r.env, 
-					   r.fk, r.stk).capture(),
-                             r.fk.fk});
-
-        throw new ContinuationException(r.fk);
-    }
-
-    public static final Symbol sym(String s) {
-        return Symbol.get(s);
+	error(r, "Error in "+where+": "+errormessage, false);
     }
 
     public static void error(Interpreter r, String errormessage)
@@ -181,6 +170,10 @@ public abstract class Util implements Conf {
                                        " values received in single-value context");
         throw new RuntimeException("expected type "+type+", got '"+o.write()+
                                    '\'');
+    }
+
+    public static final Symbol sym(String s) {
+        return Symbol.get(s);
     }
 
     public static final Quantity num(Value o) {
