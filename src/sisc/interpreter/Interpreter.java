@@ -434,13 +434,19 @@ public class Interpreter extends Util {
         return res;
     }
 
-    public final void returnVLR() {
-        if (vlr != null) {
-            if (!vlk) 
-                returnValues(vlr);
-            vlr=null;
-        }
-    }
+	public final void returnVLR() {
+		if (vlr != null) {
+			if (!vlk) 
+				returnValues(vlr);
+			vlr=null;
+		}
+	}
+	
+	public final void forceReturnVLR() {
+			if (vlr != null) {
+					returnValues(vlr);
+			}
+		}
 
     public final void replaceVLR(int size) {
         if (!vlk) {

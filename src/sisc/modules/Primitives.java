@@ -365,18 +365,19 @@ public class Primitives extends IndexedProcedure {
                    throwArgSizeException();
                 r.nxp=r.compile(vlr[0]);
                 r.env=null;
-                r.returnVLR();
                 return VOID;
             case CALLCC:
                 Value kproc=vlr[0];
                 r.replaceVLR(1);
                 r.setVLR(0,r.stk.capture(r));
+                r.vlk=true;
                 r.nxp = APPEVAL;
                 return kproc;
             case CALLFC:
                 Procedure proc=proc(vlr[0]);
                 r.replaceVLR(1);
                 r.setVLR(0,r.fk.capture(r));
+                r.vlk=true;
                 r.nxp = APPEVAL;
                 return proc;
             case BOX: return new Box(vlr[0]);
@@ -563,7 +564,6 @@ public class Primitives extends IndexedProcedure {
             case EVALUATE:
                 r.nxp=r.compile(vlr[0], env(vlr[1]));
                 r.env=null;
-                r.returnVLR();
                 return VOID;
             case WITHFC:
                 Procedure proc=proc(vlr[1]);
@@ -572,6 +572,7 @@ public class Primitives extends IndexedProcedure {
                                    null, false, r.env, r.fk, r.stk, 
                                    null);
                 r.replaceVLR(0);
+                r.vlk=true;
                 r.nxp = APPEVAL;
                 return proc;
             case CALLWITHVALUES:
@@ -579,6 +580,7 @@ public class Primitives extends IndexedProcedure {
                 Procedure consumer=proc(vlr[1]);
                 r.push(new ApplyValuesContEval(consumer));
                 r.replaceVLR(0);
+                r.vlk=true;
                 r.nxp = APPEVAL;
                 return producer;
             case GETPROP:
@@ -669,7 +671,7 @@ public class Primitives extends IndexedProcedure {
             for (; args != EMPTYLIST; args = (Pair)args.cdr) {
                 newvlr[j++] = args.car;
             }
-            
+            r.vlk=true;
             r.nxp = APPEVAL;
             return proc;
         case LIST: return valArrayToList(vlr,0,vls);

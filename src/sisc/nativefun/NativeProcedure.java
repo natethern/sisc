@@ -20,17 +20,11 @@ public abstract class NativeProcedure extends Procedure implements NamedValue {
 
     public void apply(Interpreter r) throws ContinuationException {
         //long start=System.currentTimeMillis();
-        r.lxp = r.nxp;
+        //r.lxp = r.nxp;
         r.nxp = null;
         try {
             r.acc = doApply(r);
-
-            // If we don't have a next expression, this procedure
-            // application is finished, and the Value rib is 
-            // up for recycling
-            if (r.nxp == null) {
-                r.returnVLR();
-            }
+            if (!r.vlk) r.forceReturnVLR();
         } catch (ClassCastException cc) {
             error(
                 r,

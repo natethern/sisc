@@ -140,7 +140,7 @@ public abstract class Util implements Defaults, Version {
     throws ContinuationException {
         r.acc=new Values(new Value[] {
             error,
-            new ApplyParentFrame(new CallFrame((r.nxp==null?r.lxp:r.nxp), 
+            new ApplyParentFrame(new CallFrame((r.nxp==null?r.lcf.nxp:r.nxp), 
                                                r.vlr, r.vlk,
                                                r.env, r.fk, r.stk,
                                                r.cap).capture(r))});
