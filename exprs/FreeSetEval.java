@@ -16,15 +16,19 @@ public class FreeSetEval extends Expression {
 
     public void eval(Interpreter r) throws ContinuationException { 
 	try {
-	    v.val=r.acc;
+	    v.set(r.acc);
 	} catch (NullPointerException e) {
 	    try {
 		Box b=(Box)senv.lookup(lhs);
 		v=b;
-		v.val=r.acc;
+		b.set(r.acc);
 	    } catch (UndefinedException e2) {
 		senv.define(lhs, v=new Box(r.acc));
+	    } catch (ImmutableException e2) {
+		senv.define(lhs, v=new Box(r.acc));
 	    }
+	} catch (ImmutableException e3) {
+	    senv.define(lhs, v=new Box(r.acc));
 	}
 	if (r.acc instanceof NamedValue) {
 	    NamedValue nv=(NamedValue)r.acc;

@@ -44,11 +44,7 @@ public class Interpreter extends Util {
 	rnew.writer=parent.writer;
 	rnew.evaluator=parent.evaluator;
 	if (rnew.toplevel_env!=null) 
-	    try {
-		rnew.symenv.define(TOPLEVEL, rnew.toplevel_env);
-	    } catch (EnvironmentLockedException el) {
-		el.printStackTrace();
-	    }
+	    rnew.symenv.define(TOPLEVEL, rnew.toplevel_env);
 	else 
 	    try {
 		rnew.toplevel_env=
@@ -83,9 +79,7 @@ public class Interpreter extends Util {
 	     new OutputPort(new PrintWriter(out)),
 	     new AssociativeEnvironment());
 	if (toplevel_env!=null) 
-	    try {
-		symenv.define(TOPLEVEL, toplevel_env);
-	    } catch (EnvironmentLockedException e) {}
+	    symenv.define(TOPLEVEL, toplevel_env);
 	else 
 	    try {
 		toplevel_env=(AssociativeEnvironment)symenv.lookup(TOPLEVEL);
@@ -214,28 +208,23 @@ public class Interpreter extends Util {
                 symenv.lookup(s);
         } catch (UndefinedException e) {
             contenv=new AssociativeEnvironment();
-	    try {
-		symenv.define(s, contenv);
-	    } catch (EnvironmentLockedException el) {}
+	    symenv.define(s, contenv);
         }
 	return contenv;
     }
 
-    public void define(Symbol s, Value v, Symbol context) throws EnvironmentLockedException {
+    public void define(Symbol s, Value v, Symbol context) {
         AssociativeEnvironment contenv=getContextEnv(context);	
 	try {
-	    AssociativeEnvironment host=contenv.lookupHost(s);
-
-	    if (host.locked()) 
+	    Box fr=(Box)contenv.lookup(s);
+	    fr.set(v);
+	} catch (Exception e) {
+	    if (e instanceof UndefinedException || 
+		e instanceof ClassCastException ||
+		e instanceof ImmutableException) 
 		contenv.define(s, new Box(v));
-	    else {
-		Box fr=(Box)host.lookup(s);
-		fr.val=v;
-	    }
-	} catch (UndefinedException e) {
-	    contenv.define(s, new Box(v));
-	} catch (ClassCastException e2) {
-	    contenv.define(s, new Box(v));
+	    else
+		throw (RuntimeException)e;
 	}
     }
 

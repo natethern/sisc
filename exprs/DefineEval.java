@@ -17,11 +17,7 @@ public class DefineEval extends Expression {
 	    if (nv.name==null)
 		nv.name=lhs;
 	}
-	try {
-	    r.define(lhs, rhs, TOPLEVEL);
-	} catch (EnvironmentLockedException e) {
-	    error(r,"environment is immutable");
-	}
+	r.define(lhs, rhs, TOPLEVEL);
 
 	r.acc=VOID;
 	r.nxp=null;

@@ -8,20 +8,11 @@ public class AssociativeEnvironment extends NamedValue implements Serializable {
 
     AssociativeEnvironment parent;
     protected Hashtable  bindings;
-    private boolean locked=false;
 
     public AssociativeEnvironment() {
 	this(5);
     } 
     
-    public void lock() {
-	locked=true;
-    }
-
-    public boolean locked() {
-	return locked;
-    }
-
     public AssociativeEnvironment(int size) {
 	bindings=new Hashtable (size); 
 	//	define(THIS, this);
@@ -49,8 +40,8 @@ public class AssociativeEnvironment extends NamedValue implements Serializable {
 	parent=par;
     }
     */
-    public Expression define(Symbol s, Expression val) throws EnvironmentLockedException {
-	if (locked) throw new EnvironmentLockedException();
+
+    public Expression define(Symbol s, Expression val) {
 	Expression ov=(Expression)bindings.get(s);
 	bindings.put(s,val);
 	return ov;
@@ -74,8 +65,7 @@ public class AssociativeEnvironment extends NamedValue implements Serializable {
 	else return b;
     }
     
-    public Expression set(Symbol s, Expression v) throws EnvironmentLockedException {
-	if (locked) throw new EnvironmentLockedException();
+    public Expression set(Symbol s, Expression v) {
 	Expression b=(Expression)bindings.get(s);
 	if (b==null) {
 	    if (parent!=null) {
@@ -89,6 +79,20 @@ public class AssociativeEnvironment extends NamedValue implements Serializable {
 	}
     }
     
+    /**
+     * Locks all the Boxes stored in this environment (making them immutable)
+     */
+    public void lock() {
+	for (Iterator enum=bindings.keySet().iterator(); enum.hasNext();) {
+	    Symbol key=(Symbol)enum.next();
+	    Object e=bindings.get(key);
+	    if (e instanceof Box) {
+		((Box)e).lock();
+	    }
+	}
+    }
+
+
     public Pair toAssocList() {
 	Pair p=EMPTYLIST;
 

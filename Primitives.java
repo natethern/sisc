@@ -465,7 +465,11 @@ public class Primitives extends Module {
 	    case ATAN:
 		return num(f,f.vlr[0]).atan(num(f,f.vlr[1]));
 	    case SETBOX:
-		box(f,f.vlr[0]).val=f.vlr[1];
+		try {
+		    box(f,f.vlr[0]).set(f.vlr[1]);
+		} catch (ImmutableException e) {
+		    error(f, "box "+f.vlr[0]+" is immutable");
+		}
 		return VOID;
 	    case STRINGREF:
 		return new SchemeCharacter(str(f,f.vlr[0]).stringdata[num(f,f.vlr[1]).intValue()]);
