@@ -1,77 +1,78 @@
 <chapter id="JavaInteraction">
   <title>Java Interaction</title>
   <para>
-&SISC; can be used as a scripting language for Java, or Java may be
-used to provide functionality to Scheme. Such activity is collectively
-termed 'bridging'. In &SISC; bridging is accomplished by a Java API
-for executing Scheme code and evaluating Scheme expressions, and a
-module that provides Scheme-level access to Java objects and
-implementation of Java interfaces in Scheme.
-</para>
+    &SISC; can be used as a scripting language for Java, or Java may be
+    used to provide functionality to Scheme. Such activity is collectively
+    termed 'bridging'. In &SISC; bridging is accomplished by a Java API
+    for executing Scheme code and evaluating Scheme expressions, and a
+    module that provides Scheme-level access to Java objects and
+    implementation of Java interfaces in Scheme.
+  </para>
   <sect1 id="JavaToScheme">
     <title>Java-to-Scheme Interface</title>
     <para>
-Multiple Scheme applications can run within a single &SISC;
-runtime. Each application has its own top level environment and
-evaluator. An application is represented by instances of the
-<classname>sisc.interpreter.AppContext</classname> class.
-
-A Scheme application can execute in multiple threads. Each thread must
-have its own dynamic environment, containing entities such as the current
-input and output ports. Dynamic environments are represented by
-instances of the <classname>sisc.env.DynamicEnvironment</classname> class.
-
-A thread can be associated with multiple interpreters. The reason for
-there being multiple interpreters is that internal calls need to be
-executed by an interpreter different from the one that initiated the
-internal call so that the state of the latter can be preserved.
-
-</para>
+      Multiple Scheme applications can run within a single &SISC;
+      runtime. Each application has its own top level environment and
+      evaluator. An application is represented by instances of the
+      <classname>sisc.interpreter.AppContext</classname> class.
+      
+      A Scheme application can execute in multiple threads. Each thread must
+      have its own dynamic environment, containing entities such as the current
+      input and output ports. Dynamic environments are represented by
+      instances of the
+      <classname>sisc.env.DynamicEnvironment</classname> class.       
+      A thread can be associated with multiple interpreters. The reason for
+      there being multiple interpreters is that internal calls need to be
+      executed by an interpreter different from the one that initiated the
+      internal call so that the state of the latter can be preserved.
+      
+    </para>
     <sect2>
       <title>Calling Scheme From Java</title>
       <para>
-A call from Scheme to Java can occur in one of two places:
-      <itemizedlist>
+        A call from Scheme to Java can occur in one of two places:
+        <itemizedlist>
           <listitem>
             <para>
-Within a call from Scheme to Java - we shall call this an
-<quote>internal call</quote>.
-</para>
+              Within a call from Scheme to Java - we shall call this an
+              <quote>internal call</quote>.
+            </para>
           </listitem>
           <listitem>
             <para>
-Elsewhere, e.g. as the result of a timer expiration or as part of a
-thread created by Java - we shall call this an <quote>external
-call</quote>.
-</para>
+              Elsewhere, e.g. as the result of a timer expiration or
+              as part of a thread created by Java - we shall call this
+              an <quote>external call</quote>.
+            </para>
           </listitem>
         </itemizedlist>
-The <classname>sisc.interpreter.Context</classname> class is the key
-point where both the above call scenarios are managed.
-</para>
+        The <classname>sisc.interpreter.Context</classname> class is the key
+        point where both the above call scenarios are managed.
+      </para>
       <sect3>
         <title>Internal Calls</title>
         <para>
-When making an internal call, one typically wants to do that in an
-interpreter that shares the same <classname>AppContext</classname> and
-<classname>DynamicEnvironment</classname> as the calling interpreter. One can
-get hold of such an interpreter using
-<programlisting>
+          When making an internal call, one typically wants to do that in an
+          interpreter that shares the same <classname>AppContext</classname> and
+          <classname>DynamicEnvironment</classname> as the calling interpreter. One can
+          get hold of such an interpreter using
+          <programlisting>
 Interpreter r = Context.enter();
-</programlisting>
-One can determine if a call is internal in the following manner:
-<programlisting>
+          </programlisting>
+          One can determine if a call is internal in the following manner:
+          <programlisting>
 Interpreter current = Context.currentInterpreter();
 if (current == null) { ...make external call...}
 else { ...make internal call... }
-</programlisting>
-The calls themselves are made using one of the three
-<function>eval</function> methods on the
-<classname>sisc.interpreter.Interpreter</classname>:
-<itemizedlist>
+          </programlisting>
+          The calls themselves are made using one of the three
+          <function>eval</function> methods on the
+          <classname>sisc.interpreter.Interpreter</classname>:
+          <indexterm><primary>eval</primary>
+          </indexterm>
+          
+          <itemizedlist>
             <listitem>
-              <indexterm><primary>eval</primary>
-              </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
                 <type>Value</type>
