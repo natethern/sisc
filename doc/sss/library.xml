@@ -1387,7 +1387,7 @@ com/foo/bar/baz/baz3.scm
           one can use the <function>require-extension</function>
           mechanism from <ulink
           url="http://srfi.schemers.org/srfi-55/srfi-55.html">SRFI-55</ulink>
-          to both load the module and import one or more SRFIs into the
+          to both load and import one or more SRFI modules into the
           top-level. For example:
           <programlisting>
 (require-extension (srfi 1 9 23))
