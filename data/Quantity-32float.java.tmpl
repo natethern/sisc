@@ -652,10 +652,6 @@ public class Quantity extends Value {
 
     public Quantity sqrt() {
         switch (type) {
-        case DECIM:
-            if (d<0)
-                return new Quantity(0.0f, (float)Math.sqrt(d));
-            else return new Quantity((float)Math.sqrt(d));
         case FIXEDINT: case INTEG:
             BigInteger orig=integer();
             BigInteger i=orig.abs();
@@ -664,10 +660,10 @@ public class Quantity extends Value {
                 if (orig.signum()>-1)
                     return new Quantity(rv[0]);
                 else return new Quantity(0.0f, rv[0].floatValue());
-
-        case RATIO:
-            BigDecimal[] rvd=sqrtrem(new BigDecimal(decimal()));
-            return new Quantity(rvd[0].floatValue());
+        case DECIM:
+            if (d<0)
+                return new Quantity(0.0f, (float)Math.sqrt(d));
+            else return new Quantity((float)Math.sqrt(d));
         case COMPLEX:
             // Take r=sqrt(a^2 + b^2)
             float a2=d*d;
@@ -682,6 +678,9 @@ public class Quantity extends Value {
                 return new Quantity(x,y).negate();
             } else
                 return new Quantity(x, y);
+        case RATIO:
+            BigDecimal[] rvd=sqrtrem(new BigDecimal(decimal()));
+            return new Quantity(rvd[0].floatValue());
         }
         return new Quantity((float)Math.sqrt(floatValue()));
     }
@@ -766,12 +765,10 @@ public class Quantity extends Value {
                 return new Quantity(d*o.val);
             case DECIM:
                 return new Quantity(d*o.d);
-            case INTEG:
-                return new Quantity(d*o.i.floatValue());
-            case RATIO:
-                return new Quantity(ratioToDecimal(o.i,o.de) * d);
             case COMPLEX:
                 return o.mul(this);
+            default:
+                return new Quantity(d*o.floatValue());
             }
         case INTEG:
             switch (o.type) {
@@ -832,9 +829,16 @@ public class Quantity extends Value {
     public Quantity sub(Quantity o) {
         switch (type) {
         case FIXEDINT:
-            if (o.type!=FIXEDINT)
+            switch(o.type) {
+            case FIXEDINT:
+                return intBound((long)val-o.val);
+            case DECIM:
+                return new Quantity(val-o.d);
+            case COMPLEX:
+                return new Quantity(val-o.d, -o.im);
+            default:
                 return new Quantity((long)val).sub(o);
-            else return intBound((long)val-o.val);
+            }
         case DECIM:
             switch (o.type) {
             case FIXEDINT:
@@ -910,7 +914,21 @@ public class Quantity extends Value {
     public Quantity div(Quantity o) {
         switch (type) {
         case FIXEDINT:
-            return new Quantity((long)val).div(o);
+            switch(o.type) {
+            case FIXEDINT:
+                return new Quantity(BigInteger.valueOf(val),
+                                    BigInteger.valueOf(o.val));
+            case DECIM:
+                return new Quantity(val/o.d);
+            case COMPLEX:
+                Quantity q=new Quantity();
+                q.d=val;
+                q.im=0.0f;
+                q.type=COMPLEX;
+                return q.div(o);
+            default:
+                return new Quantity((long)val).div(o);
+            }
         case DECIM:
             switch (o.type) {
             case FIXEDINT:

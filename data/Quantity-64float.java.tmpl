@@ -952,7 +952,7 @@ public class Quantity extends Value {
                 return new Quantity(val/o.d);
             case COMPLEX:
                 Quantity q=new Quantity();
-                q.d=d;
+                q.d=val;
                 q.im=0.0;
                 q.type=COMPLEX;
                 return q.div(o);

@@ -685,6 +685,9 @@ public class Quantity extends Value {
                 return new Quantity(x,y).negate();
             } else
                 return new Quantity(x, y);
+        case RATIO:
+            rvd=sqrtrem(decimal());
+            return new Quantity(rvd[0]);
         }
         return new Quantity(Math.sqrt(doubleValue()));
     }
@@ -769,12 +772,10 @@ public class Quantity extends Value {
                 return new Quantity(d.multiply(BigDecimal.valueOf(o.val)));
             case DECIM:
                 return new Quantity(d.multiply(o.d));
-            case INTEG:
-                return new Quantity(d.multiply(new BigDecimal(o.i)));
-            case RATIO:
-                return new Quantity(ratioToDecimal(o.i,o.de).multiply(d));
             case COMPLEX:
                 return o.mul(this);
+            default:
+                return new Quantity(d.multiply(o.decimal()));
             }
         case INTEG:
             switch (o.type) {
@@ -918,7 +919,10 @@ public class Quantity extends Value {
     public Quantity div(Quantity o) {
         switch (type) {
         case FIXEDINT:
-            return new Quantity((long)val).div(o);
+            if (o.type!=FIXEDINT)
+                return new Quantity((long)val).div(o);
+            else return new Quantity(BigInteger.valueOf(val),
+                                     BigInteger.valueOf(o.val));
         case DECIM:
             switch (o.type) {
             case FIXEDINT:
