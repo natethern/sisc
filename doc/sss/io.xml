@@ -1094,240 +1094,354 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         closure, or continuation.
       </para>
       <para>
-        &SISC; provides a special port type and procedures for reading
-        and writing <emphasis>any</emphasis> Scheme value using a
+        &SISC; provides a special composed port type and procedures
+        for reading and writing <emphasis>any</emphasis> Scheme value using a
         binary representation. The (de)serialization preserves the
         referential structure of the object graph comprising the
         serialized values.
       </para>
       <para>
-        Serial ports are binary ports, i.e. all operations applicable
-        to binary ports also apply to serial ports.
+        Serial ports are composed onto and thus are binary ports, 
+        i.e. all operations applicable to binary ports also apply to 
+        serial ports.
       </para>
-      <para>
-        <blockquote>
-          <para>
-            <indexterm><primary>open-serial-input-file</primary>
-            </indexterm>
+      <sect3 id="serialportcreation">
+        <title>Port Creation and Identification</title>
+        <para>
+          <blockquote>
+            <para>
+              <indexterm><primary>open-serial-input-port</primary>
+              </indexterm>
               &procedure;
-            <methodsynopsis language="scheme">
-              <type>serial-input-port</type>
-              <methodname>open-serial-input-file</methodname>
-              <methodparam>
-                <parameter>url</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-		        Creates an input port in the same manner as &R5RS;
-                <function>open-input-file</function>, producing an
-		        input port that can be used to read external
-                representations of Scheme values.
-              </para>
-            </blockquote>
-          </para>
-          <para>
-            <indexterm><primary>open-serial-output-file</primary>
-            </indexterm>
+              <methodsynopsis language="scheme">
+                <type>serial-input-port</type>
+                <methodname>open-serial-input-port</methodname>
+                <methodparam>
+                  <parameter>binary-input-port</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Creates a serial input port which reads external
+                  representations of Scheme values from the given
+                  binary input port.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>open-serial-output-port</primary>
+              </indexterm>
               &procedure;
-            <methodsynopsis language="scheme">
-              <type>serial-output-port</type>
-              <methodname>open-serial-output-file</methodname>
-              <methodparam>
-                <parameter>url</parameter>
-              </methodparam>
-              <methodparam choice="opt">
-                <parameter>auto-flush</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Creates an output port in the same manner as
-                <function>open-output-file</function>, producing an
-                output port that can be used to write external
-                representations of Scheme values.
-              </para>
-            </blockquote>
-          </para>
-          <para>
-            <indexterm><primary>call-with-serial-input-file</primary>
-            </indexterm>
+              <methodsynopsis language="scheme">
+                <type>serial-output-port</type>
+                <methodname>open-serial-output-port</methodname>
+                <methodparam>
+                  <parameter>binary-output-port</parameter>
+                </methodparam>
+                <methodparam choice="opt">
+                  <parameter>auto-flush</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Creates a serial output port which can be used to 
+                  write external representations of Scheme values
+                  to the provided binary output port.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>serial-input-port?</primary>
+              </indexterm>
               &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>call-with-serial-input-file</methodname>
-              <methodparam>
-                <parameter>url</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>procedure</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Calls <parameter>procedure</parameter> with a new
-                serial input port attached to
-                <parameter>url</parameter>. The result of the thunk is
-                returned.
-              </para>
-            </blockquote>
-          </para>
-          <para>
-            <indexterm><primary>call-with-serial-output-file</primary>
-            </indexterm>
+              <methodsynopsis language="scheme">
+                <type>&num;t/&num;f</type>
+                <methodname>serial-input-port?</methodname>
+                <methodparam>
+                  <parameter>value</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Returns &num;t if <parameter>value</parameter> is a
+                  serial input port, &num;f otherwise.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>serial-output-port?</primary>
+              </indexterm>
               &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>call-with-serial-output-file</methodname>
-              <methodparam>
-                <parameter>url</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>procedure</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Calls <parameter>procedure</parameter> with a new
-                serial output port attached to
-                <parameter>url</parameter>. The result of the thunk is
-                returned.
-              </para>
-            </blockquote>
-          </para>
-          <para>
-            <indexterm><primary>with-serial-input-from-file</primary>
-            </indexterm>
+              <methodsynopsis language="scheme">
+                <type>&num;t/&num;f</type>
+                <methodname>serial-output-port?</methodname>
+                <methodparam>
+                  <parameter>value</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Returns &num;t if <parameter>value</parameter> is a
+                  serial output port, &num;f otherwise.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+        </para>
+      </sect3>
+      <sect3 id="serialportwrappers">
+        <title>Serial Port Wrappers</title>
+        <para>
+          <blockquote>
+            <para>
+              <indexterm><primary>call-with-serial-input-port</primary>
+              </indexterm>
               &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>with-serial-input-from-file</methodname>
-              <methodparam>
-                <parameter>url</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>thunk</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Evaluates <parameter>thunk</parameter> with a serial
-                input port attached to a file opened for reading from
+              <methodsynopsis language="scheme">
+                <type>value</type>
+                <methodname>call-with-serial-input-port</methodname>
+                <methodparam>
+                  <parameter>binary-input-port</parameter>
+                </methodparam>
+                <methodparam>
+                  <parameter>procedure</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Calls <parameter>procedure</parameter> with a new
+                  serial input port attached to
+                  <parameter>binary-input-port</parameter>. 
+                  The result of the thunk is returned.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>call-with-serial-output-port</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>value</type>
+                <methodname>call-with-serial-output-port</methodname>
+                <methodparam>
+                  <parameter>binary-output-port</parameter>
+                </methodparam>
+                <methodparam>
+                  <parameter>procedure</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Calls <parameter>procedure</parameter> with a new
+                  serial output port attached to
+                  <parameter>binary-output-port</parameter>. 
+                  The result of the thunk is returned.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>with-serial-input-from-port</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>value</type>
+                <methodname>with-serial-input-from-port</methodname>
+                <methodparam>
+                  <parameter>binary-input-port</parameter>
+                </methodparam>
+                <methodparam>
+                  <parameter>thunk</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Evaluates <parameter>thunk</parameter> with a serial
+                  input port attached to the specified
+                  <parameter>binary-input-port</parameter> as the
+                  <literal>current-input-port</literal> for the duration
+                  of the evaluation. The port is
+                  <emphasis>not</emphasis> closed when
+                  <parameter>thunk</parameter> returns.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>with-serial-output-to-port</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>value</type>
+                <methodname>with-serial-output-to-port</methodname>
+                <methodparam>
+                  <parameter>binary-output-port</parameter>
+                </methodparam>
+                <methodparam>
+                  <parameter>thunk</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Evaluates <parameter>thunk</parameter> with a serial
+                  input port attached to the specified
+                  <parameter>binary-output-port</parameter> as the
+                  <literal>current-output-port</literal> for the
+                  duration of the evaluation. The port is 
+                  <emphasis>not</emphasis> closed when
+                  <parameter>thunk</parameter> returns.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>call-with-serial-input-file</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>value</type>
+                <methodname>call-with-serial-input-file</methodname>
+                <methodparam>
+                  <parameter>url</parameter>
+                </methodparam>
+                <methodparam>
+                  <parameter>procedure</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Calls <parameter>procedure</parameter> with a new
+                  serial input port attached to
+                  <parameter>url</parameter>. The result of the thunk is
+                  returned.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>call-with-serial-output-file</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>value</type>
+                <methodname>call-with-serial-output-file</methodname>
+                <methodparam>
+                  <parameter>url</parameter>
+                </methodparam>
+                <methodparam>
+                  <parameter>procedure</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Calls <parameter>procedure</parameter> with a new
+                  serial output port attached to
+                  <parameter>url</parameter>. The result of the thunk is
+                  returned.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>with-serial-input-from-file</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>value</type>
+                <methodname>with-serial-input-from-file</methodname>
+                <methodparam>
+                  <parameter>url</parameter>
+                </methodparam>
+                <methodparam>
+                  <parameter>thunk</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Evaluates <parameter>thunk</parameter> with a serial
+                  input port attached to a file opened for reading from
+                  <parameter>url</parameter> as the
+                  <literal>current-input-port</literal> for the duration
+                  of the evaluation. The port is closed when
+                  <parameter>thunk</parameter> returns normally.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>with-serial-output-to-file</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>value</type>
+                <methodname>with-serial-output-to-file</methodname>
+                <methodparam>
+                  <parameter>url</parameter>
+                </methodparam>
+                <methodparam>
+                  <parameter>thunk</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Evaluates <parameter>thunk</parameter> with a serial
+                  input port attached to a file opened for writing to
                 <parameter>url</parameter> as the
-                <literal>current-input-port</literal> for the duration
-                of the evaluation. The port is closed when
-                <parameter>thunk</parameter> returns normally.
-              </para>
-            </blockquote>
-          </para>
-          <para>
-            <indexterm><primary>with-serial-output-to-file</primary>
-            </indexterm>
+                  <literal>current-output-port</literal> for the
+                  duration of the evaluation. The port is closed when
+                  <parameter>thunk</parameter> returns normally.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+        </para>
+      </sect3>
+      <sect3 id="serialprims">
+        <title>Serialization Procedures</title>
+        <para>
+          <blockquote>
+            <para>
+              <indexterm><primary>deserialize</primary>
+              </indexterm>
               &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>with-serial-output-to-file</methodname>
-              <methodparam>
-                <parameter>url</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>thunk</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Evaluates <parameter>thunk</parameter> with a serial
-                input port attached to a file opened for writing to
-                <parameter>url</parameter> as the
-                <literal>current-output-port</literal> for the
-                duration of the evaluation. The port is closed when
-                <parameter>thunk</parameter> returns normally.
-              </para>
-            </blockquote>
-          </para>
-          <para>
-            <indexterm><primary>deserialize</primary>
-            </indexterm>
+              <methodsynopsis language="scheme">
+                <type>value</type>
+                <methodname>deserialize</methodname>
+                <methodparam choice="opt">
+                  <parameter>serial-input-port</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Reads a Scheme value from an external representation
+                  retrieved from
+                  <parameter>serial-input-port</parameter>. If
+                  <parameter>serial-input-port</parameter> is absent the
+                  data is read from the current input port.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>serialize</primary>
+              </indexterm>
               &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>deserialize</methodname>
-              <methodparam choice="opt">
-                <parameter>serial-input-port</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Reads a Scheme value from an external representation
-                retrieved from
-                <parameter>serial-input-port</parameter>. If
-                <parameter>serial-input-port</parameter> is absent the
-                data is read from the current input port.
-              </para>
-            </blockquote>
-          </para>
-          <para>
-            <indexterm><primary>serialize</primary>
-            </indexterm>
-              &procedure;
-            <methodsynopsis language="scheme">
-              <type>undefined</type>
-              <methodname>serialize</methodname>
-              <methodparam>
-                <parameter>value</parameter>
-              </methodparam>
-              <methodparam choice="opt">
-                <parameter>serial-output-port</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Writes an external representation of
-                <parameter>value</parameter> to
-                <parameter>serial-output-port</parameter>. If
-                <parameter>serial-output-port</parameter> is absent
-                the data is written to the current output port.
-              </para>
-            </blockquote>
-          </para>
-          <para>
-            <indexterm><primary>serial-input-port?</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>&num;t/&num;f</type>
-              <methodname>serial-input-port?</methodname>
-              <methodparam>
-                <parameter>value</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Returns &num;t if <parameter>value</parameter> is a
-                serial input port, &num;f otherwise.
-              </para>
-            </blockquote>
-          </para>
-          <para>
-            <indexterm><primary>serial-output-port?</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>&num;t/&num;f</type>
-              <methodname>serial-output-port?</methodname>
-              <methodparam>
-                <parameter>value</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Returns &num;t if <parameter>value</parameter> is a
-                serial output port, &num;f otherwise.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
-      </para>
+              <methodsynopsis language="scheme">
+                <type>undefined</type>
+                <methodname>serialize</methodname>
+                <methodparam>
+                  <parameter>value</parameter>
+                </methodparam>
+                <methodparam choice="opt">
+                  <parameter>serial-output-port</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Writes an external representation of
+                  <parameter>value</parameter> to
+                  <parameter>serial-output-port</parameter>. If
+                  <parameter>serial-output-port</parameter> is absent
+                  the data is written to the current output port.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+        </para>
+      </sect3>
     </sect2>
   </sect1>
   <sect1 id="netio">
