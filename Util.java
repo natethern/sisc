@@ -389,7 +389,7 @@ public abstract class Util implements Conf {
 	try {
 	    return bundle.getString(messageName);
 	} catch (MissingResourceException mr) {
-	    if (!bundle.equals(SISCB))
+	    if (!bundleName.equals(SISCB))
 		return liMessage(SISCB, messageName);
 	    else
 		return null;
