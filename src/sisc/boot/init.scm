@@ -35,6 +35,13 @@
 ;; something you wrote, let me know.
 ;;;;;;
 
+(define-syntax boolean-or
+  (syntax-rules ()
+    ((_) #t)
+    ((_ v) v)
+    ((_ v1 v2) (if v1 #t v2))
+    ((_ v1 vs ...) (if v1 #t (boolean-or vs ...)))))
+    
 (define (for-each proc ls1 . lists)
   (unless (null? ls1)
     (begin
@@ -359,7 +366,7 @@
 (define integer?
   (let ((oldint? integer?))
     (lambda (n)
-      (or (oldint? n) 
+      (boolean-or (oldint? n) 
 	  (and (real? n)
 	       (= (round n) n))))))
 
@@ -388,7 +395,7 @@
 		       mv)]
 		  [(proc (car args) mv) 
 		   (_min_max proc (car args) (cdr args)
-			     (or inexact (inexact? (car args))))]
+			     (boolean-or inexact (inexact? (car args))))]
 		  [else (_min_max proc mv (cdr args) inexact)]))])
   (set! min (lambda (x1 . args)
 	      (if (null? args) 
@@ -421,15 +428,15 @@
 				 (loop (cdr x)))]))))]
       [_and2 (lambda (x y) (and x y))])
   
-  (set! <= (_comp_help (lambda (a b) (or (< a b) (= a b))) _and2 #t))
-  (set! >= (_comp_help (lambda (a b) (or (> a b) (= a b))) _and2 #t)))
+  (set! <= (_comp_help (lambda (a b) (boolean-or (< a b) (= a b))) _and2 #t))
+  (set! >= (_comp_help (lambda (a b) (boolean-or (> a b) (= a b))) _and2 #t)))
 
 
 (let ([_?= (lambda (comparator chainer)
 	     (lambda args
-	       (or (null? args) 
+	       (boolean-or (null? args) 
 		   (null? (cdr args))
-		   (and (or (= (car args) (cadr args))
+		   (and (boolean-or (= (car args) (cadr args))
 			    (comparator (car args) (cadr args)))
 			(apply chainer (cdr args))))))])
   (set! >= (_?= > >=))
@@ -483,16 +490,16 @@
 (define (char>? c1 c2) (> (char->integer c1) (char->integer c2)))
 (define (char<? c1 c2) (< (char->integer c1) (char->integer c2)))
 (define char=? eqv?)
-(define (char>=? c1 c2) (or (char>? c1 c2) (char=? c1 c2)))
-(define (char<=? c1 c2) (or (char<? c1 c2) (char=? c1 c2)))
+(define (char>=? c1 c2) (boolean-or (char>? c1 c2) (char=? c1 c2)))
+(define (char<=? c1 c2) (boolean-or (char<? c1 c2) (char=? c1 c2)))
 (define (char-ci>? c1 c2) (char>? (char-downcase c1) (char-downcase c2)))
 (define (char-ci<? c1 c2) (char<? (char-downcase c1) (char-downcase c2)))
 (define (char-ci=? c1 c2) (char=? (char-downcase c1) (char-downcase c2)))
-(define (char-ci>=? c1 c2) (or (char-ci>? c1 c2) (char-ci=? c1 c2)))
-(define (char-ci<=? c1 c2) (or (char-ci<? c1 c2) (char-ci=? c1 c2)))
+(define (char-ci>=? c1 c2) (boolean-or (char-ci>? c1 c2) (char-ci=? c1 c2)))
+(define (char-ci<=? c1 c2) (boolean-or (char-ci<? c1 c2) (char-ci=? c1 c2)))
 
-(define (char-alphabetic? c) (and (char-ci>=? c #\a) (char-ci<=? c #\z)))
-(define (char-numeric? c) (and (char-ci>=? c #\0) (char-ci<=? c #\9)))
+(define (char-alphabetic? c) (and (char-ci>? c #\`) (char-ci<? c #\{)))
+(define (char-numeric? c) (and (char-ci>? c #\/) (char-ci<? c #\:)))
 (define (char-whitespace? c) (if (memv c '(#\space #\tab #\newline #\return)) #t #f))
 
 (define (char-upper-case? c) (and (char-alphabetic? c) (char<? c #\a)))
@@ -543,8 +550,8 @@
     (lambda (s1 s2)
       (s>? (string->list s1) (string->list s2)))))
 
-(define (string<=? s1 s2) (or (string<? s1 s2) (string=? s1 s2)))
-(define (string>=? s1 s2) (or (string>? s1 s2) (string=? s1 s2)))
+(define (string<=? s1 s2) (boolean-or (string<? s1 s2) (string=? s1 s2)))
+(define (string>=? s1 s2) (boolean-or (string>? s1 s2) (string=? s1 s2)))
 (define (string-ci=? s1 s2) 
   (string=? (string-downcase s1) (string-downcase s2)))
 (define (string-ci<? s1 s2)
