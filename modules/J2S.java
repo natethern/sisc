@@ -66,8 +66,8 @@ public class J2S extends ModuleAdapter {
         }
 
         public boolean valueEqual(Value ov) {
-	    if (!(ov instanceof JavaClass)) return false;
-            return ((JavaClass)ov).clazz.equals(clazz);
+            return (ov instanceof JavaClass) &&
+                ((JavaClass)ov).clazz.equals(clazz);
         }
 
         public void serialize(Serializer s, DataOutput dos) throws IOException {
@@ -105,7 +105,8 @@ public class J2S extends ModuleAdapter {
         }
 
         public boolean valueEqual(Value ov) {
-            return ((JavaObject)ov).o.equals(o);
+            return (ov instanceof JavaObject) &&
+                ((JavaObject)ov).o.equals(o);
         }
 
         public JavaObject() {}

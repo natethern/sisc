@@ -59,13 +59,7 @@ public class ImmutableVector extends SchemeVector {
     }
 
     public boolean equals(Object o) {
-	if (!(o instanceof ImmutableVector)) return false;
-	ImmutableVector v=(ImmutableVector)o;
-	if (vals.length != v.vals.length) return false;
-	for (int i=0; i<vals.length; i++)
-	    if (!vals[i].equals(((ImmutableVector)o).vals[i]))
-		return false;
-	return true;
+        return (o instanceof ImmutableVector) && valueEqual((Value)o);
     }
 
     public int hashCode() {

@@ -53,9 +53,7 @@ public class ImmutablePair extends Pair {
     }
 
     public boolean equals(Object o) {
-	if (!(o instanceof ImmutablePair)) return false;
-	ImmutablePair p=(ImmutablePair)o;
-	return car.equals(p.car) && cdr.equals(p.cdr);
+        return (o instanceof ImmutablePair) && valueEqual((Value)o);
     }
 
     public int hashCode() {

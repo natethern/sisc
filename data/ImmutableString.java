@@ -51,8 +51,7 @@ public class ImmutableString extends SchemeString {
     }
 
     public boolean equals(Object o) {
-	if (!(o instanceof ImmutableString)) return false;
-	return valueEqual((Value) o);
+        return (o instanceof ImmutableString) && valueEqual((Value) o);
     }
     
     public int hashCode() {

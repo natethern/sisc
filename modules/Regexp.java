@@ -437,10 +437,8 @@ public class Regexp extends ModuleAdapter
 
     public boolean valueEqual(Value ov)
     {
-      if (ov instanceof RPattern)
-        return pattern.equals(((RPattern)ov).pattern);
-      else
-        return false;
+        return (ov instanceof RPattern) &&
+            pattern.equals(((RPattern)ov).pattern);
     }
 
     public void serialize(Serializer s, DataOutput dos)
