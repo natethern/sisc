@@ -240,7 +240,7 @@
   (remove-nick (string->symbol (->string channel))
                (normalize-nick sender)))
 (define (onQuit nick login hostname reason)
-  (onPart channel nick login hostname))
+  (onPart (->jstring channel) nick login hostname))
 
 (define (onNickChange oldnick login hostname newnick)
   (remove-nick (string->symbol channel) (normalize-nick oldnick))
