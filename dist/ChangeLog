@@ -1,3 +1,9 @@
+2002-02-12  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed CHAR-UPPER-CASE? and CHAR-LOWER-CASE?
+
+	* Changed COMPOSE so it takes 0..n args
+
 2002-02-11  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Modified serialization format to support non-stream
