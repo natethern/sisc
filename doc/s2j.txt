@@ -88,9 +88,9 @@ evaluation depends on the type of object and the arguments:
   list/vector of numbers (for multi-dimensional arrays). 
 (<class> '<fieldname> [<value>]) => <value>
   gets/sets static field
-(<field> <obj> [<value>]) => <value>
+(<field> <jobj> [<value>]) => <value>
   gets/sets field - works for both static and instance fields
-(<method> <obj> <parameter> ...) => <value>
+(<method> <jobj> <parameter> ...) => <value>
   invokes method on object with parameters
 (<constructor> <parameter> ...) => <value>
   invokes constructor with parameters
@@ -106,6 +106,11 @@ constructors can be (de)serialized. Ordinary Java objects cannot be
 (java-array-new <class> <dimensions>) => <array>
 creates a java array. <dimensions> is a vector/list of numbers or a
 number.
+
+(java-synchronized <jobj> <thunk>)
+Evaluates thunk inside a synchronized(<jobj>) { } block, return the
+result of the evaluation. The result of capturing and invoking
+continuations from within <thunk> that escape it is undefined.
 
 
 Types of Java Objects

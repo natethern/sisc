@@ -62,6 +62,7 @@
    java-class
    java-wrap
    java-unwrap
+   java-synchronized
    java-instance?
    java-assignable?
    java-object?
@@ -127,6 +128,7 @@
   (include "../modules/s2j.scm")
   (define (java-class name)
     (java/class (if (string? name) (string->symbol name) name)))
+  (define java-synchronized	java/synchronized)
   (define java-wrap		java/wrap)
   (define java-unwrap		java/unwrap)
   (define java-instance?	java/instance?)

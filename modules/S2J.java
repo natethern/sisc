@@ -17,6 +17,7 @@ public class S2J extends ModuleAdapter {
 	JAVA_WRAP		=1,
 	JAVA_UNWRAP		=2,
 	JAVA_CLASS		=3,
+        JAVA_SYNC		=4,
 
 	JAVA_CONSTRUCTOR	=10,
 	JAVA_METHOD		=11,
@@ -87,6 +88,7 @@ public class S2J extends ModuleAdapter {
         define("java/wrap"		,JAVA_WRAP);
         define("java/unwrap"		,JAVA_UNWRAP);
         define("java/class"		,JAVA_CLASS);
+        define("java/synchronized"	,JAVA_SYNC);
 
         define("java/constructor"	,JAVA_CONSTRUCTOR);
         define("java/method"		,JAVA_METHOD);
@@ -894,6 +896,18 @@ public class S2J extends ModuleAdapter {
             }
 	case 2:
 	    switch(primid) {
+            case JAVA_SYNC:
+                synchronized(jobj(f.vlr[0])) {
+		    Interpreter i=Context.enter();
+		    try {
+			return i.eval(proc(f.vlr[1]), new Value[0]);
+		    } catch (SchemeException se) {
+			throwNestedPrimException(se);
+		    } finally {
+                        Context.exit();
+                    }
+		}
+		return VOID;
 	    case JAVA_FIELD:
 		try {
 		    return makeJObj(jclass(f.vlr[0]).getField(symval(f.vlr[1])));
