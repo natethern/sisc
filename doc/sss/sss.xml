@@ -100,7 +100,7 @@
       </orderedlist>
     </para>
   </appendix>
-  <appendix>
+  <appendix id="R5RSViolations">
     <title>&R5RS; Liberties and Violations</title>
     <para>
       This section lists all ways in which &SISC; interprets the
@@ -158,6 +158,41 @@ for <function>sqrt</function>, it is not clear what other mathematical
 	  </para>
 	</listitem>
       </orderedlist>
+    </para>
+    <para>
+      All of the liberties described above are implemented for the
+      convenience of the programmer.  If desired,
+      <emphasis>strict</emphasis> &R5RS; syntax and semantics may be
+      enabled, causing &SISC; to raise errors in all &R5RS; situations
+      that result in "an error", as well as respect the lexical
+      syntax's reserved characters.  When in
+      <emphasis>strict</emphasis> compliance mode, the above mentioned
+      deviations no longer apply and &SISC; is entirely &R5RS;
+      compliant.
+    </para>
+    <para>
+      <blockquote>
+        <para>
+          <indexterm><primary>strict-r5rs-compliance</primary>
+          </indexterm>
+          &parameter;
+          <methodsynopsis language="scheme">
+            <type>&num;t/&num;f</type>
+            <methodname>strict-r5rs-compliance</methodname>
+            <methodparam choice="opt"> 
+              <parameter>boolean</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              This parameter, if set <literal>&num;t</literal>, will
+              cause &SISC; to operate in strict &R5RS; compliance
+              mode.  See also the <literal>sisc.strictr5rs</literal>
+              system property in <xref linkend="system-properties"/>.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
     </para>
   </appendix>
   <appendix id="system-properties">
@@ -248,6 +283,19 @@ for <function>sqrt</function>, it is not clear what other mathematical
             Specifies the property file that will be loaded, which may
             define additional properties that are superceded by those
             issued on the command-line.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><envar>sisc.strictr5rs</envar></term>
+        <listitem>
+          <para>
+            If set true, <emphasis>strict</emphasis> &R5RS; syntax and
+            semantics are followed.  This will cause SISC to raise 
+            errors in all situations described as "an error" in the 
+            Scheme standard.  This will override and invalidate all the
+            interpretation liberties described in <xref
+            linkend="R5RSViolations"/>.  
           </para>
         </listitem>
       </varlistentry>
