@@ -37,18 +37,18 @@
   (debug "Receiving packages...")
   (let ((pc (receive-packages in id)))
     (if (memq (robot-position id) bases)
-        (packages-at-base! (robot-position id) pc)))
+        (packages-at-base! (robot-position id) pc))
 
-  (debug "Thinking...")
-  ; Decide on our move and send it to the server
-  (let ((next-move (decide id (system-time) 800)))
-    (debug "Sending move ~a ..." next-move)
-    (apply send-command (cons out next-move))
-    ;loop
-
-    ; Pause for debugging
-;    (read-char)
-
-    (main-loop id (robot-position id)
-               next-move (new-pos (cdr next-move) (robot-position id)))))
+    (debug "Thinking...")
+    ; Decide on our move and send it to the server
+    (let ((next-move (decide id (system-time) 800)))
+      (debug "Sending move ~a ..." next-move)
+      (apply send-command (cons out next-move))
+                                        ;loop
+      
+                                        ; Pause for debugging
+                                        ;    (read-char)
+      
+      (main-loop id (robot-position id)
+                 next-move (new-pos (cdr next-move) (robot-position id))))))
 

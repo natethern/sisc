@@ -1,5 +1,7 @@
 ; Package representation
 
+(define new-packages #f)
+
 (define (remove x ls)
   (if (null? ls) '()
       (if (eq? x (car ls))
@@ -49,7 +51,8 @@
   (hashtable/put! p 'location loc))
 
 (define (package-lookup id)
-  (hashtable/get! all-packages id (lambda () (make-package id))))
+  (hashtable/get! all-packages id (lambda () (set! new-packages #t)
+                                          (make-package id))))
 
 ; Called when we observe a drop action.  This does nothing if the package
 ; was delivered (we knew its destination and it was dropped at that destination)

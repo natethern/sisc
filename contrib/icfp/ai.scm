@@ -80,9 +80,10 @@
 (define (decide id start-time limit)
   (let ((current-pos (robot-position id)))
     (mvlet ([(selected-move state) 
-             (if last-state
+             (if (and (not new-packages) last-state)
                  (last-state current-pos start-time)
-                 (a* id current-pos start-time limit))])
+                 (begin (set! new-packages #f)
+                        (a* id current-pos start-time limit)))])
        (begin
          (set! last-state (if (eq? (car selected-move)
                                    '|Move|)
