@@ -788,7 +788,6 @@
   (define optimize opt:optimize)
   (initialize))
 
-(import string-io)
 (import libraries)
 (import debugging)
 (import optimizer)
