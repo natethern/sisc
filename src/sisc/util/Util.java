@@ -3,27 +3,35 @@ package sisc.util;
 import java.util.*;
 import java.text.*;
 import java.net.*;
-import java.lang.reflect.Field;
 import sisc.data.*;
 import sisc.exprs.*;
+import sisc.io.*;
 import sisc.interpreter.*;
+import java.lang.reflect.Field;
+import java.io.IOException;
+import java.io.StringReader;
+import sisc.compiler.Parser;
+import sisc.compiler.Lexer;
 
 public abstract class Util extends Defaults implements Version {
 
+    public static final boolean caseSensitive =
+        System.getProperty("sisc.caseSensitive",
+                           Boolean.toString(DEFAULT_CASE_SENSITIVE)).equals("true");
     public static final boolean permitInterrupts =
-        getSystemProperty("sisc.permitInterrupts",
-                          DEFAULT_PERMIT_INTERRUPTS).equals("true");
+        System.getProperty("sisc.permitInterrupts",
+                           Boolean.toString(DEFAULT_PERMIT_INTERRUPTS)).equals("true");
     public static final int minFloatPrecision =
-        Integer.parseInt(getSystemProperty("sisc.minFloatPrecision",
-                                           DEFAULT_MIN_FLOAT_PRECISION));
+        Integer.parseInt(System.getProperty("sisc.minFloatPrecision",
+                                            Integer.toString(DEFAULT_MIN_FLOAT_PRECISION)));
     public static final int maxFloatPrecision =
-        Integer.parseInt(getSystemProperty("sisc.maxFloatPrecision",
-                                           DEFAULT_MAX_FLOAT_PRECISION));
+        Integer.parseInt(System.getProperty("sisc.maxFloatPrecision",
+                                            Integer.toString(DEFAULT_MAX_FLOAT_PRECISION)));
 
     protected static final Value[] ZV=new Value[0];
     protected static final Quantity FIVE=Quantity.valueOf(5);
     protected static final Expression APPEVAL=new AppEval();
-    
+
     public static EOFObject EOF=EOFObject.EOF;
     public static EmptyList EMPTYLIST=EmptyList.EMPTYLIST;
     public static SchemeVoid VOID=SchemeVoid.VOID;
@@ -33,7 +41,6 @@ public abstract class Util extends Defaults implements Version {
 
     public static Symbol
         BEGIN=Symbol.get("begin"),
-        ENVVARS=Symbol.get("*environment-variables*"),
         ERRORK=Symbol.get("error-continuation"),
         EXPSC=Symbol.get("*sc-expander*"),
         EXPTOP=Symbol.get("*top*"),
@@ -48,7 +55,6 @@ public abstract class Util extends Defaults implements Version {
         PARENT=Symbol.get("parent"),
         REPORT=Symbol.get("*report*"),
         SETBANG=Symbol.get("set!"),
-        SISCCONF=Symbol.get("*config-parameters*"),
         SISC=Symbol.get("*sisc*"),
         SISC_SPECIFIC=Symbol.get("*sisc-specific*"),
         SYMENV=Symbol.get("*symenv*"),
@@ -60,21 +66,6 @@ public abstract class Util extends Defaults implements Version {
         EVAL=Symbol.get("eval");
 
     
-    public static String getSystemProperty(String name, String def) {
-        try {
-            String rv=System.getProperty(name);
-            if (rv==null) throw new RuntimeException();
-            return rv;
-        } catch (RuntimeException e) {
-            try {
-                String propname=name.substring(name.indexOf('.')+1);
-                Field f=Defaults.class.getField(propname);
-                return (String)f.get(null);
-            } catch (Exception e2) {}
-        }
-        return def;
-    }
-
     public static String warn(String messageClass) {
         StringBuffer b=new StringBuffer("{");
         b.append(liMessage(SISCB, "warning"));
@@ -135,6 +126,15 @@ public abstract class Util extends Defaults implements Version {
             throw new RuntimeException(liMessage(SISCB, "notclassloader"));
         }
         return cl;
+    }
+
+    public static Value read(String expr) throws IOException {
+        InputPort ip=new ReaderInputPort(new StringReader(expr));
+        Parser p = new Parser(new Lexer());
+        Value res = p.nextExpression(ip);
+        if (p.nextExpression(ip) != EOF)
+            throw new IOException(liMessage(SISCB, "stringreaderror", expr));
+        return res;
     }
 
     public static void error(Interpreter r, Pair error)
@@ -370,16 +370,19 @@ public abstract class Util extends Defaults implements Version {
     }
 
     public static URL url(Value v) {
-        String s = string(v);
+        try {
+            return url(string(v));
+        } catch (MalformedURLException e) {
+            typeError("url", v);
+        }
+        return null;
+    }
+
+    public static URL url(String s) throws MalformedURLException {
         try {
             return new URL(s);
         } catch (MalformedURLException e) {
-            try {
-                return new URL("file:"+s);
-            } catch (MalformedURLException ee) {
-                typeError("url", v);
-            }
-            return null;
+            return new URL("file:"+s);
         }
     }
 
