@@ -78,6 +78,7 @@ public class Quantity extends Value {
     public static Quantity valueOf(long val) { return new Quantity(val); }
     public static Quantity valueOf(double val) { return new Quantity(val); }
     public static Quantity valueOf(BigInteger val) { return new Quantity(val); }
+    public static Quantity valueOf(BigDecimal val) { return new Quantity(val.doubleValue()); }
     public static Quantity valueOf(BigInteger num, BigInteger den) { 
 	return new Quantity(num, den);
     }

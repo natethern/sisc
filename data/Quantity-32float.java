@@ -77,7 +77,9 @@ public class Quantity extends Value {
     public static Quantity valueOf(int val) { return new Quantity(val); }
     public static Quantity valueOf(long val) { return new Quantity(val); }
     public static Quantity valueOf(float val) { return new Quantity(val); }
+    public static Quantity valueOf(double val) { return new Quantity((float)val); }
     public static Quantity valueOf(BigInteger val) { return new Quantity(val); }
+    public static Quantity valueOf(BigDecimal val) { return new Quantity(val.floatValue()); }
     public static Quantity valueOf(BigInteger num, BigInteger den) { 
 	return new Quantity(num, den);
     }
@@ -1066,6 +1068,20 @@ public class Quantity extends Value {
             return d;
         case INTEG:
             return (float)i.intValue();
+        case RATIO:
+            return ratioToDecimal(i,de);
+        }
+        return 0.0f;
+    }
+
+    public double doubleValue() {
+        switch (type) {
+        case FIXEDINT:
+            return (double)val;
+        case DECIM:
+            return d;
+        case INTEG:
+            return (double)i.intValue();
         case RATIO:
             return ratioToDecimal(i,de);
         }
