@@ -72,12 +72,22 @@ public class SHashtable extends ModuleAdapter {
         }
 
         public void serialize(Serializer s) throws IOException {
-            //not the most efficient, but easiest
-            s.writeExpression(toAList());
+            s.writeInt(ht.size());
+            Iterator i = ht.entrySet().iterator();
+            while(i.hasNext()) {
+                Map.Entry e = (Map.Entry)i.next();
+                s.writeExpression((Value)e.getKey());
+                s.writeExpression((Value)e.getValue());
+            }
         }
 
         public void deserialize(Deserializer s) throws IOException {
-            addAList((Pair)s.readExpression());
+            int sz = s.readInt();
+            for (int i=0; i<sz; i++) {
+                Expression key = s.readExpression();
+                Expression val = s.readExpression();
+                ht.put(key, val);
+            }
         }
 
         public String display() {

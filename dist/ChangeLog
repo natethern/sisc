@@ -1,3 +1,7 @@
+2002-10-14  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed bug in hashtable serialization
+
 2002-10-12  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Implemented read/write invariance for symbols containing special
