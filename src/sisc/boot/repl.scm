@@ -62,16 +62,6 @@
 (define stack-trace-base 
   (make-parameter #f))
 
-(define set-stack-trace-base! 
-  (if (not (getprop 'LITE (get-symbolic-environment '*sisc*)))  
-      (lambda (k)
-        ; We use absolute references to debugging here so that this can
-        ; coexist with the lite and full dists without using import
-	(stack-trace-base 
-	 (|@debugging-native::continuation-stk| 
-	   (|@debugging-native::continuation-stk| k))))
-      (lambda (k) #f)))
-
 (define repl-prompt
   (make-config-parameter "replPrompt" (lambda (repl-depth)
                                         (format "#;~a> "
@@ -140,13 +130,15 @@
                            (when handler (_signal-unhook! "INT" handler))
                            (throw m e))
                          (lambda () 
+
+                           (let ([val 
 			   ; Set the stack trace base here, so that
 			   ; automatically printed stack traces needn't 
 			   ; include the REPL code
-			   (set-stack-trace-base!
-			    (call/cc (lambda (k) k)))
-
-                           (let ([val (eval exp (interaction-environment))])
+				  (call/cc
+				   (lambda (k)
+				     (stack-trace-base k)
+				     (eval exp (interaction-environment))))])
                              (when handler (_signal-unhook! "INT" handler))
                              (if (not (void? val))
                                  (begin ((current-writer) val) (newline))))))
