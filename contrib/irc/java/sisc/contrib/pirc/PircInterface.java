@@ -9,6 +9,7 @@ import sisc.modules.s2j.*;
 public class PircInterface extends PircBot {
 
     Procedure callHandler;
+    Procedure errorHandler;
     Interpreter interp;
 
     public PircInterface(String name) {
@@ -17,6 +18,7 @@ public class PircInterface extends PircBot {
         interp=Context.enter();
         try {
             callHandler=(Procedure)interp.eval(Symbol.get("call-handler"));
+            errorHandler=(Procedure)interp.eval(Symbol.get("error-handler"));
         } catch (SchemeException e) {
             e.printStackTrace();
         }
@@ -29,7 +31,12 @@ public class PircInterface extends PircBot {
             System.arraycopy(args,0,v,1,args.length);
             interp.eval(callHandler, v);
         } catch (SchemeException e) {
-            e.printStackTrace();
+            try {
+		interp.eval(errorHandler, new Value[] {e.m, e.e, e.f});
+            } catch (SchemeException e2) {
+		e2.printStackTrace();
+		e.printStackTrace();
+            }
         }
     }
 
