@@ -9,6 +9,7 @@ import sisc.*;
 import sisc.data.*;
 import sisc.ser.*;
 import sisc.interpreter.*;
+import sisc.io.*;
 
 public class SchemeAppServlet extends SchemeServletBase {
 
@@ -124,13 +125,13 @@ public class SchemeAppServlet extends SchemeServletBase {
         throws IOException, ServletException {
 
         sisc.compiler.Parser p = new sisc.compiler.Parser(new sisc.compiler.Lexer());
-        InputPort inp = new sisc.data.InputPort(new BufferedReader(new InputStreamReader(request.getInputStream())));
+        InputPort inp = new ReaderInputPort(new BufferedReader(new InputStreamReader(request.getInputStream())));
 
         Interpreter r = Context.enter(appName);
         try {
             Value v = r.eval(p.nextExpression(inp));
             response.setContentType("application/x-scheme");
-            OutputPort outp = new OutputPort(response.getWriter(), true);
+            OutputPort outp = new WriterOutputPort(response.getWriter(), true);
             outp.write(v.write());
         } catch (SchemeException e) {
             response.getWriter().print(e.getMessage());

@@ -3,6 +3,7 @@ package sisc.contrib.servlets;
 import java.net.*;
 import java.io.*;
 import sisc.data.*;
+import sisc.io.*;
 
 public class SchemeAppClient {
 
@@ -11,7 +12,7 @@ public class SchemeAppClient {
         URL url = new URL(args[0]);
 
         sisc.compiler.Parser p = new sisc.compiler.Parser(new sisc.compiler.Lexer());
-        InputPort inp = new sisc.data.InputPort(new BufferedReader(new InputStreamReader(System.in)));
+        InputPort inp = new ReaderInputPort(new BufferedReader(new InputStreamReader(System.in)));
         
         while(true) {
             System.out.print("\n> ");
@@ -25,7 +26,7 @@ public class SchemeAppClient {
             
             conn.connect();
             OutputStream out = conn.getOutputStream();
-            OutputPort outp = new OutputPort(new PrintWriter(out), true);
+            OutputPort outp = new WriterOutputPort(new PrintWriter(out), true);
             outp.write(v.write());
             InputStream in = conn.getInputStream();
             int i;

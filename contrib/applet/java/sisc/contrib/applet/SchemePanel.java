@@ -10,6 +10,8 @@ import java.io.*;
 
 import sisc.*;
 import sisc.data.*;
+import sisc.io.*;
+
 import sisc.env.DynamicEnvironment;
 
 public class SchemePanel extends JScrollPane {
@@ -35,8 +37,8 @@ public class SchemePanel extends JScrollPane {
         try {
             iis=new PipedInputStream(interpin);
         } catch (IOException e) {}
-        dynenv = new DynamicEnvironment(new SourceInputPort(new BufferedReader(new InputStreamReader(iis)), "console"),
-                                new OutputPort(new PrintWriter(new BufferedOutputStream(dos)), true));
+        dynenv = new DynamicEnvironment(new SourceInputPort(new BufferedInputStream(iis), "console"),
+                                        new WriterOutputPort(new PrintWriter(new BufferedOutputStream(dos)), true));
         disp.setEditable(false);
         currentEditablePos=sd.getLength()-1;
         repl=new REPL("main", dynenv);

@@ -1,12 +1,15 @@
 package sisc.contrib.applet;
 
-import sisc.*;
 import javax.swing.*;
-import javax.swing.Box;
 import java.awt.event.*;
 import java.awt.*;
-import sisc.data.*;
 import java.io.*;
+
+import sisc.*;
+import sisc.data.*;
+import sisc.io.*;
+
+import javax.swing.Box;
 
 public class SISCFrame extends JPanel implements ActionListener, KeyListener {
 
@@ -67,7 +70,7 @@ public class SISCFrame extends JPanel implements ActionListener, KeyListener {
             String s=input.getText().trim();
             if (s.charAt(s.length()-1)=='\n')
                 s=s.substring(0,s.length()-1);
-            InputPort ip=new InputPort(new BufferedReader(new StringReader(s)));
+            InputPort ip=new ReaderInputPort(new BufferedReader(new StringReader(s)));
             Value v=Util.VOID;
             try {
                 v=sp.dynenv.parser.nextExpression(ip); 
