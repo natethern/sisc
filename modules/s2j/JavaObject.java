@@ -212,9 +212,9 @@ public class JavaObject extends Procedure {
             case 0: //instantiate class
                 return new JavaObject(obj.newInstance());
             case 1: //get value of static field
-                return new JavaObject(obj.getField(symval(arg[0])).get(null));
+                return new JavaObject(obj.getField(Util.mangleFieldName(symval(arg[0]))).get(null));
             case 2: //set value of static field
-                obj.getField(symval(arg[0])).set(null,Util.jobj(arg[1]));
+                obj.getField(Util.mangleFieldName(symval(arg[0]))).set(null,Util.jobj(arg[1]));
                 return VOID;
             default:
                 throw new RuntimeException(liMessage(Util.S2JB, "zerotwoargs", liMessage(Util.S2JB, "jclass"), obj.toString()));
@@ -331,12 +331,13 @@ public class JavaObject extends Procedure {
     }
 
     protected static final Value apply(Object obj, Value[] args) {
+        String fieldName = Util.mangleFieldName(symval(args[0]));
         try {
             switch (args.length) {
             case 1: //get value of field
-                return new JavaObject(obj.getClass().getField(symval(args[0])).get(obj));
+                return new JavaObject(obj.getClass().getField(fieldName).get(obj));
             case 2: //set value of field
-                obj.getClass().getField(symval(args[0])).set(obj, Util.jobj(args[1]));
+                obj.getClass().getField(fieldName).set(obj, Util.jobj(args[1]));
                 return VOID;
             default:
                 throw new RuntimeException(liMessage(Util.S2JB, "onetwoargs", liMessage(Util.S2JB, "jobject"), obj.toString()));
@@ -345,10 +346,10 @@ public class JavaObject extends Procedure {
             throw new RuntimeException(liMessage(Util.S2JB, "illegalaccess", 
                                                  new Object[] {
                 liMessage(Util.S2JB, "jobject"), 
-                    args[0].toString(), 
+                    fieldName,
                     obj.toString()}));
         } catch (NoSuchFieldException e) {
-            throw new RuntimeException(liMessage(Util.S2JB, "nosuchfield", args[0].toString(), obj.toString()));
+            throw new RuntimeException(liMessage(Util.S2JB, "nosuchfield", fieldName, obj.toString()));
         }
     }
 }

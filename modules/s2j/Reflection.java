@@ -19,10 +19,10 @@ public class Reflection extends Util {
         JAVA_CONSTRUCTORS   =13,
         JAVA_METHODS        =14,
         JAVA_FIELDS         =15,
-        JAVA_DECL_CONSTRUCTOR=16,
+        JAVA_DECL_CONSTRUCTOR   =16,
         JAVA_DECL_METHOD    =17,
         JAVA_DECL_FIELD     =18,
-        JAVA_DECL_CONSTRUCTORS=19,
+        JAVA_DECL_CONSTRUCTORS  =19,
         JAVA_DECL_METHODS   =20,
         JAVA_DECL_FIELDS    =21,
 
@@ -59,7 +59,8 @@ public class Reflection extends Util {
         JAVA_PROXY          =64,
         JAVA_NEW            =65,
         JAVA_SET            =66,
-        JAVA_MANGLE         =67;
+        JAVA_MANGLE_FIELD_NAME  =67,
+        JAVA_MANGLE_METHOD_NAME =68;
 
     public Reflection() {
 
@@ -114,7 +115,8 @@ public class Reflection extends Util {
         define("java/proxy"         ,JAVA_PROXY);
         define("java/new"           ,JAVA_NEW);
         define("java/set!"          ,JAVA_SET);
-        define("java/mangle-name"	,JAVA_MANGLE);
+        define("java/mangle-field-name"	,JAVA_MANGLE_FIELD_NAME);
+        define("java/mangle-method-name",JAVA_MANGLE_METHOD_NAME);
 
     }
 
@@ -243,8 +245,10 @@ public class Reflection extends Util {
                 return makeJObj(jobj(f.vlr[0]).getClass());
             case JAVA_INV_HANDLER:
                 return makeJObj(new SchemeInvocation(f.ctx, proc(f.vlr[0])));
-            case JAVA_MANGLE:
-                return Symbol.intern(mangleName(symval(f.vlr[0])));
+            case JAVA_MANGLE_FIELD_NAME:
+                return Symbol.intern(mangleFieldName(symval(f.vlr[0])));
+            case JAVA_MANGLE_METHOD_NAME:
+                return Symbol.intern(mangleMethodName(symval(f.vlr[0])));
             }
         case 2:
             switch(primid) {

@@ -74,7 +74,7 @@
                      (apply (cdr m) p a)
                      (error "no such method"))))))))
 (define (find-exact-method classes name . param-types)
-  (let ([jname (java/mangle-name name)])
+  (let ([jname (java/mangle-method-name name)])
     (let loop ([classes classes])
       (if (null? classes)
           (error "no matching method")

@@ -613,7 +613,7 @@ Context.exit()
               &procedure;
               <methodsynopsis language="scheme">
                 <type>symbol</type>
-                <methodname>java-mangle-name</methodname>
+                <methodname>java-mangle-method-name</methodname>
                 <methodparam><parameter>name</parameter></methodparam>
               </methodsynopsis>
               <blockquote>
@@ -649,6 +649,22 @@ Context.exit()
                 </para>
               </blockquote>
             </para>
+            <para>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>symbol</type>
+                <methodname>java-mangle-field-name</methodname>
+                <methodparam><parameter>name</parameter></methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Converts a Scheme symbol into a Java field name by
+                  removing any occurence of the <literal>-</literal>
+                  character and converting the character following it
+                  to upper case.
+                </para>
+              </blockquote>
+            </para>
           </blockquote>
         </para>
         <para>
@@ -662,8 +678,8 @@ Context.exit()
           <function>generic-java-procedure</function> it is thus
           possible to avoid name clashes as follows:
           <programlisting>
-(define-generic app (generic-java-procedure (java-mangle-name 'append)))
-(app sb (->jstring "foo"))
+(define-generic app (generic-java-procedure 'append))
+(app sb (-&gt;jstring "foo"))
           </programlisting>
           The invocation of <function>app</function> selects the
           appropriate <function>append</function> method on
@@ -1366,6 +1382,11 @@ Class.getSigners()
                 on which the field is accessed. The optional
                 <parameter>jobj</parameter> is the new value for the
                 field.
+              </para>
+              <para>
+                The <parameter>jfield</parameter> is converted from a
+                Scheme symbol into a Java symbol using the
+                <function>java-mangle-field-name</function> procedure.
               </para>
             </blockquote>
           </para>

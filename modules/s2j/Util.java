@@ -197,17 +197,9 @@ public class Util extends ModuleAdapter {
             c;
     }
 
-    public static String mangleName(String s) {
+    public static String mangleFieldName(String s) {
         int l = s.length();
         StringBuffer res = new StringBuffer(l);
-        if (s.endsWith("!")) {
-            s = s.substring(0, l-1);
-            l--;
-        }
-        if (s.endsWith("?")) {
-            s = "is-" + s.substring(0, l-1);
-            l+=2;
-        }
         int prev = 0;
         int p;
         while ((p = s.indexOf('-', prev)) != -1) {
@@ -219,6 +211,20 @@ public class Util extends ModuleAdapter {
             }
         }
         return res.append(s.substring(prev, l)).toString();
+    }
+
+    public static String mangleMethodName(String s) {
+        int l = s.length();
+        if (s.endsWith("!")) {
+            s = s.substring(0, l-1);
+            l--;
+        }
+        if (s.endsWith("?")) {
+            s = "is-" + s.substring(0, l-1);
+            l+=2;
+        }
+
+        return mangleFieldName(s);
     }
 
 }

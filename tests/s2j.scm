@@ -73,7 +73,7 @@
 (define <sisc.data.Symbol> (java-class "sisc.data.Symbol"))
 (define s (make <sisc.data.Symbol> (->jstring "foo")))
 (s 'symval)
-(s '|caseSensitive|)
+(s 'case-sensitive)
 (<sisc.data.Symbol> '|caseSensitive|)
 
 ;;generic type conversions

@@ -448,7 +448,8 @@
      (define ?name (make-generic-procedure ?next)))
     ((_ ?name)
      (define ?name (make-generic-procedure
-                    (generic-java-procedure (java/mangle-name '?name)))))))
+                    (generic-java-procedure
+                     (java/mangle-method-name '?name)))))))
 (define-syntax define-method
   (syntax-rules (next:)
     ((_ (?name (next: ?next) (?type ?arg) ...) . ?body)
