@@ -48,8 +48,12 @@ import sisc.exprs.*;
 public class GenerateHeap {
 
     static HashSet r5rs_bindings;
-    static {
-        String[] bindingNames = new String[] {
+
+    static String[] bindingNames = new String[] {
+        //core forms
+        "lambda", "quote", "letrec", "if", "begin", "set!", "define",
+        "compile-in-annotation",
+        //procedures
         "*", "+", "-", "/", "<", "<=", "=", ">", ">=", "abs", "acos", "angle",
         "append", "apply", "asin", "assoc", "assq", "assv", "atan", "boolean?",
         "call-with-current-continuation", "call-with-input-file",
@@ -88,6 +92,8 @@ public class GenerateHeap {
         "vector-set!", "vector?", "with-input-from-file", "with-output-to-file",
         "write", "write-char", "zero?"
         };
+
+    static {
         r5rs_bindings=new HashSet(bindingNames.length);
         for (int i=0; i<bindingNames.length; i++)
             r5rs_bindings.add(bindingNames[i]);
