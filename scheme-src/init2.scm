@@ -119,6 +119,31 @@
   (let ([error-parent (error-parent error-record)])
     (and error-parent (exception-continuation error-parent))))
 
+(define (make-error-message location message)
+  (if location
+      (if message
+          (format "Error in ~a: ~a" location message)
+          (format "Error in ~a." location))
+      (if message
+          (format "Error: ~a" message)
+          "Error.")))
+
+(define (display-error e)
+  (display (if (or (null? e) (pair? e))
+               (make-error-message (error-location e)
+                                   (error-message e))
+               (make-error-message #f e)))
+  (newline))
+
+(define (print-exception e . st)
+  (display-error (exception-error e))
+  (if (or (null? st) (car st))
+      (display "printing of stack trace not supported\n"))
+  (let ([p (and (pair? error) (error-parent error))])
+    (if p
+        (begin (display "Caused by ")
+               (apply print-exception p st)))))
+
 ;Loads an already expanded file (ie does not run it through the expander)
 (define (load-expanded file)
   (call-with-input-file file

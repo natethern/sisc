@@ -217,22 +217,6 @@
                       line column))))))
    (stack-trace k)))
 
-(define (make-error-message location message)
-  (if location
-      (if message
-          (format "Error in ~a: ~a" location message)
-          (format "Error in ~a." location))
-      (if message
-          (format "Error: ~a" message)
-          "Error.")))
-
-(define (display-error e)
-  (display (if (or (null? e) (pair? e))
-               (make-error-message (error-location e)
-                                   (error-message e))
-               (make-error-message #f e)))
-  (newline))
-
 (define (print-exception e . st)
   (let ([error (exception-error e)])
     (display-error error)
