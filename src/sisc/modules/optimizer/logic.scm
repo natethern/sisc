@@ -205,7 +205,7 @@
           [(and (symbol? rator)
                 (not-redefined? rator)
                 (andmap constant? rands))
-           (values `',(eval `("noexpand" (,rator ,@rands)))
+           (values `(#%quote ,(eval `("noexpand" (,rator ,@rands))))
                    `((new-assumptions ,rator)))]
           [(and (pair? rator)
                 (eq? (car rator) 'lambda)
