@@ -1380,7 +1380,7 @@ public class Quantity extends Value {
 	    return hc^val;
 	case DECIM:
 	    long bits=Double.doubleToLongBits(d);
-	    return hc^(bits & 0xffffffff)^((bits>>>32)&0xffffffff);
+	    return hc^(int)(bits & 0xffffffff)^(int)((bits>>>32)&0xffffffff);
 	case INTEG:
 	    return hc^i.hashCode();
 	case RATIO:
@@ -1388,8 +1388,8 @@ public class Quantity extends Value {
 	case COMPLEX:
 	    bits=Double.doubleToLongBits(d);
 	    long bits2=Double.doubleToLongBits(im);
-	    return hc^(bits & 0xffffffff)^((bits>>>32)&0xffffffff)^
-		(bits2 & 0xffffffff)^((bits2>>>32)&0xffffffff);
+	    return hc^(int)(bits & 0xffffffff)^(int)((bits>>>32)&0xffffffff)^
+		(int)(bits2 & 0xffffffff)^(int)((bits2>>>32)&0xffffffff);
 	default:
 	    return hc;
 	}
