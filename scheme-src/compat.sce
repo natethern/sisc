@@ -79,17 +79,34 @@
                                        '#f))))
 		  (mapf first rest))) '#f)))))
 
-(define gen-sym
-  ((lambda (symcounter)
-     (lambda (base) 
-        (begin
-          (set! symcounter (+ symcounter '1))
-          (string->symbol (format "~s_~s" base symcounter)))))
-   0))
-  
 (define gensym
-  (lambda ()
-    (gen-sym '%)))
+    (letrec ((%_2687
+               (lambda (%_2689 %_2690)
+                 (if (zero? %_2689)
+                   (list->string %_2690)
+                   (%_2687
+                     (ashr %_2689 '6)
+                     (cons (vector-ref %_2686 (modulo %_2689 '63))
+                           %_2690)))))
+             (%_2686
+               (apply vector
+                      (string->list
+                        (string-append
+                          '"0123456789abcdefghijklmnopqrstuvwxyz"
+                          '"ABCDEFGHIJKLMNOPQRSTUVWXYZ.,")))))
+      (lambda ()
+        ((lambda (%_2688)
+           (string->symbol
+             (%_2687
+               (+ %_2688
+                  (* (modulo (abs (rand)) '65535) '311040000000))
+               '())))
+         (system-time)))))  
+
+
+(define gen-sym
+  (lambda (base) 
+    (string->symbol (format "~s_~s" base (gensym)))))
 
 (define ormap
   (lambda (proc list1)
