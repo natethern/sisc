@@ -8,6 +8,16 @@ import sisc.util.Util;
 
 public class Lexer implements Tokens {
 
+    /**
+     * When set, the *strict* R5RS lexical syntax is followed. 
+     * Any reserved character will be an error.
+     *
+     * This should really by in the DynamicEnvironment
+     */
+    public static boolean annotate=Util.getSystemProperty("sisc.strictr5rs", 
+                                                          "false")
+        .equalsIgnoreCase("true");
+
     /* Strict R5RS Syntax Helper Functions */
     public static final boolean isIdentifierStart(char c) {
         return Character.isLetter(c) ||
