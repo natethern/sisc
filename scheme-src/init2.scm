@@ -327,19 +327,9 @@
     (with-current-url from
       (lambda ()
         (let loop ([e (read-code inf)])
-          (if (not (eof-object? e))
-              (let ([res (sc-expand e)])
-                ;;transform (begin (void) expr ...) into expr ...
-                (if (and (pair? res) (eq? (car res) 'begin))
-                    (let ([res (cdr res)])
-                      (if (and (pair? res)
-                               (equal? (car res) '(void)))
-                          (set! res (cdr res))
-                          res)
-                      (for-each (lambda (expr)
-                                  (pretty-print expr outf))
-                                res))
-                    (pretty-print res outf))
+          (or (eof-object? e)
+              (begin
+                (pretty-print (sc-expand e) outf)
                 (newline outf)
                 (loop (read inf)))))))
     (close-output-port outf)
