@@ -52,7 +52,7 @@ Returns the Java class in which <jclass> was declared, or null if it
 was declared at the top-level.
 
 
-JAVA-CLASS-DECLARED-SUPERCLASSES <jclass> -> <list jclass>
+JAVA-CLASS-DECLARED-SUPERCLASSES <jclass> -> (list <jclass>)
 Returns the direct superclasses of <jclass>.
 
 For ordinary classes this is the class' superclass followed by all its
@@ -68,23 +68,27 @@ superclasses are:
 <java.io.serializable[][]>)
 
 
-JAVA-CLASS-DECLARED-CLASSES <jclass> => (list <jclass>)
-Returns all the classes declared by <jclass>.
+JAVA-CLASS-DECLARED-CLASSES <jclass> => (list <jclass>)/#f
+Returns all the classes declared by <jclass>, or #f if access to this
+information is prohibited.
 
 
-JAVA-CLASS-DECLARED-CONSTRUCTORS <jclass> => (list <jconstructor>)
-Returns all the constructors declared by <jclass>
+JAVA-CLASS-DECLARED-CONSTRUCTORS <jclass> => (list <jconstructor>)/#f
+Returns all the constructors declared by <jclass>, or #f if access to
+this information is prohibited.
 
 
-JAVA-CLASS-DECLARED-METHODS <jclass> => (list <jmethod>)
-Returns all the methods declared by <jclass>.
+JAVA-CLASS-DECLARED-METHODS <jclass> => (list <jmethod>)/#f
+Returns all the methods declared by <jclass>, or #f if access to this
+information is prohibited.
 
 
-JAVA-CLASS-DECLARED-FIELDS <jclass> -> <list jfield>
-Returns all the fields declared by <jclass>.
+JAVA-CLASS-DECLARED-FIELDS <jclass> -> (list <jfield>)/#f
+Returns all the fields declared by <jclass>, or #f if access to this
+information is prohibited.
 
 
-JAVA-CLASS-PRECEDENCE-LIST <jclass> -> <list jclass>
+JAVA-CLASS-PRECEDENCE-LIST <jclass> -> (list <jclass>)#f
 Returns the total order of <jclass> and all direct & indirect
 superclasses, as determined by the partial orders obtained from
 calling JAVA-CLASS-DECLARED-SUPERCLASSES.
@@ -460,15 +464,24 @@ Converts <jstring> to a Scheme symbol / string.
 Access Permissions
 ------------------
 
-The only class members (i.e. constructors, methods, fields) visible to
-[DEFINE]-GENERIC-JAVA-{METHOD,FIELD-ACCESSOR,FIELD-MODIFIER}[S] and
-JAVA-NEW are public ones declared in public classes. This almost
-exactly mimics the visibility rules in Java for code residing in
-packages other than the one the member is residing in. It is also in
-line with the default permissions granted to the Java reflection
-API. There is one rare case where this rule is more restrictive than
-Java's: public members of package-protected classes are not visible
-even when accessed via a public sub-class.
+Invoking [DEFINE-]JAVA-CLASS[ES], JAVA-NEW or any of the procedures
+defined with
+[DEFINE]-GENERIC-JAVA-{METHOD,FIELD-ACCESSOR,FIELD-MODIFIER}[S] causes
+the Scheme-to-Java FFI to perform reflection on the named Java
+class(es), the class passed as the first argument, or the class
+corresponding to the type first argument passed to the other
+procedures, respectively. This process collects information about all
+the constructors, methods and fields of the class and it's
+superclasses/interfaces.
+
+The only class members processed during this automatic reflection are
+public ones declared in public classes. This almost exactly mimics the
+visibility rules in Java for code residing in packages other than the
+one the member is residing in. It is also in line with the default
+permissions granted to the Java reflection API. There is one rare case
+where this rule is more restrictive than Java's: public members of
+package-protected classes are not visible even when accessed via a
+public sub-class.
 
 Depending on the security settings, the Java reflection API is in fact
 capable of granting access to *any* members of *any* class. However,
@@ -478,6 +491,20 @@ result in unpredictable results to the user. For instance,
 undocumented private methods would be invoked in preference to
 documented public methods if the formers type signature provided a
 better match.
+
+Automatic reflection ignores security exceptions thrown by the Java
+reflection API, i.e. the class in question will appear to have no
+constructors, methods and fields. This is designed to cope with
+situations where the default security settings have been altered
+in a way that prevents access to members of some (or even all)
+classes.
+
+In some applications the reflection API permissions depend on the
+context of the invocation. For instance, in applets it is usually
+possible to access class member information as part of the
+initialisation but not after that. Since [DEFINE-]JAVA-CLASS[ES]
+triggers automatic reflection, it can be used to control when
+automatic reflection for specific classes takes place.
 
 
 Common Usage
