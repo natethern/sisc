@@ -195,7 +195,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
           <methodsynopsis language="scheme">
             <type>undefined</type>
             <methodname>flush-output-port</methodname>
-            <methodparam>
+            <methodparam choice="opt">
               <parameter>output-port</parameter>
             </methodparam>
           </methodsynopsis>
@@ -205,7 +205,9 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <parameter>output-port</parameter>'s buffered data to be
               written immediately.  This operation is allowed on both
               auto-flush and non-auto-flush output ports, though it
-              has no effect on the former.
+              has no effect on the
+              former. <parameter>output-port</parameter> defaults to
+              <literal>current-output-port</literal>.
             </para>
           </blockquote>
         </para>
