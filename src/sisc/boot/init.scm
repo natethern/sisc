@@ -169,6 +169,30 @@
 	(cons (car ls1) (append2 (cdr ls1) ls2)))))
 (define append append2)
 
+(define (_make-left-pairwise-nary proc base-case)
+  (letrec ([helper
+            (lambda (acc argls)
+              (if (null? argls)
+                  acc
+                  (helper (proc acc (car argls))
+                          (cdr argls))))])
+    (lambda args
+      (if (null? args)
+          base-case
+          (helper (car args) (cdr args))))))
+
+(define (_make-right-pairwise-nary proc base-case)
+  (letrec ([helpera
+            (lambda (acc argls)
+              (if (null? argls)
+                  acc
+                  (helper (proc (car argls) acc)
+                          (cdr argls))))])
+    (lambda args
+      (if (null? args)
+          base-case
+          (helper (car args) (cdr args))))))
+
 ;;;;;;;;;;;;;;; Conversion functions
 
 (define list->string
@@ -267,19 +291,7 @@
     
 ;;;;;;;;;;;;; Optimized functions
 
-(define append
-  (letrec ([real-append 
-	    (lambda (ls1 . lses)
-	      (cond [(null? lses) ls1]
-		    [(null? ls1)
-		     (apply real-append lses)]
-		    [else (apply real-append 
-				 (append2 ls1 (car lses))
-				 (cdr lses))]))])
-    (lambda lses
-      (cond [(null? lses) ()]
-	    [(null? (cdr lses)) (car lses)]
-	    [else (apply real-append (car lses) (cdr lses))]))))
+(define append (_make-left-pairwise-nary append2 '()))
 
 ; True only if the list is proper (not circular and terminated with null)
 (define (proper-list? x)
@@ -449,15 +461,7 @@
            r))))
 
 ;;;;;;;;;;;;;; String functions
-(define string-append
-  (letrec ([string-append-helper
-	    (lambda (acc args)
-	      (if (null? args) acc
-		  (string-append-helper (_string-append acc (car args))
-					(cdr args))))])
-    (lambda args
-      (if (null? args) ""
-	  (string-append-helper (car args) (cdr args))))))
+(define string-append (_make-left-pairwise-nary _string-append ""))
 
 (define char-downcase
   (let* ((a (char->integer #\A))
