@@ -11,6 +11,9 @@
 ;;; Adapted to version 5.0c by stone@math.grin.edu (John David Stone) 1997
 ;;; Adapted to version 6.0a by Gary T. Leavens <leavens@cs.iastate.edu>, 1999
 
+;;import SISC record support, to stop SLIB using its own
+(import record)
+
 ;;; (software-type) should be set to the generic operating system type.
 ;;; UNIX, VMS, MACOS, AMIGA and MS-DOS are supported.
 (define (software-type) (detect-os))
@@ -27,7 +30,8 @@
 
 ;;; (scheme-implementation-version) should return a string describing
 ;;; the version the scheme implementation loading this file.
-(define (scheme-implementation-version) (getprop 'version '*sisc*))
+(define (scheme-implementation-version)
+  (getprop 'version (get-symbolic-environment '*sisc*)))
 
 ;;; (implementation-vicinity) should be defined to be the pathname of
 ;;; the directory where any auxillary files to your Scheme
