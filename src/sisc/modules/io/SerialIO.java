@@ -2,6 +2,7 @@ package sisc.modules.io;
 
 import sisc.interpreter.*;
 import sisc.nativefun.*;
+import sisc.util.Util;
 import sisc.data.*;
 import java.io.IOException;
 import java.io.EOFException;
@@ -91,7 +92,7 @@ public class SerialIO extends IndexedProcedure {
         } catch (IOException e) {
             IO.throwIOException(r, liMessage(IO.IOB, "errorwriting",
                                              p.toString(),
-                                             e.getMessage()), e);
+                                             Util.javaExceptionToString(e)), e);
         }
         return VOID;
     }

@@ -721,6 +721,10 @@ public abstract class Util implements Version {
                                    Object[] args) {
         return MessageFormat.format(liMessage(bundle, messageName), args);
     }
+
+    protected static String javaExceptionToString(Exception e) {
+        return "<" + e.getClass().getName() + ">: "+ e.getMessage();
+    }
 }
 
 /*
