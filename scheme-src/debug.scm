@@ -80,7 +80,18 @@
 		     result)))
 	   (lambda () (putprop 'trace-depth '*sisc* 
 			       (- (getprop 'trace-depth '*sisc*) 1))))))))
-
+(define _k-stack 
+  (lambda (e)
+    (let* ([k (cdr (assoc 'cont e))]
+           [st (let loop ((k k))
+                 (cond [(null? k) (values '() '())]
+                       [(null? (continuation-nxp k)) 
+                        (loop (continuation-stk k))]
+                       [else 
+                        (let ([nxp (continuation-nxp k)])
+                          (cons nxp (loop (continuation-stk k))))]))])
+      st)))
+           
 (define stack-trace 
   (letrec ([annotations-to-assoc
             (lambda (expr)
