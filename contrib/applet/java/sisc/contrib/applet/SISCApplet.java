@@ -7,9 +7,9 @@ import java.io.*;
 import java.net.*;
 import java.util.zip.GZIPInputStream;
 
-import sisc.*;
 import sisc.ser.*;
 import sisc.interpreter.*;
+import sisc.REPL;
 
 public class SISCApplet extends JApplet {
 
@@ -21,7 +21,7 @@ public class SISCApplet extends JApplet {
             Context.register("main", ctx);
             Interpreter r = Context.enter("main");
             SeekableInputStream in=new MemoryRandomAccessInputStream(new GZIPInputStream(conn.getInputStream()));
-            REPL.initializeInterpreter(r, new String[0], in);
+            if (!REPL.loadHeap(r, in)) return;
             Context.exit();
             SISCFrame sf=new SISCFrame(r);
             //	sf.pack();

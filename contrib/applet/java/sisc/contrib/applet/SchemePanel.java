@@ -8,11 +8,11 @@ import javax.swing.text.*;
 import java.awt.font.*;
 import java.io.*;
 
-import sisc.interpreter.Interpreter;
 import sisc.*;
 import sisc.data.*;
 import sisc.io.*;
 
+import sisc.interpreter.Interpreter;
 import sisc.env.DynamicEnvironment;
 
 public class SchemePanel extends JScrollPane {
@@ -38,7 +38,8 @@ public class SchemePanel extends JScrollPane {
         try {
             iis=new PipedInputStream(interpin);
         } catch (IOException e) {}
-        dynenv = new DynamicEnvironment(new SourceInputPort(new BufferedInputStream(iis), "console"),
+        dynenv = new DynamicEnvironment(r.getCtx(),
+                                        new SourceInputPort(new BufferedInputStream(iis), "console"),
                                         new WriterOutputPort(new PrintWriter(new BufferedOutputStream(dos)), true));
         disp.setEditable(false);
         currentEditablePos=sd.getLength()-1;
