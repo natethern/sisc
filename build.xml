@@ -1,5 +1,5 @@
 <project name="sisc" default="all">
-  
+
   <path id="classpath">
     <fileset dir="./lib">
       <include name="*.jar"/>
@@ -306,5 +306,17 @@
     <jar jarfile="${dist}/sisc-applet.jar"
          basedir="${classdir}"
          includes="sisc/applet/**"/>
+  </target>
+
+  <target name="check" depends="full-prepare,heap" if="junit.present">
+    <junit>
+      <sysproperty key="HEAP" value="${heap}"/>
+      <classpath>
+        <pathelement location="${classdir}" />
+        <pathelement path="${java.class.path}" />
+      </classpath>
+      <formatter type="plain"/>
+      <test name="sisc.tests.TestR5RS"/>
+    </junit>
   </target>
 </project>
