@@ -23,15 +23,15 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public boolean emitDebuggingSymbols = DEFAULT_EMIT_DEBUGGING_SYMBOLS;
 
     private static String defaultPrintShared =
-        Boolean.toString(DEFAULT_PRINT_SHARED);
+        new Boolean(DEFAULT_PRINT_SHARED).toString();
     private static String defaultVectorLengthPrefixing =
-        Boolean.toString(DEFAULT_VECTOR_LENGTH_PREFIXING);
+        new Boolean(DEFAULT_VECTOR_LENGTH_PREFIXING).toString();
     private static String defaultEmitDebuggingSymbols =
-        Boolean.toString(DEFAULT_EMIT_DEBUGGING_SYMBOLS);
+        new Boolean(DEFAULT_EMIT_DEBUGGING_SYMBOLS).toString();
     private static String defaultStrictR5RS =
-        Boolean.toString(DEFAULT_STRICT_R5RS);
+        new Boolean(DEFAULT_STRICT_R5RS).toString();
     private static String defaultEmitAnnotations =
-        Boolean.toString(DEFAULT_EMIT_ANNOTATIONS);
+        new Boolean(DEFAULT_EMIT_ANNOTATIONS).toString();
 
     public Value wind = FALSE; //top of wind stack
 

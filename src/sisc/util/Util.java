@@ -17,10 +17,10 @@ public abstract class Util extends Defaults implements Version {
 
     public static final boolean caseSensitive =
         System.getProperty("sisc.caseSensitive",
-                           Boolean.toString(DEFAULT_CASE_SENSITIVE)).equals("true");
+                           new Boolean(DEFAULT_CASE_SENSITIVE).toString()).equals("true");
     public static final boolean permitInterrupts =
         System.getProperty("sisc.permitInterrupts",
-                           Boolean.toString(DEFAULT_PERMIT_INTERRUPTS)).equals("true");
+                           new Boolean(DEFAULT_PERMIT_INTERRUPTS).toString()).equals("true");
     public static final int minFloatPrecision =
         Integer.parseInt(System.getProperty("sisc.minFloatPrecision",
                                             Integer.toString(DEFAULT_MIN_FLOAT_PRECISION)));
