@@ -56,6 +56,14 @@ public class AppExp extends Expression {
 
         r.vlr = r.createValues(rands.length);
 
+        if (allImmediate) {
+            r.nxp=nxp;
+            r.acc=exp.getValue(r);
+        } else {
+            r.push(nxp);
+            r.nxp=exp;
+        }
+
 	    Expression ex;
 	    // Load the immediates from right to left
 	    for (int i = rands.length-1; i>=0; i--) {
@@ -64,13 +72,6 @@ public class AppExp extends Expression {
                 r.vlr[i] = ex.getValue(r);
 	    }
 
-        if (allImmediate) {
-            r.acc=exp.getValue(r);
-            r.nxp=nxp;
-        } else {
-            r.push(nxp);
-            r.nxp=exp;
-        }
     }
 
     public Value express() {

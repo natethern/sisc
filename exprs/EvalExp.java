@@ -50,8 +50,8 @@ public class EvalExp extends Expression {
 
     public void eval(Interpreter r) throws ContinuationException {
         if (preImmediate) {
-            r.acc = pre.getValue(r);
             r.nxp = post;
+            r.acc = pre.getValue(r);
         } else {
             r.push(post);
             r.nxp=pre;

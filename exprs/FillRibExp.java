@@ -53,8 +53,8 @@ public class FillRibExp extends Expression {
     public void eval(Interpreter r) throws ContinuationException {
         r.vlr[pos]=r.acc;
         if (lastAndRatorImmediate) {
-            r.acc=exp.getValue(r);
             r.nxp=nxp;
+            r.acc=exp.getValue(r);
         } else {
             r.push(nxp);
             r.nxp=exp;
