@@ -73,9 +73,10 @@
     ((stream-cons obj strm)
       (make-stream
         (stream-low-level-delay
-          (if (not (stream? strm))
-              (stream-error "attempt to stream-cons onto non-stream")
-              (cons obj strm)))))))
+         (let ((astrm strm))
+           (if (not (stream? astrm))
+               (stream-error "attempt to stream-cons onto non-stream")
+               (cons obj astrm))))))))
 
 ;; STREAM-NULL? object -- #t if object is the null stream, #f otherwise
 (define (stream-null? obj)
