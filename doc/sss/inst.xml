@@ -133,8 +133,8 @@
       environment variable to the options you wish to pass to the
       JVM.  This includes switches for heap size, system properties,
       etc.  &SISC; itself has a number of properties that can affect
-      its operation.  See <xref linkend="system-properties"/> for a
-      list of these properties and their meanings.
+      its operation.  See <xref linkend="system-properties"/> 
+      for a list of these properties and their meanings.
     </para>
   </sect1>
   <sect1 id="FileExtensions">
