@@ -705,7 +705,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         Several utility functions are provided for manipulating IP
         addresses.  These are described below.
       </para>
-      <para id="func-get-host-by-ip-name">
+      <para>
         <blockquote>
           <para>
             <indexterm><primary>get-host-by-ip-name</primary>
