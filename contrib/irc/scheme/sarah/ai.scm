@@ -243,45 +243,59 @@
   "Okay, I'm listening.")
 
 (define (eval-within-n-ms datum ms . env)
-    (let* ([evaluation-thread
-            (let* ([env (if (null? env) 
-                            (scheme-report-environment 5)
-                            (car env))])
+    (let* ([env (if (null? env) 
+                    (scheme-report-environment 5)
+                    (car env))]
+           [os (open-output-string)]
+	   [evaluation-thread
+            (begin
               (putprop 'call/cc env call/cc)
               (putprop '$sc-put-cte env $sc-put-cte)
 	      (strict-r5rs-compliance #t)
               (thread/new 
                (lambda ()
-                 (with-output-to-string 
-                     (lambda ()
-		       (let ([result (eval datum env)])
-			 (cond [(circular? result) (write result)]
-                               [else (pretty-print result)])))))))]
+                 (with-output-to-port os
+                   (lambda () (eval datum env))))))]
            [watchdog-thread
             (thread/new
              (lambda ()
                (thread/join evaluation-thread ms)
-               (with-failure-continuation
-                   (lambda (m e)
-                     ; An error?  Egads!
-                     (if (eqv? (thread/state evaluation-thread) 'running)
-                         (begin 
-                           (thread/interrupt evaluation-thread)
-                           "Sorry, I couldn't evaluate your expression in the given time.")
-                           
-                         (make-error-message (error-location m) 
-                                             (error-message m))))
-                 (lambda ()
-                   (thread/result evaluation-thread)))))])
+               (with-output-to-port os
+                 (lambda () 
+                   (with-failure-continuation
+                       (lambda (m e)
+                         ; An error?  Egads!
+                         (if (eqv? (thread/state evaluation-thread) 'running)
+                             (begin 
+                               (thread/interrupt evaluation-thread)
+                               (display 
+                                 "Sorry, I couldn't evaluate your expression in the given time.")
+                               (print-exception (make-exception m e) #f))))
+                     (lambda ()
+                       (let ([result (thread/result evaluation-thread)])
+                         (putprop '! env result)
+                         (if (circular? result) 
+                             (write result)
+                             (pretty-print result)))))))))])
       ;Start the threads
       (thread/start evaluation-thread)
       (thread/start watchdog-thread)
       (let loop () (unless (thread/join watchdog-thread) (loop)))
-      (thread/result watchdog-thread)))
+      (get-output-string os)))
 
 (define (evaluate from channel message st)
   (let-values ([(ignoreables term) (string-split message "eval ")])
-    (eval-within-n-ms (with-input-from-string term read-code) 5000)))
+    (with/fc (lambda (m e)
+               (error-message m))
+     (lambda ()
+       (let* ([expr 'didnt-read]
+              [expr-text 
+               (with-output-to-string 
+                 (lambda ()
+                   (set! expr (with-input-from-string term read-code))))])
+        (cond [(eq? expr 'didnt-read) expr-text]
+              [(void? expr) "{No expression.  Were the parenthesis closed properly?}"]
+              [else (eval-within-n-ms expr 5000)]))))))
 
 (define (learn from channel message st)
   (let-values ([(term definition) (string-split message " is at ")])    
