@@ -47,13 +47,18 @@
           </indexterm>
           <methodsynopsis language="java">
             <modifier>public</modifier>
-            <type>String</type>
-            <methodname>display</methodname>
             <void/>
+            <methodname>display</methodname>
+            <methodparam>
+              <type>sisc.io.ValueWriter</type>
+              <parameter>writer</parameter>
+            </methodparam>
           </methodsynopsis>
           <blockquote>
             <para>
-              Returns a printable representation of this value
+              Uses the various output methods of
+              <type>sisc.io.ValueWriter</type> to construct an
+              external representation of the given Value
               suitable for output from the
               <function>display</function> Scheme function.
             </para>
@@ -79,17 +84,23 @@
           </indexterm>
           <methodsynopsis language="java">
             <modifier>public</modifier>
-            <type>String</type>
-            <methodname>write</methodname>
             <void/>
+            <methodname>write</methodname>
+            <methodparam>
+              <type>sisc.io.ValueWriter</type>
+              <parameter>writer</parameter>
+            </methodparam>
           </methodsynopsis>
           <blockquote>
             <para>
-              Returns a printable representation of this value
+              Uses the various output methods of
+              <type>sisc.io.ValueWriter</type> to construct an
+              external representation of the given Value
               suitable for output from the
-              <function>write</function> Scheme function.  If not
-              implemented, the output of the <function>display</function>
-              method is used as output from <function>write</function>.
+              <function>write</function> Scheme function.
+              If not implemented, the output constructed the by the
+              <function>display</function> method is used as output
+              from <function>write</function>.
             </para>
           </blockquote>
         </para>
