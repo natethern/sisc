@@ -958,6 +958,9 @@
 (throw (make-error 'foo))
 ; => Error in foo.
 
+(throw (make-error "something ~a happened" 'bad))
+; => Error: something bad happened
+
 (throw (make-error 3))
 ; => Error: 3
 
