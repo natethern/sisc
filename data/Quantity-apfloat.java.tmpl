@@ -165,8 +165,6 @@ public class Quantity extends Value {
     public int val;
     public BigDecimal d, im;
     public BigInteger i, de;
-    public transient SoftReference out_cache;
-    public transient byte out_cache_radix;
 
     public Quantity() {}
 
@@ -1328,9 +1326,6 @@ public class Quantity extends Value {
     }
 
     public String toString(int radix) {
-        if (out_cache!=null && out_cache_radix==radix &&
-            out_cache.get()!=null) return (String)out_cache.get();
-
         StringBuffer b=new StringBuffer();
         if (type==FIXEDINT)
             b.append(Integer.toString(val,radix));
@@ -1356,10 +1351,7 @@ public class Quantity extends Value {
             }
             b.append('i');
         }
-        out_cache_radix=(byte)radix;
-        String rv=b.toString();
-        out_cache=new SoftReference(rv);
-        return rv;
+        return b.toString();
     }
 
     public void deserialize(Deserializer s) throws IOException {
