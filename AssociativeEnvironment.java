@@ -68,18 +68,9 @@ public class AssociativeEnvironment extends NamedValue {
         symbolMap=new HashMap(1);
     }
 
-    protected void expand(int newSize) {
-        synchronized(symbolMap) {
-            Value[] newenv=new Value[newSize];
-            System.arraycopy(env, 0, newenv, 0, env.length);
-            nextFree=newSize;
-            env=newenv;
-        }
-    }
-
     protected void expand() {
         synchronized(symbolMap) {
-            Value[] newenv=new Value[(int)(env.length*EXPFACT)];
+            Value[] newenv=new Value[(int)((env.length*EXPFACT) + 1)];
             System.arraycopy(env, 0, newenv, 0, env.length);
             nextFree=env.length;
             env=newenv;
@@ -109,11 +100,15 @@ public class AssociativeEnvironment extends NamedValue {
     }
 
     public int define(Symbol s, Value v) {
-        synchronized(symbolMap) {
-            try {
-                return set(s, v);
-            } catch (NullPointerException np) {}
+        try {
+            return set(s, v);
+        } catch (NullPointerException np) {}
+        
+        return store(s, v);
+    }
 
+    protected int store(Symbol s, Value v) {
+        synchronized(symbolMap) {
             if (nextFree >= env.length) 
                 expand();
             
@@ -133,7 +128,7 @@ public class AssociativeEnvironment extends NamedValue {
         if (i==null && parent!=null) {
             int pi=parent.getLoc(s);
             if (pi!=-1) 
-                i=new Integer(define(s, parent.lookup(pi)));
+                i=new Integer(store(s, parent.lookup(pi)));
         }
         return (i==null ? -1 : i.intValue());
     }
