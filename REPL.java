@@ -50,21 +50,17 @@ public class REPL extends Thread {
         this.r = r;
     }
 
-    public static Interpreter createInterpreter(String[] args) throws ClassNotFoundException {
-	AppContext ctx = new AppContext();
-	DynamicEnv d = new DynamicEnv(System.in, System.out);
-        Interpreter r = new Interpreter(ctx,d);
-
+    public static void initializeInterpreter(Interpreter r, String[] args) throws ClassNotFoundException {
         try {
-            ctx.loadEnv(r,
-			new DataInputStream(
-                          new BufferedInputStream(
-                              new GZIPInputStream(
+            r.ctx.loadEnv(r,
+			  new DataInputStream(
+                            new BufferedInputStream(
+                               new GZIPInputStream(
                                   new BufferedInputStream(
                                       new FileInputStream(
                                           System.getProperty("HEAP","sisc.heap")),
                                       90000))
-                          )));
+			       )));
         } catch (IOException e) {
             System.err.println("Error loading heap!");
             e.printStackTrace();
@@ -95,8 +91,6 @@ public class REPL extends Thread {
         r.define(Symbol.get("fs-roots"), Util.valArrayToList((Value[])rootss,
                  0, rootss.length),
                  Util.SISC);
-
-        return r;
     }
 
     public void run() {
@@ -113,7 +107,8 @@ start:
                 continue start;
             }
         } while (false);
-        //System.runFinalizersOnExit(true);
+
+	Context.exit();
     }
 
     public static void main(String[] args) throws Exception {
@@ -148,7 +143,10 @@ start:
         pout.print("SISC");
         pout.flush();
 
-        Interpreter r = createInterpreter((String[])fargs.toArray(new String[0]));
+	AppContext ctx = new AppContext();
+	Context.register("main", ctx);
+        Interpreter r = Context.enter("main");
+        initializeInterpreter(r,(String[])fargs.toArray(new String[0]));
 
         pout.println(" ("+Util.VERSION+")");
         pout.flush();
@@ -161,7 +159,7 @@ start:
                 Socket client = ssocket.accept();
 		pout.println("Accepting connection from " + client.getInetAddress().toString());
 		pout.flush();
-                Interpreter cr = Interpreter.newContext(r);
+                Interpreter cr = Context.enter("main");
 		cr.dynenv = new DynamicEnv(new InputPort(new BufferedReader(new InputStreamReader(client.getInputStream()))),
 					   new OutputPort(new PrintWriter(client.getOutputStream()), true));
                 REPL repl = new SocketREPL(cr, client);
@@ -172,6 +170,8 @@ start:
             REPL repl=new REPL(r);
             repl.start();
         }
+
+	Context.exit();
     }
 }
 

@@ -1,0 +1,91 @@
+Calling Scheme from Java
+========================
+
+A call from Scheme to Java can occur in one of two places:
+
+* within a call from Scheme to Java - we shall call this an "internal call".
+
+* elsewhere, e.g. as the result of a timer expiration or as part of a
+thread created by Java - we shall call this an "external call".
+
+Multiple Scheme applications can run within a single SISC
+runtime. Each application has its own top level environment and
+evaluator. An application is represented by instances of the
+AppContext class.
+
+A Scheme application can execute in multiple threads. Each thread must
+have it's own dynamic environment, containing things like the current
+input and output ports. Dynamic environments are represented by
+instances of the DynamicEnv class.
+
+A thread can be associated with multiple interpreters. The reason for
+there being multiple interpreters is that internal calls need to be
+executed by an interpreter different from the one that initiated the
+internal call so that the state of the latter can be preserved.
+
+The Context class manages the above two call scenarios.
+
+Internal calls
+--------------
+When making an internal call, one typically wants to do that in an
+interpreter that shares the same AppContext and DynamicEnv as the
+calling interpreter. One can get hold of such an interpreter using
+
+  Interpreter r = Context.enter();
+
+If one isn't sure whether the call is internal, one can check this
+using
+
+  Interpreter current = Context.currentInterpreter();
+  if (current == null) { ...make external call...}
+  else { ...make internal call... }
+
+The calls themselves are made using one of the three EVAL methods on
+the interpreter:
+
+  eval(string);
+  eval(value) ;//same as calling "(eval value)" in Scheme
+  eval(proc, value[]) ;//same as calling "(proc val ...)" in Scheme
+
+which all return an instance of Value as the result.
+
+Several such calls can be made on the same interpreter.
+
+Before returning from the code that is making the internal calls
+
+  Context.exit()
+
+must be called.
+
+External calls
+--------------
+The main challenge when making external calls is what application and
+dynamic environment to make them in. Context maintains an application
+registry. To register an application call
+
+  Context.register("appname", AppContext)
+
+The application registry can be used to obtain new interpreters that
+are associated with specific applications and have a fresh dynamic
+environment:
+
+  Interpreter r = Context.enter("appname");
+
+Sometimes one may want to use a different mechanism for finding
+applications and dynamic environments. For instance, threads created
+from Scheme should probably execute within the application that
+created them and using a dynamic environment that is cloned from the
+dynamic environment present when the thread is started. There is
+therefore a general mechanism for obtaining a new interpreter that
+uses a specific application and dynamic env:
+
+  Interpreter r = Context.enter(appctx, dynenv);
+
+External calls are made in the same way as internal calls, e.g. using
+one of the eval methods.
+
+Before returning from the code that is making the internal calls
+
+  Context.exit()
+
+must be called.

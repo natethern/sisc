@@ -47,7 +47,6 @@ import sisc.exprs.*;
 public class GenerateHeap {
 
     public static void main(String[] args) throws Exception {
-        Interpreter r;
         String inHeap = null;
         String outHeap = null;
         int i;
@@ -69,8 +68,10 @@ public class GenerateHeap {
         }
 
 	AppContext ctx = new AppContext(sisc.compiler.Compiler.addSpecialForms(new AssociativeEnvironment()));
-	DynamicEnv d = new DynamicEnv(System.in, System.out);
-        r=new Interpreter(ctx,d);
+
+	Context.register("main", ctx);
+
+        Interpreter r = Context.enter("main");
 	new Primitives().initialize(r);
         ctx.setEvaluator("eval");
 
@@ -133,6 +134,8 @@ public class GenerateHeap {
 
         }
         System.out.println("Heap saved.");
+
+	Context.exit();
     }
 }
 

@@ -58,18 +58,15 @@ public class SThread extends Module {
     }
 
     class ThreadContext extends Value implements Runnable {
-        protected Interpreter r;
+        protected Interpreter parent;
+	protected Procedure thunk;
 	protected Thread thread;
 	protected int state;
 	Value rv;
 
-        ThreadContext(Interpreter parent, Expression e) {
-	    r=Interpreter.newContext(parent);
-	    
-	    r.stk=null;
-	    r.fk=null;
-	    r.nxp=new AppExp(e, new Expression[0], true);
-	    
+        ThreadContext(Interpreter parent, Procedure thunk) {
+	    this.parent = parent;
+	    this.thunk = thunk;
 	    thread=new Thread(schemeThreads, this);
 	    state=READY;
         }
@@ -83,10 +80,12 @@ public class SThread extends Module {
 	}
 
 	public void run() {
+	    Interpreter r = Context.enter(parent.ctx, parent.dynenv.copy());
 	    state=RUNNING;
-	    r.interpret();
+	    r.eval(thunk,new Value[]{});
 	    rv=r.acc;
 	    state=FINISHED;
+	    Context.exit();
 	}
 
         public String display() {
@@ -112,7 +111,7 @@ public class SThread extends Module {
         case 1:
             switch(primid) {
             case NEWTHREAD:
-		return new ThreadContext(f, proc(f,f.vlr[0]));
+		return new ThreadContext(f,proc(f,f.vlr[0]));
 	    case THREADSTART:
 		ThreadContext c=tcont(f,f.vlr[0]);
 		c.start();
