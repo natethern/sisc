@@ -1,3 +1,5 @@
+2003-09-21	Released SISC 1.8.4-rc
+
 2003-09-21  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed k invocation bug introduced by a misguided "optimization"
