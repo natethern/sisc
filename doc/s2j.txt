@@ -115,10 +115,6 @@ second argument) retrieves / sets the value of the field <field-name>
 on the object.
 
 
-Static fields can be accessed/modified by passing a typed null object
-(see JAVA-NULL) as the first argument to the procedure.
-
-
 DEFINE-GENERIC-JAVA-FIELD-ACCESSOR <scheme-name> [<java-name>]
 DEFINE-GENERIC-JAVA-FIELD-MODIFIER <scheme-name> [<java-name>]
 Binds <scheme-name> to the accessor/modifier for the Java field named
@@ -338,8 +334,8 @@ Runs <thunk> in a block synchronized on <jobject>, returning the
 result returned by <thunk>. This is the equivalent to:
 synchronized (obj) { .... } in Java.
 
-It is illegal for <thunk> to invoke escaping continuations from with
-<thunk> or, for code outside <thunk> to invoke a continuation captured
+It is illegal for <thunk> to invoke continuations that escape
+<thunk>, or for code outside <thunk> to invoke a continuation captured
 inside <thunk>.
 
 
@@ -422,13 +418,13 @@ Java:   fooObj.bar = val;
 Scheme: (:bar! foo-obj val)
 
 Chained field access:
-Java:   fooObj.bar.baz.boo
-Scheme: (fold (cut <> <>) foo-obj (list :bar :baz :boo))
-or      ((compose :boo :baz :bar) foo-obj)
+Java:   Object res = fooObj.bar.baz.boo
+Scheme: (define res (fold (cut <> <>) foo-obj (list :bar :baz :boo)))
+or      (define res ((compose :boo :baz :bar) foo-obj))
         NB: this works equally well for bean fields.
 
 Chained field modification:
-Java:   fooObj.bar.baz.boo = moo
+Java:   fooObj.bar.baz.boo = moo;
 Scheme: (:boo! (fold (cut <> <>) foo-obj (list :bar :baz)) moo)
 or      (:boo! ((compose :baz :bar) foo-obj) moo)
         NB: this works equally well for bean fields.
