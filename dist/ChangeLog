@@ -1,10 +1,24 @@
+2002-2-6  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Upgraded to the latest syntax expander.  This fixes
+	  a couple of bugs regarding module imports.
+
+	* Immutables now implement equals/hashCode so like Immutables
+	  can be serialized once.
+
+2002-1-30 Scott G. Miller <scgmille@freenetproject.org>
+
+	* Changed Primitive's throw RuntimeExceptions to
+          throwPrimExceptions.
+ 
+	* Corrected error reporting of invalid indices to strings
+
 2002-1-28 Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed circular structure creation for 'special' lists
 	  created with ', `, ',', ,@, etc.
 
 	* Added synopsis() to Value, which allows abbreviated printing.
-	  Still need to convert all error prints to use it.
 	
 2002-1-27  Matthias Radestock <matthias@sorted.org>
 
