@@ -17,7 +17,7 @@
     <property name="gendocdir" value="${docdir}/generated"/>
     <property name="schemedir" value="${basedir}/scheme-src"/>
     <property name="packagename" value="sisc"/>
-    <property name="basejar" value="esisc.jar"/>
+    <property name="basejar" value="sisc.jar"/>
     <property name="optjar" value="sisc-opt.jar"/>
     <property name="srfisll" value="srfi.sll"/>
     <property name="heap" value="${basedir}/boot/sisc.shp"/>
