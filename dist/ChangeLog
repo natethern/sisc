@@ -1,3 +1,9 @@
+2002-06-12  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Fixed a number of bugs regarding heap generation
+	  and deserialization that were causing problems reading
+	  the report env, and with sets on not-yet-loaded variables.
+
 2002-06-10  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Updated the error handling API to separate call/fc

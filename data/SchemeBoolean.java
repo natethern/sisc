@@ -54,6 +54,10 @@ public class SchemeBoolean extends Value implements Singleton {
 	return (val ? 0x01010101 : 0x10101010);
     }
 
+    public boolean equals(Object o) {
+        return ((o instanceof SchemeBoolean) && ((SchemeBoolean)o).val==val);
+    }
+
     public SchemeBoolean() {}
 
     public void serialize(Serializer s) throws IOException {

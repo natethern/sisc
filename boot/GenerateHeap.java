@@ -118,7 +118,11 @@ public class GenerateHeap {
                 rv[0].define(key, v);
             }
         }
-        base.getSymbolMap().remove(r5rs);
+
+        Map baseMap=base.getSymbolMap();
+        for (Iterator i=r5rs.keySet().iterator(); i.hasNext();) {
+            baseMap.remove(i.next());
+        }
         return rv;
     }
 
@@ -227,8 +231,7 @@ public class GenerateHeap {
 
         }
         System.out.println("Heap saved.");
-
-	Context.exit();
+       	Context.exit();
     }
 }
 

@@ -112,8 +112,7 @@ public class AssociativeEnvironment extends NamedValue {
 
     public int set(Symbol s, Value v) {
 	synchronized(symbolMap) {
-	    Integer i=(Integer)symbolMap.get(s);
-            int iv=i.intValue();
+	    int iv=getLoc(s);
             env[iv]=v;
             return iv;
 	}
@@ -128,7 +127,7 @@ public class AssociativeEnvironment extends NamedValue {
         synchronized(symbolMap) {
             try {
                 return set(s, v);
-            } catch (NullPointerException np) {}
+            } catch (ArrayIndexOutOfBoundsException np) {}
             
             return store(s, v);
         }

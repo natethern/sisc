@@ -55,7 +55,7 @@ public class FreeSetEval extends Expression {
 	} else {
             try {
                 envLoc=senv.set(lhs, r.acc);
-            } catch (NullPointerException np) {
+            } catch (ArrayIndexOutOfBoundsException np) {
                 //Variable is not bound.  Raise an error.
                 error(r, SETBANG, liMessage(SISCB,"unboundset", lhs.write()));
             }

@@ -43,8 +43,8 @@ public class BinaryDeserializer extends Deserializer {
         indent++;
         long pos=raf.getFilePointer();
         int oid=readInt();
-        if (DEBUG && (oid == 0 || oid == 2))
-            System.err.print(indentionBase.substring(0,indent)+indent+"|"+pos+"]");
+        if (DEBUG)
+            System.err.print(oid+"]");
 
         int definingOid = -1;
         try {

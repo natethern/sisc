@@ -51,8 +51,11 @@ public class LibraryBuilder extends Serializer {
     public int add(Expression val) {
         if (val==null) return -1;
         int epidx=entryPoints.indexOf(val);
-        if (epidx==-1)
-            epidx=newEntryPoints.indexOf(val);
+        if (epidx==-1) {
+            int nepidx=newEntryPoints.indexOf(val);
+            if (nepidx!=-1)
+                epidx=entryPoints.size() + nepidx;
+        }
         if (epidx==-1 && addAllowed) {
             epidx=entryPoints.size() + newEntryPoints.size();
             newEntryPoints.add(val);
@@ -84,6 +87,7 @@ public class LibraryBuilder extends Serializer {
 
         addAllowed=false;
         
+        duplicates.removeAll(entryPoints);
         //Create the index table
         Expression[] epv=new Expression[entryPoints.size()+duplicates.size()];
         int x=0;
@@ -102,6 +106,7 @@ public class LibraryBuilder extends Serializer {
         Vector classv=new Vector(classes);
         StreamSerializer ss=new StreamSerializer(fos, classv, epv);
 
+        int j=0;
         for (Iterator i=entryPoints.iterator(); i.hasNext();) {
             Expression exp=(Expression)i.next();
             ss.writeExpression(exp);
