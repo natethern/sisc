@@ -1,4 +1,4 @@
- package sisc;
+package sisc;
 
 import sisc.data.*;
 import sisc.compiler.*;
@@ -163,7 +163,7 @@ public class Interpreter extends Util {
 
     public boolean setWriter(String s) {
 	try {
-	    writer=(Procedure)((Box)toplevel_env.lookup(Symbol.get(s))).val;
+	    writer=(Procedure)toplevel_env.lookup(Symbol.get(s));
 	    return true;
 	} catch (UndefinedException e) {
 	    return false;
@@ -172,7 +172,7 @@ public class Interpreter extends Util {
 
     public boolean setEvaluator(String s) {
 	try {
-	    evaluator=(Procedure)((Box)toplevel_env.lookup(Symbol.get(s))).val;
+	    evaluator=(Procedure)toplevel_env.lookup(Symbol.get(s));
 	    return true;
 	} catch (UndefinedException e) {
 	    return false;
@@ -196,6 +196,9 @@ public class Interpreter extends Util {
 
     public void define(Symbol s, Value v, Symbol context) {
         AssociativeEnvironment contenv=getContextEnv(context);	
+	contenv.set(s, v);
+    }
+    /*
 	Box fr=null;
 	try {
 	    fr=(Box)contenv.lookup(s);
@@ -212,13 +215,14 @@ public class Interpreter extends Util {
 		throw (RuntimeException)e;
 	}
     }
+    */
 
 
     public Expression lookup(Symbol s, Symbol context) {
 	try {
 	    AssociativeEnvironment contenv=(AssociativeEnvironment)
 		symenv.lookup(context);
-	    return (Expression)((Box)contenv.lookup(s)).val;
+	    return (Expression)contenv.lookup(s);
 	} catch (UndefinedException e) {
 	    return null;
 	} catch (ClassCastException c) {
@@ -306,22 +310,23 @@ public class Interpreter extends Util {
     }
 
     public final void returnFrame(CallFrame f) {
-	if (!f.lock && (deadFramePointer<deadFrames.length - 1)) 
+	if (!f.lock && (deadFramePointer<deadFrames.length - 1)) {
 	    deadFrames[++deadFramePointer]=f;
+	}
     }
 
-    protected FillRibExp deadRibs[]=new FillRibExp[20];
-    protected int deadRibsPointer=-1;
+    protected FillRibExp deadFillRibs[]=new FillRibExp[20];
+    protected int deadFillRibsPointer=-1;
     
-    public final FillRibExp createRib(int pos,
+    public final FillRibExp createFillRib(int pos,
 				Expression rands[],
 				Expression last,
 				Expression cleanup) {
-	if (deadRibsPointer<0) 
+	if (deadFillRibsPointer<0) 
 	    return new FillRibExp(pos,rands,last,cleanup);
 	else {
 	    FillRibExp toReturn;
-	    toReturn=deadRibs[deadRibsPointer--];
+	    toReturn=deadFillRibs[deadFillRibsPointer--];
 	    toReturn.pos=pos;
 	    toReturn.rands=rands;
 	    toReturn.last=last;
@@ -330,9 +335,9 @@ public class Interpreter extends Util {
 	}
     }
 
-    public final void returnRib(FillRibExp f) {
-	if (!f.locked && (deadRibsPointer<deadRibs.length - 1)) 
-	    deadRibs[++deadRibsPointer]=f;
+    public final void returnFillRib(FillRibExp f) {
+	if (!f.locked && (deadFillRibsPointer<deadFillRibs.length - 1)) 
+	    deadFillRibs[++deadFillRibsPointer]=f;
     }
 
 

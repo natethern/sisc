@@ -32,7 +32,7 @@ public class AppExp extends Expression {
 
 	
 	if (i>-1) {
-	    r.push(r.createRib(i, rands, rator, APPEVAL));
+	    r.push(r.createFillRib(i, rands, rator, APPEVAL));
 	    r.nxp=rands[i];
 	} else {
 	    tmp=rator.getValue(r);

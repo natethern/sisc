@@ -1,85 +1,92 @@
 package sisc;
 
+import java.util.HashMap;
 import sisc.data.*;
-import java.util.*;
-import java.io.*;
 
 public class AssociativeEnvironment extends NamedValue {
+    
+    protected static final float EXPFACT=1.5F;
+    protected HashMap symbolMap;
+    public Value[] env;
+    protected int nextFree;
 
-    AssociativeEnvironment parent;
-    protected Hashtable  bindings;
+    public AssociativeEnvironment(AssociativeEnvironment cloneFrom) {
+	symbolMap=(HashMap)cloneFrom.symbolMap.clone();
+	nextFree=cloneFrom.nextFree;
+	env=new Value[nextFree];
+	System.arraycopy(cloneFrom.env, 0, env, 0, nextFree);
+    }
 
     public AssociativeEnvironment() {
-	this(5);
-    } 
-    
-    public AssociativeEnvironment(int size) {
-	bindings=new Hashtable (size); 
-    } 
-
-    public AssociativeEnvironment(AssociativeEnvironment par) {
-	this();
-	parent=par;
+	env=new Value[50];
+	nextFree=0;
+	symbolMap=new HashMap(50);
     }
 
-    public AssociativeEnvironment(AssociativeEnvironment par, int size) {
-	this(size);
-	parent=par;
-    }
-
-    public Expression define(Symbol s, Expression val) {
-	Expression ov=(Expression)bindings.get(s);
-	bindings.put(s,val);
-	return ov;
-    }
-
-    public Expression lookup(Symbol sym) throws UndefinedException {
-	Expression b=(Expression)bindings.get(sym);
-	if (b==null)
-	    if (parent!=null)
-		return parent.lookup(sym);
-	    else throw new UndefinedException();
-	else return b;
-    }
-    
-    public Expression set(Symbol s, Expression v) {
-	Expression b=(Expression)bindings.get(s);
-	if (b==null) {
-	    if (parent!=null) 
-		return parent.set(s,v);
-	    bindings.put(s,v);
-	    return null;
-	} else {
-	    bindings.put(s,v);
-	    return b;
-	}
-    }
-    
-    /**
-     * Locks all the Boxes stored in this environment (making them immutable)
-     */
-    public void lock() {
-	for (Iterator enum=bindings.keySet().iterator(); enum.hasNext();) {
-	    Object key=enum.next();
-	    Object e=bindings.get(key);
-	    if (e instanceof Box) 
-		((Box)e).lock();
+    protected void expand() {
+	synchronized(symbolMap) {
+	    Value[] newenv=new Value[(int)(env.length*EXPFACT)];
+	    System.arraycopy(env, 0, newenv, 0, env.length);
+	    nextFree=env.length;
+	    env=newenv;
 	}
     }
 
-    /*
-    public Pair toAssocList() {
-	Pair p=EMPTYLIST;
-
-	for (Iterator enum=bindings.keySet().iterator(); enum.hasNext();) {
-	    Object key=enum.next();
-
-	    p=new Pair(new Pair((Value)key,
-				(Value)bindings.get(key)), p);
+    public void trim() {
+	synchronized(symbolMap) {
+	    Value[] newenv=new Value[nextFree];
+	    System.arraycopy(env, 0, newenv, 0, nextFree);
+	    env=newenv;
 	}
-	return p;
     }
-    */
+
+    public int set(Symbol s, Value v) {
+	Integer i=(Integer)symbolMap.get(s);
+	if (i==null) 
+	    return define(s, v);
+	else {
+	    int iv=i.intValue();
+	    env[iv]=v;
+	    return iv;
+	} 
+    }
+
+    public int set(int envLoc, Value v) {
+	env[envLoc]=v;
+	return envLoc;
+    }
+
+    public int define(Symbol s, Value v) {
+	synchronized(symbolMap) {
+	    if (nextFree >= env.length)
+		expand();
+	    symbolMap.put(s, new Integer(nextFree));
+	    env[nextFree]=v;
+	    return nextFree++;
+	}
+    }
+
+    public int getLoc(Symbol s) throws UndefinedException {
+	Integer i=(Integer)symbolMap.get(s);
+	if (i==null)
+	    throw new UndefinedException();
+	return i.intValue();
+    }
+
+    public Value lookup(Symbol s) throws UndefinedException {
+	Integer i=(Integer)symbolMap.get(s);
+	try {
+	    return env[i.intValue()];
+	} catch (NullPointerException np) {
+	    throw new UndefinedException();
+	}
+    }
+
+    public Value lookup(int envLoc) throws UndefinedException {
+	//	if (envLoc >= nextFree)
+	//  throw new UndefinedException();
+	return env[envLoc];
+    }
 
     public String display() {
 	StringBuffer sb=new StringBuffer();
@@ -89,4 +96,7 @@ public class AssociativeEnvironment extends NamedValue {
 	sb.append('>');
 	return sb.toString();
     }
+
 }
+
+

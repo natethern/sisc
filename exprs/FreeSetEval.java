@@ -6,32 +6,21 @@ import sisc.data.*;
 public class FreeSetEval extends Expression {
     public Symbol lhs;
     public AssociativeEnvironment senv;
-    public Box v;
+    public int envLoc;
 
-    public FreeSetEval(Symbol lhs, Box v, AssociativeEnvironment senv) {
+    public FreeSetEval(Symbol lhs, int e, AssociativeEnvironment senv) {
 	this.lhs=lhs;
-	this.v=v;
+	envLoc=e;
 	this.senv=senv;
     }
 
     public void eval(Interpreter r) throws ContinuationException { 
 	try {
-	    v.set(r.acc);
-	} catch (NullPointerException e) {
-	    Box b=null;
-	    try {
-		b=(Box)senv.lookup(lhs);
-		v=b;
-		b.set(r.acc);
-	    } catch (UndefinedException e2) {
-		senv.define(lhs, v=new Box(r.acc));
-	    } catch (ImmutableException e2) {
-		b.shadow();
-		senv.define(lhs, v=new Box(r.acc));
-	    }
-	} catch (ImmutableException e3) {
-	    senv.define(lhs, v=new Box(r.acc));
+	    senv.set(envLoc, r.acc);
+	} catch (ArrayIndexOutOfBoundsException aie) {
+	    envLoc=senv.set(lhs, r.acc);
 	}
+
 	if (r.acc instanceof NamedValue) {
 	    NamedValue nv=(NamedValue)r.acc;
 	    if (nv.name==null)

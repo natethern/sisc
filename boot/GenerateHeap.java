@@ -18,7 +18,7 @@ public class GenerateHeap {
 	r=new Interpreter(System.in, System.out);
 	r.setEvaluator("eval");
 	FreeReferenceExp load=new FreeReferenceExp(Symbol.get("load"),
-						   null, r.toplevel_env);
+						   -1, r.toplevel_env);
 
 
 	Properties sysProps=System.getProperties();
@@ -46,7 +46,7 @@ public class GenerateHeap {
 	top_env=new AssociativeEnvironment(report_env);
 	r.symenv.define(Util.TOPLEVEL, top_env);
 	r.symenv.define(Util.REPORT, report_env);
-	report_env.lock();
+	//	report_env.lock();
 	report_env.name=Symbol.get("r5rs");
 	top_env.name=Symbol.get("top-level");
 

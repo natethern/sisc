@@ -23,7 +23,7 @@ public class REPL extends Thread {
 	    e.printStackTrace();
 	}
 	    FreeReferenceExp load=new FreeReferenceExp(Symbol.get("load"),
-						       null, r.toplevel_env);
+						       -1, r.toplevel_env);
 	for (int i=0; i<args.length; i++) {
 	    Value[] v=new Value[1];
 	    v[0]=new SchemeString(args[i]);
@@ -45,7 +45,7 @@ public class REPL extends Thread {
     public void run() {
 	Value v=null;
 	FreeReferenceExp repl=new FreeReferenceExp(Symbol.get("repl"),
-						   null, r.toplevel_env);
+						   -1, r.toplevel_env);
 	start:
 	do {
 	    try {

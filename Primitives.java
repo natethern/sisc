@@ -285,7 +285,7 @@ public class Primitives extends Module {
 		return new InputPort(new BufferedReader(
 	 				new StringReader(string(f,f.vlr[0]))));
 	    case CALLCC:
-		Procedure kproc=proc(f,f.vlr[0]);
+		Procedure kproc=(Procedure)f.vlr[0];
 		f.vlr=new Value[] {f.stk.capture()};
 
 		kproc.apply(f);
@@ -410,7 +410,7 @@ public class Primitives extends Module {
 		return VOID;*/
 	    case LOOKUP:		
 		try {
-		    return (Value)((Box)f.toplevel_env.lookup(symbol(f,f.vlr[0]))).val;
+		    return (Value)f.toplevel_env.lookup(symbol(f,f.vlr[0]));
 		} catch (UndefinedException e) {
 		    return FALSE;
 		}

@@ -77,12 +77,12 @@ public class Compiler extends Util {
 	    int[] ra=rt.lookup(sym);
 	    if (ra==null) {
 		try {
-		    return new FreeReferenceExp(sym, (Box)env.lookup(sym),
+		    return new FreeReferenceExp(sym, env.getLoc(sym),
 						env);
 		} catch (UndefinedException e) {
-		    return new FreeReferenceExp(sym, null, env);
+		    return new FreeReferenceExp(sym, -1, env);
 		} catch (ClassCastException e) {
-		    return new FreeReferenceExp(sym, null, env);
+		    return new FreeReferenceExp(sym, -1, env);
 		}
 	    } else return new LexicalReferenceExp(ra[0],ra[1]);
 	}
@@ -174,7 +174,7 @@ public class Compiler extends Util {
 		} else if (re instanceof FreeReferenceExp) {
 		    FreeReferenceExp fre=(FreeReferenceExp)re;
 		    
-		    return new FreeSetExp(fre.sym, fre.v, rhs, env);
+		    return new FreeSetExp(fre.sym, fre.envLoc, rhs, env);
 		} else {
 		    error(r, "left-hand-side of set! is not a symbol");
 		    return null;

@@ -37,18 +37,24 @@ public class CallFrame extends Procedure {
     public CallFrame capture() {
 	if (!lock) {
 	    lock=true;
+
 	    if (vlr!=null) {
 		Value[] nvlr=new Value[vlr.length];
 		System.arraycopy(vlr,0,nvlr,0,nvlr.length);
 		vlr=nvlr;
-	    }
+	    } 
+
+
 	    if (nxp!=null && nxp instanceof Volatile)
 		((Volatile)nxp).lock();
+
 	    if (parent!=null)
 		parent.capture();
+
 	    if (fk!=null)
 		fk.capture();
 	}
+
 	return this;
     }
 

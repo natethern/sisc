@@ -6,12 +6,13 @@ import sisc.data.*;
 public class FreeReferenceExp extends Expression implements Immediate {
     public Symbol sym;
     public AssociativeEnvironment lenv; 
-    public Box v;
+    public int envLoc;
 
-    public FreeReferenceExp(Symbol s, Box v, AssociativeEnvironment lenv) {
+    public FreeReferenceExp(Symbol s, int envLoc, 
+			    AssociativeEnvironment lenv) {
 	this.lenv=lenv;
 	sym=s;
-	this.v=v;
+	this.envLoc=envLoc;
     }
 
     public void eval(Interpreter r) throws ContinuationException { 
@@ -21,13 +22,12 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public Value getValue(Interpreter r) throws ContinuationException {
 	try {
-	    if (!v.shadowed())
-		return (Value)v.val;
-	    else throw new NullPointerException();
-	} catch (NullPointerException e) {
+	    return lenv.env[envLoc];
+	} catch (ArrayIndexOutOfBoundsException aie) {
 	    try {
-		v=(Box)lenv.lookup(sym);
-		return (Value)v.val; 
+		envLoc=lenv.getLoc(sym);
+		return lenv.env[envLoc];
+		//		return lenv.lookup(envLoc);
 	    } catch (UndefinedException e2) {
 		error(r, "undefined variable '"+sym+"'");
 		return null;
@@ -38,7 +38,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
     public String toString(){
 	StringBuffer b=new StringBuffer();
 	b.append("(FreeReference-exp ");
-	b.append(v).append(')');
+	b.append(sym).append(')');
 	return b.toString();
     }
 }

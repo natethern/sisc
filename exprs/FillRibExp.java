@@ -31,7 +31,7 @@ public class FillRibExp extends Expression implements Volatile {
 
  	if (np>-1) {
 	    if (locked) {
-		r.push(r.createRib(np, rands, last, cleanup));
+		r.push(r.createFillRib(np, rands, last, cleanup));
 	    } else {
 		pos=np;
 		r.push(this);
@@ -46,7 +46,7 @@ public class FillRibExp extends Expression implements Volatile {
 		r.acc=tmp;
 		r.nxp=cleanup;
 	    }
-	    r.returnRib(this);
+	    r.returnFillRib(this);
 	}
     }
 

@@ -26,9 +26,11 @@
    (lambda (fun-exp arg-exps)
      (cons fun-exp arg-exps)))
 
+
 (define build-conditional
-   (lambda (test-exp then-exp else-exp)
-     (list 'if test-exp then-exp else-exp)))
+  (lambda (test-exp then-exp else-exp)
+    (list 'if test-exp then-exp else-exp)))
+
 
 (define build-lexical-reference (lambda (var) var))
 

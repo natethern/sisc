@@ -7,10 +7,10 @@ public class FreeSetExp extends Expression {
     public Expression rhs;
     public FreeSetEval eexpr;
 
-    public FreeSetExp(Symbol lhs, Box v, Expression rhs,
+    public FreeSetExp(Symbol lhs, int envLoc, Expression rhs,
 		      AssociativeEnvironment lenv) {
 	this.rhs=rhs;
-	this.eexpr = new FreeSetEval(lhs,v,lenv);
+	this.eexpr = new FreeSetEval(lhs,envLoc, lenv);
     }
 
     public void eval(Interpreter r) throws ContinuationException { 
