@@ -49,18 +49,7 @@ public class Closure extends Procedure {
 	this.body=body;
     }
 
-    /*    int useCount;
-    static {
-	System.runFinalizersOnExit(true);
-    }
-
-    protected void finalize() {
-	if (name!=null)
-	    System.err.println(justify(useCount+"", 10, ' ')+" "+name);
-    }
-    */
     public void apply(Interpreter r) throws ContinuationException {	
-	//if (name!=null) useCount++;
 	try {
 	    r.env=new LexicalEnvironment(fcount, r.vlr, 
 					 env, arity);
@@ -72,12 +61,7 @@ public class Closure extends Procedure {
     }
 
     public String display() {
-	StringBuffer b=new StringBuffer();
-	b.append("#<procedure");
-	if (name!=null) 
-	    b.append(' ').append(name.display());
-	b.append('>');
-	return b.toString();
+	return displayNamedOpaque("procedure");
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {

@@ -124,12 +124,7 @@ public class AssociativeEnvironment extends NamedValue {
     }
 
     public String display() {
-	StringBuffer sb=new StringBuffer();
-	sb.append("#<environment");
-	if (name!=null)
-	    sb.append(' ').append(name);
-	sb.append('>');
-	return sb.toString();
+	return displayNamedOpaque("environment");
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {

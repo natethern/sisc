@@ -66,6 +66,20 @@ public class SNative extends Module {
 	define(r, "read-line", READLINE);
     }
 
+    public static final Value cadr(Value p) {
+	return ((Pair)((Pair)p).cdr).car;
+    }
+
+
+    public static final Value cddr(Value p) {
+	return ((Pair)((Pair)p).cdr).cdr;
+    }
+
+    public static boolean jnumQuery(Value v, int mask) {
+	return v instanceof Quantity &&
+	    (((Quantity)v).type & mask)!=0;
+    }
+
     protected boolean eqv(Value v1, Value v2) {
 	return v1.eq(v2) ||
 	    ((jnumQuery(v1, Quantity.EXACT) &&
@@ -128,7 +142,7 @@ public class SNative extends Module {
 			return p2;
 		    if (p2==EMPTYLIST)
 			return p1;
-		    Pair p3=new Pair(p1.car);
+		    Pair p3=list(p1.car);
 		    p1=(Pair)p1.cdr;
 		    Pair p4=p3;
 		    while (p1!=EMPTYLIST) {

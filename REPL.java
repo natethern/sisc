@@ -59,10 +59,10 @@ public class REPL extends Thread {
 		       new BufferedInputStream(
 		       new GZIPInputStream(
 		       new BufferedInputStream(
-                       new FileInputStream(
+                         new FileInputStream(
 			     System.getProperty("HEAP","sisc.heap")),
-		       90000))
-			   )));
+		         90000))
+		       )));
 	} catch (IOException e) {
 	    System.err.println("Error loading heap!");
 	    e.printStackTrace();

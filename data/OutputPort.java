@@ -63,12 +63,7 @@ public class OutputPort extends NamedValue {
     }
 
     public String display() {
-	StringBuffer b=new StringBuffer();
-	b.append("#<output-port");
-	if (name!=null) 
-	    b.append(' ').append(name.display());
-	b.append('>');
-	return b.toString();
+	return displayNamedOpaque("output-port");
     }
 
     public void flush() throws IOException {

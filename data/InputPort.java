@@ -112,12 +112,7 @@ public class InputPort extends NamedValue {
     }
 
     public String display(){
-	StringBuffer b=new StringBuffer();
-	b.append("#<input-port");
-	if (name!=null) 
-	    b.append(' ').append(name.display());
-	b.append('>');
-	return b.toString();
+	return displayNamedOpaque("input-port");
     }
 
     public void close(Interpreter f) throws ContinuationException {

@@ -38,4 +38,13 @@ public abstract class NamedValue extends Value {
     public void setName(Symbol s) {
 	name=s;
     }
+
+    public String displayNamedOpaque(String type) {
+	StringBuffer b=new StringBuffer();
+	b.append("#<").append(type);
+	if (name!=null) 
+	    b.append(' ').append(name.display());
+	b.append('>');
+	return b.toString();
+    }
 }

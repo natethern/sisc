@@ -273,7 +273,7 @@ public class Quantity extends Value {
 		try {
 		    val=Integer.parseInt(v, radix);
 		    type=FIXEDINT;
-		} catch (Exception e) {
+		} catch (NumberFormatException e) {
 		    i=new BigInteger(v, radix);
 		    type=INTEG;
 		}
@@ -1284,6 +1284,10 @@ public class Quantity extends Value {
 	simplify();
     }
 
+    protected BigInteger unscaledValue(BigDecimal d) {
+	return d.setScale(0).toBigInteger();
+    }
+
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.writeBer(type, dos);
 	switch (type) {
@@ -1297,7 +1301,7 @@ public class Quantity extends Value {
 	    break;
 	case DECIM:
 	    int scale=d.scale();
-	    buffer=d.unscaledValue().toByteArray();
+	    buffer=unscaledValue(d).toByteArray();
 	    s.writeBer(buffer.length, dos);
 	    s.writeBer(scale, dos);
 	    dos.write(buffer);
@@ -1311,13 +1315,13 @@ public class Quantity extends Value {
 	    dos.write(buffer);
 	    break;
 	case COMPLEX:
-	    buffer=d.unscaledValue().toByteArray();
+	    buffer=unscaledValue(d).toByteArray();
 	    scale=d.scale();
 	    s.writeBer(buffer.length, dos);
 	    s.writeBer(scale, dos);
 	    dos.write(buffer);
 
-	    buffer=im.unscaledValue().toByteArray();
+	    buffer=unscaledValue(d).toByteArray();
 	    scale=im.scale();
 	    s.writeBer(buffer.length, dos);
 	    s.writeBer(scale, dos);

@@ -64,7 +64,6 @@ public class AppExp extends Expression {
 
 	// Fill the rib right to left with immediates until non-imm.
 	// encountered
-
 	for (i=rands.length-1; 
 	     i>=0 && ((tmp=rands[i].getValue(r)) != null); 
 	     i--)

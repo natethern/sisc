@@ -17,16 +17,11 @@ public class Serializer {
 	INIT_PROTO=new Class[] { Interpreter.class },
 	GETVALUE_PROTO=new Class[] { DataInputStream.class };
 
-    static final String
-	DESERIALIZE="deserialize",
-	INITIALIZE="initialize",
-	GETVALUE="getValue";
-
     static Method DESM;
 
     static {
 	try {
-	    DESM=Expression.class.getMethod(DESERIALIZE, DESER_PROTO);
+	    DESM=Expression.class.getMethod("deserialize", DESER_PROTO);
 	} catch (NoSuchMethodException nsm) {
 	}
     }
@@ -115,7 +110,7 @@ public class Serializer {
 	    try {
 		Class clazz=getClass(dis);
 		if (Singleton.class.isAssignableFrom(clazz)) {
-		    Method GVM=clazz.getMethod(GETVALUE,
+		    Method GVM=clazz.getMethod("getValue", 
 					       GETVALUE_PROTO);
 		    e=(Expression)GVM.invoke(null, new Object[] { dis });
 		    deserState.put(serialId, e);
@@ -173,7 +168,7 @@ public class Serializer {
 	    try {
 		Class mod=Class.forName(className);
 		m=(Module)mod.newInstance();
-		Method init=mod.getMethod(INITIALIZE, INIT_PROTO);
+		Method init=mod.getMethod("initialize", INIT_PROTO);
 		init.invoke(m, new Object[] {f});
 	    } catch (Exception e) {
 		throw new IOException(e.getMessage());

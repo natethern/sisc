@@ -42,11 +42,6 @@ public class Pair extends Value {
 	car=cdr=EMPTYLIST;
     }
 
-    public Pair(Value car) {
-	this.car=car;
-	this.cdr=EMPTYLIST;
-    }
-
     public Pair(Value car, Value cdr) {
 	this.car=car;
 	this.cdr=cdr;

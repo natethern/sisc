@@ -49,27 +49,12 @@ public class BuiltinProcedure extends Procedure {
 	this.name=name;
 	this.host=host;
     }
-    /*
-    int useCount;
-    long consumedTime;
 
-    protected void finalize() {
-	if (name!=null) {
-	    System.err.println(justify(useCount+"", 10, ' ')+" "+name);
-	    System.err.println(justify(consumedTime+"", 15, ' ')+"ms "+name);
-	}
-	
-    }
-    */
      public void apply(Interpreter r) throws ContinuationException {
-	 // if (name!=null) useCount++;
-	 //long st=System.currentTimeMillis();
 	r.nxp=null;
 	try {
-	    //	    long start=System.currentTimeMillis();
 	    Value v=host.eval(id, r);
 	    if (v!=null) r.acc=v;
-	    //	    usecount+=System.currentTimeMillis()-start;
 	} catch (ArrayIndexOutOfBoundsException np) {
 	    error(r, name, "incorrect number of arguments to procedure");
 	} catch (ClassCastException cc) {
@@ -77,24 +62,16 @@ public class BuiltinProcedure extends Procedure {
 	} catch (RuntimeException re) {
 	    error(r, name, re.getMessage());
 	}
-	//	consumedTime+=System.currentTimeMillis()-st;
     }
 
     public String display() {
-	StringBuffer b=new StringBuffer();
-	b.append("#<builtin procedure ").append(name).append('>');
-	return b.toString();
+	return displayNamedOpaque("builtin procedure");
     }
 
     public boolean valueEqual(Value v) {
 	return ((BuiltinProcedure)v).id==id &&
 	    ((BuiltinProcedure)v).host==host;
     }
-
-    /*    
-    public void finalize() {
-	System.err.println(justify(""+usecount,10,' ')+" "+name);
-	}*/
 
     public void serialize(Serializer s, 
 			  DataOutputStream dos) throws IOException {

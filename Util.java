@@ -39,7 +39,7 @@ import java.util.*;
 import java.io.*;
 
 public abstract class Util {
-    public static final String VERSION = "r1.1.3";
+    public static final String VERSION = "r1.2.0";
 
     protected static final Quantity FIVE=new Quantity(5);
     protected static final Expression APPEVAL=new AppEval();
@@ -47,7 +47,8 @@ public abstract class Util {
     public static EOFObject EOF=EOFObject.EOF;
     public static EmptyList EMPTYLIST=EmptyList.EMPTYLIST;
     public static SchemeVoid VOID=SchemeVoid.VOID;
-    public static SchemeBoolean TRUE=SchemeBoolean.TRUE,
+    public static SchemeBoolean 
+	TRUE=SchemeBoolean.TRUE,
 	FALSE=SchemeBoolean.FALSE;
 
     public static Symbol 
@@ -58,13 +59,9 @@ public abstract class Util {
 	BEGIN=Symbol.get("begin"),
 	THIS=Symbol.get("this"),
 	LAMBDA=Symbol.get("lambda"),
-	FILE=Symbol.get("file"),
-	NOFILE=Symbol.get("no-file"),
-	DIRECTORY=Symbol.get("directory"),
 	TOPLEVEL=Symbol.get("*toplevel*"),
 	REPORT=Symbol.get("*report*"),
 	ENVVARS=Symbol.get("*environment-variables*"),
-    	SYNTAX=Symbol.get("syntax"),
 	SISC=Symbol.get("*sisc*");
 
     public static void error(Interpreter r, Value where, String errormessage) 
@@ -125,26 +122,25 @@ public abstract class Util {
 	}
     }
 
-    public static Expression[] pairToExpressions(Pair p) {
+    public static Vector pairToExpVect(Pair p) {
 	Vector v=new Vector();
-	int i=0;
-
-	for (; p!=EMPTYLIST; p=(Pair)p.cdr, i++) {
+	for (; p!=EMPTYLIST; p=(Pair)p.cdr) {
 	    v.addElement(p.car);
 	}
-	Expression[] vs=new Expression[i];
+
+	return v;
+    }
+
+    public static Expression[] pairToExpressions(Pair p) {
+	Vector v=pairToExpVect(p);
+	Expression[] vs=new Expression[v.size()];
 	v.copyInto(vs);
 	return vs;
     }
 
     public static Value[] pairToValues(Pair p) {
-	Vector v=new Vector();
-	int i=0;
-
-	for (; p!=EMPTYLIST; p=(Pair)p.cdr, i++) {
-	    v.addElement(p.car);
-	}
-	Value[] vs=new Value[i];
+	Vector v=pairToExpVect(p);
+	Value[] vs=new Value[v.size()];
 	v.copyInto(vs);
 	return vs;
     }
@@ -153,13 +149,8 @@ public abstract class Util {
 	Pair o=p;
 	if (p==EMPTYLIST) return new Symbol[0];
 
-	Vector v=new Vector();
-	int i=0;
-
-	for (; p!=EMPTYLIST; p=(Pair)p.cdr, i++) {
-	    v.addElement(p.car);
-	}
-	Symbol[] vs=new Symbol[i];
+	Vector v=pairToExpVect(p);
+	Symbol[] vs=new Symbol[v.size()];
 	v.copyInto(vs);
 	return vs;
     }
@@ -185,35 +176,42 @@ public abstract class Util {
 /* Casting checks */
     public static void typeError(Interpreter r, String type, Value o) {
 	if (o instanceof Values)
-	    throw new RuntimeException(((Values)o).values.length+" values received in single-value context");
-	throw new RuntimeException("expected type "+type+", got '"+o.write()+'\'');
+	    throw new RuntimeException(((Values)o).values.length+
+			  " values received in single-value context");
+	throw new RuntimeException("expected type "+type+", got '"+o.write()+
+				   '\'');
     }
 
-    public static final Quantity num(Interpreter r, Value o) throws ContinuationException {
+    public static final Quantity num(Interpreter r, Value o) 
+	throws ContinuationException {
 	try {
 	    return (Quantity)o;
 	} catch (ClassCastException e) { typeError(r, "number", o); } return null;
     }
 
-    public static final Pair pair(Interpreter r, Value o) throws ContinuationException {
+    public static final Pair pair(Interpreter r, Value o) 
+	throws ContinuationException {
 	try {
 	    return (Pair)o;
 	} catch (ClassCastException e) { typeError(r, "pair", o); } return null;
     }
 
-    public static final Procedure proc(Interpreter r, Value o) throws ContinuationException {
+    public static final Procedure proc(Interpreter r, Value o) 
+	throws ContinuationException {
 	try {
 	    return (Procedure)o;
 	} catch (ClassCastException e) { typeError(r, "procedure", o); } return null;
     }
 
-    public static final Pair truePair(Interpreter r, Value o) throws ContinuationException {
+    public static final Pair truePair(Interpreter r, Value o) 
+	throws ContinuationException {
 	Pair p=pair(r, o);
 	if (p==EMPTYLIST) typeError(r, "pair", o);
 	return p;
     }
 	
-    public static final char character(Interpreter r, Value c) throws ContinuationException {
+    public static final char character(Interpreter r, Value c) 
+	throws ContinuationException {
 	return chr(r, c).c;
     }
 
@@ -274,7 +272,7 @@ public abstract class Util {
     }
 
     public static final boolean truth(Value v) {
-	return (v!=FALSE);
+	return v != FALSE;
     }
 
     /* List functions */
@@ -284,28 +282,8 @@ public abstract class Util {
 	return new Pair(p1.car, append((Pair)p1.cdr, p2));
     }
 	    
-    public static final Value cadr(Value p) {
-	return ((Pair)((Pair)p).cdr).car;
-    }
-
-    public static final Value caddr(Value p) {
-	return ((Pair)((Pair)((Pair)p).cdr).cdr).car;
-    }
-
-    public static final Value cddr(Value p) {
-	return ((Pair)((Pair)p).cdr).cdr;
-    }
-
-    public static final Value first(Value p) {
-	return (p instanceof Pair ? ((Pair)p).car : null);
-    }
-
-    public static final Value rest(Value p) {
-	return (p instanceof Pair ? ((Pair)p).cdr : null);
-    }
-
     public static final Pair list(Value o1) {
-	return new Pair(o1);
+	return new Pair(o1, EMPTYLIST);
     }
 
     public static final Pair list(Value o1, Value o2) {
@@ -322,17 +300,6 @@ public abstract class Util {
 	    p=new Pair(r[(offset+len)-i-1], p);
 	}
 	return p;
-    }
-
-    public static SchemeBoolean numQuery(Value v, int mask) 
-	throws ContinuationException {
-	return truth(v instanceof Quantity &&
-		     (((Quantity)v).type & mask)!=0);
-    }
-
-    public static boolean jnumQuery(Value v, int mask) {
-	return v instanceof Quantity &&
-	    (((Quantity)v).type & mask)!=0;
     }
 }
 

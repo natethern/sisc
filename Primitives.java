@@ -41,6 +41,11 @@ import java.io.*;
 
 public class Primitives extends Module {
     public Primitives() {}
+    public static final Symbol 	
+	FILE=Symbol.get("file"),
+	NOFILE=Symbol.get("no-file"),
+	DIRECTORY=Symbol.get("directory");
+    
     public static final int 
 	ADD=1,    EQ=11,           CHARACTERQ=21, SYMBOLQ=31,
 	MUL=2,    EQUAL=12,        VECTORQ=22,    PROCEDUREQ=32,
@@ -76,6 +81,12 @@ public class Primitives extends Module {
 	PUTPROP=121, STRING2UNINTERNEDSYMBOL=66,  OPENINPUTSTRING=50,
 	LIST=122, _VOID=123, VECTORFINDLASTUNIQUE=124, MAKEPATH=125,
 	ABSPATHQ=126, PARENT_CONT=127, CONTINUATIONQ=128;
+
+    public static SchemeBoolean numQuery(Value v, int mask) 
+	throws ContinuationException {
+	return truth(v instanceof Quantity &&
+		     (((Quantity)v).type & mask)!=0);
+    }
 
     public void initialize(Interpreter r) {
 	define(r, "list", LIST);

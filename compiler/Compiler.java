@@ -71,9 +71,8 @@ public class Compiler extends Util {
     }
     
     static final int 
-	APP=-1, LAMBDA = 1, _IF=2, BEGIN=3, QUOTE=4, SET=5, 
-	DEFINE=7, 
-	TAIL=1, COMMAND=2, PROCEDURE=4, PREDICATE=8;
+	APP=-1, LAMBDA = 0, _IF=1, BEGIN=2, QUOTE=3, SET=4, DEFINE=5, 
+	TAIL=1, COMMAND=2, PREDICATE=4;
 
     public Compiler(AssociativeEnvironment menv) {
 	extendenv(menv,"lambda", LAMBDA);
@@ -87,15 +86,11 @@ public class Compiler extends Util {
     static class ReferenceEnv {
 	ReferenceEnv parent;
 	HashMap ref=new HashMap();
-	int[] rv=new int[2];
 	
 	public ReferenceEnv() {}
-	public ReferenceEnv(ReferenceEnv parent) {
-	    this.parent=parent;
-	}
 
 	public ReferenceEnv(Symbol[] s, ReferenceEnv parent) {
-	    this(parent);
+	    this.parent=parent;
 	    for (int i=0; i<s.length; i++) {
 		ref.put(s[i], new Short((short)i));
 	    }
@@ -141,7 +136,7 @@ public class Compiler extends Util {
 	return e;
     }
     
-    int getExpType(AssociativeEnvironment env, Symbol s) {
+    final int getExpType(AssociativeEnvironment env, Symbol s) {
 	try {
 	    Object h=env.lookup(s);
 	    
@@ -157,6 +152,7 @@ public class Compiler extends Util {
 				 Pair expr, ReferenceEnv rt,
 				 int context, AssociativeEnvironment env) 
 	throws ContinuationException {
+	Expression tmp;
 	if (expr.car instanceof Symbol) {
 	    Symbol s=(Symbol)expr.car;
 	    int t=getExpType(env, s);
@@ -185,44 +181,41 @@ public class Compiler extends Util {
 
 		expr=(Pair)expr.cdr;		    
 		if (expr.cdr != EMPTYLIST) 
-		    expr=new Pair(new Pair(Util.BEGIN, expr));
-		Expression body=compile(r, expr.car, 
-					new ReferenceEnv(formals, rt), 
-					TAIL | LAMBDA, env);
-		return new LambdaExp((short)formals.length, body, infArity);
+		    expr=list(new Pair(Util.BEGIN, expr));
+		tmp=compile(r, expr.car, new ReferenceEnv(formals, rt),  
+			    TAIL | LAMBDA, env);
+		return new LambdaExp((short)formals.length, tmp, infArity);
 	    case _IF:
-		Expression test=compile(r, expr.car, rt, PREDICATE, env);
+		tmp=compile(r, expr.car, rt, PREDICATE, env);
 		expr=(Pair)expr.cdr;
-		if (test instanceof Value) {
-		    if (truth((Value)test))
-			return compile(r, expr.car, rt, TAIL, env);
+		if (tmp instanceof Value) {
+		    if (truth((Value)tmp))
+			return compile(r, expr.car, rt, TAIL | context, env);
 		    else {
 			expr=(Pair)expr.cdr;
-			return compile(r, expr.car, rt, TAIL, env);
+			return compile(r, expr.car, rt, TAIL | context, env);
 		    }
 		} else {
-		    Expression conseq=compile(r, expr.car, rt, TAIL, env);
+		    Expression conseq=compile(r, expr.car, rt, TAIL | context, 
+					      env);
 		    expr=(Pair)expr.cdr;
-		    Expression altern=compile(r, expr.car, rt, TAIL, env);
-		    return new IfExp(test, conseq, altern);
+		    Expression altern=compile(r, expr.car, rt, TAIL | context,
+					      env);
+		    return new IfExp(tmp, conseq, altern);
 		}
 	    case BEGIN:
-		Vector v=new Vector();
-		
-		for (; expr!=EMPTYLIST; expr=(Pair)expr.cdr) {
-		    v.addElement(expr.car);
-		}
-		return compileBegin(r, v, context, rt, env);
+		return compileBegin(r, pairToExpVect(expr), context, rt, 
+				    env);
 	    case SET:
-		Expression re=compile(r, expr.car, rt, 0, env);
+		tmp=compile(r, expr.car, rt, 0, env);
 		expr=(Pair)expr.cdr;
 		Expression rhs=compile(r, expr.car, rt, 0, env);
-		if (re instanceof LexicalReferenceExp) {
-		    LexicalReferenceExp lre=(LexicalReferenceExp)re;
+		if (tmp instanceof LexicalReferenceExp) {
+		    LexicalReferenceExp lre=(LexicalReferenceExp)tmp;
 		    
 		    return new LexicalSetExp(lre.depth, lre.pos, rhs);
-		} else if (re instanceof FreeReferenceExp) {
-		    FreeReferenceExp fre=(FreeReferenceExp)re;
+		} else if (tmp instanceof FreeReferenceExp) {
+		    FreeReferenceExp fre=(FreeReferenceExp)tmp;
 		    
 		    return new FreeSetExp(fre.sym, fre.envLoc, rhs, env);
 		} else {
@@ -265,7 +258,7 @@ public class Compiler extends Util {
 			    ReferenceEnv rt, AssociativeEnvironment env)
 	throws ContinuationException {
 	Expression last=compile(r, (Expression)v.lastElement(), rt, 
-				TAIL & context, env);
+				TAIL | context, env);
 	
 	v.removeElementAt(v.size()-1);
 	

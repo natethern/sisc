@@ -56,17 +56,6 @@ public class CallFrame extends Procedure {
 	parent=p;
     }
 
-    public String toString(Interpreter r) {
-	StringBuffer b=new StringBuffer();
-	b.append("[CallFrame nxp:").append(nxp);
-	b.append(" vlr:").append(vlr);
-	b.append(" env:").append(env);
-	b.append(" fk:").append(fk);
-	if (parent!=null) b.append("  parent:").append(parent.toString(r));
-	b.append(']');
-	return b.toString();
-    }
-
     public CallFrame capture() {
 	if (!lock) {
 	    lock=true;
@@ -100,12 +89,7 @@ public class CallFrame extends Procedure {
     }
 
     public String display() {
-	StringBuffer b=new StringBuffer();
-	b.append("#<continuation");
-	if (name!=null) 
-	    b.append(' ').append(name.display());
-	b.append('>');
-	return b.toString();
+	return displayNamedOpaque("continuation");
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {

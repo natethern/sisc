@@ -89,7 +89,6 @@ public class Lexer implements Tokens {
 	synchronized(is) {
 
 	    int c=readIgnoringWhitespace(is);
-
 	    switch (c) {
 	    case LIST_OPEN: 
 	    case LIST_OPEN_ALT:

@@ -42,6 +42,7 @@ public class Parser extends Util implements Tokens {
     Lexer lexer;
     static final Object DOT=new Object();
     static final Object ENDPAIR=new Object();
+    static final Symbol SYNTAX=Symbol.get("syntax");
 
     static final HashMap chars=new HashMap (8);
     static {
@@ -113,11 +114,12 @@ public class Parser extends Util implements Tokens {
 	    break;
 	case TT_SHARP:
 	    int c=is.read();
-	    switch (c) {
-	    case 't': case 'T':
+	    char dc=Character.toLowerCase((char)c);
+	    switch (dc) {
+	    case 't': 
 		o=TRUE;
 		break;
-	    case 'f': case 'F':
+	    case 'f': 
 		o=FALSE;
 		break;
 	    case ';':
@@ -142,25 +144,25 @@ public class Parser extends Util implements Tokens {
 		    o=new SchemeCharacter((char)Integer.parseInt(cn, 8));
 		}
 		break;
-	    case 'b': case 'B':
+	    case 'b': 
 		o=new Quantity(lexer.readToBreak(is, Lexer.special), 2);
 		break;
-	    case 'o': case 'O':
+	    case 'o': 
 		o=new Quantity(lexer.readToBreak(is, Lexer.special), 8);
 		break;
-	    case 'x': case 'X':
+	    case 'x': 
 		o=new Quantity(lexer.readToBreak(is, Lexer.special), 16);
 		break;
-	    case 'd': case 'D':
+	    case 'd': 
 		o=new Quantity(lexer.readToBreak(is, Lexer.special));
 		break;
 	    case '&':
 		o=new Box((Value)_nextExpression(is, state, null));
 		break;
-	    case 'i': case 'I':
+	    case 'i': 
 		o=((Quantity)_nextExpression(is, state, null)).decimalVal();
 		break;
-	    case 'e': case 'E':
+	    case 'e': 
 		o=((Quantity)_nextExpression(is, state, null)).exactVal();
 		break;
 	    case '!': 

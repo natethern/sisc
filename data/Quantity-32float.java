@@ -13,7 +13,6 @@ public class Quantity extends Value {
 	String y=System.getProperty("maxprecision");
 	min_precision=(x==null ? 16 : Integer.parseInt(x));
 	max_precision=(y==null ? 32 : Integer.parseInt(y));
-	System.err.println("Quantity-lib: 32 bit floating point");
     }
 
     public final static BigInteger 

@@ -41,20 +41,7 @@ public class LexicalEnvironment extends Value {
     public Value[] vals;
 
     public LexicalEnvironment() {
-	this(new Value[0]);
-    }
-
-    LexicalEnvironment(Value[] v, LexicalEnvironment parent) {
-	this.vals=v;
-	this.parent=parent;
-    }
-
-    public LexicalEnvironment(Value[] v) {
-	this((short)v.length, v, null);
-    }
-
-    public LexicalEnvironment(short s, Value[] v, LexicalEnvironment parent) {
-	this(s, v, parent, false);
+	this.vals=new Value[0];
     }
 
     public LexicalEnvironment(short s, Value[] v, LexicalEnvironment parent,
@@ -68,7 +55,6 @@ public class LexicalEnvironment extends Value {
 	    vals=new Value[s];
 	    System.arraycopy(v, 0, vals, 0, sm1);
 	    vals[sm1]=valArrayToList(v, sm1, v.length-sm1);
-
 	} else {
 	    if (v.length!=s) 
 		throw new IllegalArgumentException();
