@@ -120,7 +120,7 @@ Constructors
 ------------
 
 JAVA-CONSTRUCTOR? <value> => #t/#f
-Determines whether <value> is a Java class.
+Determines whether <value> is a Java constructor.
 
 
 JAVA-CONSTRUCTOR-NAME <jconstructor> => <symbol>
@@ -485,11 +485,13 @@ Scheme: (:bar! foo-obj val);
 Chained field access:
 Java:   fooObj.bar.baz.boo
 Scheme: (fold (cut <> <>) foo-obj (list :bar :baz :boo))
+or      ((compose :boo :baz :bar) foo-obj)
         NB: this works equally well for bean fields.
 
 Chained field modification:
 Java:   fooObj.bar.baz.boo = moo
 Scheme: (:boo! (fold (cut <> <>) foo-obj (list :bar :baz)) moo)
+or      (:boo! ((compose :baz :bar) foo-obj))
         NB: this works equally well for bean fields.
 
 Accessing several fields:
