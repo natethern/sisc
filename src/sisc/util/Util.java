@@ -7,7 +7,6 @@ import sisc.data.*;
 import sisc.exprs.*;
 import sisc.io.*;
 import sisc.interpreter.*;
-import java.lang.reflect.Field;
 import java.io.IOException;
 import java.io.StringReader;
 import sisc.compiler.Parser;

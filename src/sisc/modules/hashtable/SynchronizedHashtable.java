@@ -1,16 +1,10 @@
 package sisc.modules.hashtable;
 
 import sisc.data.*;
-import sisc.interpreter.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Iterator;
 import java.io.IOException;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
-import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
-import sisc.util.Util;
 import sisc.modules.SThread.Mutex;
 
 public class SynchronizedHashtable extends Hashtable {

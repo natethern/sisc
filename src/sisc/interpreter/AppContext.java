@@ -4,8 +4,6 @@ import java.io.*;
 import sisc.ser.*;
 import sisc.data.*;
 import java.util.Properties;
-import java.util.Map;
-import java.util.HashMap;
 import sisc.env.SymbolicEnvironment;
 import sisc.util.Util;
 

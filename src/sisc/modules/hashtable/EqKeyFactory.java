@@ -1,7 +1,5 @@
 package sisc.modules.hashtable;
 
-import sisc.data.*;
-
 public class EqKeyFactory implements KeyFactory {
 
     public HashtableKey create() { return new Key(); }

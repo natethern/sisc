@@ -1,7 +1,6 @@
 package sisc.modules.record;
 
 import sisc.data.*;
-import sisc.interpreter.*;
 import java.io.IOException;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;

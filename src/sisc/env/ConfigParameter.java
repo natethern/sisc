@@ -6,7 +6,6 @@ import java.io.IOException;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
-import sisc.util.ExpressionVisitor;
 
 public class ConfigParameter extends SchemeParameter {
 

@@ -1,7 +1,5 @@
 package sisc.modules.hashtable;
 
-import sisc.data.*;
-
 public interface KeyFactory {
 
     HashtableKey create();
