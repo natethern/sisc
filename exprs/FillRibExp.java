@@ -41,19 +41,21 @@ public class FillRibExp extends Expression {
 
     public Expression exp, nxp;
     public int pos;
+    public boolean lastAndRatorImmediate;
 
-    public FillRibExp(Expression exp, int pos, Expression nxp) {
+    public FillRibExp(Expression exp, int pos, Expression nxp, boolean lari) {
         this.exp=exp;
         this.pos=pos;
         this.nxp=nxp;
+	lastAndRatorImmediate=lari;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
         r.vlr[pos]=r.acc;
-        if (nxp == null) {
+        if (lastAndRatorImmediate) {
             //immediate rator
             r.acc=exp.getValue(r);
-            r.nxp=APPEVAL;
+            r.nxp=nxp;
         } else {
             //rand or non-immediate rator
             r.push(nxp);
@@ -74,6 +76,7 @@ public class FillRibExp extends Expression {
             s.serialize(exp, dos);
             s.writeBer(pos, dos);
             s.serialize(nxp, dos);
+	    dos.writeBoolean(lastAndRatorImmediate);
         }
     }
 
@@ -85,6 +88,7 @@ public class FillRibExp extends Expression {
             exp=s.deserialize(dis);
             pos=s.readBer(dis);
             nxp=s.deserialize(dis);
+	    lastAndRatorImmediate=dis.readBoolean();
         }
     }
 }

@@ -295,12 +295,14 @@ public class Compiler extends Util {
             System.err.println(warn("nonprocappdetected",((Value)rator).synopsis()));
         Expression nxp = null;
         Expression lastRand = rator;
-        if (!isImmediate(rator)) {
-            nxp = APPEVAL;
-        }
+	//        if (!isImmediate(rator)) {
+	nxp = APPEVAL;
+	//        }
         for (int i= rands.length-1; i>=0; i--) {
             if (!isImmediate(rands[i])) {
-                nxp = new FillRibExp(lastRand, i, nxp);
+                nxp = new FillRibExp(lastRand, i, nxp, (i==rands.length-1 ? 
+							isImmediate(rator) : 
+							false));
                 lastRand = rands[i];
                 rands[i] = null;
             }
