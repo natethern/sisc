@@ -14,7 +14,7 @@
           (newline)
           (display "=>")
           (newline)
-          (let ([optimized ((current-optimizer) source)])
+          (let ([optimized ((current-optimizer) (_analyze! source))])
             (pretty-print optimized)
             (newline)
             (display "=>")
