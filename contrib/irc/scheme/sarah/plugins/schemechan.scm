@@ -37,10 +37,10 @@
              (eof-object? sexpr)))))
 
     
-(define (queue->s-expressions schemer)
+(define (queue->s-expressions channel-name schemer)
   (with/fc (lambda (m e)
              (clear-queue! schemer)
-             (send-messages (->jstring channel-name)
+             (send-messages channel-name
                             (make-error-message
                              (error-location m)
                              (error-message m))))
@@ -81,14 +81,14 @@
               (cond [(equal? command ".exit")
                      (clear-queue! schemer)
                      (schemer-at-repl! schemer #f)
-                     (send-message (channel-bot channel)
-                                   (->jstring (message-nick message))
-                                   (->jstring "You are now chatting."))]
+                     (send-messages (channel-bot channel)
+                                    (message-nick message)
+                                    "You are now chatting.")]
                     [(equal? command ".repl")
                      (schemer-at-repl! schemer #t)
                      (send-message (channel-bot channel)
-                                   (->jstring (message-nick message))
-                                   (->jstring "You are now in the REPL."))]
+                                   (message-nick message)
+                                   "You are now in the REPL.")]
                     [(equal? command ".attach")
                      (let ([user (trim (substring text i (string-length text)))])
                        (set-schemers-env!
@@ -104,7 +104,8 @@
                 (strict-r5rs-compliance #t)
                 (send-messages
                  (channel-bot channel) (channel-name channel)
-                 (let loop ([vs (queue->s-expressions schemer)])
+                 (let loop ([vs (queue->s-expressions (channel-name channel)
+                                                      schemer)])
                    (if (null? vs)
                        ""
                        (string-append
@@ -193,5 +194,3 @@
             (delete (cdr (assoc sender
                                 (scheme-channel-schemers schemechan)))
                     (scheme-channel-schemers scheme-channel-schemers)))))))))
-
-           

@@ -91,12 +91,12 @@
                "I respond to some natural language commands, such as:\n"
                "help - You're doing it.\n\n"))
              (for-each (lambda (p)
-                         (send-message bot
-                                       (->jstring (message-nick message))
-                                       (->jstring (string-append
-                                                   (plugin-crib p)
-                                                   " - "
-                                                   (plugin-help p)))))
+                         (send-messages bot
+                                        (message-nick message)
+                                        (string-append
+                                         (plugin-crib p)
+                                         " - "
+                                         (plugin-help p))))
                        plugins)
              #f]
             [(or (channel-bot-listens? channel) to-bot)

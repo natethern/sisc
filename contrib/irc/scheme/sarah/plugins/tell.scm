@@ -26,10 +26,9 @@
                    (random-elem tell-responses)))))))
 
 (define (do-tell recipient channel-name sender message)
-  (send-message (channel-bot (get-channel channel-name))
-		(->jstring channel-name)
-		(->jstring 
-		 (sisc:format "~a, ~a says: ~a" recipient sender message))))
+  (send-messages (channel-bot (get-channel channel-name))
+                 channel-name
+                 (sisc:format "~a, ~a says: ~a" recipient sender message)))
 
 (define (init-tell)
   (add-join-hook 
@@ -45,14 +44,14 @@
 (define (deliver-messages dbcon channel sender)
   (let ([messages (fetch-messages! dbcon (soundex sender))])    
     (when messages 
-      (send-message bot (->jstring (channel-name channel))
-		    (->jstring (sisc:format 
-				(random-elem deliver-preludes)
-				sender
-				(let ([l (length messages)])
-				  (sisc:format "~a ~a" l
-					       (if (> l 1) "messages."
-						   "message."))))))
+      (send-messages bot (channel-name channel)
+                     (sisc:format 
+                      (random-elem deliver-preludes)
+                      sender
+                      (let ([l (length messages)])
+                        (sisc:format "~a ~a" l
+                                     (if (> l 1) "messages."
+                                         "message.")))))
       (for-each (lambda (m)
 		  (do-tell sender (channel-name channel) (car m) (cdr m)))
 		messages))))
