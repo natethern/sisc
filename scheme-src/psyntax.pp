@@ -1349,7 +1349,6 @@
                            g755))))
                 (set! free-identifier=?
                   (lambda (g708 g707)
-                    (begin
                       ((lambda (g710)
                          (if (not (g255 g710))
                            (g93 'free-identifier=? '"invalid argument" g710)
@@ -1357,10 +1356,10 @@
                        g708)
                       ((lambda (g709)
                          (if (not (g255 g709))
-                           (g93 'free-identifier=? '"invalid argument" g709)
+			     (g93 'free-identifier=? '"invalid argument" g709)
                            (void)))
                        g707)
-                      (g378 g708 g707))))
+                      (g378 g708 g707)))
                 (set! bound-identifier=?
                   (lambda (g752 g751)
                     (begin
@@ -1667,7 +1666,7 @@
                g1813))))
        (lambda (g844)
          (if (g255 g844) (g378 g844 '...) '#f))
-       (lambda () (void))
+       (lambda () '(void))
        (lambda (g850 g845 g849 g846 g848 g847)
          ((lambda (g851)
             ((lambda (g852)
@@ -3524,7 +3523,7 @@
                                                               (if (eq? g1386
                                                                        'c&e)
                                                                 (g91 g1444)
-                                                                (void))
+                                                                '(void))
                                                               g1444))
                                                           (list 'define
                                                                 g1443
@@ -4252,13 +4251,13 @@
                '#f))))
        (lambda (g1210)
          (if (g204 g1210)
-           (symbol?
-             ((lambda (g1211)
-                (if (g90 g1211)
-                  (annotation-expression g1211)
-                  g1211))
-              (g205 g1210)))
-           '#f))
+	     (symbol?
+	      ((lambda (g1211)
+		 (if (g90 g1211)
+		     (annotation-expression g1211)
+		     g1211))
+	       (g205 g1210)))
+	     '#f))
        (lambda (g1287 g1285 g1286)
          (g98 g1285 (g231 g1287 g1286)))
        (lambda (g1213 g1212)
@@ -4994,15 +4993,30 @@
                 g2031))))))
       (lambda (g2142)
         (if (identifier? g2142)
-          (free-identifier=? g2142 'quote)
+          (free-identifier=? g2142 
+			     #(syntax-object
+			       quote
+			       ((top) #4(ribcage 
+					 ((import-token . *top*)) ())))
+			     )
           '#f))
       (lambda (g2036)
         (if (identifier? g2036)
-          (free-identifier=? g2036 'list)
+	    (free-identifier=? g2036 
+			       #(syntax-object
+				 list
+				 ((top) #4(ribcage 
+					   ((import-token . *top*)) ())))
+			       )
           '#f))
       (lambda (g2141)
         (if (identifier? g2141)
-          (free-identifier=? g2141 'cons)
+          (free-identifier=? g2141 
+			       #(syntax-object
+				 cons
+				 ((top) #4(ribcage 
+					   ((import-token . *top*)) ())))
+			       )
           '#f))
       (lambda (g2037)
         ((lambda (g2038)

@@ -49,7 +49,7 @@
   
 ;;;; "ratize.scm" Convert number to rational number (ported from SLIB)
 
-(define rationalize #f)
+(define rationalize (void))
 (letrec ([rational:simplest 
 	  (lambda (x y)
 	    (cond ((< y x) (rational:simplest y x))

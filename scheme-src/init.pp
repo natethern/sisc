@@ -287,6 +287,28 @@
         (cons (car ls) (remove elem (cdr ls)))))))
 (define append
   ((lambda (real-append)
+     (set! real-append 
+	   (lambda (ls1 . lses)
+	     (if (null? lses)
+		 ls1
+		 (if (null? ls1)
+		     (apply real-append lses)
+		     (apply
+		      real-append
+		      (cons (append2 ls1 (car lses))
+			    (cdr lses)))))))
+     (lambda lses
+       (if (null? lses)
+	   ()
+	   (if (null? (cdr lses))
+	       (car lses)
+	       (apply
+		real-append
+		(cons (car lses) (cdr lses)))))))
+     #f))
+
+(define append
+  ((lambda (real-append)
      ((lambda (%_21)
         (begin
           (set! real-append %_21)
@@ -331,49 +353,54 @@
 	     (map1 cdr lists)))))) 
    '#f))
 (define circular?
-  ((lambda (list-h?)
-     ((lambda (%_14)
-        (begin
-          (set! list-h? %_14)
-          ((lambda ()
-             (lambda (lsc)
-               (if (pair? lsc) (list-h? lsc (cdr lsc)) '#f))))))
-      (lambda (lsp1 lsp2)
-        (if ((lambda (t) (if t t (null? lsp2))) (null? lsp1))
-          '#f
-          (if (if (pair? lsp2) (null? (cdr lsp2)) '#f)
-            '#f
-            (if (not (pair? lsp2))
-              '#f
-              (if (eq? lsp1 lsp2)
-                '#t
-                (list-h? (cdr lsp1) (cddr lsp2)))))))))
-   '#f))
+    ((lambda (%_269)
+       (begin
+         (set! %_269
+           (lambda (%_271 %_272)
+             (if ((lambda (%_274) (if %_274 %_274 (null? %_272)))
+                  (null? %_271))
+               '#f
+               (if (if (pair? %_272) (null? (cdr %_272)) '#f)
+                 '#f
+                 (if ((lambda (%_273)
+                        (if %_273 %_273 (not (pair? (cdr %_272)))))
+                      (not (pair? %_272)))
+                   '#f
+                   (if (eq? %_271 %_272)
+                     '#t
+                     (%_269 (cdr %_271) (cddr %_272))))))))
+         (lambda (%_270)
+           (if (pair? %_270) (%_269 %_270 (cdr %_270)) '#f))))
+     #f))
 (define list?
-  ((lambda (list-h)	
-     (begin	
-       (set! list-h
-	     (lambda (lsp1 lsp2)
-	       (if (pair? lsp2)
-		   ((lambda (%_279)
-		      (if %_279
-			  %_279
-			  ((lambda (%_280)
-			     (if %_280
-				 %_280
-				 ((lambda (%_281)
-				    (if %_281
-					%_281
-					(if (not (eq? lsp1 lsp2))
-					    (list-h (cdr lsp1) (cddr lsp2))
-					    '#f)))
-				  (null? (cdr lsp2)))))
-			   (null? lsp2))))
-		    (null? lsp1))
-		   '#f)))
-       (lambda (ls)
-	 (if (pair? ls) (list-h ls (cdr ls)) '#f))))
-   #f))
+    ((lambda (%_263)
+       (begin
+         (set! %_263
+           (lambda (%_266 %_267)
+             ((lambda (%_268)
+                (if %_268
+                  %_268
+                  ((lambda (%_269)
+                     (if %_269
+                       %_269
+                       (if (pair? %_267)
+                         ((lambda (%_270)
+                            (if %_270
+                              %_270
+                              (if (not (eq? %_266 %_267))
+                                (%_263 (cdr %_266) (cddr %_267))
+                                '#f)))
+                          (null? (cdr %_267)))
+                         '#f)))
+                   (null? %_267))))
+              (null? %_266))))
+         (lambda (%_264)
+           ((lambda (%_265)
+              (if %_265
+                %_265
+                (if (pair? %_264) (%_263 %_264 (cdr %_264)) '#f)))
+            (null? %_264)))))
+     #f))
 (define expt
   (lambda (base exponent)
     (if (if (integer? exponent) (= base '2) '#f)

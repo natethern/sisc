@@ -38,7 +38,7 @@
     (get-output-string string-buffer))
 
   (define (vector->list-n v s n)
-   (if (and (>= s n) (> s 0))
+   (if (>= s n) 
 	'()
 	(cons (vector-ref v s) (vector->list-n v (+ s 1) n))))
 

@@ -3033,6 +3033,7 @@
                    (and (identifier? x)
                         (free-identifier=? x (syntax quote)))))
        (islist? (lambda (x)
+		  (display x) (newline)
                   (and (identifier? x)
                        (free-identifier=? x (syntax list)))))
        (iscons? (lambda (x)

@@ -25,44 +25,49 @@
 (define (newline . port)
   (apply display (cons #\newline port)))
 
-(define map1 
-  (letrec ([iter (lambda (proc head acc ls)
-		   (if (null? ls) 
-		       head
-		       (begin
-			 (set-cdr! acc (cons (proc (car ls)) ()))
-			 (iter proc head (cdr acc) (cdr ls)))))])
-    
-    (lambda (proc ls)
-      (if (null? ls) 
-	  ()
-	  (let ([sv (cons (proc (car ls)) ())])
-	    (iter proc sv sv (cdr ls)))))))
-
-;  (if (null? ls) ()
-;      (cons (proc (car ls)) (map proc (cdr ls)))))
-(define map map1)
+(define map (void))
+(letrec ([map1 
+	  (letrec ([iter (lambda (proc head acc ls)
+			   (if (null? ls) 
+			       head
+			       (begin
+				 (set-cdr! acc (cons (proc (car ls)) ()))
+				 (iter proc head (cdr acc) (cdr ls)))))])
+	    
+	    (lambda (proc ls)
+	      (if (null? ls) 
+		  ()
+		  (let ([sv (cons (proc (car ls)) ())])
+		    (iter proc sv sv (cdr ls))))))])
+  (set! map map1))
 
 (define (compose f g)
   (lambda (x)
     (f (g x))))
 
-(define (_assN N obj alist)
-  (cond [(null? alist) #f]
-	[(N (caar alist) obj) (car alist)]
-	[else (_assN N obj (cdr alist))]))
+(define assq (void))
+(define assv (void))
+(define assoc (void))
+(define memq (void))
+(define memv (void))
+(define member (void))
 
-(define (_memN N obj list)
-  (cond [(null? list) #f]
-	[(N (car list) obj) list]
-	[else (_memN N obj (cdr list))]))
-
-(define (assq obj alist) (_assN eq? obj alist))
-(define (assv obj alist) (_assN eqv? obj alist))
-(define (assoc obj alist) (_assN equal? obj alist))
-(define (memq obj list) (_memN eq? obj list))
-(define (memv obj list) (_memN eqv? obj list))
-(define (member obj list) (_memN equal? obj list))
+(letrec ([assN
+	  (lambda (N obj alist)
+	    (cond [(null? alist) #f]
+		  [(N (caar alist) obj) (car alist)]
+		  [else (assN N obj (cdr alist))]))]
+	 [memN
+	  (lambda (N obj list)
+	    (cond [(null? list) #f]
+		  [(N (car list) obj) list]
+		  [else (memN N obj (cdr list))]))])
+  (set! assq (lambda (obj alist) (assN eq? obj alist)))
+  (set! assv (lambda (obj alist) (assN eqv? obj alist)))
+  (set! assoc (lambda (obj alist) (assN equal? obj alist)))
+  (set! memq (lambda (obj list) (memN eq? obj list)))
+  (set! memv (lambda (obj list) (memN eqv? obj list)))
+  (set! member (lambda (obj list) (memN equal? obj list))))
 
 ;c....r
 (define cadr (compose car cdr))
@@ -94,19 +99,11 @@
 (define cdddar (compose cdr cddar))
 (define cddddr (compose cdr cdddr))
 
-(define (append2 ls1 ls2)
-  (if (null? ls1) ls2
-      (cons (car ls1) (append (cdr ls1) ls2))))
+(define append2 
+  (lambda (ls1 ls2)
+    (if (null? ls1) ls2
+	(cons (car ls1) (append2 (cdr ls1) ls2)))))
 (define append append2)
-   
-;;;;;;;;; Extensions: new names for old procedures
-
-(define first 	   car)
-(define second     cadr)
-(define third      caddr)
-(define rest 	   cdr)
-(define set-first! set-car!)
-(define set-rest!  set-cdr!)
 
 ;;;;;;;;;;;;;;; Conversion functions
 
@@ -139,17 +136,18 @@
 
 ;;;;;;;;;;;;; Constructors
 
-(if (not (lookup 'list))
-    (define (list . args) args)
+;(if (lookup 'list) (void)
+;    (define list (lambda args args))
 (define (vector . elems) (list->vector elems))
 (define (string . elems) (list->string elems))
 
 ;;;;;;;;;;;;; File functions
 
-(define _cd "")
-(define _separator "/")
+
 (define current-directory (void))
-(letrec ([gen-path
+(letrec ([_cd ""]
+	 [_separator "/"]
+	 [gen-path
 	  (lambda (base file)
 	    (let ((sl (string->list file)))
 	      (if (eq? (car sl) (string-ref _separator 0))
@@ -244,6 +242,7 @@
 	[(equal? (car ls) elem) (remove elem (cdr ls))]
 	[else
 	 (cons (car ls) (remove elem (cdr ls)))]))
+
 (define append
   (letrec ([real-append 
 	    (lambda (ls1 . lses)
@@ -258,7 +257,8 @@
 	    [(null? (cdr lses)) (car lses)]
 	    [else (apply real-append `(,(car lses) . ,(cdr lses)))]))))
 (define map
-  (letrec ([iter
+  (letrec ([map1 map]
+	   [iter
 	    (lambda (proc lists head acc)
 	      (if (null? (car lists)) 
 		  (if (andmap null? lists)
@@ -282,7 +282,8 @@
 			 (null? lsp2)) #f]
 		    [(and (pair? lsp2)
 			  (null? (cdr lsp2))) #f]
-		    [(not (pair? lsp2)) #f]
+		    [(or (not (pair? lsp2))
+			 (not (pair? (cdr lsp2)))) #f]
 		    [(eq? lsp1 lsp2) #t]
 		    [else (list-h? (cdr lsp1) (cddr lsp2))])))]
    (lambda (lsc)
@@ -291,15 +292,15 @@
 (define list? 
   (letrec [(list-h? 
              (lambda (lsp1 lsp2)
-	       (and 
-		(pair? lsp2)
-		(or (null? lsp1)
-		    (null? lsp2)
-		    (null? (cdr lsp2))
-		    (and (not (eq? lsp1 lsp2))
-			 (list-h? (cdr lsp1) (cddr lsp2)))))))]
+	       (or (null? lsp1) (null? lsp2)
+		   (and 
+		    (pair? lsp2)
+		    (or 
+		     (null? (cdr lsp2))
+		     (and (not (eq? lsp1 lsp2))
+			  (list-h? (cdr lsp1) (cddr lsp2))))))))]
    (lambda (lsc)
-     (and (pair? lsc) (list-h? lsc (cdr lsc))))))
+     (or (null? lsc) (and  (pair? lsc) (list-h? lsc (cdr lsc)))))))
 
 
 ;;;;;;;;;;;;;; Math functions/constants
@@ -349,21 +350,22 @@
 	(sqrt (+ (* a a) (* b b))))
       (if (< num 0) (- num) num)))
 
-(define (_min_max proc mv args inexact)
-  (cond [(null? args) (if (and inexact (exact? mv)) 
-			  (exact->inexact mv)
-			  mv)]
-	[(proc (car args) mv) (_min_max proc (car args) (cdr args)
-					(or inexact (inexact? (car args))))]
-	[else (_min_max proc mv (cdr args) inexact)]))
-
-(define (min . args) 
-  (if (null? args) 0
-      (_min_max < (car args) (cdr args) (inexact? (car args)))))
-
-(define (max . args)
-  (if (null? args) 0
-      (_min_max > (car args) (cdr args) (inexact? (car args)))))
+(define min (void))
+(define max (void))
+(letrec ([_min_max 
+       (lambda (proc mv args inexact)
+	 (cond [(null? args) (if (and inexact (exact? mv)) 
+				 (exact->inexact mv)
+				 mv)]
+	       [(proc (car args) mv) (_min_max proc (car args) (cdr args)
+					       (or inexact (inexact? (car args))))]
+	       [else (_min_max proc mv (cdr args) inexact)]))])
+  (set! min (lambda args
+	      (if (null? args) 0
+		  (_min_max < (car args) (cdr args) (inexact? (car args))))))
+  (set! max (lambda args
+	      (if (null? args) 0
+		  (_min_max > (car args) (cdr args) (inexact? (car args)))))))
 
 (define (negative? n) (< n 0))
 (define (positive? n) (> n 0))
@@ -371,18 +373,32 @@
 (define (odd? n) (not (even? n)))
 (define (zero? n) (= n 0))
 
-(define _comp_help
-  (lambda (comparator chainer endstate)
-    (lambda args
-      (let loop ([x args])
-	(cond [(null? x) endstate]
-	      [(null? (cdr x)) endstate]
-	      [else (chainer (comparator (car x) (cadr x))
-			     (loop (cdr x)))])))))
 
-(define _and2 (lambda (x y) (and x y)))
-(define <= (_comp_help (lambda (a b) (or (< a b) (= a b))) _and2 #t))
-(define >= (_comp_help (lambda (a b) (or (> a b) (= a b))) _and2 #t))
+(define >= (void))
+(define <= (void))
+(let ([_comp_help
+      (lambda (comparator chainer endstate)
+	(lambda args
+	  (let loop ([x args])
+	    (cond [(null? x) endstate]
+		  [(null? (cdr x)) endstate]
+		  [else (chainer (comparator (car x) (cadr x))
+				 (loop (cdr x)))]))))]
+      [_and2 (lambda (x y) (and x y))])
+  
+  (set! <= (_comp_help (lambda (a b) (or (< a b) (= a b))) _and2 #t))
+  (set! >= (_comp_help (lambda (a b) (or (> a b) (= a b))) _and2 #t)))
+
+
+(let ([_?= (lambda (comparator chainer)
+	     (lambda args
+	       (or (null? args) 
+		   (null? (cdr args))
+		   (and (or (= (car args) (cadr args))
+			    (comparator (car args) (cadr args)))
+			(apply chainer (cdr args))))))])
+  (set! >= (_?= > >=))
+  (set! <= (_?= < <=)))
 
 (define (gcd . args)
    (cond [(null? args) 0]
@@ -458,12 +474,23 @@
 (define (char-upper-case? c) (and (char-alphabetic? c) (char<? #\a)))
 (define (char-lower-case? c) (and (char-alphabetic? c) (char>? #\z)))
 
-(define (string-downcase s)
-  (list->string (map char-downcase (string->list s))))
-
-(define (string-upcase s)
-  (list->string (map char-upcase (string->list s))))
-
+(define string-downcase (void))
+(define string-upcase (void))
+(letrec ([string-map
+	  (lambda (strsrc strdst proc n l)
+	    (if (< n l)
+		(begin 
+		  (string-set! strdst n (proc (string-ref strsrc n))) 
+		  (string-map strsrc strdst proc (+ n 1) l))
+		strdest))])
+  (set! string-downcase (lambda (str)
+			  (let ([newstr (make-string (string-length str))])
+			    (string-map str newstr char-downcase 0 
+					(string-length str)))))
+  (set! string-upcase (lambda (str)
+			  (let ([newstr (make-string (string-length str))])
+			    (string-map str newstr char-upcase 0 
+					(string-length str))))))
 (define string=? equal?)
 
 (define string<?
@@ -574,6 +601,7 @@
 
 (define (list-ref list n)
   (if (zero? n) (car list) (list-ref (cdr list) (- n 1))))
+
 (define iota
   (letrec ([iota-help
 	    (lambda (n h) 

@@ -1,3 +1,35 @@
+/* 
+ * The contents of this file are subject to the Mozilla Public
+ * License Version 1.1 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS
+ * IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * rights and limitations under the License.
+ * 
+ * The Original Code is the Second Interpreter of Scheme Code (SISC).
+ * 
+ * The Initial Developer of the Original Code is Scott G. Miller.
+ * Portions created by Scott G. Miller are Copyright (C) 2000-2001
+ * Scott G. Miller.  All Rights Reserved.
+ * 
+ * Contributor(s):
+ * Matthias Radestock 
+ * 
+ * Alternatively, the contents of this file may be used under the
+ * terms of the GNU General Public License Version 2 or later (the
+ * "GPL"), in which case the provisions of the GPL are applicable 
+ * instead of those above.  If you wish to allow use of your 
+ * version of this file only under the terms of the GPL and not to
+ * allow others to use your version of this file under the MPL,
+ * indicate your decision by deleting the provisions above and
+ * replace them with the notice and other provisions required by
+ * the GPL.  If you do not delete the provisions above, a recipient
+ * may use your version of this file under either the MPL or the
+ * GPL.
+ */
 package sisc;
 
 import sisc.*;
@@ -337,6 +369,8 @@ public class Primitives extends Module {
 		do {
 		    try {
 			v=f.parser.nextExpression(p);
+		    } catch (EOFException eof) {
+			v=EOF;
 		    } catch (IOException e) {
 			f.pop(before);
 			e.printStackTrace();
@@ -475,7 +509,11 @@ public class Primitives extends Module {
 		return new SchemeCharacter(str(f,f.vlr[0]).stringdata[num(f,f.vlr[1]).intValue()]);
 	    case VECTORREF:
 		int index=num(f,f.vlr[1]).intValue();
-		return vec(f,f.vlr[0]).vals[index];
+		try {
+		    return vec(f,f.vlr[0]).vals[index];
+		} catch (ArrayIndexOutOfBoundsException e) {
+		    error(f, Symbol.get("vector-ref"), "index "+index+" out of bounds for '"+f.vlr[0].display()+"'");
+		}
 	    case MAKEVECTOR:
 		return new SchemeVector(num(f,f.vlr[0]).intValue(),
 					f.vlr[1]);
@@ -573,7 +611,12 @@ public class Primitives extends Module {
 				    character(f,f.vlr[2]));
 		return VOID;
 	    case VECTORSET:
-		vec(f,f.vlr[0]).set(num(f,f.vlr[1]).intValue(),f.vlr[2]);
+		int index=num(f,f.vlr[1]).intValue();
+		try {
+		    vec(f,f.vlr[0]).set(index,f.vlr[2]);
+		} catch (ArrayIndexOutOfBoundsException e) {
+		    error(f, Symbol.get("vector-set!"), "index "+index+" out of bounds for '"+f.vlr[0].display()+"'");
+		}
 		return VOID;
 	    case BLOCKREAD:
 		int count=num(f,f.vlr[2]).intValue();
