@@ -41,23 +41,29 @@ import java.io.*;
 public abstract class Expression extends Util implements Serializable {
     protected static Set EMPTYSET=new TreeSet();
 
-    protected TreeMap annotation;
+    protected TreeMap annotations;
     
-    public Value getAnnotation(Symbol key) {
-        if (annotation==null)
+    public synchronized Value getAnnotation(Symbol key) {
+        if (annotations==null)
             return FALSE;
-        else return (Value)annotation.get(key);
+        synchronized(annotations) {
+            return (Value)annotations.get(key);
+        }
     }
 
-    public synchronized void setAnnotation(Symbol key, Value val) {
-        if (annotation==null)
-            annotation=new TreeMap();
-        annotation.put(key, val);
+    public void setAnnotation(Symbol key, Value val) {
+        if (annotations==null)
+            annotations=new TreeMap();
+        synchronized(annotations) {
+            annotations.put(key, val);
+        }
     }
      
     public Set getAnnotationKeys() {
-        if (annotation==null) return EMPTYSET;
-        return annotation.keySet();
+        if (annotations==null) return EMPTYSET;
+        synchronized(annotations) {
+            return annotations.keySet();
+        }
     }
 
     public abstract void eval(Interpreter r) throws ContinuationException;
