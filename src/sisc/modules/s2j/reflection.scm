@@ -260,8 +260,10 @@
                                               complex simple)
   (begin (define-syntax thing
            (syntax-rules ()
-             [(_ name native)   (define name (complex native))]
-             [(_ name)          (thing name (simple 'name))]))
+             [(_ name native)
+              (define name (complex 'native))]
+             [(_ name)
+              (define name (complex (simple 'name)))]))
          (define-syntax things
            (syntax-rules ()
              [(_ (name native) . rest)  (begin (thing name native)
