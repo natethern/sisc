@@ -8,11 +8,11 @@ public class StreamSerializer extends SLL2Serializer {
 
     private Map entryPoints, classes;
     private int nextEp, nextClassIdx;
-    private ObjectOutputStream objout;
+    private NestedObjectOutputStream objout;
 
     public StreamSerializer(OutputStream out) throws IOException {
         super(out);
-        objout=new ObjectOutputStream(cos);
+        objout=new NestedObjectOutputStream(cos,this);
         this.classes=new HashMap();
         this.entryPoints=new HashMap();
     }

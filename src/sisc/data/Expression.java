@@ -163,11 +163,17 @@ public abstract class Expression extends Util
         {}
 
     public void writeExternal(ObjectOutput out) throws IOException {
-        serialize(new JavaSerializer(out));
+        Serializer s=(out instanceof NestedObjectOutputStream) ?
+            ((NestedObjectOutputStream)out).getSerializerInstance() :
+            new JavaSerializer(out);
+        serialize(s);
     }
 
     public void readExternal(ObjectInput in) throws IOException {
-        deserialize(new JavaDeserializer(in));
+        Deserializer d=(in instanceof NestedObjectInputStream) ?
+            ((NestedObjectInputStream)in).getDeserializerInstance() :
+            new JavaDeserializer(in);
+        deserialize(d);
     }
 
     public Object readResolve() throws ObjectStreamException {

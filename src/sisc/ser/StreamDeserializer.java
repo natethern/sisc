@@ -12,14 +12,14 @@ public class StreamDeserializer extends DeserializerImpl {
     AppContext ctx;
     Map classPool, alreadyReadObjects;
     DataInputStream in;
-    ObjectInputStream objin;
+    NestedObjectInputStream objin;
     Object[] thisArray=new Object[] { this };
     LinkedList deserQueue;
 
     public StreamDeserializer(AppContext ctx, InputStream input) throws IOException {
         this.ctx=ctx;
         this.in=new DataInputStream(input);
-        this.objin=new ObjectInputStream(input);
+        this.objin=new NestedObjectInputStream(input,this);
         classPool=new HashMap();
         
         alreadyReadObjects=new HashMap();
