@@ -75,10 +75,6 @@ public class Interpreter extends Util {
     public LexicalEnvironment    env;
     public CallFrame             stk, fk;
 
-    public static Interpreter newContext(Interpreter parent) {
-        return new Interpreter(parent.ctx, parent.dynenv);
-    }
-
     public Interpreter(AppContext ctx, DynamicEnv dynenv) {
         fk=new CallFrame(new DisplaylnExp(), null, null, null, stk);
         fk.capture();
@@ -143,7 +139,7 @@ public class Interpreter extends Util {
         stk=createFrame(nxp,vlr,env,fk,stk);
     }
 
-    public Value eval(String expr) throws ContinuationException, IOException {
+    public Value eval(String expr) throws IOException {
         InputPort ip=new InputPort(new BufferedReader(new StringReader(expr)));
         Value rv=VOID;
 
@@ -156,16 +152,14 @@ public class Interpreter extends Util {
         } while (true);
     }
 
-    public Value eval(Value v) throws ContinuationException {
-        return interpret(new AppExp((Expression)ctx.evaluator,
-                                    new Expression[] {v}, true));
+    public Value eval(Value v) {
+        return eval(ctx.evaluator, new Value[] {v});
     }
 
-    public Value eval(Procedure p, Value[] args) throws ContinuationException {
-	nxp = null;
+    public Value eval(Procedure p, Value[] args) {
+	acc = p;
 	vlr = args;
-	p.apply(this);
-	return acc;
+        return interpret(APPEVAL);
     }
 
     // Symbolic environment handling
