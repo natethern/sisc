@@ -35,6 +35,7 @@
 	 (cap (read in))
 	 (money (read in)))
     (check-newline in)
+    (debug "Setting my cap: ~a" cap)
     (robot-capacity! id cap)
     (robot-money! id money)
     id))
@@ -47,7 +48,7 @@
 	     (weight (read in)))
         (let ((p (make-package id)))
           (package-details! p x y weight)
-          (package-drop! p 0 x y)
+          (package-add! p)
           p))))
 
 

@@ -43,6 +43,10 @@
 				      (remove p (hashtable/get claimed-packages id '())))
 		      (apply package-location! `(,p ,@droploc))
 		      droploc)))))
+
+
+(define (package-add! p)
+  (hashtable/put! unclaimed-packages (package-id p) p))
     
 ; Called when we observe a pickup action.  This removes the package
 ; from those we know about that are unclaimed.

@@ -143,24 +143,25 @@
 		   delta-map))
        '((|Drop|))
        ; Package pickup moves
-       (let* ((packages-here (packages x y))
-	      (all-combinations (combination packages-here)))
+       (let* ((packages-here (packages x y)))
 	 (apply append
 		(map (lambda (packages)
-		       (if (<= (apply + (map package-weight packages))
+                       (debug "~a vs ~a" (package-weight packages)
+                              (robot-capacity-remaining id))
+		       (if (<= (package-weight packages)
 			       (robot-capacity-remaining id))
-			 `((|Pick| ,@(map package-id packages)))
+			 `((|Pick| ,(package-id packages)))
 			 '()))
-		     all-combinations)))
+		     packages-here)))
 
        ; Package drop moves
-       (let* ((my-packages (robots-packages id))
-	      (all-combinations (combination my-packages)))
+       (let* ((my-packages (robots-packages id)))
 	 (apply append
 		(map (lambda (packages)
-			 `((|Drop| ,@(map package-id packages))))
-		     all-combinations)))))))
+			 `((|Drop| ,(package-id packages))))
+		     my-packages)))))))
 
+(define (zeroguard n) (if (zero? n) 1 n))
 
 (define calculate-fitness 
 (letrec
@@ -197,7 +198,7 @@
                                 (apply dist `(,@pos
                                               ,@(package-location p))))
                                (weight (package-weight p)))
-                           (/ weight dist-to-deliver)))
+                           (/ weight (zeroguard dist-to-deliver))))
                        (map package-lookup (cdr move))))))
     ((|Move|)
      (let* ((myx (car pos))

@@ -29,7 +29,7 @@
   (newline))
 
 (define (st) (stack-trace (get-last-error)))
-
+(define (et) (print-error (get-last-error)))
   
 (import s2j)
 (import generic-procedures)

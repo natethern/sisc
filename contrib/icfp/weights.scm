@@ -68,7 +68,7 @@
 		   acc))))))
 
 (define (all-unclaimed-packages)
-  (hashtable/map (lambda (key) (hashtable/get unclaimed-packages key)) unclaimed-packages))
+  (hashtable/map (lambda (key val) val) unclaimed-packages))
 
 (define (pickup-distance-weight id x y)
   (let ((pickup-weight (weight id 'pickup))

@@ -21,11 +21,11 @@
 
 (define (robot-load-incr! id v)
   (when v
-	(hashtable/put! robot-capacities id (+ (robot-load id) v))))
+	(hashtable/put! robot-loads id (+ (robot-load id) v))))
 
 (define (robot-load-decr! id v)
   (when v
-	(hashtable/put! robot-capacities id (- (robot-load id) v))))
+	(hashtable/put! robot-loads id (- (robot-load id) v))))
 
 (define (robot-capacity-remaining id)
   (- (robot-capacity id)
