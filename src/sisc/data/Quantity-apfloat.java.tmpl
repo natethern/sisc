@@ -86,32 +86,32 @@ public class Quantity extends Value implements Singleton {
 	
     public static Quantity valueOf(String v, int radix, boolean handleComplex) {
         int x;
-   	    if (handleComplex && (x=v.indexOf('i'))!=-1) {
-			BigDecimal d,im;
-			if (x!=v.length()-1)
-				throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
-			x=v.lastIndexOf('+');
-			if (x==-1) {
-				x=v.lastIndexOf('-');
-				if (x==-1)
-					throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
-
-				if (x==0)
-					d=_BD_ZERO;
-				else
-					d=valueOf(v.substring(0,x), radix, false).decimal();
-				im = ( (x+2)==v.length() ? _BD_NEGONE :
-					   valueOf(v.substring(x, v.length()-1), radix, false).decimal());
-			} else {
-				if (x==0)
-					d=_BD_ZERO;
-				else
-					d=valueOf(v.substring(0,x), radix, false).decimal();
-				im = ( (x+2)==v.length() ? _BD_ONE :
-					   valueOf(v.substring(x+1, v.length()-1), radix, false).decimal());
-			}
-			return new Quantity(d,im);
-   	    } else if ((x=v.indexOf('/'))!=-1) {
+	if (handleComplex && (x=v.indexOf('i'))!=-1) {
+	    BigDecimal d,im;
+	    if (x!=v.length()-1)
+		throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
+	    x=v.lastIndexOf('+');
+	    if (x==-1) {
+		x=v.lastIndexOf('-');
+		if (x==-1)
+		    throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
+		
+		if (x==0)
+		    d=_BD_ZERO;
+		else
+		    d=valueOf(v.substring(0,x), radix, false).decimal();
+		im = ( (x+2)==v.length() ? _BD_NEGONE :
+		       valueOf(v.substring(x, v.length()-1), radix, false).decimal());
+	    } else {
+		if (x==0)
+		    d=_BD_ZERO;
+		else
+		    d=valueOf(v.substring(0,x), radix, false).decimal();
+		im = ( (x+2)==v.length() ? _BD_ONE :
+		       valueOf(v.substring(x+1, v.length()-1), radix, false).decimal());
+	    }
+	    return new Quantity(d,im);
+	} else if ((x=v.indexOf('/'))!=-1) {
             Quantity 
                 num=parseUinteger(v.substring(0,x), radix),
                 den=parseUinteger(v.substring(x+1), radix);
