@@ -474,17 +474,13 @@ public class Primitives extends ModuleAdapter {
                 f.nxp = APPEVAL;
                 return producer;
             case GETPROP:
-                try {
-                    if (f.vlr[1] instanceof SymbolicEnvironment) {
-                        return (Value)env(f.vlr[1]).lookup(symbol(f.vlr[0]));
-                    } else {
-                        return (Value)f.lookup(symbol(f.vlr[0]), symbol(f.vlr[1]));
-                    }
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    if (f.vlr.length != 2)
-                        throwArgSizeException();
-                    return FALSE;
+                Value ret = null;
+                if (f.vlr[1] instanceof SymbolicEnvironment) {
+                    ret = (Value)env(f.vlr[1]).lookup(symbol(f.vlr[0]));
+                } else {
+                    ret = (Value)f.lookup(symbol(f.vlr[0]), symbol(f.vlr[1]));
                 }
+                return (ret == null) ? FALSE : ret;
             case REMPROP:
                 f.undefine(symbol(f.vlr[0]), symbol(f.vlr[1]));
                 return VOID;
@@ -495,17 +491,13 @@ public class Primitives extends ModuleAdapter {
         case 3:
             switch(primid) {
             case GETPROP:
-                try {
-                    if (f.vlr[1] instanceof SymbolicEnvironment) {
-                        return (Value)env(f.vlr[1]).lookup(symbol(f.vlr[0]));
-                    } else {
-                        return (Value)f.lookup(symbol(f.vlr[0]), symbol(f.vlr[1]));
-                    }
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    if (f.vlr.length!=3)
-                        throwArgSizeException();
-                    return f.vlr[2];
+                Value ret = null;
+                if (f.vlr[1] instanceof SymbolicEnvironment) {
+                    ret = (Value)env(f.vlr[1]).lookup(symbol(f.vlr[0]));
+                } else {
+                    ret = (Value)f.lookup(symbol(f.vlr[0]), symbol(f.vlr[1]));
                 }
+                return (ret == null) ? f.vlr[2] : ret;
             case PUTPROP:
                 Symbol lhs=symbol(f.vlr[0]);
                 Value rhs=f.vlr[2];

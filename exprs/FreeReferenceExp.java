@@ -29,7 +29,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
             envLoc=senv.getLoc(sym);
             if (envLoc==-1)
                 error(r, liMessage(SISCB,"undefinedvar", sym.write()));
-	    r.acc=senv.lookup(envLoc);
+            r.acc=senv.lookup(envLoc);
         } 
     }
 

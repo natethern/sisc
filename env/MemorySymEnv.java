@@ -94,13 +94,12 @@ public class MemorySymEnv extends NamedValue implements SymbolicEnvironment {
 
     public int define(Symbol s, Value v) {
         synchronized(symbolMap) {
-            try {
-                int envLoc = getLoc(s);
+            int envLoc = getLoc(s);
+            if (envLoc == -1) return store(s, v);
+            else {
                 set(envLoc, v);
                 return envLoc;
-            } catch (ArrayIndexOutOfBoundsException np) {}
-            
-            return store(s, v);
+            }
         }
     }
 
@@ -130,6 +129,7 @@ public class MemorySymEnv extends NamedValue implements SymbolicEnvironment {
 
     public Value lookup(Symbol s) {
         int pi = getLoc(s);
+        if (pi==-1) return null;
         return env[pi];
     }
 

@@ -223,12 +223,13 @@ public class Interpreter extends Util {
      * @param context The name of the environment from which   
      *      the  binding will be retrieved
      * @return A value or expression
-     * @exception ArrayIndexOutOfBoundsException if the binding does
-     * not exist
      */
-    public Expression lookup(Symbol s, Symbol context)
-        throws ArrayIndexOutOfBoundsException {
-        return lookupContextEnv(context).lookup(s);
+    public Expression lookup(Symbol s, Symbol context) {
+        try {
+            return lookupContextEnv(context).lookup(s);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     /**

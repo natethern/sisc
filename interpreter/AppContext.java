@@ -29,10 +29,11 @@ public class AppContext extends Util {
     }
 
     public boolean setEvaluator(String s) {
-        try {
-            evaluator=(Procedure)toplevel_env.lookup(Symbol.get(s));
+        Procedure newEval = (Procedure)toplevel_env.lookup(Symbol.get(s));
+        if (newEval != null) {
+            evaluator = newEval;
             return true;
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } else {
             return false;
         }
     }
@@ -86,7 +87,10 @@ public class AppContext extends Util {
     }
 
     public SymbolicEnvironment lookupContextEnv(Symbol s) {
-        return (SymbolicEnvironment)symenv.lookup(s);
+        SymbolicEnvironment senv = (SymbolicEnvironment)symenv.lookup(s);
+        if (senv == null)
+            throw new ArrayIndexOutOfBoundsException();
+        return senv;
     }
 
     public void defineContextEnv(Symbol s, SymbolicEnvironment env) {

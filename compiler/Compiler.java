@@ -69,14 +69,10 @@ public class Compiler extends Util {
     }
 
     final int getExpType(SymbolicEnvironment env, Symbol s) {
-        try {
-            Object h=env.lookup(s);
-
-            if (h instanceof Syntax)
-                return ((Syntax)h).synid;
-
-        } catch (ArrayIndexOutOfBoundsException ab) {
-        }
+        Object h=env.lookup(s);
+        if (h == null) return APP;
+        if (h instanceof Syntax)
+            return ((Syntax)h).synid;
         return APP;
     }
 

@@ -168,10 +168,8 @@ public class REPL extends Thread {
         Interpreter r = Context.enter(Context.lookup(appName), dynenv);
         try {
             Symbol replSymb = Symbol.get("repl");
-            try {
-                r.ctx.toplevel_env.lookup(replSymb);
-            } catch (ArrayIndexOutOfBoundsException aiob) {
-                aiob.printStackTrace();
+            Value replVal = r.ctx.toplevel_env.lookup(replSymb);
+            if (replVal == null) {
                 System.err.println(Util.liMessage(Util.SISCB, "heapnotfound"));
                 return;
             }
