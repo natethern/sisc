@@ -3401,9 +3401,11 @@
                   ; then output the input, to preserve pointer equality and
                   ; immutability.
                   (let ([dxdy (syntax (quote (dx . dy)))])
-                    (if (equal? p dxdy)
-                        (syntax (quote ps))
-                        dxdy)))
+                    (let ([dxdyd (syntax-object->datum dxdy)]
+                          [pd `(quote ,(syntax-object->datum p))])
+                      (if (equal? pd dxdyd)
+                          (syntax (quote ps))
+                          dxdy))))
                  (_ (if (null? (syntax dy))
                         (syntax (list x))
                         (syntax (cons x y))))))
