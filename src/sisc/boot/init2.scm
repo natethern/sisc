@@ -699,29 +699,23 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
 ;;; simple delay and force; also defines make-promise
 
 (define-syntax delay
-   (lambda (x)
-      (syntax-case x ()
-         ((delay exp)
-          (syntax (make-promise (lambda () exp)))))))
+  (lambda (x)
+    (syntax-case x ()
+      ((delay exp)
+       (syntax (make-promise (lambda () exp)))))))
 
-(define make-promise
-  (lambda (proc)
-    ((lambda (result-ready? result)
-      (lambda ()
-        (if result-ready?
-            result
-            ((lambda (x)
-               (if result-ready?
-                   result
-                   (begin (set! result-ready? #t)
-                          (set! result x)
-                          result))) 
-             (proc)))))
-      #f #f)))
+(define (make-promise proc)
+  (let ([result-ready? #f]
+        [result #!void])
+    (lambda ()
+      (if result-ready? result
+          (let ([x (proc)])
+            (if result-ready? result
+                (begin (set! result-ready? #t)
+                       (set! result x)
+                       result)))))))
 
-(define force
-   (lambda (promise)
-      (promise)))
+(define (force promise) (promise))
 
 (define-syntax time
   (lambda (x)
