@@ -1,3 +1,12 @@
+2004-08-14  Scott G. Miller   <scott@sgmiller.org>
+
+	* SISC-full now uses generic-procedure based I/O, allowing
+	  new port types to be constructed in Scheme.
+
+	* Better handling of infinity and NaN in the quantity library.
+
+	* Pretty-printing is now a module.
+	
 2004-07-22  Scott G. Miller   <scott@sgmiller.org>
 
 	* Fixed REPL annotations
