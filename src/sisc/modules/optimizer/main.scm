@@ -1,5 +1,5 @@
 (define (opt:optimize e)
-  (let-values ([(rv state) (opt e (scan e '()))])
+  (let-values ([(rv state) (opt e (scan e '() '()))])
     rv))
 
 (define opt
@@ -53,10 +53,12 @@
                                   (apply merge-states rands-state*)))))
       (,other (error 'optimizer "Unrecognized s-expression: ~a" other)))))
 
-(define (scan expr lvars)
+(define (scan expr lvars ulrvars)
   (match expr
     (,x 
      (guard (symbol? x))
+     (when (memq x ulrvars)
+         (display (format "{warning: naked left-hand reference in letrec rhs: '~a'.}~%" x)))
      (cons `(refed-vars ,x)
            (if (memq x lvars) '()
                `((free-vars ,x)))))
@@ -71,18 +73,20 @@
      (merge-states test conseq altern))
     (((lambda ,formals ,body) ,[values*] ...)
      (guard (core-form-not-redefined? 'lambda))
-     (merge-states (scan body (append lvars (make-proper formals)))
+     (merge-states (scan body (append lvars (make-proper formals)) 
+                         ulrvars)
                    (apply merge-states values*)))
     ((lambda ,formals ,body) 
      (guard (core-form-not-redefined? 'lambda))
-     (scan body (append lvars (make-proper formals))))
+     (scan body (append lvars (make-proper formals)) '()))
     ((letrec ((,lhs* ,rhs*) ...) ,body)
      (guard (core-form-not-redefined? 'letrec))
-     (let ([nlv (append lvars lhs*)])
+     (let ([nlv (append lvars lhs*)]
+           [nurlv (append lhs* ulrvars)])
        (merge-states (apply merge-states (map (lambda (rhs)
-                                                (scan rhs nlv))
+                                                (scan rhs nlv nurlv))
                                               rhs*))
-                     (scan body nlv))))
+                     (scan body nlv ulrvars))))
     ((define ,lhs ,[rhs]) 
      (guard (core-form-not-redefined? 'define))
      rhs)
