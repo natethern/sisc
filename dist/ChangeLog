@@ -1,3 +1,7 @@
+2003-02-03  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Fixed some issues that were preventing SISC to run as an applet.
+
 2003-02-03  Matthias Radestock  <matthias@sorted.org>
 
 	* Added mechanism to augment the class path for loading classes
