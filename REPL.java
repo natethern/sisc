@@ -218,15 +218,14 @@ public class REPL extends Thread {
             } catch(IOException e) {}
         }
     
-        public static void listen(String app, ServerSocket ssocket) {
+        public static void listen(String app, ServerSocket ssocket)
+            throws IOException {
             for (;;) {
-                try {
-                    Socket client = ssocket.accept();
-                    DynamicEnv dynenv = new DynamicEnv(new SourceInputPort(new BufferedReader(new InputStreamReader(client.getInputStream())), "console"),
-                                                       new OutputPort(new PrintWriter(client.getOutputStream()), true));
-                    REPL repl = new SocketREPL(app, dynenv, client);
-                    repl.start();
-                } catch (IOException e) {}
+                Socket client = ssocket.accept();
+                DynamicEnv dynenv = new DynamicEnv(new SourceInputPort(new BufferedReader(new InputStreamReader(client.getInputStream())), "console"),
+                                                   new OutputPort(new PrintWriter(client.getOutputStream()), true));
+                REPL repl = new SocketREPL(app, dynenv, client);
+                repl.start();
             }
         }
     }
