@@ -333,6 +333,7 @@ public class S2J extends ModuleAdapter {
         }
 
         public boolean valueEqual(Value v) {
+	    if (!(v instanceof JavaObject)) return false;
             return ((JavaObject)v).obj.equals(obj);
         }
 
