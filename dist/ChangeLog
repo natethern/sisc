@@ -1,3 +1,19 @@
+2002-07-24  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Implemented thread/interrupt
+
+	* Slightly more efficient intBound
+
+	* Fixed errors with thread error handling 
+
+2002-07-22  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Updated to most recent version of psyntax (7/12)
+	
+	* Fixed getprop errors that were breaking the pretty-printer.
+
+	* Re-removed void, void? from the report environment.
+
 2002-07-16  Released SISC b1.5.5rc1
 
 2002-07-16  Scott G. Miller  <scgmille@freenetproject.org>
