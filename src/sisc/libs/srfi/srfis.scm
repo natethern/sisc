@@ -35,4 +35,5 @@
     srfi-42
     srfi-43
     srfi-45
-    srfi-48))
+    srfi-48
+    srfi-60))
