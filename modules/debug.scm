@@ -202,10 +202,22 @@
                       line column))))))
    (stack-trace k)))
 
-(define (print-error e . ec)
+(define (make-error-message location message)
+  (if location
+      (if message
+          (format "Error in ~a: ~a" location message)
+          (format "Error in ~a." location))
+      (if message
+          (format "Error: ~a" message)
+          "Error.")))
+
+(define (display-error e)
   (display (make-error-message (assoc-val 'location e)
                                (assoc-val 'message e)))
-  (newline)
+  (newline))
+
+(define (print-error e . ec)
+  (display-error e)
   (let ([k (if (null? ec)
                (cond [(assoc 'error-continuation e) => cdr]
                      [else #f])

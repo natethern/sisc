@@ -102,6 +102,7 @@
      annotated?
      stack-trace
      print-stack-trace
+     display-error
      print-error
      trace-depth
      trace-call

@@ -34,59 +34,13 @@
 
 (define current-exit-handler (parameterize void))
 
-(define (make-error-message location message)
-  (if location
-      (if message
-          (format "Error in ~a: ~a" location message)
-          (format "Error in ~a." location))
-      (if message
-          (format "Error: ~a" message)
-          "Error.")))
-
 (define current-optimizer (parameterize (current-optimizer)))
 
 (define current-default-error-handler
   (parameterize
-   (letrec ((eh
-             (lambda (message error-cont)
-               (cond [(null? message) "Error."]
-                     [(not (pair? message)) message]
-                     [(assoc 'parent message) =>
-                      (lambda (p)
-                        (let ((p (cdr p)))
-                          (let ((e (assoc 'error-continuation p))
-                                (mm (assoc 'message message)))
-                            (let ((submessage
-                                   (eh p (and e (cdr e)))))
-                              (cond [(assoc 'location message) =>
-                                     (lambda (lr)
-                                       (if mm
-                                           (format 
-                                            "Error in nested call from ~a: ~a~% ~a"
-                                            (cdr lr) (cdr mm) submessage)
-                                           (format 
-                                            "Error in nested call from ~a:~% ~a"
-                                            (cdr lr) submessage)))]
-                                    [else
-                                      (if mm
-                                          (format "Error in nested call: ~a~% ~a" 
-                                                  (cdr mm) submessage)
-                                          (format "Error in nested call:~% ~a"
-                                                  submessage))])))))]
-                     [(assoc 'message message) => 
-                      (lambda (mr)
-                        (make-error-message 
-                         (cond [(assoc 'location message) => cdr] 
-                               [else #f])
-                         (cdr mr)))]
-                     [(assoc 'location message) =>
-                      (lambda (lr)
-                        (make-error-message (cdr lr) #f))]
-                     [else (make-error-message #f #f)]))))
-     (lambda (m e)
-       (display (eh m e))
-       (newline)
-       (putprop 'last-error '*debug* (cons m e))))))
+   (lambda (m e)
+     (putprop 'last-error '*debug* (cons m e))
+     (display-error (get-last-error)))))
 
 (define _exit-handler (parameterize))
 
