@@ -449,6 +449,7 @@
   (lambda (n)
     (and (number? n) (not (oldcomp? n))))))
 
+(define rational? real?)
 (define complex? number?)
 
 (define (abs num) 

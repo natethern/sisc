@@ -508,6 +508,7 @@
      (lambda (%_3042)
        (if (number? %_3042) (not (%_3041 %_3042)) '#f)))
    complex?))
+(define rational? real?)
 (define complex? number?)
 (define abs
   (lambda (%_3043)
