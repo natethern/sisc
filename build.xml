@@ -58,6 +58,9 @@
       <exclude name="${packagename}/dist/**"/>
       <exclude name="${packagename}/tests/**" unless="junit.present"/>
       <exclude name="${packagename}/modules/**" if="lite"/>
+      <include name="${packagename}/modules/IO.java"/>
+      <include name="${packagename}/modules/Primitives.java"/>
+      <include name="${packagename}/modules/R5RS.java"/>
     </javac>      
   </target>
   
@@ -75,13 +78,18 @@
       <fileset dir="${classdir}">
 	<include name="*/**"/>
 	<exclude name="sisc/boot/**"/>
-	<exclude name="sisc/modules/**"/>
+        <include name="sisc/modules/IO*.class"/>
+        <include name="sisc/modules/Primitives*.class"/>
+        <include name="sisc/modules/R5RS*.class"/>
       </fileset>
     </jar>
     <jar jarfile="${basedir}/${optjar}">
       <fileset dir="${classdir}">
 	<include name="sisc/boot/**"/>
 	<include name="sisc/modules/**"/>
+        <exclude name="sisc/modules/IO*.class"/>
+        <exclude name="sisc/modules/Primitives*.class"/>
+        <exclude name="sisc/modules/R5RS*.class"/>
       </fileset>
     </jar>
   </target>
