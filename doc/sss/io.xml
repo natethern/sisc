@@ -1257,7 +1257,16 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         <computeroutput>Hello</computeroutput>.
       </para>
       <para>
-        When a source file is loaded, each s-expression is evaluated
+        The <function>load</function> function supports many types of
+        files which contain executable code.
+        <function>load</function> will attempt to determine (primarily
+        by the file's extension) which type of file is being loaded to
+        load that file in the correct manner.  The file types
+        currently supported are those described in <xref
+        linkend="FileExtensions"/>.  
+      </para>
+      <para>
+        When a pure source file is loaded, each s-expression is evaluated
         in sequence, exactly as if entered into the REPL one
         s-expression at a time.
       </para>
