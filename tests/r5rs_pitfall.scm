@@ -101,6 +101,41 @@
       ((4) (c 4)))
     r))
 
+(should-be 8.1 '((-1 4 5 3)
+                 (4 -1 5 3)
+                 (-1 5 4 3)
+                 (5 -1 4 3)
+                 (4 5 -1 3)
+                 (5 4 -1 3))
+  (let ([k1 #f]
+        [k2 #f]
+        [k3 #f]
+        [state 0])
+    (define (identity x) x)
+    (define (fn)
+      ((identity (if (= state 0)
+                     (call/cc (lambda (k) (set! k1 k) +))
+                     +))
+       (identity (if (= state 0)
+                     (call/cc (lambda (k) (set! k2 k) 1))
+                     1))
+       (identity (if (= state 0)
+                     (call/cc (lambda (k) (set! k3 k) 2))
+                     2))))
+    (define (check states)
+      (set! state 0)
+      (let* ([res '()]
+             [r (fn)])
+        (set! res (cons r res))
+        (if (null? states)
+            res
+            (begin (set! state (car states))
+                   (set! states (cdr states))
+                   (case state
+                     ((1) (k3 4))
+                     ((2) (k2 2))
+                     ((3) (k1 -)))))))
+    (map check '((1 2 3) (1 3 2) (2 1 3) (2 3 1) (3 1 2) (3 2 1)))))
 
 ;;Not really an error to fail this (Matthias Radestock)
 ;;If this returns (0 1 0), your map isn't call/cc safe, but is probably
