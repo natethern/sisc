@@ -1,5 +1,11 @@
 (define (library-path)
-  (or (getprop 'library-path '*config-parameters*) "."))
+  (or (getprop 'library-path '*config-parameters*) `(,(current-directory))))
+(define (library-path-prepend . args)
+  (putprop 'library-path '*config-parameters*
+           (append args (library-path))))
+(define (library-path-append . args)
+  (putprop 'library-path '*config-parameters*
+           (append (library-path) args)))
 
 (define *libraries* (make-hashtable))
 
