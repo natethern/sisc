@@ -21,12 +21,16 @@ public class REPL {
 
     public REPL(String appName, DynamicEnvironment dynenv, Procedure repl) {
         this(appName, repl);
-        primordialThread.env=dynenv;
+        primordialThread.env = dynenv;
     }
 
     public REPL(String appName, Procedure repl) {
-        primordialThread=new SchemeThread(appName, repl);
-        this.appName=appName;
+        this(appName, new SchemeThread(appName, repl));
+    }
+    
+    public REPL(String appName, SchemeThread primordialThread) {
+        this.primordialThread = primordialThread;
+        this.appName = appName;
     }
     
     public static SeekableInputStream findHeap() {
@@ -233,7 +237,7 @@ public class REPL {
                                                     InetAddress.getByName((String)args.get("host")));
             System.out.println("Listening on " + ssocket.getInetAddress().toString() + ":" + ssocket.getLocalPort());
             System.out.flush();
-            SocketREPL.listen("main", ssocket);
+            listen("main", ssocket);
         } else {
             Procedure p=(Procedure)
                 r.ctx.toplevel_env.lookup(Symbol.get("sisc-cli"));
@@ -242,37 +246,39 @@ public class REPL {
         }
     }
 
-    public static class SocketREPL extends REPL {
-        
+    public static void listen(String app, ServerSocket ssocket)
+        throws IOException {
+        for (;;) {
+            Socket client = ssocket.accept();
+            DynamicEnvironment dynenv = new DynamicEnvironment(new SourceInputPort(new BufferedInputStream(client.getInputStream()), "console"),
+                                                               new StreamOutputPort(client.getOutputStream(), true));
+            Interpreter r=Context.enter(app);
+            Procedure p=(Procedure)
+                r.ctx.toplevel_env.lookup(Symbol.get("sisc-cli"));
+            Context.exit();
+            SchemeThread t = new SchemeSocketThread(app, p, client);
+            t.env = dynenv;
+            REPL repl = new REPL(app, t);
+            repl.go();
+        }
+    }
+    
+    public static class SchemeSocketThread extends SchemeThread {
+
         public Socket s;
         
-        public SocketREPL(String appName, DynamicEnvironment dynenv,
-                          Socket s, Procedure repl) {
-            super(appName, dynenv, repl);
+        public SchemeSocketThread(String appName, Procedure thunk, Socket s) {
+            super(appName, thunk);
             this.s = s;
         }
-    
+
         public void run() {
-            super.go();
+            super.run();
             try {
                 s.close();
             } catch(IOException e) {}
         }
-    
-        public static void listen(String app, ServerSocket ssocket)
-            throws IOException {
-            for (;;) {
-                Socket client = ssocket.accept();
-                DynamicEnvironment dynenv = new DynamicEnvironment(new SourceInputPort(new BufferedInputStream(client.getInputStream()), "console"),
-                                                                   new StreamOutputPort(client.getOutputStream(), true));
-                Interpreter r=Context.enter();
-                Procedure p=(Procedure)
-                    r.ctx.toplevel_env.lookup(Symbol.get("sisc-cli"));
-                Context.exit();
-                REPL repl = new SocketREPL(app, dynenv, client, p);
-                repl.primordialThread.start();
-            }
-        }
+
     }
 
     static final int SWITCH=0, OPTION=1;
@@ -285,7 +291,7 @@ public class REPL {
         {"x","no-repl"},
     };
     static final int optTypes[]=new int[] {
-        OPTION, OPTION, OPTION, OPTION, OPTION, SWITCH};
+        SWITCH, OPTION, OPTION, OPTION, OPTION, SWITCH};
                                                   
     public static Map parseOpts(String[] args) {
         Map m=new HashMap();

@@ -1,3 +1,7 @@
+2003-02-13  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed socket repl regression introduced in SISC 1.7.0.
+
 2003-02-12  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed a small bug in Closure which was stealing the vlr
