@@ -52,8 +52,6 @@
                      (set-string stmt (->jint 3) (->jstring id))
                      stmt))])
     (with/fc (lambda (m e) #f) (lambda () 
-                                 (display pstmt) 
-                                 (newline)
                                  (jdbc/execute pstmt)))))
 
 
