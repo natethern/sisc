@@ -34,6 +34,59 @@
 (current-evaluator eval)
 ;(emit-annotations #t)
 
+;;;;;;;;;;;;;;;; error handling ;;;;;;;;;;;;;;;
+
+;; Most of the code here is for providing SRFI-23 style error
+;; producing, which is then applied into SISC's failure-continuation
+;; model.
+
+(define (error . args)
+  (throw (apply make-error args)))
+
+(define (make-nested-error error-record parent-record)
+  (cons (cons 'parent parent-record) error-record))
+
+(define (make-error . args)
+  (let ([error-record '()])
+    ;;Location
+    (cond [(null? args) (void)]
+          [(and (not (null? args))
+                (symbol? (car args)))
+           (set! error-record (cons (cons 'location (car args)) 
+                                    error-record))
+           (set! args (cdr args))]
+          [(not (car args))
+           (set! args (cdr args))])
+      
+    ;;Message/Value
+    (let ([message (and (not (null? args))
+                        (car args))])
+      (if message (set! args (cdr args)))
+      (if (null? args)
+          (if message (set! error-record (cons `(message . ,message)
+                                               error-record)))
+          (if (string? message)
+              (set! error-record
+                (cons `(message . ,(apply format (cons message args)))
+                      error-record))
+              (error 'error "cannot specify arguments to a non format-string error."))))
+    error-record))
+
+(define (error-location error-record)
+  (cond [(and (pair? error-record) (assoc 'location error-record))
+         => cdr]
+        [else #f]))
+
+(define (error-message error-record)
+  (cond [(and (pair? error-record) (assoc 'message error-record))
+         => cdr]
+        [else #f]))
+
+(define (error-parent error-record)
+  (cond [(and (pair? error-record) (assoc 'parent error-record))
+         => cdr]
+        [else #f]))
+
 ;Loads an already expanded file (ie does not run it through the expander)
 (define (load-expanded file)
   (call-with-input-file file
@@ -198,13 +251,13 @@
 				(string-loop (cdr sl) (+ n 1)))))])
     (string-loop (string->list x) 0)))
 	  
-(define (unquote x)
-  (error 'unquote "expression ~s not valid outside of a quasiquote."
-	 x))
+;(define (unquote x)
+;  (error 'unquote "expression ~s not valid outside of a quasiquote."
+;	 x))
 
-(define (unquote-splicing x)
-  (error 'unquote-splicing "expression ~s valid outside of a quasiquote."
-	 x))
+;(define (unquote-splicing x)
+;  (error 'unquote-splicing "expression ~s valid outside of a quasiquote."
+;	 x))
 
 ;;; macro-defs.ss
 ;;; Robert Hieb & Kent Dybvig
@@ -380,59 +433,6 @@
       (set! string-ci<? (string-order-predicate < string-order-ci))
       (set! string-ci<=? (string-order-predicate <= string-order-ci))
       (set! string-ci>=? (string-order-predicate >= string-order-ci))))
-
-;;;;;;;;;;;;;;;; error handling ;;;;;;;;;;;;;;;
-
-;; Most of the code here is for providing SRFI-23 style error
-;; producing, which is then applied into SISC's failure-continuation
-;; model.
-
-(define (error . args)
-  (throw (apply make-error args)))
-
-(define (make-nested-error error-record parent-record)
-  (cons (cons 'parent parent-record) error-record))
-
-(define (make-error . args)
-  (let ([error-record '()])
-    ;;Location
-    (cond [(null? args) (void)]
-          [(and (not (null? args))
-                (symbol? (car args)))
-           (set! error-record (cons (cons 'location (car args)) 
-                                    error-record))
-           (set! args (cdr args))]
-          [(not (car args))
-           (set! args (cdr args))])
-      
-    ;;Message/Value
-    (let ([message (and (not (null? args))
-                        (car args))])
-      (if message (set! args (cdr args)))
-      (if (null? args)
-          (if message (set! error-record (cons `(message . ,message)
-                                               error-record)))
-          (if (string? message)
-              (set! error-record
-                (cons `(message . ,(apply format (cons message args)))
-                      error-record))
-              (error 'error "cannot specify arguments to a non format-string error."))))
-    error-record))
-
-(define (error-location error-record)
-  (cond [(and (pair? error-record) (assoc 'location error-record))
-         => cdr]
-        [else #f]))
-
-(define (error-message error-record)
-  (cond [(and (pair? error-record) (assoc 'message error-record))
-         => cdr]
-        [else #f]))
-
-(define (error-parent error-record)
-  (cond [(and (pair? error-record) (assoc 'parent error-record))
-         => cdr]
-        [else #f]))
 
 ;;;;;;;;;;;;; legacy macro support ;;;;;;;;;;;;
 

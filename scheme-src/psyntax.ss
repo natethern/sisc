@@ -813,6 +813,21 @@
     (and (syntax-object? x)
          (symbol? (unannotate (syntax-object-expression x))))))
 
+;; Enforces <variable> in the R5RS lexical structure.  This
+;; is more strict than <identifier>, as it excludes syntactic keywords
+;; (sgm)
+(define var?
+  (lambda (x)
+    (cond
+      ((and (symbol? x)
+            (not (memq x '(quote lambda if set! begin cond and or case
+                                 let let* letrec do delay quasiquote
+                                 else => define unquote unquote-splicing))))
+       #t)
+      ((syntax-object? x) (var? (unannotate (syntax-object-expression x))))
+      ((annotation? x) (var? (annotation-expression x)))
+      (else #f))))
+
 (define id?
   (lambda (x)
     (cond
@@ -1153,6 +1168,17 @@
                 (and (id? (car ids))
                      (all-ids? (cdr ids)))))
           (distinct-bound-ids? ids))))
+
+;; "valid-bound-vars?" returns #t in the same conditions as 
+;; valid-bound-ids?, except that it also enforces <variable>
+;; instead of just <identifier>,  see vars? (sgm)
+(define valid-bound-vars?
+  (lambda (vars)
+     (and (let all-vars? ((vars vars))
+            (or (null? vars)
+                (and (var? (car vars))
+                     (all-vars? (cdr vars)))))
+          (distinct-bound-ids? vars))))
 
 ;;; distinct-bound-ids? expects a list of ids and returns #t if there are
 ;;; no duplicates.  It is quadratic on the length of the id list; long
@@ -2234,16 +2260,16 @@
   (lambda (e w s k)
     (syntax-case e ()
       ((_ name val)
-       (id? (syntax name))
+       (var? (syntax name))
        (k (syntax name) (syntax val) w))
       ((_ (name . args) e1 e2 ...)
-       (and (id? (syntax name))
-            (valid-bound-ids? (lambda-var-list (syntax args))))
+       (and (var? (syntax name))
+            (valid-bound-vars? (lambda-var-list (syntax args))))
        (k (wrap (syntax name) w)
           (cons (syntax lambda) (wrap (syntax (args e1 e2 ...)) w))
           empty-wrap))
       ((_ name)
-       (id? (syntax name))
+       (var? (syntax name))
        (k (wrap (syntax name) w) (syntax (void)) empty-wrap))
       (_ (syntax-error (source-wrap e w s))))))
 
@@ -2260,7 +2286,7 @@
     (syntax-case c ()
       (((id ...) e1 e2 ...)
        (let ((ids (syntax (id ...))))
-         (if (not (valid-bound-ids? ids))
+         (if (not (valid-bound-vars? ids))
              (syntax-error e "invalid parameter list in")
              (let ((labels (gen-labels ids))
                    (new-vars (map gen-var ids)))
@@ -2271,7 +2297,7 @@
                             (make-binding-wrap ids labels w)))))))
       ((ids e1 e2 ...)
        (let ((old-ids (lambda-var-list (syntax ids))))
-         (if (not (valid-bound-ids? old-ids))
+         (if (not (valid-bound-vars? old-ids))
              (syntax-error e "invalid parameter list in")
              (let ((labels (gen-labels old-ids))
                    (new-vars (map gen-var old-ids)))
@@ -2663,7 +2689,7 @@
     (syntax-case e ()
       ((_ ((id val) ...) e1 e2 ...)
        (let ((ids (syntax (id ...))))
-         (if (not (valid-bound-ids? ids))
+         (if (not (valid-bound-vars? ids))
              (invalid-ids-error (map (lambda (x) (wrap x w)) ids)
                (source-wrap e w s) "bound variable")
              (let ((labels (gen-labels ids))
@@ -2920,10 +2946,14 @@
     (let ((user-top-wrap
            (make-wrap (wrap-marks top-wrap)
              (cons user-ribcage (wrap-subst top-wrap)))))
-      (lambda (x)
-        (if (and (pair? x) (equal? (car x) noexpand))
-            (cadr x)
-            (chi-top x null-env user-top-wrap ctem rtem user-ribcage))))))
+      (lambda (x . c/rtem)
+        (cond ((and (pair? x) (equal? (car x) noexpand))
+               (cadr x))
+              ((null? c/rtem)
+               (chi-top x null-env user-top-wrap ctem rtem user-ribcage))
+              (else
+                (chi-top x null-env user-top-wrap (car c/rtem) (cadr c/rtem)
+                         user-ribcage)))))))
 
 (set! identifier?
   (lambda (x)
