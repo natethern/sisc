@@ -1,3 +1,8 @@
+2003-12-08  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Fixed recycled VLR[] bug in |apply|, and 
+	  a recycling space leak during serialization.
+	  
 2003-10-24  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed char-whitespace? returning #f for #\return
