@@ -50,9 +50,9 @@ public class BlockIO extends ModuleAdapter {
             switch (primid) {
             case MAKEBUFFER:
                 return new Buffer(num(f.vlr[0]).intValue(),
-                                  num(f.vlr[1]).intValue());
+                                  (byte)num(f.vlr[1]).intValue());
             case BUFFERREF:
-                return Quantity.valueOf(buffer(f.vlr[0]).ref(num(f.vlr[1]).intValue()));
+                return Quantity.valueOf(buffer(f.vlr[0]).ref(num(f.vlr[1]).intValue()) & 0xff);
             case BLOCKREAD:
                 int count=num(f.vlr[2]).intValue();
                 SchemeInputPort inport=inport(f.vlr[1]);
@@ -77,6 +77,15 @@ public class BlockIO extends ModuleAdapter {
                     error(f, liMessage(SISCB, "errorwriting", e.getMessage(),
                                        outport.synopsis()));
                 }
+                return VOID;
+            default:
+                throwArgSizeException();
+            }
+        case 3:
+            switch (primid) {
+            case BUFFERSET:
+                buffer(f.vlr[0]).set(num(f.vlr[1]).intValue(),
+                                     (byte)num(f.vlr[2]).intValue());
                 return VOID;
             default:
                 throwArgSizeException();
