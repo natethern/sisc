@@ -153,22 +153,18 @@ for <function>sqrt</function>, it is not clear what other mathematical
     </para>
     <variablelist>
       <varlistentry>
-        <term><literal>sisc.minprecision</literal></term>
+        <term><literal>sisc.emitannotations</literal></term>
         <listitem>
           <para>
-            Specifies the minimum precision, in decimal places, to be
-            maintained by the Quantity lib if using arbitrary
-            precision floats.
-          </para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term><literal>sisc.maxprecision</literal></term>
-        <listitem>
-          <para>
-            Specifies the maximum precision, in decimal places, to be
-            maintained by the Quantity lib if using arbitrary
-            precision floats.
+            Specifies the default value of the
+            <function>emit-annotations</function> parameter (see <xref
+            linkend="passive-debugging"/>).  If
+            <literal>true</literal>, annotations will be enabled
+            before loading any source files on the command prompt and
+            will stay enabled until set via the
+            <function>emit-annotations</function> parameter.  If
+            <literal>false</literal>, annotations will be disabled
+            (the default).
           </para>
         </listitem>
       </varlistentry>
@@ -183,18 +179,34 @@ for <function>sqrt</function>, it is not clear what other mathematical
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><literal>sisc.emitannotations</literal></term>
+        <term><literal>sisc.maxprecision</literal></term>
         <listitem>
           <para>
-            Specifies the default value of the
-            <function>emit-annotations</function> parameter (see <xref
-            linkend="passive-debugging"/>).  If
-            <literal>true</literal>, annotations will be enabled
-            before loading any source files on the command prompt and
-            will stay enabled until set via the
-            <function>emit-annotations</function> parameter.  If
-            <literal>false</literal>, annotations will be disabled
-            (the default).
+            Specifies the maximum precision, in decimal places, to be
+            maintained by the Quantity lib if using arbitrary
+            precision floats.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><literal>sisc.minprecision</literal></term>
+        <listitem>
+          <para>
+            Specifies the minimum precision, in decimal places, to be
+            maintained by the Quantity lib if using arbitrary
+            precision floats.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><literal>sisc.permitinterrupts</literal></term>
+        <listitem>
+          <para>
+            If set to <literal>true</literal>,
+            <function>thread/interrupt</function> will permitted to
+            interrupt running <emphasis>Scheme</emphasis> code, in
+            addition to sending an interrupt signal to the host
+            language.  
           </para>
         </listitem>
       </varlistentry>
@@ -397,6 +409,17 @@ for <function>sqrt</function>, it is not clear what other mathematical
               </blockquote>
             </para>
           </blockquote>
+        </para>
+      </sect2>
+      <sect2>
+        <title>Interrupts</title>
+        <para>
+          Interrupts allow running Scheme code to be forcibly broken 
+          from another thread, causing the Scheme code to raise an
+          error.  The interrupt signal handling code does add an
+          appreciable overhead (usually around 10%) to execution, and
+          is thus disabled by default.  It can be enabled using the
+          <literal>sisc.permitinterrupts</literal> system property.
         </para>
       </sect2>
     </sect1>

@@ -121,8 +121,8 @@
       which the primordial thread is one) are still running.
       Termination of a daemon thread when no non-daemon threads
       exist is the <emphasis>only</emphasis> instance where a thread
-      can be forcibly terminated.  There is no thread stop or
-      destroy operation.
+      can be forcibly terminated.  <emphasis role="bold">There is no
+      guaranteed thread stop or destroy operation.</emphasis>
     </para>
   </sect1>
   <sect1>
@@ -226,7 +226,7 @@
       return with <literal>&num;f</literal>.
     </para>
     <blockquote>
-      <para id="func-thread-join">
+      <para>
         &procedure;
         <methodsynopsis language="scheme">
           <type>boolean</type>
@@ -261,6 +261,72 @@
       indefinitely for a thread to complete should check the return
       value of <function>thread/join</function> and
       repeat the join until <literal>&num;t</literal> is returned.
+    </para>
+    <para>
+      If enabled at runtime (using the
+      <literal>sisc.permitinterrupts</literal> runtime flag, see <xref
+      linkend="system-properties"/>), running threads may be
+      interrupted at both the host language level and when executing
+      Scheme code with the <function>thread/interrupt</function>
+      function.  If disabled (the default), only a host-language
+      interrupt signal can be sent.
+    </para>
+    <blockquote>
+      <para>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>thread/interrupt</methodname>
+          <methodparam>
+            <parameter>thread-handle</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Sends an interrupt signal to the given thread.  This will 
+            cause an error to be raised from Scheme code, and a thread
+            interrupt in the host language.  
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+    <para>
+      When invoked, a signal is sent to the running thread which will
+      cause an error to be raised from some point in its execution.
+      If not caught, the thread will terminate in the
+      <emphasis>finished-with-error</emphasis> state, and the
+      raised error will be rethrown if
+      <function>thread/result</function> is called.
+      The error-continuation of the raised error will be the
+      continuation in place at the time the error was raised, and
+      thus can be used to restart the interrupted thread from the
+      point it left off.
+    </para>
+    <warning>
+      <title>Final Continuation of a Thread</title>
+      <para>
+        The continuation of an expression run in a thread is store
+        the thread's result in its thread handle, then
+        exit the thread in which it is running.  If a thread is
+        interrupted, then its computation resumed, the thread that
+        hosts the resumed computation will exit when the result is
+        complete.  As a consequence, if a computation run in a
+        separate thread is resumed in the primordial thread (that
+        usually hosts the REPL), the primordial thread will terminate
+        as soon as the computation completes.  This will circumvent
+        the REPL entirely and cause &SISC; to exit of no non-daemon
+        threads remain.  In general, interrupted threads should be
+        resumed in a newly created thread to avoid this scenario.
+      </para>
+    </warning>
+    <para>
+      It is important to note that
+      <function>thread/interrupt</function> does
+      <emphasis>not</emphasis> guarantee the termination of a thread.
+      A thread may still capture the error at the scheme level with a
+      <function>with/fc</function>, or catch the interrupt signal if
+      executing in the host language.  In either case, the running
+      code is not required to rethrow the error.
     </para>
     <para>
       Once a thread has completed, the parent thread may wish to
