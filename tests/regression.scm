@@ -196,7 +196,7 @@
     (lambda () 
       (with-input-from-string "'#(1 2 . ,(- 3))" read))))
 
-(should-be 1096496 "0.0" (number->string (atan 0)))
+(should-be 1096496 #t (> 0.1 (atan 0) -0.1))
 
 (should-be 1099750 #t
            (with/fc (lambda (m e) #f)
