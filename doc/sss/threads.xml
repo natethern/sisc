@@ -78,7 +78,7 @@
       anticipates concurrent access to a shared variable and if
       any thread is to write to the variable, sections of code that
       access the variable should use a protection mechanism from
-      <xref linkend="Monitors"/>.
+      <xref linkend="Synchronization"/>.
     </para>
     <para>
       A thread can complete in one of two ways.  If the thunk
@@ -604,7 +604,7 @@
     <para>
       &SISC; provides an implementation of mutexes and condition variables
       designed to support a wide range of synchronization models, including the
-      monitor paradigm previously found in &SISC.  The implementation provides
+      monitor paradigm previously found in &SISC;.  The implementation provides
       both a <emphasis>mutex</emphasis> and
       <emphasis>condition-variable</emphasis> first-class value for
       concurrency protection and inter-thread communication.
