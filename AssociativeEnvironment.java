@@ -165,7 +165,7 @@ public class AssociativeEnvironment extends NamedValue {
     throws IOException {
         if (SERIALIZATION) {
             int size=s.readBer(dis);
-            env=new Value[Math.max(10,nextFree)];
+            env=new Value[size];
             symbolMap=new HashMap();
             for (int i=0; i<size; i++) {
                 Symbol id=(Symbol)s.deserialize(dis);
