@@ -483,7 +483,9 @@
 (import libraries)
 (import debugging)
 (import optimizer)
-(current-optimizer optimize)
+;;*redefine* current-optimizer rather than just setting it, so that
+;;the default value becomes |optimize|
+(set! current-optimizer (make-parameter optimize))
 
 ;;load and import srfi-0
 (module srfi-0 (cond-expand)
