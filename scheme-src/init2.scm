@@ -145,13 +145,6 @@
 ;;prefix
 (define vector-length-prefixing (parameterize #t))
 
-(define modulo
-  (lambda (x y)
-    (let ([r (remainder x y)])
-       (if (if (negative? y) (positive? r) (negative? r))
-           (+ r y)
-           r))))
-
 ;; This code is based on Richard Kelsey and Jonathan Rees' version of
 ;; dynamic-wind in Scheme48 (http://s48.org). It has been heavily
 ;; modified to account for SISC's lack of structures, make exception
