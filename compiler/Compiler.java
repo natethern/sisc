@@ -281,22 +281,31 @@ public class Compiler extends Util {
 
     }
 
+    boolean isImmediate(Expression e) {
+        return (e instanceof Immediate) ||
+            ((e instanceof AnnotatedExpr) &&
+             (((AnnotatedExpr)e).expr instanceof Immediate));
+    }
+
     public final Expression application(Expression rator, Expression rands[], boolean nonTail) {
         if (rator instanceof Value && 
 	    !(rator instanceof Procedure) &&
 	    !(rator instanceof AnnotatedExpr))
 
             System.err.println(warn("nonprocappdetected",((Value)rator).synopsis()));
-        FillRibExp fr = null;
+        Expression nxp = null;
         Expression lastRand = rator;
+        if (!isImmediate(rator)) {
+            nxp = APPEVAL;
+        }
         for (int i= rands.length-1; i>=0; i--) {
-            if (!(rands[i] instanceof Immediate)) {
-                fr = new FillRibExp(lastRand, i, fr);
+            if (!isImmediate(rands[i])) {
+                nxp = new FillRibExp(lastRand, i, nxp);
                 lastRand = rands[i];
                 rands[i] = null;
             }
         }
-        return new AppExp(lastRand, rands, fr, nonTail);
+        return new AppExp(lastRand, rands, nxp, nonTail);
     }
 
     void compileExpressions(Interpreter r, Expression exprs[], ReferenceEnv rt,

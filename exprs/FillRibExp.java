@@ -51,17 +51,11 @@ public class FillRibExp extends Expression {
     public void eval(Interpreter r) throws ContinuationException {
         r.vlr[pos]=r.acc;
         if (nxp == null) {
-            //rator
-            Value tmp = exp.getValue(r);
-            if (tmp==null) {
-                r.push(APPEVAL);
-                r.nxp=exp;
-            } else {
-                r.acc=tmp;
-                r.nxp=APPEVAL;
-            }
+            //immediate rator
+            r.acc=exp.getValue(r);
+            r.nxp=APPEVAL;
         } else {
-            //rand
+            //rand or non-immediate rator
             r.push(nxp);
             r.nxp=exp;
         }

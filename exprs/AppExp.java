@@ -63,19 +63,11 @@ public class AppExp extends Expression {
 	    }
 
         if (nxp == null) {
-            //all rands are immediate
-            Value tmp=exp.getValue(r);
-            if (tmp==null) {
-                //rator is non-immediate
-                r.push(APPEVAL);
-                r.nxp=exp;
-            } else {
-                //rator is immediate
-                r.acc=tmp;
-                r.nxp=APPEVAL;
-            }
+            //all rands and the rator are immediate
+            r.acc=exp.getValue(r);
+            r.nxp=APPEVAL;
         } else {
-            //some rands are non-immediate
+            //some rands or the rator are non-immediate
             r.push(nxp);
             r.nxp=exp;
         }
