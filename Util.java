@@ -72,7 +72,7 @@ public abstract class Util implements Conf {
     public static String getSystemProperty(String name, String def) {
         try {
             return System.getProperty(name, def);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             return def;
         }
     }
@@ -206,9 +206,10 @@ public abstract class Util implements Conf {
 
     public static void typeError(Symbol bundleName, String type, Value o) {
         if (o instanceof Values)
-            throw new RuntimeException(liMessage(bundleName, "multiplevalues"));
-        throw new RuntimeException(liMessage(bundleName, "unexpectedarg", liMessage(SISCB, type), 
-					     o.write()));
+            throw new RuntimeException(liMessage(SISCB, "multiplevalues"));
+        throw new RuntimeException(liMessage(SISCB, "unexpectedarg",
+                                             liMessage(bundleName, type), 
+                                             o.write()));
     }
 
     public static final Symbol sym(String s) {
