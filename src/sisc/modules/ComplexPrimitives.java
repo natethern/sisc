@@ -43,7 +43,6 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             define("native-library-binding", NLBINDING);
             define("native-library-binding-names", NLBINDINGNAMES);
             define("number->string", NUMBER2STRING);
-            define("permit-interrupts", PERMITINTERRUPTS);
             define("putprop", PUTPROP);
             define("remprop", REMPROP);
             define("scheme-report-environment", REPORTENVIRONMENT);
