@@ -40,12 +40,13 @@ public class Compiler extends Util {
         Syntax s=new Syntax(id);
         s.setName(Symbol.get(name));
         SYNTACTIC_TOKENS.put(name, s);
+        SYNTACTIC_TOKENS.put(new Integer(id), s);
         return s;
     }
 	
-    static void extendenv(SymbolicEnvironment env, String s, int i) {
+    static void extendenv(SymbolicEnvironment env, String s, Syntax syn) {
         Symbol name=Symbol.get(s);
-        env.define(name, new Syntax(i));
+        env.define(name, syn);
     }       
 
     static final Symbol 
@@ -57,8 +58,11 @@ public class Compiler extends Util {
 
     public static void addSpecialForms(SymbolicEnvironment menv) {
     	for (Iterator i=SYNTACTIC_TOKENS.keySet().iterator(); i.hasNext();) {
-			String name=(String)i.next();
-			extendenv(menv,name,((Syntax)SYNTACTIC_TOKENS.get(name)).synid);
+            Object ns=i.next();
+            if (ns instanceof String) {
+        		String name=(String)ns;
+		      	extendenv(menv,name,(Syntax)SYNTACTIC_TOKENS.get(name));
+            }
     	}
     }
 
@@ -434,15 +438,16 @@ public class Compiler extends Util {
 
         public void deserialize(Deserializer s) throws IOException {
             synid=s.readInt();
-            setName((Symbol)s.readExpression());
+            setName(Symbol.get(s.readUTF()));
         }
 
         public void serialize(Serializer s) throws IOException {
             s.writeInt(synid);
-            s.writeExpression(getName());
+            s.writeUTF(getName().symval);
         }
 
         public Value singletonValue() {
+            System.err.println(getName());
             return (Value)SYNTACTIC_TOKENS.get(getName());
         }
     }
