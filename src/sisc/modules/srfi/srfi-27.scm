@@ -16,15 +16,17 @@
 ;; used by default for SecureRandom when given a secure PRNG, and
 ;; will use output from a secure prng to seed fast PRNGs.
 
-(define <java.util.Random> (java-class "java.util.Random"))
-(define <java.security.SecureRandom> (java-class "java.security.SecureRandom"))
-(define <java.math.BigInteger> (java-class "java.math.BigInteger"))
-(define-generic next-int)
-(define-generic next-long)
-(define-generic next-double)
-(define-generic get-instance)
-(define-generic set-seed)
-(define-generic generate-seed)
+(define-java-classes
+  <java.util.random>
+  <java.security.secure-random>
+  <java.math.big-integer>)
+(define-generic-java-methods
+  next-int
+  next-long
+  next-double
+  get-instance
+  set-seed
+  generate-seed)
 
 (define log2 
   (let ([ln2 (log 2)])
@@ -39,23 +41,25 @@
     (let ([bits-needed (bits-of n)])
       (modulo 
        (if (<= bits-needed 31)
-	   (logand #x7fffffff 
-		   (->number (next-int s)))
-	   (->number (make <java.math.BigInteger> (->jint bits-needed) 
-			   s)))
+           (logand #x7fffffff 
+                   (->number (next-int s)))
+           (->number (java-new <java.math.big-integer>
+                               (->jint bits-needed) 
+                               s)))
        n))))
 
 (define (random-source-make-reals s . unit)
   (lambda ()
     (let loop ([result (->number (next-double s))])
       (if (zero? result) 
-	  (loop (->number (next-double s)))
-	  result))))
+          (loop (->number (next-double s)))
+          result))))
 
 (define (make-secure-prng)
-  (get-instance <java.security.SecureRandom> (->jstring "SHA1PRNG")))
+  (get-instance (java-null <java.security.secure-random>)
+                (->jstring "SHA1PRNG")))
 
-(define (make-fast-prng l) (make <java.util.Random>) l)
+(define (make-fast-prng l) (java-new <java.util.random>) l)
 
 (define (make-random-source . type) 
   (let ([golden-ratio #x9e3779b97f4a7c15])
@@ -72,20 +76,20 @@
 (define random-real)
 
 (define (random-source? v)
-  (type<= (type-of v) <java.util.Random>))
+  (instance-of? v <java.util.random>))
 
 (define (random-source-randomize! s)
   (set-seed s 
-	    (if (type<= (type-of s) <java.security.SecureRandom>)
-		(generate-seed s (->jint 128))
-		(next-long secure-random-source))))
+            (if (instance-of? s <java.security.secure-random>)
+                (generate-seed s (->jint 128))
+                (next-long secure-random-source))))
 
 (define random-source-table (make-hashtable equal?))
 
 (define (random-source-pseudo-randomize! s . ij)
   (set-seed s (hashtable/get! random-source-table ij 
-			      (lambda ()
-				(next-long secure-random-source)))))
+                              (lambda ()
+                                (next-long secure-random-source)))))
 
 (define (random-source-state-ref s)
   (->number (next-long s)))
@@ -96,8 +100,8 @@
 ;; current problem: these objects wont serialize
 (define (srfi-27-init)
   (set! secure-random-source (let ([s (make-random-source)])
-			       (random-source-randomize! s)
-			       s))
+                               (random-source-randomize! s)
+                               s))
   (set! default-random-source (make-random-source))
   (set! random-integer  (random-source-make-integers default-random-source))
   (set! random-real (random-source-make-reals default-random-source)))

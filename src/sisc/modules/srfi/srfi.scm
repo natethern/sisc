@@ -379,8 +379,8 @@
       random-source-state-ref
       random-source-state-set!
       srfi-27-init)
+  (import type-system)
   (import s2j)
-  (import generic-procedures)
   (import logicops)
   (import hashtable)
   (include "srfi-27.scm")
@@ -401,7 +401,6 @@
      declare-bundle! store-bundle load-bundle! 
      localized-template)
   (import s2j)
-  (import generic-procedures)
   (include "srfi-29.scm")
   (add-feature 'srfi-29))
 

@@ -6,25 +6,24 @@
 ;; of bindings to the named symbolic environment.  A library can
 ;; add to more than one symenv by having more than one segment.
 
-(define <sisc.ser.LibraryBuilder> (java-class "sisc.ser.LibraryBuilder"))
-(define <sisc.ser.Library> (java-class "sisc.ser.Library"))
-(define <sisc.ser.SeekableDataInputStream> 
-  (java-class "sisc.ser.SeekableDataInputStream"))
-(define <sisc.ser.BufferedRandomAccessInputStream> 
-  (java-class "sisc.ser.BufferedRandomAccessInputStream"))
-(define <sisc.util.Util> (java-class "sisc.util.Util"))
-(define <sisc.ser.LibraryAE> (java-class "sisc.ser.LibraryAE"))
+(define-java-classes
+  <sisc.ser.library-builder>
+  <sisc.ser.library>
+  <sisc.util.util>
+  (<sisc.ser.library-ae> |sisc.ser.LibraryAE|))
 
-(define-generic get-parent)
-(define-generic add)
-(define-generic build-library)
-(define-generic get-local-expression)
-(define-generic add-symbolic-bindings)
-(define-generic url)
-(define-generic next)
-(define-generic has-next)
-(define-generic binding-keys)
-(define-generic iterator)
+(define-generic-java-methods
+  get-parent
+  add
+  load
+  build-library
+  get-local-expression
+  add-symbolic-bindings
+  url
+  next
+  has-next
+  binding-keys
+  iterator)
 
 (define index-sym (string->symbol "library index"))
 (define segment-str "segment ")
@@ -51,23 +50,20 @@
                 (cons symenv-id (apply _create-lib lib segments))))))))
 
 (define (create-library name filename segment1 . segments)
-  (let* ((lib (make <sisc.ser.LibraryBuilder> (->jboolean #f)))
+  (let* ((lib (java-new <sisc.ser.library-builder> (->jboolean #f)))
          (index (apply _create-lib lib segment1 segments)))
     (add lib (java-wrap index-sym) (java-wrap index))
     (call-with-binary-output-file filename
       (lambda (out)
         (build-library lib (->jstring name) ((java-wrap out) 'out))))))
 
-(define open-library
-  (let () 
-    (define-generic load)
-    (lambda (filename)
-      (load <sisc.ser.Library>
-            (url <sisc.util.Util>
-                 (java-wrap (normalize-url (current-url)  filename)))))))
+(define (open-library filename)
+  (load (java-null <sisc.ser.library>)
+        (url (java-null <sisc.util.util>)
+             (java-wrap (normalize-url (current-url)  filename)))))
 
 (define (find-base-library se)
-  (cond [(instance-of? se <sisc.ser.LibraryAE>)
+  (cond [(instance-of? se <sisc.ser.library-ae>)
          (values se #t)]
         [(not (java-null? (get-parent se)))
          (find-base-library (get-parent se))]
