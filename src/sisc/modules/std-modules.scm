@@ -835,6 +835,29 @@
   (include "io/string-io.scm"))
 
 (import generic-io)
+
+; Good Lord what a hack!
+(for-each 
+  (lambda (x) (putprop x (eval (sc-expand x))))
+ '(write
+   display
+   newline
+   write-char
+   write-block
+   write-string
+   open-input-file
+   open-output-file
+   open-binary-input-file
+   open-binary-output-file
+   close-input-port
+   close-output-port
+   input-port?
+   output-port?
+   character-input-port?
+   character-output-port?
+   binary-input-port?
+   binary-output-port?))
+   
 (let ()
   (import type-system)
   (import oo)
