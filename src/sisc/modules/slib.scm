@@ -34,7 +34,7 @@
 ;;; implementation reside.
 (define implementation-vicinity
   (let ((library-path (string-append
-                       (or (getprop 'home '*config-parameters*)
+                       (or (getenv "sisc.home")
                            (error "You must define the sisc.home property"))
                        "/")))
     (lambda () library-path)))
@@ -43,15 +43,10 @@
 ;;; directory where files of Scheme library functions reside.
 (define library-vicinity
   (let ((library-path (string-append
-                       (or (getprop 'slib '*config-parameters*)
+                       (or (getenv "sisc.slib")
                            (error "You must define the sisc.slib property"))
                        "/")))
     (lambda () library-path)))
-
-;;;
-(define getenv
-  (lambda (env-var)
-    (getprop (string->symbol env-var) '*environment-variables*)))
 
 ;;; (home-vicinity) should return the vicinity of the user's HOME
 ;;; directory, the directory which typically contains files which
