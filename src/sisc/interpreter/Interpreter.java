@@ -227,7 +227,7 @@ public class Interpreter extends Util {
      *     expression  results in an error
      */
     public Value eval(Value v) throws SchemeException {
-        return eval((Procedure)lookup(EVAL, REPORT), new Value[] {v});
+        return eval((Procedure)lookup(EVAL, REPORT), new Value[] {v, (Value)getCtx().toplevel_env});
     }
 
     /**
