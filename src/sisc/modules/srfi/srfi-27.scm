@@ -28,17 +28,9 @@
   set-seed
   generate-seed)
 
-(define log2 
-  (let ([ln2 (log 2)])
-    (lambda (n)
-      (/ (log n) ln2))))
-
-(define (bits-of n)
-  (inexact->exact (ceiling (log2 n))))
-
 (define (random-source-make-integers s)
   (lambda (n)
-    (let ([bits-needed (bits-of n)])
+    (let ([bits-needed (logcount n)])
       (modulo 
        (if (<= bits-needed 31)
            (logand #x7fffffff 
@@ -99,9 +91,7 @@
 
 ;; current problem: these objects wont serialize
 (define (srfi-27-init)
-  (set! secure-random-source (let ([s (make-random-source)])
-                               (random-source-randomize! s)
-                               s))
+  (set! secure-random-source (make-secure-prng))
   (set! default-random-source (make-random-source))
   (set! random-integer  (random-source-make-integers default-random-source))
   (set! random-real (random-source-make-reals default-random-source)))
