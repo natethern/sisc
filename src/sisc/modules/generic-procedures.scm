@@ -295,15 +295,38 @@
 (define (get-methods proc)
   (procedure-property proc 'methods))
 
+(define (make-method-list)
+  ;;(monitor . #(methods max-arity method-lookup-cache))
+  (cons (mutex/new) (vector '() 0 #f)))
+(define (method-list-methods mlist)
+  (vector-ref mlist 0))
+(define (method-list-arity mlist)
+  (vector-ref mlist 1))
+(define (method-list-cache mlist)
+  (vector-ref mlist 2))
+(define (method-list! mlist methods arity cache)
+  (set-cdr! mlist (vector methods arity cache)))
+(define (update-method-list! methods)
+  (mutex/synchronize
+   (car methods)
+   (lambda ()
+     (let* ([mlist (cdr methods)]
+            [meths (method-list-methods mlist)])
+       (define (compute-max-arity)
+         (let ([ma (apply max 0 (map method-arity meths))])
+           (if (any method-rest? meths)
+               (+ ma 1)
+               ma)))
+       (set-cdr! methods
+                 (vector meths
+                         (compute-max-arity)
+                         (make-hashtable equal?)))))))
+
 (define (generic-procedure-methods proc)
-  (cdr (vector-ref (get-methods proc) 2)))
+  (method-list-methods (cdr (get-methods proc))))
 
 (define (generic-procedure-next proc)
   (procedure-property proc 'next))
-
-(define (make-method-list)
-  ;;#(method-lookup-cache max-arity (monitor . methods))
-  (vector #f 0 (list (mutex/new))))
 
 ;;we keep track of all the classes whose methods we have already
 ;;learned about
@@ -328,22 +351,24 @@
 (define (add-method proc m)
   (add-method-to-list (get-methods proc) m))
 (define (add-method-to-list methods m)
-  (let ([meths (vector-ref methods 2)])
-    (mutex/synchronize
-     (car meths)
-     (lambda ()
-       (vector-set! methods 0 #f) ;;clear applicable-methods cache
-       (add-method-helper m meths)))))
-  
-(define (add-method-helper m methods)
-  (let ([meths (cdr methods)])
+  (mutex/synchronize
+   (car methods)
+   (lambda ()
+     (method-list! methods
+                   (add-method-helper (method-list-methods
+                                       (cdr methods))
+                                      m)
+                   0
+                   #f))))
+(define (add-method-helper methods m)
+  (let loop ([meths methods])
     (if (null? meths)
-        ;;append
-        (set-cdr! methods (cons m meths))
-        (let ([current        (car meths)])
-          (if (method= m current)
-              (set-cdr! methods (cons m (cdr meths)))
-              (add-method-helper m meths))))))
+        (cons m methods)
+        (if (method= m (car meths))
+            (begin
+              (set-car! meths m)
+              methods)
+            (loop (cdr meths))))))
 
 (define (add-java-constructor c)
   (and (memq 'public (java/modifiers c))
@@ -396,28 +421,25 @@
             (set! first (meta-type first)))
         (if (java/class? first)
             (add-class first))))
-  (let ([methods       (get-methods proc)])
-    (let ([cache       (vector-ref methods 0)]
-          [max-arity   (vector-ref methods 1)]
-          [meths       (cdr (vector-ref methods 2))])
-      (if (not cache)
-          (begin
-            (set! cache (make-hashtable equal?))
-            (vector-set! methods 0 cache)
-            (set! max-arity
-              (apply max 0 (map method-arity meths)))
-            (if (any method-rest? meths)
-                (set! max-arity (+ max-arity 1)))
-            (vector-set! methods 1 max-arity)))
-      (set! otypes (take otypes max-arity))
-      (let ([res (hashtable/get cache otypes)])
-        (if res
-            (values (car res) (cdr res))
-            (call-with-values
-                (lambda () (applicable-methods-helper meths otypes))
-              (lambda (applicable ambiguous)
-                (hashtable/put! cache otypes (cons applicable ambiguous))
-                (values applicable ambiguous))))))))
+  (let* ([methods       (get-methods proc)]
+         [mlist         (cdr methods)])
+    (if (not (method-list-cache mlist))
+        (begin
+          (update-method-list! methods)
+          (set! mlist (cdr methods))))
+    (set! otypes (take otypes (method-list-arity mlist)))
+    (let ([res (hashtable/get (method-list-cache mlist) otypes)])
+      (if res
+          (values (car res) (cdr res))
+          (call-with-values
+              (lambda () (applicable-methods-helper
+                          (method-list-methods mlist)
+                          otypes))
+            (lambda (applicable ambiguous)
+              (hashtable/put! (method-list-cache mlist)
+                              otypes
+                              (cons applicable ambiguous))
+              (values applicable ambiguous)))))))
 (define (applicable-methods-helper methods otypes)
   (define (insert applicable ambiguous m)
     (if (null? applicable)
