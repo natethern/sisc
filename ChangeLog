@@ -3,6 +3,9 @@
 	* Fixed sisc.sh so it works correctly when rlwrap is not
 	  installed, rather than just exiting.
 
+	* Changed defaults for generation of debug information and stack
+	  traces to "on".
+
 2004-09-30  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed negation of rationals. See bug 1037559.

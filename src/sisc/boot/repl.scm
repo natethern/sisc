@@ -63,7 +63,7 @@
                                                 (if (zero? repl-depth)
                                                     "" repl-depth)))))
 (define stack-trace-on-error
-  (make-config-parameter "stackTraceOnError" #f))
+  (make-config-parameter "stackTraceOnError" #t))
 
 (define (get-last-exception)
   (getprop 'last-exception '*debug*))

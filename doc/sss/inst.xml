@@ -482,7 +482,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
 
                     <envar>emitAnnotations</envar></entry>
                   <entry><function>emit-annotations</function></entry>
-                  <entry>false</entry>
+                  <entry>true</entry>
                   <entry>
                     If set to <literal>true</literal>, this parameter
                     causes source files loaded with
@@ -500,7 +500,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
 
                     <envar>emitDebuggingSymbols</envar></entry>
                   <entry><function>emit-debugging-symbols</function></entry>
-                  <entry>false</entry>
+                  <entry>true</entry>
                   <entry>
                     If set to <literal>true</literal>, additional
                     annotations useful for debugging, such as function
@@ -547,7 +547,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
 
                     <envar>stackTraceOnError</envar></entry>
                   <entry><function>stack-trace-on-error</function></entry>
-                  <entry>false</entry>
+                  <entry>true</entry>
                   <entry>
                     If set to <literal>true</literal>, whenever an
                     uncaught error is encountered a full stack trace

@@ -39,6 +39,7 @@ import sisc.ser.*;
 import sisc.data.*;
 import sisc.env.*;
 import sisc.util.Util;
+import sisc.util.Defaults;
 
 public class GenerateHeap {
 
@@ -175,6 +176,12 @@ public class GenerateHeap {
         return rv;
     }
 
+    private static void patchDefaults() {
+        //Annotations can only be emitted once we have an expander
+        //installed. Things break horribly otherwise.
+        Defaults.EMIT_ANNOTATIONS = false;
+    }
+
     public static void main(String[] args) throws Exception {
         String inHeap = null;
         String outHeap = null;
@@ -195,6 +202,8 @@ public class GenerateHeap {
           System.out.println("Output heap file name has not been specified!");
           System.exit(1);
         }
+
+        patchDefaults();
 
         LibraryBuilder lb=new LibraryBuilder();
         MemorySymEnv symenv=new LibraryAE(Symbol.get("symenv"), lb);
