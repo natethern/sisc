@@ -321,6 +321,43 @@
   (type-of-hook 'record record-type-of-hook)
   (type<=-hook  'record record-type<=-hook))
 
+(module new-generic-procedures
+    (make-generic-procedure
+     generic-procedure-methods
+     add-method
+     add-methods
+     applicable-methods
+     define-generic
+     define-generics
+     define-method
+     define-methods
+     ;;method stuff
+     <method>
+     make-method
+     method?
+     method-procedure
+     method-types
+     method-rest?
+     method-arity
+     method=
+     method-applicable?
+     compare-methods
+     method)
+  (import* record
+           define-struct
+           define-record-type)
+  (import* type-system
+           type-of
+           types=
+           types<=
+           compare-types)
+  (import hashtable)
+  (import threading)
+  (import procedure-properties)
+  (import misc)
+  (include "generic-procedures/methods.scm")
+  (include "generic-procedures/procedures.scm"))
+
 (module generic-procedures
   (class?
    object?
