@@ -129,7 +129,12 @@ public class Serializer implements Conf {
         } else return -1;
     }
 
-    public Expression deserialize(DataInputStream dis) throws IOException {
+    public final Expression deserialize(DataInputStream dis) throws IOException {
+	return deserialize(dis, true);
+    }
+
+    public Expression deserialize(DataInputStream dis, boolean callDeser) 
+	throws IOException {
         if (SERIALIZATION) {
             Integer serialId=new Integer(readBer(dis));
             if (serialId.intValue()==0) return null;
@@ -145,7 +150,8 @@ public class Serializer implements Conf {
                     } else {
                         e=(Expression)clazz.newInstance();
                         deserState.put(serialId, e);
-                        DESM.invoke(e, new Object[] { this, dis });
+                        if (callDeser)
+			    DESM.invoke(e, new Object[] { this, dis });
                     }
                 } catch (Exception e1) {
                     if (e1 instanceof IOException)

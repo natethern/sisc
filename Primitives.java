@@ -39,12 +39,16 @@ import sisc.exprs.*;
 import java.util.*;
 import java.io.*;
 
-public class Primitives extends Module {
+public class Primitives extends ModuleAdapter {
     public Primitives() {}
     public static final Symbol
 	FILE=Symbol.get("file"),
 	NOFILE=Symbol.get("no-file"),
 	DIRECTORY=Symbol.get("directory");
+
+    public String getModuleName() {
+	return "Primitives";
+    }
 
     public static final int
            ABSPATHQ=0,               ACOS=1,                ADD=2,
@@ -68,7 +72,7 @@ public class Primitives extends Module {
       INTEGER2CHAR=54,          INTEGERQ=55,
 	          INTERACTIONENVIRONMENT=56,
                LCM=57,            LENGTH=58,              LIST=59,
-       LIST2VECTOR=60,              LOAD=61,        LOADMODULE=62,
+       LIST2VECTOR=60,              LOAD=61,            LOADNL=62,
                LOG=63,            LOOKUP=64,                LT=65,
           MAKEPATH=66,   MAKERECTANGULAR=67,        MAKESTRING=68,
         MAKEVECTOR=69,     MAX_PRECISION=70,     MIN_PRECISION=71,
@@ -91,12 +95,19 @@ public class Primitives extends Module {
       VECTOR2LIST=117,VECTORFINDLASTUNIQUE=118,  VECTORLENGTH=119,
           VECTORQ=120,        VECTORREF=121,        VECTORSET=122,
             VOIDQ=123,            WRITE=124,        WRITECHAR=125,
-            _VOID=126;
+	    _VOID=126,        GETNLNAME=127,     GETNLVERSION=128,
+                      GETNLBINDINGNAMES=129,     GETNLBINDING=130;
+	
 
     public static SchemeBoolean numQuery(Value v, int mask)
     throws ContinuationException {
         return truth(v instanceof Quantity &&
                      (((Quantity)v).is(mask)));
+    }
+
+    public void define(Interpreter r, String s, int v) {
+	super.define(r,s,v);
+	r.ctx.toplevel_env.define(Symbol.get(s), getBindingValue(Symbol.get(s)));
     }
 
     public void initialize(Interpreter r) {
@@ -156,6 +167,10 @@ public class Primitives extends Module {
         define(r, "find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
         define(r, "floor", FLOOR);
         define(r, "flush-output-port", FLUSHOUTPUTPORT);
+	define(r, "get-native-library-binding", GETNLBINDING);
+	define(r, "get-native-library-binding-names", GETNLBINDINGNAMES);
+	define(r, "get-native-library-name", GETNLNAME);
+	define(r, "get-native-library-version", GETNLVERSION);
         define(r, "get-output-string", GETOUTPUTSTRING);
         define(r, "getprop", LOOKUP);
         define(r, "imag-part", IMAGPART);
@@ -168,7 +183,7 @@ public class Primitives extends Module {
         define(r, "length", LENGTH);
         define(r, "list->vector", LIST2VECTOR);
         define(r, "load", LOAD);
-        define(r, "load-module", LOADMODULE);
+        define(r, "load-native-library", LOADNL);
         define(r, "log", LOG);
         define(r, "make-path", MAKEPATH);
         define(r, "make-rectangular", MAKERECTANGULAR);
@@ -475,12 +490,19 @@ public class Primitives extends Module {
             case CURRENTEVAL:
                 f.ctx.evaluator=proc(f,f.vlr[0]);
                 return VOID;
-            case LOADMODULE:
+	    case GETNLNAME:
+		return Symbol.get(module(f,f.vlr[0]).getModuleName());
+	    case GETNLVERSION:
+		return Quantity.valueOf(module(f,f.vlr[0]).getModuleVersion());
+	    case GETNLBINDINGNAMES:
+		Value[] va=(Value[])module(f,f.vlr[0]).getModuleBindingNames();
+		return valArrayToList(va,0,va.length);
+            case LOADNL:
                 try {
                     Class clazz=Class.forName(string(f,f.vlr[0]));
                     Module m=(Module)clazz.newInstance();
                     m.initialize(f);
-                    return VOID;
+                    return m;
                 } catch (Exception e) {
                     throw new RuntimeException(e.getMessage());
                 }
@@ -599,6 +621,8 @@ public class Primitives extends Module {
                 } catch (IOException e) {
                     throw new RuntimeException("error opening file "+fname);
                 }
+	    case GETNLBINDING:
+		return module(f,f.vlr[0]).getBindingValue(symbol(f,f.vlr[1]));
             case EVAL:
                 f.nxp=f.compile(f.vlr[0], env(f,f.vlr[1]));
                 return VOID;

@@ -36,7 +36,7 @@ import java.util.WeakHashMap;
 import java.io.*;
 import sisc.Serializer;
 
-public class Symbol extends Value implements Singleton {
+public class Symbol extends Value implements Singleton, Comparable {
 
     public static WeakHashMap memo=new WeakHashMap(100);
 
@@ -112,6 +112,11 @@ public class Symbol extends Value implements Singleton {
 
     public static Expression getValue(DataInputStream dis) throws IOException {
         return Symbol.get(dis.readUTF());
+    }
+
+    public int compareTo(Object o) {
+	if (!(o instanceof Symbol)) return -1;
+	return symval.compareTo(((Symbol)o).symval);
     }
 }
 

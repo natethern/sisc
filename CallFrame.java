@@ -46,7 +46,7 @@ public class CallFrame extends Procedure {
     public LexicalEnvironment    env;
     public CallFrame              fk;
     public CallFrame          parent;
-
+    
     public CallFrame(Expression n, Value[] v,
                      LexicalEnvironment e,
                      CallFrame f, CallFrame p) {
@@ -105,9 +105,9 @@ public class CallFrame extends Procedure {
             }
             s.serialize(nxp, dos);
             s.serialize(fk, dos);
+
             s.serialize(parent, dos);
             s.serialize(env, dos);
-
             dos.writeBoolean(lock);
         }
     }

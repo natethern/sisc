@@ -37,7 +37,11 @@ import sisc.data.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class SNative extends Module {
+public class SNative extends ModuleAdapter {
+    public String getModuleName() {
+	return "NativeProcedures";
+    }
+
     protected static final int
 	ASSQ=0, MEMQ=1, ASSOC=6, MEMBER=7,
 	CADR=2, CDAR=3, CAAR=4, CDDR=5, NOT=8,

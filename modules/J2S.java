@@ -39,14 +39,18 @@ import java.util.*;
 import sisc.Serializer;
 import java.io.*;
 
-public class J2S extends Module {
+public class J2S extends ModuleAdapter {
     public static final int 
 	JFIELDREF=1, JCLASSFORNAME=2,
 	JFIELDSET=3, JGETMETHODS=4, JGETCONSTRUCTORS=5,
 	JINSTANTIATE=6, JCALL=7, JCLASSQ=8, JOBJECTQ=9,
 	JINSTANCEOFQ=10, JGETCLASS=11, JGETCLASSNAME=12,
 	JGETFIELDS=13;
-    
+
+    public String getModuleName() {
+	return "J2S";
+    }
+
     public static class JavaClass extends Value {
         public Class clazz;
 

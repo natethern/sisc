@@ -37,9 +37,13 @@ import sisc.data.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class SLogicOps extends Module {
+public class SLogicOps extends ModuleAdapter {
     protected static final int
 	LOGAND=1, LOGOR=2, LOGXOR=3, LOGNOT=4;
+
+    public String getModuleName() {
+	return "LogicalOps";
+    }
 
     public void initialize(Interpreter r) {
         define(r, "logand", LOGAND);

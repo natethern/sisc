@@ -37,7 +37,10 @@ import sisc.*;
 import sisc.data.*;
 import java.util.HashMap;
 
-public class SRFI12 extends Module {
+public class SRFI12 extends ModuleAdapter {
+    public String getModuleName() {
+	return "SRFI-12";
+    }
 
     protected static final int 
 	CONDITIONQ=0, MAKEPROPERTYCONDITION=1, 

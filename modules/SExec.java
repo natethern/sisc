@@ -37,7 +37,11 @@ import sisc.data.*;
 import java.util.*;
 import java.io.*;
 
-public class SExec extends Module {
+public class SExec extends ModuleAdapter {
+    public String getModuleName() {
+	return "Exec";
+    }
+
     public static final int SEXEC=1;
 
     public void initialize(Interpreter r) {

@@ -55,18 +55,16 @@ public class AppExp extends Expression {
         Value tmp;
         int i;
 
-        if (nonTail) {
-            r.nxp=null;
-            r.save();
-        }
+        if (nonTail) 
+            r.push(null);
 
         r.vlr=rands.length == 0 ? ZV : new Value[rands.length];
 
         // Fill the rib right to left with immediates until non-imm.
         // encountered
         for (i=rands.length-1;
-                i>=0 && ((tmp=rands[i].getValue(r)) != null);
-                i--)
+	        i>=0 && ((tmp=rands[i].getValue(r)) != null);
+	        i--)
             r.vlr[i]=tmp;
 
         // If not all were immediate, push a fillrib, otherwise
@@ -76,13 +74,15 @@ public class AppExp extends Expression {
             r.nxp=rands[i];
         } else {
             tmp=rator.getValue(r);
-            if (tmp==null) {
-                r.push(APPEVAL);
-                r.nxp=rator;
-            } else {
+
+	    if (tmp!=null) {
                 r.acc=tmp;
                 r.nxp=APPEVAL;
-            }
+            } else { 
+		r.push(APPEVAL);
+                r.nxp=rator;
+	    }
+
         }
     }
 

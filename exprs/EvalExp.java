@@ -47,7 +47,7 @@ public class EvalExp extends Expression {
     public void eval(Interpreter r) throws ContinuationException {
         Value tmp=pre.getValue(r);
         if (tmp==null) {
-            r.push(this.post);
+            r.push(post);
             r.nxp=pre;
         } else {
 	    r.nxp=post;

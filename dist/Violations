@@ -1,15 +1,5 @@
-This file lists all known violations of the R5RS Scheme Standard by SISC:
+This file lists all known violations of the R5RS Scheme Standard by SISC.
 
-Letter of the standard Violations:
-
-Section               Description
-
-5.3		      SISC's syntax expander does not report an error
-	 	      when a new binding shadows a syntactic keyword.
-		      e.g., (define define 3) does not produce an error.		      
-6.4		      SISC's dynamic wind implementation does not
-		      currently work with SISC's exception handling 
-		      model.  This is considered a high priority violation.
 
 		      
 Spirit of the standard Violations:
@@ -23,6 +13,9 @@ Spirit of the standard Violations:
                       and allows "{}|" to appear in identifiers.
 4.1.3		      SISC does not distinguish between () and the quoted
 	              empty list '(). 
+5.3		      SISC's syntax expander does not report an error
+	 	      when a new binding shadows a syntactic keyword.
+		      e.g., (define define 3) does not produce an error.		      
 6.2.3		      The standard recommends that operations such
 		      as sqrt should try to provide exact results
 		      when given exact arguments.  SISC's do not

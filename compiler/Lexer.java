@@ -144,16 +144,6 @@ public class Lexer implements Tokens {
         }
     }
 
-    public String readTo(InputPort is, int stop)
-    throws IOException {
-        StringBuffer b=new StringBuffer();
-        int x;
-        while (stop!=(x=is.read()) && x>0)
-            b.append((char)x);
-        return b.toString();
-    }
-
-
     public int readChar(InputPort is) throws IOException {
         int c=is.read();
 

@@ -36,7 +36,11 @@ import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
 
-public class SThread extends Module {
+public class SThread extends ModuleAdapter {
+    public String getModuleName() {
+	return "Threading";
+    }
+
     protected static final int 
 	NEWTHREAD=0, THREADSTART=1, THREADRETURNVALUE=2, THREADSTATE=3,
 	THREADSRUNNING=4, 

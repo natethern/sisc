@@ -35,15 +35,23 @@ package sisc;
 import sisc.data.*;
 import sisc.exprs.FreeReferenceExp;
 
-public abstract class Module extends Util implements java.io.Serializable {
+public abstract class Module extends NamedValue implements java.io.Serializable {
 
-    protected void define(Interpreter r, String s, int id) {
-        Symbol name=Symbol.get(s);
-        r.ctx.toplevel_env.set(name, new BuiltinProcedure(this, name, id));
+    public abstract Symbol[] getModuleBindingNames();
+    public abstract Value getBindingValue(Symbol name) throws NoSuchMethodError;
+
+    public abstract String getModuleName();
+    public abstract float getModuleVersion();
+
+    public String display() {
+	return displayNamedOpaque("native library");
     }
 
     public abstract void initialize(Interpreter r);
 
     public abstract Value eval(int primid, Interpreter f)
     throws ContinuationException;
+
+
+    
 }

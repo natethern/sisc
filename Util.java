@@ -68,7 +68,8 @@ public abstract class Util implements Conf {
         r.acc=new Values(new Value[] {
                              new SchemeString("Error in "+where
                                               +": "+ errormessage),
-                             new CallFrame(r.nxp, r.vlr, r.env, r.fk, r.stk).capture(),
+                             new CallFrame(r.nxp, r.vlr, r.env, 
+					   r.fk, r.stk).capture(),
                              r.fk.fk});
 
         throw new ContinuationException(r.fk);
@@ -89,7 +90,8 @@ public abstract class Util implements Conf {
         r.acc=new Values(new Value[] {
                              new SchemeString((prependError ? "Error: "+errormessage :
                                                errormessage)),
-                             new CallFrame(r.nxp, r.vlr, r.env, r.fk, r.stk).capture(),
+                             new CallFrame(r.nxp, r.vlr, r.env, 
+					   r.fk, r.stk).capture(),
                              r.fk.fk});
 
         throw new ContinuationException(r.fk);

@@ -320,7 +320,7 @@ public class Quantity extends Value {
         }
     }
 
-    protected BigInteger integer() {
+    public BigInteger integer() {
         switch(type) {
         case FIXEDINT:
             return BigInteger.valueOf(val);

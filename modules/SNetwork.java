@@ -38,7 +38,11 @@ import java.io.*;
  *   (set-so-timeout <tcp socket>) => <void>
  */
 
-public class SNetwork extends Module {
+public class SNetwork extends ModuleAdapter {
+    public String getModuleName() {
+	return "Networking";
+    }
+
     protected static final int
 	GET_LOCAL_HOST=0, GET_HOST_NAME_BY_IP=1, GET_HOST_IP_BY_NAME=2,
 	SET_MULTICAST_TTL=3, LEAVE_MULTICAST_GROUP=4,

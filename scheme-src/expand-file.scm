@@ -1,0 +1,18 @@
+(define (expand-file from to)
+  (let ([inf (open-input-file from)]
+	[outf (open-output-file to)])
+    (let loop ([e (read inf)])
+      (if (not (eof-object? e))
+	  (let ([res (sc-expand e)])
+	    (pretty-print
+	     (if (and (pair? res)
+		      (eq? (car res) 'begin)
+		      (pair? (cdr res))
+		      (equal? (cadr res) '(void)))
+		 (caddr res)
+		 res)
+	     outf)
+	    (newline outf)
+	    (loop (read inf)))))
+    (close-output-port outf)
+    (close-input-port inf)))
