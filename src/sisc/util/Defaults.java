@@ -3,9 +3,15 @@ package sisc.util;
 public abstract class Defaults {
 
     public static final int DEFAULT_SYNOPSIS_LENGTH = 30;
-    public static final String DEFAULT_PERMIT_INTERRUPTS = "false";
-    public static final String DEFAULT_MIN_FLOAT_PRECISION = "16";
-    public static final String DEFAULT_MAX_FLOAT_PRECISION = "32";
+    public static final boolean DEFAULT_CASE_SENSITIVE = false;
+    public static final boolean DEFAULT_PERMIT_INTERRUPTS = false;
+    public static final int DEFAULT_MIN_FLOAT_PRECISION = 16;
+    public static final int DEFAULT_MAX_FLOAT_PRECISION = 32;
+    public static final boolean DEFAULT_EMIT_ANNOTATIONS = false;
+    public static final boolean DEFAULT_STRICT_R5RS = false;
+    public static final boolean DEFAULT_PRINT_SHARED = false;
+    public static final boolean DEFAULT_VECTOR_LENGTH_PREFIXING = false;
+    public static final boolean DEFAULT_EMIT_DEBUGGING_SYMBOLS = false;
 }
  
 /*
