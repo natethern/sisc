@@ -91,7 +91,7 @@
 	</listitem>
 	<listitem>
 	  <para>
-	    Runtime extensiblity through a scopable module system, which may add new functions and first-class types.
+	    Runtime extensiblity through a scopeable module system, which may add new functions and first-class types.
 	  </para>
 	</listitem>
       </itemizedlist>
@@ -171,7 +171,7 @@
 	  indicates the expected type of the argument.  'value'
 	  indicates any type.  If the argument is enclosed in square
 	  brackets ([]), that parameter is optional, and may be
-	  ommited.  If the description ends in elipses (...), then 
+	  ommitted.  If the description ends in ellipses (...), then 
 	  additional arguments may be provided, but are not required.
 	</para>
       </sect2>
@@ -190,7 +190,7 @@
 	Machine, and the Java v1.2 and higher class libraries.  The
 	1.2 libraries and VM are required due to a reliance on memory
 	reference functionality used to properly garbage collect
-	unused symbols while still maining pointer equality between
+	unused symbols while still maintaining pointer equality between
 	those that remain active.
       </para>
       <para>
@@ -225,7 +225,7 @@
 	Display Conventions
       </title>
       <para>
-	Executing or loading code in the REPL ordinarily producs a value
+	Executing or loading code in the REPL ordinarily produces a value
 	result which is displayed during the Print phase.  However,
 	two other message types may be displayed.  First, if an error
 	is raised that is not handled by the running program, the
@@ -454,7 +454,7 @@
 	  symbols.  In addition, the length-prefix form is used when
 	  printing vectors, and if elements repeat at the end of a
 	  Vector, only the last unique element is printed.  This form
-	  is refered to as the <emphasis>compact</emphasis> vector 
+	  is referred to as the <emphasis>compact</emphasis> vector 
 	  representation.  The unprefixed form with all elements
 	  displayed is called the <emphasis>verbose</emphasis> representation.
 	</para>
@@ -623,10 +623,10 @@
 	  The error handler required as an argument to
 	  <computeroutput>call-with-failure-continuation</computeroutput>
 	  must take three parameters.  The first, a string, is a human
-	  readable message describing the error that occured.  The
+	  readable message describing the error that occurred.  The
 	  second is a procedure encapsulating the continuation that was
 	  in place at the site of the error.  This continuation is
-	  refered to as the <emphasis>error continuation</emphasis>
+	  referred to as the <emphasis>error continuation</emphasis>
 	  The third, the <emphasis>failure-continuation</emphasis> is
 	  a procedure that when invoked calls the failure continuation
 	  of the <computeroutput>call/fc</computeroutput> expression.  
@@ -640,7 +640,7 @@
 	  error site by invoking the error continuation with a value
 	  that should be returned in place of the expression that
 	  caused the error.  Finally, the handler may choose to
-	  propogate the error (or a new error) to the failure
+	  propagate the error (or a new error) to the failure
 	  continuation of the <computeroutput>call/fc</computeroutput>
 	  expression.  To do this, the handler invokes the
 	  failure-continuation with the provided or new message and
@@ -670,7 +670,7 @@
 	      (error-k 2)))
             ; => 6
 
-	  ; Propogate the error
+	  ; Propagate the error
 	  (call-with-failure-continuation
   	    (lambda ()
               (+ 1 (/ 1 0) 3))
@@ -691,7 +691,7 @@
 	dynamic extent being exited.  In other words, if an error is
 	raised in the dynamic extent of a dynamic-wind expression,
 	&SISC will ensure that the <emphasis>after</emphasis> thunk
-	is evaluated before the error is propogated to the
+	is evaluated before the error is propagated to the
 	failure-continuation of the dynamic-wind expression.
       </para>
       <para>
@@ -708,7 +708,7 @@
 	If an error is raised in either the
 	<emphasis>before</emphasis> or <emphasis>after</emphasis>
 	thunks, no additional measures are taken.  The error is
-	propogated to the failure-continuation of the dynamic-wind
+	propagated to the failure-continuation of the dynamic-wind
 	as if the dynamic-wind call was an ordinary function
 	application.  Explicitly, if an error is raised from
 	<emphasis>before</emphasis>, neither
@@ -761,13 +761,13 @@
 	&returns; undefined
 
 	Sets the value of the variable named by variable name in the
-	symbolc environment named by environment-value to the provided
+	symbolic environment named by environment-value to the provided
 	value.  Any previous value is forgotten.
       </programlisting>
       <para>
 	In addition, the top-level Scheme environment is a symbolic
 	environment in &SISC; that can be accessed using getprop and putprop, 
-	by ommiting the <emphasis>environment-name</emphasis> parameter.  
+	by ommitting the <emphasis>environment-name</emphasis> parameter.  
       </para>
       <programlisting>
 	&procedure; (getprop variable-name)
@@ -1186,7 +1186,7 @@
 	  to Scheme's input/output model.  Writing to an output port
 	  retrieved from a TCP socket writes the data to that socket.
 	  Reading from an input port reads from the connected socket.
-	  One imporant note is that one can control the amount of data
+	  One important note is that one can control the amount of data
 	  that fills a TCP packet by using an output port that does
 	  not auto-flush.  Data is written to the port until one
 	  considers the packet complete, and then uses
@@ -1282,7 +1282,7 @@
 	All threads executing in the system share some resources.  The
 	top-level and symbolic environments are shared by all
 	threads.  If a thread makes a change to these environments,
-	the change will be visibile in all other threads.  
+	the change will be visible in all other threads.  
 	unless changed by the thread, all threads share the same
 	console input and output ports.  As threads originate from a
 	thunk created in the primordial thread or a child thread, the
@@ -1502,7 +1502,7 @@
 	Thread Scheduling
       </title>
       <para>
-	All Scheme threads created in &SISC; are pre-emptive and
+	All Scheme threads created in &SISC; are preemptive and
 	managed by a scheduler.  It is possible for a program to
 	manage the priorities of threads in order to give execution
 	preference to higher priority threads.  It is also possible
@@ -1568,7 +1568,138 @@
 	Monitors and Synchronization
       </title>
       <para>
+        &SISC; provides an implementation of the monitor data structure
+        for concurrency protection and inter-thread communication.
+        Monitors provide mutual exclusion locking and implicitly include
+        an associated condition variable to facilitate synchronization
+        of threads with the change in state of monitored data.
+        Unlike simple mutexes, monitors can be re-entered by the
+        thread that currently holds them.  The monitor is not unlocked
+        until the holding thread has exited (unlocked) the monitor as
+        many times as it was entered (locked).
       </para>
+      <para>
+	Throughout the following sections, a thread is often said to
+	<emphasis>block</emphasis> because of some circumstance.
+	While a thread is blocked on some resource, other threads are
+	allowed to execute freely, at the discretion of the scheduler.
+      </para>
+      <para>
+	Several functions exist for performing low level operations 
+	such as creating a monitor.  All require a monitor object.
+	Monitors are represented in scheme as opaque values displayed as
+	<computeroutput>&num;&lt;monitor&gt;</computeroutput>.  To
+	obtain a monitor, the
+	<computeroutput>monitor/new</computeroutput> function is
+	used.  It is important to understand that all the monitor
+	operations depend on the same monitor being shared between any
+	threads using monitor functionality.
+      </para>
+      <programlisting>
+	&procedure; (monitor/new)
+	&returns; A new monitor.
+      </programlisting>
+      <sect2>
+        <title>
+	  Lock Operations
+        </title>
+	<para>
+	  In order to protect a segment of Scheme code from concurrent
+	  access, one can create a monitor that is shared by all
+	  threads that may access the segment.  When entering the
+	  contested region of code (the <emphasis>critical
+	  section</emphasis>), a thread would call
+	  <computeroutput>monitor/lock</computeroutput>.  Upon exiting
+	  the region, <computeroutput>monitor/unlock</computeroutput>
+	  is called.
+	</para>
+	<programlisting>
+	  &procedure; (monitor/lock monitor)
+	  &returns; undefined 
+
+	  Attempts to acquire the lock on the given monitor.  Returns
+	  only when the lock has been successfully acquired.
+
+	  
+	  &procedure; (monitor/unlock monitor)
+	  &returns; undefined
+	  
+	  Releases the lock on the given monitor.  The behavior when
+	  unlocking a monitor when the running thread does not have
+	  the lock is undefined, and may raise an error.
+	</programlisting>
+	<para> 
+	  The semantics of
+	  <computeroutput>monitor/lock</computeroutput> ensure that
+	  only one thread can execute beyond the lock call at any one
+	  time.  The first thread that reaches the call
+	  <emphasis>acquires</emphasis> the lock on the monitor.  Any
+	  later threads will block at the call to
+	  <computeroutput>monitor/lock</computeroutput> until the
+	  thread that owns the lock releases the lock with
+	  <computeroutput>monitor/unlock</computeroutput>.  
+	</para>
+      </sect2>
+      <sect2>
+	<title>
+	  Condition Variable Operations
+	</title>
+	<para>
+	  In addition to locking functionality, a monitor also
+	  has an implicitly associated <emphasis>condition
+	  variable</emphasis>.  A condition variable allows one thread
+	  to sleep until another wakes it.  A common situation is for
+	  one thread to check the status of a variable, and sleep if
+	  the <emphasis>condition</emphasis> is not met.  While the
+	  thread sleeps, one or more separate threads may execute and
+	  satisfy the condition (by changing the state of the
+	  variable) and then <emphasis>notify</emphasis> the sleeping
+	  thread.  The thread then awakes, checks the variable, and
+	  proceeds if the condition is met.  If not, it sleeps again.  
+	  This construct allows for cooperate between multiple threads
+	  on a computation.
+	</para>
+	<para>
+	  To wait on a monitor, the
+	  <computeroutput>monitor/wait</computeroutput> function is
+	  applied to a monitor.  This will cause the thread to block
+	  until notified by another thread.
+	</para>
+	<programlisting>
+	  &procedure; (monitor/wait monitor [timeout])
+	  &returns; undefined
+
+	  Causes the thread to sleep until notified by another
+	  thread.  This call will not return until notified, unless
+	  the optional timeout is specified and timeout milliseconds 
+	  have elapsed without a notification. 
+	</programlisting>
+	<para>
+	  Another thread may wake a single waiting thread with the
+	  <computeroutput>monitor/notify</computeroutput> operation.
+	  When called, one thread waiting on the monitor is
+	  woken.  If no threads are waiting this call has no effect.
+	  If more than one thread is waiting, exactly one will
+	  be woken.  Which is woken is unspecified.  If a thread
+	  wishes to wake <emphasis>all</emphasis> threads waiting on a
+	  given monitor, it may use the
+	  <computeroutput>monitor/notify-all</computeroutput> function.
+	</para>
+	<programlisting>
+	  &procedure; (monitor/notify monitor)
+	  &returns; undefined
+
+	  Wakes exactly one thread waiting on the monitor, if any such
+	  threads exist.
+
+	  
+	  &procedure (monitor/notify-all monitor)
+	  &returns; undefined
+	  
+	  Wakes all threads waiting on the monitor, if any waiting
+	  threads exist.
+	</programlisting>
+      </sect2>
     </sect1>
   </chapter>
   <chapter>
@@ -1636,7 +1767,7 @@
       This appendix describes where this manual and the implementation
       of SISC depart.  This section should remain small, as it is the
       goal of the Interpreter to conform to this document, not for
-      this document to describe the idiosyncracies of the Interpreter.
+      this document to describe the idiosyncrasies of the Interpreter.
     </para>
     <para>
       <orderedlist>
