@@ -37,25 +37,21 @@
 ;; (Partially fixed) References to helper functions from macros in report-env
 ;; will generate code incapable of resolving the helper                        
 (define test-env (scheme-report-environment 5))
-(should-be 818786.1 '#t
-           (with/fc (lambda (m e) 'error)
-             (lambda ()
-               (eval '(procedure? (delay 'okay)) (scheme-report-environment 5)))))
-(should-be 818786.2 'okay
-           (begin (eval '(define-syntax foo 
-                           (syntax-rules ()
-                             ((_ x)
-                              (car x))
-                             ((_ x y)
-                              (car y)))) test-env)
-                  (eval '(foo 'a '(okay)) test-env)))
-(should-be 818786.3 '"invalid syntax (foo a b c)"
-           (begin (eval '(define-syntax foo 
-                           (syntax-rules ()
-                             ((_ x)
-                              (car x)))) test-env)
-                  (with/fc (lambda (m e) (error-message m))
-                   (lambda () (eval '(foo a b c) test-env)))))
+(should-be 818786 '(3 okay #t)
+           (let ([test-env (scheme-report-environment 5)])
+             (eval '(define-syntax foo 
+                      (syntax-rules ()
+                        ((_ x)
+                         (car x))
+                        ((_ x y)
+                         (car y)))) test-env)
+             (list
+              (with/fc (lambda (m e) 'error)
+                       (lambda () (eval '(force (delay 3)) test-env)))
+              (eval '(foo a '(okay)) test-env)
+              (with/fc (lambda (m e) (equal? (error-message m)
+                                             "invalid syntax (foo a b c)"))
+                       (lambda () (eval '(foo a b c) test-env))))))
                             
 ;; Used to cause an out of memory error (Interrupts must be enabled to pass)
 (should-be 820401 'okay
