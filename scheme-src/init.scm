@@ -173,55 +173,35 @@
 (define (vector . elems) (list->vector elems))
 (define (string . elems) (list->string elems))
 
+;;;;;;;;;;;;; OS Detection
+
+(define (detect-os)
+  (let ([osn (string-downcase (getprop 'os.name '*environment-variables*))])
+    (if (> (string-length osn) 3)
+	(cond [(equal? (substring osn 0 3) "mac") 'macos]
+	      [(equal? (substring osn 0 3) "win") 'ms-dos]
+	      [(equal? (substring osn 0 3) "ms-") 'ms-dos]
+	      [(equal? (substring osn 0 3) "uni") 'unix]
+	      [(equal? (substring osn 0 3) "lin") 'unix]
+	      [(equal? (substring osn 0 4) "os/") 'os2]
+	      [(equal? (substring osn 0 3) "vax") 'vax])
+	'unix)))
+
 ;;;;;;;;;;;;; File functions
 
-(define str-upto
-  (lambda (str chr)
-    (let loop ([x (string->list str)] 
-	       [acc ()])
-      (cond [(null? x) ()]
-	    [(eq? (car x) chr) acc]
-	    [else (loop (cdr x) (append acc (list (car x))))]))))
-
-(define _drv-mem 
-  (map 
-   (case (detect-os)
-     [(ms-dos windows)
-      (lambda (p)
-	(cons (car (str-upto p #\:)) p))]
-     [else (lambda (p) p)])
-   (getprop 'fs-roots '*sisc*)))
-
-(define _current-drive-letter
-  (lambda () 
-    (car (str-upto (current-directory) #\:))))
-
-(if (memq (detect-os) '(ms-dos windows))
-    (set! _drv-mem (list (cons (_current-drive-letter) (current-directory)))))
-(define _MP make-path)
-(define make-path
-  (letrec ([old-mp _MP]
-	   [rel-pl
-	    (lambda (p)
-	      (case (detect-os)
-		[(ms-dos windows) 
-		 (let ([drvletter (str-upto p #\:)])
-		   (if (null? drvletter)
-		       (current-directory)
-		       (let ([recalled-path (assq (car drvletter) _drv-mem)])
-			 (if recalled-path
-			     (cdr recalled-path)
-			     ""))))]
-		[else (current-directory)]))])
-    (lambda (pre . post)
-      (if (null? post)
-	  (if (absolute-path? pre)
-	      pre
-	      (let ([rel-path (rel-pl pre)])
-		(old-mp rel-path pre)))
-	  (old-mp pre (car post))))))
 (define current-directory (void))
-(letrec ([_cd ""]
+(letrec ([_cd 
+	  (lambda args
+	    (if (null? args) (getprop 'current-directory '*sisc*)
+		(putprop 'current-directory '*sisc* (car args))))]
+	 [gen-path
+	  (lambda (p)
+	    (if (or (absolute-path? p)
+		    (and (memq (detect-os) '(ms-dos windows))
+			 (> (string-length p) 1) 
+			 (eq? (string-ref p 1) #\:)))
+		p
+		(make-path (_cd) p)))]
 	 [is
 	  (lambda (file type)
 	    (if (eq? (file-type file) type)
@@ -229,21 +209,21 @@
 		(error 'file-type "~s is not of type ~s" file type)))])
   (define *current-directory
     (lambda dir
-      (if (null? dir) _cd
-	  (let ((newpath (make-path (car dir))))
+      (if (null? dir) (_cd)
+	  (let ((newpath (gen-path (car dir))))
 	    (is newpath 'directory)
-	    (set! _cd newpath)))))
+	    (_cd newpath)))))
   (define *open-input-file
     (let ((old-oif open-input-file))
       (lambda (file)
-	(let ((file (make-path file)))
+	(let ((file (gen-path file)))
 	  (is file 'file)
 	  (old-oif file)))))
 
   (define *open-output-file
     (let ((old-oof open-output-file))
       (lambda (file)
-	(let ((file (make-path file)))
+	(let ((file (gen-path file)))
 	  (if (not (memq (file-type file) '(no-file file)))
 	      (error 'open-output-file "~s points to a directory" file)
 	      (old-oof file))))))
@@ -251,8 +231,9 @@
   (define *load	 
     (let ((_load load))
       (lambda (file)
-	(_load (make-path file)))))
+	(_load (gen-path file)))))
   
+  (_cd ".")
   (set! load *load)
   (set! current-directory *current-directory)
   (set! open-input-file *open-input-file)

@@ -23,14 +23,9 @@
 ;; operating system type.  UNIX, VMS, MACOS, AMIGA and MS-DOS are
 ;; supported.
 
-;; FIXME: Detect better
-(define (deduce-environment)
-  (if (eq? (string-ref (getprop 'file.separator '*environment-variables*) 0)
-	   #\\)
-      'ms-dos
-      'unix))
 
-(define software-type deduce-environment)
+;; On SISC, we have the misfortune of being run on a multitude of platforms
+(define software-type detect-os)
 
 ;; The SCHEME-IMPLEMENTATION-TYPE procedure returns a symbol denoting the
 ;; Scheme implementation that loads this file.
@@ -207,10 +202,11 @@
 
 (define slib:error
   (lambda args
-    (let ((port (current-error-port)))
-      (display "Error: " port)
-      (for-each (lambda (x) (display x port)) args)
-      (error #f ""))))
+    (let ((port (current-error-port))
+	  (strport (open-output-string)))
+;      (display "Error: " strport)
+      (for-each (lambda (x) (display x strport)) args)
+      (error (get-output-string strport)))))
 
 ;; The TMPNAM procedure constructs and returns a temporary file name,
 ;; presumably unique and not a duplicate of one already existing.
@@ -323,6 +319,7 @@
 
 (define slib:load-source
   (lambda (f)
+    (display f) (newline)
     (load (string-append f (scheme-file-suffix)))))
 
 ;;; defmacro:load and macro:load also need the default suffix.
