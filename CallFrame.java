@@ -57,29 +57,6 @@ public class CallFrame extends Procedure {
         parent=p;
     }
 
-    protected final void captureSetVLR(Value[] nvlr) {
-	if (!lock) {
-	    if (nxp!=null && nxp instanceof Volatile)
-		((Volatile)nxp).lock();
-	    
-	    if (parent!=null) {
-		if (parent.vlr==vlr)
-		    parent.captureSetVLR(nvlr);
-		else
-		    parent.capture();
-	    }
-	    
-	    if (fk!=null) {
-		if (fk.vlr==vlr)
-		    fk.captureSetVLR(nvlr);
-		else 
-		    fk.capture();
-	    }
-	    
-	    vlr=nvlr;
-	}
-    }
-	    
     public CallFrame capture() {
         if (!lock) {
             lock=true;
@@ -87,9 +64,18 @@ public class CallFrame extends Procedure {
             if (vlr!=null) {
                 Value[] nvlr=new Value[vlr.length];
                 System.arraycopy(vlr,0,nvlr,0,nvlr.length);
-		captureSetVLR(nvlr);
-            } else
-		captureSetVLR(null);
+                vlr=nvlr;
+            }
+
+
+            if (nxp!=null && nxp instanceof Volatile)
+		((Volatile)nxp).lock();
+
+            if (parent!=null)
+                parent.capture();
+
+            if (fk!=null)
+                fk.capture();
         }
 
         return this;
