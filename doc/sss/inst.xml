@@ -8,17 +8,18 @@
     </title>
     <para>
       &SISC; primarily targets the Java Virtual
-      Machine, and the Java v1.2 and higher class libraries.  The
+      Machine, and the Java v1.3 and higher class libraries.  The
       1.2 libraries and VM are required due to a reliance on memory
       reference functionality used to properly garbage collect
       unused symbols while still maintaining pointer equality between
-      those that remain active.
+      those that remain active, while the 1.3 libraries are needed for
+      the proxy functionality of the Java bridge library.
     </para>
     <para>
       &SISC; does not require any particular operating system, though
       the official distribution currently provides launching
       assistance for Windows and Unix based systems.  Theoretically
-      any machine that supports Java 1.2 or higher should be able to
+      any machine that supports Java 1.3 or higher should be able to
       run &SISC;.
     </para>
   </sect1>
