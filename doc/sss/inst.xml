@@ -49,11 +49,15 @@
 	  <methodsynopsis language="scheme">
             <type>does not return</type>
             <methodname>exit</methodname>
-            <void/>
+            <methodparam choice="opt">
+              <param>return-value</param>
+            </methodparam>
           </methodsynopsis>
 	  <blockquote>
 	    <para>
-	      Instructs the current REPL to exit.
+	      Instructs the current REPL to exit.  If the optional 
+              return value is given, the value will be passed out of
+              the REPL to the calling code or environment.
 	    </para>
 	  </blockquote>
 	</para>
@@ -249,20 +253,30 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
         <listitem>
           <para>
             If present, evaluate the expression in an
-            <literal>--eval</literal> switch.
+            <literal>--eval</literal> switch.  Note its success 
+            or failure.
           </para>
         </listitem>
         <listitem>
           <para>
             If present, apply the named function in a
             <literal>--call-with-args</literal> switch to the
-            arguments after the end of options sequence.
+            arguments after the end of options sequence.  Note its
+            return value.
           </para>
         </listitem>
         <listitem>
           <para>
             If <literal>--no-repl</literal> was not specified, invoke
             the REPL, otherwise exit.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Take the last return value (from the REPL if one was run,
+            otherwise the most recent return-value from the above steps).
+            If it is an integer, return that integer value
+            as SISC's overall return code.  
           </para>
         </listitem>
       </orderedlist>

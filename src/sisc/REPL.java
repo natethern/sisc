@@ -180,8 +180,6 @@ public class REPL {
             Value v=r.eval(expr);
             if (!call) 
                 System.out.println(v);
-            if (v instanceof Quantity) 
-                returnCode=((Quantity)v).intValue();
         }
 
         String func=(String)args.get("call-with-args");
