@@ -22,21 +22,31 @@
 (define (types<= x y) (every2 java/assignable? y x))
 (define (instances? x y) (every2 java/instance? y x))
 
+(define (synchronized monitor f)
+  (dynamic-wind
+   (lambda () (monitor/lock monitor))
+   f
+   (lambda () (monitor/unlock monitor))))
+
 ;;Generic functions are mapped to names which in turn are the main key
 ;;by which methods are stored / looked up. We do this so that all
 ;;generic functions share the same pool of methods that gets
 ;;constructed incrementally as we learn about java classes.
 (define *FUNCTIONS* (make-hashtable))
+(define *FUNCTIONS-LOCK* (monitor/new))
 (define (add-generic-function f name)
-  (*FUNCTIONS* f (cons f name)))
+  (synchronized *FUNCTIONS-LOCK*
+                (lambda () (*FUNCTIONS* f name))))
 (define (generic-function-name f)
-  (let ([n (*FUNCTIONS* f)])
-    (if n
-        (cdr n)
-        (error "~a is not a generic function" f))))
+  (or (synchronized *FUNCTIONS-LOCK*
+                    (lambda () (*FUNCTIONS* f)))
+      (error "~a is not a generic function" f)))
+
 ;;we keep track of all the classes whose methods we have already
 ;;incorporated into the *METHODS* table below
 (define *CLASSES* (make-hashtable))
+(define *CLASSES-LOCK* (monitor/new))
+
 ;;This maps function names to lists of methods
 ;;ordered by their "specificity", i.e. methods
 ;;appearing earlier in the list are almost more specific or
@@ -46,21 +56,29 @@
 ;;object and the CDR containing the type signature, i.e. a list of
 ;;types (one for each parameter).
 (define *METHODS* (make-hashtable))
+(define *METHODS-LOCK* (monitor/new))
 (define (get-methods name)
-  (let ([m (*METHODS* name)])
-    (or m (let ([m (cons name '())])
-            (*METHODS* name m)
-            m))))
+  (synchronized *METHODS-LOCK*
+                (lambda ()
+                  (let ([m (*METHODS* name)])
+                    (or m (let ([m (cons (monitor/new) '())])
+                            (*METHODS* name m)
+                            m))))))
+
 ;;This maps classes to lists of constructors ordered by their "specificity".
 ;;Constructors are represented by a pair with the CAR containing the
 ;;constructor object and the CDR containing the type signature, i.e. a
 ;;list of types (one for each parameter);
 (define *CONSTRUCTORS* (make-hashtable))
+(define *CONSTRUCTORS-LOCK* (monitor/new))
 (define (get-constructors class)
-  (let ([c (*CONSTRUCTORS* class)])
-    (or c (let ([c (cons class '())])
-            (*CONSTRUCTORS* class c)
-            c))))
+  (synchronized *CONSTRUCTORS-LOCK*
+                (lambda ()
+                  (let ([c (*CONSTRUCTORS* class)])
+                    (or c (let ([c (cons (monitor/new) '())])
+                            (*CONSTRUCTORS* class c)
+                            c))))))
+
 ;;mangle java method names so they look a bit more like scheme
 ;;function names
 (define (mangle-name name)
@@ -117,6 +135,9 @@
                   (not (java/object? (method-function m1))))))))
 
 (define (add-method-helper m methods)
+  (synchronized (car methods)
+                (lambda () (add-method-helper2 m methods))))
+(define (add-method-helper2 m methods)
   (let ([meths (cdr methods)])
     (if (null? meths)
         ;;append
@@ -130,7 +151,7 @@
                   (set-cdr! methods (cons m (cdr meths)))
                   ;;insert
                   (set-cdr! methods (cons m meths)))
-              (add-method-helper m meths))))))
+              (add-method-helper2 m meths))))))
 (define (add-method genf name m types rest?)
   (add-method-helper (make-method m genf (length types) types rest?)
                      (get-methods name)))
@@ -139,7 +160,8 @@
                      (get-constructors class)))
 (define (add-class class)
   (if (and (not (java/null? class))
-           (not (*CLASSES* class #t)))
+           (not (synchronized *CLASSES-LOCK*
+                              (lambda () (*CLASSES* class #t)))))
       (begin
         (add-class (java/superclass class))
         (for-each add-class (vector->list (java/interfaces class)))
@@ -164,6 +186,7 @@
 (define (find-method genf args methods)
   (or (find-normal-method genf args methods)
       (find-static-method genf args methods)))
+;;SYNC: we don't care if methods gets modified while we do this
 (define (find-method-helper pred next-fn genf args methods)
   (if (null? methods)
       #f
