@@ -1,3 +1,26 @@
+;;the following come straight from the Chez Scheme User Manual
+(define-syntax define-alias
+  (syntax-rules ()
+    [(_ x y)
+     (define-syntax x
+       (identifier-syntax y))]))
+(define-syntax from
+  (syntax-rules ()
+    [(_ m id) (let () (import-only m) id)]))
+(define-syntax import*
+  (syntax-rules ()
+    [(_ m) (begin)]
+    [(_ m (new old))
+     (module ((new tmp))
+       (define-alias new tmp)
+       (module (tmp)
+         (import m)
+         (define-alias tmp old)))]
+    [(_ m id) (module (id) (import m))]
+    [(_ m spec0 spec1 ...)
+     (begin (import* m spec0)
+            (import* m spec1 ...))]))
+
 ;;;;;;;;;;;;;;;; NATIVE MODULES ;;;;;;;;;;;;;;;
 
 (define-syntax native-module
