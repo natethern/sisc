@@ -69,19 +69,19 @@
 
 ;; Used to trigger any number of serialization bugs related to ports when
 ;; run from the repl
-#|
-
-(import serial-io)
-(define (foo x)
-  (+ x (call/cc
-        (lambda (k)
-          (call-with-serial-output-file
-           "test.ser"
-           (lambda (port) (serialize k port)))
-          1))))
-
-((call-with-serial-input-file "test.ser" deserialize) 1)
-
-(should-be 856491 11 (foo 10))
-|#
+(should-be 856491 11
+           (let ()
+             (import serial-io)
+             (define (foo x)
+               (+ x (call/cc
+                     (lambda (k)
+                       (call-with-serial-output-file
+                           "test.ser"
+                         (lambda (port) (serialize k port)))
+                       1))))
+             (if (= (foo 10) 11)
+                 ((call-with-serial-input-file
+                      "test.ser"
+                    deserialize)
+                  12))))
 
