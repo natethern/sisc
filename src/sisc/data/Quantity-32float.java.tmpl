@@ -500,12 +500,13 @@ public class Quantity extends Value implements Singleton {
                 if (Math.floor(o.d)==o.d)
                     return new Quantity(i.divide(d2i(o.d))).toInexact();
             }
+            break;
         case DECIM:
             if (Math.floor(d)==d)
                 return new Quantity(d2i(d)).quotient(o).toInexact();
-        default:
-            throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
         }
+        throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
+
     }
 
     public Quantity remainder(Quantity o) {

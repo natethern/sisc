@@ -487,13 +487,13 @@ public class Quantity extends Value implements Singleton {
                 if (new BigDecimal(o2).compareTo(o.d)==0)
                     return new Quantity(i.divide(o2)).toInexact();
             }
+            break;
         case DECIM:
             BigInteger o2=d.toBigInteger();
             if (new BigDecimal(o2).compareTo(d)==0)
                 return new Quantity(o2).quotient(o).toInexact();
-        default:
-            throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
         }
+        throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
     }
 
     public Quantity remainder(Quantity o) {
