@@ -482,18 +482,30 @@
 
 (define generate-id gen-sym) ; SISC's gen-sym has this property
 
-;; A SISC Specific modification, generate-module-id deliberately does not
-;; create a unique id, but rather one based on the module-id, so that 
-;; code dependent on a module won't depend on a specific compilation of 
-;; that module.
-(define (generate-module-id id1 . id2)
-  (or (and id1
-           (string->symbol 
-            (if (and (not (null? id2))
-                     (car id2))
-                (format "@~a::~a" id1 (car id2))
-                (format "@~a" id1))))
-      (generate-id id1)))
+;; A SISC Specific modification, generate-id-in-module deliberately
+;; does not create a unique id, but rather one based on the module-id,
+;; so that code dependent on a module won't depend on a specific
+;; compilation of that module. This also handles nested modules.
+(define (generate-module-id id)
+  (if id
+      (string->symbol (string-append "@" (symbol->string id)))
+      (generate-id id)))
+(define (generate-id-in-module module-id path id)
+  (if (not module-id) (set! module-id (generate-id #f)))
+  (if (not id) (set! id (generate-id #f)))
+  (string->symbol
+   (string-append
+    (apply string-append
+           "@"
+           (symbol->string module-id)
+           "::"
+           (let loop ((path path) (res '()))
+             (if (null? path)
+                 res
+                 (loop (cdr path) (cons (symbol->string (car path))
+                                        (cons "::" res))))))
+    (symbol->string id))))
+
 
 ;; SISC contains native functions map-car and map-cdr.  The following macro
 ;; translates these into ordinary maps when its not present
@@ -1584,136 +1596,141 @@
 
 (define chi-top-module
   (lambda (e r ribcage w s ctem rtem id exports forms)
-    (let ((fexports (flatten-exports exports)))
+    (let ((fexports (flatten-exports exports))
+          (module-id (and id (id-sym-name id))))
       (chi-external ribcage (source-wrap e w s)
-        (map (lambda (d) (cons r d)) forms) r exports fexports ctem
-        (lambda (bindings inits)
-         ; dvs & des: "defined" (letrec-bound) vars & rhs expressions
-         ; svs & ses: "set!" (top-level) vars & rhs expressions
-          (let partition ((fexports fexports) (bs bindings) (svs '()) (ses '()) (ctdefs '()))
-            (if (null? fexports)
-               ; remaining bindings are either local vars or local macros/modules
-                (let partition ((bs bs) (dvs '()) (des '()))
-                  (if (null? bs)
-                      (let ((ses (map (lambda (x) (chi (cdr x) (car x) empty-wrap)) ses))
-                            (des (map (lambda (x) (chi (cdr x) (car x) empty-wrap)) des))
-                            (inits (map (lambda (x) (chi (cdr x) (car x) empty-wrap)) inits)))
-                       ; we wait to do this here so that expansion of des & ses use
-                       ; local versions, which in particular, allows us to use macros
-                       ; locally even if ctem tells us not to eval them
-                        (for-each (lambda (x)
-                                    (apply (lambda (t label sym val)
-                                             (when label (set-indirect-label! label sym)))
-                                           x))
-                                  ctdefs)
-                        (build-sequence no-source
-                          (list (ct-eval/residualize ctem
-                                  (lambda ()
-                                    (if (null? ctdefs)
-                                        (chi-void)
-                                        (build-sequence no-source
-                                          (map (lambda (x)
-                                                 (apply (lambda (t label sym val)
-                                                          (build-cte-install sym
-                                                            (if (eq? t 'define-syntax-form)
-                                                                val
-                                                                (build-data no-source
-                                                                  (make-binding 'module
-                                                                    (make-resolved-interface val sym))))))
-                                                        x))
-                                               ctdefs)))))
-                                (ct-eval/residualize ctem
-                                  (lambda ()
-                                    (let ((n (if id (id-sym-name id) #f)))
-                                      (let* ((token (generate-module-id n))
-                                             (b (build-data no-source
-                                                  (make-binding 'module
-                                                    (make-resolved-interface exports token)))))
-                                        (if n
-                                            (build-cte-install
-                                              (if (only-top-marked? id)
-                                                  n
-                                                  (let ((marks (wrap-marks (syntax-object-wrap id))))
-                                                    (make-syntax-object n
-                                                      (make-wrap marks
-                                                        (list (make-ribcage (vector n)
-                                                                (vector marks) (vector (generate-module-id n))))))))
-                                              b)
-                                            (let ((n (generate-id 'tmp)))
-                                              (build-sequence no-source
-                                                (list (build-cte-install n b)
-                                                      (do-top-import n token)))))))))
-                              ; Some systems complain when undefined variables are assigned.
-                               (if (null? svs)
-                                   (chi-void)
-                                   (build-sequence no-source
-                                     (map (lambda (v) (build-global-definition no-source v (chi-void))) svs)))
-                                (rt-eval/residualize rtem
-                                  (lambda ()
-                                    (build-body no-source
-                                      dvs
-                                      des
-                                      (build-sequence no-source
-                                        (list
-                                          (if (null? svs)
-                                              (chi-void)
-                                              (build-sequence no-source
-                                                (map (lambda (v e)
-                                                       (build-module-definition no-source v e))
-                                                     svs
-                                                     ses)))
-                                          (if (null? inits)
-                                              (chi-void)
-                                              (build-sequence no-source inits)))))))
-                                (chi-void))))
-                      (let ((b (car bs)))
-                        (case (module-binding-type b)
-                          ((define-form)
-                           (let ((var (gen-var (module-binding-id b))))
-                             (extend-store! r
-                               (get-indirect-label (module-binding-label b))
-                               (make-binding 'lexical var))
-                             (partition (cdr bs) (cons var dvs)
-                               (cons (module-binding-val b) des))))
-                          ((define-syntax-form module-form) (partition (cdr bs) dvs des))
-                          (else (error 'sc-expand-internal "unexpected module binding type"))))))
-                (let ((module-id (and id (id-sym-name id)))
-		      (id (car fexports)) (fexports (cdr fexports)))
-                  (define pluck-binding
-                    (lambda (id bs succ fail)
-                      (let loop ((bs bs) (new-bs '()))
-                        (if (null? bs)
-                            (fail)
-                           ; this previously used bound-id=?, but free-id=?
-                           ; can prevent false positives and is okay since the
-                           ; substitutions have already been applied
-                            (if (free-id=? (module-binding-id (car bs)) id)
-                                (succ (car bs) (smart-append (reverse new-bs) (cdr bs)))
-                                (loop (cdr bs) (cons (car bs) new-bs)))))))
-                  (pluck-binding id bs
-                    (lambda (b bs)
-                      (let ((t (module-binding-type b))
-                            (label (module-binding-label b))
-                            (imps (module-binding-imps b)))
-                        (let ((fexports (append imps fexports))
-                              (sym (generate-module-id module-id
-                                                       (id-sym-name id))))
-                          (case t
-                            ((define-form)
-                             (set-indirect-label! label sym)
-                             (partition fexports bs (cons sym svs)
-                               (cons (module-binding-val b) ses)
-                               ctdefs))
-                            ((define-syntax-form)
-                             (partition fexports bs svs ses
-                               (cons (list t label sym (module-binding-val b)) ctdefs)))
-                            ((module-form)
-                             (let ((exports (module-binding-val b)))
-                               (partition (append (flatten-exports exports) fexports) bs
-                                 svs ses
-                                 (cons (list t label sym exports) ctdefs))))
-                            (else (error 'sc-expand-internal "unexpected module binding type"))))))
-                    (lambda () (partition fexports bs svs ses ctdefs)))))))))))
+                    (map (lambda (d) (cons r d)) forms) r exports fexports ctem
+                    (lambda (bindings inits)
+                      ;; dvs & des: "defined" (letrec-bound) vars & rhs expressions
+                      ;; svs & ses: "set!" (top-level) vars & rhs expressions
+                      (let partition ((fexports (map (lambda (x) (cons x '())) fexports)) (bs bindings) (svs '()) (ses '()) (ctdefs '()))
+                        (if (null? fexports)
+                            ;; remaining bindings are either local vars or local macros/modules
+                            (let partition ((bs bs) (dvs '()) (des '()))
+                              (if (null? bs)
+                                  (let ((ses (map (lambda (x) (chi (cdr x) (car x) empty-wrap)) ses))
+                                        (des (map (lambda (x) (chi (cdr x) (car x) empty-wrap)) des))
+                                        (inits (map (lambda (x) (chi (cdr x) (car x) empty-wrap)) inits)))
+                                    ;; we wait to do this here so that expansion of des & ses use
+                                    ;; local versions, which in particular, allows us to use macros
+                                    ;; locally even if ctem tells us not to eval them
+                                    (for-each (lambda (x)
+                                                (apply (lambda (t label sym val)
+                                                         (when label (set-indirect-label! label sym)))
+                                                       x))
+                                              ctdefs)
+                                    (build-sequence no-source
+                                                    (list (ct-eval/residualize
+                                                           ctem
+                                                           (lambda ()
+                                                             (if (null? ctdefs)
+                                                                 (chi-void)
+                                                                 (build-sequence no-source
+                                                                                 (map (lambda (x)
+                                                                                        (apply (lambda (t label sym val)
+                                                                                                 (build-cte-install sym
+                                                                                                                    (if (eq? t 'define-syntax-form)
+                                                                                                                        val
+                                                                                                                        (build-data no-source
+                                                                                                                                    (make-binding 'module
+                                                                                                                                                  (make-resolved-interface val sym))))))
+                                                                                               x))
+                                                                                      ctdefs)))))
+                                                          (ct-eval/residualize
+                                                           ctem
+                                                           (lambda ()
+                                                             (let ((n (if id (id-sym-name id) #f)))
+                                                               (let* ((token (generate-module-id n))
+                                                                      (b (build-data no-source
+                                                                                     (make-binding 'module
+                                                                                                   (make-resolved-interface exports token)))))
+                                                                 (if n
+                                                                     (build-cte-install
+                                                                      (if (only-top-marked? id)
+                                                                          n
+                                                                          (let ((marks (wrap-marks (syntax-object-wrap id))))
+                                                                            (make-syntax-object n
+                                                                                                (make-wrap marks
+                                                                                                           (list (make-ribcage (vector n)
+                                                                                                                               (vector marks) (vector (generate-module-id n))))))))
+                                                                      b)
+                                                                     (let ((n (generate-id 'tmp)))
+                                                                       (build-sequence no-source
+                                                                                       (list (build-cte-install n b)
+                                                                                             (do-top-import n token)))))))))
+                                                          ;; Some systems complain when undefined variables are assigned.
+                                                          (if (null? svs)
+                                                              (chi-void)
+                                                              (build-sequence no-source
+                                                                              (map (lambda (v) (build-global-definition no-source v (chi-void))) svs)))
+                                                          (rt-eval/residualize
+                                                           rtem
+                                                           (lambda ()
+                                                             (build-body no-source
+                                                                         dvs
+                                                                         des
+                                                                         (build-sequence no-source
+                                                                                         (list
+                                                                                          (if (null? svs)
+                                                                                              (chi-void)
+                                                                                              (build-sequence no-source
+                                                                                                              (map (lambda (v e)
+                                                                                                                     (build-module-definition no-source v e))
+                                                                                                                   svs
+                                                                                                                   ses)))
+                                                                                          (if (null? inits)
+                                                                                              (chi-void)
+                                                                                              (build-sequence no-source inits)))))))
+                                                          (chi-void))))
+                                  (let ((b (car bs)))
+                                    (case (module-binding-type b)
+                                      ((define-form)
+                                       (let ((var (gen-var (module-binding-id b))))
+                                         (extend-store! r
+                                                        (get-indirect-label (module-binding-label b))
+                                                        (make-binding 'lexical var))
+                                         (partition (cdr bs) (cons var dvs)
+                                                    (cons (module-binding-val b) des))))
+                                      ((define-syntax-form module-form) (partition (cdr bs) dvs des))
+                                      (else (error 'sc-expand-internal "unexpected module binding type"))))))
+                            (let ((exp (car fexports)) (fexports (cdr fexports)))
+                              (define pluck-binding
+                                (lambda (id bs succ fail)
+                                  (let loop ((bs bs) (new-bs '()))
+                                    (if (null? bs)
+                                        (fail)
+                                        ;; this previously used bound-id=?, but free-id=?
+                                        ;; can prevent false positives and is okay since the
+                                        ;; substitutions have already been applied
+                                        (if (free-id=? (module-binding-id (car bs)) id)
+                                            (succ (car bs) (smart-append (reverse new-bs) (cdr bs)))
+                                            (loop (cdr bs) (cons (car bs) new-bs)))))))
+                              (pluck-binding (car exp) bs
+                                             (lambda (b bs)
+                                               (let ((t (module-binding-type b))
+                                                     (label (module-binding-label b))
+                                                     (imps (module-binding-imps b))
+                                                     (id (car exp)))
+                                                 (let ((fexports (append (map (lambda (x) (cons x '())) imps) fexports))
+                                                       (sym (generate-id-in-module module-id (cdr exp) (id-sym-name id))))
+                                                   (case t
+                                                     ((define-form)
+                                                      (set-indirect-label! label sym)
+                                                      (partition fexports bs (cons sym svs)
+                                                                 (cons (module-binding-val b) ses)
+                                                                 ctdefs))
+                                                     ((define-syntax-form)
+                                                      (partition fexports bs svs ses
+                                                                 (cons (list t label sym (module-binding-val b)) ctdefs)))
+                                                     ((module-form)
+                                                      (let ((exports (module-binding-val b))
+                                                            (id-path (cons (id-sym-name id) (cdr exp))))
+                                                        (partition (append (map (lambda (x) (cons x id-path)) (flatten-exports exports))
+                                                                           fexports)
+                                                                   bs svs ses
+                                                                   (cons (list t label sym exports) ctdefs))))
+                                                     (else (error 'sc-expand-internal "unexpected module binding type"))))))
+                                             (lambda () (partition fexports bs svs ses ctdefs)))))))))))
 
 (define id-set-diff
   (lambda (exports defs)
@@ -1839,11 +1856,11 @@
                    (if (not (bound-id-member? id exports))
                        b
                        (make-module-binding
-                         (module-binding-type b)
-                         id
-                         (module-binding-label b)
-                         (append (get-implicit-exports id) (module-binding-imps b))
-                         (module-binding-val b)))))
+                        (module-binding-type b)
+                        id
+                        (module-binding-label b)
+                        (append (get-implicit-exports id) (module-binding-imps b))
+                        (module-binding-val b)))))
                bindings))))
     (let parse ((body body) (ids '()) (bindings '()) (inits '()))
       (if (null? body)
@@ -1853,77 +1870,77 @@
               (case type
                 ((define-form)
                  (parse-define e w s
-                   (lambda (id rhs w)
-                     (let* ((id (wrap id w))
-                            (label (gen-indirect-label))
-                            (imps (get-implicit-exports id)))
-                       (extend-ribcage! ribcage id label)
-                       (parse
-                         (cdr body)
-                         (cons id ids)
-                         (cons (make-module-binding type id label
-                                 imps (cons er (wrap rhs w)))
-                               bindings)
-                         inits)))))
+                               (lambda (id rhs w)
+                                 (let* ((id (wrap id w))
+                                        (label (gen-indirect-label))
+                                        (imps (get-implicit-exports id)))
+                                   (extend-ribcage! ribcage id label)
+                                   (parse
+                                    (cdr body)
+                                    (cons id ids)
+                                    (cons (make-module-binding type id label
+                                                               imps (cons er (wrap rhs w)))
+                                          bindings)
+                                    inits)))))
                 ((define-syntax-form)
                  (parse-define-syntax e w s
-                   (lambda (id rhs w)
-                     (let* ((id (wrap id w))
-                            (label (gen-indirect-label))
-                            (imps (get-implicit-exports id))
-                            (exp (chi rhs (transformer-env er) w)))
-                       ; arrange to evaluate the transformer lazily
-                       (extend-store! r (get-indirect-label label) (cons 'deferred exp))
-                       (extend-ribcage! ribcage id label)
-                       (parse
-                         (cdr body)
-                         (cons id ids)
-                         (cons (make-module-binding type id label imps exp)
-                               bindings)
-                         inits)))))
+                                      (lambda (id rhs w)
+                                        (let* ((id (wrap id w))
+                                               (label (gen-indirect-label))
+                                               (imps (get-implicit-exports id))
+                                               (exp (chi rhs (transformer-env er) w)))
+                                        ; arrange to evaluate the transformer lazily
+                                          (extend-store! r (get-indirect-label label) (cons 'deferred exp))
+                                          (extend-ribcage! ribcage id label)
+                                          (parse
+                                           (cdr body)
+                                           (cons id ids)
+                                           (cons (make-module-binding type id label imps exp)
+                                                 bindings)
+                                           inits)))))
                 ((module-form)
                  (let* ((*ribcage (make-empty-ribcage))
                         (*w (make-wrap (wrap-marks w) (cons *ribcage (wrap-subst w)))))
                    (parse-module e w s *w
-                     (lambda (id *exports forms)
-                       (chi-external *ribcage (source-wrap e w s)
-                                   (map (lambda (d) (cons er d)) forms)
-                                   r *exports (flatten-exports *exports) ctem
-                         (lambda (*bindings *inits)
-                           (let* ((iface (make-trimmed-interface *exports))
-                                  (bindings (append (if id *bindings (update-imp-exports *bindings *exports)) bindings))
-                                  (inits (append inits *inits)))
-                             (if id
-                                 (let ((label (gen-indirect-label))
-                                       (imps (get-implicit-exports id)))
-                                   (extend-store! r (get-indirect-label label)
-                                     (make-binding 'module iface))
-                                   (extend-ribcage! ribcage id label)
-                                   (parse
-                                     (cdr body)
-                                     (cons id ids)
-                                     (cons (make-module-binding type id label imps *exports) bindings)
-                                     inits))
-                                 (let ()
-                                   (do-import! iface ribcage)
-                                   (parse (cdr body) (cons iface ids) bindings inits))))))))))
-               ((import-form)
-                (parse-import e w s
-                  (lambda (mid)
-                    (let ((mlabel (id-var-name mid empty-wrap)))
-                      (let ((binding (lookup mlabel r)))
-                        (case (binding-type binding)
-                          ((module)
-                           (let ((iface (binding-value binding)))
-                             (when value (extend-ribcage-barrier! ribcage value))
-                             (do-import! iface ribcage)
-                             (parse
-                               (cdr body)
-                               (cons iface ids)
-                               (update-imp-exports bindings (vector->list (interface-exports iface)))
-                               inits)))
-                          ((displaced-lexical) (displaced-lexical-error mid))
-                          (else (syntax-error mid "import from unknown module"))))))))
+                                 (lambda (id *exports forms)
+                                   (chi-external *ribcage (source-wrap e w s)
+                                                 (map (lambda (d) (cons er d)) forms)
+                                                 r *exports (flatten-exports *exports) ctem
+                                                 (lambda (*bindings *inits)
+                                                   (let* ((iface (make-trimmed-interface *exports))
+                                                          (bindings (append (if id *bindings (update-imp-exports *bindings *exports)) bindings))
+                                                          (inits (append inits *inits)))
+                                                     (if id
+                                                         (let ((label (gen-indirect-label))
+                                                               (imps (get-implicit-exports id)))
+                                                           (extend-store! r (get-indirect-label label)
+                                                                          (make-binding 'module iface))
+                                                           (extend-ribcage! ribcage id label)
+                                                           (parse
+                                                            (cdr body)
+                                                            (cons id ids)
+                                                            (cons (make-module-binding type id label imps *exports) bindings)
+                                                            inits))
+                                                         (let ()
+                                                           (do-import! iface ribcage)
+                                                           (parse (cdr body) (cons iface ids) bindings inits))))))))))
+                ((import-form)
+                 (parse-import e w s
+                               (lambda (mid)
+                                 (let ((mlabel (id-var-name mid empty-wrap)))
+                                   (let ((binding (lookup mlabel r)))
+                                     (case (binding-type binding)
+                                       ((module)
+                                        (let ((iface (binding-value binding)))
+                                          (when value (extend-ribcage-barrier! ribcage value))
+                                          (do-import! iface ribcage)
+                                          (parse
+                                           (cdr body)
+                                           (cons iface ids)
+                                           (update-imp-exports bindings (vector->list (interface-exports iface)))
+                                           inits)))
+                                       ((displaced-lexical) (displaced-lexical-error mid))
+                                       (else (syntax-error mid "import from unknown module"))))))))
                 ((begin-form)
                  (syntax-case e ()
                    ((_ e1 ...)
@@ -1932,11 +1949,11 @@
                                  (cdr body)
                                  (cons (cons er (wrap (car forms) w))
                                        (f (cdr forms)))))
-                      ids bindings inits))))
+                           ids bindings inits))))
                 ((eval-when-form)
                  (syntax-case e ()
                    ((_ (x ...) e1 ...)
-                    ; mode set is implicitly (E)
+                                        ; mode set is implicitly (E)
                     (parse (if (memq 'eval (chi-when-list (syntax (x ...)) w))
                                (let f ((forms (syntax (e1 ...))))
                                  (if (null? forms)
@@ -1944,19 +1961,19 @@
                                      (cons (cons er (wrap (car forms) w))
                                            (f (cdr forms)))))
                                (cdr body))
-                      ids bindings inits))))
+                           ids bindings inits))))
                 ((local-syntax-form)
                  (chi-local-syntax value e er w s
-                   (lambda (forms er w s)
-                     (parse (let f ((forms forms))
-                              (if (null? forms)
-                                  (cdr body)
-                                  (cons (cons er (wrap (car forms) w))
-                                        (f (cdr forms)))))
-                       ids bindings inits))))
-                (else ; found an init expression
-                 (return bindings ids
-                   (append inits (cons (cons er (source-wrap e w s)) (cdr body))))))))))))
+                                   (lambda (forms er w s)
+                                     (parse (let f ((forms forms))
+                                              (if (null? forms)
+                                                  (cdr body)
+                                                  (cons (cons er (wrap (car forms) w))
+                                                        (f (cdr forms)))))
+                                            ids bindings inits))))
+                (else                   ; found an init expression
+                  (return bindings ids
+                          (append inits (cons (cons er (source-wrap e w s)) (cdr body))))))))))))
 
 (define vmap
   (lambda (fn v)
