@@ -11,7 +11,8 @@ public class CallFrame extends Procedure {
 
     public Expression            nxp;
     public Value[]               vlr, lcl, env;
-    public boolean               flk=false, vlk;
+    public boolean               vlk; //indicates that this frame has
+                                      //been captured by a continuation
     public CallFrame             fk, parent;
 
     public CallFrame(Expression n, Value[] v,
@@ -28,13 +29,9 @@ public class CallFrame extends Procedure {
 
     public final CallFrame capture(Interpreter r) {
         // Set the captured flags all the way to the root.
-        CallFrame w=this;
-        boolean lastWasLocked=false;
-        do {
-            lastWasLocked=w.flk;
-            w.vlk=w.flk=true;
-            w=w.parent;
-        } while (w!=null && !lastWasLocked); 
+        for (CallFrame w=this; w!=null && !w.vlk; w=w.parent) {
+            w.vlk=true;
+        }
 
         return this;
     }
@@ -85,7 +82,6 @@ public class CallFrame extends Procedure {
     }
 
     public void serialize(Serializer s) throws IOException {
-        s.writeBoolean(flk);
         s.writeBoolean(vlk);
         if (vlr==null)
             s.writeBoolean(false);
@@ -103,7 +99,6 @@ public class CallFrame extends Procedure {
     public CallFrame() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        flk=s.readBoolean();
         vlk=s.readBoolean();
         vlr=null;
         if (s.readBoolean()) {

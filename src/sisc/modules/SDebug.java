@@ -16,7 +16,6 @@ public class SDebug extends IndexedProcedure {
 
     protected static final int EXPRESSV = 0,
         COMPILE = 1,
-        CONT_FLK = 14,
         CONT_VLR = 2,
         CONT_NXP = 3,
         CONT_ENV = 4,
@@ -46,7 +45,6 @@ public class SDebug extends IndexedProcedure {
             define("continuation-env", CONT_ENV);
             define("continuation-fk", CONT_FK);
             define("continuation-stk", CONT_PARENT);
-            define("continuation-captured?", CONT_FLK);
             define("_fill-rib?", FILLRIBQ);
             define("_fill-rib-exp", FILLRIBEXP);
             define("_free-reference-exp?", FREEXPQ);
@@ -139,8 +137,6 @@ public class SDebug extends IndexedProcedure {
                 CallFrame cn=getCont(f.vlr[0]);
                 if (cn.nxp==null) return EMPTYLIST;
                 return new SISCExpression(cn.nxp);
-            case CONT_FLK:
-                return truth(getCont(f.vlr[0]).flk);
             case CONT_VLR:
                 return new SchemeVector(getCont(f.vlr[0]).vlr);
             case CONT_ENV:
