@@ -39,7 +39,7 @@
 
 (define (assert-proc proc thunk)
   (if (procedure? proc)
-      (thunk)
+      (synchronized proc thunk)
       (error "expected procedure")))
 (define (procedure-property proc key . rest)
   (assert-proc proc
