@@ -1,0 +1,454 @@
+/* 
+   Regexp.java
+
+   Sisc module for Jakarta ORO binding.
+
+   Author: Ovidiu Predescu <ovidiu@cup.hp.com>
+   Date: December 14, 2001
+
+   Copyright (C) 2001 Ovidiu Predescu
+   All rights reserved.
+
+   Permission to use, copy, modify, and distribute this software and its
+   documentation for any purpose and without fee is hereby granted, provided
+   that the above copyright notice appear in all copies and that both that
+   copyright notice and this permission notice appear in supporting
+   documentation.
+
+   We disclaim all warranties with regard to this software, including all
+   implied warranties of merchantability and fitness, in no event shall
+   we be liable for any special, indirect or consequential damages or any
+   damages whatsoever resulting from loss of use, data or profits, whether in
+   an action of contract, negligence or other tortious action, arising out of
+   or in connection with the use or performance of this software.
+*/
+
+package sisc.modules;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import org.apache.oro.text.GlobCompiler;
+import org.apache.oro.text.awk.AwkCompiler;
+import org.apache.oro.text.awk.AwkMatcher;
+import org.apache.oro.text.perl.Perl5Util;
+import org.apache.oro.text.regex.MalformedPatternException;
+import org.apache.oro.text.regex.MatchResult;
+import org.apache.oro.text.regex.Pattern;
+import org.apache.oro.text.regex.PatternMatcher;
+import org.apache.oro.text.regex.PatternMatcherInput;
+import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
+import org.apache.oro.text.regex.StringSubstitution;
+import org.apache.oro.text.regex.Util;
+import sisc.ContinuationException;
+import sisc.Interpreter;
+import sisc.Module;
+import sisc.ModuleAdapter;
+import sisc.Serializer;
+import sisc.data.Pair;
+import sisc.data.Quantity;
+import sisc.data.SchemeString;
+import sisc.data.SchemeVector;
+import sisc.data.Symbol;
+import sisc.data.Value;
+
+/**
+ * <p>Implements an interface to the Jakarta ORO regular expression
+ * engine.
+ *
+ * <p>The Scheme API is composed of the following functions:
+ *
+ * <ul>
+ *  <li><b>regexp/pattern</b>
+ *      <it>string</it> [<it>type</it> <it>options</it>] -> <it>pattern</it><br>
+ *
+ *      <p>Compiles a string representing a regular expression into a
+ *      pattern object. <it>type</it> is a symbol describing the type
+ *      of regular expression; currently supported types are
+ *      <it>glob</it>, <it>perl5</it>, or <it>awk</it>. If no regexp
+ *      type is specified, the default one is <it>perl5</it>.
+ *
+ *      <p>If the <it>options</it> argument is present, it is a list
+ *      composed of any of the following symbols:
+ *
+ *      <ul>
+ *       <li>case-insensitive</it>
+ *       <li>multiline</it>
+ *      </ul>
+ *
+ *  <li><b>regexp/match</b>
+ *      <it>string</it> <it>pattern</it> -> #f | list of <it>matches</it><br>
+ *
+ *      <p>Try to match <it>pattern</it> on the input string. If
+ *      there's no match <tt>#f</tt> is returned, otherwise a list of
+ *      <it>matches</it> is returned. A <it>match</it> is a cons cell
+ *      containing the beginning and end positions of a match group.
+ *
+ * </ul>
+ *
+ * @author <a href="mailto:ovidiu@cup.hp.com">Ovidiu Predescu</a>
+ * @since December 14, 2001
+ *
+ * @see org.apache.oro.text.regex.Pattern
+ * @see org.apache.oro.text.regex.PatternCompiler
+ * @see org.apache.oro.text.regex.PatternMatcher
+ */
+public class Regexp extends ModuleAdapter
+{
+  public String getModuleName()
+  {
+    return "Jakarta ORO regexp";
+  }
+
+  public float getModuleVersion()
+  {
+    return 1.0f;
+  }
+
+  public static final int RPATTERN = 1, RMATCH = 2, RMATCH_POSITIONS = 3,
+    RREPLACE = 4, RREPLACE_ALL = 5, RSPLIT = 6, RSPLIT_DELIM = 7;
+
+  public static final Symbol
+    REGEX_PERL5 = Symbol.get("perl5"),
+    REGEX_GLOB = Symbol.get("glob"),
+    REGEX_AWK = Symbol.get("awk"),
+    CASE_INSENSITIVE = Symbol.get("case-insensitive"),
+    EXTENDED = Symbol.get("extended"),
+    SINGLELINE = Symbol.get("singleline"),
+    MULTILINE = Symbol.get("multiline");
+
+  public static final int optionsFromScheme(Value value, Value type)
+  {
+    if (value instanceof Symbol) {
+      if (value == CASE_INSENSITIVE) {
+        if (type == REGEX_PERL5)
+          return Perl5Compiler.CASE_INSENSITIVE_MASK;
+        else if (type == REGEX_GLOB)
+          return GlobCompiler.CASE_INSENSITIVE_MASK;
+        else if (type == REGEX_AWK)
+          return AwkCompiler.CASE_INSENSITIVE_MASK;
+        else
+          throw new RuntimeException("Unknown compiler " + type);
+      }
+      else if (value == EXTENDED) {
+        if (type == REGEX_PERL5)
+          return Perl5Compiler.EXTENDED_MASK;
+        else
+          throw new RuntimeException("The extended mask is supported only by Perl5 regexps");
+      }
+      else if (value == SINGLELINE) {
+        if (type == REGEX_PERL5)
+          return Perl5Compiler.SINGLELINE_MASK;
+        else
+          throw new RuntimeException("The singleline mask is supported only by Perl5 regexps");
+      }
+      else if (value == MULTILINE) {
+        if (type == REGEX_PERL5)
+          return Perl5Compiler.MULTILINE_MASK;
+        else if (type == REGEX_GLOB)
+          throw new RuntimeException("Glob compiler doesn't support this option: " + value);
+        else if (type == REGEX_AWK)
+          return AwkCompiler.MULTILINE_MASK;
+      }
+      else
+        throw new RuntimeException("Unsupported regexp option " + value);
+    }
+
+    else if (value instanceof Pair) {
+      int options = 0;
+      Pair pv = (Pair)value;
+
+      while (pv != EMPTYLIST) {
+        options |= optionsFromScheme(pv.car, type);
+        pv = (Pair)pv.cdr;
+      }
+
+      return options;
+    }
+
+    else
+      throw new RuntimeException("Invalid format for options " + value);
+
+    // Not reached, but keeps the Java compiler happy
+    return 0;
+  }
+
+  public Regexp()
+  {
+    define("regexp", RPATTERN);
+    define("regexp-match", RMATCH);
+    define("regexp-match-positions", RMATCH_POSITIONS);
+    define("regexp-replace", RREPLACE);
+    define("regexp-replace*", RREPLACE_ALL);
+    define("regexp-split", RSPLIT);
+    define("regexp-split/delimiter", RSPLIT_DELIM);
+  }
+
+  protected static RPattern patternFor(Value v)
+  {
+    RPattern pat;
+
+    if (v instanceof RPattern)
+      pat = (RPattern)v;
+    else
+      pat = new RPattern((String)v.javaValue());
+
+    return pat;
+  }
+
+  public Value eval(int primid, Interpreter r)
+    throws ContinuationException
+  {
+    switch (r.vlr.length) {
+
+      // One argument functions
+    case 1: 
+      if (primid == RPATTERN)
+        return new RPattern((String)r.vlr[0].javaValue(), REGEX_PERL5, 0);
+      else
+        break;
+
+      // Two argument functions
+    case 2:
+      switch (primid) {
+      case RPATTERN:
+        return new RPattern((String)r.vlr[0].javaValue(), r.vlr[1], 0);
+      case RMATCH:
+        return patternFor(r.vlr[0]).match(r.vlr[1]);
+      case RMATCH_POSITIONS:
+        return patternFor(r.vlr[0]).matchPositions(r.vlr[1]);
+      case RSPLIT:
+        return RPattern.splitNoDelimiters(r.vlr[0], r.vlr[1]);
+      case RSPLIT_DELIM:
+        return patternFor(r.vlr[0]).splitWithDelimiters(r.vlr[1]);
+      default:
+        break;
+      }
+
+      // Three argument functions
+    case 3:
+      switch (primid) {
+      case RPATTERN:
+        return new RPattern((String)r.vlr[0].javaValue(),
+                            r.vlr[1],
+                            optionsFromScheme(r.vlr[2], r.vlr[1]));
+      case RREPLACE: 
+        return patternFor(r.vlr[0]).replaceFirst(r.vlr[1], r.vlr[2]);
+      case RREPLACE_ALL: 
+        return patternFor(r.vlr[0]).replaceAll(r.vlr[1], r.vlr[2]);
+      default:
+        break;
+      }
+    }
+
+    throw new RuntimeException("Invalid number of arguments to function "
+                               + r.acc);
+  }
+
+  public static class RPattern extends Value
+  {    
+    public Pattern pattern;
+    Symbol type;
+    int options;
+
+    public RPattern() {}
+
+    public RPattern(String pat)
+    {
+      setup (pat, REGEX_PERL5, 0);
+    }
+
+    public RPattern(String pat, Value type, int options)
+    {
+      setup (pat, type, options);
+    }
+
+    public void setup(String pat, Value type, int options)
+    {
+      try {
+        if (type == REGEX_PERL5)
+          pattern = (new Perl5Compiler()).compile(pat, options);
+        else if (type == REGEX_GLOB)
+          pattern = (new GlobCompiler()).compile(pat, options);
+        else if (type == REGEX_AWK)
+          pattern = (new AwkCompiler()).compile(pat, options);
+        else
+          throw new RuntimeException("unkown regular expression type: "
+                                     + type);
+      }
+      catch (MalformedPatternException ex) {
+        throw new RuntimeException("Malformed pattern: " + pat + "\n" + ex);
+      }
+      this.type = (Symbol)type;
+      this.options = options;
+    }
+
+    protected PatternMatcher getMatcher()
+    {
+      if (type == REGEX_PERL5 || type == REGEX_GLOB)
+        return new Perl5Matcher();
+      else if (type == REGEX_AWK)
+        return new AwkMatcher();
+      else
+        throw new RuntimeException("Unknown regular expression type: " + type);
+    }
+
+    public Value match(Value str)
+    {
+      PatternMatcher matcher = getMatcher();
+
+      // Do the matching
+      PatternMatcherInput jStr
+        = new PatternMatcherInput((String)str.javaValue());
+      Pair result = null;
+      Pair prev = null;
+      boolean found = false;
+      
+      while (matcher.contains(jStr, pattern)) {
+        found = true;
+
+        MatchResult matchResult = matcher.getMatch();
+
+        for (int i = 0, length = matchResult.groups(); i < length; i++) {
+          Pair m = new Pair(new SchemeString(matchResult.group(i)), EMPTYLIST);
+          if (result == null)
+            result = prev = m;
+          else {
+            prev.cdr = m;
+            prev = m;
+          }
+        }
+      }
+
+      if (!found)
+        return FALSE;
+      else
+        return result;
+    }
+
+    public Value matchPositions(Value str)
+    {
+      PatternMatcher matcher = getMatcher();
+
+      // Do the matching
+      PatternMatcherInput jStr
+        = new PatternMatcherInput((String)str.javaValue());
+      Pair result = null;
+      Pair prev = null;
+      boolean found = false;
+
+      while (matcher.contains(jStr, pattern)) {
+        found = true;
+
+        MatchResult matchResult = matcher.getMatch();
+
+        for (int i = 0, length = matchResult.groups(); i < length; i++) {
+          Pair m = new Pair(new Quantity(matchResult.beginOffset(i)),
+                            new Quantity(matchResult.endOffset(i)));
+          Pair elem = new Pair(m, EMPTYLIST);
+          if (result == null)
+            result = prev = elem;
+          else {
+            prev.cdr = elem;
+            prev = elem;
+          }
+        }
+      }
+
+      if (!found)
+        return FALSE;
+      else
+        return result;
+    }
+
+    public Value replaceFirst(Value input, Value substitution)
+    {
+      String result =
+        Util.substitute(getMatcher(), pattern,
+                        new StringSubstitution((String)substitution.javaValue()),
+                        (String)input.javaValue());
+      return new SchemeString(result);
+    }
+
+    public Value replaceAll(Value input, Value substitution)
+    {
+      String result =
+        Util.substitute(getMatcher(), pattern,
+                        new StringSubstitution((String)substitution.javaValue()),
+                        (String)input.javaValue(),
+                        Util.SUBSTITUTE_ALL);
+      return new SchemeString(result);
+    }
+
+    public static Value splitNoDelimiters(Value pat, Value input)
+    {
+      String pattern;
+      
+      if (pat instanceof RPattern)
+        pattern = ((RPattern)pat).pattern.getPattern();
+      else
+        pattern = (String)pat.javaValue();
+
+      ArrayList list = new ArrayList();
+      (new Perl5Util()).split(list, pattern, (String)input.javaValue());
+      SchemeVector result = new SchemeVector(list.size());
+      for (int i = 0, length = list.size(); i < length; i++)
+        result.vals[i] = new SchemeString((String)list.get(i));
+      return result;
+    }
+
+    public Value splitWithDelimiters(Value input)
+    {
+      try {
+        ArrayList list = new ArrayList();
+        Util.split(list, getMatcher(), pattern, (String)input.javaValue());
+        SchemeVector result = new SchemeVector(list.size());
+        for (int i = 0, length = list.size(); i < length; i++)
+          result.vals[i] = new SchemeString((String)list.get(i));
+        return result;
+      }
+      catch (Exception ex) {
+        System.out.println("error: " + ex);
+        ex.printStackTrace();
+        throw new RuntimeException(ex.toString());
+      }
+    }
+
+    public String display()
+    {
+      return "#<regexp " + pattern.getClass()
+        + " for pattern '" + pattern.getPattern() + "'>";
+    }
+
+    public boolean valueEqual(Value ov)
+    {
+      if (ov instanceof RPattern)
+        return pattern.equals(((RPattern)ov).pattern);
+      else
+        return false;
+    }
+
+    public void serialize(Serializer s, DataOutputStream dos)
+      throws IOException
+    {
+      if (SERIALIZATION) {
+        s.serialize(type, dos);
+        dos.writeUTF(pattern.getPattern());
+        dos.writeInt(pattern.getOptions());
+      }
+    }
+
+    public void deserialize(Serializer s, DataInputStream dis)
+      throws IOException
+    {
+      if (SERIALIZATION) {
+        type = (Symbol)s.deserialize(dis);
+        String pat = dis.readUTF();
+        options = dis.readInt();
+        setup(pat, type, options);
+      }
+    }
+  }
+}
