@@ -91,7 +91,9 @@ public class DynamicEnvironment extends Util implements Cloneable {
         res.parser.annotate = parser.annotate;
         res.parser.lexer.strictR5RS = parser.lexer.strictR5RS;
         res.setClassPath(getClassPath());
-        res.parameters = new WeakHashMap(res.parameters);
+        WeakHashMap newParams=new WeakHashMap();
+        newParams.putAll(res.parameters);
+        res.parameters = newParams;
         return res;
     }
 
