@@ -165,7 +165,9 @@ public class IO extends ModuleAdapter {
                 try {
                     b.append(URLEncoder.encode(u.getRef(),
                                                "UTF-8"));
-                } catch (UnsupportedEncodingException ue) {}
+                } catch (UnsupportedEncodingException ue) {
+		    //Cannot happen
+		}
                 
             }
             if (u.getQuery()!=null) {
@@ -173,7 +175,9 @@ public class IO extends ModuleAdapter {
                 try {
                     b.append(URLEncoder.encode(u.getQuery(),
                                                "UTF-8"));
-                } catch (UnsupportedEncodingException ue) {}
+                } catch (UnsupportedEncodingException ue) {
+		    //Cannot happen
+		}
             }
             try {
                 u=new URL(b.toString());
