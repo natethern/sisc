@@ -1,3 +1,8 @@
+2004-10-18  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed preservation of immutability in psyntax. This wasn't
+	  working with annotations turned on. See bug 994759.
+
 2004-10-16  Scott G. Miller   <scott@sgmiller.org>
 
 	* LibraryAE was getting deserialized instead of the child
@@ -85,7 +90,7 @@
 	* Fixed REPL annotations
 
 	* Fixed psyntax's quasiquote macro to preserve 
-	  immutable pairs for inert quasiquotes.
+	  immutable pairs for inert quasiquotes. See bug 994759.
 
 2004-07-08  Scott G. Miller   <scgmille@freenetproject.org>
 
