@@ -428,16 +428,18 @@
              ((point-out here))
              (travel-between-points (point-parent here) target))))
     ;;wind-safe call/cc
+    (define (make-wind-safe cont)
+      (let* ((point (get-dynamic-point))
+             (safe-k
+              (lambda results
+                (travel-between-points (get-dynamic-point) point)
+                (apply cont results))))
+        (set-annotation! safe-k 'unsafe-cont cont)
+        safe-k))
     (define (dynwind-call/cc proc)
       (original-call/cc
        (lambda (cont)
-         (let* ((point (get-dynamic-point))
-                (safe-k
-                 (lambda results
-                   (travel-between-points (get-dynamic-point) point)
-                   (apply cont results))))
-           (set-annotation! safe-k 'unsafe-cont cont)
-           (proc safe-k)))))
+         (proc (make-wind-safe cont)))))
     (define (dynamic-wind/impl in body out)
       (let* ((here (get-dynamic-point))
              (point (make-point (if here (+ (point-depth here) 1) 1)
@@ -446,9 +448,11 @@
         (set-dynamic-point! point)
         (call-with-values
             (lambda () (with/fc (lambda (m e)
-                                  (set-dynamic-point! here)
-                                  (out)
-                                  (throw m e))
+                                  (let ([wind-safe-exception
+                                         (make-wind-safe e)])
+                                    (set-dynamic-point! here)
+                                    (out)
+                                    (throw m wind-safe-exception)))
                                 body))
           (lambda results
             (set-dynamic-point! here)
