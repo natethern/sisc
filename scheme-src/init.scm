@@ -315,7 +315,8 @@
   (define (pv-ref x n)
     (cond [(vector? x) (vector-ref x n)]
           [(box? x) (unbox x)]
-          [else ((if (zero? n) car cadr) x)]))
+          [(pair? (cdr x)) ((if (zero? n) car cadr) x)]
+          [else ((if (zero? n) car cdr) x)]))
   ;; A path is either #f, or an odd-length list in which each even
   ;; element is a pair or vector somewhere in the object, and each odd
   ;; element is the index, in the following element, of the preceeding
