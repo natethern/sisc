@@ -35,7 +35,7 @@ import java.io.*;
  *   (get-host-name-by-ip <inet address>) => <inet address>
  *   (get-local-host) => <inet address>
  *
- *   (set-so-timeout <tcp socket>) => <void>
+ *   (set-so-timeout! <tcp socket> <timeout>) => <void>
  */
 
 public class SNetwork extends ModuleAdapter {
@@ -265,7 +265,7 @@ public class SNetwork extends ModuleAdapter {
         define("join-multicast-group", JOIN_MULTICAST_GROUP);
         define("leave-multicast-group", LEAVE_MULTICAST_GROUP);
         define("set-multicast-ttl!", SET_MULTICAST_TTL);
-        define("set-so-timeout", SET_SO_TIMEOUT);
+        define("set-so-timeout!", SET_SO_TIMEOUT);
     }
 
     public static SchemeSocket sock(Value o) {
