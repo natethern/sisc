@@ -48,27 +48,26 @@ public class LexicalEnvironment extends Value {
     public LexicalEnvironment(Interpreter r, Closure c) 
 	throws ContinuationException {
         parent=c.env;
-	int s=c.fcount;
-	Value[] v=r.vlr;
+        int s=c.fcount;
+        Value[] v=r.vlr;
         if (c.arity) {
-	    int sm1=s-1;
+            int sm1=s-1;
             if (v.length < sm1) 
-		error(r, liMessage(SISCB,"notenoughargstoinf", c.write(), sm1, 
-				   v.length));
-
-	    if (v.length>=s) {
-		vals=v;
-		vals[sm1]=valArrayToList(v, sm1, v.length-sm1);
-	    } else {
-		vals=r.createValues(s);
-		System.arraycopy(v, 0, vals, 0, sm1);
-		vals[sm1]=valArrayToList(v, sm1, v.length-sm1);
-	    }
+                error(r, liMessage(SISCB,"notenoughargstoinf", c.write(), sm1, 
+                                   v.length));
+            
+            if (v.length>=s) {
+                vals=v;
+            } else {
+                vals=r.createValues(s);
+                System.arraycopy(v, 0, vals, 0, sm1);
+            }
+            vals[sm1]=valArrayToList(v, sm1, v.length-sm1);
         } else {
             vals=v;
             if (vals.length!=s) {
-		error(r, liMessage(SISCB,"notenoughargsto", c.write(), s, v.length));
-	    }
+                error(r, liMessage(SISCB,"notenoughargsto", c.write(), s, v.length));
+            }
         }
     }
 
