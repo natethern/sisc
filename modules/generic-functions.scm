@@ -165,23 +165,29 @@
       (begin
         (add-class (java/superclass class))
         (for-each add-class (vector->list (java/interfaces class)))
-        (for-each (lambda (c)
-                    (add-constructor #f
-                                     class
-                                     c
+        (if (memq 'public (java/modifiers class))
+            (begin
+              (for-each (lambda (c)
+                          (if (memq 'public (java/modifiers c))
+                              (add-constructor
+                               #f
+                               class
+                               c
+                               (vector->list
+                                (java/parameter-types c))
+                               #f)))
+                        (vector->list (java/decl-constructors class)))
+              (for-each (lambda (m)
+                          (if (memq 'public (java/modifiers m))
+                              (add-method
+                               #f
+                               (mangle-name (java/name m))
+                               m
+                               (cons (java/declaring-class m)
                                      (vector->list
-                                      (java/parameter-types c))
-                                     #f))
-                  (vector->list (java/decl-constructors class)))
-        (for-each (lambda (m)
-                    (add-method #f
-                                (mangle-name (java/name m))
-                                m
-                                (cons (java/declaring-class m)
-                                      (vector->list
-                                       (java/parameter-types m)))
-                                #f))
-                  (vector->list (java/decl-methods class))))))
+                                      (java/parameter-types m)))
+                               #f)))
+                        (vector->list (java/decl-methods class))))))))
 
 (define (find-method genf args methods)
   (or (find-normal-method genf args methods)
