@@ -381,6 +381,9 @@ r / 2<superscript>s</superscript>
               <methodparam><parameter>hashtable</parameter></methodparam>
               <methodparam><parameter>key</parameter></methodparam>
               <methodparam><parameter>thunk</parameter></methodparam>
+              <methodparam choice="opt">
+                <parameter>unsafe?</parameter>
+              </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
@@ -388,12 +391,17 @@ r / 2<superscript>s</superscript>
                 <parameter>key</parameter> in
                 <parameter>hashtable</parameter>. If
                 <parameter>key</parameter> has no association then
-                <parameter>thunk</parameter> is evaluated and the result
-                is associated with <parameter>key</parameter> in
-                <parameter>hashtable</parameter> and also returned.  The
-                <parameter>nobinding</parameter> argument, which
-                defaults to &num;f, denotes the value indicating an
-                unassociated key.
+                <parameter>thunk</parameter> is evaluated and the
+                result is associated with <parameter>key</parameter>
+                in <parameter>hashtable</parameter> and also returned.
+                The <parameter>unsafe?</parameter>, which defaults to
+                &num;t, indicates whether <parameter>thunk</parameter>
+                may invoke escaping continuations or raise errors.
+                Setting <parameter>unsafe?</parameter> to &num;f
+                results in more efficient execution but may cause
+                deadlocks if <parameter>thunk</parameter> is unsafe.
+                See also <xref
+                  linkend="func-mutex-synchronize-unsafe"/>.
               </para>
             </blockquote>
           </para>
@@ -795,7 +803,7 @@ r / 2<superscript>s</superscript>
               <methodparam><parameter>symbol</parameter></methodparam>
               <methodparam><parameter>thunk</parameter></methodparam>
               <methodparam choice="opt">
-                <parameter>nobinding</parameter>
+                <parameter>unsafe?</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
@@ -805,9 +813,14 @@ r / 2<superscript>s</superscript>
                 <parameter>proc</parameter>. If the property is unset
                 then <parameter>thunk</parameter> is evaluated and the
                 property is set to the result, which is also returned.
-                The <parameter>nobinding</parameter> argument, which
-                defaults to &num;f, denotes the value indicating that
-                the property is unset.
+                The <parameter>unsafe?</parameter>, which defaults to
+                &num;t, indicates whether <parameter>thunk</parameter>
+                may invoke escaping continuations or raise errors.
+                Setting <parameter>unsafe?</parameter> to &num;f
+                results in more efficient execution but may cause
+                deadlocks if <parameter>thunk</parameter> is unsafe.
+                See also <xref
+                  linkend="func-mutex-synchronize-unsafe"/>.
               </para>
             </blockquote>
           </para>
