@@ -149,7 +149,7 @@ public class Quantity extends Value {
                     v.indexOf('f') != -1 ||
                     v.indexOf('d') != -1 ||
                     v.indexOf('l') != -1)) {
-	    return new Quantity(parseDecimal(v, radix));
+	    return new Quantity(parseDecimal(v, radix), true);
         } else 
 	    return parseUinteger(v, radix);
     }
@@ -184,6 +184,13 @@ public class Quantity extends Value {
     public Quantity(long v) {
         i=BigInteger.valueOf(v);
         type=INTEG;
+    }
+
+    public Quantity(BigDecimal d, boolean preserveScale) {
+        type=DECIM;
+        this.d=d;
+	if (!preserveScale)
+	    simplify();
     }
 
     public Quantity(BigDecimal d) {
