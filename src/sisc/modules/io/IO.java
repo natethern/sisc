@@ -14,7 +14,7 @@ public class IO extends IndexedProcedure {
         Symbol.intern("sisc.modules.io.Messages");
 
     protected static final int
-        //NEXT = 27,
+        //NEXT = 29,
 
         ABSPATHQ            = 0,
         CHARREADY           = 3,
@@ -42,7 +42,9 @@ public class IO extends IndexedProcedure {
         READCHAR            = 25,
         READCODE            = 26,
         WRITE               = 1,
-        WRITECHAR           = 7;
+        WRITECHAR           = 7,
+        STRINGINPORTQ       = 27,
+        STRINGOUTPORTQ      = 28;
         
 
     public static class Index extends IndexedLibraryAdapter { 
@@ -76,6 +78,8 @@ public class IO extends IndexedProcedure {
         define("read"               , READ);
         define("read-char"          , READCHAR);
         define("read-code"          , READCODE);
+        define("string-input-port?" , STRINGINPORTQ);
+        define("string-output-port?", STRINGOUTPORTQ);
         define("write"              , WRITE);
         define("write-char"         , WRITECHAR);
         }
@@ -100,7 +104,7 @@ public class IO extends IndexedProcedure {
         }
     }
 
-    private static Value readChar(Interpreter f, SchemeInputPort i) 
+    private static Value readChar(Interpreter f, InputPort i) 
         throws ContinuationException {
         try {
             int c=i.read();
@@ -114,7 +118,7 @@ public class IO extends IndexedProcedure {
         return null; //Should never happen
     }
 
-    private static Value read(Interpreter r, SchemeInputPort i, int flags) 
+    private static Value read(Interpreter r, InputPort i, int flags) 
         throws ContinuationException {
         try {
             return r.dynenv.parser.nextExpression(i, flags);
@@ -128,12 +132,12 @@ public class IO extends IndexedProcedure {
 
     }
     
-    public static Value read(Interpreter r, SchemeInputPort i) 
+    public static Value read(Interpreter r, InputPort i) 
         throws ContinuationException {
         return read(r, i, 0);
     }
 
-    public static Value readCode(Interpreter r, SchemeInputPort i) 
+    public static Value readCode(Interpreter r, InputPort i) 
         throws ContinuationException {
         return read(r, i, sisc.reader.Parser.PRODUCE_ANNOTATIONS |
                     sisc.reader.Parser.PRODUCE_IMMUTABLES);
@@ -260,10 +264,17 @@ public class IO extends IndexedProcedure {
             }
         case 1:
             switch (id) {
-            case INPORTQ: return truth(f.vlr[0] instanceof SchemeInputPort);
-            case OUTPORTQ: return truth(f.vlr[0] instanceof SchemeOutputPort);
+            case INPORTQ: return truth(f.vlr[0] instanceof InputPort);
+            case OUTPORTQ: return truth(f.vlr[0] instanceof OutputPort);
+            case STRINGINPORTQ:
+                return truth((f.vlr[0] instanceof ReaderInputPort) &&
+                             (((ReaderInputPort)f.vlr[0]).getReader() instanceof StringReader));
+
+            case STRINGOUTPORTQ:
+                return truth((f.vlr[0] instanceof WriterOutputPort) &&
+                             (((WriterOutputPort)f.vlr[0]).getWriter() instanceof StringWriter));
             case CHARREADY:
-                SchemeInputPort inport=inport(f.vlr[0]);
+                InputPort inport=inport(f.vlr[0]);
                 try {
                     return truth(inport.ready());
                 } catch (IOException e) {
@@ -291,7 +302,7 @@ public class IO extends IndexedProcedure {
                 inport=inport(f.vlr[0]);
                 return readCode(f, inport);
             case GETOUTPUTSTRING:
-                SchemeOutputPort port=outport(f.vlr[0]);
+                OutputPort port=outport(f.vlr[0]);
                 if (!(port instanceof WriterOutputPort) ||
                     !(((WriterOutputPort)port).getWriter() 
                       instanceof StringWriter))
@@ -322,7 +333,7 @@ public class IO extends IndexedProcedure {
                 url = url(f.vlr[0]);
                 return openCharOutFile(f, url, f.dynenv.characterSet, false);
             case FLUSHOUTPUTPORT:
-                SchemeOutputPort op=outport(f.vlr[0]);
+                OutputPort op=outport(f.vlr[0]);
                 try {
                     op.flush();
                 } catch (IOException e) {
@@ -331,7 +342,7 @@ public class IO extends IndexedProcedure {
                 }
                 return VOID;
             case CLOSEINPUTPORT:
-                SchemeInputPort inp=inport(f.vlr[0]);
+                InputPort inp=inport(f.vlr[0]);
                 try {
                     if (inp!=f.dynenv.in) inp.close();
                 } catch (IOException e) {
@@ -363,7 +374,7 @@ public class IO extends IndexedProcedure {
                 } else
                     return FALSE;
             case LOAD:
-                SchemeInputPort p=null;
+                InputPort p=null;
                 url = url(f.vlr[0]);
                 try {
                     URLConnection conn = url.openConnection();
@@ -445,7 +456,7 @@ public class IO extends IndexedProcedure {
         case 2:
             switch (id) {
             case WRITECHAR:
-                SchemeOutputPort port=outport(f.vlr[1]);
+                OutputPort port=outport(f.vlr[1]);
                 try {
                     port.write(character(f.vlr[0]));
                 } catch (IOException e) {

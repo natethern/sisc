@@ -14,6 +14,10 @@ public class ReaderInputPort extends PushbackInputPort {
         this.r=in;
     }
 
+    public Reader getReader() {
+        return r;
+    }
+
     public int readHelper() throws IOException {
         return r.read();
     }

@@ -731,6 +731,42 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </para>
             </blockquote>
           </para>
+          <para>
+            <indexterm><primary>string-input-port?</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>&num;t/&num;f</type>
+              <methodname>string-input-port?</methodname>
+              <methodparam>
+                <parameter>value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns &num;t if <parameter>value</parameter> is a
+                string input port, &num;f otherwise.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>string-output-port?</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>&num;t/&num;f</type>
+              <methodname>string-output-port?</methodname>
+              <methodparam>
+                <parameter>value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns &num;t if <parameter>value</parameter> is an
+                string output port, &num;f otherwise.
+              </para>
+            </blockquote>
+          </para>
         </blockquote>
       </para>
       <note>

@@ -2,6 +2,8 @@
 
 	* Merged block IO and binary IO into new binary-io module.
 
+	* Added predicates to distinguish between different port types.
+
 2003-06-04  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Separated character from binary IO. 
