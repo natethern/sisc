@@ -720,6 +720,8 @@
 (define (has-feature? feature)
   (memq feature *features*))
 
+(add-feature 'sisc)
+
 ;;hook that gets invoked when SISC is started
 (define initialize #f)
 (define on-startup #f)
