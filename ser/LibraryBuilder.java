@@ -82,6 +82,7 @@ public class LibraryBuilder extends Serializer {
         //Pass 2
         System.err.println("Pass 2: Write data segment");
         File tempFile=File.createTempFile("heap","tmp");
+        tempFile.deleteOnExit();
         OutputStream fos=new BufferedOutputStream(new FileOutputStream(tempFile));
         Vector classv=new Vector(classes);
         StreamSerializer ss=new StreamSerializer(fos, classv, epv);
