@@ -669,8 +669,11 @@ public class Quantity extends Value {
                     return new Quantity(rv[0]);
                 else return new Quantity(_BD_ZERO, new BigDecimal(rv[0]));
         case DECIM: case RATIO:
-            BigDecimal[] rvd=sqrtrem(decimal());
-            return new Quantity(rvd[0]);
+            BigDecimal dv=decimal();
+            BigDecimal[] rvd=sqrtrem(dv.abs());
+            if (dv.signum()>-1)
+                return new Quantity(rvd[0]);
+            else return new Quantity(_BD_ZERO, rvd[0]);
         case COMPLEX:
             // Take r=sqrt(a^2 + b^2)
             BigDecimal a2=d.multiply(d);

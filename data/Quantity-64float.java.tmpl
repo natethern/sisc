@@ -645,7 +645,7 @@ public class Quantity extends Value {
         switch (type) {
         case DECIM:
             if (d<0)
-                return new Quantity(0.0, Math.sqrt(d));
+                return new Quantity(0.0, Math.sqrt(-d));
             else return new Quantity(Math.sqrt(d));
         case FIXEDINT: case INTEG:
             BigInteger orig=integer();
@@ -655,6 +655,12 @@ public class Quantity extends Value {
                 if (orig.signum()>-1)
                     return new Quantity(rv[0]);
                 else return new Quantity(0.0, rv[0].doubleValue());
+            else {
+                double d=decimal();
+                if (d<0)
+                    return new Quantity(0.0f, Math.sqrt(-d));
+                else return new Quantity(Math.sqrt(d));
+            }
         case RATIO:
             BigDecimal[] rvd=sqrtrem(new BigDecimal(decimal()));
             return new Quantity(rvd[0].doubleValue());
