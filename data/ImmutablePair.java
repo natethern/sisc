@@ -51,6 +51,16 @@ public class ImmutablePair extends Pair {
     public void setCdr(Value v) {
 	throw new RuntimeException("pair is immutable");
     }
+
+    public boolean equals(Object o) {
+	if (!(o instanceof ImmutablePair)) return false;
+	ImmutablePair p=(ImmutablePair)o;
+	return car.equals(p.car) && cdr.equals(p.cdr);
+    }
+
+    public int hashCode() {
+	return car.hashCode() ^ cdr.hashCode();
+    }
 }
 
 

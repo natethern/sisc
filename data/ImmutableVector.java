@@ -53,6 +53,24 @@ public class ImmutableVector extends SchemeVector {
     public void set(int idx, Value v) {
 	throw new RuntimeException("vector is immutable");
     }
+
+    public boolean equals(Object o) {
+	if (!(o instanceof ImmutableVector)) return false;
+	ImmutableVector v=(ImmutableVector)o;
+	if (vals.length != v.vals.length) return false;
+	for (int i=0; i<vals.length; i++)
+	    if (!vals[i].equals(((ImmutableVector)o).vals[i]))
+		return false;
+	return true;
+    }
+
+    public int hashCode() {
+	int reg=0;
+	for (int i=0; i<vals.length; i++) 
+	    reg^=vals[i].hashCode();
+	return reg;
+    }
+		    
 }
 
 

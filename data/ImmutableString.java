@@ -50,6 +50,25 @@ public class ImmutableString extends SchemeString {
     public void set(int k, char c) {
 	throw new RuntimeException("string is immutable");
     }
+
+    public boolean equals(Object o) {
+	if (!(o instanceof ImmutableString)) return false;
+	return valueEqual((Value) o);
+    }
+    
+    public int hashCode() {
+	boolean complete=false;
+	int rv=0, reg=0;
+	for (int i=0; i<stringdata.length; i++) {
+	    if (complete) {
+		rv^=reg;
+		reg=(stringdata[i]<<16);
+	    } else {
+		reg|=stringdata[i];
+	    }
+	}
+	return rv;
+    }
 }
 
 
