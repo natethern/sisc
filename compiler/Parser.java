@@ -210,7 +210,7 @@ public class Parser extends Util implements Tokens {
 
                 Object expr=_nextExpression(is, state, def);
                 if (expr==null && v==null) {
-                    o=new SchemeVector(new Value[0]);
+                    o=new ImmutableVector(new Value[0]);
                     break;
                 } else if (expr instanceof Pair) {
                     if (v==null)
@@ -230,7 +230,7 @@ public class Parser extends Util implements Tokens {
                         v[i]=(Value)(lastObject instanceof Integer ?
                                      state.get(lastObject) : lastObject);
                 }
-                o=new SchemeVector(v);
+                o=new ImmutableVector(v);
                 break;
             }
             break;

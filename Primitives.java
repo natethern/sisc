@@ -658,7 +658,7 @@ public class Primitives extends Module {
             case VECTORSET:
                 int index=num(f,f.vlr[1]).intValue();
                 try {
-                    vec(f,f.vlr[0]).set(index,f.vlr[2]);
+                    vec(f,f.vlr[0]).set(f,index,f.vlr[2]);
                 } catch (ArrayIndexOutOfBoundsException e) {
                     error(f, Symbol.get("vector-set!"), "index "+index+" out of bounds for '"+f.vlr[0].display()+"'");
                 }

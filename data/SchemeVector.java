@@ -33,12 +33,14 @@
 package sisc.data;
 
 import java.util.Vector;
-import sisc.Serializer;
+import sisc.*;
 import java.io.*;
 
 public class SchemeVector extends Value {
     public Value[] vals;
     protected int lastUnique=-1;
+
+    public SchemeVector() {}
 
     public SchemeVector(int count) {
         this(count, Quantity.ZERO);
@@ -95,7 +97,8 @@ public class SchemeVector extends Value {
         return b.toString();
     }
 
-    public void set(int idx, Value v) {
+    public void set(Interpreter r, int idx, Value v)
+	throws ContinuationException {
         lastUnique=-1;
         vals[idx]=v;
     }
@@ -124,8 +127,6 @@ public class SchemeVector extends Value {
             }
         }
     }
-
-    public SchemeVector() {}
 
     public void deserialize(Serializer s, DataInputStream dis)
     throws IOException {
