@@ -1,4 +1,8 @@
-2003-02-13  Matthias Radestock  <matthias@sorted.org>
+2003-02-15  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* New |map| implementation that should be faster and call/cc safe.
+
+2003-02-13  Matthias Radestock  <matthias@sorted.org>a
 
 	* Fixed socket repl regression introduced in SISC 1.7.0.
 
