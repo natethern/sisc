@@ -7,23 +7,13 @@
 ;
 
 ; Time objects
-(define-record-type time-object
-  (make-time ms)
-  time?
-  (ms time-ms))
-
-(define (current-time)
-  (make-time (system-time)))
-
-(define (time->seconds to)
-  (quotient (time-ms to) 1000))
-
-(define (seconds->time seconds)
-  (make-time (* seconds 1000)))
+(define (time->seconds to) (time-second to))
+(define (seconds->time seconds) (make-time time-utc 0 seconds))
 
 (define (time->ms to)
   (cond [(number? to) (inexact->exact (* 1000 to))]
-        [(time? to) (time-ms to)]
+        [(time? to) (+ (* (time-second to) 1000)
+                       (quotient (time-nanosecond to) 1000))]
         [else (error 'time->ms "Unsupported time value ~a." to)]))
 
 ;Threading

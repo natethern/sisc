@@ -1,4 +1,12 @@
-2003-09-08	Scott G. Miller	 <scgmille@freenetproject.org>
+2003-09-16  Matthias Radestock  <matthias@sorted.org>
+
+	* Changed srfi-18 to use srfi-19's time data type, thus avoiding
+	  incompatibilities.
+
+	* Upgraded srfi-19 to latest available reference implementation,
+	  which fixes many bugs.
+
+2003-09-08  Scott G. Miller  <scgmille@freenetproject.org>
 	
 	* Modified the expander and optimizer to track syntactic tokens 
 	  (#%if and friends) the same as the unredefined symbolic forms.
@@ -13,7 +21,7 @@
 
 	* Added SRFI-42.
 
-2003-09-04	Scott G. Miller	 <scgmille@freenetproject.org>
+2003-09-04  Scott G. Miller  <scgmille@freenetproject.org>
 	
 	* Support for return-status from call-with-args, eval, or
 	  the repl using (exit return-code).

@@ -232,26 +232,6 @@
   (include "srfi-16.scm")
   (add-feature 'srfi-16))
 
-(display "srfi-18 ")
-(module srfi-18 
-    (current-thread thread? make-thread
-     thread-name thread-specific thread-specific-set!
-     thread-start! thread-yield! thread-sleep! thread-terminate!
-     thread-join!
-     mutex? make-mutex mutex-name mutex-specific mutex-specific-set!
-     mutex-state mutex-lock! mutex-unlock!
-     condition-variable? make-condition-variable condition-variable-name
-     condition-variable-specific condition-variable-specific-set!
-     condition-variable-signal! condition-variable-broadcast!
-     current-time time? time->seconds seconds->time
-     current-exception-handler with-exception-handler raise
-     join-timeout-exception? abandoned-mutex-exception?
-     terminated-thread-exception? uncaught-exception?
-     uncaught-exception-reason)
-  (import threading-native)
-  (import srfi-9)
-  (include "srfi-18.scm"))
-
 (display "srfi-19 ")
 (module srfi-19
     (time-tai
@@ -293,8 +273,35 @@
   (import srfi-6)
   (import srfi-8)
   (import record)
-  (import optional-args)
-  (include "srfi-19.scm"))
+  (import* optional-args :optional)
+  (include "srfi-19/srfi-19.scm"))
+
+(display "srfi-18 ")
+(module srfi-18 
+    (current-thread thread? make-thread
+     thread-name thread-specific thread-specific-set!
+     thread-start! thread-yield! thread-sleep! thread-terminate!
+     thread-join!
+     mutex? make-mutex mutex-name mutex-specific mutex-specific-set!
+     mutex-state mutex-lock! mutex-unlock!
+     condition-variable? make-condition-variable condition-variable-name
+     condition-variable-specific condition-variable-specific-set!
+     condition-variable-signal! condition-variable-broadcast!
+     current-time time? time->seconds seconds->time
+     current-exception-handler with-exception-handler raise
+     join-timeout-exception? abandoned-mutex-exception?
+     terminated-thread-exception? uncaught-exception?
+     uncaught-exception-reason)
+  (import threading-native)
+  (import srfi-9)
+  (import* srfi-19
+           current-time
+           time-utc
+           time?
+           make-time
+           time-second
+           time-nanosecond)
+  (include "srfi-18.scm"))
 
 (display "srfi-24 ")
 (module srfi-24 ()
