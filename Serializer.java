@@ -210,8 +210,6 @@ public class Serializer implements Conf {
                 try {
                     Class mod=Class.forName(className);
                     m=(Module)mod.newInstance();
-                    Method init=mod.getMethod("initialize", INIT_PROTO);
-                    init.invoke(m, new Object[] {f});
                 } catch (Exception e) {
 		    e.printStackTrace();
                     throw new IOException(e.getMessage());
