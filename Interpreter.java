@@ -119,8 +119,6 @@ public class Interpreter extends Util {
     }
 
     protected void interpret() throws SchemeException {
-	abortEvaluation = false; // (turadg)
-	
         try {
             do {
                 try {
@@ -347,14 +345,6 @@ public class Interpreter extends Util {
         int size = v.length;
         if (size == 0 || size >= VALUESPOOLSIZE) return;
         deadValues[size] = v;
-    }
-
-    public boolean abortEvaluation = false; // (turadg)
-    /** Break the current evaluation (turadg)
-	Causes AppEval.eval() to throw "Aborted evaluation" error
-     */
-    public void abortEvaluation () {
-	abortEvaluation = true;
     }
 }
 

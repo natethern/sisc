@@ -262,7 +262,6 @@ public class SThread extends ModuleAdapter {
         protected DynamicEnv env;
         protected Procedure thunk;
         protected Thread thread;
-        protected Interpreter interp;
         protected int state;
         Value rv;
 
@@ -295,7 +294,7 @@ public class SThread extends ModuleAdapter {
         }
 
         public void run() {
-            interp = Context.enter(ctx, env);
+            Interpreter interp = Context.enter(ctx, env);
             state=RUNNING;
             synchronized(this) {
                 this.notify();
@@ -395,7 +394,7 @@ public class SThread extends ModuleAdapter {
             case THREADINTERRUPT:
                 c=sthread(f.vlr[0]);
                 c.thread.interrupt();
-                c.interp.abortEvaluation();
+                Context.lookupThreadContext(c.thread).interrupt=true;
                 return VOID;
             case THREADNAME:
                 return new SchemeString(sthread(f.vlr[0]).thread.getName());

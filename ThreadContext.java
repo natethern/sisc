@@ -39,7 +39,9 @@ import java.util.*;
 public class ThreadContext extends Util {
 
     protected Stack interpreters = new Stack();
-    
+
+    public boolean interrupt = false;
+
     public ThreadContext() {}
 
     /*********** interpreter stack maintenance ***********/
