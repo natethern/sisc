@@ -196,7 +196,7 @@ public class Parser extends Util implements Tokens {
             is.read();
             return sym;
         case TT_SYMBOL:
-            if (lexer.strictR5RS &&
+            if (lexer.strictR5RS && !isPeculiarIdentifier(lexer.sval) &&
                 lexer.sval.length() > 1 &&
                 Lexer.in(lexer.sval.charAt(0), Lexer.number_prefixes)) 
                 throw new IOException(liMessage(SISCB, "invalididentifier",
