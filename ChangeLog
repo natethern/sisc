@@ -9,6 +9,8 @@
 
 	* More descriptive error message for |exit| outside the REPL.
 
+	* Make the REPL writer parameterizable.
+
 2004-05-20  Scott G. Miller   <scgmille@freenetproject.org>
 	
 	* Moved the analysis pass after the optimizer so
