@@ -6,7 +6,7 @@ General
 * reorganize code into new directory structure
 
 Features
-* implement binary ports
+* implement character ports
 * port scsh's SREs
 * add type and object system that is tightly integrated with S2J
 * optimize S2J method dispatch
@@ -16,4 +16,3 @@ Features
 * mechanism for dynamic loading of scheme modules
 * support for loading pre-expanded and pre-compiled modules
 * rationalize/integrate modules, libraries, slib
-* safe optimizer
