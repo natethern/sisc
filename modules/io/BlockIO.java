@@ -41,7 +41,7 @@ public class BlockIO extends ModuleAdapter {
         case 1:
             switch (primid) {
             case MAKEBUFFER:
-                return new Buffer(num(f.vlr[0]).intValue());
+                return new Buffer(num(f.vlr[0]).indexValue());
             case BUFFERLENGTH:
                 return Quantity.valueOf(buffer(f.vlr[0]).buf.length);
             case BUFFERQ:
@@ -52,10 +52,10 @@ public class BlockIO extends ModuleAdapter {
         case 2:
             switch (primid) {
             case MAKEBUFFER:
-                return new Buffer(num(f.vlr[0]).intValue(),
-                                  (byte)num(f.vlr[1]).intValue());
+                return new Buffer(num(f.vlr[0]).indexValue(),
+                                  (byte)num(f.vlr[1]).indexValue());
             case BUFFERREF:
-                int index=num(f.vlr[1]).intValue();
+                int index=num(f.vlr[1]).indexValue();
                 try {
                     return Quantity.valueOf(buffer(f.vlr[0]).ref(index)&0xff);
                 } catch (ArrayIndexOutOfBoundsException aib) {
@@ -70,10 +70,10 @@ public class BlockIO extends ModuleAdapter {
         case 3:
             switch (primid) {
             case BUFFERSET:
-                int index=num(f.vlr[1]).intValue();
+                int index=num(f.vlr[1]).indexValue();
                 try {
                     buffer(f.vlr[0]).set(index,
-                                         (byte)num(f.vlr[2]).intValue());
+                                         (byte)num(f.vlr[2]).indexValue());
                 } catch (ArrayIndexOutOfBoundsException aib) {
                     throwPrimException(liMessage(SISCB, "indexoob", 
                                                  new Object[] {
@@ -82,7 +82,7 @@ public class BlockIO extends ModuleAdapter {
                 }
                 return VOID;
             case BLOCKREAD:
-                int count=num(f.vlr[2]).intValue();
+                int count=num(f.vlr[2]).indexValue();
                 SchemeInputPort inport=inport(f.vlr[1]);
                 byte[] buf=buffer(f.vlr[0]).buf;
                 try {
@@ -96,7 +96,7 @@ public class BlockIO extends ModuleAdapter {
                 }
                 break;
             case BLOCKWRITE:
-                count=num(f.vlr[2]).intValue();
+                count=num(f.vlr[2]).indexValue();
                 SchemeOutputPort outport=outport(f.vlr[1]);
                 buf=buffer(f.vlr[0]).buf;
                 try {
@@ -116,8 +116,8 @@ public class BlockIO extends ModuleAdapter {
                 byte[] sbuf=buffer(f.vlr[0]).buf;
                 byte[] dbuf=buffer(f.vlr[2]).buf;
 
-                int soff=num(f.vlr[1]).intValue();
-                int doff=num(f.vlr[3]).intValue();
+                int soff=num(f.vlr[1]).indexValue();
+                int doff=num(f.vlr[3]).indexValue();
                 int count=sbuf.length;
 
                 try {
@@ -137,9 +137,9 @@ public class BlockIO extends ModuleAdapter {
                 byte[] sbuf=buffer(f.vlr[0]).buf;
                 byte[] dbuf=buffer(f.vlr[2]).buf;
 
-                int soff=num(f.vlr[1]).intValue();
-                int doff=num(f.vlr[3]).intValue();
-                int count=num(f.vlr[4]).intValue();
+                int soff=num(f.vlr[1]).indexValue();
+                int doff=num(f.vlr[3]).indexValue();
+                int count=num(f.vlr[4]).indexValue();
 
                 try {
                     System.arraycopy(sbuf, soff, dbuf, doff, count);

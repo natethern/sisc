@@ -136,6 +136,7 @@
                          (if (null? nf)
                              rv
                              `((lambda ,nf ,rv) ,@nv)))))
+;			      `(let ,(map list nf nv) ,rv)))))
          state)))))
 
 (define (opt:ref ref state)

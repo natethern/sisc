@@ -288,7 +288,7 @@ public class Reflection extends Util {
                               fixClass(jclass(f.vlr[0])) :
                               jclass(f.vlr[0])).isAssignableFrom(c1Fixed));
             case JAVA_ARRAY_CLASS:
-                return makeJObj(makeArrayClass(jclass(f.vlr[0]), num(f.vlr[1]).intValue()), Class.class);
+                return makeJObj(makeArrayClass(jclass(f.vlr[0]), num(f.vlr[1]).indexValue()), Class.class);
             case JAVA_ARRAY_NEW:
                 Value dims = f.vlr[1];
                 Value[] dimensions;
@@ -301,7 +301,7 @@ public class Reflection extends Util {
                 }
                 int[] intDims = new int[dimensions.length];
                 for (int i=0; i< dimensions.length; i++) {
-                    intDims[i] = num(dimensions[i]).intValue();
+                    intDims[i] = num(dimensions[i]).indexValue();
                 }
                 Class componentType = jclass(f.vlr[0]);
                 return makeJObj(Array.newInstance(componentType, intDims),

@@ -355,7 +355,7 @@ public class SThread extends ModuleAdapter {
 
                 if (c.state>=SchemeThread.RUNNING) {
                     try {
-                        c.thread.join(num(f.vlr[1]).intValue());
+                        c.thread.join(num(f.vlr[1]).indexValue());
                     } catch (InterruptedException ie) {}
                     if (c.state==SchemeThread.RUNNING) 
                         return FALSE;
@@ -366,7 +366,7 @@ public class SThread extends ModuleAdapter {
             case THREADHOLDSLOCKQ:
                 return truth(monitor(f.vlr[0]).owner==sthread(f.vlr[0]).thread);
             case SETTHREADPRIORITY:
-                sthread(f.vlr[0]).thread.setPriority(num(f.vlr[1]).intValue());
+                sthread(f.vlr[0]).thread.setPriority(num(f.vlr[1]).indexValue());
                 return VOID;
             case SETTHREADDAEMON:
                 sthread(f.vlr[0]).thread.setDaemon(truth(f.vlr[1]));

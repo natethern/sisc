@@ -370,7 +370,7 @@ public class Primitives extends ModuleAdapter {
             case ROUND: return num(f.vlr[0]).round();
             case TRUNCATE: return num(f.vlr[0]).truncate();
             case INTEGER2CHAR: return new SchemeCharacter((char)num(f.vlr[0]).
-                                                          intValue());
+                                                          indexValue());
             case VECTORFINDLASTUNIQUE: return Quantity.valueOf(vec(f.vlr[0]).findEnd());
             case EVAL:
                 f.nxp=f.compile(f.vlr[0]);
@@ -403,9 +403,9 @@ public class Primitives extends ModuleAdapter {
             case MAKEPARAM:
                 return new Parameter(f.vlr[0]);
             case MAKESTRING:
-                return new SchemeString(new char[num(f.vlr[0]).intValue()]);
+                return new SchemeString(new char[num(f.vlr[0]).indexValue()]);
             case MAKEVECTOR:
-                return new SchemeVector(num(f.vlr[0]).intValue());
+                return new SchemeVector(num(f.vlr[0]).indexValue());
             case NUMERATOR: return num(f.vlr[0]).numerator();
             case DENOMINATOR: return num(f.vlr[0]).denominator();
             case REALPART: return num(f.vlr[0]).realpart();
@@ -450,10 +450,10 @@ public class Primitives extends ModuleAdapter {
                     throwPrimException(e.getMessage());
                 }
             case MAX_PRECISION:
-                Quantity.max_precision=num(f.vlr[0]).intValue();
+                Quantity.max_precision=num(f.vlr[0]).indexValue();
                 return VOID;
             case MIN_PRECISION:
-                Quantity.min_precision=num(f.vlr[0]).intValue();
+                Quantity.min_precision=num(f.vlr[0]).indexValue();
                 return VOID;
             case SLEEP:
                 try {
@@ -498,7 +498,7 @@ public class Primitives extends ModuleAdapter {
                 }
                 return VOID;
             case STRINGREF:
-                int index=num(f.vlr[1]).intValue();
+                int index=num(f.vlr[1]).indexValue();
                 try {
                     return new SchemeCharacter(str(f.vlr[0]).charAt(index));
                 } catch (ArrayIndexOutOfBoundsException e) {
@@ -508,7 +508,7 @@ public class Primitives extends ModuleAdapter {
                                                      f.vlr[0].synopsis()}));
                 }
             case VECTORREF:
-                index=num(f.vlr[1]).intValue();
+                index=num(f.vlr[1]).indexValue();
                 try {
                     return vec(f.vlr[0]).vals[index];
                 } catch (ArrayIndexOutOfBoundsException e) {
@@ -518,7 +518,7 @@ public class Primitives extends ModuleAdapter {
                                                      f.vlr[0].synopsis()}));
                 }
             case MAKEVECTOR:
-                return new SchemeVector(num(f.vlr[0]).intValue(),
+                return new SchemeVector(num(f.vlr[0]).indexValue(),
                                         f.vlr[1]);
             case STRINGFILL:
                 SchemeString st=str(f.vlr[0]);
@@ -527,7 +527,7 @@ public class Primitives extends ModuleAdapter {
                     st.set(i, c);
                 return VOID;
             case MAKESTRING:
-                char newStr[]=new char[num(f.vlr[0]).intValue()];
+                char newStr[]=new char[num(f.vlr[0]).indexValue()];
                 char fillchar=character(f.vlr[1]);
                 for (int i=0; i<newStr.length; i++) {
                     newStr[i]=fillchar;
@@ -535,7 +535,7 @@ public class Primitives extends ModuleAdapter {
                 return new SchemeString(newStr);
             case STRING2NUMBER:
                 try {
-                    int radix=num(f.vlr[1]).intValue();
+                    int radix=num(f.vlr[1]).indexValue();
                     if (f.dynenv.parser.lexer.strictR5RS &&
                         !(radix==10 || radix == 16 || radix == 2 ||
                           radix==8))
@@ -547,7 +547,7 @@ public class Primitives extends ModuleAdapter {
                     return FALSE;
                 }
             case NUMBER2STRING:
-                int radix=num(f.vlr[1]).intValue();
+                int radix=num(f.vlr[1]).indexValue();
                 if (f.dynenv.parser.lexer.strictR5RS &&
                     !(radix==10 || radix == 16 || radix == 2 ||
                       radix==8))
@@ -560,10 +560,10 @@ public class Primitives extends ModuleAdapter {
                                         num(f.vlr[1]));
             case ASHL: return Quantity.valueOf(num(f.vlr[0]).integer()
                                                .shiftLeft(num(f.vlr[1])
-                                                          .intValue()));
+                                                          .indexValue()));
             case ASHR: return Quantity.valueOf(num(f.vlr[0]).integer()
                                                .shiftRight(num(f.vlr[1])
-                                                           .intValue()));
+                                                           .indexValue()));
             case NLBINDING:
                 return module(f.vlr[0]).getBindingValue(f, symbol(f.vlr[1]));
             case EVAL:
@@ -627,7 +627,7 @@ public class Primitives extends ModuleAdapter {
                 env.define(lhs, rhs);
                 return VOID;
             case STRINGSET:
-                int index=num(f.vlr[1]).intValue();
+                int index=num(f.vlr[1]).indexValue();
                 try {
                     str(f.vlr[0]).set(index, character(f.vlr[2]));
                 } catch (ArrayIndexOutOfBoundsException e) {
@@ -641,7 +641,7 @@ public class Primitives extends ModuleAdapter {
                 vec(f.vlr[0]).fill(f.vlr[1]);
                 return VOID;
             case VECTORSET:
-                index=num(f.vlr[1]).intValue();
+                index=num(f.vlr[1]).indexValue();
                 try {
                     vec(f.vlr[0]).set(index,f.vlr[2]);
                 } catch (ArrayIndexOutOfBoundsException e) {

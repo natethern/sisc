@@ -373,18 +373,18 @@ public class SNetwork extends ModuleAdapter {
                     addr=InetAddress.getByName(str);
                     return new SchemeString(addr.getHostAddress());
                 case OPEN_TCP_LISTENER:
-                    int port=num(f.vlr[0]).intValue();
+                    int port=num(f.vlr[0]).indexValue();
                     return new SchemeServerSocket(new ServerSocket(port));
                 case ACCEPT_TCP_SOCKET:
                     Socket sock=serversock(f.vlr[0]).s.accept();
                     return new SchemeTCPSocket(sock);
                 case OPEN_UDP_LISTEN_SOCKET:
-                    port=num(f.vlr[0]).intValue();
+                    port=num(f.vlr[0]).indexValue();
                     SchemeUDPSocket s=new SchemeUDPSocket(new DatagramSocket(port));
 		    s.setMode(LISTEN);
 		    return s;
                 case OPEN_MULTICAST_SOCKET:
-                    port=num(f.vlr[0]).intValue();
+                    port=num(f.vlr[0]).indexValue();
                     s=new SchemeMulticastUDPSocket(new MulticastSocket(port));
 		    s.setMode(LISTEN);
 		    return s;
@@ -395,38 +395,38 @@ public class SNetwork extends ModuleAdapter {
                 switch (primid) {
                 case OPEN_TCP_SOCKET:
                     String host=string( f.vlr[0]);
-                    int port=num(f.vlr[1]).intValue();
+                    int port=num(f.vlr[1]).indexValue();
                     return new SchemeTCPSocket(new Socket(host, port));
 		case OPEN_UDP_SOCKET:
 		    host=string(f.vlr[0]);
-		    port=num(f.vlr[1]).intValue();
+		    port=num(f.vlr[1]).indexValue();
 		    SchemeUDPSocket s=new SchemeUDPSocket(new DatagramSocket(), port, host);
 		    s.setMode(SEND);
 		    return s;
                 case OPEN_UDP_LISTEN_SOCKET:
-                    port=num(f.vlr[0]).intValue();
-                    int ps=num(f.vlr[1]).intValue();
+                    port=num(f.vlr[0]).indexValue();
+                    int ps=num(f.vlr[1]).indexValue();
                     s=new SchemeUDPSocket(new DatagramSocket(port), ps);
 		    s.setMode(LISTEN);
 		    return s;
 		case OPEN_MULTICAST_SOCKET:
 		    if (f.vlr[0] instanceof SchemeString) {
 			host=string(f.vlr[0]);
-			int dport=num(f.vlr[1]).intValue();
+			int dport=num(f.vlr[1]).indexValue();
 			s=new SchemeMulticastUDPSocket(new MulticastSocket(dport), dport, host);
 			s.setMode(SEND | LISTEN);
 			return s;
 		    } else if (f.vlr[1] instanceof SchemeString) {
 			String iface=string(f.vlr[1]);
-			port=num(f.vlr[0]).intValue();
+			port=num(f.vlr[0]).indexValue();
 			MulticastSocket ms=new MulticastSocket(port);
 			ms.setInterface(InetAddress.getByName(iface));
 			s=new SchemeMulticastUDPSocket(ms);
 			s.setMode(LISTEN);
 			return s;
 		    } else {
-			port=num(f.vlr[0]).intValue();
-			ps=num(f.vlr[1]).intValue();
+			port=num(f.vlr[0]).indexValue();
+			ps=num(f.vlr[1]).indexValue();
 			s=new SchemeMulticastUDPSocket(new MulticastSocket(port), ps);
 			s.setMode(LISTEN);
 			return s;
@@ -436,7 +436,7 @@ public class SNetwork extends ModuleAdapter {
                     return ssock.getOutputPort(f, truth(f.vlr[1]));
                 case SET_MULTICAST_TTL:
                     SchemeMulticastUDPSocket ms=mcastsock(f.vlr[0]);
-                    int ttl=num(f.vlr[1]).intValue();
+                    int ttl=num(f.vlr[1]).indexValue();
                     ms.setTTL(ttl);
                     return VOID;
                 case JOIN_MULTICAST_GROUP:
@@ -451,7 +451,7 @@ public class SNetwork extends ModuleAdapter {
 		    return VOID;
                 case SET_SO_TIMEOUT:
                     SchemeTCPSocket tcps=(SchemeTCPSocket)sock(f.vlr[0]);
-                    tcps.setSoTimeout(num(f.vlr[1]).intValue());
+                    tcps.setSoTimeout(num(f.vlr[1]).indexValue());
                     return VOID;
                 default:
 		    throw new RuntimeException(liMessage(SISCB,"incorrectargcount"));
@@ -459,18 +459,18 @@ public class SNetwork extends ModuleAdapter {
 	    case 3:
 		switch(primid) {
 		case OPEN_UDP_LISTEN_SOCKET:
-		    int dport=num(f.vlr[0]).intValue();
+		    int dport=num(f.vlr[0]).indexValue();
 		    String host=string(f.vlr[0]);
-		    int ps=num(f.vlr[2]).intValue();
+		    int ps=num(f.vlr[2]).indexValue();
 		    DatagramSocket ds=new DatagramSocket(dport, InetAddress.getByName(host));
 		    SchemeUDPSocket s=new SchemeUDPSocket(ds, ps);
 		    s.setMode(SEND | LISTEN);
 		    return s;
                 case OPEN_MULTICAST_SOCKET:
                     host=string(f.vlr[0]);
-                    dport=num(f.vlr[1]).intValue();
+                    dport=num(f.vlr[1]).indexValue();
 		    
-int dgramsize=num(f.vlr[2]).intValue();
+int dgramsize=num(f.vlr[2]).indexValue();
                     s=new SchemeMulticastUDPSocket(new MulticastSocket(dport), host, dgramsize);
 		    s.setMode(SEND | LISTEN);
 		    return s;
@@ -482,8 +482,8 @@ int dgramsize=num(f.vlr[2]).intValue();
                 case OPEN_MULTICAST_SOCKET:
                     String host=string(f.vlr[0]);
 		    String iface=string(f.vlr[2]);
-                    int dport=num(f.vlr[1]).intValue();
-		    int dgramsize=num(f.vlr[3]).intValue();
+                    int dport=num(f.vlr[1]).indexValue();
+		    int dgramsize=num(f.vlr[3]).indexValue();
 		    MulticastSocket ms=new MulticastSocket(dport);
 		    ms.setInterface(InetAddress.getByName(iface));
                     SchemeUDPSocket s=new SchemeMulticastUDPSocket(ms, host, dgramsize);

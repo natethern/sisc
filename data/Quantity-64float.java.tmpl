@@ -1128,6 +1128,14 @@ public class Quantity extends Value implements Singleton {
         return 0;
     }
 
+    // Necessary to enforce that indices be integers.
+    public int indexValue() {
+        if (type == FIXEDINT)
+            return val;
+        else 
+            throw new RuntimeException(liMessage(SISCB, "nonintegerindex"));
+    }
+
     public int intValue() {
         switch (type) {
         case FIXEDINT:
@@ -1231,9 +1239,10 @@ public class Quantity extends Value implements Singleton {
                         max_precision);
     }
 
-    protected static final Quantity intBound(long v) {
-        return (Integer.MIN_VALUE <= v && v <= Integer.MAX_VALUE)
-            ? new Quantity((int) v)
+    protected final Quantity intBound(long v) {
+        int x=(int)v;
+        return (x==v)
+            ? new Quantity(x)
             : new Quantity(v);
     }
 

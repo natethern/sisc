@@ -232,8 +232,8 @@ public class SNative extends ModuleAdapter {
                 switch (primid) {
                 case SUBSTRING:
                     SchemeString str=str(f.vlr[0]);
-                    int lidx=num(f.vlr[1]).intValue();
-                    int uidx=num(f.vlr[2]).intValue();
+                    int lidx=num(f.vlr[1]).indexValue();
+                    int uidx=num(f.vlr[2]).indexValue();
                     if (str.stringRepAvailable())
                         return new SchemeString(str.asString().substring(lidx, uidx));
                     else {

@@ -201,7 +201,6 @@ public class REPL {
                                    (String[])((Vector)args.get("files")).toArray(new String[0]),
                                    heap))
             return;
-        Context.exit();
 
         boolean noRepl=args.get("no-repl")!=null;
         boolean call=args.get("call-with-args")!=null;
@@ -223,13 +222,14 @@ public class REPL {
             Value v=r.eval(fun, sargs);
             if (noRepl) {
                 if (v instanceof Quantity)
-                    System.exit(((Quantity)v).intValue());
+                    System.exit(((Quantity)v).indexValue());
                 else if (v instanceof SchemeVoid)
                     System.exit(0);
                 else System.out.println(v);
             }
         }
-            
+
+        Context.exit();
         if (noRepl) return;
 
         if (args.get("server")!=null) {

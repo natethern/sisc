@@ -295,17 +295,17 @@ public class JavaObject extends Procedure {
             if (args[0] instanceof Pair) {
                 for (Pair p = pair(args[0]); p != EMPTYLIST; p = pair(p.cdr)) {
                     ar = obj;
-                    obj = Array.get(obj, num(p.car).intValue());
+                    obj = Array.get(obj, num(p.car).indexValue());
                 }
             } else if (args[0] instanceof SchemeVector) {
                 Value[] vals = ((SchemeVector)args[0]).vals;
                 for (int i=0; i < vals.length; i++) {
                     ar = obj;
-                    obj = Array.get(obj,num(vals[i]).intValue());
+                    obj = Array.get(obj,num(vals[i]).indexValue());
                 }
             } else {
                 ar = obj;
-                obj = Array.get(obj,num(args[0]).intValue());
+                obj = Array.get(obj,num(args[0]).indexValue());
             }
             return Util.makeJObj(obj, ar.getClass().getComponentType());
         case 2: //set element
@@ -314,19 +314,19 @@ public class JavaObject extends Procedure {
                 Pair p = pair(args[0]);
                 if (p == EMPTYLIST) return VOID;
                 for (; p.cdr != EMPTYLIST; p = pair(p.cdr)) {
-                    obj = Array.get(obj, num(p.car).intValue());
+                    obj = Array.get(obj, num(p.car).indexValue());
                 }
                 idx = p.car;
             } else if (args[0] instanceof SchemeVector) {
                 Value[] vals = ((SchemeVector)args[0]).vals;
                 for (int i=0; i < vals.length-1; i++) {
-                    obj = Array.get(obj,num(vals[i]).intValue());
+                    obj = Array.get(obj,num(vals[i]).indexValue());
                 }
                 idx = vals[vals.length-1];
             } else {
                 idx = args[0];
             }
-            Array.set(obj, num(idx).intValue(), Util.jobj(args[1]));
+            Array.set(obj, num(idx).indexValue(), Util.jobj(args[1]));
             return VOID;
         default:
             throw new RuntimeException(liMessage(Util.S2JB, "onetwoargs", liMessage(Util.S2JB, "jarray"), obj.toString()));
