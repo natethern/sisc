@@ -189,9 +189,7 @@ r / 2<superscript>s</superscript>
           <void/>
           <methodname>define-struct</methodname>
           <methodparam><parameter>name</parameter></methodparam>
-          <methodparam rep="repeat">
-            <parameter>field</parameter>
-          </methodparam>
+          <methodparam><parameter>(field ...)</parameter></methodparam>
         </methodsynopsis>
         <blockquote>
           <para>
