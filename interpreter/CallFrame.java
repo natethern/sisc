@@ -36,13 +36,11 @@ public class CallFrame extends Procedure {
             vlk=true;
 
             if (vlr!=null) {
-                Value[] nvlr=r.createValues(vlr.length);
-                System.arraycopy(vlr, 0, nvlr, 0, vlr.length);
+                int l=vlr.length;
+                Value[] nvlr=r.createValues(l);
+                System.arraycopy(vlr, 0, nvlr, 0, l);
                 vlr=nvlr;
             }
-
-            //if (env!=null)
-            //    env.lock();
 
             if (parent!=null)
                 parent.capture(r);

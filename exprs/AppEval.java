@@ -17,12 +17,13 @@ public class AppEval extends Expression {
            r.tctx.interrupt = false;
            error(r, liMessage(SISCB, "evaluationinterrupted"));
         }
-
-        try {
+        
+        r.acc.apply(r);
+        /*        try {
             ((Procedure)r.acc).apply(r);
         } catch (ClassCastException c) {
             error(r, liMessage(SISCB,"nonprocapp", r.acc.synopsis()));
-        }
+            }*/
     }
 
     public Value express() {

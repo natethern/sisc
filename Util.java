@@ -162,6 +162,14 @@ public abstract class Util extends Defaults implements Version {
         return v;
     }
 
+    public static final void arraycopy(Object[] a1, Object[] a2, int len) {
+        if (len<8) 
+            for (int k=len-1; k>=0; k--) 
+                a1[k]=a2[k];
+        else
+            System.arraycopy(a1, 0, a2, 0, len);
+    }
+
     public static Expression[] pairToExpressions(Pair p) {
         Vector v=pairToExpVect(p);
         Expression[] vs=new Expression[v.size()];
@@ -387,7 +395,7 @@ public abstract class Util extends Defaults implements Version {
         return new Pair(o1, list(o2, o3));
     }
 
-    public static Pair valArrayToList(Value[] r, int offset, int len) {
+    public static final Pair valArrayToList(Value[] r, int offset, int len) {
         Pair p=EMPTYLIST;
         for (int i=(offset+len)-1; i>=offset; i--) {
             p=new Pair(r[i], p);

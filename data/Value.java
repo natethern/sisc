@@ -15,8 +15,11 @@ public abstract class Value extends Expression implements Immediate {
 
     public abstract void display(ValueWriter w) throws IOException;
 
-    public String synopsis() {
-	return synopsis(DEFAULT_SYNOPSIS_LENGTH);
+    public void apply(Interpreter r) throws ContinuationException {
+        error(r, liMessage(SISCB,"nonprocapp", synopsis()));
+    }
+
+    public String synopsis() {	return synopsis(DEFAULT_SYNOPSIS_LENGTH);
     }
 
     /**

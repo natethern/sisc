@@ -303,7 +303,7 @@ public class Primitives extends ModuleAdapter {
                 f.returnVLR();
                 return VOID;
             case CALLCC:
-                Procedure kproc=(Procedure)f.vlr[0];
+                Value kproc=f.vlr[0];
                 f.replaceVLR(1);
                 f.vlr[0]=f.stk.capture(f);
                 f.nxp = APPEVAL;
