@@ -90,12 +90,12 @@
       <para>
         There are several reasons for this.  First, it makes
         refactoring easier, as one can move relevant code from module
-        to module merely by rewriting the module defintions, leaving
+        to module merely by rewriting the module definitions, leaving
         the implementation code unchanged.  Second, it makes debugging
         easier, as one can load the implementation code directly into
         the Scheme system to have access to all bindings, or load the
         module definition to view the finished, encapsulated
-        exports. Finally, it stylistically seperates interface (the
+        exports. Finally, it stylistically separates interface (the
         modules) from implementation (the included Scheme source).
       </para>
     </sect2>
@@ -213,29 +213,25 @@
       shared by many, independently developed applications.
     </para>
     <para>
-      Library modules are special modules. They are defined at the top
-      level and have a globally unique name (i.e. just like a Java 
-      package name).
-    </para>
-    <para>
-     Library modules can be <emphasis>compiled</emphasis> into a
-     compiled library using the mechanism from <xref
+      Libraries are simply bundles of Scheme code, usually precompiled, which
+      are packaged so that they may be resolved relative to a library path.
+      Libraries are typically compiled using the meachanism from <xref
      linkend="CreatingLibraries"/>.
-     Loading the resulting library makes the library module available 
+     Loading the resulting library makes the library available 
      to the loading code.
     </para>
     <para>
-     Library modules should not depend on any top-level definitions outside
+     Libraries should not depend on any top-level definitions outside
      the standard &SISC; top-level, except the definition of other library
      modules. Otherwise it is not possible to use the libraries portably.
     </para>
     <para>
-     Library modules should not contain any mutable state that is affecting
-     their behaviour. For instance, consider an OO library that assigns a
-     unique number to all classes defined when using it. If two library
-     modules used that OO library module, were compiled independently and
-     then loaded, the ids of classes defined in the first library module
-     would overlap with those defined in the second library module.
+     Libraries should not contain any mutable state that affects
+     their behavior. For instance, consider an OO library that assigns a
+     unique number to all classes defined when using it. If two libraries
+     used that OO library, were compiled independently and
+     then loaded, the ids of classes defined in the first library 
+     would overlap with those defined in the second.
     </para>
     <para>
      Libraries can be packaged with supporting code (e.g. ordinary Java
@@ -258,7 +254,7 @@ com/foo/lib3/Class2.class
     </programlisting>
     <para>
      The <literal>.scm</literal> files contain code to auto-load any
-     libraries a library module depends on and load the
+     libraries a library depends on and load the
      <literal>module.scc</literal>
      (compiled module). For example, lib1.scm could look like this:
     </para>
@@ -269,7 +265,7 @@ com/foo/lib3/Class2.class
 (load "lib1/module.scc")
     </programlisting>
     <para>
-     It is usually a good idea to name the library modules after the
+     It is usually a good idea to name the library after the
      path names in the jar, for example
      <literal>com/foo/lib{1,2,3}</literal> in the above example.
     </para> 
