@@ -94,28 +94,32 @@
 	   (proc (lambda results
 		   (travel-between-points (get-dynamic-point) point)
 		   (apply cont results)))))))
-    (set! call-with-current-continuation dynwind-call/cc)
-    (set! call/cc dynwind-call/cc)
-    ;;finally, the dynamic-wind code
-    (lambda (in body out)
+    (define (dynamic-wind/impl in body out)
       (let* ((here (get-dynamic-point))
-	     (point (make-point (if here (+ (point-depth here) 1) 1)
-				in out here)))
+	     (point (make-point 
+		     (if here (+ (point-depth here) 1) 1)
+		     in out here)))
 	(in)
 	(set-dynamic-point! point)
 	(call-with-values
-	 (lambda ()
-	   (let ((fk (current-failure-continuation)))
-	     (call/fc
-	      body
-	      (lambda (m e c)
-		(set-dynamic-point! here)
-		(out)
-		(fk m e c)))))
-	 (lambda results
-	   (set-dynamic-point! here)
-	   (out)
-	   (apply values results)))))))
+	    (lambda ()
+	      (let ((fk (current-failure-continuation)))
+		(call/fc
+		 body
+		 (lambda (m e c)
+		   (set-dynamic-point! here)
+		   (out)
+		   (fk m e c)))))
+	  (lambda results
+	    (set-dynamic-point! here)
+	    (out)
+	    (apply values results)))))
+    ;;finally, the dynamic-wind code
+    (lambda (in body out)
+	(set! call-with-current-continuation dynwind-call/cc)
+	(set! call/cc dynwind-call/cc)
+	(set! dynamic-wind dynamic-wind/impl)
+	(dynamic-wind in body out))))
 
 ;;;; "ratize.scm" Convert number to rational number (ported from SLIB)
 
@@ -224,8 +228,19 @@
 	 (syntax (let* ((st (system-time))
 			(val e)
 			(et (system-time)))
-		   (list val (list (- et st) 'ms)))))))))
-	 
+		   (list val (list (- et st) 'ms))))))
+      ((_ n e)
+       (let ([st (gensym)]
+	     [x (gensym)]
+	     [et (gensym)])
+	 (syntax (let* ((st (system-time))
+			(val (let loop ([x (- n 1)])
+			       (if (zero? x) 
+				   e
+				   (begin e (loop (- x 1))))))
+			(et (system-time)))
+		   (list val (list (quotient (- et st) n) 'avg 'ms)))))))))
+
 ;; Unless and When 
 (define-syntax when
   (syntax-rules ()
