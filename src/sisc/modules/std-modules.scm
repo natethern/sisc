@@ -123,27 +123,6 @@
      total-order)
   (include "misc.scm"))
 
-(module debugging
-    (show
-     express
-     compile
-     error-continuation-k
-     annotated?
-     trace-depth
-     trace-call
-     trace-lambda
-     trace-let
-     trace
-     untrace
-     stack-trace
-     set-breakpoint!
-     clear-breakpoint!
-     continue
-     stack-trace
-     print-stack-trace)
-  (import debugging-native)
-  (include "debug.scm"))
-
 (module threading
   (thread?
    thread/new
@@ -939,7 +918,35 @@
   (import generic-io)
   (import oo)
   (include "io/networking.scm"))
-  
+
+(module pretty-printing
+  (pretty-print
+   generic-write)
+  (import string-io)
+  (include "../modules/pp.scm"))
+
+(module debugging
+    (show
+     express
+     compile
+     error-continuation-k
+     annotated?
+     trace-depth
+     trace-call
+     trace-lambda
+     trace-let
+     trace
+     untrace
+     stack-trace
+     set-breakpoint!
+     clear-breakpoint!
+     continue
+     stack-trace
+     print-stack-trace)
+  (import debugging-native)
+  (import pretty-printing)
+  (include "debug.scm"))
+
 (module libraries
   (require-library
    provide-library
@@ -1010,9 +1017,11 @@
   (include "optimizer/main.scm")
   (define optimize opt:optimize))
 
-
+;; Standard imports
 (import libraries)
 (import optimizer)
+(import pretty-printing)
+
 (initialize)
 (set! current-optimizer (make-parameter optimize))
 
@@ -1028,14 +1037,6 @@
   (include "srfi/srfi-22/srfi-22.scm")
   (add-feature 'srfi-22))
 (import srfi-22)
-
-(module pretty-printing
-  (pretty-print
-   generic-write)
-  (import string-io)
-  (include "pp.scm"))
-
-(import pretty-printing)
 
 ;;Final initialization
 (let ()

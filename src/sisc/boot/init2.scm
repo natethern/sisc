@@ -494,7 +494,8 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
                                  (write-char #\tab port)          
                                  (anychar-dispatch (+ pos 1) arglist #f))
                                 ((#\Y)       ; Pretty-print
-                                 (pretty-print (car arglist) port) 
+                                 (@pretty-printing::pretty-print
+                                  (car arglist) port) 
                                  (anychar-dispatch (+ pos 1) (cdr arglist) #f))
                                 ((#\F)
                                  (display (format-fixed (car arglist) 0 #f) port)
@@ -785,7 +786,8 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
                          ((current-optimizer)
                           (apply sc-expand e scexpopts))
                          (interaction-environment))])
-            (pretty-print source outf) (newline outf)
+            (@pretty-printing::pretty-print source outf)
+            (newline outf)
             (loop (read inf)))))
     (close-output-port outf)
     (close-input-port inf)))
