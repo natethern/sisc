@@ -227,17 +227,11 @@
 ;;; define an error procedure for the library
 (define slib:error
   (lambda args
-    (let ((port (current-error-port))
-	  (strport (open-output-string)))
-      (for-each (lambda (x) (display x strport)) args)
-      (error (get-output-string strport)))))
-;(define slib:error
-;  (lambda args
-;    (let ((cep (current-error-port)))
-;      (if (provided? 'trace) (print-call-stack cep))
-;      (display "Error: " cep)
-;      (for-each (lambda (x) (display x cep)) args)
-;      (error #f ""))))
+    (let loop ([l args]
+               [f ""])
+      (if (null? l)
+          (apply error f args)
+          (loop (cdr l) (string-append f " ~a"))))))
 
 ;;; define these as appropriate for your system.
 (define slib:tab #\tab)

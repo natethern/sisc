@@ -131,7 +131,8 @@
                modulename))))
 
 (define (module-metadata-bindings modulename)
-  (let* ((env-name (string->symbol (format "@~a" modulename)))
+  (let* ((env-name (string->symbol
+                    (string-append "@" (symbol->string modulename))))
          (env (with/fc
               (lambda (m e) #f)
               (lambda ()

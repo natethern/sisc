@@ -525,11 +525,15 @@
 ;; that module.
 (define (generate-module-id id1 . id2)
   (or (and id1
-	   (string->symbol 
-	    (if (and (not (null? id2))
-		     (car id2))
-		(format "@~a::~a" id1 (car id2))
-		(format "~@~a" id1))))
+           (string->symbol 
+            (if (and (not (null? id2))
+                     (car id2))
+                (string-append "@"
+                               (symbol->string idl)
+                               "::"
+                               (symbol->string 9car id2))
+                (string-append "@"
+                               (symbol->string idl)))))
       (generate-id id1)))
 
 ;; SISC contains native functions map-car and map-cdr.  The following macro

@@ -2580,8 +2580,8 @@
                                 (if (symbol? x_1lt)
                                   (syntax-error
                                     (source-wrap_cv e_1ll w_1ln s_1lo)
-                                    '"encountered raw symbol "
-                                    (format '"~s" x_1lt)
+                                    '"encountered raw symbol '"
+                                    (symbol->string x_llt)
                                     '" in output of macro")
                                   x_1lt)))))))
                (rebuild-macro-output_1lq
@@ -8835,8 +8835,12 @@
               (if id1_un
                 (string->symbol
                   (if (if (null? id2_um) '#f (car id2_um))
-                    (format '"@~a::~a" id1_un (car id2_um))
-                    (format '"@~a" id1_un)))
+                    (string-append "@"
+                                   (symbol->string id1_un)
+                                   "::"
+                                   (symbol->string (car id2_um)))
+                    (string-append "@"
+                                   (symbol->string id1_un))))
                 '#f))))
          (generate-id_48 gen-sym)
          (get-import-binding_47
