@@ -1,3 +1,7 @@
+2004-01-04  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Fixed serialization of Java Objects from serial ports.
+	
 2004-01-02  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed bug 830507, method dispatch problem
