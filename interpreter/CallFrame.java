@@ -62,7 +62,7 @@ public class CallFrame extends Procedure {
             LexicalEnvironment tenv=w.env;
             while (tenv!=null && !tenv.locked) {
                 tenv.locked=true;		
-                tenv=env.parent;
+                tenv=tenv.parent;
             }
             w=w.parent;
         } while (w!=null && !lastWasLocked); 
