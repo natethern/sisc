@@ -153,6 +153,10 @@ public class REPL {
         if (args.get("help")!=null) {
             printUsage();
             System.exit(0);
+        } else if (args.get("version")!=null) {
+            System.out.println("SISC - The Second Interpreter of Scheme Code - "+
+                               Util.VERSION);
+            System.exit(0);
         }
 
         SeekableInputStream heap = findHeap((String)args.get("heap"));
@@ -202,7 +206,7 @@ public class REPL {
             Procedure fun=Util.proc(r.eval(func));
             Vector av=(Vector)args.get("argv");
             SchemeString[] sargs=new SchemeString[(av == null ? 0 : 
-						   av.size())];
+                                                   av.size())];
             for (int i=0; i<sargs.length; i++) 
                 sargs[i]=new SchemeString((String)av.elementAt(i));
             Value v=r.eval(fun, sargs);
@@ -214,7 +218,7 @@ public class REPL {
                 }
             }
         }
-	
+        
         DynamicEnvironment dynenv=r.dynenv;
         Context.exit();
         
@@ -302,9 +306,10 @@ public class REPL {
         {"e","eval"},
         {"c","call-with-args"},
         {"x","no-repl"},
+        {"v","version"}
     };
     static final int optTypes[]=new int[] {
-        SWITCH, OPTION, OPTION, OPTION, OPTION, OPTION, SWITCH};
+        SWITCH, OPTION, OPTION, OPTION, OPTION, OPTION, SWITCH, OPTION};
                                                   
     public static Map parseOpts(String[] args) {
         Map m=new HashMap();
