@@ -488,64 +488,67 @@ public class S2J extends ModuleAdapter {
 
    
     static class SchemeInvocation implements InvocationHandler {
-	protected AppContext ctx;
-	protected Procedure proc;
+        protected AppContext ctx;
+        protected Procedure proc;
 
-	static Method hashCodeMeth;
-	static Method equalsMeth;
-	static Method toStringMeth;
+        static Method hashCodeMeth;
+        static Method equalsMeth;
+        static Method toStringMeth;
 
-	static {
-	    try {
-		hashCodeMeth = Object.class.getMethod("hashCode", new Class[]{});
-		equalsMeth = Object.class.getMethod("equals", new Class[]{java.lang.Object.class});
-		toStringMeth = Object.class.getMethod("toString", new Class[]{});
-	    } catch (NoSuchMethodException e) {
-		throw new RuntimeException("could not find method");
-	    }
-	}
+        static {
+            try {
+                hashCodeMeth = Object.class.getMethod("hashCode", new Class[]{});
+                equalsMeth = Object.class.getMethod("equals", new Class[]{java.lang.Object.class});
+                toStringMeth = Object.class.getMethod("toString", new Class[]{});
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException("could not find method");
+            }
+        }
 
-	public SchemeInvocation(AppContext ctx, Procedure proc) {
-	    this.ctx = ctx;
-	    this.proc = proc;
-	}
+        public SchemeInvocation(AppContext ctx, Procedure proc) {
+            this.ctx = ctx;
+            this.proc = proc;
+        }
 
-	public Object invoke(Object proxy, Method m, Object[] args)
-	    throws Throwable {
-	    //intercept hashCode, equals and toString
-	    //in order to avoid infinite recursion
-	    if (m.getDeclaringClass() == Object.class) {
-		if (m.equals(hashCodeMeth)) {
-		    //better than returning a constant;
-		    //this works because a proxy can only have one
-		    //invocation handler
-		    return new Integer(hashCode());
-		} else if (m.equals(equalsMeth)) {
-		    return new Boolean(proxy == args[0]);
-		} else if (m.equals(toStringMeth)) {
-		    return "proxy";
-		}
-	    }
-	    Interpreter r = Context.enter(ctx, new DynamicEnv());
-	    Pair p = EMPTYLIST;
-	    if (args != null) { //for some reason args can be null
-		for (int i=args.length-1; i>=0; i--) {
-		    p = new Pair(makeJObj(args[i]), p);
-		}
-	    }
-	    Value res = null;
-	    try {
-		res = r.eval(proc, new Value[] {makeJObj(proxy),
-						makeJObj(m),
-						p});
-	    } catch (SchemeException e) {
-		//doing this gives less info in the stack trace
-		//throwNestedPrimException(e);
-		throw e;
-	    }
-	    Context.exit();
-	    return jobj(res);
-	}
+        public Object invoke(Object proxy, Method m, Object[] args)
+            throws Throwable {
+            //intercept hashCode, equals and toString
+            //in order to avoid infinite recursion
+            if (m.getDeclaringClass() == Object.class) {
+                if (m.equals(hashCodeMeth)) {
+                    //better than returning a constant;
+                    //this works because a proxy can only have one
+                    //invocation handler
+                    return new Integer(hashCode());
+                } else if (m.equals(equalsMeth)) {
+                    return new Boolean(proxy == args[0]);
+                } else if (m.equals(toStringMeth)) {
+                    return "proxy";
+                }
+            }
+            Interpreter r = Context.enter(ctx, new DynamicEnv());
+            Pair p = EMPTYLIST;
+            if (args != null) { //for some reason args can be null
+                for (int i=args.length-1; i>=0; i--) {
+                    p = new Pair(makeJObj(args[i]), p);
+                }
+            }
+            Value res = null;
+            try {
+                res = r.eval(proc, new Value[] {makeJObj(proxy),
+                                                makeJObj(m),
+                                                p});
+            } catch (SchemeException e) {
+                if (e.m instanceof JavaObject) {
+                    Object eo = ((JavaObject)e.m).obj;
+                    if (eo instanceof Throwable)
+                        throw (Throwable)eo;
+                }
+                else throw e;
+            }
+            Context.exit();
+            return jobj(res);
+        }
     }
 
     public static final int jtype(Value o) {
