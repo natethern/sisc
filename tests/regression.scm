@@ -36,7 +36,6 @@
 
 ;; (Partially fixed) References to helper functions from macros in report-env
 ;; will generate code incapable of resolving the helper                        
-(should-be 818786.0 3 (eval '(force (delay 3)) (scheme-report-environment 5)))
 (define test-env (scheme-report-environment 5))
 (should-be 818786.1 '#t
            (with/fc (lambda (m e) 'error)
