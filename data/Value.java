@@ -42,6 +42,10 @@ public abstract class Value extends Expression implements Immediate {
         return this;
     }
 
+    public String synopsis(int limit) {
+	return write();
+    }
+
     public String write() {
         return display();
     }

@@ -96,6 +96,91 @@ This document explains the SISC Scheme system.
 Secondly, SISC implements the R5RS standard.
  As such, any code written to that standard should run without reading any
  further.
+\layout Subsection
+
+About procedure documentation
+\layout Standard
+
+Throughout this document, procedures will be defined using the following
+ syntax:
+\layout Code
+
+
+\series bold 
+\emph on 
+procedure: 
+\emph default 
+(procedure-name arguments ...)
+\layout Code
+
+
+\series bold 
+\emph on 
+returns: 
+\series default 
+\emph default 
+type and description of the return value
+\layout Code
+
+ 
+\layout Code
+
+Description of the procedure's semantics.
+\layout Code
+
+ 
+\layout Code
+
+ 
+\layout Code
+
+
+\series bold 
+\emph on 
+parameter: 
+\emph default 
+(parameter-name [new-value])
+\layout Code
+
+Description of the parameter and its effects.
+\layout Code
+
+ 
+\layout Code
+
+ 
+\layout Code
+
+
+\series bold 
+\emph on 
+syntax: 
+\emph default 
+(syntactic-keyword structure ...)
+\layout Code
+
+Description of the syntax expressions semantics
+\layout Standard
+
+A procedure is a function that takes a number of arguments and produces
+ a result, which may be undefined.
+ The arguments of a procedure are always evaluated before the procedure
+ is invoked.
+ A parameter is a value that effects the operation of part of the Scheme
+ system.
+ When a parameter is invoked with no arguments, the current value of the
+ parameter is returned.
+ With arguments, the value of the parameter is changed to the arguments
+ given.
+ 
+\layout Standard
+
+Finally, syntax is any construct whose arguments are not necessarily other
+ s-expressions.
+ Arguments to a syntactic expression are not necessarily evaluated.
+ Syntactic expressions are expanded at compile time to expressions that
+ have the correct semantics but contain no additional syntactic expressions,
+ and are often much more difficult to read then the unexpanded version.
 \layout Chapter
 
 Installation and Invocation
@@ -147,14 +232,28 @@ Precision specifiers (#e, #s, #f, #d, #l) are ignored in SISC, all inexact
  In the case of arbitrary precision floats, specific precision constraints
  are maintained to prevent runaway expansion of precision.
  The parameterized functions 
+\emph on 
+min-precision
+\emph default 
+ and
 \noun on 
-min-precision 
+ 
+\emph on 
 \noun default 
-and 
-\noun on 
 max-precision
-\noun default 
- specify the constraints.
+\emph default 
+ specify the constraints:
+\layout Code
+
+
+\series bold 
+\emph on 
+parameter: 
+\emph default 
+(min-precision [digits])
+\layout Code
+
+Sets or displays the minimum precision constraint, an integer.
 \layout Standard
 
 All four base specifiers (#x, #o, #d, #b) are supported for integers and
@@ -198,9 +297,83 @@ Characters are compared with respect to the locale detected by the Java
 Symbols
 \layout Standard
 
-SISC's symbols are case-insensitive.
- An uninterned symbol (one which is distinct from all other symbols including
- those with the same characters) can be created using string->uninterned-symbol.
+SISC's symbols are ordinarily case-insensitive.
+ SISC maintains pointer equality between symbols with like contents, unless
+ the symbol is created 
+\emph on 
+uninterned
+\emph default 
+.
+ An uninterned symbol is one which is guaranteed to be pointer distinct
+ from any other symbol in the Scheme system, even another with the same
+ contents.
+ Uninterned symbols can be generated with:
+\layout Code
+
+
+\series bold 
+\emph on 
+
+\begin_inset LatexCommand \label{string->uninterned-symbol}
+
+\end_inset 
+
+procedure
+\series default 
+\emph default 
+: 
+\series bold 
+(string->uninterned-symbol string)
+\layout Code
+
+
+\series bold 
+\emph on 
+returns: 
+\series default 
+\emph default 
+an uninterned, pointer distinct symbol
+\layout Standard
+
+SISC also allows symbols to be created that 
+\emph on 
+are
+\emph default 
+ case-sensitive.
+ This can be done one of two ways.
+ The first involves setting the reader to produce cased symbols via the
+ procedure
+\layout Code
+
+
+\series bold 
+\emph on 
+
+\begin_inset LatexCommand \label{case-sensitive}
+
+\end_inset 
+
+parameter: 
+\emph default 
+(case-sensitive [boolean])
+\layout Code
+
+Sets or retrieves the reader's case sensitivity.
+\layout Standard
+
+The second method is via a non-standard symbol syntax.
+ If a symbol is enclosed in pipe ('|') characters, the reader will treat
+ that individual symbol as cased.
+ For example:
+\layout Code
+
+(eq? 'a '|A|) ; => #f
+\layout Code
+
+(eq? 'a '|a|) ; => #t
+\layout Code
+
+(eq? '|A| '|a|) ; => #f
 \layout Subsection
 
 Strings
@@ -364,22 +537,9 @@ SISC provides debugging aids that can be added to Scheme source code, as
 
 
 \series bold 
-\emph on 
-procedure
-\emph default 
-: 
+syntax: 
 \series default 
 (trace-lambda trace-name formals body)
-\layout Code
-
-
-\series bold 
-\emph on 
-returns: 
-\series default 
-a procedure
-\layout Code
-
 \layout Code
 
 When replaced with a trace-lambda, all calls to a lambda defined procedure
@@ -406,21 +566,10 @@ body
 
 \series bold 
 \emph on 
-procedure: 
+syntax: 
 \series default 
 \emph default 
 (trace-let loop-name formal-bindings body)
-\layout Code
-
-
-\series bold 
-\emph on 
-returns: 
-\series default 
-the results of body
-\layout Code
-
- 
 \layout Code
 
 Replaces a named-let expression in a similar manner to trace-lambda.

@@ -1,7 +1,19 @@
-2002-01-27  Matthias Radestock <matthias@sorted.org>
+2002-1-28 Scott G. Miller <scgmille@freenetproject.org>
+
+	* Fixed circular structure creation for 'special' lists
+	  created with ', `, ',', ,@, etc.
+	
+2002-1-27  Matthias Radestock <matthias@sorted.org>
 
 	* Added support for reading case sensitive symbols using the
 	  |<symbol>| notation
+
+2002-1-26 Scott G. Miller <scgmille@freenetproject.org>
+
+	* Made Quantity lib implementations serialize and deserialize
+	  the same.
+
+2002-1-24 Released r1.3.1
 
 2002-1-22 Scott G. Miller <scgmille@freenetproject.org>
 

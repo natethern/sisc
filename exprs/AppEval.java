@@ -42,7 +42,7 @@ public class AppEval extends Expression {
         try {
             ((Procedure)r.acc).apply(r);
         } catch (ClassCastException c) {
-            error(r, "Attempt to apply non-procedure '"+r.acc.write()+"'");
+            error(r, "Attempt to apply non-procedure '"+r.acc.synopsis(DEFAULT_SYNOPSIS_LENGTH)+"'");
         }
     }
 

@@ -64,6 +64,11 @@ public class Parser extends Util implements Tokens {
 	return nextExpression(is, 10);
     }
 
+    protected final Value nextExpression(InputPort is, HashMap state) 
+	throws IOException {
+	return (Value)_nextExpression(is, state, null);
+    }
+	
     public Value nextExpression(InputPort is, int radix) throws IOException {
         Object n=VOID;
         try {
@@ -91,6 +96,16 @@ public class Parser extends Util implements Tokens {
         }
     }
 
+    protected Object listSpecial(Symbol car, InputPort is,
+				 HashMap state, Integer def) throws IOException {
+	Pair t=new Pair();
+	Pair p=new Pair(car, t);
+	if (def!=null)
+	    state.put(def, p);
+	t.setCar(nextExpression(is, state));
+	return p;
+    }
+
     protected Object _nextExpression(InputPort is, HashMap state, Integer def, int radix)
     throws IOException {
 
@@ -103,16 +118,16 @@ public class Parser extends Util implements Tokens {
             o=DOT;
             break;
         case TT_UNQUOTE:
-            o=list(UNQUOTE, nextExpression(is));
+            o=listSpecial(UNQUOTE, is, state, def);
             break;
         case TT_UNQUOTE_SPLICING:
-            o=list(UNQUOTE_SPLICING, nextExpression(is));
+            o=listSpecial(UNQUOTE_SPLICING, is, state, def);
             break;
         case TT_QUOTE:
-            o=list(QUOTE, nextExpression(is));
+            o=listSpecial(QUOTE, is, state, def);
             break;
         case TT_BACKQUOTE:
-            o=list(BACKQUOTE, nextExpression(is));
+            o=listSpecial(BACKQUOTE, is, state, def);
             break;
         case TT_NUMBER:
             o=lexer.nval;
@@ -187,7 +202,7 @@ public class Parser extends Util implements Tokens {
                     return EOF;
                 else throw new IOException("invalid sharp sequence");
             case '\'':
-                o=list(SYNTAX, nextExpression(is));
+                o=listSpecial(SYNTAX, is, state, def);
                 break;
             default:
                 Value[] v=null;
@@ -199,6 +214,7 @@ public class Parser extends Util implements Tokens {
                                               .readToBreak(is,
                                                            Lexer
                                                            .sharp_special)));
+
                     c=is.read();
                     if (c=='=') {
                         o=_nextExpression(is, state, ref);
@@ -241,15 +257,15 @@ public class Parser extends Util implements Tokens {
         default:
             throw new IOException("Outrageous Error: unknown token "+token);
         }
-        if (def==null) return o;
-        else {
+        if (def!=null) 
             state.put(def, o);
-            return o;
-        }
+	return o;
+
     }
 
     public Value readList(InputPort is, HashMap state, Integer def)
     throws IOException, EOFException {
+
         Pair h=null;
         Pair p=null;
         Object l=_nextExpression(is, state, null);

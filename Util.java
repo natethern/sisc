@@ -64,6 +64,8 @@ public abstract class Util implements Conf {
 	ENVVARS=Symbol.get("*environment-variables*"),
 	SISC=Symbol.get("*sisc*");
 
+    public static final int DEFAULT_SYNOPSIS_LENGTH=30;
+
     public static void error(Interpreter r, Value where, String errormessage)
     throws ContinuationException {
 	error(r, "Error in "+where+": "+errormessage, false);

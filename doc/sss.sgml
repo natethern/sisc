@@ -64,6 +64,34 @@
   <para>
    Secondly, SISC implements the R5RS standard. As such, any code written to that standard should run without reading any further.
   </para>
+   <sect2>
+    <title>
+    About procedure documentation
+   </title>
+   <para>
+    Throughout this document, procedures will be defined using the following syntax:
+   </para>
+   <programlisting>
+<![ CDATA [procedure: </emphasis>(procedure-name arguments ...)
+]]><![ CDATA [returns: </emphasis>type and description of the return value
+]]><![ CDATA [ 
+]]><![ CDATA [Description of the procedure's semantics.
+]]><![ CDATA [ 
+]]><![ CDATA [ 
+]]><![ CDATA [parameter: </emphasis>(parameter-name [new-value])
+]]><![ CDATA [Description of the parameter and its effects.
+]]><![ CDATA [ 
+]]><![ CDATA [ 
+]]><![ CDATA [syntax: </emphasis>(syntactic-keyword structure ...)
+]]><![ CDATA [Description of the syntax expressions semantics
+]]>   </programlisting>
+   <para>
+    A procedure is a function that takes a number of arguments and produces a result, which may be undefined. The arguments of a procedure are always evaluated before the procedure is invoked. A parameter is a value that effects the operation of part of the Scheme system. When a parameter is invoked with no arguments, the current value of the parameter is returned. With arguments, the value of the parameter is changed to the arguments given. 
+   </para>
+   <para>
+    Finally, syntax is any construct whose arguments are not necessarily other s-expressions. Arguments to a syntactic expression are not necessarily evaluated. Syntactic expressions are expanded at compile time to expressions that have the correct semantics but contain no additional syntactic expressions, and are often much more difficult to read then the unexpanded version.
+   </para>
+   </sect2>
   </sect1>
  </chapter>
  <chapter>
@@ -126,8 +154,12 @@
      Numeric constants
     </title>
     <para>
-     Precision specifiers (&num;e, &num;s, &num;f, &num;d, &num;l) are ignored in SISC, all inexact numbers are kept in the precision of the numeric library. In the case of arbitrary precision floats, specific precision constraints are maintained to prevent runaway expansion of precision. The parameterized functions min-precision and max-precision specify the constraints.
+     Precision specifiers (&num;e, &num;s, &num;f, &num;d, &num;l) are ignored in SISC, all inexact numbers are kept in the precision of the numeric library. In the case of arbitrary precision floats, specific precision constraints are maintained to prevent runaway expansion of precision. The parameterized functions <emphasis>min-precision</emphasis> and <emphasis>max-precision</emphasis> specify the constraints:
     </para>
+    <programlisting>
+<![ CDATA [parameter: </emphasis>(min-precision [digits])
+]]><![ CDATA [Sets or displays the minimum precision constraint, an integer.
+]]>    </programlisting>
     <para>
      All four base specifiers (&num;x, &num;o, &num;d, &num;b) are supported for integers and rationals. Only decimal (&num;d), the default, is supported for floating point and complex numbers.
     </para>
@@ -160,8 +192,27 @@
     Symbols
    </title>
    <para>
-    SISC's symbols are case-insensitive. An uninterned symbol (one which is distinct from all other symbols including those with the same characters) can be created using string-&gt;uninterned-symbol.
+    SISC's symbols are ordinarily case-insensitive. SISC maintains pointer equality between symbols with like contents, unless the symbol is created <emphasis>uninterned</emphasis>. An uninterned symbol is one which is guaranteed to be pointer distinct from any other symbol in the Scheme system, even another with the same contents. Uninterned symbols can be generated with:
    </para>
+   <programlisting>
+<![ CDATA [<anchor id="string->uninterned-symbol" ></anchor>procedure</emphasis>: (string->uninterned-symbol string)
+]]><![ CDATA [returns: </emphasis>an uninterned, pointer distinct symbol
+]]>   </programlisting>
+   <para>
+    SISC also allows symbols to be created that <emphasis>are</emphasis> case-sensitive. This can be done one of two ways. The first involves setting the reader to produce cased symbols via the procedure
+   </para>
+   <programlisting>
+<![ CDATA [<anchor id="case-sensitive" ></anchor>parameter: </emphasis>(case-sensitive [boolean])
+]]><![ CDATA [Sets or retrieves the reader's case sensitivity.
+]]>   </programlisting>
+   <para>
+    The second method is via a non-standard symbol syntax. If a symbol is enclosed in pipe ('|') characters, the reader will treat that individual symbol as cased. For example:
+   </para>
+   <programlisting>
+<![ CDATA [(eq? 'a '|A|) ; => #f
+]]><![ CDATA [(eq? 'a '|a|) ; => #t
+]]><![ CDATA [(eq? '|A| '|a|) ; => #f
+]]>   </programlisting>
    </sect2>
    <sect2>
     <title>
@@ -242,6 +293,29 @@
    <title>
    Debugging
   </title>
+  <para>
+   SISC provides debugging aids that can be added to Scheme source code, as well as limited support for debugging without modification. 
+  </para>
+  <programlisting>
+<![ CDATA [syntax: (trace-lambda trace-name formals body)
+]]><![ CDATA [When replaced with a trace-lambda, all calls to a lambda defined procedure are traced on the console.  <emphasis>trace-name</emphasis> is a symbol to identify the procedure in the trace. <emphasis>formals </emphasis>and <emphasis>body</emphasis> have identical semantics to lambda.
+]]><![ CDATA [ 
+]]><![ CDATA [syntax: </emphasis>(trace-let loop-name formal-bindings body)
+]]><![ CDATA [Replaces a named-let expression in a similar manner to trace-lambda.  
+]]><![ CDATA [ 
+]]><![ CDATA [procedure: </emphasis>(trace-top-level-procedures symbol ...)
+]]><![ CDATA [returns: undefined
+]]><![ CDATA [ 
+]]><![ CDATA [Begins traces on the procedures named by the symbols given.  The procedures must be defined in the top-level environment.
+]]><![ CDATA [ 
+]]><![ CDATA [procedure: </emphasis>(untrace-top-level-procedures symbol ...)
+]]><![ CDATA [returns: undefined
+]]><![ CDATA [ 
+]]><![ CDATA [Stops tracing the top-level procedures named by the symbols given.
+]]>  </programlisting>
+  <para>
+   Trace-lambda and trace-let are useful for debugging anonymous lambdas and named-lets respectively. Trace-top-level-procedures can be used to trace calls to any procedure, including native procedures and stored continuations.
+  </para>
   </sect1>
   <sect1>
    <title>
@@ -272,6 +346,52 @@
    <title>
    Networking
   </title>
+  </sect1>
+  <sect1>
+   <title>
+   SQL interface
+  </title>
+  <para>
+   SISC's database interface is modeled after a mix of Perl's DBI and ODBC/JDBC. Accessing a database occurs in several steps; establishing a connection to a database source, creating a query, specifying any parameters, executing the query, then retrieving results.
+  </para>
+   <sect2>
+    <title>
+    Creating connections
+   </title>
+   <para>
+    (dbi/connect &ldquo;driver:database &lt;opts&gt;&rdquo;)
+   </para>
+   <para>
+    =&gt; connection
+   </para>
+   </sect2>
+   <sect2>
+    <title>
+    Types
+   </title>
+   <programlisting>
+<![ CDATA [(dbi/connect source)
+]]><![ CDATA [(dbi/query connection &ldquo;statement&rdquo;)
+]]><![ CDATA [
+]]><![ CDATA [(dbi/prepare connection &ldquo;statement&rdquo;)
+]]><![ CDATA [(dbi/set-string prepared-statement pos string)
+]]><![ CDATA [(dbi/set-boolean prepared-statement pos bool)
+]]><![ CDATA [(dbi/set-integer prepared-statement pos exact-integer)
+]]><![ CDATA [(dbi/set-float prepared-statement pos inexact-real)
+]]><![ CDATA [(dbi/set-input-port prepared-statement pos input-port)
+]]><![ CDATA [ 
+]]><![ CDATA [(dbi/execute prepared-statement)
+]]><![ CDATA [(dbi/get-string result pos) 
+]]><![ CDATA [(dbi/get-boolean result pos)
+]]><![ CDATA [(dbi/get-integer result pos)
+]]><![ CDATA [(dbi/get-float result pos)
+]]><![ CDATA [(dbi/get-input-port result pos)
+]]><![ CDATA [
+]]><![ CDATA [(dbi/execute-update prepared-statement)
+]]><![ CDATA [
+]]><![ CDATA [
+]]>   </programlisting>
+   </sect2>
   </sect1>
  </chapter>
  <chapter>

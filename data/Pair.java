@@ -55,21 +55,50 @@ public class Pair extends Value {
 	cdr = v;
     }
 
-    protected void display(StringBuffer b, boolean write) {
+    public String synopsis(int limit) {
+        StringBuffer b=new StringBuffer();
+        if (car==QUOTE) {
+            b.append('\'').append(((Pair)cdr).car.display());
+        } else if (car==UNQUOTE) {
+            b.append(',').append(((Pair)cdr).car.display());
+        } else if (car==BACKQUOTE) {
+            b.append('`').append(((Pair)cdr).car.display());
+        } else if (car==UNQUOTE_SPLICING) {
+            b.append(",@").append(((Pair)cdr).car.display());
+        } else {
+            b.append('(');
+            if (display(b, true, new Integer(limit)))
+		b.append(')');
+	    else b.append(" ...");
+        }
+	return b.toString();
+    }
+
+    protected boolean display(StringBuffer b, boolean write, Integer limit) {
 
         Pair cv=this;
         do {
-            b.append((write ? cv.car.write() : cv.car.display()));
+            b.append((limit == null ?
+		      (write ? cv.car.write() : cv.car.display()) :
+		      (cv.car.synopsis(b.length() - limit.intValue()))));
+	    if (limit != null &&
+		b.length() > limit.intValue()) return false;
 
             if (cv.cdr instanceof Pair) {
                 if (cv.cdr!=EMPTYLIST)
                     b.append(' ');
                 cv=(Pair)cv.cdr;
             } else {
-                b.append(" . ").append((write ? cv.cdr.write() : cv.cdr.display()));
+                b.append(" . ").append((limit == null ?
+					(write ? cv.cdr.write() : 
+					 cv.cdr.display()) :
+					cv.cdr.synopsis(limit.intValue()-
+							b.length())));
+				     
                 break;
             }
         } while (cv!=EMPTYLIST);
+	return true;
     }
 
     public String display() {
@@ -84,7 +113,7 @@ public class Pair extends Value {
             b.append(",@").append(((Pair)cdr).car.display());
         } else {
             b.append('(');
-            display(b, false);
+            display(b, false, null);
             b.append(')');
         }
         return b.toString();
@@ -102,7 +131,7 @@ public class Pair extends Value {
             b.append(",@").append(((Pair)cdr).car.write());
         } else {
             b.append('(');
-            display(b, true);
+            display(b, true, null);
             b.append(')');
         }
         return b.toString();
