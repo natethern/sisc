@@ -616,4 +616,4 @@
 
 ;;
 (if (not (getprop 'LITE '*sisc*))
-    (load "../src/sisc/modules/std-modules.scm"))
+    (load "../modules/std-modules.scm"))

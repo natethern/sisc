@@ -19,7 +19,7 @@
     <property name="libdir" value="${basedir}/lib"/>
     <property name="docdir" value="${basedir}/doc"/>
     <property name="gendocdir" value="${docdir}/generated"/>
-    <property name="schemedir" value="${basedir}/scheme-src"/>
+    <property name="bootdir" value="${srcdir}/sisc/boot"/>
     <property name="srfidir" value="${srcdir}/sisc/modules/srfi"/>
     <property name="quantitydir" value="${srcdir}/sisc/data"/>
     <property name="tmpdir" value="${basedir}/tmp"/>
@@ -52,7 +52,7 @@
     <mkdir dir="${libdir}"/>
     <available classname="junit.framework.TestCase"
                property="junit.present"
-	       classpathref="classpath"/>
+               classpathref="classpath"/>
     <property name="xmldcl" value="/usr/share/sgml/declaration/xml.dcl"/>
     <property name="sss" value="sss"/>
   </target>
@@ -166,7 +166,7 @@
         <include name="sisc/modules/R5RS*.class"/>
       </fileset>
       <manifest>
-	<section name="sisc/">
+        <section name="sisc/">
           <attribute name="Specification-Title" value="Second Interpreter of Scheme Code"/>
           <attribute name="Specification-Version" value="${specver}"/>
            <!-- Got a better idea?: -->
@@ -187,7 +187,7 @@
         <exclude name="sisc/modules/R5RS*.class"/>
       </fileset>
       <manifest>
-	<section name="SISC Optional">
+        <section name="SISC Optional">
           <attribute name="Specification-Title" value="Second Interpreter of Scheme Code"/>
           <attribute name="Specification-Version" value="${specver}"/>
            <!-- Got a better idea?: -->
@@ -206,17 +206,17 @@
     <java classname="sisc.REPL"
           classpath="${classdir}"
           dir="${srfidir}"
-	  fork="yes">
-	<jvmarg value="-Dsisc.heapfile=${heap}"/>
-	<arg value="-x"/>
-	<arg value="${srfidir}/srfi-sll.scm"/>
+          fork="yes">
+        <jvmarg value="-Dsisc.heapfile=${heap}"/>
+        <arg value="-x"/>
+        <arg value="${srfidir}/srfi-sll.scm"/>
     </java>
   </target> 
 
   <target name="sisc-lib" depends="srfi-sll" unless="lite">
     <jar jarfile="${basedir}/${libjar}">
       <fileset dir="${tmpdir}">
-    	<include name="*/**"/>
+            <include name="*/**"/>
       </fileset>
     </jar>
   </target>
@@ -224,8 +224,8 @@
   <target name="full-heap" depends="jars" unless="lite">
     <java classname="sisc.boot.GenerateHeap"
           classpath="${classdir}"
-          dir="${schemedir}"
-	  fork="yes">
+          dir="${bootdir}"
+          fork="yes">
       <jvmarg value="-Dbeta=${beta}"/>
       <arg value="-out"/>
       <arg value="${heap}"/>
@@ -242,8 +242,8 @@
   <target name="lite-heap" depends="jars" if="lite">
     <java classname="sisc.boot.GenerateHeap"
           classpath="${classdir}"
-          dir="${schemedir}"
-	  fork="yes">
+          dir="${bootdir}"
+          fork="yes">
       <arg value="-out"/>
       <arg value="${heap}"/>
       <arg value="-files"/>
@@ -264,8 +264,8 @@
           description="Generate javadocs">
     <mkdir dir="${gendocdir}/javadoc"/>
     <javadoc packagenames="${packagename}.*"
-	     sourcepath="${srcdir}"
-	     destdir="${gendocdir}/javadoc"/>
+             sourcepath="${srcdir}"
+             destdir="${gendocdir}/javadoc"/>
   </target>
 
   <target name="manual" depends="prepare"
@@ -322,10 +322,10 @@
 
     <tar tarfile="${dist}/sisc-lite-${version}.tar">
       <tarfileset dir="${dist}/lite" mode="755">
-	<include name="sisc/sisc"/>
+        <include name="sisc/sisc"/>
       </tarfileset>
       <tarfileset dir="${dist}/lite">
-	<include name="sisc/*"/>
+        <include name="sisc/*"/>
         <exclude name="sisc/sisc"/>
       </tarfileset>
     </tar>
@@ -354,10 +354,10 @@
           file="${srfidir}/srfi-22/srfi-22.sh"/>
     <chmod file="${dist}/full/sisc/scheme-src/srfi-22/srfi-22.sh"
            perm="ugo+rx"/>
-    <chmod file="${dist}/full/sisc/install-srfi22.sh"
-           perm="ugo+rx"/>
     <copy todir="${dist}/full/sisc/"
           file="${basedir}/dist/install-srfi22.sh"/>
+    <chmod file="${dist}/full/sisc/install-srfi22.sh"
+           perm="ugo+rx"/>
 
     <copy todir="${dist}/full/sisc"
           file="${basedir}/${basejar}"/>
@@ -369,13 +369,13 @@
           file="${heap}"/>
     <copy todir="${dist}/full/sisc">
       <fileset dir="${dist}">
-	<include name="ChangeLog"/>
+        <include name="ChangeLog"/>
         <include name="ReleaseCandidate" if="releasecandidate"/>
-	<include name="README"/>
-	<include name="COPYING"/>
+        <include name="README"/>
+        <include name="COPYING"/>
         <include name="GOALS"/>
         <include name="TODO"/>
-	<include name="sisc.bat"/>
+        <include name="sisc.bat"/>
       </fileset>
     </copy>
 
@@ -385,11 +385,11 @@
     <tar tarfile="${dist}/sisc-${version}.tar">
 
       <tarfileset dir="${dist}/full" mode="755">
-	<include name="sisc/sisc"/>
+        <include name="sisc/sisc"/>
       </tarfileset>
       <tarfileset dir="${dist}/full">
-	<include name="sisc/**"/>
-	<exclude name="sisc/sisc"/>
+        <include name="sisc/**"/>
+        <exclude name="sisc/sisc"/>
       </tarfileset>
     </tar>
 
@@ -427,7 +427,7 @@
     <!-- Generate the index first -->
     <mkdir dir="${gendocdir}/tmp"/>
     <exec executable="collateindex.pl" dir="${docdir}/sss"
-	  output="${docdir}/sss/index.xml">
+          output="${docdir}/sss/index.xml">
       <arg line="-N"/>
     </exec>
     <exec executable="jw" dir="${docdir}/sss"> 
