@@ -1,3 +1,10 @@
+2003-02-04  SISC 1.7.2-beta Released
+
+2003-02-04  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Added configurable repl prompt, displays #;-~a> if
+	  |current-prompt| is set to a string, normal if #f.
+
 2003-02-03  Matthias Radestock  <matthias@sorted.org>
 
 	* Added mechanism to augment the class path for loading classes
