@@ -8,9 +8,9 @@
   </path>
 
   <target name="prepare">
-    <property name="specver" value="1.8.1-alpha"/>
-    <property name="version" value="1.8.1-alpha"/>
-    <property name="cvsversion" value="a1_8_1"/> 
+    <property name="specver" value="1.8.2-alpha"/>
+    <property name="version" value="1.8.2-alpha"/>
+    <property name="cvsversion" value="a1_8_2"/> 
     <property name="spectitle" value="Second Interpreter of Scheme Code"/>
     <!-- Got a better idea?: -->
     <property name="specvendor" value="SISC Development Group"/>
@@ -384,6 +384,7 @@
     <delete dir="${dist}/full"/>
     <mkdir dir="${dist}/full"/>
     <mkdir dir="${dist}/full/sisc"/>
+    <mkdir dir="${dist}/full/doc"/>
     <mkdir dir="${dist}/full/sisc/scheme-src"/>
     <mkdir dir="${dist}/full/sisc/scheme-src/srfi-22"/>
 
@@ -392,9 +393,16 @@
     <copy todir="${dist}/full/sisc/scheme-src"
           file="${srfidir}/optional-args.scm"/>
 
+    <copy todir="${dist}/full/sisc/doc">
+      <fileset dir="${docdir}/sss">
+        <include name="*.html"/>
+      </fileset>
+    </copy>
     <copy todir="${dist}/full/sisc/scheme-src/srfi-22/"
           file="${srfidir}/srfi-22/srfi-22.sh"/>
     <chmod file="${dist}/full/sisc/scheme-src/srfi-22/srfi-22.sh"
+           perm="ugo+rx"/>
+    <chmod file="${dist}/full/sisc/install-srfi22.sh"
            perm="ugo+rx"/>
     <copy todir="${dist}/full/sisc/"
           file="${basedir}/install-srfi22.sh"/>

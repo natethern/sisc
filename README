@@ -17,17 +17,13 @@ while still providing exceptional performance.
 
 SISC also provides useful real-world extensions, such as networking,
 elegant exception handling, a scope-friendly module system, support
-for SLIB, numerous SRFIs, and a Java foreign-function interface.
+for SLIB, numerous SRFIs, and an extensible type system 
+with a Java foreign-function interface.
 
-Finally, native functionality can be added through the use of Modules,
-extensions that may add new types, values, and functions to the
+Finally, native functionality can be added through the use of native
+libraries that may add new types, values, and functions to the
 language. These extensions can be packaged into scopable modules at
 the Scheme level as well.
-
-More information about SISC, including a paper on the implementation
-and the full SISC manual, can be found at the SISC website,
-http://sisc.sourceforge.net
-
 
 Installation
 ------------
@@ -35,11 +31,14 @@ Installation
 Define SISC_HOME in your environment variables to point to the
 directory in which you installed the SISC distribution. Then, install
 "sisc.sh" or "sisc.bat" in your path. If you are running on a Unix or
-Unix-like system, you may also wish to install the various shell
-scripts in scheme-src/srfi-22 in your path in order to support the
-SRFI-22 functionality of Scheme programs as Unix scripts.  To run
-SISC, just type "sisc" or "sisc.bat", followed by any scheme source
-files you wish to load.
+Unix-like system, you may also wish to run the "install-srfi22.sh" script,
+which will set up SRFI-22 support for running Scheme programs directly
+from the shell.
+
+To run SISC, just type "sisc" or "sisc.bat", followed by any scheme source
+files you wish to load.  Refer to the SISC Manual (which accompanies
+the full distribution and can be found on the SISC website) for the
+full command-line usage instructions.
 
 
 Bugs
@@ -57,6 +56,12 @@ If you're running the Lite build, you will not be able to perform step 3.
 Please obtain the full build and see if your error occurs there as well,
 then submit a report with the stack trace from the full build.  
 
+Website
+-------
+More information about SISC, including a paper on the implementation
+and the full SISC manual, can be found at the SISC website,
+
+http://sisc.sourceforge.net
 
 
 (C) 2000-2003 Scott G. Miller <scgmille@freenetproject.org>
