@@ -43,9 +43,10 @@
 (native-module s2j-native        "sisc.modules.S2J")
 (native-module hashtable-native  "sisc.modules.SHashtable")
 
-(module syntax-case-helpers
-    (wrap-symbol)
-  (include "../modules/sc-helpers.scm"))
+(module misc
+    (wrap-symbol
+     dynamic-lambda)
+  (include "misc.scm"))
 
 (module threading
   (thread/new
@@ -81,7 +82,7 @@
    synchronized-unsafe
    parallel)
   (import threading-native)
-  (include "../modules/thread.scm"))
+  (include "thread.scm"))
 
 (module hashtable
   (make-hashtable
@@ -98,14 +99,14 @@
    hashtable/map)
   (import hashtable-native)
   (import threading)
-  (include "../modules/hashtable.scm"))
+  (include "hashtable.scm"))
 
 (module procedure-properties
   (procedure-property
    set-procedure-property!
    procedure-property!)
   (import threading)
-  (include "../modules/procedure-properties.scm"))
+  (include "procedure-properties.scm"))
 
 (module generic-procedures
   (meta
@@ -131,7 +132,7 @@
   (import hashtable)
   (import threading)
   (import procedure-properties)
-  (include "../modules/generic-procedures.scm"))
+  (include "generic-procedures.scm"))
 
 (module s2j
   ((define-java-proxy java-proxy java-proxy-helper)
@@ -205,8 +206,8 @@
    <object>)
   (import s2j-native)
   (import generic-procedures)
-  (import syntax-case-helpers)
-  (include "../modules/s2j.scm")
+  (import misc)
+  (include "s2j.scm")
   (define (java-class name)
     (java/class (if (string? name) (string->symbol name) name)))
   (define java-synchronized	java/synchronized)
@@ -250,6 +251,6 @@
    library-loaded?)
   (import threading)
   (import hashtable)
-  (include "../modules/libraries.scm"))
+  (include "libraries.scm"))
 
 (import libraries)

@@ -453,4 +453,4 @@
 
 ;;
 (if (not (getprop 'LITE '*sisc*))
-    (load "std-modules.scm"))
+    (load "../modules/std-modules.scm"))
