@@ -239,11 +239,26 @@ public class Quantity extends Value {
         if (radix==10) {
             int x;
             if ((x=dv.indexOf('e'))!=-1) {
+                int e=x;
                 StringBuffer b=new StringBuffer();
-                char[] c=dv.substring(0,x).toCharArray();
-                parsePounds(c);
-                b.append(c);
-                b.append(dv.substring(x));
+                String preExp=dv.substring(0,e);
+                if ((x=preExp.indexOf('.'))!=-1) {
+                    char[] c=preExp.substring(0,x).toCharArray();
+                    boolean wholeHadPounds=parsePounds(c);
+                    b.append(c);
+                    c=preExp.substring(x+1).toCharArray();
+                    if (wholeHadPounds)
+                        for (int i=0; i<c.length; i++)
+                            if (c[i]!='#')
+                                throw new NumberFormatException("non-contiguous use of #s");
+                    parsePounds(c);
+                    b.append('.').append(c);
+                } else {
+                    char[] c=dv.substring(0,e).toCharArray();
+                    parsePounds(c);
+                    b.append(c);
+                }
+                b.append(dv.substring(e));
                 dv=b.toString();
                 return Float.parseFloat(dv);
             } else if ((x=dv.indexOf('s'))!=-1 ||
@@ -253,10 +268,26 @@ public class Quantity extends Value {
                 StringBuffer b=new StringBuffer(dv.substring(0,x));
                 b.append('e').append(dv.substring(x+1));
                 dv=b.toString();
-                return Float.parseFloat(dv);
-            } else if (dv.indexOf('.')!=-1)
-                return Float.parseFloat(dv);
-            else if (dv.indexOf('#')!=-1) {
+                return parseDecimal(dv, radix, asDecimal);
+            } else if ((x=dv.indexOf('.'))!=-1) {
+                StringBuffer b=new StringBuffer();
+                char c[]=dv.substring(0,x).toCharArray();
+                if (parsePounds(c)) {
+                    b.append(c);
+                    c=dv.substring(x+1).toCharArray();
+                    for (int i=0; i<c.length; i++)
+                        if (c[i]!='#')
+                            throw new NumberFormatException("non-contiguous use of #s");
+                    parsePounds(c);
+                } else {
+                    b.append(c);
+                    c=dv.substring(x+1).toCharArray();
+                    parsePounds(c);
+                }
+                b.append('.').append(c);
+
+                return Float.parseFloat(b.toString());
+            } else if (dv.indexOf('#')!=-1) {
                 char[] c=dv.toCharArray();
                 parsePounds(c);
                 return Float.parseFloat(new String(c));
@@ -281,8 +312,8 @@ public class Quantity extends Value {
                 ipart=new BigDecimal(new BigInteger(dv.substring(0, x), radix));
                 String fpartstr=dv.substring(x+1);
                 fpart=new BigInteger(fpartstr, radix);
-                return ipart.add(new BigDecimal(Float.toString((float)(fpart.floatValue() /
-                                                                       Math.pow(radix, fpartstr.length()))))).floatValue();
+                return ipart.add(new BigDecimal(Double.toString(fpart.floatValue() /
+                                                                Math.pow(radix, fpartstr.length())))).floatValue();
             }
         }
     }
@@ -310,8 +341,8 @@ public class Quantity extends Value {
             }
         }
         if (type==INTEG) {
-            if (i.compareTo(_INT_MAX)==-1 &&
-                i.compareTo(_INT_MIN)==1) {
+            if (i.compareTo(_INT_MAX)<=0 &&
+                i.compareTo(_INT_MIN)>=0) {
                 val=i.intValue();
                 type=FIXEDINT;
             }
@@ -652,6 +683,10 @@ public class Quantity extends Value {
 
     public Quantity sqrt() {
         switch (type) {
+        case DECIM:
+            if (d<0)
+                return new Quantity(0.0f, (float)Math.sqrt(d));
+            else return new Quantity((float)Math.sqrt(d));
         case FIXEDINT: case INTEG:
             BigInteger orig=integer();
             BigInteger i=orig.abs();
@@ -660,10 +695,9 @@ public class Quantity extends Value {
                 if (orig.signum()>-1)
                     return new Quantity(rv[0]);
                 else return new Quantity(0.0f, rv[0].floatValue());
-        case DECIM:
-            if (d<0)
-                return new Quantity(0.0f, (float)Math.sqrt(d));
-            else return new Quantity((float)Math.sqrt(d));
+        case RATIO:
+            BigDecimal[] rvd=sqrtrem(new BigDecimal(decimal()));
+            return new Quantity(rvd[0].floatValue());
         case COMPLEX:
             // Take r=sqrt(a^2 + b^2)
             float a2=d*d;
@@ -678,9 +712,6 @@ public class Quantity extends Value {
                 return new Quantity(x,y).negate();
             } else
                 return new Quantity(x, y);
-        case RATIO:
-            BigDecimal[] rvd=sqrtrem(new BigDecimal(decimal()));
-            return new Quantity(rvd[0].floatValue());
         }
         return new Quantity((float)Math.sqrt(floatValue()));
     }

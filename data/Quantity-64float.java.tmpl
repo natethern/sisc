@@ -339,8 +339,8 @@ public class Quantity extends Value {
             }
         }
         if (type==INTEG) {
-            if (i.compareTo(_INT_MAX)==-1 &&
-                i.compareTo(_INT_MIN)==1) {
+            if (i.compareTo(_INT_MAX)<=0 &&
+                i.compareTo(_INT_MIN)>=0) {
                 val=i.intValue();
                 type=FIXEDINT;
             }
@@ -693,7 +693,6 @@ public class Quantity extends Value {
                 if (orig.signum()>-1)
                     return new Quantity(rv[0]);
                 else return new Quantity(0.0, rv[0].doubleValue());
-
         case RATIO:
             BigDecimal[] rvd=sqrtrem(new BigDecimal(decimal()));
             return new Quantity(rvd[0].doubleValue());

@@ -246,13 +246,27 @@ public class Quantity extends Value {
         if (radix==10) {
             int x;
             if ((x=dv.indexOf('e'))!=-1) {
+                int e=x;
                 StringBuffer b=new StringBuffer();
-                char[] c=dv.substring(0,x).toCharArray();
-                parsePounds(c);
-                b.append(c);
-                b.append(dv.substring(x));
+                String preExp=dv.substring(0,e);
+                if ((x=preExp.indexOf('.'))!=-1) {
+                    char[] c=preExp.substring(0,x).toCharArray();
+                    boolean wholeHadPounds=parsePounds(c);
+                    b.append(c);
+                    c=preExp.substring(x+1).toCharArray();
+                    if (wholeHadPounds)
+                        for (int i=0; i<c.length; i++)
+                            if (c[i]!='#')
+                                throw new NumberFormatException("non-contiguous use of #s");
+                    parsePounds(c);
+                    b.append('.').append(c);
+                } else {
+                    char[] c=dv.substring(0,e).toCharArray();
+                    parsePounds(c);
+                    b.append(c);
+                }
+                b.append(dv.substring(e));
                 dv=b.toString();
-                Double.parseDouble(dv);
                 return new BigDecimal(dv);
             } else if ((x=dv.indexOf('s'))!=-1 ||
                        (x=dv.indexOf('f'))!=-1 ||
@@ -261,11 +275,26 @@ public class Quantity extends Value {
                 StringBuffer b=new StringBuffer(dv.substring(0,x));
                 b.append('e').append(dv.substring(x+1));
                 dv=b.toString();
-                Double.parseDouble(dv);
-                return new BigDecimal(dv);
-            } else if (dv.indexOf('.')!=-1)
-                return new BigDecimal(dv);
-            else if (dv.indexOf('#')!=-1) {
+                return parseDecimal(dv, radix, asDecimal);
+            } else if ((x=dv.indexOf('.'))!=-1) {
+                StringBuffer b=new StringBuffer();
+                char c[]=dv.substring(0,x).toCharArray();
+                if (parsePounds(c)) {
+                    b.append(c);
+                    c=dv.substring(x+1).toCharArray();
+                    for (int i=0; i<c.length; i++)
+                        if (c[i]!='#')
+                            throw new NumberFormatException("non-contiguous use of #s");
+                    parsePounds(c);
+                } else {
+                    b.append(c);
+                    c=dv.substring(x+1).toCharArray();
+                    parsePounds(c);
+                }
+                b.append('.').append(c);
+
+                return new BigDecimal(b.toString());
+            } else if (dv.indexOf('#')!=-1) {
                 char[] c=dv.toCharArray();
                 parsePounds(c);
                 return new BigDecimal(new String(c));
@@ -290,7 +319,11 @@ public class Quantity extends Value {
                 ipart=new BigDecimal(new BigInteger(dv.substring(0, x), radix));
                 String fpartstr=dv.substring(x+1);
                 fpart=new BigInteger(fpartstr, radix);
-                return ipart.add(div(new BigDecimal(fpart), new BigDecimal(Math.pow(radix, fpartstr.length()))));
+                return ipart.add(
+                        new BigDecimal(fpart).divide(
+                         new BigDecimal(Math.pow(radix, 
+                                                 fpartstr.length())),
+                                  BigDecimal.ROUND_HALF_EVEN));
             }
         }
     }
@@ -666,7 +699,7 @@ public class Quantity extends Value {
                 if (orig.signum()>-1)
                     return new Quantity(rv[0]);
                 else return new Quantity(_BD_ZERO, new BigDecimal(rv[0]));
-        case DECIM:
+        case DECIM: case RATIO:
             BigDecimal[] rvd=sqrtrem(decimal());
             return new Quantity(rvd[0]);
         case COMPLEX:
@@ -685,9 +718,6 @@ public class Quantity extends Value {
                 return new Quantity(x,y).negate();
             } else
                 return new Quantity(x, y);
-        case RATIO:
-            rvd=sqrtrem(decimal());
-            return new Quantity(rvd[0]);
         }
         return new Quantity(Math.sqrt(doubleValue()));
     }
@@ -836,9 +866,17 @@ public class Quantity extends Value {
     public Quantity sub(Quantity o) {
         switch (type) {
         case FIXEDINT:
-            if (o.type!=FIXEDINT)
+            switch(o.type) {
+            case FIXEDINT:
+                return intBound((long)val-o.val);
+            case DECIM:
+                return new Quantity(BigDecimal.valueOf(val).subtract(o.d));
+            case COMPLEX:
+                return new Quantity(BigDecimal.valueOf(val).subtract(o.d),
+                                    o.im.negate());
+            default:
                 return new Quantity((long)val).sub(o);
-            else return intBound((long)val-o.val);
+            }
         case DECIM:
             switch (o.type) {
             case FIXEDINT:
@@ -919,10 +957,22 @@ public class Quantity extends Value {
     public Quantity div(Quantity o) {
         switch (type) {
         case FIXEDINT:
-            if (o.type!=FIXEDINT)
+            switch(o.type) {
+            case FIXEDINT:
+                return new Quantity(BigInteger.valueOf(val),
+                                    BigInteger.valueOf(o.val));
+            case DECIM:
+                return new Quantity(div(BigDecimal.valueOf(val),
+                                        o.d));
+            case COMPLEX:
+                Quantity q=new Quantity();
+                q.d=BigDecimal.valueOf(val);
+                q.im=_BD_ZERO;
+                q.type=COMPLEX;
+                return q.div(o);
+            default:
                 return new Quantity((long)val).div(o);
-            else return new Quantity(BigInteger.valueOf(val),
-                                     BigInteger.valueOf(o.val));
+            }
         case DECIM:
             switch (o.type) {
             case FIXEDINT:
@@ -1106,8 +1156,9 @@ public class Quantity extends Value {
             return new BigDecimal(i);
         case RATIO:
             return ratioToDecimal(i,de);
+        default:
+            throw new NumberFormatException(liMessage(SISCB, "isnotreal", toString()));
         }
-        return new BigDecimal(0.0);
     }
 
     public long longValue() {
