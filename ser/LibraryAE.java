@@ -44,6 +44,19 @@ public class LibraryAE extends MemorySymEnv {
         bindWatch=new HashSet();
     }
 
+
+    /**
+     * Operate in "observe" mode.
+     *
+     * @param name the name of the SymEnv
+     * @param lb the library serializer
+     */
+    public LibraryAE(SymbolicEnvironment parent, LibraryBuilder lb) {
+        this.parent=parent;
+        this.lb=lb;
+        bindWatch=new HashSet();
+    }
+
     
     /**
      * Operate in "retrieve" mode.
@@ -163,13 +176,13 @@ public class LibraryAE extends MemorySymEnv {
             s.writeInt(lb.add(parent == null ? null : parent.asValue()));
         } else {
             //serialize in "retrieve" mode
-            s.writeInt(addressMap.size());
-            for (Iterator i=addressMap.keySet().iterator(); i.hasNext();) {
+            s.writeInt(0);
+            /*            for (Iterator i=addressMap.keySet().iterator(); i.hasNext();) {
                 Symbol key=(Symbol)i.next();
                 Integer pos=(Integer)addressMap.get(key);
                 s.writeExpression(key);
                 s.writeInt(pos.intValue());
-            }
+                }*/
             s.writeInt(parentIdx);
         }
     }
