@@ -12,7 +12,6 @@ import sisc.util.ExpressionVisitor;
 public class LexicalEnvironment extends Value {
     public LexicalEnvironment parent;
     public Value[] vals;
-    public Interpreter r;
 
     public LexicalEnvironment() {
         this.vals=ZV;
@@ -21,44 +20,6 @@ public class LexicalEnvironment extends Value {
     public LexicalEnvironment(Value[] vals, LexicalEnvironment parent) {
         this.vals=vals;
         this.parent=parent;
-    }
-
-    public final LexicalEnvironment reinit(Interpreter r, Closure c) throws ContinuationException {
-        parent=c.env;
-        this.r=r;
-        Value[] v=r.vlr;
-        int vl=v.length;
-        if (!c.arity) {
-            if (vl == c.fcount) {
-                vals=v;
-                return this;
-            }
-            error(r, liMessage(SISCB,"notenoughargsto", c.toString(),
-                               c.fcount, vl));
-            return this;
-        }
-        
-        int sm1=c.fcount-1;
-        if (vl < sm1) {
-            error(r, liMessage(SISCB,"notenoughargstoinf", c.toString(),
-                               sm1, vl));
-            return this;
-        }
-
-        if (vl > sm1 && !r.vlk) {
-            vals=v;
-        } else {
-            vals=r.createValues(sm1+1);
-            System.arraycopy(v, 0, vals, 0, sm1);
-        }
-
-        vals[sm1]=valArrayToList(v, sm1, vl-sm1);
-        return this;
-    }
- 
-    public LexicalEnvironment(Interpreter r, Closure c) 
-	throws ContinuationException {
-        reinit(r, c);
     }
 
     public final Value lookup(int depth, int pos) {

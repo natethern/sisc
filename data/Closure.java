@@ -22,10 +22,39 @@ public class Closure extends Procedure {
         this.body=body;
     }
 
+    private final Value[] matchArgs(Interpreter r)
+        throws ContinuationException {
+        Value[] v=r.vlr;
+        int vl=v.length;
+        if (!arity) {
+            if (vl == fcount) return v;
+            error(r, liMessage(SISCB,"notenoughargsto", toString(),
+                               fcount, vl));
+            return null;
+        }
+        
+        int sm1=fcount-1;
+        if (vl < sm1) {
+            error(r, liMessage(SISCB,"notenoughargstoinf", toString(),
+                               sm1, vl));
+            return null;
+        }
+        Value[] vals;
+        if (vl > sm1 && !r.vlk) {
+            vals=v;
+        } else {
+            vals=r.createValues(sm1+1);
+            System.arraycopy(v, 0, vals, 0, sm1);
+        }
+
+        vals[sm1]=valArrayToList(v, sm1, vl-sm1);
+        return vals;
+    }
+
     public void apply(Interpreter r) throws ContinuationException {
-        r.env=new LexicalEnvironment(r, this);
+        r.env=new LexicalEnvironment(matchArgs(r), env);
         r.nxp=body;
-	r.vlr=ZV;
+        r.vlr=ZV;
     }
 
     public void display(ValueWriter w) throws IOException {
