@@ -12,7 +12,6 @@ public class CountingOutputStream extends FilterOutputStream {
     }
 
     public void write(int b) throws IOException {
-        if ( b==8) new Throwable().printStackTrace();
         position++;
         out.write(b);
     }
