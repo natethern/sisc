@@ -13,6 +13,8 @@ import sisc.util.*;
 
 public class ComplexPrimitives extends IndexedProcedure implements Primitives {
 
+    final static String GENSYM_MAGIC_PREFIX = "%%gensym_";
+
     public static class Index extends IndexedLibraryAdapter {
         
         public Value construct(int id) {
@@ -28,6 +30,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             define("current-wind", CURRENTWIND);
             define("eval", EVALUATE);
             define("gensym", GENSYM);
+            define("gensym?", GENSYMP);
             define("getenv", GETENV);
             define("getprop", GETPROP);
             define("get-sidecar-environment", GETSIDECAR);
@@ -81,7 +84,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             case CURRENTWIND: return r.dynenv.wind;
             case GENSYM: 
                 long unv=r.tctx.nextUnique();
-                return Symbol.intern(base64encode(unv));
+                return Symbol.intern(GENSYM_MAGIC_PREFIX+base64encode(unv));
             case INTERACTIONENVIRONMENT:
                 return r.getCtx().toplevel_env.asValue();
             case SISCINITIAL: 
@@ -115,7 +118,9 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                 }
             case GENSYM: 
                 long unv=r.tctx.nextUnique();
-                return Symbol.intern(base64encode(unv));
+                return Symbol.intern(GENSYM_MAGIC_PREFIX+base64encode(unv));
+            case GENSYMP:
+                return truth(symbol(vlr[0]).symval.startsWith(GENSYM_MAGIC_PREFIX));
             case EVALUATE:
                 r.nxp=r.compile(vlr[0]);
                 r.env=null;

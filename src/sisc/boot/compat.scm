@@ -70,8 +70,8 @@
 
 (define (gen-sym base)
   (if base
-      (string->symbol (string-append (symbol->string base) "_"
-                                     (symbol->string (gensym))))
+      (string->symbol (string-append (symbol->string (gensym)) "_"
+                                     (symbol->string base)))
       (gensym)))
 
 (define (ormap proc list1)

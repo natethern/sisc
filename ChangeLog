@@ -1,3 +1,7 @@
+2004-12-31  Matthias Radestock  <matthias@sorted.org>
+
+	* Added GENSYM? predicate, contributed by Magnus Jonsson.
+
 2004-12-29  Matthias Radestock  <matthias@sorted.org>
 
 	* Simplified the syntax for DEFINE-CLASS.

@@ -2,7 +2,7 @@ package sisc.modules;
 
 interface Primitives {
 
-    //next: 137
+    //next: 138
     int ACOS = 23,
         ADD = 114,
         APPLY = 121,
@@ -43,6 +43,7 @@ interface Primitives {
         FLOOR = 48,
         GCD = 92,
         GENSYM = 0,
+        GENSYMP = 137,
         GETSIDECAR = 124,
         GETENV = 123,
         GETENVIRONMENT = 18,
