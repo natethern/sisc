@@ -1,42 +1,185 @@
-  <chapter id="javainteraction">
-    <title>
-      Java Interaction
-    </title>
-    <para>
-      &SISC; can be used as a scripting language
-      for Java, or Java may be used to provide functionality to
-      Scheme. Such activity is collectively termed 'bridging'. &SISC;
-      provides an API that may be called from Java to execute Scheme
-      code or evaluate Scheme expressions. In addition, the J2S module
-      provides Scheme level control of Java objects, methods, and
-      fields. Finally, the two can be combined in a number of complex
-      ways to intertwine the two languages.
-    </para>
-    <sect1 id="JavaToScheme">
+<chapter id="JavaInteraction">
+  <title>Java Interaction</title>
+  <para>
+&SISC; can be used as a scripting language for Java, or Java may be
+used to provide functionality to Scheme. Such activity is collectively
+termed 'bridging'. In &SISC; bridging is accomplished by a Java API
+for executing Scheme code and evaluating Scheme expressions, and a
+module that provides Scheme-level access to Java objects and
+implementation of Java interfaces in Scheme.
+</para>
+  <sect1 id="JavaToScheme">
+    <title>Java-to-Scheme Interface</title>
+    <para></para>
+    <sect2 id="JErrorHandling">
       <title>
-	Java to Scheme call API
-      </title>
-      <para></para>
-      <sect2 id="JErrorHandling">
-	<title>
 	  Error Handling
 	</title>
-	<para></para>
-      </sect2>
-      <sect2 id="JContinuations">
-	<title>
+      <para></para>
+    </sect2>
+    <sect2 id="JContinuations">
+      <title>
 	  Continuations
 	</title>
-	<para></para>
-      </sect2>
-    </sect1>
-    <sect1 id="SchemeToJava">
-      <title>
-	Scheme level Java manipulation
-      </title>
       <para></para>
-    </sect1>
-  </chapter>
+    </sect2>
+  </sect1>
+  <sect1 id="SchemeToJava">
+    <title>Scheme-to-Java Interface</title>
+    <para>
+The Scheme-to-Java Interface is encapsulated in the
+<literal>s2j</literal> module and can be imported in the
+usual manner, i.e.
+<programlisting>
+(import s2j)
+</programlisting>
+In addition to the core Scheme-to-Java functionality, the module also
+re-exports the contents of the
+<literal>generic-functions</literal> module described in
+<xref linkend="GenericFunctions"/>, since a significant proportion of
+the module's functionality is offered through tight integration with
+the generic function mechanism.
+</para>
+    <sect2>
+      <title>Java Objects</title>
+      <para>
+Java objects are exposed to the Scheme world as instances of a special
+data type that is disjoint from all other Scheme types.
+</para>
+      <para>
+<methodsynopsis language="scheme">
+          <type>&num;t/&num;f</type>
+          <methodname>java-object?</methodname>
+          <methodparam><parameter>obj</parameter></methodparam>
+        </methodsynopsis>
+<blockquote>
+          <para>
+returns &num;t if <parameter>obj</parameter> is a Java object, &num;f
+otherwise.
+</para>
+        </blockquote>
+</para>
+      <sect3>
+	<title>Object Types</title>
+	<para>
+Some types of Java objects are handled specially, namely classes,
+interfaces, arrays and <constant>null</constant>. A set of predicates
+ascertains whether a Java object is of one of these special types.
+</para>
+        <para>
+<simplelist>
+            <member>
+<methodsynopsis language="scheme">
+                <type>&num;t/&num;f</type>
+                <methodname>java-class?</methodname>
+                <methodparam><parameter>obj</parameter></methodparam>
+              </methodsynopsis>
+</member>
+            <member>
+<methodsynopsis language="scheme">
+                <type>&num;t/&num;f</type>
+                <methodname>java-interface?</methodname>
+                <methodparam><parameter>obj</parameter></methodparam>
+              </methodsynopsis>
+</member>
+            <member>
+<methodsynopsis language="scheme">
+                <type>&num;t/&num;f</type>
+                <methodname>java-array?</methodname>
+                <methodparam><parameter>obj</parameter></methodparam>
+              </methodsynopsis>
+</member>
+            <member>
+<methodsynopsis language="scheme">
+                <type>&num;t/&num;f</type>
+                <methodname>java-null?</methodname>
+                <methodparam><parameter>obj</parameter></methodparam>
+              </methodsynopsis>
+</member>
+            </simplelist>
+<blockquote>
+            <para>
+Ascertains whether <parameter>obj</parameter> is a Java class,
+interface, array or is <constant>null</constant>.
+</para>
+          </blockquote>
+</para>
+        <para>
+Generally all java objects are self-evaluating. The result of the
+evaluation depends on the type of object and the arguments.
+</para>
+        <para>
+<methodsynopsis language="scheme">
+            <type>jobj</type>
+            <methodname></methodname>
+            <methodparam><parameter>jobj</parameter></methodparam>
+            <methodparam><parameter>fieldname</parameter></methodparam>
+            <methodparam choice="opt">
+              <parameter>jobj</parameter>
+            </methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Gets or sets the value of Java object's instance or static member
+field. <parameter>jobj</parameter> can be any Java
+object. <parameter>fieldname</parameter> denotes the field name and
+must be supplied as a symbol.
+</para>
+          </blockquote>
+</para>
+        <para>
+<methodsynopsis language="scheme">
+            <type>jobj</type>
+            <methodname></methodname>
+            <methodparam><parameter>jclass</parameter></methodparam>
+            <methodparam><parameter>fieldname</parameter></methodparam>
+            <methodparam choice="opt">
+              <parameter>jobj</parameter>
+            </methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Gets or sets the value of Java class' static member
+field. <parameter>jclass</parameter> can be any Java
+class. <parameter>fieldname</parameter> denotes the field name and
+must be supplied as a symbol.
+</para>
+          </blockquote>
+</para>
+        <para>
+<methodsynopsis language="scheme">
+            <type>jobj</type>
+            <methodname></methodname>
+            <methodparam><parameter>jarray</parameter></methodparam>
+            <methodparam><parameter>index</parameter></methodparam>
+            <methodparam choice="opt">
+              <parameter>jobj</parameter>
+            </methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Gets or sets the value of a Java array element.
+<parameter>jarray</parameter> can be any Java array
+object. <parameter>index</parameter> can be either a number
+or, for multi-dimensional arrays, a list or vector of numbers.
+</para>
+          </blockquote>
+</para>
+      </sect3>
+      <sect3>
+	<title>Object Comparison</title>
+	<para>
+Comparing Java objects using <function>eq?</function> compares the
+objects using Java's <function>==</function>
+comparison. <function>equal?</function>, on the other hand, compares
+the objects using Java's <function>equals</function> method. Applying
+either <function>eq?</function> or <function>equal?</function> to a
+mixture of Java objects and other Scheme objects returns &num;f.
+</para>
+      </sect3>
+    </sect2>
+  </sect1>
+</chapter>
 <!-- Keep this comment at the end of the file
 Local variables:
 sgml-parent-document:("sss.xml" "chapter")
