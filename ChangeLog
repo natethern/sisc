@@ -1,3 +1,10 @@
+2004-08-24  Released SISC 1.9.0-alpha
+
+2004-08-23  Scott G. Miller   <scott@sgmiller.org>
+
+	* Numerous bugs related to dead code and undefined references
+	  fixed.
+
 2004-08-14  Scott G. Miller   <scott@sgmiller.org>
 
 	* SISC-full now uses generic-procedure based I/O, allowing
