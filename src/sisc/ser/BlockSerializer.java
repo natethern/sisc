@@ -6,6 +6,7 @@ import sisc.data.Expression;
 
 public class BlockSerializer extends SLL2Serializer {
 
+    private Set seen;
     private Vector classes;
     private int[] sizes;
     private Expression[] entryPoints;
@@ -17,7 +18,8 @@ public class BlockSerializer extends SLL2Serializer {
         this.classes=classes;
         this.entryPoints=entryPoints;
         sizes=new int[entryPoints.length];
-        
+        seen=new HashSet();
+
         ci=new HashMap();
         for (int i=0; i<classes.size(); i++) {
             ci.put(classes.elementAt(i), new Integer(i));
@@ -71,6 +73,7 @@ public class BlockSerializer extends SLL2Serializer {
                 writeSeenEntryPoint(posi);
                 return;
             }  else {
+                seen.add(e);
                 sizeStartOffset=writeNewEntryPointMarker(posi, e);
                 flush=true;
             }
@@ -83,6 +86,10 @@ public class BlockSerializer extends SLL2Serializer {
             if (sizeStartOffset != -1)
                 sizes[posi] = cos.position - sizeStartOffset;
         } // else we'll get it in a callback with a SerJobEnd
+    }
+
+    protected boolean seen(Expression e) {
+        return seen.contains(e);
     }
     
     public void writeClass(Class c) throws IOException {

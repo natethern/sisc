@@ -45,8 +45,8 @@ public class StreamSerializer extends SLL2Serializer {
         int sizeStartOffset = -1;
         int posi=nextEp;
         
-        if (seen(e)) {
-            Integer epIndex=(Integer)entryPoints.get(e);
+        Integer epIndex=(Integer)entryPoints.get(e);
+        if (epIndex != null) {
             writeSeenEntryPoint(epIndex.intValue());
             return;
         }  else {

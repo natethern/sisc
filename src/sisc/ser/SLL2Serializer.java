@@ -11,7 +11,6 @@ public abstract class SLL2Serializer extends SerializerImpl {
     private Map offsets;
     protected DataOutputStream datout;
     protected CountingOutputStream cos;
-    protected Set seen;
     protected LinkedList serQueue;
            
     protected SLL2Serializer(OutputStream out) throws IOException {
@@ -19,7 +18,6 @@ public abstract class SLL2Serializer extends SerializerImpl {
         datout=new DataOutputStream(cos);
         
         serQueue=new LinkedList();
-        seen=new HashSet();
         offsets=new HashMap();
     }
    
@@ -116,10 +114,6 @@ public abstract class SLL2Serializer extends SerializerImpl {
         writeBer(v, datout);
     }
 
-    protected boolean seen(Expression e) { 
-        return seen.contains(e);
-    }
-
     protected void serializeDetails(Expression e) throws IOException {
         e.serialize(this);
         e.serializeAnnotations(this);
@@ -166,7 +160,6 @@ public abstract class SLL2Serializer extends SerializerImpl {
     }
     
     protected int writeNewEntryPointMarker(int posi, Expression e) throws IOException {
-        seen.add(e);
         setOffset(posi, cos.position);
         
         writeInt(2);
