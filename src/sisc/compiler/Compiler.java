@@ -329,7 +329,7 @@ public class Compiler extends CompilerConstants {
         case UNKNOWN:
             exps=pairToExpressions(expr);
             compileExpressions(r, exps, sets, rf, 0, env);
-            Expression operout=compile(r,oper,sets, rf,0,env, null);
+            Expression operout=compile(r,oper,sets, rf,0,env,an);
             rv = application(r, operout, exps, context, an, env);
             break;
         default:
