@@ -872,6 +872,10 @@
    call-with-serial-output-port
    with-serial-input-from-port
    with-serial-output-to-port
+   call-with-serial-input-file
+   call-with-serial-output-file
+   with-serial-input-from-file
+   with-serial-output-to-file
    serial-input-port?
    serial-output-port?)
   (import* serial-io-native
