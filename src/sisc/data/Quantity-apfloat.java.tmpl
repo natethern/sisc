@@ -126,16 +126,18 @@ public class Quantity extends Value implements Singleton {
             double yd=parseDecimal(v.substring(x+1), radix, true).doubleValue();
             return new Quantity(new BigDecimal(xd*Math.cos(yd)),
                                 new BigDecimal(xd*Math.sin(yd)));
-        } else if (radix==10 &&
-                   (v.indexOf('.') != -1 ||
-                    v.indexOf('e') != -1 ||
-                    v.indexOf('s') != -1 ||
-                    v.indexOf('f') != -1 ||
-                    v.indexOf('d') != -1 ||
-                    v.indexOf('l') != -1)) {
-            return new Quantity(parseDecimal(v, radix), true);
-        } else 
-            return parseUinteger(v, radix);
+        } else if (radix==10) {
+            String lv=v.toLowerCase();
+            if (lv.indexOf('.') != -1 ||
+                lv.indexOf('e') != -1 ||
+                lv.indexOf('s') != -1 ||
+                lv.indexOf('f') != -1 ||
+                lv.indexOf('d') != -1 ||
+                lv.indexOf('l') != -1) {
+                return new Quantity(parseDecimal(lv, radix), true);
+            }
+        }  
+        return parseUinteger(v, radix);
     }
 
     public int type;
@@ -220,69 +222,59 @@ public class Quantity extends Value implements Singleton {
 
     protected static BigDecimal parseDecimal(String dv, int radix,
                                              boolean asDecimal) {
-        if (radix==10) {
-            int x;
-            if ((x=dv.indexOf('e'))!=-1) {
-                int e=x;
-                StringBuffer b=new StringBuffer();
-                String preExp=dv.substring(0,e);
-                if ((x=preExp.indexOf('.'))!=-1) {
-                    char[] c=preExp.substring(0,x).toCharArray();
-                    boolean wholeHadPounds=parsePounds(c);
-                    b.append(c);
-                    c=preExp.substring(x+1).toCharArray();
-                    if (wholeHadPounds)
+        try {
+            if (radix==10) {
+                int x;
+                if ((x=dv.indexOf('e'))!=-1) {
+                    int e=x;
+                    StringBuffer b=new StringBuffer();
+                    String preExp=dv.substring(0,e);
+                    if ((x=preExp.indexOf('.'))!=-1) {
+                        char[] c=preExp.substring(0,x).toCharArray();
+                        boolean wholeHadPounds=parsePounds(c);
+                        b.append(c);
+                        c=preExp.substring(x+1).toCharArray();
+                        if (wholeHadPounds)
+                            for (int i=0; i<c.length; i++)
+                                if (c[i]!='#')
+                                    throw new NumberFormatException(liMessage(SISCB,"noncontigpounds"));
+                        parsePounds(c);
+                        b.append('.').append(c);
+                    } else {
+                        char[] c=dv.substring(0,e).toCharArray();
+                        parsePounds(c);
+                        b.append(c);
+                    }
+                    b.append(dv.substring(e));
+                    dv=b.toString();
+                    return new BigDecimal(dv);
+                } else if ((x=dv.indexOf('s'))!=-1 ||
+                           (x=dv.indexOf('f'))!=-1 ||
+                           (x=dv.indexOf('d'))!=-1 ||
+                           (x=dv.indexOf('l'))!=-1) {
+                    StringBuffer b=new StringBuffer(dv.substring(0,x));
+                    b.append('e').append(dv.substring(x+1));
+                    dv=b.toString();
+                    return parseDecimal(dv, radix, asDecimal);
+                } else if ((x=dv.indexOf('.'))!=-1) {
+                    StringBuffer b=new StringBuffer();
+                    char c[]=dv.substring(0,x).toCharArray();
+                    if (parsePounds(c)) {
+                        b.append(c);
+                        c=dv.substring(x+1).toCharArray();
                         for (int i=0; i<c.length; i++)
                             if (c[i]!='#')
                                 throw new NumberFormatException(liMessage(SISCB,"noncontigpounds"));
-                    parsePounds(c);
+                        parsePounds(c);
+                    } else {
+                        b.append(c);
+                        c=dv.substring(x+1).toCharArray();
+                        parsePounds(c);
+                    }
                     b.append('.').append(c);
-                } else {
-                    char[] c=dv.substring(0,e).toCharArray();
-                    parsePounds(c);
-                    b.append(c);
-                }
-                b.append(dv.substring(e));
-                dv=b.toString();
-                return new BigDecimal(dv);
-            } else if ((x=dv.indexOf('s'))!=-1 ||
-                       (x=dv.indexOf('f'))!=-1 ||
-                       (x=dv.indexOf('d'))!=-1 ||
-                       (x=dv.indexOf('l'))!=-1) {
-                StringBuffer b=new StringBuffer(dv.substring(0,x));
-                b.append('e').append(dv.substring(x+1));
-                dv=b.toString();
-                return parseDecimal(dv, radix, asDecimal);
-            } else if ((x=dv.indexOf('.'))!=-1) {
-                StringBuffer b=new StringBuffer();
-                char c[]=dv.substring(0,x).toCharArray();
-                if (parsePounds(c)) {
-                    b.append(c);
-                    c=dv.substring(x+1).toCharArray();
-                    for (int i=0; i<c.length; i++)
-                        if (c[i]!='#')
-                            throw new NumberFormatException(liMessage(SISCB,"noncontigpounds"));
-                    parsePounds(c);
-                } else {
-                    b.append(c);
-                    c=dv.substring(x+1).toCharArray();
-                    parsePounds(c);
-                }
-                b.append('.').append(c);
-
-                return new BigDecimal(b.toString());
-            } else if (dv.indexOf('#')!=-1) {
-                char[] c=dv.toCharArray();
-                parsePounds(c);
-                return new BigDecimal(new String(c));
-            } else if (asDecimal)
-                return new BigDecimal(dv);
-            else
-                throw new NumberFormatException(liMessage(SISCB,"notadecimal"));
-        } else {
-            int x;
-            if ((x=dv.indexOf('.'))==-1)
-                if (dv.indexOf('#')!=-1) {
+                    
+                    return new BigDecimal(b.toString());
+                } else if (dv.indexOf('#')!=-1) {
                     char[] c=dv.toCharArray();
                     parsePounds(c);
                     return new BigDecimal(new String(c));
@@ -290,18 +282,34 @@ public class Quantity extends Value implements Singleton {
                     return new BigDecimal(dv);
                 else
                     throw new NumberFormatException(liMessage(SISCB,"notadecimal"));
-            else {
-                BigDecimal ipart;
-                BigInteger fpart;
-                ipart=new BigDecimal(new BigInteger(dv.substring(0, x), radix));
-                String fpartstr=dv.substring(x+1);
-                fpart=new BigInteger(fpartstr, radix);
-                return ipart.add(
-                        new BigDecimal(fpart).divide(
-                         new BigDecimal(Math.pow(radix, 
-                                                 fpartstr.length())),
-                                  BigDecimal.ROUND_HALF_EVEN));
+            } else {
+                int x;
+                if ((x=dv.indexOf('.'))==-1)
+                    if (dv.indexOf('#')!=-1) {
+                        char[] c=dv.toCharArray();
+                        parsePounds(c);
+                        return new BigDecimal(new String(c));
+                    } else if (asDecimal)
+                        return new BigDecimal(dv);
+                    else
+                        throw new NumberFormatException(liMessage(SISCB,"notadecimal"));
+                else {
+                    BigDecimal ipart;
+                    BigInteger fpart;
+                    ipart=new BigDecimal(new BigInteger(dv.substring(0, x), radix));
+                    String fpartstr=dv.substring(x+1);
+                    fpart=new BigInteger(fpartstr, radix);
+                    return ipart.add(
+                     new BigDecimal(fpart).divide(
+                      new BigDecimal(Math.pow(radix, 
+                                              fpartstr.length())),
+                                     BigDecimal.ROUND_HALF_EVEN));
+                }
             }
+        } catch (StringIndexOutOfBoundsException ioob) { 
+            // Workaround for an IBM JVM bug, this exception is never
+            // supposed to be thrown
+            throw new NumberFormatException(liMessage(SISCB,"notadecimal"));
         }
     }
 
