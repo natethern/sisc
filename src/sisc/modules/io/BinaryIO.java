@@ -182,6 +182,11 @@ public class BinaryIO extends IndexedProcedure {
                                                      f.vlr[0].synopsis()}));
                 }
                 return VOID;
+            default:
+                throwArgSizeException();
+            }
+        case 4:
+            switch (id) {            
             case BLOCKREAD:
                 int count=num(f.vlr[2]).indexValue();
                 int offset=num(f.vlr[1]).indexValue();
@@ -199,7 +204,8 @@ public class BinaryIO extends IndexedProcedure {
                 break;
             case BLOCKWRITE:
                 count=num(f.vlr[2]).indexValue();
-                BinaryOutputPort outport=boutport(f.vlr[1]);
+                offset=num(f.vlr[1]).indexValue();
+                BinaryOutputPort outport=boutport(f.vlr[3]);
                 buf=buffer(f.vlr[0]).buf;
                 try {
                     outport.write(buf, 0, count);
@@ -209,18 +215,13 @@ public class BinaryIO extends IndexedProcedure {
                                        e.getMessage()));
                 }
                 return VOID;
-            default:
-                throwArgSizeException();
-            }
-        case 4:
-            switch (id) {            
             case BUFFERCOPY:
                 byte[] sbuf=buffer(f.vlr[0]).buf;
                 byte[] dbuf=buffer(f.vlr[2]).buf;
 
                 int soff=num(f.vlr[1]).indexValue();
                 int doff=num(f.vlr[3]).indexValue();
-                int count=sbuf.length;
+                count=sbuf.length;
 
                 try {
                     System.arraycopy(sbuf, soff, dbuf, doff, count);

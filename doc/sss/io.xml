@@ -1027,16 +1027,20 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <parameter>buffer</parameter>
               </methodparam>
               <methodparam>
-                <parameter>binary-output-port</parameter>
+                <parameter>offset</parameter>
               </methodparam>
               <methodparam>
                 <parameter>count</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>binary-output-port</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
                 Writes <parameter>count</parameter> bytes of data from
-                the provided <parameter>buffer</parameter> to the
+                the provided <parameter>buffer</parameter> at 
+                starting point <paramter>offset</paramter> to the
                 given <parameter>binary-output-port</parameter>.  Exactly
                 <parameter>count</parameter> bytes will be written.
               </para>

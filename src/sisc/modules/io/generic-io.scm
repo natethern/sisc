@@ -150,11 +150,15 @@
 (define-method (gio/write-char (<char> c) (<filter-output-port> o))
   (gio/write-char c (:out o)))
 
-(define-method (gio/write-block (<char> c) (<filter-output-port> o))
-  (gio/write-char c (:out o)))
+(define-method (gio/write-block (<sisc.modules.io.buffer> b)
+                                (<number> off) (<number> count)
+                                (<filter-output-port> o))
+  (gio/write-block b off count (:out o)))
 
-(define-method (gio/write-string (<char> c) (<filter-output-port> o))
-  (gio/write-char c (:out o)))
+(define-method (gio/write-string (<string> s)
+                                 (<number> off) (<number> count)
+                                 (<filter-output-port> o))
+  (gio/write-string s off count (:out o)))
 
 (define-method (gio/write-char (<char> c) (<filter-output-port> o))
   (gio/write-char c (:out o)))
@@ -235,17 +239,25 @@
 (define-method (gio/display (<value> v) (<filter-output-port> o))
   (gio/display v (:out o)))
 
-(define-method (gio/write-string (<sisc.data.scheme-output-port> o) . rest)
-  (apply native-write-string (append rest (list o))))
+(define-method (gio/write-string (<string> s)
+                                 (<number> off) (<number> count)
+                                 (<sisc.data.scheme-output-port> o))
+  (native-write-string s off count o))
 
-(define-method (gio/write-string (<filter-output-port> o) . rest)
-  (apply gio/write-string (:out o) rest))
+(define-method (gio/write-block (<sisc.modules.io.buffer> b)
+                                (<number> off) (<number> count)
+                                (<filter-output-port> o))
+  (gio/write-block b off count (:out o)))
 
-(define-method (gio/write-block (<sisc.data.scheme-output-port> o) . rest)
-  (apply native-write-block (append rest (list o))))
+(define-method (gio/write-block (<sisc.modules.io.buffer> b)
+                                (<number> off) (<number> count)
+                                (<sisc.data.scheme-output-port> o))
+  (native-write-block b off count o))
 
-(define-method (gio/write-block (<filter-output-port> o) . rest)
-  (apply gio/write-block (:out o) rest))
+(define-method (gio/write-block (<sisc.modules.io.buffer> b)
+                                (<number> off) (<number> count)
+                                (<filter-output-port> o))
+  (gio/write-block b off count (:out o)))
 
 (define-method (gio/flush-output-port (<sisc.data.scheme-output-port> o))
   (native-flush-output-port o))
