@@ -620,7 +620,8 @@
 
 (define-syntax build-lexical-var
   (syntax-rules ()
-    ((_ src id) (if src `(compile-in-annotation ,(gensym) ,src) (gensym)))))
+    ((_ src id) (if src `(compile-in-annotation ,(gen-sym id) ,src) 
+        (gen-sym id)))))
 
 (define-syntax self-evaluating?
   (syntax-rules ()
