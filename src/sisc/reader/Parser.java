@@ -136,11 +136,11 @@ public class Parser extends Util implements Tokens {
         return _nextExpression(is, state, def, 10, flags);
     }
 
-    protected Quantity numberCheck(Object o, int flags) throws IOException {
+    protected Quantity numberCheck(Object o, InputPort is, int flags) throws IOException {
         try {
             return (Quantity)o;
         } catch (ClassCastException cce) {
-            potentialError(flags, "badtokennotnumber", null);
+            potentialError(flags, "badtokennotnumber", is);
             return Quantity.ZERO;
         }
     }
@@ -273,16 +273,16 @@ public class Parser extends Util implements Tokens {
                 }
                 break;
             case 'b':
-                o=numberCheck(_nextExpression(is, state, null, 2, flags), flags);
+                o=numberCheck(_nextExpression(is, state, null, 2, flags), is, flags);
                 break;
             case 'o':
-                o=numberCheck(_nextExpression(is, state, null, 8, flags), flags);
+                o=numberCheck(_nextExpression(is, state, null, 8, flags), is, flags);
                 break;
             case 'x':
-                o=numberCheck(_nextExpression(is, state, null, 16, flags), flags);
+                o=numberCheck(_nextExpression(is, state, null, 16, flags), is, flags);
                 break;
             case 'd':
-                o=numberCheck(_nextExpression(is, state, null, flags), flags);
+                o=numberCheck(_nextExpression(is, state, null, flags), is, flags);
                 break;
             case '&':
                 o=new Box();
@@ -290,10 +290,10 @@ public class Parser extends Util implements Tokens {
                 ((Box)o).val=(Value)_nextExpression(is, state, null, flags);
                 break;
             case 'i':
-                o=numberCheck(_nextExpression(is, state, null, radix, flags), flags).toInexact();
+                o=numberCheck(_nextExpression(is, state, null, radix, flags), is, flags).toInexact();
                 break;
             case 'e':
-                o=numberCheck(_nextExpression(is, state, null, radix, flags), flags).toExact();
+                o=numberCheck(_nextExpression(is, state, null, radix, flags), is, flags).toExact();
                 break;
             case '!':
                 String bv=lexer.readToBreak(is, Lexer.special, false, false);
