@@ -267,7 +267,7 @@ public class REPL extends Thread {
             for (;;) {
                 Socket client = ssocket.accept();
                 DynamicEnvironment dynenv = new DynamicEnvironment(new SourceInputPort(new BufferedInputStream(client.getInputStream()), "console"),
-                                                   new OutputPort(new PrintWriter(client.getOutputStream()), true));
+                                                                   new StreamOutputPort(client.getOutputStream(), true));
                 REPL repl = new SocketREPL(app, dynenv, client);
                 repl.start();
             }

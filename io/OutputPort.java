@@ -1,71 +1,15 @@
-package sisc.data;
+package sisc.io;
 
-import java.io.*;
-import sisc.*;
-import sisc.interpreter.*;
+import sisc.data.Value;
+import java.io.IOException;
 
-public class OutputPort extends NamedValue {
-    public transient Writer w;
-    transient boolean autoflush;
+public interface OutputPort extends Port {
 
-    public OutputPort(Writer w) {
-        this(w, false);
-    }
-
-    public OutputPort(Writer w, boolean autoflush) {
-        this.w=w;
-        this.autoflush=autoflush;
-    }
-
-    public void writeChar(char c) throws IOException {
-        w.write(c);
-        if (autoflush) flush();
-    }
-
-    public void write(char[] buff, int count)
-    throws ContinuationException {
-        try {
-            w.write(buff, 0, count);
-            if (autoflush) flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    public void write(String s) throws IOException {
-        w.write(s);
-        if (autoflush) flush();
-    }
-
-    public String display() {
-        return displayNamedOpaque("output-port");
-    }
-
-    public void flush() throws IOException {
-        w.flush();
-    }
-
-    public void close() throws ContinuationException {
-        try {
-            flush();
-        } catch (IOException e) {
-        }
-
-        try {
-            w.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
+    public void write(char v) throws IOException;
+    public void write(String v) throws IOException;
+    public void display(Value v) throws IOException;
+    public void flush() throws IOException;
 }
-
-
-
-
-
-
-
-
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file

@@ -62,7 +62,7 @@ public class SNetwork extends ModuleAdapter {
     abstract class SchemeSocket extends Value implements Closable {
         public abstract void close() throws IOException;
         abstract SchemeInputPort getInputPort(Interpreter r) throws IOException, ContinuationException;
-        abstract OutputPort getOutputPort(Interpreter r, boolean autoflush) throws IOException, ContinuationException;
+        abstract SchemeOutputPort getOutputPort(Interpreter r, boolean autoflush) throws IOException, ContinuationException;
     }
 
     class SchemeServerSocket extends Value implements Closable {
@@ -109,10 +109,10 @@ public class SNetwork extends ModuleAdapter {
             return new StreamInputPort(new BufferedInputStream(s.getInputStream()));
         }
 
-        public OutputPort getOutputPort(Interpreter r, 
+        public SchemeOutputPort getOutputPort(Interpreter r, 
 					boolean autoflush) throws IOException, ContinuationException {
-            return new OutputPort(new PrintWriter(s.getOutputStream()),
-                                  autoflush);
+            return new StreamOutputPort(s.getOutputStream(),
+                                        autoflush);
         }
     }
 
@@ -251,11 +251,11 @@ public class SNetwork extends ModuleAdapter {
             return new StreamInputPort(new BufferedInputStream(new UDPInputStream(s, packet_size)));
         }
 
-        public OutputPort getOutputPort(Interpreter r, boolean autoflush) throws IOException, ContinuationException {
+        public SchemeOutputPort getOutputPort(Interpreter r, boolean autoflush) throws IOException, ContinuationException {
 	    if ((mode & SEND)==0)
 		error(r, liMessage(SNETB, "outputoninputudp"));
-            return new OutputPort(new PrintWriter(new UDPOutputStream(s, remoteHost, dport)),
-                                  autoflush);
+            return new StreamOutputPort(new UDPOutputStream(s, remoteHost, dport),
+                                        autoflush);
         }
     }
 

@@ -1,45 +1,13 @@
-package sisc.env;
+package sisc.io;
 
-import sisc.data.*;
-import sisc.compiler.*;
-import java.io.*;
-import sisc.io.*;
+import sisc.data.SchemeOutputPort;
 
-public class DynamicEnvironment extends sisc.Util implements Cloneable {
+public abstract class AutoflushOutputPort extends SchemeOutputPort {
 
-    public SchemeInputPort in;
-    public SchemeOutputPort out;
+    protected boolean autoflush;
 
-    public Value wind = FALSE; //top of wind stack
-
-    //the lexer is stateful
-    public Parser parser = new Parser(new Lexer());
-
-    //user-defined thread variables; this map is weak so that we don't
-    //hang on to vars that are no longer in use.
-    public java.util.Map parameters = new java.util.WeakHashMap(0);
-
-    public DynamicEnvironment() {
-        this(System.in, System.out);
-    }
-
-    public DynamicEnvironment(SchemeInputPort in, SchemeOutputPort out) {
-        this.in = in;
-        this.out = out;
-    }
-
-    public DynamicEnvironment(InputStream in, OutputStream out) {
-        this(new SourceInputPort(new BufferedInputStream(in), liMessage(SISCB, "console")),
-             new StreamOutputPort(out, true));
-    }
-
-    public DynamicEnvironment copy() {
-        try {
-            return (DynamicEnvironment)super.clone();
-        }
-        catch (CloneNotSupportedException e) {
-            return this;
-        }
+    public AutoflushOutputPort(boolean a) {
+        autoflush=a;
     }
 }
 /*

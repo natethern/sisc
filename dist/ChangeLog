@@ -1,3 +1,9 @@
+2002-09-23  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Rewrote the IO layer with a more flexible, abstract
+	  Input and Output port, which will allow new IO types
+	  to be more easily created.
+
 2002-09-23  Matthias Radestock  <matthias@sorted.org>
 
 	* Added Java Bean property access via

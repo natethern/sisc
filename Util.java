@@ -278,9 +278,9 @@ public abstract class Util extends Defaults implements Version {
 	return null;
     }
 
-    public static final OutputPort outport(Value o) {
+    public static final SchemeOutputPort outport(Value o) {
         try {
-            return (OutputPort)o;
+            return (SchemeOutputPort)o;
         } catch (ClassCastException e) { typeError("output-port", o); }
 	return null;
     }

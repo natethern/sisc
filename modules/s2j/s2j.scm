@@ -52,7 +52,7 @@
 (define-scheme-types
   (expression   |Expression|)
   (input-port   |SchemeInputPort|)
-  (output-port  |OutputPort|)
+  (output-port  |SchemeOutputPort|)
   (list         |Pair|)
   (procedure    |Procedure|)
   (number       |Quantity|)

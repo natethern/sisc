@@ -1,45 +1,43 @@
-package sisc.env;
+package sisc.io;
 
-import sisc.data.*;
-import sisc.compiler.*;
-import java.io.*;
-import sisc.io.*;
+import sisc.data.Value;
+import java.io.IOException;
+import java.io.Writer;
 
-public class DynamicEnvironment extends sisc.Util implements Cloneable {
+public class WriterOutputPort extends AutoflushOutputPort {
 
-    public SchemeInputPort in;
-    public SchemeOutputPort out;
+    protected Writer out;
 
-    public Value wind = FALSE; //top of wind stack
-
-    //the lexer is stateful
-    public Parser parser = new Parser(new Lexer());
-
-    //user-defined thread variables; this map is weak so that we don't
-    //hang on to vars that are no longer in use.
-    public java.util.Map parameters = new java.util.WeakHashMap(0);
-
-    public DynamicEnvironment() {
-        this(System.in, System.out);
+    public WriterOutputPort(Writer out, boolean aflush) {
+        super(aflush);
+        this.out=out;
     }
 
-    public DynamicEnvironment(SchemeInputPort in, SchemeOutputPort out) {
-        this.in = in;
-        this.out = out;
+    public Writer getWriter() {
+        return out;
     }
 
-    public DynamicEnvironment(InputStream in, OutputStream out) {
-        this(new SourceInputPort(new BufferedInputStream(in), liMessage(SISCB, "console")),
-             new StreamOutputPort(out, true));
+    public void write(char v) throws IOException {
+        out.write(v);
+        if (autoflush) flush();
     }
 
-    public DynamicEnvironment copy() {
-        try {
-            return (DynamicEnvironment)super.clone();
-        }
-        catch (CloneNotSupportedException e) {
-            return this;
-        }
+    public void write(String s) throws IOException {
+        out.write(s);
+        if (autoflush) flush();
+    }
+
+    public void display(Value v) throws IOException {
+        write(v.display());
+    }
+
+    public void flush() throws IOException {
+        out.flush();
+    }
+
+    public void close() throws IOException {
+        flush();
+        out.close();
     }
 }
 /*

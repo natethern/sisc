@@ -13,8 +13,8 @@ public class IO extends ModuleAdapter {
     protected static final int
         //NEXT = 31,
         ABSPATHQ            = 0,
-        BLOCKREAD           = 1,
-        BLOCKWRITE          = 2,
+        //BLOCKREAD           = 1,
+        //BLOCKWRITE          = 2,
         CHARREADY           = 3,
         CLOSEINPUTPORT      = 4,
         CLOSEOUTPUTPORT     = 5,
@@ -46,8 +46,8 @@ public class IO extends ModuleAdapter {
 
     public IO() {
         define("absolute-path?"     , ABSPATHQ);
-        define("block-read"         , BLOCKREAD);
-        define("block-write"        , BLOCKWRITE);
+        //define("block-read"         , BLOCKREAD);
+        //define("block-write"        , BLOCKWRITE);
         define("char-ready?"        , CHARREADY);
         define("close-input-port"   , CLOSEINPUTPORT);
         define("close-output-port"  , CLOSEOUTPUTPORT);
@@ -150,7 +150,7 @@ public class IO extends ModuleAdapter {
             switch (primid) {
             case CURRENTOUTPUTPORT: return f.dynenv.out;
             case CURRENTINPUTPORT: return f.dynenv.in;
-            case OPENOUTPUTSTRING: return new OutputPort(new StringWriter());
+            case OPENOUTPUTSTRING: return new WriterOutputPort(new StringWriter(), false);
             case PEEKCHAR:
                 Value v=readChar(f.dynenv.in);
                 if (v instanceof SchemeCharacter)
@@ -167,8 +167,8 @@ public class IO extends ModuleAdapter {
             }
         case 1:
             switch (primid) {
-            case INPORTQ: return truth(f.vlr[0] instanceof InputPort);
-            case OUTPORTQ: return truth(f.vlr[0] instanceof OutputPort);
+            case INPORTQ: return truth(f.vlr[0] instanceof SchemeInputPort);
+            case OUTPORTQ: return truth(f.vlr[0] instanceof SchemeOutputPort);
             case CHARREADY:
                 SchemeInputPort inport=inport(f.vlr[0]);
                 try {
@@ -203,14 +203,16 @@ public class IO extends ModuleAdapter {
                 inport=inport(f.vlr[0]);
                 return readCode(f, inport);
             case GETOUTPUTSTRING:
-                OutputPort port=outport(f.vlr[0]);
-                if (!(port.w instanceof StringWriter))
+                SchemeOutputPort port=outport(f.vlr[0]);
+                if (!(port instanceof WriterOutputPort) ||
+                    !(((WriterOutputPort)port).getWriter() 
+                      instanceof StringWriter))
                     throwPrimException( liMessage(SISCB, "outputnotastringport"));
                 try {
                     port.flush();
                 } catch (IOException e) {}
 
-                StringWriter sw=(StringWriter)port.w;
+                StringWriter sw=(StringWriter)((WriterOutputPort)port).getWriter();
                 SchemeString s=new SchemeString(sw.getBuffer().toString());
                 sw.getBuffer().setLength(0);
                 return s;
@@ -239,17 +241,17 @@ public class IO extends ModuleAdapter {
                 try {
                     if (url.getProtocol().equals("file")) {
                         //the JDK does not permit write access to file URLs
-                        return new OutputPort(new BufferedWriter(new FileWriter(url.getPath())));
+                        return new StreamOutputPort(new BufferedOutputStream(new FileOutputStream(url.getPath())), false);
                     }
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(false);
                     conn.setDoOutput(true);
-                    return new OutputPort(new BufferedWriter(new OutputStreamWriter(conn.getOutputStream())));
+                    return new StreamOutputPort(new BufferedOutputStream(conn.getOutputStream()), false);
                 } catch (IOException e) {
                     throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
                 }
             case FLUSHOUTPUTPORT:
-                OutputPort op=outport(f.vlr[0]);
+                SchemeOutputPort op=outport(f.vlr[0]);
                 try {
                     op.flush();
                 } catch (IOException e) {
@@ -261,12 +263,16 @@ public class IO extends ModuleAdapter {
                 try {
                     if (inp!=f.dynenv.in) inp.close();
                 } catch (IOException e) {
-                    //fixme?
+                    error(f, liMessage(SISCB, "errorclosing", inp.synopsis()));
                 }
                 return VOID;
             case CLOSEOUTPUTPORT:
                 op=outport(f.vlr[0]);
-                if (op!=f.dynenv.out) op.close();
+                try {
+                    if (op!=f.dynenv.out) op.close();
+                } catch (IOException e) {
+                    error(f, liMessage(SISCB, "errorclosing", op.synopsis()));
+                }
                 return VOID;
             case INPORTLOCATION:
                 inp = inport(f.vlr[0]);
@@ -311,7 +317,7 @@ public class IO extends ModuleAdapter {
                 return VOID;
             case WRITECHAR:
                 try {
-                    f.dynenv.out.writeChar(character(f.vlr[0]));
+                    f.dynenv.out.write(character(f.vlr[0]));
                 } catch (IOException e) {
                     throwPrimException(liMessage(SISCB, "errorwriting",
                                                  f.dynenv.out.synopsis()));
@@ -365,9 +371,9 @@ public class IO extends ModuleAdapter {
         case 2:
             switch (primid) {
             case WRITECHAR:
-                OutputPort port=outport(f.vlr[1]);
+                SchemeOutputPort port=outport(f.vlr[1]);
                 try {
-                    port.writeChar(character(f.vlr[0]));
+                    port.write(character(f.vlr[0]));
                 } catch (IOException e) {
                     throwPrimException(liMessage(SISCB, "errorwriting",
                                                  port.synopsis()));
@@ -398,14 +404,14 @@ public class IO extends ModuleAdapter {
                 try {
                     if (url.getProtocol().equals("file")) {
                         //the JDK does not permit write access to file URLs
-                        return new OutputPort(new BufferedWriter(new FileWriter(url.getPath())),
-                                              truth(f.vlr[1]));
+                        return new StreamOutputPort(new FileOutputStream(url.getPath()),
+                                                    truth(f.vlr[1]));
                     }
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(false);
                     conn.setDoOutput(true);
-                    return new OutputPort(new BufferedWriter(new OutputStreamWriter(conn.getOutputStream())),
-                                          truth(f.vlr[1]));
+                    return new StreamOutputPort(new BufferedOutputStream(conn.getOutputStream()),
+                                                truth(f.vlr[1]));
                 } catch (IOException e) {
                     throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
                 }
@@ -416,7 +422,7 @@ public class IO extends ModuleAdapter {
             }
         case 3:
             switch(primid) {
-            case BLOCKREAD:
+                /*            case BLOCKREAD:
                 int count=num(f.vlr[2]).intValue();
                 SchemeInputPort inport=inport(f.vlr[1]);
                 SchemeString st=str(f.vlr[0]);
@@ -425,12 +431,12 @@ public class IO extends ModuleAdapter {
                 int rv=readChars(inport, buff, 0, count);
                 if (rv==-1) return EOF;
                 else return Quantity.valueOf(rv);
-            case BLOCKWRITE:
+                case BLOCKWRITE:
                 count=num(f.vlr[2]).intValue();
                 OutputPort outport=outport(f.vlr[1]);
                 buff=str(f.vlr[0]).asCharArray();
                 outport.write(buff, count);
-                return VOID;
+                return VOID;*/
             default:
                 throwArgSizeException();
             }
