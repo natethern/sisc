@@ -49,7 +49,7 @@
 (define (get-last-exception)
   (getprop 'last-exception '*debug*))
 
-(define _exit-handler (parameterize '()))
+(define _exit-handler (make-parameter '()))
 
 (define repl
   (letrec ([repl/read

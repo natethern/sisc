@@ -204,7 +204,7 @@
 
 ;;;;;;;;;;;;; File functions
 
-(define current-url (make-parameter "file:."))
+(define current-url (_make-parameter "file:."))
 
 (define (current-directory . rest)
   (if (null? rest)

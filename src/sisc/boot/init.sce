@@ -282,7 +282,7 @@
          'unix))
      (string-downcase
        (getenv "os.name")))))
-(define current-url (make-parameter "file:."))
+(define current-url (_make-parameter "file:."))
 (define current-directory
   (lambda |rest_SuONHQmSU|
     (if (null? |rest_SuONHQmSU|)

@@ -114,7 +114,7 @@
 (define $syntax-dispatch (void))
 (define $make-environment (void))
 
-(define strict-r5rs-compliance (make-native-parameter "strictR5RSCompliance"))
+(define strict-r5rs-compliance (_make-native-parameter "strictR5RSCompliance"))
   
 (define make-false
   (lambda (v) '#f))
