@@ -38,21 +38,19 @@
          (distinct (cdr ls))]
         [else (cons (car ls) (distinct (cdr ls)))]))
 
-(define union-assoc 
-  (lambda a*
-    (if (null? a*) 
-        '()
-        (let ((keys (distinct (map car (apply append a*)))))
-          (let loop ((x keys))
-            (if (null? x) 
-                '()
-                (cons (cons (car x)
-                            (apply union (map (lambda (v)
-                                                (cond [(assoc (car x) v) => cdr]
-                                                      [else '()]))
-                                              a*)))
-                      (loop (cdr x)))))))))
-
+(define (union-assoc . a*)
+  (if (null? a*) 
+      '()
+      (let ((keys (distinct (map car (apply append a*)))))
+        (let loop ((x keys))
+          (if (null? x) 
+              '()
+              (cons (cons (car x)
+                          (apply union (map (lambda (v)
+                                              (cond [(assoc (car x) v) => cdr]
+                                                    [else '()]))
+                                            a*)))
+                    (loop (cdr x))))))))
 
 (define merge-states)
 

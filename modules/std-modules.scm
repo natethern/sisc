@@ -308,7 +308,9 @@
 (module optimizer
     (optimize)
   (import pattern-matching)
-  (include "optimizer/mvlet.scm")
+  ;;TODO: we really want to import the srfi-11 module here, but srfis
+  ;;are not part of the core build
+  (include "../scheme-src/srfi/srfi-11.scm")
   (include "optimizer/ds.scm")
   (include "optimizer/helpers.scm")
   (include "optimizer/logic.scm")
