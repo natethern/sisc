@@ -198,6 +198,7 @@ public class Primitives extends ModuleAdapter {
         }
 
         public boolean visit(ExpressionVisitee e) {
+            if (e == null) return true;
             if (element.equals(e) || trailMap.containsKey(e))
                 return false;
             if (components == null) components = new LinkedList();
