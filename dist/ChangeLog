@@ -1,3 +1,10 @@
+2002-11-23  Matthias Radestock  <matthias@sorted.org>
+
+	* Improved |circular?| to detect circularities in *all* data
+	  types.
+
+	* Added contents of hashtable to its print representation.
+
 2002-11-22  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed thread localization of parameters.

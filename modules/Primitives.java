@@ -2,20 +2,23 @@ package sisc.modules;
 
 import java.util.*;
 import java.lang.reflect.*;
-import java.io.IOException;
-import java.io.StringReader;
-
 import sisc.data.*;
 import sisc.io.*;
 import sisc.exprs.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.LinkedList;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
 import sisc.env.MemorySymEnv;
 import sisc.util.ExpressionVisitor;
+import sisc.util.ExpressionVisitee;
 
 public class Primitives extends ModuleAdapter {
 
@@ -49,6 +52,7 @@ public class Primitives extends ModuleAdapter {
         define("ceiling", CEILING);
         define("char->integer", CHAR2INTEGER);
         define("char?", CHARACTERQ);
+        define("circular?", CIRCULARQ);
         define("compact-string-rep", COMPACTSTRINGREP);
         define("complex?", COMPLEXQ);
         define("cons", CONS);
@@ -141,6 +145,78 @@ public class Primitives extends ModuleAdapter {
         throws ContinuationException {
         return truth(v instanceof Quantity &&
                      (((Quantity)v).is(mask)));
+    }
+
+    public static class CircularityDetector implements ExpressionVisitor {
+
+        private Map trailMap;
+        private LinkedList trail;
+        private ExpressionVisitee element;
+        private LinkedList components;
+        private boolean isCircular;
+
+        public CircularityDetector() {
+            trailMap = new HashMap(1);
+            trail = new LinkedList();
+        }
+
+        public boolean isCircular(ExpressionVisitee e) {
+            element = e;
+            boolean res = false;
+            try {
+                res = isCircular();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            element = null;
+            trailMap.clear();
+            trail.clear();
+            return res;
+        }
+
+        private boolean isCircular() {
+            isCircular = false;
+            //this loop is complicated by an optimisation: checking
+            //non-composite elements does not require any memory
+            //allocation.
+            while(true) {
+                components = null;
+                element.visit(this);
+                if (isCircular) return true;
+                if (components == null) {
+                    while(true) {
+                        if (trail.isEmpty()) return false;
+                        element = (ExpressionVisitee)trail.getLast();
+                        components = (LinkedList)trailMap.get(element);
+                        if (!components.isEmpty()) break;
+                        //pop trail element
+                        trail.removeLast();
+                        trailMap.remove(element);
+                    }
+                } else {
+                    //push trail element
+                    trailMap.put(element, components);
+                    trail.addLast(element);
+                }
+                //pop component
+                element = (ExpressionVisitee)components.removeFirst();
+            }
+        }
+
+        public void visit(ExpressionVisitee e) {
+            //the logic is sub-optimal - after a circularity has been
+            //detected we continue processing. To change this we'd
+            //need to alter the signature of visit() to return a
+            //boolean.
+            if (isCircular) return;
+            if (element.equals(e) || trailMap.containsKey(e)) {
+                isCircular = true;
+                return;
+            }
+            if (components == null) components = new LinkedList();
+            //push component
+            components.addLast(e);
+        }
     }
 
     public static class Parameter extends Procedure {
@@ -327,6 +403,8 @@ public class Primitives extends ModuleAdapter {
                 return Quantity.valueOf(str(f.vlr[0]).length());
             case VECTORLENGTH:
                 return Quantity.valueOf(vec(f.vlr[0]).vals.length);
+            case CIRCULARQ:
+                return truth(new CircularityDetector().isCircular(f.vlr[0]));
             case MAKEPARAM:
                 return new Parameter(f.vlr[0]);
             case MAKESTRING:
@@ -648,7 +726,6 @@ public class Primitives extends ModuleAdapter {
 
     static final int
         //0-10
-        //16
         //26-30
         //33-34
         //37
@@ -679,6 +756,7 @@ public class Primitives extends ModuleAdapter {
         CEILING = 23,
         CHAR2INTEGER = 24,
         CHARACTERQ = 25,
+        CIRCULARQ = 16,
         COMPACTSTRINGREP = 125,
         COMPLEXQ = 40,
         CONS = 109,
