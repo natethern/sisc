@@ -8,42 +8,43 @@
 (module jdbc (jdbc/connect jdbc/prepare-statement
                            jdbc/execute-query jdbc/execute jdbc/close
                            set-int set-string set-double set-float)
-  (import old-s2j)
-  (import old-generic-procedures)
+  (import s2j)
   (import streams)
-  (define <java.sql.Connection> (java-class "java.sql.Connection"))
-  (define <java.sql.PreparedStatement> (java-class "java.sql.PreparedStatement"))
-  (define <java.sql.ResultSet> (java-class "java.sql.ResultSet"))
-  (define <java.sql.DriverManager> (java-class "java.sql.DriverManager"))
-  (define <java.sql.Types> (java-class "java.sql.Types"))  
-  (define-generic close)
-  (define-generic prepare-statement)
-  (define-generic execute-query)
-  (define-generic execute-update)
-  (define-generic get-connection)
-  (define-generic get-meta-data)
-  (define-generic get-type)
-  (define-generic get-string)
-  (define-generic get-int)
-  (define-generic get-float)
-  (define-generic get-double)
-  (define-generic set-string)
-  (define-generic set-int)
-  (define-generic set-float)
-  (define-generic set-double)
-  (define-generic get-column-type)
-  (define-generic get-column-count)
-  (define-generic get-column-label)
-  (define-generic delete-row)
-  (define-generic next)
-  (define jdbc/close close)
+  (define-java-classes
+    <java.sql.connection>
+    <java.sql.prepared-statement>
+    <java.sql.result-set>
+    <java.sql.driver-manager>
+    <java.sql.types>)
+  (define-generic-java-methods (jdbc/close close)
+    prepare-statement
+    execute-query
+    execute-update
+    get-connection
+    get-meta-data
+    get-type
+    get-string
+    get-int
+    get-float
+    get-double
+    set-string
+    set-int
+    set-float
+    set-double
+    get-column-type
+    get-column-count
+    get-column-label
+    delete-row
+    next)
   (define type-conversions #f)
+  (define (access-constant class cname)
+    ((generic-java-field-accessor cname) (java-null class)))
   (define (list-index ls e)
     (cond [(null? ls) #f]
           [(equal? (car ls) e) 0]
           [else (+ 1 (list-index (cdr ls) e))]))
   (define (jdbc/connect jdbc-datasource)
-    (get-connection <java.sql.DriverManager> (->jstring jdbc-datasource)))
+    (get-connection (java-null <java.sql.driver-manager>) (->jstring jdbc-datasource)))
   (define jdbc/execute execute-update)
   (define (jdbc/execute-query statement)
     (let* ((rs (execute-query statement))
@@ -80,19 +81,19 @@
   (define (jdbc/prepare-statement connection query . updatable)
     (if (and (not (null? updatable)) (car updatable))
         (prepare-statement connection (->jstring query)
-                           (<java.sql.ResultSet> '|TYPE_FORWARD_ONLY|)
-                           (<java.sql.ResultSet> '|CONCUR_UPDATABLE|))
+                           (<java.sql.result-set> '|TYPE_FORWARD_ONLY|)
+                           (<java.sql.result-set> '|CONCUR_UPDATABLE|))
         (prepare-statement connection (->jstring query))))
                                                        
   (set! type-conversions
-        `((,(->number (<java.sql.Types> '|INTEGER|)) . (,get-int . ,->number))
-          (,(->number (<java.sql.Types> '|FLOAT|)) . (,get-float . ,->number))
-          (,(->number (<java.sql.Types> '|DOUBLE|)) . (,get-double . ,->number))
-          (,(->number (<java.sql.Types> '|DECIMAL|)) . (,get-double . ,->number))
-          (,(->number (<java.sql.Types> '|NUMERIC|)) . (,get-double . ,->number))
-          (,(->number (<java.sql.Types> '|REAL|)) . (,get-float . ,->number))
-          (,(->number (<java.sql.Types> '|VARCHAR|)) . (,get-string . ,->string))
-          (,(->number (<java.sql.Types> '|CHAR|)) . (,get-string . ,->string))))
-  (java-class "org.postgresql.Driver"))
+        `((,(->number (access-constant <java.sql.Types> '|INTEGER|)) . (,get-int . ,->number))
+          (,(->number (access-constant <java.sql.Types> '|FLOAT|)) . (,get-float . ,->number))
+          (,(->number (access-constant <java.sql.Types> '|DOUBLE|)) . (,get-double . ,->number))
+          (,(->number (access-constant <java.sql.Types> '|DECIMAL|)) . (,get-double . ,->number))
+          (,(->number (access-constant <java.sql.Types> '|NUMERIC|)) . (,get-double . ,->number))
+          (,(->number (access-constant <java.sql.Types> '|REAL|)) . (,get-float . ,->number))
+          (,(->number (access-constant <java.sql.Types> '|VARCHAR|)) . (,get-string . ,->string))
+          (,(->number (access-constant <java.sql.Types> '|CHAR|)) . (,get-string . ,->string))))
+  (java-class '|org.postgresql.Driver|))
 
 
