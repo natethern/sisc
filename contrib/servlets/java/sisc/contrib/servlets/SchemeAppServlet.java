@@ -156,7 +156,7 @@ class SocketListener extends Thread {
 
     public void run() {
         try {
-            REPL.SocketREPL.listen(appName, ssocket);
+            REPL.listen(appName, ssocket);
             ssocket.close();
         } catch (IOException e) {}
     }
