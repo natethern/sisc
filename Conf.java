@@ -40,14 +40,15 @@ public interface Conf {
     String VERSION = "r1.3.0";
 
     boolean
+
 	SERIALIZATION = true,
 	EXPRESS       = true,
 	LITE          = false;
-
-    /*
+/*
+    
 	SERIALIZATION = false,
 	EXPRESS       = false,
 	LITE          = true;
-    */
+*/    
     
 }

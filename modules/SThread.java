@@ -93,6 +93,7 @@ public class SThread extends ModuleAdapter {
     }
 
     class Monitor extends NamedValue {
+	private byte l1=0;
 	private int lockCount=0;
 	private Thread owner=null;
 	private Object condvar=new Object();
@@ -128,32 +129,33 @@ public class SThread extends ModuleAdapter {
 	    }
 	}
 
-	public Value lock() {
-	    Thread thisThread=null;
+	public final Value lock() {
+	    Thread thisThread=Thread.currentThread();
 
-	    synchronized(this) {
-		if (owner == null) {
-		    owner=Thread.currentThread();
-		} else if ((thisThread=Thread.currentThread())!= 
-			   owner) {
+	    if (owner==thisThread) 
+		lockCount++;
+	    else {
+		synchronized(this) {
 		    while (lockCount>0) {
 			try {
 			    this.wait();
 			} catch (InterruptedException ie) {}
-
+			
 		    }
-		    owner=thisThread;
+		    lockCount++;
 		}
-		lockCount++;
-		return TRUE;
+		owner=thisThread;
 	    }
+
+	    
+	    return TRUE;
 	}
 
-	public void unlock() {
-	    synchronized(this) {
-		if (Thread.currentThread() == owner) {
-		    if (--lockCount == 0) {
-			owner=null;
+	public final void unlock() {
+	    if (owner==Thread.currentThread()) {
+		if ((--lockCount)==0) {
+		    owner=null;
+		    synchronized(this) {
 			this.notify();
 		    }
 		}
