@@ -13,7 +13,7 @@ then
 fi
 
 #If the rlwrap readline wrapper is in the path, enable it for SISC
-if [ -x `which rlwrap` ]
+if [ -x "`which rlwrap`" ]
 then
    RLWRAP=rlwrap
 fi
