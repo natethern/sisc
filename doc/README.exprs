@@ -32,21 +32,18 @@ with the results of the pre-expression in the accumulator.  An EvalExp
 is usually paired with a *Eval expression as the post-expression.
 
 DefineEval:
-  DefineEval expects the value rib to contain the variable, binding, and
-context values for a property-table set.  
+  DefineEval sets or defines a toplevel binding it is constructed with
+to a value in the accumulator.
 
 FillRibExp:
-  FillRibExp takes a rib-address and a list of expressions.  When evaluated, 
-it expects to find a processed value in the accumulator.  It will place
-this value in the value-rib at the rib-address.  If expressions remain
-to be evaluated, it will then push another FillRibExp with the next
-rib-address on the stack, then set the next-expression register to the next
-expression.  The result is that a FillRibExp will fill the value-rib with
-the results of evaluating a number of expressions.
+  FillRibExp takes a rib-address, a next expression, and a value expression.
+It first stores the value in the accumulator into the value rib at its
+constructed rib address.  Then it pushes the next expression onto the
+stack and sets the nxp register to the value expression.  
 
 FreeReferenceExp:
   A FreeReferenceExp sets the accumulator to the result of looking up a 
-symbol in the toplevel environment.  If the variable is not bound, an error
+symbol in a symbolic environment.  If the variable is not bound, an error
 is raised.
 
 FreeSetEval:
@@ -65,6 +62,16 @@ LambdaExp:
 arity (fixed or infinite) of a procedure.  When evaluated, it captures the
 lexical environment in a Closure and puts the new closure in the
 accumulator.
+
+LetrecExp:
+  Behaves like AppExp, except that it creates a LexicalEnvironment
+that contains a number of uninitialized values that will be visible
+when evaluating its arguments, and that its last expression is LetrecEval
+rather than AppEval.
+
+LetrecEval:
+  Sets the values of the bindings created by LetrecExp to the values
+present in the value rib.
 
 LexicalReferenceExp:
   The LexicalReferenceExp looks up a lexical reference in the current
