@@ -187,6 +187,7 @@
           <methodsynopsis language="scheme">
             <type>hashtable</type>
             <methodname>make-hashtable</methodname>
+            <void/>
           </methodsynopsis>
           <blockquote>
             <para>
@@ -461,7 +462,13 @@
     <title>
       Operating System interface
     </title>
-    <para></para>
+    <note>
+      <para>
+        The interface to the host operating system is a work in
+        progress. Documentation and a corresponding implementation
+        will appear in future revisions. 
+      </para>
+    </note>
   </sect1>
 </chapter>
 <!-- Keep this comment at the end of the file

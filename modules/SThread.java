@@ -253,7 +253,7 @@ public class SThread extends ModuleAdapter {
 
 	public Value getResult(Interpreter r) throws ContinuationException {
 	    if (state < FINISHED) {
-		throw new RuntimeException("Thread has not yet terminated.");
+		throw new RuntimeException(liMessage(THREADB,"threadnotyetterminated"));
 	    } else if (state == FINISHED) {
 		return rv;
 	    } else {

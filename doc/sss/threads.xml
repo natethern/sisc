@@ -463,7 +463,8 @@
       Monitors are represented in scheme as opaque values displayed as
       <literal>&num;&lt;monitor&gt;</literal>.  To
       obtain a monitor, the
-      <function>monitor/new</function> function is
+      <function>monitor/new</function> or
+      <function>monitor-of</function> function can be used
       used.  It is important to understand that all the monitor
       operations depend on the same monitor being shared between any
       threads using monitor functionality.
@@ -482,6 +483,23 @@
           </para>
         </blockquote>
       </para>
+      <para>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>monitor</type>
+          <methodname>monitor-of</methodname>
+          <methodparam>
+            <parameter>value</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Returns a monitor that is uniquely associated to the given
+            value.  Subsequent (or concurrent) calls to this function
+            are guaranteed to return the same monitor if given the
+            same value.
+          </para>
+        </blockquote>
     </blockquote>
     <sect2>
       <title>
