@@ -124,7 +124,7 @@ public class StreamDeserializer extends DeserializerImpl {
     public SymbolicEnvironment readSymbolicEnvironment() throws IOException {
         Expression e=readExpression();
         if (e instanceof Symbol) 
-            return ctx.lookupContextEnv((Symbol)e);
+            e=ctx.getExpression((Symbol)e);
         return (SymbolicEnvironment)e;
     }
 

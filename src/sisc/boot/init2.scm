@@ -796,30 +796,43 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
 
 ;; I/O ;;
 
+(define (call-with-input-port&close port proc)
+  (with/fc (lambda (m e)
+             (close-input-port port)
+             (throw m e))
+           (lambda () 
+             (call-with-values 
+              (lambda () (proc port))
+              (lambda results
+                (close-input-port port)
+                (apply values results))))))
+
+(define (call-with-output-port&close port proc)
+  (with/fc (lambda (m e)
+             (close-output-port port)
+             (throw m e))
+           (lambda () 
+             (call-with-values 
+              (lambda () (proc port))
+              (lambda results
+                (close-output-port port)
+                (apply values results))))))
+
+  
 (define (call-with-input-file file procOrEncoding . proc)
   (cond [(null? proc) 
-         (let* ([port (open-input-file file)]
-                [result (procOrEncoding port)])
-           (close-input-port port)
-           result)]
+         (call-with-input-port&close (open-input-file file) procOrEncoding)]        
         [(null? (cdr proc))
-         (let* ([port (open-input-file file procOrEncoding)]
-                [result ((car proc) port)])
-           (close-input-port port)
-           result)]
+         (call-with-input-port&close (open-input-file file procOrEncoding)
+                                     (car proc))]
         [else (error 'call-with-input-file "too many arguments.")]))
 
 (define (call-with-output-file file procOrEncoding . proc)
   (cond [(null? proc) 
-         (let* ([port (open-output-file file)]
-                [result (procOrEncoding port)])
-           (close-output-port port)
-           result)]
+         (call-with-output-port&close (open-output-file file) procOrEncoding)]        
         [(null? (cdr proc))
-         (let* ([port (open-output-file file procOrEncoding)]
-                [result ((car proc) port)])
-           (close-output-port port)
-           result)]
+         (call-with-output-port&close (open-output-file file procOrEncoding)
+                                      (car proc))]
         [else (error 'call-with-output-file "too many arguments.")]))
 
 (define (with-input-from-port port thunk)

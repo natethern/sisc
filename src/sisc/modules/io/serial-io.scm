@@ -36,11 +36,7 @@
 (define (call-with-serial-output-file url proc)
   (call-with-binary-output-file url
     (lambda (out)
-      (call-with-serial-output-port
-       out
-       (lambda (out)
-         (proc out)
-         (flush-output-port out))))))
+      (call-with-serial-output-port out proc))))
 
 (define (with-serial-output-to-file url thunk)
   (call-with-serial-output-file url

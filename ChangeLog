@@ -1,3 +1,11 @@
+2004-11-6  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Set the lcl even on thunks, to prevent value leaks from
+	  persisting in the stack.
+	  
+	* StreamDeserializer now resolves symbolic environments
+	  in the same way as BlockDeserializer.
+	  
 2004-11-5  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Define the I/O procedures as toplevel with psyntax,

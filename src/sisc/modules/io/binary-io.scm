@@ -1,14 +1,8 @@
 (define (call-with-binary-input-file file proc)
-  (let* ([port (open-binary-input-file file)]
-         [result (proc port)])
-    (close-input-port port)
-    result))
-
+  (call-with-input-port&close (open-binary-input-file file) proc))
+ 
 (define (call-with-binary-output-file file proc)
-  (let* ([port (open-binary-output-file file)]
-         [result (proc port)])
-    (close-output-port port)
-    result))        
+  (call-with-output-port&close (open-binary-output-file file) proc))
 
 (define (with-binary-input-from-file file thunk)
   (call-with-binary-input-file file 

@@ -387,8 +387,9 @@ public class Interpreter extends Util {
 
         //Clear these fields to avoid hanging onto otherwise
         //garbage collectable data for too long
-        f.env=null;
-        f.vlr=null;
+        
+        f.lcl=f.vlr=f.env=null;
+        
 
         f.parent=frameFreeList;
         frameFreeList = f;
