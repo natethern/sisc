@@ -55,9 +55,11 @@
               ;;eval
               (let ([val (eval exp)])
                 (cond [(void? val) (repl/read writer)]
-                      [(and (not (print-shared)) (circular? val))
-                       (begin 
-                         (display "{Refusing to print non-terminating structure}")
+                      [(circular? val)
+                       (begin
+                         (if (print-shared)
+                             (write val)
+                             (display "{Refusing to print non-terminating structure}"))
                          (newline)
                          (repl/read writer))]
                       [else 

@@ -240,7 +240,9 @@ public class Parser extends Util implements Tokens {
                 o=numberCheck(_nextExpression(is, state, null, flags));
                 break;
             case '&':
-                o=new Box((Value)_nextExpression(is, state, null, flags));
+                o=new Box();
+		if (def!=null) state.put(def, o);
+                ((Box)o).val=(Value)_nextExpression(is, state, null, flags);
                 break;
             case 'i':
                 o=numberCheck(_nextExpression(is, state, null, radix, flags)).toInexact();
