@@ -426,11 +426,17 @@ public class Primitives extends ModuleAdapter {
                     }
                 else throwPrimException(liMessage(SISCB, "unsupportedstandardver"));
             case NULLENVIRONMENT:
-                if (FIVE.equals(num(f.vlr[0]))) {
+                switch (num(f.vlr[0]).indexValue()) {
+                case 5:
                     MemorySymEnv ae = new MemorySymEnv();
                     sisc.compiler.Compiler.addSpecialForms(ae);
                     return ae;
-                } else throwPrimException(liMessage(SISCB, "unsupportedstandardver"));
+                case 0:
+                    return new MemorySymEnv();
+                default:
+                    throwPrimException(liMessage(SISCB, "unsupportedstandardver"));
+                    return VOID;
+                }
             case STRICTR5RS: 
                 f.dynenv.parser.lexer.strictR5RS=truth(f.vlr[0]);
                 return VOID;

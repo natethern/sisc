@@ -78,9 +78,10 @@
             (isLae #f)
             (symenv (let loop ((se (with/fc
                                     (lambda (m e)
-                                      (let ([e (null-environment 5)])
+                                      (let ([e (null-environment 0)])
                                         (set-symbolic-environment! 
                                          symenv-sym e)
+                                        (set-annotation! e 'name symenv-sym)
                                         e))
                                     (lambda ()
                                       (get-symbolic-environment symenv-sym)))))
