@@ -231,12 +231,19 @@ public class Parser extends Util implements Tokens {
                 String cn=lexer.readToBreak(is, Lexer.special);
                 String cnl=cn.toLowerCase();
                 Object cs=chars.get(cnl);
-                if (cs!=null) {
-                    o=cs;
-                } else if (cn.length()==1) {
-                    o=new SchemeCharacter(cn.charAt(0));
-                } else {
-                    o=new SchemeCharacter((char)Integer.parseInt(cn, 8));
+                try {
+                    if (cs!=null) {
+                        o=cs;
+                    } else if (cn.length()==1) {
+                        o=new SchemeCharacter(cn.charAt(0));
+                    } else if (cn.charAt(0)=='u') {
+                        o=new SchemeCharacter((char)Integer.parseInt(cn.substring(1), 16));
+                    } else {
+                        o=new SchemeCharacter((char)Integer.parseInt(cn, 8));
+                    }
+                } catch (NumberFormatException nfe) {
+                    throw new IOException(Util.liMessage(Util.SISCB,
+                                                         "invalidcharconst"));
                 }
                 break;
             case 'b':

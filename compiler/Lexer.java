@@ -36,6 +36,7 @@ import java.io.*;
 import java.math.*;
 import java.util.Vector;
 import sisc.data.*;
+import sisc.Util;
 
 public class Lexer implements Tokens {
     static final char
@@ -158,6 +159,19 @@ public class Lexer implements Tokens {
 	case 'n': return '\n';
 	case 'f': return '\f';
 	case 'r': return '\r';
+        case 'u': 
+            char[] hexChars=new char[4];
+            for (int i=0; i<hexChars.length; i++) {
+                int rc=is.read();
+                if (rc==-1) throw new EOFException("End of file on hex-literal");
+                hexChars[i]=(char)rc;
+            }
+            try {
+                return (char)Integer.parseInt(new String(hexChars), 16);
+            } catch (NumberFormatException nfe) {
+                throw new IOException(Util.liMessage(Util.SISCB,
+                                                     "invalidcharconst"));
+            }
         default: return c;
 	}
     }
