@@ -4,7 +4,6 @@ import java.io.*;
 import sisc.io.*;
 import sisc.data.*;
 import sisc.env.*;
-import sisc.compiler.Compiler;
 import sisc.util.Util;
 
 /**
@@ -436,10 +435,11 @@ public class Interpreter extends Util {
     }
 
     public final void returnVLR() {
-        if (!vlk && vlr!=null) {
-            returnValues(vlr);
+        if (vlr != null) {
+            if (!vlk) 
+                returnValues(vlr);
+            vlr=null;
         }
-        vlr=null;
     }
 
     public final void replaceVLR(int size) {

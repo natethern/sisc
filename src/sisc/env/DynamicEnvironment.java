@@ -2,13 +2,13 @@ package sisc.env;
 
 import java.io.*;
 import sisc.data.*;
-import sisc.compiler.*;
 import sisc.io.*;
 import java.util.WeakHashMap;
 import java.net.URLClassLoader;
 import java.net.URL;
 import java.security.AccessControlException;
 import sisc.interpreter.AppContext;
+import sisc.reader.*;
 import sisc.util.Util;
 
 public class DynamicEnvironment extends Util implements Cloneable {
