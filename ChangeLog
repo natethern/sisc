@@ -2,6 +2,7 @@
 
 	* Created a dedicated flag for marking call frames as captured.  
 	  Previously, vlk was overloaded, causing rare continuation bugs.
+	  See bug 1038532.
 	  
 2004-10-14  Scott G. Miller   <scott@sgmiller.org>
 
