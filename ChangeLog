@@ -1,3 +1,8 @@
+2005-02-24  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Lazy dynamic-wind installation isn't semantically safe.  
+	  Removed it.  See bug 1151368.
+	  
 2005-02-23  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Altered the REPL code to keep a stack-trace base frame, so we

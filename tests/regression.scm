@@ -13,6 +13,17 @@
                                 test-id value return-value))
                (display (format "Passed: ~a\n" test-id)))))))))
 
+
+(should-be 1151368 9
+           (let ([x 0])
+             (call/cc 
+               (lambda (k)
+                 (dynamic-wind
+                   (lambda () (set! x (+ x 1)))
+                   (lambda () (set! x (+ x 3)) (k))
+                   (lambda () (set! x (+ x 5))))))
+             x))
+
 ;;used to cause an NPE
 (should-be 807474 #f
            (let ((k #f))
@@ -206,3 +217,10 @@
                                (letrec #t () () 4)))
                       #t)))
 
+(should-be 1103630 "\u0e10\u0e1f\u0e2b\u0e01\u0e14"
+           (let ()
+              (import serial-io)
+              (call-with-serial-output-file "test.ser" 
+                (lambda (port) (serialize "\u0e10\u0e1f\u0e2b\u0e01\u0e14" 
+                                          port)))
+              (call-with-serial-input-file "test.ser" deserialize)))
