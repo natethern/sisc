@@ -2,12 +2,6 @@
 (import generic-procedures)
 (import hashtable)
 
-(define (call-with-output-string f)
-  (let ((outsp (open-output-string)))
-    (f outsp)
-    (close-output-port outsp)
-    (get-output-string outsp)))
-
 ;;various servlet / session / request / response methods
 (define-generic get-attribute)    
 (define-generic set-attribute)
