@@ -5,7 +5,7 @@
 
 (define (current-exception-handler)
   (let ([cfc (call/fc (fk) fk)])
-    (lambda (exn) (call/cc (lambda (k) (cfc exn k cfc))))))
+    (lambda (exn) (call/cc (lambda (k) (cfc exn k))))))
 
 (define (with-exception-handler handler thunk)
   (with/fc 
