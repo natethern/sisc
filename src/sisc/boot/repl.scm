@@ -68,18 +68,17 @@
 (define (get-last-exception)
   (getprop 'last-exception '*debug*))
 
-
+(define repl-thread (make-parameter #f))
+  
 (define make-interrupt-handler
   (if (not (getprop 'LITE (get-symbolic-environment '*sisc*)))
       (lambda ()
         ; We use absolute references to threading here so that this can
         ; coexist with the lite and full dists without using import
-        (letrec ([thread (|@threading-native::thread/current|)]
-                 [handler
-                  (lambda ()
-                    (_signal-unhook! "INT" handler)
-                    (|@threading-native::thread/interrupt| thread))])
-          handler))
+        (repl-thread (|@threading-native::thread/current|))
+        (lambda ()
+          (_signal-unhook! "INT" handler)
+          (|@threading-native::thread/interrupt| (repl-thread))))
       (lambda () #f)))
 
 (define repl
