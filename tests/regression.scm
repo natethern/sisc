@@ -58,9 +58,10 @@
                   (with/fc (lambda (m e) (error-message m))
                    (lambda () (eval '(foo a b c) test-env)))))
                             
-;; Used to cause an out of memory error
-(import threading)
+;; Used to cause an out of memory error (Interrupts must be enabled to pass)
 (should-be 820401 'okay
+           (let ()
+             (import threading)
              (let loop ([x 20])
                (if (zero? x)
                    'okay
@@ -69,4 +70,4 @@
                      (thread/start t)
                      (sleep 1000)
                      (thread/interrupt t)
-                     (loop (- x 1))))))
+                     (loop (- x 1)))))))
