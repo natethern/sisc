@@ -42,7 +42,10 @@
        (print-exception exception (stack-trace-on-error))))))
 
 (define repl-prompt
-  (make-config-parameter "replPrompt" ""))
+  (make-config-parameter "replPrompt" (lambda (repl-depth)
+                                        (format "#;~a>"
+                                                (if (zero? repl-depth)
+                                                    "" repl-depth)))))
 (define stack-trace-on-error
   (make-config-parameter "stackTraceOnError" #f))
 
@@ -54,12 +57,15 @@
 (define repl
   (letrec ([repl/read
             (lambda (writer)
-              (display "#;")
-              (let ([len (- (length (_exit-handler)) 1)])
-                (unless (zero? len)
-                  (display len)))
-              (display (repl-prompt))
-              (display "> ")
+
+              ; Display the prompt
+              (let ([rp (repl-prompt)]
+                    [repl-depth (- (length (_exit-handler)) 1)])
+                (display
+                 (if (procedure? rp)
+                     (rp repl-depth)
+                     rp)))
+
               ;;read
               (let ([exp (read-code (current-input-port))])
                 (if (eof-object? exp) 
