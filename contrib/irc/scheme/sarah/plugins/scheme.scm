@@ -107,7 +107,7 @@
 (define (safe-pp-to-string value)
   (if (circular? value)
       (with-output-to-string (lambda () (write value)))
-      (pretty-print-to-string value)))
+      (with-output-to-string (lambda () (pretty-print value)))))
 
 (define (make-resume k)
   (let ([system-time system-time]
