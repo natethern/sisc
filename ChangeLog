@@ -1,3 +1,9 @@
+2004-01-02  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Fixed bug 830507, method dispatch problem
+
+	* Fixed string comparison in SRFI-13.
+	
 2003-12-08  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed recycled VLR[] bug in |apply|, and 
