@@ -1014,6 +1014,64 @@
           </para>
         </blockquote>
       </para>
+      <para>
+        Calling a generic will dispatch on the argument types as
+        described above.  This dispatch can change if new methods are
+        added to a generic procedure.  On occasion the programmer may
+        wish to fix the dispatch of a particular generic function,
+        either to guarantee a specific function is called for a given
+        part of a Scheme program, or to improve performance by
+        avoiding the type dispatch at each call.  &SISC; provides a
+        syntactic form which allows the programmer to bind/rebind a
+        generic procedure to a new lexical variable which is the
+        monomorphized variant of the function call.  
+        <blockquote>
+          <para>
+            <indexterm><primary>let-monomorphic</primary></indexterm>
+            &syntax;
+            <methodsynopsis language="scheme">        
+              <void/>
+              <methodname>let-monomorphic</methodname>
+              <methodparam><parameter>bindings</parameter></methodparam>
+              <methodparam
+            choice="rep"><parameter>expressions</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <simplelist>
+                <member>
+                  where <parameter>bindings</parameter> are of the
+                  form <literal>(<parameter>generic</parameter>
+                  <parameter>type</parameter>...)
+                  </literal>
+                </member>
+                <member>
+                  or <literal>((<parameter>binding</parameter>
+                  <parameter>generic</parameter>)
+                  <parameter>type</parameter>...)</literal>
+                </member>
+              </simplelist>
+              <para>
+                In the former binding form, the generic procedure
+                specified by <parameter>generic</parameter> is rebound
+                lexically with the same name, and monomorphized to the
+                method which is applicable for the given types.  In
+                the latter form, the generic is rebound lexically to
+                the new name specified by
+                <parameter>binding</parameter>.  Both forms may be
+                used in a given call to <function>let-monomorphic</function>.
+              </para>
+              <para>
+                The bindings are made as if by
+                <function>let</function>, i.e. no assumptions can be
+                made as to the order in which they are bound.  The
+                expressions are evaluated as in <function>let</function>
+                as well, in order using an implicit
+                <function>begin</function>.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
     </sect2>
     <sect2>
       <title>Procedures on Methods</title>
