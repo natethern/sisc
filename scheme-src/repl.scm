@@ -94,7 +94,7 @@
 				  (cadr args))])
 	  (call/cc 
 	   (lambda (k)
-	     (putprop 'exit-handler '*sisc* (parameterize k))
+	     (_exit-handler k)
 	     (begin
 	       (call/cc 
 		(lambda (k)
@@ -107,7 +107,6 @@
 		  (lambda (m e f)
 		    ((current-default-error-handler) m e f console-out)
 		    (loop)))))))
-	  (display (format "Exiting.~%"))
 	  (if ((current-exit-handler))
 	      (void)
 	      (repl-start)))))))

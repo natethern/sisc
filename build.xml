@@ -19,7 +19,7 @@
     <property name="packagename" value="sisc"/>
     <property name="jarname" value="sisc.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
-    <property name="quantity-type" value="64float"/>
+    <property name="quantity-type" value="apfloat"/>
     <property name="debugging" value="off"/>
     <property name="optimization" value="on"/>
     <!-- <property name="releasecandidate" value="yes"/> -->
@@ -157,7 +157,7 @@
   <target name="docs" depends="javadocs,manual"
           description="Generate Documentation"/>
 
-  <target name="all" depends="heap,docs"
+  <target name="all" depends="heap"
           description="Build lite edition">
   </target>
 
