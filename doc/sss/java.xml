@@ -1482,7 +1482,7 @@ Class.getSigners()
           future. Currently, only two kinds of types are supported:
           <simplelist>
             <member>
-              Java classes and interfaces1, obtained through the
+              Java classes and interfaces, obtained through the
               mechanisms described in <xref linkend="JavaClasses"/>,
               and
             </member>
