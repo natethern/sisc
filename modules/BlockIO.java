@@ -53,15 +53,31 @@ public class BlockIO extends ModuleAdapter {
                 return new Buffer(num(f.vlr[0]).intValue(),
                                   (byte)num(f.vlr[1]).intValue());
             case BUFFERREF:
-                return Quantity.valueOf(buffer(f.vlr[0]).ref(num(f.vlr[1]).intValue()) & 0xff);
+                int index=num(f.vlr[1]).intValue();
+                try {
+                    return Quantity.valueOf(buffer(f.vlr[0]).ref(index)&0xff);
+                } catch (ArrayIndexOutOfBoundsException aib) {
+                    throwPrimException(liMessage(SISCB, "indexoob", 
+                                                 new Object[] {
+                                                     new Integer(index),
+                                                     f.vlr[0].synopsis()}));
+                }
             default:
                 throwArgSizeException();
             }
         case 3:
             switch (primid) {
             case BUFFERSET:
-                buffer(f.vlr[0]).set(num(f.vlr[1]).intValue(),
-                                     (byte)num(f.vlr[2]).intValue());
+                int index=num(f.vlr[1]).intValue();
+                try {
+                    buffer(f.vlr[0]).set(index,
+                                         (byte)num(f.vlr[2]).intValue());
+                } catch (ArrayIndexOutOfBoundsException aib) {
+                    throwPrimException(liMessage(SISCB, "indexoob", 
+                                                 new Object[] {
+                                                     new Integer(index),
+                                                     f.vlr[0].synopsis()}));
+                }
                 return VOID;
             case BLOCKREAD:
                 int count=num(f.vlr[2]).intValue();
