@@ -50,7 +50,7 @@ public class REPL extends Thread {
         this.r = r;
     }
 
-    public static void initializeInterpreter(Interpreter r, String[] args) throws ClassNotFoundException {
+    public static boolean initializeInterpreter(Interpreter r, String[] args) throws ClassNotFoundException {
         try {
             r.ctx.loadEnv(r,
 			  new DataInputStream(
@@ -62,8 +62,9 @@ public class REPL extends Thread {
                                       90000))
 			       )));
         } catch (IOException e) {
-            System.err.println("Error loading heap!");
+            System.err.println("\nError loading heap!");
             e.printStackTrace();
+	    return false;
         }
 
 	Symbol loadSymb = Symbol.get("load");
@@ -94,10 +95,17 @@ public class REPL extends Thread {
         r.define(Symbol.get("fs-roots"), Util.valArrayToList((Value[])rootss,
                  0, rootss.length),
                  Util.SISC);
+	return true;
     }
 
     public void run() {
 	Symbol replSymb = Symbol.get("repl");
+	try {
+	    r.ctx.toplevel_env.lookup(replSymb);
+	} catch (ArrayIndexOutOfBoundsException aiob) {
+	    System.err.println("Fatal error: Heap not found or does not contain repl.");
+	    return;
+	}
         do {
             try {
 		r.eval((Procedure)r.ctx.toplevel_env.lookup(replSymb),
@@ -148,31 +156,32 @@ public class REPL extends Thread {
 	AppContext ctx = new AppContext();
 	Context.register("main", ctx);
         Interpreter r = Context.enter("main");
-        initializeInterpreter(r,(String[])fargs.toArray(new String[0]));
+        if (initializeInterpreter(r,(String[])fargs.toArray(new String[0]))) {
+	
+	    pout.println(" ("+Util.VERSION+")");
+	    pout.flush();
 
-        pout.println(" ("+Util.VERSION+")");
-        pout.flush();
-
-        if (server) {
-            ServerSocket ssocket = new ServerSocket(port, 50, bindAddr);
-            pout.println("Listening on " + ssocket.getInetAddress().toString() + ":" + ssocket.getLocalPort());
-            pout.flush();
-            for (;;) {
-                Socket client = ssocket.accept();
-		pout.println("Accepting connection from " + client.getInetAddress().toString());
+	    if (server) {
+		ServerSocket ssocket = new ServerSocket(port, 50, bindAddr);
+		pout.println("Listening on " + ssocket.getInetAddress().toString() + ":" + ssocket.getLocalPort());
 		pout.flush();
-		DynamicEnv dynenv = new DynamicEnv(new InputPort(new BufferedReader(new InputStreamReader(client.getInputStream()))),
-						   new OutputPort(new PrintWriter(client.getOutputStream()), true));
-                REPL repl = new SocketREPL(dynenv, client);
-                repl.start();
-            }
-        }
-        else {
-            REPL repl=new REPL(r);
-            repl.start();
-        }
-
-	Context.exit();
+		for (;;) {
+		    Socket client = ssocket.accept();
+		    pout.println("Accepting connection from " + client.getInetAddress().toString());
+		    pout.flush();
+		    DynamicEnv dynenv = new DynamicEnv(new InputPort(new BufferedReader(new InputStreamReader(client.getInputStream()))),
+						       new OutputPort(new PrintWriter(client.getOutputStream()), true));
+		    REPL repl = new SocketREPL(dynenv, client);
+		    repl.start();
+		}
+	    }
+	    else {
+		REPL repl=new REPL(r);
+		repl.start();
+	    }
+	    
+	    Context.exit();
+	}
     }
 }
 

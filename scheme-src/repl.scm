@@ -76,3 +76,6 @@
 	   (lambda (m e f)
 	     ((current-default-error-handler) m e f console-out)
 	     (loop))))))))
+
+(module (foo)
+  (define foo 1))

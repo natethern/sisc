@@ -31,24 +31,8 @@
  */
 package sisc;
 
-/**
- * Compile-time constants used to selectively include/exclude
- * code
- */
-public interface Conf {
+public interface Version {
 
     String VERSION = "r1.3.1";
 
-    boolean
-
-	SERIALIZATION = true,
-	EXPRESS       = true,
-	LITE          = false;
-/*
-    
-	SERIALIZATION = false,
-	EXPRESS       = false,
-	LITE          = true;
-*/    
-    
 }

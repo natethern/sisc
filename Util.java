@@ -316,6 +316,10 @@ public abstract class Util implements Conf {
         }
         return p;
     }
+
+    public static void main(String[] args) {
+	System.out.println(VERSION);
+    }
 }
 
 

@@ -355,6 +355,135 @@ Library Functions
 \layout Section
 
 Debugging
+\layout Standard
+
+SISC provides debugging aids that can be added to Scheme source code, as
+ well as limited support for debugging without modification.
+ 
+\layout Code
+
+
+\series bold 
+\emph on 
+procedure
+\emph default 
+: 
+\series default 
+(trace-lambda trace-name formals body)
+\layout Code
+
+
+\series bold 
+\emph on 
+returns: 
+\series default 
+a procedure
+\layout Code
+
+\layout Code
+
+When replaced with a trace-lambda, all calls to a lambda defined procedure
+ are traced on the console.
+  
+\emph on 
+trace-name
+\emph default 
+ is a symbol to identify the procedure in the trace.
+ 
+\emph on 
+formals 
+\emph default 
+and 
+\emph on 
+body
+\emph default 
+ have identical semantics to lambda.
+\layout Code
+
+ 
+\layout Code
+
+
+\series bold 
+\emph on 
+procedure: 
+\series default 
+\emph default 
+(trace-let loop-name formal-bindings body)
+\layout Code
+
+
+\series bold 
+\emph on 
+returns: 
+\series default 
+the results of body
+\layout Code
+
+ 
+\layout Code
+
+Replaces a named-let expression in a similar manner to trace-lambda.
+  
+\layout Code
+
+ 
+\layout Code
+
+
+\series bold 
+\emph on 
+procedure: 
+\series default 
+\emph default 
+(trace-top-level-procedures symbol ...)
+\layout Code
+
+
+\series bold 
+\emph on 
+returns: 
+\series default 
+undefined
+\layout Code
+
+ 
+\layout Code
+
+Begins traces on the procedures named by the symbols given.
+  The procedures must be defined in the top-level environment.
+\layout Code
+
+ 
+\layout Code
+
+
+\series bold 
+\emph on 
+procedure: 
+\series default 
+\emph default 
+(untrace-top-level-procedures symbol ...)
+\layout Code
+
+
+\series bold 
+\emph on 
+returns: 
+\series default 
+undefined
+\layout Code
+
+ 
+\layout Code
+
+Stops tracing the top-level procedures named by the symbols given.
+\layout Standard
+
+Trace-lambda and trace-let are useful for debugging anonymous lambdas and
+ named-lets respectively.
+ Trace-top-level-procedures can be used to trace calls to any procedure,
+ including native procedures and stored continuations.
 \layout Section
 
 Logical Operations
@@ -378,6 +507,107 @@ File-system interface
 \end_inset 
 
 Networking
+\layout Section
+
+SQL interface
+\layout Standard
+
+SISC's database interface is modeled after a mix of Perl's DBI and ODBC/JDBC.
+ Accessing a database occurs in several steps; establishing a connection
+ to a database source, creating a query, specifying any parameters, executing
+ the query, then retrieving results.
+\layout Subsection
+
+Creating connections
+\layout Standard
+
+(dbi/connect 
+\begin_inset Quotes eld
+\end_inset 
+
+driver:database <opts>
+\begin_inset Quotes erd
+\end_inset 
+
+)
+\layout Standard
+
+=> connection
+\layout Subsection
+
+Types
+\layout Code
+
+(dbi/connect source)
+\layout Code
+
+(dbi/query connection 
+\begin_inset Quotes eld
+\end_inset 
+
+statement
+\begin_inset Quotes erd
+\end_inset 
+
+)
+\layout Code
+
+\layout Code
+
+(dbi/prepare connection 
+\begin_inset Quotes eld
+\end_inset 
+
+statement
+\begin_inset Quotes erd
+\end_inset 
+
+)
+\layout Code
+
+(dbi/set-string prepared-statement pos string)
+\layout Code
+
+(dbi/set-boolean prepared-statement pos bool)
+\layout Code
+
+(dbi/set-integer prepared-statement pos exact-integer)
+\layout Code
+
+(dbi/set-float prepared-statement pos inexact-real)
+\layout Code
+
+(dbi/set-input-port prepared-statement pos input-port)
+\layout Code
+
+ 
+\layout Code
+
+(dbi/execute prepared-statement)
+\layout Code
+
+(dbi/get-string result pos) 
+\layout Code
+
+(dbi/get-boolean result pos)
+\layout Code
+
+(dbi/get-integer result pos)
+\layout Code
+
+(dbi/get-float result pos)
+\layout Code
+
+(dbi/get-input-port result pos)
+\layout Code
+
+\layout Code
+
+(dbi/execute-update prepared-statement)
+\layout Code
+
+\layout Code
+
 \layout Chapter
 
 Threads and Concurrency

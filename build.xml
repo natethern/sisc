@@ -8,7 +8,21 @@
     <pathelement path=".."/>
   </path>
 
+  <target name="full-prepare" depends="prepare,init">
+    <delete file="${basedir}/Conf.java"/> 
+    <copy file="${basedir}/Conf-full.java"
+          tofile="${basedir}/Conf.java"/>
+  </target>
+
+  <target name="lite-prepare" depends="prepare,init">
+    <delete file="${basedir}/Conf.java"/> 
+    <property name="lite" value="present"/>
+    <copy file="${basedir}/Conf-lite.java"
+          tofile="${basedir}/Conf.java"/>
+  </target>
+
   <target name="prepare">
+    <property name="version" value="1.3.1"/>
     <property file="${basedir}/build.properties"/>    
     <property name="srcdir" value="${basedir}/.."/>
     <property name="classdir" value="${basedir}/classes"/>
@@ -19,6 +33,7 @@
     <property name="jarname" value="sisc.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
     <property name="quantity-type" value="apfloat"/>
+    <property name="dist" value="${basedir}/dist"/>
   </target>
 
   <target name="init" depends="prepare">
@@ -49,12 +64,14 @@
     <javac srcdir="${srcdir}"
            destdir="${classdir}"
 	   classpathref="classpath"
-	   debug="on"
+	   debug="off"
            optimize="on">
       <include name="${packagename}/**"/>
+      <exclude name="${packagename}/Conf-*.java"/>
       <exclude name="${packagename}/*/Quantity-*.java"/>
       <exclude name="${packagename}/tests/**" unless="junit.present"/>
       <exclude name="${packagename}/modules/Regexp.java" unless="oro.present"/>
+      <exclude name="${packagename}/modules/**" if="lite"/>
     </javac>      
   </target>
   
@@ -67,8 +84,8 @@
   
   <target name="heap" depends="compiler">
     <java classname="sisc.boot.GenerateHeap"
-	  classpath="${classdir}"
-	  dir="${schemedir}"
+          classpath="${classdir}"
+          dir="${schemedir}"
 	  fork="yes">
       <arg value="-out"/>
       <arg value="${heap}"/>
@@ -79,10 +96,34 @@
       <arg value="${schemedir}/init2.scm"/>
       <arg value="${schemedir}/pp.scm"/>
       <arg value="${schemedir}/repl.scm"/>
+      <arg value="${schemedir}/j2s.scm"/>
+      <arg value="${schemedir}/debug.scm"/>
     </java>
   </target>
 
-  <target name="all" depends="jars,heap"
+  <target name="lite-heap" depends="compiler">
+    <java classname="sisc.boot.GenerateHeap"
+          classpath="${classdir}"
+          dir="${schemedir}"
+	  fork="yes">
+      <arg value="-out"/>
+      <arg value="${heap}"/>
+      <arg value="-files"/>
+      <arg value="${schemedir}/lite.scm"/>
+      <arg value="${schemedir}/init.pp"/>
+      <arg value="${schemedir}/compat.pp"/>
+      <arg value="${schemedir}/psyntax.pp"/>
+      <arg value="${schemedir}/init2.scm"/>
+      <arg value="${schemedir}/pp.scm"/>
+      <arg value="${schemedir}/repl.scm"/>
+    </java>
+  </target>
+
+  <target name="all-lite" depends="lite-prepare,jars,lite-heap"
+          description="Build lite edition">
+  </target>
+
+  <target name="all" depends="full-prepare,jars,heap"
           description="Build all">  
   </target>
     
@@ -94,4 +135,123 @@
     <delete file="${heap}"/>
     <delete file="${basedir}/data/Quantity.java"/>
   </target> 
+
+  <target name="lite-dist" depends="clean,all-lite">
+    <delete dir="${dist}/lite"/>
+    <mkdir dir="${dist}/lite"/>
+    <mkdir dir="${dist}/lite/win"/>
+    <mkdir dir="${dist}/lite/unix"/>
+    <mkdir dir="${dist}/lite/win/sisc"/>
+    <mkdir dir="${dist}/lite/unix/sisc"/>
+
+    <copy todir="${dist}/lite/win/sisc"
+          file="${basedir}/${jarname}"/>
+    <copy todir="${dist}/lite/unix/sisc"
+          file="${basedir}/${jarname}"/>
+    <copy todir="${dist}/lite/win/sisc"
+          file="${heap}"/>
+    <copy todir="${dist}/lite/unix/sisc"
+          file="${heap}"/>
+    <copy todir="${dist}/lite/win/sisc">
+      <fileset dir="${dist}">
+	<include name="ChangeLog"/>
+	<include name="README"/>
+	<include name="COPYING"/>
+	<include name="sisc.bat"/>
+      </fileset>
+    </copy>
+    <copy todir="${dist}/lite/unix/sisc">
+      <fileset dir="${dist}">
+	<include name="ChangeLog"/>
+	<include name="README"/>
+	<include name="COPYING"/>
+      </fileset>
+    </copy>
+
+    <copy file="${dist}/sisc.sh"
+          tofile="${dist}/lite/unix/sisc/sisc"/>
+    <chmod file="${dist}/lite/unix/sisc/sisc"
+           perm="ugo+rx"/>
+
+    <tar tarfile="${dist}/sisc-lite-${version}.tar">
+
+      <tarfileset dir="${dist}/lite/unix" mode="755">
+	<include name="sisc/sisc"/>
+      </tarfileset>
+      <tarfileset dir="${dist}/lite/unix">
+	<include name="sisc/*"/>
+	<exclude name="sisc/sisc"/>
+      </tarfileset>
+    </tar>
+
+    <gzip src="${dist}/sisc-lite-${version}.tar"
+          zipfile="${dist}/sisc-lite-${version}.tar.gz" />
+    <delete file="${dist}/sisc-lite-${version}.tar"/>
+    <zip zipfile="${dist}/sisc-lite-${version}.zip"
+         basedir="${dist}/lite/win"/>
+
+  </target>
+
+  <target name="full-dist" depends="clean,all">
+    <delete dir="${dist}/full"/>
+    <mkdir dir="${dist}/full"/>
+    <mkdir dir="${dist}/full/win"/>
+    <mkdir dir="${dist}/full/unix"/>
+    <mkdir dir="${dist}/full/win/sisc"/>
+    <mkdir dir="${dist}/full/unix/sisc"/>
+
+    <copy todir="${dist}/full/win/sisc"
+          file="${basedir}/${jarname}"/>
+    <copy todir="${dist}/full/unix/sisc"
+          file="${basedir}/${jarname}"/>
+    <copy todir="${dist}/full/win/sisc"
+          file="${heap}"/>
+    <copy todir="${dist}/full/unix/sisc"
+          file="${heap}"/>
+    <copy todir="${dist}/full/win/sisc">
+      <fileset dir="${dist}">
+	<include name="ChangeLog"/>
+	<include name="README"/>
+	<include name="COPYING"/>
+	<include name="sisc.bat"/>
+      </fileset>
+    </copy>
+    <copy todir="${dist}/full/unix/sisc">
+      <fileset dir="${dist}">
+	<include name="ChangeLog"/>
+	<include name="README"/>
+	<include name="COPYING"/>
+      </fileset>
+    </copy>
+
+    <copy file="${dist}/sisc.sh"
+          tofile="${dist}/full/unix/sisc/sisc"/>
+    <chmod file="${dist}/full/unix/sisc/sisc"
+           perm="ugo+rx"/>
+
+    <tar tarfile="${dist}/sisc-${version}.tar">
+
+      <tarfileset dir="${dist}/full/unix" mode="755">
+	<include name="sisc/sisc"/>
+      </tarfileset>
+      <tarfileset dir="${dist}/full/unix">
+	<include name="sisc/*"/>
+	<exclude name="sisc/sisc"/>
+      </tarfileset>
+    </tar>
+
+    <gzip src="${dist}/sisc-${version}.tar"
+          zipfile="${dist}/sisc-${version}.tar.gz" />
+    <delete file="${dist}/sisc-${version}.tar"/>
+    <zip zipfile="${dist}/sisc-${version}.zip"
+         basedir="${dist}/full/win"/>
+  </target>
+
+  <target name="source-dist" depends="prepare">
+    <delete dir="${dist}/sisc"/>
+    <cvs command="export" dest="${dist}" date="NOW" package="sisc"/>
+    <jar jarfile="${dist}/sisc-${version}.jar" 
+         basedir="${dist}"  
+         includes="sisc/**"/>
+  </target>
 </project>
