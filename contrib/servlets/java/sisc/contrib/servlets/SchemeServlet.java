@@ -15,7 +15,7 @@ public class SchemeServlet extends SchemeServletBase {
 
     public void init()
         throws ServletException {
-        appName	= getInitParameter("app-name");
+        super.init();
         String initExpr = getInitParameter("init-expr");
         evalExpr(initExpr);
     }

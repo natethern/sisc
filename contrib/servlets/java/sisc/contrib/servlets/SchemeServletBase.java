@@ -23,6 +23,15 @@ public class SchemeServletBase extends HttpServlet {
         htmlEscapes.put("'", "&#39;");          // '
     }
 
+    public void init()
+        throws ServletException {
+        appName = getInitParameter("app-name");
+        String scName = getServletContext().getServletContextName();
+        if (scName != null && !scName.equals("")) {
+            appName = scName + " - " + appName;
+        }
+    }
+
     protected static String searchReplace(String in, Hashtable pairs) {
         StringBuffer out = new StringBuffer(in.length()*2);
         String c;

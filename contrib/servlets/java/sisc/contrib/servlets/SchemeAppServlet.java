@@ -15,7 +15,7 @@ public class SchemeAppServlet extends SchemeServletBase {
 
     public void init()
         throws ServletException {
-        appName	= getInitParameter("app-name");
+        super.init();
         String heapFile	= getInitParameter("heap-file");
         AppContext ctx = new AppContext();
         Context.register(appName, ctx);
