@@ -54,13 +54,14 @@
 (define repl
   (letrec ([repl/read
             (lambda (writer)
-              (display (format "#;~a~a> "
-                               (let ((len (- (length (_exit-handler))
-                                             1)))
-                                 (if (zero? len) "" len))
-                               (if (current-prompt) 
-                                   (string-append "-" (current-prompt))
-                                   "")))
+              (display "#;")
+              (let ([len (- (length (_exit-handler)) 1)])
+                (unless (zero? len)
+                  (display len)))
+              (when (current-prompt)
+                (display #\-)
+                (display (current-prompt)))
+              (display #\>)
               ;;read
               (let ([exp (read-code (current-input-port))])
                 (if (eof-object? exp) 
