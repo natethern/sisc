@@ -22,7 +22,6 @@ public class FillRibExp extends Expression {
 
     public void eval(Interpreter r) throws ContinuationException {
         r.setVLR(pos, r.acc);
-        //r.vlr[pos]=r.acc;
         if (lastAndRatorImmediate) {
             r.acc=exp.getValue(r);
             r.next(nxp);
@@ -44,7 +43,7 @@ public class FillRibExp extends Expression {
         s.writeExpression(exp);
         s.writeInt(pos);
         s.writeExpression(nxp);
-            s.writeBoolean(lastAndRatorImmediate);
+        s.writeBoolean(lastAndRatorImmediate);
     }
 
     public FillRibExp() {}
@@ -53,7 +52,7 @@ public class FillRibExp extends Expression {
         exp=s.readExpression();
         pos=s.readInt();
         nxp=s.readExpression();
-            lastAndRatorImmediate=s.readBoolean();
+        lastAndRatorImmediate=s.readBoolean();
     }
 
     public boolean visit(ExpressionVisitor v) {
