@@ -1,7 +1,8 @@
 2005-01-15  Scott G. Miller  <sgmiller@gmail.com>
 
-	* The optimizer was encountering pre-ananlyzed code (due to recursion in
-	  the expander which calls eval), and choking on it.  Fixed.
+	* Fixed bug where the optimizer was encountering pre-ananlyzed
+	  code (due to recursion in the expander which calls eval), and
+	  choking on it.
 	  
 2005-01-11  Scott G. Miller  <sgmiller@gmail.com>
 
