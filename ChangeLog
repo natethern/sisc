@@ -1,3 +1,8 @@
+2005-02-11  Scott G. Miller  <sgmiller@gmail.com>
+
+    * Fix a bug in our fix of a bug in SRFI-13, which broke
+      string-contains-ci.
+      
 2005-01-22  Matthias Radestock  <matthias@sorted.org>
 
 	* Prevent NPEs in code that has illegal naked references in

@@ -1322,7 +1322,10 @@
              [patlen (string-length pattern)]
              [pattern (->jstring (if (eq? c= char=?)
                                      pat (string-downcase pat)))]
-             [i (->number (index-of (->jstring text) pattern))])
+             [i (->number (index-of (->jstring (if (eq? c= char=?)
+                                                   text
+                                                   (string-downcase text))) 
+                                    pattern))])
         (and (> i -1) (<= i (- t-end patlen)) i)))))
 
 ;;; Knuth-Morris-Pratt string searching
