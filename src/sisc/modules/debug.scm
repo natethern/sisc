@@ -202,13 +202,17 @@
                x)
          (cdr keys)))))
 
-(define (stack-trace k)
+(define (stack-trace k . base)
   (cond
-    [(null? k) '()]
-    [(annotation k 'unsafe-cont) => stack-trace]
+    [(or (null? k) 
+	 (and (not (null? base))
+	      (eq? k (car base))))
+     '()]
+    [(annotation k 'unsafe-cont) => (lambda (nk)
+				      (apply stack-trace nk base))]
     [else
       (let ([nxp (continuation-nxp k)]
-            [stk (stack-trace (continuation-stk k))])
+            [stk (apply stack-trace (continuation-stk k) base)])
         (if (null? nxp)
             stk
             (cons (cons nxp 
@@ -248,15 +252,15 @@
                       sourcefile
                       line column)]))))
 
-(define (print-stack-trace k)
+(define (print-stack-trace k . base)
   (for-each (lambda (entry)
               (display (format-stack-trace-entry entry))
               (newline))
-            (stack-trace k)))
+            (apply stack-trace k base)))
 
 (print-exception-stack-trace-hook
  'debug
- (lambda (next e)
+ (lambda (next e . base)
    (if (exception? e)
-       (print-stack-trace (exception-continuation e))
+       (apply print-stack-trace (exception-continuation e) base)
        (next e))))

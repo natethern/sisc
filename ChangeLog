@@ -1,3 +1,8 @@
+2005-02-23  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Altered the REPL code to keep a stack-trace base frame, so we
+	  don't show most of the REPL's trace in exception printing.
+	  
 2005-02-19  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Made the default serialization for Expressions to throw
@@ -13,6 +18,11 @@
 
 	* Fixed a bug in our fix of a bug in SRFI-13, which broke
 	  string-contains-ci.
+
+2005-02-08  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Added system introspection functions to the OS module.  These
+	  may or may not be supporteed.
       
 2005-01-22  Matthias Radestock  <matthias@sorted.org>
 
