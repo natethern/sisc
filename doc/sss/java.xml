@@ -2148,7 +2148,7 @@ Foo fooObj = new Foo(1, 2);
               overloaded method.  Interfaces and classes that directly
               inherit from <classname>java.lang.Object</classname> are
               all given <classname>java.lang.Object</classname> as the
-              <emhpasis>last</emphasis> element in their superclass
+              <emphasis>last</emphasis> element in their superclass
               list.  For primitive and array types the direct
               superclass or superclasses reflect the widening
               conversions performed by Java.  For example,
