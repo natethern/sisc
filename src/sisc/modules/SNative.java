@@ -122,6 +122,56 @@ public class SNative extends IndexedProcedure {
 
     public final Value doApply(Interpreter f) throws ContinuationException {
         switch(id) {
+        case CHARLESSTHAN:
+            if (f.vlr.length < 2)
+                throwArgSizeException();
+            else {
+                char c=character(f.vlr[0]);
+                for (int i=1; i<f.vlr.length; i++)
+                    if (character(f.vlr[i])<=c)
+                        return FALSE;
+                return TRUE;
+            }
+        case CHARGRTRTHAN:
+            if (f.vlr.length < 2)
+                throwArgSizeException();
+            else {
+                char c=character(f.vlr[0]);
+                for (int i=1; i<f.vlr.length; i++)
+                    if (character(f.vlr[i])>=c)
+                        return FALSE;
+                return TRUE;
+            }
+        case CHAREQUALCI:
+            if (f.vlr.length < 2)
+                throwArgSizeException();
+            else {
+                char c=Character.toLowerCase(character(f.vlr[0]));
+                for (int i=1; i<f.vlr.length; i++)
+                    if (Character.toLowerCase(character(f.vlr[i]))!=c)
+                        return FALSE;
+                return TRUE;
+            }
+        case CHARLESSTHANCI:
+            if (f.vlr.length < 2)
+                throwArgSizeException();
+            else {
+                char c=Character.toLowerCase(character(f.vlr[0]));
+                for (int i=1; i<f.vlr.length; i++)
+                    if (Character.toLowerCase(character(f.vlr[i]))<=c)
+                        return FALSE;
+                return TRUE;
+            }
+        case CHARGRTRTHANCI:
+            if (f.vlr.length < 2)
+                throwArgSizeException();
+            else {
+                char c=Character.toLowerCase(character(f.vlr[0]));
+                for (int i=1; i<f.vlr.length; i++)
+                    if (Character.toLowerCase(character(f.vlr[i]))>=c)
+                        return FALSE;
+                return TRUE;
+            }
         case VECTOR:
             Value res = new SchemeVector(f.vlr);
             f.vlr = null;
@@ -205,19 +255,6 @@ public class SNative extends IndexedProcedure {
                 }
             case 2:
                 switch(id) {
-                case CHARLESSTHAN:
-                    return truth(character(f.vlr[0])<character(f.vlr[1]));
-                case CHARGRTRTHAN:
-                    return truth(character(f.vlr[0])>character(f.vlr[1]));
-                case CHAREQUALCI:
-                    return truth(Character.toLowerCase(character(f.vlr[0]))=
-                                 Character.toLowerCase(character(f.vlr[1])));
-                case CHARLESSTHANCI:
-                    return truth(Character.toLowerCase(character(f.vlr[0]))<
-                                 Character.toLowerCase(character(f.vlr[1])));
-                case CHARGRTRTHANCI:
-                    return truth(Character.toLowerCase(character(f.vlr[0]))>
-                                 Character.toLowerCase(character(f.vlr[1])));
                 case LISTREF:
                     Pair p1=pair(f.vlr[0]);
                     for (int l=num(f.vlr[1]).intValue(); l>0; l--) {
