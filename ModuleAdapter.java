@@ -63,4 +63,10 @@ public abstract class ModuleAdapter extends Module {
 	return formatter.format(getLiMessage(messageName),
 				new Object[] { arg1 });
     }
+
+    public static String liMessage(String messageName, String arg1,
+				   String arg2) {
+	return formatter.format(getLiMessage(messageName),
+				new Object[] { arg1, arg2 });
+    }
 }
