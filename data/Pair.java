@@ -60,24 +60,6 @@ public class Pair extends Value {
         return b.toString();
     }
 
-    public String write() {
-        StringBuffer b=new StringBuffer();
-        if (car==QUOTE) {
-            b.append('\'').append(((Pair)cdr).car.write());
-        } else if (car==UNQUOTE) {
-            b.append(',').append(((Pair)cdr).car.write());
-        } else if (car==BACKQUOTE) {
-            b.append('`').append(((Pair)cdr).car.write());
-        } else if (car==UNQUOTE_SPLICING) {
-            b.append(",@").append(((Pair)cdr).car.write());
-        } else {
-            b.append('(');
-            display(b, true);
-            b.append(')');
-        }
-        return b.toString();
-    }
-
     public boolean valueEqual(Value v) {
         if (!(v instanceof Pair)) return false;
         Pair p=(Pair)v;

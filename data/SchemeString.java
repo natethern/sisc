@@ -83,9 +83,31 @@ public class SchemeString extends Value {
         }
     }
 
-    String display(boolean write) {
-        if (!write) return asString();
+    public void set(int k, char c) {
+        asCharArray();
+        data_c[k]=c;
+        data_s = null;
+    }
 
+    public void set(String s) {
+        data_s = s;
+        data_c = null;
+    }
+
+    public void set(char[] ca) {
+        data_c = ca;
+        data_s = null;
+    }
+
+    public String display() {
+        return asString();
+    }
+
+    public String write() {
+        return toString();
+    }
+
+    public String toString() {
         StringBuffer b=new StringBuffer();
         b.append('"');
         int lastGood=0;
@@ -110,34 +132,6 @@ public class SchemeString extends Value {
         b.append(data_c, lastGood, data_c.length-lastGood);
         b.append('"');
         return b.toString();
-    }
-
-    public void set(int k, char c) {
-        asCharArray();
-        data_c[k]=c;
-        data_s = null;
-    }
-
-    public void set(String s) {
-        data_s = s;
-        data_c = null;
-    }
-
-    public void set(char[] ca) {
-        data_c = ca;
-        data_s = null;
-    }
-
-    public String display() {
-        return display(false);
-    }
-
-    public String write() {
-        return display(true);
-    }
-
-    public String toString() {
-        return write();
     }
 
     public void serialize(Serializer s) throws IOException {

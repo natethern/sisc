@@ -39,29 +39,30 @@ public class Symbol extends Value {
         return symval;
     }
 
-    public static StringBuffer slashProcess(StringBuffer b, String s) {
-        if (Parser.isPeculiarIdentifier(s)) 
-            b.append(s);
+    private void slashify(StringBuffer b) {
+        if (Parser.isPeculiarIdentifier(symval)) 
+            b.append(symval);
         else 
-            for (int i=0; i<s.length(); i++) {
-                char c=s.charAt(i);
+            for (int i=0; i<symval.length(); i++) {
+                char c=symval.charAt(i);
                 if ((i>0 && Lexer.isIdentifierSubsequent(c)) ||
                     (i==0 && Lexer.isIdentifierStart(c)))
                     b.append(c);
                 else 
                     b.append('\\').append(c);
             }
-        return b;
     }
 
     public String write() {
+        StringBuffer b = new StringBuffer();
         if (caseSensitive || symval.toLowerCase().equals(symval))
-            return slashProcess(new StringBuffer(), symval).toString();
+            slashify(b);
         else {
-            StringBuffer b=new StringBuffer("|");
-            slashProcess(b, symval).append('|');
-            return b.toString();
+            b.append('|');
+            slashify(b);
+            b.append('|');
         }
+        return b.toString();
     }
 
     public Symbol() {}

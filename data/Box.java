@@ -27,10 +27,6 @@ public class Box extends Value {
         return b.toString();
     }
 
-    public String write() {
-        return display();
-    }
-
     public boolean valueEqual(Value v) {
 	if (!(v instanceof Box)) return false;
         Box b=(Box)v;

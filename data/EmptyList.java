@@ -17,10 +17,6 @@ public class EmptyList extends Pair implements Singleton {
         return "()";
     }
 
-    public String write() {
-        return display();
-    }
-
     public boolean valueEqual(Value o) {
 	return o instanceof EmptyList;
     }

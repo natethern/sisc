@@ -47,17 +47,6 @@ public class AnnotatedExpr extends Value {
         return b.toString();
     }
 
-    public String write() {
-        StringBuffer b=new StringBuffer("#@(");
-        b.append(annotation.write()).append(" . ");
-        if (expr instanceof Value) 
-            b.append(((Value)expr).write());
-        else 
-            b.append(expr.express());
-        b.append(')');
-        return b.toString();
-    }
-
     public void deserialize(Deserializer s) throws IOException {
         expr=s.readExpression();
         annotation=(Value)s.readExpression();
