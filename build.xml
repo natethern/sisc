@@ -17,7 +17,8 @@
     <property name="gendocdir" value="${docdir}/generated"/>
     <property name="schemedir" value="${basedir}/scheme-src"/>
     <property name="packagename" value="sisc"/>
-    <property name="jarname" value="sisc.jar"/>
+    <property name="basejar" value="sisc-base.jar"/>
+    <property name="optjar" value="sisc-opt.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
     <property name="quantity-type" value="64float"/>
     <property name="debugging" value="off"/>
@@ -36,7 +37,8 @@
     <delete dir="${classdir}"/>
     <delete dir="${gendocdir}"/>
     <delete file="${docdir}/sss/style.xsl"/>
-    <delete file="${basedir}/${jarname}"/>
+    <delete file="${basedir}/${basejar}"/>
+    <delete file="${basedir}/${optjar}"/>
     <delete file="${heap}"/>
     <delete file="${basedir}/data/Quantity.java"/>
     <delete file="${basedir}/Conf.java"/>
@@ -68,11 +70,18 @@
   </target> 
 
   <target name="jars" depends="compiler,i18n">
-    <jar jarfile="${basedir}/${jarname}"
+    <jar jarfile="${basedir}/${basejar}"
 	 manifest="${basedir}/boot/Manifest">
       <fileset dir="${classdir}">
 	<include name="*/**"/>
-	<exclude name="sisc/boot/GenerateHeap.class" if="lite"/>
+	<exclude name="sisc/boot/**"/>
+	<exclude name="sisc/modules/**"/>
+      </fileset>
+    </jar>
+    <jar jarfile="${basedir}/${optjar}">
+      <fileset dir="${classdir}">
+	<include name="sisc/boot/**"/>
+	<include name="sisc/modules/**"/>
       </fileset>
     </jar>
   </target>
@@ -152,7 +161,7 @@
     <mkdir dir="${dist}/lite/sisc"/>
 
     <copy todir="${dist}/lite/sisc"
-          file="${basedir}/${jarname}"/>
+          file="${basedir}/${basejar}"/>
     <copy todir="${dist}/lite/sisc"
           file="${heap}"/>
     <copy todir="${dist}/lite/sisc">
@@ -173,8 +182,7 @@
            perm="ugo+rx"/>
 
     <tar tarfile="${dist}/sisc-lite-${version}.tar">
-
-      <tarfileset dir="${dist}/sisc" mode="755">
+      <tarfileset dir="${dist}/lite" mode="755">
 	<include name="sisc/sisc"/>
       </tarfileset>
       <tarfileset dir="${dist}/lite">
@@ -207,7 +215,9 @@
     </copy>
 
     <copy todir="${dist}/full/sisc"
-          file="${basedir}/${jarname}"/>
+          file="${basedir}/${basejar}"/>
+    <copy todir="${dist}/full/sisc"
+          file="${basedir}/${optjar}"/>
     <copy todir="${dist}/full/sisc"
           file="${heap}"/>
     <copy todir="${dist}/full/sisc">

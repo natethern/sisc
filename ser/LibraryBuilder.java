@@ -137,6 +137,8 @@ public class LibraryBuilder extends Serializer {
         }
         datout.flush();
 
+        System.err.println(classes.size()+" classes");
+        System.err.println(offsets.length+" entry points");
         return null;
     }
 
