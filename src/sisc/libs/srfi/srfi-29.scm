@@ -7,6 +7,7 @@
      localized-template)
   (import s2j)
   (import srfi-6)
+  (import string-io)
   (include "../../modules/srfi/srfi-29.scm")
   (add-feature 'srfi-29))
 
