@@ -310,6 +310,29 @@
     (close-output-port port)
     result))
 
+;;;;;;;;;;;;; legacy macro support ;;;;;;;;;;;;
+
+(define-syntax define-macro
+  (lambda (x)
+    (syntax-case x ()
+      ((_ (name . args) . body)
+       (syntax (define-macro name (lambda args . body))))
+      ((_ name transformer)
+       (syntax
+        (define-syntax name
+	  (lambda (y)
+	    (syntax-case y ()
+               ((_ . args)
+		(datum->syntax-object
+		 (syntax _)
+		 (apply transformer
+			(syntax-object->datum (syntax args)))))))))))))
+
+(define-syntax defmacro
+  (syntax-rules ()
+    ((_ name args . body)
+     (define-macro name (lambda args . body)))))
+
 
 ;;;;;;;;;;;;;;;; NATIVE MODULES ;;;;;;;;;;;;;;;
 
