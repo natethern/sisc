@@ -14,7 +14,7 @@ public class IO extends IndexedProcedure {
         Symbol.intern("sisc.modules.io.Messages");
 
     protected static final int
-        //NEXT = 25,
+        //NEXT = 27,
 
         ABSPATHQ            = 0,
         CHARREADY           = 3,
@@ -38,17 +38,19 @@ public class IO extends IndexedProcedure {
         PEEKCHAR            = 23,
         READ                = 21,
         READCHAR            = 18,
+        READSTRING          = 25,
         READCODE            = 11,
         WRITE               = 1,
-        WRITECHAR           = 7;
+        WRITECHAR           = 7,
+        WRITESTRING         = 26;
         
 
     public static class Index extends IndexedLibraryAdapter { 
-
-		public Value construct(int id) {
-			return new IO(id);
-		}
-		    	
+        
+        public Value construct(int id) {
+            return new IO(id);
+        }
+        
     	public Index() {
             define("absolute-path?"     , ABSPATHQ);
             define("char-ready?"        , CHARREADY);
@@ -72,8 +74,10 @@ public class IO extends IndexedProcedure {
             define("read"               , READ);
             define("read-char"          , READCHAR);
             define("read-code"          , READCODE);
+            define("read-string"        , READSTRING);
             define("write"              , WRITE);
             define("write-char"         , WRITECHAR);
+            define("write-string"       , WRITESTRING);
         }
     }
     
@@ -268,6 +272,8 @@ public class IO extends IndexedProcedure {
             case READCHAR:
                 return readChar(f, f.dynenv.in);
             case READCODE:
+                System.err.println("Shaazzaa!");
+        
                 return readCode(f, f.dynenv.in);
             default:
                 throwArgSizeException();
@@ -506,10 +512,47 @@ public class IO extends IndexedProcedure {
             }
         case 3:
             switch (id) {
-            case OPENOUTPUTFILE:
+            case READSTRING:
+                try {
+                    char[] buf=str(f.vlr[0]).asCharArray();
+                    return Quantity.valueOf(((ReaderInputPort)f.dynenv.in).getReader().read(buf, num(f.vlr[1]).intValue(), num(f.vlr[2]).intValue()));
+                } catch (IOException e) {
+                    throwIOException(f, e.getMessage(), e);
+                }
+                return VOID;
+            case WRITESTRING:
+                try {
+                    char[] buf=str(f.vlr[0]).asCharArray();
+                    ((WriterOutputPort)f.dynenv.out).getWriter().write(buf, num(f.vlr[1]).intValue(), num(f.vlr[2]).intValue());
+                } catch (IOException e) {
+                    throwIOException(f, e.getMessage(), e);
+                }
+                return VOID;
+                case OPENOUTPUTFILE:
                 URL url = url(f.vlr[0]);
                 return openCharOutFile(f, url, string(f.vlr[1]), 
                                        truth(f.vlr[2]));
+            default:
+                throwArgSizeException();
+            }
+        case 4:
+            switch (id) {
+            case READSTRING:
+                try {
+                    char[] buf=str(f.vlr[0]).asCharArray();
+                    return Quantity.valueOf(((ReaderInputPort)f.vlr[3]).getReader().read(buf, num(f.vlr[1]).intValue(), num(f.vlr[2]).intValue()));
+                } catch (IOException e) {
+                    throwIOException(f, e.getMessage(), e);
+                }
+                return VOID;
+            case WRITESTRING:
+                try {
+                    char[] buf=str(f.vlr[0]).asCharArray();
+                    ((WriterOutputPort)f.vlr[3]).getWriter().write(buf, num(f.vlr[1]).intValue(), num(f.vlr[2]).intValue());
+                } catch (IOException e) {
+                    throwIOException(f, e.getMessage(), e);
+                }
+                return VOID;
             default:
                 throwArgSizeException();
             }
