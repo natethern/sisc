@@ -4,7 +4,6 @@ import java.util.*;
 import java.io.*;
 import sisc.data.Expression;
 import sisc.data.Singleton;
-import sisc.data.Symbol;
 import sisc.env.SymbolicEnvironment;
 
 public class StreamSerializer extends SerializerImpl {

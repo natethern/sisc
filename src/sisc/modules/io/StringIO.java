@@ -1,7 +1,6 @@
 package sisc.modules.io;
 
 import java.io.*;
-import java.net.*;
 
 import sisc.interpreter.*;
 import sisc.nativefun.*;
