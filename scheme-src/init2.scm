@@ -108,13 +108,12 @@
 	(set-dynamic-point! point)
 	(call-with-values
 	    (lambda ()
-	      (let ((fk (current-failure-continuation)))
-		(call/fc
-		 body
-		 (lambda (m e c)
-		   (set-dynamic-point! here)
-		   (out)
-		   (fk m e c)))))
+	      (call/fc
+	       body
+	       (lambda (m e fk)
+		 (set-dynamic-point! here)
+		 (out)
+		 (fk m e))))
 	  (lambda results
 	    (set-dynamic-point! here)
 	    (out)
