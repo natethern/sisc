@@ -13,7 +13,6 @@ public class SISCApplet extends JApplet {
     public void init() {
         try {
             URL u=new URL(getDocumentBase(),"sisc.heap");
-            System.err.println(u);
             URLConnection conn=u.openConnection();
             AppContext ctx = new AppContext();
             Context.register("main", ctx);
