@@ -41,8 +41,8 @@ public class Quantity extends Value {
     public static int max_precision;
 
     static {
-        String x=System.getProperty("minprecision");
-        String y=System.getProperty("maxprecision");
+        String x=getSystemProperty("minprecision", null);
+        String y=getSystemProperty("maxprecision", null);
         min_precision=(x==null ? 16 : Integer.parseInt(x));
         max_precision=(y==null ? 32 : Integer.parseInt(y));
     }

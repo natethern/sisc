@@ -58,6 +58,11 @@ public class AssociativeEnvironment extends NamedValue {
         nextFree=env.length;
     }
 
+    public AssociativeEnvironment(Symbol name) {
+	this();
+	this.name=name;
+    }
+
     public AssociativeEnvironment() {
         env=new Value[50];
         nextFree=0;

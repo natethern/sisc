@@ -1,5 +1,6 @@
+<!DOCTYPE project PUBLIC "-//ANT//DTD project//EN" "/usr/share/sgml/dtd/project.dtd" []>
 <project name="sisc" default="all">
-
+  
   <path id="classpath">
     <fileset dir="./lib">
       <include name="*.jar"/>
@@ -32,11 +33,11 @@
     <property name="packagename" value="sisc"/>
     <property name="jarname" value="sisc.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
-    <property name="quantity-type" value="apfloat"/>
-    <property name="debugging" value="on"/>
-    <property name="optimization" value="off"/>
+    <property name="quantity-type" value="64float"/>
+    <property name="debugging" value="off"/>
+    <property name="optimization" value="on"/>
     <property name="dist" value="${basedir}/dist"/>
-    <property name="doc.style" value="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/docbook.xsl"/>
+    <property name="doc.style" value="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl"/>
   </target>
 
   <target name="init" depends="prepare">
@@ -98,6 +99,7 @@
       <exclude name="${packagename}/modules/Regexp.java" unless="oro.present"/>
       <exclude name="${packagename}/modules/servlets/**" unless="servlets.present"/>
       <exclude name="${packagename}/modules/**" if="lite"/>
+      <exclude name="${packagename}/applet/**"/>
     </javac>      
   </target>
   
@@ -113,6 +115,8 @@
     <jar jarfile="${basedir}/${jarname}"
 	 manifest="${basedir}/boot/Manifest">
       <fileset dir="${classdir}" includes="*/**"/>
+<!--      <fileset dir="${basedir}/boot" includes="sisc.heap"/>	
+      <fileset dir="${basedir}" includes="lambdafish.gif"/>	-->
     </jar>
   </target>
   
@@ -288,5 +292,20 @@
     <jar jarfile="${dist}/sisc-${version}.jar" 
          basedir="${dist}"  
          includes="sisc/**"/>
+  </target>
+
+<!-- SISC As an Applet -->
+
+  <target name="applet" depends="all-lite">
+    <javac srcdir="${srcdir}"
+           destdir="${classdir}"
+	   classpathref="classpath"
+	   debug="${debugging}"
+           optimize="${optimization}">
+      <include name="${packagename}/applet/**"/>
+    </javac>
+    <jar jarfile="${dist}/sisc-applet.jar"
+         basedir="${classdir}"
+         includes="sisc/applet/**"/>
   </target>
 </project>

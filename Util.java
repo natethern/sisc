@@ -69,6 +69,14 @@ public abstract class Util implements Conf {
 
     public static final int DEFAULT_SYNOPSIS_LENGTH=30;
 
+    public static String getSystemProperty(String name, String def) {
+        try {
+            return System.getProperty(name, def);
+        } catch (Exception e) {
+            return def;
+        }
+    }
+
     public static String warn(String messageClass) {
 	StringBuffer b=new StringBuffer("{");
 	b.append(liMessage(SISCB, "warning"));

@@ -306,6 +306,84 @@
 	</blockquote>
       </para>
     </sect2>
+    <sect2 id="Boxing">
+      <title>
+	Boxes
+      </title>
+      <para>
+	&SISC; supports boxes, a container for a
+	Scheme value. Boxing is often used to implement
+	call-by-reference semantics. Boxes are created and accessed
+	using the following three functions:
+      </para>
+      <para>
+	<blockquote>
+	  <para>
+	    &procedure;
+	    <methodsynopsis language="scheme">
+	      <type>undefined</type>
+	      <methodname>box</methodname>
+	      <methodparam>
+		<parameter>value</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Creates a box filled with the given value.
+	      </para>
+	    </blockquote>
+	  </para>
+	  <para>
+	    &procedure;
+	    <methodsynopsis language="scheme">
+	      <type>value</type>
+	      <methodname>unbox</methodname>
+	      <methodparam>
+		<parameter>box</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Returns the value contained in the given box.
+	      </para>
+	    </blockquote>
+	  </para>
+	  <para>
+	    &procedure;
+	    <methodsynopsis language="scheme">
+	      <type>undefined</type>
+	      <methodname>set-box!</methodname>
+	      <methodparam>
+		<parameter>box</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>value</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Replaces the value contained in the given box with the
+		value provided.
+	      </para>
+	    </blockquote>
+	  </para>
+	</blockquote>
+      </para>
+      <para>
+	In addition to the <function>box</function> function for
+	creating boxes, &SISC; provides an external representation for
+	boxes and boxed values. It extends the &R5RS; grammar with the 
+	following:
+      </para>
+      <programlisting>
+	&lt;boxed value&gt; --&gt; &num;&amp;&lt;datum&gt;
+      </programlisting>
+      <para>
+	This syntax denotes a boxed value, with
+	<computeroutput>&lt;datum&gt;</computeroutput> as the contained
+	value.
+      </para>
+    </sect2>
     <sect2 id="CircularStructures">
       <title>
 	Circular structures
@@ -781,82 +859,24 @@
       binding and set it to the new value.
     </para>
   </sect1>
-  <sect1 id="Boxing">
+  <sect1>
     <title>
-      Boxing
+      Syntactic Extension
     </title>
     <para>
-      &SISC; supports boxes, a container for a
-      Scheme value. Boxing is often used to implement
-      call-by-reference semantics. Boxes are created and accessed
-      using the following three functions:
-    </para>
-    <para>
-      <blockquote>
-	<para>
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>undefined</type>
-	    <methodname>box</methodname>
-	    <methodparam>
-	      <parameter>value</parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Creates a box filled with the given value.
-	    </para>
-	  </blockquote>
-	</para>
-	<para>
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>value</type>
-	    <methodname>unbox</methodname>
-	    <methodparam>
-	      <parameter>box</parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Returns the value contained in the given box.
-	    </para>
-	  </blockquote>
-	</para>
-	<para>
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>undefined</type>
-	    <methodname>set-box!</methodname>
-	    <methodparam>
-	      <parameter>box</parameter>
-	    </methodparam>
-	    <methodparam>
-	      <parameter>value</parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Replaces the value contained in the given box with the
-	      value provided.
-	    </para>
-	  </blockquote>
-	</para>
-      </blockquote>
-    </para>
-    <para>
-      In addition to the <function>box</function> function for
-      creating boxes, &SISC; provides an external representation for
-      boxes and boxed values. It extends the &R5RS; grammar with the 
-      following:
-    </para>
-    <programlisting>
-&lt;boxed value&gt; --&gt; &num;&amp;&lt;datum&gt;
-    </programlisting>
-    <para>
-      This syntax denotes a boxed value, with
-      <computeroutput>&lt;datum&gt;</computeroutput> as the contained
-      value.
+      &SISC; provides a hygenic macro system that fully conforms to
+      the &R5RS; standard.  The macro system is provided by the
+      portable syntax-case macro expander
+      <citation>Expander</citation>, and as such also a more flexible 
+      macro definition system called
+      <function>syntax-case</function>.  A full description of the
+      capabilities of the expander is best found in the 
+      <ulink url="http://www.scheme.com/csug.html">
+	<citetitle>Chez Scheme Users Guide</citetitle>
+      </ulink>, specifically 
+      <ulink url="http://www.scheme.com/csug/syntax.html#g2154">
+	<citetitle>Section 9.2, Syntax-Case</citetitle>
+      </ulink>.  
     </para>
   </sect1>
 </chapter>

@@ -320,6 +320,13 @@
     <title>
       Monitors and Synchronization
     </title>
+    <warning>
+      <para>
+	This section is likely to change in the not-to distant future,
+	as &SISC; moves to a separation of locks and condition
+	variables more akin to that described by SRFI-12.
+      </para>
+    </warning>
     <para>
       &SISC; provides an implementation of the monitor data structure
       for concurrency protection and inter-thread communication.

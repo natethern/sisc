@@ -67,7 +67,7 @@ public class GenerateHeap {
           System.exit(1);
         }
 
-	AppContext ctx = new AppContext(sisc.compiler.Compiler.addSpecialForms(new AssociativeEnvironment()));
+	AppContext ctx = new AppContext(sisc.compiler.Compiler.addSpecialForms(new AssociativeEnvironment(Util.TOPLEVEL)));
 
 	Context.register("main", ctx);
 

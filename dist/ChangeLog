@@ -1,3 +1,12 @@
+2002-03-15  Scott G. Miller <scgmille@freenetproject.org>
+	
+	* Fixed SQRT for large integers, with the side effect
+	  of producing exact results for exact arguments with an exact
+	  square root.
+
+	* Added annotation support, which will allow source-correlated
+	  error messages.
+
 2002-03-09  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed equality problems with Immutables

@@ -51,7 +51,7 @@ public class REPL extends Thread {
     
     public static InputStream findHeap() {
 	try {
-	    String heapLocation=System.getProperty("HEAP", null);
+	    String heapLocation=Util.getSystemProperty("HEAP", null);
 	    InputStream heap=null;
 	    if (heapLocation==null) {
 		URL heapURL=ClassLoader.getSystemResource("sisc.heap");
@@ -97,29 +97,32 @@ public class REPL extends Thread {
 	    }
         }
 
-        Properties sysProps=System.getProperties();
-        for (Iterator ir=sysProps.keySet().iterator(); ir.hasNext();) {
-            String key=(String)ir.next();
-            Symbol s=Symbol.get(key);
-            r.define(s, new SchemeString(sysProps.getProperty(key)),
-                     Util.ENVVARS);
-        }
         // ovidiu: No need to version, as it is read from the heap
         // file. Should we do the same with the rest of the
         // properties?
-//         r.define(Symbol.get("version"), new SchemeString(Util.VERSION), Util.SISC);
-        File[] roots=File.listRoots();
-        SchemeString[] rootss=new SchemeString[roots.length];
-        for (int i=0; i<roots.length; i++)
-            rootss[i]=new SchemeString(roots[i].getPath());
-        r.define(Symbol.get("fs-roots"), Util.valArrayToList((Value[])rootss,
-                 0, rootss.length),
-                 Util.SISC);
+        //         r.define(Symbol.get("version"), new SchemeString(Util.VERSION), Util.SISC);        
+        try {
+            Properties sysProps=System.getProperties();
+            for (Iterator ir=sysProps.keySet().iterator(); ir.hasNext();) {
+                String key=(String)ir.next();
+                Symbol s=Symbol.get(key);
+                r.define(s, new SchemeString(sysProps.getProperty(key)),
+                         Util.ENVVARS);
+            }
+
+            File[] roots=File.listRoots();
+            SchemeString[] rootss=new SchemeString[roots.length];
+            for (int i=0; i<roots.length; i++)
+                rootss[i]=new SchemeString(roots[i].getPath());
+            r.define(Symbol.get("fs-roots"), Util.valArrayToList((Value[])rootss,
+                                                                 0, rootss.length),
+                     Util.SISC);
+        } catch (java.security.AccessControlException ace) {}
 	return true;
     }
 
     public void run() {
-	r= Context.enter("main");
+	r= Context.enter(Context.lookup("main"), r.dynenv);
 	try {
 	    Symbol replSymb = Symbol.get("repl");
 	    try {
