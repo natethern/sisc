@@ -134,7 +134,7 @@
     ;;Various lookahead opts
     ((if ,B '#f '#f)
      (values 
-      `(begin ,B ,altern)
+      (make-begin B altern)
       (new-state)))
     ((if ,B '#f (quote ,x))
      (values 
@@ -146,12 +146,12 @@
       (new-state)))
     ((if ,B (quote ,x) (quote ,y))
      (values 
-      `(begin ,B ,conseq)
+      (make-begin B conseq)
       (new-state)))
     ;;Begin lifting (possibly unsafe)
     ((begin ,e* ... ,el)
 ;       (guard (not-redefined? 'begin))
-     (values `(begin ,@e* (if ,el ,conseq ,altern))
+     (values (apply make-begin (append e* `((if ,el ,conseq ,altern))))
              '((new-assumptions begin))))
     (,other (values `(if ,other ,conseq ,altern) (new-state)))))
 
@@ -202,6 +202,7 @@
            (append sub-begin 
                    (apply mb-helper exps*))))
         (,other (cons other (apply mb-helper exps*))))))
+
 (define (make-begin exp1 . exps*)
   (if (null? exps*) 
       exp1
@@ -213,7 +214,9 @@
                    
 
 (define (opt:begin exp1 exps* state)
-  (values (apply make-begin (cons exp1 exps*)) (new-state)))
+  (values
+   (apply make-begin (cons exp1 exps*))
+   (new-state)))
 
 (define (opt:set! lhs rhs state)
   (match rhs
@@ -221,9 +224,11 @@
     ((begin ,e* ... ,el)
 ;     (guard (not-redefined? 'begin))
      (values
-      `(begin ,@e* (set! ,lhs ,el))
+      (apply make-begin (append e* `((set! ,lhs ,el))))
       '((new-assumptions 'begin))))
     (,else
       (values
        `(set! ,lhs ,else)
        (new-state)))))
+
+

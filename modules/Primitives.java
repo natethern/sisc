@@ -220,7 +220,12 @@ public class Primitives extends ModuleAdapter {
                 return truth(f.vlr[0] instanceof Pair &&
                              f.vlr[0]!=EMPTYLIST);
             case GETENVIRONMENT:
-                return f.ctx.lookupContextEnv(symbol(f.vlr[0])).asValue();
+                try {
+                    return f.ctx.lookupContextEnv(symbol(f.vlr[0])).asValue();
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    throwPrimException(liMessage(SISCB, "noenv", f.vlr[0].synopsis()));
+                    return VOID;
+                }
             case SIN: return num(f.vlr[0]).sin();
             case COS: return num(f.vlr[0]).cos();
             case TAN: return num(f.vlr[0]).tan();
