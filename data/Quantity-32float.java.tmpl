@@ -1114,7 +1114,7 @@ public class Quantity extends Value implements Singleton {
         case DECIM:
             return d;
         case INTEG:
-            return (double)i.intValue();
+            return i.doubleValue();
         case RATIO:
             return ratioToDecimal(i,de);
         }
