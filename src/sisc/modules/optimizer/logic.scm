@@ -119,10 +119,7 @@
             (let ([nv (map (lambda (e) (opt e state)) nvo)])
               (if (= (length nv) (length values*))
                   (values nf nvo sec state)
-                  (opt:letrec-helper
-                   nf nv (merge-states 
-                          state 
-                          (apply merge-states fstate*))))))))))
+                  (opt:letrec-helper nf nv state))))))))
 
 (define (opt:letrec keyword formals values* lexicals body state)
   (let-values ([(nf nv sec state) (opt:letrec-helper formals values* state)])
