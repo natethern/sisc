@@ -920,13 +920,13 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </para>
             </blockquote>
           </para>
-          <para id="func-block-read">
-            <indexterm><primary>block-read</primary>
+          <para id="func-read-block">
+            <indexterm><primary>read-block</primary>
             </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>integer</type>
-              <methodname>block-read</methodname>
+              <methodname>read-block</methodname>
               <methodparam>
                 <parameter>buffer</parameter>
               </methodparam>
@@ -950,13 +950,13 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </para>
             </blockquote>
           </para>
-          <para id="func-block-write">
-            <indexterm><primary>block-write</primary>
+          <para id="func-write-block">
+            <indexterm><primary>write-block</primary>
             </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
               <type>undefined</type>
-              <methodname>block-write</methodname>
+              <methodname>write-block</methodname>
               <methodparam>
                 <parameter>buffer</parameter>
               </methodparam>
