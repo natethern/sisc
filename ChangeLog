@@ -1,4 +1,9 @@
-2004-10-15  Scott G. Miller   <scott@sgmiller.org>
+2004-10-16  Scott G. Miller   <scott@sgmiller.org>
+
+	* LibraryAE was getting deserialized instead of the child
+	  environment due to a name conflict.  
+	  
+2004-10-16  Scott G. Miller   <scott@sgmiller.org>
 
 	* Made some attempt to display line/column numbers from load
 	  and parsing so that one can trace the start of an s-expression
