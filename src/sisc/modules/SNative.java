@@ -126,20 +126,28 @@ public class SNative extends IndexedProcedure {
             if (f.vlr.length < 2)
                 throwArgSizeException();
             else {
-                char c=character(f.vlr[0]);
-                for (int i=1; i<f.vlr.length; i++)
-                    if (character(f.vlr[i])<=c)
+                char c1=character(f.vlr[0]);
+                char c2;
+                for (int i=1; i<f.vlr.length; i++) {
+                    c2=character(f.vlr[i]);
+                    if (c1>=c2)
                         return FALSE;
+                    c1=c2;
+                }
                 return TRUE;
             }
         case CHARGRTRTHAN:
             if (f.vlr.length < 2)
                 throwArgSizeException();
             else {
-                char c=character(f.vlr[0]);
-                for (int i=1; i<f.vlr.length; i++)
-                    if (character(f.vlr[i])>=c)
+                char c1=character(f.vlr[0]);
+                char c2;
+                for (int i=1; i<f.vlr.length; i++) {
+                    c2=character(f.vlr[i]);
+                    if (c1<=c2)
                         return FALSE;
+                    c1=c2;
+                }
                 return TRUE;
             }
         case CHAREQUALCI:
@@ -156,20 +164,28 @@ public class SNative extends IndexedProcedure {
             if (f.vlr.length < 2)
                 throwArgSizeException();
             else {
-                char c=Character.toLowerCase(character(f.vlr[0]));
-                for (int i=1; i<f.vlr.length; i++)
-                    if (Character.toLowerCase(character(f.vlr[i]))<=c)
+                char c1=Character.toLowerCase(character(f.vlr[0]));
+                char c2;
+                for (int i=1; i<f.vlr.length; i++) {
+                    c2=Character.toLowerCase(character(f.vlr[i]));
+                    if (c2<=c1)
                         return FALSE;
+                    c1=c2;
+                }
                 return TRUE;
             }
         case CHARGRTRTHANCI:
             if (f.vlr.length < 2)
                 throwArgSizeException();
             else {
-                char c=Character.toLowerCase(character(f.vlr[0]));
-                for (int i=1; i<f.vlr.length; i++)
-                    if (Character.toLowerCase(character(f.vlr[i]))>=c)
+                char c1=Character.toLowerCase(character(f.vlr[0]));
+                char c2;
+                for (int i=1; i<f.vlr.length; i++) {
+                    c2=Character.toLowerCase(character(f.vlr[i]));
+                    if (c2>=c1)
                         return FALSE;
+                    c1=c2;
+                }
                 return TRUE;
             }
         case VECTOR:
