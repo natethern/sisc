@@ -255,7 +255,7 @@ public class Reflection extends Util {
             switch(primid) {
             case JAVA_SYNC:
                 synchronized(jobj(f.vlr[0])) {
-                    Interpreter i=Context.enter();
+                    Interpreter i=Context.enter(f);
                     try {
                         return i.eval(proc(f.vlr[1]), ZV);
                     } catch (SchemeException se) {

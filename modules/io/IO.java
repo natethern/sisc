@@ -344,7 +344,7 @@ public class IO extends ModuleAdapter {
                 } catch (IOException e) {
                     throwPrimException(liMessage(IOB, "erroropening", url.toString()));
                 }
-                Interpreter r = Context.enter();
+                Interpreter r = Context.enter(f);
                 try {
                     v=null;
                     do {
