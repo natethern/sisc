@@ -1019,7 +1019,7 @@
 
 
 ;;; We extend MAP to handle arguments of unequal length.
-(define map map-in-order)	
+(define (map . args) (apply map-in-order args))
 
 
 ;;; filter, remove, partition
