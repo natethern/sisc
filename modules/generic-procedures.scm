@@ -50,17 +50,35 @@
 (define (generic-procedure-next proc)
   (procedure-property proc 'next))
 
+(define (make-method-list) (list (monitor/new)))
+(define (constructor-methods class) (make-method-list))
+
+;;we keep track of all the classes whose methods we have already
+;;learned about
+(define *CLASSES* (make-hashtable))
+;;for each Java method name we maintain a method list which is shared
+;;by all the generic procedures representing java methods of that name
+(define *JAVA-METHODS* (make-hashtable))
+(define (java-methods name)
+  (hashtable/get! *JAVA-METHODS* name make-method-list))
+;;Java constructors are stored in per-class method lists
+(define *JAVA-CONSTRUCTORS* (make-hashtable))
+(define (java-constructor-methods class)
+  (hashtable/get! *JAVA-CONSTRUCTORS* class make-method-list))
+
 ;;constructors are chained by chaining their contained generic
-;;procedures
+;;procedures, which get created lazily on a per-class basis
 (define (constructor proc class)
   (hashtable/get!
    (procedure-property proc 'generic-constructors)
    class
    (lambda ()
-     (let ([next (procedure-property proc 'next)])
-       (if next
-           (make-generic-procedure (constructor next class))
-           (make-generic-procedure))))))
+     (apply _make-generic-procedure
+            ((procedure-property proc 'constructor-methods) class)
+            (let ([next (procedure-property proc 'next)])
+              (if next
+                  (list (constructor next class))
+                  '()))))))
 
 (define (method<= m1 m2)
   (cond ((> (method-arity m1) (method-arity m2)) #t)
@@ -91,15 +109,6 @@
                   ;;insert
                   (set-cdr! methods (cons m meths)))
               (add-method-helper m meths))))))
-
-;;we keep track of all the classes whose methods we have already
-;;learned about
-(define *CLASSES* (make-hashtable))
-;;for each java method name we maintain a method list which is shared
-;;by all the generic procedures representing java methods of that name
-(define *JAVA-METHODS* (make-hashtable))
-(define (java-methods name)
-  (hashtable/get! *JAVA-METHODS* name make-method-list))
 
 (define (add-java-constructors proc constructors)
   (for-each (lambda (c)
@@ -183,15 +192,13 @@
                       args
                       (procedure-property proc 'next)))
 
-(define (make-method-list) (list (monitor/new)))
-
 (define (_make-generic-procedure methods . rest)
   (letrec ([proc      (lambda args (find-and-call proc args methods))])
     (set-procedure-property! proc 'methods methods)
     (if (not (null? rest))
         (set-procedure-property! proc 'next (car rest)))
     proc))
-(define (_make-generic-constructor . rest)
+(define (_make-generic-constructor cproc . rest)
   (letrec ([proc (lambda (class . args)
                    (if (java/class? class) (add-class class))
                    (apply (constructor proc class) args))])
@@ -199,21 +206,23 @@
     ;;generic procedures, one for each class, that contain methods for
     ;;each of the constructors defined for that class
     (set-procedure-property! proc 'generic-constructors (make-hashtable))
+    (set-procedure-property! proc 'constructor-methods cproc)
     (if (not (null? rest))
         (set-procedure-property! proc 'next (car rest)))
     proc))
 
 (define (generic-java-procedure name . rest)
   (apply _make-generic-procedure (java-methods name) rest))
-;;There is *one* generic java constructor
-(define *JAVA-CONSTRUCTOR* (_make-generic-constructor))
-(define (generic-java-constructor) *JAVA-CONSTRUCTOR*)
+(define (generic-java-constructor . rest)
+  (apply _make-generic-constructor java-constructor-methods rest))
 ;;The global generic constructor chains the generic java constructor
-(define make (_make-generic-constructor (generic-java-constructor)))
+(define make (_make-generic-constructor constructor-methods
+                                        (generic-java-constructor)))
 
 (define (make-generic-procedure . rest)
   (apply _make-generic-procedure (make-method-list) rest))
-(define make-generic-constructor _make-generic-constructor)
+(define (make-generic-constructor . rest)
+  (apply _make-generic-constructor constructor-methods rest))
 
 (define-syntax define-generic
   (syntax-rules ()
