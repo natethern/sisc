@@ -312,7 +312,7 @@
   </target>
 
   <target name="manual" depends="prepare"
-          description="Generate Manual">
+          description="Generate Manual" unless="lite">
     <copy file="${docdir}/sss/html.xsl" tofile="${docdir}/sss/style.xsl"/>
     <replace file="${docdir}/sss/style.xsl"
              token="@@@doc.style@@@"
@@ -467,7 +467,7 @@
     </junit>
   </target>
 
-  <target name="manual-print" depends="prepare">
+  <target name="manual-print" depends="prepare" unless="lite">
     <!-- Generate the index first -->
     <mkdir dir="${gendocdir}/tmp"/>
     <exec executable="collateindex.pl" dir="${docdir}/sss"
