@@ -43,8 +43,8 @@
 ; REP loop.  It is returned whenever a "nonspecified" value is specified
 ; by the standard.  The following should pick up an appropriate value.
 
-;(define void
-;   (let ((void-object (if #f #f)))
+#(define void
+   (let ((void-object (if #f #f)))
 ;      (lambda () void-object)))
 
 ; "andmap" is like "map" except instead of "consing" the results it
@@ -76,16 +76,16 @@
 				       (mapf (cdr first) (map cdr rest)) #f))))
 		  (mapf first rest))) #f)))))
 
-; (define gen-sym
-;   ((lambda (symcounter)
-;      (lambda (base) 
-;        (set! symcounter (+ symcounter 1))
-;        (string->symbol (format "~s_~s" base symcounter))))
-;    0))
+(define gen-sym
+  ((lambda (symcounter)
+     (lambda (base) 
+       (set! symcounter (+ symcounter 1))
+       (string->symbol (format "~s_~s" base symcounter))))
+   0))
   
-; (define gensym
-;   (lambda ()
-;     (gen-sym '%)))
+(define gensym
+  (lambda ()
+    (gen-sym '%)))
 
 (define list*
   (lambda args
