@@ -17,6 +17,17 @@ public class StreamInputPort extends PushbackInputPort {
         return in.available()>0;
     }
 
+    public int read(byte[] buff, int offs, 
+                    int count) throws IOException {
+        if (pushback!=-1) {
+            buff[offs]=(byte)pushback;
+            pushback=-1;
+            count--;
+            offs++;
+        }
+        return readHelper(buff, offs, count);
+    }
+
     public int readHelper(byte[] buff, int offs, 
                           int count) throws IOException {
         return in.read(buff, offs, count);

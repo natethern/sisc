@@ -133,24 +133,6 @@ public class IO extends IndexedProcedure {
 
     }
     
-    private static int readChars(Interpreter f,
-                                 SchemeInputPort is, char[] buff, int off,
-                                 int len) 
-        throws ContinuationException {
-        byte[] buff2=new byte[len];
-        try {
-            int rc=is.read(buff2, 0, len);
-            for (int i=0; i<rc; i++) {
-                buff[i+off]=(char)buff2[i];
-            }
-            return rc;
-        } catch (IOException e) {
-            throwIOException(f, liMessage(IOB, "errorreading", is.toString(),
-                                       e.getMessage()), e);
-        }
-        return -1; //should never happen
-    }
-
     public static Value read(Interpreter r, SchemeInputPort i) 
         throws ContinuationException {
         return read(r, i, 0);

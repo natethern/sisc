@@ -22,10 +22,12 @@ public class ReaderInputPort extends PushbackInputPort {
         return r.ready();
     }
 
+    /*
     public int readHelper(byte[] buff, int offs, 
                           int count) throws IOException {
         throw new IOException(liMessage(SISCB, "binaryreadunsup"));
     }
+    */
 
     public void close() throws IOException {
         r.close();

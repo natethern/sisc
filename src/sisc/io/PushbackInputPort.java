@@ -29,20 +29,6 @@ public abstract class PushbackInputPort extends SchemeInputPort {
         pushback=c;
     }
 
-    public int read(byte[] buff, int offs, 
-                    int count) throws IOException {
-        if (pushback!=-1) {
-            buff[offs]=(byte)pushback;
-            pushback=-1;
-            count--;
-            offs++;
-        }
-        return readHelper(buff, offs, count);
-    }
-
-    public abstract int readHelper(byte[] buff, int offs, 
-                                   int count) throws IOException;
-
 }
 /*
  * The contents of this file are subject to the Mozilla Public

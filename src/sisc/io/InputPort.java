@@ -21,12 +21,6 @@ public interface InputPort extends Port {
      */
     boolean ready() throws IOException;
 
-    /**
-     * Reads up to count bytes into the specified buffer, and 
-     * must include the pushback byte
-     */
-    int read(byte[] buff, int off, int count) throws IOException;
-
 }
 /*
  * The contents of this file are subject to the Mozilla Public
