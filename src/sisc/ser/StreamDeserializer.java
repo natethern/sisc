@@ -16,7 +16,7 @@ public class StreamDeserializer extends DeserializerImpl {
     LinkedList deserQueue;
 
     public StreamDeserializer(AppContext ctx, InputStream input) throws IOException {
-	this.ctx=ctx;
+        this.ctx=ctx;
         this.in=new DataInputStream(input);
         classPool=new HashMap();
         
@@ -53,13 +53,13 @@ public class StreamDeserializer extends DeserializerImpl {
                     if (definingOid!=-1) {
                         Integer epIdx=new Integer(definingOid);
                         if (alreadyReadObjects.get(epIdx)==null)
-                           alreadyReadObjects.put(epIdx, e);
+                            alreadyReadObjects.put(epIdx, e);
                     }
                 } else {
                     if (definingOid!=-1) {
                         Integer epIdx=new Integer(definingOid);
                         if (alreadyReadObjects.get(epIdx)==null)
-                           alreadyReadObjects.put(epIdx, e);
+                            alreadyReadObjects.put(epIdx, e);
                     }
                     int start=deserQueue.size();
                     deserQueue.addFirst(e);
@@ -119,18 +119,18 @@ public class StreamDeserializer extends DeserializerImpl {
     }
 
     public Class readClass() throws IOException {
-	int cid=readInt();
-	Integer i=new Integer(cid);
-	Class c=(Class)classPool.get(i);
-	if (c==null) {
-	    try {
-		c=Class.forName(readUTF());
-		classPool.put(i, c);
-	    } catch (ClassNotFoundException cnf) {
-		throw new IOException("cnf:"+cnf.getMessage());
-	    }
-	}
-	return c;
+        int cid=readInt();
+        Integer i=new Integer(cid);
+        Class c=(Class)classPool.get(i);
+        if (c==null) {
+            try {
+                c=Class.forName(readUTF());
+                classPool.put(i, c);
+            } catch (ClassNotFoundException cnf) {
+                throw new IOException("cnf:"+cnf.getMessage());
+            }
+        }
+        return c;
     }
         
     public int read(byte[] b) throws IOException {
