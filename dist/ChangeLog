@@ -1,3 +1,12 @@
+2002-05-02  Matthias Radestock  <matthias@sorted.org>
+
+	* Added capability to define multiple generic Java procedures
+	  referring to the same Java method name, and multiple generic
+	  Java constructors.
+
+	* Added capability to chain generic Java procedures and generic
+	  Java constructors.
+
 2002-05-01  Matthias Radestock  <matthias@sorted.org>
 
 	* Added procedure properties functionality.

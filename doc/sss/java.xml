@@ -481,16 +481,23 @@ Context.exit()
               <methodsynopsis language="scheme">
                 <type>proc</type>
                 <methodname>generic-java-constructor</methodname>
-                <void/>
+                <methodparam choice="opt">
+                  <parameter>next-proc</parameter>
+                </methodparam>
               </methodsynopsis>
               <blockquote>
                 <para>
-                  Retrieves the generic constructor singleton that
-                  contains all Java constructors of all classes. Its main
-                  purpose is to allow new constructors (besides
-                  <function>make</function>) to be defined that, like
-                  <function>make</function> are chaining all Java
+                  Creates a generic constructor that contains all Java
+                  constructors of all classes. Its main purpose is to
+                  allow new constructors (besides
+                  <function>make</function>) to be defined that (like
+                  <function>make</function>) are chaining all Java
                   constructors.
+                </para>
+                <para>
+                  If the <parameter>next-proc</parameter> parameter is
+                  specified, the generic constructor is chained to
+                  that procedure, which must be a generic constructor.
                 </para>
               </blockquote>
             </para>
@@ -504,8 +511,8 @@ Context.exit()
           constructors or overload/override existing constructors via
           the <function>define-constructor</function> macro defined in
           <xref linkend="GenericProcedures"/>. Due to the implicit or
-          explicit chaining of <function>make</function> to the
-          generic Java constructor singleton, constructors defined in
+          explicit chaining of <function>make</function> to
+          generic Java constructors, constructors defined in
           Scheme take precedence over constructors defined in
           Java. They are not visible to Java code. They must invoke a
           Java constructor in order to actually create a Java
@@ -562,12 +569,19 @@ Context.exit()
                 <type>proc</type>
                 <methodname>generic-java-procedure</methodname>
                 <methodparam><parameter>method-name</parameter></methodparam>
+                <methodparam choice="opt">
+                  <parameter>next-proc</parameter>
+                </methodparam>
               </methodsynopsis>
               <blockquote>
                 <para>
-                  Retrieves the generic procedure singleton that
-                  contains all Java methods of all classes whose name
-                  is <parameter>name</parameter>.
+                  Creates a generic procedure that contains all Java
+                  methods of all classes whose name is
+                  <parameter>name</parameter>.
+                </para>
+                <para>
+                  If the <parameter>next-proc</parameter> parameter is
+                  specified, the generic procedure is chained to it.
                 </para>
               </blockquote>
             </para>
@@ -1516,7 +1530,7 @@ Class.getSigners()
           </blockquote>
         </para>
       </sect3>
-      <sect3>
+      <sect3 id="genprocdef">
         <title>Defining Generic Procedures</title>
         <para>
           There are two steps to defining generic procedures -

@@ -110,16 +110,16 @@
                   (set-cdr! methods (cons m meths)))
               (add-method-helper m meths))))))
 
-(define (add-java-constructors proc constructors)
+(define (add-java-constructors constructors new-constructors)
   (for-each (lambda (c)
               (if (memq 'public (java/modifiers c))
-                  (add-method
-                   proc
+                  (add-method-to-list
+                   constructors
                    (make-method
                     c
                     (vector->list (java/parameter-types c))
                     #f))))
-            constructors))
+            new-constructors))
 (define (add-java-methods methods new-methods)
   (for-each (lambda (m)
               (if (memq 'public (java/modifiers m))
@@ -142,7 +142,7 @@
         (if (memq 'public (java/modifiers class))
             (let ([methods (make-hashtable)])
               (add-java-constructors
-               (constructor (generic-java-constructor) class)
+               (java-constructor-methods class)
                (vector->list (java/decl-constructors class)))
               (for-each (lambda (m)
                           (let ([name (java/name m)])
