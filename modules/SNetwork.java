@@ -219,15 +219,15 @@ public class SNetwork extends ModuleAdapter {
 	}
 
 	public SchemeUDPSocket(DatagramSocket s, String dhost, int ds) throws IOException {
+            this(s, 1500);
 	    this.packet_size=ds;
 	    remoteHost=InetAddress.getByName(dhost);
-	    this.s=s;
 	}
 
 	public SchemeUDPSocket(DatagramSocket s, int port, String dhost) throws IOException {
+            this(s, 1500);
 	    this.dport=port;
 	    remoteHost=InetAddress.getByName(dhost);
-	    this.s=s;
 	}
 
         public String display() {
