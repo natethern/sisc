@@ -11,6 +11,7 @@ import sisc.reader.Lexer;
 import sisc.reader.Parser;
 import java.io.IOException;
 import java.io.StringReader;
+import java.lang.reflect.Constructor;
 
 public abstract class Util implements Defaults, Version {
 
@@ -83,12 +84,39 @@ public abstract class Util implements Defaults, Version {
         return b.toString();
     }
 
+    static Class JOBJ=null;
+    static Class[] OBJARRY=new Class[] { Object.class };
+    static Constructor JOBJCONST=null;
+    static {
+	try {
+	    JOBJ=Class.forName("sisc.modules.s2j.JavaObject");
+	    JOBJCONST=JOBJ.getConstructor(OBJARRY);
+	} catch (Exception cnf) {}
+    }
+
+    public static Value javaWrap(Object o) {
+	if (JOBJ!=null)
+	    try {
+		return (Value)JOBJCONST.newInstance(new Object[] {o});
+	    } catch (Exception ie) {}
+	return FALSE;
+    }
+
     public static void error(Interpreter r, Value where, String errormessage,
                              Pair moreData) 
         throws ContinuationException {
         error(r, append(moreData,
                         list(new Pair(MESSAGE, new SchemeString(errormessage)),
                              new Pair(LOCATION, where))));
+    }
+
+
+    public static void error(Interpreter r, Value where, String errormessage,
+                             Exception e) 
+        throws ContinuationException {
+        error(r, list(new Pair(MESSAGE, new SchemeString(errormessage)),
+		      new Pair(LOCATION, where),
+		      new Pair(JEXCEPTION, javaWrap(e))));
     }
 
     public static void error(Interpreter r, Value where, String errormessage)

@@ -29,7 +29,8 @@ public abstract class NativeProcedure extends Procedure implements NamedValue {
             error(
                 r,
                 getName(),
-                liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()));
+                liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()),
+		cc);
         } catch (NestedPrimRuntimeException npr) {
             error(r, getName(), npr);
         } catch (RuntimeException re) {
@@ -37,7 +38,7 @@ public abstract class NativeProcedure extends Procedure implements NamedValue {
             String msg = re.getMessage();
             if (msg == null)
                 msg = re.toString();
-            error(r, getName(), msg);
+            error(r, getName(), msg, re);
         }
         //time+=System.currentTimeMillis()-start;
     }
