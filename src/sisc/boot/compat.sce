@@ -113,22 +113,20 @@
 (define syntax-error (void))
 (define $syntax-dispatch (void))
 
-(define $old-eval (current-evaluator))
-
 (define current-optimizer 
   (lambda args
     (lambda (x) x)))
 
 (define strict-r5rs-compliance (make-native-parameter "strictR5RSCompliance"))
   
-(define eval 
-  ((lambda (old-eval)
-     (lambda (x . env)
-       (if (if (pair? x) (equal? (car x) "noexpand") '#f)
-           (apply old-eval (cons (cadr x) env))
-           ((lambda (e) (apply old-eval (cons e env)))
-            ((current-optimizer) (sc-expand x '(E) '(E)))))))
-   (current-evaluator)))
+;(define eval 
+;  ((lambda (old-eval)
+;     (lambda (x . env)
+;       (if (if (pair? x) (equal? (car x) "noexpand") '#f)
+;           (apply old-eval (cons (cadr x) env))
+;           ((lambda (e) (apply old-eval (cons e env)))
+;            ((current-optimizer) (sc-expand x '(E) '(E)))))))
+;   eval))
 
 (define make-false
   (lambda (v) '#f))

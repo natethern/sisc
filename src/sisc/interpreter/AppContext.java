@@ -8,7 +8,6 @@ import sisc.util.Util;
 
 public class AppContext extends Util {
 
-    public Procedure evaluator;
     public SymbolicEnvironment symenv;
     public SymbolicEnvironment toplevel_env;
     /*
@@ -46,16 +45,6 @@ public class AppContext extends Util {
         }
     }
 
-    public boolean setEvaluator(String s) {
-        Procedure newEval = (Procedure)toplevel_env.lookup(Symbol.get(s));
-        if (newEval != null) {
-            evaluator = newEval;
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public Expression getExpression(Symbol name) {
         try {
             return libraries.getExpression(name);
@@ -72,7 +61,6 @@ public class AppContext extends Util {
         libraries.addLibrary(s);
         
         CallFrame lstk=(CallFrame)s.getExpression(0);
-        Procedure levaluator=(Procedure)s.getExpression(1);
 
         SymbolicEnvironment lsymenv=(SymbolicEnvironment)s.getExpression(SYMENV);
         try {
@@ -83,7 +71,6 @@ public class AppContext extends Util {
                 e.printStackTrace();
                 throw new IOException("Heap did not contain toplevel environment!");
             }
-            evaluator=levaluator;
         } catch (Exception e) {
             e.printStackTrace();
             throw new IOException(e.getMessage());
@@ -96,7 +83,6 @@ public class AppContext extends Util {
         throws IOException {
         r.push(r.nxp);
         lb.add(r.stk);
-        lb.add(evaluator);
         lb.add(SYMENV, symenv.asValue());
         lb.add(TOPLEVEL, toplevel_env.asValue());
 

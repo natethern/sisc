@@ -64,14 +64,13 @@ public class Primitives extends IndexedProcedure {
             define("complex?", COMPLEXQ);
             define("cons", CONS);
             define("cos", COS);
-            define("current-evaluator", CURRENTEVAL);
             define("current-wind", CURRENTWIND);
             define("denominator", DENOMINATOR);
             define("environment?", ENVIRONMENTQ);
             define("eq?", EQ);
             define("eqv?", EQV);
             define("equal?", EQUAL);
-            define("eval", EVAL);
+            define("eval", EVALUATE);
             define("exact->inexact", EXACT2INEXACT);
             define("exact?", EXACTQ);
             define("exp", EXP);
@@ -255,7 +254,6 @@ public class Primitives extends IndexedProcedure {
             case CASESENSITIVE: return truth(Symbol.caseSensitive);
             case COMPACTSTRINGREP: return truth(SchemeString.compactRepresentation);
             case CURRENTWIND: return r.dynenv.wind;
-            case CURRENTEVAL: return (Value)r.getCtx().evaluator;
             case GENSYM: 
                 long unv=r.tctx.nextUnique();
                 return Symbol.intern(base64encode(unv));
@@ -358,7 +356,7 @@ public class Primitives extends IndexedProcedure {
             case INTEGER2CHAR: return new SchemeCharacter((char)num(vlr[0]).
                                                           indexValue());
             case VECTORFINDLASTUNIQUE: return Quantity.valueOf(vec(vlr[0]).findEnd());
-            case EVAL:
+            case EVALUATE:
                 if (r.dynenv.parser.lexer.strictR5RS) 
                    throwArgSizeException();
                 r.nxp=r.compile(vlr[0]);
@@ -425,9 +423,6 @@ public class Primitives extends IndexedProcedure {
                     throwPrimException(liMessage(SISCB, "unsupportedstandardver"));
                     return VOID;
                 }
-            case CURRENTEVAL:
-                r.getCtx().evaluator=proc(vlr[0]);
-                return VOID;
             case NLNAME:
                 return Symbol.get(nlib(vlr[0]).getLibraryName());
             case NLVERSION:
@@ -559,7 +554,7 @@ public class Primitives extends IndexedProcedure {
                                                            .indexValue()));
             case NLBINDING:
                 return nlib(vlr[0]).getBindingValue(r, symbol(vlr[1]));
-            case EVAL:
+            case EVALUATE:
                 r.nxp=r.compile(vlr[0], env(vlr[1]));
                 r.env=null;
                 r.returnVLR();
@@ -720,7 +715,7 @@ public class Primitives extends IndexedProcedure {
         return VOID;
     }
 
-    //next: 124
+    //next: 122
     static final int
         ACOS = 23,
         ADD = 114,
@@ -746,7 +741,6 @@ public class Primitives extends IndexedProcedure {
         COMPLEXQ = 37,
         CONS = 85,
         COS = 20,
-        CURRENTEVAL = 8,
         CURRENTWIND = 70,
         DENOMINATOR = 67,
         DIV = 115,
@@ -754,7 +748,7 @@ public class Primitives extends IndexedProcedure {
         EQ = 83,
         EQUAL = 86,
         EQV = 84,
-        EVAL = 81,
+        EVALUATE = 81,
         EXACT2INEXACT = 46,
         EXACTQ = 38,
         EXP = 25,
@@ -797,7 +791,7 @@ public class Primitives extends IndexedProcedure {
         NUMERATOR = 66,
         PAIRQ = 17,
         PARAMETERQ = 40,
-        PERMITINTERRUPTS = 122,
+        PERMITINTERRUPTS = 8,
         PROCEDUREQ = 35,
         PUTPROP = 110,
         QUOTIENT = 90,

@@ -98,8 +98,8 @@ public class REPL {
         Symbol loadSymb = Symbol.get("load");
         for (int i=0; i<args.length; i++) {
             try {
-                r.eval((Procedure)r.getCtx().toplevel_env.lookup(loadSymb),
-                       new Value[]{new SchemeString(args[i])});
+                r.eval((Procedure)r.lookup(loadSymb, Util.TOPLEVEL),
+                       new Value[] {new SchemeString(args[i])});
             } catch (SchemeException se) {
                 Value vm=se.m;
                 if (vm instanceof Pair) {
@@ -221,8 +221,7 @@ public class REPL {
             System.out.flush();
             listen("main", ssocket);
         } else {
-            Procedure p=(Procedure)
-                r.getCtx().toplevel_env.lookup(Symbol.get("sisc-cli"));
+            Procedure p=(Procedure)r.lookup(Symbol.get("sisc-cli"), Util.TOPLEVEL);
             REPL repl = new REPL("main",p);
             repl.go();
         }
@@ -236,8 +235,7 @@ public class REPL {
                                                                new SourceInputPort(new BufferedInputStream(client.getInputStream()), "console"),
                                                                new StreamOutputPort(client.getOutputStream(), true));
             Interpreter r=Context.enter(dynenv);
-            Procedure p=(Procedure)
-                r.getCtx().toplevel_env.lookup(Symbol.get("sisc-cli"));
+            Procedure p=(Procedure)r.lookup(Symbol.get("sisc-cli"), Util.TOPLEVEL);
             Context.exit();
             SchemeThread t = new SchemeSocketThread(app, p, client);
             t.env = dynenv;

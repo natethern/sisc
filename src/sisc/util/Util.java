@@ -56,8 +56,8 @@ public abstract class Util extends Defaults implements Version {
         TOPLEVEL=Symbol.get("*toplevel*"),
         BACKQUOTE=Symbol.get("quasiquote"),
         UNQUOTE=Symbol.get("unquote"),
-        UNQUOTE_SPLICING=Symbol.get("unquote-splicing");
-
+        UNQUOTE_SPLICING=Symbol.get("unquote-splicing"),
+        EVAL=Symbol.get("eval");
 
     
     public static String getSystemProperty(String name, String def) {

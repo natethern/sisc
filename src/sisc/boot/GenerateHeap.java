@@ -155,7 +155,9 @@ public class GenerateHeap {
         sisc.compiler.Compiler.addSpecialForms(toplevel);
         symenv.define(Util.TOPLEVEL, toplevel);
         symenv.define(Util.EXPSC, scexpander);
-        
+        //we do the following so that code can explictly refer to the r5rs env during boot
+        symenv.define(Util.REPORT, toplevel);
+
         // Set this initially, so the optimizer can do its core forms
         // check without error
         symenv.define(Util.SISC_SPECIFIC, toplevel);
@@ -167,8 +169,6 @@ public class GenerateHeap {
         new sisc.modules.Primitives.Index().bindAll(r, ctx.toplevel_env);
         new sisc.modules.Annotations.Index().bindAll(r, ctx.toplevel_env);
         new sisc.modules.io.IO.Index().bindAll(r, ctx.toplevel_env);
-        ctx.setEvaluator("eval");
-        
         
         Symbol loadSymb = Symbol.get("load");
         
@@ -192,7 +192,7 @@ public class GenerateHeap {
         for (; i<args.length; i++) {
             System.out.println("Expanding and compiling "+args[i]+"...");
             try {
-                r.eval((Procedure)r.getCtx().toplevel_env.lookup(loadSymb),
+                r.eval((Procedure)r.lookup(loadSymb, Util.TOPLEVEL),
                        new Value[] {new SchemeString(args[i])});
             } catch (SchemeException se) {
                 System.err.println("Error during expand: "+se.getMessage());
