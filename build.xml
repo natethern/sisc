@@ -229,6 +229,7 @@
           classpath="${classdir}"
           dir="${srfidir}"
           fork="yes">
+        <jvmarg value="-server"/>
         <arg value="-h"/>
         <arg value="${heap}"/>
         <arg value="-x"/>
@@ -284,7 +285,7 @@
   <target name="heap" depends="full-heap,lite-heap">
   </target>
 
-  <target name="heap-jar" depends="heap"
+  <target name="heap-jar"
           description="Package the built heap into a JAR, accessible by sisc.boot.HeapAnchor">
     <jar jarfile="${basedir}/${heapjar}">
       <fileset dir="${classdir}" includes="sisc/boot/HeapAnchor.class"/>
