@@ -75,12 +75,15 @@ signatures against each other and using the supplied <types> for
 disambiguation. <types> must be applicable (as determined by
 METHOD-APPLICABLE?) to both <method1> and <method2>.
 
-The result of the overall comparison is initialised to 'equal. Then a
-triple-wise comparison is performed on successive elements of the type
-method signatures and <types>, using the COMPARE-TYPES procedure:
+The result is computed by a triple-wise comparison on successive
+elements of the type method signatures and <types>, using the
+COMPARE-TYPES procedure:
 
-* If we run out of elements in both method signatures we return
-the result computed so far.
+* If we run out of elements in both method signatures then
+  - if both or neither method return rest arguments then we return
+    'equal
+  - if <method1> takes rest arguments then we return 'less-specific
+  - if <method2> takes rest arguments then we return 'more-specific
 
 * If we run out of elements in <method1>'s signature only then we
 return 'less-specific.
@@ -96,7 +99,7 @@ return 'more-specific.
 
 Informally, the above performs a left-to-right match, returning the
 result of the type comparison at the point of the first discernible
-difference. Note that
+difference.
 
 
 METHOD ([(next: ?next)] (<type> ?arg) ... [. ?rest]) . ?body

@@ -33,10 +33,13 @@
 (define (compare-methods m1 m2 otypes)
   (let loop ([m1-t (method-types m1)]
              [m2-t (method-types m2)]
-             [o-t  otypes]
-             [res 'equal])
+             [o-t  otypes])
     (cond [(and (null? m1-t) (null? m2-t))
-           res]
+           (let ([r1 (method-rest? m1)]
+                 [r2 (method-rest? m2)])
+             (cond [(eq? r1 r2) 'equal]
+                   [r1 'less-specific]
+                   [r2 'more-specific]))]
           [(null? m1-t) 'less-specific]
           [(null? m2-t) 'more-specific]
           [else
@@ -46,7 +49,7 @@
               (case (compare-types (car m1-t) (car m2-t) (car o-t))
                 [(less-specific) 'less-specific]
                 [(more-specific) 'more-specific]
-                [(equal) (loop m1-tn m2-tn o-tn res)]))])))
+                [(equal) (loop m1-tn m2-tn o-tn)]))])))
 
 (define-syntax method
   (syntax-rules (next:)
