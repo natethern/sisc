@@ -104,7 +104,7 @@
 (list-sort (comparator <) '(3 4 2 1))
 (list-sort (comparator string<?) '("foo" "bar" "baz"))
 
-;exception handling
+;;exception handling
 (define-generic char-at)
 (define-generic print-stack-trace)
 (call/fc
@@ -112,6 +112,37 @@
  (lambda (m e f)
    (print-stack-trace m)
    #f))
+;;throwing exceptions from within proxy
+(define <java.util.Iterator> (java-class "java.util.Iterator"))
+(define <java.lang.UnsupportedOperationException>
+  (java-class "java.lang.UnsupportedOperationException"))
+(define <java.util.NoSuchElementException>
+  (java-class "java.util.NoSuchElementException"))
+
+(define-java-proxy (list-iterator-helper l) <java.util.Iterator>
+  (method (|hasNext|)
+    (->jboolean (not (null? (unbox l)))))
+  (method (|next|)
+    (let ([ll (unbox l)])
+      (if (null? ll)
+          (error (make <java.util.NoSuchElementException>))
+          (begin
+            (set-box! l (cdr ll))
+            (java-wrap (car ll))))))
+  (method (|remove|)
+    (error (make <java.lang.UnsupportedOperationException>))))
+(define (list-iterator l)
+  (list-iterator-helper (box l)))
+(define-generic has-next)
+(define-generic next)
+(define-generic remove)
+(define i (list-iterator '(1 2 3)))
+(has-next i)
+(next i)
+(next i)
+(next i)
+(next i)
+(remove i)
 
 ;garbage collection
 (let loop ([count 100])

@@ -76,11 +76,11 @@ Instances of a class can be created with the generic MAKE function.
 
 (java-wrap <obj>) => <jobj>
 (java-unwrap <jobj>) => <obj>
-The first function wraps a Scheme so it can be passed in call to a
-java method / constructor or when setting a field of a java object or
-class. The second function "casts" a java object into a Scheme object
-and is used when java methods return Scheme objects or java fields
-containg Scheme objects are fetched.
+The first function wraps a Scheme object so it can be passed in call
+to a java method / constructor or when setting a field of a java
+object or class. The second function "casts" a java object into a
+Scheme object and is used when java methods return Scheme objects or
+java fields containg Scheme objects are fetched.
 
 Generally all java objects are self-evaluating. The result of the
 evaluation depends on the type of object and the arguments:
@@ -204,7 +204,11 @@ a "j" prefix, e.g. <jint>, <jstring>.
 Exceptions
 ----------
 Java exceptions are propagated to scheme and can be caught with,
-e.g. call/fc.
+e.g. call/fc. In Scheme, Java exceptions can be thrown by passing them
+to the ERROR procedure, e.g.
+  (error (make <java.util.NoSuchElementException>))
+If this occurs inside a proxy method, the exception is propagated to
+the invoking Java code.
 
 
 Fixes to the Java Type System
@@ -221,7 +225,7 @@ corresponding to the primitive types, e.g. a java.lang.Byte is not
 assignable to a java.lang.Integer.
 
 
-Under the Hood
+Internals
 --------------
 The j2s-module is a native sisc module that basically defines scheme
 functions corresponding to all methods on java.lang.Class plus the

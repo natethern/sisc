@@ -806,6 +806,16 @@ other exception, e.g. with <function>call/fc</function> as defined in
 will catch the <classname>IndexOutOfBoundsException</classname>, print
 its stack trace and return &num;f.
 </para>
+        <para>
+In Scheme, Java exceptions can be thrown by passing them to the
+<function>error</function> procedure, e.g.
+<programlisting>
+  (error (make &lt;java.util.NoSuchElementException&gt;))
+</programlisting>
+If this occurs inside a proxy method (see <xref
+linkend="JavaProxies"/>), the exception is propagated to the invoking
+Java code.
+</para>
       </sect3>
     </sect2>
     <sect2>
@@ -854,7 +864,7 @@ Since all Scheme objects are represented internally as Java objects
 anyway, the wrapping and unwrapping preserves object identity.
 </para>
       </sect3>
-      <sect3>
+      <sect3 id="JavaProxies">
         <title>Proxies</title>
         <para>
 The <literal>s2j</literal> module provides a mechanism by which Scheme
