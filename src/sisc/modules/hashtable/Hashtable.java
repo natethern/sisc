@@ -11,19 +11,30 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 import sisc.util.Util;
-import sisc.modules.SThread.Mutex;
 
-public abstract class Hashtable extends Value {
+public class Hashtable extends Value {
 
     private HashMap ht;
+    private KeyFactory kf;
 
     public Hashtable() {
         this.ht = new HashMap(0);
     }
 
-    protected abstract Object makeKey(Value k);
+    public Hashtable(KeyFactory kf) {
+        this();
+        this.kf = kf;
+    }
 
-    protected abstract Value getKey(Object o);
+    protected HashtableKey makeKey(Value k) {
+        HashtableKey key = kf.create();
+        key.setValue(k);
+        return key;
+    }
+
+    protected Value getKey(Object o) {
+        return ((HashtableKey)o).getValue();
+    }
 
     public Value get(Value k) {
         return (Value)ht.get(makeKey(k));
@@ -104,6 +115,7 @@ public abstract class Hashtable extends Value {
     }
 
     public void serialize(Serializer s) throws IOException {
+        s.writeUTF(kf.getClass().getName());
         s.writeInt(ht.size());
         Iterator i = ht.entrySet().iterator();
         while(i.hasNext()) {
@@ -114,6 +126,18 @@ public abstract class Hashtable extends Value {
     }
 
     public void deserialize(Deserializer s) throws IOException {
+        try {
+            kf = (KeyFactory)Class.forName(s.readUTF(),
+                                           true,
+                                           currentClassLoader())
+                .newInstance();
+        } catch (ClassNotFoundException e) {
+            throw new IOException(e.getMessage());
+        } catch (InstantiationException e) {
+            throw new IOException(e.getMessage());
+        } catch (IllegalAccessException e) {
+            throw new IOException(e.getMessage());
+        }
         int sz = s.readInt();
         for (int i=0; i<sz; i++) {
             Expression key = s.readInitializedExpression();

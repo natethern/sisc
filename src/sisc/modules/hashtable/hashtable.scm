@@ -1,28 +1,47 @@
+
 (define (make-hashtable . rest)
-  (cond ((null? rest) (make-eqv-hashtable))
-        ((eq? (car rest) eq?) (make-eq-hashtable))
-        ((eq? (car rest) eqv?) (make-eqv-hashtable))
-        ((eq? (car rest) equal?) (make-equal-hashtable))
-        (else (error "hashtables only work with eq?, eqv? and equal?"))))
+  (define (process-opt-args)
+    (let ([eq-proc eqv?]
+          [safe? #t])
+      (if (not (null? rest))
+          (begin
+            (set! eq-proc (car rest))
+            (set! rest (cdr rest))
+            (if (not (null? rest))
+                (begin
+                  (set! safe? (car rest))
+                  (set! rest (cdr rest))
+                  (if (not (null? rest))
+                      (error "expected zero, one or two args"))))))
+      (values eq-proc safe?)))
+  (call-with-values process-opt-args
+    (lambda (eq-proc safe?)
+      (cond
+        [(eq? eq-proc eq?) (make-eq-hashtable safe?)]
+        [(eq? eq-proc eqv?) (make-eqv-hashtable safe?)]
+        [(eq? eq-proc equal?) (make-equal-hashtable safe?)]
+        [else (error 'make-hashtable
+                     "expected eq?, eqv? or equal?")]))))
 
 (define (alist->hashtable alist . rest)
-  (cond ((null? rest) (alist->eqv-hashtable alist))
-        ((eq? (car rest) eq?) (alist->eq-hashtable alist))
-        ((eq? (car rest) eqv?) (alist->eqv-hashtable alist))
-        ((eq? (car rest) equal?) (alist->equal-hashtable alist))
-        (else (error "hashtables only work with eq?, eqv? and equal?"))))
+  (hashtable/add-alist! (apply make-hashtable rest) alist))
 
 (define (hashtable/get! ht key thunk . rest)
-  ((if (or (null? rest) (car rest)) synchronized synchronized-unsafe)
-   ht
-   (lambda ()
-     (let* ([def (list #f)]
-            [res (hashtable/get ht key def)])
-       (if (eq? res def)
-           (let ([res (thunk)])
-             (hashtable/put! ht key res)
-             res)
-           res)))))
+  (define (helper)
+    (let* ([def (list #f)]
+           [res (hashtable/get ht key def)])
+      (if (eq? res def)
+          (let ([res (thunk)])
+            (hashtable/put! ht key res)
+            res)
+          res)))
+  (if (hashtable/thread-safe? ht)
+      ((if (or (null? rest) (car rest))
+           synchronized
+           synchronized-unsafe)
+       ht
+       helper)
+      (helper)))
 
 ;;The following are quite inefficient. To get around that we'd have
 ;;to expose java collection iterators.

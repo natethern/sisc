@@ -1,0 +1,190 @@
+package sisc.modules.hashtable;
+
+import sisc.data.*;
+import sisc.interpreter.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
+import java.io.IOException;
+import sisc.io.ValueWriter;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
+import sisc.util.Util;
+import sisc.modules.SThread.Mutex;
+
+public class SynchronizedHashtable extends Hashtable {
+
+    public SynchronizedHashtable() {}
+
+    public SynchronizedHashtable(KeyFactory kf) {
+        super(kf);
+    }
+
+    public Value get(Value k) {
+        Mutex m = Mutex.of(this);
+        m.acquire();
+        try {
+            return super.get(k);
+        } finally {
+            m.unlock();
+        }
+    }
+
+    public Value put(Value k, Value v) {
+        Mutex m = Mutex.of(this);
+        m.acquire();
+        try {
+            return super.put(k, v);
+        } finally {
+            m.unlock();
+        }
+    }
+
+    public Value remove(Value k) {
+        Mutex m = Mutex.of(this);
+        m.acquire();
+        try {
+            return super.remove(k);
+        } finally {
+            m.unlock();
+        }
+    }
+
+    public int size() {
+        Mutex m = Mutex.of(this);
+        m.acquire();
+        try {
+            return super.size();
+        } finally {
+            m.unlock();
+        }
+    }
+
+    public void clear() {
+        Mutex m = Mutex.of(this);
+        m.acquire();
+        try {
+            super.clear();
+        } finally {
+            m.unlock();
+        }
+    }
+
+    public void addAList(Pair p) {
+        Mutex m = Mutex.of(this);
+        m.acquire();
+        try {
+            for (; p != EMPTYLIST; p = pair(p.cdr)) {
+                Pair entry = pair(p.car);
+                super.put(entry.car, entry.cdr);
+            }
+        } finally {
+            m.unlock();
+        }
+    }
+
+    public Pair toAList() {
+        Mutex m = Mutex.of(this);
+        m.acquire();
+        try {
+            return super.toAList();
+        } finally {
+            m.unlock();
+        }
+    }
+
+    public Pair keys() {
+        Mutex m = Mutex.of(this);
+        m.acquire();
+        try {
+            return super.keys();
+        } finally {
+            m.unlock();
+        }
+    }
+
+    public boolean valueEqual(Value v) {
+        Mutex m = Mutex.of(this);
+        m.acquire();
+        try {
+            return super.valueEqual(v);
+        } finally {
+            m.unlock();
+        }
+    }
+
+    public int valueHashCode() {
+        Mutex m = Mutex.of(this);
+        m.acquire();
+        try {
+            return super.valueHashCode();
+        } finally {
+            m.unlock();
+        }
+    }
+
+    public void serialize(Serializer s) throws IOException {
+        Mutex m = Mutex.of(this);
+        m.acquire();
+        try {
+            super.serialize(s);
+        } finally {
+            m.unlock();
+        }
+    }
+
+    public boolean visit(ExpressionVisitor v) {
+        Mutex m = Mutex.of(this);
+        m.acquire();
+        try {
+            return super.visit(v);
+        } finally {
+            m.unlock();
+        }
+    }
+
+    public void display(ValueWriter w) throws IOException {
+        Mutex m = Mutex.of(this);
+        m.acquire();
+        try {
+            super.display(w);
+        } finally {
+            m.unlock();
+        }
+    }
+
+}
+
+/*
+ * The contents of this file are subject to the Mozilla Public
+ * License Version 1.1 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS
+ * IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * rights and limitations under the License.
+ * 
+ * The Original Code is the Second Interpreter of Scheme Code (SISC).
+ * 
+ * The Initial Developer of the Original Code is Scott G. Miller.
+ * Portions created by Scott G. Miller are Copyright (C) 2000-2002
+ * Scott G. Miller.  All Rights Reserved.
+ * 
+ * Contributor(s):
+ * Matthias Radestock 
+ * 
+ * Alternatively, the contents of this file may be used under the
+ * terms of the GNU General Public License Version 2 or later (the
+ * "GPL"), in which case the provisions of the GPL are applicable 
+ * instead of those above.  If you wish to allow use of your 
+ * version of this file only under the terms of the GPL and not to
+ * allow others to use your version of this file under the MPL,
+ * indicate your decision by deleting the provisions above and
+ * replace them with the notice and other provisions required by
+ * the GPL.  If you do not delete the provisions above, a recipient
+ * may use your version of this file under either the MPL or the
+ * GPL.
+ */

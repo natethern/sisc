@@ -181,10 +181,6 @@ r / 2<superscript>s</superscript>
         association lists typically perform these operations in linear
         time based on the number of elements.
       </para>
-      <para>
-          &SISC; hash tables are thread-safe, i.e. multiple threads can
-        concurrently access and modify the same hash table.
-      </para>
       <sect3>
         <title>Creation</title>
         <para>
@@ -204,19 +200,37 @@ r / 2<superscript>s</superscript>
               <methodparam choice="opt">
                 <parameter>eq?/eqv?/equal?</parameter>
               </methodparam>
+              <methodparam choice="opt">
+                <parameter>thread-safe?</parameter>
+              </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Creates a hash table. The optional argument supplies
-                the equivalence test procedure that the hashtable should
-                use. It must be one of <function>eq?</function>,
-                <function>eqv?</function>, or
-                <function>equal?</function>. The default is
+                Creates a hash table. The first optional argument
+                supplies the equivalence test procedure that the
+                hashtable should use. It must be one of
+                <function>eq?</function>, <function>eqv?</function>,
+                or <function>equal?</function>. The default is
                 <function>eqv?</function>.
+              </para>
+              <para>
+                The second optional argument determines whether
+                operations on the hash table should be made
+                thread-safe. The default is &num;t. Thread
+                synchronization (see <xref linkend="Threads"/>) is
+                required if there are potentially several threads
+                operating concurrently on the hash table and one of
+                these threads performs a structural modification
+                (i.e. adds or removes an entry; merely changing the
+                value of an entry is not a structural
+                modification). Failure to enforce proper thread
+                synchronization has unpredicatable results.
               </para>
               <para>
                   The keys of hash tables using
                   <function>equal?</function> must not be mutated.
+              </para>
+              <para>
               </para>
             </blockquote>
           </para>
@@ -263,6 +277,9 @@ r / 2<superscript>s</superscript>
               <methodparam choice="opt">
                 <parameter>eq?/eqv?/equal?</parameter>
               </methodparam>
+              <methodparam choice="opt">
+                <parameter>thread-safe?</parameter>
+              </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
@@ -272,12 +289,8 @@ r / 2<superscript>s</superscript>
                 must be a list of pairs, with the
                 <function>car</function> of each pair representing a
                 key and the <function>cdr</function> representing its
-                associated value. The optional argument supplies the
-                equivalence test procedure that the hashtable should
-                use. It must be one of <function>eq?</function>,
-                <function>eqv?</function>, or
-                <function>equal?</function>. The default is
-                <function>eqv?</function>.
+                associated value. The optional arguments are the same
+                as for <function>make-hashtable</function>.
               </para>
               <para>
                 If there are multiple pairs which contain the same key

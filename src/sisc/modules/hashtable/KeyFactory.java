@@ -2,36 +2,10 @@ package sisc.modules.hashtable;
 
 import sisc.data.*;
 
-public class EqHashtable extends Hashtable {
+public interface KeyFactory {
 
-    public EqHashtable() {
-        super();
-    }
+    HashtableKey create();
 
-    protected Object makeKey(Value k) { return new Key(k); }
-
-    protected Value getKey(Object o) { return ((Key)o).value(); }
-
-    public static class Key {
-
-        private Value key;
-
-        public Key(Value k) {
-            key = k;
-        }
-
-        public Value value() {
-            return key;
-        }
-
-        public boolean equals(Object o) {
-            return (o instanceof Key) && (key == ((Key)o).value());
-        }
-
-        public int hashCode() {
-            return System.identityHashCode(key);
-        }
-    }
 }
 
 /*

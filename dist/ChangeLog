@@ -1,3 +1,13 @@
+2003-05-11  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed handling of thunks returning multiple values in
+	  |mutex/synchronize-unsafe|.
+
+	* Added ability to create thread-unsafe hash tables.
+
+	* Improved performance of object system by using thread-unsafe
+	  hash tables.
+
 2003-05-04  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed a bug in Library symbolic environments where not
