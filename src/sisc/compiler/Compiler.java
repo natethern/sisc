@@ -80,9 +80,8 @@ public class Compiler extends CompilerConstants {
     }
 
     public Expression compile(Interpreter r, Expression v,
-                              SymbolicEnvironment env, boolean analyze) 
+                              SymbolicEnvironment env) 
         throws ContinuationException {
-        if (analyze) v=Analyzer.analyze(v, env);
         Expression e=compile(r, v, EMPTYLIST, new ReferenceFactory(),
                              REALTAIL | TAIL, env, null);
         return e;
@@ -573,7 +572,7 @@ public class Compiler extends CompilerConstants {
         new sisc.modules.SimplePrimitives.Index().bindAll(r, env);        
         new sisc.modules.ComplexPrimitives.Index().bindAll(r, env);        
         Compiler c=new Compiler();
-        Expression v=c.compile(r, p.nextExpression(in), env, true);
+        Expression v=c.compile(r, p.nextExpression(in), env);
         System.out.println(v.express());
         System.err.println(r.interpret(v));
     }

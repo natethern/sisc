@@ -115,6 +115,9 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                 } else {
                     return new SchemeString(str);
                 }
+            case GENSYM: 
+                long unv=r.tctx.nextUnique();
+                return Symbol.intern(base64encode(unv));
             case EVALUATE:
                 r.nxp=r.compile(vlr[0]);
                 r.env=null;
@@ -196,9 +199,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             case NLBINDING:
                 return nlib(vlr[0]).getBindingValue(r, symbol(vlr[1]));
             case EVALUATE:
-                if (vlr[1] instanceof SymbolicEnvironment)
-                    r.nxp=r.compile(vlr[0], (SymbolicEnvironment)vlr[1]);
-                else r.nxp=r.compile(vlr[0], truth(vlr[1]));
+                r.nxp=r.compile(vlr[0], (SymbolicEnvironment)vlr[1]);
                 r.env=null;
                 return VOID;
             case WITHFC:
@@ -267,10 +268,6 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             }
         case 3:
             switch(id) {
-            case EVALUATE:
-                r.nxp=r.compile(vlr[0], env(vlr[1]), truth(vlr[2]));
-                r.env=null;
-                return VOID;
             case GETPROP:
                 Value ret = null;
                 if (vlr[1] instanceof SymbolicEnvironment) {

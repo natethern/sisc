@@ -104,19 +104,9 @@ public class Interpreter extends Util {
         return compile(v, getCtx().toplevel_env);
     }
 
-    public Expression compile(Value v, boolean a)
-        throws ContinuationException {
-        return compile(v, getCtx().toplevel_env, a);
-    }
-
     public Expression compile(Value v, SymbolicEnvironment env)
         throws ContinuationException {
-        return compile(v, env, true);
-    }
-
-    public Expression compile(Value v, SymbolicEnvironment env, boolean a)
-        throws ContinuationException {
-        return compiler.compile(this, v, env, a);
+        return compiler.compile(this, v, env);
     }
 
     public Value interpret(Expression e) throws SchemeException {

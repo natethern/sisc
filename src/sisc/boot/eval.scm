@@ -43,8 +43,13 @@
             [interaction-environment interaction-environment])
         (lambda (x . env)
           (cond [(and (pair? x) (member (car x) '("noexpand" "analyzeonly")))
-                 (apply old-eval (cadr x)
-                        (append env (list (equal? (car x) "analyzeonly"))))]
+                 (apply old-eval
+                        (if (equal? (car x) "analyzeonly")
+                            (_analyze! (cadr x)
+                                       (if (null? env)
+                                           (interaction-environment)
+                                           (car env)))
+                            (cadr x)) env)]
                 [(and (null? env) (strict-r5rs-compliance))
                  (error 'eval "expected 2 arguments to procedure, got 1.")]
                 [else 

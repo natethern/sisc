@@ -1,133 +1,138 @@
 (#%program
-  ((|x_XiIU-cife| . 1) (_make-parameter . 1))
+  ((|x_IMdGot96F| . 1) (_make-parameter . 1))
   ()
-  ()
+  (_make-parameter)
   (#%define current-optimizer
     (_make-parameter
-      (#%lambda #t (|x_XiIU-cife|) () |x_XiIU-cife|))))
+      (#%lambda #t (|x_IMdGot96F|) () |x_IMdGot96F|))))
 (#%program
   ((interaction-environment . 1)
    (sc-expand . 1)
    (_analyze! . 1)
    (apply . 1)
    (current-optimizer . 1)
-   (|sc-expand_Xi4GS0kfe| . 1)
-   (|optimizer_XisrKQlfe| . 1)
-   (|_analyze!_XiKJUzjfe| . 1)
-   (|source_Xi8kGKmfe| . 2)
-   (|e_XiQcCEnfe| . 1)
-   (|m_XiugEbnfe| . 1)
+   (|sc-expand_IMBrghb6F| . 1)
+   (|optimizer_IMZc85d6F| . 1)
+   (|source_IMF54_d6F| . 2)
+   (|e_IMl-_Ue6F| . 1)
+   (|m_IM_12se6F| . 1)
    (throw . 1)
-   (|old-ie_XiOnIhmfe| . 2)
-   (|interaction-environment_XiqCQtkfe| . 3)
+   (|old-ie_IMj96yd6F| . 2)
    (with-failure-continuation . 1)
    (error . 1)
    (strict-r5rs-compliance . 1)
-   (null? . 1)
+   (|interaction-environment_IMXneKb6F| . 4)
+   (|env_IMhkcbc6F| . 6)
+   (null? . 2)
+   (cadr . 2)
+   (|_analyze!_IMfviQa6F| . 2)
    (equal? . 1)
-   (list . 1)
-   (|env_XiMyOWkfe| . 4)
-   (append . 1)
-   (cadr . 1)
-   (|old-eval_Xi2RYFife| . 2)
-   (|apply_XioNW6jfe| . 3)
-   (car . 2)
+   (|old-eval_IMzCmW96F| . 2)
+   (|apply_IMVykna6F| . 3)
+   (car . 3)
    (member . 1)
-   (|x_Xi6vMnlfe| . 5)
+   (|x_IMDgaEc6F| . 6)
    (pair? . 1)
    (eval . 2))
-  ((|source_Xi8kGKmfe| . 1) (eval . 1))
-  (member
+  ((|source_IMF54_d6F| . 1) (eval . 1))
+  (interaction-environment
+    sc-expand
+    _analyze!
+    apply
+    eval
+    member
     car
     pair?
-    append
     equal?
-    list
+    null?
     cadr
     with-failure-continuation
     throw
     current-optimizer
     error
-    null?
     strict-r5rs-compliance)
   (#%set! eval
     ((#%lambda #t
-       (|old-eval_Xi2RYFife|
-         |apply_XioNW6jfe|
-         |_analyze!_XiKJUzjfe|
-         |sc-expand_Xi4GS0kfe|
-         |interaction-environment_XiqCQtkfe|)
+       (|old-eval_IMzCmW96F|
+         |apply_IMVykna6F|
+         |_analyze!_IMfviQa6F|
+         |sc-expand_IMBrghb6F|
+         |interaction-environment_IMXneKb6F|)
        ()
        (#%lambda #t
-         (|x_Xi6vMnlfe| . |env_XiMyOWkfe|)
-         (|interaction-environment_XiqCQtkfe|
-           |sc-expand_Xi4GS0kfe|
-           |_analyze!_XiKJUzjfe|
-           |apply_XioNW6jfe|
-           |old-eval_Xi2RYFife|)
-         (#%if (#%if (pair? |x_Xi6vMnlfe|)
+         (|x_IMDgaEc6F| . |env_IMhkcbc6F|)
+         (|interaction-environment_IMXneKb6F|
+           |sc-expand_IMBrghb6F|
+           |_analyze!_IMfviQa6F|
+           |apply_IMVykna6F|
+           |old-eval_IMzCmW96F|)
+         (#%if (#%if (pair? |x_IMDgaEc6F|)
                  (member
-                   (car |x_Xi6vMnlfe|)
+                   (car |x_IMDgaEc6F|)
                    (#%quote ("noexpand" "analyzeonly")))
                  #f)
-           (|apply_XioNW6jfe|
-             |old-eval_Xi2RYFife|
-             (cadr |x_Xi6vMnlfe|)
-             (append
-               |env_XiMyOWkfe|
-               (list (equal? (car |x_Xi6vMnlfe|) "analyzeonly"))))
-           (#%if (#%if (null? |env_XiMyOWkfe|)
+           (|apply_IMVykna6F|
+             |old-eval_IMzCmW96F|
+             (#%if (equal? (car |x_IMDgaEc6F|) "analyzeonly")
+               (|_analyze!_IMfviQa6F|
+                 (cadr |x_IMDgaEc6F|)
+                 (#%if (null? |env_IMhkcbc6F|)
+                   (|interaction-environment_IMXneKb6F|)
+                   (car |env_IMhkcbc6F|)))
+               (cadr |x_IMDgaEc6F|))
+             |env_IMhkcbc6F|)
+           (#%if (#%if (null? |env_IMhkcbc6F|)
                    (strict-r5rs-compliance)
                    #f)
              (error (#%quote eval)
                     "expected 2 arguments to procedure, got 1.")
              ((#%lambda #t
-                (|optimizer_XisrKQlfe|
-                  |old-ie_XiOnIhmfe|
-                  |source_Xi8kGKmfe|)
-                (|env_XiMyOWkfe|
-                  |x_Xi6vMnlfe|
-                  |interaction-environment_XiqCQtkfe|
-                  |sc-expand_Xi4GS0kfe|
-                  |_analyze!_XiKJUzjfe|
-                  |apply_XioNW6jfe|
-                  |old-eval_Xi2RYFife|)
+                (|optimizer_IMZc85d6F|
+                  |old-ie_IMj96yd6F|
+                  |source_IMF54_d6F|)
+                (|env_IMhkcbc6F|
+                  |x_IMDgaEc6F|
+                  |interaction-environment_IMXneKb6F|
+                  |sc-expand_IMBrghb6F|
+                  |_analyze!_IMfviQa6F|
+                  |apply_IMVykna6F|
+                  |old-eval_IMzCmW96F|)
                 (#%begin
                   (with-failure-continuation
                     (#%lambda #t
-                      (|m_XiugEbnfe| |e_XiQcCEnfe|)
-                      (|old-ie_XiOnIhmfe|
-                        |interaction-environment_XiqCQtkfe|)
+                      (|m_IM_12se6F| |e_IMl-_Ue6F|)
+                      (|old-ie_IMj96yd6F|
+                        |interaction-environment_IMXneKb6F|)
                       (#%begin
-                        (|interaction-environment_XiqCQtkfe|
-                          |old-ie_XiOnIhmfe|)
-                        (throw |m_XiugEbnfe| |e_XiQcCEnfe|)))
+                        (|interaction-environment_IMXneKb6F|
+                          |old-ie_IMj96yd6F|)
+                        (throw |m_IM_12se6F| |e_IMl-_Ue6F|)))
                     (#%lambda #t
                       ()
-                      (|source_Xi8kGKmfe|
-                        |old-ie_XiOnIhmfe|
-                        |optimizer_XisrKQlfe|
-                        |x_Xi6vMnlfe|
-                        |interaction-environment_XiqCQtkfe|
-                        |sc-expand_Xi4GS0kfe|
-                        |_analyze!_XiKJUzjfe|)
-                      (#%set! |source_Xi8kGKmfe|
-                        (|_analyze!_XiKJUzjfe|
-                          (|optimizer_XisrKQlfe|
-                            (|sc-expand_Xi4GS0kfe|
-                              |x_Xi6vMnlfe|
+                      (|source_IMF54_d6F|
+                        |old-ie_IMj96yd6F|
+                        |optimizer_IMZc85d6F|
+                        |x_IMDgaEc6F|
+                        |interaction-environment_IMXneKb6F|
+                        |sc-expand_IMBrghb6F|
+                        |_analyze!_IMfviQa6F|)
+                      (#%set! |source_IMF54_d6F|
+                        (|_analyze!_IMfviQa6F|
+                          (|optimizer_IMZc85d6F|
+                            (|sc-expand_IMBrghb6F|
+                              |x_IMDgaEc6F|
                               (#%quote (e))
                               (#%quote (e))))
-                          (|interaction-environment_XiqCQtkfe|
-                            |old-ie_XiOnIhmfe|)))))
-                  (|apply_XioNW6jfe|
-                    |old-eval_Xi2RYFife|
-                    |source_Xi8kGKmfe|
-                    |env_XiMyOWkfe|)))
+                          (|interaction-environment_IMXneKb6F|
+                            |old-ie_IMj96yd6F|)))))
+                  (|apply_IMVykna6F|
+                    |old-eval_IMzCmW96F|
+                    |source_IMF54_d6F|
+                    |env_IMhkcbc6F|)))
               (current-optimizer)
-              (|apply_XioNW6jfe|
-                |interaction-environment_XiqCQtkfe|
-                |env_XiMyOWkfe|)
+              (|apply_IMVykna6F|
+                |interaction-environment_IMXneKb6F|
+                |env_IMhkcbc6F|)
               #f)))))
      eval
      apply
