@@ -364,16 +364,10 @@
       </fileset>
     </copy>
 
-    <copy tofile="${dist}/full/sisc/scheme-src/srfi-22/scheme-r4rs"
+    <copy todir="${dist}/full/sisc/scheme-src/srfi-22/"
           file="${basedir}/scheme-src/srfi/srfi-22/srfi-22.sh"/>
-    <copy tofile="${dist}/full/sisc/scheme-src/srfi-22/scheme-r5rs"
-          file="${basedir}/scheme-src/srfi/srfi-22/srfi-22.sh"/>
-    <copy tofile="${dist}/full/sisc/scheme-src/srfi-22/scheme-srfi-0"
-          file="${basedir}/scheme-src/srfi/srfi-22/srfi-22.sh"/>
-    <copy tofile="${dist}/full/sisc/scheme-src/srfi-22/scheme-srfi-7"
-          file="${basedir}/scheme-src/srfi/srfi-22/srfi-22.sh"/>
-    <copy tofile="${dist}/full/sisc/scheme-src/srfi-22/scheme-ieee-1178-1900"
-          file="${basedir}/scheme-src/srfi/srfi-22/srfi-22.sh"/>
+    <copy todir="${dist}/full/sisc/"
+          file="${basedir}/dist/install-srfi22.sh"/>
 
     <copy todir="${dist}/full/sisc"
           file="${basedir}/${basejar}"/>
