@@ -20,140 +20,140 @@ import sisc.util.*;
 
 public class Primitives extends IndexedProcedure {
 
-	public static class Index extends IndexedLibraryAdapter {
-
-		public Value construct(int id) {
-			return new Primitives(id);
-		}
-
-		public Index() {
-			define("list", LIST);
-			define("*", MUL);
-			define("+", ADD);
-			define("-", SUB);
-			define("/", DIV);
-			define("<", LT);
-			define("=", NEQ);
-			define(">", GRT);
-			define("_gcd", GCD);
-			define("_lcm", LCM);
-			define("_string-append", STRINGAPPEND);
-			define("acos", ACOS);
-			define("apply", APPLY);
-			define("ashl", ASHL);
-			define("ashr", ASHR);
-			define("asin", ASIN);
-			define("atan", ATAN);
-			define("boolean?", BOOLEANQ);
-			define("box", BOX);
-			define("box?", BOXQ);
-			define("call-with-current-continuation", CALLCC);
-			define("call-with-failure-continuation", CALLFC);
-			define("call-with-values", CALLWITHVALUES);
-			define("car", CAR);
-			define("case-sensitive", CASESENSITIVE);
-			define("cdr", CDR);
-			define("ceiling", CEILING);
-			define("char->integer", CHAR2INTEGER);
-			define("char?", CHARACTERQ);
-			define("circular?", CIRCULARQ);
-			define("compact-string-rep", COMPACTSTRINGREP);
-			define("complex?", COMPLEXQ);
-			define("cons", CONS);
-			define("cos", COS);
-			define("current-evaluator", CURRENTEVAL);
-			define("current-wind", CURRENTWIND);
-			define("denominator", DENOMINATOR);
-			define("environment?", ENVIRONMENTQ);
-			define("eq?", EQ);
-			define("eqv?", EQV);
-			define("equal?", EQUAL);
-			define("eval", EVAL);
-			define("exact->inexact", EXACT2INEXACT);
-			define("exact?", EXACTQ);
-			define("exp", EXP);
-			define("find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
-			define("floor", FLOOR);
-			define("native-library-binding", NLBINDING);
-			define("native-library-binding-names", NLBINDINGNAMES);
-			define("native-library-name", NLNAME);
-			define("native-library-version", NLVERSION);
-			define("get-symbolic-environment", GETENVIRONMENT);
-			define("set-symbolic-environment!", SETENVIRONMENT);
-			define("gensym", GENSYM);
-			define("getprop", GETPROP);
-			define("imag-part", IMAGPART);
-			define("inexact->exact", INEXACT2EXACT);
-			define("inexact?", INEXACTQ);
-			define("integer->char", INTEGER2CHAR);
-			define("integer?", INTEGERQ);
-			define("interaction-environment", INTERACTIONENVIRONMENT);
-			define("length", LENGTH);
-			define("list->vector", LIST2VECTOR);
-			define("load-native-library", LOADNL);
-			define("log", LOG);
-			define("make-parameter", MAKEPARAM);
-			define("make-rectangular", MAKERECTANGULAR);
-			define("make-string", MAKESTRING);
-			define("make-vector", MAKEVECTOR);
-			define("max-precision", MAX_PRECISION);
-			define("min-precision", MIN_PRECISION);
-			define("null-environment", NULLENVIRONMENT);
-			define("null?", NULLQ);
-			define("number->string", NUMBER2STRING);
-			define("number?", NUMBERQ);
-			define("numerator", NUMERATOR);
-			define("pair?", PAIRQ);
-			define("parameter?", PARAMETERQ);
-			define("procedure?", PROCEDUREQ);
-			define("putprop", PUTPROP);
-			define("quotient", QUOTIENT);
-			define("real-part", REALPART);
-			define("remainder", REMAINDER);
-			define("remprop", REMPROP);
-			define("round", ROUND);
-			define("scheme-report-environment", REPORTENVIRONMENT);
-			define("set-box!", SETBOX);
-			define("set-car!", SETCAR);
-			define("set-cdr!", SETCDR);
-			define("sin", SIN);
-			define("sisc-initial-environment", SISCINITIAL);
-			define("sqrt", SQRT);
-			define("sleep", SLEEP);
-			define("strict-r5rs-compliance", STRICTR5RS);
-			define("string->number", STRING2NUMBER);
-			define("string->symbol", STRING2SYMBOL);
-			define("string->uninterned-symbol", STRING2UNINTERNEDSYMBOL);
-			define("string-fill!", STRINGFILL);
-			define("string-length", STRINGLENGTH);
-			define("string-ref", STRINGREF);
-			define("string-set!", STRINGSET);
-			define("string?", STRINGQ);
-			define("symbol->string", SYMBOL2STRING);
-			define("symbol?", SYMBOLQ);
-			define("system-time", SYSTIME);
-			define("tan", TAN);
-			define("time-zone-offset", TIMEZONEOFFSET);
-			define("truncate", TRUNCATE);
-			define("unbox", UNBOX);
-			define("vector-fill!", VECTORFILL);
-			define("vector->list", VECTOR2LIST);
-			define("vector-length", VECTORLENGTH);
-			define("vector-ref", VECTORREF);
-			define("vector-set!", VECTORSET);
-			define("vector?", VECTORQ);
-			define("void", _VOID);
-			define("void?", VOIDQ);
-			define("with-failure-continuation", WITHFC);
-		}
-	}
-	
-	public Primitives() {}
-	
-	public Primitives(int id) {
-		super(id);
-	}
-	
+    public static class Index extends IndexedLibraryAdapter {
+        
+        public Value construct(int id) {
+            return new Primitives(id);
+        }
+        
+        public Index() {
+            define("list", LIST);
+            define("*", MUL);
+            define("+", ADD);
+            define("-", SUB);
+            define("/", DIV);
+            define("<", LT);
+            define("=", NEQ);
+            define(">", GRT);
+            define("_gcd", GCD);
+            define("_lcm", LCM);
+            define("_string-append", STRINGAPPEND);
+            define("acos", ACOS);
+            define("apply", APPLY);
+            define("ashl", ASHL);
+            define("ashr", ASHR);
+            define("asin", ASIN);
+            define("atan", ATAN);
+            define("boolean?", BOOLEANQ);
+            define("box", BOX);
+            define("box?", BOXQ);
+            define("call-with-current-continuation", CALLCC);
+            define("call-with-failure-continuation", CALLFC);
+            define("call-with-values", CALLWITHVALUES);
+            define("car", CAR);
+            define("case-sensitive", CASESENSITIVE);
+            define("cdr", CDR);
+            define("ceiling", CEILING);
+            define("char->integer", CHAR2INTEGER);
+            define("char?", CHARACTERQ);
+            define("circular?", CIRCULARQ);
+            define("compact-string-rep", COMPACTSTRINGREP);
+            define("complex?", COMPLEXQ);
+            define("cons", CONS);
+            define("cos", COS);
+            define("current-evaluator", CURRENTEVAL);
+            define("current-wind", CURRENTWIND);
+            define("denominator", DENOMINATOR);
+            define("environment?", ENVIRONMENTQ);
+            define("eq?", EQ);
+            define("eqv?", EQV);
+            define("equal?", EQUAL);
+            define("eval", EVAL);
+            define("exact->inexact", EXACT2INEXACT);
+            define("exact?", EXACTQ);
+            define("exp", EXP);
+            define("find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
+            define("floor", FLOOR);
+            define("native-library-binding", NLBINDING);
+            define("native-library-binding-names", NLBINDINGNAMES);
+            define("native-library-name", NLNAME);
+            define("native-library-version", NLVERSION);
+            define("get-symbolic-environment", GETENVIRONMENT);
+            define("set-symbolic-environment!", SETENVIRONMENT);
+            define("gensym", GENSYM);
+            define("getprop", GETPROP);
+            define("imag-part", IMAGPART);
+            define("inexact->exact", INEXACT2EXACT);
+            define("inexact?", INEXACTQ);
+            define("integer->char", INTEGER2CHAR);
+            define("integer?", INTEGERQ);
+            define("interaction-environment", INTERACTIONENVIRONMENT);
+            define("length", LENGTH);
+            define("list->vector", LIST2VECTOR);
+            define("load-native-library", LOADNL);
+            define("log", LOG);
+            define("make-parameter", MAKEPARAM);
+            define("make-rectangular", MAKERECTANGULAR);
+            define("make-string", MAKESTRING);
+            define("make-vector", MAKEVECTOR);
+            define("max-precision", MAX_PRECISION);
+            define("min-precision", MIN_PRECISION);
+            define("null-environment", NULLENVIRONMENT);
+            define("null?", NULLQ);
+            define("number->string", NUMBER2STRING);
+            define("number?", NUMBERQ);
+            define("numerator", NUMERATOR);
+            define("pair?", PAIRQ);
+            define("parameter?", PARAMETERQ);
+            define("procedure?", PROCEDUREQ);
+            define("putprop", PUTPROP);
+            define("quotient", QUOTIENT);
+            define("real-part", REALPART);
+            define("remainder", REMAINDER);
+            define("remprop", REMPROP);
+            define("round", ROUND);
+            define("scheme-report-environment", REPORTENVIRONMENT);
+            define("set-box!", SETBOX);
+            define("set-car!", SETCAR);
+            define("set-cdr!", SETCDR);
+            define("sin", SIN);
+            define("sisc-initial-environment", SISCINITIAL);
+            define("sqrt", SQRT);
+            define("sleep", SLEEP);
+            define("strict-r5rs-compliance", STRICTR5RS);
+            define("string->number", STRING2NUMBER);
+            define("string->symbol", STRING2SYMBOL);
+            define("string->uninterned-symbol", STRING2UNINTERNEDSYMBOL);
+            define("string-fill!", STRINGFILL);
+            define("string-length", STRINGLENGTH);
+            define("string-ref", STRINGREF);
+            define("string-set!", STRINGSET);
+            define("string?", STRINGQ);
+            define("symbol->string", SYMBOL2STRING);
+            define("symbol?", SYMBOLQ);
+            define("system-time", SYSTIME);
+            define("tan", TAN);
+            define("time-zone-offset", TIMEZONEOFFSET);
+            define("truncate", TRUNCATE);
+            define("unbox", UNBOX);
+            define("vector-fill!", VECTORFILL);
+            define("vector->list", VECTOR2LIST);
+            define("vector-length", VECTORLENGTH);
+            define("vector-ref", VECTORREF);
+            define("vector-set!", VECTORSET);
+            define("vector?", VECTORQ);
+            define("void", _VOID);
+            define("void?", VOIDQ);
+            define("with-failure-continuation", WITHFC);
+        }
+    }
+    
+    public Primitives() {}
+    
+    public Primitives(int id) {
+        super(id);
+    }
+    
     public static SchemeBoolean numQuery(Value v, int mask)
         throws ContinuationException {
         return truth(v instanceof Quantity &&
@@ -288,19 +288,24 @@ public class Primitives extends IndexedProcedure {
         SIZESWITCH: switch (vls) {
         case 0:
             switch (id) {
-            case GENSYM: 
-                long unv=r.tctx.nextUnique();
-                return Symbol.intern(base64encode(unv));
-            case _VOID: return VOID;
+            case ADD: return Quantity.ZERO;
+            case DIV:
+            case NEQ: 
+            case LT: 
+            case GRT:
+            case SUB: throwArgSizeException(); return VOID;
+            case CASESENSITIVE: return truth(Symbol.caseSensitive);
             case COMPACTSTRINGREP: return truth(SchemeString.compactRepresentation);
             case CURRENTWIND: return r.dynenv.wind;
             case CURRENTEVAL: return (Value)r.ctx.evaluator;
+            case GENSYM: 
+                long unv=r.tctx.nextUnique();
+                return Symbol.intern(base64encode(unv));
             case INTERACTIONENVIRONMENT:
                 return r.ctx.toplevel_env.asValue();
-            case SYSTIME: return Quantity.valueOf(System.currentTimeMillis());
             case MAX_PRECISION: return Quantity.valueOf(Quantity.max_precision);
             case MIN_PRECISION: return Quantity.valueOf(Quantity.min_precision);
-            case CASESENSITIVE: return truth(Symbol.caseSensitive);
+            case MUL: return Quantity.ONE;
             case SISCINITIAL: 
                 try {
                     return new MemorySymEnv(r.lookupContextEnv(Util.SISC_SPECIFIC));
@@ -308,16 +313,11 @@ public class Primitives extends IndexedProcedure {
                     throwPrimException(liMessage(SISCB, "nosiscspecificenv"));
                 }
             case STRICTR5RS: return truth(r.dynenv.parser.lexer.strictR5RS);
+            case SYSTIME: return Quantity.valueOf(System.currentTimeMillis());
             case TIMEZONEOFFSET:
                 Calendar cal = Calendar.getInstance();
-                return Quantity.valueOf((cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET)) / 1000);
-            case ADD: return Quantity.ZERO;
-            case MUL: return Quantity.ONE;
-            case DIV:
-            case NEQ: 
-            case LT: 
-            case GRT:
-            case SUB: throwArgSizeException(); return VOID;
+                return Quantity.valueOf((cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET)) / 1000); 
+            case _VOID: return VOID;
             default:
                 break SIZESWITCH;
             }
@@ -770,135 +770,125 @@ public class Primitives extends IndexedProcedure {
     }
 
     static final int
-        //0-10
-        //26-30
-        //33-34
-        //44-46
-        //59
-        //69
-        //72-75
-        //78-82
-        //110
-        //136-139
-        //154
-        ACOS = 14,
-        ADD = 152,
-        APPLY = 50,
-        ASHL = 104,
-        ASHR = 105,
-        ASIN = 15,
-        ATAN = 106,
-        BOOLEANQ = 17,
-        BOX = 18,
-        BOXQ = 19,
-        CALLCC = 20,
-        CALLFC = 107,
-        CALLWITHVALUES = 108,
-        CAR = 21,
-        CASESENSITIVE = 151,
-        CDR = 22,
-        CEILING = 23,
-        CHAR2INTEGER = 24,
-        CHARACTERQ = 25,
-        CIRCULARQ = 16,
-        COMPACTSTRINGREP = 125,
-        COMPLEXQ = 40,
-        CONS = 109,
-        COS = 31,
-        CURRENTEVAL = 32,
-        CURRENTWIND = 35,
-        DENOMINATOR = 36,
-        DIV = 144,
-        ENVIRONMENTQ = 39,
-        EQ = 112,
-        EQV = 111,
-        EQUAL = 113,
-        EVAL = 115,
-        EXACT2INEXACT = 41,
-        EXACTQ = 42,
-        EXP = 43,
-        FLOOR = 54,
-        GCD = 116,
-        GENSYM = 13,
-        GETENVIRONMENT = 64,
-        GETPROP = 119,
-        GRT = 153,
-        NLBINDING = 117,
-        NLBINDINGNAMES = 47,
-        NLNAME = 48,
-        NLVERSION = 49,
-        IMAGPART = 51,
-        INEXACT2EXACT = 52,
-        INEXACTQ = 53,
-        INTEGER2CHAR = 55,
-        INTEGERQ = 56,
-        INTERACTIONENVIRONMENT = 4,
-        LCM = 118,
-        LENGTH = 57,
-        LIST = 146,
-        LIST2VECTOR = 58,
-        LOADNL = 60,
-        LOG = 61,
-        LT = 147,
+        ACOS = 23,
+        ADD = 114,
+        APPLY = 121,
+        ASHL = 102,
+        ASHR = 103,
+        ASIN = 22,
+        ATAN = 93,
+        BOOLEANQ = 32,
+        BOX = 56,
+        BOXQ = 58,
+        CALLCC = 54,
+        CALLFC = 55,
+        CALLWITHVALUES = 106,
+        CAR = 15,
+        CASESENSITIVE = 6,
+        CDR = 16,
+        CEILING = 49,
+        CHAR2INTEGER = 43,
+        CHARACTERQ = 30,
+        CIRCULARQ = 62,
+        COMPACTSTRINGREP = 7,
+        COMPLEXQ = 37,
+        CONS = 85,
+        COS = 20,
+        CURRENTEVAL = 8,
+        CURRENTWIND = 70,
+        DENOMINATOR = 67,
+        DIV = 115,
+        ENVIRONMENTQ = 34,
+        EQ = 83,
+        EQUAL = 86,
+        EQV = 84,
+        EVAL = 81,
+        EXACT2INEXACT = 46,
+        EXACTQ = 38,
+        EXP = 25,
+        FLOOR = 48,
+        GCD = 92,
+        GENSYM = 0,
+        GETENVIRONMENT = 18,
+        GETPROP = 109,
+        GRT = 118,
+        IMAGPART = 69,
+        INEXACT2EXACT = 47,
+        INEXACTQ = 39,
+        INTEGER2CHAR = 52,
+        INTEGERQ = 36,
+        INTERACTIONENVIRONMENT = 1,
+        LCM = 91,
+        LENGTH = 59,
+        LIST = 120,
+        LIST2VECTOR = 44,
+        LOADNL = 77,
+        LOG = 24,
+        LT = 117,
         MAKEPARAM = 63,
-        MAKERECTANGULAR = 121,
-        MAKESTRING = 122,
-        MAKEVECTOR = 123,
-        MAX_PRECISION = 65,
-        MIN_PRECISION = 66,
-        MUL = 148,
-        NEQ = 149,
-        NULLENVIRONMENT = 67,
-        NULLQ = 68,
-        NUMBER2STRING = 124,
-        NUMBERQ = 70,
-        NUMERATOR = 71,
-        PAIRQ = 76,
-        PARAMETERQ = 77,
-        PROCEDUREQ = 120,
-        PUTPROP = 140,
-        QUOTIENT = 126,
-        REALPART = 83,
-        REMAINDER = 127,
-        REMPROP = 62,
-        REPORTENVIRONMENT = 84,
-        ROUND = 85,
-        SETBOX = 128,
-        SETCAR = 129,
-        SETCDR = 130,
-        SETENVIRONMENT = 38,
-        SIN = 86,
-        SISCINITIAL = 89,
-        SLEEP = 87,
-        SQRT = 88,
-        STRICTR5RS = 37,
-        STRING2NUMBER = 131,
-        STRING2SYMBOL = 90,
-        STRING2UNINTERNEDSYMBOL = 91,
-        STRINGAPPEND = 132,
-        STRINGFILL = 133,
-        STRINGLENGTH = 92,
-        STRINGQ = 93,
-        STRINGREF = 134,
-        STRINGSET = 141,
-        SUB = 150,
-        SYMBOL2STRING = 94,
-        SYMBOLQ = 95,
-        SYSTIME = 11,
-        TAN = 96,
-        TIMEZONEOFFSET = 114,
-        TRUNCATE = 12,
-        UNBOX = 97,
-        VECTOR2LIST = 98,
-        VECTORFINDLASTUNIQUE = 99,
-        VECTORLENGTH = 100,
-        VECTORQ = 101,
-        VECTORREF = 135,
-        VECTORSET = 142,
-        VECTORFILL = 145,
-        VOIDQ = 102,
-        WITHFC = 103,
-        _VOID = 12;
+        MAKERECTANGULAR = 101,
+        MAKESTRING = 99,
+        MAKEVECTOR = 65,
+        MAX_PRECISION = 9,
+        MIN_PRECISION = 10,
+        MUL = 11,
+        NEQ = 116,
+        NLBINDING = 104,
+        NLBINDINGNAMES = 76,
+        NLNAME = 74,
+        NLVERSION = 75,
+        NULLENVIRONMENT = 73,
+        NULLQ = 14,
+        NUMBER2STRING = 80,
+        NUMBERQ = 27,
+        NUMERATOR = 66,
+        PAIRQ = 17,
+        PARAMETERQ = 40,
+        PROCEDUREQ = 35,
+        PUTPROP = 110,
+        QUOTIENT = 90,
+        REALPART = 68,
+        REMAINDER = 89,
+        REMPROP = 107,
+        REPORTENVIRONMENT = 72,
+        ROUND = 50,
+        SETBOX = 94,
+        SETCAR = 87,
+        SETCDR = 88,
+        SETENVIRONMENT = 108,
+        SIN = 19,
+        SISCINITIAL = 2,
+        SLEEP = 78,
+        SQRT = 26,
+        STRICTR5RS = 12,
+        STRING2NUMBER = 79,
+        STRING2SYMBOL = 42,
+        STRING2UNINTERNEDSYMBOL = 71,
+        STRINGAPPEND = 100,
+        STRINGFILL = 98,
+        STRINGLENGTH = 60,
+        STRINGQ = 31,
+        STRINGREF = 95,
+        STRINGSET = 111,
+        SUB = 119,
+        SYMBOL2STRING = 41,
+        SYMBOLQ = 29,
+        SYSTIME = 3,
+        TAN = 21,
+        TIMEZONEOFFSET = 4,
+        TRUNCATE = 51,
+        UNBOX = 57,
+        VECTOR2LIST = 45,
+        VECTORFILL = 113,
+        VECTORFINDLASTUNIQUE = 53,
+        VECTORLENGTH = 61,
+        VECTORQ = 28,
+        VECTORREF = 96,
+        VECTORSET = 112,
+        VOIDQ = 33,
+        WITHFC = 105,
+        _VOID = 5;
+
 }
 /*
  * The contents of this file are subject to the Mozilla Public
