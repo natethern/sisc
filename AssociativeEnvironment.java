@@ -182,11 +182,6 @@ public class AssociativeEnvironment extends NamedValue {
         return symbolMap.keySet().iterator();
     }
 
-    //This should not be used outside of SISC (Internal only)
-    public void remove(Set keys) {
-        symbolMap.remove(keys);
-    }
-
     public void serialize(Serializer s) throws IOException {
         super.serialize(s);
         s.writeInt(symbolMap.size());

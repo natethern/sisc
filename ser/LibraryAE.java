@@ -119,15 +119,6 @@ public class LibraryAE extends AssociativeEnvironment {
             return store(s, parent.lookup(pi));
         }
     }
-            
-    public void remove(Set s) {
-        if (base==null) {
-            super.remove(s);
-            bindWatch.remove(s);
-        } else
-            addressMap.remove(s);
-    }
-    
     
     /**
      * Catch all occurences of sets and note them for when we serialize
