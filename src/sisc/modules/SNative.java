@@ -22,6 +22,10 @@ public class SNative extends IndexedProcedure {
         LISTREF = 14,
         VALUES = 15,
         SUBSTRING = 17,
+        CHARGRTRTHAN = 26,
+        CHARLESSTHAN = 27,
+        CHARGRTRTHANCI = 28,
+        CHARLESSTHANCI = 29,
         STRINGORDER = 18,
         STRINGORDERCI = 19,
         STRINGUPCASE = 20,
@@ -55,6 +59,10 @@ public class SNative extends IndexedProcedure {
             define("not", NOT);
             define("reverse", REVERSE);
             define("reverse!", REVERSEB);
+            define("char<?", CHARLESSTHAN);
+            define("char-ci>?", CHARGRTRTHANCI);
+            define("char-ci<?", CHARLESSTHANCI);
+            define("char>?", CHARGRTRTHAN);
             define("string-order", STRINGORDER);
             define("string-downcase", STRINGDOWNCASE);
             define("string-order-ci", STRINGORDERCI);
@@ -195,6 +203,16 @@ public class SNative extends IndexedProcedure {
                 }
             case 2:
                 switch(id) {
+                case CHARLESSTHAN:
+                    return truth(character(f.vlr[0])<character(f.vlr[1]));
+                case CHARGRTRTHAN:
+                    return truth(character(f.vlr[0])>character(f.vlr[1]));
+                case CHARLESSTHANCI:
+                    return truth(Character.toLowerCase(character(f.vlr[0]))<
+                                 Character.toLowerCase(character(f.vlr[1])));
+                case CHARGRTRTHANCI:
+                    return truth(Character.toLowerCase(character(f.vlr[0]))>
+                                 Character.toLowerCase(character(f.vlr[1])));
                 case LISTREF:
                     Pair p1=pair(f.vlr[0]);
                     for (int l=num(f.vlr[1]).intValue(); l>0; l--) {
