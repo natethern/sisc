@@ -167,11 +167,11 @@
         <include name="sisc/modules/R5RS*.class"/>
       </fileset>
       <manifest>
-	<section name="SISC Core">
+        <section name="SISC Core">
           <attribute name="Implementation-Title" value="SISC"/>
           <attribute name="Implementation-Version" value="${version}"/>
            <!-- Got a better idea?: -->
-          <attribute name="Implementation-Vender" value="SISC Development Group"/>
+          <attribute name="Implementation-Vendor" value="SISC Development Group"/>
         </section>
       </manifest>
     </jar>
@@ -184,11 +184,11 @@
         <exclude name="sisc/modules/R5RS*.class"/>
       </fileset>
       <manifest>
-	<section name="SISC Optional">
+        <section name="SISC Optional">
           <attribute name="Implementation-Title" value="SISC"/>
           <attribute name="Implementation-Version" value="${version}"/>
            <!-- Got a better idea?: -->
-          <attribute name="Implementation-Vender" value="SISC Development Group"/>
+          <attribute name="Implementation-Vendor" value="SISC Development Group"/>
         </section>
       </manifest>
     </jar>
