@@ -793,7 +793,7 @@
 (define char-lower-case?
   (lambda (%_1125)
     (if (char-alphabetic? %_1125)
-      (char>? %_1125 '#\z)
+      (char>? %_1125 '#\Z)
       '#f)))
 (define string-downcase (void))
 (define string-upcase (void))

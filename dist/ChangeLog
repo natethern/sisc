@@ -1,3 +1,7 @@
+2002-04-10  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed bug in CHAR-LOWER-CASE?
+
 2002-03-31  Scott G. Miller	<scgmille@freenetproject.org>
 
 	* Removed J2S and javaValue functionality, which has been

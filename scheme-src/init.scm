@@ -581,8 +581,8 @@
 (define (char-numeric? c) (and (char-ci>=? c #\0) (char-ci<=? c #\9)))
 (define (char-whitespace? c) (if (memq c '(#\space #\tab #\newline)) #t #f))
 
-(define (char-upper-case? c) (and (char-alphabetic? c) (char<? c #\a)))
-(define (char-lower-case? c) (and (char-alphabetic? c) (char>? c #\z)))
+(define (char-upper-case? c) (and (char-alphabetic? c) (char>? c #\a)))
+(define (char-lower-case? c) (and (char-alphabetic? c) (char>? c #\Z)))
 
 (define string-downcase (void))
 (define string-upcase (void))
