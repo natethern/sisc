@@ -1066,7 +1066,7 @@ public class Quantity extends Value {
 	case FIXEDINT:
 	    return hc^val;
 	case DECIM:
-	    int bits=Float.doubleToIntBits(d);
+	    int bits=Float.floatToIntBits(d);
 	    return hc^bits;
 	case INTEG:
 	    return hc^i.hashCode();
