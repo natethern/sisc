@@ -113,13 +113,12 @@
   <appendix>
     <title>&R5RS; Liberties and Violations</title>
     <para>
-      This section lists all ways in which &SISC; interprets the &R5RS; 
-      specification, where the stanard is not particular clear.  Such
-      interpretations may allow non-portable code to be written and
-      executed on &SISC;
-      Additionally, all known &R5RS; violations are listed.  Actual
-      violations are considered &SISC; bugs, and are considered high
-      priority to be fixed.
+      This section lists all ways in which &SISC; interprets the
+      &R5RS; specification, where the standard is not particular clear.
+      Such interpretations may allow non-portable code to be written
+      and executed on &SISC; Additionally, all known &R5RS; violations
+      are listed.  Actual violations are considered &SISC; bugs, and
+      have a high priority for being fixed.
     </para>
     <para>
       <orderedlist>
