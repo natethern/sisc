@@ -810,12 +810,6 @@
   (define write-char		_write-char)
   (define zero?			_zero?))
 
-;;our srfi-0 implementation relies on this
-(define *features* '())
-(define (add-feature feature)
-  (if (not (memq feature *features*))
-      (set! *features* (cons feature *features*))))
-
 (module srfi-0 (cond-expand)
   (include "srfi/srfi-0.scm")
   (add-feature 'srfi-0))

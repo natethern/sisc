@@ -337,5 +337,15 @@
     ((_ name args . body)
      (define-macro name (lambda args . body)))))
 
+;;our srfi-0 implementation relies on this
+(define *features* '())
+(define (add-feature feature)
+  (if (not (memq feature *features*))
+      (set! *features* (cons feature *features*))))
+(define (add-features features)
+  (for-each add-feature features))
+(define (has-feature? feature)
+  (memq feature *features*))
+
 (if (not (getprop 'LITE '*sisc*))
     (load "std-modules.scm"))

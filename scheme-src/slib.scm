@@ -123,15 +123,15 @@
 ;; out whether to attempt some incompletely standard operation.
 
 (define *features*
-  '(source    ; Chez Scheme can load Scheme source files, with the
+ '(source    ; Chez Scheme can load Scheme source files, with the
 	      ;   command (slib:load-source "filename") -- see below.
 
-    char-ready? delay dynamic-wind format defmacro
-    full-continuation getenv ieee-p1178 macro multiarg/and-
-    multiarg-apply pretty-print rationalize 
-    rev3-procedures rev3-report rev4-optional-procedures rev4-report
-    string-port values with-file rev5-procedures rev5-report 
-    rev5-optional-procedures))
+   char-ready? delay dynamic-wind format defmacro
+   full-continuation getenv ieee-p1178 macro multiarg/and-
+   multiarg-apply pretty-print rationalize 
+   rev3-procedures rev3-report rev4-optional-procedures rev4-report
+   string-port values with-file rev5-procedures rev5-report 
+   rev5-optional-procedures))
 
 (define *defmacros*
   (list (cons 'defmacro

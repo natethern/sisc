@@ -35,6 +35,6 @@
           (cond-expand more-clauses ...))
          (else body ...))))
       ((cond-expand (feature-id body ...) more-clauses ...)
-       (if (memq (syntax-object->datum (syntax feature-id)) *features*)
+       (if (has-feature? (syntax-object->datum (syntax feature-id)))
            (syntax (begin body ...))
            (syntax (cond-expand more-clauses ...)))))))
