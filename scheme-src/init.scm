@@ -450,13 +450,15 @@
 		   (_min_max proc (car args) (cdr args)
 			     (or inexact (inexact? (car args))))]
 		  [else (_min_max proc mv (cdr args) inexact)]))])
-  (set! min (lambda args
-	      (if (null? args) 0
-		  (_min_max < (car args) (cdr args) 
+  (set! min (lambda (x1 . args)
+	      (if (null? args) 
+                  x1
+		  (_min_max < x1 args
 			    (inexact? (car args))))))
-  (set! max (lambda args
-	      (if (null? args) 0
-		  (_min_max > (car args) (cdr args) 
+  (set! max (lambda (x1 . args)
+	      (if (null? args) 
+                  x1
+		  (_min_max > x1 args
 			    (inexact? (car args)))))))
 
 (define (negative? n) (< n 0))

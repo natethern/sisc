@@ -798,12 +798,14 @@ public class Primitives extends ModuleAdapter {
                 return quantity;
 
             case NEQ:
+                if (f.vlr.length<2) throwArgSizeException();
                 quantity=num(f.vlr[0]);
                 for (int i=f.vlr.length-1; i>=0; i--) {
                     if (!quantity.comp(num(f.vlr[i]), 0)) return FALSE;
                 }
                 return TRUE;
             case LT:
+                if (f.vlr.length<2) throwArgSizeException();
                 quantity=num(f.vlr[0]);
                 for (int i=1; i<f.vlr.length; i++) {
                     Quantity q=num(f.vlr[i]);
@@ -812,6 +814,7 @@ public class Primitives extends ModuleAdapter {
                 }
                 return TRUE;
             case GRT:
+                if (f.vlr.length<2) throwArgSizeException();
                 quantity=num(f.vlr[0]);
                 for (int i=1; i<f.vlr.length; i++) {
                     Quantity q=num(f.vlr[i]);
