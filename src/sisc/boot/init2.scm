@@ -590,29 +590,30 @@
                                  '*environment-variables*)
                         "sisc.properties")]
          [testval	(list #f)])
-     (with/fc  ;ignore errors
-      (lambda (m e) #f)
-      (lambda ()
-        (with-input-from-file prop-file
-          (lambda ()
-            (let loop ([entry (read)])
-              (or (eof-object? entry)
-                  (begin
-                    (if (eq? (getprop (car entry)
-                                      '*config-parameters*
-                                      testval)
-                             testval)
-                        (putprop (car entry)
-                                 '*config-parameters*
-                                 (cdr entry)))
-                    (loop (read)))))))))
-     ;;set various special properties
-     (let ([v       (getprop 'emitannotations '*config-parameters*
-                             testval)])
-       (if (not (eq? v testval))
-           (emit-annotations v)))
-     ;;return to non-winding call/cc
-     (unload-dynamic-wind))))
+     (when (file-exists? prop-file) 
+       (with/fc  ;ignore errors
+        (lambda (m e) #f)
+        (lambda ()
+          (with-input-from-file prop-file
+            (lambda ()
+              (let loop ([entry (read)])
+                (or (eof-object? entry)
+                    (begin
+                      (if (eq? (getprop (car entry)
+                                        '*config-parameters*
+                                        testval)
+                               testval)
+                          (putprop (car entry)
+                                   '*config-parameters*
+                                   (cdr entry)))
+                      (loop (read))))))))))
+      ;;set various special properties
+      (let ([v (getprop 'emitannotations '*config-parameters*
+                        testval)])
+        (if (not (eq? v testval))
+            (emit-annotations v)))
+      ;;return to non-winding call/cc
+      (unload-dynamic-wind))))
 
 ;;
 (if (not (getprop 'LITE '*sisc*))
