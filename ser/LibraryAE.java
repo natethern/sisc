@@ -35,8 +35,8 @@ public class LibraryAE extends AssociativeEnvironment {
                 
         }
 
-        int parentIdx=b.add(bindingsFrom.parent);
-            
+        int parentIdx = (bindingsFrom.parent == null) ? -1 : b.add(bindingsFrom.parent);
+
         LibraryAE lib=new LibraryAE(addressMap, parentIdx);
         return lib;
     }
@@ -70,6 +70,15 @@ public class LibraryAE extends AssociativeEnvironment {
     }
 
 
+    private void loadParent() {
+        if (parent != null || parentIdx == -1) return;
+        try {
+            parent=(AssociativeEnvironment)base.getExpression(parentIdx);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public java.util.Set bindingKeys() {
         if (base==null)
             return super.bindingKeys();
@@ -78,54 +87,39 @@ public class LibraryAE extends AssociativeEnvironment {
             synchronized(symbolMap) {
                 res = addressMap.keySet();
             }
+            loadParent();
+            if (parent != null) {
+                res.addAll(parent.bindingKeys());
+            }
             return res;
         }
     }
 
-    public Value lookup(int i) {
-        try {
-            if (base==null)
-                return super.lookup(i);
-            else
-                return (Value)base.getExpression(i);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        throw new ArrayIndexOutOfBoundsException();
-    }
-
     public int getLoc(Symbol s) {
-        int rv=super.getLoc(s);
-        if (base==null) return rv;
-        if (rv!=-1) return rv;
-        try {
-            return store(s, lookup(s));
-        } catch (ArrayIndexOutOfBoundsException aib) {
-            return -1;
-        }
-    }
-            
-    public Value lookup(Symbol s) {
-        if (base==null)
-            return super.lookup(s);
-        else {
-            Integer i=(Integer)addressMap.get(s);
-            if (i==null) {
-                if (parentIdx==-1)
-                    throw new ArrayIndexOutOfBoundsException();
-                if (parent==null)
+        synchronized(symbolMap) {
+            //already loaded?
+            Integer i = (Integer)symbolMap.get(s);
+            if (i!=null) return i.intValue();
+            //present in this AE?
+            if (base != null) {
+                i = (Integer)addressMap.get(s);
+                if (i!=null) {
                     try {
-                        parent=(AssociativeEnvironment)base.getExpression(parentIdx);
+                        return store(s, (Value)base.getExpression(i.intValue()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                return parent.lookup(s);
+                }
+                loadParent();
             }
-            return lookup(i.intValue());
+            //try parent
+            if (parent == null) return -1;
+            int pi=parent.getLoc(s);
+            if (pi==-1) return -1;
+            return store(s, parent.lookup(pi));
         }
     }
-
-
+            
     public void remove(Set s) {
         if (base==null) {
             super.remove(s);

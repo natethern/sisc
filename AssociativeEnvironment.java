@@ -159,11 +159,12 @@ public class AssociativeEnvironment extends NamedValue {
     }
 
     public Value lookup(Symbol s) {
-        return lookup(getLoc(s));
+        int pi = getLoc(s);
+        return env[pi];
     }
 
-    public Value lookup(int envLoc) {
-        return env[envLoc];
+    public Value lookup(int pi) {
+        return env[pi];
     }
 
     public void undefine(Symbol s) {
