@@ -1,0 +1,64 @@
+<project name="sisc" default="all">
+  <target name="init" depends="prepare"></target>
+
+  <target name="prepare">
+    <property file="${basedir}/build.properties"/>    
+    <property name="classdir" value="${basedir}/classes"/>
+    <property name="docdir" value="${basedir}/doc/javadoc"/>
+    <property name="srcdir" value="${basedir}/.."/>
+    <property name="schemedir" value="${basedir}/scheme-src"/>
+    <property name="packagename" value="sisc"/>
+    <property name="jarname" value="sisc.jar"/>
+    <property name="heap" value="${basedir}/boot/sisc.heap"/>
+  </target>
+
+  <target name="docs" depends="init"
+          description="Generate Documentation">
+    <mkdir dir="${docdir}"/>
+    <javadoc sourcepath="${srcdir}"
+             packagenames="${packagename}.*"
+             destdir="${docdir}"/>
+  </target>
+
+  <target name="compiler" depends="init">
+    <mkdir dir="${classdir}"/>
+    <javac srcdir="${srcdir}"
+           destdir="${classdir}"
+	   classpath=".."
+           includes="${packagename}/**"
+	   optimize="on"
+    />      
+  </target>
+  
+  <target name="jars" depends="compiler">
+    <jar jarfile="${basedir}/${jarname}"
+         basedir="${classdir}"
+         includes="*/**"/>
+  </target>
+  
+  <target name="heap" depends="compiler">
+    <java classname="sisc.boot.GenerateHeap"
+	  classpath="${classdir}"
+	  dir="${schemedir}/syntax-case"
+	  fork="yes">
+      <arg value="${heap}"/>
+      <arg value="${schemedir}/init.pp"/>
+      <arg value="${schemedir}/syntax-case/loadpp.ss"/>
+      <arg value="${schemedir}/init2.scm"/>
+      <arg value="${schemedir}/pp.scm"/>
+      <arg value="${schemedir}/repl.scm"/>
+    </java>
+  </target>
+
+  <target name="all" depends="jars,heap,docs"
+          description="Build all">  
+  </target>
+    
+  <target name="clean" depends="init"
+          description="Remove generated sources, class files and jar files">
+    <delete dir="${classdir}"/>
+    <delete dir="${docdir}"/>
+    <delete file="${basedir}/${jarname}"/>
+    <delete file="${heap}"/>
+  </target> 
+</project>
