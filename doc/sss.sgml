@@ -16,7 +16,11 @@
       Introduction
     </title>
     <para>
-      <emphasis>SISC</emphasis> is a lightweight, platform independent Scheme system whose primary goals are rapid execution of the complete R<superscript>5</superscript>RS and future Scheme standards, plus a useful superset for real-world application development. 
+      <emphasis>SISC</emphasis> is a lightweight, platform independent
+      Scheme system whose primary goals are rapid execution of the
+      complete R<superscript>5</superscript>RS and future Scheme
+      standards, plus a useful superset for real-world application
+      development. 
     </para>
     <para>
       <emphasis>SISC</emphasis>'s development progresses in two
@@ -333,11 +337,72 @@
       </sect2>
       <sect2>
 	<title>
+	  Circular structures
+	</title>
+	<para>
+	  <emphasis>SISC</emphasis> provides a parse-time syntax for 
+	  creating data (primarily vectors and lists) that contains
+	  references to itself.  This can be useful to create streams,
+	  graphs, and other self-referencing structures while
+	  maintaining readability and avoiding complex construction
+	  code.
+	</para>
+	<para> 
+	  The reader syntax has two parts, defining a pointer, and
+	  later referencing the pointer to create the circular
+	  reference.
+	</para>
+	<para>
+	  Below is an addition to the R<superscript>5</superscript>RS
+	  formal syntax (specifically section 7.1.2, external
+	  representations) to support circular structures:
+	</para>
+	<programlisting>
+	  &lt;pointer definition&gt; --> #&lt;uinteger 10&gt;=&lt;datum&gt;
+	  &lt;pointer reference&gt; --> #&lt;uinteger 10&gt;#
+	</programlisting>
+	<para>
+	  The first form instructs the reader to create a pointer
+	  identified by the specified integer, which maps to the datum
+	  that follows, and is active during the reading of the datum
+	  on the right-hand side of the definition.  
+	</para>
+	<para>
+	  If a second definition occurs during the reading of the
+	  datum with the same integral identifier, the previous
+	  definition is overwritten for the duration of the read.  The
+	  definitions are <emphasis>not</emphasis> scoped in any way.
+	  The pointer identifiers should be kept unique by the
+	  programmer to prevent any unintended effects of identifier
+	  collisions. 
+	</para>
+	<para>
+	  The second form references a previously created pointer 
+	  definition.  It is an error to reference an undefined
+	  pointer.  The reader will handle a valid reference by
+	  placing a pointer at the current read position back to the
+	  location of the definition. 
+	</para>
+	<para>
+	  At this point some examples might be helpful:
+	</para>
+	<programlisting>
+	  (define x '#0=(1 2 . #0#))
+	  (caddr x)        ; => 1
+	  (list-ref x 15)  ; => 2
+
+	  (define y '(1 2 #1=#(3 4) . #1#))
+	  (eq? (caddr y) (cdddr y)) ; => #t
+	</programlisting>
+      </sect2>
+      <sect2>
+	<title>
 	  Immutable types
 	</title>
 	<para>
-	  SISC follows the R5RS recommendation of immutable list,
-	  string, and vector constants. Quoted lists and vectors are
+	  SISC follows the R<superscript>5</superscript>RS
+	  recommendation of immutable list, string, and vector
+	  constants. Quoted lists and vectors are
 	  immutable. Attempting to modify elements in these constants
 	  will raise an error. String constants are immutable as well
 	  when created with symbol-&gt;string.
