@@ -181,7 +181,7 @@
      (opt:if B altern conseq state))
     ((,?if ,B ,x #f)
      (guard (and (constant? x) (core-form-eq? ?if 'if #%if)))
-     (opt:if B conseq altern))
+     (opt:if B conseq altern state))
     ((,?if ,B ,x ,y)
      (guard (and (constant? x) (constant? y) (core-form-eq? ?if 'if #%if)))
      (values 
