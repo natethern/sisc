@@ -138,4 +138,4 @@
 ;                "sisc.modules.SLogicOps"
 ;                "sisc.modules.SNetwork" "sisc.modules.SDebug")))
 (if (not (getprop 'LITE '*sisc*))
-    (for-each load-module '("sisc.modules.SNative")))
+    (for-each load-module '("sisc.modules.SNative$Index")))
