@@ -2384,6 +2384,8 @@
              (vector-set! new i (strip-annotation (vector-ref x i) #f))
              (loop (fx- i 1))))
          new))
+      ((box? x)
+       (box (strip-annotation (unbox x) #f)))
       (else x))))
 
 ;;; strips syntax-objects down to top-wrap; if top-wrap is layered directly
