@@ -37,6 +37,16 @@ public class Symbol extends Value {
     public String display() {
         return symval;
     }
+    
+    public String write() {
+        if (symval.toLowerCase().equals(symval))
+            return symval;
+        else {
+            StringBuffer b=new StringBuffer("|");
+            b.append(symval).append('|');
+            return b.toString();
+        }
+    }
 
     public Symbol() {}
 
