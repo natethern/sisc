@@ -29,7 +29,7 @@
 
   (debug "Thinking...")
   ; Decide on our move and send it to the server
-  (let ((next-move (decide id (system-time) 400)))
+  (let ((next-move (decide id (system-time) 800)))
     (debug "Sending move ~a ..." next-move)
     (apply send-command (cons out next-move))
     ;loop

@@ -57,9 +57,8 @@
 (define (identity x) x)
 (define a* 
   (letrec ((unwind 
-	    (trace-lambda unwind (return next)
-	      (if (equal? '(false) (node-move (node-parent next)))
-		  (return (node-move next))
+	    (lambda (return next)
+	      (if (equal? '(false) (node-move (node-parent next)))		  (return (node-move next))
 		  (unwind return (node-parent next)))))
            (highest-rated 
             (lambda (cache id closed-list max-so-far maxf-so-far)
@@ -97,10 +96,10 @@
 		 (unwind return (if (null? closed)
                                     last-move
                                     (begin 
-                                      (set-cost! root-node -1000.0)
+                                      (set-cost! root-node -100000.0)
                                       (let ((highest (highest-rated cost-cache id
                                                       closed root-node 
-                                                      -1000.0)))
+                                                      -100000.0)))
                                         (set! last-path (map node-pos highest))
                                         highest))))
 		 (let ((node-current
@@ -112,10 +111,10 @@
 		       (begin 
                          (debug "Stopping search after ~a moves, ~a ms"
                                 moves (- (system-time) start-time))
-                         (set-cost! root-node -1000.0)
+                         (set-cost! root-node -100000.0)
                          (set! node-current (highest-rated cost-cache id
                                              (cons node-current closed)
-                                             root-node -1000.0))
+                                             root-node -100000.0))
                          (set! last-path (let loop ((n node-current))
                                            (if (null? n) '()
                                                (cons (node-pos n)

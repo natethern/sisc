@@ -1,9 +1,7 @@
 ; Manages the game state
 
-(import hashtable)
 (define robot-ids '())
 (define robots (make-hashtable))
-(define world)
  
 (define robot-locations (make-hashtable))
 (define robot-capacities (make-hashtable))
@@ -27,7 +25,6 @@
   (when v
 	(hashtable/put! robot-loads id (- (robot-load id) v))))
 
-(trace 'robot-load-incr! 'robot-load-decr! 'robot-capacity!)
 (define (robot-capacity-remaining id)
   (- (robot-capacity id)
      (robot-load id)))
@@ -68,10 +65,6 @@
 	      robot-locations)
 	     #f)))
 			       
-(define (we-were-just-there? x y)
-  (and (= last-x x)
-       (= last-y y)))
-
 ; Parses a response command and updates the gamestate
 (define (parse-response id command in)
   (case command
@@ -90,15 +83,12 @@
 	 ((X) (set-robot-x! id arg))
 	 ((Y) (set-robot-y! id arg)))))))
 	       
-(define (bid! n)
-  (set! my-money (- my-money n)))
-
 ; The distance formula 
-#;(define dist
-  (letrec ([square (lambda (x) (* x x))])
-    (lambda (x1 y1 x2 y2)
-      (sqrt (+ (square (- x2 x1))
-               (square (- y2 y1)))))))
+;(define dist
+;  (letrec ([square (lambda (x) (* x x))])
+ ;   (lambda (x1 y1 x2 y2)
+  ;    (sqrt (+ (square (- x2 x1))
+   ;            (square (- y2 y1)))))))
 
 (define dist
     (lambda (x1 y1 x2 y2)

@@ -91,8 +91,6 @@
 	    (peaceful-bid id))
 	move))
 
-(define (random n) 0)
-
 (define (pick-move moves)
   (let loop ((best-move (car moves))
 	     (rest (cdr moves)))
@@ -103,27 +101,6 @@
 	   (loop best-move (cdr rest))]
 	  [else (loop (if (zero? (random 2)) best-move (car rest))
 		      (cdr rest))])))
-
-(define (evaluate-moves id moves start-time)
-  (if (or (null? moves)
-	  (> (- (system-time) start-time) 800))
-      '()
-      (cons (cons (calculate-fitness id (car moves)) (car moves))
-	    (evaluate-moves id (cdr moves) start-time))))
-
-(define (combination ls)
-  (cond  [(null? ls) '()]
-	 [(null? (cdr ls)) (list ls)]
-	 [else
-	  (let ((cl (car ls))
-		(subcombo (combination (cdr ls))))
-	    (cons (list cl)
-		  (apply append
-			 (map (lambda (c)
-				(if (pair? c)
-				    `((,cl ,@c) ,c)
-				    `((,cl ,c) ,(list c))))
-			      subcombo)))))))
 
 (define enumerate-moves 
   (let ((delta-map  '(           (+0 +1 |N|)
@@ -137,27 +114,44 @@
 		     (let ((nx (+ (car d) x))
 			   (ny (+ (cadr d) y)))
 		       (if (and (<= 1 nx world-width)
-				(<= 1 ny world-height))
+				(<= 1 ny world-height)
+                                (not (or (wall? nx ny) (water? nx ny))))
 			   `((|Move| ,(caddr d)))
 			   '())))
 		   delta-map))
-       '((|Drop|))
        ; Package pickup moves
-       (let ((packages-here (packages x y)))
-	 (apply append
-		(map (lambda (packages)
-		       (if (< (package-weight packages)
-			       (robot-capacity-remaining id))
-			 `((|Pick| ,(package-id packages)))
-			 '()))
-		     packages-here)))
+       (let ploop ((ph (packages x y)) 
+                  (acc '())
+                  (acct '())
+                  (acw (robot-capacity-remaining id)))
+         (cond [(null? ph)
+                (if (null? acc)
+                    '()
+                    `((|Pick| ,@acc)))]
+               [(< (package-weight (car ph)) acw)
+                (ploop (cdr ph) (cons (package-id (car ph)) acc) acct
+                      (- acw (package-weight (car ph))))]
+               [(and (null? acc) (> (package-weight (car ph))
+                                    acw))
+                (ploop (cdr ph) acc acct acw)]
+               [(null? acc)
+                (ploop (cdr ph) '() '() (robot-capacity-remaining id))]
+               [else (ploop ph '() (cons `(|Pick| ,@acc) acct) 
+                            (robot-capacity-remaining id))]))
 
        ; Package drop moves
-       (let* ((my-packages (robots-packages id)))
-	 (apply append
-		(map (lambda (packages)
-			 `((|Drop| ,(package-id packages))))
-		     my-packages)))))))
+       (let dloop ((ph (robots-packages id)) 
+                  (acc '()))
+         (cond [(null? ph)
+                (if (null? acc)
+                    '()
+                    `((|Drop| ,@acc)))]
+               [(equal? (package-destination (car ph)) (list x y))
+                (dloop (cdr ph) (cons (package-id (car ph)) acc))]
+               [else 
+                (dloop (cdr ph) acc)]))))))
+
+
 
 (define calculate-fitness 
 (letrec
@@ -177,7 +171,7 @@
     ((|Drop|)
      (if (null? (cadr move))
          (weight id 'go-nowhere)
-         (apply + (map (lambda (p)
+         (apply + (map (trace-lambda df(p)
                          (let ((dist-to-deliver 
                                 (apply dist `(,@pos
                                               ,@(package-destination p)))))
@@ -188,7 +182,7 @@
     ((|Pick|)
      (if (null? (cadr move))
          (weight id 'go-nowhere)
-         (apply + (map (lambda (p)
+         (apply + (map (trace-lambda pf(p)
                          (let ((dist-to-deliver 
                                 (apply dist `(,@pos
                                               ,@(package-location p))))

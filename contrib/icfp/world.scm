@@ -1,10 +1,10 @@
 ; World Representation
 
-(define world-width)
-(define world-height)
-(define world-scale)
-(define world-map)
-(define world)
+(define world-width (void))
+(define world-height (void))
+(define world-scale (void))
+(define world-map (void))
+(define world (void))
 
 (define bases '())
 (define (add-home-base! x y)
@@ -17,28 +17,13 @@
     (set! world-scale (+ width height))
     (set! world-map (make-string (* width height) #\.))))
 
-
-(define-syntax define-alias
-  (syntax-rules ()
-    ((_ name (args ...) body ...)
-     (define-syntax name
-       (syntax-rules ()
-	 ((_ args ...)
-	  body ...))))))
-
-(define-alias define-world-attribute (name attr) 
-  (define-alias name (wrl) (hashtable/get wrl attr)))
-
-(define weight hashtable/get)
-(define weight! hashtable/put!)
-
-(define-alias world-idx (x y)
+(define (world-idx x y)
   (+ -1 x (* (- y 1) world-width)))
 
-(define-alias world-ref (x y)
+(define (world-ref x y)
   (string-ref world-map (world-idx x y)))
 
-(define-alias world-set! (wrl x y v)
+(define (world-set! wrl x y v)
   (string-set! world-map (world-idx x y) v))
 
 (define (do-nothing . args) (void))

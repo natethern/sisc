@@ -14,12 +14,12 @@
 
 (define (forceful-bid id before)
   ((if before + -)
-   estimated-confrontational-bid))
+   (hashtable/get! estimated-bids id (lambda () 5))))
 
 (define (peaceful-bid id) 1)
 
 (define (adjust-bid! id success)
   (hashtable/put! estimated-bids id 
-		  ((if success + -) (estimated-confrontational-bid id) 1)))
+		  ((if success + -) (forceful-bid id #t) 1)))
 
 

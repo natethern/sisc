@@ -9,11 +9,13 @@ public class Gui extends JFrame {
     int ww, wh;
     String world;
     int fw=7,fh=10;
+    int id;
 
     public Arena a;
 
-    public Gui() {
+    public Gui(int id) {
         super("Arena");
+        this.id=id;
         r=Context.enter();
         try {
             ww=((Quantity)r.eval("world-width")).intValue();
@@ -49,7 +51,7 @@ public class Gui extends JFrame {
             Pair path=Util.EMPTYLIST;
             int rx=1,ry=1;
             try {
-                Pair robot=(Pair)r.eval("(robot-position 1)");
+                Pair robot=(Pair)r.eval("(robot-position "+id+")");
                 path=(Pair)r.eval("last-path");
                 rx=((Quantity)robot.car).intValue();
                 ry=((Quantity)((Pair)robot.cdr).car).intValue();

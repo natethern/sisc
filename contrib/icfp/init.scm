@@ -1,9 +1,5 @@
 ;; ICFP 2002 Entry 
 ;; Initialization file
-(current-optimizer (lambda (x) x))
-(putprop 'assumptive-procedures '*opt* '(+ - * / not car cdr cons))
-
-(trace 'load)
 ; Load the source code
 (load "constants.scm")
 (load "gamestate.scm")
@@ -20,23 +16,15 @@
 (load "prioq.scm")
 (load "astar.scm")
 
-(define in)
-(define out)
-(define sock)
+(define in (void))
+(define out (void))
+(define sock (void))
 
 (define (debug . args)
   (display (apply format args))
   (newline))
 
-(define (st) (stack-trace (get-last-error)))
-(define (et) (print-error (get-last-error)))
-  
-(import s2j)
-(import generic-procedures)
-(define-generic repaint)
-(define-generic show)
-(define gui-frame)
-(define gui-pane)
+
 (define (go)
   (let ((connection 
          (connect (getprop 'host '*environment-variables*)
@@ -49,14 +37,14 @@
   (debug "Receiving Game State...")
   
   (let ((playerno (receive-gamestate in)))
-    (set! gui-frame (make (java-class "Gui")))
+    (set! gui-frame (make (java-class "Gui") (->jint playerno)))
     (set! gui-pane (gui-frame 'a))
     (display gui-frame)
     (show gui-frame)
     (debug "Entering main-loop...")
     (main-loop playerno #f #f)))
 ;(go)
-(define (gui id)
-  (repaint gui-pane))
+(define (gui id) 
+ (repaint gui-pane))
 
 

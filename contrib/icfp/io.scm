@@ -1,11 +1,9 @@
 ; IO Routines
 
-(import networking) ; Load TCP/IP stack
-
 (define (connect host port)
   (let* ((sock (open-tcp-socket host port))
 	 (in (open-socket-input-port sock))
-	 (out (open-socket-output-port sock #t)))
+	 (out (open-socket-output-port sock)))
     (list sock in out)))
 
 (define (check-newline in)
@@ -70,22 +68,15 @@
 	  [else 
 	   (list package)])))
 
-(define (receive-robots in)
-  (let* ((id (begin (read-char in) (read in)))
-	 (x (begin (read in) (read in)))
-	 (y (begin (read in) (read in))))
-    (store-robot-location! id x y)
-    (if (more-robots? in)
-	(cons id (receive-robots in))
-	(list id))))
-
 (define (send-command out bid command . args)
   (display (format "~a ~a" bid command) out)
   (for-each (lambda (arg)
 	      (display #\space out)
 	      (display arg out))
 	    args)
-  (newline out))
+  (newline out)
+  (flush-output-port out))
+
 
 (define (receive-responses in)
   (let* ((id (begin (read-char in) (read in))))
@@ -105,6 +96,7 @@
   (receive-configuration in))
 
 (define (handshake in out)
-  (display (format "Player~%") out))
+  (display (format #;"Login 30 10~%" "Player~%") out)
+  (flush-output-port out))
 
 ;(trace 'receive-configuration 'read-char 'receive-responses 'parse-response)
