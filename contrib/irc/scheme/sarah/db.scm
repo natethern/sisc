@@ -51,3 +51,28 @@
     (with/fc (lambda (m e) #f) (lambda () (jdbc/execute pstmt)))))
 
 
+(define (store-message conn sender recipient message) 
+  (let ([pstmt (jdbc/prepare-statement conn
+                "INSERT INTO tell VALUES(?,?,?)")])
+    (set-string pstmt (->jint 1) (->jstring recipient))
+    (set-string pstmt (->jint 2) (->jstring sender))
+    (set-string pstmt (->jint 3) (->jstring message))
+    (with/fc (lambda (m e) #f) (lambda () (jdbc/execute pstmt)))))
+
+(define (fetch-messages! conn recipient)
+  (let* ([stmt (jdbc/prepare-statement conn
+                                       (format "SELECT sender, message FROM tell WHERE lower(recipient)='~a'"
+                                               (string-downcase recipient)))]
+         [results
+          (jdbc/execute-query stmt)])
+    (and (not (null? results)) 
+         (begin 
+           (let ([rv
+                  (ordered-stream-map (lambda (item)  (cons (item '1)
+                                                            (item '2)))
+                                      results)])
+             (jdbc/execute (jdbc/prepare-statement 
+                            conn (format "DELETE FROM tell WHERE lower(recipient)='~a'" 
+                                         (string-downcase recipient))))
+             rv)))))
+

@@ -84,7 +84,7 @@
 (define (list-skip ls n)
   (if (zero? n) ls (list-skip (cdr ls) (- n 1))))
 
-(define (answer message . to-bot)
+(define (answer from message . priv-message)
   (let* ([tokens (tokenize message)]
          [strict-tokens (map (lambda (ts)
                                (string->symbol
@@ -94,16 +94,17 @@
                                     (string->list
                                      (symbol->string tok)))
                                   tokens))]
-          [to-bot (or (and (not (null? to-bot)) (car to-bot))
+          [to-bot (or (and (not (null? priv-message)) (car priv-message))
                       (memq bot-name strict-tokens))]
           [cleaned-message (bot-clean message)]
           [pattern (find-pattern strict-tokens)]
           [response (and pattern 
                          (display pattern)
                          (and-let* ([handler (assq pattern pattern-handlers)]) 
-                                   ((cdr handler) cleaned-message)))])
+                                   ((cdr handler) from cleaned-message)))])
     (if (and response (or (not bot-quiet) to-bot))
-        response
+        (and (not (eq? response #t))
+             response)
         (let ([hal-response
                (say hal cleaned-message)])
           (and (or (not bot-quiet) to-bot) hal-response)))))
@@ -128,9 +129,10 @@
     (listen . LISTEN)
     (evaluate . EVALUATE)
     (seen . SEEN)
+    (tell . TELL)
     ))
 
-(define (*-is type message)
+(define (*-is type from message)
   (let-values ([(ignoreables term) (string-split message " is ")])
     (and term 
          (begin 
@@ -148,13 +150,13 @@
 
 (define (quiet . args) (set! bot-quiet #t) "Fine, shutting up.")
 (define (listen . args) (set! bot-quiet #f) "Okay, I'm listening.")
-(define (evaluate message)
+(define (evaluate from message)
   (let-values ([(ignoreables term) (string-split message "evaluate ")])
     (with-output-to-string 
         (lambda () (pretty-print 
                     (eval (with-input-from-string term read)))))))
 
-(define (learn message)
+(define (learn from message)
   (let-values ([(term definition) (string-split message " is at ")])    
     (and (or (and term definition
                   (if (store-item dbcon 'where term definition)
@@ -166,8 +168,50 @@
                         (random-elem learn-responses)
                         (random-elem knewthat-responses))))))))
 
-(define (seen message)
-  (let-values ([(ignoreables person) (string-split message " seen ")])
+(define (onJoin channel sender login hostname)
+  (add-nick (string->symbol (->string channel))
+            (string->symbol (string-downcase (->string sender))))
+  (let ([messages (fetch-messages! dbcon (->string sender))])
+    (when messages 
+         (send-message bot channel 
+                       (->jstring (format (random-elem deliver-preludes)
+                                          (->string sender) 
+                                          (let ([l (length messages)])
+                                            (format "~a ~a" l
+                                                    (if (> l 1) "messages."
+                                                        "message."))))))
+         (for-each (lambda (m)
+                     (do-tell sender (car m) (cdr m)))
+                   messages))))
+
+(define (onPart channel sender login hostname)
+  (remove-nick (string->symbol (->string channel))
+               (string->symbol (->string sender))))
+
+(define (do-tell recipient sender message)
+  (send-message bot (->jstring channel)
+                (->jstring 
+                 (format "~a, ~a says: ~a" recipient sender message))))
+  
+(define (tell from message)
+  (let-values ([(ignoreables message) (string-split message "tell ")])
+    (and message
+         (and-let* ([spidx (string-index message " ")]
+                    [recipient (substring message 0 spidx)])
+           (let ([message (substring message (+ spidx 1)
+                                     (string-length message))])
+             (if (member (string->symbol
+                          (string-downcase recipient))
+                         (get-present (string->symbol channel)))
+                 (begin (do-tell from recipient message) #t)
+                 (begin 
+                   (store-message dbcon from (string-downcase recipient) message)
+                   (random-elem tell-responses))))))))
+  
+
+      
+(define (seen from message)
+  (let-values ([(ignoreables person) (string-split message "seen ")])
     (and person 
          (begin 
            (if (eq? #\? (string-ref person (- (string-length person) 1)))
@@ -179,9 +223,9 @@
                               message)
                  (random-elem haventseen-responses)))))))
                               
-(define (what-is message) (*-is 'what message))
-(define (where-is message) (*-is 'where message))
-(define (who-is message) (*-is 'what message))
+(define (what-is from message) (*-is 'what from message))
+(define (where-is from message) (*-is 'where from message))
+(define (who-is from message) (*-is 'what from message))
 
 (define pattern-handlers
   `((WHATIS . ,what-is)
@@ -192,4 +236,5 @@
     (SEEN . ,seen)
     (LISTEN . ,listen)
     (LEARN . ,learn)
-    (EVALUATE . ,evaluate)))
+    (EVALUATE . ,evaluate)
+    (TELL . ,tell)))

@@ -29,6 +29,15 @@
     "Sorry, no."
     "Not as far as I can remember."))
 
+(define tell-responses
+  '("Will do."
+    "Got it."
+    "Okay."))
+
+(define deliver-preludes
+  '("~a, you have ~a"
+    "Welcome back ~a, you have ~a"))
+
 (define seen-phrases
   '("I last saw ~a on ~a"
     "~a was here ~a"))
