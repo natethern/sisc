@@ -4,6 +4,7 @@ General
 * produce a performance testing framework that is invokable from ant
 * make stack trace location reporting more accurate and meaningful
 * reorganize code into new directory structure
+* Document the S2J Reflection functions.
 
 Features
 * implement character ports
