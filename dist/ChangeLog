@@ -1,3 +1,8 @@
+2002-06-07  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Error handling revamped to pass along error information
+	  through Scheme->Java->Scheme ... calls. 
+
 2002-06-04  Matthias Radestock  <matthias@sorted.org>
 
 	* Upgraded syntax-case again. It now supports tail-matching.

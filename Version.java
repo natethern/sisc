@@ -33,6 +33,6 @@ package sisc;
 
 public interface Version {
 
-    String VERSION = "b1.5.1";
+    String VERSION = "b1.5.2";
 
 }
