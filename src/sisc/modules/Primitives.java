@@ -75,6 +75,7 @@ public class Primitives extends IndexedProcedure {
             define("find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
             define("floor", FLOOR);
             define("getenv", GETENV);
+            define("get-sidecar-environment", GETSIDECAR);
             define("get-symbolic-environment", GETENVIRONMENT);
             define("set-symbolic-environment!", SETENVIRONMENT);
             define("gensym", GENSYM);
@@ -292,6 +293,9 @@ public class Primitives extends IndexedProcedure {
                     throwPrimException(liMessage(SISCB, "noenv", vlr[0].synopsis()));
                     return VOID;
                 }
+            case GETSIDECAR:
+                return r.getCtx().toplevel_env
+                                 .getSidecarEnvironment(symbol(vlr[0])).asValue();
             case GETENV:
                 String str = r.getCtx().getProperty(string(vlr[0]));
                 if (str == null) {
@@ -452,7 +456,11 @@ public class Primitives extends IndexedProcedure {
                 SchemeString.compactRepresentation=truth(vlr[0]);
                 return VOID;
             case GETPROP:
-                return r.getCtx().toplevel_env.lookup(symbol(vlr[0]));
+                return r.getCtx().toplevel_env.lookup(symbol(vlr[0])); 
+            case INTERACTIONENVIRONMENT:
+                Value env=r.getCtx().toplevel_env.asValue();
+                r.getCtx().toplevel_env=Util.env(vlr[0]);
+                return env;
             default:
                 break SIZESWITCH;
             }
@@ -608,6 +616,8 @@ public class Primitives extends IndexedProcedure {
             case SETENVIRONMENT:
                 r.getCtx().defineContextEnv(symbol(vlr[0]), env(vlr[1]));
                 return VOID;
+            case GETSIDECAR:
+                return env(vlr[1]).getSidecarEnvironment(symbol(vlr[0])).asValue();
             default:
                 break SIZESWITCH;
             }
@@ -735,7 +745,7 @@ public class Primitives extends IndexedProcedure {
         return VOID;
     }
 
-    //next: 124
+    //next: 125
     static final int
         ACOS = 23,
         ADD = 114,
@@ -775,6 +785,7 @@ public class Primitives extends IndexedProcedure {
         FLOOR = 48,
         GCD = 92,
         GENSYM = 0,
+        GETSIDECAR = 124,
         GETENV = 123,
         GETENVIRONMENT = 18,
         GETPROP = 109,
