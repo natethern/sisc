@@ -42,10 +42,6 @@
    ("who is "
     "\"Who is <someone>\" asks for information about someone."
     (*-is? 'what))
-   (" is at " "\"<something> is at <somewhere>\" defines the location of a term for later recollection by \"where is\"."
-    (learn 'where))
-   (" is " "\"<something> is <something else>\" defines a term for later recollection by \"what is\"."
-    (learn 'what))
    ("later tell " "\"tell <someone> <something>\" asks me to deliver a message to someone next time they speak."
     (tell 'later))   
    ("tell " "\"tell <someone> <something>\" asks me to deliver a message to someone as soon as I see them in a channel."
@@ -67,6 +63,10 @@
     join-chan)
    ("scheme-channel " "\"scheme-channel <channel-name>\" creates a scheme channel with the given name" make-schemechan)
    ("part " "\"part <channel-name>\" asks me to leave a channel I'm in." request-part)
+   (" is at " "\"<something> is at <somewhere>\" defines the location of a term for later recollection by \"where is\"."
+    (learn 'where))
+   (" is " "\"<something> is <something else>\" defines a term for later recollection by \"what is\"."
+    (learn 'what))
 ))
 
 (define (infobot . plugins)

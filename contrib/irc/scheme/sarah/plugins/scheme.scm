@@ -14,6 +14,27 @@
     (lambda ()
       (safe-pp-to-string (sc-expand (read-code) '(e) '(e))))))
 
+(define (forbidden-procedure name)
+  (lambda args
+    (error name "use is forbidden in this environment.")))
+
+(define forbidden-bindings 
+   '(open-input-file open-output-file 
+    interaction-environment
+    with-output-to-file
+    with-input-from-file
+    call-with-input-file
+    call-with-output-file
+    open-source-input-file))
+
+(define (sandbox env)
+  (putprop 'eval env (lambda (expr env)
+                       (eval expr (sandbox env))))
+  (for-each (lambda (binding)
+              (putprop binding env (forbidden-procedure binding)))
+            forbidden-bindings)
+  env)
+
 (define (stateless-eval channel message ignore term)
   (with/fc (lambda (m e)
              (error-message m))
@@ -27,7 +48,7 @@
               [(void? expr) "{No expression.  Were the parenthesis closed properly?}"]
               [else
                (strict-r5rs-compliance #t)
-               (let ([env (scheme-report-environment 5)])
+               (let ([env (sandbox (scheme-report-environment 5))])
                  (for-each (lambda (k v) (putprop k env v))
                            '(call/cc $sc-put-cte fold error)
                            (list call/cc $sc-put-cte fold error))
@@ -71,6 +92,16 @@
     (thread/start evaluation-thread)
     (thread/start watchdog-thread)
     (let loop () (unless (thread/join watchdog-thread) (loop)))
-    (get-output-string os)))
+    (let ([outstr (get-output-string os)])
+      (if (or (> (string-length outstr) (* 80 25 2))
+              (> (count-newlines outstr) 50))
+          "Output is excessive for this environment.  Not printing."
+          outstr))))
+
+(define (count-newlines outstr)
+  (let loop ([ls (string->list outstr)] [n 0])
+    (cond [(null? ls) n]
+          [(char=? #\newline (car ls)) (loop (cdr ls) (+ n 1))]
+          [else (loop (cdr ls) n)])))
 
 

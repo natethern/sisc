@@ -116,19 +116,6 @@
                         (string #\newline)
                         (loop (cdr vs))))))))))))))
 
-(define (forbidden-procedure name)
-  (lambda args
-    (error name "use is forbidden in this environment.")))
-
-(define forbidden-bindings 
-   '(open-input-file open-output-file 
-    interaction-environment
-    with-output-to-file
-    with-input-from-file
-    call-with-input-file
-    call-with-output-file
-    open-source-input-file))
-
 (define (my-load url env)
   (call-with-input-file url
     (lambda (in)
@@ -144,7 +131,7 @@
       (string->symbol (format "~a_~a" var x)))))
 
 (define (make-scheme-channel-env schemechan)
-  (let* ([etmp (scheme-report-environment 5)]
+  (let* ([etmp (sandbox (scheme-report-environment 5))]
          [special-var (string->uninterned-symbol "no-binding")]
          [from (lambda (user binding)
                  (if (assoc user (scheme-channel-schemers schemechan))
@@ -166,9 +153,6 @@
                      (lambda ()
                        (when (file-is-file? url) 
                          (error 'load "Loading from local files not permitted.")))))])
-    (for-each (lambda (proc)
-                (putprop proc etmp (forbidden-procedure proc)))
-              forbidden-bindings)
     (putprop '$sc-put-cte etmp $sc-put-cte)
     (putprop '$syntax-dispatch etmp $syntax-dispatch)
     (putprop 'syntax-error etmp syntax-error)

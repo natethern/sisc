@@ -6,7 +6,7 @@
 
 (define (store-tell dbcon message term later)
   (and (not (equal? term ""))
-       (and-let* ([spidx (string-index term " ")]
+       (and-let* ([spidx (string-index term #\space)]
 		  [recipient (substring term 0 spidx)])
          (let ([todeliver (substring term (+ spidx 1)
 				     (string-length term))])

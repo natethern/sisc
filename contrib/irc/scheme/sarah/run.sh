@@ -1,9 +1,6 @@
 PATH=/usr/local/java/bin:$PATH
 CLASSPATH="/home/scgmille/java/contrib/irc/lib/pircbot.jar:/home/scgmille/java/contrib/irc/sisc-pirc.jar:.:/usr/share/java/postgresql.jar:$CLASSPATH"
 SISC_HOME=/home/scgmille/java/contrib/irc/scheme/sarah/sisc
-JAVAOPT="-Dsisc.permitInterrupts=true -Dsisc.slib=/usr/share/slib"
+JAVAOPT="-Dsisc.permitInterrupts=true -Dsisc.slib=/usr/share/slib -server"
 export CLASSPATH SISC_HOME JAVAOPT PATH
-screen sh sisc/sisc libs.scm sisc/scheme-src/slib.scm streams.scm \
-                 jdbc.scm amb.scm phrases.scm alice.scm random.scm \
-                 state.scm time.scm ../pirc.scm db.scm ai.scm schemechan.scm \
-                 bot.scm zippy.scm
+screen sh sisc/sisc ./libs.scm ./sarahbot.scm

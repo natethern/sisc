@@ -67,7 +67,7 @@
        (cond [(or (= x (string-length message))
                   (> x (+ bot-name-length 1)))
               message]
-             [(eqv? (string-ref message x) #\:)
+             [(memv (string-ref message x) '(#\: #\,))
               (substring message (+ x 1) (string-length message))]
              [else (loop (+ x 1))])))))
 
