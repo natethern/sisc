@@ -3397,8 +3397,13 @@
                (syntax-case (syntax x) ()
                  ((quote? dx)
                   (isquote? (syntax quote?))
-                  (if p (syntax (quote ps))
-                        (syntax (quote (dx . dy)))))
+                  ; If the output is equal to the input (ie no quasi transforms)
+                  ; then output the input, to preserve pointer equality and
+                  ; immutability.
+                  (let ([dxdy (syntax (quote (dx . dy)))])
+                    (if (and p (equal? p dxdy))
+                        (syntax (quote ps))
+                        dxdy)))
                  (_ (if (null? (syntax dy))
                         (syntax (list x))
                         (syntax (cons x y))))))
