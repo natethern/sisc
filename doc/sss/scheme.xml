@@ -1032,7 +1032,7 @@
       <title>Error Records</title>
       <para>
         An error record is the value usually propagated with an error
-        in SISC.  It is a datastructure containing such information as
+        in &SISC;. It is a datastructure containing such information as
         the location of the error, a descriptive message about the
         error, and possibly other error metadata.  
       </para>
@@ -1160,14 +1160,30 @@
                   <parameter>parent-error-continuation</parameter>
                 </methodparam>
               </methodsynopsis>
+              <methodsynopsis language="scheme">
+                <type>error-record</type>
+                <methodname>make-nested-error</methodname>
+                <methodparam>
+                  <parameter>local-error</parameter>
+                </methodparam>
+                <methodparam>
+                  <parameter>exception</parameter>
+                </methodparam>
+              </methodsynopsis>
               <blockquote>
                 <para>
-                  Creates an error record which has
+                  The first version creates an error record which has
                   <parameter>parent-error</parameter> (and it's
                   associated
                   <parameter>parent-error-continuation</parameter>) as
                   the root cause of an error-record passed as
                   <parameter>local-error</parameter>.
+                </para>
+                <para>
+                  The second version creates an error record which has
+                  <parameter>exception</parameter> (see <xref
+                  linkend="Exceptions"/>) as the root cause of an error
+                  passed as <parameter>local-error</parameter>.
                 </para>
               </blockquote>
             </para>
@@ -1308,13 +1324,27 @@
                   <parameter>error-continuation</parameter>
                 </methodparam>
               </methodsynopsis>
+              <methodsynopsis language="scheme">
+                <type>does not return</type>
+                <methodname>throw</methodname>
+                <methodparam>      
+                  <parameter>exception</parameter>
+                </methodparam>
+              </methodsynopsis>
               <blockquote>
                 <para>
-                  Applies the given error record to the current failure 
-                  continuation.
-                  If provided, the error continuation is designated
-                  by the optional parameter.  If not, the continuation of 
-                  the throw expression is used.
+                  The first verison applies the given error record to
+                  the current failure continuation.  If provided, the
+                  error continuation is designated by the optional
+                  parameter.  If not, the continuation of the throw
+                  expression is used.
+                </para>
+                <para>
+                  The second form applies the current failure
+                  continuation to the error record and error
+                  continuation extracted from the supplied
+                  <parameter>exception</parameter> (see <xref
+                  linkend="Exceptions"/>).
                 </para>
               </blockquote>
             </para>
@@ -1407,6 +1437,106 @@
 (define (error . args)
   (throw (apply make-error args)))
           </programlisting>
+        </para>
+      </sect3>
+      <sect3 id="Exceptions">
+        <title>Exceptions</title>
+        <para>
+          Exceptions in &SISC; are a simple wrapper around an error
+          record and an associated error continuation.
+        </para>
+        <para>
+          Exceptions are created with
+        </para>
+        <para>
+          <blockquote>
+            <para>
+              <indexterm><primary>make-exception</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme" id="make-exception">
+                <type>exception</type>
+                <methodname>make-exception</methodname>
+                <methodparam>
+                  <parameter>error-record</parameter>
+                </methodparam>
+                <methodparam>
+                  <parameter>error-continuation</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Constructs an exception from an
+                  <parameter>error-record</parameter> and an
+                  <parameter>error-continuation</parameter>, e.g. as
+                  obtained from the arguments of a handler procedure
+                  passed to <function>with-fc</function>.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          Accessors and a type-test are provided by the following
+          procedures:
+        </para>
+        <para>
+          <blockquote>
+            <para>
+              <indexterm><primary>exception-error</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme" id="exception-error">
+                <type>error-record</type>
+                <methodname>exception-error</methodname>
+                <methodparam>
+                  <parameter>exception</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Returns the <parameter>exception</parameter>'s error
+                  record.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>exception-continuation</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme" id="exception-continuation">
+                <type>error-continuation</type>
+                <methodname>exception-continuation</methodname>
+                <methodparam>
+                  <parameter>exception</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Returns the <parameter>exception</parameter>'s error
+                  continuation.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>exception?</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme" id="exception?">
+                <type>&num;t/&num;f</type>
+                <methodname>exception?</methodname>
+                <methodparam>
+                  <parameter>obj</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Returns &num;t if <parameter>obj</parameter> is an
+                  exception object, &num;f otherwise.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
         </para>
       </sect3>
     </sect2>
