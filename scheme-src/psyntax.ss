@@ -1,5 +1,5 @@
 ;;; Portable implementation of syntax-case
-;;; Extracted from Chez Scheme Version 6.9 (Jun 04, 2002)
+;;; Extracted from Chez Scheme Version 6.9 (Jul 12, 2002)
 ;;; Authors: R. Kent Dybvig, Oscar Waddell, Bob Hieb, Carl Bruggeman
 
 ;;; Copyright (c) 1992-2002 Cadence Research Systems
@@ -1482,7 +1482,7 @@
   (lambda (e r ribcage w s ctem rtem id exports forms)
     (let ((fexports (flatten-exports exports)))
       (chi-external ribcage (source-wrap e w s)
-        (map (lambda (d) (cons r d)) forms) r exports fexports ctem rtem
+        (map (lambda (d) (cons r d)) forms) r exports fexports ctem
         (lambda (bindings inits)
          ; dvs & des: "defined" (letrec-bound) vars & rhs expressions
          ; svs & ses: "set!" (top-level) vars & rhs expressions
@@ -1544,21 +1544,23 @@
                                    (chi-void)
                                    (build-sequence no-source
                                      (map (lambda (v) (build-global-definition no-source v (chi-void))) svs)))
-                                (build-body no-source
-                                  dvs
-                                  des
-                                  (build-sequence no-source
-                                    (list
-                                      (if (null? svs)
-                                          (chi-void)
-                                          (build-sequence no-source
-                                            (map (lambda (v e)
-                                                   (build-module-definition no-source v e))
-                                                 svs
-                                                 ses)))
-                                      (if (null? inits)
-                                          (chi-void)
-                                          (build-sequence no-source inits)))))
+                                (rt-eval/residualize rtem
+                                  (lambda ()
+                                    (build-body no-source
+                                      dvs
+                                      des
+                                      (build-sequence no-source
+                                        (list
+                                          (if (null? svs)
+                                              (chi-void)
+                                              (build-sequence no-source
+                                                (map (lambda (v e)
+                                                       (build-module-definition no-source v e))
+                                                     svs
+                                                     ses)))
+                                          (if (null? inits)
+                                              (chi-void)
+                                              (build-sequence no-source inits)))))))
                                 (chi-void))))
                       (let ((b (car bs)))
                         (case (module-binding-type b)
@@ -1709,7 +1711,7 @@
                    (lp2 (cdr ls2) (conflicts x (car ls2) cls)))))))))
 
 (define chi-external
-  (lambda (ribcage source-exp body r exports fexports ctem rtem k)
+  (lambda (ribcage source-exp body r exports fexports ctem k)
     (define return
       (lambda (bindings ids inits)
         (check-defined-ids source-exp ids)
@@ -1780,7 +1782,7 @@
                      (lambda (id *exports forms)
                        (chi-external *ribcage (source-wrap e w s)
                                    (map (lambda (d) (cons er d)) forms)
-                                   r *exports (flatten-exports *exports) ctem rtem
+                                   r *exports (flatten-exports *exports) ctem
                          (lambda (*bindings *inits)
                            (let* ((iface (make-trimmed-interface *exports))
                                   (bindings (append (if id *bindings (update-imp-exports *bindings *exports)) bindings))
