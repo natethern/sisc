@@ -83,8 +83,6 @@ public class Conversion extends Util {
             case CONV_JDOUBLE:
                 return makeJObj(new Double(num(f.vlr[0]).doubleValue()), Double.TYPE);
             case CONV_JSTRING:
-                byte b = 1;
-                java.lang.Integer.toString(b);
                 Value v = f.vlr[0];
                 if (v instanceof Symbol)
                     return makeJObj(symval(v));
