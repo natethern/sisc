@@ -42,7 +42,6 @@ public class StreamDeserializer extends DeserializerImpl {
             switch(type) {
             case 2: //shared expressions
                 definingOid=readInt();
-                flush=true;
             case 0: //ordinary expressions
                 Expression e;
                 Class clazz=readClass();
@@ -80,7 +79,7 @@ public class StreamDeserializer extends DeserializerImpl {
         } 
     }
 
-    Expression deser() throws IOException {
+    public Expression deser() throws IOException {
         int start=deserQueue.size();
         Expression e=readExpression();
         deserLoop(start);

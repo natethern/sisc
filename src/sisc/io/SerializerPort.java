@@ -24,7 +24,7 @@ public class SerializerPort
     }
 
     protected void writeSerHelper(Value v) throws IOException {
-        serializer.writeExpression(v);
+        serializer.serialize(v);
     }
     
     public void flush() throws IOException {

@@ -25,7 +25,7 @@ public class DeserializerPort
     }
 
     protected Value readSerHelper() throws IOException {
-        return (Value)deserializer.readExpression();
+        return (Value)deserializer.deser();
     }
 }
 /*
