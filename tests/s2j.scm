@@ -49,9 +49,9 @@
 (define-java-class <java.util.date>)
 (define-generic-java-method get-time)
 (define d (java-new <java.util.date>))
-(define time (get-time d))
-(define d1 (java-new <java.util.date> time))
-(define d2 (java-new <java.util.date> time))
+(define now (get-time d))
+(define d1 (java-new <java.util.date> now))
+(define d2 (java-new <java.util.date> now))
 (eq? d1 d2) ;=> #f
 (eqv? d1 d2) ;=> #f
 (equal? d1 d2) ;=> #t
