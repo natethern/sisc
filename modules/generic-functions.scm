@@ -22,8 +22,6 @@
 (define (types<= x y) (every2 java/assignable? y x))
 (define (instances? x y) (every2 java/instance? y x))
 
-(include "../modules/thread.scm")
-
 ;;Generic functions are mapped to names which in turn are the main key
 ;;by which methods are stored / looked up. We do this so that all
 ;;generic functions share the same pool of methods that gets

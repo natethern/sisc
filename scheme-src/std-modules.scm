@@ -63,6 +63,38 @@
   (define (hashtable/map proc ht)
     (map (lambda (x) (proc (car x) (cdr x))) (hashtable->alist ht))))
 
+(module threads
+  ((monitor/synchronize)
+   (monitor/synchronize-unsafe)
+   thread/new
+   thread/start
+   thread/yield
+   thread/interrupt
+   thread/join
+   thread/result
+   thread/current
+   thread/notify
+   thread/notify-all
+   thread/wait
+   thread/name
+   thread/name!
+   thread/priority
+   thread/daemon?
+   thread/daemon!
+   thread/priority!
+   thread/state
+   thread/interrupted?
+   thread/holds-lock?
+   thread/_active-thread-count
+   monitor/new
+   monitor/lock
+   monitor/unlock
+   monitor/wait
+   monitor/notify
+   monitor/notify-all)
+  (import threading-module)
+  (include "../modules/thread.scm"))
+
 (module generic-functions 
   ((define-generic generic-function)
    (define-method add-method generic-function-name)
@@ -70,7 +102,7 @@
    make)
   (import s2j-module)
   (import hashtable)
-  (import threading-module)
+  (import threads)
   (include "../modules/generic-functions.scm"))
 
 (module s2j
