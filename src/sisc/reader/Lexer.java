@@ -153,14 +153,19 @@ public class Lexer implements Tokens {
     }
 
     public int readChar(InputPort is) throws IOException {
-        return readChar(is, true, false); 
+        return readChar(is, true, false, true); 
     }
 
-    public int readChar(InputPort is, boolean handleEscapes, boolean invertEscaped) 
+    public int readPureChar(InputPort is) throws IOException {
+        return readChar(is, true, false, false); 
+    }
+
+    public int readChar(InputPort is, boolean handleEscapes, 
+                        boolean invertEscaped, boolean respectReserved) 
         throws IOException {
         int c=is.read();
 
-        if (strictR5RS && in((char)c, reserved)) 
+        if (strictR5RS && respectReserved && in((char)c, reserved)) 
             throw new IOException(Util.liMessage(Util.SISCB, "reservedchar", 
                                                  new String(new char[] {
                                                      ((char)c)})));
@@ -175,7 +180,7 @@ public class Lexer implements Tokens {
     throws IOException {
         StringBuffer b=new StringBuffer();
         int x;
-        while ('"'!=(x=readChar(is)) && x!=0)
+        while ('"'!=(x=readPureChar(is)) && x!=0)
             b.append((char)x);
         return b.toString();
     }
@@ -187,7 +192,7 @@ public class Lexer implements Tokens {
         char c;
         try {
             do {            
-                int x=readChar(is, handleEscapes, true);
+                int x=readChar(is, handleEscapes, true, true);
                 boolean escaped=(x < 0);
                 if (escaped) 
                    //Escaped character
