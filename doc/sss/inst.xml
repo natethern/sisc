@@ -160,7 +160,7 @@
       </listitem>
       <listitem>
         <para>
-          <literal>sll</literal> - &SISC; Loadable Library.  This
+          <literal>sll</literal> - &SISC; Compiled Library.  This
           contains expanded and compiled code in a &SISC; specific
           representation.
         </para>
