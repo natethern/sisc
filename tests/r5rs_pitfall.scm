@@ -1,6 +1,6 @@
 (define-syntax should-be
   (syntax-rules ()
-    ((_ test-id value expression)
+    ((should-be test-id value expression)
      (let ((return-value expression))
          (if (not (equal? return-value value))
            (for-each (lambda (v) (display v))
