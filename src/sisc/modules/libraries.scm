@@ -23,4 +23,4 @@
       (and (locate-library lib) #t)))
 
 (define (library-loaded? lib)
-  (hashtable/get (string->symbol lib)))
+  (hashtable/get *libraries* (string->symbol lib)))
