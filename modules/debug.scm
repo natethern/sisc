@@ -141,8 +141,10 @@
   (define (make-breakpoint proc)
     (lambda args
       (call/cc (lambda (k)
-                 (display (format "{break: ~s}~%" 
-                                  (cons function-id args)))
+                 (display (format "{break: ~s~% ~a}~%" 
+                                  (cons function-id args)
+                                  (format-stack-trace-entry
+                                   (car (stack-trace k)))))
                  (putprop 'continue-point '*debug* 
                           (delay (k (apply proc args))))
                  (((getprop 'repl '*debug*)))))))
@@ -207,27 +209,28 @@
                                  source-file))))
                   stk))))))
 
+(define (format-stack-trace-entry entry)
+  (let ([expr (car entry)]
+        [data (cdr entry)])
+    (let ([line (cdr (assoc 'line-number data))]
+          [column (cdr (assoc 'column-number data))]
+          [sourcefile (cdr (assoc 'source-file data))])
+      (if (and (_fill-rib? expr)
+               (_free-reference-exp? 
+                (_fill-rib-exp expr)))
+          (format "~a:~a:~a: <called from ~a>~%" 
+                  sourcefile
+                  line column
+                  (_free-reference-symbol
+                   (_fill-rib-exp expr)))
+          (format "~a:~a:~a: <indeterminate call>~%" 
+                  sourcefile
+                  line column)))))
+
 (define (print-stack-trace k)
   (for-each
    (lambda (entry)
-     (let ([expr (car entry)]
-           [data (cdr entry)])
-       (let ([line (cdr (assoc 'line-number data))]
-             [column (cdr (assoc 'column-number data))]
-             [sourcefile (cdr (assoc 'source-file data))])
-         (if (and (_fill-rib? expr)
-                  (_free-reference-exp? 
-                   (_fill-rib-exp expr)))
-             (display 
-              (format "~a:~a:~a: <called from ~a>~%" 
-                      sourcefile
-                      line column
-                      (_free-reference-symbol
-                       (_fill-rib-exp expr))))
-             (display 
-              (format "~a:~a:~a: <indeterminate call>~%" 
-                      sourcefile
-                      line column))))))
+     (display (format-stack-trace-entry entry)))
    (stack-trace k)))
 
 (define (print-exception e . st)
