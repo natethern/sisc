@@ -22,6 +22,10 @@
 (define-generic add-binding)
 (define-generic get-entry-point)
 (define-generic url)
+(define-generic next)
+(define-generic has-next)
+(define-generic binding-keys)
+(define-generic iterator)
 
 (define index-sym (string->symbol "library index"))
 (define segment-str "segment ")
@@ -103,20 +107,47 @@
         (if (getprop (car b) '*sc-expander*)
             (loop (cdr b) (cons (car b) s) t)
             (loop (cdr b) s (cons (car b) t))))))
+(define (union ls1 ls2)
+  (let loop ([ls1 ls1] [acc '()])
+    (cond [(null? ls1) (append acc ls2)]
+          [(memq (car ls1) ls2)
+           (loop (cdr ls1) acc)]
+          [else (loop (cdr ls1) (cons (car ls1) acc))])))
+
+(define (binding-matches? binding module-prefix)
+  (let ([s1 (symbol->string binding)]
+        [mpl (string-length module-prefix)])
+    (and (> (string-length s1) mpl)
+         (string=? module-prefix (substring s1 0 mpl)))))
+
+(define (search-for-implicits modulename bindings-so-far)
+  (let ([module-prefix (string-append "@" (symbol->string modulename) "::")]
+        [iterator (iterator 
+                   (binding-keys 
+                    (get-symbolic-environment '*toplevel*)))])
+    (let loop ([acc bindings-so-far])
+      (if (->boolean (has-next iterator))
+          (let ([b (java-unwrap (next iterator))])
+            (loop
+             (if (and (binding-matches? b module-prefix)
+                      (not (memq b acc)))
+                 (cons b acc)
+                 acc)))
+          acc))))
+
 (define (get-referenced-bindings modulename)
   (let ((mod (getprop modulename (get-symbolic-environment '*sc-expander*))))
     ; I'm a little nervous about the hardcoding of the positions of 
     ; important elements here, a better understanding of the psyntax
     ; datastructures would be nice.
     (if (and (pair? mod) (eq? (car mod) 'module))
-        (apply append
-               (map (lambda (e)
-                      (let ((n (syntax-object-sym e))
-                            (procs (vector->list 
-                                    (vector-ref (cadr (vector-ref e 2))
-                                                3))))
-                        procs))
-                    (vector->list (interface-exports (cdr mod)))))
+        (search-for-implicits 
+         modulename
+         (apply append
+                (map (lambda (e)
+                       (vector->list (vector-ref (cadr (vector-ref e 2))
+                                                 3)))
+                     (vector->list (interface-exports (cdr mod))))))
         (error 'get-referenced-bindings "'~a' does not name a module." 
                modulename))))
 

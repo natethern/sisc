@@ -86,13 +86,13 @@ public class LibraryAE extends MemorySymEnv {
         }
     }
 
-    public java.util.Set bindingKeys() {
+    public Set bindingKeys() {
         if (base==null)
             return super.bindingKeys();
         else {
-            java.util.Set res;
+            java.util.Set res = new HashSet();
             synchronized(symbolMap) {
-                res = addressMap.keySet();
+                res.addAll(addressMap.keySet());
             }
             loadParent();
             if (parent != null) {
@@ -148,7 +148,6 @@ public class LibraryAE extends MemorySymEnv {
     public void deserialize(Deserializer d) throws IOException {
         setName((Symbol)d.readExpression());
         base=d.getLibrary();
-
         int size=d.readInt();
         addressMap=new HashMap(size);
         for (int i=0; i<size; i++) {

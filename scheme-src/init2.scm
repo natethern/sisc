@@ -401,7 +401,7 @@
 (define-syntax unless
   (syntax-rules ()
     ((_ e0 e1 e2 ...)
-     (if (not e0) (begin e1 e2 ...)))))
+     (if e0 (void) (begin e1 e2 ...)))))
 
 ;;perform macro expansion on a file
 (define (expand-file from to . scexpopts)
