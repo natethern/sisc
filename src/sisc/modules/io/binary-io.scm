@@ -1,6 +1,3 @@
-(define open-binary-input-file (make-io-proc _open-binary-input-file))
-(define open-binary-output-file (make-io-proc _open-binary-output-file))
-
 (define (call-with-binary-input-file file proc)
   (let* ([port (open-binary-input-file file)]
          [result (proc port)])

@@ -728,33 +728,6 @@
   (type<=-hook        'oo oo-type<=-hook)
   (compare-types-hook 'oo oo-compare-types-hook))
 
-(module binary-io
-  (read-block
-   write-block
-   make-buffer
-   buffer
-   buffer?
-   buffer-ref
-   buffer-set!
-   buffer-length
-   buffer-copy!
-   open-binary-input-file
-   open-binary-output-file
-   call-with-binary-input-file
-   call-with-binary-output-file
-   with-binary-input-from-file
-   with-binary-output-to-file
-   binary-input-port?
-   binary-output-port?)
-  (import buffers)
-  (import* binary-io-native
-           read-block
-           write-block
-           (_open-binary-input-file open-binary-input-file)
-           (_open-binary-output-file open-binary-output-file)
-           binary-input-port?
-           binary-output-port?)
-  (include "io/binary-io.scm"))
 
 (include "io/generic-io-types.scm")
 (module generic-io-types
@@ -793,6 +766,8 @@
    output-port?
    character-input-port?
    character-output-port?
+   binary-input-port?
+   binary-output-port?
    make-wrapped-constructor
    unwrap-native-input-port
    unwrap-native-output-port
@@ -819,18 +794,45 @@
   (import oo)
   (import type-system)
   (import s2j)
-  (import* binary-io
-           read-block write-block
-           (_open-binary-input-file open-binary-input-file)
-           (_open-binary-output-file open-binary-output-file))
+  (import* binary-io-native
+           (native-read-block read-block)
+           (native-write-block write-block)
+           (native-open-binary-input-file open-binary-input-file)
+           (native-open-binary-output-file open-binary-output-file))
   (import gio/filtergenerics)
   (include "io/generic-io.scm")
-  (set! read-block _gio/read-block)
-  (set! write-block _gio/write-block)
   (set! unwrap-native-output-port :out)
   (set! unwrap-native-input-port :in)
   (set! close-input-port gio/close)
   (set! close-output-port gio/close))
+
+(module binary-io
+  (read-block
+   write-block
+   make-buffer
+   buffer
+   buffer?
+   buffer-ref
+   buffer-set!
+   buffer-length
+   buffer-copy!
+   open-binary-input-file
+   open-binary-output-file
+   call-with-binary-input-file
+   call-with-binary-output-file
+   with-binary-input-from-file
+   with-binary-output-to-file
+   binary-input-port?
+   binary-output-port?)
+  (import buffers)
+  (import* generic-io
+           read-block
+           write-block
+           open-binary-input-file
+           open-binary-output-file
+           binary-input-port?
+           binary-output-port?)
+  (include "io/binary-io.scm"))
 
 (module string-io
   (with-input-from-string
@@ -886,7 +888,6 @@
            (_open-serial-output-port open-serial-output-port))
   (import oo)
   (import generic-io)
-  (import* binary-io call-with-binary-output-file call-with-binary-input-file)
   (import* type-system instance-of?)
   (include "io/serial-io.scm"))
 

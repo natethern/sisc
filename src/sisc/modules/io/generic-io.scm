@@ -31,13 +31,11 @@
 (define native-read-char   (getprop 'read-char))
 (define native-char-ready? (getprop 'char-ready?))
 (define native-read-string (getprop 'read-string))
-(define native-read-block  (getprop 'read-block))
 (define native-read-code   (getprop 'read-code))
 (define native-read        (getprop 'read))
 (define native-display     (getprop 'display))
 (define native-write       (getprop 'write))
 (define native-write-char  (getprop 'write-char))
-(define native-write-block (getprop 'write-block))
 (define native-write-string (getprop 'write-string))
 (define native-open-input-file (getprop 'open-input-file))
 (define native-open-output-file (getprop 'open-output-file))
@@ -54,16 +52,20 @@
 (define (open-output-file . args)
   (make <native-character-output-port> (apply native-open-output-file args)))
 
-(define (open-binary-output-file . args)
-  (make <native-output-port>
-    (apply _open-binary-output-file args)))
+(define open-binary-output-file
+  (let ([ioproc (make-io-proc native-open-binary-output-file)])
+    (lambda args
+      (make <native-output-port>
+        (apply ioproc args)))))
 
 (define (open-input-file . args)
   (make <native-character-input-port> (apply native-open-input-file args)))
 
-(define (open-binary-input-file . args)
-  (make <native-input-port>
-    (apply _open-binary-input-file args)))
+(define open-binary-input-file
+  (let ([ioproc (make-io-proc native-open-binary-input-file)])
+    (lambda args
+      (make <native-input-port>
+        (apply ioproc args)))))
 
 (define (read . port)
   (gio/read (inport port)))
@@ -80,7 +82,7 @@
 (define (read-string string offset length . port)
   (gio/read-string string offset length (inport port)))
 
-(define (_gio/read-block buffer offset length . port)
+(define (read-block buffer offset length . port)
   (gio/read-block buffer offset length (inport port)))
 
 (define (display v . port)
@@ -95,7 +97,7 @@
 (define (write-string str offset length . port)
   (gio/write-string str offset length (outport port)))
 
-(define (_gio/write-block buf offset length . port)
+(define (write-block buf offset length . port)
   (gio/write-block buf offset length (outport port)))
 
 (define (flush-output-port . port)
@@ -119,6 +121,14 @@
 
 (define (character-output-port? v)
   (instance-of? v <character-output-port>))
+
+(define (binary-input-port? v)
+  (and (input-port? v)
+       (not (instance-of? v <character-input-port>))))
+
+(define (binary-output-port? v)
+  (and (output-port? v)
+       (not (instance-of? v <character-output-port>))))
 
 (define-method (initialize (<filter-input-port> i) (<value> parent-i))
   (:in! i parent-i))
@@ -170,39 +180,39 @@
 
 ; Finally, add back the R5RS function logic
 
-(define-method (gio/read (<filter-input-port> i))
-  (gio/read (:in i)))
-
 (define-method (gio/read (<sisc.data.scheme-input-port> i))
   (native-read i))
 
-(define-method (gio/read-char (<filter-input-port> i))
-  (gio/read-char (:in i)))
+(define-method (gio/read (<filter-input-port> i))
+  (gio/read (:in i)))
 
 (define-method (gio/read-char (<sisc.data.scheme-input-port> i))
   (native-read-char i))
 
-(define-method (gio/read-code (<filter-input-port> i))
-  (gio/read-code (:in i)))
+(define-method (gio/read-char (<filter-input-port> i))
+  (gio/read-char (:in i)))
 
 (define-method (gio/read-code (<sisc.data.scheme-input-port> i))
   (native-read-code i))
 
-(define-method (gio/char-ready? (<filter-input-port> i))
-  (gio/char-ready? (:in i)))
+(define-method (gio/read-code (<filter-input-port> i))
+  (gio/read-code (:in i)))
 
 (define-method (gio/char-ready? (<sisc.data.scheme-input-port> i))
   (native-char-ready? i))
 
-(define-method (gio/read-string (<string> string)
-                                (<number> offset) (<number> length)
-                                (<filter-input-port> i))
-  (gio/read-string string offset length (:in i)))
+(define-method (gio/char-ready? (<filter-input-port> i))
+  (gio/char-ready? (:in i)))
 
 (define-method (gio/read-string (<string> string)
                                 (<number> offset) (<number> length)
                                 (<sisc.data.scheme-input-port> i))
   (native-read-string string offset length (:in i)))
+
+(define-method (gio/read-string (<string> string)
+                                (<number> offset) (<number> length)
+                                (<filter-input-port> i))
+  (gio/read-string string offset length (:in i)))
 
 (define-method (gio/read-block (<sisc.modules.io.buffer> buffer)
                                (<number> offset)
