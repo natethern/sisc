@@ -771,7 +771,8 @@
   (import s2j)
   (import type-system)
   (import binary-io)
-  (include "compiledlibs.scm"))
+  (include "compiledlibs.scm")
+  (install))
 
 (module pattern-matching
     ((match

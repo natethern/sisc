@@ -311,6 +311,9 @@
           ((eof-object? x))
         (eval (list "noexpand" x))))))
 
+(add-file-handler 'sce load-expanded)
+(add-file-handler 'pp load-expanded)
+
 (define call/fc call-with-failure-continuation)
 (define with/fc with-failure-continuation)
 (define call/cc call-with-current-continuation)

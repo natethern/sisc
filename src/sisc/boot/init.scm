@@ -217,52 +217,48 @@
                             v
                             (string-append v "/")))))))
 
-;Will be redefined later
-(define load-expanded load)
+(define *FILE-HANDLERS* '())
+(define (add-file-handler extension thunk)
+  (if (not (assq extension *FILE-HANDLERS*))
+      (set! *FILE-HANDLERS*
+        (cons (cons extension thunk) *FILE-HANDLERS*))))
+(define file-handler
+  (let ([_load load])
+    (lambda (extension)
+      (cond [(assq (string->symbol (string-downcase extension))
+                   *FILE-HANDLERS*)
+             => cdr]
+            [else _load]))))
 
-(let ([_load load])
-  (let ([normalize (lambda (proc)
-                     (lambda (file . rest)
-                       (apply proc (normalize-url (current-url) file) rest)))]
-        [file-handler 
-         (lambda (extension)
-                        (case (string->symbol (string-downcase extension))
-                          ((sce pp) load-expanded)
-                          ((sll) 
-                           (with-failure-continuation
-                               (lambda (m e)
-                                 (lambda (name) 
-                                   (error 'load "shared libraries not supported in this build.")))
-                             (lambda ()
-                               (eval '(lambda (name)
-                                        (import compiled-libraries)
-                                        (link-library (open-library name)))))))
-
-                          (else _load)))]
-        [file-extension (lambda (url)
-                          (let loop ((x (reverse (string->list url)))
-                                     (acc '()))
-                            (cond [(null? x) #f]
-                                  [(equal? (car x) #\.)
-                                   (list->string acc)]
-                                  [else (loop (cdr x) (cons (car x) acc))])))])
-  (set! open-input-file (normalize open-input-file))
-  (set! open-source-input-file (normalize open-source-input-file))
-  (set! open-output-file (normalize open-output-file))
-  (set! load
-    (lambda (file)
-      (let ([previous-url (current-url)])
-        (current-url (normalize-url previous-url file))
-        (with-failure-continuation
-            (lambda (m e)
-              (current-url previous-url)
-              (call-with-failure-continuation (lambda (fk) (fk m e))))
-          (lambda () 
-            (let ((fe (file-extension (current-url))))
-              ((file-handler (if fe fe "scm"))
-               (current-url)))))
-        (current-url previous-url))
-      (void)))))
+(let ([normalize
+       (lambda (proc)
+         (lambda (file . rest)
+           (apply proc (normalize-url (current-url) file) rest)))]
+      [file-extension
+       (lambda (url)
+         (let loop ((x (reverse (string->list url)))
+                    (acc '()))
+           (cond [(null? x) #f]
+                 [(equal? (car x) #\.)
+                  (list->string acc)]
+                 [else (loop (cdr x) (cons (car x) acc))])))])
+    (set! open-input-file (normalize open-input-file))
+    (set! open-source-input-file (normalize open-source-input-file))
+    (set! open-output-file (normalize open-output-file))
+    (set! load
+      (lambda (file)
+        (let ([previous-url (current-url)])
+          (current-url (normalize-url previous-url file))
+          (with-failure-continuation
+              (lambda (m e)
+                (current-url previous-url)
+                (call-with-failure-continuation (lambda (fk) (fk m e))))
+            (lambda () 
+              (let ((fe (file-extension (current-url))))
+                ((file-handler (if fe fe "scm"))
+                 (current-url)))))
+          (current-url previous-url))
+        (void))))
 
 (define (load-module str)
   (let* ([nl (load-native-library str)]

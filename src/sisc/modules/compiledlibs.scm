@@ -165,4 +165,8 @@
                        ,@(getprops (apply append (map car bindings))
                                    '*sc-expander*))))
             metadata))))
-     
+
+(define (install)
+  (add-file-handler
+   'sll
+   (lambda (name) (link-library (open-library name)))))
