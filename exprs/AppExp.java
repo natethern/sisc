@@ -46,7 +46,7 @@ public class AppExp extends Expression {
         this.rands=rands;
         this.nxp = nxp;
         this.nonTail=nontail;
-	this.allImmediate=allImmediate;
+        this.allImmediate=allImmediate;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
@@ -65,11 +65,9 @@ public class AppExp extends Expression {
 	    }
 
         if (allImmediate) {
-            //all rands and the rator are immediate
             r.acc=exp.getValue(r);
             r.nxp=nxp;
         } else {
-            //some rands or the rator are non-immediate
             r.push(nxp);
             r.nxp=exp;
         }
@@ -80,8 +78,7 @@ public class AppExp extends Expression {
         for (int i=rands.length-1; i>=0; i--) {
             args=new Pair(((rands[i]==null) ? FALSE : rands[i].express()), args);
         }
-        args=new Pair(exp.express(), args);
-        if (nxp!=null) args = new Pair(nxp.express(), args);
+        args = new Pair(exp.express(), new Pair(nxp.express(), args));
         return new Pair(nonTail ? sym("App-exp") : sym("TailApp-exp"), args);
     }
 
@@ -111,7 +108,7 @@ public class AppExp extends Expression {
             }
             nxp=s.deserialize(dis);
             nonTail=dis.readBoolean();
-	    allImmediate=dis.readBoolean();
+            allImmediate=dis.readBoolean();
         }
     }
 }

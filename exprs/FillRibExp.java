@@ -47,24 +47,22 @@ public class FillRibExp extends Expression {
         this.exp=exp;
         this.pos=pos;
         this.nxp=nxp;
-	lastAndRatorImmediate=lari;
+        this.lastAndRatorImmediate=lari;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
         r.vlr[pos]=r.acc;
         if (lastAndRatorImmediate) {
-            //immediate rator
             r.acc=exp.getValue(r);
             r.nxp=nxp;
         } else {
-            //rand or non-immediate rator
             r.push(nxp);
             r.nxp=exp;
         }
     }
 
     public Value express() {
-        return new Pair(sym("FillRib-exp"), new Pair(exp.express(), ((nxp==null) ? EMPTYLIST : nxp.express())));
+        return new Pair(sym("FillRib-exp"), new Pair(exp.express(), nxp.express()));
     }
 
     public Value getAnnotation() {

@@ -293,19 +293,16 @@ public class Compiler extends Util {
 	    !(rator instanceof AnnotatedExpr))
 
             System.err.println(warn("nonprocappdetected",((Value)rator).synopsis()));
-        Expression nxp = null;
+        Expression nxp = APPEVAL;
         Expression lastRand = rator;
-	//        if (!isImmediate(rator)) {
-	nxp = APPEVAL;
-	//        }
-	boolean allImmediate=isImmediate(rator);
+        boolean allImmediate=isImmediate(rator);
         for (int i= rands.length-1; i>=0; i--) {
             if (!isImmediate(rands[i])) {
                 nxp = new FillRibExp(lastRand, i, nxp, (i==rands.length-1 &&
 							allImmediate));
                 lastRand = rands[i];
                 rands[i] = null;
-		allImmediate=false;
+                allImmediate=false;
             }
         }
         return new AppExp(lastRand, rands, nxp, nonTail, allImmediate);
