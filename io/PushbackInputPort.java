@@ -2,31 +2,49 @@ package sisc.io;
 
 import java.io.*;
 import sisc.*;
+import sisc.data.SchemeInputPort;
 import sisc.interpreter.*;
 
-public class StreamInputPort extends PushbackInputPort {
-    protected InputStream r;
+abstract public class PushbackInputPort extends SchemeInputPort {
 
-    public StreamInputPort(InputStream in) {
-        this.r=in;
+    protected int pushback = -1;
+
+    public PushbackInputPort() {
     }
 
-    public int readHelper() throws IOException {
-        return r.read();
+    public int read() throws IOException {
+        int c=pushback;
+        if (pushback!=-1)
+            pushback=-1;
+        else 
+            c=readHelper();
+
+        if (c==-1)
+            throw new EOFException();
+
+        return c;
     }
 
-    public boolean ready() throws IOException {
-        return r.available()>0;
+    abstract protected int readHelper() throws IOException;
+
+    public void pushback(int c) {
+        pushback=c;
     }
 
-    public int readHelper(byte[] buff, int offs, 
-                          int count) throws IOException {
-        return r.read(buff, offs, count);
+    public int read(byte[] buff, int offs, 
+                    int count) throws IOException {
+        if (pushback!=-1) {
+            buff[offs]=(byte)pushback;
+            pushback=-1;
+            count--;
+            offs++;
+        }
+        return readHelper(buff, offs, count);
     }
 
-    public void close() throws IOException {
-        r.close();
-    }
+    abstract public int readHelper(byte[] buff, int offs, 
+                                   int count) throws IOException;
+
 }
 /*
  * The contents of this file are subject to the Mozilla Public

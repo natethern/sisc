@@ -2,51 +2,25 @@ package sisc.io;
 
 import java.io.*;
 import sisc.*;
-import sisc.data.SchemeInputPort;
 import sisc.interpreter.*;
 
-public class ReaderInputPort extends SchemeInputPort {
+public class ReaderInputPort extends PushbackInputPort {
     protected Reader r;
-    protected int pushback = -1;
 
     public ReaderInputPort(Reader in) {
         this.r=in;
     }
 
-    public int read() throws IOException {
-        int c=pushback;
-        if (pushback!=-1)
-            pushback=-1;
-        else 
-            c=r.read();
-
-        if (c==-1)
-            throw new EOFException();
-
-        return c;
-    }
-
-    public void pushback(int c) {
-        pushback=c;
+    public int readHelper() throws IOException {
+        return r.read();
     }
 
     public boolean ready() throws IOException {
         return r.ready();
     }
 
-    public int read(char[] buff, int offs, 
-                    int count) throws IOException {
-        if (pushback!=-1) {
-            buff[offs]=(char)pushback;
-            pushback=-1;
-            count--;
-            offs++;
-        }
-        return r.read(buff, offs, count);
-    }
-
-    public int read(byte[] buff, int offs, 
-                    int count) throws IOException {
+    public int readHelper(byte[] buff, int offs, 
+                          int count) throws IOException {
         throw new IOException(liMessage(SISCB, "binaryreadunsup"));
     }
 

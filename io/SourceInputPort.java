@@ -8,15 +8,14 @@ public class SourceInputPort extends StreamInputPort implements InputPort {
     public String sourceFile;
 
     public SourceInputPort(InputStream in, String file) {
-	super(in);
-	line=1;
-	column=1;
-	sourceFile=file;
-
+        super(in);
+        line=1;
+        column=1;
+        sourceFile=file;
     }
 
-    public int read() throws IOException {
-        int c=super.read();
+    public int readHelper() throws IOException {
+        int c=super.readHelper();
         if (c=='\n') {
             line++;
             column=1;
