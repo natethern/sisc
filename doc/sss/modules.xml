@@ -551,6 +551,17 @@
         number of methods are provided that are helpful for this
         domain.
       </para>
+      <para>
+        The <type>ExpressionVisitor</type> passed to visit contains
+        only one method, <function>visit</function>, which bears the
+        same contract as the <function>visit</function> above.  When
+        called, an Expression would then call the
+        ExpressionVisitor's <function>visit</function> method once for
+        each nested Expression.  This method is used during
+        serialization and during printing to detect cycles in data
+        and code structures.
+      </para>
+    </sect2>
       <sect3>
         <title>Deserializer methods</title>
         <para>
@@ -776,16 +787,6 @@
           </blockquote>
         </para>
       </sect3>
-      <para>
-        The <type>ExpressionVisitor</type> passed to visit contains
-        only one method, <function>visit</function>, which bears the
-        same contract as the <function>visit</function> above.  When
-        called, an Expression would then call the
-        ExpressionVisitor's <function>visit</function> method once for
-          each nested Expression.  This method is used during
-        serialization and during printing to detect cycles in data
-        and code structures.
-      </para>
     </sect2>
   </sect1>
 </chapter>
