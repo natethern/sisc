@@ -16,11 +16,7 @@ public class ApplyParentFrame extends Procedure {
     }
 
     public void apply(Interpreter r) throws ContinuationException {
-        if (r.vlr.length==1) {
-            r.acc=r.vlr[0];
-        }
-        else r.acc=new Values(r.vlr);
-        r.pop(c.parent);
+	c.parent.apply(r);
     }
 
     public void display(ValueWriter w) throws IOException {
