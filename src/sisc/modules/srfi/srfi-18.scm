@@ -29,7 +29,6 @@
                                  (let ([rv (thunk)])
                                    (abandon-mutexes (current-thread))
                                    rv)))))])
-    (thread/daemon! thread #t)
     (unless (null? name)
       (set-annotation! thread 'name (car name)))
     thread))
