@@ -91,17 +91,6 @@
   (lambda ()
     (gen-sym '%)))
 
-(define list*
-  (lambda args
-    (if (null? args) '()
-        (if (null? (cdr args)) 
-	    (car args)
-	    (cons (car args) (apply list* (cdr args)))))))
-
-(define top-level-bound?
-  (lambda (x)
-    (getprop x '*toplevel*)))
-
 (define ormap
   (lambda (proc list1)
     (if (not (null? list1))
