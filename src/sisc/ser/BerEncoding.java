@@ -36,4 +36,13 @@ public abstract class BerEncoding {
         }
         return val;
     }
+
+    /*---helper functions---*/
+    public static short readBerShort(DataInput dis) throws IOException {
+        return (short)BlockDeserializer.readBer(dis);
+    }
+
+    public static int readBer(DataInput dis) throws IOException {
+        return (int)readBerLong(dis);
+    }
 }

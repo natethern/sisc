@@ -217,18 +217,21 @@
                             v
                             (string-append v "/")))))))
 
-(define *FILE-HANDLERS* '())
-(define (add-file-handler extension thunk)
-  (if (not (assq extension *FILE-HANDLERS*))
-      (set! *FILE-HANDLERS*
-        (cons (cons extension thunk) *FILE-HANDLERS*))))
-(define file-handler
-  (let ([_load load])
-    (lambda (extension)
-      (cond [(assq (string->symbol (string-downcase extension))
-                   *FILE-HANDLERS*)
-             => cdr]
-            [else _load]))))
+(define file-handler)
+(define add-file-handler)
+(let ([*FILE-HANDLERS* '()])
+  (set! add-file-handler 
+        (lambda (extension thunk)
+          (if (not (assq extension *FILE-HANDLERS*))
+              (set! *FILE-HANDLERS*
+                    (cons (cons extension thunk) *FILE-HANDLERS*)))))
+  (set! file-handler
+    (let ([_load load])
+      (lambda (extension)
+        (cond [(assq (string->symbol (string-downcase extension))
+                     *FILE-HANDLERS*)
+               => cdr]
+              [else _load])))))
 
 (let ([normalize
        (lambda (proc)

@@ -6,9 +6,9 @@ import java.io.*;
 import sisc.data.*;
 import sisc.env.SymbolicEnvironment;
 
-public class BinaryDeserializer extends DeserializerImpl {
+public class BlockDeserializer extends DeserializerImpl implements LibraryDeserializer {
 
-    Class[] classPool;
+    Map classPool;
     Expression[] alreadyReadObjects;
     int[] offsets, sizes;
     SeekableDataInput raf;
@@ -17,19 +17,18 @@ public class BinaryDeserializer extends DeserializerImpl {
     Library baseLib;
     LinkedList deserQueue;
 
-    public BinaryDeserializer(SeekableDataInput input, 
-                              Class[] c, int[] o, int[] l) throws IOException {
+    public BlockDeserializer(SeekableDataInput input, 
+                             Map classes, int[] o, int[] l) throws IOException {
         this.raf=input;
         base=raf.getFilePointer();
-        classPool=c;
+        classPool=classes;
+        
         offsets=o;
         sizes=l;
         alreadyReadObjects=new Expression[offsets.length];
         deserQueue=new LinkedList();
     }
-
-    int indent=0;
-
+    
     public final Expression readExpression() throws IOException {
         return readExpression(false);
     }
@@ -37,9 +36,8 @@ public class BinaryDeserializer extends DeserializerImpl {
     public final Expression readInitializedExpression() throws IOException {
         return readExpression(true);
     }
-
+    int indent=0;
     public Expression readExpression(boolean flush) throws IOException {
-        indent++;
         long pos=raf.getFilePointer();
         int type=readInt();
         int definingOid = -1;
@@ -48,7 +46,7 @@ public class BinaryDeserializer extends DeserializerImpl {
             //Read the stream object type, values above 15 of which represent
             //shared objects
             switch(type) {
-            case 2:
+            case 2: //shared expressions
                 definingOid=readInt();
                 if (alreadyReadObjects[definingOid] != null) {
                     int sc=sizes[definingOid];
@@ -57,7 +55,7 @@ public class BinaryDeserializer extends DeserializerImpl {
                     }
                     return alreadyReadObjects[definingOid];
                 } else flush=true;
-            case 0:
+            case 0: //ordinary expressions
                 Expression e;
                 Class clazz=readClass();
                 e=(Expression)clazz.newInstance();
@@ -74,9 +72,14 @@ public class BinaryDeserializer extends DeserializerImpl {
                     if (flush) deserLoop(start);
                 }
                 return e;
-            case 1:
+            case 1: //null
                 return null;
-            default:
+            case 3: //Class Definitions (SLL3)
+                int cid=readInt();
+                Class c=readClass();
+                classPool.put(new Integer(cid), c);
+                return readExpression(flush);
+            default: //expression references
                 return fetchShared(type-16);
             }
         } catch (InstantiationException ie) {
@@ -85,9 +88,7 @@ public class BinaryDeserializer extends DeserializerImpl {
         } catch (IllegalAccessException iae) {
             iae.printStackTrace();
             throw new IOException(iae.getMessage());
-        } finally {
-            indent--;
-        }
+        } finally { indent --; }
     }
 
     Expression deser() throws IOException {
@@ -137,7 +138,7 @@ public class BinaryDeserializer extends DeserializerImpl {
     }
 
     public Class readClass() throws IOException {
-        return classPool[readInt()];
+        return (Class)classPool.get(new Integer(readInt()));
     }
         
     public int read(byte[] b) throws IOException {
@@ -182,7 +183,7 @@ public class BinaryDeserializer extends DeserializerImpl {
     }
 
     public short readShort() throws IOException {
-        return readBerShort(raf);
+        return BerEncoding.readBerShort(raf);
     }
 
     public String readUTF() throws IOException {
@@ -222,19 +223,10 @@ public class BinaryDeserializer extends DeserializerImpl {
         return null; //not supported;
     }
 
-    /*---helper functions---*/
-    public static short readBerShort(DataInput dis) throws IOException {
-        return (short)readBer(dis);
-    }
-
-    public static int readBer(DataInput dis) throws IOException {
-        return (int)readBerLong(dis);
-    }
-
     public static void main(String[] args) throws IOException {
         ByteArrayOutputStream bos=new ByteArrayOutputStream();
         DataOutputStream dos=new DataOutputStream(bos);
-        StreamSerializer.writeBer(-1, dos);
+        BlockSerializer.writeBer(-1, dos);
         byte[] b=bos.toByteArray();
         for (int i=0; i<b.length; i++) {
             System.err.println(Integer.toHexString(b[i]&0xff));

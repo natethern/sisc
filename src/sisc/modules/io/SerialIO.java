@@ -57,7 +57,8 @@ public class SerialIO extends IndexedProcedure {
     private static DeserializerPort openSerInFile(Interpreter f, URL url)
         throws ContinuationException {
         try {
-            return new DeserializerPort(new BufferedInputStream(IO.getURLInputStream(url))); 
+            return new DeserializerPort(f.getCtx(),
+                                        new BufferedInputStream(IO.getURLInputStream(url))); 
         } catch (IOException e) {
             IO.throwIOException(f, liMessage(IO.IOB, "erroropening", 
                                              url.toString()), e);

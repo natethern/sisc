@@ -128,7 +128,7 @@ public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
         tempFile.deleteOnExit();
         OutputStream fos=new BufferedOutputStream(new FileOutputStream(tempFile));
         Vector classv=new Vector(classes);
-        StreamSerializer ss=new StreamSerializer(fos, classv, epv);
+        BlockSerializer ss=new BlockSerializer(fos, classv, epv);
 
         for (Iterator i=entryPoints.iterator(); i.hasNext();) {
             Expression exp=(Expression)i.next();

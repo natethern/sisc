@@ -161,7 +161,7 @@ public class LibraryAE extends MemorySymEnv {
 
     public void deserialize(Deserializer d) throws IOException {
         setName((Symbol)d.readExpression());
-        base=d.getLibrary();
+        base=((LibraryDeserializer)d).getLibrary();
         int size=d.readInt();
         addressMap=new HashMap(size);
         for (int i=0; i<size; i++) {

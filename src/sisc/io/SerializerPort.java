@@ -2,19 +2,20 @@ package sisc.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 
 import sisc.data.Value;
+import sisc.ser.StreamSerializer;
 
 public class SerializerPort
     extends StreamOutputPort
     implements SerialOutputPort {
 
+    public StreamSerializer serializer;
+    
     public SerializerPort(OutputStream out, boolean aflush)
         throws IOException {
-
-        super(new ObjectOutputStream(out), aflush);
+        super(out, aflush);
+        serializer=new StreamSerializer(out);
     }
 
     public void writeSer(Value v) throws IOException {
@@ -23,7 +24,17 @@ public class SerializerPort
     }
 
     protected void writeSerHelper(Value v) throws IOException {
-        ((ObjectOutput)out).writeObject(v);
+        serializer.writeExpression(v);
+    }
+    
+    public void flush() throws IOException {
+	serializer.flush();
+	super.flush();
+    }
+
+    public void close() throws IOException {
+	serializer.close();
+	super.close();
     }
 }
 /*

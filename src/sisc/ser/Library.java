@@ -7,10 +7,10 @@ import sisc.data.*;
 import sisc.util.Util;
 
 public class Library extends Util {
-    static final String LIBRARY_VERSION="SLL2";
+    static final String LIBRARY_VERSION="SLL3";
     
     protected String name;
-    protected BinaryDeserializer lib;
+    protected BlockDeserializer lib;
     protected Map names;
 
     public static Library load(URL u) throws IOException, ClassNotFoundException {
@@ -28,33 +28,34 @@ public class Library extends Util {
             throw new IOException(liMessage(SISCB, "unsuplib"));
 
         String libname=di.readUTF();
-        Class[] classes=new Class[BinaryDeserializer.readBer(di)];
-        for (int i=0; i<classes.length; i++) {
-            classes[i]=Class.forName(di.readUTF());
+        int classCount=BerEncoding.readBer(di);
+        Map classes=new HashMap(classCount);
+        for (int i=0; i<classCount; i++) {
+            classes.put(new Integer(i), Class.forName(di.readUTF()));
         }
-        int socount=BinaryDeserializer.readBer(di);
+
+        int socount=BlockDeserializer.readBer(di);
         int[] sharedObjectOffsets=new int[socount];
         int[] sharedObjectSizes=new int[socount];
 
         HashMap names=new HashMap();
 
         for (int i=0; i<socount; i++) {
-            sharedObjectOffsets[i]=BinaryDeserializer.readBer(di);
-            sharedObjectSizes[i]=BinaryDeserializer.readBer(di);
+            sharedObjectOffsets[i]=BlockDeserializer.readBer(di);
+            sharedObjectSizes[i]=BlockDeserializer.readBer(di);
         }
-        
-        int symtableLength=BinaryDeserializer.readBer(di);
+        int symtableLength=BlockDeserializer.readBer(di);
         for (int i=0; i<symtableLength; i++) {
             String s=di.readUTF();
-            int ep=BinaryDeserializer.readBer(di);
+            int ep=BlockDeserializer.readBer(di);
             names.put(Symbol.intern(s), new Integer(ep));
         }
 
-        return new Library(libname, new BinaryDeserializer(di, classes, sharedObjectOffsets, sharedObjectSizes), names);
+        return new Library(libname, new BlockDeserializer(di, classes, sharedObjectOffsets, sharedObjectSizes), names);
     }
         
         /* All this and more at your */ 
-    public Library(String name, BinaryDeserializer lib, Map names) {
+    public Library(String name, BlockDeserializer lib, Map names) {
         this.name=name;
         this.lib=lib;
         this.names=names;

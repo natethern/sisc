@@ -19,7 +19,6 @@ public interface Deserializer extends ObjectInput {
 
     SymbolicEnvironment readSymbolicEnvironment() throws IOException;
     Class readClass() throws IOException;
-    Library getLibrary();
 }
 
 /*

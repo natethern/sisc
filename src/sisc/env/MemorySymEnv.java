@@ -220,7 +220,8 @@ public class MemorySymEnv extends Value
     public void deserializeSidecar(Deserializer s) throws IOException {    
         int scsize=s.readInt();
         for (int i=0; i<scsize; i++) {
-            Symbol key=(Symbol)s.readExpression();
+            Expression e=s.readExpression();
+            Symbol key=(Symbol)e;
             sidecars.put(key, s.readSymbolicEnvironment());
         }
     }

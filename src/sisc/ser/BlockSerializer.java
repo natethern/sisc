@@ -4,18 +4,35 @@ import java.util.*;
 import java.io.*;
 import sisc.data.Expression;
 
-public class StreamSerializer extends SLL2Serializer {
+public class BlockSerializer extends SLL2Serializer {
 
-    private Map entryPoints, classes;
-    private HashMap ci;
-    private int nextEp, nextClassIdx;
-    
-    public StreamSerializer(OutputStream out) throws IOException {
+    private Vector classes;
+    private int[] sizes;
+    private Expression[] entryPoints;
+    private HashMap epi, ci;
+
+    public BlockSerializer(OutputStream out, Vector classes, 
+                           Expression[] entryPoints) throws IOException {
         super(out);
-        this.classes=new HashMap();
-        this.entryPoints=new HashMap();
+        this.classes=classes;
+        this.entryPoints=entryPoints;
+        sizes=new int[entryPoints.length];
+        
+        ci=new HashMap();
+        for (int i=0; i<classes.size(); i++) {
+            ci.put(classes.elementAt(i), new Integer(i));
+        }
+
+        epi=new HashMap();
+        for (int i=0; i<entryPoints.length; i++) {
+            epi.put(entryPoints[i], new Integer(i));
+        }
     }
-    
+
+    int[] getSizes() {
+        return sizes;
+    }
+
     public final void writeExpression(Expression e) throws IOException {
         writeExpression(e, false);
     }
@@ -42,34 +59,39 @@ public class StreamSerializer extends SLL2Serializer {
             return;
         } 
 
+        Integer epIndex=(Integer)epi.get(e);
+
         int sizeStartOffset = -1;
-        int posi=nextEp;
+        int posi=-1;
+
+        if (epIndex!=null) {
+            posi=epIndex.intValue();
+            //entry point / shared expression
+            if (seen(e)) {
+                writeSeenEntryPoint(posi);
+                return;
+            }  else {
+                sizeStartOffset=writeNewEntryPointMarker(posi, e);
+                flush=true;
+            }
+        } else writeOrdinaryExpressionMarker();
         
-        if (seen(e)) {
-            Integer epIndex=(Integer)entryPoints.get(e);
-            writeSeenEntryPoint(epIndex.intValue());
-            return;
-        }  else {
-            sizeStartOffset=writeNewEntryPointMarker(nextEp++, e);
-            flush=true;
-        }
-        
-        writeExpressionSerialization(e, new SerJobEnd(posi, sizeStartOffset), 
-                                     flush);
+        if (writeExpressionSerialization(e, new SerJobEnd(posi, sizeStartOffset), 
+                                         flush)) {
+            //If true, the item was serialized contiguously, so we can
+            //record its size now
+            if (sizeStartOffset != -1)
+                sizes[posi] = cos.position - sizeStartOffset;
+        } // else we'll get it in a callback with a SerJobEnd
     }
     
     public void writeClass(Class c) throws IOException {
-        Integer classIdx=(Integer)classes.get(c);
-        if (classIdx == null) {
-            writeInt(nextClassIdx);
-            classes.put(c, new Integer(nextClassIdx++));
-            writeUTF(c.getName());
-        } else {
-            writeInt(classIdx.intValue());
-        }
+        writeInt(((Integer)ci.get(c)).intValue());
     }
 
     protected void serializeEnd(SerJobEnd j) {
+        if (j.sizeStartOffset != -1)
+            sizes[j.posi] = cos.position - j.sizeStartOffset;
     }
 }
 

@@ -2,19 +2,22 @@ package sisc.io;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
 
 import sisc.data.Value;
+import sisc.interpreter.AppContext;
+import sisc.ser.StreamDeserializer;
 
 public class DeserializerPort
     extends StreamInputPort
     implements SerialInputPort {
 
-    public DeserializerPort(InputStream in)
+    public StreamDeserializer deserializer;
+    
+    public DeserializerPort(AppContext ctx, InputStream in)
         throws IOException {
 
-        super(new ObjectInputStream(in));
+        super(in);
+        deserializer=new StreamDeserializer(ctx, in);
     }
 
     public Value readSer() throws IOException {
@@ -22,11 +25,7 @@ public class DeserializerPort
     }
 
     protected Value readSerHelper() throws IOException {
-        try {
-            return (Value)((ObjectInput)in).readObject();
-        } catch (ClassNotFoundException e) {
-            throw new IOException("class not found: " + e.getMessage());
-        }
+        return (Value)deserializer.readExpression();
     }
 }
 /*
