@@ -101,9 +101,9 @@
     </para>
     <para>
       Once created, a thread can be in one of four states:
-      <emphasis>ready</emphasis>, <emphasis>running</emphasis>, or
+      <emphasis>ready</emphasis>, <emphasis>running</emphasis>, 
       <emphasis>finished</emphasis>, or
-      <emphasis>finishd-with-error</emphasis>.  The first two
+      <emphasis>finished-with-error</emphasis>.  The first two
       states indicate a newly created thread and a running thread,
       repectively.  The last represent the end stages of a thread, the
       former indicating a thread that has exited cleanly, the latter
