@@ -733,6 +733,7 @@
    flush-output-port
    write
    display
+   newline
    write-char
    write-block
    write-string
@@ -841,12 +842,10 @@
    (lambda ()
      (let ([curin (current-input-port)]
            [curout (current-output-port)])
-       (unless (type<= curin <native-input-port>)
-         (set! current-input-port (make-parameter
-                                   (make <native-input-port> curin))))
-       (unless (instance-of? curin <native-output-port>)
-         (set! current-output-port (make-parameter
-                                    (make <native-output-port> curout))))))))
+       (unless (instance-of? curin <native-input-port>)
+         (current-input-port (make <native-input-port> curin)))
+       (unless (instance-of? curout <native-output-port>)
+         (current-output-port (make <native-output-port> curout)))))))
 
 (module serial-io
   (serialize

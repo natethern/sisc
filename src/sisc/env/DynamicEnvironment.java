@@ -21,9 +21,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
 
     public AppContext ctx;
 
-    public SchemeInputPort in;
-    public SchemeOutputPort out;
-
+    public Value in, out;
+    
     public boolean caseSensitive = Defaults.CASE_SENSITIVE;
     public boolean printShared = Defaults.PRINT_SHARED;
     public boolean vectorLengthPrefixing = Defaults.VECTOR_LENGTH_PREFIXING;
@@ -94,6 +93,14 @@ public class DynamicEnvironment extends Util implements Cloneable {
         } catch (AccessControlException e) {}
     }
 
+    public SchemeInputPort getCurrentInPort() {
+        return inport(in);
+    }
+
+    public SchemeOutputPort getCurrentOutPort() {
+        return outport(out);
+    }
+
     public Object clone() throws CloneNotSupportedException {
         DynamicEnvironment res = (DynamicEnvironment)super.clone();
         res.parser = new Parser(new Lexer());
@@ -143,7 +150,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
     }
 
     public void setInputPort(Value v) {
-        in = inport(v);
+        in = v;
     }
 
     public Value getOutputPort() {
@@ -151,7 +158,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
     }
 
     public void setOutputPort(Value v) {
-        out = outport(v);
+        out = v;
     }
 
     public Value getPrintShared() {

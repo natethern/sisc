@@ -104,6 +104,9 @@
 (define (write-block buf offset length . port)
   (gio/write-block buf offset length (outport port)))
 
+(define (newline . port)
+  (apply display #\newline port))
+  
 (define (flush-output-port . port)
   (gio/flush-output-port (outport port)))
 

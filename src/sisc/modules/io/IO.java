@@ -250,31 +250,29 @@ public class IO extends IndexedProcedure {
             switch (id) {
             case CHARREADY:
                 try {
-                    return truth(f.dynenv.in.ready());
+                    return truth(f.dynenv.getCurrentInPort().ready());
                 } catch (IOException e) {
                     return FALSE;
                 }
             case FLUSHOUTPUTPORT:
                 try {
-                    f.dynenv.out.flush();
+                    f.dynenv.getCurrentOutPort().flush();
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "errorflushing", 
                                                   f.dynenv.out.toString()), e);
                 }
                 return VOID;
             case PEEKCHAR:
-                Value v=readChar(f, f.dynenv.in);
+                Value v=readChar(f, f.dynenv.getCurrentInPort());
                 if (v instanceof SchemeCharacter)
-                    f.dynenv.in.pushback(((SchemeCharacter)v).c);
+                    f.dynenv.getCurrentInPort().pushback(((SchemeCharacter)v).c);
                 return v;
             case READ:
-                return read(f, f.dynenv.in);
+                return read(f, f.dynenv.getCurrentInPort());
             case READCHAR:
-                return readChar(f, f.dynenv.in);
+                return readChar(f, f.dynenv.getCurrentInPort());
             case READCODE:
-                System.err.println("Shaazzaa!");
-        
-                return readCode(f, f.dynenv.in);
+                return readCode(f, f.dynenv.getCurrentInPort());
             default:
                 throwArgSizeException();
             }
@@ -290,9 +288,9 @@ public class IO extends IndexedProcedure {
                     return FALSE;
                 }
             case DISPLAY:
-                return displayOrWrite(f, f.dynenv.out, f.vlr[0], true);
+                return displayOrWrite(f, f.dynenv.getCurrentOutPort(), f.vlr[0], true);
             case WRITE:
-                return displayOrWrite(f, f.dynenv.out, f.vlr[0], false);
+                return displayOrWrite(f, f.dynenv.getCurrentOutPort(), f.vlr[0], false);
             case PEEKCHAR:
                 inport=inport(f.vlr[0]);
                 Value v=readChar(f, inport);
@@ -429,7 +427,7 @@ public class IO extends IndexedProcedure {
                 return VOID;
             case WRITECHAR:
                 try {
-                    f.dynenv.out.write(character(f.vlr[0]));
+                    f.dynenv.getCurrentOutPort().write(character(f.vlr[0]));
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "errorwriting",
                                                   f.dynenv.out.toString(),

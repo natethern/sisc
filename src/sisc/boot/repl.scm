@@ -79,7 +79,8 @@
         (letrec ([handler
                   (lambda ()
                     (_signal-unhook! "INT" handler)
-                    (|@threading-native::thread/interrupt| (repl-thread)))])
+                    (if (repl-thread) 
+                        (|@threading-native::thread/interrupt| (repl-thread))))])
           handler))
       (lambda () #f)))
 

@@ -139,9 +139,15 @@ public class REPL {
 
     public void go() {
         try {
-            primordialThread.env.out.write("SISC ("+Util.VERSION+") - " + 
-                                           appName + "\n");
-        } catch (IOException e) {}
+            Interpreter r=Context.enter(appName);
+            r.eval("(display \"SISC ("+Util.VERSION+") - " + 
+                   appName + "\\n\")");
+        } catch (IOException e) {
+            
+        } catch (SchemeException se) {
+        } finally {
+            Context.exit();
+        }
 
         if (primordialThread.thunk == null) {
             System.err.println(Util.liMessage(Util.SISCB, "heapnotfound"));

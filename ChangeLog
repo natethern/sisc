@@ -5,7 +5,10 @@
 	  
 	* Implemented fine grained library-delta serialization and moved
 	  the interrupt handler's thread off the stack.  See bug 1046307.
-	  
+
+	* Fixed various mismatches between generic I/O and the low level
+	  I/O functions scattered in the source (current-*-port for example).
+	  	  
 2004-10-13  Scott G. Miller   <scott@sgmiller.org>
 
 	* Fixed bug in psyntax that broke shadowing of imports at the top
