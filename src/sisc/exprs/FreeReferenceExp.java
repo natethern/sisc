@@ -1,18 +1,53 @@
 package sisc.exprs;
 
 import sisc.data.*;
+
 import java.io.*;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
+import sisc.exprs.fp.OptimisticExpression;
+import sisc.exprs.fp.OptimisticHost;
 import sisc.util.ExpressionVisitor;
 import sisc.util.FreeReference;
 import sisc.util.UndefinedVarException;
 
-public class FreeReferenceExp extends Expression implements Immediate {
+public class FreeReferenceExp extends Expression 
+    implements Immediate, OptimisticExpression {
 
+    /**
+     * @author scgmille
+     *
+     * TODO To change the template for this generated type comment go to
+     * Window - Preferences - Java - Code Style - Code Templates
+     */
+    public class NonImmediateFreeReferenceExp extends Expression {
+
+        FreeReferenceExp base;
+        
+        public NonImmediateFreeReferenceExp(FreeReferenceExp base) {
+            this.base=base;
+        }
+        
+        /* (non-Javadoc)
+         * @see sisc.data.Expression#eval(sisc.interpreter.Interpreter)
+         */
+        public void eval(Interpreter r) throws ContinuationException {
+            base.eval(r);
+        }
+
+        /* (non-Javadoc)
+         * @see sisc.data.Expression#express()
+         */
+        public Value express() {
+            return list(sym("NIFreeReference-exp"), ref.getName());
+        }
+    }
+    
     private FreeReference ref;
+    private OptimisticHost host;
+    private int uexpPosition;
 
     public FreeReferenceExp(FreeReference ref) {
         this.ref = ref;
@@ -36,6 +71,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
             return ref.getValue();
         } catch (UndefinedVarException e) {
             error(r, liMessage(SISCB,"undefinedvar", e.var));
+            host.alter(uexpPosition, new NonImmediateFreeReferenceExp(this));
             return null; //won't get here
         }
     }
@@ -73,6 +109,21 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public FreeReference getReference() {
         return ref;
+    }
+
+    /* (non-Javadoc)
+     * @see sisc.exprs.fp.OptimisticExpression#setHost(sisc.exprs.fp.OptimisticHost, int)
+     */
+    public void setHost(OptimisticHost host, int uexpPosition) {
+        this.host=host;
+        this.uexpPosition=uexpPosition;
+    }
+
+    /* (non-Javadoc)
+     * @see sisc.exprs.fp.OptimisticExpression#dropSafe()
+     */
+    public void dropSafe() {
+        host=null;
     }
 }
 /*

@@ -19,6 +19,12 @@ public interface OptimisticExpression {
      */
     public void setHost(OptimisticHost host, int uexpPosition);
     
+    /**
+     * Called to clear the safe expressions
+     *
+     */
+    public void dropSafe();
+
 }
 /*
  * The contents of this file are subject to the Mozilla Public
