@@ -6,10 +6,8 @@
                                            (strict-r5rs-compliance))))))))
                                            
 (define (opt:optimize e)
-  (let ([scanned (scan e '() '())])
-    (write scanned) (newline)
-    (let-values ([(rv state) (opt e scanned)])
-      rv)))
+  (let-values ([(rv state) (scan e '() '())])
+    rv))
 
 (define (opt e state)
   (match e
