@@ -61,11 +61,8 @@ The code in init-expr typically does one of the following
 - load file(s) with LOAD - all file loading is performed relative the
 servlet context root.
 
-- load libraries with REQUIRE-LIBRARY - prior to that the library-path
-configuration parameter would typically be modified to include a
-directory relative to the servlet context root, e.g.
-  (library-path-prepend (normalize-url (current-directory)
-                                       "scheme-lib/"))
+- load libraries with REQUIRE-LIBRARY - this will use the current Java
+classpath to locate and load files.
 
 
 Access control
