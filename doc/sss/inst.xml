@@ -140,39 +140,57 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
     </para>
   </sect1>
   <sect1 id="FileExtensions">
-    <title>Common File Extensions</title>
-    <para>
-      &SISC; supports a number of file types for loading Scheme code
-      into the interpreter.  The common extensions are:
-    </para>
-    <itemizedlist>
-      <listitem>
-        <para>
-          <literal>scm</literal> - Scheme source code
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>sce</literal> - Scheme code expanded.  This type of
-          code has been processed by the syntax expander and contains
-          only core Scheme forms.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>sll</literal> - &SISC; Compiled Library.  This
-          contains expanded and compiled code in a &SISC; specific
-          representation.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>shp</literal> - (Pronounced sheep) &SISC; heap file.
-          This file contains all the compiled code loaded when &SISC; 
-          starts up.
-        </para>
-      </listitem>
-    </itemizedlist>
+    <title>Running Scheme Programs</title>
+    <sect2 id="Loading">
+      <title>Loading</title>
+      <para>
+        &SISC; supports loading Scheme programs using the &R5RS;
+        optional procedure <function>load</function>.  A number of file 
+        types for loading Scheme code are supported.  
+        The common extensions are:
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            <literal>scm</literal> - Scheme source code
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>sce</literal> - Scheme code expanded.  This type of
+            code has been processed by the syntax expander and contains
+            only core Scheme forms.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>sll</literal> - &SISC; Compiled Library.  This
+            contains expanded and compiled code in a &SISC; specific
+            representation.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>shp</literal> - (Pronounced sheep) &SISC; heap file.
+            This file contains all the compiled code loaded when &SISC; 
+            starts up.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+    <sect2 id="Scheme Scripts">
+      <title>Scheme Shell Scripts</title>
+      <para>
+        On Unix or Unix-like systems, &SISC; supports SRFI-22, a
+        mechanism for writing shell-like scripts that can be invoked
+        directly as executable programs.  The text of the SRFI, which
+        can be found at 
+        <ulink url="http://srfi.schemers.org/srfi-22/srfi-22.html">
+          
+          <citetitle>http://srfi.schemers.org</citetitle>
+        </ulink>, describes how such programs are written.  
+      </para>
+    </sect2>
   </sect1>
 </chapter>
 <!-- Keep this comment at the end of the file
