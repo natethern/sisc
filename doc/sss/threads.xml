@@ -296,11 +296,9 @@
       If not caught, the thread will terminate in the
       <emphasis>finished-with-error</emphasis> state, and the
       raised error will be rethrown if
-      <function>thread/result</function> is called.
-      The error-continuation of the raised error will be the
-      continuation in place at the time the error was raised, and
-      thus can be used to restart the interrupted thread from the
-      point it left off.
+      <function>thread/result</function> is called.  The error-continuation
+      of the error thrown inside the thread, when invoked with no arguments,
+      will restart the computation exactly where it left off.
     </para>
     <warning>
       <title>Final Continuation of a Thread</title>
