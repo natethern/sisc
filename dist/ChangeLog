@@ -1,3 +1,7 @@
+2001-12-04  Matthias Radestock  <matthias@sorted.org>
+
+	* made literal strings, vectors and lists immutable
+
 r1.3.0  Major changes
 
 	* Removed BeginExp, DefineExp, FreeSetExp, IfExp, and LexicalSetExp,
