@@ -21,7 +21,9 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public Value getValue(Interpreter r) throws ContinuationException {
 	try {
-	    return (Value)v.val;
+	    if (!v.shadowed())
+		return (Value)v.val;
+	    else throw new NullPointerException();
 	} catch (NullPointerException e) {
 	    try {
 		v=(Box)lenv.lookup(sym);

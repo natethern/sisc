@@ -5,10 +5,18 @@ import sisc.data.*;
 
 public class Box extends Value {
     public Expression val;
-    protected boolean locked=false;
+    protected boolean locked=false, shadowed=false;
 
     public Box(Expression val) {
 	this.val=val;
+    }
+
+    public void shadow() {
+	shadowed=true;
+    }
+
+    public boolean shadowed() {
+	return shadowed;
     }
 
     public void lock() {

@@ -196,14 +196,18 @@ public class Interpreter extends Util {
 
     public void define(Symbol s, Value v, Symbol context) {
         AssociativeEnvironment contenv=getContextEnv(context);	
+	Box fr=null;
 	try {
-	    Box fr=(Box)contenv.lookup(s);
+	    fr=(Box)contenv.lookup(s);
 	    fr.set(v);
+	} catch (ImmutableException e) {
+	    fr.shadow();
+	    contenv.define(s, new Box(v));
 	} catch (Exception e) {
 	    if (e instanceof UndefinedException || 
-		e instanceof ClassCastException ||
-		e instanceof ImmutableException) 
+		e instanceof ClassCastException)
 		contenv.define(s, new Box(v));
+	    
 	    else
 		throw (RuntimeException)e;
 	}

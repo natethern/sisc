@@ -18,13 +18,15 @@ public class FreeSetEval extends Expression {
 	try {
 	    v.set(r.acc);
 	} catch (NullPointerException e) {
+	    Box b=null;
 	    try {
-		Box b=(Box)senv.lookup(lhs);
+		b=(Box)senv.lookup(lhs);
 		v=b;
 		b.set(r.acc);
 	    } catch (UndefinedException e2) {
 		senv.define(lhs, v=new Box(r.acc));
 	    } catch (ImmutableException e2) {
+		b.shadow();
 		senv.define(lhs, v=new Box(r.acc));
 	    }
 	} catch (ImmutableException e3) {

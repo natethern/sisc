@@ -1009,7 +1009,7 @@ public class Quantity extends Value {
 	case INTEG:
 	    return (double)i.intValue();
 	case RATIO:
-	    return i.divide(de).doubleValue();
+	    return ratioToDecimal(i,de).doubleValue();
 	}
 	return 0.0;
     }

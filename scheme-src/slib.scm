@@ -335,4 +335,5 @@
 
 (slib:load (in-vicinity (library-vicinity) "require"))
 
-;; end of chez.init
+(define (1- x) (- x 1))
+(define (1+ x) (+ x 1))
