@@ -1,3 +1,9 @@
+2002-03-29  Matthias Radestock  <matthias@sorted.org>
+
+	* Revised generic functions module. It's now called
+	  "generic-procedures" and contains numerous bug fixes, changes
+	  and enhancements
+
 2002-03-15  Scott G. Miller <scgmille@freenetproject.org>
 	
 	* Fixed SQRT for large integers, with the side effect

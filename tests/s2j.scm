@@ -1,7 +1,8 @@
 (import s2j)
+(import generic-procedures)
 (define-generic value-of)
 (define-generic index-of)
-(define-generic app append) ;;do not overwrite Scheme's append
+(define-generic app (generic-java-procedure 'append)) ;;do not overwrite Scheme's append
 (define-generic to-string)
 ;;test calling of constructor
 (define sb (make <jstringbuffer> (->jstring "foo")))
@@ -9,7 +10,6 @@
 (app sb (->jstring "foo"))
 (app sb sb)
 ;;test calling of static methods
-(value-of (->jstring "foo") (->jint 1234))
 (value-of <jstring> (->jint 1234))
 ;;test overloading of Java methods in Scheme...
 ;;Wouldn't it be nice if StringBuffer.indexOf could take a char as an
@@ -21,14 +21,15 @@
 ;;test rest arg handling
 ;;Wouldn't it be nice if StringBuffer.append could take any number of
 ;;arguments? Well, now it can - as long as we call it from Scheme :)
-(define-method (app (<jstringbuffer> buf) . rest)
-  (for-each (lambda (x) (app buf x)) rest)
+(define-method (app (next: next-method)
+                    (<jstringbuffer> buf) . rest)
+  (for-each (lambda (x) (next-method buf x)) rest)
   buf)
 (app sb (->jstring "foo") (->jint 1) (->jstring "bar"))
 ;test of "next-method" functionality.
 (define <java.lang.Character> (java-class "java.lang.Character"))
 (define-method (value-of (next: next-method)
-                         (<jstring> s)
+                         ((meta <jstring>) s)
                          (<java.lang.Character> c))
   (display "\nFOUND\n")
   (next-method s c))
@@ -36,13 +37,13 @@
 ;;test overloading of Java constructors in Scheme...
 (define-constructor (<jstringbuffer> (next: next-method) (<jstring> s))
   (display "\nHERE\n")
-  (next-method))
+  (next-method s))
 (make <jstringbuffer> (->jstring "foo"))
 ;scoping
 (let ()
   (define-generic value-of)
   (define-method (value-of (next: next-method)
-                           (<jstring> s)
+                           ((meta <jstring>) s)
                            (<java.lang.Character> c))
     (display "\nLOCAL\n")
     (next-method s c))

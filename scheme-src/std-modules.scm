@@ -95,22 +95,33 @@
   (import threading-module)
   (include "../modules/thread.scm"))
 
-(module generic-functions 
-  ((define-generic generic-function)
-   (define-method add-method generic-function-name)
-   (define-constructor add-constructor)
+(module generic-procedures
+  (meta
+   type<=
+   instance-of?
+   define-generic
+   define-method
+   define-constructor
+   make-generic-procedure
+   make-generic-constructor
+   make-method
+   method-procedure
+   method-types
+   method-rest?
+   generic-procedure-methods
+   generic-procedure-next
+   constructor
+   add-method
+   generic-java-procedure
+   generic-java-constructor
    make)
   (import s2j-module)
   (import hashtable)
   (import threads)
-  (include "../modules/generic-functions.scm"))
+  (include "../modules/generic-procedures.scm"))
 
 (module s2j
-  (define-generic
-   define-method
-   define-constructor
-   make
-   (define-java-proxy java-proxy java-proxy-helper)
+  ((define-java-proxy java-proxy java-proxy-helper)
    java-class
    java-wrap
    java-unwrap
@@ -176,7 +187,7 @@
    <symbol>
    <object>)
   (import s2j-module)
-  (import generic-functions)
+  (import generic-procedures)
   (include "../modules/s2j.scm")
   (define (java-class name)
     (java/class (if (string? name) (string->symbol name) name)))
@@ -193,20 +204,20 @@
   (define java-class-of		java/class-of)
   (define java-array-new  	java/array-new)
   (define-generic ->)
-  (define-method (-> (<jboolean> _))	->jboolean)
-  (define-method (-> (<jchar> _))	->jchar)
-  (define-method (-> (<jbyte> _))	->jbyte)
-  (define-method (-> (<jshort> _))	->jshort)
-  (define-method (-> (<jint> _))	->jint)
-  (define-method (-> (<jlong> _))	->jlong)
-  (define-method (-> (<jfloat> _))	->jfloat)
-  (define-method (-> (<jdouble> _))	->jdouble)
-  (define-method (-> (<jstring> _))	->jstring)
-  (define-method (-> (<list> _))	->list)
-  (define-method (-> (<number> _))	->number)
-  (define-method (-> (<boolean> _))	->boolean)
-  (define-method (-> (<character> _))	->character)
-  (define-method (-> (<string> _))	->string)
-  (define-method (-> (<vector> _))	->vector)
-  (define-method (-> (<symbol> _))	->symbol)
+  (define-method (-> ((meta <jboolean>) _)) ->jboolean)
+  (define-method (-> ((meta <jchar>)_))     ->jchar)
+  (define-method (-> ((meta <jbyte>) _))    ->jbyte)
+  (define-method (-> ((meta <jshort>) _))   ->jshort)
+  (define-method (-> ((meta <jint>) _))     ->jint)
+  (define-method (-> ((meta <jlong>) _))    ->jlong)
+  (define-method (-> ((meta <jfloat>) _))   ->jfloat)
+  (define-method (-> ((meta <jdouble>) _))  ->jdouble)
+  (define-method (-> ((meta <jstring>) _))  ->jstring)
+  (define-method (-> ((meta <list>) _))     ->list)
+  (define-method (-> ((meta <number>) _))   ->number)
+  (define-method (-> ((meta <boolean>) _))  ->boolean)
+  (define-method (-> ((meta <character>) _))    ->character)
+  (define-method (-> ((meta <string>) _))   ->string)
+  (define-method (-> ((meta <vector>) _))   ->vector)
+  (define-method (-> ((meta <symbol>) _))   ->symbol)
   )
