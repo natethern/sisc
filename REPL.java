@@ -126,7 +126,9 @@ public class REPL extends Thread {
                                  read(r, val),
                                  Util.SISCCONF);
                     } catch (IOException e) {
-                        System.err.println("\""+val+"\" is not a valid Scheme expression");
+                        r.define(Symbol.get(key.substring(5)),
+                                 new SchemeString(val),
+                                 Util.SISCCONF);
                     }
                 }
             }
