@@ -37,10 +37,10 @@
                     (or (real-name (metaphone recipient)) recipient)
                     sender message)))
 
-(define (init-tell)
-  (add-join-hook 
+(define (init-tell) #!void)
+#|  (add-join-hook 
    (lambda (channel sender login hostname)
-     (deliver-messages dbcon (get-channel channel) sender))))
+     (deliver-messages dbcon (get-channel channel) sender))))|#
 
 (define (translate-for-third-party sentence sex) sentence)
 

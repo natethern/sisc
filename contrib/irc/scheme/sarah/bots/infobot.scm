@@ -78,6 +78,7 @@
     (learn 'where))
    (" is " "\"<something> is <something else>\" defines a term for later recollection by \"what is\"."
     (learn 'what))
+   (#t "<something>? asks me what something is" (*-is? #f))
 ))
 
 (define (infobot . plugins)
@@ -86,7 +87,8 @@
                   (full-parse (->string
                                (get-name (channel-bot channel)))
                               message)])
-      (cond [(equal? cleaned-message "help")
+      (cond [(and (or (channel-bot-listens? channel) to-bot)
+                  (equal? cleaned-message "help"))
              ; display help
              (send-messages
               (channel-bot channel) (message-nick message)
@@ -107,8 +109,9 @@
             [(or (channel-bot-listens? channel) to-bot)
              (let loop ([p plugins])
                (cond [(null? p) #t]
-                     [(crib-match? (plugin-crib (car p))
-                                   (message-text message))
+                     [(or (eqv? #t (plugin-crib (car p)))
+                          (crib-match? (plugin-crib (car p))
+                                   (message-text message)))
                       (let ([rv
                              (apply (plugin-handler (car p))
                                     channel message

@@ -125,7 +125,12 @@
              (with-input-from-string (if (null? iostr) "" (car iostr))
                (lambda () 
                  (with-output-to-port os
-                   (lambda () (eval datum env)))))))]
+                   (lambda () 
+                     (when (and (circular? datum) 
+                                 (not (and (pair? datum) 
+                                           (eq? (car datum) 'quote))))
+                       (error 'eval "illegal expression."))
+                     (eval datum env)))))))]
          [watchdog-thread
           (thread/new
            (lambda ()

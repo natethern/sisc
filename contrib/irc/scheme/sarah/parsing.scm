@@ -30,11 +30,13 @@
  (->string (jtrim (->jstring str))))
 
 (define (crib-split on str)
-  (let ([i (string-contains str on)])
-    (if i
-        (list (trim (substring str 0 i))
-              (trim (substring str (+ i (string-length on)) (string-length str))))
-        (list #f #f))))
+  (if (eq? on #t)
+      (list "" (trim str))
+      (let ([i (string-contains str on)])
+        (if i
+            (list (trim (substring str 0 i))
+                  (trim (substring str (+ i (string-length on)) (string-length str))))
+            (list #f #f)))))
 
 (define (clean word charset)
   (if (null? word) 

@@ -11,9 +11,9 @@
                  (sisc:format "~a~a ~a ~a" 
                               (random-elem whatis-preludes) 
                               (car random-result)
-                              (cdr (assq (if type type 'what)
+                              (cdr (assq (cadr random-result) 
                                          '((what . is) (where . "is at"))))
-                              (cdr random-result))))))))
+                              (cddr random-result))))))))
 
 
 (define (learn type)
@@ -41,7 +41,7 @@
   (let* ([stmt (jdbc/prepare-statement conn
                   (sisc:format 
                     (string-append
-                      "SELECT knowledge.key, knowledge.data FROM knowledge LEFT JOIN aka ON "
+                      "SELECT knowledge.key, knowledge.type, knowledge.data FROM knowledge LEFT JOIN aka ON "
                       "    (aka.key ilike '~a' AND aka.data ilike knowledge.key)"
                       " WHERE ((aka.key IS NULL AND knowledge.key ilike '~a') "
                       "    OR (aka.key IS NOT NULL)) "
@@ -52,7 +52,9 @@
           (jdbc/execute-query stmt)])
     (and (not (null? results)) 
          (ordered-stream-map (lambda (item)
-                               (cons (item '1) (item '2)))
+                               (cons (item '1)
+                                     (cons (string->symbol (item '2)) 
+                                           (item '3))))
                      results))))
 
 (define (store-item conn type key data)
