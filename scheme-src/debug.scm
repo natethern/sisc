@@ -222,7 +222,7 @@
                                   (cons function-id args)))
                  (putprop 'continue-point '*debug* 
                           (delay (k (apply proc args))))
-                 ((getprop 'repl '*debug*))))))
+                 (((getprop 'repl '*debug*)))))))
   (let ([breakpoints (cond [(getprop 'breakpoints '*debug*) => 
                             (lambda (x) x)]
                            [else '()])])

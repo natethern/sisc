@@ -93,7 +93,8 @@
 (define _exit-handler (parameterize))
 
 (define repl
-  (letrec ([repl/eval-print-loop
+  (letrec ([repl-k (parameterize)]
+           [repl/eval-print-loop
             (lambda (exp console-in console-out writer)
               ;;eval
               (let ([val (eval exp)])
@@ -121,6 +122,7 @@
                         (repl/read console-in console-out writer))
                     (repl/eval-print-loop exp console-in 
                                           console-out writer))))])
+    (putprop 'repl '*debug* repl-k)
     (lambda args
       (current-url
        (string-append
@@ -142,7 +144,7 @@
                (call/cc 
                 (lambda (k)
                   (set! repl-start k)
-                  (putprop 'repl '*debug* k)))
+                  (repl-k k)))
                (let loop ()
                  (with/fc
                   (lambda (m e)
