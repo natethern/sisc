@@ -1,3 +1,5 @@
+2003-10-11  Released SISC 1.8.5
+
 2003-10-08  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed a space leak in ThreadContext/Context.
