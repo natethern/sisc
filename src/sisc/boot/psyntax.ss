@@ -1587,7 +1587,7 @@
 
 (define flatten-exports
   (lambda (exports)
-s    (let loop ((exports exports) (ls '()))
+    (let loop ((exports exports) (ls '()))
       (if (null? exports)
           ls
           (loop (cdr exports)
@@ -1617,12 +1617,6 @@ s    (let loop ((exports exports) (ls '()))
 (define chi-top-module
   (lambda (e r ribcage w s ctem rtem id exports forms)
     (let ((fexports (flatten-exports exports))
-          (iexports (let f ((exports exports))
-                      (if (null? exports)
-                          '()
-                          (if (and (pair? (car exports)) (bound-id=? id (caar exports)))
-                              (flatten-exports (cdar exports))
-                              (f (cdr exports))))))
           (module-id (and id (id-sym-name id))))
       (chi-external ribcage (source-wrap e w s)
                     (map (lambda (d) (cons r d)) forms) r exports fexports ctem
@@ -1737,7 +1731,7 @@ s    (let loop ((exports exports) (ls '()))
                                                      (label (module-binding-label b))
                                                      (imps (module-binding-imps b))
                                                      (id (car exp)))
-                                                 (let* ((fexports (append (map (lambda (x) (cons x '())) imps) fexports))
+                                                 (let ((fexports (append (map (lambda (x) (cons x '())) imps) fexports))
                                                        (sym
                                                         (begin
                                                           (generate-id-in-module
