@@ -295,19 +295,14 @@ public class Compiler extends Util {
             default:
                 Expression[] exps=pairToExpressions(expr);
                 compileExpressions(r, exps, rt, 0, env);
-                return application(compile(r,s,rt,0,env, null), 
-                                   exps, context, an);
+                rv = application(compile(r,s,rt,0,env, null), 
+                                 exps, context, an);
             }
-        } else if (expr.car instanceof Pair) {
-            Expression[] exps=pairToExpressions((Pair)expr.cdr);
-            compileExpressions(r, exps, rt, 0, env);
-	    return application(compile(r, expr.car, rt, 0, env, null), 
-                               exps, context, an);
         } else {
             Expression[] exps=pairToExpressions((Pair)expr.cdr);
             compileExpressions(r, exps, rt, 0, env);
-	    return application(compile(r, expr.car, rt, 0, env, null), 
-                               exps, context, an);
+            rv = application(compile(r, expr.car, rt, 0, env, null), 
+                             exps, context, an);
         }
         if (an!=null)
             setAnnotations(rv, an);
