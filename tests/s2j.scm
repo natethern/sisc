@@ -31,30 +31,16 @@
   (for-each (lambda (x) (next-method buf x)) rest)
   buf)
 (app sb (->jstring "foo") (->jint 1) (->jstring "bar"))
-;test of "next-method" functionality.
-(define <java.lang.Character> (java-class "java.lang.Character"))
-(define-method (value-of (next: next-method)
-                         ((meta <jstring>) s)
-                         (<java.lang.Character> c))
-  (display "\nFOUND\n")
-  (next-method s c))
-(value-of <jstring> (->jchar #\o))
-;;test overloading of Java constructors in Scheme...
-(define-constructor (<jstringbuffer> (next: next-method) (<jstring> s))
-  (display "\nHERE\n")
-  (next-method s))
-(make <jstringbuffer> (->jstring "foo"))
 ;scoping
 (let ()
   (define-generic value-of)
   (define-method (value-of (next: next-method)
                            ((meta <jstring>) s)
-                           (<java.lang.Character> c))
+                           (<jchar> c))
     (display "\nLOCAL\n")
     (next-method s c))
   (value-of <jstring> (->jchar #\o)))
 (value-of <jstring> (->jchar #\o))
-  
 
 ;array creation and access
 (define a (java-array-new <jint> #(2 2 2)))

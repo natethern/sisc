@@ -41,36 +41,36 @@ import java.util.Iterator;
 
 public class SDebug extends ModuleAdapter {
     public String getModuleName() {
-	return "Debugging";
+        return "Debugging";
     }
 
     protected static final int 
-	EXPRESSV=0, COMPILE=1,
-	CONT_VLR=2, CONT_NXP=3, CONT_ENV=4, CONT_FK=5,
-	CONT_LOCKQ=6, CONT_PARENT=7, 
-	ANNOTATIONEXPR=10, ANNOTATIONQ=11, ANNOTATION=8, ANNOTATIONKEYS=9,
-	EMITANNOTATIONS=12, ERROR_CONT_K=13, SETANNOTATION=14,
+        EXPRESSV=0, COMPILE=1,
+        CONT_VLR=2, CONT_NXP=3, CONT_ENV=4, CONT_FK=5,
+        CONT_LOCKQ=6, CONT_PARENT=7, 
+        ANNOTATIONEXPR=10, ANNOTATIONQ=11, ANNOTATION=8, ANNOTATIONKEYS=9,
+        EMITANNOTATIONS=12, ERROR_CONT_K=13, SETANNOTATION=14,
         ANNOTATIONSRC=15, ANNOTATIONSTRIPPED=16, SETANNOTATIONSTRIPPED=17, 
         FILLRIBQ=18, FILLRIBEXP=19, FREEXPQ=20, FRESYM=21;
-
+    
     public SDebug() {
-	define("emit-annotations", EMITANNOTATIONS);
+        define("emit-annotations", EMITANNOTATIONS);
         define("express", EXPRESSV);
         define("compile", COMPILE);
-	define("error-continuation-k", ERROR_CONT_K);
+        define("error-continuation-k", ERROR_CONT_K);
         define("continuation-vlr", CONT_VLR);
         define("continuation-nxp", CONT_NXP);
         define("continuation-env", CONT_ENV);
         define("continuation-fk", CONT_FK);
-	define("continuation-stk", CONT_PARENT);
+        define("continuation-stk", CONT_PARENT);
         define("continuation-captured?", CONT_LOCKQ);
-	define("annotation?", ANNOTATIONQ);
-	define("annotation-keys", ANNOTATIONKEYS);
-	define("annotation", ANNOTATION);
-	define("set-annotation!", SETANNOTATION);
+        define("annotation?", ANNOTATIONQ);
+        define("annotation-keys", ANNOTATIONKEYS);
+        define("annotation", ANNOTATION);
+        define("set-annotation!", SETANNOTATION);
         define("annotation-source", ANNOTATIONSRC);
         define("annotation-expression", ANNOTATIONEXPR);
-	define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
+        define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
         define("annotation-stripped", ANNOTATIONSTRIPPED);
         define("_fill-rib?", FILLRIBQ);
         define("_fill-rib-exp", FILLRIBEXP);
@@ -80,22 +80,22 @@ public class SDebug extends ModuleAdapter {
 
     class SISCExpression extends Value {
         protected Expression e;
-
+        
         SISCExpression(Expression e) {
             this.e=e;
         }
 
-        public void setAnnotation(Symbol key, Value v) {
-            e.setAnnotation(key, v);
+        public Value setAnnotation(Symbol key, Value v) {
+            return e.setAnnotation(key, v);
         }
  
         public Set getAnnotationKeys() {
             return e.getAnnotationKeys();
         }
 
-	public Value getAnnotation(Symbol key) {
-	    return e.getAnnotation(key);
-	}
+        public Value getAnnotation(Symbol key) {
+            return e.getAnnotation(key);
+        }
 
         public String display() {
             return "#<expression "+e.express().write()+'>';
@@ -106,18 +106,18 @@ public class SDebug extends ModuleAdapter {
         try {
             return (AnnotatedExpr)o;
         } catch (ClassCastException e) { typeError("annotatedexpression", o); }
-	return null;
+        return null;
     }
 
     public Value eval(int primid, Interpreter f) throws ContinuationException {
         switch(f.vlr.length) {
-	case 0:
-	    switch(primid) {
-	    case EMITANNOTATIONS:
-		return truth(f.dynenv.parser.annotate);
-	    default:
+        case 0:
+            switch(primid) {
+            case EMITANNOTATIONS:
+                return truth(f.dynenv.parser.annotate);
+            default:
                 throwArgSizeException();
-	    }
+            }
         case 1:
             switch(primid) {
             case FREEXPQ:
@@ -138,21 +138,21 @@ public class SDebug extends ModuleAdapter {
                 return p;
             case ANNOTATIONSTRIPPED:
                 return annotated(f.vlr[0]).stripped;
-	    case EMITANNOTATIONS:
-		f.dynenv.parser.annotate=truth(f.vlr[0]);
-		return VOID;
+            case EMITANNOTATIONS:
+                f.dynenv.parser.annotate=truth(f.vlr[0]);
+                return VOID;
             case EXPRESSV:
-		if (f.vlr[0] instanceof SISCExpression) {
-		    return ((SISCExpression)f.vlr[0]).e.express();
-		} else {
-		    Closure c=(Closure)f.vlr[0];
-		    return list(c.arity ? sym("infinite") : sym("finite"),
-				Quantity.valueOf(c.fcount), c.body.express());
-		}
+                if (f.vlr[0] instanceof SISCExpression) {
+                    return ((SISCExpression)f.vlr[0]).e.express();
+                } else {
+                    Closure c=(Closure)f.vlr[0];
+                    return list(c.arity ? sym("infinite") : sym("finite"),
+                                Quantity.valueOf(c.fcount), c.body.express());
+                }
             case COMPILE:
                 return new Closure(false, (short)0, f.compile(f.vlr[0]), f.env);
-	    case ERROR_CONT_K:
-		return ((ApplyParentFrame)f.vlr[0]).c;
+            case ERROR_CONT_K:
+                return ((ApplyParentFrame)f.vlr[0]).c;
             case CONT_LOCKQ:
                 if (f.vlr[0] instanceof ApplyParentFrame)
                     f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
@@ -174,25 +174,25 @@ public class SDebug extends ModuleAdapter {
                     f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
                 cn=cont(f.vlr[0]);
                 return cn.env;
-	    case CONT_PARENT: 
+            case CONT_PARENT: 
                 if (f.vlr[0] instanceof ApplyParentFrame)
                     f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
-		cn=cont(f.vlr[0]);
-		if (cn.parent==null) return EMPTYLIST;
+                cn=cont(f.vlr[0]);
+                if (cn.parent==null) return EMPTYLIST;
                 return cn.parent;
-	    case ANNOTATIONQ:
-		return truth(f.vlr[0] instanceof AnnotatedExpr);
-	    case ANNOTATIONSRC:
-		Value rv;
-		if (f.vlr[0] instanceof AnnotatedExpr) 
-		    rv=annotated(f.vlr[0]).annotation;
+            case ANNOTATIONQ:
+                return truth(f.vlr[0] instanceof AnnotatedExpr);
+            case ANNOTATIONSRC:
+                Value rv;
+                if (f.vlr[0] instanceof AnnotatedExpr) 
+                    rv=annotated(f.vlr[0]).annotation;
                 else 
                     rv=FALSE;
-		return rv;
-	    case ANNOTATIONEXPR:
-		if (f.vlr[0] instanceof AnnotatedExpr) 
-		    return (Value)annotated(f.vlr[0]).expr;
-		else return f.vlr[0];
+                return rv;
+            case ANNOTATIONEXPR:
+                if (f.vlr[0] instanceof AnnotatedExpr) 
+                    return (Value)annotated(f.vlr[0]).expr;
+                else return f.vlr[0];
             default:
                 throwArgSizeException();
             }
@@ -202,21 +202,31 @@ public class SDebug extends ModuleAdapter {
                 annotated(f.vlr[0]).stripped=f.vlr[1];
                 return VOID;
             case ANNOTATION:
-		return f.vlr[0].getAnnotation(symbol(f.vlr[1]));
+                return f.vlr[0].getAnnotation(symbol(f.vlr[1]));
             default:
                 throwArgSizeException();
             }
         case 3:
             switch(primid) {
-	    case SETANNOTATION:
-                f.vlr[0].setAnnotation(symbol(f.vlr[1]), f.vlr[2]);
-                return VOID;
+            case ANNOTATION:
+                return f.vlr[0].getAnnotation(symbol(f.vlr[1]), f.vlr[2]);
+            case SETANNOTATION:
+                return f.vlr[0].setAnnotation(symbol(f.vlr[1]), f.vlr[2]);
+            default:
+                throwArgSizeException();
+            }
+        case 4:
+            switch(primid) {
+            case SETANNOTATION:
+                return f.vlr[0].setAnnotation(symbol(f.vlr[1]),
+                                              f.vlr[2],
+                                              f.vlr[3]);
             default:
                 throwArgSizeException();
             }
         default:
-	    throwArgSizeException();
+            throwArgSizeException();
         }
-	return VOID;
+        return VOID;
     }
 }

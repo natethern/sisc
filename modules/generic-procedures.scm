@@ -37,24 +37,6 @@
 (define (types<= x y) (every2 type<= x y))
 (define (instances-of? x y) (every2 instance-of? x y))
 
-;;we need synchronized hashtables in a few places
-(define (make-synchronized-hashtable)
-  (cons (monitor/new) (make-hashtable)))
-(define (synchronized-hashtable/get ht key . def)
-  (monitor/synchronize-unsafe
-   (car ht)
-   (lambda () (apply hashtable/get (cdr ht) key def))))
-(define (synchronized-hashtable/put! ht key val . def)
-  (monitor/synchronize-unsafe
-   (car ht)
-   (lambda () (apply hashtable/put! (cdr ht) key val def))))
-(define (synchronized-hashtable/get! ht key def-proc)
-  (monitor/synchronize-unsafe
-   (car ht)
-   (lambda ()
-     (let ([res ((cdr ht) key)])
-       (or res (let ([res (def-proc)]) ((cdr ht) key res) res))))))
-
 (define (assert-proc proc thunk)
   (if (procedure? proc)
       (thunk)
@@ -62,23 +44,19 @@
 (define (procedure-property proc key . rest)
   (assert-proc proc
                (lambda ()
-                 (or (annotation proc key)
-                     (if (null? rest) #f (car rest))))))
+                 (apply annotation proc key rest))))
 (define (set-procedure-property! proc key val . rest)
   (assert-proc proc
                (lambda ()
-                 (let ([res (annotation proc key)])
-                   (set-annotation! proc key val)
-                   (or res (if (null? rest) #f (car rest)))))))
+                 (apply set-annotation! proc key val rest))))
 (define (procedure-property! proc key . rest)
   (assert-proc proc
                (lambda ()
                  (or (annotation proc key)
-                     (if (null? rest)
-                         #f
-                         (begin
-                           (set-annotation! proc key ((car rest)))
-                           (annotation proc key)))))))
+                     (and (not (null? rest))
+                          (let ([res ((car rest))])
+                            (set-annotation! proc key res)
+                            res))))))
 
 ;;This maps procedure to lists of methods ordered by their
 ;;"specificity", i.e. methods appearing earlier in the list are always
@@ -99,9 +77,9 @@
 ;;chained to a generic procedure that is part of another constructor.
 (define (constructor proc class)
   (let ([constr (procedure-property! proc 'generic-constructors
-                                     make-synchronized-hashtable)]
+                                     make-hashtable)]
         [next   (procedure-property proc 'next)])
-    (synchronized-hashtable/get!
+    (hashtable/get!
      constr
      class
      (lambda ()
@@ -177,7 +155,7 @@
 
 (define (add-class class)
   (if (and (not (java/null? class))
-           (not (synchronized-hashtable/put! *CLASSES* class #t)))
+           (not (hashtable/put! *CLASSES* class #t)))
       (begin
         (add-class (java/superclass class))
         (for-each add-class (vector->list (java/interfaces class)))
@@ -263,16 +241,15 @@
 
 ;;for each java method name there is a corresponding generic
 ;;procedure.
-(define *JAVA-METHODS* (make-synchronized-hashtable))
+(define *JAVA-METHODS* (make-hashtable))
 (define (generic-java-procedure name)
-  (synchronized-hashtable/get! *JAVA-METHODS* name
-                               _make-generic-procedure))
+  (hashtable/get! *JAVA-METHODS* name _make-generic-procedure))
 ;;There is *one* generic java constructor
 (define *JAVA-CONSTRUCTOR* (_make-generic-constructor))
 (define (generic-java-constructor) *JAVA-CONSTRUCTOR*)
 ;;we keep track of all the classes whose methods we have already
 ;;learned about
-(define *CLASSES* (make-synchronized-hashtable))
+(define *CLASSES* (make-hashtable))
 ;;The global generic constructor chains the generic java constructor
 (define make (_make-generic-constructor (generic-java-constructor)))
 

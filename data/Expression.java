@@ -42,19 +42,28 @@ public abstract class Expression extends Util implements Serializable {
 
     protected Map annotations;
     
-    public synchronized Value getAnnotation(Symbol key) {
+    public synchronized Value getAnnotation(Symbol key, Value def) {
         if (annotations==null)
-            return FALSE;
+            return def;
         Value res = (Value)annotations.get(key);
-        return (res == null) ? FALSE : res;
+        return (res == null) ? def : res;
     }
 
-    public synchronized void setAnnotation(Symbol key, Value val) {
+    public Value getAnnotation(Symbol key) {
+        return getAnnotation(key, FALSE);
+    }
+
+    public synchronized Value setAnnotation(Symbol key, Value val, Value def) {
         if (annotations==null)
             annotations=Collections.synchronizedMap(new HashMap(0));
-        annotations.put(key, val);
+        Value res = (Value)annotations.put(key, val);
+        return (res == null) ? def : res;
     }
      
+    public Value setAnnotation(Symbol key, Value val) {
+        return setAnnotation(key, val, FALSE);
+    }
+
     public synchronized Set getAnnotationKeys() {
         if (annotations==null) return EMPTYSET;
         return annotations.keySet();
