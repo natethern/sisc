@@ -3,7 +3,7 @@ package sisc.data;
 import java.io.*;
 import sisc.io.ValueWriter;
 
-public class EOFObject extends SingletonValue implements Singleton {
+public class EOFObject extends SingletonValue {
     public static EOFObject EOF=new EOFObject();
 
     public EOFObject() {}

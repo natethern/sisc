@@ -12,7 +12,7 @@ import sisc.ser.Serializer;
  * @author scgmille
  *
  */
-public abstract class SingletonValue extends Value {
+public abstract class SingletonValue extends Value implements Singleton {
 
     public void serialize(Serializer s) throws IOException {}
     public void deserialize(Deserializer s) throws IOException {}

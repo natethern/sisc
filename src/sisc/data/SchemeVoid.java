@@ -4,7 +4,7 @@ import java.io.*;
 
 import sisc.io.ValueWriter;
 
-public class SchemeVoid extends SingletonValue implements Singleton {
+public class SchemeVoid extends SingletonValue {
     public static SchemeVoid VOID=new SchemeVoid();
 
     public SchemeVoid() {}
