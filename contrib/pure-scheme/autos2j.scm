@@ -147,16 +147,10 @@
   
   (define (write-autos2j-module-definition module-name classes . port)
     (receive (sclasses saccessors smodifiers smethods)
-        (scan-java-classes class)
+        (scan-java-classes classes)
       (parameterize ((print-shared #f))
         (apply pretty-print (generate-module-definition
                              module-name
-                             (filter
-                              (lambda (cn)
-                                (not (member
-                                      cn
-                                      (map string->symbol
-                                           (map cdr primitive-classes)))))
-                              sclasses)
+                             sclasses
                              saccessors smodifiers smethods)
                port)))))
