@@ -45,7 +45,7 @@ public class J2S extends ModuleAdapter {
 	JFIELDSET=3, JGETMETHODS=4, JGETCONSTRUCTORS=5,
 	JINSTANTIATE=6, JCALL=7, JCLASSQ=8, JOBJECTQ=9,
 	JINSTANCEOFQ=10, JGETCLASS=11, JGETCLASSNAME=12,
-	JGETFIELDS=13;
+	JGETFIELDS=13, UGLYSYNC=14;
 
     public String getModuleName() {
 	return "J2S";
@@ -109,6 +109,18 @@ public class J2S extends ModuleAdapter {
         public JavaObject() {}
     }
 
+    class CatchError extends Expression {
+	boolean caught=false;
+
+	public void eval(Interpreter r) throws ContinuationException {
+	    r.nxp=null;
+	    caught=true;
+	}
+
+	public Value express() {
+	    return list(Symbol.get("CatchErrorExp"));
+	}
+    }
 
     public J2S() {
         define("java/field-ref", JFIELDREF);
@@ -124,6 +136,7 @@ public class J2S extends ModuleAdapter {
         define("java/class?", JCLASSQ);
         define("java/instance-of?", JINSTANCEOFQ);
         define("java/get-class-name", JGETCLASSNAME);
+	define("java/_synchronized", UGLYSYNC);
     }
 
     public Value schemeValue(Object v) {
@@ -221,6 +234,28 @@ public class J2S extends ModuleAdapter {
             break;
         case 2:
             switch(primid) {
+	    case UGLYSYNC:
+		Object syncOn;
+		if (f.vlr[1] instanceof JavaObject) {
+		    syncOn=((JavaObject)f.vlr[0]).o;
+		} else {
+		    syncOn=f.vlr[0];
+		}
+
+		Procedure thunk=proc(f.vlr[1]);
+		Value rv=VOID;
+		synchronized(syncOn) {
+		    Interpreter i=Context.enter(f.ctx, f.dynenv.copy());
+		    CatchError e=new CatchError();
+		    i.fk=new CallFrame(e, null, null, i.fk, i.stk);
+		    rv=i.eval(thunk, new Value[0]);
+		    Context.exit();
+		    if (rv instanceof Values && e.caught) {
+			f.acc=rv;
+			throw new ContinuationException(f.fk);
+		    }
+		}
+		return rv;
             case JINSTANCEOFQ:
                 return truth(((JavaClass)f.vlr[1]).clazz.isAssignableFrom(f.vlr[0].getClass()));
             case JFIELDREF:
