@@ -44,19 +44,20 @@ public class LexicalEnvironment extends Value {
         this.vals=ZV;
     }
 
-    public LexicalEnvironment(int s, Value[] v, LexicalEnvironment parent,
-                              boolean infiniteArity,
-                              Interpreter r, Procedure c)
-    throws ContinuationException {
-        this.parent=parent;
+    public LexicalEnvironment(Interpreter r, Closure c) 
+	throws ContinuationException {
+        parent=c.env;
 
-        if (infiniteArity) {
-            vals=new Value[s--];
+	int s=c.fcount;
+	Value[] v=r.vlr;
+        if (c.arity) {
+            vals=r.createValues(s--);
             if (v.length < s)
                 error(r, "expected " + s +
                       " arguments to "+c+", got "+v.length);
             System.arraycopy(v, 0, vals, 0, s);
             vals[s]=valArrayToList(v, s, v.length-s);
+	    r.returnValues(v);
         } else {
             if (v.length!=s)
                 error(r, "expected " + s +

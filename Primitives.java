@@ -325,8 +325,7 @@ public class Primitives extends ModuleAdapter {
 							new StringReader(string(f.vlr[0]))));
             case CALLCC:
                 Procedure kproc=(Procedure)f.vlr[0];
-                f.returnValues(f.vlr);
-                f.vlr = new Value[] {f.stk.capture()};
+                f.vlr = new Value[] {f.stk.capture(f)};
                 f.nxp = APPEVAL;
                 return kproc;
             case GETOUTPUTSTRING:
@@ -375,7 +374,7 @@ public class Primitives extends ModuleAdapter {
             case UNBOX: return (Value)box(f.vlr[0]).val;
             case BOXQ: return truth(f.vlr[0] instanceof Box);
             case LOAD:
-                CallFrame before=f.stk.capture();
+                CallFrame before=f.stk.capture(f);
                 InputPort p=null;
                 try {
                     p=new InputPort(new BufferedReader(new FileReader(string(f.vlr[0]))));

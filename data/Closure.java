@@ -50,8 +50,7 @@ public class Closure extends Procedure {
     }
 
     public void apply(Interpreter r) throws ContinuationException {
-        r.env=new LexicalEnvironment(fcount, r.vlr,
-                                     env, arity, r, this);
+        r.env=new LexicalEnvironment(r, this);
         r.nxp=body;
     }
 

@@ -1238,12 +1238,9 @@ public class Quantity extends Value {
                         max_precision);
     }
 
-    protected Quantity intBound(long v) {
-        if (v>Integer.MAX_VALUE ||
-                v<Integer.MIN_VALUE)
-            return new Quantity(v);
-        else
-            return new Quantity((int)v);
+    protected final static Quantity intBound(long v) {
+        return (v>Integer.MAX_VALUE || v<Integer.MIN_VALUE) ?
+               new Quantity(v) : new Quantity((int)v);
     }
 
     public String display() {

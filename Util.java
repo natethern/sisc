@@ -88,7 +88,7 @@ public abstract class Util implements Conf {
     throws ContinuationException {
         r.acc=new Values(new Value[] {
 	    error,
-	    new CallFrame(r.nxp, r.vlr, r.env, r.fk, r.stk).capture(),
+	    new CallFrame(r.nxp, r.vlr, r.env, r.fk, r.stk).capture(r),
 	    r.fk.fk});
         throw new ContinuationException(r.fk);
     }
@@ -326,8 +326,8 @@ public abstract class Util implements Conf {
 
     public static Pair valArrayToList(Value[] r, int offset, int len) {
         Pair p=EMPTYLIST;
-        for (int i=0; i<len; i++) {
-            p=new Pair(r[(offset+len)-i-1], p);
+        for (int i=(offset+len)-1; i>=offset; i--) {
+            p=new Pair(r[i], p);
         }
         return p;
     }

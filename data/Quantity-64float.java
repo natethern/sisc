@@ -1239,7 +1239,6 @@ public class Quantity extends Value {
                new Quantity(v) : new Quantity((int)v);
     }
 
-
     protected static String zeroTrim(String s) {
         int y=s.indexOf('.');
         char c;

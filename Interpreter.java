@@ -66,6 +66,7 @@ public class Interpreter extends Util {
     public DynamicEnv dynenv;
 
     //REGISTERS
+    public boolean               lck;
     public Value                 acc;
     public Expression            nxp;
     public Value[]               vlr;
@@ -128,6 +129,7 @@ public class Interpreter extends Util {
         env=c.env;
         fk=c.fk;
         stk=c.parent;
+	lck=c.lock;
         returnFrame(c);
     }
 
@@ -267,11 +269,12 @@ public class Interpreter extends Util {
     protected static final int VALUESPOOLSIZE=8;
     protected Value deadValues[][] = new Value[VALUESPOOLSIZE][];
 
+
     public final Value[] createValues(int size) {
-        if (size == 0) return ZV;
-        if (size >= VALUESPOOLSIZE) return new Value[size];
+        if (size == 0) { return ZV; }
+        if (size >= VALUESPOOLSIZE) { return new Value[size]; }
         Value[] res = deadValues[size];
-        if (res == null) return new Value[size];
+        if (res == null) { return new Value[size]; }
         deadValues[size] = null;
         return res;
     }
