@@ -11,6 +11,7 @@
     <property name="packagename" value="sisc"/>
     <property name="jarname" value="sisc.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
+    <property name="quantity-type" value="apfloat"/>
   </target>
 
   <target name="docs" depends="init"
@@ -21,7 +22,12 @@
 	     destdir="${docdir}"/>
   </target>
 
-  <target name="compiler" depends="init">
+  <target name="quantity" depends="init">
+    <copy file="${basedir}/data/Quantity-${quantity-type}.java"
+	  tofile="${basedir}/data/Quantity.java"/>
+  </target>
+
+  <target name="compiler" depends="quantity">
     <mkdir dir="${classdir}"/>
     <javac srcdir="${srcdir}"
            destdir="${classdir}"
@@ -54,7 +60,7 @@
     </java>
   </target>
 
-  <target name="all" depends="jars,heap,docs"
+  <target name="all" depends="jars,heap"
           description="Build all">  
   </target>
     
@@ -64,5 +70,6 @@
     <delete dir="${docdir}"/>
     <delete file="${basedir}/${jarname}"/>
     <delete file="${heap}"/>
+    <delete file="${basedir}/data/Quantity.java"/>
   </target> 
 </project>
