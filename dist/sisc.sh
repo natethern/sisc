@@ -1,7 +1,7 @@
 #!/bin/sh
 if [ -z "$SISC_HOME" ]
 then
-   SISC_HOME="." #/usr/local/lib/sisc
+   SISC_HOME="`dirname $0`" #/usr/local/lib/sisc
 fi
 
 EXTENSIONS=""
