@@ -24,7 +24,7 @@ public class Compiler extends Util {
 
     static final int
 	APP=-1, LAMBDA = 0, _IF=1, BEGIN=2, QUOTE=3, SET=4, DEFINE=5,
-	MAKEANNOTATION=6, LETREC=7,
+	MAKEANNOTATION=6, LETREC=7, 
 	
 	TAIL=1, COMMAND=2, PREDICATE=4, REALTAIL=8;
 
@@ -50,12 +50,12 @@ public class Compiler extends Util {
                               int context, SymbolicEnvironment env, 
                               Pair an)
     throws ContinuationException {
-        if (v==EMPTYLIST) {
+        if (v==Expression.EMPTYLIST) {
 	    //we evaluate () to the empty list, which is an "ignorable
 	    //error", according to R5RS. Note that presently we never
 	    //actually end up in this code since the macro expander
 	    //expands () to '().
-	    return EMPTYLIST;
+	    return Expression.EMPTYLIST;
 	} else if (v instanceof Pair) {
             Pair expr=(Pair)v;
             return compileApp(r,expr,rt,context,env,an);
@@ -70,7 +70,8 @@ public class Compiler extends Util {
     public Expression compile(Interpreter r, Expression v,
                               SymbolicEnvironment env)
     throws ContinuationException {
-        Expression e= compile(r, v, new ReferenceEnv(), TAIL, env, null);
+        Expression e= compile(r, v, new ReferenceEnv(), REALTAIL | TAIL, 
+                              env, null);
         return e;
     }
 
@@ -91,9 +92,9 @@ public class Compiler extends Util {
     }
 
     void setAnnotations(Expression e, Pair p) {
-        while (p!=EMPTYLIST) {
+        while (p!=Expression.EMPTYLIST) {
             Pair kv=(Pair)p.car;
-            e.setAnnotation(symbol(kv.car), kv.cdr);
+            e.setAnnotation(Expression.symbol(kv.car), kv.cdr);
             p=(Pair)p.cdr;
         }
     }
@@ -133,9 +134,9 @@ public class Compiler extends Util {
                     formals=argsToSymbols((Pair)expr.car);
                     Pair tmpp=(Pair)expr.car;
                     while (tmpp.cdr instanceof Pair
-                            && tmpp.cdr!=EMPTYLIST)
+                            && tmpp.cdr!=Expression.EMPTYLIST)
                         tmpp=(Pair)tmpp.cdr;
-                    infArity=(tmpp.cdr!=EMPTYLIST);
+                    infArity=(tmpp.cdr!=Expression.EMPTYLIST);
                 } else {
                     infArity=true;
                     formals=new Symbol[] {(Symbol)expr.car};
@@ -147,13 +148,13 @@ public class Compiler extends Util {
                             TAIL | LAMBDA | REALTAIL, env, null);
                 rv=new LambdaExp(formals.length, tmp, infArity);
                 break;
-            case LETREC:
+            case LETREC: 
                 Pair tmpp=(Pair)expr.car;
                 
                 Vector formv=new Vector();
                 Vector expv=new Vector();
 
-                while (tmpp != EMPTYLIST) {
+                while (tmpp != Expression.EMPTYLIST) {
                     Pair bp=(Pair)tmpp.car;
                     formv.add(bp.car);
                     expv.add(((Pair)bp.cdr).car);
@@ -166,9 +167,8 @@ public class Compiler extends Util {
                 expv.copyInto(rhses);
 
                 expr=(Pair)expr.cdr;
-
-                rv=compileLetrec(r, formals, rhses, expr, 
-                                 rt, env);
+		rv=compileLetrec(r, formals, rhses, expr, 
+				 rt, env, context);
                 break;
             case _IF:
                 tmp=compile(r, expr.car, rt, PREDICATE, env, null);
@@ -199,7 +199,7 @@ public class Compiler extends Util {
                     
                     rv=new FreeSetEval(fre.sym, env);
                 } else {
-                    error(r, liMessage(SISCB, "setlhsnotsymbol"));
+                    Expression.error(r, liMessage(SISCB, "setlhsnotsymbol"));
                     return null;
                 }
                 rv.annotations = rhs.annotations;
@@ -218,22 +218,24 @@ public class Compiler extends Util {
                 expr=(Pair)expr.cdr;
                 Pair annot=null;
                 if (expr.car instanceof Pair)
-                    annot=pair(expr.car);
+                    annot=Expression.pair(expr.car);
                 else
-                    annot=list(new Pair(OTHER, expr.car));
+                    annot=Expression.list(new Pair(OTHER, expr.car));
                 rv=compile(r, aexpr, rt, context, env, annot);
                 an=null;
                 break;
             default:
                 Expression[] exps=pairToExpressions(expr);
                 compileExpressions(r, exps, rt, 0, env);
-                rv = application(r, compile(r,s,rt,0,env, null), 
+                rv = application(r, 
+                                 compile(r,s,rt,0,env, null), 
                                  exps, context, an);
             }
         } else {
             Expression[] exps=pairToExpressions((Pair)expr.cdr);
             compileExpressions(r, exps, rt, 0, env);
-            rv = application(r, compile(r, expr.car, rt, 0, env, null), 
+            rv = application(r, 
+                             compile(r, expr.car, rt, 0, env, null), 
                              exps, context, an);
         }
         if (an!=null)
@@ -244,13 +246,14 @@ public class Compiler extends Util {
     public Expression compileLetrec(Interpreter r,
                                     Symbol[] formals, Expression[] rands,
                                     Pair body, ReferenceEnv rt, 
-                                    SymbolicEnvironment env) 
+                                    SymbolicEnvironment env, int context) 
         throws ContinuationException {
         ReferenceEnv nrt=new ReferenceEnv(formals, rt);
         compileExpressions(r, rands, nrt, 0, env);
         boolean allImmediate=true;
         Expression nxp=new LetrecEval(compile(r, body.car, nrt, 
-                                              TAIL | LAMBDA, env, null));
+                                              context | TAIL | LAMBDA, 
+                                              env, null));
 
         /* If we're emitting debugging symbols, annotate the AppEval
            with the name of the procedure. 
@@ -258,7 +261,7 @@ public class Compiler extends Util {
         if (r.dynenv.emitDebuggingSymbols)
             nxp.setAnnotation(PROCNAME, _LETREC);
 
-        Expression lastRand = VOID;
+        Expression lastRand = Expression.VOID;
 
         for (int i= 0; i<rands.length; i++) {
             if (!isImmediate(rands[i])) {
@@ -294,7 +297,7 @@ public class Compiler extends Util {
         return new LetrecExp(lastRand, rands, nxp, allImmediate);
     }
 
-    public final Expression application(Interpreter r,
+    public final Expression application(Interpreter r, 
                                         Expression rator, Expression rands[], 
                                         int context, Pair annotation) {
         if (rator instanceof Value && 
@@ -302,7 +305,7 @@ public class Compiler extends Util {
 	    !(rator instanceof AnnotatedExpr))
 
             System.err.println(warn("nonprocappdetected",((Value)rator).synopsis()));
-        Expression nxp = new AppEval();
+        Expression nxp = new AppEval((context & REALTAIL) != 0);
         
         if (annotation!=null)
             setAnnotations(nxp, annotation);
@@ -387,7 +390,7 @@ public class Compiler extends Util {
         }
 
         public void eval(Interpreter r) throws ContinuationException {
-            error(r, liMessage(SISCB, "invalidsyncontext", getName().toString()));
+            Expression.error(r, Util.liMessage(SISCB, "invalidsyncontext", getName().toString()));
         }
 
         public void display(ValueWriter w) throws IOException {
