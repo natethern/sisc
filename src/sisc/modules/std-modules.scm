@@ -518,7 +518,11 @@
   (import* new-generic-procedures
            make-method
            make-generic-procedure
-           add-methods)
+           add-methods
+           add-method)
+  (import* threading
+           mutex/new
+           mutex/synchronize)
   (import misc)
   (import hashtable)
   (import s2j-reflection)
@@ -527,7 +531,6 @@
   (define jnull (java/null))
   (include "s2j/reflection.scm")
   (include "s2j/misc.scm")
-  (setup-memoized-procedures)
   (type-of-hook       'java java-type-of-hook)
   (type<=-hook        'java java-type<=-hook)
   (compare-types-hook 'java java-compare-types-hook))

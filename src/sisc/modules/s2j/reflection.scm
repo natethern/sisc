@@ -1,9 +1,5 @@
 ;;;;;;;;;; HELPERS ;;;;;;;;;;
 
-(define (memoize p)
-  (let ([memo (make-hashtable eqv?)])
-    (lambda (x) (hashtable/get! memo x (lambda () (p x))))))
-
 (define (filter-map f lis)
   (let recur ((lis lis))
     (if (null? lis) 
@@ -132,56 +128,104 @@
                      <jvalue>)
                #f))
 
-(define (generic-java-constructor jclass)
-  (let ([gproc (make-generic-procedure)])
-    (if (memq 'public (java/modifiers jclass))
-        (add-methods gproc
-                     (filter-map
-                      (lambda (c)
-                        (and (memq 'public (java/modifiers c))
-                             (java-constructor-method c)))
-                      (java/constructors jclass))))
-    gproc))
+(define *REFLECTION-MUTEX* (mutex/new))
+(define *CLASS-PRECEDENCE-LISTS*        (make-hashtable eqv? #f))
+(define *REFLECTED-CONSTRUCTORS*        (make-hashtable eqv? #f))
+(define *REFLECTED-METHODS*             (make-hashtable eq? #f))
+(define *REFLECTED-FIELD-ACCESSORS*     (make-hashtable eq? #f))
+(define *REFLECTED-FIELD-MODIFIERS*     (make-hashtable eq? #f))
 
-(define (generic-java-procedure name fetch reflect)
-  ;;reflected-classes contains all the classes/interfaces from which
-  ;;we have reflected
-  (let ([reflected-classes (make-hashtable eqv?)]
-        [gproc (make-generic-procedure)])
-    (define (do-reflection jclass)
-      (hashtable/get!
-       reflected-classes
-       jclass
-       (lambda ()
-         (for-each do-reflection
-                   (java-class-declared-superclasses jclass))
-         (if (memq 'public (java/modifiers jclass))
-             (add-methods gproc
-                          (filter-map
-                           (lambda (p)
-                             (and (eq? (java/name p) name)
-                                  (memq 'public (java/modifiers p))
-                                  (reflect p)))
-                           (fetch jclass))))
-         #t)))
-    (define (proc . args) 
-      (if (not (null? args))
-          (let ([o (car args)])
-            (if (java/object? o) (do-reflection (java/class-of o)))))
-      (apply gproc args))
-    proc))
+(define (reflect-java-class-members jclass)
+  (define (helper fetch create)
+    (filter-map (lambda (m) (and (memq 'public (java/modifiers m))
+                                 (cons (java/name m) (create m))))
+                (or (fetch jclass) '())))
+  (hashtable/put!
+   *REFLECTED-CONSTRUCTORS*
+   jclass
+   (let ([gproc (make-generic-procedure)])
+     (add-methods gproc (map cdr (helper java/constructors
+                                         java-constructor-method)))
+     gproc))
+  (for-each (lambda (table fetch create)
+              (for-each (lambda (member)
+                          (add-method (hashtable/get!
+                                       table
+                                       (car member)
+                                       make-generic-procedure)
+                                      (cdr member)))
+                        (helper fetch create)))
+            (list *REFLECTED-METHODS*
+                  *REFLECTED-FIELD-ACCESSORS*
+                  *REFLECTED-FIELD-MODIFIERS*)
+            (list java/methods
+                  java/fields
+                  java/fields)
+            (list java-method-method
+                  java-field-accessor-method
+                  java-field-modifier-method)))
 
+(define (reflect-java-class jclass)
+  (let ([reflected? (hashtable/get *CLASS-PRECEDENCE-LISTS* jclass)])
+    (or reflected?
+        (begin
+          (for-each reflect-java-class
+                    (java-class-declared-superclasses jclass))
+          (hashtable/put! *CLASS-PRECEDENCE-LISTS*
+                          jclass
+                          (compute-class-precedence-list jclass))
+          (if (memq 'public (java/modifiers jclass))
+              (reflect-java-class-members jclass)
+              (hashtable/put! *REFLECTED-CONSTRUCTORS*
+                              jclass
+                              (make-generic-procedure)))))))
+
+(define (generic-java-procedure table name)
+  (mutex/synchronize
+   *REFLECTION-MUTEX*
+   (lambda ()
+     (let ([gproc (hashtable/get! table
+                                  name
+                                  make-generic-procedure)])
+       (lambda args
+         (if (not (null? args))
+             (let ([o (car args)])
+               (if (java/object? o)
+                   (mutex/synchronize
+                    *REFLECTION-MUTEX*
+                    (lambda ()
+                      (reflect-java-class (java/class-of o)))))))
+         (apply gproc args))))))
 
 ;;;;;;;;;; HIGH LEVEL PROCEDURES AND SYNTAX ;;;;;;;;;;
 
-(define java-class-precedence-list)
-(define java-constructor-for-class)
-(define generic-java-method)
-(define generic-java-field-accessor)
-(define generic-java-field-modifier)
+(define (java-class-precedence-list jclass)
+  (mutex/synchronize
+   *REFLECTION-MUTEX*
+   (lambda ()
+     (reflect-java-class jclass)
+     (hashtable/get *CLASS-PRECEDENCE-LISTS* jclass))))
 
-(define (java-constructor name)
-  (java-constructor-for-class (java-class name)))
+(define (java-constructor-for-class jclass)
+  (mutex/synchronize
+   *REFLECTION-MUTEX*
+   (lambda ()
+     (reflect-java-class jclass)
+     (hashtable/get *REFLECTED-CONSTRUCTORS* jclass))))
+
+(define (generic-java-method name)
+  (generic-java-procedure *REFLECTED-METHODS* name))
+
+(define (generic-java-field-accessor name)
+  (generic-java-procedure *REFLECTED-FIELD-ACCESSORS* name))
+
+(define (generic-java-field-modifier name)
+  (generic-java-procedure *REFLECTED-FIELD-MODIFIERS* name))
+
+(define (java-class name)
+  (let ([jclass (java/class name)])
+    (reflect-java-class jclass)
+    jclass))
 
 (define (java-new jclass . args)
   (apply (java-constructor-for-class jclass) args))
@@ -242,27 +286,3 @@
                         define-generic-java-field-modifiers
                         generic-java-field-modifier
                         java/mangle-method-name)
-
-(define (setup-memoized-procedures)
-  (set! java-class-precedence-list
-    (memoize (lambda (jclass)
-               (compute-class-precedence-list jclass))))
-  (set! java-constructor-for-class
-    (memoize (lambda (jclass)
-               (generic-java-constructor jclass))))
-  (set! generic-java-method
-    (memoize (lambda (name)
-               (generic-java-procedure name
-                                       java/methods
-                                       java-method-method))))
-  (set! generic-java-field-accessor
-    (memoize (lambda (name)
-               (generic-java-procedure name
-                                       java/fields
-                                       java-field-accessor-method))))
-  (set! generic-java-field-modifier
-    (memoize (lambda (name)
-               (generic-java-procedure name
-                                       java/fields
-                                       java-field-modifier-method))))
-  (void))

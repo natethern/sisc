@@ -13,7 +13,6 @@
 (define java-wrap                               java/wrap)
 (define java-unwrap                             java/unwrap)
 (define java-null                               java/null)
-(define java-class                              java/class)
 (define java-array-class                        java/array-class)
 (define java-proxy-class                        java/proxy-class)
 (define java-object?                            java/object?)
