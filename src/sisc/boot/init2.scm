@@ -103,6 +103,23 @@
 (define character-set           (make-native-parameter "characterSet"))
 (define inline-primitives       (make-native-parameter "inlinePrimitives"))
 
+
+(define (inline-usual-primitives)
+    (inline-primitives 
+      '(* + - / < <= = > >= abs acos angle asin assoc assq assv atan boolean?
+        car cdr caar cadr cdar cddr ceiling char-alphabetic? char-ci<=? 
+        char-ci<? char-ci=? char-ci>=? char-ci>? char-lower-case? 
+        char-numeric? char-ready? char-upcase char-upper-case? char-whitespace? 
+        char<=? char<? char=? char>=? char>? char? complex? cos denominator 
+        eof-object? eq? equal? eqv? even? exact? exp expt floor gcd imag-part
+        inexact? input-port? integer? lcm length list-ref list? log magnitude
+        max member memq memv min modulo negative? not null? number? numerator 
+        odd? output-port? pair? positive? procedure? quotient rational? real-part
+        real? remainder round sin sqrt string-ci<=? string-ci<? string-ci=?
+        string-ci>=? string-ci>? string-length string<=? string<? string=? 
+        string>=? string>? string? symbol? tan truncate vector-length vector? 
+        zero?)))
+
 ;(if (equal? (getenv "sisc.debugging") "true")
 ;    (begin
 ;      (emit-annotations #t)
@@ -258,6 +275,9 @@
       (if p 
           (begin (display "Caused by ")
                  (apply print-exception p st))))))
+
+(define (print-error e k)
+  (print-exception (make-exception e k)))
 
 ;; FORMAT
 (define format
@@ -543,6 +563,7 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
 (define call/fc call-with-failure-continuation)
 (define with/fc with-failure-continuation)
 (define call/cc call-with-current-continuation)
+(define call/ec call-with-escape-continuation)
 
 ;; This code is based on Richard Kelsey and Jonathan Rees' version of
 ;; dynamic-wind in Scheme48 (http://s48.org). It has been heavily
