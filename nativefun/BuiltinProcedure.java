@@ -30,6 +30,7 @@ public class BuiltinProcedure extends Procedure {
     }
 
     public void apply(Interpreter r) throws ContinuationException {
+        //long start=System.currentTimeMillis();
         r.lxp=r.nxp;
         r.nxp=null;
         try {
@@ -48,6 +49,7 @@ public class BuiltinProcedure extends Procedure {
         } catch (RuntimeException re) {
             error(r, name, re.getMessage());
         } 
+        //time+=System.currentTimeMillis()-start;
     }
 
     public static void error(Interpreter r, Value where, 
@@ -93,6 +95,19 @@ public class BuiltinProcedure extends Procedure {
         host=s.readModule();
         id=s.readInt();
     }
+
+    /*
+    // Profiling
+        long time;
+        
+    protected void finalize() {
+        System.err.println(justify(""+time, 10, ' ')+" "+name);
+    }
+
+    static {
+        System.runFinalizersOnExit(true);
+    }
+    */
 }
 
 /*

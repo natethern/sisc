@@ -281,7 +281,6 @@ public class Interpreter extends Util {
     protected static final int VALUESPOOLSIZE=8;
     protected Value deadValues[][] = new Value[VALUESPOOLSIZE][];
 
-
     //static int sizemiss, miss, hit, zerohit;
     public final Value[] createValues(int size) {
         if (size == 0) { 

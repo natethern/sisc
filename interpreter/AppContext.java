@@ -12,7 +12,26 @@ public class AppContext extends Util {
     public Procedure evaluator;
     public SymbolicEnvironment symenv;
     public SymbolicEnvironment toplevel_env;
+    /*
+    protected void finalize() {
+        SymbolicEnvironment ct=lookupContextEnv(Symbol.get("*prof*"));
+        SymbolicEnvironment cc=lookupContextEnv(Symbol.get("*profc*"));
+        for (Iterator i=ct.keys(); i.hasNext();) {
+            Symbol key=(Symbol)i.next();
+            System.err.println("P"+justify(ct.lookup(key).toString(),
+                                           10,' ')+" "+
+                               justify(cc.lookup(key).toString(),
+                                       10,' ')+" "+
+                               key);
+        }
+    }
 
+
+    static {
+        System.runFinalizersOnExit(true);
+    }
+    */
+    
     private LibraryManager libraries;
 
     public AppContext() {
