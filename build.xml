@@ -128,8 +128,6 @@
       <arg value="${schemedir}/repl.scm"/>
       <arg value="${schemedir}/j2s.scm"/>
       <arg value="${schemedir}/debug.scm"/>
-      <arg value="${schemedir}/slib.scm"/>
-      <arg value="${schemedir}/srfi.scm"/>
     </java>
   </target>
 

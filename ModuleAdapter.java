@@ -46,7 +46,11 @@ public abstract class ModuleAdapter extends Module {
     }
 
     public ModuleAdapter() {
-	liMessages=ResourceBundle.getBundle(getModuleName());
+        try {
+            liMessages = ResourceBundle.getBundle(getModuleName());
+        } catch (MissingResourceException mr) {
+            liMessages = Util.liMessages;
+        }
     }
 
     protected static String getLiMessage(String mn) {
