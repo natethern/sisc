@@ -17,16 +17,23 @@
       (when (->boolean (has-more-tokens tokenizer))
         (let ([tok (->string (next-token tokenizer))])
           (display (sisc:format "[to: ~a] ~a~%" destination tok))
+          (for-each (lambda (hook) (hook destination response)) send-hooks)
           (send-message bot (->jstring destination) (->jstring tok))
         (loop))))))
 
 (define join-hooks '())
 (define part-hooks '())
+(define action-hooks '())
+(define send-hooks '())
 
 (define (add-join-hook func)
   (set! join-hooks (cons func join-hooks)))
 (define (add-part-hook func)
   (set! part-hooks (cons func part-hooks)))
+(define (add-action-hook func)
+  (set! action-hooks (cons func action-hooks)))
+(define (add-send-hook func)
+  (set! send-hooks (cons func send-hooks)))
 
 (define (onPrivateMessage nick login host message)
   (handle-message private-channel
@@ -52,6 +59,18 @@
   (for-each (lambda (hook)
               (apply hook (map ->string (list channel sender login hostname))))
             join-hooks))
+
+(define (onAction sender login hostname target action)
+  (for-each (lambda (hook)
+              (hook (get-channel (->string target)) 
+                    (make-irc-message #f 
+                                          (->string target) (->string
+                                          sender) 
+                                          (normalize-nick (->symbol sender)) 
+                                          (->string login) 
+                                          (->string hostname) 
+                                          (->string action))))
+            action-hooks))
 
 (define (onQuit nick login hostname reason)
   (for-each (lambda (chan)

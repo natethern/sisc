@@ -15,7 +15,7 @@
 (define (make-schemechan channel message ignore term)
   (do-join term
            (make-channel-record term (channel-bot channel) #f '()
-                                (list scheme-channel) #f))
+                                (list scheme-channel) #f #f))	
   "Okay.")
 
 (define (queue-empty? schemer)

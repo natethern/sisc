@@ -27,6 +27,7 @@
 
 (include "bots/anna.scm")
 (include "bots/infobot.scm")
+(include "bots/logbot.scm")
 (include "plugins/info.scm")
 (include "plugins/locate.scm")
 (include "plugins/seen.scm")
@@ -35,14 +36,15 @@
 (include "plugins/scheme.scm")
 (include "plugins/zippy.scm")
 (include "plugins/schemechan.scm")
+(include "plugins/logging.scm")
 
 (define (random-elem ls)
   (list-ref ls (random-integer (length ls))))
 
 (define (make-standard-channel name bot)
   (make-channel-record name bot #f '()
-                       (list unawaybot seenbot (make-standard-infobot) annabot)
-                       #f))
+                       (list logbot unawaybot seenbot (make-standard-infobot) annabot)
+                       #f #f))
 
 (define (dbconnect host user password)
   (jdbc/connect (sisc:format "jdbc:postgresql://~a/sarah?user=~a&password=~a" host user password)))
@@ -51,7 +53,7 @@
 (define bot)
 
 (define (join-chan channel messsage ignore term)
-  (do-join term (make-standard-channel term (channel-bot channel)))
+;  (do-join term (make-standard-channel term (channel-bot channel)))
   "Okay.")
 
 (define (onDisconnect)

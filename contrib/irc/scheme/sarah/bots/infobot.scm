@@ -51,6 +51,8 @@
     seen)
    ("be quiet" "Asks me to only speak when spoken to" be-quiet)
    ("shut up" "Same as above." be-quiet)
+   ("log" "log <on|off> asks me to turn on/off logging for this channel."
+    chanlog)
    ("listen up" "I'll start conversing to any message I see." listen-up)
    ("eval" "\"eval <s-expression>\" causes me to evaluate the given s-expression in R5RS Scheme and return the result"
     stateless-eval)

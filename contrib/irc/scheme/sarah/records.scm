@@ -6,7 +6,7 @@
   (handler plugin-handler))
 
 (define-record-type :channel
-  (make-channel-record name bot quiet members handlers seed)
+  (make-channel-record name bot quiet members handlers seed logfile)
   channel-record?
   (name channel-name)
   (bot channel-bot)
@@ -14,7 +14,8 @@
   (quiet channel-bot-listens? set-channel-bot-listening!)
   (members channel-members set-channel-members!)
   (handlers channel-handlers set-channel-handlers!)
-  (seed channel-seed set-channel-seed!))
+  (seed channel-seed set-channel-seed!)
+  (logfile channel-log-file set-channel-log-file!))
 
 (define-record-type :command
   (make-command-record name help handler)
