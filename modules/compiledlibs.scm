@@ -76,7 +76,14 @@
                           (string-length segment-str)
                           (string-length symenv-id-str))))
             (isLae #f)
-            (symenv (let loop ((se (get-symbolic-environment symenv-sym)))
+            (symenv (let loop ((se (with/fc
+                                    (lambda (m e)
+                                      (let ([e (null-environment 5)])
+                                        (set-symbolic-environment! 
+                                         symenv-sym e)
+                                        e))
+                                    (lambda ()
+                                      (get-symbolic-environment symenv-sym)))))
                       (cond [(instance-of? 
                               se <sisc.ser.LibraryAE>)
                              (begin (set! isLae #t) se)]
@@ -121,18 +128,38 @@
         (error 'module-bindings "'~a' does not name a module." 
                modulename))))
 
+(define (module-metadata-bindings modulename)
+  (let* ((env-name (string->symbol (format "@~a" modulename)))
+         (env (with/fc
+              (lambda (m e) #f)
+              (lambda ()
+                (get-symbolic-environment env-name)))))
+                 
+    (if env
+        (let ([it (iterator (binding-keys (java-wrap env)))])
+          (let loop ([acc '()])
+            (if (->boolean (has-next it))
+                (let ([b (java-unwrap (next it))])
+                  (loop (cons (cons b (getprop b env)) acc)))
+                (cons env-name acc))))
+        (list env-name))))
+
 (define (getprops props table)
   (map (lambda (p) (cons p (getprop p table))) props))
 
 (define (create-library-from-module libname filename . modules)
   (let* ([modules (if (null? modules) (list libname) modules)]
-         [bindings (map module-bindings modules)])
-    (create-library
-     libname filename 
-     `(*toplevel*
-       . (,@(getprops (apply append (map cadr bindings))
-                      '*toplevel*)))
-     `(*sc-expander* 
-       . (,@(getprops modules '*sc-expander*)
-          ,@(getprops (apply append (map car bindings))
-                      '*sc-expander*))))))
+         [bindings (map module-bindings modules)]
+         [metadata (map module-metadata-bindings modules)])
+    (apply create-library
+           (append 
+            (list libname filename
+                  `(*toplevel*
+                    . (,@(getprops (apply append (map cadr bindings))
+                                   '*toplevel*)))
+                  `(*sc-expander* 
+                    . (,@(getprops modules '*sc-expander*)
+                       ,@(getprops (apply append (map car bindings))
+                                   '*sc-expander*))))
+            metadata))))
+     

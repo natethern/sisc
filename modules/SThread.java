@@ -28,7 +28,8 @@ public class SThread extends ModuleAdapter {
         THREADHOLDSLOCKQ=19, THREADSRUNNING=20, THREADRESULT=21,
         MUTEXNEW=22, MUTEXLOCK=23, MUTEXUNLOCK=24, 
         CONDVARNOTIFY=25, CONDVARNOTIFYALL=26, 
-        MUTEXOF=28, MUTEXQ=29, CONDVARQ=30, CONDVARNEW=31;
+        MUTEXOF=28, MUTEXQ=29, CONDVARQ=30, CONDVARNEW=31,
+        THREADSETRESULT=32;
 
 
     protected static Symbol 
@@ -58,6 +59,7 @@ public class SThread extends ModuleAdapter {
         define("thread/interrupted?", THREADINTERRUPTEDQ);
         define("thread/holds-lock?", THREADHOLDSLOCKQ);
 
+        define("thread/_set-result!", THREADSETRESULT);
         define("thread/_active-thread-count", THREADSRUNNING);
 
         define("condvar?", CONDVARQ);
@@ -370,6 +372,9 @@ public class SThread extends ModuleAdapter {
                 }
             case THREADHOLDSLOCKQ:
                 return truth(mutex(f.vlr[0]).owner==sthread(f.vlr[0]).thread);
+            case THREADSETRESULT:
+                sthread(f.vlr[0]).rv=f.vlr[1];
+                return VOID;
             case SETTHREADPRIORITY:
                 sthread(f.vlr[0]).thread.setPriority(num(f.vlr[1]).indexValue());
                 return VOID;
