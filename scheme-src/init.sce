@@ -819,7 +819,7 @@
       '#f)))
 (define char-whitespace?
   (lambda (|c_Su-r_VoTU|)
-    (if (memq |c_Su-r_VoTU| '(#\space #\tab #\newline))
+    (if (memv |c_Su-r_VoTU| '(#\space #\tab #\newline))
       '#t
       '#f)))
 (define char-upper-case?
