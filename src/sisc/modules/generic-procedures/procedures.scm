@@ -86,14 +86,11 @@
 
 ;;;;;;;;;; DISPATCH ;;;;;;;;;;
 
-;;returns a list of applicable methods and ambiguous methods. The
-;;applicable methods are returned in a total order based on their
-;;specificity with respect to otypes. Ambiguous methods are methods
-;;for which there is at least one other (consequently also ambiguous)
-;;method that could inhabit the same place in the total order.
+;;Returns the list of applicable methods. The applicable methods are
+;;returned in a total order based on their specificity with respect to
+;;otypes.
 ;;
-;;The algorithm used here is the same as the one employed by Goo
-;;(http://www.googoogaga.org/), Dylan and others.
+;;The algorithm used here is the same as the one employed by CLOS
 (define (applicable-methods proc otypes)
   (applicable-methods-wrapper (get-methods proc) otypes take))
 (define (applicable-methods-wrapper methods args get-types)
@@ -113,50 +110,36 @@
              (set-cdr! methods mlist)))
        (let* ([otypes (get-types args (method-list-arity mlist))]
               [res (method-cache-get cache otypes)])
-         (if res
-             (values (car res) (cdr res))
-             (call-with-values
-                 (lambda () (applicable-methods-helper
-                             (method-list-methods mlist)
-                             otypes))
-               (lambda (applicable ambiguous)
-                 (method-cache-put! cache
-                                    otypes
-                                    (cons applicable ambiguous))
-                 (values applicable ambiguous)))))))))
+         (or res
+             (let ([res (applicable-methods-helper
+                         (method-list-methods mlist)
+                         otypes)])
+               (method-cache-put! cache otypes res)
+               res)))))))
 (define (applicable-methods-helper methods otypes)
-  (define (insert applicable ambiguous m)
+  (define (insert applicable m)
     (if (null? applicable)
-        (values (list m) ambiguous)
+        (list m)
         (let ([other (car applicable)])
           (case (compare-methods m other otypes)
-            ((more-specific)
-             (values (cons m applicable) ambiguous))
-            ((less-specific)
-             (call-with-values (lambda () (insert (cdr applicable)
-                                                  ambiguous
-                                                  m))
-               (lambda (applicable ambiguous)
-                 (values (cons other applicable) ambiguous))))
-            (else
-              (values '() (cons m applicable)))))))
+            [(more-specific)
+             (cons m applicable)]
+            [(less-specific)
+             (cons other (insert (cdr applicable) m))]
+            (else '())))))
   ;;optimization opportunity: turn otypes into a vector so that
   ;;method-applicable can do a fast size test. Not much point doing
   ;;this though if we are going to cache the result of this entire
   ;;operation anyway.
   (let loop ([methods    methods]
-             [applicable '()]
-             [ambiguous  '()])
+             [applicable '()])
     (if (null? methods)
-        (values applicable ambiguous)
-        (let ([m (car methods)])
-          (if (method-applicable? m otypes)
-              (call-with-values (lambda () (insert applicable
-                                                   ambiguous
-                                                   m))
-                (lambda (applicable ambiguous)
-                  (loop (cdr methods) applicable ambiguous)))
-              (loop (cdr methods) applicable ambiguous))))))
+        applicable
+        (loop (cdr methods)
+              (let ([m (car methods)])
+                (if (method-applicable? m otypes)
+                    (insert applicable m)
+                    applicable))))))
 
 (define (call-method-helper applicable args)
   (apply (method-procedure (car applicable))
@@ -169,16 +152,14 @@
   (map type-of (take args count)))
 
 (define (invoke-generic-procedure proc args)
-  (call-with-values
-      (lambda () (applicable-methods-wrapper (get-methods proc)
-                                             args
-                                             limited-type-of))
-    (lambda (applicable ambiguous)
-      (if (null? applicable)
-          (error (string-append "no applicable method for args ~s "
-                                "in generic procedure ~s")
-                 args proc))
-      (call-method-helper applicable args))))
+  (let ([applicable (applicable-methods-wrapper (get-methods proc)
+                                                args
+                                                limited-type-of)])
+    (if (null? applicable)
+        (error (string-append "no applicable method for args ~s "
+                              "in generic procedure ~s")
+               args proc)
+        (call-method-helper applicable args))))
 
 
 ;;;;;;;;;; CONSTRUCTORS ;;;;;;;;;;

@@ -18,7 +18,12 @@
 
 ;;compare two types taking into account the cpl of c
 ;;NB: c must be a sub-type of both types
-(define compare-types-hook (make-hook (lambda (x y c) 'ambiguous)))
+(define compare-types-hook
+  (make-hook (lambda (x y c)
+               (error (string-append
+                       "unable to compare types ~s and ~s "
+                       "with respect to type ~c")
+                      x y c))))
 (define (compare-types x y c)
   (let ([x<y? (type<= x y)]
         [y<x? (type<= y x)])

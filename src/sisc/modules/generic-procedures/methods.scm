@@ -44,10 +44,9 @@
                   [m2-tn (cdr m2-t)]
                   [o-tn  (cdr o-t)])
               (case (compare-types (car m1-t) (car m2-t) (car o-t))
-                [(equal) (loop m1-tn m2-tn o-tn res)]
-                [(ambiguous) (loop m1-tn m2-tn o-tn 'ambiguous)]
+                [(less-specific) 'less-specific]
                 [(more-specific) 'more-specific]
-                [(less-specific) 'less-specific]))])))
+                [(equal) (loop m1-tn m2-tn o-tn res)]))])))
 
 (define-syntax method
   (syntax-rules (next:)

@@ -69,7 +69,7 @@ the TYPES<= procedure.
 
 
 COMPARE-METHODS <method1> <method2> <list types>
-=> equal, ambiguous, more-specific, less-specific
+=> equal, more-specific, less-specific
 Determines the relationship of two methods by comparing their type
 signatures against each other and using the supplied <types> for
 disambiguation. <types> must be applicable (as determined by
@@ -90,16 +90,13 @@ return 'more-specific.
 
 * If COMPARE-TYPES returns 'equal we proceed to the next triple.
 
-* If COMPARE-TYPES returns 'ambiguous we set the result to 'ambiguous
-and proceed to the next triple.
-
 * If COMPARE-TYPES returns 'less-specific we return 'less-specific.
 
 * If COMPARE-TYPES returns 'more-specific we return 'more-specific.
 
 Informally, the above performs a left-to-right match, returning the
 result of the type comparison at the point of the first discernible
-difference.
+difference. Note that
 
 
 METHOD ([(next: ?next)] (<type> ?arg) ... [. ?rest]) . ?body
@@ -139,17 +136,12 @@ Adds <methods> to <generic-proc>. This is more efficient than calling
 ADD-METHOD on each individual method.
 
 
-APPLICABLE-METHODS <generic-proc> <list types>
-=> <applicable> <ambiguous>
+APPLICABLE-METHODS <generic-proc> <list types> => <list method>
 Returns all methods of <generic-proc> that are applicable, as
-determined by METHOD-APPLICABLE?, to <types>. The result is returned
-as two lists which result from pair-wise method comparison using
-COMPARE-METHODS.
+determined by METHOD-APPLICABLE?, to <types>. The result is computed
+by pair-wise method comparison using COMPARE-METHODS.
 
-The first list contains a all the applicable methods, ordered
-by their specificity, for which an unambiguous ordering could be
-determined. The second list contains all those applicable methods for
-which no unambiguous ordering by specificity was possible.
+The applicable methods are ordered by their specificity.
 
 
 Syntax
@@ -242,7 +234,7 @@ methods being incapable of discerning whether there *is* a next best
 matching method.
 
 * A "left-to-right" rule in the method selection logic simplifies the
-algorithm and results in far fewer cases where methods are considered
-ambiguous. See COMPARE-METHODS for details.
+algorithm and results in elimination of ambiguity. See COMPARE-METHODS
+for details.
 
 * Improved error reporting.

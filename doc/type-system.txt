@@ -33,7 +33,7 @@ Java types representing native types.
 
 
 COMPARE-TYPES <type1> <type2> <type3>
-=> equal, ambiguous, more-specific, less-specific
+=> equal, more-specific, less-specific
 Determines the relationship of two types with respect to a
 third. <type3> must be a sub-type of <type1> and <type2>. <type1> and
 <type2> are first compared using TYPE<=. If that comparison indicates
@@ -46,8 +46,7 @@ The predicate is equipped with an extension hook,
 COMPARE-TYPES-HOOK that is invoked in the case the comparison of
 <type1> with <type2> using TYPE<= finds the two types to be
 disjoint. See below for more details on hooks. The default
-implementation of COMPARE-TYPES does not examine <type3> and thus
-declares the two types ambiguous if TYPE<= finds them disjoint.
+implementation returns an error.
 
 
 Derived procedures and predicates
