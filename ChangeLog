@@ -1,3 +1,7 @@
+2004-06-20  Scott G. Miller   <scgmille@freenetproject.org>
+
+	* Added the os module.
+	
 2004-06-17  Scott G. Miller   <scgmille@freenetproject.org>
 	
 	* Print a stack trace when an error occurs loading source

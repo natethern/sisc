@@ -832,6 +832,20 @@
     (import debugging)
     (include "match.ss"))
 
+(module os
+  (process-terminated?
+   wait-for-process
+   get-process-stdout
+   get-process-stderr
+   get-process-stdin
+   spawn-process
+   spawn-process-with-environment
+   spawn-process/env)
+  (import s2j)
+  (include "os/process.scm")
+  (define spawn-process/env)
+  (set! spawn-process/env spawn-process-with-environment))
+
 (module optimizer
   (optimize initialize)
   (import pattern-matching)
