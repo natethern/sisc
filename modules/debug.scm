@@ -98,7 +98,7 @@
         (begin
           (for-each 
            (lambda (procedure-symbol)
-             (let ([proc (getprop procedure-symbol '*toplevel*)])
+             (let ([proc (getprop (sc-expand procedure-symbol) '*toplevel*)])
                (cond [(not (procedure? proc))
                       (error 'trace "'~s' is not bound to a procedure." 
                              procedure-symbol)]
@@ -126,7 +126,7 @@
                                  [else '()])])
     (for-each 
      (lambda (procedure-symbol)
-       (let ([proc (assq procedure-symbol traced-procedures)])
+       (let ([proc (assq (sc-expand procedure-symbol) traced-procedures)])
          (if proc
              (begin
                (when (eq? (cdr proc) 
