@@ -1,3 +1,7 @@
+2004-12-27  Matthias Radestock  <matthias@sorted.org>
+
+	* Implemented srfi-40.
+
 2004-12-13  Matthias Radestock  <matthias@sorted.org>
 
 	* Allow S2J proxy definitions to refer to classes defined in the
