@@ -274,6 +274,12 @@ public class Parser extends Util implements Tokens {
                     return EOF;
                 else if (bv.equals("void"))
                     return VOID;
+                else if (bv.equals("+inf"))
+                    return Quantity.POSITIVE_INFINITY;
+                else if (bv.equals("-inf"))
+                    return Quantity.NEGATIVE_INFINITY;
+                else if (bv.equals("nan"))
+                    return Quantity.NaN;
                 else throw new IOException(liMessage(SISCB, "invalidsharpc", bv));
 			case '%': 
 				// Syntactic tokens
