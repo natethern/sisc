@@ -174,24 +174,6 @@ for <function>sqrt</function>, it is not clear what other mathematical
 	    causes &SISC; to revert to base 10.
 	  </para>
 	</listitem>
-        <listitem>
-          <para>6.5 -
-            The environment returned by the
-            <function>scheme-report-environment</function> does not 
-            contain the syntactic keywords specified in the standard.
-            This is a violation of the standard.
-          </para>
-        </listitem>
-        <listitem>
-          <para>6.5 -
-            If a syntactic keyword defined by &R5RS; is redefined,
-            that definition overrides the keyword in all contexts.  In
-            particular, 
-            the environment returned by the
-            <function>scheme-report-environment</function> is affected
-            as well.
-          </para>
-        </listitem>
       </orderedlist>
     </para>
   </appendix>
