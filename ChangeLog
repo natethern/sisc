@@ -1,3 +1,8 @@
+2004-12-11  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Changed let-monomorphic to behave more like let, allowing
+	  internal definitions in the body.
+
 2004-12-13  Matthias Radestock  <matthias@sorted.org>
 
 	* Allow S2J proxy definitions to refer to classes defined in the
@@ -19,6 +24,8 @@
 
 	* Changed the generic procedure's DEFINE-METHOD(S) macros to be
 	  definitions.
+
+2004-12-05  Released SISC 1.9.5
 
 2004-12-01  Scott G. Miller  <sgmiller@gmail.com>
 
