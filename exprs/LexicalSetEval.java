@@ -71,5 +71,16 @@ public class LexicalSetEval extends Expression {
             pos=s.readBer(dis);
         }
     }
+
+    public boolean equals(Object o) {
+        if (!(o instanceof LexicalSetEval))
+            return false;
+        LexicalSetEval e=(LexicalSetEval)o;
+        return e.depth==depth && e.pos==pos;
+    }
+
+    public int hashCode() {
+        return depth<<16 | pos | 0xea000000;
+    }
 }
 

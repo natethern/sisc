@@ -74,6 +74,16 @@ public class DefineEval extends Expression {
             lhs=(Symbol)s.deserialize(dis);
         }
     }
+
+    public boolean equals(Object o) {
+        return (o instanceof DefineEval) &&
+            lhs.equals(((DefineEval)o).lhs);
+    }
+
+    public int hashCode() {
+        return lhs.hashCode();
+    }
+
 }
 
 

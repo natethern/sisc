@@ -90,4 +90,15 @@ public class FreeSetEval extends Expression {
             envLoc=-1;
         }
     }
+
+    public boolean equals(Object o) {
+        if (!(o instanceof FreeSetEval))
+            return false;
+        FreeSetEval e=(FreeSetEval)o;
+        return lhs.equals(e.lhs) && senv.equals(e.senv);
+    }
+
+    public int hashCode() {
+        return lhs.hashCode() ^ senv.hashCode();
+    }
 }
