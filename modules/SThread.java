@@ -107,36 +107,37 @@ public class SThread extends ModuleAdapter {
 	private int lockCount=0;
 	private Thread owner=null;
 	private CondVar condvar=new CondVar();
+        private Object clock=new Object();
 
 	public Value lock(long timeout) {
 	    Thread thisThread=null;
 
 	    synchronized(this) {
-		if (owner == null) {
-		    owner=Thread.currentThread();
-		    
-		} else if ((thisThread=Thread.currentThread())!= 
-			   owner) {
-		    
-		    long lastAwoken=System.currentTimeMillis();
-		    
-		    while (lockCount>0) {
-			try {
-			    this.wait(timeout);
-			} catch (InterruptedException ie) {}
-
-			long now=System.currentTimeMillis();
-			timeout-=(now-lastAwoken);
-			if (timeout <= 0)
-			    return FALSE;
-			else
-			    lastAwoken=now;
-		    }
-		    owner=thisThread;
-		}
-		lockCount++;
-		return TRUE;
-	    }
+                if (owner == null) {
+                    owner=Thread.currentThread();
+                    
+                } else if ((thisThread=Thread.currentThread())!= 
+                           owner) {
+                    
+                    long lastAwoken=System.currentTimeMillis();
+                    
+                    while (lockCount>0) {
+                        try {
+                            this.wait(timeout);
+                        } catch (InterruptedException ie) {}
+                        
+                        long now=System.currentTimeMillis();
+                        timeout-=(now-lastAwoken);
+                        if (timeout <= 0)
+                            return FALSE;
+                        else
+                            lastAwoken=now;
+                    }
+                    owner=thisThread;
+                }
+                lockCount++;
+                return TRUE;
+            }
 	}
 
 	public final Value acquire() {
@@ -146,14 +147,14 @@ public class SThread extends ModuleAdapter {
 		lockCount++;
 	    else {
 		synchronized(this) {
-		    while (lockCount>0) {
-			try {
-			    this.wait();
-			} catch (InterruptedException ie) {}
-			
-		    }
-		    lockCount++;
-		}
+                    while (lockCount>0) {
+                        try {
+                            this.wait();
+                        } catch (InterruptedException ie) {}
+                        
+                    }
+                    lockCount++;
+                }
 		owner=thisThread;
 	    }
 
@@ -163,12 +164,26 @@ public class SThread extends ModuleAdapter {
 
 	public final void unlock() {
 	    if (owner==Thread.currentThread()) {
-		if ((--lockCount)==0) {
-		    owner=null;
-		    synchronized(this) {
-			this.notify();
-		    }
-		}
+                synchronized(this) {
+                    synchronized(condvar) {
+                        if ((--lockCount)==0) {
+                            owner=null;
+                            this.notify();
+                        }
+                    }
+                }
+	    }
+	}
+
+	public final void unlockAll() {
+	    if (owner==Thread.currentThread()) {
+                synchronized(this) {
+                    synchronized(condvar) {
+                        lockCount=0;
+                        owner=null;
+                        this.notify();
+                    }
+                }
 	    }
 	}
 
@@ -188,10 +203,10 @@ public class SThread extends ModuleAdapter {
 	    while (true) {
 		try {
 		    synchronized(condvar) {
-                        unlock();
-			condvar.wait();
-                        acquire();
-		    }
+                        unlockAll();
+                        condvar.wait();
+                    }
+                    acquire();
 		    return;
 		} catch (InterruptedException e) {}
 	    }
@@ -201,7 +216,7 @@ public class SThread extends ModuleAdapter {
 	    while (true) {
 		try {
 		    synchronized(condvar) {
-                        unlock();
+                        unlockAll();
 			condvar.wait(timeout);
                         acquire();
 		    }
