@@ -32,7 +32,7 @@
           (loop)))))
 
   (define (onPrivateMessage nick login host message)
-    (let ([response (answer (->string nick) (->string message) #t)])
+    (let ([response (answer (->string nick) #f (->string message) #t)])
       (if response
           (send-messages nick response))))
 

@@ -113,9 +113,13 @@
                                    ((cdr handler) from channel
 				    cleaned-message to-bot)))])
     (if response
-        (and (or (not (bot-quiet (string->symbol channel))) to-bot) response)
-        (and (or (not (bot-quiet (string->symbol channel))) to-bot)
-             (ask-alice cleaned-message)))))
+        (and (or (and channel
+		      (not (bot-quiet (string->symbol channel))))
+		 to-bot) response)
+        (and (or (and channel
+		      (not (bot-quiet (string->symbol channel))))
+		 to-bot)
+	     (ask-alice cleaned-message)))))
     
 (define (bot-clean message)
   (let loop ([x 0])
