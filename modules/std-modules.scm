@@ -429,8 +429,6 @@
      create-library-from-module
      open-library
      link-library)
-  (import s2j)
-  (import generic-procedures)
   (include "compiledlibs.scm"))
 
 (module pattern-matching
