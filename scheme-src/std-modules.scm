@@ -96,6 +96,13 @@
   (import threading)
   (include "../modules/hashtable.scm"))
 
+(module procedure-properties
+  (procedure-property
+   set-procedure-property!
+   procedure-property!)
+  (import threading)
+  (include "../modules/procedure-properties.scm"))
+
 (module generic-procedures
   (meta
    type<=
@@ -119,6 +126,7 @@
   (import s2j-native)
   (import hashtable)
   (import threading)
+  (import procedure-properties)
   (include "../modules/generic-procedures.scm"))
 
 (module s2j

@@ -330,7 +330,10 @@
               <parameter>key</parameter> has no association then
               <parameter>thunk</parameter> is evaluated and the result
               is associated with <parameter>key</parameter> in
-              <parameter>hashtable</parameter> and also returned.
+              <parameter>hashtable</parameter> and also returned.  The
+              <parameter>nobinding</parameter> argument, which
+              defaults to &num;f, denotes the value indicating an
+              unassociated key.
             </para>
           </blockquote>
         </para>
@@ -461,6 +464,101 @@
         </para>
       </blockquote>
     </sect2>
+  </sect1>
+  <sect1>
+    <title>Procedure Properties</title>
+    <para>
+      &requires; 
+      <emphasis role="bold">
+        (import <emphasis>procedure-properties</emphasis>)
+      </emphasis>
+    </para>
+    <para>
+      &SISC; allows key/value bindings to be associated with
+      procedures. This has a number of applications. For instance,
+      <xref linkend="GenericProcedures">generic procedures</xref>
+      store their methods in a procedure property.
+    </para>
+    <para>
+      Keys must be symbols. Values can be anything. All operations are
+      thread-safe.
+    </para>
+    <para>
+      <blockquote>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>obj</type>
+            <methodname>procedure-property</methodname>
+            <methodparam><parameter>proc</parameter></methodparam>
+            <methodparam><parameter>symbol</parameter></methodparam>
+            <methodparam choice="opt">
+              <parameter>nobinding</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Returns the value associated with the property
+              <parameter>symbol</parameter> of procedure
+              <parameter>proc</parameter>, or
+              <parameter>nobinding</parameter>, which defaults to
+              &num;f, if the property is not set.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+      <blockquote>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>obj</type>
+            <methodname>set-procedure-property!</methodname>
+            <methodparam><parameter>proc</parameter></methodparam>
+            <methodparam><parameter>symbol</parameter></methodparam>
+            <methodparam><parameter>val</parameter></methodparam>
+            <methodparam choice="opt">
+              <parameter>nobinding</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Sets the property <parameter>symbol</parameter> of procedure
+              <parameter>proc</parameter> to the value
+              <parameter>val</parameter>. Returns the previous value
+              of the property or <parameter>nobinding</parameter>,
+              which defaults to &num;f, if the property was unset.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+      <blockquote>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>obj</type>
+            <methodname>procedure-property!</methodname>
+            <methodparam><parameter>proc</parameter></methodparam>
+            <methodparam><parameter>symbol</parameter></methodparam>
+            <methodparam><parameter>thunk</parameter></methodparam>
+            <methodparam choice="opt">
+              <parameter>nobinding</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Returns the value associated with the property
+              <parameter>symbol</parameter> of procedure
+              <parameter>proc</parameter>. If the property is unset
+              then <parameter>thunk</parameter> is evaluated and the
+              property is set to the result, which is also returned.
+              The <parameter>nobinding</parameter> argument, which
+              defaults to &num;f, denotes the value indicating that
+              the property is unset.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+    </para>
   </sect1>
   <sect1 id="OperatingSystemInterface">
     <title>
