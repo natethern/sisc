@@ -4,14 +4,11 @@
 ;; These are handled natively by SISC, we just need to create the 
 ;; write-showing-shared function.
 
-(define write-showing-shared
+(define write-with-shared-structure 
   (lambda args
-    (let ([old-shared-state #f])
-      (dynamic-wind 
-       (lambda () 
-         (set! old-shared-state (print-shared #t)))
-       (lambda ()
-         (apply write args))
-       (lambda ()
-         (print-shared old-shared-state))))))
-       
+    (let ([old-shared-state (print-shared #t)])
+      (apply write args)
+      (print-shared old-shared-state)
+      #!void)))
+
+(define read-with-shared-structure read)
