@@ -1,3 +1,8 @@
+2003-02-12  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Fixed a small bug in Closure which was stealing the vlr
+	  when it was locked, resulting in problems with call/cc.
+
 2003-02-04  SISC 1.7.2-beta Released
 
 2003-02-04  Scott G. Miller  <scgmille@freenetproject.org>
