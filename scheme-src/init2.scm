@@ -401,6 +401,20 @@
               (error 'error "cannot specify arguments to a non format-string error."))))
     error-record))
 
+(define (error-location error-record)
+  (cond [(and (pair? error-record) (assoc 'location error-record))
+         => cdr]
+        [else #f]))
+
+(define (error-message error-record)
+  (cond [(and (pair? error-record) (assoc 'message error-record))
+         => cdr]
+        [else #f]))
+
+(define (error-parent error-record)
+  (cond [(and (pair? error-record) (assoc 'parent error-record))
+         => cdr]
+        [else #f]))
 
 ;;;;;;;;;;;;; legacy macro support ;;;;;;;;;;;;
 
