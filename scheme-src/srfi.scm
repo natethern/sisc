@@ -251,6 +251,12 @@
   ;;this srfi is natively supported by our syntax expander
   (add-feature 'srfi-24))
 
+(display "srfi-27\n")
+(module srfi-27 (cut cute)
+  (include "srfi/srfi-27.scm")
+  (add-feature 'srfi-27))
+
+(display "srfi-28\n")
 (module srfi-28 ()
   ;;this srfi is natively supported by SISC
   (add-feature 'srfi-28))

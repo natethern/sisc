@@ -43,6 +43,7 @@
           (format "Error: ~a" message)
           "Error.")))
 
+(define current-optimizer (parameterize (lambda (x) x)))
 
 (define current-default-error-handler
   (parameterize
