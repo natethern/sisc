@@ -41,7 +41,7 @@ import java.util.jar.*;
 import java.io.*;
 import java.text.*;
 
-public abstract class Util implements Conf {
+public abstract class Util implements Version {
 
     protected static final Value[] ZV=new Value[0];
     protected static final Quantity FIVE=Quantity.valueOf(5);

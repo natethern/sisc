@@ -83,17 +83,13 @@ public class SchemeCharacter extends Value {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeChar(c);
-        }
+        s.writeChar(c);
     }
 
     public SchemeCharacter() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            c=s.readChar();
-        }
+        c=s.readChar();
     }
 }
 

@@ -1352,53 +1352,49 @@ public class Quantity extends Value {
     }
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            type=s.readInt();
-            switch (type) {
-            case FIXEDINT:
-                val=s.readInt();
-                break;
-            case INTEG:
-                i=s.readBigInteger();
-                break;
-            case DECIM:
-		d=s.readBigDecimal().floatValue();
-                break;
-            case RATIO:
-                i=s.readBigInteger();
-                de=s.readBigInteger();
-                break;
-            case COMPLEX:
-                d=s.readBigDecimal().floatValue();
-                im=s.readBigDecimal().floatValue();
-                break;
-            }
-            simplify();
+        type=s.readInt();
+        switch (type) {
+        case FIXEDINT:
+            val=s.readInt();
+            break;
+        case INTEG:
+            i=s.readBigInteger();
+            break;
+        case DECIM:
+            d=s.readBigDecimal().floatValue();
+            break;
+        case RATIO:
+            i=s.readBigInteger();
+            de=s.readBigInteger();
+            break;
+        case COMPLEX:
+            d=s.readBigDecimal().floatValue();
+            im=s.readBigDecimal().floatValue();
+            break;
         }
+        simplify();
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeInt(type);
-            switch (type) {
-            case FIXEDINT:
-                s.writeInt(val);
-                break;
-            case INTEG:
-                s.writeBigInteger(i);
-                break;
-            case DECIM:
-                s.writeBigDecimal(new BigDecimal(d));
-                break;
-            case RATIO:
-                s.writeBigInteger(i);
-                s.writeBigInteger(de);
-                break;
-            case COMPLEX:
-                s.writeBigDecimal(new BigDecimal(d));
-                s.writeBigDecimal(new BigDecimal(im));
-                break;
-            }
+        s.writeInt(type);
+        switch (type) {
+        case FIXEDINT:
+            s.writeInt(val);
+            break;
+        case INTEG:
+            s.writeBigInteger(i);
+            break;
+        case DECIM:
+            s.writeBigDecimal(new BigDecimal(d));
+            break;
+        case RATIO:
+            s.writeBigInteger(i);
+            s.writeBigInteger(de);
+            break;
+        case COMPLEX:
+            s.writeBigDecimal(new BigDecimal(d));
+            s.writeBigDecimal(new BigDecimal(im));
+            break;
         }
     }
 }

@@ -65,16 +65,12 @@ public class ApplyValuesContEval extends Expression {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeExpression(consumer);
-        }
+        s.writeExpression(consumer);
     }
 
     public ApplyValuesContEval() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            consumer=(Procedure)s.readExpression();
-        }
+        consumer=(Procedure)s.readExpression();
     }
 }

@@ -70,17 +70,12 @@ public class SHashtable extends ModuleAdapter {
         }
 
         public void serialize(Serializer s) throws IOException {
-            if (SERIALIZATION) {
-                //not the most efficient, but easiest
-                s.writeExpression(toAList());
-            }
+            //not the most efficient, but easiest
+            s.writeExpression(toAList());
         }
 
         public void deserialize(Deserializer s) throws IOException {
-            if (SERIALIZATION) {
-                //not the most efficient, but easiest
-                addAList((Pair)s.readExpression());
-            }
+            addAList((Pair)s.readExpression());
         }
 
         public String display() {

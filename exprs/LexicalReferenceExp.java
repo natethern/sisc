@@ -61,10 +61,15 @@ public class LexicalReferenceExp extends Expression implements Immediate {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeInt(depth);
-            s.writeInt(pos);
-        }
+        s.writeInt(depth);
+        s.writeInt(pos);
+    }
+
+    public LexicalReferenceExp() {}
+
+    public void deserialize(Deserializer s) throws IOException {
+        depth=s.readInt();
+        pos=s.readInt();
     }
 
     public boolean equals(Object o) {
@@ -76,14 +81,6 @@ public class LexicalReferenceExp extends Expression implements Immediate {
 
     public int hashCode() {
         return depth<<16 | pos | 0xea000000;
-    }
-    public LexicalReferenceExp() {}
-
-    public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            depth=s.readInt();
-            pos=s.readInt();
-        }
     }
 }
 

@@ -68,17 +68,13 @@ public class Box extends Value {
     }
     
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeExpression(val);
-        }
+        s.writeExpression(val);
     }
 
     public Box() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            val=s.readExpression();
-        }
+        val=s.readExpression();
     }
 }
 

@@ -55,19 +55,15 @@ public class IfEval extends Expression {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeExpression(conseq);
-            s.writeExpression(altern);
-        }
+        s.writeExpression(conseq);
+        s.writeExpression(altern);
     }
 
     public IfEval() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            conseq=s.readExpression();
-            altern=s.readExpression();
-        }
+        conseq=s.readExpression();
+        altern=s.readExpression();
     }
 }
 

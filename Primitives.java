@@ -236,15 +236,11 @@ public class Primitives extends ModuleAdapter {
         }
 
         public void serialize(Serializer s) throws IOException {
-            if (SERIALIZATION) {
-                s.writeExpression(v);
-            }
+            s.writeExpression(v);
         }
 
         public void deserialize(Deserializer s) throws IOException {
-            if (SERIALIZATION) {
-                v = (Value)s.readExpression();
-            }
+            v = (Value)s.readExpression();
         }
     }
 

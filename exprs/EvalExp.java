@@ -65,20 +65,16 @@ public class EvalExp extends Expression {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeExpression(pre);
-            s.writeExpression(post);
-            s.writeBoolean(preImmediate);
-        }
+        s.writeExpression(pre);
+        s.writeExpression(post);
+        s.writeBoolean(preImmediate);
     }
 
     public EvalExp() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            pre=s.readExpression();
-            post=s.readExpression();
-            preImmediate=s.readBoolean();
-        }
+        pre=s.readExpression();
+        post=s.readExpression();
+        preImmediate=s.readBoolean();
     }
 }

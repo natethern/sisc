@@ -201,99 +201,95 @@ public class S2J extends ModuleAdapter {
         public JavaObject() {}
 
         public void serialize(Serializer s) throws IOException {
-            if (SERIALIZATION) {
-                byte ty = getObjType();
-                s.writeByte(ty);
-                switch (ty) {
-                case JNULL:
-                    break;
-                case JCLASS: {
-                    s.writeUTF(((Class)obj).getName());
-                    break;
+            byte ty = getObjType();
+            s.writeByte(ty);
+            switch (ty) {
+            case JNULL:
+                break;
+            case JCLASS: {
+                s.writeUTF(((Class)obj).getName());
+                break;
+            }
+            case JFIELD: {
+                Field f = (Field)obj;
+                s.writeUTF(f.getDeclaringClass().getName());
+                s.writeUTF(f.getName());
+                break;
+            }
+            case JMETHOD: {
+                Method m = (Method)obj;
+                s.writeUTF(m.getDeclaringClass().getName());
+                s.writeUTF(m.getName());
+                Class[] types = m.getParameterTypes();
+                s.writeInt(types.length);
+                for (int i=0; i < types.length; i++) {
+                    s.writeUTF(types[i].getName());
                 }
-                case JFIELD: {
-                    Field f = (Field)obj;
-                    s.writeUTF(f.getDeclaringClass().getName());
-                    s.writeUTF(f.getName());
-                    break;
+                break;
+            }
+            case JCONSTR: {
+                Constructor c = (Constructor)obj;
+                s.writeUTF(c.getDeclaringClass().getName());
+                Class[] types = c.getParameterTypes();
+                s.writeInt(types.length);
+                for (int i=0; i < types.length; i++) {
+                    s.writeUTF(types[i].getName());
                 }
-                case JMETHOD: {
-                    Method m = (Method)obj;
-                    s.writeUTF(m.getDeclaringClass().getName());
-                    s.writeUTF(m.getName());
-                    Class[] types = m.getParameterTypes();
-                    s.writeInt(types.length);
-                    for (int i=0; i < types.length; i++) {
-                        s.writeUTF(types[i].getName());
-                    }
-                    break;
-                }
-                case JCONSTR: {
-                    Constructor c = (Constructor)obj;
-                    s.writeUTF(c.getDeclaringClass().getName());
-                    Class[] types = c.getParameterTypes();
-                    s.writeInt(types.length);
-                    for (int i=0; i < types.length; i++) {
-                        s.writeUTF(types[i].getName());
-                    }
-                    break;
-                }
-                default:
-                    throw new RuntimeException(liMessage(S2JB, "cannotserialize"));
-                }
+                break;
+            }
+            default:
+                throw new RuntimeException(liMessage(S2JB, "cannotserialize"));
             }
         }
 
         public void deserialize(Deserializer s) throws IOException {
-            if (SERIALIZATION) {
-                byte ty = s.readByte();
-                switch (ty) {
-                case JNULL: {
-                    obj = null;
-                    break;
-                }
-                case JCLASS: {
-                    obj = resolveType(s.readUTF());
-                    break;
-                }
-                case JFIELD:
-                    try {
-                        Class c = resolveType(s.readUTF());
-                        obj = c.getDeclaredField(s.readUTF());
-                    } catch (NoSuchFieldException e) {
-                        throw new RuntimeException(liMessage(S2JB, "cannotdeserialize"));
-                    }
-                    break;
-                case JMETHOD:
-                    try {
-                        Class c = resolveType(s.readUTF());
-                        String n = s.readUTF();
-                        int l = s.readInt();
-                        Class types[] = new Class[l];
-                        for (int i=0; i < l; i++) {
-                            types[i] = resolveType(s.readUTF());
-                        }
-                        obj = c.getDeclaredMethod(n, types);
-                    } catch (NoSuchMethodException e) {
-                        throw new RuntimeException(liMessage(S2JB, "cannotdeserialize"));
-                    }
-                    break;
-                case JCONSTR:
-                    try {
-                        Class c = resolveType(s.readUTF());
-                        int l = s.readInt();
-                        Class types[] = new Class[l];
-                        for (int i=0; i < l; i++) {
-                            types[i] = resolveType(s.readUTF());
-                        }
-                        obj = c.getDeclaredConstructor(types);
-                    } catch (NoSuchMethodException e) {
-                        throw new RuntimeException(liMessage(S2JB, "cannotdeserialize"));
-                    }
-                    break;
-                default:
+            byte ty = s.readByte();
+            switch (ty) {
+            case JNULL: {
+                obj = null;
+                break;
+            }
+            case JCLASS: {
+                obj = resolveType(s.readUTF());
+                break;
+            }
+            case JFIELD:
+                try {
+                    Class c = resolveType(s.readUTF());
+                    obj = c.getDeclaredField(s.readUTF());
+                } catch (NoSuchFieldException e) {
                     throw new RuntimeException(liMessage(S2JB, "cannotdeserialize"));
                 }
+                break;
+            case JMETHOD:
+                try {
+                    Class c = resolveType(s.readUTF());
+                    String n = s.readUTF();
+                    int l = s.readInt();
+                    Class types[] = new Class[l];
+                    for (int i=0; i < l; i++) {
+                        types[i] = resolveType(s.readUTF());
+                    }
+                    obj = c.getDeclaredMethod(n, types);
+                } catch (NoSuchMethodException e) {
+                    throw new RuntimeException(liMessage(S2JB, "cannotdeserialize"));
+                }
+                break;
+            case JCONSTR:
+                try {
+                    Class c = resolveType(s.readUTF());
+                    int l = s.readInt();
+                    Class types[] = new Class[l];
+                    for (int i=0; i < l; i++) {
+                        types[i] = resolveType(s.readUTF());
+                    }
+                    obj = c.getDeclaredConstructor(types);
+                } catch (NoSuchMethodException e) {
+                    throw new RuntimeException(liMessage(S2JB, "cannotdeserialize"));
+                }
+                break;
+            default:
+                throw new RuntimeException(liMessage(S2JB, "cannotdeserialize"));
             }
         }
 

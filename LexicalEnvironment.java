@@ -41,7 +41,6 @@ import sisc.ser.Deserializer;
 public class LexicalEnvironment extends Value {
     public LexicalEnvironment parent;
     public Value[] vals;
-    //    public boolean locked;
 
     public LexicalEnvironment() {
         this.vals=ZV;
@@ -101,26 +100,18 @@ public class LexicalEnvironment extends Value {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-	    //dos.writeBoolean(locked);
-            s.writeInt(vals.length);
-            for (int i=0; i<vals.length; i++)
-                s.writeExpression(vals[i]);
-            s.writeExpression(parent);
-        }
+        s.writeInt(vals.length);
+        for (int i=0; i<vals.length; i++)
+            s.writeExpression(vals[i]);
+        s.writeExpression(parent);
     }
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-	    //locked=dis.readBoolean();
-            int size=s.readInt();
-            vals=new Value[size];
-
-            for (int i=0; i<size; i++)
-                vals[i]=(Value)s.readExpression();
-
-            parent = (LexicalEnvironment)s.readExpression();
-        }
+        int size=s.readInt();
+        vals=new Value[size];
+        for (int i=0; i<size; i++)
+            vals[i]=(Value)s.readExpression();
+        parent = (LexicalEnvironment)s.readExpression();
     }
 }
 

@@ -97,42 +97,38 @@ public class CallFrame extends Procedure {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            if (vlr==null)
-                s.writeBoolean(false);
-            else {
-                s.writeBoolean(true);
-                s.writeInt(vlr.length);
-                for (int i=0; i<vlr.length; i++)
-                    s.writeExpression(vlr[i]);
-            }
-            s.writeExpression(nxp);
-            s.writeExpression(fk);
-
-            s.writeExpression(parent);
-            s.writeExpression(env);
-            s.writeBoolean(vlk);
+        if (vlr==null)
+            s.writeBoolean(false);
+        else {
+            s.writeBoolean(true);
+            s.writeInt(vlr.length);
+            for (int i=0; i<vlr.length; i++)
+                s.writeExpression(vlr[i]);
         }
+        s.writeExpression(nxp);
+        s.writeExpression(fk);
+
+        s.writeExpression(parent);
+        s.writeExpression(env);
+        s.writeBoolean(vlk);
     }
 
     public CallFrame() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            vlr=null;
-            if (s.readBoolean()) {
-                int size=s.readInt();
-                vlr=new Value[size];
-                for (int i=0; i<size; i++)
-                    vlr[i]=(Value)s.readExpression();
-            }
-
-            nxp=s.readExpression();
-            fk=(CallFrame)s.readExpression();
-            parent=(CallFrame)s.readExpression();
-            env=(LexicalEnvironment)s.readExpression();
-            vlk=s.readBoolean();
+        vlr=null;
+        if (s.readBoolean()) {
+            int size=s.readInt();
+            vlr=new Value[size];
+            for (int i=0; i<size; i++)
+                vlr[i]=(Value)s.readExpression();
         }
+
+        nxp=s.readExpression();
+        fk=(CallFrame)s.readExpression();
+        parent=(CallFrame)s.readExpression();
+        env=(LexicalEnvironment)s.readExpression();
+        vlk=s.readBoolean();
     }
 }
 

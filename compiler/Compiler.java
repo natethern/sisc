@@ -59,17 +59,12 @@ public class Compiler extends Util {
 
         public Syntax() {}
 
-        public void deserialize(Deserializer s)
-        throws IOException {
-            if (SERIALIZATION) {
-                synid=s.readInt();
-            }
+        public void deserialize(Deserializer s) throws IOException {
+            synid=s.readInt();
         }
 
         public void serialize(Serializer s) throws IOException {
-            if (SERIALIZATION) {
-                s.writeInt(synid);
-            }
+            s.writeInt(synid);
         }
     }
 

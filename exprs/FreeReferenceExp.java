@@ -81,21 +81,17 @@ public class FreeReferenceExp extends Expression implements Immediate {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeExpression(sym);
-            s.writeExpression(lenv);
-        }
+        s.writeExpression(sym);
+        s.writeExpression(lenv);
     }
 
     public FreeReferenceExp() {
     }
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            sym=(Symbol)s.readExpression();
-            lenv=(AssociativeEnvironment)s.readExpression();
-            envLoc=-1;
-        }
+        sym=(Symbol)s.readExpression();
+        lenv=(AssociativeEnvironment)s.readExpression();
+        envLoc=-1;
     }
 
     public boolean equals(Object o) {

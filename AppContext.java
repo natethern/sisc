@@ -68,103 +68,56 @@ public class AppContext extends Util {
     }
 
     // Heapfile loading/saving
-    public void loadEnv(Interpreter r, 
-                        SeekableDataInput i) throws IOException, ClassNotFoundException {
-        if (SERIALIZATION) {
-            Library s=Library.load(i);
+    public void loadEnv(Interpreter r, SeekableDataInput i)
+        throws IOException, ClassNotFoundException {
 
-            SchemeBoolean lTRUE=(SchemeBoolean)s.getExpression(0),
-                                lFALSE=(SchemeBoolean)s.getExpression(1);
-            SchemeVoid lVOID=(SchemeVoid)s.getExpression(2);
-            EmptyList lEMPTYLIST=(EmptyList)s.getExpression(3);
-            EOFObject lEOF=(EOFObject)s.getExpression(4);
-            CallFrame lstk=(CallFrame)s.getExpression(5);
-            Procedure levaluator=(Procedure)s.getExpression(6);
+        Library s=Library.load(i);
 
-            AssociativeEnvironment lsymenv=(AssociativeEnvironment)s.getExpression(Symbol.get("symenv"));
+        SchemeBoolean lTRUE=(SchemeBoolean)s.getExpression(0),
+            lFALSE=(SchemeBoolean)s.getExpression(1);
+        SchemeVoid lVOID=(SchemeVoid)s.getExpression(2);
+        EmptyList lEMPTYLIST=(EmptyList)s.getExpression(3);
+        EOFObject lEOF=(EOFObject)s.getExpression(4);
+        CallFrame lstk=(CallFrame)s.getExpression(5);
+        Procedure levaluator=(Procedure)s.getExpression(6);
 
+        AssociativeEnvironment lsymenv=(AssociativeEnvironment)s.getExpression(Symbol.get("symenv"));
+
+        try {
+            symenv=lsymenv;
             try {
-                symenv=lsymenv;
-                try {
-                    toplevel_env=lookupContextEnv(TOPLEVEL);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                    throw new IOException("Heap did not contain toplevel environment!");
-                }
-                evaluator=levaluator;
-                TRUE=lTRUE;
-                FALSE=lFALSE;
-                VOID=lVOID;
-                EMPTYLIST=lEMPTYLIST;
-                EOF=lEOF;
-            } catch (Exception e) {
-		e.printStackTrace();
-                throw new IOException(e.getMessage());
-            } finally {
-                r.pop(lstk);
+                toplevel_env=lookupContextEnv(TOPLEVEL);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                e.printStackTrace();
+                throw new IOException("Heap did not contain toplevel environment!");
             }
-        } else {
-            /*
-            ObjectInputStream ois=new ObjectInputStream(i);
-	    CallFrame lstk = null;
-            try {
-                SchemeBoolean lTRUE=(SchemeBoolean)ois.readObject(),
-                                    lFALSE=(SchemeBoolean)ois.readObject();
-                SchemeVoid lVOID=(SchemeVoid)ois.readObject();
-                EmptyList lEMPTYLIST=(EmptyList)ois.readObject();
-                EOFObject lEOF=(EOFObject)ois.readObject();
-                lstk=(CallFrame)ois.readObject();
-                AssociativeEnvironment lsymenv=(AssociativeEnvironment)ois.readObject();
-                Procedure levaluator=(Procedure)ois.readObject();
-
-
-                symenv=lsymenv;
-                try {
-                    toplevel_env=lookupContextEnv(TOPLEVEL);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    throw new IOException("Heap did not contain toplevel environment!");
-                }
-                evaluator=levaluator;
-                TRUE=lTRUE;
-                FALSE=lFALSE;
-                VOID=lVOID;
-                EMPTYLIST=lEMPTYLIST;
-                EOF=lEOF;
-            } catch (Exception e) {
-		e.printStackTrace();
-                throw new IOException(e.getMessage());
-            } finally {
-                r.pop(lstk);
-                }*/
+            evaluator=levaluator;
+            TRUE=lTRUE;
+            FALSE=lFALSE;
+            VOID=lVOID;
+            EMPTYLIST=lEMPTYLIST;
+            EOF=lEOF;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        } finally {
+            r.pop(lstk);
         }
     }
 
-    public void saveEnv(Interpreter r, OutputStream o, LibraryBuilder lb) throws IOException {
+    public void saveEnv(Interpreter r, OutputStream o, LibraryBuilder lb)
+        throws IOException {
         r.save();
-        if (SERIALIZATION) {
-            lb.add(TRUE);
-            lb.add(FALSE);
-            lb.add(VOID);
-            lb.add(EMPTYLIST);
-            lb.add(EOF);            
-            lb.add(r.stk);
-            lb.add(evaluator);
-            lb.add(Symbol.get("symenv"), symenv);
-
-            lb.buildLibrary(o);
-        } else {
-            ObjectOutputStream out=new ObjectOutputStream(o);
-            out.writeObject(r.stk);
-            out.writeObject(symenv);
-            out.writeObject(evaluator);
-            out.writeObject(TRUE);
-            out.writeObject(FALSE);
-            out.writeObject(VOID);
-            out.writeObject(EMPTYLIST);
-            out.writeObject(EOF);
-            out.flush();
-        }
-
+        lb.add(TRUE);
+        lb.add(FALSE);
+        lb.add(VOID);
+        lb.add(EMPTYLIST);
+        lb.add(EOF);            
+        lb.add(r.stk);
+        lb.add(evaluator);
+        lb.add(Symbol.get("symenv"), symenv);
+        
+        lb.buildLibrary(o);
         r.pop(r.stk);
     }
 

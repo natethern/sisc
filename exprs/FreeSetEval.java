@@ -76,20 +76,16 @@ public class FreeSetEval extends Expression {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeExpression(lhs);
-            s.writeExpression(senv);
-        }
+        s.writeExpression(lhs);
+        s.writeExpression(senv);
     }
 
     public FreeSetEval() {}
 
      public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            lhs=(Symbol)s.readExpression();
-            senv=(AssociativeEnvironment)s.readExpression();
-            envLoc=-1;
-        }
+         lhs=(Symbol)s.readExpression();
+         senv=(AssociativeEnvironment)s.readExpression();
+         envLoc=-1;
     }
 
     public boolean equals(Object o) {

@@ -155,21 +155,16 @@ public class SchemeVector extends Value {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeInt(vals.length);
-            for (int i=0; i<vals.length; i++) {
-                s.writeExpression(vals[i]);
-            }
+        s.writeInt(vals.length);
+        for (int i=0; i<vals.length; i++) {
+            s.writeExpression(vals[i]);
         }
     }
 
-    public void deserialize(Deserializer s)
-    throws IOException {
-        if (SERIALIZATION) {
-            vals=new Value[s.readInt()];
-            for (int i=0; i<vals.length; i++) {
-                vals[i]=(Value)s.readExpression();
-            }
+    public void deserialize(Deserializer s) throws IOException {
+        vals=new Value[s.readInt()];
+        for (int i=0; i<vals.length; i++) {
+            vals[i]=(Value)s.readExpression();
         }
     }
 }

@@ -112,15 +112,11 @@ public class SchemeString extends Value {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeUTF(new String(stringdata));
-        }
+        s.writeUTF(new String(stringdata));
     }
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            stringdata=s.readUTF().toCharArray();
-        }
+        stringdata=s.readUTF().toCharArray();
     }
 }
 

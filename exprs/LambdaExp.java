@@ -63,21 +63,17 @@ public class LambdaExp extends Expression implements Immediate {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeBoolean(infiniteArity);
-            s.writeInt(fcount);
-            s.writeExpression(body);
-        }
+        s.writeBoolean(infiniteArity);
+        s.writeInt(fcount);
+        s.writeExpression(body);
     }
 
     public LambdaExp() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            infiniteArity=s.readBoolean();
-            fcount=s.readInt();
-            body=s.readExpression();
-        }
+        infiniteArity=s.readBoolean();
+        fcount=s.readInt();
+        body=s.readExpression();
     }
 }
 

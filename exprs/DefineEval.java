@@ -63,17 +63,13 @@ public class DefineEval extends Expression {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeExpression(lhs);
-        }
+        s.writeExpression(lhs);
     }
 
     public DefineEval() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            lhs=(Symbol)s.readExpression();
-        }
+        lhs=(Symbol)s.readExpression();
     }
 
     public boolean equals(Object o) {

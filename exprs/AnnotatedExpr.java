@@ -62,40 +62,36 @@ public class AnnotatedExpr extends Value {
     public AnnotatedExpr() {}
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
 	    s.writeExpression(expr);
 	    s.writeExpression(annotation);
 	    s.writeExpression(stripped);
-        }
     }
 
     public String display() {
-	StringBuffer b=new StringBuffer("#@(");
-	b.append(annotation.display()).append(" . ");
-	if (expr instanceof Value) 
-	    b.append(((Value)expr).display());
-	else 
-	    b.append(expr.express());
-	b.append(')');
-	return b.toString();
+        StringBuffer b=new StringBuffer("#@(");
+        b.append(annotation.display()).append(" . ");
+        if (expr instanceof Value) 
+            b.append(((Value)expr).display());
+        else 
+            b.append(expr.express());
+        b.append(')');
+        return b.toString();
     }
 
     public String write() {
-	StringBuffer b=new StringBuffer("#@(");
-	b.append(annotation.write()).append(" . ");
-	if (expr instanceof Value) 
-	    b.append(((Value)expr).write());
-	else 
-	    b.append(expr.express());
-	b.append(')');
-	return b.toString();
+        StringBuffer b=new StringBuffer("#@(");
+        b.append(annotation.write()).append(" . ");
+        if (expr instanceof Value) 
+            b.append(((Value)expr).write());
+        else 
+            b.append(expr.express());
+        b.append(')');
+        return b.toString();
     }
 
     public void readExpression(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
 	    expr=s.readExpression();
 	    annotation=(Value)s.readExpression();
-            stripped=(Value)s.readExpression();
-        }
+        stripped=(Value)s.readExpression();
     }
 }

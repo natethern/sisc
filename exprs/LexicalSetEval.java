@@ -58,19 +58,15 @@ public class LexicalSetEval extends Expression {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeInt(depth);
-            s.writeInt(pos);
-        }
+        s.writeInt(depth);
+        s.writeInt(pos);
     }
 
     public LexicalSetEval() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            depth=s.readInt();
-            pos=s.readInt();
-        }
+        depth=s.readInt();
+        pos=s.readInt();
     }
 
     public boolean equals(Object o) {

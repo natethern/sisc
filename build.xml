@@ -42,22 +42,7 @@
     <delete file="${basedir}/Conf.java"/>
   </target> 
 
-  <target name="select-full-config" depends="prepare" unless="lite">
-    <copy file="${basedir}/Conf-full.java.tmpl"
-          tofile="${basedir}/Conf.java"
-          overwrite="yes"/>
-  </target>
-
-  <target name="select-lite-config" depends="prepare" if="lite">
-    <copy file="${basedir}/Conf-lite.java.tmpl"
-          tofile="${basedir}/Conf.java"
-          overwrite="yes"/>
-  </target>
-
-  <target name="select-config" depends="select-full-config,select-lite-config">
-  </target>
-
-  <target name="compiler" depends="select-config">
+  <target name="compiler" depends="prepare">
     <copy file="${basedir}/data/Quantity-${quantity-type}.java.tmpl"
           tofile="${basedir}/data/Quantity.java"
           overwrite="yes"/>

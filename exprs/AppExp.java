@@ -82,30 +82,26 @@ public class AppExp extends Expression {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeExpression(exp);
-            s.writeInt(rands.length);
-            for (int i=0; i<rands.length; i++) {
-                s.writeExpression(rands[i]);
-            }
-            s.writeExpression(nxp);
-            s.writeBoolean(allImmediate);
+        s.writeExpression(exp);
+        s.writeInt(rands.length);
+        for (int i=0; i<rands.length; i++) {
+            s.writeExpression(rands[i]);
         }
+        s.writeExpression(nxp);
+        s.writeBoolean(allImmediate);
     }
 
     public AppExp() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            exp=s.readExpression();
-            int size=s.readInt();
-            rands=new Expression[size];
-            for (int i=0; i<size; i++) {
-                rands[i]=s.readExpression();
-            }
-            nxp=s.readExpression();
-            allImmediate=s.readBoolean();
+        exp=s.readExpression();
+        int size=s.readInt();
+        rands=new Expression[size];
+        for (int i=0; i<size; i++) {
+            rands[i]=s.readExpression();
         }
+        nxp=s.readExpression();
+        allImmediate=s.readBoolean();
     }
 }
 

@@ -62,31 +62,27 @@ public class Closure extends Procedure {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeExpression(name);
-            long attr=(long)fcount << 1;
-            if (arity) attr|=1;
-            s.writeLong(attr);
-            s.writeExpression(env);
-            s.writeExpression(body);
-        }
+        s.writeExpression(name);
+        long attr=(long)fcount << 1;
+        if (arity) attr|=1;
+        s.writeLong(attr);
+        s.writeExpression(env);
+        s.writeExpression(body);
     }
 
     public Value express() {
-	return new Pair(sym("closure"), list(truth(arity), Quantity.valueOf(fcount), body.express()));
+        return new Pair(sym("closure"), list(truth(arity), Quantity.valueOf(fcount), body.express()));
     }
 
     public Closure() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            name=(Symbol)s.readExpression();
-            long attr=s.readLong();
-            fcount=(int)(attr>>1);
-            arity=(attr&1)!=0;
-            env=(LexicalEnvironment)s.readExpression();
-            body=s.readExpression();
-        }
+        name=(Symbol)s.readExpression();
+        long attr=s.readLong();
+        fcount=(int)(attr>>1);
+        arity=(attr&1)!=0;
+        env=(LexicalEnvironment)s.readExpression();
+        body=s.readExpression();
     }
 }
 

@@ -68,23 +68,19 @@ public class FillRibExp extends Expression {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeExpression(exp);
-            s.writeInt(pos);
-            s.writeExpression(nxp);
+        s.writeExpression(exp);
+        s.writeInt(pos);
+        s.writeExpression(nxp);
 	    s.writeBoolean(lastAndRatorImmediate);
-        }
     }
 
     public FillRibExp() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            exp=s.readExpression();
-            pos=s.readInt();
-            nxp=s.readExpression();
+        exp=s.readExpression();
+        pos=s.readInt();
+        nxp=s.readExpression();
 	    lastAndRatorImmediate=s.readBoolean();
-        }
     }
 }
 
