@@ -247,9 +247,6 @@ level. FIX: this is hard to fix.
 
 Shortcomings of generic functions:
 
-* not as efficient as they could be. FIX: considerable improvements
-will result from the introduction of a hashtable type into sisc
-
 * error reporting is not particularly good. FIX: real-world usage will
 tell what errors crop up frequently and we can then put some mechanism
 in place for reporting them in a meaningful way.
@@ -257,8 +254,6 @@ in place for reporting them in a meaningful way.
 * only operate on java objects. FIX: need a more complex type
 system. This is quite hard but I've got most of the code for that
 already written.
-
-* not thread-safe. FIX: use the threads module.
 
 * not garbage collected.
 
