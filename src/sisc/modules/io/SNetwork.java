@@ -92,6 +92,10 @@ public class SNetwork extends IndexedProcedure {
         public void close() throws IOException {
             s.close();
         }
+
+        public void setSoTimeout(int ms) throws SocketException {
+            s.setSoTimeout(ms);
+        }
     }
 
     class SchemeTCPSocket extends SchemeSocket {
@@ -487,8 +491,13 @@ public class SNetwork extends IndexedProcedure {
                     ms.leaveGroup(InetAddress.getByName(host));
                     return VOID;
                 case SET_SO_TIMEOUT:
-                    SchemeTCPSocket tcps=(SchemeTCPSocket)sock(f.vlr[0]);
-                    tcps.setSoTimeout(num(f.vlr[1]).indexValue());
+                    if(f.vlr[0] instanceof SchemeSocket) {
+                         SchemeTCPSocket tcps=(SchemeTCPSocket)sock(f.vlr[0]);
+                         tcps.setSoTimeout(num(f.vlr[1]).intValue());
+                    } else {
+                        SchemeServerSocket servsock=serversock(f.vlr[0]);
+                        servsock.setSoTimeout(num(f.vlr[1]).intValue());
+                    }
                     return VOID;
                 default:
                     throw new RuntimeException(liMessage(SISCB,"incorrectargcount"));
