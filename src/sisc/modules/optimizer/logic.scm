@@ -1,27 +1,27 @@
-(define (remove-unreferenced vars refed)
-  (cond [(null? vars) '()]
-        [(assq (car vars) refed) =>
-         (lambda (count)
-           (if (> (cdr count) 0)
-               (cons (car vars) (remove-unreferenced (cdr vars) refed))
-               (remove-unreferenced (cdr vars) refed)))]
-        [else (remove-unreferenced (cdr vars) refed)]))
-  
-(define (opt:lambda keyword formals lexicals body state)
-  (let* ([rv (opt body state)]
-         [newlexicals (remove-unreferenced lexicals (state-get state refv))])
-    (list keyword #t formals newlexicals rv)))
+(define (opt:lambda keyword formals body state)
+  (let-values ([(rv state)
+                (opt body
+                     (union-state-entry*
+                      state
+                      'lvars
+                      (cond [(list? formals)
+                             formals]
+                            [(pair? formals)
+                             (make-proper formals)]
+                            [else (list formals)])))])
+    (values (list keyword formals rv) state)))
 
 ;;Constant Propogation (always safe)
 ; This function is complicatedly thorough
-(define cp-candidates
-  (lambda (formals values* rec state)
-    (let ((nf '())
+
+(define cp-candidates 
+  (lambda (formals values* state rec)
+    (let ((set-vars (or (get-state-entry state 'set-vars) '()))
+          (refed-vars (or (get-state-entry state 'refed-vars) '()))
+          (free-vars (or (get-state-entry state 'free-vars) '()))
+          (nf '())
           (nv '())
-          (sec '())
-          (refv (state-get state refv))
-          (lsetv (state-get state setv))
-          (freev (state-get state freev)))
+          (sec '()))
       (define (cp-helper x y acc)
         ;Watch for null? x but not null? y, or vice versa, indicating
         ;argument count mismatch.  If we find one, don't optimize
@@ -33,16 +33,14 @@
                   (cond 
                     ;; If this var is never referenced, add its rhs to 
                     ;; the side-effect-only list
-                    [(not (assq cx refv))
+                    [(not (memq cx refed-vars))
                      (set! sec (cons cy sec))
                      (cp-helper (cdr x) (cdr y) acc)]
                     ;; If this var gets set!'ed, or its right-hand side
                     ;; is non-immediate, or is the same var in a letrec,
 		    ;; skip it
                     [(or (not (immediate? cy))
-                         (if rec
-                             (> (reference-count cx lsetv) 1)
-                             (assq cx lsetv))
+                         (and set-vars (memq cx set-vars))
 			 (and rec (eq? cx cy)))
                      (set! nf (cons cx nf))
                      (set! nv (cons cy nv))
@@ -73,109 +71,110 @@
                     ;; If the right hand side is a var-ref, 
                     ;; but its set!'ed or a free variable, skip it.
                     [(and (symbol? cy) 
-                          (or  (if rec
-                                   (> (reference-count cy lsetv) 1)
-                                   (assq cy lsetv))
-                               (memq cy freev)))
+                          (or (memq cy set-vars)
+                              (memq cy free-vars)))
                      (set! nf (cons cx nf))
                      (set! nv (cons cy nv))
                      (cp-helper (cdr x) (cdr y) acc)]
-;                    ;; If the right-hand-side is a lexical var-ref and 
-;                    ;; that var is not set! in the body, we can
- ;                   ;; do a simple variable renaming.
-                    [(and (symbol? cy)
-                          (and rec (memq cy formals)))
-  ;                  [(and (symbol? cy) 
-  ;                        (or (and rec (memq cy formals))
-   ;                           (not (memq cy freev))))
-                               (cp-helper (cdr x)
-                                          (cdr y) 
-                                          (cons (cons cx cy) acc))]
-                    ;; Due to recent problems, don't do variable to variable
-                    ;; copies from outer scopes
-                    [(symbol? cy)
-                     (set! nf (cons cx nf))
-                     (set! nv (cons cy nv))
-                     (cp-helper (cdr x) (cdr y) acc)]
+                    ;; If the right-hand-side is a var-ref and 
+                    ;; that var is not set! in the body, we can
+                    ;; do a simple variable renaming.
+                    [(and (symbol? cy) 
+                          (or (and rec (memq cy formals))
+                              (memq cy (or (get-state-entry state 'lvars)
+                                           '()))))
+                     (cp-helper (cdr x)
+                                (cdr y) 
+                                (cons (cons cx cy) acc))]
                     [else 
                       (if rec
                           (begin
                             (let vloop ((v acc))
                               (unless (null? v) 
-                                (if (eq? (cdar v) cx)
-                                    (set-cdr! (car v) cy))))
-                            (varcount-decr! state setv cx)
-                            #;(set! nf (cons cx nf))
-                            #;(set! nv (cons cy nv))))
+                                (if (eq? (cdr v) cx)
+                                    (set-cdr! v cy))))
+                            (set! nf (cons cx nf))
+                            (set! nv (cons cy nv))))
                       (cp-helper (cdr x)
                                  (cdr y) 
-                                 (cons (cons cx cy) acc))])))])
+                                 (cons (cons cx cy) acc))]))]))
       (let ((cpc (cp-helper formals values* '())))
         (if (and (null? cpc) (null? sec))
             (values formals values* cpc sec)
             (values nf nv cpc sec))))))
-
+  
 (define (opt:letrec-helper formals values* state)
-  (let-values ([(nf nvo cpcs sec)
-                (cp-candidates formals values* #t state)])
-    (if (null? cpcs)
-        (values nf nvo sec state)
-        (begin
-          (for-each (lambda (var) (varcount-decr! state refv (car var)))
-                    cpcs)
-          (state-union-ls state cpc cpcs)
-          (let ([nv (map (lambda (e) (opt e state)) nvo)])
-            (if (= (length nv) (length values*))
-                (values nf nvo sec state)
-                (opt:letrec-helper nf nv state)))))))
+  (let ((state (union-state-entry* state 'lvars formals)))
+    (let-values ([(nf nvo cpc sec)
+                  (cp-candidates formals values* state #t)])
+      (let ([state (if (null? cpc)
+                       state
+                       (union-state-entry* state 'constant-prop cpc))])
+        (if (null? cpc)
+            (values nf nvo sec state)
+            (let-values ([(nv fstate*)
+                          (let ([x (map (lambda (e)
+                                          (let-values ([(rv state) (opt e state)])
+                                            (cons rv state)))
+                                        nvo)])
+                            (values (map car x) (map cdr x)))])
+              (if (= (length nv) (length values*))
+                  (values nf nvo sec state)
+                  (opt:letrec-helper
+                   nf nv (merge-states 
+                          state 
+                          (apply merge-states fstate*))))))))))
 
-(define (opt:letrec keyword formals values* lexicals body state)
+(define (opt:letrec keyword formals values* body state)
   (let-values ([(nf nv sec state) (opt:letrec-helper formals values* state)])
-    (let ([newbody (opt body state)])
-      (apply make-begin state 
-             (append sec 
-                     (list
-                      (if (null? nf)
-                          newbody
-                           `(,keyword #t ,(map list nf nv)
-                                      ,(remove-unreferenced lexicals (state-get state refv))
-                                      ,newbody))))))))
+    (let-values ([(newbody bstate) (opt body state)])
+      (values
+       (apply make-begin 
+              (append sec 
+                      (list
+                       (if (null? nf)
+                           newbody
+                           `(,keyword ,(map list nf nv) ,newbody)))))
+       (merge-states state bstate)))))
 
-(define (opt:let keyword formals lexicals values* body state)
-  (let-values ([(nf nv cpcs sec) (cp-candidates formals values* #f state)])
-    (for-each (lambda (var) (varcount-decr! state refv (car var)))
-              cpcs)
-    (let* ([state (if (null? cpcs) state (state-union-ls state cpc cpcs))]
-           [rv (opt body state)])
-      (apply make-begin state
-             (append sec
-                     (list
-                      (if (null? nf)
-                          rv
-                          `(,(opt:lambda keyword nf lexicals rv state)
-                            ,@nv))))))))
+(define (opt:let keyword formals values* body state)
+  (let ((state (union-state-entry* state 'lvars formals)))
+    (let-values ([(nf nv cpc sec) (cp-candidates formals values* state #f)])
+      (let-values ([(rv state)
+                    (opt body (if (null? cpc)
+                                  state
+                                  (union-state-entry* state 'constant-prop
+                                                      cpc)))])
+        (values
+         (apply make-begin 
+                (append sec
+                        (list
+                         (if (null? nf)
+                             rv
+                             `((,keyword ,nf ,rv) ,@nv)))))
+         state)))))
 
 (define (opt:ref ref state)
-  (let ((cp (state-get state cpc)))
+  (let ((cp (get-state-entry state 'constant-prop)))
     (cond [(and cp (assq ref cp)) =>
            (lambda (v)
-             (let ([rv (opt (cdr v) state)])
-               (if (symbol? rv)
-                   (varcount-incr! state refv rv)
-                   (varcount-decr! state refv ref))
-               rv))]
-          [else ref])))
+             (opt (cdr v) state))]
+          [else (values ref (new-state))])))
 
 (define (opt:if keyword test conseq altern state)
   (match test
     ;;Branch elimination (always safe)
     (,x
      (guard (constant? x))
-      (if x conseq altern))
+     (values 
+      (if x conseq altern)
+      (new-state)))
     ;;Various lookahead opts
     ((,?if ,B #f #f)     
      (guard (core-form-eq? ?if 'if #%if))
-     (make-begin state B altern))
+     (values 
+      (make-begin B altern)
+      (new-state)))
     ((,?if ,B #f ,x)
      (guard (and (constant? x)
                  (core-form-eq? ?if 'if #%if)))
@@ -185,7 +184,9 @@
      (opt:if keyword B conseq altern state))
     ((,?if ,B ,x ,y)
      (guard (and (constant? x) (constant? y) (core-form-eq? ?if 'if #%if)))
-     (make-begin state B conseq))
+     (values 
+      (make-begin B conseq)
+      (new-state)))
     ;;Or optimization
     (((,?lambda (,var) (,?if ,itest ,iconseq ,ialtern))
       ,val)
@@ -199,8 +200,9 @@
     ((,?begin ,e* ... ,el)
      (guard (core-form-eq? ?begin 'begin #%begin))
      (let-values ([(rv state) (opt:if keyword el conseq altern state)])
-       (apply make-begin state (append e* `(,rv)))))
-    (,other `(,keyword ,other ,conseq ,altern))))
+       (values (apply make-begin (append e* `(,rv)))
+               (merge-states state '((new-assumptions begin))))))
+    (,other (values `(,keyword ,other ,conseq ,altern) (new-state)))))
 
 ;; Applications and constant folding (possibly unsafe)
 (define opt:application 
@@ -208,55 +210,51 @@
     (cond [(and (eq? rator 'not)
                 (not-redefined? 'not)
                 (= (length rands) 1))
-           (varcount-decr! state refv 'not)
-           (opt:if '#%if (car rands) #f #t state)]
+           (let-values ([(rv state) (opt:if '#%if (car rands) #f #t state)])
+             (values rv (merge-states state '((new-assumptions not)))))]
           [(and (symbol? rator)
                 (not-redefined? rator)
                 (andmap constant? rands))
-           (varcount-decr! state refv rator)
-           (eval `("noexpand" (,rator ,@rands)))]
+           (values (eval `("noexpand" (,rator ,@rands)))
+                   `((new-assumptions ,rator)))]
           [(and (pair? rator)
                 (eq? (car rator) 'lambda)
                 (pair? (cdr rator))
                 (null? (cadr rator))
                 (pair? (cddr rator))
                 (null? (cdddr rator)))
-           E]
+           (values E (new-state))]
           [else 
-           `(,rator ,@rands)])))
+            (values `(,rator ,@rands) (new-state))))))
 
 ;; begin flattening, constant elimination, and collapse
-(define (mb-helper state exp1 . exps*)
+(define (mb-helper exp1 . exps*)
   (if (null? exps*)
       (if (and (pair? exp1)
                (core-form-eq? (car exp1) 'begin '#%begin))
-          (apply mb-helper state (cdr exp1))
+          (apply mb-helper (cdr exp1))
           (list exp1))
       (match exp1
         ;; Eliminate constants and variable references
         ;; in command context.
         (,x
-         (guard (symbol? x))
-         (varcount-decr! state refv x)
-         (apply mb-helper state exps*))
-        (,x
-         (guard (constant? x))
-         (apply mb-helper state exps*))
+         (guard (or (constant? x) (symbol? x)))
+         (apply mb-helper exps*))
         ;; Eliminate procedures in command context
         ((lambda ,formals ,body)
-         (apply mb-helper state exps*))
+         (apply mb-helper exps*))
         ;; Flatten nested begins
         ((,?begin ,sexps* ...)
          (guard (core-form-eq? ?begin 'begin #%begin))
-         (let ((sub-begin (apply mb-helper state sexps*)))
+         (let ((sub-begin (apply mb-helper sexps*)))
            (append sub-begin 
-                   (apply mb-helper state exps*))))
-        (,other (cons other (apply mb-helper state exps*))))))
+                   (apply mb-helper exps*))))
+        (,other (cons other (apply mb-helper exps*))))))
 
-(define (make-begin state exp1 . exps*)
+(define (make-begin exp1 . exps*)
   (if (null? exps*) 
       exp1
-      (let ((result (apply mb-helper state exp1 exps*)))
+      (let ((result (apply mb-helper exp1 exps*)))
         (if (and (pair? result)
                  (= (length result) 1))
             (car result)
@@ -264,13 +262,21 @@
                    
 
 (define (opt:begin exp1 exps* state)
-  (apply make-begin state exp1 exps*))
+  (values
+   (apply make-begin exp1 exps*)
+   (new-state)))
 
 (define (opt:set! keyword lhs rhs state)
   (match rhs
     ;; Begin lifting
     ((begin ,e* ... ,el)
 ;     (guard (core-form-not-redefined? 'begin))
-     (apply make-begin state (append e* `((,keyword ,lhs ,el)))))
+     (values
+      (apply make-begin (append e* `((,keyword ,lhs ,el))))
+      '((new-assumptions 'begin))))
     (,else
-     `(,keyword ,lhs ,else))))
+      (values
+       `(,keyword ,lhs ,else)
+       (new-state)))))
+
+

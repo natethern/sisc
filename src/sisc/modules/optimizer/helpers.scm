@@ -16,12 +16,6 @@
   (if (null? lses) ls1
       (apply union (union-2 ls1 (car lses)) (cdr lses))))
 
-(define (difference ls1 ls2)
-  (cond [(null? ls1) '()]
-        [(memq (car ls1) ls2)
-         (difference (cdr ls1) ls2)]
-        [else (cons (car ls1) (difference (cdr ls1) ls2))]))
-
 (define (constant? e)
   (or (atom? e) 
       (and (pair? e) (= (length e) 2) (eq? (car e) #%quote))))
@@ -31,8 +25,7 @@
       (constant? e)))
 
 (define (not-redefined? proc)
-  (or (eq? (inline-primitives) #t)
-       (memq proc (inline-primitives))))
+  (memq proc (getprop 'assumptive-procedures '*opt* '())))
 
 (define-syntax core-form-eq? 
   (syntax-rules ()
