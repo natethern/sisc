@@ -1,0 +1,135 @@
+;;;;;;;;;;;;;;;; NATIVE MODULES ;;;;;;;;;;;;;;;
+
+(define-syntax native-module
+  (lambda (x)
+    (syntax-case x ()
+      ((_ name class)
+       (let ((m (load-native-library (syntax-object->datum (syntax class)))))
+	 (with-syntax (((def ...) (datum->syntax-object
+				   (syntax name)
+				   (get-native-library-binding-names m))))
+           (syntax (module name (def ...)
+		     (define *module* (load-native-library class))
+                     (define def (get-native-library-binding
+                                   *module* (quote def)))
+		     ...))))))))
+
+
+(native-module j2s-module "sisc.modules.J2S")
+(native-module logicops-module "sisc.modules.SLogicOps")
+(native-module networking-module "sisc.modules.SNetwork")
+(native-module threading-module "sisc.modules.SThread")
+(native-module debug-module "sisc.modules.SDebug")
+(native-module s2j-module "sisc.modules.S2J")
+
+(module generic-functions 
+  ((define-generic generic-method)
+   (define-method add-method)
+   (define-constructor add-constructor)
+   make)
+  (import s2j-module)
+  (include "../modules/generic-functions.scm"))
+
+(module s2j
+  (define-generic
+   define-method
+   define-constructor
+   make
+   (define-java-proxy java-proxy java-proxy-helper)
+   java-class
+   java-wrap
+   java-unwrap
+   java-instance?
+   java-assignable?
+   java-object?
+   java-class?
+   java-interface?
+   java-array?
+   java-null?
+   java-class-of
+   java-array-new
+   ->
+   ->jboolean
+   ->jchar
+   ->jbyte
+   ->jshort
+   ->jint
+   ->jlong
+   ->jfloat
+   ->jdouble
+   ->jstring
+   ->jarray
+   ->boolean
+   ->character
+   ->number
+   ->string
+   ->symbol
+   ->vector
+   ->list
+   <jvoid>
+   <jboolean>
+   <jchar>
+   <jbyte>
+   <jshort>
+   <jint>
+   <jlong>
+   <jfloat>
+   <jdouble>
+   <jclass>
+   <jmath>
+   <jobject>
+   <jprocess>
+   <jruntime>
+   <jstring>
+   <jstringbuffer>
+   <jsystem>
+   <jthread>
+   <jthrowable>
+   <jexception>
+   <expression>
+   <input-port>
+   <output-port>
+   <list>
+   <procedure>
+   <number>
+   <boolean>
+   <character>
+   <string>
+   <vector>
+   <void>
+   <symbol>
+   <object>)
+  (import s2j-module)
+  (import generic-functions)
+  (include "../modules/s2j.scm")
+  (define (java-class name)
+    (java/class (if (string? name) (string->symbol name) name)))
+  (define java-wrap		java/wrap)
+  (define java-unwrap		java/unwrap)
+  (define java-instance?	java/instance?)
+  (define java-assignable?	java/assignable?)
+  (define java-object?		java/object?)
+  (define java-class?		java/class?)
+  (define java-interface?	java/interface?)
+  (define java-array?		java/array?)
+  (define java-null? 		java/null?)
+  (define java-class-of		java/class-of)
+  (define java-array-new  	java/array-new)
+  (define-generic ->)
+  (define-method (-> (<jboolean> _))	->jboolean)
+  (define-method (-> (<jchar> _))	->jchar)
+  (define-method (-> (<jbyte> _))	->jbyte)
+  (define-method (-> (<jshort> _))	->jshort)
+  (define-method (-> (<jint> _))	->jint)
+  (define-method (-> (<jlong> _))	->jlong)
+  (define-method (-> (<jfloat> _))	->jfloat)
+  (define-method (-> (<jdouble> _))	->jdouble)
+  (define-method (-> (<jstring> _))	->jstring)
+  (define-method (-> (<list> _))	->list)
+  (define-method (-> (<number> _))	->number)
+  (define-method (-> (<boolean> _))	->boolean)
+  (define-method (-> (<character> _))	->character)
+  (define-method (-> (<string> _))	->string)
+  (define-method (-> (<vector> _))	->vector)
+  (define-method (-> (<symbol> _))	->symbol)
+  )

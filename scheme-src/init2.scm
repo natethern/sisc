@@ -334,28 +334,5 @@
     ((_ name args . body)
      (define-macro name (lambda args . body)))))
 
-
-;;;;;;;;;;;;;;;; NATIVE MODULES ;;;;;;;;;;;;;;;
-
-(define-syntax native-module
-  (lambda (x)
-    (syntax-case x ()
-      ((_ name class)
-       (let ((m (load-native-library (syntax-object->datum (syntax class)))))
-	 (with-syntax (((def ...) (datum->syntax-object
-				   (syntax name)
-				   (get-native-library-binding-names m))))
-           (syntax (module name (def ...)
-		     (define *module* (load-native-library class))
-                     (define def (get-native-library-binding
-                                   *module* (quote def)))
-		     ...))))))))
-
-
 (if (not (getprop 'LITE '*sisc*))
-    (begin
-      (eval '(native-module j2s-module "sisc.modules.J2S"))
-      (eval '(native-module logicops-module "sisc.modules.SLogicOps"))
-      (eval '(native-module networking-module "sisc.modules.SNetwork"))
-      (eval '(native-module threading-module "sisc.modules.SThread"))
-      (eval '(native-module debug-module "sisc.modules.SDebug"))))
+    (load "std-modules.scm"))

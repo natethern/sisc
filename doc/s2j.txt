@@ -1,0 +1,264 @@
+Scheme -> Java Interface
+========================
+(available by importing the s2j module)
+
+Generic Functions
+-----------------
+(define-generic <name>)
+(define-method (<name> [(next: <next-method-param>)]
+                       (<type> <param>) ...) . <body>)
+
+The first form binds <name> to a generic function. The second one adds
+the function, as defined by the param list and body, to the method
+list of the generic functions.
+
+When a generic function is invoked, the method is called whose type
+signature best matches the types of the given parameters. An error is
+reported if there is no such method.
+
+The next-method-param, if supplied in the definition of a method, will
+be bound to the "next best" matching method. It can be invoked with
+parameters or without parameters, in which case the parameters of the
+orignal invocation are used.
+
+Generic methods implictly include all java methods (in all classes)
+whose mangled name matches the generic function name. Name mangling is
+done as follows:
+1) a '-' is inserted between a lower-case character and an upper-case
+character. Non-alphabetic characters are considered to be lower-case
+characters. 
+2) the whole name is downcased
+==> "fooBarBaz" becomes "foo-bar-baz", "FooBar" becomes "foo-bar"
+3) a '!' is appended if the original name started with "set" followed
+by an upper-case character.
+
+Scheme methods with the same signature as java methods *always* take
+precedence (i.e. are a better match) than the java methods.
+
+Defining a Scheme method with the same signature as an existing Scheme
+method overwrites the existing method.
+
+<type> must be a java class object (see below).
+
+
+(define-constructor (<type> (<type> <param>) ...) . <body>)
+
+This form is basically the same as the define-method form except it
+defines a "constructor" method for a specific type. All constructor
+methods are part of the single generic constructor function MAKE.
+
+
+Proxies
+-------
+(define-java-proxy (<name> <arg> ...)
+                   [(<interface> ...) | <interface>]
+  (method (<name> (<type> <param>) ...) . <body>) ...)
+
+This defines a function bound to <name> with parameters <arg> ... that
+when invoked creates a Java object that implements all the
+<interface>s. The names and signatures of the methods must match the
+java names (after mangling) and signatures of the methods declared by
+the <interface>s. Note that <arg>s and the special SELF parameter will
+be bound in the <body>s of the methods.
+
+
+Java Objects
+------------
+(java-class [<string> | <symbol>]) => <class>
+The string/symbol must be a fully-qualified name of a Java class or
+interface, or a primitive type (e.g. "int") or an array types
+(e.g. "int[][]").
+
+Instances of a class can be created with the generic MAKE function.
+
+(java-wrap <obj>) => <jobj>
+(java-unwrap <jobj>) => <obj>
+These first function wraps a Scheme so it can be passed in call to a
+java method / constructor or when setting a field of a java object or
+class. The second function "casts" a java object into a Scheme object
+and is used when java methods return Scheme objects or java fields
+containg Scheme objects are fetched.
+
+Generally all java objects are self-evaluating. The result of the
+evaluation depends on the type of object and the arguments:
+(<jobj> '<fieldname> [<value>]) => <value>
+  gets/sets field - works for both static and instance fields
+(<array> <index> [<value>]) => <value>
+  gets/sets array element. <index> can be either a number or a
+  list/vector of numbers (for multi-dimensional arrays). 
+(<class> '<fieldname> [<value>]) => <value>
+  gets/sets static field
+(<field> <obj> [<value>]) => <value>
+  gets/sets field - works for both static and instance fields
+(<method> <obj> <parameter> ...) => <value>
+  invokes method on object with parameters
+(<constructor> <parameter> ...) => <value>
+  invokes constructor with parameters
+(<class>) => <jobj>
+  creates a new instance using the default argument-less constructor.
+
+eq? is mapped to Java's == and equal? is mapped to Java's equals.
+
+A weak hash of mappings from Java objects to their corresponding
+Scheme wrappers is maintained. Thus, Java objects are represented by
+at most one Scheme object.
+
+The objects representing Java classes, fields, methods and
+constructors can be (de)serialized. Ordinary Java objects cannot be
+(de)serialized.
+
+(java-array-new <class> <dimensions>) => <array>
+creates a java array. <dimensions> is a vector/list of numbers or a
+number.
+
+
+Types of Java Objects
+---------------------
+(java-class-of <jobj>) => <class>
+returns the class of the java object
+
+(java-object? <obj>) => #t/#f
+tests whether <obj> is a java object, including a class, interface,
+array, null or ordinary object.
+
+(java-class? <obj>) => #t/#f
+tests whether <obj> is a java class.
+
+(java-interface? <obj>) => #t/#f
+tests whether <obj> is a java interface.
+
+(java-array? <obj>) => #t/#f
+tests whether <obj> is a java array.
+
+(java-null? <obj>) => #t/#f
+tests whether <obj> is the java null object.
+
+(java-instance? <class> <jobj>) => #t/#f
+tests whether <jobj> is an instance of <class>
+
+(java-assignable? <class1> <class2>)
+tests whether <class2> is assignable to <class1>
+
+
+Type conversions
+----------------
+The S2J interface performs *no* automatic conversion between Scheme
+types and Java types, e.g. one cannot simply call a Java method that
+takes an int with a Scheme number. Automatic conversion is not done
+for the following reasons:
+
+- For some Scheme types, such as numbers, the mapping to Java types is
+one-to-many, e.g. a Scheme number could be converted to a byte, short,
+int, etc.
+
+- Some Java types have several corresponding Scheme types, e.g. a Java
+array could be represented as Scheme list or vector - this causes
+ambiguities when automatic conversion of results is attempted
+
+- Conversion carries an overhead that can be significant. For
+instance, Java strings have to be copied "by value" to Scheme
+strings. In a chained-call scenario, i.e. where the results of one J2S
+called are passed as arguments to another, the conversion is
+unnecessary.
+
+- Conversion conflicts with generic functions.
+
+Instead a general conversion function can be used to explicitly
+convert from Scheme to Java types and visa versa. In fact this
+function can in principle also be used to convert between Scheme types
+and between Java types in a future version. The general conversion
+function pattern is:
+  ((-> <type-obj>) <arg> ... <obj>)
+
+i.e. the -> function takes a type and returns a function that that
+converts objects to a specific type. The <arg> ... list is normally
+empty. Its purpose is to supply additional information needed for the
+conversion.
+
+The -> is an ordinary generic function, so it is actually possible to
+define custom conversion functions.
+
+For most of the conversion functions returned by (-> <type-obj>) there
+are top-level bindings consisting of the type name prefixed with ->,
+e.g.
+  (->jint 2)
+
+Note that doing this is a lot more efficient than using the generic ->
+function. That is because the generic conversion is defined in terms
+of the specialized conversions rather than the other way round
+
+All Scheme types have a corresponding type objects, which are bound to
+identifiers in the top-level environment, eg. <void>, <procedure>,
+<boolean>, <number> etc.
+
+Java types are represented by their corresponding Java classes. All
+primitive types and some other common Java types (most of the ones in
+java.lang) are bound to identifiers in the top-level environment with
+a "j" prefix, e.g. <jint>, <jstring>.
+
+
+Exceptions
+----------
+Java exceptions are propagated to scheme and can be caught with,
+e.g. call/fc.
+
+
+Fixes to the Java Type System
+-----------------------------
+Primitive types are mapped to their respective java.lang classes. This
+means, amongst other things, that
+* primitive types are indirect sub-classes of java.lang.Object
+* primitive types are assignable to their respective java.lang classes
+and visa versa.
+
+Note however that no widening conversion takes place, because Java
+does not define widening conversions for the java.lang classes
+corresponding to the primitive types, e.g. a java.lang.Byte is not
+assignable to a java.lang.Integer.
+
+
+Under the Hood
+--------------
+The j2s-module is a native sisc module that basically defines scheme
+functions corresponding to all methods on java.lang.Class plus the
+various other reflection classes. This completeness is not strictly
+necessary but greatly improves readability and performance. The only
+methods of the reflection API that have not been mapped this way are:
+
+Class.forName(String,boolean,ClassLoader)
+Class.getClassLoader()
+Class.getPackage()
+Class.getProtectionDomain()
+Class.getResource(String)
+Class.getResourceAsStream(String)
+Class.getSigners()
+
+
+Issues
+------
+
+* Proxies implement the hashCode, equals? and toString methods
+internally and hence these methods cannot be defined at the Scheme
+level. FIX: this is hard to fix.
+
+Shortcomings of generic methods:
+
+* not as efficient as they could be. FIX: considerable improvements
+will result from the introduction of a hashtable type into sisc
+
+* error reporting is not particularly good. FIX: real-world usage will
+tell what errors crop up frequently and we can then put some mechanism
+in place for reporting them in a meaningful way.
+
+* cannot handle rest arguments. FIX: need a more complex type
+system. This is quite hard but I've got most of the code for that
+already written.
+
+* only operate on java objects. FIX: as above.
+
+* not thread-safe. FIX: use the threads module.
+
+* not properly lexically scoped. The binding of the generic method
+name *is* lexically scoped, but the contents are not, i.e. all generic
+methods of the same name share their underlying definitions regardless
+of the scope they are defined in. FIX: *very* hard to fix.
