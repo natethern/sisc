@@ -52,9 +52,11 @@ public class CallFrame extends Procedure {
 
         CallFrame toReturn=makeSafe(r);
 
-        // Set the captured flags all the way to the root,
-        // including our unsafe doppleganger
-        CallFrame w=this;
+        // Set the captured flags all the way to the root.
+        // Note that we do not need to set the flags on the original
+        // frame since we have just taken a copy of it, thus
+        // guaranteeing that this k won't modify it.
+        CallFrame w=toReturn;
         boolean lastWasLocked=false;
         do {
             lastWasLocked=w.flk;
@@ -68,8 +70,15 @@ public class CallFrame extends Procedure {
     }
     
     public final CallFrame makeSafe(Interpreter r) {
+        /**
+           The only frames we make safe are frames which have been
+           captured and hence have their vlk flag set. Cloning
+           preserves the flag value. It is important that the vlk of
+           the new frame is true for one reason only: we try to patch
+           the new frame into the k, replacing the old frame. Since
+           k's are shared objects their frames must not be recycled.
+        **/
         CallFrame cv=cloneFrame(r);
-        cv.vlk=true;
         cv.copyVLR(r);
         return cv;
     }
