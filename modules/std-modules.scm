@@ -87,6 +87,11 @@
 (native-module hashtable-native  "sisc.modules.SHashtable")
 (native-module block-io-native  "sisc.modules.io.BlockIO")
 
+(module loadable-libraries
+    (create-library create-library-from-module
+     open-library link-library)
+    (include "loadablelibs.scm"))
+
 (module misc
     (wrap-symbol
      dynamic-freeze
