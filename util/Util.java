@@ -37,6 +37,7 @@ public abstract class Util extends Defaults implements Version {
         EXPTOP=Symbol.get("*top*"),
         FCONT=Symbol.get("failure-continuation"),
         QUOTE=Symbol.get("quote"),
+        JEXCEPTION=Symbol.get("java-exception"),
         LAMBDA=Symbol.get("lambda"),
         LOCATION=Symbol.get("location"),
         MESSAGE=Symbol.get("message"),
@@ -90,14 +91,28 @@ public abstract class Util extends Defaults implements Version {
 	return b.toString();
     }
 
+    public static void error(Interpreter r, Value where, String errormessage,
+                             Pair moreData) 
+        throws ContinuationException {
+        error(r, append(moreData,
+                        list(new Pair(MESSAGE, new SchemeString(errormessage)),
+                             new Pair(LOCATION, where))));
+    }
+
     public static void error(Interpreter r, Value where, String errormessage)
-    throws ContinuationException {
+        throws ContinuationException {
 	error(r, list(new Pair(MESSAGE, new SchemeString(errormessage)),
                       new Pair(LOCATION, where)));
     }
 
+    public static void error(Interpreter r, String errormessage, Pair moreData)
+        throws ContinuationException {
+        error(r, new Pair(new Pair(MESSAGE, new SchemeString(errormessage)),
+                          moreData));
+    }
+                             
     public static void error(Interpreter r, String errormessage) 
-    throws ContinuationException {
+        throws ContinuationException {
 	error(r, list(new Pair(MESSAGE, new SchemeString(errormessage))));
     }
 
