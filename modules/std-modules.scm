@@ -269,15 +269,18 @@
    type-of
    type<=
    instance-of?
+   scheme-class?
+   scheme-object?
    make-class
+   make-object
+   make-generic-procedure
+   make-generic-constructor
+   make-method
    define-generic
    define-method
    define-methods
    define-class
    (define-constructor c-proc)
-   make-generic-procedure
-   make-generic-constructor
-   make-method
    method-procedure
    method-types
    method-rest?
