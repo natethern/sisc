@@ -449,7 +449,7 @@
                 </member>
               </simplelist>
               <para>
-                Adds a method the generic procedure
+                Adds a method to the generic procedure
                 <parameter>name</parameter>. A method has a typed
                 parameter list and a body. Defining a method with the
                 same signature as an existing method overwrites the

@@ -64,43 +64,6 @@
   (symbol       |Symbol|)
   (object       |Value|))
 
-(define ih (java/class '|java.lang.reflect.InvocationHandler|))
-(define (make-proxy-helper constr methods . meths)
-  (let ((methods (map (lambda (x y) (cons x y)) methods meths)))
-    (constr (java/invocation-handler
-             (lambda (p m a)
-               (let ((m (assoc m methods)))
-                 (if m
-                     (apply (cdr m) p a)
-                     (error "no such method"))))))))
-(define (find-exact-method classes name . param-types)
-  (let ([jname (java/mangle-method-name name)])
-    (let loop ([classes classes])
-      (if (null? classes)
-          (error "no matching method")
-          (or (apply java/method (car classes) jname param-types)
-              (loop (cdr classes)))))))
-(define (java-proxy-helper interfaces sigs proc)
-  (let* ([proxy-class (apply java/proxy interfaces)]
-         [methods (map (lambda (x) (apply find-exact-method interfaces x))
-                       sigs)]
-         [constr (java/constructor proxy-class ih)])
-    (lambda args
-      (apply make-proxy-helper constr methods (apply proc args)))))
-(define-syntax java-proxy
-  (syntax-rules (self method)
-    ((_ ?args ?intf	(method (?name (?type ?arg) ...) . ?body) ...)
-     (java-proxy-helper ?intf
-                        `((?name ,?type ...) ...)
-                        (lambda ?args
-                          (list (lambda (self ?arg ...) . ?body) ...))))))
-(define-syntax define-java-proxy
-  (syntax-rules ()
-    ((_ (?pname . ?args) (?intf ...) ?rest ...)
-     (define ?pname (java-proxy ?args (list ?intf ...) ?rest ...)))
-    ((_ (?pname . ?args) ?intf ?rest ...)
-     (define ?pname (java-proxy ?args (list ?intf) ?rest ...)))))
-
 ;;;;;;;;;; exception handling ;;;;;;;;;;
 
 (define-generic print-stack-trace

@@ -1,3 +1,8 @@
+2003-04-06  Matthias Radestock  <matthias@sorted.org>
+
+	* Improved j2s proxy mechanism - it's now using generic
+	  procedures.
+
 2003-04-02  SISC 1.8.0-alpha and 1.7.8 Released
 
 2003-03-30  Scott G. Miller  <scgmille@freenetproject.org>

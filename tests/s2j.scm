@@ -137,20 +137,26 @@
 ;;implementing Java interfaces in Scheme
 (define <java.util.Comparator> (java-class "java.util.Comparator"))
 (define <java.util.Arrays> (java-class "java.util.Arrays"))
-(define-java-proxy (comparator fn) <java.util.Comparator>
-  (method (|compare| (<jobject> obj1) (<jobject> obj2))
-    (let ((x (java-unwrap obj1))
-          (y (java-unwrap obj2)))
-      (->jint (cond ((fn x y) -1)
-                    ((fn y x) +1)
-                    (else 0))))))
+(define <comparator-proxy> (java-proxy-class <java.util.Comparator>))
+(define (comparator fn)
+  (make <comparator-proxy>
+        (java-proxy-method-dispatcher fn)))
+(define-java-proxy-method (comparex (<procedure> fn)
+                                   (<java.util.Comparator> p)
+                                   (<jobject> obj1)
+                                   (<jobject> obj2))
+  (let ([x (java-unwrap obj1)]
+        [y (java-unwrap obj2)])
+    (->jint (cond [(fn x y) -1]
+                  [(fn y x) +1]
+                  [else 0]))))
 (define-generic sort)
-(define (list-sort comp l)
+(define (list-sort fn l)
   (let ([a (->jarray (map java-wrap l) <jobject>)])
-    (sort <java.util.Arrays> a comp)
+    (sort <java.util.Arrays> a (comparator fn))
     (map java-unwrap (->list a))))
-(list-sort (comparator <) '(3 4 2 1))
-(list-sort (comparator string<?) '("foo" "bar" "baz"))
+(list-sort < '(3 4 2 1))
+(list-sort string<? '("foo" "bar" "baz"))
 
 ;;exception handling
 (define-generic char-at)
@@ -162,25 +168,30 @@
   (java-class "java.lang.UnsupportedOperationException"))
 (define <java.util.NoSuchElementException>
   (java-class "java.util.NoSuchElementException"))
-
-(define-java-proxy (list-iterator-helper l) <java.util.Iterator>
-  (method (has-next)
-    (->jboolean (not (null? (unbox l)))))
-  (method (next)
-    (let ([ll (unbox l)])
-      (if (null? ll)
-          (throw (make-error (make <java.util.NoSuchElementException>)))
-          (begin
-            (set-box! l (cdr ll))
-            (java-wrap (car ll))))))
-  (method (remove)
-    (error (make <java.lang.UnsupportedOperationException>))))
-(define (list-iterator l)
-  (list-iterator-helper (box l)))
+(define <iterator-proxy> (java-proxy-class <java.util.Iterator>))
+(define-class (<list-iterator>) (value #f))
+(define-method (initialize (<list-iterator> i) (<top> value))
+  (i 'value value))
+(define-java-proxy-method (has-next (<list-iterator> i)
+                                    (<java.util.Iterator> p))
+  (->jboolean (not (null? (i 'value)))))
+(define-java-proxy-method (next (<list-iterator> i)
+                                (<java.util.Iterator> p))
+  (let ([ll (i 'value)])
+    (if (null? ll)
+        (error (make <java.util.NoSuchElementException>))
+        (begin
+          (i 'value (cdr ll))
+          (java-wrap (car ll))))))
+(define-java-proxy-method (remove (<list-iterator> i)
+                                  (<java.util.Iterator> p))
+  (error (make <java.lang.UnsupportedOperationException>)))
 (define-generic has-next)
 (define-generic next)
 (define-generic remove)
-(define i (list-iterator '(1 2 3)))
+(define i (make <iterator-proxy>
+                (java-proxy-method-dispatcher
+                 (make <list-iterator> '(1 2 3)))))
 (has-next i)
 (next i)
 (next i)

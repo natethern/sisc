@@ -281,6 +281,7 @@
    define-generic
    define-method
    define-methods
+   define-java-proxy-method
    define-class
    (define-constructor c-proc)
    method-procedure
@@ -293,21 +294,23 @@
    generic-procedure-methods
    generic-procedure-next
    constructor
+   java-proxy-method-dispatcher
    add-method
    applicable-methods
    generic-java-procedure
    generic-java-constructor
+   generic-java-proxy-procedure
    make
    initialize)
   (import s2j-reflection)
+  (import s2j-conversion)
   (import hashtable)
   (import threading)
   (import procedure-properties)
   (include "generic-procedures.scm"))
 
 (module s2j
-  ((define-java-proxy java-proxy java-proxy-helper)
-   java-class
+  (java-class
    java-wrap
    java-unwrap
    java-synchronized
@@ -320,9 +323,11 @@
    java-null?
    java-class-of
    java-array-new
+   java-proxy-class
    java-null
    java-mangle-field-name
    java-mangle-method-name
+   java-invocation-handler
    jnull
    ->
    ->jboolean
@@ -398,9 +403,11 @@
   (define java-null? 		java/null?)
   (define java-class-of		java/class-of)
   (define java-array-new  	java/array-new)
+  (define java-proxy-class  java/proxy-class)
   (define java-null         java/null)
   (define java-mangle-field-name    java/mangle-field-name)
   (define java-mangle-method-name   java/mangle-method-name)
+  (define java-invocation-handler   java/invocation-handler)
   (define jnull             (java/null))
   (define-generic ->)
   (define-method (-> ((meta <jboolean>) _)) ->jboolean)

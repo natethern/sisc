@@ -311,6 +311,9 @@
 (define *JAVA-CONSTRUCTORS* (make-hashtable eqv?))
 (define (java-constructor-methods class)
   (hashtable/get! *JAVA-CONSTRUCTORS* class make-method-list))
+;;mapping of Java method names to generic procedures that handle
+;;invocation of Scheme code from Java via a proxy
+(define *GENERIC-JAVA-PROXY-PROCEDURES* (make-hashtable eq?))
 
 ;;constructors are chained by chaining their contained generic
 ;;procedures, which get created lazily on a per-class basis
@@ -325,6 +328,11 @@
               (if next
                   (list (constructor next class))
                   '()))))))
+
+(define (java-proxy-method-dispatcher v)
+  (java/invocation-handler
+   (lambda (p m a)
+     (apply (generic-java-proxy-procedure (java/name m)) v p a))))
 
 (define (add-method proc m)
   (add-method-to-list (get-methods proc) m))
@@ -526,6 +534,20 @@
   (apply _make-generic-procedure (make-method-list) rest))
 (define (make-generic-constructor . rest)
   (apply _make-generic-constructor constructor-methods rest))
+(define <java.lang.UnsupportedOperationException>
+  (java/class '|java.lang.UnsupportedOperationException|))
+(define (generic-java-proxy-procedure name)
+  (let ([mangled-name (java/mangle-method-name name)])
+    (hashtable/get!
+     *GENERIC-JAVA-PROXY-PROCEDURES*
+     mangled-name
+     (lambda ()
+       (make-generic-procedure
+        (lambda args
+          (error (make <java.lang.UnsupportedOperationException>
+                       (->jstring (format "proxy procedure ~a, args ~a"
+                                          mangled-name
+                                          args))))))))))
 
 (define-syntax define-generic
   (syntax-rules ()
@@ -556,14 +578,19 @@
      (define-method (?name (next: dummy) . ?rest) . ?body))))
 (define-syntax define-methods
   (syntax-rules ()
-    ((_ name (signature . body) ...)
+    ((_ ?name (?signature . ?body) ...)
      (begin
-       (define-method (name . signature) . body)
+       (define-method (?name . ?signature) . ?body)
        ...))))
 (define-syntax define-constructor
   (syntax-rules ()
     ((_ (?class . ?rest) . ?body)
      (define-method ((constructor c-proc ?class) . ?rest) . ?body))))
+(define-syntax define-java-proxy-method
+  (syntax-rules ()
+    ((_ (?name . ?rest) . ?body)
+     (define-method ((generic-java-proxy-procedure '?name) . ?rest)
+       . ?body))))
 (define-syntax define-class
   (syntax-rules ()
     ((_ (?name . ?superclasses) (?key ?val) ...)
