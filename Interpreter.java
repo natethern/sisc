@@ -201,15 +201,25 @@ public class Interpreter extends Util {
 
     // Symbolic environment handling
 
-    public void define(Symbol s, Value v, Symbol context) {
-        AssociativeEnvironment contenv=null;
+    protected AssociativeEnvironment getContextEnv(Symbol s) {
+	AssociativeEnvironment contenv=null;
         try {
             contenv=(AssociativeEnvironment)
-                symenv.lookup(context);
+                symenv.lookup(s);
         } catch (UndefinedException e) {
             contenv=new AssociativeEnvironment();
-            symenv.define(context, contenv);
+            symenv.define(s, contenv);
         }
+	return contenv;
+    }
+
+    public void define(Symbol s, Value v, Symbol context) {
+        AssociativeEnvironment contenv=getContextEnv(context);
+	contenv.define(s,new Box(v));
+    }
+    
+    public void set(Symbol s, Value v, Symbol context) {
+        AssociativeEnvironment contenv=getContextEnv(context);	
 	try {
 	    Box fr=(Box)contenv.lookup(s);
 	    fr.val=v;
