@@ -1587,7 +1587,7 @@
 
 (define flatten-exports
   (lambda (exports)
-    (let loop ((exports exports) (ls '()))
+s    (let loop ((exports exports) (ls '()))
       (if (null? exports)
           ls
           (loop (cdr exports)
@@ -1617,13 +1617,19 @@
 (define chi-top-module
   (lambda (e r ribcage w s ctem rtem id exports forms)
     (let ((fexports (flatten-exports exports))
+          (iexports (let f ((exports exports))
+                      (if (null? exports)
+                          '()
+                          (if (and (pair? (car exports)) (bound-id=? id (caar exports)))
+                              (flatten-exports (cdar exports))
+                              (f (cdr exports))))))
           (module-id (and id (id-sym-name id))))
       (chi-external ribcage (source-wrap e w s)
                     (map (lambda (d) (cons r d)) forms) r exports fexports ctem
                     (lambda (bindings inits)
                       ;; dvs & des: "defined" (letrec-bound) vars & rhs expressions
                       ;; svs & ses: "set!" (top-level) vars & rhs expressions
-                      (let partition ((fexports (map (lambda (x) (cons x '())) fexports)) (bs bindings) (svs '()) (ses '()) (ctdefs '()))
+                      (let partition ((fexports (map (lambda (x) (cons x '())) fexports)) (bs bindings) (svs '()) (ses '()) (ctdefs '()) (allimps '()))
                         (if (null? fexports)
                             ;; remaining bindings are either local vars or local macros/modules
                             (let partition ((bs bs) (dvs '()) (des '()))
@@ -1731,26 +1737,38 @@
                                                      (label (module-binding-label b))
                                                      (imps (module-binding-imps b))
                                                      (id (car exp)))
-                                                 (let ((fexports (append (map (lambda (x) (cons x '())) imps) fexports))
-                                                       (sym (generate-id-in-module module-id (cdr exp) (id-sym-name id))))
+                                                 (let* ((fexports (append (map (lambda (x) (cons x '())) imps) fexports))
+                                                       (sym
+                                                        (begin
+                                                          (generate-id-in-module
+                                                             (and module-id
+                                                                  (not (member id allimps))
+                                                                  module-id)
+                                                             (cdr exp)
+                                                             (id-sym-name id)))))
                                                    (case t
                                                      ((define-form)
                                                       (set-indirect-label! label sym)
                                                       (partition fexports bs (cons sym svs)
                                                                  (cons (module-binding-val b) ses)
-                                                                 ctdefs))
+                                                                 ctdefs
+                                                                 (append imps allimps)))
                                                      ((define-syntax-form)
                                                       (partition fexports bs svs ses
-                                                                 (cons (list t label sym (module-binding-val b)) ctdefs)))
+                                                                 (cons (list t label sym (module-binding-val b))
+                                                                       ctdefs)
+                                                                 (append imps allimps)))
                                                      ((module-form)
                                                       (let ((exports (module-binding-val b))
                                                             (id-path (cons (id-sym-name id) (cdr exp))))
                                                         (partition (append (map (lambda (x) (cons x id-path)) (flatten-exports exports))
                                                                            fexports)
                                                                    bs svs ses
-                                                                   (cons (list t label sym exports) ctdefs))))
+                                                                   (cons (list t label sym exports)
+                                                                         ctdefs)
+                                                                   (append imps allimps))))
                                                      (else (error 'sc-expand-internal "unexpected module binding type"))))))
-                                             (lambda () (partition fexports bs svs ses ctdefs)))))))))))
+                                             (lambda () (partition fexports bs svs ses ctdefs allimps)))))))))))
 
 (define id-set-diff
   (lambda (exports defs)
@@ -1879,7 +1897,13 @@
                         (module-binding-type b)
                         id
                         (module-binding-label b)
-                        (append (get-implicit-exports id) (module-binding-imps b))
+                        (let ((implicit-exports (get-implicit-exports id)))
+                           ; Mark all implicit exports, so we can generate a gensymed
+                           ; binding later
+                           (for-each (lambda (imp-id)
+                                         (annotation! imp-id 'implicit-export #t))
+                                     implicit-exports)
+                           (append implicit-exports (module-binding-imps b)))
                         (module-binding-val b)))))
                bindings))))
     (let parse ((body body) (ids '()) (bindings '()) (inits '()))
@@ -1928,7 +1952,11 @@
                                                  r *exports (flatten-exports *exports) ctem
                                                  (lambda (*bindings *inits)
                                                    (let* ((iface (make-trimmed-interface *exports))
-                                                          (bindings (append (if id *bindings (update-imp-exports *bindings *exports)) bindings))
+                                                          (bindings (append (if id
+                                                                                *bindings
+                                                                                (update-imp-exports
+                                                                                 *bindings *exports))
+                                                                            bindings))
                                                           (inits (append inits *inits)))
                                                      (if id
                                                          (let ((label (gen-indirect-label))
