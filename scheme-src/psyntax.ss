@@ -589,13 +589,18 @@
 
 (define build-sequence
   (lambda (src exps)
-    (if (null? (cdr exps))
-        (if src
-            `(compile-in-annotation ,(car exps) ,src)
-            (car exps))
-        (if src
-            `(compile-in-annotation (begin ,@exps) ,src)
-            `(begin ,@exps)))))
+    (cond [(null? exps) 
+           '(if '#f '#f)]
+          [(equal? '(void) (car exps))
+           (build-sequence src (cdr exps))]
+          [(null? (cdr exps)) 
+           (if src 
+               `(compile-in-annotation ,(car exps) ,src)
+               (car exps))]
+          [else
+            (if src
+                `(compile-in-annotation (begin ,@exps) ,src)
+                `(begin ,@exps))])))
 
 (define build-letrec
   (lambda (src vars val-exps body-exp)
