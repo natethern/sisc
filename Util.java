@@ -72,6 +72,7 @@ public abstract class Util implements Version {
         THIS=Symbol.get("this"),
         LAMBDA=Symbol.get("lambda"),
         TOPLEVEL=Symbol.get("*toplevel*"),
+        SYMENV=Symbol.get("*symenv*"),
         REPORT=Symbol.get("*report*"),
         ENVVARS=Symbol.get("*environment-variables*"),
         SISCCONF=Symbol.get("*config-parameters*"),

@@ -130,9 +130,12 @@ public class LibraryBuilder extends Serializer {
         }
 
         int[] offsets=ss.getOffsets();
+        int[] sizes=ss.getSizes();
+
         writeBer(offsets.length, datout);
         for (int i=0; i<offsets.length; i++) {
             writeBer(offsets[i], datout);
+            writeBer(sizes[i], datout);
             Symbol s=(Symbol)names.get(new Integer(i));
             datout.writeBoolean(s!=null);
             if (s!=null)

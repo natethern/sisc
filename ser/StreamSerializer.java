@@ -13,7 +13,7 @@ public class StreamSerializer extends Serializer {
 
     Vector classes;
     Set seen;
-    int[] offsets;
+    int[] offsets, sizes;
     Expression[] entryPoints;
     DataOutput datout;
     CountingOutputStream cos;
@@ -29,6 +29,7 @@ public class StreamSerializer extends Serializer {
         seen=new HashSet();
         this.entryPoints=entryPoints;
         offsets=new int[entryPoints.length];
+        sizes=new int[entryPoints.length];
 
         ci=new HashMap();
         for (int i=0; i<classes.size(); i++) {
@@ -43,6 +44,10 @@ public class StreamSerializer extends Serializer {
 
     int[] getOffsets() {
         return offsets;
+    }
+
+    int[] getSizes() {
+        return sizes;
     }
 
     public boolean SHOWEP;
@@ -66,16 +71,21 @@ public class StreamSerializer extends Serializer {
         } 
 
         Integer epIndex=(Integer)epi.get(e);
+
+        int sizeStartOffset = -1;
+        int posi=-1;
         if (epIndex!=null) {
+            posi=epIndex.intValue();
             //entry point / shared expression
             if (seen(e)) {
-                writeInt(epIndex.intValue()+16);
+                writeInt(posi+16);
                 return;
             }  else {
-                offsets[epIndex.intValue()]=cos.position;
                 seen.add(e);
+                offsets[posi]=cos.position;
                 writeInt(2);
-                writeInt(epIndex.intValue());
+                writeInt(posi);
+                sizeStartOffset = cos.position;
             }
         } else writeInt(0);
 
@@ -91,6 +101,8 @@ public class StreamSerializer extends Serializer {
                 writeExpression(e.getAnnotation(key));
             }
         }
+        if (sizeStartOffset != -1)
+            sizes[posi] = cos.position - sizeStartOffset;
     }
 
     public void writeAssociativeEnvironment(AssociativeEnvironment e)

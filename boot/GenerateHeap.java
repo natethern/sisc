@@ -151,7 +151,7 @@ public class GenerateHeap {
         AssociativeEnvironment symenv=new AssociativeEnvironment();
         AssociativeEnvironment toplevel=sisc.compiler.Compiler.addSpecialForms(new AssociativeEnvironment(new LibraryAE(null, lb)));
         toplevel.name=Util.TOPLEVEL;
-        symenv.name=Symbol.get("*symenv*");
+        symenv.name=Symbol.get("symenv");
         symenv.define(Util.TOPLEVEL, toplevel);
 
 	AppContext ctx = new AppContext(symenv);

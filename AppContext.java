@@ -82,8 +82,7 @@ public class AppContext extends Util {
         CallFrame lstk=(CallFrame)s.getExpression(5);
         Procedure levaluator=(Procedure)s.getExpression(6);
 
-        AssociativeEnvironment lsymenv=(AssociativeEnvironment)s.getExpression(Symbol.get("symenv"));
-
+        AssociativeEnvironment lsymenv=(AssociativeEnvironment)s.getExpression(SYMENV);
         try {
             symenv=lsymenv;
             try {
@@ -117,7 +116,7 @@ public class AppContext extends Util {
         lb.add(EOF);            
         lb.add(r.stk);
         lb.add(evaluator);
-        lb.add(Symbol.get("symenv"), symenv);
+        lb.add(SYMENV, symenv);
         
         lb.buildLibrary("sisc", o);
         r.pop(r.stk);

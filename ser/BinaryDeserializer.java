@@ -15,23 +15,19 @@ public class BinaryDeserializer extends Deserializer {
     Map modules;
     Class[] classPool;
     Expression[] alreadyReadObjects;
-    int[] offsets;
+    int[] offsets, sizes;
     SeekableDataInput raf;
     Object[] thisArray=new Object[] { this };
     long base;
     Library baseLib;
 
-    public void clear() {
-        for (int i=0; i<alreadyReadObjects.length; i++)
-            alreadyReadObjects[i]=null;
-    }
-
     public BinaryDeserializer(SeekableDataInput input, 
-                              Class[] c, int[] o) throws IOException {
+                              Class[] c, int[] o, int[] l) throws IOException {
         this.raf=input;
         base=raf.getFilePointer();
         classPool=c;
         offsets=o;
+        sizes=l;
         alreadyReadObjects=new Expression[offsets.length];
         modules=new HashMap();
     }
@@ -42,19 +38,27 @@ public class BinaryDeserializer extends Deserializer {
     public Expression readExpression() throws IOException {
         indent++;
         long pos=raf.getFilePointer();
-        int oid=readInt();
+        int type=readInt();
         if (DEBUG)
-            System.err.print(oid+"]");
+            System.err.print(type+"]");
 
         int definingOid = -1;
         try {
-            //System.err.print(justify("",indent,' ')+Long.toHexString(pos)+" "+oid+"]");
+            if (DEBUG)
+                System.err.print(justify("",indent,' ')+Long.toHexString(pos)+" "+type+"]");
 
             //Read the stream object type, values above 15 of which represent
             //shared objects
-            switch(oid) {
+            switch(type) {
             case 2:
                 definingOid=readInt();
+                if (alreadyReadObjects[definingOid] != null) {
+                    int sc=sizes[definingOid];
+                    while (sc>0) {
+                        sc-=raf.skipBytes(sc);
+                    }
+                    return alreadyReadObjects[definingOid];
+                }
             case 0:
                 Expression e;
                 Class clazz=readClass();
@@ -68,7 +72,7 @@ public class BinaryDeserializer extends Deserializer {
                     try {
                         Method GVM=clazz.getMethod("getValue", DESER_PROTO);
                         e=(Expression)GVM.invoke(null, thisArray);
-                        if (definingOid!=-1)
+                        if (definingOid!=-1 && alreadyReadObjects[definingOid]==null)
                             alreadyReadObjects[definingOid]=e;//new SoftReference(e);
                     } catch (NoSuchMethodException nsm) {
                         e=(Expression)clazz.newInstance();
@@ -76,7 +80,7 @@ public class BinaryDeserializer extends Deserializer {
                 } else {
                     //System.err.println(" (NS) ");
                     e=(Expression)clazz.newInstance();
-                    if (definingOid!=-1)
+                    if (definingOid!=-1 && alreadyReadObjects[definingOid]==null)             
                         alreadyReadObjects[definingOid]=e;//new SoftReference(e);
                     DESM.invoke(e, thisArray);
                     int ac=readInt();
@@ -90,11 +94,11 @@ public class BinaryDeserializer extends Deserializer {
                 }
                 return e;
             case 1:
-                //System.err.println("null");
+                if (DEBUG) System.err.println("null");
                 return null;
             default:
-                //System.err.println("Fo:"+(oid-2));
-                return fetchShared(oid-16);
+                if (DEBUG) System.err.println("Fo:"+(type-2));
+                return fetchShared(type-16);
             }
         } catch (InvocationTargetException ite) {
             ite.printStackTrace();
@@ -111,11 +115,11 @@ public class BinaryDeserializer extends Deserializer {
     }
 
     protected Expression fetchShared(int oid) throws IOException {
-        Expression e=null;
-        if (alreadyReadObjects[oid]!=null) 
-            e = (Expression) alreadyReadObjects[oid];//.get();
-
-        if (e==null) {
+        Expression e=alreadyReadObjects[oid];
+        boolean hadIt=false;
+        if (e!=null) {
+            hadIt=true;
+        } else {
             long currentPos=raf.getFilePointer();
             //System.err.println("Seeking to "+ base +":"+ offsets[oid]+" ["+Long.toHexString(base+offsets[oid])+"]");
             raf.seek(base + offsets[oid]);
@@ -123,6 +127,13 @@ public class BinaryDeserializer extends Deserializer {
             raf.seek(currentPos);
         }
 
+        /*
+        if (e instanceof AssociativeEnvironment) {
+            System.err.println(hashCode());
+
+            System.err.println("AE "+e+" returned from oid "+oid+":"+hadIt);
+            if (!hadIt) new Throwable().printStackTrace();
+            }*/
         return e;
     }            
 

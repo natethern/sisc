@@ -21,17 +21,20 @@ public class Library {
         }
         int socount=BinaryDeserializer.readBer(di);
         int[] sharedObjectOffsets=new int[socount];
+        int[] sharedObjectSizes=new int[socount];
+
         HashMap names=new HashMap();
 
         for (int i=0; i<socount; i++) {
             sharedObjectOffsets[i]=BinaryDeserializer.readBer(di);
+            sharedObjectSizes[i]=BinaryDeserializer.readBer(di);
             if (di.readBoolean()) {
                 Symbol name=Symbol.get(di.readUTF());
                 names.put(name, new Integer(i));
             }
         }
 
-        return new Library(libname, new BinaryDeserializer(di, classes, sharedObjectOffsets), names);
+        return new Library(libname, new BinaryDeserializer(di, classes, sharedObjectOffsets, sharedObjectSizes), names);
     }
         
         /* All this and more at your */ 
@@ -70,9 +73,4 @@ public class Library {
         Expression e=l.getExpression(Symbol.get(args[1]));//Integer.parseInt(args[1]));
         System.err.println(e);
     }
-
-    public void clear() {
-        lib.clear();
-    }
-        
 }
