@@ -42,10 +42,6 @@ import java.lang.reflect.*;
 import java.net.*;
 
 public class Primitives extends ModuleAdapter {
-    public static final Symbol
-        FILE=Symbol.get("file"),
-        NOFILE=Symbol.get("no-file"),
-        DIRECTORY=Symbol.get("directory");
 
     public String getModuleName() {
         return "Primitives";
@@ -117,9 +113,7 @@ public class Primitives extends ModuleAdapter {
         define("exact->inexact", EXACT2INEXACT);
         define("exact?", EXACTQ);
         define("exp", EXP);
-        define("file/name", FILENAME);
-        define("file/parent", FILEPARENT);
-        define("file/type", FILETYPE);
+        define("file-exists?", FILEEXISTSQ);
         define("find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
         define("floor", FLOOR);
         define("flush-output-port", FLUSHOUTPUTPORT);
@@ -553,17 +547,13 @@ public class Primitives extends ModuleAdapter {
             case CURRENTWIND:
                 f.dynenv.wind = f.vlr[0];
                 return VOID;
-            case FILENAME:
-                File tmpf=new File(string(f.vlr[0]));
-                return new SchemeString(tmpf.getName());
-            case FILEPARENT:
-                tmpf=new File(string(f.vlr[0]));
-                return new SchemeString(tmpf.getParent());
-            case FILETYPE:
-                tmpf=new File(string(f.vlr[0]));
-                return ( !tmpf.exists() ? NOFILE :
-                         tmpf.isDirectory() ? DIRECTORY :
-                         FILE );
+            case FILEEXISTSQ:
+                try {
+                    makeURL(f.vlr[0]).openConnection().getInputStream().close();
+                    return TRUE;
+                } catch (IOException e) {
+                    return FALSE;
+                }
             case STRING2UNINTERNEDSYMBOL:
                 return Symbol.getUnique(string(f.vlr[0]));
             case REPORTENVIRONMENT:
@@ -963,9 +953,7 @@ public class Primitives extends ModuleAdapter {
         EXACT2INEXACT = 41,
         EXACTQ = 42,
         EXP = 43,
-        FILENAME = 155,
-        FILEPARENT = 156,
-        FILETYPE = 44,
+        FILEEXISTSQ = 44,
         FLOOR = 45,
         FLUSHOUTPUTPORT = 46,
         GCD = 116,

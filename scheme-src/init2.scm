@@ -195,9 +195,6 @@
 				(string-loop (cdr sl) (+ n 1)))))])
     (string-loop (string->list x) 0)))
 	  
-(define (file-exists? x)
-  (not (eq? (file/type x) 'no-file)))
-
 (define (unquote x)
   (error 'unquote "expression ~s not valid outside of a quasiquote."
 	 x))
