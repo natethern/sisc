@@ -1,6 +1,7 @@
-package sisc;
+package sisc.interpreter;
 
-import sisc.data.*;
+import sisc.data.Value;
+import sisc.data.Procedure;
 
 public class SchemeException extends Exception {
     public Value m;

@@ -1,5 +1,7 @@
 package sisc;
 
+import sisc.interpreter.SchemeException;
+
 public class NestedPrimRuntimeException extends PrimRuntimeException {
 
     protected SchemeException e;
