@@ -1,4 +1,4 @@
-(define (opt:lambda formals body state)
+(define (opt:lambda keyword formals body state)
   (let-values ([(rv state)
                 (opt body
                      (union-state-entry*
@@ -9,7 +9,7 @@
                             [(pair? formals)
                              (make-proper formals)]
                             [else (list formals)])))])
-    (values `(lambda ,formals ,rv) state)))
+    (values (list keyword formals rv) state)))
 
 ;;Constant Propogation (always safe)
 ; This function is complicatedly thorough
@@ -124,7 +124,7 @@
 ;                    (apply merge-states fstate*)))))
 ))))
 
-(define (opt:letrec formals values* body state)
+(define (opt:letrec keyword formals values* body state)
   (let-values ([(nf nv sec state) (opt:letrec-helper formals values* state)])
     (let-values ([(newbody bstate) (opt body state)])
       (values
@@ -133,10 +133,10 @@
                       (list
                        (if (null? nf)
                            newbody
-                           `(letrec ,(map list nf nv) ,newbody)))))
+                           `(,keyword ,(map list nf nv) ,newbody)))))
        (merge-states state bstate)))))
 
-(define (opt:let formals values* body state)
+(define (opt:let keyword formals values* body state)
   (let ((state (union-state-entry* state 'lvars formals)))
     (let-values ([(nf nv cpc sec) (cp-candidates formals values* state #f)])
       (let-values ([(rv state)
@@ -150,8 +150,7 @@
                         (list
                          (if (null? nf)
                              rv
-                             `((lambda ,nf ,rv) ,@nv)))))
-;                              `(let ,(map list nf nv) ,rv)))))
+                             `((,keyword ,nf ,rv) ,@nv)))))
          state)))))
 
 (define (opt:ref ref state)
@@ -161,7 +160,7 @@
              (opt (cdr v) state))]
           [else (values ref (new-state))])))
 
-(define (opt:if test conseq altern state)
+(define (opt:if keyword test conseq altern state)
   (match test
     ;;Branch elimination (always safe)
     (,x
@@ -178,10 +177,10 @@
     ((,?if ,B #f ,x)
      (guard (and (constant? x)
                  (core-form-eq? ?if 'if #%if)))
-     (opt:if B altern conseq state))
+     (opt:if keyword B altern conseq state))
     ((,?if ,B ,x #f)
      (guard (and (constant? x) (core-form-eq? ?if 'if #%if)))
-     (opt:if B conseq altern state))
+     (opt:if keyword B conseq altern state))
     ((,?if ,B ,x ,y)
      (guard (and (constant? x) (constant? y) (core-form-eq? ?if 'if #%if)))
      (values 
@@ -190,10 +189,10 @@
     ;;Begin lifting (possibly unsafe)
     ((,?begin ,e* ... ,el)
      (guard (core-form-eq? ?begin 'begin #%begin))
-     (let-values ([(rv state) (opt:if el conseq altern state)])
+     (let-values ([(rv state) (opt:if keyword el conseq altern state)])
        (values (apply make-begin (append e* `(,rv)))
                (merge-states state '((new-assumptions begin))))))
-    (,other (values `(if ,other ,conseq ,altern) (new-state)))))
+    (,other (values `(,keyword ,other ,conseq ,altern) (new-state)))))
 
 ;; Applications and constant folding (possibly unsafe)
 (define opt:application 
@@ -201,7 +200,7 @@
     (cond [(and (eq? rator 'not)
                 (not-redefined? 'not)
                 (= (length rands) 1))
-           (let-values ([(rv state) (opt:if (car rands) #f #t state)])
+           (let-values ([(rv state) (opt:if '#%if (car rands) #f #t state)])
              (values rv (merge-states state '((new-assumptions not)))))]
           [(and (symbol? rator)
                 (not-redefined? rator)
@@ -256,17 +255,17 @@
    (apply make-begin exp1 exps*)
    (new-state)))
 
-(define (opt:set! lhs rhs state)
+(define (opt:set! keyword lhs rhs state)
   (match rhs
     ;; Begin lifting
     ((begin ,e* ... ,el)
 ;     (guard (core-form-not-redefined? 'begin))
      (values
-      (apply make-begin (append e* `((set! ,lhs ,el))))
+      (apply make-begin (append e* `((,keyword ,lhs ,el))))
       '((new-assumptions 'begin))))
     (,else
       (values
-       `(set! ,lhs ,else)
+       `(,keyword ,lhs ,else)
        (new-state)))))
 
 
