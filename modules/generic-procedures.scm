@@ -20,6 +20,12 @@
           (filter pred (cdr l)))
       l))
 (define (remove pred l) (filter (lambda (x) (not (pred x))) l))
+(define (take lis k)
+  (let recur ((lis lis) (k k))
+    (if (or (zero? k) (null? lis)) ;;added null check here
+        '()
+        (cons (car lis)
+              (recur (cdr lis) (- k 1))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;; TYPE SYSTEM ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -283,12 +289,14 @@
   (procedure-property proc 'methods))
 
 (define (generic-procedure-methods proc)
-  (cdr (get-methods proc)))
+  (cdr (vector-ref (get-methods proc) 2)))
 
 (define (generic-procedure-next proc)
   (procedure-property proc 'next))
 
-(define (make-method-list) (list (monitor/new)))
+(define (make-method-list)
+  ;;#(method-lookup-cache max-arity (monitor . methods))
+  (vector #f 0 (list (monitor/new))))
 (define (constructor-methods class) (make-method-list))
 
 ;;we keep track of all the classes whose methods we have already
@@ -321,10 +329,13 @@
 (define (add-method proc m)
   (add-method-to-list (get-methods proc) m))
 (define (add-method-to-list methods m)
-  (monitor/synchronize-unsafe
-   (car methods)
-   (lambda () (add-method-helper m methods))))
-
+  (let ([meths (vector-ref methods 2)])
+    (monitor/synchronize
+     (car meths)
+     (lambda ()
+       (vector-set! methods 0 #f) ;;clear applicable-methods cache
+       (add-method-helper m meths)))))
+  
 (define (add-method-helper m methods)
   (let ([meths (cdr methods)])
     (if (null? meths)
@@ -390,6 +401,40 @@
 ;;The algorithm used here is the same as the one employed by Goo
 ;;(http://www.googoogaga.org/), Dylan and others.
 (define (applicable-methods proc otypes)
+  ;;make sure we know about all relevant methods
+  ;;we really only need/ought to do this when proc is a
+  ;;generic-java-procedure
+  (if (not (null? otypes))
+      (let ([first (car otypes)])
+        (if (meta? first)
+            (set! first (meta-type first)))
+        (if (java/class? first)
+            (add-class first))))
+  ;;(applicable-methods-helper (generic-procedure-methods proc)
+  (let* ([methods       (get-methods proc)]
+         [cache         (vector-ref methods 0)]
+         [max-arity     (vector-ref methods 1)]
+         [meths         (cdr (vector-ref methods 2))])
+    (if (not cache)
+        (begin
+          (set! cache (make-hashtable equal?))
+          (vector-set! methods 0 cache)
+          (set! max-arity
+            (apply max 0 (map method-arity meths)))
+          (if (any method-rest? meths)
+              (set! max-arity (+ max-arity 1)))
+          (vector-set! methods 1 max-arity)
+          ))
+    (set! otypes (take otypes max-arity))
+    (let ([res (cache otypes)])
+      (if res
+          (values (car res) (cdr res))
+          (call-with-values
+              (lambda () (applicable-methods-helper meths otypes))
+            (lambda (applicable ambiguous)
+              (cache otypes (cons applicable ambiguous))
+              (values applicable ambiguous)))))))
+(define (applicable-methods-helper methods otypes)
   (define (insert applicable ambiguous m)
     (if (null? applicable)
         (values (list m) ambiguous)
@@ -405,20 +450,11 @@
                  (values (cons other applicable) ambiguous))))
             (else
               (values '() (cons m applicable)))))))
-  ;;make sure we know about all relevant methods
-  ;;we really only need/ought to do this when proc is a
-  ;;generic-java-procedure
-  (if (not (null? otypes))
-      (let ([first (car otypes)])
-        (if (meta? first)
-            (set! first (meta-type first)))
-        (if (java/class? first)
-            (add-class first))))
   ;;optimization opportunity: turn otypes into a vector so that
   ;;method-applicable can do a fast size test. Not much point doing
   ;;this though if we are going to cache the result of this entire
   ;;operation anyway.
-  (let loop ([methods    (generic-procedure-methods proc)]
+  (let loop ([methods    methods]
              [applicable '()]
              [ambiguous  '()])
     (if (null? methods)

@@ -4,6 +4,8 @@
 
 	* Added |hashtable/size| procedure.
 
+	* Improved performance of generic procedure method lookup.
+
 2002-12-16  Matthias Radestock  <matthias@sorted.org>
 
 	* Changed |eq?| and |eqv?| on immutable pairs, vectors, strings to
