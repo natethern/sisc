@@ -234,7 +234,8 @@
         ((lambda ,formals ,body)
          (apply mb-helper exps*))
         ;; Flatten nested begins
-        ((begin ,sexps* ...)
+        ((,?begin ,sexps* ...)
+         (guard (core-form-eq? ?begin 'begin #%begin))
          (let ((sub-begin (apply mb-helper sexps*)))
            (append sub-begin 
                    (apply mb-helper exps*))))
