@@ -81,7 +81,7 @@ public class Parser extends Util implements Tokens {
                 System.err.println(warn("orphanedparen"));
                 return nextExpression(is, radix);
             } else if (n==DOT)
-                throw new IOException(liMessage("unexpecteddot"));
+                throw new IOException(liMessage(SISCB, "unexpecteddot"));
         }
         return (Value)n;
     }
@@ -202,7 +202,7 @@ public class Parser extends Util implements Tokens {
             case '!':
                 if (lexer.readToBreak(is, Lexer.special).equals("eof"))
                     return EOF;
-                else throw new IOException(liMessage("invalidsharp"));
+                else throw new IOException(liMessage(SISCB, "invalidsharp"));
             case '\'':
                 o=listSpecial(SYNTAX, is, state, def);
                 break;
@@ -270,7 +270,7 @@ public class Parser extends Util implements Tokens {
             }
             break;
         default:
-            throw new IOException(liMessage("unknowntoken"));
+            throw new IOException(liMessage(SISCB, "unknowntoken"));
         }
         if (def!=null) 
             state.put(def, o);
@@ -299,10 +299,10 @@ public class Parser extends Util implements Tokens {
                     if (l == DOT) {
                         l=_nextExpression(is, state, null);
                         if (l==ENDPAIR)
-                            throw new IOException(liMessage("expectedexprincdr"));
+                            throw new IOException(liMessage(SISCB, "expectedexprincdr"));
                         p.cdr=(Value)(l instanceof Integer ? state.get(l) : l);
                         if (_nextExpression(is, state, null)!=ENDPAIR)
-                            throw new IOException(liMessage("toomanyafterdot"));
+                            throw new IOException(liMessage(SISCB, "toomanyafterdot"));
                         return h;
                     } else
                         p.cdr=p=new ImmutablePair();

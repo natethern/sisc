@@ -48,7 +48,7 @@ public class Compiler extends Util {
         }
 
         public void eval(Interpreter r) throws ContinuationException {
-            error(r, liMessage("invalidsyncontext", name.write()));
+            error(r, liMessage(SISCB, "invalidsyncontext", name.write()));
         }
 
         public String display() {
@@ -126,7 +126,7 @@ public class Compiler extends Util {
                               int context, AssociativeEnvironment env)
     throws ContinuationException {
         if (v==EMPTYLIST) {
-	    //error(r, liMessage("invnullexpr"));
+	    //error(r, liMessage(SISCB, "invnullexpr"));
 	    //return null;
 
 	    //we evaluate () to the empty list, which is an "ignorable
@@ -235,7 +235,7 @@ public class Compiler extends Util {
 
                     return new EvalExp(rhs, new FreeSetEval(fre.sym, fre.envLoc, env));
                 } else {
-                    error(r, liMessage("setlhsnotsymbol"));
+                    error(r, liMessage(SISCB, "setlhsnotsymbol"));
                     return null;
                 }
             case DEFINE:
