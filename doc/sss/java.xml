@@ -2019,7 +2019,7 @@ Class.getSigners()
               be a supertype of all other types.
             </para>
           </blockquote>
-          The algorithm is encapsulated by the following procedure:
+          The algorithm is encapsulated by the following procedures:
           <blockquote>
             <para>
                 &procedure;
@@ -2034,8 +2034,30 @@ Class.getSigners()
                   Returns two values: the list of applicable methods
                   of generic procedure <parameter>proc</parameter>
                   when applied to arguments of types
-                  <parameter>types</parameter> (a list), and the
-                  corresponding list of ambiguous methods.
+                  <parameter>types</parameter> (a list) ordered by
+                  specificity, and the corresponding list of ambiguous
+                  methods.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+          <blockquote>
+            <para>
+                &procedure;
+              <methodsynopsis language="scheme">
+                <type>&num;t/&num;f</type>
+                <methodname>method-applicable?</methodname>
+                <methodparam><parameter>method</parameter></methodparam>
+                <methodparam><parameter>types</parameter></methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Determinesd whether the types in
+                  <parameter>types</parameter> (a list) match the type
+                  signature of <parameter>method</parameter>, i.e. if
+                  it is possible to invoke
+                  <parameter>method</parameter> with arguments of the
+                  specified <parameter>types</parameter>.
                 </para>
               </blockquote>
             </para>

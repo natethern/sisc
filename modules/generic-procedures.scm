@@ -143,7 +143,7 @@
        (every2 eq? (method-types m1) (method-types m2))))
 
 ;;Checks whether a method can be called with arguments of specific
-;;types. This will eventually replace the preceeding procedure
+;;types.
 (define (method-applicable? m otypes)
   (let ([l (length otypes)]
         [a (method-arity m)])
