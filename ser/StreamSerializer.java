@@ -13,6 +13,16 @@ import sisc.interpreter.Interpreter;
 
 public class StreamSerializer extends SerializerImpl {
 
+    static class SerJobEnd {
+        public int posi;
+        public int sizeStartOffset;
+
+        public SerJobEnd(int posi, int sizeStartOffset) {
+            this.posi=posi;
+            this.sizeStartOffset=sizeStartOffset;
+        }
+    }
+
     Vector classes;
     Set seen;
     int[] offsets, sizes;
@@ -20,7 +30,8 @@ public class StreamSerializer extends SerializerImpl {
     DataOutput datout;
     CountingOutputStream cos;
     HashMap epi, ci;
-    
+    LinkedList serQueue;
+
     static final int WATCH=512;
 
     public StreamSerializer(OutputStream out, Vector classes, 
@@ -32,7 +43,8 @@ public class StreamSerializer extends SerializerImpl {
         this.entryPoints=entryPoints;
         offsets=new int[entryPoints.length];
         sizes=new int[entryPoints.length];
-
+        serQueue=new LinkedList();
+        
         ci=new HashMap();
         for (int i=0; i<classes.size(); i++) {
             ci.put(classes.elementAt(i), new Integer(i));
@@ -76,6 +88,8 @@ public class StreamSerializer extends SerializerImpl {
 
         int sizeStartOffset = -1;
         int posi=-1;
+        boolean flush=false;
+
         if (epIndex!=null) {
             posi=epIndex.intValue();
             //entry point / shared expression
@@ -88,23 +102,55 @@ public class StreamSerializer extends SerializerImpl {
                 writeInt(2);
                 writeInt(posi);
                 sizeStartOffset = cos.position;
+                flush=true;
             }
         } else writeInt(0);
 
-
         writeClass(e.getClass());
-        e.serialize(this);
-        if (!(e instanceof Singleton)) {
-            Set s=e.getAnnotationKeys();
-            writeInt(s.size());
-            for (Iterator i=s.iterator(); i.hasNext();) {
-                Symbol key=(Symbol)i.next();
-                writeExpression(key);
-                writeExpression(e.getAnnotation(key));
-            }
+        if (e instanceof Singleton) {
+            e.serialize(this);
+            if (sizeStartOffset != -1)
+                sizes[posi] = cos.position - sizeStartOffset;
+        } else {
+            int start=serQueue.size();
+            serQueue.addFirst(new SerJobEnd(posi, sizeStartOffset));
+            serQueue.addFirst(e);
+            if (flush)
+                serLoop(start);
         }
-        if (sizeStartOffset != -1)
-            sizes[posi] = cos.position - sizeStartOffset;
+    }
+    
+    void serializeEnd(SerJobEnd j) {
+        if (j.sizeStartOffset != -1)
+            sizes[j.posi] = cos.position - j.sizeStartOffset;
+    }
+        
+    void serializeDetails(Expression e) throws IOException {
+        e.serialize(this);
+        Set s=e.getAnnotationKeys();
+        writeInt(s.size());
+        for (Iterator i=s.iterator(); i.hasNext();) {
+            Symbol key=(Symbol)i.next();
+            writeExpression(key);
+            writeExpression(e.getAnnotation(key));
+        }
+    }
+    
+    public void serialize(Expression e) throws IOException {
+        int start=serQueue.size();
+        writeExpression(e);
+        serLoop(start);
+    }
+    
+    void serLoop(int start) throws IOException {
+        while (serQueue.size()>start) {
+            Object o=serQueue.removeFirst();
+            if (o instanceof Expression) {
+                serializeDetails((Expression)o);
+            } else if (o instanceof SerJobEnd) {
+                serializeEnd((SerJobEnd)o);
+            } 
+        }
     }
 
     public void writeSymbolicEnvironment(SymbolicEnvironment e)

@@ -21,6 +21,7 @@ public class BinaryDeserializer extends DeserializerImpl {
     Object[] thisArray=new Object[] { this };
     long base;
     Library baseLib;
+    LinkedList deserQueue;
 
     public BinaryDeserializer(SeekableDataInput input, 
                               Class[] c, int[] o, int[] l) throws IOException {
@@ -31,6 +32,7 @@ public class BinaryDeserializer extends DeserializerImpl {
         sizes=l;
         alreadyReadObjects=new Expression[offsets.length];
         modules=new HashMap();
+        deserQueue=new LinkedList();
     }
 
     int indent=0;
@@ -40,10 +42,9 @@ public class BinaryDeserializer extends DeserializerImpl {
         indent++;
         long pos=raf.getFilePointer();
         int type=readInt();
-        if (DEBUG)
-            System.err.print(type+"]");
-
         int definingOid = -1;
+        boolean flush=false;
+
         try {
             if (DEBUG)
                 System.err.print(justify("",indent,' ')+Long.toHexString(pos)+" "+type+"]");
@@ -59,7 +60,7 @@ public class BinaryDeserializer extends DeserializerImpl {
                         sc-=raf.skipBytes(sc);
                     }
                     return alreadyReadObjects[definingOid];
-                }
+                } else flush=true;
             case 0:
                 Expression e;
                 Class clazz=readClass();
@@ -72,22 +73,16 @@ public class BinaryDeserializer extends DeserializerImpl {
                 if (e instanceof Singleton) {
                     e.deserialize(this);
                     e = ((Singleton)e).singletonValue();
-                    //System.err.println(" (S) ");
+                    if (DEBUG) System.err.println(" (S) ");
                     if (definingOid!=-1 && alreadyReadObjects[definingOid]==null)
                         alreadyReadObjects[definingOid]=e;//new SoftReference(e);
                 } else {
                     //System.err.println(" (NS) ");
                     if (definingOid!=-1 && alreadyReadObjects[definingOid]==null)             
                         alreadyReadObjects[definingOid]=e;//new SoftReference(e);
-                    e.deserialize(this);
-                    int ac=readInt();
-                    //if (ac>0) System.err.println("!!!"+ac);
-                    for (; ac>0; ac--) {
-                        //System.err.println(pos);
-                        Expression key=readExpression();
-                        Expression value=readExpression();
-                        e.setAnnotation((Symbol)key, (Value)value);
-                    }
+                    int start=deserQueue.size();
+                    deserQueue.addFirst(e);
+                    if (flush) deserLoop(start);
                 }
                 return e;
             case 1:
@@ -108,6 +103,39 @@ public class BinaryDeserializer extends DeserializerImpl {
         }
     }
 
+    Expression deser() throws IOException {
+        int start=deserQueue.size();
+        Expression e=readExpression();
+        deserLoop(start);
+        return e;
+    }
+    
+    void deserLoop(int start) throws IOException {
+        while (deserQueue.size()>start) {
+            if (false && DEBUG) {
+                System.err.print('[');
+                for (Iterator i=deserQueue.iterator(); i.hasNext();) {
+                    System.err.print(i.next().getClass().toString()+",");
+                }
+                System.err.println(']');
+            }
+            Object o=deserQueue.removeFirst();
+            initializeExpression((Expression)o);
+        }
+    }
+
+    void initializeExpression(Expression e) throws IOException {
+        e.deserialize(this);
+        int ac=readInt();
+        //if (ac>0) System.err.println("!!!"+ac);
+        for (; ac>0; ac--) {
+            //System.err.println(pos);
+            Expression key=readExpression();
+            Expression value=readExpression();
+            e.setAnnotation((Symbol)key, (Value)value);
+        }
+    }
+    
     protected Expression fetchShared(int oid) throws IOException {
         try {
             Expression e=alreadyReadObjects[oid];
@@ -115,7 +143,7 @@ public class BinaryDeserializer extends DeserializerImpl {
                 long currentPos=raf.getFilePointer();
                 if (DEBUG) System.err.println("Seeking to "+ base +":"+ offsets[oid]+" ["+Long.toHexString(base+offsets[oid])+"]");
                 raf.seek(base + offsets[oid]);
-                e=readExpression();
+                e=deser();
                 raf.seek(currentPos);
             }
             return e;

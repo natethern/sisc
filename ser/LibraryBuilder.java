@@ -18,7 +18,7 @@ public class LibraryBuilder extends SerializerImpl {
     boolean addAllowed=true;
     Set classes, seen, duplicates;
     int dupid=0;
-    LinkedList entryPoints, newEntryPoints;
+    LinkedList entryPoints, newEntryPoints, serQueue;
     Map names; 
     boolean includeAEs;
 
@@ -82,15 +82,33 @@ public class LibraryBuilder extends SerializerImpl {
         //Pass 1
         System.err.println("Pass 1: Discovery...");
 
+        serQueue=new LinkedList();
+
         //serialization may create new entry points, so we loop until
         //no new ones are added
         while (!newEntryPoints.isEmpty()) {
             entryPoints.addAll(newEntryPoints);
-            LinkedList newEP=new LinkedList(newEntryPoints);
+            serQueue.addAll(newEntryPoints);
             newEntryPoints.clear();
-            for (Iterator i=newEP.iterator(); i.hasNext();) {
-                Expression exp=(Expression)i.next();
-                writeExpression(exp);
+            while (!serQueue.isEmpty()) {
+                Expression e=(Expression)serQueue.removeFirst();
+                if (e!=null) {
+                    if (seen(e)) {
+                        if (!entryPoints.contains(e) && !newEntryPoints.contains(e))
+                            duplicates.add(e);
+                    } else {
+                        seen.add(e);
+                        writeClass(e.getClass());
+                        e.serialize(this);
+                        if (!(e instanceof Singleton)) {
+                            for (Iterator i=e.getAnnotationKeys().iterator(); i.hasNext();) {
+                                Symbol key=(Symbol)i.next();
+                                writeExpression(key);
+                                writeExpression(e.getAnnotation(key));
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -117,7 +135,7 @@ public class LibraryBuilder extends SerializerImpl {
 
         for (Iterator i=entryPoints.iterator(); i.hasNext();) {
             Expression exp=(Expression)i.next();
-            ss.writeExpression(exp);
+            ss.serialize(exp);//writeExpression(exp);
         }
         fos.flush();
         fos.close();
@@ -164,21 +182,7 @@ public class LibraryBuilder extends SerializerImpl {
 
     /*---Serialization functions---*/
     public void writeExpression(Expression e) throws IOException {
-        if (e!=null) {
-            if (seen(e)) {
-                if (!entryPoints.contains(e) && !newEntryPoints.contains(e))
-                    duplicates.add(e);
-            } else {
-                seen.add(e);
-                writeClass(e.getClass());
-                e.serialize(this);
-                for (Iterator i=e.getAnnotationKeys().iterator(); i.hasNext();) {
-                    Symbol key=(Symbol)i.next();
-                    writeExpression(key);
-                    writeExpression(e.getAnnotation(key));
-                }
-            }
-        }
+        serQueue.addFirst(e);
     }
     
     public void forceSeen(Expression e) {

@@ -83,7 +83,7 @@ public class Library extends Util {
 
     public static void main(String[] args) throws Exception {
         Library l=Library.load(new SeekableDataInputStream(new BufferedRandomAccessInputStream(args[0], "r", 8, 2048)));
-        Expression e=l.getExpression(Symbol.get(args[1]));//Integer.parseInt(args[1]));
+        Expression e=l.getExpression(Integer.parseInt(args[1]));//Integer.parseInt(args[1]));
         System.err.println(e);
     }
 }
