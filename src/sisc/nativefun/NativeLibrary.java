@@ -29,31 +29,6 @@ public abstract class NativeLibrary extends Value
             env.define(syms[i], getBindingValue(r, syms[i]));
         }
     }
-
-    public static void throwPrimException(String message) {
-        throw new PrimRuntimeException(message);
-    }
-
-    public static void throwNestedPrimException(String message, SchemeException e) {
-        throw new NestedPrimRuntimeException(message, e);
-    }
-
-    public static void throwNestedPrimException(SchemeException e) {
-        throw new NestedPrimRuntimeException(e);
-    }
-
-    public static void throwArgSizeException() {
-        throwPrimException(liMessage(SISCB, "incorrectargcount"));
-    }
-
-    public static final NativeLibrary nlib(Value o) {
-        try {
-            return (NativeLibrary)o;
-        } catch (ClassCastException e) { typeError("nativelibrary", o); }
-
-        return null;
-    }
-
 }
 /*
  * The contents of this file are subject to the Mozilla Public

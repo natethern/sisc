@@ -15,7 +15,7 @@ public abstract class Module extends Value
     public abstract float getModuleVersion();
 
     public void display(ValueWriter w) throws IOException {
-        displayNamedOpaque(w, liMessage(SISCB, "nativelibrary"));
+        displayNamedOpaque(w, "module");//liMessage(SISCB, "nativelibrary"));
     }
 
     public void bindAll(Interpreter r, sisc.env.SymbolicEnvironment env) {
@@ -44,7 +44,7 @@ public abstract class Module extends Value
         throwPrimException(liMessage(SISCB, "incorrectargcount"));
     }
 
-    public static final Module module(Value o) {
+    public static final Module nlib(Value o) {
         try {
             return (Module)o;
         } catch (ClassCastException e) { typeError("nativelibrary", o); }

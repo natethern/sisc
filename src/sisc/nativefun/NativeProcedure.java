@@ -20,10 +20,10 @@ public abstract class NativeProcedure extends Procedure implements NamedValue {
 
     public void apply(Interpreter r) throws ContinuationException {
         //long start=System.currentTimeMillis();
-        r.lxp=r.nxp;
-        r.nxp=null;
+        r.lxp = r.nxp;
+        r.nxp = null;
         try {
-            r.acc=doApply(r);
+            r.acc = doApply(r);
 
             // If we don't have a next expression, this procedure
             // application is finished, and the Value rib is 
@@ -32,38 +32,74 @@ public abstract class NativeProcedure extends Procedure implements NamedValue {
                 r.returnVLR();
             }
         } catch (ClassCastException cc) {
-            error(r, getName(), liMessage(SISCB,"gotunexpectedvalue",
-                                     cc.getMessage()));
+            error(
+                r,
+                getName(),
+                liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()));
         } catch (NestedPrimRuntimeException npr) {
             error(r, getName(), npr);
         } catch (RuntimeException re) {
             //re.printStackTrace();
             String msg = re.getMessage();
-            if (msg == null) msg = re.toString();
+            if (msg == null)
+                msg = re.toString();
             error(r, getName(), msg);
         }
         //time+=System.currentTimeMillis()-start;
     }
 
-    public static void error(Interpreter r, Value where, 
-                             NestedPrimRuntimeException parent) 
+    public static void error(
+        Interpreter r,
+        Value where,
+        NestedPrimRuntimeException parent)
         throws ContinuationException {
-        SchemeException rootCauseException=parent.getRootCause();
-        Pair rootCause=new Pair(new Pair(ERRORK, rootCauseException.e),
-                                new Pair(new Pair(FCONT, rootCauseException.f),
-                                         rootCauseException.m));
-        String parentMessage=parent.getMessage();
-        error(r, (parentMessage == null ?
-                  list(new Pair(LOCATION, where),
-                       new Pair(PARENT, rootCause)) :
-                  list(new Pair(MESSAGE, new SchemeString(parentMessage)),
-                       new Pair(LOCATION, where),
-                       new Pair(PARENT, rootCause))));
+        SchemeException rootCauseException = parent.getRootCause();
+        Pair rootCause =
+            new Pair(
+                new Pair(ERRORK, rootCauseException.e),
+                new Pair(
+                    new Pair(FCONT, rootCauseException.f),
+                    rootCauseException.m));
+        String parentMessage = parent.getMessage();
+        error(r,
+            (parentMessage == null
+                ? list(new Pair(LOCATION, where), new Pair(PARENT, rootCause))
+                : list(
+                    new Pair(MESSAGE, new SchemeString(parentMessage)),
+                    new Pair(LOCATION, where),
+                    new Pair(PARENT, rootCause))));
     }
 
     public void display(ValueWriter w) throws IOException {
         displayNamedOpaque(w, "native procedure");
     }
+
+    public static void throwPrimException(String message) {
+        throw new PrimRuntimeException(message);
+    }
+
+    public static void throwNestedPrimException(
+        String message,
+        SchemeException e) {
+        throw new NestedPrimRuntimeException(message, e);
+    }
+
+    public static void throwNestedPrimException(SchemeException e) {
+        throw new NestedPrimRuntimeException(e);
+    }
+
+    public static void throwArgSizeException() {
+          throwPrimException(liMessage(SISCB, "incorrectargcount"));
+    }
+    
+    public static final NativeLibrary nlib(Value o) {
+         try {
+             return (NativeLibrary)o;
+         } catch (ClassCastException e) { typeError("nativelibrary", o); }
+
+         return null;
+     }
+
 }
 
 /*
