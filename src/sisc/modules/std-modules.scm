@@ -240,13 +240,17 @@
    call-with-binary-input-file
    call-with-binary-output-file
    with-binary-input-from-file
-   with-binary-output-to-file)
+   with-binary-output-to-file
+   binary-input-port?
+   binary-output-port?)
   (import buffers)
   (import* binary-io-native
            block-read
            block-write
            open-binary-input-file
-           open-binary-output-file)
+           open-binary-output-file
+           binary-input-port?
+           binary-output-port?)
   (include "io/binary-io.scm"))
 
 (module hashtable

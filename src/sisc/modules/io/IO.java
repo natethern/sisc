@@ -183,6 +183,24 @@ public class IO extends IndexedProcedure {
         return u;
     }
 
+    public static SchemeInputPort openCharInFile(Interpreter f,
+                                                 URL u,
+                                                 String encoding) 
+    throws ContinuationException {    
+      try {
+        return new SourceInputPort(
+                new BufferedReader(
+                 new InputStreamReader(getURLInputStream(u), encoding)), 
+                u.toString());
+      } catch (UnsupportedEncodingException us) {
+        throwIOException(f, liMessage(IOB, "unsupencoding", encoding), us);                
+      } catch (IOException e) {
+        throwIOException(f, liMessage(IOB, "erroropening", 
+                                   u.toString()), e);
+      }
+      return null;
+    }
+
     public static SchemeOutputPort openCharOutFile(Interpreter f, 
                                                    URL url,
                                                    String encoding,
@@ -219,24 +237,6 @@ public class IO extends IndexedProcedure {
         return conn.getOutputStream();
     }
         
-    public static SchemeInputPort openCharInFile(Interpreter f,
-                                                 URL u,
-                                                 String encoding) 
-    throws ContinuationException {    
-      try {
-        return new SourceInputPort(
-                new BufferedReader(
-                 new InputStreamReader(getURLInputStream(u), encoding)), 
-                u.toString());
-      } catch (UnsupportedEncodingException us) {
-        throwIOException(f, liMessage(IOB, "unsupencoding", encoding), us);                
-      } catch (IOException e) {
-        throwIOException(f, liMessage(IOB, "erroropening", 
-                                   u.toString()), e);
-      }
-      return null;
-    }
-
 
     public Value doApply(Interpreter f)
         throws ContinuationException {

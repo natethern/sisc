@@ -9,6 +9,8 @@ import java.io.BufferedOutputStream;
 import java.net.URL;
 import sisc.io.StreamOutputPort;
 import sisc.io.StreamInputPort;
+import sisc.io.BinaryOutputPort;
+import sisc.io.BinaryInputPort;
 
 public class BinaryIO extends IndexedProcedure {
 
@@ -18,7 +20,8 @@ public class BinaryIO extends IndexedProcedure {
     protected static final int
         BLOCKREAD=1, BLOCKWRITE=2, MAKEBUFFER=3, BUFFERQ=4,
         BUFFERLENGTH=5, BUFFERREF=6, BUFFERSET=7, BUFFERCOPY=8,
-        OPENBINARYINPUTFILE = 9, OPENBINARYOUTPUTFILE= 10;
+        OPENBINARYINPUTFILE = 9, OPENBINARYOUTPUTFILE= 10,
+        BINARYINPUTPORTQ = 11, BINARYOUTPUTPORTQ = 12;
 
 
     public static class Index extends IndexedLibraryAdapter {
@@ -36,22 +39,24 @@ public class BinaryIO extends IndexedProcedure {
             define("buffer-ref",    BUFFERREF);
             define("buffer-set!",   BUFFERSET);
             define("buffer-copy!",  BUFFERCOPY);
+            define("open-binary-input-file",  OPENBINARYINPUTFILE);
             define("open-binary-output-file", OPENBINARYOUTPUTFILE);
-            define("open-binary-input-file",  OPENBINARYINPUTFILE);        
+            define("binary-input-port?",  BINARYINPUTPORTQ);
+            define("binary-output-port?", BINARYOUTPUTPORTQ);
         }   
     }
     
-    public static final StreamOutputPort soutport(Value o) {
+    public static final BinaryOutputPort boutport(Value o) {
         try {
-            return (StreamOutputPort)o;
-        } catch (ClassCastException e) { typeError(BINARYB, "soutput-port", o); }
+            return (BinaryOutputPort)o;
+        } catch (ClassCastException e) { typeError(BINARYB, "boutput-port", o); }
         return null;
     }
 
-    public static final StreamInputPort sinport(Value o) {
+    public static final BinaryInputPort binport(Value o) {
         try {
-            return (StreamInputPort)o;
-        } catch (ClassCastException e) { typeError(BINARYB, "sinput-port", o); }
+            return (BinaryInputPort)o;
+        } catch (ClassCastException e) { typeError(BINARYB, "binput-port", o); }
         return null;
     }
 
@@ -106,6 +111,10 @@ public class BinaryIO extends IndexedProcedure {
                 return openBinInFile(f, url(f.vlr[0]));
             case OPENBINARYOUTPUTFILE:
                 return openBinOutFile(f, url(f.vlr[0]), false);
+            case BINARYINPUTPORTQ:
+                return truth(f.vlr[0] instanceof BinaryInputPort);
+            case BINARYOUTPUTPORTQ:
+                return truth(f.vlr[0] instanceof BinaryOutputPort);
             default:
                 throwArgSizeException();
             }
@@ -145,7 +154,7 @@ public class BinaryIO extends IndexedProcedure {
                 return VOID;
             case BLOCKREAD:
                 int count=num(f.vlr[2]).indexValue();
-                StreamInputPort inport=sinport(f.vlr[1]);
+                BinaryInputPort inport=binport(f.vlr[1]);
                 byte[] buf=buffer(f.vlr[0]).buf;
                 try {
                     int rv=inport.read(buf, 0, Math.min(buf.length, count));
@@ -159,7 +168,7 @@ public class BinaryIO extends IndexedProcedure {
                 break;
             case BLOCKWRITE:
                 count=num(f.vlr[2]).indexValue();
-                StreamOutputPort outport=soutport(f.vlr[1]);
+                BinaryOutputPort outport=boutport(f.vlr[1]);
                 buf=buffer(f.vlr[0]).buf;
                 try {
                     outport.write(buf, 0, count);

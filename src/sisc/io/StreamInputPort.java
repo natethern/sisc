@@ -2,7 +2,10 @@ package sisc.io;
 
 import java.io.*;
 
-public class StreamInputPort extends PushbackInputPort {
+public class StreamInputPort
+    extends PushbackInputPort
+    implements BinaryInputPort {
+
     public InputStream in;
 
     public StreamInputPort(InputStream in) {

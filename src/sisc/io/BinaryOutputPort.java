@@ -1,45 +1,10 @@
 package sisc.io;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
-public class StreamOutputPort
-    extends AutoflushOutputPort
-    implements BinaryOutputPort {
+public interface BinaryOutputPort extends OutputPort {
 
-    public OutputStream out;
-
-    public StreamOutputPort(OutputStream out, boolean aflush) {
-        super(aflush);
-        this.out=out;
-    }
-
-    public void write(byte[] b, int offset, int length) throws IOException {
-        writeHelper(b, offset, length);
-        if (autoflush) flush();
-    }
-
-    protected void writeHelper(char v) throws IOException {
-        out.write(v);
-    }
-
-    protected void writeHelper(String s) throws IOException {
-        out.write(s.getBytes("UTF-8"));
-    }
-
-    protected void writeHelper(byte[] b, int offset, int length)
-        throws IOException {
-        out.write(b, offset, length);
-    }
-
-    public void flush() throws IOException {
-        out.flush();
-    }
-
-    public void close() throws IOException {
-        flush();
-        out.close();
-    }
+    void write(byte[] b, int offset, int length) throws IOException;
 }
 /*
  * The contents of this file are subject to the Mozilla Public

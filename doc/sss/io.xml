@@ -265,11 +265,35 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         <para>
           <blockquote>
             <para>
+              <indexterm><primary>open-input-file</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>input-port</type>
+                <methodname>open-input-file</methodname>
+                <methodparam>
+                  <parameter>url</parameter>
+                </methodparam>
+                <methodparam choice="opt">
+                  <parameter>encoding</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Creates an input port from the specified
+                  <parameter>url</parameter>.  If the optional
+                  <parameter>encoding</parameter> parameter, a string,
+                  is supplied input will be decoded from the specified
+                  encoding rather than the default.
+                </para>
+              </blockquote>
+            </para>
+            <para>
               <indexterm><primary>open-output-file</primary>
               </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
-                <type>output port</type>
+                <type>output-port</type>
                 <methodname>open-output-file</methodname>
                 <methodparam>
                   <parameter>url</parameter>
@@ -293,30 +317,6 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                   after each write call.  If the specified file exists,
                   it will be overwritten silently when the port is
                   opened.
-                </para>
-              </blockquote>
-            </para>
-            <para>
-              <indexterm><primary>open-input-file</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <type>input port</type>
-                <methodname>open-input-file</methodname>
-                <methodparam>
-                  <parameter>url</parameter>
-                </methodparam>
-                <methodparam choice="opt">
-                  <parameter>encoding</parameter>
-                </methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Creates an input port from the specified
-                  <parameter>url</parameter>.  If the optional
-                  <parameter>encoding</parameter> parameter, a string,
-                  is supplied input will be decoded from the specified
-                  encoding rather than the default.
                 </para>
               </blockquote>
             </para>
@@ -421,7 +421,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <type>value</type>
                 <methodname>with-input-from-port</methodname>
                 <methodparam>
-                  <parameter>port</parameter>
+                  <parameter>input-port</parameter>
                 </methodparam>
                 <methodparam>
                   <parameter>thunk</parameter>
@@ -430,7 +430,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <blockquote>
                 <para>   
                   Evaluates <parameter>thunk</parameter> with
-                  <parameter>port</parameter> as the
+                  <parameter>input-port</parameter> as the
                   <literal>current-input-port</literal> for the duration
                   of the evaluation.  
                 </para>
@@ -444,7 +444,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <type>value</type>
                 <methodname>with-output-to-port</methodname>
                 <methodparam>
-                  <parameter>port</parameter>
+                  <parameter>output-port</parameter>
                 </methodparam>
                 <methodparam>
                   <parameter>thunk</parameter>
@@ -453,7 +453,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <blockquote>
                 <para>   
                   Evaluates <parameter>thunk</parameter> with
-                  <parameter>port</parameter> as the
+                  <parameter>output-port</parameter> as the
                   <literal>current-output-port</literal> for the duration
                   of the evaluation.  
                 </para>
@@ -528,6 +528,49 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
           </blockquote>
         </para>
       </sect3>
+      <sect3>
+        <title>Port Predicates</title>
+        <para>
+          <blockquote>
+            <para>
+              <indexterm><primary>input-port?</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>&num;t/&num;f</type>
+                <methodname>input-port?</methodname>
+                <methodparam>
+                  <parameter>value</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Returns &num;t if <parameter>value</parameter> is an
+                  input port, &num;f otherwise.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>output-port?</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>&num;t/&num;f</type>
+                <methodname>output-port?</methodname>
+                <methodparam>
+                  <parameter>value</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Returns &num;t if <parameter>value</parameter> is an
+                  output port, &num;f otherwise.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+        </para>
+      </sect3>
     </sect2>
     <sect2 id="StringPorts"> <title>String Ports</title>
       <para>
@@ -549,7 +592,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
-              <type>input-port</type>
+              <type>string-input-port</type>
               <methodname>open-input-string</methodname>
               <methodparam>
                 <parameter>string</parameter>
@@ -568,7 +611,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
           <para id="func-open-output-string">
               &procedure;
             <methodsynopsis language="scheme">
-              <type>output-port</type>
+              <type>string-output-port</type>
               <methodname>open-output-string</methodname> <void/>
             </methodsynopsis>
             <blockquote>
@@ -725,7 +768,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
-              <type>output port</type>
+              <type>binary-input-port</type>
               <methodname>open-binary-input-file</methodname>
               <methodparam>
                 <parameter>url</parameter>
@@ -736,7 +779,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
 		        Creates an input port in the same manner as &R5RS;
                 <function>open-input-file</function>, producing an
 		        input port that does no character-set decoding on the
-                bytes read as input.              </para>
+                bytes read as input.
+              </para>
             </blockquote>
           </para>
           <para>
@@ -744,7 +788,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
-              <type>output port</type>
+              <type>binary-output-port</type>
               <methodname>open-binary-output-file</methodname>
               <methodparam>
                 <parameter>url</parameter>
@@ -867,7 +911,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <parameter>buffer</parameter>
               </methodparam>
               <methodparam>
-                <parameter>input-port</parameter>
+                <parameter>binary-input-port</parameter>
               </methodparam>
               <methodparam>
                 <parameter>count</parameter>
@@ -876,7 +920,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             <blockquote>
               <para>
                 Reads up to <parameter>count</parameter> bytes of data
-                from the provided <parameter>input-port</parameter>
+                from the provided <parameter>binary-input-port</parameter>
                 into the binary buffer <parameter>buffer</parameter>.  
                 Note that less
                 than <parameter>count</parameter> bytes may be read.
@@ -897,7 +941,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <parameter>buffer</parameter>
               </methodparam>
               <methodparam>
-                <parameter>output-port</parameter>
+                <parameter>binary-output-port</parameter>
               </methodparam>
               <methodparam>
                 <parameter>count</parameter>
@@ -907,8 +951,44 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <para>
                 Writes <parameter>count</parameter> bytes of data from
                 the provided <parameter>buffer</parameter> to the
-                given <parameter>output-port</parameter>.  Exactly
+                given <parameter>binary-output-port</parameter>.  Exactly
                 <parameter>count</parameter> bytes will be written.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>binary-input-port?</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>&num;t/&num;f</type>
+              <methodname>binary-input-port?</methodname>
+              <methodparam>
+                <parameter>value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns &num;t if <parameter>value</parameter> is a
+                binary input port, &num;f otherwise.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>binary-output-port?</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>&num;t/&num;f</type>
+              <methodname>binary-output-port?</methodname>
+              <methodparam>
+                <parameter>value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns &num;t if <parameter>value</parameter> is an
+                binary output port, &num;f otherwise.
               </para>
             </blockquote>
           </para>
@@ -1113,7 +1193,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
-              <type>input-port</type>
+              <type>binary-input-port</type>
               <methodname>open-binary-socket-input-port</methodname>
               <methodparam><parameter>socket</parameter>
               </methodparam>
@@ -1129,7 +1209,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
-              <type>output-port</type>
+              <type>binary-output-port</type>
               <methodname>open-binary-socket-output-port</methodname>
               <methodparam><parameter>socket</parameter>
               </methodparam>

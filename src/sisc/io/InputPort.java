@@ -1,6 +1,6 @@
 package sisc.io;
 
-import java.io.*;
+import java.io.IOException;
 
 public interface InputPort extends Port {
 
