@@ -199,8 +199,7 @@ public abstract class Util implements Conf {
     /* Casting checks */
     public static void typeError(String type, Value o) {
         if (o instanceof Values)
-            throw new RuntimeException(((Values)o).values.length+
-                                       " values received in single-value context");
+            throw new RuntimeException(liMessage(SISCB, "multiplevalues"));
         throw new RuntimeException(liMessage(SISCB, "unexpectedarg", liMessage(SISCB, type), 
 					     o.synopsis(DEFAULT_SYNOPSIS_LENGTH)));
     }
@@ -357,7 +356,7 @@ public abstract class Util implements Conf {
     }
 
     /* Localization and Internationalization */
-    static Symbol SISCB=Symbol.intern("SISC");
+    public static Symbol SISCB=Symbol.intern("SISC");
     static WeakHashMap bundles=new WeakHashMap();
     static Locale myLocale=Locale.getDefault();
     static MessageFormat formatter=new MessageFormat("");
