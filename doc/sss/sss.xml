@@ -171,6 +171,21 @@ for <function>sqrt</function>, it is not clear what other mathematical
     </para>
   </appendix>
   <appendix>
+    <title>Troubleshooting</title>
+    <para>
+      This appendix covers issues with running &SISC; in certain environments.
+    </para>
+    <sect1 id="Kaffe">
+      <title>Kaffe</title>
+      <para>There is a known limitation with Kaffe, whose default
+      stack size is too small for &SISC; to parse s-expressions. To fix
+      this, either edit the &SISC; startup scripts to pass
+      <literal>-Xss32m</literal>, or set the
+      <literal>JAVAOPT</literal> environment variable to the same.
+      </para>
+    </sect1>
+  </appendix>
+  <appendix>
     <title>Backend Details</title>
     <note>
       <para>
