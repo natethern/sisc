@@ -5,6 +5,7 @@ import java.math.*;
 
 import sisc.data.Expression;
 import sisc.data.Symbol;
+import sisc.data.Value;
 import sisc.env.SymbolicEnvironment;
 import sisc.env.DelegatingSymEnv;
 
@@ -53,6 +54,26 @@ public class JavaDeserializer implements Deserializer {
         Expression e = (Expression)readObjectIOExceptionOnly();
         if (e != null) e.deserializeAnnotations(this);
         return e;
+    }
+
+    public Value[] readValueArray() throws IOException {
+        int l=readInt();
+        Value[] v=new Value[l];
+        readExpressionArray(v);
+        return v;
+    }
+    
+    public Expression[] readExpressionArray() throws IOException {
+        int l=readInt();
+        Expression[] v=new Expression[l];
+        readExpressionArray(v);
+        return v;
+    }
+    
+    void readExpressionArray(Expression[] target) throws IOException {        
+        for (int i=0; i<target.length; i++) {
+            target[i]=readExpression();
+        }
     }
 
     public Expression readInitializedExpression() throws IOException {

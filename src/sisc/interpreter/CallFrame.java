@@ -2,10 +2,13 @@ package sisc.interpreter;
 
 import java.io.*;
 import sisc.data.*;
+import sisc.env.SymbolicEnvironment;
 import sisc.io.ValueWriter;
 import sisc.util.ExpressionVisitor;
+import sisc.ser.DeserializerImpl;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.ser.SerializerImpl;
 
 public class CallFrame extends Procedure {
 
@@ -14,14 +17,17 @@ public class CallFrame extends Procedure {
     public boolean               vlk; //indicates that this frame has
                                       //been captured by a continuation
     public CallFrame             fk, parent;
-
+    public SymbolicEnvironment   tpl; //The currently active top-level environment
+    
     public CallFrame(Expression n, Value[] v,
                      boolean vlk, Value[] l, Value[] e,
+                     SymbolicEnvironment t,
                      CallFrame f, CallFrame p) {
         nxp=n;
         vlr=v;
         this.vlk=vlk;
         env=e;
+        tpl=t;
         lcl=l;
         fk=f;
         parent=p;
@@ -49,7 +55,7 @@ public class CallFrame extends Procedure {
 
     public boolean visit(ExpressionVisitor v) {
         return visitValueArray(v, vlr) && visitValueArray(v,lcl) && 
-            visitValueArray(v,env) && v.visit(nxp) && v.visit(fk) && 
+            visitValueArray(v,env) && v.visit(tpl) && v.visit(nxp) && v.visit(fk) && 
             v.visit(parent);
     }
 
@@ -62,35 +68,17 @@ public class CallFrame extends Procedure {
         r.pop(this);
     }
 
-    public static void writeValueArray(Serializer s, Value[] v) throws IOException {
-        if (v==null) s.writeInt(0);
-        else {
-            s.writeInt(v.length);
-            for (int i=0; i<v.length; i++) {
-                s.writeExpression(v[i]);
-            }
-        }
-    }
-    
-    public static Value[] readValueArray(Deserializer s) throws IOException {
-        int l=s.readInt();
-        Value[] v=new Value[l];
-        for (int i=0; i<v.length; i++) {
-            v[i]=(Value)s.readExpression();
-        }
-        return v;
-    }
-
     public void serialize(Serializer s) throws IOException {
         s.writeBoolean(vlk);
         if (vlr==null)
             s.writeBoolean(false);
         else {
             s.writeBoolean(true);
-            writeValueArray(s,vlr);
+            s.writeExpressionArray(vlr);
         }
-        writeValueArray(s,lcl);
-        writeValueArray(s,env);
+        s.writeExpressionArray(lcl);
+        s.writeExpressionArray(env);
+        s.writeSymbolicEnvironment(tpl);
         s.writeExpression(nxp);
         s.writeExpression(fk);
         s.writeExpression(parent);
@@ -102,10 +90,11 @@ public class CallFrame extends Procedure {
         vlk=s.readBoolean();
         vlr=null;
         if (s.readBoolean()) {
-            vlr=readValueArray(s);
+            vlr=s.readValueArray();
         }
-        lcl=readValueArray(s);
-        env=readValueArray(s);
+        lcl=s.readValueArray();
+        env=s.readValueArray();
+        tpl=s.readSymbolicEnvironment();
         nxp=s.readExpression();
         fk=(CallFrame)s.readExpression();
         parent=(CallFrame)s.readExpression();

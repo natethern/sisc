@@ -3,8 +3,10 @@ package sisc.data;
 import java.io.*;
 import sisc.interpreter.*;
 import sisc.io.ValueWriter;
+import sisc.ser.DeserializerImpl;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
+import sisc.ser.SerializerImpl;
 import sisc.util.ExpressionVisitor;
 import sisc.env.LexicalUtils;
 
@@ -85,7 +87,7 @@ public class Closure extends Procedure implements NamedValue {
         if (arity) attr|=1;
         s.writeLong(attr);
         LexicalUtils.writeIntArray(s, boxes);
-        CallFrame.writeValueArray(s,env);
+        s.writeExpressionArray(env);
         s.writeExpression(body);
     }
 
@@ -101,7 +103,7 @@ public class Closure extends Procedure implements NamedValue {
         arity=(attr&1)!=0;
         boxes=LexicalUtils.readIntArray(s);
         bl=(boxes == null ? -1 : boxes.length-1);
-        env=CallFrame.readValueArray(s);
+        env=s.readValueArray();
         body=s.readExpression();
     }
 

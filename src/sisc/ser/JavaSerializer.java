@@ -30,6 +30,16 @@ public class JavaSerializer implements Serializer {
         if (e != null) e.serializeAnnotations(this);
     }
 
+    public void writeExpressionArray(Expression[] v) throws IOException {
+        if (v==null) writeInt(0);
+        else {
+            writeInt(v.length);
+            for (int i=0; i<v.length; i++) {
+                writeExpression(v[i]);
+            }
+        }
+    }
+
     public void writeInitializedExpression(Expression e) throws IOException {
         writeExpression(e);
     }

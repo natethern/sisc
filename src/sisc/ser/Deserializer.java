@@ -6,7 +6,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import sisc.data.Expression;
+import sisc.data.Value;
 import sisc.env.SymbolicEnvironment;
+
 
 public interface Deserializer extends ObjectInput {
 
@@ -15,6 +17,9 @@ public interface Deserializer extends ObjectInput {
     BigDecimal readBigDecimal() throws IOException;
 
     Expression readExpression() throws IOException;
+    Expression[] readExpressionArray() throws IOException;
+    Value[] readValueArray() throws IOException;
+
     Expression readInitializedExpression() throws IOException;
 
     SymbolicEnvironment readSymbolicEnvironment() throws IOException;
