@@ -5,7 +5,7 @@
 ;; a string (column label).
 ;;
 ;; Currently only supports SQL number and string types.
-(module jdbc (jdbc/connect jdbc/prepare-statement 
+(module jdbc (jdbc/connect jdbc/prepare-statement
                            jdbc/execute-query jdbc/execute jdbc/close
                            set-int set-string set-double set-float)
   (import s2j)
@@ -34,6 +34,7 @@
   (define-generic get-column-type)
   (define-generic get-column-count)
   (define-generic get-column-label)
+  (define-generic delete-row)
   (define-generic next)
   (define jdbc/close close)
   (define type-conversions #f)
@@ -58,7 +59,9 @@
                   (lambda (rs)
                     (lambda (field-id)
                       (let* ((field-pos 
-                              (cond [(number? field-id)
+                              (cond [(eq? field-id 'delete) 
+                                     (delete-row rs)]
+                                    [(number? field-id)
                                      field-id]
                                     [(string? field-id)
                                      (+ (list-index cn field-id) 1)]
@@ -74,8 +77,13 @@
                                      (fetch-next-row))
                         '()))))
           (fetch-next-row)))))
-  (define (jdbc/prepare-statement connection query)
-    (prepare-statement connection (->jstring query)))
+  (define (jdbc/prepare-statement connection query . updatable)
+    (if (and (not (null? updatable)) (car updatable))
+        (prepare-statement connection (->jstring query)
+                           (<java.sql.ResultSet> '|TYPE_FORWARD_ONLY|)
+                           (<java.sql.ResultSet> '|CONCUR_UPDATABLE|))
+        (prepare-statement connection (->jstring query))))
+                                                       
   (set! type-conversions
         `((,(->number (<java.sql.Types> '|INTEGER|)) . (,get-int . ,->number))
           (,(->number (<java.sql.Types> '|FLOAT|)) . (,get-float . ,->number))
