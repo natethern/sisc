@@ -36,7 +36,7 @@
       Finally the process begins again with a new prompt.
     </para>
     <para>
-      The process terminates with a forced kill of the JVM (with
+      The process terminates with a forced kill of the JVM (with 
       Control-C or similar), or when an end of file is detected on
       the console.  Also, the <function>exit</function> procedure may
       be used to exit the current REPL.
@@ -63,6 +63,15 @@
 	  </blockquote>
 	</para>
       </blockquote>
+    </para>
+    <para>
+      Evaluation may be prematurely interrupted on some platforms by
+      sending SIGQUIT (usually by pressing Control-C) to the &SISC;
+      process.  If supported, this will cause an interrupted error to
+      be raised at whichever expression is currently being evaluated
+      in the REPL thread.  If not caught, this will cause the error to
+      be raised at the console and a new prompt will be displayed.
+      Issuing the signal twice will terminate &SISC;.     
     </para>
   </sect1>
   <sect1 id="DisplayConventions">
