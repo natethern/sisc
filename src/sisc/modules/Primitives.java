@@ -22,7 +22,7 @@ import sisc.env.NativeParameter;
 import sisc.env.ConfigParameter;
 import sisc.util.*;
 
-public class Primitives extends IndexedProcedure implements InlinableProcedure {
+public class Primitives extends IndexedProcedure {
 
     public static class Index extends IndexedLibraryAdapter {
         
@@ -674,7 +674,6 @@ public class Primitives extends IndexedProcedure implements InlinableProcedure {
             }
             
             r.nxp = APPEVAL;
-            r.env = null;
             return proc;
         case LIST: return valArrayToList(vlr,0,vls);
         case ADD:
