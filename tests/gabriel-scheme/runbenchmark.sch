@@ -17,11 +17,12 @@
     ((_ x y z) (putprop x y z))))
 
 (define (time n thunk)
-  (let ((st (system-time)))
-    (let loop ((x n))
-      (if (zero? x)
-          (list (quotient (- (system-time) st) n) 'avg 'ms)
-          (begin (thunk) (loop (- x 1)))))))
+  (let loop ((x n) (res '()))
+    (if (zero? x)
+        (list (apply min res) 'min 'ms)
+        (let ((st (system-time)))
+          (begin (thunk)
+                 (loop (- x 1) (cons (- (system-time) st) res)))))))
 
 (define benchmark-results '())
 
