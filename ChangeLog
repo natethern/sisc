@@ -3,6 +3,10 @@
 	* call-with-serial-*-file wasn't allowing functions
 	  to return multiple values. Fixed.
 
+	* vector-fill! was incorrectly defined in Primitives,
+	  resulting in its use always causing an incorrect
+	  argument count error.
+
 2004-01-29  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed a bug in the optimizer which broke copy-propogations
