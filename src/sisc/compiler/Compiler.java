@@ -50,9 +50,9 @@ public class Compiler extends CompilerConstants {
     }
 
     protected Expression compile(Interpreter r, Expression v, Pair sets,
-                              ReferenceFactory rf, 
-                              int context, SymbolicEnvironment env, 
-                              Pair an)
+                                 ReferenceFactory rf, 
+                                 int context, SymbolicEnvironment env, 
+                                 Pair an)
         throws ContinuationException {
         if (v==EMPTYLIST) {
             //we evaluate () to the empty list, which is an "ignorable
@@ -66,7 +66,9 @@ public class Compiler extends CompilerConstants {
         } else if (v instanceof Symbol) {
             Symbol sym=(Symbol)v;
 
-            return rf.createReference(sym, sets, env);
+            Expression ref=rf.createReference(sym, sets, env);
+            if (an!=null) setAnnotations(ref, an);
+            return ref;
         }
         else return v;
     }
