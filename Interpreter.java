@@ -240,7 +240,7 @@ public class Interpreter extends Util {
      * "@param s
      */
     public AssociativeEnvironment lookupContextEnv(Symbol s) {
-	return ctx.lookupContextEnv(s);
+        return ctx.lookupContextEnv(s);
     }
 
     /**
@@ -250,7 +250,7 @@ public class Interpreter extends Util {
      * @param env 
      */
     public void defineContextEnv(Symbol s, AssociativeEnvironment env) {
-	ctx.symenv.define(s, env);
+        ctx.defineContextEnv(s, env);
     }
 
     protected AssociativeEnvironment getContextEnv(Symbol s) {

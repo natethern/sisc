@@ -43,7 +43,7 @@ public class AppContext extends Util {
     public AssociativeEnvironment toplevel_env;
 
     public AppContext() {
-	symenv=toplevel_env=new AssociativeEnvironment();
+        symenv=toplevel_env=new AssociativeEnvironment();
     }
 
     public AppContext(AssociativeEnvironment symenv) {
@@ -162,7 +162,11 @@ public class AppContext extends Util {
     }
 
     public AssociativeEnvironment lookupContextEnv(Symbol s) {
-	return (AssociativeEnvironment)symenv.lookup(s);
+        return (AssociativeEnvironment)symenv.lookup(s);
+    }
+
+    public void defineContextEnv(Symbol s, AssociativeEnvironment env) {
+        symenv.define(s, env);
     }
 
 }
