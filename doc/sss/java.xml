@@ -197,11 +197,9 @@ constructors can be (de)serialized. Ordinary Java objects cannot be
 Java objects can be created by Scheme code by invoking the
 <function>make</function> generic function with a class object as the
 first parameter followed by any number of Java objects, e.g.
-<informalexample>
           <programlisting>
 (define sb (make &lt;jstringbuffer&gt; (-&gt;jstring "foo")))
 </programlisting>
-        </informalexample>
 <constant>&lt;jstringbuffer&gt;</constant> is bound to the object
 represting the Java class
 <classname>java.lang.StringBuffer</classname>. The angle brackets are
@@ -246,16 +244,14 @@ multi-dimensional arrays, a list or vector of numbers.
 </para>
       </para>
       </sect3>
-      <sect3>
+      <sect3 id="JavaMethodInvocation">
         <title>Method Invocation</title>
         <para>
 Scheme code can invoke Java methods via generic functions, e.g.
-<informalexample>
             <programlisting>
 (define-generic to-string)
 (to-string sb)
 </programlisting>
-          </informalexample>
 which calls the <function>toString</function> method on the
 <classname>java.lang.StringBuffer</classname> instance defined above.
 </para>
@@ -290,12 +286,10 @@ e.g. <function>setFoo</function> becomes <function>set-foo!</function>.
 The names of some Java methods, when mangled, clash with names of
 standard Scheme functions. <function>define-generic</function> can
 therefore take an explicit internal name as the second argument, e.g.
-<informalexample>
               <programlisting>
 (define-generic app append)
 (app sb (->jstring "foo"))
 </programlisting>
-            </informalexample>
 The invocation of <function>app</function> selects the appropriate
 <function>append</function> method on
 <classname>java.lang.StringBuffer</classname>
@@ -368,11 +362,9 @@ denoting an array type
 By convention, names of constants bound to class objects are
 constructed by enclosing the fully qualified class name in angle
 brackets, e.g.
-<informalexample>
             <programlisting>
 (define &lt;java.util.Comparator&gt; (java-class "java.util.Comparator"))
 </programlisting>
-          </informalexample>
 An exception are primitive types and classes defined in the
 <classname>java.lang</classname> (excluding the wrapper classes for
 primitive types, such as
@@ -529,11 +521,9 @@ conversion function is
             <para>
 Returns a function that when invoked will convert its argument into an
 object of type <parameter>type</parameter>. For example
-<informalexample>
                 <programlisting>
 ((-&gt; &lt;jstring&gt;) "foo")
 </programlisting>
-              </informalexample>
 converts the Scheme string <literal>"foo"</literal> into a Java
 string. Typically the returned function takes just one argument - the
 object to be converted. There are however some special cases where
@@ -577,12 +567,10 @@ identifiers in the top-level environment,
 eg. <literal>&lt;void&gt;</literal>,
 <literal>&lt;boolean&gt;</literal>, <literal>&lt;number&gt;</literal>
 etc. Hence, for instance
-<informalexample>
           <programlisting>
 ((-&gt; &lt;number&gt;) (-&gt;jint 1))
 (-&gt;number (-&gt;jint 1))
 </programlisting>
-          </informalexample>
 both convert the Scheme number <literal>1</literal> into a Java
 <classname>int</classname> and back into a Scheme number.
 </para>
@@ -593,7 +581,6 @@ both convert the Scheme number <literal>1</literal> into a Java
 Java exceptions are propagated to scheme and can be caught like any
 other exception, e.g. with <function>call/fc</function> as defined in
 <xref linkend="FailureContinuations"/>. For example
-<informalexample>
             <programlisting>
 (define-generic char-at)
 (define-generic print-stack-trace)
@@ -603,7 +590,6 @@ other exception, e.g. with <function>call/fc</function> as defined in
    (print-stack-trace m)
    #f))
 </programlisting>
-          </informalexample>
 will catch the <classname>IndexOutOfBoundsException</classname>, print
 its stack trace and return &num;f.
 </para>
@@ -808,7 +794,6 @@ corresponding to almost all methods on
 <classname>java.lang.Class</classname> 
 plus the various other reflection classes. The only
 methods of the Java Reflection API that have not been mapped this way are:
-<informalexample>
             <programlisting>
 Class.forName(String,boolean,ClassLoader)
 Class.getClassLoader()
@@ -818,7 +803,6 @@ Class.getResource(String)
 Class.getResourceAsStream(String)
 Class.getSigners()
 </programlisting>
-          </informalexample>
 The majority of functions in <literal>s2j-module</literal> are not
 exported by <literal>s2j</literal> since direct use of the Java
 Reflection API should not be necessary due to the higher-level
@@ -899,6 +883,248 @@ Creates a new instance of <parameter>jclass</parameter> by invoking its
 default, argument-less constructor.
 </para>
           </blockquote>
+</para>
+      </sect3>
+    </sect2>
+    <sect2 id="GenericFunctions">
+      <title>Generic Functions</title>
+      <para>
+Generic functions provide a mechanism by which a Scheme function can
+select different bodies for execution depending on the types of the
+parameters it was called with. Languages like ANSI Lisp and Dylan
+provide similar functionality. Generic functions have several
+advantages over normal functions:
+<itemizedlist>
+          <listitem>
+            <para>
+It is not necessary to come up with unique names for functions that
+perform the same operation on different types of objects. This avoids
+cluttering the name space. All these functions can be defined
+separately but yet be part of the same, single generic function.
+</para>
+          </listitem>
+          <listitem>
+            <para>
+The functionality of a generic function can be extended incrementally
+through code located in different places. This avoids "spaghetti code"
+where adding a new type of objects requires changes to existing pieces
+of code in several locations.
+</para>
+          </listitem>
+          <listitem>
+            <para>
+Code using generic functions has a high degree of polymorphism without
+having to resort to ugly and hard-to-maintain type-check-and-dispatch
+branching.
+</para>
+          </listitem>
+        </itemizedlist>
+</para>
+      <para>
+In &SISC; the generic function mechanism is encapsulated in the
+<literal>generic-functions</literal> module and can be imported in the
+usual manner, i.e.
+<programlisting>
+(import generic-functions)
+</programlisting>
+</para>
+      <sect3>
+        <title>Defining Generic Functions</title>
+        <para>
+There are two steps to defining generic functions - defining the
+generic function itself and adding methods to it.
+</para>
+        <para>
+<methodsynopsis language="scheme">
+            <void/>
+            <methodname>define-generic</methodname>
+            <methodparam><parameter>name</parameter></methodparam>
+            <methodparam choice="opt">
+              <parameter>fname</parameter>
+            </methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Creates a new generic function and binds it to
+<parameter>name</parameter> in the current lexical environment. The
+name of the generic function is <parameter>fname</parameter>, which
+defaults to <parameter>name</parameter>. The name of a generic
+function is significant when the function is to be used to access Java
+methods, as explained in <xref linkend="JavaMethodInvocation"/>.
+Multiple generic functions with the same <parameter>fname</parameter>
+have their own sets of Scheme methods but share the Java methods
+associated with <parameter>fname</parameter>.
+</para>
+        </blockquote>
+</para>
+      <para>
+<methodsynopsis language="scheme">
+            <void/>
+            <methodname>define-method</methodname>
+            <methodparam><parameter>signature</parameter></methodparam>
+            <methodparam><parameter>.</parameter></methodparam>
+            <methodparam><parameter>body</parameter></methodparam>
+          </methodsynopsis>
+<blockquote>
+            <simplelist spacing="compact">
+              <member>
+where <parameter>signature</parameter> is of the form
+<literal>(</literal><parameter>name</parameter>
+<literal>(</literal><parameter>type</parameter>
+<parameter>param</parameter><literal>)</literal> ... [
+<literal>.</literal> <parameter>rest</parameter>]<literal>)</literal>
+</member>
+              <member>
+and <parameter>body</parameter> can contain anything that is valid
+inside the body of a <function>lambda</function>.
+</member>
+            </simplelist>
+            <para>
+Adds a method the generic function <parameter>name</parameter>. A
+method has a typed parameter list and a body. Types must be Java
+classes. Defining a method with the same signature as an existing
+method overwrites the existing method.
+</para>
+        </blockquote>
+</para>
+      <para>
+<methodsynopsis language="scheme">
+            <void/>
+            <methodname>define-constructor</methodname>
+            <methodparam><parameter>signature</parameter></methodparam>
+            <methodparam><parameter>.</parameter></methodparam>
+            <methodparam><parameter>body</parameter></methodparam>
+          </methodsynopsis>
+<blockquote>
+            <simplelist spacing="compact">
+              <member>
+where <parameter>signature</parameter> is of the form
+<literal>(</literal><parameter>type</parameter>
+<literal>(</literal><parameter>type</parameter>
+<parameter>param</parameter><literal>)</literal> ... [
+<literal>.</literal> <parameter>rest</parameter>]<literal>)</literal>
+</member>
+              <member>
+and <parameter>body</parameter> can contain anything that is valid
+inside the body of a <function>lambda</function>.
+</member>
+            </simplelist>
+            <para>
+This form is basically identical to the
+<function>define-method</function> form except it defines a
+"constructor" method for a specific type. All constructor methods are
+part of the single generic function <function>make</function>.
+</para>
+        </blockquote>
+</para>
+        <para>
+An example might be helpful at this stage.
+<programlisting>
+(define-generic app append) ;;do not overwrite Scheme's append
+(define-method (app (&lt;jstringbuffer&gt; buf) . rest)
+  (for-each (lambda (x) (app buf x)) rest)
+  buf)
+(define sb (make &lt;jstringbuffer&gt;))
+(app sb (->jstring "foo") (->jint 1) (->jstring "bar"))
+</programlisting>
+This defines a method on <classname>java.lang.StringBuffer</classname>
+that takes any number of parameters and appends them to the string
+buffer instance. Thus the final call returns a string buffer
+containing <literal>"foo1bar"</literal>.
+</para>
+      </sect3>
+      <sect3>
+        <title>Invoking Generic Functions</title>
+        <para>
+Generic functions are invoked just like ordinary functions. The
+invocation selects a method whose type signature best matches the
+types of the given parameters. An error is reported if there is no
+such method. The following precedence rules apply:
+<itemizedlist>
+            <listitem>
+              <para>
+Methods with n+1 mandatory parameters take precedence
+over methods with n mandatory parameters.
+</para>
+            </listitem>
+            <listitem>
+              <para>
+Methods without rest arg take precedence over methods with rest args.
+</para>
+            </listitem>
+            <listitem>
+              <para>
+Scheme methods take precedence over Java methods with the same
+signature.
+</para>
+            </listitem>
+            <listitem>
+              <para>
+A method with n mandatory parameters with or without a rest arg takes
+precedence over another method with n mandatory parameters with or
+without a rest arg, if the types of all parameters of the first method
+are sub-types or identical to the types of all parameters of the
+second method.
+</para>
+            </listitem>
+          </itemizedlist>
+It is possible to call the "next best" matching method from within the
+body of a method. To do so, the first parameter declaration must have
+the form <literal>(next:
+</literal><parameter>next-method</parameter><literal>)</literal>, e.g.
+<programlisting>
+(define-method (value-of (next: next-method)
+                         (&lt;jstring&gt; s)
+                         (&lt;java.lang.Character&gt; c))
+  (display "\nin method\n")
+  (next-method))
+</programlisting>
+If the next method is invoked with no parameters then the same
+parameters as supplied to the current method invocation are used. When
+parameters <emphasis>are</emphasis> supplied explicitly, one needs to
+be aware that the next method can only invoke methods of a lower
+precedence than the current one.
+</para>
+      </sect3>
+      <sect3>
+        <title>Limitations</title>
+        <para>
+The generic functions code is still relatively young and suffers from
+a number of shortcomings.
+<itemizedlist>
+            <listitem>
+              <para>
+Error reporting is not particularly good. Real-world usage will tell
+what errors crop up frequently and we can then put some mechanism in
+place for reporting them in a meaningful way.
+</para>
+            </listitem>
+            <listitem>
+              <para>
+Generic functions only operate on Java objects. &SISC; needs a more
+complex type system to fix this, which is quite hard but most of the
+code for that has already beenwritten.
+</para>
+            </listitem>
+            <listitem>
+              <para>
+Generic functions and their methods are not garbage collected.
+</para>
+            </listitem>
+            <listitem>
+              <para>
+Generic functions are lexically scoped, but their methods are not.
+</para>
+            </listitem>
+          </itemizedlist>
+The last two items imply that defining generic functions or their
+methods in a local scope is generally a bad idea. One exception are
+module definitions. It is perfectly safe for modules to define private
+(i.e. not exported) generic functions and add methods to them without
+interfering with other modules. However, care must be taken when
+generic functions are imported or exported - methods are added to
+generic function when the module gets <emphasis>defined</emphasis>
+rather then when it gets imported.
 </para>
       </sect3>
     </sect2>
