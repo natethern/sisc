@@ -35,10 +35,6 @@ public class FillRibExp extends Expression {
         return new Pair(sym("FillRib-exp"), new Pair(exp.express(), nxp.express()));
     }
 
-    public void setCaptured(Interpreter r, CallFrame onFrame) {
-        onFrame.setCaptured(r, pos+1);
-    }
-
     public void serialize(Serializer s) throws IOException {
         s.writeExpression(exp);
         s.writeInt(pos);

@@ -54,11 +54,8 @@ public class Interpreter extends Util {
                                                       new Value[3]};
 
     //ACCOUNTING REGISTERS
-    private CallFrame            lcf, llcf;//used for continuation capture
     public boolean               vlk;      //vlk, when true, indicates the
                                            //frame was captured.
-    private boolean              cap[];    //Indicates which vlr positions
-                                           //contained a k capture.
     public Expression            lxp;      //Used for debugging
 
     //ACTIVITY REGISTERS
@@ -72,8 +69,7 @@ public class Interpreter extends Util {
 
     //Scheme->Java exception conversion FK
     static CallFrame top_fk = new CallFrame(new ThrowSchemeException(),
-                                            null, false, null, null, null,
-                                            null, null);
+                                            null, false, null, null, null, null);
     static {
         top_fk.vlk = true;
         // This creates a loop in the stack, which will be a problem for
@@ -87,9 +83,6 @@ public class Interpreter extends Util {
         fk=top_fk;
         this.tctx = tctx;
         this.dynenv = dynenv;
-        // Set l*cf to a dummy frame, so we dont have to null check 
-        // in returnFrame
-        llcf=lcf=new CallFrame(null, null, true, null, null, null, null, null);
     }
 
     public AppContext getCtx() {
@@ -144,48 +137,38 @@ public class Interpreter extends Util {
 
     public final void newVLR(int size) {
         vlk=false;
-        cap=null;
         vlr=createValues(size);
     }
     
     public final void pop(CallFrame c) {
-        cap=c.cap;
-        nxp=c.nxp;
+        nxp=lxp=c.nxp;
         vlr=c.vlr;
         lcl=c.lcl;
         env=c.env;
         fk=c.fk;
         stk=c.parent;
         vlk=c.vlk;
-        returnFrame(llcf);
-        llcf=lcf;
-        lcf=c;
+        returnFrame(c);
     }
 
     public final void setVLR(int pos, Value v) {
-        if (cap!=null) {
-            for (int i=pos; i>=0; i--) {
-                if (cap[i]) {
-                    llcf.parent=lcf=lcf.makeSafe(this);
-                    vlr=lcf.vlr;
-                    cap = null;
-                    break;
-                }
-            }
+        if (vlk) {
+            Value[] newvlr = createValues(vlr.length);
+            System.arraycopy(vlr, 0, newvlr, 0, vlr.length);
+            vlr = newvlr;
+            vlk = false;
         }
         vlr[pos]=v;
     }
 
     public void error(Pair error)  throws ContinuationException {
-        Expression last = (nxp != null ? nxp :
-                           (lxp != null ? lxp : lcf.nxp));
+        Expression last = (nxp != null ? nxp : lxp);
         acc = new Values(new Value[] {
                              error,
                              new ApplyParentFrame(new CallFrame(last, 
                                                                 vlr, vlk,
                                                                 lcl, env,
-                                                                fk, stk,
-                                                                cap).capture(this))});
+                                                                fk, stk).capture(this))});
         throw new ContinuationException(fk);
     }
 
@@ -357,7 +340,6 @@ public class Interpreter extends Util {
         rv.vlk=vlk;
         rv.env=e;
         rv.lcl=l;
-        rv.cap=null;
         return rv;
     }
 
@@ -379,7 +361,6 @@ public class Interpreter extends Util {
         stk.vlk=vlk;
         stk.env=env;
         stk.lcl=lcl;
-        stk.cap=cap;
     }
     
     public final void returnFrame(CallFrame f) {

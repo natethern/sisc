@@ -11,13 +11,12 @@ public class CallFrame extends Procedure {
 
     public Expression            nxp;
     public Value[]               vlr, lcl, env;
-    public boolean               flk=false, vlk, cap[];
+    public boolean               flk=false, vlk;
     public CallFrame             fk, parent;
 
     public CallFrame(Expression n, Value[] v,
                      boolean vlk, Value[] l, Value[] e,
-                     CallFrame f, CallFrame p,
-                     boolean[] cap) {
+                     CallFrame f, CallFrame p) {
         nxp=n;
         vlr=v;
         this.vlk=vlk;
@@ -25,79 +24,21 @@ public class CallFrame extends Procedure {
         lcl=l;
         fk=f;
         parent=p;
-        this.cap=cap;
-    }
-
-    public final void copyVLR(Interpreter r) {
-        if (vlr!=null) {
-            int l=vlr.length;
-            Value[] nvlr=r.createValues(l);
-            System.arraycopy(vlr, 0, nvlr, 0, l);
-            vlr=nvlr;
-            cap=null;
-        }
     }
 
     public final CallFrame capture(Interpreter r) {
-        //Returning a safe frame is an optimization. k invocation
-        //makes frames safe as necessary but it cannot make the top
-        //frame safe. That's because frames are made safe by cloning
-        //them and then swivelling the child frame's parent pointer,
-        //but the top frame has no child frame. So without this
-        //optimization, any invocation of the k potentially requires a
-        //cloning of the captured frame in order to obtain a safe vlr.
-        //NB: this is not a cost-free optimization: if no further ks
-        //were captured from the same frame then the cloning is
-        //unnecessary (and wouldn't occur without this "optimization").
-
-        CallFrame toReturn=makeSafe(r);
-
         // Set the captured flags all the way to the root.
-        // Note that we do not need to set the flags on the original
-        // frame since we have just taken a copy of it, thus
-        // guaranteeing that this k won't modify it.
-        CallFrame w=toReturn;
+        CallFrame w=this;
         boolean lastWasLocked=false;
         do {
             lastWasLocked=w.flk;
             w.vlk=w.flk=true;
-            if (w.nxp!=null)
-                w.nxp.setCaptured(r, w);
             w=w.parent;
         } while (w!=null && !lastWasLocked); 
 
-        return toReturn;
+        return this;
     }
     
-    public final CallFrame makeSafe(Interpreter r) {
-        /**
-           The only frames we make safe are frames which have been
-           captured and hence have their vlk flag set. Cloning
-           preserves the flag value. It is important that the vlk of
-           the new frame is true for one reason only: we try to patch
-           the new frame into the k, replacing the old frame. Since
-           k's are shared objects their frames must not be recycled.
-        **/
-        CallFrame cv=cloneFrame(r);
-        cv.copyVLR(r);
-        return cv;
-    }
-
-    public final void setCaptured(Interpreter r, int pos) {
-        if (vlr!=null) {
-            if (cap==null) {
-                cap=new boolean[vlr.length];
-            }
-            if (pos<vlr.length) {
-                cap[pos]=true;
-            }
-        }
-    }
-
-    protected final CallFrame cloneFrame(Interpreter r) {
-        return r.createFrame(nxp, vlr, vlk, lcl, env, fk, parent);
-    }
-
     public void display(ValueWriter w) throws IOException {    
         displayNamedOpaque(w, "continuation"); 
     }
@@ -151,10 +92,6 @@ public class CallFrame extends Procedure {
         else {
             s.writeBoolean(true);
             writeValueArray(s,vlr);
-            s.writeInt(cap==null ? 0 : cap.length);
-            if (cap!=null)
-                for (int i=0; i<cap.length; i++) 
-                    s.writeBoolean(cap[i]);
         }
         writeValueArray(s,lcl);
         writeValueArray(s,env);
@@ -171,12 +108,6 @@ public class CallFrame extends Procedure {
         vlr=null;
         if (s.readBoolean()) {
             vlr=readValueArray(s);
-            int capsize=s.readInt();
-            if (capsize>0) {
-                cap=new boolean[capsize];
-                for (int i=0; i<capsize; i++) 
-                    cap[i]=s.readBoolean();
-            }
         }
         lcl=readValueArray(s);
         env=readValueArray(s);

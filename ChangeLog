@@ -1,3 +1,11 @@
+2004-11-09  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed a bug that caused continuations to misbehave in a
+	  multi-threaded setting.
+
+	* Simplified continuation logic significantly, without incurring
+	  any significant performance penalty.
+
 2004-11-08  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed arity checking of thunks.
