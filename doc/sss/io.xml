@@ -161,7 +161,7 @@
 	Networking
       </title>
     <para> 
-      &requires;networking-module&endrequires;
+      &requires;<emphasis role='bold'>(import networking-module)</emphasis>
     </para>
       <para>
 	The &SISC; Networking library provides a mechanism for

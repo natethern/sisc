@@ -7,8 +7,7 @@
  <!ENTITY procedure "<emphasis role='bold'><emphasis>procedure:</emphasis></emphasis>">
  <!ENTITY parameter "<emphasis role='bold'><emphasis>parameter:</emphasis></emphasis>">
  <!ENTITY f "&num;f">
- <!ENTITY requires "<emphasis>Requires:</emphasis><emphasis role='bold'> (import ">
- <!ENTITY endrequires ")</emphasis>">  
+ <!ENTITY requires "<emphasis>Requires:</emphasis>">
  <!ENTITY intro-chapter SYSTEM "intro.xml">
  <!ENTITY inst-chapter SYSTEM "inst.xml">
  <!ENTITY scheme-chapter SYSTEM "scheme.xml">
@@ -16,6 +15,7 @@
  <!ENTITY io-chapter SYSTEM "io.xml">
  <!ENTITY threads-chapter SYSTEM "threads.xml">
  <!ENTITY modules-chapter SYSTEM "modules.xml">
+ <!ENTITY genf-chapter SYSTEM "genf.xml">
  <!ENTITY java-chapter SYSTEM "java.xml">
  <!ENTITY gfdl SYSTEM "fdl.xml">
 ]>
@@ -68,6 +68,7 @@
   &io-chapter;
   &threads-chapter;
   &modules-chapter;
+  &genf-chapter;
   &java-chapter;
   <appendix id="Errata">
     <title>Errata</title>
