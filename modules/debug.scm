@@ -78,8 +78,8 @@
     (if (null? x) 
         '()
         (let ([traced-procedure (car x)])
-          (if (not (eq? (cdr traced-procedure)
-                        (getprop (car traced-procedure) '*toplevel*)))
+          (if (eq? (cdr traced-procedure)
+                   (getprop (car traced-procedure) '*toplevel*))
               (loop (cdr x))
               (cons traced-procedure (loop (cdr x))))))))
               
@@ -109,8 +109,8 @@
                               (cons (cons real-ps proc) traced-procedures))
                         (putprop real-ps '*toplevel*
                                  (make-traced real-ps proc)))])))
-           procs)
-          (putprop 'traced-procedures '*debug* traced-procedures)))))
+           procs)))
+    (putprop 'traced-procedures '*debug* traced-procedures)))
 
 
 (define (remove-from-assoc procedure-name assoc)
