@@ -148,7 +148,7 @@ public class Quantity extends Value implements Singleton {
                 lv.indexOf('f') != -1 ||
                 lv.indexOf('d') != -1 ||
                 lv.indexOf('l') != -1) {
-                return new Quantity(parseDecimal(lv, radix), true);
+                return new Quantity(parseDecimal(lv, radix));
             }
         }  
         return parseUinteger(v, radix);
