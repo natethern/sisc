@@ -488,49 +488,49 @@
   (syntax-rules ()
     ((_ source fun-exp arg-exps)
      (if source 
-	 `(make-annotation (,fun-exp . ,arg-exps) ,source)
+	 `(compile-in-annotation (,fun-exp . ,arg-exps) ,source)
 	 `(,fun-exp . ,arg-exps)))))
 
 (define-syntax build-conditional
   (syntax-rules ()
     ((_ source test-exp then-exp else-exp)
      (if source
-       	 `(make-annotation (if ,test-exp ,then-exp ,else-exp) ,source)
+       	 `(compile-in-annotation (if ,test-exp ,then-exp ,else-exp) ,source)
 	 `(if ,test-exp ,then-exp ,else-exp)))))
 
 (define-syntax build-lexical-reference
   (syntax-rules ()
     ((_ type source var)
      (if source 
-	 `(make-annotation ,var ,source)
+	 `(compile-in-annotation ,var ,source)
 	 var))))
 
 (define-syntax build-lexical-assignment
   (syntax-rules ()
     ((_ source var exp)
      (if source
-	 `(make-annotation (set! ,var ,exp) ,source)
+	 `(compile-in-annotation (set! ,var ,exp) ,source)
 	 `(set! ,var ,exp)))))
 
 (define-syntax build-global-reference
   (syntax-rules ()
     ((_ source var)
      (if source 
-	 `(make-annotation ,var ,source)
+	 `(compile-in-annotation ,var ,source)
 	 var))))
 
 (define-syntax build-global-assignment
   (syntax-rules ()
     ((_ source var exp)
      (if source
-	 `(make-annotation (set! ,var ,exp) ,source)
+	 `(compile-in-annotation (set! ,var ,exp) ,source)
 	 `(set! ,var ,exp)))))
 
 (define-syntax build-global-definition
   (syntax-rules ()
     ((_ source var exp)
      (if source
-	 `(make-annotation (define ,var ,exp) ,source)
+	 `(compile-in-annotation (define ,var ,exp) ,source)
 	 `(define ,var ,exp)))))
 
 (define-syntax build-module-definition
@@ -559,7 +559,7 @@
   (syntax-rules ()
     ((_ src vars exp)
      (if src 
-	 `(make-annotation (lambda ,vars ,exp) ,src)
+	 `(compile-in-annotation (lambda ,vars ,exp) ,src)
 	 `(lambda ,vars ,exp)))))
 
 (define-syntax build-primref
@@ -570,34 +570,36 @@
 (define-syntax build-data
   (syntax-rules ()
     ((_ src exp) 
-	`',exp)))
+       (if src
+          `(compile-in-annotation ',exp ,src)
+  	  `',exp))))
 
 (define build-sequence
   (lambda (src exps)
     (if (null? (cdr exps))
 	(if src
-	    `(make-annotation ,(car exps) ,src)
+	    `(compile-in-annotation ,(car exps) ,src)
 	    (car exps))
 	(if src
-	    `(make-annotation (begin ,@exps) ,src)
+	    `(compile-in-annotation (begin ,@exps) ,src)
 	    `(begin ,@exps)))))
 
 (define build-letrec
   (lambda (src vars val-exps body-exp)
     (if (null? vars)
 	(if src
-	    `(make-annotation ,body-exp ,src)
+	    `(compile-in-annotation ,body-exp ,src)
 	    body-exp)
 	(if src
-	    `(make-annotation 
-			      ,(cons (list 'lambda vars
-					   (append (cons 'begin
-							 (map (lambda (v e)
-								(list 'set! v e))
-							      vars val-exps))
-						   (list body-exp)))
-				     (map (lambda (x) #f) vars))
-			      ,src)
+	    `(compile-in-annotation 
+              ,(cons (list 'lambda vars
+                           (append (cons 'begin
+                                         (map (lambda (v e)
+                                                (list 'set! v e))
+                                              vars val-exps))
+                                   (list body-exp)))
+                     (map (lambda (x) #f) vars))
+              ,src)
 	    (cons (list 'lambda vars
 			(append (cons 'begin
 				      (map (lambda (v e)
@@ -608,7 +610,7 @@
 
 (define-syntax build-lexical-var
   (syntax-rules ()
-    ((_ src id) (if src `(make-annotation ,(gensym) ,src) (gensym)))))
+    ((_ src id) (if src `(compile-in-annotation ,(gensym) ,src) (gensym)))))
 
 (define-syntax self-evaluating?
   (syntax-rules ()
