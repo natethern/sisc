@@ -1156,12 +1156,17 @@
                 <methodparam>
                   <parameter>parent-error</parameter>
                 </methodparam>
+                <methodparam>
+                  <parameter>parent-error-continuation</parameter>
+                </methodparam>
               </methodsynopsis>
               <blockquote>
                 <para>
                   Creates an error record which has
-                  <parameter>parent-error</parameter> as the root
-                  cause of an error-record created and passed as 
+                  <parameter>parent-error</parameter> (and it's
+                  associated
+                  <parameter>parent-error-continuation</parameter>) as
+                  the root cause of an error-record passed as
                   <parameter>local-error</parameter>.
                 </para>
               </blockquote>
@@ -1177,11 +1182,11 @@
 (with-failure-continuation
   (lambda (m e)
     (throw (make-nested-error 
-            (make-error 'foo "could not call bar.") m)))
+            (make-error 'foo "could not call bar.") m e)))
   (lambda ()
     (error 'bar "something went wrong.")))
-;=> Error in nested call from foo: could not call bar.
-;    Error in bar: something went wrong.
+;=> Error in foo: could not call bar.
+;   Caused by Error in bar: something went wrong.
           </programlisting>
         </informalexample>
       </sect3>
@@ -1237,24 +1242,44 @@
               </blockquote>
             </para>
             <para>
-              <indexterm><primary>error-parent</primary>
+              <indexterm><primary>error-parent-error</primary>
               </indexterm>
               &procedure;
-              <methodsynopsis language="scheme" id="error-parent">
+              <methodsynopsis language="scheme" id="error-parent-error">
                 <type>error-record</type>
-                <methodname>error-parent</methodname>
+                <methodname>error-parent-error</methodname>
                 <methodparam>
                   <parameter>error-record</parameter>
                 </methodparam>
               </methodsynopsis>
               <blockquote>
                 <para>
-                  Obtains the parent of the error, which is another
-                  error record present in a nested error.
-                  Specifically the value of the second argument to
+                  Obtains the parent error of the error.
+                  This is the value of the second argument to
                   the <function>make-nested-error</function> function.
                   If there is no parent specified, <literal>#f</literal> is
                   returned.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>error-parent-continuation</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme" id="error-parent-continuation">
+                <type>error-continuation</type>
+                <methodname>error-parent-continuation</methodname>
+                <methodparam>
+                  <parameter>error-record</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Obtains the parent error continuation of the
+                  error. This is the value of the third argument to
+                  the <function>make-nested-error</function> function.
+                  If there is no parent specified,
+                  <literal>#f</literal> is returned.
                 </para>
               </blockquote>
             </para>

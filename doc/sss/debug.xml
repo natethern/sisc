@@ -22,30 +22,22 @@
     </para>
     <blockquote>
       <para>
-        <indexterm><primary>get-last-error</primary>
+        <indexterm><primary>get-last-exception</primary>
         </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
-          <type>error-record</type>
-          <methodname>get-last-error</methodname>
+          <type>exception</type>
+          <methodname>get-last-exception</methodname>
           <void/>
         </methodsynopsis>
         <blockquote>
           <para>
-            Retrieves the error record of the last error that occurred
+            Retrieves the last exception that occurred
             in &SISC;.
           </para>
         </blockquote>
       </para>
     </blockquote>
-    <para> 
-      An error record is a structure containing properties of the error 
-      that occurred (as described in <xref linkend="ErrorRecords"/>), 
-      including the error continuation and the error value or message.
-      With these two values, one may perform many of
-      the actions that can be accomplished in the error-handler of a
-      <literal>with-failure-continuation</literal> expression.
-    </para>
     <para>
       One of the most common desires is to obtain a trace of the
       call stack, to determine what sequence of calls resulted in the
@@ -97,35 +89,30 @@
     </blockquote>
     <para>
       The error message, location information and call stack
-      associated with an error structure can be displayed in
-      human-readable using the following procedure.
+      associated with an exception can be displayed in
+      human-readable form using the following procedure.
     </para>
     <blockquote>
       <para>
-        <indexterm><primary>print-error</primary>
+        <indexterm><primary>print-exception</primary>
         </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <void/>
-          <methodname>print-error</methodname>
-          <methodparam><parameter>error-record</parameter>
+          <methodname>print-exception</methodname>
+          <methodparam><parameter>exception</parameter>
           </methodparam>
-          <methodparam choice="opt"><parameter>error-continuation</parameter>
+          <methodparam choice="opt"><parameter>stack-trace?</parameter>
           </methodparam>
         </methodsynopsis>
         <blockquote>
           <para>
-            Displays the error message, location and stack trace for
-            the provided
-            <parameter>error-record</parameter>. Furthermore the
-            procedure calls itself recursively in order to displays
-            that information for nested errors.
-          </para>
-          <para>
-            If provided, the optional error-continuation overrides 
-            that given in the error-record, or provides the
-            error-continuation if it is not included in the error record
-            (as may occur when calling this function from an error handler).
+            Displays the error message and location of
+            <parameter>exception</parameter>. A stack trace is
+            displayed if <parameter>stack-trace?</parameter> is absent
+            or set to &num;t. Furthermore the procedure calls itself
+            recursively in order to displays that information for
+            nested exceptions.
           </para>
         </blockquote>
       </para>

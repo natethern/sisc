@@ -111,6 +111,14 @@
          => cdr]
         [else #f]))
 
+(define (error-parent-error error-record)
+  (let ([error-parent (error-parent error-record)])
+    (and error-parent (exception-error error-parent))))
+
+(define (error-parent-continuation error-record)
+  (let ([error-parent (error-parent error-record)])
+    (and error-parent (exception-continuation error-parent))))
+
 ;Loads an already expanded file (ie does not run it through the expander)
 (define (load-expanded file)
   (call-with-input-file file
