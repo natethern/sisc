@@ -99,7 +99,7 @@ public class Interpreter extends Util {
         return compiler.compile(this, v, env);
     }
 
-    public Value interpret(Expression e) throws SchemeException {
+    protected Value interpret(Expression e) throws SchemeException {
         stk=createFrame(null, null, false, null, top_fk, null, null);
         nxp=e;
         interpret();
