@@ -59,8 +59,9 @@
 ;; modified to account for SISC's lack of structures, make exception
 ;; handling work properly and conform with SRFI18 requirements with
 ;; regard to call/cc behaviour.
-(define dynamic-wind
-  (let ((original-call/cc call-with-current-continuation))
+(define dynamic-wind #f)
+(define unload-dynamic-wind #f)
+(let ((original-call/cc call-with-current-continuation))
     ;;the dynamic wind stack
     (define get-dynamic-point current-wind)
     (define set-dynamic-point! current-wind)
@@ -114,12 +115,19 @@
 	      (set-dynamic-point! here)
 	      (out)
 	      (apply values results)))))
-    ;;finally, the dynamic-wind code
-    (lambda (in body out)
-	(set! call-with-current-continuation dynwind-call/cc)
-	(set! call/cc dynwind-call/cc)
-	(set! dynamic-wind dynamic-wind/impl)
-	(dynamic-wind in body out))))
+    (define dynamic-wind-loader
+      (lambda (in body out)
+        (set! call-with-current-continuation dynwind-call/cc)
+        (set! call/cc dynwind-call/cc)
+        (set! dynamic-wind dynamic-wind/impl)
+        (dynamic-wind in body out)))
+    ;;finally, the install the dynamic-wind hooks
+    (set! dynamic-wind dynamic-wind-loader)
+    (set! unload-dynamic-wind
+          (lambda ()
+            (set! call-with-current-continuation original-call/cc)
+            (set! call/cc original-call/cc)
+            (set! dynamic-wind dynamic-wind-loader))))
 
 ;;;; "ratize.scm" Convert number to rational number (ported from SLIB)
 

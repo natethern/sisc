@@ -194,10 +194,11 @@
 ;;;;;;;;;;;;; File functions
 
 (define current-directory (void))
+(define _current-directory (make-parameter #f))
 (letrec ([_cd 
 	  (lambda args
-	    (if (null? args) (getprop 'current-directory '*sisc*)
-		(putprop 'current-directory '*sisc* (car args))))]
+	    (if (null? args) (_current-directory)
+                (_current-directory (car args))))]
 	 [gen-path
 	  (lambda (p)
 	    (if (or (absolute-path? p)
@@ -208,9 +209,9 @@
 		(make-path (_cd) p)))]
 	 [is
 	  (lambda (file type)
-	    (if (eq? (file-type file) type)
+	    (if (eq? (file/type file) type)
 		#t
-		(error 'file-type "~s is not of type ~s." file type)))])
+		(error 'file/type "~s is not of type ~s." file type)))])
   (define *current-directory
     (lambda dir
       (if (null? dir) (_cd)
@@ -223,25 +224,41 @@
 	(let ((file (gen-path file)))
 	  (is file 'file)
 	  (old-oif file)))))
-
+  (define *open-source-input-file
+    (let ((old-osif open-source-input-file))
+      (lambda (file)
+	(let ((file (gen-path file)))
+	  (is file 'file)
+	  (old-osif file)))))
   (define *open-output-file
     (let ((old-oof open-output-file))
       (lambda (file)
 	(let ((file (gen-path file)))
-	  (if (not (memq (file-type file) '(no-file file)))
+	  (if (not (memq (file/type file) '(no-file file)))
 	      (error 'open-output-file "~s points to a directory." file)
 	      (old-oof file))))))
 
   (define *load	 
     (let ((_load load))
       (lambda (file)
-	(_load (gen-path file)))))
-  
+        (let ([previous-directory
+               (current-directory)]
+               [full-fn (gen-path file)])
+          (current-directory (file/parent full-fn))
+          (call-with-failure-continuation
+           (lambda ()
+             (_load full-fn))
+           (lambda (m e c)
+             (current-directory previous-directory)
+             (c m e)))
+          (current-directory previous-directory)
+          (void)))))
   (_cd ".")
   (set! load *load)
   (set! current-directory *current-directory)
   (set! open-input-file *open-input-file)
-  (set! open-output-file *open-output-file))
+  (set! open-output-file *open-output-file)
+  (set! open-source-input-file *open-source-input-file))
 
 (define (load-module str)
   (let* ([nl (load-native-library str)]
