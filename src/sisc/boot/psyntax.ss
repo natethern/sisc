@@ -480,7 +480,7 @@
 ;;; system run to support separate compilation; the default value given
 ;;; is satisfactory during initial development only.
 
-(define generate-id gensym)
+(define generate-id gen-sym)
 #|  (let ([vmem '()]
         [anon 0])
     (lambda var
