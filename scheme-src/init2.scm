@@ -53,17 +53,22 @@
 (define (exception-error exception)
   (cdr exception))
 
-(define (throw error . error-k)
+(define (throw error-or-exception . error-k)
   (call-with-failure-continuation
       (lambda (fk)
-        (cond [(not (null? error-k))
-               (fk error (car error-k))]
-              [(exception? error)
-               (fk (exception-error error)
-                   (exception-continuation error))]
-              [else
-                (call-with-current-continuation
-                    (lambda (k) (fk error k)))]))))
+        (cond
+          [(pair? error-or-exception)
+           (if (null? error-k)
+               (call-with-current-continuation
+                   (lambda (k) (fk error-or-exception k)))
+               (fk error-or-exception (car error-k)))]
+          [(and (exception? error-or-exception)
+                (null? error-k))
+           (fk (exception-error error-or-exception)
+               (exception-continuation error-or-exception))]
+          [else
+            (error 'throw "expected error-record or exception, got ~a"
+                   error-or-exception)]))))
 
 (define (error . args)
   (throw (apply make-error args)))
@@ -574,7 +579,7 @@
           (if (not startup-enabled?)
               (error "on-startup is only callable during heap build"))
           (if (not (procedure? thunk))
-              (error "~a is not a procedure"))
+              (error "~a is not a procedure" thunk))
           (set! *startup-hooks* (cons thunk *startup-hooks*)))))
 
 (on-startup
