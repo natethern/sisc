@@ -58,7 +58,7 @@ public class Primitives extends IndexedProcedure {
     public static final Hashtable shash(Value o) {
         try {
             return (Hashtable)o;
-        } catch (ClassCastException e) { typeError("hashtable", o); }
+        } catch (ClassCastException e) { typeError(SHASHB, "hashtable", o); }
         return null;
     }
 

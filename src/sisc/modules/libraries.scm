@@ -16,11 +16,11 @@
            (if (not url)
                (error "library ~a not found" lib))
            (load url)
-           (*libraries* (string->symbol lib) #t))))))
+           (hashtable/put! *libraries* (string->symbol lib) #t))))))
 
 (define (library-exists? lib)
   (or (library-loaded? lib)
       (and (locate-library lib) #t)))
 
 (define (library-loaded? lib)
-  (*libraries* (string->symbol lib)))
+  (hashtable/get (string->symbol lib)))

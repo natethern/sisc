@@ -431,38 +431,6 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
         </blockquote>
-        <para>
-          Hash tables can be invoked as procedures. This provides
-          convenient short-cuts for the very common
-          <function>hashtable/get</function> and
-          <function>hashtable/put!</function> operations:
-        </para>
-        <blockquote>
-          <para>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname></methodname>
-              <methodparam><parameter>hashtable</parameter></methodparam>
-              <methodparam><parameter>key</parameter></methodparam>
-              <methodparam choice="opt">
-                <parameter>val</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                If <parameter>val</parameter> is present, then this is
-                equivalent to calling <literal>(hashtable/put!</literal>
-                <parameter>hashtable</parameter>
-                <parameter>key</parameter>
-                <parameter>value</parameter><literal>)</literal>,
-                otherwise <literal>(hashtable/get</literal>
-                <parameter>hashtable</parameter>
-                <parameter>key</parameter><literal>)</literal>.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
       </sect3>
       <sect3>
         <title>Bulk Operations</title>

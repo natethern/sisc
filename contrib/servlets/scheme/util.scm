@@ -35,13 +35,13 @@
    (lambda (k-data)
      (let* ([counter (car k-data)]
             [res (string-append "cont" (number->string counter))])
-       ((cdr k-data) (string->symbol res) k)
+       (hashtable/put! (cdr k-data) (string->symbol res) k)
        (set-car! k-data (+ counter 1))
        res))))
 (define (fetch-k n)
   (access-k-data
    (lambda (k-data)
-     ((cdr k-data) (string->symbol n)))))
+     (hashtable/get (cdr k-data) (string->symbol n)))))
 
 (define (make-dispatcher default-page)
   (lambda (request response)

@@ -13,7 +13,7 @@ import sisc.util.ExpressionVisitor;
 import sisc.util.Util;
 import sisc.modules.SThread.Mutex;
 
-public abstract class Hashtable extends Procedure {
+public abstract class Hashtable extends Value {
 
     private HashMap ht;
 
@@ -146,29 +146,6 @@ public abstract class Hashtable extends Procedure {
         w.append('>');
     }
 
-    public void apply(Interpreter r)
-        throws ContinuationException {
-
-        r.nxp = null;
-
-        Mutex m = Mutex.of(this);
-        m.acquire();
-        try {
-            switch (r.vlr.length) {
-            case 1:
-                r.acc = get(r.vlr[0]);
-                break;
-            case 2:
-                r.acc = put(r.vlr[0], r.vlr[1]);
-                break;
-            default:
-                throw new RuntimeException(liMessage(SISCB, "hashtableargs", synopsis()));
-            }
-        } finally {
-            m.unlock();
-        }
-        if (r.acc == null) r.acc = FALSE;
-    }
 }
 
 /*
