@@ -167,7 +167,6 @@
 
 (module file-manipulation
   (directory-list
-   file-exists? 
    file-hidden? 
    file-is-directory?
    file-is-file? 
@@ -181,7 +180,6 @@
    make-directories!)
   (import file-manipulation-native)
   (define directory-list)
-  (define file-exists?)
   (define file-hidden?)
   (define file-is-directory?)
   (define file-is-file?)
@@ -197,7 +195,6 @@
     (lambda (path)
       (proc (normalize-url path))))
   (set! directory-list (normalize directory/list))
-  (set! file-exists? (normalize file/exists?))
   (set! file-hidden? (normalize file/hidden?))
   (set! file-is-directory? (normalize file/is-directory?))
   (set! file-is-file? (normalize file/is-file?))

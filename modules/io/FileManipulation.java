@@ -16,14 +16,13 @@ public class FileManipulation extends ModuleAdapter {
 
     protected static final int
         DIRECTORYQ = 1, FILEQ = 2, HIDDENQ = 3,
-        EXISTSQ = 4, DIRLIST = 6, LASTMODIFIED = 7, SETLASTMODIFIED = 8,
+        DIRLIST = 6, LASTMODIFIED = 7, SETLASTMODIFIED = 8,
         SETREADONLY = 9, LENGTH = 10, GETPARENTURL = 11, MAKEDIRECTORY = 12,
         MAKEDIRECTORIES = 13, RENAME = 14;
         
 
     public FileManipulation() {
         define("file/hidden?"      , HIDDENQ);
-        define("file/exists?"      , EXISTSQ);
         define("file/is-directory?", DIRECTORYQ);
         define("file/is-file?"     , FILEQ);
         define("directory/list"    , DIRLIST);
@@ -53,8 +52,6 @@ public class FileManipulation extends ModuleAdapter {
                 return truth(fileHandle(f.vlr[0]).isDirectory());
             case FILEQ:
                 return truth(fileHandle(f.vlr[0]).isFile());
-            case EXISTSQ:
-                return truth(fileHandle(f.vlr[0]).exists());
             case HIDDENQ:
                 return truth(fileHandle(f.vlr[0]).isHidden());
             case DIRLIST:
