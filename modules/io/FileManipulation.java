@@ -1,7 +1,7 @@
 package sisc.modules.io;
 
 import java.io.*;
-import java.net.URL;
+import java.net.*;
 import java.net.MalformedURLException;
 
 import sisc.interpreter.*;
@@ -43,7 +43,7 @@ public class FileManipulation extends ModuleAdapter {
         URL u=url(o);
         if (!"file".equals(u.getProtocol()))
             throwPrimException(liMessage(IO.IOB, "notafileurl"));
-        return new File(u.getPath());
+        return new File(URLDecoder.decode(u.getPath()));
     }
 
     public Value eval(int primid, Interpreter f)

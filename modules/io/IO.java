@@ -152,6 +152,38 @@ public class IO extends ModuleAdapter {
         return VOID;
     }
 
+    URL urlClean(URL u) {
+        if (u.getProtocol().equals("file") &&
+            (u.getRef()!=null || u.getQuery()!=null)) {
+            System.err.println(u.getRef());
+            System.err.println(u.getQuery());
+            StringBuffer b=new StringBuffer(u.getProtocol());
+            b.append(':');
+            b.append(u.getPath());
+            if (u.getRef()!=null) {
+                b.append("%23");
+                try {
+                    b.append(URLEncoder.encode(u.getRef(),
+                                               "UTF-8"));
+                } catch (UnsupportedEncodingException ue) {}
+                
+            }
+            if (u.getQuery()!=null) {
+                b.append("%3F");
+                try {
+                    b.append(URLEncoder.encode(u.getQuery(),
+                                               "UTF-8"));
+                } catch (UnsupportedEncodingException ue) {}
+            }
+            try {
+                u=new URL(b.toString());
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        } 
+        return u;
+    }
+
     public Value eval(int primid, Interpreter f)
         throws ContinuationException {
         switch (f.vlr.length) {
@@ -381,7 +413,8 @@ public class IO extends ModuleAdapter {
                 File fn=new File(f1);
                 return truth(fn.isAbsolute());
             case NORMALIZEURL:
-                return new SchemeString(url(f.vlr[0]).toString());
+                URL u=urlClean(url(f.vlr[0]));
+                return new SchemeString(u.toString());
             default:
                 throwArgSizeException();
             }
@@ -428,7 +461,7 @@ public class IO extends ModuleAdapter {
                     throwPrimException(liMessage(IOB, "erroropening", url.toString()));
                 }
             case NORMALIZEURL:
-                return new SchemeString(url(f.vlr[0], f.vlr[1]).toString());
+                return new SchemeString(urlClean(url(f.vlr[0], f.vlr[1])).toString());
             default:
                 throwArgSizeException();
             }
