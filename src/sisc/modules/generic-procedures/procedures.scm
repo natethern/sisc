@@ -203,7 +203,7 @@
   (lambda (x)
     (syntax-case x ()
       ((_ () expr ...)
-       (syntax (begin expr ...)))
+       (syntax (let () expr ...)))
       ((_ (((aka fun) type ...) rest ...) expr ...)
        (with-syntax ([(temps ...)
                       (generate-temporaries (syntax (type ...)))])
