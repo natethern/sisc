@@ -228,7 +228,7 @@
                                    (error 'load "shared libraries not supported in this build.")))
                              (lambda ()
                                (eval '(lambda (name)
-                                        (import loadable-libraries)
+                                        (import compiled-libraries)
                                         (link-library (open-library name)))))))
 
                           (else _load)))]

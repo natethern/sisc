@@ -358,14 +358,14 @@
   (import hashtable)
   (include "libraries.scm"))
 
-(module loadable-libraries
+(module compiled-libraries
     (create-library
      create-library-from-module
      open-library
      link-library)
   (import s2j)
   (import generic-procedures)
-  (include "loadablelibs.scm"))
+  (include "compiledlibs.scm"))
 
 (module pattern-matching
     ((match

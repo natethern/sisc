@@ -249,7 +249,7 @@
                           '"shared libraries not supported in this build.")))
                (lambda ()
                  (eval '(lambda (name)
-                          (import loadable-libraries)
+                          (import compiled-libraries)
                           (link-library (open-library name))))))
              %_2713)))
        (string->symbol (string-downcase %_2726))))
