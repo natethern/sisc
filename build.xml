@@ -9,14 +9,14 @@
 
   <target name="full-prepare" depends="prepare,init">
     <delete file="${basedir}/Conf.java"/> 
-    <copy file="${basedir}/Conf-full.java"
+    <copy file="${basedir}/Conf-full.java.tmpl"
           tofile="${basedir}/Conf.java"/>
   </target>
 
   <target name="lite-prepare" depends="prepare,init">
     <delete file="${basedir}/Conf.java"/> 
     <property name="lite" value="present"/>
-    <copy file="${basedir}/Conf-lite.java"
+    <copy file="${basedir}/Conf-lite.java.tmpl"
           tofile="${basedir}/Conf.java"/>
   </target>
 
@@ -79,7 +79,7 @@
   </target>
 
   <target name="quantity" depends="init">
-    <copy file="${basedir}/data/Quantity-${quantity-type}.java"
+    <copy file="${basedir}/data/Quantity-${quantity-type}.java.tmpl"
 	  tofile="${basedir}/data/Quantity.java"/>
   </target>
 
@@ -92,8 +92,6 @@
            optimize="${optimization}">
       <include name="${packagename}/**"/>
       <exclude name="${packagename}/dist/**"/>
-      <exclude name="${packagename}/Conf-*.java"/>
-      <exclude name="${packagename}/*/Quantity-*.java"/>
       <exclude name="${packagename}/tests/**" unless="junit.present"/>
       <exclude name="${packagename}/modules/Regexp.java" unless="oro.present"/>
       <exclude name="${packagename}/modules/servlets/**" unless="servlets.present"/>
