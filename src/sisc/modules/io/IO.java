@@ -200,6 +200,14 @@ public class IO extends IndexedProcedure {
         return u;
     }
 
+	public SchemeOutputPort openOutPort(OutputStream out, String encoding, boolean autoflush) throws IOException {
+		return new WriterOutputPort(new BufferedWriter(new OutputStreamWriter(out)), autoflush);
+	}
+	
+	public SchemeInputPort openInPort(InputStream in, String encoding) throws IOException {
+			return new ReaderInputPort(new BufferedReader(new InputStreamReader(in, encoding)));
+	}
+		
     public Value doApply(Interpreter f)
         throws ContinuationException {
         switch (f.vlr.length) {
@@ -272,7 +280,7 @@ public class IO extends IndexedProcedure {
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(true);
                     conn.setDoOutput(false);
-                    return new SourceInputPort(new BufferedInputStream(conn.getInputStream()), url.toString());
+                    return new SourceInputPort(new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF8")), url.toString());
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "erroropening", 
                                                url.toString()), e);
@@ -283,7 +291,7 @@ public class IO extends IndexedProcedure {
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(true);
                     conn.setDoOutput(false);
-                    return new ReaderInputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())));
+                    return openInPort(conn.getInputStream(), "UTF8");
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "erroropening", 
                                                url.toString()), e);
@@ -293,12 +301,12 @@ public class IO extends IndexedProcedure {
                 try {
                     if (url.getProtocol().equals("file")) {
                         //the JDK does not permit write access to file URLs
-                        return new WriterOutputPort(new BufferedWriter(new FileWriter(url.getPath())), false);
+                        return openOutPort(new FileOutputStream(url.getPath()), "UTF8", false);
                     }
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(false);
                     conn.setDoOutput(true);
-                    return new StreamOutputPort(new BufferedOutputStream(conn.getOutputStream()), false);
+                    return openOutPort(conn.getOutputStream(), "UTF8", false);
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "erroropening", 
                                                url.toString()), e);
@@ -445,14 +453,14 @@ public class IO extends IndexedProcedure {
                 try {
                     if (url.getProtocol().equals("file")) {
                         //the JDK does not permit write access to file URLs
-                        return new StreamOutputPort(new BufferedOutputStream(new FileOutputStream(url.getPath())),
-                                                    truth(f.vlr[1]));
+                        return openOutPort(new FileOutputStream(url.getPath()),
+						                   "UTF8", truth(f.vlr[1]));
                     }
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(false);
                     conn.setDoOutput(true);
-                    return new StreamOutputPort(new BufferedOutputStream(conn.getOutputStream()),
-                                                truth(f.vlr[1]));
+                    return openOutPort(conn.getOutputStream(),
+                                      "UTF8", truth(f.vlr[1]));
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "erroropening",
                                                   url.toString()), e);

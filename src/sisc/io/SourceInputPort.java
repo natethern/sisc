@@ -2,19 +2,27 @@ package sisc.io;
 
 import java.io.*;
 
-public class SourceInputPort extends StreamInputPort implements InputPort {
+public class SourceInputPort extends ReaderInputPort {
 
     public int line, column;
     public String sourceFile;
 
     public SourceInputPort(InputStream in, String file) {
-        super(in);
-        line=1;
-        column=1;
-        sourceFile=file;
+        this(new BufferedReader(new InputStreamReader(in)), file);
     }
 
-    public int readHelper() throws IOException {
+    /**
+	 * @param reader
+	 */
+	public SourceInputPort(Reader reader, String file) {
+		super(reader);
+
+		line=1;
+		column=1;
+		sourceFile=file;
+	}
+
+	public int readHelper() throws IOException {
         int c=super.readHelper();
         if (c=='\n') {
             line++;
