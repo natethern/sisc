@@ -1,3 +1,9 @@
+2003-01-31  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Modified the syntax expander to generate non-unique symbols
+	  for module names and module bindings, allowing modules 
+	  created/serialized on one SISC version to run on another.
+	
 2003-01-30  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Clear the LexicalEnvironment when calling eval.  This doesn't
