@@ -1897,13 +1897,8 @@ s    (let loop ((exports exports) (ls '()))
                         (module-binding-type b)
                         id
                         (module-binding-label b)
-                        (let ((implicit-exports (get-implicit-exports id)))
-                           ; Mark all implicit exports, so we can generate a gensymed
-                           ; binding later
-                           (for-each (lambda (imp-id)
-                                         (annotation! imp-id 'implicit-export #t))
-                                     implicit-exports)
-                           (append implicit-exports (module-binding-imps b)))
+                        (append (get-implicit-exports id)
+                                (module-binding-imps b))
                         (module-binding-val b)))))
                bindings))))
     (let parse ((body body) (ids '()) (bindings '()) (inits '()))
