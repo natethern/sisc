@@ -5,5 +5,7 @@
 (expand-file "compat.scm" "compat.sce" '(e) '(e))
 (display "Expanding psyntax.ss...\n")
 (expand-file "psyntax.ss" "psyntax.sce" '(l) '(l))
+(display "Expanding analyzer.scm...\n")
+(expand-file "analyzer.scm" "analyzer.sce" '(l) '(l))
 (display "Expanding eval.scm...\n")
 (expand-file "eval.scm" "eval.sce" '(e) '(e))

@@ -2,9 +2,9 @@ package sisc.modules;
 
 interface Primitives {
 
-    //next: 129,
-    int ANALYZE = 126,
-        ACOS = 23,
+    //holes: 126
+    //next: 130
+    int ACOS = 23,
         ADD = 114,
         APPLY = 121,
         ASHL = 102,
@@ -38,6 +38,7 @@ interface Primitives {
         EXACT2INEXACT = 46,
         EXACTQ = 38,
         EXP = 25,
+        EXPTYPE = 129,
         FLOOR = 48,
         GCD = 92,
         GENSYM = 0,

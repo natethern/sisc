@@ -88,7 +88,7 @@ public class Compiler extends CompilerConstants {
         return e;
     }
 
-    static final int getExpType(SymbolicEnvironment env, Value s) {
+    public static final int getExpType(SymbolicEnvironment env, Value s) {
     	if (s instanceof Syntax) {
             return ((Syntax)s).synid;
         } else if (s instanceof Symbol){

@@ -60,6 +60,7 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define("equal?", EQUAL);
             define("exact->inexact", EXACT2INEXACT);
             define("exact?", EXACTQ);
+            define("_expression-type", EXPTYPE);
             define("exp", EXP);
             define("find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
             define("floor", FLOOR);
@@ -366,6 +367,8 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             return new Pair(v1, v2);
         case EQUAL:
             return truth(v1.valueEqual(v2));
+        case EXPTYPE:
+            return Quantity.valueOf(sisc.compiler.Compiler.getExpType(env(v1), v2));
         case SETCAR:
             truePair(v1).setCar(v2);
             return VOID;

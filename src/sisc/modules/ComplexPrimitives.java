@@ -3,7 +3,6 @@ package sisc.modules;
 import sisc.data.*;
 import sisc.io.*;
 import sisc.exprs.*;
-import sisc.compiler.Analyzer;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
 import java.io.IOException;
@@ -21,7 +20,6 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
         }
         
         public Index() {
-            define("_analyze!", ANALYZE);
             define("apply", APPLY);
             define("call-with-current-continuation", CALLCC);
             define("call-with-failure-continuation", CALLFC);
@@ -156,8 +154,6 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                 Value env=r.getCtx().toplevel_env.asValue();
                 r.getCtx().toplevel_env=Util.env(vlr[0]);
                 return env;
-            case ANALYZE:
-                return (Value)Analyzer.analyze(vlr[0], r.getCtx().toplevel_env);
             case STRING2NUMBER:
                 String st=string(vlr[0]);
                 try {

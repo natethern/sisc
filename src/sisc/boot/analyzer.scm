@@ -7,7 +7,7 @@
 ;; (letrec bindings body) => (letrec #t bindings (lexicals ...) body)
 ;;
 
-(define analyze
+(define _analyze!
   (let ()
     (import misc)
     (define PROGRAM 0)

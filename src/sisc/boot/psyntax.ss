@@ -480,7 +480,24 @@
 ;;; system run to support separate compilation; the default value given
 ;;; is satisfactory during initial development only.
 
-(define generate-id gen-sym) ; SISC's gen-sym has this property
+(define generate-id gensym)
+#|  (let ([vmem '()]
+        [anon 0])
+    (lambda var
+      (cond [(null? var)
+             (set! anon (+ anon 1))
+             (string->symbol (string-append "%_" (number->string anon 32)))]
+            [(assq (car var) vmem)
+             (lambda (binding)
+               (set-cdr! binding (+ (cdr binding 1)))
+               (string->symbol
+                (string-append (symbol->string (car var))
+                               "_"
+                               (number->string (cdr binding) 32))))]
+            [else (set! vmem (cons (cons (car var) 0) vmem))
+                  (string->symbol
+                   (string-append (symbol->string (car var))
+                                  "_0"))]))))|#
 
 ;; A SISC Specific modification, generate-id-in-module deliberately
 ;; does not create a unique id, but rather one based on the module-id,

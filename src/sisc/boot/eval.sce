@@ -1,134 +1,133 @@
 (#%program
-  ((|x_PiFSZp43x| . 1) (_make-parameter . 1))
+  ((|x_XiIU-cife| . 1) (_make-parameter . 1))
   ()
   ()
   (#%define current-optimizer
     (_make-parameter
-      (#%lambda #t (|x_PiFSZp43x|) () |x_PiFSZp43x|))))
+      (#%lambda #t (|x_XiIU-cife|) () |x_XiIU-cife|))))
 (#%program
-  ((|apply_PilLVj53x| . 3)
-   (|m_PireDo93x| . 1)
-   (with-failure-continuation . 1)
-   (|env_PiJwN773x| . 4)
-   (|e_PiNaBR93x| . 1)
-   (car . 2)
-   (apply . 1)
-   (strict-r5rs-compliance . 1)
-   (pair? . 1)
-   (|sc-expand_Pi1ERd63x| . 1)
+  ((interaction-environment . 1)
    (sc-expand . 1)
-   (|interaction-environment_PinAPG63x| . 3)
-   (null? . 1)
-   (list . 1)
-   (|old-ie_PiLlHu83x| . 2)
-   (|source_Pi5iFX83x| . 2)
-   (interaction-environment . 1)
-   (equal? . 1)
-   (|_analyze!_PiHHTM53x| . 1)
-   (|old-eval_Pi_OXS43x| . 2)
-   (cadr . 1)
-   (|x_Pi3tLA73x| . 5)
-   (eval . 2)
-   (append . 1)
-   (|optimizer_PippJ183x| . 1)
-   (member . 1)
-   (throw . 1)
-   (error . 1)
    (_analyze! . 1)
-   (current-optimizer . 1))
-  ((eval . 1) (|source_Pi5iFX83x| . 1))
-  (equal?
-    with-failure-continuation
+   (apply . 1)
+   (current-optimizer . 1)
+   (|sc-expand_Xi4GS0kfe| . 1)
+   (|optimizer_XisrKQlfe| . 1)
+   (|_analyze!_XiKJUzjfe| . 1)
+   (|source_Xi8kGKmfe| . 2)
+   (|e_XiQcCEnfe| . 1)
+   (|m_XiugEbnfe| . 1)
+   (throw . 1)
+   (|old-ie_XiOnIhmfe| . 2)
+   (|interaction-environment_XiqCQtkfe| . 3)
+   (with-failure-continuation . 1)
+   (error . 1)
+   (strict-r5rs-compliance . 1)
+   (null? . 1)
+   (equal? . 1)
+   (list . 1)
+   (|env_XiMyOWkfe| . 4)
+   (append . 1)
+   (cadr . 1)
+   (|old-eval_Xi2RYFife| . 2)
+   (|apply_XioNW6jfe| . 3)
+   (car . 2)
+   (member . 1)
+   (|x_Xi6vMnlfe| . 5)
+   (pair? . 1)
+   (eval . 2))
+  ((|source_Xi8kGKmfe| . 1) (eval . 1))
+  (member
     car
-    cadr
-    append
-    member
     pair?
-    strict-r5rs-compliance
+    append
+    equal?
+    list
+    cadr
+    with-failure-continuation
     throw
+    current-optimizer
     error
     null?
-    current-optimizer
-    list)
+    strict-r5rs-compliance)
   (#%set! eval
     ((#%lambda #t
-       (|old-eval_Pi_OXS43x|
-         |apply_PilLVj53x|
-         |_analyze!_PiHHTM53x|
-         |sc-expand_Pi1ERd63x|
-         |interaction-environment_PinAPG63x|)
+       (|old-eval_Xi2RYFife|
+         |apply_XioNW6jfe|
+         |_analyze!_XiKJUzjfe|
+         |sc-expand_Xi4GS0kfe|
+         |interaction-environment_XiqCQtkfe|)
        ()
        (#%lambda #t
-         (|x_Pi3tLA73x| . |env_PiJwN773x|)
-         (|old-eval_Pi_OXS43x|
-           |apply_PilLVj53x|
-           |_analyze!_PiHHTM53x|
-           |sc-expand_Pi1ERd63x|
-           |interaction-environment_PinAPG63x|)
-         (#%if (#%if (pair? |x_Pi3tLA73x|)
+         (|x_Xi6vMnlfe| . |env_XiMyOWkfe|)
+         (|interaction-environment_XiqCQtkfe|
+           |sc-expand_Xi4GS0kfe|
+           |_analyze!_XiKJUzjfe|
+           |apply_XioNW6jfe|
+           |old-eval_Xi2RYFife|)
+         (#%if (#%if (pair? |x_Xi6vMnlfe|)
                  (member
-                   (car |x_Pi3tLA73x|)
+                   (car |x_Xi6vMnlfe|)
                    (#%quote ("noexpand" "analyzeonly")))
                  #f)
-           (|apply_PilLVj53x|
-             |old-eval_Pi_OXS43x|
-             (cadr |x_Pi3tLA73x|)
+           (|apply_XioNW6jfe|
+             |old-eval_Xi2RYFife|
+             (cadr |x_Xi6vMnlfe|)
              (append
-               |env_PiJwN773x|
-               (list (equal? (car |x_Pi3tLA73x|) "analyzeonly"))))
-           (#%if (#%if (null? |env_PiJwN773x|)
+               |env_XiMyOWkfe|
+               (list (equal? (car |x_Xi6vMnlfe|) "analyzeonly"))))
+           (#%if (#%if (null? |env_XiMyOWkfe|)
                    (strict-r5rs-compliance)
                    #f)
              (error (#%quote eval)
                     "expected 2 arguments to procedure, got 1.")
              ((#%lambda #t
-                (|optimizer_PippJ183x|
-                  |old-ie_PiLlHu83x|
-                  |source_Pi5iFX83x|)
-                (|x_Pi3tLA73x|
-                  |env_PiJwN773x|
-                  |old-eval_Pi_OXS43x|
-                  |apply_PilLVj53x|
-                  |_analyze!_PiHHTM53x|
-                  |sc-expand_Pi1ERd63x|
-                  |interaction-environment_PinAPG63x|)
+                (|optimizer_XisrKQlfe|
+                  |old-ie_XiOnIhmfe|
+                  |source_Xi8kGKmfe|)
+                (|env_XiMyOWkfe|
+                  |x_Xi6vMnlfe|
+                  |interaction-environment_XiqCQtkfe|
+                  |sc-expand_Xi4GS0kfe|
+                  |_analyze!_XiKJUzjfe|
+                  |apply_XioNW6jfe|
+                  |old-eval_Xi2RYFife|)
                 (#%begin
                   (with-failure-continuation
                     (#%lambda #t
-                      (|m_PireDo93x| |e_PiNaBR93x|)
-                      (|old-ie_PiLlHu83x|
-                        |interaction-environment_PinAPG63x|)
+                      (|m_XiugEbnfe| |e_XiQcCEnfe|)
+                      (|old-ie_XiOnIhmfe|
+                        |interaction-environment_XiqCQtkfe|)
                       (#%begin
-                        (|interaction-environment_PinAPG63x|
-                          |old-ie_PiLlHu83x|)
-                        (throw |m_PireDo93x| |e_PiNaBR93x|)))
+                        (|interaction-environment_XiqCQtkfe|
+                          |old-ie_XiOnIhmfe|)
+                        (throw |m_XiugEbnfe| |e_XiQcCEnfe|)))
                     (#%lambda #t
                       ()
-                      (|optimizer_PippJ183x|
-                        |old-ie_PiLlHu83x|
-                        |source_Pi5iFX83x|
-                        |x_Pi3tLA73x|
-                        |_analyze!_PiHHTM53x|
-                        |sc-expand_Pi1ERd63x|
-                        |interaction-environment_PinAPG63x|)
-                      (#%begin
-                        (#%set! |source_Pi5iFX83x|
-                          (|_analyze!_PiHHTM53x|
-                            (|optimizer_PippJ183x|
-                              (|sc-expand_Pi1ERd63x|
-                                |x_Pi3tLA73x|
-                                (#%quote (e))
-                                (#%quote (e))))))
-                        (|interaction-environment_PinAPG63x|
-                          |old-ie_PiLlHu83x|))))
-                  (|apply_PilLVj53x|
-                    |old-eval_Pi_OXS43x|
-                    |source_Pi5iFX83x|
-                    |env_PiJwN773x|)))
+                      (|source_Xi8kGKmfe|
+                        |old-ie_XiOnIhmfe|
+                        |optimizer_XisrKQlfe|
+                        |x_Xi6vMnlfe|
+                        |interaction-environment_XiqCQtkfe|
+                        |sc-expand_Xi4GS0kfe|
+                        |_analyze!_XiKJUzjfe|)
+                      (#%set! |source_Xi8kGKmfe|
+                        (|_analyze!_XiKJUzjfe|
+                          (|optimizer_XisrKQlfe|
+                            (|sc-expand_Xi4GS0kfe|
+                              |x_Xi6vMnlfe|
+                              (#%quote (e))
+                              (#%quote (e))))
+                          (|interaction-environment_XiqCQtkfe|
+                            |old-ie_XiOnIhmfe|)))))
+                  (|apply_XioNW6jfe|
+                    |old-eval_Xi2RYFife|
+                    |source_Xi8kGKmfe|
+                    |env_XiMyOWkfe|)))
               (current-optimizer)
-              (|apply_PilLVj53x|
-                |interaction-environment_PinAPG63x|
-                |env_PiJwN773x|)
+              (|apply_XioNW6jfe|
+                |interaction-environment_XiqCQtkfe|
+                |env_XiMyOWkfe|)
               #f)))))
      eval
      apply

@@ -2,7 +2,10 @@
   (not (null? (annotation-keys obj))))
 
 (define (compile x . env)
-  (apply _compile ((current-optimizer) (_analyze! (sc-expand x))) env))
+  (apply _compile
+         (_analyze! ((current-optimizer) (sc-expand x))
+                    (if (null? env) (interaction-environment) (car env)))
+         env))
 
 (define-syntax show
   (lambda (e)
@@ -14,17 +17,22 @@
           (newline)
           (display "=>")
           (newline)
-          (let ([optimized ((current-optimizer) (_analyze! source))])
+          (let ([optimized ((current-optimizer) source)])
             (pretty-print optimized)
             (newline)
             (display "=>")
             (newline)
-            (let ([compiled (_compile optimized)])
-              (pretty-print (express compiled))
+            (let ([analyzed (_analyze! optimized (interaction-environment))])
+              (pretty-print analyzed)
               (newline)
               (display "=>")
-              (newline)
-              (compiled)))))))))
+              (newline)              
+              (let ([compiled (_compile analyzed)])
+                (pretty-print (express compiled))
+                (newline)
+                (display "=>")
+                (newline)
+                (compiled))))))))))
   
 (define trace-depth (make-parameter -1))
 

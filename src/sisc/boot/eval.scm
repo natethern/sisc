@@ -58,6 +58,6 @@
                     (lambda ()               
                       (set! source (_analyze!
                                     (optimizer
-                                     (sc-expand x '(e) '(e)))))
-                      (interaction-environment old-ie)))
+                                     (sc-expand x '(e) '(e)))
+                                    (interaction-environment old-ie)))))
                    (apply old-eval source env))]))))
