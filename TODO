@@ -16,3 +16,6 @@ Features
 * write a debugger
 * port scsh's SREs
 * mechanism to construct immutable objects other than literals
+* direct implementation of shift and reset
+   http://citeseer.nj.nec.com/gasbichler02final.html
+  but make sure it plays nicely with dynamic-wind
