@@ -529,7 +529,7 @@
            #t)
          #f)))
    complex?))
-(#%define rational? real?)
+(#%define rational? exact?)
 (#%define complex? number?)
 (#%define abs
   (#%lambda (|num_u_B0ZxAB51|)

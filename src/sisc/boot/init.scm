@@ -375,7 +375,9 @@
   (lambda (n)
     (and (number? n) (not (oldcomp? n))))))
 
-(define rational? real?)
+(define (rational? v) (and ;(real? v) ;; commented out because we don't
+                       (exact? v)))   ;; have any exact nonreals
+
 (define complex? number?)
 
 (define (abs num) 
@@ -455,17 +457,11 @@
 (define modulo
   (lambda (x y)
     (let ([r (remainder x y)])
-       (if (if (negative? y) (positive? r) (negative? r))
+       (if ((if (negative? y) positive? negative?) r)
            (+ r y)
            r))))
 
 ;;;;;;;;;;;;;; String functions
-
-(define (string-append . args)
-  (cond [(null? args) ""]
-        [(null? (cdr args)) (car args)]
-        [else (apply string-append (_string-append (car args) (cadr args))
-	             (cddr args))]))
 
 (define char-downcase
   (let* ((a (char->integer #\A))
