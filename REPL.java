@@ -83,7 +83,10 @@ public class REPL extends Thread {
             r.define(s, new SchemeString(sysProps.getProperty(key)),
                      Util.ENVVARS);
         }
-        r.define(Symbol.get("version"), new SchemeString(Util.VERSION), Util.SISC);
+        // ovidiu: No need to version, as it is read from the heap
+        // file. Should we do the same with the rest of the
+        // properties?
+//         r.define(Symbol.get("version"), new SchemeString(Util.VERSION), Util.SISC);
         File[] roots=File.listRoots();
         SchemeString[] rootss=new SchemeString[roots.length];
         for (int i=0; i<roots.length; i++)
