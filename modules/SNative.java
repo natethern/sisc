@@ -130,21 +130,19 @@ public class SNative extends ModuleAdapter {
                     str=str(f.vlr[0]);
                     return new SchemeString(str.asString().toLowerCase());
                 case MAPCDR:
-                    Value lists=f.vlr[0];
+                    Pair lists=pair(f.vlr[0]);
                     Pair c=EMPTYLIST;
                     while (lists != EMPTYLIST) {
-                        Pair p1=pair(lists);
-                        c=new Pair(((Pair)p1.car).cdr, c);
-                        lists=p1.cdr;
+                        c=new Pair(truePair(lists.car).cdr, c);
+                        lists=pair(lists.cdr);
                     }
                     return reverse(c);
                 case MAPCAR:
-                    lists=f.vlr[0];
+                    lists=pair(f.vlr[0]);
                     c=EMPTYLIST;
                     while (lists != EMPTYLIST) {
-                        Pair p1=pair(lists);
-                        c=new Pair(((Pair)p1.car).car, c);
-                        lists=p1.cdr;
+                        c=new Pair(truePair(lists.car).car, c);
+                        lists=pair(lists.cdr);
                     }
                     return reverse(c);
                 case REVERSE:

@@ -1,3 +1,8 @@
+2003-03-30  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Fixed a failure to raise an error in for-each when lists
+          of different lengths passed.
+
 2003-03-26  Matthias Radestock  <matthias@lshift.net>
 
 	* Added support for display of stack traces of Java exceptions by
