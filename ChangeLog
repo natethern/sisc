@@ -1,3 +1,12 @@
+2003-10-15  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed bug in srfi-19's |current-data|. See bug #823824.
+
+2003-10-13  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Removed a dependency on a jdk1.3-specific API call that is not
+	  present in jdk1.2.
+
 2003-10-11  Released SISC 1.8.5
 
 2003-10-08  Scott G. Miller  <scgmille@freenetproject.org>

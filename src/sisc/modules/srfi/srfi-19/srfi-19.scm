@@ -589,7 +589,7 @@
 ;; This should be written to be OS specific.
 
 (define (tm:local-tz-offset)
-  (date-time-zone-offset (seconds->date (current-seconds))))
+  (time-zone-offset))
 
 ;; special thing -- ignores nanos
 (define (tm:time->julian-day-number seconds tz-offset)
