@@ -1,4 +1,12 @@
 ;;
+; convenience wrapper around thread/new&start
+;;
+(define (thread/spawn thunk)
+  (let ([thread (thread/new thunk)])
+    (thread/start thread)
+    thread))
+
+;;
 ; monitor/synchronize-unsafe will synchronize the execution of a thunk
 ; on a given monitor, but will *not* safely unlock the monitor when
 ; execution of the thunk raises an error or escapes the thunk by
@@ -33,8 +41,7 @@
 ;;
 
 (define (parallel . thunks)
-  (let ([threads (map thread/new thunks)])
-    (for-each thread/start threads)
+  (let ([threads (map thread/spawn thunks)])
     (for-each (lambda (t)
                 (let loop ([rv (thread/join t)])
                   (if (not rv) (loop (thread/join t)))))

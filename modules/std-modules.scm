@@ -120,6 +120,7 @@
   (thread?
    thread/new
    thread/start
+   thread/spawn
    thread/yield
    thread/interrupt
    thread/join

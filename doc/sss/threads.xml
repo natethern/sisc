@@ -250,6 +250,32 @@
       </para>
     </blockquote>
     <para>
+      It is common pattern to create a thread and immediately start
+      it. The convenience method <function>thread/spawn</function>
+      encapsulates this operation.
+    </para>
+    <blockquote>
+      <para id="func-thread-spawn">
+        <indexterm><primary>thread/spawn</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>thread-handle</type>
+          <methodname>thread/spawn</methodname>
+          <methodparam>
+            <parameter>thunk</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Creates a new thread handle whose code is defined in the
+            provided <parameter>thunk</parameter>, and starts the
+            thread.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+    <para>
       Once started, the thread will be in the running state.  The
       body of the thunk is now being evaluated in parallel to the
       parent thread.  The thread will remain in the running state
