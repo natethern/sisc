@@ -153,11 +153,13 @@
               extra
               pp-expr)
           (let ((head (car expr)))
-            (if (symbol? head)
+            (if (or (symbol? head) (syntactic-token? head))
                 (let ((proc (style head)))
                   (if proc
                       (proc expr col extra)
-                      (if (> (string-length (symbol->string head))
+                      (if (> (string-length (if (symbol? head)
+                                                (symbol->string head)
+                                                (syntactic-token->string head)))
                              max-call-head-width)
                           (pp-general expr col extra #f #f #f pp-expr)
                           (pp-call expr col extra pp-expr))))
@@ -246,13 +248,14 @@
     (define max-expr-width 50)
     (define (style head)
       (case head
-        ((LAMBDA LET* LETREC DEFINE) pp-LAMBDA)
-        ((IF SET!)                   pp-IF)
+        ((#%define  #%lambda #%letrec 
+          LAMBDA LET* LETREC DEFINE) pp-LAMBDA)
+        ((#%if #%set! IF SET!)       pp-IF)
         ((COND)                      pp-COND)
         ((CASE)                      pp-CASE)
         ((AND OR)                    pp-AND)
         ((LET)                       pp-LET)
-        ((BEGIN)                     pp-BEGIN)
+        ((#%begin BEGIN)             pp-BEGIN)
         ((DO)                        pp-DO)
         (else                        #f)))
     (pr obj col 0 pp-expr)) ; pp

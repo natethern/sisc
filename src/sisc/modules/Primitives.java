@@ -134,6 +134,8 @@ public class Primitives extends IndexedProcedure {
             define("string?", STRINGQ);
             define("symbol->string", SYMBOL2STRING);
             define("symbol?", SYMBOLQ);
+            define("syntactic-token?", SYNTOKENQ);
+            define("syntactic-token->string", SYNTOKEN2STRING);
             define("system-time", SYSTIME);
             define("tan", TAN);
             define("time-zone-offset", TIMEZONEOFFSET);
@@ -321,6 +323,7 @@ public class Primitives extends IndexedProcedure {
             case NUMBERQ: return truth(vlr[0] instanceof Quantity);
             case VECTORQ: return truth(vlr[0] instanceof SchemeVector);
             case SYMBOLQ: return truth(vlr[0] instanceof Symbol);
+            case SYNTOKENQ: return truth(vlr[0] instanceof sisc.interpreter.Compiler.Syntax);
             case CHARACTERQ: return truth(vlr[0] instanceof SchemeCharacter);
             case STRINGQ: return truth(vlr[0] instanceof SchemeString);
             case BOOLEANQ: return truth(vlr[0] instanceof SchemeBoolean);
@@ -335,6 +338,8 @@ public class Primitives extends IndexedProcedure {
             case PARAMETERQ: return truth(vlr[0] instanceof Parameter);
             case SYMBOL2STRING:
                 return new ImmutableString(symbol(vlr[0]).symval);
+            case SYNTOKEN2STRING: 
+                return new ImmutableString(((sisc.interpreter.Compiler.Syntax)vlr[0]).toString());
             case STRING2NUMBER:
                 String st=string(vlr[0]);
                 try {
@@ -747,7 +752,7 @@ public class Primitives extends IndexedProcedure {
         return VOID;
     }
 
-    //next: 125, {6}
+    //next: 126,
     static final int
         ACOS = 23,
         ADD = 114,
@@ -854,6 +859,8 @@ public class Primitives extends IndexedProcedure {
         SUB = 119,
         SYMBOL2STRING = 41,
         SYMBOLQ = 29,
+        SYNTOKEN2STRING = 125,
+        SYNTOKENQ = 6,
         SYSTIME = 3,
         TAN = 21,
         TIMEZONEOFFSET = 4,
