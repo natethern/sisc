@@ -186,10 +186,10 @@
             </blockquote>
             <informalexample>
               <programlisting>
-(instance-of? 1 &lt;number&lt;)  &arrow; &t;
-(instance-of? 'a &lt;symbol&lt;)  &arrow; &t;
-(instance-of? 1 &lt;symbol&lt;)  &arrow; &f;
-(instance-of? 1 &lt;value&lt;)  &arrow; &t;
+(instance-of? 1 &lt;number&gt;)  &arrow; &t;
+(instance-of? 'a &lt;symbol&gt;)  &arrow; &t;
+(instance-of? 1 &lt;symbol&gt;)  &arrow; &f;
+(instance-of? 1 &lt;value&gt;)  &arrow; &t;
               </programlisting>
             </informalexample>
           </para>
