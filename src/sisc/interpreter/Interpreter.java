@@ -53,6 +53,7 @@ public class Interpreter extends Util {
                                            //frame was captured.
     public boolean             cap[];      //Indicates which vlr positions
                                            //contained a k capture.
+    public Expression            lxp;      //Used for debugging
 
     //ACTIVITY REGISTERS
     public Value                 acc;

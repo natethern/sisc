@@ -181,9 +181,11 @@ public abstract class Util implements Version {
 
     public static void error(Interpreter r, Pair error)
         throws ContinuationException {
+        Expression last=(r.nxp != null ? r.nxp : (r.lxp != null ? r.lxp :
+                                                  r.lcf.nxp));
         r.acc = new Values(new Value[] {
             error,
-            new ApplyParentFrame(new CallFrame((r.nxp == null ? r.lcf.nxp : r.nxp),
+            new ApplyParentFrame(new CallFrame(last, 
                                                r.vlr,
                                                r.vlk,
                                                r.env,

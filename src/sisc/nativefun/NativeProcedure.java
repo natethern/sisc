@@ -20,7 +20,7 @@ public abstract class NativeProcedure extends Procedure implements NamedValue {
 
     public void apply(Interpreter r) throws ContinuationException {
         //long start=System.currentTimeMillis();
-        //r.lxp = r.nxp;
+        r.lxp = r.nxp;
         r.nxp = null;
         try {
             r.saveVLR=r.vlk;
