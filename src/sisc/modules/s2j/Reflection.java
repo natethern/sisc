@@ -248,7 +248,7 @@ public class Reflection extends Util {
             case JAVA_CLASS_OF:
                 return makeJObj(sjobj(f.vlr[0]).classOf(), Class.class);
             case JAVA_INV_HANDLER:
-                return makeJObj(new SchemeInvocation(f.ctx, proc(f.vlr[0])), SchemeInvocation.class);
+                return makeJObj(new SchemeInvocation(f.dynenv.copy(), proc(f.vlr[0])), SchemeInvocation.class);
             case JAVA_NULL:
                 return makeJObj(null, jclass(f.vlr[0]));
             case JAVA_MANGLE_FIELD_NAME:

@@ -163,10 +163,10 @@ public class GenerateHeap {
         
         Context.register("main", ctx);
         
-        Interpreter r = Context.enter("main");
-        new sisc.modules.Primitives.Index().bindAll(r, r.ctx.toplevel_env);
-        new sisc.modules.Annotations.Index().bindAll(r, r.ctx.toplevel_env);
-        new sisc.modules.io.IO.Index().bindAll(r, r.ctx.toplevel_env);
+        Interpreter r = Context.enter(ctx);
+        new sisc.modules.Primitives.Index().bindAll(r, ctx.toplevel_env);
+        new sisc.modules.Annotations.Index().bindAll(r, ctx.toplevel_env);
+        new sisc.modules.io.IO.Index().bindAll(r, ctx.toplevel_env);
         ctx.setEvaluator("eval");
         
         
@@ -192,7 +192,7 @@ public class GenerateHeap {
         for (; i<args.length; i++) {
             System.out.println("Expanding and compiling "+args[i]+"...");
             try {
-                r.eval((Procedure)r.ctx.toplevel_env.lookup(loadSymb),
+                r.eval((Procedure)r.getCtx().toplevel_env.lookup(loadSymb),
                        new Value[] {new SchemeString(args[i])});
             } catch (SchemeException se) {
                 System.err.println("Error during expand: "+se.getMessage());
@@ -212,7 +212,7 @@ public class GenerateHeap {
         r5rs=results[0];
         sisc_specific=results[1];
 
-        r.ctx.toplevel_env=top_level=new MemorySymEnv(new LibraryAE(sisc_specific, lb), Util.TOPLEVEL);
+        r.getCtx().toplevel_env=top_level=new MemorySymEnv(new LibraryAE(sisc_specific, lb), Util.TOPLEVEL);
         r5rs.setName(Util.REPORT);
         sisc_specific.setName(Util.SISC_SPECIFIC);
         

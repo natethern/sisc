@@ -3,9 +3,10 @@ package sisc.modules.s2j;
 import java.lang.reflect.*;
 import sisc.data.*;
 import sisc.interpreter.*;
+import sisc.env.DynamicEnvironment;
 
 public class SchemeInvocation implements InvocationHandler {
-    protected AppContext ctx;
+    protected DynamicEnvironment dynenv;
     protected Procedure proc;
 
     static Method hashCodeMeth;
@@ -22,8 +23,8 @@ public class SchemeInvocation implements InvocationHandler {
         }
     }
 
-    public SchemeInvocation(AppContext ctx, Procedure proc) {
-        this.ctx = ctx;
+    public SchemeInvocation(DynamicEnvironment dynenv, Procedure proc) {
+        this.dynenv = dynenv;
         this.proc = proc;
     }
 
@@ -43,7 +44,7 @@ public class SchemeInvocation implements InvocationHandler {
                 return "proxy";
             }
         }
-        Interpreter r = Context.enter(ctx, new sisc.env.DynamicEnvironment());
+        Interpreter r = Context.enter(dynenv);
         Pair p = Util.EMPTYLIST;
         if (args != null) { //for some reason args can be null
             Class[] pTypes = m.getParameterTypes();

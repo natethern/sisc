@@ -8,9 +8,12 @@ import java.util.WeakHashMap;
 import java.net.URLClassLoader;
 import java.net.URL;
 import java.security.AccessControlException;
+import sisc.interpreter.AppContext;
 import sisc.util.Util;
 
 public class DynamicEnvironment extends Util implements Cloneable {
+
+    public AppContext ctx;
 
     public SchemeInputPort in;
     public SchemeOutputPort out;
@@ -31,11 +34,18 @@ public class DynamicEnvironment extends Util implements Cloneable {
     //hang on to vars that are no longer in use.
     public java.util.Map parameters = new WeakHashMap(0);
 
-    public DynamicEnvironment() {
-        this(System.in, System.out);
+    public DynamicEnvironment(AppContext ctx) {
+        this(ctx, System.in, System.out);
     }
 
-    public DynamicEnvironment(SchemeInputPort in, SchemeOutputPort out) {
+    public DynamicEnvironment(AppContext ctx, InputStream in, OutputStream out) {
+        this(ctx,
+             new SourceInputPort(new BufferedInputStream(in), liMessage(SISCB, "console")),
+             new StreamOutputPort(out, true));
+    }
+
+    public DynamicEnvironment(AppContext ctx, SchemeInputPort in, SchemeOutputPort out) {
+        this.ctx = ctx;
         this.in = in;
         this.out = out;
         printShared = false;
@@ -44,11 +54,6 @@ public class DynamicEnvironment extends Util implements Cloneable {
         try {
             urlClassLoader = new URLClassLoader(new URL[]{}, classLoader);
         } catch (AccessControlException e) {}
-    }
-
-    public DynamicEnvironment(InputStream in, OutputStream out) {
-        this(new SourceInputPort(new BufferedInputStream(in), liMessage(SISCB, "console")),
-             new StreamOutputPort(out, true));
     }
 
     public Object clone() throws CloneNotSupportedException {

@@ -12,7 +12,7 @@ public class DelegatingSymEnv extends Value
 
     protected SymbolicEnvironment getEnv() {
         if (delegee == null) {
-            delegee = (SymbolicEnvironment)sisc.interpreter.Context.currentInterpreter().ctx.getExpression(getName());
+            delegee = (SymbolicEnvironment)sisc.interpreter.Context.currentInterpreter().getCtx().getExpression(getName());
         }
         return delegee;
     }

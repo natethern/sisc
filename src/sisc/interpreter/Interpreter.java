@@ -42,7 +42,6 @@ public class Interpreter extends Util {
     //be moved to the dynenv
     public static Compiler compiler = new Compiler();
 
-    public AppContext ctx;
     public ThreadContext tctx;
     public DynamicEnvironment dynenv;
 
@@ -75,9 +74,8 @@ public class Interpreter extends Util {
         top_fk.fk=top_fk;
     }
 
-    public Interpreter(AppContext ctx, ThreadContext tctx, DynamicEnvironment dynenv) {
+    public Interpreter(ThreadContext tctx, DynamicEnvironment dynenv) {
         fk=top_fk;
-        this.ctx = ctx;
         this.tctx = tctx;
         this.dynenv = dynenv;
 
@@ -86,8 +84,12 @@ public class Interpreter extends Util {
         llcf=lcf=new CallFrame(null, null, true, null, null, null, null);
     }
 
+    public AppContext getCtx() {
+        return dynenv.ctx;
+    }
+
     public Expression compile(Value v) throws ContinuationException {
-        return compiler.compile(this, v, ctx.toplevel_env);
+        return compiler.compile(this, v, getCtx().toplevel_env);
     }
 
     public Expression compile(Value v, SymbolicEnvironment env)
@@ -226,7 +228,7 @@ public class Interpreter extends Util {
      *     expression  results in an error
      */
     public Value eval(Value v) throws SchemeException {
-        return eval(ctx.evaluator, new Value[] {v});
+        return eval(getCtx().evaluator, new Value[] {v});
     }
 
     /**
@@ -245,11 +247,11 @@ public class Interpreter extends Util {
     }
 
     public SymbolicEnvironment lookupContextEnv(Symbol s) {
-        return ctx.lookupContextEnv(s);
+        return getCtx().lookupContextEnv(s);
     }
 
     public void defineContextEnv(Symbol s, SymbolicEnvironment env) {
-        ctx.defineContextEnv(s, env);
+        getCtx().defineContextEnv(s, env);
     }
 
     public SymbolicEnvironment getContextEnv(Symbol s) {

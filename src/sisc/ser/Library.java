@@ -80,7 +80,7 @@ public class Library extends Util {
         try {
             return getLocalExpression(name);
         } catch (FileNotFoundException fnf) {
-            return sisc.interpreter.Context.currentInterpreter().ctx.getExpression(name);
+            return sisc.interpreter.Context.currentInterpreter().getCtx().getExpression(name);
         }
     }
 

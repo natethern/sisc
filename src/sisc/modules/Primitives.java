@@ -253,12 +253,12 @@ public class Primitives extends IndexedProcedure {
             case CASESENSITIVE: return truth(Symbol.caseSensitive);
             case COMPACTSTRINGREP: return truth(SchemeString.compactRepresentation);
             case CURRENTWIND: return r.dynenv.wind;
-            case CURRENTEVAL: return (Value)r.ctx.evaluator;
+            case CURRENTEVAL: return (Value)r.getCtx().evaluator;
             case GENSYM: 
                 long unv=r.tctx.nextUnique();
                 return Symbol.intern(base64encode(unv));
             case INTERACTIONENVIRONMENT:
-                return r.ctx.toplevel_env.asValue();
+                return r.getCtx().toplevel_env.asValue();
             case MAXFLOATPRECISION: return Quantity.valueOf(maxFloatPrecision);
             case MINFLOATPRECISION: return Quantity.valueOf(minFloatPrecision);
             case MUL: return Quantity.ONE;
@@ -291,7 +291,7 @@ public class Primitives extends IndexedProcedure {
                              vlr[0]!=EMPTYLIST);
             case GETENVIRONMENT:
                 try {
-                    return r.ctx.lookupContextEnv(symbol(vlr[0])).asValue();
+                    return r.getCtx().lookupContextEnv(symbol(vlr[0])).asValue();
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throwPrimException(liMessage(SISCB, "noenv", vlr[0].synopsis()));
                     return VOID;
@@ -426,7 +426,7 @@ public class Primitives extends IndexedProcedure {
                 r.dynenv.parser.lexer.strictR5RS=truth(vlr[0]);
                 return VOID;
             case CURRENTEVAL:
-                r.ctx.evaluator=proc(vlr[0]);
+                r.getCtx().evaluator=proc(vlr[0]);
                 return VOID;
             case NLNAME:
                 return Symbol.get(nlib(vlr[0]).getLibraryName());
@@ -592,7 +592,7 @@ public class Primitives extends IndexedProcedure {
                 r.undefine(symbol(vlr[0]), symbol(vlr[1]));
                 return VOID;
             case SETENVIRONMENT:
-                r.ctx.defineContextEnv(symbol(vlr[0]), env(vlr[1]));
+                r.getCtx().defineContextEnv(symbol(vlr[0]), env(vlr[1]));
                 return VOID;
             default:
                 break SIZESWITCH;

@@ -77,7 +77,7 @@ public class REPL {
         throws ClassNotFoundException {
 
         try {
-            r.ctx.loadEnv(r, new SeekableDataInputStream(in));
+            r.getCtx().loadEnv(r, new SeekableDataInputStream(in));
         } catch (IOException e) {
             System.err.println("\n"+Util.liMessage(Util.SISCB, 
                                                    "errorloadingheap"));
@@ -98,7 +98,7 @@ public class REPL {
         Symbol loadSymb = Symbol.get("load");
         for (int i=0; i<args.length; i++) {
             try {
-                r.eval((Procedure)r.ctx.toplevel_env.lookup(loadSymb),
+                r.eval((Procedure)r.getCtx().toplevel_env.lookup(loadSymb),
                        new Value[]{new SchemeString(args[i])});
             } catch (SchemeException se) {
                 Value vm=se.m;
@@ -178,7 +178,7 @@ public class REPL {
 
         AppContext ctx = new AppContext();
         Context.register("main", ctx);
-        Interpreter r = Context.enter("main");
+        Interpreter r = Context.enter(ctx);
         if (!initializeInterpreter(r, 
                                    (String[])((Vector)args.get("files")).toArray(new String[0]),
                                    heap))
@@ -222,7 +222,7 @@ public class REPL {
             listen("main", ssocket);
         } else {
             Procedure p=(Procedure)
-                r.ctx.toplevel_env.lookup(Symbol.get("sisc-cli"));
+                r.getCtx().toplevel_env.lookup(Symbol.get("sisc-cli"));
             REPL repl = new REPL("main",p);
             repl.go();
         }
@@ -232,11 +232,12 @@ public class REPL {
         throws IOException {
         for (;;) {
             Socket client = ssocket.accept();
-            DynamicEnvironment dynenv = new DynamicEnvironment(new SourceInputPort(new BufferedInputStream(client.getInputStream()), "console"),
+            DynamicEnvironment dynenv = new DynamicEnvironment(Context.lookup(app),
+                                                               new SourceInputPort(new BufferedInputStream(client.getInputStream()), "console"),
                                                                new StreamOutputPort(client.getOutputStream(), true));
-            Interpreter r=Context.enter(app);
+            Interpreter r=Context.enter(dynenv);
             Procedure p=(Procedure)
-                r.ctx.toplevel_env.lookup(Symbol.get("sisc-cli"));
+                r.getCtx().toplevel_env.lookup(Symbol.get("sisc-cli"));
             Context.exit();
             SchemeThread t = new SchemeSocketThread(app, p, client);
             t.env = dynenv;

@@ -11,7 +11,6 @@ public class SchemeThread extends Value implements Runnable, NamedValue {
     public static final ThreadGroup 
         schemeThreads=new ThreadGroup("SISC Threads");
 
-    public AppContext ctx;
     public DynamicEnvironment env;
     public Procedure thunk;
     public Thread thread;
@@ -24,7 +23,6 @@ public class SchemeThread extends Value implements Runnable, NamedValue {
     }
 
     public SchemeThread(Interpreter r, Procedure thunk) {
-        this.ctx = r.ctx;
         this.env = r.dynenv.copy();
         this.env.wind = FALSE;
         this.thunk = thunk;
@@ -53,7 +51,7 @@ public class SchemeThread extends Value implements Runnable, NamedValue {
     }
     
     public void run() {
-        Interpreter interp = Context.enter(ctx, env);
+        Interpreter interp = Context.enter(env);
         Context.lookupThreadContext().hostThread=this;
 
         state=RUNNING;

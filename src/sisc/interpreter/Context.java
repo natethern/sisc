@@ -64,16 +64,20 @@ public class Context extends Util {
        @see Interpreter
     */
     public static Interpreter enter(Interpreter r) {
-        return enter(r.ctx, r.dynenv);
+        return enter(r.dynenv);
     }
 
     public static Interpreter enter(String appName) {
-        return enter(lookup(appName), new DynamicEnvironment());
+        return enter(lookup(appName));
     }
     
-    public static Interpreter enter(AppContext ctx, DynamicEnvironment dynenv) {
+    public static Interpreter enter(AppContext ctx) {
+        return enter(new DynamicEnvironment(ctx));
+    }
+    
+    public static Interpreter enter(DynamicEnvironment dynenv) {
         ThreadContext tctx = lookupThreadContext();
-        Interpreter res = createInterpreter(ctx, tctx, dynenv);
+        Interpreter res = createInterpreter(tctx, dynenv);
         tctx.pushInterpreter(res);
         return res;
     }
@@ -91,10 +95,9 @@ public class Context extends Util {
      * a) interpreter creation is quite cheap, and
      * b) pool maintenance would require thread synchronization
      */
-    private static Interpreter createInterpreter(AppContext ctx,
-                                                 ThreadContext tctx,
+    private static Interpreter createInterpreter(ThreadContext tctx,
                                                  DynamicEnvironment dynenv) {
-        return new Interpreter(ctx, tctx, dynenv);
+        return new Interpreter(tctx, dynenv);
     }
 
     private static void returnInterpreter(Interpreter r) {
