@@ -20,6 +20,7 @@
 (define-generic build-library)
 (define-generic get-local-expression)
 (define-generic add-binding)
+(define-generic add-symbolic-bindings)
 (define-generic get-entry-point)
 (define-generic url)
 (define-generic next)
@@ -96,19 +97,16 @@
                             (string-length segment-str)
                             (string-length symenv-id-str))))))))
        (lambda (symenv lae?)
-         (for-each 
-          (lambda (binding)
-            (if lae?
-                (add-binding symenv
-                             lib
-                             (java-wrap binding)
-                             (get-entry-point lib (java-wrap binding)))
-                (putprop binding
-                         (java-unwrap symenv)
-                         (java-unwrap
-                          (get-local-expression lib (java-wrap binding))))))
-          (java-unwrap
-           (get-local-expression lib (java-wrap symenv-id)))))))
+	 (let ([symlist (get-local-expression lib (java-wrap symenv-id))])
+	   (if lae?
+	       (add-symbolic-bindings symenv lib symlist)
+	       (for-each 
+		(lambda (binding)
+		  (putprop binding
+			   (java-unwrap symenv)
+			   (java-unwrap
+			    (get-local-expression lib (java-wrap binding)))))
+		(java-unwrap symlist)))))))
    (java-unwrap (get-local-expression lib (java-wrap index-sym)))))
 
 (define (find-bindings prefix env)
