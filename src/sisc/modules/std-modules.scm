@@ -88,6 +88,7 @@
 (native-module hashtable-native  "sisc.modules.hashtable.Primitives$Index")
 (native-module record-native     "sisc.modules.record.Primitives$Index")
 (native-module binary-io-native  "sisc.modules.io.BinaryIO$Index")
+(native-module string-io-native  "sisc.modules.io.StringIO$Index")
 (native-module file-manipulation-native "sisc.modules.io.FileManipulation$Index")
 
 (module misc
@@ -225,6 +226,20 @@
   (set! make-directory! (normalize _make-directory!))
   (set! make-directories! (normalize _make-directories!)))
 
+(module string-io
+  (with-input-from-string
+   with-output-to-string
+   call-with-input-string
+   call-with-output-string
+   open-input-string
+   open-output-string
+   get-output-string
+   string-input-port?
+   string-output-port?
+   open-source-input-string)
+  (import string-io-native)
+  (include "io/string-io.scm"))
+  
 (module binary-io
   (block-read
    block-write
@@ -773,6 +788,7 @@
   (define optimize opt:optimize)
   (initialize))
 
+(import string-io)
 (import libraries)
 (import debugging)
 (import optimizer)

@@ -482,7 +482,8 @@ public class IO extends IndexedProcedure {
                    aflush=truth(f.vlr[1]);
                 return openCharOutFile(f, url, encoding, aflush);
             case NORMALIZEURL:
-                return new SchemeString(urlClean(url(f.vlr[0], f.vlr[1])).toString());
+                return new SchemeString(urlClean(url(f.vlr[0], 
+                                                     f.vlr[1])).toString());
             default:
                 throwArgSizeException();
             }
