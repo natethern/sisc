@@ -20,7 +20,8 @@ public class Lexer implements Tokens {
 	UNQUOTE    =',',
 	UNQUOTE_SPLICING
 	='@',
-	DOT        ='.';
+	DOT        ='.',
+        PIPE       ='|';
     
     static final char[]
 	special = new char[]
@@ -177,6 +178,34 @@ public class Lexer implements Tokens {
             if (c>set[i]) return false;
             else if (c==set[i]) return true;
         return false;
+    }
+
+    public void skipSRFI30Comment(InputPort in) 
+        throws IOException {
+        boolean seenSharp=false, seenPipe=false;
+        int depth=0;
+        do {
+            switch (readChar(in)) {
+            case PIPE:
+                if (seenSharp) {
+                    seenSharp=false;
+                    depth++;
+                } else {
+                    seenPipe=true;
+                }
+                break;
+            case SHARP:
+                if (seenPipe) {
+                    seenPipe=false;
+                    depth--;
+                } else {
+                    seenSharp=true;
+                }
+                break;
+            default:
+                seenPipe=seenSharp=false;
+            }
+        } while (depth >= 0);
     }
 }
 /*

@@ -1,4 +1,3 @@
-
 package sisc.compiler;
 
 import sisc.Util;
@@ -250,6 +249,11 @@ public class Parser extends Util implements Tokens {
                 Pair p=(Pair)nextExpression(is, state, flags);
                 o=new AnnotatedExpr(p.cdr, p.car);
 		break;
+            case '|': 
+                //Nested multiline comment
+                lexer.skipSRFI30Comment(is);
+                o=nextExpression(is, state, flags);
+                break;
             default:
                 Value[] v=null;
                 is.pushback(c);
