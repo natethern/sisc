@@ -1960,29 +1960,31 @@ Class.getSigners()
         <para>
           An example might be helpful at this stage.
           <programlisting>
-(define-constructor (&lt;jstring> (next: next-method)
-                               (&lt;jchar&gt; c))
-  (next-method (-&gt;jarray (list c) &lt;jchar&gt;)))
-(define-generic index-of)
-(define-method (index-of (next: next-method)
-                         (&lt;jstringbuffer&gt; buf)
-                         (&lt;jchar&gt; c))
-(define sb (make &lt;jstringbuffer&gt; (-&gt;jstring "foo")))
-(-&gt;number (index-of sb (-&gt;jchar #\o))) ;=> 1
+(define-constructor (&lt;jstring&gt; (&lt;jchar&gt; c))
+  (make &lt;jstring&gt; (-&gt;jarray (list c) &lt;jchar&gt;)))
+(define-generic app (generic-java-procedure 'append))
+(define-method (app (next: next-method)
+                    (&lt;jstringbuffer&gt; buf) . rest)
+  (for-each (lambda (x) (next-method buf x)) rest)
+  buf)
+(define sb (make &lt;jstringbuffer&gt; (make &lt;jstring&gt; (-&gt;jchar #\o))))
+(->string (app sb (-&gt;jstring "foo") (-&gt;jint 1) (-&gt;jstring "bar")))
+;=> "ofoo1bar"
           </programlisting>
           This defines a method new constructor on
           <classname>java.lang.String</classname> that constructs a
           string from a single character by constructing a
           single-element array of characters and invoking the existing
-          Java constructor with it. (This is done by
-          <literal>next-method</literal>, which we explain in more
-          detail below).  Furthermore, a new generic function
-          <function>index-of</function> is defined and a method is
-          added to it that returns the index of a character in a
-          <classname>java.lang.StringBuffer</classname>. The method
-          invokes the single-character string constructor defined just
-          above and passes the resulting string to the existing
-          <function>indexOf</function> Java method.
+          Java constructor with it. Furthermore, a new generic procedure
+          <function>app</function> is defined which is chained to a
+          generic procedure representing the Java
+          <function>append</function> methods. A method is defined on
+          the generic procedure that appends the contents of any
+          number of arguments to a
+          <classname>java.lang.StringBuffer</classname>. It does this
+          by calling the Java method for appending a single object
+          using the <function>next-method</function> mechanism which
+          we will describe later.
         </para>
       </sect3>
       <sect3>
