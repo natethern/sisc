@@ -53,9 +53,8 @@
     <javadoc packagenames="${packagename}.*"
 	     sourcepath="${srcdir}"
 	     destdir="${docdir}/javadoc"/>
-    <mkdir dir="${docdir}/manual"/>
-    <style basedir="${docdir}" includes="sss.xml"
-        destdir="${docdir}/manual" style="${docbookdir}/html/docbook.xsl">
+    <style basedir="${docdir}/sss" includes="sss.xml"
+        destdir="${docdir}" style="${docbookdir}/html/docbook.xsl">
     </style>
   </target>
 
@@ -137,7 +136,7 @@
           description="Remove generated sources, class files and jar files">
     <delete dir="${classdir}"/>
     <delete dir="${docdir}/javadoc"/>
-    <delete dir="${docdir}/manual"/>
+    <delete file="${docdir}/sss.html"/>
     <delete file="${basedir}/${jarname}"/>
     <delete file="${heap}"/>
     <delete file="${basedir}/data/Quantity.java"/>
