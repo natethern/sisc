@@ -3,16 +3,17 @@
 (import hashtable)
 
 ;;various servlet / session / request / response methods
-(define-generic get-attribute)    
-(define-generic set-attribute)
-(define-generic get-parameter)
-(define-generic get-session)
-(define-generic get-servlet-context)
-(define-generic get-real-path)
+(define-generic-java-methods
+  get-attribute
+  set-attribute
+  get-parameter
+  get-session
+  get-servlet-context
+  get-real-path)
 
-(define current-request (parameterize))
-(define current-response (parameterize))
-(define current-return (parameterize))
+(define current-request (make-parameter #f))
+(define current-response (make-parameter #f))
+(define current-return (make-parameter #f))
 
 (define (get-k-data session)
   (let ([k-data (get-attribute session (->jstring "kData"))])
