@@ -74,13 +74,8 @@ public class AppContext extends Util {
         Library s=Library.load(i);
         LibraryManager.getInstance().addLibrary(s);
 
-        SchemeBoolean lTRUE=(SchemeBoolean)s.getExpression(0),
-            lFALSE=(SchemeBoolean)s.getExpression(1);
-        SchemeVoid lVOID=(SchemeVoid)s.getExpression(2);
-        EmptyList lEMPTYLIST=(EmptyList)s.getExpression(3);
-        EOFObject lEOF=(EOFObject)s.getExpression(4);
-        CallFrame lstk=(CallFrame)s.getExpression(5);
-        Procedure levaluator=(Procedure)s.getExpression(6);
+        CallFrame lstk=(CallFrame)s.getExpression(0);
+        Procedure levaluator=(Procedure)s.getExpression(1);
 
         AssociativeEnvironment lsymenv=(AssociativeEnvironment)s.getExpression(SYMENV);
         try {
@@ -92,12 +87,14 @@ public class AppContext extends Util {
                 throw new IOException("Heap did not contain toplevel environment!");
             }
             evaluator=levaluator;
+            /*
             TRUE=lTRUE;
             FALSE=lFALSE;
             VOID=lVOID;
             EMPTYLIST=lEMPTYLIST;
             EOF=lEOF;
             setVoids();
+            */
         } catch (Exception e) {
             e.printStackTrace();
             throw new IOException(e.getMessage());
@@ -109,11 +106,6 @@ public class AppContext extends Util {
     public void saveEnv(Interpreter r, OutputStream o, LibraryBuilder lb)
         throws IOException {
         r.save();
-        lb.add(TRUE);
-        lb.add(FALSE);
-        lb.add(VOID);
-        lb.add(EMPTYLIST);
-        lb.add(EOF);            
         lb.add(r.stk);
         lb.add(evaluator);
         lb.add(SYMENV, symenv);

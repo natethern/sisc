@@ -56,11 +56,10 @@ public abstract class Util implements Version {
 
     protected static Value[] MANY_VOIDS=new Value[32];
 
-    static void setVoids() {
+    static {
         for (int i=MANY_VOIDS.length-1; i>=0; i--)
             MANY_VOIDS[i]=VOID;
     };
-
 
     public static Symbol
         SETBANG=Symbol.get("set!"),
