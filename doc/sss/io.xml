@@ -43,8 +43,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         </footnote>
       </para>
       <para>
-        Relative file names or URLs are resolved in relation to the
-        following parameter:
+        Relative file names or URLs are resolved in relation to the        following parameter:
         <blockquote>
           <para>
 	    <indexterm><primary>current-url</primary></indexterm>
@@ -175,7 +174,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             an auto-flush port.
           </para>
         </footnote>.  Enabling auto-flush can be done when the
-        port is created per the specifications below.  A port that
+        port is created per the specifications of the output port
+        constructors in following sections.  A port that
         does not automatically flush can be flushed at any time by
         calling <computeroutput>flush-output-port</computeroutput>.
         Finally, an output-port that does not automatically flush will
@@ -184,6 +184,42 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         not be flushed if the Scheme system is exited without closing
         the port.
       </para>
+      <blockquote>
+	<para>
+	  <indexterm><primary>flush-output-port</primary>
+	  </indexterm>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>undefined</type>
+	    <methodname>flush-output-port</methodname>
+	    <methodparam>
+	      <parameter>output-port</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Causes the specified
+	      <parameter>output-port</parameter>'s buffered data to
+	      be written immediately.  This operation is allowed on
+	      both auto-flush and non-auto-flush output ports,
+	      though it has no effect on the former.
+	    </para>
+	  </blockquote>
+	</para>
+      </blockquote>
+    </sect2>
+    <sect2>
+      <title>Character Ports</title>
+      <para>
+	The &R5RS; I/O primitives implemented by &SISC; create
+	<emphasis>character ports</emphasis>.  Character ports read
+	characters from input sources and treat the data as characters
+	in a given character set.  By default, input data is handled
+	as UTF-8 from RFC 2279.   Correspondingly, character ports
+	output bytes from characters according to a given character
+	set's conversion rules, again, using the UTF-8 character set 
+	by default.  
+      </para> 
       <para>
         <blockquote>
           <para>
@@ -211,30 +247,68 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </para>
             </blockquote>
           </para>
+        </blockquote>
+      </para>
+    </sect2>
+    <sect2 id="BinaryIO">
+      <title>Binary Ports</title>
+      <para>
+	In addition to the &R5RS; I/O functions, &SISC; provides a
+	symmetric set of functions for reading and writing binary data
+	to and from ports with no character set translation.  These
+	ports are operated on in the same way as character ports,
+	i.e. with <function>read</function>,
+	<function>read-char</function>, <function>display</function>,
+	etc.  
+      </para>
+      <para>
+        <blockquote>
           <para>
-            <indexterm><primary>flush-output-port</primary>
+            <indexterm><primary>open-binary-input-file</primary>
             </indexterm>
               &procedure;
             <methodsynopsis language="scheme">
-              <type>undefined</type>
-              <methodname>flush-output-port</methodname>
+              <type>output port</type>
+              <methodname>open-binary-input-file</methodname>
               <methodparam>
-                <parameter>output-port</parameter>
+                <parameter>url</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Causes the specified
-                <parameter>output-port</parameter>'s buffered data to
-                be written immediately.  This operation is allowed on
-                both auto-flush and non-auto-flush output ports,
-                though it has no effect on the former.
+		Creates an input port in the same manner as &R5RS;
+                <function>open-input-file</function>, producing an
+		input port that does no character-set decoding on the
+                bytes read as input.              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+
+        <blockquote>
+          <para>
+            <indexterm><primary>open-binary-output-file</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>output port</type>
+              <methodname>open-binary-output-file</methodname>
+              <methodparam>
+                <parameter>url</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>auto-flush</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+		Creates an output port in the same manner as
+                <function>open-output-file</function>, producing an
+                output port that does no character-set encoding.
               </para>
             </blockquote>
           </para>
         </blockquote>
       </para>
-    </sect2>
     <sect2 id="BlockIO">
       <title>Block I/O</title>
       <para>
