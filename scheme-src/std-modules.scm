@@ -29,10 +29,10 @@
        (let ((m (load-native-library (syntax-object->datum (syntax class)))))
          (with-syntax (((def ...) (datum->syntax-object
                                    (syntax name)
-                                   (get-native-library-binding-names m))))
+                                   (native-library-binding-names m))))
            (syntax (module name (def ...)
 		     (define *module* (load-native-library class))
-             (define def (get-native-library-binding
+             (define def (native-library-binding
                           *module* (quote def)))
 		     ...))))))))
 

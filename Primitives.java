@@ -123,10 +123,10 @@ public class Primitives extends ModuleAdapter {
         define("find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
         define("floor", FLOOR);
         define("flush-output-port", FLUSHOUTPUTPORT);
-        define("get-native-library-binding", GETNLBINDING);
-        define("get-native-library-binding-names", GETNLBINDINGNAMES);
-        define("get-native-library-name", GETNLNAME);
-        define("get-native-library-version", GETNLVERSION);
+        define("native-library-binding", NLBINDING);
+        define("native-library-binding-names", NLBINDINGNAMES);
+        define("native-library-name", NLNAME);
+        define("native-library-version", NLVERSION);
         define("get-output-string", GETOUTPUTSTRING);
         define("getprop", LOOKUP);
         define("imag-part", IMAGPART);
@@ -532,11 +532,11 @@ public class Primitives extends ModuleAdapter {
             case CURRENTEVAL:
                 f.ctx.evaluator=proc(f.vlr[0]);
                 return VOID;
-            case GETNLNAME:
+            case NLNAME:
                 return Symbol.get(module(f.vlr[0]).getModuleName());
-            case GETNLVERSION:
+            case NLVERSION:
                 return Quantity.valueOf(module(f.vlr[0]).getModuleVersion());
-            case GETNLBINDINGNAMES:
+            case NLBINDINGNAMES:
                 Value[] va=(Value[])module(f.vlr[0]).getModuleBindingNames();
                 return valArrayToList(va,0,va.length);
             case LOADNL:
@@ -671,7 +671,7 @@ public class Primitives extends ModuleAdapter {
                 } catch (IOException e) {
                     throwPrimException("error opening file "+fname);
                 }
-            case GETNLBINDING:
+            case NLBINDING:
                 return module(f.vlr[0]).getBindingValue(symbol(f.vlr[1]));
             case EVAL:
                 f.nxp=f.compile(f.vlr[0], env(f.vlr[1]));
@@ -907,10 +907,10 @@ public class Primitives extends ModuleAdapter {
         FLOOR = 45,
         FLUSHOUTPUTPORT = 46,
         GCD = 116,
-        GETNLBINDING = 117,
-        GETNLBINDINGNAMES = 47,
-        GETNLNAME = 48,
-        GETNLVERSION = 49,
+        NLBINDING = 117,
+        NLBINDINGNAMES = 47,
+        NLNAME = 48,
+        NLVERSION = 49,
         GETOUTPUTSTRING = 50,
         GRT = 153,
         IMAGPART = 51,

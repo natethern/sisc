@@ -262,9 +262,9 @@
 
 (define (load-module str)
   (let* ([nl (load-native-library str)]
-	 [binding-names (get-native-library-binding-names nl)])
+	 [binding-names (native-library-binding-names nl)])
     (for-each (lambda (name)
-		(putprop name '*toplevel* (get-native-library-binding nl name)))
+		(putprop name '*toplevel* (native-library-binding nl name)))
 	      binding-names)))
     
 ;;;;;;;;;;;;; Optimized functions

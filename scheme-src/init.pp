@@ -295,9 +295,9 @@
                  (putprop
                    %_961
                    '*toplevel*
-                   (get-native-library-binding %_959 %_961)))
+                   (native-library-binding %_959 %_961)))
                %_960))))
-        (get-native-library-binding-names %_959)))
+        (native-library-binding-names %_959)))
      (load-native-library %_958))))
 (define reverse
   ((lambda (%_962)
