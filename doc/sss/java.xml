@@ -70,6 +70,8 @@ The calls themselves are made using one of the three
 <classname>sisc.interpreter.Interpreter</classname>:
 <itemizedlist>
             <listitem>
+              <indexterm><primary>eval</primary>
+              </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
                 <type>Value</type>
@@ -294,6 +296,8 @@ Context.exit()
       </para>
       <blockquote>
         <para>
+          <indexterm><primary>java-object?</primary>
+          </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
             <type>&num;t/&num;f</type>
@@ -319,6 +323,8 @@ Context.exit()
         <blockquote>
           <simplelist>
             <member>
+              <indexterm><primary>java-class?</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>&num;t/&num;f</type>
@@ -327,6 +333,8 @@ Context.exit()
               </methodsynopsis>
             </member>
             <member>
+              <indexterm><primary>java-interface?</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>&num;t/&num;f</type>
@@ -335,6 +343,8 @@ Context.exit()
               </methodsynopsis>
             </member>
             <member>
+              <indexterm><primary>java-array?</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>&num;t/&num;f</type>
@@ -343,6 +353,8 @@ Context.exit()
               </methodsynopsis>
             </member>
             <member>
+              <indexterm><primary>java-null?</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>&num;t/&num;f</type>
@@ -534,6 +546,8 @@ Context.exit()
           is obtained as follows
           <blockquote>
             <para>
+              <indexterm><primary>generic-java-constructor</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>proc</type>
@@ -588,6 +602,8 @@ Context.exit()
           arrays. This is done by a special procedure instead.
           <blockquote>
             <para>
+              <indexterm><primary>java-array-new</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>jarray</type>
@@ -627,6 +643,8 @@ Context.exit()
           to special generic procedures obtained as follows:
           <blockquote>
             <para>
+              <indexterm><primary>generic-java-procedure</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>proc</type>
@@ -659,6 +677,8 @@ Context.exit()
           is performed by
           <blockquote>
             <para>
+              <indexterm><primary>java-mangle-method-name</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>symbol</type>
@@ -699,6 +719,8 @@ Context.exit()
               </blockquote>
             </para>
             <para>
+              <indexterm><primary>java-mangle-field-name</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>symbol</type>
@@ -771,6 +793,8 @@ Context.exit()
           The primary means of getting hold of a Java class is
           <blockquote>
             <para>
+              <indexterm><primary>java-class</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>jclass</type>
@@ -829,6 +853,8 @@ Context.exit()
           The class of an object can be obtained with
           <blockquote>
             <para>
+              <indexterm><primary>java-class-of</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>jclass</type>
@@ -851,6 +877,8 @@ Context.exit()
           type is that of another.
           <blockquote>
             <para>
+              <indexterm><primary>java-instance?</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>&num;t/&num;f</type>
@@ -870,6 +898,8 @@ Context.exit()
           </blockquote>
           <blockquote>
             <para>
+              <indexterm><primary>java-assignable?</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>&num;t/&num;f</type>
@@ -989,6 +1019,8 @@ Context.exit()
         </para>
         <blockquote>
           <para>
+            <indexterm><primary>-&gt;</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
               <type>proc</type>
@@ -1038,6 +1070,8 @@ Context.exit()
         </para>
         <blockquote>
           <para>
+            <indexterm><primary>-&gt;jarray</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
               <type>jarray</type>
@@ -1120,6 +1154,8 @@ Context.exit()
         </para>
         <blockquote>
           <para>
+            <indexterm><primary>java-wrap</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
               <type>jobj</type>
@@ -1137,6 +1173,8 @@ Context.exit()
         </blockquote>
         <blockquote>
           <para>
+            <indexterm><primary>java-unwrap</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
               <type>obj</type>
@@ -1183,6 +1221,8 @@ Context.exit()
         </para>
         <blockquote>
           <para>
+            <indexterm><primary>java-null</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
               <type>jobj</type>
@@ -1231,6 +1271,8 @@ Context.exit()
         </para>
         <blockquote>
           <para>
+            <indexterm><primary>define-java-proxy</primary>
+            </indexterm>
             &syntax;
             <methodsynopsis language="scheme">
               <void/>
@@ -1368,6 +1410,8 @@ Context.exit()
         </para>
         <blockquote>
           <para>
+            <indexterm><primary>java-synchronized</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
               <type>obj</type>
@@ -1568,6 +1612,8 @@ Class.getSigners()
           <function>meta</function> is defined as follows:
           <blockquote>
             <para>
+              <indexterm><primary>meta</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>type</type>
@@ -1588,6 +1634,8 @@ Class.getSigners()
           Types can be compared with
           <blockquote>
             <para>
+              <indexterm><primary>type&lt;=</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>&num;t/&num;f</type>
@@ -1612,6 +1660,8 @@ Class.getSigners()
           particular type with
           <blockquote>
             <para>
+              <indexterm><primary>instance-of?</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>&num;t/&num;f</type>
@@ -1631,6 +1681,8 @@ Class.getSigners()
           The type of an object can be obtained with
           <blockquote>
             <para>
+              <indexterm><primary>type-of</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>type</type>
@@ -1654,6 +1706,8 @@ Class.getSigners()
           supported:
           <blockquote>
             <para>
+              <indexterm><primary>class-direct-superclasses</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>list</type>
@@ -1674,6 +1728,8 @@ Class.getSigners()
           </blockquote>
           <blockquote>
             <para>
+              <indexterm><primary>class-direct-slots</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>list</type>
@@ -1694,6 +1750,8 @@ Class.getSigners()
           </blockquote>
           <blockquote>
             <para>
+              <indexterm><primary>class-precedence-list</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>list</type>
@@ -1752,6 +1810,8 @@ Class.getSigners()
         <para>
           <blockquote>
             <para>
+              <indexterm><primary>define-generic</primary>
+              </indexterm>
               &syntax;
               <methodsynopsis language="scheme">
                 <void/>
@@ -1785,6 +1845,8 @@ Class.getSigners()
           Generic procedures can also be constructed procedurally, using
           <blockquote>
             <para>
+              <indexterm><primary>make-generic-procedure</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>proc</type>
@@ -1805,6 +1867,8 @@ Class.getSigners()
           generic procedure:
           <blockquote>
             <para>
+              <indexterm><primary>generic-procedure-methods</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>list</type>
@@ -1822,6 +1886,8 @@ Class.getSigners()
           </blockquote>
           <blockquote>
             <para>
+              <indexterm><primary>generic-procedure-next</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>proc/&num;f</type>
@@ -1842,6 +1908,8 @@ Class.getSigners()
           Methods can be added to generic procedures with
           <blockquote>
             <para>
+              <indexterm><primary>define-method</primary>
+              </indexterm>
               &syntax;
               <methodsynopsis language="scheme">
                 <void/>
@@ -1888,6 +1956,8 @@ Class.getSigners()
           Methods can also be defined procedurally using
           <blockquote>
             <para>
+              <indexterm><primary>make-method</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>method</type>
@@ -1916,6 +1986,8 @@ Class.getSigners()
           with
           <blockquote>
             <para>
+              <indexterm><primary>add-method</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <void/>
@@ -1939,14 +2011,18 @@ Class.getSigners()
           <blockquote>
             <simplelist>
               <member>
-                  &procedure;
+                <indexterm><primary>method-procedure</primary>
+                </indexterm>
+                &procedure;
                 <methodsynopsis language="scheme">
                   <type>proc</type>
-                <methodname>method-procedure</methodname>
+                  <methodname>method-procedure</methodname>
                   <methodparam><parameter>method</parameter></methodparam>
                 </methodsynopsis>
               </member>
               <member>
+                <indexterm><primary>method-types</primary>
+                </indexterm>
                   &procedure;
                 <methodsynopsis language="scheme">
                   <type>list</type>
@@ -1955,6 +2031,8 @@ Class.getSigners()
                 </methodsynopsis>
               </member>
               <member>
+                <indexterm><primary>method-rest?</primary>
+                </indexterm>
                   &procedure;
                 <methodsynopsis language="scheme">
                   <type>&num;t/&num;f</type>
@@ -2002,6 +2080,8 @@ Class.getSigners()
           Constructors are defined with
           <blockquote>
             <para>
+              <indexterm><primary>define-constructor</primary>
+              </indexterm>
               &syntax;
               <methodsynopsis language="scheme">
                 <void/>
@@ -2048,6 +2128,8 @@ Class.getSigners()
           New generic constructors can be created with
           <blockquote>
             <para>
+              <indexterm><primary>make-generic-constructor</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>proc</type>
@@ -2073,6 +2155,8 @@ Class.getSigners()
           constructed. The mapping is performed by
           <blockquote>
             <para>
+              <indexterm><primary>constructor</primary>
+              </indexterm>
               &procedure;
               <methodsynopsis language="scheme">
                 <type>proc</type>
@@ -2195,6 +2279,8 @@ Class.getSigners()
           The algorithm is encapsulated by the following procedures:
           <blockquote>
             <para>
+              <indexterm><primary>applicable-methods</primary>
+              </indexterm>
                 &procedure;
               <methodsynopsis language="scheme">
                 <type>list list</type>
@@ -2216,6 +2302,8 @@ Class.getSigners()
           </blockquote>
           <blockquote>
             <para>
+              <indexterm><primary>method-applicable?</primary>
+              </indexterm>
                 &procedure;
               <methodsynopsis language="scheme">
                 <type>&num;t/&num;f</type>
