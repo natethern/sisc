@@ -517,24 +517,24 @@
 
 (define string<?
   (letrec ([s<? (lambda (s1 s2)
-		  (cond [(null? s1) #f]
-			[(null? s2) #t]
+		  (cond [(null? s1) (not (null? s2))]
+			[(null? s2) #f]
 			[else (let ([c1 (car s1)]
 				    [c2 (car s2)])
 				(cond [(char<? c1 c2) #t]
-				      [(char=? c1 c2) #f]
+				      [(char>? c1 c2) #f]
 				      [else (s<? (cdr s1) (cdr s2))]))]))])
     (lambda (s1 s2)
       (s<? (string->list s1) (string->list s2)))))
 
 (define string>?
   (letrec ([s>? (lambda (s1 s2)
-		  (cond [(null? s1) #f]
-			[(null? s2) #t]
+		  (cond [(null? s2) (not (null? s1))]
+			[(null? s1) #f]
 			[else (let ([c1 (car s1)]
 				    [c2 (car s2)])
 				(cond [(char>? c1 c2) #t]
-				      [(char=? c1 c2) #f]
+				      [(char<? c1 c2) #f]
 				      [else (s>? (cdr s1) (cdr s2))]))]))])
     (lambda (s1 s2)
       (s>? (string->list s1) (string->list s2)))))
