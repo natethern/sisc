@@ -548,7 +548,8 @@
    integer?))
 (define real?
   ((lambda (%_1041)
-     (lambda (%_1042) (not (%_1041 %_1042))))
+     (lambda (%_1042)
+       (if (number? %_1042) (not (%_1041 %_1042)) '#f)))
    complex?))
 (define complex? number?)
 (define abs
@@ -788,7 +789,7 @@
 (define char-upper-case?
   (lambda (%_1124)
     (if (char-alphabetic? %_1124)
-      (char<? %_1124 '#\a)
+      (char>? %_1124 '#\a)
       '#f)))
 (define char-lower-case?
   (lambda (%_1125)

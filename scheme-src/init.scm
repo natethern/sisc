@@ -440,7 +440,7 @@
 (define real? 
  (let ((oldcomp? complex?))
   (lambda (n)
-   (not (oldcomp? n)))))
+    (and (number? n) (not (oldcomp? n))))))
 
 (define complex? number?)
 
