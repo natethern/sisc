@@ -789,6 +789,38 @@
         is <emphasis>not</emphasis> reacquired.
       </para>
       <blockquote>
+        <para id="condvarq">
+          <indexterm><primary>condvar?</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>&num;t/&num;f</type>
+            <methodname>condvar?</methodname>
+            <methodparam>
+              <parameter>value</parameter>
+            </methodparam>            
+          </methodsynopsis>
+          <blockquote>
+            <para>
+		      Returns true if the provided value is a condition variable.
+            </para>
+          </blockquote>
+        </para>
+        <para id="condvar-new">
+          <indexterm><primary>condvar/new</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>condition variable</type>
+            <methodname>condvar/new</methodname>
+            <void/>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+	          Creates a new condition variable.
+            </para>
+          </blockquote>
+        </para>
         <para id="func-mutex-wait">
           <indexterm><primary>mutex/unlock!</primary>
           </indexterm>
