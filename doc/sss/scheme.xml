@@ -80,6 +80,14 @@
 	  default, is supported for floating point and complex
 	  numbers.
 	</para>
+        <para>
+          &SISC; will produce infinite or not-a-number quantities from
+          some operations.  Those quantities are represented and
+          can be used in Scheme programs as 
+          <literal>#!+inf</literal> (positive infinity),
+          <literal>#!-inf</literal> (negative infinity), and
+          <literal>#!nan</literal> (not-a-number).
+        </para>
       </sect3>
       <sect3 id="Exactness">
 	<title>
