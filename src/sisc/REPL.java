@@ -166,14 +166,17 @@ public class REPL {
                                    heap))
             return;
 
+        int returnCode = 0;
         boolean noRepl=args.get("no-repl")!=null;
         boolean call=args.get("call-with-args")!=null;
 
         String expr=(String)args.get("eval");
         if (expr!=null) {
-            if (!call)
-                System.out.println(r.eval(expr));
-            else r.eval(expr);
+            Value v=r.eval(expr);
+            if (!call) 
+                System.out.println(v);
+            if (v instanceof Quantity) 
+                returnCode=((Quantity)v).intValue();
         }
 
         String func=(String)args.get("call-with-args");
@@ -187,31 +190,45 @@ public class REPL {
             Value v=r.eval(fun, sargs);
             if (noRepl) {
                 if (v instanceof Quantity)
-                    System.exit(((Quantity)v).indexValue());
-                else if (v instanceof SchemeVoid)
-                    System.exit(0);
-                else System.out.println(v);
+                    returnCode=((Quantity)v).indexValue();
+                else if (!(v instanceof SchemeVoid)) {
+                    System.out.println(v);
+                }
             }
         }
-	DynamicEnvironment dynenv=r.dynenv;
+	
+        DynamicEnvironment dynenv=r.dynenv;
         Context.exit();
-        if (noRepl) return;
-
-        String listen = (String)args.get("listen");
-        if (listen!=null) {
-            int cidx = listen.indexOf(':');
-            ServerSocket ssocket = cidx == -1 ?
-                new ServerSocket(Integer.parseInt(listen), 50) :
-                new ServerSocket(Integer.parseInt(listen.substring(cidx+1)), 50, 
-                                 InetAddress.getByName(listen.substring(0, cidx)));
-            System.out.println("Listening on " + ssocket.getInetAddress().toString() + ":" + ssocket.getLocalPort());
-            System.out.flush();
-            listen("main", ssocket);
-        } else {
-            Procedure p=(Procedure)r.lookup(Symbol.get("sisc-cli"), Util.TOPLEVEL);
-            REPL repl = new REPL("main",dynenv,p);
-            repl.go();
+        
+        if (!noRepl) {
+            String listen = (String)args.get("listen");
+            if (listen!=null) {
+                int cidx = listen.indexOf(':');
+                ServerSocket ssocket = cidx == -1 ?
+                    new ServerSocket(Integer.parseInt(listen), 50) :
+                    new ServerSocket(Integer.parseInt(listen.substring(cidx+1)), 50, 
+                                     InetAddress.getByName(listen.substring(0, cidx)));
+                System.out.println("Listening on " + ssocket.getInetAddress().toString() + ":" + ssocket.getLocalPort());
+                System.out.flush();
+                listen("main", ssocket);
+            } else {
+                Procedure p=(Procedure)r.lookup(Symbol.get("sisc-cli"), Util.TOPLEVEL);
+                REPL repl = new REPL("main",dynenv,p);
+                repl.go();
+                repl.primordialThread.thread.join();
+                switch (repl.primordialThread.state) {
+                case SchemeThread.FINISHED:
+                    if (repl.primordialThread.rv instanceof Quantity) {
+                        returnCode=((Quantity)repl.primordialThread.rv).intValue();
+                    }
+                    break;
+                case SchemeThread.FINISHED_ABNORMALLY:
+                    returnCode=1;
+                    break;
+                }                                    
+            }
         }
+        System.exit(returnCode);
     }
 
     public static void listen(String app, ServerSocket ssocket)

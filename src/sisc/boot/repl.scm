@@ -32,7 +32,7 @@
 ;;
 ;; The SISC read-eval-print-loop
 
-(define current-exit-handler (make-parameter void))
+(define current-exit-handler (make-parameter (lambda (rv) rv)))
 
 (define current-default-error-handler
   (make-parameter
@@ -63,8 +63,8 @@
               ;;read
               (let ([exp (read-code (current-input-port))])
                 (if (eof-object? exp) 
-                    (if ((current-exit-handler))
-                        (exit)
+                    (if ((current-exit-handler) exp)
+                        (exit exp)
                         (repl/read writer))
                     (begin
                       ;; Consume any whitespace
@@ -89,33 +89,32 @@
               (string-append dir (getenv "file.separator"))
               "."))))
       (let ([repl-start #f])
-        (call/cc
-         (lambda (k)
-           (_exit-handler (cons k (_exit-handler)))
-           (begin
-             (call/cc (lambda (k) 
-                        (set! repl-start k)
-                        (putprop 'repl '*debug* k)))
-             (let loop ()
-               (with/fc (lambda (m e)
-                          ((current-default-error-handler) m e)
-                          (loop))
-                 (lambda ()
-                   (repl/read
-                    (lambda (v)
-                      (if (and (getprop 'pretty-print)
-                               (not (getprop '*sisc* 'LITE))
-                               (not (circular? v)))
-                          (pretty-print v)
-                          ;;dynamic wind would be better here, but
-                          ;;we don't want to use it in core code
-                          (let ([ps (print-shared)])
-                            (print-shared #t)
-                            (write v)
-                            (print-shared ps)))))
-                   (void)))))))
-        (if ((current-exit-handler))
-            (void)
+        (or ((current-exit-handler)
+             (call/cc
+               (lambda (k)
+                 (_exit-handler (cons k (_exit-handler)))
+                 (begin
+                   (call/cc (lambda (k) 
+                              (set! repl-start k)
+                              (putprop 'repl '*debug* k)))
+                   (let loop ()
+                     (with/fc (lambda (m e)
+                                ((current-default-error-handler) m e)
+                                (loop))
+                       (lambda ()
+                         (repl/read
+                          (lambda (v)
+                            (if (and (getprop 'pretty-print)
+                                     (not (getprop '*sisc* 'LITE))
+                                     (not (circular? v)))
+                                (pretty-print v)
+                                ;;dynamic wind would be better here, but
+                                ;;we don't want to use it in core code
+                                (let ([ps (print-shared)])
+                                  (print-shared #t)
+                                  (write v)
+                                  (print-shared ps)))))
+                         (void))))))))
             (repl-start))))))
 
 (define (sisc-cli)
@@ -126,8 +125,9 @@
              (sisc-cli))
            repl))
 
-(define (exit)
-  (let ([k (car (_exit-handler))])
+(define (exit . return-value)
+  (let ([k (car (_exit-handler))]
+        [rv (if (null? return-value) #!void (car return-value))])
     (_exit-handler (cdr (_exit-handler)))
     (newline)
-    (if k (k))))
+    (if k (k rv) rv)))
