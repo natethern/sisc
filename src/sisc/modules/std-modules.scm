@@ -259,7 +259,6 @@
     ((define-record-type
        make-record-type record-constructor record-predicate
        define-record-field record-accessor record-modifier)
-     record?
      define-struct)
   (import record-native)
   (import misc)
