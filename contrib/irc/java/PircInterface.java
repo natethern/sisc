@@ -11,6 +11,7 @@ public class PircInterface extends PircBot {
 
     public PircInterface(String name) {
         this.setName(name);
+        this.setLogin("siscbot");
         interp=Context.enter();
         try {
             callHandler=(Procedure)interp.eval(Symbol.get("call-handler"));

@@ -15,11 +15,12 @@
   (define channel (->jstring "#sarahtest"))
 
   (define (onPrivateMessage nick login host message)
-    (let ([response (answer (->string message))])
+    (let ([response (answer (->string message) #t)])
       (if response
           (send-message bot nick (->jstring response)))))
 
   (define (onMessage channel nick login host message)
+    (store-seen dbcon (->string nick) (->string message))
     (let ([response (answer (->string message))])
       (if response
           (send-message bot channel (->jstring response)))))

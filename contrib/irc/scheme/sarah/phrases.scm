@@ -1,3 +1,7 @@
+(define time-preludes
+  '("Its"
+    "My watch says"))
+
 (define whatis-preludes
   '("I've heard" 
     "Someone once said"
@@ -18,3 +22,14 @@
     "Understood."
     "I'll keep that in mind."
     "So noted."))
+
+(define haventseen-responses
+  '("Sorry, haven't seem 'em."
+    "Nope."
+    "Sorry, no."
+    "Not as far as I can remember."))
+
+(define seen-phrases
+  '("I last saw ~a on ~a"
+    "~a was here ~a"))
+  

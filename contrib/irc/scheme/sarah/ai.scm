@@ -1,3 +1,6 @@
+(import srfi-2)
+(import srfi-11)
+
 (define somewhat-clean
   (string->list "abcdefghijklmnopqrstuvwxyz()[]->+-*/_01234567890?!."))
 (define really-clean
@@ -81,31 +84,29 @@
 (define (list-skip ls n)
   (if (zero? n) ls (list-skip (cdr ls) (- n 1))))
 
-(define (answer message)
-  (let* ([tokens (tokenize message)])
-         ;Tel Hal, regardless, to expand his corups
-
-    ;Is it addressed to the bot
-    (let* ([to-bot (memq bot-name tokens)]
-           [cleaned-message (bot-clean message)]
-           [pattern (find-pattern (map (lambda (ts)
-                                         (string->symbol
-                                          (list->string 
-                                           (clean ts really-clean))))
-                                       (map (lambda (tok)
-                                              (string->list
-                                               (symbol->string tok)))
-                                            tokens)))]
-           [response (and pattern 
-                          (display pattern)
-                          (and-let* ([handler (assq pattern pattern-handlers)]) 
-                                    (display tokens)
-                                    ((cdr handler) cleaned-message)))])
-      (if (and response (or (not bot-quiet) to-bot))
-          response
-          (let ([hal-response
-                 (say hal cleaned-message)])
-            (and (or (not bot-quiet) to-bot) hal-response))))))
+(define (answer message . to-bot)
+  (let* ([tokens (tokenize message)]
+         [strict-tokens (map (lambda (ts)
+                               (string->symbol
+                                (list->string 
+                                 (clean ts really-clean))))
+                             (map (lambda (tok)
+                                    (string->list
+                                     (symbol->string tok)))
+                                  tokens))]
+          [to-bot (or (and (not (null? to-bot)) (car to-bot))
+                      (memq bot-name strict-tokens))]
+          [cleaned-message (bot-clean message)]
+          [pattern (find-pattern strict-tokens)]
+          [response (and pattern 
+                         (display pattern)
+                         (and-let* ([handler (assq pattern pattern-handlers)]) 
+                                   ((cdr handler) cleaned-message)))])
+    (if (and response (or (not bot-quiet) to-bot))
+        response
+        (let ([hal-response
+               (say hal cleaned-message)])
+          (and (or (not bot-quiet) to-bot) hal-response)))))
     
 (define (bot-clean message)
   (let loop ([x 0])
@@ -126,42 +127,61 @@
     (be . ((quiet . QUIET)))
     (listen . LISTEN)
     (evaluate . EVALUATE)
+    (seen . SEEN)
     ))
 
-(define (what-is message)
+(define (*-is type message)
   (let-values ([(ignoreables term) (string-split message " is ")])
     (and term 
          (begin 
            (if (eq? #\? (string-ref term (- (string-length term) 1)))
                (set! term (substring term 
                                      0 (- (string-length term) 1))))
-           (display term)
-           (and-let* ([results (lookup-item dbcon term)])
+           (and-let* ([results (lookup-item dbcon type term)])
              (let ([random-result (random-elem results)])
-               (format "~a ~a is ~a" 
+               (format "~a ~a ~a ~a" 
                        (random-elem whatis-preludes) 
                        (car random-result)
+                       (cdr (assq type '((what . is) (where . "is at"))))
                        (cdr random-result))))))))
        
 
 (define (quiet . args) (set! bot-quiet #t) "Fine, shutting up.")
 (define (listen . args) (set! bot-quiet #f) "Okay, I'm listening.")
-(define (evaluate . args)
+(define (evaluate message)
   (let-values ([(ignoreables term) (string-split message "evaluate ")])
     (with-output-to-string 
         (lambda () (pretty-print 
                     (eval (with-input-from-string term read)))))))
 
 (define (learn message)
-  (let-values ([(term definition) (string-split message " is ")])
-    (if (and term definition)
-        (if (store-item dbcon term definition)
-            (random-elem learn-responses)
-            (random-elem knewthat-responses)))))
-                
-(define what-time)
-(define who-is)
-(define where-is)
+  (let-values ([(term definition) (string-split message " is at ")])    
+    (and (or (and term definition
+                  (if (store-item dbcon 'where term definition)
+                      (random-elem learn-responses)
+                      (random-elem knewthat-responses)))
+             (let-values ([(term definition) (string-split message " is ")])
+               (and term definition
+                    (if (store-item dbcon 'what term definition)
+                        (random-elem learn-responses)
+                        (random-elem knewthat-responses))))))))
+
+(define (seen message)
+  (let-values ([(ignoreables person) (string-split message " seen ")])
+    (and person 
+         (begin 
+           (if (eq? #\? (string-ref person (- (string-length person) 1)))
+               (set! person (substring person 
+                                     0 (- (string-length person) 1))))
+           (let-values ([(seen message) (lookup-seen dbcon person)])
+             (if seen (format "~a, saying: ~a."
+                              (format (random-elem seen-phrases) person seen)
+                              message)
+                 (random-elem haventseen-responses)))))))
+                              
+(define (what-is message) (*-is 'what message))
+(define (where-is message) (*-is 'where message))
+(define (who-is message) (*-is 'what message))
 
 (define pattern-handlers
   `((WHATIS . ,what-is)
@@ -169,7 +189,7 @@
     (WHOIS . ,who-is)
     (WHEREIS . ,where-is)
     (QUIET . ,quiet)
+    (SEEN . ,seen)
     (LISTEN . ,listen)
     (LEARN . ,learn)
     (EVALUATE . ,evaluate)))
-
