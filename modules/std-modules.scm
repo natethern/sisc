@@ -45,7 +45,8 @@
 
 (module misc
     (wrap-symbol
-     dynamic-freeze)
+     dynamic-freeze
+     define-simple-syntax)
   (include "misc.scm"))
 
 (module debugging

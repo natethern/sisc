@@ -39,3 +39,16 @@
                     (lambda ()
                       (call-with-values (lambda () (apply proc args))
                         call-k)))))))))))
+
+;; Nice macro to make the other macros look like simple function defines.
+;; e.g.
+;; (define-simple-syntax (when condition body ...)
+;;   (if condition
+;;       (begin body ...)))
+(define-syntax define-simple-syntax
+  (syntax-rules ()
+    ((_ (name . args) body ...)
+     (define-syntax name
+       (syntax-rules ()
+         ((name . args)
+          body ...))))))
