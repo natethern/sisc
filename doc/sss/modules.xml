@@ -561,7 +561,6 @@
         serialization and during printing to detect cycles in data
         and code structures.
       </para>
-    </sect2>
       <sect3>
         <title>Deserializer methods</title>
         <para>
