@@ -597,6 +597,30 @@
         </blockquote>
       </para>
     </blockquote>
+    <para>
+      Finally, a thread (including the main thread) may sleep for
+      a specified amount of time, allowing other threads to 
+      execute in the mean time.  If no other threads are running, 
+      sleeping effectively pauses the program for the given time period.
+    </para>
+    <blockquote>
+      <para id="func-sleep">
+        <indexterm><primary>sleep</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>sleep</methodname>
+          <methodparam><parameter>milliseconds</parameter></methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Causes the currently executing thread to sleep for the
+            given number of milliseconds, specified as an exact integer.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
   </sect1>
   <sect1 id="Synchronization">
     <title>
