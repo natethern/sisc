@@ -126,7 +126,7 @@ public class SchemeAppServlet extends SchemeServletBase {
                            HttpServletResponse response)
         throws IOException, ServletException {
 
-        sisc.compiler.Parser p = new sisc.compiler.Parser(new sisc.compiler.Lexer());
+        sisc.reader.Parser p = new sisc.reader.Parser(new sisc.reader.Lexer());
         InputPort inp = new ReaderInputPort(new BufferedReader(new InputStreamReader(request.getInputStream())));
 
         Interpreter r = Context.enter(appName);
