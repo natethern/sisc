@@ -555,6 +555,84 @@
 	specified in <xref linkend="threadsemantics"/>.
       </para>
     </sect2>
+    <sect2 id="ImmutableTypes">
+      <title>
+	Immutable types
+      </title>
+      <para>
+	&SISC; follows the &R5RS;
+	recommendation of immutable list, string, and vector
+	constants. Quoted lists and vectors are
+	immutable. Attempting to modify elements in these constants
+	will raise an error. String constants are immutable as well
+	when created with
+	<function>symbol-&gt;string</function>.
+      </para>
+    </sect2>
+  </sect1>
+  <sect1 id="Equivalence">
+    <title>
+      Equivalence
+    </title>
+    <para>
+      &SISC;'s storage model maintains true pointer equality between
+      symbols, booleans, the end-of-file object, void, and the empty
+      list.  Thus two instances of any of those types is guaranteed to
+      return <literal>#t</literal> from <function>eq?</function> if they
+      would have produced <literal>#t</literal> from
+      <function>equal?</function>.  
+    </para>
+    <para>
+      Numbers and characters are not pointer equal ordinarily (unless actually
+      occupying the same storage).  &SISC; will return 
+      <literal>#t</literal> from <function>eqv?</function>
+      if two numbers are both exact, or both 
+      inexact, and are numerically equal.  Two characters are
+      equivalent from <function>eqv?</function> if they occupy the
+      same code-point in the unicode character set.  This is the behavior
+      specified by &R5RS;.  
+    </para>
+    <para>
+      Strings, vectors, lists, and boxes are containers for other
+      Scheme types.  As such they are not pointer equal unless they
+      are referenced by two variables that point to the same storage
+      location (i.e. they are actually pointer equal).  &SISC; holds
+      that only <function>equal?</function> will return
+      <literal>#t</literal> if two objects are the
+      same type and their contents contain equivalent values with respect to
+      <function>equal?</function>.  
+    </para>
+  </sect1>
+  <sect1 id="syntax">
+    <title>
+      Syntax and Lexical Structure
+    </title>
+    <sect2 id="comments">
+      <title>Comments</title>
+      <para>
+        In addition to the single line comments of the Scheme
+        standard, &SISC; supports both <emphasis>s-expression
+        commenting</emphasis> and <emphasis>nested, multiline comments</emphasis>.  An s-expression comment is used to
+        comment out an entire s-expression.  To do this, the sharp
+        sequence <literal>#;</literal> is used.  It extends the &R5RS;
+        grammar with the following production:
+        <programlisting>
+&lt;expression-comment&gt; --&gt; #;&lt;datum&gt;
+        </programlisting>
+      </para>
+      <para>
+        The reader, upon encountering this sharp sequence, will read
+        and discard the next datum.
+      </para>
+      <para>
+        Nested, multiline comments are as defined in SRFI-30.
+        Briefly, a multiline comment begins with the sharp sequence
+        <literal>#|</literal> and ends with the sequence
+        <literal>|#</literal>.  The comment may contain nested
+        comments as well.  Unfortunately, this extension cannot be
+        represented in a stateless grammar for the lexical structure.
+      </para>
+    </sect2>
     <sect2 id="SharedStructures">
       <title>
 	Shared Structures
@@ -657,150 +735,180 @@
           time of this writing, the SRFI is in draft.
         </para>
       </sect3>
-    </sect2>
-    <sect2 id="ImmutableTypes">
+    </sect2>   
+    <sect2 id="ControlFeatures">
       <title>
-	Immutable types
+        Control Features
       </title>
       <para>
-	&SISC; follows the &R5RS;
-	recommendation of immutable list, string, and vector
-	constants. Quoted lists and vectors are
-	immutable. Attempting to modify elements in these constants
-	will raise an error. String constants are immutable as well
-	when created with
-	<function>symbol-&gt;string</function>.
+        In addition to the &R5RS; standard control features, two
+        additional forms, 
+        <function>when</function> and <function>unless</function>, are
+        supported by &SISC;.
+      </para>
+      <para>
+        <blockquote>
+          <para>
+            <indexterm><primary>when</primary>
+            </indexterm>
+            &syntax;
+            <methodsynopsis language="scheme" id="when">
+              <type>value</type>
+              <methodname>when</methodname>
+              <methodparam>
+                <parameter>condition</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>expression</parameter>
+              </methodparam>
+              <methodparam choice="opt" rep="repeat">
+                <parameter>expressions</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Evaluates <parameter>condition</parameter>, an
+                expression.  If true, the expressions that follow are
+                evaluated, in order, the value of the last being
+                returned.  If not true, the result is unspecified.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>unless</primary>
+            </indexterm>
+            &syntax;
+            <methodsynopsis language="scheme" id="unless">
+              <type>value</type>
+              <methodname>unless</methodname>
+              <methodparam>
+                <parameter>condition</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>expression</parameter>
+              </methodparam>
+              <methodparam choice="opt" rep="repeat">
+                <parameter>expressions</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Evaluates <parameter>condition</parameter>, an
+                expression.  If false, the expressions that follow are
+                evaluated, in order, the value of the last being
+                returned.  If true, the result is unspecified.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
       </para>
     </sect2>
-    <sect2 id="comments">
-      <title>Comments</title>
+    <sect2>
+      <title>
+        Syntactic Extension
+      </title>
       <para>
-        In addition to the single line comments of the Scheme
-        standard, &SISC; supports both <emphasis>s-expression
-        commenting</emphasis> and <emphasis>nested, multiline comments</emphasis>.  An s-expression comment is used to
-        comment out an entire s-expression.  To do this, the sharp
-        sequence <literal>#;</literal> is used.  It extends the &R5RS;
-        grammar with the following production:
-        <programlisting>
-&lt;expression-comment&gt; --&gt; #;&lt;datum&gt;
-        </programlisting>
+        &SISC; provides a hygienic macro system that fully conforms to
+        the &R5RS; standard.  The macro system is provided by the
+        portable syntax-case macro expander.  In addition to &R5RS;
+        macros, the expander provides a more flexible 
+        macro definition tool called
+        <function>syntax-case</function>.  A full description of the
+        capabilities of the expander is best found in the 
+        <ulink url="http://www.scheme.com/csug.html">
+  	<citetitle>Chez Scheme Users Guide</citetitle>
+        </ulink>, specifically 
+        <ulink url="http://www.scheme.com/csug/syntax.html#g2154">
+  	<citetitle>Section 9.2, Syntax-Case</citetitle>
+        </ulink>.  
       </para>
       <para>
-        The reader, upon encountering this sharp sequence, will read
-        and discard the next datum.
+        In addition, &SISC; supports non-hygienic, legacy macro support
+        in two forms; <function>define-macro</function> and 
+        <function>defmacro</function>.  These forms, found in older
+        Scheme code written for R<superscript>4</superscript>RS
+        compliant Scheme systems, should be used only
+        for executing legacy code which relies on it.  New code should
+        use the safer and more flexible <function>syntax-case</function>
+        or the standard <function>syntax-rules</function> macros.
       </para>
       <para>
-        Nested, multiline comments are as defined in SRFI-30.
-        Briefly, a multiline comment begins with the sharp sequence
-        <literal>#|</literal> and ends with the sequence
-        <literal>|#</literal>.  The comment may contain nested
-        comments as well.  Unfortunately, this extension cannot be
-        represented in a stateless grammar for the lexical structure.
+        <blockquote>
+          <para>
+            <indexterm><primary>define-macro</primary>
+            </indexterm>
+            &syntax;
+            <methodsynopsis language="scheme" id="define-macro">    
+              <methodname>define-macro</methodname>
+              <methodparam><parameter>(name . args)</parameter>
+              </methodparam>
+               <methodparam rep="repeat"><parameter>body</parameter>
+              </methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            &syntax;
+            <methodsynopsis language="scheme" id="define-macro2">    
+              <methodname>define-macro</methodname>
+              <methodparam><parameter>name</parameter>
+              </methodparam>
+              <methodparam><parameter>transformer</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                In the first form, <function>define-macro</function>
+                creates a macro transformer bound to
+                <parameter>name</parameter>, which when applied will
+                have raw s-expressions bound to one or more parameters
+                (<parameter>args</parameter>).  The <literal>(name
+                . args)</literal> name and formal parameter form is
+                identical to the short form for procedure definition
+                with <function>define</function>.
+              </para>
+              <para>
+                The transformer's body will then, using the s-expressions bound
+                to its arguments, return a new s-expression that is the
+                result of the macro transformation.
+              </para>
+              <para>
+                The second form binds an arbitrary procedure to the
+                syntactic keyword <literal>name</literal>, using that
+                procedure to transform occurences of that named syntax
+                during future evaluations.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>defmacro</primary>
+            </indexterm>
+            &syntax;
+            <methodsynopsis language="scheme" id="defmacro">    
+              <methodname>defmacro</methodname>
+              <methodparam><parameter>name</parameter>
+              </methodparam>
+              <methodparam><parameter>args</parameter>
+              </methodparam>
+              <methodparam rep="repeat"><parameter>body</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                <function>defmacro</function> is another macro
+                definition form supported by some Scheme systems.  Its
+                semantics are equivalent to:
+                <programlisting>
+(define-macro (name . args) body ...)
+                </programlisting>
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
       </para>
     </sect2>
-  </sect1>
-  <sect1 id="Equivalence">
-    <title>
-      Equivalence
-    </title>
-    <para>
-      &SISC;'s storage model maintains true pointer equality between
-      symbols, booleans, the end-of-file object, void, and the empty
-      list.  Thus two instances of any of those types is guaranteed to
-      return <literal>#t</literal> from <function>eq?</function> if they
-      would have produced <literal>#t</literal> from
-      <function>equal?</function>.  
-    </para>
-    <para>
-      Numbers and characters are not pointer equal ordinarily (unless actually
-      occupying the same storage).  &SISC; will return 
-      <literal>#t</literal> from <function>eqv?</function>
-      if two numbers are both exact, or both 
-      inexact, and are numerically equal.  Two characters are
-      equivalent from <function>eqv?</function> if they occupy the
-      same code-point in the unicode character set.  This is the behavior
-      specified by &R5RS;.  
-    </para>
-    <para>
-      Strings, vectors, lists, and boxes are containers for other
-      Scheme types.  As such they are not pointer equal unless they
-      are referenced by two variables that point to the same storage
-      location (i.e. they are actually pointer equal).  &SISC; holds
-      that only <function>equal?</function> will return
-      <literal>#t</literal> if two objects are the
-      same type and their contents contain equivalent values with respect to
-      <function>equal?</function>.  
-    </para>
-  </sect1>
-  <sect1 id="ControlFeatures">
-    <title>
-      Control Features
-    </title>
-    <para>
-      In addition to the &R5RS; standard control features, two
-      additional forms, 
-      <function>when</function> and <function>unless</function>, are
-      supported by &SISC;.
-    </para>
-    <para>
-      <blockquote>
-        <para>
-          <indexterm><primary>when</primary>
-          </indexterm>
-          &syntax;
-          <methodsynopsis language="scheme" id="when">
-            <type>value</type>
-            <methodname>when</methodname>
-            <methodparam>
-              <parameter>condition</parameter>
-            </methodparam>
-            <methodparam>
-              <parameter>expression</parameter>
-            </methodparam>
-            <methodparam choice="opt" rep="repeat">
-              <parameter>expressions</parameter>
-            </methodparam>
-          </methodsynopsis>
-          <blockquote>
-            <para>
-              Evaluates <parameter>condition</parameter>, an
-              expression.  If true, the expressions that follow are
-              evaluated, in order, the value of the last being
-              returned.  If not true, the result is unspecified.
-            </para>
-          </blockquote>
-        </para>
-        <para>
-          <indexterm><primary>unless</primary>
-          </indexterm>
-          &syntax;
-          <methodsynopsis language="scheme" id="unless">
-            <type>value</type>
-            <methodname>unless</methodname>
-            <methodparam>
-              <parameter>condition</parameter>
-            </methodparam>
-            <methodparam>
-              <parameter>expression</parameter>
-            </methodparam>
-            <methodparam choice="opt" rep="repeat">
-              <parameter>expressions</parameter>
-            </methodparam>
-          </methodsynopsis>
-          <blockquote>
-            <para>
-              Evaluates <parameter>condition</parameter>, an
-              expression.  If false, the expressions that follow are
-              evaluated, in order, the value of the last being
-              returned.  If true, the result is unspecified.
-            </para>
-          </blockquote>
-        </para>
-      </blockquote>
-    </para>
   </sect1>
   <sect1 id="ErrorHandling">
-    <title>Error Handling</title>
+    <title>Errors and Error Handling</title>
     <para>
       Errors can be raised by primitives in libraries and Scheme-level
       code. &SISC; provides a sophisticated mechanism for handling
@@ -1568,67 +1676,67 @@
         <function>with-failure-continuation</function> expression.
       </para>
     </sect2>
-  </sect1>
-  <sect1 id="DynamicWind">
-    <title><function>dynamic-wind</function></title>
-    <para>
-      &R5RS; does not specify the behavior of
-      <function>dynamic-wind</function> in the case
-      where an error is raised while evaluating the 
-      <emphasis>during</emphasis> thunk.  &SISC; chooses to view
-      an error raised in that section as an instance of the
-      dynamic extent being exited.  In other words, if an error is
-      raised in the dynamic extent of a dynamic-wind expression,
-      &SISC; will ensure that the <emphasis>after</emphasis> thunk
-      is evaluated before the error is propagated to the
-      failure-continuation of the dynamic-wind expression.
-    </para>
-    <example>
-      <title>Errors and <function>dynamic-wind</function></title>
-      <programlisting>
+    <sect2 id="DynamicWind">
+      <title><function>dynamic-wind</function></title>
+      <para>
+        &R5RS; does not specify the behavior of
+        <function>dynamic-wind</function> in the case
+        where an error is raised while evaluating the 
+        <emphasis>during</emphasis> thunk.  &SISC; chooses to view
+        an error raised in that section as an instance of the
+        dynamic extent being exited.  In other words, if an error is
+        raised in the dynamic extent of a dynamic-wind expression,
+        &SISC; will ensure that the <emphasis>after</emphasis> thunk
+        is evaluated before the error is propagated to the
+        failure-continuation of the dynamic-wind expression.
+      </para>
+      <example>
+        <title>Errors and <function>dynamic-wind</function></title>
+        <programlisting>
 (define x 0)
 (dynamic-wind (lambda () (set! x (+ x 1)))
               (lambda () (/ 1 0))
               (lambda () (set! x (+ x 1))))
 
 ; =&gt; A divide by zero error is raised, and the value of x is 2
-      </programlisting>
-    </example>
-    <para>
-      If an error is raised in either the
-      <emphasis>before</emphasis> or <emphasis>after</emphasis>
-      thunks, no additional measures are taken.  The error is
-      propagated to the failure-continuation of the dynamic-wind
-      as if the dynamic-wind call was an ordinary function
-      application.  Explicitly, if an error is raised from
-      <emphasis>before</emphasis>, neither
-      <emphasis>during</emphasis> nor <emphasis>after</emphasis>
-      will be executed.  If an error is raised in
-      <emphasis>after</emphasis>, the results of evaluating
-      <emphasis>before</emphasis> and <emphasis>during</emphasis>
-      remain valid.  
-    </para>
-    <para>
-      Also noteworthy is what happens if a continuation is invoked
-      that exits from either the <emphasis>before</emphasis> or
-      <emphasis>after</emphasis> thunks.  Such a case is treated
-      just as if a continuation was invoked during the evaluation
-      of an operand to an application.  This is to say that no
-      additional steps will be taken by &SISC;.  If
-      <emphasis>before</emphasis> is escaped by a continuation invocation,
-      neither <emphasis>during</emphasis> nor <emphasis>after</emphasis>
-      will be executed.  If <emphasis>after</emphasis> is escaped,
-      the results of <emphasis>before</emphasis> and
-      <emphasis>during</emphasis> remain valid.
-    </para>
-    <para>
-      In summary, extraordinary evaluation is only possible during
-      the evaluation of the <emphasis>during</emphasis> thunk. The
-      <emphasis>before</emphasis> and <emphasis>after</emphasis>
-      thunks are evaluated with the dynamic environment and
-      dynamic-wind stack of the call to dynamic-wind itself.
-    </para>
-  </sect1>
+        </programlisting>
+      </example>
+      <para>
+        If an error is raised in either the
+        <emphasis>before</emphasis> or <emphasis>after</emphasis>
+        thunks, no additional measures are taken.  The error is
+        propagated to the failure-continuation of the dynamic-wind
+        as if the dynamic-wind call was an ordinary function
+        application.  Explicitly, if an error is raised from
+        <emphasis>before</emphasis>, neither
+        <emphasis>during</emphasis> nor <emphasis>after</emphasis>
+        will be executed.  If an error is raised in
+        <emphasis>after</emphasis>, the results of evaluating
+        <emphasis>before</emphasis> and <emphasis>during</emphasis>
+        remain valid.  
+      </para>
+      <para>
+        Also noteworthy is what happens if a continuation is invoked
+        that exits from either the <emphasis>before</emphasis> or
+        <emphasis>after</emphasis> thunks.  Such a case is treated
+        just as if a continuation was invoked during the evaluation
+        of an operand to an application.  This is to say that no
+        additional steps will be taken by &SISC;.  If
+        <emphasis>before</emphasis> is escaped by a continuation invocation,
+        neither <emphasis>during</emphasis> nor <emphasis>after</emphasis>
+        will be executed.  If <emphasis>after</emphasis> is escaped,
+        the results of <emphasis>before</emphasis> and
+        <emphasis>during</emphasis> remain valid.
+      </para>
+      <para>
+        In summary, extraordinary evaluation is only possible during
+        the evaluation of the <emphasis>during</emphasis> thunk. The
+        <emphasis>before</emphasis> and <emphasis>after</emphasis>
+        thunks are evaluated with the dynamic environment and
+        dynamic-wind stack of the call to dynamic-wind itself.
+      </para>
+    </sect2>
+   </sect1>
   <sect1 id="SymbolicEnvironments">
     <title>
       Symbolic Environments and Property Maps
@@ -1833,109 +1941,6 @@
         binding and set it to the new value.
       </para>
     </sect2>
-  </sect1>
-  <sect1>
-    <title>
-      Syntactic Extension
-    </title>
-    <para>
-      &SISC; provides a hygienic macro system that fully conforms to
-      the &R5RS; standard.  The macro system is provided by the
-      portable syntax-case macro expander.  In addition to &R5RS;
-      macros, the expander provides a more flexible 
-      macro definition tool called
-      <function>syntax-case</function>.  A full description of the
-      capabilities of the expander is best found in the 
-      <ulink url="http://www.scheme.com/csug.html">
-	<citetitle>Chez Scheme Users Guide</citetitle>
-      </ulink>, specifically 
-      <ulink url="http://www.scheme.com/csug/syntax.html#g2154">
-	<citetitle>Section 9.2, Syntax-Case</citetitle>
-      </ulink>.  
-    </para>
-    <para>
-      In addition, &SISC; supports non-hygienic, legacy macro support
-      in two forms; <function>define-macro</function> and 
-      <function>defmacro</function>.  These forms, found in older
-      Scheme code written for R<superscript>4</superscript>RS
-      compliant Scheme systems, should be used only
-      for executing legacy code which relies on it.  New code should
-      use the safer and more flexible <function>syntax-case</function>
-      or the standard <function>syntax-rules</function> macros.
-    </para>
-    <para>
-      <blockquote>
-        <para>
-          <indexterm><primary>define-macro</primary>
-          </indexterm>
-          &syntax;
-          <methodsynopsis language="scheme" id="define-macro">    
-            <methodname>define-macro</methodname>
-            <methodparam><parameter>(name . args)</parameter>
-            </methodparam>
-            <methodparam rep="repeat"><parameter>body</parameter>
-            </methodparam>
-          </methodsynopsis>
-        </para>
-        <para>
-          &syntax;
-          <methodsynopsis language="scheme" id="define-macro2">    
-            <methodname>define-macro</methodname>
-            <methodparam><parameter>name</parameter>
-            </methodparam>
-            <methodparam><parameter>transformer</parameter>
-            </methodparam>
-          </methodsynopsis>
-          <blockquote>
-            <para>
-              In the first form, <function>define-macro</function>
-              creates a macro transformer bound to
-              <parameter>name</parameter>, which when applied will
-              have raw s-expressions bound to one or more parameters
-              (<parameter>args</parameter>).  The <literal>(name
-              . args)</literal> name and formal parameter form is
-              identical to the short form for procedure definition
-              with <function>define</function>.
-            </para>
-            <para>
-              The transformer's body will then, using the s-expressions bound
-              to its arguments, return a new s-expression that is the
-              result of the macro transformation.
-            </para>
-            <para>
-              The second form binds an arbitrary procedure to the
-              syntactic keyword <literal>name</literal>, using that
-              procedure to transform occurences of that named syntax
-              during future evaluations.
-            </para>
-          </blockquote>
-        </para>
-        <para>
-          <indexterm><primary>defmacro</primary>
-          </indexterm>
-          &syntax;
-          <methodsynopsis language="scheme" id="defmacro">    
-            <methodname>defmacro</methodname>
-            <methodparam><parameter>name</parameter>
-            </methodparam>
-            <methodparam><parameter>args</parameter>
-            </methodparam>
-            <methodparam rep="repeat"><parameter>body</parameter>
-            </methodparam>
-          </methodsynopsis>
-          <blockquote>
-            <para>
-              <function>defmacro</function> is another macro
-              definition form supported by some Scheme systems.  Its
-              semantics are equivalent to:
-              <programlisting>
-(define-macro (name . args) body ...)
-              </programlisting>
-            </para>
-          </blockquote>
-        </para>
-      </blockquote>
-    </para>
   </sect1>
   <sect1 id="MiscellaneousFunctions">
     <title>
