@@ -36,12 +36,12 @@
                                    *module* (quote def)))
 		     ...))))))))
 
-(native-module logicops-module   "sisc.modules.SLogicOps")
-(native-module networking-module "sisc.modules.SNetwork")
-(native-module threading-module  "sisc.modules.SThread")
-(native-module debug-module      "sisc.debug.SDebug")
-(native-module s2j-module        "sisc.modules.S2J")
-(native-module hashtable-module  "sisc.modules.SHashtable")
+(native-module logicops   "sisc.modules.SLogicOps")
+(native-module networking "sisc.modules.SNetwork")
+(native-module threading  "sisc.modules.SThread")
+(native-module debugging  "sisc.debug.SDebug")
+(native-module s2j        "sisc.modules.S2J")
+(native-module hashtable  "sisc.modules.SHashtable")
 
 (module hashtable
   (make-hashtable
@@ -56,7 +56,7 @@
    hashtable/keys
    hashtable/for-each
    hashtable/map)
-  (import hashtable-module)
+  (import hashtable)
   (include "../modules/hashtable.scm"))
 
 (module threads
@@ -88,7 +88,7 @@
    monitor/notify-all
    monitor/synchronize
    monitor/synchronize-unsafe)
-  (import threading-module)
+  (import threading)
   (include "../modules/thread.scm"))
 
 (module generic-procedures
@@ -111,7 +111,7 @@
    generic-java-procedure
    generic-java-constructor
    make)
-  (import s2j-module)
+  (import s2j)
   (import hashtable)
   (import threads)
   (include "../modules/generic-procedures.scm"))
@@ -182,7 +182,7 @@
    <void>
    <symbol>
    <object>)
-  (import s2j-module)
+  (import s2j)
   (import generic-procedures)
   (include "../modules/s2j.scm")
   (define (java-class name)

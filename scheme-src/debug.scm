@@ -1,4 +1,4 @@
-(import debug-module)
+(import debugging)
 
 (define (get-last-error)
   (getprop 'last-error '*sisc*))

@@ -154,11 +154,12 @@ public class Parser extends Util implements Tokens {
 	    }
 
             o=readList(is, state, def);
-	    if (annotate && o instanceof Pair && line>=0) 
+	    if (annotate && o instanceof Pair && line>=0) {
 		o=new AnnotatedExpr((Expression)o, 
 				    list(new Pair(LINE, Quantity.valueOf(line)),
 					 new Pair(COLUMN, Quantity.valueOf(col)),
 					 new Pair(FILE, new SchemeString(file))));
+            } 
 	    return o;
         case TT_ENDPAIR:
             o=ENDPAIR;

@@ -237,6 +237,11 @@
 	</para>
       </blockquote>
     </para>
+    <note>
+      <para>
+        This interface complies with SRFI-6 (Basic String Ports).
+      </para>
+    </note>
   </sect1>
   <sect1 id="PrettyPrinting">
     <title>

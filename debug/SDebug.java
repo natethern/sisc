@@ -51,8 +51,8 @@ public class SDebug extends ModuleAdapter {
         ANNOTATIONEXPR=10, ANNOTATIONQ=11, ANNOTATION=8, ANNOTATIONKEYS=9,
         EMITANNOTATIONS=12, ERROR_CONT_K=13, SETANNOTATION=14,
         ANNOTATIONSRC=15, ANNOTATIONSTRIPPED=16, SETANNOTATIONSTRIPPED=17, 
-        FILLRIBQ=18, FILLRIBEXP=19, FREEXPQ=20, FRESYM=21;
-    
+        FILLRIBQ=18, FILLRIBEXP=19, FREEXPQ=20, FRESYM=21, MAKEANNOTATION=22;
+
     public SDebug() {
         define("emit-annotations", EMITANNOTATIONS);
         define("express", EXPRESSV);
@@ -76,6 +76,7 @@ public class SDebug extends ModuleAdapter {
         define("_fill-rib-exp", FILLRIBEXP);
         define("_free-reference-exp?", FREEXPQ);
         define("_free-reference-symbol", FRESYM);
+        define("make-annotation", MAKEANNOTATION);
     }
 
     class SISCExpression extends Value {
@@ -208,6 +209,10 @@ public class SDebug extends ModuleAdapter {
             }
         case 3:
             switch(primid) {
+            case MAKEANNOTATION:
+                AnnotatedExpr ae=new AnnotatedExpr(f.vlr[0], f.vlr[1]);
+                ae.stripped=f.vlr[2];
+                return ae;
             case ANNOTATION:
                 return f.vlr[0].getAnnotation(symbol(f.vlr[1]), f.vlr[2]);
             case SETANNOTATION:

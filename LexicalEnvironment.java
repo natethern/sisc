@@ -53,7 +53,7 @@ public class LexicalEnvironment extends Value {
         if (c.arity) {
 	    int sm1=s-1;
             if (v.length < sm1) 
-		error(r, liMessage(SISCB,"notenoughargsto", c.write(), sm1, 
+		error(r, liMessage(SISCB,"notenoughargstoinf", c.write(), sm1, 
 				   v.length));
 
 	    if (v.length>=s) {

@@ -90,7 +90,7 @@ public class Compiler extends Util {
         extendenv(menv,"quote", QUOTE);
         extendenv(menv,"set!", SET);
         extendenv(menv,"define", DEFINE);
-	extendenv(menv,"make-annotation", MAKEANNOTATION);
+	extendenv(menv,"compile-in-annotation", MAKEANNOTATION);
         return menv;
     }
 
@@ -214,6 +214,7 @@ public class Compiler extends Util {
                 expr=(Pair)expr.cdr;
                 if (expr.cdr != EMPTYLIST)
                     expr=list(new Pair(Util.BEGIN, expr));
+
                 tmp=compile(r, expr.car, new ReferenceEnv(formals, rt),
                             TAIL | LAMBDA | REALTAIL, env, null);
 

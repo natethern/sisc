@@ -1,3 +1,8 @@
+2002-03-31  Scott G. Miller	<scgmille@freenetproject.org>
+
+	* Removed J2S and javaValue functionality, which has been
+	  completely replaced by S2J
+
 2002-03-31  Matthias Radestock  <matthias@sorted.org>
 
 	* Made hashtables thread-safe.

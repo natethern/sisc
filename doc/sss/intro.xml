@@ -171,8 +171,8 @@
 	linkend="Modules"/>).  Sections that describe functions in
 	modules will have a <emphasis>requires</emphasis> statement
 	indicating the statement that must be evaluated to make those
-	functions available in the Scheme environment.  The require
-	statement will apear as follows:
+	functions available in the Scheme environment.  The requires
+	statement will appear as follows:
       </para>
       <para>
 	&requires; 
