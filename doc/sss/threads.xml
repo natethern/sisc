@@ -145,6 +145,8 @@
     </para>
     <blockquote>
       <para>
+        <indexterm><primary>thread?</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>&num;t/&num;f</type>
@@ -159,6 +161,8 @@
         </blockquote>
       </para>
       <para id="func-thread-new">
+        <indexterm><primary>thread/new</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>thread-handle</type>
@@ -182,6 +186,8 @@
     </para>
     <blockquote>
       <para id="func-thread-start">
+        <indexterm><primary>thread/start</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>undefined</type>
@@ -209,6 +215,8 @@
     </para>
     <blockquote>
       <para id="func-thread-state">
+        <indexterm><primary>thread/state</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>symbol</type>
@@ -240,6 +248,8 @@
     </para>
     <blockquote>
       <para>
+        <indexterm><primary>thread/join</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>boolean</type>
@@ -286,6 +296,8 @@
     </para>
     <blockquote>
       <para>
+        <indexterm><primary>thread/interrupt</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>undefined</type>
@@ -347,6 +359,8 @@
     </para>
     <blockquote>
       <para id="func-thread-result">
+        <indexterm><primary>thread/result</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>value</type>
@@ -379,6 +393,8 @@
     </para>
     <blockquote>
       <para id="func-parallel">
+        <indexterm><primary>parallel</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>multiple values</type>
@@ -447,6 +463,8 @@
     </para>
     <blockquote>
       <para id="func-thread-priority">
+        <indexterm><primary>thread/priority</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>integer</type>
@@ -462,6 +480,8 @@
         </blockquote>
       </para>
       <para id="func-thread-priority-bang">
+        <indexterm><primary>thread/priority!</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>undefined</type>
@@ -491,6 +511,8 @@
     </para>
     <blockquote>
       <para id="func-thread-yield">
+        <indexterm><primary>thread/yield</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>undefined</type>
@@ -548,6 +570,8 @@
     </para>
     <blockquote>
       <para>
+        <indexterm><primary>monitor?</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>&num;t/&num;f</type>
@@ -562,6 +586,8 @@
         </blockquote>
       </para>
       <para id="func-monitor-new">
+        <indexterm><primary>monitor/new</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>monitor</type>
@@ -575,6 +601,8 @@
         </blockquote>
       </para>
       <para>
+        <indexterm><primary>monitor-of</primary>
+        </indexterm>
         &procedure;
         <methodsynopsis language="scheme">
           <type>monitor</type>
@@ -609,6 +637,8 @@
       </para>
       <blockquote>
         <para id="func-monitor-lock">
+          <indexterm><primary>monitor/lock</primary>
+          </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
             <type>undefined</type>
@@ -625,6 +655,8 @@
           </blockquote>
         </para>
         <para id="func-monitor-unlock">
+          <indexterm><primary>monitor/unlock</primary>
+          </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
             <type>undefined</type>
@@ -684,6 +716,8 @@
       </para>
       <blockquote>
         <para id="func-monitor-wait">
+          <indexterm><primary>monitor/wait</primary>
+          </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
             <type>undefined</type>
@@ -721,6 +755,8 @@
       </para>
       <blockquote>
         <para id="func-monitor-notify">
+          <indexterm><primary>monitor/notify</primary>
+          </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
             <type>undefined</type>
@@ -739,6 +775,8 @@
           </blockquote>
         </para>
         <para id="func-monitor-notify-all">
+          <indexterm><primary>monitor/notify-all</primary>
+          </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
             <type>undefined</type>
@@ -769,6 +807,8 @@
 	</para>
       <blockquote>
         <para id="func-monitor-synchronize">
+          <indexterm><primary>monitor/synchronize</primary>
+          </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
             <type>value</type>
@@ -790,6 +830,8 @@
           </blockquote>
         </para>
         <para id="func-monitor-synchronize-unsafe">
+          <indexterm><primary>monitor/synchronize-unsafe</primary>
+          </indexterm>
           &procedure;
           <methodsynopsis language="scheme">
             <type>value</type>

@@ -71,6 +71,8 @@
 	<para>
 	  <blockquote>
 	    <para>
+              <indexterm><primary>min-precision</primary>
+              </indexterm>
 	      &parameter;
 	      <methodsynopsis language="scheme" id="min-precision">
 		<type>integer</type>
@@ -87,6 +89,8 @@
 	      </blockquote>
 	    </para>
 	    <para>
+              <indexterm><primary>max-precision</primary>
+              </indexterm>
 	      &parameter;
 	      <methodsynopsis language="scheme" id="max-precision">
 		<type>integer</type>

@@ -32,7 +32,9 @@
       <para>
         <blockquote>
           <para>
-              &procedure;
+            <indexterm><primary>logand</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>integer</type>
               <methodname>logand</methodname>
@@ -49,7 +51,9 @@
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>logor</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>integer</type>
               <methodname>logor</methodname>
@@ -66,7 +70,9 @@
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>logxor</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>integer</type>
               <methodname>logxor</methodname>
@@ -83,7 +89,9 @@
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>lognot</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>integer</type>
               <methodname>lognot</methodname>
@@ -108,7 +116,9 @@
       <para>
         <blockquote>
           <para>
-              &procedure;
+            <indexterm><primary>ashl</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>integer</type>
               <methodname>ashl</methodname>
@@ -123,7 +133,9 @@
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>ashr</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>integer</type>
               <methodname>ashr</methodname>
@@ -191,7 +203,9 @@ r / 2<superscript>s</superscript>
         </para>
         <blockquote>
           <para>
-              &procedure;
+            <indexterm><primary>make-hashtable</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>hashtable</type>
               <methodname>make-hashtable</methodname>
@@ -208,7 +222,9 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>hashtable?</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>&num;t/&num;f</type>
               <methodname>hashtable?</methodname>
@@ -222,7 +238,9 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>alist-&gt;hashtable</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>hashtable</type>
               <methodname>alist-&gt;hashtable</methodname>
@@ -244,7 +262,9 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>hashtable-&gt;alist</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>alist</type>
               <methodname>hashtable-&gt;alist</methodname>
@@ -276,7 +296,9 @@ r / 2<superscript>s</superscript>
         </para>
         <blockquote>
           <para>
-              &procedure;
+            <indexterm><primary>hashtable/put!</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>hashtable/put!</methodname>
@@ -300,7 +322,9 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>hashtable/get</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>hashtable/get</methodname>
@@ -321,8 +345,10 @@ r / 2<superscript>s</superscript>
               </para>
             </blockquote>
           </para>
-          <para>
-              &procedure;
+          <para>    
+            <indexterm><primary>hashtable/get!</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>hashtable/get!</methodname>
@@ -346,7 +372,9 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>hashtable/remove!</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>hashtable/remove!</methodname>
@@ -377,7 +405,7 @@ r / 2<superscript>s</superscript>
         </para>
         <blockquote>
           <para>
-              &procedure;
+            &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname></methodname>
@@ -410,7 +438,9 @@ r / 2<superscript>s</superscript>
         </para>
         <blockquote>
           <para>
-              &procedure;
+            <indexterm><primary>hashtable/clear!</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <void/>
               <methodname>hashtable/clear!</methodname>
@@ -423,7 +453,9 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>hashtable/keys</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>list</type>
               <methodname>hashtable/keys</methodname>
@@ -436,7 +468,9 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>hashtable/for-each</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <void/>
               <methodname>hashtable/for-each</methodname>
@@ -453,7 +487,9 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>hashtable/map</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>list</type>
               <methodname>hashtable/map</methodname>
@@ -494,7 +530,9 @@ r / 2<superscript>s</superscript>
       <para>
         <blockquote>
           <para>
-              &procedure;
+            <indexterm><primary>buffer?</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>&num;t/&num;f</type>
               <methodname>buffer?</methodname>
@@ -508,7 +546,9 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>make-buffer</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>buffer</type>
               <methodname>make-buffer</methodname>
@@ -529,7 +569,9 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>buffer</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>buffer</type>
               <methodname>buffer</methodname>
@@ -546,7 +588,9 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>buffer-length</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>fixed integer</type>
               <methodname>buffer-length</methodname>
@@ -560,6 +604,8 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
           <para>
+            <indexterm><primary>buffer-ref</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
               <type>fixed integer</type>
@@ -578,6 +624,8 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
           <para>
+            <indexterm><primary>buffer-set!</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
               <type>undefined</type>
@@ -599,6 +647,8 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
           <para>
+            <indexterm><primary>buffer-copy!</primary>
+            </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
               <type>undefined</type>
@@ -658,7 +708,9 @@ r / 2<superscript>s</superscript>
       <para>
         <blockquote>
           <para>
-              &procedure;
+            <indexterm><primary>procedure-property</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>procedure-property</methodname>
@@ -681,7 +733,9 @@ r / 2<superscript>s</superscript>
         </blockquote>
         <blockquote>
           <para>
-              &procedure;
+            <indexterm><primary>set-procedure-property!</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>set-procedure-property!</methodname>
@@ -705,7 +759,9 @@ r / 2<superscript>s</superscript>
         </blockquote>
         <blockquote>
           <para>
-              &procedure;
+            <indexterm><primary>procedure-property!</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>value</type>
               <methodname>procedure-property!</methodname>
@@ -768,7 +824,9 @@ com/foo/bar/baz/baz3.scm
       <para>
         <blockquote>
           <para>
-              &procedure;
+            <indexterm><primary>require-library</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>undefined</type>
               <methodname>require-library</methodname>
@@ -816,7 +874,9 @@ com/foo/bar/baz/baz3.scm
       <para>
         <blockquote>
           <para>
-              &procedure;
+            <indexterm><primary>library-exists?</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>&num;t/&num;f</type>
               <methodname>library-exists?</methodname>
@@ -831,7 +891,9 @@ com/foo/bar/baz/baz3.scm
             </blockquote>
           </para>
           <para>
-              &procedure;
+            <indexterm><primary>library-loaded?</primary>
+            </indexterm>
+            &procedure;
             <methodsynopsis language="scheme">
               <type>&num;t/&num;f</type>
               <methodname>library-loaded?</methodname>
