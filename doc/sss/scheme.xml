@@ -538,43 +538,16 @@
         Parameters
       </title>
       <para>
-        A parameter is a named thread-local variable that is accessed through
+        A parameter is a named dynamic variable that is accessed through
         a function.  The function, when given no arguments, returns
         the current value of the parameter.  When given an argument,
         the value of the parameter is set to the provided value.  
       </para>
       <para>
-        Parameters are constructed with the
-        <function>parameterize</function> procedure:
-      </para>
-      <para>
-        <indexterm><primary>parameterize</primary>
-        </indexterm>
-        &procedure;
-        <methodsynopsis language="scheme" id="parameterize">
-          <type>parameter</type>
-          <methodname>parameterize</methodname>
-          <methodparam choice="opt">
-            <parameter>initial-value</parameter>
-          </methodparam>
-          <methodparam choice="opt">
-            <parameter>constraint</parameter>
-          </methodparam>
-        </methodsynopsis>
-        <blockquote>
-          <para>
-            Creates a parameter function.  If given, the
-            <parameter>initial-value</parameter> argument specifies
-            the value of the parameter.  If not provided, the initial
-            value is unspecified.
-            <parameter>constraint</parameter>, if given, is a
-            predicate that returns <literal>#t</literal> if a value to
-            which the parameter is being set is a legal value for the
-            parameter.  If the constraint returns
-            <literal>#f</literal>, an error is raised and the
-            parameter retains its old value.
-          </para>
-        </blockquote>
+        &SISC;'s parameters are fully compatible with those specified 
+	by SRFI-39.  Consult the SRFI-39 specification at 
+	<ulink url="http://srfi.schemers.org">srfi.schemers.org</ulink> 
+	for documentation on how to construct and use parameters.
       </para>
     </sect2>
     <sect2 id="SharedStructures">
