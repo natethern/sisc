@@ -18,8 +18,14 @@ public class LibraryBuilder extends Serializer {
     int dupid=0;
     LinkedList entryPoints, newEntryPoints;
     Map names; 
+    boolean includeAEs;
 
     public LibraryBuilder() {
+        this(true);
+    }
+
+    public LibraryBuilder(boolean iae) {
+        includeAEs=iae;
         classes=new HashSet();
         seen=new HashSet();
         duplicates=new HashSet();
@@ -67,7 +73,8 @@ public class LibraryBuilder extends Serializer {
         return entryPoints.indexOf(val);
     }
 
-    public Library buildLibrary(OutputStream out) throws IOException {
+    public Library buildLibrary(String name, 
+                                OutputStream out) throws IOException {
         DataOutputStream datout=new DataOutputStream(out);
 
         //Pass 1
@@ -116,6 +123,7 @@ public class LibraryBuilder extends Serializer {
         
         //Pass 3
         System.err.println("Pass 3: Write index");
+        datout.writeUTF(name);
         writeBer(classes.size(), datout);
         for (int i=0; i<classv.size(); i++) {
             datout.writeUTF(((Class)classv.elementAt(i)).getName());
@@ -169,6 +177,19 @@ public class LibraryBuilder extends Serializer {
     
     public void forceSeen(Expression e) {
         seen.add(e);
+    }
+
+    public void writeAssociativeEnvironment(AssociativeEnvironment e) 
+        throws IOException {
+        if (e!=null) {
+            classes.add(e.getClass());
+            if (includeAEs) {
+                if (e.name!=null)
+                    add(e.name,e);
+                else 
+                    add(e);
+            }
+        }
     }
 
     public void writeModule(Module e) throws IOException {

@@ -161,6 +161,9 @@ public class LibraryAE extends AssociativeEnvironment {
     public void serialize(Serializer s) throws IOException {
         if (base == null) {
             //serialize in "observe" mode
+            if (name!=null)
+                lb.add(name, this);
+
             s.writeInt(bindWatch.size());
             for (Iterator i=bindWatch.iterator(); i.hasNext();) {
                 Symbol key=(Symbol)i.next();

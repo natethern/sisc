@@ -93,6 +93,14 @@ public class StreamSerializer extends Serializer {
         }
     }
 
+    public void writeAssociativeEnvironment(AssociativeEnvironment e)
+        throws IOException {
+        if (e==null || e.name==null) { 
+            writeExpression(e);
+        } else 
+            writeExpression(e.name);
+    }
+
     public void writeModule(Module e) throws IOException {
         writeClass(e.getClass());
     }

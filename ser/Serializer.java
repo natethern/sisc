@@ -7,6 +7,7 @@ import java.math.BigInteger;
 
 import sisc.Module;
 import sisc.data.Expression;
+import sisc.AssociativeEnvironment;
 
 public abstract class Serializer implements DataOutput {
 
@@ -25,6 +26,7 @@ public abstract class Serializer implements DataOutput {
     }
 
     public abstract void writeExpression(Expression e) throws IOException;
+    public abstract void writeAssociativeEnvironment(AssociativeEnvironment e) throws IOException;
     public abstract void writeClass(Class c) throws IOException;
     public abstract void writeModule(Module m) throws IOException;
 

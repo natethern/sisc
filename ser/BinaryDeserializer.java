@@ -100,6 +100,7 @@ public class BinaryDeserializer extends Deserializer {
             ite.printStackTrace();
             throw new IOException(ite.getMessage());
         } catch (InstantiationException ie) {
+            ie.printStackTrace();
             throw new IOException(ie.getMessage());
         } catch (IllegalAccessException iae) {
             iae.printStackTrace();
@@ -127,6 +128,15 @@ public class BinaryDeserializer extends Deserializer {
 
     public Library getLibrary() {
         return baseLib;
+    }
+
+    public AssociativeEnvironment readAssociativeEnvironment() throws IOException {
+        AssociativeEnvironment rv;
+        Expression e=readExpression();
+        if (e instanceof Symbol) 
+            rv=(AssociativeEnvironment)baseLib.getExpression((Symbol)e);
+        else rv=(AssociativeEnvironment)e;
+        return rv;
     }
 
     public Module readModule() throws IOException {

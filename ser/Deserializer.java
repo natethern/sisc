@@ -8,6 +8,7 @@ import java.math.BigInteger;
 import sisc.Module;
 import sisc.data.Expression;
 import sisc.Util;
+import sisc.AssociativeEnvironment;
 
 public abstract class Deserializer extends Util implements DataInput {
 
@@ -37,6 +38,7 @@ public abstract class Deserializer extends Util implements DataInput {
     }
 
     public abstract Expression readExpression() throws IOException;
+    public abstract AssociativeEnvironment readAssociativeEnvironment() throws IOException;
     public abstract Class readClass() throws IOException;
     public abstract Module readModule() throws IOException;
     public abstract Library getLibrary();
