@@ -9,12 +9,12 @@ import sisc.Serializer;
 
 public class SHashtable extends ModuleAdapter {
     public String getModuleName() {
-	return "SHashtable";
+        return "SHashtable";
     }
 
     protected static final int 
-	HT_MAKE		=1,
-	HTQ		=2,
+        HT_MAKE		=1,
+        HTQ         =2,
         HT_PUT		=3,
         HT_GET		=4,
         HT_REMOVE	=5,
@@ -26,19 +26,19 @@ public class SHashtable extends ModuleAdapter {
     public SHashtable() {
 
         define("make-hashtable"		,HT_MAKE);
-        define("hashtable?"		,HTQ);
+        define("hashtable?"         ,HTQ);
         define("hashtable/put!"		,HT_PUT);
         define("hashtable/get"		,HT_GET);
         define("hashtable/remove!"	,HT_REMOVE);
-	define("hashtable/clear!"	,HT_CLEAR);
-	define("hashtable->alist"	,HT_TO_ALIST);
-	define("alist->hashtable"	,ALIST_TO_HT);
+        define("hashtable/clear!"	,HT_CLEAR);
+        define("hashtable->alist"	,HT_TO_ALIST);
+        define("alist->hashtable"	,ALIST_TO_HT);
         define("hashtable/keys"		,HT_KEYS);
     }
 
     public static class SchemeHashtable extends Procedure {
 
-        public HashMap ht = new HashMap();
+        public Map ht = Collections.synchronizedMap(new HashMap(0));
 
         public SchemeHashtable() {}
 
@@ -104,10 +104,10 @@ public class SHashtable extends ModuleAdapter {
         try {
             return (SchemeHashtable)o;
         } catch (ClassCastException e) { typeError("hashtable", o); }
-	return null;
+        return null;
     }
 
-    public static final HashMap hash(Value o) {
+    public static final Map hash(Value o) {
         return shash(o).ht;
     }
 
@@ -146,7 +146,7 @@ public class SHashtable extends ModuleAdapter {
         default:
             Value def = FALSE;
             Value res = null;
-	    switch(primid) {
+            switch(primid) {
             case HT_PUT:
                 switch (f.vlr.length) {
                 case 3: break;
@@ -174,9 +174,9 @@ public class SHashtable extends ModuleAdapter {
                 }
                 res = (Value)hash(f.vlr[0]).remove(f.vlr[1]);
                 break;
-	    default:
-		throwArgSizeException();
-	    }
+            default:
+                throwArgSizeException();
+            }
             return (res == null) ? def : res;
         }
     }

@@ -36,18 +36,19 @@
                                    *module* (quote def)))
 		     ...))))))))
 
-(native-module logicops-module "sisc.modules.SLogicOps")
+(native-module logicops-module   "sisc.modules.SLogicOps")
 (native-module networking-module "sisc.modules.SNetwork")
-(native-module threading-module "sisc.modules.SThread")
-(native-module debug-module "sisc.debug.SDebug")
-(native-module s2j-module "sisc.modules.S2J")
-(native-module hashtable-module "sisc.modules.SHashtable")
+(native-module threading-module  "sisc.modules.SThread")
+(native-module debug-module      "sisc.debug.SDebug")
+(native-module s2j-module        "sisc.modules.S2J")
+(native-module hashtable-module  "sisc.modules.SHashtable")
 
 (module hashtable
   (make-hashtable
    hashtable?
    hashtable/put!
    hashtable/get
+   hashtable/get!
    hashtable/remove!
    hashtable/clear!
    hashtable->alist
@@ -56,12 +57,7 @@
    hashtable/for-each
    hashtable/map)
   (import hashtable-module)
-  ;;The following are quite inefficient. To get around that we'd have
-  ;;to expose java collection iterators.
-  (define (hashtable/for-each proc ht)
-    (for-each (lambda (x) (proc (car x) (cdr x))) (hashtable->alist ht)))
-  (define (hashtable/map proc ht)
-    (map (lambda (x) (proc (car x) (cdr x))) (hashtable->alist ht))))
+  (include "../modules/hashtable.scm"))
 
 (module threads
   (thread/new
