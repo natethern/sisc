@@ -12,7 +12,7 @@ public class BlockIO extends ModuleAdapter {
 
     protected static final int
         BLOCKREAD=1, BLOCKWRITE=2, MAKEBUFFER=3, BUFFERQ=4,
-        BUFFERLENGTH=5, BUFFERREF=6, BUFFERSET=7;
+        BUFFERLENGTH=5, BUFFERREF=6, BUFFERSET=7, BUFFERCOPY=8;
     protected Symbol BLOCKB=Symbol.get("BlockIO");
 
     public BlockIO() {
@@ -23,6 +23,7 @@ public class BlockIO extends ModuleAdapter {
         define("buffer-length", BUFFERLENGTH);
         define("buffer-ref",    BUFFERREF);
         define("buffer-set!",   BUFFERSET);
+        define("buffer-copy!",  BUFFERCOPY);
     }
 
     final Buffer buffer(Value v) throws ContinuationException {
@@ -86,6 +87,36 @@ public class BlockIO extends ModuleAdapter {
                     error(f, liMessage(SISCB, "errorwriting", e.getMessage(),
                                        outport.synopsis()));
                 }
+                return VOID;
+            default:
+                throwArgSizeException();
+            }
+        case 4:
+            switch (primid) {            
+            case BUFFERCOPY:
+                byte[] sbuf=buffer(f.vlr[0]).buf;
+                byte[] dbuf=buffer(f.vlr[2]).buf;
+
+                int soff=num(f.vlr[1]).intValue();
+                int doff=num(f.vlr[3]).intValue();
+                int count=sbuf.length;
+
+                System.arraycopy(sbuf, soff, dbuf, doff, count);
+                return VOID;
+            default:
+                throwArgSizeException();
+            }
+        case 5:
+            switch (primid) {            
+            case BUFFERCOPY:
+                byte[] sbuf=buffer(f.vlr[0]).buf;
+                byte[] dbuf=buffer(f.vlr[2]).buf;
+
+                int soff=num(f.vlr[1]).intValue();
+                int doff=num(f.vlr[3]).intValue();
+                int count=num(f.vlr[4]).intValue();
+
+                System.arraycopy(sbuf, soff, dbuf, doff, count);
                 return VOID;
             default:
                 throwArgSizeException();

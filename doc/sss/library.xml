@@ -598,6 +598,36 @@ r / 2<superscript>s</superscript>
               </para>
             </blockquote>
           </para>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>buffer-copy!</methodname>
+              <methodparam><parameter>source-buffer</parameter></methodparam>
+              <methodparam><parameter>source-offset</parameter>
+              </methodparam>
+              <methodparam><parameter>dest-buffer</parameter>
+              </methodparam>
+              <methodparam><parameter>dest-offset</parameter>
+              </methodparam>
+              <methodparam choice="opt"><parameter>count</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Copies <parameter>count</parameter> bytes starting from index
+                <parameter>source-offset</parameter> in the source
+                buffer to successive bytes starting at index
+                <parameter>dest-offset</parameter> in the destination
+                buffer.  If <parameter>count</parameter> is
+                unspecified, it is assumed to be the length of the
+                source buffer.
+                It is an error to copy more bytes from the source
+                buffer than are available, or two copy more bytes into
+                the destination buffer than its capacity allows.
+              </para>
+            </blockquote>
+          </para>
         </blockquote>
       </para>
       <para>

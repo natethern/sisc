@@ -118,7 +118,8 @@
    buffer?
    buffer-ref
    buffer-set!
-   buffer-length)
+   buffer-length
+   buffer-copy!)
   (import block-io-native)
   (include "buffer.scm"))
 
