@@ -6,7 +6,7 @@ import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
-public class Quantity extends Value {
+public class Quantity extends Value implements Singleton {
 
     public static int min_precision, max_precision;
 
@@ -1402,6 +1402,10 @@ public class Quantity extends Value {
             s.writeBigDecimal(new BigDecimal(im));
             break;
         }
+    }
+
+    public Value singletonValue() {
+        return this;
     }
 }
 
