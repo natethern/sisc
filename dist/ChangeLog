@@ -1,5 +1,10 @@
-2002-12-10  Released SISC 1.7.0-beta
+2002-12-15  Released SISC 1.7.0-beta
 
+2002-12-14  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Fixed a rare, complicated memory leak involving the 
+	  CallFrame recycling pool.
+	
 2002-12-10  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Refactored the REPL such that the main SISC thread is also
