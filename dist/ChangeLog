@@ -1,3 +1,5 @@
+2002-10-02  Released SISC 1.6.0-beta
+
 2002-09-30  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Added constant-propogation of lexical variables to the optimizer.
