@@ -37,73 +37,64 @@ import sisc.data.*;
 import java.util.*;
 
 public class Context extends Util {
+
     //"appname" -> AppContext
-    protected static Hashtable apps = new Hashtable();
-    //Thread -> Stack{Interpreter}
-    protected static Hashtable threads = new Hashtable();
-    
+    private static Map apps =
+        Collections.synchronizedMap(new HashMap());
+    //Thread -> Context
+    private static Map threads =
+        Collections.synchronizedMap(new WeakHashMap());
+
     /*********** application table maintenance ***********/
 
     public static void register(String appName, AppContext ctx) {
-	apps.put(appName,ctx);
+        apps.put(appName,ctx);
     }
-
+    
     public static void unregister(String appName) {
-	apps.remove(appName);
+        apps.remove(appName);
     }
-
+    
     public static AppContext lookup(String appName) {
-	return (AppContext)apps.get(appName);
-    }
-
-    /*********** thread table maintenance ***********/
-
-    public static Interpreter currentInterpreter() {
-	Thread thread = Thread.currentThread();
-	Stack stack = (Stack)threads.get(thread);
-	if (stack == null) return null;
-	return (Interpreter)stack.peek();
-    }
-
-    protected static void pushInterpreter(Interpreter r) {
-	Thread thread = Thread.currentThread();
-	Stack stack = (Stack)threads.get(thread);
-	if (stack == null) {
-	    stack = new Stack();
-	    threads.put(thread, stack);
-	}
-	stack.push(r);
-    }
-
-    protected static Interpreter popInterpreter() {
-	Thread thread = Thread.currentThread();
-	Stack stack = (Stack)threads.get(thread);
-	if (stack == null) return null;
-	Interpreter res = (Interpreter)stack.pop();
-	if (stack.empty()) threads.remove(thread);
-	return res;
+        return (AppContext)apps.get(appName);
     }
 
     /*********** main interface ***********/
 
+    public static Interpreter currentInterpreter() {
+        Thread thread = Thread.currentThread();
+        ThreadContext tctx = (ThreadContext)threads.get(thread);
+        if (tctx == null) return null;
+        return tctx.currentInterpreter();
+    }
+
     public static Interpreter enter() {
-	Interpreter r = currentInterpreter();
-	return enter(r.ctx, r.dynenv);
+        Interpreter r = currentInterpreter();
+        return enter(r.ctx, r.dynenv);
     }
-
+    
     public static Interpreter enter(String appName) {
-	return enter(lookup(appName), new DynamicEnv());
+        return enter(lookup(appName), new DynamicEnv());
     }
-
+    
     public static Interpreter enter(AppContext ctx, DynamicEnv dynenv) {
-	Interpreter res = createInterpreter(ctx, dynenv);
-	pushInterpreter(res);
-	return res;
+        Thread thread = Thread.currentThread();
+        ThreadContext tctx = (ThreadContext)threads.get(thread);
+        if (tctx == null) {
+            tctx = new ThreadContext();
+            threads.put(thread, tctx);
+        }
+        Interpreter res = createInterpreter(ctx, tctx, dynenv);
+        tctx.pushInterpreter(res);
+        return res;
     }
 
     public static void exit() {
-	Interpreter r = popInterpreter();
-	returnInterpreter(r);
+        Thread thread = Thread.currentThread();
+        ThreadContext tctx = (ThreadContext)threads.get(thread);
+        if (tctx == null) return;
+        Interpreter r = tctx.popInterpreter();
+        returnInterpreter(r);
     }
 
     /*********** resource maintenance ***********/
@@ -113,12 +104,13 @@ public class Context extends Util {
      * a) interpreter creation is quite cheap, and
      * b) pool maintenance would require thread synchronization
      */
-    public static Interpreter createInterpreter(AppContext ctx,
-						DynamicEnv dynenv) {
-	return new Interpreter(ctx, dynenv);
+    private static Interpreter createInterpreter(AppContext ctx,
+                                                 ThreadContext tctx,
+                                                 DynamicEnv dynenv) {
+        return new Interpreter(ctx, tctx, dynenv);
     }
 
-    public static void returnInterpreter(Interpreter r) {
+    private static void returnInterpreter(Interpreter r) {
     }
 
 }

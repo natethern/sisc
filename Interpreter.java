@@ -75,6 +75,7 @@ public class Interpreter extends Util {
     public static Compiler compiler = new Compiler();
 
     public AppContext ctx;
+    public ThreadContext tctx;
     public DynamicEnv dynenv;
 
     //REGISTERS
@@ -94,9 +95,10 @@ public class Interpreter extends Util {
         top_fk.vlk = true;
     }
 
-    public Interpreter(AppContext ctx, DynamicEnv dynenv) {
+    public Interpreter(AppContext ctx, ThreadContext tctx, DynamicEnv dynenv) {
         fk=top_fk;
         this.ctx = ctx;
+        this.tctx = tctx;
         this.dynenv = dynenv;
     }
 
