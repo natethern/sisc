@@ -38,7 +38,7 @@ public class SHashtable extends ModuleAdapter {
 
     public static class SchemeHashtable extends Procedure {
 
-        public Map ht = Collections.synchronizedMap(new HashMap(0));
+        public Map ht = new HashMap(0);
 
         public SchemeHashtable() {}
 
