@@ -2,7 +2,7 @@
 
   <property file="build.properties"/>    
   <property environment="env"/>
-  <property name="sisc.home" value="${env.SISC_LIB}"/>
+  <property name="sisc.home" value="${env.SISC_HOME}"/>
   <property name="packagename" value="sisc.contrib.servlets"/>
   <property name="srcdir" value="java"/>
   <property name="classdir" value="classes"/>
