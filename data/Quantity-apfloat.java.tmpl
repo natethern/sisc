@@ -1255,7 +1255,9 @@ public class Quantity extends Value {
     }
 
     protected static final Quantity intBound(long v) {
-        return ((int)(v>>>32) == 0) ? new Quantity((int)v) : new Quantity(v);
+        return (Integer.MIN_VALUE <= v && v <= Integer.MAX_VALUE)
+            ? new Quantity((int) v)
+            : new Quantity(v);
     }
 
     public boolean is(int mask) {
