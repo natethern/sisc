@@ -25,6 +25,7 @@
  'srfi-25
  'srfi-25-lib
  'srfi-26
+ 'srfi-27
  '_srfi-28
  'srfi-28
  'srfi-29

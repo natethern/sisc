@@ -365,6 +365,27 @@
   (include "srfi-26.scm")
   (add-feature 'srfi-26))
 
+(display "srfi-27 ")
+(module srfi-27
+    (default-random-source
+      make-random-source
+      random-integer 
+      random-real
+      random-source?
+      random-source-make-integers
+      random-source-make-reals
+      random-source-pseudo-randomize!
+      random-source-randomize!
+      random-source-state-ref
+      random-source-state-set!
+      srfi-27-init)
+  (import s2j)
+  (import generic-procedures)
+  (import logicops)
+  (import hashtable)
+  (include "srfi-27.scm")
+  (add-feature 'srfi-27))
+
 (display "srfi-28 ")
 (module _srfi-28 (_format)
   (define _format format))
