@@ -124,8 +124,14 @@ public class Interpreter extends Util {
                 }
             } while (true);
         } catch (NullPointerException done) {
-            if (nxp!=null) 
-                throw done;
+            if (nxp!=null) {
+                try {
+                    error(this, null, done.getMessage(), done);
+                } catch (ContinuationException ce) {
+                    pop(ce.k);
+                    interpret();
+                }
+            }
         } catch (SchemeRuntimeException rte) {
             throw rte.promote();
         }
