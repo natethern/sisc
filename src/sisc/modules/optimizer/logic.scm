@@ -206,7 +206,7 @@
 
 ;; Applications and constant folding (possibly unsafe)
 (define opt:application 
-  (lambda (rator rands)
+  (lambda (rator rands state)
     (cond [(and (eq? rator 'not)
                 (not-redefined? 'not)
                 (= (length rands) 1))
