@@ -53,6 +53,11 @@
    (lambda (m e f)
      f)))
 
+;; This code is based on Richard Kelsey and Jonathan Rees' version of
+;; dynamic-wind in Scheme48 (http://s48.org). It has been heavily
+;; modified to account for SISC's lack of structures, make exception
+;; handling work properly and conform with SRFI18 requirements with
+;; regard to call/cc behaviour.
 (define dynamic-wind
   (let ((original-call/cc call-with-current-continuation))
     ;;the dynamic wind stack
@@ -112,53 +117,6 @@
 	   (out)
 	   (apply values results)))))))
 
-;(define dynamic-wind 
-;  (lambda args
-;    (eval '(let ()
-;	     (define *here* (list #f))
-	     
-;	     (define original-cwcc call-with-current-continuation)
-	     
-;	     (define (reroot! there)
-;	       (if (not (eq? *here* there))
-;		   (begin
-;		     (reroot! (cdr there))
-;		     (let ((before (caar there)) (after (cdar there)))
-;		       (set-car! *here* (cons after before))
-;		       (set-cdr! *here* there)
-;		       (set-car! there #f)
-;		       (set-cdr! there '())
-;		       (set! *here* there)
-;		       (before)))))                                   
-	     
-;	     (set! dynwind-call/cc
-;		   (lambda (proc)
-;		     (let ((here *here*))
-;		       (original-cwcc
-;			(lambda (cont)
-;			  (proc (lambda results
-;				  (reroot! here)
-;				  (apply cont results))))))))
-	     
-;	     (set! dynamic-wind
-;		   (lambda (before during after)
-;		     (let ((here *here*))
-;		       (reroot! (cons (cons before after) here))
-;		       (call-with-values
-;			   (lambda ()
-;			     (call/fc 
-;			      during
-;			      (lambda (m e c)
-;				(reroot! here)
-;				(c m e (current-failure-continuation)))))
-;			 (lambda results
-;			   (reroot! here)
-;			   (apply values results))))))
-	     
-;	     (set! call/cc dynwind-call/cc)
-;	     (set! call-with-current-continuation dynwind-call/cc)))
-;    (apply (getprop 'dynamic-wind) args)))
-  
 ;;;; "ratize.scm" Convert number to rational number (ported from SLIB)
 
 (define rationalize (void))
