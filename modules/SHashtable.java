@@ -94,7 +94,7 @@ public class SHashtable extends ModuleAdapter {
                 r.acc = (Value)ht.put(r.vlr[0], r.vlr[1]);
                 break;
             default:
-                throw new RuntimeException("applying hashtable " + display() + " requires between one and two args");
+                throw new RuntimeException(liMessage("hashtableargs", display()));
             }
             if (r.acc == null) r.acc = FALSE;
         }

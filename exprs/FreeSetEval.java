@@ -55,7 +55,7 @@ public class FreeSetEval extends Expression {
 		envLoc=senv.set(lhs, r.acc);
 	    } catch (NullPointerException np) {
 		//Variable is not bound.  Raise an error.
-		error(r, SETBANG, "attempt to set unbound variable '"+lhs+"'.");
+		error(r, SETBANG, liMessage("unboundset", lhs.write()));
 	    }
         } 
 

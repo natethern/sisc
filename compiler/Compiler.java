@@ -48,7 +48,7 @@ public class Compiler extends Util {
         }
 
         public void eval(Interpreter r) throws ContinuationException {
-            error(r, "invalid context for syntax-identifier "+name);
+            error(r, liMessage("invalidsyncontext", name.write()));
         }
 
         public String display() {
@@ -126,7 +126,8 @@ public class Compiler extends Util {
                               int context, AssociativeEnvironment env)
     throws ContinuationException {
         if (v==EMPTYLIST) {
-	    //error(r, "invalid expression: ()"); return null;
+	    //error(r, liMessage("invnullexpr"));
+	    //return null;
 
 	    //we evaluate () to the empty list, which is an "ignorable
 	    //error", according to R5RS. Note that presently we never
@@ -234,7 +235,7 @@ public class Compiler extends Util {
 
                     return new EvalExp(rhs, new FreeSetEval(fre.sym, fre.envLoc, env));
                 } else {
-                    error(r, "left-hand-side of set! is not a symbol");
+                    error(r, liMessage("setlhsnotsymbol"));
                     return null;
                 }
             case DEFINE:
@@ -265,8 +266,7 @@ public class Compiler extends Util {
 
     public final Expression application(Expression rator, Expression rands[], boolean nonTail) {
         if (rator instanceof Value && !(rator instanceof Procedure))
-            System.err.println("{warning: compiler detected application of non-procedure '"+
-                               ((Value)rator).write()+"'}");
+            System.err.println(warn("nonprocappdetected",((Value)rator).synopsis()));
 	return new AppExp(rator, rands, nonTail);
     }
 

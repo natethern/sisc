@@ -218,7 +218,7 @@ public class J2S extends ModuleAdapter {
                 try {
                     return new JavaClass(Class.forName(string(f.vlr[0])));
                 } catch (ClassNotFoundException e) {
-                    throw new RuntimeException("class not found");
+                    throw new RuntimeException(liMessage("classnotfound"));
                 }
             case JGETCLASSNAME:
                 return new SchemeString(((JavaClass)f.vlr[0]).clazz.getName());
@@ -266,9 +266,9 @@ public class J2S extends ModuleAdapter {
                     Object v=field.get(on);
                     return schemeValue(v);
                 } catch (NoSuchFieldException e) {
-                    throw new RuntimeException("no such field");
+                    throw new RuntimeException(liMessage("nosuchfield"));
                 } catch (IllegalAccessException e2) {
-                    throw new RuntimeException("illegal access");
+                    throw new RuntimeException(liMessage("illegalaccess"));
                 }
             }
             break;
@@ -291,9 +291,9 @@ public class J2S extends ModuleAdapter {
                     }
                     field.set(target, ((JavaObject)f.vlr[2]).o);
                 } catch (NoSuchFieldException e) {
-                    throw new RuntimeException("No such field");
+                    throw new RuntimeException(liMessage("nosuchfield"));
                 } catch (IllegalAccessException e2) {
-                    throw new RuntimeException("Field is unreachable due access protection");
+                    throw new RuntimeException(liMessage("illegalaccess"));
                 }
                 return VOID;
             case JINSTANTIATE:
@@ -311,7 +311,8 @@ public class J2S extends ModuleAdapter {
                     Constructor cns=clz.getConstructor(classSpec);
                     return schemeValue(cns.newInstance(objects));
                 } catch (Exception e) {
-                    throw new RuntimeException("Error instantiating object: "+e);
+                    throw new RuntimeException(liMessage("errorinstantiating", 
+							 e.toString()));
                 }
             }
         case 4:
@@ -346,7 +347,8 @@ public class J2S extends ModuleAdapter {
                     return schemeValue(m.invoke(callOn, objects));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    throw new RuntimeException("Error instantiating object: "+e);
+                    throw new RuntimeException(liMessage("errorinstantiating", 
+							 e.toString()));
                 }
             }
 	default:

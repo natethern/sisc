@@ -68,6 +68,24 @@ public abstract class Util implements Conf {
 
     public static final int DEFAULT_SYNOPSIS_LENGTH=30;
 
+    public static String warn(String messageClass) {
+	StringBuffer b=new StringBuffer("{");
+	b.append(liMessage("warning"));
+	b.append(": ");
+	b.append(liMessage(messageClass));
+	b.append(')');
+	return b.toString();
+    }
+
+    public static String warn(String messageClass, String arg) {
+	StringBuffer b=new StringBuffer("{");
+	b.append(liMessage("warning"));
+	b.append(": ");
+	b.append(liMessage(messageClass, arg));
+	b.append(')');
+	return b.toString();
+    }
+
     public static void error(Interpreter r, Value where, String errormessage)
     throws ContinuationException {
 	error(r, liMessage("errorinwhere", where.toString())+": "+errormessage, false);
@@ -338,6 +356,7 @@ public abstract class Util implements Conf {
         return p;
     }
 
+    /* Localization and Internationalization */
     static Locale myLocale=Locale.getDefault();
     static MessageFormat formatter=new MessageFormat("");
     static ResourceBundle liMessages=ResourceBundle.getBundle("Messages");
@@ -346,7 +365,6 @@ public abstract class Util implements Conf {
 	formatter.setLocale(myLocale);
     }
 
-    // L10N and I18N
     public static String liMessage(String messageName) {
 	return liMessages.getString(messageName);
     }
@@ -373,6 +391,14 @@ public abstract class Util implements Conf {
 	return formatter.format(liMessages.getString(messageName),
 				new Object[] { new Integer(arg1), 
 					       new Integer(arg2) });
+    }
+
+    public static String liMessage(String messageName, String arg1, 
+				   int arg2, int arg3) {
+	return formatter.format(liMessages.getString(messageName),
+				new Object[] { arg1,
+					       new Integer(arg2), 
+					       new Integer(arg3) });
     }
     
     public static void main(String[] args) {

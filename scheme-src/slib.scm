@@ -334,6 +334,7 @@
 ;; SLIB:LOAD can now be defined to load SLIB files.
 
 (define slib:load slib:load-source)
+(define defmacro:load slib:load)
 
 ;; Load the REQUIRE package.
 

@@ -365,7 +365,7 @@ public class SThread extends ModuleAdapter {
 			c.thread.join();
 		    } catch (InterruptedException ie) {}
 		} else {
-		    error(f, "Thread has not yet started");
+		    error(f, liMessage("threadnotstarted"));
 		}
 	    case THREADSTATE:
 		c=tcont(f.vlr[0]);
@@ -392,7 +392,7 @@ public class SThread extends ModuleAdapter {
 			return FALSE;
 		    else return stateOf(c);
 		} else {
-		    throw new RuntimeException("Thread has not yet started");
+		    throw new RuntimeException(liMessage("threadnotstarted"));
 		}
 	    case THREADHOLDSLOCKQ:
 		return truth(monitor(f.vlr[0]).owner==tcont(f.vlr[0]).thread);

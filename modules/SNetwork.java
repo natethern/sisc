@@ -373,7 +373,7 @@ public class SNetwork extends ModuleAdapter {
                     tcps.setSoTimeout(num(f.vlr[1]).intValue());
                     return VOID;
                 default:
-		    throw new RuntimeException( "incorrect number of arguments to procedure");
+		    throw new RuntimeException(liMessage("incorrectargcount"));
                 }
             case 3:
                 switch(primid) {

@@ -52,16 +52,14 @@ public class LexicalEnvironment extends Value {
 	Value[] v=r.vlr;
         if (c.arity) {
             vals=r.createValues(s--);
-            if (v.length < s)
-                error(r, "expected " + s +
-                      " arguments to "+c+", got "+v.length);
+            if (v.length < s) 
+		error(r, liMessage("notenoughargsto", c.write(), s, v.length));
             System.arraycopy(v, 0, vals, 0, s);
             vals[s]=valArrayToList(v, s, v.length-s);
 	    r.returnValues(v);
         } else {
             if (v.length!=s)
-                error(r, "expected " + s +
-                      " arguments to "+c+", got "+v.length);
+		error(r, liMessage("notenoughargsto", c.write(), s, v.length));
             vals=v;
         }
     }

@@ -77,6 +77,7 @@ public class Primitives extends ModuleAdapter {
         define("_string-append", STRINGAPPEND);
         define("absolute-path?", ABSPATHQ);
         define("acos", ACOS);
+	define("annotation?", ANNOTATIONQ);
         define("apply", APPLY);
         define("ashl", ASHL);
         define("ashr", ASHR);
@@ -227,6 +228,7 @@ public class Primitives extends ModuleAdapter {
             }
         case 1:
             switch (primid) {
+	    case ANNOTATIONQ: return truth(f.vlr[0] instanceof AnnotatedExpr);
             case NULLQ: return truth(f.vlr[0]==EMPTYLIST);
             case CAR: return truePair( f.vlr[0]).car;
 	    case CASESENSITIVE:
@@ -796,7 +798,7 @@ public class Primitives extends ModuleAdapter {
 	CLOSEOUTPUTPORT = 28,
 	COMPLEXQ = 29,
 	CONS = 109,
-	// <30>
+	ANNOTATIONQ = 30,
 	COS = 31,
 	//	CURRENTEVAL = 0,
 	CURRENTEVAL = 32,

@@ -30,71 +30,67 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-package sisc.data;
+package sisc.exprs;
 
 import sisc.*;
+import sisc.data.*;
 import java.io.*;
 
-public abstract class Value extends Expression implements Immediate {
+public class AnnotatedExpr extends Value {
+    protected Expression expr;
+    protected Value annotation;
 
-    public abstract String display();
-    public Object javaValue() {
-        return this;
+    public AnnotatedExpr(Expression expr, Value annotation) {
+	this.expr=expr;
+	this.annotation=annotation;
     }
 
-    public String synopsis() {
-	return synopsis(DEFAULT_SYNOPSIS_LENGTH);
+    public final void eval(Interpreter r) throws ContinuationException {
+	expr.eval(r);
     }
-
-    /** 
-     * Only this function need be overridden
-     */
-    public String synopsis(int limit) {
-	String v=write();
-	if (v.length() > limit)
-	    return write().substring(0,limit)+"...";
-	else return v;
-    }
-
-    public String write() {
-        return display();
-    }
-
-    public boolean equals(Object v) {
-        return eq(v) ||
-	    ((this.getClass().isAssignableFrom(v.getClass()) ||
-	      v.getClass().isAssignableFrom(this.getClass())) &&
-	     valueEqual((Value)v));
-    }
-
-    public boolean eq(Object v) {
-        return this==v;
-    }
-
-    public boolean valueEqual(Value v) {
-        return eq(v);
-    }
-
-    public String toString() {
-        return display();
-    }
-
-    public void eval(Interpreter r) throws ContinuationException {
-        r.acc=this;
-        r.nxp=null;
-    }
-
-    public Value getValue(Interpreter r) throws ContinuationException {
-        return this;
+    
+    public final Value getValue(Interpreter r) throws ContinuationException {
+	return expr.getValue(r);
     }
 
     public Value express() {
-        return this;
+        return list(sym("Annotated-expr"), annotation, expr.express());
+    }
+
+    public AnnotatedExpr() {}
+
+    public void serialize(Serializer s, DataOutput dos) throws IOException {
+        if (SERIALIZATION) {
+	    s.serialize(expr, dos);
+	    s.serialize(annotation, dos);
+        }
+    }
+
+    public String display() {
+	StringBuffer b=new StringBuffer("#@");
+	b.append(annotation.display()).append(',');
+	if (expr instanceof Value) 
+	    b.append(((Value)expr).display());
+	else 
+	    b.append(expr.express());
+	return b.toString();
+    }
+
+    public String write() {
+	StringBuffer b=new StringBuffer("#@");
+	b.append(annotation.write()).append(',');
+	if (expr instanceof Value) 
+	    b.append(((Value)expr).write());
+	else 
+	    b.append(expr.express());
+	return b.toString();
+    }
+
+    public void deserialize(Serializer s, DataInput dis)
+    throws IOException {
+        if (SERIALIZATION) {
+	    expr=s.deserialize(dis);
+	    annotation=(Value)s.deserialize(dis);
+        }
     }
 }
-
-
-
-
-
-

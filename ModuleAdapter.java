@@ -1,7 +1,7 @@
 package sisc;
 
-import java.util.TreeMap;
-import java.util.Iterator;
+import java.text.*;
+import java.util.*;
 import sisc.data.*;
 
 public abstract class ModuleAdapter extends Module {
@@ -34,5 +34,33 @@ public abstract class ModuleAdapter extends Module {
 
     public float getModuleVersion() {
 	return 0.0f;
+    }
+
+    /* Localization and Internationalization */
+    static Locale myLocale=Locale.getDefault();
+    static MessageFormat formatter=new MessageFormat("");
+    static ResourceBundle liMessages;
+
+    static {
+	formatter.setLocale(myLocale);
+    }
+
+    public ModuleAdapter() {
+	liMessages=ResourceBundle.getBundle(getModuleName());
+    }
+
+    protected static String getLiMessage(String mn) {
+	String rv=liMessages.getString(mn);
+	if (rv==null) return Util.liMessage(mn);
+	else return rv;
+    }
+
+    public static String liMessage(String messageName) {
+	return getLiMessage(messageName);
+    }
+
+    public static String liMessage(String messageName, String arg1) {
+	return formatter.format(getLiMessage(messageName),
+				new Object[] { arg1 });
     }
 }

@@ -35,6 +35,7 @@ package sisc.compiler;
 
 import sisc.Util;
 import sisc.data.*;
+import sisc.exprs.AnnotatedExpr;
 import java.io.*;
 import java.util.*;
 
@@ -42,7 +43,8 @@ public class Parser extends Util implements Tokens {
     Lexer lexer;
     static final Object DOT=new Object();
     static final Object ENDPAIR=new Object();
-    static final Symbol SYNTAX=Symbol.get("syntax");
+    static final Symbol SYNTAX=Symbol.get("syntax"),
+	ANNOTATION=Symbol.get("make-annotation");
 
     static final HashMap chars=new HashMap (8);
     static {
@@ -76,10 +78,10 @@ public class Parser extends Util implements Tokens {
             return (Value)n;
         } catch (ClassCastException ce) {
             if (n==ENDPAIR) {
-                System.err.println("{warning: ignored orphaned close-parenthesis ')'}");
+                System.err.println(warn("orphanedparen"));
                 return nextExpression(is, radix);
             } else if (n==DOT)
-                throw new IOException("unexpected dot '.'.");
+                throw new IOException(liMessage("unexpecteddot"));
         }
         return (Value)n;
     }
@@ -200,10 +202,18 @@ public class Parser extends Util implements Tokens {
             case '!':
                 if (lexer.readToBreak(is, Lexer.special).equals("eof"))
                     return EOF;
-                else throw new IOException("invalid sharp sequence");
+                else throw new IOException(liMessage("invalidsharp"));
             case '\'':
                 o=listSpecial(SYNTAX, is, state, def);
                 break;
+	    case '@': 
+		//Annotation
+		Pair p=new Pair(ANNOTATION, EMPTYLIST);
+		if (def!=null)
+		    state.put(def, p);
+		p.setCdr(nextExpression(is, state));
+		o=p;
+		break;
             default:
                 Value[] v=null;
                 is.pushback(c);
@@ -242,7 +252,7 @@ public class Parser extends Util implements Tokens {
                         v=new Value[length((Pair)expr)];
                 } else if (expr!=null)
                     throw new IOException("Invalid sharp construct '"+expr+"'");
-                Pair p=(Pair)expr;
+                p=(Pair)expr;
                 Object lastObject=Quantity.ZERO;
 
                 for (int i=0; i<v.length; i++) {
@@ -260,7 +270,7 @@ public class Parser extends Util implements Tokens {
             }
             break;
         default:
-            throw new IOException("Outrageous Error: unknown token "+token);
+            throw new IOException(liMessage("unknowntoken"));
         }
         if (def!=null) 
             state.put(def, o);
@@ -289,10 +299,10 @@ public class Parser extends Util implements Tokens {
                     if (l == DOT) {
                         l=_nextExpression(is, state, null);
                         if (l==ENDPAIR)
-                            throw new IOException("Expected expression in cdr field");
+                            throw new IOException(liMessage("expectedexprincdr"));
                         p.cdr=(Value)(l instanceof Integer ? state.get(l) : l);
                         if (_nextExpression(is, state, null)!=ENDPAIR)
-                            throw new IOException("More than one object after dot ('.')");
+                            throw new IOException(liMessage("toomanyafterdot"));
                         return h;
                     } else
                         p.cdr=p=new ImmutablePair();
@@ -300,7 +310,7 @@ public class Parser extends Util implements Tokens {
                 l=_nextExpression(is, state, null);
             }
         } catch (EOFException e) {
-            System.err.println("{warning: unexpected end-of-file}");
+            System.err.println(warn("unexpectedeof"));
             return VOID;
         }
 
