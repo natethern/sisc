@@ -370,14 +370,14 @@ public class S2J extends ModuleAdapter {
                     obj.getField(symval(arg[0])).set(null,jobj(arg[1]));
                     return VOID;
                 default:
-                    throw new RuntimeException("applying java class " + obj.getName() + " requires between zero and two args");
+                    throw new RuntimeException("applying java class " + obj + " requires between zero and two args");
                 }
             } catch (InstantiationException e) {
-                throw new RuntimeException("error during instantiation of class " + obj.getName());
+                throw new RuntimeException("error during instantiation of class " + obj);
             } catch (IllegalAccessException e) {
-                throw new RuntimeException("invocation of default constructor of class " + obj.getName() + " not permitted");
+                throw new RuntimeException("invocation of default constructor of class " + obj + " not permitted");
             } catch (NoSuchFieldException e) {
-                throw new RuntimeException("no static field " + arg[0] + " in class " + obj.getName());
+                throw new RuntimeException("no static field " + arg[0] + " in class " + obj);
             }
         }
 
@@ -390,10 +390,10 @@ public class S2J extends ModuleAdapter {
                     obj.set(jobj(args[0]), jobj(args[1]));
                     return VOID;
                 default:
-                    throw new RuntimeException("applying java field " + obj.getName() + " requires one or two args");
+                    throw new RuntimeException("applying java field " + obj + " requires one or two args");
                 }
             } catch (IllegalAccessException e) {
-                throw new RuntimeException("access to field " + obj.getName() + " in class " + args[0] + " not permitted");
+                throw new RuntimeException("access to field " + obj + " in class " + args[0] + " not permitted");
             }
         }
 
@@ -407,7 +407,7 @@ public class S2J extends ModuleAdapter {
             try {
                 return create(obj.invoke(o,params));
             } catch (IllegalAccessException e) {
-                throw new RuntimeException("invocation of method " + obj.getName() + " on " + o + " not permitted");
+                throw new RuntimeException("invocation of method " + obj + " on " + o + " not permitted");
             }
         }
 
@@ -420,7 +420,7 @@ public class S2J extends ModuleAdapter {
             try {
                 return create(obj.newInstance(params));
             } catch (InstantiationException e) {
-                throw new RuntimeException("error during instantiation of class " + obj.getDeclaringClass().getName());
+                throw new RuntimeException("error during invocation of constructor " + obj + " of class " + obj.getDeclaringClass().getName());
             } catch (IllegalAccessException e) {
                 throw new RuntimeException("invocation of constructor " + obj + " of class " + obj.getDeclaringClass().getName() + " not permitted");
             }
@@ -479,9 +479,9 @@ public class S2J extends ModuleAdapter {
                     throw new RuntimeException("applying java object " + obj + " requires one or two args");
                 }
             } catch (IllegalAccessException e) {
-                throw new RuntimeException("access to field " + args[0] + " of class " + obj.getClass().getName() + " not permitted");
+                throw new RuntimeException("access to field " + args[0] + " of istance of class " + obj.getClass() + " not permitted");
             } catch (NoSuchFieldException e) {
-                throw new RuntimeException("no field " + args[0] + " in class " + obj.getClass().getName());
+                throw new RuntimeException("no field " + args[0] + " in instance of class " + obj.getClass());
             }
         }
     }
@@ -539,16 +539,21 @@ public class S2J extends ModuleAdapter {
                                                 makeJObj(m),
                                                 p});
             } catch (SchemeException e) {
-                if (e.m instanceof JavaObject) {
-                    Object eo = ((JavaObject)e.m).obj;
-                    if (eo instanceof Throwable)
-                        throw (Throwable)eo;
-                }
-                else throw e;
+                throw javaException(e);
             }
             Context.exit();
             return jobj(res);
         }
+    }
+
+    public static Throwable javaException(SchemeException e) {
+        Throwable ex = e;
+        if (e.m instanceof JavaObject) {
+            Object eo = ((JavaObject)e.m).obj;
+            if (eo instanceof Throwable)
+                ex = (Throwable)eo;
+        }
+        return ex;
     }
 
     public static final int jtype(Value o) {
