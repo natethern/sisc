@@ -1,4 +1,4 @@
-(define-generics gio/read-char gio/char-ready?
+(define-generics gio/peek-char gio/read-char gio/char-ready?
   gio/flush-output-port gio/write-char gio/write-block
   gio/read-block gio/read-string gio/write-string gio/close
   gio/write gio/display gio/read gio/read-code
@@ -28,6 +28,7 @@
      (if (null? portarg) (current-output-port) (car portarg)))))
 
 ; First, save the original functions
+(define native-peek-char   (getprop 'peek-char))
 (define native-read-char   (getprop 'read-char))
 (define native-char-ready? (getprop 'char-ready?))
 (define native-read-string (getprop 'read-string))
@@ -69,6 +70,9 @@
 
 (define (read . port)
   (gio/read (inport port)))
+
+(define (peek-char . port)
+  (gio/peek-char (inport port)))
 
 (define (read-char . port)
   (gio/read-char (inport port)))
@@ -139,6 +143,9 @@
 (define-method (gio/read (<filter-input-port> i))
   (gio/read (:in i)))
 
+(define-method (gio/peek-char (<filter-input-port> i))
+  (gio/peek-char (:in i)))
+
 (define-method (gio/read-char (<filter-input-port> i))
   (gio/read-char (:in i)))
 
@@ -185,6 +192,9 @@
 
 (define-method (gio/read (<filter-input-port> i))
   (gio/read (:in i)))
+
+(define-method (gio/peek-char (<sisc.data.scheme-input-port> i))
+  (native-peek-char i))
 
 (define-method (gio/read-char (<sisc.data.scheme-input-port> i))
   (native-read-char i))

@@ -725,6 +725,7 @@
 (module generic-io
   (char-ready?
    read
+   peek-char
    read-char
    read-code
    read-block
