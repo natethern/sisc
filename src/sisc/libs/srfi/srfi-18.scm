@@ -1,3 +1,4 @@
+(require-library 'sisc/libs/srfi/srfi-1)
 (require-library 'sisc/libs/srfi/srfi-9)
 (require-library 'sisc/libs/srfi/srfi-19)
 
@@ -25,6 +26,7 @@
            make-time
            time-second
            time-nanosecond)
+  (import* srfi-1 delete!)
   (include "../../modules/srfi/srfi-18.scm"))
 
 (display "srfi-18\n")
