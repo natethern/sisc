@@ -141,7 +141,7 @@
       <xsl:apply-templates select="type" mode="scheme"/>
     </xsl:if>
   </code>
-  <xsl:call-template name="synop-break"/>
+<!--  <xsl:call-template name="synop-break"/>-->
 </xsl:template>
 
 </xsl:stylesheet>
