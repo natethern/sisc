@@ -42,14 +42,17 @@
                   (sisc:format 
                     (string-append
                       "SELECT knowledge.key, knowledge.type, knowledge.data FROM knowledge LEFT JOIN aka ON "
-                      "    (aka.key ilike '~a' AND aka.data ilike knowledge.key)"
-                      " WHERE ((aka.key IS NULL AND knowledge.key ilike '~a') "
+                      "    (aka.key ilike ? AND aka.data ilike knowledge.key)"
+                      " WHERE ((aka.key IS NULL AND knowledge.key ilike ?) "
                       "    OR (aka.key IS NOT NULL)) "
                       "   ~a") 
-                     key key (if type (sisc:format "AND type='~a'"
+                    (if type (sisc:format "AND type='~a'"
                                                    type) "")))]
+                  
          [results
-          (jdbc/execute-query stmt)])
+	  (begin (set-string stmt (->jint 1) (->jstring key))
+                 (set-string stmt (->jint 2) (->jstring key))
+                 (jdbc/execute-query stmt))])
     (and (not (null? results)) 
          (ordered-stream-map (lambda (item)
                                (cons (item '1)
