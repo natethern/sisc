@@ -123,16 +123,14 @@ public class AssociativeEnvironment extends NamedValue {
     }
 
     public int getLoc(Symbol s) {
-        Integer i;
         synchronized(symbolMap) {
-            i=(Integer)symbolMap.get(s);
-            if (i==null && parent!=null) {
-                int pi=parent.getLoc(s);
-                if (pi!=-1) 
-                    i=new Integer(store(s, parent.lookup(pi)));
-            }
+            Integer i=(Integer)symbolMap.get(s);
+            if (i!=null) return i.intValue();
+            if (parent == null) return -1;
+            int pi=parent.getLoc(s);
+            if (pi==-1) return -1;
+            return store(s, parent.lookup(pi));
         }
-        return (i==null ? -1 : i.intValue());
     }
 
     public Value lookup(Symbol s) {
