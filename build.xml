@@ -22,7 +22,7 @@
     <property name="basejar" value="sisc.jar"/>
 <!--    <property name="classopt" value="yes"/>-->
     <property name="optjar" value="sisc-opt.jar"/>
-    <property name="srfisll" value="srfi.sll"/>
+    <property name="srfisll" value="${basedir}/boot/srfi.sll"/>
     <property name="heap" value="${basedir}/boot/sisc.shp"/>
     <property name="quantity-type" value="apfloat"/>
     <!--<property name="releasecandidate" value="yes"/> -->
@@ -53,6 +53,7 @@
     <delete file="${basedir}/${basejar}"/>
     <delete file="${basedir}/${optjar}"/>
     <delete file="${heap}"/>
+    <delete file="${srfisll}"/>
     <delete file="${basedir}/data/Quantity.java"/>
     <delete file="${basedir}/Conf.java"/>
   </target> 
@@ -152,12 +153,12 @@
           dir="${schemedir}"
 	  fork="yes">
 	<jvmarg value="-Dsisc.heapfile=${heap}"/>
+	<arg value="-x"/>
 	<arg value="srfi-sll.scm"/>
     </java>
-    <move file="${schemedir}/${srfisll}" todir="${basedir}"/>
   </target> 
 
-  <target name="srfi-sce" depends="full-heap" unless="lite">
+<!--  <target name="srfi-sce" depends="full-heap" unless="lite">
     <java classname="sisc.REPL"
           classpath="${classdir}"
           dir="${schemedir}"
@@ -165,7 +166,7 @@
 	<jvmarg value="-Dsisc.heapfile=${heap}"/>
 	<arg line="-x -e '(expand-file &quot;srfi.scm&quot; &quot;srfi.sce&quot;)'"/>
     </java>
-  </target> 
+  </target> -->
 
   <target name="full-heap" depends="jars" unless="lite">
     <java classname="sisc.boot.GenerateHeap"
@@ -292,7 +293,6 @@
     <copy todir="${dist}/full/sisc/scheme-src">
       <fileset dir="${basedir}/scheme-src">
         <include name="slib.scm"/>
-        <include name="srfi.sce"/> 
         <!-- <include name="srfi/**"/> -->
         <include name="optional-args.scm"/>
       </fileset>
@@ -304,6 +304,8 @@
           file="${basedir}/${optjar}"/>
     <copy todir="${dist}/full/sisc"
           file="${heap}"/>
+    <copy todir="${dist}/full/sisc"
+          file="${srfisll}"/>
     <copy todir="${dist}/full/sisc">
       <fileset dir="${dist}">
 	<include name="ChangeLog"/>
@@ -412,6 +414,6 @@
     </cvs>
   </target> 
  
-  <target name="release-full-dist" depends="prepare,clean,srfi-sce,dist"/> 
+  <target name="release-full-dist" depends="prepare,clean,srfi-sll,dist"/> 
   <target name="release" depends="prepare,tag,source-dist"/> 
 </project>
