@@ -333,6 +333,8 @@ public abstract class Util extends IndexedProcedure {
     public static String mangleClassName(String s) {
         int p;
         int l = s.length();
+
+        //remove angle brackets and upcase character after last dot.
         if (s.startsWith("<") && s.endsWith(">")) {
             s = s.substring(1, l-1);
             p = s.lastIndexOf('.');
@@ -344,12 +346,21 @@ public abstract class Util extends IndexedProcedure {
                 s = res.toString();
             }
         }
-        String tail = "";
-        p = s.indexOf("[]");
-        if (p != -1) {
-            tail = s.substring(p, s.length());
-            s = s.substring(0, p);
+
+        //convert trailing '*' into []
+        StringBuffer tail = new StringBuffer();
+        while (s.endsWith("*")) {
+            s = s.substring(0, s.length()-1);
+            tail.append("[]");
         }
+
+        //preserve trailing []
+        while (s.endsWith("[]")) {
+            s = s.substring(0, s.length()-2);
+            tail.append("[]");
+        }
+
+        //perform field mangling on the "between the dots" parts.
         int prev=0;
         StringBuffer res = new StringBuffer(l);
         while((p=s.indexOf('.', prev)) != -1) {
