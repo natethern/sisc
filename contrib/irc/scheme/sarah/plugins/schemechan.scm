@@ -37,10 +37,11 @@
              (eof-object? sexpr)))))
 
     
-(define (queue->s-expressions channel-name schemer)
+(define (queue->s-expressions channel schemer)
   (with/fc (lambda (m e)
              (clear-queue! schemer)
-             (send-messages channel-name
+             (send-messages (channel-bot channel)
+                            (channel-name channel)
                             (make-error-message
                              (error-location m)
                              (error-message m))))
@@ -48,10 +49,10 @@
              (let ([datum (with-input-from-string
                               (schemers-queue schemer)
                             (lambda ()
-                               (let loop ([c (read-code)])
-                                 (if (eof-object? c)
-                                     '()
-                                     (cons c (loop (read-code)))))))])
+                              (let loop ([c (read-code)])
+                                (if (eof-object? c)
+                                    '()
+                                    (cons c (loop (read-code)))))))])
                (clear-queue! schemer)
                datum))))
 
@@ -104,7 +105,7 @@
                 (strict-r5rs-compliance #t)
                 (send-messages
                  (channel-bot channel) (channel-name channel)
-                 (let loop ([vs (queue->s-expressions (channel-name channel)
+                 (let loop ([vs (queue->s-expressions channel
                                                       schemer)])
                    (if (null? vs)
                        ""
@@ -169,6 +170,8 @@
                 (putprop proc etmp (forbidden-procedure proc)))
               forbidden-bindings)
     (putprop '$sc-put-cte etmp $sc-put-cte)
+    (putprop '$syntax-dispatch etmp $syntax-dispatch)
+    (putprop 'syntax-error etmp syntax-error)
     (putprop '_load etmp my-load)
     (putprop 'gen-sym etmp simple-gen-sym)
     (putprop ': etmp from)
