@@ -481,27 +481,28 @@ public class Primitives extends ModuleAdapter {
                 } catch (IOException e) {
                     throwPrimException( "error opening " + url);
                 }
-                CallFrame before=f.stk.capture(f);
-                v=null;
-                do {
-                    try {
-                        v=f.dynenv.parser.nextExpression(p);
-                    } catch (EOFException eof) {
-                        v=EOF;
-                    } catch (IOException e) {
-                        f.pop(before);
-                        throwPrimException( "error reading from "+p.write());
-                    }
-                    if (v!=EOF) {
+                Interpreter r = Context.enter();
+                try {
+                    v=null;
+                    do {
                         try {
-                            f.eval(v);
-                        } catch (SchemeException se) {
-                            f.pop(before);
-                            throwNestedPrimException(se);
+                            v=r.dynenv.parser.nextExpression(p);
+                        } catch (EOFException eof) {
+                            v=EOF;
+                        } catch (IOException e) {
+                            throwPrimException( "error reading from "+p.write());
                         }
-                    }
-                } while (v!=EOF);
-                f.pop(before);
+                        if (v!=EOF) {
+                            try {
+                                r.eval(v);
+                            } catch (SchemeException se) {
+                                throwNestedPrimException(se);
+                            }
+                        }
+                    } while (v!=EOF);
+                } finally {
+                    Context.exit();
+                }
                 return VOID;
             case LENGTH:
                 return Quantity.valueOf(length(pair(f.vlr[0])));
