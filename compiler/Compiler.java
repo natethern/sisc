@@ -295,7 +295,7 @@ public class Compiler extends Util {
                 Symbol lhs=(Symbol)expr.car;
                 expr=(Pair)expr.cdr;
                 rhs = compile(r, expr.car, rt, 0, env, null);
-                rv = new DefineEval(lhs);
+                rv = new DefineEval(lhs, env);
                 rv.annotations = rhs.annotations;
                 rv = makeEvalExp(rhs, rv);
                 break;

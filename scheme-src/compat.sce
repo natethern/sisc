@@ -127,7 +127,7 @@
        (if (if (pair? x) (equal? (car x) "noexpand") #f)
            (apply old-eval (cons (cadr x) env))
            ((lambda (e) (apply old-eval (cons e env)))
-            ((current-optimizer) (sc-expand x))))))
+            ((current-optimizer) (sc-expand x '(E) '(E)))))))
    (current-evaluator)))
 
 (define make-false

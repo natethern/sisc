@@ -1,7 +1,31 @@
+2002-07-16  Released SISC b1.5.5rc1
+
+2002-07-15  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Added sisc-initial-environment.  
+
+	* I18Ned much of Primitives.
+	
+	* putprop/getprop can now take a first class environment
+	  as their second argument.
+
+	* Deprecated the one/two argument versions of getprop/putprop.
+
+2002-07-14  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Added set-symbolic-environment!  Renamed get-environment
+	  to get-symbolic-environment!
+	
+	* Fixed DefineEval to be compiled with the environment it
+	  will be making the definition into.  This fixes (define ...)
+	  in a non-toplevel environment.
+
 2002-07-13  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Enforce the R5RS lexical syntax for <variable>.
 	  (define define 3) is now an error.
+
+2002-07-07  Released SISC b1.5.4
 
 2002-07-07  Matthias Radestock  <matthias@sorted.org>
 
@@ -12,6 +36,8 @@
 
 	* Fixed serialization deficiency that can allow
 	  some objects to be deserialized twice.
+
+2002-06-27  Released SISC b1.5.3
 
 2002-06-26  Scott G. Miller  <scgmille@freenetproject.org>
 

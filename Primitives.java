@@ -131,8 +131,9 @@ public class Primitives extends ModuleAdapter {
         define("native-library-name", NLNAME);
         define("native-library-version", NLVERSION);
         define("get-output-string", GETOUTPUTSTRING);
-        define("get-environment", GETENVIRONMENT);
-        define("getprop", LOOKUP);
+        define("get-symbolic-environment", GETENVIRONMENT);
+        define("set-symbolic-environment!", SETENVIRONMENT);
+        define("getprop", GETPROP);
         define("imag-part", IMAGPART);
         define("inexact->exact", INEXACT2EXACT);
         define("inexact?", INEXACTQ);
@@ -186,6 +187,7 @@ public class Primitives extends ModuleAdapter {
         define("set-car!", SETCAR);
         define("set-cdr!", SETCDR);
         define("sin", SIN);
+        define("sisc-initial-environment", SISCINITIAL);
         define("sqrt", SQRT);
         define("sleep", SLEEP);
         define("string->number", STRING2NUMBER);
@@ -265,7 +267,7 @@ public class Primitives extends ModuleAdapter {
             try {
                 return new URL("file:"+s);
             } catch (MalformedURLException ee) {
-                throwPrimException("malformed url " + s);
+                throwPrimException(liMessage(SISCB, "malformedurl", s));
                 return null;
             }
         }
@@ -280,7 +282,7 @@ public class Primitives extends ModuleAdapter {
             try {
                 return new URL(c, "file:"+s);
             } catch (MalformedURLException ee) {
-                throwPrimException("malformed url " + s);
+                throwPrimException(liMessage(SISCB, "malformedurl", s));
                 return null;
             }
         }
@@ -316,6 +318,12 @@ public class Primitives extends ModuleAdapter {
             case MAX_PRECISION: return Quantity.valueOf(Quantity.max_precision);
             case MIN_PRECISION: return Quantity.valueOf(Quantity.min_precision);
             case CASESENSITIVE: return truth(Symbol.caseSensitive);
+            case SISCINITIAL: 
+                try {
+                    return new AssociativeEnvironment(f.lookupContextEnv(SISC_SPECIFIC));
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    throwPrimException(liMessage(SISCB, "nosiscspecificenv"));
+                }
             }
         case 1:
             switch (primid) {
@@ -330,12 +338,6 @@ public class Primitives extends ModuleAdapter {
                              f.vlr[0]!=EMPTYLIST);
             case GETENVIRONMENT:
                 return f.ctx.lookupContextEnv(symbol(f.vlr[0])).asValue();
-            case LOOKUP:
-                try {
-                    return f.ctx.toplevel_env.lookup(symbol(f.vlr[0]));
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    return FALSE;
-                }
             case SIN: return num(f.vlr[0]).sin();
             case COS: return num(f.vlr[0]).cos();
             case TAN: return num(f.vlr[0]).tan();
@@ -437,7 +439,7 @@ public class Primitives extends ModuleAdapter {
             case GETOUTPUTSTRING:
                 OutputPort port=outport(f.vlr[0]);
                 if (!(port.w instanceof StringWriter))
-                    throwPrimException( "output port is not a string output port");
+                    throwPrimException( liMessage(SISCB, "outputnotastringport"));
                 try {
                     port.flush();
                 } catch (IOException e) {}
@@ -454,7 +456,7 @@ public class Primitives extends ModuleAdapter {
                     conn.setDoOutput(false);
                     return new SourceInputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())), url.toString());
                 } catch (IOException e) {
-                    throwPrimException("error opening " + url);
+                    throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
                 }
             case OPENINPUTFILE:
                 url = makeURL(f.vlr[0]);
@@ -464,7 +466,7 @@ public class Primitives extends ModuleAdapter {
                     conn.setDoOutput(false);
                     return new InputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())));
                 } catch (IOException e) {
-                    throwPrimException("error opening " + url);
+                    throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
                 }
             case OPENOUTPUTFILE:
                 url = makeURL(f.vlr[0]);
@@ -478,15 +480,14 @@ public class Primitives extends ModuleAdapter {
                     conn.setDoOutput(true);
                     return new OutputPort(new BufferedWriter(new OutputStreamWriter(conn.getOutputStream())));
                 } catch (IOException e) {
-                    e.printStackTrace();
-                    throwPrimException("error opening " + url);
+                    throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
                 }
             case FLUSHOUTPUTPORT:
                 OutputPort op=outport(f.vlr[0]);
                 try {
                     op.flush();
                 } catch (IOException e) {
-                    throwPrimException( "error flushing port: "+e.getMessage());
+                    throwPrimException(liMessage(SISCB, "errorflushing", op.toString()));
                 }
                 return VOID;
             case CLOSEINPUTPORT:
@@ -509,7 +510,7 @@ public class Primitives extends ModuleAdapter {
                     conn.setDoOutput(false);
                     p=new SourceInputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())), url.toString());
                 } catch (IOException e) {
-                    throwPrimException( "error opening " + url);
+                    throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
                 }
                 Interpreter r = Context.enter();
                 try {
@@ -520,7 +521,8 @@ public class Primitives extends ModuleAdapter {
                         } catch (EOFException eof) {
                             v=EOF;
                         } catch (IOException e) {
-                            throwPrimException( "error reading from "+p.write());
+                            throwPrimException(liMessage(SISCB, "errorreading",
+                                                         p.synopsis()));
                         }
                         if (v!=EOF) {
                             try {
@@ -550,7 +552,8 @@ public class Primitives extends ModuleAdapter {
                 try {
                     f.dynenv.out.writeChar(character(f.vlr[0]));
                 } catch (IOException e) {
-                    throwPrimException("Error writing to output port "+f.dynenv.out);
+                    throwPrimException(liMessage(SISCB, "errorwriting",
+                                                 f.dynenv.out.synopsis()));
                 }
                 return VOID;
             case NUMERATOR: return num(f.vlr[0]).numerator();
@@ -562,7 +565,8 @@ public class Primitives extends ModuleAdapter {
                     f.dynenv.out.write((primid == WRITE ? f.vlr[0].write() :
                                         f.vlr[0].display()));
                 } catch (IOException e) {
-                    throwPrimException("Error writing to output port "+f.dynenv.out);
+                    throwPrimException(liMessage(SISCB, "errorwriting",
+                                                 f.dynenv.out.write()));
                 }
                 return VOID;
             case CURRENTOUTPUTPORT:
@@ -588,15 +592,15 @@ public class Primitives extends ModuleAdapter {
                     try {
                         return new AssociativeEnvironment(f.lookupContextEnv(REPORT));
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        throwPrimException("Standard environment not present");
+                        throwPrimException(liMessage(SISCB, "noreportenv"));
                     }
-                else throwPrimException("Unsupported standard version");
+                else throwPrimException(liMessage(SISCB, "unsupportedstandardver"));
             case NULLENVIRONMENT:
                 if (FIVE.equals(num(f.vlr[0]))) {
                     AssociativeEnvironment ae = new AssociativeEnvironment();
                     sisc.compiler.Compiler.addSpecialForms(ae);
                     return ae;
-                } else throwPrimException("Unsupported standard version");
+                } else throwPrimException(liMessage(SISCB, "unsupportedstandardver"));
             case CURRENTEVAL:
                 f.ctx.evaluator=proc(f.vlr[0]);
                 return VOID;
@@ -686,7 +690,8 @@ public class Primitives extends ModuleAdapter {
                 try {
                     box(f.vlr[0]).set(f.vlr[1]);
                 } catch (ImmutableException e) {
-                    throwPrimException("box "+f.vlr[0]+" is immutable");
+                    throwPrimException(liMessage(SISCB, "isimmutable", "box",
+                                                 f.vlr[0].write()));
                 }
                 return VOID;
             case STRINGREF:
@@ -694,16 +699,20 @@ public class Primitives extends ModuleAdapter {
                 try {
                     return new SchemeCharacter(str(f.vlr[0]).charAt(index));
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    throwPrimException("index "+index+" out of bounds for '"+
-                                       f.vlr[0].synopsis()+"'");
+                    throwPrimException(liMessage(SISCB, "indexoob", 
+                                                 new Object[] {
+                                                     new Integer(index),
+                                                     f.vlr[0].synopsis()}));
                 }
             case VECTORREF:
                 index=num(f.vlr[1]).intValue();
                 try {
                     return vec(f.vlr[0]).vals[index];
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    throwPrimException("index "+index+" out of bounds for '"+
-                                       f.vlr[0].synopsis()+"'");
+                    throwPrimException(liMessage(SISCB, "indexoob", 
+                                                 new Object[] {
+                                                     new Integer(index),
+                                                     f.vlr[0].synopsis()}));
                 }
             case MAKEVECTOR:
                 return new SchemeVector(num(f.vlr[0]).intValue(),
@@ -739,7 +748,8 @@ public class Primitives extends ModuleAdapter {
                 try {
                     port.writeChar(character(f.vlr[0]));
                 } catch (IOException e) {
-                    throwPrimException("Error writing to output port "+port);
+                    throwPrimException(liMessage(SISCB, "errorwriting",
+                                                 port.synopsis()));                    
                 }
                 return VOID;
             case MAKERECTANGULAR:
@@ -757,7 +767,8 @@ public class Primitives extends ModuleAdapter {
                     port.write((primid == WRITE ? f.vlr[0].write() :
                                 f.vlr[0].display()));
                 } catch (IOException e) {
-                    throwPrimException("Error writing to output port "+port);
+                    throwPrimException(liMessage(SISCB, "errorwriting",
+                                                 port.synopsis()));   
                 }
                 return VOID;
             case OPENOUTPUTFILE:
@@ -774,8 +785,7 @@ public class Primitives extends ModuleAdapter {
                     return new OutputPort(new BufferedWriter(new OutputStreamWriter(conn.getOutputStream())),
                                           truth(f.vlr[1]));
                 } catch (IOException e) {
-                    e.printStackTrace();
-                    throwPrimException("error opening " + url);
+                    throwPrimException(liMessage(SISCB, "erroropening", url.toString()));
                 }
             case NLBINDING:
                 return module(f.vlr[0]).getBindingValue(f, symbol(f.vlr[1]));
@@ -806,12 +816,15 @@ public class Primitives extends ModuleAdapter {
                 try {
                     return new SchemeString(fn.getCanonicalPath());
                 } catch (IOException e) {
-                    throwPrimException("Invalid path specification");
+                    throwPrimException(liMessage(SISCB, "invalidpathspec"));
                 }
-            case LOOKUP:
+            case GETPROP:
                 try {
-                    return (Value)f.lookup(symbol(f.vlr[0]),
-                                           symbol(f.vlr[1]));
+                    if (f.vlr[1] instanceof SymbolicEnvironment) {
+                        return (Value)env(f.vlr[1]).lookup(symbol(f.vlr[0]));
+                    } else {
+                        return (Value)f.lookup(symbol(f.vlr[0]), symbol(f.vlr[1]));
+                    }
                 } catch (ArrayIndexOutOfBoundsException e) {
                     return FALSE;
                 }
@@ -825,29 +838,43 @@ public class Primitives extends ModuleAdapter {
                 return VOID;
             case ANNOTATION:
                 return f.vlr[0].getAnnotation(symbol(f.vlr[1]));
+            case SETENVIRONMENT:
+                f.ctx.defineContextEnv(symbol(f.vlr[0]), env(f.vlr[1]));
+                return VOID;
             }
         case 3:
             switch(primid) {
-            case LOOKUP:
+            case GETPROP:
                 try {
-                    return (Value)f.lookup(symbol(f.vlr[0]),
-                                           symbol(f.vlr[1]));
+                    if (f.vlr[1] instanceof SymbolicEnvironment) {
+                        return (Value)env(f.vlr[1]).lookup(symbol(f.vlr[0]));
+                    } else {
+                        return (Value)f.lookup(symbol(f.vlr[0]), symbol(f.vlr[1]));
+                    }
                 } catch (ArrayIndexOutOfBoundsException e) {
                     return f.vlr[2];
                 }
             case PUTPROP:
                 Symbol lhs=symbol(f.vlr[0]);
-                Symbol context=symbol(f.vlr[1]);
                 Value rhs=f.vlr[2];
+                SymbolicEnvironment env;
+                if (f.vlr[1] instanceof SymbolicEnvironment) {
+                    env=(SymbolicEnvironment)f.vlr[1];
+                } else {
+                    env=f.getContextEnv(symbol(f.vlr[1]));
+                }
                 updateName(rhs, lhs);
-                f.define(lhs, rhs, context);
+                env.define(lhs, rhs);
                 return VOID;
             case STRINGSET:
                 int index=num(f.vlr[1]).intValue();
                 try {
                     str(f.vlr[0]).set(index, character(f.vlr[2]));
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    throwPrimException("index "+index+" out of bounds for '"+f.vlr[0].synopsis()+"'");
+                    throwPrimException(liMessage(SISCB, "indexoob", 
+                                                 new Object[] {
+                                                     new Integer(index),
+                                                     f.vlr[0].synopsis()}));
                 }
                 return VOID;
             case VECTORFILL:
@@ -858,7 +885,10 @@ public class Primitives extends ModuleAdapter {
                 try {
                     vec(f.vlr[0]).set(index,f.vlr[2]);
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    throwPrimException("index "+index+" out of bounds for '"+f.vlr[0].synopsis()+"'");
+                    throwPrimException(liMessage(SISCB, "indexoob", 
+                                                 new Object[] {
+                                                     new Integer(index),
+                                                     f.vlr[0].synopsis()}));
                 }
                 return VOID;
             case BLOCKREAD:
@@ -1033,6 +1063,7 @@ public class Primitives extends ModuleAdapter {
         FLUSHOUTPUTPORT = 46,
         GCD = 116,
         GETENVIRONMENT = 64,
+        GETPROP = 119,
         NLBINDING = 117,
         NLBINDINGNAMES = 47,
         NLNAME = 48,
@@ -1053,7 +1084,6 @@ public class Primitives extends ModuleAdapter {
         LOAD = 59,
         LOADNL = 60,
         LOG = 61,
-        LOOKUP = 119,
         LT = 147,
         MAKEANNOTATION = 8,
         MAKEPARAM = 63,
@@ -1098,11 +1128,12 @@ public class Primitives extends ModuleAdapter {
         SETBOX = 128,
         SETCAR = 129,
         SETCDR = 130,
+        SETENVIRONMENT = 38,
         SIN = 86,
+        SISCINITIAL = 89,
         SLEEP = 87,
         SQRT = 88,
         STRING2NUMBER = 131,
-        //	STRING2NUMBER = 89,
         STRING2SYMBOL = 90,
         STRING2UNINTERNEDSYMBOL = 91,
         STRINGAPPEND = 132,
@@ -1128,7 +1159,6 @@ public class Primitives extends ModuleAdapter {
         VOIDQ = 102,
         WITHFC = 103,
         WRITE = 111,
-        //	WRITE = 38,
         WRITECHAR = 136,
         _VOID = 12;
 

@@ -89,7 +89,8 @@ public class GenerateHeap {
         "string=?", "string>=?", "string>?", "string?", "substring",
         "symbol->string", "symbol?", "tan", "truncate", "values", "vector",
         "vector->list", "vector-fill!", "vector-length", "vector-ref",
-        "vector-set!", "vector?", "with-input-from-file", "with-output-to-file",
+        "vector-set!", "vector?", "void", "void?",
+        "with-input-from-file", "with-output-to-file",
         "write", "write-char", "zero?"
         };
 

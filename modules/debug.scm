@@ -142,7 +142,7 @@
   (cond [(assoc x ls) => cdr]
         [else #f]))
 
-(define (stack-trace e)
+(define (stack-trace e . ec)
   (define (annotations-to-assoc expr)
     (let loop ([x ()] [keys (annotation-keys expr)])
       (if (null? keys) x
@@ -150,72 +150,77 @@
            (cons (cons (car keys) (annotation expr (car keys)))
                  x)
            (cdr keys)))))
-  (let* ([k (cdr (assoc 'error-continuation e))]
+  (let* ([k (cond [(assoc 'error-continuation e) => cdr]
+                  [(null? ec) #f]
+                  [else (car ec)])]
          [m (assoc-val 'message e)]
          [p (assoc-val 'parent e)]
          [st #f]
          [annots #f])
-    (call-with-values 
-        (lambda ()
-          (let loop ((k k))
-            (cond [(null? k) (values '() '())]
-                  [(null? (continuation-nxp k)) 
-                   (loop (continuation-stk k))]
-                  [else 
-                    (let* ([nxp (continuation-nxp k)]
-                           [nxp-annot (annotations-to-assoc nxp)])
-                      (call-with-values 
-                          (lambda () (loop (continuation-stk k)))
-                        (lambda (exprs annots)
-                          (values 
-                           (cons nxp exprs)
-                           (cons 
-                            (if (null? nxp-annot)
-                                '((line-number . ?)
-                                  (column-number . ?)
-                                  (source-file . ?))
-                                nxp-annot)
-                            annots)))))])))
-      (lambda (exprs ants)
-        (set! st exprs)
-        (set! annots ants)))
-    (if (not (null? annots))
+    (if (not k)
+        (display (format "{warning: no error continuation in error record, cannot display trace.~%}"))
         (begin
-          (let ([data (car annots)])
-            (let ([line (cdr (assoc 'line-number data))]
-                  [column (cdr (assoc 'column-number data))]
-                  [sourcefile (cdr (assoc 'source-file data))])
-              (display 
-               (format "~a:~a:~a: ~a~%" 
-                       sourcefile
-                       line column
-                       (make-error-message 
-                        (and (pair? e) (assoc-val 'location e))
-                        (and (pair? e) (assoc-val 'message e)))))))
-          (for-each
-           (lambda (data expr)
-             (if data
-                 (let ([line (cdr (assoc 'line-number data))]
-                       [column (cdr (assoc 'column-number data))]
-                       [sourcefile (cdr (assoc 'source-file data))])
-                   (if (and (_fill-rib? expr)
-                            (_free-reference-exp? (_fill-rib-exp expr)))
-                       (display 
-                        (format "~a:~a:~a: <called from ~a>~%" 
-                                sourcefile
-                                line column
-                                (_free-reference-symbol
-                                 (_fill-rib-exp expr))))
-                       (display 
-                        (format "~a:~a:~a: <indeterminate call>~%" 
-                                sourcefile
-                                line column))))))
-           (cdr annots) (cdr st)))
-        (display (format "{No stack trace available.}~%")))
-    (if p 
-        (begin (display (format "~%While calling:~%~%"))
-               (stack-trace p)))))
-
+          (call-with-values 
+              (lambda ()
+                (let loop ((k k))
+                  (cond [(null? k) (values '() '())]
+                        [(null? (continuation-nxp k)) 
+                         (loop (continuation-stk k))]
+                        [else 
+                          (let* ([nxp (continuation-nxp k)]
+                                 [nxp-annot (annotations-to-assoc nxp)])
+                            (call-with-values 
+                                (lambda () (loop (continuation-stk k)))
+                              (lambda (exprs annots)
+                                (values 
+                                 (cons nxp exprs)
+                                 (cons 
+                                  (if (null? nxp-annot)
+                                      '((line-number . ?)
+                                        (column-number . ?)
+                                        (source-file . ?))
+                                      nxp-annot)
+                                  annots)))))])))
+            (lambda (exprs ants)
+              (set! st exprs)
+              (set! annots ants)))
+          (if (not (null? annots))
+              (begin
+                (let ([data (car annots)])
+                  (let ([line (cdr (assoc 'line-number data))]
+                        [column (cdr (assoc 'column-number data))]
+                        [sourcefile (cdr (assoc 'source-file data))])
+                    (display 
+                     (format "~a:~a:~a: ~a~%" 
+                             sourcefile
+                             line column
+                             (make-error-message 
+                              (and (pair? e) (assoc-val 'location e))
+                              (and (pair? e) (assoc-val 'message e)))))))
+                (for-each
+                 (lambda (data expr)
+                   (if data
+                       (let ([line (cdr (assoc 'line-number data))]
+                             [column (cdr (assoc 'column-number data))]
+                             [sourcefile (cdr (assoc 'source-file data))])
+                         (if (and (_fill-rib? expr)
+                                  (_free-reference-exp? (_fill-rib-exp expr)))
+                             (display 
+                              (format "~a:~a:~a: <called from ~a>~%" 
+                                      sourcefile
+                                      line column
+                                      (_free-reference-symbol
+                                       (_fill-rib-exp expr))))
+                             (display 
+                              (format "~a:~a:~a: <indeterminate call>~%" 
+                                      sourcefile
+                                      line column))))))
+                 (cdr annots) (cdr st)))
+              (display (format "{No stack trace available.}~%")))
+          (if p 
+              (begin (display (format "~%While calling:~%~%"))
+                     (stack-trace p)))))))
+  
 (define (set-breakpoint! function-id)
   (define (make-breakpoint proc)
     (lambda args

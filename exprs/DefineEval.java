@@ -40,15 +40,17 @@ import sisc.ser.Deserializer;
 
 public class DefineEval extends Expression {
     public Symbol lhs;
+    public SymbolicEnvironment env;
 
-    public DefineEval(Symbol lhs) {
+    public DefineEval(Symbol lhs, SymbolicEnvironment env) {
         this.lhs=lhs;
+        this.env=env;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
         Value rhs=r.acc;
         updateName(rhs, lhs);
-        r.define(lhs, rhs, TOPLEVEL);
+        env.define(lhs, rhs);
 
         r.acc=VOID;
         r.nxp=null;
@@ -60,12 +62,14 @@ public class DefineEval extends Expression {
 
     public void serialize(Serializer s) throws IOException {
         s.writeExpression(lhs);
+        s.writeSymbolicEnvironment(env);
     }
 
     public DefineEval() {}
 
     public void deserialize(Deserializer s) throws IOException {
         lhs=(Symbol)s.readExpression();
+        env=s.readSymbolicEnvironment();
     }
 
     public boolean equals(Object o) {
@@ -74,7 +78,7 @@ public class DefineEval extends Expression {
     }
 
     public int hashCode() {
-        return lhs.hashCode();
+        return lhs.hashCode() ^ env.hashCode();
     }
 
 }
