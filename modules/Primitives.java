@@ -374,13 +374,13 @@ public class Primitives extends ModuleAdapter {
             case CALLCC:
                 Value kproc=f.vlr[0];
                 f.replaceVLR(1);
-                f.vlr[0]=f.stk.capture(f);
+                f.setVLR(0,f.stk.capture(f));
                 f.nxp = APPEVAL;
                 return kproc;
             case CALLFC:
                 Procedure proc=proc(f.vlr[0]);
                 f.replaceVLR(1);
-                f.vlr[0]=f.fk.capture(f);
+                f.setVLR(0,f.fk.capture(f));
                 f.nxp = APPEVAL;
                 return proc;
             case BOX: return new Box(f.vlr[0]);

@@ -380,6 +380,13 @@
   ()
   (add-feature 'srfi-30))
 
+;Still draft
+(display "srfi-38 ")
+(module srfi-38
+  (write-showing-shared)
+  (include "srfi/srfi-38.scm")
+  (add-feature 'srfi-38))
+
 (newline)
 
 ;; 
@@ -390,7 +397,7 @@
 ;; 
 ;; Software distributed under the License is distributed on an "AS
 ;; IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-;; implied. See the License for the specific language governing
+`;; implied. See the License for the specific language governing
 ;; rights and limitations under the License.
 ;; 
 ;; The Original Code is the Second Interpreter of Scheme Code (SISC).
