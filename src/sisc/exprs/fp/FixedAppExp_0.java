@@ -89,10 +89,10 @@ public class FixedAppExp_0 extends Expression
 
     protected void revert(Expression[] rands) {
         AppExp safeExpr=new AppExp(new FreeReferenceExp(ref), rands, APPEVAL, false);
-        host.alter(uexpPosition, safeExpr);
 		if (safeExpr instanceof OptimisticHost) {
             ((OptimisticHost)safeExpr).setHosts();
         }
+        host.alter(uexpPosition, safeExpr);
         throw new OptimismUnwarrantedException();
 		
 	}
