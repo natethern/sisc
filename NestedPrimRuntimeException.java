@@ -2,15 +2,20 @@ package sisc;
 
 public class NestedPrimRuntimeException extends PrimRuntimeException {
 
-    protected String primMessage;
+    protected SchemeException e;
 
-    public NestedPrimRuntimeException(String primMessage, String message) {
+    public NestedPrimRuntimeException(String message, SchemeException e) {
 	super(message);
-	this.primMessage=primMessage;
+	this.e=e;
     }
 
-    public String getPrimMessage() {
-	return primMessage;
+    public NestedPrimRuntimeException(SchemeException e) {
+	super("exception during nested call");
+	this.e=e;
+    }
+
+    public SchemeException getRootCause() {
+	return e;
     }
 }
     

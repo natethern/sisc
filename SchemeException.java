@@ -16,18 +16,7 @@ public class SchemeException extends Exception {
     public String getMessage() {
 	return m.display();
     }
-    
-    public void throwPrimException() {
-	throw new PrimRuntimeException(getMessage());
-    }
 
-    public void throwNestedPrimException() {
-	throw new NestedPrimRuntimeException("", getMessage());
-    }
-
-    public void throwNestedPrimException(String message) {
-	throw new NestedPrimRuntimeException(message, getMessage());
-    }
 }
     
 /*

@@ -50,11 +50,15 @@ public abstract class Module extends NamedValue implements java.io.Serializable 
     public abstract Value eval(int primid, Interpreter f)
     throws ContinuationException;
 
-    public void throwPrimException(String message) {
+    public static void throwPrimException(String message) {
 	throw new PrimRuntimeException(message);
     }
 
-    public void throwNestedPrimException(String message, SchemeException s) {
-	s.throwNestedPrimException(message);
+    public static void throwNestedPrimException(String message, SchemeException e) {
+	throw new NestedPrimRuntimeException(message, e);
+    }
+
+    public static void throwNestedPrimException(SchemeException e) {
+	throw new NestedPrimRuntimeException(e);
     }
 }

@@ -105,3 +105,25 @@ was made.
 
 Note that capturing and invoking a continuation within the *same* call
 works "correctly".
+
+Exceptions
+----------
+Interpreter.eval() throws a SchemeException when an evaluation causes
+an exception that is not caught "within" the evaluation.
+
+When making internal calls the exception can be propagted to the
+calling interpreter in one of four ways
+
+1) by throwing a RuntimeException - this will be reported as "Error in
+<prim-name>: <description>"
+
+2) by calling throwPrimException("<description>") - this will be
+reported as "Error in <prim-name>: <description>"
+
+3) by calling throwNestedPrimException("<description>",
+theSchemeException - this will be reported as "Error in <prim-name>:
+<description>\n  <nested-description>"
+
+4) by calling throwNestedPrimException(theSchemeException) - this will
+be reported as "Error in <prim-name>: exception during nested call\n
+<nested-description>"
