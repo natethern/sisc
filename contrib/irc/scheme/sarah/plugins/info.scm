@@ -4,15 +4,16 @@
     (if (eqv? #\? (string-ref term (- (string-length term) 1)))
         (set! term (substring term 
                               0 (- (string-length term) 1))))
-    (let ([results (lookup-item dbcon type term)])
-      (or (not results)
-	  (let ([random-result (random-elem results)])
-	    (sisc:format "~a~a ~a ~a" 
-			 (random-elem whatis-preludes) 
-			 (car random-result)
-			 (cdr (assq (if type type 'what)
-				    '((what . is) (where . "is at"))))
-			 (cdr random-result)))))))
+    (and term 
+         (let ([results (lookup-item dbcon type (trim term))])
+           (or (not results)
+               (let ([random-result (random-elem results)])
+                 (sisc:format "~a~a ~a ~a" 
+                              (random-elem whatis-preludes) 
+                              (car random-result)
+                              (cdr (assq (if type type 'what)
+                                         '((what . is) (where . "is at"))))
+                              (cdr random-result))))))))
 
 (define (learn type)
   (lambda (channel message term definition)
