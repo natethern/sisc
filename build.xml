@@ -98,7 +98,6 @@
       <arg value="file:compat.sce"/>
       <arg value="file:psyntax.sce"/>
       <arg value="file:init2.scm"/>
-      <arg value="file:errors.scm"/>
       <arg value="file:pp.scm"/>
       <arg value="file:repl.scm"/>
       <arg value="file:debug.scm"/>
@@ -118,7 +117,6 @@
       <arg value="file:compat.sce"/>
       <arg value="file:psyntax.sce"/>
       <arg value="file:init2.scm"/>
-      <arg value="file:errors.scm"/>
       <arg value="file:pp.scm"/>
       <arg value="file:repl.scm"/>
     </java>
