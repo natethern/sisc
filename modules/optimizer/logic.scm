@@ -18,6 +18,7 @@
   (lambda (formals values* state rec)
     (let ((set-vars (or (get-state-entry state 'set-vars) '()))
           (refed-vars (or (get-state-entry state 'refed-vars) '()))
+          (free-vars (or (get-state-entry state 'free-vars) '()))
           (nf '())
           (nv '())
           (sec '()))
@@ -66,9 +67,10 @@
                                                      (cdr y)
                                                      (cons (cons cx v) acc))])))]
                     ;; If the right hand side is a var-ref, 
-                    ;; but its set!'ed, skip it.
+                    ;; but its set!'ed or a free variable, skip it.
                     [(and (symbol? cy) 
-                          (memq cy set-vars))
+                          (or (memq cy set-vars)
+                              (memq cy free-vars)))
                      (set! nf (cons cx nf))
                      (set! nv (cons cy nv))
                      (cp-helper (cdr x) (cdr y) acc)]
