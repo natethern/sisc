@@ -34,6 +34,16 @@
     (next-method s c))
   (value-of <jstring> (->jchar #\o)))
 (value-of <jstring> (->jchar #\o))
+;;define methods on Scheme types
+(define-method (app (<list> l) . rest)
+  (apply append l rest))
+(define-method (app (<vector> v) . rest)
+  (list->vector (apply append (map vector->list (cons v rest)))))
+(define-method (app (<string> s) . rest)
+  (apply string-append s rest))
+(app '(1 2) '(3 4))
+(app '#(1 2) '#(3 4))
+(app "foo" "bar")
 
 ;array creation and access
 (define a (java-array-new <jint> '#(2 2 2)))
