@@ -14,19 +14,22 @@
 (define current-response (parameterize))
 (define current-return (parameterize))
 
+(define (get-k-data session)
+  (let ([k-data (get-attribute session (->jstring "kData"))])
+    (if (java-null? k-data)
+        (let ([k-data (cons 0 (make-hashtable))])
+          (set-attribute session
+                         (->jstring "kData")
+                         (java-wrap k-data))
+          k-data)
+        (java-unwrap k-data))))
+
 (define (access-k-data f)
   (let ([session (get-session (current-request) (->jboolean #t))])
     (java-synchronized
      session
-     (lambda ()
-       (let ([k-data (get-attribute session (->jstring "kData"))])
-         (f (if (java-null? k-data)
-                (let ([k-data (cons 0 (make-hashtable))])
-                  (set-attribute session
-                                 (->jstring "kData")
-                                 (java-wrap k-data))
-                  k-data)
-                (java-unwrap k-data))))))))
+     (lambda () (f (get-k-data session))))))
+
 (define (store-k k)
   (access-k-data
    (lambda (k-data)
