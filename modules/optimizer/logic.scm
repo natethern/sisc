@@ -194,7 +194,8 @@
     (cond [(and (eq? rator 'not)
                 (not-redefined? 'not)
                 (= (length rands) 1))
-           (values `(if ,@rands '#f '#t) '((new-assumptions not)))]
+           (let-values ([(rv state) (opt:if (car rands) ''#f ''#t state)])
+             (values rv (merge-states state '((new-assumptions not)))))]
           [(and (symbol? rator)
                 (not-redefined? rator)
                 (andmap constant? rands))
