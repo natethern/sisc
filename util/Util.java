@@ -433,7 +433,7 @@ public abstract class Util extends Defaults implements Version {
 
     /* Localization and Internationalization */
     public static Symbol SISCB=Symbol.intern("sisc.Messages");
-    static WeakHashMap bundles=new WeakHashMap();
+    public static WeakHashMap bundles=new WeakHashMap();
     static Locale myLocale=Locale.getDefault();
     static MessageFormat formatter=new MessageFormat("");
 
