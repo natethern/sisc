@@ -79,12 +79,12 @@
 (define map
   (letrec ([map1 (lambda (proc list acc)
                    (if (null? list)
-                       (reverse! acc)
+                       (reverse acc)
                        (map1 proc (cdr list) 
                              (cons (proc (car list)) acc))))]
            [loop (lambda (proc list1 lists c)
                    (if (null? list1)
-                       (reverse! c)
+                       (reverse c)
                        (loop proc (cdr list1)
                              (map-cdr lists)
                              (cons (apply proc

@@ -60,7 +60,7 @@
                       |list_0k2F1YVkK|
                       |acc_0koB_oWkK|)
                (if (null? |list_0k2F1YVkK|)
-                 (reverse! |acc_0koB_oWkK|)
+                 (reverse |acc_0koB_oWkK|)
                  (|map1_0k--deTkK|
                    |proc_0kII3vVkK|
                    (cdr |list_0k2F1YVkK|)
@@ -72,7 +72,7 @@
                       |lists_0kqqVLXkK|
                       |c_0kMmTcYkK|)
                (if (null? |list1_0k4uXiXkK|)
-                 (reverse! |c_0kMmTcYkK|)
+                 (reverse |c_0kMmTcYkK|)
                  (|loop_0kkXbHTkK|
                    |proc_0kKxZRWkK|
                    (cdr |list1_0k4uXiXkK|)
