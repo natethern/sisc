@@ -1,291 +1,291 @@
 (#%begin
-  (#%lambda (|when-list_sEGB3U6JG|
-             |compiling-a-file_sE0y1l7JG|)
+  (#%lambda (|when-list_-v_zSjoIA|
+             |compiling-a-file_-vlwQMoIA|)
     (apply append
-           (map (#%lambda (|s_sEmu_N7JG|)
-                  (#%if |compiling-a-file_sE0y1l7JG|
-                    (#%if (eqv? |s_sEmu_N7JG| (#%quote compile))
+           (map (#%lambda (|s_-vHsOdpIA|)
+                  (#%if |compiling-a-file_-vlwQMoIA|
+                    (#%if (eqv? |s_-vHsOdpIA| (#%quote compile))
                       (#%quote (c))
-                      (#%if (eqv? |s_sEmu_N7JG| (#%quote load))
+                      (#%if (eqv? |s_-vHsOdpIA| (#%quote load))
                         (#%quote (l))
-                        (#%if (eqv? |s_sEmu_N7JG| (#%quote visit))
+                        (#%if (eqv? |s_-vHsOdpIA| (#%quote visit))
                           (#%quote (v))
-                          (#%if (eqv? |s_sEmu_N7JG| (#%quote revisit))
+                          (#%if (eqv? |s_-vHsOdpIA| (#%quote revisit))
                             (#%quote (r))
                             ()))))
-                    (#%if (eqv? |s_sEmu_N7JG| (#%quote eval))
+                    (#%if (eqv? |s_-vHsOdpIA| (#%quote eval))
                       (#%quote (e))
                       ())))
-                |when-list_sEGB3U6JG|)))
-  (#%lambda (|fn_sEuDEK-IG| |v_sEQzCb_IG|)
-    ((#%letrec ((|doloop_sEawAE_IG|
-                  (#%lambda (|i_sEwsy50JG| |ls_sESowy0JG|)
-                    (#%if (< |i_sEwsy50JG| 0)
-                      |ls_sESowy0JG|
-                      (|doloop_sEawAE_IG|
-                        (- |i_sEwsy50JG| 1)
-                        (cons (|fn_sEuDEK-IG|
-                                (vector-ref |v_sEQzCb_IG| |i_sEwsy50JG|))
-                              |ls_sESowy0JG|))))))
-       |doloop_sEawAE_IG|)
-     (- (vector-length |v_sEQzCb_IG|) 1)
+                |when-list_-v_zSjoIA|)))
+  (#%lambda (|fn_-vPBragIA| |v_-v9ypDgIA|)
+    ((#%letrec ((|doloop_-vvun4hIA|
+                  (#%lambda (|i_-vRqlxhIA| |ls_-vbnj-hIA|)
+                    (#%if (< |i_-vRqlxhIA| 0)
+                      |ls_-vbnj-hIA|
+                      (|doloop_-vvun4hIA|
+                        (- |i_-vRqlxhIA| 1)
+                        (cons (|fn_-vPBragIA|
+                                (vector-ref |v_-v9ypDgIA| |i_-vRqlxhIA|))
+                              |ls_-vbnj-hIA|))))))
+       |doloop_-vvun4hIA|)
+     (- (vector-length |v_-v9ypDgIA|) 1)
      ()))
-  (#%lambda (|x_sEYvsLgHG| |update_sEisqchHG|)
-    (vector-set! |x_sEYvsLgHG| 5 |update_sEisqchHG|))
-  (#%lambda (|x_sEgDwRfHG| |update_sECzuigHG|)
-    (vector-set! |x_sEgDwRfHG| 4 |update_sECzuigHG|))
-  (#%lambda (|x_sEAKAXeHG| |update_sEWGyofHG|)
-    (vector-set! |x_sEAKAXeHG| 3 |update_sEWGyofHG|))
-  (#%lambda (|x_sEURE1eHG| |update_sEeOCueHG|)
-    (vector-set! |x_sEURE1eHG| 2 |update_sEeOCueHG|))
-  (#%lambda (|x_sEcZI7dHG| |update_sEyVGAdHG|)
-    (vector-set! |x_sEcZI7dHG| 1 |update_sEyVGAdHG|))
-  (#%lambda (|x_sE8jVpaHG|)
-    (#%if (vector? |x_sE8jVpaHG|)
-      (#%if (= (vector-length |x_sE8jVpaHG|) 6)
-        (eq? (vector-ref |x_sE8jVpaHG| 0)
+  (#%lambda (|x_-vhufbyGA| |update_-vDqdEyGA|)
+    (vector-set! |x_-vhufbyGA| 5 |update_-vDqdEyGA|))
+  (#%lambda (|x_-vBBjhxGA| |update_-vXxhKxGA|)
+    (vector-set! |x_-vBBjhxGA| 4 |update_-vXxhKxGA|))
+  (#%lambda (|x_-vVInnwGA| |update_-vfFlQwGA|)
+    (vector-set! |x_-vVInnwGA| 3 |update_-vfFlQwGA|))
+  (#%lambda (|x_-vdQrtvGA| |update_-vzMpWvGA|)
+    (vector-set! |x_-vdQrtvGA| 2 |update_-vzMpWvGA|))
+  (#%lambda (|x_-vxXvzuGA| |update_-vTTt0vGA|)
+    (vector-set! |x_-vxXvzuGA| 1 |update_-vTTt0vGA|))
+  (#%lambda (|x_-vthIRrGA|)
+    (#%if (vector? |x_-vthIRrGA|)
+      (#%if (= (vector-length |x_-vthIRrGA|) 6)
+        (eq? (vector-ref |x_-vthIRrGA| 0)
              (#%quote module-binding))
         #f)
       #f))
-  (#%lambda (|x_sE0_h-4HG| |update_sEmXfr5HG|)
-    (vector-set! |x_sE0_h-4HG| 2 |update_sEmXfr5HG|))
-  (#%lambda (|x_sEk6m44HG| |update_sEG2kx4HG|)
-    (vector-set! |x_sEk6m44HG| 1 |update_sEG2kx4HG|))
-  (#%lambda (|e_sE48bfsGG|
-             |r_sEq49IsGG|
-             |w_sEM079tGG|
-             |top-ribcage_sE6Z4CtGG|)
+  (#%lambda (|x_-vlZ4qmGA| |update_-vHV2TmGA|)
+    (vector-set! |x_-vlZ4qmGA| 2 |update_-vHV2TmGA|))
+  (#%lambda (|x_-vF49wlGA| |update_-v_07ZlGA|)
+    (vector-set! |x_-vF49wlGA| 1 |update_-v_07ZlGA|))
+  (#%lambda (|e_-vp6-GJFA|
+             |r_-vL2Y7KFA|
+             |w_-v5_VAKFA|
+             |top-ribcage_-vrXT1LFA|)
     (call-with-values
       (#%lambda ()
-        (|syntax-type_sECplNtAG|
-          |e_sE48bfsGG|
-          |r_sEq49IsGG|
-          |w_sEM079tGG|
+        (|syntax-type_-vXn8dLzA|
+          |e_-vp6-GJFA|
+          |r_-vL2Y7KFA|
+          |w_-v5_VAKFA|
           #f
-          |top-ribcage_sE6Z4CtGG|))
-      (#%lambda (|type_sEsV23uGG|
-                 |value_sEOR0wuGG|
-                 |e_sE8O-YuGG|
-                 |w_sEuKYpvGG|
-                 |s_sEQGWSvGG|)
-        (|chi-expr_sEGe7-KAG|
-          |type_sEsV23uGG|
-          |value_sEOR0wuGG|
-          |e_sE8O-YuGG|
-          |r_sEq49IsGG|
-          |w_sEuKYpvGG|
-          |s_sEQGWSvGG|))))
-  (#%lambda (|x_sEARUCLEG| |update_sEWNS3MEG|)
-    (vector-set! |x_sEARUCLEG| 1 |update_sEWNS3MEG|))
-  (#%lambda (|x_sEMElhFEG|)
-    (#%if (vector? |x_sEMElhFEG|)
-      (#%if (= (vector-length |x_sEMElhFEG|) 4)
-        (eq? (vector-ref |x_sEMElhFEG| 0)
+          |top-ribcage_-vrXT1LFA|))
+      (#%lambda (|type_-vNTRuLFA|
+                 |value_-v7QPXLFA|
+                 |e_-vtMNoMFA|
+                 |w_-vPILRMFA|
+                 |s_-v9FJiNFA|)
+        (|chi-expr_-v_cWp0AA|
+          |type_-vNTRuLFA|
+          |value_-v7QPXLFA|
+          |e_-vtMNoMFA|
+          |r_-vL2Y7KFA|
+          |w_-vPILRMFA|
+          |s_-v9FJiNFA|))))
+  (#%lambda (|x_-vVPH21EA| |update_-vfMFv1EA|)
+    (vector-set! |x_-vVPH21EA| 1 |update_-vfMFv1EA|))
+  (#%lambda (|x_-v5D8JWDA|)
+    (#%if (vector? |x_-v5D8JWDA|)
+      (#%if (= (vector-length |x_-v5D8JWDA|) 4)
+        (eq? (vector-ref |x_-v5D8JWDA| 0)
              (#%quote ribcage))
         #f)
       #f))
-  (#%lambda (|x_sEm2A6CEG|)
-    ((#%lambda (|t_sEI-xzCEG|)
-       (#%if |t_sEI-xzCEG|
-         |t_sEI-xzCEG|
-         ((#%lambda (|t_sE2Xv0DEG|)
-            (#%if |t_sE2Xv0DEG|
-              |t_sE2Xv0DEG|
-              (|indirect-label?_sEuLNnXzG| |x_sEm2A6CEG|)))
-          (symbol? |x_sEm2A6CEG|))))
-     (string? |x_sEm2A6CEG|)))
-  (#%lambda (|x_sE84h7eEG| |update_sEu0fAeEG|)
-    (vector-set! |x_sE84h7eEG| 2 |update_sEu0fAeEG|))
-  (#%lambda (|x_sEsblddEG| |update_sEO7jGdEG|)
-    (vector-set! |x_sEsblddEG| 1 |update_sEO7jGdEG|))
-  (#%letrec ((|lambda-var-list_sEc9wATAG|
-               (#%lambda (|vars_sEcp8PKLG|)
-                 ((#%letrec ((|lvl_sEyl6gLLG|
-                               (#%lambda (|vars_sEUh4JLLG|
-                                          |ls_sEee2aMLG|
-                                          |w_sEAa0DMLG|)
-                                 (#%if (pair? |vars_sEUh4JLLG|)
-                                   (|lvl_sEyl6gLLG|
-                                     (cdr |vars_sEUh4JLLG|)
-                                     (cons (|wrap_sEwWDIpAG|
-                                             (car |vars_sEUh4JLLG|)
-                                             |w_sEAa0DMLG|)
-                                           |ls_sEee2aMLG|)
-                                     |w_sEAa0DMLG|)
-                                   (#%if (|id?_sE4-1KFzG| |vars_sEUh4JLLG|)
-                                     (cons (|wrap_sEwWDIpAG|
-                                             |vars_sEUh4JLLG|
-                                             |w_sEAa0DMLG|)
-                                           |ls_sEee2aMLG|)
-                                     (#%if (null? |vars_sEUh4JLLG|)
-                                       |ls_sEee2aMLG|
-                                       (#%if (|syntax-object?_sEueTWfzG|
-                                               |vars_sEUh4JLLG|)
-                                         (|lvl_sEyl6gLLG|
-                                           (|syntax-object-expression_sEQaRngzG|
-                                             |vars_sEUh4JLLG|)
-                                           |ls_sEee2aMLG|
-                                           (|join-wraps_sE-_e6hAG|
-                                             |w_sEAa0DMLG|
-                                             (|syntax-object-wrap_sEa7PQgzG|
-                                               |vars_sEUh4JLLG|)))
-                                         (#%if (annotation? |vars_sEUh4JLLG|)
-                                           (|lvl_sEyl6gLLG|
+  (#%lambda (|x_-vH0nyTDA|)
+    ((#%lambda (|t_-v1Zk_TDA|)
+       (#%if |t_-v1Zk_TDA|
+         |t_-v1Zk_TDA|
+         ((#%lambda (|t_-vnVisUDA|)
+            (#%if |t_-vnVisUDA|
+              |t_-vnVisUDA|
+              (|indirect-label?_-vPJAPczA| |x_-vH0nyTDA|)))
+          (symbol? |x_-vH0nyTDA|))))
+     (string? |x_-vH0nyTDA|)))
+  (#%lambda (|x_-vt24zvDA| |update_-vP-10wDA|)
+    (vector-set! |x_-vt24zvDA| 2 |update_-vP-10wDA|))
+  (#%lambda (|x_-vN98FuDA| |update_-v7666vDA|)
+    (vector-set! |x_-vN98FuDA| 1 |update_-v7666vDA|))
+  (#%letrec ((|lambda-var-list_-vx7j09AA|
+               (#%lambda (|vars_-vxnXe0LA|)
+                 ((#%letrec ((|lvl_-vTjVH0LA|
+                               (#%lambda (|vars_-vdgT81LA|
+                                          |ls_-vzcRB1LA|
+                                          |w_-vV8P22LA|)
+                                 (#%if (pair? |vars_-vdgT81LA|)
+                                   (|lvl_-vTjVH0LA|
+                                     (cdr |vars_-vdgT81LA|)
+                                     (cons (|wrap_-vRUq8HzA|
+                                             (car |vars_-vdgT81LA|)
+                                             |w_-vV8P22LA|)
+                                           |ls_-vzcRB1LA|)
+                                     |w_-vV8P22LA|)
+                                   (#%if (|id?_-vpYQ9XyA| |vars_-vdgT81LA|)
+                                     (cons (|wrap_-vRUq8HzA|
+                                             |vars_-vdgT81LA|
+                                             |w_-vV8P22LA|)
+                                           |ls_-vzcRB1LA|)
+                                     (#%if (null? |vars_-vdgT81LA|)
+                                       |ls_-vzcRB1LA|
+                                       (#%if (|syntax-object?_-vPcGmxyA|
+                                               |vars_-vdgT81LA|)
+                                         (|lvl_-vTjVH0LA|
+                                           (|syntax-object-expression_-v99EPxyA|
+                                             |vars_-vdgT81LA|)
+                                           |ls_-vzcRB1LA|
+                                           (|join-wraps_-vj-1yyzA|
+                                             |w_-vV8P22LA|
+                                             (|syntax-object-wrap_-vv5CgyyA|
+                                               |vars_-vdgT81LA|)))
+                                         (#%if (annotation? |vars_-vdgT81LA|)
+                                           (|lvl_-vTjVH0LA|
                                              (annotation-expression
-                                               |vars_sEUh4JLLG|)
-                                             |ls_sEee2aMLG|
-                                             |w_sEAa0DMLG|)
-                                           (cons |vars_sEUh4JLLG|
-                                                 |ls_sEee2aMLG|)))))))))
-                    |lvl_sEyl6gLLG|)
-                  |vars_sEcp8PKLG|
+                                               |vars_-vdgT81LA|)
+                                             |ls_-vzcRB1LA|
+                                             |w_-vV8P22LA|)
+                                           (cons |vars_-vdgT81LA|
+                                                 |ls_-vzcRB1LA|)))))))))
+                    |lvl_-vTjVH0LA|)
+                  |vars_-vxnXe0LA|
                   ()
                   (#%quote (())))))
-             (|gen-var_sEScy7TAG|
-               (#%lambda (|id_sEwwcVJLG|)
-                 ((#%lambda (|id_sESsamKLG|)
-                    (#%if (annotation? |id_sESsamKLG|)
-                      (#%if (annotation-source |id_sESsamKLG|)
+             (|gen-var_-vbblz8AA|
+               (#%lambda (|id_-vRu_k_KA|)
+                 ((#%lambda (|id_-vbrZN_KA|)
+                    (#%if (annotation? |id_-vbrZN_KA|)
+                      (#%if (annotation-source |id_-vbrZN_KA|)
                         (list (#%quote annotate)
-                              (gen-sym (annotation-expression |id_sESsamKLG|))
-                              (annotation-source |id_sESsamKLG|))
-                        (gen-sym (annotation-expression |id_sESsamKLG|)))
-                      (gen-sym |id_sESsamKLG|)))
-                  (#%if (|syntax-object?_sEueTWfzG| |id_sEwwcVJLG|)
-                    (|syntax-object-expression_sEQaRngzG|
-                      |id_sEwwcVJLG|)
-                    |id_sEwwcVJLG|))))
-             (|strip_sEwgAGSAG|
-               (#%lambda (|x_sEOOmEHLG| |w_sE8Lk5ILG|)
-                 (|strip*_sEakCdSAG|
-                   |x_sEOOmEHLG|
-                   |w_sE8Lk5ILG|
-                   (#%lambda (|x_sEuHiyILG|)
-                     (#%if ((#%lambda (|t_sEQDg_ILG|)
-                              (#%if |t_sEQDg_ILG|
-                                |t_sEQDg_ILG|
-                                ((#%lambda (|t_sEaAesJLG|)
-                                   (#%if |t_sEaAesJLG|
-                                     |t_sEaAesJLG|
-                                     (#%if (box? |x_sEuHiyILG|)
-                                       (annotation? (unbox |x_sEuHiyILG|))
+                              (gen-sym (annotation-expression |id_-vbrZN_KA|))
+                              (annotation-source |id_-vbrZN_KA|))
+                        (gen-sym (annotation-expression |id_-vbrZN_KA|)))
+                      (gen-sym |id_-vbrZN_KA|)))
+                  (#%if (|syntax-object?_-vPcGmxyA| |id_-vRu_k_KA|)
+                    (|syntax-object-expression_-v99EPxyA|
+                      |id_-vRu_k_KA|)
+                    |id_-vRu_k_KA|))))
+             (|strip_-vRen68AA|
+               (#%lambda (|x_-v7N94ZKA| |w_-vtJ7xZKA|)
+                 (|strip*_-vvipF7AA|
+                   |x_-v7N94ZKA|
+                   |w_-vtJ7xZKA|
+                   (#%lambda (|x_-vPF5-ZKA|)
+                     (#%if ((#%lambda (|t_-v9C3r-KA|)
+                              (#%if |t_-v9C3r-KA|
+                                |t_-v9C3r-KA|
+                                ((#%lambda (|t_-vvy1U-KA|)
+                                   (#%if |t_-vvy1U-KA|
+                                     |t_-vvy1U-KA|
+                                     (#%if (box? |x_-vPF5-ZKA|)
+                                       (annotation? (unbox |x_-vPF5-ZKA|))
                                        #f)))
-                                 (#%if (pair? |x_sEuHiyILG|)
-                                   (annotation? (car |x_sEuHiyILG|))
+                                 (#%if (pair? |x_-vPF5-ZKA|)
+                                   (annotation? (car |x_-vPF5-ZKA|))
                                    #f))))
-                            (annotation? |x_sEuHiyILG|))
-                       (|strip-annotation_sEQnEMRAG| |x_sEuHiyILG| #f)
-                       |x_sEuHiyILG|)))))
-             (|strip*_sEakCdSAG|
-               (#%lambda (|x_sEIjFzDLG| |w_sE2gD0ELG| |fn_sEocBtELG|)
+                            (annotation? |x_-vPF5-ZKA|))
+                       (|strip-annotation_-v9mrc7AA| |x_-vPF5-ZKA| #f)
+                       |x_-vPF5-ZKA|)))))
+             (|strip*_-vvipF7AA|
+               (#%lambda (|x_-v1is_UKA| |w_-vneqsVKA| |fn_-vJaoVVKA|)
                  (#%if (memq (#%quote top)
-                             (|wrap-marks_sEQwNlJzG| |w_sE2gD0ELG|))
-                   (|fn_sEocBtELG| |x_sEIjFzDLG|)
-                   ((#%letrec ((|f_sEK8zWELG|
-                                 (#%lambda (|x_sE45xnFLG|)
-                                   (#%if (|syntax-object?_sEueTWfzG|
-                                           |x_sE45xnFLG|)
-                                     (|strip*_sEakCdSAG|
-                                       (|syntax-object-expression_sEQaRngzG|
-                                         |x_sE45xnFLG|)
-                                       (|syntax-object-wrap_sEa7PQgzG|
-                                         |x_sE45xnFLG|)
-                                       |fn_sEocBtELG|)
-                                     (#%if (pair? |x_sE45xnFLG|)
-                                       ((#%lambda (|a_sE6WqKGLG| |d_sEsSobHLG|)
-                                          (#%if (#%if (eq? |a_sE6WqKGLG|
-                                                           (car |x_sE45xnFLG|))
-                                                  (eq? |d_sEsSobHLG|
-                                                       (cdr |x_sE45xnFLG|))
+                             (|wrap-marks_-v9vAN-yA| |w_-vneqsVKA|))
+                   (|fn_-vJaoVVKA| |x_-v1is_UKA|)
+                   ((#%letrec ((|f_-v37mmWKA|
+                                 (#%lambda (|x_-vp3kPWKA|)
+                                   (#%if (|syntax-object?_-vPcGmxyA|
+                                           |x_-vp3kPWKA|)
+                                     (|strip*_-vvipF7AA|
+                                       (|syntax-object-expression_-v99EPxyA|
+                                         |x_-vp3kPWKA|)
+                                       (|syntax-object-wrap_-vv5CgyyA|
+                                         |x_-vp3kPWKA|)
+                                       |fn_-vJaoVVKA|)
+                                     (#%if (pair? |x_-vp3kPWKA|)
+                                       ((#%lambda (|a_-vrUdaYKA| |d_-vNQbDYKA|)
+                                          (#%if (#%if (eq? |a_-vrUdaYKA|
+                                                           (car |x_-vp3kPWKA|))
+                                                  (eq? |d_-vNQbDYKA|
+                                                       (cdr |x_-vp3kPWKA|))
                                                   #f)
-                                            |x_sE45xnFLG|
-                                            (cons |a_sE6WqKGLG|
-                                                  |d_sEsSobHLG|)))
-                                        (|f_sEK8zWELG| (car |x_sE45xnFLG|))
-                                        (|f_sEK8zWELG| (cdr |x_sE45xnFLG|)))
-                                       (#%if (vector? |x_sE45xnFLG|)
-                                         ((#%lambda (|old_sEq1vQFLG|)
-                                            ((#%lambda (|new_sEMZshGLG|)
+                                            |x_-vp3kPWKA|
+                                            (cons |a_-vrUdaYKA|
+                                                  |d_-vNQbDYKA|)))
+                                        (|f_-v37mmWKA| (car |x_-vp3kPWKA|))
+                                        (|f_-v37mmWKA| (cdr |x_-vp3kPWKA|)))
+                                       (#%if (vector? |x_-vp3kPWKA|)
+                                         ((#%lambda (|old_-vL_hgXKA|)
+                                            ((#%lambda (|new_-v5YfJXKA|)
                                                (#%if (andmap
                                                        eq?
-                                                       |old_sEq1vQFLG|
-                                                       |new_sEMZshGLG|)
-                                                 |x_sE45xnFLG|
+                                                       |old_-vL_hgXKA|
+                                                       |new_-v5YfJXKA|)
+                                                 |x_-vp3kPWKA|
                                                  (list->vector
-                                                   |new_sEMZshGLG|)))
-                                             (map |f_sEK8zWELG|
-                                                  |old_sEq1vQFLG|)))
-                                          (vector->list |x_sE45xnFLG|))
-                                         |x_sE45xnFLG|))))))
-                      |f_sEK8zWELG|)
-                    |x_sEIjFzDLG|))))
-             (|strip-annotation_sEQnEMRAG|
-               (#%lambda (|x_sEiJToALG| |parent_sEEFRRALG|)
-                 (#%if (pair? |x_sEiJToALG|)
-                   ((#%lambda (|new_sEmnH6DLG|)
+                                                   |new_-v5YfJXKA|)))
+                                             (map |f_-v37mmWKA|
+                                                  |old_-vL_hgXKA|)))
+                                          (vector->list |x_-vp3kPWKA|))
+                                         |x_-vp3kPWKA|))))))
+                      |f_-v37mmWKA|)
+                    |x_-v1is_UKA|))))
+             (|strip-annotation_-v9mrc7AA|
+               (#%lambda (|x_-vDHGQRKA| |parent_-vZDEhSKA|)
+                 (#%if (pair? |x_-vDHGQRKA|)
+                   ((#%lambda (|new_-vHluyUKA|)
                       (#%begin
-                        (#%if |parent_sEEFRRALG|
+                        (#%if |parent_-vZDEhSKA|
                           (set-annotation-stripped!
-                            |parent_sEEFRRALG|
-                            |new_sEmnH6DLG|)
+                            |parent_-vZDEhSKA|
+                            |new_-vHluyUKA|)
                           #!void)
                         (set-car!
-                          |new_sEmnH6DLG|
-                          (|strip-annotation_sEQnEMRAG|
-                            (car |x_sEiJToALG|)
+                          |new_-vHluyUKA|
+                          (|strip-annotation_-v9mrc7AA|
+                            (car |x_-vDHGQRKA|)
                             #f))
                         (set-cdr!
-                          |new_sEmnH6DLG|
-                          (|strip-annotation_sEQnEMRAG|
-                            (cdr |x_sEiJToALG|)
+                          |new_-vHluyUKA|
+                          (|strip-annotation_-v9mrc7AA|
+                            (cdr |x_-vDHGQRKA|)
                             #f))
-                        |new_sEmnH6DLG|))
+                        |new_-vHluyUKA|))
                     (cons #f #f))
-                   (#%if (annotation? |x_sEiJToALG|)
-                     ((#%lambda (|t_sE0rJFCLG|)
-                        (#%if |t_sE0rJFCLG|
-                          |t_sE0rJFCLG|
-                          (|strip-annotation_sEQnEMRAG|
-                            (annotation-expression |x_sEiJToALG|)
-                            |x_sEiJToALG|)))
-                      (annotation-stripped |x_sEiJToALG|))
-                     (#%if (vector? |x_sEiJToALG|)
-                       ((#%lambda (|new_sE-BPiBLG|)
+                   (#%if (annotation? |x_-vDHGQRKA|)
+                     ((#%lambda (|t_-vlpw5UKA|)
+                        (#%if |t_-vlpw5UKA|
+                          |t_-vlpw5UKA|
+                          (|strip-annotation_-v9mrc7AA|
+                            (annotation-expression |x_-vDHGQRKA|)
+                            |x_-vDHGQRKA|)))
+                      (annotation-stripped |x_-vDHGQRKA|))
+                     (#%if (vector? |x_-vDHGQRKA|)
+                       ((#%lambda (|new_-vjACKSKA|)
                           (#%begin
-                            (#%if |parent_sEEFRRALG|
+                            (#%if |parent_-vZDEhSKA|
                               (set-annotation-stripped!
-                                |parent_sEEFRRALG|
-                                |new_sE-BPiBLG|)
+                                |parent_-vZDEhSKA|
+                                |new_-vjACKSKA|)
                               #!void)
-                            ((#%letrec ((|loop_sEkyNLBLG|
-                                          (#%lambda (|i_sEGuLcCLG|)
-                                            (#%if (< |i_sEGuLcCLG| 0)
+                            ((#%letrec ((|loop_-vFwAbTKA|
+                                          (#%lambda (|i_-v_syETKA|)
+                                            (#%if (< |i_-v_syETKA| 0)
                                               #!void
                                               (#%begin
                                                 (vector-set!
-                                                  |new_sE-BPiBLG|
-                                                  |i_sEGuLcCLG|
-                                                  (|strip-annotation_sEQnEMRAG|
+                                                  |new_-vjACKSKA|
+                                                  |i_-v_syETKA|
+                                                  (|strip-annotation_-v9mrc7AA|
                                                     (vector-ref
-                                                      |x_sEiJToALG|
-                                                      |i_sEGuLcCLG|)
+                                                      |x_-vDHGQRKA|
+                                                      |i_-v_syETKA|)
                                                     #f))
-                                                (|loop_sEkyNLBLG|
-                                                  (- |i_sEGuLcCLG| 1)))))))
-                               |loop_sEkyNLBLG|)
-                             (- (vector-length |x_sEiJToALG|) 1))
-                            |new_sE-BPiBLG|))
-                        (make-vector (vector-length |x_sEiJToALG|)))
-                       (#%if (box? |x_sEiJToALG|)
-                         (box (|strip-annotation_sEQnEMRAG|
-                                (unbox |x_sEiJToALG|)
+                                                (|loop_-vFwAbTKA|
+                                                  (- |i_-v_syETKA| 1)))))))
+                               |loop_-vFwAbTKA|)
+                             (- (vector-length |x_-vDHGQRKA|) 1))
+                            |new_-vjACKSKA|))
+                        (make-vector (vector-length |x_-vDHGQRKA|)))
+                       (#%if (box? |x_-vDHGQRKA|)
+                         (box (|strip-annotation_-v9mrc7AA|
+                                (unbox |x_-vDHGQRKA|)
                                 #f))
-                         |x_sEiJToALG|))))))
-             (|ellipsis?_sEurGjRAG|
-               (#%lambda (|x_sEYMVXzLG|)
-                 (#%if (|nonsymbol-id?_sE0ke0DzG| |x_sEYMVXzLG|)
-                   (|literal-id=?_sEKy-JkAG|
-                     |x_sEYMVXzLG|
+                         |x_-vDHGQRKA|))))))
+             (|ellipsis?_-vPptL6AA|
+               (#%lambda (|x_-vhLInRKA|)
+                 (#%if (|nonsymbol-id?_-vli1sUyA| |x_-vhLInRKA|)
+                   (|literal-id=?_-v3xN9CzA|
+                     |x_-vhLInRKA|
                      #3(syntax-object
                         ...
                         ((top)
@@ -876,236 +876,236 @@
                              "i"))
                          #4(ribcage (#2(import-token *top*)) ()))))
                    #f)))
-             (|chi-void_sE8vISQAG|
+             (|chi-void_-vttvi6AA|
                (#%lambda ()
                  (#%if (atom? #!void)
                    #!void
                    (list #%quote #!void))))
-             (|chi-local-syntax_sEOyKpQAG|
-               (#%lambda (|rec?_sEI8H4pLG|
-                          |e_sE25FxpLG|
-                          |r_sEo1D-pLG|
-                          |w_sEKZArqLG|
-                          |s_sE4WyUqLG|
-                          |k_sEqSwlrLG|)
-                 ((#%lambda (|tmp_sE6LsfsLG|)
-                    (#%if |tmp_sE6LsfsLG|
-                      (apply (#%lambda (|__sEODo9tLG|
-                                        |id_sE8AmCtLG|
-                                        |val_sEuwk3uLG|
-                                        |e1_sEQsiwuLG|
-                                        |e2_sEapgZuLG|)
-                               (#%if (not (|valid-bound-ids?_sEqrWDlAG|
-                                            |id_sE8AmCtLG|))
-                                 (|invalid-ids-error_sEQ1IOoAG|
-                                   (map (#%lambda (|x_sEgUZ1zLG|)
-                                          (|wrap_sEwWDIpAG|
-                                            |x_sEgUZ1zLG|
-                                            |w_sEKZArqLG|))
-                                        |id_sE8AmCtLG|)
-                                   (|source-wrap_sESSB9qAG|
-                                     |e_sE25FxpLG|
-                                     |w_sEKZArqLG|
-                                     |s_sE4WyUqLG|)
-                                   "keyword")
-                                 ((#%lambda (|labels_sEShcTvLG|)
-                                    ((#%lambda (|new-w_sEceakwLG|)
-                                       (|k_sEqSwlrLG|
-                                         (cons |e1_sEQsiwuLG| |e2_sEapgZuLG|)
-                                         (|extend-env*_sEgNuozzG|
-                                           |labels_sEShcTvLG|
-                                           ((#%lambda (|w_sEU66exLG|
-                                                       |trans-r_sEe34HxLG|)
-                                              (map (#%lambda (|x_sEA_18yLG|)
-                                                     (|make-binding_sEMH_8szG|
+             (|chi-local-syntax_-v7xxR5AA|
+               (#%lambda (|rec?_-v17uwGKA|
+                          |e_-vn3sZGKA|
+                          |r_-vJ_pqHKA|
+                          |w_-v3YnTHKA|
+                          |s_-vpUlkIKA|
+                          |k_-vLQjNIKA|)
+                 ((#%lambda (|tmp_-vrJfHJKA|)
+                    (#%if |tmp_-vrJfHJKA|
+                      (apply (#%lambda (|__-v7CbBKKA|
+                                        |id_-vty92LKA|
+                                        |val_-vPu7vLKA|
+                                        |e1_-v9r5YLKA|
+                                        |e2_-vvn3pMKA|)
+                               (#%if (|valid-bound-ids?_-vLpJ3DzA|
+                                       |id_-vty92LKA|)
+                                 ((#%lambda (|labels_-vbg_iNKA|)
+                                    ((#%lambda (|new-w_-vxcZLNKA|)
+                                       (|k_-vLQjNIKA|
+                                         (cons |e1_-v9r5YLKA| |e2_-vvn3pMKA|)
+                                         (|extend-env*_-vBLhQQyA|
+                                           |labels_-vbg_iNKA|
+                                           ((#%lambda (|w_-vd5VFOKA|
+                                                       |trans-r_-vz1T6PKA|)
+                                              (map (#%lambda (|x_-vVZQzPKA|)
+                                                     (|make-binding_-v5GOAJyA|
                                                        (#%quote deferred)
-                                                       (|chi_sEki9xKAG|
-                                                         |x_sEA_18yLG|
-                                                         |trans-r_sEe34HxLG|
-                                                         |w_sEU66exLG|)))
-                                                   |val_sEuwk3uLG|))
-                                            (#%if |rec?_sEI8H4pLG|
-                                              |new-w_sEceakwLG|
-                                              |w_sEKZArqLG|)
-                                            (|transformer-env_sEYFqiAzG|
-                                              |r_sEo1D-pLG|))
-                                           |r_sEo1D-pLG|)
-                                         |new-w_sEceakwLG|
-                                         |s_sE4WyUqLG|))
-                                     (|make-binding-wrap_sEYalLfAG|
-                                       |id_sE8AmCtLG|
-                                       |labels_sEShcTvLG|
-                                       |w_sEKZArqLG|)))
-                                  (|gen-labels_sEeix_-zG| |id_sE8AmCtLG|))))
-                             |tmp_sE6LsfsLG|)
+                                                       (|chi_-vFgYY_zA|
+                                                         |x_-vVZQzPKA|
+                                                         |trans-r_-vz1T6PKA|
+                                                         |w_-vd5VFOKA|)))
+                                                   |val_-vPu7vLKA|))
+                                            (#%if |rec?_-v17uwGKA|
+                                              |new-w_-vxcZLNKA|
+                                              |w_-v3YnTHKA|)
+                                            (|transformer-env_-vhEdKRyA|
+                                              |r_-vJ_pqHKA|))
+                                           |r_-vJ_pqHKA|)
+                                         |new-w_-vxcZLNKA|
+                                         |s_-vpUlkIKA|))
+                                     (|make-binding-wrap_-vh98bxzA|
+                                       |id_-vty92LKA|
+                                       |labels_-vbg_iNKA|
+                                       |w_-v3YnTHKA|)))
+                                  (|gen-labels_-vzgkrgzA| |id_-vty92LKA|))
+                                 (|invalid-ids-error_-v90veGzA|
+                                   (map (#%lambda (|x_-vBSMtQKA|)
+                                          (|wrap_-vRUq8HzA|
+                                            |x_-vBSMtQKA|
+                                            |w_-v3YnTHKA|))
+                                        |id_-vty92LKA|)
+                                   (|source-wrap_-vbRoBHzA|
+                                     |e_-vn3sZGKA|
+                                     |w_-v3YnTHKA|
+                                     |s_-vpUlkIKA|)
+                                   "keyword")))
+                             |tmp_-vrJfHJKA|)
                       (syntax-error
-                        (|source-wrap_sESSB9qAG|
-                          |e_sE25FxpLG|
-                          |w_sEKZArqLG|
-                          |s_sE4WyUqLG|))))
+                        (|source-wrap_-vbRoBHzA|
+                          |e_-vn3sZGKA|
+                          |w_-v3YnTHKA|
+                          |s_-vpUlkIKA|))))
                   ($syntax-dispatch
-                    (#%annotate |e_sE25FxpLG| value)
+                    (#%annotate |e_-vn3sZGKA| value)
                     (#%quote (any #2(each (any any)) any . each-any))))))
-             (|chi-lambda-clause_sEsCMYPAG|
-               (#%lambda (|e_sEqHyScLG|
-                          |c_sEMDwjdLG|
-                          |r_sE6AuMdLG|
-                          |w_sEswsdeLG|
-                          |k_sEOsqGeLG|)
-                 ((#%lambda (|tmp_sEulmAfLG|)
-                    (#%if |tmp_sEulmAfLG|
-                      (apply (#%lambda (|id_sEYBXslLG|
-                                        |e1_sEiyVVlLG|
-                                        |e2_sEEuTmmLG|)
-                               (#%if (not (|valid-bound-ids?_sEqrWDlAG|
-                                            |id_sEYBXslLG|))
+             (|chi-lambda-clause_-vNAzo5AA|
+               (#%lambda (|e_-vLFliuKA|
+                          |c_-v5CjLuKA|
+                          |r_-vryhcvKA|
+                          |w_-vNufFvKA|
+                          |k_-v7rd6wKA|)
+                 ((#%lambda (|tmp_-vPj90xKA|)
+                    (#%if |tmp_-vPj90xKA|
+                      (apply (#%lambda (|id_-vhAKUCKA|
+                                        |e1_-vDwIlDKA|
+                                        |e2_-vZsGODKA|)
+                               (#%if (|valid-bound-ids?_-vLpJ3DzA|
+                                       |id_-vhAKUCKA|)
+                                 ((#%lambda (|labels_-vFlCIEKA|
+                                             |new-vars_-v_hA9FKA|)
+                                    (|k_-v7rd6wKA|
+                                      |new-vars_-v_hA9FKA|
+                                      (|chi-body_-vn-Nd2AA|
+                                        (cons |e1_-vDwIlDKA| |e2_-vZsGODKA|)
+                                        |e_-vLFliuKA|
+                                        (|extend-var-env*_-vXHfhRyA|
+                                          |labels_-vFlCIEKA|
+                                          |new-vars_-v_hA9FKA|
+                                          |r_-vryhcvKA|)
+                                        (|make-binding-wrap_-vh98bxzA|
+                                          |id_-vhAKUCKA|
+                                          |labels_-vFlCIEKA|
+                                          |w_-vNufFvKA|))))
+                                  (|gen-labels_-vzgkrgzA| |id_-vhAKUCKA|)
+                                  (map |gen-var_-vbblz8AA| |id_-vhAKUCKA|))
                                  (syntax-error
-                                   |e_sEqHyScLG|
-                                   "invalid parameter list in")
-                                 ((#%lambda (|labels_sEknPgnLG|
-                                             |new-vars_sEGjNJnLG|)
-                                    (|k_sEOsqGeLG|
-                                      |new-vars_sEGjNJnLG|
-                                      (|chi-body_sE20_NMAG|
-                                        (cons |e1_sEiyVVlLG| |e2_sEEuTmmLG|)
-                                        |e_sEqHyScLG|
-                                        (|extend-var-env*_sECJsRzzG|
-                                          |labels_sEknPgnLG|
-                                          |new-vars_sEGjNJnLG|
-                                          |r_sE6AuMdLG|)
-                                        (|make-binding-wrap_sEYalLfAG|
-                                          |id_sEYBXslLG|
-                                          |labels_sEknPgnLG|
-                                          |w_sEswsdeLG|))))
-                                  (|gen-labels_sEeix_-zG| |id_sEYBXslLG|)
-                                  (map |gen-var_sEScy7TAG| |id_sEYBXslLG|))))
-                             |tmp_sEulmAfLG|)
-                      ((#%lambda (|tmp_sEQhk1gLG|)
-                         (#%if |tmp_sEQhk1gLG|
-                           (apply (#%lambda (|ids_sEwagXgLG|
-                                             |e1_sES6eohLG|
-                                             |e2_sEc3cRhLG|)
-                                    ((#%lambda (|old-ids_sEy_9iiLG|)
-                                       (#%if (not (|valid-bound-ids?_sEqrWDlAG|
-                                                    |old-ids_sEy_9iiLG|))
+                                   |e_-vLFliuKA|
+                                   "invalid parameter list in")))
+                             |tmp_-vPj90xKA|)
+                      ((#%lambda (|tmp_-v9g7txKA|)
+                         (#%if |tmp_-v9g7txKA|
+                           (apply (#%lambda (|ids_-vR83nyKA|
+                                             |e1_-vb51QyKA|
+                                             |e2_-vx1_gzKA|)
+                                    ((#%lambda (|old-ids_-vTZYJzKA|)
+                                       (#%if (|valid-bound-ids?_-vLpJ3DzA|
+                                               |old-ids_-vTZYJzKA|)
+                                         ((#%lambda (|labels_-vdWWaAKA|
+                                                     |new-vars_-vzSUDAKA|)
+                                            (|k_-v7rd6wKA|
+                                              ((#%letrec ((|f_-vVOS4BKA|
+                                                            (#%lambda (|ls1_-vfLQxBKA|
+                                                                       |ls2_-vBHO-BKA|)
+                                                              (#%if (null? |ls1_-vfLQxBKA|)
+                                                                |ls2_-vBHO-BKA|
+                                                                (|f_-vVOS4BKA|
+                                                                  (cdr |ls1_-vfLQxBKA|)
+                                                                  (cons (car |ls1_-vfLQxBKA|)
+                                                                        |ls2_-vBHO-BKA|))))))
+                                                 |f_-vVOS4BKA|)
+                                               (cdr |new-vars_-vzSUDAKA|)
+                                               (car |new-vars_-vzSUDAKA|))
+                                              (|chi-body_-vn-Nd2AA|
+                                                (cons |e1_-vb51QyKA|
+                                                      |e2_-vx1_gzKA|)
+                                                |e_-vLFliuKA|
+                                                (|extend-var-env*_-vXHfhRyA|
+                                                  |labels_-vdWWaAKA|
+                                                  |new-vars_-vzSUDAKA|
+                                                  |r_-vryhcvKA|)
+                                                (|make-binding-wrap_-vh98bxzA|
+                                                  |old-ids_-vTZYJzKA|
+                                                  |labels_-vdWWaAKA|
+                                                  |w_-vNufFvKA|))))
+                                          (|gen-labels_-vzgkrgzA|
+                                            |old-ids_-vTZYJzKA|)
+                                          (map |gen-var_-vbblz8AA|
+                                               |old-ids_-vTZYJzKA|))
                                          (syntax-error
-                                           |e_sEqHyScLG|
-                                           "invalid parameter list in")
-                                         ((#%lambda (|labels_sEUX7LiLG|
-                                                     |new-vars_sEeU5cjLG|)
-                                            (|k_sEOsqGeLG|
-                                              ((#%letrec ((|f_sEAQ3FjLG|
-                                                            (#%lambda (|ls1_sEWM16kLG|
-                                                                       |ls2_sEgJ_ykLG|)
-                                                              (#%if (null? |ls1_sEWM16kLG|)
-                                                                |ls2_sEgJ_ykLG|
-                                                                (|f_sEAQ3FjLG|
-                                                                  (cdr |ls1_sEWM16kLG|)
-                                                                  (cons (car |ls1_sEWM16kLG|)
-                                                                        |ls2_sEgJ_ykLG|))))))
-                                                 |f_sEAQ3FjLG|)
-                                               (cdr |new-vars_sEeU5cjLG|)
-                                               (car |new-vars_sEeU5cjLG|))
-                                              (|chi-body_sE20_NMAG|
-                                                (cons |e1_sES6eohLG|
-                                                      |e2_sEc3cRhLG|)
-                                                |e_sEqHyScLG|
-                                                (|extend-var-env*_sECJsRzzG|
-                                                  |labels_sEUX7LiLG|
-                                                  |new-vars_sEeU5cjLG|
-                                                  |r_sE6AuMdLG|)
-                                                (|make-binding-wrap_sEYalLfAG|
-                                                  |old-ids_sEy_9iiLG|
-                                                  |labels_sEUX7LiLG|
-                                                  |w_sEswsdeLG|))))
-                                          (|gen-labels_sEeix_-zG|
-                                            |old-ids_sEy_9iiLG|)
-                                          (map |gen-var_sEScy7TAG|
-                                               |old-ids_sEy_9iiLG|))))
-                                     (|lambda-var-list_sEc9wATAG|
-                                       |ids_sEwagXgLG|)))
-                                  |tmp_sEQhk1gLG|)
-                           (syntax-error |e_sEqHyScLG|)))
+                                           |e_-vLFliuKA|
+                                           "invalid parameter list in")))
+                                     (|lambda-var-list_-vx7j09AA|
+                                       |ids_-vR83nyKA|)))
+                                  |tmp_-v9g7txKA|)
+                           (syntax-error |e_-vLFliuKA|)))
                        ($syntax-dispatch
-                         (#%annotate |c_sEMDwjdLG| value)
+                         (#%annotate |c_-v5CjLuKA| value)
                          (#%quote (any any . each-any))))))
                   ($syntax-dispatch
-                    (#%annotate |c_sEMDwjdLG| value)
+                    (#%annotate |c_-v5CjLuKA| value)
                     (#%quote (each-any any . each-any))))))
-             (|parse-define-syntax_sE6GOvPAG|
-               (#%lambda (|e_sEYqZZ6LG|
-                          |w_sEinXq7LG|
-                          |s_sEEjVT7LG|
-                          |k_sE-fTk8LG|)
-                 ((#%lambda (|tmp_sEG8Pe9LG|)
-                    (#%if (#%if |tmp_sEG8Pe9LG|
-                            (apply (#%lambda (|__sEoSEvbLG|
-                                              |name_sEKOCYbLG|
-                                              |val_sE4LApcLG|)
-                                     (|id?_sE4-1KFzG| |name_sEKOCYbLG|))
-                                   |tmp_sEG8Pe9LG|)
+             (|parse-define-syntax_-vrEBX4AA|
+               (#%lambda (|e_-vhpMpoKA|
+                          |w_-vDlKSoKA|
+                          |s_-vZhIjpKA|
+                          |k_-vjeGMpKA|)
+                 ((#%lambda (|tmp_-v_6CGqKA|)
+                    (#%if (#%if |tmp_-v_6CGqKA|
+                            (apply (#%lambda (|__-vJQrXsKA|
+                                              |name_-v3NpotKA|
+                                              |val_-vpJnRtKA|)
+                                     (|id?_-vpYQ9XyA| |name_-v3NpotKA|))
+                                   |tmp_-v_6CGqKA|)
                             #f)
-                      (apply (#%lambda (|__sEm1L8aLG|
-                                        |name_sEIZIBaLG|
-                                        |val_sE2WG2bLG|)
-                               (|k_sE-fTk8LG|
-                                 |name_sEIZIBaLG|
-                                 |val_sE2WG2bLG|
-                                 |w_sEinXq7LG|))
-                             |tmp_sEG8Pe9LG|)
+                      (apply (#%lambda (|__-vH_xArKA|
+                                        |name_-v1Yv1sKA|
+                                        |val_-vnUtusKA|)
+                               (|k_-vjeGMpKA|
+                                 |name_-v1Yv1sKA|
+                                 |val_-vnUtusKA|
+                                 |w_-vDlKSoKA|))
+                             |tmp_-v_6CGqKA|)
                       (syntax-error
-                        (|source-wrap_sESSB9qAG|
-                          |e_sEYqZZ6LG|
-                          |w_sEinXq7LG|
-                          |s_sEEjVT7LG|))))
+                        (|source-wrap_-vbRoBHzA|
+                          |e_-vhpMpoKA|
+                          |w_-vDlKSoKA|
+                          |s_-vZhIjpKA|))))
                   ($syntax-dispatch
-                    (#%annotate |e_sEYqZZ6LG| value)
+                    (#%annotate |e_-vhpMpoKA| value)
                     (#%quote (any any any))))))
-             (|parse-define_sEMJQ2PAG|
-               (#%lambda (|e_sEE8XoVKG|
-                          |w_sE-4VRVKG|
-                          |s_sEk1TiWKG|
-                          |k_sEGZQLWKG|)
-                 ((#%lambda (|tmp_sEmSMFXKG|)
-                    (#%if (#%if |tmp_sEmSMFXKG|
-                            (apply (#%lambda (|__sEWB3D5LG|
-                                              |name_sEgy146LG|
-                                              |val_sECu_w6LG|)
-                                     (|id?_sE4-1KFzG| |name_sEgy146LG|))
-                                   |tmp_sEmSMFXKG|)
+             (|parse-define_-v5IDu4AA|
+               (#%lambda (|e_-vZ6KQaKA|
+                          |w_-vj3IhbKA|
+                          |s_-vF_FKbKA|
+                          |k_-v_XDbcKA|)
+                 ((#%lambda (|tmp_-vHQz5dKA|)
+                    (#%if (#%if |tmp_-vHQz5dKA|
+                            (apply (#%lambda (|__-vfAS2nKA|
+                                              |name_-vBwQvnKA|
+                                              |val_-vXsOYnKA|)
+                                     (|id?_-vpYQ9XyA| |name_-vBwQvnKA|))
+                                   |tmp_-vHQz5dKA|)
                             #f)
-                      (apply (#%lambda (|__sEUM9g4LG|
-                                        |name_sEeJ7J4LG|
-                                        |val_sEAF5a5LG|)
-                               (|k_sEGZQLWKG|
-                                 |name_sEeJ7J4LG|
-                                 |val_sEAF5a5LG|
-                                 |w_sE-4VRVKG|))
-                             |tmp_sEmSMFXKG|)
-                      ((#%lambda (|tmp_sEIOK6YKG|)
-                         (#%if (#%if |tmp_sEIOK6YKG|
-                                 (apply (#%lambda (|__sEa3k_1LG|
-                                                   |name_sEw_hs2LG|
-                                                   |args_sESXfV2LG|
-                                                   |e1_sEcUdm3LG|
-                                                   |e2_sEyQbP3LG|)
-                                          (#%if (|id?_sE4-1KFzG|
-                                                  |name_sEw_hs2LG|)
-                                            (|valid-bound-ids?_sEqrWDlAG|
-                                              (|lambda-var-list_sEc9wATAG|
-                                                |args_sESXfV2LG|))
+                      (apply (#%lambda (|__-vdLYHlKA|
+                                        |name_-vzHW8mKA|
+                                        |val_-vVDUBmKA|)
+                               (|k_-v_XDbcKA|
+                                 |name_-vzHW8mKA|
+                                 |val_-vVDUBmKA|
+                                 |w_-vj3IhbKA|))
+                             |tmp_-vHQz5dKA|)
+                      ((#%lambda (|tmp_-v1NxydKA|)
+                         (#%if (#%if |tmp_-v1NxydKA|
+                                 (apply (#%lambda (|__-vv17rjKA|
+                                                   |name_-vRZ4UjKA|
+                                                   |args_-vbW2lkKA|
+                                                   |e1_-vxS0OkKA|
+                                                   |e2_-vTO-elKA|)
+                                          (#%if (|id?_-vpYQ9XyA|
+                                                  |name_-vRZ4UjKA|)
+                                            (|valid-bound-ids?_-vLpJ3DzA|
+                                              (|lambda-var-list_-vx7j09AA|
+                                                |args_-vbW2lkKA|))
                                             #f))
-                                        |tmp_sEIOK6YKG|)
+                                        |tmp_-v1NxydKA|)
                                  #f)
-                           (apply (#%lambda (|__sE6pwh_KG|
-                                             |name_sEsluK_KG|
-                                             |args_sEOhsb0LG|
-                                             |e1_sE8eqE0LG|
-                                             |e2_sEuao51LG|)
-                                    (|k_sEGZQLWKG|
-                                      (|wrap_sEwWDIpAG|
-                                        |name_sEsluK_KG|
-                                        |w_sE-4VRVKG|)
+                           (apply (#%lambda (|__-vrnjJgKA|
+                                             |name_-vNjhahKA|
+                                             |args_-v7gfDhKA|
+                                             |e1_-vtcd4iKA|
+                                             |e2_-vP8bxiKA|)
+                                    (|k_-v_XDbcKA|
+                                      (|wrap_-vRUq8HzA|
+                                        |name_-vNjhahKA|
+                                        |w_-vj3IhbKA|)
                                       (cons #3(syntax-object
                                                lambda
                                                ((top)
@@ -1705,27 +1705,27 @@
                                                    (#2(import-token *top*))
                                                    ()
                                                    ())))
-                                            (|wrap_sEwWDIpAG|
-                                              (cons |args_sEOhsb0LG|
-                                                    (cons |e1_sE8eqE0LG|
-                                                          |e2_sEuao51LG|))
-                                              |w_sE-4VRVKG|))
+                                            (|wrap_-vRUq8HzA|
+                                              (cons |args_-v7gfDhKA|
+                                                    (cons |e1_-vtcd4iKA|
+                                                          |e2_-vP8bxiKA|))
+                                              |w_-vj3IhbKA|))
                                       (#%quote (()))))
-                                  |tmp_sEIOK6YKG|)
-                           ((#%lambda (|tmp_sE2LIzYKG|)
-                              (#%if (#%if |tmp_sE2LIzYKG|
-                                      (apply (#%lambda (|__sEqwAn-KG|
-                                                        |name_sEMsyQ-KG|)
-                                               (|id?_sE4-1KFzG|
-                                                 |name_sEMsyQ-KG|))
-                                             |tmp_sE2LIzYKG|)
+                                  |tmp_-v1NxydKA|)
+                           ((#%lambda (|tmp_-vnJv_dKA|)
+                              (#%if (#%if |tmp_-vnJv_dKA|
+                                      (apply (#%lambda (|__-vLunPfKA|
+                                                        |name_-v5rlggKA|)
+                                               (|id?_-vpYQ9XyA|
+                                                 |name_-v5rlggKA|))
+                                             |tmp_-vnJv_dKA|)
                                       #f)
-                                (apply (#%lambda (|__sEKDEtZKG|
-                                                  |name_sE4ACWZKG|)
-                                         (|k_sEGZQLWKG|
-                                           (|wrap_sEwWDIpAG|
-                                             |name_sE4ACWZKG|
-                                             |w_sE-4VRVKG|)
+                                (apply (#%lambda (|__-v3CrVeKA|
+                                                  |name_-vpypmfKA|)
+                                         (|k_-v_XDbcKA|
+                                           (|wrap_-vRUq8HzA|
+                                             |name_-vpypmfKA|
+                                             |w_-vj3IhbKA|)
                                            #3(syntax-object
                                               (void)
                                               ((top)
@@ -2326,744 +2326,744 @@
                                                   ()
                                                   ())))
                                            (#%quote (()))))
-                                       |tmp_sE2LIzYKG|)
+                                       |tmp_-vnJv_dKA|)
                                 (syntax-error
-                                  (|source-wrap_sESSB9qAG|
-                                    |e_sEE8XoVKG|
-                                    |w_sE-4VRVKG|
-                                    |s_sEk1TiWKG|))))
+                                  (|source-wrap_-vbRoBHzA|
+                                    |e_-vZ6KQaKA|
+                                    |w_-vj3IhbKA|
+                                    |s_-vF_FKbKA|))))
                             ($syntax-dispatch
-                              (#%annotate |e_sEE8XoVKG| value)
+                              (#%annotate |e_-vZ6KQaKA| value)
                               (#%quote (any any))))))
                        ($syntax-dispatch
-                         (#%annotate |e_sEE8XoVKG| value)
+                         (#%annotate |e_-vZ6KQaKA| value)
                          (#%quote (any (any . any) any . each-any))))))
                   ($syntax-dispatch
-                    (#%annotate |e_sEE8XoVKG| value)
+                    (#%annotate |e_-vZ6KQaKA| value)
                     (#%quote (any any any))))))
-             (|parse-import_sEqNSBOAG|
-               (#%lambda (|e_sESMhqQKG|
-                          |w_sEcJfTQKG|
-                          |s_sEyFdkRKG|
-                          |k_sEUBbNRKG|)
-                 ((#%lambda (|tmp_sEAu7HSKG|)
-                    (#%if (#%if |tmp_sEAu7HSKG|
-                            (apply (#%lambda (|__sEYf_uUKG| |mid_sEicZXUKG|)
-                                     (|id?_sE4-1KFzG| |mid_sEicZXUKG|))
-                                   |tmp_sEAu7HSKG|)
+             (|parse-import_-vLLF14AA|
+               (#%lambda (|e_-vbL4S5KA|
+                          |w_-vxH2j6KA|
+                          |s_-vTD0M6KA|
+                          |k_-vdA-c7KA|)
+                 ((#%lambda (|tmp_-vVsW68KA|)
+                    (#%if (#%if |tmp_-vVsW68KA|
+                            (apply (#%lambda (|__-vheOW9KA| |mid_-vDaMnaKA|)
+                                     (|id?_-vpYQ9XyA| |mid_-vDaMnaKA|))
+                                   |tmp_-vVsW68KA|)
                             #f)
-                      (apply (#%lambda (|__sEgn3BTKG| |mid_sECj12UKG|)
-                               (|k_sEUBbNRKG|
-                                 (|wrap_sEwWDIpAG|
-                                   |mid_sECj12UKG|
-                                   |w_sEcJfTQKG|)))
-                             |tmp_sEAu7HSKG|)
+                      (apply (#%lambda (|__-vBlS09KA| |mid_-vXhQt9KA|)
+                               (|k_-vdA-c7KA|
+                                 (|wrap_-vRUq8HzA|
+                                   |mid_-vXhQt9KA|
+                                   |w_-vxH2j6KA|)))
+                             |tmp_-vVsW68KA|)
                       (syntax-error
-                        (|source-wrap_sESSB9qAG|
-                          |e_sESMhqQKG|
-                          |w_sEcJfTQKG|
-                          |s_sEyFdkRKG|))))
+                        (|source-wrap_-vbRoBHzA|
+                          |e_-vbL4S5KA|
+                          |w_-vxH2j6KA|
+                          |s_-vTD0M6KA|))))
                   ($syntax-dispatch
-                    (#%annotate |e_sESMhqQKG| value)
+                    (#%annotate |e_-vbL4S5KA| value)
                     (#%quote (any any))))))
-             (|parse-module_sE4RU8OAG|
-               (#%lambda (|e_sEuQr7AKG|
-                          |w_sEQMpAAKG|
-                          |s_sEaJn1BKG|
-                          |*w_sEwFluBKG|
-                          |k_sESBjXBKG|)
-                 (#%letrec ((|listify_sEcyhoCKG|
-                              (#%lambda (|exports_sEqlCULKG|)
-                                (#%if (null? |exports_sEqlCULKG|)
+             (|parse-module_-vpPHA3AA|
+               (#%lambda (|e_-vPOezRJA|
+                          |w_-v9Lc0SJA|
+                          |s_-vvHatSJA|
+                          |*w_-vRD8WSJA|
+                          |k_-vbA6nTJA|)
+                 (#%letrec ((|listify_-vxw4QTJA|
+                              (#%lambda (|exports_-vLjpk1KA|)
+                                (#%if (null? |exports_-vLjpk1KA|)
                                   ()
-                                  (cons ((#%lambda (|tmp_sEMhAlMKG|)
-                                           ((#%lambda (|tmp_sE6eyOMKG|)
-                                              (#%if |tmp_sE6eyOMKG|
-                                                (apply (#%lambda (|ex_sEO6uINKG|)
-                                                         (|listify_sEcyhoCKG|
-                                                           |ex_sEO6uINKG|))
-                                                       |tmp_sE6eyOMKG|)
-                                                (#%if (|id?_sE4-1KFzG|
-                                                        |tmp_sEMhAlMKG|)
-                                                  (|wrap_sEwWDIpAG|
-                                                    |tmp_sEMhAlMKG|
-                                                    |*w_sEwFluBKG|)
+                                  (cons ((#%lambda (|tmp_-v5gnN1KA|)
+                                           ((#%lambda (|tmp_-vrcle2KA|)
+                                              (#%if |tmp_-vrcle2KA|
+                                                (apply (#%lambda (|ex_-v75h83KA|)
+                                                         (|listify_-vxw4QTJA|
+                                                           |ex_-v75h83KA|))
+                                                       |tmp_-vrcle2KA|)
+                                                (#%if (|id?_-vpYQ9XyA|
+                                                        |tmp_-v5gnN1KA|)
+                                                  (|wrap_-vRUq8HzA|
+                                                    |tmp_-v5gnN1KA|
+                                                    |*w_-vRD8WSJA|)
                                                   (syntax-error
-                                                    (|source-wrap_sESSB9qAG|
-                                                      |e_sEuQr7AKG|
-                                                      |w_sEQMpAAKG|
-                                                      |s_sEaJn1BKG|)
+                                                    (|source-wrap_-vbRoBHzA|
+                                                      |e_-vPOezRJA|
+                                                      |w_-v9Lc0SJA|
+                                                      |s_-vvHatSJA|)
                                                     "invalid exports list in"))))
                                             ($syntax-dispatch
                                               (#%annotate
-                                                |tmp_sEMhAlMKG|
+                                                |tmp_-v5gnN1KA|
                                                 value)
                                               (#%quote each-any))))
-                                         (car |exports_sEqlCULKG|))
-                                        (|listify_sEcyhoCKG|
-                                          (cdr |exports_sEqlCULKG|))))))
-                            (|return_sEyufRCKG|
-                              (#%lambda (|id_sEu_pCOKG|
-                                         |exports_sEQXn3PKG|
-                                         |forms_sEaUlwPKG|)
-                                (|k_sESBjXBKG|
-                                  |id_sEu_pCOKG|
-                                  (|listify_sEcyhoCKG| |exports_sEQXn3PKG|)
-                                  (map (#%lambda (|x_sEwQjZPKG|)
-                                         (|wrap_sEwWDIpAG|
-                                           |x_sEwQjZPKG|
-                                           |*w_sEwFluBKG|))
-                                       |forms_sEaUlwPKG|)))))
-                   ((#%lambda (|tmp_sEenbLDKG|)
-                      (#%if |tmp_sEenbLDKG|
-                        (apply (#%lambda (|__sEIDMDJKG|
-                                          |ex_sE2AK4KKG|
-                                          |form_sEowIxKKG|)
-                                 (|return_sEyufRCKG|
+                                         (car |exports_-vLjpk1KA|))
+                                        (|listify_-vxw4QTJA|
+                                          (cdr |exports_-vLjpk1KA|))))))
+                            (|return_-vTs2hUJA|
+                              (#%lambda (|id_-vPZc24KA|
+                                         |exports_-v9Wav4KA|
+                                         |forms_-vvS8Y4KA|)
+                                (|k_-vbA6nTJA|
+                                  |id_-vPZc24KA|
+                                  (|listify_-vxw4QTJA| |exports_-v9Wav4KA|)
+                                  (map (#%lambda (|x_-vRO6p5KA|)
+                                         (|wrap_-vRUq8HzA|
+                                           |x_-vRO6p5KA|
+                                           |*w_-vRD8WSJA|))
+                                       |forms_-vvS8Y4KA|)))))
+                   ((#%lambda (|tmp_-vzl-aVJA|)
+                      (#%if |tmp_-vzl-aVJA|
+                        (apply (#%lambda (|__-v1Cz3_JA|
+                                          |ex_-vnyxw_JA|
+                                          |form_-vJuvZ_JA|)
+                                 (|return_-vTs2hUJA|
                                    #f
-                                   |ex_sE2AK4KKG|
-                                   |form_sEowIxKKG|))
-                               |tmp_sEenbLDKG|)
-                        ((#%lambda (|tmp_sEAj9cEKG|)
-                           (#%if (#%if |tmp_sEAj9cEKG|
-                                   (apply (#%lambda (|__sEkSUPHKG|
-                                                     |mid_sEGOSgIKG|
-                                                     |ex_sE0LQJIKG|
-                                                     |form_sEmHOaJKG|)
-                                            (|id?_sE4-1KFzG| |mid_sEGOSgIKG|))
-                                          |tmp_sEAj9cEKG|)
+                                   |ex_-vnyxw_JA|
+                                   |form_-vJuvZ_JA|))
+                               |tmp_-vzl-aVJA|)
+                        ((#%lambda (|tmp_-vVhYDVJA|)
+                           (#%if (#%if |tmp_-vVhYDVJA|
+                                   (apply (#%lambda (|__-vFQHfZJA|
+                                                     |mid_-v_MFIZJA|
+                                                     |ex_-vlJD9-JA|
+                                                     |form_-vHFBC-JA|)
+                                            (|id?_-vpYQ9XyA| |mid_-v_MFIZJA|))
+                                          |tmp_-vVhYDVJA|)
                                    #f)
-                             (apply (#%lambda (|__sEgc56FKG|
-                                               |mid_sEC83zFKG|
-                                               |ex_sEY410GKG|
-                                               |form_sEi1_sGKG|)
-                                      (|return_sEyufRCKG|
-                                        (|wrap_sEwWDIpAG|
-                                          |mid_sEC83zFKG|
-                                          |w_sEQMpAAKG|)
-                                        |ex_sEY410GKG|
-                                        |form_sEi1_sGKG|))
-                                    |tmp_sEAj9cEKG|)
+                             (apply (#%lambda (|__-vBaUxWJA|
+                                               |mid_-vX6S-WJA|
+                                               |ex_-vh3QrXJA|
+                                               |form_-vD_NUXJA|)
+                                      (|return_-vTs2hUJA|
+                                        (|wrap_-vRUq8HzA|
+                                          |mid_-vX6S-WJA|
+                                          |w_-v9Lc0SJA|)
+                                        |ex_-vh3QrXJA|
+                                        |form_-vD_NUXJA|))
+                                    |tmp_-vVhYDVJA|)
                              (syntax-error
-                               (|source-wrap_sESSB9qAG|
-                                 |e_sEuQr7AKG|
-                                 |w_sEQMpAAKG|
-                                 |s_sEaJn1BKG|))))
+                               (|source-wrap_-vbRoBHzA|
+                                 |e_-vPOezRJA|
+                                 |w_-v9Lc0SJA|
+                                 |s_-vvHatSJA|))))
                          ($syntax-dispatch
-                           (#%annotate |e_sEuQr7AKG| value)
+                           (#%annotate |e_-vPOezRJA| value)
                            (#%quote (any any each-any . each-any))))))
                     ($syntax-dispatch
-                      (#%annotate |e_sEuQr7AKG| value)
+                      (#%annotate |e_-vPOezRJA| value)
                       (#%quote (any each-any . each-any)))))))
-             (|do-import!_sEKUWHNAG|
-               (#%lambda (|interface_sEM6CSxKG| |ribcage_sE63AjyKG|)
-                 ((#%lambda (|token_sEs_xMyKG|)
-                    (#%if |token_sEs_xMyKG|
-                      (|extend-ribcage-subst!_sEgipReAG|
-                        |ribcage_sE63AjyKG|
-                        |token_sEs_xMyKG|)
-                      (|vfor-each_sEgElPHAG|
-                        (#%lambda (|id_sEOXvdzKG|)
-                          ((#%lambda (|label1_sE8UtGzKG|)
+             (|do-import!_-v3TJ73AA|
+               (#%lambda (|interface_-v55piPJA| |ribcage_-vr1nLPJA|)
+                 ((#%lambda (|token_-vNZkcQJA|)
+                    (#%if |token_-vNZkcQJA|
+                      (|extend-ribcage-subst!_-vBgchwzA|
+                        |ribcage_-vr1nLPJA|
+                        |token_-vNZkcQJA|)
+                      (|vfor-each_-vBC8fZzA|
+                        (#%lambda (|id_-v7WiFQJA|)
+                          ((#%lambda (|label1_-vtSg6RJA|)
                              (#%begin
-                               (#%if |label1_sE8UtGzKG|
+                               (#%if |label1_-vtSg6RJA|
                                  #!void
                                  (syntax-error
-                                   |id_sEOXvdzKG|
+                                   |id_-v7WiFQJA|
                                    "exported identifier not visible"))
-                               (|extend-ribcage!_sEetvudAG|
-                                 |ribcage_sE63AjyKG|
-                                 |id_sEOXvdzKG|
-                                 |label1_sE8UtGzKG|)))
-                           (|id-var-name-loc_sEIJ4njAG|
-                             |id_sEOXvdzKG|
+                               (|extend-ribcage!_-vzriWuzA|
+                                 |ribcage_-vr1nLPJA|
+                                 |id_-v7WiFQJA|
+                                 |label1_-vtSg6RJA|)))
+                           (|id-var-name-loc_-v1ITOAzA|
+                             |id_-v7WiFQJA|
                              (#%quote (())))))
-                        (|interface-exports_sEG39vwAG|
-                          |interface_sEM6CSxKG|))))
-                  (|interface-token_sE007YwAG|
-                    |interface_sEM6CSxKG|))))
-             (|chi-internal_sEoYYeNAG|
-               (#%lambda (|ribcage_sEgHaFZJG|
-                          |source-exp_sECD86-JG|
-                          |body_sEYz6z-JG|
-                          |r_sEiw40_JG|
-                          |k_sEEs2t_JG|)
-                 (#%letrec ((|return_sE-o0W_JG|
-                              (#%lambda (|exprs_sE2pMBvKG|
-                                         |ids_sEolK2wKG|
-                                         |vars_sEKhIvwKG|
-                                         |vals_sE4eGYwKG|
-                                         |inits_sEqaEpxKG|)
+                        (|interface-exports_-v_1YWNzA|
+                          |interface_-v55piPJA|))))
+                  (|interface-token_-vl-VnOzA|
+                    |interface_-v55piPJA|))))
+             (|chi-internal_-vJWLG2AA|
+               (#%lambda (|ribcage_-vBFZ4fJA|
+                          |source-exp_-vXBXxfJA|
+                          |body_-vhyV-fJA|
+                          |r_-vDuTrgJA|
+                          |k_-vZqRUgJA|)
+                 (#%letrec ((|return_-vjnPlhJA|
+                              (#%lambda (|exprs_-vnnz1NJA|
+                                         |ids_-vJjxuNJA|
+                                         |vars_-v3gvXNJA|
+                                         |vals_-vpctoOJA|
+                                         |inits_-vL8rROJA|)
                                 (#%begin
-                                  (|check-defined-ids_sEePrsGAG|
-                                    |source-exp_sECD86-JG|
-                                    |ids_sEolK2wKG|)
-                                  (|k_sEEs2t_JG|
-                                    |exprs_sE2pMBvKG|
-                                    |ids_sEolK2wKG|
-                                    (reverse |vars_sEKhIvwKG|)
-                                    (reverse |vals_sE4eGYwKG|)
-                                    |inits_sEqaEpxKG|)))))
-                   ((#%letrec ((|parse_sEkl-m0KG|
-                                 (#%lambda (|body_sEGhYP0KG|
-                                            |ids_sE0eWg1KG|
-                                            |vars_sEmaUJ1KG|
-                                            |vals_sEI6Sa2KG|
-                                            |inits_sE23QD2KG|)
-                                   (#%if (null? |body_sEGhYP0KG|)
-                                     (|return_sE-o0W_JG|
-                                       |body_sEGhYP0KG|
-                                       |ids_sE0eWg1KG|
-                                       |vars_sEmaUJ1KG|
-                                       |vals_sEI6Sa2KG|
-                                       |inits_sE23QD2KG|)
-                                     ((#%lambda (|e_sEo_N43KG| |er_sEKXLx3KG|)
+                                  (|check-defined-ids_-vzNeUXzA|
+                                    |source-exp_-vXBXxfJA|
+                                    |ids_-vJjxuNJA|)
+                                  (|k_-vZqRUgJA|
+                                    |exprs_-vnnz1NJA|
+                                    |ids_-vJjxuNJA|
+                                    (reverse |vars_-v3gvXNJA|)
+                                    (reverse |vals_-vpctoOJA|)
+                                    |inits_-vL8rROJA|)))))
+                   ((#%letrec ((|parse_-vFjNOhJA|
+                                 (#%lambda (|body_-v_fLfiJA|
+                                            |ids_-vlcJIiJA|
+                                            |vars_-vH8H9jJA|
+                                            |vals_-v15FCjJA|
+                                            |inits_-vn1D3kJA|)
+                                   (#%if (null? |body_-v_fLfiJA|)
+                                     (|return_-vjnPlhJA|
+                                       |body_-v_fLfiJA|
+                                       |ids_-vlcJIiJA|
+                                       |vars_-vH8H9jJA|
+                                       |vals_-v15FCjJA|
+                                       |inits_-vn1D3kJA|)
+                                     ((#%lambda (|e_-vJZAwkJA| |er_-v3WyZkJA|)
                                         (call-with-values
                                           (#%lambda ()
-                                            (|syntax-type_sECplNtAG|
-                                              |e_sEo_N43KG|
-                                              |er_sEKXLx3KG|
+                                            (|syntax-type_-vXn8dLzA|
+                                              |e_-vJZAwkJA|
+                                              |er_-v3WyZkJA|
                                               (#%quote (()))
                                               #f
-                                              |ribcage_sEgHaFZJG|))
-                                          (#%lambda (|type_sE4UJ-3KG|
-                                                     |value_sEqQHr4KG|
-                                                     |e_sEMMFU4KG|
-                                                     |w_sE6JDl5KG|
-                                                     |s_sEsFBO5KG|)
-                                            (#%if (eqv? |type_sE4UJ-3KG|
+                                              |ribcage_-vBFZ4fJA|))
+                                          (#%lambda (|type_-vpSwqlJA|
+                                                     |value_-vLOuTlJA|
+                                                     |e_-v5LskmJA|
+                                                     |w_-vrHqNmJA|
+                                                     |s_-vNDoenJA|)
+                                            (#%if (eqv? |type_-vpSwqlJA|
                                                         (#%quote define-form))
-                                              (|parse-define_sEMJQ2PAG|
-                                                |e_sEMMFU4KG|
-                                                |w_sE6JDl5KG|
-                                                |s_sEsFBO5KG|
-                                                (#%lambda (|id_sE-KYTsKG|
-                                                           |rhs_sEkHWktKG|
-                                                           |w_sEGDUNtKG|)
-                                                  ((#%lambda (|id_sE0ASeuKG|
-                                                              |label_sEmwQHuKG|)
-                                                     ((#%lambda (|var_sEIsO8vKG|)
+                                              (|parse-define_-v5IDu4AA|
+                                                |e_-v5LskmJA|
+                                                |w_-vrHqNmJA|
+                                                |s_-vNDoenJA|
+                                                (#%lambda (|id_-vjJLjKJA|
+                                                           |rhs_-vFFJMKJA|
+                                                           |w_-v_BHdLJA|)
+                                                  ((#%lambda (|id_-vlyFGLJA|
+                                                              |label_-vHuD7MJA|)
+                                                     ((#%lambda (|var_-v1rBAMJA|)
                                                         (#%begin
-                                                          (|extend-ribcage!_sEetvudAG|
-                                                            |ribcage_sEgHaFZJG|
-                                                            |id_sE0ASeuKG|
-                                                            |label_sEmwQHuKG|)
-                                                          (|extend-store!_sEyWvyFAG|
-                                                            |r_sEiw40_JG|
-                                                            |label_sEmwQHuKG|
-                                                            (|make-binding_sEMH_8szG|
+                                                          (|extend-ribcage!_-vzriWuzA|
+                                                            |ribcage_-vBFZ4fJA|
+                                                            |id_-vlyFGLJA|
+                                                            |label_-vHuD7MJA|)
+                                                          (|extend-store!_-vTUi-WzA|
+                                                            |r_-vDuTrgJA|
+                                                            |label_-vHuD7MJA|
+                                                            (|make-binding_-v5GOAJyA|
                                                               (#%quote lexical)
-                                                              |var_sEIsO8vKG|))
-                                                          (|parse_sEkl-m0KG|
-                                                            (cdr |body_sEGhYP0KG|)
-                                                            (cons |id_sE0ASeuKG|
-                                                                  |ids_sE0eWg1KG|)
-                                                            (cons |var_sEIsO8vKG|
-                                                                  |vars_sEmaUJ1KG|)
-                                                            (cons (cons |er_sEKXLx3KG|
-                                                                        (|wrap_sEwWDIpAG|
-                                                                          |rhs_sEkHWktKG|
-                                                                          |w_sEGDUNtKG|))
-                                                                  |vals_sEI6Sa2KG|)
-                                                            |inits_sE23QD2KG|)))
-                                                      (|gen-var_sEScy7TAG|
-                                                        |id_sE0ASeuKG|)))
-                                                   (|wrap_sEwWDIpAG|
-                                                     |id_sE-KYTsKG|
-                                                     |w_sEGDUNtKG|)
-                                                   (|gen-label_sEypB5-zG|))))
-                                              (#%if (eqv? |type_sE4UJ-3KG|
+                                                              |var_-v1rBAMJA|))
+                                                          (|parse_-vFjNOhJA|
+                                                            (cdr |body_-v_fLfiJA|)
+                                                            (cons |id_-vlyFGLJA|
+                                                                  |ids_-vlcJIiJA|)
+                                                            (cons |var_-v1rBAMJA|
+                                                                  |vars_-vH8H9jJA|)
+                                                            (cons (cons |er_-v3WyZkJA|
+                                                                        (|wrap_-vRUq8HzA|
+                                                                          |rhs_-vFFJMKJA|
+                                                                          |w_-v_BHdLJA|))
+                                                                  |vals_-v15FCjJA|)
+                                                            |inits_-vn1D3kJA|)))
+                                                      (|gen-var_-vbblz8AA|
+                                                        |id_-vlyFGLJA|)))
+                                                   (|wrap_-vRUq8HzA|
+                                                     |id_-vjJLjKJA|
+                                                     |w_-v_BHdLJA|)
+                                                   (|gen-label_-vTnoxfzA|))))
+                                              (#%if (eqv? |type_-vpSwqlJA|
                                                           (#%quote
                                                             define-syntax-form))
-                                                (|parse-define-syntax_sE6GOvPAG|
-                                                  |e_sEMMFU4KG|
-                                                  |w_sE6JDl5KG|
-                                                  |s_sEsFBO5KG|
-                                                  (#%lambda (|id_sEW49aqKG|
-                                                             |rhs_sEg17DqKG|
-                                                             |w_sECZ44rKG|)
-                                                    ((#%lambda (|id_sEYV2xrKG|
-                                                                |label_sEiS0-rKG|
-                                                                |exp_sEEO-qsKG|)
+                                                (|parse-define-syntax_-vrEBX4AA|
+                                                  |e_-v5LskmJA|
+                                                  |w_-vrHqNmJA|
+                                                  |s_-vNDoenJA|
+                                                  (#%lambda (|id_-vf3YBHJA|
+                                                             |rhs_-vB_V2IJA|
+                                                             |w_-vXXTvIJA|)
+                                                    ((#%lambda (|id_-vhURYIJA|
+                                                                |label_-vDQPpJJA|
+                                                                |exp_-vZMNSJJA|)
                                                        (#%begin
-                                                         (|extend-ribcage!_sEetvudAG|
-                                                           |ribcage_sEgHaFZJG|
-                                                           |id_sEYV2xrKG|
-                                                           |label_sEiS0-rKG|)
-                                                         (|extend-store!_sEyWvyFAG|
-                                                           |r_sEiw40_JG|
-                                                           |label_sEiS0-rKG|
-                                                           (|make-binding_sEMH_8szG|
+                                                         (|extend-ribcage!_-vzriWuzA|
+                                                           |ribcage_-vBFZ4fJA|
+                                                           |id_-vhURYIJA|
+                                                           |label_-vDQPpJJA|)
+                                                         (|extend-store!_-vTUi-WzA|
+                                                           |r_-vDuTrgJA|
+                                                           |label_-vDQPpJJA|
+                                                           (|make-binding_-v5GOAJyA|
                                                              (#%quote deferred)
-                                                             |exp_sEEO-qsKG|))
-                                                         (|parse_sEkl-m0KG|
-                                                           (cdr |body_sEGhYP0KG|)
-                                                           (cons |id_sEYV2xrKG|
-                                                                 |ids_sE0eWg1KG|)
-                                                           |vars_sEmaUJ1KG|
-                                                           |vals_sEI6Sa2KG|
-                                                           |inits_sE23QD2KG|)))
-                                                     (|wrap_sEwWDIpAG|
-                                                       |id_sEW49aqKG|
-                                                       |w_sECZ44rKG|)
-                                                     (|gen-label_sEypB5-zG|)
-                                                     (|chi_sEki9xKAG|
-                                                       |rhs_sEg17DqKG|
-                                                       (|transformer-env_sEYFqiAzG|
-                                                         |er_sEKXLx3KG|)
-                                                       |w_sECZ44rKG|))))
-                                                (#%if (eqv? |type_sE4UJ-3KG|
+                                                             |exp_-vZMNSJJA|))
+                                                         (|parse_-vFjNOhJA|
+                                                           (cdr |body_-v_fLfiJA|)
+                                                           (cons |id_-vhURYIJA|
+                                                                 |ids_-vlcJIiJA|)
+                                                           |vars_-vH8H9jJA|
+                                                           |vals_-v15FCjJA|
+                                                           |inits_-vn1D3kJA|)))
+                                                     (|wrap_-vRUq8HzA|
+                                                       |id_-vf3YBHJA|
+                                                       |w_-vXXTvIJA|)
+                                                     (|gen-label_-vTnoxfzA|)
+                                                     (|chi_-vFgYY_zA|
+                                                       |rhs_-vB_V2IJA|
+                                                       (|transformer-env_-vhEdKRyA|
+                                                         |er_-v3WyZkJA|)
+                                                       |w_-vXXTvIJA|))))
+                                                (#%if (eqv? |type_-vpSwqlJA|
                                                             (#%quote
                                                               module-form))
-                                                  ((#%lambda (|*ribcage_sEq_FWiKG|)
-                                                     ((#%lambda (|*w_sEMXDnjKG|)
-                                                        (|parse-module_sE4RU8OAG|
-                                                          |e_sEMMFU4KG|
-                                                          |w_sE6JDl5KG|
-                                                          |s_sEsFBO5KG|
-                                                          |*w_sEMXDnjKG|
-                                                          (#%lambda (|id_sE6UBQjKG|
-                                                                     |exports_sEsQzhkKG|
-                                                                     |forms_sEOMxKkKG|)
-                                                            (|chi-internal_sEoYYeNAG|
-                                                              |*ribcage_sEq_FWiKG|
-                                                              (|source-wrap_sESSB9qAG|
-                                                                |e_sEMMFU4KG|
-                                                                |w_sE6JDl5KG|
-                                                                |s_sEsFBO5KG|)
-                                                              (map (#%lambda (|d_sE8JvblKG|)
-                                                                     (cons |er_sEKXLx3KG|
-                                                                           |d_sE8JvblKG|))
-                                                                   |forms_sEOMxKkKG|)
-                                                              |r_sEiw40_JG|
-                                                              (#%lambda (|*body_sEuFtElKG|
-                                                                         |*ids_sEQBr5mKG|
-                                                                         |*vars_sEaypymKG|
-                                                                         |*vals_sEwun_mKG|
-                                                                         |*inits_sESqlsnKG|)
+                                                  ((#%lambda (|*ribcage_-vLZsmAJA|)
+                                                     ((#%lambda (|*w_-v5WqPAJA|)
+                                                        (|parse-module_-vpPHA3AA|
+                                                          |e_-v5LskmJA|
+                                                          |w_-vrHqNmJA|
+                                                          |s_-vNDoenJA|
+                                                          |*w_-v5WqPAJA|
+                                                          (#%lambda (|id_-vrSogBJA|
+                                                                     |exports_-vNOmJBJA|
+                                                                     |forms_-v7LkaCJA|)
+                                                            (|chi-internal_-vJWLG2AA|
+                                                              |*ribcage_-vLZsmAJA|
+                                                              (|source-wrap_-vbRoBHzA|
+                                                                |e_-v5LskmJA|
+                                                                |w_-vrHqNmJA|
+                                                                |s_-vNDoenJA|)
+                                                              (map (#%lambda (|d_-vtHiDCJA|)
+                                                                     (cons |er_-v3WyZkJA|
+                                                                           |d_-vtHiDCJA|))
+                                                                   |forms_-v7LkaCJA|)
+                                                              |r_-vDuTrgJA|
+                                                              (#%lambda (|*body_-vPDg4DJA|
+                                                                         |*ids_-v9AexDJA|
+                                                                         |*vars_-vvwc-DJA|
+                                                                         |*vals_-vRsarEJA|
+                                                                         |*inits_-vbp8UEJA|)
                                                                 (#%begin
-                                                                  (|check-module-exports_sEUSt_FAG|
-                                                                    |source-exp_sECD86-JG|
-                                                                    (|flatten-exports_sEEef8vAG|
-                                                                      |exports_sEsQzhkKG|)
-                                                                    |*ids_sEQBr5mKG|)
-                                                                  ((#%lambda (|iface_sEcnjVnKG|
-                                                                              |vars_sEyjhmoKG|
-                                                                              |vals_sEUffPoKG|
-                                                                              |inits_sEecdgpKG|)
-                                                                     (#%if |id_sE6UBQjKG|
-                                                                       ((#%lambda (|label_sEA8bJpKG|)
+                                                                  (|check-module-exports_-vdRgrXzA|
+                                                                    |source-exp_-vXBXxfJA|
+                                                                    (|flatten-exports_-vZc2AMzA|
+                                                                      |exports_-vNOmJBJA|)
+                                                                    |*ids_-v9AexDJA|)
+                                                                  ((#%lambda (|iface_-vxl6lFJA|
+                                                                              |vars_-vTh4OFJA|
+                                                                              |vals_-vde2fGJA|
+                                                                              |inits_-vza0IGJA|)
+                                                                     (#%if |id_-vrSogBJA|
+                                                                       ((#%lambda (|label_-vV6-8HJA|)
                                                                           (#%begin
-                                                                            (|extend-ribcage!_sEetvudAG|
-                                                                              |ribcage_sEgHaFZJG|
-                                                                              |id_sE6UBQjKG|
-                                                                              |label_sEA8bJpKG|)
-                                                                            (|extend-store!_sEyWvyFAG|
-                                                                              |r_sEiw40_JG|
-                                                                              |label_sEA8bJpKG|
-                                                                              (|make-binding_sEMH_8szG|
+                                                                            (|extend-ribcage!_-vzriWuzA|
+                                                                              |ribcage_-vBFZ4fJA|
+                                                                              |id_-vrSogBJA|
+                                                                              |label_-vV6-8HJA|)
+                                                                            (|extend-store!_-vTUi-WzA|
+                                                                              |r_-vDuTrgJA|
+                                                                              |label_-vV6-8HJA|
+                                                                              (|make-binding_-v5GOAJyA|
                                                                                 (#%quote
                                                                                   module)
-                                                                                |iface_sEcnjVnKG|))
-                                                                            (|parse_sEkl-m0KG|
-                                                                              (cdr |body_sEGhYP0KG|)
-                                                                              (cons |id_sE6UBQjKG|
-                                                                                    |ids_sE0eWg1KG|)
-                                                                              |vars_sEyjhmoKG|
-                                                                              |vals_sEUffPoKG|
-                                                                              |inits_sEecdgpKG|)))
-                                                                        (|gen-label_sEypB5-zG|))
+                                                                                |iface_-vxl6lFJA|))
+                                                                            (|parse_-vFjNOhJA|
+                                                                              (cdr |body_-v_fLfiJA|)
+                                                                              (cons |id_-vrSogBJA|
+                                                                                    |ids_-vlcJIiJA|)
+                                                                              |vars_-vTh4OFJA|
+                                                                              |vals_-vde2fGJA|
+                                                                              |inits_-vza0IGJA|)))
+                                                                        (|gen-label_-vTnoxfzA|))
                                                                        (#%begin
-                                                                         (|do-import!_sEKUWHNAG|
-                                                                           |iface_sEcnjVnKG|
-                                                                           |ribcage_sEgHaFZJG|)
-                                                                         (|parse_sEkl-m0KG|
-                                                                           (cdr |body_sEGhYP0KG|)
-                                                                           (cons |iface_sEcnjVnKG|
-                                                                                 |ids_sE0eWg1KG|)
-                                                                           |vars_sEyjhmoKG|
-                                                                           |vals_sEUffPoKG|
-                                                                           |inits_sEecdgpKG|))))
-                                                                   (|make-trimmed-interface_sE2R0jyAG|
-                                                                     |exports_sEsQzhkKG|)
+                                                                         (|do-import!_-v3TJ73AA|
+                                                                           |iface_-vxl6lFJA|
+                                                                           |ribcage_-vBFZ4fJA|)
+                                                                         (|parse_-vFjNOhJA|
+                                                                           (cdr |body_-v_fLfiJA|)
+                                                                           (cons |iface_-vxl6lFJA|
+                                                                                 |ids_-vlcJIiJA|)
+                                                                           |vars_-vTh4OFJA|
+                                                                           |vals_-vde2fGJA|
+                                                                           |inits_-vza0IGJA|))))
+                                                                   (|make-trimmed-interface_-vnPPKPzA|
+                                                                     |exports_-vNOmJBJA|)
                                                                    (append
-                                                                     |*vars_sEaypymKG|
-                                                                     |vars_sEmaUJ1KG|)
+                                                                     |*vars_-vvwc-DJA|
+                                                                     |vars_-vH8H9jJA|)
                                                                    (append
-                                                                     |*vals_sEwun_mKG|
-                                                                     |vals_sEI6Sa2KG|)
+                                                                     |*vals_-vRsarEJA|
+                                                                     |vals_-v15FCjJA|)
                                                                    (append
-                                                                     |inits_sE23QD2KG|
-                                                                     |*inits_sESqlsnKG|
-                                                                     |*body_sEuFtElKG|))))))))
-                                                      (|make-wrap_sEuAPUIzG|
-                                                        (|wrap-marks_sEQwNlJzG|
-                                                          |w_sE6JDl5KG|)
-                                                        (cons |*ribcage_sEq_FWiKG|
-                                                              (|wrap-subst_sEatLOJzG|
-                                                                |w_sE6JDl5KG|)))))
-                                                   (|make-ribcage_sEAevs_zG|
+                                                                     |inits_-vn1D3kJA|
+                                                                     |*inits_-vbp8UEJA|
+                                                                     |*body_-vPDg4DJA|))))))))
+                                                      (|make-wrap_-vPyCk-yA|
+                                                        (|wrap-marks_-v9vAN-yA|
+                                                          |w_-vrHqNmJA|)
+                                                        (cons |*ribcage_-vLZsmAJA|
+                                                              (|wrap-subst_-vvrye_yA|
+                                                                |w_-vrHqNmJA|)))))
+                                                   (|make-ribcage_-vVciUgzA|
                                                      ()
                                                      ()
                                                      ()))
-                                                  (#%if (eqv? |type_sE4UJ-3KG|
+                                                  (#%if (eqv? |type_-vpSwqlJA|
                                                               (#%quote
                                                                 import-form))
-                                                    (|parse-import_sEqNSBOAG|
-                                                      |e_sEMMFU4KG|
-                                                      |w_sE6JDl5KG|
-                                                      |s_sEsFBO5KG|
-                                                      (#%lambda (|mid_sEIhQFgKG|)
-                                                        ((#%lambda (|mlabel_sE2eO6hKG|)
-                                                           ((#%lambda (|binding_sEoaMzhKG|)
-                                                              ((#%lambda (|t_sEK6K0iKG|)
-                                                                 (#%if (eqv? |t_sEK6K0iKG|
+                                                    (|parse-import_-vLLF14AA|
+                                                      |e_-v5LskmJA|
+                                                      |w_-vrHqNmJA|
+                                                      |s_-vNDoenJA|
+                                                      (#%lambda (|mid_-v1gD5yJA|)
+                                                        ((#%lambda (|mlabel_-vncByyJA|)
+                                                           ((#%lambda (|binding_-vJ8z_yJA|)
+                                                              ((#%lambda (|t_-v35xszJA|)
+                                                                 (#%if (eqv? |t_-v35xszJA|
                                                                              (#%quote
                                                                                module))
-                                                                   ((#%lambda (|iface_sE43ItiKG|)
+                                                                   ((#%lambda (|iface_-vp1vVzJA|)
                                                                       (#%begin
-                                                                        (#%if |value_sEqQHr4KG|
-                                                                          (|extend-ribcage-barrier!_sEAptXdAG|
-                                                                            |ribcage_sEgHaFZJG|
-                                                                            |value_sEqQHr4KG|)
+                                                                        (#%if |value_-vLOuTlJA|
+                                                                          (|extend-ribcage-barrier!_-vVngnvzA|
+                                                                            |ribcage_-vBFZ4fJA|
+                                                                            |value_-vLOuTlJA|)
                                                                           #!void)
-                                                                        (|do-import!_sEKUWHNAG|
-                                                                          |iface_sE43ItiKG|
-                                                                          |ribcage_sEgHaFZJG|)
-                                                                        (|parse_sEkl-m0KG|
-                                                                          (cdr |body_sEGhYP0KG|)
-                                                                          (cons |iface_sE43ItiKG|
-                                                                                |ids_sE0eWg1KG|)
-                                                                          |vars_sEmaUJ1KG|
-                                                                          |vals_sEI6Sa2KG|
-                                                                          |inits_sE23QD2KG|)))
-                                                                    (cdr |binding_sEoaMzhKG|))
-                                                                   (#%if (eqv? |t_sEK6K0iKG|
+                                                                        (|do-import!_-v3TJ73AA|
+                                                                          |iface_-vp1vVzJA|
+                                                                          |ribcage_-vBFZ4fJA|)
+                                                                        (|parse_-vFjNOhJA|
+                                                                          (cdr |body_-v_fLfiJA|)
+                                                                          (cons |iface_-vp1vVzJA|
+                                                                                |ids_-vlcJIiJA|)
+                                                                          |vars_-vH8H9jJA|
+                                                                          |vals_-v15FCjJA|
+                                                                          |inits_-vn1D3kJA|)))
+                                                                    (cdr |binding_-vJ8z_yJA|))
+                                                                   (#%if (eqv? |t_-v35xszJA|
                                                                                (#%quote
                                                                                  displaced-lexical))
-                                                                     (|displaced-lexical-error_sEiCoLAzG|
-                                                                       |mid_sEIhQFgKG|)
+                                                                     (|displaced-lexical-error_-vDAbbSyA|
+                                                                       |mid_-v1gD5yJA|)
                                                                      (syntax-error
-                                                                       |mid_sEIhQFgKG|
+                                                                       |mid_-v1gD5yJA|
                                                                        "import from unknown module"))))
-                                                               (car |binding_sEoaMzhKG|)))
-                                                            (|lookup_sEkri6CzG|
-                                                              |mlabel_sE2eO6hKG|
-                                                              |r_sEiw40_JG|)))
-                                                         (|id-var-name_sE2G2QjAG|
-                                                           |mid_sEIhQFgKG|
+                                                               (car |binding_-vJ8z_yJA|)))
+                                                            (|lookup_-vFp5yTyA|
+                                                              |mlabel_-vncByyJA|
+                                                              |r_-vDuTrgJA|)))
+                                                         (|id-var-name_-vnERfBzA|
+                                                           |mid_-v1gD5yJA|
                                                            (#%quote (()))))))
-                                                    (#%if (eqv? |type_sE4UJ-3KG|
+                                                    (#%if (eqv? |type_-vpSwqlJA|
                                                                 (#%quote
                                                                   begin-form))
-                                                      ((#%lambda (|tmp_sEED0YdKG|)
-                                                         (#%if |tmp_sEED0YdKG|
-                                                           (apply (#%lambda (|__sE-z-oeKG|
-                                                                             |e1_sEkwYReKG|)
-                                                                    (|parse_sEkl-m0KG|
-                                                                      ((#%letrec ((|f_sEGsWifKG|
-                                                                                    (#%lambda (|forms_sE0pULfKG|)
-                                                                                      (#%if (null? |forms_sE0pULfKG|)
-                                                                                        (cdr |body_sEGhYP0KG|)
-                                                                                        (cons (cons |er_sEKXLx3KG|
-                                                                                                    (|wrap_sEwWDIpAG|
-                                                                                                      (car |forms_sE0pULfKG|)
-                                                                                                      |w_sE6JDl5KG|))
-                                                                                              (|f_sEGsWifKG|
-                                                                                                (cdr |forms_sE0pULfKG|)))))))
-                                                                         |f_sEGsWifKG|)
-                                                                       |e1_sEkwYReKG|)
-                                                                      |ids_sE0eWg1KG|
-                                                                      |vars_sEmaUJ1KG|
-                                                                      |vals_sEI6Sa2KG|
-                                                                      |inits_sE23QD2KG|))
-                                                                  |tmp_sEED0YdKG|)
+                                                      ((#%lambda (|tmp_-vZBPnvJA|)
+                                                         (#%if |tmp_-vZBPnvJA|
+                                                           (apply (#%lambda (|__-vjyNQvJA|
+                                                                             |e1_-vFuLhwJA|)
+                                                                    (|parse_-vFjNOhJA|
+                                                                      ((#%letrec ((|f_-v_qJKwJA|
+                                                                                    (#%lambda (|forms_-vlnHbxJA|)
+                                                                                      (#%if (null? |forms_-vlnHbxJA|)
+                                                                                        (cdr |body_-v_fLfiJA|)
+                                                                                        (cons (cons |er_-v3WyZkJA|
+                                                                                                    (|wrap_-vRUq8HzA|
+                                                                                                      (car |forms_-vlnHbxJA|)
+                                                                                                      |w_-vrHqNmJA|))
+                                                                                              (|f_-v_qJKwJA|
+                                                                                                (cdr |forms_-vlnHbxJA|)))))))
+                                                                         |f_-v_qJKwJA|)
+                                                                       |e1_-vFuLhwJA|)
+                                                                      |ids_-vlcJIiJA|
+                                                                      |vars_-vH8H9jJA|
+                                                                      |vals_-v15FCjJA|
+                                                                      |inits_-vn1D3kJA|))
+                                                                  |tmp_-vZBPnvJA|)
                                                            (syntax-error
-                                                             |e_sEMMFU4KG|)))
+                                                             |e_-v5LskmJA|)))
                                                        ($syntax-dispatch
                                                          (#%annotate
-                                                           |e_sEMMFU4KG|
+                                                           |e_-v5LskmJA|
                                                            value)
                                                          (#%quote
                                                            (any . each-any))))
-                                                      (#%if (eqv? |type_sE4UJ-3KG|
+                                                      (#%if (eqv? |type_-vpSwqlJA|
                                                                   (#%quote
                                                                     eval-when-form))
-                                                        ((#%lambda (|tmp_sEy8jT9KG|)
-                                                           (#%if |tmp_sEy8jT9KG|
-                                                             (apply (#%lambda (|__sEU4hkaKG|
-                                                                               |x_sEe1fNaKG|
-                                                                               |e1_sEAZcebKG|)
-                                                                      (|parse_sEkl-m0KG|
+                                                        ((#%lambda (|tmp_-vT66jrJA|)
+                                                           (#%if |tmp_-vT66jrJA|
+                                                             (apply (#%lambda (|__-vd34MrJA|
+                                                                               |x_-vz_1dsJA|
+                                                                               |e1_-vVX_FsJA|)
+                                                                      (|parse_-vFjNOhJA|
                                                                         (#%if (memq (#%quote
                                                                                       eval)
-                                                                                    (|chi-when-list_sEUHvwrAG|
-                                                                                      |x_sEe1fNaKG|
-                                                                                      |w_sE6JDl5KG|))
-                                                                          ((#%letrec ((|f_sEWVaHbKG|
-                                                                                        (#%lambda (|forms_sEgS88cKG|)
-                                                                                          (#%if (null? |forms_sEgS88cKG|)
-                                                                                            (cdr |body_sEGhYP0KG|)
-                                                                                            (cons (cons |er_sEKXLx3KG|
-                                                                                                        (|wrap_sEwWDIpAG|
-                                                                                                          (car |forms_sEgS88cKG|)
-                                                                                                          |w_sE6JDl5KG|))
-                                                                                                  (|f_sEWVaHbKG|
-                                                                                                    (cdr |forms_sEgS88cKG|)))))))
-                                                                             |f_sEWVaHbKG|)
-                                                                           |e1_sEAZcebKG|)
-                                                                          (cdr |body_sEGhYP0KG|))
-                                                                        |ids_sE0eWg1KG|
-                                                                        |vars_sEmaUJ1KG|
-                                                                        |vals_sEI6Sa2KG|
-                                                                        |inits_sE23QD2KG|))
-                                                                    |tmp_sEy8jT9KG|)
+                                                                                    (|chi-when-list_-vdGiYIzA|
+                                                                                      |x_-vz_1dsJA|
+                                                                                      |w_-vrHqNmJA|))
+                                                                          ((#%letrec ((|f_-vfUZ6tJA|
+                                                                                        (#%lambda (|forms_-vBQXztJA|)
+                                                                                          (#%if (null? |forms_-vBQXztJA|)
+                                                                                            (cdr |body_-v_fLfiJA|)
+                                                                                            (cons (cons |er_-v3WyZkJA|
+                                                                                                        (|wrap_-vRUq8HzA|
+                                                                                                          (car |forms_-vBQXztJA|)
+                                                                                                          |w_-vrHqNmJA|))
+                                                                                                  (|f_-vfUZ6tJA|
+                                                                                                    (cdr |forms_-vBQXztJA|)))))))
+                                                                             |f_-vfUZ6tJA|)
+                                                                           |e1_-vVX_FsJA|)
+                                                                          (cdr |body_-v_fLfiJA|))
+                                                                        |ids_-vlcJIiJA|
+                                                                        |vars_-vH8H9jJA|
+                                                                        |vals_-v15FCjJA|
+                                                                        |inits_-vn1D3kJA|))
+                                                                    |tmp_-vT66jrJA|)
                                                              (syntax-error
-                                                               |e_sEMMFU4KG|)))
+                                                               |e_-v5LskmJA|)))
                                                          ($syntax-dispatch
                                                            (#%annotate
-                                                             |e_sEMMFU4KG|
+                                                             |e_-v5LskmJA|
                                                              value)
                                                            (#%quote
                                                              (any each-any
                                                                   .
                                                                   each-any))))
-                                                        (#%if (eqv? |type_sE4UJ-3KG|
+                                                        (#%if (eqv? |type_-vpSwqlJA|
                                                                     (#%quote
                                                                       local-syntax-form))
-                                                          (|chi-local-syntax_sEOyKpQAG|
-                                                            |value_sEqQHr4KG|
-                                                            |e_sEMMFU4KG|
-                                                            |er_sEKXLx3KG|
-                                                            |w_sE6JDl5KG|
-                                                            |s_sEsFBO5KG|
-                                                            (#%lambda (|forms_sE8yxI6KG|
-                                                                       |er_sEuuv97KG|
-                                                                       |w_sEQqtC7KG|
-                                                                       |s_sEanr38KG|)
-                                                              (|parse_sEkl-m0KG|
-                                                                ((#%letrec ((|f_sEwjpw8KG|
-                                                                              (#%lambda (|forms_sESfnZ8KG|)
-                                                                                (#%if (null? |forms_sESfnZ8KG|)
-                                                                                  (cdr |body_sEGhYP0KG|)
-                                                                                  (cons (cons |er_sEuuv97KG|
-                                                                                              (|wrap_sEwWDIpAG|
-                                                                                                (car |forms_sESfnZ8KG|)
-                                                                                                |w_sEQqtC7KG|))
-                                                                                        (|f_sEwjpw8KG|
-                                                                                          (cdr |forms_sESfnZ8KG|)))))))
-                                                                   |f_sEwjpw8KG|)
-                                                                 |forms_sE8yxI6KG|)
-                                                                |ids_sE0eWg1KG|
-                                                                |vars_sEmaUJ1KG|
-                                                                |vals_sEI6Sa2KG|
-                                                                |inits_sE23QD2KG|)))
-                                                          (|return_sE-o0W_JG|
-                                                            (cons (cons |er_sEKXLx3KG|
-                                                                        (|source-wrap_sESSB9qAG|
-                                                                          |e_sEMMFU4KG|
-                                                                          |w_sE6JDl5KG|
-                                                                          |s_sEsFBO5KG|))
-                                                                  (cdr |body_sEGhYP0KG|))
-                                                            |ids_sE0eWg1KG|
-                                                            |vars_sEmaUJ1KG|
-                                                            |vals_sEI6Sa2KG|
-                                                            |inits_sE23QD2KG|)))))))))))
-                                      (cdar |body_sEGhYP0KG|)
-                                      (caar |body_sEGhYP0KG|))))))
-                      |parse_sEkl-m0KG|)
-                    |body_sEYz6z-JG|
+                                                          (|chi-local-syntax_-v7xxR5AA|
+                                                            |value_-vLOuTlJA|
+                                                            |e_-v5LskmJA|
+                                                            |er_-v3WyZkJA|
+                                                            |w_-vrHqNmJA|
+                                                            |s_-vNDoenJA|
+                                                            (#%lambda (|forms_-vtwk8oJA|
+                                                                       |er_-vPsiBoJA|
+                                                                       |w_-v9pg2pJA|
+                                                                       |s_-vvlevpJA|)
+                                                              (|parse_-vFjNOhJA|
+                                                                ((#%letrec ((|f_-vRhcYpJA|
+                                                                              (#%lambda (|forms_-vbeapqJA|)
+                                                                                (#%if (null? |forms_-vbeapqJA|)
+                                                                                  (cdr |body_-v_fLfiJA|)
+                                                                                  (cons (cons |er_-vPsiBoJA|
+                                                                                              (|wrap_-vRUq8HzA|
+                                                                                                (car |forms_-vbeapqJA|)
+                                                                                                |w_-v9pg2pJA|))
+                                                                                        (|f_-vRhcYpJA|
+                                                                                          (cdr |forms_-vbeapqJA|)))))))
+                                                                   |f_-vRhcYpJA|)
+                                                                 |forms_-vtwk8oJA|)
+                                                                |ids_-vlcJIiJA|
+                                                                |vars_-vH8H9jJA|
+                                                                |vals_-v15FCjJA|
+                                                                |inits_-vn1D3kJA|)))
+                                                          (|return_-vjnPlhJA|
+                                                            (cons (cons |er_-v3WyZkJA|
+                                                                        (|source-wrap_-vbRoBHzA|
+                                                                          |e_-v5LskmJA|
+                                                                          |w_-vrHqNmJA|
+                                                                          |s_-vNDoenJA|))
+                                                                  (cdr |body_-v_fLfiJA|))
+                                                            |ids_-vlcJIiJA|
+                                                            |vars_-vH8H9jJA|
+                                                            |vals_-v15FCjJA|
+                                                            |inits_-vn1D3kJA|)))))))))))
+                                      (cdar |body_-v_fLfiJA|)
+                                      (caar |body_-v_fLfiJA|))))))
+                      |parse_-vFjNOhJA|)
+                    |body_-vhyV-fJA|
                     ()
                     ()
                     ()
                     ()))))
-             (|chi-body_sE20_NMAG|
-               (#%lambda (|body_sEMBHpSJG|
-                          |outer-form_sE6yFSSJG|
-                          |r_sEsuDjTJG|
-                          |w_sEOqBMTJG|)
-                 ((#%lambda (|r_sE8nzdUJG|)
-                    ((#%lambda (|ribcage_sEujxGUJG|)
-                       ((#%lambda (|w_sEQfv7VJG|)
-                          ((#%lambda (|body_sEactAVJG|)
-                             (|chi-internal_sEoYYeNAG|
-                               |ribcage_sEujxGUJG|
-                               |outer-form_sE6yFSSJG|
-                               |body_sEactAVJG|
-                               |r_sE8nzdUJG|
-                               (#%lambda (|exprs_sEw8r1WJG|
-                                          |ids_sES4puWJG|
-                                          |vars_sEc1nXWJG|
-                                          |vals_sEyZkoXJG|
-                                          |inits_sEUViRXJG|)
+             (|chi-body_-vn-Nd2AA|
+               (#%lambda (|body_-v5AuR7JA|
+                          |outer-form_-vrwsi8JA|
+                          |r_-vNsqL8JA|
+                          |w_-v7poc9JA|)
+                 ((#%lambda (|r_-vtlmF9JA|)
+                    ((#%lambda (|ribcage_-vPhk6aJA|)
+                       ((#%lambda (|w_-v9eizaJA|)
+                          ((#%lambda (|body_-vvag0bJA|)
+                             (|chi-internal_-vJWLG2AA|
+                               |ribcage_-vPhk6aJA|
+                               |outer-form_-vrwsi8JA|
+                               |body_-vvag0bJA|
+                               |r_-vtlmF9JA|
+                               (#%lambda (|exprs_-vR6etbJA|
+                                          |ids_-vb3cWbJA|
+                                          |vars_-vx_9ncJA|
+                                          |vals_-vTX7QcJA|
+                                          |inits_-vdU5hdJA|)
                                  (#%begin
-                                   (#%if (null? |exprs_sEw8r1WJG|)
+                                   (#%if (null? |exprs_-vR6etbJA|)
                                      (syntax-error
-                                       |outer-form_sE6yFSSJG|
+                                       |outer-form_-vrwsi8JA|
                                        "no expressions in body")
                                      #!void)
-                                   (|build-body_sEKH7jczG|
+                                   (|build-body_-v3GWKtyA|
                                      #f
-                                     |vars_sEc1nXWJG|
-                                     (map (#%lambda (|x_sEeSgiYJG|)
-                                            (|chi_sEki9xKAG|
-                                              (cdr |x_sEeSgiYJG|)
-                                              (car |x_sEeSgiYJG|)
+                                     |vars_-vx_9ncJA|
+                                     (map (#%lambda (|x_-vzQ3KdJA|)
+                                            (|chi_-vFgYY_zA|
+                                              (cdr |x_-vzQ3KdJA|)
+                                              (car |x_-vzQ3KdJA|)
                                               (#%quote (()))))
-                                          |vals_sEyZkoXJG|)
-                                     (|build-sequence_sE2PbpbzG|
+                                          |vals_-vTX7QcJA|)
+                                     (|build-sequence_-vnN-QsyA|
                                        #f
-                                       (map (#%lambda (|x_sEAOeLYJG|)
-                                              (|chi_sEki9xKAG|
-                                                (cdr |x_sEAOeLYJG|)
-                                                (car |x_sEAOeLYJG|)
+                                       (map (#%lambda (|x_-vVM1beJA|)
+                                              (|chi_-vFgYY_zA|
+                                                (cdr |x_-vVM1beJA|)
+                                                (car |x_-vVM1beJA|)
                                                 (#%quote (()))))
                                             (append
-                                              |inits_sEUViRXJG|
-                                              |exprs_sEw8r1WJG|))))))))
-                           (map (#%lambda (|x_sEWKccZJG|)
-                                  (cons |r_sE8nzdUJG|
-                                        (|wrap_sEwWDIpAG|
-                                          |x_sEWKccZJG|
-                                          |w_sEQfv7VJG|)))
-                                |body_sEMBHpSJG|)))
-                        (|make-wrap_sEuAPUIzG|
-                          (|wrap-marks_sEQwNlJzG| |w_sEOqBMTJG|)
-                          (cons |ribcage_sEujxGUJG|
-                                (|wrap-subst_sEatLOJzG| |w_sEOqBMTJG|)))))
-                     (|make-ribcage_sEAevs_zG| () () ())))
+                                              |inits_-vdU5hdJA|
+                                              |exprs_-vR6etbJA|))))))))
+                           (map (#%lambda (|x_-vfJ_DeJA|)
+                                  (cons |r_-vtlmF9JA|
+                                        (|wrap_-vRUq8HzA|
+                                          |x_-vfJ_DeJA|
+                                          |w_-v9eizaJA|)))
+                                |body_-v5AuR7JA|)))
+                        (|make-wrap_-vPyCk-yA|
+                          (|wrap-marks_-v9vAN-yA| |w_-v7poc9JA|)
+                          (cons |ribcage_-vPhk6aJA|
+                                (|wrap-subst_-vvrye_yA| |w_-v7poc9JA|)))))
+                     (|make-ribcage_-vVciUgzA| () () ())))
                   (cons (#%quote ("placeholder" placeholder))
-                        |r_sEsuDjTJG|))))
-             (|chi-macro_sEI31lMAG|
-               (#%lambda (|p_sEADggKJG|
-                          |e_sEWzeJKJG|
-                          |r_sEgwcaLJG|
-                          |w_sECsaDLJG|
-                          |s_sEYo84MJG|
-                          |rib_sEil6xMJG|)
-                 (#%letrec ((|rebuild-macro-output_sEEh4-MJG|
-                              (#%lambda (|x_sEG6-kOJG| |m_sE03YNOJG|)
-                                (#%if (pair? |x_sEG6-kOJG|)
-                                  (cons (|rebuild-macro-output_sEEh4-MJG|
-                                          (car |x_sEG6-kOJG|)
-                                          |m_sE03YNOJG|)
-                                        (|rebuild-macro-output_sEEh4-MJG|
-                                          (cdr |x_sEG6-kOJG|)
-                                          |m_sE03YNOJG|))
-                                  (#%if (|syntax-object?_sEueTWfzG|
-                                          |x_sEG6-kOJG|)
-                                    ((#%lambda (|w_sEKMN2RJG|)
-                                       ((#%lambda (|ms_sE4JLvRJG|
-                                                   |s_sEqFJYRJG|)
-                                          (|make-syntax-object_sE8iVtfzG|
-                                            (|syntax-object-expression_sEQaRngzG|
-                                              |x_sEG6-kOJG|)
-                                            (#%if (#%if (pair? |ms_sE4JLvRJG|)
-                                                    (eq? (car |ms_sE4JLvRJG|)
+                        |r_-vNsqL8JA|))))
+             (|chi-macro_-v12QM1AA|
+               (#%lambda (|p_-vVB3I_IA|
+                          |e_-vfy190JA|
+                          |r_-vBu_B0JA|
+                          |w_-vXqZ21JA|
+                          |s_-vhnXv1JA|
+                          |rib_-vDjVY1JA|)
+                 (#%letrec ((|rebuild-macro-output_-vZfTp2JA|
+                              (#%lambda (|x_-v_4NM3JA| |m_-vl1Ld4JA|)
+                                (#%if (pair? |x_-v_4NM3JA|)
+                                  (cons (|rebuild-macro-output_-vZfTp2JA|
+                                          (car |x_-v_4NM3JA|)
+                                          |m_-vl1Ld4JA|)
+                                        (|rebuild-macro-output_-vZfTp2JA|
+                                          (cdr |x_-v_4NM3JA|)
+                                          |m_-vl1Ld4JA|))
+                                  (#%if (|syntax-object?_-vPcGmxyA|
+                                          |x_-v_4NM3JA|)
+                                    ((#%lambda (|w_-v3LAu6JA|)
+                                       ((#%lambda (|ms_-vpHyX6JA|
+                                                   |s_-vLDwo7JA|)
+                                          (|make-syntax-object_-vtgIVwyA|
+                                            (|syntax-object-expression_-v99EPxyA|
+                                              |x_-v_4NM3JA|)
+                                            (#%if (#%if (pair? |ms_-vpHyX6JA|)
+                                                    (eq? (car |ms_-vpHyX6JA|)
                                                          #f)
                                                     #f)
-                                              (|make-wrap_sEuAPUIzG|
-                                                (cdr |ms_sE4JLvRJG|)
-                                                (cdr |s_sEqFJYRJG|))
-                                              (|make-wrap_sEuAPUIzG|
-                                                (cons |m_sE03YNOJG|
-                                                      |ms_sE4JLvRJG|)
-                                                (#%if |rib_sEil6xMJG|
-                                                  (cons |rib_sEil6xMJG|
+                                              (|make-wrap_-vPyCk-yA|
+                                                (cdr |ms_-vpHyX6JA|)
+                                                (cdr |s_-vLDwo7JA|))
+                                              (|make-wrap_-vPyCk-yA|
+                                                (cons |m_-vl1Ld4JA|
+                                                      |ms_-vpHyX6JA|)
+                                                (#%if |rib_-vDjVY1JA|
+                                                  (cons |rib_-vDjVY1JA|
                                                         (cons (#%quote shift)
-                                                              |s_sEqFJYRJG|))
+                                                              |s_-vLDwo7JA|))
                                                   (cons (#%quote shift)
-                                                        |s_sEqFJYRJG|))))))
-                                        (|wrap-marks_sEQwNlJzG| |w_sEKMN2RJG|)
-                                        (|wrap-subst_sEatLOJzG|
-                                          |w_sEKMN2RJG|)))
-                                     (|syntax-object-wrap_sEa7PQgzG|
-                                       |x_sEG6-kOJG|))
-                                    (#%if (vector? |x_sEG6-kOJG|)
-                                      ((#%lambda (|n_sEm_VePJG|)
-                                         ((#%lambda (|v_sEIXTHPJG|)
-                                            ((#%letrec ((|doloop_sE2UR8QJG|
-                                                          (#%lambda (|i_sEoQPBQJG|)
-                                                            (#%if (= |i_sEoQPBQJG|
-                                                                     |n_sEm_VePJG|)
-                                                              |v_sEIXTHPJG|
+                                                        |s_-vLDwo7JA|))))))
+                                        (|wrap-marks_-v9vAN-yA| |w_-v3LAu6JA|)
+                                        (|wrap-subst_-vvrye_yA|
+                                          |w_-v3LAu6JA|)))
+                                     (|syntax-object-wrap_-vv5CgyyA|
+                                       |x_-v_4NM3JA|))
+                                    (#%if (vector? |x_-v_4NM3JA|)
+                                      ((#%lambda (|n_-vHZIG4JA|)
+                                         ((#%lambda (|v_-v1WG75JA|)
+                                            ((#%letrec ((|doloop_-vnSEA5JA|
+                                                          (#%lambda (|i_-vJOC16JA|)
+                                                            (#%if (= |i_-vJOC16JA|
+                                                                     |n_-vHZIG4JA|)
+                                                              |v_-v1WG75JA|
                                                               (#%begin
                                                                 (vector-set!
-                                                                  |v_sEIXTHPJG|
-                                                                  |i_sEoQPBQJG|
-                                                                  (|rebuild-macro-output_sEEh4-MJG|
+                                                                  |v_-v1WG75JA|
+                                                                  |i_-vJOC16JA|
+                                                                  (|rebuild-macro-output_-vZfTp2JA|
                                                                     (vector-ref
-                                                                      |x_sEG6-kOJG|
-                                                                      |i_sEoQPBQJG|)
-                                                                    |m_sE03YNOJG|))
-                                                                (|doloop_sE2UR8QJG|
-                                                                  (+ |i_sEoQPBQJG|
+                                                                      |x_-v_4NM3JA|
+                                                                      |i_-vJOC16JA|)
+                                                                    |m_-vl1Ld4JA|))
+                                                                (|doloop_-vnSEA5JA|
+                                                                  (+ |i_-vJOC16JA|
                                                                      1)))))))
-                                               |doloop_sE2UR8QJG|)
+                                               |doloop_-vnSEA5JA|)
                                              0))
-                                          (make-vector |n_sEm_VePJG|)))
-                                       (vector-length |x_sEG6-kOJG|))
-                                      (#%if (symbol? |x_sEG6-kOJG|)
+                                          (make-vector |n_-vHZIG4JA|)))
+                                       (vector-length |x_-v_4NM3JA|))
+                                      (#%if (symbol? |x_-v_4NM3JA|)
                                         (syntax-error
-                                          (|source-wrap_sESSB9qAG|
-                                            |e_sEWzeJKJG|
-                                            |w_sECsaDLJG|
-                                            |s_sEYo84MJG|)
+                                          (|source-wrap_-vbRoBHzA|
+                                            |e_-vfy190JA|
+                                            |w_-vXqZ21JA|
+                                            |s_-vhnXv1JA|)
                                           "encountered raw symbol "
-                                          (format "~s" |x_sEG6-kOJG|)
+                                          (format "~s" |x_-v_4NM3JA|)
                                           " in output of macro")
-                                        |x_sEG6-kOJG|)))))))
-                   (|rebuild-macro-output_sEEh4-MJG|
-                     ((#%lambda (|out_sE-d2rNJG|)
-                        (#%if (procedure? |out_sE-d2rNJG|)
-                          (|out_sE-d2rNJG|
-                            (#%lambda (|id_sEka0UNJG|)
+                                        |x_-v_4NM3JA|)))))))
+                   (|rebuild-macro-output_-vZfTp2JA|
+                     ((#%lambda (|out_-vjcRS2JA|)
+                        (#%if (procedure? |out_-vjcRS2JA|)
+                          (|out_-vjcRS2JA|
+                            (#%lambda (|id_-vF8Pj3JA|)
                               (#%begin
-                                (#%if (identifier? |id_sEka0UNJG|)
+                                (#%if (identifier? |id_-vF8Pj3JA|)
                                   #!void
                                   (syntax-error
-                                    |id_sEka0UNJG|
+                                    |id_-vF8Pj3JA|
                                     "environment argument is not an identifier"))
-                                (|lookup_sEkri6CzG|
-                                  (|id-var-name_sE2G2QjAG|
-                                    |id_sEka0UNJG|
+                                (|lookup_-vFp5yTyA|
+                                  (|id-var-name_-vnERfBzA|
+                                    |id_-vF8Pj3JA|
                                     (#%quote (())))
-                                  |r_sEgwcaLJG|))))
-                          |out_sE-d2rNJG|))
-                      (|p_sEADggKJG|
-                        (|source-wrap_sESSB9qAG|
-                          |e_sEWzeJKJG|
-                          (|anti-mark_sEqgY87AG| |w_sECsaDLJG|)
-                          |s_sEYo84MJG|)))
+                                  |r_-vBu_B0JA|))))
+                          |out_-vjcRS2JA|))
+                      (|p_-vVB3I_IA|
+                        (|source-wrap_-vbRoBHzA|
+                          |e_-vfy190JA|
+                          (|anti-mark_-vLeLAozA| |w_-vXqZ21JA|)
+                          |s_-vhnXv1JA|)))
                      (string #\m)))))
-             (|chi-set!_sEm73ULAG|
-               (#%lambda (|e_sEia82yJG|
-                          |r_sEE66vyJG|
-                          |w_sE-24YyJG|
-                          |s_sEk_1pzJG|
-                          |rib_sEGX_RzJG|)
-                 ((#%lambda (|tmp_sEmQXLAJG|)
-                    (#%if (#%if |tmp_sEmQXLAJG|
-                            (apply (#%lambda (|__sEyOmVIJG|
-                                              |id_sEUKkmJJG|
-                                              |val_sEeHiPJJG|)
-                                     (|id?_sE4-1KFzG| |id_sEUKkmJJG|))
-                                   |tmp_sEmQXLAJG|)
+             (|chi-set!_-vH5Sj1AA|
+               (#%lambda (|e_-vD8XtPIA|
+                          |r_-vZ4VWPIA|
+                          |w_-vj1TnQIA|
+                          |s_-vFZQQQIA|
+                          |rib_-v_VOhRIA|)
+                 ((#%lambda (|tmp_-vHOKbSIA|)
+                    (#%if (#%if |tmp_-vHOKbSIA|
+                            (apply (#%lambda (|__-vTM9l-IA|
+                                              |id_-vdJ7O-IA|
+                                              |val_-vzF5f_IA|)
+                                     (|id?_-vpYQ9XyA| |id_-vdJ7O-IA|))
+                                   |tmp_-vHOKbSIA|)
                             #f)
-                      (apply (#%lambda (|__sE2JTFBJG|
-                                        |id_sEoFR6CJG|
-                                        |val_sEKBPzCJG|)
-                               ((#%lambda (|n_sE4yN0DJG|)
-                                  ((#%lambda (|b_sEquLtDJG|)
-                                     ((#%lambda (|t_sEMqJWDJG|)
-                                        (#%if (eqv? |t_sEMqJWDJG|
+                      (apply (#%lambda (|__-vnHG5TIA|
+                                        |id_-vJDEyTIA|
+                                        |val_-v3AC_TIA|)
+                               ((#%lambda (|n_-vpwAsUIA|)
+                                  ((#%lambda (|b_-vLsyVUIA|)
+                                     ((#%lambda (|t_-v5pwmVIA|)
+                                        (#%if (eqv? |t_-v5pwmVIA|
                                                     (#%quote macro!))
-                                          ((#%lambda (|id_sESVq_HJG|
-                                                      |val_sEcSosIJG|)
-                                             (|syntax-type_sECplNtAG|
-                                               (|chi-macro_sEI31lMAG|
-                                                 (|binding-value_sEsAX2tzG|
-                                                   |b_sEquLtDJG|)
+                                          ((#%lambda (|id_-vbUdrZIA|
+                                                      |val_-vxQbUZIA|)
+                                             (|syntax-type_-vXn8dLzA|
+                                               (|chi-macro_-v12QM1AA|
+                                                 (|binding-value_-vNyKuKyA|
+                                                   |b_-vLsyVUIA|)
                                                  (list #3(syntax-object
                                                           set!
                                                           ((top)
@@ -3688,398 +3688,398 @@
                                                                   *top*))
                                                               ()
                                                               ())))
-                                                       |id_sESVq_HJG|
-                                                       |val_sEcSosIJG|)
-                                                 |r_sEE66vyJG|
+                                                       |id_-vbUdrZIA|
+                                                       |val_-vxQbUZIA|)
+                                                 |r_-vZ4VWPIA|
                                                  (#%quote (()))
-                                                 |s_sEk_1pzJG|
-                                                 |rib_sEGX_RzJG|)
-                                               |r_sEE66vyJG|
+                                                 |s_-vFZQQQIA|
+                                                 |rib_-v_VOhRIA|)
+                                               |r_-vZ4VWPIA|
                                                (#%quote (()))
-                                               |s_sEk_1pzJG|
-                                               |rib_sEGX_RzJG|))
-                                           (|wrap_sEwWDIpAG|
-                                             |id_sEoFR6CJG|
-                                             |w_sE-24YyJG|)
-                                           (|wrap_sEwWDIpAG|
-                                             |val_sEKBPzCJG|
-                                             |w_sE-24YyJG|))
+                                               |s_-vFZQQQIA|
+                                               |rib_-v_VOhRIA|))
+                                           (|wrap_-vRUq8HzA|
+                                             |id_-vJDEyTIA|
+                                             |w_-vj1TnQIA|)
+                                           (|wrap_-vRUq8HzA|
+                                             |val_-v3AC_TIA|
+                                             |w_-vj1TnQIA|))
                                           (values
                                             (#%quote core)
-                                            (#%lambda (|e_sE6nHnEJG|
-                                                       |r_sEsjFQEJG|
-                                                       |w_sEOfDhFJG|
-                                                       |s_sE8cBKFJG|)
-                                              ((#%lambda (|val_sEu8zbGJG|
-                                                          |n_sEQ4xEGJG|)
-                                                 ((#%lambda (|b_sEa1v5HJG|)
-                                                    ((#%lambda (|t_sEwZsyHJG|)
-                                                       (#%if (eqv? |t_sEwZsyHJG|
+                                            (#%lambda (|e_-vrluPVIA|
+                                                       |r_-vNhsgWIA|
+                                                       |w_-v7eqJWIA|
+                                                       |s_-vtaoaXIA|)
+                                              ((#%lambda (|val_-vP6mDXIA|
+                                                          |n_-v93k4YIA|)
+                                                 ((#%lambda (|b_-vv_hxYIA|)
+                                                    ((#%lambda (|t_-vRXf-YIA|)
+                                                       (#%if (eqv? |t_-vRXf-YIA|
                                                                    (#%quote
                                                                      lexical))
-                                                         (#%if |s_sE8cBKFJG|
+                                                         (#%if |s_-vtaoaXIA|
                                                            (list #%annotate
                                                                  (list #%set!
-                                                                       (|binding-value_sEsAX2tzG|
-                                                                         |b_sEa1v5HJG|)
-                                                                       |val_sEu8zbGJG|)
-                                                                 |s_sE8cBKFJG|)
+                                                                       (|binding-value_-vNyKuKyA|
+                                                                         |b_-vv_hxYIA|)
+                                                                       |val_-vP6mDXIA|)
+                                                                 |s_-vtaoaXIA|)
                                                            (list #%set!
-                                                                 (|binding-value_sEsAX2tzG|
-                                                                   |b_sEa1v5HJG|)
-                                                                 |val_sEu8zbGJG|))
-                                                         (#%if (eqv? |t_sEwZsyHJG|
+                                                                 (|binding-value_-vNyKuKyA|
+                                                                   |b_-vv_hxYIA|)
+                                                                 |val_-vP6mDXIA|))
+                                                         (#%if (eqv? |t_-vRXf-YIA|
                                                                      (#%quote
                                                                        global))
-                                                           (#%if |s_sE8cBKFJG|
+                                                           (#%if |s_-vtaoaXIA|
                                                              (list #%annotate
                                                                    (list #%set!
-                                                                         (|binding-value_sEsAX2tzG|
-                                                                           |b_sEa1v5HJG|)
-                                                                         |val_sEu8zbGJG|)
-                                                                   |s_sE8cBKFJG|)
+                                                                         (|binding-value_-vNyKuKyA|
+                                                                           |b_-vv_hxYIA|)
+                                                                         |val_-vP6mDXIA|)
+                                                                   |s_-vtaoaXIA|)
                                                              (list #%set!
-                                                                   (|binding-value_sEsAX2tzG|
-                                                                     |b_sEa1v5HJG|)
-                                                                   |val_sEu8zbGJG|))
-                                                           (#%if (eqv? |t_sEwZsyHJG|
+                                                                   (|binding-value_-vNyKuKyA|
+                                                                     |b_-vv_hxYIA|)
+                                                                   |val_-vP6mDXIA|))
+                                                           (#%if (eqv? |t_-vRXf-YIA|
                                                                        (#%quote
                                                                          displaced-lexical))
                                                              (syntax-error
-                                                               (|wrap_sEwWDIpAG|
-                                                                 |id_sEoFR6CJG|
-                                                                 |w_sEOfDhFJG|)
+                                                               (|wrap_-vRUq8HzA|
+                                                                 |id_-vJDEyTIA|
+                                                                 |w_-v7eqJWIA|)
                                                                "identifier out of context")
                                                              (syntax-error
-                                                               (|source-wrap_sESSB9qAG|
-                                                                 |e_sE6nHnEJG|
-                                                                 |w_sEOfDhFJG|
-                                                                 |s_sE8cBKFJG|))))))
-                                                     (|binding-type_sE6EZBszG|
-                                                       |b_sEa1v5HJG|)))
-                                                  (|lookup_sEkri6CzG|
-                                                    |n_sEQ4xEGJG|
-                                                    |r_sEsjFQEJG|)))
-                                               (|chi_sEki9xKAG|
-                                                 |val_sEKBPzCJG|
-                                                 |r_sEsjFQEJG|
-                                                 |w_sEOfDhFJG|)
-                                               (|id-var-name_sE2G2QjAG|
-                                                 |id_sEoFR6CJG|
-                                                 |w_sEOfDhFJG|)))
-                                            |e_sEia82yJG|
-                                            |w_sE-24YyJG|
-                                            |s_sEk_1pzJG|)))
-                                      (|binding-type_sE6EZBszG|
-                                        |b_sEquLtDJG|)))
-                                   (|lookup_sEkri6CzG|
-                                     |n_sE4yN0DJG|
-                                     |r_sEE66vyJG|)))
-                                (|id-var-name_sE2G2QjAG|
-                                  |id_sEoFR6CJG|
-                                  |w_sE-24YyJG|)))
-                             |tmp_sEmQXLAJG|)
+                                                               (|source-wrap_-vbRoBHzA|
+                                                                 |e_-vrluPVIA|
+                                                                 |w_-v7eqJWIA|
+                                                                 |s_-vtaoaXIA|))))))
+                                                     (|binding-type_-vrCM1KyA|
+                                                       |b_-vv_hxYIA|)))
+                                                  (|lookup_-vFp5yTyA|
+                                                    |n_-v93k4YIA|
+                                                    |r_-vNhsgWIA|)))
+                                               (|chi_-vFgYY_zA|
+                                                 |val_-v3AC_TIA|
+                                                 |r_-vNhsgWIA|
+                                                 |w_-v7eqJWIA|)
+                                               (|id-var-name_-vnERfBzA|
+                                                 |id_-vJDEyTIA|
+                                                 |w_-v7eqJWIA|)))
+                                            |e_-vD8XtPIA|
+                                            |w_-vj1TnQIA|
+                                            |s_-vFZQQQIA|)))
+                                      (|binding-type_-vrCM1KyA|
+                                        |b_-vLsyVUIA|)))
+                                   (|lookup_-vFp5yTyA|
+                                     |n_-vpwAsUIA|
+                                     |r_-vZ4VWPIA|)))
+                                (|id-var-name_-vnERfBzA|
+                                  |id_-vJDEyTIA|
+                                  |w_-vj1TnQIA|)))
+                             |tmp_-vHOKbSIA|)
                       (syntax-error
-                        (|source-wrap_sESSB9qAG|
-                          |e_sEia82yJG|
-                          |w_sE-24YyJG|
-                          |s_sEk_1pzJG|))))
+                        (|source-wrap_-vbRoBHzA|
+                          |e_-vD8XtPIA|
+                          |w_-vj1TnQIA|
+                          |s_-vFZQQQIA|))))
                   ($syntax-dispatch
-                    (#%annotate |e_sEia82yJG| value)
+                    (#%annotate |e_-vD8XtPIA| value)
                     (#%quote (any any any))))))
-             (|chi-application_sE0b5rLAG|
-               (#%lambda (|x_sEuZAIrJG|
-                          |e_sEQVy9sJG|
-                          |r_sEaSwCsJG|
-                          |w_sEwOu3tJG|
-                          |s_sESKswtJG|)
-                 ((#%lambda (|tmp_sEyDoquJG|)
-                    (#%if |tmp_sEyDoquJG|
-                      (apply (#%lambda (|e0_sEewkkvJG| |e1_sEAsiNvJG|)
-                               (#%if |s_sESKswtJG|
+             (|chi-application_-vl9US0AA|
+               (#%lambda (|x_-vPXn8JIA|
+                          |e_-v9UlBJIA|
+                          |r_-vvQj2KIA|
+                          |w_-vRMhvKIA|
+                          |s_-vbJfYKIA|)
+                 ((#%lambda (|tmp_-vTBbSLIA|)
+                    (#%if |tmp_-vTBbSLIA|
+                      (apply (#%lambda (|e0_-vzu7MMIA| |e1_-vVq5dNIA|)
+                               (#%if |s_-vbJfYKIA|
                                  (list #%annotate
-                                       (cons |x_sEuZAIrJG|
-                                             (map (#%lambda (|e_sEChc8xJG|)
-                                                    (|chi_sEki9xKAG|
-                                                      |e_sEChc8xJG|
-                                                      |r_sEaSwCsJG|
-                                                      |w_sEwOu3tJG|))
-                                                  |e1_sEAsiNvJG|))
-                                       |s_sESKswtJG|)
-                                 (cons |x_sEuZAIrJG|
-                                       (map (#%lambda (|e_sEWogewJG|)
-                                              (|chi_sEki9xKAG|
-                                                |e_sEWogewJG|
-                                                |r_sEaSwCsJG|
-                                                |w_sEwOu3tJG|))
-                                            |e1_sEAsiNvJG|))))
-                             |tmp_sEyDoquJG|)
+                                       (cons |x_-vPXn8JIA|
+                                             (map (#%lambda (|e_-vXf_zOIA|)
+                                                    (|chi_-vFgYY_zA|
+                                                      |e_-vXf_zOIA|
+                                                      |r_-vvQj2KIA|
+                                                      |w_-vRMhvKIA|))
+                                                  |e1_-vVq5dNIA|))
+                                       |s_-vbJfYKIA|)
+                                 (cons |x_-vPXn8JIA|
+                                       (map (#%lambda (|e_-vfn3GNIA|)
+                                              (|chi_-vFgYY_zA|
+                                                |e_-vfn3GNIA|
+                                                |r_-vvQj2KIA|
+                                                |w_-vRMhvKIA|))
+                                            |e1_-vVq5dNIA|))))
+                             |tmp_-vTBbSLIA|)
                       (syntax-error
-                        (|source-wrap_sESSB9qAG|
-                          |e_sEQVy9sJG|
-                          |w_sEwOu3tJG|
-                          |s_sESKswtJG|))))
+                        (|source-wrap_-vbRoBHzA|
+                          |e_-v9UlBJIA|
+                          |w_-vRMhvKIA|
+                          |s_-vbJfYKIA|))))
                   ($syntax-dispatch
-                    (#%annotate |e_sEQVy9sJG| value)
+                    (#%annotate |e_-v9UlBJIA| value)
                     (#%quote (any . each-any))))))
-             (|chi-expr_sEGe7-KAG|
-               (#%lambda (|type_sEgagciJG|
-                          |value_sEC6eFiJG|
-                          |e_sEY2c6jJG|
-                          |r_sEi_9zjJG|
-                          |w_sEEX70kJG|
-                          |s_sE-T5tkJG|)
-                 (#%if (eqv? |type_sEgagciJG| (#%quote lexical))
-                   (#%if |s_sE-T5tkJG|
-                     (list #%annotate |value_sEC6eFiJG| |s_sE-T5tkJG|)
-                     |value_sEC6eFiJG|)
-                   (#%if (eqv? |type_sEgagciJG| (#%quote core))
-                     (|value_sEC6eFiJG|
-                       |e_sEY2c6jJG|
-                       |r_sEi_9zjJG|
-                       |w_sEEX70kJG|
-                       |s_sE-T5tkJG|)
-                     (#%if (eqv? |type_sEgagciJG| (#%quote lexical-call))
-                       (|chi-application_sE0b5rLAG|
-                         (#%if (|source-annotation_sE09gxozG|
-                                 (car |e_sEY2c6jJG|))
+             (|chi-expr_-v_cWp0AA|
+               (#%lambda (|type_-vB83EzIA|
+                          |value_-vX415AIA|
+                          |e_-vh1_xAIA|
+                          |r_-vDZY-AIA|
+                          |w_-vZVWrBIA|
+                          |s_-vjSUUBIA|)
+                 (#%if (eqv? |type_-vB83EzIA| (#%quote lexical))
+                   (#%if |s_-vjSUUBIA|
+                     (list #%annotate |value_-vX415AIA| |s_-vjSUUBIA|)
+                     |value_-vX415AIA|)
+                   (#%if (eqv? |type_-vB83EzIA| (#%quote core))
+                     (|value_-vX415AIA|
+                       |e_-vh1_xAIA|
+                       |r_-vDZY-AIA|
+                       |w_-vZVWrBIA|
+                       |s_-vjSUUBIA|)
+                     (#%if (eqv? |type_-vB83EzIA| (#%quote lexical-call))
+                       (|chi-application_-vl9US0AA|
+                         (#%if (|source-annotation_-vl73ZFyA|
+                                 (car |e_-vh1_xAIA|))
                            (list #%annotate
-                                 |value_sEC6eFiJG|
-                                 (|source-annotation_sE09gxozG|
-                                   (car |e_sEY2c6jJG|)))
-                           |value_sEC6eFiJG|)
-                         |e_sEY2c6jJG|
-                         |r_sEi_9zjJG|
-                         |w_sEEX70kJG|
-                         |s_sE-T5tkJG|)
-                       (#%if (eqv? |type_sEgagciJG| (#%quote constant))
-                         (#%if |s_sE-T5tkJG|
+                                 |value_-vX415AIA|
+                                 (|source-annotation_-vl73ZFyA|
+                                   (car |e_-vh1_xAIA|)))
+                           |value_-vX415AIA|)
+                         |e_-vh1_xAIA|
+                         |r_-vDZY-AIA|
+                         |w_-vZVWrBIA|
+                         |s_-vjSUUBIA|)
+                       (#%if (eqv? |type_-vB83EzIA| (#%quote constant))
+                         (#%if |s_-vjSUUBIA|
                            (list #%annotate
-                                 (#%if (atom? (|strip_sEwgAGSAG|
-                                                (|source-wrap_sESSB9qAG|
-                                                  |e_sEY2c6jJG|
-                                                  |w_sEEX70kJG|
-                                                  |s_sE-T5tkJG|)
+                                 (#%if (atom? (|strip_-vRen68AA|
+                                                (|source-wrap_-vbRoBHzA|
+                                                  |e_-vh1_xAIA|
+                                                  |w_-vZVWrBIA|
+                                                  |s_-vjSUUBIA|)
                                                 (#%quote (()))))
-                                   (|strip_sEwgAGSAG|
-                                     (|source-wrap_sESSB9qAG|
-                                       |e_sEY2c6jJG|
-                                       |w_sEEX70kJG|
-                                       |s_sE-T5tkJG|)
+                                   (|strip_-vRen68AA|
+                                     (|source-wrap_-vbRoBHzA|
+                                       |e_-vh1_xAIA|
+                                       |w_-vZVWrBIA|
+                                       |s_-vjSUUBIA|)
                                      (#%quote (())))
                                    (list #%quote
-                                         (|strip_sEwgAGSAG|
-                                           (|source-wrap_sESSB9qAG|
-                                             |e_sEY2c6jJG|
-                                             |w_sEEX70kJG|
-                                             |s_sE-T5tkJG|)
+                                         (|strip_-vRen68AA|
+                                           (|source-wrap_-vbRoBHzA|
+                                             |e_-vh1_xAIA|
+                                             |w_-vZVWrBIA|
+                                             |s_-vjSUUBIA|)
                                            (#%quote (())))))
-                                 |s_sE-T5tkJG|)
-                           (#%if (atom? (|strip_sEwgAGSAG|
-                                          (|source-wrap_sESSB9qAG|
-                                            |e_sEY2c6jJG|
-                                            |w_sEEX70kJG|
-                                            |s_sE-T5tkJG|)
+                                 |s_-vjSUUBIA|)
+                           (#%if (atom? (|strip_-vRen68AA|
+                                          (|source-wrap_-vbRoBHzA|
+                                            |e_-vh1_xAIA|
+                                            |w_-vZVWrBIA|
+                                            |s_-vjSUUBIA|)
                                           (#%quote (()))))
-                             (|strip_sEwgAGSAG|
-                               (|source-wrap_sESSB9qAG|
-                                 |e_sEY2c6jJG|
-                                 |w_sEEX70kJG|
-                                 |s_sE-T5tkJG|)
+                             (|strip_-vRen68AA|
+                               (|source-wrap_-vbRoBHzA|
+                                 |e_-vh1_xAIA|
+                                 |w_-vZVWrBIA|
+                                 |s_-vjSUUBIA|)
                                (#%quote (())))
                              (list #%quote
-                                   (|strip_sEwgAGSAG|
-                                     (|source-wrap_sESSB9qAG|
-                                       |e_sEY2c6jJG|
-                                       |w_sEEX70kJG|
-                                       |s_sE-T5tkJG|)
+                                   (|strip_-vRen68AA|
+                                     (|source-wrap_-vbRoBHzA|
+                                       |e_-vh1_xAIA|
+                                       |w_-vZVWrBIA|
+                                       |s_-vjSUUBIA|)
                                      (#%quote (()))))))
-                         (#%if (eqv? |type_sEgagciJG| (#%quote global))
-                           (#%if |s_sE-T5tkJG|
-                             (list #%annotate |value_sEC6eFiJG| |s_sE-T5tkJG|)
-                             |value_sEC6eFiJG|)
-                           (#%if (eqv? |type_sEgagciJG| (#%quote call))
-                             (|chi-application_sE0b5rLAG|
-                               (|chi_sEki9xKAG|
-                                 (car |e_sEY2c6jJG|)
-                                 |r_sEi_9zjJG|
-                                 |w_sEEX70kJG|)
-                               |e_sEY2c6jJG|
-                               |r_sEi_9zjJG|
-                               |w_sEEX70kJG|
-                               |s_sE-T5tkJG|)
-                             (#%if (eqv? |type_sEgagciJG| (#%quote begin-form))
-                               ((#%lambda (|tmp_sEMfLrpJG|)
-                                  (#%if |tmp_sEMfLrpJG|
-                                    (apply (#%lambda (|__sE6cJUpJG|
-                                                      |e1_sEs8HlqJG|
-                                                      |e2_sEO4FOqJG|)
-                                             (|chi-sequence_sEcPzCqAG|
-                                               (cons |e1_sEs8HlqJG|
-                                                     |e2_sEO4FOqJG|)
-                                               |r_sEi_9zjJG|
-                                               |w_sEEX70kJG|
-                                               |s_sE-T5tkJG|))
-                                           |tmp_sEMfLrpJG|)
-                                    (syntax-error |e_sEY2c6jJG|)))
+                         (#%if (eqv? |type_-vB83EzIA| (#%quote global))
+                           (#%if |s_-vjSUUBIA|
+                             (list #%annotate |value_-vX415AIA| |s_-vjSUUBIA|)
+                             |value_-vX415AIA|)
+                           (#%if (eqv? |type_-vB83EzIA| (#%quote call))
+                             (|chi-application_-vl9US0AA|
+                               (|chi_-vFgYY_zA|
+                                 (car |e_-vh1_xAIA|)
+                                 |r_-vDZY-AIA|
+                                 |w_-vZVWrBIA|)
+                               |e_-vh1_xAIA|
+                               |r_-vDZY-AIA|
+                               |w_-vZVWrBIA|
+                               |s_-vjSUUBIA|)
+                             (#%if (eqv? |type_-vB83EzIA| (#%quote begin-form))
+                               ((#%lambda (|tmp_-v5eyTGIA|)
+                                  (#%if |tmp_-v5eyTGIA|
+                                    (apply (#%lambda (|__-vrawkHIA|
+                                                      |e1_-vN6uNHIA|
+                                                      |e2_-v73seIIA|)
+                                             (|chi-sequence_-vxNm2IzA|
+                                               (cons |e1_-vN6uNHIA|
+                                                     |e2_-v73seIIA|)
+                                               |r_-vDZY-AIA|
+                                               |w_-vZVWrBIA|
+                                               |s_-vjSUUBIA|))
+                                           |tmp_-v5eyTGIA|)
+                                    (syntax-error |e_-vh1_xAIA|)))
                                 ($syntax-dispatch
-                                  (#%annotate |e_sEY2c6jJG| value)
+                                  (#%annotate |e_-vh1_xAIA| value)
                                   (#%quote (any any . each-any))))
-                               (#%if (eqv? |type_sEgagciJG|
+                               (#%if (eqv? |type_-vB83EzIA|
                                            (#%quote local-syntax-form))
-                                 (|chi-local-syntax_sEOyKpQAG|
-                                   |value_sEC6eFiJG|
-                                   |e_sEY2c6jJG|
-                                   |r_sEi_9zjJG|
-                                   |w_sEEX70kJG|
-                                   |s_sE-T5tkJG|
-                                   |chi-sequence_sEcPzCqAG|)
-                                 (#%if (eqv? |type_sEgagciJG|
+                                 (|chi-local-syntax_-v7xxR5AA|
+                                   |value_-vX415AIA|
+                                   |e_-vh1_xAIA|
+                                   |r_-vDZY-AIA|
+                                   |w_-vZVWrBIA|
+                                   |s_-vjSUUBIA|
+                                   |chi-sequence_-vxNm2IzA|)
+                                 (#%if (eqv? |type_-vB83EzIA|
                                              (#%quote eval-when-form))
-                                   ((#%lambda (|tmp_sE0J_PlJG|)
-                                      (#%if |tmp_sE0J_PlJG|
-                                        (apply (#%lambda (|__sEmFZgmJG|
-                                                          |x_sEIBXJmJG|
-                                                          |e1_sE2yVanJG|
-                                                          |e2_sEouTDnJG|)
+                                   ((#%lambda (|tmp_-vlHOfDIA|)
+                                      (#%if |tmp_-vlHOfDIA|
+                                        (apply (#%lambda (|__-vHDMIDIA|
+                                                          |x_-v1AK9EIA|
+                                                          |e1_-vnwICEIA|
+                                                          |e2_-vJsG3FIA|)
                                                  (#%if (memq (#%quote eval)
-                                                             (|chi-when-list_sEUHvwrAG|
-                                                               |x_sEIBXJmJG|
-                                                               |w_sEEX70kJG|))
-                                                   (|chi-sequence_sEcPzCqAG|
-                                                     (cons |e1_sE2yVanJG|
-                                                           |e2_sEouTDnJG|)
-                                                     |r_sEi_9zjJG|
-                                                     |w_sEEX70kJG|
-                                                     |s_sE-T5tkJG|)
-                                                   (|chi-void_sE8vISQAG|)))
-                                               |tmp_sE0J_PlJG|)
-                                        (syntax-error |e_sEY2c6jJG|)))
+                                                             (|chi-when-list_-vdGiYIzA|
+                                                               |x_-v1AK9EIA|
+                                                               |w_-vZVWrBIA|))
+                                                   (|chi-sequence_-vxNm2IzA|
+                                                     (cons |e1_-vnwICEIA|
+                                                           |e2_-vJsG3FIA|)
+                                                     |r_-vDZY-AIA|
+                                                     |w_-vZVWrBIA|
+                                                     |s_-vjSUUBIA|)
+                                                   (|chi-void_-vttvi6AA|)))
+                                               |tmp_-vlHOfDIA|)
+                                        (syntax-error |e_-vh1_xAIA|)))
                                     ($syntax-dispatch
-                                      (#%annotate |e_sEY2c6jJG| value)
+                                      (#%annotate |e_-vh1_xAIA| value)
                                       (#%quote (any each-any any . each-any))))
-                                   (#%if (memv |type_sEgagciJG|
+                                   (#%if (memv |type_-vB83EzIA|
                                                (#%quote
                                                  (define-form
                                                    define-syntax-form
                                                    module-form
                                                    import-form)))
                                      (syntax-error
-                                       (|source-wrap_sESSB9qAG|
-                                         |e_sEY2c6jJG|
-                                         |w_sEEX70kJG|
-                                         |s_sE-T5tkJG|)
+                                       (|source-wrap_-vbRoBHzA|
+                                         |e_-vh1_xAIA|
+                                         |w_-vZVWrBIA|
+                                         |s_-vjSUUBIA|)
                                        "invalid context for definition")
-                                     (#%if (eqv? |type_sEgagciJG|
+                                     (#%if (eqv? |type_-vB83EzIA|
                                                  (#%quote syntax))
                                        (syntax-error
-                                         (|source-wrap_sESSB9qAG|
-                                           |e_sEY2c6jJG|
-                                           |w_sEEX70kJG|
-                                           |s_sE-T5tkJG|)
+                                         (|source-wrap_-vbRoBHzA|
+                                           |e_-vh1_xAIA|
+                                           |w_-vZVWrBIA|
+                                           |s_-vjSUUBIA|)
                                          "reference to pattern variable outside syntax form")
-                                       (#%if (eqv? |type_sEgagciJG|
+                                       (#%if (eqv? |type_-vB83EzIA|
                                                    (#%quote displaced-lexical))
-                                         (|displaced-lexical-error_sEiCoLAzG|
-                                           (|source-wrap_sESSB9qAG|
-                                             |e_sEY2c6jJG|
-                                             |w_sEEX70kJG|
-                                             |s_sE-T5tkJG|))
+                                         (|displaced-lexical-error_-vDAbbSyA|
+                                           (|source-wrap_-vbRoBHzA|
+                                             |e_-vh1_xAIA|
+                                             |w_-vZVWrBIA|
+                                             |s_-vjSUUBIA|))
                                          (syntax-error
-                                           (|source-wrap_sESSB9qAG|
-                                             |e_sEY2c6jJG|
-                                             |w_sEEX70kJG|
-                                             |s_sE-T5tkJG|))))))))))))))))
-             (|chi_sEki9xKAG|
-               (#%lambda (|e_sEwDwAeJG| |r_sESzu1fJG| |w_sEcwsufJG|)
+                                           (|source-wrap_-vbRoBHzA|
+                                             |e_-vh1_xAIA|
+                                             |w_-vZVWrBIA|
+                                             |s_-vjSUUBIA|))))))))))))))))
+             (|chi_-vFgYY_zA|
+               (#%lambda (|e_-vRBj0wIA| |r_-vbyhtwIA| |w_-vxufWwIA|)
                  (call-with-values
                    (#%lambda ()
-                     (|syntax-type_sECplNtAG|
-                       |e_sEwDwAeJG|
-                       |r_sESzu1fJG|
-                       |w_sEcwsufJG|
+                     (|syntax-type_-vXn8dLzA|
+                       |e_-vRBj0wIA|
+                       |r_-vbyhtwIA|
+                       |w_-vxufWwIA|
                        #f
                        #f))
-                   (#%lambda (|type_sEysqXfJG|
-                              |value_sEUooogJG|
-                              |e_sEelmRgJG|
-                              |w_sEAhkihJG|
-                              |s_sEWdiLhJG|)
-                     (|chi-expr_sEGe7-KAG|
-                       |type_sEysqXfJG|
-                       |value_sEUooogJG|
-                       |e_sEelmRgJG|
-                       |r_sESzu1fJG|
-                       |w_sEAhkihJG|
-                       |s_sEWdiLhJG|)))))
-             (|ct-eval/residualize_sE-lb4KAG|
-               (#%lambda (|ctem_sEsZISbJG| |thunk_sEOVGjcJG|)
-                 (#%if (memq (#%quote e) |ctem_sEsZISbJG|)
+                   (#%lambda (|type_-vTqdnxIA|
+                              |value_-vdnbQxIA|
+                              |e_-vzj9hyIA|
+                              |w_-vVf7KyIA|
+                              |s_-vfc5bzIA|)
+                     (|chi-expr_-v_cWp0AA|
+                       |type_-vTqdnxIA|
+                       |value_-vdnbQxIA|
+                       |e_-vzj9hyIA|
+                       |r_-vbyhtwIA|
+                       |w_-vVf7KyIA|
+                       |s_-vfc5bzIA|)))))
+             (|ct-eval/residualize_-vjk-v_zA|
+               (#%lambda (|ctem_-vNXvitIA| |thunk_-v7UtLtIA|)
+                 (#%if (memq (#%quote e) |ctem_-vNXvitIA|)
                    (#%begin
-                     (|top-level-eval-hook_sEarWUmyG|
-                       (|thunk_sEOVGjcJG|))
-                     (|chi-void_sE8vISQAG|))
-                   ((#%lambda (|thunk_sE8SEMcJG|)
-                      (#%if (memq (#%quote r) |ctem_sEsZISbJG|)
-                        (#%if ((#%lambda (|t_sEQKAGdJG|)
-                                 (#%if |t_sEQKAGdJG|
-                                   |t_sEQKAGdJG|
-                                   (memq (#%quote v) |ctem_sEsZISbJG|)))
-                               (memq (#%quote l) |ctem_sEsZISbJG|))
-                          (|thunk_sE8SEMcJG|)
-                          (|thunk_sE8SEMcJG|))
-                        (#%if ((#%lambda (|t_sEuOCddJG|)
-                                 (#%if |t_sEuOCddJG|
-                                   |t_sEuOCddJG|
-                                   (memq (#%quote v) |ctem_sEsZISbJG|)))
-                               (memq (#%quote l) |ctem_sEsZISbJG|))
-                          (|thunk_sE8SEMcJG|)
-                          (|chi-void_sE8vISQAG|))))
-                    (#%if (memq (#%quote c) |ctem_sEsZISbJG|)
-                      ((#%lambda (|x_sEaHy7eJG|)
+                     (|top-level-eval-hook_-vvpJkExA|
+                       (|thunk_-v7UtLtIA|))
+                     (|chi-void_-vttvi6AA|))
+                   ((#%lambda (|thunk_-vtQrcuIA|)
+                      (#%if (memq (#%quote r) |ctem_-vNXvitIA|)
+                        (#%if ((#%lambda (|t_-v9Jn6vIA|)
+                                 (#%if |t_-v9Jn6vIA|
+                                   |t_-v9Jn6vIA|
+                                   (memq (#%quote v) |ctem_-vNXvitIA|)))
+                               (memq (#%quote l) |ctem_-vNXvitIA|))
+                          (|thunk_-vtQrcuIA|)
+                          (|thunk_-vtQrcuIA|))
+                        (#%if ((#%lambda (|t_-vPMpFuIA|)
+                                 (#%if |t_-vPMpFuIA|
+                                   |t_-vPMpFuIA|
+                                   (memq (#%quote v) |ctem_-vNXvitIA|)))
+                               (memq (#%quote l) |ctem_-vNXvitIA|))
+                          (|thunk_-vtQrcuIA|)
+                          (|chi-void_-vttvi6AA|))))
+                    (#%if (memq (#%quote c) |ctem_-vNXvitIA|)
+                      ((#%lambda (|x_-vvFlzvIA|)
                          (#%begin
-                           (|top-level-eval-hook_sEarWUmyG| |x_sEaHy7eJG|)
-                           (#%lambda () |x_sEaHy7eJG|)))
-                       (|thunk_sEOVGjcJG|))
-                      |thunk_sEOVGjcJG|)))))
-             (|rt-eval/residualize_sEEpdDJAG|
-               (#%lambda (|rtem_sEojV89JG| |thunk_sEKfTB9JG|)
-                 (#%if (memq (#%quote e) |rtem_sEojV89JG|)
-                   (|thunk_sEKfTB9JG|)
-                   ((#%lambda (|thunk_sE4cR2aJG|)
-                      (#%if (memq (#%quote v) |rtem_sEojV89JG|)
-                        (#%if ((#%lambda (|t_sEM4NYaJG|)
-                                 (#%if |t_sEM4NYaJG|
-                                   |t_sEM4NYaJG|
-                                   (memq (#%quote r) |rtem_sEojV89JG|)))
-                               (memq (#%quote l) |rtem_sEojV89JG|))
-                          (|thunk_sE4cR2aJG|)
-                          (|thunk_sE4cR2aJG|))
-                        (#%if ((#%lambda (|t_sEq8PvaJG|)
-                                 (#%if |t_sEq8PvaJG|
-                                   |t_sEq8PvaJG|
-                                   (memq (#%quote r) |rtem_sEojV89JG|)))
-                               (memq (#%quote l) |rtem_sEojV89JG|))
-                          (|thunk_sE4cR2aJG|)
-                          (|chi-void_sE8vISQAG|))))
-                    (#%if (memq (#%quote c) |rtem_sEojV89JG|)
-                      ((#%lambda (|x_sE61LpbJG|)
+                           (|top-level-eval-hook_-vvpJkExA| |x_-vvFlzvIA|)
+                           (#%lambda () |x_-vvFlzvIA|)))
+                       (|thunk_-v7UtLtIA|))
+                      |thunk_-v7UtLtIA|)))))
+             (|rt-eval/residualize_-vZn03_zA|
+               (#%lambda (|rtem_-vJhIAqIA| |thunk_-v3eG1rIA|)
+                 (#%if (memq (#%quote e) |rtem_-vJhIAqIA|)
+                   (|thunk_-v3eG1rIA|)
+                   ((#%lambda (|thunk_-vpaEurIA|)
+                      (#%if (memq (#%quote v) |rtem_-vJhIAqIA|)
+                        (#%if ((#%lambda (|t_-v53AosIA|)
+                                 (#%if |t_-v53AosIA|
+                                   |t_-v53AosIA|
+                                   (memq (#%quote r) |rtem_-vJhIAqIA|)))
+                               (memq (#%quote l) |rtem_-vJhIAqIA|))
+                          (|thunk_-vpaEurIA|)
+                          (|thunk_-vpaEurIA|))
+                        (#%if ((#%lambda (|t_-vL6CXrIA|)
+                                 (#%if |t_-vL6CXrIA|
+                                   |t_-vL6CXrIA|
+                                   (memq (#%quote r) |rtem_-vJhIAqIA|)))
+                               (memq (#%quote l) |rtem_-vJhIAqIA|))
+                          (|thunk_-vpaEurIA|)
+                          (|chi-void_-vttvi6AA|))))
+                    (#%if (memq (#%quote c) |rtem_-vJhIAqIA|)
+                      ((#%lambda (|x_-vr_xRsIA|)
                          (#%begin
-                           (|top-level-eval-hook_sEarWUmyG| |x_sE61LpbJG|)
-                           (#%lambda () |x_sE61LpbJG|)))
-                       (|thunk_sEKfTB9JG|))
-                      |thunk_sEKfTB9JG|)))))
-             (|update-mode-set_sEYwhJIAG|
-               (#%lambda (|when-list_sEYTdD4JG| |mode-set_sEiQb45JG|)
+                           (|top-level-eval-hook_-vvpJkExA| |x_-vr_xRsIA|)
+                           (#%lambda () |x_-vr_xRsIA|)))
+                       (|thunk_-v3eG1rIA|))
+                      |thunk_-v3eG1rIA|)))))
+             (|update-mode-set_-vhv49-zA|
+               (#%lambda (|when-list_-vhS03mIA| |mode-set_-vDO-vmIA|)
                  (remq (#%quote -)
                        (apply append
-                              (map (#%lambda (|m_sEEM9x5JG|)
-                                     ((#%lambda (|row_sE-I7-5JG|)
-                                        (map (#%lambda (|s_sEkF5r6JG|)
-                                               (cdr (assq |s_sEkF5r6JG|
-                                                          |row_sE-I7-5JG|)))
-                                             |when-list_sEYTdD4JG|))
-                                      (cdr (assq |m_sEEM9x5JG|
+                              (map (#%lambda (|m_-vZKYYmIA|)
+                                     ((#%lambda (|row_-vjHWpnIA|)
+                                        (map (#%lambda (|s_-vFDUSnIA|)
+                                               (cdr (assq |s_-vFDUSnIA|
+                                                          |row_-vjHWpnIA|)))
+                                             |when-list_-vhS03mIA|))
+                                      (cdr (assq |m_-vZKYYmIA|
                                                  (#%quote
                                                    ((l (load . l)
                                                        (compile . c)
@@ -4106,2240 +4106,2239 @@
                                                        (visit . -)
                                                        (revisit . -)
                                                        (eval . e))))))))
-                                   |mode-set_sEiQb45JG|)))))
-             (|do-top-import_sECAjgIAG|
-               (#%lambda (|mid_sEW2kg3JG| |token_sEg_hJ3JG|)
+                                   |mode-set_-vDO-vmIA|)))))
+             (|do-top-import_-vXy6IZzA|
+               (#%lambda (|mid_-vf17IkIA| |token_-vBZ49lIA|)
                  (list (#%quote $sc-put-cte)
-                       (list (#%quote quote) |mid_sEW2kg3JG|)
-                       (#%if (atom? (|make-binding_sEMH_8szG|
+                       (list (#%quote quote) |mid_-vf17IkIA|)
+                       (#%if (atom? (|make-binding_-v5GOAJyA|
                                       (#%quote do-import)
-                                      |token_sEg_hJ3JG|))
-                         (|make-binding_sEMH_8szG|
+                                      |token_-vBZ49lIA|))
+                         (|make-binding_-v5GOAJyA|
                            (#%quote do-import)
-                           |token_sEg_hJ3JG|)
+                           |token_-vBZ49lIA|)
                          (list #%quote
-                               (|make-binding_sEMH_8szG|
+                               (|make-binding_-v5GOAJyA|
                                  (#%quote do-import)
-                                 |token_sEg_hJ3JG|))))))
-             (|vfor-each_sEgElPHAG|
-               (#%lambda (|fn_sEclu_0JG| |v_sEyhss1JG|)
-                 ((#%lambda (|len_sEUdqV1JG|)
-                    ((#%letrec ((|doloop_sEeaom2JG|
-                                  (#%lambda (|i_sEA6mP2JG|)
-                                    (#%if (not (= |i_sEA6mP2JG|
-                                                  |len_sEUdqV1JG|))
+                                 |token_-vBZ49lIA|))))))
+             (|vfor-each_-vBC8fZzA|
+               (#%lambda (|fn_-vxjhriIA| |v_-vTffUiIA|)
+                 ((#%lambda (|len_-vdcdljIA|)
+                    ((#%letrec ((|doloop_-vz8bOjIA|
+                                  (#%lambda (|i_-vV49fkIA|)
+                                    (#%if (= |i_-vV49fkIA| |len_-vdcdljIA|)
+                                      #!void
                                       (#%begin
-                                        (|fn_sEclu_0JG|
+                                        (|fn_-vxjhriIA|
                                           (vector-ref
-                                            |v_sEyhss1JG|
-                                            |i_sEA6mP2JG|))
-                                        (|doloop_sEeaom2JG|
-                                          (+ |i_sEA6mP2JG| 1)))
-                                      #!void))))
-                       |doloop_sEeaom2JG|)
+                                            |v_-vTffUiIA|
+                                            |i_-vV49fkIA|))
+                                        (|doloop_-vz8bOjIA|
+                                          (+ |i_-vV49fkIA| 1)))))))
+                       |doloop_-vz8bOjIA|)
                      0))
-                  (vector-length |v_sEyhss1JG|))))
-             (|chi-external_sEALpVGAG|
-               (#%lambda (|ribcage_sEUIvsmIG|
-                          |source-exp_sEeFtVmIG|
-                          |body_sEABrmnIG|
-                          |r_sEWxpPnIG|
-                          |exports_sEgungoIG|
-                          |fexports_sECqlJoIG|
-                          |ctem_sEYmjapIG|
-                          |k_sEijhDpIG|)
-                 (#%letrec ((|return_sEEff4qIG|
-                              (#%lambda (|bindings_sEmj1jVIG|
-                                         |ids_sEIf_LVIG|
-                                         |inits_sE2cZcWIG|)
+                  (vector-length |v_-vTffUiIA|))))
+             (|chi-external_-vVJclYzA|
+               (#%lambda (|ribcage_-vdHiUDHA|
+                          |source-exp_-vzDglEHA|
+                          |body_-vVzeOEHA|
+                          |r_-vfwcfFHA|
+                          |exports_-vBsaIFHA|
+                          |fexports_-vXo89GHA|
+                          |ctem_-vhl6CGHA|
+                          |k_-vDh43HHA|)
+                 (#%letrec ((|return_-vZd2wHHA|
+                              (#%lambda (|bindings_-vHhQKaIA|
+                                         |ids_-v1eObbIA|
+                                         |inits_-vnaMEbIA|)
                                 (#%begin
-                                  (|check-defined-ids_sEePrsGAG|
-                                    |source-exp_sEeFtVmIG|
-                                    |ids_sEIf_LVIG|)
-                                  (|check-module-exports_sEUSt_FAG|
-                                    |source-exp_sEeFtVmIG|
-                                    |fexports_sECqlJoIG|
-                                    |ids_sEIf_LVIG|)
-                                  (|k_sEijhDpIG|
-                                    |bindings_sEmj1jVIG|
-                                    |inits_sE2cZcWIG|))))
-                            (|get-implicit-exports_sE-bdxqIG|
-                              (#%lambda (|id_sEo8XFWIG|)
-                                ((#%letrec ((|f_sEK4V6XIG|
-                                              (#%lambda (|exports_sE41TzXIG|)
-                                                (#%if (null? |exports_sE41TzXIG|)
+                                  (|check-defined-ids_-vzNeUXzA|
+                                    |source-exp_-vzDglEHA|
+                                    |ids_-v1eObbIA|)
+                                  (|check-module-exports_-vdRgrXzA|
+                                    |source-exp_-vzDglEHA|
+                                    |fexports_-vXo89GHA|
+                                    |ids_-v1eObbIA|)
+                                  (|k_-vDh43HHA|
+                                    |bindings_-vHhQKaIA|
+                                    |inits_-vnaMEbIA|))))
+                            (|get-implicit-exports_-vja0ZHHA|
+                              (#%lambda (|id_-vJ6K5cIA|)
+                                ((#%letrec ((|f_-v33IycIA|
+                                              (#%lambda (|exports_-vp_F_cIA|)
+                                                (#%if (null? |exports_-vp_F_cIA|)
                                                   ()
-                                                  (#%if (#%if (pair? (car |exports_sE41TzXIG|))
-                                                          (|bound-id=?_sE4vYalAG|
-                                                            |id_sEo8XFWIG|
-                                                            (caar |exports_sE41TzXIG|))
+                                                  (#%if (#%if (pair? (car |exports_-vp_F_cIA|))
+                                                          (|bound-id=?_-vptLCCzA|
+                                                            |id_-vJ6K5cIA|
+                                                            (caar |exports_-vp_F_cIA|))
                                                           #f)
-                                                    (|flatten-exports_sEEef8vAG|
-                                                      (cdar |exports_sE41TzXIG|))
-                                                    (|f_sEK4V6XIG|
-                                                      (cdr |exports_sE41TzXIG|)))))))
-                                   |f_sEK4V6XIG|)
-                                 |exports_sEgungoIG|)))
-                            (|update-imp-exports_sEk8b-qIG|
-                              (#%lambda (|bindings_sEqZQ0YIG|
-                                         |exports_sEMVOtYIG|)
-                                ((#%lambda (|exports_sE6SMWYIG|)
-                                   (map (#%lambda (|b_sEsOKnZIG|)
-                                          ((#%lambda (|id_sEOKIQZIG|)
-                                             (#%if (not (|bound-id-member?_sEa-FfpAG|
-                                                          |id_sEOKIQZIG|
-                                                          |exports_sE6SMWYIG|))
-                                               |b_sEsOKnZIG|
-                                               (|make-module-binding_sEKJYczAG|
-                                                 (|module-binding-type_sEqCU6AAG|
-                                                   |b_sEsOKnZIG|)
-                                                 |id_sEOKIQZIG|
-                                                 (|module-binding-label_sE6vQ0BAG|
-                                                   |b_sEsOKnZIG|)
+                                                    (|flatten-exports_-vZc2AMzA|
+                                                      (cdar |exports_-vp_F_cIA|))
+                                                    (|f_-v33IycIA|
+                                                      (cdr |exports_-vp_F_cIA|)))))))
+                                   |f_-v33IycIA|)
+                                 |exports_-vBsaIFHA|)))
+                            (|update-imp-exports_-vF6-pIHA|
+                              (#%lambda (|bindings_-vLXDsdIA|
+                                         |exports_-v5UBVdIA|)
+                                ((#%lambda (|exports_-vrQzmeIA|)
+                                   (map (#%lambda (|b_-vNMxPeIA|)
+                                          ((#%lambda (|id_-v7JvgfIA|)
+                                             (#%if (|bound-id-member?_-vvYsHGzA|
+                                                     |id_-v7JvgfIA|
+                                                     |exports_-vrQzmeIA|)
+                                               (|make-module-binding_-v3ILEQzA|
+                                                 (|module-binding-type_-vLAHyRzA|
+                                                   |b_-vNMxPeIA|)
+                                                 |id_-v7JvgfIA|
+                                                 (|module-binding-label_-vrtDsSzA|
+                                                   |b_-vNMxPeIA|)
                                                  (append
-                                                   (|get-implicit-exports_sE-bdxqIG|
-                                                     |id_sEOKIQZIG|)
-                                                   (|module-binding-imps_sEsrOtBAG|
-                                                     |b_sEsOKnZIG|))
-                                                 (|module-binding-val_sEOnMWBAG|
-                                                   |b_sEsOKnZIG|))))
-                                           (|module-binding-id_sEMySzAAG|
-                                             |b_sEsOKnZIG|)))
-                                        |bindings_sEqZQ0YIG|))
-                                 (map (#%lambda (|x_sE8HGh-IG|)
-                                        (#%if (pair? |x_sE8HGh-IG|)
-                                          (car |x_sE8HGh-IG|)
-                                          |x_sE8HGh-IG|))
-                                      |exports_sEMVOtYIG|)))))
-                   ((#%letrec ((|parse_sEG49rrIG|
-                                 (#%lambda (|body_sE017UrIG|
-                                            |ids_sEmZ4lsIG|
-                                            |bindings_sEIV2OsIG|
-                                            |inits_sE2S0ftIG|)
-                                   (#%if (null? |body_sE017UrIG|)
-                                     (|return_sEEff4qIG|
-                                       |bindings_sEIV2OsIG|
-                                       |ids_sEmZ4lsIG|
-                                       |inits_sE2S0ftIG|)
-                                     ((#%lambda (|e_sEoO-HtIG| |er_sEKKY8uIG|)
+                                                   (|get-implicit-exports_-vja0ZHHA|
+                                                     |id_-v7JvgfIA|)
+                                                   (|module-binding-imps_-vNpBVSzA|
+                                                     |b_-vNMxPeIA|))
+                                                 (|module-binding-val_-v7mzmTzA|
+                                                   |b_-vNMxPeIA|))
+                                               |b_-vNMxPeIA|))
+                                           (|module-binding-id_-v5xF_RzA|
+                                             |b_-vNMxPeIA|)))
+                                        |bindings_-vLXDsdIA|))
+                                 (map (#%lambda (|x_-vtFtJfIA|)
+                                        (#%if (pair? |x_-vtFtJfIA|)
+                                          (car |x_-vtFtJfIA|)
+                                          |x_-vtFtJfIA|))
+                                      |exports_-v5UBVdIA|)))))
+                   ((#%letrec ((|parse_-v_2YSIHA|
+                                 (#%lambda (|body_-vl_VjJHA|
+                                            |ids_-vHXTMJHA|
+                                            |bindings_-v1URdKHA|
+                                            |inits_-vnQPGKHA|)
+                                   (#%if (null? |body_-vl_VjJHA|)
+                                     (|return_-vZd2wHHA|
+                                       |bindings_-v1URdKHA|
+                                       |ids_-vHXTMJHA|
+                                       |inits_-vnQPGKHA|)
+                                     ((#%lambda (|e_-vJMN7LHA| |er_-v3JLALHA|)
                                         (call-with-values
                                           (#%lambda ()
-                                            (|syntax-type_sECplNtAG|
-                                              |e_sEoO-HtIG|
-                                              |er_sEKKY8uIG|
+                                            (|syntax-type_-vXn8dLzA|
+                                              |e_-vJMN7LHA|
+                                              |er_-v3JLALHA|
                                               (#%quote (()))
                                               #f
-                                              |ribcage_sEUIvsmIG|))
-                                          (#%lambda (|type_sE4HWBuIG|
-                                                     |value_sEqDU2vIG|
-                                                     |e_sEMzSvvIG|
-                                                     |w_sE6wQYvIG|
-                                                     |s_sEssOpwIG|)
-                                            (#%if (eqv? |type_sE4HWBuIG|
+                                              |ribcage_-vdHiUDHA|))
+                                          (#%lambda (|type_-vpFJ1MHA|
+                                                     |value_-vLBHuMHA|
+                                                     |e_-v5yFXMHA|
+                                                     |w_-vruDoNHA|
+                                                     |s_-vNqBRNHA|)
+                                            (#%if (eqv? |type_-vpFJ1MHA|
                                                         (#%quote define-form))
-                                              (|parse-define_sEMJQ2PAG|
-                                                |e_sEMzSvvIG|
-                                                |w_sE6wQYvIG|
-                                                |s_sEssOpwIG|
-                                                (#%lambda (|id_sEiFdBSIG|
-                                                           |rhs_sEEBb2TIG|
-                                                           |w_sE-x9vTIG|)
-                                                  ((#%lambda (|id_sEku7YTIG|)
-                                                     ((#%lambda (|label_sEGq5pUIG|)
-                                                        ((#%lambda (|imps_sE0n3SUIG|)
+                                              (|parse-define_-v5IDu4AA|
+                                                |e_-v5yFXMHA|
+                                                |w_-vruDoNHA|
+                                                |s_-vNqBRNHA|
+                                                (#%lambda (|id_-vDD018IA|
+                                                           |rhs_-vZz-t8IA|
+                                                           |w_-vjwYW8IA|)
+                                                  ((#%lambda (|id_-vFsWn9IA|)
+                                                     ((#%lambda (|label_-v_oUQ9IA|)
+                                                        ((#%lambda (|imps_-vllShaIA|)
                                                            (#%begin
-                                                             (|extend-ribcage!_sEetvudAG|
-                                                               |ribcage_sEUIvsmIG|
-                                                               |id_sEku7YTIG|
-                                                               |label_sEGq5pUIG|)
-                                                             (|parse_sEG49rrIG|
-                                                               (cdr |body_sE017UrIG|)
-                                                               (cons |id_sEku7YTIG|
-                                                                     |ids_sEmZ4lsIG|)
-                                                               (cons (|make-module-binding_sEKJYczAG|
-                                                                       |type_sE4HWBuIG|
-                                                                       |id_sEku7YTIG|
-                                                                       |label_sEGq5pUIG|
-                                                                       |imps_sE0n3SUIG|
-                                                                       (cons |er_sEKKY8uIG|
-                                                                             (|wrap_sEwWDIpAG|
-                                                                               |rhs_sEEBb2TIG|
-                                                                               |w_sE-x9vTIG|)))
-                                                                     |bindings_sEIV2OsIG|)
-                                                               |inits_sE2S0ftIG|)))
-                                                         (|get-implicit-exports_sE-bdxqIG|
-                                                           |id_sEku7YTIG|)))
-                                                      (|gen-indirect-label_sEwAHKYzG|)))
-                                                   (|wrap_sEwWDIpAG|
-                                                     |id_sEiFdBSIG|
-                                                     |w_sE-x9vTIG|))))
-                                              (#%if (eqv? |type_sE4HWBuIG|
+                                                             (|extend-ribcage!_-vzriWuzA|
+                                                               |ribcage_-vdHiUDHA|
+                                                               |id_-vFsWn9IA|
+                                                               |label_-v_oUQ9IA|)
+                                                             (|parse_-v_2YSIHA|
+                                                               (cdr |body_-vl_VjJHA|)
+                                                               (cons |id_-vFsWn9IA|
+                                                                     |ids_-vHXTMJHA|)
+                                                               (cons (|make-module-binding_-v3ILEQzA|
+                                                                       |type_-vpFJ1MHA|
+                                                                       |id_-vFsWn9IA|
+                                                                       |label_-v_oUQ9IA|
+                                                                       |imps_-vllShaIA|
+                                                                       (cons |er_-v3JLALHA|
+                                                                             (|wrap_-vRUq8HzA|
+                                                                               |rhs_-vZz-t8IA|
+                                                                               |w_-vjwYW8IA|)))
+                                                                     |bindings_-v1URdKHA|)
+                                                               |inits_-vnQPGKHA|)))
+                                                         (|get-implicit-exports_-vja0ZHHA|
+                                                           |id_-vFsWn9IA|)))
+                                                      (|gen-indirect-label_-vRyuaezA|)))
+                                                   (|wrap_-vRUq8HzA|
+                                                     |id_-vDD018IA|
+                                                     |w_-vjwYW8IA|))))
+                                              (#%if (eqv? |type_-vpFJ1MHA|
                                                           (#%quote
                                                             define-syntax-form))
-                                                (|parse-define-syntax_sE6GOvPAG|
-                                                  |e_sEMzSvvIG|
-                                                  |w_sE6wQYvIG|
-                                                  |s_sEssOpwIG|
-                                                  (#%lambda (|id_sEU2sqPIG|
-                                                             |rhs_sEe_pTPIG|
-                                                             |w_sEAXnkQIG|)
-                                                    ((#%lambda (|id_sEWTlNQIG|)
-                                                       ((#%lambda (|label_sEgQjeRIG|)
-                                                          ((#%lambda (|imps_sECMhHRIG|)
-                                                             ((#%lambda (|exp_sEYIf8SIG|)
+                                                (|parse-define-syntax_-vrEBX4AA|
+                                                  |e_-v5yFXMHA|
+                                                  |w_-vruDoNHA|
+                                                  |s_-vNqBRNHA|
+                                                  (#%lambda (|id_-vd1fS4IA|
+                                                             |rhs_-vzZcj5IA|
+                                                             |w_-vVVaM5IA|)
+                                                    ((#%lambda (|id_-vfS8d6IA|)
+                                                       ((#%lambda (|label_-vBO6G6IA|)
+                                                          ((#%lambda (|imps_-vXK477IA|)
+                                                             ((#%lambda (|exp_-vhH2A7IA|)
                                                                 (#%begin
-                                                                  (|extend-store!_sEyWvyFAG|
-                                                                    |r_sEWxpPnIG|
-                                                                    (|get-indirect-label_sESwFbZzG|
-                                                                      |label_sEgQjeRIG|)
+                                                                  (|extend-store!_-vTUi-WzA|
+                                                                    |r_-vfwcfFHA|
+                                                                    (|get-indirect-label_-vbvsDezA|
+                                                                      |label_-vBO6G6IA|)
                                                                     (cons (#%quote
                                                                             deferred)
-                                                                          |exp_sEYIf8SIG|))
-                                                                  (|extend-ribcage!_sEetvudAG|
-                                                                    |ribcage_sEUIvsmIG|
-                                                                    |id_sEWTlNQIG|
-                                                                    |label_sEgQjeRIG|)
-                                                                  (|parse_sEG49rrIG|
-                                                                    (cdr |body_sE017UrIG|)
-                                                                    (cons |id_sEWTlNQIG|
-                                                                          |ids_sEmZ4lsIG|)
-                                                                    (cons (|make-module-binding_sEKJYczAG|
-                                                                            |type_sE4HWBuIG|
-                                                                            |id_sEWTlNQIG|
-                                                                            |label_sEgQjeRIG|
-                                                                            |imps_sECMhHRIG|
-                                                                            |exp_sEYIf8SIG|)
-                                                                          |bindings_sEIV2OsIG|)
-                                                                    |inits_sE2S0ftIG|)))
-                                                              (|chi_sEki9xKAG|
-                                                                |rhs_sEe_pTPIG|
-                                                                (|transformer-env_sEYFqiAzG|
-                                                                  |er_sEKKY8uIG|)
-                                                                |w_sEAXnkQIG|)))
-                                                           (|get-implicit-exports_sE-bdxqIG|
-                                                             |id_sEWTlNQIG|)))
-                                                        (|gen-indirect-label_sEwAHKYzG|)))
-                                                     (|wrap_sEwWDIpAG|
-                                                       |id_sEU2sqPIG|
-                                                       |w_sEAXnkQIG|))))
-                                                (#%if (eqv? |type_sE4HWBuIG|
+                                                                          |exp_-vhH2A7IA|))
+                                                                  (|extend-ribcage!_-vzriWuzA|
+                                                                    |ribcage_-vdHiUDHA|
+                                                                    |id_-vfS8d6IA|
+                                                                    |label_-vBO6G6IA|)
+                                                                  (|parse_-v_2YSIHA|
+                                                                    (cdr |body_-vl_VjJHA|)
+                                                                    (cons |id_-vfS8d6IA|
+                                                                          |ids_-vHXTMJHA|)
+                                                                    (cons (|make-module-binding_-v3ILEQzA|
+                                                                            |type_-vpFJ1MHA|
+                                                                            |id_-vfS8d6IA|
+                                                                            |label_-vBO6G6IA|
+                                                                            |imps_-vXK477IA|
+                                                                            |exp_-vhH2A7IA|)
+                                                                          |bindings_-v1URdKHA|)
+                                                                    |inits_-vnQPGKHA|)))
+                                                              (|chi_-vFgYY_zA|
+                                                                |rhs_-vzZcj5IA|
+                                                                (|transformer-env_-vhEdKRyA|
+                                                                  |er_-v3JLALHA|)
+                                                                |w_-vVVaM5IA|)))
+                                                           (|get-implicit-exports_-vja0ZHHA|
+                                                             |id_-vfS8d6IA|)))
+                                                        (|gen-indirect-label_-vRyuaezA|)))
+                                                     (|wrap_-vRUq8HzA|
+                                                       |id_-vd1fS4IA|
+                                                       |w_-vVVaM5IA|))))
+                                                (#%if (eqv? |type_-vpFJ1MHA|
                                                             (#%quote
                                                               module-form))
-                                                  ((#%lambda (|*ribcage_sEqOSxJIG|)
-                                                     ((#%lambda (|*w_sEMKQ-JIG|)
-                                                        (|parse-module_sE4RU8OAG|
-                                                          |e_sEMzSvvIG|
-                                                          |w_sE6wQYvIG|
-                                                          |s_sEssOpwIG|
-                                                          |*w_sEMKQ-JIG|
-                                                          (#%lambda (|id_sE6HOrKIG|
-                                                                     |*exports_sEsDMUKIG|
-                                                                     |forms_sEOzKlLIG|)
-                                                            (|chi-external_sEALpVGAG|
-                                                              |*ribcage_sEqOSxJIG|
-                                                              (|source-wrap_sESSB9qAG|
-                                                                |e_sEMzSvvIG|
-                                                                |w_sE6wQYvIG|
-                                                                |s_sEssOpwIG|)
-                                                              (map (#%lambda (|d_sE8wIOLIG|)
-                                                                     (cons |er_sEKKY8uIG|
-                                                                           |d_sE8wIOLIG|))
-                                                                   |forms_sEOzKlLIG|)
-                                                              |r_sEWxpPnIG|
-                                                              |*exports_sEsDMUKIG|
-                                                              (|flatten-exports_sEEef8vAG|
-                                                                |*exports_sEsDMUKIG|)
-                                                              |ctem_sEYmjapIG|
-                                                              (#%lambda (|*bindings_sEusGfMIG|
-                                                                         |*inits_sEQoEIMIG|)
-                                                                ((#%lambda (|iface_sEalC9NIG|)
-                                                                   ((#%lambda (|bindings_sEwhACNIG|)
-                                                                      ((#%lambda (|inits_sESdy3OIG|)
-                                                                         (#%if |id_sE6HOrKIG|
-                                                                           ((#%lambda (|label_sEcawwOIG|
-                                                                                       |imps_sEy6uZOIG|)
+                                                  ((#%lambda (|*ribcage_-vLMFZ-HA|)
+                                                     ((#%lambda (|*w_-v5JDq_HA|)
+                                                        (|parse-module_-vpPHA3AA|
+                                                          |e_-v5yFXMHA|
+                                                          |w_-vruDoNHA|
+                                                          |s_-vNqBRNHA|
+                                                          |*w_-v5JDq_HA|
+                                                          (#%lambda (|id_-vrFBT_HA|
+                                                                     |*exports_-vNBzk0IA|
+                                                                     |forms_-v7yxN0IA|)
+                                                            (|chi-external_-vVJclYzA|
+                                                              |*ribcage_-vLMFZ-HA|
+                                                              (|source-wrap_-vbRoBHzA|
+                                                                |e_-v5yFXMHA|
+                                                                |w_-vruDoNHA|
+                                                                |s_-vNqBRNHA|)
+                                                              (map (#%lambda (|d_-vtuve1IA|)
+                                                                     (cons |er_-v3JLALHA|
+                                                                           |d_-vtuve1IA|))
+                                                                   |forms_-v7yxN0IA|)
+                                                              |r_-vfwcfFHA|
+                                                              |*exports_-vNBzk0IA|
+                                                              (|flatten-exports_-vZc2AMzA|
+                                                                |*exports_-vNBzk0IA|)
+                                                              |ctem_-vhl6CGHA|
+                                                              (#%lambda (|*bindings_-vPqtH1IA|
+                                                                         |*inits_-v9nr82IA|)
+                                                                ((#%lambda (|iface_-vvjpB2IA|)
+                                                                   ((#%lambda (|bindings_-vRfn23IA|)
+                                                                      ((#%lambda (|inits_-vbclv3IA|)
+                                                                         (#%if |id_-vrFBT_HA|
+                                                                           ((#%lambda (|label_-vx8jY3IA|
+                                                                                       |imps_-vT4hp4IA|)
                                                                               (#%begin
-                                                                                (|extend-store!_sEyWvyFAG|
-                                                                                  |r_sEWxpPnIG|
-                                                                                  (|get-indirect-label_sESwFbZzG|
-                                                                                    |label_sEcawwOIG|)
-                                                                                  (|make-binding_sEMH_8szG|
+                                                                                (|extend-store!_-vTUi-WzA|
+                                                                                  |r_-vfwcfFHA|
+                                                                                  (|get-indirect-label_-vbvsDezA|
+                                                                                    |label_-vx8jY3IA|)
+                                                                                  (|make-binding_-v5GOAJyA|
                                                                                     (#%quote
                                                                                       module)
-                                                                                    |iface_sEalC9NIG|))
-                                                                                (|extend-ribcage!_sEetvudAG|
-                                                                                  |ribcage_sEUIvsmIG|
-                                                                                  |id_sE6HOrKIG|
-                                                                                  |label_sEcawwOIG|)
-                                                                                (|parse_sEG49rrIG|
-                                                                                  (cdr |body_sE017UrIG|)
-                                                                                  (cons |id_sE6HOrKIG|
-                                                                                        |ids_sEmZ4lsIG|)
-                                                                                  (cons (|make-module-binding_sEKJYczAG|
-                                                                                          |type_sE4HWBuIG|
-                                                                                          |id_sE6HOrKIG|
-                                                                                          |label_sEcawwOIG|
-                                                                                          |imps_sEy6uZOIG|
-                                                                                          |*exports_sEsDMUKIG|)
-                                                                                        |bindings_sEwhACNIG|)
-                                                                                  |inits_sESdy3OIG|)))
-                                                                            (|gen-indirect-label_sEwAHKYzG|)
-                                                                            (|get-implicit-exports_sE-bdxqIG|
-                                                                              |id_sE6HOrKIG|))
+                                                                                    |iface_-vvjpB2IA|))
+                                                                                (|extend-ribcage!_-vzriWuzA|
+                                                                                  |ribcage_-vdHiUDHA|
+                                                                                  |id_-vrFBT_HA|
+                                                                                  |label_-vx8jY3IA|)
+                                                                                (|parse_-v_2YSIHA|
+                                                                                  (cdr |body_-vl_VjJHA|)
+                                                                                  (cons |id_-vrFBT_HA|
+                                                                                        |ids_-vHXTMJHA|)
+                                                                                  (cons (|make-module-binding_-v3ILEQzA|
+                                                                                          |type_-vpFJ1MHA|
+                                                                                          |id_-vrFBT_HA|
+                                                                                          |label_-vx8jY3IA|
+                                                                                          |imps_-vT4hp4IA|
+                                                                                          |*exports_-vNBzk0IA|)
+                                                                                        |bindings_-vRfn23IA|)
+                                                                                  |inits_-vbclv3IA|)))
+                                                                            (|gen-indirect-label_-vRyuaezA|)
+                                                                            (|get-implicit-exports_-vja0ZHHA|
+                                                                              |id_-vrFBT_HA|))
                                                                            (#%begin
-                                                                             (|do-import!_sEKUWHNAG|
-                                                                               |iface_sEalC9NIG|
-                                                                               |ribcage_sEUIvsmIG|)
-                                                                             (|parse_sEG49rrIG|
-                                                                               (cdr |body_sE017UrIG|)
-                                                                               (cons |iface_sEalC9NIG|
-                                                                                     |ids_sEmZ4lsIG|)
-                                                                               |bindings_sEwhACNIG|
-                                                                               |inits_sESdy3OIG|))))
+                                                                             (|do-import!_-v3TJ73AA|
+                                                                               |iface_-vvjpB2IA|
+                                                                               |ribcage_-vdHiUDHA|)
+                                                                             (|parse_-v_2YSIHA|
+                                                                               (cdr |body_-vl_VjJHA|)
+                                                                               (cons |iface_-vvjpB2IA|
+                                                                                     |ids_-vHXTMJHA|)
+                                                                               |bindings_-vRfn23IA|
+                                                                               |inits_-vbclv3IA|))))
                                                                        (append
-                                                                         |inits_sE2S0ftIG|
-                                                                         |*inits_sEQoEIMIG|)))
+                                                                         |inits_-vnQPGKHA|
+                                                                         |*inits_-v9nr82IA|)))
                                                                     (append
-                                                                      (#%if |id_sE6HOrKIG|
-                                                                        |*bindings_sEusGfMIG|
-                                                                        (|update-imp-exports_sEk8b-qIG|
-                                                                          |*bindings_sEusGfMIG|
-                                                                          |*exports_sEsDMUKIG|))
-                                                                      |bindings_sEIV2OsIG|)))
-                                                                 (|make-trimmed-interface_sE2R0jyAG|
-                                                                   |*exports_sEsDMUKIG|)))))))
-                                                      (|make-wrap_sEuAPUIzG|
-                                                        (|wrap-marks_sEQwNlJzG|
-                                                          |w_sE6wQYvIG|)
-                                                        (cons |*ribcage_sEqOSxJIG|
-                                                              (|wrap-subst_sEatLOJzG|
-                                                                |w_sE6wQYvIG|)))))
-                                                   (|make-ribcage_sEAevs_zG|
+                                                                      (#%if |id_-vrFBT_HA|
+                                                                        |*bindings_-vPqtH1IA|
+                                                                        (|update-imp-exports_-vF6-pIHA|
+                                                                          |*bindings_-vPqtH1IA|
+                                                                          |*exports_-vNBzk0IA|))
+                                                                      |bindings_-v1URdKHA|)))
+                                                                 (|make-trimmed-interface_-vnPPKPzA|
+                                                                   |*exports_-vNBzk0IA|)))))))
+                                                      (|make-wrap_-vPyCk-yA|
+                                                        (|wrap-marks_-v9vAN-yA|
+                                                          |w_-vruDoNHA|)
+                                                        (cons |*ribcage_-vLMFZ-HA|
+                                                              (|wrap-subst_-vvrye_yA|
+                                                                |w_-vruDoNHA|)))))
+                                                   (|make-ribcage_-vVciUgzA|
                                                      ()
                                                      ()
                                                      ()))
-                                                  (#%if (eqv? |type_sE4HWBuIG|
+                                                  (#%if (eqv? |type_-vpFJ1MHA|
                                                               (#%quote
                                                                 import-form))
-                                                    (|parse-import_sEqNSBOAG|
-                                                      |e_sEMzSvvIG|
-                                                      |w_sE6wQYvIG|
-                                                      |s_sEssOpwIG|
-                                                      (#%lambda (|mid_sEI41hHIG|)
-                                                        ((#%lambda (|mlabel_sE21_JHIG|)
-                                                           ((#%lambda (|binding_sEoZYaIIG|)
-                                                              ((#%lambda (|t_sEKVWDIIG|)
-                                                                 (#%if (eqv? |t_sEKVWDIIG|
+                                                    (|parse-import_-vLLF14AA|
+                                                      |e_-v5yFXMHA|
+                                                      |w_-vruDoNHA|
+                                                      |s_-vNqBRNHA|
+                                                      (#%lambda (|mid_-v13QIYHA|)
+                                                        ((#%lambda (|mlabel_-vn_N9ZHA|)
+                                                           ((#%lambda (|binding_-vJXLCZHA|)
+                                                              ((#%lambda (|t_-v3UJ3-HA|)
+                                                                 (#%if (eqv? |t_-v3UJ3-HA|
                                                                              (#%quote
                                                                                module))
-                                                                   ((#%lambda (|iface_sE4SU4JIG|)
+                                                                   ((#%lambda (|iface_-vpQHw-HA|)
                                                                       (#%begin
-                                                                        (#%if |value_sEqDU2vIG|
-                                                                          (|extend-ribcage-barrier!_sEAptXdAG|
-                                                                            |ribcage_sEUIvsmIG|
-                                                                            |value_sEqDU2vIG|)
+                                                                        (#%if |value_-vLBHuMHA|
+                                                                          (|extend-ribcage-barrier!_-vVngnvzA|
+                                                                            |ribcage_-vdHiUDHA|
+                                                                            |value_-vLBHuMHA|)
                                                                           #!void)
-                                                                        (|do-import!_sEKUWHNAG|
-                                                                          |iface_sE4SU4JIG|
-                                                                          |ribcage_sEUIvsmIG|)
-                                                                        (|parse_sEG49rrIG|
-                                                                          (cdr |body_sE017UrIG|)
-                                                                          (cons |iface_sE4SU4JIG|
-                                                                                |ids_sEmZ4lsIG|)
-                                                                          (|update-imp-exports_sEk8b-qIG|
-                                                                            |bindings_sEIV2OsIG|
+                                                                        (|do-import!_-v3TJ73AA|
+                                                                          |iface_-vpQHw-HA|
+                                                                          |ribcage_-vdHiUDHA|)
+                                                                        (|parse_-v_2YSIHA|
+                                                                          (cdr |body_-vl_VjJHA|)
+                                                                          (cons |iface_-vpQHw-HA|
+                                                                                |ids_-vHXTMJHA|)
+                                                                          (|update-imp-exports_-vF6-pIHA|
+                                                                            |bindings_-v1URdKHA|
                                                                             (vector->list
-                                                                              (|interface-exports_sEG39vwAG|
-                                                                                |iface_sE4SU4JIG|)))
-                                                                          |inits_sE2S0ftIG|)))
-                                                                    (|binding-value_sEsAX2tzG|
-                                                                      |binding_sEoZYaIIG|))
-                                                                   (#%if (eqv? |t_sEKVWDIIG|
+                                                                              (|interface-exports_-v_1YWNzA|
+                                                                                |iface_-vpQHw-HA|)))
+                                                                          |inits_-vnQPGKHA|)))
+                                                                    (|binding-value_-vNyKuKyA|
+                                                                      |binding_-vJXLCZHA|))
+                                                                   (#%if (eqv? |t_-v3UJ3-HA|
                                                                                (#%quote
                                                                                  displaced-lexical))
-                                                                     (|displaced-lexical-error_sEiCoLAzG|
-                                                                       |mid_sEI41hHIG|)
+                                                                     (|displaced-lexical-error_-vDAbbSyA|
+                                                                       |mid_-v13QIYHA|)
                                                                      (syntax-error
-                                                                       |mid_sEI41hHIG|
+                                                                       |mid_-v13QIYHA|
                                                                        "import from unknown module"))))
-                                                               (|binding-type_sE6EZBszG|
-                                                                 |binding_sEoZYaIIG|)))
-                                                            (|lookup_sEkri6CzG|
-                                                              |mlabel_sE21_JHIG|
-                                                              |r_sEWxpPnIG|)))
-                                                         (|id-var-name_sE2G2QjAG|
-                                                           |mid_sEI41hHIG|
+                                                               (|binding-type_-vrCM1KyA|
+                                                                 |binding_-vJXLCZHA|)))
+                                                            (|lookup_-vFp5yTyA|
+                                                              |mlabel_-vn_N9ZHA|
+                                                              |r_-vfwcfFHA|)))
+                                                         (|id-var-name_-vnERfBzA|
+                                                           |mid_-v13QIYHA|
                                                            (#%quote (()))))))
-                                                    (#%if (eqv? |type_sE4HWBuIG|
+                                                    (#%if (eqv? |type_-vpFJ1MHA|
                                                                 (#%quote
                                                                   begin-form))
-                                                      ((#%lambda (|tmp_sEEqdzEIG|)
-                                                         (#%if |tmp_sEEqdzEIG|
-                                                           (apply (#%lambda (|__sE-mb0FIG|
-                                                                             |e1_sEkj9tFIG|)
-                                                                    (|parse_sEG49rrIG|
-                                                                      ((#%letrec ((|f_sEGf7WFIG|
-                                                                                    (#%lambda (|forms_sE0c5nGIG|)
-                                                                                      (#%if (null? |forms_sE0c5nGIG|)
-                                                                                        (cdr |body_sE017UrIG|)
-                                                                                        (cons (cons |er_sEKKY8uIG|
-                                                                                                    (|wrap_sEwWDIpAG|
-                                                                                                      (car |forms_sE0c5nGIG|)
-                                                                                                      |w_sE6wQYvIG|))
-                                                                                              (|f_sEGf7WFIG|
-                                                                                                (cdr |forms_sE0c5nGIG|)))))))
-                                                                         |f_sEGf7WFIG|)
-                                                                       |e1_sEkj9tFIG|)
-                                                                      |ids_sEmZ4lsIG|
-                                                                      |bindings_sEIV2OsIG|
-                                                                      |inits_sE2S0ftIG|))
-                                                                  |tmp_sEEqdzEIG|)
+                                                      ((#%lambda (|tmp_-vZo0_VHA|)
+                                                         (#%if |tmp_-vZo0_VHA|
+                                                           (apply (#%lambda (|__-vjl-rWHA|
+                                                                             |e1_-vFhYUWHA|)
+                                                                    (|parse_-v_2YSIHA|
+                                                                      ((#%letrec ((|f_-v_dWlXHA|
+                                                                                    (#%lambda (|forms_-vlaUOXHA|)
+                                                                                      (#%if (null? |forms_-vlaUOXHA|)
+                                                                                        (cdr |body_-vl_VjJHA|)
+                                                                                        (cons (cons |er_-v3JLALHA|
+                                                                                                    (|wrap_-vRUq8HzA|
+                                                                                                      (car |forms_-vlaUOXHA|)
+                                                                                                      |w_-vruDoNHA|))
+                                                                                              (|f_-v_dWlXHA|
+                                                                                                (cdr |forms_-vlaUOXHA|)))))))
+                                                                         |f_-v_dWlXHA|)
+                                                                       |e1_-vFhYUWHA|)
+                                                                      |ids_-vHXTMJHA|
+                                                                      |bindings_-v1URdKHA|
+                                                                      |inits_-vnQPGKHA|))
+                                                                  |tmp_-vZo0_VHA|)
                                                            (syntax-error
-                                                             |e_sEMzSvvIG|)))
+                                                             |e_-v5yFXMHA|)))
                                                        ($syntax-dispatch
                                                          (#%annotate
-                                                           |e_sEMzSvvIG|
+                                                           |e_-v5yFXMHA|
                                                            value)
                                                          (#%quote
                                                            (any . each-any))))
-                                                      (#%if (eqv? |type_sE4HWBuIG|
+                                                      (#%if (eqv? |type_-vpFJ1MHA|
                                                                   (#%quote
                                                                     eval-when-form))
-                                                        ((#%lambda (|tmp_sEyXvuAIG|)
-                                                           (#%if |tmp_sEyXvuAIG|
-                                                             (apply (#%lambda (|__sEUTtXAIG|
-                                                                               |x_sEeQroBIG|
-                                                                               |e1_sEAMpRBIG|)
-                                                                      (|parse_sEG49rrIG|
+                                                        ((#%lambda (|tmp_-vTViWRHA|)
+                                                           (#%if |tmp_-vTViWRHA|
+                                                             (apply (#%lambda (|__-vdSgnSHA|
+                                                                               |x_-vzOeQSHA|
+                                                                               |e1_-vVKchTHA|)
+                                                                      (|parse_-v_2YSIHA|
                                                                         (#%if (memq (#%quote
                                                                                       eval)
-                                                                                    (|chi-when-list_sEUHvwrAG|
-                                                                                      |x_sEeQroBIG|
-                                                                                      |w_sE6wQYvIG|))
-                                                                          ((#%letrec ((|f_sEWIniCIG|
-                                                                                        (#%lambda (|forms_sEgFlLCIG|)
-                                                                                          (#%if (null? |forms_sEgFlLCIG|)
-                                                                                            (cdr |body_sE017UrIG|)
-                                                                                            (cons (cons |er_sEKKY8uIG|
-                                                                                                        (|wrap_sEwWDIpAG|
-                                                                                                          (car |forms_sEgFlLCIG|)
-                                                                                                          |w_sE6wQYvIG|))
-                                                                                                  (|f_sEWIniCIG|
-                                                                                                    (cdr |forms_sEgFlLCIG|)))))))
-                                                                             |f_sEWIniCIG|)
-                                                                           |e1_sEAMpRBIG|)
-                                                                          (cdr |body_sE017UrIG|))
-                                                                        |ids_sEmZ4lsIG|
-                                                                        |bindings_sEIV2OsIG|
-                                                                        |inits_sE2S0ftIG|))
-                                                                    |tmp_sEyXvuAIG|)
+                                                                                    (|chi-when-list_-vdGiYIzA|
+                                                                                      |x_-vzOeQSHA|
+                                                                                      |w_-vruDoNHA|))
+                                                                          ((#%letrec ((|f_-vfHaKTHA|
+                                                                                        (#%lambda (|forms_-vBD8bUHA|)
+                                                                                          (#%if (null? |forms_-vBD8bUHA|)
+                                                                                            (cdr |body_-vl_VjJHA|)
+                                                                                            (cons (cons |er_-v3JLALHA|
+                                                                                                        (|wrap_-vRUq8HzA|
+                                                                                                          (car |forms_-vBD8bUHA|)
+                                                                                                          |w_-vruDoNHA|))
+                                                                                                  (|f_-vfHaKTHA|
+                                                                                                    (cdr |forms_-vBD8bUHA|)))))))
+                                                                             |f_-vfHaKTHA|)
+                                                                           |e1_-vVKchTHA|)
+                                                                          (cdr |body_-vl_VjJHA|))
+                                                                        |ids_-vHXTMJHA|
+                                                                        |bindings_-v1URdKHA|
+                                                                        |inits_-vnQPGKHA|))
+                                                                    |tmp_-vTViWRHA|)
                                                              (syntax-error
-                                                               |e_sEMzSvvIG|)))
+                                                               |e_-v5yFXMHA|)))
                                                          ($syntax-dispatch
                                                            (#%annotate
-                                                             |e_sEMzSvvIG|
+                                                             |e_-v5yFXMHA|
                                                              value)
                                                            (#%quote
                                                              (any each-any
                                                                   .
                                                                   each-any))))
-                                                        (#%if (eqv? |type_sE4HWBuIG|
+                                                        (#%if (eqv? |type_-vpFJ1MHA|
                                                                     (#%quote
                                                                       local-syntax-form))
-                                                          (|chi-local-syntax_sEOyKpQAG|
-                                                            |value_sEqDU2vIG|
-                                                            |e_sEMzSvvIG|
-                                                            |er_sEKKY8uIG|
-                                                            |w_sE6wQYvIG|
-                                                            |s_sEssOpwIG|
-                                                            (#%lambda (|forms_sE8lKjxIG|
-                                                                       |er_sEuhIMxIG|
-                                                                       |w_sEQdGdyIG|
-                                                                       |s_sEaaEGyIG|)
-                                                              (|parse_sEG49rrIG|
-                                                                ((#%letrec ((|f_sEw6C7zIG|
-                                                                              (#%lambda (|forms_sES2AAzIG|)
-                                                                                (#%if (null? |forms_sES2AAzIG|)
-                                                                                  (cdr |body_sE017UrIG|)
-                                                                                  (cons (cons |er_sEuhIMxIG|
-                                                                                              (|wrap_sEwWDIpAG|
-                                                                                                (car |forms_sES2AAzIG|)
-                                                                                                |w_sEQdGdyIG|))
-                                                                                        (|f_sEw6C7zIG|
-                                                                                          (cdr |forms_sES2AAzIG|)))))))
-                                                                   |f_sEw6C7zIG|)
-                                                                 |forms_sE8lKjxIG|)
-                                                                |ids_sEmZ4lsIG|
-                                                                |bindings_sEIV2OsIG|
-                                                                |inits_sE2S0ftIG|)))
-                                                          (|return_sEEff4qIG|
-                                                            |bindings_sEIV2OsIG|
-                                                            |ids_sEmZ4lsIG|
+                                                          (|chi-local-syntax_-v7xxR5AA|
+                                                            |value_-vLBHuMHA|
+                                                            |e_-v5yFXMHA|
+                                                            |er_-v3JLALHA|
+                                                            |w_-vruDoNHA|
+                                                            |s_-vNqBRNHA|
+                                                            (#%lambda (|forms_-vtjxLOHA|
+                                                                       |er_-vPfvcPHA|
+                                                                       |w_-v9ctFPHA|
+                                                                       |s_-vv8r6QHA|)
+                                                              (|parse_-v_2YSIHA|
+                                                                ((#%letrec ((|f_-vR4pzQHA|
+                                                                              (#%lambda (|forms_-vb1n0RHA|)
+                                                                                (#%if (null? |forms_-vb1n0RHA|)
+                                                                                  (cdr |body_-vl_VjJHA|)
+                                                                                  (cons (cons |er_-vPfvcPHA|
+                                                                                              (|wrap_-vRUq8HzA|
+                                                                                                (car |forms_-vb1n0RHA|)
+                                                                                                |w_-v9ctFPHA|))
+                                                                                        (|f_-vR4pzQHA|
+                                                                                          (cdr |forms_-vb1n0RHA|)))))))
+                                                                   |f_-vR4pzQHA|)
+                                                                 |forms_-vtjxLOHA|)
+                                                                |ids_-vHXTMJHA|
+                                                                |bindings_-v1URdKHA|
+                                                                |inits_-vnQPGKHA|)))
+                                                          (|return_-vZd2wHHA|
+                                                            |bindings_-v1URdKHA|
+                                                            |ids_-vHXTMJHA|
                                                             (append
-                                                              |inits_sE2S0ftIG|
-                                                              (cons (cons |er_sEKKY8uIG|
-                                                                          (|source-wrap_sESSB9qAG|
-                                                                            |e_sEMzSvvIG|
-                                                                            |w_sE6wQYvIG|
-                                                                            |s_sEssOpwIG|))
-                                                                    (cdr |body_sE017UrIG|))))))))))))))
-                                      (cdar |body_sE017UrIG|)
-                                      (caar |body_sE017UrIG|))))))
-                      |parse_sEG49rrIG|)
-                    |body_sEABrmnIG|
+                                                              |inits_-vnQPGKHA|
+                                                              (cons (cons |er_-v3JLALHA|
+                                                                          (|source-wrap_-vbRoBHzA|
+                                                                            |e_-v5yFXMHA|
+                                                                            |w_-vruDoNHA|
+                                                                            |s_-vNqBRNHA|))
+                                                                    (cdr |body_-vl_VjJHA|))))))))))))))
+                                      (cdar |body_-vl_VjJHA|)
+                                      (caar |body_-vl_VjJHA|))))))
+                      |parse_-v_2YSIHA|)
+                    |body_-vVzeOEHA|
                     ()
                     ()
                     ()))))
-             (|check-defined-ids_sEePrsGAG|
-               (#%lambda (|source-exp_sEMdWx2IG| |ls_sE6aU-2IG|)
-                 (#%letrec ((|b-i=?_sEs6Sr3IG|
-                              (#%lambda (|x_sEAqtT8IG| |y_sEWmrk9IG|)
-                                (#%if (symbol? |x_sEAqtT8IG|)
-                                  (#%if (symbol? |y_sEWmrk9IG|)
-                                    (eq? |x_sEAqtT8IG| |y_sEWmrk9IG|)
-                                    (#%if (eq? |x_sEAqtT8IG|
-                                               ((#%lambda (|e_sEi8j8bIG|)
+             (|check-defined-ids_-vzNeUXzA|
+               (#%lambda (|source-exp_-v5cJZjHA| |ls_-vr8HqkHA|)
+                 (#%letrec ((|b-i=?_-vN4FTkHA|
+                              (#%lambda (|x_-vVogjqHA| |y_-vfleMqHA|)
+                                (#%if (symbol? |x_-vVogjqHA|)
+                                  (#%if (symbol? |y_-vfleMqHA|)
+                                    (eq? |x_-vVogjqHA| |y_-vfleMqHA|)
+                                    (#%if (eq? |x_-vVogjqHA|
+                                               ((#%lambda (|e_-vD66AsHA|)
                                                   (#%if (annotation?
-                                                          |e_sEi8j8bIG|)
+                                                          |e_-vD66AsHA|)
                                                     (annotation-expression
-                                                      |e_sEi8j8bIG|)
-                                                    |e_sEi8j8bIG|))
-                                                (#%if (|syntax-object?_sEueTWfzG|
-                                                        |y_sEWmrk9IG|)
-                                                  (|syntax-object-expression_sEQaRngzG|
-                                                    |y_sEWmrk9IG|)
-                                                  |y_sEWmrk9IG|)))
-                                      (|same-marks?_sEGUa0iAG|
-                                        (|wrap-marks_sEQwNlJzG|
-                                          (|syntax-object-wrap_sEa7PQgzG|
-                                            |y_sEWmrk9IG|))
-                                        (|wrap-marks_sEQwNlJzG|
+                                                      |e_-vD66AsHA|)
+                                                    |e_-vD66AsHA|))
+                                                (#%if (|syntax-object?_-vPcGmxyA|
+                                                        |y_-vfleMqHA|)
+                                                  (|syntax-object-expression_-v99EPxyA|
+                                                    |y_-vfleMqHA|)
+                                                  |y_-vfleMqHA|)))
+                                      (|same-marks?_-v_SZrzzA|
+                                        (|wrap-marks_-v9vAN-yA|
+                                          (|syntax-object-wrap_-vv5CgyyA|
+                                            |y_-vfleMqHA|))
+                                        (|wrap-marks_-v9vAN-yA|
                                           (#%quote ((top)))))
                                       #f))
-                                  (#%if (symbol? |y_sEWmrk9IG|)
-                                    (#%if (eq? |y_sEWmrk9IG|
-                                               ((#%lambda (|e_sECfneaIG|)
+                                  (#%if (symbol? |y_-vfleMqHA|)
+                                    (#%if (eq? |y_-vfleMqHA|
+                                               ((#%lambda (|e_-vXdaGrHA|)
                                                   (#%if (annotation?
-                                                          |e_sECfneaIG|)
+                                                          |e_-vXdaGrHA|)
                                                     (annotation-expression
-                                                      |e_sECfneaIG|)
-                                                    |e_sECfneaIG|))
-                                                (#%if (|syntax-object?_sEueTWfzG|
-                                                        |x_sEAqtT8IG|)
-                                                  (|syntax-object-expression_sEQaRngzG|
-                                                    |x_sEAqtT8IG|)
-                                                  |x_sEAqtT8IG|)))
-                                      (|same-marks?_sEGUa0iAG|
-                                        (|wrap-marks_sEQwNlJzG|
-                                          (|syntax-object-wrap_sEa7PQgzG|
-                                            |x_sEAqtT8IG|))
-                                        (|wrap-marks_sEQwNlJzG|
+                                                      |e_-vXdaGrHA|)
+                                                    |e_-vXdaGrHA|))
+                                                (#%if (|syntax-object?_-vPcGmxyA|
+                                                        |x_-vVogjqHA|)
+                                                  (|syntax-object-expression_-v99EPxyA|
+                                                    |x_-vVogjqHA|)
+                                                  |x_-vVogjqHA|)))
+                                      (|same-marks?_-v_SZrzzA|
+                                        (|wrap-marks_-v9vAN-yA|
+                                          (|syntax-object-wrap_-vv5CgyyA|
+                                            |x_-vVogjqHA|))
+                                        (|wrap-marks_-v9vAN-yA|
                                           (#%quote ((top)))))
                                       #f)
-                                    (|bound-id=?_sE4vYalAG|
-                                      |x_sEAqtT8IG|
-                                      |y_sEWmrk9IG|)))))
-                            (|vfold_sEO2QU3IG|
-                              (#%lambda (|v_sEE4hBbIG|
-                                         |p_sE-0f2cIG|
-                                         |cls_sEkZcvcIG|)
-                                ((#%lambda (|len_sEGVaYcIG|)
-                                   ((#%letrec ((|lp_sE0S8pdIG|
-                                                 (#%lambda (|i_sEmO6SdIG|
-                                                            |cls_sEIK4jeIG|)
-                                                   (#%if (= |i_sEmO6SdIG|
-                                                            |len_sEGVaYcIG|)
-                                                     |cls_sEIK4jeIG|
-                                                     (|lp_sE0S8pdIG|
-                                                       (+ |i_sEmO6SdIG| 1)
-                                                       (|p_sE-0f2cIG|
+                                    (|bound-id=?_-vptLCCzA|
+                                      |x_-vVogjqHA|
+                                      |y_-vfleMqHA|)))))
+                            (|vfold_-v71DklHA|
+                              (#%lambda (|v_-vZ241tHA|
+                                         |p_-vj_1utHA|
+                                         |cls_-vFX_WtHA|)
+                                ((#%lambda (|len_-v_TZnuHA|)
+                                   ((#%letrec ((|lp_-vlQXQuHA|
+                                                 (#%lambda (|i_-vHMVhvHA|
+                                                            |cls_-v1JTKvHA|)
+                                                   (#%if (= |i_-vHMVhvHA|
+                                                            |len_-v_TZnuHA|)
+                                                     |cls_-v1JTKvHA|
+                                                     (|lp_-vlQXQuHA|
+                                                       (+ |i_-vHMVhvHA| 1)
+                                                       (|p_-vj_1utHA|
                                                          (vector-ref
-                                                           |v_sEE4hBbIG|
-                                                           |i_sEmO6SdIG|)
-                                                         |cls_sEIK4jeIG|))))))
-                                      |lp_sE0S8pdIG|)
+                                                           |v_-vZ241tHA|
+                                                           |i_-vHMVhvHA|)
+                                                         |cls_-v1JTKvHA|))))))
+                                      |lp_-vlQXQuHA|)
                                     0
-                                    |cls_sEkZcvcIG|))
-                                 (vector-length |v_sEE4hBbIG|))))
-                            (|conflicts_sE8_Nl4IG|
-                              (#%lambda (|x_sE2H2MeIG|
-                                         |y_sEoD0dfIG|
-                                         |cls_sEKz-FfIG|)
-                                (#%if (|interface?_sEk7b2wAG| |x_sE2H2MeIG|)
-                                  (#%if (|interface?_sEk7b2wAG| |y_sEoD0dfIG|)
+                                    |cls_-vFX_WtHA|))
+                                 (vector-length |v_-vZ241tHA|))))
+                            (|conflicts_-vtZANlHA|
+                              (#%lambda (|x_-vnFRbwHA|
+                                         |y_-vJBPEwHA|
+                                         |cls_-v3yN5xHA|)
+                                (#%if (|interface?_-vF5-tNzA| |x_-vnFRbwHA|)
+                                  (#%if (|interface?_-vF5-tNzA| |y_-vJBPEwHA|)
                                     (call-with-values
                                       (#%lambda ()
-                                        ((#%lambda (|xe_sE4wY6gIG|
-                                                    |ye_sEqsWzgIG|)
+                                        ((#%lambda (|xe_-vpuLyxHA|
+                                                    |ye_-vLqJ_xHA|)
                                            (#%if (> (vector-length
-                                                      |xe_sE4wY6gIG|)
+                                                      |xe_-vpuLyxHA|)
                                                     (vector-length
-                                                      |ye_sEqsWzgIG|))
+                                                      |ye_-vLqJ_xHA|))
                                              (values
-                                               |x_sE2H2MeIG|
-                                               |ye_sEqsWzgIG|)
+                                               |x_-vnFRbwHA|
+                                               |ye_-vLqJ_xHA|)
                                              (values
-                                               |y_sEoD0dfIG|
-                                               |xe_sE4wY6gIG|)))
-                                         (|interface-exports_sEG39vwAG|
-                                           |x_sE2H2MeIG|)
-                                         (|interface-exports_sEG39vwAG|
-                                           |y_sEoD0dfIG|)))
-                                      (#%lambda (|iface_sEMoU0hIG|
-                                                 |exports_sE6lSthIG|)
-                                        (|vfold_sEO2QU3IG|
-                                          |exports_sE6lSthIG|
-                                          (#%lambda (|id_sEshQWhIG|
-                                                     |cls_sEOdOniIG|)
-                                            (|id-iface-conflicts_sEuXLO4IG|
-                                              |id_sEshQWhIG|
-                                              |iface_sEMoU0hIG|
-                                              |cls_sEOdOniIG|))
-                                          |cls_sEKz-FfIG|)))
-                                    (|id-iface-conflicts_sEuXLO4IG|
-                                      |y_sEoD0dfIG|
-                                      |x_sE2H2MeIG|
-                                      |cls_sEKz-FfIG|))
-                                  (#%if (|interface?_sEk7b2wAG| |y_sEoD0dfIG|)
-                                    (|id-iface-conflicts_sEuXLO4IG|
-                                      |x_sE2H2MeIG|
-                                      |y_sEoD0dfIG|
-                                      |cls_sEKz-FfIG|)
-                                    (#%if (|b-i=?_sEs6Sr3IG|
-                                            |x_sE2H2MeIG|
-                                            |y_sEoD0dfIG|)
-                                      (cons |x_sE2H2MeIG| |cls_sEKz-FfIG|)
-                                      |cls_sEKz-FfIG|)))))
-                            (|id-iface-conflicts_sEuXLO4IG|
-                              (#%lambda (|id_sE8aMQiIG|
-                                         |iface_sEu6KhjIG|
-                                         |cls_sEQ2IKjIG|)
-                                ((#%lambda (|token_sEa_FbkIG|)
-                                   (#%if |token_sEa_FbkIG|
-                                     (#%if (|lookup-import-binding-name_sECenifAG|
-                                             ((#%lambda (|e_sEyMx_lIG|)
+                                               |y_-vJBPEwHA|
+                                               |xe_-vpuLyxHA|)))
+                                         (|interface-exports_-v_1YWNzA|
+                                           |x_-vnFRbwHA|)
+                                         (|interface-exports_-v_1YWNzA|
+                                           |y_-vJBPEwHA|)))
+                                      (#%lambda (|iface_-v5nHsyHA|
+                                                 |exports_-vrjFVyHA|)
+                                        (|vfold_-v71DklHA|
+                                          |exports_-vrjFVyHA|
+                                          (#%lambda (|id_-vNfDmzHA|
+                                                     |cls_-v7cBPzHA|)
+                                            (|id-iface-conflicts_-vPVyemHA|
+                                              |id_-vNfDmzHA|
+                                              |iface_-v5nHsyHA|
+                                              |cls_-v7cBPzHA|))
+                                          |cls_-v3yN5xHA|)))
+                                    (|id-iface-conflicts_-vPVyemHA|
+                                      |y_-vJBPEwHA|
+                                      |x_-vnFRbwHA|
+                                      |cls_-v3yN5xHA|))
+                                  (#%if (|interface?_-vF5-tNzA| |y_-vJBPEwHA|)
+                                    (|id-iface-conflicts_-vPVyemHA|
+                                      |x_-vnFRbwHA|
+                                      |y_-vJBPEwHA|
+                                      |cls_-v3yN5xHA|)
+                                    (#%if (|b-i=?_-vN4FTkHA|
+                                            |x_-vnFRbwHA|
+                                            |y_-vJBPEwHA|)
+                                      (cons |x_-vnFRbwHA| |cls_-v3yN5xHA|)
+                                      |cls_-v3yN5xHA|)))))
+                            (|id-iface-conflicts_-vPVyemHA|
+                              (#%lambda (|id_-vt8zgAHA|
+                                         |iface_-vP4xJAHA|
+                                         |cls_-v91vaBHA|)
+                                ((#%lambda (|token_-vvZsDBHA|)
+                                   (#%if |token_-vvZsDBHA|
+                                     (#%if (|lookup-import-binding-name_-vXcaKwzA|
+                                             ((#%lambda (|e_-vTKkrDHA|)
                                                 (#%if (annotation?
-                                                        |e_sEyMx_lIG|)
+                                                        |e_-vTKkrDHA|)
                                                   (annotation-expression
-                                                    |e_sEyMx_lIG|)
-                                                  |e_sEyMx_lIG|))
-                                              (#%if (|syntax-object?_sEueTWfzG|
-                                                      |id_sE8aMQiIG|)
-                                                (|syntax-object-expression_sEQaRngzG|
-                                                  |id_sE8aMQiIG|)
-                                                |id_sE8aMQiIG|))
-                                             |token_sEa_FbkIG|
-                                             (#%if (symbol? |id_sE8aMQiIG|)
-                                               (|wrap-marks_sEQwNlJzG|
+                                                    |e_-vTKkrDHA|)
+                                                  |e_-vTKkrDHA|))
+                                              (#%if (|syntax-object?_-vPcGmxyA|
+                                                      |id_-vt8zgAHA|)
+                                                (|syntax-object-expression_-v99EPxyA|
+                                                  |id_-vt8zgAHA|)
+                                                |id_-vt8zgAHA|))
+                                             |token_-vvZsDBHA|
+                                             (#%if (symbol? |id_-vt8zgAHA|)
+                                               (|wrap-marks_-v9vAN-yA|
                                                  (#%quote ((top))))
-                                               (|wrap-marks_sEQwNlJzG|
-                                                 (|syntax-object-wrap_sEa7PQgzG|
-                                                   |id_sE8aMQiIG|))))
-                                       (cons |id_sE8aMQiIG| |cls_sEQ2IKjIG|)
-                                       |cls_sEQ2IKjIG|)
-                                     (|vfold_sEO2QU3IG|
-                                       (|interface-exports_sEG39vwAG|
-                                         |iface_sEu6KhjIG|)
-                                       (#%lambda (|*id_sEwXDEkIG|
-                                                  |cls_sESTB5lIG|)
-                                         (#%if (|b-i=?_sEs6Sr3IG|
-                                                 |*id_sEwXDEkIG|
-                                                 |id_sE8aMQiIG|)
-                                           (cons |*id_sEwXDEkIG|
-                                                 |cls_sESTB5lIG|)
-                                           |cls_sESTB5lIG|))
-                                       |cls_sEQ2IKjIG|)))
-                                 (|interface-token_sE007YwAG|
-                                   |iface_sEu6KhjIG|)))))
-                   (#%if (null? |ls_sE6aU-2IG|)
+                                               (|wrap-marks_-v9vAN-yA|
+                                                 (|syntax-object-wrap_-vv5CgyyA|
+                                                   |id_-vt8zgAHA|))))
+                                       (cons |id_-vt8zgAHA| |cls_-v91vaBHA|)
+                                       |cls_-v91vaBHA|)
+                                     (|vfold_-v71DklHA|
+                                       (|interface-exports_-v_1YWNzA|
+                                         |iface_-vP4xJAHA|)
+                                       (#%lambda (|*id_-vRVq4CHA|
+                                                  |cls_-vbSoxCHA|)
+                                         (#%if (|b-i=?_-vN4FTkHA|
+                                                 |*id_-vRVq4CHA|
+                                                 |id_-vt8zgAHA|)
+                                           (cons |*id_-vRVq4CHA|
+                                                 |cls_-vbSoxCHA|)
+                                           |cls_-vbSoxCHA|))
+                                       |cls_-v91vaBHA|)))
+                                 (|interface-token_-vl-VnOzA|
+                                   |iface_-vP4xJAHA|)))))
+                   (#%if (null? |ls_-vr8HqkHA|)
                      #!void
-                     ((#%letrec ((|lp_sEQTJf5IG|
-                                   (#%lambda (|x_sEaQHI5IG|
-                                              |ls_sEwMF96IG|
-                                              |cls_sESIDC6IG|)
-                                     (#%if (null? |ls_sEwMF96IG|)
-                                       (#%if (null? |cls_sESIDC6IG|)
+                     ((#%letrec ((|lp_-v9SwHmHA|
+                                   (#%lambda (|x_-vvOu8nHA|
+                                              |ls_-vRKsBnHA|
+                                              |cls_-vbHq2oHA|)
+                                     (#%if (null? |ls_-vRKsBnHA|)
+                                       (#%if (null? |cls_-vbHq2oHA|)
                                          #!void
-                                         ((#%lambda (|cls_sEeuvq8IG|)
+                                         ((#%lambda (|cls_-vzsiSpHA|)
                                             (syntax-error
-                                              |source-exp_sEMdWx2IG|
+                                              |source-exp_-v5cJZjHA|
                                               "duplicate definition for "
                                               (symbol->string
-                                                (car |cls_sEeuvq8IG|))
+                                                (car |cls_-vzsiSpHA|))
                                               " in"))
                                           (syntax-object->datum
-                                            |cls_sESIDC6IG|)))
-                                       ((#%letrec ((|lp2_sEcFB37IG|
-                                                     (#%lambda (|ls2_sEyBzw7IG|
-                                                                |cls_sEUxxZ7IG|)
-                                                       (#%if (null? |ls2_sEyBzw7IG|)
-                                                         (|lp_sEQTJf5IG|
-                                                           (car |ls_sEwMF96IG|)
-                                                           (cdr |ls_sEwMF96IG|)
-                                                           |cls_sEUxxZ7IG|)
-                                                         (|lp2_sEcFB37IG|
-                                                           (cdr |ls2_sEyBzw7IG|)
-                                                           (|conflicts_sE8_Nl4IG|
-                                                             |x_sEaQHI5IG|
-                                                             (car |ls2_sEyBzw7IG|)
-                                                             |cls_sEUxxZ7IG|))))))
-                                          |lp2_sEcFB37IG|)
-                                        |ls_sEwMF96IG|
-                                        |cls_sESIDC6IG|)))))
-                        |lp_sEQTJf5IG|)
-                      (car |ls_sE6aU-2IG|)
-                      (cdr |ls_sE6aU-2IG|)
+                                            |cls_-vbHq2oHA|)))
+                                       ((#%letrec ((|lp2_-vxDovoHA|
+                                                     (#%lambda (|ls2_-vTzmYoHA|
+                                                                |cls_-vdwkppHA|)
+                                                       (#%if (null? |ls2_-vTzmYoHA|)
+                                                         (|lp_-v9SwHmHA|
+                                                           (car |ls_-vRKsBnHA|)
+                                                           (cdr |ls_-vRKsBnHA|)
+                                                           |cls_-vdwkppHA|)
+                                                         (|lp2_-vxDovoHA|
+                                                           (cdr |ls2_-vTzmYoHA|)
+                                                           (|conflicts_-vtZANlHA|
+                                                             |x_-vvOu8nHA|
+                                                             (car |ls2_-vTzmYoHA|)
+                                                             |cls_-vdwkppHA|))))))
+                                          |lp2_-vxDovoHA|)
+                                        |ls_-vRKsBnHA|
+                                        |cls_-vbHq2oHA|)))))
+                        |lp_-v9SwHmHA|)
+                      (car |ls_-vr8HqkHA|)
+                      (cdr |ls_-vr8HqkHA|)
                       ())))))
-             (|check-module-exports_sEUSt_FAG|
-               (#%lambda (|source-exp_sEejxXVHG|
-                          |fexports_sEAfvoWHG|
-                          |ids_sEWbtRWHG|)
-                 (#%letrec ((|defined?_sEg8riXHG|
-                              (#%lambda (|e_sEkOe0-HG| |ids_sEGKct-HG|)
-                                (ormap (#%lambda (|x_sE0HaW-HG|)
-                                         (#%if (|interface?_sEk7b2wAG|
-                                                 |x_sE0HaW-HG|)
-                                           ((#%lambda (|token_sEmD8n_HG|)
-                                              (#%if |token_sEmD8n_HG|
-                                                (|lookup-import-binding-name_sECenifAG|
-                                                  ((#%lambda (|e_sEqhY42IG|)
+             (|check-module-exports_-vdRgrXzA|
+               (#%lambda (|source-exp_-vzhknbHA|
+                          |fexports_-vVdiQbHA|
+                          |ids_-vfaghcHA|)
+                 (#%letrec ((|defined?_-vB6eKcHA|
+                              (#%lambda (|e_-vFM1sfHA| |ids_-v_I_UfHA|)
+                                (ormap (#%lambda (|x_-vlFZlgHA|)
+                                         (#%if (|interface?_-vF5-tNzA|
+                                                 |x_-vlFZlgHA|)
+                                           ((#%lambda (|token_-vHBXOgHA|)
+                                              (#%if |token_-vHBXOgHA|
+                                                (|lookup-import-binding-name_-vXcaKwzA|
+                                                  ((#%lambda (|e_-vLfLwjHA|)
                                                      (#%if (annotation?
-                                                             |e_sEqhY42IG|)
+                                                             |e_-vLfLwjHA|)
                                                        (annotation-expression
-                                                         |e_sEqhY42IG|)
-                                                       |e_sEqhY42IG|))
-                                                   (#%if (|syntax-object?_sEueTWfzG|
-                                                           |e_sEkOe0-HG|)
-                                                     (|syntax-object-expression_sEQaRngzG|
-                                                       |e_sEkOe0-HG|)
-                                                     |e_sEkOe0-HG|))
-                                                  |token_sEmD8n_HG|
-                                                  (|wrap-marks_sEQwNlJzG|
-                                                    (|syntax-object-wrap_sEa7PQgzG|
-                                                      |e_sEkOe0-HG|)))
-                                                ((#%lambda (|v_sEIz6Q_HG|)
-                                                   ((#%letrec ((|lp_sE2w4h0IG|
-                                                                 (#%lambda (|i_sEos2K0IG|)
-                                                                   (#%if (>= |i_sEos2K0IG|
+                                                         |e_-vLfLwjHA|)
+                                                       |e_-vLfLwjHA|))
+                                                   (#%if (|syntax-object?_-vPcGmxyA|
+                                                           |e_-vFM1sfHA|)
+                                                     (|syntax-object-expression_-v99EPxyA|
+                                                       |e_-vFM1sfHA|)
+                                                     |e_-vFM1sfHA|))
+                                                  |token_-vHBXOgHA|
+                                                  (|wrap-marks_-v9vAN-yA|
+                                                    (|syntax-object-wrap_-vv5CgyyA|
+                                                      |e_-vFM1sfHA|)))
+                                                ((#%lambda (|v_-v1yVfhHA|)
+                                                   ((#%letrec ((|lp_-vnuTIhHA|
+                                                                 (#%lambda (|i_-vJqR9iHA|)
+                                                                   (#%if (>= |i_-vJqR9iHA|
                                                                              0)
-                                                                     ((#%lambda (|t_sEKo0b1IG|)
-                                                                        (#%if |t_sEKo0b1IG|
-                                                                          |t_sEKo0b1IG|
-                                                                          (|lp_sE2w4h0IG|
-                                                                            (- |i_sEos2K0IG|
+                                                                     ((#%lambda (|t_-v3nPCiHA|)
+                                                                        (#%if |t_-v3nPCiHA|
+                                                                          |t_-v3nPCiHA|
+                                                                          (|lp_-vnuTIhHA|
+                                                                            (- |i_-vJqR9iHA|
                                                                                1))))
-                                                                      (|bound-id=?_sE4vYalAG|
-                                                                        |e_sEkOe0-HG|
+                                                                      (|bound-id=?_-vptLCCzA|
+                                                                        |e_-vFM1sfHA|
                                                                         (vector-ref
-                                                                          |v_sEIz6Q_HG|
-                                                                          |i_sEos2K0IG|)))
+                                                                          |v_-v1yVfhHA|
+                                                                          |i_-vJqR9iHA|)))
                                                                      #f))))
-                                                      |lp_sE2w4h0IG|)
+                                                      |lp_-vnuTIhHA|)
                                                     (- (vector-length
-                                                         |v_sEIz6Q_HG|)
+                                                         |v_-v1yVfhHA|)
                                                        1)))
-                                                 (|interface-exports_sEG39vwAG|
-                                                   |x_sE0HaW-HG|))))
-                                            (|interface-token_sE007YwAG|
-                                              |x_sE0HaW-HG|))
-                                           (|bound-id=?_sE4vYalAG|
-                                             |e_sEkOe0-HG|
-                                             |x_sE0HaW-HG|)))
-                                       |ids_sEGKct-HG|))))
-                   ((#%letrec ((|loop_sEC4pLXHG|
-                                 (#%lambda (|fexports_sEY0ncYHG|
-                                            |missing_sEiZkFYHG|)
-                                   (#%if (null? |fexports_sEY0ncYHG|)
-                                     (#%if (null? |missing_sEiZkFYHG|)
+                                                 (|interface-exports_-v_1YWNzA|
+                                                   |x_-vlFZlgHA|))))
+                                            (|interface-token_-vl-VnOzA|
+                                              |x_-vlFZlgHA|))
+                                           (|bound-id=?_-vptLCCzA|
+                                             |e_-vFM1sfHA|
+                                             |x_-vlFZlgHA|)))
+                                       |ids_-v_I_UfHA|))))
+                   ((#%letrec ((|loop_-vX2cbdHA|
+                                 (#%lambda (|fexports_-vh_9EdHA|
+                                            |missing_-vDX75eHA|)
+                                   (#%if (null? |fexports_-vh_9EdHA|)
+                                     (#%if (null? |missing_-vDX75eHA|)
                                        #!void
                                        (syntax-error
-                                         |missing_sEiZkFYHG|
+                                         |missing_-vDX75eHA|
                                          "missing definition for export(s)"))
-                                     ((#%lambda (|e_sEEVi6ZHG|
-                                                 |fexports_sE-RgzZHG|)
-                                        (#%if (|defined?_sEg8riXHG|
-                                                |e_sEEVi6ZHG|
-                                                |ids_sEWbtRWHG|)
-                                          (|loop_sEC4pLXHG|
-                                            |fexports_sE-RgzZHG|
-                                            |missing_sEiZkFYHG|)
-                                          (|loop_sEC4pLXHG|
-                                            |fexports_sE-RgzZHG|
-                                            (cons |e_sEEVi6ZHG|
-                                                  |missing_sEiZkFYHG|))))
-                                      (car |fexports_sEY0ncYHG|)
-                                      (cdr |fexports_sEY0ncYHG|))))))
-                      |loop_sEC4pLXHG|)
-                    |fexports_sEAfvoWHG|
+                                     ((#%lambda (|e_-vZT5yeHA|
+                                                 |fexports_-vjQ3_eHA|)
+                                        (#%if (|defined?_-vB6eKcHA|
+                                                |e_-vZT5yeHA|
+                                                |ids_-vfaghcHA|)
+                                          (|loop_-vX2cbdHA|
+                                            |fexports_-vjQ3_eHA|
+                                            |missing_-vDX75eHA|)
+                                          (|loop_-vX2cbdHA|
+                                            |fexports_-vjQ3_eHA|
+                                            (cons |e_-vZT5yeHA|
+                                                  |missing_-vDX75eHA|))))
+                                      (car |fexports_-vh_9EdHA|)
+                                      (cdr |fexports_-vh_9EdHA|))))))
+                      |loop_-vX2cbdHA|)
+                    |fexports_-vVdiQbHA|
                     ()))))
-             (|extend-store!_sEyWvyFAG|
-               (#%lambda (|r_sEcuDAUHG|
-                          |label_sEyqB1VHG|
-                          |binding_sEUmzuVHG|)
+             (|extend-store!_-vTUi-WzA|
+               (#%lambda (|r_-vxsq0aHA|
+                          |label_-vTootaHA|
+                          |binding_-vdlmWaHA|)
                  (set-cdr!
-                   |r_sEcuDAUHG|
-                   (|extend-env_sEWQwXyzG|
-                     |label_sEyqB1VHG|
-                     |binding_sEUmzuVHG|
-                     (cdr |r_sEcuDAUHG|)))))
-             (|id-set-diff_sEc-x5FAG|
-               (#%lambda (|exports_sEwBHGTHG| |defs_sESxF7UHG|)
-                 (#%if (null? |exports_sEwBHGTHG|)
+                   |r_-vxsq0aHA|
+                   (|extend-env_-vfPjnQyA|
+                     |label_-vTootaHA|
+                     |binding_-vdlmWaHA|
+                     (cdr |r_-vxsq0aHA|)))))
+             (|id-set-diff_-vxYkxWzA|
+               (#%lambda (|exports_-vRzu69HA| |defs_-vbwsz9HA|)
+                 (#%if (null? |exports_-vRzu69HA|)
                    ()
-                   (#%if (|bound-id-member?_sEa-FfpAG|
-                           (car |exports_sEwBHGTHG|)
-                           |defs_sESxF7UHG|)
-                     (|id-set-diff_sEc-x5FAG|
-                       (cdr |exports_sEwBHGTHG|)
-                       |defs_sESxF7UHG|)
-                     (cons (car |exports_sEwBHGTHG|)
-                           (|id-set-diff_sEc-x5FAG|
-                             (cdr |exports_sEwBHGTHG|)
-                             |defs_sESxF7UHG|))))))
-             (|chi-top-module_sES1AEEAG|
-               (#%lambda (|e_sEEooFhHG|
-                          |r_sE-km6iHG|
-                          |ribcage_sEkhkziHG|
-                          |w_sEGdi0jHG|
-                          |s_sE0agtjHG|
-                          |ctem_sEm6eWjHG|
-                          |rtem_sEI2cnkHG|
-                          |id_sE2_9QkHG|
-                          |exports_sEoX7hlHG|
-                          |forms_sEKT5KlHG|)
-                 ((#%lambda (|fexports_sE4Q3bmHG| |module-id_sEqM1EmHG|)
-                    (|chi-external_sEALpVGAG|
-                      |ribcage_sEkhkziHG|
-                      (|source-wrap_sESSB9qAG|
-                        |e_sEEooFhHG|
-                        |w_sEGdi0jHG|
-                        |s_sE0agtjHG|)
-                      (map (#%lambda (|d_sEMI_4nHG|)
-                             (cons |r_sE-km6iHG| |d_sEMI_4nHG|))
-                           |forms_sEKT5KlHG|)
-                      |r_sE-km6iHG|
-                      |exports_sEoX7hlHG|
-                      |fexports_sE4Q3bmHG|
-                      |ctem_sEm6eWjHG|
-                      (#%lambda (|bindings_sE6FZxnHG| |inits_sEsBX-nHG|)
-                        ((#%letrec ((|partition_sEOxVroHG|
-                                      (#%lambda (|fexports_sE8uTUoHG|
-                                                 |bs_sEuqRlpHG|
-                                                 |svs_sEQmPOpHG|
-                                                 |ses_sEajNfqHG|
-                                                 |ctdefs_sEwfLIqHG|)
-                                        (#%if (null? |fexports_sE8uTUoHG|)
-                                          ((#%letrec ((|partition_sE8FRnDHG|
-                                                        (#%lambda (|bs_sEuBPQDHG|
-                                                                   |dvs_sEQxNhEHG|
-                                                                   |des_sEauLKEHG|)
-                                                          (#%if (null? |bs_sEuBPQDHG|)
-                                                            ((#%lambda (|ses_sEyfDyGHG|
-                                                                        |des_sEUbB_GHG|
-                                                                        |inits_sEe8zsHHG|)
+                   (#%if (|bound-id-member?_-vvYsHGzA|
+                           (car |exports_-vRzu69HA|)
+                           |defs_-vbwsz9HA|)
+                     (|id-set-diff_-vxYkxWzA|
+                       (cdr |exports_-vRzu69HA|)
+                       |defs_-vbwsz9HA|)
+                     (cons (car |exports_-vRzu69HA|)
+                           (|id-set-diff_-vxYkxWzA|
+                             (cdr |exports_-vRzu69HA|)
+                             |defs_-vbwsz9HA|))))))
+             (|chi-top-module_-vb0n4WzA|
+               (#%lambda (|e_-vZmb5zGA|
+                          |r_-vjj9yzGA|
+                          |ribcage_-vFf7_zGA|
+                          |w_-v_b5sAGA|
+                          |s_-vl83VAGA|
+                          |ctem_-vH41mBGA|
+                          |rtem_-v11_OBGA|
+                          |id_-vnZYfCGA|
+                          |exports_-vJVWICGA|
+                          |forms_-v3SU9DGA|)
+                 ((#%lambda (|fexports_-vpOSCDGA| |module-id_-vLKQ3EGA|)
+                    (|chi-external_-vVJclYzA|
+                      |ribcage_-vFf7_zGA|
+                      (|source-wrap_-vbRoBHzA|
+                        |e_-vZmb5zGA|
+                        |w_-v_b5sAGA|
+                        |s_-vl83VAGA|)
+                      (map (#%lambda (|d_-v5HOwEGA|)
+                             (cons |r_-vjj9yzGA| |d_-v5HOwEGA|))
+                           |forms_-v3SU9DGA|)
+                      |r_-vjj9yzGA|
+                      |exports_-vJVWICGA|
+                      |fexports_-vpOSCDGA|
+                      |ctem_-vH41mBGA|
+                      (#%lambda (|bindings_-vrDMZEGA| |inits_-vNzKqFGA|)
+                        ((#%letrec ((|partition_-v7wITFGA|
+                                      (#%lambda (|fexports_-vtsGkGGA|
+                                                 |bs_-vPoENGGA|
+                                                 |svs_-v9lCeHGA|
+                                                 |ses_-vvhAHHGA|
+                                                 |ctdefs_-vRdy8IGA|)
+                                        (#%if (null? |fexports_-vtsGkGGA|)
+                                          ((#%letrec ((|partition_-vtDEPUGA|
+                                                        (#%lambda (|bs_-vPzCgVGA|
+                                                                   |dvs_-v9wAJVGA|
+                                                                   |des_-vvsyaWGA|)
+                                                          (#%if (null? |bs_-vPzCgVGA|)
+                                                            ((#%lambda (|ses_-vTdq-XGA|
+                                                                        |des_-vdaorYGA|
+                                                                        |inits_-vz6mUYGA|)
                                                                (#%begin
                                                                  (for-each
-                                                                   (#%lambda (|x_sEA4xVHHG|)
-                                                                     (apply (#%lambda (|t_sEW0vmIHG|
-                                                                                       |label_sEgZsPIHG|
-                                                                                       |sym_sECVqgJHG|
-                                                                                       |val_sEYRoJJHG|)
-                                                                              (#%if |label_sEgZsPIHG|
-                                                                                (|set-indirect-label!_sEctDEZzG|
-                                                                                  |label_sEgZsPIHG|
-                                                                                  |sym_sECVqgJHG|)
+                                                                   (#%lambda (|x_-vV2klZGA|)
+                                                                     (apply (#%lambda (|t_-vf_hOZGA|
+                                                                                       |label_-vBXff-GA|
+                                                                                       |sym_-vXTdI-GA|
+                                                                                       |val_-vhQb9_GA|)
+                                                                              (#%if |label_-vBXff-GA|
+                                                                                (|set-indirect-label!_-vxrq4fzA|
+                                                                                  |label_-vBXff-GA|
+                                                                                  |sym_-vXTdI-GA|)
                                                                                 #!void))
-                                                                            |x_sEA4xVHHG|))
-                                                                   |ctdefs_sEwfLIqHG|)
-                                                                 (|build-sequence_sE2PbpbzG|
+                                                                            |x_-vV2klZGA|))
+                                                                   |ctdefs_-vRdy8IGA|)
+                                                                 (|build-sequence_-vnN-QsyA|
                                                                    #f
-                                                                   (list (|ct-eval/residualize_sE-lb4KAG|
-                                                                           |ctem_sEm6eWjHG|
+                                                                   (list (|ct-eval/residualize_-vjk-v_zA|
+                                                                           |ctem_-vH41mBGA|
                                                                            (#%lambda ()
-                                                                             (#%if (null? |ctdefs_sEwfLIqHG|)
-                                                                               (|chi-void_sE8vISQAG|)
-                                                                               (|build-sequence_sE2PbpbzG|
+                                                                             (#%if (null? |ctdefs_-vRdy8IGA|)
+                                                                               (|chi-void_-vttvi6AA|)
+                                                                               (|build-sequence_-vnN-QsyA|
                                                                                  #f
-                                                                                 (map (#%lambda (|x_sEiOmaKHG|)
-                                                                                        (apply (#%lambda (|t_sEEKkDKHG|
-                                                                                                          |label_sE-Gi4LHG|
-                                                                                                          |sym_sEkDgxLHG|
-                                                                                                          |val_sEGze-LHG|)
+                                                                                 (map (#%lambda (|x_-vDM9C_GA|)
+                                                                                        (apply (#%lambda (|t_-vZI730HA|
+                                                                                                          |label_-vjF5w0HA|
+                                                                                                          |sym_-vFB3Z0HA|
+                                                                                                          |val_-v_x1q1HA|)
                                                                                                  (list (#%quote
                                                                                                          $sc-put-cte)
                                                                                                        (list (#%quote
                                                                                                                quote)
-                                                                                                             |sym_sEkDgxLHG|)
-                                                                                                       (#%if (eq? |t_sEEKkDKHG|
+                                                                                                             |sym_-vFB3Z0HA|)
+                                                                                                       (#%if (eq? |t_-vZI730HA|
                                                                                                                   (#%quote
                                                                                                                     define-syntax-form))
-                                                                                                         |val_sEGze-LHG|
-                                                                                                         (#%if (atom? (|make-binding_sEMH_8szG|
+                                                                                                         |val_-v_x1q1HA|
+                                                                                                         (#%if (atom? (|make-binding_-v5GOAJyA|
                                                                                                                         (#%quote
                                                                                                                           module)
-                                                                                                                        (|make-resolved-interface_sEoN-LyAG|
-                                                                                                                          |val_sEGze-LHG|
-                                                                                                                          |sym_sEkDgxLHG|)))
-                                                                                                           (|make-binding_sEMH_8szG|
+                                                                                                                        (|make-resolved-interface_-vJLNbQzA|
+                                                                                                                          |val_-v_x1q1HA|
+                                                                                                                          |sym_-vFB3Z0HA|)))
+                                                                                                           (|make-binding_-v5GOAJyA|
                                                                                                              (#%quote
                                                                                                                module)
-                                                                                                             (|make-resolved-interface_sEoN-LyAG|
-                                                                                                               |val_sEGze-LHG|
-                                                                                                               |sym_sEkDgxLHG|))
+                                                                                                             (|make-resolved-interface_-vJLNbQzA|
+                                                                                                               |val_-v_x1q1HA|
+                                                                                                               |sym_-vFB3Z0HA|))
                                                                                                            (list #%quote
-                                                                                                                 (|make-binding_sEMH_8szG|
+                                                                                                                 (|make-binding_-v5GOAJyA|
                                                                                                                    (#%quote
                                                                                                                      module)
-                                                                                                                   (|make-resolved-interface_sEoN-LyAG|
-                                                                                                                     |val_sEGze-LHG|
-                                                                                                                     |sym_sEkDgxLHG|)))))))
-                                                                                               |x_sEiOmaKHG|))
-                                                                                      |ctdefs_sEwfLIqHG|)))))
-                                                                         (|ct-eval/residualize_sE-lb4KAG|
-                                                                           |ctem_sEm6eWjHG|
+                                                                                                                   (|make-resolved-interface_-vJLNbQzA|
+                                                                                                                     |val_-v_x1q1HA|
+                                                                                                                     |sym_-vFB3Z0HA|)))))))
+                                                                                               |x_-vDM9C_GA|))
+                                                                                      |ctdefs_-vRdy8IGA|)))))
+                                                                         (|ct-eval/residualize_-vjk-v_zA|
+                                                                           |ctem_-vH41mBGA|
                                                                            (#%lambda ()
-                                                                             ((#%lambda (|n_sE0wcrMHG|)
-                                                                                ((#%lambda (|token_sEmsaUMHG|)
-                                                                                   ((#%lambda (|b_sEIo8lNHG|)
-                                                                                      (#%if |n_sE0wcrMHG|
+                                                                             ((#%lambda (|n_-vlu_S1HA|)
+                                                                                ((#%lambda (|token_-vHqZj2HA|)
+                                                                                   ((#%lambda (|b_-v1nXM2HA|)
+                                                                                      (#%if |n_-vlu_S1HA|
                                                                                         (list (#%quote
                                                                                                 $sc-put-cte)
                                                                                               (list (#%quote
                                                                                                       quote)
-                                                                                                    (#%if (|same-marks?_sEGUa0iAG|
-                                                                                                            (|wrap-marks_sEQwNlJzG|
-                                                                                                              (|syntax-object-wrap_sEa7PQgzG|
-                                                                                                                |id_sE2_9QkHG|))
-                                                                                                            (|wrap-marks_sEQwNlJzG|
+                                                                                                    (#%if (|same-marks?_-v_SZrzzA|
+                                                                                                            (|wrap-marks_-v9vAN-yA|
+                                                                                                              (|syntax-object-wrap_-vv5CgyyA|
+                                                                                                                |id_-vnZYfCGA|))
+                                                                                                            (|wrap-marks_-v9vAN-yA|
                                                                                                               (#%quote
                                                                                                                 ((top)))))
-                                                                                                      |n_sE0wcrMHG|
-                                                                                                      ((#%lambda (|marks_sEoh4fOHG|)
-                                                                                                         (|make-syntax-object_sE8iVtfzG|
-                                                                                                           |n_sE0wcrMHG|
-                                                                                                           (|make-wrap_sEuAPUIzG|
-                                                                                                             |marks_sEoh4fOHG|
-                                                                                                             (list (|make-ribcage_sEAevs_zG|
+                                                                                                      |n_-vlu_S1HA|
+                                                                                                      ((#%lambda (|marks_-vJfTG3HA|)
+                                                                                                         (|make-syntax-object_-vtgIVwyA|
+                                                                                                           |n_-vlu_S1HA|
+                                                                                                           (|make-wrap_-vPyCk-yA|
+                                                                                                             |marks_-vJfTG3HA|
+                                                                                                             (list (|make-ribcage_-vVciUgzA|
                                                                                                                      (vector
-                                                                                                                       |n_sE0wcrMHG|)
+                                                                                                                       |n_-vlu_S1HA|)
                                                                                                                      (vector
-                                                                                                                       |marks_sEoh4fOHG|)
+                                                                                                                       |marks_-vJfTG3HA|)
                                                                                                                      (vector
-                                                                                                                       (|generate-module-id_sEYOzTryG|
-                                                                                                                         |n_sE0wcrMHG|)))))))
-                                                                                                       (|wrap-marks_sEQwNlJzG|
-                                                                                                         (|syntax-object-wrap_sEa7PQgzG|
-                                                                                                           |id_sE2_9QkHG|)))))
-                                                                                              |b_sEIo8lNHG|)
-                                                                                        ((#%lambda (|n_sE2l6ONHG|)
-                                                                                           (|build-sequence_sE2PbpbzG|
+                                                                                                                       (|generate-module-id_-vhNmjJxA|
+                                                                                                                         |n_-vlu_S1HA|)))))))
+                                                                                                       (|wrap-marks_-v9vAN-yA|
+                                                                                                         (|syntax-object-wrap_-vv5CgyyA|
+                                                                                                           |id_-vnZYfCGA|)))))
+                                                                                              |b_-v1nXM2HA|)
+                                                                                        ((#%lambda (|n_-vnjVd3HA|)
+                                                                                           (|build-sequence_-vnN-QsyA|
                                                                                              #f
                                                                                              (list (list (#%quote
                                                                                                            $sc-put-cte)
                                                                                                          (list (#%quote
                                                                                                                  quote)
-                                                                                                               |n_sE2l6ONHG|)
-                                                                                                         |b_sEIo8lNHG|)
-                                                                                                   (|do-top-import_sECAjgIAG|
-                                                                                                     |n_sE2l6ONHG|
-                                                                                                     |token_sEmsaUMHG|))))
-                                                                                         (|generate-id_sECSBqryG|
+                                                                                                               |n_-vnjVd3HA|)
+                                                                                                         |b_-v1nXM2HA|)
+                                                                                                   (|do-top-import_-vXy6IZzA|
+                                                                                                     |n_-vnjVd3HA|
+                                                                                                     |token_-vHqZj2HA|))))
+                                                                                         (|generate-id_-vXQoSIxA|
                                                                                            (#%quote
                                                                                              tmp)))))
-                                                                                    (#%if (atom? (|make-binding_sEMH_8szG|
+                                                                                    (#%if (atom? (|make-binding_-v5GOAJyA|
                                                                                                    (#%quote
                                                                                                      module)
-                                                                                                   (|make-resolved-interface_sEoN-LyAG|
-                                                                                                     |exports_sEoX7hlHG|
-                                                                                                     |token_sEmsaUMHG|)))
-                                                                                      (|make-binding_sEMH_8szG|
+                                                                                                   (|make-resolved-interface_-vJLNbQzA|
+                                                                                                     |exports_-vJVWICGA|
+                                                                                                     |token_-vHqZj2HA|)))
+                                                                                      (|make-binding_-v5GOAJyA|
                                                                                         (#%quote
                                                                                           module)
-                                                                                        (|make-resolved-interface_sEoN-LyAG|
-                                                                                          |exports_sEoX7hlHG|
-                                                                                          |token_sEmsaUMHG|))
+                                                                                        (|make-resolved-interface_-vJLNbQzA|
+                                                                                          |exports_-vJVWICGA|
+                                                                                          |token_-vHqZj2HA|))
                                                                                       (list #%quote
-                                                                                            (|make-binding_sEMH_8szG|
+                                                                                            (|make-binding_-v5GOAJyA|
                                                                                               (#%quote
                                                                                                 module)
-                                                                                              (|make-resolved-interface_sEoN-LyAG|
-                                                                                                |exports_sEoX7hlHG|
-                                                                                                |token_sEmsaUMHG|))))))
-                                                                                 (|generate-module-id_sEYOzTryG|
-                                                                                   |n_sE0wcrMHG|)))
-                                                                              (#%if |id_sE2_9QkHG|
-                                                                                ((#%lambda (|e_sE4a09PHG|)
+                                                                                              (|make-resolved-interface_-vJLNbQzA|
+                                                                                                |exports_-vJVWICGA|
+                                                                                                |token_-vHqZj2HA|))))))
+                                                                                 (|generate-module-id_-vhNmjJxA|
+                                                                                   |n_-vlu_S1HA|)))
+                                                                              (#%if |id_-vnZYfCGA|
+                                                                                ((#%lambda (|e_-vp8PA4HA|)
                                                                                    (#%if (annotation?
-                                                                                           |e_sE4a09PHG|)
+                                                                                           |e_-vp8PA4HA|)
                                                                                      (annotation-expression
-                                                                                       |e_sE4a09PHG|)
-                                                                                     |e_sE4a09PHG|))
-                                                                                 (#%if (|syntax-object?_sEueTWfzG|
-                                                                                         |id_sE2_9QkHG|)
-                                                                                   (|syntax-object-expression_sEQaRngzG|
-                                                                                     |id_sE2_9QkHG|)
-                                                                                   |id_sE2_9QkHG|))
+                                                                                       |e_-vp8PA4HA|)
+                                                                                     |e_-vp8PA4HA|))
+                                                                                 (#%if (|syntax-object?_-vPcGmxyA|
+                                                                                         |id_-vnZYfCGA|)
+                                                                                   (|syntax-object-expression_-v99EPxyA|
+                                                                                     |id_-vnZYfCGA|)
+                                                                                   |id_-vnZYfCGA|))
                                                                                 #f))))
-                                                                         (#%if (null? |svs_sEQmPOpHG|)
-                                                                           (|chi-void_sE8vISQAG|)
-                                                                           (|build-sequence_sE2PbpbzG|
+                                                                         (#%if (null? |svs_-v9lCeHGA|)
+                                                                           (|chi-void_-vttvi6AA|)
+                                                                           (|build-sequence_-vnN-QsyA|
                                                                              #f
-                                                                             (map (#%lambda (|v_sEq6-BPHG|)
+                                                                             (map (#%lambda (|v_-vL4N15HA|)
                                                                                     (list #%define
-                                                                                          |v_sEq6-BPHG|
-                                                                                          (|chi-void_sE8vISQAG|)))
-                                                                                  |svs_sEQmPOpHG|)))
-                                                                         (|rt-eval/residualize_sEEpdDJAG|
-                                                                           |rtem_sEI2cnkHG|
+                                                                                          |v_-vL4N15HA|
+                                                                                          (|chi-void_-vttvi6AA|)))
+                                                                                  |svs_-v9lCeHGA|)))
+                                                                         (|rt-eval/residualize_-vZn03_zA|
+                                                                           |rtem_-v11_OBGA|
                                                                            (#%lambda ()
-                                                                             (|build-body_sEKH7jczG|
+                                                                             (|build-body_-v3GWKtyA|
                                                                                #f
-                                                                               |dvs_sEQxNhEHG|
-                                                                               |des_sEUbB_GHG|
-                                                                               (|build-sequence_sE2PbpbzG|
+                                                                               |dvs_-v9wAJVGA|
+                                                                               |des_-vdaorYGA|
+                                                                               (|build-sequence_-vnN-QsyA|
                                                                                  #f
-                                                                                 (list (#%if (null? |svs_sEQmPOpHG|)
-                                                                                         (|chi-void_sE8vISQAG|)
-                                                                                         (|build-sequence_sE2PbpbzG|
+                                                                                 (list (#%if (null? |svs_-v9lCeHGA|)
+                                                                                         (|chi-void_-vttvi6AA|)
+                                                                                         (|build-sequence_-vnN-QsyA|
                                                                                            #f
-                                                                                           (map (#%lambda (|v_sEM2Y2QHG|
-                                                                                                           |e_sE6_VvQHG|)
+                                                                                           (map (#%lambda (|v_-v51Lu5HA|
+                                                                                                           |e_-vrZIX5HA|)
                                                                                                   (list #%set!
-                                                                                                        |v_sEM2Y2QHG|
-                                                                                                        |e_sE6_VvQHG|))
-                                                                                                |svs_sEQmPOpHG|
-                                                                                                |ses_sEyfDyGHG|)))
-                                                                                       (#%if (null? |inits_sEe8zsHHG|)
-                                                                                         (|chi-void_sE8vISQAG|)
-                                                                                         (|build-sequence_sE2PbpbzG|
+                                                                                                        |v_-v51Lu5HA|
+                                                                                                        |e_-vrZIX5HA|))
+                                                                                                |svs_-v9lCeHGA|
+                                                                                                |ses_-vTdq-XGA|)))
+                                                                                       (#%if (null? |inits_-vz6mUYGA|)
+                                                                                         (|chi-void_-vttvi6AA|)
+                                                                                         (|build-sequence_-vnN-QsyA|
                                                                                            #f
-                                                                                           |inits_sEe8zsHHG|)))))))
-                                                                         (|chi-void_sE8vISQAG|)))))
-                                                             (map (#%lambda (|x_sEsXTYQHG|)
-                                                                    (|chi_sEki9xKAG|
-                                                                      (cdr |x_sEsXTYQHG|)
-                                                                      (car |x_sEsXTYQHG|)
+                                                                                           |inits_-vz6mUYGA|)))))))
+                                                                         (|chi-void_-vttvi6AA|)))))
+                                                             (map (#%lambda (|x_-vNVGo6HA|)
+                                                                    (|chi_-vFgYY_zA|
+                                                                      (cdr |x_-vNVGo6HA|)
+                                                                      (car |x_-vNVGo6HA|)
                                                                       (#%quote
                                                                         (()))))
-                                                                  |ses_sEajNfqHG|)
-                                                             (map (#%lambda (|x_sEOTRpRHG|)
-                                                                    (|chi_sEki9xKAG|
-                                                                      (cdr |x_sEOTRpRHG|)
-                                                                      (car |x_sEOTRpRHG|)
+                                                                  |ses_-vvhAHHGA|)
+                                                             (map (#%lambda (|x_-v7SER6HA|)
+                                                                    (|chi_-vFgYY_zA|
+                                                                      (cdr |x_-v7SER6HA|)
+                                                                      (car |x_-v7SER6HA|)
                                                                       (#%quote
                                                                         (()))))
-                                                                  |des_sEauLKEHG|)
-                                                             (map (#%lambda (|x_sE8QPSRHG|)
-                                                                    (|chi_sEki9xKAG|
-                                                                      (cdr |x_sE8QPSRHG|)
-                                                                      (car |x_sE8QPSRHG|)
+                                                                  |des_-vvsyaWGA|)
+                                                             (map (#%lambda (|x_-vtOCi7HA|)
+                                                                    (|chi_-vFgYY_zA|
+                                                                      (cdr |x_-vtOCi7HA|)
+                                                                      (car |x_-vtOCi7HA|)
                                                                       (#%quote
                                                                         (()))))
-                                                                  |inits_sEsBX-nHG|))
-                                                            ((#%lambda (|b_sEwqJbFHG|)
-                                                               ((#%lambda (|t_sESmHEFHG|)
-                                                                  (#%if (eqv? |t_sESmHEFHG|
+                                                                  |inits_-vNzKqFGA|))
+                                                            ((#%lambda (|b_-vRowDWGA|)
+                                                               ((#%lambda (|t_-vblu4XGA|)
+                                                                  (#%if (eqv? |t_-vblu4XGA|
                                                                               (#%quote
                                                                                 define-form))
-                                                                    ((#%lambda (|var_sEcjF5GHG|)
+                                                                    ((#%lambda (|var_-vxhsxXGA|)
                                                                        (#%begin
-                                                                         (|extend-store!_sEyWvyFAG|
-                                                                           |r_sE-km6iHG|
-                                                                           (|get-indirect-label_sESwFbZzG|
-                                                                             (|module-binding-label_sE6vQ0BAG|
-                                                                               |b_sEwqJbFHG|))
-                                                                           (|make-binding_sEMH_8szG|
+                                                                         (|extend-store!_-vTUi-WzA|
+                                                                           |r_-vjj9yzGA|
+                                                                           (|get-indirect-label_-vbvsDezA|
+                                                                             (|module-binding-label_-vrtDsSzA|
+                                                                               |b_-vRowDWGA|))
+                                                                           (|make-binding_-v5GOAJyA|
                                                                              (#%quote
                                                                                lexical)
-                                                                             |var_sEcjF5GHG|))
-                                                                         (|partition_sE8FRnDHG|
-                                                                           (cdr |bs_sEuBPQDHG|)
-                                                                           (cons |var_sEcjF5GHG|
-                                                                                 |dvs_sEQxNhEHG|)
-                                                                           (cons (|module-binding-val_sEOnMWBAG|
-                                                                                   |b_sEwqJbFHG|)
-                                                                                 |des_sEauLKEHG|))))
-                                                                     (|gen-var_sEScy7TAG|
-                                                                       (|module-binding-id_sEMySzAAG|
-                                                                         |b_sEwqJbFHG|)))
-                                                                    (#%if (memv |t_sESmHEFHG|
+                                                                             |var_-vxhsxXGA|))
+                                                                         (|partition_-vtDEPUGA|
+                                                                           (cdr |bs_-vPzCgVGA|)
+                                                                           (cons |var_-vxhsxXGA|
+                                                                                 |dvs_-v9wAJVGA|)
+                                                                           (cons (|module-binding-val_-v7mzmTzA|
+                                                                                   |b_-vRowDWGA|)
+                                                                                 |des_-vvsyaWGA|))))
+                                                                     (|gen-var_-vbblz8AA|
+                                                                       (|module-binding-id_-v5xF_RzA|
+                                                                         |b_-vRowDWGA|)))
+                                                                    (#%if (memv |t_-vblu4XGA|
                                                                                 (#%quote
                                                                                   (define-syntax-form
                                                                                     module-form)))
-                                                                      (|partition_sE8FRnDHG|
-                                                                        (cdr |bs_sEuBPQDHG|)
-                                                                        |dvs_sEQxNhEHG|
-                                                                        |des_sEauLKEHG|)
+                                                                      (|partition_-vtDEPUGA|
+                                                                        (cdr |bs_-vPzCgVGA|)
+                                                                        |dvs_-v9wAJVGA|
+                                                                        |des_-vvsyaWGA|)
                                                                       (error (#%quote
                                                                                sc-expand-internal)
                                                                              "unexpected module binding type"))))
-                                                                (|module-binding-type_sEqCU6AAG|
-                                                                  |b_sEwqJbFHG|)))
-                                                             (car |bs_sEuBPQDHG|))))))
-                                             |partition_sE8FRnDHG|)
-                                           |bs_sEuqRlpHG|
+                                                                (|module-binding-type_-vLAHyRzA|
+                                                                  |b_-vRowDWGA|)))
+                                                             (car |bs_-vPzCgVGA|))))))
+                                             |partition_-vtDEPUGA|)
+                                           |bs_-vPoENGGA|
                                            ()
                                            ())
-                                          ((#%lambda (|exp_sESbJ9rHG|
-                                                      |fexports_sEc8HCrHG|)
-                                             (#%letrec ((|pluck-binding_sEy4F3sHG|
-                                                          (#%lambda (|id_sEK24dAHG|
-                                                                     |bs_sE4_1GAHG|
-                                                                     |succ_sEqX_6BHG|
-                                                                     |fail_sEMTZzBHG|)
-                                                            ((#%letrec ((|loop_sE6QX0CHG|
-                                                                          (#%lambda (|bs_sEsMVtCHG|
-                                                                                     |new-bs_sEOITWCHG|)
-                                                                            (#%if (null? |bs_sEsMVtCHG|)
-                                                                              (|fail_sEMTZzBHG|)
-                                                                              (#%if (|free-id=?_sEoC0hkAG|
-                                                                                      (|module-binding-id_sEMySzAAG|
-                                                                                        (car |bs_sEsMVtCHG|))
-                                                                                      |id_sEK24dAHG|)
-                                                                                (|succ_sEqX_6BHG|
-                                                                                  (car |bs_sEsMVtCHG|)
-                                                                                  (|smart-append_sEE3hFgAG|
+                                          ((#%lambda (|exp_-vbawBIGA|
+                                                      |fexports_-vx6u2JGA|)
+                                             (#%letrec ((|pluck-binding_-vT2svJGA|
+                                                          (#%lambda (|id_-v31TERGA|
+                                                                     |bs_-vpZQ5SGA|
+                                                                     |succ_-vLVOySGA|
+                                                                     |fail_-v5SM_SGA|)
+                                                            ((#%letrec ((|loop_-vrOKsTGA|
+                                                                          (#%lambda (|bs_-vNKIVTGA|
+                                                                                     |new-bs_-v7HGmUGA|)
+                                                                            (#%if (null? |bs_-vNKIVTGA|)
+                                                                              (|fail_-v5SM_SGA|)
+                                                                              (#%if (|free-id=?_-vJAPIBzA|
+                                                                                      (|module-binding-id_-v5xF_RzA|
+                                                                                        (car |bs_-vNKIVTGA|))
+                                                                                      |id_-v31TERGA|)
+                                                                                (|succ_-vLVOySGA|
+                                                                                  (car |bs_-vNKIVTGA|)
+                                                                                  (|smart-append_-vZ145yzA|
                                                                                     (reverse
-                                                                                      |new-bs_sEOITWCHG|)
-                                                                                    (cdr |bs_sEsMVtCHG|)))
-                                                                                (|loop_sE6QX0CHG|
-                                                                                  (cdr |bs_sEsMVtCHG|)
-                                                                                  (cons (car |bs_sEsMVtCHG|)
-                                                                                        |new-bs_sEOITWCHG|)))))))
-                                                               |loop_sE6QX0CHG|)
-                                                             |bs_sE4_1GAHG|
+                                                                                      |new-bs_-v7HGmUGA|)
+                                                                                    (cdr |bs_-vNKIVTGA|)))
+                                                                                (|loop_-vrOKsTGA|
+                                                                                  (cdr |bs_-vNKIVTGA|)
+                                                                                  (cons (car |bs_-vNKIVTGA|)
+                                                                                        |new-bs_-v7HGmUGA|)))))))
+                                                               |loop_-vrOKsTGA|)
+                                                             |bs_-vpZQ5SGA|
                                                              ()))))
-                                               (|pluck-binding_sEy4F3sHG|
-                                                 (car |exp_sESbJ9rHG|)
-                                                 |bs_sEuqRlpHG|
-                                                 (#%lambda (|b_sEU0DwsHG|
-                                                            |bs_sEeZAZsHG|)
-                                                   ((#%lambda (|t_sEAVyqtHG|
-                                                               |label_sEWRwTtHG|
-                                                               |imps_sEgOukuHG|
-                                                               |id_sECKsNuHG|)
-                                                      ((#%lambda (|fexports_sEYGqevHG|
-                                                                  |sym_sEiDoHvHG|)
-                                                         (#%if (eqv? |t_sEAVyqtHG|
+                                               (|pluck-binding_-vT2svJGA|
+                                                 (car |exp_-vbawBIGA|)
+                                                 |bs_-vPoENGGA|
+                                                 (#%lambda (|b_-vd_pYJGA|
+                                                            |bs_-vzXnpKGA|)
+                                                   ((#%lambda (|t_-vVTlSKGA|
+                                                               |label_-vfQjjLGA|
+                                                               |imps_-vBMhMLGA|
+                                                               |id_-vXIfdMGA|)
+                                                      ((#%lambda (|fexports_-vhFdGMGA|
+                                                                  |sym_-vDBb7NGA|)
+                                                         (#%if (eqv? |t_-vVTlSKGA|
                                                                      (#%quote
                                                                        define-form))
                                                            (#%begin
-                                                             (|set-indirect-label!_sEctDEZzG|
-                                                               |label_sEWRwTtHG|
-                                                               |sym_sEiDoHvHG|)
-                                                             (|partition_sEOxVroHG|
-                                                               |fexports_sEYGqevHG|
-                                                               |bs_sEeZAZsHG|
-                                                               (cons |sym_sEiDoHvHG|
-                                                                     |svs_sEQmPOpHG|)
-                                                               (cons (|module-binding-val_sEOnMWBAG|
-                                                                       |b_sEU0DwsHG|)
-                                                                     |ses_sEajNfqHG|)
-                                                               |ctdefs_sEwfLIqHG|))
-                                                           (#%if (eqv? |t_sEAVyqtHG|
+                                                             (|set-indirect-label!_-vxrq4fzA|
+                                                               |label_-vfQjjLGA|
+                                                               |sym_-vDBb7NGA|)
+                                                             (|partition_-v7wITFGA|
+                                                               |fexports_-vhFdGMGA|
+                                                               |bs_-vzXnpKGA|
+                                                               (cons |sym_-vDBb7NGA|
+                                                                     |svs_-v9lCeHGA|)
+                                                               (cons (|module-binding-val_-v7mzmTzA|
+                                                                       |b_-vd_pYJGA|)
+                                                                     |ses_-vvhAHHGA|)
+                                                               |ctdefs_-vRdy8IGA|))
+                                                           (#%if (eqv? |t_-vVTlSKGA|
                                                                        (#%quote
                                                                          define-syntax-form))
-                                                             (|partition_sEOxVroHG|
-                                                               |fexports_sEYGqevHG|
-                                                               |bs_sEeZAZsHG|
-                                                               |svs_sEQmPOpHG|
-                                                               |ses_sEajNfqHG|
-                                                               (cons (list |t_sEAVyqtHG|
-                                                                           |label_sEWRwTtHG|
-                                                                           |sym_sEiDoHvHG|
-                                                                           (|module-binding-val_sEOnMWBAG|
-                                                                             |b_sEU0DwsHG|))
-                                                                     |ctdefs_sEwfLIqHG|))
-                                                             (#%if (eqv? |t_sEAVyqtHG|
+                                                             (|partition_-v7wITFGA|
+                                                               |fexports_-vhFdGMGA|
+                                                               |bs_-vzXnpKGA|
+                                                               |svs_-v9lCeHGA|
+                                                               |ses_-vvhAHHGA|
+                                                               (cons (list |t_-vVTlSKGA|
+                                                                           |label_-vfQjjLGA|
+                                                                           |sym_-vDBb7NGA|
+                                                                           (|module-binding-val_-v7mzmTzA|
+                                                                             |b_-vd_pYJGA|))
+                                                                     |ctdefs_-vRdy8IGA|))
+                                                             (#%if (eqv? |t_-vVTlSKGA|
                                                                          (#%quote
                                                                            module-form))
-                                                               ((#%lambda (|exports_sE-vkBwHG|
-                                                                           |id-path_sEksi2xHG|)
-                                                                  (|partition_sEOxVroHG|
+                                                               ((#%lambda (|exports_-vju71OGA|
+                                                                           |id-path_-vFq5uOGA|)
+                                                                  (|partition_-v7wITFGA|
                                                                     (append
-                                                                      (map (#%lambda (|x_sEGogvxHG|)
-                                                                             (cons |x_sEGogvxHG|
-                                                                                   |id-path_sEksi2xHG|))
-                                                                           (|flatten-exports_sEEef8vAG|
-                                                                             |exports_sE-vkBwHG|))
-                                                                      |fexports_sEYGqevHG|)
-                                                                    |bs_sEeZAZsHG|
-                                                                    |svs_sEQmPOpHG|
-                                                                    |ses_sEajNfqHG|
-                                                                    (cons (list |t_sEAVyqtHG|
-                                                                                |label_sEWRwTtHG|
-                                                                                |sym_sEiDoHvHG|
-                                                                                |exports_sE-vkBwHG|)
-                                                                          |ctdefs_sEwfLIqHG|)))
-                                                                (|module-binding-val_sEOnMWBAG|
-                                                                  |b_sEU0DwsHG|)
-                                                                (cons ((#%lambda (|e_sEmhcpyHG|)
+                                                                      (map (#%lambda (|x_-v_m3XOGA|)
+                                                                             (cons |x_-v_m3XOGA|
+                                                                                   |id-path_-vFq5uOGA|))
+                                                                           (|flatten-exports_-vZc2AMzA|
+                                                                             |exports_-vju71OGA|))
+                                                                      |fexports_-vhFdGMGA|)
+                                                                    |bs_-vzXnpKGA|
+                                                                    |svs_-v9lCeHGA|
+                                                                    |ses_-vvhAHHGA|
+                                                                    (cons (list |t_-vVTlSKGA|
+                                                                                |label_-vfQjjLGA|
+                                                                                |sym_-vDBb7NGA|
+                                                                                |exports_-vju71OGA|)
+                                                                          |ctdefs_-vRdy8IGA|)))
+                                                                (|module-binding-val_-v7mzmTzA|
+                                                                  |b_-vd_pYJGA|)
+                                                                (cons ((#%lambda (|e_-vHf_QPGA|)
                                                                          (#%if (annotation?
-                                                                                 |e_sEmhcpyHG|)
+                                                                                 |e_-vHf_QPGA|)
                                                                            (annotation-expression
-                                                                             |e_sEmhcpyHG|)
-                                                                           |e_sEmhcpyHG|))
-                                                                       (#%if (|syntax-object?_sEueTWfzG|
-                                                                               |id_sECKsNuHG|)
-                                                                         (|syntax-object-expression_sEQaRngzG|
-                                                                           |id_sECKsNuHG|)
-                                                                         |id_sECKsNuHG|))
-                                                                      (cdr |exp_sESbJ9rHG|)))
+                                                                             |e_-vHf_QPGA|)
+                                                                           |e_-vHf_QPGA|))
+                                                                       (#%if (|syntax-object?_-vPcGmxyA|
+                                                                               |id_-vXIfdMGA|)
+                                                                         (|syntax-object-expression_-v99EPxyA|
+                                                                           |id_-vXIfdMGA|)
+                                                                         |id_-vXIfdMGA|))
+                                                                      (cdr |exp_-vbawBIGA|)))
                                                                (error (#%quote
                                                                         sc-expand-internal)
                                                                       "unexpected module binding type")))))
                                                        (append
-                                                         (map (#%lambda (|x_sEIdaSyHG|)
-                                                                (cons |x_sEIdaSyHG|
+                                                         (map (#%lambda (|x_-v1cZhQGA|)
+                                                                (cons |x_-v1cZhQGA|
                                                                       ()))
-                                                              |imps_sEgOukuHG|)
-                                                         |fexports_sEc8HCrHG|)
-                                                       (|generate-id-in-module_sEiLxksyG|
-                                                         |module-id_sEqM1EmHG|
-                                                         (cdr |exp_sESbJ9rHG|)
-                                                         ((#%lambda (|e_sEo66MzHG|)
+                                                              |imps_-vBMhMLGA|)
+                                                         |fexports_-vx6u2JGA|)
+                                                       (|generate-id-in-module_-vDJkMJxA|
+                                                         |module-id_-vLKQ3EGA|
+                                                         (cdr |exp_-vbawBIGA|)
+                                                         ((#%lambda (|e_-vJ4VbRGA|)
                                                             (#%if (annotation?
-                                                                    |e_sEo66MzHG|)
+                                                                    |e_-vJ4VbRGA|)
                                                               (annotation-expression
-                                                                |e_sEo66MzHG|)
-                                                              |e_sEo66MzHG|))
-                                                          (#%if (|syntax-object?_sEueTWfzG|
-                                                                  |id_sECKsNuHG|)
-                                                            (|syntax-object-expression_sEQaRngzG|
-                                                              |id_sECKsNuHG|)
-                                                            |id_sECKsNuHG|)))))
-                                                    (|module-binding-type_sEqCU6AAG|
-                                                      |b_sEU0DwsHG|)
-                                                    (|module-binding-label_sE6vQ0BAG|
-                                                      |b_sEU0DwsHG|)
-                                                    (|module-binding-imps_sEsrOtBAG|
-                                                      |b_sEU0DwsHG|)
-                                                    (car |exp_sESbJ9rHG|)))
+                                                                |e_-vJ4VbRGA|)
+                                                              |e_-vJ4VbRGA|))
+                                                          (#%if (|syntax-object?_-vPcGmxyA|
+                                                                  |id_-vXIfdMGA|)
+                                                            (|syntax-object-expression_-v99EPxyA|
+                                                              |id_-vXIfdMGA|)
+                                                            |id_-vXIfdMGA|)))))
+                                                    (|module-binding-type_-vLAHyRzA|
+                                                      |b_-vd_pYJGA|)
+                                                    (|module-binding-label_-vrtDsSzA|
+                                                      |b_-vd_pYJGA|)
+                                                    (|module-binding-imps_-vNpBVSzA|
+                                                      |b_-vd_pYJGA|)
+                                                    (car |exp_-vbawBIGA|)))
                                                  (#%lambda ()
-                                                   (|partition_sEOxVroHG|
-                                                     |fexports_sEc8HCrHG|
-                                                     |bs_sEuqRlpHG|
-                                                     |svs_sEQmPOpHG|
-                                                     |ses_sEajNfqHG|
-                                                     |ctdefs_sEwfLIqHG|)))))
-                                           (car |fexports_sE8uTUoHG|)
-                                           (cdr |fexports_sE8uTUoHG|))))))
-                           |partition_sEOxVroHG|)
-                         (map (#%lambda (|x_sEuMNjSHG|)
-                                (cons |x_sEuMNjSHG| ()))
-                              |fexports_sE4Q3bmHG|)
-                         |bindings_sE6FZxnHG|
+                                                   (|partition_-v7wITFGA|
+                                                     |fexports_-vx6u2JGA|
+                                                     |bs_-vPoENGGA|
+                                                     |svs_-v9lCeHGA|
+                                                     |ses_-vvhAHHGA|
+                                                     |ctdefs_-vRdy8IGA|)))))
+                                           (car |fexports_-vtsGkGGA|)
+                                           (cdr |fexports_-vtsGkGGA|))))))
+                           |partition_-v7wITFGA|)
+                         (map (#%lambda (|x_-vPKAL7HA|)
+                                (cons |x_-vPKAL7HA| ()))
+                              |fexports_-vpOSCDGA|)
+                         |bindings_-vrDMZEGA|
                          ()
                          ()
                          ()))))
-                  (|flatten-exports_sEEef8vAG| |exports_sEoX7hlHG|)
-                  (#%if |id_sE2_9QkHG|
-                    ((#%lambda (|e_sEaFJdTHG|)
-                       (#%if (annotation? |e_sEaFJdTHG|)
-                         (annotation-expression |e_sEaFJdTHG|)
-                         |e_sEaFJdTHG|))
-                     (#%if (|syntax-object?_sEueTWfzG| |id_sE2_9QkHG|)
-                       (|syntax-object-expression_sEQaRngzG|
-                         |id_sE2_9QkHG|)
-                       |id_sE2_9QkHG|))
+                  (|flatten-exports_-vZc2AMzA| |exports_-vJVWICGA|)
+                  (#%if |id_-vnZYfCGA|
+                    ((#%lambda (|e_-vvDwF8HA|)
+                       (#%if (annotation? |e_-vvDwF8HA|)
+                         (annotation-expression |e_-vvDwF8HA|)
+                         |e_-vvDwF8HA|))
+                     (#%if (|syntax-object?_-vPcGmxyA| |id_-vnZYfCGA|)
+                       (|syntax-object-expression_-v99EPxyA|
+                         |id_-vnZYfCGA|)
+                       |id_-vnZYfCGA|))
                     #f))))
-             (|module-binding-val_sEOnMWBAG|
-               (#%lambda (|x_sES0LGcHG|)
-                 (vector-ref |x_sES0LGcHG| 5)))
-             (|module-binding-imps_sEsrOtBAG|
-               (#%lambda (|x_sEw4NdcHG|)
-                 (vector-ref |x_sEw4NdcHG| 4)))
-             (|module-binding-label_sE6vQ0BAG|
-               (#%lambda (|x_sEa8PMbHG|)
-                 (vector-ref |x_sEa8PMbHG| 3)))
-             (|module-binding-id_sEMySzAAG|
-               (#%lambda (|x_sEQbRjbHG|)
-                 (vector-ref |x_sEQbRjbHG| 2)))
-             (|module-binding-type_sEqCU6AAG|
-               (#%lambda (|x_sEufTSaHG|)
-                 (vector-ref |x_sEufTSaHG| 1)))
-             (|make-module-binding_sEKJYczAG|
-               (#%lambda (|type_sEqB398HG|
-                          |id_sEMx1C8HG|
-                          |label_sE6u_29HG|
-                          |imps_sEsqZv9HG|
-                          |val_sEOmXY9HG|)
+             (|module-binding-val_-v7mzmTzA|
+               (#%lambda (|x_-vb_x6uGA|)
+                 (vector-ref |x_-vb_x6uGA| 5)))
+             (|module-binding-imps_-vNpBVSzA|
+               (#%lambda (|x_-vR2AFtGA|)
+                 (vector-ref |x_-vR2AFtGA| 4)))
+             (|module-binding-label_-vrtDsSzA|
+               (#%lambda (|x_-vv6CctGA|)
+                 (vector-ref |x_-vv6CctGA| 3)))
+             (|module-binding-id_-v5xF_RzA|
+               (#%lambda (|x_-v9aELsGA|)
+                 (vector-ref |x_-v9aELsGA| 2)))
+             (|module-binding-type_-vLAHyRzA|
+               (#%lambda (|x_-vPdGisGA|)
+                 (vector-ref |x_-vPdGisGA| 1)))
+             (|make-module-binding_-v3ILEQzA|
+               (#%lambda (|type_-vLzSApGA|
+                          |id_-v5wQ1qGA|
+                          |label_-vrsOuqGA|
+                          |imps_-vNoMXqGA|
+                          |val_-v7lKorGA|)
                  (vector
                    (#%quote module-binding)
-                   |type_sEqB398HG|
-                   |id_sEMx1C8HG|
-                   |label_sE6u_29HG|
-                   |imps_sEsqZv9HG|
-                   |val_sEOmXY9HG|)))
-             (|make-resolved-interface_sEoN-LyAG|
-               (#%lambda (|exports_sEoM9O6HG| |import-token_sEKI7f7HG|)
-                 (|make-interface_sE-adBvAG|
+                   |type_-vLzSApGA|
+                   |id_-v5wQ1qGA|
+                   |label_-vrsOuqGA|
+                   |imps_-vNoMXqGA|
+                   |val_-v7lKorGA|)))
+             (|make-resolved-interface_-vJLNbQzA|
+               (#%lambda (|exports_-vJKYdoGA| |import-token_-v3HWGoGA|)
+                 (|make-interface_-vj901NzA|
                    (list->vector
-                     (map (#%lambda (|x_sE4F5I7HG|)
-                            (|make-trimmed-syntax-object_sEi7jcgAG|
-                              (#%if (pair? |x_sE4F5I7HG|)
-                                (car |x_sE4F5I7HG|)
-                                |x_sE4F5I7HG|)))
-                          |exports_sEoM9O6HG|))
-                   |import-token_sEKI7f7HG|)))
-             (|make-trimmed-interface_sE2R0jyAG|
-               (#%lambda (|exports_sEITdU5HG|)
-                 (|make-interface_sE-adBvAG|
+                     (map (#%lambda (|x_-vpDU7pGA|)
+                            (|make-trimmed-syntax-object_-vD56ExzA|
+                              (#%if (pair? |x_-vpDU7pGA|)
+                                (car |x_-vpDU7pGA|)
+                                |x_-vpDU7pGA|)))
+                          |exports_-vJKYdoGA|))
+                   |import-token_-v3HWGoGA|)))
+             (|make-trimmed-interface_-vnPPKPzA|
+               (#%lambda (|exports_-v1S0knGA|)
+                 (|make-interface_-vj901NzA|
                    (list->vector
-                     (map (#%lambda (|x_sE2Qbl6HG|)
-                            (#%if (pair? |x_sE2Qbl6HG|)
-                              (car |x_sE2Qbl6HG|)
-                              |x_sE2Qbl6HG|))
-                          |exports_sEITdU5HG|))
+                     (map (#%lambda (|x_-vnO-MnGA|)
+                            (#%if (pair? |x_-vnO-MnGA|)
+                              (car |x_-vnO-MnGA|)
+                              |x_-vnO-MnGA|))
+                          |exports_-v1S0knGA|))
                    #f)))
-             (|interface-token_sE007YwAG|
-               (#%lambda (|x_sE-9oD3HG|)
-                 (vector-ref |x_sE-9oD3HG| 2)))
-             (|interface-exports_sEG39vwAG|
-               (#%lambda (|x_sEEdqa3HG|)
-                 (vector-ref |x_sEEdqa3HG| 1)))
-             (|interface?_sEk7b2wAG|
-               (#%lambda (|x_sEihsJ2HG|)
-                 (#%if (vector? |x_sEihsJ2HG|)
-                   (#%if (= (vector-length |x_sEihsJ2HG|) 3)
-                     (eq? (vector-ref |x_sEihsJ2HG| 0)
+             (|interface-token_-vl-VnOzA|
+               (#%lambda (|x_-vj8b3lGA|)
+                 (vector-ref |x_-vj8b3lGA| 2)))
+             (|interface-exports_-v_1YWNzA|
+               (#%lambda (|x_-vZbdCkGA|)
+                 (vector-ref |x_-vZbdCkGA| 1)))
+             (|interface?_-vF5-tNzA|
+               (#%lambda (|x_-vDff9kGA|)
+                 (#%if (vector? |x_-vDff9kGA|)
+                   (#%if (= (vector-length |x_-vDff9kGA|) 3)
+                     (eq? (vector-ref |x_-vDff9kGA| 0)
                           (#%quote interface))
                      #f)
                    #f)))
-             (|make-interface_sE-adBvAG|
-               (#%lambda (|exports_sECowP1HG| |token_sEYkug2HG|)
+             (|make-interface_-vj901NzA|
+               (#%lambda (|exports_-vXmjfjGA| |token_-vhjhIjGA|)
                  (vector
                    (#%quote interface)
-                   |exports_sECowP1HG|
-                   |token_sEYkug2HG|)))
-             (|flatten-exports_sEEef8vAG|
-               (#%lambda (|exports_sEeDE__GG|)
-                 ((#%letrec ((|loop_sEAzCs0HG|
-                               (#%lambda (|exports_sEWvAV0HG| |ls_sEgsym1HG|)
-                                 (#%if (null? |exports_sEWvAV0HG|)
-                                   |ls_sEgsym1HG|
-                                   (|loop_sEAzCs0HG|
-                                     (cdr |exports_sEWvAV0HG|)
-                                     (#%if (pair? (car |exports_sEWvAV0HG|))
-                                       (|loop_sEAzCs0HG|
-                                         (car |exports_sEWvAV0HG|)
-                                         |ls_sEgsym1HG|)
-                                       (cons (car |exports_sEWvAV0HG|)
-                                             |ls_sEgsym1HG|)))))))
-                    |loop_sEAzCs0HG|)
-                  |exports_sEeDE__GG|
+                   |exports_-vXmjfjGA|
+                   |token_-vhjhIjGA|)))
+             (|flatten-exports_-vZc2AMzA|
+               (#%lambda (|exports_-vzBrrhGA|)
+                 ((#%letrec ((|loop_-vVxpUhGA|
+                               (#%lambda (|exports_-vfunliGA| |ls_-vBqlOiGA|)
+                                 (#%if (null? |exports_-vfunliGA|)
+                                   |ls_-vBqlOiGA|
+                                   (|loop_-vVxpUhGA|
+                                     (cdr |exports_-vfunliGA|)
+                                     (#%if (pair? (car |exports_-vfunliGA|))
+                                       (|loop_-vVxpUhGA|
+                                         (car |exports_-vfunliGA|)
+                                         |ls_-vBqlOiGA|)
+                                       (cons (car |exports_-vfunliGA|)
+                                             |ls_-vBqlOiGA|)))))))
+                    |loop_-vVxpUhGA|)
+                  |exports_-vzBrrhGA|
                   ())))
-             (|chi-top_sEiihHuAG|
-               (#%lambda (|e_sEaDUjwGG|
-                          |r_sEwzSMwGG|
-                          |w_sESvQdxGG|
-                          |ctem_sEcsOGxGG|
-                          |rtem_sEyoM7yGG|
-                          |top-ribcage_sEUkKAyGG|)
+             (|chi-top_-vDg47MzA|
+               (#%lambda (|e_-vvBHLNFA|
+                          |r_-vRxFcOFA|
+                          |w_-vbuDFOFA|
+                          |ctem_-vxqB6PFA|
+                          |rtem_-vTmzzPFA|
+                          |top-ribcage_-vdjx0QFA|)
                  (call-with-values
                    (#%lambda ()
-                     (|syntax-type_sECplNtAG|
-                       |e_sEaDUjwGG|
-                       |r_sEwzSMwGG|
-                       |w_sESvQdxGG|
+                     (|syntax-type_-vXn8dLzA|
+                       |e_-vvBHLNFA|
+                       |r_-vRxFcOFA|
+                       |w_-vbuDFOFA|
                        #f
-                       |top-ribcage_sEUkKAyGG|))
-                   (#%lambda (|type_sEehI1zGG|
-                              |value_sEAdGuzGG|
-                              |e_sEW9EXzGG|
-                              |w_sEg6CoAGG|
-                              |s_sEC2ARAGG|)
-                     (#%if (eqv? |type_sEehI1zGG| (#%quote begin-form))
-                       ((#%lambda (|tmp_sEQ0TQYGG|)
-                          (#%if |tmp_sEQ0TQYGG|
-                            (apply (#%lambda (|__sEUGGy_GG|)
-                                     (|chi-void_sE8vISQAG|))
-                                   |tmp_sEQ0TQYGG|)
-                            ((#%lambda (|tmp_sEaZQhZGG|)
-                               (#%if |tmp_sEaZQhZGG|
-                                 (apply (#%lambda (|__sEwVOKZGG|
-                                                   |e1_sESRMb-GG|
-                                                   |e2_sEcOKE-GG|)
-                                          (|chi-top-sequence_sEyLx3rAG|
-                                            (cons |e1_sESRMb-GG|
-                                                  |e2_sEcOKE-GG|)
-                                            |r_sEwzSMwGG|
-                                            |w_sEg6CoAGG|
-                                            |s_sEC2ARAGG|
-                                            |ctem_sEcsOGxGG|
-                                            |rtem_sEyoM7yGG|
-                                            |top-ribcage_sEUkKAyGG|))
-                                        |tmp_sEaZQhZGG|)
-                                 (syntax-error |e_sEW9EXzGG|)))
+                       |top-ribcage_-vdjx0QFA|))
+                   (#%lambda (|type_-vzfvtQFA|
+                              |value_-vVbtWQFA|
+                              |e_-vf8rnRFA|
+                              |w_-vB4pQRFA|
+                              |s_-vX0nhSFA|)
+                     (#%if (eqv? |type_-vzfvtQFA| (#%quote begin-form))
+                       ((#%lambda (|tmp_-v9_FgeGA|)
+                          (#%if |tmp_-v9_FgeGA|
+                            (apply (#%lambda (|__-vdFt-gGA|)
+                                     (|chi-void_-vttvi6AA|))
+                                   |tmp_-v9_FgeGA|)
+                            ((#%lambda (|tmp_-vvXDJeGA|)
+                               (#%if |tmp_-vvXDJeGA|
+                                 (apply (#%lambda (|__-vRTBafGA|
+                                                   |e1_-vbQzDfGA|
+                                                   |e2_-vxMx4gGA|)
+                                          (|chi-top-sequence_-vTJkvIzA|
+                                            (cons |e1_-vbQzDfGA|
+                                                  |e2_-vxMx4gGA|)
+                                            |r_-vRxFcOFA|
+                                            |w_-vB4pQRFA|
+                                            |s_-vX0nhSFA|
+                                            |ctem_-vxqB6PFA|
+                                            |rtem_-vTmzzPFA|
+                                            |top-ribcage_-vdjx0QFA|))
+                                        |tmp_-vvXDJeGA|)
+                                 (syntax-error |e_-vf8rnRFA|)))
                              ($syntax-dispatch
-                               (#%annotate |e_sEW9EXzGG| value)
+                               (#%annotate |e_-vf8rnRFA| value)
                                (#%quote (any any . each-any))))))
                         ($syntax-dispatch
-                          (#%annotate |e_sEW9EXzGG| value)
+                          (#%annotate |e_-vf8rnRFA| value)
                           (#%quote (any))))
-                       (#%if (eqv? |type_sEehI1zGG|
+                       (#%if (eqv? |type_-vzfvtQFA|
                                    (#%quote local-syntax-form))
-                         (|chi-local-syntax_sEOyKpQAG|
-                           |value_sEAdGuzGG|
-                           |e_sEW9EXzGG|
-                           |r_sEwzSMwGG|
-                           |w_sEg6CoAGG|
-                           |s_sEC2ARAGG|
-                           (#%lambda (|body_sE6j1AWGG|
-                                      |r_sEsf_0XGG|
-                                      |w_sEObZtXGG|
-                                      |s_sE88XWXGG|)
-                             (|chi-top-sequence_sEyLx3rAG|
-                               |body_sE6j1AWGG|
-                               |r_sEsf_0XGG|
-                               |w_sEObZtXGG|
-                               |s_sE88XWXGG|
-                               |ctem_sEcsOGxGG|
-                               |rtem_sEyoM7yGG|
-                               |top-ribcage_sEUkKAyGG|)))
-                         (#%if (eqv? |type_sEehI1zGG| (#%quote eval-when-form))
-                           ((#%lambda (|tmp_sEkXnBRGG|)
-                              (#%if |tmp_sEkXnBRGG|
-                                (apply (#%lambda (|__sEGTl2SGG|
-                                                  |x_sE0QjvSGG|
-                                                  |e1_sEmMhYSGG|
-                                                  |e2_sEIIfpTGG|)
-                                         ((#%lambda (|when-list_sE2FdSTGG|
-                                                     |body_sEoBbjUGG|)
-                                            ((#%lambda (|ctem_sEKx9MUGG|
-                                                        |rtem_sE4u7dVGG|)
-                                               (#%if (#%if (null? |ctem_sEKx9MUGG|)
-                                                       (null? |rtem_sE4u7dVGG|)
+                         (|chi-local-syntax_-v7xxR5AA|
+                           |value_-vVbtWQFA|
+                           |e_-vf8rnRFA|
+                           |r_-vRxFcOFA|
+                           |w_-vB4pQRFA|
+                           |s_-vX0nhSFA|
+                           (#%lambda (|body_-vrhQ_bGA|
+                                      |r_-vNdOscGA|
+                                      |w_-v7aMVcGA|
+                                      |s_-vt6KmdGA|)
+                             (|chi-top-sequence_-vTJkvIzA|
+                               |body_-vrhQ_bGA|
+                               |r_-vNdOscGA|
+                               |w_-v7aMVcGA|
+                               |s_-vt6KmdGA|
+                               |ctem_-vxqB6PFA|
+                               |rtem_-vTmzzPFA|
+                               |top-ribcage_-vdjx0QFA|)))
+                         (#%if (eqv? |type_-vzfvtQFA| (#%quote eval-when-form))
+                           ((#%lambda (|tmp_-vFVa17GA|)
+                              (#%if |tmp_-vFVa17GA|
+                                (apply (#%lambda (|__-v_R8u7GA|
+                                                  |x_-vlO6X7GA|
+                                                  |e1_-vHK4o8GA|
+                                                  |e2_-v1H2R8GA|)
+                                         ((#%lambda (|when-list_-vnD0i9GA|
+                                                     |body_-vJz-K9GA|)
+                                            ((#%lambda (|ctem_-v3wYbaGA|
+                                                        |rtem_-vpsWEaGA|)
+                                               (#%if (#%if (null? |ctem_-v3wYbaGA|)
+                                                       (null? |rtem_-vpsWEaGA|)
                                                        #f)
-                                                 (|chi-void_sE8vISQAG|)
-                                                 (|chi-top-sequence_sEyLx3rAG|
-                                                   |body_sEoBbjUGG|
-                                                   |r_sEwzSMwGG|
-                                                   |w_sEg6CoAGG|
-                                                   |s_sEC2ARAGG|
-                                                   |ctem_sEKx9MUGG|
-                                                   |rtem_sE4u7dVGG|
-                                                   |top-ribcage_sEUkKAyGG|)))
-                                             (|update-mode-set_sEYwhJIAG|
-                                               |when-list_sE2FdSTGG|
-                                               |ctem_sEcsOGxGG|)
-                                             (|update-mode-set_sEYwhJIAG|
-                                               |when-list_sE2FdSTGG|
-                                               |rtem_sEyoM7yGG|)))
-                                          (|chi-when-list_sEUHvwrAG|
-                                            |x_sE0QjvSGG|
-                                            |w_sEg6CoAGG|)
-                                          (cons |e1_sEmMhYSGG|
-                                                |e2_sEIIfpTGG|)))
-                                       |tmp_sEkXnBRGG|)
-                                (syntax-error |e_sEW9EXzGG|)))
+                                                 (|chi-void_-vttvi6AA|)
+                                                 (|chi-top-sequence_-vTJkvIzA|
+                                                   |body_-vJz-K9GA|
+                                                   |r_-vRxFcOFA|
+                                                   |w_-vB4pQRFA|
+                                                   |s_-vX0nhSFA|
+                                                   |ctem_-v3wYbaGA|
+                                                   |rtem_-vpsWEaGA|
+                                                   |top-ribcage_-vdjx0QFA|)))
+                                             (|update-mode-set_-vhv49-zA|
+                                               |when-list_-vnD0i9GA|
+                                               |ctem_-vxqB6PFA|)
+                                             (|update-mode-set_-vhv49-zA|
+                                               |when-list_-vnD0i9GA|
+                                               |rtem_-vTmzzPFA|)))
+                                          (|chi-when-list_-vdGiYIzA|
+                                            |x_-vlO6X7GA|
+                                            |w_-vB4pQRFA|)
+                                          (cons |e1_-vHK4o8GA|
+                                                |e2_-v1H2R8GA|)))
+                                       |tmp_-vFVa17GA|)
+                                (syntax-error |e_-vf8rnRFA|)))
                             ($syntax-dispatch
-                              (#%annotate |e_sEW9EXzGG| value)
+                              (#%annotate |e_-vf8rnRFA| value)
                               (#%quote (any each-any any . each-any))))
-                           (#%if (eqv? |type_sEehI1zGG|
+                           (#%if (eqv? |type_-vzfvtQFA|
                                        (#%quote define-syntax-form))
-                             (|parse-define-syntax_sE6GOvPAG|
-                               |e_sEW9EXzGG|
-                               |w_sEg6CoAGG|
-                               |s_sEC2ARAGG|
-                               (#%lambda (|id_sEcDM9MGG|
-                                          |rhs_sEyzKCMGG|
-                                          |w_sEUvI3NGG|)
-                                 ((#%lambda (|id_sEesGwNGG|)
+                             (|parse-define-syntax_-vrEBX4AA|
+                               |e_-vf8rnRFA|
+                               |w_-vB4pQRFA|
+                               |s_-vX0nhSFA|
+                               (#%lambda (|id_-vxBzB1GA|
+                                          |rhs_-vTxx22GA|
+                                          |w_-vduvv2GA|)
+                                 ((#%lambda (|id_-vzqtY2GA|)
                                     (#%begin
-                                      ((#%lambda (|n_sEAoEZNGG|)
-                                         ((#%lambda (|b_sEWkCqOGG|)
-                                            ((#%lambda (|t_sEghATOGG|)
-                                               (#%if (memv |t_sEghATOGG|
+                                      ((#%lambda (|n_-vVmrp3GA|)
+                                         ((#%lambda (|b_-vfjpS3GA|)
+                                            ((#%lambda (|t_-vBfnj4GA|)
+                                               (#%if (memv |t_-vBfnj4GA|
                                                            (#%quote
                                                              (displaced-lexical)))
-                                                 (|displaced-lexical-error_sEiCoLAzG|
-                                                   |id_sEesGwNGG|)
+                                                 (|displaced-lexical-error_-vDAbbSyA|
+                                                   |id_-vzqtY2GA|)
                                                  #!void))
-                                             (|binding-type_sE6EZBszG|
-                                               |b_sEWkCqOGG|)))
-                                          (|lookup_sEkri6CzG|
-                                            |n_sEAoEZNGG|
-                                            |r_sEwzSMwGG|)))
-                                       (|id-var-name_sE2G2QjAG|
-                                         |id_sEesGwNGG|
+                                             (|binding-type_-vrCM1KyA|
+                                               |b_-vfjpS3GA|)))
+                                          (|lookup_-vFp5yTyA|
+                                            |n_-vVmrp3GA|
+                                            |r_-vRxFcOFA|)))
+                                       (|id-var-name_-vnERfBzA|
+                                         |id_-vzqtY2GA|
                                          (#%quote (()))))
-                                      (|ct-eval/residualize_sE-lb4KAG|
-                                        |ctem_sEcsOGxGG|
+                                      (|ct-eval/residualize_-vjk-v_zA|
+                                        |ctem_-vxqB6PFA|
                                         (#%lambda ()
                                           (list (#%quote $sc-put-cte)
                                                 (list (#%quote quote)
-                                                      ((#%lambda (|sym_sECdykPGG|)
-                                                         (#%if (|same-marks?_sEGUa0iAG|
-                                                                 (|wrap-marks_sEQwNlJzG|
-                                                                   (|syntax-object-wrap_sEa7PQgzG|
-                                                                     |id_sEesGwNGG|))
-                                                                 (|wrap-marks_sEQwNlJzG|
+                                                      ((#%lambda (|sym_-vXblM4GA|)
+                                                         (#%if (|same-marks?_-v_SZrzzA|
+                                                                 (|wrap-marks_-v9vAN-yA|
+                                                                   (|syntax-object-wrap_-vv5CgyyA|
+                                                                     |id_-vzqtY2GA|))
+                                                                 (|wrap-marks_-v9vAN-yA|
                                                                    (#%quote
                                                                      ((top)))))
-                                                           |sym_sECdykPGG|
-                                                           ((#%lambda (|marks_sEY9wNPGG|)
-                                                              (|make-syntax-object_sE8iVtfzG|
-                                                                |sym_sECdykPGG|
-                                                                (|make-wrap_sEuAPUIzG|
-                                                                  |marks_sEY9wNPGG|
-                                                                  (list (|make-ribcage_sEAevs_zG|
+                                                           |sym_-vXblM4GA|
+                                                           ((#%lambda (|marks_-vh8jd5GA|)
+                                                              (|make-syntax-object_-vtgIVwyA|
+                                                                |sym_-vXblM4GA|
+                                                                (|make-wrap_-vPyCk-yA|
+                                                                  |marks_-vh8jd5GA|
+                                                                  (list (|make-ribcage_-vVciUgzA|
                                                                           (vector
-                                                                            |sym_sECdykPGG|)
+                                                                            |sym_-vXblM4GA|)
                                                                           (vector
-                                                                            |marks_sEY9wNPGG|)
+                                                                            |marks_-vh8jd5GA|)
                                                                           (vector
-                                                                            (|generate-id_sECSBqryG|
-                                                                              |sym_sECdykPGG|)))))))
-                                                            (|wrap-marks_sEQwNlJzG|
-                                                              (|syntax-object-wrap_sEa7PQgzG|
-                                                                |id_sEesGwNGG|)))))
-                                                       ((#%lambda (|e_sEE2sHQGG|)
+                                                                            (|generate-id_-vXQoSIxA|
+                                                                              |sym_-vXblM4GA|)))))))
+                                                            (|wrap-marks_-v9vAN-yA|
+                                                              (|syntax-object-wrap_-vv5CgyyA|
+                                                                |id_-vzqtY2GA|)))))
+                                                       ((#%lambda (|e_-vZ0f76GA|)
                                                           (#%if (annotation?
-                                                                  |e_sEE2sHQGG|)
+                                                                  |e_-vZ0f76GA|)
                                                             (annotation-expression
-                                                              |e_sEE2sHQGG|)
-                                                            |e_sEE2sHQGG|))
-                                                        (#%if (|syntax-object?_sEueTWfzG|
-                                                                |id_sEesGwNGG|)
-                                                          (|syntax-object-expression_sEQaRngzG|
-                                                            |id_sEesGwNGG|)
-                                                          |id_sEesGwNGG|))))
-                                                (|chi_sEki9xKAG|
-                                                  |rhs_sEyzKCMGG|
-                                                  (|transformer-env_sEYFqiAzG|
-                                                    |r_sEwzSMwGG|)
-                                                  |w_sEUvI3NGG|))))))
-                                  (|wrap_sEwWDIpAG|
-                                    |id_sEcDM9MGG|
-                                    |w_sEUvI3NGG|))))
-                             (#%if (eqv? |type_sEehI1zGG|
+                                                              |e_-vZ0f76GA|)
+                                                            |e_-vZ0f76GA|))
+                                                        (#%if (|syntax-object?_-vPcGmxyA|
+                                                                |id_-vzqtY2GA|)
+                                                          (|syntax-object-expression_-v99EPxyA|
+                                                            |id_-vzqtY2GA|)
+                                                          |id_-vzqtY2GA|))))
+                                                (|chi_-vFgYY_zA|
+                                                  |rhs_-vTxx22GA|
+                                                  (|transformer-env_-vhEdKRyA|
+                                                    |r_-vRxFcOFA|)
+                                                  |w_-vduvv2GA|))))))
+                                  (|wrap_-vRUq8HzA|
+                                    |id_-vxBzB1GA|
+                                    |w_-vduvv2GA|))))
+                             (#%if (eqv? |type_-vzfvtQFA|
                                          (#%quote define-form))
-                               (|parse-define_sEMJQ2PAG|
-                                 |e_sEW9EXzGG|
-                                 |w_sEg6CoAGG|
-                                 |s_sEC2ARAGG|
-                                 (#%lambda (|id_sE4j9KGGG|
-                                            |rhs_sEqf7bHGG|
-                                            |w_sEMb5EHGG|)
-                                   ((#%lambda (|id_sE6835IGG|)
+                               (|parse-define_-v5IDu4AA|
+                                 |e_-vf8rnRFA|
+                                 |w_-vB4pQRFA|
+                                 |s_-vX0nhSFA|
+                                 (#%lambda (|id_-vphY9YFA|
+                                            |rhs_-vLdWCYFA|
+                                            |w_-v5aU3ZFA|)
+                                   ((#%lambda (|id_-vr6SwZFA|)
                                       (#%begin
-                                        ((#%lambda (|n_sEs41yIGG|)
-                                           ((#%lambda (|b_sEO0_-IGG|)
-                                              ((#%lambda (|t_sE8ZYrJGG|)
-                                                 (#%if (memv |t_sE8ZYrJGG|
+                                        ((#%lambda (|n_-vN2QZZFA|)
+                                           ((#%lambda (|b_-v7_Nq-FA|)
+                                              ((#%lambda (|t_-vtXLT-FA|)
+                                                 (#%if (memv |t_-vtXLT-FA|
                                                              (#%quote
                                                                (displaced-lexical)))
-                                                   (|displaced-lexical-error_sEiCoLAzG|
-                                                     |id_sE6835IGG|)
+                                                   (|displaced-lexical-error_-vDAbbSyA|
+                                                     |id_-vr6SwZFA|)
                                                    #!void))
-                                               (|binding-type_sE6EZBszG|
-                                                 |b_sEO0_-IGG|)))
-                                            (|lookup_sEkri6CzG|
-                                              |n_sEs41yIGG|
-                                              |r_sEwzSMwGG|)))
-                                         (|id-var-name_sE2G2QjAG|
-                                           |id_sE6835IGG|
+                                               (|binding-type_-vrCM1KyA|
+                                                 |b_-v7_Nq-FA|)))
+                                            (|lookup_-vFp5yTyA|
+                                              |n_-vN2QZZFA|
+                                              |r_-vRxFcOFA|)))
+                                         (|id-var-name_-vnERfBzA|
+                                           |id_-vr6SwZFA|
                                            (#%quote (()))))
-                                        ((#%lambda (|sym_sEuVWUJGG|)
-                                           ((#%lambda (|valsym_sEQRUlKGG|)
-                                              (|build-sequence_sE2PbpbzG|
+                                        ((#%lambda (|sym_-vPTJk_FA|)
+                                           ((#%lambda (|valsym_-v9QHN_FA|)
+                                              (|build-sequence_-vnN-QsyA|
                                                 #f
-                                                (list (|ct-eval/residualize_sE-lb4KAG|
-                                                        |ctem_sEcsOGxGG|
+                                                (list (|ct-eval/residualize_-vjk-v_zA|
+                                                        |ctem_-vxqB6PFA|
                                                         (#%lambda ()
                                                           (list (#%quote
                                                                   $sc-put-cte)
                                                                 (list (#%quote
                                                                         quote)
-                                                                      (#%if (eq? |sym_sEuVWUJGG|
-                                                                                 |valsym_sEQRUlKGG|)
-                                                                        |sym_sEuVWUJGG|
-                                                                        ((#%lambda (|marks_sEaOSOKGG|)
-                                                                           (|make-syntax-object_sE8iVtfzG|
-                                                                             |sym_sEuVWUJGG|
-                                                                             (|make-wrap_sEuAPUIzG|
-                                                                               |marks_sEaOSOKGG|
-                                                                               (list (|make-ribcage_sEAevs_zG|
+                                                                      (#%if (eq? |sym_-vPTJk_FA|
+                                                                                 |valsym_-v9QHN_FA|)
+                                                                        |sym_-vPTJk_FA|
+                                                                        ((#%lambda (|marks_-vvMFe0GA|)
+                                                                           (|make-syntax-object_-vtgIVwyA|
+                                                                             |sym_-vPTJk_FA|
+                                                                             (|make-wrap_-vPyCk-yA|
+                                                                               |marks_-vvMFe0GA|
+                                                                               (list (|make-ribcage_-vVciUgzA|
                                                                                        (vector
-                                                                                         |sym_sEuVWUJGG|)
+                                                                                         |sym_-vPTJk_FA|)
                                                                                        (vector
-                                                                                         |marks_sEaOSOKGG|)
+                                                                                         |marks_-vvMFe0GA|)
                                                                                        (vector
-                                                                                         |valsym_sEQRUlKGG|))))))
-                                                                         (|wrap-marks_sEQwNlJzG|
-                                                                           (|syntax-object-wrap_sEa7PQgzG|
-                                                                             |id_sE6835IGG|)))))
-                                                                (#%if (atom? (|make-binding_sEMH_8szG|
+                                                                                         |valsym_-v9QHN_FA|))))))
+                                                                         (|wrap-marks_-v9vAN-yA|
+                                                                           (|syntax-object-wrap_-vv5CgyyA|
+                                                                             |id_-vr6SwZFA|)))))
+                                                                (#%if (atom? (|make-binding_-v5GOAJyA|
                                                                                (#%quote
                                                                                  global)
-                                                                               |valsym_sEQRUlKGG|))
-                                                                  (|make-binding_sEMH_8szG|
+                                                                               |valsym_-v9QHN_FA|))
+                                                                  (|make-binding_-v5GOAJyA|
                                                                     (#%quote
                                                                       global)
-                                                                    |valsym_sEQRUlKGG|)
+                                                                    |valsym_-v9QHN_FA|)
                                                                   (list #%quote
-                                                                        (|make-binding_sEMH_8szG|
+                                                                        (|make-binding_-v5GOAJyA|
                                                                           (#%quote
                                                                             global)
-                                                                          |valsym_sEQRUlKGG|))))))
-                                                      (|rt-eval/residualize_sEEpdDJAG|
-                                                        |rtem_sEyoM7yGG|
+                                                                          |valsym_-v9QHN_FA|))))))
+                                                      (|rt-eval/residualize_-vZn03_zA|
+                                                        |rtem_-vTmzzPFA|
                                                         (#%lambda ()
-                                                          (#%if |s_sEC2ARAGG|
+                                                          (#%if |s_-vX0nhSFA|
                                                             (list #%annotate
                                                                   (list #%define
-                                                                        |valsym_sEQRUlKGG|
-                                                                        (|chi_sEki9xKAG|
-                                                                          |rhs_sEqf7bHGG|
-                                                                          |r_sEwzSMwGG|
-                                                                          |w_sEMb5EHGG|))
-                                                                  |s_sEC2ARAGG|)
+                                                                        |valsym_-v9QHN_FA|
+                                                                        (|chi_-vFgYY_zA|
+                                                                          |rhs_-vLdWCYFA|
+                                                                          |r_-vRxFcOFA|
+                                                                          |w_-v5aU3ZFA|))
+                                                                  |s_-vX0nhSFA|)
                                                             (list #%define
-                                                                  |valsym_sEQRUlKGG|
-                                                                  (|chi_sEki9xKAG|
-                                                                    |rhs_sEqf7bHGG|
-                                                                    |r_sEwzSMwGG|
-                                                                    |w_sEMb5EHGG|))))))))
-                                            (#%if (|same-marks?_sEGUa0iAG|
-                                                    (|wrap-marks_sEQwNlJzG|
-                                                      (|syntax-object-wrap_sEa7PQgzG|
-                                                        |id_sE6835IGG|))
-                                                    (|wrap-marks_sEQwNlJzG|
+                                                                  |valsym_-v9QHN_FA|
+                                                                  (|chi_-vFgYY_zA|
+                                                                    |rhs_-vLdWCYFA|
+                                                                    |r_-vRxFcOFA|
+                                                                    |w_-v5aU3ZFA|))))))))
+                                            (#%if (|same-marks?_-v_SZrzzA|
+                                                    (|wrap-marks_-v9vAN-yA|
+                                                      (|syntax-object-wrap_-vv5CgyyA|
+                                                        |id_-vr6SwZFA|))
+                                                    (|wrap-marks_-v9vAN-yA|
                                                       (#%quote ((top)))))
-                                              |sym_sEuVWUJGG|
-                                              (|generate-id_sECSBqryG|
-                                                |sym_sEuVWUJGG|))))
-                                         ((#%lambda (|e_sESGOILGG|)
-                                            (#%if (annotation? |e_sESGOILGG|)
+                                              |sym_-vPTJk_FA|
+                                              (|generate-id_-vXQoSIxA|
+                                                |sym_-vPTJk_FA|))))
+                                         ((#%lambda (|e_-vbFB81GA|)
+                                            (#%if (annotation? |e_-vbFB81GA|)
                                               (annotation-expression
-                                                |e_sESGOILGG|)
-                                              |e_sESGOILGG|))
-                                          (#%if (|syntax-object?_sEueTWfzG|
-                                                  |id_sE6835IGG|)
-                                            (|syntax-object-expression_sEQaRngzG|
-                                              |id_sE6835IGG|)
-                                            |id_sE6835IGG|)))))
-                                    (|wrap_sEwWDIpAG|
-                                      |id_sE4j9KGGG|
-                                      |w_sEMb5EHGG|))))
-                               (#%if (eqv? |type_sEehI1zGG|
+                                                |e_-vbFB81GA|)
+                                              |e_-vbFB81GA|))
+                                          (#%if (|syntax-object?_-vPcGmxyA|
+                                                  |id_-vr6SwZFA|)
+                                            (|syntax-object-expression_-v99EPxyA|
+                                              |id_-vr6SwZFA|)
+                                            |id_-vr6SwZFA|)))))
+                                    (|wrap_-vRUq8HzA|
+                                      |id_-vphY9YFA|
+                                      |w_-v5aU3ZFA|))))
+                               (#%if (eqv? |type_-vzfvtQFA|
                                            (#%quote module-form))
-                                 ((#%lambda (|r_sEkMp6DGG| |ribcage_sEGInzDGG|)
-                                    (|parse-module_sE4RU8OAG|
-                                      |e_sEW9EXzGG|
-                                      |w_sEg6CoAGG|
-                                      |s_sEC2ARAGG|
-                                      (|make-wrap_sEuAPUIzG|
-                                        (|wrap-marks_sEQwNlJzG| |w_sEg6CoAGG|)
-                                        (cons |ribcage_sEGInzDGG|
-                                              (|wrap-subst_sEatLOJzG|
-                                                |w_sEg6CoAGG|)))
-                                      (#%lambda (|id_sE0Fl0EGG|
-                                                 |exports_sEmBjtEGG|
-                                                 |forms_sEIxhWEGG|)
-                                        (#%if |id_sE0Fl0EGG|
+                                 ((#%lambda (|r_-vFKcyUFA| |ribcage_-v_Ga_UFA|)
+                                    (|parse-module_-vpPHA3AA|
+                                      |e_-vf8rnRFA|
+                                      |w_-vB4pQRFA|
+                                      |s_-vX0nhSFA|
+                                      (|make-wrap_-vPyCk-yA|
+                                        (|wrap-marks_-v9vAN-yA| |w_-vB4pQRFA|)
+                                        (cons |ribcage_-v_Ga_UFA|
+                                              (|wrap-subst_-vvrye_yA|
+                                                |w_-vB4pQRFA|)))
+                                      (#%lambda (|id_-vlD8sVFA|
+                                                 |exports_-vHz6VVFA|
+                                                 |forms_-v1w4mWFA|)
+                                        (#%if |id_-vlD8sVFA|
                                           (#%begin
-                                            ((#%lambda (|n_sE2ufnFGG|)
-                                               ((#%lambda (|b_sEoqdQFGG|)
-                                                  ((#%lambda (|t_sEKmbhGGG|)
-                                                     (#%if (memv |t_sEKmbhGGG|
+                                            ((#%lambda (|n_-vns2PWFA|)
+                                               ((#%lambda (|b_-vJo0gXFA|)
+                                                  ((#%lambda (|t_-v3l-IXFA|)
+                                                     (#%if (memv |t_-v3l-IXFA|
                                                                  (#%quote
                                                                    (displaced-lexical)))
-                                                       (|displaced-lexical-error_sEiCoLAzG|
-                                                         (|wrap_sEwWDIpAG|
-                                                           |id_sE0Fl0EGG|
-                                                           |w_sEg6CoAGG|))
+                                                       (|displaced-lexical-error_-vDAbbSyA|
+                                                         (|wrap_-vRUq8HzA|
+                                                           |id_-vlD8sVFA|
+                                                           |w_-vB4pQRFA|))
                                                        #!void))
-                                                   (|binding-type_sE6EZBszG|
-                                                     |b_sEoqdQFGG|)))
-                                                (|lookup_sEkri6CzG|
-                                                  |n_sE2ufnFGG|
-                                                  |r_sEkMp6DGG|)))
-                                             (|id-var-name_sE2G2QjAG|
-                                               |id_sE0Fl0EGG|
+                                                   (|binding-type_-vrCM1KyA|
+                                                     |b_-vJo0gXFA|)))
+                                                (|lookup_-vFp5yTyA|
+                                                  |n_-vns2PWFA|
+                                                  |r_-vFKcyUFA|)))
+                                             (|id-var-name_-vnERfBzA|
+                                               |id_-vlD8sVFA|
                                                (#%quote (()))))
-                                            (|chi-top-module_sES1AEEAG|
-                                              |e_sEW9EXzGG|
-                                              |r_sEkMp6DGG|
-                                              |ribcage_sEGInzDGG|
-                                              |w_sEg6CoAGG|
-                                              |s_sEC2ARAGG|
-                                              |ctem_sEcsOGxGG|
-                                              |rtem_sEyoM7yGG|
-                                              |id_sE0Fl0EGG|
-                                              |exports_sEmBjtEGG|
-                                              |forms_sEIxhWEGG|))
-                                          (|chi-top-module_sES1AEEAG|
-                                            |e_sEW9EXzGG|
-                                            |r_sEkMp6DGG|
-                                            |ribcage_sEGInzDGG|
-                                            |w_sEg6CoAGG|
-                                            |s_sEC2ARAGG|
-                                            |ctem_sEcsOGxGG|
-                                            |rtem_sEyoM7yGG|
+                                            (|chi-top-module_-vb0n4WzA|
+                                              |e_-vf8rnRFA|
+                                              |r_-vFKcyUFA|
+                                              |ribcage_-v_Ga_UFA|
+                                              |w_-vB4pQRFA|
+                                              |s_-vX0nhSFA|
+                                              |ctem_-vxqB6PFA|
+                                              |rtem_-vTmzzPFA|
+                                              |id_-vlD8sVFA|
+                                              |exports_-vHz6VVFA|
+                                              |forms_-v1w4mWFA|))
+                                          (|chi-top-module_-vb0n4WzA|
+                                            |e_-vf8rnRFA|
+                                            |r_-vFKcyUFA|
+                                            |ribcage_-v_Ga_UFA|
+                                            |w_-vB4pQRFA|
+                                            |s_-vX0nhSFA|
+                                            |ctem_-vxqB6PFA|
+                                            |rtem_-vTmzzPFA|
                                             #f
-                                            |exports_sEmBjtEGG|
-                                            |forms_sEIxhWEGG|)))))
+                                            |exports_-vHz6VVFA|
+                                            |forms_-v1w4mWFA|)))))
                                   (cons (#%quote
                                           ("top-level module placeholder"
                                            placeholder))
-                                        |r_sEwzSMwGG|)
-                                  (|make-ribcage_sEAevs_zG| () () ()))
-                                 (#%if (eqv? |type_sEehI1zGG|
+                                        |r_-vRxFcOFA|)
+                                  (|make-ribcage_-vVciUgzA| () () ()))
+                                 (#%if (eqv? |type_-vzfvtQFA|
                                              (#%quote import-form))
-                                   (|parse-import_sEqNSBOAG|
-                                     |e_sEW9EXzGG|
-                                     |w_sEg6CoAGG|
-                                     |s_sEC2ARAGG|
-                                     (#%lambda (|mid_sEiXvLBGG|)
-                                       (|ct-eval/residualize_sE-lb4KAG|
-                                         |ctem_sEcsOGxGG|
+                                   (|parse-import_-vLLF14AA|
+                                     |e_-vf8rnRFA|
+                                     |w_-vB4pQRFA|
+                                     |s_-vX0nhSFA|
+                                     (#%lambda (|mid_-vDVibTFA|)
+                                       (|ct-eval/residualize_-vjk-v_zA|
+                                         |ctem_-vxqB6PFA|
                                          (#%lambda ()
                                            (#%begin
-                                             (#%if |value_sEAdGuzGG|
+                                             (#%if |value_-vVbtWQFA|
                                                (syntax-error
-                                                 (|source-wrap_sESSB9qAG|
-                                                   |e_sEW9EXzGG|
-                                                   |w_sEg6CoAGG|
-                                                   |s_sEC2ARAGG|)
+                                                 (|source-wrap_-vbRoBHzA|
+                                                   |e_-vf8rnRFA|
+                                                   |w_-vB4pQRFA|
+                                                   |s_-vX0nhSFA|)
                                                  "not valid at top-level")
                                                #!void)
-                                             ((#%lambda (|binding_sEETtcCGG|)
-                                                ((#%lambda (|t_sE-PrFCGG|)
-                                                   (#%if (eqv? |t_sE-PrFCGG|
+                                             ((#%lambda (|binding_-vZRgETFA|)
+                                                ((#%lambda (|t_-vjOe5UFA|)
+                                                   (#%if (eqv? |t_-vjOe5UFA|
                                                                (#%quote
                                                                  module))
-                                                     (|do-top-import_sECAjgIAG|
-                                                       |mid_sEiXvLBGG|
-                                                       (|interface-token_sE007YwAG|
-                                                         (|binding-value_sEsAX2tzG|
-                                                           |binding_sEETtcCGG|)))
-                                                     (#%if (eqv? |t_sE-PrFCGG|
+                                                     (|do-top-import_-vXy6IZzA|
+                                                       |mid_-vDVibTFA|
+                                                       (|interface-token_-vl-VnOzA|
+                                                         (|binding-value_-vNyKuKyA|
+                                                           |binding_-vZRgETFA|)))
+                                                     (#%if (eqv? |t_-vjOe5UFA|
                                                                  (#%quote
                                                                    displaced-lexical))
-                                                       (|displaced-lexical-error_sEiCoLAzG|
-                                                         |mid_sEiXvLBGG|)
+                                                       (|displaced-lexical-error_-vDAbbSyA|
+                                                         |mid_-vDVibTFA|)
                                                        (syntax-error
-                                                         |mid_sEiXvLBGG|
+                                                         |mid_-vDVibTFA|
                                                          "import from unknown module"))))
-                                                 (|binding-type_sE6EZBszG|
-                                                   |binding_sEETtcCGG|)))
-                                              (|lookup_sEkri6CzG|
-                                                (|id-var-name_sE2G2QjAG|
-                                                  |mid_sEiXvLBGG|
+                                                 (|binding-type_-vrCM1KyA|
+                                                   |binding_-vZRgETFA|)))
+                                              (|lookup_-vFp5yTyA|
+                                                (|id-var-name_-vnERfBzA|
+                                                  |mid_-vDVibTFA|
                                                   (#%quote (())))
                                                 ())))))))
-                                   (|rt-eval/residualize_sEEpdDJAG|
-                                     |rtem_sEyoM7yGG|
+                                   (|rt-eval/residualize_-vZn03_zA|
+                                     |rtem_-vTmzzPFA|
                                      (#%lambda ()
-                                       (|chi-expr_sEGe7-KAG|
-                                         |type_sEehI1zGG|
-                                         |value_sEAdGuzGG|
-                                         |e_sEW9EXzGG|
-                                         |r_sEwzSMwGG|
-                                         |w_sEg6CoAGG|
-                                         |s_sEC2ARAGG|))))))))))))))
-             (|syntax-type_sECplNtAG|
-               (#%lambda (|e_sEU9M5kGG|
-                          |r_sEe6KykGG|
-                          |w_sEA2I_kGG|
-                          |s_sEW-FslGG|
-                          |rib_sEgXDVlGG|)
-                 (#%if (symbol? |e_sEU9M5kGG|)
-                   ((#%lambda (|n_sEImjrqGG|)
-                      ((#%lambda (|b_sE2jhUqGG|)
-                         ((#%lambda (|type_sEofflrGG|)
-                            (#%if (eqv? |type_sEofflrGG| (#%quote lexical))
+                                       (|chi-expr_-v_cWp0AA|
+                                         |type_-vzfvtQFA|
+                                         |value_-vVbtWQFA|
+                                         |e_-vf8rnRFA|
+                                         |r_-vRxFcOFA|
+                                         |w_-vB4pQRFA|
+                                         |s_-vX0nhSFA|))))))))))))))
+             (|syntax-type_-vXn8dLzA|
+               (#%lambda (|e_-vd8zxBFA|
+                          |r_-vz4x-BFA|
+                          |w_-vV0vrCFA|
+                          |s_-vfZsUCFA|
+                          |rib_-vBVqlDFA|)
+                 (#%if (symbol? |e_-vd8zxBFA|)
+                   ((#%lambda (|n_-v1l6THFA|)
+                      ((#%lambda (|b_-vnh4kIFA|)
+                         ((#%lambda (|type_-vJd2NIFA|)
+                            (#%if (eqv? |type_-vJd2NIFA| (#%quote lexical))
                               (values
-                                |type_sEofflrGG|
-                                (|binding-value_sEsAX2tzG| |b_sE2jhUqGG|)
-                                |e_sEU9M5kGG|
-                                |w_sEA2I_kGG|
-                                |s_sEW-FslGG|)
-                              (#%if (eqv? |type_sEofflrGG| (#%quote global))
+                                |type_-vJd2NIFA|
+                                (|binding-value_-vNyKuKyA| |b_-vnh4kIFA|)
+                                |e_-vd8zxBFA|
+                                |w_-vV0vrCFA|
+                                |s_-vfZsUCFA|)
+                              (#%if (eqv? |type_-vJd2NIFA| (#%quote global))
                                 (values
-                                  |type_sEofflrGG|
-                                  (|binding-value_sEsAX2tzG| |b_sE2jhUqGG|)
-                                  |e_sEU9M5kGG|
-                                  |w_sEA2I_kGG|
-                                  |s_sEW-FslGG|)
-                                (#%if (memv |type_sEofflrGG|
+                                  |type_-vJd2NIFA|
+                                  (|binding-value_-vNyKuKyA| |b_-vnh4kIFA|)
+                                  |e_-vd8zxBFA|
+                                  |w_-vV0vrCFA|
+                                  |s_-vfZsUCFA|)
+                                (#%if (memv |type_-vJd2NIFA|
                                             (#%quote (macro macro!)))
-                                  (|syntax-type_sECplNtAG|
-                                    (|chi-macro_sEI31lMAG|
-                                      (|binding-value_sEsAX2tzG| |b_sE2jhUqGG|)
-                                      |e_sEU9M5kGG|
-                                      |r_sEe6KykGG|
-                                      |w_sEA2I_kGG|
-                                      |s_sEW-FslGG|
-                                      |rib_sEgXDVlGG|)
-                                    |r_sEe6KykGG|
+                                  (|syntax-type_-vXn8dLzA|
+                                    (|chi-macro_-v12QM1AA|
+                                      (|binding-value_-vNyKuKyA| |b_-vnh4kIFA|)
+                                      |e_-vd8zxBFA|
+                                      |r_-vz4x-BFA|
+                                      |w_-vV0vrCFA|
+                                      |s_-vfZsUCFA|
+                                      |rib_-vBVqlDFA|)
+                                    |r_-vz4x-BFA|
                                     (#%quote (()))
                                     #f
-                                    |rib_sEgXDVlGG|)
+                                    |rib_-vBVqlDFA|)
                                   (values
-                                    |type_sEofflrGG|
-                                    (|binding-value_sEsAX2tzG| |b_sE2jhUqGG|)
-                                    |e_sEU9M5kGG|
-                                    |w_sEA2I_kGG|
-                                    |s_sEW-FslGG|)))))
-                          (|binding-type_sE6EZBszG| |b_sE2jhUqGG|)))
-                       (|lookup_sEkri6CzG| |n_sEImjrqGG| |r_sEe6KykGG|)))
-                    (|id-var-name_sE2G2QjAG|
-                      |e_sEU9M5kGG|
-                      |w_sEA2I_kGG|))
-                   (#%if (pair? |e_sEU9M5kGG|)
-                     ((#%lambda (|first_sEEIvJnGG|)
-                        (#%if (|id?_sE4-1KFzG| |first_sEEIvJnGG|)
-                          ((#%lambda (|n_sEkBrDoGG|)
-                             ((#%lambda (|b_sEGxp4pGG|)
-                                ((#%lambda (|type_sE0unxpGG|)
-                                   (#%if (eqv? |type_sE0unxpGG|
+                                    |type_-vJd2NIFA|
+                                    (|binding-value_-vNyKuKyA| |b_-vnh4kIFA|)
+                                    |e_-vd8zxBFA|
+                                    |w_-vV0vrCFA|
+                                    |s_-vfZsUCFA|)))))
+                          (|binding-type_-vrCM1KyA| |b_-vnh4kIFA|)))
+                       (|lookup_-vFp5yTyA| |n_-v1l6THFA| |r_-vz4x-BFA|)))
+                    (|id-var-name_-vnERfBzA|
+                      |e_-vd8zxBFA|
+                      |w_-vV0vrCFA|))
+                   (#%if (pair? |e_-vd8zxBFA|)
+                     ((#%lambda (|first_-vZGi9FFA|)
+                        (#%if (|id?_-vpYQ9XyA| |first_-vZGi9FFA|)
+                          ((#%lambda (|n_-vFze3GFA|)
+                             ((#%lambda (|b_-v_vcwGFA|)
+                                ((#%lambda (|type_-vlsaZGFA|)
+                                   (#%if (eqv? |type_-vlsaZGFA|
                                                (#%quote lexical))
                                      (values
                                        (#%quote lexical-call)
-                                       (|binding-value_sEsAX2tzG|
-                                         |b_sEGxp4pGG|)
-                                       |e_sEU9M5kGG|
-                                       |w_sEA2I_kGG|
-                                       |s_sEW-FslGG|)
-                                     (#%if (memv |type_sE0unxpGG|
+                                       (|binding-value_-vNyKuKyA|
+                                         |b_-v_vcwGFA|)
+                                       |e_-vd8zxBFA|
+                                       |w_-vV0vrCFA|
+                                       |s_-vfZsUCFA|)
+                                     (#%if (memv |type_-vlsaZGFA|
                                                  (#%quote (macro macro!)))
-                                       (|syntax-type_sECplNtAG|
-                                         (|chi-macro_sEI31lMAG|
-                                           (|binding-value_sEsAX2tzG|
-                                             |b_sEGxp4pGG|)
-                                           |e_sEU9M5kGG|
-                                           |r_sEe6KykGG|
-                                           |w_sEA2I_kGG|
-                                           |s_sEW-FslGG|
-                                           |rib_sEgXDVlGG|)
-                                         |r_sEe6KykGG|
+                                       (|syntax-type_-vXn8dLzA|
+                                         (|chi-macro_-v12QM1AA|
+                                           (|binding-value_-vNyKuKyA|
+                                             |b_-v_vcwGFA|)
+                                           |e_-vd8zxBFA|
+                                           |r_-vz4x-BFA|
+                                           |w_-vV0vrCFA|
+                                           |s_-vfZsUCFA|
+                                           |rib_-vBVqlDFA|)
+                                         |r_-vz4x-BFA|
                                          (#%quote (()))
                                          #f
-                                         |rib_sEgXDVlGG|)
-                                       (#%if (eqv? |type_sE0unxpGG|
+                                         |rib_-vBVqlDFA|)
+                                       (#%if (eqv? |type_-vlsaZGFA|
                                                    (#%quote core))
                                          (values
-                                           |type_sE0unxpGG|
-                                           (|binding-value_sEsAX2tzG|
-                                             |b_sEGxp4pGG|)
-                                           |e_sEU9M5kGG|
-                                           |w_sEA2I_kGG|
-                                           |s_sEW-FslGG|)
-                                         (#%if (eqv? |type_sE0unxpGG|
+                                           |type_-vlsaZGFA|
+                                           (|binding-value_-vNyKuKyA|
+                                             |b_-v_vcwGFA|)
+                                           |e_-vd8zxBFA|
+                                           |w_-vV0vrCFA|
+                                           |s_-vfZsUCFA|)
+                                         (#%if (eqv? |type_-vlsaZGFA|
                                                      (#%quote local-syntax))
                                            (values
                                              (#%quote local-syntax-form)
-                                             (|binding-value_sEsAX2tzG|
-                                               |b_sEGxp4pGG|)
-                                             |e_sEU9M5kGG|
-                                             |w_sEA2I_kGG|
-                                             |s_sEW-FslGG|)
-                                           (#%if (eqv? |type_sE0unxpGG|
+                                             (|binding-value_-vNyKuKyA|
+                                               |b_-v_vcwGFA|)
+                                             |e_-vd8zxBFA|
+                                             |w_-vV0vrCFA|
+                                             |s_-vfZsUCFA|)
+                                           (#%if (eqv? |type_-vlsaZGFA|
                                                        (#%quote begin))
                                              (values
                                                (#%quote begin-form)
                                                #f
-                                               |e_sEU9M5kGG|
-                                               |w_sEA2I_kGG|
-                                               |s_sEW-FslGG|)
-                                             (#%if (eqv? |type_sE0unxpGG|
+                                               |e_-vd8zxBFA|
+                                               |w_-vV0vrCFA|
+                                               |s_-vfZsUCFA|)
+                                             (#%if (eqv? |type_-vlsaZGFA|
                                                          (#%quote eval-when))
                                                (values
                                                  (#%quote eval-when-form)
                                                  #f
-                                                 |e_sEU9M5kGG|
-                                                 |w_sEA2I_kGG|
-                                                 |s_sEW-FslGG|)
-                                               (#%if (eqv? |type_sE0unxpGG|
+                                                 |e_-vd8zxBFA|
+                                                 |w_-vV0vrCFA|
+                                                 |s_-vfZsUCFA|)
+                                               (#%if (eqv? |type_-vlsaZGFA|
                                                            (#%quote define))
                                                  (values
                                                    (#%quote define-form)
                                                    #f
-                                                   |e_sEU9M5kGG|
-                                                   |w_sEA2I_kGG|
-                                                   |s_sEW-FslGG|)
-                                                 (#%if (eqv? |type_sE0unxpGG|
+                                                   |e_-vd8zxBFA|
+                                                   |w_-vV0vrCFA|
+                                                   |s_-vfZsUCFA|)
+                                                 (#%if (eqv? |type_-vlsaZGFA|
                                                              (#%quote
                                                                define-syntax))
                                                    (values
                                                      (#%quote
                                                        define-syntax-form)
                                                      #f
-                                                     |e_sEU9M5kGG|
-                                                     |w_sEA2I_kGG|
-                                                     |s_sEW-FslGG|)
-                                                   (#%if (eqv? |type_sE0unxpGG|
+                                                     |e_-vd8zxBFA|
+                                                     |w_-vV0vrCFA|
+                                                     |s_-vfZsUCFA|)
+                                                   (#%if (eqv? |type_-vlsaZGFA|
                                                                (#%quote
                                                                  module-key))
                                                      (values
                                                        (#%quote module-form)
                                                        #f
-                                                       |e_sEU9M5kGG|
-                                                       |w_sEA2I_kGG|
-                                                       |s_sEW-FslGG|)
-                                                     (#%if (eqv? |type_sE0unxpGG|
+                                                       |e_-vd8zxBFA|
+                                                       |w_-vV0vrCFA|
+                                                       |s_-vfZsUCFA|)
+                                                     (#%if (eqv? |type_-vlsaZGFA|
                                                                  (#%quote
                                                                    import))
                                                        (values
                                                          (#%quote import-form)
-                                                         (#%if (|binding-value_sEsAX2tzG|
-                                                                 |b_sEGxp4pGG|)
-                                                           (|wrap_sEwWDIpAG|
-                                                             |first_sEEIvJnGG|
-                                                             |w_sEA2I_kGG|)
+                                                         (#%if (|binding-value_-vNyKuKyA|
+                                                                 |b_-v_vcwGFA|)
+                                                           (|wrap_-vRUq8HzA|
+                                                             |first_-vZGi9FFA|
+                                                             |w_-vV0vrCFA|)
                                                            #f)
-                                                         |e_sEU9M5kGG|
-                                                         |w_sEA2I_kGG|
-                                                         |s_sEW-FslGG|)
-                                                       (#%if (eqv? |type_sE0unxpGG|
+                                                         |e_-vd8zxBFA|
+                                                         |w_-vV0vrCFA|
+                                                         |s_-vfZsUCFA|)
+                                                       (#%if (eqv? |type_-vlsaZGFA|
                                                                    (#%quote
                                                                      set!))
-                                                         (|chi-set!_sEm73ULAG|
-                                                           |e_sEU9M5kGG|
-                                                           |r_sEe6KykGG|
-                                                           |w_sEA2I_kGG|
-                                                           |s_sEW-FslGG|
-                                                           |rib_sEgXDVlGG|)
+                                                         (|chi-set!_-vH5Sj1AA|
+                                                           |e_-vd8zxBFA|
+                                                           |r_-vz4x-BFA|
+                                                           |w_-vV0vrCFA|
+                                                           |s_-vfZsUCFA|
+                                                           |rib_-vBVqlDFA|)
                                                          (values
                                                            (#%quote call)
                                                            #f
-                                                           |e_sEU9M5kGG|
-                                                           |w_sEA2I_kGG|
-                                                           |s_sEW-FslGG|)))))))))))))
-                                 (|binding-type_sE6EZBszG| |b_sEGxp4pGG|)))
-                              (|lookup_sEkri6CzG|
-                                |n_sEkBrDoGG|
-                                |r_sEe6KykGG|)))
-                           (|id-var-name_sE2G2QjAG|
-                             |first_sEEIvJnGG|
-                             |w_sEA2I_kGG|))
-                          (#%if (syntactic-token? |first_sEEIvJnGG|)
-                            (#%if (eqv? |first_sEEIvJnGG| #%begin)
+                                                           |e_-vd8zxBFA|
+                                                           |w_-vV0vrCFA|
+                                                           |s_-vfZsUCFA|)))))))))))))
+                                 (|binding-type_-vrCM1KyA| |b_-v_vcwGFA|)))
+                              (|lookup_-vFp5yTyA|
+                                |n_-vFze3GFA|
+                                |r_-vz4x-BFA|)))
+                           (|id-var-name_-vnERfBzA|
+                             |first_-vZGi9FFA|
+                             |w_-vV0vrCFA|))
+                          (#%if (syntactic-token? |first_-vZGi9FFA|)
+                            (#%if (eqv? |first_-vZGi9FFA| #%begin)
                               (values
                                 (#%quote begin-form)
                                 #f
-                                |e_sEU9M5kGG|
-                                |w_sEA2I_kGG|
-                                |s_sEW-FslGG|)
-                              (#%if (eqv? |first_sEEIvJnGG| #%define)
+                                |e_-vd8zxBFA|
+                                |w_-vV0vrCFA|
+                                |s_-vfZsUCFA|)
+                              (#%if (eqv? |first_-vZGi9FFA| #%define)
                                 (values
                                   (#%quote define-form)
                                   #f
-                                  |e_sEU9M5kGG|
-                                  |w_sEA2I_kGG|
-                                  |s_sEW-FslGG|)
-                                (#%if (eqv? |first_sEEIvJnGG| #%set!)
-                                  (|chi-set!_sEm73ULAG|
-                                    |e_sEU9M5kGG|
-                                    |r_sEe6KykGG|
-                                    |w_sEA2I_kGG|
-                                    |s_sEW-FslGG|
-                                    |rib_sEgXDVlGG|)
-                                  (#%if (eqv? |first_sEEIvJnGG| #%quote)
+                                  |e_-vd8zxBFA|
+                                  |w_-vV0vrCFA|
+                                  |s_-vfZsUCFA|)
+                                (#%if (eqv? |first_-vZGi9FFA| #%set!)
+                                  (|chi-set!_-vH5Sj1AA|
+                                    |e_-vd8zxBFA|
+                                    |r_-vz4x-BFA|
+                                    |w_-vV0vrCFA|
+                                    |s_-vfZsUCFA|
+                                    |rib_-vBVqlDFA|)
+                                  (#%if (eqv? |first_-vZGi9FFA| #%quote)
                                     (values
                                       (#%quote core)
-                                      |core-quote_sEeEtZrAG|
-                                      |e_sEU9M5kGG|
-                                      |w_sEA2I_kGG|
-                                      |s_sEW-FslGG|)
-                                    (#%if (eqv? |first_sEEIvJnGG| #%if)
+                                      |core-quote_-vzCgpJzA|
+                                      |e_-vd8zxBFA|
+                                      |w_-vV0vrCFA|
+                                      |s_-vfZsUCFA|)
+                                    (#%if (eqv? |first_-vZGi9FFA| #%if)
                                       (values
                                         (#%quote core)
-                                        |core-if_sEAArqsAG|
-                                        |e_sEU9M5kGG|
-                                        |w_sEA2I_kGG|
-                                        |s_sEW-FslGG|)
-                                      (#%if (eqv? |first_sEEIvJnGG| #%lambda)
+                                        |core-if_-vVyeSJzA|
+                                        |e_-vd8zxBFA|
+                                        |w_-vV0vrCFA|
+                                        |s_-vfZsUCFA|)
+                                      (#%if (eqv? |first_-vZGi9FFA| #%lambda)
                                         (values
                                           (#%quote core)
-                                          |core-lambda_sEWwpTsAG|
-                                          |e_sEU9M5kGG|
-                                          |w_sEA2I_kGG|
-                                          |s_sEW-FslGG|)
-                                        (#%if (eqv? |first_sEEIvJnGG| #%letrec)
+                                          |core-lambda_-vfvcjKzA|
+                                          |e_-vd8zxBFA|
+                                          |w_-vV0vrCFA|
+                                          |s_-vfZsUCFA|)
+                                        (#%if (eqv? |first_-vZGi9FFA| #%letrec)
                                           (values
                                             (#%quote core)
-                                            |core-letrec_sEgtnktAG|
-                                            |e_sEU9M5kGG|
-                                            |w_sEA2I_kGG|
-                                            |s_sEW-FslGG|)
+                                            |core-letrec_-vBraMKzA|
+                                            |e_-vd8zxBFA|
+                                            |w_-vV0vrCFA|
+                                            |s_-vfZsUCFA|)
                                           (values
                                             (#%quote call)
                                             #f
-                                            |e_sEU9M5kGG|
-                                            |w_sEA2I_kGG|
-                                            |s_sEW-FslGG|))))))))
+                                            |e_-vd8zxBFA|
+                                            |w_-vV0vrCFA|
+                                            |s_-vfZsUCFA|))))))))
                             (values
                               (#%quote call)
                               #f
-                              |e_sEU9M5kGG|
-                              |w_sEA2I_kGG|
-                              |s_sEW-FslGG|))))
-                      (car |e_sEU9M5kGG|))
-                     (#%if (|syntax-object?_sEueTWfzG| |e_sEU9M5kGG|)
-                       (|syntax-type_sECplNtAG|
-                         (|syntax-object-expression_sEQaRngzG|
-                           |e_sEU9M5kGG|)
-                         |r_sEe6KykGG|
-                         (|join-wraps_sE-_e6hAG|
-                           |w_sEA2I_kGG|
-                           (|syntax-object-wrap_sEa7PQgzG| |e_sEU9M5kGG|))
+                              |e_-vd8zxBFA|
+                              |w_-vV0vrCFA|
+                              |s_-vfZsUCFA|))))
+                      (car |e_-vd8zxBFA|))
+                     (#%if (|syntax-object?_-vPcGmxyA| |e_-vd8zxBFA|)
+                       (|syntax-type_-vXn8dLzA|
+                         (|syntax-object-expression_-v99EPxyA|
+                           |e_-vd8zxBFA|)
+                         |r_-vz4x-BFA|
+                         (|join-wraps_-vj-1yyzA|
+                           |w_-vV0vrCFA|
+                           (|syntax-object-wrap_-vv5CgyyA| |e_-vd8zxBFA|))
                          #f
-                         |rib_sEgXDVlGG|)
-                       (#%if (annotation? |e_sEU9M5kGG|)
-                         (|syntax-type_sECplNtAG|
-                           (annotation-expression |e_sEU9M5kGG|)
-                           |r_sEe6KykGG|
-                           |w_sEA2I_kGG|
-                           (annotation-source |e_sEU9M5kGG|)
-                           |rib_sEgXDVlGG|)
-                         (#%if (not ((#%lambda (|t_sEYPzPmGG|)
-                                       (#%if |t_sEYPzPmGG|
-                                         |t_sEYPzPmGG|
-                                         ((#%lambda (|t_sEiMxgnGG|)
-                                            (#%if |t_sEiMxgnGG|
-                                              |t_sEiMxgnGG|
-                                              (#%if (null? |e_sEU9M5kGG|)
-                                                (strict-r5rs-compliance)
-                                                #f)))
-                                          (vector? |e_sEU9M5kGG|))))
-                                     (pair? |e_sEU9M5kGG|)))
-                           (values
-                             (#%quote constant)
-                             #f
-                             |e_sEU9M5kGG|
-                             |w_sEA2I_kGG|
-                             |s_sEW-FslGG|)
+                         |rib_-vBVqlDFA|)
+                       (#%if (annotation? |e_-vd8zxBFA|)
+                         (|syntax-type_-vXn8dLzA|
+                           (annotation-expression |e_-vd8zxBFA|)
+                           |r_-vz4x-BFA|
+                           |w_-vV0vrCFA|
+                           (annotation-source |e_-vd8zxBFA|)
+                           |rib_-vBVqlDFA|)
+                         (#%if ((#%lambda (|t_-vhOmfEFA|)
+                                  (#%if |t_-vhOmfEFA|
+                                    |t_-vhOmfEFA|
+                                    ((#%lambda (|t_-vDKkIEFA|)
+                                       (#%if |t_-vDKkIEFA|
+                                         |t_-vDKkIEFA|
+                                         (#%if (null? |e_-vd8zxBFA|)
+                                           (strict-r5rs-compliance)
+                                           #f)))
+                                     (vector? |e_-vd8zxBFA|))))
+                                (pair? |e_-vd8zxBFA|))
                            (values
                              (#%quote other)
                              #f
-                             |e_sEU9M5kGG|
-                             |w_sEA2I_kGG|
-                             |s_sEW-FslGG|))))))))
-             (|core-letrec_sEgtnktAG|
-               (#%lambda (|e_sEkqt8aGG|
-                          |r_sEGmrBaGG|
-                          |w_sE0jp2bGG|
-                          |s_sEmfnvbGG|)
-                 ((#%lambda (|tmp_sE28jpcGG|)
-                    (#%if |tmp_sE28jpcGG|
-                      (apply (#%lambda (|__sEK0fjdGG|
-                                        |id_sE4ZcMdGG|
-                                        |val_sEqVadeGG|
-                                        |e1_sEMR8GeGG|
-                                        |e2_sE6O67fGG|)
-                               (#%if (not (|valid-bound-ids?_sEqrWDlAG|
-                                            |id_sE4ZcMdGG|))
-                                 (|invalid-ids-error_sEQ1IOoAG|
-                                   (map (#%lambda (|x_sEchQbjGG|)
-                                          (|wrap_sEwWDIpAG|
-                                            |x_sEchQbjGG|
-                                            |w_sE0jp2bGG|))
-                                        |id_sE4ZcMdGG|)
-                                   (|source-wrap_sESSB9qAG|
-                                     |e_sEkqt8aGG|
-                                     |w_sE0jp2bGG|
-                                     |s_sEmfnvbGG|)
-                                   "bound variable")
-                                 ((#%lambda (|labels_sEOG21gGG|
-                                             |new-vars_sE8D0ugGG|)
-                                    ((#%lambda (|w_sEuz-WgGG| |r_sEQvYnhGG|)
-                                       (|build-letrec_sEoL9SbzG|
-                                         |s_sEmfnvbGG|
-                                         |new-vars_sE8D0ugGG|
-                                         (map (#%lambda (|x_sEasWQhGG|)
-                                                (|chi_sEki9xKAG|
-                                                  |x_sEasWQhGG|
-                                                  |r_sEQvYnhGG|
-                                                  |w_sEuz-WgGG|))
-                                              |val_sEqVadeGG|)
-                                         (|chi-body_sE20_NMAG|
-                                           (cons |e1_sEMR8GeGG| |e2_sE6O67fGG|)
-                                           (|source-wrap_sESSB9qAG|
-                                             |e_sEkqt8aGG|
-                                             |w_sEuz-WgGG|
-                                             |s_sEmfnvbGG|)
-                                           |r_sEQvYnhGG|
-                                           |w_sEuz-WgGG|)))
-                                     (|make-binding-wrap_sEYalLfAG|
-                                       |id_sE4ZcMdGG|
-                                       |labels_sEOG21gGG|
-                                       |w_sE0jp2bGG|)
-                                     (|extend-var-env*_sECJsRzzG|
-                                       |labels_sEOG21gGG|
-                                       |new-vars_sE8D0ugGG|
-                                       |r_sEGmrBaGG|)))
-                                  (|gen-labels_sEeix_-zG| |id_sE4ZcMdGG|)
-                                  (map |gen-var_sEScy7TAG| |id_sE4ZcMdGG|))))
-                             |tmp_sE28jpcGG|)
+                             |e_-vd8zxBFA|
+                             |w_-vV0vrCFA|
+                             |s_-vfZsUCFA|)
+                           (values
+                             (#%quote constant)
+                             #f
+                             |e_-vd8zxBFA|
+                             |w_-vV0vrCFA|
+                             |s_-vfZsUCFA|))))))))
+             (|core-letrec_-vBraMKzA|
+               (#%lambda (|e_-vFogArFA|
+                          |r_-v_ke1sFA|
+                          |w_-vlhcusFA|
+                          |s_-vHdaXsFA|)
+                 ((#%lambda (|tmp_-vn66RtFA|)
+                    (#%if |tmp_-vn66RtFA|
+                      (apply (#%lambda (|__-v3_1LuFA|
+                                        |id_-vpX_bvFA|
+                                        |val_-vLTZEvFA|
+                                        |e1_-v5QX5wFA|
+                                        |e2_-vrMVywFA|)
+                               (#%if (|valid-bound-ids?_-vLpJ3DzA|
+                                       |id_-vpX_bvFA|)
+                                 ((#%lambda (|labels_-v7FRsxFA|
+                                             |new-vars_-vtBPVxFA|)
+                                    ((#%lambda (|w_-vPxNmyFA| |r_-v9uLPyFA|)
+                                       (|build-letrec_-vJJYhtyA|
+                                         |s_-vHdaXsFA|
+                                         |new-vars_-vtBPVxFA|
+                                         (map (#%lambda (|x_-vvqJgzFA|)
+                                                (|chi_-vFgYY_zA|
+                                                  |x_-vvqJgzFA|
+                                                  |r_-v9uLPyFA|
+                                                  |w_-vPxNmyFA|))
+                                              |val_-vLTZEvFA|)
+                                         (|chi-body_-vn-Nd2AA|
+                                           (cons |e1_-v5QX5wFA| |e2_-vrMVywFA|)
+                                           (|source-wrap_-vbRoBHzA|
+                                             |e_-vFogArFA|
+                                             |w_-vPxNmyFA|
+                                             |s_-vHdaXsFA|)
+                                           |r_-v9uLPyFA|
+                                           |w_-vPxNmyFA|)))
+                                     (|make-binding-wrap_-vh98bxzA|
+                                       |id_-vpX_bvFA|
+                                       |labels_-v7FRsxFA|
+                                       |w_-vlhcusFA|)
+                                     (|extend-var-env*_-vXHfhRyA|
+                                       |labels_-v7FRsxFA|
+                                       |new-vars_-vtBPVxFA|
+                                       |r_-v_ke1sFA|)))
+                                  (|gen-labels_-vzgkrgzA| |id_-vpX_bvFA|)
+                                  (map |gen-var_-vbblz8AA| |id_-vpX_bvFA|))
+                                 (|invalid-ids-error_-v90veGzA|
+                                   (map (#%lambda (|x_-vxfDDAFA|)
+                                          (|wrap_-vRUq8HzA|
+                                            |x_-vxfDDAFA|
+                                            |w_-vlhcusFA|))
+                                        |id_-vpX_bvFA|)
+                                   (|source-wrap_-vbRoBHzA|
+                                     |e_-vFogArFA|
+                                     |w_-vlhcusFA|
+                                     |s_-vHdaXsFA|)
+                                   "bound variable")))
+                             |tmp_-vn66RtFA|)
                       (syntax-error
-                        (|source-wrap_sESSB9qAG|
-                          |e_sEkqt8aGG|
-                          |w_sE0jp2bGG|
-                          |s_sEmfnvbGG|))))
+                        (|source-wrap_-vbRoBHzA|
+                          |e_-vFogArFA|
+                          |w_-vlhcusFA|
+                          |s_-vHdaXsFA|))))
                   ($syntax-dispatch
-                    (#%annotate |e_sEkqt8aGG| value)
+                    (#%annotate |e_-vFogArFA| value)
                     (#%quote (any #2(each (any any)) any . each-any))))))
-             (|core-lambda_sEWwpTsAG|
-               (#%lambda (|e_sEU-NC5GG|
-                          |r_sEeXL36GG|
-                          |w_sEATJw6GG|
-                          |s_sEWPHZ6GG|)
-                 ((#%lambda (|tmp_sECIDT7GG|)
-                    (#%if |tmp_sECIDT7GG|
-                      (apply (#%lambda (|__sEYEBk8GG| |c_sEiBzN8GG|)
-                               (|chi-lambda-clause_sEsCMYPAG|
-                                 (|source-wrap_sESSB9qAG|
-                                   |e_sEU-NC5GG|
-                                   |w_sEATJw6GG|
-                                   |s_sEWPHZ6GG|)
-                                 |c_sEiBzN8GG|
-                                 |r_sEeXL36GG|
-                                 |w_sEATJw6GG|
-                                 (#%lambda (|vars_sEExxe9GG| |body_sE-tvH9GG|)
-                                   (#%if |s_sEWPHZ6GG|
+             (|core-lambda_-vfvcjKzA|
+               (#%lambda (|e_-vdZA2nFA|
+                          |r_-vzVyvnFA|
+                          |w_-vVRwYnFA|
+                          |s_-vfOupoFA|)
+                 ((#%lambda (|tmp_-vXGqjpFA|)
+                    (#%if |tmp_-vXGqjpFA|
+                      (apply (#%lambda (|__-vhDoMpFA| |c_-vDzmdqFA|)
+                               (|chi-lambda-clause_-vNAzo5AA|
+                                 (|source-wrap_-vbRoBHzA|
+                                   |e_-vdZA2nFA|
+                                   |w_-vVRwYnFA|
+                                   |s_-vfOupoFA|)
+                                 |c_-vDzmdqFA|
+                                 |r_-vzVyvnFA|
+                                 |w_-vVRwYnFA|
+                                 (#%lambda (|vars_-vZvkGqFA| |body_-vjsi7rFA|)
+                                   (#%if |s_-vfOupoFA|
                                      (list #%annotate
                                            (list #%lambda
-                                                 |vars_sEExxe9GG|
-                                                 |body_sE-tvH9GG|)
-                                           |s_sEWPHZ6GG|)
+                                                 |vars_-vZvkGqFA|
+                                                 |body_-vjsi7rFA|)
+                                           |s_-vfOupoFA|)
                                      (list #%lambda
-                                           |vars_sEExxe9GG|
-                                           |body_sE-tvH9GG|)))))
-                             |tmp_sECIDT7GG|)
-                      (syntax-error |e_sEU-NC5GG|)))
+                                           |vars_-vZvkGqFA|
+                                           |body_-vjsi7rFA|)))))
+                             |tmp_-vXGqjpFA|)
+                      (syntax-error |e_-vdZA2nFA|)))
                   ($syntax-dispatch
-                    (#%annotate |e_sEU-NC5GG| value)
+                    (#%annotate |e_-vdZA2nFA| value)
                     (#%quote (any . any))))))
-             (|core-if_sEAArqsAG|
-               (#%lambda (|e_sEKRgQ-FG|
-                          |r_sE4Oeh_FG|
-                          |w_sEqKcK_FG|
-                          |s_sEMGab0GG|)
-                 ((#%lambda (|tmp_sEsz651GG|)
-                    (#%if |tmp_sEsz651GG|
-                      (apply (#%lambda (|__sES9Uf4GG|
-                                        |test_sEc6SI4GG|
-                                        |then_sEy2Q95GG|)
-                               (#%if |s_sEMGab0GG|
+             (|core-if_-vVyeSJzA|
+               (#%lambda (|e_-v3Q3ggFA|
+                          |r_-vpM1JgFA|
+                          |w_-vLI_9hFA|
+                          |s_-v5FZChFA|)
+                 ((#%lambda (|tmp_-vNxVwiFA|)
+                    (#%if |tmp_-vNxVwiFA|
+                      (apply (#%lambda (|__-vb8HHlFA|
+                                        |test_-vx4F8mFA|
+                                        |then_-vT0DBmFA|)
+                               (#%if |s_-v5FZChFA|
                                  (list #%annotate
                                        (list #%if
-                                             (|chi_sEki9xKAG|
-                                               |test_sEc6SI4GG|
-                                               |r_sE4Oeh_FG|
-                                               |w_sEqKcK_FG|)
-                                             (|chi_sEki9xKAG|
-                                               |then_sEy2Q95GG|
-                                               |r_sE4Oeh_FG|
-                                               |w_sEqKcK_FG|)
-                                             (|chi-void_sE8vISQAG|))
-                                       |s_sEMGab0GG|)
+                                             (|chi_-vFgYY_zA|
+                                               |test_-vx4F8mFA|
+                                               |r_-vpM1JgFA|
+                                               |w_-vLI_9hFA|)
+                                             (|chi_-vFgYY_zA|
+                                               |then_-vT0DBmFA|
+                                               |r_-vpM1JgFA|
+                                               |w_-vLI_9hFA|)
+                                             (|chi-void_-vttvi6AA|))
+                                       |s_-v5FZChFA|)
                                  (list #%if
-                                       (|chi_sEki9xKAG|
-                                         |test_sEc6SI4GG|
-                                         |r_sE4Oeh_FG|
-                                         |w_sEqKcK_FG|)
-                                       (|chi_sEki9xKAG|
-                                         |then_sEy2Q95GG|
-                                         |r_sE4Oeh_FG|
-                                         |w_sEqKcK_FG|)
-                                       (|chi-void_sE8vISQAG|))))
-                             |tmp_sEsz651GG|)
-                      ((#%lambda (|tmp_sEOv4y1GG|)
-                         (#%if |tmp_sEOv4y1GG|
-                           (apply (#%lambda (|__sEuo0s2GG|
-                                             |test_sEQk-U2GG|
-                                             |then_sEahYl3GG|
-                                             |else_sEwdWO3GG|)
-                                    (#%if |s_sEMGab0GG|
+                                       (|chi_-vFgYY_zA|
+                                         |test_-vx4F8mFA|
+                                         |r_-vpM1JgFA|
+                                         |w_-vLI_9hFA|)
+                                       (|chi_-vFgYY_zA|
+                                         |then_-vT0DBmFA|
+                                         |r_-vpM1JgFA|
+                                         |w_-vLI_9hFA|)
+                                       (|chi-void_-vttvi6AA|))))
+                             |tmp_-vNxVwiFA|)
+                      ((#%lambda (|tmp_-v7uTZiFA|)
+                         (#%if |tmp_-v7uTZiFA|
+                           (apply (#%lambda (|__-vPmPTjFA|
+                                             |test_-v9jNkkFA|
+                                             |then_-vvfLNkFA|
+                                             |else_-vRbJelFA|)
+                                    (#%if |s_-v5FZChFA|
                                       (list #%annotate
                                             (list #%if
-                                                  (|chi_sEki9xKAG|
-                                                    |test_sEQk-U2GG|
-                                                    |r_sE4Oeh_FG|
-                                                    |w_sEqKcK_FG|)
-                                                  (|chi_sEki9xKAG|
-                                                    |then_sEahYl3GG|
-                                                    |r_sE4Oeh_FG|
-                                                    |w_sEqKcK_FG|)
-                                                  (|chi_sEki9xKAG|
-                                                    |else_sEwdWO3GG|
-                                                    |r_sE4Oeh_FG|
-                                                    |w_sEqKcK_FG|))
-                                            |s_sEMGab0GG|)
+                                                  (|chi_-vFgYY_zA|
+                                                    |test_-v9jNkkFA|
+                                                    |r_-vpM1JgFA|
+                                                    |w_-vLI_9hFA|)
+                                                  (|chi_-vFgYY_zA|
+                                                    |then_-vvfLNkFA|
+                                                    |r_-vpM1JgFA|
+                                                    |w_-vLI_9hFA|)
+                                                  (|chi_-vFgYY_zA|
+                                                    |else_-vRbJelFA|
+                                                    |r_-vpM1JgFA|
+                                                    |w_-vLI_9hFA|))
+                                            |s_-v5FZChFA|)
                                       (list #%if
-                                            (|chi_sEki9xKAG|
-                                              |test_sEQk-U2GG|
-                                              |r_sE4Oeh_FG|
-                                              |w_sEqKcK_FG|)
-                                            (|chi_sEki9xKAG|
-                                              |then_sEahYl3GG|
-                                              |r_sE4Oeh_FG|
-                                              |w_sEqKcK_FG|)
-                                            (|chi_sEki9xKAG|
-                                              |else_sEwdWO3GG|
-                                              |r_sE4Oeh_FG|
-                                              |w_sEqKcK_FG|))))
-                                  |tmp_sEOv4y1GG|)
+                                            (|chi_-vFgYY_zA|
+                                              |test_-v9jNkkFA|
+                                              |r_-vpM1JgFA|
+                                              |w_-vLI_9hFA|)
+                                            (|chi_-vFgYY_zA|
+                                              |then_-vvfLNkFA|
+                                              |r_-vpM1JgFA|
+                                              |w_-vLI_9hFA|)
+                                            (|chi_-vFgYY_zA|
+                                              |else_-vRbJelFA|
+                                              |r_-vpM1JgFA|
+                                              |w_-vLI_9hFA|))))
+                                  |tmp_-v7uTZiFA|)
                            (syntax-error
-                             (|source-wrap_sESSB9qAG|
-                               |e_sEKRgQ-FG|
-                               |w_sEqKcK_FG|
-                               |s_sEMGab0GG|))))
+                             (|source-wrap_-vbRoBHzA|
+                               |e_-v3Q3ggFA|
+                               |w_-vLI_9hFA|
+                               |s_-v5FZChFA|))))
                        ($syntax-dispatch
-                         (#%annotate |e_sEKRgQ-FG| value)
+                         (#%annotate |e_-v3Q3ggFA| value)
                          (#%quote (any any any any))))))
                   ($syntax-dispatch
-                    (#%annotate |e_sEKRgQ-FG| value)
+                    (#%annotate |e_-v3Q3ggFA| value)
                     (#%quote (any any any))))))
-             (|core-quote_sEeEtZrAG|
-               (#%lambda (|e_sEEmzLWFG|
-                          |r_sE-ixcXFG|
-                          |w_sEkfvFXFG|
-                          |s_sEGbt6YFG|)
-                 ((#%lambda (|tmp_sEm4p0ZFG|)
-                    (#%if |tmp_sEm4p0ZFG|
-                      (apply (#%lambda (|__sE2ZkWZFG| |e_sEoVin-FG|)
-                               (#%if |s_sEGbt6YFG|
+             (|core-quote_-vzCgpJzA|
+               (#%lambda (|e_-vZkmbcFA|
+                          |r_-vjhkEcFA|
+                          |w_-vFdi5dFA|
+                          |s_-v_9gydFA|)
+                 ((#%lambda (|tmp_-vH2cseFA|)
+                    (#%if |tmp_-vH2cseFA|
+                      (apply (#%lambda (|__-vnX7mfFA| |e_-vJT5PfFA|)
+                               (#%if |s_-v_9gydFA|
                                  (list #%annotate
-                                       (#%if (atom? (|strip_sEwgAGSAG|
-                                                      |e_sEoVin-FG|
-                                                      |w_sEkfvFXFG|))
-                                         (|strip_sEwgAGSAG|
-                                           |e_sEoVin-FG|
-                                           |w_sEkfvFXFG|)
+                                       (#%if (atom? (|strip_-vRen68AA|
+                                                      |e_-vJT5PfFA|
+                                                      |w_-vFdi5dFA|))
+                                         (|strip_-vRen68AA|
+                                           |e_-vJT5PfFA|
+                                           |w_-vFdi5dFA|)
                                          (list #%quote
-                                               (|strip_sEwgAGSAG|
-                                                 |e_sEoVin-FG|
-                                                 |w_sEkfvFXFG|)))
-                                       |s_sEGbt6YFG|)
-                                 (#%if (atom? (|strip_sEwgAGSAG|
-                                                |e_sEoVin-FG|
-                                                |w_sEkfvFXFG|))
-                                   (|strip_sEwgAGSAG|
-                                     |e_sEoVin-FG|
-                                     |w_sEkfvFXFG|)
+                                               (|strip_-vRen68AA|
+                                                 |e_-vJT5PfFA|
+                                                 |w_-vFdi5dFA|)))
+                                       |s_-v_9gydFA|)
+                                 (#%if (atom? (|strip_-vRen68AA|
+                                                |e_-vJT5PfFA|
+                                                |w_-vFdi5dFA|))
+                                   (|strip_-vRen68AA|
+                                     |e_-vJT5PfFA|
+                                     |w_-vFdi5dFA|)
                                    (list #%quote
-                                         (|strip_sEwgAGSAG|
-                                           |e_sEoVin-FG|
-                                           |w_sEkfvFXFG|)))))
-                             |tmp_sEm4p0ZFG|)
+                                         (|strip_-vRen68AA|
+                                           |e_-vJT5PfFA|
+                                           |w_-vFdi5dFA|)))))
+                             |tmp_-vH2cseFA|)
                       (syntax-error
-                        (|source-wrap_sESSB9qAG|
-                          |e_sEEmzLWFG|
-                          |w_sEkfvFXFG|
-                          |s_sEGbt6YFG|))))
+                        (|source-wrap_-vbRoBHzA|
+                          |e_-vZkmbcFA|
+                          |w_-vFdi5dFA|
+                          |s_-v_9gydFA|))))
                   ($syntax-dispatch
-                    (#%annotate |e_sEEmzLWFG| value)
+                    (#%annotate |e_-vZkmbcFA| value)
                     (#%quote (any any))))))
-             (|chi-when-list_sEUHvwrAG|
-               (#%lambda (|when-list_sECxFoVFG| |w_sEYtDRVFG|)
-                 (map (#%lambda (|x_sEiqBiWFG|)
-                        (#%if (|literal-id=?_sEKy-JkAG|
-                                |x_sEiqBiWFG|
+             (|chi-when-list_-vdGiYIzA|
+               (#%lambda (|when-list_-vXvsQaFA| |w_-vhsqhbFA|)
+                 (map (#%lambda (|x_-vDooKbFA|)
+                        (#%if (|literal-id=?_-v3xN9CzA|
+                                |x_-vDooKbFA|
                                 #3(syntax-object
                                    compile
                                    ((top)
@@ -6935,8 +6934,8 @@
                                         "i"))
                                     #4(ribcage (#2(import-token *top*)) ()))))
                           (#%quote compile)
-                          (#%if (|literal-id=?_sEKy-JkAG|
-                                  |x_sEiqBiWFG|
+                          (#%if (|literal-id=?_-v3xN9CzA|
+                                  |x_-vDooKbFA|
                                   #3(syntax-object
                                      load
                                      ((top)
@@ -7535,8 +7534,8 @@
                                          ()
                                          ()))))
                             (#%quote load)
-                            (#%if (|literal-id=?_sEKy-JkAG|
-                                    |x_sEiqBiWFG|
+                            (#%if (|literal-id=?_-v3xN9CzA|
+                                    |x_-vDooKbFA|
                                     #3(syntax-object
                                        visit
                                        ((top)
@@ -8135,8 +8134,8 @@
                                            ()
                                            ()))))
                               (#%quote visit)
-                              (#%if (|literal-id=?_sEKy-JkAG|
-                                      |x_sEiqBiWFG|
+                              (#%if (|literal-id=?_-v3xN9CzA|
+                                      |x_-vDooKbFA|
                                       #3(syntax-object
                                          revisit
                                          ((top)
@@ -8735,8 +8734,8 @@
                                              ()
                                              ()))))
                                 (#%quote revisit)
-                                (#%if (|literal-id=?_sEKy-JkAG|
-                                        |x_sEiqBiWFG|
+                                (#%if (|literal-id=?_-v3xN9CzA|
+                                        |x_-vDooKbFA|
                                         #3(syntax-object
                                            eval
                                            ((top)
@@ -9336,2009 +9335,2008 @@
                                                ()))))
                                   (#%quote eval)
                                   (syntax-error
-                                    (|wrap_sEwWDIpAG|
-                                      |x_sEiqBiWFG|
-                                      |w_sEYtDRVFG|)
+                                    (|wrap_-vRUq8HzA|
+                                      |x_-vDooKbFA|
+                                      |w_-vhsqhbFA|)
                                     "invalid eval-when situation")))))))
-                      |when-list_sECxFoVFG|)))
-             (|chi-top-sequence_sEyLx3rAG|
-               (#%lambda (|body_sEOk63PFG|
-                          |r_sE8h4wPFG|
-                          |w_sEud2ZPFG|
-                          |s_sEQ90qQFG|
-                          |ctem_sEa6-SQFG|
-                          |rtem_sEw2YjRFG|
-                          |ribcage_sES-VMRFG|)
-                 (|build-sequence_sE2PbpbzG|
-                   |s_sEQ90qQFG|
-                   ((#%letrec ((|dobody_sEcXTdSFG|
-                                 (#%lambda (|body_sEyTRGSFG|
-                                            |r_sEUPP7TFG|
-                                            |w_sEeMNATFG|
-                                            |ctem_sEAIL1UFG|
-                                            |rtem_sEWEJuUFG|)
-                                   (#%if (null? |body_sEyTRGSFG|)
+                      |when-list_-vXvsQaFA|)))
+             (|chi-top-sequence_-vTJkvIzA|
+               (#%lambda (|body_-v7jVu4FA|
+                          |r_-vtfTX4FA|
+                          |w_-vPbRo5FA|
+                          |s_-v98PR5FA|
+                          |ctem_-vv4Ni6FA|
+                          |rtem_-vR0LL6FA|
+                          |ribcage_-vbZIc7FA|)
+                 (|build-sequence_-vnN-QsyA|
+                   |s_-v98PR5FA|
+                   ((#%letrec ((|dobody_-vxVGF7FA|
+                                 (#%lambda (|body_-vTRE68FA|
+                                            |r_-vdOCz8FA|
+                                            |w_-vzKA09FA|
+                                            |ctem_-vVGyt9FA|
+                                            |rtem_-vfDwW9FA|)
+                                   (#%if (null? |body_-vTRE68FA|)
                                      ()
-                                     ((#%lambda (|first_sEgBHXUFG|)
-                                        (cons |first_sEgBHXUFG|
-                                              (|dobody_sEcXTdSFG|
-                                                (cdr |body_sEyTRGSFG|)
-                                                |r_sEUPP7TFG|
-                                                |w_sEeMNATFG|
-                                                |ctem_sEAIL1UFG|
-                                                |rtem_sEWEJuUFG|)))
-                                      (|chi-top_sEiihHuAG|
-                                        (car |body_sEyTRGSFG|)
-                                        |r_sEUPP7TFG|
-                                        |w_sEeMNATFG|
-                                        |ctem_sEAIL1UFG|
-                                        |rtem_sEWEJuUFG|
-                                        |ribcage_sES-VMRFG|))))))
-                      |dobody_sEcXTdSFG|)
-                    |body_sEOk63PFG|
-                    |r_sE8h4wPFG|
-                    |w_sEud2ZPFG|
-                    |ctem_sEa6-SQFG|
-                    |rtem_sEw2YjRFG|))))
-             (|chi-sequence_sEcPzCqAG|
-               (#%lambda (|body_sEIRo-KFG|
-                          |r_sE2OmrLFG|
-                          |w_sEoKkULFG|
-                          |s_sEKGilMFG|)
-                 (|build-sequence_sE2PbpbzG|
-                   |s_sEKGilMFG|
-                   ((#%letrec ((|dobody_sE4DgOMFG|
-                                 (#%lambda (|body_sEqzefNFG|
-                                            |r_sEMvcINFG|
-                                            |w_sE6sa9OFG|)
-                                   (#%if (null? |body_sEqzefNFG|)
+                                     ((#%lambda (|first_-vBzunaFA|)
+                                        (cons |first_-vBzunaFA|
+                                              (|dobody_-vxVGF7FA|
+                                                (cdr |body_-vTRE68FA|)
+                                                |r_-vdOCz8FA|
+                                                |w_-vzKA09FA|
+                                                |ctem_-vVGyt9FA|
+                                                |rtem_-vfDwW9FA|)))
+                                      (|chi-top_-vDg47MzA|
+                                        (car |body_-vTRE68FA|)
+                                        |r_-vdOCz8FA|
+                                        |w_-vzKA09FA|
+                                        |ctem_-vVGyt9FA|
+                                        |rtem_-vfDwW9FA|
+                                        |ribcage_-vbZIc7FA|))))))
+                      |dobody_-vxVGF7FA|)
+                    |body_-v7jVu4FA|
+                    |r_-vtfTX4FA|
+                    |w_-vPbRo5FA|
+                    |ctem_-vv4Ni6FA|
+                    |rtem_-vR0LL6FA|))))
+             (|chi-sequence_-vxNm2IzA|
+               (#%lambda (|body_-v1Qbq0FA|
+                          |r_-vnM9T0FA|
+                          |w_-vJI7k1FA|
+                          |s_-v3F5N1FA|)
+                 (|build-sequence_-vnN-QsyA|
+                   |s_-v3F5N1FA|
+                   ((#%letrec ((|dobody_-vpB3e2FA|
+                                 (#%lambda (|body_-vLx1H2FA|
+                                            |r_-v5u_73FA|
+                                            |w_-vrqZA3FA|)
+                                   (#%if (null? |body_-vLx1H2FA|)
                                      ()
-                                     ((#%lambda (|first_sEso8COFG|)
-                                        (cons |first_sEso8COFG|
-                                              (|dobody_sE4DgOMFG|
-                                                (cdr |body_sEqzefNFG|)
-                                                |r_sEMvcINFG|
-                                                |w_sE6sa9OFG|)))
-                                      (|chi_sEki9xKAG|
-                                        (car |body_sEqzefNFG|)
-                                        |r_sEMvcINFG|
-                                        |w_sE6sa9OFG|))))))
-                      |dobody_sE4DgOMFG|)
-                    |body_sEIRo-KFG|
-                    |r_sE2OmrLFG|
-                    |w_sEoKkULFG|))))
-             (|source-wrap_sESSB9qAG|
-               (#%lambda (|x_sEG0vDJFG| |w_sE0Zs4KFG| |s_sEmVqxKFG|)
-                 (|wrap_sEwWDIpAG|
-                   (#%if |s_sEmVqxKFG|
-                     (make-annotation |x_sEG0vDJFG| |s_sEmVqxKFG| #f)
-                     |x_sEG0vDJFG|)
-                   |w_sE0Zs4KFG|)))
-             (|wrap_sEwWDIpAG|
-               (#%lambda (|x_sE-7zJIFG| |w_sEk4xaJFG|)
-                 (#%if (#%if (null? (|wrap-marks_sEQwNlJzG| |w_sEk4xaJFG|))
-                         (null? (|wrap-subst_sEatLOJzG| |w_sEk4xaJFG|))
+                                     ((#%lambda (|first_-vNmX14FA|)
+                                        (cons |first_-vNmX14FA|
+                                              (|dobody_-vpB3e2FA|
+                                                (cdr |body_-vLx1H2FA|)
+                                                |r_-v5u_73FA|
+                                                |w_-vrqZA3FA|)))
+                                      (|chi_-vFgYY_zA|
+                                        (car |body_-vLx1H2FA|)
+                                        |r_-v5u_73FA|
+                                        |w_-vrqZA3FA|))))))
+                      |dobody_-vpB3e2FA|)
+                    |body_-v1Qbq0FA|
+                    |r_-vnM9T0FA|
+                    |w_-vJI7k1FA|))))
+             (|source-wrap_-vbRoBHzA|
+               (#%lambda (|x_-v_-h3_EA| |w_-vlXfw_EA| |s_-vHTdZ_EA|)
+                 (|wrap_-vRUq8HzA|
+                   (#%if |s_-vHTdZ_EA|
+                     (make-annotation |x_-v_-h3_EA| |s_-vHTdZ_EA| #f)
+                     |x_-v_-h3_EA|)
+                   |w_-vlXfw_EA|)))
+             (|wrap_-vRUq8HzA|
+               (#%lambda (|x_-vj6m9-EA| |w_-vF2kC-EA|)
+                 (#%if (#%if (null? (|wrap-marks_-v9vAN-yA| |w_-vF2kC-EA|))
+                         (null? (|wrap-subst_-vvrye_yA| |w_-vF2kC-EA|))
                          #f)
-                   |x_sE-7zJIFG|
-                   (#%if (|syntax-object?_sEueTWfzG| |x_sE-7zJIFG|)
-                     (|make-syntax-object_sE8iVtfzG|
-                       (|syntax-object-expression_sEQaRngzG|
-                         |x_sE-7zJIFG|)
-                       (|join-wraps_sE-_e6hAG|
-                         |w_sEk4xaJFG|
-                         (|syntax-object-wrap_sEa7PQgzG| |x_sE-7zJIFG|)))
-                     (#%if (null? |x_sE-7zJIFG|)
-                       |x_sE-7zJIFG|
-                       (|make-syntax-object_sE8iVtfzG|
-                         |x_sE-7zJIFG|
-                         |w_sEk4xaJFG|))))))
-             (|bound-id-member?_sEa-FfpAG|
-               (#%lambda (|x_sEYiFmHFG| |list_sEifDPHFG|)
-                 (#%if (not (null? |list_sEifDPHFG|))
-                   ((#%lambda (|t_sEEbBgIFG|)
-                      (#%if |t_sEEbBgIFG|
-                        |t_sEEbBgIFG|
-                        (|bound-id-member?_sEa-FfpAG|
-                          |x_sEYiFmHFG|
-                          (cdr |list_sEifDPHFG|))))
-                    (|bound-id=?_sE4vYalAG|
-                      |x_sEYiFmHFG|
-                      (car |list_sEifDPHFG|)))
-                   #f)))
-             (|invalid-ids-error_sEQ1IOoAG|
-               (#%lambda (|ids_sEUEREEFG|
-                          |exp_sEeBP5FFG|
-                          |class_sEAxNyFFG|)
-                 ((#%letrec ((|find_sEWtL_FFG|
-                               (#%lambda (|ids_sEgqJsGFG| |gooduns_sECmHVGFG|)
-                                 (#%if (null? |ids_sEgqJsGFG|)
-                                   (syntax-error |exp_sEeBP5FFG|)
-                                   (#%if (|id?_sE4-1KFzG|
-                                           (car |ids_sEgqJsGFG|))
-                                     (#%if (|bound-id-member?_sEa-FfpAG|
-                                             (car |ids_sEgqJsGFG|)
-                                             |gooduns_sECmHVGFG|)
+                   |x_-vj6m9-EA|
+                   (#%if (|syntax-object?_-vPcGmxyA| |x_-vj6m9-EA|)
+                     (|make-syntax-object_-vtgIVwyA|
+                       (|syntax-object-expression_-v99EPxyA|
+                         |x_-vj6m9-EA|)
+                       (|join-wraps_-vj-1yyzA|
+                         |w_-vF2kC-EA|
+                         (|syntax-object-wrap_-vv5CgyyA| |x_-vj6m9-EA|)))
+                     (#%if (null? |x_-vj6m9-EA|)
+                       |x_-vj6m9-EA|
+                       (|make-syntax-object_-vtgIVwyA|
+                         |x_-vj6m9-EA|
+                         |w_-vF2kC-EA|))))))
+             (|bound-id-member?_-vvYsHGzA|
+               (#%lambda (|x_-vhhsOYEA| |list_-vDdqfZEA|)
+                 (#%if (null? |list_-vDdqfZEA|)
+                   #f
+                   ((#%lambda (|t_-vZ9oIZEA|)
+                      (#%if |t_-vZ9oIZEA|
+                        |t_-vZ9oIZEA|
+                        (|bound-id-member?_-vvYsHGzA|
+                          |x_-vhhsOYEA|
+                          (cdr |list_-vDdqfZEA|))))
+                    (|bound-id=?_-vptLCCzA|
+                      |x_-vhhsOYEA|
+                      (car |list_-vDdqfZEA|))))))
+             (|invalid-ids-error_-v90veGzA|
+               (#%lambda (|ids_-vdDE4WEA|
+                          |exp_-vzzCxWEA|
+                          |class_-vVvA-WEA|)
+                 ((#%letrec ((|find_-vfsyrXEA|
+                               (#%lambda (|ids_-vBowUXEA| |gooduns_-vXkulYEA|)
+                                 (#%if (null? |ids_-vBowUXEA|)
+                                   (syntax-error |exp_-vzzCxWEA|)
+                                   (#%if (|id?_-vpYQ9XyA|
+                                           (car |ids_-vBowUXEA|))
+                                     (#%if (|bound-id-member?_-vvYsHGzA|
+                                             (car |ids_-vBowUXEA|)
+                                             |gooduns_-vXkulYEA|)
                                        (syntax-error
-                                         (car |ids_sEgqJsGFG|)
+                                         (car |ids_-vBowUXEA|)
                                          "duplicate "
-                                         |class_sEAxNyFFG|)
-                                       (|find_sEWtL_FFG|
-                                         (cdr |ids_sEgqJsGFG|)
-                                         (cons (car |ids_sEgqJsGFG|)
-                                               |gooduns_sECmHVGFG|)))
+                                         |class_-vVvA-WEA|)
+                                       (|find_-vfsyrXEA|
+                                         (cdr |ids_-vBowUXEA|)
+                                         (cons (car |ids_-vBowUXEA|)
+                                               |gooduns_-vXkulYEA|)))
                                      (syntax-error
-                                       (car |ids_sEgqJsGFG|)
+                                       (car |ids_-vBowUXEA|)
                                        "invalid "
-                                       |class_sEAxNyFFG|))))))
-                    |find_sEWtL_FFG|)
-                  |ids_sEUEREEFG|
+                                       |class_-vVvA-WEA|))))))
+                    |find_-vfsyrXEA|)
+                  |ids_-vdDE4WEA|
                   ())))
-             (|distinct-bound-ids?_sEu5KloAG|
-               (#%lambda (|ids_sEwTZQCFG|)
-                 ((#%letrec ((|distinct?_sESPXhDFG|
-                               (#%lambda (|ids_sEcMVKDFG|)
-                                 ((#%lambda (|t_sEyITbEFG|)
-                                    (#%if |t_sEyITbEFG|
-                                      |t_sEyITbEFG|
-                                      (#%if (not (|bound-id-member?_sEa-FfpAG|
-                                                   (car |ids_sEcMVKDFG|)
-                                                   (cdr |ids_sEcMVKDFG|)))
-                                        (|distinct?_sESPXhDFG|
-                                          (cdr |ids_sEcMVKDFG|))
-                                        #f)))
-                                  (null? |ids_sEcMVKDFG|)))))
-                    |distinct?_sESPXhDFG|)
-                  |ids_sEwTZQCFG|)))
-             (|valid-bound-ids?_sEqrWDlAG|
-               (#%lambda (|ids_sE8661BFG|)
-                 (#%if ((#%letrec ((|all-ids?_sEu24uBFG|
-                                     (#%lambda (|ids_sEQ-1XBFG|)
-                                       ((#%lambda (|t_sEaX_nCFG|)
-                                          (#%if |t_sEaX_nCFG|
-                                            |t_sEaX_nCFG|
-                                            (#%if (|id?_sE4-1KFzG|
-                                                    (car |ids_sEQ-1XBFG|))
-                                              (|all-ids?_sEu24uBFG|
-                                                (cdr |ids_sEQ-1XBFG|))
+             (|distinct-bound-ids?_-vP3xNFzA|
+               (#%lambda (|ids_-vRRMgUEA|)
+                 ((#%letrec ((|distinct?_-vbOKJUEA|
+                               (#%lambda (|ids_-vxKIaVEA|)
+                                 ((#%lambda (|t_-vTGGDVEA|)
+                                    (#%if |t_-vTGGDVEA|
+                                      |t_-vTGGDVEA|
+                                      (#%if (|bound-id-member?_-vvYsHGzA|
+                                              (car |ids_-vxKIaVEA|)
+                                              (cdr |ids_-vxKIaVEA|))
+                                        #f
+                                        (|distinct?_-vbOKJUEA|
+                                          (cdr |ids_-vxKIaVEA|)))))
+                                  (null? |ids_-vxKIaVEA|)))))
+                    |distinct?_-vbOKJUEA|)
+                  |ids_-vRRMgUEA|)))
+             (|valid-bound-ids?_-vLpJ3DzA|
+               (#%lambda (|ids_-vt4VsSEA|)
+                 (#%if ((#%letrec ((|all-ids?_-vP0TVSEA|
+                                     (#%lambda (|ids_-v9ZQmTEA|)
+                                       ((#%lambda (|t_-vvVOPTEA|)
+                                          (#%if |t_-vvVOPTEA|
+                                            |t_-vvVOPTEA|
+                                            (#%if (|id?_-vpYQ9XyA|
+                                                    (car |ids_-v9ZQmTEA|))
+                                              (|all-ids?_-vP0TVSEA|
+                                                (cdr |ids_-v9ZQmTEA|))
                                               #f)))
-                                        (null? |ids_sEQ-1XBFG|)))))
-                          |all-ids?_sEu24uBFG|)
-                        |ids_sE8661BFG|)
-                   (|distinct-bound-ids?_sEu5KloAG| |ids_sE8661BFG|)
+                                        (null? |ids_-v9ZQmTEA|)))))
+                          |all-ids?_-vP0TVSEA|)
+                        |ids_-vt4VsSEA|)
+                   (|distinct-bound-ids?_-vP3xNFzA| |ids_-vt4VsSEA|)
                    #f)))
-             (|bound-id=?_sE4vYalAG|
-               (#%lambda (|i_sE4sijyFG| |j_sEqogMyFG|)
-                 (#%if (#%if (|syntax-object?_sEueTWfzG| |i_sE4sijyFG|)
-                         (|syntax-object?_sEueTWfzG| |j_sEqogMyFG|)
+             (|bound-id=?_-vptLCCzA|
+               (#%lambda (|i_-vpq5LPEA| |j_-vLm3cQEA|)
+                 (#%if (#%if (|syntax-object?_-vPcGmxyA| |i_-vpq5LPEA|)
+                         (|syntax-object?_-vPcGmxyA| |j_-vLm3cQEA|)
                          #f)
-                   (#%if (eq? ((#%lambda (|e_sEsda7AFG|)
-                                 (#%if (annotation? |e_sEsda7AFG|)
-                                   (annotation-expression |e_sEsda7AFG|)
-                                   |e_sEsda7AFG|))
-                               (|syntax-object-expression_sEQaRngzG|
-                                 |i_sE4sijyFG|))
-                              ((#%lambda (|e_sEO98AAFG|)
-                                 (#%if (annotation? |e_sEO98AAFG|)
-                                   (annotation-expression |e_sEO98AAFG|)
-                                   |e_sEO98AAFG|))
-                               (|syntax-object-expression_sEQaRngzG|
-                                 |j_sEqogMyFG|)))
-                     (|same-marks?_sEGUa0iAG|
-                       (|wrap-marks_sEQwNlJzG|
-                         (|syntax-object-wrap_sEa7PQgzG| |i_sE4sijyFG|))
-                       (|wrap-marks_sEQwNlJzG|
-                         (|syntax-object-wrap_sEa7PQgzG| |j_sEqogMyFG|)))
+                   (#%if (eq? ((#%lambda (|e_-vNbZyREA|)
+                                 (#%if (annotation? |e_-vNbZyREA|)
+                                   (annotation-expression |e_-vNbZyREA|)
+                                   |e_-vNbZyREA|))
+                               (|syntax-object-expression_-v99EPxyA|
+                                 |i_-vpq5LPEA|))
+                              ((#%lambda (|e_-v78X_REA|)
+                                 (#%if (annotation? |e_-v78X_REA|)
+                                   (annotation-expression |e_-v78X_REA|)
+                                   |e_-v78X_REA|))
+                               (|syntax-object-expression_-v99EPxyA|
+                                 |j_-vLm3cQEA|)))
+                     (|same-marks?_-v_SZrzzA|
+                       (|wrap-marks_-v9vAN-yA|
+                         (|syntax-object-wrap_-vv5CgyyA| |i_-vpq5LPEA|))
+                       (|wrap-marks_-v9vAN-yA|
+                         (|syntax-object-wrap_-vv5CgyyA| |j_-vLm3cQEA|)))
                      #f)
-                   (eq? (#%if (annotation? |i_sE4sijyFG|)
-                          (annotation-expression |i_sE4sijyFG|)
-                          |i_sE4sijyFG|)
-                        (#%if (annotation? |j_sEqogMyFG|)
-                          (annotation-expression |j_sEqogMyFG|)
-                          |j_sEqogMyFG|)))))
-             (|literal-id=?_sEKy-JkAG|
-               (#%lambda (|id_sEi4FktFG| |literal_sEE0DNtFG|)
-                 (#%if (eq? ((#%lambda (|e_sE2DoYwFG|)
-                               (#%if (annotation? |e_sE2DoYwFG|)
-                                 (annotation-expression |e_sE2DoYwFG|)
-                                 |e_sE2DoYwFG|))
-                             (#%if (|syntax-object?_sEueTWfzG| |id_sEi4FktFG|)
-                               (|syntax-object-expression_sEQaRngzG|
-                                 |id_sEi4FktFG|)
-                               |id_sEi4FktFG|))
-                            ((#%lambda (|e_sEKvkSxFG|)
-                               (#%if (annotation? |e_sEKvkSxFG|)
-                                 (annotation-expression |e_sEKvkSxFG|)
-                                 |e_sEKvkSxFG|))
-                             (#%if (|syntax-object?_sEueTWfzG|
-                                     |literal_sEE0DNtFG|)
-                               (|syntax-object-expression_sEQaRngzG|
-                                 |literal_sEE0DNtFG|)
-                               |literal_sEE0DNtFG|)))
-                   ((#%lambda (|n-id_sE-YAeuFG| |n-literal_sEkVyHuFG|)
-                      ((#%lambda (|t_sEGRw8vFG|)
-                         (#%if |t_sEGRw8vFG|
-                           |t_sEGRw8vFG|
-                           (#%if ((#%lambda (|t_sEmKs2wFG|)
-                                    (#%if |t_sEmKs2wFG|
-                                      |t_sEmKs2wFG|
-                                      (symbol? |n-id_sE-YAeuFG|)))
-                                  (not |n-id_sE-YAeuFG|))
-                             ((#%lambda (|t_sE0OuBvFG|)
-                                (#%if |t_sE0OuBvFG|
-                                  |t_sE0OuBvFG|
-                                  (symbol? |n-literal_sEkVyHuFG|)))
-                              (not |n-literal_sEkVyHuFG|))
+                   (eq? (#%if (annotation? |i_-vpq5LPEA|)
+                          (annotation-expression |i_-vpq5LPEA|)
+                          |i_-vpq5LPEA|)
+                        (#%if (annotation? |j_-vLm3cQEA|)
+                          (annotation-expression |j_-vLm3cQEA|)
+                          |j_-vLm3cQEA|)))))
+             (|literal-id=?_-v3xN9CzA|
+               (#%lambda (|id_-vD2sMKEA| |literal_-vZ-pdLEA|)
+                 (#%if (eq? ((#%lambda (|e_-vnBboOEA|)
+                               (#%if (annotation? |e_-vnBboOEA|)
+                                 (annotation-expression |e_-vnBboOEA|)
+                                 |e_-vnBboOEA|))
+                             (#%if (|syntax-object?_-vPcGmxyA| |id_-vD2sMKEA|)
+                               (|syntax-object-expression_-v99EPxyA|
+                                 |id_-vD2sMKEA|)
+                               |id_-vD2sMKEA|))
+                            ((#%lambda (|e_-v3u7iPEA|)
+                               (#%if (annotation? |e_-v3u7iPEA|)
+                                 (annotation-expression |e_-v3u7iPEA|)
+                                 |e_-v3u7iPEA|))
+                             (#%if (|syntax-object?_-vPcGmxyA|
+                                     |literal_-vZ-pdLEA|)
+                               (|syntax-object-expression_-v99EPxyA|
+                                 |literal_-vZ-pdLEA|)
+                               |literal_-vZ-pdLEA|)))
+                   ((#%lambda (|n-id_-vjXnGLEA| |n-literal_-vFTl7MEA|)
+                      ((#%lambda (|t_-v_PjAMEA|)
+                         (#%if |t_-v_PjAMEA|
+                           |t_-v_PjAMEA|
+                           (#%if ((#%lambda (|t_-vHIfuNEA|)
+                                    (#%if |t_-vHIfuNEA|
+                                      |t_-vHIfuNEA|
+                                      (symbol? |n-id_-vjXnGLEA|)))
+                                  (#%if |n-id_-vjXnGLEA| #f #t))
+                             ((#%lambda (|t_-vlMh1NEA|)
+                                (#%if |t_-vlMh1NEA|
+                                  |t_-vlMh1NEA|
+                                  (symbol? |n-literal_-vFTl7MEA|)))
+                              (#%if |n-literal_-vFTl7MEA| #f #t))
                              #f)))
-                       (eq? |n-id_sE-YAeuFG| |n-literal_sEkVyHuFG|)))
-                    (|id-var-name_sE2G2QjAG|
-                      |id_sEi4FktFG|
+                       (eq? |n-id_-vjXnGLEA| |n-literal_-vFTl7MEA|)))
+                    (|id-var-name_-vnERfBzA|
+                      |id_-vD2sMKEA|
                       (#%quote (())))
-                    (|id-var-name_sE2G2QjAG|
-                      |literal_sEE0DNtFG|
+                    (|id-var-name_-vnERfBzA|
+                      |literal_-vZ-pdLEA|
                       (#%quote (()))))
                    #f)))
-             (|free-id=?_sEoC0hkAG|
-               (#%lambda (|i_sEeqRCqFG| |j_sEAmP3rFG|)
-                 (#%if (eq? ((#%lambda (|e_sEgfLZrFG|)
-                               (#%if (annotation? |e_sEgfLZrFG|)
-                                 (annotation-expression |e_sEgfLZrFG|)
-                                 |e_sEgfLZrFG|))
-                             (#%if (|syntax-object?_sEueTWfzG| |i_sEeqRCqFG|)
-                               (|syntax-object-expression_sEQaRngzG|
-                                 |i_sEeqRCqFG|)
-                               |i_sEeqRCqFG|))
-                            ((#%lambda (|e_sEY7HTsFG|)
-                               (#%if (annotation? |e_sEY7HTsFG|)
-                                 (annotation-expression |e_sEY7HTsFG|)
-                                 |e_sEY7HTsFG|))
-                             (#%if (|syntax-object?_sEueTWfzG| |j_sEAmP3rFG|)
-                               (|syntax-object-expression_sEQaRngzG|
-                                 |j_sEAmP3rFG|)
-                               |j_sEAmP3rFG|)))
-                   (eq? (|id-var-name_sE2G2QjAG|
-                          |i_sEeqRCqFG|
+             (|free-id=?_-vJAPIBzA|
+               (#%lambda (|i_-vzoE2IEA| |j_-vVkCvIEA|)
+                 (#%if (eq? ((#%lambda (|e_-vBdypJEA|)
+                               (#%if (annotation? |e_-vBdypJEA|)
+                                 (annotation-expression |e_-vBdypJEA|)
+                                 |e_-vBdypJEA|))
+                             (#%if (|syntax-object?_-vPcGmxyA| |i_-vzoE2IEA|)
+                               (|syntax-object-expression_-v99EPxyA|
+                                 |i_-vzoE2IEA|)
+                               |i_-vzoE2IEA|))
+                            ((#%lambda (|e_-vh6ujKEA|)
+                               (#%if (annotation? |e_-vh6ujKEA|)
+                                 (annotation-expression |e_-vh6ujKEA|)
+                                 |e_-vh6ujKEA|))
+                             (#%if (|syntax-object?_-vPcGmxyA| |j_-vVkCvIEA|)
+                               (|syntax-object-expression_-v99EPxyA|
+                                 |j_-vVkCvIEA|)
+                               |j_-vVkCvIEA|)))
+                   (eq? (|id-var-name_-vnERfBzA|
+                          |i_-vzoE2IEA|
                           (#%quote (())))
-                        (|id-var-name_sE2G2QjAG|
-                          |j_sEAmP3rFG|
+                        (|id-var-name_-vnERfBzA|
+                          |j_-vVkCvIEA|
                           (#%quote (()))))
                    #f)))
-             (|id-var-name_sE2G2QjAG|
-               (#%lambda (|id_sESEZOoFG| |w_sEcBXfpFG|)
+             (|id-var-name_-vnERfBzA|
+               (#%lambda (|id_-vbDMeGEA| |w_-vxzKHGEA|)
                  (call-with-values
                    (#%lambda ()
-                     (|id-var-name-loc&marks_sE0R8tiAG|
-                       |id_sESEZOoFG|
-                       |w_sEcBXfpFG|))
-                   (#%lambda (|label_sEyxVIpFG| |marks_sEUtT9qFG|)
-                     (#%if (|indirect-label?_sEuLNnXzG| |label_sEyxVIpFG|)
-                       (|get-indirect-label_sESwFbZzG|
-                         |label_sEyxVIpFG|)
-                       |label_sEyxVIpFG|)))))
-             (|id-var-name-loc_sEIJ4njAG|
-               (#%lambda (|id_sEuT5_mFG| |w_sEQP3snFG|)
+                     (|id-var-name-loc&marks_-vlPXUzzA|
+                       |id_-vbDMeGEA|
+                       |w_-vxzKHGEA|))
+                   (#%lambda (|label_-vTvI8HEA| |marks_-vdsGBHEA|)
+                     (#%if (|indirect-label?_-vPJAPczA| |label_-vTvI8HEA|)
+                       (|get-indirect-label_-vbvsDezA|
+                         |label_-vTvI8HEA|)
+                       |label_-vTvI8HEA|)))))
+             (|id-var-name-loc_-v1ITOAzA|
+               (#%lambda (|id_-vPRUqEEA| |w_-v9OSTEEA|)
                  (call-with-values
                    (#%lambda ()
-                     (|id-var-name-loc&marks_sE0R8tiAG|
-                       |id_sEuT5_mFG|
-                       |w_sEQP3snFG|))
-                   (#%lambda (|label_sEaM1VnFG| |marks_sEwI_loFG|)
-                     |label_sEaM1VnFG|))))
-             (|id-var-name&marks_sEmN6WiAG|
-               (#%lambda (|id_sE66eblFG| |w_sEs2cElFG|)
+                     (|id-var-name-loc&marks_-vlPXUzzA|
+                       |id_-vPRUqEEA|
+                       |w_-v9OSTEEA|))
+                   (#%lambda (|label_-vvKQkFEA| |marks_-vRGONFEA|)
+                     |label_-vvKQkFEA|))))
+             (|id-var-name&marks_-vHLVlAzA|
+               (#%lambda (|id_-vr41DCEA| |w_-vN0_3DEA|)
                  (call-with-values
                    (#%lambda ()
-                     (|id-var-name-loc&marks_sE0R8tiAG|
-                       |id_sE66eblFG|
-                       |w_sEs2cElFG|))
-                   (#%lambda (|label_sEO-95mFG| |marks_sE8X7ymFG|)
+                     (|id-var-name-loc&marks_-vlPXUzzA|
+                       |id_-vr41DCEA|
+                       |w_-vN0_3DEA|))
+                   (#%lambda (|label_-v7ZYwDEA| |marks_-vtVWZDEA|)
                      (values
-                       (#%if (|indirect-label?_sEuLNnXzG| |label_sEO-95mFG|)
-                         (|get-indirect-label_sESwFbZzG|
-                           |label_sEO-95mFG|)
-                         |label_sEO-95mFG|)
-                       |marks_sE8X7ymFG|)))))
-             (|id-var-name-loc&marks_sE0R8tiAG|
-               (#%lambda (|id_sE46ml5FG| |w_sEq2kO5FG|)
-                 (#%letrec ((|search_sEM-hf6FG|
-                              (#%lambda (|sym_sEcqZMaFG|
-                                         |subst_sEymXdbFG|
-                                         |marks_sEUiVGbFG|)
-                                (#%if (null? |subst_sEymXdbFG|)
-                                  (values |sym_sEcqZMaFG| |marks_sEUiVGbFG|)
-                                  ((#%lambda (|fst_sEefT7cFG|)
-                                     (#%if (eq? |fst_sEefT7cFG|
+                       (#%if (|indirect-label?_-vPJAPczA| |label_-v7ZYwDEA|)
+                         (|get-indirect-label_-vbvsDezA|
+                           |label_-v7ZYwDEA|)
+                         |label_-v7ZYwDEA|)
+                       |marks_-vtVWZDEA|)))))
+             (|id-var-name-loc&marks_-vlPXUzzA|
+               (#%lambda (|id_-vp49NmEA| |w_-vL07enEA|)
+                 (#%letrec ((|search_-v5Z4HnEA|
+                              (#%lambda (|sym_-vxoMcsEA|
+                                         |subst_-vTkKFsEA|
+                                         |marks_-vdhI6tEA|)
+                                (#%if (null? |subst_-vTkKFsEA|)
+                                  (values |sym_-vxoMcsEA| |marks_-vdhI6tEA|)
+                                  ((#%lambda (|fst_-vzdGztEA|)
+                                     (#%if (eq? |fst_-vzdGztEA|
                                                 (#%quote shift))
-                                       (|search_sEM-hf6FG|
-                                         |sym_sEcqZMaFG|
-                                         (cdr |subst_sEymXdbFG|)
-                                         (cdr |marks_sEUiVGbFG|))
-                                       ((#%lambda (|symnames_sEAbRAcFG|)
-                                          (#%if (vector? |symnames_sEAbRAcFG|)
-                                            (|search-vector-rib_sEsTd97FG|
-                                              |sym_sEcqZMaFG|
-                                              |subst_sEymXdbFG|
-                                              |marks_sEUiVGbFG|
-                                              |symnames_sEAbRAcFG|
-                                              |fst_sEefT7cFG|)
-                                            (|search-list-rib_sE6XfI6FG|
-                                              |sym_sEcqZMaFG|
-                                              |subst_sEymXdbFG|
-                                              |marks_sEUiVGbFG|
-                                              |symnames_sEAbRAcFG|
-                                              |fst_sEefT7cFG|)))
-                                        (|ribcage-symnames_sEg7rm0AG|
-                                          |fst_sEefT7cFG|))))
-                                   (car |subst_sEymXdbFG|)))))
-                            (|search-list-rib_sE6XfI6FG|
-                              (#%lambda (|sym_sEW7P1dFG|
-                                         |subst_sEg4NudFG|
-                                         |marks_sEC0LXdFG|
-                                         |symnames_sEYYIoeFG|
-                                         |ribcage_sEiVGReFG|)
-                                ((#%letrec ((|f_sEEREifFG|
-                                              (#%lambda (|symnames_sE-NCLfFG|
-                                                         |i_sEkKAcgFG|)
-                                                (#%if (null? |symnames_sE-NCLfFG|)
-                                                  (|search_sEM-hf6FG|
-                                                    |sym_sEW7P1dFG|
-                                                    (cdr |subst_sEg4NudFG|)
-                                                    |marks_sEC0LXdFG|)
-                                                  (#%if (#%if (eq? (car |symnames_sE-NCLfFG|)
-                                                                   |sym_sEW7P1dFG|)
-                                                          (|same-marks?_sEGUa0iAG|
-                                                            |marks_sEC0LXdFG|
+                                       (|search_-v5Z4HnEA|
+                                         |sym_-vxoMcsEA|
+                                         (cdr |subst_-vTkKFsEA|)
+                                         (cdr |marks_-vdhI6tEA|))
+                                       ((#%lambda (|symnames_-vV9E0uEA|)
+                                          (#%if (vector? |symnames_-vV9E0uEA|)
+                                            (|search-vector-rib_-vNR0BoEA|
+                                              |sym_-vxoMcsEA|
+                                              |subst_-vTkKFsEA|
+                                              |marks_-vdhI6tEA|
+                                              |symnames_-vV9E0uEA|
+                                              |fst_-vzdGztEA|)
+                                            (|search-list-rib_-vrV28oEA|
+                                              |sym_-vxoMcsEA|
+                                              |subst_-vTkKFsEA|
+                                              |marks_-vdhI6tEA|
+                                              |symnames_-vV9E0uEA|
+                                              |fst_-vzdGztEA|)))
+                                        (|ribcage-symnames_-vB5eOhzA|
+                                          |fst_-vzdGztEA|))))
+                                   (car |subst_-vTkKFsEA|)))))
+                            (|search-list-rib_-vrV28oEA|
+                              (#%lambda (|sym_-vf6CtuEA|
+                                         |subst_-vB2AWuEA|
+                                         |marks_-vX-xnvEA|
+                                         |symnames_-vhXvQvEA|
+                                         |ribcage_-vDTthwEA|)
+                                ((#%letrec ((|f_-vZPrKwEA|
+                                              (#%lambda (|symnames_-vjMpbxEA|
+                                                         |i_-vFInExEA|)
+                                                (#%if (null? |symnames_-vjMpbxEA|)
+                                                  (|search_-v5Z4HnEA|
+                                                    |sym_-vf6CtuEA|
+                                                    (cdr |subst_-vB2AWuEA|)
+                                                    |marks_-vX-xnvEA|)
+                                                  (#%if (#%if (eq? (car |symnames_-vjMpbxEA|)
+                                                                   |sym_-vf6CtuEA|)
+                                                          (|same-marks?_-v_SZrzzA|
+                                                            |marks_-vX-xnvEA|
                                                             (list-ref
-                                                              (|ribcage-marks_sEC3pP0AG|
-                                                                |ribcage_sEiVGReFG|)
-                                                              |i_sEkKAcgFG|))
+                                                              (|ribcage-marks_-vX1cfizA|
+                                                                |ribcage_-vDTthwEA|)
+                                                              |i_-vFInExEA|))
                                                           #f)
                                                     (values
                                                       (list-ref
-                                                        (|ribcage-labels_sEY_mg1AG|
-                                                          |ribcage_sEiVGReFG|)
-                                                        |i_sEkKAcgFG|)
-                                                      |marks_sEC0LXdFG|)
-                                                    (#%if (|import-token?_sEQSJjaAG|
-                                                            (car |symnames_sE-NCLfFG|))
-                                                      ((#%lambda (|t_sEGGyFgFG|)
-                                                         (#%if |t_sEGGyFgFG|
+                                                        (|ribcage-labels_-vh-9IizA|
+                                                          |ribcage_-vDTthwEA|)
+                                                        |i_-vFInExEA|)
+                                                      |marks_-vX-xnvEA|)
+                                                    (#%if (|import-token?_-v9RwLrzA|
+                                                            (car |symnames_-vjMpbxEA|))
+                                                      ((#%lambda (|t_-v_El5yEA|)
+                                                         (#%if |t_-v_El5yEA|
                                                            (#%if (symbol?
-                                                                   |t_sEGGyFgFG|)
+                                                                   |t_-v_El5yEA|)
                                                              (values
-                                                               |t_sEGGyFgFG|
-                                                               |marks_sEC0LXdFG|)
-                                                             (|id-var-name&marks_sEmN6WiAG|
-                                                               |t_sEGGyFgFG|
+                                                               |t_-v_El5yEA|
+                                                               |marks_-vX-xnvEA|)
+                                                             (|id-var-name&marks_-vHLVlAzA|
+                                                               |t_-v_El5yEA|
                                                                (#%quote (()))))
-                                                           (|f_sEEREifFG|
-                                                             (cdr |symnames_sE-NCLfFG|)
-                                                             |i_sEkKAcgFG|)))
-                                                       (|lookup-import-binding-name_sECenifAG|
-                                                         |sym_sEW7P1dFG|
-                                                         (|import-token-key_sEaPHMaAG|
-                                                           (car |symnames_sE-NCLfFG|))
-                                                         |marks_sEC0LXdFG|))
-                                                      (#%if (#%if (eq? (car |symnames_sE-NCLfFG|)
-                                                                       |barrier-marker_sE8-Np9AG|)
-                                                              (|same-marks?_sEGUa0iAG|
-                                                                |marks_sEC0LXdFG|
+                                                           (|f_-vZPrKwEA|
+                                                             (cdr |symnames_-vjMpbxEA|)
+                                                             |i_-vFInExEA|)))
+                                                       (|lookup-import-binding-name_-vXcaKwzA|
+                                                         |sym_-vf6CtuEA|
+                                                         (|import-token-key_-vvNucszA|
+                                                           (car |symnames_-vjMpbxEA|))
+                                                         |marks_-vX-xnvEA|))
+                                                      (#%if (#%if (eq? (car |symnames_-vjMpbxEA|)
+                                                                       |barrier-marker_-vtYARqzA|)
+                                                              (|same-marks?_-v_SZrzzA|
+                                                                |marks_-vX-xnvEA|
                                                                 (list-ref
-                                                                  (|ribcage-marks_sEC3pP0AG|
-                                                                    |ribcage_sEiVGReFG|)
-                                                                  |i_sEkKAcgFG|))
+                                                                  (|ribcage-marks_-vX1cfizA|
+                                                                    |ribcage_-vDTthwEA|)
+                                                                  |i_-vFInExEA|))
                                                               #f)
                                                         (values
                                                           #f
-                                                          |marks_sEC0LXdFG|)
-                                                        (|f_sEEREifFG|
-                                                          (cdr |symnames_sE-NCLfFG|)
-                                                          (+ |i_sEkKAcgFG|
+                                                          |marks_-vX-xnvEA|)
+                                                        (|f_-vZPrKwEA|
+                                                          (cdr |symnames_-vjMpbxEA|)
+                                                          (+ |i_-vFInExEA|
                                                              1)))))))))
-                                   |f_sEEREifFG|)
-                                 |symnames_sEYYIoeFG|
+                                   |f_-vZPrKwEA|)
+                                 |symnames_-vhXvQvEA|
                                  0)))
-                            (|search-vector-rib_sEsTd97FG|
-                              (#%lambda (|sym_sEmzuzhFG|
-                                         |subst_sEIvs0iFG|
-                                         |marks_sE2sqtiFG|
-                                         |symnames_sEoooWiFG|
-                                         |ribcage_sEKkmnjFG|)
-                                ((#%lambda (|n_sE4hkQjFG|)
-                                   ((#%letrec ((|f_sEqdihkFG|
-                                                 (#%lambda (|i_sEM9gKkFG|)
-                                                   (#%if (= |i_sEM9gKkFG|
-                                                            |n_sE4hkQjFG|)
-                                                     (|search_sEM-hf6FG|
-                                                       |sym_sEmzuzhFG|
-                                                       (cdr |subst_sEIvs0iFG|)
-                                                       |marks_sE2sqtiFG|)
+                            (|search-vector-rib_-vNR0BoEA|
+                              (#%lambda (|sym_-vHxh_yEA|
+                                         |subst_-v1ufszEA|
+                                         |marks_-vnqdVzEA|
+                                         |symnames_-vJmbmAEA|
+                                         |ribcage_-v3j9PAEA|)
+                                ((#%lambda (|n_-vpf7gBEA|)
+                                   ((#%letrec ((|f_-vLb5JBEA|
+                                                 (#%lambda (|i_-v583aCEA|)
+                                                   (#%if (= |i_-v583aCEA|
+                                                            |n_-vpf7gBEA|)
+                                                     (|search_-v5Z4HnEA|
+                                                       |sym_-vHxh_yEA|
+                                                       (cdr |subst_-v1ufszEA|)
+                                                       |marks_-vnqdVzEA|)
                                                      (#%if (#%if (eq? (vector-ref
-                                                                        |symnames_sEoooWiFG|
-                                                                        |i_sEM9gKkFG|)
-                                                                      |sym_sEmzuzhFG|)
-                                                             (|same-marks?_sEGUa0iAG|
-                                                               |marks_sE2sqtiFG|
+                                                                        |symnames_-vJmbmAEA|
+                                                                        |i_-v583aCEA|)
+                                                                      |sym_-vHxh_yEA|)
+                                                             (|same-marks?_-v_SZrzzA|
+                                                               |marks_-vnqdVzEA|
                                                                (vector-ref
-                                                                 (|ribcage-marks_sEC3pP0AG|
-                                                                   |ribcage_sEKkmnjFG|)
-                                                                 |i_sEM9gKkFG|))
+                                                                 (|ribcage-marks_-vX1cfizA|
+                                                                   |ribcage_-v3j9PAEA|)
+                                                                 |i_-v583aCEA|))
                                                              #f)
                                                        (values
                                                          (vector-ref
-                                                           (|ribcage-labels_sEY_mg1AG|
-                                                             |ribcage_sEKkmnjFG|)
-                                                           |i_sEM9gKkFG|)
-                                                         |marks_sE2sqtiFG|)
-                                                       (|f_sEqdihkFG|
-                                                         (+ |i_sEM9gKkFG|
+                                                           (|ribcage-labels_-vh-9IizA|
+                                                             |ribcage_-v3j9PAEA|)
+                                                           |i_-v583aCEA|)
+                                                         |marks_-vnqdVzEA|)
+                                                       (|f_-vLb5JBEA|
+                                                         (+ |i_-v583aCEA|
                                                             1)))))))
-                                      |f_sEqdihkFG|)
+                                      |f_-vLb5JBEA|)
                                     0))
-                                 (vector-length |symnames_sEoooWiFG|)))))
-                   (#%if (symbol? |id_sE46ml5FG|)
-                     (|search_sEM-hf6FG|
-                       |id_sE46ml5FG|
-                       (|wrap-subst_sEatLOJzG| |w_sEq2kO5FG|)
-                       (|wrap-marks_sEQwNlJzG| |w_sEq2kO5FG|))
-                     (#%if (|syntax-object?_sEueTWfzG| |id_sE46ml5FG|)
-                       ((#%lambda (|sym_sE8M938FG| |w1_sEuI7w8FG|)
-                          ((#%lambda (|marks_sEQE5Z8FG|)
+                                 (vector-length |symnames_-vJmbmAEA|)))))
+                   (#%if (symbol? |id_-vp49NmEA|)
+                     (|search_-v5Z4HnEA|
+                       |id_-vp49NmEA|
+                       (|wrap-subst_-vvrye_yA| |w_-vL07enEA|)
+                       (|wrap-marks_-v9vAN-yA| |w_-vL07enEA|))
+                     (#%if (|syntax-object?_-vPcGmxyA| |id_-vp49NmEA|)
+                       ((#%lambda (|sym_-vtKYupEA| |w1_-vPGWXpEA|)
+                          ((#%lambda (|marks_-v9DUoqEA|)
                              (call-with-values
                                (#%lambda ()
-                                 (|search_sEM-hf6FG|
-                                   |sym_sE8M938FG|
-                                   (|wrap-subst_sEatLOJzG| |w_sEq2kO5FG|)
-                                   |marks_sEQE5Z8FG|))
-                               (#%lambda (|new-id_sEaB3q9FG| |marks_sEwx1T9FG|)
-                                 (#%if (eq? |new-id_sEaB3q9FG| |sym_sE8M938FG|)
-                                   (|search_sEM-hf6FG|
-                                     |sym_sE8M938FG|
-                                     (|wrap-subst_sEatLOJzG| |w1_sEuI7w8FG|)
-                                     |marks_sEwx1T9FG|)
+                                 (|search_-v5Z4HnEA|
+                                   |sym_-vtKYupEA|
+                                   (|wrap-subst_-vvrye_yA| |w_-vL07enEA|)
+                                   |marks_-v9DUoqEA|))
+                               (#%lambda (|new-id_-vvzSRqEA| |marks_-vRvQirEA|)
+                                 (#%if (eq? |new-id_-vvzSRqEA| |sym_-vtKYupEA|)
+                                   (|search_-v5Z4HnEA|
+                                     |sym_-vtKYupEA|
+                                     (|wrap-subst_-vvrye_yA| |w1_-vPGWXpEA|)
+                                     |marks_-vRvQirEA|)
                                    (values
-                                     |new-id_sEaB3q9FG|
-                                     |marks_sEwx1T9FG|)))))
-                           (|join-marks_sEkYczhAG|
-                             (|wrap-marks_sEQwNlJzG| |w_sEq2kO5FG|)
-                             (|wrap-marks_sEQwNlJzG| |w1_sEuI7w8FG|))))
-                        ((#%lambda (|e_sESt_jaFG|)
-                           (#%if (annotation? |e_sESt_jaFG|)
-                             (annotation-expression |e_sESt_jaFG|)
-                             |e_sESt_jaFG|))
-                         (|syntax-object-expression_sEQaRngzG|
-                           |id_sE46ml5FG|))
-                        (|syntax-object-wrap_sEa7PQgzG| |id_sE46ml5FG|))
-                       (#%if (annotation? |id_sE46ml5FG|)
-                         (|search_sEM-hf6FG|
-                           (#%if (annotation? |id_sE46ml5FG|)
-                             (annotation-expression |id_sE46ml5FG|)
-                             |id_sE46ml5FG|)
-                           (|wrap-subst_sEatLOJzG| |w_sEq2kO5FG|)
-                           (|wrap-marks_sEQwNlJzG| |w_sEq2kO5FG|))
-                         (|error-hook_sESjSOnyG|
+                                     |new-id_-vvzSRqEA|
+                                     |marks_-vRvQirEA|)))))
+                           (|join-marks_-vFW_-yzA|
+                             (|wrap-marks_-v9vAN-yA| |w_-vL07enEA|)
+                             (|wrap-marks_-v9vAN-yA| |w1_-vPGWXpEA|))))
+                        ((#%lambda (|e_-vbsOLrEA|)
+                           (#%if (annotation? |e_-vbsOLrEA|)
+                             (annotation-expression |e_-vbsOLrEA|)
+                             |e_-vbsOLrEA|))
+                         (|syntax-object-expression_-v99EPxyA|
+                           |id_-vp49NmEA|))
+                        (|syntax-object-wrap_-vv5CgyyA| |id_-vp49NmEA|))
+                       (#%if (annotation? |id_-vp49NmEA|)
+                         (|search_-v5Z4HnEA|
+                           (#%if (annotation? |id_-vp49NmEA|)
+                             (annotation-expression |id_-vp49NmEA|)
+                             |id_-vp49NmEA|)
+                           (|wrap-subst_-vvrye_yA| |w_-vL07enEA|)
+                           (|wrap-marks_-v9vAN-yA| |w_-vL07enEA|))
+                         (|error-hook_-vbiFeFxA|
                            (#%quote id-var-name)
                            "invalid id"
-                           |id_sE46ml5FG|)))))))
-             (|same-marks?_sEGUa0iAG|
-               (#%lambda (|x_sE2hs-3FG| |y_sEodqr4FG|)
-                 ((#%lambda (|t_sEK9oU4FG|)
-                    (#%if |t_sEK9oU4FG|
-                      |t_sEK9oU4FG|
-                      (#%if (not (null? |x_sE2hs-3FG|))
-                        (#%if (not (null? |y_sEodqr4FG|))
-                          (#%if (eq? (car |x_sE2hs-3FG|) (car |y_sEodqr4FG|))
-                            (|same-marks?_sEGUa0iAG|
-                              (cdr |x_sE2hs-3FG|)
-                              (cdr |y_sEodqr4FG|))
-                            #f)
-                          #f)
-                        #f)))
-                  (eq? |x_sE2hs-3FG| |y_sEodqr4FG|))))
-             (|join-marks_sEkYczhAG|
-               (#%lambda (|m1_sEmow43FG| |m2_sEIkux3FG|)
-                 (|smart-append_sEE3hFgAG|
-                   |m1_sEmow43FG|
-                   |m2_sEIkux3FG|)))
-             (|join-wraps_sE-_e6hAG|
-               (#%lambda (|w1_sE-CEg1FG| |w2_sEkzCJ1FG|)
-                 ((#%lambda (|m1_sEGvAa2FG| |s1_sE0syD2FG|)
-                    (#%if (null? |m1_sEGvAa2FG|)
-                      (#%if (null? |s1_sE0syD2FG|)
-                        |w2_sEkzCJ1FG|
-                        (|make-wrap_sEuAPUIzG|
-                          (|wrap-marks_sEQwNlJzG| |w2_sEkzCJ1FG|)
-                          (|smart-append_sEE3hFgAG|
-                            |s1_sE0syD2FG|
-                            (|wrap-subst_sEatLOJzG| |w2_sEkzCJ1FG|))))
-                      (|make-wrap_sEuAPUIzG|
-                        (|smart-append_sEE3hFgAG|
-                          |m1_sEGvAa2FG|
-                          (|wrap-marks_sEQwNlJzG| |w2_sEkzCJ1FG|))
-                        (|smart-append_sEE3hFgAG|
-                          |s1_sE0syD2FG|
-                          (|wrap-subst_sEatLOJzG| |w2_sEkzCJ1FG|)))))
-                  (|wrap-marks_sEQwNlJzG| |w1_sE-CEg1FG|)
-                  (|wrap-subst_sEatLOJzG| |w1_sE-CEg1FG|))))
-             (|smart-append_sEE3hFgAG|
-               (#%lambda (|m1_sEiKIm0FG| |m2_sEEGGP0FG|)
-                 (#%if (null? |m2_sEEGGP0FG|)
-                   |m1_sEiKIm0FG|
-                   (append |m1_sEiKIm0FG| |m2_sEEGGP0FG|))))
-             (|make-trimmed-syntax-object_sEi7jcgAG|
-               (#%lambda (|id_sEe4VEZEG|)
+                           |id_-vp49NmEA|)))))))
+             (|same-marks?_-v_SZrzzA|
+               (#%lambda (|x_-vnffqlEA| |y_-vJbdTlEA|)
+                 ((#%lambda (|t_-v38bkmEA|)
+                    (#%if |t_-v38bkmEA|
+                      |t_-v38bkmEA|
+                      (#%if (null? |x_-vnffqlEA|)
+                        #f
+                        (#%if (null? |y_-vJbdTlEA|)
+                          #f
+                          (#%if (eq? (car |x_-vnffqlEA|) (car |y_-vJbdTlEA|))
+                            (|same-marks?_-v_SZrzzA|
+                              (cdr |x_-vnffqlEA|)
+                              (cdr |y_-vJbdTlEA|))
+                            #f)))))
+                  (eq? |x_-vnffqlEA| |y_-vJbdTlEA|))))
+             (|join-marks_-vFW_-yzA|
+               (#%lambda (|m1_-vHmjwkEA| |m2_-v1jhZkEA|)
+                 (|smart-append_-vZ145yzA|
+                   |m1_-vHmjwkEA|
+                   |m2_-v1jhZkEA|)))
+             (|join-wraps_-vj-1yyzA|
+               (#%lambda (|w1_-vjBrIiEA| |w2_-vFxp9jEA|)
+                 ((#%lambda (|m1_-v_tnCjEA| |s1_-vlql3kEA|)
+                    (#%if (null? |m1_-v_tnCjEA|)
+                      (#%if (null? |s1_-vlql3kEA|)
+                        |w2_-vFxp9jEA|
+                        (|make-wrap_-vPyCk-yA|
+                          (|wrap-marks_-v9vAN-yA| |w2_-vFxp9jEA|)
+                          (|smart-append_-vZ145yzA|
+                            |s1_-vlql3kEA|
+                            (|wrap-subst_-vvrye_yA| |w2_-vFxp9jEA|))))
+                      (|make-wrap_-vPyCk-yA|
+                        (|smart-append_-vZ145yzA|
+                          |m1_-v_tnCjEA|
+                          (|wrap-marks_-v9vAN-yA| |w2_-vFxp9jEA|))
+                        (|smart-append_-vZ145yzA|
+                          |s1_-vlql3kEA|
+                          (|wrap-subst_-vvrye_yA| |w2_-vFxp9jEA|)))))
+                  (|wrap-marks_-v9vAN-yA| |w1_-vjBrIiEA|)
+                  (|wrap-subst_-vvrye_yA| |w1_-vjBrIiEA|))))
+             (|smart-append_-vZ145yzA|
+               (#%lambda (|m1_-vDIvOhEA| |m2_-vZEtfiEA|)
+                 (#%if (null? |m2_-vZEtfiEA|)
+                   |m1_-vDIvOhEA|
+                   (append |m1_-vDIvOhEA| |m2_-vZEtfiEA|))))
+             (|make-trimmed-syntax-object_-vD56ExzA|
+               (#%lambda (|id_-vz2I4fEA|)
                  (call-with-values
                    (#%lambda ()
-                     (|id-var-name&marks_sEmN6WiAG|
-                       |id_sEe4VEZEG|
+                     (|id-var-name&marks_-vHLVlAzA|
+                       |id_-vz2I4fEA|
                        (#%quote (()))))
-                   (#%lambda (|tosym_sEA0T5-EG| |marks_sEWYQy-EG|)
+                   (#%lambda (|tosym_-vV-FxfEA| |marks_-vfXD-fEA|)
                      (#%begin
-                       (#%if |tosym_sEA0T5-EG|
+                       (#%if |tosym_-vV-FxfEA|
                          #!void
                          (syntax-error
-                           |id_sEe4VEZEG|
+                           |id_-vz2I4fEA|
                            "identifier not visible for export"))
-                       ((#%lambda (|fromsym_sEgVO_-EG|)
-                          (|make-syntax-object_sE8iVtfzG|
-                            |fromsym_sEgVO_-EG|
-                            (|make-wrap_sEuAPUIzG|
-                              |marks_sEWYQy-EG|
-                              (list (|make-ribcage_sEAevs_zG|
-                                      (vector |fromsym_sEgVO_-EG|)
-                                      (vector |marks_sEWYQy-EG|)
-                                      (vector |tosym_sEA0T5-EG|))))))
-                        ((#%lambda (|e_sEYNKV_EG|)
-                           (#%if (annotation? |e_sEYNKV_EG|)
-                             (annotation-expression |e_sEYNKV_EG|)
-                             |e_sEYNKV_EG|))
-                         (#%if (|syntax-object?_sEueTWfzG| |id_sEe4VEZEG|)
-                           (|syntax-object-expression_sEQaRngzG|
-                             |id_sEe4VEZEG|)
-                           |id_sEe4VEZEG|))))))))
-             (|make-binding-wrap_sEYalLfAG|
-               (#%lambda (|ids_sE6MhdUEG|
-                          |labels_sEsIfGUEG|
-                          |w_sEOEd7VEG|)
-                 (#%if (null? |ids_sE6MhdUEG|)
-                   |w_sEOEd7VEG|
-                   (|make-wrap_sEuAPUIzG|
-                     (|wrap-marks_sEQwNlJzG| |w_sEOEd7VEG|)
-                     (cons ((#%lambda (|labelvec_sE8BbAVEG|)
-                              ((#%lambda (|n_sEux91WEG|)
-                                 ((#%lambda (|symnamevec_sEQt7uWEG|
-                                             |marksvec_sEaq5XWEG|)
+                       ((#%lambda (|fromsym_-vBTBrgEA|)
+                          (|make-syntax-object_-vtgIVwyA|
+                            |fromsym_-vBTBrgEA|
+                            (|make-wrap_-vPyCk-yA|
+                              |marks_-vfXD-fEA|
+                              (list (|make-ribcage_-vVciUgzA|
+                                      (vector |fromsym_-vBTBrgEA|)
+                                      (vector |marks_-vfXD-fEA|)
+                                      (vector |tosym_-vV-FxfEA|))))))
+                        ((#%lambda (|e_-vhMxlhEA|)
+                           (#%if (annotation? |e_-vhMxlhEA|)
+                             (annotation-expression |e_-vhMxlhEA|)
+                             |e_-vhMxlhEA|))
+                         (#%if (|syntax-object?_-vPcGmxyA| |id_-vz2I4fEA|)
+                           (|syntax-object-expression_-v99EPxyA|
+                             |id_-vz2I4fEA|)
+                           |id_-vz2I4fEA|))))))))
+             (|make-binding-wrap_-vh98bxzA|
+               (#%lambda (|ids_-vrK4F9EA|
+                          |labels_-vNG26aEA|
+                          |w_-v7D0zaEA|)
+                 (#%if (null? |ids_-vrK4F9EA|)
+                   |w_-v7D0zaEA|
+                   (|make-wrap_-vPyCk-yA|
+                     (|wrap-marks_-v9vAN-yA| |w_-v7D0zaEA|)
+                     (cons ((#%lambda (|labelvec_-vtz-_aEA|)
+                              ((#%lambda (|n_-vPvYsbEA|)
+                                 ((#%lambda (|symnamevec_-v9sWVbEA|
+                                             |marksvec_-vvoUmcEA|)
                                     (#%begin
-                                      ((#%letrec ((|f_sEwm3oXEG|
-                                                    (#%lambda (|ids_sESi1RXEG|
-                                                               |i_sEcf_hYEG|)
-                                                      (#%if (null? |ids_sESi1RXEG|)
+                                      ((#%letrec ((|f_-vRkSPcEA|
+                                                    (#%lambda (|ids_-vbhQgdEA|
+                                                               |i_-vxdOJdEA|)
+                                                      (#%if (null? |ids_-vbhQgdEA|)
                                                         #!void
                                                         (call-with-values
                                                           (#%lambda ()
-                                                            (|id-sym-name&marks_sE8ERrIzG|
-                                                              (car |ids_sESi1RXEG|)
-                                                              |w_sEOEd7VEG|))
-                                                          (#%lambda (|symname_sEybZKYEG|
-                                                                     |marks_sEU7XbZEG|)
+                                                            (|id-sym-name&marks_-vtCETZyA|
+                                                              (car |ids_-vbhQgdEA|)
+                                                              |w_-v7D0zaEA|))
+                                                          (#%lambda (|symname_-vT9MaeEA|
+                                                                     |marks_-vd6KDeEA|)
                                                             (#%begin
                                                               (vector-set!
-                                                                |symnamevec_sEQt7uWEG|
-                                                                |i_sEcf_hYEG|
-                                                                |symname_sEybZKYEG|)
+                                                                |symnamevec_-v9sWVbEA|
+                                                                |i_-vxdOJdEA|
+                                                                |symname_-vT9MaeEA|)
                                                               (vector-set!
-                                                                |marksvec_sEaq5XWEG|
-                                                                |i_sEcf_hYEG|
-                                                                |marks_sEU7XbZEG|)
-                                                              (|f_sEwm3oXEG|
-                                                                (cdr |ids_sESi1RXEG|)
-                                                                (+ |i_sEcf_hYEG|
+                                                                |marksvec_-vvoUmcEA|
+                                                                |i_-vxdOJdEA|
+                                                                |marks_-vd6KDeEA|)
+                                                              (|f_-vRkSPcEA|
+                                                                (cdr |ids_-vbhQgdEA|)
+                                                                (+ |i_-vxdOJdEA|
                                                                    1)))))))))
-                                         |f_sEwm3oXEG|)
-                                       |ids_sE6MhdUEG|
+                                         |f_-vRkSPcEA|)
+                                       |ids_-vrK4F9EA|
                                        0)
-                                      (|make-ribcage_sEAevs_zG|
-                                        |symnamevec_sEQt7uWEG|
-                                        |marksvec_sEaq5XWEG|
-                                        |labelvec_sE8BbAVEG|)))
-                                  (make-vector |n_sEux91WEG|)
-                                  (make-vector |n_sEux91WEG|)))
-                               (vector-length |labelvec_sE8BbAVEG|)))
-                            (list->vector |labels_sEsIfGUEG|))
-                           (|wrap-subst_sEatLOJzG| |w_sEOEd7VEG|))))))
-             (|lookup-import-binding-name_sECenifAG|
-               (#%lambda (|sym_sEI9w2REG|
-                          |key_sE26uvREG|
-                          |marks_sEo2sYREG|)
-                 ((#%lambda (|new_sEK-ppSEG|)
-                    (#%if |new_sEK-ppSEG|
-                      ((#%letrec ((|f_sE4XnSSEG|
-                                    (#%lambda (|new_sEqTljTEG|)
-                                      (#%if (pair? |new_sEqTljTEG|)
-                                        ((#%lambda (|t_sEMPjMTEG|)
-                                           (#%if |t_sEMPjMTEG|
-                                             |t_sEMPjMTEG|
-                                             (|f_sE4XnSSEG|
-                                               (cdr |new_sEqTljTEG|))))
-                                         (|f_sE4XnSSEG| (car |new_sEqTljTEG|)))
-                                        (#%if (symbol? |new_sEqTljTEG|)
-                                          (#%if (|same-marks?_sEGUa0iAG|
-                                                  |marks_sEo2sYREG|
-                                                  (|wrap-marks_sEQwNlJzG|
+                                      (|make-ribcage_-vVciUgzA|
+                                        |symnamevec_-v9sWVbEA|
+                                        |marksvec_-vvoUmcEA|
+                                        |labelvec_-vtz-_aEA|)))
+                                  (make-vector |n_-vPvYsbEA|)
+                                  (make-vector |n_-vPvYsbEA|)))
+                               (vector-length |labelvec_-vtz-_aEA|)))
+                            (list->vector |labels_-vNG26aEA|))
+                           (|wrap-subst_-vvrye_yA| |w_-v7D0zaEA|))))))
+             (|lookup-import-binding-name_-vXcaKwzA|
+               (#%lambda (|sym_-v18ju6EA|
+                          |key_-vn4hX6EA|
+                          |marks_-vJ0fo7EA|)
+                 ((#%lambda (|new_-v3ZcR7EA|)
+                    (#%if |new_-v3ZcR7EA|
+                      ((#%letrec ((|f_-vpVai8EA|
+                                    (#%lambda (|new_-vLR8L8EA|)
+                                      (#%if (pair? |new_-vLR8L8EA|)
+                                        ((#%lambda (|t_-v5O6c9EA|)
+                                           (#%if |t_-v5O6c9EA|
+                                             |t_-v5O6c9EA|
+                                             (|f_-vpVai8EA|
+                                               (cdr |new_-vLR8L8EA|))))
+                                         (|f_-vpVai8EA| (car |new_-vLR8L8EA|)))
+                                        (#%if (symbol? |new_-vLR8L8EA|)
+                                          (#%if (|same-marks?_-v_SZrzzA|
+                                                  |marks_-vJ0fo7EA|
+                                                  (|wrap-marks_-v9vAN-yA|
                                                     (#%quote ((top)))))
-                                            |new_sEqTljTEG|
+                                            |new_-vLR8L8EA|
                                             #f)
-                                          (#%if (|same-marks?_sEGUa0iAG|
-                                                  |marks_sEo2sYREG|
-                                                  (|wrap-marks_sEQwNlJzG|
-                                                    (|syntax-object-wrap_sEa7PQgzG|
-                                                      |new_sEqTljTEG|)))
-                                            |new_sEqTljTEG|
+                                          (#%if (|same-marks?_-v_SZrzzA|
+                                                  |marks_-vJ0fo7EA|
+                                                  (|wrap-marks_-v9vAN-yA|
+                                                    (|syntax-object-wrap_-vv5CgyyA|
+                                                      |new_-vLR8L8EA|)))
+                                            |new_-vLR8L8EA|
                                             #f))))))
-                         |f_sE4XnSSEG|)
-                       |new_sEK-ppSEG|)
+                         |f_-vpVai8EA|)
+                       |new_-v3ZcR7EA|)
                       #f))
-                  (|get-import-binding_sEgWDZqyG|
-                    |sym_sEI9w2REG|
-                    |key_sE26uvREG|))))
-             (|extend-ribcage-subst!_sEgipReAG|
-               (#%lambda (|ribcage_sE0hA8QEG| |token_sEmdyBQEG|)
-                 (|set-ribcage-symnames!_sEiYkJ1AG|
-                   |ribcage_sE0hA8QEG|
-                   (cons (|make-import-token_sEuWLS9AG| |token_sEmdyBQEG|)
-                         (|ribcage-symnames_sEg7rm0AG|
-                           |ribcage_sE0hA8QEG|)))))
-             (|extend-ribcage-barrier-help!_sEWlroeAG|
-               (#%lambda (|ribcage_sEkoEePEG| |wrap_sEGkCHPEG|)
+                  (|get-import-binding_-vBUqpIxA|
+                    |sym_-v18ju6EA|
+                    |key_-vn4hX6EA|))))
+             (|extend-ribcage-subst!_-vBgchwzA|
+               (#%lambda (|ribcage_-vlfnA5EA| |token_-vHbl16EA|)
+                 (|set-ribcage-symnames!_-vDW79jzA|
+                   |ribcage_-vlfnA5EA|
+                   (cons (|make-import-token_-vPUyirzA| |token_-vHbl16EA|)
+                         (|ribcage-symnames_-vB5eOhzA|
+                           |ribcage_-vlfnA5EA|)))))
+             (|extend-ribcage-barrier-help!_-vfkeQvzA|
+               (#%lambda (|ribcage_-vFmrG4EA| |wrap_-v_ip75EA|)
                  (#%begin
-                   (|set-ribcage-symnames!_sEiYkJ1AG|
-                     |ribcage_sEkoEePEG|
-                     (cons |barrier-marker_sE8-Np9AG|
-                           (|ribcage-symnames_sEg7rm0AG|
-                             |ribcage_sEkoEePEG|)))
-                   (|set-ribcage-marks!_sEEUia2AG|
-                     |ribcage_sEkoEePEG|
-                     (cons (|wrap-marks_sEQwNlJzG| |wrap_sEGkCHPEG|)
-                           (|ribcage-marks_sEC3pP0AG| |ribcage_sEkoEePEG|))))))
-             (|extend-ribcage-barrier!_sEAptXdAG|
-               (#%lambda (|ribcage_sEEvIkOEG| |killer-id_sE-rGNOEG|)
-                 (|extend-ribcage-barrier-help!_sEWlroeAG|
-                   |ribcage_sEEvIkOEG|
-                   (|syntax-object-wrap_sEa7PQgzG|
-                     |killer-id_sE-rGNOEG|))))
-             (|extend-ribcage!_sEetvudAG|
-               (#%lambda (|ribcage_sEgKQwMEG|
-                          |id_sECGOZMEG|
-                          |label_sEYCMqNEG|)
+                   (|set-ribcage-symnames!_-vDW79jzA|
+                     |ribcage_-vFmrG4EA|
+                     (cons |barrier-marker_-vtYARqzA|
+                           (|ribcage-symnames_-vB5eOhzA|
+                             |ribcage_-vFmrG4EA|)))
+                   (|set-ribcage-marks!_-vZS5CjzA|
+                     |ribcage_-vFmrG4EA|
+                     (cons (|wrap-marks_-v9vAN-yA| |wrap_-v_ip75EA|)
+                           (|ribcage-marks_-vX1cfizA| |ribcage_-vFmrG4EA|))))))
+             (|extend-ribcage-barrier!_-vVngnvzA|
+               (#%lambda (|ribcage_-vZtvM3EA| |killer-id_-vjqtd4EA|)
+                 (|extend-ribcage-barrier-help!_-vfkeQvzA|
+                   |ribcage_-vZtvM3EA|
+                   (|syntax-object-wrap_-vv5CgyyA|
+                     |killer-id_-vjqtd4EA|))))
+             (|extend-ribcage!_-vzriWuzA|
+               (#%lambda (|ribcage_-vBIDY1EA|
+                          |id_-vXEBp2EA|
+                          |label_-vhBzS2EA|)
                  (#%begin
-                   (|set-ribcage-symnames!_sEiYkJ1AG|
-                     |ribcage_sEgKQwMEG|
-                     (cons ((#%lambda (|e_sEizKTNEG|)
-                              (#%if (annotation? |e_sEizKTNEG|)
-                                (annotation-expression |e_sEizKTNEG|)
-                                |e_sEizKTNEG|))
-                            (|syntax-object-expression_sEQaRngzG|
-                              |id_sECGOZMEG|))
-                           (|ribcage-symnames_sEg7rm0AG|
-                             |ribcage_sEgKQwMEG|)))
-                   (|set-ribcage-marks!_sEEUia2AG|
-                     |ribcage_sEgKQwMEG|
-                     (cons (|wrap-marks_sEQwNlJzG|
-                             (|syntax-object-wrap_sEa7PQgzG| |id_sECGOZMEG|))
-                           (|ribcage-marks_sEC3pP0AG| |ribcage_sEgKQwMEG|)))
-                   (|set-ribcage-labels!_sE-QgD2AG|
-                     |ribcage_sEgKQwMEG|
-                     (cons |label_sEYCMqNEG|
-                           (|ribcage-labels_sEY_mg1AG|
-                             |ribcage_sEgKQwMEG|))))))
-             (|import-token-key_sEaPHMaAG|
-               (#%lambda (|x_sEeVW9LEG|)
-                 (vector-ref |x_sEeVW9LEG| 1)))
-             (|import-token?_sEQSJjaAG|
-               (#%lambda (|x_sEUYYIKEG|)
-                 (#%if (vector? |x_sEUYYIKEG|)
-                   (#%if (= (vector-length |x_sEUYYIKEG|) 2)
-                     (eq? (vector-ref |x_sEUYYIKEG| 0)
+                   (|set-ribcage-symnames!_-vDW79jzA|
+                     |ribcage_-vBIDY1EA|
+                     (cons ((#%lambda (|e_-vDxxj3EA|)
+                              (#%if (annotation? |e_-vDxxj3EA|)
+                                (annotation-expression |e_-vDxxj3EA|)
+                                |e_-vDxxj3EA|))
+                            (|syntax-object-expression_-v99EPxyA|
+                              |id_-vXEBp2EA|))
+                           (|ribcage-symnames_-vB5eOhzA|
+                             |ribcage_-vBIDY1EA|)))
+                   (|set-ribcage-marks!_-vZS5CjzA|
+                     |ribcage_-vBIDY1EA|
+                     (cons (|wrap-marks_-v9vAN-yA|
+                             (|syntax-object-wrap_-vv5CgyyA| |id_-vXEBp2EA|))
+                           (|ribcage-marks_-vX1cfizA| |ribcage_-vBIDY1EA|)))
+                   (|set-ribcage-labels!_-vjP33kzA|
+                     |ribcage_-vBIDY1EA|
+                     (cons |label_-vhBzS2EA|
+                           (|ribcage-labels_-vh-9IizA|
+                             |ribcage_-vBIDY1EA|))))))
+             (|import-token-key_-vvNucszA|
+               (#%lambda (|x_-vzTJB0EA|)
+                 (vector-ref |x_-vzTJB0EA| 1)))
+             (|import-token?_-v9RwLrzA|
+               (#%lambda (|x_-vdXL80EA|)
+                 (#%if (vector? |x_-vdXL80EA|)
+                   (#%if (= (vector-length |x_-vdXL80EA|) 2)
+                     (eq? (vector-ref |x_-vdXL80EA| 0)
                           (#%quote import-token))
                      #f)
                    #f)))
-             (|make-import-token_sEuWLS9AG|
-               (#%lambda (|key_sEy0_fKEG|)
-                 (vector (#%quote import-token) |key_sEy0_fKEG|)))
-             (|barrier-marker_sE8-Np9AG| #f)
-             (|anti-mark_sEqgY87AG|
-               (#%lambda (|w_sEc41PJEG|)
-                 (|make-wrap_sEuAPUIzG|
-                   (cons #f (|wrap-marks_sEQwNlJzG| |w_sEc41PJEG|))
+             (|make-import-token_-vPUyirzA|
+               (#%lambda (|key_-vT-NH_DA|)
+                 (vector (#%quote import-token) |key_-vT-NH_DA|)))
+             (|barrier-marker_-vtYARqzA| #f)
+             (|anti-mark_-vLeLAozA|
+               (#%lambda (|w_-vx2Qe_DA|)
+                 (|make-wrap_-vPyCk-yA|
+                   (cons #f (|wrap-marks_-v9vAN-yA| |w_-vx2Qe_DA|))
                    (cons (#%quote shift)
-                         (|wrap-subst_sEatLOJzG| |w_sEc41PJEG|)))))
-             (|set-ribcage-labels!_sE-QgD2AG|
-               (#%lambda (|x_sEwb5VIEG| |update_sES73mJEG|)
-                 (vector-set! |x_sEwb5VIEG| 3 |update_sES73mJEG|)))
-             (|set-ribcage-marks!_sEEUia2AG|
-               (#%lambda (|x_sEQi9_HEG| |update_sEaf7sIEG|)
-                 (vector-set! |x_sEQi9_HEG| 2 |update_sEaf7sIEG|)))
-             (|set-ribcage-symnames!_sEiYkJ1AG|
-               (#%lambda (|x_sE8qd5HEG| |update_sEumbyHEG|)
-                 (vector-set! |x_sE8qd5HEG| 1 |update_sEumbyHEG|)))
-             (|ribcage-labels_sEY_mg1AG|
-               (#%lambda (|x_sEOtfEGEG|)
-                 (vector-ref |x_sEOtfEGEG| 3)))
-             (|ribcage-marks_sEC3pP0AG|
-               (#%lambda (|x_sEsxhbGEG|)
-                 (vector-ref |x_sEsxhbGEG| 2)))
-             (|ribcage-symnames_sEg7rm0AG|
-               (#%lambda (|x_sE6BjKFEG|)
-                 (vector-ref |x_sE6BjKFEG| 1)))
-             (|make-ribcage_sEAevs_zG|
-               (#%lambda (|symnames_sEKPrWDEG|
-                          |marks_sE4MpnEEG|
-                          |labels_sEqInQEEG|)
+                         (|wrap-subst_-vvrye_yA| |w_-vx2Qe_DA|)))))
+             (|set-ribcage-labels!_-vjP33kzA|
+               (#%lambda (|x_-vR9Uk-DA| |update_-vb6SN-DA|)
+                 (vector-set! |x_-vR9Uk-DA| 3 |update_-vb6SN-DA|)))
+             (|set-ribcage-marks!_-vZS5CjzA|
+               (#%lambda (|x_-v9hYqZDA| |update_-vvdWTZDA|)
+                 (vector-set! |x_-v9hYqZDA| 2 |update_-vvdWTZDA|)))
+             (|set-ribcage-symnames!_-vDW79jzA|
+               (#%lambda (|x_-vto0xYDA| |update_-vPk-ZYDA|)
+                 (vector-set! |x_-vto0xYDA| 1 |update_-vPk-ZYDA|)))
+             (|ribcage-labels_-vh-9IizA|
+               (#%lambda (|x_-v7s24YDA|)
+                 (vector-ref |x_-v7s24YDA| 3)))
+             (|ribcage-marks_-vX1cfizA|
+               (#%lambda (|x_-vNv4DXDA|)
+                 (vector-ref |x_-vNv4DXDA| 2)))
+             (|ribcage-symnames_-vB5eOhzA|
+               (#%lambda (|x_-vrz6aXDA|)
+                 (vector-ref |x_-vrz6aXDA| 1)))
+             (|make-ribcage_-vVciUgzA|
+               (#%lambda (|symnames_-v3OemVDA|
+                          |marks_-vpKcPVDA|
+                          |labels_-vLGagWDA|)
                  (vector
                    (#%quote ribcage)
-                   |symnames_sEKPrWDEG|
-                   |marks_sE4MpnEEG|
-                   |labels_sEqInQEEG|)))
-             (|gen-labels_sEeix_-zG|
-               (#%lambda (|ls_sEoTttDEG|)
-                 (#%if (null? |ls_sEoTttDEG|)
+                   |symnames_-v3OemVDA|
+                   |marks_-vpKcPVDA|
+                   |labels_-vLGagWDA|)))
+             (|gen-labels_-vzgkrgzA|
+               (#%lambda (|ls_-vJRgVUDA|)
+                 (#%if (null? |ls_-vJRgVUDA|)
                    ()
-                   (cons (|gen-label_sEypB5-zG|)
-                         (|gen-labels_sEeix_-zG| (cdr |ls_sEoTttDEG|))))))
-             (|gen-label_sEypB5-zG|
+                   (cons (|gen-label_-vTnoxfzA|)
+                         (|gen-labels_-vzgkrgzA| (cdr |ls_-vJRgVUDA|))))))
+             (|gen-label_-vTnoxfzA|
                (#%lambda () (string #\i)))
-             (|make-indirect-label_sE8PPWWzG|
-               (#%lambda (|label_sE06CFBEG|)
+             (|make-indirect-label_-vtNCmczA|
+               (#%lambda (|label_-vl4p5TDA|)
                  (vector
                    (#%quote indirect-label)
-                   |label_sE06CFBEG|)))
-             (|indirect-label?_sEuLNnXzG|
-               (#%lambda (|x_sEG9EcBEG|)
-                 (#%if (vector? |x_sEG9EcBEG|)
-                   (#%if (= (vector-length |x_sEG9EcBEG|) 2)
-                     (eq? (vector-ref |x_sEG9EcBEG| 0)
+                   |label_-vl4p5TDA|)))
+             (|indirect-label?_-vPJAPczA|
+               (#%lambda (|x_-v_7rESDA|)
+                 (#%if (vector? |x_-v_7rESDA|)
+                   (#%if (= (vector-length |x_-v_7rESDA|) 2)
+                     (eq? (vector-ref |x_-v_7rESDA| 0)
                           (#%quote indirect-label))
                      #f)
                    #f)))
-             (|indirect-label-label_sEQHLQXzG|
-               (#%lambda (|x_sEkdGLAEG|)
-                 (vector-ref |x_sEkdGLAEG| 1)))
-             (|set-indirect-label-label!_sEaEJhYzG|
-               (#%lambda (|x_sEEkKRzEG| |update_sE-gIiAEG|)
-                 (vector-set! |x_sEEkKRzEG| 1 |update_sE-gIiAEG|)))
-             (|gen-indirect-label_sEwAHKYzG|
+             (|indirect-label-label_-v9GygdzA|
+               (#%lambda (|x_-vFbtbSDA|)
+                 (vector-ref |x_-vFbtbSDA| 1)))
+             (|set-indirect-label-label!_-vvCwJdzA|
+               (#%lambda (|x_-vZixhRDA| |update_-vjfvKRDA|)
+                 (vector-set! |x_-vZixhRDA| 1 |update_-vjfvKRDA|)))
+             (|gen-indirect-label_-vRyuaezA|
                (#%lambda ()
-                 (|make-indirect-label_sE8PPWWzG|
-                   (|gen-label_sEypB5-zG|))))
-             (|get-indirect-label_sESwFbZzG|
-               (#%lambda (|x_sEioMozEG|)
-                 (|indirect-label-label_sEQHLQXzG| |x_sEioMozEG|)))
-             (|set-indirect-label!_sEctDEZzG|
-               (#%lambda (|x_sECvQuyEG| |v_sEYrOXyEG|)
-                 (|set-indirect-label-label!_sEaEJhYzG|
-                   |x_sECvQuyEG|
-                   |v_sEYrOXyEG|)))
-             (|wrap-subst_sEatLOJzG| cdr)
-             (|wrap-marks_sEQwNlJzG| car)
-             (|make-wrap_sEuAPUIzG| cons)
-             (|id-sym-name&marks_sE8ERrIzG|
-               (#%lambda (|x_sEeKYGwEG| |w_sEAGW7xEG|)
-                 (#%if (|syntax-object?_sEueTWfzG| |x_sEeKYGwEG|)
+                 (|make-indirect-label_-vtNCmczA|
+                   (|gen-label_-vTnoxfzA|))))
+             (|get-indirect-label_-vbvsDezA|
+               (#%lambda (|x_-vDmzQQDA|)
+                 (|indirect-label-label_-v9GygdzA| |x_-vDmzQQDA|)))
+             (|set-indirect-label!_-vxrq4fzA|
+               (#%lambda (|x_-vXtDWPDA| |v_-vhqBnQDA|)
+                 (|set-indirect-label-label!_-vvCwJdzA|
+                   |x_-vXtDWPDA|
+                   |v_-vhqBnQDA|)))
+             (|wrap-subst_-vvrye_yA| cdr)
+             (|wrap-marks_-v9vAN-yA| car)
+             (|make-wrap_-vPyCk-yA| cons)
+             (|id-sym-name&marks_-vtCETZyA|
+               (#%lambda (|x_-vzIL6ODA| |w_-vVEJzODA|)
+                 (#%if (|syntax-object?_-vPcGmxyA| |x_-vzIL6ODA|)
                    (values
-                     ((#%lambda (|e_sEgzS1yEG|)
-                        (#%if (annotation? |e_sEgzS1yEG|)
-                          (annotation-expression |e_sEgzS1yEG|)
-                          |e_sEgzS1yEG|))
-                      (|syntax-object-expression_sEQaRngzG|
-                        |x_sEeKYGwEG|))
-                     (|join-marks_sEkYczhAG|
-                       (|wrap-marks_sEQwNlJzG| |w_sEAGW7xEG|)
-                       (|wrap-marks_sEQwNlJzG|
-                         (|syntax-object-wrap_sEa7PQgzG| |x_sEeKYGwEG|))))
+                     ((#%lambda (|e_-vBxFtPDA|)
+                        (#%if (annotation? |e_-vBxFtPDA|)
+                          (annotation-expression |e_-vBxFtPDA|)
+                          |e_-vBxFtPDA|))
+                      (|syntax-object-expression_-v99EPxyA|
+                        |x_-vzIL6ODA|))
+                     (|join-marks_-vFW_-yzA|
+                       (|wrap-marks_-v9vAN-yA| |w_-vVEJzODA|)
+                       (|wrap-marks_-v9vAN-yA|
+                         (|syntax-object-wrap_-vv5CgyyA| |x_-vzIL6ODA|))))
                    (values
-                     (#%if (annotation? |x_sEeKYGwEG|)
-                       (annotation-expression |x_sEeKYGwEG|)
-                       |x_sEeKYGwEG|)
-                     (|wrap-marks_sEQwNlJzG| |w_sEAGW7xEG|)))))
-             (|id?_sE4-1KFzG|
-               (#%lambda (|x_sEyR0NvEG|)
-                 (#%if (symbol? |x_sEyR0NvEG|)
+                     (#%if (annotation? |x_-vzIL6ODA|)
+                       (annotation-expression |x_-vzIL6ODA|)
+                       |x_-vzIL6ODA|)
+                     (|wrap-marks_-v9vAN-yA| |w_-vVEJzODA|)))))
+             (|id?_-vpYQ9XyA|
+               (#%lambda (|x_-vTPPcNDA|)
+                 (#%if (symbol? |x_-vTPPcNDA|)
                    #t
-                   (#%if (|syntax-object?_sEueTWfzG| |x_sEyR0NvEG|)
+                   (#%if (|syntax-object?_-vPcGmxyA| |x_-vTPPcNDA|)
                      (symbol?
-                       ((#%lambda (|e_sEUN-dwEG|)
-                          (#%if (annotation? |e_sEUN-dwEG|)
-                            (annotation-expression |e_sEUN-dwEG|)
-                            |e_sEUN-dwEG|))
-                        (|syntax-object-expression_sEQaRngzG|
-                          |x_sEyR0NvEG|)))
-                     (#%if (annotation? |x_sEyR0NvEG|)
-                       (symbol? (annotation-expression |x_sEyR0NvEG|))
+                       ((#%lambda (|e_-vdMNFNDA|)
+                          (#%if (annotation? |e_-vdMNFNDA|)
+                            (annotation-expression |e_-vdMNFNDA|)
+                            |e_-vdMNFNDA|))
+                        (|syntax-object-expression_-v99EPxyA|
+                          |x_-vTPPcNDA|)))
+                     (#%if (annotation? |x_-vTPPcNDA|)
+                       (symbol? (annotation-expression |x_-vTPPcNDA|))
                        #f)))))
-             (|nonsymbol-id?_sE0ke0DzG|
-               (#%lambda (|x_sESY4TuEG|)
-                 (#%if (|syntax-object?_sEueTWfzG| |x_sESY4TuEG|)
+             (|nonsymbol-id?_-vli1sUyA|
+               (#%lambda (|x_-vbXTiMDA|)
+                 (#%if (|syntax-object?_-vPcGmxyA| |x_-vbXTiMDA|)
                    (symbol?
-                     ((#%lambda (|e_sEcV2kvEG|)
-                        (#%if (annotation? |e_sEcV2kvEG|)
-                          (annotation-expression |e_sEcV2kvEG|)
-                          |e_sEcV2kvEG|))
-                      (|syntax-object-expression_sEQaRngzG|
-                        |x_sESY4TuEG|)))
+                     ((#%lambda (|e_-vxTRLMDA|)
+                        (#%if (annotation? |e_-vxTRLMDA|)
+                          (annotation-expression |e_-vxTRLMDA|)
+                          |e_-vxTRLMDA|))
+                      (|syntax-object-expression_-v99EPxyA|
+                        |x_-vbXTiMDA|)))
                    #f)))
-             (|global-extend_sEGngzCzG|
-               (#%lambda (|type_sEQ7bwtEG|
-                          |sym_sEa49ZtEG|
-                          |val_sEw07quEG|)
-                 (|put-global-definition-hook_sEA1I3qyG|
-                   |sym_sEa49ZtEG|
-                   (|make-binding_sEMH_8szG|
-                     |type_sEQ7bwtEG|
-                     |val_sEw07quEG|))))
-             (|lookup_sEkri6CzG|
-               (#%lambda (|x_sEoIv-oEG| |r_sEKEtrpEG|)
-                 (#%letrec ((|whack-binding!_sE4BrUpEG|
-                              (#%lambda (|b_sE8ffCsEG| |*b_sEubd3tEG|)
+             (|global-extend_-v_l3_TyA|
+               (#%lambda (|type_-v96-XKDA|
+                          |sym_-vv2YoLDA|
+                          |val_-vR-VRLDA|)
+                 (|put-global-definition-hook_-vV_uvHxA|
+                   |sym_-vv2YoLDA|
+                   (|make-binding_-v5GOAJyA|
+                     |type_-v96-XKDA|
+                     |val_-vR-VRLDA|))))
+             (|lookup_-vFp5yTyA|
+               (#%lambda (|x_-vJGiqGDA| |r_-v3DgTGDA|)
+                 (#%letrec ((|whack-binding!_-vpzekHDA|
+                              (#%lambda (|b_-vtd22KDA| |*b_-vP90vKDA|)
                                 (#%begin
-                                  (|set-binding-type!_sEOwVvtzG|
-                                    |b_sE8ffCsEG|
-                                    (|binding-type_sE6EZBszG| |*b_sEubd3tEG|))
-                                  (|set-binding-value!_sE8tTYtzG|
-                                    |b_sE8ffCsEG|
-                                    (|binding-value_sEsAX2tzG|
-                                      |*b_sEubd3tEG|))))))
-                   ((#%lambda (|b_sEqxplqEG|)
-                      ((#%lambda (|t_sEMtnOqEG|)
-                         (#%if (eqv? |t_sEMtnOqEG| (#%quote deferred))
+                                  (|set-binding-type!_-v7vIXKyA|
+                                    |b_-vtd22KDA|
+                                    (|binding-type_-vrCM1KyA| |*b_-vP90vKDA|))
+                                  (|set-binding-value!_-vtrGoLyA|
+                                    |b_-vtd22KDA|
+                                    (|binding-value_-vNyKuKyA|
+                                      |*b_-vP90vKDA|))))))
+                   ((#%lambda (|b_-vLvcNHDA|)
+                      ((#%lambda (|t_-v5saeIDA|)
+                         (#%if (eqv? |t_-v5saeIDA| (#%quote deferred))
                            (#%begin
-                             (|whack-binding!_sE4BrUpEG|
-                               |b_sEqxplqEG|
-                               ((#%lambda (|*b_sE6qlfrEG|)
-                                  ((#%lambda (|t_sEsmjIrEG|)
-                                     (#%if |t_sEsmjIrEG|
-                                       |t_sEsmjIrEG|
+                             (|whack-binding!_-vpzekHDA|
+                               |b_-vLvcNHDA|
+                               ((#%lambda (|*b_-vro8HIDA|)
+                                  ((#%lambda (|t_-vNk68JDA|)
+                                     (#%if |t_-vNk68JDA|
+                                       |t_-vNk68JDA|
                                        (syntax-error
-                                         |*b_sE6qlfrEG|
+                                         |*b_-vro8HIDA|
                                          "invalid transformer")))
-                                   (|sanitize-binding_sE-ukFBzG|
-                                     |*b_sE6qlfrEG|)))
-                                (|local-eval-hook_sEwnUlnyG|
-                                  (|binding-value_sEsAX2tzG| |b_sEqxplqEG|))))
-                             (|binding-type_sE6EZBszG| |b_sEqxplqEG|)
-                             |b_sEqxplqEG|)
-                           |b_sEqxplqEG|))
-                       (|binding-type_sE6EZBszG| |b_sEqxplqEG|)))
-                    (|lookup*_sEEymcBzG| |x_sEoIv-oEG| |r_sEKEtrpEG|)))))
-             (|sanitize-binding_sE-ukFBzG|
-               (#%lambda (|b_sEIPz4oEG|)
-                 (#%if (procedure? |b_sEIPz4oEG|)
-                   (|make-binding_sEMH_8szG|
+                                   (|sanitize-binding_-vjt75TyA|
+                                     |*b_-vro8HIDA|)))
+                                (|local-eval-hook_-vRlHNExA|
+                                  (|binding-value_-vNyKuKyA| |b_-vLvcNHDA|))))
+                             (|binding-type_-vrCM1KyA| |b_-vLvcNHDA|)
+                             |b_-vLvcNHDA|)
+                           |b_-vLvcNHDA|))
+                       (|binding-type_-vrCM1KyA| |b_-vLvcNHDA|)))
+                    (|lookup*_-vZw9ESyA| |x_-vJGiqGDA| |r_-v3DgTGDA|)))))
+             (|sanitize-binding_-vjt75TyA|
+               (#%lambda (|b_-v1OmwFDA|)
+                 (#%if (procedure? |b_-v1OmwFDA|)
+                   (|make-binding_-v5GOAJyA|
                      (#%quote macro)
-                     |b_sEIPz4oEG|)
-                   (#%if (|binding?_sEupRpuzG| |b_sEIPz4oEG|)
-                     ((#%lambda (|t_sE2MxxoEG|)
-                        (#%if (memv |t_sE2MxxoEG|
+                     |b_-v1OmwFDA|)
+                   (#%if (|binding?_-vPnERLyA| |b_-v1OmwFDA|)
+                     ((#%lambda (|t_-vnKkZFDA|)
+                        (#%if (memv |t_-vnKkZFDA|
                                     (#%quote (core macro macro!)))
                           (#%if (procedure?
-                                  (|binding-value_sEsAX2tzG| |b_sEIPz4oEG|))
-                            |b_sEIPz4oEG|
+                                  (|binding-value_-vNyKuKyA| |b_-v1OmwFDA|))
+                            |b_-v1OmwFDA|
                             #f)
-                          (#%if (eqv? |t_sE2MxxoEG| (#%quote module))
-                            (#%if (|interface?_sEk7b2wAG|
-                                    (|binding-value_sEsAX2tzG| |b_sEIPz4oEG|))
-                              |b_sEIPz4oEG|
+                          (#%if (eqv? |t_-vnKkZFDA| (#%quote module))
+                            (#%if (|interface?_-vF5-tNzA|
+                                    (|binding-value_-vNyKuKyA| |b_-v1OmwFDA|))
+                              |b_-v1OmwFDA|
                               #f)
-                            |b_sEIPz4oEG|)))
-                      (|binding-type_sE6EZBszG| |b_sEIPz4oEG|))
+                            |b_-v1OmwFDA|)))
+                      (|binding-type_-vrCM1KyA| |b_-v1OmwFDA|))
                      #f))))
-             (|lookup*_sEEymcBzG|
-               (#%lambda (|x_sEk2IgmEG| |r_sEG-FJmEG|)
-                 ((#%lambda (|t_sE0XDanEG|)
-                    (#%if |t_sE0XDanEG|
-                      (cdr |t_sE0XDanEG|)
-                      (#%if (symbol? |x_sEk2IgmEG|)
-                        ((#%lambda (|t_sEmTBDnEG|)
-                           (#%if |t_sEmTBDnEG|
-                             |t_sEmTBDnEG|
-                             (|make-binding_sEMH_8szG|
+             (|lookup*_-vZw9ESyA|
+               (#%lambda (|x_-vF0vIDDA| |r_-v_Ys9EDA|)
+                 ((#%lambda (|t_-vlVqCEDA|)
+                    (#%if |t_-vlVqCEDA|
+                      (cdr |t_-vlVqCEDA|)
+                      (#%if (symbol? |x_-vF0vIDDA|)
+                        ((#%lambda (|t_-vHRo3FDA|)
+                           (#%if |t_-vHRo3FDA|
+                             |t_-vHRo3FDA|
+                             (|make-binding_-v5GOAJyA|
                                (#%quote global)
-                               |x_sEk2IgmEG|)))
-                         (|get-global-definition-hook_sEWZFwqyG|
-                           |x_sEk2IgmEG|))
-                        (|make-binding_sEMH_8szG|
+                               |x_-vF0vIDDA|)))
+                         (|get-global-definition-hook_-vfYsYHxA|
+                           |x_-vF0vIDDA|))
+                        (|make-binding_-v5GOAJyA|
                           (#%quote displaced-lexical)
                           #f))))
-                  (assq |x_sEk2IgmEG| |r_sEG-FJmEG|))))
-             (|displaced-lexical-error_sEiCoLAzG|
-               (#%lambda (|id_sE-5KPlEG|)
+                  (assq |x_-vF0vIDDA| |r_-v_Ys9EDA|))))
+             (|displaced-lexical-error_-vDAbbSyA|
+               (#%lambda (|id_-vj4xfDDA|)
                  (syntax-error
-                   |id_sE-5KPlEG|
-                   (#%if (|id-var-name_sE2G2QjAG|
-                           |id_sE-5KPlEG|
+                   |id_-vj4xfDDA|
+                   (#%if (|id-var-name_-vnERfBzA|
+                           |id_-vj4xfDDA|
                            (#%quote (())))
                      "identifier out of context"
                      "identifier not visible"))))
-             (|transformer-env_sEYFqiAzG|
-               (#%lambda (|r_sEidOVkEG|)
-                 (#%if (null? |r_sEidOVkEG|)
+             (|transformer-env_-vhEdKRyA|
+               (#%lambda (|r_-vDbBlCDA|)
+                 (#%if (null? |r_-vDbBlCDA|)
                    ()
-                   ((#%lambda (|a_sEE9MmlEG|)
-                      (#%if (eq? (cadr |a_sEE9MmlEG|) (#%quote lexical))
-                        (|transformer-env_sEYFqiAzG| (cdr |r_sEidOVkEG|))
-                        (cons |a_sEE9MmlEG|
-                              (|transformer-env_sEYFqiAzG|
-                                (cdr |r_sEidOVkEG|)))))
-                    (car |r_sEidOVkEG|)))))
-             (|extend-var-env*_sECJsRzzG|
-               (#%lambda (|labels_sEgoUyjEG|
-                          |vars_sECkS_jEG|
-                          |r_sEYgQskEG|)
-                 (#%if (null? |labels_sEgoUyjEG|)
-                   |r_sEYgQskEG|
-                   (|extend-var-env*_sECJsRzzG|
-                     (cdr |labels_sEgoUyjEG|)
-                     (cdr |vars_sECkS_jEG|)
-                     (|extend-env_sEWQwXyzG|
-                       (car |labels_sEgoUyjEG|)
-                       (|make-binding_sEMH_8szG|
+                   ((#%lambda (|a_-vZ7zOCDA|)
+                      (#%if (eq? (cadr |a_-vZ7zOCDA|) (#%quote lexical))
+                        (|transformer-env_-vhEdKRyA| (cdr |r_-vDbBlCDA|))
+                        (cons |a_-vZ7zOCDA|
+                              (|transformer-env_-vhEdKRyA|
+                                (cdr |r_-vDbBlCDA|)))))
+                    (car |r_-vDbBlCDA|)))))
+             (|extend-var-env*_-vXHfhRyA|
+               (#%lambda (|labels_-vBmH-ADA|
+                          |vars_-vXiFrBDA|
+                          |r_-vhfDUBDA|)
+                 (#%if (null? |labels_-vBmH-ADA|)
+                   |r_-vhfDUBDA|
+                   (|extend-var-env*_-vXHfhRyA|
+                     (cdr |labels_-vBmH-ADA|)
+                     (cdr |vars_-vXiFrBDA|)
+                     (|extend-env_-vfPjnQyA|
+                       (car |labels_-vBmH-ADA|)
+                       (|make-binding_-v5GOAJyA|
                          (#%quote lexical)
-                         (car |vars_sECkS_jEG|))
-                       |r_sEYgQskEG|)))))
-             (|extend-env*_sEgNuozzG|
-               (#%lambda (|labels_sEez-biEG|
-                          |bindings_sEAvYEiEG|
-                          |r_sEWrW5jEG|)
-                 (#%if (null? |labels_sEez-biEG|)
-                   |r_sEWrW5jEG|
-                   (|extend-env*_sEgNuozzG|
-                     (cdr |labels_sEez-biEG|)
-                     (cdr |bindings_sEAvYEiEG|)
-                     (|extend-env_sEWQwXyzG|
-                       (car |labels_sEez-biEG|)
-                       (car |bindings_sEAvYEiEG|)
-                       |r_sEWrW5jEG|)))))
-             (|extend-env_sEWQwXyzG|
-               (#%lambda (|label_sEcK4RgEG|
-                          |binding_sEyG2ihEG|
-                          |r_sEUC0LhEG|)
-                 (cons (cons |label_sEcK4RgEG| |binding_sEyG2ihEG|)
-                       |r_sEUC0LhEG|)))
-             (|binding?_sEupRpuzG|
-               (#%lambda (|x_sESN6ogEG|)
-                 (#%if (pair? |x_sESN6ogEG|)
-                   (symbol? (car |x_sESN6ogEG|))
+                         (car |vars_-vXiFrBDA|))
+                       |r_-vhfDUBDA|)))))
+             (|extend-env*_-vBLhQQyA|
+               (#%lambda (|labels_-vzxNDzDA|
+                          |bindings_-vVtL4ADA|
+                          |r_-vfqJxADA|)
+                 (#%if (null? |labels_-vzxNDzDA|)
+                   |r_-vfqJxADA|
+                   (|extend-env*_-vBLhQQyA|
+                     (cdr |labels_-vzxNDzDA|)
+                     (cdr |bindings_-vVtL4ADA|)
+                     (|extend-env_-vfPjnQyA|
+                       (car |labels_-vzxNDzDA|)
+                       (car |bindings_-vVtL4ADA|)
+                       |r_-vfqJxADA|)))))
+             (|extend-env_-vfPjnQyA|
+               (#%lambda (|label_-vxITgyDA|
+                          |binding_-vTERJyDA|
+                          |r_-vdBPazDA|)
+                 (cons (cons |label_-vxITgyDA| |binding_-vTERJyDA|)
+                       |r_-vdBPazDA|)))
+             (|binding?_-vPnERLyA|
+               (#%lambda (|x_-vbMVPxDA|)
+                 (#%if (pair? |x_-vbMVPxDA|)
+                   (symbol? (car |x_-vbMVPxDA|))
                    #f)))
-             (|set-binding-value!_sE8tTYtzG| set-cdr!)
-             (|set-binding-type!_sEOwVvtzG| set-car!)
-             (|binding-value_sEsAX2tzG| cdr)
-             (|binding-type_sE6EZBszG| car)
-             (|make-binding_sEMH_8szG|
-               (#%lambda (|x_sEaVaufEG| |y_sEwR8XfEG|)
-                 (cons |x_sEaVaufEG| |y_sEwR8XfEG|)))
-             (|source-annotation_sE09gxozG|
-               (#%lambda (|x_sEQYc1fEG|)
-                 (#%if (annotation? |x_sEQYc1fEG|)
-                   (annotation-source |x_sEQYc1fEG|)
-                   (#%if (|syntax-object?_sEueTWfzG| |x_sEQYc1fEG|)
-                     (|source-annotation_sE09gxozG|
-                       (|syntax-object-expression_sEQaRngzG|
-                         |x_sEQYc1fEG|))
+             (|set-binding-value!_-vtrGoLyA| set-cdr!)
+             (|set-binding-type!_-v7vIXKyA| set-car!)
+             (|binding-value_-vNyKuKyA| cdr)
+             (|binding-type_-vrCM1KyA| car)
+             (|make-binding_-v5GOAJyA|
+               (#%lambda (|x_-vvTZVwDA| |y_-vRPXmxDA|)
+                 (cons |x_-vvTZVwDA| |y_-vRPXmxDA|)))
+             (|source-annotation_-vl73ZFyA|
+               (#%lambda (|x_-v9X_swDA|)
+                 (#%if (annotation? |x_-v9X_swDA|)
+                   (annotation-source |x_-v9X_swDA|)
+                   (#%if (|syntax-object?_-vPcGmxyA| |x_-v9X_swDA|)
+                     (|source-annotation_-vl73ZFyA|
+                       (|syntax-object-expression_-v99EPxyA|
+                         |x_-v9X_swDA|))
                      #f))))
-             (|syntax-object-wrap_sEa7PQgzG|
-               (#%lambda (|x_sE6fnMcEG|)
-                 (vector-ref |x_sE6fnMcEG| 2)))
-             (|syntax-object-expression_sEQaRngzG|
-               (#%lambda (|x_sEMipjcEG|)
-                 (vector-ref |x_sEMipjcEG| 1)))
-             (|syntax-object?_sEueTWfzG|
-               (#%lambda (|x_sEqmrSbEG|)
-                 (#%if (vector? |x_sEqmrSbEG|)
-                   (#%if (= (vector-length |x_sEqmrSbEG|) 3)
-                     (eq? (vector-ref |x_sEqmrSbEG| 0)
+             (|syntax-object-wrap_-vv5CgyyA|
+               (#%lambda (|x_-vrdacuDA|)
+                 (vector-ref |x_-vrdacuDA| 2)))
+             (|syntax-object-expression_-v99EPxyA|
+               (#%lambda (|x_-v5hcLtDA|)
+                 (vector-ref |x_-v5hcLtDA| 1)))
+             (|syntax-object?_-vPcGmxyA|
+               (#%lambda (|x_-vLkeitDA|)
+                 (#%if (vector? |x_-vLkeitDA|)
+                   (#%if (= (vector-length |x_-vLkeitDA|) 3)
+                     (eq? (vector-ref |x_-vLkeitDA| 0)
                           (#%quote syntax-object))
                      #f)
                    #f)))
-             (|make-syntax-object_sE8iVtfzG|
-               (#%lambda (|expression_sEKtvYaEG| |wrap_sE4qtpbEG|)
+             (|make-syntax-object_-vtgIVwyA|
+               (#%lambda (|expression_-v3siosDA| |wrap_-vpogRsDA|)
                  (vector
                    (#%quote syntax-object)
-                   |expression_sEKtvYaEG|
-                   |wrap_sE4qtpbEG|)))
-             (|build-body_sEKH7jczG|
-               (#%lambda (|src_sEmID89EG|
-                          |vars_sEIEBB9EG|
-                          |val-exps_sE2Bz2aEG|
-                          |body-exp_sEoxxvaEG|)
-                 (|build-letrec_sEoL9SbzG|
-                   |src_sEmID89EG|
-                   |vars_sEIEBB9EG|
-                   |val-exps_sE2Bz2aEG|
-                   |body-exp_sEoxxvaEG|)))
-             (|build-letrec_sEoL9SbzG|
-               (#%lambda (|src_sE-WLk7EG|
-                          |vars_sEkTJN7EG|
-                          |val-exps_sEGPHe8EG|
-                          |body-exp_sE0MFH8EG|)
-                 (#%if (null? |vars_sEkTJN7EG|)
-                   (#%if |src_sE-WLk7EG|
+                   |expression_-v3siosDA|
+                   |wrap_-vpogRsDA|)))
+             (|build-body_-v3GWKtyA|
+               (#%lambda (|src_-vHGqAqDA|
+                          |vars_-v1Do1rDA|
+                          |val-exps_-vnzmurDA|
+                          |body-exp_-vJvkXrDA|)
+                 (|build-letrec_-vJJYhtyA|
+                   |src_-vHGqAqDA|
+                   |vars_-v1Do1rDA|
+                   |val-exps_-vnzmurDA|
+                   |body-exp_-vJvkXrDA|)))
+             (|build-letrec_-vJJYhtyA|
+               (#%lambda (|src_-vjVyMoDA|
+                          |vars_-vFRwdpDA|
+                          |val-exps_-v_NuGpDA|
+                          |body-exp_-vlKs7qDA|)
+                 (#%if (null? |vars_-vFRwdpDA|)
+                   (#%if |src_-vjVyMoDA|
                      (list #%annotate
-                           |body-exp_sE0MFH8EG|
-                           |src_sE-WLk7EG|)
-                     |body-exp_sE0MFH8EG|)
-                   (#%if |src_sE-WLk7EG|
+                           |body-exp_-vlKs7qDA|
+                           |src_-vjVyMoDA|)
+                     |body-exp_-vlKs7qDA|)
+                   (#%if |src_-vjVyMoDA|
                      (list #%annotate
                            (list #%letrec
                                  (map list
-                                      |vars_sEkTJN7EG|
-                                      |val-exps_sEGPHe8EG|)
-                                 |body-exp_sE0MFH8EG|)
-                           |src_sE-WLk7EG|)
+                                      |vars_-vFRwdpDA|
+                                      |val-exps_-v_NuGpDA|)
+                                 |body-exp_-vlKs7qDA|)
+                           |src_-vjVyMoDA|)
                      (list #%letrec
-                           (map list |vars_sEkTJN7EG| |val-exps_sEGPHe8EG|)
-                           |body-exp_sE0MFH8EG|)))))
-             (|build-sequence_sE2PbpbzG|
-               (#%lambda (|src_sEi2Qq6EG| |exps_sEE-NT6EG|)
-                 (#%if (null? |exps_sEE-NT6EG|)
-                   (|chi-void_sE8vISQAG|)
-                   (#%if (equal? (#%quote (void)) (car |exps_sEE-NT6EG|))
-                     (|build-sequence_sE2PbpbzG|
-                       |src_sEi2Qq6EG|
-                       (cdr |exps_sEE-NT6EG|))
-                     (#%if (null? (cdr |exps_sEE-NT6EG|))
-                       (#%if |src_sEi2Qq6EG|
+                           (map list |vars_-vFRwdpDA| |val-exps_-v_NuGpDA|)
+                           |body-exp_-vlKs7qDA|)))))
+             (|build-sequence_-vnN-QsyA|
+               (#%lambda (|src_-vD0DSnDA| |exps_-vZYAjoDA|)
+                 (#%if (null? |exps_-vZYAjoDA|)
+                   (|chi-void_-vttvi6AA|)
+                   (#%if (equal? (#%quote (void)) (car |exps_-vZYAjoDA|))
+                     (|build-sequence_-vnN-QsyA|
+                       |src_-vD0DSnDA|
+                       (cdr |exps_-vZYAjoDA|))
+                     (#%if (null? (cdr |exps_-vZYAjoDA|))
+                       (#%if |src_-vD0DSnDA|
                          (list (#%quote annotate)
-                               (car |exps_sEE-NT6EG|)
-                               |src_sEi2Qq6EG|)
-                         (car |exps_sEE-NT6EG|))
-                       (#%if |src_sEi2Qq6EG|
+                               (car |exps_-vZYAjoDA|)
+                               |src_-vD0DSnDA|)
+                         (car |exps_-vZYAjoDA|))
+                       (#%if |src_-vD0DSnDA|
                          (list #%annotate
-                               (cons #%begin |exps_sEE-NT6EG|)
-                               |src_sEi2Qq6EG|)
-                         (cons #%begin |exps_sEE-NT6EG|)))))))
-             (|generate-id-in-module_sEiLxksyG|
-               (#%lambda (|module-id_sEeo0J3EG|
-                          |path_sEAk-94EG|
-                          |id_sEWgYC4EG|)
+                               (cons #%begin |exps_-vZYAjoDA|)
+                               |src_-vD0DSnDA|)
+                         (cons #%begin |exps_-vZYAjoDA|)))))))
+             (|generate-id-in-module_-vDJkMJxA|
+               (#%lambda (|module-id_-vzmP8lDA|
+                          |path_-vViNBlDA|
+                          |id_-vffL2mDA|)
                  (#%begin
-                   (#%if (not |module-id_sEeo0J3EG|)
-                     (#%set! |module-id_sEeo0J3EG|
-                       (|generate-id_sECSBqryG| #f))
-                     #!void)
-                   (#%if (not |id_sEWgYC4EG|)
-                     (#%set! |id_sEWgYC4EG|
-                       (|generate-id_sECSBqryG| #f))
-                     #!void)
+                   (#%if |module-id_-vzmP8lDA|
+                     #!void
+                     (#%set! |module-id_-vzmP8lDA|
+                       (|generate-id_-vXQoSIxA| #f)))
+                   (#%if |id_-vffL2mDA|
+                     #!void
+                     (#%set! |id_-vffL2mDA|
+                       (|generate-id_-vXQoSIxA| #f)))
                    (string->symbol
                      (string-append
                        (apply string-append
                               "@"
-                              (symbol->string |module-id_sEeo0J3EG|)
+                              (symbol->string |module-id_-vzmP8lDA|)
                               "::"
-                              ((#%letrec ((|loop_sEgdW35EG|
-                                            (#%lambda (|path_sEC9Uw5EG|
-                                                       |res_sEY5SZ5EG|)
-                                              (#%if (null? |path_sEC9Uw5EG|)
-                                                |res_sEY5SZ5EG|
-                                                (|loop_sEgdW35EG|
-                                                  (cdr |path_sEC9Uw5EG|)
+                              ((#%letrec ((|loop_-vBbJvmDA|
+                                            (#%lambda (|path_-vX7HYmDA|
+                                                       |res_-vh4FpnDA|)
+                                              (#%if (null? |path_-vX7HYmDA|)
+                                                |res_-vh4FpnDA|
+                                                (|loop_-vBbJvmDA|
+                                                  (cdr |path_-vX7HYmDA|)
                                                   (cons (symbol->string
-                                                          (car |path_sEC9Uw5EG|))
+                                                          (car |path_-vX7HYmDA|))
                                                         (cons "::"
-                                                              |res_sEY5SZ5EG|)))))))
-                                 |loop_sEgdW35EG|)
-                               |path_sEAk-94EG|
+                                                              |res_-vh4FpnDA|)))))))
+                                 |loop_-vBbJvmDA|)
+                               |path_-vViNBlDA|
                                ()))
-                       (symbol->string |id_sEWgYC4EG|))))))
-             (|generate-module-id_sEYOzTryG|
-               (#%lambda (|id_sEUr2g3EG|)
-                 (#%if |id_sEUr2g3EG|
+                       (symbol->string |id_-vffL2mDA|))))))
+             (|generate-module-id_-vhNmjJxA|
+               (#%lambda (|id_-vdqRHkDA|)
+                 (#%if |id_-vdqRHkDA|
                    (string->symbol
                      (string-append
                        "@"
-                       (symbol->string |id_sEUr2g3EG|)))
-                   (|generate-id_sECSBqryG| |id_sEUr2g3EG|))))
-             (|generate-id_sECSBqryG| gen-sym)
-             (|get-import-binding_sEgWDZqyG|
-               (#%lambda (|symbol_sEcz6m2EG| |token_sEyv4P2EG|)
-                 (getprop |symbol_sEcz6m2EG| |token_sEyv4P2EG|)))
-             (|get-global-definition-hook_sEWZFwqyG|
-               (#%lambda (|symbol_sESC8V1EG|)
+                       (symbol->string |id_-vdqRHkDA|)))
+                   (|generate-id_-vXQoSIxA| |id_-vdqRHkDA|))))
+             (|generate-id_-vXQoSIxA| gen-sym)
+             (|get-import-binding_-vBUqpIxA|
+               (#%lambda (|symbol_-vxxVNjDA| |token_-vTtTekDA|)
+                 (getprop |symbol_-vxxVNjDA| |token_-vTtTekDA|)))
+             (|get-global-definition-hook_-vfYsYHxA|
+               (#%lambda (|symbol_-vbBXkjDA|)
                  (getprop
-                   |symbol_sESC8V1EG|
+                   |symbol_-vbBXkjDA|
                    (#%quote *sc-expander*))))
-             (|put-global-definition-hook_sEA1I3qyG|
-               (#%lambda (|symbol_sEaKc_0EG| |val_sEwGas1EG|)
-                 ($sc-put-cte |symbol_sEaKc_0EG| |val_sEwGas1EG|)))
-             (|error-hook_sESjSOnyG|
-               (#%lambda (|who_sE8ViE_DG|
-                          |why_sEuRg50EG|
-                          |what_sEQNey0EG|)
-                 (error |who_sE8ViE_DG|
+             (|put-global-definition-hook_-vV_uvHxA|
+               (#%lambda (|symbol_-vvI_qiDA| |val_-vREZTiDA|)
+                 ($sc-put-cte |symbol_-vvI_qiDA| |val_-vREZTiDA|)))
+             (|error-hook_-vbiFeFxA|
+               (#%lambda (|who_-vtT54hDA|
+                          |why_-vPP3xhDA|
+                          |what_-v9M1-hDA|)
+                 (error |who_-vtT54hDA|
                         "~a ~s"
-                        |why_sEuRg50EG|
-                        |what_sEQNey0EG|)))
-             (|local-eval-hook_sEwnUlnyG|
-               (#%lambda (|x_sEOYkb_DG|)
-                 (eval (list |noexpand_sEa5-WVxG| |x_sEOYkb_DG|))))
-             (|top-level-eval-hook_sEarWUmyG|
-               (#%lambda (|x_sEs0nK-DG|)
-                 (eval (list |noexpand_sEa5-WVxG| |x_sEs0nK-DG|))))
-             (|noexpand_sEa5-WVxG| "noexpand"))
+                        |why_-vPP3xhDA|
+                        |what_-v9M1-hDA|)))
+             (|local-eval-hook_-vRlHNExA|
+               (#%lambda (|x_-v7X7DgDA|)
+                 (eval (list |noexpand_-vv3NmbxA| |x_-v7X7DgDA|))))
+             (|top-level-eval-hook_-vvpJkExA|
+               (#%lambda (|x_-vN-9agDA|)
+                 (eval (list |noexpand_-vv3NmbxA| |x_-vN-9agDA|))))
+             (|noexpand_-vv3NmbxA| "noexpand"))
     (#%begin
       (#%set! $sc-put-cte
-        (#%lambda (|id_sEy5u1UAG| |b_sEU1suUAG|)
-          (#%letrec ((|put-token_sEe-pXUAG|
-                       (#%lambda (|id_sE0m3WZAG| |token_sEmi1n-AG|)
-                         (#%letrec ((|cons-id_sEIe_P-AG|
-                                      (#%lambda (|id_sEMUOx1BG| |x_sE6RM-1BG|)
-                                        (#%if (not |x_sE6RM-1BG|)
-                                          |id_sEMUOx1BG|
-                                          (cons |id_sEMUOx1BG|
-                                                |x_sE6RM-1BG|))))
-                                    (|weed_sE2bZg_AG|
-                                      (#%lambda (|id_sEsNKr2BG| |x_sEOJIU2BG|)
-                                        (#%if (pair? |x_sEOJIU2BG|)
-                                          (#%if (|bound-id=?_sE4vYalAG|
-                                                  (car |x_sEOJIU2BG|)
-                                                  |id_sEsNKr2BG|)
-                                            (|weed_sE2bZg_AG|
-                                              |id_sEsNKr2BG|
-                                              (cdr |x_sEOJIU2BG|))
-                                            (|cons-id_sEIe_P-AG|
-                                              (car |x_sEOJIU2BG|)
-                                              (|weed_sE2bZg_AG|
-                                                |id_sEsNKr2BG|
-                                                (cdr |x_sEOJIU2BG|))))
-                                          (#%if ((#%lambda (|t_sE8GGl3BG|)
-                                                   (#%if |t_sE8GGl3BG|
-                                                     |t_sE8GGl3BG|
-                                                     (|bound-id=?_sE4vYalAG|
-                                                       |x_sEOJIU2BG|
-                                                       |id_sEsNKr2BG|)))
-                                                 (not |x_sEOJIU2BG|))
+        (#%lambda (|id_-vT3ht9AA| |b_-vd0fW9AA|)
+          (#%letrec ((|put-token_-vzYcnaAA|
+                       (#%lambda (|id_-vlkSlfAA| |token_-vHgQOfAA|)
+                         (#%letrec ((|cons-id_-v1dOfgAA|
+                                      (#%lambda (|id_-v5TBZiAA| |x_-vrPzqjAA|)
+                                        (#%if |x_-vrPzqjAA|
+                                          (cons |id_-v5TBZiAA| |x_-vrPzqjAA|)
+                                          |id_-v5TBZiAA|)))
+                                    (|weed_-vn9MIgAA|
+                                      (#%lambda (|id_-vNLxTjAA| |x_-v7IvkkAA|)
+                                        (#%if (pair? |x_-v7IvkkAA|)
+                                          (#%if (|bound-id=?_-vptLCCzA|
+                                                  (car |x_-v7IvkkAA|)
+                                                  |id_-vNLxTjAA|)
+                                            (|weed_-vn9MIgAA|
+                                              |id_-vNLxTjAA|
+                                              (cdr |x_-v7IvkkAA|))
+                                            (|cons-id_-v1dOfgAA|
+                                              (car |x_-v7IvkkAA|)
+                                              (|weed_-vn9MIgAA|
+                                                |id_-vNLxTjAA|
+                                                (cdr |x_-v7IvkkAA|))))
+                                          (#%if ((#%lambda (|t_-vtEtNkAA|)
+                                                   (#%if |t_-vtEtNkAA|
+                                                     |t_-vtEtNkAA|
+                                                     (|bound-id=?_-vptLCCzA|
+                                                       |x_-v7IvkkAA|
+                                                       |id_-vNLxTjAA|)))
+                                                 (#%if |x_-v7IvkkAA| #f #t))
                                             #f
-                                            |x_sEOJIU2BG|)))))
-                           ((#%lambda (|sym_sEo7XJ_AG|)
-                              ((#%lambda (|x_sEK3Va0BG|)
-                                 (#%if (#%if (not |x_sEK3Va0BG|)
-                                         (symbol? |id_sE0m3WZAG|)
-                                         #f)
-                                   (remprop |sym_sEo7XJ_AG| |token_sEmi1n-AG|)
+                                            |x_-v7IvkkAA|)))))
+                           ((#%lambda (|sym_-vJ5K9hAA|)
+                              ((#%lambda (|x_-v32IChAA|)
+                                 (#%if (#%if |x_-v32IChAA|
+                                         #f
+                                         (symbol? |id_-vlkSlfAA|))
+                                   (remprop |sym_-vJ5K9hAA| |token_-vHgQOfAA|)
                                    (putprop
-                                     |sym_sEo7XJ_AG|
-                                     |token_sEmi1n-AG|
-                                     (|cons-id_sEIe_P-AG|
-                                       |id_sE0m3WZAG|
-                                       |x_sEK3Va0BG|))))
-                               (|weed_sE2bZg_AG|
-                                 |id_sE0m3WZAG|
-                                 (getprop |sym_sEo7XJ_AG| |token_sEmi1n-AG|))))
-                            ((#%lambda (|e_sEqYQ41BG|)
-                               (#%if (annotation? |e_sEqYQ41BG|)
-                                 (annotation-expression |e_sEqYQ41BG|)
-                                 |e_sEqYQ41BG|))
-                             (#%if (|syntax-object?_sEueTWfzG| |id_sE0m3WZAG|)
-                               (|syntax-object-expression_sEQaRngzG|
-                                 |id_sE0m3WZAG|)
-                               |id_sE0m3WZAG|))))))
-                     (|sc-put-module_sEAWnoVAG|
-                       (#%lambda (|exports_sEuCEO3BG| |token_sEQyCf4BG|)
-                         (|vfor-each_sEgElPHAG|
-                           (#%lambda (|id_sEavAI4BG|)
-                             (|put-token_sEe-pXUAG|
-                               |id_sEavAI4BG|
-                               |token_sEQyCf4BG|))
-                           |exports_sEuCEO3BG|)))
-                     (|put-cte_sEWSlRVAG|
-                       (#%lambda (|id_sEwry95BG| |binding_sESnwC5BG|)
+                                     |sym_-vJ5K9hAA|
+                                     |token_-vHgQOfAA|
+                                     (|cons-id_-v1dOfgAA|
+                                       |id_-vlkSlfAA|
+                                       |x_-v32IChAA|))))
+                               (|weed_-vn9MIgAA|
+                                 |id_-vlkSlfAA|
+                                 (getprop |sym_-vJ5K9hAA| |token_-vHgQOfAA|))))
+                            ((#%lambda (|e_-vLWDwiAA|)
+                               (#%if (annotation? |e_-vLWDwiAA|)
+                                 (annotation-expression |e_-vLWDwiAA|)
+                                 |e_-vLWDwiAA|))
+                             (#%if (|syntax-object?_-vPcGmxyA| |id_-vlkSlfAA|)
+                               (|syntax-object-expression_-v99EPxyA|
+                                 |id_-vlkSlfAA|)
+                               |id_-vlkSlfAA|))))))
+                     (|sc-put-module_-vVUaQaAA|
+                       (#%lambda (|exports_-vPArelAA| |token_-v9xpHlAA|)
+                         (|vfor-each_-vBC8fZzA|
+                           (#%lambda (|id_-vvtn8mAA|)
+                             (|put-token_-vzYcnaAA|
+                               |id_-vvtn8mAA|
+                               |token_-v9xpHlAA|))
+                           |exports_-vPArelAA|)))
+                     (|put-cte_-vfR8hbAA|
+                       (#%lambda (|id_-vRplBmAA| |binding_-vbmj2nAA|)
                          (#%begin
-                           (|put-token_sEe-pXUAG|
-                             |id_sEwry95BG|
+                           (|put-token_-vzYcnaAA|
+                             |id_-vRplBmAA|
                              (#%quote *top*))
-                           ((#%lambda (|sym_sEcku36BG|)
+                           ((#%lambda (|sym_-vxihvnAA|)
                               (putprop
-                                |sym_sEcku36BG|
+                                |sym_-vxihvnAA|
                                 (#%quote *sc-expander*)
-                                |binding_sESnwC5BG|))
-                            (#%if (symbol? |id_sEwry95BG|)
-                              |id_sEwry95BG|
-                              (|id-var-name_sE2G2QjAG|
-                                |id_sEwry95BG|
+                                |binding_-vbmj2nAA|))
+                            (#%if (symbol? |id_-vRplBmAA|)
+                              |id_-vRplBmAA|
+                              (|id-var-name_-vnERfBzA|
+                                |id_-vRplBmAA|
                                 (#%quote (())))))))))
-            ((#%lambda (|binding_sEgPjiWAG|)
-               ((#%lambda (|t_sECLhLWAG|)
-                  (#%if (eqv? |t_sECLhLWAG| (#%quote module))
+            ((#%lambda (|binding_-vBN6KbAA|)
+               ((#%lambda (|t_-vXJ4bcAA|)
+                  (#%if (eqv? |t_-vXJ4bcAA| (#%quote module))
                     (#%begin
-                      ((#%lambda (|iface_sEkt70ZAG|)
-                         (|sc-put-module_sEAWnoVAG|
-                           (|interface-exports_sEG39vwAG| |iface_sEkt70ZAG|)
-                           (|interface-token_sE007YwAG| |iface_sEkt70ZAG|)))
-                       (|binding-value_sEsAX2tzG| |binding_sEgPjiWAG|))
-                      (|put-cte_sEWSlRVAG|
-                        |id_sEy5u1UAG|
-                        |binding_sEgPjiWAG|))
-                    (#%if (eqv? |t_sECLhLWAG| (#%quote do-import))
-                      ((#%lambda (|token_sEYHfcXAG|)
-                         ((#%lambda (|b_sEiEdFXAG|)
-                            ((#%lambda (|t_sEEAb6YAG|)
-                               (#%if (eqv? |t_sEEAb6YAG| (#%quote module))
-                                 ((#%lambda (|iface_sE-w9zYAG|)
+                      ((#%lambda (|iface_-vFrWreAA|)
+                         (|sc-put-module_-vVUaQaAA|
+                           (|interface-exports_-v_1YWNzA| |iface_-vFrWreAA|)
+                           (|interface-token_-vl-VnOzA| |iface_-vFrWreAA|)))
+                       (|binding-value_-vNyKuKyA| |binding_-vBN6KbAA|))
+                      (|put-cte_-vfR8hbAA|
+                        |id_-vT3ht9AA|
+                        |binding_-vBN6KbAA|))
+                    (#%if (eqv? |t_-vXJ4bcAA| (#%quote do-import))
+                      ((#%lambda (|token_-vhG2EcAA|)
+                         ((#%lambda (|b_-vDC05dAA|)
+                            ((#%lambda (|t_-vZy-xdAA|)
+                               (#%if (eqv? |t_-vZy-xdAA| (#%quote module))
+                                 ((#%lambda (|iface_-vjvY-dAA|)
                                     (#%begin
-                                      (#%if (eq? (|interface-token_sE007YwAG|
-                                                   |iface_sE-w9zYAG|)
-                                                 |token_sEYHfcXAG|)
+                                      (#%if (eq? (|interface-token_-vl-VnOzA|
+                                                   |iface_-vjvY-dAA|)
+                                                 |token_-vhG2EcAA|)
                                         #!void
                                         (syntax-error
-                                          |id_sEy5u1UAG|
+                                          |id_-vT3ht9AA|
                                           "import mismatch for module"))
-                                      (|sc-put-module_sEAWnoVAG|
-                                        (|interface-exports_sEG39vwAG|
-                                          |iface_sE-w9zYAG|)
+                                      (|sc-put-module_-vVUaQaAA|
+                                        (|interface-exports_-v_1YWNzA|
+                                          |iface_-vjvY-dAA|)
                                         (#%quote *top*))))
-                                  (|binding-value_sEsAX2tzG| |b_sEiEdFXAG|))
+                                  (|binding-value_-vNyKuKyA| |b_-vDC05dAA|))
                                  (syntax-error
-                                   |id_sEy5u1UAG|
+                                   |id_-vT3ht9AA|
                                    "import from unknown module")))
-                             (|binding-type_sE6EZBszG| |b_sEiEdFXAG|)))
-                          (|lookup_sEkri6CzG|
-                            (|id-var-name_sE2G2QjAG|
-                              |id_sEy5u1UAG|
+                             (|binding-type_-vrCM1KyA| |b_-vDC05dAA|)))
+                          (|lookup_-vFp5yTyA|
+                            (|id-var-name_-vnERfBzA|
+                              |id_-vT3ht9AA|
                               (#%quote (())))
                             ())))
-                       (|binding-value_sEsAX2tzG| |b_sEU1suUAG|))
-                      (|put-cte_sEWSlRVAG|
-                        |id_sEy5u1UAG|
-                        |binding_sEgPjiWAG|))))
-                (|binding-type_sE6EZBszG| |binding_sEgPjiWAG|)))
-             ((#%lambda (|t_sEGp5tZAG|)
-                (#%if |t_sEGp5tZAG|
-                  |t_sEGp5tZAG|
+                       (|binding-value_-vNyKuKyA| |b_-vd0fW9AA|))
+                      (|put-cte_-vfR8hbAA|
+                        |id_-vT3ht9AA|
+                        |binding_-vBN6KbAA|))))
+                (|binding-type_-vrCM1KyA| |binding_-vBN6KbAA|)))
+             ((#%lambda (|t_-v_nUUeAA|)
+                (#%if |t_-v_nUUeAA|
+                  |t_-v_nUUeAA|
                   (error (#%quote define-syntax)
                          "invalid transformer ~s"
-                         |b_sEU1suUAG|)))
-              (|sanitize-binding_sE-ukFBzG| |b_sEU1suUAG|))))))
-      (|global-extend_sEGngzCzG|
+                         |b_-vd0fW9AA|)))
+              (|sanitize-binding_-vjt75TyA| |b_-vd0fW9AA|))))))
+      (|global-extend_-v_l3_TyA|
         (#%quote local-syntax)
         (#%quote letrec-syntax)
         #t)
-      (|global-extend_sEGngzCzG|
+      (|global-extend_-v_l3_TyA|
         (#%quote local-syntax)
         (#%quote let-syntax)
         #f)
-      (|global-extend_sEGngzCzG|
+      (|global-extend_-v_l3_TyA|
         (#%quote core)
         (#%quote fluid-let-syntax)
-        (#%lambda (|e_sEygsw6BG|
-                   |r_sEUcqZ6BG|
-                   |w_sEe9oq7BG|
-                   |s_sEA5mT7BG|)
-          ((#%lambda (|tmp_sEg-hN8BG|)
-             (#%if (#%if |tmp_sEg-hN8BG|
-                     (apply (#%lambda (|__sEsYIWgBG|
-                                       |var_sEOUGnhBG|
-                                       |val_sE8REQhBG|
-                                       |e1_sEuNChiBG|
-                                       |e2_sEQJAKiBG|)
-                              (|valid-bound-ids?_sEqrWDlAG| |var_sEOUGnhBG|))
-                            |tmp_sEg-hN8BG|)
+        (#%lambda (|e_-vTefYnAA|
+                   |r_-vdbdpoAA|
+                   |w_-vz7bSoAA|
+                   |s_-vV39jpAA|)
+          ((#%lambda (|tmp_-vBY4dqAA|)
+             (#%if (#%if |tmp_-vBY4dqAA|
+                     (apply (#%lambda (|__-vNWvmyAA|
+                                       |var_-v7TtPyAA|
+                                       |val_-vtPrgzAA|
+                                       |e1_-vPLpJzAA|
+                                       |e2_-v9InaAAA|)
+                              (|valid-bound-ids?_-vLpJ3DzA| |var_-v7TtPyAA|))
+                            |tmp_-vBY4dqAA|)
                      #f)
-               (apply (#%lambda (|__sEYSdH9BG|
-                                 |var_sEiPb8aBG|
-                                 |val_sEEL9BaBG|
-                                 |e1_sE-H72bBG|
-                                 |e2_sEkE5vbBG|)
-                        ((#%lambda (|names_sEGA3YbBG|)
+               (apply (#%lambda (|__-vhR07rAA|
+                                 |var_-vDN-zrAA|
+                                 |val_-vZJY0sAA|
+                                 |e1_-vjGWtsAA|
+                                 |e2_-vFCUWsAA|)
+                        ((#%lambda (|names_-v_ySntAA|)
                            (#%begin
                              (for-each
-                               (#%lambda (|id_sE0x1pcBG| |n_sEmt_RcBG|)
-                                 ((#%lambda (|t_sEIpZidBG|)
-                                    (#%if (memv |t_sEIpZidBG|
+                               (#%lambda (|id_-vlvQQtAA| |n_-vHrOhuAA|)
+                                 ((#%lambda (|t_-v1oMKuAA|)
+                                    (#%if (memv |t_-v1oMKuAA|
                                                 (#%quote (displaced-lexical)))
-                                      (|displaced-lexical-error_sEiCoLAzG|
-                                        (|wrap_sEwWDIpAG|
-                                          |id_sE0x1pcBG|
-                                          |w_sEe9oq7BG|))
+                                      (|displaced-lexical-error_-vDAbbSyA|
+                                        (|wrap_-vRUq8HzA|
+                                          |id_-vlvQQtAA|
+                                          |w_-vz7bSoAA|))
                                       #!void))
-                                  (|binding-type_sE6EZBszG|
-                                    (|lookup_sEkri6CzG|
-                                      |n_sEmt_RcBG|
-                                      |r_sEUcqZ6BG|))))
-                               |var_sEiPb8aBG|
-                               |names_sEGA3YbBG|)
-                             (|chi-body_sE20_NMAG|
-                               (cons |e1_sE-H72bBG| |e2_sEkE5vbBG|)
-                               (|source-wrap_sESSB9qAG|
-                                 |e_sEygsw6BG|
-                                 |w_sEe9oq7BG|
-                                 |s_sEA5mT7BG|)
-                               (|extend-env*_sEgNuozzG|
-                                 |names_sEGA3YbBG|
-                                 ((#%lambda (|trans-r_sEKeTFeBG|)
-                                    (map (#%lambda (|x_sE4bR6fBG|)
-                                           (|make-binding_sEMH_8szG|
+                                  (|binding-type_-vrCM1KyA|
+                                    (|lookup_-vFp5yTyA|
+                                      |n_-vHrOhuAA|
+                                      |r_-vdbdpoAA|))))
+                               |var_-vDN-zrAA|
+                               |names_-v_ySntAA|)
+                             (|chi-body_-vn-Nd2AA|
+                               (cons |e1_-vjGWtsAA| |e2_-vFCUWsAA|)
+                               (|source-wrap_-vbRoBHzA|
+                                 |e_-vTefYnAA|
+                                 |w_-vz7bSoAA|
+                                 |s_-vV39jpAA|)
+                               (|extend-env*_-vBLhQQyA|
+                                 |names_-v_ySntAA|
+                                 ((#%lambda (|trans-r_-v3dG5wAA|)
+                                    (map (#%lambda (|x_-vp9EywAA|)
+                                           (|make-binding_-v5GOAJyA|
                                              (#%quote deferred)
-                                             (|chi_sEki9xKAG|
-                                               |x_sE4bR6fBG|
-                                               |trans-r_sEKeTFeBG|
-                                               |w_sEe9oq7BG|)))
-                                         |val_sEEL9BaBG|))
-                                  (|transformer-env_sEYFqiAzG| |r_sEUcqZ6BG|))
-                                 |r_sEUcqZ6BG|)
-                               |w_sEe9oq7BG|)))
-                         (map (#%lambda (|x_sEM3N0gBG|)
-                                (|id-var-name_sE2G2QjAG|
-                                  |x_sEM3N0gBG|
-                                  |w_sEe9oq7BG|))
-                              |var_sEiPb8aBG|)))
-                      |tmp_sEg-hN8BG|)
+                                             (|chi_-vFgYY_zA|
+                                               |x_-vp9EywAA|
+                                               |trans-r_-v3dG5wAA|
+                                               |w_-vz7bSoAA|)))
+                                         |val_-vZJY0sAA|))
+                                  (|transformer-env_-vhEdKRyA| |r_-vdbdpoAA|))
+                                 |r_-vdbdpoAA|)
+                               |w_-vz7bSoAA|)))
+                         (map (#%lambda (|x_-v52AsxAA|)
+                                (|id-var-name_-vnERfBzA|
+                                  |x_-v52AsxAA|
+                                  |w_-vz7bSoAA|))
+                              |var_-vDN-zrAA|)))
+                      |tmp_-vBY4dqAA|)
                (syntax-error
-                 (|source-wrap_sESSB9qAG|
-                   |e_sEygsw6BG|
-                   |w_sEe9oq7BG|
-                   |s_sEA5mT7BG|))))
+                 (|source-wrap_-vbRoBHzA|
+                   |e_-vTefYnAA|
+                   |w_-vz7bSoAA|
+                   |s_-vV39jpAA|))))
            ($syntax-dispatch
-             (#%annotate |e_sEygsw6BG| value)
+             (#%annotate |e_-vTefYnAA| value)
              (#%quote (any #2(each (any any)) any . each-any))))))
-      (|global-extend_sEGngzCzG|
+      (|global-extend_-v_l3_TyA|
         (#%quote core)
         (#%quote quote)
-        |core-quote_sEeEtZrAG|)
-      (|global-extend_sEGngzCzG|
+        |core-quote_-vzCgpJzA|)
+      (|global-extend_-v_l3_TyA|
         (#%quote core)
         (#%quote lambda)
-        |core-lambda_sEWwpTsAG|)
-      (|global-extend_sEGngzCzG|
+        |core-lambda_-vfvcjKzA|)
+      (|global-extend_-v_l3_TyA|
         (#%quote core)
         (#%quote letrec)
-        |core-letrec_sEgtnktAG|)
-      (|global-extend_sEGngzCzG|
+        |core-letrec_-vBraMKzA|)
+      (|global-extend_-v_l3_TyA|
         (#%quote core)
         (#%quote if)
-        |core-if_sEAArqsAG|)
-      (|global-extend_sEGngzCzG|
+        |core-if_-vVyeSJzA|)
+      (|global-extend_-v_l3_TyA|
         (#%quote core)
         (#%quote syntax)
-        (#%letrec ((|gen-syntax_sEwCwEjBG|
-                     (#%lambda (|src_sEotTHsBG|
-                                |e_sEKpR8tBG|
-                                |r_sE4mPBtBG|
-                                |maps_sEqiN2uBG|
-                                |ellipsis?_sEMeLvuBG|)
-                       (#%if (|id?_sE4-1KFzG| |e_sEKpR8tBG|)
-                         ((#%lambda (|label_sEYn88RBG|)
-                            ((#%lambda (|b_sEik6BRBG|)
-                               (#%if (eq? (|binding-type_sE6EZBszG|
-                                            |b_sEik6BRBG|)
+        (#%letrec ((|gen-syntax_-vRAj4BAA|
+                     (#%lambda (|src_-vJrG7KAA|
+                                |e_-v3oEAKAA|
+                                |r_-vpkC1LAA|
+                                |maps_-vLgAuLAA|
+                                |ellipsis?_-v5dyXLAA|)
+                       (#%if (|id?_-vpYQ9XyA| |e_-v3oEAKAA|)
+                         ((#%lambda (|label_-vhmXz6BA|)
+                            ((#%lambda (|b_-vDiV07BA|)
+                               (#%if (eq? (|binding-type_-vrCM1KyA|
+                                            |b_-vDiV07BA|)
                                           (#%quote syntax))
                                  (call-with-values
                                    (#%lambda ()
-                                     ((#%lambda (|var.lev_sEEg42SBG|)
-                                        (|gen-ref_sESyu5kBG|
-                                          |src_sEotTHsBG|
-                                          (car |var.lev_sEEg42SBG|)
-                                          (cdr |var.lev_sEEg42SBG|)
-                                          |maps_sEqiN2uBG|))
-                                      (|binding-value_sEsAX2tzG|
-                                        |b_sEik6BRBG|)))
-                                   (#%lambda (|var_sE-c2vSBG| |maps_sEk90YSBG|)
+                                     ((#%lambda (|var.lev_-vZeTt7BA|)
+                                        (|gen-ref_-vbxhxBAA|
+                                          |src_-vJrG7KAA|
+                                          (car |var.lev_-vZeTt7BA|)
+                                          (cdr |var.lev_-vZeTt7BA|)
+                                          |maps_-vLgAuLAA|))
+                                      (|binding-value_-vNyKuKyA|
+                                        |b_-vDiV07BA|)))
+                                   (#%lambda (|var_-vjbRW7BA| |maps_-vF7Pn8BA|)
                                      (values
-                                       (list (#%quote ref) |var_sE-c2vSBG|)
-                                       |maps_sEk90YSBG|)))
-                                 (#%if (|ellipsis?_sEMeLvuBG| |e_sEKpR8tBG|)
+                                       (list (#%quote ref) |var_-vjbRW7BA|)
+                                       |maps_-vF7Pn8BA|)))
+                                 (#%if (|ellipsis?_-v5dyXLAA| |e_-v3oEAKAA|)
                                    (syntax-error
-                                     |src_sEotTHsBG|
+                                     |src_-vJrG7KAA|
                                      "misplaced ellipsis in syntax form")
                                    (values
-                                     (list (#%quote quote) |e_sEKpR8tBG|)
-                                     |maps_sEqiN2uBG|))))
-                             (|lookup_sEkri6CzG|
-                               |label_sEYn88RBG|
-                               |r_sE4mPBtBG|)))
-                          (|id-var-name_sE2G2QjAG|
-                            |e_sEKpR8tBG|
+                                     (list (#%quote quote) |e_-v3oEAKAA|)
+                                     |maps_-vLgAuLAA|))))
+                             (|lookup_-vFp5yTyA|
+                               |label_-vhmXz6BA|
+                               |r_-vpkC1LAA|)))
+                          (|id-var-name_-vnERfBzA|
+                            |e_-v3oEAKAA|
                             (#%quote (()))))
-                         ((#%lambda (|tmp_sEs7HpvBG|)
-                            (#%if (#%if |tmp_sEs7HpvBG|
-                                    (apply (#%lambda (|dots_sEgvceQBG|
-                                                      |e_sECraHQBG|)
-                                             (|ellipsis?_sEMeLvuBG|
-                                               |dots_sEgvceQBG|))
-                                           |tmp_sEs7HpvBG|)
+                         ((#%lambda (|tmp_-vN5uRMAA|)
+                            (#%if (#%if |tmp_-vN5uRMAA|
+                                    (apply (#%lambda (|dots_-vBt_F5BA|
+                                                      |e_-vXpZ66BA|)
+                                             (|ellipsis?_-v5dyXLAA|
+                                               |dots_-vBt_F5BA|))
+                                           |tmp_-vN5uRMAA|)
                                     #f)
-                              (apply (#%lambda (|dots_sEeGiTOBG| |e_sEACgkPBG|)
-                                       (|gen-syntax_sEwCwEjBG|
-                                         |src_sEotTHsBG|
-                                         |e_sEACgkPBG|
-                                         |r_sE4mPBtBG|
-                                         |maps_sEqiN2uBG|
-                                         (#%lambda (|x_sEWyeNPBG|) #f)))
-                                     |tmp_sEs7HpvBG|)
-                              ((#%lambda (|tmp_sEO3FSvBG|)
-                                 (#%if (#%if |tmp_sEO3FSvBG|
-                                         (apply (#%lambda (|x_sEcRowNBG|
-                                                           |dots_sEyNmZNBG|
-                                                           |y_sEUJkqOBG|)
-                                                  (|ellipsis?_sEMeLvuBG|
-                                                    |dots_sEyNmZNBG|))
-                                                |tmp_sEO3FSvBG|)
+                              (apply (#%lambda (|dots_-vzE5j4BA| |e_-vVA3M4BA|)
+                                       (|gen-syntax_-vRAj4BAA|
+                                         |src_-vJrG7KAA|
+                                         |e_-vVA3M4BA|
+                                         |r_-vpkC1LAA|
+                                         |maps_-vLgAuLAA|
+                                         (#%lambda (|x_-vfx1d5BA|) #f)))
+                                     |tmp_-vN5uRMAA|)
+                              ((#%lambda (|tmp_-v72siNAA|)
+                                 (#%if (#%if |tmp_-v72siNAA|
+                                         (apply (#%lambda (|x_-vxPbY2BA|
+                                                           |dots_-vTL9p3BA|
+                                                           |y_-vdI7S3BA|)
+                                                  (|ellipsis?_-v5dyXLAA|
+                                                    |dots_-vTL9p3BA|))
+                                                |tmp_-v72siNAA|)
                                          #f)
-                                   (apply (#%lambda (|x_sEi986DBG|
-                                                     |dots_sEE56zDBG|
-                                                     |y_sE-140EBG|)
-                                            ((#%letrec ((|f_sEk-1tEBG|
-                                                          (#%lambda (|y_sEGW_VEBG|
-                                                                     |k_sE0TZmFBG|)
-                                                            ((#%lambda (|tmp_sEILVgGBG|)
-                                                               (#%if (#%if |tmp_sEILVgGBG|
-                                                                       (apply (#%lambda (|dots_sEu7zfLBG|
-                                                                                         |y_sEQ3xILBG|)
-                                                                                (|ellipsis?_sEMeLvuBG|
-                                                                                  |dots_sEu7zfLBG|))
-                                                                              |tmp_sEILVgGBG|)
+                                   (apply (#%lambda (|x_-vD7XxUAA|
+                                                     |dots_-vZ3V-UAA|
+                                                     |y_-vj0TrVAA|)
+                                            ((#%letrec ((|f_-vFYQUVAA|
+                                                          (#%lambda (|y_-v_UOlWAA|
+                                                                     |k_-vlRMOWAA|)
+                                                            ((#%lambda (|tmp_-v1KIIXAA|)
+                                                               (#%if (#%if |tmp_-v1KIIXAA|
+                                                                       (apply (#%lambda (|dots_-vP5mH0BA|
+                                                                                         |y_-v92k81BA|)
+                                                                                (|ellipsis?_-v5dyXLAA|
+                                                                                  |dots_-vP5mH0BA|))
+                                                                              |tmp_-v1KIIXAA|)
                                                                        #f)
-                                                                 (apply (#%lambda (|dots_sEMpJ-IBG|
-                                                                                   |y_sE6mHrJBG|)
-                                                                          (|f_sEk-1tEBG|
-                                                                            |y_sE6mHrJBG|
-                                                                            (#%lambda (|maps_sEsiFUJBG|)
+                                                                 (apply (#%lambda (|dots_-v5owq-AA|
+                                                                                   |y_-vrkuT-AA|)
+                                                                          (|f_-vFYQUVAA|
+                                                                            |y_-vrkuT-AA|
+                                                                            (#%lambda (|maps_-vNgsk_AA|)
                                                                               (call-with-values
                                                                                 (#%lambda ()
-                                                                                  (|k_sE0TZmFBG|
+                                                                                  (|k_-vlRMOWAA|
                                                                                     (cons ()
-                                                                                          |maps_sEsiFUJBG|)))
-                                                                                (#%lambda (|x_sEOeDlKBG|
-                                                                                           |maps_sE8bBOKBG|)
-                                                                                  (#%if (null? (car |maps_sE8bBOKBG|))
+                                                                                          |maps_-vNgsk_AA|)))
+                                                                                (#%lambda (|x_-v7dqN_AA|
+                                                                                           |maps_-vt9oe0BA|)
+                                                                                  (#%if (null? (car |maps_-vt9oe0BA|))
                                                                                     (syntax-error
-                                                                                      |src_sEotTHsBG|
+                                                                                      |src_-vJrG7KAA|
                                                                                       "extra ellipsis in syntax form")
                                                                                     (values
-                                                                                      (|gen-mappend_sEyrq_kBG|
-                                                                                        |x_sEOeDlKBG|
-                                                                                        (car |maps_sE8bBOKBG|))
-                                                                                      (cdr |maps_sE8bBOKBG|))))))))
-                                                                        |tmp_sEILVgGBG|)
+                                                                                      (|gen-mappend_-vTpdrCAA|
+                                                                                        |x_-v7dqN_AA|
+                                                                                        (car |maps_-vt9oe0BA|))
+                                                                                      (cdr |maps_-vt9oe0BA|))))))))
+                                                                        |tmp_-v1KIIXAA|)
                                                                  (call-with-values
                                                                    (#%lambda ()
-                                                                     (|gen-syntax_sEwCwEjBG|
-                                                                       |src_sEotTHsBG|
-                                                                       |y_sEGW_VEBG|
-                                                                       |r_sE4mPBtBG|
-                                                                       |maps_sEqiN2uBG|
-                                                                       |ellipsis?_sEMeLvuBG|))
-                                                                   (#%lambda (|y_sEoERaHBG|
-                                                                              |maps_sEKAPDHBG|)
+                                                                     (|gen-syntax_-vRAj4BAA|
+                                                                       |src_-vJrG7KAA|
+                                                                       |y_-v_UOlWAA|
+                                                                       |r_-vpkC1LAA|
+                                                                       |maps_-vLgAuLAA|
+                                                                       |ellipsis?_-v5dyXLAA|))
+                                                                   (#%lambda (|y_-vJCECYAA|
+                                                                              |maps_-v3zC3ZAA|)
                                                                      (call-with-values
                                                                        (#%lambda ()
-                                                                         (|k_sE0TZmFBG|
-                                                                           |maps_sEKAPDHBG|))
-                                                                       (#%lambda (|x_sE4xN4IBG|
-                                                                                  |maps_sEqtLxIBG|)
+                                                                         (|k_-vlRMOWAA|
+                                                                           |maps_-v3zC3ZAA|))
+                                                                       (#%lambda (|x_-vpvAwZAA|
+                                                                                  |maps_-vLryZZAA|)
                                                                          (values
-                                                                           (|gen-append_sEcvsykBG|
-                                                                             |x_sE4xN4IBG|
-                                                                             |y_sEoERaHBG|)
-                                                                           |maps_sEqtLxIBG|)))))))
+                                                                           (|gen-append_-vxtf-BAA|
+                                                                             |x_-vpvAwZAA|
+                                                                             |y_-vJCECYAA|)
+                                                                           |maps_-vLryZZAA|)))))))
                                                              ($syntax-dispatch
                                                                (#%annotate
-                                                                 |y_sEGW_VEBG|
+                                                                 |y_-v_UOlWAA|
                                                                  value)
                                                                (#%quote
                                                                  (any .
                                                                       any)))))))
-                                               |f_sEk-1tEBG|)
-                                             |y_sE-140EBG|
-                                             (#%lambda (|maps_sEa0v9MBG|)
+                                               |f_-vFYQUVAA|)
+                                             |y_-vj0TrVAA|
+                                             (#%lambda (|maps_-vv-hB1BA|)
                                                (call-with-values
                                                  (#%lambda ()
-                                                   (|gen-syntax_sEwCwEjBG|
-                                                     |src_sEotTHsBG|
-                                                     |x_sEi986DBG|
-                                                     |r_sE4mPBtBG|
-                                                     (cons () |maps_sEa0v9MBG|)
-                                                     |ellipsis?_sEMeLvuBG|))
-                                                 (#%lambda (|x_sEwYsCMBG|
-                                                            |maps_sESUq3NBG|)
-                                                   (#%if (null? (car |maps_sESUq3NBG|))
+                                                   (|gen-syntax_-vRAj4BAA|
+                                                     |src_-vJrG7KAA|
+                                                     |x_-vD7XxUAA|
+                                                     |r_-vpkC1LAA|
+                                                     (cons () |maps_-vv-hB1BA|)
+                                                     |ellipsis?_-v5dyXLAA|))
+                                                 (#%lambda (|x_-vRWf22BA|
+                                                            |maps_-vbTdv2BA|)
+                                                   (#%if (null? (car |maps_-vbTdv2BA|))
                                                      (syntax-error
-                                                       |src_sEotTHsBG|
+                                                       |src_-vJrG7KAA|
                                                        "extra ellipsis in syntax form")
                                                      (values
-                                                       (|gen-map_sEUnoslBG|
-                                                         |x_sEwYsCMBG|
-                                                         (car |maps_sESUq3NBG|))
-                                                       (cdr |maps_sESUq3NBG|))))))))
-                                          |tmp_sEO3FSvBG|)
-                                   ((#%lambda (|tmp_sE80DjwBG|)
-                                      (#%if |tmp_sE80DjwBG|
-                                        (apply (#%lambda (|x_sEevkoABG|
-                                                          |y_sEAriRABG|)
+                                                       (|gen-map_-vdmbUCAA|
+                                                         |x_-vRWf22BA|
+                                                         (car |maps_-vbTdv2BA|))
+                                                       (cdr |maps_-vbTdv2BA|))))))))
+                                          |tmp_-v72siNAA|)
+                                   ((#%lambda (|tmp_-vt-pLNAA|)
+                                      (#%if |tmp_-vt-pLNAA|
+                                        (apply (#%lambda (|x_-vzt7QRAA|
+                                                          |y_-vVp5hSAA|)
                                                  (call-with-values
                                                    (#%lambda ()
-                                                     (|gen-syntax_sEwCwEjBG|
-                                                       |src_sEotTHsBG|
-                                                       |x_sEevkoABG|
-                                                       |r_sE4mPBtBG|
-                                                       |maps_sEqiN2uBG|
-                                                       |ellipsis?_sEMeLvuBG|))
-                                                   (#%lambda (|xnew_sEWngiBBG|
-                                                              |maps_sEgkeLBBG|)
+                                                     (|gen-syntax_-vRAj4BAA|
+                                                       |src_-vJrG7KAA|
+                                                       |x_-vzt7QRAA|
+                                                       |r_-vpkC1LAA|
+                                                       |maps_-vLgAuLAA|
+                                                       |ellipsis?_-v5dyXLAA|))
+                                                   (#%lambda (|xnew_-vfm3KSAA|
+                                                              |maps_-vBi1bTAA|)
                                                      (call-with-values
                                                        (#%lambda ()
-                                                         (|gen-syntax_sEwCwEjBG|
-                                                           |src_sEotTHsBG|
-                                                           |y_sEAriRABG|
-                                                           |r_sE4mPBtBG|
-                                                           |maps_sEgkeLBBG|
-                                                           |ellipsis?_sEMeLvuBG|))
-                                                       (#%lambda (|ynew_sECgccCBG|
-                                                                  |maps_sEYcaFCBG|)
+                                                         (|gen-syntax_-vRAj4BAA|
+                                                           |src_-vJrG7KAA|
+                                                           |y_-vVp5hSAA|
+                                                           |r_-vpkC1LAA|
+                                                           |maps_-vBi1bTAA|
+                                                           |ellipsis?_-v5dyXLAA|))
+                                                       (#%lambda (|ynew_-vXe_DTAA|
+                                                                  |maps_-vhbZ4UAA|)
                                                          (values
-                                                           (|gen-cons_sEekmVlBG|
-                                                             |e_sEKpR8tBG|
-                                                             |x_sEevkoABG|
-                                                             |y_sEAriRABG|
-                                                             |xnew_sEWngiBBG|
-                                                             |ynew_sECgccCBG|)
-                                                           |maps_sEYcaFCBG|))))))
-                                               |tmp_sE80DjwBG|)
-                                        ((#%lambda (|tmp_sEuYAMwBG|)
-                                           (#%if |tmp_sEuYAMwBG|
-                                             (apply (#%lambda (|x1_sEaRwGxBG|
-                                                               |x2_sEwNu7yBG|)
-                                                      ((#%lambda (|ls_sESJsAyBG|)
+                                                           (|gen-cons_-vzi9lDAA|
+                                                             |e_-v3oEAKAA|
+                                                             |x_-vzt7QRAA|
+                                                             |y_-vVp5hSAA|
+                                                             |xnew_-vfm3KSAA|
+                                                             |ynew_-vXe_DTAA|)
+                                                           |maps_-vhbZ4UAA|))))))
+                                               |tmp_-vt-pLNAA|)
+                                        ((#%lambda (|tmp_-vPWncOAA|)
+                                           (#%if |tmp_-vPWncOAA|
+                                             (apply (#%lambda (|x1_-vvPj6PAA|
+                                                               |x2_-vRLhzPAA|)
+                                                      ((#%lambda (|ls_-vbIf0QAA|)
                                                          (call-with-values
                                                            (#%lambda ()
-                                                             (|gen-syntax_sEwCwEjBG|
-                                                               |src_sEotTHsBG|
-                                                               |ls_sESJsAyBG|
-                                                               |r_sE4mPBtBG|
-                                                               |maps_sEqiN2uBG|
-                                                               |ellipsis?_sEMeLvuBG|))
-                                                           (#%lambda (|lsnew_sEcGq1zBG|
-                                                                      |maps_sEyCouzBG|)
+                                                             (|gen-syntax_-vRAj4BAA|
+                                                               |src_-vJrG7KAA|
+                                                               |ls_-vbIf0QAA|
+                                                               |r_-vpkC1LAA|
+                                                               |maps_-vLgAuLAA|
+                                                               |ellipsis?_-v5dyXLAA|))
+                                                           (#%lambda (|lsnew_-vxEdtQAA|
+                                                                      |maps_-vTAbWQAA|)
                                                              (values
-                                                               (|gen-vector_sEAgkmmBG|
-                                                                 |e_sEKpR8tBG|
-                                                                 |ls_sESJsAyBG|
-                                                                 |lsnew_sEcGq1zBG|)
-                                                               |maps_sEyCouzBG|))))
-                                                       (cons |x1_sEaRwGxBG|
-                                                             |x2_sEwNu7yBG|)))
-                                                    |tmp_sEuYAMwBG|)
+                                                               (|gen-vector_-vVe7ODAA|
+                                                                 |e_-v3oEAKAA|
+                                                                 |ls_-vbIf0QAA|
+                                                                 |lsnew_-vxEdtQAA|)
+                                                               |maps_-vTAbWQAA|))))
+                                                       (cons |x1_-vvPj6PAA|
+                                                             |x2_-vRLhzPAA|)))
+                                                    |tmp_-vPWncOAA|)
                                              (values
                                                (list (#%quote quote)
-                                                     |e_sEKpR8tBG|)
-                                               |maps_sEqiN2uBG|)))
+                                                     |e_-v3oEAKAA|)
+                                               |maps_-vLgAuLAA|)))
                                          ($syntax-dispatch
-                                           (#%annotate |e_sEKpR8tBG| value)
+                                           (#%annotate |e_-v3oEAKAA| value)
                                            #2(vector (any . each-any))))))
                                     ($syntax-dispatch
-                                      (#%annotate |e_sEKpR8tBG| value)
+                                      (#%annotate |e_-v3oEAKAA| value)
                                       (#%quote (any . any))))))
                                ($syntax-dispatch
-                                 (#%annotate |e_sEKpR8tBG| value)
+                                 (#%annotate |e_-v3oEAKAA| value)
                                  (#%quote (any any . any))))))
                           ($syntax-dispatch
-                            (#%annotate |e_sEKpR8tBG| value)
+                            (#%annotate |e_-v3oEAKAA| value)
                             (#%quote (any any)))))))
-                   (|gen-ref_sESyu5kBG|
-                     (#%lambda (|src_sEG5-oTBG|
-                                |var_sE02YRTBG|
-                                |level_sEm-ViUBG|
-                                |maps_sEIWTLUBG|)
-                       (#%if (= |level_sEm-ViUBG| 0)
-                         (values |var_sE02YRTBG| |maps_sEIWTLUBG|)
-                         (#%if (null? |maps_sEIWTLUBG|)
+                   (|gen-ref_-vbxhxBAA|
+                     (#%lambda (|src_-v_3NQ8BA|
+                                |var_-vl0Lh9BA|
+                                |level_-vHYIK9BA|
+                                |maps_-v1VGbaBA|)
+                       (#%if (= |level_-vHYIK9BA| 0)
+                         (values |var_-vl0Lh9BA| |maps_-v1VGbaBA|)
+                         (#%if (null? |maps_-v1VGbaBA|)
                            (syntax-error
-                             |src_sEG5-oTBG|
+                             |src_-v_3NQ8BA|
                              "missing ellipsis in syntax form")
                            (call-with-values
                              (#%lambda ()
-                               (|gen-ref_sESyu5kBG|
-                                 |src_sEG5-oTBG|
-                                 |var_sE02YRTBG|
-                                 (- |level_sEm-ViUBG| 1)
-                                 (cdr |maps_sEIWTLUBG|)))
-                             (#%lambda (|outer-var_sE2TRcVBG|
-                                        |outer-maps_sEoPPFVBG|)
-                               ((#%lambda (|b_sEKLN6WBG|)
-                                  (#%if |b_sEKLN6WBG|
+                               (|gen-ref_-vbxhxBAA|
+                                 |src_-v_3NQ8BA|
+                                 |var_-vl0Lh9BA|
+                                 (- |level_-vHYIK9BA| 1)
+                                 (cdr |maps_-v1VGbaBA|)))
+                             (#%lambda (|outer-var_-vnREEaBA|
+                                        |outer-maps_-vJNC5bBA|)
+                               ((#%lambda (|b_-v3KAybBA|)
+                                  (#%if |b_-v3KAybBA|
                                     (values
-                                      (cdr |b_sEKLN6WBG|)
-                                      |maps_sEIWTLUBG|)
-                                    ((#%lambda (|inner-var_sE4ILzWBG|)
+                                      (cdr |b_-v3KAybBA|)
+                                      |maps_-v1VGbaBA|)
+                                    ((#%lambda (|inner-var_-vpGy_bBA|)
                                        (values
-                                         |inner-var_sE4ILzWBG|
-                                         (cons (cons (cons |outer-var_sE2TRcVBG|
-                                                           |inner-var_sE4ILzWBG|)
-                                                     (car |maps_sEIWTLUBG|))
-                                               |outer-maps_sEoPPFVBG|)))
-                                     (|gen-var_sEScy7TAG| (#%quote tmp)))))
-                                (assq |outer-var_sE2TRcVBG|
-                                      (car |maps_sEIWTLUBG|)))))))))
-                   (|gen-append_sEcvsykBG|
-                     (#%lambda (|x_sEqEJ0XBG| |y_sEMAHtXBG|)
-                       (#%if (equal? |y_sEMAHtXBG| (#%quote '()))
-                         |x_sEqEJ0XBG|
+                                         |inner-var_-vpGy_bBA|
+                                         (cons (cons (cons |outer-var_-vnREEaBA|
+                                                           |inner-var_-vpGy_bBA|)
+                                                     (car |maps_-v1VGbaBA|))
+                                               |outer-maps_-vJNC5bBA|)))
+                                     (|gen-var_-vbblz8AA| (#%quote tmp)))))
+                                (assq |outer-var_-vnREEaBA|
+                                      (car |maps_-v1VGbaBA|)))))))))
+                   (|gen-append_-vxtf-BAA|
+                     (#%lambda (|x_-vLCwscBA| |y_-v5zuVcBA|)
+                       (#%if (equal? |y_-v5zuVcBA| (#%quote '()))
+                         |x_-vLCwscBA|
                          (list (#%quote append)
-                               |x_sEqEJ0XBG|
-                               |y_sEMAHtXBG|))))
-                   (|gen-mappend_sEyrq_kBG|
-                     (#%lambda (|e_sE6xFWXBG| |map-env_sEstDnYBG|)
+                               |x_-vLCwscBA|
+                               |y_-v5zuVcBA|))))
+                   (|gen-mappend_-vTpdrCAA|
+                     (#%lambda (|e_-vrvsmdBA| |map-env_-vNrqPdBA|)
                        (list (#%quote apply)
                              (#%quote (primitive append))
-                             (|gen-map_sEUnoslBG|
-                               |e_sE6xFWXBG|
-                               |map-env_sEstDnYBG|))))
-                   (|gen-map_sEUnoslBG|
-                     (#%lambda (|e_sEOpBQYBG| |map-env_sE8mzhZBG|)
-                       ((#%lambda (|formals_sEuixKZBG| |actuals_sEQevb-BG|)
-                          (#%if (eq? (car |e_sEOpBQYBG|) (#%quote ref))
-                            (car |actuals_sEQevb-BG|)
+                             (|gen-map_-vdmbUCAA|
+                               |e_-vrvsmdBA|
+                               |map-env_-vNrqPdBA|))))
+                   (|gen-map_-vdmbUCAA|
+                     (#%lambda (|e_-v7oogeBA| |map-env_-vtkmJeBA|)
+                       ((#%lambda (|formals_-vPgkafBA| |actuals_-v9diDfBA|)
+                          (#%if (eq? (car |e_-v7oogeBA|) (#%quote ref))
+                            (car |actuals_-v9diDfBA|)
                             (#%if (andmap
-                                    (#%lambda (|x_sES3py_BG|)
-                                      (#%if (eq? (car |x_sES3py_BG|)
+                                    (#%lambda (|x_-vb2c-gBA|)
+                                      (#%if (eq? (car |x_-vb2c-gBA|)
                                                  (#%quote ref))
-                                        (memq (cadr |x_sES3py_BG|)
-                                              |formals_sEuixKZBG|)
+                                        (memq (cadr |x_-vb2c-gBA|)
+                                              |formals_-vPgkafBA|)
                                         #f))
-                                    (cdr |e_sEOpBQYBG|))
+                                    (cdr |e_-v7oogeBA|))
                               (cons (#%quote map)
                                     (cons (list (#%quote primitive)
-                                                (car |e_sEOpBQYBG|))
-                                          (map ((#%lambda (|r_sEabtE-BG|)
-                                                  (#%lambda (|x_sEw7r5_BG|)
-                                                    (cdr (assq (cadr |x_sEw7r5_BG|)
-                                                               |r_sEabtE-BG|))))
+                                                (car |e_-v7oogeBA|))
+                                          (map ((#%lambda (|r_-vv9g4gBA|)
+                                                  (#%lambda (|x_-vR5exgBA|)
+                                                    (cdr (assq (cadr |x_-vR5exgBA|)
+                                                               |r_-vv9g4gBA|))))
                                                 (map cons
-                                                     |formals_sEuixKZBG|
-                                                     |actuals_sEQevb-BG|))
-                                               (cdr |e_sEOpBQYBG|))))
+                                                     |formals_-vPgkafBA|
+                                                     |actuals_-v9diDfBA|))
+                                               (cdr |e_-v7oogeBA|))))
                               (cons (#%quote map)
                                     (cons (list (#%quote lambda)
-                                                |formals_sEuixKZBG|
-                                                |e_sEOpBQYBG|)
-                                          |actuals_sEQevb-BG|)))))
-                        (map-cdr |map-env_sE8mzhZBG|)
-                        (map (#%lambda (|x_sEc0n__BG|)
-                               (list (#%quote ref) (car |x_sEc0n__BG|)))
-                             |map-env_sE8mzhZBG|))))
-                   (|gen-cons_sEekmVlBG|
-                     (#%lambda (|e_sEyYks0CG|
-                                |x_sEUUiV0CG|
-                                |y_sEeRgm1CG|
-                                |xnew_sEANeP1CG|
-                                |ynew_sEWJcg2CG|)
-                       ((#%lambda (|t_sEgGaJ2CG|)
-                          (#%if (eqv? |t_sEgGaJ2CG| (#%quote quote))
-                            (#%if (eq? (car |xnew_sEANeP1CG|) (#%quote quote))
-                              ((#%lambda (|xnew_sECC8a3CG| |ynew_sEYy6D3CG|)
-                                 (#%if (#%if (eq? |xnew_sECC8a3CG|
-                                                  |x_sEUUiV0CG|)
-                                         (eq? |ynew_sEYy6D3CG| |y_sEeRgm1CG|)
+                                                |formals_-vPgkafBA|
+                                                |e_-v7oogeBA|)
+                                          |actuals_-v9diDfBA|)))))
+                        (map-cdr |map-env_-vtkmJeBA|)
+                        (map (#%lambda (|x_-vx-9rhBA|)
+                               (list (#%quote ref) (car |x_-vx-9rhBA|)))
+                             |map-env_-vtkmJeBA|))))
+                   (|gen-cons_-vzi9lDAA|
+                     (#%lambda (|e_-vTW7UhBA|
+                                |x_-vdT5liBA|
+                                |y_-vzP3OiBA|
+                                |xnew_-vVL1fjBA|
+                                |ynew_-vfI_HjBA|)
+                       ((#%lambda (|t_-vBEZ8kBA|)
+                          (#%if (eqv? |t_-vBEZ8kBA| (#%quote quote))
+                            (#%if (eq? (car |xnew_-vVL1fjBA|) (#%quote quote))
+                              ((#%lambda (|xnew_-vXAXBkBA| |ynew_-vhxV2lBA|)
+                                 (#%if (#%if (eq? |xnew_-vXAXBkBA|
+                                                  |x_-vdT5liBA|)
+                                         (eq? |ynew_-vhxV2lBA| |y_-vzP3OiBA|)
                                          #f)
-                                   (list (#%quote quote) |e_sEyYks0CG|)
+                                   (list (#%quote quote) |e_-vTW7UhBA|)
                                    (list (#%quote quote)
-                                         (cons |xnew_sECC8a3CG|
-                                               |ynew_sEYy6D3CG|))))
-                               (cadr |xnew_sEANeP1CG|)
-                               (cadr |ynew_sEWJcg2CG|))
-                              (#%if (eq? (cadr |ynew_sEWJcg2CG|) ())
-                                (list (#%quote list) |xnew_sEANeP1CG|)
+                                         (cons |xnew_-vXAXBkBA|
+                                               |ynew_-vhxV2lBA|))))
+                               (cadr |xnew_-vVL1fjBA|)
+                               (cadr |ynew_-vfI_HjBA|))
+                              (#%if (eq? (cadr |ynew_-vfI_HjBA|) ())
+                                (list (#%quote list) |xnew_-vVL1fjBA|)
                                 (list (#%quote cons)
-                                      |xnew_sEANeP1CG|
-                                      |ynew_sEWJcg2CG|)))
-                            (#%if (eqv? |t_sEgGaJ2CG| (#%quote list))
+                                      |xnew_-vVL1fjBA|
+                                      |ynew_-vfI_HjBA|)))
+                            (#%if (eqv? |t_-vBEZ8kBA| (#%quote list))
                               (cons (#%quote list)
-                                    (cons |xnew_sEANeP1CG|
-                                          (cdr |ynew_sEWJcg2CG|)))
+                                    (cons |xnew_-vVL1fjBA|
+                                          (cdr |ynew_-vfI_HjBA|)))
                               (list (#%quote cons)
-                                    |xnew_sEANeP1CG|
-                                    |ynew_sEWJcg2CG|))))
-                        (car |ynew_sEWJcg2CG|))))
-                   (|gen-vector_sEAgkmmBG|
-                     (#%lambda (|e_sEiv444CG| |ls_sEEr2x4CG| |lsnew_sE-n0-4CG|)
-                       (#%if (eq? (car |lsnew_sE-n0-4CG|) (#%quote quote))
-                         (#%if (eq? (cadr |lsnew_sE-n0-4CG|) |ls_sEEr2x4CG|)
-                           (list (#%quote quote) |e_sEiv444CG|)
+                                    |xnew_-vVL1fjBA|
+                                    |ynew_-vfI_HjBA|))))
+                        (car |ynew_-vfI_HjBA|))))
+                   (|gen-vector_-vVe7ODAA|
+                     (#%lambda (|e_-vDtTvlBA| |ls_-vZpRYlBA| |lsnew_-vjmPpmBA|)
+                       (#%if (eq? (car |lsnew_-vjmPpmBA|) (#%quote quote))
+                         (#%if (eq? (cadr |lsnew_-vjmPpmBA|) |ls_-vZpRYlBA|)
+                           (list (#%quote quote) |e_-vDtTvlBA|)
                            (list (#%quote quote)
-                                 (list->vector (cadr |lsnew_sE-n0-4CG|))))
-                         (#%if (eq? (car |lsnew_sE-n0-4CG|) (#%quote list))
-                           (cons (#%quote vector) (cdr |lsnew_sE-n0-4CG|))
-                           (list (#%quote list->vector) |lsnew_sE-n0-4CG|)))))
-                   (|regen_sEWciPmBG|
-                     (#%lambda (|x_sEkk-q5CG|)
-                       ((#%lambda (|t_sEGgYT5CG|)
-                          (#%if (eqv? |t_sEGgYT5CG| (#%quote ref))
-                            (cadr |x_sEkk-q5CG|)
-                            (#%if (eqv? |t_sEGgYT5CG| (#%quote primitive))
-                              (cadr |x_sEkk-q5CG|)
-                              (#%if (eqv? |t_sEGgYT5CG| (#%quote quote))
-                                (#%if (atom? (cadr |x_sEkk-q5CG|))
-                                  (cadr |x_sEkk-q5CG|)
-                                  (list #%quote (cadr |x_sEkk-q5CG|)))
-                                (#%if (eqv? |t_sEGgYT5CG| (#%quote lambda))
+                                 (list->vector (cadr |lsnew_-vjmPpmBA|))))
+                         (#%if (eq? (car |lsnew_-vjmPpmBA|) (#%quote list))
+                           (cons (#%quote vector) (cdr |lsnew_-vjmPpmBA|))
+                           (list (#%quote list->vector) |lsnew_-vjmPpmBA|)))))
+                   (|regen_-vfb5fEAA|
+                     (#%lambda (|x_-vFiNSmBA|)
+                       ((#%lambda (|t_-v_eLjnBA|)
+                          (#%if (eqv? |t_-v_eLjnBA| (#%quote ref))
+                            (cadr |x_-vFiNSmBA|)
+                            (#%if (eqv? |t_-v_eLjnBA| (#%quote primitive))
+                              (cadr |x_-vFiNSmBA|)
+                              (#%if (eqv? |t_-v_eLjnBA| (#%quote quote))
+                                (#%if (atom? (cadr |x_-vFiNSmBA|))
+                                  (cadr |x_-vFiNSmBA|)
+                                  (list #%quote (cadr |x_-vFiNSmBA|)))
+                                (#%if (eqv? |t_-v_eLjnBA| (#%quote lambda))
                                   (list #%lambda
-                                        (cadr |x_sEkk-q5CG|)
-                                        (|regen_sEWciPmBG|
-                                          (caddr |x_sEkk-q5CG|)))
-                                  (#%if (eqv? |t_sEGgYT5CG| (#%quote map))
-                                    ((#%lambda (|ls_sE0dWk6CG|)
-                                       (cons (#%if (= (length |ls_sE0dWk6CG|)
+                                        (cadr |x_-vFiNSmBA|)
+                                        (|regen_-vfb5fEAA|
+                                          (caddr |x_-vFiNSmBA|)))
+                                  (#%if (eqv? |t_-v_eLjnBA| (#%quote map))
+                                    ((#%lambda (|ls_-vlbJMnBA|)
+                                       (cons (#%if (= (length |ls_-vlbJMnBA|)
                                                       2)
                                                (#%quote map)
                                                (#%quote map))
-                                             |ls_sE0dWk6CG|))
-                                     (map |regen_sEWciPmBG|
-                                          (cdr |x_sEkk-q5CG|)))
-                                    (cons (car |x_sEkk-q5CG|)
-                                          (map |regen_sEWciPmBG|
-                                               (cdr |x_sEkk-q5CG|)))))))))
-                        (car |x_sEkk-q5CG|)))))
-          (#%lambda (|e_sEg9ggnBG|
-                     |r_sEC5eJnBG|
-                     |w_sEY1caoBG|
-                     |s_sEi-9DoBG|)
-            ((#%lambda (|e_sEEW74pBG|)
-               ((#%lambda (|tmp_sEkP3-pBG|)
-                  (#%if |tmp_sEkP3-pBG|
-                    (apply (#%lambda (|__sE0I_TqBG| |x_sEmEZkrBG|)
+                                             |ls_-vlbJMnBA|))
+                                     (map |regen_-vfb5fEAA|
+                                          (cdr |x_-vFiNSmBA|)))
+                                    (cons (car |x_-vFiNSmBA|)
+                                          (map |regen_-vfb5fEAA|
+                                               (cdr |x_-vFiNSmBA|)))))))))
+                        (car |x_-vFiNSmBA|)))))
+          (#%lambda (|e_-vB73IEAA|
+                     |r_-vX319FAA|
+                     |w_-vh0_BFAA|
+                     |s_-vDYY2GAA|)
+            ((#%lambda (|e_-vZUWvGAA|)
+               ((#%lambda (|tmp_-vFNSpHAA|)
+                  (#%if |tmp_-vFNSpHAA|
+                    (apply (#%lambda (|__-vlGOjIAA| |x_-vHCMMIAA|)
                              (call-with-values
                                (#%lambda ()
-                                 (|gen-syntax_sEwCwEjBG|
-                                   |e_sEEW74pBG|
-                                   |x_sEmEZkrBG|
-                                   |r_sEC5eJnBG|
+                                 (|gen-syntax_-vRAj4BAA|
+                                   |e_-vZUWvGAA|
+                                   |x_-vHCMMIAA|
+                                   |r_-vX319FAA|
                                    ()
-                                   |ellipsis?_sEurGjRAG|))
-                               (#%lambda (|e_sEIAXNrBG| |maps_sE2xVesBG|)
-                                 (|regen_sEWciPmBG| |e_sEIAXNrBG|))))
-                           |tmp_sEkP3-pBG|)
-                    (syntax-error |e_sEEW74pBG|)))
+                                   |ellipsis?_-vPptL6AA|))
+                               (#%lambda (|e_-v1zKdJAA| |maps_-vnvIGJAA|)
+                                 (|regen_-vfb5fEAA| |e_-v1zKdJAA|))))
+                           |tmp_-vFNSpHAA|)
+                    (syntax-error |e_-vZUWvGAA|)))
                 ($syntax-dispatch
-                  (#%annotate |e_sEEW74pBG| value)
+                  (#%annotate |e_-vZUWvGAA| value)
                   (#%quote (any any)))))
-             (|source-wrap_sESSB9qAG|
-               |e_sEg9ggnBG|
-               |w_sEY1caoBG|
-               |s_sEi-9DoBG|)))))
-      (|global-extend_sEGngzCzG|
+             (|source-wrap_-vbRoBHzA|
+               |e_-vB73IEAA|
+               |w_-vh0_BFAA|
+               |s_-vDYY2GAA|)))))
+      (|global-extend_-v_l3_TyA|
         (#%quote set!)
         (#%quote set!)
         ())
-      (|global-extend_sEGngzCzG|
+      (|global-extend_-v_l3_TyA|
         (#%quote begin)
         (#%quote begin)
         ())
-      (|global-extend_sEGngzCzG|
+      (|global-extend_-v_l3_TyA|
         (#%quote module-key)
         (#%quote module)
         ())
-      (|global-extend_sEGngzCzG|
+      (|global-extend_-v_l3_TyA|
         (#%quote import)
         (#%quote import)
         #f)
-      (|global-extend_sEGngzCzG|
+      (|global-extend_-v_l3_TyA|
         (#%quote import)
         (#%quote import-only)
         #t)
-      (|global-extend_sEGngzCzG|
+      (|global-extend_-v_l3_TyA|
         (#%quote define)
         (#%quote define)
         ())
-      (|global-extend_sEGngzCzG|
+      (|global-extend_-v_l3_TyA|
         (#%quote define-syntax)
         (#%quote define-syntax)
         ())
-      (|global-extend_sEGngzCzG|
+      (|global-extend_-v_l3_TyA|
         (#%quote eval-when)
         (#%quote eval-when)
         ())
-      (|global-extend_sEGngzCzG|
+      (|global-extend_-v_l3_TyA|
         (#%quote core)
         (#%quote syntax-case)
-        (#%letrec ((|convert-pattern_sEm9UN6CG|
-                     (#%lambda (|pattern_sEiG2ziCG| |keys_sEEC00jCG|)
-                       (#%letrec ((|cvt*_sE-y-sjCG|
-                                    (#%lambda (|p*_sEGrWmkCG|
-                                               |n_sE0oUPkCG|
-                                               |ids_sEmkSglCG|)
-                                      (#%if (null? |p*_sEGrWmkCG|)
-                                        (values () |ids_sEmkSglCG|)
+        (#%letrec ((|convert-pattern_-vH7HdoBA|
+                     (#%lambda (|pattern_-vDER-zBA| |keys_-vZAPrABA|)
+                       (#%letrec ((|cvt*_-vjxNUABA|
+                                    (#%lambda (|p*_-v_pJOBBA|
+                                               |n_-vlmHfCBA|
+                                               |ids_-vHiFICBA|)
+                                      (#%if (null? |p*_-v_pJOBBA|)
+                                        (values () |ids_-vHiFICBA|)
                                         (call-with-values
                                           (#%lambda ()
-                                            (|cvt*_sE-y-sjCG|
-                                              (cdr |p*_sEGrWmkCG|)
-                                              |n_sE0oUPkCG|
-                                              |ids_sEmkSglCG|))
-                                          (#%lambda (|y_sEIgQJlCG|
-                                                     |ids_sE2dOamCG|)
+                                            (|cvt*_-vjxNUABA|
+                                              (cdr |p*_-v_pJOBBA|)
+                                              |n_-vlmHfCBA|
+                                              |ids_-vHiFICBA|))
+                                          (#%lambda (|y_-v1fD9DBA|
+                                                     |ids_-vnbBCDBA|)
                                             (call-with-values
                                               (#%lambda ()
-                                                (|cvt_sEkvYVjCG|
-                                                  (car |p*_sEGrWmkCG|)
-                                                  |n_sE0oUPkCG|
-                                                  |ids_sE2dOamCG|))
-                                              (#%lambda (|x_sEo9MDmCG|
-                                                         |ids_sEK5K4nCG|)
+                                                (|cvt_-vFtLlBBA|
+                                                  (car |p*_-v_pJOBBA|)
+                                                  |n_-vlmHfCBA|
+                                                  |ids_-vnbBCDBA|))
+                                              (#%lambda (|x_-vJ7z3EBA|
+                                                         |ids_-v34xwEBA|)
                                                 (values
-                                                  (cons |x_sEo9MDmCG|
-                                                        |y_sEIgQJlCG|)
-                                                  |ids_sEK5K4nCG|))))))))
-                                  (|cvt_sEkvYVjCG|
-                                    (#%lambda (|p_sE42IxnCG|
-                                               |n_sEq-F-nCG|
-                                               |ids_sEMWDroCG|)
-                                      (#%if (|id?_sE4-1KFzG| |p_sE42IxnCG|)
-                                        (#%if (|bound-id-member?_sEa-FfpAG|
-                                                |p_sE42IxnCG|
-                                                |keys_sEEC00jCG|)
+                                                  (cons |x_-vJ7z3EBA|
+                                                        |y_-v1fD9DBA|)
+                                                  |ids_-v34xwEBA|))))))))
+                                  (|cvt_-vFtLlBBA|
+                                    (#%lambda (|p_-vp0vZEBA|
+                                               |n_-vLYsqFBA|
+                                               |ids_-v5VqTFBA|)
+                                      (#%if (|id?_-vpYQ9XyA| |p_-vp0vZEBA|)
+                                        (#%if (|bound-id-member?_-vvYsHGzA|
+                                                |p_-vp0vZEBA|
+                                                |keys_-vZAPrABA|)
                                           (values
                                             (vector
                                               (#%quote free-id)
-                                              |p_sE42IxnCG|)
-                                            |ids_sEMWDroCG|)
+                                              |p_-vp0vZEBA|)
+                                            |ids_-v5VqTFBA|)
                                           (values
                                             (#%quote any)
-                                            (cons (cons |p_sE42IxnCG|
-                                                        |n_sEq-F-nCG|)
-                                                  |ids_sEMWDroCG|)))
-                                        ((#%lambda (|tmp_sEsPzlpCG|)
-                                           (#%if (#%if |tmp_sEsPzlpCG|
-                                                   (apply (#%lambda (|x_sEuPrbFCG|
-                                                                     |dots_sEQLpEFCG|)
-                                                            (|ellipsis?_sEurGjRAG|
-                                                              |dots_sEQLpEFCG|))
-                                                          |tmp_sEsPzlpCG|)
+                                            (cons (cons |p_-vp0vZEBA|
+                                                        |n_-vLYsqFBA|)
+                                                  |ids_-v5VqTFBA|)))
+                                        ((#%lambda (|tmp_-vNNmNGBA|)
+                                           (#%if (#%if |tmp_-vNNmNGBA|
+                                                   (apply (#%lambda (|x_-vPNeDWBA|
+                                                                     |dots_-v9Kc4XBA|)
+                                                            (|ellipsis?_-vPptL6AA|
+                                                              |dots_-v9Kc4XBA|))
+                                                          |tmp_-vNNmNGBA|)
                                                    #f)
-                                             (apply (#%lambda (|x_sE62AnDCG|
-                                                               |dots_sEs-xQDCG|)
+                                             (apply (#%lambda (|x_-vr0nPUBA|
+                                                               |dots_-vNYkgVBA|)
                                                       (call-with-values
                                                         (#%lambda ()
-                                                          (|cvt_sEkvYVjCG|
-                                                            |x_sE62AnDCG|
-                                                            (+ |n_sEq-F-nCG| 1)
-                                                            |ids_sEMWDroCG|))
-                                                        (#%lambda (|p_sEOWvhECG|
-                                                                   |ids_sE8TtKECG|)
+                                                          (|cvt_-vFtLlBBA|
+                                                            |x_-vr0nPUBA|
+                                                            (+ |n_-vLYsqFBA| 1)
+                                                            |ids_-v5VqTFBA|))
+                                                        (#%lambda (|p_-v7ViJVBA|
+                                                                   |ids_-vtRgaWBA|)
                                                           (values
-                                                            (#%if (eq? |p_sEOWvhECG|
+                                                            (#%if (eq? |p_-v7ViJVBA|
                                                                        (#%quote
                                                                          any))
                                                               (#%quote
                                                                 each-any)
                                                               (vector
                                                                 (#%quote each)
-                                                                |p_sEOWvhECG|))
-                                                            |ids_sE8TtKECG|))))
-                                                    |tmp_sEsPzlpCG|)
-                                             ((#%lambda (|tmp_sEOLxOpCG|)
-                                                (#%if (#%if |tmp_sEOLxOpCG|
-                                                        (apply (#%lambda (|x_sEKgIzBCG|
-                                                                          |dots_sE4dG0CCG|
-                                                                          |y_sEq9EtCCG|
-                                                                          |z_sEM5CWCCG|)
-                                                                 (|ellipsis?_sEurGjRAG|
-                                                                   |dots_sE4dG0CCG|))
-                                                               |tmp_sEOLxOpCG|)
+                                                                |p_-v7ViJVBA|))
+                                                            |ids_-vtRgaWBA|))))
+                                                    |tmp_-vNNmNGBA|)
+                                             ((#%lambda (|tmp_-v7KkeHBA|)
+                                                (#%if (#%if |tmp_-v7KkeHBA|
+                                                        (apply (#%lambda (|x_-v3fv_SBA|
+                                                                          |dots_-vpbtsTBA|
+                                                                          |y_-vL7rVTBA|
+                                                                          |z_-v54pmUBA|)
+                                                                 (|ellipsis?_-vPptL6AA|
+                                                                   |dots_-vpbtsTBA|))
+                                                               |tmp_-v7KkeHBA|)
                                                         #f)
-                                                  (apply (#%lambda (|x_sEYU2BwCG|
-                                                                    |dots_sEiR02xCG|
-                                                                    |y_sEEN-uxCG|
-                                                                    |z_sE-JYXxCG|)
+                                                  (apply (#%lambda (|x_-vhTR0OBA|
+                                                                    |dots_-vDPPtOBA|
+                                                                    |y_-vZLNWOBA|
+                                                                    |z_-vjILnPBA|)
                                                            (call-with-values
                                                              (#%lambda ()
-                                                               (|cvt_sEkvYVjCG|
-                                                                 |z_sE-JYXxCG|
-                                                                 |n_sEq-F-nCG|
-                                                                 |ids_sEMWDroCG|))
-                                                             (#%lambda (|z_sEkGWoyCG|
-                                                                        |ids_sEGCURyCG|)
+                                                               (|cvt_-vFtLlBBA|
+                                                                 |z_-vjILnPBA|
+                                                                 |n_-vLYsqFBA|
+                                                                 |ids_-v5VqTFBA|))
+                                                             (#%lambda (|z_-vFEJQPBA|
+                                                                        |ids_-v_AHhQBA|)
                                                                (call-with-values
                                                                  (#%lambda ()
-                                                                   (|cvt*_sE-y-sjCG|
-                                                                     |y_sEEN-uxCG|
-                                                                     |n_sEq-F-nCG|
-                                                                     |ids_sEGCURyCG|))
-                                                                 (#%lambda (|y_sEmvQLzCG|
-                                                                            |ids_sEIrOcACG|)
+                                                                   (|cvt*_-vjxNUABA|
+                                                                     |y_-vZLNWOBA|
+                                                                     |n_-vLYsqFBA|
+                                                                     |ids_-v_AHhQBA|))
+                                                                 (#%lambda (|y_-vHtDbRBA|
+                                                                            |ids_-v1qBERBA|)
                                                                    (call-with-values
                                                                      (#%lambda ()
-                                                                       (|cvt_sEkvYVjCG|
-                                                                         |x_sEYU2BwCG|
-                                                                         (+ |n_sEq-F-nCG|
+                                                                       (|cvt_-vFtLlBBA|
+                                                                         |x_-vhTR0OBA|
+                                                                         (+ |n_-vLYsqFBA|
                                                                             1)
-                                                                         |ids_sEIrOcACG|))
-                                                                     (#%lambda (|x_sE2oMFACG|
-                                                                                |ids_sEokK6BCG|)
+                                                                         |ids_-v1qBERBA|))
+                                                                     (#%lambda (|x_-vnmz5SBA|
+                                                                                |ids_-vJixySBA|)
                                                                        (values
                                                                          (vector
                                                                            (#%quote
                                                                              each+)
-                                                                           |x_sE2oMFACG|
+                                                                           |x_-vnmz5SBA|
                                                                            (reverse
-                                                                             |y_sEmvQLzCG|)
-                                                                           |z_sEkGWoyCG|)
-                                                                         |ids_sEokK6BCG|))))))))
-                                                         |tmp_sEOLxOpCG|)
-                                                  ((#%lambda (|tmp_sE8IvfqCG|)
-                                                     (#%if |tmp_sE8IvfqCG|
-                                                       (apply (#%lambda (|x_sEUefTtCG|
-                                                                         |y_sEebdkuCG|)
+                                                                             |y_-vHtDbRBA|)
+                                                                           |z_-vFEJQPBA|)
+                                                                         |ids_-vJixySBA|))))))))
+                                                         |tmp_-v7KkeHBA|)
+                                                  ((#%lambda (|tmp_-vtGiHHBA|)
+                                                     (#%if |tmp_-vtGiHHBA|
+                                                       (apply (#%lambda (|x_-vdd2jLBA|
+                                                                         |y_-vz90MLBA|)
                                                                 (call-with-values
                                                                   (#%lambda ()
-                                                                    (|cvt_sEkvYVjCG|
-                                                                      |y_sEebdkuCG|
-                                                                      |n_sEq-F-nCG|
-                                                                      |ids_sEMWDroCG|))
-                                                                  (#%lambda (|y_sEA7bNuCG|
-                                                                             |ids_sEW39evCG|)
+                                                                    (|cvt_-vFtLlBBA|
+                                                                      |y_-vz90MLBA|
+                                                                      |n_-vLYsqFBA|
+                                                                      |ids_-v5VqTFBA|))
+                                                                  (#%lambda (|y_-vV5-cMBA|
+                                                                             |ids_-vf2YFMBA|)
                                                                     (call-with-values
                                                                       (#%lambda ()
-                                                                        (|cvt_sEkvYVjCG|
-                                                                          |x_sEUefTtCG|
-                                                                          |n_sEq-F-nCG|
-                                                                          |ids_sEW39evCG|))
-                                                                      (#%lambda (|x_sEg07HvCG|
-                                                                                 |ids_sECY48wCG|)
+                                                                        (|cvt_-vFtLlBBA|
+                                                                          |x_-vdd2jLBA|
+                                                                          |n_-vLYsqFBA|
+                                                                          |ids_-vf2YFMBA|))
+                                                                      (#%lambda (|x_-vB-V6NBA|
+                                                                                 |ids_-vXWTzNBA|)
                                                                         (values
-                                                                          (cons |x_sEg07HvCG|
-                                                                                |y_sEA7bNuCG|)
-                                                                          |ids_sECY48wCG|))))))
-                                                              |tmp_sE8IvfqCG|)
-                                                       ((#%lambda (|tmp_sEuEtIqCG|)
-                                                          (#%if |tmp_sEuEtIqCG|
+                                                                          (cons |x_-vB-V6NBA|
+                                                                                |y_-vV5-cMBA|)
+                                                                          |ids_-vXWTzNBA|))))))
+                                                              |tmp_-vtGiHHBA|)
+                                                       ((#%lambda (|tmp_-vPCg8IBA|)
+                                                          (#%if |tmp_-vPCg8IBA|
                                                             (apply (#%lambda ()
                                                                      (values
                                                                        ()
-                                                                       |ids_sEMWDroCG|))
-                                                                   |tmp_sEuEtIqCG|)
-                                                            ((#%lambda (|tmp_sEQAr9rCG|)
-                                                               (#%if |tmp_sEQAr9rCG|
-                                                                 (apply (#%lambda (|x_sEwtn3sCG|)
+                                                                       |ids_-v5VqTFBA|))
+                                                                   |tmp_-vPCg8IBA|)
+                                                            ((#%lambda (|tmp_-v9zeBIBA|)
+                                                               (#%if |tmp_-v9zeBIBA|
+                                                                 (apply (#%lambda (|x_-vRravJBA|)
                                                                           (call-with-values
                                                                             (#%lambda ()
-                                                                              (|cvt_sEkvYVjCG|
-                                                                                |x_sEwtn3sCG|
-                                                                                |n_sEq-F-nCG|
-                                                                                |ids_sEMWDroCG|))
-                                                                            (#%lambda (|p_sEcmjZsCG|
-                                                                                       |ids_sEyihqtCG|)
+                                                                              (|cvt_-vFtLlBBA|
+                                                                                |x_-vRravJBA|
+                                                                                |n_-vLYsqFBA|
+                                                                                |ids_-v5VqTFBA|))
+                                                                            (#%lambda (|p_-vxk6pKBA|
+                                                                                       |ids_-vTg4SKBA|)
                                                                               (values
                                                                                 (vector
                                                                                   (#%quote
                                                                                     vector)
-                                                                                  |p_sEcmjZsCG|)
-                                                                                |ids_sEyihqtCG|))))
-                                                                        |tmp_sEQAr9rCG|)
+                                                                                  |p_-vxk6pKBA|)
+                                                                                |ids_-vTg4SKBA|))))
+                                                                        |tmp_-v9zeBIBA|)
                                                                  (values
                                                                    (vector
                                                                      (#%quote
                                                                        atom)
-                                                                     (|strip_sEwgAGSAG|
-                                                                       |p_sE42IxnCG|
+                                                                     (|strip_-vRen68AA|
+                                                                       |p_-vp0vZEBA|
                                                                        (#%quote
                                                                          (()))))
-                                                                   |ids_sEMWDroCG|)))
+                                                                   |ids_-v5VqTFBA|)))
                                                              ($syntax-dispatch
                                                                (#%annotate
-                                                                 |p_sE42IxnCG|
+                                                                 |p_-vp0vZEBA|
                                                                  value)
                                                                #2(vector
                                                                   each-any)))))
                                                         ($syntax-dispatch
                                                           (#%annotate
-                                                            |p_sE42IxnCG|
+                                                            |p_-vp0vZEBA|
                                                             value)
                                                           ()))))
                                                    ($syntax-dispatch
                                                      (#%annotate
-                                                       |p_sE42IxnCG|
+                                                       |p_-vp0vZEBA|
                                                        value)
                                                      (#%quote (any . any))))))
                                               ($syntax-dispatch
                                                 (#%annotate
-                                                  |p_sE42IxnCG|
+                                                  |p_-vp0vZEBA|
                                                   value)
                                                 (#%quote
                                                   (any any
@@ -11348,726 +11346,732 @@
                                                           ()
                                                           any)))))))
                                          ($syntax-dispatch
-                                           (#%annotate |p_sE42IxnCG| value)
+                                           (#%annotate |p_-vp0vZEBA| value)
                                            (#%quote (any any))))))))
-                         (|cvt_sEkvYVjCG| |pattern_sEiG2ziCG| 0 ()))))
-                   (|build-dispatch-call_sEI5Se7CG|
-                     (#%lambda (|pvars_sEaIn5GCG|
-                                |exp_sEwElyGCG|
-                                |y_sESAj_GCG|
-                                |r_sEcxhsHCG|)
+                         (|cvt_-vFtLlBBA| |pattern_-vDER-zBA| 0 ()))))
+                   (|build-dispatch-call_-v14FGoBA|
+                     (#%lambda (|pvars_-vvGaxXBA|
+                                |exp_-vRC8-XBA|
+                                |y_-vbz6rYBA|
+                                |r_-vxv4UYBA|)
                        (#%begin
-                         (map-cdr |pvars_sEaIn5GCG|)
-                         ((#%lambda (|ids_sEytfVHCG|)
-                            ((#%lambda (|labels_sEembPICG|
-                                        |new-vars_sEAi9gJCG|)
+                         (map-cdr |pvars_-vvGaxXBA|)
+                         ((#%lambda (|ids_-vTr2lZBA|)
+                            ((#%lambda (|labels_-vzk-e-BA|
+                                        |new-vars_-vVgYH-BA|)
                                (list (#%quote apply)
                                      (list #%lambda
-                                           |new-vars_sEAi9gJCG|
-                                           (|chi_sEki9xKAG|
-                                             |exp_sEwElyGCG|
-                                             (|extend-env*_sEgNuozzG|
-                                               |labels_sEembPICG|
-                                               (map (#%lambda (|var_sEWe7JJCG|
-                                                               |level_sEgb5aKCG|)
-                                                      (|make-binding_sEMH_8szG|
+                                           |new-vars_-vVgYH-BA|
+                                           (|chi_-vFgYY_zA|
+                                             |exp_-vRC8-XBA|
+                                             (|extend-env*_-vBLhQQyA|
+                                               |labels_-vzk-e-BA|
+                                               (map (#%lambda (|var_-vfdW8_BA|
+                                                               |level_-vB9UB_BA|)
+                                                      (|make-binding_-v5GOAJyA|
                                                         (#%quote syntax)
-                                                        (cons |var_sEWe7JJCG|
-                                                              |level_sEgb5aKCG|)))
-                                                    |new-vars_sEAi9gJCG|
+                                                        (cons |var_-vfdW8_BA|
+                                                              |level_-vB9UB_BA|)))
+                                                    |new-vars_-vVgYH-BA|
                                                     (map-cdr
-                                                      |pvars_sEaIn5GCG|))
-                                               |r_sEcxhsHCG|)
-                                             (|make-binding-wrap_sEYalLfAG|
-                                               |ids_sEytfVHCG|
-                                               |labels_sEembPICG|
+                                                      |pvars_-vvGaxXBA|))
+                                               |r_-vxv4UYBA|)
+                                             (|make-binding-wrap_-vh98bxzA|
+                                               |ids_-vTr2lZBA|
+                                               |labels_-vzk-e-BA|
                                                (#%quote (())))))
-                                     |y_sESAj_GCG|))
-                             (|gen-labels_sEeix_-zG| |ids_sEytfVHCG|)
-                             (map |gen-var_sEScy7TAG| |ids_sEytfVHCG|)))
-                          (map-car |pvars_sEaIn5GCG|)))))
-                   (|gen-clause_sE22QH7CG|
-                     (#%lambda (|x_sEGNSkNCG|
-                                |keys_sE0KQNNCG|
-                                |clauses_sEmGOeOCG|
-                                |r_sEICMHOCG|
-                                |pat_sE2zK8PCG|
-                                |fender_sEovIBPCG|
-                                |exp_sEKrG2QCG|)
+                                     |y_-vbz6rYBA|))
+                             (|gen-labels_-vzgkrgzA| |ids_-vTr2lZBA|)
+                             (map |gen-var_-vbblz8AA| |ids_-vTr2lZBA|)))
+                          (map-car |pvars_-vvGaxXBA|)))))
+                   (|gen-clause_-vn0D7pBA|
+                     (#%lambda (|x_-v_LFM2CA|
+                                |keys_-vlIDd3CA|
+                                |clauses_-vHEBG3CA|
+                                |r_-v1Bz74CA|
+                                |pat_-vnxxA4CA|
+                                |fender_-vJtv15CA|
+                                |exp_-v3qtu5CA|)
                        (call-with-values
                          (#%lambda ()
-                           (|convert-pattern_sEm9UN6CG|
-                             |pat_sE2zK8PCG|
-                             |keys_sE0KQNNCG|))
-                         (#%lambda (|p_sE4oEvQCG| |pvars_sEqkCYQCG|)
-                           (#%if (not (|distinct-bound-ids?_sEu5KloAG|
-                                        (map-car |pvars_sEqkCYQCG|)))
-                             (|invalid-ids-error_sEQ1IOoAG|
-                               (map-car |pvars_sEqkCYQCG|)
-                               |pat_sE2zK8PCG|
-                               "pattern variable")
-                             (#%if (not (andmap
-                                          (#%lambda (|x_sEKNC0hDG|)
-                                            (not (|ellipsis?_sEurGjRAG|
-                                                   (car |x_sEKNC0hDG|))))
-                                          |pvars_sEqkCYQCG|))
-                               (syntax-error
-                                 |pat_sE2zK8PCG|
-                                 "misplaced ellipsis in syntax-case pattern")
-                               ((#%lambda (|y_sEMgApRCG|)
+                           (|convert-pattern_-vH7HdoBA|
+                             |pat_-vnxxA4CA|
+                             |keys_-vlIDd3CA|))
+                         (#%lambda (|p_-vpmrX5CA| |pvars_-vLipo6CA|)
+                           (#%if (|distinct-bound-ids?_-vP3xNFzA|
+                                   (map-car |pvars_-vLipo6CA|))
+                             (#%if (andmap
+                                     (#%lambda (|x_-v3MpsyCA|)
+                                       (#%if (|ellipsis?_-vPptL6AA|
+                                               (car |x_-v3MpsyCA|))
+                                         #f
+                                         #t))
+                                     |pvars_-vLipo6CA|)
+                               ((#%lambda (|y_-v5fnR6CA|)
                                   (list (list #%lambda
-                                              (list |y_sEMgApRCG|)
+                                              (list |y_-v5fnR6CA|)
                                               (list #%if
-                                                    ((#%lambda (|tmp_sEyEdoWCG|)
-                                                       (#%if |tmp_sEyEdoWCG|
+                                                    ((#%lambda (|tmp_-vTC0QbCA|)
+                                                       (#%if |tmp_-vTC0QbCA|
                                                          (apply (#%lambda ()
-                                                                  |y_sEMgApRCG|)
-                                                                |tmp_sEyEdoWCG|)
+                                                                  |y_-v5fnR6CA|)
+                                                                |tmp_-vTC0QbCA|)
                                                          (list #%if
-                                                               |y_sEMgApRCG|
-                                                               (|build-dispatch-call_sEI5Se7CG|
-                                                                 |pvars_sEqkCYQCG|
-                                                                 |fender_sEovIBPCG|
-                                                                 |y_sEMgApRCG|
-                                                                 |r_sEICMHOCG|)
+                                                               |y_-v5fnR6CA|
+                                                               (|build-dispatch-call_-v14FGoBA|
+                                                                 |pvars_-vLipo6CA|
+                                                                 |fender_-vJtv15CA|
+                                                                 |y_-v5fnR6CA|
+                                                                 |r_-v1Bz74CA|)
                                                                (#%if (atom? #f)
                                                                  #f
                                                                  (list #%quote
                                                                        #f)))))
                                                      ($syntax-dispatch
                                                        (#%annotate
-                                                         |fender_sEovIBPCG|
+                                                         |fender_-vJtv15CA|
                                                          value)
                                                        #2(atom #t)))
-                                                    (|build-dispatch-call_sEI5Se7CG|
-                                                      |pvars_sEqkCYQCG|
-                                                      |exp_sEKrG2QCG|
-                                                      |y_sEMgApRCG|
-                                                      |r_sEICMHOCG|)
-                                                    (|gen-syntax-case_sEo-N88CG|
-                                                      |x_sEGNSkNCG|
-                                                      |keys_sE0KQNNCG|
-                                                      |clauses_sEmGOeOCG|
-                                                      |r_sEICMHOCG|)))
-                                        (#%if (eq? |p_sE4oEvQCG| (#%quote any))
+                                                    (|build-dispatch-call_-v14FGoBA|
+                                                      |pvars_-vLipo6CA|
+                                                      |exp_-v3qtu5CA|
+                                                      |y_-v5fnR6CA|
+                                                      |r_-v1Bz74CA|)
+                                                    (|gen-syntax-case_-vJYAApBA|
+                                                      |x_-v_LFM2CA|
+                                                      |keys_-vlIDd3CA|
+                                                      |clauses_-vHEBG3CA|
+                                                      |r_-v1Bz74CA|)))
+                                        (#%if (eq? |p_-vpmrX5CA| (#%quote any))
                                           (list (#%quote list)
                                                 (cons #%annotate
-                                                      (cons |x_sEGNSkNCG|
+                                                      (cons |x_-v_LFM2CA|
                                                             (#%quote
                                                               (value)))))
                                           (list (#%quote $syntax-dispatch)
                                                 (cons #%annotate
-                                                      (cons |x_sEGNSkNCG|
+                                                      (cons |x_-v_LFM2CA|
                                                             (#%quote (value))))
-                                                (#%if (atom? |p_sE4oEvQCG|)
-                                                  |p_sE4oEvQCG|
+                                                (#%if (atom? |p_-vpmrX5CA|)
+                                                  |p_-vpmrX5CA|
                                                   (list #%quote
-                                                        |p_sE4oEvQCG|))))))
-                                (|gen-var_sEScy7TAG| (#%quote tmp)))))))))
-                   (|gen-syntax-case_sEo-N88CG|
-                     (#%lambda (|x_sE4KAthDG|
-                                |keys_sEqGyWhDG|
-                                |clauses_sEMCwniDG|
-                                |r_sE6zuQiDG|)
-                       (#%if (null? |clauses_sEMCwniDG|)
-                         (list (#%quote syntax-error) |x_sE4KAthDG|)
-                         ((#%lambda (|tmp_sEsvshjDG|)
-                            ((#%lambda (|tmp_sEOrqKjDG|)
-                               (#%if |tmp_sEOrqKjDG|
-                                 (apply (#%lambda (|pat_sES5esmDG|
-                                                   |exp_sEc2cVmDG|)
-                                          (#%if (#%if (|id?_sE4-1KFzG|
-                                                        |pat_sES5esmDG|)
-                                                  (#%if (not (|bound-id-member?_sEa-FfpAG|
-                                                               |pat_sES5esmDG|
-                                                               |keys_sEqGyWhDG|))
-                                                    (not (|ellipsis?_sEurGjRAG|
-                                                           |pat_sES5esmDG|))
-                                                    #f)
+                                                        |p_-vpmrX5CA|))))))
+                                (|gen-var_-vbblz8AA| (#%quote tmp)))
+                               (syntax-error
+                                 |pat_-vnxxA4CA|
+                                 "misplaced ellipsis in syntax-case pattern"))
+                             (|invalid-ids-error_-v90veGzA|
+                               (map-car |pvars_-vLipo6CA|)
+                               |pat_-vnxxA4CA|
+                               "pattern variable"))))))
+                   (|gen-syntax-case_-vJYAApBA|
+                     (#%lambda (|x_-vpInVyCA|
+                                |keys_-vLElmzCA|
+                                |clauses_-v5BjPzCA|
+                                |r_-vrxhgACA|)
+                       (#%if (null? |clauses_-v5BjPzCA|)
+                         (list (#%quote syntax-error) |x_-vpInVyCA|)
+                         ((#%lambda (|tmp_-vNtfJACA|)
+                            ((#%lambda (|tmp_-v7qdaBCA|)
+                               (#%if |tmp_-v7qdaBCA|
+                                 (apply (#%lambda (|pat_-vb41UDCA|
+                                                   |exp_-vx0_kECA|)
+                                          (#%if (#%if (|id?_-vpYQ9XyA|
+                                                        |pat_-vb41UDCA|)
+                                                  (#%if (|bound-id-member?_-vvYsHGzA|
+                                                          |pat_-vb41UDCA|
+                                                          |keys_-vLElmzCA|)
+                                                    #f
+                                                    (#%if (|ellipsis?_-vPptL6AA|
+                                                            |pat_-vb41UDCA|)
+                                                      #f
+                                                      #t))
                                                   #f)
-                                            ((#%lambda (|label_sEy-9mnDG|
-                                                        |var_sEUW7PnDG|)
+                                            ((#%lambda (|label_-vTYYNECA|
+                                                        |var_-vdVWeFCA|)
                                                (list (list #%lambda
-                                                           (list |var_sEUW7PnDG|)
-                                                           (|chi_sEki9xKAG|
-                                                             |exp_sEc2cVmDG|
-                                                             (|extend-env_sEWQwXyzG|
-                                                               |label_sEy-9mnDG|
-                                                               (|make-binding_sEMH_8szG|
+                                                           (list |var_-vdVWeFCA|)
+                                                           (|chi_-vFgYY_zA|
+                                                             |exp_-vx0_kECA|
+                                                             (|extend-env_-vfPjnQyA|
+                                                               |label_-vTYYNECA|
+                                                               (|make-binding_-v5GOAJyA|
                                                                  (#%quote
                                                                    syntax)
-                                                                 (cons |var_sEUW7PnDG|
+                                                                 (cons |var_-vdVWeFCA|
                                                                        0))
-                                                               |r_sE6zuQiDG|)
-                                                             (|make-binding-wrap_sEYalLfAG|
-                                                               (list |pat_sES5esmDG|)
-                                                               (list |label_sEy-9mnDG|)
+                                                               |r_-vrxhgACA|)
+                                                             (|make-binding-wrap_-vh98bxzA|
+                                                               (list |pat_-vb41UDCA|)
+                                                               (list |label_-vTYYNECA|)
                                                                (#%quote
                                                                  (())))))
-                                                     |x_sE4KAthDG|))
-                                             (|gen-label_sEypB5-zG|)
-                                             (|gen-var_sEScy7TAG|
-                                               |pat_sES5esmDG|))
-                                            (|gen-clause_sE22QH7CG|
-                                              |x_sE4KAthDG|
-                                              |keys_sEqGyWhDG|
-                                              (cdr |clauses_sEMCwniDG|)
-                                              |r_sE6zuQiDG|
-                                              |pat_sES5esmDG|
+                                                     |x_-vpInVyCA|))
+                                             (|gen-label_-vTnoxfzA|)
+                                             (|gen-var_-vbblz8AA|
+                                               |pat_-vb41UDCA|))
+                                            (|gen-clause_-vn0D7pBA|
+                                              |x_-vpInVyCA|
+                                              |keys_-vLElmzCA|
+                                              (cdr |clauses_-v5BjPzCA|)
+                                              |r_-vrxhgACA|
+                                              |pat_-vb41UDCA|
                                               #t
-                                              |exp_sEc2cVmDG|)))
-                                        |tmp_sEOrqKjDG|)
-                                 ((#%lambda (|tmp_sE8oobkDG|)
-                                    (#%if |tmp_sE8oobkDG|
-                                      (apply (#%lambda (|pat_sEQgk5lDG|
-                                                        |fender_sEadiylDG|
-                                                        |exp_sEw9g_lDG|)
-                                               (|gen-clause_sE22QH7CG|
-                                                 |x_sE4KAthDG|
-                                                 |keys_sEqGyWhDG|
-                                                 (cdr |clauses_sEMCwniDG|)
-                                                 |r_sE6zuQiDG|
-                                                 |pat_sEQgk5lDG|
-                                                 |fender_sEadiylDG|
-                                                 |exp_sEw9g_lDG|))
-                                             |tmp_sE8oobkDG|)
+                                              |exp_-vx0_kECA|)))
+                                        |tmp_-v7qdaBCA|)
+                                 ((#%lambda (|tmp_-vtmbDBCA|)
+                                    (#%if |tmp_-vtmbDBCA|
+                                      (apply (#%lambda (|pat_-v9f7xCCA|
+                                                        |fender_-vvb5-CCA|
+                                                        |exp_-vR73rDCA|)
+                                               (|gen-clause_-vn0D7pBA|
+                                                 |x_-vpInVyCA|
+                                                 |keys_-vLElmzCA|
+                                                 (cdr |clauses_-v5BjPzCA|)
+                                                 |r_-vrxhgACA|
+                                                 |pat_-v9f7xCCA|
+                                                 |fender_-vvb5-CCA|
+                                                 |exp_-vR73rDCA|))
+                                             |tmp_-vtmbDBCA|)
                                       (syntax-error
-                                        (car |clauses_sEMCwniDG|)
+                                        (car |clauses_-v5BjPzCA|)
                                         "invalid syntax-case clause")))
                                   ($syntax-dispatch
-                                    (#%annotate |tmp_sEsvshjDG| value)
+                                    (#%annotate |tmp_-vNtfJACA| value)
                                     (#%quote (any any any))))))
                              ($syntax-dispatch
-                               (#%annotate |tmp_sEsvshjDG| value)
+                               (#%annotate |tmp_-vNtfJACA| value)
                                (#%quote (any any)))))
-                          (car |clauses_sEMCwniDG|))))))
-          (#%lambda (|e_sEKWLB8CG|
-                     |r_sE4TJ29CG|
-                     |w_sEqPHv9CG|
-                     |s_sEMLFY9CG|)
-            ((#%lambda (|e_sE6IDpaCG|)
-               ((#%lambda (|tmp_sEOAzjbCG|)
-                  (#%if |tmp_sEOAzjbCG|
-                    (apply (#%lambda (|__sE8xxMbCG|
-                                      |val_sEutvdcCG|
-                                      |key_sEQptGcCG|
-                                      |m_sEamr7dCG|)
+                          (car |clauses_-v5BjPzCA|))))))
+          (#%lambda (|e_-v3Vy1qBA|
+                     |r_-vpRwuqBA|
+                     |w_-vLNuXqBA|
+                     |s_-v5KsorBA|)
+            ((#%lambda (|e_-vrGqRrBA|)
+               ((#%lambda (|tmp_-v7zmLsBA|)
+                  (#%if |tmp_-v7zmLsBA|
+                    (apply (#%lambda (|__-vtvkctBA|
+                                      |val_-vPriFtBA|
+                                      |key_-v9og6uBA|
+                                      |m_-vvkezuBA|)
                              (#%if (andmap
-                                     (#%lambda (|x_sECN6FhCG|)
-                                       (#%if (|id?_sE4-1KFzG| |x_sECN6FhCG|)
-                                         (not (|ellipsis?_sEurGjRAG|
-                                                |x_sECN6FhCG|))
+                                     (#%lambda (|x_-vXLV4zBA|)
+                                       (#%if (|id?_-vpYQ9XyA| |x_-vXLV4zBA|)
+                                         (#%if (|ellipsis?_-vPptL6AA|
+                                                 |x_-vXLV4zBA|)
+                                           #f
+                                           #t)
                                          #f))
-                                     |key_sEQptGcCG|)
-                               ((#%lambda (|x_sEwipAdCG|)
-                                  (#%if |s_sEMLFY9CG|
+                                     |key_-v9og6uBA|)
+                               ((#%lambda (|x_-vRgc0vBA|)
+                                  (#%if |s_-v5KsorBA|
                                     (list #%annotate
                                           (list (list #%lambda
-                                                      (list |x_sEwipAdCG|)
-                                                      (|gen-syntax-case_sEo-N88CG|
-                                                        |x_sEwipAdCG|
-                                                        |key_sEQptGcCG|
-                                                        |m_sEamr7dCG|
-                                                        |r_sE4TJ29CG|))
-                                                (|chi_sEki9xKAG|
-                                                  |val_sEutvdcCG|
-                                                  |r_sE4TJ29CG|
+                                                      (list |x_-vRgc0vBA|)
+                                                      (|gen-syntax-case_-vJYAApBA|
+                                                        |x_-vRgc0vBA|
+                                                        |key_-v9og6uBA|
+                                                        |m_-vvkezuBA|
+                                                        |r_-vpRwuqBA|))
+                                                (|chi_-vFgYY_zA|
+                                                  |val_-vPriFtBA|
+                                                  |r_-vpRwuqBA|
                                                   (#%quote (()))))
-                                          |s_sEMLFY9CG|)
+                                          |s_-v5KsorBA|)
                                     (list (list #%lambda
-                                                (list |x_sEwipAdCG|)
-                                                (|gen-syntax-case_sEo-N88CG|
-                                                  |x_sEwipAdCG|
-                                                  |key_sEQptGcCG|
-                                                  |m_sEamr7dCG|
-                                                  |r_sE4TJ29CG|))
-                                          (|chi_sEki9xKAG|
-                                            |val_sEutvdcCG|
-                                            |r_sE4TJ29CG|
+                                                (list |x_-vRgc0vBA|)
+                                                (|gen-syntax-case_-vJYAApBA|
+                                                  |x_-vRgc0vBA|
+                                                  |key_-v9og6uBA|
+                                                  |m_-vvkezuBA|
+                                                  |r_-vpRwuqBA|))
+                                          (|chi_-vFgYY_zA|
+                                            |val_-vPriFtBA|
+                                            |r_-vpRwuqBA|
                                             (#%quote (()))))))
-                                (|gen-var_sEScy7TAG| (#%quote tmp)))
+                                (|gen-var_-vbblz8AA| (#%quote tmp)))
                                (syntax-error
-                                 |e_sE6IDpaCG|
+                                 |e_-vrGqRrBA|
                                  "invalid literals list in")))
-                           |tmp_sEOAzjbCG|)
-                    (syntax-error |e_sE6IDpaCG|)))
+                           |tmp_-v7zmLsBA|)
+                    (syntax-error |e_-vrGqRrBA|)))
                 ($syntax-dispatch
-                  (#%annotate |e_sE6IDpaCG| value)
+                  (#%annotate |e_-vrGqRrBA| value)
                   (#%quote (any any each-any . each-any)))))
-             (|source-wrap_sESSB9qAG|
-               |e_sEKWLB8CG|
-               |w_sEqPHv9CG|
-               |s_sEMLFY9CG|)))))
+             (|source-wrap_-vbRoBHzA|
+               |e_-v3Vy1qBA|
+               |w_-vLNuXqBA|
+               |s_-v5KsorBA|)))))
       (#%set! sc-expand
-        ((#%lambda (|user-ribcage_sEWL1apDG|)
-           ((#%lambda (|user-top-wrap_sEgI_CpDG|)
-              (#%lambda (|x_sEYAXwqDG| . |c/rtem_sECEZ3qDG|)
-                (#%if (#%if (pair? |x_sEYAXwqDG|)
-                        (equal? (car |x_sEYAXwqDG|) "noexpand")
+        ((#%lambda (|user-ribcage_-vfKQBGCA|)
+           ((#%lambda (|user-top-wrap_-vBGO2HCA|)
+              (#%lambda (|x_-vhzKYHCA| . |c/rtem_-vXCMvHCA|)
+                (#%if (#%if (pair? |x_-vhzKYHCA|)
+                        (equal? (car |x_-vhzKYHCA|) "noexpand")
                         #f)
-                  (cadr |x_sEYAXwqDG|)
-                  (#%if (null? |c/rtem_sECEZ3qDG|)
-                    (|chi-top_sEiihHuAG|
-                      |x_sEYAXwqDG|
+                  (cadr |x_-vhzKYHCA|)
+                  (#%if (null? |c/rtem_-vXCMvHCA|)
+                    (|chi-top_-vDg47MzA|
+                      |x_-vhzKYHCA|
                       ()
-                      |user-top-wrap_sEgI_CpDG|
+                      |user-top-wrap_-vBGO2HCA|
                       (#%quote (l c))
                       (#%quote (l))
-                      |user-ribcage_sEWL1apDG|)
-                    (|chi-top_sEiihHuAG|
-                      |x_sEYAXwqDG|
+                      |user-ribcage_-vfKQBGCA|)
+                    (|chi-top_-vDg47MzA|
+                      |x_-vhzKYHCA|
                       ()
-                      |user-top-wrap_sEgI_CpDG|
-                      (car |c/rtem_sECEZ3qDG|)
-                      (cadr |c/rtem_sECEZ3qDG|)
-                      |user-ribcage_sEWL1apDG|)))))
-            (|make-wrap_sEuAPUIzG|
-              (|wrap-marks_sEQwNlJzG| (#%quote ((top))))
-              (cons |user-ribcage_sEWL1apDG|
-                    (|wrap-subst_sEatLOJzG| (#%quote ((top))))))))
-         ((#%lambda (|ribcage_sEixVZqDG|)
+                      |user-top-wrap_-vBGO2HCA|
+                      (car |c/rtem_-vXCMvHCA|)
+                      (cadr |c/rtem_-vXCMvHCA|)
+                      |user-ribcage_-vfKQBGCA|)))))
+            (|make-wrap_-vPyCk-yA|
+              (|wrap-marks_-v9vAN-yA| (#%quote ((top))))
+              (cons |user-ribcage_-vfKQBGCA|
+                    (|wrap-subst_-vvrye_yA| (#%quote ((top))))))))
+         ((#%lambda (|ribcage_-vDvIpICA|)
             (#%begin
-              (|extend-ribcage-subst!_sEgipReAG|
-                |ribcage_sEixVZqDG|
+              (|extend-ribcage-subst!_-vBgchwzA|
+                |ribcage_-vDvIpICA|
                 (#%quote *top*))
-              |ribcage_sEixVZqDG|))
-          (|make-ribcage_sEAevs_zG| () () ()))))
+              |ribcage_-vDvIpICA|))
+          (|make-ribcage_-vVciUgzA| () () ()))))
       (#%set! identifier?
-        (#%lambda (|x_sEEtTqrDG|)
-          (|nonsymbol-id?_sE0ke0DzG| |x_sEEtTqrDG|)))
+        (#%lambda (|x_-vZrGSICA|)
+          (|nonsymbol-id?_-vli1sUyA| |x_-vZrGSICA|)))
       (#%set! datum->syntax-object
-        (#%lambda (|id_sE-pRTrDG| |datum_sEkmPksDG|)
+        (#%lambda (|id_-vjoEjJCA| |datum_-vFkCMJCA|)
           (#%begin
-            (#%if (|nonsymbol-id?_sE0ke0DzG| |id_sE-pRTrDG|)
+            (#%if (|nonsymbol-id?_-vli1sUyA| |id_-vjoEjJCA|)
               #!void
-              (|error-hook_sESjSOnyG|
+              (|error-hook_-vbiFeFxA|
                 (#%quote datum->syntax-object)
                 "invalid argument"
-                |id_sE-pRTrDG|))
-            (|make-syntax-object_sE8iVtfzG|
-              |datum_sEkmPksDG|
-              (|syntax-object-wrap_sEa7PQgzG| |id_sE-pRTrDG|)))))
+                |id_-vjoEjJCA|))
+            (|make-syntax-object_-vtgIVwyA|
+              |datum_-vFkCMJCA|
+              (|syntax-object-wrap_-vv5CgyyA| |id_-vjoEjJCA|)))))
       (#%set! syntax-object->datum
-        (#%lambda (|x_sE0fLetDG|)
-          (|strip_sEwgAGSAG| |x_sE0fLetDG| (#%quote (())))))
+        (#%lambda (|x_-vldyGKCA|)
+          (|strip_-vRen68AA| |x_-vldyGKCA| (#%quote (())))))
       (#%set! generate-temporaries
-        (#%lambda (|ls_sEmbJHtDG|)
+        (#%lambda (|ls_-vH9w7LCA|)
           (#%begin
-            (#%if (list? |ls_sEmbJHtDG|)
+            (#%if (list? |ls_-vH9w7LCA|)
               #!void
-              (|error-hook_sESjSOnyG|
+              (|error-hook_-vbiFeFxA|
                 (#%quote generate-temporaries)
                 "invalid argument"
-                |ls_sEmbJHtDG|))
-            (map (#%lambda (|x_sE24FBuDG|)
-                   (|wrap_sEwWDIpAG| (gensym) (#%quote ((top)))))
-                 |ls_sEmbJHtDG|))))
+                |ls_-vH9w7LCA|))
+            (map (#%lambda (|x_-vn2s1MCA|)
+                   (|wrap_-vRUq8HzA| (gensym) (#%quote ((top)))))
+                 |ls_-vH9w7LCA|))))
       (#%set! free-identifier=?
-        (#%lambda (|x_sEo0D2vDG| |y_sEKYAvvDG|)
+        (#%lambda (|x_-vJ-puMCA| |y_-v3XnXMCA|)
           (#%begin
-            (#%if (|nonsymbol-id?_sE0ke0DzG| |x_sEo0D2vDG|)
+            (#%if (|nonsymbol-id?_-vli1sUyA| |x_-vJ-puMCA|)
               #!void
-              (|error-hook_sESjSOnyG|
+              (|error-hook_-vbiFeFxA|
                 (#%quote free-identifier=?)
                 "invalid argument"
-                |x_sEo0D2vDG|))
-            (#%if (|nonsymbol-id?_sE0ke0DzG| |y_sEKYAvvDG|)
+                |x_-vJ-puMCA|))
+            (#%if (|nonsymbol-id?_-vli1sUyA| |y_-v3XnXMCA|)
               #!void
-              (|error-hook_sESjSOnyG|
+              (|error-hook_-vbiFeFxA|
                 (#%quote free-identifier=?)
                 "invalid argument"
-                |y_sEKYAvvDG|))
-            (|free-id=?_sEoC0hkAG|
-              |x_sEo0D2vDG|
-              |y_sEKYAvvDG|))))
+                |y_-v3XnXMCA|))
+            (|free-id=?_-vJAPIBzA|
+              |x_-vJ-puMCA|
+              |y_-v3XnXMCA|))))
       (#%set! bound-identifier=?
-        (#%lambda (|x_sEMNuSwDG| |y_sE6KsjxDG|)
+        (#%lambda (|x_-v5MhiOCA| |y_-vrIfLOCA|)
           (#%begin
-            (#%if (|nonsymbol-id?_sE0ke0DzG| |x_sEMNuSwDG|)
+            (#%if (|nonsymbol-id?_-vli1sUyA| |x_-v5MhiOCA|)
               #!void
-              (|error-hook_sESjSOnyG|
+              (|error-hook_-vbiFeFxA|
                 (#%quote bound-identifier=?)
                 "invalid argument"
-                |x_sEMNuSwDG|))
-            (#%if (|nonsymbol-id?_sE0ke0DzG| |y_sE6KsjxDG|)
+                |x_-v5MhiOCA|))
+            (#%if (|nonsymbol-id?_-vli1sUyA| |y_-vrIfLOCA|)
               #!void
-              (|error-hook_sESjSOnyG|
+              (|error-hook_-vbiFeFxA|
                 (#%quote bound-identifier=?)
                 "invalid argument"
-                |y_sE6KsjxDG|))
-            (|bound-id=?_sE4vYalAG|
-              |x_sEMNuSwDG|
-              |y_sE6KsjxDG|))))
+                |y_-vrIfLOCA|))
+            (|bound-id=?_-vptLCCzA|
+              |x_-v5MhiOCA|
+              |y_-vrIfLOCA|))))
       (#%set! literal-identifier=?
-        (#%lambda (|x_sE8zmGyDG| |y_sEuvk7zDG|)
+        (#%lambda (|x_-vtx96QCA| |y_-vPt7zQCA|)
           (#%begin
-            (#%if (|nonsymbol-id?_sE0ke0DzG| |x_sE8zmGyDG|)
+            (#%if (|nonsymbol-id?_-vli1sUyA| |x_-vtx96QCA|)
               #!void
-              (|error-hook_sESjSOnyG|
+              (|error-hook_-vbiFeFxA|
                 (#%quote literal-identifier=?)
                 "invalid argument"
-                |x_sE8zmGyDG|))
-            (#%if (|nonsymbol-id?_sE0ke0DzG| |y_sEuvk7zDG|)
+                |x_-vtx96QCA|))
+            (#%if (|nonsymbol-id?_-vli1sUyA| |y_-vPt7zQCA|)
               #!void
-              (|error-hook_sESjSOnyG|
+              (|error-hook_-vbiFeFxA|
                 (#%quote literal-identifier=?)
                 "invalid argument"
-                |y_sEuvk7zDG|))
-            (|literal-id=?_sEKy-JkAG|
-              |x_sE8zmGyDG|
-              |y_sEuvk7zDG|))))
+                |y_-vPt7zQCA|))
+            (|literal-id=?_-v3xN9CzA|
+              |x_-vtx96QCA|
+              |y_-vPt7zQCA|))))
       (#%set! syntax-error
-        (#%lambda (|object_sESgcXADG| . |messages_sEwkeuADG|)
+        (#%lambda (|object_-vbf_mSCA| . |messages_-vRi1WRCA|)
           (#%begin
             (for-each
-              (#%lambda (|x_sEcdaoBDG|)
-                (#%if (string? |x_sEcdaoBDG|)
+              (#%lambda (|x_-vxbZPSCA|)
+                (#%if (string? |x_-vxbZPSCA|)
                   #!void
-                  (|error-hook_sESjSOnyG|
+                  (|error-hook_-vbiFeFxA|
                     (#%quote syntax-error)
                     "invalid argument"
-                    |x_sEcdaoBDG|)))
-              |messages_sEwkeuADG|)
-            ((#%lambda (|message_sEU56iCDG|)
-               (|error-hook_sESjSOnyG|
+                    |x_-vxbZPSCA|)))
+              |messages_-vRi1WRCA|)
+            ((#%lambda (|message_-vd4VJTCA|)
+               (|error-hook_-vbiFeFxA|
                  #f
-                 |message_sEU56iCDG|
-                 (|strip_sEwgAGSAG|
-                   |object_sESgcXADG|
+                 |message_-vd4VJTCA|
+                 (|strip_-vRen68AA|
+                   |object_-vbf_mSCA|
                    (#%quote (())))))
-             (#%if (null? |messages_sEwkeuADG|)
+             (#%if (null? |messages_-vRi1WRCA|)
                "invalid syntax"
-               (apply string-append |messages_sEwkeuADG|))))))
-      (#%letrec ((|match-each_sEe24LCDG|
-                   (#%lambda (|e_sE0qJJHDG| |p_sEmmHaIDG| |w_sEIiFDIDG|)
-                     (#%if (annotation? |e_sE0qJJHDG|)
-                       (|match-each_sEe24LCDG|
-                         (annotation-expression |e_sE0qJJHDG|)
-                         |p_sEmmHaIDG|
-                         |w_sEIiFDIDG|)
-                       (#%if (pair? |e_sE0qJJHDG|)
-                         ((#%lambda (|first_sE2fD4JDG|)
-                            (#%if |first_sE2fD4JDG|
-                              ((#%lambda (|rest_sEobBxJDG|)
-                                 (#%if |rest_sEobBxJDG|
-                                   (cons |first_sE2fD4JDG| |rest_sEobBxJDG|)
+               (apply string-append |messages_-vRi1WRCA|))))))
+      (#%letrec ((|match-each_-vz0TaUCA|
+                   (#%lambda (|e_-vlow9ZCA| |p_-vHkuCZCA| |w_-v1hs3-CA|)
+                     (#%if (annotation? |e_-vlow9ZCA|)
+                       (|match-each_-vz0TaUCA|
+                         (annotation-expression |e_-vlow9ZCA|)
+                         |p_-vHkuCZCA|
+                         |w_-v1hs3-CA|)
+                       (#%if (pair? |e_-vlow9ZCA|)
+                         ((#%lambda (|first_-vndqw-CA|)
+                            (#%if |first_-vndqw-CA|
+                              ((#%lambda (|rest_-vJ9oZ-CA|)
+                                 (#%if |rest_-vJ9oZ-CA|
+                                   (cons |first_-vndqw-CA| |rest_-vJ9oZ-CA|)
                                    #f))
-                               (|match-each_sEe24LCDG|
-                                 (cdr |e_sE0qJJHDG|)
-                                 |p_sEmmHaIDG|
-                                 |w_sEIiFDIDG|))
+                               (|match-each_-vz0TaUCA|
+                                 (cdr |e_-vlow9ZCA|)
+                                 |p_-vHkuCZCA|
+                                 |w_-v1hs3-CA|))
                               #f))
-                          (|match_sEiITsFDG|
-                            (car |e_sE0qJJHDG|)
-                            |p_sEmmHaIDG|
-                            |w_sEIiFDIDG|
+                          (|match_-vDGGUWCA|
+                            (car |e_-vlow9ZCA|)
+                            |p_-vHkuCZCA|
+                            |w_-v1hs3-CA|
                             ()))
-                         (#%if (null? |e_sE0qJJHDG|)
+                         (#%if (null? |e_-vlow9ZCA|)
                            ()
-                           (#%if (|syntax-object?_sEueTWfzG| |e_sE0qJJHDG|)
-                             (|match-each_sEe24LCDG|
-                               (|syntax-object-expression_sEQaRngzG|
-                                 |e_sE0qJJHDG|)
-                               |p_sEmmHaIDG|
-                               (|join-wraps_sE-_e6hAG|
-                                 |w_sEIiFDIDG|
-                                 (|syntax-object-wrap_sEa7PQgzG|
-                                   |e_sE0qJJHDG|)))
+                           (#%if (|syntax-object?_-vPcGmxyA| |e_-vlow9ZCA|)
+                             (|match-each_-vz0TaUCA|
+                               (|syntax-object-expression_-v99EPxyA|
+                                 |e_-vlow9ZCA|)
+                               |p_-vHkuCZCA|
+                               (|join-wraps_-vj-1yyzA|
+                                 |w_-v1hs3-CA|
+                                 (|syntax-object-wrap_-vv5CgyyA|
+                                   |e_-vlow9ZCA|)))
                              #f))))))
-                 (|match-each+_sEA-1cDDG|
-                   (#%lambda (|e_sEK7z-JDG|
-                              |x-pat_sE44xrKDG|
-                              |y-pat_sEq0vUKDG|
-                              |z-pat_sEMYslLDG|
-                              |w_sE6VqOLDG|
-                              |r_sEsRofMDG|)
-                     ((#%letrec ((|f_sEONmIMDG|
-                                   (#%lambda (|e_sE8Kk9NDG| |w_sEuGiCNDG|)
-                                     (#%if (pair? |e_sE8Kk9NDG|)
+                 (|match-each+_-vVYQDUCA|
+                   (#%lambda (|e_-v36mq_CA|
+                              |x-pat_-vp2kT_CA|
+                              |y-pat_-vL-hk0DA|
+                              |z-pat_-v5XfN0DA|
+                              |w_-vrTde1DA|
+                              |r_-vNPbH1DA|)
+                     ((#%letrec ((|f_-v7M982DA|
+                                   (#%lambda (|e_-vtI7B2DA| |w_-vPE523DA|)
+                                     (#%if (pair? |e_-vtI7B2DA|)
                                        (call-with-values
                                          (#%lambda ()
-                                           (|f_sEONmIMDG|
-                                             (cdr |e_sE8Kk9NDG|)
-                                             |w_sEuGiCNDG|))
-                                         (#%lambda (|xr*_sEQCg3ODG|
-                                                    |y-pat_sEazewODG|
-                                                    |r_sEwvcZODG|)
-                                           (#%if |r_sEwvcZODG|
-                                             (#%if (null? |y-pat_sEazewODG|)
-                                               ((#%lambda (|xr_sESraqPDG|)
-                                                  (#%if |xr_sESraqPDG|
+                                           (|f_-v7M982DA|
+                                             (cdr |e_-vtI7B2DA|)
+                                             |w_-vPE523DA|))
+                                         (#%lambda (|xr*_-v9B3v3DA|
+                                                    |y-pat_-vvx1Y3DA|
+                                                    |r_-vRt_o4DA|)
+                                           (#%if |r_-vRt_o4DA|
+                                             (#%if (null? |y-pat_-vvx1Y3DA|)
+                                               ((#%lambda (|xr_-vbqZR4DA|)
+                                                  (#%if |xr_-vbqZR4DA|
                                                     (values
-                                                      (cons |xr_sESraqPDG|
-                                                            |xr*_sEQCg3ODG|)
-                                                      |y-pat_sEazewODG|
-                                                      |r_sEwvcZODG|)
+                                                      (cons |xr_-vbqZR4DA|
+                                                            |xr*_-v9B3v3DA|)
+                                                      |y-pat_-vvx1Y3DA|
+                                                      |r_-vRt_o4DA|)
                                                     (values #f #f #f)))
-                                                (|match_sEiITsFDG|
-                                                  (car |e_sE8Kk9NDG|)
-                                                  |x-pat_sE44xrKDG|
-                                                  |w_sEuGiCNDG|
+                                                (|match_-vDGGUWCA|
+                                                  (car |e_-vtI7B2DA|)
+                                                  |x-pat_-vp2kT_CA|
+                                                  |w_-vPE523DA|
                                                   ()))
                                                (values
                                                  ()
-                                                 (cdr |y-pat_sEazewODG|)
-                                                 (|match_sEiITsFDG|
-                                                   (car |e_sE8Kk9NDG|)
-                                                   (car |y-pat_sEazewODG|)
-                                                   |w_sEuGiCNDG|
-                                                   |r_sEwvcZODG|)))
+                                                 (cdr |y-pat_-vvx1Y3DA|)
+                                                 (|match_-vDGGUWCA|
+                                                   (car |e_-vtI7B2DA|)
+                                                   (car |y-pat_-vvx1Y3DA|)
+                                                   |w_-vPE523DA|
+                                                   |r_-vRt_o4DA|)))
                                              (values #f #f #f))))
-                                       (#%if (annotation? |e_sE8Kk9NDG|)
-                                         (|f_sEONmIMDG|
+                                       (#%if (annotation? |e_-vtI7B2DA|)
+                                         (|f_-v7M982DA|
                                            (annotation-expression
-                                             |e_sE8Kk9NDG|)
-                                           |w_sEuGiCNDG|)
-                                         (#%if (|syntax-object?_sEueTWfzG|
-                                                 |e_sE8Kk9NDG|)
-                                           (|f_sEONmIMDG|
-                                             (|syntax-object-expression_sEQaRngzG|
-                                               |e_sE8Kk9NDG|)
-                                             (|join-wraps_sE-_e6hAG|
-                                               |w_sEuGiCNDG|
-                                               (|syntax-object-wrap_sEa7PQgzG|
-                                                 |e_sE8Kk9NDG|)))
+                                             |e_-vtI7B2DA|)
+                                           |w_-vPE523DA|)
+                                         (#%if (|syntax-object?_-vPcGmxyA|
+                                                 |e_-vtI7B2DA|)
+                                           (|f_-v7M982DA|
+                                             (|syntax-object-expression_-v99EPxyA|
+                                               |e_-vtI7B2DA|)
+                                             (|join-wraps_-vj-1yyzA|
+                                               |w_-vPE523DA|
+                                               (|syntax-object-wrap_-vv5CgyyA|
+                                                 |e_-vtI7B2DA|)))
                                            (values
                                              ()
-                                             |y-pat_sEq0vUKDG|
-                                             (|match_sEiITsFDG|
-                                               |e_sE8Kk9NDG|
-                                               |z-pat_sEMYslLDG|
-                                               |w_sEuGiCNDG|
-                                               |r_sEsRofMDG|))))))))
-                        |f_sEONmIMDG|)
-                      |e_sEK7z-JDG|
-                      |w_sE6VqOLDG|)))
-                 (|match-each-any_sEWW_EDDG|
-                   (#%lambda (|e_sEco8TPDG| |w_sEyk6kQDG|)
-                     (#%if (annotation? |e_sEco8TPDG|)
-                       (|match-each-any_sEWW_EDDG|
-                         (annotation-expression |e_sEco8TPDG|)
-                         |w_sEyk6kQDG|)
-                       (#%if (pair? |e_sEco8TPDG|)
-                         ((#%lambda (|l_sEUg4NQDG|)
-                            (#%if |l_sEUg4NQDG|
-                              (cons (|wrap_sEwWDIpAG|
-                                      (car |e_sEco8TPDG|)
-                                      |w_sEyk6kQDG|)
-                                    |l_sEUg4NQDG|)
+                                             |y-pat_-vL-hk0DA|
+                                             (|match_-vDGGUWCA|
+                                               |e_-vtI7B2DA|
+                                               |z-pat_-v5XfN0DA|
+                                               |w_-vPE523DA|
+                                               |r_-vNPbH1DA|))))))))
+                        |f_-v7M982DA|)
+                      |e_-v36mq_CA|
+                      |w_-vrTde1DA|)))
+                 (|match-each-any_-vfVO4VCA|
+                   (#%lambda (|e_-vxmXi5DA| |w_-vTiVL5DA|)
+                     (#%if (annotation? |e_-vxmXi5DA|)
+                       (|match-each-any_-vfVO4VCA|
+                         (annotation-expression |e_-vxmXi5DA|)
+                         |w_-vTiVL5DA|)
+                       (#%if (pair? |e_-vxmXi5DA|)
+                         ((#%lambda (|l_-vdfTc6DA|)
+                            (#%if |l_-vdfTc6DA|
+                              (cons (|wrap_-vRUq8HzA|
+                                      (car |e_-vxmXi5DA|)
+                                      |w_-vTiVL5DA|)
+                                    |l_-vdfTc6DA|)
                               #f))
-                          (|match-each-any_sEWW_EDDG|
-                            (cdr |e_sEco8TPDG|)
-                            |w_sEyk6kQDG|))
-                         (#%if (null? |e_sEco8TPDG|)
+                          (|match-each-any_-vfVO4VCA|
+                            (cdr |e_-vxmXi5DA|)
+                            |w_-vTiVL5DA|))
+                         (#%if (null? |e_-vxmXi5DA|)
                            ()
-                           (#%if (|syntax-object?_sEueTWfzG| |e_sEco8TPDG|)
-                             (|match-each-any_sEWW_EDDG|
-                               (|syntax-object-expression_sEQaRngzG|
-                                 |e_sEco8TPDG|)
-                               (|join-wraps_sE-_e6hAG|
-                                 |w_sEyk6kQDG|
-                                 (|syntax-object-wrap_sEa7PQgzG|
-                                   |e_sEco8TPDG|)))
+                           (#%if (|syntax-object?_-vPcGmxyA| |e_-vxmXi5DA|)
+                             (|match-each-any_-vfVO4VCA|
+                               (|syntax-object-expression_-v99EPxyA|
+                                 |e_-vxmXi5DA|)
+                               (|join-wraps_-vj-1yyzA|
+                                 |w_-vTiVL5DA|
+                                 (|syntax-object-wrap_-vv5CgyyA|
+                                   |e_-vxmXi5DA|)))
                              #f))))))
-                 (|match-empty_sEgTZ5EDG|
-                   (#%lambda (|p_sEed2eRDG| |r_sEA90HRDG|)
-                     (#%if (null? |p_sEed2eRDG|)
-                       |r_sEA90HRDG|
-                       (#%if (eq? |p_sEed2eRDG| (#%quote any))
-                         (cons () |r_sEA90HRDG|)
-                         (#%if (pair? |p_sEed2eRDG|)
-                           (|match-empty_sEgTZ5EDG|
-                             (car |p_sEed2eRDG|)
-                             (|match-empty_sEgTZ5EDG|
-                               (cdr |p_sEed2eRDG|)
-                               |r_sEA90HRDG|))
-                           (#%if (eq? |p_sEed2eRDG| (#%quote each-any))
-                             (cons () |r_sEA90HRDG|)
-                             ((#%lambda (|t_sEW5-7SDG|)
-                                (#%if (eqv? |t_sEW5-7SDG| (#%quote each))
-                                  (|match-empty_sEgTZ5EDG|
-                                    (vector-ref |p_sEed2eRDG| 1)
-                                    |r_sEA90HRDG|)
-                                  (#%if (eqv? |t_sEW5-7SDG| (#%quote each+))
-                                    (|match-empty_sEgTZ5EDG|
-                                      (vector-ref |p_sEed2eRDG| 1)
-                                      (|match-empty_sEgTZ5EDG|
-                                        (reverse (vector-ref |p_sEed2eRDG| 2))
-                                        (|match-empty_sEgTZ5EDG|
-                                          (vector-ref |p_sEed2eRDG| 3)
-                                          |r_sEA90HRDG|)))
-                                    (#%if (memv |t_sEW5-7SDG|
+                 (|match-empty_-vBRMxVCA|
+                   (#%lambda (|p_-vzbRF6DA| |r_-vV7P67DA|)
+                     (#%if (null? |p_-vzbRF6DA|)
+                       |r_-vV7P67DA|
+                       (#%if (eq? |p_-vzbRF6DA| (#%quote any))
+                         (cons () |r_-vV7P67DA|)
+                         (#%if (pair? |p_-vzbRF6DA|)
+                           (|match-empty_-vBRMxVCA|
+                             (car |p_-vzbRF6DA|)
+                             (|match-empty_-vBRMxVCA|
+                               (cdr |p_-vzbRF6DA|)
+                               |r_-vV7P67DA|))
+                           (#%if (eq? |p_-vzbRF6DA| (#%quote each-any))
+                             (cons () |r_-vV7P67DA|)
+                             ((#%lambda (|t_-vf4Nz7DA|)
+                                (#%if (eqv? |t_-vf4Nz7DA| (#%quote each))
+                                  (|match-empty_-vBRMxVCA|
+                                    (vector-ref |p_-vzbRF6DA| 1)
+                                    |r_-vV7P67DA|)
+                                  (#%if (eqv? |t_-vf4Nz7DA| (#%quote each+))
+                                    (|match-empty_-vBRMxVCA|
+                                      (vector-ref |p_-vzbRF6DA| 1)
+                                      (|match-empty_-vBRMxVCA|
+                                        (reverse (vector-ref |p_-vzbRF6DA| 2))
+                                        (|match-empty_-vBRMxVCA|
+                                          (vector-ref |p_-vzbRF6DA| 3)
+                                          |r_-vV7P67DA|)))
+                                    (#%if (memv |t_-vf4Nz7DA|
                                                 (#%quote (free-id atom)))
-                                      |r_sEA90HRDG|
-                                      (#%if (memv |t_sEW5-7SDG|
+                                      |r_-vV7P67DA|
+                                      (#%if (memv |t_-vf4Nz7DA|
                                                   (#%quote (vector)))
-                                        (|match-empty_sEgTZ5EDG|
-                                          (vector-ref |p_sEed2eRDG| 1)
-                                          |r_sEA90HRDG|)
+                                        (|match-empty_-vBRMxVCA|
+                                          (vector-ref |p_-vzbRF6DA| 1)
+                                          |r_-vV7P67DA|)
                                         #!void)))))
-                              (vector-ref |p_sEed2eRDG| 0))))))))
-                 (|combine_sECPXyEDG|
-                   (#%lambda (|r*_sEg2YASDG| |r_sEC-V1TDG|)
-                     (#%if (null? (car |r*_sEg2YASDG|))
-                       |r_sEC-V1TDG|
-                       (cons (map-car |r*_sEg2YASDG|)
-                             (|combine_sECPXyEDG|
-                               (map-cdr |r*_sEg2YASDG|)
-                               |r_sEC-V1TDG|)))))
-                 (|match*_sEYLV_EDG|
-                   (#%lambda (|e_sEYWTuTDG|
-                              |p_sEiTRXTDG|
-                              |w_sEEPPoUDG|
-                              |r_sE-LNRUDG|)
-                     (#%if (null? |p_sEiTRXTDG|)
-                       (#%if (null? |e_sEYWTuTDG|) |r_sE-LNRUDG| #f)
-                       (#%if (pair? |p_sEiTRXTDG|)
-                         (#%if (pair? |e_sEYWTuTDG|)
-                           (|match_sEiITsFDG|
-                             (car |e_sEYWTuTDG|)
-                             (car |p_sEiTRXTDG|)
-                             |w_sEEPPoUDG|
-                             (|match_sEiITsFDG|
-                               (cdr |e_sEYWTuTDG|)
-                               (cdr |p_sEiTRXTDG|)
-                               |w_sEEPPoUDG|
-                               |r_sE-LNRUDG|))
+                              (vector-ref |p_-vzbRF6DA| 0))))))))
+                 (|combine_-vXNK-VCA|
+                   (#%lambda (|r*_-vB0L08DA| |r_-vXYIt8DA|)
+                     (#%if (null? (car |r*_-vB0L08DA|))
+                       |r_-vXYIt8DA|
+                       (cons (map-car |r*_-vB0L08DA|)
+                             (|combine_-vXNK-VCA|
+                               (map-cdr |r*_-vB0L08DA|)
+                               |r_-vXYIt8DA|)))))
+                 (|match*_-vhKIrWCA|
+                   (#%lambda (|e_-vhVGW8DA|
+                              |p_-vDREn9DA|
+                              |w_-vZNCQ9DA|
+                              |r_-vjKAhaDA|)
+                     (#%if (null? |p_-vDREn9DA|)
+                       (#%if (null? |e_-vhVGW8DA|) |r_-vjKAhaDA| #f)
+                       (#%if (pair? |p_-vDREn9DA|)
+                         (#%if (pair? |e_-vhVGW8DA|)
+                           (|match_-vDGGUWCA|
+                             (car |e_-vhVGW8DA|)
+                             (car |p_-vDREn9DA|)
+                             |w_-vZNCQ9DA|
+                             (|match_-vDGGUWCA|
+                               (cdr |e_-vhVGW8DA|)
+                               (cdr |p_-vDREn9DA|)
+                               |w_-vZNCQ9DA|
+                               |r_-vjKAhaDA|))
                            #f)
-                         (#%if (eq? |p_sEiTRXTDG| (#%quote each-any))
-                           ((#%lambda (|l_sE2qBzXDG|)
-                              (#%if |l_sE2qBzXDG|
-                                (cons |l_sE2qBzXDG| |r_sE-LNRUDG|)
+                         (#%if (eq? |p_-vDREn9DA| (#%quote each-any))
+                           ((#%lambda (|l_-vnoo_cDA|)
+                              (#%if |l_-vnoo_cDA|
+                                (cons |l_-vnoo_cDA| |r_-vjKAhaDA|)
                                 #f))
-                            (|match-each-any_sEWW_EDDG|
-                              |e_sEYWTuTDG|
-                              |w_sEEPPoUDG|))
-                           ((#%lambda (|t_sEkILiVDG|)
-                              (#%if (eqv? |t_sEkILiVDG| (#%quote each))
-                                (#%if (null? |e_sEYWTuTDG|)
-                                  (|match-empty_sEgTZ5EDG|
-                                    (vector-ref |p_sEiTRXTDG| 1)
-                                    |r_sE-LNRUDG|)
-                                  ((#%lambda (|r*_sEItD6XDG|)
-                                     (#%if |r*_sEItD6XDG|
-                                       (|combine_sECPXyEDG|
-                                         |r*_sEItD6XDG|
-                                         |r_sE-LNRUDG|)
+                            (|match-each-any_-vfVO4VCA|
+                              |e_-vhVGW8DA|
+                              |w_-vZNCQ9DA|))
+                           ((#%lambda (|t_-vFGyKaDA|)
+                              (#%if (eqv? |t_-vFGyKaDA| (#%quote each))
+                                (#%if (null? |e_-vhVGW8DA|)
+                                  (|match-empty_-vBRMxVCA|
+                                    (vector-ref |p_-vDREn9DA| 1)
+                                    |r_-vjKAhaDA|)
+                                  ((#%lambda (|r*_-v1sqycDA|)
+                                     (#%if |r*_-v1sqycDA|
+                                       (|combine_-vXNK-VCA|
+                                         |r*_-v1sqycDA|
+                                         |r_-vjKAhaDA|)
                                        #f))
-                                   (|match-each_sEe24LCDG|
-                                     |e_sEYWTuTDG|
-                                     (vector-ref |p_sEiTRXTDG| 1)
-                                     |w_sEEPPoUDG|)))
-                                (#%if (eqv? |t_sEkILiVDG| (#%quote free-id))
-                                  (#%if (|id?_sE4-1KFzG| |e_sEYWTuTDG|)
-                                    (#%if (|literal-id=?_sEKy-JkAG|
-                                            (|wrap_sEwWDIpAG|
-                                              |e_sEYWTuTDG|
-                                              |w_sEEPPoUDG|)
-                                            (vector-ref |p_sEiTRXTDG| 1))
-                                      |r_sE-LNRUDG|
+                                   (|match-each_-vz0TaUCA|
+                                     |e_-vhVGW8DA|
+                                     (vector-ref |p_-vDREn9DA| 1)
+                                     |w_-vZNCQ9DA|)))
+                                (#%if (eqv? |t_-vFGyKaDA| (#%quote free-id))
+                                  (#%if (|id?_-vpYQ9XyA| |e_-vhVGW8DA|)
+                                    (#%if (|literal-id=?_-v3xN9CzA|
+                                            (|wrap_-vRUq8HzA|
+                                              |e_-vhVGW8DA|
+                                              |w_-vZNCQ9DA|)
+                                            (vector-ref |p_-vDREn9DA| 1))
+                                      |r_-vjKAhaDA|
                                       #f)
                                     #f)
-                                  (#%if (eqv? |t_sEkILiVDG| (#%quote each+))
+                                  (#%if (eqv? |t_-vFGyKaDA| (#%quote each+))
                                     (call-with-values
                                       (#%lambda ()
-                                        (|match-each+_sEA-1cDDG|
-                                          |e_sEYWTuTDG|
-                                          (vector-ref |p_sEiTRXTDG| 1)
-                                          (vector-ref |p_sEiTRXTDG| 2)
-                                          (vector-ref |p_sEiTRXTDG| 3)
-                                          |w_sEEPPoUDG|
-                                          |r_sE-LNRUDG|))
-                                      (#%lambda (|xr*_sEGEJLVDG|
-                                                 |y-pat_sE0BHcWDG|
-                                                 |r_sEmxFFWDG|)
-                                        (#%if |r_sEmxFFWDG|
-                                          (#%if (null? |y-pat_sE0BHcWDG|)
-                                            (#%if (null? |xr*_sEGEJLVDG|)
-                                              (|match-empty_sEgTZ5EDG|
-                                                (vector-ref |p_sEiTRXTDG| 1)
-                                                |r_sEmxFFWDG|)
-                                              (|combine_sECPXyEDG|
-                                                |xr*_sEGEJLVDG|
-                                                |r_sEmxFFWDG|))
+                                        (|match-each+_-vVYQDUCA|
+                                          |e_-vhVGW8DA|
+                                          (vector-ref |p_-vDREn9DA| 1)
+                                          (vector-ref |p_-vDREn9DA| 2)
+                                          (vector-ref |p_-vDREn9DA| 3)
+                                          |w_-vZNCQ9DA|
+                                          |r_-vjKAhaDA|))
+                                      (#%lambda (|xr*_-v_CwbbDA|
+                                                 |y-pat_-vlzuEbDA|
+                                                 |r_-vHvs5cDA|)
+                                        (#%if |r_-vHvs5cDA|
+                                          (#%if (null? |y-pat_-vlzuEbDA|)
+                                            (#%if (null? |xr*_-v_CwbbDA|)
+                                              (|match-empty_-vBRMxVCA|
+                                                (vector-ref |p_-vDREn9DA| 1)
+                                                |r_-vHvs5cDA|)
+                                              (|combine_-vXNK-VCA|
+                                                |xr*_-v_CwbbDA|
+                                                |r_-vHvs5cDA|))
                                             #f)
                                           #f)))
-                                    (#%if (eqv? |t_sEkILiVDG| (#%quote atom))
+                                    (#%if (eqv? |t_-vFGyKaDA| (#%quote atom))
                                       (#%if (equal?
-                                              (vector-ref |p_sEiTRXTDG| 1)
-                                              (|strip_sEwgAGSAG|
-                                                |e_sEYWTuTDG|
-                                                |w_sEEPPoUDG|))
-                                        |r_sE-LNRUDG|
+                                              (vector-ref |p_-vDREn9DA| 1)
+                                              (|strip_-vRen68AA|
+                                                |e_-vhVGW8DA|
+                                                |w_-vZNCQ9DA|))
+                                        |r_-vjKAhaDA|
                                         #f)
-                                      (#%if (memv |t_sEkILiVDG|
+                                      (#%if (memv |t_-vFGyKaDA|
                                                   (#%quote (vector)))
-                                        (#%if (vector? |e_sEYWTuTDG|)
-                                          (|match_sEiITsFDG|
-                                            (vector->list |e_sEYWTuTDG|)
-                                            (vector-ref |p_sEiTRXTDG| 1)
-                                            |w_sEEPPoUDG|
-                                            |r_sE-LNRUDG|)
+                                        (#%if (vector? |e_-vhVGW8DA|)
+                                          (|match_-vDGGUWCA|
+                                            (vector->list |e_-vhVGW8DA|)
+                                            (vector-ref |p_-vDREn9DA| 1)
+                                            |w_-vZNCQ9DA|
+                                            |r_-vjKAhaDA|)
                                           #f)
                                         #!void))))))
-                            (vector-ref |p_sEiTRXTDG| 0)))))))
-                 (|match_sEiITsFDG|
-                   (#%lambda (|e_sEomz0YDG|
-                              |p_sEKixtYDG|
-                              |w_sE4fvWYDG|
-                              |r_sEqbtnZDG|)
-                     (#%if (not |r_sEqbtnZDG|)
-                       #f
-                       (#%if (eq? |p_sEKixtYDG| (#%quote any))
-                         (cons (|wrap_sEwWDIpAG| |e_sEomz0YDG| |w_sE4fvWYDG|)
-                               |r_sEqbtnZDG|)
-                         (#%if (|syntax-object?_sEueTWfzG| |e_sEomz0YDG|)
-                           (|match*_sEYLV_EDG|
-                             ((#%lambda (|e_sE64ph-DG|)
-                                (#%if (annotation? |e_sE64ph-DG|)
-                                  (annotation-expression |e_sE64ph-DG|)
-                                  |e_sE64ph-DG|))
-                              (|syntax-object-expression_sEQaRngzG|
-                                |e_sEomz0YDG|))
-                             |p_sEKixtYDG|
-                             (|join-wraps_sE-_e6hAG|
-                               |w_sE4fvWYDG|
-                               (|syntax-object-wrap_sEa7PQgzG| |e_sEomz0YDG|))
-                             |r_sEqbtnZDG|)
-                           (|match*_sEYLV_EDG|
-                             (#%if (annotation? |e_sEomz0YDG|)
-                               (annotation-expression |e_sEomz0YDG|)
-                               |e_sEomz0YDG|)
-                             |p_sEKixtYDG|
-                             |w_sE4fvWYDG|
-                             |r_sEqbtnZDG|)))))))
+                            (vector-ref |p_-vDREn9DA| 0)))))))
+                 (|match_-vDGGUWCA|
+                   (#%lambda (|e_-vJkmsdDA|
+                              |p_-v3hkVdDA|
+                              |w_-vpdimeDA|
+                              |r_-vL9gPeDA|)
+                     (#%if |r_-vL9gPeDA|
+                       (#%if (eq? |p_-v3hkVdDA| (#%quote any))
+                         (cons (|wrap_-vRUq8HzA| |e_-vJkmsdDA| |w_-vpdimeDA|)
+                               |r_-vL9gPeDA|)
+                         (#%if (|syntax-object?_-vPcGmxyA| |e_-vJkmsdDA|)
+                           (|match*_-vhKIrWCA|
+                             ((#%lambda (|e_-vr2cJfDA|)
+                                (#%if (annotation? |e_-vr2cJfDA|)
+                                  (annotation-expression |e_-vr2cJfDA|)
+                                  |e_-vr2cJfDA|))
+                              (|syntax-object-expression_-v99EPxyA|
+                                |e_-vJkmsdDA|))
+                             |p_-v3hkVdDA|
+                             (|join-wraps_-vj-1yyzA|
+                               |w_-vpdimeDA|
+                               (|syntax-object-wrap_-vv5CgyyA| |e_-vJkmsdDA|))
+                             |r_-vL9gPeDA|)
+                           (|match*_-vhKIrWCA|
+                             (#%if (annotation? |e_-vJkmsdDA|)
+                               (annotation-expression |e_-vJkmsdDA|)
+                               |e_-vJkmsdDA|)
+                             |p_-v3hkVdDA|
+                             |w_-vpdimeDA|
+                             |r_-vL9gPeDA|)))
+                       #f))))
         (#%set! $syntax-dispatch
-          (#%lambda (|e_sEEERVFDG| |p_sE-APmGDG|)
-            (#%if (eq? |p_sE-APmGDG| (#%quote any))
-              (list |e_sEEERVFDG|)
-              (#%if (|syntax-object?_sEueTWfzG| |e_sEEERVFDG|)
-                (|match*_sEYLV_EDG|
-                  ((#%lambda (|e_sEGtLgHDG|)
-                     (#%if (annotation? |e_sEGtLgHDG|)
-                       (annotation-expression |e_sEGtLgHDG|)
-                       |e_sEGtLgHDG|))
-                   (|syntax-object-expression_sEQaRngzG|
-                     |e_sEEERVFDG|))
-                  |p_sE-APmGDG|
-                  (|syntax-object-wrap_sEa7PQgzG| |e_sEEERVFDG|)
+          (#%lambda (|e_-vZCElXCA| |p_-vjzCOXCA|)
+            (#%if (eq? |p_-vjzCOXCA| (#%quote any))
+              (list |e_-vZCElXCA|)
+              (#%if (|syntax-object?_-vPcGmxyA| |e_-vZCElXCA|)
+                (|match*_-vhKIrWCA|
+                  ((#%lambda (|e_-v_ryIYCA|)
+                     (#%if (annotation? |e_-v_ryIYCA|)
+                       (annotation-expression |e_-v_ryIYCA|)
+                       |e_-v_ryIYCA|))
+                   (|syntax-object-expression_-v99EPxyA|
+                     |e_-vZCElXCA|))
+                  |p_-vjzCOXCA|
+                  (|syntax-object-wrap_-vv5CgyyA| |e_-vZCElXCA|)
                   ())
-                (|match*_sEYLV_EDG|
-                  (#%if (annotation? |e_sEEERVFDG|)
-                    (annotation-expression |e_sEEERVFDG|)
-                    |e_sEEERVFDG|)
-                  |p_sE-APmGDG|
+                (|match*_-vhKIrWCA|
+                  (#%if (annotation? |e_-vZCElXCA|)
+                    (annotation-expression |e_-vZCElXCA|)
+                    |e_-vZCElXCA|)
+                  |p_-vjzCOXCA|
                   (#%quote (()))
                   ())))))))))
 ($sc-put-cte
   'with-syntax
-  (#%lambda (|x_sEW6-3NLG|)
-    ((#%lambda (|tmp_sEC_VZNLG|)
-       (#%if |tmp_sEC_VZNLG|
-         (apply (#%lambda (|__sEs1nGVLG| |e1_sEOZk7WLG| |e2_sE8WiAWLG|)
+  (#%lambda (|x_-vf5Nv2LA|)
+    ((#%lambda (|tmp_-vXZIp3LA|)
+       (#%if |tmp_-vXZIp3LA|
+         (apply (#%lambda (|__-vN_96bLA| |e1_-v7Y7zbLA| |e2_-vtU50cLA|)
                   (cons #3(syntax-object
                            begin
                            ((top)
@@ -12075,15 +12079,15 @@
                             #4(ribcage ())
                             #4(ribcage #1(x) #1((top)) #1("i"))
                             #4(ribcage (#2(import-token *top*)) ())))
-                        (cons |e1_sEOZk7WLG| |e2_sE8WiAWLG|)))
-                |tmp_sEC_VZNLG|)
-         ((#%lambda (|tmp_sEYXTqOLG|)
-            (#%if |tmp_sEYXTqOLG|
-              (apply (#%lambda (|__sEonzYSLG|
-                                |out_sEKjxpTLG|
-                                |in_sE4gvSTLG|
-                                |e1_sEqctjULG|
-                                |e2_sEM8rMULG|)
+                        (cons |e1_-v7Y7zbLA| |e2_-vtU50cLA|)))
+                |tmp_-vXZIp3LA|)
+         ((#%lambda (|tmp_-vhWGS3LA|)
+            (#%if |tmp_-vhWGS3LA|
+              (apply (#%lambda (|__-vJlmo8LA|
+                                |out_-v3ikR8LA|
+                                |in_-vpeii9LA|
+                                |e1_-vLagL9LA|
+                                |e2_-v57ecaLA|)
                        (list #3(syntax-object
                                 syntax-case
                                 ((top)
@@ -12094,9 +12098,9 @@
                                  #4(ribcage ())
                                  #4(ribcage #1(x) #1((top)) #1("i"))
                                  #4(ribcage (#2(import-token *top*)) ())))
-                             |in_sE4gvSTLG|
+                             |in_-vpeii9LA|
                              ()
-                             (list |out_sEKjxpTLG|
+                             (list |out_-v3ikR8LA|
                                    (cons #3(syntax-object
                                             begin
                                             ((top)
@@ -12113,16 +12117,16 @@
                                                 (#2(import-token *top*))
                                                 ()
                                                 ())))
-                                         (cons |e1_sEqctjULG|
-                                               |e2_sEM8rMULG|)))))
-                     |tmp_sEYXTqOLG|)
-              ((#%lambda (|tmp_sEiURTOLG|)
-                 (#%if |tmp_sEiURTOLG|
-                   (apply (#%lambda (|__sEEQPkPLG|
-                                     |out_sE-MNNPLG|
-                                     |in_sEkJLeQLG|
-                                     |e1_sEGFJHQLG|
-                                     |e2_sE0CH8RLG|)
+                                         (cons |e1_-vLagL9LA|
+                                               |e2_-v57ecaLA|)))))
+                     |tmp_-vhWGS3LA|)
+              ((#%lambda (|tmp_-vDSEj4LA|)
+                 (#%if |tmp_-vDSEj4LA|
+                   (apply (#%lambda (|__-vZOCM4LA|
+                                     |out_-vjLAd5LA|
+                                     |in_-vFHyG5LA|
+                                     |e1_-v_Dw76LA|
+                                     |e2_-vlAuA6LA|)
                             (list #3(syntax-object
                                      syntax-case
                                      ((top)
@@ -12146,9 +12150,9 @@
                                                (#2(import-token *top*))
                                                ()
                                                ())))
-                                        |in_sEkJLeQLG|)
+                                        |in_-vFHyG5LA|)
                                   ()
-                                  (list |out_sE-MNNPLG|
+                                  (list |out_-vjLAd5LA|
                                         (cons #3(syntax-object
                                                  begin
                                                  ((top)
@@ -12165,29 +12169,29 @@
                                                      (#2(import-token *top*))
                                                      ()
                                                      ())))
-                                              (cons |e1_sEGFJHQLG|
-                                                    |e2_sE0CH8RLG|)))))
-                          |tmp_sEiURTOLG|)
-                   (syntax-error |x_sEW6-3NLG|)))
+                                              (cons |e1_-v_Dw76LA|
+                                                    |e2_-vlAuA6LA|)))))
+                          |tmp_-vDSEj4LA|)
+                   (syntax-error |x_-vf5Nv2LA|)))
                ($syntax-dispatch
-                 (#%annotate |x_sEW6-3NLG| value)
+                 (#%annotate |x_-vf5Nv2LA| value)
                  (#%quote (any #2(each (any any)) any . each-any))))))
           ($syntax-dispatch
-            (#%annotate |x_sEW6-3NLG| value)
+            (#%annotate |x_-vf5Nv2LA| value)
             (#%quote (any ((any any)) any . each-any))))))
      ($syntax-dispatch
-       (#%annotate |x_sEW6-3NLG| value)
+       (#%annotate |x_-vf5Nv2LA| value)
        (#%quote (any () any . each-any))))))
 ($sc-put-cte
   'syntax-rules
-  (#%lambda (|x_sEQOeuXLG|)
-    ((#%lambda (|tmp_sEwHaoYLG|)
-       (#%if |tmp_sEwHaoYLG|
-         (apply (#%lambda (|__sESD8RYLG|
-                           |k_sEcA6iZLG|
-                           |keyword_sEyw4LZLG|
-                           |pattern_sEUs2c-LG|
-                           |template_sEep0F-LG|)
+  (#%lambda (|x_-v9N1WcLA|)
+    ((#%lambda (|tmp_-vRFZPdLA|)
+       (#%if |tmp_-vRFZPdLA|
+         (apply (#%lambda (|__-vbCXgeLA|
+                           |k_-vxyVJeLA|
+                           |keyword_-vTuTafLA|
+                           |pattern_-vdrRDfLA|
+                           |template_-vznP4gLA|)
                   (list #3(syntax-object
                            lambda
                            ((top)
@@ -12231,9 +12235,9 @@
                                            (#2(import-token *top*))
                                            ()
                                            ())))
-                                    (cons |k_sEcA6iZLG|
-                                          (map (#%lambda (|tmp_sEgeW__LG|
-                                                          |tmp_sEWhYy_LG|)
+                                    (cons |k_-vxyVJeLA|
+                                          (map (#%lambda (|tmp_-vBcJrhLA|
+                                                          |tmp_-vfgL-gLA|)
                                                  (list (cons #3(syntax-object
                                                                 dummy
                                                                 ((top)
@@ -12259,7 +12263,7 @@
                                                                         *top*))
                                                                     ()
                                                                     ())))
-                                                             |tmp_sEWhYy_LG|)
+                                                             |tmp_-vfgL-gLA|)
                                                        (list #3(syntax-object
                                                                 syntax
                                                                 ((top)
@@ -12285,21 +12289,21 @@
                                                                         *top*))
                                                                     ()
                                                                     ())))
-                                                             |tmp_sEgeW__LG|)))
-                                               |template_sEep0F-LG|
-                                               |pattern_sEUs2c-LG|))))))
-                |tmp_sEwHaoYLG|)
-         (syntax-error |x_sEQOeuXLG|)))
+                                                             |tmp_-vBcJrhLA|)))
+                                               |template_-vznP4gLA|
+                                               |pattern_-vdrRDfLA|))))))
+                |tmp_-vRFZPdLA|)
+         (syntax-error |x_-v9N1WcLA|)))
      ($syntax-dispatch
-       (#%annotate |x_sEQOeuXLG| value)
+       (#%annotate |x_-v9N1WcLA| value)
        (#%quote
          (any each-any . #2(each ((any . any) any))))))))
 ($sc-put-cte
   'or
-  (#%lambda (|x_sECaUs0MG|)
-    ((#%lambda (|tmp_sEi3Qm1MG|)
-       (#%if |tmp_sEi3Qm1MG|
-         (apply (#%lambda (|__sEKuvU5MG|)
+  (#%lambda (|x_-vX8HUhLA|)
+    ((#%lambda (|tmp_-vD1DOiLA|)
+       (#%if |tmp_-vD1DOiLA|
+         (apply (#%lambda (|__-v3tiknLA|)
                   #3(syntax-object
                      #f
                      ((top)
@@ -12307,18 +12311,18 @@
                       #4(ribcage ())
                       #4(ribcage #1(x) #1((top)) #1("i"))
                       #4(ribcage (#2(import-token *top*)) ()))))
-                |tmp_sEi3Qm1MG|)
-         ((#%lambda (|tmp_sEE_NP1MG|)
-            (#%if |tmp_sEE_NP1MG|
-              (apply (#%lambda (|__sE2Cz-4MG| |e_sEoyxr5MG|)
-                       |e_sEoyxr5MG|)
-                     |tmp_sEE_NP1MG|)
-              ((#%lambda (|tmp_sE-XLg2MG|)
-                 (#%if |tmp_sE-XLg2MG|
-                   (apply (#%lambda (|__sEkUJJ2MG|
-                                     |e1_sEGQHa3MG|
-                                     |e2_sE0NFD3MG|
-                                     |e3_sEmJD44MG|)
+                |tmp_-vD1DOiLA|)
+         ((#%lambda (|tmp_-vZZAfjLA|)
+            (#%if |tmp_-vZZAfjLA|
+              (apply (#%lambda (|__-vnAmqmLA| |e_-vJwkTmLA|)
+                       |e_-vJwkTmLA|)
+                     |tmp_-vZZAfjLA|)
+              ((#%lambda (|tmp_-vjWyIjLA|)
+                 (#%if |tmp_-vjWyIjLA|
+                   (apply (#%lambda (|__-vFSw9kLA|
+                                     |e1_-v_OuCkLA|
+                                     |e2_-vlLs3lLA|
+                                     |e3_-vHHqwlLA|)
                             (list #3(syntax-object
                                      let
                                      ((top)
@@ -12345,7 +12349,7 @@
                                                      (#2(import-token *top*))
                                                      ()
                                                      ())))
-                                              |e1_sEGQHa3MG|))
+                                              |e1_-v_OuCkLA|))
                                   (list #3(syntax-object
                                            if
                                            ((top)
@@ -12401,28 +12405,28 @@
                                                      (#2(import-token *top*))
                                                      ()
                                                      ())))
-                                              (cons |e2_sE0NFD3MG|
-                                                    |e3_sEmJD44MG|)))))
-                          |tmp_sE-XLg2MG|)
-                   (syntax-error |x_sECaUs0MG|)))
+                                              (cons |e2_-vlLs3lLA|
+                                                    |e3_-vHHqwlLA|)))))
+                          |tmp_-vjWyIjLA|)
+                   (syntax-error |x_-vX8HUhLA|)))
                ($syntax-dispatch
-                 (#%annotate |x_sECaUs0MG| value)
+                 (#%annotate |x_-vX8HUhLA| value)
                  (#%quote (any any any . each-any))))))
           ($syntax-dispatch
-            (#%annotate |x_sECaUs0MG| value)
+            (#%annotate |x_-vX8HUhLA| value)
             (#%quote (any any))))))
      ($syntax-dispatch
-       (#%annotate |x_sECaUs0MG| value)
+       (#%annotate |x_-vX8HUhLA| value)
        (#%quote (any))))))
 ($sc-put-cte
   'and
-  (#%lambda (|x_sE4rtl6MG|)
-    ((#%lambda (|tmp_sEMjpf7MG|)
-       (#%if |tmp_sEMjpf7MG|
-         (apply (#%lambda (|__sEQZcZ9MG|
-                           |e1_sEaWaqaMG|
-                           |e2_sEwS8TaMG|
-                           |e3_sESO6kbMG|)
+  (#%lambda (|x_-vppgNnLA|)
+    ((#%lambda (|tmp_-v5icHoLA|)
+       (#%if |tmp_-v5icHoLA|
+         (apply (#%lambda (|__-v9Y_orLA|
+                           |e1_-vvUZRrLA|
+                           |e2_-vRQXisLA|
+                           |e3_-vbNVLsLA|)
                   (cons #3(syntax-object
                            if
                            ((top)
@@ -12433,7 +12437,7 @@
                             #4(ribcage ())
                             #4(ribcage #1(x) #1((top)) #1("i"))
                             #4(ribcage (#2(import-token *top*)) ())))
-                        (cons |e1_sEaWaqaMG|
+                        (cons |e1_-vvUZRrLA|
                               (cons (cons #3(syntax-object
                                              and
                                              ((top)
@@ -12450,7 +12454,7 @@
                                                  (#2(import-token *top*))
                                                  ()
                                                  ())))
-                                          (cons |e2_sEwS8TaMG| |e3_sESO6kbMG|))
+                                          (cons |e2_-vRQXisLA| |e3_-vbNVLsLA|))
                                     #3(syntax-object
                                        (#f)
                                        ((top)
@@ -12464,15 +12468,15 @@
                                            (#2(import-token *top*))
                                            ()
                                            ())))))))
-                |tmp_sEMjpf7MG|)
-         ((#%lambda (|tmp_sE6gnI7MG|)
-            (#%if |tmp_sE6gnI7MG|
-              (apply (#%lambda (|__sE85h39MG| |e_sEu1fw9MG|)
-                       |e_sEu1fw9MG|)
-                     |tmp_sE6gnI7MG|)
-              ((#%lambda (|tmp_sEscl98MG|)
-                 (#%if |tmp_sEscl98MG|
-                   (apply (#%lambda (|__sEO8jC8MG|)
+                |tmp_-v5icHoLA|)
+         ((#%lambda (|tmp_-vrea8pLA|)
+            (#%if |tmp_-vrea8pLA|
+              (apply (#%lambda (|__-vt34vqLA| |e_-vP_1YqLA|)
+                       |e_-vP_1YqLA|)
+                     |tmp_-vrea8pLA|)
+              ((#%lambda (|tmp_-vNa8BpLA|)
+                 (#%if |tmp_-vNa8BpLA|
+                   (apply (#%lambda (|__-v7762qLA|)
                             #3(syntax-object
                                #t
                                ((top)
@@ -12480,35 +12484,35 @@
                                 #4(ribcage ())
                                 #4(ribcage #1(x) #1((top)) #1("i"))
                                 #4(ribcage (#2(import-token *top*)) ()))))
-                          |tmp_sEscl98MG|)
-                   (syntax-error |x_sE4rtl6MG|)))
+                          |tmp_-vNa8BpLA|)
+                   (syntax-error |x_-vppgNnLA|)))
                ($syntax-dispatch
-                 (#%annotate |x_sE4rtl6MG| value)
+                 (#%annotate |x_-vppgNnLA| value)
                  (#%quote (any))))))
           ($syntax-dispatch
-            (#%annotate |x_sE4rtl6MG| value)
+            (#%annotate |x_-vppgNnLA| value)
             (#%quote (any any))))))
      ($syntax-dispatch
-       (#%annotate |x_sE4rtl6MG| value)
+       (#%annotate |x_-vppgNnLA| value)
        (#%quote (any any any . each-any))))))
 ($sc-put-cte
   'let
-  (#%lambda (|x_sEyH2ecMG|)
-    ((#%lambda (|tmp_sEeA-7dMG|)
-       (#%if (#%if |tmp_sEeA-7dMG|
-               (apply (#%lambda (|__sEa59VoMG|
-                                 |x_sEw17mpMG|
-                                 |v_sESZ4PpMG|
-                                 |e1_sEcW2gqMG|
-                                 |e2_sEyS0JqMG|)
-                        (andmap identifier? |x_sEw17mpMG|))
-                      |tmp_sEeA-7dMG|)
+  (#%lambda (|x_-vTFRFtLA|)
+    ((#%lambda (|tmp_-vzyNzuLA|)
+       (#%if (#%if |tmp_-vzyNzuLA|
+               (apply (#%lambda (|__-vv3YkGLA|
+                                 |x_-vR_VNGLA|
+                                 |v_-vbYTeHLA|
+                                 |e1_-vxURHHLA|
+                                 |e2_-vTQP8ILA|)
+                        (andmap identifier? |x_-vR_VNGLA|))
+                      |tmp_-vzyNzuLA|)
                #f)
-         (apply (#%lambda (|__sEqyphlMG|
-                           |x_sEMunKlMG|
-                           |v_sE6rlbmMG|
-                           |e1_sEsnjEmMG|
-                           |e2_sEOjh5nMG|)
+         (apply (#%lambda (|__-vLwcJCLA|
+                           |x_-v5taaDLA|
+                           |v_-vrp8DDLA|
+                           |e1_-vNl64ELA|
+                           |e2_-v7i4xELA|)
                   (cons (cons #3(syntax-object
                                  lambda
                                  ((top)
@@ -12519,29 +12523,29 @@
                                   #4(ribcage ())
                                   #4(ribcage #1(x) #1((top)) #1("i"))
                                   #4(ribcage (#2(import-token *top*)) ())))
-                              (cons |x_sEMunKlMG|
-                                    (cons |e1_sEsnjEmMG| |e2_sEOjh5nMG|)))
-                        |v_sE6rlbmMG|))
-                |tmp_sEeA-7dMG|)
-         ((#%lambda (|tmp_sEAwYAdMG|)
-            (#%if (#%if |tmp_sEAwYAdMG|
-                    (apply (#%lambda (|__sE0YD6iMG|
-                                      |f_sEmUBziMG|
-                                      |x_sEIQz0jMG|
-                                      |v_sE2NxtjMG|
-                                      |e1_sEoJvWjMG|
-                                      |e2_sEKFtnkMG|)
+                              (cons |x_-v5taaDLA|
+                                    (cons |e1_-vNl64ELA| |e2_-v7i4xELA|)))
+                        |v_-vrp8DDLA|))
+                |tmp_-vzyNzuLA|)
+         ((#%lambda (|tmp_-vVuL0vLA|)
+            (#%if (#%if |tmp_-vVuL0vLA|
+                    (apply (#%lambda (|__-vlWqyzLA|
+                                      |f_-vHSo_zLA|
+                                      |x_-v1PmsALA|
+                                      |v_-vnLkVALA|
+                                      |e1_-vJHimBLA|
+                                      |e2_-v3EgPBLA|)
                              (andmap
                                identifier?
-                               (cons |f_sEmUBziMG| |x_sEIQz0jMG|)))
-                           |tmp_sEAwYAdMG|)
+                               (cons |f_-vHSo_zLA| |x_-v1PmsALA|)))
+                           |tmp_-vVuL0vLA|)
                     #f)
-              (apply (#%lambda (|__sEWsW1eMG|
-                                |f_sEgpUueMG|
-                                |x_sEClSXeMG|
-                                |v_sEYhQofMG|
-                                |e1_sEieORfMG|
-                                |e2_sEEaMigMG|)
+              (apply (#%lambda (|__-vfrJtvLA|
+                                |f_-vBnHWvLA|
+                                |x_-vXjFnwLA|
+                                |v_-vhgDQwLA|
+                                |e1_-vDcBhxLA|
+                                |e2_-vZ8zKxLA|)
                        (cons (list #3(syntax-object
                                       letrec
                                       ((top)
@@ -12555,7 +12559,7 @@
                                           (#2(import-token *top*))
                                           ()
                                           ())))
-                                   (list (list |f_sEgpUueMG|
+                                   (list (list |f_-vBnHWvLA|
                                                (cons #3(syntax-object
                                                         lambda
                                                         ((top)
@@ -12578,41 +12582,41 @@
                                                                 *top*))
                                                             ()
                                                             ())))
-                                                     (cons |x_sEClSXeMG|
-                                                           (cons |e1_sEieORfMG|
-                                                                 |e2_sEEaMigMG|)))))
-                                   |f_sEgpUueMG|)
-                             |v_sEYhQofMG|))
-                     |tmp_sEAwYAdMG|)
-              (syntax-error |x_sEyH2ecMG|)))
+                                                     (cons |x_-vXjFnwLA|
+                                                           (cons |e1_-vDcBhxLA|
+                                                                 |e2_-vZ8zKxLA|)))))
+                                   |f_-vBnHWvLA|)
+                             |v_-vhgDQwLA|))
+                     |tmp_-vVuL0vLA|)
+              (syntax-error |x_-vTFRFtLA|)))
           ($syntax-dispatch
-            (#%annotate |x_sEyH2ecMG| value)
+            (#%annotate |x_-vTFRFtLA| value)
             (#%quote
               (any any #2(each (any any)) any . each-any))))))
      ($syntax-dispatch
-       (#%annotate |x_sEyH2ecMG| value)
+       (#%annotate |x_-vTFRFtLA| value)
        (#%quote (any #2(each (any any)) any . each-any))))))
 ($sc-put-cte
   'let*
-  (#%lambda (|x_sEeLYCrMG|)
-    ((#%lambda (|tmp_sEWDUwsMG|)
-       (#%if (#%if |tmp_sEWDUwsMG|
-               (apply (#%lambda (|let*_sE4NpjzMG|
-                                 |x_sEqJnMzMG|
-                                 |v_sEMFldAMG|
-                                 |e1_sE6CjGAMG|
-                                 |e2_sEsyh7BMG|)
-                        (andmap identifier? |x_sEqJnMzMG|))
-                      |tmp_sEWDUwsMG|)
+  (#%lambda (|x_-vzJL2JLA|)
+    ((#%lambda (|tmp_-vfCHYJLA|)
+       (#%if (#%if |tmp_-vfCHYJLA|
+               (apply (#%lambda (|let*_-vpLcLQLA|
+                                 |x_-vLHacRLA|
+                                 |v_-v5E8FRLA|
+                                 |e1_-vrA66SLA|
+                                 |e2_-vNw4zSLA|)
+                        (andmap identifier? |x_-vLHacRLA|))
+                      |tmp_-vfCHYJLA|)
                #f)
-         (apply (#%lambda (|let*_sEgASZsMG|
-                           |x_sECwQqtMG|
-                           |v_sEYsOTtMG|
-                           |e1_sEipMkuMG|
-                           |e2_sEElKNuMG|)
-                  ((#%letrec ((|f_sE-hIevMG|
-                                (#%lambda (|bindings_sEkeGHvMG|)
-                                  (#%if (null? |bindings_sEkeGHvMG|)
+         (apply (#%lambda (|let*_-vByFpKLA|
+                           |x_-vXuDSKLA|
+                           |v_-vhrBjLLA|
+                           |e1_-vDnzMLLA|
+                           |e2_-vZjxdMLA|)
+                  ((#%letrec ((|f_-vjgvGMLA|
+                                (#%lambda (|bindings_-vFct7NLA|)
+                                  (#%if (null? |bindings_-vFct7NLA|)
                                     (cons #3(syntax-object
                                              let
                                              ((top)
@@ -12639,13 +12643,13 @@
                                                  ()
                                                  ())))
                                           (cons ()
-                                                (cons |e1_sEipMkuMG|
-                                                      |e2_sEElKNuMG|)))
-                                    ((#%lambda (|tmp_sEGaE8wMG|)
-                                       ((#%lambda (|tmp_sE07CBwMG|)
-                                          (#%if |tmp_sE07CBwMG|
-                                            (apply (#%lambda (|body_sEm3A2xMG|
-                                                              |binding_sEI_xvxMG|)
+                                                (cons |e1_-vDnzMLLA|
+                                                      |e2_-vZjxdMLA|)))
+                                    ((#%lambda (|tmp_-v_8rANLA|)
+                                       ((#%lambda (|tmp_-vl5p1OLA|)
+                                          (#%if |tmp_-vl5p1OLA|
+                                            (apply (#%lambda (|body_-vH1nuOLA|
+                                                              |binding_-v1-kXOLA|)
                                                      (list #3(syntax-object
                                                               let
                                                               ((top)
@@ -12685,37 +12689,37 @@
                                                                       *top*))
                                                                   ()
                                                                   ())))
-                                                           (list |binding_sEI_xvxMG|)
-                                                           |body_sEm3A2xMG|))
-                                                   |tmp_sE07CBwMG|)
-                                            (syntax-error |tmp_sEGaE8wMG|)))
+                                                           (list |binding_-v1-kXOLA|)
+                                                           |body_-vH1nuOLA|))
+                                                   |tmp_-vl5p1OLA|)
+                                            (syntax-error |tmp_-v_8rANLA|)))
                                         ($syntax-dispatch
-                                          (#%annotate |tmp_sEGaE8wMG| value)
+                                          (#%annotate |tmp_-v_8rANLA| value)
                                           (#%quote (any any)))))
-                                     (list (|f_sE-hIevMG|
-                                             (cdr |bindings_sEkeGHvMG|))
-                                           (car |bindings_sEkeGHvMG|)))))))
-                     |f_sE-hIevMG|)
-                   (map list |x_sECwQqtMG| |v_sEYsOTtMG|)))
-                |tmp_sEWDUwsMG|)
-         (syntax-error |x_sEeLYCrMG|)))
+                                     (list (|f_-vjgvGMLA|
+                                             (cdr |bindings_-vFct7NLA|))
+                                           (car |bindings_-vFct7NLA|)))))))
+                     |f_-vjgvGMLA|)
+                   (map list |x_-vXuDSKLA| |v_-vhrBjLLA|)))
+                |tmp_-vfCHYJLA|)
+         (syntax-error |x_-vzJL2JLA|)))
      ($syntax-dispatch
-       (#%annotate |x_sEeLYCrMG| value)
+       (#%annotate |x_-vzJL2JLA| value)
        (#%quote (any #2(each (any any)) any . each-any))))))
 ($sc-put-cte
   'cond
-  (#%lambda (|x_sE8rd1CMG|)
-    ((#%lambda (|tmp_sEQj9XCMG|)
-       (#%if |tmp_sEQj9XCMG|
-         (apply (#%lambda (|__sEag7oDMG| |m1_sEwc5RDMG| |m2_sES83iEMG|)
-                  ((#%letrec ((|f_sEc51LEMG|
-                                (#%lambda (|clause_sEy1_bFMG|
-                                           |clauses_sEUZYEFMG|)
-                                  (#%if (null? |clauses_sEUZYEFMG|)
-                                    ((#%lambda (|tmp_sEo3sUMMG|)
-                                       (#%if |tmp_sEo3sUMMG|
-                                         (apply (#%lambda (|e1_sEwn3kSMG|
-                                                           |e2_sESj1NSMG|)
+  (#%lambda (|x_-vtp0tTLA|)
+    ((#%lambda (|tmp_-v9iYmULA|)
+       (#%if |tmp_-v9iYmULA|
+         (apply (#%lambda (|__-vveWPULA| |m1_-vRaUgVLA| |m2_-vb7SJVLA|)
+                  ((#%letrec ((|f_-vx3QaWLA|
+                                (#%lambda (|clause_-vT_NDWLA|
+                                           |clauses_-vdYL4XLA|)
+                                  (#%if (null? |clauses_-vdYL4XLA|)
+                                    ((#%lambda (|tmp_-vJ1fk2MA|)
+                                       (#%if |tmp_-vJ1fk2MA|
+                                         (apply (#%lambda (|e1_-vRlSL7MA|
+                                                           |e2_-vbiQc8MA|)
                                                   (cons #3(syntax-object
                                                            begin
                                                            ((top)
@@ -12790,12 +12794,12 @@
                                                                          *top*))
                                                                      ()
                                                                      ())))
-                                                              (cons |e1_sEwn3kSMG|
-                                                                    |e2_sESj1NSMG|))))
-                                                |tmp_sEo3sUMMG|)
-                                         ((#%lambda (|tmp_sEK_plNMG|)
-                                            (#%if |tmp_sEK_plNMG|
-                                              (apply (#%lambda (|e0_sEar5TRMG|)
+                                                              (cons |e1_-vRlSL7MA|
+                                                                    |e2_-vbiQc8MA|))))
+                                                |tmp_-vJ1fk2MA|)
+                                         ((#%lambda (|tmp_-v3-cN2MA|)
+                                            (#%if |tmp_-v3-cN2MA|
+                                              (apply (#%lambda (|e0_-vvpUi7MA|)
                                                        (cons #3(syntax-object
                                                                 let
                                                                 ((top)
@@ -12875,7 +12879,7 @@
                                                                                           *top*))
                                                                                       ()
                                                                                       ())))
-                                                                               |e0_sEar5TRMG|))
+                                                                               |e0_-vvpUi7MA|))
                                                                    #3(syntax-object
                                                                       ((if t
                                                                          t))
@@ -12922,11 +12926,11 @@
                                                                               *top*))
                                                                           ()
                                                                           ()))))))
-                                                     |tmp_sEK_plNMG|)
-                                              ((#%lambda (|tmp_sE4YnONMG|)
-                                                 (#%if |tmp_sE4YnONMG|
-                                                   (apply (#%lambda (|e0_sEuy9ZQMG|
-                                                                     |e1_sEQu7qRMG|)
+                                                     |tmp_-v3-cN2MA|)
+                                              ((#%lambda (|tmp_-vpWae3MA|)
+                                                 (#%if |tmp_-vpWae3MA|
+                                                   (apply (#%lambda (|e0_-vPwYo6MA|
+                                                                     |e1_-v9tWR6MA|)
                                                             (list #3(syntax-object
                                                                      let
                                                                      ((top)
@@ -13023,7 +13027,7 @@
                                                                                          *top*))
                                                                                      ()
                                                                                      ())))
-                                                                              |e0_sEuy9ZQMG|))
+                                                                              |e0_-vPwYo6MA|))
                                                                   (list #3(syntax-object
                                                                            if
                                                                            ((top)
@@ -13120,7 +13124,7 @@
                                                                                    *top*))
                                                                                ()
                                                                                ())))
-                                                                        (cons |e1_sEQu7qRMG|
+                                                                        (cons |e1_-v9tWR6MA|
                                                                               #3(syntax-object
                                                                                  (t)
                                                                                  ((top)
@@ -13169,12 +13173,12 @@
                                                                                          *top*))
                                                                                      ()
                                                                                      ())))))))
-                                                          |tmp_sE4YnONMG|)
-                                                   ((#%lambda (|tmp_sEqUlfOMG|)
-                                                      (#%if |tmp_sEqUlfOMG|
-                                                        (apply (#%lambda (|e0_sE6Nh9PMG|
-                                                                          |e1_sEsJfCPMG|
-                                                                          |e2_sEOFd3QMG|)
+                                                          |tmp_-vpWae3MA|)
+                                                   ((#%lambda (|tmp_-vLS8H3MA|)
+                                                      (#%if |tmp_-vLS8H3MA|
+                                                        (apply (#%lambda (|e0_-vrL4B4MA|
+                                                                          |e1_-vNH225MA|
+                                                                          |e2_-v7E0v5MA|)
                                                                  (list #3(syntax-object
                                                                           if
                                                                           ((top)
@@ -13226,7 +13230,7 @@
                                                                                   *top*))
                                                                               ()
                                                                               ())))
-                                                                       |e0_sE6Nh9PMG|
+                                                                       |e0_-vrL4B4MA|
                                                                        (cons #3(syntax-object
                                                                                 begin
                                                                                 ((top)
@@ -13278,14 +13282,14 @@
                                                                                         *top*))
                                                                                     ()
                                                                                     ())))
-                                                                             (cons |e1_sEsJfCPMG|
-                                                                                   |e2_sEOFd3QMG|))))
-                                                               |tmp_sEqUlfOMG|)
+                                                                             (cons |e1_-vNH225MA|
+                                                                                   |e2_-v7E0v5MA|))))
+                                                               |tmp_-vLS8H3MA|)
                                                         (syntax-error
-                                                          |x_sE8rd1CMG|)))
+                                                          |x_-vtp0tTLA|)))
                                                     ($syntax-dispatch
                                                       (#%annotate
-                                                        |clause_sEy1_bFMG|
+                                                        |clause_-vT_NDWLA|
                                                         value)
                                                       (#%quote
                                                         (any any
@@ -13293,7 +13297,7 @@
                                                              each-any))))))
                                                ($syntax-dispatch
                                                  (#%annotate
-                                                   |clause_sEy1_bFMG|
+                                                   |clause_-vT_NDWLA|
                                                    value)
                                                  (#%quote
                                                    (any #2(free-id
@@ -13329,11 +13333,11 @@
                                                         any))))))
                                           ($syntax-dispatch
                                             (#%annotate
-                                              |clause_sEy1_bFMG|
+                                              |clause_-vT_NDWLA|
                                               value)
                                             (#%quote (any))))))
                                      ($syntax-dispatch
-                                       (#%annotate |clause_sEy1_bFMG| value)
+                                       (#%annotate |clause_-vT_NDWLA| value)
                                        (#%quote
                                          (#2(free-id
                                              #3(syntax-object
@@ -13364,10 +13368,10 @@
                                           any
                                           .
                                           each-any))))
-                                    ((#%lambda (|tmp_sEeWW5GMG|)
-                                       ((#%lambda (|tmp_sEgLQsHMG|)
-                                          (#%if |tmp_sEgLQsHMG|
-                                            (apply (#%lambda (|e0_sEIaw-LMG|)
+                                    ((#%lambda (|tmp_-vzUJxXLA|)
+                                       ((#%lambda (|tmp_-vBJDUYLA|)
+                                          (#%if |tmp_-vBJDUYLA|
+                                            (apply (#%lambda (|e0_-v19jq1MA|)
                                                      (list #3(syntax-object
                                                               let
                                                               ((top)
@@ -13454,7 +13458,7 @@
                                                                                   *top*))
                                                                               ()
                                                                               ())))
-                                                                       |e0_sEIaw-LMG|))
+                                                                       |e0_-v19jq1MA|))
                                                            (list #3(syntax-object
                                                                     if
                                                                     ((top)
@@ -13602,12 +13606,12 @@
                                                                             *top*))
                                                                         ()
                                                                         ())))
-                                                                 |tmp_sEeWW5GMG|)))
-                                                   |tmp_sEgLQsHMG|)
-                                            ((#%lambda (|tmp_sECHOVHMG|)
-                                               (#%if |tmp_sECHOVHMG|
-                                                 (apply (#%lambda (|e0_sE0iA4LMG|
-                                                                   |e1_sEmeyxLMG|)
+                                                                 |tmp_-vzUJxXLA|)))
+                                                   |tmp_-vBJDUYLA|)
+                                            ((#%lambda (|tmp_-vXFBlZLA|)
+                                               (#%if |tmp_-vXFBlZLA|
+                                                 (apply (#%lambda (|e0_-vlgnw0MA|
+                                                                   |e1_-vHclZ0MA|)
                                                           (list #3(syntax-object
                                                                    let
                                                                    ((top)
@@ -13712,7 +13716,7 @@
                                                                                        *top*))
                                                                                    ()
                                                                                    ())))
-                                                                            |e0_sE0iA4LMG|))
+                                                                            |e0_-vlgnw0MA|))
                                                                 (list #3(syntax-object
                                                                          if
                                                                          ((top)
@@ -13817,7 +13821,7 @@
                                                                                  *top*))
                                                                              ()
                                                                              ())))
-                                                                      (cons |e1_sEmeyxLMG|
+                                                                      (cons |e1_-vHclZ0MA|
                                                                             #3(syntax-object
                                                                                (t)
                                                                                ((top)
@@ -13870,13 +13874,13 @@
                                                                                        *top*))
                                                                                    ()
                                                                                    ()))))
-                                                                      |tmp_sEeWW5GMG|)))
-                                                        |tmp_sECHOVHMG|)
-                                                 ((#%lambda (|tmp_sEYDMmIMG|)
-                                                    (#%if |tmp_sEYDMmIMG|
-                                                      (apply (#%lambda (|e0_sEEwIgJMG|
-                                                                        |e1_sE-sGJJMG|
-                                                                        |e2_sEkpEaKMG|)
+                                                                      |tmp_-vzUJxXLA|)))
+                                                        |tmp_-vXFBlZLA|)
+                                                 ((#%lambda (|tmp_-vhCzOZLA|)
+                                                    (#%if |tmp_-vhCzOZLA|
+                                                      (apply (#%lambda (|e0_-vZuvI-LA|
+                                                                        |e1_-vjrt9_LA|
+                                                                        |e2_-vFnrC_LA|)
                                                                (list #3(syntax-object
                                                                         if
                                                                         ((top)
@@ -13932,7 +13936,7 @@
                                                                                 *top*))
                                                                             ()
                                                                             ())))
-                                                                     |e0_sEEwIgJMG|
+                                                                     |e0_-vZuvI-LA|
                                                                      (cons #3(syntax-object
                                                                               begin
                                                                               ((top)
@@ -13988,21 +13992,21 @@
                                                                                       *top*))
                                                                                   ()
                                                                                   ())))
-                                                                           (cons |e1_sE-sGJJMG|
-                                                                                 |e2_sEkpEaKMG|))
-                                                                     |tmp_sEeWW5GMG|))
-                                                             |tmp_sEYDMmIMG|)
+                                                                           (cons |e1_-vjrt9_LA|
+                                                                                 |e2_-vFnrC_LA|))
+                                                                     |tmp_-vzUJxXLA|))
+                                                             |tmp_-vhCzOZLA|)
                                                       (syntax-error
-                                                        |x_sE8rd1CMG|)))
+                                                        |x_-vtp0tTLA|)))
                                                   ($syntax-dispatch
                                                     (#%annotate
-                                                      |clause_sEy1_bFMG|
+                                                      |clause_-vT_NDWLA|
                                                       value)
                                                     (#%quote
                                                       (any any . each-any))))))
                                              ($syntax-dispatch
                                                (#%annotate
-                                                 |clause_sEy1_bFMG|
+                                                 |clause_-vT_NDWLA|
                                                  value)
                                                (#%quote
                                                  (any #2(free-id
@@ -14041,37 +14045,37 @@
                                                                 ()))))
                                                       any))))))
                                         ($syntax-dispatch
-                                          (#%annotate |clause_sEy1_bFMG| value)
+                                          (#%annotate |clause_-vT_NDWLA| value)
                                           (#%quote (any)))))
-                                     (|f_sEc51LEMG|
-                                       (car |clauses_sEUZYEFMG|)
-                                       (cdr |clauses_sEUZYEFMG|)))))))
-                     |f_sEc51LEMG|)
-                   |m1_sEwc5RDMG|
-                   |m2_sES83iEMG|))
-                |tmp_sEQj9XCMG|)
-         (syntax-error |x_sE8rd1CMG|)))
+                                     (|f_-vx3QaWLA|
+                                       (car |clauses_-vdYL4XLA|)
+                                       (cdr |clauses_-vdYL4XLA|)))))))
+                     |f_-vx3QaWLA|)
+                   |m1_-vRaUgVLA|
+                   |m2_-vb7SJVLA|))
+                |tmp_-v9iYmULA|)
+         (syntax-error |x_-vtp0tTLA|)))
      ($syntax-dispatch
-       (#%annotate |x_sE8rd1CMG| value)
+       (#%annotate |x_-vtp0tTLA| value)
        (#%quote (any any . each-any))))))
 ($sc-put-cte
   'do
-  (#%lambda (|orig-x_sEU8X7UMG|)
-    ((#%lambda (|tmp_sEA1T1VMG|)
-       (#%if |tmp_sEA1T1VMG|
-         (apply (#%lambda (|__sEWZQuVMG|
-                           |var_sEgWOXVMG|
-                           |init_sECSMoWMG|
-                           |step_sEYOKRWMG|
-                           |e0_sEiLIiXMG|
-                           |e1_sEEHGLXMG|
-                           |c_sE-DEcYMG|)
-                  ((#%lambda (|tmp_sEkACFYMG|)
-                     ((#%lambda (|tmp_sEM_hb1NG|)
-                        (#%if |tmp_sEM_hb1NG|
-                          (apply (#%lambda (|step_sE6YfE1NG|)
-                                   ((#%lambda (|tmp_sE8N9_2NG|)
-                                      (#%if |tmp_sE8N9_2NG|
+  (#%lambda (|orig-x_-vd7Kz9MA|)
+    ((#%lambda (|tmp_-vV_FtaMA|)
+       (#%if |tmp_-vV_FtaMA|
+         (apply (#%lambda (|__-vfYDWaMA|
+                           |var_-vBUBnbMA|
+                           |init_-vXQzQbMA|
+                           |step_-vhNxhcMA|
+                           |e0_-vDJvKcMA|
+                           |e1_-vZFtbdMA|
+                           |c_-vjCrEdMA|)
+                  ((#%lambda (|tmp_-vFyp5eMA|)
+                     ((#%lambda (|tmp_-v5-4DiMA|)
+                        (#%if |tmp_-v5-4DiMA|
+                          (apply (#%lambda (|step_-vrW24jMA|)
+                                   ((#%lambda (|tmp_-vtLYqkMA|)
+                                      (#%if |tmp_-vtLYqkMA|
                                         (apply (#%lambda ()
                                                  (list #3(syntax-object
                                                           let
@@ -14140,10 +14144,10 @@
                                                               ()
                                                               ())))
                                                        (map list
-                                                            |var_sEgWOXVMG|
-                                                            |init_sECSMoWMG|)
+                                                            |var_-vBUBnbMA|
+                                                            |init_-vXQzQbMA|)
                                                        (list #3(syntax-object
-                                                                if
+                                                                unless
                                                                 ((top)
                                                                  #4(ribcage
                                                                     #1(step)
@@ -14175,49 +14179,7 @@
                                                                         *top*))
                                                                     ()
                                                                     ())))
-                                                             (list #3(syntax-object
-                                                                      not
-                                                                      ((top)
-                                                                       #4(ribcage
-                                                                          #1(step)
-                                                                          #1((top))
-                                                                          #1("i"))
-                                                                       #4(ribcage
-                                                                          #7(_
-                                                                             var
-                                                                             init
-                                                                             step
-                                                                             e0
-                                                                             e1
-                                                                             c)
-                                                                          #7((top)
-                                                                             (top)
-                                                                             (top)
-                                                                             (top)
-                                                                             (top)
-                                                                             (top)
-                                                                             (top))
-                                                                          #7("i"
-                                                                             "i"
-                                                                             "i"
-                                                                             "i"
-                                                                             "i"
-                                                                             "i"
-                                                                             "i"))
-                                                                       #4(ribcage
-                                                                          ()
-                                                                          ()
-                                                                          ())
-                                                                       #4(ribcage
-                                                                          #1(orig-x)
-                                                                          #1((top))
-                                                                          #1("i"))
-                                                                       #4(ribcage
-                                                                          (#2(import-token
-                                                                              *top*))
-                                                                          ()
-                                                                          ())))
-                                                                   |e0_sEiLIiXMG|)
+                                                             |e0_-vDJvKcMA|
                                                              (cons #3(syntax-object
                                                                       begin
                                                                       ((top)
@@ -14261,7 +14223,7 @@
                                                                           ()
                                                                           ())))
                                                                    (append
-                                                                     |c_sE-DEcYMG|
+                                                                     |c_-vjCrEdMA|
                                                                      (list (cons #3(syntax-object
                                                                                     doloop
                                                                                     ((top)
@@ -14304,12 +14266,12 @@
                                                                                             *top*))
                                                                                         ()
                                                                                         ())))
-                                                                                 |step_sE6YfE1NG|)))))))
-                                               |tmp_sE8N9_2NG|)
-                                        ((#%lambda (|tmp_sEuJ7s3NG|)
-                                           (#%if |tmp_sEuJ7s3NG|
-                                             (apply (#%lambda (|e1_sEQF5V3NG|
-                                                               |e2_sEaC3m4NG|)
+                                                                                 |step_-vrW24jMA|)))))))
+                                               |tmp_-vtLYqkMA|)
+                                        ((#%lambda (|tmp_-vPHWTkMA|)
+                                           (#%if |tmp_-vPHWTkMA|
+                                             (apply (#%lambda (|e1_-v9EUklMA|
+                                                               |e2_-vvASNlMA|)
                                                       (list #3(syntax-object
                                                                let
                                                                ((top)
@@ -14385,8 +14347,8 @@
                                                                    ()
                                                                    ())))
                                                             (map list
-                                                                 |var_sEgWOXVMG|
-                                                                 |init_sECSMoWMG|)
+                                                                 |var_-vBUBnbMA|
+                                                                 |init_-vXQzQbMA|)
                                                             (list #3(syntax-object
                                                                      if
                                                                      ((top)
@@ -14436,7 +14398,7 @@
                                                                              *top*))
                                                                          ()
                                                                          ())))
-                                                                  |e0_sEiLIiXMG|
+                                                                  |e0_-vDJvKcMA|
                                                                   (cons #3(syntax-object
                                                                            begin
                                                                            ((top)
@@ -14486,8 +14448,8 @@
                                                                                    *top*))
                                                                                ()
                                                                                ())))
-                                                                        (cons |e1_sEQF5V3NG|
-                                                                              |e2_sEaC3m4NG|))
+                                                                        (cons |e1_-v9EUklMA|
+                                                                              |e2_-vvASNlMA|))
                                                                   (cons #3(syntax-object
                                                                            begin
                                                                            ((top)
@@ -14538,7 +14500,7 @@
                                                                                ()
                                                                                ())))
                                                                         (append
-                                                                          |c_sE-DEcYMG|
+                                                                          |c_-vjCrEdMA|
                                                                           (list (cons #3(syntax-object
                                                                                          doloop
                                                                                          ((top)
@@ -14588,43 +14550,43 @@
                                                                                                  *top*))
                                                                                              ()
                                                                                              ())))
-                                                                                      |step_sE6YfE1NG|)))))))
-                                                    |tmp_sEuJ7s3NG|)
-                                             (syntax-error |e1_sEEHGLXMG|)))
+                                                                                      |step_-vrW24jMA|)))))))
+                                                    |tmp_-vPHWTkMA|)
+                                             (syntax-error |e1_-vZFtbdMA|)))
                                          ($syntax-dispatch
-                                           (#%annotate |e1_sEEHGLXMG| value)
+                                           (#%annotate |e1_-vZFtbdMA| value)
                                            (#%quote (any . each-any))))))
                                     ($syntax-dispatch
-                                      (#%annotate |e1_sEEHGLXMG| value)
+                                      (#%annotate |e1_-vZFtbdMA| value)
                                       ())))
-                                 |tmp_sEM_hb1NG|)
-                          (syntax-error |tmp_sEkACFYMG|)))
+                                 |tmp_-v5-4DiMA|)
+                          (syntax-error |tmp_-vFyp5eMA|)))
                       ($syntax-dispatch
-                        (#%annotate |tmp_sEkACFYMG| value)
+                        (#%annotate |tmp_-vFyp5eMA| value)
                         (#%quote each-any))))
-                   (map (#%lambda (|v_sEGwA6ZMG| |s_sE0tyzZMG|)
-                          ((#%lambda (|tmp_sEIlut-MG|)
-                             (#%if |tmp_sEIlut-MG|
-                               (apply (#%lambda () |v_sEGwA6ZMG|)
-                                      |tmp_sEIlut-MG|)
-                               ((#%lambda (|tmp_sE2isW-MG|)
-                                  (#%if |tmp_sE2isW-MG|
-                                    (apply (#%lambda (|e_sEKaoQ_MG|)
-                                             |e_sEKaoQ_MG|)
-                                           |tmp_sE2isW-MG|)
-                                    (syntax-error |orig-x_sEU8X7UMG|)))
+                   (map (#%lambda (|v_-v_unyeMA| |s_-vlrl_eMA|)
+                          ((#%lambda (|tmp_-v1khVfMA|)
+                             (#%if |tmp_-v1khVfMA|
+                               (apply (#%lambda () |v_-v_unyeMA|)
+                                      |tmp_-v1khVfMA|)
+                               ((#%lambda (|tmp_-vngfmgMA|)
+                                  (#%if |tmp_-vngfmgMA|
+                                    (apply (#%lambda (|e_-v39bghMA|)
+                                             |e_-v39bghMA|)
+                                           |tmp_-vngfmgMA|)
+                                    (syntax-error |orig-x_-vd7Kz9MA|)))
                                 ($syntax-dispatch
-                                  (#%annotate |s_sE0tyzZMG| value)
+                                  (#%annotate |s_-vlrl_eMA| value)
                                   (#%quote (any))))))
                            ($syntax-dispatch
-                             (#%annotate |s_sE0tyzZMG| value)
+                             (#%annotate |s_-vlrl_eMA| value)
                              ())))
-                        |var_sEgWOXVMG|
-                        |step_sEYOKRWMG|)))
-                |tmp_sEA1T1VMG|)
-         (syntax-error |orig-x_sEU8X7UMG|)))
+                        |var_-vBUBnbMA|
+                        |step_-vhNxhcMA|)))
+                |tmp_-vV_FtaMA|)
+         (syntax-error |orig-x_-vd7Kz9MA|)))
      ($syntax-dispatch
-       (#%annotate |orig-x_sEU8X7UMG| value)
+       (#%annotate |orig-x_-vd7Kz9MA| value)
        (#%quote
          (any #2(each (any any . any))
               (any . each-any)
@@ -14632,11 +14594,11 @@
               each-any))))))
 ($sc-put-cte
   'quasiquote
-  (#%letrec ((|isquote?_sEC1LT8NG|
-               (#%lambda (|x_sEqeidfNG|)
-                 (#%if (identifier? |x_sEqeidfNG|)
+  (#%letrec ((|isquote?_-vX_xjqMA|
+               (#%lambda (|x_-vLc5FwMA|)
+                 (#%if (identifier? |x_-vLc5FwMA|)
                    (free-identifier=?
-                     |x_sEqeidfNG|
+                     |x_-vLc5FwMA|
                      #3(syntax-object
                         quote
                         ((top)
@@ -14656,11 +14618,11 @@
                             #9("i" "i" "i" "i" "i" "i" "i" "i" "i"))
                          #4(ribcage (#2(import-token *top*)) ()))))
                    #f)))
-             (|islist?_sEYZIk9NG|
-               (#%lambda (|x_sEMagGfNG|)
-                 (#%if (identifier? |x_sEMagGfNG|)
+             (|islist?_-vhYvMqMA|
+               (#%lambda (|x_-v5936xMA|)
+                 (#%if (identifier? |x_-v5936xMA|)
                    (free-identifier=?
-                     |x_sEMagGfNG|
+                     |x_-v5936xMA|
                      #3(syntax-object
                         list
                         ((top)
@@ -14680,11 +14642,11 @@
                             #9("i" "i" "i" "i" "i" "i" "i" "i" "i"))
                          #4(ribcage (#2(import-token *top*)) ()))))
                    #f)))
-             (|iscons?_sEiWGN9NG|
-               (#%lambda (|x_sE67e7gNG|)
-                 (#%if (identifier? |x_sE67e7gNG|)
+             (|iscons?_-vDUtdrMA|
+               (#%lambda (|x_-vr51zxMA|)
+                 (#%if (identifier? |x_-vr51zxMA|)
                    (free-identifier=?
-                     |x_sE67e7gNG|
+                     |x_-vr51zxMA|
                      #3(syntax-object
                         cons
                         ((top)
@@ -14704,54 +14666,54 @@
                             #9("i" "i" "i" "i" "i" "i" "i" "i" "i"))
                          #4(ribcage (#2(import-token *top*)) ()))))
                    #f)))
-             (|quote-nil?_sEESEeaNG|
-               (#%lambda (|x_sEs3cAgNG|)
-                 ((#%lambda (|tmp_sE8Y7uhNG|)
-                    (#%if |tmp_sE8Y7uhNG|
-                      (apply (#%lambda (|quote?_sEQQ3oiNG|)
-                               (|isquote?_sEC1LT8NG| |quote?_sEQQ3oiNG|))
-                             |tmp_sE8Y7uhNG|)
+             (|quote-nil?_-vZQrGrMA|
+               (#%lambda (|x_-vN1__xMA|)
+                 ((#%lambda (|tmp_-vtWWVyMA|)
+                    (#%if |tmp_-vtWWVyMA|
+                      (apply (#%lambda (|quote?_-v9PSPzMA|)
+                               (|isquote?_-vX_xjqMA| |quote?_-v9PSPzMA|))
+                             |tmp_-vtWWVyMA|)
                       #f))
                   ($syntax-dispatch
-                    (#%annotate |x_sEs3cAgNG| value)
+                    (#%annotate |x_-vN1__xMA| value)
                     (#%quote (any ()))))))
-             (|quasilist*_sE-OCHaNG|
-               (#%lambda (|x_sEaN1RiNG| |y_sEwJ_hjNG|)
-                 ((#%letrec ((|f_sESFZKjNG|
-                               (#%lambda (|x_sEcCXbkNG|)
-                                 (#%if (null? |x_sEcCXbkNG|)
-                                   |y_sEwJ_hjNG|
-                                   (|quasicons_sEkLA8bNG|
-                                     (car |x_sEcCXbkNG|)
-                                     (|f_sESFZKjNG| (cdr |x_sEcCXbkNG|)))))))
-                    |f_sESFZKjNG|)
-                  |x_sEaN1RiNG|)))
-             (|quasicons_sEkLA8bNG|
-               (#%lambda (|x_sEyyVEkNG| |y_sEUuT5lNG|)
-                 ((#%lambda (|tmp_sEerRylNG|)
-                    ((#%lambda (|tmp_sEAnP_lNG|)
-                       (#%if |tmp_sEAnP_lNG|
-                         (apply (#%lambda (|x_sEWjNsmNG| |y_sEggLVmNG|)
-                                  ((#%lambda (|tmp_sEY8HPnNG|)
-                                     (#%if (#%if |tmp_sEY8HPnNG|
-                                             (apply (#%lambda (|quote?_sEsea3vNG|
-                                                               |dy_sEOa8wvNG|)
-                                                      (|isquote?_sEC1LT8NG|
-                                                        |quote?_sEsea3vNG|))
-                                                    |tmp_sEY8HPnNG|)
+             (|quasilist*_-vjNp7sMA|
+               (#%lambda (|x_-vvLQgAMA| |y_-vRHOJAMA|)
+                 ((#%letrec ((|f_-vbEMaBMA|
+                               (#%lambda (|x_-vxAKDBMA|)
+                                 (#%if (null? |x_-vxAKDBMA|)
+                                   |y_-vRHOJAMA|
+                                   (|quasicons_-vFJnAsMA|
+                                     (car |x_-vxAKDBMA|)
+                                     (|f_-vbEMaBMA| (cdr |x_-vxAKDBMA|)))))))
+                    |f_-vbEMaBMA|)
+                  |x_-vvLQgAMA|)))
+             (|quasicons_-vFJnAsMA|
+               (#%lambda (|x_-vTwI4CMA| |y_-vdtGxCMA|)
+                 ((#%lambda (|tmp_-vzpE-CMA|)
+                    ((#%lambda (|tmp_-vVlCrDMA|)
+                       (#%if |tmp_-vVlCrDMA|
+                         (apply (#%lambda (|x_-vfiAUDMA| |y_-vBeylEMA|)
+                                  ((#%lambda (|tmp_-vh7ufFMA|)
+                                     (#%if (#%if |tmp_-vh7ufFMA|
+                                             (apply (#%lambda (|quote?_-vNcZuMMA|
+                                                               |dy_-v79XXMMA|)
+                                                      (|isquote?_-vX_xjqMA|
+                                                        |quote?_-vNcZuMMA|))
+                                                    |tmp_-vh7ufFMA|)
                                              #f)
-                                       (apply (#%lambda (|quote?_sEmLs-qNG|
-                                                         |dy_sEIHqrrNG|)
-                                                ((#%lambda (|tmp_sEoAmlsNG|)
-                                                   (#%if (#%if |tmp_sEoAmlsNG|
-                                                           (apply (#%lambda (|quote?_sEMle9uNG|
-                                                                             |dx_sE6icCuNG|)
-                                                                    (|isquote?_sEC1LT8NG|
-                                                                      |quote?_sEMle9uNG|))
-                                                                  |tmp_sEoAmlsNG|)
+                                       (apply (#%lambda (|quote?_-vHJfqIMA|
+                                                         |dy_-v1GdTIMA|)
+                                                ((#%lambda (|tmp_-vJy9NJMA|)
+                                                   (#%if (#%if |tmp_-vJy9NJMA|
+                                                           (apply (#%lambda (|quote?_-v5k1BLMA|
+                                                                             |dx_-vrg_1MMA|)
+                                                                    (|isquote?_-vX_xjqMA|
+                                                                      |quote?_-v5k1BLMA|))
+                                                                  |tmp_-vJy9NJMA|)
                                                            #f)
-                                                     (apply (#%lambda (|quote?_sE4tiftNG|
-                                                                       |dx_sEqpgItNG|)
+                                                     (apply (#%lambda (|quote?_-vpr5HKMA|
+                                                                       |dx_-vLn38LMA|)
                                                               (list #3(syntax-object
                                                                        quote
                                                                        ((top)
@@ -14820,10 +14782,10 @@
                                                                                *top*))
                                                                            ()
                                                                            ())))
-                                                                    (cons |dx_sEqpgItNG|
-                                                                          |dy_sEIHqrrNG|)))
-                                                            |tmp_sEoAmlsNG|)
-                                                     (#%if (null? |dy_sEIHqrrNG|)
+                                                                    (cons |dx_-vLn38LMA|
+                                                                          |dy_-v1GdTIMA|)))
+                                                            |tmp_-vJy9NJMA|)
+                                                     (#%if (null? |dy_-v1GdTIMA|)
                                                        (list #3(syntax-object
                                                                 list
                                                                 ((top)
@@ -14873,7 +14835,7 @@
                                                                         *top*))
                                                                     ()
                                                                     ())))
-                                                             |x_sEWjNsmNG|)
+                                                             |x_-vfiAUDMA|)
                                                        (list #3(syntax-object
                                                                 cons
                                                                 ((top)
@@ -14923,24 +14885,24 @@
                                                                         *top*))
                                                                     ()
                                                                     ())))
-                                                             |x_sEWjNsmNG|
-                                                             |y_sEggLVmNG|))))
+                                                             |x_-vfiAUDMA|
+                                                             |y_-vBeylEMA|))))
                                                  ($syntax-dispatch
                                                    (#%annotate
-                                                     |x_sEWjNsmNG|
+                                                     |x_-vfiAUDMA|
                                                      value)
                                                    (#%quote (any any)))))
-                                              |tmp_sEY8HPnNG|)
-                                       ((#%lambda (|tmp_sEi5FgoNG|)
-                                          (#%if (#%if |tmp_sEi5FgoNG|
-                                                  (apply (#%lambda (|listp_sEGSw4qNG|
-                                                                    |stuff_sE0PuxqNG|)
-                                                           (|islist?_sEYZIk9NG|
-                                                             |listp_sEGSw4qNG|))
-                                                         |tmp_sEi5FgoNG|)
+                                              |tmp_-vh7ufFMA|)
+                                       ((#%lambda (|tmp_-vD3sIFMA|)
+                                          (#%if (#%if |tmp_-vD3sIFMA|
+                                                  (apply (#%lambda (|listp_-v_QjwHMA|
+                                                                    |stuff_-vlNhZHMA|)
+                                                           (|islist?_-vhYvMqMA|
+                                                             |listp_-v_QjwHMA|))
+                                                         |tmp_-vD3sIFMA|)
                                                   #f)
-                                            (apply (#%lambda (|listp_sE-ZAapNG|
-                                                              |stuff_sEkWyDpNG|)
+                                            (apply (#%lambda (|listp_-vjYnCGMA|
+                                                              |stuff_-vFUl3HMA|)
                                                      (cons #3(syntax-object
                                                               list
                                                               ((top)
@@ -14983,9 +14945,9 @@
                                                                       *top*))
                                                                   ()
                                                                   ())))
-                                                           (cons |x_sEWjNsmNG|
-                                                                 |stuff_sEkWyDpNG|)))
-                                                   |tmp_sEi5FgoNG|)
+                                                           (cons |x_-vfiAUDMA|
+                                                                 |stuff_-vFUl3HMA|)))
+                                                   |tmp_-vD3sIFMA|)
                                             (list #3(syntax-object
                                                      cons
                                                      ((top)
@@ -15027,24 +14989,24 @@
                                                              *top*))
                                                          ()
                                                          ())))
-                                                  |x_sEWjNsmNG|
-                                                  |y_sEggLVmNG|)))
+                                                  |x_-vfiAUDMA|
+                                                  |y_-vBeylEMA|)))
                                         ($syntax-dispatch
-                                          (#%annotate |y_sEggLVmNG| value)
+                                          (#%annotate |y_-vBeylEMA| value)
                                           (#%quote (any . any))))))
                                    ($syntax-dispatch
-                                     (#%annotate |y_sEggLVmNG| value)
+                                     (#%annotate |y_-vBeylEMA| value)
                                      (#%quote (any any)))))
-                                |tmp_sEAnP_lNG|)
-                         (syntax-error |tmp_sEerRylNG|)))
+                                |tmp_-vVlCrDMA|)
+                         (syntax-error |tmp_-vzpE-CMA|)))
                      ($syntax-dispatch
-                       (#%annotate |tmp_sEerRylNG| value)
+                       (#%annotate |tmp_-vzpE-CMA| value)
                        (#%quote (any any)))))
-                  (list |x_sEyyVEkNG| |y_sEUuT5lNG|))))
-             (|quasiappend_sEGHyBbNG|
-               (#%lambda (|x_sE876ZvNG| |y_sEu34qwNG|)
-                 ((#%lambda (|ls_sEQ_1TwNG|)
-                    (#%if (null? |ls_sEQ_1TwNG|)
+                  (list |x_-vTwI4CMA| |y_-vdtGxCMA|))))
+             (|quasiappend_-v_Fl1tMA|
+               (#%lambda (|x_-vt5VoNMA| |y_-vP1TRNMA|)
+                 ((#%lambda (|ls_-v9-QiOMA|)
+                    (#%if (null? |ls_-v9-QiOMA|)
                       #3(syntax-object
                          '()
                          ((top)
@@ -15065,11 +15027,11 @@
                              #9((top))
                              #9("i" "i" "i" "i" "i" "i" "i" "i" "i"))
                           #4(ribcage (#2(import-token *top*)) ())))
-                      (#%if (null? (cdr |ls_sEQ_1TwNG|))
-                        (car |ls_sEQ_1TwNG|)
-                        ((#%lambda (|tmp_sEwUZMxNG|)
-                           (#%if |tmp_sEwUZMxNG|
-                             (apply (#%lambda (|p_sESQXdyNG|)
+                      (#%if (null? (cdr |ls_-v9-QiOMA|))
+                        (car |ls_-v9-QiOMA|)
+                        ((#%lambda (|tmp_-vRSMcPMA|)
+                           (#%if |tmp_-vRSMcPMA|
+                             (apply (#%lambda (|p_-vbPKFPMA|)
                                       (cons #3(syntax-object
                                                append
                                                ((top)
@@ -15111,36 +15073,36 @@
                                                    (#2(import-token *top*))
                                                    ()
                                                    ())))
-                                            |p_sESQXdyNG|))
-                                    |tmp_sEwUZMxNG|)
-                             (syntax-error |ls_sEQ_1TwNG|)))
+                                            |p_-vbPKFPMA|))
+                                    |tmp_-vRSMcPMA|)
+                             (syntax-error |ls_-v9-QiOMA|)))
                          ($syntax-dispatch
-                           (#%annotate |ls_sEQ_1TwNG| value)
+                           (#%annotate |ls_-v9-QiOMA| value)
                            (#%quote each-any))))))
-                  ((#%letrec ((|f_sEyJT7zNG|
-                                (#%lambda (|x_sEUFRAzNG|)
-                                  (#%if (null? |x_sEUFRAzNG|)
-                                    (#%if (|quote-nil?_sEESEeaNG|
-                                            |y_sEu34qwNG|)
+                  ((#%letrec ((|f_-vTHGzQMA|
+                                (#%lambda (|x_-vdEE0RMA|)
+                                  (#%if (null? |x_-vdEE0RMA|)
+                                    (#%if (|quote-nil?_-vZQrGrMA|
+                                            |y_-vP1TRNMA|)
                                       ()
-                                      (list |y_sEu34qwNG|))
-                                    (#%if (|quote-nil?_sEESEeaNG|
-                                            (car |x_sEUFRAzNG|))
-                                      (|f_sEyJT7zNG| (cdr |x_sEUFRAzNG|))
-                                      (cons (car |x_sEUFRAzNG|)
-                                            (|f_sEyJT7zNG|
-                                              (cdr |x_sEUFRAzNG|))))))))
-                     |f_sEyJT7zNG|)
-                   |x_sE876ZvNG|))))
-             (|quasivector_sE0Ew2cNG|
-               (#%lambda (|x_sEeCP1ANG|)
-                 ((#%lambda (|tmp_sECnHRBNG|)
-                    (#%if (#%if |tmp_sECnHRBNG|
-                            (apply (#%lambda (|quote?_sEgCHTPNG| |x_sECyFkQNG|)
-                                     (|isquote?_sEC1LT8NG| |quote?_sEgCHTPNG|))
-                                   |tmp_sECnHRBNG|)
+                                      (list |y_-vP1TRNMA|))
+                                    (#%if (|quote-nil?_-vZQrGrMA|
+                                            (car |x_-vdEE0RMA|))
+                                      (|f_-vTHGzQMA| (cdr |x_-vdEE0RMA|))
+                                      (cons (car |x_-vdEE0RMA|)
+                                            (|f_-vTHGzQMA|
+                                              (cdr |x_-vdEE0RMA|))))))))
+                     |f_-vTHGzQMA|)
+                   |x_-vt5VoNMA|))))
+             (|quasivector_-vlCjutMA|
+               (#%lambda (|x_-vzACtRMA|)
+                 ((#%lambda (|tmp_-vXluhTMA|)
+                    (#%if (#%if |tmp_-vXluhTMA|
+                            (apply (#%lambda (|quote?_-vBAuj5NA| |x_-vXwsM5NA|)
+                                     (|isquote?_-vX_xjqMA| |quote?_-vBAuj5NA|))
+                                   |tmp_-vXluhTMA|)
                             #f)
-                      (apply (#%lambda (|quote?_sEeNNwONG| |x_sEAJLZONG|)
+                      (apply (#%lambda (|quote?_-vzLAY3NA| |x_-vVHyp4NA|)
                                (list #3(syntax-object
                                         quote
                                         ((top)
@@ -15178,22 +15140,22 @@
                                             (#2(import-token *top*))
                                             ()
                                             ())))
-                                     (list->vector |x_sEAJLZONG|)))
-                             |tmp_sECnHRBNG|)
-                      ((#%letrec ((|f_sEigDLCNG|
-                                    (#%lambda (|x_sEEcBcDNG| |k_sE-8zFDNG|)
-                                      ((#%lambda (|tmp_sEG1vzENG|)
-                                         (#%if (#%if |tmp_sEG1vzENG|
-                                                 (apply (#%lambda (|quote?_sEcYT9NNG|
-                                                                   |x_sEyURCNNG|)
-                                                          (|isquote?_sEC1LT8NG|
-                                                            |quote?_sEcYT9NNG|))
-                                                        |tmp_sEG1vzENG|)
+                                     (list->vector |x_-vVHyp4NA|)))
+                             |tmp_-vXluhTMA|)
+                      ((#%letrec ((|f_-vDeqbUMA|
+                                    (#%lambda (|x_-vZaoEUMA| |k_-vj7m5VMA|)
+                                      ((#%lambda (|tmp_-v__h_VMA|)
+                                         (#%if (#%if |tmp_-v__h_VMA|
+                                                 (apply (#%lambda (|quote?_-vxWGB2NA|
+                                                                   |x_-vTSE23NA|)
+                                                          (|isquote?_-vX_xjqMA|
+                                                            |quote?_-vxWGB2NA|))
+                                                        |tmp_-v__h_VMA|)
                                                  #f)
-                                           (apply (#%lambda (|quote?_sEa7-OLNG|
-                                                             |x_sEw3YfMNG|)
-                                                    (|k_sE-8zFDNG|
-                                                      (map (#%lambda (|tmp_sES_VIMNG|)
+                                           (apply (#%lambda (|quote?_-vv5Ne1NA|
+                                                             |x_-vR1LH1NA|)
+                                                    (|k_-vj7m5VMA|
+                                                      (map (#%lambda (|tmp_-vb-I82NA|)
                                                              (list #3(syntax-object
                                                                       quote
                                                                       ((top)
@@ -15268,41 +15230,41 @@
                                                                               *top*))
                                                                           ()
                                                                           ())))
-                                                                   |tmp_sES_VIMNG|))
-                                                           |x_sEw3YfMNG|)))
-                                                  |tmp_sEG1vzENG|)
-                                           ((#%lambda (|tmp_sE0-s0FNG|)
-                                              (#%if (#%if |tmp_sE0-s0FNG|
-                                                      (apply (#%lambda (|listp_sEue2VKNG|
-                                                                        |x_sEQa0mLNG|)
-                                                               (|islist?_sEYZIk9NG|
-                                                                 |listp_sEue2VKNG|))
-                                                             |tmp_sE0-s0FNG|)
+                                                                   |tmp_-vb-I82NA|))
+                                                           |x_-vR1LH1NA|)))
+                                                  |tmp_-v__h_VMA|)
+                                           ((#%lambda (|tmp_-vlYfsWMA|)
+                                              (#%if (#%if |tmp_-vlYfsWMA|
+                                                      (apply (#%lambda (|listp_-vPcRk0NA|
+                                                                        |x_-v99PN0NA|)
+                                                               (|islist?_-vhYvMqMA|
+                                                                 |listp_-vPcRk0NA|))
+                                                             |tmp_-vlYfsWMA|)
                                                       #f)
-                                                (apply (#%lambda (|listp_sEsp8yJNG|
-                                                                  |x_sEOl6_JNG|)
-                                                         (|k_sE-8zFDNG|
-                                                           |x_sEOl6_JNG|))
-                                                       |tmp_sE0-s0FNG|)
-                                                ((#%lambda (|tmp_sEmWqtFNG|)
-                                                   (#%if (#%if |tmp_sEmWqtFNG|
-                                                           (apply (#%lambda (|cons?_sEqAebING|
-                                                                             |x_sEMwcEING|
-                                                                             |y_sE6ta5JNG|)
-                                                                    (|iscons?_sEiWGN9NG|
-                                                                      |cons?_sEqAebING|))
-                                                                  |tmp_sEmWqtFNG|)
+                                                (apply (#%lambda (|listp_-vNnXZ-MA|
+                                                                  |x_-v7kVq_MA|)
+                                                         (|k_-vj7m5VMA|
+                                                           |x_-v7kVq_MA|))
+                                                       |tmp_-vlYfsWMA|)
+                                                ((#%lambda (|tmp_-vHUdVWMA|)
+                                                   (#%if (#%if |tmp_-vHUdVWMA|
+                                                           (apply (#%lambda (|cons?_-vLy1DZMA|
+                                                                             |x_-v5v_3-MA|
+                                                                             |y_-vrrZw-MA|)
+                                                                    (|iscons?_-vDUtdrMA|
+                                                                      |cons?_-vLy1DZMA|))
+                                                                  |tmp_-vHUdVWMA|)
                                                            #f)
-                                                     (apply (#%lambda (|cons?_sE2PmnGNG|
-                                                                       |x_sEoLkQGNG|
-                                                                       |y_sEKHihHNG|)
-                                                              (|f_sEigDLCNG|
-                                                                |y_sEKHihHNG|
-                                                                (#%lambda (|ls_sE4EgKHNG|)
-                                                                  (|k_sE-8zFDNG|
-                                                                    (cons |x_sEoLkQGNG|
-                                                                          |ls_sE4EgKHNG|)))))
-                                                            |tmp_sEmWqtFNG|)
+                                                     (apply (#%lambda (|cons?_-vnN9PXMA|
+                                                                       |x_-vJJ7gYMA|
+                                                                       |y_-v3G5JYMA|)
+                                                              (|f_-vDeqbUMA|
+                                                                |y_-v3G5JYMA|
+                                                                (#%lambda (|ls_-vpC3aZMA|)
+                                                                  (|k_-vj7m5VMA|
+                                                                    (cons |x_-vJJ7gYMA|
+                                                                          |ls_-vpC3aZMA|)))))
+                                                            |tmp_-vHUdVWMA|)
                                                      (list #3(syntax-object
                                                               list->vector
                                                               ((top)
@@ -15357,21 +15319,21 @@
                                                                       *top*))
                                                                   ()
                                                                   ())))
-                                                           |x_sEeCP1ANG|)))
+                                                           |x_-vzACtRMA|)))
                                                  ($syntax-dispatch
                                                    (#%annotate
-                                                     |x_sEEcBcDNG|
+                                                     |x_-vZaoEUMA|
                                                      value)
                                                    (#%quote (any any any))))))
                                             ($syntax-dispatch
-                                              (#%annotate |x_sEEcBcDNG| value)
+                                              (#%annotate |x_-vZaoEUMA| value)
                                               (#%quote (any . each-any))))))
                                        ($syntax-dispatch
-                                         (#%annotate |x_sEEcBcDNG| value)
+                                         (#%annotate |x_-vZaoEUMA| value)
                                          (#%quote (any each-any)))))))
-                         |f_sEigDLCNG|)
-                       |x_sEeCP1ANG|
-                       (#%lambda (|ls_sEUQP3ONG|)
+                         |f_-vDeqbUMA|)
+                       |x_-vzACtRMA|
+                       (#%lambda (|ls_-vdPCv3NA|)
                          (cons #3(syntax-object
                                   vector
                                   ((top)
@@ -15394,18 +15356,18 @@
                                       #9((top))
                                       #9("i" "i" "i" "i" "i" "i" "i" "i" "i"))
                                    #4(ribcage (#2(import-token *top*)) ())))
-                               |ls_sEUQP3ONG|)))))
+                               |ls_-vdPCv3NA|)))))
                   ($syntax-dispatch
-                    (#%annotate |x_sEeCP1ANG| value)
+                    (#%annotate |x_-vzACtRMA| value)
                     (#%quote (any each-any))))))
-             (|quasi_sEmAuvcNG|
-               (#%lambda (|p_sEYuDNQNG| |lev_sEirBeRNG|)
-                 ((#%lambda (|tmp_sE-jx8SNG|)
-                    (#%if |tmp_sE-jx8SNG|
-                      (apply (#%lambda (|p_sESaUb_NG|)
-                               (#%if (= |lev_sEirBeRNG| 0)
-                                 |p_sESaUb_NG|
-                                 (|quasicons_sEkLA8bNG|
+             (|quasi_-vHyhXtMA|
+               (#%lambda (|p_-vhtqd6NA| |lev_-vDpoG6NA|)
+                 ((#%lambda (|tmp_-vjikA7NA|)
+                    (#%if |tmp_-vjikA7NA|
+                      (apply (#%lambda (|p_-vb9HDgNA|)
+                               (#%if (= |lev_-vDpoG6NA| 0)
+                                 |p_-vb9HDgNA|
+                                 (|quasicons_-vFJnAsMA|
                                    #3(syntax-object
                                       'unquote
                                       ((top)
@@ -15439,21 +15401,21 @@
                                           (#2(import-token *top*))
                                           ()
                                           ())))
-                                   (|quasi_sEmAuvcNG|
-                                     (list |p_sESaUb_NG|)
-                                     (- |lev_sEirBeRNG| 1)))))
-                             |tmp_sE-jx8SNG|)
-                      ((#%lambda (|tmp_sEkgvBSNG|)
-                         (#%if |tmp_sEkgvBSNG|
-                           (apply (#%lambda (|p_sEup0oZNG| |q_sEQl-QZNG|)
-                                    (#%if (= |lev_sEirBeRNG| 0)
-                                      (|quasilist*_sE-OCHaNG|
-                                        |p_sEup0oZNG|
-                                        (|quasi_sEmAuvcNG|
-                                          |q_sEQl-QZNG|
-                                          |lev_sEirBeRNG|))
-                                      (|quasicons_sEkLA8bNG|
-                                        (|quasicons_sEkLA8bNG|
+                                   (|quasi_-vHyhXtMA|
+                                     (list |p_-vb9HDgNA|)
+                                     (- |lev_-vDpoG6NA| 1)))))
+                             |tmp_-vjikA7NA|)
+                      ((#%lambda (|tmp_-vFei18NA|)
+                         (#%if |tmp_-vFei18NA|
+                           (apply (#%lambda (|p_-vPnPPeNA| |q_-v9kNgfNA|)
+                                    (#%if (= |lev_-vDpoG6NA| 0)
+                                      (|quasilist*_-vjNp7sMA|
+                                        |p_-vPnPPeNA|
+                                        (|quasi_-vHyhXtMA|
+                                          |q_-v9kNgfNA|
+                                          |lev_-vDpoG6NA|))
+                                      (|quasicons_-vFJnAsMA|
+                                        (|quasicons_-vFJnAsMA|
                                           #3(syntax-object
                                              'unquote
                                              ((top)
@@ -15490,24 +15452,24 @@
                                                  (#2(import-token *top*))
                                                  ()
                                                  ())))
-                                          (|quasi_sEmAuvcNG|
-                                            |p_sEup0oZNG|
-                                            (- |lev_sEirBeRNG| 1)))
-                                        (|quasi_sEmAuvcNG|
-                                          |q_sEQl-QZNG|
-                                          |lev_sEirBeRNG|))))
-                                  |tmp_sEkgvBSNG|)
-                           ((#%lambda (|tmp_sEGct2TNG|)
-                              (#%if |tmp_sEGct2TNG|
-                                (apply (#%lambda (|p_sE6E8AXNG| |q_sEsA61YNG|)
-                                         (#%if (= |lev_sEirBeRNG| 0)
-                                           (|quasiappend_sEGHyBbNG|
-                                             |p_sE6E8AXNG|
-                                             (|quasi_sEmAuvcNG|
-                                               |q_sEsA61YNG|
-                                               |lev_sEirBeRNG|))
-                                           (|quasicons_sEkLA8bNG|
-                                             (|quasicons_sEkLA8bNG|
+                                          (|quasi_-vHyhXtMA|
+                                            |p_-vPnPPeNA|
+                                            (- |lev_-vDpoG6NA| 1)))
+                                        (|quasi_-vHyhXtMA|
+                                          |q_-v9kNgfNA|
+                                          |lev_-vDpoG6NA|))))
+                                  |tmp_-vFei18NA|)
+                           ((#%lambda (|tmp_-v_agu8NA|)
+                              (#%if |tmp_-v_agu8NA|
+                                (apply (#%lambda (|p_-vrCX_cNA| |q_-vNyVsdNA|)
+                                         (#%if (= |lev_-vDpoG6NA| 0)
+                                           (|quasiappend_-v_Fl1tMA|
+                                             |p_-vrCX_cNA|
+                                             (|quasi_-vHyhXtMA|
+                                               |q_-vNyVsdNA|
+                                               |lev_-vDpoG6NA|))
+                                           (|quasicons_-vFJnAsMA|
+                                             (|quasicons_-vFJnAsMA|
                                                #3(syntax-object
                                                   'unquote-splicing
                                                   ((top)
@@ -15544,17 +15506,17 @@
                                                       (#2(import-token *top*))
                                                       ()
                                                       ())))
-                                               (|quasi_sEmAuvcNG|
-                                                 |p_sE6E8AXNG|
-                                                 (- |lev_sEirBeRNG| 1)))
-                                             (|quasi_sEmAuvcNG|
-                                               |q_sEsA61YNG|
-                                               |lev_sEirBeRNG|))))
-                                       |tmp_sEGct2TNG|)
-                                ((#%lambda (|tmp_sE09rvTNG|)
-                                   (#%if |tmp_sE09rvTNG|
-                                     (apply (#%lambda (|p_sEMHa7XNG|)
-                                              (|quasicons_sEkLA8bNG|
+                                               (|quasi_-vHyhXtMA|
+                                                 |p_-vrCX_cNA|
+                                                 (- |lev_-vDpoG6NA| 1)))
+                                             (|quasi_-vHyhXtMA|
+                                               |q_-vNyVsdNA|
+                                               |lev_-vDpoG6NA|))))
+                                       |tmp_-v_agu8NA|)
+                                ((#%lambda (|tmp_-vl7eX8NA|)
+                                   (#%if |tmp_-vl7eX8NA|
+                                     (apply (#%lambda (|p_-v5GZycNA|)
+                                              (|quasicons_-vFJnAsMA|
                                                 #3(syntax-object
                                                    'quasiquote
                                                    ((top)
@@ -15591,30 +15553,30 @@
                                                        (#2(import-token *top*))
                                                        ()
                                                        ())))
-                                                (|quasi_sEmAuvcNG|
-                                                  (list |p_sEMHa7XNG|)
-                                                  (+ |lev_sEirBeRNG| 1))))
-                                            |tmp_sE09rvTNG|)
-                                     ((#%lambda (|tmp_sEm5pYTNG|)
-                                        (#%if |tmp_sEm5pYTNG|
-                                          (apply (#%lambda (|p_sE4PedWNG|
-                                                            |q_sEqLcGWNG|)
-                                                   (|quasicons_sEkLA8bNG|
-                                                     (|quasi_sEmAuvcNG|
-                                                       |p_sE4PedWNG|
-                                                       |lev_sEirBeRNG|)
-                                                     (|quasi_sEmAuvcNG|
-                                                       |q_sEqLcGWNG|
-                                                       |lev_sEirBeRNG|)))
-                                                 |tmp_sEm5pYTNG|)
-                                          ((#%lambda (|tmp_sEI1npUNG|)
-                                             (#%if |tmp_sEI1npUNG|
-                                               (apply (#%lambda (|x_sEoWijVNG|)
-                                                        (|quasivector_sE0Ew2cNG|
-                                                          (|quasi_sEmAuvcNG|
-                                                            |x_sEoWijVNG|
-                                                            |lev_sEirBeRNG|)))
-                                                      |tmp_sEI1npUNG|)
+                                                (|quasi_-vHyhXtMA|
+                                                  (list |p_-v5GZycNA|)
+                                                  (+ |lev_-vDpoG6NA| 1))))
+                                            |tmp_-vl7eX8NA|)
+                                     ((#%lambda (|tmp_-vH3co9NA|)
+                                        (#%if |tmp_-vH3co9NA|
+                                          (apply (#%lambda (|p_-vpN1FbNA|
+                                                            |q_-vLJ_5cNA|)
+                                                   (|quasicons_-vFJnAsMA|
+                                                     (|quasi_-vHyhXtMA|
+                                                       |p_-vpN1FbNA|
+                                                       |lev_-vDpoG6NA|)
+                                                     (|quasi_-vHyhXtMA|
+                                                       |q_-vLJ_5cNA|
+                                                       |lev_-vDpoG6NA|)))
+                                                 |tmp_-vH3co9NA|)
+                                          ((#%lambda (|tmp_-v10aR9NA|)
+                                             (#%if |tmp_-v10aR9NA|
+                                               (apply (#%lambda (|x_-vJU5LaNA|)
+                                                        (|quasivector_-vlCjutMA|
+                                                          (|quasi_-vHyhXtMA|
+                                                            |x_-vJU5LaNA|
+                                                            |lev_-vDpoG6NA|)))
+                                                      |tmp_-v10aR9NA|)
                                                (list #3(syntax-object
                                                         quote
                                                         ((top)
@@ -15652,15 +15614,15 @@
                                                                 *top*))
                                                             ()
                                                             ())))
-                                                     |p_sEYuDNQNG|)))
+                                                     |p_-vhtqd6NA|)))
                                            ($syntax-dispatch
-                                             (#%annotate |p_sEYuDNQNG| value)
+                                             (#%annotate |p_-vhtqd6NA| value)
                                              #2(vector each-any)))))
                                       ($syntax-dispatch
-                                        (#%annotate |p_sEYuDNQNG| value)
+                                        (#%annotate |p_-vhtqd6NA| value)
                                         (#%quote (any . any))))))
                                  ($syntax-dispatch
-                                   (#%annotate |p_sEYuDNQNG| value)
+                                   (#%annotate |p_-vhtqd6NA| value)
                                    (#%quote
                                      (#2(free-id
                                          #3(syntax-object
@@ -15697,7 +15659,7 @@
                                                 ()))))
                                       any))))))
                             ($syntax-dispatch
-                              (#%annotate |p_sEYuDNQNG| value)
+                              (#%annotate |p_-vhtqd6NA| value)
                               (#%quote
                                 ((#2(free-id
                                      #3(syntax-object
@@ -15737,7 +15699,7 @@
                                  .
                                  any))))))
                        ($syntax-dispatch
-                         (#%annotate |p_sEYuDNQNG| value)
+                         (#%annotate |p_-vhtqd6NA| value)
                          (#%quote
                            ((#2(free-id
                                 #3(syntax-object
@@ -15763,7 +15725,7 @@
                             .
                             any))))))
                   ($syntax-dispatch
-                    (#%annotate |p_sEYuDNQNG| value)
+                    (#%annotate |p_-vhtqd6NA| value)
                     (#%quote
                       (#2(free-id
                           #3(syntax-object
@@ -15785,46 +15747,46 @@
                                  #9("i" "i" "i" "i" "i" "i" "i" "i" "i"))
                               #4(ribcage (#2(import-token *top*)) ()))))
                        any)))))))
-    (#%lambda (|x_sEIwsYcNG|)
-      ((#%lambda (|tmp_sEopoSdNG|)
-         (#%if |tmp_sEopoSdNG|
-           (apply (#%lambda (|__sEKlmjeNG| |e_sE4ikMeNG|)
-                    (|quasi_sEmAuvcNG| |e_sE4ikMeNG| 0))
-                  |tmp_sEopoSdNG|)
-           (syntax-error |x_sEIwsYcNG|)))
+    (#%lambda (|x_-v1vfouMA|)
+      ((#%lambda (|tmp_-vJnbivMA|)
+         (#%if |tmp_-vJnbivMA|
+           (apply (#%lambda (|__-v3k9LvMA| |e_-vpg7cwMA|)
+                    (|quasi_-vHyhXtMA| |e_-vpg7cwMA| 0))
+                  |tmp_-vJnbivMA|)
+           (syntax-error |x_-v1vfouMA|)))
        ($syntax-dispatch
-         (#%annotate |x_sEIwsYcNG| value)
+         (#%annotate |x_-v1vfouMA| value)
          (#%quote (any any)))))))
 ($sc-put-cte
   'include
-  (#%lambda (|x_sEc7SE_NG|)
-    (#%letrec ((|read-file_sEy3Q50OG|
-                 (#%lambda (|fn_sE-uvD4OG| |k_sEkrt45OG|)
-                   ((#%lambda (|p_sEGnrx5OG|)
-                      ((#%letrec ((|f_sE0kp-5OG|
-                                    (#%lambda (|acc_sEmgnr6OG|)
-                                      ((#%lambda (|x_sEIclU6OG|)
-                                         (#%if (eof-object? |x_sEIclU6OG|)
+  (#%lambda (|x_-vx5F4hNA|)
+    (#%letrec ((|read-file_-vT1DxhNA|
+                 (#%lambda (|fn_-vjti3mNA| |k_-vFpgwmNA|)
+                   ((#%lambda (|p_-v_leZmNA|)
+                      ((#%letrec ((|f_-vlicqnNA|
+                                    (#%lambda (|acc_-vHeaTnNA|)
+                                      ((#%lambda (|x_-v1b8koNA|)
+                                         (#%if (eof-object? |x_-v1b8koNA|)
                                            (#%begin
-                                             (close-input-port |p_sEGnrx5OG|)
-                                             (reverse |acc_sEmgnr6OG|))
-                                           (|f_sE0kp-5OG|
+                                             (close-input-port |p_-v_leZmNA|)
+                                             (reverse |acc_-vHeaTnNA|))
+                                           (|f_-vlicqnNA|
                                              (cons (datum->syntax-object
-                                                     |k_sEkrt45OG|
-                                                     |x_sEIclU6OG|)
-                                                   |acc_sEmgnr6OG|))))
-                                       (read-code |p_sEGnrx5OG|)))))
-                         |f_sE0kp-5OG|)
+                                                     |k_-vFpgwmNA|
+                                                     |x_-v1b8koNA|)
+                                                   |acc_-vHeaTnNA|))))
+                                       (read-code |p_-v_leZmNA|)))))
+                         |f_-vlicqnNA|)
                        ()))
-                    (open-source-input-file |fn_sE-uvD4OG|)))))
-      ((#%lambda (|tmp_sEeYL_0OG|)
-         (#%if |tmp_sEeYL_0OG|
-           (apply (#%lambda (|k_sEAUJs1OG| |filename_sEWQHV1OG|)
-                    ((#%lambda (|fn_sEgNFm2OG|)
-                       ((#%lambda (|tmp_sECJDP2OG|)
-                          ((#%lambda (|tmp_sEYFBg3OG|)
-                             (#%if |tmp_sEYFBg3OG|
-                               (apply (#%lambda (|exp_sEiCzJ3OG|)
+                    (open-source-input-file |fn_-vjti3mNA|)))))
+      ((#%lambda (|tmp_-vzWyriNA|)
+         (#%if |tmp_-vzWyriNA|
+           (apply (#%lambda (|k_-vVSwUiNA| |filename_-vfPuljNA|)
+                    ((#%lambda (|fn_-vBLsOjNA|)
+                       ((#%lambda (|tmp_-vXHqfkNA|)
+                          ((#%lambda (|tmp_-vhEoIkNA|)
+                             (#%if |tmp_-vhEoIkNA|
+                               (apply (#%lambda (|exp_-vDAm9lNA|)
                                         (cons #3(syntax-object
                                                  begin
                                                  ((top)
@@ -15853,59 +15815,59 @@
                                                      (#2(import-token *top*))
                                                      ()
                                                      ())))
-                                              |exp_sEiCzJ3OG|))
-                                      |tmp_sEYFBg3OG|)
-                               (syntax-error |tmp_sECJDP2OG|)))
+                                              |exp_-vDAm9lNA|))
+                                      |tmp_-vhEoIkNA|)
+                               (syntax-error |tmp_-vXHqfkNA|)))
                            ($syntax-dispatch
-                             (#%annotate |tmp_sECJDP2OG| value)
+                             (#%annotate |tmp_-vXHqfkNA| value)
                              (#%quote each-any))))
-                        (|read-file_sEy3Q50OG|
-                          |fn_sEgNFm2OG|
-                          |k_sEAUJs1OG|)))
-                     (syntax-object->datum |filename_sEWQHV1OG|)))
-                  |tmp_sEeYL_0OG|)
-           (syntax-error |x_sEc7SE_NG|)))
+                        (|read-file_-vT1DxhNA|
+                          |fn_-vBLsOjNA|
+                          |k_-vVSwUiNA|)))
+                     (syntax-object->datum |filename_-vfPuljNA|)))
+                  |tmp_-vzWyriNA|)
+           (syntax-error |x_-vx5F4hNA|)))
        ($syntax-dispatch
-         (#%annotate |x_sEc7SE_NG| value)
+         (#%annotate |x_-vx5F4hNA| value)
          (#%quote (any any)))))))
 ($sc-put-cte
   'unquote
-  (#%lambda (|x_sE29jl7OG|)
-    ((#%lambda (|tmp_sEK1ff8OG|)
-       (#%if |tmp_sEK1ff8OG|
-         (apply (#%lambda (|__sE4-cI8OG| |e_sEqWa99OG|)
+  (#%lambda (|x_-vn76NoNA|)
+    ((#%lambda (|tmp_-v302HpNA|)
+       (#%if |tmp_-v302HpNA|
+         (apply (#%lambda (|__-vpY_7qNA| |e_-vLUZAqNA|)
                   (syntax-error
-                    |x_sE29jl7OG|
+                    |x_-vn76NoNA|
                     "expression not valid outside of quasiquote"))
-                |tmp_sEK1ff8OG|)
-         (syntax-error |x_sE29jl7OG|)))
+                |tmp_-v302HpNA|)
+         (syntax-error |x_-vn76NoNA|)))
      ($syntax-dispatch
-       (#%annotate |x_sE29jl7OG| value)
+       (#%annotate |x_-vn76NoNA| value)
        (#%quote (any . each-any))))))
 ($sc-put-cte
   'unquote-splicing
-  (#%lambda (|x_sEMS8C9OG|)
-    ((#%lambda (|tmp_sEsL4waOG|)
-       (#%if |tmp_sEsL4waOG|
-         (apply (#%lambda (|__sEOH2ZaOG| |e_sE8E0qbOG|)
+  (#%lambda (|x_-v5RX1rNA|)
+    ((#%lambda (|tmp_-vNJTXrNA|)
+       (#%if |tmp_-vNJTXrNA|
+         (apply (#%lambda (|__-v7GRosNA| |e_-vtCPRsNA|)
                   (syntax-error
-                    |x_sEMS8C9OG|
+                    |x_-v5RX1rNA|
                     "expression not valid outside of quasiquote"))
-                |tmp_sEsL4waOG|)
-         (syntax-error |x_sEMS8C9OG|)))
+                |tmp_-vNJTXrNA|)
+         (syntax-error |x_-v5RX1rNA|)))
      ($syntax-dispatch
-       (#%annotate |x_sEMS8C9OG| value)
+       (#%annotate |x_-v5RX1rNA| value)
        (#%quote (any . each-any))))))
 ($sc-put-cte
   'case
-  (#%lambda (|x_sEuA-SbOG|)
-    ((#%lambda (|tmp_sEatWMcOG|)
-       (#%if |tmp_sEatWMcOG|
-         (apply (#%lambda (|__sEwpUddOG|
-                           |e_sESlSGdOG|
-                           |m1_sEciQ7eOG|
-                           |m2_sEyeOAeOG|)
-                  ((#%lambda (|tmp_sEUaM1fOG|)
+  (#%lambda (|x_-vPyNitNA|)
+    ((#%lambda (|tmp_-vvrJcuNA|)
+       (#%if |tmp_-vvrJcuNA|
+         (apply (#%lambda (|__-vRnHFuNA|
+                           |e_-vbkF6vNA|
+                           |m1_-vxgDzvNA|
+                           |m2_-vTcB0wNA|)
+                  ((#%lambda (|tmp_-vd9ztwNA|)
                      (list #3(syntax-object
                               let
                               ((top)
@@ -15934,16 +15896,16 @@
                                               (#2(import-token *top*))
                                               ()
                                               ())))
-                                       |e_sESlSGdOG|))
-                           |tmp_sEUaM1fOG|))
-                   ((#%letrec ((|f_sEe7KufOG|
-                                 (#%lambda (|clause_sEA3IXfOG|
-                                            |clauses_sEW_FogOG|)
-                                   (#%if (null? |clauses_sEW_FogOG|)
-                                     ((#%lambda (|tmp_sEM175oOG|)
-                                        (#%if |tmp_sEM175oOG|
-                                          (apply (#%lambda (|e1_sEwASIrOG|
-                                                            |e2_sESwQ9sOG|)
+                                       |e_-vbkF6vNA|))
+                           |tmp_-vd9ztwNA|))
+                   ((#%letrec ((|f_-vz5xWwNA|
+                                 (#%lambda (|clause_-vV1vnxNA|
+                                            |clauses_-vf-sQxNA|)
+                                   (#%if (null? |clauses_-vf-sQxNA|)
+                                     ((#%lambda (|tmp_-v50WwFNA|)
+                                        (#%if |tmp_-v50WwFNA|
+                                          (apply (#%lambda (|e1_-vRyF8JNA|
+                                                            |e2_-vbvDBJNA|)
                                                    (cons #3(syntax-object
                                                             begin
                                                             ((top)
@@ -16023,14 +15985,14 @@
                                                                           *top*))
                                                                       ()
                                                                       ())))
-                                                               (cons |e1_sEwASIrOG|
-                                                                     |e2_sESwQ9sOG|))))
-                                                 |tmp_sEM175oOG|)
-                                          ((#%lambda (|tmp_sE6-4yoOG|)
-                                             (#%if |tmp_sE6-4yoOG|
-                                               (apply (#%lambda (|k_sEOS0spOG|
-                                                                 |e1_sE8P-UpOG|
-                                                                 |e2_sEuLYlqOG|)
+                                                               (cons |e1_-vRyF8JNA|
+                                                                     |e2_-vbvDBJNA|))))
+                                                 |tmp_-v50WwFNA|)
+                                          ((#%lambda (|tmp_-vrYTZFNA|)
+                                             (#%if |tmp_-vrYTZFNA|
+                                               (apply (#%lambda (|k_-v7RPTGNA|
+                                                                 |e1_-vtNNkHNA|
+                                                                 |e2_-vPJLNHNA|)
                                                         (list #3(syntax-object
                                                                  if
                                                                  ((top)
@@ -16241,7 +16203,7 @@
                                                                                      *top*))
                                                                                  ()
                                                                                  ())))
-                                                                          |k_sEOS0spOG|))
+                                                                          |k_-v7RPTGNA|))
                                                               (cons #3(syntax-object
                                                                        begin
                                                                        ((top)
@@ -16296,18 +16258,18 @@
                                                                                *top*))
                                                                            ()
                                                                            ())))
-                                                                    (cons |e1_sE8P-UpOG|
-                                                                          |e2_sEuLYlqOG|))))
-                                                      |tmp_sE6-4yoOG|)
-                                               (syntax-error |x_sEuA-SbOG|)))
+                                                                    (cons |e1_-vtNNkHNA|
+                                                                          |e2_-vPJLNHNA|))))
+                                                      |tmp_-vrYTZFNA|)
+                                               (syntax-error |x_-vPyNitNA|)))
                                            ($syntax-dispatch
                                              (#%annotate
-                                               |clause_sEA3IXfOG|
+                                               |clause_-vV1vnxNA|
                                                value)
                                              (#%quote
                                                (each-any any . each-any))))))
                                       ($syntax-dispatch
-                                        (#%annotate |clause_sEA3IXfOG| value)
+                                        (#%annotate |clause_-vV1vnxNA| value)
                                         (#%quote
                                           (#2(free-id
                                               #3(syntax-object
@@ -16338,12 +16300,12 @@
                                            any
                                            .
                                            each-any))))
-                                     ((#%lambda (|tmp_sEgYDRgOG|)
-                                        ((#%lambda (|tmp_sEiNxciOG|)
-                                           (#%if |tmp_sEiNxciOG|
-                                             (apply (#%lambda (|k_sE2khQlOG|
-                                                               |e1_sEogfhmOG|
-                                                               |e2_sEKcdKmOG|)
+                                     ((#%lambda (|tmp_-vBWqhyNA|)
+                                        ((#%lambda (|tmp_-vDLkEzNA|)
+                                           (#%if |tmp_-vDLkEzNA|
+                                             (apply (#%lambda (|k_-vni4gDNA|
+                                                               |e1_-vJe2JDNA|
+                                                               |e2_-v3b0aENA|)
                                                       (list #3(syntax-object
                                                                if
                                                                ((top)
@@ -16561,7 +16523,7 @@
                                                                                    *top*))
                                                                                ()
                                                                                ())))
-                                                                        |k_sE2khQlOG|))
+                                                                        |k_-vni4gDNA|))
                                                             (cons #3(syntax-object
                                                                      begin
                                                                      ((top)
@@ -16620,15 +16582,15 @@
                                                                              *top*))
                                                                          ()
                                                                          ())))
-                                                                  (cons |e1_sEogfhmOG|
-                                                                        |e2_sEKcdKmOG|))
-                                                            |tmp_sEgYDRgOG|))
-                                                    |tmp_sEiNxciOG|)
-                                             ((#%lambda (|tmp_sEEJvFiOG|)
-                                                (#%if |tmp_sEEJvFiOG|
-                                                  (apply (#%lambda (|k_sEkCrzjOG|
-                                                                    |e1_sEGyp0kOG|
-                                                                    |e2_sE0vntkOG|)
+                                                                  (cons |e1_-vJe2JDNA|
+                                                                        |e2_-v3b0aENA|))
+                                                            |tmp_-vBWqhyNA|))
+                                                    |tmp_-vDLkEzNA|)
+                                             ((#%lambda (|tmp_-vZHi5ANA|)
+                                                (#%if |tmp_-vZHi5ANA|
+                                                  (apply (#%lambda (|k_-vFAe_ANA|
+                                                                    |e1_-v_wcsBNA|
+                                                                    |e2_-vltaVBNA|)
                                                            (list #3(syntax-object
                                                                     if
                                                                     ((top)
@@ -16861,7 +16823,7 @@
                                                                                         *top*))
                                                                                     ()
                                                                                     ())))
-                                                                             |k_sEkCrzjOG|))
+                                                                             |k_-vFAe_ANA|))
                                                                  (cons #3(syntax-object
                                                                           begin
                                                                           ((top)
@@ -16920,15 +16882,15 @@
                                                                                   *top*))
                                                                               ()
                                                                               ())))
-                                                                       (cons |e1_sEGyp0kOG|
-                                                                             |e2_sE0vntkOG|))
-                                                                 |tmp_sEgYDRgOG|))
-                                                         |tmp_sEEJvFiOG|)
+                                                                       (cons |e1_-v_wcsBNA|
+                                                                             |e2_-vltaVBNA|))
+                                                                 |tmp_-vBWqhyNA|))
+                                                         |tmp_-vZHi5ANA|)
                                                   (syntax-error
-                                                    |x_sEuA-SbOG|)))
+                                                    |x_-vPyNitNA|)))
                                               ($syntax-dispatch
                                                 (#%annotate
-                                                  |clause_sEA3IXfOG|
+                                                  |clause_-vV1vnxNA|
                                                   value)
                                                 (#%quote
                                                   (each-any
@@ -16937,26 +16899,26 @@
                                                     each-any))))))
                                          ($syntax-dispatch
                                            (#%annotate
-                                             |clause_sEA3IXfOG|
+                                             |clause_-vV1vnxNA|
                                              value)
                                            (#%quote ((any) any . each-any)))))
-                                      (|f_sEe7KufOG|
-                                        (car |clauses_sEW_FogOG|)
-                                        (cdr |clauses_sEW_FogOG|)))))))
-                      |f_sEe7KufOG|)
-                    |m1_sEciQ7eOG|
-                    |m2_sEyeOAeOG|)))
-                |tmp_sEatWMcOG|)
-         (syntax-error |x_sEuA-SbOG|)))
+                                      (|f_-vz5xWwNA|
+                                        (car |clauses_-vf-sQxNA|)
+                                        (cdr |clauses_-vf-sQxNA|)))))))
+                      |f_-vz5xWwNA|)
+                    |m1_-vxgDzvNA|
+                    |m2_-vTcB0wNA|)))
+                |tmp_-vvrJcuNA|)
+         (syntax-error |x_-vPyNitNA|)))
      ($syntax-dispatch
-       (#%annotate |x_sEuA-SbOG| value)
+       (#%annotate |x_-vPyNitNA| value)
        (#%quote (any any any . each-any))))))
 ($sc-put-cte
   'identifier-syntax
-  (#%lambda (|x_sEeiIZtOG|)
-    ((#%lambda (|tmp_sEWaETuOG|)
-       (#%if |tmp_sEWaETuOG|
-         (apply (#%lambda (|__sEKnbdBOG| |e_sE4k9GBOG|)
+  (#%lambda (|x_-vzgvpLNA|)
+    ((#%lambda (|tmp_-vf9rjMNA|)
+       (#%if |tmp_-vf9rjMNA|
+         (apply (#%lambda (|__-v3m-ESNA| |e_-vpiY5TNA|)
                   (list #3(syntax-object
                            lambda
                            ((top)
@@ -17028,8 +16990,8 @@
                                                  (#2(import-token *top*))
                                                  ()
                                                  ())))
-                                          |e_sE4k9GBOG|))
-                              (list (cons |__sEKnbdBOG|
+                                          |e_-vpiY5TNA|))
+                              (list (cons |__-v3m-ESNA|
                                           (#%quote
                                             (#3(syntax-object
                                                 x
@@ -17079,7 +17041,7 @@
                                                  (#2(import-token *top*))
                                                  ()
                                                  ())))
-                                          (cons |e_sE4k9GBOG|
+                                          (cons |e_-vpiY5TNA|
                                                 (#%quote
                                                   (#3(syntax-object
                                                       x
@@ -17115,26 +17077,26 @@
                                                               *top*))
                                                           ()
                                                           ())))))))))))
-                |tmp_sEWaETuOG|)
-         ((#%lambda (|tmp_sEg7CkvOG|)
-            (#%if (#%if |tmp_sEg7CkvOG|
-                    (apply (#%lambda (|__sEGJnvyOG|
-                                      |id_sE0GlYyOG|
-                                      |exp1_sEmCjpzOG|
-                                      |var_sEIyhSzOG|
-                                      |val_sE2vfjAOG|
-                                      |exp2_sEordMAOG|)
-                             (#%if (identifier? |id_sE0GlYyOG|)
-                               (identifier? |var_sEIyhSzOG|)
+                |tmp_-vf9rjMNA|)
+         ((#%lambda (|tmp_-vB5pMMNA|)
+            (#%if (#%if |tmp_-vB5pMMNA|
+                    (apply (#%lambda (|__-v_HaXPNA|
+                                      |id_-vlE8oQNA|
+                                      |exp1_-vHA6RQNA|
+                                      |var_-v1x4iRNA|
+                                      |val_-vnt2LRNA|
+                                      |exp2_-vJp0cSNA|)
+                             (#%if (identifier? |id_-vlE8oQNA|)
+                               (identifier? |var_-v1x4iRNA|)
                                #f))
-                           |tmp_sEg7CkvOG|)
+                           |tmp_-vB5pMMNA|)
                     #f)
-              (apply (#%lambda (|__sEC3ANvOG|
-                                |id_sEY_xewOG|
-                                |exp1_sEiYvHwOG|
-                                |var_sEEUt8xOG|
-                                |val_sE-QrBxOG|
-                                |exp2_sEkNp2yOG|)
+              (apply (#%lambda (|__-vX1ndNNA|
+                                |id_-vh-kGNNA|
+                                |exp1_-vDWi7ONA|
+                                |var_-vZSgAONA|
+                                |val_-vjPe1PNA|
+                                |exp2_-vFLcuPNA|)
                        (list #3(syntax-object
                                 cons
                                 ((top)
@@ -17256,8 +17218,8 @@
                                                                 *top*))
                                                             ()
                                                             ())))
-                                                     |var_sEEUt8xOG|
-                                                     |val_sE-QrBxOG|)
+                                                     |var_-vZSgAONA|
+                                                     |val_-vjPe1PNA|)
                                                (list #3(syntax-object
                                                         syntax
                                                         ((top)
@@ -17285,8 +17247,8 @@
                                                                 *top*))
                                                             ()
                                                             ())))
-                                                     |exp2_sEkNp2yOG|))
-                                         (list (cons |id_sEY_xewOG|
+                                                     |exp2_-vFLcuPNA|))
+                                         (list (cons |id_-vh-kGNNA|
                                                      (#%quote
                                                        (#3(syntax-object
                                                            x
@@ -17369,7 +17331,7 @@
                                                                 *top*))
                                                             ()
                                                             ())))
-                                                     (cons |exp1_sEiYvHwOG|
+                                                     (cons |exp1_-vDWi7ONA|
                                                            (#%quote
                                                              (#3(syntax-object
                                                                  x
@@ -17431,7 +17393,7 @@
                                                                          *top*))
                                                                      ()
                                                                      ()))))))))
-                                         (list |id_sEY_xewOG|
+                                         (list |id_-vh-kGNNA|
                                                (list #3(syntax-object
                                                         identifier?
                                                         ((top)
@@ -17486,7 +17448,7 @@
                                                                       *top*))
                                                                   ()
                                                                   ())))
-                                                           |id_sEY_xewOG|))
+                                                           |id_-vh-kGNNA|))
                                                (list #3(syntax-object
                                                         syntax
                                                         ((top)
@@ -17514,11 +17476,11 @@
                                                                 *top*))
                                                             ()
                                                             ())))
-                                                     |exp1_sEiYvHwOG|))))))
-                     |tmp_sEg7CkvOG|)
-              (syntax-error |x_sEeiIZtOG|)))
+                                                     |exp1_-vDWi7ONA|))))))
+                     |tmp_-vB5pMMNA|)
+              (syntax-error |x_-vzgvpLNA|)))
           ($syntax-dispatch
-            (#%annotate |x_sEeiIZtOG| value)
+            (#%annotate |x_-vzgvpLNA| value)
             (#%quote
               (any (any any)
                    ((#2(free-id
@@ -17532,5 +17494,5 @@
                      any)
                     any)))))))
      ($syntax-dispatch
-       (#%annotate |x_sEeiIZtOG| value)
+       (#%annotate |x_-vzgvpLNA| value)
        (#%quote (any any))))))
