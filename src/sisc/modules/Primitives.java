@@ -252,8 +252,9 @@ public class Primitives extends IndexedProcedure {
             case LT: 
             case GRT:
             case SUB: throwArgSizeException(); return VOID;
-            case CASESENSITIVE: return truth(Symbol.caseSensitive);
+
             case COMPACTSTRINGREP: return truth(SchemeString.compactRepresentation);
+	    case CASESENSITIVE: return truth(r.dynenv.caseSensitive); 
             case CURRENTWIND: return r.dynenv.wind;
             case GENSYM: 
                 long unv=r.tctx.nextUnique();
@@ -413,6 +414,9 @@ public class Primitives extends IndexedProcedure {
                 return VOID;
             case STRING2UNINTERNEDSYMBOL:
                 return Symbol.getUnique(string(vlr[0]));
+            case CASESENSITIVE: 
+		r.dynenv.caseSensitive = truth(vlr[0]);
+		return VOID;
             case REPORTENVIRONMENT:
                 if (FIVE.equals(num(vlr[0])))
                     try {

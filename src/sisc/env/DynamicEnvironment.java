@@ -18,6 +18,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public SchemeInputPort in;
     public SchemeOutputPort out;
 
+    public boolean caseSensitive = DEFAULT_CASE_SENSITIVE;
     public boolean printShared = DEFAULT_PRINT_SHARED;
     public boolean vectorLengthPrefixing = DEFAULT_VECTOR_LENGTH_PREFIXING;
     public boolean emitDebuggingSymbols = DEFAULT_EMIT_DEBUGGING_SYMBOLS;
@@ -33,6 +34,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
         new Boolean(DEFAULT_STRICT_R5RS).toString();
     private static String defaultEmitAnnotations =
         new Boolean(DEFAULT_EMIT_ANNOTATIONS).toString();
+    private static String defaultCaseSensitive = 
+	new Boolean(DEFAULT_CASE_SENSITIVE).toString();
 
     public Value wind = FALSE; //top of wind stack
 
