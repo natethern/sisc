@@ -309,19 +309,19 @@
   (call-with-input-file file
     (lambda (port)
       (let ([cip (current-input-port)])
-        (current-input-port port)
-        (let ([res (thunk)])
-          (current-input-port cip)
-          res)))))
+        (dynamic-wind
+         (lambda () (current-input-port port))
+         thunk
+         (lambda () (current-input-port cip)))))))
 
 (define (with-output-to-file str thunk)
   (call-with-output-file file
     (lambda (port)
       (let ([cop (current-output-port)])
-        (current-output-port port)
-        (let ([res (thunk)])
-          (current-output-port cop)
-          res)))))
+        (dynamic-wind
+         (lambda () (current-output-port port))
+         thunk
+         (lambda () (current-output-port cop)))))))
 
 ;;;;;;;;;;;;; legacy macro support ;;;;;;;;;;;;
 
