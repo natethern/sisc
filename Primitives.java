@@ -39,6 +39,7 @@ import sisc.exprs.*;
 import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
+import java.net.*;
 
 public class Primitives extends ModuleAdapter {
     public static final Symbol
@@ -152,6 +153,7 @@ public class Primitives extends ModuleAdapter {
         define("number->string", NUMBER2STRING);
         define("number?", NUMBERQ);
         define("numerator", NUMERATOR);
+        define("normalize-url", NORMALIZEURL);
         define("open-input-file", OPENINPUTFILE);
         define("open-input-string", OPENINPUTSTRING);
         define("open-output-file", OPENOUTPUTFILE);
@@ -248,6 +250,27 @@ public class Primitives extends ModuleAdapter {
             if (SERIALIZATION) {
                 v = (Value)s.deserialize(dis);
             }
+        }
+    }
+
+    public static URL makeURL(Value v) {
+        String s = string(v);
+        try {
+            return new URL(s);
+        } catch (MalformedURLException e) {
+            throwPrimException("malformed url " + s);
+            return null;
+        }
+    }
+
+    public static URL makeURL(Value current, Value v) {
+        URL c = makeURL(current);
+        String s = string(v);
+        try {
+            return new URL(c, s);
+        } catch (MalformedURLException e) {
+            throwPrimException("malformed url " + s);
+            return null;
         }
     }
 
@@ -395,25 +418,39 @@ public class Primitives extends ModuleAdapter {
                 sw.getBuffer().setLength(0);
                 return s;
             case OPENSOURCEINPUTFILE:
-                String fname=string(f.vlr[0]);
+                URL url = makeURL(f.vlr[0]);
                 try {
-                    return new SourceInputPort(new BufferedReader(new FileReader(fname)), fname);
+                    URLConnection conn = url.openConnection();
+                    conn.setDoInput(true);
+                    conn.setDoOutput(false);
+                    return new SourceInputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())), url.toString());
                 } catch (IOException e) {
-                    throwPrimException( "error opening file "+fname);
+                    throwPrimException("error opening " + url);
                 }
             case OPENINPUTFILE:
-                fname=string(f.vlr[0]);
+                url = makeURL(f.vlr[0]);
                 try {
-                    return new InputPort(new BufferedReader(new FileReader(fname)));
+                    URLConnection conn = url.openConnection();
+                    conn.setDoInput(true);
+                    conn.setDoOutput(false);
+                    return new InputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())));
                 } catch (IOException e) {
-                    throwPrimException( "error opening file "+fname);
+                    throwPrimException("error opening " + url);
                 }
             case OPENOUTPUTFILE:
-                fname=string(f.vlr[0]);
+                url = makeURL(f.vlr[0]);
                 try {
-                    return new OutputPort(new BufferedWriter(new FileWriter(fname)));
+                    if (url.getProtocol().equals("file")) {
+                        //the JDK does not permit write access to file URLs
+                        return new OutputPort(new BufferedWriter(new FileWriter(url.getPath())));
+                    }
+                    URLConnection conn = url.openConnection();
+                    conn.setDoInput(false);
+                    conn.setDoOutput(true);
+                    return new OutputPort(new BufferedWriter(new OutputStreamWriter(conn.getOutputStream())));
                 } catch (IOException e) {
-                    throwPrimException( "error opening file "+fname);
+                    e.printStackTrace();
+                    throwPrimException("error opening " + url);
                 }
             case FLUSHOUTPUTPORT:
                 OutputPort op=outport(f.vlr[0]);
@@ -437,11 +474,14 @@ public class Primitives extends ModuleAdapter {
             case LOAD:
                 CallFrame before=f.stk.capture(f);
                 InputPort p=null;
-                String sourceFile=string(f.vlr[0]);
+                url = makeURL(f.vlr[0]);
                 try {
-                    p=new SourceInputPort(new BufferedReader(new FileReader(sourceFile)), sourceFile);
+                    URLConnection conn = url.openConnection();
+                    conn.setDoInput(true);
+                    conn.setDoOutput(false);
+                    p=new SourceInputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())), url.toString());
                 } catch (IOException e) {
-                    throwPrimException( "error opening '"+sourceFile+"'");
+                    throwPrimException( "error opening " + url);
                 }
                 v=null;
                 do {
@@ -560,6 +600,8 @@ public class Primitives extends ModuleAdapter {
                     Thread.sleep(num(f.vlr[0]).longValue());
                 } catch (InterruptedException ie) {}
                 return VOID;
+            case NORMALIZEURL:
+                return new SchemeString(makeURL(f.vlr[0]).toString());
             }
         case 2:
             switch (primid) {
@@ -712,6 +754,8 @@ public class Primitives extends ModuleAdapter {
                 } catch (ArrayIndexOutOfBoundsException e) {
                     return FALSE;
                 }
+            case NORMALIZEURL:
+                return new SchemeString(makeURL(f.vlr[0], f.vlr[1]).toString());
             }
         case 3:
             switch(primid) {
@@ -944,9 +988,9 @@ public class Primitives extends ModuleAdapter {
         NULLENVIRONMENT = 67,
         NULLQ = 68,
         NUMBER2STRING = 124,
-        //	NUMBER2STRING = 69,
         NUMBERQ = 70,
         NUMERATOR = 71,
+        NORMALIZEURL = 69,
         OPENINPUTFILE = 72,
         OPENINPUTSTRING = 73,
         OPENOUTPUTFILE = 125,

@@ -70,10 +70,12 @@
             (putprop 'first-start '*sisc* #t)
             (unload-dynamic-wind)
             (set! _separator (getprop 'file.separator '*environment-variables*))
-            (call/fc 
-             (lambda ()
-               (current-directory (getprop 'user.dir '*environment-variables*)))
-             (lambda (m e c) (void)))))
+            (current-url
+             (string-append "file:"
+                            (let ([dir (getprop 'user.dir
+                                                '*environment-variables*)])
+                              (if dir dir "."))
+                            _separator))))
       (letrec ([console-in (if (null? args) (current-input-port)
                                (car args))]
 	       [console-out (if (null? args) (current-output-port)

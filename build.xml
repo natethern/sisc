@@ -19,7 +19,7 @@
     <property name="packagename" value="sisc"/>
     <property name="jarname" value="sisc.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
-    <property name="quantity-type" value="apfloat"/>
+    <property name="quantity-type" value="64float"/>
     <property name="debugging" value="off"/>
     <property name="optimization" value="on"/>
     <property name="releasecandidate" value="yes"/>
@@ -100,13 +100,13 @@
       <arg value="-out"/>
       <arg value="${heap}"/>
       <arg value="-files"/>
-      <arg value="${schemedir}/init.pp"/>
-      <arg value="${schemedir}/compat.pp"/>
-      <arg value="${schemedir}/psyntax.pp"/>
-      <arg value="${schemedir}/init2.scm"/>
-      <arg value="${schemedir}/pp.scm"/>
-      <arg value="${schemedir}/repl.scm"/>
-      <arg value="${schemedir}/debug.scm"/>
+      <arg value="file:init.pp"/>
+      <arg value="file:compat.pp"/>
+      <arg value="file:psyntax.pp"/>
+      <arg value="file:init2.scm"/>
+      <arg value="file:pp.scm"/>
+      <arg value="file:repl.scm"/>
+      <arg value="file:debug.scm"/>
     </java>
   </target>
 
@@ -118,13 +118,13 @@
       <arg value="-out"/>
       <arg value="${heap}"/>
       <arg value="-files"/>
-      <arg value="${schemedir}/lite.scm"/>
-      <arg value="${schemedir}/init.pp"/>
-      <arg value="${schemedir}/compat.pp"/>
-      <arg value="${schemedir}/psyntax.pp"/>
-      <arg value="${schemedir}/init2.scm"/>
-      <arg value="${schemedir}/pp.scm"/>
-      <arg value="${schemedir}/repl.scm"/>
+      <arg value="file:lite.scm"/>
+      <arg value="file:init.pp"/>
+      <arg value="file:compat.pp"/>
+      <arg value="file:psyntax.pp"/>
+      <arg value="file:init2.scm"/>
+      <arg value="file:pp.scm"/>
+      <arg value="file:repl.scm"/>
     </java>
   </target>
 
