@@ -551,7 +551,7 @@ Scheme: (define res (:bar foo-obj))
 
 Modify field:
 Java:   fooObj.bar = val;
-Scheme: (:bar! foo-obj val);
+Scheme: (:bar! foo-obj val)
 
 Chained field access:
 Java:   fooObj.bar.baz.boo
@@ -562,7 +562,7 @@ or      ((compose :boo :baz :bar) foo-obj)
 Chained field modification:
 Java:   fooObj.bar.baz.boo = moo
 Scheme: (:boo! (fold (cut <> <>) foo-obj (list :bar :baz)) moo)
-or      (:boo! ((compose :baz :bar) foo-obj))
+or      (:boo! ((compose :baz :bar) foo-obj) moo)
         NB: this works equally well for bean fields.
 
 Accessing several fields:
@@ -602,16 +602,25 @@ Implementing interfaces:
 Java:   public class Foo implements Bar, Baz {
           private int x;
           private int y;
-          public Foo(int x, int y) { this.x = x; this.y = y; }
-          public int barMethod(int z) { return x+y+z; }
-          public int bazMethod(int z) { return x+y-z; }
+          public Foo(int x, int y) {
+            this.x = x;
+            this.y = y;
+          }
+          public int barMethod(int z) {
+            return x+y+z;
+          }
+          public int bazMethod(int z) {
+            return x+y-z;
+          }
         }
         ...
         Foo fooObj = new Foo(1, 2);
 Scheme: (define-java-proxy (foo x y)
            (<bar> <baz>)
-           (define (bar-method z) (->jint (+ x y (->number z))))
-           (define (baz-method z) (->jint (+ x y (- (->number z))))))
+           (define (bar-method p z)
+              (->jint (+ x y (->number z))))
+           (define (baz-method p z)
+              (->jint (+ x y (- (->number z))))))
         ...
         (define foo-obj (foo 1 2))
 
