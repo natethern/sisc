@@ -124,14 +124,6 @@
 	  </para>
 	</listitem>
 	<listitem>
-	  <para>5.3 - 
-	    &SISC;'s syntax expander does not report an error when a
-	    new binding shadows a syntactic keyword.  For example,
-	    <computeroutput>(define define 3)</computeroutput> does
-	    not produce an error.
-	  </para>
-	</listitem>
-	<listitem>
 	  <para>6.2.3 - 
 	    The standard desires that that operations such as
 	    <function>sqrt</function> try to provide exact results
