@@ -19,6 +19,7 @@
  'srfi-14
  'srfi-13
  'srfi-16
+ 'srfi-18
  'srfi-19
  'srfi-24
  'srfi-25
