@@ -3,6 +3,7 @@ Bug Fixes
 * make implementations of srfis 12 and 34 fully compliant with spec
 * make let-syntax strictly r5rs compliant when strict compliance is
   demanded
+* Work to eliminate bottlenecks in generic-procedure calls.
 
 General
 * Document weak hashtables
