@@ -92,14 +92,14 @@
 
                       ;;eval                      
                       (let ([handler (make-interrupt-handler)])
-                        (_signal-hook! "INT" handler)
+                        (when (permit-interrupts) (_signal-hook! "INT" handler))
                         (with/fc
                          (lambda (m e)
-                           (_signal-unhook! "INT" handler)
+                           (when (permit-interrupts) (_signal-unhook! "INT" handler))
                            (throw m e))
                          (lambda () 
                            (let ([val (eval exp (interaction-environment))])
-                             (_signal-unhook! "INT" handler)
+                             (when (permit-interrupts) (_signal-unhook! "INT" handler))
                              (if (not (void? val))
                                  (begin (writer val) (newline)))))))
                       (repl/read writer)))))])
