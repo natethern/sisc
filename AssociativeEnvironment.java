@@ -78,7 +78,18 @@ public class AssociativeEnvironment extends NamedValue {
         }
         return res;
     }
-    
+
+    //The following two methods are for internal use only, despite
+    //their public modifiers
+
+    public Map getSymbolMap() {
+        return symbolMap;
+    }
+
+    public void setParent(AssociativeEnvironment e) {
+        parent=e;
+    }
+
     protected void expand() {
         synchronized(symbolMap) {
             Value[] newenv=new Value[(int)((env.length*EXPFACT) + 1)];
@@ -155,6 +166,10 @@ public class AssociativeEnvironment extends NamedValue {
 
     public String display() {
         return displayNamedOpaque("environment");
+    }
+
+    public Iterator keys() {
+        return symbolMap.keySet().iterator();
     }
 
     public void serialize(Serializer s, DataOutput dos) throws IOException {

@@ -67,6 +67,7 @@ public abstract class Util implements Conf {
 	REPORT=Symbol.get("*report*"),
 	ENVVARS=Symbol.get("*environment-variables*"),
 	SISC=Symbol.get("*sisc*"),
+        SISC_SPECIFIC=Symbol.get("*sisc-specific*"),
         OTHER=Symbol.get("other");
 
     public static final int DEFAULT_SYNOPSIS_LENGTH=30;

@@ -46,6 +46,74 @@ import sisc.exprs.*;
 
 public class GenerateHeap {
 
+    static HashSet r5rs_bindings;
+    static {
+        String[] bindingNames = new String[] {
+        "*", "+", "-", "/", "<", "<=", "=", ">", ">=", "abs", "acos", "angle",
+        "append", "apply", "asin", "assoc", "assq", "assv", "atan", "boolean?",
+        "call-with-current-continuation", "call-with-input-file",
+        "call-with-output-file", "call-with-values", "car", "cdr", "caar",
+        "cadr", "cdar", "cddr", "caaar", "caadr", "cadar", "caddr", "cdaar",
+        "cdadr", "cddar", "cdddr", "caaaar", "caaadr", "caadar", "caaddr",
+        "cadaar", "cadadr", "caddar", "cadddr", "cdaaar", "cdaadr", "cdadar",
+        "cdaddr", "cddaar", "cddadr", "cdddar", "cddddr", "ceiling",
+        "char->integer", "char-alphabetic?", "char-ci<=?", "char-ci<?",
+        "char-ci=?", "char-ci>=?", "char-ci>?", "char-downcase",
+        "char-lower-case?", "char-numeric?", "char-ready?", "char-upcase",
+        "char-upper-case?", "char-whitespace?", "char<=?", "char<?", "char=?",
+        "char>=?", "char>?", "char?", "close-input-port", "close-output-port",
+        "complex?", "cons", "cos", "current-input-port", "current-output-port",
+        "denominator", "display", "dynamic-wind", "eof-object?", "eq?", "equal?",
+        "eqv?", "eval", "even?", "exact->inexact", "exact?", "exp", "expt",
+        "floor", "for-each", "force", "gcd", "imag-part", "inexact->exact",
+        "inexact?", "input-port?", "integer->char", "integer?",
+        "interaction-environment", "lcm", "length", "list", "list->string",
+        "list->vector", "list-ref", "list-tail", "list?", "load", "log",
+        "magnitude", "make-polar", "make-rectangular", "make-string",
+        "make-vector", "map", "max", "member", "memq", "memv", "min", "modulo",
+        "negative?", "newline", "not", "null-environment", "null?",
+        "number->string", "number?", "numerator", "odd?", "open-input-file",
+        "open-output-file", "output-port?", "pair?", "peek-char", "positive?",
+        "procedure?", "quotient", "rational?", "rationalize", "read",
+        "read-char", "real-part", "real?", "remainder", "reverse", "round",
+        "scheme-report-environment", "set-car!", "set-cdr!", "sin", "sqrt",
+        "string", "string->list", "string->number", "string->symbol",
+        "string-append", "string-ci<=?", "string-ci<?", "string-ci=?",
+        "string-ci>=?", "string-ci>?", "string-copy", "string-fill!",
+        "string-length", "string-ref", "string-set!", "string<=?", "string<?",
+        "string=?", "string>=?", "string>?", "string?", "substring",
+        "symbol->string", "symbol?", "tan", "truncate", "values", "vector",
+        "vector->list", "vector-fill!", "vector-length", "vector-ref",
+        "vector-set!", "vector?", "with-input-from-file", "with-output-to-file",
+        "write", "write-char", "zero?"
+        };
+        r5rs_bindings=new HashSet(bindingNames.length);
+        for (int i=0; i<bindingNames.length; i++)
+            r5rs_bindings.add(bindingNames[i]);
+    }
+
+    static AssociativeEnvironment[] classify(AssociativeEnvironment base) {
+        AssociativeEnvironment[] rv=new AssociativeEnvironment[2];
+        rv[0]=new AssociativeEnvironment();
+        rv[1]=base;
+        rv[1].setParent(rv[0]);
+
+        HashMap r5rs=new HashMap();
+
+        //Note the  R5RS bindings so we can transfer them to the
+        //bottommost env.
+        for (Iterator i=base.keys(); i.hasNext();) {
+            Symbol key=(Symbol)i.next();
+            if (r5rs_bindings.contains(key.symval)) {
+                Value v=base.lookup(key);
+                r5rs.put(key, v);
+                rv[0].define(key, v);
+            }
+        }
+        base.getSymbolMap().remove(r5rs);
+        return rv;
+    }
+
     public static void main(String[] args) throws Exception {
         String inHeap = null;
         String outHeap = null;
@@ -109,19 +177,21 @@ public class GenerateHeap {
 	    }
         }
 
-        // Lock in the R5RS environment
-        AssociativeEnvironment report_env, top_env, sisc_env;
-        report_env=r.lookupContextEnv(Util.TOPLEVEL);
-        report_env.trim();
-        top_env=new AssociativeEnvironment(report_env);
-        sisc_env=r.lookupContextEnv(Util.SISC);
-        r.defineContextEnv(Util.TOPLEVEL, top_env);
-	r.defineContextEnv(Util.REPORT, report_env);
-	r.defineContextEnv(Util.SISC, sisc_env);
-        //	report_env.lock();
-        report_env.name=Symbol.get("r5rs");
-        top_env.name=Symbol.get("top-level");
-        sisc_env.name=Symbol.get("sisc");
+        System.err.println("Partitioning bindings...");
+        AssociativeEnvironment[] results=classify(r.lookupContextEnv(Util.TOPLEVEL));
+        AssociativeEnvironment sisc_specific, r5rs, top_level;
+        r5rs=results[0];
+        sisc_specific=results[1];
+
+        r5rs.name=Symbol.get("r5rs");
+        sisc_specific.name=Symbol.get("sisc-specific");
+
+        top_level=new AssociativeEnvironment(sisc_specific);
+        top_level.name=Symbol.get("top-level");
+                                                  
+        r.defineContextEnv(Util.TOPLEVEL, top_level);
+	r.defineContextEnv(Util.REPORT, r5rs);
+        r.defineContextEnv(Util.SISC_SPECIFIC, sisc_specific);
 
         System.out.println("Saving heap...");
 
