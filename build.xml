@@ -4,17 +4,16 @@
 
   <target name="prepare">
     <property file="${basedir}/build.properties"/>    
-    <property name="classdir" value="${basedir}/buildsrc"/>
+    <property name="srcdir" value="${basedir}/.."/>
     <property name="classdir" value="${basedir}/classes"/>
     <property name="docdir" value="${basedir}/doc/javadoc"/>
-    <property name="srcdir" value="${basedir}/.."/>
     <property name="schemedir" value="${basedir}/scheme-src"/>
     <property name="packagename" value="sisc"/>
     <property name="jarname" value="sisc.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
   </target>
 
-  <target name="docs" depends="init, preprocess"
+  <target name="docs" depends="init"
           description="Generate Documentation">
     <mkdir dir="${docdir}"/>
     <javadoc packagenames="${packagename}.*"
@@ -22,14 +21,9 @@
 	     destdir="${docdir}"/>
   </target>
 
-  <target name="preprocess" depends="init">
-    <mkdir dir="${buildsrc}"/>
-    <exec dir="${srcdir}" 
-          executable="cpp" 
-
   <target name="compiler" depends="init">
     <mkdir dir="${classdir}"/>
-    <javac srcdir="${buildsrc}"
+    <javac srcdir="${srcdir}"
            destdir="${classdir}"
 	   classpath=".."
            includes="${packagename}/**"
