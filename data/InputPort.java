@@ -43,7 +43,7 @@ public class InputPort extends NamedValue {
         this.r=r;
     }
 
-    public Value readchar() {
+    public Value readChar() {
         try {
             return new SchemeCharacter((char)read());
         } catch (EOFException e) {
@@ -88,7 +88,7 @@ public class InputPort extends NamedValue {
         }
     }
 
-    public Value read(Interpreter r, int flags) {
+    private Value read(Interpreter r, int flags) {
         try {
             return r.dynenv.parser.nextExpression(this, flags);
         } catch (EOFException e) {
@@ -96,6 +96,15 @@ public class InputPort extends NamedValue {
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    public Value read(Interpreter r) {
+        return read(r, 0);
+    }
+
+    public Value readCode(Interpreter r) {
+        return read(r, sisc.compiler.Parser.PRODUCE_ANNOTATIONS |
+                    sisc.compiler.Parser.PRODUCE_IMMUTABLES);
     }
 
     public void mark(int ral) throws IOException {

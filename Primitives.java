@@ -32,14 +32,14 @@
  */
 package sisc;
 
-import sisc.*;
-import sisc.compiler.*;
-import sisc.data.*;
-import sisc.exprs.*;
 import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
+
+import sisc.*;
+import sisc.data.*;
+import sisc.exprs.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -285,16 +285,16 @@ public class Primitives extends ModuleAdapter {
             case CURRENTWIND: return f.dynenv.wind;
             case OPENOUTPUTSTRING: return new OutputPort(new StringWriter());
             case PEEKCHAR:
-                Value v=f.dynenv.in.readchar();
+                Value v=f.dynenv.in.readChar();
                 if (v instanceof SchemeCharacter)
                     f.dynenv.in.pushback(((SchemeCharacter)v).c);
                 return v;
-            case READ: case READCHAR:
-                return (primid==READ ? f.dynenv.in.read(f, 0) :
-                        f.dynenv.in.readchar());
+            case READ:
+                return f.dynenv.in.read(f);
+            case READCHAR:
+                return f.dynenv.in.readChar();
             case READCODE:
-                return f.dynenv.in.read(f, Parser.PRODUCE_ANNOTATIONS |
-                                        Parser.PRODUCE_IMMUTABLES);
+                return f.dynenv.in.readCode(f);
             case CURRENTEVAL: return (Value)f.ctx.evaluator;
             case INTERACTIONENVIRONMENT:
                 return f.ctx.toplevel_env;
@@ -380,7 +380,7 @@ public class Primitives extends ModuleAdapter {
             case VECTORFINDLASTUNIQUE: return Quantity.valueOf(vec(f.vlr[0]).findEnd());
             case PEEKCHAR:
                 InputPort inport=inport(f.vlr[0]);
-                Value v=inport.readchar();
+                Value v=inport.readChar();
                 if (v instanceof SchemeCharacter)
                     inport.pushback(((SchemeCharacter)v).c);
                 return v;
@@ -391,15 +391,15 @@ public class Primitives extends ModuleAdapter {
                 } catch (IOException e) {
                     return FALSE;
                 }
-            case READ: case READCHAR:
+            case READ:
                 inport=inport(f.vlr[0]);
-                return (primid==READ ? inport.read(f, 0) :
-                        inport.readchar());
+                return inport.read(f);
+            case READCHAR:
+                inport=inport(f.vlr[0]);
+                return inport.readChar();
             case READCODE:
                 inport=inport(f.vlr[0]);
-                return inport.read(f, 
-                                   Parser.PRODUCE_ANNOTATIONS |
-                                   Parser.PRODUCE_IMMUTABLES);
+                return inport.readCode(f);
             case EVAL:
                 f.nxp=f.compile(f.vlr[0]);
                 f.returnVLR();
