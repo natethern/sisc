@@ -5,7 +5,7 @@
              (open-output-file
                 (let loop ([i 0])
                   (let ([fname 
-                           (sisc:format "/arc/scratch/sarah-logs/~a_~a_~a.log"
+                           (format "/arc/scratch/sarah-logs/~a_~a_~a.log"
                                (substring (channel-name channel) 1
                                           (string-length 
                                                   (channel-name channel)))

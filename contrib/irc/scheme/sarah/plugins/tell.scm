@@ -34,7 +34,7 @@
 (define (do-tell recipient channel-name sender message)
   (send-messages (channel-bot (get-channel channel-name))
                  channel-name
-                 (sisc:format "~a, ~a says: ~a" 
+                 (format "~a, ~a says: ~a" 
                     (or (real-name (metaphone recipient)) recipient)
                     sender message)))
 
@@ -53,11 +53,11 @@
   (let ([messages (fetch-messages! dbcon (metaphone sender))])    
     (when messages 
       (send-messages bot (channel-name channel)
-                     (sisc:format 
+                     (format 
                       (random-elem deliver-preludes)
                       sender
                       (let ([l (length messages)])
-                        (sisc:format "~a ~a" l
+                        (format "~a ~a" l
                                      (if (> l 1) "messages."
                                          "message.")))))
       (for-each (lambda (m)
@@ -76,7 +76,7 @@
 
 (define (fetch-messages! conn recipient)
   (let* ([stmt (jdbc/prepare-statement conn
-                                       (sisc:format "SELECT sender, message FROM tell WHERE id='~a'"
+                                       (format "SELECT sender, message FROM tell WHERE id='~a'"
                                                     recipient))]
          [results
           (jdbc/execute-query stmt)])
@@ -87,7 +87,7 @@
                                                             (item '2)))
                                       results)])
              (jdbc/execute (jdbc/prepare-statement 
-                            conn (sisc:format "DELETE FROM tell WHERE id='~a'" 
+                            conn (format "DELETE FROM tell WHERE id='~a'" 
                                               recipient)))
              rv)))))
 

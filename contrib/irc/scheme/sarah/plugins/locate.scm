@@ -1,7 +1,7 @@
 (define (locate channel message ignore term)
   (with-output-to-string
     (lambda ()
-      (display (sisc:format "~a is in " term))
+      (display (format "~a is in " term))
       (let loop ([o (channels-user-occupies (metaphone term))])
         (if (null? o) (display #\.)
             (begin

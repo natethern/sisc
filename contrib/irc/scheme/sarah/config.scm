@@ -2,6 +2,8 @@
 (define ircserver "irc.freenode.net")
 (define channels '("#sisc" "#scheme" "#ant-wars"))
 (define scheme-channels '("#schemerepl"))
-(define dbhost "localhost")
-(define dbuser "scgmille")
+
+(define dbname "sarah")
+(define dbhost "saba")
+(define dbuser "scomill")
 (define dbpasswd "foo")

@@ -116,6 +116,3 @@
          [cleaned-message (bot-clean bot-name (message-text message))])
     (values to-bot cleaned-message strict-tokens)))
           
-    
-         
-  

@@ -10,11 +10,11 @@
        (lambda ()
 	 (unless (equal? from last-user)
   	   (call-with-input-file 
-	       (sisc:format "http://localhost:2001/?text=Call+me+~a." from)
+	       (format "http://localhost:2001/?text=Call+me+~a." from)
 	     read-line)
 	   (set! last-user from))
 	 (call-with-input-file 
-	     (sisc:format "http://localhost:2001/?text=~a"
+	     (format "http://localhost:2001/?text=~a"
 			  (->string (encode (java-null <java.net.url-encoder>)
 					    (->jstring message))))
 	   read-line))))))

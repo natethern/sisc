@@ -8,7 +8,7 @@
          (let ([results (lookup-item dbcon type (trim term))])
            (or (not results)
                (let ([random-result (random-elem results)])
-                 (sisc:format "~a~a ~a ~a" 
+                 (format "~a~a ~a ~a" 
                               (random-elem whatis-preludes) 
                               (car random-result)
                               (cdr (assq (cadr random-result) 
@@ -45,14 +45,14 @@
 
 (define (lookup-item conn type key)
   (let* ([stmt (jdbc/prepare-statement conn
-                  (sisc:format 
+                  (format 
                     (string-append
                       "SELECT knowledge.key, knowledge.type, knowledge.data FROM knowledge LEFT JOIN aka ON "
                       "    (aka.key ilike ? AND aka.data ilike knowledge.key)"
                       " WHERE ((aka.key IS NULL AND knowledge.key ilike ?) "
                       "    OR (aka.key IS NOT NULL)) "
                       "   ~a") 
-                    (if type (sisc:format "AND type='~a'"
+                    (if type (format "AND type='~a'"
                                                    type) "")))]
                   
          [results

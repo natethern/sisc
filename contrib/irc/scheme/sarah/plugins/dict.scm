@@ -8,7 +8,7 @@
                 (lambda ()
                   (when (= 220 (read))
                     (read-line)
-                    (display (sisc:format "DEFINE ~a ~a\r\n"
+                    (display (format "DEFINE ~a ~a\r\n"
                                           database word) out)
                     (let ([rc (read)])
                       (cond [(> 200 rc 100)
@@ -25,7 +25,7 @@
                              (display "Sorry, I couldn't find that word.")]
                             [else
                              (display
-                              (sisc:format
+                              (format
                                "Error ~a retriving dictionary entry for '~a'"
                                rc word))])))))))])
     (close-output-port out)

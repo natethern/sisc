@@ -3,12 +3,11 @@
   (if (eqv? #\? (string-ref term (- (string-length term) 1)))
       (set! term (substring term 
                             0 (- (string-length term) 1))))
-  (display (sisc:format "~a ~a~%" ignore term))
   (if (equal? ignore "")
       (let-values ([(seen message person) 
                     (lookup-seen dbcon (metaphone term))])
-        (if seen (sisc:format "~a UTC, saying: ~a."
-                              (sisc:format (random-elem seen-phrases) person seen)
+        (if seen (format "~a UTC, saying: ~a."
+                              (format (random-elem seen-phrases) person seen)
                               message)
             (random-elem haventseen-responses)))
       'continue))
@@ -21,9 +20,8 @@
 
 
 (define (lookup-seen conn person)
-  (display (sisc:format "~a ~a~%" conn person))
   (let* ([stmt (jdbc/prepare-statement conn
-                (sisc:format (string-append "SELECT to_char(timezone('UTC',seenon), 'Mon DD at HH:MI pm')"
+                (format (string-append "SELECT to_char(timezone('UTC',seenon), 'Mon DD at HH:MI pm')"
 		                            ", message, nick FROM seen WHERE id='~a'")
                              person))]
          [result

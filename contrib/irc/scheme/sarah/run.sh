@@ -1,6 +1,13 @@
 PATH=/usr/local/java/bin:$PATH
-CLASSPATH="/home/scgmille/java/contrib/irc/lib/pircbot.jar:/home/scgmille/java/contrib/irc/sisc-pirc.jar:.:/usr/share/java/postgresql.jar:$CLASSPATH"
-SISC_HOME=/home/scgmille/java/contrib/irc/scheme/sarah/sisc
-JAVAOPT="-Dsisc.permitInterrupts=true -Dsisc.emitAnnotations=true -Dsisc.emitDebuggingSymbols=true -Dsisc.slib=/usr/share/slib"
+CLASSPATH="libs/pircbot.jar:libs/sisc-pirc.jar:libs/postgresql.jar:.:$CLASSPATH"
+SISC_HOME=libs
+JAVAOPT="-Dsisc.permitInterrupts=true -Dsisc.emitAnnotations=true -Dsisc.emitDebuggingSymbols=true"
 export CLASSPATH SISC_HOME JAVAOPT PATH
-sh sisc/sisc ./libs.scm ./sarahbot.scm
+cd anna
+./server.sh &
+ANNAPID=$!
+echo $ANNAPID
+cd ..
+
+sh sisc/sisc ./libs.scc ./sarahbot.scc
+kill $ANNAPID

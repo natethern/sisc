@@ -134,7 +134,7 @@
   (let ([x 0])
     (lambda (var)
       (set! x (+ x 1))
-      (string->symbol (sisc:format "~a_~a" var x)))))
+      (string->symbol (format "~a_~a" var x)))))
 
 (define (make-scheme-channel-env schemechan)
   (let* ([etmp (sandbox (scheme-report-environment 5))]

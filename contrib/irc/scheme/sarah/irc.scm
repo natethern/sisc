@@ -17,7 +17,7 @@
     (let loop ()
       (when (->boolean (has-more-tokens tokenizer))
         (let ([tok (->string (next-token tokenizer))])
-          (display (sisc:format "[to: ~a] ~a~%" destination tok))
+          (display (format "[to: ~a] ~a~%" destination tok))
           (send-message bot (->jstring destination) (->jstring tok))
         (loop))))))
 
@@ -111,7 +111,7 @@
   "Okay.")
   
 (define (handle-message chanrec message)
-  (display (sisc:format (if (message-is-private? message)
+  (display (format (if (message-is-private? message)
                             "<from: ~a> ~a~%"
                             "[from: ~a] ~a~%")
                         (message-nick message) (message-text message)))

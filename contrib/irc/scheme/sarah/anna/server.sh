@@ -31,5 +31,5 @@ SQL_LIB=lib/mysql_comp.jar
 HTTP_SERVER_LIBS=lib/org.mortbay.jetty.jar
 
 PROGRAMD_CLASSPATH=$SERVLET_LIB:$ALICE_LIB:$JS_LIB:$SQL_LIB:$HTTP_SERVER_LIBS
-java -classpath $PROGRAMD_CLASSPATH -Xms64m -Xmx64m org.alicebot.server.net.AliceServer $1
+java -classpath $PROGRAMD_CLASSPATH -Xms64m -Xmx64m org.alicebot.server.net.AliceServer $1 
 

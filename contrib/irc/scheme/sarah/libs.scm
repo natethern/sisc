@@ -6,10 +6,11 @@
    sisc/libs/srfi/srfi-11
    sisc/libs/srfi/srfi-13
    sisc/libs/srfi/srfi-19
-   sisc/libs/srfi/srfi-27))
+   sisc/libs/srfi/srfi-27
+   lineio))
 
 (putprop 'home '*config-parameters* (normalize-url (current-url) "sisc/"))
 (putprop 'slib '*config-parameters* "/usr/share/slib")
 (putprop 'sisc.slib '*config-parameters* "/usr/share/slib")
-(load "sisc/scheme-src/slib.scm")
+
 (current-class-path '("../../lib/pircbot.jar" "../../sisc-pirc.jar"))

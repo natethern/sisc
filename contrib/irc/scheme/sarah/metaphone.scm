@@ -5,13 +5,18 @@
            (has-next? (lambda (ls) (not (null? (cdr ls)))))
            (has-n+1? (lambda (ls) (and (not (null? (cdr ls)))
                                        (not (null? (cddr ls))))))
-           (x->s (lambda (e) (if (char=? (car e) #\x) (cons #\s (cdr e)) e)))
+           (x->s (lambda (e) (if (and (not (null? e))
+                                      (char=? (car e) #\x))
+                                 (cons #\s (cdr e)) 
+                                 e)))
            (?n->n (lambda (e)
-                    (if (member (take e 2)
+                    (if (and (> (length e) 1)
+                             (member (take e 2)
                                 '((#\p #\n) (#\a #\e) (#\k #\n) (#\w #\r)
-                                  (#\g #\n))) (cdr e) e)))
+                                  (#\g #\n)))) (cdr e) e)))
            (wh->w (lambda (e)
-                    (if (and (char=? (car e) #\w) (char=? (cadr e) #\h))
+                    (if (and (not (null? e))
+	                     (char=? (car e) #\w) (char=? (cadr e) #\h))
                         (cons #\w (cddr e)) e)))
            (metaphone-rules
             (lambda (sym e metaph size last)
@@ -121,6 +126,8 @@
                 (else metaph)))))
     (lambda (name . size)
       (let ((size (if (null? size) 6 (car size))))
+        (if (< (string-length name) 4) 
+            name
         (let loop ((e (wh->w
                        (x->s
                         (?n->n
@@ -136,4 +143,4 @@
                           (if (and (not last) (memv sym vowels))
                               (list sym)
                               (metaphone-rules sym e metaph size last)))
-                      sym))))))))                                           
+                      sym)))))))))

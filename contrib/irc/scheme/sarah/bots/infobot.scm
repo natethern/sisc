@@ -103,15 +103,13 @@
                   (full-parse (->string
                                (get-name (channel-bot channel)))
                               message)])
-      (display (sisc:format "<~a \"~a\" \"~a\">~%" to-bot cleaned-message
-strict-tokens))
       (cond [(and (or (channel-bot-listens? channel) to-bot)
                   (equal? cleaned-message "help"))
              ; display help
              (send-messages
               (channel-bot channel) (message-nick message)
               (string-append
-               (sisc:format "Hello, I'm ~a, a SISC Scheme Multibot.\n"
+               (format "Hello, I'm ~a, a SISC Scheme Multibot.\n"
                             (->string (get-name (channel-bot channel))))
                "I respond to some natural language commands, such as:\n"
                "help - You're doing it.\n\n"))
