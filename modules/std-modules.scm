@@ -215,7 +215,7 @@
     (lambda (f1 v)
       (file/set-last-modified! (normalize-url f1) v)))
   (set! file-set-read-only! (normalize file/set-read-only!))
-  (set! file-set-read-only! (normalize file/delete!))
+  (set! file-delete! (normalize file/delete!))
   (set! get-parent-url (normalize _get-parent-url))
   (set! make-directory! (normalize _make-directory!))
   (set! make-directories! (normalize _make-directories!)))
