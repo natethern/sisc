@@ -26,7 +26,8 @@ public class Parser extends Util implements Tokens {
         PRODUCE_IMMUTABLES =0x1,
         PRODUCE_ANNOTATIONS=0x2,
         STRICT_R5RS        =0x4,
-        CASE_SENSITIVE     =0x8;
+        CASE_SENSITIVE     =0x8,
+        READING_VECTOR     =0x10;
 
     public boolean annotate = Defaults.EMIT_ANNOTATIONS;
 
@@ -346,7 +347,7 @@ public class Parser extends Util implements Tokens {
                 if (def!=null) state.put(def, iv);
                 def=null;
 
-                Object expr=_nextExpression(is, state, def, flags);
+                Object expr=_nextExpression(is, state, def, flags | READING_VECTOR);
                 if (expr instanceof AnnotatedExpr) {
                     o=new AnnotatedExpr(iv, ((AnnotatedExpr)expr).annotation);
                     expr=((AnnotatedExpr)expr).expr;
@@ -396,6 +397,9 @@ public class Parser extends Util implements Tokens {
             
         Pair h=null;
         Pair p=null;
+        boolean readingVector = readingVector(flags);
+        flags &= ~READING_VECTOR;
+        
         Object l=_nextExpression(is, state, null, flags);
         try {
             while (l!=ENDPAIR) {
@@ -405,6 +409,9 @@ public class Parser extends Util implements Tokens {
                     if (def!=null) state.put(def, p);
                 } else
                     if (l == DOT) {
+                        if (readingVector) {
+                            throw new IOException(liMessage(SISCB, "dotwhenreadingvector"));
+                        }
                         l=_nextExpression(is, state, null, flags);
                         if (l==ENDPAIR)
                             throw new IOException(liMessage(SISCB, "expectedexprincdr"));
@@ -418,7 +425,7 @@ public class Parser extends Util implements Tokens {
                                  new ImmutablePair() :
                                  new Pair ());
                 p.car=(Value)(l instanceof Integer ? state.get(l) : l);
-                l=_nextExpression(is, state, null, flags);
+                l=_nextExpression(is, state, null, flags & ~READING_VECTOR);
             }
         } catch (EOFException e) {
             warn("unexpectedeof", is);
@@ -438,6 +445,10 @@ public class Parser extends Util implements Tokens {
 
     protected final boolean produceImmutables(int flags) {
         return (flags & PRODUCE_IMMUTABLES) != 0;
+    }
+
+    protected final boolean readingVector(int flags) {
+        return (flags & READING_VECTOR) != 0;
     }
 }
 /*
