@@ -20,6 +20,11 @@
 
 	* Fixed handling of uncertain digits in exact numbers.
 
+        * Added Thread support (preliminary)
+  
+        * Fixed equals? handling of immutable data (more specifically,
+          equals? handling of subclasses of values)
+
 r1.3.0  Major changes
 
 	* Removed BeginExp, DefineExp, FreeSetExp, IfExp, and LexicalSetExp,

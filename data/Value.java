@@ -47,7 +47,8 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     public boolean equals(Object v) {
-        return eq(v) || (v.getClass()==this.getClass() &&
+        return eq(v) || ((v.getClass()==this.getClass() ||
+			  this.getClass().isAssignableFrom(v.getClass())) &&
                          valueEqual((Value)v));
     }
 
