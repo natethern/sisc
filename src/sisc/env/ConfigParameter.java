@@ -19,10 +19,10 @@ public class ConfigParameter extends SchemeParameter {
         this.paramName = paramName;
     }
 
-    public Value getValue(DynamicEnvironment dynenv) {
-        Value res = (Value)dynenv.parameters.get(this);
+    public Value getValue(Interpreter r) throws ContinuationException {
+        Value res = (Value)r.dynenv.parameters.get(this);
         if (res != null) return res;
-        String val = dynenv.ctx.getProperty("sisc."+paramName);
+        String val = r.dynenv.ctx.getProperty("sisc."+paramName);
         if (val == null) return def;
         if (def instanceof SchemeBoolean) {
             res = truth(val.equals("true"));
@@ -34,7 +34,7 @@ public class ConfigParameter extends SchemeParameter {
             try {
                 res = read(val);
             } catch (IOException e) {
-                throw new RuntimeException(liMessage(SISCB, "configparammalformed", paramName));
+                error(r, liMessage(SISCB, "configparammalformed", paramName));
             }
         }
         return res;

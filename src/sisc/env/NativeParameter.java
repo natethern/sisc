@@ -42,23 +42,25 @@ public class NativeParameter extends Parameter {
         throw new RuntimeException(liMessage(SISCB, "nativeparamnotfound", fieldName));
     }
 
-    public Value getValue(DynamicEnvironment dynenv) {
+    public Value getValue(Interpreter r) throws ContinuationException {
         try {
-            return (Value)readMethod.invoke(dynenv, new Object[]{});
+            return (Value)readMethod.invoke(r.dynenv, new Object[]{});
         } catch (InvocationTargetException e) {
-            throw new RuntimeException(e.getMessage());
+            error(r, liMessage(SISCB, "nativeparamaccess", e.getMessage()));
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e.getMessage());
+            error(r, liMessage(SISCB, "nativeparamaccess", e.getMessage()));
         }
+        return null;
     }
 
-    public void setValue(DynamicEnvironment dynenv, Value v) {
+    public void setValue(Interpreter r, Value v) throws ContinuationException {
         try {
-            writeMethod.invoke(dynenv, new Object[] {v});
+            writeMethod.invoke(r.dynenv, new Object[] {v});
         } catch (InvocationTargetException e) {
+            error(r, liMessage(SISCB, "nativeparamaccess", e.getMessage()));
             throw new RuntimeException(e.getMessage());
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e.getMessage());
+            error(r, liMessage(SISCB, "nativeparamaccess", e.getMessage()));
         }
     }
 

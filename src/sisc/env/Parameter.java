@@ -5,8 +5,8 @@ import sisc.interpreter.*;
 
 public abstract class Parameter extends Procedure {
  
-    public abstract Value getValue(DynamicEnvironment dynenv);
-    public abstract void setValue(DynamicEnvironment dynenv, Value v);
+    public abstract Value getValue(Interpreter r) throws ContinuationException;
+    public abstract void setValue(Interpreter r, Value v) throws ContinuationException;
 
     public void apply(Interpreter r)
         throws ContinuationException {
@@ -15,17 +15,17 @@ public abstract class Parameter extends Procedure {
         synchronized (r.dynenv) {
             switch (r.vlr.length) {
             case 0:
-                res = getValue(r.dynenv);
+                res = getValue(r);
                 break;
             case 1:
-                res = getValue(r.dynenv);
-                setValue(r.dynenv, r.vlr[0]);
+                res = getValue(r);
+                setValue(r, r.vlr[0]);
                 if (null == res) res = FALSE;
                 break;
             default:
-                throw new RuntimeException(liMessage(SISCB, "parameterargs", synopsis()));
-        }
-        r.acc = res;
+                error(r, liMessage(SISCB, "parameterargs", synopsis()));
+            }
+            r.acc = res;
         }
     }
 }

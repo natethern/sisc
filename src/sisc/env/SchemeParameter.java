@@ -18,13 +18,13 @@ public class SchemeParameter extends Parameter {
         this.def = def;
     }
 
-    public Value getValue(DynamicEnvironment dynenv) {
-        Value res = (Value)dynenv.parameters.get(this);
+    public Value getValue(Interpreter r) throws ContinuationException {
+        Value res = (Value)r.dynenv.parameters.get(this);
         return (res == null) ? def : res;
     }
 
-    public void setValue(DynamicEnvironment dynenv, Value v) {
-        dynenv.parameters.put(this, v);
+    public void setValue(Interpreter r, Value v) throws ContinuationException {
+        r.dynenv.parameters.put(this, v);
     }
 
     public void display(ValueWriter w) throws IOException {
