@@ -15,7 +15,7 @@
     </title>
     <para>
       Passive debugging facilities are provided that collect
-      information on an error that occured at runtime and was not
+      information on an error that occurred at runtime and was not
       caught by the executing code.  The programmer can then inspect
       the last error, obtain information about the call stack of
       the error, or even attempt to restart the computation.
@@ -30,7 +30,7 @@
         </methodsynopsis>
         <blockquote>
           <para>
-            Retrieves the error record of the last error that occured
+            Retrieves the error record of the last error that occurred
             in &SISC;.
           </para>
         </blockquote>
@@ -194,7 +194,7 @@
       of the operands the function is being applied to.  Each nested
       call is indented slightly, so as to illustrate the depth of
       calls.  When the function application returns, the value of the
-      function-call is displayed at the same indention as the call
+      function-call is displayed at the same indentation as the call
       itself.
     </para>
   </sect1>

@@ -355,7 +355,7 @@
         helper methods provided by the passed
         <function>serializer</function> object.  The methods in
         <literal>DataOutput</literal> and <literal>DataInput</literal>
-        are also useful for serialization and deserializaiton respectively.
+        are also useful for serialization and deserialization respectively.
         <blockquote>
           <para>
             <methodsynopsis language="java">

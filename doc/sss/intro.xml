@@ -17,7 +17,7 @@
     core.
   </para>
   <para>
-    &SISC; as a project began as the sucessor to the Lightweight
+    &SISC; as a project began as the successor to the Lightweight
     Interpreter of Scheme Code (<emphasis>LISC</emphasis>).
     <emphasis>LISC</emphasis> was a small, stack-based almost R4RS compliant Scheme.
     &SISC; was born out of the desire to create an interpreter that
@@ -161,7 +161,7 @@
         when not clear, should be described in the procedure summary
 	paragraph that follows the prototype.  If the argument is
 	enclosed in square brackets ([]), that parameter is optional,
-	and may be ommitted.  If a parameter is optional and is followed by 
+	and may be omitted.  If a parameter is optional and is followed by 
 	ellipses (...), then the argument is a
 	<emphasis>rest</emphasis> argument, and may be satisfied by
 	zero or more values.

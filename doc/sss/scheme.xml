@@ -554,7 +554,7 @@
 	The error handler required as an argument to
 	<function>call-with-failure-continuation</function>
 	must take three parameters.  The first, a string, is a value
-	containing information about the error that occured.  This is
+	containing information about the error that occurred.  This is
 	often a string containing the error message.  The
 	second is a procedure encapsulating the continuation that was
 	in place at the site of the error.  This continuation is
@@ -814,7 +814,7 @@
     <para>
       In addition, the top-level Scheme environment is a symbolic
       environment in &SISC; that can be accessed using getprop and putprop, 
-      by ommitting the <parameter>environment-name</parameter> parameter.  
+      by omitting the <parameter>environment-name</parameter> parameter.  
     </para>
     <para>
       <blockquote>

@@ -304,7 +304,7 @@
       <para id="func-parallel">
         &procedure;
         <methodsynopsis language="scheme">
-          <type>multipe values</type>
+          <type>multiple values</type>
           <methodname>parallel</methodname>
           <methodparam>
             <parameter>thunk1</parameter>

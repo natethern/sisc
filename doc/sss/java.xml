@@ -153,7 +153,7 @@ Interpreter r = Context.enter("appname");
           <classname>AppContext</classname>s are usually created by
           calling their argument-less constructor and are later
           modified by loading a heap image into them. So a typical
-          context initialisation sequence would be:
+          context initialization sequence would be:
           <programlisting>
 AppContext ctx = new AppContext();
 Context.register("myapp", ctx);
@@ -461,7 +461,7 @@ Context.exit()
 (define sb (make &lt;jstringbuffer&gt; (-&gt;jstring "foo")))
           </programlisting>
           <constant>&lt;jstringbuffer&gt;</constant> is bound to the
-          object represting the Java class
+          object representing the Java class
           <classname>java.lang.StringBuffer</classname>. The angle
           brackets are only a notational convention for denoting
           variables bound to class
@@ -919,7 +919,7 @@ Context.exit()
           2)</literal>. Note that doing this is a lot more efficient
           than using <function>-&gt;</function> since
           <function>-&gt;</function> is defined in terms of the
-          specialised conversion procedures, i.e. just like in the
+          specialized conversion procedures, i.e. just like in the
           above example. Also, there are some
           conversion that cannot be accomplished with
           <function>-&gt;</function>. One such case is conversion to
@@ -1095,7 +1095,7 @@ Context.exit()
                 environment. A proxy constructor is a procedure that
                 when invoked creates a Java object that implements a
                 certain set of Java interfaces in terms of Scheme code
-                which is parameterised by a set of arguments passed to
+                which is parameterized by a set of arguments passed to
                 the constructor on invocation. The object resulting from
                 invoking the proxy constructor can be passed to any Java
                 constructor or method as a parameter whose type is one
@@ -1109,7 +1109,7 @@ Context.exit()
               <para>
                 <parameter>name</parameter> is the name to which to bind
                 the proxy constructor in the current environment. The
-                <parameter>arg</parameter>s parameterise the proxy
+                <parameter>arg</parameter>s parameterize the proxy
                 constructor and are bound in the lexical environment of
                 <parameter>body</parameter>. <parameter>interface-spec</parameter>
                 specifies what interface(s) should be implemented by
@@ -1159,7 +1159,7 @@ Context.exit()
               objects. There is only one method that needs to be
               implemented - <function>compare</function> which takes
               two <classname>java.lang.Object</classname>s. The proxy
-              is constructor is parameterised with a comparison
+              is constructor is parameterized with a comparison
               procedure which the implementation of
               <function>compare</function> uses to compare the two
               objects - after unwrapping them and thus obtaining their
@@ -1779,7 +1779,7 @@ Class.getSigners()
           <classname>java.lang.StringBuffer</classname>. The method
           invokes the single-character string constructor defined just
           above and passes the resulting string to the existing
-          <function>indexdOf</function> Java method.
+          <function>indexOf</function> Java method.
         </para>
       </sect3>
       <sect3>
@@ -1850,7 +1850,7 @@ Class.getSigners()
             </listitem>
             <listitem>
               <para>
-                Generic procedured only operate on Java
+                Generic procedures only operate on Java
                 objects. &SISC; needs a more complex type system to
                 fix this, which is quite hard but most of the code for
                 that has already been written.
