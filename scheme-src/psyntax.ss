@@ -478,6 +478,13 @@
 
 (define generate-id gen-sym) ; SISC's gen-sym has this property
 
+;; A SISC Specific modification, generate-module-id deliberately does not
+;; create a unique id, but rather one based on the module-id, so that 
+;; code dependent on a module won't depend on a specific compilation of 
+;; that module
+(define (generate-module-id module-id id)
+  (string->symbol (format "_~a ~a" module-id id)))
+
 ;  (let ((digits "0123456789abcdefghijklmnopqrstuvwxyz"))
 ;    (let ((base (string-length digits)) (session-key "_"))
 ;      (define make-digit (lambda (x) (string-ref digits x)))
@@ -1492,7 +1499,8 @@
 
 (define chi-top-module
   (lambda (e r ribcage w s ctem rtem id exports forms)
-    (let ((fexports (flatten-exports exports)))
+    (let ((fexports (flatten-exports exports))
+          (module-id (if id (id-sym-name id) 'anon)))
       (chi-external ribcage (source-wrap e w s)
         (map (lambda (d) (cons r d)) forms) r exports fexports ctem
         (lambda (bindings inits)
@@ -1603,7 +1611,8 @@
                             (label (module-binding-label b))
                             (imps (module-binding-imps b)))
                         (let ((fexports (append imps fexports))
-                              (sym (generate-id (id-sym-name id))))
+                              (sym (generate-module-id module-id
+                                                       (id-sym-name id))))
                           (case t
                             ((define-form)
                              (set-indirect-label! label sym)
