@@ -121,12 +121,16 @@ public class REPL {
                        new Value[] {new SchemeString(files[i])});
             } catch (SchemeException se) {
                 Value vm=se.m;
-                if (vm instanceof Pair) {
-                    String errormessage=simpleErrorToString((Pair)vm);
-                    System.err.println(errormessage);
-                } else {
-                    System.err.println(Util.liMessage(Util.SISCB, "errorduringload")+vm);
-                }
+	       try {
+		   r.eval((Procedure)r.lookup(Symbol.get("print-error"), Util.TOPLEVEL),
+			  new Value[] {vm, se.e});
+	       } catch (SchemeException se2) {
+		   if (vm instanceof Pair) {
+		       System.err.println(simpleErrorToString((Pair)vm));
+		   } else {
+		       System.err.println(Util.liMessage(Util.SISCB, "errorduringload")+vm);
+		   }
+	       }
                 returnStatus=false;
             }
         }
