@@ -352,8 +352,8 @@ Context.exit()
           </blockquote>
         </blockquote>
         <para>
-          Generally all java objects are self-evaluating. The result
-          of the evaluation depends on the type of object and the
+          Generally all java objects can be invoked as procedures. The result
+          of the invocation depends on the type of object and the
           arguments.
         </para>
         <blockquote>
