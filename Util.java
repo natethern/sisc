@@ -89,7 +89,7 @@ public abstract class Util implements Conf {
         r.acc=new Values(new Value[] {
 	    error,
 	    new CallFrame(r.nxp, r.vlr, r.env, r.fk, r.stk).capture(r),
-	    r.fk.fk});
+	    new CurriedFC(r.fk.fk)});
         throw new ContinuationException(r.fk);
     }
 

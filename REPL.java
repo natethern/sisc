@@ -116,6 +116,7 @@ public class REPL extends Thread {
 		} catch (SchemeException e) {
 		    System.err.println("Uncaught error: "+e.getMessage());
 		} catch (Exception e) {
+		    e.printStackTrace();
 		    System.err.println("System error: "+e.toString());
 		}
 	    } while (true);

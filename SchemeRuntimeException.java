@@ -1,13 +1,15 @@
 package sisc;
 
 import sisc.data.Value;
+import sisc.data.Procedure;
  
 public class SchemeRuntimeException extends RuntimeException {
     Value m;
-    CallFrame e, f;
+    CallFrame e;
+    Procedure f;
 
     public SchemeRuntimeException(Value message, CallFrame exception_k, 
-			   CallFrame parent_fk) {
+				  Procedure parent_fk) {
 	m=message;
 	e=exception_k;
 	f=parent_fk;

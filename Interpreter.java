@@ -50,7 +50,7 @@ public class Interpreter extends Util {
 	    Values v=(Values)r.acc;
 	    throw new SchemeRuntimeException(v.values[0], 
 					     cont(v.values[1]), 
-					     cont(v.values[2]));
+					     proc(v.values[2]));
 	}
 
 	public Value express() {
