@@ -142,11 +142,77 @@
 	&SISC;'s characters are double-byte wide.  This means that they
 	are capable of representing the full range of unicode characters. 
         Unicode characters can be created with
-	<function>number-&gt;character</function> or 
-	<computeroutput>&num;&bsol;nnnnnn</computeroutput>, where <computeroutput>nnnn</computeroutput> is an
-	octal number in the range 000000 -&gt; 177777.  At least two zeros must
-        be specified to distinguish from the '0' character.
+	<function>number-&gt;character</function>;
+	<literal>&num;&bsol;nnnnnn</literal>, where <literal>nnnn</literal> is an
+	octal number in the range 000000 -&gt; 177777; or <literal>&num;&bsol;uxxxx</literal>, where <literal>xxxx</literal> is a hexadecimal number in the range 0000 -&gt; ffff.  At least two zeros must 
+        be specified to distinguish from the '0' character when using an
+        octal character literal.  At least one zero must be specified to 
+        distinguish a hexadecimal character from the 'u' character.  
       </para>
+      <para>
+        &SISC; also provides additional named characters, to add to
+        the Scheme standard's <literal>space</literal> and
+        <literal>newline</literal>:
+      </para>
+      <table id="named-characters">
+        <title>Named character literals</title>
+        <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+          <colspec colname='Character Name'/>
+          <colspec colname='Unicode value (hex)'/>
+          <thead>
+            <row>
+              <entry>Character Name</entry>
+              <entry>Unicode Value (hex)</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><literal>backspace</literal></entry>
+              <entry><literal>0008</literal></entry>
+            </row>
+            <row>
+              <entry><literal>newline</literal></entry>
+              <entry><literal>000a</literal></entry>
+            </row>
+            <row>
+              <entry><literal>nul</literal></entry>
+              <entry><literal>0000</literal></entry>
+            </row>
+            <row>
+              <entry><literal>page</literal></entry>
+              <entry><literal>000c</literal></entry>
+            </row>
+            <row>
+              <entry><literal>return</literal></entry>
+              <entry><literal>000d</literal></entry>
+            </row>
+            <row>
+              <entry><literal>rubout</literal></entry>
+              <entry><literal>007f</literal></entry>
+            </row>
+            <row>
+              <entry><literal>space</literal></entry>
+              <entry><literal>0020</literal></entry>
+            </row>
+            <row>
+              <entry><literal>tab</literal></entry>
+              <entry><literal>0009</literal></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+      <para>
+        Formally, &SISC;'s lexer modifies the &R5RS; grammar with the
+        following productions for character literals:
+      </para>
+      <programlisting>
+&lt;character&gt; --&gt; &num;&bsol; &lt;any character&gt; 
+     | &num;&bsol;u &lt;uinteger 16&gt; 
+     | &num;&bsol; &lt;uinteger 8&gt;
+     | &num;&bsol; &lt;character name&gt;
+&lt;character name&gt; --&gt; backspace | newline | nul 
+     | page | return | rubout | space | tab
+      </programlisting>
       <para>
 	Characters are <emphasis>not</emphasis> compared with respect to the
         locale of the running system.  Character comparison is equivalent
@@ -247,8 +313,59 @@
       </title>
       <para>
 	Strings are built from Unicode characters, and are compared
-        lexicographically in a manner derived from character comparison.
+        lexicographically in a manner derived from character
+        comparison.  In addition to using backslash to escape the
+        double-quote (") character and the backspace character itself,
+        &SISC; provides several escape codes to ease string literal
+        construction.
       </para>
+      <table id="string-escapes">
+        <title>String escape codes</title>
+        <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+          <colspec colname='Character Name'/>
+          <colspec colname='Unicode value (hex)'/>
+          <thead>
+            <row>
+              <entry>Escape</entry>
+              <entry>Value</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><literal>&bsol;f</literal></entry>
+              <entry>Inserts the formfeed character (unicode 000c)</entry>
+            </row>
+            <row>
+              <entry><literal>&bsol;n</literal></entry>
+              <entry>Inserts the newline character (unicode 000a)</entry>
+            </row>
+            <row>
+              <entry><literal>&bsol;r</literal></entry>
+              <entry>Inserts the rubout character (unicode 0008)</entry>
+            </row>
+            <row>
+              <entry><literal>&bsol;t</literal></entry>
+              <entry>Inserts the tab character (unicode 0009)</entry>
+            </row>
+            <row>
+              <entry><literal>&bsol;uxxxx</literal></entry>
+              <entry>Inserts the unicode character described by the
+              hex number 'xxxx'.  All four hex digits must be specified.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>&bsol;&bsol;</literal></entry>
+              <entry>Inserts the backslash ('&bsol;')
+              character</entry>
+            </row>
+            <row>
+              <entry><literal>&bsol;"</literal></entry>
+              <entry>Inserts the double quote ('"')
+              character</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
     </sect2>
     <sect2 id="Lists">
       <title>
@@ -287,7 +404,7 @@
       </title>
       <para>
 	&SISC; supports the length prefix method of creating Vector
-	constants. For example, '<computeroutput>&num;5(x)</computeroutput>
+	constants. For example, '<literal>&num;5(x)</literal>
 	creates a vector constant containing five identical
 	symbols.  In addition, the length-prefix form is used when
 	printing vectors, and if elements repeat at the end of a
@@ -414,7 +531,7 @@
       </programlisting>
       <para>
 	This syntax denotes a boxed value, with
-	<computeroutput>&lt;datum&gt;</computeroutput> as the contained
+	<literal>&lt;datum&gt;</literal> as the contained
 	value.
       </para>
       <para>
