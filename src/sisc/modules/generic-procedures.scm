@@ -293,10 +293,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;; MAIN ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;This maps procedure to lists of methods ordered by their
-;;"specificity", i.e. methods appearing earlier in the list are always
-;;more specific or incomparable (i.e. neither less or more specific)
-;;than methods appearing later.
 (define (get-methods proc)
   (procedure-property proc 'methods))
 
