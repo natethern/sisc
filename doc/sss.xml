@@ -679,74 +679,75 @@
 	    ; => <emphasis>A divide by zero error is raised</emphasis>
 	</programlisting>
       </sect2>
-      <sect2>
-	<title><computeroutput>dynamic-wind</computeroutput></title>
-	<para>
-	  &R5RS; does not specify the behavior of
-	  <computeroutput>dynamic-wind</computeroutput> in the case
-	  where an error is raised somewhere in a call to the
-	  <emphasis>during</emphasis> thunk.  &SISC; chooses to view
-	  an error raised in that section as an instance of the
-	  dynamic extent being exited.  In other words, if an error is
-	  raised in the dynamic extent of a dynamic-wind expression,
-	  &SISC will ensure that the <emphasis>after</emphasis> thunk
-	  is evaluated before the error is propogated to the
-	  failure-continuation of the dynamic-wind expression.
-	</para>
-	<para>
-	  Here is an example:
-	</para>
-	<programlisting>
-	  (define x 0)
-	  (dynamic-wind (lambda () (set! x (+ x 1)))
-	                (lambda () (/ 1 0))
-	                (lambda () (set! x (+ x 1))))
-	  ; => A divide by zero error is raised, and the value of x is 2
-	</programlisting>
-	<para>
-	  If an error is raised in either the
-	  <emphasis>before</emphasis> or <emphasis>after</emphasis>
-	  thunks, no additional measures are taken.  The error is
-	  propogated to the failure-continuation of the dynamic-wind
-	  as if the dynamic-wind call was an ordinary function
-	  application.  Explicitly, if an error is raised from
-	  <emphasis>before</emphasis>, neither
-	  <emphasis>during</emphasis> nor <emphasis>after</emphasis>
-	  will be executed.  If an error is raised in
-	  <emphasis>after</emphasis>, the results of evaluating
-	  <emphasis>before</emphasis> and <emphasis>during</emphasis>
-	  remain valid.  
-	</para>
-	<para>
-	  Also noteworthy is what happens if a continuation is invoked
-	  that exits from either the <emphasis>before</emphasis> or
-	  <emphasis>after</emphasis> thunks.  Such a case is treated
-	  just as if a continuation was invoked during the evaluation
-	  of an operand to an application.  This is to say that no
-	  additional steps will be taken by &SISC;.  If
-	  <emphasis>before</emphasis> is escaped by a continuation invocation,
-	  neither <emphasis>during</emphasis> nor <emphasis>after</emphasis>
-	  will be executed.  If <emphasis>after</emphasis> is escaped,
-	  the results of <emphasis>before</emphasis> and
-	  <emphasis>during</emphasis> remain valid.
-	</para>
-	<para>
-	  In summary, extraordinary evaluation is only possible during
-	  the evaluation of the <emphasis>during</emphasis> thunk, the
-	  <emphasis>before</emphasis> and <emphasis>after</emphasis>
-	  thunks are evaluated with the dynamic environment and
-	  dynamic-wind stack of the call to dynamic-wind itself.
-	</para>
-      </sect2>
+    </sect1>
+    <sect1>
+      <title><computeroutput>dynamic-wind</computeroutput></title>
+      <para>
+	&R5RS; does not specify the behavior of
+	<computeroutput>dynamic-wind</computeroutput> in the case
+	where an error is raised somewhere in a call to the
+	<emphasis>during</emphasis> thunk.  &SISC; chooses to view
+	an error raised in that section as an instance of the
+	dynamic extent being exited.  In other words, if an error is
+	raised in the dynamic extent of a dynamic-wind expression,
+	&SISC will ensure that the <emphasis>after</emphasis> thunk
+	is evaluated before the error is propogated to the
+	failure-continuation of the dynamic-wind expression.
+      </para>
+      <para>
+	Here is an example:
+      </para>
+      <programlisting>
+	(define x 0)
+	(dynamic-wind (lambda () (set! x (+ x 1)))
+	              (lambda () (/ 1 0))
+             	      (lambda () (set! x (+ x 1))))
+	; => A divide by zero error is raised, and the value of x is 2
+      </programlisting>
+      <para>
+	If an error is raised in either the
+	<emphasis>before</emphasis> or <emphasis>after</emphasis>
+	thunks, no additional measures are taken.  The error is
+	propogated to the failure-continuation of the dynamic-wind
+	as if the dynamic-wind call was an ordinary function
+	application.  Explicitly, if an error is raised from
+	<emphasis>before</emphasis>, neither
+	<emphasis>during</emphasis> nor <emphasis>after</emphasis>
+	will be executed.  If an error is raised in
+	<emphasis>after</emphasis>, the results of evaluating
+	<emphasis>before</emphasis> and <emphasis>during</emphasis>
+	remain valid.  
+      </para>
+      <para>
+	Also noteworthy is what happens if a continuation is invoked
+	that exits from either the <emphasis>before</emphasis> or
+	<emphasis>after</emphasis> thunks.  Such a case is treated
+	just as if a continuation was invoked during the evaluation
+	of an operand to an application.  This is to say that no
+	additional steps will be taken by &SISC;.  If
+	<emphasis>before</emphasis> is escaped by a continuation invocation,
+	neither <emphasis>during</emphasis> nor <emphasis>after</emphasis>
+	will be executed.  If <emphasis>after</emphasis> is escaped,
+	the results of <emphasis>before</emphasis> and
+	<emphasis>during</emphasis> remain valid.
+      </para>
+      <para>
+	In summary, extraordinary evaluation is only possible during
+	the evaluation of the <emphasis>during</emphasis> thunk. The
+	<emphasis>before</emphasis> and <emphasis>after</emphasis>
+	thunks are evaluated with the dynamic environment and
+	dynamic-wind stack of the call to dynamic-wind itself.
+      </para>
     </sect1>
     <sect1 id="SymbolicEnvironments">
       <title>
 	Symbolic Environments
       </title>
       <para>
-	Symbolic environments provide additional named global
-	environments useful for storing program specific data without
-	exposing it to the general global environment.  
+	Symbolic environments (sometimes referred to as property lists) 
+	provide additional named global environments useful for storing 
+	program specific data without exposing it to the general
+	purpose top-level environment.
       </para>
       <programlisting>
 	&procedure; (getprop variable-name environment-name)
@@ -763,6 +764,32 @@
 	symbolc environment named by environment-value to the provided
 	value.  Any previous value is forgotten.
       </programlisting>
+      <para>
+	In addition, the top-level Scheme environment is a symbolic
+	environment in &SISC; that can be accessed using getprop and putprop, 
+	by ommiting the <emphasis>environment-name</emphasis> parameter.  
+      </para>
+      <programlisting>
+	&procedure; (getprop variable-name)
+	&returns; a value, or &num;f if unbound
+
+	Attempts a lookup of variable-name in the top-level environment.
+	If found, the value is returned.  If not bound, &num;f is returned.
+
+	&procedure; (putprop variable-name value)
+	&returns; undefined
+
+	Sets the value of the variable named by variable name in the
+	top-level environment to the provided value.  
+      </programlisting>
+      <para>
+	Finally, &SISC; adheres strictly to &R5RS; when it comes to
+	using <computeroutput>set!</computeroutput> to modify the
+	contents of a top-level variable.  If an attempt to set an
+	undefined variable is made, an error will be raised.  This
+	differs from some Scheme systems that will silently create the
+	binding and set it to the new value.
+      </para>
     </sect1>
     <sect1 id="Boxing">
       <title>
@@ -1228,7 +1255,321 @@
     <title>
       Threads and Concurrency
     </title>
-    <para></para>
+    <para>
+      &SISC; provides a comprehensive library for executing Scheme
+      code in parallel in multiple concurrent threads.  This allows
+      code for simple code for handling blocking I/O sources (such as
+      network servers) or for the ability to do parallel computation
+      across multiple processors.
+    </para>
+    <para>
+      In addition, functions are provided to ensure mutually exclusive
+      access to data (mutexes), to assign priorities to Scheme
+      threads, and for inter-thread signaling and synchronization.
+    </para>
+    <sect1>
+      <title>
+	Scheme Thread Semantics
+      </title>
+      <para>
+	Care has been taken to ensure that Scheme code executing
+	concurrently in two or more threads does not result in
+	unpredictable behavior.  Assuming the executing threads do not
+	share data, executing code in multiple threads should behave
+	just as executing the code in a single thread.  
+      </para>
+      <para>
+	All threads executing in the system share some resources.  The
+	top-level and symbolic environments are shared by all
+	threads.  If a thread makes a change to these environments,
+	the change will be visibile in all other threads.  
+	unless changed by the thread, all threads share the same
+	console input and output ports.  As threads originate from a
+	thunk created in the primordial thread or a child thread, the
+	lexical environment captured by the thunk may include some
+	lexical variables from the parent thread.  These variables
+	will be visible by both the parent and child threads.  The
+	lexical environments created in an executing thread are
+	visible by that thread only (unless that thread spawns a child
+	thread whose thunk binds its parents lexicals).  
+      </para>
+      <para>
+	Some resources can be shared but may also be distinct from
+	thread to thread.  These resources are inherited from the
+	parent thread, but may be changed by the child or parent
+	without affecting the other.  The console input and output
+	port are inherited by the parent, as is the dynamic-wind
+	stack.  
+      </para>
+      <para>
+	When a thread begins, it is considered to be isolated from its
+	parent in terms of the dynamic-wind stack.  If a parent spawns
+	a thread in the <emphasis>during</emphasis> section of a
+	dynamic-wind call, the spawned thread
+	<emphasis>escapes</emphasis> the restrictions of the
+	dynamic-wind call.  This is logical, as the parent thread may
+	then exit from the dynamic extent even as the child thread
+	executes, or may remain there waiting for the child thread to
+	finish, in which case the parent has not left the
+	dynamic extent of the call.  In short, the dynamic-wind is
+	protecting only the parent thread. 
+      </para>
+      <para>
+	It is possible for more than one thread to access the same
+	memory location (be it a lexical variable or a named variable
+	in the top-level or a symbolic environment), it is also
+	possible that interactions on shared variables can have
+	unpredictable results.  As in any multi-threaded language,
+	unprotected access to shared variables can result in race
+	conditions and other concurrency mishaps.  If the programmer
+	anticipates concurrent access to a shared variable and if
+	any thread is to write to the variable, sections of code that
+	access the variable should use a protection mechanism from
+	<xref linkend="Monitors"/>.
+      </para>
+      <para>
+	A thread can complete in one of two ways.  If the thunk
+	that contains the thread's code exits, the thread will
+	terminate and the thread handle will contain the return value
+	of the thunk.  This completion condition is called a
+	<emphasis>clean</emphasis> exit.  If during the execution of
+	the thunk's body an error is raised, the thread will terminate
+	and the thread handle will trap the error.  The error will be
+	raised to any caller that attempts to retrieve the return
+	value of the thread. 
+      </para>
+      <para>
+	It is perfectly legal for a thunk to both capture and invoke
+	continuations, even continuations created by other threads.
+	When applying a continuation captured outside of the thread,
+	the resources of the executing thread are used, though the
+	thread may be accessing lexical environments created by other
+	threads.  
+      </para>
+      <para>
+	Once created, a thread can be in one of three states:
+	<emphasis>ready</emphasis>, <emphasis>running</emphasis>, or
+	<emphasis>finished</emphasis>.  The finished state is actually
+	two states, either <emphasis>finished</emphasis>, or
+	<emphasis>finished-with-error</emphasis>.  The former
+	indicates that the thread is stopped and a value was returned
+	from its evaluation.  The later indicates that the thread
+	completed because an error was raised when evaluating its
+	code.
+      </para>
+      <para>
+	There are no guarantees that a Scheme thread will ever exit.
+	It is perfectly valid for a thread to execute indefinitely.
+	Also, the &SISC; environment will not exit until all threads
+	have completed, either cleanly or with a failure, unless all
+	remaining threads are so-called <emphasis>daemon</emphasis>
+	threads.  Daemon threads are threads that may run indefinitely
+	but will be forcibly terminated if no non-daemon threads (of
+	which the primordial thread is one) are still running.
+	Termination of a daemon thread when no non-daemon threads
+	exist is the <emphasis>only</emphasis> instance where a thread
+	can be forcibly terminated.  There is no thread stop or
+	destroy operation.
+      </para>
+    </sect1>
+    <sect1>
+      <title>
+	Basic Thread Operations
+      </title>
+      <para>
+	This section describes the basic, low-level operations on
+	threads, including how to create a thread, how to start it,
+	how to wait for it to terminate, and how to retrieve it's
+	result.  A thread is managed in Scheme by its <emphasis>thread
+	handle</emphasis>, an opaque value that is used to identify
+	the thread.  A thread handle is present as an argument to most
+	of the thread library functions.
+      </para>
+      <para>
+	Threads are created with
+	<computeroutput>thread/new</computeroutput>.  This function
+	takes as its sole argument a thunk.  The body of the thunk is
+	the code that the thread will execute when started.  
+      </para>
+      <programlisting>
+	&procedure (thread/new thunk)
+	&returns; A thread handle
+
+	Creates a new thread handle whose code is defined in the
+	provided thunk.
+      </programlisting>
+      <para>
+	Once a thread-handle is created, the thread is in the ready
+	state, and can be started at any time by calling
+	<computeroutput>thread/start</computeroutput>.  
+      </para>
+      <programlisting>
+	&procedure (thread/start thread-handle)
+	&returns; undefined
+
+	Starts the given thread represented by thread-handle.  The
+	thread must be in the ready state.  It is an error to start
+	a thread in any other state.
+      </programlisting>
+      <para>
+	Once started, the thread will be in the running state.  The
+	body of the thunk is now being evaluated in parallel to the
+	parent thread.  The thread will remain in the running state
+	until it completes and enters one of the two finished states.
+	The state can be read using
+	<computeroutput>thread/state</computeroutput>.
+      </para>
+      <programlisting>
+	&procedure; (thread/state thread-handle)
+	&returns; The thread's state, one of 'ready, 'running,
+	          'finished or 'finished-with-error
+      </programlisting>
+      <para>
+	The parent thread may continue executing its own code, or may
+	attempt to <emphasis>join</emphasis> the child thread.
+	To join another thread is to wait until the other thread has
+	completed.  The parent thread can join a child using
+	<computeroutput>thread/join</computeroutput>.  The parent can
+	wait indefinitely or may specify a timeout, after which the
+	<computeroutput>thread/join</computeroutput> command will
+	return with &num;f.
+      </para>
+      <programlisting>
+	&procedure (thread/join thread-handle [timeout])
+	&returns; &num;t if the indicated thread has completed, &num;f
+	          otherwise.
+
+	Attempts to join with the indicated thread.  If the thread
+	terminates, thread/join will return &num;t.  If a timeout is
+	specified, thread/join will only wait timeout milliseconds for
+	the thread to complete.  If the thread does not terminate
+	before the timeout, &num;f will be returned.
+      </programlisting>
+      <para>
+	It is possible to join on an already completed thread.  In
+	such a case the join will immediately return &num;t.
+	The behavior of a join on a thread in the ready state is
+	unspecified, and may cause an error.  Finally, it is possible
+	that a join may return &num;f, even if no timeout is
+	specified.  Though unlikely, programmers who wish to wait
+	indefinitely for a thread to complete should check the return
+	value of <computeroutput>thread/join</computeroutput> and
+	repeat the join until &num;t is returned.
+      </para>
+      <para>
+	Once a thread has completed, the parent thread may wish to
+	retrieve the result of the thread's thunk, be it an error or a
+	valid result.  This can be done with the
+	<computeroutput>thread/result</computeroutput> function.  
+      </para>
+      <programlisting>
+	&procedure; (thread/result thread-handle)
+	&returns; A value
+
+	Returns the return value from a completed thread.  If the
+	thread completed with error, that error is raised from this
+	call.
+      </programlisting>
+      <para>
+	An error will be raised if an attempt is made to retrieve the
+	result of a thread before that thread has completed.  
+      </para>
+    </sect1>
+    <sect1>
+      <title>
+	High-level Functions
+      </title>
+      <para>
+	In addition to the basic thread operations, some high level
+	syntax is provided to simplify some general case thread use.
+      </para>
+      <programlisting>
+	&syntax; (parallel thunk thunk [thunk ...])
+	&returns; The return values of each thunk as multiple values
+
+	Executes each thunk in its own thread in parallel.  The call
+	to parallel blocks until all the threads have finished.  
+	If all threads completed without error, the results of each
+	thunk are returned as multiple values.  If any thread raised
+	an error, that error is raised from the call to parallel.  The
+	error is raised only after all other thunks have also
+	completed.  If more than one thunk raises an error, it is
+	undefined which error will be raised to the caller.
+      </programlisting>
+    </sect1>
+    <sect1>
+      <title>
+	Thread Scheduling
+      </title>
+      <para>
+	All Scheme threads created in &SISC; are pre-emptive and
+	managed by a scheduler.  It is possible for a program to
+	manage the priorities of threads in order to give execution
+	preference to higher priority threads.  It is also possible
+	for threads to give up their execution time to other blocked
+	threads.
+      </para>
+      <para>
+	The priority of a thread is representing by an integer.  The
+	range of priorities and the default priority of a thread is
+	unspecified and may be platform specific.  Larger integers
+	represent higher priorities then lower integers.  If a higher 
+	or lower priority thread is desired, the recommended procedure
+	is to get the current priority of a thread and increment or
+	decrement it.  Though unspecified, it is possible that an
+	error will be raised if a priority level outside the platform
+	specific range is selected.
+      </para>
+      <para>
+	Though not guaranteed, the behavior of the scheduler when two 
+	threads, one with higher priority than another are both
+	runnable but only one processor is available to run a thread,
+	the higher priority thread will be selected.  If only equal
+	priority are available to be run, the scheduler can choose any
+	thread to run.  No guarantees are made about latency or fairness.
+      </para>
+      <para>
+	Thread priorities can be set by the parent thread or the
+	thread itself.  The behavior of a child thread attempting to
+	set the parent's priority, or a sibling's priority is
+	undefined.
+      </para>
+      <programlisting>
+	&procedure; (thread/priority thread-handle)
+	&returns; The priority of the given thread, an integer
+
+	Retrieves the current priority of the given thread.
+
+	
+	&procedure; (thread/priority! thread-handle new-priority)
+	&returns; undefined
+
+	Attempts to set the given thread's priority to the integer
+	new-priority.
+      </programlisting>
+      <para>
+	In addition to setting priority levels, a program may wish to
+	yield its execution time temporarily to other threads.
+	Performing a yield allows the scheduler to select a thread to
+	run on the processor of the thread that just yielded control.
+	It is possible that the yielding thread may be selected again,
+	or another thread may be chosen.
+      </para>
+      <programlisting>
+	&procedure; (thread/yield)
+	&returns; unspecified
+
+	Causes the currently executing thread to yield to other
+	threads.
+      </programlisting>
+    </sect1>
+    <sect1 id="Monitors">
+      <title>
+	Monitors and Synchronization
+      </title>
+      <para>
+      </para>
+    </sect1>
   </chapter>
   <chapter>
     <title>
@@ -1299,12 +1640,6 @@
     </para>
     <para>
       <orderedlist>
-	<listitem>
-	  <para>
-	    (<xref linkend="Symbols"/>) The function
-	    <computeroutput>case-sensitive</computeroutput> is not yet implemented.
-	  </para>
-	</listitem>
 	<listitem>
 	  <para>
 	    (<xref linkend="Characters"/> and <xref
