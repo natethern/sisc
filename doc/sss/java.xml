@@ -616,21 +616,289 @@ its stack trace and return &num;f.
       <sect3>
         <title>Wrapping Scheme Objects</title>
         <para>
+Sometimes we may want to pass Scheme objects to Java as parameters in
+method calls and as values for fields without converting them into
+Java objects. For instance, we may want to store and retrieve Scheme
+objects in/from an instance of a Java collection class such as
+<classname>java.util.HashSet</classname>. This can be done with the
+help of two functions that wrap and and unwrap Scheme objects.
+</para>
+        <para>
+<methodsynopsis language="scheme">
+            <type>jobj</type>
+            <methodname>java-wrap</methodname>
+            <methodparam><parameter>obj</parameter></methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Wraps a Scheme object so it can be passed in call to a Java method /
+constructor or when setting a field of a Java object or class.
+</para>
+          </blockquote>
+</para>
+        <para>
+<methodsynopsis language="scheme">
+            <type>obj</type>
+            <methodname>java-unwrap</methodname>
+            <methodparam><parameter>jobj</parameter></methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Casts a java object into a Scheme object, so a Scheme object returned
+by a Java method or when accessing a Java field can be used in Scheme
+code.
+</para>
+          </blockquote>
+</para>
+<para>
+Since all Scheme objects are represented internally as Java objects
+anyway, the wrapping and unwrapping preserves object identity.
 </para>
       </sect3>
       <sect3>
         <title>Proxies</title>
         <para>
+The <literal>s2j</literal> module provides a mechanism by which Scheme
+code can construct objects that implement particular Java interfaces,
+with the methods required by the interfaces being implemented in
+Scheme. This is accomplished by means of the following macro
+</para>
+        <para>
+<methodsynopsis language="scheme">
+            <void/>
+            <methodname>define-java-proxy</methodname>
+            <methodparam><parameter>func-spec</parameter></methodparam>
+            <methodparam><parameter>interface-spec</parameter></methodparam>
+            <methodparam rep="repeat">
+              <parameter>method-spec</parameter>
+            </methodparam>
+          </methodsynopsis>
+<blockquote>
+            <simplelist spacing="compact">
+              <member>
+where <parameter>func-spec</parameter> is of the form
+<literal>(</literal><parameter>name</parameter>
+<parameter>arg</parameter> ...<literal>)</literal>
+</member>
+              <member>
+and <parameter>interface-spec</parameter> is of the form 
+<literal>(</literal><parameter>jclass</parameter> ...<literal>)</literal>
+or <parameter>jclass</parameter>
+</member>
+              <member>
+and <parameter>method-spec</parameter> is of the form <literal>(method
+(</literal><parameter>name</parameter>
+<literal>(</literal><parameter>type</parameter>
+<parameter>param</parameter><literal>)</literal> ...<literal>) . </literal><parameter>body</parameter><literal>)</literal>
+</member>
+            </simplelist>
+            <para>
+Defines a proxy constructor in the current environment. A proxy
+constructor is a function that when invoked creates a Java object that
+implements a certain set of Java interfaces in terms of Scheme code
+which is parameterised by a set of arguments passed to the constructor
+on invocation. The object resulting from invoking the proxy
+constructor can be passed to any Java constructor or method as a
+parameter whose type is one of the interfaces (or super-interface thereof)
+implemented by the proxy. Method invocations by Java (or indeed
+Scheme) on the object result in execution of one of the methods
+declared method bodies, selected based on its name and type
+signature. If no such method is found an error is raised.
+</para>
+            <para>
+<parameter>name</parameter> is the name to which to bind the proxy
+constructor in the current environment. The
+<parameter>arg</parameter>s parameterise the proxy constructor and are
+bound in the lexical environment of
+<parameter>body</parameter>. <parameter>interface-spec</parameter>
+specifies what interface(s) should be implemented by this proxy. All
+<parameter>jclass</parameter> must be Java
+<emphasis>interfaces</emphasis> - proxies cannot sub-class Java
+<emphasis>classes</emphasis>.  The <parameter>name</parameter>s and
+<parameter>type</parameter>s of the methods must
+<emphasis>exactly</emphasis> match those of the methods on the Java
+interfaces. An error is raised at declaration-time when this is not
+the case. This is likely to change in a future version and name
+mangling and "best match" policy similar to the one used by generic
+functions will be employed.
+</para>
+          </blockquote>
+</para>
+        <para>
+An example might be helpful at this stage:
+<informalexample>
+            <programlisting>
+(define &lt;java.util.Comparator&gt; (java-class "java.util.Comparator"))
+(define &lt;java.util.Arrays&gt; (java-class "java.util.Arrays"))
+(define-java-proxy (comparator fn) &lt;java.util.Comparator&gt;
+  (method (|compare| (&lt;jobject&gt; obj1) (&lt;jobject&gt; obj2))
+    (let ((x (java-unwrap obj1))
+          (y (java-unwrap obj2)))
+      (-&gt;jint (cond ((fn x y) -1)
+                    ((fn y x) +1)
+                    (else 0))))))
+(define-generic sort)
+(define (list-sort comp l)
+  (let ([a (-&gt;jarray (map java-wrap l) &lt;jobject&gt;)])
+    (sort &lt;java.util.Arrays&gt; a comp)
+    (map java-unwrap (-&gt;list a))))
+(list-sort (comparator &lt;) '(3 4 2 1))
+;=&gt; '(1 2 3 4)
+(list-sort (comparator string&lt;?) '("foo" "bar" "baz"))
+;=&gt;'("bar" "baz" "foo")
+</programlisting>
+            <para>
+This defines a proxy constructor <function>comparator</function> that
+implements the <classname>java.util.Comparator</classname> interface
+top perform comparison of arbitrary Scheme objects. There is only one
+method that needs to be implemented - <function>compare</function>
+which takes two <classname>java.lang.Object</classname>s. The proxy is
+constructor is parameterised with a comparison function which the
+implementation of <function>compare</function> uses to compare the two
+objects - after unwrapping them and thus obtaining their original
+Scheme representation. The <function>list-sort</function> function
+takes a comparator as the first parameter and a list as the second. It
+sorts the list using the comparator by wrapping all list elements and
+stuffing them into a Java array, calling the <function>sort</function>
+static method on <classname>java.util.Array</classname> and then
+converting the array back into a list with all elements unwrapped.
+</para>
+          </informalexample>
+</para>
+        <para>
+<note>
+            Proxies defined using <function>define-java-proxy</function>
+            implement the <function>hashCode</function>,
+            <function>equals</function> and
+            <function>toString</function> methods internally and hence
+            defining these methods at the Scheme level has no effect.
+          </note>
 </para>
       </sect3>
       <sect3>
-        <title>Synchronisation</title>
+        <title>Synchronization</title>
         <para>
+<literal>s2j</literal> provides an equivalent of the
+<literal>synchronized</literal> Java keyword that allows threads to
+synchronize on a particular Java object.
 </para>
-        </sect3>
-      <sect3>
-        <title>Under The Hood</title>
         <para>
+<methodsynopsis language="scheme">
+            <type>obj</type>
+            <methodname>java-synchronized</methodname>
+            <methodparam><parameter>jobj</parameter></methodparam>
+            <methodparam><parameter>thunk</parameter></methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Evaluates <parameter>thunk</parameter> inside a block that is
+synchronized on <parameter>jobj</parameter>, returning the result of
+the evaluation. The result of capturing and invoking continuations
+from within <parameter>thunk</parameter> that escape it is undefined.
+</para>
+          </blockquote>
+</para>
+      </sect3>
+      <sect3>
+        <title>Reflection</title>
+        <para>
+The <literal>s2j</literal> module is based on the native
+<literal>s2j-module</literal> which defines Scheme functions
+corresponding to almost all methods on
+<classname>java.lang.Class</classname> 
+plus the various other reflection classes. The only
+methods of the Java Reflection API that have not been mapped this way are:
+<informalexample>
+            <programlisting>
+Class.forName(String,boolean,ClassLoader)
+Class.getClassLoader()
+Class.getPackage()
+Class.getProtectionDomain()
+Class.getResource(String)
+Class.getResourceAsStream(String)
+Class.getSigners()
+</programlisting>
+          </informalexample>
+The majority of functions in <literal>s2j-module</literal> are not
+exported by <literal>s2j</literal> since direct use of the Java
+Reflection API should not be necessary due to the higher-level
+functionality provided by <literal>s2j</literal> and the
+<literal>generic-functions</literal> modules. It is however worth
+noting that <literal>s2j-module</literal> (and hence
+<literal>s2j</literal>) treat reflected Java fields, methods and
+constructors specially. Specifically, they are all represented as
+self-evaluating objects.
+</para>
+        <para>
+<methodsynopsis language="scheme">
+            <type>jobj</type>
+            <methodname></methodname>
+            <methodparam><parameter>jfield</parameter></methodparam>
+            <methodparam><parameter>target</parameter></methodparam>
+            <methodparam choice="opt">
+              <parameter>jobj</parameter>
+            </methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Gets or sets the value of Java object's instance or static member
+field. <parameter>jfield</parameter> must be a reflected Java field
+object. The <parameter>target</parameter> is the Java object or class
+on which the field is accessed. The optional
+<parameter>jobj</parameter> is the new value for the field.
+</para>
+          </blockquote>
+</para>
+        <para>
+<methodsynopsis language="scheme">
+            <type>jobj</type>
+            <methodname></methodname>
+            <methodparam><parameter>jmethod</parameter></methodparam>
+            <methodparam><parameter>target</parameter></methodparam>
+            <methodparam rep="repeat">
+              <parameter>jobj</parameter>
+            </methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Invokes the method represented by the reflected Java method
+object <parameter>jmethod</parameter> on Java object supplied as a
+<parameter>target</parameter> with the <parameter>jobj</parameter>s as 
+parameters. If <parameter>jmethod</parameter> is a static method,
+<parameter>target</parameter> is ignored and can be any Java object,
+including <constant>null</constant>
+</para>
+          </blockquote>
+</para>
+        <para>
+<methodsynopsis language="scheme">
+            <type>jobj</type>
+            <methodname></methodname>
+            <methodparam><parameter>jconstructor</parameter></methodparam>
+            <methodparam rep="repeat">
+              <parameter>jobj</parameter>
+            </methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Invokes the constructor represented by the reflected Java constructor
+object <parameter>jconstructor</parameter> with the supplied
+<parameter>jobj</parameter> parameters.
+</para>
+          </blockquote>
+</para>
+        <para>
+<methodsynopsis language="scheme">
+            <type>jobj</type>
+            <methodname></methodname>
+            <methodparam><parameter>jclass</parameter></methodparam>
+          </methodsynopsis>
+<blockquote>
+            <para>
+Creates a new instance of <parameter>jclass</parameter> by invoking its
+default, argument-less constructor.
+</para>
+          </blockquote>
 </para>
       </sect3>
     </sect2>
