@@ -9,21 +9,48 @@
 
 
 ;;Constant Propogation (always safe)
-(define (cp-candidates formals values* state)
+; This function is complicatedly thorough
+(define (cp-candidates formals values* state rec)
   (let ((set-vars (get-state-entry state 'set-vars))
         (nf '())
         (nv '()))
     (let ((cpc
            (let loop ((x formals)
-                      (y values*)
-                      (acc '()))
+                            (y values*)
+                            (acc '()))
              (cond [(null? x) acc]
+                   ; If this var is bound to another var ref,
+                   ; see if it too is bound to a cp-candidate,
+                   ; and use that value instead of the var
+                   [(and rec
+                         (symbol? (car y))
+                         (assq (car y) acc)) =>
+                    (lambda (vref)
+                      (let vloop ((v (cdr vref)))
+                        (cond [(eq? v (car x))
+                               (error 'optimizer "optimizer detected circular variable assignment")]
+                              [(not (symbol? v)) 
+                               (loop (cdr x) (cdr y)
+                                     (cons (cons (car x) v) acc))]
+                              [(assq v acc) =>
+                               (lambda (vref2)
+                                 (vloop (cdr vref2)))]
+                              [else (loop (cdr x) (cdr y)
+                                          (cons (cons (car x) v) acc))])))]
+                   [(symbol? (car y))
+                    (loop (cdr x) (cdr y) 
+                          (cons (cons (car x) (car y)) acc))]
                    [(or (not (immediate? (car y)))
                         (and set-vars (memq (car x) set-vars)))
                     (set! nf (cons (car x) nf))
                     (set! nv (cons (car y) nv))
                     (loop (cdr x) (cdr y) acc)]
                    [else 
+                     (if rec
+                         (let vloop ((v acc))
+                           (unless (null? v) 
+                             (if (eq? (cdr v) (car x))
+                                 (set-cdr! v (car y))))))
                      (loop (cdr x) (cdr y) 
                            (cons (cons (car x) (car y)) acc))]))))
       (values nf nv cpc))))
@@ -35,7 +62,7 @@
                         (values* values*)
                         (state state))
                 (mvlet ([(nf nvo cpc) 
-                         (cp-candidates formals values* state)])
+                         (cp-candidates formals values* state '#t)])
                   (let ([state (if (null? cpc)
                                    state
                                    (union-state-entry* state 'constant-prop 
@@ -48,7 +75,7 @@
                                            nvo)])
                                (values (map car x)
                                        (map cdr x)))])
-                      (if (equal? nv values*)
+                      (if (= (length nv) (length values*))
                           (values nf nv state)
                           (loop nf nv (merge-states 
                                        state 
@@ -64,7 +91,7 @@
 (define opt:let
   (lambda (formals values* body state)
     (mvlet ([(nf nv cpc) 
-             (cp-candidates formals values* state)])
+             (cp-candidates formals values* state '#f)])
       (mvlet ([(rv state)
                (opt body (if (null? cpc)
                              state
