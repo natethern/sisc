@@ -266,31 +266,22 @@
      (if (not e0) (begin e1 e2 ...)))))
 
 ;;perform macro expansion on a file
-(define (expand-file expand-from expand-to)
-  (let ([inp (open-input-file expand-from)]
-	[outp (open-output-file expand-to)]
-	[precision (max-precision)])
+(define (expand-file from to)
+  (let ([inf (open-source-input-file from)]
+        [outf (open-output-file to)]
+        [precision (max-precision)])
     (max-precision 1500)
-    (let loop ([expr (read inp)])
-      (if (not (eof-object? expr))
-	  (begin
-	    (let ([ev (sc-expand expr)])
-	      (pretty-print
-	       ;;the expansion tends to generate a lot of of
-	       ;;expressions of the form (begin (void) <x>). The
-	       ;;following reduces these to <x>.
-	       (if (and #t
-			(list? ev) 
-			(= (length ev) 3)
-			(eq? (car ev) 'begin)
-			(equal? (caadr ev) '$sc-put-cte))
-		   (caddr ev)
-		   ev) outp))
-	    (newline outp)
-	    (loop (read inp))))
-      (close-input-port inp)
-      (close-output-port outp)
-      (max-precision precision))))
+    (with-current-url from
+      (lambda ()
+        (let loop ([e (read-code inf)])
+          (if (not (eof-object? e))
+              (begin
+                (pretty-print (sc-expand e) outf)
+                (newline outf)
+                (loop (read inf)))))))
+    (close-output-port outf)
+    (close-input-port inf)
+    (max-precision precision)))
 
 ;; I/O ;;
 
