@@ -1,4 +1,3 @@
-
 <chapter id="JavaInteraction">
   <title>Java Interaction</title>
   <para>
@@ -153,13 +152,19 @@ Interpreter r = Context.enter("appname");
           </programlisting>
           <classname>AppContext</classname>s are usually created by
           calling their argument-less constructor and are later
-          modified by loading a heap image into them. So a typical
-          context initialization sequence would be:
+          modified by loading a heap image into them.  Heap images 
+          are randomly accessable, and as such must be accessed in
+          their entirety, rather than as a stream.  If not loaded
+          from disk, this entails first transfering the image over a
+          stream into memory, then operating on the entire heap in
+          memory.
+          A typical initialization sequence, loading the heap image
+          from disk, would be:
           <programlisting>
 AppContext ctx = new AppContext();
 Context.register("myapp", ctx);
 Interpreter r = Context.enter("myapp");
-ctx.loadEnv(r, dataInputStream);
+ctx.loadEnv(r, new BufferedRandomAccessInputStream("sisc.shp","r"));
 Context.exit();
           </programlisting> 
         </para>
