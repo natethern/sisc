@@ -46,7 +46,7 @@ public class LibraryBuilder extends SerializerImpl {
      */
     public int add(Symbol name, Expression val) {
         int epidx=add(val);
-        names.put(new Integer(epidx), name);
+        names.put(name, new Integer(epidx));
         return epidx;
     }
 
@@ -137,10 +137,12 @@ public class LibraryBuilder extends SerializerImpl {
         for (int i=0; i<offsets.length; i++) {
             writeBer(offsets[i], datout);
             writeBer(sizes[i], datout);
-            Symbol s=(Symbol)names.get(new Integer(i));
-            datout.writeBoolean(s!=null);
-            if (s!=null)
-                datout.writeUTF(s.symval);
+        };
+        writeBer(names.size(), datout);
+        for (Iterator i=names.keySet().iterator(); i.hasNext();) {
+            Symbol s=(Symbol)i.next();
+            datout.writeUTF(s.symval);
+            writeBer(((Integer)names.get(s)).intValue(), datout);
         }
         
         //Pass 4

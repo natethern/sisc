@@ -8,12 +8,17 @@ import sisc.*;
 import sisc.data.*;
 
 public class Library extends Util {
-
+    final static String LIBRARY_VERSION="SLL2";
+    
     protected String name;
     protected BinaryDeserializer lib;
     protected Map names;
 
     public static Library load(SeekableDataInput di) throws IOException, ClassNotFoundException {
+        String libver=di.readUTF();
+        if (!libver.equals(LIBRARY_VERSION))
+            throw new IOException(liMessage(SISCB, "unsuplib"));
+
         String libname=di.readUTF();
         Class[] classes=new Class[BinaryDeserializer.readBer(di)];
         for (int i=0; i<classes.length; i++) {
@@ -28,10 +33,13 @@ public class Library extends Util {
         for (int i=0; i<socount; i++) {
             sharedObjectOffsets[i]=BinaryDeserializer.readBer(di);
             sharedObjectSizes[i]=BinaryDeserializer.readBer(di);
-            if (di.readBoolean()) {
-                Symbol name=Symbol.get(di.readUTF());
-                names.put(name, new Integer(i));
-            }
+        }
+        
+        int symtableLength=BinaryDeserializer.readBer(di);
+        for (int i=0; i<symtableLength; i++) {
+            String s=di.readUTF();
+            int ep=BinaryDeserializer.readBer(di);
+            names.put(Symbol.get(s), new Integer(ep));
         }
 
         return new Library(libname, new BinaryDeserializer(di, classes, sharedObjectOffsets, sharedObjectSizes), names);

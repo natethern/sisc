@@ -112,6 +112,7 @@ public class StreamSerializer extends SerializerImpl {
         if (e==null) {
             writeExpression((Expression)null);
         } else if (e.getName()==null) { 
+            System.err.println("!"+e.getClass());//bindingKeys());
             writeExpression(e.asValue());
         } else 
             writeExpression(e.getName());

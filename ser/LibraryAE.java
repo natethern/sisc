@@ -117,6 +117,7 @@ public class LibraryAE extends MemorySymEnv {
     public LibraryAE() {}
 
     public void deserialize(Deserializer d) throws IOException {
+        setName((Symbol)d.readExpression());
         int size=d.readInt();
         addressMap=new HashMap(size);
         for (int i=0; i<size; i++) {
@@ -130,6 +131,7 @@ public class LibraryAE extends MemorySymEnv {
     }
 
     public void serialize(Serializer s) throws IOException {
+        s.writeExpression(getName());
         if (base == null) {
             //serialize in "observe" mode
             if (name!=null)
