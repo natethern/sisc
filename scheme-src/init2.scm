@@ -30,6 +30,14 @@
 ;; may use your version of this file under either the MPL or the
 ;; GPL.
 ;;
+
+(define (parameterize . default)
+  (let ([value (if (not (null? default)) (car default) #f)])
+    (lambda newval
+      (if (null? newval) 
+	  value
+	  (set! value (car newval))))))
+		 
 (current-evaluator eval)
 
 (define modulo
@@ -38,6 +46,12 @@
        (if (if (negative? y) (positive? r) (negative? r))
            (+ r y)
            r))))
+
+(define (current-failure-continuation)
+  (call-with-failure-continuation
+   (lambda () (error 'current-fc))
+   (lambda (m e f)
+     f)))
 
 (define dynamic-wind 
   (lambda args

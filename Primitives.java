@@ -56,7 +56,7 @@ public class Primitives extends Module {
            CEILING=18,      CHAR2INTEGER=19,        CHARACTERQ=20,
          CHARREADY=21,    CLOSEINPUTPORT=22,   CLOSEOUTPUTPORT=23,
           COMPLEXQ=24,              CONS=25,     CONTINUATIONQ=26,
-               COS=27,       CURRENTEVAL=28,         CURRENTFC=29,
+  	       COS=27,       CURRENTEVAL=28,               // <29>
   CURRENTINPUTPORT=30, CURRENTOUTPUTPORT=31,      CURRENTWRITE=32,
        DENOMINATOR=33,           DISPLAY=34,               DIV=35,
       ENVIRONMENTQ=36,                EQ=37,             EQUAL=38,
@@ -139,7 +139,6 @@ public class Primitives extends Module {
         define(r, "continuation?", CONTINUATIONQ);
         define(r, "cos", COS);
         define(r, "current-evaluator", CURRENTEVAL);
-        define(r, "current-failure-continuation", CURRENTFC);
         define(r, "current-input-port", CURRENTINPUTPORT);
         define(r, "current-output-port", CURRENTOUTPUTPORT);
         define(r, "current-writer", CURRENTWRITE);
@@ -476,8 +475,6 @@ public class Primitives extends Module {
                 if (FIVE.equals(num(f,f.vlr[0])))
                     return sisc.compiler.Compiler.addSpecialForms(new AssociativeEnvironment());
                 else throw new RuntimeException("Unsupported standard version");
-            case CURRENTFC:
-                return f.fk;
             case CURRENTEVAL:
                 f.evaluator=proc(f,f.vlr[0]);
                 return VOID;

@@ -32,6 +32,12 @@
 ;;
 ;; The SISC read-eval-print-loop
 
+(define current-default-error-handler
+  (parameterize
+   (lambda (message error-cont failure-cont output-port)
+     (display message output-port)
+     (newline output-port))))
+
 (define repl
   (letrec ([repl-loop
 	    (lambda (console-in console-out writer)
@@ -56,16 +62,12 @@
       (letrec ([console-in (if (null? args) (current-input-port)
 			    (car args))]
 	       [console-out (if (null? args) (current-output-port)
-				(cadr args))]
-	       [error-handler
-		(lambda (message error-cont failure-cont)
-		  (display message console-out)
-		  (newline console-out))])
+				(cadr args))])
 	(let loop ()
 	  (call/fc
 	   (lambda ()
 	     (repl-loop console-in console-out (current-writer))
 	     (void))
 	   (lambda (m e f)
-	     (error-handler m e f)
+	     ((current-default-error-handler) m e f console-out)
 	     (loop))))))))
