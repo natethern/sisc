@@ -81,6 +81,7 @@
     ((W) (move-robot! id -1 0))
     (else 
      (let ((arg (read in)))
+       (debug "Ra: ~a" arg)
        (case command
 	 ((P) (apply package-pickup! `(,(package-lookup arg) 
                                        ,id ,@(robot-position id))))

@@ -143,11 +143,9 @@
 		   delta-map))
        '((|Drop|))
        ; Package pickup moves
-       (let* ((packages-here (packages x y)))
+       (let ((packages-here (packages x y)))
 	 (apply append
 		(map (lambda (packages)
-                       (debug "~a vs ~a" (package-weight packages)
-                              (robot-capacity-remaining id))
 		       (if (< (package-weight packages)
 			       (robot-capacity-remaining id))
 			 `((|Pick| ,(package-id packages)))
@@ -166,7 +164,6 @@
     ((get-cost
       (lambda (cache id x y . move)
         (cond [(hashtable/get cache (make-rectangular x y)) => (lambda (x)
-;                                                     (debug "Hit!")
                                                      x)]
               [else 
                 (let ((cost
@@ -191,7 +188,7 @@
     ((|Pick|)
      (if (null? (cadr move))
          (weight id 'go-nowhere)
-         (apply + (map (trace-lambda pp (p)
+         (apply + (map (lambda (p)
                          (let ((dist-to-deliver 
                                 (apply dist `(,@pos
                                               ,@(package-location p))))

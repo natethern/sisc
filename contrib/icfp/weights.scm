@@ -40,7 +40,7 @@
     (search . 1)
     (revisit . -4)
     (visit . 1)
-    (pickup . 100)
+    (pickup . 200)
     (go-nowhere . -30)))
 
 (define (weight id type)

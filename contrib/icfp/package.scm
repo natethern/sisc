@@ -6,9 +6,29 @@
 	  (remove x (cdr ls))
 	  (cons (car ls) (remove x (cdr ls))))))
 
+(define (removep x ls)
+  (if (null? ls) '()
+      (if (= (package-id x) (package-id (car ls)))
+	  (removep x (cdr ls))
+	  (cons (car ls) (removep x (cdr ls))))))
+
 (define unclaimed-packages (make-hashtable))
 (define claimed-packages (make-hashtable))
 (define all-packages (make-hashtable))
+(define package-locations (make-hashtable))
+
+
+(define (packages . loc)
+  (hashtable/get package-locations (apply make-rectangular loc)
+                 '()))
+(define (package-at! p pos) 
+  (hashtable/put! package-locations (apply make-rectangular pos) 
+                  (cons p (apply packages pos))))
+(define (package-not-at! p pos) 
+  (let* ((op (apply packages pos))
+         (np (removep p op)))
+    (hashtable/put! package-locations (apply make-rectangular pos) 
+                    np)))
 
 (define (make-package id)
   (let ((p (make-hashtable)))
@@ -37,7 +57,6 @@
 (define (package-drop! p id . droploc)
   (when p
 	(let ((loc (package-destination p)))
-          (debug "loc: ~a" loc)
           (begin (if (not (and loc (equal? loc droploc)))
                      (hashtable/put! unclaimed-packages (package-id p) p)
                      (begin 
@@ -53,7 +72,10 @@
 
 (define (package-add! p)
   (hashtable/put! unclaimed-packages (package-id p) p)
-  (hashtable/put! all-packages (package-id p) p))
+  (if (not (hashtable/put! all-packages (package-id p) p))
+      (package-at! p (package-location p))))
+
+                  
     
 ; Called when we observe a pickup action.  This removes the package
 ; from those we know about that are unclaimed.
@@ -63,15 +85,8 @@
 	(robot-load-incr! id (package-weight p))
 	(hashtable/put! claimed-packages id
                         (cons p (hashtable/get claimed-packages id '())))
+        (package-not-at! p pickuploc)
         (clear-seen! id)))
 
 (define (robots-packages id)
   (hashtable/get claimed-packages id '()))
-
-(define (packages . loc)
-  (apply append
-	 (hashtable/map (lambda (key val)
-			  (if (equal? (package-location val) loc)
-			      (list val)
-			      '()))
-			unclaimed-packages)))
