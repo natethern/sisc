@@ -756,7 +756,7 @@
         <para>
           The error handler required as an argument to
           <function>with-failure-continuation</function> must accept
-          two value.  The first is a value containing information
+          two values.  The first is a value containing information
           about the error that occurred.  This is often an association
           list containing a number of attributes of the error.  The
           second is a procedure encapsulating the continuation that
@@ -824,7 +824,7 @@
           Failure continuations exist as an attribute of the ordinary
           continuations of Scheme expressions.  Because of this, the
           invocation of a continuation may cause a different failure
-          continuation to become active in the region of the invoked
+          continuation to become active in the region of the captured
           continuation.  Specifically, the failure continuation in place
           at the <function>call/cc</function> expression will be
           reinstated when that continuation is later invoked.
