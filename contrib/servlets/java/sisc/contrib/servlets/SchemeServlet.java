@@ -25,7 +25,7 @@ public class SchemeServlet extends SchemeServletBase {
         try {
             evalExpr(destroyExpr);
         } catch (ServletException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.toString());
         }
     }
 
