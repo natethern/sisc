@@ -487,7 +487,7 @@
 
 (define (char-alphabetic? c) (and (char-ci>=? c #\a) (char-ci<=? c #\z)))
 (define (char-numeric? c) (and (char-ci>=? c #\0) (char-ci<=? c #\9)))
-(define (char-whitespace? c) (if (memv c '(#\space #\tab #\newline)) #t #f))
+(define (char-whitespace? c) (if (memv c '(#\space #\tab #\newline #\return)) #t #f))
 
 (define (char-upper-case? c) (and (char-alphabetic? c) (char<? c #\a)))
 (define (char-lower-case? c) (and (char-alphabetic? c) (char>? c #\Z)))

@@ -778,7 +778,7 @@
       '#f)))
 (define char-whitespace?
   (lambda (|c_Y5ZPD48S-|)
-    (if (memv |c_Y5ZPD48S-| '(#\space #\tab #\newline))
+    (if (memv |c_Y5ZPD48S-| '(#\space #\tab #\newline #\return))
       '#t
       '#f)))
 (define char-upper-case?
