@@ -13,7 +13,7 @@
    (lambda ()
      (connect bot (->jstring "irc.openprojects.net"))))
   
-  (define channel "#sisc")
+  (define channel "#sarahtest")
 
   (define (onPrivateMessage nick login host message)
     (let ([response (answer (->string nick) (->string message) #t)])
