@@ -22,7 +22,8 @@
        (not (box? x))))
 
 (define (immediate? e)
-  (and (pair? e) (= (length e) 2) (eq? (car e) 'quote)))
+  (or (symbol? e)
+      (and (pair? e) (= (length e) 2) (eq? (car e) 'quote))))
 
 (define (not-redefined? proc)
   (memq proc (getprop 'assumptive-procedures '*opt*)))
