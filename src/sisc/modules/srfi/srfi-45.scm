@@ -1,20 +1,22 @@
 (define-struct promise (expr eager?))
 
 (define-simple-syntax (lazy exp)
-  (make-promise (lambda () exp) #f))
+  (box (box (make-promise (lambda () exp) #f))))
 
 (define (eager x)
-  (make-promise x #t))
+  (box (box (make-promise x #t))))
 
 (define-simple-syntax (delay exp)
   (lazy (eager exp)))
 
 (define (force promise)
-  (if (promise? promise)
-      (if (promise-eager? promise)
-          (promise-expr promise)
-          (let ((new-promise ((promise-expr promise))))
-            (set-promise-expr! promise (promise-expr new-promise))
-            (set-promise-eager?! promise (promise-eager? new-promise))
-            (force promise)))
-      promise))
+  (let* ((content (unbox (unbox promise)))
+         (expr (promise-expr content)))
+    (if (promise-eager? content)
+        expr
+        (let* ((promise* (expr))
+               (content  (unbox (unbox promise))))
+          (when (not (promise-eager? content))
+            (set-box! (unbox promise) (unbox (unbox promise*)))
+            (set-box! promise* (unbox promise)))
+          (force promise)))))
