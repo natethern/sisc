@@ -100,11 +100,13 @@ public class AssociativeEnvironment extends NamedValue {
     }
 
     public int define(Symbol s, Value v) {
-        try {
-            return set(s, v);
-        } catch (NullPointerException np) {}
-        
-        return store(s, v);
+        synchronized(symbolMap) {
+            try {
+                return set(s, v);
+            } catch (NullPointerException np) {}
+            
+            return store(s, v);
+        }
     }
 
     protected int store(Symbol s, Value v) {
@@ -124,11 +126,11 @@ public class AssociativeEnvironment extends NamedValue {
         Integer i;
         synchronized(symbolMap) {
             i=(Integer)symbolMap.get(s);
-        }
-        if (i==null && parent!=null) {
-            int pi=parent.getLoc(s);
-            if (pi!=-1) 
-                i=new Integer(store(s, parent.lookup(pi)));
+            if (i==null && parent!=null) {
+                int pi=parent.getLoc(s);
+                if (pi!=-1) 
+                    i=new Integer(store(s, parent.lookup(pi)));
+            }
         }
         return (i==null ? -1 : i.intValue());
     }
