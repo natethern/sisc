@@ -1970,7 +1970,7 @@
         </blockquote>
       </para>
       <para>
-        In addition to <emphasis>procedures</emphasis> for slt
+        In addition to <emphasis>procedures</emphasis> for slot
         initialization, access and modification, slot definitions can
         also produce equivalent <emphasis>methods</emphasis>. These
         are suitable for adding to generic procedures and can, for
