@@ -13,8 +13,8 @@ public class Quantity extends Value implements Singleton {
     //    static Quantity[] ints=new Quantity[2048+100];
 
     static {
-        String x=Util.getSystemProperty("sisc.minprecision", null);
-        String y=Util.getSystemProperty("sisc.maxprecision", null);
+        String x=getSystemProperty("sisc.minprecision", null);
+        String y=getSystemProperty("sisc.maxprecision", null);
         min_precision=(x==null ? 16 : Integer.parseInt(x));
         max_precision=(y==null ? 32 : Integer.parseInt(y));
         //  for (int i=-100; i<2048; i++) 
@@ -107,12 +107,12 @@ public class Quantity extends Value implements Singleton {
         } else if ((x=v.indexOf('i'))!=-1) {
             BigDecimal d,im;
             if (x!=v.length()-1)
-                throw new NumberFormatException(Util.liMessage(Util.SISCB,"invalidcomplex"));
+                throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
             x=v.lastIndexOf('+');
             if (x==-1) {
                 x=v.lastIndexOf('-');
                 if (x==-1)
-                    throw new NumberFormatException(Util.liMessage(Util.SISCB,"invalidcomplex"));
+                    throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
 
                 if (x==0)
                     d=_BD_ZERO;
@@ -237,7 +237,7 @@ public class Quantity extends Value implements Singleton {
                     if (wholeHadPounds)
                         for (int i=0; i<c.length; i++)
                             if (c[i]!='#')
-                                throw new NumberFormatException(Util.liMessage(Util.SISCB,"noncontigpounds"));
+                                throw new NumberFormatException(liMessage(SISCB,"noncontigpounds"));
                     parsePounds(c);
                     b.append('.').append(c);
                 } else {
@@ -264,7 +264,7 @@ public class Quantity extends Value implements Singleton {
                     c=dv.substring(x+1).toCharArray();
                     for (int i=0; i<c.length; i++)
                         if (c[i]!='#')
-                            throw new NumberFormatException(Util.liMessage(Util.SISCB,"noncontigpounds"));
+                            throw new NumberFormatException(liMessage(SISCB,"noncontigpounds"));
                     parsePounds(c);
                 } else {
                     b.append(c);
@@ -281,7 +281,7 @@ public class Quantity extends Value implements Singleton {
             } else if (asDecimal)
                 return new BigDecimal(dv);
             else
-                throw new NumberFormatException(Util.liMessage(Util.SISCB,"notadecimal"));
+                throw new NumberFormatException(liMessage(SISCB,"notadecimal"));
         } else {
             int x;
             if ((x=dv.indexOf('.'))==-1)
@@ -292,7 +292,7 @@ public class Quantity extends Value implements Singleton {
                 } else if (asDecimal)
                     return new BigDecimal(dv);
                 else
-                    throw new NumberFormatException(Util.liMessage(Util.SISCB,"notadecimal"));
+                    throw new NumberFormatException(liMessage(SISCB,"notadecimal"));
             else {
                 BigDecimal ipart;
                 BigInteger fpart;
@@ -311,7 +311,7 @@ public class Quantity extends Value implements Singleton {
     protected void simplify() {
         if (type==RATIO) {
             if (de.equals(_BI_ZERO))
-                throw new ArithmeticException(Util.liMessage(Util.SISCB,"divisionbyzero"));
+                throw new ArithmeticException(liMessage(SISCB,"divisionbyzero"));
             BigInteger gcd=i.gcd(de);
             if (!gcd.equals(_BI_ONE)) {
                 i=i.divide(gcd);
@@ -355,7 +355,7 @@ public class Quantity extends Value implements Singleton {
         case FIXEDINT: return new Quantity((long)val).lsh(num);
         case INTEG: return new Quantity(i.shiftLeft(num));
         default:
-            throw new NumberFormatException(Util.liMessage(Util.SISCB,"onlyshiftintegers"));
+            throw new NumberFormatException(liMessage(SISCB,"onlyshiftintegers"));
         }
     }
 
@@ -364,7 +364,7 @@ public class Quantity extends Value implements Singleton {
         case FIXEDINT: return new Quantity((long)val).rsh(num);
         case INTEG: return new Quantity(i.shiftRight(num));
         default:
-            throw new NumberFormatException(Util.liMessage(Util.SISCB,"onlyshiftintegers"));
+            throw new NumberFormatException(liMessage(SISCB,"onlyshiftintegers"));
         }
     }
 
@@ -403,7 +403,7 @@ public class Quantity extends Value implements Singleton {
                     return new Quantity(i.gcd(o2)).toInexact();
             }
         }
-        throw new ArithmeticException(Util.liMessage(Util.SISCB,"isnotaninteger", this.toString()));
+        throw new ArithmeticException(liMessage(SISCB,"isnotaninteger", this.toString()));
     }
 
     public Quantity lcm(Quantity o) {
@@ -434,7 +434,7 @@ public class Quantity extends Value implements Singleton {
             return (inexact? new Quantity(L).toInexact():
                     new Quantity(L));
         }
-        throw new ArithmeticException(Util.liMessage(Util.SISCB,"isnotaninteger", this.toString()));
+        throw new ArithmeticException(liMessage(SISCB,"isnotaninteger", this.toString()));
     }
 
     protected Quantity round(int rtype) {
@@ -442,7 +442,7 @@ public class Quantity extends Value implements Singleton {
         case DECIM:
             return new Quantity(d.setScale(0, rtype));
         case COMPLEX:
-            throw new ArithmeticException(Util.liMessage(Util.SISCB,"isnotareal", this.toString()));
+            throw new ArithmeticException(liMessage(SISCB,"isnotareal", this.toString()));
         case RATIO:
             return toInexact().round(rtype).toExact();
         default:
@@ -470,7 +470,7 @@ public class Quantity extends Value implements Singleton {
             if (new BigDecimal(o2).compareTo(d)==0)
                 return new Quantity(o2).modulo(o).toInexact();
         default:
-            throw new NumberFormatException(Util.liMessage(Util.SISCB,"expectedintegers"));
+            throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
         }
     }
 
@@ -495,7 +495,7 @@ public class Quantity extends Value implements Singleton {
             if (new BigDecimal(o2).compareTo(d)==0)
                 return new Quantity(o2).quotient(o).toInexact();
         default:
-            throw new NumberFormatException(Util.liMessage(Util.SISCB,"expectedintegers"));
+            throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
         }
     }
 
@@ -518,7 +518,7 @@ public class Quantity extends Value implements Singleton {
             if (new BigDecimal(o2).compareTo(d)==0)
                 return new Quantity(o2).remainder(o).toInexact();
         default:
-            throw new NumberFormatException(Util.liMessage(Util.SISCB,"expectedintegers"));
+            throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
         }
     }
 
@@ -577,9 +577,9 @@ public class Quantity extends Value implements Singleton {
 
     public Quantity atan(Quantity other) {
         if (type==COMPLEX)
-            throw new ArithmeticException(Util.liMessage(Util.SISCB,"isnotareal", this.toString()));
+            throw new ArithmeticException(liMessage(SISCB,"isnotareal", this.toString()));
         if (other.type==COMPLEX)
-            throw new ArithmeticException(Util.liMessage(Util.SISCB,"isnotareal", other.toString()));
+            throw new ArithmeticException(liMessage(SISCB,"isnotareal", other.toString()));
         return new Quantity(Math.atan2(doubleValue(), other.doubleValue()));
     }
 
@@ -1113,7 +1113,7 @@ public class Quantity extends Value implements Singleton {
             } else {
                 return o.comp(this, test);}
         }
-        throw new NumberFormatException(Util.liMessage(Util.SISCB,"nocomplexcomparison"));
+        throw new NumberFormatException(liMessage(SISCB,"nocomplexcomparison"));
     }
 
     public double doubleValue() {
@@ -1141,7 +1141,7 @@ public class Quantity extends Value implements Singleton {
         case RATIO:
             return ratioToDecimal(i,de);
         default:
-            throw new NumberFormatException(Util.liMessage(Util.SISCB, "isnotreal", toString()));
+            throw new NumberFormatException(liMessage(SISCB, "isnotreal", toString()));
         }
     }
 
@@ -1188,7 +1188,7 @@ public class Quantity extends Value implements Singleton {
         case INTEG:
             return i;
         default:
-            throw new NumberFormatException(Util.liMessage(Util.SISCB, "notaninteger"));
+            throw new NumberFormatException(liMessage(SISCB, "notaninteger"));
         }
     }
 
@@ -1238,7 +1238,7 @@ public class Quantity extends Value implements Singleton {
     public Quantity numerator() throws NumberFormatException {
         switch (type) {
         case COMPLEX:
-            throw new NumberFormatException(Util.liMessage(Util.SISCB,"isnotrational", toString()));
+            throw new NumberFormatException(liMessage(SISCB,"isnotrational", toString()));
         case DECIM:
             return toExact().numerator().toInexact();
         case RATIO:
@@ -1251,7 +1251,7 @@ public class Quantity extends Value implements Singleton {
     public Quantity denominator() throws NumberFormatException {
         switch (type) {
         case COMPLEX:
-            throw new NumberFormatException(Util.liMessage(Util.SISCB,"isnotrational", toString()));
+            throw new NumberFormatException(liMessage(SISCB,"isnotrational", toString()));
         case DECIM:
             return toExact().denominator().toInexact();
         case RATIO:
