@@ -142,3 +142,9 @@
                       [g (lambda (i)
                            (+ y x))])
                (g y))))
+
+(should-be 937722 #t
+           (andmap (lambda (p)
+                     (with/fc (lambda (m e) #t)
+                              (lambda () (p '()) (p '(a)) #f)))
+                   (list caar cadr cdar cddr)))
