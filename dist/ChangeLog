@@ -1,3 +1,13 @@
+2003-01-02  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Fixed an inadequacy in gen-sym, which wasn't supporting prefix-less
+	  symbols.  This caused import* and anonymous top-level modules
+	  to fail.
+
+	* Hooked circular printing code to error message code so that 
+	  circular structures print properly (and don't stack overflow)
+	  when generating error messages.
+	
 2002-12-24  Matthias Radestock  <matthias@sorted.org>
 
 	* Added |equal?|-based hashtables.
