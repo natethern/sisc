@@ -28,6 +28,7 @@ public interface OptimisticHost {
     public void alter(int uexpPosition, Expression replaceWith);
     
     public void setHosts();
+    
 }
 /*
  * The contents of this file are subject to the Mozilla Public

@@ -485,8 +485,9 @@ public class Compiler extends CompilerConstants {
                             ((OptimisticHost)fixedCall).setHosts();
                         if (!r.dynenv.hedgedInlining) {
                             addAnnotations(fixedCall, lastRand.annotations);
-                            return fixedCall;
+                            ((OptimisticExpression)fixedCall).dropSafe();
                         }
+                        return fixedCall;
                     }
                 }
             } 

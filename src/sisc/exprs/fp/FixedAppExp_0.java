@@ -89,7 +89,9 @@ public class FixedAppExp_0 extends Expression
 
     protected void revert(Expression[] rands) {
         AppExp safeExpr=new AppExp(new FreeReferenceExp(ref), rands, APPEVAL, false);
-        if (safeExpr instanceof OptimisticHost) {
+        if (safeExpr == null) {
+            Procedure.throwPrimException(liMessage(SISCB, "nosafeexpr"));
+        } else if (safeExpr instanceof OptimisticHost) {
             ((OptimisticHost)safeExpr).setHosts();
         }
         host.alter(uexpPosition, safeExpr);
@@ -118,6 +120,11 @@ public class FixedAppExp_0 extends Expression
 
     public boolean visit(ExpressionVisitor v) {
         return ref.visit(v) && v.visit((Expression)host);
+    }
+
+
+   public void dropSafe() {
+       host=null;
     }
 }
 /*
