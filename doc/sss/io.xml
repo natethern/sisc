@@ -906,7 +906,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       </para>
     </sect2>
     <sect2>
-      <title>Source Loading[</title>
+      <title>Source Loading</title>
       <para>
         The <function>load</function> procedure accepts URLs as well
         as ordinary file names. See <xref linkend="urlfile"/> for
