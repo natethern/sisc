@@ -104,22 +104,19 @@ public class Symbol extends Value implements Singleton {
     }
 
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
 	    s.writeBoolean(memo.containsKey(this));
-            s.writeUTF(symval);
-        }
+        s.writeUTF(symval);
     }
 
     public Symbol() {}
 
     public static Expression getValue(Deserializer dis) throws IOException {
-	if (dis.readBoolean()) {
-	    return new Symbol(dis.readUTF());
+        if (dis.readBoolean()) {
+            return new Symbol(dis.readUTF());
         } else {
             return intern(dis.readUTF());
         }
     }
-
 }
 
 

@@ -86,24 +86,19 @@ public class Values extends Value {
     }
 	
     public void serialize(Serializer s) throws IOException {
-        if (SERIALIZATION) {
-            s.writeInt(values.length);
-            for (int i=0; i<values.length; i++) {
-                s.writeExpression(values[i]);
-            }
+        s.writeInt(values.length);
+        for (int i=0; i<values.length; i++) {
+            s.writeExpression(values[i]);
         }
     }
 
     public Values() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        if (SERIALIZATION) {
-            int size=s.readInt();
-            values=new Value[size];
-            for (int i=0; i<size; i++) {
-                values[i]=(Value)s.readExpression();
-            }
+        int size=s.readInt();
+        values=new Value[size];
+        for (int i=0; i<size; i++) {
+            values[i]=(Value)s.readExpression();
         }
     }
 }
-
