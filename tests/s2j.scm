@@ -11,11 +11,16 @@
 (app sb sb)
 ;;test calling of static methods
 (value-of <jstring> (->jint 1234))
-;;test overloading of Java methods in Scheme...
+;;test overloading of Java methods and constructors in Scheme...
 ;;Wouldn't it be nice if StringBuffer.indexOf could take a char as an
 ;;argument? Well, now it can - as long as we call it from Scheme :)
-(define-method (index-of (<jstringbuffer> buf) (<jchar> c))
-  (index-of buf (make <jstring> (->jarray (list c) <jchar>))))
+(define-constructor (<jstring> (next: next-method)
+                               (<jchar> c))
+  (next-method (->jarray (list c) <jchar>)))
+(define-method (index-of (next: next-method)
+                         (<jstringbuffer> buf)
+                         (<jchar> c))
+  (next-method buf (make <jstring> c)))
 (index-of sb (->jstring "oo")) ;calls java method
 (index-of sb (->jchar #\o)) ;calls scheme method
 ;;test rest arg handling
