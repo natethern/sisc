@@ -144,7 +144,7 @@
                   ((current-default-error-handler) m e)
                   (loop))
                 (lambda ()
-                  (repl/read (if (getprop 'pretty-print)
+                  (repl/read (if (getprop 'pretty-print '*toplevel*)
                                  pretty-print
                                  write))
                   (void)))))))

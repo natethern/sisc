@@ -820,6 +820,8 @@ public class Primitives extends ModuleAdapter {
                         return (Value)f.lookup(symbol(f.vlr[0]), symbol(f.vlr[1]));
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {
+                    if (f.vlr.length != 2)
+                        throwArgSizeException();
                     return FALSE;
                 }
             case REMPROP:
@@ -846,6 +848,8 @@ public class Primitives extends ModuleAdapter {
                         return (Value)f.lookup(symbol(f.vlr[0]), symbol(f.vlr[1]));
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {
+                    if (f.vlr.length!=3)
+                        throwArgSizeException();
                     return f.vlr[2];
                 }
             case PUTPROP:
