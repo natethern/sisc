@@ -264,7 +264,7 @@
     </para>
     <para>
       If enabled at runtime (using the
-      <envvar>sisc.permitinterrupts</envvar> runtime flag, see <xref
+      <envar>sisc.permitinterrupts</envar> runtime flag, see <xref
       linkend="system-properties"/>), running threads may be
       interrupted at both the host language level and when executing
       Scheme code with the <function>thread/interrupt</function>

@@ -153,7 +153,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
     </para>
     <variablelist>
       <varlistentry>
-        <term><envvar>sisc.emitannotations</envvar></term>
+        <term><envar>sisc.emitannotations</envar></term>
         <listitem>
           <para>
             Specifies the default value of the
@@ -169,7 +169,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><envvar>sisc.heapfile</envvar></term>
+        <term><envar>sisc.heapfile</envar></term>
         <listitem>
           <para>
             Specifies the path to a &SISC; serialized heap file to use 
