@@ -290,21 +290,23 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
       <para>
         SISC's behaviour is affected by a number of configuration
         parameters. These fall into two categories:
-        <simplelist>
-          <member>
+        <orderedlist>
+          <listitem>
            <para>
               Static configuration parameters that can only be specified
               at system startup and apply across all &SISC; applications
               that use the same classloader.
            </para>
-          </member>
-          <member>
-            Dynamic configuration parameters that can be altered on a
-            per-thread basis without impacting other threads. These
-            kind of parameters are also called "thread locals", or, in
-            Scheme terminology, dynamic parameters.
-          </member>
-        </simplelist>
+          </listitem>
+          <listitem>
+            <para>
+              Dynamic configuration parameters that can be altered on a
+              per-thread basis without impacting other threads. These
+              kind of parameters are also called "thread locals", or, in
+              Scheme terminology, dynamic parameters.
+            </para>
+          </listitem>
+        </orderedlist>
       </para>
       <sect3>
         <title>Static Parameters</title>
@@ -328,7 +330,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                         The names of all properties for configuration
                         parameters must be prefixed with
                         <envar>sisc.</envar>.
-                    </para>
+                      </para>
                     </footnote>
                   </entry>
                   <entry>Scheme parameter</entry>
