@@ -96,9 +96,9 @@
   (let ((x 1))
     (let-syntax
         ((foo (syntax-rules ()
-                ((_ y) (let-syntax
-                           ((bar (syntax-rules ()
-                                   ((_) (let ((x 2)) y)))))
+                ((foo y) (let-syntax
+                             ((bar (syntax-rules ()
+                                   ((bar) (let ((x 2)) y)))))
                          (bar))))))
       (foo x))))
 
