@@ -280,7 +280,7 @@
 
 <indexentry>
   <primaryie>accept-tcp-socket,
-    <ulink url="x2692.html#TCP" role="AEN2883">TCP</ulink>
+    <ulink url="x2693.html#TCP" role="AEN2884">TCP</ulink>
   </primaryie>
 </indexentry>
 
@@ -298,13 +298,13 @@
 
 <indexentry>
   <primaryie>alist-&gt;hashtable,
-    <ulink url="c6969.html#AEN7122" role="AEN7173">Creation</ulink>
+    <ulink url="c6969.html#AEN7173" role="AEN7224">Creation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>append,
-    <ulink url="x7933.html#AEN7942" role="AEN8009">External Representation of Values</ulink>
+    <ulink url="c8055.html#AEN8064" role="AEN8131">External Representation of Values</ulink>
   </primaryie>
 </indexentry>
 
@@ -316,19 +316,19 @@
 
 <indexentry>
   <primaryie>apply,
-    <ulink url="x7933.html#AEN8187" role="AEN8195">Fixable Native Procedures</ulink>
+    <ulink url="x8239.html#AEN8309" role="AEN8317">Fixable Native Procedures</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>ashl,
-    <ulink url="c6969.html#BitwiseLogicalOperations" role="AEN7043">         Bitwise Logical Operations       </ulink>
+    <ulink url="c6969.html#BitwiseLogicalOperations" role="AEN7094">         Bitwise Logical Operations       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>ashr,
-    <ulink url="c6969.html#BitwiseLogicalOperations" role="AEN7058">         Bitwise Logical Operations       </ulink>
+    <ulink url="c6969.html#BitwiseLogicalOperations" role="AEN7109">         Bitwise Logical Operations       </ulink>
   </primaryie>
 </indexentry>
 
@@ -337,61 +337,61 @@
 
 <indexentry>
   <primaryie>binary-input-port?,
-    <ulink url="c1797.html#BinaryIO" role="AEN2437">Binary Ports and Block IO</ulink>
+    <ulink url="c1795.html#BinaryIO" role="AEN2438">Binary Ports and Block IO</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>binary-output-port?,
-    <ulink url="c1797.html#BinaryIO" role="AEN2449">Binary Ports and Block IO</ulink>
+    <ulink url="c1795.html#BinaryIO" role="AEN2450">Binary Ports and Block IO</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>box,
-    <ulink url="c496.html#Boxing" role="AEN742"> 	Boxes       </ulink>
+    <ulink url="c494.html#Boxing" role="AEN740"> 	Boxes       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>box?,
-    <ulink url="c496.html#Boxing" role="AEN788"> 	Boxes       </ulink>
+    <ulink url="c494.html#Boxing" role="AEN786"> 	Boxes       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>buffer,
-    <ulink url="c6969.html#Buffers" role="AEN7402">Binary Buffers</ulink>
+    <ulink url="c6969.html#Buffers" role="AEN7453">Binary Buffers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>buffer-copy!,
-    <ulink url="c6969.html#Buffers" role="AEN7457">Binary Buffers</ulink>
+    <ulink url="c6969.html#Buffers" role="AEN7508">Binary Buffers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>buffer-length,
-    <ulink url="c6969.html#Buffers" role="AEN7413">Binary Buffers</ulink>
+    <ulink url="c6969.html#Buffers" role="AEN7464">Binary Buffers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>buffer-ref,
-    <ulink url="c6969.html#Buffers" role="AEN7424">Binary Buffers</ulink>
+    <ulink url="c6969.html#Buffers" role="AEN7475">Binary Buffers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>buffer-set!,
-    <ulink url="c6969.html#Buffers" role="AEN7439">Binary Buffers</ulink>
+    <ulink url="c6969.html#Buffers" role="AEN7490">Binary Buffers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>buffer?,
-    <ulink url="c6969.html#Buffers" role="AEN7375">Binary Buffers</ulink>
+    <ulink url="c6969.html#Buffers" role="AEN7426">Binary Buffers</ulink>
   </primaryie>
 </indexentry>
 
@@ -400,91 +400,91 @@
 
 <indexentry>
   <primaryie>call-with-binary-input-file,
-    <ulink url="c1797.html#BinaryIO" role="AEN2331">Binary Ports and Block IO</ulink>
+    <ulink url="c1795.html#BinaryIO" role="AEN2329">Binary Ports and Block IO</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>call-with-binary-output-file,
-    <ulink url="c1797.html#BinaryIO" role="AEN2346">Binary Ports and Block IO</ulink>
+    <ulink url="c1795.html#BinaryIO" role="AEN2344">Binary Ports and Block IO</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>call-with-failure-continuation,
-    <ulink url="x992.html#AEN1046" role="AEN1053">Capture</ulink>
+    <ulink url="x990.html#AEN1044" role="AEN1051">Capture</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>call-with-input-file,
-    <ulink url="c1797.html#iodelegate" role="AEN2017">Port Creation Wrappers</ulink>
+    <ulink url="c1795.html#iodelegate" role="AEN2015">Port Creation Wrappers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>call-with-input-string,
-    <ulink url="c1797.html#StringPorts" role="AEN2206">String Ports</ulink>
+    <ulink url="c1795.html#StringPorts" role="AEN2204">String Ports</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>call-with-output-file,
-    <ulink url="c1797.html#iodelegate" role="AEN2036">Port Creation Wrappers</ulink>
+    <ulink url="c1795.html#iodelegate" role="AEN2034">Port Creation Wrappers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>call-with-output-string,
-    <ulink url="c1797.html#StringPorts" role="AEN2221">String Ports</ulink>
+    <ulink url="c1795.html#StringPorts" role="AEN2219">String Ports</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>call-with-serial-input-file,
-    <ulink url="c1797.html#serialportwrappers" role="AEN2596">Serial Port Wrappers</ulink>
+    <ulink url="c1795.html#serialportwrappers" role="AEN2597">Serial Port Wrappers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>call-with-serial-input-port,
-    <ulink url="c1797.html#serialportwrappers" role="AEN2530">Serial Port Wrappers</ulink>
+    <ulink url="c1795.html#serialportwrappers" role="AEN2531">Serial Port Wrappers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>call-with-serial-output-file,
-    <ulink url="c1797.html#serialportwrappers" role="AEN2611">Serial Port Wrappers</ulink>
+    <ulink url="c1795.html#serialportwrappers" role="AEN2612">Serial Port Wrappers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>call-with-serial-output-port,
-    <ulink url="c1797.html#serialportwrappers" role="AEN2545">Serial Port Wrappers</ulink>
+    <ulink url="c1795.html#serialportwrappers" role="AEN2546">Serial Port Wrappers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>call/fc,
-    <ulink url="x992.html#AEN1046" role="AEN1062">Capture</ulink>
+    <ulink url="x990.html#AEN1044" role="AEN1060">Capture</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>case-sensitive,
-    <ulink url="x172.html#AEN316" role="AEN352">Dynamic Parameters</ulink>
+    <ulink url="x175.html#AEN319" role="AEN355">Dynamic Parameters</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>character-set,
-    <ulink url="x172.html#AEN316" role="AEN359">Dynamic Parameters</ulink>
+    <ulink url="x175.html#AEN319" role="AEN362">Dynamic Parameters</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>circular?,
-    <ulink url="x1528.html" role="AEN1534">       Miscellaneous Functions     </ulink>
+    <ulink url="x1526.html" role="AEN1532">       Miscellaneous Functions     </ulink>
   </primaryie>
 </indexentry>
 
@@ -520,19 +520,19 @@
 
 <indexentry>
   <primaryie>clear-breakpoint!,
-    <ulink url="x1677.html#AEN1756" role="AEN1777">         Breakpoints       </ulink>
+    <ulink url="x1675.html#AEN1754" role="AEN1775">         Breakpoints       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>close-socket,
-    <ulink url="x2692.html#sockets" role="AEN2825">Socket Operations</ulink>
+    <ulink url="x2693.html#sockets" role="AEN2826">Socket Operations</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>compact-string-rep,
-    <ulink url="x8719.html#AEN8734" role="AEN8744">Strings</ulink>
+    <ulink url="x8848.html#AEN8863" role="AEN8873">Strings</ulink>
   </primaryie>
 </indexentry>
 
@@ -555,8 +555,14 @@
 </indexentry>
 
 <indexentry>
+  <primaryie>compile-file,
+    <ulink url="x7923.html" role="AEN7943">Creating Libraries</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
   <primaryie>compose,
-    <ulink url="x1528.html" role="AEN1546">       Miscellaneous Functions     </ulink>
+    <ulink url="x1526.html" role="AEN1544">       Miscellaneous Functions     </ulink>
   </primaryie>
 </indexentry>
 
@@ -586,31 +592,25 @@
 
 <indexentry>
   <primaryie>construct,
-    <ulink url="x7933.html#AEN8261" role="AEN8294">Indexed Native Libraries</ulink>
+    <ulink url="x8239.html#AEN8383" role="AEN8416">Indexed Native Libraries</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>continue,
-    <ulink url="x1677.html#AEN1756" role="AEN1788">         Breakpoints       </ulink>
-  </primaryie>
-</indexentry>
-
-<indexentry>
-  <primaryie>create-library-from-module,
-    <ulink url="x7869.html" role="AEN7887">Creating Libraries</ulink>
+    <ulink url="x1675.html#AEN1754" role="AEN1786">         Breakpoints       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>current-class-path,
-    <ulink url="x3253.html#ClassLoading" role="AEN3561">Class Loading</ulink>
+    <ulink url="x3254.html#ClassLoading" role="AEN3562">Class Loading</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>current-url,
-    <ulink url="c1797.html#urlfile" role="AEN1821">URLs</ulink>
+    <ulink url="c1795.html#urlfile" role="AEN1819">URLs</ulink>
   </primaryie>
 </indexentry>
 
@@ -619,7 +619,7 @@
 
 <indexentry>
   <primaryie>define,
-    <ulink url="x7933.html#AEN8261" role="AEN8273">Indexed Native Libraries</ulink>
+    <ulink url="x8239.html#AEN8383" role="AEN8395">Indexed Native Libraries</ulink>
   </primaryie>
 </indexentry>
 
@@ -697,7 +697,7 @@
 
 <indexentry>
   <primaryie>define-macro,
-    <ulink url="x836.html#AEN928" role="AEN949">         Syntactic Extension       </ulink>
+    <ulink url="x834.html#AEN926" role="AEN947">         Syntactic Extension       </ulink>
   </primaryie>
 </indexentry>
 
@@ -714,39 +714,51 @@
 </indexentry>
 
 <indexentry>
+  <primaryie>define-simple-syntax,
+    <ulink url="c6969.html#Definitions" role="AEN7011">Definitions</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
   <primaryie>define-struct,
-    <ulink url="c6969.html#Records" role="AEN7089">Records</ulink>
+    <ulink url="c6969.html#Records" role="AEN7140">Records</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>define-values,
+    <ulink url="c6969.html#Definitions" role="AEN6988">Definitions</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>defmacro,
-    <ulink url="x836.html#AEN928" role="AEN977">         Syntactic Extension       </ulink>
+    <ulink url="x834.html#AEN926" role="AEN975">         Syntactic Extension       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>deserialize,
-    <ulink url="c1797.html#serialprims" role="AEN2664">Serialization Procedures</ulink>,
-    <ulink url="x7933.html#serialization" role="AEN8339">Serialization</ulink>
+    <ulink url="c1795.html#serialprims" role="AEN2665">Serialization Procedures</ulink>,
+    <ulink url="x8439.html" role="AEN8461">Serialization</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>directory-list,
-    <ulink url="x3253.html#FileManipulation" role="AEN3520">File Manipulation</ulink>
+    <ulink url="x3254.html#FileManipulation" role="AEN3521">File Manipulation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>display,
-    <ulink url="x7933.html#AEN7942" role="AEN7949">External Representation of Values</ulink>
+    <ulink url="c8055.html#AEN8064" role="AEN8071">External Representation of Values</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>doApply,
-    <ulink url="x7933.html#AEN8161" role="AEN8169">Native Procedures</ulink>
+    <ulink url="x8239.html#AEN8283" role="AEN8291">Native Procedures</ulink>
   </primaryie>
 </indexentry>
 
@@ -755,49 +767,49 @@
 
 <indexentry>
   <primaryie>emit-annotations,
-    <ulink url="x172.html#AEN316" role="AEN367">Dynamic Parameters</ulink>
+    <ulink url="x175.html#AEN319" role="AEN370">Dynamic Parameters</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>emit-debugging-symbols,
-    <ulink url="x172.html#AEN316" role="AEN380">Dynamic Parameters</ulink>
+    <ulink url="x175.html#AEN319" role="AEN383">Dynamic Parameters</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>eq,
-    <ulink url="x7933.html#AEN8078" role="AEN8083">Equality</ulink>
+    <ulink url="c8055.html#AEN8200" role="AEN8205">Equality</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>error,
-    <ulink url="x992.html#RaisingErrors" role="AEN1257">Raising Errors</ulink>
+    <ulink url="x990.html#RaisingErrors" role="AEN1255">Raising Errors</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>error-location,
-    <ulink url="x992.html#AEN1161" role="AEN1167">Accessors</ulink>
+    <ulink url="x990.html#AEN1159" role="AEN1165">Accessors</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>error-message,
-    <ulink url="x992.html#AEN1161" role="AEN1179">Accessors</ulink>
+    <ulink url="x990.html#AEN1159" role="AEN1177">Accessors</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>error-parent-continuation,
-    <ulink url="x992.html#AEN1161" role="AEN1205">Accessors</ulink>
+    <ulink url="x990.html#AEN1159" role="AEN1203">Accessors</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>error-parent-error,
-    <ulink url="x992.html#AEN1161" role="AEN1192">Accessors</ulink>
+    <ulink url="x990.html#AEN1159" role="AEN1190">Accessors</ulink>
   </primaryie>
 </indexentry>
 
@@ -809,19 +821,19 @@
 
 <indexentry>
   <primaryie>exception-continuation,
-    <ulink url="x992.html#Exceptions" role="AEN1331">Exceptions</ulink>
+    <ulink url="x990.html#Exceptions" role="AEN1329">Exceptions</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>exception-error,
-    <ulink url="x992.html#Exceptions" role="AEN1319">Exceptions</ulink>
+    <ulink url="x990.html#Exceptions" role="AEN1317">Exceptions</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>exception?,
-    <ulink url="x992.html#Exceptions" role="AEN1343">Exceptions</ulink>
+    <ulink url="x990.html#Exceptions" role="AEN1341">Exceptions</ulink>
   </primaryie>
 </indexentry>
 
@@ -836,85 +848,85 @@
 
 <indexentry>
   <primaryie>file-delete!,
-    <ulink url="x3253.html#FileManipulation" role="AEN3373">File Manipulation</ulink>
+    <ulink url="x3254.html#FileManipulation" role="AEN3374">File Manipulation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>file-hidden?,
-    <ulink url="x3253.html#FileManipulation" role="AEN3385">File Manipulation</ulink>
+    <ulink url="x3254.html#FileManipulation" role="AEN3386">File Manipulation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>file-is-directory?,
-    <ulink url="x3253.html#FileManipulation" role="AEN3396">File Manipulation</ulink>
+    <ulink url="x3254.html#FileManipulation" role="AEN3397">File Manipulation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>file-is-file?,
-    <ulink url="x3253.html#FileManipulation" role="AEN3407">File Manipulation</ulink>
+    <ulink url="x3254.html#FileManipulation" role="AEN3408">File Manipulation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>file-is-readable?,
-    <ulink url="x3253.html#FileManipulation" role="AEN3470">File Manipulation</ulink>
+    <ulink url="x3254.html#FileManipulation" role="AEN3471">File Manipulation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>file-is-writeable?,
-    <ulink url="x3253.html#FileManipulation" role="AEN3482">File Manipulation</ulink>
+    <ulink url="x3254.html#FileManipulation" role="AEN3483">File Manipulation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>file-last-modified,
-    <ulink url="x3253.html#FileManipulation" role="AEN3418">File Manipulation</ulink>
+    <ulink url="x3254.html#FileManipulation" role="AEN3419">File Manipulation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>file-length,
-    <ulink url="x3253.html#FileManipulation" role="AEN3494">File Manipulation</ulink>
+    <ulink url="x3254.html#FileManipulation" role="AEN3495">File Manipulation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>file-rename!,
-    <ulink url="x3253.html#FileManipulation" role="AEN3429">File Manipulation</ulink>
+    <ulink url="x3254.html#FileManipulation" role="AEN3430">File Manipulation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>file-set-last-modified!,
-    <ulink url="x3253.html#FileManipulation" role="AEN3443">File Manipulation</ulink>
+    <ulink url="x3254.html#FileManipulation" role="AEN3444">File Manipulation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>file-set-read-only!,
-    <ulink url="x3253.html#FileManipulation" role="AEN3505">File Manipulation</ulink>
+    <ulink url="x3254.html#FileManipulation" role="AEN3506">File Manipulation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>find-resource,
-    <ulink url="x3253.html#Resources" role="AEN3336">Locating Resources</ulink>
+    <ulink url="x3254.html#Resources" role="AEN3337">Locating Resources</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>find-resources,
-    <ulink url="x3253.html#Resources" role="AEN3349">Locating Resources</ulink>
+    <ulink url="x3254.html#Resources" role="AEN3350">Locating Resources</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>flush-output-port,
-    <ulink url="c1797.html#AEN1872" role="AEN1885">Buffered I/O</ulink>
+    <ulink url="c1795.html#AEN1870" role="AEN1883">Buffered I/O</ulink>
   </primaryie>
 </indexentry>
 
@@ -947,158 +959,158 @@
 
 <indexentry>
   <primaryie>get-host-ip-by-name,
-    <ulink url="x2692.html#netutils" role="AEN2721">IP Addressing</ulink>
+    <ulink url="x2693.html#netutils" role="AEN2722">IP Addressing</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>get-host-name-by-ip,
-    <ulink url="x2692.html#netutils" role="AEN2732">IP Addressing</ulink>
+    <ulink url="x2693.html#netutils" role="AEN2733">IP Addressing</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>get-last-exception,
-    <ulink url="c1593.html#passive-debugging" role="AEN1602">       Passive Debugging     </ulink>
+    <ulink url="c1591.html#passive-debugging" role="AEN1600">       Passive Debugging     </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>get-local-host,
-    <ulink url="x2692.html#netutils" role="AEN2743">IP Addressing</ulink>
+    <ulink url="x2693.html#netutils" role="AEN2744">IP Addressing</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>get-output-string,
-    <ulink url="c1797.html#StringPorts" role="AEN2195">String Ports</ulink>
+    <ulink url="c1795.html#StringPorts" role="AEN2193">String Ports</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>get-parent-url,
-    <ulink url="x3253.html#FileManipulation" role="AEN3457">File Manipulation</ulink>
+    <ulink url="x3254.html#FileManipulation" role="AEN3458">File Manipulation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>get-process-stderr,
-    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7710">         Operating System Interface       </ulink>
+    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7761">         Operating System Interface       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>get-process-stdin,
-    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7721">         Operating System Interface       </ulink>
+    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7772">         Operating System Interface       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>get-process-stdout,
-    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7699">         Operating System Interface       </ulink>
+    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7750">         Operating System Interface       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>getBindingValue,
-    <ulink url="x7933.html#AEN8117" role="AEN8150">Adding Native Bindings</ulink>
+    <ulink url="x8239.html" role="AEN8272">Adding Native Bindings</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>getLibraryBindingNames,
-    <ulink url="x7933.html#AEN8117" role="AEN8141">Adding Native Bindings</ulink>
+    <ulink url="x8239.html" role="AEN8263">Adding Native Bindings</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>getLibraryName,
-    <ulink url="x7933.html#AEN8117" role="AEN8123">Adding Native Bindings</ulink>
+    <ulink url="x8239.html" role="AEN8245">Adding Native Bindings</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>getLibraryVersion,
-    <ulink url="x7933.html#AEN8117" role="AEN8132">Adding Native Bindings</ulink>
+    <ulink url="x8239.html" role="AEN8254">Adding Native Bindings</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>getprop,
-    <ulink url="x1420.html#AccessingSymbolicEnvironments" role="AEN1434">         Access Functions       </ulink>
+    <ulink url="x1418.html#AccessingSymbolicEnvironments" role="AEN1432">         Access Functions       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>gio/char-ready?,
-    <ulink url="x3055.html#AEN3076" role="AEN3083">Input Generics</ulink>,
-    <ulink url="x3055.html#AEN3091" role="AEN3100">Input Generics</ulink>
+    <ulink url="x3056.html#AEN3077" role="AEN3084">Input Generics</ulink>,
+    <ulink url="x3056.html#AEN3092" role="AEN3101">Input Generics</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>gio/display,
-    <ulink url="x3055.html#AEN3169" role="AEN3198">Output Generics</ulink>
+    <ulink url="x3056.html#AEN3170" role="AEN3199">Output Generics</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>gio/flush-output-port,
-    <ulink url="x3055.html#AEN3169" role="AEN3178">Output Generics</ulink>
+    <ulink url="x3056.html#AEN3170" role="AEN3179">Output Generics</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>gio/read,
-    <ulink url="x3055.html#AEN3091" role="AEN3109">Input Generics</ulink>
+    <ulink url="x3056.html#AEN3092" role="AEN3110">Input Generics</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>gio/read-block,
-    <ulink url="x3055.html#AEN3091" role="AEN3136">Input Generics</ulink>
+    <ulink url="x3056.html#AEN3092" role="AEN3137">Input Generics</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>gio/read-char,
-    <ulink url="x3055.html#AEN3091" role="AEN3118">Input Generics</ulink>
+    <ulink url="x3056.html#AEN3092" role="AEN3119">Input Generics</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>gio/read-code,
-    <ulink url="x3055.html#AEN3091" role="AEN3127">Input Generics</ulink>
+    <ulink url="x3056.html#AEN3092" role="AEN3128">Input Generics</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>gio/read-string,
-    <ulink url="x3055.html#AEN3091" role="AEN3153">Input Generics</ulink>
+    <ulink url="x3056.html#AEN3092" role="AEN3154">Input Generics</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>gio/write,
-    <ulink url="x3055.html#AEN3169" role="AEN3187">Output Generics</ulink>
+    <ulink url="x3056.html#AEN3170" role="AEN3188">Output Generics</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>gio/write-block,
-    <ulink url="x3055.html#AEN3169" role="AEN3220">Output Generics</ulink>
+    <ulink url="x3056.html#AEN3170" role="AEN3221">Output Generics</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>gio/write-char,
-    <ulink url="x3055.html#AEN3169" role="AEN3209">Output Generics</ulink>
+    <ulink url="x3056.html#AEN3170" role="AEN3210">Output Generics</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>gio/write-string,
-    <ulink url="x3055.html#AEN3169" role="AEN3237">Output Generics</ulink>
+    <ulink url="x3056.html#AEN3170" role="AEN3238">Output Generics</ulink>
   </primaryie>
 </indexentry>
 
@@ -1107,67 +1119,67 @@
 
 <indexentry>
   <primaryie>hashtable-&gt;alist,
-    <ulink url="c6969.html#AEN7122" role="AEN7194">Creation</ulink>
+    <ulink url="c6969.html#AEN7173" role="AEN7245">Creation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>hashtable/clear!,
-    <ulink url="c6969.html#AEN7304" role="AEN7309">Bulk Operations</ulink>
+    <ulink url="c6969.html#AEN7355" role="AEN7360">Bulk Operations</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>hashtable/for-each,
-    <ulink url="c6969.html#AEN7304" role="AEN7333">Bulk Operations</ulink>
+    <ulink url="c6969.html#AEN7355" role="AEN7384">Bulk Operations</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>hashtable/get,
-    <ulink url="c6969.html#AEN7208" role="AEN7236">Access</ulink>
+    <ulink url="c6969.html#AEN7259" role="AEN7287">Access</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>hashtable/get!,
-    <ulink url="c6969.html#AEN7208" role="AEN7255">Access</ulink>
+    <ulink url="c6969.html#AEN7259" role="AEN7306">Access</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>hashtable/keys,
-    <ulink url="c6969.html#AEN7304" role="AEN7321">Bulk Operations</ulink>
+    <ulink url="c6969.html#AEN7355" role="AEN7372">Bulk Operations</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>hashtable/map,
-    <ulink url="c6969.html#AEN7304" role="AEN7349">Bulk Operations</ulink>
+    <ulink url="c6969.html#AEN7355" role="AEN7400">Bulk Operations</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>hashtable/put!,
-    <ulink url="c6969.html#AEN7208" role="AEN7213">Access</ulink>
+    <ulink url="c6969.html#AEN7259" role="AEN7264">Access</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>hashtable/remove!,
-    <ulink url="c6969.html#AEN7208" role="AEN7283">Access</ulink>
+    <ulink url="c6969.html#AEN7259" role="AEN7334">Access</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>hashtable/size,
-    <ulink url="c6969.html#AEN7122" role="AEN7161">Creation</ulink>
+    <ulink url="c6969.html#AEN7173" role="AEN7212">Creation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>hashtable?,
-    <ulink url="c6969.html#AEN7122" role="AEN7149">Creation</ulink>
+    <ulink url="c6969.html#AEN7173" role="AEN7200">Creation</ulink>
   </primaryie>
 </indexentry>
 
@@ -1181,14 +1193,20 @@
 </indexentry>
 
 <indexentry>
+  <primaryie>inline-primitives,
+    <ulink url="x8848.html#AEN8888" role="AEN8899">Compiler options</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
   <primaryie>input-port-location,
-    <ulink url="x3253.html#AEN3295" role="AEN3314">Location Tracking</ulink>
+    <ulink url="x3254.html#AEN3296" role="AEN3315">Location Tracking</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>input-port?,
-    <ulink url="c1797.html#AEN2135" role="AEN2140">Port Predicates</ulink>
+    <ulink url="c1795.html#AEN2133" role="AEN2138">Port Predicates</ulink>
   </primaryie>
 </indexentry>
 
@@ -1206,7 +1224,7 @@
 
 <indexentry>
   <primaryie>iota,
-    <ulink url="x1528.html" role="AEN1561">       Miscellaneous Functions     </ulink>
+    <ulink url="x1526.html" role="AEN1559">       Miscellaneous Functions     </ulink>
   </primaryie>
 </indexentry>
 
@@ -1521,7 +1539,7 @@
 
 <indexentry>
   <primaryie>join-multicast-group,
-    <ulink url="x2692.html#AEN2953" role="AEN3008">Multicast UDP</ulink>
+    <ulink url="x2693.html#AEN2954" role="AEN3009">Multicast UDP</ulink>
   </primaryie>
 </indexentry>
 
@@ -1530,7 +1548,7 @@
 
 <indexentry>
   <primaryie>leave-multicast-group,
-    <ulink url="x2692.html#AEN2953" role="AEN3022">Multicast UDP</ulink>
+    <ulink url="x2693.html#AEN2954" role="AEN3023">Multicast UDP</ulink>
   </primaryie>
 </indexentry>
 
@@ -1542,37 +1560,37 @@
 
 <indexentry>
   <primaryie>library-exists?,
-    <ulink url="c6969.html#LibraryModule" role="AEN7597">Loadable Scheme Libraries</ulink>
+    <ulink url="c6969.html#LibraryModule" role="AEN7648">Loadable Scheme Libraries</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>library-loaded?,
-    <ulink url="c6969.html#LibraryModule" role="AEN7609">Loadable Scheme Libraries</ulink>
+    <ulink url="c6969.html#LibraryModule" role="AEN7660">Loadable Scheme Libraries</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>logand,
-    <ulink url="c6969.html#BitwiseLogicalOperations" role="AEN6990">         Bitwise Logical Operations       </ulink>
+    <ulink url="c6969.html#BitwiseLogicalOperations" role="AEN7041">         Bitwise Logical Operations       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>lognot,
-    <ulink url="c6969.html#BitwiseLogicalOperations" role="AEN7029">         Bitwise Logical Operations       </ulink>
+    <ulink url="c6969.html#BitwiseLogicalOperations" role="AEN7080">         Bitwise Logical Operations       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>logor,
-    <ulink url="c6969.html#BitwiseLogicalOperations" role="AEN7003">         Bitwise Logical Operations       </ulink>
+    <ulink url="c6969.html#BitwiseLogicalOperations" role="AEN7054">         Bitwise Logical Operations       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>logxor,
-    <ulink url="c6969.html#BitwiseLogicalOperations" role="AEN7016">         Bitwise Logical Operations       </ulink>
+    <ulink url="c6969.html#BitwiseLogicalOperations" role="AEN7067">         Bitwise Logical Operations       </ulink>
   </primaryie>
 </indexentry>
 
@@ -1587,31 +1605,31 @@
 
 <indexentry>
   <primaryie>make-buffer,
-    <ulink url="c6969.html#Buffers" role="AEN7386">Binary Buffers</ulink>
+    <ulink url="c6969.html#Buffers" role="AEN7437">Binary Buffers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>make-directories!,
-    <ulink url="x3253.html#FileManipulation" role="AEN3543">File Manipulation</ulink>
+    <ulink url="x3254.html#FileManipulation" role="AEN3544">File Manipulation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>make-directory!,
-    <ulink url="x3253.html#FileManipulation" role="AEN3531">File Manipulation</ulink>
+    <ulink url="x3254.html#FileManipulation" role="AEN3532">File Manipulation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>make-error,
-    <ulink url="x992.html#AEN1083" role="AEN1090">Creating Error Records</ulink>
+    <ulink url="x990.html#AEN1081" role="AEN1088">Creating Error Records</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>make-exception,
-    <ulink url="x992.html#Exceptions" role="AEN1300">Exceptions</ulink>
+    <ulink url="x990.html#Exceptions" role="AEN1298">Exceptions</ulink>
   </primaryie>
 </indexentry>
 
@@ -1623,7 +1641,7 @@
 
 <indexentry>
   <primaryie>make-hashtable,
-    <ulink url="c6969.html#AEN7122" role="AEN7127">Creation</ulink>
+    <ulink url="c6969.html#AEN7173" role="AEN7178">Creation</ulink>
   </primaryie>
 </indexentry>
 
@@ -1636,7 +1654,7 @@
 
 <indexentry>
   <primaryie>make-nested-error,
-    <ulink url="x992.html#AEN1083" role="AEN1127">Creating Error Records</ulink>
+    <ulink url="x990.html#AEN1081" role="AEN1125">Creating Error Records</ulink>
   </primaryie>
 </indexentry>
 
@@ -1648,7 +1666,7 @@
 
 <indexentry>
   <primaryie>max-float-precision,
-    <ulink url="x172.html#AEN268" role="AEN307">Static Parameters</ulink>
+    <ulink url="x175.html#AEN271" role="AEN310">Static Parameters</ulink>
   </primaryie>
 </indexentry>
 
@@ -1702,7 +1720,7 @@
 
 <indexentry>
   <primaryie>min-float-precision,
-    <ulink url="x172.html#AEN268" role="AEN298">Static Parameters</ulink>
+    <ulink url="x175.html#AEN271" role="AEN301">Static Parameters</ulink>
   </primaryie>
 </indexentry>
 
@@ -1754,7 +1772,7 @@
 
 <indexentry>
   <primaryie>normalize-url,
-    <ulink url="c1797.html#urlfile" role="AEN1856">URLs</ulink>
+    <ulink url="c1795.html#urlfile" role="AEN1854">URLs</ulink>
   </primaryie>
 </indexentry>
 
@@ -1763,109 +1781,109 @@
 
 <indexentry>
   <primaryie>open-binary-input-file,
-    <ulink url="c1797.html#BinaryIO" role="AEN2304">Binary Ports and Block IO</ulink>
+    <ulink url="c1795.html#BinaryIO" role="AEN2302">Binary Ports and Block IO</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-binary-output-file,
-    <ulink url="c1797.html#BinaryIO" role="AEN2317">Binary Ports and Block IO</ulink>
+    <ulink url="c1795.html#BinaryIO" role="AEN2315">Binary Ports and Block IO</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-binary-socket-input-port,
-    <ulink url="x2692.html#sockets" role="AEN2800">Socket Operations</ulink>
+    <ulink url="x2693.html#sockets" role="AEN2801">Socket Operations</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-binary-socket-output-port,
-    <ulink url="x2692.html#sockets" role="AEN2811">Socket Operations</ulink>
+    <ulink url="x2693.html#sockets" role="AEN2812">Socket Operations</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-input-file,
-    <ulink url="c1797.html#AEN1926" role="AEN1931">Port Creation</ulink>
+    <ulink url="c1795.html#AEN1924" role="AEN1929">Port Creation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-input-string,
-    <ulink url="c1797.html#StringPorts" role="AEN2175">String Ports</ulink>
+    <ulink url="c1795.html#StringPorts" role="AEN2173">String Ports</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-multicast-socket,
-    <ulink url="x2692.html#AEN2953" role="AEN2963">Multicast UDP</ulink>
+    <ulink url="x2693.html#AEN2954" role="AEN2964">Multicast UDP</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-output-file,
-    <ulink url="c1797.html#AEN1926" role="AEN1946">Port Creation</ulink>
+    <ulink url="c1795.html#AEN1924" role="AEN1944">Port Creation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-serial-input-port,
-    <ulink url="c1797.html#serialportcreation" role="AEN2478">Port Creation and Identification</ulink>
+    <ulink url="c1795.html#serialportcreation" role="AEN2479">Port Creation and Identification</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-serial-output-port,
-    <ulink url="c1797.html#serialportcreation" role="AEN2489">Port Creation and Identification</ulink>
+    <ulink url="c1795.html#serialportcreation" role="AEN2490">Port Creation and Identification</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-socket-input-port,
-    <ulink url="x2692.html#sockets" role="AEN2769">Socket Operations</ulink>
+    <ulink url="x2693.html#sockets" role="AEN2770">Socket Operations</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-socket-output-port,
-    <ulink url="x2692.html#sockets" role="AEN2783">Socket Operations</ulink>
+    <ulink url="x2693.html#sockets" role="AEN2784">Socket Operations</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-source-input-file,
-    <ulink url="x3253.html#AEN3295" role="AEN3302">Location Tracking</ulink>
+    <ulink url="x3254.html#AEN3296" role="AEN3303">Location Tracking</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-tcp-listener,
-    <ulink url="x2692.html#TCP" role="AEN2859">TCP</ulink>
+    <ulink url="x2693.html#TCP" role="AEN2860">TCP</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-tcp-socket,
-    <ulink url="x2692.html#TCP" role="AEN2846">TCP</ulink>
+    <ulink url="x2693.html#TCP" role="AEN2847">TCP</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-udp-listen-socket,
-    <ulink url="x2692.html#UDP" role="AEN2916">UDP</ulink>
+    <ulink url="x2693.html#UDP" role="AEN2917">UDP</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>open-udp-socket,
-    <ulink url="x2692.html#UDP" role="AEN2935">UDP</ulink>
+    <ulink url="x2693.html#UDP" role="AEN2936">UDP</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>output-port?,
-    <ulink url="c1797.html#AEN2135" role="AEN2152">Port Predicates</ulink>
+    <ulink url="c1795.html#AEN2133" role="AEN2150">Port Predicates</ulink>
   </primaryie>
 </indexentry>
 
@@ -1880,67 +1898,67 @@
 
 <indexentry>
   <primaryie>permit-interrupts,
-    <ulink url="x172.html#AEN268" role="AEN287">Static Parameters</ulink>
+    <ulink url="x175.html#AEN271" role="AEN290">Static Parameters</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>pretty-print,
-    <ulink url="x3253.html#PrettyPrinting" role="AEN3263">Pretty-Printing</ulink>
+    <ulink url="x3254.html#PrettyPrinting" role="AEN3264">Pretty-Printing</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>print-exception,
-    <ulink url="c1593.html#passive-debugging" role="AEN1647">       Passive Debugging     </ulink>
+    <ulink url="c1591.html#passive-debugging" role="AEN1645">       Passive Debugging     </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>print-shared,
-    <ulink url="x172.html#AEN316" role="AEN392">Dynamic Parameters</ulink>
+    <ulink url="x175.html#AEN319" role="AEN395">Dynamic Parameters</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>print-stack-trace,
-    <ulink url="c1593.html#passive-debugging" role="AEN1633">       Passive Debugging     </ulink>
+    <ulink url="c1591.html#passive-debugging" role="AEN1631">       Passive Debugging     </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>procedure-property,
-    <ulink url="c6969.html#AEN7482" role="AEN7495">Procedure Properties</ulink>
+    <ulink url="c6969.html#AEN7533" role="AEN7546">Procedure Properties</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>procedure-property!,
-    <ulink url="c6969.html#AEN7482" role="AEN7536">Procedure Properties</ulink>
+    <ulink url="c6969.html#AEN7533" role="AEN7587">Procedure Properties</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>process-terminated?,
-    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7735">         Operating System Interface       </ulink>
+    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7786">         Operating System Interface       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>process?,
-    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7684">         Operating System Interface       </ulink>
+    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7735">         Operating System Interface       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>proper-list?,
-    <ulink url="c496.html#Lists" role="AEN705">         Pairs and Lists       </ulink>
+    <ulink url="c494.html#Lists" role="AEN703">         Pairs and Lists       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>putprop,
-    <ulink url="x1420.html#AccessingSymbolicEnvironments" role="AEN1466">         Access Functions       </ulink>
+    <ulink url="x1418.html#AccessingSymbolicEnvironments" role="AEN1464">         Access Functions       </ulink>
   </primaryie>
 </indexentry>
 
@@ -1949,67 +1967,67 @@
 
 <indexentry>
   <primaryie>read-block,
-    <ulink url="c1797.html#BinaryIO" role="AEN2395">Binary Ports and Block IO</ulink>
+    <ulink url="c1795.html#BinaryIO" role="AEN2393">Binary Ports and Block IO</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>read-string,
-    <ulink url="c1797.html#bulkchario" role="AEN1971">Bulk Character I/O</ulink>
+    <ulink url="c1795.html#bulkchario" role="AEN1969">Bulk Character I/O</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>readBigDecimal,
-    <ulink url="x7933.html#AEN8375" role="AEN8391">Deserializer methods</ulink>
+    <ulink url="x8439.html#AEN8497" role="AEN8513">Deserializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>readBigInteger,
-    <ulink url="x7933.html#AEN8375" role="AEN8380">Deserializer methods</ulink>
+    <ulink url="x8439.html#AEN8497" role="AEN8502">Deserializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>readClass,
-    <ulink url="x7933.html#AEN8375" role="AEN8402">Deserializer methods</ulink>
+    <ulink url="x8439.html#AEN8497" role="AEN8524">Deserializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>readExpression,
-    <ulink url="x7933.html#AEN8375" role="AEN8413">Deserializer methods</ulink>
+    <ulink url="x8439.html#AEN8497" role="AEN8535">Deserializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>readInitializedExpression,
-    <ulink url="x7933.html#AEN8375" role="AEN8425">Deserializer methods</ulink>
+    <ulink url="x8439.html#AEN8497" role="AEN8547">Deserializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>readModule,
-    <ulink url="x7933.html#AEN8375" role="AEN8438">Deserializer methods</ulink>
+    <ulink url="x8439.html#AEN8497" role="AEN8560">Deserializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>readSymbolicEnvironment,
-    <ulink url="x7933.html#AEN8375" role="AEN8450">Deserializer methods</ulink>
+    <ulink url="x8439.html#AEN8497" role="AEN8572">Deserializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>repl-prompt,
-    <ulink url="x172.html#AEN316" role="AEN406">Dynamic Parameters</ulink>
+    <ulink url="x175.html#AEN319" role="AEN409">Dynamic Parameters</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>require-library,
-    <ulink url="c6969.html#LibraryModule" role="AEN7574">Loadable Scheme Libraries</ulink>
+    <ulink url="c6969.html#LibraryModule" role="AEN7625">Loadable Scheme Libraries</ulink>
   </primaryie>
 </indexentry>
 
@@ -2018,62 +2036,62 @@
 
 <indexentry>
   <primaryie>serial-input-port?,
-    <ulink url="c1797.html#serialportcreation" role="AEN2502">Port Creation and Identification</ulink>
+    <ulink url="c1795.html#serialportcreation" role="AEN2503">Port Creation and Identification</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>serial-output-port?,
-    <ulink url="c1797.html#serialportcreation" role="AEN2514">Port Creation and Identification</ulink>
+    <ulink url="c1795.html#serialportcreation" role="AEN2515">Port Creation and Identification</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>serialize,
-    <ulink url="c1797.html#serialprims" role="AEN2677">Serialization Procedures</ulink>,
-    <ulink url="x7933.html#serialization" role="AEN8326">Serialization</ulink>
+    <ulink url="c1795.html#serialprims" role="AEN2678">Serialization Procedures</ulink>,
+    <ulink url="x8439.html" role="AEN8448">Serialization</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>server-socket?,
-    <ulink url="x2692.html#TCP" role="AEN2872">TCP</ulink>
+    <ulink url="x2693.html#TCP" role="AEN2873">TCP</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>set-box!,
-    <ulink url="c496.html#Boxing" role="AEN764"> 	Boxes       </ulink>
+    <ulink url="c494.html#Boxing" role="AEN762"> 	Boxes       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>set-breakpoint!,
-    <ulink url="x1677.html#AEN1756" role="AEN1766">         Breakpoints       </ulink>
+    <ulink url="x1675.html#AEN1754" role="AEN1764">         Breakpoints       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>set-multicast-ttl!,
-    <ulink url="x2692.html#AEN2953" role="AEN3041">Multicast UDP</ulink>
+    <ulink url="x2693.html#AEN2954" role="AEN3042">Multicast UDP</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>set-procedure-property!,
-    <ulink url="c6969.html#AEN7482" role="AEN7514">Procedure Properties</ulink>
+    <ulink url="c6969.html#AEN7533" role="AEN7565">Procedure Properties</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>set-so-timeout!,
-    <ulink url="x2692.html#TCP" role="AEN2894">TCP</ulink>
+    <ulink url="x2693.html#TCP" role="AEN2895">TCP</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>sisc-initial-environment,
-    <ulink url="x1420.html#ObtainingSymbolicEnvironments" role="AEN1509">          Obtaining and Naming       </ulink>
+    <ulink url="x1418.html#ObtainingSymbolicEnvironments" role="AEN1507">          Obtaining and Naming       </ulink>
   </primaryie>
 </indexentry>
 
@@ -2139,67 +2157,67 @@
 
 <indexentry>
   <primaryie>socket?,
-    <ulink url="x2692.html#sockets" role="AEN2758">Socket Operations</ulink>
+    <ulink url="x2693.html#sockets" role="AEN2759">Socket Operations</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>spawn-process,
-    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7631">         Operating System Interface       </ulink>
+    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7682">         Operating System Interface       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>spawn-process-with-environment,
-    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7644">         Operating System Interface       </ulink>
+    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7695">         Operating System Interface       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>spawn-process/env,
-    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7659">         Operating System Interface       </ulink>
+    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7710">         Operating System Interface       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>stack-trace,
-    <ulink url="c1593.html#passive-debugging" role="AEN1617">       Passive Debugging     </ulink>
+    <ulink url="c1591.html#passive-debugging" role="AEN1615">       Passive Debugging     </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>stack-trace-on-error,
-    <ulink url="x172.html#AEN316" role="AEN416">Dynamic Parameters</ulink>
+    <ulink url="x175.html#AEN319" role="AEN419">Dynamic Parameters</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>strict-r5rs-compliance,
-    <ulink url="x172.html#AEN316" role="AEN427">Dynamic Parameters</ulink>
+    <ulink url="x175.html#AEN319" role="AEN430">Dynamic Parameters</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>string-&gt;uninterned-symbol,
-    <ulink url="c496.html#Symbols" role="AEN624"> 	Symbols       </ulink>
+    <ulink url="c494.html#Symbols" role="AEN622"> 	Symbols       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>string-input-port?,
-    <ulink url="c1797.html#StringPorts" role="AEN2262">String Ports</ulink>
+    <ulink url="c1795.html#StringPorts" role="AEN2260">String Ports</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>string-output-port?,
-    <ulink url="c1797.html#StringPorts" role="AEN2274">String Ports</ulink>
+    <ulink url="c1795.html#StringPorts" role="AEN2272">String Ports</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>synopsis,
-    <ulink url="x7933.html#AEN7942" role="AEN7989">External Representation of Values</ulink>
+    <ulink url="c8055.html#AEN8064" role="AEN8111">External Representation of Values</ulink>
   </primaryie>
 </indexentry>
 
@@ -2208,31 +2226,31 @@
 
 <indexentry>
   <primaryie>thread/daemon!,
-    <ulink url="x3628.html" role="AEN3674">       Basic Thread Operations     </ulink>
+    <ulink url="x3629.html" role="AEN3675">       Basic Thread Operations     </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>thread/daemon?,
-    <ulink url="x3628.html" role="AEN3688">       Basic Thread Operations     </ulink>
+    <ulink url="x3629.html" role="AEN3689">       Basic Thread Operations     </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>thread/interrupt,
-    <ulink url="x3628.html" role="AEN3765">       Basic Thread Operations     </ulink>
+    <ulink url="x3629.html" role="AEN3765">       Basic Thread Operations     </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>thread/join,
-    <ulink url="x3628.html" role="AEN3740">       Basic Thread Operations     </ulink>
+    <ulink url="x3629.html" role="AEN3741">       Basic Thread Operations     </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>thread/new,
-    <ulink url="x3628.html" role="AEN3647">       Basic Thread Operations     </ulink>
+    <ulink url="x3629.html" role="AEN3648">       Basic Thread Operations     </ulink>
   </primaryie>
 </indexentry>
 
@@ -2250,25 +2268,25 @@
 
 <indexentry>
   <primaryie>thread/result,
-    <ulink url="x3628.html" role="AEN3791">       Basic Thread Operations     </ulink>
+    <ulink url="x3629.html" role="AEN3791">       Basic Thread Operations     </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>thread/spawn,
-    <ulink url="x3628.html" role="AEN3703">       Basic Thread Operations     </ulink>
+    <ulink url="x3629.html" role="AEN3704">       Basic Thread Operations     </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>thread/start,
-    <ulink url="x3628.html" role="AEN3662">       Basic Thread Operations     </ulink>
+    <ulink url="x3629.html" role="AEN3663">       Basic Thread Operations     </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>thread/state,
-    <ulink url="x3628.html" role="AEN3718">       Basic Thread Operations     </ulink>
+    <ulink url="x3629.html" role="AEN3719">       Basic Thread Operations     </ulink>
   </primaryie>
 </indexentry>
 
@@ -2280,37 +2298,37 @@
 
 <indexentry>
   <primaryie>thread?,
-    <ulink url="x3628.html" role="AEN3636">       Basic Thread Operations     </ulink>
+    <ulink url="x3629.html" role="AEN3637">       Basic Thread Operations     </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>throw,
-    <ulink url="x992.html#RaisingErrors" role="AEN1223">Raising Errors</ulink>
+    <ulink url="x990.html#RaisingErrors" role="AEN1221">Raising Errors</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>time,
-    <ulink url="x1528.html" role="AEN1574">       Miscellaneous Functions     </ulink>
+    <ulink url="x1526.html" role="AEN1572">       Miscellaneous Functions     </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>trace,
-    <ulink url="x1677.html#AEN1685" role="AEN1725">         Runtime Tracing       </ulink>
+    <ulink url="x1675.html#AEN1683" role="AEN1723">         Runtime Tracing       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>trace-lambda,
-    <ulink url="x1677.html#AEN1685" role="AEN1691">         Runtime Tracing       </ulink>
+    <ulink url="x1675.html#AEN1683" role="AEN1689">         Runtime Tracing       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>trace-let,
-    <ulink url="x1677.html#AEN1685" role="AEN1710">         Runtime Tracing       </ulink>
+    <ulink url="x1675.html#AEN1683" role="AEN1708">         Runtime Tracing       </ulink>
   </primaryie>
 </indexentry>
 
@@ -2350,19 +2368,19 @@
 
 <indexentry>
   <primaryie>unbox,
-    <ulink url="c496.html#Boxing" role="AEN753"> 	Boxes       </ulink>
+    <ulink url="c494.html#Boxing" role="AEN751"> 	Boxes       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>unless,
-    <ulink url="x836.html#ControlFeatures" role="AEN913">         Control Features       </ulink>
+    <ulink url="x834.html#ControlFeatures" role="AEN911">         Control Features       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>untrace,
-    <ulink url="x1677.html#AEN1685" role="AEN1737">         Runtime Tracing       </ulink>
+    <ulink url="x1675.html#AEN1683" role="AEN1735">         Runtime Tracing       </ulink>
   </primaryie>
 </indexentry>
 
@@ -2371,19 +2389,19 @@
 
 <indexentry>
   <primaryie>valueEqual,
-    <ulink url="x7933.html#AEN8078" role="AEN8097">Equality</ulink>
+    <ulink url="c8055.html#AEN8200" role="AEN8219">Equality</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>vector-length-prefixing,
-    <ulink url="x172.html#AEN316" role="AEN440">Dynamic Parameters</ulink>
+    <ulink url="x175.html#AEN319" role="AEN443">Dynamic Parameters</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>visit,
-    <ulink url="x7933.html#serialization" role="AEN8353">Serialization</ulink>
+    <ulink url="x8439.html" role="AEN8475">Serialization</ulink>
   </primaryie>
 </indexentry>
 
@@ -2392,175 +2410,175 @@
 
 <indexentry>
   <primaryie>wait-for-process,
-    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7747">         Operating System Interface       </ulink>
+    <ulink url="c6969.html#OperatingSystemInterface" role="AEN7798">         Operating System Interface       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>when,
-    <ulink url="x836.html#ControlFeatures" role="AEN897">         Control Features       </ulink>
+    <ulink url="x834.html#ControlFeatures" role="AEN895">         Control Features       </ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-binary-input-from-file,
-    <ulink url="c1797.html#BinaryIO" role="AEN2361">Binary Ports and Block IO</ulink>
+    <ulink url="c1795.html#BinaryIO" role="AEN2359">Binary Ports and Block IO</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-binary-output-to-file,
-    <ulink url="c1797.html#BinaryIO" role="AEN2378">Binary Ports and Block IO</ulink>
+    <ulink url="c1795.html#BinaryIO" role="AEN2376">Binary Ports and Block IO</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-character-set,
-    <ulink url="c1797.html#charports" role="AEN1912">Character Ports</ulink>
+    <ulink url="c1795.html#charports" role="AEN1910">Character Ports</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-class-path,
-    <ulink url="x3253.html#ClassLoading" role="AEN3577">Class Loading</ulink>
+    <ulink url="x3254.html#ClassLoading" role="AEN3578">Class Loading</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-current-url,
-    <ulink url="c1797.html#urlfile" role="AEN1839">URLs</ulink>
+    <ulink url="c1795.html#urlfile" role="AEN1837">URLs</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-failure-continuation,
-    <ulink url="x992.html#AEN1004" role="AEN1012">Creation</ulink>
+    <ulink url="x990.html#AEN1002" role="AEN1010">Creation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-input-from-file,
-    <ulink url="c1797.html#redirectedio" role="AEN2094">Replacing Standard Ports</ulink>
+    <ulink url="c1795.html#redirectedio" role="AEN2092">Replacing Standard Ports</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-input-from-port,
-    <ulink url="c1797.html#redirectedio" role="AEN2062">Replacing Standard Ports</ulink>
+    <ulink url="c1795.html#redirectedio" role="AEN2060">Replacing Standard Ports</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-input-from-string,
-    <ulink url="c1797.html#StringPorts" role="AEN2233">String Ports</ulink>
+    <ulink url="c1795.html#StringPorts" role="AEN2231">String Ports</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-output-to-file,
-    <ulink url="c1797.html#redirectedio" role="AEN2115">Replacing Standard Ports</ulink>
+    <ulink url="c1795.html#redirectedio" role="AEN2113">Replacing Standard Ports</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-output-to-port,
-    <ulink url="c1797.html#redirectedio" role="AEN2078">Replacing Standard Ports</ulink>
+    <ulink url="c1795.html#redirectedio" role="AEN2076">Replacing Standard Ports</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-output-to-string,
-    <ulink url="c1797.html#StringPorts" role="AEN2249">String Ports</ulink>
+    <ulink url="c1795.html#StringPorts" role="AEN2247">String Ports</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-serial-input-from-file,
-    <ulink url="c1797.html#serialportwrappers" role="AEN2626">Serial Port Wrappers</ulink>
+    <ulink url="c1795.html#serialportwrappers" role="AEN2627">Serial Port Wrappers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-serial-input-from-port,
-    <ulink url="c1797.html#serialportwrappers" role="AEN2560">Serial Port Wrappers</ulink>
+    <ulink url="c1795.html#serialportwrappers" role="AEN2561">Serial Port Wrappers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-serial-output-to-file,
-    <ulink url="c1797.html#serialportwrappers" role="AEN2643">Serial Port Wrappers</ulink>
+    <ulink url="c1795.html#serialportwrappers" role="AEN2644">Serial Port Wrappers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with-serial-output-to-port,
-    <ulink url="c1797.html#serialportwrappers" role="AEN2578">Serial Port Wrappers</ulink>
+    <ulink url="c1795.html#serialportwrappers" role="AEN2579">Serial Port Wrappers</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>with/fc,
-    <ulink url="x992.html#AEN1004" role="AEN1023">Creation</ulink>
+    <ulink url="x990.html#AEN1002" role="AEN1021">Creation</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>write,
-    <ulink url="x7933.html#AEN7942" role="AEN7969">External Representation of Values</ulink>
+    <ulink url="c8055.html#AEN8064" role="AEN8091">External Representation of Values</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>write-block,
-    <ulink url="c1797.html#BinaryIO" role="AEN2418">Binary Ports and Block IO</ulink>
+    <ulink url="c1795.html#BinaryIO" role="AEN2416">Binary Ports and Block IO</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>write-string,
-    <ulink url="c1797.html#bulkchario" role="AEN1992">Bulk Character I/O</ulink>
+    <ulink url="c1795.html#bulkchario" role="AEN1990">Bulk Character I/O</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>writeBigDecimal,
-    <ulink url="x7933.html#AEN8461" role="AEN8479">Serializer methods</ulink>
+    <ulink url="x8439.html#AEN8583" role="AEN8601">Serializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>writeBigInteger,
-    <ulink url="x7933.html#AEN8461" role="AEN8466">Serializer methods</ulink>
+    <ulink url="x8439.html#AEN8583" role="AEN8588">Serializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>writeClass,
-    <ulink url="x7933.html#AEN8461" role="AEN8492">Serializer methods</ulink>
+    <ulink url="x8439.html#AEN8583" role="AEN8614">Serializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>writeExpression,
-    <ulink url="x7933.html#AEN8461" role="AEN8505">Serializer methods</ulink>
+    <ulink url="x8439.html#AEN8583" role="AEN8627">Serializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>writeInitializedExpression,
-    <ulink url="x7933.html#AEN8461" role="AEN8519">Serializer methods</ulink>
+    <ulink url="x8439.html#AEN8583" role="AEN8641">Serializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>writeModule,
-    <ulink url="x7933.html#AEN8461" role="AEN8534">Serializer methods</ulink>
+    <ulink url="x8439.html#AEN8583" role="AEN8656">Serializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>writeSymbolicEnvironment,
-    <ulink url="x7933.html#AEN8461" role="AEN8548">Serializer methods</ulink>
+    <ulink url="x8439.html#AEN8583" role="AEN8670">Serializer methods</ulink>
   </primaryie>
 </indexentry>
 

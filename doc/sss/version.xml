@@ -1,6 +1,6 @@
 <para>
   This document describes functionality present in &SISC; version
-  1.9.4.  Some of the document may apply to previous and future 
+  1.10.0-alpha.  Some of the document may apply to previous and future 
   versions.  When in doubt, the source of this document can be found
   in the &SISC; CVS repository, or in the packaged source distribution
   that should be available wherever the binary distribution was obtained.

@@ -10,6 +10,102 @@
       whose definition is included in the full &SISC; distribution,
       but not the lite distribution.
     </para>
+    <sect2 id="Definitions">
+      <title>Definitions</title>
+      <para>
+        In addition to the standard &R5RS; definition syntaxes, &SISC;
+        provides an additional value definition and syntax definition form.
+      </para>
+      <para>
+        First, <function>define-values</function>, which allows
+        more than one binding to be created at once, given the
+        multiple-value return of its body.
+      </para>
+      <para>
+        <blockquote>
+          <para>
+            <indexterm><primary>define-values</primary>
+            </indexterm>
+            &syntax;
+            <methodsynopsis language="scheme" id="definevalues">
+              <type>undefined</type>
+              <methodname>define-values</methodname>
+              <methodparam>
+                <parameter>(binding</parameter>
+              </methodparam>
+              <methodparam repeat="repeat">
+                <parameter>binding</parameter>
+              </methodparam>)
+            <methodparam>
+              <parameter>expression</parameter>
+            </methodparam>
+          </methodsynopsis>
+            <blockquote>
+              <para>
+                Evaluates the expression in the body, which
+                must return the same number of values as
+                there are binding names.  Each value is then
+                bound (in an undefined order) to each binding
+                name.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        <function>define-values</function> behaves like
+        <function>define</function> in terms of which environment the
+        bindings are created.  If the <function>define-values</function>
+        statement is at the top-level then bindings are created in the
+        top-level environment.  If the statement is in a lexical
+        environment, then it behaves just as an internal define.
+      </para>
+      <para>
+        Second, <function>define-simple-syntax</function> provides a
+        shorthand for syntax definition when the syntactic form's
+        appearance is similar to a function.
+      </para>
+      <para>
+        <blockquote>
+          <para>
+            <indexterm><primary>define-simple-syntax</primary>
+            </indexterm>
+            &syntax;
+            <methodsynopsis language="scheme" id="definesimplesyntax">
+              <type>undefined</type>
+              <methodname>define-simple-syntax</methodname>
+              <methodparam>
+                <parameter>(name</parameter>
+              </methodparam>
+              <methodparam rep="repeat">
+                <parameter>vars</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>body</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates a syntactic form with the given name, 
+                and any number of listed syntactic variables, which
+                expands to the given body (with instances of the
+                syntactic variables hygienically expanded).
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>        
+      </para>
+      <para>
+        Here is an example usage of
+        <function>define-simple-syntax</function> to define the
+        <function>when</function> macro:
+      </para>
+      <programlisting>
+(define-simple-syntax (when condition body ...)
+  (if condition
+      (begin body ...)))
+      </programlisting>
+    </sect2>
     <sect2 id="BitwiseLogicalOperations">
       <title>
         Bitwise Logical Operations
