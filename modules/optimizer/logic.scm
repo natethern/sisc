@@ -3,7 +3,7 @@
                 (opt body
                      (union-state-entry*
                       state
-                      'vars
+                      'lvars
                       (cond [(list? formals)
                              formals]
                             [(pair? formals)
@@ -14,69 +14,72 @@
 ;;Constant Propogation (always safe)
 ; This function is complicatedly thorough
 
-(define (cp-candidates formals values* state rec)
-  (let ((set-vars (get-state-entry state 'set-vars))
-        (nf '())
-        (nv '()))
-    (define (cp-helper x y acc)
-      (if (null? x) acc
-          (let ((cx (car x))
-                (cy (car y)))
-            (cond [(null? x) acc]
-                  ;; If this var is bound to another var ref,
-                  ;; see if it too is bound to a cp-candidate,
-                  ;; and use that value instead of the var.
-                  [(and rec
-                        (symbol? cy)
-                        (assq cy acc)) =>
-                        (lambda (vref)
-                          (let vloop ((v (cdr vref)))
-                            ;;Watch that we never have a chain leading
-                            ;;to an existing var
-                            (cond [(eq? v cx)
-                                   (error 'optimizer "optimizer detected circular variable assignment")]
-                                  ;; Reached an immediate or non-var
-                                  [(not (symbol? v)) 
-                                   (cp-helper (cdr x)
-                                              (cdr y)
-                                              (cons (cons cx v) acc))]
-                                  [(assq v acc) =>
-                                   (lambda (vref2)
-                                     (vloop (cdr vref2)))]
-                                  [else (cp-helper (cdr x)
-                                                   (cdr y)
-                                                   (cons (cons cx v) acc))])))]
-                  [(and (symbol? cy)
-                        (memq cy formals))
-                   (cp-helper (cdr x)
-                              (cdr y) 
-                              (cons (cons cx cy) acc))]
-                  [(or (not (immediate? cy))
-                       (and set-vars (memq cx set-vars)))
-                   (set! nf (cons cx nf))
-                   (set! nv (cons cy nv))
-                   (cp-helper (cdr x) (cdr y) acc)]
-                  [else 
-                    (if rec
-                        (begin
-                          (let vloop ((v acc))
-                            (unless (null? v) 
-                              (if (eq? (cdr v) cx)
-                                  (set-cdr! v cy))))
-                          (set! nf (cons cx nf))
-                          (set! nv (cons cy nv))))
-                    (cp-helper (cdr x)
-                               (cdr y) 
-                               (cons (cons cx cy) acc))]))))
-    (let ((cpc (cp-helper formals values* '())))
-      (values nf nv cpc))))
-
+(define cp-candidates 
+  (lambda (formals values* state rec)
+    (let ((set-vars (get-state-entry state 'set-vars))
+          (nf '())
+          (nv '()))
+      (define (cp-helper x y acc)
+        (if (null? x) acc
+            (let ((cx (car x))
+                  (cy (car y)))
+              (cond [(null? x) acc]
+                    ;; If this var is bound to another var ref,
+                    ;; see if it too is bound to a cp-candidate,
+                    ;; and use that value instead of the var.
+                    [(and rec
+                          (symbol? cy)
+                          (assq cy acc)) =>
+                          (lambda (vref)
+                            (let vloop ((v (cdr vref)))
+                              ;;Watch that we never have a chain leading
+                              ;;to an existing var
+                              (cond [(eq? v cx)
+                                     (error 'optimizer "optimizer detected circular variable assignment")]
+                                    ;; Reached an immediate or non-var
+                                    [(not (symbol? v)) 
+                                     (cp-helper (cdr x)
+                                                (cdr y)
+                                                (cons (cons cx v) acc))]
+                                    [(assq v acc) =>
+                                     (lambda (vref2)
+                                       (vloop (cdr vref2)))]
+                                    [else (cp-helper (cdr x)
+                                                     (cdr y)
+                                                     (cons (cons cx v) acc))])))]
+                    [(and (symbol? cy)
+                          (or (and rec (memq cy formals))
+                              (memq cy (get-state-entry state 'lvars))))
+                     (cp-helper (cdr x)
+                                (cdr y) 
+                                (cons (cons cx cy) acc))]
+                    [(or (not (immediate? cy))
+                         (and set-vars (memq cx set-vars)))
+                     (set! nf (cons cx nf))
+                     (set! nv (cons cy nv))
+                     (cp-helper (cdr x) (cdr y) acc)]
+                    [else 
+                      (if rec
+                          (begin
+                            (let vloop ((v acc))
+                              (unless (null? v) 
+                                (if (eq? (cdr v) cx)
+                                    (set-cdr! v cy))))
+                            (set! nf (cons cx nf))
+                            (set! nv (cons cy nv))))
+                      (cp-helper (cdr x)
+                                 (cdr y) 
+                                 (cons (cons cx cy) acc))]))))
+      (let ((cpc (cp-helper formals values* '())))
+        (values nf nv cpc)))))
+  
 (define (opt:letrec-helper formals values* state)
-  (let-values ([(nf nvo cpc)
-                (cp-candidates formals values* state '#t)])
-    (let ([state (if (null? cpc)
-                     state
-                     (union-state-entry* state 'constant-prop cpc))])
+  (let ((state (union-state-entry* state 'lvars formals)))
+    (let-values ([(nf nvo cpc)
+                  (cp-candidates formals values* state '#t)])
+      (let ([state (if (null? cpc)
+                       state
+                       (union-state-entry* state 'constant-prop cpc))])
 ;      (let-values ([(nv fstate*)
 ;                    (let ([x (map (lambda (e)
 ;                                    (let-values ([(rv state) (opt e state)])
@@ -89,7 +92,7 @@
 ;             nf nv (merge-states 
 ;                    state 
 ;                    (apply merge-states fstate*)))))
-)))
+))))
 
 (define (opt:letrec formals values* body state)
   (let-values ([(nf nv state) (opt:letrec-helper formals values* state)])
@@ -101,17 +104,18 @@
        (merge-states state bstate)))))
 
 (define (opt:let formals values* body state)
-  (let-values ([(nf nv cpc) (cp-candidates formals values* state '#f)])
-    (let-values ([(rv state)
-                  (opt body (if (null? cpc)
-                                state
-                                (union-state-entry* state 'constant-prop
-                                                    cpc)))])
-      (values
-       (if (null? nf)
-           rv
-           `((lambda ,nf ,rv) ,@nv))
-       state))))
+  (let ((state (union-state-entry* state 'lvars formals)))
+    (let-values ([(nf nv cpc) (cp-candidates formals values* state '#f)])
+      (let-values ([(rv state)
+                    (opt body (if (null? cpc)
+                                  state
+                                  (union-state-entry* state 'constant-prop
+                                                      cpc)))])
+        (values
+         (if (null? nf)
+             rv
+             `((lambda ,nf ,rv) ,@nv))
+         state)))))
 
 (define (opt:ref ref state)
   (let ((cp (get-state-entry state 'constant-prop)))

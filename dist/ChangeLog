@@ -1,3 +1,12 @@
+2002-09-30  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Added constant-propogation of lexical variables to the optimizer.
+
+2002-09-29  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Key developers increased the value of 
+          (floor (/ (- (system-time) 307461060000) 31536000000))
+
 2002-09-29  Matthias Radestock  <matthias@sorted.org>
 
 	* Made S2J's Java nulls typed, which, amongst other benefits,

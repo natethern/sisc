@@ -47,7 +47,6 @@ public class BuiltinProcedure extends Procedure {
         } catch (NestedPrimRuntimeException npr) {
             error(r, name, npr);
         } catch (RuntimeException re) {
-            re.printStackTrace();
             String msg = re.getMessage();
             if (msg == null) msg = re.toString();
             error(r, name, msg);
