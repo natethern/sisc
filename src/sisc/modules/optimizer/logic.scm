@@ -217,15 +217,6 @@
                 (andmap constant? rands))
            (values (eval `("noexpand" (,rator ,@rands)))
                    `((new-assumptions ,rator)))]
-          [(and (pair? rator)
-                (eq? (car rator) 'lambda)
-                (pair? (cdr rator))
-                (null? (cadr rator))
-                (pair? (cddr rator))
-                (null? (cdddr rator))
-                (not-redefined? 'lambda)
-                (null? rands))
-           (values (caddr rator) (new-state))]
           [else 
             (values `(,rator ,@rands) (new-state))))))
 
