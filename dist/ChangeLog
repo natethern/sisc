@@ -1,3 +1,7 @@
+2002-09-28  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Added support for stack-trace on wind-safe continuations
+
 2002-09-27  Matthias Radestock  <matthias@sorted.org>
 
 	* Introduced <top> and <bot> types for generic procedures

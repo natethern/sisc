@@ -160,8 +160,10 @@
          (cdr keys)))))
 
 (define (stack-trace k)
-  (if (null? k)
-      '()
+  (cond
+    [(null? k) '()]
+    [(annotation k 'unsafe-cont) => stack-trace]
+    [else
       (let ([nxp (continuation-nxp k)]
             [stk (stack-trace (continuation-stk k))])
         (if (null? nxp)
@@ -175,7 +177,7 @@
                                '(line-number
                                  column-number
                                  source-file))))
-                  stk)))))
+                  stk))))))
 
 (define (print-stack-trace k)
   (for-each
@@ -209,8 +211,7 @@
                      [else #f])
                (car ec))])
     (if k
-        (cond [(annotation k 'unsafe-cont) => print-stack-trace]
-              [else (print-stack-trace k)])
+        (print-stack-trace k)
         (display (format "{no stack trace available}~%")))
     (let ([p (assoc-val 'parent e)])
       (if p 
