@@ -1,7 +1,10 @@
 package sisc.data;
 
 import java.io.*;
+
 import sisc.io.ValueWriter;
+import sisc.ser.Deserializer;
+import sisc.ser.Serializer;
 
 public class SchemeVoid extends Value implements Singleton {
     public static SchemeVoid VOID=new SchemeVoid();
@@ -19,6 +22,9 @@ public class SchemeVoid extends Value implements Singleton {
     public Value singletonValue() {
         return VOID;
     }
+
+    public void serialize(Serializer s) throws IOException {}
+    public void deserialize(Deserializer s) throws IOException {}
 }
 /*
  * The contents of this file are subject to the Mozilla Public
