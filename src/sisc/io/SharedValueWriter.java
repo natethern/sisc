@@ -16,8 +16,9 @@ public class SharedValueWriter extends PortValueWriter {
     private int count;
 
     public SharedValueWriter(OutputPort port,
-                             boolean vectorLengthPrefixing) {
-        super(port, vectorLengthPrefixing);
+                             boolean vectorLengthPrefixing,
+			     boolean caseSensitive) {
+        super(port, vectorLengthPrefixing, caseSensitive);
         shared = new HashMap(1);
         visited = new LinkedList();
         count = 0;

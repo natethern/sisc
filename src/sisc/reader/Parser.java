@@ -24,7 +24,8 @@ public class Parser extends Util implements Tokens {
     public static final int 
         PRODUCE_IMMUTABLES =0x1,
         PRODUCE_ANNOTATIONS=0x2,
-        STRICT_R5RS        =0x4;
+        STRICT_R5RS        =0x4,
+	CASE_SENSITIVE     =0x8;
 
     public boolean annotate = Defaults.EMIT_ANNOTATIONS;
 
@@ -199,7 +200,7 @@ public class Parser extends Util implements Tokens {
                 Lexer.in(lexer.sval.charAt(0), Lexer.number_prefixes)) 
                 throw new IOException(liMessage(SISCB, "invalididentifier",
                                                 lexer.sval));
-            o=Symbol.get(lexer.sval);
+            o=Symbol.get(lexer.sval, caseSensitive(flags));
             break;
         case TT_SHARP:
             int c=is.read();
@@ -403,6 +404,10 @@ public class Parser extends Util implements Tokens {
         }
 
         return (h==null ? (Value)EMPTYLIST : (Value)h);
+    }
+
+    protected final boolean caseSensitive(int flags) {
+        return (flags & CASE_SENSITIVE) != 0;
     }
 
     protected final boolean produceAnnotations(int flags) {

@@ -150,6 +150,7 @@
 (define current-input-port      (make-native-parameter "inputPort"))
 (define current-output-port     (make-native-parameter "outputPort"))
 (define current-class-path      (make-native-parameter "classPath"))
+(define case-sensitive          (make-native-parameter "caseSensitive"))
 (define print-shared            (make-native-parameter "printShared"))
 (define vector-length-prefixing (make-native-parameter "vectorLengthPrefixing"))
 (define emit-debugging-symbols  (make-native-parameter "emitDebuggingSymbols"))

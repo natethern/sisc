@@ -52,7 +52,6 @@ public class Primitives extends IndexedProcedure {
             define("call-with-failure-continuation", CALLFC);
             define("call-with-values", CALLWITHVALUES);
             define("car", CAR);
-            define("case-sensitive", CASESENSITIVE);
             define("cdr", CDR);
             define("ceiling", CEILING);
             define("char->integer", CHAR2INTEGER);
@@ -254,7 +253,6 @@ public class Primitives extends IndexedProcedure {
             case SUB: throwArgSizeException(); return VOID;
 
             case COMPACTSTRINGREP: return truth(SchemeString.compactRepresentation);
-	    case CASESENSITIVE: return truth(r.dynenv.caseSensitive); 
             case CURRENTWIND: return r.dynenv.wind;
             case GENSYM: 
                 long unv=r.tctx.nextUnique();
@@ -414,9 +412,6 @@ public class Primitives extends IndexedProcedure {
                 return VOID;
             case STRING2UNINTERNEDSYMBOL:
                 return Symbol.getUnique(string(vlr[0]));
-            case CASESENSITIVE: 
-		r.dynenv.caseSensitive = truth(vlr[0]);
-		return VOID;
             case REPORTENVIRONMENT:
                 if (FIVE.equals(num(vlr[0])))
                     try {
@@ -752,7 +747,7 @@ public class Primitives extends IndexedProcedure {
         return VOID;
     }
 
-    //next: 125
+    //next: 125, {6}
     static final int
         ACOS = 23,
         ADD = 114,
@@ -768,7 +763,6 @@ public class Primitives extends IndexedProcedure {
         CALLFC = 55,
         CALLWITHVALUES = 106,
         CAR = 15,
-        CASESENSITIVE = 6,
         CDR = 16,
         CEILING = 49,
         CHAR2INTEGER = 43,

@@ -289,6 +289,7 @@ public abstract class Util implements Version {
                                              o.synopsis()));
     }
 
+    // Synonym for Symbol.get(s) (i.e. a lowercased sym)
     public static final Symbol sym(String s) {
         return Symbol.get(s);
     }

@@ -124,13 +124,16 @@ public class IO extends IndexedProcedure {
     
     public static Value read(Interpreter r, InputPort i) 
         throws ContinuationException {
-        return read(r, i, 0);
+        return read(r, i, r.dynenv.caseSensitive ? 
+		          sisc.reader.Parser.CASE_SENSITIVE : 0);
     }
 
     public static Value readCode(Interpreter r, InputPort i) 
         throws ContinuationException {
         return read(r, i, sisc.reader.Parser.PRODUCE_ANNOTATIONS |
-                    sisc.reader.Parser.PRODUCE_IMMUTABLES);
+                    sisc.reader.Parser.PRODUCE_IMMUTABLES |
+		    (r.dynenv.caseSensitive ? 
+		     sisc.reader.Parser.CASE_SENSITIVE : 0));
     }
 
     public Value displayOrWrite(Interpreter r,
@@ -140,8 +143,10 @@ public class IO extends IndexedProcedure {
         throws ContinuationException {
         try {
             ValueWriter w = r.dynenv.printShared ?
-                new SharedValueWriter(port, r.dynenv.vectorLengthPrefixing):
-                new PortValueWriter(port, r.dynenv.vectorLengthPrefixing);
+                new SharedValueWriter(port, r.dynenv.vectorLengthPrefixing,
+				      r.dynenv.caseSensitive):
+                new PortValueWriter(port, r.dynenv.vectorLengthPrefixing,
+				    r.dynenv.caseSensitive);
             if (display) w.display(v);
             else w.write(v);
         } catch (IOException e) {

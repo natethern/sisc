@@ -86,6 +86,10 @@ public class Interpreter extends Util {
         return dynenv.ctx;
     }
 
+    public Symbol getSymbol(String v) {
+	return Symbol.get(v, dynenv.caseSensitive);
+    }
+
     public Expression compile(Value v) throws ContinuationException {
         return compiler.compile(this, v, getCtx().toplevel_env);
     }

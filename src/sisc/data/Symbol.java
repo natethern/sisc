@@ -17,6 +17,10 @@ public class Symbol extends Value {
     }
 
     public static Symbol get(String str) {
+	return get(str, false);
+    }
+
+    public static Symbol get(String str, boolean caseSensitive) {
         return intern(caseSensitive ? str : str.toLowerCase());
     }
 
@@ -55,8 +59,8 @@ public class Symbol extends Value {
     }
 
     public void write(ValueWriter w) throws IOException {
-        if ((caseSensitive || symval.toLowerCase().equals(symval))
-            && !Lexer.contains(symval, Lexer.special_and_reserved) 
+        if ((w.caseSensitive() || symval.toLowerCase().equals(symval))
+            && !Lexer.contains(symval, Lexer.special_and_reserved)
             && (Parser.isPeculiarIdentifier(symval)
                 || (symval.length()>0
                     && Lexer.isIdentifierStart(symval.charAt(0)))))

@@ -166,6 +166,14 @@ public class DynamicEnvironment extends Util implements Cloneable {
         vectorLengthPrefixing = truth(v);
     }
 
+    public Value getCaseSensitive() {
+	return truth(caseSensitive);
+    }
+
+    public void setCaseSensitive(Value v) {
+	caseSensitive = truth(v);
+    }
+
     public Value getEmitDebuggingSymbols() {
         return truth(emitDebuggingSymbols);
     }

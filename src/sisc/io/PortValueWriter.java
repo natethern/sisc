@@ -13,16 +13,18 @@ public class PortValueWriter extends Util
 
     private boolean display;
 
-    private boolean vectorLengthPrefixing;
+    private boolean vectorLengthPrefixing, caseSensitive;
 
     public PortValueWriter(OutputPort port) {
-        this(port, false);
+        this(port, false, false);
     }
 
     public PortValueWriter(OutputPort port,
-                           boolean vectorLengthPrefixing) {
+                           boolean vectorLengthPrefixing,
+			   boolean caseSensitive) {
         this.port = port;
         this.vectorLengthPrefixing = vectorLengthPrefixing;
+	this.caseSensitive = caseSensitive;
     }
 
     protected void displayOrWrite(Value v, boolean display)
@@ -68,6 +70,10 @@ public class PortValueWriter extends Util
 
     public boolean vectorLengthPrefixing() {
         return vectorLengthPrefixing;
+    }
+
+    public boolean caseSensitive() {
+	return caseSensitive;
     }
 }
 

@@ -13,6 +13,7 @@ public interface ValueWriter {
 
     boolean isInlinable(Value v);
     boolean vectorLengthPrefixing();
+    boolean caseSensitive();
 }
 
 /*
