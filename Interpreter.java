@@ -58,9 +58,6 @@ public class Interpreter extends Util {
 	}
     }
 
-    //Scheme->Java exception conversion FK
-    protected static Expression THROW_SCHEME_EXCEPTION=new ThrowSchemeException();
-
     //the compiler is stateless; if that ever changes it would need to
     //be moved to the dynenv
     public static Compiler compiler = new Compiler();
@@ -69,18 +66,22 @@ public class Interpreter extends Util {
     public DynamicEnv dynenv;
 
     //REGISTERS
-    public boolean envReclaimable;
     public Value                 acc;
     public Expression            nxp;
     public Value[]               vlr;
     public LexicalEnvironment    env;
     public CallFrame             stk, fk;
 
+    //Scheme->Java exception conversion FK
+    static CallFrame top_fk = new CallFrame(new ThrowSchemeException(),
+                                            null, null, null, null);
+    static {
+        top_fk.fk = top_fk;
+        top_fk.lock = true;
+    }
+
     public Interpreter(AppContext ctx, DynamicEnv dynenv) {
-        env=new LexicalEnvironment();
-	fk=new CallFrame(THROW_SCHEME_EXCEPTION, null, null, null, stk);
-	fk.fk=fk;
-	fk.capture();
+	fk=top_fk;
 	this.ctx = ctx;
 	this.dynenv = dynenv;
     }
@@ -264,7 +265,6 @@ public class Interpreter extends Util {
     }
 
     protected static final int VALUESPOOLSIZE=4;
-    protected static final Value[] ZV = new Value[0];
     protected Value deadValues[][] = new Value[VALUESPOOLSIZE][];
 
     public final Value[] createValues(int size) {
