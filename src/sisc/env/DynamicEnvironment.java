@@ -186,8 +186,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
     
     protected static String getDefaultCharacterSet() {
         // I wish there were a better way to do this
-        OutputStreamWriter p=new OutputStreamWriter(System.out);
-        return p.getEncoding();
+        InputStreamReader r=new InputStreamReader(new ByteArrayInputStream(new byte[0]));
+        return r.getEncoding();
     }
 }
 /*
