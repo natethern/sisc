@@ -467,11 +467,9 @@ public class Interpreter extends Util {
     }
 
     public final void returnValues(Value[] v) {
-        /*if (recycleValues) {
-		  int size = v.length;
-          if (size == 0 || size >= VALUESPOOLWIDTH) return;
-		  deadValues[size]=v;
-        }*/
+        int size = v.length;
+        if (size == 0 || size >= VALUESPOOLWIDTH) return;
+            deadValues[size]=v;
     }
 }
 /*
