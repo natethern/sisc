@@ -14,7 +14,7 @@ public class IO extends IndexedProcedure {
         Symbol.intern("sisc.modules.io.Messages");
 
     protected static final int
-        //NEXT = 29,
+        //NEXT = 24,
 
         ABSPATHQ            = 0,
         CHARREADY           = 3,
@@ -25,26 +25,21 @@ public class IO extends IndexedProcedure {
         FINDRESOURCE        = 6,
         FINDRESOURCES       = 2,
         FLUSHOUTPUTPORT     = 10,
-        GETOUTPUTSTRING     = 11,
         INPORTQ             = 12,
         INPORTLOCATION      = 13,
         LOAD                = 14,
         MAKEPATH            = 15,
         NORMALIZEURL        = 16,
         OPENINPUTFILE       = 17,
-        OPENINPUTSTRING     = 18,
         OPENOUTPUTFILE      = 19,
         OPENSOURCEINPUTFILE = 20,
-        OPENOUTPUTSTRING    = 21,
         OUTPORTQ            = 22,
         PEEKCHAR            = 23,
-        READ                = 24,
-        READCHAR            = 25,
-        READCODE            = 26,
+        READ                = 21,
+        READCHAR            = 18,
+        READCODE            = 11,
         WRITE               = 1,
-        WRITECHAR           = 7,
-        STRINGINPORTQ       = 27,
-        STRINGOUTPORTQ      = 28;
+        WRITECHAR           = 7;
         
 
     public static class Index extends IndexedLibraryAdapter { 
@@ -63,23 +58,18 @@ public class IO extends IndexedProcedure {
         define("find-resource"      , FINDRESOURCE);
         define("find-resources"     , FINDRESOURCES);
         define("flush-output-port"  , FLUSHOUTPUTPORT);
-        define("get-output-string"  , GETOUTPUTSTRING);
         define("input-port?"        , INPORTQ);
         define("input-port-location", INPORTLOCATION);
         define("load"               , LOAD);
         define("normalize-url"      , NORMALIZEURL);
         define("open-input-file"    , OPENINPUTFILE);
-        define("open-input-string"  , OPENINPUTSTRING);
         define("open-output-file"   , OPENOUTPUTFILE);
-        define("open-output-string" , OPENOUTPUTSTRING);
         define("open-source-input-file", OPENSOURCEINPUTFILE);
         define("output-port?"       , OUTPORTQ);
         define("peek-char"          , PEEKCHAR);
         define("read"               , READ);
         define("read-char"          , READCHAR);
         define("read-code"          , READCODE);
-        define("string-input-port?" , STRINGINPORTQ);
-        define("string-output-port?", STRINGOUTPORTQ);
         define("write"              , WRITE);
         define("write-char"         , WRITECHAR);
         }
@@ -247,7 +237,6 @@ public class IO extends IndexedProcedure {
         switch (f.vlr.length) {
         case 0:
             switch (id) {
-            case OPENOUTPUTSTRING: return new WriterOutputPort(new StringWriter(), false);
             case PEEKCHAR:
                 Value v=readChar(f, f.dynenv.in);
                 if (v instanceof SchemeCharacter)
@@ -266,13 +255,6 @@ public class IO extends IndexedProcedure {
             switch (id) {
             case INPORTQ: return truth(f.vlr[0] instanceof InputPort);
             case OUTPORTQ: return truth(f.vlr[0] instanceof OutputPort);
-            case STRINGINPORTQ:
-                return truth((f.vlr[0] instanceof ReaderInputPort) &&
-                             (((ReaderInputPort)f.vlr[0]).getReader() instanceof StringReader));
-
-            case STRINGOUTPORTQ:
-                return truth((f.vlr[0] instanceof WriterOutputPort) &&
-                             (((WriterOutputPort)f.vlr[0]).getWriter() instanceof StringWriter));
             case CHARREADY:
                 InputPort inport=inport(f.vlr[0]);
                 try {
@@ -284,8 +266,6 @@ public class IO extends IndexedProcedure {
                 return displayOrWrite(f, f.dynenv.out, f.vlr[0], true);
             case WRITE:
                 return displayOrWrite(f, f.dynenv.out, f.vlr[0], false);
-            case OPENINPUTSTRING:
-                return new ReaderInputPort(new StringReader(string(f.vlr[0])));
             case PEEKCHAR:
                 inport=inport(f.vlr[0]);
                 Value v=readChar(f, inport);
@@ -301,20 +281,6 @@ public class IO extends IndexedProcedure {
             case READCODE:
                 inport=inport(f.vlr[0]);
                 return readCode(f, inport);
-            case GETOUTPUTSTRING:
-                OutputPort port=outport(f.vlr[0]);
-                if (!(port instanceof WriterOutputPort) ||
-                    !(((WriterOutputPort)port).getWriter() 
-                      instanceof StringWriter))
-                    throwPrimException( liMessage(IOB, "outputnotastringport"));
-                try {
-                    port.flush();
-                } catch (IOException e) {}
-
-                StringWriter sw=(StringWriter)((WriterOutputPort)port).getWriter();
-                SchemeString s=new SchemeString(sw.getBuffer().toString());
-                sw.getBuffer().setLength(0);
-                return s;
             case OPENSOURCEINPUTFILE:
                 URL url = url(f.vlr[0]);
                 try {
