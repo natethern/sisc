@@ -34,8 +34,19 @@
 (current-evaluator eval)
 (emit-annotations #t)
 
-(define (parameterize . default)
-  (make-parameter (if (not (null? default)) (car default) #f)))
+(define (parameterize . args)
+  (let ([initial-value (if (null? args) #f (car args))]
+        [constraint? (if (or (null? args) (null? (cdr args)))
+                        (lambda (x) #t)
+                        (if (not (procedure? (cadr args)))
+                            (error 'parameterize "constraint is not a procedure/")
+                            (cadr args)))])
+    (let ([parameter (make-parameter initial-value)])
+      (lambda arg
+        (cond [(null? arg) (parameter)]
+              [(constraint? (car arg)) 
+               (parameter (car arg))]
+              [else (error "new parameter value does not meet the parameter's type constraints")])))))
 
 ;;A parameter that defines whether vectors will be printed with a length
 ;;prefix

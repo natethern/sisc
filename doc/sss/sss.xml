@@ -177,9 +177,19 @@ for <function>sqrt</function>, it is not clear what other mathematical
         <listitem>
           <para>6.5 -
             The environment returned by the
-            <function>scheme-report-environment</function> contains
-            more bindings than specified in &R5RS;.  This is a
-            violation of the standard.
+            <function>scheme-report-environment</function> does not 
+            contain the syntactic keywords specified in the standard.
+            This is a violation of the standard.
+          </para>
+        </listitem>
+        <listitem>
+          <para>6.5 -
+            If a syntactic keyword defined by &R5RS; is redefined,
+            that definition overrides the keyword in all contexts.  In
+            particular, 
+            the environment returned by the
+            <function>scheme-report-environment</function> is affected
+            as well.
           </para>
         </listitem>
       </orderedlist>
@@ -240,38 +250,6 @@ for <function>sqrt</function>, it is not clear what other mathematical
       </varlistentry>
     </variablelist>
   </appendix>
-<!--
-  <bibliography>
-    <title>References</title>
-    <bibliomixed>
-      <bibliomset relation="article">
-	<title role="article">
-	  Syntactic abstraction in Scheme
-	</title>.
-	<author>
-	  <firstname>R. </firstname> 
-	  <othername>Kent </othername> 
-	  <surname>Dybvig</surname>
-	</author>, 
-	<author>
-	  <firstname>Robert </firstname> 
-	  <surname>Hieb</surname>, 
-	</author> and 
-	<author>
-	  <firstname>Carl </firstname>
-	  <surname>Bruggeman</surname>
-	</author>.
-      </bibliomset>
-      <bibliomset relation="journal">
-	<title>Lisp and Symbolic Computation</title>
-	<volumenum>5</volumenum>,
-	<issuenum>4</issuenum>,
-	pp. <pagenums>83-110</pagenums>,
-	<pubdate>December, 1993</pubdate>.
-      </bibliomset>
-    </bibliomixed>
-  </bibliography>
--->
 <!--  &index; -->
   &gfdl;
 </book>

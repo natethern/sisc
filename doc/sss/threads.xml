@@ -641,7 +641,9 @@
           <blockquote>
             <para>
               Wakes exactly one thread waiting on the monitor, if any such
-              threads exist.
+              threads exist.  If the notifying thread holds the lock
+              on <parameter>monitor</parameter>, the waiting thread
+              will not procede until the notifying thread releases the lock.
             </para>
           </blockquote>
         </para>
@@ -657,7 +659,9 @@
           <blockquote>
             <para>	  
               Wakes all threads waiting on the monitor, if any waiting
-              threads exist.
+              threads exist.  If the notifying thread holds the lock
+              on <parameter>monitor</parameter>, the waiting thread
+              will not procede until the notifying thread releases the lock.
             </para>
           </blockquote>
         </para>

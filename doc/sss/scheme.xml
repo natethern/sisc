@@ -239,6 +239,38 @@
 	according to the locale's rules.
       </para>
     </sect2>
+    <sect2 id="Lists">
+      <title>
+        Pairs and Lists
+      </title>
+      <para>
+        &SISC; provides a few non-standard functions for dealing with
+        pairs and lists.
+      </para>
+      <para>
+	<blockquote>
+	  <para>
+	    &procedure;
+	    <methodsynopsis language="scheme">
+	      <type>#t/#f</type>
+	      <methodname>proper-list?</methodname>
+	      <methodparam>
+		<parameter>datum</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>        
+                Returns <literal>#t</literal> if the given argument is
+                a <emphasis>proper-list</emphasis>.  That is, if the
+                argument is a pair, whose cdr is either the empty-list
+                or also a proper-list, and which contains no
+                references to itself (is not circular).
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
     <sect2 id="Vectors">
       <title>
 	Vectors
@@ -384,6 +416,48 @@
         contained in the other.
       </para>
     </sect2>
+    <sect2 id="Parameters">
+      <title>
+        Parameters
+      </title>
+      <para>
+        A parameter is a named thread-local variable that is accessed through
+        a function.  The function, when given no arguments, returns
+        the current value of the parameter.  When given an argument,
+        the value of the parameter is set to the provided value.  
+      </para>
+      <para>
+        Parameters are constructed with the
+        <function>parameterize</function> procedure:
+      </para>
+      <para>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>parameter</type>
+          <methodname>parameterize</methodname>
+          <methodparam choice="opt">
+            <parameter>initial-value</parameter>
+          </methodparam>
+          <methodparam choice="opt">
+            <parameter>constraint</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Creates a parameter function.  If given, the
+            <parameter>initial-value</parameter> argument specifies
+            the value of the parameter.  If not provided, the initial
+            value is unspecified.
+            <parameter>constraint</parameter>, if given, is a
+            predicate that returns <literal>#t</literal> if a value to
+            which the parameter is being set is a legal value for the
+            parameter.  If the constraint returns
+            <literal>#f</literal>, an error is raised and the
+            parameter retains its old value.
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
     <sect2 id="CircularStructures">
       <title>
 	Circular structures
@@ -476,6 +550,69 @@
 	<function>symbol-&gt;string</function>.
       </para>
     </sect2>
+  </sect1>
+  <sect1 id="ControlFeatures">
+    <title>
+      Control Features
+    </title>
+    <para>
+      In addition to the &R5RS; standard control features, two
+      additional forms, 
+      <function>when</function> and <function>unless</function>, are
+      supported by &SISC;.
+    </para>
+    <para>
+      <blockquote>
+        <para>
+          &syntax;
+          <methodsynopsis language="scheme">
+            <type>value</type>
+            <methodname>when</methodname>
+            <methodparam>
+              <parameter>condition</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>expression</parameter>
+            </methodparam>
+            <methodparam choice="opt" rep="repeat">
+              <parameter>expressions</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Evaluates <parameter>condition</parameter>, an
+              expression.  If true, the expressions that follow are
+              evaluated, in order, the value of the last being
+              returned.  If not true, the result is unspecified.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          &syntax;
+          <methodsynopsis language="scheme">
+            <type>value</type>
+            <methodname>unless</methodname>
+            <methodparam>
+              <parameter>condition</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>expression</parameter>
+            </methodparam>
+            <methodparam choice="opt" rep="repeat">
+              <parameter>expressions</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Evaluates <parameter>condition</parameter>, an
+              expression.  If false, the expressions that follow are
+              evaluated, in order, the value of the last being
+              returned.  If true, the result is unspecified.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+    </para>
   </sect1>
   <sect1 id="ErrorHandling">
     <title>
@@ -883,6 +1020,110 @@
       <ulink url="http://www.scheme.com/csug/syntax.html#g2154">
 	<citetitle>Section 9.2, Syntax-Case</citetitle>
       </ulink>.  
+    </para>
+  </sect1>
+  <sect1 id="MiscellaneousFunctions">
+    <title>
+      Miscellaneous Functions
+    </title>
+    <para>
+      The remaining functions in this chapter are not easily classified, but 
+      nevertheless are useful and worth describing.
+    </para>
+    <para>
+      <blockquote>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>#t/#f</type>
+            <methodname>circular?</methodname>
+            <methodparam>
+              <parameter>datum</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Returns <literal>#t</literal> if the given datum
+              is circular.  A datum is circular if it is a compound
+              datum (lists or vectors for example), and one of its
+              elements is a reference to itself, or a reference to a
+              sub-element which creates a cycle.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>procedure</type>
+            <methodname>compose</methodname>
+            <methodparam choice="opt" rep="repeat">
+              <parameter>function</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              <function>compose</function> takes zero or more
+              functions and returns a new procedure that will apply to
+              its arguments the arguments to
+              <function>compose</function> in reverse order.  If no
+              functions are provided, the identity function is
+              returned.
+            </para>
+            <para>
+              For example, the function <function>caddr</function>
+              could be simply defined as:
+            </para>
+            <programlisting>
+(define caddr (compose car cdr cdr))
+            </programlisting>
+          </blockquote>
+        </para>
+        <para>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>pair</type>
+            <methodname>iota</methodname>
+            <methodparam>
+              <parameter>n</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>        
+              The <function>iota</function> function produces a list
+              whose elements are the integers 0 to n-1 inclusive.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          &syntax;
+          <methodsynopsis language="scheme">
+            <type>list</type>
+            <methodname>time</methodname>
+            <methodparam choice="opt">
+              <parameter>iterations</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>expression</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Evaluates the given expression
+              <parameter>iterations</parameter> times, or if
+              <parameter>iterations</parameter> is not provided, only
+              once.  When complete, a list is returned of the
+              following form:
+              <programlisting>
+(result (<emphasis>n</emphasis> ms))
+              </programlisting>
+              where <emphasis>n</emphasis> is the number of
+              milliseconds taken to evaluate the expression.  If more
+              than one iteration occured, then the average number of
+              milliseconds elapsed is returned.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
     </para>
   </sect1>
 </chapter>
