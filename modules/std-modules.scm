@@ -254,11 +254,14 @@
    meta
    <top>
    <bot>
+   <class>
    type-of
    type<=
    instance-of?
+   make-class
    define-generic
    define-method
+   define-class
    (define-constructor c-proc)
    make-generic-procedure
    make-generic-constructor
