@@ -20,9 +20,11 @@ public class Parser extends Util implements Tokens {
 
     /**
      * When set, annotations will be emitted.  Requires that
-     * the given InputPort be a SourceInputPort
+     * the given InputPort be a SourceInputPort.
+     *
+     * This should really by in the DynamicEnv
      */
-    public boolean annotate=getSystemProperty("sisc.emitannotations", "false").equalsIgnoreCase("true");
+    public static boolean annotate=getSystemProperty("sisc.emitannotations", "false").equalsIgnoreCase("true");
 
     Lexer lexer;
 

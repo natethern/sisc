@@ -478,7 +478,7 @@
  (lambda ()
    ;;populate *config-parameters* symbolic env with contents of
    ;;sisc.properties file, but leaving any existing entries intact
-   (let ([prop-file (or (getprop 'sisc.properties
+   (let ([prop-file (or (getprop 'sisc.propertyfile
                                  '*environment-variables*)
                         "sisc.properties")]
          [testval	(list #f)])
@@ -497,8 +497,14 @@
                         (putprop (car entry)
                                  '*config-parameters*
                                  (cdr entry)))
-                    (loop (read))))))))))
-   (unload-dynamic-wind)))
+                    (loop (read)))))))))
+     ;;set various special properties
+     (let ([v       (getprop 'emitannotations '*config-parameters*
+                             testval)])
+       (if (not (eq? v testval))
+           (emit-annotations v)))
+     ;;return to non-winding call/cc
+     (unload-dynamic-wind))))
 
 ;;
 (if (not (getprop 'LITE '*sisc*))
