@@ -40,7 +40,8 @@
 (native-module networking "sisc.modules.SNetwork")
 (native-module debugging-native  "sisc.modules.SDebug")
 (native-module threading-native  "sisc.modules.SThread")
-(native-module s2j-native        "sisc.modules.S2J")
+(native-module s2j-reflection    "sisc.modules.s2j.Reflection")
+(native-module s2j-conversion    "sisc.modules.s2j.Conversion")
 (native-module hashtable-native  "sisc.modules.SHashtable")
 
 (module misc
@@ -161,7 +162,7 @@
    generic-java-constructor
    make
    initialize)
-  (import s2j-native)
+  (import s2j-reflection)
   (import hashtable)
   (import threading)
   (import procedure-properties)
@@ -237,10 +238,11 @@
    <void>
    <symbol>
    <object>)
-  (import s2j-native)
+  (import s2j-reflection)
+  (import s2j-conversion)
   (import generic-procedures)
   (import misc)
-  (include "s2j.scm")
+  (include "s2j/s2j.scm")
   (define (java-class name)
     (java/class (if (string? name) (string->symbol name) name)))
   (define java-synchronized	java/synchronized)
