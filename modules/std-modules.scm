@@ -37,13 +37,13 @@
                                   *module* (quote def))) ...))))))))
 
 (native-module logicops   "sisc.modules.SLogicOps")
-(native-module networking "sisc.modules.SNetwork")
+(native-module networking "sisc.modules.io.SNetwork")
 (native-module debugging-native  "sisc.modules.SDebug")
 (native-module threading-native  "sisc.modules.SThread")
 (native-module s2j-reflection    "sisc.modules.s2j.Reflection")
 (native-module s2j-conversion    "sisc.modules.s2j.Conversion")
 (native-module hashtable-native  "sisc.modules.SHashtable")
-(native-module block-io-native  "sisc.modules.BlockIO")
+(native-module block-io-native  "sisc.modules.io.BlockIO")
 
 (module misc
     (wrap-symbol
@@ -121,12 +121,20 @@
    buffer-length
    buffer-copy!)
   (import block-io-native)
-  (include "buffer.scm"))
+  (include "io/buffer.scm"))
 
 (module block-io
   (block-read
-   block-write)
-  (import block-io-native))
+   block-write
+   make-buffer
+   buffer
+   buffer?
+   buffer-ref
+   buffer-set!
+   buffer-length
+   buffer-copy!)
+  (import block-io-native)
+  (include "io/buffer.scm"))
 
 (module hashtable
   (make-hashtable

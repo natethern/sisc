@@ -1,4 +1,4 @@
-package sisc.modules;
+package sisc.modules.io;
 
 import sisc.data.NamedValue;
 import sisc.ser.Serializer;

@@ -234,12 +234,6 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         </emphasis>
       </para>
       <para>
-        &requires; 
-        <emphasis role="bold">
-          (import <emphasis>buffer</emphasis>)
-        </emphasis>
-      </para>
-      <para>
         In addition to the standard operations on ports
         (<computeroutput>read, read-char, char-ready?,
           display,</computeroutput> and
