@@ -1007,10 +1007,14 @@ Context.exit()
           stack trace and return &num;f.
         </para>
         <para>
-          In Scheme, Java exceptions can be thrown by passing them to
-          the <function>throw</function> procedure, e.g.
+          In Scheme, Java exceptions can be thrown by raising an error
+          containing the Java exception as the message, e.g.
           <programlisting>
-(throw (make &lt;java.util.NoSuchElementException&gt;))
+(error (make &lt;java.util.NoSuchElementException&gt;))
+          </programlisting>
+          or
+          <programlisting>
+(throw (make-error (make &lt;java.util.NoSuchElementException&gt;)))
           </programlisting>
           If this occurs inside a proxy method (see <xref
           linkend="JavaProxies"/>), the exception is propagated to the

@@ -114,12 +114,12 @@
   (method (next)
     (let ([ll (unbox l)])
       (if (null? ll)
-          (throw (make <java.util.NoSuchElementException>))
+          (throw (make-error (make <java.util.NoSuchElementException>)))
           (begin
             (set-box! l (cdr ll))
             (java-wrap (car ll))))))
   (method (remove)
-    (throw (make <java.lang.UnsupportedOperationException>))))
+    (error (make <java.lang.UnsupportedOperationException>))))
 (define (list-iterator l)
   (list-iterator-helper (box l)))
 (define-generic has-next)
@@ -131,7 +131,9 @@
 (next i)
 (next i)
 (next i)
-(remove i)
+;;catching an exception thrown by a proxy.
+(with/fc (lambda (m e) (print-stack-trace m) #f)
+  (lambda () (remove i)))
 
 ;garbage collection
 (let loop ([count 100])
