@@ -879,6 +879,295 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
 	</blockquote>
       </para>
     </sect2>
+    <sect2 id="UDP">
+      <title>UDP</title>
+      <para>
+	UDP sockets can be obtained for both receive only and
+	send/receive sessions. 
+      </para>
+      <para>
+        <blockquote>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>udp socket</type>
+              <methodname>open-udp-listen-socket</methodname>
+              <methodparam>
+                <parameter>listen-port</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>interface-address</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>datagram-size</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+		Opens a UDP socket that listens on
+		<parameter>listen-port</parameter> (optionally bound
+		to only the interface on
+		<parameter>interface-address</parameter>).  If
+		provided, <parameter>datagram-size</parameter>
+		specifies the buffer size (in bytes) for receiving UDP
+		datagrams.  Datagrams larger than
+		<parameter>datagram-size</parameter> are truncated to
+		that size.  If unspecified, the default datagram size
+		is 1500 bytes.
+	      </para>
+	    </blockquote>
+	  </para>
+          <para>
+	    &procedure;
+            <methodsynopsis language="scheme">
+              <type>udp socket</type>
+              <methodname>open-udp-socket</methodname>
+              <methodparam>
+                <parameter>remote-host</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>remote-port</parameter>
+              </methodparam>
+	    </methodsynopsis>
+            <blockquote>
+              <para>
+		Opens a UDP socket for sending datagrams to 
+		the Internet host specified by
+		<parameter>remote-host</parameter>, on port
+		<parameter>remote-port</parameter>.
+	      </para>
+	    </blockquote>
+	  </para>
+	</blockquote>
+      </para>
+      <para>
+	After obtaining a UDP socket, input and output ports can be
+	obtained in the usual manner.  It is an error to attempt to
+	obtain an output-port from a listening UDP socket, or an input
+	port from a sending UDP socket.  
+      </para>
+      <para>
+	UDP input ports behave as
+	ordinary input ports.  When a datagram arrives as a result of
+	any read operation on the port, their entire contents are
+	stored in a buffer of length
+	<parameter>datagram-size</parameter> bytes.  Successive read
+	operations return data from that buffer until it is exhausted,
+	at which point a read operation will cause the UDP socket to
+	listen for another datagram.
+      </para>
+      <para>
+	UDP output ports should be treated with some care, however.
+	If a UDP output port was obtained in auto-flush mode, each
+	write operation to the output port will cause a new datagram
+	to be sent.  Control over the size of the datagram must be
+	maintained by using a port that does not auto-flush, writing
+	the desired data, and flushing once the amount of data that
+	the user wants to occupy a single UDP datagram is reached.
+	The behavior of constructing very large UDP packets is
+	undefined.  The packet may be silently dropped or (more
+	likely) fragmented at the IP layer.
+      </para>
+    </sect2>
+    <sect2>
+      <title>UDP Multicast</title>
+      <para>
+	&SISC; provides support for IP multicast UDP datagrams as
+	well.  This allows a program to both send and receive to an IP
+	multicast group. 
+      </para>
+      <note>
+	<para>
+	  The UDP Multicast feature requires that the underlying
+	  operating system's IP networking stack support Multicast.
+	  The functions described here may produce an error if the
+	  operating system does not.
+	</para>
+      </note>
+      <para>
+	A program wishing to use multicast UDP sockets must first
+	obtain a multicast socket for either listening to a multicast
+	group, or for both listening and sending to such a group.
+      </para>
+      <para>
+	<blockquote>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>multicast udp socket</type>
+              <methodname>open-multicast-socket</methodname>
+              <methodparam>
+                <parameter>listen-port</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>interface-address</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>datagram-size</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+		Opens a multicast UDP socket that listens on
+		<parameter>listen-port</parameter> (optionally bound
+		only to the interface addressed by
+		<parameter>interface-address</parameter>.  If
+		provided, <parameter>datagram-size</parameter> specifies the
+		buffer size (in bytes) for receiving UDP datagrams.
+		Datagrams larger than
+		<parameter>datagram-size</parameter> are truncated to
+		that size.  If unspecified, the default datagram size
+		is 1500 bytes.  
+	      </para>
+	    </blockquote>
+	  </para>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>multicast udp socket</type>
+              <methodname>open-multicast-socket</methodname>
+              <methodparam>
+                <parameter>group</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>port</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>interface-address</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>datagram-size</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+		Opens a multicast UDP socket for sending datagrams 
+		to the specified multicast
+		<parameter>group</parameter>, on the specified
+		<parameter>port</parameter>.  The returned socket will
+		also be capable of listening to that group on the same
+		port (and optionally bound only to the interface
+		addressed by <parameter>interface-address</parameter>, 
+		though the socket will not initially be a member of
+		the group.  If provided,
+		<parameter>datagram-size</parameter> specifies the
+		buffer size (in bytes) for receiving UDP datagrams.
+		Datagrams larger than
+		<parameter>datagram-size</parameter> are truncated to
+		that size.  If unspecified, the default datagram size
+		is 1500 bytes.  
+	      </para>
+	    </blockquote>
+	  </para>
+	</blockquote>
+      </para>
+      <para> 
+	Once a sending socket has been obtained (the second form), an
+	output-port can be obtained in the usual manner, and datagrams
+	can be immediately sent to the multicast group.  To receive
+	datagrams, sockets returned from both forms must
+	<emphasis>join</emphasis> a multicast group.  
+      </para>
+      <para>
+	A multicast group is specified by a class D IP address and by a
+	standard UDP port number. Class D IP addresses are in the range
+	224.0.0.0 to 239.255.255.255, inclusive. The address 224.0.0.0 is
+	reserved and should not be used. 
+      </para>
+      <para>
+	Groups are joined and left using the following functions:
+      </para>
+      <para>
+	<blockquote>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>join-multicast-group</methodname>
+              <methodparam>
+                <parameter>multicast-socket</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>group</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>		
+		Causes the given multicast socket to join the group
+		specified by the Internet address in
+		<parameter>group</parameter>.  Once joined, read
+		operations on an obtained input-port will be able to
+		receive datagrams destined to that group.
+	      </para>
+	    </blockquote>
+	  </para>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>leave-multicast-group</methodname>
+              <methodparam>
+                <parameter>multicast-socket</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>group</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>		
+		Causes the given multicast socket to leave the group
+		specified by the Internet address in
+		<parameter>group</parameter>.  Read operations on any
+		input ports obtained from this socket will no longer
+		receive datagrams from that group.
+	      </para>
+	    </blockquote>
+	  </para>
+	</blockquote>
+      </para>
+      <para>
+	A single multicast socket can simultaneously listen to more
+	than one multicast group.  A socket can only send to one
+	group, however: the group it was constructed with.
+      </para>
+      <para>
+	Multicast packets are limited in extent by their
+	time-to-live.  Each time a multicast packet crosses a router,
+	its ttl is decremented.  In this manner, one can send
+	datagrams only to local networks or subnetworks, as well as
+	more grand scopes.  The TTL of a socket is set using
+	<function>set-multicast-ttl!</function>
+      </para>
+      <para>
+	<blockquote>
+          <para>
+	    &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>set-multicast-ttl!</methodname>
+              <methodparam>
+                <parameter>multicast-socket</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>ttl</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>		
+		Sets the multicast TTL of the given socket to
+		<parameter>ttl</parameter>, an integer.  All datagrams
+		sent after this call will have their TTL set to the
+		new value.
+	      </para>
+	    </blockquote>
+	  </para>
+	</blockquote>
+      </para>
+      <para>
+	Valid multicast TTLs are in the range 0 (restricted to the
+	same host) to 255 (unlimited in scope).
+      </para>
+    </sect2>
   </sect1>
   <sect1>
     <title>Miscellaneous</title>
