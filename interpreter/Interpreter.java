@@ -307,7 +307,7 @@ public class Interpreter extends Util {
     protected int deadFramePointer=-1;
     CallFrame returnRegister;
 
-    public synchronized CallFrame createFrame(Expression n, Value[] v,
+    public CallFrame createFrame(Expression n, Value[] v,
                                  boolean vlk, 
                                  LexicalEnvironment e,
                                  CallFrame f,
@@ -329,7 +329,7 @@ public class Interpreter extends Util {
         }
     }
     
-    public synchronized final void returnFrame(CallFrame f) {
+    public final void returnFrame(CallFrame f) {
         if (!f.vlk && (deadFramePointer < FPMAX)) {
             deadFrames[++deadFramePointer]=f;
         }
