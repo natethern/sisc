@@ -1953,6 +1953,8 @@
             <methodparam rep="repeat"><parameter>body</parameter>
             </methodparam>
           </methodsynopsis>
+        </para>
+        <para>
           &syntax;
           <methodsynopsis language="scheme" id="define-macro2">    
             <methodname>define-macro</methodname>
