@@ -2415,7 +2415,8 @@
   (lambda (x w)
     (strip* x w
       (lambda (x)
-        (if (or (annotation? x) (and (pair? x) (annotation? (car x))))
+        (if (or (annotation? x) (and (pair? x) (annotation? (car x)))
+                (and (box? x) (annotation? (unbox x))))
             (strip-annotation x #f)
             x)))))
 
