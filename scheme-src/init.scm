@@ -246,9 +246,6 @@
         (current-url (normalize-url previous-url file))
         (with-failure-continuation
           (lambda (m e)
-            (display "Load error: ")
-            (newline)
-            (pretty-print m)
             (current-url previous-url)
             (throw m e))
             (lambda () 
