@@ -1,8 +1,13 @@
+2002-02-25  Matthias Radestock  <matthias@sorted.org>
+
+	* Made generic function module thread-safe
+
 2002-02-24  Matthias Radestock  <matthias@sorted.org>
 
 	* Added hashtable module.
 
-	* Changed S2J module to use hashtables instead of alists
+	* Changed generic function module to use hashtables instead of
+	  alists
 
 2002-02-20  Matthias Radestock  <matthias@sorted.org>
 
