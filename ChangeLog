@@ -1,3 +1,7 @@
+2004-02-27  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Remove dependent mutexes from their threads in SRFI-18.
+
 2004-02-17  Scott G. Miller <scgmille@freenetproject.org>
 
 	* call-with-serial-*-file wasn't allowing functions

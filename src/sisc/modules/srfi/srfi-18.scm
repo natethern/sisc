@@ -141,10 +141,19 @@
             (mutex/unlock! mutex condvar)))
     (let ([owner (annotation mutex 'owner)])
       (set-annotation! mutex 'state
-                       (if owner 'not-abandoned 'abandoned)))
+                       (if owner 'not-abandoned 'abandoned))
+      (let ([mutexes (annotation owner 'mutexes '())])
+        (unless (null? mutexes)
+          (if (and (null? (cdr mutexes))
+                   (eq? (car mutexes) mutex))
+              (set-annotation! owner 'mutexes '())
+              (do ([ls mutexes (cdr ls)])
+                  ((null? (cdr ls)))
+                (if (eq? (cadr ls) mutex)
+                    (set-cdr! ls (cddr ls))))))))
     (mutex/unlock! mutex)))
 
-; Conditon Variables
+; Condition Variables
 
 (define condition-variable? condvar?)
 
