@@ -10,6 +10,7 @@ import sisc.ser.Deserializer;
 public class LexicalEnvironment extends Value {
     public LexicalEnvironment parent;
     public Value[] vals;
+    public Interpreter r;
 
     public LexicalEnvironment() {
         this.vals=ZV;
@@ -20,26 +21,26 @@ public class LexicalEnvironment extends Value {
         this.parent=parent;
     }
 
-    public LexicalEnvironment(Interpreter r, Closure c) 
-	throws ContinuationException {
+    public final LexicalEnvironment reinit(Interpreter r, Closure c) throws ContinuationException {
         parent=c.env;
+        this.r=r;
         Value[] v=r.vlr;
         int vl=v.length;
         if (!c.arity) {
             if (vl == c.fcount) {
                 vals=v;
-                return;
+                return this;
             }
             error(r, liMessage(SISCB,"notenoughargsto", c.write(),
                                c.fcount, vl));
-            return;
+            return this;
         }
         
         int sm1=c.fcount-1;
         if (vl < sm1) {
             error(r, liMessage(SISCB,"notenoughargstoinf", c.write(),
                                sm1, vl));
-            return;
+            return this;
         }
 
         if (vl > sm1 && !r.vlk) {
@@ -50,6 +51,12 @@ public class LexicalEnvironment extends Value {
         }
 
         vals[sm1]=valArrayToList(v, sm1, vl-sm1);
+        return this;
+    }
+ 
+    public LexicalEnvironment(Interpreter r, Closure c) 
+	throws ContinuationException {
+        reinit(r, c);
     }
 
     public final Value lookup(int depth, int pos) {
