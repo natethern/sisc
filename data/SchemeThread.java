@@ -16,7 +16,7 @@ public class SchemeThread extends Value implements Runnable, NamedValue {
     public Procedure thunk;
     public Thread thread;
     public int state;
-    Value rv;
+    public Value rv;
     
     public SchemeThread(String appName,
                         Procedure thunk) {
