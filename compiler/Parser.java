@@ -252,7 +252,7 @@ public class Parser extends Util implements Tokens {
         try {
             while (l!=ENDPAIR) {
                 if (p==null) {
-                    h=p=new Pair();
+                    h=p=new ImmutablePair();
                     if (def!=null) state.put(def, p);
                 } else
                     if (l == DOT) {
@@ -264,7 +264,7 @@ public class Parser extends Util implements Tokens {
                             throw new IOException("More than one object after dot ('.')");
                         return h;
                     } else
-                        p.cdr=p=new Pair();
+                        p.cdr=p=new ImmutablePair();
                 p.car=(Value)(l instanceof Integer ? state.get(l) : l);
                 l=_nextExpression(is, state, null);
             }

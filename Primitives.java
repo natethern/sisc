@@ -508,10 +508,10 @@ public class Primitives extends Module {
             case EQUAL:
                 return truth(f.vlr[0].equals(f.vlr[1]));
             case SETCAR:
-                truePair(f,f.vlr[0]).car=f.vlr[1];
+                truePair(f,f.vlr[0]).setCar(f,f.vlr[1]);
                 return VOID;
             case SETCDR:
-                truePair(f,f.vlr[0]).cdr=f.vlr[1];
+                truePair(f,f.vlr[0]).setCdr(f,f.vlr[1]);
                 return VOID;
             case REMAINDER:
                 return num(f,f.vlr[0]).remainder(num(f,f.vlr[1]));

@@ -33,7 +33,7 @@
 package sisc.data;
 
 import java.io.*;
-import sisc.Serializer;
+import sisc.*;
 
 public class Pair extends Value {
     public Value car, cdr;
@@ -45,6 +45,16 @@ public class Pair extends Value {
     public Pair(Value car, Value cdr) {
         this.car=car;
         this.cdr=cdr;
+    }
+
+    public void setCar(Interpreter r, Value v)
+	throws ContinuationException {
+	car = v;
+    }
+
+    public void setCdr(Interpreter r, Value v)
+	throws ContinuationException {
+	cdr = v;
     }
 
     protected void display(StringBuffer b, boolean write) {
