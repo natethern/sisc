@@ -90,7 +90,7 @@
       (let ([repl-start #f])
         (call/cc
          (lambda (k)
-           (_exit-handler k)
+           (_exit-handler (cons k (_exit-handler)))
            (begin
              (call/cc 
               (lambda (k)
@@ -111,5 +111,6 @@
             (repl-start))))))
 
 (define (exit)
-  (let ([k (_exit-handler)])
+  (let ([k (car (_exit-handler))])
+    (_exit-handler (cdr (_exit-handler)))
     (if k (k))))
