@@ -2,81 +2,52 @@
   (lambda (x)
     (syntax-case x ()
       ((_ name)
-       (let ([syntax-helper
-              (lambda (pre symb app)
-                (datum->syntax-object
-                 symb
-                 (string->symbol
-                  (string-append pre
-                                 (symbol->string
-                                  (syntax-object->datum symb))
-                                 app))))])
-         (with-syntax ((sname (syntax-helper "<j" (syntax name) ">")))
-           (syntax (define sname (java/class 'name)))))))))
+       (with-syntax ((sname (wrap-symbol "<j" (syntax name) ">")))
+         (syntax (define sname (java/class 'name))))))))
 (define-syntax define-primitive-java-types
   (syntax-rules ()
     ((_ name ...)
      (begin (define-primitive-java-type name) ...))))
 
-(define-primitive-java-types
-  void boolean char byte short int long float double)
-
 (define-syntax define-java-lang-type
   (lambda (x)
     (syntax-case x ()
       ((_ name jname)
-       (let ([syntax-helper
-              (lambda (pre symb app)
-                (datum->syntax-object
-                 symb
-                 (string->symbol
-                  (string-append pre
-                                 (symbol->string
-                                  (syntax-object->datum symb))
-                                 app))))])
-         (with-syntax ([sname (syntax-helper "<j" (syntax name) ">")]
-                       [jname (syntax-helper "java.lang." (syntax jname) "")])
-           (syntax (define sname (java/class 'jname)))))))))
-
+       (with-syntax ([sname (wrap-symbol "<j" (syntax name) ">")]
+                     [jname (wrap-symbol "java.lang." (syntax jname) "")])
+         (syntax (define sname (java/class 'jname))))))))
 (define-syntax define-java-lang-types
   (syntax-rules ()
     ((_ (name jname) ...)
      (begin (define-java-lang-type name jname) ...))))
 
-(define-java-lang-types
-  (class	|Class|)
-  (math		|Math|)
-  (object	|Object|)
-  (process	|Process|)
-  (runtime	|Runtime|)
-  (string	|String|)
-  (stringbuffer	|StringBuffer|)
-  (system	|System|)
-  (thread	|Thread|)
-  (throwable	|Throwable|)
-  (exception	|Exception|))
-
 (define-syntax define-scheme-type
   (lambda (x)
     (syntax-case x ()
       ((_ name jname)
-       (let ([syntax-helper
-              (lambda (pre symb app)
-                (datum->syntax-object
-                 symb
-                 (string->symbol
-                  (string-append pre
-                                 (symbol->string
-                                  (syntax-object->datum symb))
-                                 app))))])
-         (with-syntax ([sname (syntax-helper "<" (syntax name) ">")]
-                       [jname (syntax-helper "sisc.data." (syntax jname) "")])
-           (syntax (define sname (java/class 'jname)))))))))
-
+       (with-syntax ([sname (wrap-symbol "<" (syntax name) ">")]
+                     [jname (wrap-symbol "sisc.data." (syntax jname) "")])
+         (syntax (define sname (java/class 'jname))))))))
 (define-syntax define-scheme-types
   (syntax-rules ()
     ((_ (name jname) ...)
      (begin (define-scheme-type name jname) ...))))
+
+(define-primitive-java-types
+  void boolean char byte short int long float double)
+
+(define-java-lang-types
+  (class        |Class|)
+  (math         |Math|)
+  (object       |Object|)
+  (process      |Process|)
+  (runtime      |Runtime|)
+  (string       |String|)
+  (stringbuffer	|StringBuffer|)
+  (system       |System|)
+  (thread       |Thread|)
+  (throwable	|Throwable|)
+  (exception	|Exception|))
 
 (define-scheme-types
   (expression   |Expression|)

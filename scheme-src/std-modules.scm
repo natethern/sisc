@@ -20,6 +20,7 @@
     [(_ m spec0 spec1 ...)
      (begin (import* m spec0)
             (import* m spec1 ...))]))
+
 ;;;;;;;;;;;;;;;; NATIVE MODULES ;;;;;;;;;;;;;;;
 
 (define-syntax native-module
@@ -41,6 +42,10 @@
 (native-module threading-native  "sisc.modules.SThread")
 (native-module s2j-native        "sisc.modules.S2J")
 (native-module hashtable-native  "sisc.modules.SHashtable")
+
+(module syntax-case-helpers
+    (wrap-symbol)
+  (include "../modules/sc-helpers.scm"))
 
 (module threading
   (thread/new
@@ -200,6 +205,7 @@
    <object>)
   (import s2j-native)
   (import generic-procedures)
+  (import syntax-case-helpers)
   (include "../modules/s2j.scm")
   (define (java-class name)
     (java/class (if (string? name) (string->symbol name) name)))
