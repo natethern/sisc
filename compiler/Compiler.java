@@ -130,7 +130,16 @@ public class Compiler extends Util {
                 boolean infArity=false;
                 Symbol[] formals=null;
 
-                if (expr.car != EMPTYLIST) {
+                if (expr.car == EMPTYLIST) {
+                    // If the formals were empty (a thunk), we're not'
+                    // going to allocate a lexical rib, so don't increase
+                    // the lexical depth
+
+                    expr=(Pair)expr.cdr;
+                    tmp=compile(r, expr.car, rt, TAIL | LAMBDA | REALTAIL, 
+                                env, null);
+                    rv=new LambdaExp(formals.length, tmp, infArity);
+                } else {
                     if (expr.car instanceof Pair) {
                         formals=argsToSymbols((Pair)expr.car);
                         Pair tmpp=(Pair)expr.car;
@@ -142,19 +151,15 @@ public class Compiler extends Util {
                         infArity=true;
                         formals=new Symbol[] {(Symbol)expr.car};
                     }
+
+                    expr=(Pair)expr.cdr;
+                    
+                    tmp=compile(r, expr.car, new ReferenceEnv(formals, rt), 
+                                TAIL | LAMBDA | REALTAIL, env, null);
+                    rv=new LambdaExp(formals.length, tmp, infArity);
                 }
 
-                expr=(Pair)expr.cdr;
 
-                // If the formals were empty (a thunk), we're not'
-                // going to allocate a lexical rib, so don't increase
-                // the lexical depth
-                
-                tmp=compile(r, expr.car, 
-                            (formals == null ? rt :
-                             new ReferenceEnv(formals, rt)), 
-                            TAIL | LAMBDA | REALTAIL, env, null);
-                rv=new LambdaExp(formals.length, tmp, infArity);
                 break;
             case LETREC: 
                 Pair tmpp=(Pair)expr.car;
