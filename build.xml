@@ -8,7 +8,7 @@
   </path>
 
   <target name="prepare">
-    <property name="version" value="1.6.1-beta"/>
+    <property name="version" value="1.6.2-rc"/>
     <property file="${basedir}/build.properties"/>    
     <property name="srcdir" value="${basedir}/.."/>
     <property name="classdir" value="${basedir}/classes"/>
@@ -22,7 +22,7 @@
     <property name="srfisll" value="srfi.sll"/>
     <property name="heap" value="${basedir}/boot/sisc.shp"/>
     <property name="quantity-type" value="apfloat"/>
-    <property name="debugging" value="on"/>
+    <property name="debugging" value="off"/>
     <property name="optimization" value="on"/>
 <!--    <property name="releasecandidate" value="yes"/> -->
     <property name="dist" value="${basedir}/dist"/>
