@@ -36,6 +36,7 @@ import sisc.*;
 import sisc.data.*;
 
 public class AppExp extends Expression {
+    static Value[] ZV=new Value[0];
     public Expression rator, rands[];
     public boolean nonTail;
 
@@ -45,20 +46,23 @@ public class AppExp extends Expression {
 	this.nonTail=nontail;
     }
 
-
     public void eval(Interpreter r) throws ContinuationException { 
+	Value tmp;
+	int i;
+
 	if (nonTail) {
 	    r.nxp=null;
 	    r.save();
 	}
 
-	r.vlr=new Value[rands.length];
+	r.vlr=rands.length == 0 ? ZV : new Value[rands.length];
 
 	// Fill the rib right to left with immediates until non-imm.
 	// encountered
-	int i=rands.length-1;
-	Value tmp;
-	for (; i>=0 && ((tmp=rands[i].getValue(r)) != null); i--)
+
+	for (i=rands.length-1; 
+	     i>=0 && ((tmp=rands[i].getValue(r)) != null); 
+	     i--)
 	    r.vlr[i]=tmp;
 	
 	// If not all were immediate, push a fillrib, otherwise
