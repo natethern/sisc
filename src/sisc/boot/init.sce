@@ -678,18 +678,21 @@
          |r_xAHs9TYaG|))
      (remainder |x_xA_zdZXaG| |y_xAlwbqYaG|))))
 (#%define string-append
-  (#%lambda |args_73w3K4aLH|
-    (#%if (null? |args_73w3K4aLH|)
+    (#%letrec ((|string-append-helper_quvgyIdaT|
+                 (#%lambda (|acc_qub9uCeaT| |args_qux5s3faT|)
+                   (#%if (null? |args_qux5s3faT|)
+                     |acc_qub9uCeaT|
+                     (|string-append-helper_quvgyIdaT|
+                       (_string-append
+                         |acc_qub9uCeaT|
+                         (car |args_qux5s3faT|))
+                       (cdr |args_qux5s3faT|))))))
+      (#%lambda |args_quRcw9eaT|
+        (#%if (null? |args_quRcw9eaT|)
           ""
-          (#%if (null? (cdr |args_73w3K4aLH|))
-                (car |args_73w3K4aLH|)
-                (#%begin
-                 #t
-                 (apply string-append
-                        (_string-append
-                         (car |args_73w3K4aLH|)
-                         (cadr |args_73w3K4aLH|))
-                        (cddr |args_73w3K4aLH|)))))))
+          (|string-append-helper_quvgyIdaT|
+            (car |args_quRcw9eaT|)
+            (cdr |args_quRcw9eaT|))))))
 (#%define char-downcase
   ((#%lambda (|a_xA1p7kZaG|)
      ((#%lambda (|z_xAnl5NZaG|)
