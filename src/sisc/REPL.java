@@ -293,7 +293,7 @@ public class REPL {
 
     public static void printUsage() {
         System.out.println("SISC - Second Interpreter of Scheme Code\n");
-        System.out.println("usage: sisc [-?x] [-l port] [-h heapfile] [-p property-file]");
+        System.out.println("usage: sisc [-?xv] [-l port] [-h heapfile] [-p property-file]");
         System.out.println("            [-e s-expression] [-c function] [source-file ...] [-- arguments ...]");
     }
 
@@ -309,7 +309,7 @@ public class REPL {
         {"v","version"}
     };
     static final int optTypes[]=new int[] {
-        SWITCH, OPTION, OPTION, OPTION, OPTION, OPTION, SWITCH, OPTION};
+        SWITCH, OPTION, OPTION, OPTION, OPTION, OPTION, SWITCH, SWITCH};
                                                   
     public static Map parseOpts(String[] args) {
         Map m=new HashMap();
