@@ -88,10 +88,15 @@ Returns all the fields declared by <jclass>, or #f if access to this
 information is prohibited.
 
 
-JAVA-CLASS-PRECEDENCE-LIST <jclass> -> (list <jclass>)#f
+JAVA-CLASS-PRECEDENCE-LIST <jclass> -> (list <jclass>)
 Returns the total order of <jclass> and all direct & indirect
 superclasses, as determined by the partial orders obtained from
 calling JAVA-CLASS-DECLARED-SUPERCLASSES.
+
+The ordering of classes in the class precedence list is important when
+comparing types using the type system's COMPARE-TYPES procedure, which
+is used by the generic procedure method selection algorithm. See
+COMPARE-METHODS.
 
 
 JAVA-NEW <jclass> <jvalue> ... -> <jobject>
@@ -511,7 +516,7 @@ Common Usage
 ------------
 
 Some of the following examples require FOLD from srfi-1 and CUT and
-CUTE from srfi-26.
+CUTE from srfi-26, and COMPOSE from the misc module.
 
 Create bindings for classes, methods and fields:
 Java:   n/a
