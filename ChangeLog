@@ -1,3 +1,9 @@
+2005-04-04  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Fixed design flaw in the strict R5RS which raised
+	  an error when reserved characters are encountered
+	  even in strings.
+	  
 2005-03-31  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Added the "tpl" register to the Interpreter, which
