@@ -1,3 +1,5 @@
+2003-01-04  SISC 1.7.1-beta Released
+
 2003-01-03  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed a vlr recycling bug in single-value-return case of
