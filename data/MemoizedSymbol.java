@@ -1,7 +1,7 @@
 package sisc.data;
 
 import java.util.WeakHashMap;
-import java.ref.WeakReference;
+import java.lang.ref.WeakReference;
 
 public class MemoizedSymbol extends Symbol implements Singleton {
 
