@@ -74,25 +74,25 @@
       error has:
     </para>
     <programlisting>
-      Error.
+Error.
 
-      Error in &lt;error-location&gt;.
+Error in &lt;error-location&gt;.
 
-      Error: &lt;description&gt;
+Error: &lt;description&gt;
       
-      Error in &lt;error-location&gt;: &lt;description&gt;
+Error in &lt;error-location&gt;: &lt;description&gt;
       
-      Error in nested call.
-       &lt;nested-error&gt;
+Error in nested call.
+&lt;nested-error&gt;
 
-      Error in nested call: &lt;description&gt;
-       &lt;nested-error&gt;
+Error in nested call: &lt;description&gt;
+&lt;nested-error&gt;
 
-      Error in nested call from &lt;error-location&gt;.
-       &lt;nested-error&gt;
+Error in nested call from &lt;error-location&gt;.
+&lt;nested-error&gt;
 
-      Error in nested call from &lt;error-location&gt;: &lt;description&gt;
-       &lt;nested-error&gt;
+Error in nested call from &lt;error-location&gt;: &lt;description&gt;
+&lt;nested-error&gt;
     </programlisting>
     <para>
       The location of an error often refers to the name of a procedure,
@@ -116,7 +116,7 @@
       with the word 'warning'.
     </para>
     <programlisting>
-      {warning: &lt;description&gt;}
+{warning: &lt;description&gt;}
     </programlisting>
   </sect1>
   <sect1 id="running-sisc">

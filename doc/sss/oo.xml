@@ -566,14 +566,13 @@
       <para>
         An example might be helpful at this stage.
         <programlisting>
-          (define-generic app (generic-java-procedure 'append))
-          (define-method (app (next: next-method)
-          (&lt;jstringbuffer&gt; buf) . rest)
-          (for-each (lambda (x) (next-method buf x)) rest)
-          buf)
-          (define sb (make &lt;jstringbuffer&gt;))
-          (-&gt;string (app sb (-&gt;jstring "foo") (-&gt;jint 1) (-&gt;jstring "bar")))
-          ;=&gt; "foo1bar"
+(define-generic app (generic-java-procedure 'append))
+(define-method (app (next: next-method)
+  (&lt;jstringbuffer&gt; buf) . rest)
+  (for-each (lambda (x) (next-method buf x)) rest)
+  buf)
+(define sb (make &lt;jstringbuffer&gt;))
+(-&gt;string (app sb (-&gt;jstring "foo") (-&gt;jint 1) (-&gt;jstring "bar"))) ;=&gt; "foo1bar"
         </programlisting>
         This defines a new generic procedure
         <function>app</function> which is chained to a generic
@@ -712,16 +711,14 @@
       <para>
         An example might be helpful at this stage.
         <programlisting>
-          (define-constructor (&lt;jstring&gt; (&lt;jchar&gt; c))
-          (make &lt;jstring&gt; (-&gt;jarray (list c) &lt;jchar&gt;)))
-          (-&gt;string (make &lt;jstring&gt; (-&gt;jchar #\o)))
-          ;=&gt; "o"
-          (define-constructor (&lt;jstringbuffer&gt; (next: next-method) . rest)
-          (next-method))
-          (define-method (initialize (&lt;jstringbuffer&gt; sb) . rest)
-          (apply app sb rest))
-          (-&gt;string (make &lt;jstringbuffer&gt; (-&gt;jstring "foo") (-&gt;jint 1) (-&gt;jstring "bar")))
-          ;=&gt; "foo1bar"
+(define-constructor (&lt;jstring&gt; (&lt;jchar&gt; c))
+  (make &lt;jstring&gt; (-&gt;jarray (list c) &lt;jchar&gt;)))
+(-&gt;string (make &lt;jstring&gt; (-&gt;jchar #\o))) ;=&gt; "o"
+(define-constructor (&lt;jstringbuffer&gt; (next: next-method) . rest)
+  (next-method))
+(define-method (initialize (&lt;jstringbuffer&gt; sb) . rest)
+  (apply app sb rest))
+(-&gt;string (make &lt;jstringbuffer&gt; (-&gt;jstring "foo") (-&gt;jint 1) (-&gt;jstring "bar"))) ;=&gt; "foo1bar"
         </programlisting>
         First this defines a method new constructor on
         <classname>java.lang.String</classname> that constructs a
@@ -845,11 +842,11 @@
         </literal><parameter>next-method</parameter><literal>)</literal>,
         e.g.
         <programlisting>
-          (define-method (value-of (next: next-method)
-          ((meta &lt;jstring&gt;) s)
-          (&lt;java.lang.Character&gt; c))
-          (display "\nin method\n")
-          (next-method s c))
+(define-method (value-of (next: next-method)
+                         ((meta &lt;jstring&gt;) s)
+                         (&lt;java.lang.Character&gt; c))
+  (display "\nin method\n")
+  (next-method s c))
         </programlisting>
         <parameter>next-method</parameter> should only be called
         with arguments that would result in the same ordered
