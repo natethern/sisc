@@ -304,8 +304,11 @@ public class Parser extends Util implements Tokens {
 		def=null;
 
                 Object expr=_nextExpression(is, state, def, flags);
-		if (expr instanceof AnnotatedExpr)
-		    expr=((AnnotatedExpr)expr).expr;
+		if (expr instanceof AnnotatedExpr) {
+                    o=new AnnotatedExpr(iv, ((AnnotatedExpr)expr).annotation);
+                    expr=((AnnotatedExpr)expr).expr;
+                }
+
                 if (expr==null && v==null) {
 		    iv.vals=new Value[0];
                     break;
