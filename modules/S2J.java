@@ -496,7 +496,7 @@ public class S2J extends ModuleAdapter {
 		equalsMeth = Object.class.getMethod("equals", new Class[]{java.lang.Object.class});
 		toStringMeth = Object.class.getMethod("toString", new Class[]{});
 	    } catch (NoSuchMethodException e) {
-		throw new RuntimeException("could not find method", e);
+		throw new RuntimeException("could not find method");
 	    }
 	}
 
