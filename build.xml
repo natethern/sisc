@@ -1,4 +1,3 @@
-<!DOCTYPE project PUBLIC "-//ANT//DTD project//EN" "/usr/share/sgml/dtd/project.dtd" []>
 <project name="sisc" default="all">
   
   <path id="classpath">
