@@ -214,7 +214,7 @@
 
 <indexentry>
   <primaryie>compact-string-rep,
-    <ulink url="x5440.html#AEN5455" role="AEN5465">Strings</ulink>
+    <ulink url="x5441.html#AEN5456" role="AEN5466">Strings</ulink>
   </primaryie>
 </indexentry>
 
@@ -232,7 +232,7 @@
 
 <indexentry>
   <primaryie>create-library-from-module,
-    <ulink url="x4811.html" role="AEN4829">Creating Libraries</ulink>
+    <ulink url="x4812.html" role="AEN4830">Creating Libraries</ulink>
   </primaryie>
 </indexentry>
 
@@ -247,7 +247,7 @@
 
 <indexentry>
   <primaryie>define,
-    <ulink url="x4875.html#AEN4961" role="AEN5036">Adding Native Bindings</ulink>
+    <ulink url="x4876.html#AEN4962" role="AEN5037">Adding Native Bindings</ulink>
   </primaryie>
 </indexentry>
 
@@ -277,13 +277,13 @@
 
 <indexentry>
   <primaryie>deserialize,
-    <ulink url="x4875.html#serialization" role="AEN5076">Serialization</ulink>
+    <ulink url="x4876.html#serialization" role="AEN5077">Serialization</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>display,
-    <ulink url="x4875.html#AEN4879" role="AEN4888">Adding Types</ulink>
+    <ulink url="x4876.html#AEN4880" role="AEN4889">Adding Types</ulink>
   </primaryie>
 </indexentry>
 
@@ -298,7 +298,7 @@
 
 <indexentry>
   <primaryie>eq,
-    <ulink url="x4875.html#AEN4879" role="AEN4935">Adding Types</ulink>
+    <ulink url="x4876.html#AEN4880" role="AEN4936">Adding Types</ulink>
   </primaryie>
 </indexentry>
 
@@ -335,7 +335,7 @@
 <indexentry>
   <primaryie>eval,
     <ulink url="c2710.html#AEN2732" role="AEN2741">Internal Calls</ulink>,
-    <ulink url="x4875.html#AEN4961" role="AEN5009">Adding Native Bindings</ulink>
+    <ulink url="x4876.html#AEN4962" role="AEN5010">Adding Native Bindings</ulink>
   </primaryie>
 </indexentry>
 
@@ -449,25 +449,25 @@
 
 <indexentry>
   <primaryie>getBindingValue,
-    <ulink url="x4875.html#AEN4961" role="AEN4998">Adding Native Bindings</ulink>
+    <ulink url="x4876.html#AEN4962" role="AEN4999">Adding Native Bindings</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>getModuleBindingNames,
-    <ulink url="x4875.html#AEN4961" role="AEN4989">Adding Native Bindings</ulink>
+    <ulink url="x4876.html#AEN4962" role="AEN4990">Adding Native Bindings</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>getModuleName,
-    <ulink url="x4875.html#AEN4961" role="AEN4971">Adding Native Bindings</ulink>
+    <ulink url="x4876.html#AEN4962" role="AEN4972">Adding Native Bindings</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>getModuleVersion,
-    <ulink url="x4875.html#AEN4961" role="AEN4980">Adding Native Bindings</ulink>
+    <ulink url="x4876.html#AEN4962" role="AEN4981">Adding Native Bindings</ulink>
   </primaryie>
 </indexentry>
 
@@ -998,37 +998,37 @@
 
 <indexentry>
   <primaryie>readBigDecimal,
-    <ulink url="x4875.html#AEN5094" role="AEN5110">Deserializer methods</ulink>
+    <ulink url="x4876.html#AEN5095" role="AEN5111">Deserializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>readBigInteger,
-    <ulink url="x4875.html#AEN5094" role="AEN5099">Deserializer methods</ulink>
+    <ulink url="x4876.html#AEN5095" role="AEN5100">Deserializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>readClass,
-    <ulink url="x4875.html#AEN5094" role="AEN5121">Deserializer methods</ulink>
+    <ulink url="x4876.html#AEN5095" role="AEN5122">Deserializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>readExpression,
-    <ulink url="x4875.html#AEN5094" role="AEN5132">Deserializer methods</ulink>
+    <ulink url="x4876.html#AEN5095" role="AEN5133">Deserializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>readModule,
-    <ulink url="x4875.html#AEN5094" role="AEN5144">Deserializer methods</ulink>
+    <ulink url="x4876.html#AEN5095" role="AEN5145">Deserializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>readSymbolicEnvironment,
-    <ulink url="x4875.html#AEN5094" role="AEN5156">Deserializer methods</ulink>
+    <ulink url="x4876.html#AEN5095" role="AEN5157">Deserializer methods</ulink>
   </primaryie>
 </indexentry>
 
@@ -1043,7 +1043,7 @@
 
 <indexentry>
   <primaryie>serialize,
-    <ulink url="x4875.html#serialization" role="AEN5063">Serialization</ulink>
+    <ulink url="x4876.html#serialization" role="AEN5064">Serialization</ulink>
   </primaryie>
 </indexentry>
 
@@ -1109,7 +1109,7 @@
 
 <indexentry>
   <primaryie>synopsis,
-    <ulink url="x4875.html#AEN4879" role="AEN4920">Adding Types</ulink>
+    <ulink url="x4876.html#AEN4880" role="AEN4921">Adding Types</ulink>
   </primaryie>
 </indexentry>
 
@@ -1244,7 +1244,7 @@
 
 <indexentry>
   <primaryie>valueEqual,
-    <ulink url="x4875.html#AEN4879" role="AEN4949">Adding Types</ulink>
+    <ulink url="x4876.html#AEN4880" role="AEN4950">Adding Types</ulink>
   </primaryie>
 </indexentry>
 
@@ -1319,43 +1319,43 @@
 
 <indexentry>
   <primaryie>write,
-    <ulink url="x4875.html#AEN4879" role="AEN4906">Adding Types</ulink>
+    <ulink url="x4876.html#AEN4880" role="AEN4907">Adding Types</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>writeBigDecimal,
-    <ulink url="x4875.html#AEN5167" role="AEN5185">Serializer methods</ulink>
+    <ulink url="x4876.html#AEN5168" role="AEN5186">Serializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>writeBigInteger,
-    <ulink url="x4875.html#AEN5167" role="AEN5172">Serializer methods</ulink>
+    <ulink url="x4876.html#AEN5168" role="AEN5173">Serializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>writeClass,
-    <ulink url="x4875.html#AEN5167" role="AEN5198">Serializer methods</ulink>
+    <ulink url="x4876.html#AEN5168" role="AEN5199">Serializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>writeExpression,
-    <ulink url="x4875.html#AEN5167" role="AEN5211">Serializer methods</ulink>
+    <ulink url="x4876.html#AEN5168" role="AEN5212">Serializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>writeModule,
-    <ulink url="x4875.html#AEN5167" role="AEN5225">Serializer methods</ulink>
+    <ulink url="x4876.html#AEN5168" role="AEN5226">Serializer methods</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>writeSymbolicEnvironment,
-    <ulink url="x4875.html#AEN5167" role="AEN5239">Serializer methods</ulink>
+    <ulink url="x4876.html#AEN5168" role="AEN5240">Serializer methods</ulink>
   </primaryie>
 </indexentry>
 
