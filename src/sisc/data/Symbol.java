@@ -17,11 +17,7 @@ public class Symbol extends Value {
     }
 
     public static Symbol get(String str) {
-        int l = str.length();
-        if (l>1 && str.charAt(0)=='|' && str.charAt(l-1) == '|')
-            return intern(str.substring(1,l-1));
-        else
-            return intern(caseSensitive ? str : str.toLowerCase());
+        return intern(caseSensitive ? str : str.toLowerCase());
     }
 
     public String symval;
