@@ -245,6 +245,14 @@ public class GenerateHeap {
                 r.eval(load, new Value[] {new SchemeString(args[i])});
             } catch (SchemeException se) {
                 System.err.println("Error during expand: "+se.getMessage());
+                try {
+                    r.eval((Procedure)
+                           r.eval(Symbol.get("print-exception")), 
+                           new Value[] {se.m});
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // Oh well, we tried
+                }
             }
         }
         
