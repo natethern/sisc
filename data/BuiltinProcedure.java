@@ -73,8 +73,9 @@ public class BuiltinProcedure extends Procedure {
     }
 
     public boolean valueEqual(Value v) {
-        return ((BuiltinProcedure)v).id==id &&
-               ((BuiltinProcedure)v).host==host;
+        return (v instanceof BuiltinProcedure) &&
+	    ((BuiltinProcedure)v).id==id &&
+	    ((BuiltinProcedure)v).host==host;
     }
 
     public int hashCode() {

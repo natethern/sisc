@@ -66,6 +66,16 @@ public class Values extends Value {
         error(r, liMessage(SISCB,"multiplevalues"));
     }
 
+    public boolean equals(Object v) {
+	if (!(v instanceof Values)) return false;
+	Values vs=(Values)v;
+	if (vs.values.length!=values.length) return false;
+	for (int i=values.length-1; i>=0; i--)
+	    if (!values[i].equals(vs.values[i])) 
+		return false;
+	return true;
+    }
+
     public int hashCode() {
 	int hc=0;
 	for (int i=0; i<values.length; i++)

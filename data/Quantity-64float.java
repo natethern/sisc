@@ -1092,13 +1092,12 @@ public class Quantity extends Value {
         throw new NumberFormatException("cannot compare complex numbers for order");
     }
 
-
-    public boolean eq(Object v) {
+    public boolean eq(Value v) {
         return v instanceof Quantity &&
-               ((Quantity)v).type==type &&
-               valueEqual((Value)v);
+	    (super.eq((Value)v) ||
+	     (((Quantity)v).type==type &&
+	      valueEqual((Value)v)));
     }
-
 
     public double doubleValue() {
         switch (type) {
@@ -1361,11 +1360,6 @@ public class Quantity extends Value {
 
     public final boolean less(Quantity o) {
         return comp(o, -1);
-    }
-
-
-    public final boolean valueEqual(Value v) {
-        return equals(v);
     }
 
     public final boolean equals(Object ob) {

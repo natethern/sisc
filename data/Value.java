@@ -61,10 +61,7 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     public boolean equals(Object v) {
-        return eq(v) ||
-	    ((this.getClass().isAssignableFrom(v.getClass()) ||
-	      v.getClass().isAssignableFrom(this.getClass())) &&
-	     valueEqual((Value)v));
+        return eq(v);
     }
 
     public boolean eq(Object v) {
@@ -72,7 +69,7 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     public boolean valueEqual(Value v) {
-        return eq(v);
+        return eq(v) || equals(v);
     }
 
     public String toString() {

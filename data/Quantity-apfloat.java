@@ -1071,14 +1071,11 @@ public class Quantity extends Value {
         return comp(o, -1);
     }
 
-    public boolean eq(Object v) {
+    public boolean eq(Value v) {
         return v instanceof Quantity &&
-               ((Quantity)v).type==type &&
-               valueEqual((Value)v);
-    }
-
-    public boolean valueEqual(Value v) {
-        return equals(v);
+	    (super.eq((Value)v) ||
+	     (((Quantity)v).type==type &&
+	      valueEqual((Value)v)));
     }
 
     public boolean equals(Object ob) {
