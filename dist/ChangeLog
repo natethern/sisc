@@ -2,7 +2,7 @@
 
 	* New |map| implementation that should be faster and call/cc safe.
 
-2003-02-13  Matthias Radestock  <matthias@sorted.org>a
+2003-02-13  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed socket repl regression introduced in SISC 1.7.0.
 
