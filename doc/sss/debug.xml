@@ -60,8 +60,8 @@
             <parameter>continuation</parameter> in form of a
             list. Each element in the list is a pair that represents
             one level in the call stack, starting from the top. The
-            car of an element a &SISC; virtual machine
-            expression and the cdr is an association list identifying
+            car of an element a is a &SISC; virtual machine
+            expression while the cdr is an association list identifying
             the corresponding Scheme code source location using the
             following keys: <literal>source-file</literal>,
             <literal>line-number</literal>,
