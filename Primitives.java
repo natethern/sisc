@@ -823,7 +823,7 @@ public class Primitives extends ModuleAdapter {
 	GETNLNAME = 48,
 	GETNLVERSION = 49,
 	GETOUTPUTSTRING = 50,
-	GRT = 145,
+	GRT = 153,
 	IMAGPART = 51,
 	INEXACT2EXACT = 52,
 	INEXACTQ = 53,
