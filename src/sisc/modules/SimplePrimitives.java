@@ -514,8 +514,8 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
         case SUB: return num(v1).sub(num(v2)).sub(num(v3));
         case NEQ: 
             Quantity q2=num(v2);
-            return truth(!num(v1).comp(q2,0) &&
-                         !q2.comp(num(v3),0));
+            return truth(num(v1).comp(q2,0) &&
+                         q2.comp(num(v3),0));
         case LT:
             q2=num(v2);
             return truth(num(v1).comp(q2,-1) &&
