@@ -51,7 +51,7 @@
     </date>
     <copyright>
       <year>2002</year>
-      <holder>Scott G. Miller, </holder>
+      <holder>Scott G. Miller</holder>
       <holder>Matthias Radestock</holder>
     </copyright>
     <legalnotice>
@@ -95,7 +95,7 @@
 	</listitem>
         <listitem>
           <para>
-            (<xref linkend="annotation-property"/>) The
+            (<xref linkend="Debugging"/>) The
             <literal>EMITANNOTATIONS</literal> property is not yet
             supported by &SISC; at the time of this writing.
           </para>

@@ -102,7 +102,7 @@
         </blockquote>
       </para>
     </blockquote>
-    <para id="annotation-property">
+    <para>
       In addition, setting the Java system propery
       <literal>EMITANNOTATIONS</literal> to <literal>true</literal>
       will enable annotations.  This method must be used to annotate
