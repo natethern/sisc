@@ -38,6 +38,8 @@
 (include "plugins/schemechan.scm")
 (include "plugins/logging.scm")
 
+(random-source-randomize! default-random-source)
+
 (define bot-metaphone (metaphone bot-name))
 
 (define (random-elem ls)
