@@ -2,6 +2,7 @@ package sisc.data;
 
 import java.math.*;
 import java.io.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -1308,8 +1309,8 @@ public class Quantity extends Value {
         }
     }
 
-    public String display() {
-        return toString();
+    public void display(ValueWriter w) throws IOException {
+        w.append(toString());
     }
 
     public String toString() {

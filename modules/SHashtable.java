@@ -8,6 +8,7 @@ import sisc.exprs.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
 import sisc.modules.SThread.Monitor;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -90,11 +91,12 @@ public class SHashtable extends ModuleAdapter {
             }
         }
 
-        public String display() {
-            StringBuffer b=new StringBuffer("#<");
-            b.append(Util.liMessage(SHASHB, "hashtable")).append(' ');
-            b.append(ht.size()).append('>');
-            return b.toString();
+        public void display(ValueWriter w) throws IOException {
+            w.append("#<")
+                .append(Util.liMessage(SHASHB, "hashtable"))
+                .append(' ')
+                .append(Integer.toString(ht.size()))
+                .append('>');
         }
 
         public void apply(Interpreter r)

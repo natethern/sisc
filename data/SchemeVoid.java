@@ -1,14 +1,15 @@
 package sisc.data;
 
 import java.io.*;
+import sisc.io.ValueWriter;
 
 public class SchemeVoid extends Value implements Singleton {
     public static SchemeVoid VOID=new SchemeVoid();
 
     public SchemeVoid() {}
 
-    public String display() {
-        return "#<void>";
+    public void display(ValueWriter w) throws IOException {
+        w.append("#<void>");
     }
 
     public int hashCode() {

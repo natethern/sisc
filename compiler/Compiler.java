@@ -1,11 +1,12 @@
 package sisc.compiler;
 
+import java.util.*;
+import java.io.*;
 import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
-import java.util.*;
-import java.io.*;
 import sisc.interpreter.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
@@ -314,8 +315,8 @@ public class Compiler extends Util {
             error(r, liMessage(SISCB, "invalidsyncontext", name.toString()));
         }
 
-        public String display() {
-            return "#!"+synid;
+        public void display(ValueWriter w) throws IOException {
+            w.append("#!").append(Integer.toString(synid));
         }
 
         public Syntax() {}

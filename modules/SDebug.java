@@ -1,12 +1,14 @@
 package sisc.modules;
 
 import java.awt.*;
-import java.util.Set;
 import sisc.*;
+import sisc.io.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
+import java.util.Set;
+import java.io.IOException;
 
 public class SDebug extends ModuleAdapter {
 
@@ -54,9 +56,8 @@ public class SDebug extends ModuleAdapter {
             return e.getAnnotation(key);
         }
 
-        public String display() {
-            return "#<"+liMessage(SISCB, "expression")+' '+
-                e.express().write()+'>';
+        public void display(ValueWriter w) throws IOException {
+            w.append("#<").append(liMessage(SISCB, "expression")).append(' ').append(e.express()).append('>');
         }
     }
 

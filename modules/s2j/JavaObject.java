@@ -8,6 +8,7 @@ import sisc.interpreter.*;
 
 import java.io.IOException;
 
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -147,14 +148,12 @@ public class JavaObject extends Procedure {
         return obj.getClass();
     }
 
-    public String display() {
-        StringBuffer b=new StringBuffer();
-        b.append("#<java ");
-        b.append(Util.nameType(obj.getClass()));
-        b.append(" ");
-        b.append(obj);
-        b.append('>');
-        return b.toString();
+    public void display(ValueWriter w) throws IOException {
+        w.append("#<java ")
+            .append(Util.nameType(obj.getClass()))
+            .append(' ')
+            .append(obj.toString())
+            .append('>');
     }
 
     public int hashCode() {

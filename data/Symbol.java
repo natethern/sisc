@@ -1,9 +1,10 @@
 package sisc.data;
 
 import java.io.*;
+import sisc.compiler.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
-import sisc.compiler.*;
 
 public class Symbol extends Value {
 
@@ -35,34 +36,32 @@ public class Symbol extends Value {
         return Symbol.get(symval.toLowerCase());
     }
 
-    public String display() {
-        return symval;
+    public void display(ValueWriter w) throws IOException {
+        w.append(symval);
     }
 
-    private void slashify(StringBuffer b) {
+    private void slashify(ValueWriter w) throws IOException {
         if (Parser.isPeculiarIdentifier(symval)) 
-            b.append(symval);
+            w.append(symval);
         else 
             for (int i=0; i<symval.length(); i++) {
                 char c=symval.charAt(i);
                 if ((i>0 && Lexer.isIdentifierSubsequent(c)) ||
                     (i==0 && Lexer.isIdentifierStart(c)))
-                    b.append(c);
+                    w.append(c);
                 else 
-                    b.append('\\').append(c);
+                    w.append('\\').append(c);
             }
     }
 
-    public String write() {
-        StringBuffer b = new StringBuffer();
+    public void write(ValueWriter w) throws IOException {
         if (caseSensitive || symval.toLowerCase().equals(symval))
-            slashify(b);
+            slashify(w);
         else {
-            b.append('|');
-            slashify(b);
-            b.append('|');
+            w.append('|');
+            slashify(w);
+            w.append('|');
         }
-        return b.toString();
     }
 
     public Symbol() {}

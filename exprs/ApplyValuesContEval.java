@@ -4,6 +4,7 @@ import java.io.*;
 import sisc.*;
 import sisc.data.*;
 import sisc.interpreter.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -25,11 +26,8 @@ public class ApplyValuesContEval extends Expression {
         r.acc=(Value)consumer;
     }
 
-    public String display() {
-        StringBuffer sb=new StringBuffer("#<");
-        sb.append(liMessage(SISCB, "systemcontinuation"));
-        sb.append('>');
-        return sb.toString();
+    public void display(ValueWriter w) throws IOException {
+        w.append("#<").append(liMessage(SISCB, "systemcontinuation")).append('>');
     }
 
     public Value express() {

@@ -2,6 +2,8 @@ package sisc.nativefun;
 
 import sisc.data.*;
 import sisc.interpreter.*;
+import java.io.IOException;
+import sisc.io.ValueWriter;
 
 public abstract class Module extends NamedValue
     implements java.io.Serializable {
@@ -12,8 +14,8 @@ public abstract class Module extends NamedValue
     public abstract String getModuleName();
     public abstract float getModuleVersion();
 
-    public String display() {
-        return displayNamedOpaque(liMessage(SISCB, "nativelibrary"));
+    public void display(ValueWriter w) throws IOException {
+        displayNamedOpaque(w, liMessage(SISCB, "nativelibrary"));
     }
 
     public void bindAll(Interpreter r, sisc.env.SymbolicEnvironment env) {

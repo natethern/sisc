@@ -3,6 +3,9 @@ package sisc.data;
 import sisc.*;
 import java.io.*;
 import sisc.interpreter.*;
+import sisc.io.ValueWriter;
+import sisc.io.WriterOutputPort;
+import sisc.io.PortValueWriter;
 
 /**
  * Value is the base class for anything treated as a first-class value 
@@ -10,11 +13,7 @@ import sisc.interpreter.*;
  */
 public abstract class Value extends Expression implements Immediate {
 
-    /**
-     * Returns a representation of this value as a String, as if it were 
-     * output from Scheme's 'display' function.
-     */
-    public abstract String display();
+    public abstract void display(ValueWriter w) throws IOException;
 
     public String synopsis() {
 	return synopsis(DEFAULT_SYNOPSIS_LENGTH);
@@ -35,12 +34,8 @@ public abstract class Value extends Expression implements Immediate {
         else return v;
     }
 
-    /**
-     * Returns a representation of this value as a String, as if it were 
-     * output from Scheme's 'write' function.
-     */
-    public String write() {
-        return display();
+    public void write(ValueWriter w) throws IOException {
+        display(w);
     }
 
     /**
@@ -74,7 +69,16 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     public String toString() {
-        return write();
+        StringWriter sw = new StringWriter();
+        WriterOutputPort p = new WriterOutputPort(sw, false);
+        ValueWriter w = new PortValueWriter(p);
+        try {
+            w.write(this);
+            p.close();
+        } catch (IOException e) {
+            //shouldn't happen since we are writing to string
+        }
+        return sw.toString();
     }
 
     /**

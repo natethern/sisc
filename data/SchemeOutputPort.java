@@ -1,13 +1,15 @@
 package sisc.data;
 
+import java.io.IOException;
 import sisc.data.NamedValue;
 import sisc.io.OutputPort;
+import sisc.io.ValueWriter;
 
 public abstract class SchemeOutputPort extends NamedValue 
     implements OutputPort {
 
-    public String display() {
-        return displayNamedOpaque("output-port");
+    public void display(ValueWriter w) throws IOException {
+        displayNamedOpaque(w, "output-port");
     }
 }
 /*

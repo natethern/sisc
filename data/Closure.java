@@ -3,6 +3,7 @@ package sisc.data;
 import java.io.*;
 import sisc.*;
 import sisc.interpreter.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.LexicalEnvironment;
@@ -27,8 +28,8 @@ public class Closure extends Procedure {
 	r.vlr=ZV;
     }
 
-    public String display() {
-        return displayNamedOpaque("procedure");
+    public void display(ValueWriter w) throws IOException {
+        displayNamedOpaque(w, "procedure");
     }
 
     public void serialize(Serializer s) throws IOException {

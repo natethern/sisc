@@ -2,6 +2,7 @@ package sisc.data;
 
 import java.util.Hashtable;
 import java.io.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -25,19 +26,20 @@ public class SchemeCharacter extends Value {
         this.c=c;
     }
 
-    public String display() {
-        return ""+c;
+    public void display(ValueWriter w) throws IOException {
+        w.append(c);
     }
 
-    public String write() {
+    public void write(ValueWriter w) throws IOException {
         String hr=(String)humanReadables.get(this);
-        if (hr!=null) return hr;
-        StringBuffer b=new StringBuffer();
-        b.append("#\\");
-        if (c<128 && c>31)
-            b.append(c);
-        else b.append(justify(Integer.toOctalString(c),3,'0'));
-        return b.toString();
+        if (hr!=null) {
+            w.append(hr);
+        } else {
+            w.append("#\\");
+            if (c<128 && c>31)
+                w.append(c);
+            else w.append(justify(Integer.toOctalString(c),3,'0'));
+        }
     }
 
     public boolean eq(Object v) {

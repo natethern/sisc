@@ -1,8 +1,9 @@
 package sisc.data;
 
 import java.util.*;
-import sisc.data.*;
 import java.io.*;
+import sisc.data.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -17,14 +18,12 @@ public class Box extends Value {
         val=v;
     }
 
-    public String display() {
-        StringBuffer b=new StringBuffer();
-        b.append("#&");
+    public void display(ValueWriter w) throws IOException {
+        w.append("#&");
         if (val instanceof Value) 
-            b.append(((Value)val).write());
+            w.append((Value)val);
         else
-            b.append("#<").append(liMessage(SISCB, "expression")).append('>');
-        return b.toString();
+            w.append("#<").append(liMessage(SISCB, "expression")).append('>');
     }
 
     public boolean valueEqual(Value v) {

@@ -11,6 +11,7 @@ import sisc.io.*;
 import sisc.exprs.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
@@ -171,8 +172,8 @@ public class Primitives extends ModuleAdapter {
             r.acc = res;
         }
 
-        public String display() {
-            return displayNamedOpaque("parameter");
+        public void display(ValueWriter w) throws IOException {
+            displayNamedOpaque(w, "parameter");
         }
 
         public void serialize(Serializer s) throws IOException {

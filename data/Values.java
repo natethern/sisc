@@ -3,6 +3,7 @@ package sisc.data;
 import java.io.*;
 import sisc.*;
 import sisc.interpreter.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -13,14 +14,11 @@ public class Values extends Value {
         values=v;
     }
 
-    public String display() {
-        StringBuffer b=new StringBuffer();
-
-        for (int i=0; i<values.length; i++) {
-            b.append(values[i].display());
-            if (i+1<values.length) b.append('\n');
+    public void display(ValueWriter w) throws IOException {
+        for (int i=0; i<values.length-1; i++) {
+            w.append(values[i]).append('\n');
         }
-        return b.toString();
+        if (values.length>0) w.append(values[values.length-1]);
     }
 
     public void eval(Interpreter r) throws ContinuationException {

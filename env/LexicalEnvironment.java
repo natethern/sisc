@@ -4,6 +4,7 @@ import java.util.*;
 import java.io.*;
 import sisc.data.*;
 import sisc.interpreter.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -76,11 +77,8 @@ public class LexicalEnvironment extends Value {
         e.vals[pos]=v;
     }
 
-    public String display() {
-        StringBuffer b=new StringBuffer("#<");
-        b.append(liMessage(SISCB, "environment"));
-        b.append('>');
-        return b.toString();
+    public void display(ValueWriter w) throws IOException {
+        w.append("#<").append(liMessage(SISCB, "environment")).append('>');
     }
 
     public void serialize(Serializer s) throws IOException {

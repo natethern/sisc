@@ -1,6 +1,8 @@
 package sisc.env;
 
 import sisc.data.*;
+import java.io.IOException;
+import sisc.io.ValueWriter;
 
 public class DelegatingSymEnv extends NamedValue
     implements SymbolicEnvironment {
@@ -20,8 +22,8 @@ public class DelegatingSymEnv extends NamedValue
         this.name = name;
     }
 
-    public String display() {
-        return displayNamedOpaque("environment");
+    public void display(ValueWriter w) throws IOException {
+        displayNamedOpaque(w, "environment");
     }
 
     public void setParent(SymbolicEnvironment e) {

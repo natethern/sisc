@@ -7,6 +7,7 @@ import sisc.exprs.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
 
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -75,8 +76,8 @@ public class SThread extends ModuleAdapter {
     public static class CondVar extends NamedValue {
         public CondVar() {};
 
-        public String display() {
-            return displayNamedOpaque("condvar");
+        public void display(ValueWriter w) throws IOException {
+            displayNamedOpaque(w, "condvar");
         }
     }
 
@@ -201,8 +202,8 @@ public class SThread extends ModuleAdapter {
             }
         }
 
-        public String display() {
-            return ((NamedValue)this).displayNamedOpaque("monitor");
+        public void display(ValueWriter w) throws IOException {
+            displayNamedOpaque(w, "monitor");
         }
 
         public static Monitor of(Value v) {
@@ -281,8 +282,8 @@ public class SThread extends ModuleAdapter {
             Context.exit();
         }
 
-        public String display() {
-            return ((NamedValue)this).displayNamedOpaque("thread");
+        public void display(ValueWriter w) throws IOException {
+            displayNamedOpaque(w, "thread");
         }
     }
 

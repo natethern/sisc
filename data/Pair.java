@@ -2,6 +2,7 @@ package sisc.data;
 
 import java.io.*;
 import sisc.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -25,48 +26,53 @@ public class Pair extends Value {
 	cdr = v;
     }
 
-    protected void display(StringBuffer b, boolean write) {
-        Pair cv=this;
-        do {
-            b.append(write ? cv.car.write() : cv.car.display());
-            if (cv.cdr instanceof Pair) {
-                if (cv.cdr!=EMPTYLIST)
-                    b.append(' ');
-                cv=(Pair)cv.cdr;
-            } else {
-                b.append(" . ").append(write ? cv.cdr.write() : 
-				       cv.cdr.display());
-				     
-                break;
-            }
-        } while (cv!=EMPTYLIST);
+    private static boolean quasiquote(ValueWriter w, String prefix, Value q, Value v) throws IOException {
+        if (v instanceof Pair && ((Pair)v).cdr == EMPTYLIST) {
+            String qq = null;
+            if (q==QUOTE) {
+                qq = "'";
+            } else if (q==UNQUOTE) {
+                qq = ",";
+            } else if (q==BACKQUOTE) {
+                qq = "`";
+            } else if (q==UNQUOTE_SPLICING) {
+                qq = ",@";
+            } else return false;
+            w.append(prefix).append(qq).append(((Pair)v).car);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public String display() {
-        StringBuffer b=new StringBuffer();
-        if (car==QUOTE) {
-            b.append('\'').append(((Pair)cdr).car.display());
-        } else if (car==UNQUOTE) {
-            b.append(',').append(((Pair)cdr).car.display());
-        } else if (car==BACKQUOTE) {
-            b.append('`').append(((Pair)cdr).car.display());
-        } else if (car==UNQUOTE_SPLICING) {
-            b.append(",@").append(((Pair)cdr).car.display());
-        } else {
-            b.append('(');
-            display(b, false);
-            b.append(')');
+    public void display(ValueWriter w) throws IOException {
+        Value ccar = car;
+        Value ccdr = cdr;
+        if (quasiquote(w, "", ccar, ccdr)) return;
+        w.append('(').append(ccar);
+        while (ccdr != EMPTYLIST) {
+            if ((ccdr instanceof Pair) && w.isInlinable(ccdr)) {
+                Pair p = (Pair)ccdr;
+                ccar = p.car;
+                ccdr = p.cdr;
+                if (quasiquote(w, " . ", ccar, ccdr)) break;
+                w.append(' ').append(ccar);
+            } else {
+                w.append(" . ");
+                w.append(ccdr);
+                break;
+            }
         }
-        return b.toString();
+        w.append(')');
     }
 
     public boolean valueEqual(Value v) {
         if (!(v instanceof Pair)) return false;
         Pair p=(Pair)v;
-	boolean carequal=car.valueEqual(p.car);
-	if (carequal)
-	    return cdr.valueEqual(p.cdr);
-	else return false;
+        boolean carequal=car.valueEqual(p.car);
+        if (carequal)
+            return cdr.valueEqual(p.cdr);
+        else return false;
     }
 
     public void serialize(Serializer s) throws IOException {

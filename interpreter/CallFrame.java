@@ -5,6 +5,7 @@ import java.lang.ref.*;
 import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.LexicalEnvironment;
@@ -61,8 +62,8 @@ public class CallFrame extends Procedure {
         r.pop(this);
     }
 
-    public String display() {
-        return displayNamedOpaque("continuation");
+    public void display(ValueWriter w) throws IOException {
+        displayNamedOpaque(w, "continuation");
     }
 
     public void serialize(Serializer s) throws IOException {

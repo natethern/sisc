@@ -5,6 +5,7 @@ import sisc.*;
 import sisc.compiler.*;
 import sisc.interpreter.*;
 import sisc.data.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -70,8 +71,8 @@ public class BuiltinProcedure extends Procedure {
                        new Pair(PARENT, rootCause))));
     }
 
-    public String display() {
-        return displayNamedOpaque("builtin procedure");
+    public void display(ValueWriter w) throws IOException {
+        displayNamedOpaque(w, "builtin procedure");
     }
 
     public boolean equals(Object v) {

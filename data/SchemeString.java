@@ -2,6 +2,7 @@ package sisc.data;
 
 import sisc.*;
 import java.io.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -99,12 +100,12 @@ public class SchemeString extends Value {
         data_s = null;
     }
 
-    public String display() {
-        return asString();
+    public void display(ValueWriter w) throws IOException {
+        w.append(asString());
     }
 
-    public String write() {
-        return toString();
+    public void write(ValueWriter w) throws IOException {
+        w.append(toString());
     }
 
     public String toString() {

@@ -4,6 +4,7 @@ import java.io.*;
 import sisc.*;
 import sisc.data.*;
 import sisc.interpreter.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -36,15 +37,13 @@ public class AnnotatedExpr extends Value {
 	    s.writeExpression(stripped);
     }
 
-    public String display() {
-        StringBuffer b=new StringBuffer("#@(");
-        b.append(annotation.display()).append(" . ");
+    public void display(ValueWriter w) throws IOException {
+        w.append("#@(").append(annotation).append(" . ");
         if (expr instanceof Value) 
-            b.append(((Value)expr).display());
+            w.append(((Value)expr));
         else 
-            b.append(expr.express());
-        b.append(')');
-        return b.toString();
+            w.append(expr.express());
+        w.append(')');
     }
 
     public void deserialize(Deserializer s) throws IOException {

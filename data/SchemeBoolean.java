@@ -1,6 +1,7 @@
 package sisc.data;
 
 import java.io.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -14,8 +15,8 @@ public class SchemeBoolean extends Value implements Singleton {
         val=v;
     }
 
-    public String display() {
-        return (val ? "#t" : "#f");
+    public void display(ValueWriter w) throws IOException {
+        w.append(val ? "#t" : "#f");
     }
 
     public int hashCode() {

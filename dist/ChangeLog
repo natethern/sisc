@@ -1,3 +1,9 @@
+2002-11-19  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed a bug in |write| and |display| when writing lists
+	  containing unusual occurences of quote, quasiquote, unquote,
+	  unquote-splicing.
+
 2002-11-11 Released SISC 1.6.3
 
 2002-10-31 Released SISC 1.6.3-rc

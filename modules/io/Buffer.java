@@ -1,9 +1,10 @@
 package sisc.modules.io;
 
+import java.io.IOException;
 import sisc.data.NamedValue;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
-import java.io.IOException;
 
 public class Buffer extends NamedValue {
     
@@ -27,8 +28,8 @@ public class Buffer extends NamedValue {
         buf[idx]=(byte)val;
     }
 
-    public String display() {
-        return displayNamedOpaque("buffer");
+    public void display(ValueWriter w) throws IOException {
+        displayNamedOpaque(w, "buffer");
     }
 
     public Buffer() {}

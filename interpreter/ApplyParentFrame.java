@@ -3,6 +3,7 @@ package sisc.interpreter;
 import java.io.*;
 import sisc.data.*;
 import sisc.interpreter.*;
+import sisc.io.ValueWriter;
 
 public class ApplyParentFrame extends Procedure {
     public CallFrame c;
@@ -20,8 +21,8 @@ public class ApplyParentFrame extends Procedure {
         r.pop(c.parent);
     }
 
-    public String display() {
-        return displayNamedOpaque(liMessage(SISCB, "errorcontinuation"));
+    public void display(ValueWriter w) throws IOException {
+        displayNamedOpaque(w, liMessage(SISCB, "errorcontinuation"));
     }
 }
 

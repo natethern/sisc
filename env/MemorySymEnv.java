@@ -1,11 +1,12 @@
 package sisc.env;
 
+import java.io.*;
+import sisc.data.*;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import sisc.data.*;
-import java.io.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -149,8 +150,8 @@ public class MemorySymEnv extends NamedValue
         }
     }
 
-    public String display() {
-        return displayNamedOpaque("environment");
+    public void display(ValueWriter w) throws IOException {
+        displayNamedOpaque(w, "environment");
     }
 
     public Iterator keys() {

@@ -7,6 +7,7 @@ import sisc.interpreter.*;
 
 import java.io.IOException;
 
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -38,12 +39,8 @@ public class JavaNull extends JavaObject {
         return (Class)obj;
     }
 
-    public String display() {
-        StringBuffer b=new StringBuffer();
-        b.append("#<jnull ");
-        b.append(Util.nameType((Class)obj));
-        b.append('>');
-        return b.toString();
+    public void display(ValueWriter w) throws IOException {
+        w.append("#<jnull ").append(Util.nameType((Class)obj)).append('>');
     }
 
     public boolean eq(Object v) {

@@ -1,8 +1,9 @@
 package sisc.data;
 
+import java.io.IOException;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
-import java.io.IOException;
 
 public abstract class NamedValue extends Value {
 
@@ -16,13 +17,12 @@ public abstract class NamedValue extends Value {
         return name;
     }
 
-    public String displayNamedOpaque(String type) {
-        StringBuffer b=new StringBuffer();
-        b.append("#<").append(type);
+    public void displayNamedOpaque(ValueWriter w, String type)
+        throws IOException {
+        w.append("#<").append(type);
         if (name!=null)
-            b.append(' ').append(name.display());
-        b.append('>');
-        return b.toString();
+            w.append(' ').append(name);
+        w.append('>');
     }
 
     public void serialize(Serializer s) throws IOException {

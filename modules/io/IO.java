@@ -166,8 +166,11 @@ public class IO extends ModuleAdapter {
                 }
             case DISPLAY: case WRITE:
                 try {
-                    f.dynenv.out.write((primid == WRITE ? f.vlr[0].write() :
-                                        f.vlr[0].display()));
+                    ValueWriter w = new PortValueWriter(f.dynenv.out);
+                    if (primid == WRITE)
+                        w.write(f.vlr[0]);
+                    else
+                        w.display(f.vlr[0]);
                 } catch (IOException e) {
                     throwPrimException(liMessage(SISCB, "errorwriting",
                                                  f.dynenv.out.toString()));
@@ -370,8 +373,11 @@ public class IO extends ModuleAdapter {
             case DISPLAY: case WRITE:
                 port=outport(f.vlr[1]);
                 try {
-                    port.write((primid == WRITE ? f.vlr[0].write() :
-                                f.vlr[0].display()));
+                    ValueWriter w = new PortValueWriter(port);
+                    if (primid == WRITE)
+                        w.write(f.vlr[0]);
+                    else
+                        w.display(f.vlr[0]);
                 } catch (IOException e) {
                     throwPrimException(liMessage(SISCB, "errorwriting",
                                                  port.toString()));   

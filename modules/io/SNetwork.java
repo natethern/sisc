@@ -73,10 +73,8 @@ public class SNetwork extends ModuleAdapter {
             this.s=s;
         }
 
-        public String display() {
-            StringBuffer b=new StringBuffer("#<");
-            b.append(liMessage(SNETB, "tcplistensocket")).append('>');
-            return b.toString();
+        public void display(ValueWriter w) throws IOException {
+            w.append("#<").append(liMessage(SNETB, "tcplistensocket")).append('>');
         }
 
         public void close() throws IOException {
@@ -92,10 +90,8 @@ public class SNetwork extends ModuleAdapter {
             this.s=s;
         }
 
-        public String display() {
-            StringBuffer b=new StringBuffer("#<");
-            b.append(liMessage(SNETB, "tcpsocket")).append('>');
-            return b.toString();
+        public void display(ValueWriter w) throws IOException {
+            w.append("#<").append(liMessage(SNETB, "tcpsocket")).append('>');
         }
 
         public void close() throws IOException {
@@ -236,10 +232,8 @@ public class SNetwork extends ModuleAdapter {
 	    remoteHost=InetAddress.getByName(dhost);
 	}
 
-        public String display() {
-            StringBuffer b=new StringBuffer("#<");
-            b.append(liMessage(SNETB, "udpsocket")).append('>');
-            return b.toString();
+        public void display(ValueWriter w) throws IOException {
+            w.append("#<").append(liMessage(SNETB, "udpsocket")).append('>');
         }
 
         public void close() throws IOException {
@@ -286,10 +280,8 @@ public class SNetwork extends ModuleAdapter {
             super(s, host);
         }
 
-        public String display() {
-            StringBuffer b=new StringBuffer("#<");
-            b.append(liMessage(SNETB, "multicastudpsocket")).append('>');
-            return b.toString();
+        public void display(ValueWriter w) throws IOException {
+            w.append("#<").append(liMessage(SNETB, "multicastudpsocket")).append('>');
         }
 
         public void joinGroup(InetAddress group) throws IOException {

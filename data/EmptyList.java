@@ -1,6 +1,7 @@
 package sisc.data;
 
 import java.io.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Deserializer;
 import sisc.ser.Serializer;
 
@@ -13,8 +14,8 @@ public class EmptyList extends Pair implements Singleton {
 
     public EmptyList() {}
 
-    public String display() {
-        return "()";
+    public void display(ValueWriter w) throws IOException {
+        w.append("()");
     }
 
     public boolean valueEqual(Value o) {

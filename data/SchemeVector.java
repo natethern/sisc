@@ -2,6 +2,7 @@ package sisc.data;
 
 import sisc.*;
 import java.io.*;
+import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -50,27 +51,23 @@ public class SchemeVector extends Value {
         return lastUnique=vals.length;
     }
     
-    void display(StringBuffer b, boolean write, int l) {
-        for (int i=0; i<l; i++) {
-            b.append(write ? vals[i].write() : vals[i].display());
-            if (i+1<l) b.append(' ');
+    void display(ValueWriter w, int l) throws IOException {
+        for (int i=0; i<l-1; i++) {
+            w.append(vals[i]).append(' ');
         }
+        if (l>0) w.append(vals[l-1]);
     }
 
-    public String display() {
-        StringBuffer b=new StringBuffer();
-        b.append("#(");
-        display(b, false, vals.length);
-        b.append(')');
-        return b.toString();
+    public void display(ValueWriter w) throws IOException {
+        w.append("#(");
+        display(w, vals.length);
+        w.append(')');
     }
 
-    public String write() {
-        StringBuffer b=new StringBuffer();
-        b.append('#').append(vals.length).append('(');
-        display(b, true, findEnd());
-        b.append(')');
-        return b.toString();
+    public void write(ValueWriter w) throws IOException {
+        w.append('#').append(Integer.toString(vals.length)).append('(');
+        display(w, findEnd());
+        w.append(')');
     }
 
     public void fill(Value v) {
