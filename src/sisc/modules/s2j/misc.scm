@@ -99,6 +99,36 @@
   void boolean double float long int short byte char)
 
 
+;;;;;;;;;; EXCEPTION HANDLING ;;;;;;;;;;
+
+(define display-java-stack-trace)
+
+;;(define (initialize-exception-handling) (void))
+(define (initialize-exception-handling)
+  (define-generic-java-methods
+    print-stack-trace
+    to-string
+    close)
+  (define-java-classes
+    <java.io.string-writer>
+    <java.io.print-writer>)
+  (set! display-java-stack-trace
+    (lambda (java-exception)
+      (let* ([sw (java-new <java.io.string-writer>)]
+             [pw (java-new <java.io.print-writer> sw)])
+        (print-stack-trace java-exception pw)
+        (close pw)
+        (display (->string (to-string sw))))))
+  (print-exception-stack-trace-hook
+   'java
+   (lambda (next e)
+     (if (exception? e)
+         (let ([m (error-message (exception-error e))])
+           (if (java-object? m)
+               (display-java-stack-trace m))))
+     (next e))))
+
+
 ;;;;;;;;;; HOOKS ;;;;;;;;;;
 
 (define (java-type-of-hook next o)

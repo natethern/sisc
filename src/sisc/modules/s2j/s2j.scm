@@ -66,8 +66,7 @@
 
 ;;;;;;;;;; exception handling ;;;;;;;;;;
 
-(define-generic print-stack-trace
-  (generic-java-procedure 'print-stack-trace standard-print-stack-trace))
+(define-generic print-stack-trace)
 (define-generic to-string)
 (define-generic close)
 
@@ -77,17 +76,3 @@
     (print-stack-trace java-exception pw)
     (close pw)
     (display (->string (to-string sw)))))
-
-(define (print-exception e . st)
-  (let ([error (exception-error e)])
-    (display-error error)
-    (if (or (null? st) (car st))
-        (begin
-          (print-stack-trace (exception-continuation e))
-          (let ([m (error-message error)])
-            (if (java-object? m) (display-java-stack-trace m)))))
-    (let ([p (and (pair? error) (error-parent error))])
-      (if p 
-          (begin (display "Caused by ")
-                 (apply print-exception p st))))))
-

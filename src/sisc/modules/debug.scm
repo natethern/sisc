@@ -236,26 +236,16 @@
               (format "~a:~a:~a: <indeterminate call>" 
                       sourcefile
                       line column)]))))
-  
+
 (define (print-stack-trace k)
-  (for-each
-   (lambda (entry)
-     (display (format-stack-trace-entry entry))
-     (newline))
-   (stack-trace k)))
+  (for-each (lambda (entry)
+              (display (format-stack-trace-entry entry))
+              (newline))
+            (stack-trace k)))
 
-(define (print-exception e . st)
-  (let ([error (exception-error e)])
-    (display-error error)
-    (if (or (null? st) (car st))
-        (print-stack-trace (exception-continuation e)))
-    (let ([p (and (pair? error) (error-parent error))])
-      (if p 
-          (begin (display "Caused by ")
-                 (apply print-exception p st))))))
-
-;; Always display stack traces
-(define stack-trace-on-error
-  (make-config-parameter "stackTraceOnError" #f))
-
-           
+(print-exception-stack-trace-hook
+ 'debug
+ (lambda (next e)
+   (if (exception? e)
+       (print-stack-trace (exception-continuation e))
+       (next e))))

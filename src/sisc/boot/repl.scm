@@ -41,7 +41,10 @@
        (putprop 'last-exception '*debug* exception)
        (print-exception exception (stack-trace-on-error))))))
 
-(define repl-prompt (make-config-parameter "replPrompt" ""))
+(define repl-prompt
+  (make-config-parameter "replPrompt" ""))
+(define stack-trace-on-error
+  (make-config-parameter "stackTraceOnError" #f))
 
 (define (get-last-exception)
   (getprop 'last-exception '*debug*))

@@ -1,29 +1,3 @@
-;;;;;;;;;; HOOKS ;;;;;;;;;;
-
-(define (hook-items proc)
-  (procedure-property proc 'items))
-(define (set-hook-items! proc items)
-  (set-procedure-property! proc 'items items))
-
-(define (make-hook default)
-  (let ([items (list default)])
-    (define (hook key item)
-      (cond [(assq key (cdr items))
-             => (lambda (x) (set-cdr! x item))]
-            [else
-              (set-cdr! items (cons (cons key item) (cdr items)))]))
-    (set-hook-items! hook items)
-    hook))
-
-(define (invoke-hook hook . args)
-  (let ([all-items (hook-items hook)])
-    (let loop ([items (cdr all-items)])
-      (if (null? items)
-          (apply (car all-items) args)
-          (apply (cdar items)
-                 (lambda args (loop (cdr items))) args)))))
-
-
 ;;;;;;;;;; PROCEDURES AND PREDICATES ;;;;;;;;;;
 
 (define type-of-hook (make-hook native-type-of))

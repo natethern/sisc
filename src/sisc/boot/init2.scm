@@ -61,6 +61,32 @@
       (emit-annotations #t)
       (emit-debugging-symbols #t)))
 
+;;;;;;;;;; hooks ;;;;;;;;;;
+
+(define (hook-items proc)
+  (annotation proc 'items))
+(define (set-hook-items! proc items)
+  (set-annotation! proc 'items items))
+
+(define (make-hook default)
+  (let ([items (list default)])
+    (define (hook key item)
+      (cond [(assq key (cdr items))
+             => (lambda (x) (set-cdr! x item))]
+            [else
+              (set-cdr! items (cons (cons key item)
+                                    (cdr items)))]))
+    (set-hook-items! hook items)
+    hook))
+
+(define (invoke-hook hook . args)
+  (let ([all-items (hook-items hook)])
+    (let loop ([items (cdr all-items)])
+      (if (null? items)
+          (apply (car all-items) args)
+          (apply (cdar items)
+                 (lambda args (loop (cdr items))) args)))))
+
 ;;;;;;;;;;;;;;;; error handling ;;;;;;;;;;;;;;;
 
 ;; Most of the code here is for providing SRFI-23 style error
@@ -168,14 +194,22 @@
                                (error-message e)))
   (newline))
 
+(define print-exception-stack-trace-hook
+  (make-hook (lambda (e)
+               (display "printing of stack trace not supported\n"))))
+
+(define (print-exception-stack-trace e)
+  (invoke-hook print-exception-stack-trace-hook e))
+
 (define (print-exception e . st)
-  (display-error (exception-error e))
-  (if (or (null? st) (car st))
-      (display "printing of stack trace not supported\n"))
-  (let ([p (and (pair? error) (error-parent error))])
-    (if p
-        (begin (display "Caused by ")
-               (apply print-exception p st)))))
+  (let ([error (exception-error e)])
+    (display-error error)
+    (if (or (null? st) (car st))
+        (invoke-hook print-exception-stack-trace-hook e))
+    (let ([p (and (pair? error) (error-parent error))])
+      (if p 
+          (begin (display "Caused by ")
+                 (apply print-exception p st))))))
 
 (define (format format-string . objects)
   (let ((buffer (open-output-string)))

@@ -114,9 +114,7 @@
      clear-breakpoint!
      continue
      stack-trace
-     print-stack-trace
-     stack-trace-on-error
-     print-exception)
+     print-stack-trace)
   (import debugging-native)
   (include "debug.scm"))
 
@@ -506,7 +504,8 @@
      ->symbol
      ->vector
      ->list
-     jnull)
+     jnull
+     display-java-stack-trace)
   (import* record
            define-record-type)
   (import* type-system
@@ -533,7 +532,8 @@
   (include "s2j/misc.scm")
   (type-of-hook       'java java-type-of-hook)
   (type<=-hook        'java java-type<=-hook)
-  (compare-types-hook 'java java-compare-types-hook))
+  (compare-types-hook 'java java-compare-types-hook)
+  (initialize-exception-handling))
 
 (module s2j
   (java-class
@@ -607,14 +607,11 @@
    <void>
    <symbol>
    <object>
-   print-stack-trace
-   display-java-stack-trace
-   print-exception)
+   display-java-stack-trace)
   (import s2j-reflection)
   (import s2j-conversion)
   (import generic-procedures)
   (import misc)
-  (import* debugging (standard-print-stack-trace print-stack-trace))
   (include "s2j/s2j.scm")
   (define (java-class name)
     (java/class (if (string? name) (string->symbol name) name)))
