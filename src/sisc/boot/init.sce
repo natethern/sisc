@@ -266,29 +266,6 @@
 (define string
   (lambda |elems_Y5N9k_5R-|
     (list->string |elems_Y5N9k_5R-|)))
-(define detect-os
-  (lambda ()
-    ((lambda (|osn_Y576is6R-|)
-       (if (> (string-length |osn_Y576is6R-|) '3)
-         (if (equal? (substring |osn_Y576is6R-| '0 '3) '"mac")
-           'macos
-           (if (equal? (substring |osn_Y576is6R-| '0 '3) '"win")
-             'ms-dos
-             (if (equal? (substring |osn_Y576is6R-| '0 '3) '"ms-")
-               'ms-dos
-               (if (equal? (substring |osn_Y576is6R-| '0 '3) '"uni")
-                 'unix
-                 (if (equal? (substring |osn_Y576is6R-| '0 '3) '"lin")
-                   'unix
-                   (if (equal?
-                         (substring |osn_Y576is6R-| '0 '4)
-                         '"os/2")
-                     'os2
-                     (if (equal? (substring |osn_Y576is6R-| '0 '3) '"vax")
-                       'vax
-                       '#!void)))))))
-         'unix))
-     (string-downcase (getenv '"os.name")))))
 (define current-url (_make-parameter '"file:."))
 (define current-directory
   (lambda |rest_Y5t2gV6R-|

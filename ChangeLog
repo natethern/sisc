@@ -1,3 +1,7 @@
+2003-08-04  Matthias Radestock  <matthias@sorted.org>
+
+	* Improved slib's O/S detection.
+
 2003-07-27  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed runtime error message construction to handle circular data

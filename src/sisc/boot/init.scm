@@ -198,20 +198,6 @@
 (define (vector . elems) (list->vector elems))
 (define (string . elems) (list->string elems))
 
-;;;;;;;;;;;;; OS Detection
-
-(define (detect-os)
-  (let ([osn (string-downcase (getenv "os.name"))])
-    (if (> (string-length osn) 3)
-	(cond [(equal? (substring osn 0 3) "mac") 'macos]
-	      [(equal? (substring osn 0 3) "win") 'ms-dos]
-	      [(equal? (substring osn 0 3) "ms-") 'ms-dos]
-	      [(equal? (substring osn 0 3) "uni") 'unix]
-	      [(equal? (substring osn 0 3) "lin") 'unix]
-	      [(equal? (substring osn 0 4) "os/2") 'os2]
-	      [(equal? (substring osn 0 3) "vax") 'vax])
-	'unix)))
-
 ;;;;;;;;;;;;; File functions
 
 (define current-url (_make-parameter "file:."))

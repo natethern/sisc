@@ -16,7 +16,18 @@
 
 ;;; (software-type) should be set to the generic operating system type.
 ;;; UNIX, VMS, MACOS, AMIGA and MS-DOS are supported.
-(define (software-type) (detect-os))
+(define (software-type)
+  (define (string-starts-with-ci? s1 s2)
+    (let ([l (string-length s2)])
+      (and (not (< (string-length s1) l))
+           (string-ci=? (substring s1 0 l) s2))))
+  (let ([osn (getenv "os.name")])
+	(cond [(string-starts-with-ci? osn "win") 'ms-dos]
+          [(string-starts-with-ci? osn "mac") 'macos]
+          [(string-starts-with-ci? osn "os/2") 'os2]
+          [(string-starts-with-ci? osn "openvms") 'vms]
+          [(string-starts-with-ci? osn "vax") 'vax]
+          [else 'unix])))
 
 ;;; (scheme-implementation-type) should return the name of the scheme
 ;;; implementation loading this file.
