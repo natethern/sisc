@@ -345,7 +345,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                     <indexterm><primary>permit-interrupts</primary></indexterm>
                     <envar>permitInterrupts</envar></entry>
                   <entry><function>permit-interrupts</function></entry>
-                  <entry>false</entry>
+                  <entry>true</entry>
                   <entry>
                     If set to <literal>true</literal>,
                     <function>thread/interrupt</function> is

@@ -1,12 +1,12 @@
 package sisc.util;
 
-import sisc.data.Pair;
+import sisc.data.Value;
 
 public abstract class Defaults {
 
     public static int     SYNOPSIS_LENGTH             = 30;
     public static boolean CASE_SENSITIVE              = false;
-    public static boolean PERMIT_INTERRUPTS           = false;
+    public static boolean PERMIT_INTERRUPTS           = true;
     public static int     MIN_FLOAT_PRECISION         = 16;
     public static int     MAX_FLOAT_PRECISION         = 32;
     public static boolean STRICT_R5RS                 = false;
@@ -14,7 +14,7 @@ public abstract class Defaults {
     public static boolean VECTOR_LENGTH_PREFIXING     = true;
     public static boolean EMIT_ANNOTATIONS            = false;
     public static boolean EMIT_DEBUGGING_SYMBOLS      = false;
-    public static Pair    INLINE_PRIMITIVES           = null;
+    public static Value   INLINE_PRIMITIVES           = null;
 }
  
 /*
