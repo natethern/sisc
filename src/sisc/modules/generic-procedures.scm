@@ -104,7 +104,7 @@
   (or (java/object? o) (scheme-object? o)))
 
 (define (make-object class slots)
-  (let ([slots (alist->hashtable slots eq?)])
+  (let ([slots (alist->hashtable slots eq? #f)])
     (define (res keys . rest)
       (let ([key      (if (pair? keys) (car keys) keys)]
             [keys     (if (pair? keys) (cdr keys) '())])
@@ -118,14 +118,17 @@
     (set-procedure-property! res 'class class)
     res))
 (define (make-class superclasses slots)
-  (let ([res (make-object <class> `((superclasses . ,superclasses)
-                                    (slots . ,(alist->hashtable slots eq?))))])
+  (let ([res (make-object <class>
+                          `((superclasses . ,superclasses)
+                            (slots . ,(alist->hashtable slots
+                                                        eq?
+                                                        #f))))])
     (add-method-to-list
      *CONSTRUCTORS*
      (make-method (object-initializer res) (list (meta res)) #t))
     res))
 (define (object-initializer class)
-  (let ([slots (make-hashtable eq?)])
+  (let ([slots (make-hashtable eq? #f)])
     (for-each (lambda (c)
                 (if (scheme-class? c)
                     (hashtable/for-each
@@ -167,8 +170,10 @@
 ;;Because computing the cpl is expensive we cache the results.
 (define *CLASS-PRECEDENCE-LISTS* (make-hashtable eqv?))
 (define (class-precedence-list class)
-  (hashtable/get! *CLASS-PRECEDENCE-LISTS* class
-                  (lambda () (compute-class-precedence-list class))))
+  (hashtable/get! *CLASS-PRECEDENCE-LISTS*
+                  class
+                  (lambda ()
+                    (compute-class-precedence-list class))))
 (define (compute-class-precedence-list class)
   (define (merge-lists partial-cpl remaining-lists)
     (set! remaining-lists (remove null? remaining-lists))
@@ -295,32 +300,17 @@
 (define (get-methods proc)
   (procedure-property proc 'methods))
 
-(define (make-method-list)
-  ;;(monitor . #(methods max-arity method-lookup-cache))
-  (cons (mutex/new) (vector '() 0 #f)))
+(define (make-protected-method-list)
+  ;;(monitor . mlist)
+  (cons (mutex/new) (make-method-list '() 0 #f)))
+(define (make-method-list methods max-arity method-lookup-cache)
+  (vector methods max-arity method-lookup-cache))
 (define (method-list-methods mlist)
   (vector-ref mlist 0))
 (define (method-list-arity mlist)
   (vector-ref mlist 1))
 (define (method-list-cache mlist)
   (vector-ref mlist 2))
-(define (method-list! mlist methods arity cache)
-  (set-cdr! mlist (vector methods arity cache)))
-(define (update-method-list! methods)
-  (mutex/synchronize
-   (car methods)
-   (lambda ()
-     (let* ([mlist (cdr methods)]
-            [meths (method-list-methods mlist)])
-       (define (compute-max-arity)
-         (let ([ma (apply max 0 (map method-arity meths))])
-           (if (any method-rest? meths)
-               (+ ma 1)
-               ma)))
-       (set-cdr! methods
-                 (vector meths
-                         (compute-max-arity)
-                         (make-hashtable equal?)))))))
 
 (define (generic-procedure-methods proc)
   (method-list-methods (cdr (get-methods proc))))
@@ -335,7 +325,7 @@
 ;;by all the generic procedures representing java methods of that name
 (define *JAVA-METHODS* (make-hashtable eq?))
 (define (java-methods name)
-  (hashtable/get! *JAVA-METHODS* name make-method-list))
+  (hashtable/get! *JAVA-METHODS* name make-protected-method-list))
 ;;Constructors are stored in a global list which is shared by all
 ;;the generic procedures representing constructors
 (define *CONSTRUCTORS* #f)
@@ -351,15 +341,15 @@
 (define (add-method proc m)
   (add-method-to-list (get-methods proc) m))
 (define (add-method-to-list methods m)
-  (mutex/synchronize
+  (mutex/synchronize-unsafe
    (car methods)
    (lambda ()
-     (method-list! methods
-                   (add-method-helper (method-list-methods
-                                       (cdr methods))
-                                      m)
-                   0
-                   #f))))
+     (set-cdr! methods
+               (make-method-list (add-method-helper
+                                  (method-list-methods (cdr methods))
+                                  m)
+                                 0
+                                 #f)))))
 (define (add-method-helper methods m)
   (let loop ([meths methods])
     (if (null? meths)
@@ -421,25 +411,33 @@
             (set! first (meta-type first)))
         (if (java/class? first)
             (add-class first))))
-  (let* ([methods       (get-methods proc)]
-         [mlist         (cdr methods)])
-    (if (not (method-list-cache mlist))
-        (begin
-          (update-method-list! methods)
-          (set! mlist (cdr methods))))
-    (set! otypes (take otypes (method-list-arity mlist)))
-    (let ([res (hashtable/get (method-list-cache mlist) otypes)])
-      (if res
-          (values (car res) (cdr res))
-          (call-with-values
-              (lambda () (applicable-methods-helper
-                          (method-list-methods mlist)
-                          otypes))
-            (lambda (applicable ambiguous)
-              (hashtable/put! (method-list-cache mlist)
-                              otypes
-                              (cons applicable ambiguous))
-              (values applicable ambiguous)))))))
+  (let ([methods       (get-methods proc)])
+    (mutex/synchronize-unsafe
+     (car methods)
+     (lambda ()
+       (let ([mlist (cdr methods)])
+         (if (not (method-list-cache mlist))
+             (let ([meths (method-list-methods mlist)])
+               (set! mlist (make-method-list
+                            meths
+                            (+ (apply max 0 (map method-arity meths))
+                               (if (any method-rest? meths) 1 0))
+                            (make-hashtable equal? #f)))
+               (set-cdr! methods mlist)))
+         (set! otypes (take otypes (method-list-arity mlist)))
+         (let* ([cache (method-list-cache mlist)]
+                [res (hashtable/get cache otypes)])
+           (if res
+               (values (car res) (cdr res))
+               (call-with-values
+                   (lambda () (applicable-methods-helper
+                               (method-list-methods mlist)
+                               otypes))
+                 (lambda (applicable ambiguous)
+                   (hashtable/put! cache
+                                   otypes
+                                   (cons applicable ambiguous))
+                   (values applicable ambiguous))))))))))
 (define (applicable-methods-helper methods otypes)
   (define (insert applicable ambiguous m)
     (if (null? applicable)
@@ -506,7 +504,7 @@
 (define (generic-builtin-constructor . rest)
   (apply _make-generic-procedure *CONSTRUCTORS* rest))
 (define (make-generic-procedure . rest)
-  (apply _make-generic-procedure (make-method-list) rest))
+  (apply _make-generic-procedure (make-protected-method-list) rest))
 (define <java.lang.UnsupportedOperationException>
   (java/class '|java.lang.UnsupportedOperationException|))
 (define (generic-java-proxy-procedure name)
@@ -518,9 +516,10 @@
        (make-generic-procedure
         (lambda args
           (error (make <java.lang.UnsupportedOperationException>
-                       (->jstring (format "proxy procedure ~a, args ~a"
-                                          mangled-name
-                                          args))))))))))
+                       (->jstring
+                        (format "proxy procedure ~a, args ~a"
+                                mangled-name
+                                args))))))))))
 
 (define-syntax define-generic
   (syntax-rules ()
@@ -572,7 +571,7 @@
   (let ([res (apply create class args)])
     (apply initialize res args)
     res))
-(set! *CONSTRUCTORS* (make-method-list))
+(set! *CONSTRUCTORS* (make-protected-method-list))
 (set! create (make-generic-procedure (generic-builtin-constructor)))
 (set! initialize (make-generic-procedure (lambda args (void))))
 
@@ -583,7 +582,9 @@
                           '((superclasses)
                             (slots . ,(alist->hashtable
                                        `((superclasses)
-                                         (slots . ,(make-hashtable eq?)))
-                                       eq?))))])
+                                         (slots . ,(make-hashtable eq?
+                                                                   #f)))
+                                       eq?
+                                       #f))))])
     (set-procedure-property! res 'class res)
     res))
