@@ -26,7 +26,7 @@ public class Parser extends Util implements Tokens {
         PRODUCE_IMMUTABLES =0x1,
         PRODUCE_ANNOTATIONS=0x2,
         STRICT_R5RS        =0x4,
-	CASE_SENSITIVE     =0x8;
+	    CASE_SENSITIVE     =0x8;
 
     public boolean annotate = Defaults.EMIT_ANNOTATIONS;
 
@@ -276,11 +276,11 @@ public class Parser extends Util implements Tokens {
                 else throw new IOException(liMessage(SISCB, "invalidsharpc", bv));
 			case '%': 
 				// Syntactic tokens
-				bv=lexer.readToBreak(is, Lexer.special, false, false).toLowerCase();
-				Compiler.Syntax s=(Compiler.Syntax)Compiler.SYNTACTIC_TOKENS.get(bv);
-				if (s==null)
-					throw new IOException(liMessage(SISCB, "invalidsyntoken", bv));
-				return s;				
+                bv=lexer.readToBreak(is, Lexer.special, false, false).toLowerCase();
+                Compiler.Syntax s=(Compiler.Syntax)Compiler.SYNTACTIC_TOKENS.get(bv);
+                if (s==null)
+                	throw new IOException(liMessage(SISCB, "invalidsyntoken", bv));
+                return s;				
             case '\'':
                 o=listSpecial(SYNTAX, is, state, def, flags);
                 break;
