@@ -49,6 +49,8 @@ public class SThread extends ModuleAdapter {
 	THREADDAEMONQ=13, SETTHREADNAME=14, SETTHREADPRIORITY=15,
 	SETTHREADDAEMON=16, THREADSTATE=17, THREADINTERRUPTEDQ=18,
 	THREADHOLDSLOCKQ=19, THREADSRUNNING=20, THREADRESULT=21,
+	MONITORNEW=22, MONITORLOCK=23, MONITORUNLOCK=24, 
+	MONITORNOTIFY=25, MONITORNOTIFYALL=26, MONITORWAIT=27,
 
 	READY=0, RUNNING=1, FINISHED=2, FINISHED_ABNORMALLY=3;
 
@@ -81,9 +83,118 @@ public class SThread extends ModuleAdapter {
 	define("thread/interrupted?", THREADINTERRUPTEDQ);
 	define("thread/holds-lock?", THREADHOLDSLOCKQ);
 	define("_active-thread-count", THREADSRUNNING);
+
+	define("monitor/new", MONITORNEW);
+	define("monitor/lock", MONITORLOCK);
+	define("monitor/unlock", MONITORUNLOCK);
+	define("monitor/wait", MONITORWAIT);
+	define("monitor/notify", MONITORNOTIFY);
+	define("monitor/notify-all", MONITORNOTIFY);
     }
 
-    class ThreadContext extends Value implements Runnable {
+    class Monitor extends NamedValue {
+	private int lockCount=0;
+	private Thread owner=null;
+	private Object condvar=new Object();
+
+	public Value lock(long timeout) {
+	    Thread thisThread=Thread.currentThread();
+
+	    synchronized(this) {
+		do {
+		    if (owner == null || owner == thisThread) {
+			owner=thisThread;
+			return Quantity.valueOf(lockCount++);
+		    } else {
+			long lastAwoken=System.currentTimeMillis();
+
+			while (lockCount>0) {
+			    try {
+				this.wait(timeout);
+			    } catch (InterruptedException ie) {}
+
+			    long now=System.currentTimeMillis();
+			    timeout-=(now-lastAwoken);
+			    if (timeout <= 0)
+				return FALSE;
+			    else
+				lastAwoken=now;
+			}
+		    }
+		} while (true);
+	    }
+	}
+
+	public Value lock() {
+	    synchronized(this) {
+		Thread thisThread=Thread.currentThread();
+		
+		do {
+		    if (owner == null || owner == thisThread) {
+			owner=thisThread;
+			return Quantity.valueOf(lockCount++);
+		    } else {
+			while (lockCount>0) {
+			    try {
+				this.wait();
+			    } catch (InterruptedException ie) {}
+			}
+		    }
+		} while (true);
+	    }
+	}
+
+	public void unlock() {
+	    synchronized(this) {
+		if (Thread.currentThread() == owner) {
+		    if (--lockCount == 0) {
+			owner=null;
+			this.notify();
+		    }
+		}
+	    }
+	}
+
+	public void m_notify() {
+	    synchronized(condvar) {
+		condvar.notify();
+	    }
+	}
+
+	public void m_notifyall() {
+	    synchronized(condvar) {
+		condvar.notifyAll();
+	    }
+	}
+
+	public void m_wait() {
+	    while (true) {
+		try {
+		    synchronized(condvar) {
+			condvar.wait();
+		    }
+		    return;
+		} catch (InterruptedException e) {}
+	    }
+	}
+
+	public void m_wait(long timeout) {
+	    while (true) {
+		try {
+		    synchronized(condvar) {
+			condvar.wait(timeout);
+		    }
+		    return;
+		} catch (InterruptedException e) {}
+	    }
+	}
+
+	public String display() {
+	    return ((NamedValue)this).displayNamedOpaque("monitor");
+	}
+    }
+
+    class ThreadContext extends NamedValue implements Runnable {
         protected Interpreter parent;
 	protected Procedure thunk;
 	protected Thread thread;
@@ -146,7 +257,7 @@ public class SThread extends ModuleAdapter {
 	}
 
         public String display() {
-            return "#<thread>";
+            return ((NamedValue)this).displayNamedOpaque("thread");
         }
     }
 
@@ -154,6 +265,13 @@ public class SThread extends ModuleAdapter {
         try {
             return (ThreadContext)o;
         } catch (ClassCastException e) { typeError("thread context", o); }
+	return null;
+    }
+
+    public static final Monitor monitor(Value o) {
+        try {
+            return (Monitor)o;
+        } catch (ClassCastException e) { typeError("monitor", o); }
 	return null;
     }
 
@@ -176,6 +294,9 @@ public class SThread extends ModuleAdapter {
         switch(f.vlr.length) {
 	case 0:
             switch(primid) {
+	    case MONITORNEW:
+		return new Monitor();
+
 		//	    case THREADCURRENT:
 		//		return f.dynenv.threadContext;
 	    case THREADSRUNNING:
@@ -188,6 +309,20 @@ public class SThread extends ModuleAdapter {
 	    }
         case 1:
             switch(primid) {
+	    case MONITORLOCK:
+		return monitor(f.vlr[0]).lock();
+	    case MONITORUNLOCK:
+		monitor(f.vlr[0]).unlock();
+		return VOID;
+	    case MONITORNOTIFY:
+		monitor(f.vlr[0]).m_notify();
+		return VOID;
+	    case MONITORNOTIFYALL:
+		monitor(f.vlr[0]).m_notifyall();
+		return VOID;
+	    case MONITORWAIT:
+		monitor(f.vlr[0]).m_wait();
+		return VOID;
             case THREADNEW:
 		return new ThreadContext(f,proc(f.vlr[0]));
 	    case THREADSTART:
@@ -223,12 +358,18 @@ public class SThread extends ModuleAdapter {
             }
 	case 2:
 	    switch(primid) {
+	    case MONITORLOCK:
+		long timeout=num(f.vlr[1]).longValue();
+		return monitor(f.vlr[0]).lock(timeout);
+	    case MONITORWAIT:
+		monitor(f.vlr[0]).m_wait(num(f.vlr[1]).longValue());
+		return VOID;
 	    case THREADJOIN:
 		ThreadContext c=tcont(f.vlr[0]);
 
 		if (c.state>=RUNNING) {
 		    try {
-			c.thread.join(num(f.vlr[1]).longValue());
+			c.thread.join(num(f.vlr[1]).intValue());
 		    } catch (InterruptedException ie) {}
 		    if (c.state==RUNNING) 
 			return FALSE;
