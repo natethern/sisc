@@ -30,7 +30,7 @@
 ;; may use your version of this file under either the MPL or the
 ;; GPL.
 ;;
-(import j2s-module)
+(load-module "sisc.modules.J2S")
   
 (define scheme->java-object 
   (let ([java-integer-class (java/class-for-name "sisc.data.Value")])

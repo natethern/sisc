@@ -37,8 +37,6 @@
                                    *module* (quote def)))
 		     ...))))))))
 
-
-(native-module j2s-module "sisc.modules.J2S")
 (native-module logicops-module "sisc.modules.SLogicOps")
 (native-module networking-module "sisc.modules.SNetwork")
 (native-module threading-module "sisc.modules.SThread")
@@ -73,6 +71,7 @@
    make)
   (import s2j-module)
   (import hashtable)
+  (import threading-module)
   (include "../modules/generic-functions.scm"))
 
 (module s2j
