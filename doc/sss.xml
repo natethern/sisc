@@ -7,6 +7,7 @@
  <!ENTITY procedure "<emphasis role='bold'><emphasis>procedure:</emphasis></emphasis>">
  <!ENTITY parameter "<emphasis role='bold'><emphasis>parameter:</emphasis></emphasis>">
  <!ENTITY f "&num;f">
+ <!ENTITY gfdl SYSTEM "fdl.sgml">
 ]>
 
 <book lang="en">
@@ -16,12 +17,39 @@
     <title>
       &SISC; <emphasis>for Seasoned Schemers</emphasis>
     </title>
-    <author>
-      <firstname>Scott</firstname><surname>Miller</surname>
-    </author>
+    <authorgroup>
+      <author>
+	<firstname>Scott</firstname>
+	<othername>G.</othername>
+	<surname>Miller</surname>
+      </author>
+      <author>
+	<firstname>Matthias</firstname>
+	<surname>Radestock</surname>
+	<contrib>
+	  Generic functions and Scheme/Java bridge documentation
+	</contrib>
+      </author>
+    </authorgroup>
     <date>
-      Jan 2002
+      February 2002
     </date>
+    <copyright>
+      <year>2002</year>
+      <holder>Scott G. Miller</holder>
+    </copyright>
+    <legalnotice>
+      <para>
+	Permission is granted to copy, distribute and/or modify this
+	document under the terms of the GNU Free Documentation License,
+	Version 1.1 or any later version published by the Free Software
+	Foundation; with no Invariant Sections, with no Front-Cover
+	Texts, and with no Back-Cover Texts.  A copy of the license is
+	included in the section entitled "GNU Free Documentation License".
+	(<xref linkend="gfdl"/>)
+      </para>
+    </legalnotice>
+      
   </bookinfo>
   <chapter>
     <title>
@@ -41,7 +69,7 @@
       functionality through extensions that do not complicate the
       core.
     </para>
-    <sect1>
+    <sect1 id="Features">
       <title>
 	Features
       </title>
@@ -68,7 +96,7 @@
 	</listitem>
       </itemizedlist>
     </sect1>
-    <sect1>
+    <sect1 id="About">
       <title>
 	About this document
       </title>
@@ -84,7 +112,7 @@
 	code written to that standard should run without reading any
 	further.
       </para>
-      <sect2>
+      <sect2 id="AboutProcedures">
 	<title>
 	  About procedure documentation
 	</title>
@@ -149,11 +177,11 @@
       </sect2>
     </sect1>
   </chapter>
-  <chapter>
+  <chapter id="Installation">
     <title>
       Installation and Invocation
     </title>
-    <sect1>
+    <sect1 id="RequiredEnv">
       <title>
 	Required Environment
       </title>
@@ -173,7 +201,7 @@
 	run &SISC;.
       </para>
     </sect1>
-    <sect1>
+    <sect1 id="REPL">
       <title>
 	The Read-Eval-Print-Loop
       </title>
@@ -192,7 +220,7 @@
 	the console.
       </para>
     </sect1>
-    <sect1>
+    <sect1 id="DisplayConventions">
       <title> 
 	Display Conventions
       </title>
@@ -233,7 +261,7 @@
       </programlisting>
     </sect1>
   </chapter>
-  <chapter>
+  <chapter id="SchemeLanguage">
     <title>
       Scheme Language
     </title>
@@ -242,11 +270,11 @@
       interprets, which is a superset of the
       &R5RS; Scheme Standard.
     </para>
-    <sect1>
+    <sect1 id="Types">
       <title>
 	Types
       </title>
-      <sect2>
+      <sect2 id="Numbers">
 	<title>
 	  Numbers
 	</title>
@@ -284,7 +312,7 @@
 	  all numeric libraries, and rational numbers are built with
 	  arbitrary precision components.
 	</para>
-	<sect3>
+	<sect3 id="NumericConstants">
 	  <title>
 	    Numeric constants
 	  </title>
@@ -320,7 +348,7 @@
 	    numbers.
 	  </para>
 	</sect3>
-	<sect3>
+	<sect3 id="Exactness">
 	  <title>
 	    Exactness
 	  </title>
@@ -341,7 +369,7 @@
 	  </para>
 	</sect3>
       </sect2>
-      <sect2 id="characters">
+      <sect2 id="Characters">
 	<title>
 	  Characters
 	</title>
@@ -358,7 +386,7 @@
 	  by the Java VM.
 	</para>
       </sect2>
-      <sect2 id="symbols">
+      <sect2 id="Symbols">
 	<title>
 	  Symbols
 	</title>
@@ -400,7 +428,7 @@
 	  (eq? '|A| '|a|) ; => #f
 	</programlisting>
       </sect2>
-      <sect2 id="strings">
+      <sect2 id="Strings">
 	<title>
 	  Strings
 	</title>
@@ -409,13 +437,13 @@
 	  according to the locale's rules.
 	</para>
       </sect2>
-      <sect2>
+      <sect2 id="Lists">
 	<title>
 	  Lists
 	</title>
 	<para></para>
       </sect2>
-      <sect2>
+      <sect2 id="Vectors">
 	<title>
 	  Vectors
 	</title>
@@ -459,7 +487,7 @@
 	  emitted.
 	</programlisting>
       </sect2>
-      <sect2>
+      <sect2 id="CircularStructures">
 	<title>
 	  Circular structures
 	</title>
@@ -529,7 +557,7 @@
 	  structures, though such functionality may exist in future releases.
 	</para>
       </sect2>
-      <sect2>
+      <sect2 id="ImmutableTypes">
 	<title>
 	  Immutable types
 	</title>
@@ -544,7 +572,7 @@
 	</para>
       </sect2>
     </sect1>
-    <sect1>
+    <sect1 id="ErrorHandling">
       <title>
 	Error handling
       </title>
@@ -558,7 +586,7 @@
 	explicitly represented in &SISC; as a <emphasis>failure
 	continuation</emphasis>. 
       </para>
-      <sect2>
+      <sect2 id="FailureContinuations">
 	<title>
 	  Failure continuations
 	</title>
@@ -587,7 +615,7 @@
 	  </para>
 	</blockquote>
       </sect2>
-      <sect2>
+      <sect2 id="ErrorHandlers">
 	<title>
 	  Error handlers
 	</title>
@@ -623,7 +651,7 @@
 	  At this point, a few examples may be helpful:
 	</para>
 	<programlisting>
-	  (+ 1 (/ 1 0) 3)) 
+	  (+ 1 (/ 1 0) 3)
    	    ; => <emphasis>A divide by zero error is raised</emphasis>
 
 	  ; Return a new value
@@ -652,7 +680,7 @@
 	</programlisting>
       </sect2>
     </sect1>
-    <sect1>
+    <sect1 id="SymbolicEnvironments">
       <title>
 	Symbolic Environments
       </title>
@@ -677,7 +705,7 @@
 	value.  Any previous value is forgotten.
       </programlisting>
     </sect1>
-    <sect1>
+    <sect1 id="Boxing">
       <title>
 	Boxing
       </title>
@@ -706,11 +734,11 @@
       </programlisting>
     </sect1>
   </chapter>
-  <chapter>
+  <chapter id="LibraryFunctions">
     <title>
       &SISC; Library Functions
     </title>
-    <sect1 id="debugging">
+    <sect1 id="Debugging">
       <title>
 	Debugging
       </title>
@@ -749,7 +777,7 @@
 	continuations.
       </para>
     </sect1>
-    <sect1>
+    <sect1 id="BitwiseLogicalOperations">
       <title>
 	Bitwise Logical Operations
       </title>
@@ -803,14 +831,14 @@
 	integers and produce only exact integers.  
       </para>
     </sect1>
-    <sect1>
+    <sect1 id="OperatingSystemInterface">
       <title>
 	Operating System interface
       </title>
       <para></para>
     </sect1>
   </chapter>
-  <chapter>
+  <chapter id="IO">
     <title>
       I/O
     </title>
@@ -821,7 +849,7 @@
       with all &R5RS; port operations, as well as some &SISC; specific 
       port functions.
     </para>
-    <sect1 id="portcreation">
+    <sect1 id="PortCreation">
       <title>
 	Port creation
       </title>
@@ -860,7 +888,7 @@
 	former.
       </programlisting>
     </sect1>
-    <sect1>
+    <sect1 id="BlockIO">
       <title>
 	Block I/O
       </title>
@@ -893,7 +921,7 @@
 	<emphasis>output-port</emphasis>.
       </programlisting>
     </sect1>
-    <sect1>
+    <sect1 id="StringPorts">
       <title>
 	String Ports
       </title>
@@ -935,7 +963,7 @@
 	initial, empty state.
       </programlisting>
     </sect1>
-    <sect1>
+    <sect1 id="PrettyPrinting">
       <title>
 	Pretty-printing
       </title>
@@ -954,7 +982,7 @@
 	specified. 
       </programlisting>
     </sect1>
-    <sect1>
+    <sect1 id="FileSystem">
       <title>
 	File-system interface
       </title>
@@ -1137,7 +1165,7 @@
       </sect2>
     </sect1>
   </chapter>
-  <chapter>
+  <chapter id="Threads">
     <title>
       Threads and Concurrency
     </title>
@@ -1177,32 +1205,32 @@
       fields. Finally, the two can be combined in a number of complex
       ways to intertwine the two languages.
     </para>
-    <sect1>
+    <sect1 id="JavaToScheme">
       <title>
 	Java to Scheme call API
       </title>
       <para></para>
-      <sect2>
+      <sect2 id="JErrorHandling">
 	<title>
 	  Error Handling
 	</title>
 	<para></para>
       </sect2>
-      <sect2>
+      <sect2 id="JContinuations">
 	<title>
 	  Continuations
 	</title>
 	<para></para>
       </sect2>
     </sect1>
-    <sect1>
+    <sect1 id="SchemeToJava">
       <title>
 	Scheme level Java manipulation
       </title>
       <para></para>
     </sect1>
   </chapter>
-  <appendix>
+  <appendix id="Errata">
     <title>Errata</title>
     <para>
       This appendix describes where this manual and the implementation
@@ -1214,20 +1242,20 @@
       <orderedlist>
 	<listitem>
 	  <para>
-	    (<xref linkend="symbols"/>) The function
+	    (<xref linkend="Symbols"/>) The function
 	    <computeroutput>case-sensitive</computeroutput> is not yet implemented.
 	  </para>
 	</listitem>
 	<listitem>
 	  <para>
-	    (<xref linkend="characters"/> and <xref
-	    linkend="strings"/>) Characters  and strings are not
+	    (<xref linkend="Characters"/> and <xref
+	    linkend="Strings"/>) Characters  and strings are not
 	    compared according to locale rules (bug &num;493773)
 	  </para>
 	</listitem>
 	<listitem>
 	  <para>
-	    (<xref linkend="debugging"/>) The debugging functions
+	    (<xref linkend="Debugging"/>) The debugging functions
 	     functions <computeroutput>trace</computeroutput> and
 	    <computeroutput>untrace</computeroutput> are not yet
 	    implemented.
@@ -1235,7 +1263,7 @@
 	</listitem>
 	<listitem>
 	  <para>
-	    (<xref linkend="portcreation"/>) The optional boolean
+	    (<xref linkend="PortCreation"/>) The optional boolean
 	    argument in the creation of output ports that specifies
 	    auto-flush behavior is only present on net network port
 	    creation functions.  File ports are missing this
@@ -1245,6 +1273,7 @@
       </orderedlist>
     </para>
   </appendix>
+  &gfdl;
   <index id="functions">
     <title>Index of Functions</title>
     <para>
