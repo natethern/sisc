@@ -408,7 +408,7 @@
                (set! mlist (make-method-list
                             meths
                             (+ (apply max 0 (map method-arity meths))
-                               (if (any method-rest? meths) 1 0))
+                               1)
                             (make-hashtable equal? #f)))
                (set-cdr! methods mlist)))
          (set! otypes (take otypes (method-list-arity mlist)))

@@ -1,3 +1,8 @@
+2003-05-24  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed a bug in the generic procedure method cache that caused
+	  erroneous matches.
+
 2003-05-21  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed read/write invariance for some peculiar symbols.
