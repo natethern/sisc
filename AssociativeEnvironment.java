@@ -129,7 +129,7 @@ public class AssociativeEnvironment extends NamedValue {
                 synchronized(symbolMap) {
                     symbolMap.put(s, i=new Integer(pi));
                 }
-                env[pi]=parent.lookup(s);
+                env[pi]=parent.lookup(pi);
             }
         }
         return (i==null ? -1 : i.intValue());
