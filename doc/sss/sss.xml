@@ -183,7 +183,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
     </para>
     <variablelist>
       <varlistentry>
-        <term>minprecision</term>
+        <term><literal>minprecision</literal></term>
         <listitem>
           <para>
             Specifies the minimum precision, in decimal places, to be
@@ -193,7 +193,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term>maxprecision</term>
+        <term><literal>maxprecision</literal></term>
         <listitem>
           <para>
             Specifies the maximum precision, in decimal places, to be
@@ -203,7 +203,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term>heapfile</term>
+        <term><literal>heapfile</literal></term>
         <listitem>
           <para>
             Specifies the path to a &SISC; serialized heap file to use 
@@ -213,7 +213,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term>emitannotations</term>
+        <term><literal>emitannotations</literal></term>
         <listitem>
           <para>
             Specifies the default value of the
