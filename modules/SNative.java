@@ -96,10 +96,16 @@ public class SNative extends ModuleAdapter {
     public Value eval(int primid, Interpreter f) throws ContinuationException {
         switch(primid) {
         case VECTOR:
-            return new SchemeVector(f.vlr);
+            Value res = new SchemeVector(f.vlr);
+            f.vlr = null;
+            return res;
         case VALUES:
-            return (f.vlr.length==1 ? f.vlr[0] :
-                    (Value)new Values(f.vlr));
+            if (f.vlr.length==1) return f.vlr[0];
+            else {
+                res = new Values(f.vlr);
+                f.vlr = null;
+                return res;
+            }
         default:
             switch(f.vlr.length) {
             case 0:

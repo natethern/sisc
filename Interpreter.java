@@ -262,4 +262,24 @@ public class Interpreter extends Util {
 	if (!f.locked && (deadFillRibsPointer < FRPMAX))
 	    deadFillRibs[++deadFillRibsPointer]=f;
     }
+
+    protected static final int VALUESPOOLSIZE=4;
+    protected static final Value[] ZV = new Value[0];
+    protected Value deadValues[][] = new Value[VALUESPOOLSIZE][];
+
+    public final Value[] createValues(int size) {
+        if (size == 0) return ZV;
+        if (size >= VALUESPOOLSIZE) return new Value[size];
+        Value[] res = deadValues[size];
+        if (res == null) return new Value[size];
+        deadValues[size] = null;
+        return res;
+    }
+
+    public final void returnValues(Value[] v) {
+        if (v == null) return;
+        int size = v.length;
+        if (size == 0 || size >= VALUESPOOLSIZE) return;
+        deadValues[size] = v;
+    }
 }
