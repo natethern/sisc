@@ -7,6 +7,8 @@
  <!ENTITY procedure "<emphasis>procedure: </emphasis> ">
  <!ENTITY parameter "<emphasis>parameter: </emphasis>">
  <!ENTITY f "&num;f">
+ <!ENTITY t "&num;f">
+ <!ENTITY arrow ";=&gt;">
  <!ENTITY requires "<emphasis>Requires: </emphasis>">
  <!ENTITY intro-chapter SYSTEM "intro.xml">
  <!ENTITY inst-chapter SYSTEM "inst.xml">
