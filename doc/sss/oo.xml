@@ -911,10 +911,10 @@
         </listitem>
         <listitem>
           <para>
-            Scheme objects, including Scheme classes themselves, are
-            not a distinct type from procedures,
+            Objects (Java and Scheme), including classes, are not a
+            distinct type from procedures,
             i.e. <function>procedure?</function> will return &num;t
-            for instances of Scheme objects.
+            for objects.
           </para>
         </listitem>
         <listitem>
