@@ -49,27 +49,23 @@
 (define _exit-handler (parameterize '()))
 
 (define repl
-  (letrec ([repl-k (parameterize)]
-           [repl/eval-print-loop
-            (lambda (exp writer)
-              ;;eval
-              (let ([val (eval exp)])
-                (if (not (void? val))
-                    (begin (writer val) (newline)))
-                (repl/read writer)))]
-           [repl/read
+  (letrec ([repl/read
             (lambda (writer)
-              (display (format "#;~a> " (let ((len (- (length (_exit-handler))
-                                                      1)))
-                                          (if (zero? len) ""  len))))
+              (display (format "#;~a> "
+                               (let ((len (- (length (_exit-handler))
+                                             1)))
+                                 (if (zero? len) "" len))))
               ;;read
               (let ([exp (read-code (current-input-port))])
                 (if (eof-object? exp) 
                     (if ((current-exit-handler))
                         (exit)
                         (repl/read writer))
-                    (repl/eval-print-loop exp writer))))])
-    (putprop 'repl '*debug* repl-k)
+                    ;;eval
+                    (let ([val (eval exp)])
+                      (if (not (void? val))
+                          (begin (writer val) (newline)))
+                      (repl/read writer)))))])
     (lambda ()
       (current-url
        (string-append
@@ -84,28 +80,24 @@
          (lambda (k)
            (_exit-handler (cons k (_exit-handler)))
            (begin
-             (call/cc 
-              (lambda (k)
-                (set! repl-start k)
-                (repl-k k)))
+             (call/cc (lambda (k) (set! repl-start k)))
              (let loop ()
-               (with/fc
-                (lambda (m e)
-                  ((current-default-error-handler) m e)
-                  (loop))
-                (lambda ()
-                  (repl/read
-                   (lambda (v)
-                     (if (and (getprop 'pretty-print '*toplevel*)
-                              (not (circular? v)))
-                         (pretty-print v)
-                         ;;dynamic wind would be better here, but
-                         ;;we don't want to use it in core code
-                         (let ([ps (print-shared)])
-                           (print-shared #t)
-                           (write v)
-                           (print-shared ps)))))
-                  (void)))))))
+               (with/fc (lambda (m e)
+                          ((current-default-error-handler) m e)
+                          (loop))
+                 (lambda ()
+                   (repl/read
+                    (lambda (v)
+                      (if (and (getprop 'pretty-print '*toplevel*)
+                               (not (circular? v)))
+                          (pretty-print v)
+                          ;;dynamic wind would be better here, but
+                          ;;we don't want to use it in core code
+                          (let ([ps (print-shared)])
+                            (print-shared #t)
+                            (write v)
+                            (print-shared ps)))))
+                   (void)))))))
         (if ((current-exit-handler))
             (void)
             (repl-start))))))
