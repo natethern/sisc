@@ -183,12 +183,12 @@
                                                     (if (> l 1) "messages."
                                                         "message."))))))
          (for-each (lambda (m)
-                     (do-tell sender (car m) (cdr m)))
+                     (do-tell (->string sender) (car m) (cdr m)))
                    messages))))
 
 (define (onPart channel sender login hostname)
   (remove-nick (string->symbol (->string channel))
-               (string->symbol (->string sender))))
+               (string->symbol (string-downcase (->string sender)))))
 
 (define (do-tell recipient sender message)
   (send-message bot (->jstring channel)
@@ -205,7 +205,7 @@
              (if (member (string->symbol
                           (string-downcase recipient))
                          (get-present (string->symbol channel)))
-                 (begin (do-tell from recipient message) #t)
+                 (begin (do-tell recipient from message) #t)
                  (begin 
                    (store-message dbcon from (string-downcase recipient) message)
                    (random-elem tell-responses))))))))
