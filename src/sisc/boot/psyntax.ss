@@ -371,7 +371,7 @@
     ((_ test e1 e2 ...) (if test (begin e1 e2 ...)))))
 (define-syntax unless
   (syntax-rules ()
-    ((_ test e1 e2 ...) (if test '#!void (begin e1 e2 ...)))))
+    ((_ test e1 e2 ...) (if test ('#(quote) #!void) (begin e1 e2 ...)))))
 (define-syntax define-structure
   (lambda (x)
     (define construct-name
@@ -612,13 +612,13 @@
   (syntax-rules ()
     ((_ src exp) 
      (if src
-         `(compile-in-annotation ',exp ,src)
-         `',exp))))
+         `(compile-in-annotation ('#(quote) ,exp) ,src)
+         `('#(quote) ,exp)))))
 
 (define build-sequence
   (lambda (src exps)
     (cond [(null? exps) 
-           '(if '#f '#f)]
+           (chi-void)]
           [(equal? '(void) (car exps))
            (build-sequence src (cdr exps))]
           [(null? (cdr exps)) 
@@ -2382,7 +2382,7 @@
 
 (define chi-void
   (lambda ()
-    ''#!void))
+  	(build-data #f '#!void)))
 
 (define ellipsis?
   (lambda (x)

@@ -43,6 +43,8 @@ public abstract class Util implements Version {
     protected static final Expression APPEVAL = new AppEval();
 
     public static EOFObject EOF = EOFObject.EOF;
+    public static sisc.interpreter.Compiler.Syntax QUOTE = 
+        new sisc.interpreter.Compiler.Syntax(sisc.interpreter.Compiler.QUOTE);
     public static EmptyList EMPTYLIST = EmptyList.EMPTYLIST;
     public static SchemeVoid VOID = SchemeVoid.VOID;
     public static SchemeBoolean TRUE = SchemeBoolean.TRUE,
@@ -53,7 +55,6 @@ public abstract class Util implements Version {
         EXPSC = Symbol.get("*sc-expander*"),
         EXPTOP = Symbol.get("*top*"),
         FCONT = Symbol.get("failure-continuation"),
-        QUOTE = Symbol.get("quote"),
         JEXCEPTION = Symbol.get("java-exception"),
         LAMBDA = Symbol.get("lambda"),
         LOCATION = Symbol.get("location"),
@@ -61,6 +62,7 @@ public abstract class Util implements Version {
         NAME = Symbol.get("name"),
         OTHER = Symbol.get("other"),
         PARENT = Symbol.get("parent"),
+        QUOTESYM = Symbol.get("quote"),
         REPORT = Symbol.get("*report*"),
         SETBANG = Symbol.get("set!"),
         SISC = Symbol.get("*sisc*"),

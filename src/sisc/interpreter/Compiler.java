@@ -21,9 +21,12 @@ public class Compiler extends Util {
         env.define(name, new Syntax(i));
     }
 
-    static final int
-        APP=-1, LAMBDA = 0, _IF=1, BEGIN=2, QUOTE=3, SET=4, DEFINE=5,
-        MAKEANNOTATION=6, LETREC=7, 
+    static String synnames[]={"app", "lambda","if", "begin","quote","set","define",
+        "makeann","letrec"};
+        
+    public static final int 
+        APP=0, LAMBDA = 1, _IF=2, BEGIN=3, QUOTE=4, SET=5, DEFINE=6,
+        MAKEANNOTATION=7, LETREC=8, 
         
         TAIL=1, COMMAND=2, PREDICATE=4, REALTAIL=8;
 
@@ -116,12 +119,18 @@ public class Compiler extends Util {
 
         Expression tmp, rv;
 
+        int eType=-1;
+        Value oper=expr.car;
         if (expr.car instanceof Symbol) {
-            Symbol s=(Symbol)expr.car;
-            int t=getExpType(env, s);
+            eType=getExpType(env, (Symbol)oper);
             expr=(Pair)expr.cdr;
-
-            switch (t) {
+        } else if (expr.car instanceof Syntax) {
+            eType=((Syntax)expr.car).synid;
+            expr=(Pair)expr.cdr;
+        }
+        
+        if (eType >= 0) {
+            switch (eType) {
             case QUOTE:
                 rv=expr.car;
                 break;
@@ -240,7 +249,7 @@ public class Compiler extends Util {
                 Expression[] exps=pairToExpressions(expr);
                 compileExpressions(r, exps, rt, 0, env);
                 rv = application(r, 
-                                 compile(r,s,rt,0,env, null), 
+                                 compile(r,oper,rt,0,env, null), 
                                  exps, context, an);
             }
         } else {
@@ -411,7 +420,7 @@ public class Compiler extends Util {
         }
 
         public void display(ValueWriter w) throws IOException {
-            w.append("#!").append(Integer.toString(synid));
+            w.append("#!").append(synnames[synid]);
         }
 
         public Syntax() {}

@@ -151,7 +151,7 @@ public class Parser extends Util implements Tokens {
             o=listSpecial(UNQUOTE_SPLICING, is, state, def, flags);
             break;
         case TT_QUOTE:
-            o=listSpecial(QUOTE, is, state, def, flags);
+            o=listSpecial(QUOTESYM, is, state, def, flags);
             break;
         case TT_BACKQUOTE:
             o=listSpecial(BACKQUOTE, is, state, def, flags);
@@ -272,6 +272,8 @@ public class Parser extends Util implements Tokens {
                     return EOF;
                 else if (bv.equals("void"))
                     return VOID;
+                else if (bv.equals("quote"))
+                    return QUOTE;
                 else throw new IOException(liMessage(SISCB, "invalidsharpc"));
             case '\'':
                 o=listSpecial(SYNTAX, is, state, def, flags);

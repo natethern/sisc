@@ -87,7 +87,7 @@ public class Interpreter extends Util {
     }
 
     public Symbol getSymbol(String v) {
-	return Symbol.get(v, dynenv.caseSensitive);
+    return Symbol.get(v, dynenv.caseSensitive);
     }
 
     public Expression compile(Value v) throws ContinuationException {
@@ -437,13 +437,13 @@ public class Interpreter extends Util {
         return res;
     }
 
-	public final void returnVLR() {
-		if (vlr != null) {
-			if (!vlk) 
-				returnValues(vlr);
-			vlr=null;
-		}
-	}
+    public final void returnVLR() {
+        if (vlr != null) {
+            if (!vlk) 
+                returnValues(vlr);
+            vlr=null;
+        }
+    }
 	
 	public final void forceReturnVLR() {
 			if (vlr != null) {
