@@ -67,6 +67,7 @@
 	   debug="off"
            optimize="on">
       <include name="${packagename}/**"/>
+      <exclude name="${packagename}/dist/**"/>
       <exclude name="${packagename}/Conf-*.java"/>
       <exclude name="${packagename}/*/Quantity-*.java"/>
       <exclude name="${packagename}/tests/**" unless="junit.present"/>
