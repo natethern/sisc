@@ -67,9 +67,16 @@
                     g)))
               (cdr fs)))))
 
-;; This computes a total order from a set of partial orders, e.g.
+;; TOTAL-ORDER computes a total order from a set of partial orders,
+;; e.g.
 ;; (total-order '((a d) (b c) (c d))) ;=> '(a b c d)
 ;; #f is returned if no such total order exists
+;;
+;; Optionally, we handle weak partial orders, i.e. we allow the total
+;; ordering to perform some re-ordering of the partial orders as long
+;; as the strong ordering constraint (determined by a predicate) is
+;; preserved.
+
 (define (any pred l)
   (and (pair? l) (or (pred (car l)) (any pred (cdr l)))))
 (define (filter pred l)
@@ -79,7 +86,26 @@
           (filter pred (cdr l)))
       l))
 (define (remove pred l) (filter (lambda (x) (not (pred x))) l))
-(define (total-order partial-orders)
+(define (weak-partial-order-select partial-orders pred)
+  (define (weakly-ordered? partial-order c)
+    (let loop ([processed '()]
+               [partial-order partial-order])
+      (or (null? partial-order)
+          (if (eqv? (car partial-order) c)
+              (not (any (lambda (x) (pred x c)) processed))
+              (loop (cons (car partial-order) processed)
+                    (cdr partial-order))))))
+  (define (all-weakly-ordered? partial-orders c)
+    (or (null? partial-orders)
+        (and (weakly-ordered? (car partial-orders) c)
+             (all-weakly-ordered? (cdr partial-orders) c))))
+  (let loop ([remaining partial-orders])
+    (and (not (null? remaining))
+         (let ([c (caar remaining)])
+           (if (all-weakly-ordered? partial-orders c)
+               c
+               (loop (cdr remaining)))))))
+(define (total-order partial-orders . rest)
   (define (merge result remaining)
     (define (find-next l)
       (let ([c (car l)])
@@ -89,9 +115,19 @@
     (if (null? remaining)
         (reverse result)
         (let ([next (any find-next remaining)])
-          (and next
-               (merge (cons next result)
-                      (map (lambda (l)
-                             (if (eqv? (car l) next) (cdr l) l))
-                           remaining))))))
+          (if next
+              (merge (cons next result)
+                     (map (lambda (l)
+                            (if (eqv? (car l) next) (cdr l) l))
+                          remaining))
+              (and (not (null? rest))
+                   (car rest)
+                   (let ([c (weak-partial-order-select remaining
+                                                       (car rest))])
+                     (and c
+                          (merge (cons c result)
+                                 (map (lambda (l)
+                                        (remove (lambda (x)
+                                                  (eqv? x c)) l))
+                                      remaining)))))))))
   (merge '() partial-orders))

@@ -83,7 +83,8 @@
   (or (total-order
        (let ([parents (java-class-declared-superclasses jclass)])
          (cons (cons jclass parents)
-               (map java-class-precedence-list parents))))
+               (map java-class-precedence-list parents)))
+       type<=)
       (error "inconsistent type precedence graph for java type ~a"
              (java/name jclass))))
 

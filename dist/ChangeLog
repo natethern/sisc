@@ -1,7 +1,10 @@
 2003-07-02  Matthias Radestock  <matthias@sorted.org>
 
 	* Improved S2J class name mangling to handle package-less and
-	  nested classes 
+	  nested classes.
+
+	* Changed class precedence list computation algorithm in the oo
+	  system and S2J to resolve most cpl inconsistencies.
 
 2003-06-29  Released SISC 1.8.1-alpha
 

@@ -16,7 +16,8 @@
 (define (compute-class-precedence-list class)
   (or (total-order (let ([parents (class-direct-superclasses class)])
                      (cons (cons class parents)
-                           (map class-precedence-list parents))))
+                           (map class-precedence-list parents)))
+                   type<=)
       (error "inconsistent class precedence graph for class ~a"
              (class-name class))))
 

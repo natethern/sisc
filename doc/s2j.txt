@@ -103,6 +103,13 @@ comparing types using the type system's COMPARE-TYPES procedure, which
 is used by the generic procedure method selection algorithm. See
 COMPARE-METHODS.
 
+The ordering of classes returned by JAVA-CLASS-DECLARED-SUPERCLASSES
+is considered "weak" whereas the ordering of the class itself with
+respect to its direct superclasses is considered strong. The
+significance of this is that when computing the class precedence list
+weak orderings are re-arranged if that is the only way to obtain a
+total order. By contrast, strong orderings are never rearranged.
+
 
 JAVA-NEW <jclass> <jvalue> ... -> <jobject>
 Selects & calls a constructor of <jclass>, returning the newly created
