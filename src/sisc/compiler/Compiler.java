@@ -31,8 +31,7 @@ import sisc.reader.*;
  *          
  *  <s-expression>)
  * 
- * TODO:  Make output a valid Scheme program by moving #t into the 
- * body
+ * TODO:  Make output a valid Scheme program by moving #t into the body
  * (#%lambda #t <formals> (lexically-referenced-vars ...) <body>)
  * (#%letrec #t <bindings (lexically-referenced-vars ...) <body>)
  */
@@ -206,70 +205,74 @@ public class Compiler extends CompilerConstants {
             }
             break;
         case LAMBDA:
-            boolean infArity=false;
-            // Skip #t
-            expr=(Pair)expr.cdr;
-
-            Symbol[] formals=null;
-            int fcount;
-            Value ftmp=expr.car;
-            if (ftmp instanceof Pair && ftmp != EMPTYLIST) {
-                formals=argsToSymbols((Pair)ftmp);
-                do {
-                    ftmp=((Pair)ftmp).cdr; 
-                } while (ftmp != EMPTYLIST && ftmp instanceof Pair);
-                infArity=ftmp instanceof Symbol;
-            } else if (expr.car instanceof Symbol) {
-                formals=new Symbol[] {(Symbol)expr.car};
-                infArity=true;
-            } else {
-                formals=new Symbol[0];
-            }
-            
-            expr=(Pair)expr.cdr;
-
-            Symbol[] lexicalSyms=argsToSymbols((Pair)expr.car);
-            expr=(Pair)expr.cdr;
-            
-            ReferenceFactory nf=new ReferenceFactory(formals, lexicalSyms);
-
-            tmp=compile(r, expr.car, sets, nf, TAIL | LAMBDA | REALTAIL, 
-                        env, null);
-            int[][] copies=resolveCopies(rf, lexicalSyms);
-            int[] boxes=findBoxes(formals, sets);
-            rv=new LambdaExp(formals.length, 
-                             tmp, infArity, copies[0], copies[1], 
-                             (boxes.length==0 ? null :boxes));
+        	{
+	            boolean infArity=false;
+	            // Skip #t
+	            expr=(Pair)expr.cdr;
+	
+	            Symbol[] formals=null;
+	            int fcount;
+	            Value ftmp=expr.car;
+	            if (ftmp instanceof Pair && ftmp != EMPTYLIST) {
+	                formals=argsToSymbols((Pair)ftmp);
+	                do {
+	                    ftmp=((Pair)ftmp).cdr; 
+	                } while (ftmp != EMPTYLIST && ftmp instanceof Pair);
+	                infArity=ftmp instanceof Symbol;
+	            } else if (expr.car instanceof Symbol) {
+	                formals=new Symbol[] {(Symbol)expr.car};
+	                infArity=true;
+	            } else {
+	                formals=new Symbol[0];
+	            }
+	            
+	            expr=(Pair)expr.cdr;
+	
+	            Symbol[] lexicalSyms=argsToSymbols((Pair)expr.car);
+	            expr=(Pair)expr.cdr;
+	            
+	            ReferenceFactory nf=new ReferenceFactory(formals, lexicalSyms);
+	
+	            tmp=compile(r, expr.car, sets, nf, TAIL | LAMBDA | REALTAIL, 
+	                        env, null);
+	            int[][] copies=resolveCopies(rf, lexicalSyms);
+	            int[] boxes=findBoxes(formals, sets);
+	            rv=new LambdaExp(formals.length, 
+	                             tmp, infArity, copies[0], copies[1], 
+	                             (boxes.length==0 ? null :boxes));
+        	}
             break;
         case LETREC:
-            // Skip the #t marker
-            expr=(Pair)expr.cdr;
-
-            Pair tmpp=(Pair)expr.car;
-
-            Vector formv=new Vector();
-            Vector expv=new Vector();
-            
-            while (tmpp != EMPTYLIST) {
-                Pair bp=(Pair)tmpp.car;
-
-                formv.add(bp.car);
-                expv.add(((Pair)bp.cdr).car);
-                tmpp=(Pair)tmpp.cdr;
-            }
-            
-            formals=new Symbol[formv.size()];
-            Expression[] rhses=new Expression[expv.size()];
-            formv.copyInto(formals);
-            expv.copyInto(rhses);
-
-            expr=(Pair)expr.cdr;
-            lexicalSyms=argsToSymbols((Pair)expr.car);
-            expr=(Pair)expr.cdr;
-            
-            rv=compileLetrec(r, formals, lexicalSyms, rhses, expr.car, 
-                             sets, rf, env, context);
-            break;
+        	{
+	            // Skip the #t marker
+	            expr=(Pair)expr.cdr;
+	
+	            Pair tmpp=(Pair)expr.car;
+	
+	            Vector formv=new Vector();
+	            Vector expv=new Vector();
+	            
+	            while (tmpp != EMPTYLIST) {
+	                Pair bp=(Pair)tmpp.car;
+	
+	                formv.add(bp.car);
+	                expv.add(((Pair)bp.cdr).car);
+	                tmpp=(Pair)tmpp.cdr;
+	            }
+	            
+	            Symbol[] formals=new Symbol[formv.size()];
+	            Expression[] rhses=new Expression[expv.size()];
+	            formv.copyInto(formals);
+	            expv.copyInto(rhses);
+	
+	            expr=(Pair)expr.cdr;
+	            Symbol[] lexicalSyms=argsToSymbols((Pair)expr.car);
+	            expr=(Pair)expr.cdr;
+	            
+	            rv=compileLetrec(r, formals, lexicalSyms, rhses, expr.car, 
+	                             sets, rf, env, context);
+        	}
+	        break;
         case _IF:
             tmp=compile(r, expr.car, sets, rf, PREDICATE, env, null);
             expr=(Pair)expr.cdr;
@@ -288,7 +291,7 @@ public class Compiler extends CompilerConstants {
             rv = makeEvalExp(tmp, rv);
             break;
         case BEGIN:
-            rv=compileBegin(r, pairToExpVect(expr), context, sets, rf, env);
+            rv=compileBegin(r, pairToExpressions(expr), context, sets, rf, env);
             break;
         case SET:
             Symbol sym=(Symbol)expr.car;
@@ -490,17 +493,17 @@ public class Compiler extends CompilerConstants {
             exprs[i]=compile(r, exprs[i], sets, rf,context, env, null);
     }
 
-    Expression compileBegin(Interpreter r, Vector v, int context,
+    Expression compileBegin(Interpreter r, Expression[] v, int context,
                             Pair sets, ReferenceFactory rf,
                             SymbolicEnvironment env)
     throws ContinuationException {        
-        Expression last=compile(r, (Expression)v.lastElement(), sets, rf,
+        Expression last=compile(r, v[v.length - 1], sets, rf,
                                 TAIL | context, env, null);
         //if (v.size()==1) return last;
         
         Expression be=last;
-        for (int i=v.size()-2; i>=0; i--) {
-            Expression e=compile(r, (Expression)v.elementAt(i),
+        for (int i = v.length - 2; i >= 0; --i) {
+            Expression e=compile(r, v[i],
                                  sets, rf, COMMAND, env, null);
             addAnnotations(be, e.annotations);
             be = makeEvalExp(e, be);
