@@ -1,3 +1,13 @@
+2002-10-12  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Fixed several aspects of symbol processing
+	  - Symbols containing uppercase letters (either created w/
+	    case-sensitive, pipes, or symbol->string) are printed w/ write
+	    with surrounding pipes if case-sensitivity off.
+	  - Symbols with special characters can be created by escaping
+	    the odd character, eg: foo\ bar.  
+	  - Symbols with special characters are written with escapes.
+
 2002-10-11  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Modified gensym to produce 4d-unique (unique in both space and
