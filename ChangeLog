@@ -1,6 +1,7 @@
 2005-03-23  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Added support for SRFI-55 (and build it in by default)
+	* Added support for SRFIs 51, 54.
 
 2005-03-22  Scott G. Miller  <sgmiller@gmail.com>
 
