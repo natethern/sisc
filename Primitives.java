@@ -552,7 +552,7 @@ public class Primitives extends ModuleAdapter {
             case CONS:
                 return new Pair(f.vlr[0], f.vlr[1]);
             case EQUAL:
-                return truth(f.vlr[0].valueEqual(f.vlr[1]));
+                return truth(f.vlr[0].equals(f.vlr[1]));
             case SETCAR:
                 truePair(f.vlr[0]).setCar(f.vlr[1]);
                 return VOID;
