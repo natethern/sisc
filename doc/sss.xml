@@ -1700,6 +1700,52 @@
 	  threads exist.
 	</programlisting>
       </sect2>
+      <sect2>
+	<title>
+	  High-level Concurrency
+	</title>
+	<para>
+	  In addition to the low-level operations on monitors, two
+	  library functions are provided to greatly ease the
+	  construction and readability of thread-safe code.
+	</para>
+	<programlisting>
+	  &syntax; (monitor/synchronize monitor expression)
+	  
+	  Protects expression as a critical section by safely locking
+	  access to the expression with the monitor.
+
+	  
+	  &syntax; (monitor/synchronize-unsafe monitor expression)
+	  
+	  Behaves exactly as monitor/synchronize without automatic 
+	  unlocking when an error is raised from or a continuation 
+	  escapes from expression.
+	</programlisting>
+	<para>
+	  <computeroutput>monitor/synchronize</computeroutput> locks
+	  the monitor while the expression provided is being
+	  executed.  The lock is automatically released when the
+	  expression has completed.  Also, if an error is raised or a
+	  continuation is invoked that escapes the call to
+	  <computeroutput>monitor/synchronize</computeroutput>, the
+	  lock is automatically released.
+	</para>
+	<para>
+	  The added safety provided by 
+	  <computeroutput>monitor/synchronize</computeroutput> may
+	  slow the execution of code that repeatedly calls a critical
+	  section.  If the programmer is absolutely sure that no error
+	  can be raised and that no continuations will be applied to
+	  escape the call,
+	  <computeroutput>monitor/synchronize-unsafe</computeroutput>
+	  may be used.  It provides no safety guarantees in those
+	  situations.  If an error is raised or an escaping
+	  continuation invoked, the monitor will remain locked which
+	  could cause a deadlock if another thread attempts to acquire
+	  the lock.  
+	</para>
+      </sect2>
     </sect1>
   </chapter>
   <chapter>
