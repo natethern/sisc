@@ -292,6 +292,15 @@
       indentation is kept for further nesting, but the depth of the
       call is displayed as an integer preceding the call.
     </para>
+    <note>
+      <para>
+        Tracing a function installs instrumentation code around
+        the procedure which does not preserve the continuation
+        of a call to that function.  Thus, tail calls made in 
+        a traced function are no longer tail calls.  This may
+        affect the memory usage characteristics of running code.
+      </para>
+    </note>
   </sect1>
 </chapter>
 <!-- Keep this comment at the end of the file
