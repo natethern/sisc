@@ -5,7 +5,7 @@
            (if (> (cdr count) 0)
                (cons (car vars) (remove-unreferenced (cdr vars) refed))
                (remove-unreferenced (cdr vars) refed)))]
-        [else (cons (car vars) (remove-unreferenced (cdr vars) refed))]))
+        [else (remove-unreferenced (cdr vars) refed)]))
   
 (define (opt:lambda keyword formals lexicals body state)
   (let* ([rv (opt body state)]
