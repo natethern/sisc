@@ -60,10 +60,12 @@ public class IfExp extends Expression {
 	}
     }
 
+#ifdef EXPRESS
     public Value express() {
 	return list(sym("If-exp"), test.express(), eexp.express());
     }
-
+#endif
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.serialize(test, dos);
 	s.serialize(eexp, dos);
@@ -76,4 +78,5 @@ public class IfExp extends Expression {
 	test=s.deserialize(dis);
 	eexp=(IfEval)s.deserialize(dis);
     }
+#endif
 }

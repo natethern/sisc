@@ -85,7 +85,7 @@ public class AppExp extends Expression {
 	    }
 	}
     }
-
+#ifdef EXPRESS
     public Value express() {
 	Pair args=EMPTYLIST;
 	for (int i=rands.length-1; i>=0; i--) {
@@ -94,7 +94,8 @@ public class AppExp extends Expression {
 	args=new Pair(rator.express(), args);
 	return new Pair(nonTail ? sym("App-exp") : sym("TailApp-exp"), args);
     }
-
+#endif
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.writeBer(rands.length, dos);
 	for (int i=0; i<rands.length; i++) 
@@ -117,4 +118,8 @@ public class AppExp extends Expression {
 	rator=s.deserialize(dis);
 	nonTail=dis.readBoolean();
     }
+#endif
 }
+
+
+

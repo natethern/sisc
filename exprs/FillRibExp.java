@@ -86,11 +86,12 @@ public class FillRibExp extends Expression implements Volatile {
     public void lock() {
 	locked=true;
     }
-
+#ifdef EXPRESS
     public Value express() {
 	return list(sym("FillRib-exp"), rands[pos].express(), last.express());
     }
-
+#endif
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.writeBer(rands.length, dos);
 	for (int i=0; i<rands.length; i++) 
@@ -115,6 +116,7 @@ public class FillRibExp extends Expression implements Volatile {
 	
 	locked=dis.readBoolean();
     }
+#endif
 }
 
 

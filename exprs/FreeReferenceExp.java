@@ -66,11 +66,12 @@ public class FreeReferenceExp extends Expression implements Immediate {
 	}
 	return lenv.env[envLoc];
     }
-
+#ifdef EXPRESS
     public Value express() {
 	return list(sym("FreeReference-exp"), sym);
     }
-
+#endif
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.serialize(sym, dos);
 	s.serialize(lenv, dos);
@@ -95,4 +96,5 @@ public class FreeReferenceExp extends Expression implements Immediate {
     public int hashCode() {
 	return lenv.hashCode() ^ sym.hashCode();
     }
+#endif
 }

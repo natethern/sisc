@@ -190,6 +190,15 @@
 			(et (system-time)))
 		   (list val (list (- et st) 'ms)))))))))
 	 
+;; Unless and When 
+(define-syntax when
+  (syntax-rules ()
+    ((_ e0 e1 e2 ...)
+     (if e0 (begin e1 e2 ...)))))
 
+(define-syntax unless
+  (syntax-rules ()
+    ((_ e0 e1 e2 ...)
+     (if (not e0) (begin e1 e2 ...)))))
 
 

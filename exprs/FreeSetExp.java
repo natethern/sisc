@@ -55,11 +55,12 @@ public class FreeSetExp extends Expression {
 	r.push(eexpr);
 	r.nxp=rhs;
     }
-
+#ifdef EXPRESS
     public Value express() {
 	return list(sym("FreeSet-exp"), eexpr.express(), rhs.express());
     }
-
+#endif
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.serialize(rhs, dos);
 	s.serialize(eexpr, dos);
@@ -72,5 +73,6 @@ public class FreeSetExp extends Expression {
 	rhs=s.deserialize(dis);
 	eexpr=(FreeSetEval)s.deserialize(dis);
     }
+#endif
 
 }

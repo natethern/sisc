@@ -34,7 +34,9 @@ package sisc.data;
 
 import sisc.*;
 import sisc.compiler.*;
+#ifdef SERIALIZATION
 import java.io.*;
+#endif
 
 public class BuiltinProcedure extends Procedure {
     public int id;
@@ -73,6 +75,7 @@ public class BuiltinProcedure extends Procedure {
 	    ((BuiltinProcedure)v).host==host;
     }
 
+#ifdef SERIALIZATION
     public void serialize(Serializer s, 
 			  DataOutputStream dos) throws IOException {
 	s.serializeModule(host, dos);
@@ -89,6 +92,7 @@ public class BuiltinProcedure extends Procedure {
 	id=s.readBer(dis);
 	name=(Symbol)s.deserialize(dis);
     }
+#endif
 }	
 	
     

@@ -81,7 +81,7 @@ public class LexicalEnvironment extends Value {
     public String display() {
 	return "#<environment>";
     }
-
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.writeBer(vals.length, dos);
 	for (int i=0; i<vals.length; i++) 
@@ -107,6 +107,7 @@ public class LexicalEnvironment extends Value {
 	}
 	else parent=null;
     }
+#endif
 }
 
 

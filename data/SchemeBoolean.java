@@ -32,8 +32,10 @@
  */
 package sisc.data;
 
+#ifdef SERIALIZATION
 import sisc.Serializer;
 import java.io.*;
+#endif
 
 public class SchemeBoolean extends Value implements Singleton {
     public static SchemeBoolean TRUE=new SchemeBoolean(true);
@@ -53,6 +55,7 @@ public class SchemeBoolean extends Value implements Singleton {
 	return val ? JTRUE : JFALSE;
     }
 
+#ifdef SERIALIZATION
     public SchemeBoolean() {}
 
     public void serialize(Serializer s,
@@ -66,5 +69,6 @@ public class SchemeBoolean extends Value implements Singleton {
 	    return TRUE;
 	return FALSE;
     }
+#endif
 }
 

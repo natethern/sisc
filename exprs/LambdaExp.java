@@ -55,11 +55,12 @@ public class LambdaExp extends Expression implements Immediate {
     public Value getValue(Interpreter r) throws ContinuationException {
 	return new Closure(infiniteArity, fcount, body, r.env);
     }
-
+#ifdef EXPRESS
     public Value express() {
 	return list(sym("Lambda-exp"), new Quantity(fcount), body.express());
     }
-
+#endif
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	dos.writeBoolean(infiniteArity);
 	s.writeBer(fcount, dos);
@@ -74,6 +75,7 @@ public class LambdaExp extends Expression implements Immediate {
 	fcount=s.readBer(dis);
 	body=s.deserialize(dis);
     }
+#endif
 }
 
 

@@ -33,8 +33,9 @@
 package sisc.data;
 
 import sisc.*;
+#ifdef SERIALIZATION
 import java.io.*;
-
+#endif
 public class Closure extends Procedure {
     public boolean arity;
     public int fcount;
@@ -59,6 +60,7 @@ public class Closure extends Procedure {
 	return displayNamedOpaque("procedure");
     }
 
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.serialize(name, dos);
 	dos.writeBoolean(arity);
@@ -77,6 +79,7 @@ public class Closure extends Procedure {
 	env=(LexicalEnvironment)s.deserialize(dis);
 	body=s.deserialize(dis);
     }
+#endif
 }	
 	
 

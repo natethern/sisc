@@ -55,6 +55,7 @@ public class Compiler extends Util {
 	    return "#!"+synid;
 	}
 
+#ifdef SERIALIZATION
 	public Syntax() {}
 	public void deserialize(Serializer s, DataInputStream dis)
 	    throws IOException {
@@ -63,6 +64,7 @@ public class Compiler extends Util {
 	public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	    s.writeBer(synid, dos);
 	}
+#endif
     }
 
     static void extendenv(AssociativeEnvironment env, String s, int i) {

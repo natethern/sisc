@@ -33,7 +33,9 @@
 package sisc.data;
 
 import sisc.*;
+#ifdef SERIALIZATION
 import java.io.*;
+#endif
 
 public class SchemeString extends Value {
     public boolean immutable;
@@ -107,6 +109,7 @@ public class SchemeString extends Value {
 	return new String(stringdata);
     }
 
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	dos.writeUTF(new String(stringdata));
 	dos.writeBoolean(immutable);
@@ -119,6 +122,7 @@ public class SchemeString extends Value {
 	stringdata=dis.readUTF().toCharArray();
 	immutable=dis.readBoolean();
     }
+#endif
 }
 		
    

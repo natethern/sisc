@@ -42,8 +42,10 @@ public abstract class Expression extends Util implements Serializable {
 	return null;
     }
 
+#ifdef EXPRESS
     public abstract Value express();
-
+#endif
+#ifdef SERIALIZATION
     public void serialize(Serializer s, 
 			  DataOutputStream dos) throws IOException {	
     }
@@ -51,4 +53,13 @@ public abstract class Expression extends Util implements Serializable {
     public void deserialize(Serializer s,
 			    DataInputStream dis) throws IOException 
     {}
+#endif
 }
+
+
+
+
+
+
+
+

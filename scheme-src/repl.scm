@@ -69,6 +69,3 @@
 	   (lambda (m e f)
 	     (error-handler m e f)
 	     (loop))))))))
-
-(define x '(1 2 3))
-(set-cdr! (cddr x) x)

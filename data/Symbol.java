@@ -34,7 +34,9 @@ package sisc.data;
 
 import java.util.WeakHashMap; 
 import java.io.*;
+#ifdef SERIALIZATION
 import sisc.Serializer;
+#endif
 
 public class Symbol extends Value implements Singleton {
     
@@ -100,9 +102,11 @@ public class Symbol extends Value implements Singleton {
 	}
     }
 
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	dos.writeUTF(symval);
     }
+#endif
 
     public Symbol() {}
 

@@ -127,6 +127,7 @@ public class AssociativeEnvironment extends NamedValue {
 	return displayNamedOpaque("environment");
     }
 
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.writeBer(symbolMap.size(), dos);
 	for (Iterator i=symbolMap.keySet().iterator(); i.hasNext();) {
@@ -149,6 +150,7 @@ public class AssociativeEnvironment extends NamedValue {
 	}
 	nextFree=size;
     }
+#endif
 }
 
 

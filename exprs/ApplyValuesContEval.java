@@ -56,11 +56,12 @@ public class ApplyValuesContEval extends Expression {
     public String display() {
 	return "#<system continuation>";
     }
-
+#ifdef EXPRESS
     public Value express() {
 	return list(sym("ApplyValuesContEval"));
     }
-
+#endif
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.serialize(consumer, dos);
     }
@@ -71,4 +72,5 @@ public class ApplyValuesContEval extends Expression {
 	throws IOException {
 	consumer=(Procedure)s.deserialize(dis);
     }
+#endif
 }

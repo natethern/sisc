@@ -34,8 +34,10 @@ package sisc.data;
 
 import sisc.Util;
 import java.util.Hashtable;
+#ifdef SERIALIZATION
 import java.io.*;
 import sisc.Serializer;
+#endif
 
 public class SchemeCharacter extends Value {
     static final Hashtable humanReadables=new Hashtable(8);
@@ -92,6 +94,7 @@ public class SchemeCharacter extends Value {
 	return new Character(c);
     }
 
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	dos.writeChar(c);
     }
@@ -102,4 +105,6 @@ public class SchemeCharacter extends Value {
 	throws IOException {
 	c=dis.readChar();
     }
+#endif
 }
+

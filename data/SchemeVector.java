@@ -33,9 +33,10 @@
 package sisc.data;
 
 import java.util.Vector;
+#ifdef SERIALIZATION
 import sisc.Serializer;
 import java.io.*;
-
+#endif
 public class SchemeVector extends Value {
     public Value[] vals;
     protected int lastUnique=-1;
@@ -115,6 +116,7 @@ public class SchemeVector extends Value {
 	return v;
     }
 
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) 
 	throws IOException {
 	s.writeBer(vals.length, dos);
@@ -131,6 +133,7 @@ public class SchemeVector extends Value {
 	    vals[i]=(Value)s.deserialize(dis);
 	}
     }
+#endif
 }
 
 

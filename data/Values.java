@@ -66,6 +66,7 @@ public class Values extends Value {
 	error(r, "multiple values received in single-value context");
     }
 
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.writeBer(values.length, dos);
 	for (int i=0; i<values.length; i++) {
@@ -82,5 +83,6 @@ public class Values extends Value {
 	    values[i]=(Value)s.deserialize(dis);
 	}
     }
+#endif
 }
 

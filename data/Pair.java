@@ -32,9 +32,10 @@
  */
 package sisc.data;
 
+#ifdef SERIALIZATION
 import java.io.*;
 import sisc.Serializer;
-
+#endif
 public class Pair extends Value {
     public Value car, cdr;
 
@@ -107,6 +108,7 @@ public class Pair extends Value {
 	    cdr.equals(p.cdr);
     }
 
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) 
 	throws IOException {
 	Pair rv=this;
@@ -137,6 +139,7 @@ public class Pair extends Value {
 	}
 	rv.cdr=(Value)s.deserialize(dis);
     }
+#endif
 }
     
 

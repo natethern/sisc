@@ -1,8 +1,10 @@
 package sisc.data;
 
 import java.math.*;
+#ifdef SERIALIZATION
 import sisc.Serializer;
 import java.io.*;
+#endif
 
 public class Quantity extends Value {
     public static int min_precision; 
@@ -1191,7 +1193,25 @@ public class Quantity extends Value {
 	out_cache_radix=(byte)radix;
 	return out_cache=b.toString();
     }
+    
+    public Object javaValue() {
+	switch(type) {
+	case FIXEDINT:
+	    if (val < Integer.MAX_VALUE && val > Integer.MIN_VALUE)
+		return new Integer((int)val);
+	    else return new Long(val);
+	case INTEG:
+	    return i;
+	case DECIM:
+	    return new Double(d);
+	case RATIO:
+	    return new Double(ratioToDecimal(i, de));
+	case COMPLEX:
+	}
+	return null;
+    }
 
+#ifdef SERIALIZATION
     public void deserialize(Serializer s,
 			    DataInputStream dis) throws IOException {
 	type=s.readBer(dis);
@@ -1255,7 +1275,7 @@ public class Quantity extends Value {
 	    break;
 	}
     }
-
+#endif
 }
 
 

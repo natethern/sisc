@@ -47,15 +47,11 @@ public class CallFrame extends Procedure {
     public CallFrame              fk;
     public CallFrame          parent;
 
-    protected static ReferenceQueue vlrQ=new ReferenceQueue();
-    protected SoftReference vlrCap;
-
     public CallFrame(Expression n, Value[] v, 
 		     LexicalEnvironment e, 
 		     CallFrame f, CallFrame p) {
 	nxp=n;
 	vlr=v;
-	vlrCap=new SoftReference(v, vlrQ);
 	env=e;
 	fk=f;
 	parent=p;
@@ -97,6 +93,7 @@ public class CallFrame extends Procedure {
 	return displayNamedOpaque("continuation");
     }
 
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	if (vlr==null) 
 	    dos.writeBoolean(false);
@@ -131,6 +128,7 @@ public class CallFrame extends Procedure {
 	env=(LexicalEnvironment)s.deserialize(dis);
 	lock=dis.readBoolean();
     }
+#endif
 }
 
 

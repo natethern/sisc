@@ -47,11 +47,12 @@ public class IfEval extends Expression {
     public void eval(Interpreter r) throws ContinuationException { 
 	r.nxp = (truth(r.acc) ? conseq : altern);
     }
-
+#ifdef EXPRESS
     public Value express() {
 	return list(sym("If-eval"), conseq.express(), altern.express());
     }
-
+#endif
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.serialize(conseq, dos);
 	s.serialize(altern, dos);
@@ -64,7 +65,9 @@ public class IfEval extends Expression {
 	conseq=s.deserialize(dis);
 	altern=s.deserialize(dis);
     }
+#endif
 }
+
 
 
 

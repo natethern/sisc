@@ -1,6 +1,4 @@
 package sisc.data;
 
-public interface Singleton {
-
-}
+public interface Singleton {}
     

@@ -53,11 +53,12 @@ public class LexicalReferenceExp extends Expression implements Immediate {
     public Value getValue(Interpreter r) throws ContinuationException {
 	return r.env.lookup(depth, pos);
     }
-
+#ifdef EXPRESS
     public Value express() {
 	return new Pair(new Quantity(depth), new Quantity(pos));
     }
-
+#endif
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.writeBer(depth, dos);
 	s.writeBer(pos, dos);
@@ -73,7 +74,6 @@ public class LexicalReferenceExp extends Expression implements Immediate {
     public int hashCode() {
 	return depth<<16 | pos | 0xea000000;
     }
-    
     public LexicalReferenceExp() {}
 
     public void deserialize(Serializer s, DataInputStream dis) 
@@ -81,6 +81,7 @@ public class LexicalReferenceExp extends Expression implements Immediate {
 	depth=s.readBer(dis);
 	pos=s.readBer(dis);
     }
+#endif
 }
 
 

@@ -45,10 +45,12 @@ public class AppEval extends Expression {
 	    error(r, "Attempt to apply non-procedure '"+r.acc.write()+"'");
 	} 
     }
-
+#ifdef EXPRESS
     public Value express() {
 	return list(sym("App-Eval"));
     }
-
+#endif
+#ifdef SERIALIZATION
     public AppEval() {}
+#endif
 }

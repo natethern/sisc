@@ -49,12 +49,13 @@ public class LexicalSetEval extends Expression {
 	r.acc=VOID;
 	r.nxp=null;
     }
-
+#ifdef EXPRESS
     public Value express() {
 	return list(sym("LexicalSet-eval"), 
 		    new Pair(new Quantity(depth), new Quantity(pos)));
     }
-
+#endif
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.writeBer(depth, dos);
 	s.writeBer(pos, dos);
@@ -67,4 +68,6 @@ public class LexicalSetEval extends Expression {
 	depth=s.readBer(dis);
 	pos=s.readBer(dis);
     }
+#endif
 }
+

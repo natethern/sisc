@@ -49,11 +49,12 @@ public class LexicalSetExp extends Expression {
 	r.push(eexpr);
 	r.nxp=rhs;
     }
-
+#ifdef EXPRESS
     public Value express() {
 	return list(sym("LexicalSet-exp"), eexpr.express(), rhs.express());
     }
-
+#endif
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.serialize(rhs, dos);
 	s.serialize(eexpr, dos);
@@ -66,5 +67,8 @@ public class LexicalSetExp extends Expression {
 	rhs=s.deserialize(dis);
 	eexpr=(LexicalSetEval)s.deserialize(dis);
     }
+#endif
 }
+
+
 

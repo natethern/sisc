@@ -1,9 +1,10 @@
 package sisc.data;
 
 import java.math.*;
+#ifdef SERIALIZATION
 import sisc.Serializer;
 import java.io.*;
-
+#endif
 public class Quantity extends Value {
     public static int min_precision; 
     public static int max_precision;
@@ -1192,6 +1193,7 @@ public class Quantity extends Value {
 	return out_cache=b.toString();
     }
 
+#ifdef SERIALIZATION
     public void deserialize(Serializer s,
 			    DataInputStream dis) throws IOException {
 	type=s.readBer(dis);
@@ -1255,7 +1257,7 @@ public class Quantity extends Value {
 	    break;
 	}
     }
-
+#endif
 }
 
 

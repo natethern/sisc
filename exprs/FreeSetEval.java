@@ -63,11 +63,12 @@ public class FreeSetEval extends Expression {
 	r.acc=VOID;
 	r.nxp=null;
     }
-
+#ifdef EXPRESS
     public Value express() {
 	return list(sym("FreeSet-eval"), lhs);
     }
-
+#endif
+#ifdef SERIALIZATION
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
 	s.serialize(lhs, dos);
 	s.serialize(senv, dos);
@@ -81,5 +82,5 @@ public class FreeSetEval extends Expression {
 	senv=(AssociativeEnvironment)s.deserialize(dis);
 	envLoc=-1;
     }
-
+#endif
 }

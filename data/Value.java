@@ -71,10 +71,11 @@ public abstract class Value extends Expression implements Immediate {
     public final Value getValue(Interpreter r) throws ContinuationException {
 	return this;
     }
-
+#ifdef EXPRESS
     public Value express() {
 	return this;
     }
+#endif
 }
 
 
