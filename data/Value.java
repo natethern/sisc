@@ -46,7 +46,7 @@ public abstract class Value extends Expression implements Immediate {
      * @param v the other Value
      */
     public boolean equals(Object v) {
-        return eq(v);
+        return eqv(v);
     }
 
     /**
@@ -56,7 +56,7 @@ public abstract class Value extends Expression implements Immediate {
      * 
      * @param v the other Value
      */
-    public boolean eq(Object v) {
+    public boolean eqv(Object v) {
         return this==v;
     }
 
@@ -67,7 +67,7 @@ public abstract class Value extends Expression implements Immediate {
      * @param v the other Value
      */
     public boolean valueEqual(Value v) {
-        return eq(v) || equals(v);
+        return eqv(v) || equals(v);
     }
 
     /**

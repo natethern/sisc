@@ -53,7 +53,7 @@ public class SchemeVector extends Value {
         if (vals.length>1) {
             Value v=vals[vals.length-1];
             for (int i=vals.length-2; i>=0; i--)
-                if (!vals[i].eq(v)) return lastUnique=i+2;
+                if (!vals[i].eqv(v)) return lastUnique=i+2;
             return lastUnique=1;
         }
         return lastUnique=vals.length;

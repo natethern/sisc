@@ -26,7 +26,7 @@ public class Closure extends Procedure implements NamedValue {
     private final Value[] matchArgs(Interpreter r)
         throws ContinuationException {
         Value[] v=r.vlr;
-        int vl=v.length;
+        final int vl=v.length;
         if (!arity) {
             if (vl == fcount) {
                 if (r.vlk) {
@@ -40,7 +40,7 @@ public class Closure extends Procedure implements NamedValue {
             return null;
         }
         
-        int sm1=fcount-1;
+        final int sm1=fcount-1;
         if (vl < sm1) {
             error(r, liMessage(SISCB,"notenoughargstoinf", toString(),
                                sm1, vl));

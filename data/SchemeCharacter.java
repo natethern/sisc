@@ -42,7 +42,7 @@ public class SchemeCharacter extends Value {
         }
     }
 
-    public boolean eq(Object v) {
+    public boolean eqv(Object v) {
         return (v instanceof SchemeCharacter &&
                 ((SchemeCharacter)v).c==c);
     }

@@ -28,6 +28,7 @@ public class Quantity extends Value implements Singleton {
     public static final Quantity
         ZERO = Quantity.valueOf(0),
         ONE  = Quantity.valueOf(1),
+        NEGONE  = Quantity.valueOf(-1),
         TWO  = Quantity.valueOf(2),
         I    = Quantity.valueOf(0.0f, 1.0f),
         TWO_I= Quantity.valueOf(0.0f, 2.0f),
@@ -1280,7 +1281,7 @@ public class Quantity extends Value implements Singleton {
         return comp(o, -1);
     }
 
-    public boolean eq(Object v) {
+    public boolean eqv(Object v) {
         if (!(v instanceof Quantity)) return false;
         Quantity q=(Quantity)v;
 	    return ((is(EXACT) && q.is(EXACT)) ||
