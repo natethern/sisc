@@ -59,10 +59,11 @@ public class Values extends Value {
         }
     }
 
-    public void visit(ExpressionVisitor v) {
+    public boolean visit(ExpressionVisitor v) {
         for (int i=0; i<values.length; i++) {
-            v.visit(values[i]);
+            if (!v.visit(values[i])) return false;
         }
+        return true;
     }
 }
 /*

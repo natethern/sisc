@@ -2,7 +2,7 @@ package sisc.util;
 
 public interface ExpressionVisitee {
 
-    void visit(ExpressionVisitor v);
+    boolean visit(ExpressionVisitor v);
 }
 
 /*

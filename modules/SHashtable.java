@@ -92,13 +92,14 @@ public class SHashtable extends ModuleAdapter {
             }
         }
 
-        public void visit(ExpressionVisitor v) {
+        public boolean visit(ExpressionVisitor v) {
             Iterator i = ht.entrySet().iterator();
             while(i.hasNext()) {
                 Map.Entry e = (Map.Entry)i.next();
-                v.visit((Value)e.getKey());
-                v.visit((Value)e.getValue());
+                if (!v.visit((Value)e.getKey())) return false;
+                if (!v.visit((Value)e.getValue())) return false;
             }
+            return true;
         }
 
         public void display(ValueWriter w) throws IOException {

@@ -85,9 +85,8 @@ public class Pair extends Value {
         cdr=(Value)s.readExpression();
     }
 
-    public void visit(ExpressionVisitor v) {
-        v.visit(car);
-        v.visit(cdr);
+    public boolean visit(ExpressionVisitor v) {
+        return v.visit(car) && v.visit(cdr);
     }
 }
 

@@ -44,7 +44,7 @@ public class SharedValueWriter extends PortValueWriter {
     private static Integer seenMarker = new Integer(-1);
     private static Integer sharedMarker = new Integer(-2);
 
-    public void visit(ExpressionVisitee e) {
+    public boolean visit(ExpressionVisitee e) {
         Object i = shared.get(e);
         if (i == null) {
             shared.put(e, seenMarker);
@@ -52,6 +52,7 @@ public class SharedValueWriter extends PortValueWriter {
         } else {
             shared.put(e, sharedMarker);
         }
+        return true;
     }
 
     public ValueWriter append(Value v) throws IOException {

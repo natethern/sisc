@@ -51,9 +51,8 @@ public class DefineEval extends Expression {
         return lhs.hashCode() ^ env.hashCode();
     }
 
-    public void visit(ExpressionVisitor v) {
-        v.visit(lhs);
-        v.visit(env);
+    public boolean visit(ExpressionVisitor v) {
+        return v.visit(lhs) && v.visit(env);
     }
 }
 

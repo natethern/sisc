@@ -52,9 +52,8 @@ public class FillRibExp extends Expression {
 	    lastAndRatorImmediate=s.readBoolean();
     }
 
-    public void visit(ExpressionVisitor v) {
-        v.visit(exp);
-        v.visit(nxp);
+    public boolean visit(ExpressionVisitor v) {
+        return v.visit(exp) &&  v.visit(nxp);
     }
 }
 

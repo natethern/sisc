@@ -73,12 +73,12 @@ public class AppExp extends Expression {
         allImmediate=s.readBoolean();
     }
 
-    public void visit(ExpressionVisitor v) {
-        v.visit(exp);
+    public boolean visit(ExpressionVisitor v) {
+        if (!v.visit(exp)) return false;
         for (int i=0; i<rands.length; i++) {
-            v.visit(rands[i]);
+            if (!v.visit(rands[i])) return false;
         }
-        v.visit(nxp);
+        return v.visit(nxp);
     }
 }
 

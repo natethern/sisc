@@ -68,9 +68,8 @@ public class FreeSetEval extends Expression {
         return lhs.hashCode() ^ senv.hashCode();
     }
 
-    public void visit(ExpressionVisitor v) {
-        v.visit(lhs);
-        v.visit(senv);
+    public boolean visit(ExpressionVisitor v) {
+        return v.visit(lhs) && v.visit(senv);
     }
 }
 /*

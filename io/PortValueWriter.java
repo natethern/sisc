@@ -46,7 +46,8 @@ public class PortValueWriter extends Util
         displayOrWrite(v, false);
     }
 
-    public void visit(ExpressionVisitee e) {
+    public boolean visit(ExpressionVisitee e) {
+        return true;
     }
 
     public ValueWriter append(Value v) throws IOException {

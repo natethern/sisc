@@ -56,10 +56,8 @@ public class Closure extends Procedure {
         body=s.readExpression();
     }
 
-    public void visit(ExpressionVisitor v) {
-        super.visit(v);
-        v.visit(env);
-        v.visit(body);
+    public boolean visit(ExpressionVisitor v) {
+        return super.visit(v) && v.visit(env) && v.visit(body);
     }
 
     /*

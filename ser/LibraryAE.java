@@ -187,14 +187,14 @@ public class LibraryAE extends MemorySymEnv {
         }
     }
 
-    public void visit(ExpressionVisitor v) {
-        v.visit((Expression)parent);
+    public boolean visit(ExpressionVisitor v) {
+        if (!v.visit(parent)) return false;
         if (base == null) {
             if (name!=null && v==lb)
                 lb.add(name, this);
             for (Iterator i=bindWatch.iterator(); i.hasNext();) {
                 Symbol key=(Symbol)i.next();
-                v.visit(key);
+                if (!v.visit(key)) return false;
                 //add binding as new entry point to library
                 if (v==lb)
                     lb.add(super.lookup(key));
@@ -205,9 +205,10 @@ public class LibraryAE extends MemorySymEnv {
             //serialize in "retrieve" mode
             for (Iterator i=addressMap.keySet().iterator(); i.hasNext();) {
                 Symbol key=(Symbol)i.next();
-                v.visit(key);
+                if (!v.visit(key)) return false;
             }
         }
+        return true;
     }
 }
 

@@ -138,8 +138,9 @@ public class JavaObject extends Procedure {
         }
     }
 
-    public void visit(ExpressionVisitor v) {
-        if (obj != null && obj instanceof Expression) v.visit((Expression)obj);
+    public boolean visit(ExpressionVisitor v) {
+        return (obj != null && obj instanceof Expression) ?
+            v.visit((Expression)obj) : true;
     }
 
     public JavaObject(Object o) {

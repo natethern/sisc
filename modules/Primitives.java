@@ -153,7 +153,6 @@ public class Primitives extends ModuleAdapter {
         private LinkedList trail;
         private ExpressionVisitee element;
         private LinkedList components;
-        private boolean isCircular;
 
         public CircularityDetector() {
             trailMap = new HashMap(1);
@@ -162,27 +161,20 @@ public class Primitives extends ModuleAdapter {
 
         public boolean isCircular(ExpressionVisitee e) {
             element = e;
-            boolean res = false;
-            try {
-                res = isCircular();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            components = null;
+            boolean res = isCircular();
             element = null;
+            components = null;
             trailMap.clear();
             trail.clear();
             return res;
         }
 
         private boolean isCircular() {
-            isCircular = false;
             //this loop is complicated by an optimisation: checking
             //non-composite elements does not require any memory
             //allocation.
-            while(true) {
-                components = null;
-                element.visit(this);
-                if (isCircular) return true;
+            while(element.visit(this)) {
                 if (components == null) {
                     while(true) {
                         if (trail.isEmpty()) return false;
@@ -200,22 +192,18 @@ public class Primitives extends ModuleAdapter {
                 }
                 //pop component
                 element = (ExpressionVisitee)components.removeFirst();
+                components = null;
             }
+            return true;
         }
 
-        public void visit(ExpressionVisitee e) {
-            //the logic is sub-optimal - after a circularity has been
-            //detected we continue processing. To change this we'd
-            //need to alter the signature of visit() to return a
-            //boolean.
-            if (isCircular) return;
-            if (element.equals(e) || trailMap.containsKey(e)) {
-                isCircular = true;
-                return;
-            }
+        public boolean visit(ExpressionVisitee e) {
+            if (element.equals(e) || trailMap.containsKey(e))
+                return false;
             if (components == null) components = new LinkedList();
             //push component
             components.addLast(e);
+            return true;
         }
     }
 
@@ -260,8 +248,8 @@ public class Primitives extends ModuleAdapter {
             v = (Value)s.readExpression();
         }
 
-        public void visit(ExpressionVisitor v) {
-            v.visit(this.v);
+        public boolean visit(ExpressionVisitor v) {
+            return v.visit(this.v);
         }
     }
     

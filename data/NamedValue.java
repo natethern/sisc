@@ -34,8 +34,8 @@ public abstract class NamedValue extends Value {
         name=(Symbol)s.readExpression();
     }
 
-    public void visit(ExpressionVisitor v) {
-        v.visit(name);
+    public boolean visit(ExpressionVisitor v) {
+        return v.visit(name);
     }
 }
 /*

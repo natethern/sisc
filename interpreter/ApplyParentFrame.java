@@ -36,8 +36,8 @@ public class ApplyParentFrame extends Procedure {
         c=(CallFrame)s.readExpression();
     }
 
-    public void visit(ExpressionVisitor v) {
-        v.visit(c);
+    public boolean visit(ExpressionVisitor v) {
+        return v.visit(c);
     }
 }
 

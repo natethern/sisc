@@ -44,8 +44,8 @@ public class ApplyValuesContEval extends Expression {
         consumer=(Procedure)s.readExpression();
     }
 
-    public void visit(ExpressionVisitor v) {
-        v.visit(consumer);
+    public boolean visit(ExpressionVisitor v) {
+        return v.visit(consumer);
     }
 }
 /*

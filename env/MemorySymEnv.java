@@ -186,15 +186,15 @@ public class MemorySymEnv extends NamedValue
         parent=s.readSymbolicEnvironment();
     }
 
-    public void visit(ExpressionVisitor v) {
-        super.visit(v);
+    public boolean visit(ExpressionVisitor v) {
+        if (!super.visit(v)) return false;
         for (Iterator i=symbolMap.keySet().iterator(); i.hasNext();) {
             Symbol key=(Symbol)i.next();
-            v.visit(key);
+            if (!v.visit(key)) return false;
             int loc=((Integer)symbolMap.get(key)).intValue();
-            v.visit(env[loc]);
+            if (!v.visit(env[loc])) return false;
         }
-        v.visit((Expression)parent);
+        return v.visit(parent);
     }
 
 }

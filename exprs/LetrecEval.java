@@ -32,8 +32,8 @@ public class LetrecEval extends Expression {
         body=s.readExpression();
     }
 
-    public void visit(ExpressionVisitor v) {
-        v.visit(body);
+    public boolean visit(ExpressionVisitor v) {
+        return v.visit(body);
     }
 }
 /*

@@ -52,10 +52,8 @@ public class AnnotatedExpr extends Value {
         stripped=(Value)s.readExpression();
     }
 
-    public void visit(ExpressionVisitor v) {
-        v.visit(expr);
-        v.visit(annotation);
-        v.visit(stripped);
+    public boolean visit(ExpressionVisitor v) {
+        return v.visit(expr) && v.visit(annotation) && v.visit(stripped);
     }
 }
 /*

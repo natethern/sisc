@@ -97,10 +97,11 @@ public class LexicalEnvironment extends Value {
         parent = (LexicalEnvironment)s.readExpression();
     }
 
-    public void visit(ExpressionVisitor v) {
-        for (int i=0; i<vals.length; i++)
-            v.visit(vals[i]);
-        v.visit(parent);
+    public boolean visit(ExpressionVisitor v) {
+        for (int i=0; i<vals.length; i++) {
+            if (!v.visit(vals[i])) return false;
+        }
+        return v.visit(parent);
     }
 }
 

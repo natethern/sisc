@@ -182,7 +182,7 @@ public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
     }
 
     /*---Serialization first pass functions---*/
-    public void visit(ExpressionVisitee e) {
+    public boolean visit(ExpressionVisitee e) {
         if (e!=null) {
             serQueue.addFirst(e);
             if (includeAEs && e instanceof SymbolicEnvironment) {
@@ -193,6 +193,7 @@ public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
                     add(se.getName(),se.asValue());
             }
         }
+        return true;
     }
     
     public boolean seen(Expression e) { 

@@ -231,9 +231,8 @@ public class SThread extends ModuleAdapter {
             condvar=(CondVar)ser.readExpression();
         }
 
-        public void visit(ExpressionVisitor v) {
-            super.visit(v);
-            v.visit(condvar);
+        public boolean visit(ExpressionVisitor v) {
+            return super.visit(v) && v.visit(condvar);
         }
     }
 

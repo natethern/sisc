@@ -45,9 +45,8 @@ public class EvalExp extends Expression {
         preImmediate=s.readBoolean();
     }
 
-    public void visit(ExpressionVisitor v) {
-        v.visit(pre);
-        v.visit(post);
+    public boolean visit(ExpressionVisitor v) {
+        return v.visit(pre) && v.visit(post);
     }
 }
 /*

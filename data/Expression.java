@@ -129,7 +129,9 @@ public abstract class Expression extends Util
             ((Singleton)this).singletonValue() : this;
     }
 
-    public void visit(ExpressionVisitor v) {}
+    public boolean visit(ExpressionVisitor v) {
+        return true;
+    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public

@@ -99,9 +99,8 @@ public class BuiltinProcedure extends Procedure {
         id=s.readInt();
     }
 
-    public void visit(ExpressionVisitor v) {
-        super.visit(v);
-        v.visit(host);
+    public boolean visit(ExpressionVisitor v) {
+        return super.visit(v) && v.visit(host);
     }
 
     /*

@@ -35,9 +35,8 @@ public class IfEval extends Expression {
         altern=s.readExpression();
     }
 
-    public void visit(ExpressionVisitor v) {
-        v.visit(conseq);
-        v.visit(altern);
+    public boolean visit(ExpressionVisitor v) {
+        return v.visit(conseq) && v.visit(altern);
     }
 }
 

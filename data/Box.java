@@ -44,8 +44,8 @@ public class Box extends Value {
         val=s.readExpression();
     }
 
-    public void visit(ExpressionVisitor v) {
-        v.visit(val);
+    public boolean visit(ExpressionVisitor v) {
+        return v.visit(val);
     }
 }
 

@@ -71,8 +71,8 @@ public class SDebug extends ModuleAdapter {
             e=s.readExpression();
         }
 
-        public void visit(ExpressionVisitor v) {
-            v.visit(e);
+        public boolean visit(ExpressionVisitor v) {
+            return v.visit(e);
         }
 
     }

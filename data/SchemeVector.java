@@ -102,10 +102,11 @@ public class SchemeVector extends Value {
         }
     }
 
-    public void visit(ExpressionVisitor v) {
+    public boolean visit(ExpressionVisitor v) {
         for (int i=0; i<vals.length; i++) {
-            v.visit(vals[i]);
+            if (!v.visit(vals[i])) return false;
         }
+        return true;
     }
 }
 

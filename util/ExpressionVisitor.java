@@ -4,7 +4,7 @@ import sisc.data.Expression;
 
 public interface ExpressionVisitor {
 
-    void visit(ExpressionVisitee e);
+    boolean visit(ExpressionVisitee e);
 }
 
 /*

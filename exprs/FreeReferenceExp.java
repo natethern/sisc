@@ -79,9 +79,8 @@ public class FreeReferenceExp extends Expression implements Immediate {
         return senv.hashCode() ^ sym.hashCode();
     }
 
-    public void visit(ExpressionVisitor v) {
-        v.visit(sym);
-        v.visit(senv);
+    public boolean visit(ExpressionVisitor v) {
+        return v.visit(sym) && v.visit(senv);
     }
 }
 /*

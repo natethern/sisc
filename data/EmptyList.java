@@ -37,7 +37,9 @@ public class EmptyList extends Pair implements Singleton {
         return EMPTYLIST;
     }
 
-    public void visit(ExpressionVisitor v) {}
+    public boolean visit(ExpressionVisitor v) {
+        return true;
+    }
 }
 
 

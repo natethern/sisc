@@ -99,14 +99,12 @@ public class CallFrame extends Procedure {
         vlk=s.readBoolean();
     }
 
-    public void visit(ExpressionVisitor v) {
+    public boolean visit(ExpressionVisitor v) {
         if (vlr!=null)
-            for (int i=0; i<vlr.length; i++)
-                v.visit(vlr[i]);
-        v.visit(nxp);
-        v.visit(fk);
-        v.visit(parent);
-        v.visit(env);
+            for (int i=0; i<vlr.length; i++) {
+                if (!v.visit(vlr[i])) return false;
+            }
+        return v.visit(nxp) && v.visit(fk) && v.visit(parent) && v.visit(env);
     }
 }
 
