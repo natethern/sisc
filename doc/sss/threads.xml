@@ -20,7 +20,7 @@
     access to data (mutexes), to assign priorities to Scheme
     threads, and for inter-thread signaling and synchronization.
   </para>
-  <sect1>
+  <sect1 id="threadsemantics">
     <title>
       Scheme Thread Semantics
     </title>
@@ -50,8 +50,9 @@
       Some resources can be shared but may also be distinct from
       thread to thread.  These resources are inherited from the
       parent thread, but may be changed by the child or parent
-      without affecting the other.  The console input and output
-      port are inherited by the parent, as is the dynamic-wind
+      without affecting the other.  The dynamic environment 
+      (including the console input and output port, parameters, etc.)
+      are inherited from the parent, as is the dynamic-wind
       stack.  
     </para>
     <para>

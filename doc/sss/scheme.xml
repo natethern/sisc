@@ -548,6 +548,11 @@
 	by SRFI-39.  Consult the SRFI-39 specification at 
 	<ulink url="http://srfi.schemers.org">srfi.schemers.org</ulink> 
 	for documentation on how to construct and use parameters.
+	SRFI-39 does not specify the semantics for parameters in the
+	presence of threads.  SISC's parameters bind into the dynamic
+	environment, which means their semantics are defined based on the
+	semantics of dynamic environments' interactions with threads,
+	specified in <xref linkend="threadsemantics"/>.
       </para>
     </sect2>
     <sect2 id="SharedStructures">
