@@ -1,5 +1,5 @@
 ;;; Portable implementation of syntax-case
-;;; Extracted from Chez Scheme Version 6.9 (May 31, 2002)
+;;; Extracted from Chez Scheme Version 6.9 (Jun 04, 2002)
 ;;; Authors: R. Kent Dybvig, Oscar Waddell, Bob Hieb, Carl Bruggeman
 
 ;;; Copyright (c) 1992-2002 Cadence Research Systems
@@ -467,26 +467,31 @@
   (lambda (symbol token)
     (getprop symbol token)))
 
+;;; generate-id ideally produces globally unique symbols, i.e., symbols
+;;; unique across system runs, to support separate compilation/expansion.
+;;; Use gensym-hook if you do not need to support separate compilation/
+;;; expansion or if your system's gensym creates globally unique
+;;; symbols (as in Chez Scheme).  Otherwise, use the following code
+;;; as a starting point.  session-key should be a unique string for each
+;;; system run to support separate compilation; the default value given
+;;; is satisfactory during initial development only.
 (define generate-id
-  (let ((b 36))
-   ; session-key should generate a unique integer for each system run
-   ; to support separate compilation
-    (define session-key (lambda () 0))
-    (define make-digit
-      (lambda (x) (integer->char (fx+ x (if (> x 9) 55 48)))))
-    (define fmt
-      (lambda (n)
-        (let fmt ((n n) (a '()))
-          (if (< n b)
-              (list->string (cons (make-digit n) a))
-              (let ((r (modulo n b)) (rest (quotient n b)))
-                (fmt rest (cons (make-digit r) a)))))))
-    (let ((prefix (fmt (session-key))) (n -1))
-      (lambda (name)
-        (set! n (+ n 1))
-        (string->symbol
-         (string-append
-          (symbol->string name) "#" prefix (fmt n)))))))
+  (let ((digits "0123456789abcdefghijklmnopqrstuvwxyz"))
+    (let ((base (string-length digits)) (session-key "_"))
+      (define make-digit (lambda (x) (string-ref digits x)))
+      (define fmt
+        (lambda (n)
+          (let fmt ((n n) (a '()))
+            (if (< n base)
+                (list->string (cons (make-digit n) a))
+                (let ((r (modulo n base)) (rest (quotient n base)))
+                  (fmt rest (cons (make-digit r) a)))))))
+      (let ((n -1))
+        (lambda (name)
+          (set! n (+ n 1))
+          (string->symbol (string-append (symbol->string name)
+                                         session-key
+                                         (fmt n))))))))
 )
 
 
@@ -591,30 +596,6 @@
         (if src
             `(compile-in-annotation (begin ,@exps) ,src)
             `(begin ,@exps)))))
-
-;(define build-letrec
-;  (lambda (src vars val-exps body-exp)
-;    (if (null? vars)
-;        (if src
-;            `(compile-in-annotation ,body-exp ,src)
-;            body-exp)
-;        (if src
-;            `(compile-in-annotation 
-;              ,(cons (list 'lambda vars
-;                           (append (cons 'begin
-;                                         (map (lambda (v e)
-;                                                (list 'set! v e))
-;                                              vars val-exps))
-;                                   (list body-exp)))
-;                     (map (lambda (x) #f) vars))
-;              ,src)
-;            (cons (list 'lambda vars
-;                        (append (cons 'begin
-;                                      (map (lambda (v e)
-;                                             (list 'set! v e))
-;                                           vars val-exps))
-;                                (list body-exp)))
-;                  (map (lambda (x) #f) vars))))))
 
 (define build-letrec
   (lambda (src vars val-exps body-exp)
@@ -2733,26 +2714,41 @@
       ; accepts pattern & keys
       ; returns syntax-dispatch pattern & ids
       (lambda (pattern keys)
-        (let cvt ((p pattern) (n 0) (ids '()))
-          (if (id? p)
-              (if (bound-id-member? p keys)
-                  (values (vector 'free-id p) ids)
-                  (values 'any (cons (cons p n) ids)))
-              (syntax-case p ()
-                ((x dots)
-                 (ellipsis? (syntax dots))
-                 (let-values (((p ids) (cvt (syntax x) (fx+ n 1) ids)))
-                   (values (if (eq? p 'any) 'each-any (vector 'each p))
-                           ids)))
-                ((x . y)
-                 (let-values (((y ids) (cvt (syntax y) n ids)))
-                   (let-values (((x ids) (cvt (syntax x) n ids)))
-                     (values (cons x y) ids))))
-                (() (values '() ids))
-                (#(x ...)
-                 (let-values (((p ids) (cvt (syntax (x ...)) n ids)))
-                   (values (vector 'vector p) ids)))
-                (x (values (vector 'atom (strip p empty-wrap)) ids)))))))
+        (define cvt*
+          (lambda (p* n ids)
+            (if (null? p*)
+                (values '() ids)
+                (let-values (((y ids) (cvt* (cdr p*) n ids)))
+                  (let-values (((x ids) (cvt (car p*) n ids)))
+                    (values (cons x y) ids))))))
+        (define cvt
+          (lambda (p n ids)
+            (if (id? p)
+                (if (bound-id-member? p keys)
+                    (values (vector 'free-id p) ids)
+                    (values 'any (cons (cons p n) ids)))
+                (syntax-case p ()
+                  ((x dots)
+                   (ellipsis? (syntax dots))
+                   (let-values (((p ids) (cvt (syntax x) (fx+ n 1) ids)))
+                     (values (if (eq? p 'any) 'each-any (vector 'each p))
+                             ids)))
+                  ((x dots y ... . z)
+                   (ellipsis? (syntax dots))
+                   (let-values (((z ids) (cvt (syntax z) n ids)))
+                     (let-values (((y ids) (cvt* (syntax (y ...)) n ids)))
+                       (let-values (((x ids) (cvt (syntax x) (fx+ n 1) ids)))
+                         (values `#4(each+ ,x ,(reverse y) ,z) ids)))))
+                  ((x . y)
+                   (let-values (((y ids) (cvt (syntax y) n ids)))
+                     (let-values (((x ids) (cvt (syntax x) n ids)))
+                       (values (cons x y) ids))))
+                  (() (values '() ids))
+                  (#(x ...)
+                   (let-values (((p ids) (cvt (syntax (x ...)) n ids)))
+                     (values (vector 'vector p) ids)))
+                  (x (values (vector 'atom (strip p empty-wrap)) ids))))))
+        (cvt pattern 0 '())))
 
     (define build-dispatch-call
       (lambda (pvars exp y r)
@@ -2983,19 +2979,20 @@
 
 ;;; The expression is matched with the pattern as follows:
 
-;;; pattern:                           matches:
+;;; p in pattern:                        matches:
 ;;;   ()                                 empty list
 ;;;   any                                anything
-;;;   (<pattern>1 . <pattern>2)          (<pattern>1 . <pattern>2)
-;;;   each-any                           (any*)
-;;;   #(free-id <key>)                   <key> with free-identifier=?
-;;;   #(each <pattern>)                  (<pattern>*)
-;;;   #(vector <pattern>)                (list->vector <pattern>)
+;;;   (p1 . p2)                          pair (list)
+;;;   #(free-id <key>)                   <key> with literal-identifier=?
+;;;   each-any                           any proper list
+;;;   #(each p)                          (p*)
+;;;   #(each+ p1 (p2_1 ...p2_n) p3)      (p1* (p2_n ... p2_1) . p3)
+;;;   #(vector p)                        (list->vector p)
 ;;;   #(atom <object>)                   <object> with "equal?"
 
 ;;; Vector cops out to pair under assumption that vectors are rare.  If
 ;;; not, should convert to:
-;;;   #(vector <pattern>*)               #(<pattern>*)
+;;;   #(vector p)                        #(p*)
 
 (let ()
 
@@ -3015,6 +3012,25 @@
                    p
                    (join-wraps w (syntax-object-wrap e))))
       (else #f))))
+
+(define match-each+
+  (lambda (e x-pat y-pat z-pat w r)
+    (let f ((e e) (w w))
+      (cond
+        ((pair? e)
+         (let-values (((xr* y-pat r) (f (cdr e) w)))
+           (if r
+               (if (null? y-pat)
+                   (let ((xr (match (car e) x-pat w '())))
+                     (if xr
+                         (values (cons xr xr*) y-pat r)
+                         (values #f #f #f)))
+                   (values '() (cdr y-pat) (match (car e) (car y-pat) w r)))
+               (values #f #f #f))))
+        ((annotation? e) (f (annotation-expression e) w))
+        ((syntax-object? e) (f (syntax-object-expression e)
+                               (join-wraps w (syntax-object-wrap e))))
+        (else (values '() y-pat (match e z-pat w r)))))))
 
 (define match-each-any
   (lambda (e w)
@@ -3040,8 +3056,17 @@
       (else
        (case (vector-ref p 0)
          ((each) (match-empty (vector-ref p 1) r))
+         ((each+) (match-empty (vector-ref p 1)
+                    (match-empty (reverse (vector-ref p 2))
+                      (match-empty (vector-ref p 3) r))))
          ((free-id atom) r)
          ((vector) (match-empty (vector-ref p 1) r)))))))
+
+(define combine
+  (lambda (r* r)
+    (if (null? (car r*))
+        r
+        (cons (map car r*) (combine (map cdr r*) r)))))
 
 (define match*
   (lambda (e p w r)
@@ -3057,13 +3082,17 @@
          ((each)
           (if (null? e)
               (match-empty (vector-ref p 1) r)
-              (let ((l (match-each e (vector-ref p 1) w)))
-                (and l
-                     (let collect ((l l))
-                       (if (null? (car l))
-                           r
-                           (cons (map car l) (collect (map cdr l)))))))))
+              (let ((r* (match-each e (vector-ref p 1) w)))
+                (and r* (combine r* r)))))
          ((free-id) (and (id? e) (literal-id=? (wrap e w) (vector-ref p 1)) r))
+         ((each+)
+          (let-values (((xr* y-pat r)
+                        (match-each+ e (vector-ref p 1) (vector-ref p 2)
+                          (vector-ref p 3) w r)))
+            (and r (null? y-pat)
+              (if (null? xr*)
+                  (match-empty (vector-ref p 1) r)
+                  (combine xr* r)))))
          ((atom) (and (equal? (vector-ref p 1) (strip e w)) r))
          ((vector)
           (and (vector? e)
