@@ -191,7 +191,7 @@
   (call-with-input-file file
     (lambda (port) 
       (do ((x (read port) (read port)))
-          ((eof-object? x) (void))
+          ((eof-object? x))
         (eval (list "noexpand" x))))))
 
 (define (parameterize . args)
@@ -404,7 +404,7 @@
 (define-syntax unless
   (syntax-rules ()
     ((_ e0 e1 e2 ...)
-     (if e0 (void) (begin e1 e2 ...)))))
+     (if e0 '#!void (begin e1 e2 ...)))))
 
 ;;perform macro expansion on a file
 (define (expand-file from to . scexpopts)

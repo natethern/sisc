@@ -371,7 +371,7 @@
     ((_ test e1 e2 ...) (if test (begin e1 e2 ...)))))
 (define-syntax unless
   (syntax-rules ()
-    ((_ test e1 e2 ...) (when (not test) (begin e1 e2 ...)))))
+    ((_ test e1 e2 ...) (if test '#!void (begin e1 e2 ...)))))
 (define-syntax define-structure
   (lambda (x)
     (define construct-name
@@ -684,7 +684,7 @@
   (syntax-rules ()
     ((_ pred? e who)
      (let ((x e))
-       (if (not (pred? x)) (error-hook who "invalid argument" x))))))
+       (unless (pred? x) (error-hook who "invalid argument" x))))))
 
 ;;; compile-time environments
 
