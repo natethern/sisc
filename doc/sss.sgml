@@ -5,6 +5,7 @@
  <!ENTITY returns "<emphasis role=bold><emphasis>returns:</emphasis></emphasis>">
  <!ENTITY procedure "<emphasis role=bold><emphasis>procedure:</emphasis></emphasis>">
  <!ENTITY parameter "<emphasis role=bold><emphasis>parameter:</emphasis></emphasis>">
+ <!ENTITY f "&num;f">
 ]>
 
 <book lang="en">
@@ -14,6 +15,9 @@
     <title>
       &SISC; <emphasis>for Seasoned Schemers</emphasis>
     </title>
+    <author>
+      <firstname>Scott</firstname><surname>Miller</surname>
+    </author>
     <date>
       Jan 2002
     </date>
@@ -88,7 +92,7 @@
 	  the following syntax:
 	</para>
 	<programlisting>
-	  &procedure; (procedure-name arguments ...)
+	  &procedure; (procedure-name argument [optional argument] ...)
 	  &returns; type and description of the return value
 	</programlisting>
 	<blockquote>
@@ -125,6 +129,14 @@
 	  syntactic expressions, and are often much more difficult to
 	  read then the unexpanded version.
 	</para>
+	<para>
+	  Procedures, parameters, and syntax may take one or more
+	  arguments.  The name of an argument in a description
+	  indicates the expected type of the argument.  'value'
+	  indicates any type.  If the argument is enclosed in square
+	  brackets ([]), that parameter is optional, and may be
+	  ommited.  If the description ends in elipses (...), then 
+	  additional arguments may be provided, but are not required.
       </sect2>
     </sect1>
   </chapter>
@@ -545,7 +557,168 @@
       <title>
 	Networking
       </title>
-      <para></para>
+      <para>
+	The &SISC; Networking library provides a mechanism for
+	creating and manipulating IP network protocols as standard
+	Scheme ports.  &SISC; supports TCP, UDP, and Multicast UDP.
+	Each is described in the sections that follow.
+      </para>
+      <para>
+	Each protocol provides one or more <emphasis>socket
+	constructors</emphasis>.  These functions produce a Socket
+	handle, which is represented in &SISC; as
+	<computeroutput>&num;&lt;socket&gt;</computeroutput>.  A
+	socket handle is then used to obtain Scheme ports.
+      </para>
+      <para>
+	IP addresses are represented as strings in &SISC;.  Unless
+	otherwise noted, the network library functions that require an
+	address may take an address as a string in the dotted quad
+	form ("aaa.bbb.ccc.ddd"), or as a hostname which will be
+	resolved using the domain name system.  All port values must
+	be integers in the proper range.
+      </para>
+      <sect2 id="netutils">
+	<title>
+	  Address functions
+	</title>
+	<para>
+	  Several utility functions are provided for manipulating IP
+	  addresses.  These are described below.
+	</para>
+	<programlisting>
+	  &procedure; (get-host-ip-by-name string)
+	  &returns; A dotted-quad IP address or &f;
+
+	  Attempts to resolve a hostname provided as a string into an 
+	  IP address in dotted-quad form.  If the host cannot be
+	  found, &f; is returned.
+
+	  
+	  &procedure; (get-host-name-by-ip string)
+	  &returns; A hostname or &f;
+
+	  Attempts a reverse lookup of the given dotted-quad address
+	  to determine a registered domain name.  If unsuccessful, &f;
+	  is returned
+
+	  
+	  &procedure; (get-local-host)
+	  &returns; The dotted-quad address of the local host 
+
+	  Attempts to determine the Internet visible IP address of the
+	  local machine.  If successful, this address is returned in
+	  dotted-quad notation.  &f; is returned otherwise.
+	</programlisting>
+      </sect2>
+      <sect2 id="sockets">
+	<title>
+	  Socket operations
+	</title>
+	<para>
+	  Once obtained using a protocol specific constructor, a
+	  Socket Handle allows manipulation of common socket options,
+	  the creation of Scheme input/output ports, and closing of
+	  the socket.
+	</para>
+	<programlisting>
+	  &procedure; (open-socket-input-port socket)
+	  &returns; an input port
+
+	  Opens a Scheme input port to the socket.  
+
+
+	  &procedure; (open-socket-output-port socket [boolean])
+	  &returns; an output port
+
+	  Opens a Scheme output port to the socket.  If provided, the
+	  boolean argument specifies whether the given port should be
+	  set to auto-flush mode.  If unspecified, the port does
+	  <emphasis>not</emphasis> auto-flush.
+	  
+
+	  &procedure; (close-socket socket)
+	  &returns; unspecified
+
+	  Closes an IP socket.  
+	</programlisting>
+	<para>
+	  The port-obtaining functions above work on most sockets.
+	  An exception applies for  TCP server sockets, which are used only to
+	  obtain connected TCP sockets.
+      </sect2>
+      <sect2 id="TCP">
+	<title>
+	  TCP
+	</title>
+	<para>
+	  The most commonly used Internet protocol maps most favorably
+	  to Scheme's input/output model.  Writing to an output port
+	  retrieved from a TCP socket writes the data to that socket.
+	  Reading from an input port reads from the connected socket.
+	  One imporant note is that one can control the amount of data
+	  that fills a TCP packet by using an output port that does
+	  not auto-flush.  Data is written to the port until one
+	  considers the packet complete, and then uses
+	  <computeroutput>(flush-output-port port)</computeroutput> to
+	  complete the packet.  Note also that this does not
+	  <emphasis>guarantee</emphasis> that one gets the desired
+	  packet size, but does allow one to construct reasonably
+	  sized packets.
+	</para>
+	<para>
+	  TCP sockets are obtained one of two ways.  Either one
+	  creates an outgoing connection to another listening host and
+	  then subsequently obtains a socket handle, or one creates a
+	  <emphasis>listening socket</emphasis> and then obtains a
+	  socket by waiting for an incoming connection on the
+	  specified port.  In either case, the result is a socket
+	  handle with an available input and output port that can be
+	  obtained using a function in the previous section.
+	</para>
+	<programlisting>
+	  &procedure; (open-tcp-socket string integer)
+	  &returns; A connected TCP socket
+
+	  Attempts to connect to the host at the given hostname or IP
+	  address encoded in the string, at the given TCP port
+	  specified by the integer.  An error is raised if the host
+	  cannot be found or the connection fails.
+
+	  
+	  &procedure; (open-tcp-listener integer [string])
+	  &returns; A TCP server socket
+
+	  Creates a TCP server socket, which may only be used with
+	  accept-tcp-socket, or closed.  The server socket will listen
+	  on the integer port specified.  If provided, the string
+	  specifies the address of a local interface to bind to.  If
+	  not provided, the port is bound on all available
+	  interfaces.  An error is raised if the socket cannot be
+	  bound and set listening.
+
+	  
+	  &procedure; (accept-tcp-socket server-socket)
+	  &returns; A TCP socket
+
+	  Accepts an incoming connection on the provided
+	  server-socket, and returns a TCP socket handle.  This
+	  function will block until an incoming connection is made,
+	  or, if set, the socket timeout is exceeded.  If the latter
+	  happens, an error will be raised.
+
+	  
+	  &procedure; (set-so-timeout! socket integer)
+	  &returns; undefined
+
+	  Sets the socket timeout on a socket.  The socket can be
+	  either a server socket or connected socket.  In the former
+	  case, this value specifies the number of milliseconds that
+	  an accept-tcp-socket can wait before timing out.  In the
+	  latter, the value specifies the number of milliseconds that
+	  can elapse during a read call before timing out.
+	</programlisting>
+      </sect2>
     </sect1>
   </chapter>
   <chapter>
