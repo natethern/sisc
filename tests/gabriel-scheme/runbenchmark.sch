@@ -19,7 +19,7 @@
 (define (time n thunk)
   (let loop ((x n) (res '()))
     (if (zero? x)
-        (list (apply + res) 'min 'ms)
+        (list (apply min res) 'min 'ms)
         (let ((st (system-time)))
           (begin (thunk)
                  (loop (- x 1) (cons (- (system-time) st) res)))))))
