@@ -1,6 +1,6 @@
 package sisc.util;
 
-public abstract class Defaults {
+public interface Defaults {
 
     public static final int DEFAULT_SYNOPSIS_LENGTH = 30;
     public static final boolean DEFAULT_CASE_SENSITIVE = false;

@@ -13,7 +13,7 @@ import java.io.StringReader;
 import sisc.compiler.Parser;
 import sisc.compiler.Lexer;
 
-public abstract class Util extends Defaults implements Version {
+public abstract class Util implements Defaults, Version {
 
     public static final boolean caseSensitive =
         System.getProperty("sisc.caseSensitive",
