@@ -153,7 +153,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
     </para>
     <variablelist>
       <varlistentry>
-        <term><literal>sisc.emitannotations</literal></term>
+        <term><envvar>sisc.emitannotations</envvar></term>
         <listitem>
           <para>
             Specifies the default value of the
@@ -169,7 +169,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><literal>sisc.heapfile</literal></term>
+        <term><envvar>sisc.heapfile</envvar></term>
         <listitem>
           <para>
             Specifies the path to a &SISC; serialized heap file to use 
@@ -179,7 +179,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><literal>sisc.maxprecision</literal></term>
+        <term><envvar>sisc.maxprecision</envvar></term>
         <listitem>
           <para>
             Specifies the maximum precision, in decimal places, to be
@@ -189,7 +189,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><literal>sisc.minprecision</literal></term>
+        <term><envvar>sisc.minprecision</envvar></term>
         <listitem>
           <para>
             Specifies the minimum precision, in decimal places, to be
@@ -199,7 +199,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><literal>sisc.permitinterrupts</literal></term>
+        <term><envvar>sisc.permitinterrupts</envvar></term>
         <listitem>
           <para>
             If set to <literal>true</literal>,
@@ -318,10 +318,6 @@ for <function>sqrt</function>, it is not clear what other mathematical
         representable exact integers to the numbers quoted above.
       </para>
       <para>
-        <literal>
-                  </literal>
-      </para>
-      <para>
         Likewise, arbitrary precision inexact numbers (when present)
         have a similar hard limit.  The arbitrary precision inexact is
         constructed with an arbitrary precision exact number with the
@@ -419,7 +415,7 @@ for <function>sqrt</function>, it is not clear what other mathematical
           error.  The interrupt signal handling code does add an
           appreciable overhead (usually between 4-10%) to execution, and
           is thus disabled by default.  It can be enabled using the
-          <literal>sisc.permitinterrupts</literal> system property.
+          <envvar>sisc.permitinterrupts</envvar> system property.
         </para>
       </sect2>
     </sect1>
