@@ -1,7 +1,6 @@
-2003-02-24  Scott G. Miller  <scgmille@freenetproject.org>
+2003-02-20  Scott G. Miller  <scgmille@freenetproject.org>
 
-	* The optimizer now considers all the *set! operations sets, 
-	  instead of just set!
+	* Minor bug fix in compiled-library geneation.
 	  
 2003-02-18  SISC 1.7.4-rc Released
 
