@@ -16,6 +16,7 @@
  * Scott G. Miller.  All Rights Reserved.
  * 
  * Contributor(s):
+ * Matthias Radestock 
  * 
  * Alternatively, the contents of this file may be used under the
  * terms of the GNU General Public License Version 2 or later (the
@@ -29,10 +30,41 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-package sisc;
+package sisc.exprs;
 
-public interface Version {
+import sisc.*;
+import sisc.data.*;
 
-    String VERSION = "b1.5.1";
+public class LetrecExp extends AppExp {
 
+    public LetrecExp(Expression rhses[], Expression body, boolean allImmediate) {
+        super(FALSE, rhses, new LetrecEval(body), allImmediate);
+    }
+
+    public void eval(Interpreter r) throws ContinuationException {
+        Value[] envv=r.createValues(rands.length);
+        int csf=0;
+        while (csf < rands.length) {
+            int cc=Math.min(MANY_FALSES.length, rands.length-csf);
+            System.arraycopy(MANY_FALSES, 0, envv, csf, cc);
+            csf+=cc;
+        }
+
+        r.env=new LexicalEnvironment(r.createValues(rands.length), r.env);
+        super.eval(r);
+    }
+
+    public Value express() {
+        Pair args=EMPTYLIST;
+        for (int i=rands.length-1; i>=0; i--) {
+            args=new Pair(((rands[i]==null) ? FALSE : rands[i].express()), args);
+        }
+        args = new Pair(exp.express(), new Pair(nxp.express(), args));
+        return new Pair(sym("Letrec-exp"), args);
+    }
+
+    public LetrecExp() {}
 }
+
+
+

@@ -49,28 +49,31 @@
             (lambda (exp console-in console-out writer)
               ;;eval
               (let ([val (eval exp)])
-                (cond [(void? val) (repl/read console-in console-out writer)]
+                (cond [(void? val) (repl/prompt console-in console-out writer)]
                       [(circular? val)
                        (begin 
                          (display "{Refusing to print non-terminating structure}")
                          (newline)
-                         (repl/read console-in console-out writer))]
+                         (repl/prompt console-in console-out writer))]
                       [else 
                        (begin 
                          ;;print
                          (writer val console-out)
                          (newline console-out)
                          ;;loop
-                         (repl/read console-in console-out writer))])))]
-           [repl/read
+                         (repl/prompt console-in console-out writer))])))]
+           [repl/prompt
             (lambda (console-in console-out writer)
               (display "> " console-out)
+              (repl/read console-in console-out writer))]
+           [repl/read
+            (lambda (console-in console-out writer)
               ;;read
               (let ([exp (read-with-annotations console-in #t)])
                 (if (eof-object? exp) 
                     (if ((current-exit-handler))
                         (void)
-                        (repl/read console-in console-out writer))
+                        (repl/prompt console-in console-out writer))
                     (repl/eval-print-loop exp console-in 
                                           console-out writer))))])
     (lambda args
@@ -94,14 +97,14 @@
                (call/cc 
                 (lambda (k)
                   (set! repl-start k)))
-               (let loop ()
+               (let loop ((entry-point repl/read))
                  (call/fc
                   (lambda ()
-                    (repl/read console-in console-out pretty-print)
+                    (entry-point console-in console-out pretty-print)
                     (void))
                   (lambda (m e f)
                     ((current-default-error-handler) m e f console-out)
-                    (loop)))))))
+                    (loop repl/prompt)))))))
           (if ((current-exit-handler))
               (void)
               (repl-start)))))))

@@ -75,7 +75,7 @@ public class Compiler extends Util {
 
     static final int
 	APP=-1, LAMBDA = 0, _IF=1, BEGIN=2, QUOTE=3, SET=4, DEFINE=5,
-	MAKEANNOTATION=6,
+	MAKEANNOTATION=6, LETREC=7,
 	
 	TAIL=1, COMMAND=2, PREDICATE=4, REALTAIL=8;
 
@@ -83,6 +83,7 @@ public class Compiler extends Util {
 
     public static AssociativeEnvironment addSpecialForms(AssociativeEnvironment menv) {
         extendenv(menv,"lambda", LAMBDA);
+        extendenv(menv,"letrec", LETREC);
         extendenv(menv,"if", _IF);
         extendenv(menv,"begin", BEGIN);
         extendenv(menv,"quote", QUOTE);
@@ -217,14 +218,34 @@ public class Compiler extends Util {
                     formals=new Symbol[] {(Symbol)expr.car};
                 }
 
+                
                 expr=(Pair)expr.cdr;
-                if (expr.cdr != EMPTYLIST)
-                    expr=list(new Pair(Util.BEGIN, expr));
-
-                tmp=compile(r, expr.car, new ReferenceEnv(formals, rt),
-                            TAIL | LAMBDA | REALTAIL, env, null);
-
+                tmp=compileLambdaBody(r, expr, new ReferenceEnv(formals, rt), 
+                                      TAIL | LAMBDA | REALTAIL, env);
                 rv=new LambdaExp(formals.length, tmp, infArity);
+                break;
+            case LETREC:
+                Pair tmpp=(Pair)expr.car;
+                
+                Vector formv=new Vector();
+                Vector expv=new Vector();
+
+                while (tmpp != EMPTYLIST) {
+                    Pair bp=(Pair)tmpp.car;
+                    formv.add(bp.car);
+                    expv.add(((Pair)bp.cdr).car);
+                    tmpp=(Pair)tmpp.cdr;
+                }
+                
+                formals=new Symbol[formv.size()];
+                Expression[] rhses=new Expression[expv.size()];
+                formv.copyInto(formals);
+                expv.copyInto(rhses);
+
+                expr=(Pair)expr.cdr;
+
+                rv=compileLetrec(r, formals, rhses, expr, 
+                                 rt, env);
                 break;
             case _IF:
                 tmp=compile(r, expr.car, rt, PREDICATE, env, null);
@@ -307,6 +328,33 @@ public class Compiler extends Util {
         return rv;
     }
 
+    public Expression compileLambdaBody(Interpreter r, Pair bodyp, 
+                                        ReferenceEnv rt, int context,
+                                        AssociativeEnvironment env) 
+        throws ContinuationException {
+        Expression body;
+        if (bodyp.cdr != EMPTYLIST)
+            body=new Pair(Util.BEGIN, bodyp);
+        else
+            body=bodyp.car;
+        
+        return compile(r, body, rt, 
+                       TAIL | LAMBDA | REALTAIL, env, null);
+    }
+
+    public Expression compileLetrec(Interpreter r,
+                                    Symbol[] formals, Expression[] rhses,
+                                    Pair body, ReferenceEnv rt, 
+                                    AssociativeEnvironment env) 
+        throws ContinuationException {
+        ReferenceEnv nrt=new ReferenceEnv(formals, rt);
+        boolean allImmediate=compileExpressions(r, rhses, nrt, 0, env);
+        return new LetrecExp(rhses, 
+                             compileLambdaBody(r, body, nrt, TAIL | LAMBDA,
+                                               env), allImmediate);
+                             
+    }
+
     public final Expression application(Expression rator, Expression rands[], 
                                         int context, Pair annotation) {
         if (rator instanceof Value && 
@@ -335,11 +383,16 @@ public class Compiler extends Util {
         return new AppExp(lastRand, rands, nxp, allImmediate);
     }
 
-    void compileExpressions(Interpreter r, Expression exprs[], ReferenceEnv rt,
-                            int context, AssociativeEnvironment env)
+    boolean compileExpressions(Interpreter r, Expression exprs[], 
+                               ReferenceEnv rt,
+                               int context, AssociativeEnvironment env)
     throws ContinuationException {
-        for (int i=exprs.length-1; i>=0; i--)
+        boolean allImmediate=true;
+        for (int i=exprs.length-1; i>=0; i--) {
             exprs[i]=compile(r, exprs[i], rt, context, env, null);
+            allImmediate&=exprs[i] instanceof Immediate;
+        }
+        return allImmediate;
     }
 
     Expression compileBegin(Interpreter r, Vector v, int context,

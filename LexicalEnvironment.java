@@ -46,6 +46,11 @@ public class LexicalEnvironment extends Value {
         this.vals=ZV;
     }
 
+    public LexicalEnvironment(Value[] vals, LexicalEnvironment parent) {
+        this.vals=vals;
+        this.parent=parent;
+    }
+
     public LexicalEnvironment(Interpreter r, Closure c) 
 	throws ContinuationException {
         parent=c.env;

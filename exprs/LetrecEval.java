@@ -16,6 +16,7 @@
  * Scott G. Miller.  All Rights Reserved.
  * 
  * Contributor(s):
+ * Matthias Radestock 
  * 
  * Alternatively, the contents of this file may be used under the
  * terms of the GNU General Public License Version 2 or later (the
@@ -29,10 +30,36 @@
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-package sisc;
+package sisc.exprs;
 
-public interface Version {
+import sisc.*;
+import sisc.data.*;
+import java.io.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 
-    String VERSION = "b1.5.1";
+public class LetrecEval extends Expression {
 
+    public Expression body;
+    public LetrecEval(Expression body) {
+        this.body=body;
+    }
+
+    public void eval(Interpreter r) throws ContinuationException {
+        r.nxp=body;
+        r.env.vals=r.vlr;
+    }
+
+    public Value express() {
+        return list(sym("Letrec-Eval"), body.express());
+    }
+
+    public LetrecEval() {}
+    public void serialize(Serializer s) throws IOException {
+        s.writeExpression(body);
+    }
+
+    public void deserialize(Deserializer s) throws IOException {
+        body=s.readExpression();
+    }
 }

@@ -592,30 +592,6 @@
             `(compile-in-annotation (begin ,@exps) ,src)
             `(begin ,@exps)))))
 
-(define build-letrec
-  (lambda (src vars val-exps body-exp)
-    (if (null? vars)
-        (if src
-            `(compile-in-annotation ,body-exp ,src)
-            body-exp)
-        (if src
-            `(compile-in-annotation 
-              ,(cons (list 'lambda vars
-                           (append (cons 'begin
-                                         (map (lambda (v e)
-                                                (list 'set! v e))
-                                              vars val-exps))
-                                   (list body-exp)))
-                     (map (lambda (x) #f) vars))
-              ,src)
-            (cons (list 'lambda vars
-                        (append (cons 'begin
-                                      (map (lambda (v e)
-                                             (list 'set! v e))
-                                           vars val-exps))
-                                (list body-exp)))
-                  (map (lambda (x) #f) vars))))))
-
 ;(define build-letrec
 ;  (lambda (src vars val-exps body-exp)
 ;    (if (null? vars)
@@ -624,9 +600,33 @@
 ;            body-exp)
 ;        (if src
 ;            `(compile-in-annotation 
-;              (letrec ,(map list vars val-exps) ,body-exp)
+;              ,(cons (list 'lambda vars
+;                           (append (cons 'begin
+;                                         (map (lambda (v e)
+;                                                (list 'set! v e))
+;                                              vars val-exps))
+;                                   (list body-exp)))
+;                     (map (lambda (x) #f) vars))
 ;              ,src)
-;            `(letrec ,(map list vars val-exps) ,body-exp)))))
+;            (cons (list 'lambda vars
+;                        (append (cons 'begin
+;                                      (map (lambda (v e)
+;                                             (list 'set! v e))
+;                                           vars val-exps))
+;                                (list body-exp)))
+;                  (map (lambda (x) #f) vars))))))
+
+(define build-letrec
+  (lambda (src vars val-exps body-exp)
+    (if (null? vars)
+        (if src
+            `(compile-in-annotation ,body-exp ,src)
+            body-exp)
+        (if src
+            `(compile-in-annotation 
+              (letrec ,(map list vars val-exps) ,body-exp)
+              ,src)
+            `(letrec ,(map list vars val-exps) ,body-exp)))))
 
 (define build-body
   (lambda (src vars val-exps body-exp)

@@ -51,8 +51,13 @@ public abstract class Util implements Version {
     public static EmptyList EMPTYLIST=EmptyList.EMPTYLIST;
     public static SchemeVoid VOID=SchemeVoid.VOID;
     public static SchemeBoolean
-    TRUE=SchemeBoolean.TRUE,
+        TRUE=SchemeBoolean.TRUE,
          FALSE=SchemeBoolean.FALSE;
+
+    protected static final Value[] MANY_FALSES=new Value[] {
+        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE };
+
 
     public static Symbol
         SETBANG=Symbol.get("set!"),

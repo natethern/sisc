@@ -31,9 +31,9 @@
                                    (syntax name)
                                    (native-library-binding-names m))))
            (syntax (module name (def ...)
-		     (define *module* (load-native-library class))
+		   ;  (define *module* (load-native-library class))
              (define def (native-library-binding
-                          *module* (quote def)))
+                          (load-native-library class) #;*module* (quote def)))
 		     ...))))))))
 
 (native-module logicops   "sisc.modules.SLogicOps")
