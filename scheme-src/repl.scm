@@ -80,7 +80,9 @@
          (lambda (k)
            (_exit-handler (cons k (_exit-handler)))
            (begin
-             (call/cc (lambda (k) (set! repl-start k)))
+             (call/cc (lambda (k) 
+                        (set! repl-start k)
+                        (putprop 'repl '*debug* k)))
              (let loop ()
                (with/fc (lambda (m e)
                           ((current-default-error-handler) m e)
