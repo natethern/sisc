@@ -43,8 +43,6 @@
             (apply proc (map car lists))
             (apply for-each (cons proc (map cdr lists)))))))
 
-(define (exit) #!eof)
-
 (define (eof-object? x) (eq? x #!eof))
 ;;;;;;;;; Standard Scheme functions
 

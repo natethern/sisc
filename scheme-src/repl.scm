@@ -50,10 +50,6 @@
 	      (let* ([exp (read-with-annotations console-in #t)]
 		     [val (eval exp)])
 		(cond [(void? val) (repl-loop console-in console-out writer)]
-		      [(eof-object? val) 
-		       (if ((current-exit-handler))
-			   (void)
-			   (repl-loop console-in console-out writer))]
 		      [(circular? val)
 		       (begin 
 			 (display "{Refusing to print non-terminating structure}")
@@ -65,27 +61,41 @@
 			 (newline console-out)
 			 (repl-loop console-in console-out writer))])))])
     (lambda args
-      (if (not (getprop 'first-start '*sisc*))
-          (begin
-            (putprop 'first-start '*sisc* #t)
-            (unload-dynamic-wind)
-            (set! _separator (getprop 'file.separator '*environment-variables*))
-            (current-url
-             (string-append "file:"
-                            (let ([dir (getprop 'user.dir
-                                                '*environment-variables*)])
-                              (if dir
-                                  (string-append dir _separator)
-                                  "."))))))
-      (letrec ([console-in (if (null? args) (current-input-port)
-                               (car args))]
-	       [console-out (if (null? args) (current-output-port)
-				(cadr args))])
-	(let loop ()
-	  (call/fc
-	   (lambda ()
-	     (repl-loop console-in console-out pretty-print)
-	     (void))
-	   (lambda (m e f)
-	     ((current-default-error-handler) m e f console-out)
-	     (loop))))))))
+      (let ([repl-start #f])
+	(if (not (getprop 'first-start '*sisc*))
+	    (begin
+	      (putprop 'first-start '*sisc* #t)
+	      (unload-dynamic-wind)
+	      (set! _separator (getprop 'file.separator '*environment-variables*))
+	      (current-url
+	       (string-append "file:"
+			      (let ([dir (getprop 'user.dir
+						  '*environment-variables*)])
+				(if dir
+				    (string-append dir _separator)
+				    "."))))))
+	(letrec ([console-in (if (null? args) (current-input-port)
+				 (car args))]
+		 [console-out (if (null? args) (current-output-port)
+				  (cadr args))])
+	  (call/cc 
+	   (lambda (k)
+	     (putprop 'exit-handler '*sisc* (parameterize k))
+	     (begin
+	       (call/cc 
+		(lambda (k)
+		  (set! repl-start k)))
+	       (let loop ()
+		 (call/fc
+		  (lambda ()
+		    (repl-loop console-in console-out pretty-print)
+		    (void))
+		  (lambda (m e f)
+		    ((current-default-error-handler) m e f console-out)
+		    (loop)))))))
+	  (if ((current-exit-handler))
+	      (void)
+	      (repl-start)))))))
+
+(define (exit)
+  (((getprop 'exit-handler '*sisc*)) (void)))

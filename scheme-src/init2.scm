@@ -323,7 +323,7 @@
 
 (define (with-input-from-file file thunk)
   (call-with-input-file file
-    (lambda (port) (with-input-form-port port thunk))))
+    (lambda (port) (with-input-from-port port thunk))))
 
 (define (with-output-to-file file thunk)
   (call-with-output-file file
