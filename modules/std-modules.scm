@@ -414,6 +414,13 @@
   (define-method (-> ((meta <string>) _))   ->string)
   (define-method (-> ((meta <vector>) _))   ->vector)
   (define-method (-> ((meta <symbol>) _))   ->symbol)
+  ;;ensure that methods on java.lang.Class are found when generic
+  ;;procedures are invoked on Java classes. We accomplish this by
+  ;;calling |applicable-methods| on a (*any*) generic procedure with
+  ;;the type of <jclass> as one of the parameter types. As a side
+  ;;effect this will make java.lang.Class's methods known to the
+  ;;generic procedure dispatch mechanism
+  (applicable-methods -> (list (meta <jclass>)))
   )
 
 (module libraries
