@@ -162,7 +162,8 @@ public class Parser extends Util implements Tokens {
 
             o=readList(is, state, def, flags);
 	    if (annotate && 
-                produceAnnotations(flags) && o instanceof Pair && line>=0) {
+                produceAnnotations(flags) && o instanceof Pair && line>=0
+                && o!=EMPTYLIST) {
 		o=new AnnotatedExpr((Expression)o, 
 				    list(new Pair(LINE, Quantity.valueOf(line)),
 					 new Pair(COLUMN, Quantity.valueOf(col)),
