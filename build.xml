@@ -366,6 +366,10 @@
 
     <copy todir="${dist}/full/sisc/scheme-src/srfi-22/"
           file="${basedir}/scheme-src/srfi/srfi-22/srfi-22.sh"/>
+    <chmod file="${dist}/full/sisc/scheme-src/srfi-22/srfi-22.sh"
+           perm="ugo+rx"/>
+    <chmod file="${dist}/full/sisc/install-srfi22.sh"
+           perm="ugo+rx"/>
     <copy todir="${dist}/full/sisc/"
           file="${basedir}/dist/install-srfi22.sh"/>
 
