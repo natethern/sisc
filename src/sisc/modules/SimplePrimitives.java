@@ -52,6 +52,7 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define("compact-string-rep", COMPACTSTRINGREP);
             define("complex?", COMPLEXQ);
             define("cons", CONS);
+            define("cons-immutable", CONSIMMUTABLE);
             define("cos", COS);
             define("denominator", DENOMINATOR);
             define("environment?", ENVIRONMENTQ);
@@ -65,6 +66,8 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define("find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
             define("floor", FLOOR);
             define("imag-part", IMAGPART);
+            define("immutable-pair?", IMMUTABLEPAIRQ);
+            define("immutable-vector?", IMMUTABLEVECTORQ);
             define("inexact->exact", INEXACT2EXACT);
             define("inexact?", INEXACTQ);
             define("integer->char", INTEGER2CHAR);
@@ -79,6 +82,7 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define("make-rectangular", MAKERECTANGULAR);
             define("make-string", MAKESTRING);
             define("make-vector", MAKEVECTOR);
+            define("make-immutable-vector", MAKEIMMUTABLEVECTOR);
             define("native-library-name", NLNAME);
             define("native-library-version", NLVERSION);
             define("max-float-precision", MAXFLOATPRECISION);
@@ -241,6 +245,10 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
         case PAIRQ:
             return truth(v1 instanceof Pair &&
                          v1!=EMPTYLIST);
+        case IMMUTABLEPAIRQ:
+            return truth(v1 instanceof ImmutablePair);
+        case IMMUTABLEVECTORQ:
+            return truth(v1 instanceof ImmutableVector);
         case ADD: 
         case MUL: return num(v1);
         case SUB: return num(v1).negate();
@@ -312,6 +320,8 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             return new SchemeString(new char[num(v1).indexValue()]);
         case MAKEVECTOR:
             return new SchemeVector(num(v1).indexValue());
+        case MAKEIMMUTABLEVECTOR:
+            return new ImmutableVector(vec(v1).vals);
         case NUMERATOR: return num(v1).numerator();
         case DENOMINATOR: return num(v1).denominator();
         case REALPART: return num(v1).realpart();
@@ -358,6 +368,8 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
         case EQV: return truth(v1.eqv(v2));
         case CONS:
             return new Pair(v1, v2);
+        case CONSIMMUTABLE:
+            return new ImmutablePair(v1, v2);
         case EQUAL:
             return truth(v1.valueEqual(v2));
         case EXPTYPE:

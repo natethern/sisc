@@ -2,7 +2,7 @@ package sisc.modules;
 
 interface Primitives {
 
-    //next: 130
+    //next: 134
     int ACOS = 23,
         ADD = 114,
         APPLY = 121,
@@ -26,6 +26,7 @@ interface Primitives {
         COMPACTSTRINGREP = 7,
         COMPLEXQ = 37,
         CONS = 85,
+        CONSIMMUTABLE = 131,
         COS = 20,
         CURRENTWIND = 70,
         DENOMINATOR = 67,
@@ -48,6 +49,8 @@ interface Primitives {
         GETPROP = 109,
         GRT = 118,
         IMAGPART = 69,
+        IMMUTABLEPAIRQ = 132,
+        IMMUTABLEVECTORQ = 133,
         INEXACT2EXACT = 47,
         INEXACTQ = 39,
         INTEGER2CHAR = 52,
@@ -66,6 +69,7 @@ interface Primitives {
         MAKERECTANGULAR = 101,
         MAKESTRING = 99,
         MAKEVECTOR = 65,
+        MAKEIMMUTABLEVECTOR = 130,
         MAXFLOATPRECISION = 9,
         MINFLOATPRECISION = 10,
         MUL = 11,
