@@ -16,7 +16,7 @@ public class SNative extends ModuleAdapter {
         
         SUBSTRING=17, STRINGORDER=18, STRINGORDERCI=19,
         STRINGUPCASE=20, STRINGDOWNCASE=21,
-        MAPHELP1=22, MAPHELP2=23, REVERSE=24;
+        MAPCDAR=22, MAPCAAR=23, REVERSE=24;
     
     static long symid=0;
 
@@ -42,8 +42,8 @@ public class SNative extends ModuleAdapter {
         define("substring", SUBSTRING);
         define("values", VALUES);
         define("vector", VECTOR);
-        define("_maphelp1", MAPHELP1);
-        define("_maphelp2", MAPHELP2);
+        define("map-cdar", MAPCDAR);
+        define("map-caar", MAPCAAR);
     }
 
     public static final Value cadr(Value p) {
@@ -129,6 +129,24 @@ public class SNative extends ModuleAdapter {
                 case STRINGDOWNCASE:
                     str=str(f.vlr[0]);
                     return new SchemeString(str.asString().toLowerCase());
+                case MAPCDAR:
+                    Value lists=f.vlr[0];
+                    Pair c=EMPTYLIST;
+                    while (lists != EMPTYLIST) {
+                        Pair p1=pair(lists);
+                        c=new Pair(((Pair)p1.car).cdr, c);
+                        lists=p1.cdr;
+                    }
+                    return reverse(c);
+                case MAPCAAR:
+                    lists=f.vlr[0];
+                    c=EMPTYLIST;
+                    while (lists != EMPTYLIST) {
+                        Pair p1=pair(lists);
+                        c=new Pair(((Pair)p1.car).car, c);
+                        lists=p1.cdr;
+                    }
+                    return reverse(c);
                 case REVERSE:
                     return reverse(pair(f.vlr[0]));
                 default:
@@ -207,24 +225,6 @@ public class SNative extends ModuleAdapter {
                     str=str(f.vlr[0]);
                     str2=str(f.vlr[1]);
                     return Quantity.valueOf(str.asString().compareToIgnoreCase(str2.asString()));
-                case MAPHELP1:
-                    Value lists=f.vlr[0];
-                    Pair c=pair(f.vlr[1]);
-                    while (lists != EMPTYLIST) {
-                        p1=pair(lists);
-                        c=new Pair(((Pair)p1.car).cdr, c);
-                        lists=p1.cdr;
-                    }
-                    return reverse(c);
-                case MAPHELP2:
-                    lists=f.vlr[0];
-                    c=pair(f.vlr[1]);
-                    while (lists != EMPTYLIST) {
-                        p1=pair(lists);
-                        c=new Pair(((Pair)p1.car).car, c);
-                        lists=p1.cdr;
-                    }
-                    return reverse(c);
                 default:
                     throwArgSizeException();
                 }
