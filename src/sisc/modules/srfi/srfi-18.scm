@@ -118,13 +118,15 @@
     (if timeout
         (mutex/lock! mutex (time->ms timeout))
         (mutex/lock! mutex))
-    (let ([oldstate (mutex-state mutex)])
+    (let ([oldstate (mutex-state mutex)]
+          [threads-mutexes (annotation thread 'mutexes '())])
       (if thread
           (begin
             (set-annotation! mutex 'owner thread)
             (set-annotation! mutex 'state thread)
-            (set-annotation! thread 'mutexes 
-                             (cons mutex (annotation thread 'mutexes '()))))
+            (unless (memq mutex threads-mutexes)
+              (set-annotation! thread 'mutexes 
+                               (cons mutex threads-mutexes))))
           (set-annotation! mutex 'state 'not-owned))
       (if (eq? oldstate 'abandoned)
           (raise 'abandoned-mutex mutex)))))
@@ -133,7 +135,7 @@
   (let* ([condvar (and (not (null? args))
                        (car args))]
          [timeout (and condvar (let ([v (and (not (null? (cdr args)))
-                                            (cadr args))])
+                                             (cadr args))])
                                 (and v (time->ms v))))])
     (if condvar
         (if timeout
@@ -143,14 +145,17 @@
       (set-annotation! mutex 'state
                        (if owner 'not-abandoned 'abandoned))
       (let ([mutexes (annotation owner 'mutexes '())])
-        (unless (null? mutexes)
-          (if (and (null? (cdr mutexes))
-                   (eq? (car mutexes) mutex))
-              (set-annotation! owner 'mutexes '())
-              (do ([ls mutexes (cdr ls)])
-                  ((null? (cdr ls)))
-                (if (eq? (cadr ls) mutex)
-                    (set-cdr! ls (cddr ls))))))))
+        (cond [(null? mutexes)]
+              [(eq? (car mutexes) mutex)
+               (set-annotation! owner 'mutexes (cdr mutexes))]
+              [(and (null? (cdr mutexes))
+                    (eq? (car mutexes) mutex))
+               (set-annotation! owner 'mutexes '())]
+              [else
+               (do ([ls mutexes (cdr ls)])
+                   ((null? (cdr ls)))
+                 (if (eq? (cadr ls) mutex)
+                     (set-cdr! ls (cddr ls))))])))
     (mutex/unlock! mutex)))
 
 ; Condition Variables
