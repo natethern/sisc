@@ -482,27 +482,35 @@ whose mangled name matches that of the function. The name mangling is
 performed in order to give Java method names a more Scheme-like
 appearance. The rules are as follows:
 <orderedlist spacing="compact">
-<listitem>
+            <listitem>
               <para>
 A <literal>-</literal> is inserted between a lower-case character and
 an upper-case character. Non-alphabetic characters are considered to
 be lower-case characters.
 </para>
             </listitem>
-<listitem>
+            <listitem>
               <para>
 The whole name is down-cased, e.g. <function>fooBarBaz</function>
 becomes <function>foo-bar-baz</function>, and
 <function>FooBar</function> becomes <function>foo-bar</function>.
 </para>
-              </listitem>
-<listitem>
+            </listitem>
+            <listitem>
               <para>
 A <literal>!</literal> is appended if the original name started with
 <function>set</function> followed by an upper-case character,
 e.g. <function>setFoo</function> becomes <function>set-foo!</function>.
 </para>
-              </listitem>
+            </listitem>
+            <listitem>
+              <para>
+A <literal>?</literal> is appended if the original name started with
+<function>is</function> followed by an upper-case character. The
+<function>is</function> is dropped , e.g. <function>isFoo</function>
+becomes <function>foo?</function>.
+</para>
+            </listitem>
 </orderedlist>
 The names of some Java methods, when mangled, clash with names of
 standard Scheme functions. <function>define-generic</function> can

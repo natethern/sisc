@@ -18,7 +18,9 @@ characters.
 ==> "fooBarBaz" becomes "foo-bar-baz", "FooBar" becomes "foo-bar"
 3) a '!' is appended if the original name started with "set" followed
 by an upper-case character.
-
+4) a '?' is appended if the original name started with "is" followed
+by an upper-case character. The "is" is dropped, so "isFoo" becomes
+"foo?".
 
 (define-method (<genf> [(next: <next-method>)]
                        (<type> <param>) ... [ . <rest>]) . <body>)
