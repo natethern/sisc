@@ -467,12 +467,12 @@
 	      (if (null? args) 
                   x1
 		  (_min_max < x1 args
-			    (inexact? (car args))))))
+			    (inexact? x1)))))
   (set! max (lambda (x1 . args)
 	      (if (null? args) 
                   x1
 		  (_min_max > x1 args
-			    (inexact? (car args)))))))
+			    (inexact? x1))))))
 
 (define (negative? n) (< n 0))
 (define (positive? n) (> n 0))
