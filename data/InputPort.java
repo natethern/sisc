@@ -52,8 +52,15 @@ public class InputPort extends NamedValue {
     }
 
     public Value read(char[] buff, int count) throws ContinuationException {
+        int offs=0;
+        if (pushback!=-1) {
+            buff[0]=(char)pushback;
+            pushback=-1;
+            count--;
+            offs=1;
+        }
         try {
-            int s=r.read(buff, 0, count);
+            int s=r.read(buff, offs, count);
             return (s==-1 ? (Value)EOFObject.EOF : (Value)Quantity.valueOf(s));
 
         } catch (IOException e) {
@@ -92,7 +99,7 @@ public class InputPort extends NamedValue {
         r.reset();
     }
 
-    public String display(){
+    public String display() {
         return displayNamedOpaque("input-port");
     }
 

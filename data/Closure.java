@@ -54,6 +54,21 @@ public class Closure extends Procedure {
         env=(LexicalEnvironment)s.readExpression();
         body=s.readExpression();
     }
+
+    /*
+    //Profiling
+    long ec=0;
+
+    static {
+        System.runFinalizersOnExit(true);
+    }
+
+    protected void finalize() {
+        if (name!=null) {
+            System.err.println("C"+justify(""+ec, 10, ' ')+" "+name);
+        }
+    }           
+    */
 }
 
 
