@@ -164,7 +164,9 @@
             (out (reverse-string-append result) col)
             (if (pair? obj)
               (pp-pair obj col extra)
-              (pp-list (vector->list obj) (wr (vector-length obj) 
+              (pp-list (vector->list obj) (if (vector-length-prefixing)
+					      (wr (vector-length obj) 
+						  (out "#" col))
 					      (out "#" col)) extra pp-expr))))
         (wr obj col)))
 
