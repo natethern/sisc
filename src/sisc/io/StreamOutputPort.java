@@ -12,16 +12,22 @@ public class StreamOutputPort extends AutoflushOutputPort {
         this.out=out;
     }
 
+    public void write(byte[] b, int offset, int length) throws IOException {
+        writeHelper(b, offset, length);
+        if (autoflush) flush();
+    }
+
     protected void writeHelper(char v) throws IOException {
         out.write(v);
     }
 
-    public void write(byte[] b, int offset, int length) throws IOException {
-        out.write(b, offset, length);
-    }
-
     protected void writeHelper(String s) throws IOException {
         out.write(s.getBytes("UTF-8"));
+    }
+
+    protected void writeHelper(byte[] b, int offset, int length)
+        throws IOException {
+        out.write(b, offset, length);
     }
 
     public void flush() throws IOException {
