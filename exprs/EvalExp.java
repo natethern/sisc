@@ -20,12 +20,10 @@ public class EvalExp extends Expression {
     public void eval(Interpreter r) throws ContinuationException {
         if (preImmediate) {
             r.acc = pre.getValue(r);
-            r.nxp=post;
-            post.eval(r);
+            r.next(post);
         } else {
             r.push(post);
-            r.nxp=pre;
-            pre.eval(r);
+            r.next(pre);
         }
     }
 

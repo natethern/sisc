@@ -127,6 +127,11 @@ public class Interpreter extends Util {
         }
     }
 
+    public final void next(Expression nextExpr) throws ContinuationException {
+        nxp=nextExpr;
+        nextExpr.eval(this);
+    }
+
     public final void newVLR(int size) {
         vlk=false;
         cap=null;

@@ -16,8 +16,7 @@ public class IfEval extends Expression {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        r.nxp = truth(r.acc) ? conseq : altern;
-        r.nxp.eval(r);
+        r.next(truth(r.acc) ? conseq : altern);
     }
 
     public Value express() {

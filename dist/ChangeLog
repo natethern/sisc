@@ -3,6 +3,12 @@
 	* Fixed problem calling methods defined on java.lang.Class via
 	  generic procedures.
 
+2003-03-01  Scott G. Miller <scgmille@freenetproject.org>
+
+	* LexicalEnvironment recycling optimization.
+
+	* Limited trampolining optimization.
+
 2003-02-25  SISC 1.7.5 Released
 
 2003-02-20  Scott G. Miller  <scgmille@freenetproject.org>

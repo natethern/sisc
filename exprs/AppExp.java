@@ -30,8 +30,7 @@ public class AppExp extends Expression {
             for (int i = l-1; i>=0; i--) {
                 r.vlr[i] = rands[i].getValue(r);
             }
-            r.nxp=nxp;
-            nxp.eval(r);
+            r.next(nxp);
         } else {
             r.push(nxp);
             // Load the immediates from right to left
@@ -41,8 +40,7 @@ public class AppExp extends Expression {
                 if (ex != null)
                     r.vlr[i] = ex.getValue(r);
             }
-            r.nxp=exp;
-            exp.eval(r);
+            r.next(exp);
         }
     }
 

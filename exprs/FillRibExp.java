@@ -26,12 +26,10 @@ public class FillRibExp extends Expression {
         //r.vlr[pos]=r.acc;
         if (lastAndRatorImmediate) {
             r.acc=exp.getValue(r);
-            r.nxp=nxp;
-            nxp.eval(r);
+            r.next(nxp);
         } else {
             r.push(nxp);
-            r.nxp=exp;
-            exp.eval(r);
+            r.next(exp);
         }
     }
 
