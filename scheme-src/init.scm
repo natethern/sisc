@@ -211,7 +211,7 @@
 	      [(equal? (substring osn 0 3) "ms-") 'ms-dos]
 	      [(equal? (substring osn 0 3) "uni") 'unix]
 	      [(equal? (substring osn 0 3) "lin") 'unix]
-	      [(equal? (substring osn 0 3) "os/") 'os2]
+	      [(equal? (substring osn 0 4) "os/2") 'os2]
 	      [(equal? (substring osn 0 3) "vax") 'vax])
 	'unix)))
 
