@@ -38,17 +38,20 @@ public class BuiltinProcedure extends Procedure {
             if (v!=null) r.acc=v;
             if (r.nxp == null) {
                 r.returnVLR();
-	    }
+            }
         } catch (ArrayIndexOutOfBoundsException np) {
             error(r, name, liMessage(SISCB, "incorrectargcount"));
         } catch (ClassCastException cc) {
             error(r, name, liMessage(SISCB,"gotunexpectedvalue",
-				     cc.getMessage()));
-	} catch (NestedPrimRuntimeException npr) {
-	    error(r, name, npr);
+                                     cc.getMessage()));
+        } catch (NestedPrimRuntimeException npr) {
+            error(r, name, npr);
         } catch (RuntimeException re) {
-            error(r, name, re.getMessage());
-        } 
+            re.printStackTrace();
+            String msg = re.getMessage();
+            if (msg == null) msg = re.toString();
+            error(r, name, msg);
+        }
         //time+=System.currentTimeMillis()-start;
     }
 

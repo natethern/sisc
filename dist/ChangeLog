@@ -1,3 +1,10 @@
+2002-09-26  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed bug that caused SISC to terminate when a builtin procedure
+	  threw a NullPointerException
+
+2002-09-25  Released SISC b1.5.6
+
 2002-09-24  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Re-added block IO (now in the 'block-io' module)
