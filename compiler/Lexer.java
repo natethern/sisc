@@ -151,14 +151,14 @@ public class Lexer implements Tokens {
 
 	switch (c = is.read()) {
 	case '"': return c | 0x80000000;
-	case '0': return 0x0;
-	case 'a': return 0x7;
-	case 'b': return 0x8;
-	case 't': return 0x9;
-	case 'n': return 0xa;
-	case 'v': return 0xb;
-	case 'f': return 0xc;
-	case 'r': return 0xd;
+	//case '0': return '\0';//enabling this breaks a few things
+	//case 'a': return '\a';//not part of unicode
+	case 'b': return '\b';
+	case 't': return '\t';
+	case 'n': return '\n';
+	//case 'v': return '\v';//not part of unicode
+	case 'f': return '\f';
+	case 'r': return '\r';
         default: return c;
 	}
     }
