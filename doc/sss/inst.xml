@@ -138,6 +138,101 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
       its operation.  See <xref linkend="system-properties"/> 
       for a list of these properties and their meanings.
     </para>
+    <sect2 id="commandline">
+      <title>Command-line switches</title>
+      <para>
+        &SISC; can, in addition to loading Scheme source programs,
+        also accept a few command-line switches to change its
+        behavior.  Any
+        non-switch argument is considered a Scheme source file to load
+        on startup, until the <emphasis>end of options</emphasis>
+        characters  "--" are reached.  Any item
+        after those characters are considered arguments to the
+        function specified in the "call-with-args" switch.  
+      </para>
+      <para>
+        All command-line switches have both a short and long form.
+        These forms are equivalent in meaning.
+      </para>
+      <table id="commandline-switches">
+        <title>&SISC; Commandline Switches</title>
+        <tgroup cols='3' align='left' colsep='1' rowsep='1'>
+          <colspec colname='Long-switch'/>
+          <colspec colname='Short-switch'/>
+          <colspec colname='Meaning'/>
+          <thead>
+            <row>
+              <entry>Long Switch</entry>
+              <entry>Short Switch</entry>
+              <entry>Switch meaning</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><literal>--call-with-args &lt;name&gt;</literal></entry>
+              <entry><literal>-c &lt;name&gt;</literal></entry>
+              <entry>
+                Call the top-level procedure <literal>name</literal> 
+                with the remaining command-line arguments after the
+                "--" sequence.
+              </entry>
+            </row>          
+            <row>
+              <entry><literal>--eval &lt;expression&gt;</literal></entry>
+              <entry><literal>-e &lt;expression&gt;</literal></entry>
+              <entry>
+                Evaluate the provided expression.
+              </entry>
+            </row>          
+            <row>
+              <entry><literal>--no-repl</literal></entry>
+              <entry><literal>-x</literal></entry>
+              <entry>
+                Exit after loading all the Scheme source files and
+                processing all command-line switches.
+              </entry>
+            </row>          
+          </tbody>
+        </tgroup>
+      </table>
+      <para>
+        The order of processing the commandline is as follows:
+      </para>
+      <orderedlist>
+        <listitem>
+          <para>
+            Process the entire commandline, noting the
+            settings of each switch and accumulating all Scheme source
+            files and arguments after the end of options sequence.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Load each Scheme source file found in the order they
+            occured on the commandline.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            If present, evaluate the expression in an
+            <literal>--eval</literal> switch.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            If present, apply the named function in a
+            <literal>--call-with-args</literal> switch to the
+            arguments after the end of options sequence.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            If <literal>--no-repl</literal> was not specified, invoke
+            the REPL, otherwise exit.
+          </para>
+        </listitem>
+      </orderedlist>
+    </sect2>
   </sect1>
   <sect1 id="FileExtensions">
     <title>Running Scheme Programs</title>
