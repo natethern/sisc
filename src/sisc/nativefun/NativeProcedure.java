@@ -27,7 +27,6 @@ public abstract class NativeProcedure extends Procedure implements NamedValue {
             r.acc = doApply(r);
             if (!r.saveVLR) r.forceReturnVLR();
         } catch (ClassCastException cc) {
-            cc.printStackTrace();
             error(
                 r,
                 getName(),
@@ -36,7 +35,6 @@ public abstract class NativeProcedure extends Procedure implements NamedValue {
         } catch (NestedPrimRuntimeException npr) {
             error(r, getName(), npr);
         } catch (RuntimeException re) {
-            re.printStackTrace();
             String msg = re.getMessage();
             if (msg == null)
                 msg = re.toString();
