@@ -313,8 +313,6 @@ public class Compiler extends Util {
 
     public final Expression application(Expression rator, Expression rands[], 
                                         int context, Pair annotation) {
-        boolean nonTail=(context & TAIL) == 0;
-
         if (rator instanceof Value && 
 	    !(rator instanceof Procedure) &&
 	    !(rator instanceof AnnotatedExpr))
@@ -336,7 +334,7 @@ public class Compiler extends Util {
         }
         if (lastRand.annotations != null)
             nxp.annotations = lastRand.annotations;
-        return new AppExp(lastRand, rands, nxp, nonTail, allImmediate);
+        return new AppExp(lastRand, rands, nxp, allImmediate);
     }
 
     void compileExpressions(Interpreter r, Expression exprs[], ReferenceEnv rt,

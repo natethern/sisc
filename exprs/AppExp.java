@@ -38,21 +38,17 @@ import java.io.*;
 
 public class AppExp extends Expression {
     public Expression exp, rands[], nxp;
-    public boolean nonTail, allImmediate;
+    public boolean allImmediate;
 
     public AppExp(Expression exp, Expression rands[], Expression nxp, 
-		  boolean nontail, boolean allImmediate) {
+                  boolean allImmediate) {
         this.exp=exp;
         this.rands=rands;
         this.nxp = nxp;
-        this.nonTail=nontail;
         this.allImmediate=allImmediate;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-
-        if (nonTail) 
-            r.push(null);
 
         r.vlr = r.createValues(rands.length);
 
@@ -80,7 +76,7 @@ public class AppExp extends Expression {
             args=new Pair(((rands[i]==null) ? FALSE : rands[i].express()), args);
         }
         args = new Pair(exp.express(), new Pair(nxp.express(), args));
-        return new Pair(nonTail ? sym("App-exp") : sym("TailApp-exp"), args);
+        return new Pair(sym("App-exp"), args);
     }
 
     public void serialize(Serializer s, DataOutput dos) throws IOException {
@@ -91,8 +87,7 @@ public class AppExp extends Expression {
                 s.serialize(rands[i], dos);
             }
             s.serialize(nxp, dos);
-            s.writeBer((nonTail ? 2 : 0) |
-                       (allImmediate ? 1 : 0), dos);
+            dos.writeBoolean(allImmediate);
         }
     }
 
@@ -108,9 +103,7 @@ public class AppExp extends Expression {
                 rands[i]=s.deserialize(dis);
             }
             nxp=s.deserialize(dis);
-            int flags=s.readBer(dis);
-            allImmediate=(flags & 0x1)!=0;
-            nonTail=(flags & 0x2)!=0;
+            allImmediate=dis.readBoolean();
         }
     }
 }
