@@ -2,7 +2,6 @@ package sisc.modules;
 
 interface Primitives {
 
-    //holes: 126
     //next: 130
     int ACOS = 23,
         ADD = 114,
@@ -15,6 +14,7 @@ interface Primitives {
         BOX = 56,
         BOXQ = 58,
         CALLCC = 54,
+        CALLEC = 126,
         CALLFC = 55,
         CALLWITHVALUES = 106,
         CAR = 15,
