@@ -3,6 +3,8 @@
 	* Added thunk libraries, which resolve a number of issues with
 	  compiled libraries.
 
+	* Fixed Java serialization of annotations.
+
 2003-06-15  Matthias Radestock  <matthias@sorted.org>
 
 	* Merged block IO and binary IO into new binary-io module.
