@@ -461,6 +461,7 @@
               <modifier>public</modifier>
               <type>Value</type>
               <methodname>apply</methodname>        
+              <void/>
             </methodsynopsis>
             <blockquote>
               <para>
