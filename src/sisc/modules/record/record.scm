@@ -94,11 +94,7 @@
 ; procedures used by the macro expansion of DEFINE-RECORD-TYPE.
 
 (define (record-constructor type tags)
-  (let ((size (length (record-type-field-tags type)))
-        (arg-count (length tags))
-        (indexes (map (lambda (tag)
-                        (field-index type tag))
-                      tags)))
+  (let ((arg-count (length tags)))
     (lambda args
       (if (= (length args) arg-count)
           (make-record type args)
