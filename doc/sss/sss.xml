@@ -111,12 +111,15 @@
     </para>
   </appendix>
   <appendix>
-    <title>&R5RS; Liberties</title>
+    <title>&R5RS; Liberties and Violations</title>
     <para>
-      While &SISC; does not fail to conform to &R5RS; in any known
-      way, it does choose to interpret some vague areas of the
-      standard in ways that may allow non-portable code to be written
-      and executed on &SISC;.
+      This section lists all ways in which &SISC; interprets the &R5RS; 
+      specification, where the stanard is not particular clear.  Such
+      interpretations may allow non-portable code to be written and
+      executed on &SISC;
+      Additionally, all known &R5RS; violations are listed.  Actual
+      violations are considered &SISC; bugs, and are considered high
+      priority to be fixed.
     </para>
     <para>
       <orderedlist>
