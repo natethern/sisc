@@ -134,7 +134,7 @@ public class Compiler extends Util {
 		Expression body=compile(r, expr.car, 
 					new ReferenceEnv(formals, rt), 
 					TAIL | LAMBDA, env);
-		return new LambdaExp(formals, body, infArity);
+		return new LambdaExp(formals.length, body, infArity);
 	    case _IF:
 		expr=(Pair)expr.cdr;
 		Expression test=compile(r, expr.car, rt, PREDICATE, env);

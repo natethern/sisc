@@ -41,9 +41,11 @@ public class Primitives extends Module {
 	BOX=115,  CLOSEOUTPUTPORT=80,          EXACT2INEXACT=81,
 	UNBOX=116,CURRENTINPUTPORT=46,         CURRENTOUTPUTPORT=47,      
         FLOOR=83, OPENOUTPUTSTRING=48,         GETOUTPUTSTRING=49, 
-	PUTPROP=121, STRING2UNINTERNEDSYMBOL=66,  OPENINPUTSTRING=50;
+	PUTPROP=121, STRING2UNINTERNEDSYMBOL=66,  OPENINPUTSTRING=50,
+	LIST=122;
 
     public void initialize(Interpreter r) {
+	define(r, "list", LIST);
 	define(r, "*", MUL); 
 	define(r, "+", ADD); 
 	define(r, "-", SUB); 
@@ -283,7 +285,7 @@ public class Primitives extends Module {
 		return new InputPort(new BufferedReader(
 	 				new StringReader(string(f,f.vlr[0]))));
 	    case CALLCC:
-		Procedure kproc=(Procedure)f.vlr[0];
+		Procedure kproc=proc(f,f.vlr[0]);
 		f.vlr=new Value[] {f.stk.capture()};
 
 		kproc.apply(f);
@@ -398,10 +400,10 @@ public class Primitives extends Module {
 		    return new AssociativeEnvironment();
 		else throw new RuntimeException("Unsupported standard version");
 	    case CURRENTEVAL:
-		f.evaluator=(Procedure)f.vlr[0];
+		f.evaluator=proc(f,f.vlr[0]);
 		return VOID;
 	    case CURRENTWRITE:
-		f.writer=(Procedure)f.vlr[0];
+		f.writer=proc(f,f.vlr[0]);
 		return VOID;
 		/*	    case SYNTRANS:
 		f.compiler.syntaxTransform=truth(f.vlr[0]);
@@ -527,16 +529,16 @@ public class Primitives extends Module {
 		f.nxp=f.compile(f.vlr[0], env(f,f.vlr[1]));
 		return VOID;
 	    case CALLFC:
-		Procedure proc=(Procedure)f.vlr[0];
-		Procedure ehandler=(Procedure)f.vlr[1];
+		Procedure proc=proc(f,f.vlr[0]);
+		Procedure ehandler=proc(f,f.vlr[1]);
 		f.fk=f.createFrame(new ApplyValuesContEval(ehandler), 
 				   null, f.env, f.fk, f.stk);
 		f.vlr=new Value[0];
 		proc.apply(f);
 		return null;
 	    case CALLWITHVALUES:
-		Procedure producer=(Procedure)f.vlr[0];
-		Procedure consumer=(Procedure)f.vlr[1];
+		Procedure producer=proc(f,f.vlr[0]);
+		Procedure consumer=proc(f,f.vlr[1]);
 		f.push(new ApplyValuesContEval(consumer));
 		
 		f.vlr=new Value[0];
@@ -587,7 +589,7 @@ public class Primitives extends Module {
 	    Quantity quantity=null;
 	    switch (primid) {
 	    case APPLY:
-		Procedure proc=(Procedure)f.vlr[0];
+		Procedure proc=proc(f,f.vlr[0]);
 		Pair args=pair(f,f.vlr[f.vlr.length-1]);
 		Pair arg1=EMPTYLIST;
 		for (int i=f.vlr.length-2; i>=1; i--) 
@@ -612,6 +614,7 @@ public class Primitives extends Module {
 		
 	    }
 	    switch (primid) {
+	    case LIST: return valArrayToList(f.vlr,0,f.vlr.length);
 	    case SUB: 
 		quantity=num(f,f.vlr[0]);
 		if (f.vlr.length==1) {

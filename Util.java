@@ -162,6 +162,12 @@ public abstract class Util {
 	} catch (ClassCastException e) { typeError(r, "pair", o); } return null;
     }
 
+    public static Procedure proc(Interpreter r, Value o) throws ContinuationException {
+	try {
+	    return (Procedure)o;
+	} catch (ClassCastException e) { typeError(r, "procedure", o); } return null;
+    }
+
     public static Pair truePair(Interpreter r, Value o) throws ContinuationException {
 	Pair p=pair(r, o);
 	if (p==EMPTYLIST) typeError(r, "pair", o);

@@ -4,27 +4,26 @@ import sisc.*;
 
 public class Closure extends Procedure {
     public boolean arity;
-    public Symbol[] formals;
+    public int fcount;
     public LexicalEnvironment env;
     public Expression body;
    
-    public Closure(boolean arity, Symbol[] formals, Expression body,
+    public Closure(boolean arity, int fcount, Expression body,
 		   LexicalEnvironment env) {
 	this.arity=arity;
-	this.formals=formals;
+	this.fcount=fcount;
 	this.env=env;
 	this.body=body;
     }
 
     public void apply(Interpreter r) throws ContinuationException {
 	try {
-	    r.env=new LexicalEnvironment(formals, r.vlr, 
+	    r.env=new LexicalEnvironment(fcount, r.vlr, 
 					 env, arity);
 	} catch (IllegalArgumentException e) {
-	    error(r, "expected "+(arity ? 
-				  formals.length-1 : 
-				  formals.length)+" arguments to "+this+
-		  ", got "+r.vlr.length);
+	    error(r, "expected "+(arity ? fcount - 1 : fcount)
+		  +" arguments to "+this+", got "+r.vlr.length);
+
 	}
 	r.nxp=body;
     }

@@ -20,7 +20,7 @@
 (define newline
   (lambda port
     (apply display (cons '#\newline port))))
-(define list (lambda args args))
+;(define list (lambda args args))
 (define map
   (lambda (proc ls)
     (if (null? ls)
