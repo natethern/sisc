@@ -15,35 +15,51 @@
         (nv '()))
     (let ((cpc
            (let loop ((x formals)
-                      (y values*))
-             (cond [(null? x) '()]
-                   [(and set-vars (memq (car x) set-vars))
+                      (y values*)
+                      (acc '()))
+             (cond [(null? x) acc]
+                   [(or (not (immediate? (car y)))
+                        (and set-vars (memq (car x) set-vars)))
                     (set! nf (cons (car x) nf))
                     (set! nv (cons (car y) nv))
-                    (loop (cdr x) (cdr y))]
-                   [(immediate? (car y))
-                    (cons (cons (car x) (car y))
-                          (loop (cdr x) (cdr y)))]
+                    (loop (cdr x) (cdr y) acc)]
                    [else 
-                     (set! nf (cons (car x) nf))
-                     (set! nv (cons (car y) nv))
-                     (loop (cdr x) (cdr y))]))))
+                     (loop (cdr x) (cdr y) 
+                           (cons (cons (car x) (car y)) acc))]))))
       (values nf nv cpc))))
 
 (define opt:letrec
   (lambda (formals values* body state)
-    (mvlet ([(nf nv cpc) 
-             (cp-candidates formals values* state)])
-      (mvlet ([(rv state)
-               (opt body (if (null? cpc)
-                             state
-                             (union-state-entry* state 'constant-prop 
-                                                 cpc)))])
-             (values
-              (if (null? nf)
-                  rv
-                  `(letrec ,(map list nf nv) ,rv))
-              state)))))
+    (mvlet ([(nf nv state)
+             (let loop ((formals formals)
+                        (values* values*)
+                        (state state))
+                (mvlet ([(nf nvo cpc) 
+                         (cp-candidates formals values* state)])
+                  (let ([state (if (null? cpc)
+                                   state
+                                   (union-state-entry* state 'constant-prop 
+                                                       cpc))])
+                    (mvlet ([(nv fstate*)
+                             (let ([x (map (lambda (e)
+                                             (mvlet ([(rv state)
+                                                      (opt e state)])
+                                                    (cons rv state)))
+                                           nvo)])
+                               (values (map car x)
+                                       (map cdr x)))])
+                      (if (equal? nv values*)
+                          (values nf nv state)
+                          (loop nf nv (merge-states 
+                                       state 
+                                       (apply merge-states fstate*))))))))])
+        (mvlet ([(newbody bstate)
+                 (opt body state)])
+          (values
+           (if (null? nf)
+               newbody
+               `(letrec ,(map list nf nv) ,newbody))
+           (merge-states state bstate))))))
 
 (define opt:let
   (lambda (formals values* body state)
@@ -65,7 +81,7 @@
     (let ((cp (get-state-entry state 'constant-prop)))
       (cond [(and cp (assq ref cp)) =>
              (lambda (v)
-               (values (cdr v) (new-state)))]
+               (opt (cdr v) state))]
             [else (values ref (new-state))]))))
 
 (define opt:if

@@ -329,7 +329,8 @@
         (let loop ([e (read-code inf)])
           (or (eof-object? e)
               (begin
-                (pretty-print (apply sc-expand `(,e ,@scexpopts)) outf)
+                (pretty-print ((current-optimizer) 
+                               (apply sc-expand `(,e ,@scexpopts))) outf)
                 (newline outf)
                 (loop (read inf)))))))
     (close-output-port outf)
