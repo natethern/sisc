@@ -11,7 +11,8 @@
 ;;;;;;;;;; TYPES ;;;;;;;;;;
 
 (define (get-methods proc)
-  (procedure-property proc 'methods))
+  (or (procedure-property proc 'methods)
+      (error "~a is not a generic procedure" proc)))
 
 (define (set-methods! proc methods)
   (set-procedure-property! proc 'methods methods))
