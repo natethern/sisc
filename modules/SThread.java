@@ -330,8 +330,8 @@ public class SThread extends ModuleAdapter {
             switch(primid) {
             case MONITORFOR:
                 synchronized(f.vlr[0]) {
-                    Monitor m=monitor(f.vlr[0].getAnnotation(MONITOR));
-                    if (m==null) {
+                    Value m = f.vlr[0].getAnnotation(MONITOR);
+                    if (m==FALSE) {
                         m=new Monitor();
                         f.vlr[0].setAnnotation(MONITOR, m);
                     } 
