@@ -4,6 +4,16 @@ Letter of the standard Violations:
 
 Section               Description
 
+5.3		      SISC's syntax expander does not report an error
+	 	      when a new binding shadows a syntactic keyword.
+		      e.g., (define define 3) does not produce an error.		      
+6.4		      SISC's dynamic wind implementation does not
+		      currently work with SISC's exception handling 
+		      model.  This is considered a high priority violation.
+
+		      
+Spirit of the standard Violations:
+
 2.3		      SISC allows identifiers to start with +, -, or .,
 		      if they cannot be read as numbers.
 2.3		      SISC uses the reserved characters '[' and ']'
@@ -13,32 +23,12 @@ Section               Description
                       and allows "{}|" to appear in identifiers.
 4.1.3		      SISC does not distinguish between () and the quoted
 	              empty list '(). 
-5.3		      SISC's syntax expander does not report an error
-	 	      when a new binding shadows a syntactic keyword.
-		      e.g., (define define 3) does not produce an error.		      
+6.2.3		      The standard recommends that operations such
+		      as sqrt should try to provide exact results
+		      when given exact arguments.  SISC's do not
+		      currently.
 6.2.6		      SISC allows radixes other than those specified
  		      in the contract for number->string, and 
                       string->number.  In particular, any radix up to
 	              36 is allowed, and any unsupported value causes
 		      SISC to revert to base 10.
-7.1.1		      SISC's reader should act on the existance of
-		      the uncertain digit character '#' and produce
-		      an inexact number.  It does not.
-
-		      Ex: 
-			 3## ;=> should be 300.0, is 300
-
-7.1.2		      SISC optionally supports prepending the length of
-		      a vector to its external representation, so
-		      SISC's grammar for vector is:
-
-		      <vector> --> #(<datum>*) | #<uinteger 10>(<datum>*)
-
-		      
-Spirit of the standard Violations:
-
-6.2.3		      The standard recommends that operations such
-		      as sqrt should try to provide exact results
-		      when given exact arguments.  SISC's do not
-		      currently.
-
