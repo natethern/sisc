@@ -257,7 +257,7 @@
     </condition>
   </target>
 
-  <target name="sisc-lib" depends="build-sisclib" if="buildSisclib">
+  <target name="sisc-lib" depends="heap,build-sisclib" if="buildSisclib">
     <antcall target="srfi-scc"/>
     <jar jarfile="${basedir}/${libjar}">
       <fileset dir="${tmpdir}">
