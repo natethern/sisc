@@ -1,0 +1,13 @@
+* fix bug in psyntax that strips annotations from macro-expanded code
+* make character and string functions sensitive to current locale
+* make continuations serializable in a compact form
+* do a code walk to weed out anything that breaks thread-safety
+* produce a validation testing framework that is invokable from ant
+* produce a performance testing framework that is invokable from ant
+* make stack trace location reporting more accurate and meaningful
+* reorganize code into new directory structure
+* add type and object system that is tightly integrated with S2J
+* come up with a better heap serialization framework
+* write a debugger
+* add mechanism for dynamic loading of scheme modules
+* add support for loading pre-expanded and pre-compiled modules
