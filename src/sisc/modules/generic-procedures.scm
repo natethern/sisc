@@ -224,18 +224,18 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;; METHOD OBJECTS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;we could be using srfi-9's structures here, but I do want to keep
-;;this code clean of any srfi dependencies.
-
 ;;a method is a procedure. It has an arity and a signature (a list of
 ;;parameter types) and flag indicating whether it can take rest
 ;;parameters
+(define-record-type method (_make-method procedure arity types rest?)
+  method?
+  (procedure    method-procedure        set-method-procedure!)
+  (arity        method-arity            set-method-arity!)
+  (types        method-types            set-method-types!)
+  (rest?        method-rest?            set-method-rest!))
+
 (define (make-method f types rest?)
-  (vector f (length types) types rest?))
-(define (method-procedure m)    (vector-ref m 0))
-(define (method-arity m)        (vector-ref m 1))
-(define (method-types m)        (vector-ref m 2))
-(define (method-rest? m)        (vector-ref m 3))
+  (_make-method f (length types) types rest?))
 
 (define (method= m1 m2)
   (and (= (method-arity m1) (method-arity m2))
@@ -296,17 +296,10 @@
 (define (get-methods proc)
   (procedure-property proc 'methods))
 
+(define-struct method-list (methods arity cache))
 (define (make-protected-method-list)
   ;;(monitor . mlist)
   (cons (mutex/new) (make-method-list '() 0 #f)))
-(define (make-method-list methods max-arity method-lookup-cache)
-  (vector methods max-arity method-lookup-cache))
-(define (method-list-methods mlist)
-  (vector-ref mlist 0))
-(define (method-list-arity mlist)
-  (vector-ref mlist 1))
-(define (method-list-cache mlist)
-  (vector-ref mlist 2))
 
 (define (generic-procedure-methods proc)
   (method-list-methods (cdr (get-methods proc))))
@@ -360,22 +353,20 @@
   (and (memq 'public (java/modifiers c))
        (add-method-to-list
         *CONSTRUCTORS*
-        (make-method
-         (lambda (next class . args) (apply c args))
-         (cons (meta (java/declaring-class c))
-               (vector->list (java/parameter-types c)))
-         #f))))
+        (make-method (lambda (next class . args) (apply c args))
+                     (cons (meta (java/declaring-class c))
+                           (vector->list (java/parameter-types c)))
+                     #f))))
 (define (add-java-method m)
   (and (memq 'public (java/modifiers m))
        (add-method-to-list
         (java-methods (java/name m))
-        (make-method
-         (lambda (next . args) (apply m args))
-         (cons (if (memq 'static (java/modifiers m))
-                   (meta (java/declaring-class m))
-                   (java/declaring-class m))
-               (vector->list (java/parameter-types m)))
-         #f))))
+        (make-method (lambda (next . args) (apply m args))
+                     (cons (if (memq 'static (java/modifiers m))
+                               (meta (java/declaring-class m))
+                               (java/declaring-class m))
+                           (vector->list (java/parameter-types m)))
+                     #f))))
 (define (add-class class)
   (if (and (not (java/null? class))
            (not (hashtable/put! *JAVA-CLASSES* class #t)))
@@ -527,19 +518,18 @@
 (define-syntax define-method
   (syntax-rules (next:)
     ((_ (?name (next: ?next) (?type ?arg) ...) . ?body)
-     (add-method ?name
-                 (make-method (lambda (?next ?arg ...) . ?body)
-                              (list ?type ...)
-                              #f)))
+     (add-method ?name (make-method (lambda (?next ?arg ...) . ?body)
+                                    (list ?type ...)
+                                    #f)))
     ((_ (?name (next: ?next) . ?rest) . ?body)
      (define-method "rest" ?name ?next () ?rest ?body))
     ((_ "rest" ?name ?next (?param ...) (?head . ?rest) ?body)
      (define-method "rest" ?name ?next (?param ... ?head) ?rest ?body))
     ((_ "rest" ?name ?next ((?type ?arg) ...) ?rest ?body)
-     (add-method ?name
-                 (make-method (lambda (?next ?arg ... . ?rest) . ?body)
-                              (list ?type ...)
-                              #t)))
+     (add-method ?name (make-method (lambda (?next ?arg ... . ?rest)
+                                      . ?body)
+                                    (list ?type ...)
+                                    #t)))
     ((_ (?name ?param ...) . ?body)
      (define-method (?name (next: dummy) ?param ...) . ?body))
     ((_ (?name . ?rest) . ?body)

@@ -293,6 +293,7 @@
    define-methods
    define-java-proxy-method
    define-class
+   method?
    method-procedure
    method-types
    method-rest?
@@ -316,6 +317,7 @@
   (import hashtable)
   (import threading)
   (import procedure-properties)
+  (import record)
   (include "generic-procedures.scm"))
 
 (module s2j
