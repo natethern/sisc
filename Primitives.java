@@ -91,6 +91,7 @@ public class Primitives extends ModuleAdapter {
         define("call-with-failure-continuation", CALLFC);
         define("call-with-values", CALLWITHVALUES);
         define("car", CAR);
+	define("case-sensitive!", CASESENSITIVE);
         define("cdr", CDR);
         define("ceiling", CEILING);
         define("char->integer", CHAR2INTEGER);
@@ -223,11 +224,15 @@ public class Primitives extends ModuleAdapter {
             case SYSTIME: return Quantity.valueOf(System.currentTimeMillis());
             case MAX_PRECISION: return Quantity.valueOf(Quantity.max_precision);
             case MIN_PRECISION: return Quantity.valueOf(Quantity.min_precision);
+	    case CASESENSITIVE: return truth(Symbol.caseSensitive);
             }
         case 1:
             switch (primid) {
             case NULLQ: return truth(f.vlr[0]==EMPTYLIST);
             case CAR: return truePair( f.vlr[0]).car;
+	    case CASESENSITIVE:
+		Symbol.caseSensitive = truth(f.vlr[0]);
+		return VOID;
             case CDR: return truePair( f.vlr[0]).cdr;
             case PAIRQ:
                 return truth(f.vlr[0] instanceof Pair &&
@@ -760,6 +765,7 @@ public class Primitives extends ModuleAdapter {
 	CALLFC = 107,
 	CALLWITHVALUES = 108,
 	CAR = 21,
+	CASESENSITIVE = 151,
 	CDR = 22,
 	CEILING = 23,
 	CHAR2INTEGER = 24,
