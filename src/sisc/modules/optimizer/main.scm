@@ -47,7 +47,10 @@
            (values `(,l ,@values*)
                    values-state*))))
     ((,?lambda/letrec #t ,formals ,meta ,body)
-     ; An already analyzed expression, skip it
+     ; An already analyzed expression, skip it.  This can occur when
+     ; psyntax pre-expands some forms in complicated syntax-case expressions.
+     ; The analyzer also must deal with expressions that contain a mix of
+     ; analyzed and unanalyzed code.
      (guard (or (core-form-eq? ?lambda/letrec 'lambda #%lambda)
                 (core-form-eq? ?lambda/letrec 'letrec #%letrec)))
      (values `(,?lambda/letrec #t ,formals ,meta ,body) (new-state)))
