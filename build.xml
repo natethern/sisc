@@ -29,12 +29,6 @@
     <available classname="junit.framework.TestCase"
                property="junit.present"
 	       classpathref="classpath"/>
-    <available property="oro.present"
-	       classname="org.apache.oro.text.regex.Pattern"
-	       classpathref="classpath"/>
-    <available property="servlets.present"
-	       classname="javax.servlet.Servlet"
-	       classpathref="classpath"/>
   </target>
 
   <target name="clean" depends="prepare"
@@ -76,8 +70,6 @@
       <include name="${packagename}/**"/>
       <exclude name="${packagename}/dist/**"/>
       <exclude name="${packagename}/tests/**" unless="junit.present"/>
-      <exclude name="${packagename}/modules/Regexp.java" unless="oro.present"/>
-      <exclude name="${packagename}/modules/servlets/**" unless="servlets.present"/>
       <exclude name="${packagename}/modules/**" if="lite"/>
       <exclude name="${packagename}/applet/**"/>
     </javac>      
