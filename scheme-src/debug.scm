@@ -1,4 +1,4 @@
-(load-module "sisc.modules.SDebug")
+(load-module "sisc.debug.SDebug")
 
 (define-syntax show
   (lambda (e)
