@@ -1,3 +1,9 @@
+(import s2j)
+(import generic-procedures)
+(define <java.util.StringTokenizer> (java-class "java.util.StringTokenizer"))
+(define-generic next-token)
+(define-generic has-more-tokens)
+
   (display "Connecting to database...\n")
   (define dbcon (dbconnect "minstrel"))
 
@@ -16,18 +22,26 @@
   
   (define channel "#sisc")
 
+  (define (send-messages destination response)
+    (let ([tokenizer (make <java.util.StringTokenizer> 
+                           (->jstring response)
+                           (->jstring (string #\newline)))])
+      (let loop ()
+        (when (->boolean (has-more-tokens tokenizer))
+          (send-message bot destination (next-token tokenizer))
+          (loop)))))
+
   (define (onPrivateMessage nick login host message)
     (let ([response (answer (->string nick) (->string message) #t)])
-      (display response) (newline)
       (if response
-          (send-message bot nick (->jstring response)))))
+          (send-messages nick response))))
 
   (define (onMessage channel nick login host message)
     (store-seen dbcon (normalize-nick nick) (->string nick) (->string message))
     (unless (equal? (symbol->string bot-name) nick)
       (let ([response (answer (->string nick) (->string message))])
-        (if response
-            (send-message bot channel (->jstring response))))))
+        (send-messages channel response))))
+
   (display (sisc:format "Starting Hal...~%"))
   (define hal (make-hal))
   (display (sisc:format "Joining ~a...~%" channel))

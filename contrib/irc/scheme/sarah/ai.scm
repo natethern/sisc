@@ -1,5 +1,6 @@
 (import srfi-2)
 (import srfi-11)
+(import threading)
 
 (define somewhat-clean
   (string->list "abcdefghijklmnopqrstuvwxyz()[]->+-*/_01234567890?!."))
@@ -119,7 +120,8 @@
           [else (loop (+ x 1))])))
 
 (define pattern-graph
-  '((what . ((is . WHATIS)
+  '((help . HELP)
+    (what . ((is . WHATIS)
              (time . WHATTIME)))
     (whats . WHATIS)
     (who . ((is . WHOIS)))
@@ -133,6 +135,24 @@
     (seen . SEEN)
     (tell . TELL)
     ))
+
+(define (help . args)
+   (string-append
+    "Hello, I'm Sarah, a SISC Scheme Infobot.\n"
+    "I respond to some natural language commands, such as:\n"
+    "help - You're doing it.\n"
+    "Something is something's description\n"
+    "  (I'll remember this for someone's later query of...)\n"
+    "What is something?\n"
+    "  (You'll get a similar effect with Who is somebody? and Where is something?)\n\n"
+    "Tell somebody something.\n"
+    "  (I'll tell someone your message immediately if they're online, or\n"
+    "   hold it until I see them next.)\n"
+    "Seen somebody?\n"
+    "  (I'll tell you the last time I saw someone, and what they said last.)\n"
+    "evaluate (some-scheme-expression)\n"
+    "  (I'll run a simple program for you, but it must complete quickly!)\n"))
+
 
 (define (*-is type from message)
   (let-values ([(ignoreables term) (string-split message " is ")])
@@ -152,11 +172,39 @@
 
 (define (quiet . args) (set! bot-quiet #t) "Fine, shutting up.")
 (define (listen . args) (set! bot-quiet #f) "Okay, I'm listening.")
+
 (define (evaluate from message)
   (let-values ([(ignoreables term) (string-split message "evaluate ")])
-    (with-output-to-string 
-        (lambda () (pretty-print 
-                    (eval (with-input-from-string term read)))))))
+    (let* ([evaluation-thread
+           (thread/new 
+            (lambda ()
+              (with-output-to-string 
+                  (lambda () (pretty-print 
+                              (eval (with-input-from-string term read)
+                                    ;Run this in R5RS only
+                                    (scheme-report-environment 5)))))))]
+           [watchdog-thread
+            (thread/new
+             (lambda ()
+               (sleep 200)
+               (with-failure-continuation
+                   (lambda (m e)
+                     ; An error?  Egads!
+                     (if (eq? (thread/state evaluation-thread) 'running)
+                         (begin 
+                           (thread/interrupt evaluation-thread)
+                           "Sorry, I couldn't evaluate your expression in the given time.")
+                           
+                         (make-error-message (error-location m) 
+                                             (error-message m))))
+                 (lambda ()
+                   (thread/result evaluation-thread)))))])
+      ;Start the threads
+      (thread/start evaluation-thread)
+      (thread/start watchdog-thread)
+      (let loop () (unless (thread/join watchdog-thread) (loop)))
+      (thread/result watchdog-thread))))
+
 
 (define (learn from message)
   (let-values ([(term definition) (string-split message " is at ")])    
@@ -191,7 +239,9 @@
 (define (onPart channel sender login hostname)
   (remove-nick (string->symbol (->string channel))
                (normalize-nick sender)))
-(define onQuit onPart)
+(define (onQuit nick login hostname reason)
+  (onPart channel nick login hostname))
+
 (define (onNickChange oldnick login hostname newnick)
   (remove-nick (string->symbol channel) (normalize-nick oldnick))
   (onJoin (->jstring channel) 
@@ -256,4 +306,5 @@
     (LISTEN . ,listen)
     (LEARN . ,learn)
     (EVALUATE . ,evaluate)
-    (TELL . ,tell)))
+    (TELL . ,tell)
+    (HELP . ,help)))
