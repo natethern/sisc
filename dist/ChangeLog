@@ -1,3 +1,18 @@
+2003-05-26  Matthias Radestock  <matthias@sorted.org>
+
+	* Changed signature of some s2j primitives to return lists instead
+	  of vectors.
+
+	* Changed names of some s2j primitives to shorter versions.
+
+	* Fixed a few bugs in and made some improvements to error handling
+	  performed by s2j primitives and gnerally improved.
+
+	* Removed a few superfluous s2j primitives.
+
+	* Added s2j invocation primitives in preparation for making Java
+	  objects non-procedures.
+
 2003-05-24  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed a bug in the generic procedure method cache that caused
