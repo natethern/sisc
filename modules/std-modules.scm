@@ -456,10 +456,8 @@
       convert-pat mapper my-backquote extend-backquote sexp-dispatch))
   (include "match.ss"))
 
-; We must reasonably assume that the core forms are intact, or we're going to 
-; have a hard time with output from the expander anyway
-(putprop 'assumptive-procedures '*opt* 
-	 '(lambda define if begin set! letrec quote))
+(putprop 'assumptive-procedures '*opt* '())
+
 (module optimizer
     (optimize)
   (import pattern-matching)
