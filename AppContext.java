@@ -117,7 +117,6 @@ public class AppContext extends Util {
         lb.add(EOF);            
         lb.add(r.stk);
         lb.add(evaluator);
-        lb.add(Util.TOPLEVEL, toplevel_env);
         lb.add(Symbol.get("symenv"), symenv);
         
         lb.buildLibrary("sisc", o);
