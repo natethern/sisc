@@ -241,4 +241,8 @@ method" invocation facility of generic procedures since it results in
 methods being incapable of discerning whether there *is* a next best
 matching method.
 
+* A "left-to-right" rule in the method selection logic simplifies the
+algorithm and results in far fewer cases where methods are considered
+ambiguous. See COMPARE-METHODS for details.
+
 * Improved error reporting.
