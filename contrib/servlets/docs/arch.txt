@@ -3,9 +3,6 @@ SchemeAppServlet has the following init parameters
 * heap-file
 * init-expr
 * destroy-expr (optional)
-* repl-port (optional)
-* repl-host (optional)
-
 SchemeAppServlet is responsible for initialising a scheme
 application. When it's init() method is called it establishes an
 application context of the given name and loads the specified heap
@@ -35,13 +32,15 @@ The current directory which is active during the evaluation of
 init-expr and destroy-expr is the servlet context root, which means
 relative file names in load etc are resolved relative to it.
 
-If repl-port is specified, the servlet creates a thread listening for
-connections on that port. New connections spawn a thread with a
-Read-Eval-Print-Loop running in the servlet's Scheme
-application, i.e. connecting to the port via, say, telnet will present
-you with a SISC prompt just as if you were running SISC from the
-command line except that all expressions are evaluated within the
-context of the servlet's Scheme application.
+The SchemeAppServlet checks for servlet context init parameters called
+"<app-name>-repl-port" and "<app-name>-repl-host". If the former is
+present the servlet creates a thread listening for connections on that
+port. New connections spawn a thread with a Read-Eval-Print-Loop
+running in the servlet's Scheme application, i.e. connecting to the
+port via, say, telnet will present you with a SISC prompt just as if
+you were running SISC from the command line except that all
+expressions are evaluated within the context of the servlet's Scheme
+application.
 
 Specifying repl-host forces the the listening port to be bound to a
 specific IP address.

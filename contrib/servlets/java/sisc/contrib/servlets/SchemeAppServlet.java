@@ -15,8 +15,7 @@ public class SchemeAppServlet extends SchemeServletBase {
 
     SocketListener socketListener = null;
 
-    public void init()
-        throws ServletException {
+    public void init() throws ServletException {
         super.init();
         String heapFile	= getInitParameter("heap-file");
         AppContext ctx = new AppContext();
@@ -35,10 +34,12 @@ public class SchemeAppServlet extends SchemeServletBase {
         String initExpr = getInitParameter("init-expr");
         evalExpr(initExpr);
 
-        String port = getInitParameter("repl-port");
+        ServletContext sctx = getServletContext();
+        String unqualifiedAppName = getInitParameter("app-name");
+        String port = sctx.getInitParameter(unqualifiedAppName+"-repl-port");
         if (port == null) return;
         InetAddress bindAddr = null;
-        String host = getInitParameter("repl-host");
+        String host = sctx.getInitParameter(unqualifiedAppName+"-repl-host");
         if (host != null) {
             try {
                 bindAddr = InetAddress.getByName(host);
@@ -52,6 +53,7 @@ public class SchemeAppServlet extends SchemeServletBase {
                                                     bindAddr);
             socketListener = new SocketListener(appName, ssocket);
             socketListener.start();
+            log("repl listening on " + (host == null ? "*" : host) + ":" + port);
         } catch (IOException e) {
             throw new ServletException("unable to listen", e);
         }

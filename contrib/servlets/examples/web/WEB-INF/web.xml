@@ -7,6 +7,15 @@
   <description>SISC Servlet Examples</description>
   <distributable/>
 
+  <context-param>
+    <param-name>app-repl-port</param-name>
+    <param-value>7077</param-value>
+  </context-param>
+  <context-param>
+    <param-name>app-repl-host</param-name>
+    <param-value>localhost</param-value>
+  </context-param>
+
   <servlet>
     <servlet-name>SchemeApp</servlet-name>
     <description>initializes Scheme App</description>
@@ -30,14 +39,6 @@
     <init-param>
       <param-name>destroy-expr</param-name>
       <param-value>(lambda (x) (void))</param-value>
-    </init-param>
-    <init-param>
-      <param-name>repl-port</param-name>
-      <param-value>7077</param-value>
-    </init-param>
-    <init-param>
-      <param-name>repl-host</param-name>
-      <param-value>localhost</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
