@@ -140,10 +140,10 @@ public class REPL {
     public void go() {
         try {
             Interpreter r=Context.enter(appName);
-            r.eval("(display \"SISC ("+Util.VERSION+") - " + 
-                   appName + "\\n\")");
-        } catch (IOException e) {
-            
+            r.eval((Procedure)r.eval(Symbol.get("display")),
+                   new Value[] {new SchemeString("SISC ("+Util.VERSION+") - " + 
+                                                 appName + "\n"),
+                                primordialThread.env.out});
         } catch (SchemeException se) {
         } finally {
             Context.exit();
