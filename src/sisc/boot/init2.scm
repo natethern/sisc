@@ -37,19 +37,19 @@
   
 ;; source to eval:
 #;(set! eval (let ([old-eval eval]
-		 [apply apply]
-		 [current-cte current-cte]
-		 [sc-expand sc-expand]
-		 [interaction-environment interaction-environment])
-	     (lambda (x . env)
-	       (if (and (pair? x) (equal? (car x) "noexpand"))
-		   (apply old-eval (cadr x) env)
-		   (let* ([optimizer (current-optimizer)]
-			  [old-ie (apply interaction-environment env)]
-			  [source (optimizer
-				   (sc-expand x '(e) '(e)))])
-		     (interaction-environment old-ie)
-		     (apply old-eval source env))))))
+                 [apply apply]
+                 [current-cte current-cte]
+                 [sc-expand sc-expand]
+                 [interaction-environment interaction-environment])
+             (lambda (x . env)
+               (if (and (pair? x) (equal? (car x) "noexpand"))
+                   (apply old-eval (cadr x) env)
+                   (let* ([optimizer (current-optimizer)]
+                          [old-ie (apply interaction-environment env)]
+                          [source (optimizer
+                                   (sc-expand x '(e) '(e)))])
+                     (interaction-environment old-ie)
+                     (apply old-eval source env))))))
 
 (set! eval
   ((lambda (|interaction-environment_fglBCWfWB|
@@ -90,38 +90,38 @@
 (define (make-parameter value . converter)
   (cond [(null? converter) 
          (_make-parameter value)]
-	    [(null? (cdr converter))
-	     (let ([param (_make-parameter value)]
-		       [converter (car converter)])
-	      (lambda arg
-	        (if (null? arg)
-		    (param)
-		    (param (converter (car arg))))))]
-	    [else (error 'make-parameter "too many arguments.")]))
+            [(null? (cdr converter))
+             (let ([param (_make-parameter value)]
+                       [converter (car converter)])
+              (lambda arg
+                (if (null? arg)
+                    (param)
+                    (param (converter (car arg))))))]
+            [else (error 'make-parameter "too many arguments.")]))
 
 (define (make-config-parameter name value . converter)
     (cond [(null? converter) 
-	   (_make-config-parameter name value)]
-	  [(null? (cdr converter))
-	   (let ([param (_make-config-parameter name value)]
-		 [converter (car converter)])
-	     (lambda arg
-	       (if (null? arg)
-		   (param)
-		   (param (converter (car arg))))))]
-	  [else (error 'make-config-parameter "too many arguments.")]))
+           (_make-config-parameter name value)]
+          [(null? (cdr converter))
+           (let ([param (_make-config-parameter name value)]
+                 [converter (car converter)])
+             (lambda arg
+               (if (null? arg)
+                   (param)
+                   (param (converter (car arg))))))]
+          [else (error 'make-config-parameter "too many arguments.")]))
 
 (define (make-native-parameter name . converter)
     (cond [(null? converter) 
-	   (_make-native-parameter name)]
-	  [(null? (cdr converter))
-	   (let ([param (_make-native-parameter name)]
-		 [converter (car converter)])
-	     (lambda arg
-	       (if (null? arg)
-		   (param)
-		   (param (converter (car arg))))))]
-	  [else (error 'make-config-parameter "too many arguments.")]))
+           (_make-native-parameter name)]
+          [(null? (cdr converter))
+           (let ([param (_make-native-parameter name)]
+                 [converter (car converter)])
+             (lambda arg
+               (if (null? arg)
+                   (param)
+                   (param (converter (car arg))))))]
+          [else (error 'make-config-parameter "too many arguments.")]))
 
 (define-syntax parameterize
   (lambda (expr)
@@ -140,9 +140,9 @@
                  (param-name tmps) ...)
                (lambda () . body)
                (lambda () 
-	             (for-each (lambda (p l) (p l))
-		               (list param-name ...)
-		               old-values))))))])))
+                     (for-each (lambda (p l) (p l))
+                               (list param-name ...)
+                               old-values))))))])))
 
 ;; native parameters
 
@@ -364,135 +364,144 @@
 ;; modified to account for SISC's lack of structures, make exception
 ;; handling work properly and conform with SRFI18 requirements with
 ;; regard to call/cc behaviour.
-(define dynamic-wind #f)
-(define unload-dynamic-wind #f)
-(let ((original-call/cc call-with-current-continuation))
-  ;;the dynamic wind stack
-  (define get-dynamic-point current-wind)
-  (define set-dynamic-point! current-wind)
-  ;;a point in the dynamic wind stack
-  ;;-this would be easier if we had structures
-  (define (make-point depth in out parent)
-    (vector depth in out parent))
-  (define (point-depth point) (vector-ref point 0))
-  (define (point-in point) (vector-ref point 1))
-  (define (point-out point) (vector-ref point 2))
-  (define (point-parent point) (vector-ref point 3))
-  ;;
-  (define (travel-between-points here target)
-    (cond ((eq? here target)
-           (set-dynamic-point! here))
-          ((or (not here)               ; HERE has reached the root.
-               (and target
-                    (< (point-depth here) (point-depth target))))
-           (travel-between-points here (point-parent target))
-           ((point-in target))
-           (set-dynamic-point! target))
-          (else
-            (set-dynamic-point! (point-parent here))
-            ((point-out here))
-            (travel-between-points (point-parent here) target))))
-  ;;wind-safe call/cc
-  (define (dynwind-call/cc proc)
-    (original-call/cc
-     (lambda (cont)
-       (let* ((point (get-dynamic-point))
-              (safe-k
-               (lambda results
-                 (travel-between-points (get-dynamic-point) point)
-                 (apply cont results))))
-         (set-annotation! safe-k 'unsafe-cont cont)
-         (proc safe-k)))))
-  (define (dynamic-wind/impl in body out)
-    (let* ((here (get-dynamic-point))
-           (point (make-point (if here (+ (point-depth here) 1) 1)
-                              in out here)))
-      (in)
-      (set-dynamic-point! point)
-      (call-with-values
-          (lambda () (with/fc (lambda (m e)
-                                (set-dynamic-point! here)
-                                (out)
-                                (throw m e))
-                       body))
-   	    (lambda results
-	      (set-dynamic-point! here)
-	      (out)
-	      (apply values results)))))
-  (define dynamic-wind-loader
-    (lambda (in body out)
-      (putprop 'call-with-current-continuation dynwind-call/cc)
-      (putprop 'call/cc dynwind-call/cc)
-      (putprop 'dynamic-wind dynamic-wind/impl)
-      (dynamic-wind in body out)))
-  ;;finally, the install the dynamic-wind hooks
-  (set! dynamic-wind dynamic-wind-loader)
-  (set! unload-dynamic-wind
-    (lambda ()
-      (putprop 'call-with-current-continuation original-call/cc)
-      (putprop 'call/cc original-call/cc)
-      (putprop 'dynamic-wind dynamic-wind-loader))))
+(define dynamic-wind)
+(define unload-dynamic-wind)
 
+;;a point in the dynamic wind stack
+;;-this would be easier if we had structures
+(let-syntax ([point-depth 
+              (syntax-rules () 
+                ((_ point) (vector-ref point 0)))]
+             [point-in
+              (syntax-rules () 
+                ((_ point) (vector-ref point 1)))]
+             [point-out
+              (syntax-rules () 
+                ((_ point) (vector-ref point 2)))]
+             [point-parent
+              (syntax-rules () 
+                ((_ point) (vector-ref point 3)))])
+  (let ((original-call/cc call-with-current-continuation))
+    ;;the dynamic wind stack
+    (define get-dynamic-point current-wind)
+    (define set-dynamic-point! current-wind)
+    (define make-point vector) ; (depth in out parent)
+    ;;
+    (define (travel-between-points here target)
+      (cond ((eq? here target)
+             (set-dynamic-point! here))
+            ((if here               ; HERE has reached the root.
+                 (and target
+                      (< (point-depth here) (point-depth target)))
+                 #t)
+             (travel-between-points here (point-parent target))
+             ((point-in target))
+             (set-dynamic-point! target))
+            (else
+             (set-dynamic-point! (point-parent here))
+             ((point-out here))
+             (travel-between-points (point-parent here) target))))
+    ;;wind-safe call/cc
+    (define (dynwind-call/cc proc)
+      (original-call/cc
+       (lambda (cont)
+         (let* ((point (get-dynamic-point))
+                (safe-k
+                 (lambda results
+                   (travel-between-points (get-dynamic-point) point)
+                   (apply cont results))))
+           (set-annotation! safe-k 'unsafe-cont cont)
+           (proc safe-k)))))
+    (define (dynamic-wind/impl in body out)
+      (let* ((here (get-dynamic-point))
+             (point (make-point (if here (+ (point-depth here) 1) 1)
+                                in out here)))
+        (in)
+        (set-dynamic-point! point)
+        (call-with-values
+            (lambda () (with/fc (lambda (m e)
+                                  (set-dynamic-point! here)
+                                  (out)
+                                  (throw m e))
+                                body))
+          (lambda results
+            (set-dynamic-point! here)
+            (out)
+            (apply values results)))))
+    (define dynamic-wind-loader
+      (lambda (in body out)
+        (putprop 'call-with-current-continuation dynwind-call/cc)
+        (putprop 'call/cc dynwind-call/cc)
+        (putprop 'dynamic-wind dynamic-wind/impl)
+        (dynamic-wind in body out)))
+    ;;finally, the install the dynamic-wind hooks
+    (set! dynamic-wind dynamic-wind-loader)
+    (set! unload-dynamic-wind
+          (lambda ()
+            (putprop 'call-with-current-continuation original-call/cc)
+            (putprop 'call/cc original-call/cc)
+            (putprop 'dynamic-wind dynamic-wind-loader)))))
+  
 ;;;; "ratize.scm" Convert number to rational number (ported from SLIB)
 
 (define rationalize (void))
 (letrec ([rational:simplest 
-	  (lambda (x y)
-	    (cond ((< y x) (rational:simplest y x))
-		  ((not (< x y)) (if (rational? x) x 
-				     (error 'rationalize 
-					    "~s weirdness" x)))
-		  ((positive? x) (sr x y))
-		  ((negative? y) (- (sr (- y) (- x))))
-		  (else (if (and (exact? x) (exact? y)) 0 0.0))))]
-	 [sr 
-	  (lambda (x y) 
-	    (let ((fx (floor x)) (fy (floor y)))
-	      (cond ((not (< fx x)) fx)
-		    ((= fx fy) (+ fx (/ (sr (/ (- y fy)) (/ (- x fx))))))
-		    (else (+ 1 fx)))))])
+          (lambda (x y)
+            (cond ((< y x) (rational:simplest y x))
+                  ((not (< x y)) (if (rational? x) x 
+                                     (error 'rationalize 
+                                            "~s weirdness" x)))
+                  ((positive? x) (sr x y))
+                  ((negative? y) (- (sr (- y) (- x))))
+                  (else (if (and (exact? x) (exact? y)) 0 0.0))))]
+         [sr 
+          (lambda (x y) 
+            (let ((fx (floor x)) (fy (floor y)))
+              (cond ((not (< fx x)) fx)
+                    ((= fx fy) (+ fx (/ (sr (/ (- y fy)) (/ (- x fx))))))
+                    (else (+ 1 fx)))))])
   (set! rationalize 
-	(lambda (x e)
-	  (rational:simplest (- x e) (+ x e)))))
+        (lambda (x e)
+          (rational:simplest (- x e) (+ x e)))))
 
 (define list-tail (lambda (x k) (if (zero? k) x (list-tail (cdr x) (- k 1)))))
 
 (define make-polar
   (lambda (x y)
     (make-rectangular (* x (cos y))
-		      (* x (sin y)))))
+                      (* x (sin y)))))
 
 (define magnitude
   (lambda (x)
     (cond [(real? x) (abs x)]
-	  [else (let ([r (real-part x)]
-		      [i (imag-part x)])
-		  (sqrt (+ (* r r) (* i i))))])))
+          [else (let ([r (real-part x)]
+                      [i (imag-part x)])
+                  (sqrt (+ (* r r) (* i i))))])))
 
 (define angle 
   (lambda (x)
     (cond [(integer? x) (if (>= x 0)
-			    (atan 0 1)
-			    (atan 0 -1))]
-	  [(real? x) (atan 0 x)]
-	  [else (atan (imag-part x) (real-part x))])))
+                            (atan 0 1)
+                            (atan 0 -1))]
+          [(real? x) (atan 0 x)]
+          [else (atan (imag-part x) (real-part x))])))
 
 (define (string-copy x)
   (letrec ([newstr (make-string (string-length x))]
-	   [string-loop (lambda (sl n)
-			  (if (null? sl) newstr
-			      (begin
-				(string-set! newstr n (car sl))
-				(string-loop (cdr sl) (+ n 1)))))])
+           [string-loop (lambda (sl n)
+                          (if (null? sl) newstr
+                              (begin
+                                (string-set! newstr n (car sl))
+                                (string-loop (cdr sl) (+ n 1)))))])
     (string-loop (string->list x) 0)))
 
 ;(define (unquote x)
 ;  (error 'unquote "expression ~s not valid outside of a quasiquote."
-;	 x))
+;         x))
 
 ;(define (unquote-splicing x)
 ;  (error 'unquote-splicing "expression ~s valid outside of a quasiquote."
-;	 x))
+;         x))
 
 ;;; macro-defs.ss
 ;;; Robert Hieb & Kent Dybvig
@@ -512,13 +521,13 @@
       (lambda ()
         (if result-ready?
             result
-	    ((lambda (x)
-	       (if result-ready?
-		   result
-		   (begin (set! result-ready? #t)
-			  (set! result x)
-			  result))) 
-	     (proc)))))
+            ((lambda (x)
+               (if result-ready?
+                   result
+                   (begin (set! result-ready? #t)
+                          (set! result x)
+                          result))) 
+             (proc)))))
       #f #f)))
 
 (define force
@@ -530,17 +539,17 @@
     (syntax-case x ()
       ((_ e)
        (syntax (let* ((st (system-time))
-		      (val e)
-		      (et (system-time)))
-		 (list val (list (- et st) 'ms)))))
+                      (val e)
+                      (et (system-time)))
+                 (list val (list (- et st) 'ms)))))
       ((_ n e)
        (syntax (let* ((st (system-time))
-		      (val (let loop ([x (- n 1)])
-			     (if (zero? x) 
-				 e
-				 (begin e (loop (- x 1))))))
-		      (et (system-time)))
-		 (list val (list (quotient (- et st) n) 'avg 'ms))))))))
+                      (val (let loop ([x (- n 1)])
+                             (if (zero? x) 
+                                 e
+                                 (begin e (loop (- x 1))))))
+                      (et (system-time)))
+                 (list val (list (quotient (- et st) n) 'avg 'ms))))))))
 
 ;; Unless and When 
 (define-syntax when
@@ -696,13 +705,13 @@
       ((_ name transformer)
        (syntax
         (define-syntax name
-	  (lambda (y)
-	    (syntax-case y ()
+          (lambda (y)
+            (syntax-case y ()
                ((_ . args)
-		(datum->syntax-object
-		 (syntax _)
-		 (apply transformer
-			(syntax-object->datum (syntax args)))))))))))))
+                (datum->syntax-object
+                 (syntax _)
+                 (apply transformer
+                        (syntax-object->datum (syntax args)))))))))))))
 
 (define-syntax defmacro
   (syntax-rules ()
