@@ -3346,7 +3346,7 @@
                               (syntax (step ...)))))
              (syntax-case (syntax (e1 ...)) ()
                 (() (syntax (let doloop ((var init) ...)
-                               (unless e0
+                               (if e0 #!void
                                  (begin c ... (doloop step ...))))))
                 ((e1 e2 ...)
                  (syntax (let doloop ((var init) ...)
