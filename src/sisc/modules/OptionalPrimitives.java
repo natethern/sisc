@@ -431,13 +431,7 @@ public class OptionalPrimitives extends IndexedFixableProcedure {
         MAPCDR = 22,
         MAPCAR = 23,
         REVERSE = 24,
-        REVERSEB = 25;
-    
-    public static void main(String[] args) throws Exception {
-        Symbol a=Symbol.get("a");
-        System.err.println(new OptionalPrimitives(CDAR).apply(list(a,a)).express());
-    }
-
+        REVERSEB = 25;    
 }
 
 /*
