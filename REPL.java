@@ -53,18 +53,20 @@ public class REPL extends Thread {
         this.dynenv = dynenv;
     }
     
-    public static BufferedRandomAccessInputStream findHeap() {
+    public static SeekableInputStream findHeap() {
         try {
             String heapLocation=Util.getSystemProperty("sisc.heapfile", null);
-            BufferedRandomAccessInputStream heap = null;
+            SeekableInputStream heap = null;
             if (heapLocation==null) {
                 URL heapURL=ClassLoader.getSystemResource("sisc.heap");
                 if (heapURL==null)
-                    heap=new BufferedRandomAccessInputStream("sisc.heap","r",1,8192);
+                    heap=//new MemoryRandomAccessInputStream(new FileInputStream(heapLocation));
+                        new BufferedRandomAccessInputStream("sisc.heap","r",1,8192);
                 //                else 
                 //  heap=heapURL.openStream();
             } else 
-                heap=new BufferedRandomAccessInputStream(heapLocation, "r", 1, 8192);
+                heap=//new MemoryRandomAccessInputStream(new FileInputStream(heapLocation));
+                    new BufferedRandomAccessInputStream(heapLocation, "r", 1, 8192);
 
             return heap;
         } catch (Exception e) {
@@ -79,7 +81,7 @@ public class REPL extends Thread {
 
     public static boolean initializeInterpreter(Interpreter r,
                                                 String[] args,
-                                                BufferedRandomAccessInputStream in)
+                                                SeekableInputStream in)
         throws ClassNotFoundException {
 
         try {
@@ -207,7 +209,7 @@ public class REPL extends Thread {
             fargs.add(arg);
         }
 
-        BufferedRandomAccessInputStream heap = findHeap();
+        SeekableInputStream heap = findHeap();
         if (heap==null) {
             System.err.println(Util.liMessage(Util.SISCB, "noheap"));
             return;

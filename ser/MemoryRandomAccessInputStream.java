@@ -28,11 +28,13 @@ public class MemoryRandomAccessInputStream extends SeekableInputStream {
     }
 
     public int read() throws IOException {
+        if (filePointer==data.length) return -1;
         return data[filePointer++] & 0xff;
     }
 
     public int read(byte[] b, int off, int len) throws IOException {
         int rc=Math.min(len, data.length - filePointer);
+        if (rc==0 && len>0) return -1;
         System.arraycopy(data, filePointer, b, off, rc);
         filePointer+=rc;
         return rc;
