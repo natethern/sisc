@@ -1075,7 +1075,7 @@
 	<title>Return a new value</title>
 <programlisting>
 (with-failure-continuation
-  (lambda (message error-k)
+  (lambda (error-record error-k)
     'error)
   (lambda ()
     (+ 1 (/ 1 0) 3)))
@@ -1086,7 +1086,7 @@
 	<title>Restart with a different value</title>
 	<programlisting>
 (with-failure-continuation
-   (lambda (message error-k)
+   (lambda (error-record error-k)
     (error-k 2))
    (lambda ()
      (+ 1 (/ 1 0) 3)))
@@ -1097,8 +1097,8 @@
 	<title>Propagate the error</title>
 	<programlisting>
 (with-failure-continuation
-  (lambda (message error-k)
-    (rethrow message error-k))
+  (lambda (error-record error-k)
+    (rethrow error-record error-k))
   (lambda ()
     (+ 1 (/ 1 0) 3)))
 ; => <emphasis>A divide by zero error is raised</emphasis>
