@@ -17,9 +17,10 @@
 ;;
 (define (mutex/synchronize-unsafe mutex thunk)
   (mutex/lock! mutex)
-  (let ([result (thunk)])
-    (mutex/unlock! mutex)
-    result))
+  (call-with-values thunk
+    (lambda res
+      (mutex/unlock! mutex)
+      (apply values res))))
 
 (define (synchronized-unsafe obj thunk)
   (mutex/synchronize-unsafe (mutex-of obj) thunk))
