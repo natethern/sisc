@@ -31,7 +31,7 @@
       (let ((segment1 (car segments))
             (segments (cdr segments)))
         (let ((symenv (car segment1))
-              (bindings (map car (cdr segment1))))
+              (bindings (map-car (cdr segment1))))
           (if (null? bindings)
               (apply _create-lib (cons lib segments))
               (let ((symenv-id (string->symbol

@@ -41,7 +41,7 @@
 (define (union-assoc . a*)
   (if (null? a*) 
       '()
-      (let ((keys (distinct (map car (apply append a*)))))
+      (let ((keys (distinct (map-car (apply append a*)))))
         (let loop ((x keys))
           (if (null? x) 
               '()
