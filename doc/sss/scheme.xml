@@ -990,6 +990,77 @@
           </programlisting>
         </informalexample>
       </sect3>
+      <sect3>
+        <title>Accessing Common Error Record Fields</title>
+        <para>
+          An error record created with <function>make-error</function>
+          or received in an error-handler contains several useful
+          pieces of information.  The following functions allow the
+          programmer to access that information.
+        </para>
+        <para>
+          <blockquote>
+            <para>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>symbol</type>
+                <methodname>error-location</methodname>
+                <methodparam>
+                  <parameter>error-record</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Obtains the location of the error, a symbol which
+                  may be a function identifier.  If there is no
+                  location specified, <literal>#f</literal> is
+                  returned.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>value</type>
+                <methodname>error-message</methodname>
+                <methodparam>
+                  <parameter>error-record</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Obtains the message of the error, which may
+                  be a string which is a descriptive message of the
+                  error, or an arbitrary value (as created by the
+                  second form of <function>make-error</function>).
+                  If there is no message specified, 
+                  <literal>#f</literal> is returned.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>error-record</type>
+                <methodname>error-parent</methodname>
+                <methodparam>
+                  <parameter>error-record</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Obtains the parent of the error, which is another
+                  error record present in a nested error.
+                  Specifically the value of the second argument to
+                  the <function>make-nested-error</function> function.
+                  If there is no parent specified, <literal>#f</literal> is
+                  returned.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+        </para>
+      </sect3>
     </sect2>
     <sect2>
       <title>Standard <function>error</function> function</title>
