@@ -9,8 +9,8 @@
 
 ;;various servlet / session / request / response methods
 (define-generic get-attribute)    
-(define-generic set-attribute!)
-(define-generic set-content-type!)
+(define-generic set-attribute)
+(define-generic set-content-type)
 (define-generic get-writer)
 (define-generic print)
 (define-generic get-parameter)
@@ -29,9 +29,9 @@
        (let ([k-data (get-attribute session (->jstring "kData"))])
          (f (if (java-null? k-data)
                 (let ([k-data (cons 0 (make-hashtable))])
-                  (set-attribute! session
-                                  (->jstring "kData")
-                                  (java-wrap k-data))
+                  (set-attribute session
+                                 (->jstring "kData")
+                                 (java-wrap k-data))
                   k-data)
                 (java-unwrap k-data))))))))
 (define (store-k k)
@@ -61,11 +61,3 @@
   
 (define (get-param p)
   (->string (get-parameter (current-request) (->jstring p))))
-
-(define-syntax comment
-  (syntax-rules ()
-    ((_ . rest) (void))))
-(comment
- (define baz "1234")
- (->yatl `([foo . ([foo . #(([foo . ,baz] [bar . 2]))])]))
- )
