@@ -44,7 +44,8 @@ public class SDebug extends ModuleAdapter {
     protected static final int 
 	EXPRESSV=0, COMPILE=1,
 	CONT_VLR=2, CONT_NXP=3, CONT_ENV=4, CONT_FK=5,
-	CONT_LOCKQ=6;
+	CONT_LOCKQ=6, CONT_PARENT=7, MARKEDQ=8, MARKEDLINE=9,
+	MARKEDCOL=10, MARKEDFILE=11;
 
     public SDebug() {
         define("express", EXPRESSV);
@@ -53,7 +54,12 @@ public class SDebug extends ModuleAdapter {
         define("continuation-nxp", CONT_NXP);
         define("continuation-env", CONT_ENV);
         define("continuation-fk", CONT_FK);
+	define("continuation-stk", CONT_PARENT);
         define("continuation-captured?", CONT_LOCKQ);
+	define("marked?", MARKEDQ);
+	define("marked/line-number", MARKEDLINE);
+	define("marked/column-number", MARKEDCOL);
+	define("marked/source-file", MARKEDFILE);
     }
 
     class SISCExpression extends Value {
@@ -66,6 +72,13 @@ public class SDebug extends ModuleAdapter {
         public String display() {
             return "#<expression "+e.express().write()+'>';
         }
+    }
+
+    public static final MarkedExpression marked(Value o) {
+        try {
+            return (MarkedExpression)o;
+        } catch (ClassCastException e) { typeError("markedexpression", o); }
+	return null;
     }
 
     public Value eval(int primid, Interpreter f) throws ContinuationException {
@@ -91,6 +104,17 @@ public class SDebug extends ModuleAdapter {
             case CONT_ENV:
                 cn=cont(f.vlr[0]);
                 return cn.env;
+	    case CONT_PARENT: 
+		cn=cont(f.vlr[0]);
+                return cn.parent;
+	    case MARKEDQ:
+		return truth(f.vlr[0] instanceof MarkedExpression);
+	    case MARKEDLINE:
+		return Quantity.valueOf(marked(f.vlr[0]).getLineNumber());
+	    case MARKEDCOL:
+		return Quantity.valueOf(marked(f.vlr[0]).getColumnNumber());
+	    case MARKEDFILE:
+		return new SchemeString(marked(f.vlr[0]).getFilename());
             default:
                 throwArgSizeException();
             }

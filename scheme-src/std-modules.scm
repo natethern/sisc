@@ -40,7 +40,7 @@
 (native-module logicops-module "sisc.modules.SLogicOps")
 (native-module networking-module "sisc.modules.SNetwork")
 (native-module threading-module "sisc.modules.SThread")
-(native-module debug-module "sisc.modules.SDebug")
+(native-module debug-module "sisc.debug.SDebug")
 (native-module s2j-module "sisc.modules.S2J")
 (native-module hashtable-module "sisc.modules.SHashtable")
 

@@ -101,7 +101,6 @@ public class Primitives extends ModuleAdapter {
         define("close-output-port", CLOSEOUTPUTPORT);
         define("complex?", COMPLEXQ);
         define("cons", CONS);
-        define("continuation?", CONTINUATIONQ);
         define("cos", COS);
         define("current-evaluator", CURRENTEVAL);
         define("current-input-port", CURRENTINPUTPORT);
@@ -157,7 +156,6 @@ public class Primitives extends ModuleAdapter {
         define("open-output-string", OPENOUTPUTSTRING);
         define("output-port?", OUTPORTQ);
         define("pair?", PAIRQ);
-        define("parent-continuation", PARENT_CONT);
         define("peek-char", PEEKCHAR);
         define("procedure?", PROCEDUREQ);
         define("putprop", PUTPROP);
@@ -262,7 +260,6 @@ public class Primitives extends ModuleAdapter {
             case VOIDQ: return truth(f.vlr[0]==VOID);
             case ENVIRONMENTQ: return truth(f.vlr[0] instanceof
 					    AssociativeEnvironment);
-            case CONTINUATIONQ: return truth(f.vlr[0] instanceof CallFrame);
             case PROCEDUREQ: return truth(f.vlr[0] instanceof Procedure);
             case INTEGERQ: return numQuery(f.vlr[0],Quantity.INTEGER);
 
@@ -490,8 +487,6 @@ public class Primitives extends ModuleAdapter {
 		    Thread.sleep(num(f.vlr[0]).longValue());
 		} catch (InterruptedException ie) {}
 		return VOID;
-            case PARENT_CONT:
-                return ((CallFrame)f.vlr[0]).parent;
             }
         case 2:
             switch (primid) {
@@ -801,7 +796,7 @@ public class Primitives extends ModuleAdapter {
 	CLOSEOUTPUTPORT = 28,
 	COMPLEXQ = 29,
 	CONS = 109,
-	CONTINUATIONQ = 30,
+	// <30>
 	COS = 31,
 	//	CURRENTEVAL = 0,
 	CURRENTEVAL = 32,
@@ -876,7 +871,7 @@ public class Primitives extends ModuleAdapter {
 	OPENOUTPUTSTRING = 7,
 	OUTPORTQ = 75,
 	PAIRQ = 76,
-	PARENT_CONT = 77,
+	// <77>
 	PEEKCHAR = 78,
 	//	PEEKCHAR = 8,
 	PROCEDUREQ = 79,
