@@ -62,7 +62,7 @@ public class InputPort extends NamedValue {
         int c=pushback;
         if (pushback!=-1)
             pushback=-1;
-        else
+        else 
             c=r.read();
 
         if (c==-1)

@@ -91,7 +91,7 @@ public class Primitives extends ModuleAdapter {
         define("call-with-failure-continuation", CALLFC);
         define("call-with-values", CALLWITHVALUES);
         define("car", CAR);
-	define("case-sensitive!", CASESENSITIVE);
+	define("case-sensitive", CASESENSITIVE);
         define("cdr", CDR);
         define("ceiling", CEILING);
         define("char->integer", CHAR2INTEGER);
@@ -377,7 +377,7 @@ public class Primitives extends ModuleAdapter {
                 CallFrame before=f.stk.capture(f);
                 InputPort p=null;
                 try {
-                    p=new InputPort(new BufferedReader(new FileReader(string(f.vlr[0]))));
+                    p=new SourceInputPort(new BufferedReader(new FileReader(string(f.vlr[0]))), string(f.vlr[0]));
                 } catch (IOException e) {
                     throwPrimException( "error opening '"+string(f.vlr[0])+"'");
                 }

@@ -89,7 +89,8 @@
       </programlisting>
       <para>
 	Mathematically, if r is the number, and s is the number of
-	bits, ashl calculates:
+	bits, ashl calculates:bg
+
 	<programlisting>
 	  r x 2<superscript>s</superscript>
 	</programlisting>

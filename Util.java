@@ -38,6 +38,7 @@ import sisc.compiler.*;
 import java.util.*;
 import java.util.jar.*;
 import java.io.*;
+import java.text.*;
 
 public abstract class Util implements Conf {
 
@@ -69,7 +70,7 @@ public abstract class Util implements Conf {
 
     public static void error(Interpreter r, Value where, String errormessage)
     throws ContinuationException {
-	error(r, "Error in "+where+": "+errormessage, false);
+	error(r, liMessage("errorinwhere", where.toString())+": "+errormessage, false);
     }
 
     public static void error(Interpreter r, String errormessage)
@@ -80,16 +81,23 @@ public abstract class Util implements Conf {
     public static void error(Interpreter r, String errormessage,
                              boolean prependError)
     throws ContinuationException {
-	error(r, new SchemeString((prependError ? "Error: "+errormessage :
+	error(r, new SchemeString((prependError ? liMessage("error")+": "+errormessage :
 				   errormessage)));
     }
 
     public static void error(Interpreter r, Value error)
     throws ContinuationException {
+	CallFrame c;
         r.acc=new Values(new Value[] {
 	    error,
-	    new CallFrame(r.nxp, r.vlr, r.env, r.fk, r.stk).capture(r),
+	    c=new CallFrame(r.nxp, r.vlr, r.env, r.fk, r.stk).capture(r),
 	    new CurriedFC(r.fk.fk)});
+	while (c!=null) {
+	    if (c.nxp!=null)
+		System.err.println(c.nxp.getClass());
+	    c=c.parent;
+	}
+
         throw new ContinuationException(r.fk);
     }
 
@@ -104,7 +112,7 @@ public abstract class Util implements Conf {
     throws Exception {
         int x=length(argl);
         if (x!=arity && arity!=-1)
-            throw new RuntimeException("expected "+arity+" args, got "+x);
+            throw new RuntimeException(liMessage("notenoughargs", arity, x));
     }
 
     public static int length(Pair p) {
@@ -115,8 +123,7 @@ public abstract class Util implements Conf {
                 p=(Pair)p.cdr;
             return i;
         } catch (ClassCastException ce) {
-            throw new RuntimeException(s.synopsis(DEFAULT_SYNOPSIS_LENGTH)+
-				       " is not a proper list");
+            throw new RuntimeException(liMessage("notaproperlist", s.synopsis(DEFAULT_SYNOPSIS_LENGTH)));
         }
     }
 
@@ -176,9 +183,8 @@ public abstract class Util implements Conf {
         if (o instanceof Values)
             throw new RuntimeException(((Values)o).values.length+
                                        " values received in single-value context");
-        throw new RuntimeException("expected type "+type+", got '"+
-				   o.synopsis(DEFAULT_SYNOPSIS_LENGTH)+
-                                   '\'');
+        throw new RuntimeException(liMessage("unexpectedarg", liMessage(type), 
+					     o.synopsis(DEFAULT_SYNOPSIS_LENGTH)));
     }
 
     public static final Symbol sym(String s) {
@@ -286,7 +292,7 @@ public abstract class Util implements Conf {
     public static final Module module(Value o) {
         try {
             return (Module)o;
-        } catch (ClassCastException e) { typeError("native library", o); }
+        } catch (ClassCastException e) { typeError("nativelibrary", o); }
 	return null;
     }
 
@@ -332,6 +338,43 @@ public abstract class Util implements Conf {
         return p;
     }
 
+    static Locale myLocale=Locale.getDefault();
+    static MessageFormat formatter=new MessageFormat("");
+    static ResourceBundle liMessages=ResourceBundle.getBundle("Messages");
+
+    static {
+	formatter.setLocale(myLocale);
+    }
+
+    // L10N and I18N
+    public static String liMessage(String messageName) {
+	return liMessages.getString(messageName);
+    }
+
+    public static String liMessage(String messageName, String arg1) {
+	return formatter.format(liMessages.getString(messageName),
+				new Object[] { arg1 });
+    }
+
+    public static String liMessage(String messageName, String arg1, 
+				   String arg2) {
+	return formatter.format(liMessages.getString(messageName),
+				new Object[] { arg1, arg2 });
+    }
+
+    public static String liMessage(String messageName, String arg1,
+				   String arg2, String arg3) {
+	return formatter.format(liMessages.getString(messageName),
+				new Object[] { arg1, arg2, arg3 });
+    }
+
+
+    public static String liMessage(String messageName, int arg1, int arg2) {
+	return formatter.format(liMessages.getString(messageName),
+				new Object[] { new Integer(arg1), 
+					       new Integer(arg2) });
+    }
+    
     public static void main(String[] args) {
 	System.out.println(VERSION);
     }
