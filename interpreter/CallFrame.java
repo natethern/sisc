@@ -55,13 +55,12 @@ public class CallFrame extends Procedure {
         CallFrame w=this;
         boolean lastWasLocked=false;
         do {
-            if (lastWasLocked) break;
             lastWasLocked=w.vlk;
             w.vlk=true;
             if (w.nxp!=null)
                 w.nxp.setCaptured(r, w);
             w=w.parent;
-        } while (w!=null); 
+        } while (w!=null && !lastWasLocked); 
 
         return toReturn;
     }

@@ -149,7 +149,8 @@ public class Interpreter extends Util {
         if (cap!=null) {
             for (int i=pos; i>=0; i--) {
                 if (cap[i]) {
-                    cap[i]=false;
+                    if (i+1 < vlr.length)
+                        cap[i+1]=false;
                     llcf.parent=lcf=lcf.makeSafe(this);
                     vlr=lcf.vlr;
                     break;
