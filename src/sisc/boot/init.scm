@@ -58,6 +58,16 @@
      (lambda (ls)	
        (iter ls '()))))
 
+(define reverse!
+  (letrec [(iter (lambda (s r)
+                   (if (null? s) r
+                       (let ((d (cdr s)))
+                         (set-cdr! s r)
+                         (iter d s)))))]
+    (lambda (s)
+      (iter s '()))))
+
+    
 (define (map-car ls)
   (if (null? ls) '()
       (cons (caar ls) (map-car (cdr ls)))))
@@ -69,12 +79,12 @@
 (define map
   (letrec ([map1 (lambda (proc list acc)
                    (if (null? list)
-                       (reverse acc)
+                       (reverse! acc)
                        (map1 proc (cdr list) 
                              (cons (proc (car list)) acc))))]
            [loop (lambda (proc list1 lists c)
                    (if (null? list1)
-                       (reverse c)
+                       (reverse! c)
                        (loop proc (cdr list1)
                              (map-cdr lists)
                              (cons (apply proc
@@ -239,7 +249,7 @@
            (apply proc (normalize-url (current-url) file) rest)))]
       [file-extension
        (lambda (url)
-         (let loop ((x (reverse (string->list url)))
+         (let loop ((x (reverse! (string->list url)))
                     (acc '()))
            (cond [(null? x) #f]
                  [(equal? (car x) #\.)

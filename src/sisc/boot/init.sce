@@ -32,6 +32,16 @@
                    (cons (car |ls_0kCdmqRkK|) |acc_0kY9kTRkK|))))))
     (lambda (|ls_0kghoZQkK|)
       (|iter_0kWkqwQkK| |ls_0kghoZQkK| '()))))
+(define reverse!
+  (letrec ((iter (lambda (s r)
+                   (if (null? s) r
+                       ((lambda (d)
+                          (begin
+                            (set-cdr! s r)
+                            (iter d s)))
+                        (cdr s))))))
+    (lambda (s)
+      (iter s '()))))
 (define map-car
   (lambda (|ls_0ki6ikSkK|)
     (if (null? |ls_0ki6ikSkK|)
@@ -50,7 +60,7 @@
                       |list_0k2F1YVkK|
                       |acc_0koB_oWkK|)
                (if (null? |list_0k2F1YVkK|)
-                 (reverse |acc_0koB_oWkK|)
+                 (reverse! |acc_0koB_oWkK|)
                  (|map1_0k--deTkK|
                    |proc_0kII3vVkK|
                    (cdr |list_0k2F1YVkK|)
@@ -62,7 +72,7 @@
                       |lists_0kqqVLXkK|
                       |c_0kMmTcYkK|)
                (if (null? |list1_0k4uXiXkK|)
-                 (reverse |c_0kMmTcYkK|)
+                 (reverse! |c_0kMmTcYkK|)
                  (|loop_0kkXbHTkK|
                    |proc_0kKxZRWkK|
                    (cdr |list1_0k4uXiXkK|)
@@ -367,7 +377,7 @@
                        (cdr |x_0ksBL4qlK|)
                        (cons (car |x_0ksBL4qlK|) |acc_0kOxJxqlK|)))))))
       |loop_0k6FNDplK|)
-    (reverse (string->list |url_0kMIPaplK|))
+    (reverse! (string->list |url_0kMIPaplK|))
     '())))
 (define load-module
   (lambda (|str_0k8uH-qlK|)

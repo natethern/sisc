@@ -28,7 +28,8 @@ public class SNative extends IndexedProcedure {
         STRINGDOWNCASE = 21,
         MAPCDR = 22,
         MAPCAR = 23,
-        REVERSE = 24;
+        REVERSE = 24,
+	REVERSEB = 25;
 
     static long symid = 0;
 
@@ -53,6 +54,7 @@ public class SNative extends IndexedProcedure {
             define("memv", MEMV);
             define("not", NOT);
             define("reverse", REVERSE);
+            define("reverse!", REVERSEB);
             define("string-order", STRINGORDER);
             define("string-downcase", STRINGDOWNCASE);
             define("string-order-ci", STRINGORDERCI);
@@ -92,6 +94,20 @@ public class SNative extends IndexedProcedure {
             p=(Pair)p.cdr;
         }
         return n;
+    }
+
+    protected final Pair reverseInPlace(Pair s) {
+	if (s==EMPTYLIST) return EMPTYLIST;
+	Pair r=EMPTYLIST;
+	Value d;
+	do {
+	    d=s.cdr;
+	    s.cdr=r;
+	    r=s;
+	    if (d==EMPTYLIST) break;
+	    s=(Pair)d;
+        } while (true);
+        return r;
     }
 
     public final Value doApply(Interpreter f) throws ContinuationException {
@@ -172,6 +188,8 @@ public class SNative extends IndexedProcedure {
                     return reverse(c);
                 case REVERSE:
                     return reverse(pair(f.vlr[0]));
+                case REVERSEB:
+                    return reverseInPlace(pair(f.vlr[0]));
                 default:
                     throwArgSizeException();
                 }
