@@ -95,23 +95,21 @@ public class AssociativeEnvironment extends NamedValue {
         return envLoc;
     }
 
-    public int setOrDefine(Symbol s, Value v) {
-	try {
-	    return set(s, v);
-	} catch (NullPointerException np) {
-	    return define(s,v);
-	}
-    }
-
     public int define(Symbol s, Value v) {
-	if (nextFree >= env.length) 
-	    expand();
-	
-	//NB: the order of the following two statements is important;
-	//otherwise a lookup taking place concurrently might get garbage
-	env[nextFree]=v;
-	symbolMap.put(s, new Integer(nextFree));
-	return nextFree++;
+        synchronized(symbolMap) {
+            try {
+                return set(s, v);
+            } catch (NullPointerException np) {}
+
+            if (nextFree >= env.length) 
+                expand();
+            
+            //NB: the order of the following two statements is important;
+            //otherwise a lookup taking place concurrently might get garbage
+            env[nextFree]=v;
+            symbolMap.put(s, new Integer(nextFree));
+            return nextFree++;
+        }
     }
 
     public int getLoc(Symbol s) {

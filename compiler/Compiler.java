@@ -72,7 +72,7 @@ public class Compiler extends Util {
 
     static void extendenv(AssociativeEnvironment env, String s, int i) {
         Symbol name=Symbol.get(s);
-        env.setOrDefine(name, new Syntax(i));
+        env.define(name, new Syntax(i));
     }
 
     static final int

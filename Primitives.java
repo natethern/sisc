@@ -186,7 +186,6 @@ public class Primitives extends ModuleAdapter {
         define("symbol->string", SYMBOL2STRING);
         define("symbol?", SYMBOLQ);
         define("system-time", SYSTIME);
-        define("system-time",SYSTIME);
         define("tan", TAN);
 	define("truncate", TRUNCATE);
         define("unbox", UNBOX);

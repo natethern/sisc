@@ -52,7 +52,7 @@ public class AppContext extends Util {
             toplevel_env=lookupContextEnv(TOPLEVEL);
         } catch (ArrayIndexOutOfBoundsException ue) {
             toplevel_env=symenv;
-            symenv.setOrDefine(TOPLEVEL, toplevel_env);
+            symenv.define(TOPLEVEL, toplevel_env);
         }
     }
 

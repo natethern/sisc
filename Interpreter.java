@@ -167,7 +167,7 @@ public class Interpreter extends Util {
     }
 
     public void defineContextEnv(Symbol s, AssociativeEnvironment env) {
-	ctx.symenv.setOrDefine(s, env);
+	ctx.symenv.define(s, env);
     }
 
     protected AssociativeEnvironment getContextEnv(Symbol s) {
@@ -183,7 +183,7 @@ public class Interpreter extends Util {
 
     public void define(Symbol s, Value v, Symbol context) {
         AssociativeEnvironment contenv=getContextEnv(context);
-        contenv.setOrDefine(s, v);
+        contenv.define(s, v);
     }
 
 
