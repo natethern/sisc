@@ -9,7 +9,7 @@ public class SchemeVoid extends Value implements Singleton {
     public SchemeVoid() {}
 
     public void display(ValueWriter w) throws IOException {
-        w.append("#<void>");
+        w.append("#!void");
     }
 
     public int hashCode() {
