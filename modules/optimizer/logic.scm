@@ -192,7 +192,7 @@
         ;; Eliminate variable references in command context
         (,x
          (guard (symbol? x))
-         (apply mb-helper xps*))
+         (apply mb-helper exps*))
         ;; Eliminate procedures in command context
         ((lambda ,formals ,body)
          (apply mb-helper exps*))
