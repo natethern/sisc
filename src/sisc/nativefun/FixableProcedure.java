@@ -59,7 +59,7 @@ public abstract class FixableProcedure extends Procedure implements NamedValue {
             }
             if (!r.saveVLR) r.forceReturnVLR();
         } catch (ClassCastException cc) {
-            cc.printStackTrace();
+            //cc.printStackTrace();
             error(r,
                   getName(),
                   liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()),
@@ -67,7 +67,7 @@ public abstract class FixableProcedure extends Procedure implements NamedValue {
         } catch (NestedPrimRuntimeException npr) {
             error(r, getName(), npr);
         } catch (RuntimeException re) {
-            re.printStackTrace();
+            //re.printStackTrace();
             String msg = re.getMessage();
             if (msg == null)
                 msg = re.toString();
