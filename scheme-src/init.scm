@@ -57,21 +57,33 @@
 (define (newline . port)
   (apply display (cons #\newline port)))
 
-(define map (void))
-(letrec ([map1 
-	  (letrec ([iter (lambda (proc head acc ls)
-			   (if (null? ls) 
-			       head
-			       (begin
-				 (set-cdr! acc (cons (proc (car ls)) ()))
-				 (iter proc head (cdr acc) (cdr ls)))))])
-	    
-	    (lambda (proc ls)
-	      (if (null? ls) 
-		  ()
-		  (let ([sv (cons (proc (car ls)) ())])
-		    (iter proc sv sv (cdr ls))))))])
-  (set! map map1))
+(define reverse
+   (letrec [(iter 
+             (lambda (ls acc)
+               (if (null? ls) acc
+                   (iter (cdr ls) (cons (car ls) acc)))))]
+     (lambda (ls)	
+       (iter ls ()))))
+
+(define map
+  (letrec ([map1 (lambda (proc list acc)
+                   (if (null? list)
+                       (reverse acc)
+                       (map1 proc (cdr list) 
+                             (cons (proc (car list)) acc))))]
+           [loop (lambda (proc list1 lists c)
+                   (if (null? list1)
+                       (reverse c)
+                       (loop proc (cdr list1)
+                             (_maphelp1 lists '())
+                             (cons (apply proc
+                                          (car list1)
+                                          (_maphelp2 lists '()))
+                                   c))))])
+    (lambda (proc list1 . lists)
+      (if (null? lists)
+          (map1 proc list1 '())
+          (loop proc list1 lists '())))))
 
 (define (compose . rest)
   (if (null? rest)
@@ -265,13 +277,6 @@
 	      binding-names)))
     
 ;;;;;;;;;;;;; Optimized functions
-(define reverse
-   (letrec [(iter 
-             (lambda (ls acc)
-               (if (null? ls) acc
-                   (iter (cdr ls) (cons (car ls) acc)))))]
-     (lambda (ls)	
-       (iter ls ()))))
 
 (define append
   (letrec ([real-append 
@@ -286,25 +291,6 @@
       (cond [(null? lses) ()]
 	    [(null? (cdr lses)) (car lses)]
 	    [else (apply real-append `(,(car lses) . ,(cdr lses)))]))))
-
-(define map
-  (letrec ([map1 map]
-	   [iter
-	    (lambda (proc lists head acc)
-	      (if (null? (car lists)) 
-		  (if (andmap null? lists)
-		      head
-		      (error 'map "lists are not of equal length."))
-		  (let ([newres (cons (apply proc (map1 car lists)) ())]
-			[rest (map1 cdr lists)])
-		    (if (not (null? acc)) (set-cdr! acc newres))
-		    (if (null? head)
-			(iter proc rest newres newres)
-			(iter proc rest head newres)))))])
-    (lambda (proc ls . lses)
-      (if (null? lses)
-	  (map1 proc ls)
-	  (iter proc (cons ls lses) () ())))))
 
 ; True only if the list is proper (not circular and terminated with null)
 (define (proper-list? x)

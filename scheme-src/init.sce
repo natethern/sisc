@@ -1,93 +1,158 @@
 (define for-each
-  (lambda (%_2649 . %_2648)
-    (if (null? %_2648)
+  (lambda (|proc_Lveb_L5hE| . |lists_LvUe1j5hE|)
+    (if (null? |lists_LvUe1j5hE|)
       (error 'for-each
              '"invalid number of arguments to procedure for-each.")
-      (if (not (null? (car %_2648)))
+      (if (null? (car |lists_LvUe1j5hE|))
+        (void)
         (begin
-          (apply %_2649 (map car %_2648))
-          (apply for-each (cons %_2649 (map cdr %_2648))))
-        (void)))))
+          (apply |proc_Lveb_L5hE|
+                 (map car |lists_LvUe1j5hE|))
+          (apply for-each
+                 (cons |proc_Lveb_L5hE|
+                       (map cdr |lists_LvUe1j5hE|))))))))
 (define eof-object?
-  (lambda (%_2650) (eq? %_2650 '#!eof)))
+  (lambda (|x_LvA7Zc6hE|)
+    (eq? |x_LvA7Zc6hE| '#!eof)))
 (define not
-  (lambda (%_2651) (if %_2651 '#f '#t)))
+  (lambda (|x_LvW3XF6hE|)
+    (if |x_LvW3XF6hE| '#f '#t)))
 (define eqv? eq?)
 (define newline
-  (lambda %_2652
-    (apply display (cons '#\newline %_2652))))
-(define map (void))
-(letrec ((%_2653
-           (letrec ((%_2654
-                      (lambda (%_2658 %_2659 %_2660 %_2661)
-                        (if (null? %_2661)
-                          %_2659
-                          (begin
-                            (set-cdr!
-                              %_2660
-                              (cons (%_2658 (car %_2661)) '()))
-                            (%_2654
-                              %_2658
-                              %_2659
-                              (cdr %_2660)
-                              (cdr %_2661)))))))
-             (lambda (%_2655 %_2656)
-               (if (null? %_2656)
-                 '()
-                 ((lambda (%_2657)
-                    (%_2654 %_2655 %_2657 %_2657 (cdr %_2656)))
-                  (cons (%_2655 (car %_2656)) '())))))))
-  (set! map %_2653))
+  (lambda |port_Lvg0V67hE|
+    (apply display
+           (cons '#\newline |port_Lvg0V67hE|))))
+(define reverse
+  (letrec ((|iter_LvCYSz7hE|
+             (lambda (|ls_LviROt8hE| |acc_LvENMW8hE|)
+               (if (null? |ls_LviROt8hE|)
+                 |acc_LvENMW8hE|
+                 (|iter_LvCYSz7hE|
+                   (cdr |ls_LviROt8hE|)
+                   (cons (car |ls_LviROt8hE|) |acc_LvENMW8hE|))))))
+    (lambda (|ls_LvYUQ08hE|)
+      (|iter_LvCYSz7hE| |ls_LvYUQ08hE| '()))))
+(define map
+  (letrec ((|map1_Lv-JKn9hE|
+             (lambda (|proc_LvIrAEbhE|
+                      |list_Lv2oy5chE|
+                      |acc_LvokwychE|)
+               (if (null? |list_Lv2oy5chE|)
+                 (reverse |acc_LvokwychE|)
+                 (|map1_Lv-JKn9hE|
+                   |proc_LvIrAEbhE|
+                   (cdr |list_Lv2oy5chE|)
+                   (cons (|proc_LvIrAEbhE| (car |list_Lv2oy5chE|))
+                         |acc_LvokwychE|)))))
+           (|loop_LvkGIQ9hE|
+             (lambda (|proc_LvKgu_chE|
+                      |list1_Lv4dssdhE|
+                      |lists_Lvq9qVdhE|
+                      |c_LvM5omehE|)
+               (if (null? |list1_Lv4dssdhE|)
+                 (reverse |c_LvM5omehE|)
+                 (|loop_LvkGIQ9hE|
+                   |proc_LvKgu_chE|
+                   (cdr |list1_Lv4dssdhE|)
+                   (_maphelp1 |lists_Lvq9qVdhE| '())
+                   (cons (apply |proc_LvKgu_chE|
+                                (car |list1_Lv4dssdhE|)
+                                (_maphelp2 |lists_Lvq9qVdhE| '()))
+                         |c_LvM5omehE|))))))
+    (lambda (|proc_LvmvCbbhE|
+             |list1_Lv0zEKahE|
+             .
+             |lists_LvGCGhahE|)
+      (if (null? |lists_LvGCGhahE|)
+        (|map1_Lv-JKn9hE|
+          |proc_LvmvCbbhE|
+          |list1_Lv0zEKahE|
+          '())
+        (|loop_LvkGIQ9hE|
+          |proc_LvmvCbbhE|
+          |list1_Lv0zEKahE|
+          |lists_LvGCGhahE|
+          '())))))
 (define compose
-  (lambda %_2662
-    (if (null? %_2662)
-      (lambda (%_2666) %_2666)
-      ((lambda (%_2664 %_2663)
-         (lambda (%_2665) (%_2663 (%_2664 %_2665))))
-       (apply compose (cdr %_2662))
-       (car %_2662)))))
+  (lambda |rest_Lv62mPehE|
+    (if (null? |rest_Lv62mPehE|)
+      (lambda (|x_LvuPdDghE|) |x_LvuPdDghE|)
+      ((lambda (|f_Lvs-jgfhE| |g_LvOWhJfhE|)
+         (lambda (|x_Lv8TfaghE|)
+           (|f_Lvs-jgfhE| (|g_LvOWhJfhE| |x_Lv8TfaghE|))))
+       (car |rest_Lv62mPehE|)
+       (apply compose (cdr |rest_Lv62mPehE|))))))
 (define compose2
-  (lambda (%_2667 %_2668)
-    (lambda (%_2669) (%_2667 (%_2668 %_2669)))))
+  (lambda (|f_LvQLb4hhE| |g_LvaI9xhhE|)
+    (lambda (|x_LvwE7-hhE|)
+      (|f_LvQLb4hhE| (|g_LvaI9xhhE| |x_LvwE7-hhE|)))))
 (define assq (void))
 (define assv (void))
 (define assoc (void))
 (define memq (void))
 (define memv (void))
 (define member (void))
-(letrec ((%_2671
-           (lambda (%_2687 %_2688 %_2689)
-             (if (null? %_2689)
+(letrec ((|assn_LvSA5rihE|
+           (lambda (|n_LvGNEMohE| |obj_Lv0KCdphE| |alist_LvmGAGphE|)
+             (if (null? |alist_LvmGAGphE|)
                '#f
-               (if (%_2687 (car %_2689) %_2688)
-                 %_2689
-                 (%_2671 %_2687 %_2688 (cdr %_2689))))))
-         (%_2670
-           (lambda (%_2684 %_2685 %_2686)
-             (if (null? %_2686)
+               (if (|n_LvGNEMohE|
+                     (caar |alist_LvmGAGphE|)
+                     |obj_Lv0KCdphE|)
+                 (car |alist_LvmGAGphE|)
+                 (|assn_LvSA5rihE|
+                   |n_LvGNEMohE|
+                   |obj_Lv0KCdphE|
+                   (cdr |alist_LvmGAGphE|))))))
+         (|memn_Lvcx3UihE|
+           (lambda (|n_LvICy7qhE| |obj_Lv2zwAqhE| |list_Lvovu1rhE|)
+             (if (null? |list_Lvovu1rhE|)
                '#f
-               (if (%_2684 (caar %_2686) %_2685)
-                 (car %_2686)
-                 (%_2670 %_2684 %_2685 (cdr %_2686)))))))
+               (if (|n_LvICy7qhE|
+                     (car |list_Lvovu1rhE|)
+                     |obj_Lv2zwAqhE|)
+                 |list_Lvovu1rhE|
+                 (|memn_Lvcx3UihE|
+                   |n_LvICy7qhE|
+                   |obj_Lv2zwAqhE|
+                   (cdr |list_Lvovu1rhE|)))))))
   (begin
     (set! assq
-      (lambda (%_2672 %_2673)
-        (%_2670 eq? %_2672 %_2673)))
+      (lambda (|obj_Lvyt1ljhE| |alist_LvUp_NjhE|)
+        (|assn_LvSA5rihE|
+          eq?
+          |obj_Lvyt1ljhE|
+          |alist_LvUp_NjhE|)))
     (set! assv
-      (lambda (%_2674 %_2675)
-        (%_2670 eqv? %_2674 %_2675)))
+      (lambda (|obj_LvemZekhE| |alist_LvAiXHkhE|)
+        (|assn_LvSA5rihE|
+          eqv?
+          |obj_LvemZekhE|
+          |alist_LvAiXHkhE|)))
     (set! assoc
-      (lambda (%_2676 %_2677)
-        (%_2670 equal? %_2676 %_2677)))
+      (lambda (|obj_LvWeV8lhE| |alist_LvgbTBlhE|)
+        (|assn_LvSA5rihE|
+          equal?
+          |obj_LvWeV8lhE|
+          |alist_LvgbTBlhE|)))
     (set! memq
-      (lambda (%_2678 %_2679)
-        (%_2671 eq? %_2678 %_2679)))
+      (lambda (|obj_LvC7R2mhE| |list_LvY3PvmhE|)
+        (|memn_Lvcx3UihE|
+          eq?
+          |obj_LvC7R2mhE|
+          |list_LvY3PvmhE|)))
     (set! memv
-      (lambda (%_2680 %_2681)
-        (%_2671 eqv? %_2680 %_2681)))
+      (lambda (|obj_Lvi0NYmhE| |list_LvEYKpnhE|)
+        (|memn_Lvcx3UihE|
+          eqv?
+          |obj_Lvi0NYmhE|
+          |list_LvEYKpnhE|)))
     (set! member
-      (lambda (%_2682 %_2683)
-        (%_2671 equal? %_2682 %_2683)))))
+      (lambda (|obj_Lv-UISnhE| |list_LvkRGjohE|)
+        (|memn_Lvcx3UihE|
+          equal?
+          |obj_Lv-UISnhE|
+          |list_LvkRGjohE|)))))
 (define cadr (compose2 car cdr))
 (define cdar (compose2 cdr car))
 (define cddr (compose2 cdr cdr))
@@ -117,67 +182,92 @@
 (define cdddar (compose2 cdr cddar))
 (define cddddr (compose2 cdr cdddr))
 (define append2
-  (lambda (%_2690 %_2691)
-    (if (null? %_2690)
-      %_2691
-      (cons (car %_2690) (append2 (cdr %_2690) %_2691)))))
+  (lambda (|ls1_LvKrsurhE| |ls2_Lv4oqXrhE|)
+    (if (null? |ls1_LvKrsurhE|)
+      |ls2_Lv4oqXrhE|
+      (cons (car |ls1_LvKrsurhE|)
+            (append2 (cdr |ls1_LvKrsurhE|) |ls2_Lv4oqXrhE|)))))
 (define append append2)
 (define list->string
-  (lambda (%_2692)
-    (letrec ((%_2693
-               (lambda (%_2694 %_2695 %_2696)
-                 (if (null? %_2694)
-                   %_2695
+  (lambda (|l_LvqkooshE|)
+    (letrec ((|l2s_LvMgmRshE|
+               (lambda (|l_Lv6dkithE| |s_Lvs9iLthE| |n_LvO5gcuhE|)
+                 (if (null? |l_Lv6dkithE|)
+                   |s_Lvs9iLthE|
                    (begin
-                     (string-set! %_2695 %_2696 (car %_2694))
-                     (%_2693 (cdr %_2694) %_2695 (+ %_2696 '1)))))))
-      (%_2693 %_2692 (make-string (length %_2692)) '0))))
+                     (string-set!
+                       |s_Lvs9iLthE|
+                       |n_LvO5gcuhE|
+                       (car |l_Lv6dkithE|))
+                     (|l2s_LvMgmRshE|
+                       (cdr |l_Lv6dkithE|)
+                       |s_Lvs9iLthE|
+                       (+ |n_LvO5gcuhE| '1)))))))
+      (|l2s_LvMgmRshE|
+        |l_LvqkooshE|
+        (make-string (length |l_LvqkooshE|))
+        '0))))
 (define string->list
-  (letrec ((%_2697
-             (lambda (%_2699 %_2700 %_2701)
-               (if (< %_2701 '0)
-                 %_2700
-                 (%_2697
-                   %_2699
-                   (cons (string-ref %_2699 %_2701) %_2700)
-                   (- %_2701 '1))))))
-    (lambda (%_2698)
-      (%_2697 %_2698 '() (- (string-length %_2698) '1)))))
+  (letrec ((|s2l_Lv82eFuhE|
+             (lambda (|s_LvQW9zvhE| |h_LvaT70whE| |n_LvwP5twhE|)
+               (if (< |n_LvwP5twhE| '0)
+                 |h_LvaT70whE|
+                 (|s2l_Lv82eFuhE|
+                   |s_LvQW9zvhE|
+                   (cons (string-ref |s_LvQW9zvhE| |n_LvwP5twhE|)
+                         |h_LvaT70whE|)
+                   (- |n_LvwP5twhE| '1))))))
+    (lambda (|s_Lvu-b6vhE|)
+      (|s2l_Lv82eFuhE|
+        |s_Lvu-b6vhE|
+        '()
+        (- (string-length |s_Lvu-b6vhE|) '1)))))
 (define list->vector
-  (letrec ((%_2702
-             (lambda (%_2704 %_2705 %_2706)
-               (if (null? %_2704)
-                 %_2705
+  (letrec ((|l2v_LvSL3WwhE|
+             (lambda (|l_LvyE_PxhE| |v_LvUAZgyhE| |n_LvexXJyhE|)
+               (if (null? |l_LvyE_PxhE|)
+                 |v_LvUAZgyhE|
                  (begin
-                   (vector-set! %_2705 %_2706 (car %_2704))
-                   (%_2702 (cdr %_2704) %_2705 (+ %_2706 '1)))))))
-    (lambda (%_2703)
-      (if (proper-list? %_2703)
-        (%_2702 %_2703 (make-vector (length %_2703)) '0)
+                   (vector-set!
+                     |v_LvUAZgyhE|
+                     |n_LvexXJyhE|
+                     (car |l_LvyE_PxhE|))
+                   (|l2v_LvSL3WwhE|
+                     (cdr |l_LvyE_PxhE|)
+                     |v_LvUAZgyhE|
+                     (+ |n_LvexXJyhE| '1)))))))
+    (lambda (|l_LvcI1nxhE|)
+      (if (proper-list? |l_LvcI1nxhE|)
+        (|l2v_LvSL3WwhE|
+          |l_LvcI1nxhE|
+          (make-vector (length |l_LvcI1nxhE|))
+          '0)
         (error 'list->vector
                '"can only convert a proper list."
-               %_2703)))))
+               |l_LvcI1nxhE|)))))
 (define vector
-  (lambda %_2707 (list->vector %_2707)))
+  (lambda |elems_LvAtVazhE|
+    (list->vector |elems_LvAtVazhE|)))
 (define string
-  (lambda %_2708 (list->string %_2708)))
+  (lambda |elems_LvWpTDzhE|
+    (list->string |elems_LvWpTDzhE|)))
 (define detect-os
   (lambda ()
-    ((lambda (%_2709)
-       (if (> (string-length %_2709) '3)
-         (if (equal? (substring %_2709 '0 '3) '"mac")
+    ((lambda (|osn_LvgmR4AhE|)
+       (if (> (string-length |osn_LvgmR4AhE|) '3)
+         (if (equal? (substring |osn_LvgmR4AhE| '0 '3) '"mac")
            'macos
-           (if (equal? (substring %_2709 '0 '3) '"win")
+           (if (equal? (substring |osn_LvgmR4AhE| '0 '3) '"win")
              'ms-dos
-             (if (equal? (substring %_2709 '0 '3) '"ms-")
+             (if (equal? (substring |osn_LvgmR4AhE| '0 '3) '"ms-")
                'ms-dos
-               (if (equal? (substring %_2709 '0 '3) '"uni")
+               (if (equal? (substring |osn_LvgmR4AhE| '0 '3) '"uni")
                  'unix
-                 (if (equal? (substring %_2709 '0 '3) '"lin")
+                 (if (equal? (substring |osn_LvgmR4AhE| '0 '3) '"lin")
                    'unix
-                   (if (equal? (substring %_2709 '0 '4) '"os/")
+                   (if (equal? (substring |osn_LvgmR4AhE| '0 '4) '"os/")
                      'os2
-                     (if (equal? (substring %_2709 '0 '3) '"vax")
+                     (if (equal? (substring |osn_LvgmR4AhE| '0 '3) '"vax")
                        'vax
                        (void))))))))
          'unix))
@@ -185,333 +275,402 @@
        (getprop 'os.name '*environment-variables*)))))
 (define current-url (make-parameter '"file:."))
 (define current-directory
-  (lambda %_2710
-    (if (null? %_2710)
+  (lambda |rest_LvCiPxAhE|
+    (if (null? |rest_LvCiPxAhE|)
       (normalize-url (current-url) '".")
       (current-url
         (normalize-url
           (current-url)
-          ((lambda (%_2711)
-             ((lambda (%_2712)
-                (if (eq? (string-ref %_2711 (- %_2712 '1)) '#\/)
-                  %_2711
-                  (string-append %_2711 '"/")))
-              (string-length %_2711)))
-           (car %_2710)))))))
+          ((lambda (|v_LvYeN-AhE|)
+             ((lambda (|l_LvibLrBhE|)
+                (if (eq? (string-ref |v_LvYeN-AhE| (- |l_LvibLrBhE| '1))
+                         '#\/)
+                  |v_LvYeN-AhE|
+                  (string-append |v_LvYeN-AhE| '"/")))
+              (string-length |v_LvYeN-AhE|)))
+           (car |rest_LvCiPxAhE|)))))))
 (define load-expanded load)
-((lambda (%_2713)
-   ((lambda (%_2716 %_2715 %_2714)
+((lambda (|_load_LvE7JUBhE|)
+   ((lambda (|normalize_Lv-3HlChE|
+             |file-handler_Lvk0FOChE|
+             |file-extension_LvGYCfDhE|)
       (begin
-        (set! open-input-file (%_2714 open-input-file))
+        (set! open-input-file
+          (|normalize_Lv-3HlChE| open-input-file))
         (set! open-source-input-file
-          (%_2714 open-source-input-file))
-        (set! open-output-file (%_2714 open-output-file))
+          (|normalize_Lv-3HlChE| open-source-input-file))
+        (set! open-output-file
+          (|normalize_Lv-3HlChE| open-output-file))
         (set! load
-          (lambda (%_2717)
+          (lambda (|file_Lv0VAIDhE|)
             (begin
-              ((lambda (%_2718)
+              ((lambda (|previous-url_LvmRy9EhE|)
                  (begin
-                   (current-url (normalize-url %_2718 %_2717))
+                   (current-url
+                     (normalize-url
+                       |previous-url_LvmRy9EhE|
+                       |file_Lv0VAIDhE|))
                    (with-failure-continuation
-                     (lambda (%_2719 %_2720)
+                     (lambda (|m_LvINwCEhE| |e_Lv2Ku3FhE|)
                        (begin
-                         (current-url %_2718)
+                         (current-url |previous-url_LvmRy9EhE|)
                          (call-with-failure-continuation
-                           (lambda (%_2721) (%_2721 %_2719 %_2720)))))
+                           (lambda (|fk_LvoGswFhE|)
+                             (|fk_LvoGswFhE| |m_LvINwCEhE| |e_Lv2Ku3FhE|)))))
                      (lambda ()
-                       ((lambda (%_2722)
-                          ((%_2715 (if %_2722 %_2722 '"scm"))
+                       ((lambda (|fe_LvKCqZFhE|)
+                          ((|file-handler_Lvk0FOChE|
+                             (if |fe_LvKCqZFhE| |fe_LvKCqZFhE| '"scm"))
                            (current-url)))
-                        (%_2716 (current-url)))))
-                   (current-url %_2718)))
+                        (|file-extension_LvGYCfDhE| (current-url)))))
+                   (current-url |previous-url_LvmRy9EhE|)))
                (current-url))
               (void))))))
-    (lambda (%_2731)
-      ((letrec ((%_2732
-                  (lambda (%_2733 %_2734)
-                    (if (null? %_2733)
-                      '#f
-                      (if (equal? (car %_2733) '#\.)
-                        (list->string %_2734)
-                        (%_2732 (cdr %_2733) (cons (car %_2733) %_2734)))))))
-         %_2732)
-       (reverse (string->list %_2731))
-       '()))
-    (lambda (%_2726)
-      ((lambda (%_2727)
-         (if (memv %_2727 '(sce pp))
+    (lambda (|proc_Lv4zoqGhE|)
+      (lambda (|file_LvMrkkHhE| . |rest_LvqvmTGhE|)
+        (apply |proc_Lv4zoqGhE|
+               (normalize-url (current-url) |file_LvMrkkHhE|)
+               |rest_LvqvmTGhE|)))
+    (lambda (|extension_Lv6oiNHhE|)
+      ((lambda (|t_LvskgeIhE|)
+         (if (memv |t_LvskgeIhE| '(sce pp))
            load-expanded
-           (if (memv %_2727 '(sll))
+           (if (memv |t_LvskgeIhE| '(sll))
              (with-failure-continuation
-               (lambda (%_2728 %_2729)
-                 (lambda (%_2730)
+               (lambda (|m_LvOgeHIhE| |e_Lv8dc8JhE|)
+                 (lambda (|name_Lvu9aBJhE|)
                    (error 'load
                           '"shared libraries not supported in this build.")))
                (lambda ()
                  (eval '(lambda (name)
                           (import compiled-libraries)
                           (link-library (open-library name))))))
-             %_2713)))
-       (string->symbol (string-downcase %_2726))))
-    (lambda (%_2723)
-      (lambda (%_2725 . %_2724)
-        (apply %_2723
-               (normalize-url (current-url) %_2725)
-               %_2724)))))
+             |_load_LvE7JUBhE|)))
+       (string->symbol
+         (string-downcase |extension_Lv6oiNHhE|))))
+    (lambda (|url_LvQ582KhE|)
+      ((letrec ((|loop_Lva26vKhE|
+                  (lambda (|x_Lvw-3YKhE| |acc_LvSW1pLhE|)
+                    (if (null? |x_Lvw-3YKhE|)
+                      '#f
+                      (if (equal? (car |x_Lvw-3YKhE|) '#\.)
+                        (list->string |acc_LvSW1pLhE|)
+                        (|loop_Lva26vKhE|
+                          (cdr |x_Lvw-3YKhE|)
+                          (cons (car |x_Lvw-3YKhE|) |acc_LvSW1pLhE|)))))))
+         |loop_Lva26vKhE|)
+       (reverse (string->list |url_LvQ582KhE|))
+       '()))))
  load)
 (define load-module
-  (lambda (%_2735)
-    ((lambda (%_2736)
-       ((lambda (%_2737)
+  (lambda (|str_LvcT_RLhE|)
+    ((lambda (|nl_LvyPZiMhE|)
+       ((lambda (|binding-names_LvULXLMhE|)
           (for-each
-            (lambda (%_2738)
+            (lambda (|name_LveIVcNhE|)
               (putprop
-                %_2738
+                |name_LveIVcNhE|
                 '*toplevel*
-                (native-library-binding %_2736 %_2738)))
-            %_2737))
-        (native-library-binding-names %_2736)))
-     (load-native-library %_2735))))
-(define reverse
-  (letrec ((%_2739
-             (lambda (%_2741 %_2742)
-               (if (null? %_2741)
-                 %_2742
-                 (%_2739 (cdr %_2741) (cons (car %_2741) %_2742))))))
-    (lambda (%_2740) (%_2739 %_2740 '()))))
+                (native-library-binding
+                  |nl_LvyPZiMhE|
+                  |name_LveIVcNhE|)))
+            |binding-names_LvULXLMhE|))
+        (native-library-binding-names |nl_LvyPZiMhE|)))
+     (load-native-library |str_LvcT_RLhE|))))
 (define append
-  (letrec ((%_2743
-             (lambda (%_2746 . %_2745)
-               (if (null? %_2745)
-                 %_2746
-                 (if (null? %_2746)
-                   (apply %_2743 %_2745)
-                   (apply %_2743
-                          (cons (append2 %_2746 (car %_2745))
-                                (cdr %_2745))))))))
-    (lambda %_2744
-      (if (null? %_2744)
+  (letrec ((|real-append_LvAETFNhE|
+             (lambda (|ls1_LvCtN0PhE| . |lses_LvgxPzOhE|)
+               (if (null? |lses_LvgxPzOhE|)
+                 |ls1_LvCtN0PhE|
+                 (if (null? |ls1_LvCtN0PhE|)
+                   (apply |real-append_LvAETFNhE| |lses_LvgxPzOhE|)
+                   (apply |real-append_LvAETFNhE|
+                          (cons (append2
+                                  |ls1_LvCtN0PhE|
+                                  (car |lses_LvgxPzOhE|))
+                                (cdr |lses_LvgxPzOhE|))))))))
+    (lambda |lses_LvWAR6OhE|
+      (if (null? |lses_LvWAR6OhE|)
         '()
-        (if (null? (cdr %_2744))
-          (car %_2744)
-          (apply %_2743 (cons (car %_2744) (cdr %_2744))))))))
-(define map
-  (letrec ((%_2748
-             (lambda (%_2752 %_2753 %_2754 %_2755)
-               (if (null? (car %_2753))
-                 (if (andmap null? %_2753)
-                   %_2754
-                   (error 'map '"lists are not of equal length."))
-                 ((lambda (%_2757 %_2756)
-                    (begin
-                      (if (not (null? %_2755))
-                        (set-cdr! %_2755 %_2756)
-                        (void))
-                      (if (null? %_2754)
-                        (%_2748 %_2752 %_2757 %_2756 %_2756)
-                        (%_2748 %_2752 %_2757 %_2754 %_2756))))
-                  (%_2747 cdr %_2753)
-                  (cons (apply %_2752 (%_2747 car %_2753)) '())))))
-           (%_2747 map))
-    (lambda (%_2751 %_2750 . %_2749)
-      (if (null? %_2749)
-        (%_2747 %_2751 %_2750)
-        (%_2748 %_2751 (cons %_2750 %_2749) '() '())))))
+        (if (null? (cdr |lses_LvWAR6OhE|))
+          (car |lses_LvWAR6OhE|)
+          (apply |real-append_LvAETFNhE|
+                 (cons (car |lses_LvWAR6OhE|)
+                       (cdr |lses_LvWAR6OhE|))))))))
 (define proper-list?
-  (lambda (%_2758)
-    ((letrec ((%_2759
-                (lambda (%_2760 %_2761)
-                  (if (pair? %_2760)
-                    ((lambda (%_2762)
-                       (if (pair? %_2762)
-                         ((lambda (%_2764 %_2763)
-                            (if (not (eq? %_2763 %_2764))
-                              (%_2759 %_2763 %_2764)
-                              '#f))
-                          (cdr %_2761)
-                          (cdr %_2762))
-                         (null? %_2762)))
-                     (cdr %_2760))
-                    (null? %_2760)))))
-       %_2759)
-     %_2758
-     %_2758)))
+  (lambda (|x_LvYpLtPhE|)
+    ((letrec ((|lp_LvimJWPhE|
+                (lambda (|x_LvEiHnQhE| |lag_Lv-eFQQhE|)
+                  (if (pair? |x_LvEiHnQhE|)
+                    ((lambda (|x_LvkbDhRhE|)
+                       (if (pair? |x_LvkbDhRhE|)
+                         ((lambda (|x_LvG7BKRhE| |lag_Lv04zbShE|)
+                            (if (eq? |x_LvG7BKRhE| |lag_Lv04zbShE|)
+                              '#f
+                              (|lp_LvimJWPhE| |x_LvG7BKRhE| |lag_Lv04zbShE|)))
+                          (cdr |x_LvkbDhRhE|)
+                          (cdr |lag_Lv-eFQQhE|))
+                         (null? |x_LvkbDhRhE|)))
+                     (cdr |x_LvEiHnQhE|))
+                    (null? |x_LvEiHnQhE|)))))
+       |lp_LvimJWPhE|)
+     |x_LvYpLtPhE|
+     |x_LvYpLtPhE|)))
 (define list? proper-list?)
 (define expt
-  (letrec ((%_2803
-             (lambda (%_2808 %_2809)
-               (if (negative? %_2809)
-                 (/ (%_2803 %_2808 (abs %_2809)))
-                 (if (if (exact? %_2808) (= %_2808 '2) '#f)
-                   (ashl '1 %_2809)
-                   ((letrec ((%_2810
-                               (lambda (%_2811 %_2812 %_2813)
-                                 (if (zero? %_2811)
-                                   %_2812
-                                   (%_2810
-                                     (quotient %_2811 '2)
-                                     (if (odd? %_2811)
-                                       (* %_2812 %_2813)
-                                       %_2812)
-                                     (* %_2813 %_2813))))))
-                      %_2810)
-                    %_2809
+  (letrec ((|general-expt_Lvm0xEShE|
+             (lambda (|base_LvKNosUhE| |exponent_Lv4KmVUhE|)
+               (exp (* |exponent_Lv4KmVUhE| (log |base_LvKNosUhE|)))))
+           (|integer-expt_LvIYu5ThE|
+             (lambda (|base_LvqGkmVhE| |exponent_LvMCiPVhE|)
+               (if (negative? |exponent_LvMCiPVhE|)
+                 (/ (|integer-expt_LvIYu5ThE|
+                      |base_LvqGkmVhE|
+                      (abs |exponent_LvMCiPVhE|)))
+                 (if (if (exact? |base_LvqGkmVhE|)
+                       (= |base_LvqGkmVhE| '2)
+                       '#f)
+                   (ashl '1 |exponent_LvMCiPVhE|)
+                   ((letrec ((|loop_Lv6zggWhE|
+                               (lambda (|rest_LvsveJWhE|
+                                        |result_LvOrcaXhE|
+                                        |squaring_Lv8oaDXhE|)
+                                 (if (zero? |rest_LvsveJWhE|)
+                                   |result_LvOrcaXhE|
+                                   (|loop_Lv6zggWhE|
+                                     (quotient |rest_LvsveJWhE| '2)
+                                     (if (odd? |rest_LvsveJWhE|)
+                                       (* |result_LvOrcaXhE|
+                                          |squaring_Lv8oaDXhE|)
+                                       |result_LvOrcaXhE|)
+                                     (* |squaring_Lv8oaDXhE|
+                                        |squaring_Lv8oaDXhE|))))))
+                      |loop_Lv6zggWhE|)
+                    |exponent_LvMCiPVhE|
                     '1
-                    %_2808)))))
-           (%_2802
-             (lambda (%_2806 %_2807)
-               (exp (* %_2807 (log %_2806))))))
-    (lambda (%_2804 %_2805)
-      (if (zero? %_2805)
-        (if (exact? %_2805) '1 '1.0)
-        (if (zero? %_2804)
-          (if (exact? %_2805) %_2804 '0.0)
-          (if (if (exact? %_2805) (integer? %_2805) '#f)
-            (%_2803 %_2804 %_2805)
-            (%_2802 %_2804 %_2805)))))))
+                    |base_LvqGkmVhE|))))))
+    (lambda (|base_Lv2VsyThE| |exponent_LvoRq_ThE|)
+      (if (zero? |exponent_LvoRq_ThE|)
+        (if (exact? |exponent_LvoRq_ThE|) '1 '1.0)
+        (if (zero? |base_Lv2VsyThE|)
+          (if (exact? |exponent_LvoRq_ThE|)
+            |base_Lv2VsyThE|
+            '0.0)
+          (if (if (exact? |exponent_LvoRq_ThE|)
+                (integer? |exponent_LvoRq_ThE|)
+                '#f)
+            (|integer-expt_LvIYu5ThE|
+              |base_Lv2VsyThE|
+              |exponent_LvoRq_ThE|)
+            (|general-expt_Lvm0xEShE|
+              |base_Lv2VsyThE|
+              |exponent_LvoRq_ThE|)))))))
 (define modpow
-  (lambda (%_2814 %_2815 %_2816)
-    (if (= %_2815 '1)
-      (modulo %_2814 %_2816)
-      (if (even? %_2815)
-        ((lambda (%_2819)
-           (modulo (* %_2819 %_2819) %_2816))
-         (modpow %_2814 (/ %_2815 '2) %_2816))
-        ((lambda (%_2818)
+  (lambda (|x_Lvuk84YhE| |y_LvQg6xYhE| |n_Lvad4-YhE|)
+    (if (= |y_LvQg6xYhE| '1)
+      (modulo |x_Lvuk84YhE| |n_Lvad4-YhE|)
+      (if (even? |y_LvQg6xYhE|)
+        ((lambda (|tmp_Lvc2-k-hE|)
+           (modulo
+             (* |tmp_Lvc2-k-hE| |tmp_Lvc2-k-hE|)
+             |n_Lvad4-YhE|))
+         (modpow
+           |x_Lvuk84YhE|
+           (/ |y_LvQg6xYhE| '2)
+           |n_Lvad4-YhE|))
+        ((lambda (|tmp_LvS50UZhE|)
            (begin
-             (set! %_2818 (modulo (* %_2818 %_2818) %_2816))
-             (modulo (* %_2814 %_2818) %_2816)))
-         (modpow %_2814 (/ (- %_2815 '1) '2) %_2816))))))
+             (set! |tmp_LvS50UZhE|
+               (modulo
+                 (* |tmp_LvS50UZhE| |tmp_LvS50UZhE|)
+                 |n_Lvad4-YhE|))
+             (modulo
+               (* |x_Lvuk84YhE| |tmp_LvS50UZhE|)
+               |n_Lvad4-YhE|)))
+         (modpow
+           |x_Lvuk84YhE|
+           (/ (- |y_LvQg6xYhE| '1) '2)
+           |n_Lvad4-YhE|))))))
 (define integer?
-  ((lambda (%_2820)
-     (lambda (%_2821)
-       ((lambda (%_2822)
-          (if %_2822
-            %_2822
-            (if (real? %_2821) (= (round %_2821) %_2821) '#f)))
-        (%_2820 %_2821))))
+  ((lambda (|oldint?_Lvy-XN-hE|)
+     (lambda (|n_LvUWVe_hE|)
+       ((lambda (|t_LveTTH_hE|)
+          (if |t_LveTTH_hE|
+            |t_LveTTH_hE|
+            (if (real? |n_LvUWVe_hE|)
+              (= (round |n_LvUWVe_hE|) |n_LvUWVe_hE|)
+              '#f)))
+        (|oldint?_Lvy-XN-hE| |n_LvUWVe_hE|))))
    integer?))
 (define real?
-  ((lambda (%_2823)
-     (lambda (%_2824)
-       (if (number? %_2824) (not (%_2823 %_2824)) '#f)))
+  ((lambda (|oldcomp?_LvAPR80iE|)
+     (lambda (|n_LvWLPB0iE|)
+       (if (number? |n_LvWLPB0iE|)
+         (if (|oldcomp?_LvAPR80iE| |n_LvWLPB0iE|) '#f '#t)
+         '#f)))
    complex?))
 (define rational? real?)
 (define complex? number?)
 (define abs
-  (lambda (%_2825)
-    (if (not (real? %_2825))
-      ((lambda (%_2827 %_2826)
-         (sqrt (+ (* %_2826 %_2826) (* %_2827 %_2827))))
-       (imag-part %_2825)
-       (real-part %_2825))
-      (if (< %_2825 '0) (- %_2825) %_2825))))
+  (lambda (|num_LvgIN21iE|)
+    (if (real? |num_LvgIN21iE|)
+      (if (< |num_LvgIN21iE| '0)
+        (- |num_LvgIN21iE|)
+        |num_LvgIN21iE|)
+      ((lambda (|a_LvCELv1iE| |b_LvYAJY1iE|)
+         (sqrt (+ (* |a_LvCELv1iE| |a_LvCELv1iE|)
+                  (* |b_LvYAJY1iE| |b_LvYAJY1iE|))))
+       (real-part |num_LvgIN21iE|)
+       (imag-part |num_LvgIN21iE|)))))
 (define min (void))
 (define max (void))
-(letrec ((%_2828
-           (lambda (%_2833 %_2834 %_2835 %_2836)
-             (if (null? %_2835)
-               (if (if %_2836 (exact? %_2834) '#f)
-                 (exact->inexact %_2834)
-                 %_2834)
-               (if (%_2833 (car %_2835) %_2834)
-                 (%_2828
-                   %_2833
-                   (car %_2835)
-                   (cdr %_2835)
-                   (if %_2836 %_2836 (inexact? (car %_2835))))
-                 (%_2828 %_2833 %_2834 (cdr %_2835) %_2836))))))
+(letrec ((|_min_max_LvixHp2iE|
+           (lambda (|proc_Lv0fxG4iE|
+                    |mv_Lvmbv75iE|
+                    |args_LvI7tA5iE|
+                    |inexact_Lv24r16iE|)
+             (if (null? |args_LvI7tA5iE|)
+               (if (if |inexact_Lv24r16iE|
+                     (exact? |mv_Lvmbv75iE|)
+                     '#f)
+                 (exact->inexact |mv_Lvmbv75iE|)
+                 |mv_Lvmbv75iE|)
+               (if (|proc_Lv0fxG4iE|
+                     (car |args_LvI7tA5iE|)
+                     |mv_Lvmbv75iE|)
+                 (|_min_max_LvixHp2iE|
+                   |proc_Lv0fxG4iE|
+                   (car |args_LvI7tA5iE|)
+                   (cdr |args_LvI7tA5iE|)
+                   ((lambda (|t_Lvo0pu6iE|)
+                      (if |t_Lvo0pu6iE|
+                        |t_Lvo0pu6iE|
+                        (inexact? (car |args_LvI7tA5iE|))))
+                    |inexact_Lv24r16iE|))
+                 (|_min_max_LvixHp2iE|
+                   |proc_Lv0fxG4iE|
+                   |mv_Lvmbv75iE|
+                   (cdr |args_LvI7tA5iE|)
+                   |inexact_Lv24r16iE|))))))
   (begin
     (set! min
-      (lambda (%_2830 . %_2829)
-        (if (null? %_2829)
-          %_2830
-          (%_2828 < %_2830 %_2829 (inexact? %_2830)))))
+      (lambda (|x1_Lv-pDj3iE| . |args_LvEtFS2iE|)
+        (if (null? |args_LvEtFS2iE|)
+          |x1_Lv-pDj3iE|
+          (|_min_max_LvixHp2iE|
+            <
+            |x1_Lv-pDj3iE|
+            |args_LvEtFS2iE|
+            (inexact? |x1_Lv-pDj3iE|)))))
     (set! max
-      (lambda (%_2832 . %_2831)
-        (if (null? %_2831)
-          %_2832
-          (%_2828 > %_2832 %_2831 (inexact? %_2832)))))))
+      (lambda (|x1_LvGizd4iE| . |args_LvkmBM3iE|)
+        (if (null? |args_LvkmBM3iE|)
+          |x1_LvGizd4iE|
+          (|_min_max_LvixHp2iE|
+            >
+            |x1_LvGizd4iE|
+            |args_LvkmBM3iE|
+            (inexact? |x1_LvGizd4iE|)))))))
 (define negative?
-  (lambda (%_2838) (< %_2838 '0)))
+  (lambda (|n_LvKYmX6iE|) (< |n_LvKYmX6iE| '0)))
 (define positive?
-  (lambda (%_2839) (> %_2839 '0)))
+  (lambda (|n_Lv4Vko7iE|) (> |n_Lv4Vko7iE| '0)))
 (define even?
-  (lambda (%_2840) (= '0 (modulo %_2840 '2))))
+  (lambda (|n_LvqRiR7iE|)
+    (= '0 (modulo |n_LvqRiR7iE| '2))))
 (define odd?
-  (lambda (%_2841) (not (even? %_2841))))
-(define zero? (lambda (%_2842) (= %_2842 '0)))
-(define add1 (lambda (%_2843) (+ %_2843 '1)))
-(define sub1 (lambda (%_2844) (- %_2844 '1)))
+  (lambda (|n_LvMNgi8iE|)
+    (if (even? |n_LvMNgi8iE|) '#f '#t)))
+(define zero?
+  (lambda (|n_Lv6KeL8iE|) (= |n_Lv6KeL8iE| '0)))
+(define add1
+  (lambda (|n_LvsGcc9iE|) (+ |n_LvsGcc9iE| '1)))
+(define sub1
+  (lambda (|n_LvOCaF9iE|) (- |n_LvOCaF9iE| '1)))
 (define >= (void))
 (define <= (void))
-((lambda (%_2846 %_2845)
+((lambda (|_comp_help_Lv8z86aiE| |_and2_Lvuv6zaiE|)
    (begin
      (set! <=
-       (%_2845
-         (lambda (%_2847 %_2848)
-           ((lambda (%_2849)
-              (if %_2849 %_2849 (= %_2847 %_2848)))
-            (< %_2847 %_2848)))
-         %_2846
+       (|_comp_help_Lv8z86aiE|
+         (lambda (|a_LvQr40biE| |b_Lvao2tbiE|)
+           ((lambda (|t_Lvwk0WbiE|)
+              (if |t_Lvwk0WbiE|
+                |t_Lvwk0WbiE|
+                (= |a_LvQr40biE| |b_Lvao2tbiE|)))
+            (< |a_LvQr40biE| |b_Lvao2tbiE|)))
+         |_and2_Lvuv6zaiE|
          '#t))
      (set! >=
-       (%_2845
-         (lambda (%_2850 %_2851)
-           ((lambda (%_2852)
-              (if %_2852 %_2852 (= %_2850 %_2851)))
-            (> %_2850 %_2851)))
-         %_2846
+       (|_comp_help_Lv8z86aiE|
+         (lambda (|a_LvSg-mciE| |b_LvcdYPciE|)
+           ((lambda (|t_Lvy9WgdiE|)
+              (if |t_Lvy9WgdiE|
+                |t_Lvy9WgdiE|
+                (= |a_LvSg-mciE| |b_LvcdYPciE|)))
+            (> |a_LvSg-mciE| |b_LvcdYPciE|)))
+         |_and2_Lvuv6zaiE|
          '#t))))
- (lambda (%_2859 %_2860) (if %_2859 %_2860 '#f))
- (lambda (%_2853 %_2854 %_2855)
-   (lambda %_2856
-     ((letrec ((%_2857
-                 (lambda (%_2858)
-                   (if (null? %_2858)
-                     %_2855
-                     (if (null? (cdr %_2858))
-                       %_2855
-                       (%_2854
-                         (%_2853 (car %_2858) (cadr %_2858))
-                         (%_2857 (cdr %_2858))))))))
-        %_2857)
-      %_2856))))
-((lambda (%_2861)
+ (lambda (|comparator_LvU5UJdiE|
+          |chainer_Lve2SaeiE|
+          |endstate_LvA-PDeiE|)
+   (lambda |args_LvWWN4fiE|
+     ((letrec ((|loop_LvgTLxfiE|
+                 (lambda (|x_LvCPJ-fiE|)
+                   (if (null? |x_LvCPJ-fiE|)
+                     |endstate_LvA-PDeiE|
+                     (if (null? (cdr |x_LvCPJ-fiE|))
+                       |endstate_LvA-PDeiE|
+                       (|chainer_Lve2SaeiE|
+                         (|comparator_LvU5UJdiE|
+                           (car |x_LvCPJ-fiE|)
+                           (cadr |x_LvCPJ-fiE|))
+                         (|loop_LvgTLxfiE| (cdr |x_LvCPJ-fiE|))))))))
+        |loop_LvgTLxfiE|)
+      |args_LvWWN4fiE|)))
+ (lambda (|x_LvYLHrgiE| |y_LviIFUgiE|)
+   (if |x_LvYLHrgiE| |y_LviIFUgiE| '#f)))
+((lambda (|_?=_LvEEDlhiE|)
    (begin
-     (set! >= (%_2861 > >=))
-     (set! <= (%_2861 < <=))))
- (lambda (%_2862 %_2863)
-   (lambda %_2864
-     ((lambda (%_2865)
-        (if %_2865
-          %_2865
-          ((lambda (%_2866)
-             (if %_2866
-               %_2866
-               (if ((lambda (%_2867)
-                      (if %_2867
-                        %_2867
-                        (%_2862 (car %_2864) (cadr %_2864))))
-                    (= (car %_2864) (cadr %_2864)))
-                 (apply %_2863 (cdr %_2864))
+     (set! >= (|_?=_LvEEDlhiE| > >=))
+     (set! <= (|_?=_LvEEDlhiE| < <=))))
+ (lambda (|comparator_Lv-ABOhiE| |chainer_LvkxzfiiE|)
+   (lambda |args_LvGtxIiiE|
+     ((lambda (|t_Lv0qv9jiE|)
+        (if |t_Lv0qv9jiE|
+          |t_Lv0qv9jiE|
+          ((lambda (|t_LvmmtCjiE|)
+             (if |t_LvmmtCjiE|
+               |t_LvmmtCjiE|
+               (if ((lambda (|t_LvIir3kiE|)
+                      (if |t_LvIir3kiE|
+                        |t_LvIir3kiE|
+                        (|comparator_Lv-ABOhiE|
+                          (car |args_LvGtxIiiE|)
+                          (cadr |args_LvGtxIiiE|))))
+                    (= (car |args_LvGtxIiiE|)
+                       (cadr |args_LvGtxIiiE|)))
+                 (apply |chainer_LvkxzfiiE|
+                        (cdr |args_LvGtxIiiE|))
                  '#f)))
-           (null? (cdr %_2864)))))
-      (null? %_2864)))))
+           (null? (cdr |args_LvGtxIiiE|)))))
+      (null? |args_LvGtxIiiE|)))))
 (define gcd
-  (lambda %_2868
-    (if (null? %_2868)
+  (lambda |args_Lv2fpwkiE|
+    (if (null? |args_Lv2fpwkiE|)
       '0
-      (if (null? (cdr %_2868))
-        (car %_2868)
-        (_gcd (car %_2868) (cadr %_2868))))))
+      (if (null? (cdr |args_Lv2fpwkiE|))
+        (car |args_Lv2fpwkiE|)
+        (_gcd (car |args_Lv2fpwkiE|)
+              (cadr |args_Lv2fpwkiE|))))))
 (define lcm
-  (lambda %_2869
-    (if (null? %_2869)
+  (lambda |args_LvobnZkiE|
+    (if (null? |args_LvobnZkiE|)
       '1
-      (if (null? (cdr %_2869))
-        (car %_2869)
-        (_lcm (car %_2869) (cadr %_2869))))))
+      (if (null? (cdr |args_LvobnZkiE|))
+        (car |args_LvobnZkiE|)
+        (_lcm (car |args_LvobnZkiE|)
+              (cadr |args_LvobnZkiE|))))))
 (max-precision '1500)
 (define pi-10 (string->number '"3.1415926536"))
 (define pi-70
@@ -530,257 +689,303 @@
     '"2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274274663919320030599218174135966290435729003342952605956307381323286279434907632338298807531952510190115738341879307021540891499348841675092447614606680822648001684774118537423454424371075390777449920695517027618386062613313845830007520449338265602976067371132007093287091274437470472306969772093101416928368190255151086574637721112523897844250569536967707854499699679468644549059879316368892300987931277361782154249992295763514822082698951936680331825288693984964651058209392398294887933203625094431173012381970684161403970198376793206832823764648042953118023287825098194558153017567173613320698112509961818815930416903515988885193458072738667385894228792284998920868058257492796104841984443634632449684875602336248270419786232090021609902353043699418491463140934317381436405462531520961836908887070167683964243781405927145635490613031072085103837505101157477041718986106873969655212671546889570350354"))
 (define e e-10)
 (define modulo
-  (lambda (%_2870 %_2871)
-    ((lambda (%_2872)
-       (if (if (negative? %_2871)
-             (positive? %_2872)
-             (negative? %_2872))
-         (+ %_2872 %_2871)
-         %_2872))
-     (remainder %_2870 %_2871))))
+  (lambda (|x_LvK7lqliE| |y_Lv44jTliE|)
+    ((lambda (|r_Lvq0hkmiE|)
+       (if (if (negative? |y_Lv44jTliE|)
+             (positive? |r_Lvq0hkmiE|)
+             (negative? |r_Lvq0hkmiE|))
+         (+ |r_Lvq0hkmiE| |y_Lv44jTliE|)
+         |r_Lvq0hkmiE|))
+     (remainder |x_LvK7lqliE| |y_Lv44jTliE|))))
 (max-precision '32)
 (define string-append
-  (lambda %_2873
-    (if (null? %_2873)
+  (lambda |args_LvMYeNmiE|
+    (if (null? |args_LvMYeNmiE|)
       '""
-      (if (null? (cdr %_2873))
-        (car %_2873)
+      (if (null? (cdr |args_LvMYeNmiE|))
+        (car |args_LvMYeNmiE|)
         (apply string-append
-               (_string-append (car %_2873) (cadr %_2873))
-               (cddr %_2873))))))
+               (_string-append
+                 (car |args_LvMYeNmiE|)
+                 (cadr |args_LvMYeNmiE|))
+               (cddr |args_LvMYeNmiE|))))))
 (define char-downcase
-  ((lambda (%_2874)
-     ((lambda (%_2875)
-        ((lambda (%_2876)
-           (lambda (%_2877)
-             ((lambda (%_2878)
-                (if (if (>= %_2878 %_2874) (<= %_2878 %_2875) '#f)
-                  (integer->char (+ %_2878 %_2876))
-                  %_2877))
-              (char->integer %_2877))))
-         (- (char->integer '#\a) %_2874)))
+  ((lambda (|a_Lv6VceniE|)
+     ((lambda (|z_LvsRaHniE|)
+        ((lambda (|lc-offset_LvON88oiE|)
+           (lambda (|c_Lv8K6BoiE|)
+             ((lambda (|cv_LvuG42piE|)
+                (if (if (>= |cv_LvuG42piE| |a_Lv6VceniE|)
+                      (<= |cv_LvuG42piE| |z_LvsRaHniE|)
+                      '#f)
+                  (integer->char
+                    (+ |cv_LvuG42piE| |lc-offset_LvON88oiE|))
+                  |c_Lv8K6BoiE|))
+              (char->integer |c_Lv8K6BoiE|))))
+         (- (char->integer '#\a) |a_Lv6VceniE|)))
       (char->integer '#\Z)))
    (char->integer '#\A)))
 (define char-upcase
-  ((lambda (%_2879)
-     ((lambda (%_2880)
-        ((lambda (%_2881)
-           (lambda (%_2882)
-             ((lambda (%_2883)
-                (if (if (>= %_2883 %_2879) (<= %_2883 %_2880) '#f)
-                  (integer->char (- %_2883 %_2881))
-                  %_2882))
-              (char->integer %_2882))))
-         (- %_2879 (char->integer '#\A))))
+  ((lambda (|a_LvQC2vpiE|)
+     ((lambda (|z_Lvaz0YpiE|)
+        ((lambda (|uc-offset_Lvwv-oqiE|)
+           (lambda (|c_LvSrYRqiE|)
+             ((lambda (|cv_LvcoWiriE|)
+                (if (if (>= |cv_LvcoWiriE| |a_LvQC2vpiE|)
+                      (<= |cv_LvcoWiriE| |z_Lvaz0YpiE|)
+                      '#f)
+                  (integer->char
+                    (- |cv_LvcoWiriE| |uc-offset_Lvwv-oqiE|))
+                  |c_LvSrYRqiE|))
+              (char->integer |c_LvSrYRqiE|))))
+         (- |a_LvQC2vpiE| (char->integer '#\A))))
       (char->integer '#\z)))
    (char->integer '#\a)))
 (define char>?
-  (lambda (%_2884 %_2885)
-    (> (char->integer %_2884) (char->integer %_2885))))
+  (lambda (|c1_LvykULriE| |c2_LvUgScsiE|)
+    (> (char->integer |c1_LvykULriE|)
+       (char->integer |c2_LvUgScsiE|))))
 (define char<?
-  (lambda (%_2886 %_2887)
-    (< (char->integer %_2886) (char->integer %_2887))))
+  (lambda (|c1_LvedQFsiE| |c2_LvA9O6tiE|)
+    (< (char->integer |c1_LvedQFsiE|)
+       (char->integer |c2_LvA9O6tiE|))))
 (define char=? eq?)
 (define char>=?
-  (lambda (%_2888 %_2889)
-    ((lambda (%_2890)
-       (if %_2890 %_2890 (char=? %_2888 %_2889)))
-     (char>? %_2888 %_2889))))
+  (lambda (|c1_LvW5MztiE| |c2_Lvg2K0uiE|)
+    ((lambda (|t_LvC-HtuiE|)
+       (if |t_LvC-HtuiE|
+         |t_LvC-HtuiE|
+         (char=? |c1_LvW5MztiE| |c2_Lvg2K0uiE|)))
+     (char>? |c1_LvW5MztiE| |c2_Lvg2K0uiE|))))
 (define char<=?
-  (lambda (%_2891 %_2892)
-    ((lambda (%_2893)
-       (if %_2893 %_2893 (char=? %_2891 %_2892)))
-     (char<? %_2891 %_2892))))
+  (lambda (|c1_LvYWFWuiE| |c2_LviTDnviE|)
+    ((lambda (|t_LvEPBQviE|)
+       (if |t_LvEPBQviE|
+         |t_LvEPBQviE|
+         (char=? |c1_LvYWFWuiE| |c2_LviTDnviE|)))
+     (char<? |c1_LvYWFWuiE| |c2_LviTDnviE|))))
 (define char-ci>?
-  (lambda (%_2894 %_2895)
+  (lambda (|c1_Lv-LzhwiE| |c2_LvkIxKwiE|)
     (char>?
-      (char-downcase %_2894)
-      (char-downcase %_2895))))
+      (char-downcase |c1_Lv-LzhwiE|)
+      (char-downcase |c2_LvkIxKwiE|))))
 (define char-ci<?
-  (lambda (%_2896 %_2897)
+  (lambda (|c1_LvGEvbxiE| |c2_Lv0BtExiE|)
     (char<?
-      (char-downcase %_2896)
-      (char-downcase %_2897))))
+      (char-downcase |c1_LvGEvbxiE|)
+      (char-downcase |c2_Lv0BtExiE|))))
 (define char-ci=?
-  (lambda (%_2898 %_2899)
+  (lambda (|c1_Lvmxr5yiE| |c2_LvItpyyiE|)
     (char=?
-      (char-downcase %_2898)
-      (char-downcase %_2899))))
+      (char-downcase |c1_Lvmxr5yiE|)
+      (char-downcase |c2_LvItpyyiE|))))
 (define char-ci>=?
-  (lambda (%_2900 %_2901)
-    ((lambda (%_2902)
-       (if %_2902 %_2902 (char-ci=? %_2900 %_2901)))
-     (char-ci>? %_2900 %_2901))))
+  (lambda (|c1_Lv2qn_yiE| |c2_LvomlsziE|)
+    ((lambda (|t_LvKijVziE|)
+       (if |t_LvKijVziE|
+         |t_LvKijVziE|
+         (char-ci=? |c1_Lv2qn_yiE| |c2_LvomlsziE|)))
+     (char-ci>? |c1_Lv2qn_yiE| |c2_LvomlsziE|))))
 (define char-ci<=?
-  (lambda (%_2903 %_2904)
-    ((lambda (%_2905)
-       (if %_2905 %_2905 (char-ci=? %_2903 %_2904)))
-     (char-ci<? %_2903 %_2904))))
+  (lambda (|c1_Lv4fhmAiE| |c2_LvqbfPAiE|)
+    ((lambda (|t_LvM7dgBiE|)
+       (if |t_LvM7dgBiE|
+         |t_LvM7dgBiE|
+         (char-ci=? |c1_Lv4fhmAiE| |c2_LvqbfPAiE|)))
+     (char-ci<? |c1_Lv4fhmAiE| |c2_LvqbfPAiE|))))
 (define char-alphabetic?
-  (lambda (%_2906)
-    (if (char-ci>=? %_2906 '#\a)
-      (char-ci<=? %_2906 '#\z)
+  (lambda (|c_Lv64bJBiE|)
+    (if (char-ci>=? |c_Lv64bJBiE| '#\a)
+      (char-ci<=? |c_Lv64bJBiE| '#\z)
       '#f)))
 (define char-numeric?
-  (lambda (%_2907)
-    (if (char-ci>=? %_2907 '#\0)
-      (char-ci<=? %_2907 '#\9)
+  (lambda (|c_Lvs09aCiE|)
+    (if (char-ci>=? |c_Lvs09aCiE| '#\0)
+      (char-ci<=? |c_Lvs09aCiE| '#\9)
       '#f)))
 (define char-whitespace?
-  (lambda (%_2908)
-    (if (memq %_2908 '(#\space #\tab #\newline))
+  (lambda (|c_LvOY6DCiE|)
+    (if (memq |c_LvOY6DCiE| '(#\space #\tab #\newline))
       '#t
       '#f)))
 (define char-upper-case?
-  (lambda (%_2909)
-    (if (char-alphabetic? %_2909)
-      (char<? %_2909 '#\a)
+  (lambda (|c_Lv8V44DiE|)
+    (if (char-alphabetic? |c_Lv8V44DiE|)
+      (char<? |c_Lv8V44DiE| '#\a)
       '#f)))
 (define char-lower-case?
-  (lambda (%_2910)
-    (if (char-alphabetic? %_2910)
-      (char>? %_2910 '#\Z)
+  (lambda (|c_LvuR2xDiE|)
+    (if (char-alphabetic? |c_LvuR2xDiE|)
+      (char>? |c_LvuR2xDiE| '#\Z)
       '#f)))
 (define string-downcase (void))
 (define string-upcase (void))
-(letrec ((%_2911
-           (lambda (%_2916 %_2917 %_2918 %_2919 %_2920)
-             (if (< %_2919 %_2920)
+(letrec ((|string-map_LvQN0-DiE|
+           (lambda (|strsrc_LvyvSeGiE|
+                    |strdst_LvUrQHGiE|
+                    |proc_LveoO8HiE|
+                    |n_LvAkMBHiE|
+                    |l_LvWgK2IiE|)
+             (if (< |n_LvAkMBHiE| |l_LvWgK2IiE|)
                (begin
                  (string-set!
-                   %_2917
-                   %_2919
-                   (%_2918 (string-ref %_2916 %_2919)))
-                 (%_2911
-                   %_2916
-                   %_2917
-                   %_2918
-                   (+ %_2919 '1)
-                   %_2920))
-               %_2917))))
+                   |strdst_LvUrQHGiE|
+                   |n_LvAkMBHiE|
+                   (|proc_LveoO8HiE|
+                     (string-ref |strsrc_LvyvSeGiE| |n_LvAkMBHiE|)))
+                 (|string-map_LvQN0-DiE|
+                   |strsrc_LvyvSeGiE|
+                   |strdst_LvUrQHGiE|
+                   |proc_LveoO8HiE|
+                   (+ |n_LvAkMBHiE| '1)
+                   |l_LvWgK2IiE|))
+               |strdst_LvUrQHGiE|))))
   (begin
     (set! string-downcase
-      (lambda (%_2912)
-        ((lambda (%_2913)
-           (%_2911
-             %_2912
-             %_2913
+      (lambda (|str_LvaK-qEiE|)
+        ((lambda (|newstr_LvwGYTEiE|)
+           (|string-map_LvQN0-DiE|
+             |str_LvaK-qEiE|
+             |newstr_LvwGYTEiE|
              char-downcase
              '0
-             (string-length %_2912)))
-         (make-string (string-length %_2912)))))
+             (string-length |str_LvaK-qEiE|)))
+         (make-string (string-length |str_LvaK-qEiE|)))))
     (set! string-upcase
-      (lambda (%_2914)
-        ((lambda (%_2915)
-           (%_2911
-             %_2914
-             %_2915
+      (lambda (|str_LvSCWkFiE|)
+        ((lambda (|newstr_LvczUNFiE|)
+           (|string-map_LvQN0-DiE|
+             |str_LvSCWkFiE|
+             |newstr_LvczUNFiE|
              char-upcase
              '0
-             (string-length %_2914)))
-         (make-string (string-length %_2914)))))))
+             (string-length |str_LvSCWkFiE|)))
+         (make-string (string-length |str_LvSCWkFiE|)))))))
 (define string=? equal?)
 (define string<?
-  (letrec ((%_2921
-             (lambda (%_2924 %_2925)
-               (if (null? %_2924)
-                 (not (null? %_2925))
-                 (if (null? %_2925)
+  (letrec ((|s<?_LvgdIvIiE|
+             (lambda (|s1_Lvi2CSJiE| |s2_LvE-zjKiE|)
+               (if (null? |s1_Lvi2CSJiE|)
+                 (if (null? |s2_LvE-zjKiE|) '#f '#t)
+                 (if (null? |s2_LvE-zjKiE|)
                    '#f
-                   ((lambda (%_2927 %_2926)
-                      (if (char<? %_2926 %_2927)
+                   ((lambda (|c1_Lv-WxMKiE| |c2_LvkTvdLiE|)
+                      (if (char<? |c1_Lv-WxMKiE| |c2_LvkTvdLiE|)
                         '#t
-                        (if (char>? %_2926 %_2927)
+                        (if (char>? |c1_Lv-WxMKiE| |c2_LvkTvdLiE|)
                           '#f
-                          (%_2921 (cdr %_2924) (cdr %_2925)))))
-                    (car %_2925)
-                    (car %_2924)))))))
-    (lambda (%_2922 %_2923)
-      (%_2921
-        (string->list %_2922)
-        (string->list %_2923)))))
+                          (|s<?_LvgdIvIiE|
+                            (cdr |s1_Lvi2CSJiE|)
+                            (cdr |s2_LvE-zjKiE|)))))
+                    (car |s1_Lvi2CSJiE|)
+                    (car |s2_LvE-zjKiE|)))))))
+    (lambda (|s1_LvC9GYIiE| |s2_LvY5EpJiE|)
+      (|s<?_LvgdIvIiE|
+        (string->list |s1_LvC9GYIiE|)
+        (string->list |s2_LvY5EpJiE|)))))
 (define string>?
-  (letrec ((%_2928
-             (lambda (%_2931 %_2932)
-               (if (null? %_2932)
-                 (not (null? %_2931))
-                 (if (null? %_2931)
+  (letrec ((|s>?_LvGPtGLiE|
+             (lambda (|s1_LvIEn1NiE| |s2_Lv2BluNiE|)
+               (if (null? |s2_Lv2BluNiE|)
+                 (if (null? |s1_LvIEn1NiE|) '#f '#t)
+                 (if (null? |s1_LvIEn1NiE|)
                    '#f
-                   ((lambda (%_2934 %_2933)
-                      (if (char>? %_2933 %_2934)
+                   ((lambda (|c1_LvoxjXNiE| |c2_LvKthoOiE|)
+                      (if (char>? |c1_LvoxjXNiE| |c2_LvKthoOiE|)
                         '#t
-                        (if (char<? %_2933 %_2934)
+                        (if (char<? |c1_LvoxjXNiE| |c2_LvKthoOiE|)
                           '#f
-                          (%_2928 (cdr %_2931) (cdr %_2932)))))
-                    (car %_2932)
-                    (car %_2931)))))))
-    (lambda (%_2929 %_2930)
-      (%_2928
-        (string->list %_2929)
-        (string->list %_2930)))))
+                          (|s>?_LvGPtGLiE|
+                            (cdr |s1_LvIEn1NiE|)
+                            (cdr |s2_Lv2BluNiE|)))))
+                    (car |s1_LvIEn1NiE|)
+                    (car |s2_Lv2BluNiE|)))))))
+    (lambda (|s1_Lv0Mr7MiE| |s2_LvmIpAMiE|)
+      (|s>?_LvGPtGLiE|
+        (string->list |s1_Lv0Mr7MiE|)
+        (string->list |s2_LvmIpAMiE|)))))
 (define string<=?
-  (lambda (%_2935 %_2936)
-    ((lambda (%_2937)
-       (if %_2937 %_2937 (string=? %_2935 %_2936)))
-     (string<? %_2935 %_2936))))
+  (lambda (|s1_Lv4qfROiE| |s2_LvqmdiPiE|)
+    ((lambda (|t_LvMibLPiE|)
+       (if |t_LvMibLPiE|
+         |t_LvMibLPiE|
+         (string=? |s1_Lv4qfROiE| |s2_LvqmdiPiE|)))
+     (string<? |s1_Lv4qfROiE| |s2_LvqmdiPiE|))))
 (define string>=?
-  (lambda (%_2938 %_2939)
-    ((lambda (%_2940)
-       (if %_2940 %_2940 (string=? %_2938 %_2939)))
-     (string>? %_2938 %_2939))))
+  (lambda (|s1_Lv6f9cQiE| |s2_Lvsb7FQiE|)
+    ((lambda (|t_LvO756RiE|)
+       (if |t_LvO756RiE|
+         |t_LvO756RiE|
+         (string=? |s1_Lv6f9cQiE| |s2_Lvsb7FQiE|)))
+     (string>? |s1_Lv6f9cQiE| |s2_Lvsb7FQiE|))))
 (define string-ci=?
-  (lambda (%_2941 %_2942)
+  (lambda (|s1_Lv843zRiE| |s2_Lvu010SiE|)
     (string=?
-      (string-downcase %_2941)
-      (string-downcase %_2942))))
+      (string-downcase |s1_Lv843zRiE|)
+      (string-downcase |s2_Lvu010SiE|))))
 (define string-ci<?
-  (lambda (%_2943 %_2944)
+  (lambda (|s1_LvQY-sSiE| |s2_LvaVYVSiE|)
     (string<?
-      (string-downcase %_2943)
-      (string-downcase %_2944))))
+      (string-downcase |s1_LvQY-sSiE|)
+      (string-downcase |s2_LvaVYVSiE|))))
 (define string-ci>?
-  (lambda (%_2945 %_2946)
+  (lambda (|s1_LvwRWmTiE| |s2_LvSNUPTiE|)
     (string>?
-      (string-downcase %_2945)
-      (string-downcase %_2946))))
+      (string-downcase |s1_LvwRWmTiE|)
+      (string-downcase |s2_LvSNUPTiE|))))
 (define string-ci>=?
-  (lambda (%_2947 %_2948)
+  (lambda (|s1_LvcKSgUiE| |s2_LvyGQJUiE|)
     (string>=?
-      (string-downcase %_2947)
-      (string-downcase %_2948))))
+      (string-downcase |s1_LvcKSgUiE|)
+      (string-downcase |s2_LvyGQJUiE|))))
 (define string-ci<=?
-  (lambda (%_2949 %_2950)
+  (lambda (|s1_LvUCOaViE| |s2_LvezMDViE|)
     (string<=?
-      (string-downcase %_2949)
-      (string-downcase %_2950))))
+      (string-downcase |s1_LvUCOaViE|)
+      (string-downcase |s2_LvezMDViE|))))
 (define substring
-  (letrec ((%_2951
-             (lambda (%_2956 %_2957 %_2958 %_2959 %_2960)
-               (if (< %_2959 %_2960)
+  (letrec ((|fill-string_LvAvK4WiE|
+             (lambda (|sstr_LvidAlYiE|
+                      |dstr_LvE9yOYiE|
+                      |n_Lv-5wfZiE|
+                      |s_Lvk2uIZiE|
+                      |e_LvG-r9-iE|)
+               (if (< |s_Lvk2uIZiE| |e_LvG-r9-iE|)
                  (begin
                    (string-set!
-                     %_2957
-                     %_2958
-                     (string-ref %_2956 %_2959))
-                   (%_2951
-                     %_2956
-                     %_2957
-                     (+ %_2958 '1)
-                     (+ %_2959 '1)
-                     %_2960))
+                     |dstr_LvE9yOYiE|
+                     |n_Lv-5wfZiE|
+                     (string-ref |sstr_LvidAlYiE| |s_Lvk2uIZiE|))
+                   (|fill-string_LvAvK4WiE|
+                     |sstr_LvidAlYiE|
+                     |dstr_LvE9yOYiE|
+                     (+ |n_Lv-5wfZiE| '1)
+                     (+ |s_Lvk2uIZiE| '1)
+                     |e_LvG-r9-iE|))
                  (void)))))
-    (lambda (%_2952 %_2953 %_2954)
-      ((lambda (%_2955)
+    (lambda (|str_LvWrIxWiE|
+             |start_LvgoG-WiE|
+             |end_LvCkErXiE|)
+      ((lambda (|newstr_LvYgCUXiE|)
          (begin
-           (%_2951 %_2952 %_2955 '0 %_2953 %_2954)
-           %_2955))
-       (make-string (- %_2954 %_2953))))))
+           (|fill-string_LvAvK4WiE|
+             |str_LvWrIxWiE|
+             |newstr_LvYgCUXiE|
+             '0
+             |start_LvgoG-WiE|
+             |end_LvCkErXiE|)
+           |newstr_LvYgCUXiE|))
+       (make-string
+         (- |end_LvCkErXiE| |start_LvgoG-WiE|))))))
 (define list-ref
-  (lambda (%_2968 %_2969)
-    (if (zero? %_2969)
-      (car %_2968)
-      (list-ref (cdr %_2968) (- %_2969 '1)))))
+  (lambda (|list_Lv0XpC-iE| |n_LvmTn3_iE|)
+    (if (zero? |n_LvmTn3_iE|)
+      (car |list_Lv0XpC-iE|)
+      (list-ref
+        (cdr |list_Lv0XpC-iE|)
+        (- |n_LvmTn3_iE| '1)))))
 (define values
-  (lambda %_2970
+  (lambda |args_LvIPlw_iE|
     (call-with-current-continuation
-      (lambda (%_2971) (apply %_2971 %_2970)))))
+      (lambda (|k_Lv2MjZ_iE|)
+        (apply |k_Lv2MjZ_iE| |args_LvIPlw_iE|)))))

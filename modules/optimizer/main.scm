@@ -44,7 +44,7 @@
   (match expr
     (,x 
      (guard (symbol? x))
-     (new-state))
+     `((refed-vars ,x)))
     ((quote ,x) (new-state))
     ((begin ,[exp1] ,[exps*] ...)
      (merge-states exp1 (apply merge-states exps*)))
@@ -57,7 +57,9 @@
      (merge-states (apply merge-states rhs*) body))
     ((define ,lhs ,[rhs]) rhs)
     ((set! ,formal ,[value]) 
-     (union-state-entry value 'set-vars formal))
+     (union-state-entry
+      (union-state-entry value 'set-vars formal)
+      'refed-vars formal))
     ((compile-in-annotation ,[expr] ,annotation) expr)
     ((,[rator] ,[rands*] ...)
      (merge-states rator (apply merge-states rands*)))

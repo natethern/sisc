@@ -17,8 +17,10 @@
 (define cp-candidates 
   (lambda (formals values* state rec)
     (let ((set-vars (get-state-entry state 'set-vars))
+          (refed-vars (get-state-entry state 'refed-vars))
           (nf '())
-          (nv '()))
+          (nv '())
+          (sec '()))
       (define (cp-helper x y acc)
         ;Watch for null? x but not null? y, or vice versa, indicating
         ;argument count mismatch.  If we find one, don't optimize
@@ -28,6 +30,11 @@
                 (let ((cx (car x))
                       (cy (car y)))
                   (cond 
+                    ;; If this var is never referenced, add its rhs to 
+                    ;; the side-effect-only list
+                    [(not (memq cx refed-vars))
+                     (set! sec (cons cy sec))
+                     (cp-helper (cdr x) (cdr y) acc)]
                     ;; If this var gets set!'ed, or its right-hand side
                     ;; is non-immediate, skip it
                     [(or (not (immediate? cy))
@@ -77,13 +84,13 @@
                                  (cdr y) 
                                  (cons (cons cx cy) acc))]))]))
       (let ((cpc (cp-helper formals values* '())))
-        (if (null? cpc) 
-            (values formals values* cpc)
-            (values nf nv cpc))))))
+        (if (and (null? cpc) (null? sec))
+            (values formals values* cpc sec)
+            (values nf nv cpc sec))))))
   
 (define (opt:letrec-helper formals values* state)
   (let ((state (union-state-entry* state 'lvars formals)))
-    (let-values ([(nf nvo cpc)
+    (let-values ([(nf nvo cpc sec)
                   (cp-candidates formals values* state '#t)])
       (let ([state (if (null? cpc)
                        state
@@ -95,7 +102,7 @@
 ;                                  nvo)])
 ;                      (values (map car x) (map cdr x)))])
 ;        (if (= (length nv) (length values*))
-            (values nf nvo state)
+            (values nf nvo sec state)
 ;            (opt:letrec-helper
 ;             nf nv (merge-states 
 ;                    state 
@@ -103,26 +110,32 @@
 ))))
 
 (define (opt:letrec formals values* body state)
-  (let-values ([(nf nv state) (opt:letrec-helper formals values* state)])
+  (let-values ([(nf nv sec state) (opt:letrec-helper formals values* state)])
     (let-values ([(newbody bstate) (opt body state)])
       (values
-       (if (null? nf)
-           newbody
-           `(letrec ,(map list nf nv) ,newbody))
+       (apply make-begin 
+              (append sec 
+                      (list
+                       (if (null? nf)
+                           newbody
+                           `(letrec ,(map list nf nv) ,newbody)))))
        (merge-states state bstate)))))
 
 (define (opt:let formals values* body state)
   (let ((state (union-state-entry* state 'lvars formals)))
-    (let-values ([(nf nv cpc) (cp-candidates formals values* state '#f)])
+    (let-values ([(nf nv cpc sec) (cp-candidates formals values* state '#f)])
       (let-values ([(rv state)
                     (opt body (if (null? cpc)
                                   state
                                   (union-state-entry* state 'constant-prop
                                                       cpc)))])
         (values
-         (if (null? nf)
-             rv
-             `((lambda ,nf ,rv) ,@nv))
+         (apply make-begin 
+                (append sec
+                        (list
+                         (if (null? nf)
+                             rv
+                             `((lambda ,nf ,rv) ,@nv)))))
          state)))))
 
 (define (opt:ref ref state)
@@ -169,7 +182,6 @@
     (cond [(and (eq? rator 'not)
                 (not-redefined? 'not)
                 (= (length rands) 1))
-           
            (values `(if ,@rands '#f '#t) '((new-assumptions not)))]
           [(and (symbol? rator)
                 (not-redefined? rator)
