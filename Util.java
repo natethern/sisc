@@ -177,6 +177,13 @@ public abstract class Util implements Conf {
         return Symbol.get(s);
     }
 
+    public static final String symval(Value o) {
+        try {
+            return ((Symbol)o).symval;
+        } catch (ClassCastException e) { typeError("symbol", o); }
+	return null;
+    }
+
     public static final Quantity num(Value o) {
         try {
             return (Quantity)o;
