@@ -427,9 +427,23 @@ public class UtilTest extends TestCase
     //TODO Implement reverseInPlace().
     }
 
-    public void testAppend()
+    public void testAppend1()
     {
-    //TODO Implement append().
+        assertSame(Util.append(l0, l0), l0);
+        assertSame(Util.append(l0, l1), l1);
+        assertSame(Util.append(l0, l2), l2);
+        assertSame(Util.append(l0, l3), l3);
+    }
+    
+    public void testAppend2()
+    {
+        Pair testee1 = Util.append(l1, l2);
+        Pair testee2 = Util.append(l1, l2);
+
+        assertNotSame(testee1, testee2);
+        assertTrue(testee1.valueEqual(testee2));
+        assertSame(testee1.cdr, l2);
+        assertSame(testee1.cdr, testee2.cdr);
     }
 
     /*
