@@ -32,7 +32,7 @@
 ;;
 		 
 (current-evaluator eval)
-(emit-annotations #t)
+;(emit-annotations #t)
 
 (define (parameterize . args)
   (let ([initial-value (if (null? args) #f (car args))]
