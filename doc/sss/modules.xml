@@ -1,25 +1,464 @@
 <chapter id="Modules">
   <title>
-    The Module System
+    Modules and Extensibility
   </title>
-  <para>
-    Modules provide an additional level of scoping control, allowing
-    symbolic and syntactic bindings to be bundled in a named or
-    anonymous package.  The package can then be imported into any
-    scope, making the bindings contained in the module visible in
-    only that scope.
-  </para>
-  <para>
-    &SISC;'s modules are provided by the portable syntax-case macro
-    expander by R. Kent Dybvig and Oscar Waddell.  A comprehensive
-    explanation of the provided module system is best found in the
-    <ulink url="http://www.scheme.com/csug.html">
-      <citetitle>Chez Scheme Users Guide</citetitle>
-    </ulink>, specifically 
-    <ulink url="http://www.scheme.com/csug/syntax.html#g2187">
-      <citetitle>Section 9.3, Modules</citetitle>
-    </ulink>.  
-  </para>
+  <sect1>
+    <title>
+      Modules
+    </title>
+    <para>
+      Modules provide an additional level of scoping control, allowing
+      symbolic and syntactic bindings to be bundled in a named or
+      anonymous package.  The package can then be imported into any
+      scope, making the bindings contained in the module visible in
+      only that scope.
+    </para>
+    <para>
+      &SISC;'s modules are provided by the portable syntax-case macro
+      expander by R. Kent Dybvig and Oscar Waddell.  A comprehensive
+      explanation of the provided module system is best found in the
+      <ulink url="http://www.scheme.com/csug.html">
+        <citetitle>Chez Scheme Users Guide</citetitle>
+      </ulink>, specifically 
+      <ulink url="http://www.scheme.com/csug/syntax.html#g2187">
+        <citetitle>Section 9.3, Modules</citetitle>
+      </ulink>.  
+    </para>
+  </sect1>
+  <sect1>
+    <title>Extensibility</title>
+    <para>
+      Occasionally functionality may be desired that is not easily
+      accomplished at the Scheme level.  A new first-class type may be
+      desired, or efficient access to a Java library.  &SISC; 
+      provides a simple API for such modifications.
+    </para>
+    <sect2>
+      <title>Adding Types</title>
+      <para>
+        A Scheme value is represented in &SISC; as a subclass of the
+        abstract Java class <literal>sisc.data.Value</literal>.  A proper
+        subclass <emphasis>must</emphasis> implement the
+        <function>display</function> method:
+      </para>
+      <blockquote>
+        <para>
+          <methodsynopsis language="java">
+            <modifier>public</modifier>
+            <type>String</type>
+            <methodname>display</methodname>
+            <void/>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Returns a printable representation of this value
+              suitable for output from the
+              <function>display</function> Scheme function.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+      <para>
+        If the type that is being added will be serialized in a &SISC;
+        heap, and it contains one or more member variables, the Value
+        must include a default constructor (a constructor with no
+        arguments), and implement the <function>deserialize</function>
+        and <function>serialize</function> methods described in <xref
+        linkend="serialization"/>.
+      </para>
+      <para>
+        No other method that we describe below is required.  Suitable
+        defaults are provided by the Value class itself.  However, it
+        may be desirable to do so.
+      </para>
+      <blockquote>
+        <para>
+          <methodsynopsis language="java">
+            <modifier>public</modifier>
+            <type>String</type>
+            <methodname>write</methodname>
+            <void/>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Returns a printable representation of this value
+              suitable for output from the
+              <function>write</function> Scheme function.  If not
+              implemented, the output of the <function>display</function>
+              method is used as output from <function>write</function>.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+      <blockquote>
+        <para>
+          <methodsynopsis language="java">
+            <modifier>public</modifier>
+            <type>String</type>
+            <methodname>synopsis</methodname>
+            <methodparam>
+              <type>int</type>
+              <parameter>limit</parameter>
+            </methodparam>
+            <void/>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Returns approximately <parameter>limit</parameter>
+              characters from the printable representation of this
+              value as if returned by <function>write</function>.
+              This method is used for displaying the value in error
+              messages where the entire representation may be superfluous.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+      <blockquote>
+        <para>
+          <methodsynopsis language="java">
+            <modifier>public</modifier>
+            <type>boolean</type>
+            <methodname>eq</methodname>
+            <methodparam>
+              <type>Object</type>
+              <parameter>other</parameter>
+            </methodparam>
+            <void/>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Returns true if another provided Java object is equal in
+              the sense of <function>eq?</function> to this Value.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+      <blockquote>
+        <para>
+          <methodsynopsis language="java">
+            <modifier>public</modifier>
+            <type>boolean</type>
+            <methodname>valueEqual</methodname>
+            <methodparam>
+              <type>Value</type>
+              <parameter>other</parameter>
+            </methodparam>
+            <void/>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Returns true if another provided Scheme value is equal in
+              the sense of <function>equal?</function> to this Value.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+    </sect2>
+    <sect2>
+      <title>Adding Native Bindings</title>
+      <para>
+        Adding native functions or values implemented in native code 
+        is accomplished by creating a
+        Java class that extends the abstract class
+        <literal>sisc.Module</literal>, or, more commonly, the helper
+        class <literal>sisc.ModuleAdapter</literal>.  This should not
+        be confused with a Scheme module, which is a scoped package
+        for bindings.  Natively defined functions in a &SISC;
+        <literal>Module</literal> can be packaged into a Scheme module
+        however.  The following
+        methods must be defined in a proper <literal>Module</literal>
+        subclass:
+        <blockquote>
+          <para>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>String</type>
+              <methodname>getModuleName</methodname>        
+              <void/>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the name of this module.  The name should also
+                be acceptable for use in filenames.
+              </para>
+            </blockquote>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>float</type>
+              <methodname>getModuleVersion</methodname>        
+              <void/>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the version of this module.
+              </para>
+            </blockquote>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>sisc.data.Symbol[]</type>
+              <methodname>getModuleBindingNames</methodname>        
+              <void/>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns an array of the names of the bindings
+                exported by this module.  Each name is a Scheme symbol.
+              </para>
+            </blockquote>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>Value</type>
+              <methodname>getBindingValue</methodname>        
+              <methodparam>
+                <type>sisc.data.Symbol</type>
+                <parameter>name</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the value of a given binding exported by this module.
+              </para>
+            </blockquote>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>Value</type>
+              <methodname>eval</methodname>        
+              <methodparam>
+                <type>int</type>
+                <parameter>primid</parameter>
+              </methodparam>
+              <methodparam>
+                <type>sisc.Interpreter</type>
+                <parameter>interpreter</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the value of evaluating a function defined in
+                this module with the given primitive id.  
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        In the most common case, a Module is created to define one or
+        more primitive functions whose implementations are in Java
+        code.  Each such function must be referenced by an integer
+        unique to the function within this module.  The integer and
+        the module are wrapped in a &SISC;
+        <literal>BuiltinProcedure</literal>.  When the procedure is
+        applied in Scheme, the <function>eval</function> method will
+        be called with the primitive id and the calling Interpreter.
+        The <literal>Value[]</literal> <literal>vlr</literal> in the
+        Interpreter will contain the evaluated arguments to the
+        primitive.
+      </para>
+      <para>
+        The simplest way to define a Module that exports functions is
+        to subclass <literal>sisc.ModuleAdapter</literal>.  If done
+        this way, only the <function>getModuleName</function> and
+        <function>eval</function> methods must be implemented.  Each
+        function that one wishes to export is then described with the
+        <function>define</function> method available in
+        <literal>ModuleAdapter</literal>:
+        <blockquote>
+          <para>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>void</type>
+              <methodname>define</methodname>        
+              <methodparam>
+                <type>String</type>
+                <parameter>functionName</parameter>
+              </methodparam>
+              <methodparam>
+                <type>int</type>
+                <parameter>primitiveId</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Advertises that this Module implements a function
+                called <parameter>functionName</parameter>, and that
+                its primitive id is <parameter>primitiveId</parameter>
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        The reader is directed to the source code of any of the &SISC;
+        modules for further examples. 
+      </para>
+    </sect2>
+    <sect2>
+      <title>Serialization</title>
+      <para>
+        &SISC; provides an API for serializing the state of a running
+        Interpreter.  The &SISC; heap is a dump of the state of an
+        Interpreter with the necessary code to implement &R5RS;
+        Scheme, for example.  In order to facilitate this
+        serialization, &SISC; Expressions and Values can implement
+        helper methods to define the serialization of the object.
+        If the Expression or Value contains no internal state that
+        need be serialized, the serialization methods may be ignored.
+        If not, the Expression or Value must contain a default (no
+        argument) constructor, and implement the following two methods:
+        <blockquote>
+          <para>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>void</type>
+              <methodname>serialize</methodname>
+              <methodparam>
+                <type>sisc.Serializer</type>
+                <parameter>serializer</parameter>
+              </methodparam>
+              <methodparam>
+                <type>java.io.DataOutput</type>
+                <parameter>out</parameter>
+              </methodparam>
+              <exceptionname>java.io.IOException</exceptionname>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Serializes the contents of the value to the given
+                <literal>DataOutput</literal> source.  
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>void</type>
+              <methodname>deserialize</methodname>
+              <methodparam>
+                <type>sisc.Serializer</type>
+                <parameter>serializer</parameter>
+              </methodparam>
+              <methodparam>
+                <type>java.io.DataInput</type>
+                <parameter>in</parameter>
+              </methodparam>
+              <exceptionname>java.io.IOException</exceptionname>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Sets the state of the expression to the serialized
+                data read from <parameter>in</parameter>.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        While serializing or deserializing, there are a number of
+        helper methods provided by the passed
+        <function>serializer</function> object.  The methods in
+        <literal>DataOutput</literal> and <literal>DataInput</literal>
+        are also useful for serialization and deserializaiton respectively.
+        <blockquote>
+          <para>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>int</type>
+              <methodname>readBer</methodname>
+              <methodparam>
+                <type>java.io.DataInput</type>
+                <parameter>in</parameter>
+              </methodparam>
+              <exceptionname>java.io.IOException</exceptionname>
+            </methodsynopsis>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>short</type>
+              <methodname>readBerShort</methodname>
+              <methodparam>
+                <type>java.io.DataInput</type>
+                <parameter>in</parameter>
+              </methodparam>
+              <exceptionname>java.io.IOException</exceptionname>
+            </methodsynopsis>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>long</type>
+              <methodname>readBerLong</methodname>
+              <methodparam>
+                <type>java.io.DataInput</type>
+                <parameter>in</parameter>
+              </methodparam>
+              <exceptionname>java.io.IOException</exceptionname>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Reads a BER encoded integer from the data source.  BER
+                encoding is a compact encoding of integers that
+                requires a variable number of bytes to represent an
+                Integer.
+              </para>
+            </blockquote>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>void</type>
+              <methodname>writeBer</methodname>
+              <methodparam>
+                <type>long</type>
+                <parameter>val</parameter>
+              </methodparam>
+              <methodparam>
+                <type>java.io.DataInput</type>
+                <parameter>in</parameter>
+              </methodparam>
+              <exceptionname>java.io.IOException</exceptionname>
+            </methodsynopsis>        
+            <blockquote>
+              <para>
+                Writes an integer to the data source encoded as a BER
+                integer.
+              </para>
+            </blockquote>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>void</type>
+              <methodname>serialize</methodname>
+              <methodparam>
+                <type>sisc.Expression</type>
+                <parameter>expr</parameter>
+              </methodparam>
+              <methodparam>
+                <type>java.io.DataOutput</type>
+                <parameter>out</parameter>
+              </methodparam>
+              <exceptionname>java.io.IOException</exceptionname>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Serializes a &SISC; Expression or Value to the given
+                data source.
+              </para>
+            </blockquote>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>Expression</type>
+              <methodname>deserialize</methodname>
+              <methodparam>
+                <type>java.io.DataInput</type>
+                <parameter>in</parameter>
+              </methodparam>
+              <exceptionname>java.io.IOException</exceptionname>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Deserializes a &SISC; expression from the given data 
+                source.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
+  </sect1>
 </chapter>
 <!-- Keep this comment at the end of the file
 Local variables:

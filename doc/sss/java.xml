@@ -71,6 +71,7 @@ The calls themselves are made using one of the three
 <itemizedlist>
             <listitem>
 <methodsynopsis language="java">
+                <modifier>public</modifier>
                 <type>Value</type>
                 <methodname>eval</methodname>
                 <methodparam>
@@ -81,6 +82,7 @@ The calls themselves are made using one of the three
             </listitem>
             <listitem>
 <methodsynopsis language="java">
+                <modifier>public</modifier>
                 <type>Value</type>
                 <methodname>eval</methodname>
                 <methodparam>
@@ -98,6 +100,7 @@ The calls themselves are made using one of the three
             </listitem>
             <listitem>
               <methodsynopsis language="java">
+                <modifier>public</modifier>
                 <type>Value</type>
                 <methodname>eval</methodname>
                 <methodparam>
