@@ -165,7 +165,7 @@ public class SNative extends ModuleAdapter {
                     p1=pair(f.vlr[1]);
                     while (p1!=EMPTYLIST) {
                         Pair assc=pair(p1.car);
-                        if (assc.car.eq(v1))
+                        if (assc.car.eqv(v1))
                             return assc;
                         p1=pair(p1.cdr);
                     }
@@ -175,7 +175,7 @@ public class SNative extends ModuleAdapter {
                     p1=pair(f.vlr[1]);
                     while (p1!=EMPTYLIST) {
                         Pair assc=pair(p1.car);
-                        if (assc.car.eq(v1))
+                        if (assc.car == v1)
                             return assc;
                         p1=pair(p1.cdr);
                     }
@@ -184,7 +184,7 @@ public class SNative extends ModuleAdapter {
                     v1=f.vlr[0];
                     p1=pair(f.vlr[1]);
                     while (p1!=EMPTYLIST) {
-                        if (p1.car.eq(v1))
+                        if (p1.car == v1)
                             return p1;
                         p1=pair(p1.cdr);
                     }
@@ -193,7 +193,7 @@ public class SNative extends ModuleAdapter {
                     v1=f.vlr[0];
                     p1=pair(f.vlr[1]);
                     while (p1!=EMPTYLIST) {
-                        if (p1.car.eq(v1))
+                        if (p1.car.eqv(v1))
                             return p1;
                         p1=pair(p1.cdr);
                     }

@@ -43,7 +43,7 @@ public class JavaNull extends JavaObject {
         w.append("#<jnull ").append(Util.nameType((Class)obj)).append('>');
     }
 
-    public boolean eq(Object v) {
+    public boolean eqv(Object v) {
         return (this == v) || (v != null && v.getClass() == JavaNull.class
                                && obj == ((JavaNull)v).obj);
     }

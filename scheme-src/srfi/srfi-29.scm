@@ -10,10 +10,6 @@
 
 ;;An SRFI-28 and SRFI-29 compliant version of format.  It requires
 ;;SRFI-23 for error reporting.
-(define <sisc.util.Util> (java-class "sisc.util.Util"))
-(define-generic get)
-(define-generic register-bundle)
-(define-generic get-string)
 
 (define format
   (lambda (format-string . objects)
@@ -187,14 +183,19 @@
 (define (load-bundle! bundle-specifier)  
   #f)
 
+(define-generic get)
+(define-generic register-bundle)
+(define-generic get-string)
+
 (define (get-native-bundle package)
-  (with/fc 
-   (lambda (m e) #f)
-   (lambda ()
-     (let ([rb (get (<sisc.util.Util> 'bundles) package)])
+  (let ([suu (java-class "sisc.util.Util")])
+    (with/fc 
+     (lambda (m e) #f)
+     (lambda ()
+       (let ([rb (get (suu 'bundles) package)])
        (if (java-null? rb)
            (begin
-             (register-bundle <sisc.util.Util> package)
-             (get (<sisc.util.Util> 'bundles) package))
-           rb)))))
+             (register-bundle suu package)
+             (get (suu 'bundles) package))
+           rb))))))
                

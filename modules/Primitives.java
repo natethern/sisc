@@ -61,6 +61,7 @@ public class Primitives extends ModuleAdapter {
         define("denominator", DENOMINATOR);
         define("environment?", ENVIRONMENTQ);
         define("eq?", EQ);
+        define("eqv?", EQV);
         define("equal?", EQUAL);
         define("eval", EVAL);
         define("exact->inexact", EXACT2INEXACT);
@@ -297,6 +298,13 @@ public class Primitives extends ModuleAdapter {
             case TIMEZONEOFFSET:
                 Calendar cal = Calendar.getInstance();
                 return Quantity.valueOf((cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET)) / 1000);
+            case ADD: return Quantity.ZERO;
+            case MUL: return Quantity.ONE;
+            case DIV:
+            case NEQ: 
+            case LT: 
+            case GRT:
+            case SUB: throwArgSizeException(); return VOID;
             default:
                 break SIZESWITCH;
             }
@@ -318,6 +326,13 @@ public class Primitives extends ModuleAdapter {
                     throwPrimException(liMessage(SISCB, "noenv", f.vlr[0].synopsis()));
                     return VOID;
                 }
+            case ADD: 
+            case MUL: return num(f.vlr[0]);
+            case SUB: return num(f.vlr[0]).negate();
+            case DIV: return Quantity.ONE.div(num(f.vlr[0]));
+            case LT: 
+            case GRT:
+            case NEQ: throwArgSizeException(); return VOID;
             case SIN: return num(f.vlr[0]).sin();
             case COS: return num(f.vlr[0]).cos();
             case TAN: return num(f.vlr[0]).tan();
@@ -476,7 +491,8 @@ public class Primitives extends ModuleAdapter {
             }
         case 2:
             switch (primid) {
-            case EQ: return truth(f.vlr[0].eq(f.vlr[1]));
+            case EQ: return truth(f.vlr[0] == f.vlr[1]);
+            case EQV: return truth(f.vlr[0].eqv(f.vlr[1]));
             case CONS:
                 return new Pair(f.vlr[0], f.vlr[1]);
             case EQUAL:
@@ -487,6 +503,11 @@ public class Primitives extends ModuleAdapter {
             case SETCDR:
                 truePair(f.vlr[0]).setCdr(f.vlr[1]);
                 return VOID;
+            case ADD: return num(f.vlr[0]).add(num(f.vlr[1]));
+            case MUL: return num(f.vlr[0]).mul(num(f.vlr[1]));
+            case SUB: return num(f.vlr[0]).sub(num(f.vlr[1]));
+            case DIV: return num(f.vlr[0]).div(num(f.vlr[1]));
+            case NEQ: return truth(num(f.vlr[0]).comp(num(f.vlr[1]),0));
             case REMAINDER:
                 return num(f.vlr[0]).remainder(num(f.vlr[1]));
             case QUOTIENT:
@@ -687,36 +708,30 @@ public class Primitives extends ModuleAdapter {
             return proc;
         case LIST: return valArrayToList(f.vlr,0,f.vlr.length);
         case ADD:
-            quantity=Quantity.ZERO;
-            for (int i=f.vlr.length-1; i>=0; i--) {
-                quantity=quantity.add(num(f.vlr[i]));
-            }
+            int x=f.vlr.length-1;
+            quantity=num(f.vlr[x]);
+            while (--x >= 0) 
+                quantity=quantity.add(num(f.vlr[x]));
             return quantity;
         case MUL:
-            quantity=Quantity.ONE;
-            for (int i=f.vlr.length-1; i>=0; i--) {
-                quantity=quantity.mul(num(f.vlr[i]));
-            }
+            x=f.vlr.length-1;
+            quantity=num(f.vlr[x]);
+            while (--x >= 0) 
+                quantity=quantity.mul(num(f.vlr[x]));
             return quantity;
-        case SUB:
+        case SUB: 
             quantity=num(f.vlr[0]);
-            if (f.vlr.length==1) {
-                return Quantity.ZERO.sub(quantity);
-            }
             for (int i=1; i<f.vlr.length; i++) {
                 quantity=quantity.sub(num(f.vlr[i]));
             }
             return quantity;
-            
         case NEQ:
-            if (f.vlr.length<2) throwArgSizeException();
             quantity=num(f.vlr[0]);
-            for (int i=f.vlr.length-1; i>=0; i--) {
+            for (int i=f.vlr.length-1; i>0; i--) {
                 if (!quantity.comp(num(f.vlr[i]), 0)) return FALSE;
             }
             return TRUE;
         case LT:
-            if (f.vlr.length<2) throwArgSizeException();
             quantity=num(f.vlr[0]);
             for (int i=1; i<f.vlr.length; i++) {
                 Quantity q=num(f.vlr[i]);
@@ -725,7 +740,6 @@ public class Primitives extends ModuleAdapter {
             }
             return TRUE;
         case GRT:
-            if (f.vlr.length<2) throwArgSizeException();
             quantity=num(f.vlr[0]);
             for (int i=1; i<f.vlr.length; i++) {
                 Quantity q=num(f.vlr[i]);
@@ -733,13 +747,12 @@ public class Primitives extends ModuleAdapter {
                 quantity=q;
             }
             return TRUE;
-        case DIV:
-            quantity=num(f.vlr[0]);
-            if (f.vlr.length==1) {return Quantity.ONE.div(quantity); }
-            for (int i=1; i<f.vlr.length; i++) {
-                quantity=quantity.div(num(f.vlr[i]));
-            }
-            return quantity;
+        case DIV: 
+            x=f.vlr.length-1;
+            quantity=num(f.vlr[x]);
+            while (--x >= 1) 
+                quantity=quantity.mul(num(f.vlr[x]));
+            return num(f.vlr[0]).div(quantity);
         default:
             throwArgSizeException();
         }
@@ -755,7 +768,7 @@ public class Primitives extends ModuleAdapter {
         //69
         //72-75
         //78-82
-        //110-111
+        //110
         //136-139
         //154
         ACOS = 14,
@@ -788,6 +801,7 @@ public class Primitives extends ModuleAdapter {
         DIV = 144,
         ENVIRONMENTQ = 39,
         EQ = 112,
+        EQV = 111,
         EQUAL = 113,
         EVAL = 115,
         EXACT2INEXACT = 41,

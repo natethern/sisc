@@ -36,22 +36,16 @@
 ;;;;;;
 
 (define (for-each proc ls1 . lists)
-  (unless (null? ls1))
-      (begin
-        (set! lists (cons ls1 lists))
-        (apply proc (map-car lists))
-        (apply for-each proc (map-cdr lists))))
-
+  (unless (null? ls1)
+    (begin
+      (set! lists (cons ls1 lists))
+      (apply proc (map-car lists))
+      (apply for-each proc (map-cdr lists)))))
+  
 (define (eof-object? x) (eq? x #!eof))
 ;;;;;;;;; Standard Scheme functions
 
 (define (not x) (if x #f #t))
-
-;; In SISC, eqv? is the same as eq?, because booleans, symbols,
-;; and the empty list are all pointer equal.  Numbers and characters
-;; define eq? as value equivalent (numbers must also be of the same
-;; exactness), obviating the need for eqv? to do so.
-(define eqv? eq?)
 
 (define (newline . port)
   (apply display #\newline port))
@@ -226,7 +220,7 @@
        (normalize-url (current-url)
                       (let* ([v (car rest)]
                              [l (string-length v)])
-                        (if (eq? (string-ref v (- l 1)) '#\/)
+                        (if (eqv? (string-ref v (- l 1)) '#\/)
                             v
                             (string-append v "/")))))))
 
@@ -514,7 +508,7 @@
 
 (define (char>? c1 c2) (> (char->integer c1) (char->integer c2)))
 (define (char<? c1 c2) (< (char->integer c1) (char->integer c2)))
-(define char=? eq?)
+(define char=? eqv?)
 (define (char>=? c1 c2) (or (char>? c1 c2) (char=? c1 c2)))
 (define (char<=? c1 c2) (or (char<? c1 c2) (char=? c1 c2)))
 (define (char-ci>? c1 c2) (char>? (char-downcase c1) (char-downcase c2)))

@@ -167,13 +167,13 @@ public class JavaObject extends Procedure {
         return obj.hashCode();
     }
 
-    public boolean eq(Object v) {
+    public boolean eqv(Object v) {
         return this == v || (v != null && v.getClass() == JavaObject.class
                              && obj == ((JavaObject)v).obj);
     }
 
     public boolean valueEqual(Value v) {
-        return eq(v) || (v instanceof JavaObject
+        return eqv(v) || (v instanceof JavaObject
                          && obj.equals(((JavaObject)v).get()));
     }
 

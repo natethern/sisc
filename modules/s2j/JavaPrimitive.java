@@ -47,7 +47,7 @@ public class JavaPrimitive extends JavaObject {
             .append('>');
     }
 
-    public boolean eq(Object v) {
+    public boolean eqv(Object v) {
         return this == v || (v != null && v.getClass() == JavaPrimitive.class
                              && type == ((JavaPrimitive)v).type
                              && obj.equals(((JavaPrimitive)v).obj));
