@@ -53,7 +53,9 @@
 	  classpath="${classdir}"
 	  dir="${schemedir}"
 	  fork="yes">
+      <arg value="-out"/>
       <arg value="${heap}"/>
+      <arg value="-files"/>
       <arg value="${schemedir}/init.pp"/>
       <arg value="${schemedir}/compat.pp"/>
       <arg value="${schemedir}/psyntax.pp"/>
