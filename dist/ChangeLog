@@ -1,6 +1,11 @@
+2001-12-13  Matthias Radestock  <matthias@sorted.org>
+
+	* Removed current-writer, was only used by repl which now just
+	calls pretty-print directly
+
 2001-12-04  Matthias Radestock  <matthias@sorted.org>
 
-	* made literal strings, vectors and lists immutable
+	* Made literal strings, vectors and lists immutable
 
 2001-12-04  Scott G. Miller  <scgmille@freenetproject.org>
 	

@@ -69,9 +69,6 @@ public class GenerateHeap {
                                    false));
         }
 
-        if (!r.setWriter("pretty-print"))
-            r.setWriter("write");
-
         // Lock in the R5RS environment
         AssociativeEnvironment report_env, top_env;
         report_env=(AssociativeEnvironment)r.symenv.lookup(Util.TOPLEVEL);

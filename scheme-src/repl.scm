@@ -71,7 +71,7 @@
 	(let loop ()
 	  (call/fc
 	   (lambda ()
-	     (repl-loop console-in console-out (current-writer))
+	     (repl-loop console-in console-out pretty-print)
 	     (void))
 	   (lambda (m e f)
 	     ((current-default-error-handler) m e f console-out)

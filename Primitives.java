@@ -57,7 +57,7 @@ public class Primitives extends Module {
          CHARREADY=21,    CLOSEINPUTPORT=22,   CLOSEOUTPUTPORT=23,
           COMPLEXQ=24,              CONS=25,     CONTINUATIONQ=26,
   	       COS=27,       CURRENTEVAL=28,               // <29>
-  CURRENTINPUTPORT=30, CURRENTOUTPUTPORT=31,      CURRENTWRITE=32,
+	CURRENTINPUTPORT=30, CURRENTOUTPUTPORT=31,	   // <32>,
        DENOMINATOR=33,           DISPLAY=34,               DIV=35,
       ENVIRONMENTQ=36,                EQ=37,             EQUAL=38,
              ERROR=39,              EVAL=40,     EXACT2INEXACT=41,
@@ -141,7 +141,6 @@ public class Primitives extends Module {
         define(r, "current-evaluator", CURRENTEVAL);
         define(r, "current-input-port", CURRENTINPUTPORT);
         define(r, "current-output-port", CURRENTOUTPUTPORT);
-        define(r, "current-writer", CURRENTWRITE);
         define(r, "denominator", DENOMINATOR);
         define(r, "display", DISPLAY);
         define(r, "environment?", ENVIRONMENTQ);
@@ -248,7 +247,6 @@ public class Primitives extends Module {
                 return (primid==READ ? f.console_in.read(f) :
                         f.console_in.readchar(f));
             case CURRENTEVAL: return (Value)f.evaluator;
-            case CURRENTWRITE: return (Value)f.writer;
             case INTERACTIONENVIRONMENT:
                 return f.toplevel_env;
             case SYSTIME: return Quantity.valueOf(System.currentTimeMillis());
@@ -476,9 +474,6 @@ public class Primitives extends Module {
                 else throw new RuntimeException("Unsupported standard version");
             case CURRENTEVAL:
                 f.evaluator=proc(f,f.vlr[0]);
-                return VOID;
-            case CURRENTWRITE:
-                f.writer=proc(f,f.vlr[0]);
                 return VOID;
             case LOADMODULE:
                 try {

@@ -43,7 +43,7 @@ public class Interpreter extends Util {
 
     public Parser parser=new Parser(new Lexer());
 
-    protected Procedure evaluator, writer;
+    protected Procedure evaluator;
     public OutputPort console_out;
     public InputPort console_in;
     public AssociativeEnvironment symenv, toplevel_env;
@@ -78,7 +78,6 @@ public class Interpreter extends Util {
     public static Interpreter newContext(Interpreter parent) {
         Interpreter rnew=new Interpreter(parent.console_in, parent.console_out,
                                          parent.symenv);
-        rnew.writer=parent.writer;
         rnew.evaluator=parent.evaluator;
         if (rnew.toplevel_env!=null)
             rnew.symenv.define(TOPLEVEL, rnew.toplevel_env);
@@ -201,22 +200,6 @@ public class Interpreter extends Util {
                                     new Expression[] {v}, true));
     }
 
-    public void write(Value v) throws ContinuationException {
-        vlr=new Value[] {v};
-        nxp=APPEVAL;
-        acc=(Value)writer;
-        interpret();
-    }
-
-    public boolean setWriter(String s) {
-        try {
-            writer=(Procedure)toplevel_env.lookup(Symbol.get(s));
-            return true;
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return false;
-        }
-    }
-
     public boolean setEvaluator(String s) {
         try {
             evaluator=(Procedure)toplevel_env.lookup(Symbol.get(s));
@@ -262,7 +245,6 @@ public class Interpreter extends Util {
             CallFrame lstk=(CallFrame)s.deserialize(i);
             AssociativeEnvironment lsymenv=(AssociativeEnvironment)s.deserialize(i);
             Procedure levaluator=(Procedure)s.deserialize(i);
-            Procedure lwriter=(Procedure)s.deserialize(i);
             SchemeBoolean lTRUE=(SchemeBoolean)s.deserialize(i),
                                 lFALSE=(SchemeBoolean)s.deserialize(i);
             SchemeVoid lVOID=(SchemeVoid)s.deserialize(i);
@@ -277,7 +259,6 @@ public class Interpreter extends Util {
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throw new IOException("Heap did not contain toplevel environment!");
                 }
-                writer=lwriter;
                 evaluator=levaluator;
                 TRUE=lTRUE;
                 FALSE=lFALSE;
@@ -296,7 +277,6 @@ public class Interpreter extends Util {
                 CallFrame lstk=(CallFrame)ois.readObject();
                 AssociativeEnvironment lsymenv=(AssociativeEnvironment)ois.readObject();
                 Procedure levaluator=(Procedure)ois.readObject();
-                Procedure lwriter=(Procedure)ois.readObject();
                 SchemeBoolean lTRUE=(SchemeBoolean)ois.readObject(),
                                     lFALSE=(SchemeBoolean)ois.readObject();
                 SchemeVoid lVOID=(SchemeVoid)ois.readObject();
@@ -311,7 +291,6 @@ public class Interpreter extends Util {
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throw new IOException("Heap did not contain toplevel environment!");
                 }
-                writer=lwriter;
                 evaluator=levaluator;
                 TRUE=lTRUE;
                 FALSE=lFALSE;
@@ -333,7 +312,6 @@ public class Interpreter extends Util {
             s.serialize(stk, o);
             s.serialize(symenv, o);
             s.serialize(evaluator, o);
-            s.serialize(writer, o);
             s.serialize(TRUE, o);
             s.serialize(FALSE, o);
             s.serialize(VOID,o);
@@ -345,7 +323,6 @@ public class Interpreter extends Util {
             out.writeObject(stk);
             out.writeObject(symenv);
             out.writeObject(evaluator);
-            out.writeObject(writer);
             out.writeObject(TRUE);
             out.writeObject(FALSE);
             out.writeObject(VOID);
