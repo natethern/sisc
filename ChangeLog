@@ -1,3 +1,9 @@
+2003-08-11  SISC 1.8.2-alpha Released
+
+2003-08-10	Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Sane underpinnings for explicit syntax (#%quote, etc).
+	
 2003-08-04  Matthias Radestock  <matthias@sorted.org>
 
 	* Improved slib's O/S detection.
