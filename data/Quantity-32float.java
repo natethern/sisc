@@ -1153,7 +1153,7 @@ public class Quantity extends Value {
     protected static String zeroTrim(String s) {
 	int y=s.indexOf('.');
 	char c;	
-	if (y!=-1) {
+	if (y!=-1 && s.indexOf('e')==-1) {
 	    for (int x=s.length()-1; x>1; x--) 
 		if ((c=s.charAt(x))!='0') 
 		    return (c=='.' ? s.substring(0,x+2) : s.substring(0,x+1));
@@ -1168,7 +1168,7 @@ public class Quantity extends Value {
 	if (type==FIXEDINT)
 	    b.append(Integer.toString(val,radix));
 	else if (type==DECIM) {
-	    String s=zeroTrim(Float.toString(d));
+	    String s=zeroTrim(Float.toString(d).toLowerCase());
 	    b.append(s);
 	    if (s.indexOf('.')==-1) b.append(".0");
 	} else if (type==INTEG)
@@ -1176,16 +1176,16 @@ public class Quantity extends Value {
 	else if (type==RATIO)
 	    b.append(i.toString(radix)).append('/').append(de.toString(radix));
 	else if (type==COMPLEX) {
-	    b.append(zeroTrim(Float.toString(d)));
+	    b.append(zeroTrim(Float.toString(d).toLowerCase()));
 	    if (im>0) {
 		b.append('+');
 		if (im!=1.0f)
-		    b.append(Float.toString(im));
+		    b.append(Float.toString(im).toLowerCase());
 	    } else {
 		if (im==-1.0f)
 		    b.append('-');
 		else 
-		    b.append(zeroTrim(Float.toString(im)));
+		    b.append(zeroTrim(Float.toString(im).toLowerCase()));
 	    }
 	    b.append('i');
 	}
