@@ -45,24 +45,18 @@ public abstract class Expression extends Util implements Serializable {
     public synchronized Value getAnnotation(Symbol key) {
         if (annotations==null)
             return FALSE;
-        synchronized(annotations) {
-            return (Value)annotations.get(key);
-        }
+        return (Value)annotations.get(key);
     }
 
-    public void setAnnotation(Symbol key, Value val) {
+    public synchronized void setAnnotation(Symbol key, Value val) {
         if (annotations==null)
             annotations=Collections.synchronizedMap(new HashMap(0));
-        synchronized(annotations) {
-            annotations.put(key, val);
-        }
+        annotations.put(key, val);
     }
      
-    public Set getAnnotationKeys() {
+    public synchronized Set getAnnotationKeys() {
         if (annotations==null) return EMPTYSET;
-        synchronized(annotations) {
-            return annotations.keySet();
-        }
+        return annotations.keySet();
     }
 
     public abstract void eval(Interpreter r) throws ContinuationException;
