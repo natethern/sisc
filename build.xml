@@ -14,7 +14,7 @@
 <!--    <property name="releasecandidate" value="yes"/>-->
     <property name="beta" value="yes"/>
     <property file="${basedir}/build.properties"/>    
-    <property name="srcdir" value="${basedir}/.."/>
+    <property name="srcdir" value="${basedir}/src"/>
     <property name="classdir" value="${basedir}/classes"/>
     <property name="libdir" value="${basedir}/lib"/>
     <property name="docdir" value="${basedir}/doc"/>
@@ -26,8 +26,9 @@
 <!--    <property name="classopt" value="yes"/>-->
     <property name="optjar" value="sisc-opt.jar"/>
     <property name="libjar" value="sisc-lib.jar"/>
-    <property name="heap" value="${basedir}/boot/sisc.shp"/>
+    <property name="heap" value="${basedir}/sisc.shp"/>
     <property name="quantity-type" value="apfloat"/>
+    <property name="quantity-dir" value="${srcdir}/sisc/data"/>
     <condition property="debugging" value="on">
       <or> 
         <isset property="releasecandidate"/>
@@ -64,31 +65,30 @@
     <delete file="${basedir}/${basejar}"/>
     <delete file="${basedir}/${optjar}"/>
     <delete file="${heap}"/>
-    <delete file="${basedir}/data/Quantity.java"/>
+    <delete file="${quantity-dir}/Quantity.java"/>
     <delete>
-      <fileset dir="${basedir}/data"
+      <fileset dir="${quantity-dir}"
                includes=".Quantity-*"/>
     </delete>
-    <delete file="${basedir}/Conf.java"/>
   </target> 
 
   <target name="quantity-uptodate" depends="prepare">
     <uptodate property="quantityUptodate"
-              targetfile="${basedir}/data/.Quantity-${quantity-type}"
-              srcfile="${basedir}/data/Quantity-${quantity-type}.java.tmpl"/>
+              targetfile="${quantity-dir}/.Quantity-${quantity-type}"
+              srcfile="${quantity-dir}/Quantity-${quantity-type}.java.tmpl"/>
   </target>
 
   <target name="quantity"
           depends="quantity-uptodate"
           unless="quantityUptodate">
-    <copy file="${basedir}/data/Quantity-${quantity-type}.java.tmpl"
-          tofile="${basedir}/data/Quantity.java"
+    <copy file="${quantity-dir}/Quantity-${quantity-type}.java.tmpl"
+          tofile="${quantity-dir}/Quantity.java"
           overwrite="yes"/>
     <delete>
-      <fileset dir="${basedir}/data"
+      <fileset dir="${quantity-dir}"
                includes=".Quantity-*"/>
     </delete>
-    <touch file="${basedir}/data/.Quantity-${quantity-type}"/>
+    <touch file="${quantity-dir}/.Quantity-${quantity-type}"/>
   </target>
 
   <target name="compile" depends="quantity">
@@ -143,18 +143,16 @@
 
   <target name="i18n" depends="prepare">
     <mkdir dir="${classdir}/sisc"/>
-    <copy todir="${classdir}/sisc">
-      <fileset dir="${basedir}" >
+    <copy todir="${classdir}">
+      <fileset dir="${srcdir}" >
         <include name="**/*.properties"/>
-        <exclude name="**/build.properties"/>
-        <exclude name="classes/**/*.properties"/>
       </fileset>
     </copy>
   </target>
 
   <target name="jars" depends="compile,class-opt,i18n"> 
     <jar jarfile="${basedir}/${basejar}"
-         manifest="${basedir}/boot/Manifest">
+         manifest="${srcdir}/Manifest">
       <fileset dir="${classdir}">
         <include name="*/**"/>
         <exclude name="sisc/boot/**"/>
