@@ -261,6 +261,42 @@
   (let ((ls (list 1 2 3 4)))
     (append ls ls '(5))))
 
+;; This example actually illustrates a bug in R5RS.  If a Scheme system
+;; follows the letter of the standard, 1 should be returned, but
+;; the general agreement is that 2 should instead be returned.
+;; The reason is that in R5RS, let-syntax always introduces new scope, thus 
+;; in the following test, the let-syntax breaks the definition section
+;; and begins the expression section of the let. 
+;;
+;; The general agreement by the implementors in 1998 was that the following 
+;; should be possible, but isn't:
+;;
+;;   (define ---)
+;;   (let-syntax (---)
+;;     (define ---)
+;;     (define ---))
+;;   (define ---)
+;;
+;; Scheme systems based on the Portable syntax-case expander by Dybvig
+;; and Waddell do allow the above, and thus often violate the letter of
+;; R5RS.  In such systems, the following will produce a local scope:
+;;
+;;   (define ---)
+;;   (let-syntax ((a ---))
+;;     (let ()
+;;       (define ---)
+;;       (define ---)))
+;;   (define ---)
+;;
+;; Credits to Matthias Radestock and thanks to R. Kent Dybvig for the
+;; explanation and background
+(should-be 8.3 1
+  (let ((x 1))
+    (let-syntax ((foo (syntax-rules () ((_) 2))))
+      (define x (foo))
+      3)
+    x))
+
 ;;Not really an error to fail this (Matthias Radestock)
 ;;If this returns (0 1 0), your map isn't call/cc safe, but is probably
 ;;tail-recursive.  If its (0 0 0), the opposite is true.
