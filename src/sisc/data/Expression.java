@@ -1,6 +1,7 @@
 package sisc.data;
 
 import java.util.*;
+import java.beans.java_awt_BorderLayout_PersistenceDelegate;
 import java.io.*;
 import sisc.ser.*;
 import sisc.exprs.fp.OptimismUnwarrantedException;
@@ -148,6 +149,7 @@ public abstract class Expression extends Util
      * @param s the Serializer
      */
     public void serialize(Serializer s) throws IOException {
+        throw new NotSerializableException(getClass().getName());
     }
 
     /**
