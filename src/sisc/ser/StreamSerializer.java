@@ -51,7 +51,6 @@ public class StreamSerializer extends SLL2Serializer {
         }  else {
             entryPoints.put(e, new Integer(nextEp));
             sizeStartOffset=writeNewEntryPointMarker(nextEp++, e);
-            //flush=true;
         }
         
         writeExpressionSerialization(e, new SerJobEnd(posi, sizeStartOffset), 
