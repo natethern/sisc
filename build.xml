@@ -17,8 +17,7 @@
     <property name="gendocdir" value="${docdir}/generated"/>
     <property name="schemedir" value="${basedir}/scheme-src"/>
     <property name="packagename" value="sisc"/>
-    <property name="basejar" value="sisc-base.jar"/>
-    <property name="oldjar" value="sisc.jar"/>
+    <property name="basejar" value="sisc.jar"/>
     <property name="optjar" value="sisc-opt.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
     <property name="quantity-type" value="64float"/>
@@ -39,7 +38,6 @@
     <delete dir="${gendocdir}"/>
     <delete file="${docdir}/sss/style.xsl"/>
     <delete file="${basedir}/${basejar}"/>
-    <delete file="${basedir}/${oldjar}"/>
     <delete file="${basedir}/${optjar}"/>
     <delete file="${heap}"/>
     <delete file="${basedir}/data/Quantity.java"/>
