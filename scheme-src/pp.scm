@@ -38,21 +38,21 @@
     (get-output-string string-buffer))
 
   (define (vector->list-n v s n)
-    (if (>= s n) 
+   (if (and (>= s n) (> s 0))
 	'()
 	(cons (vector-ref v s) (vector->list-n v (+ s 1) n))))
 
   (define *MAX_PPV* 50000)
 
-  (define (vector-find-endpoint v)
-    (let ([lastelem (- (vector-length v) 1)])
-      (if (= lastelem -1) 
-	  -1
-	  (let ([base (vector-ref v lastelem)])
-	    (let loop ([x lastelem])
-	      (if (and (> x -1) (eq? base (vector-ref v x)))
-		  (loop (- x 1))
-		  (+ x 2)))))))
+  (define vector-find-endpoint find-last-unique-vector-element)
+;    (let ([lastelem (- (vector-length v) 1)])
+;      (if (= lastelem -1) 
+;	  -1
+;	  (let ([base (vector-ref v lastelem)])
+;	    (let loop ([x lastelem])
+;	      (if (and (> x -1) (eq? base (vector-ref v x)))
+;		  (loop (- x 1))
+;		  (+ x 2)))))))
 
   (define (read-macro? l)
     (define (length1? l) (and (pair? l) (null? (cdr l))))
@@ -93,11 +93,11 @@
 
     (cond ((pair? obj)        (wr-expr obj col))
           ((vector? obj)      (wr-lst 
-			       (if (> (vector-length obj) *MAX_PPV*)
-				   (vector->list obj)
+		;	       (if (> (vector-length obj) *MAX_PPV*)
+			;	   (vector->list obj)
 				   (vector->list-n 
 				    obj 0 
-				    (vector-find-endpoint obj)))
+				    (vector-find-endpoint obj));)
 			       (wr (vector-length obj)
 				   (out "#" col))))
 ;	  ((box? obj)         (wr (unbox obj) (out "#&" col)))

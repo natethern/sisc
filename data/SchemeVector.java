@@ -2,6 +2,7 @@ package sisc.data;
 
 public class SchemeVector extends Value {
     public Value[] vals;
+    protected int lastUnique;
 
     public SchemeVector(int count) {
 	this(count, Quantity.ZERO);
@@ -31,14 +32,15 @@ public class SchemeVector extends Value {
 	return true;
     }
 
-    int findEnd() {
+    public int findEnd() {
+        if (lastUnique > -1) return lastUnique;
 	if (vals.length>1) {
 	    Value v=vals[vals.length-1];
 	    for (int i=vals.length-2; i>=0; i--) 
-		if (!vals[i].eq(v)) return i+2;
-	    return 1;
+		if (!vals[i].eq(v)) return lastUnique=i+2;
+	    return lastUnique=1;
 	} 
-	return vals.length;
+	return lastUnique=vals.length;
     }
 	
     void display(StringBuffer b, boolean write) {
@@ -59,6 +61,7 @@ public class SchemeVector extends Value {
     }
 
     public void set(int idx, Value v) {
+        lastUnique=-1;
 	vals[idx]=v;
     }
 

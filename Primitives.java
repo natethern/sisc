@@ -42,7 +42,7 @@ public class Primitives extends Module {
 	UNBOX=116,CURRENTINPUTPORT=46,         CURRENTOUTPUTPORT=47,      
         FLOOR=83, OPENOUTPUTSTRING=48,         GETOUTPUTSTRING=49, 
 	PUTPROP=121, STRING2UNINTERNEDSYMBOL=66,  OPENINPUTSTRING=50,
-	LIST=122, _VOID=123;
+	LIST=122, _VOID=123, VECTORFINDLASTUNIQUE=124;
 
     public void initialize(Interpreter r) {
 	define(r, "list", LIST);
@@ -96,6 +96,7 @@ public class Primitives extends Module {
 	define(r, "exact?", EXACTQ);
 	define(r, "exp", EXP);
 	define(r, "file-type", FILETYPE);
+	define(r, "find-last-unique-vector-element", VECTORFINDLASTUNIQUE);
 	define(r, "floor", FLOOR);
 	define(r, "get-output-string", GETOUTPUTSTRING);
 	define(r, "getprop", LOOKUP);
@@ -261,6 +262,7 @@ public class Primitives extends Module {
 	    case ROUND: return num(f,f.vlr[0]).round();
 	    case INTEGER2CHAR: return new SchemeCharacter((char)num(f,f.vlr[0]).
 							intValue());
+	    case VECTORFINDLASTUNIQUE: return new Quantity(vec(f,f.vlr[0]).findEnd());
 	    case PEEKCHAR:
 		InputPort inport=inport(f,f.vlr[0]);
 		Value v=inport.readchar(f);

@@ -1667,7 +1667,7 @@
                g1813))))
        (lambda (g844)
          (if (g255 g844) (g378 g844 '...) '#f))
-       (lambda () (list 'void))
+       (lambda () (void))
        (lambda (g850 g845 g849 g846 g848 g847)
          ((lambda (g851)
             ((lambda (g852)

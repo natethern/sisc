@@ -1,12 +1,10 @@
 package sisc.data;
 
 import sisc.*;
-import sisc.exprs.Barrier;
 
 public class Closure extends Procedure {
     public boolean arity;
     public int fcount;
-    //public long usecount;
     public LexicalEnvironment env;
     public Expression body;
    
@@ -19,7 +17,6 @@ public class Closure extends Procedure {
     }
 
     public void apply(Interpreter r) throws ContinuationException {	
-	//usecount++;
 	try {
 	    r.env=new LexicalEnvironment(fcount, r.vlr, 
 					 env, arity);
@@ -38,10 +35,6 @@ public class Closure extends Procedure {
 	b.append('>');
 	return b.toString();
     }
-    
-    //    protected void finalize() {
-	//	System.err.println(justify(""+usecount,10,' ')+" "+name);
-    //    }
 }
 	
 	
