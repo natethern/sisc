@@ -22,7 +22,7 @@ public class UnboxExp extends Expression implements Immediate {
 
     public final Value getValue(Interpreter r) throws ContinuationException {
         //r.ux++;
-        return (Value)((Box)ref.getValue(r)).val;
+        return ((Box)ref.getValue(r)).val;
     }
 
     public Value express() {

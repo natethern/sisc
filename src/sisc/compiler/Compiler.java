@@ -212,7 +212,6 @@ public class Compiler extends CompilerConstants {
 	            expr=(Pair)expr.cdr;
 	
 	            Symbol[] formals=null;
-	            int fcount;
 	            Value ftmp=expr.car;
 	            if (ftmp instanceof Pair && ftmp != EMPTYLIST) {
 	                formals=argsToSymbols((Pair)ftmp);

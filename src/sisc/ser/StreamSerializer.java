@@ -3,6 +3,7 @@ package sisc.ser;
 import java.util.*;
 import java.io.*;
 import sisc.data.Expression;
+import sisc.interpreter.AppContext;
 
 public class StreamSerializer extends SLL2Serializer {
 
@@ -10,8 +11,8 @@ public class StreamSerializer extends SLL2Serializer {
     private int nextEp, nextClassIdx;
     private NestedObjectOutputStream objout;
 
-    public StreamSerializer(OutputStream out) throws IOException {
-        super(out);
+    public StreamSerializer(AppContext ctx, OutputStream out) throws IOException {
+        super(ctx, out);
         objout=new NestedObjectOutputStream(cos,this);
         this.classes=new HashMap();
         this.entryPoints=new HashMap();
@@ -54,9 +55,13 @@ public class StreamSerializer extends SLL2Serializer {
             entryPoints.put(e, new Integer(nextEp));
             sizeStartOffset=writeNewEntryPointMarker(nextEp++, e);
         }
-        
-        writeExpressionSerialization(e, new SerJobEnd(posi, sizeStartOffset), 
-                                     flush);
+        LibraryBinding lb=ctx.reverseLookup(e);
+        if (lb==null) {
+            writeExpressionSerialization(e, new SerJobEnd(posi, sizeStartOffset), 
+                    flush);
+        } else {
+            writeLibraryReference(lb, new SerJobEnd(posi, sizeStartOffset), flush);
+        }
     }
     
     public void writeClass(Class c) throws IOException {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import sisc.data.Value;
+import sisc.interpreter.AppContext;
 import sisc.ser.StreamSerializer;
 
 public class SerializerPort
@@ -12,10 +13,10 @@ public class SerializerPort
 
     public StreamSerializer serializer;
     
-    public SerializerPort(OutputStream out, boolean aflush)
+    public SerializerPort(AppContext ctx, OutputStream out, boolean aflush)
         throws IOException {
         super(out, aflush);
-        serializer=new StreamSerializer(out);
+        serializer=new StreamSerializer(ctx, out);
     }
 
     public void writeSer(Value v) throws IOException {

@@ -5,6 +5,8 @@ import java.util.*;
 import java.io.*;
 import sisc.data.*;
 import sisc.env.SymbolicEnvironment;
+import sisc.interpreter.AppContext;
+import sisc.interpreter.Context;
 
 public class BlockDeserializer extends DeserializerImpl implements LibraryDeserializer {
 
@@ -16,9 +18,11 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
     long base;
     Library baseLib;
     LinkedList deserQueue;
-
-    public BlockDeserializer(SeekableDataInput input, 
+    AppContext ctx;
+    
+    public BlockDeserializer(AppContext ctx, SeekableDataInput input, 
                              Map classes, int[] o, int[] l) throws IOException {
+        this.ctx=ctx;
         this.raf=input;
         base=raf.getFilePointer();
         classPool=classes;
@@ -30,18 +34,27 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
     }
     
     public final Expression readExpression() throws IOException {
-        return readExpression(false);
+        return readExpression(false, -1);
     }
 
     public final Expression readInitializedExpression() throws IOException {
-        return readExpression(true);
+        return readExpression(true, -1);
     }
+    
     int indent=0;
-    public Expression readExpression(boolean flush) throws IOException {
+    public Expression readExpression(boolean flush, int definingOid) throws IOException {
         int type=readInt();
-        int definingOid = -1;
 
         try {
+            /*
+            StringBuffer b=new StringBuffer();
+            for (int i=0; i<indent; i++) {
+                b.append(' ');
+            }
+            b.append(type).append(", ").append(definingOid);
+            System.out.println(b.toString());
+            */
+
             //Read the stream object type, values above 15 of which represent
             //shared objects
             switch(type) {
@@ -53,7 +66,9 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
                         sc-=raf.skipBytes(sc);
                     }
                     return alreadyReadObjects[definingOid];
-                } else flush=true;
+                } else {
+                    return readExpression(true, definingOid);
+                }
             case 0: //ordinary expressions
                 Expression e;
                 Class clazz=readClass();
@@ -77,7 +92,14 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
                 int cid=readInt();
                 Class c=readClass();
                 classPool.put(new Integer(cid), c);
-                return readExpression(flush);
+                return readExpression(flush, -1);
+            case 4: //External library references
+                String libName=readUTF();
+                int epid=readInt();
+                e=ctx.getExpression(libName, epid);
+                if (definingOid!=-1 && alreadyReadObjects[definingOid]==null)             
+                    alreadyReadObjects[definingOid]=e;
+                return e;
             default: //expression references
                 return fetchShared(type-16);
             }

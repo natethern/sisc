@@ -4,25 +4,26 @@ import java.util.*;
 import java.io.*;
 import java.net.URL;
 import sisc.data.*;
+import sisc.interpreter.AppContext;
 import sisc.util.Util;
 
 public class Library extends Util {
-    static final String LIBRARY_VERSION="SLL3";
+    static final String LIBRARY_VERSION="SLL4";
     
     protected String name;
     protected BlockDeserializer lib;
     protected Map names;
 
-    public static Library load(URL u) throws IOException, ClassNotFoundException {
+    public static Library load(AppContext ctx, URL u) throws IOException, ClassNotFoundException {
         if (u.getProtocol().equalsIgnoreCase("file")) {
             String path=u.getPath();
-            return load(new SeekableDataInputStream(new BufferedRandomAccessInputStream(path, "r")));
+            return load(ctx, new SeekableDataInputStream(new BufferedRandomAccessInputStream(path, "r")));
         } else {
-            return load(new SeekableDataInputStream(new MemoryRandomAccessInputStream(u.openStream())));
+            return load(ctx, new SeekableDataInputStream(new MemoryRandomAccessInputStream(u.openStream())));
         }
     }
        
-    public static Library load(SeekableDataInput di) throws IOException, ClassNotFoundException {
+    public static Library load(AppContext ctx, SeekableDataInput di) throws IOException, ClassNotFoundException {
         String libver=di.readUTF();
         if (!libver.equals(LIBRARY_VERSION))
             throw new IOException(liMessage(SISCB, "unsuplib"));
@@ -37,7 +38,7 @@ public class Library extends Util {
         int socount=BlockDeserializer.readBer(di);
         int[] sharedObjectOffsets=new int[socount];
         int[] sharedObjectSizes=new int[socount];
-
+        
         HashMap names=new HashMap();
 
         for (int i=0; i<socount; i++) {
@@ -51,7 +52,7 @@ public class Library extends Util {
             names.put(Symbol.intern(s), new Integer(ep));
         }
 
-        return new Library(libname, new BlockDeserializer(di, classes, sharedObjectOffsets, sharedObjectSizes), names);
+        return new Library(libname, new BlockDeserializer(ctx, di, classes, sharedObjectOffsets, sharedObjectSizes), names);
     }
         
         /* All this and more at your */ 
@@ -96,10 +97,19 @@ public class Library extends Util {
         return name;
     }
 
-    public static void main(String[] args) throws Exception {
-        Library l=Library.load(new SeekableDataInputStream(new BufferedRandomAccessInputStream(args[0], "r", 8, 2048)));
-        Expression e=l.getExpression(Integer.parseInt(args[1]));//Integer.parseInt(args[1]));
-        System.err.println(e);
+    /**
+     * Given an expression, return the entry point id of the expression if any, -1 otherwise.
+     * 
+     * @param e
+     * @return
+     */
+    public int reverseLookup(Expression e) {
+        for (int i=lib.alreadyReadObjects.length-1; i>=0; i--) {
+            if (lib.alreadyReadObjects[i]==e) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
 

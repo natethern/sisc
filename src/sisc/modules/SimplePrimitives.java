@@ -294,7 +294,7 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
                                                       indexValue());
         case VECTORFINDLASTUNIQUE: return Quantity.valueOf(vec(v1).findEnd());
         case BOX: return new Box(v1);
-        case UNBOX: return (Value)box(v1).val;
+        case UNBOX: return box(v1).val;
         case BOXQ: return truth(v1 instanceof Box);
         case LENGTH:
             return Quantity.valueOf(length(pair(v1)));

@@ -3,6 +3,7 @@ package sisc.ser;
 import java.util.*;
 import java.io.*;
 import sisc.data.Expression;
+import sisc.interpreter.AppContext;
 
 public class BlockSerializer extends SLL2Serializer {
 
@@ -12,9 +13,9 @@ public class BlockSerializer extends SLL2Serializer {
     private Expression[] entryPoints;
     private HashMap epi, ci;
 
-    public BlockSerializer(OutputStream out, Vector classes, 
+    public BlockSerializer(AppContext ctx, OutputStream out, Vector classes, 
                            Expression[] entryPoints) throws IOException {
-        super(out);
+        super(ctx, out);
         this.classes=classes;
         this.entryPoints=entryPoints;
         sizes=new int[entryPoints.length];
@@ -77,10 +78,19 @@ public class BlockSerializer extends SLL2Serializer {
                 sizeStartOffset=writeNewEntryPointMarker(posi, e);
                 flush=true;
             }
-        } else writeOrdinaryExpressionMarker();
+        } 
+
+        LibraryBinding lb=ctx.reverseLookup(e);
+        boolean contiguous;
+        if (lb==null) {
+            contiguous=writeExpressionSerialization(e, new SerJobEnd(posi, sizeStartOffset), 
+                            flush);
+        } else {
+            contiguous=writeLibraryReference(lb, new SerJobEnd(posi, sizeStartOffset), 
+                    flush);
+        }
         
-        if (writeExpressionSerialization(e, new SerJobEnd(posi, sizeStartOffset), 
-                                         flush)) {
+        if (contiguous) {
             //If true, the item was serialized contiguously, so we can
             //record its size now
             if (sizeStartOffset != -1)

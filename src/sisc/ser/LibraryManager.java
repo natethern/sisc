@@ -7,10 +7,11 @@ import java.util.*;
 import sisc.util.Util;
 import sisc.data.Expression;
 import sisc.data.Symbol;
+import sisc.interpreter.AppContext;
 
 public class LibraryManager extends Util {
     
-    static class LoadableLibrary {
+    class LoadableLibrary {
         URL path;
         Library handle;
 
@@ -35,7 +36,7 @@ public class LibraryManager extends Util {
                     sis=new SeekableDataInputStream(new MemoryRandomAccessInputStream(path.openStream()));
                 }
                 try {
-                    handle=Library.load(sis);
+                    handle=Library.load(ctx, sis);
                 } catch (ClassNotFoundException cnf) {
                     cnf.printStackTrace();
                 }
@@ -49,15 +50,16 @@ public class LibraryManager extends Util {
     }
     
     protected Map loadedLibraries;
-
-    public LibraryManager() {
+    AppContext ctx;
+    
+    public LibraryManager(AppContext ctx) {
+        this.ctx=ctx;
         loadedLibraries=new HashMap();
     }
 
     public Expression getExpression(Symbol name) throws IOException {
-        for (Iterator i=loadedLibraries.keySet().iterator(); i.hasNext();) {
-            Object key=i.next();
-            LoadableLibrary ll=(LoadableLibrary)loadedLibraries.get(key);
+        for (Iterator i=loadedLibraries.values().iterator(); i.hasNext();) {
+            LoadableLibrary ll=(LoadableLibrary)i.next();
             try {
                 return ll.getLibrary().getLocalExpression(name);
             } catch (FileNotFoundException fnf) {
@@ -66,6 +68,26 @@ public class LibraryManager extends Util {
         throw new FileNotFoundException(liMessage(SISCB,
                                                   "namedlibbindingnotanywhere",
                                                   name.toString()));
+    }
+    
+    /**
+     * Returns the reference to a binding in the active libraries, or null
+     * if the provided expression isn't an entry point in any library.
+     * 
+     * @param e
+     * @return
+     */
+    public LibraryBinding getBindingReference(Expression e) throws IOException {
+        for (Iterator i=loadedLibraries.entrySet().iterator(); i.hasNext();) {
+            Map.Entry entry=(Map.Entry)i.next();
+            String name=(String)entry.getKey();
+            LoadableLibrary ll=(LoadableLibrary)entry.getValue();
+            int eid=ll.getLibrary().reverseLookup(e);
+            if (eid>-1) {
+                return new LibraryBinding(name, eid);
+            }            
+        }
+        return null;
     }
 
     public void addLibrary(Library l) {
@@ -87,6 +109,19 @@ public class LibraryManager extends Util {
             mfu.printStackTrace();
         } 
         return false;
+    }
+
+    /** 
+     * Returns an expression from an external library named by
+     * the given name and entry point.
+     * 
+     * @param libName
+     * @param epid
+     * @return
+     */
+    public Expression getExpression(String libName, int epid) throws IOException {
+        LoadableLibrary ll=(LoadableLibrary)loadedLibraries.get(libName);
+        return ll.getLibrary().getExpression(epid);
     }
 }
 

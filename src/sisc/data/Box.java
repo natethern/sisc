@@ -19,17 +19,14 @@ public class Box extends Value {
 
     public void display(ValueWriter w) throws IOException {
         w.append("#&");
-        if (val instanceof Value) 
-            w.append((Value)val);
-        else
-            w.append("#<").append(liMessage(SISCB, "expression")).append('>');
+        w.append(val);
     }
 
     public boolean valueEqual(Value v) {
         if (!(v instanceof Box)) return false;
         Box b=(Box)v;
         if (val==null && b.val!=null) return false;
-        return ((Value)val).valueEqual((Value)b.val);
+        return val.valueEqual(b.val);
     }
     
     public void serialize(Serializer s) throws IOException {

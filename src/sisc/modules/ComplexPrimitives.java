@@ -176,7 +176,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                     return FALSE;
                 }
             case NLBINDINGNAMES:
-                Value[] va=(Value[])nlib(vlr[0]).getLibraryBindingNames(r);
+                Value[] va=nlib(vlr[0]).getLibraryBindingNames(r);
                 return valArrayToList(va,0,va.length);        
             case REPORTENVIRONMENT:
                 if (FIVE.equals(num(vlr[0])))
@@ -229,9 +229,9 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             case GETPROP:
                 Value ret = null;
                 if (vlr[1] instanceof SymbolicEnvironment) {
-                    ret = (Value)env(vlr[1]).lookup(symbol(vlr[0]));
+                    ret = env(vlr[1]).lookup(symbol(vlr[0]));
                 } else {
-                    ret = (Value)r.getCtx().toplevel_env.getSidecarEnvironment(
+                    ret = r.getCtx().toplevel_env.getSidecarEnvironment(
                              symbol(vlr[1])).lookup(symbol(vlr[0]));
                 }
                 return (ret == null) ? FALSE : ret;
@@ -278,9 +278,9 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             case GETPROP:
                 Value ret = null;
                 if (vlr[1] instanceof SymbolicEnvironment) {
-                    ret = (Value)env(vlr[1]).lookup(symbol(vlr[0]));
+                    ret = env(vlr[1]).lookup(symbol(vlr[0]));
                 } else {
-                    ret = (Value)r.getCtx().toplevel_env.getSidecarEnvironment(
+                    ret = r.getCtx().toplevel_env.getSidecarEnvironment(
                           symbol(vlr[1])).lookup(symbol(vlr[0]));
                 }
                 return (ret == null) ? vlr[2] : ret;

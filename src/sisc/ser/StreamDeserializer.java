@@ -27,23 +27,22 @@ public class StreamDeserializer extends DeserializerImpl {
     }
 
     public final Expression readExpression() throws IOException {
-        return readExpression(false);
+        return readExpression(false, -1);
     }
 
     public final Expression readInitializedExpression() throws IOException {
-        return readExpression(true);
+        return readExpression(true, -1);
     }
 
-    public Expression readExpression(boolean flush) throws IOException {
+    public Expression readExpression(boolean flush, int definingOid) throws IOException {
         int type=readInt();
-        int definingOid = -1;
 
         try {
             //Read the stream object type, values above 15 of which represent
             //shared objects
             switch(type) {
             case 2: //shared expressions
-                definingOid=readInt();
+                return readExpression(flush, readInt());
             case 0: //ordinary expressions
                 Expression e;
                 Class clazz=readClass();
@@ -69,6 +68,16 @@ public class StreamDeserializer extends DeserializerImpl {
                 return e;
             case 1: //null
                 return null;
+            case 4:
+                String libName=readUTF();
+                int epid=readInt();
+                e=ctx.getExpression(libName, epid);
+                if (definingOid!=-1) {
+                    Integer epIdx=new Integer(definingOid);
+                    if (alreadyReadObjects.get(epIdx)==null)
+                        alreadyReadObjects.put(epIdx, e);
+                }
+                return e;
             default: //expression references
                 return fetchShared(type-16);
             }

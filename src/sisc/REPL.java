@@ -89,7 +89,7 @@ public class REPL {
             for (int i=0; i<roots.length; i++)
                 rootss[i]=new SchemeString(roots[i].getPath());
             r.define(Symbol.get("fs-roots"),
-                     Util.valArrayToList((Value[])rootss, 0, rootss.length),
+                     Util.valArrayToList(rootss, 0, rootss.length),
                      Util.SISC);
         } catch (java.security.AccessControlException ace) {}
         

@@ -19,5 +19,5 @@
 
 ;; Default main, so ordinary "whole bunch 'o scheme code" scripts
 ;; will work
-(define (main . args) 0)
+(define (main args) 0)
 	

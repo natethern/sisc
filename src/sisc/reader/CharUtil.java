@@ -59,7 +59,7 @@ public abstract class CharUtil {
         //escaping rules are those defined by Java, except we don't
         //handle octal escapes.
         switch (c) {
-        case '"': return (int)c | 0x80000000; 
+        case '"': return c | 0x80000000; 
         case 'b': return '\b'; 
         case 't': return '\t'; 
         case 'n': return '\n'; 

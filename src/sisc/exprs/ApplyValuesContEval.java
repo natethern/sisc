@@ -30,7 +30,7 @@ public class ApplyValuesContEval extends Expression {
             r.vlr[0]=r.acc;
         }
         r.nxp=APPEVAL;
-        r.acc=(Value)consumer;
+        r.acc=consumer;
     }
 
     public void display(ValueWriter w) throws IOException {

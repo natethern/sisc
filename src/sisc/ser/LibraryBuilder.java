@@ -4,6 +4,7 @@ import java.util.*;
 import java.io.*;
 import sisc.data.*;
 import sisc.env.SymbolicEnvironment;
+import sisc.interpreter.AppContext;
 import sisc.util.ExpressionVisitor;
 import sisc.util.ExpressionVisitee;
 
@@ -13,6 +14,7 @@ import sisc.util.ExpressionVisitee;
  */
 public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
 
+    AppContext ctx;
     boolean addAllowed=true;
     Set classes, seen, duplicates;
     int dupid=0;
@@ -21,10 +23,15 @@ public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
     boolean includeAEs;
 
     public LibraryBuilder() {
-        this(true);
+        this(null);
+    }
+    
+    public LibraryBuilder(AppContext ctx) {
+        this(ctx, true);
     }
 
-    public LibraryBuilder(boolean iae) {
+    public LibraryBuilder(AppContext ctx, boolean iae) {
+        this.ctx=ctx;
         includeAEs=iae;
         classes=new HashSet();
         seen=new HashSet();
@@ -34,6 +41,9 @@ public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
         names=new HashMap();
     }
 
+    public void setAppContext(AppContext ctx) {
+        this.ctx=ctx;
+    }
 
     /**
      * Add an entry point.
@@ -128,7 +138,7 @@ public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
         tempFile.deleteOnExit();
         OutputStream fos=new BufferedOutputStream(new FileOutputStream(tempFile));
         Vector classv=new Vector(classes);
-        BlockSerializer ss=new BlockSerializer(fos, classv, epv);
+        BlockSerializer ss=new BlockSerializer(ctx, fos, classv, epv);
 
         for (Iterator i=entryPoints.iterator(); i.hasNext();) {
             Expression exp=(Expression)i.next();

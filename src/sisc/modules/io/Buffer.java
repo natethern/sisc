@@ -30,7 +30,7 @@ public class Buffer extends Value implements NamedValue {
     }
 
     public final void set(int idx, byte val) {
-        buf[idx]=(byte)val;
+        buf[idx]=val;
     }
 
     public void display(ValueWriter w) throws IOException {

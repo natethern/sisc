@@ -5,6 +5,7 @@ import java.util.*;
 import sisc.data.Expression;
 import sisc.data.Singleton;
 import sisc.env.SymbolicEnvironment;
+import sisc.interpreter.AppContext;
 
 public abstract class SLL2Serializer extends SerializerImpl {
 
@@ -12,8 +13,10 @@ public abstract class SLL2Serializer extends SerializerImpl {
     protected DataOutputStream datout;
     protected CountingOutputStream cos;
     protected LinkedList serQueue;
-           
-    protected SLL2Serializer(OutputStream out) throws IOException {
+    protected AppContext ctx;       
+    
+    protected SLL2Serializer(AppContext ctx, OutputStream out) throws IOException {
+        this.ctx=ctx;
         cos=new CountingOutputStream(out);
         datout=new DataOutputStream(cos);
         
@@ -177,6 +180,7 @@ public abstract class SLL2Serializer extends SerializerImpl {
     }
 
     protected boolean writeExpressionSerialization(Expression e, SerJobEnd end, boolean flush) throws IOException {
+        writeInt(0);
         writeClass(e.getClass());
         if (e instanceof Singleton) {
             e.serialize(this);
@@ -189,6 +193,13 @@ public abstract class SLL2Serializer extends SerializerImpl {
                 serLoop(start);
             return false;
         }
+    }
+
+    protected boolean writeLibraryReference(LibraryBinding lb, SerJobEnd end, boolean flush) throws IOException {
+        writeInt(4);
+        writeUTF(lb.name);
+        writeInt(lb.epid);
+        return true;
     }
 
     protected int[] getOffsets() {

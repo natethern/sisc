@@ -3,6 +3,7 @@ package sisc.interpreter;
 import java.io.*;
 import sisc.ser.*;
 import sisc.data.*;
+
 import java.util.Properties;
 import sisc.env.SymbolicEnvironment;
 import sisc.util.Util;
@@ -41,6 +42,7 @@ public class AppContext extends Util {
 
     public AppContext(Properties props) {
         this.props = props;
+        libraries=new LibraryManager(this);
     }
 
     public AppContext(SymbolicEnvironment symenv) {
@@ -64,9 +66,8 @@ public class AppContext extends Util {
     public void loadEnv(Interpreter r, SeekableDataInput i)
         throws IOException, ClassNotFoundException {
 
-        Library s=Library.load(i);
+        Library s=Library.load(r.getCtx(), i);
         
-        libraries = new LibraryManager();
         libraries.addLibrary(s);
         
         CallFrame lstk=(CallFrame)s.getExpression(0);
@@ -122,6 +123,27 @@ public class AppContext extends Util {
     public String getProperty(String name, String def) {
         String res = getProperty(name);
         return (res == null) ? def : res;
+    }
+
+
+    /**
+     * Returns an expression from an external library named by
+     * the given name and entry point.
+     * 
+     * @param libName
+     * @param epid
+     * @return
+     */
+    public Expression getExpression(String libName, int epid) throws IOException {
+        return libraries.getExpression(libName, epid);
+    }
+
+    /**
+     * @param e
+     * @return
+     */
+    public LibraryBinding reverseLookup(Expression e) throws IOException {
+        return libraries.getBindingReference(e);
     }
 
 }
