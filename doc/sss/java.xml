@@ -1597,18 +1597,29 @@ Class.getSigners()
           Generic procedures require a type system for their
           operation. At present the type system employed by &SISC;'s
           generic procedures is rather basic. This will change in the
-          future. Currently, only two kinds of types are supported:
-          <simplelist>
-            <member>
-              Java classes and interfaces, obtained through the
-              mechanisms described in <xref linkend="JavaClasses"/>,
-              and
-            </member>
-            <member>
-              Meta types, obtained by invoking
-              <function>meta</function>.
-            </member>
-          </simplelist>
+          future. Currently, only the following kinds of types are supported:
+          <itemizedlist>
+            <listitem>
+              <para>
+                Java classes and interfaces, obtained through the
+                mechanisms described in <xref linkend="JavaClasses"/>.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Meta types, obtained by invoking
+                <function>meta</function>.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <literal>&lt;top&gt;</literal> and
+                <literal>&lt;bot&gt;</literal>. All types are
+                sub-types of <literal>&lt;top&gt;</literal> and
+                super-types of <literal>&lt;bot&gt;</literal>.
+              </para>
+            </listitem>
+          </itemizedlist>
           <function>meta</function> is defined as follows:
           <blockquote>
             <para>
