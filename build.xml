@@ -15,7 +15,6 @@
     <!-- Got a better idea?: -->
     <property name="specvendor" value="SISC Development Group"/>
 
-<!--    <property name="releasecandidate" value="yes"/>-->
     <property name="beta" value="yes"/>
     <property file="${basedir}/build.properties"/>    
     <property name="srcdir" value="${basedir}/src"/>
@@ -36,20 +35,10 @@
     <property name="heap" value="${basedir}/sisc.shp"/>
     <property name="quantity-type" value="apfloat"/>
     <condition property="debugging" value="on">
-      <or> 
-        <isset property="releasecandidate"/>
-        <isset property="beta"/>
-      </or>
+      <isset property="beta"/>
     </condition>
     <condition property="debugging" value="off">
-      <and>
-        <not>
-          <isset property="releasecandidate"/>
-        </not>
-        <not>
-          <isset property="beta"/>
-        </not>
-      </and>
+      <not><isset property="beta"/></not>
     </condition>
     <condition property="siscDebugging" value="true">
       <isset property="beta"/>
@@ -364,7 +353,6 @@
         <include name="COPYING"/>
         <include name="GOALS"/>
         <include name="TODO"/>
-        <include name="ReleaseCandidate" if="releasecandidate"/>
         <include name="sisc.bat"/>
       </fileset>
     </copy>
@@ -424,7 +412,6 @@
     <copy todir="${dist}/full/sisc">
       <fileset dir="${dist}">
         <include name="ChangeLog"/>
-        <include name="ReleaseCandidate" if="releasecandidate"/>
         <include name="README"/>
         <include name="COPYING"/>
         <include name="GOALS"/>
