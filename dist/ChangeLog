@@ -1,3 +1,11 @@
+2002-09-24  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Re-added block IO (now in the 'block-io' module)
+	  but using the new buffer type which is definitely 
+	  binary safe, unlike strings.
+
+	* Added a binary buffer type in the 'buffer' module.
+
 2002-09-23  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Rewrote the IO layer with a more flexible, abstract
