@@ -21,7 +21,7 @@ public class SchemeAppServlet extends SchemeServletBase {
         Interpreter r = Context.enter(appName);
         String realFile = getServletContext().getRealPath(heapFile);
         try {
-            ctx.loadEnv(r, new DataInputStream(new java.util.zip.GZIPInputStream(new FileInputStream(realFile))));
+            ctx.loadEnv(r, new SeekableDataInputStream(new BufferedRandomAccessInputStream(realFile, "r", 1, 8192)));
         } catch (IOException e) {
             throw new ServletException("unable to load heap file " + realFile, e);
         } finally {

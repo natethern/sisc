@@ -59,7 +59,6 @@ import sisc.ContinuationException;
 import sisc.Interpreter;
 import sisc.Module;
 import sisc.ModuleAdapter;
-import sisc.Serializer;
 import sisc.data.Pair;
 import sisc.data.Quantity;
 import sisc.data.SchemeString;
@@ -441,25 +440,19 @@ public class Regexp extends ModuleAdapter
             pattern.equals(((RPattern)ov).pattern);
     }
 
-    public void serialize(Serializer s, DataOutput dos)
-      throws IOException
+    public void serialize(sisc.ser.Serializer s) throws IOException
     {
-      if (SERIALIZATION) {
-        s.serialize(type, dos);
-        dos.writeUTF(pattern.getPattern());
-        dos.writeInt(pattern.getOptions());
-      }
+        s.writeExpression(type);
+        s.writeUTF(pattern.getPattern());
+        s.writeInt(pattern.getOptions());
     }
 
-    public void deserialize(Serializer s, DataInput dis)
-      throws IOException
+    public void deserialize(sisc.ser.Deserializer s) throws IOException
     {
-      if (SERIALIZATION) {
-        type = (Symbol)s.deserialize(dis);
-        String pat = dis.readUTF();
-        options = dis.readInt();
+        type = (Symbol)s.readExpression();
+        String pat = s.readUTF();
+        options = s.readInt();
         setup(pat, type, options);
-      }
     }
   }
 }
