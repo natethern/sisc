@@ -69,6 +69,7 @@ public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
             epidx=entryPoints.size() + newEntryPoints.size();
             newEntryPoints.add(val);
         }
+
         return epidx;
     }
 
@@ -95,12 +96,16 @@ public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
                 Expression e=(Expression)serQueue.removeFirst();
                 if (e!=null) {
                     if (seen(e)) {
-                        if (!entryPoints.contains(e) && !newEntryPoints.contains(e))
+                        if (!entryPoints.contains(e) && !newEntryPoints.contains(e)) {
                             duplicates.add(e);
+			}
                     } else {
                         seen.add(e);
                         classes.add(e.getClass());
-                        e.visit(this);
+                        if (e instanceof SymbolicEnvironment) {
+                            if (includeAEs || (e.getName()==null))
+                                e.visit(this);
+                        } else e.visit(this);                                
                         if (!(e instanceof Singleton)) {
                             for (Iterator i=e.getAnnotationKeys().iterator(); i.hasNext();) {
                                 Symbol key=(Symbol)i.next();
