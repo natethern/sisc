@@ -46,7 +46,7 @@
 (define (get-last-exception)
   (getprop 'last-exception '*debug*))
 
-(define _exit-handler (parameterize))
+(define _exit-handler (parameterize '()))
 
 (define repl
   (letrec ([repl-k (parameterize)]
@@ -69,12 +69,14 @@
                          (repl/read writer))])))]
            [repl/read
             (lambda (writer)
-              (display "> ")
+              (display (format "#;~a> " (let ((len (- (length (_exit-handler))
+                                                      1)))
+                                          (if (zero? len) ""  len))))
               ;;read
               (let ([exp (read-code (current-input-port))])
                 (if (eof-object? exp) 
                     (if ((current-exit-handler))
-                        (void)
+                        (exit)
                         (repl/read writer))
                     (repl/eval-print-loop exp writer))))])
     (putprop 'repl '*debug* repl-k)
@@ -113,4 +115,5 @@
 (define (exit)
   (let ([k (car (_exit-handler))])
     (_exit-handler (cdr (_exit-handler)))
+    (newline)
     (if k (k))))

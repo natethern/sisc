@@ -20,7 +20,7 @@
     <property name="schemedir" value="${basedir}/scheme-src"/>
     <property name="packagename" value="sisc"/>
     <property name="basejar" value="sisc.jar"/>
-    <property name="classopt" value="yes"/>
+    <!--<property name="classopt" value="yes"/>-->
     <property name="optjar" value="sisc-opt.jar"/>
     <property name="srfisll" value="srfi.sll"/>
     <property name="heap" value="${basedir}/boot/sisc.shp"/>
