@@ -33,7 +33,6 @@
 package sisc.data;
 
 import sisc.*;
-import java.io.*;
 
 public class ImmutableString extends SchemeString {
 
