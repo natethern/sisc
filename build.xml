@@ -30,6 +30,8 @@
     <available classname="junit.framework.TestCase"
                property="junit.present"
 	       classpathref="classpath"/>
+    <property name="xmldcl" value="/usr/share/sgml/declaration/xml.dcl"/>
+    <property name="sss" value="sss"/>
   </target>
 
   <target name="clean" depends="prepare"
@@ -151,7 +153,7 @@
              value="${doc.style}"/>
     <mkdir dir="${gendocdir}/sss"/>
     <style basedir="${docdir}/sss"
-           includes="sss.xml"
+           includes="${sss}.xml"
            destdir="${gendocdir}/sss"
            style="${docdir}/sss/style.xsl">
     </style>
@@ -284,5 +286,47 @@
       <formatter type="plain"/>
       <test name="sisc.tests.TestR5RS"/>
     </junit>
+  </target>
+
+  <target name="manual-print" depends="prepare">
+    <!-- Generate the index first -->
+    <mkdir dir="${gendocdir}/tmp"/>
+    <exec executable="collateindex.pl" dir="${docdir}/sss"
+	  output="${docdir}/sss/index.xml">
+      <arg line="-N"/>
+    </exec>
+    <exec executable="jw" dir="${docdir}/sss"> 
+      <arg line="-o ${gendocdir}/tmp -l ${xmldcl} -V html-index"/>
+      <arg value="${sss}.xml"/>
+    </exec>    
+    <exec executable="collateindex.pl" dir="${docdir}/sss">
+      <arg value="-t"/>
+      <arg value="Index of Functions, Parameters, and Syntax"/>
+      <arg line="-g -o index.xml ${gendocdir}/tmp/HTML.index"/>
+    </exec>
+    <delete dir="${gendocdir}/tmp"/>
+
+    <!-- Generate the tex output -->
+    <exec executable="jw" dir="${docdir}/sss"> 
+      <arg line="-o ${gendocdir} -l ${xmldcl} -b tex"/>
+      <arg value="${sss}.xml"/>
+    </exec>
+    <exec executable="jadetex" dir="${gendocdir}">
+      <arg value="${sss}.tex"/>
+    </exec>
+    <exec executable="jadetex" dir="${gendocdir}">
+      <arg value="${sss}.tex"/>
+    </exec>
+    <exec executable="jadetex" dir="${gendocdir}">
+      <arg value="${sss}.tex"/>
+    </exec>
+
+    <!-- Convert to PS and PDF -->
+    <exec executable="dvips" dir="${gendocdir}">
+      <arg value="${sss}.dvi"/>
+    </exec>
+    <exec executable="dvipdfm" dir="${gendocdir}">
+      <arg value="${sss}.dvi"/>
+    </exec>
   </target>
 </project>
