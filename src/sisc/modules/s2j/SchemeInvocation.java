@@ -30,20 +30,6 @@ public class SchemeInvocation implements InvocationHandler {
 
     public Object invoke(Object proxy, Method m, Object[] args)
         throws Throwable {
-        //intercept hashCode, equals and toString
-        //in order to avoid infinite recursion
-        if (m.getDeclaringClass() == Object.class) {
-            if (m.equals(hashCodeMeth)) {
-                //better than returning a constant;
-                //this works because a proxy can only have one
-                //invocation handler
-                return new Integer(hashCode());
-            } else if (m.equals(equalsMeth)) {
-                return new Boolean(proxy == args[0]);
-            } else if (m.equals(toStringMeth)) {
-                return "proxy";
-            }
-        }
         Interpreter r = Context.enter(dynenv);
         Pair p = Util.EMPTYLIST;
         if (args != null) { //for some reason args can be null

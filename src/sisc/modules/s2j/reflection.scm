@@ -262,12 +262,26 @@
   (apply (java-constructor-for-class jclass) args))
 
 (define (java-proxy-dispatcher handlers)
-  (java/invocation-handler
-   (lambda (p m a)
-     (apply (cond [(assq (java/name m) handlers) => cdr]
-                  [else (error "no handler for method ~a on proxy ~s"
-                               (java/name m) p)])
-            p a))))
+  (define (return-error method-name p)
+    (error "no handler for method ~a on proxy ~s" method-name p))
+  (let ([<java.lang.object-class> (java/class '|java.lang.Object|)])
+    (define (handler p m a)
+      (let* ([method-name (java/name m)]
+             [res (assq method-name handlers)])
+        (if res
+            (apply (cdr res) p a)
+            ;;intercept hashCode, equals and toString in order to
+            ;;avoid infinite recursion since the printing of an error
+            ;;message requires these methods.
+            (if (eqv? (java/declaring-class m)
+                      <java.lang.object-class>)
+                (case method-name
+                  [(|hashCode|) (->jint (hash-code handler))]
+                  [(|equals|) (->jboolean (eqv? p (car a)))]
+                  [(|toString|) (->jstring "proxy")]
+                  [else (return-error method-name p)])
+                (return-error method-name p)))))
+    (java/invocation-handler handler)))
 
 (define-syntax java-proxy-method-handler
   (syntax-rules (define)

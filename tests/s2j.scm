@@ -162,7 +162,8 @@
           (begin (set! l (cdr l))
                  (java-wrap res)))))
   (define (remove i)
-    (error (java-new <java.lang.unsupported-operation-exception>))))
+    (error (java-new <java.lang.unsupported-operation-exception>)))
+  (define (to-string) (->jstring 'list-iterator)))
 (define-generic-java-methods
   has-next
   next
@@ -173,6 +174,9 @@
 (next i)
 (next i)
 (next i)
+
+;;overriding of toString
+(display i) ;;-> #<java $Proxy1 list-iterator>
 
 ;;catching an exception thrown by a proxy.
 (with/fc (lambda (m e) (print-exception (make-exception m e)) #f)

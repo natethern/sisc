@@ -1,3 +1,7 @@
+2004-10-19  Matthias Radestock  <matthias@sorted.org>
+
+	* Allowed java proxies to define hashCode, equals and toString.
+
 2004-10-18  SISC 1.9.1-alpha Released
 
 2004-10-18  Matthias Radestock  <matthias@sorted.org>
