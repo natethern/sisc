@@ -192,7 +192,7 @@ public class JavaObject extends Procedure {
                 error(r, liMessage(Util.S2JB, "cannotapplyobject", obj.toString()));
             }
         } catch (InvocationTargetException e) {
-            error(r, Util.makeJObj(e.getTargetException()));
+            error(r, Util.makeJObj(e.getTargetException(), Throwable.class));
         } catch (RuntimeException e) {
             e.printStackTrace(System.err);
             error(r, e.getMessage());
@@ -206,9 +206,10 @@ public class JavaObject extends Procedure {
         try {
             switch (arg.length) {
             case 0: //instantiate class
-                return Util.makeJObj(obj.newInstance());
+                return Util.makeJObj(obj.newInstance(), obj);
             case 1: //get value of static field
-                return Util.makeJObj(obj.getField(Util.mangleFieldName(symval(arg[0]))).get(null));
+                Field f = obj.getField(Util.mangleFieldName(symval(arg[0])));
+                return Util.makeJObj(f.get(null), f.getType());
             case 2: //set value of static field
                 obj.getField(Util.mangleFieldName(symval(arg[0]))).set(null,Util.jobj(arg[1]));
                 return VOID;
@@ -232,7 +233,7 @@ public class JavaObject extends Procedure {
         try {
             switch (args.length) {
             case 1: //get value
-                return Util.makeJObj(obj.get(Util.jobj(args[0])));
+                return Util.makeJObj(obj.get(Util.jobj(args[0])), obj.getType());
             case 2: //set value
                 obj.set(Util.jobj(args[0]), Util.jobj(args[1]));
                 return VOID;
@@ -256,7 +257,7 @@ public class JavaObject extends Procedure {
             params[i] = Util.jobj(args[i+1]);
         }
         try {
-            return Util.makeJObj(obj.invoke(o,params));
+            return Util.makeJObj(obj.invoke(o,params), obj.getReturnType());
         } catch (IllegalAccessException e) {
             throw new RuntimeException(liMessage(Util.S2JB, "illegalaccess", 
                                                  new Object[] {
@@ -273,7 +274,7 @@ public class JavaObject extends Procedure {
             params[i] = Util.jobj(args[i]);
         }
         try {
-            return Util.makeJObj(obj.newInstance(params));
+            return Util.makeJObj(obj.newInstance(params), obj.getDeclaringClass());
         } catch (InstantiationException e) {
             throw new RuntimeException(liMessage(Util.S2JB, "constructorerror", obj.toString(), obj.getDeclaringClass().getName()));
         } catch (IllegalAccessException e) {
@@ -288,19 +289,23 @@ public class JavaObject extends Procedure {
     protected static final Value applyArray(Object obj, Value[] args) {
         switch (args.length) {
         case 1: //get element
+            Object ar = null;
             if (args[0] instanceof Pair) {
                 for (Pair p = pair(args[0]); p != EMPTYLIST; p = pair(p.cdr)) {
+                    ar = obj;
                     obj = Array.get(obj, num(p.car).intValue());
                 }
             } else if (args[0] instanceof SchemeVector) {
                 Value[] vals = ((SchemeVector)args[0]).vals;
                 for (int i=0; i < vals.length; i++) {
+                    ar = obj;
                     obj = Array.get(obj,num(vals[i]).intValue());
                 }
             } else {
+                ar = obj;
                 obj = Array.get(obj,num(args[0]).intValue());
             }
-            return Util.makeJObj(obj);
+            return Util.makeJObj(obj, ar.getClass().getComponentType());
         case 2: //set element
             Value idx = null;
             if (args[0] instanceof Pair) {
@@ -331,6 +336,7 @@ public class JavaObject extends Procedure {
             throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
         void set(Object o, Object v)
             throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+        Class getType();
     }
 
     public static class BeanFieldAccessor implements FieldAccessor {
@@ -352,6 +358,10 @@ public class JavaObject extends Procedure {
 
             d.getWriteMethod().invoke(o, new Object[] {v});
         }
+
+        public Class getType() {
+            return d.getPropertyType();
+        }
     }
 
     public static class NormalFieldAccessor implements FieldAccessor {
@@ -371,6 +381,10 @@ public class JavaObject extends Procedure {
         public void set(Object o, Object v)
             throws IllegalAccessException {
             f.set(o, v);
+        }
+
+        public Class getType() {
+            return f.getType();
         }
     }
 
@@ -407,7 +421,7 @@ public class JavaObject extends Procedure {
 
             switch (args.length) {
             case 1: //get value of bean field
-                return Util.makeJObj(fa.get(obj));
+                return Util.makeJObj(fa.get(obj), fa.getType());
             case 2: //set value of bean field
                 fa.set(obj, Util.jobj(args[1]));
                 return VOID;
@@ -435,7 +449,8 @@ public class JavaObject extends Procedure {
         try {
             switch (args.length) {
             case 1: //get value of field
-                return Util.makeJObj(obj.getClass().getField(fieldName).get(obj));
+                Field f = obj.getClass().getField(fieldName);
+                return Util.makeJObj(f.get(obj), f.getType());
             case 2: //set value of field
                 obj.getClass().getField(fieldName).set(obj, Util.jobj(args[1]));
                 return VOID;

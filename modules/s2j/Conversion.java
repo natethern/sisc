@@ -117,9 +117,10 @@ public class Conversion extends Util {
             case CONV_VECTOR:
                 o = jobj(f.vlr[0]);
                 if (o.getClass().isArray()) {
+                    Class componentType = o.getClass().getComponentType();
                     Value[] vals = new Value[Array.getLength(o)];
                     for (int i=0; i < vals.length; i++) {
-                        vals[i] = makeJObj(Array.get(o, i));
+                        vals[i] = makeJObj(Array.get(o, i), componentType);
                     }
                     return new SchemeVector(vals);
                 } else
@@ -127,9 +128,10 @@ public class Conversion extends Util {
             case CONV_LIST:
                 o = jobj(f.vlr[0]);
                 if (o.getClass().isArray()) {
+                    Class componentType = o.getClass().getComponentType();
                     Pair p = EMPTYLIST;
                     for (int i=Array.getLength(o)-1; i>=0; i--) {
-                        p = new Pair(makeJObj(Array.get(o, i)), p);
+                        p = new Pair(makeJObj(Array.get(o, i), componentType), p);
                     }
                     return p;
                 } else

@@ -46,14 +46,15 @@ public class SchemeInvocation implements InvocationHandler {
         Interpreter r = Context.enter(ctx, new sisc.env.DynamicEnvironment());
         Pair p = sisc.Util.EMPTYLIST;
         if (args != null) { //for some reason args can be null
+            Class[] pTypes = m.getParameterTypes();
             for (int i=args.length-1; i>=0; i--) {
-                p = new Pair(Util.makeJObj(args[i]), p);
+                p = new Pair(Util.makeJObj(args[i], pTypes[i]), p);
             }
         }
         Value res = null;
         try {
-            res = r.eval(proc, new Value[] {Util.makeJObj(proxy),
-                                            Util.makeJObj(m),
+            res = r.eval(proc, new Value[] {Util.makeJObj(proxy, Object.class),
+                                            Util.makeJObj(m, Method.class),
                                             p});
         } catch (SchemeException e) {
             throw Util.javaException(e);

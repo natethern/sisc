@@ -36,8 +36,8 @@ public class SchemeServlet extends SchemeServletBase {
         Interpreter r = Context.enter(appName);
         try {
             r.eval(fn, new Value[] {
-                sisc.modules.s2j.Util.makeJObj(request),
-                    sisc.modules.s2j.Util.makeJObj(response) });
+                sisc.modules.s2j.Util.makeJObj(request, HttpServletRequest.class),
+                    sisc.modules.s2j.Util.makeJObj(response, HttpServletResponse.class) });
         } catch (SchemeException e) {
             throw new ServletException("calling " + fn + " failed", sisc.modules.s2j.Util.javaException(e));
         } finally {

@@ -124,12 +124,12 @@ public class Reflection extends Util {
         case 0:
             switch(primid) {
             case JAVA_NULL:
-                return makeJObj(null);
+                return makeJObj(null, Object.class);
             }
         case 1:
             switch(primid) {
             case JAVA_WRAP:
-                return makeJObj(f.vlr[0]);
+                return makeJObj(f.vlr[0], Value.class);
             case JAVA_UNWRAP:
                 return (Value)jobj(f.vlr[0]);
             case JAVA_CLASS:
@@ -137,7 +137,7 @@ public class Reflection extends Util {
                 Class c = resolveType(cname);
                 if (c == null)
                     throw new RuntimeException(liMessage(S2JB, "classnotfound", cname));
-                else return makeJObj(c);
+                else return makeJObj(c, Class.class);
             case JAVA_CONSTRUCTORS:
                 return objArrayToVec(jclass(f.vlr[0]).getConstructors());
             case JAVA_METHODS:
@@ -157,9 +157,9 @@ public class Reflection extends Util {
             case JAVA_INTERFACES:
                 return objArrayToVec(jclass(f.vlr[0]).getInterfaces());
             case JAVA_SUPERCLASS:
-                return makeJObj(jclass(f.vlr[0]).getSuperclass());
+                return makeJObj(jclass(f.vlr[0]).getSuperclass(), Class.class);
             case JAVA_COMPONENT_TYPE:
-                return makeJObj(jclass(f.vlr[0]).getComponentType());
+                return makeJObj(jclass(f.vlr[0]).getComponentType(), Class.class);
             case JAVA_NAME:
                 switch (jtype(f.vlr[0])) {
                 case JavaObject.JCLASS:
@@ -188,9 +188,9 @@ public class Reflection extends Util {
             case JAVA_DECLARING_CLASS:
                 switch (jtype(f.vlr[0])) {
                 case JavaObject.JCLASS:
-                    return makeJObj(jclass(f.vlr[0]).getDeclaringClass());
+                    return makeJObj(jclass(f.vlr[0]).getDeclaringClass(), Class.class);
                 default:
-                    return makeJObj(((Member)jobj(f.vlr[0])).getDeclaringClass());
+                    return makeJObj(((Member)jobj(f.vlr[0])).getDeclaringClass(), Class.class);
                 }
             case JAVA_EXCEPTION_TYPES:
                 switch (jtype(f.vlr[0])) {
@@ -209,9 +209,9 @@ public class Reflection extends Util {
                     return objArrayToVec(jmethod(f.vlr[0]).getParameterTypes());
                 }
             case JAVA_RETURN_TYPE:
-                return makeJObj(jmethod(f.vlr[0]).getReturnType());
+                return makeJObj(jmethod(f.vlr[0]).getReturnType(), Class.class);
             case JAVA_FIELD_TYPE:
-                return makeJObj(jfield(f.vlr[0]).getType());
+                return makeJObj(jfield(f.vlr[0]).getType(), Class.class);
             case JAVA_OBJECTQ:
                 return truth(f.vlr[0] instanceof JavaObject);
             case JAVA_CLASSQ:
@@ -241,9 +241,9 @@ public class Reflection extends Util {
                              jtype(f.vlr[0]) == JavaObject.JCLASS &&
                              jclass(f.vlr[0]).isArray());
             case JAVA_CLASS_OF:
-                return makeJObj(sjobj(f.vlr[0]).classOf());
+                return makeJObj(sjobj(f.vlr[0]).classOf(), Class.class);
             case JAVA_INV_HANDLER:
-                return makeJObj(new SchemeInvocation(f.ctx, proc(f.vlr[0])));
+                return makeJObj(new SchemeInvocation(f.ctx, proc(f.vlr[0])), SchemeInvocation.class);
             case JAVA_NULL:
                 return makeJObj(null, jclass(f.vlr[0]));
             case JAVA_MANGLE_FIELD_NAME:
@@ -267,13 +267,13 @@ public class Reflection extends Util {
                 return VOID;
             case JAVA_FIELD:
                 try {
-                    return makeJObj(jclass(f.vlr[0]).getField(symval(f.vlr[1])));
+                    return makeJObj(jclass(f.vlr[0]).getField(symval(f.vlr[1])), Field.class);
                 } catch (NoSuchFieldException e) {
                     return FALSE;
                 }
             case JAVA_DECL_FIELD:
                 try {
-                    return makeJObj(jclass(f.vlr[0]).getDeclaredField(symval(f.vlr[1])));
+                    return makeJObj(jclass(f.vlr[0]).getDeclaredField(symval(f.vlr[1])), Field.class);
                 } catch (NoSuchFieldException e) {
                     return FALSE;
                 }
@@ -282,7 +282,7 @@ public class Reflection extends Util {
             case JAVA_ASSIGNABLEQ:
                 return truth(fixClass(jclass(f.vlr[0])).isAssignableFrom(fixClass(jclass(f.vlr[1]))));
             case JAVA_ARRAY_CLASS:
-                return makeJObj(makeArrayClass(jclass(f.vlr[0]), num(f.vlr[1]).intValue()));
+                return makeJObj(makeArrayClass(jclass(f.vlr[0]), num(f.vlr[1]).intValue()), Class.class);
             case JAVA_ARRAY_NEW:
                 Value dims = f.vlr[1];
                 Value[] dimensions;
@@ -297,7 +297,9 @@ public class Reflection extends Util {
                 for (int i=0; i< dimensions.length; i++) {
                     intDims[i] = num(dimensions[i]).intValue();
                 }
-                return makeJObj(Array.newInstance(jclass(f.vlr[0]), intDims));
+                Class componentType = jclass(f.vlr[0]);
+                return makeJObj(Array.newInstance(componentType, intDims),
+                                makeArrayClass(componentType, intDims.length));
             }
         default:
             switch(primid) {
@@ -307,7 +309,7 @@ public class Reflection extends Util {
                     for (int i=0; i<f.vlr.length-1; i++) {
                         paramTypes[i] = jclass(f.vlr[i+1]);
                     }
-                    return makeJObj(jclass(f.vlr[0]).getConstructor(paramTypes));
+                    return makeJObj(jclass(f.vlr[0]).getConstructor(paramTypes), Constructor.class);
                 } catch (NoSuchMethodException e) {
                     return FALSE;
                 }
@@ -317,7 +319,7 @@ public class Reflection extends Util {
                     for (int i=0; i<f.vlr.length-2; i++) {
                         paramTypes[i] = jclass(f.vlr[i+2]);
                     }
-                    return makeJObj(jclass(f.vlr[0]).getMethod(symval(f.vlr[1]),paramTypes));
+                    return makeJObj(jclass(f.vlr[0]).getMethod(symval(f.vlr[1]),paramTypes), Method.class);
                 } catch (NoSuchMethodException e) {
                     return FALSE;
                 }
@@ -327,7 +329,7 @@ public class Reflection extends Util {
                     for (int i=0; i<f.vlr.length-1; i++) {
                         paramTypes[i] = jclass(f.vlr[i+1]);
                     }
-                    return makeJObj(jclass(f.vlr[0]).getDeclaredConstructor(paramTypes));
+                    return makeJObj(jclass(f.vlr[0]).getDeclaredConstructor(paramTypes), Constructor.class);
                 } catch (NoSuchMethodException e) {
                     return FALSE;
                 }
@@ -337,7 +339,7 @@ public class Reflection extends Util {
                     for (int i=0; i<f.vlr.length-2; i++) {
                         paramTypes[i] = jclass(f.vlr[i+2]);
                     }
-                    return makeJObj(jclass(f.vlr[0]).getDeclaredMethod(symval(f.vlr[1]),paramTypes));
+                    return makeJObj(jclass(f.vlr[0]).getDeclaredMethod(symval(f.vlr[1]),paramTypes), Method.class);
                 } catch (NoSuchMethodException e) {
                     return FALSE;
                 }
@@ -346,7 +348,7 @@ public class Reflection extends Util {
                 for (int i=0; i<f.vlr.length; i++) {
                     interfaces[i] = jclass(f.vlr[i]);
                 }
-                return makeJObj(Proxy.getProxyClass(ClassLoader.getSystemClassLoader(), interfaces));
+                return makeJObj(Proxy.getProxyClass(ClassLoader.getSystemClassLoader(), interfaces), Class.class);
             default:
                 throwArgSizeException();
             }

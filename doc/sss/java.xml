@@ -1167,51 +1167,57 @@ Context.exit()
         </para>
       </sect3>
       <sect3>
-        <title>Assignment</title>
+        <title>Null</title>
         <para>
-          Internally, Java objects are represented by a special Scheme
-          object containing a reference to the Java object. It is
-          possible to create these objects explicitly and to assign
-          one to another.
+          In Java, <literal>null</literal> is an untyped object. Any
+          object parameter in a method can be set to
+          <literal>null</literal> on invocation and any object/class
+          field can be assigned a <literal>null</literal> value.
+        </para>
+        <para>
+          By contrast, the Scheme objects representing Java
+          <literal>null</literal> are typed. This allows generic
+          function invocation to use the type information for method
+          selection, otherwise it would be impossible to invoke
+          methods with <literal>null</literal> parameters.
         </para>
         <blockquote>
           <para>
             &procedure;
             <methodsynopsis language="scheme">
               <type>jobj</type>
-              <methodname>java-new</methodname>
-              <void/>
+              <methodname>java-null</methodname>
+              <methodparam choice="opt">
+                <parameter>jclass</parameter>
+              </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Creates a new Scheme object, initially representing
-                the <literal>null</literal> Java object.
-              </para>
-            </blockquote>
-          </para>
-          <para>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <void/>
-              <methodname>java-set!</methodname>
-              <methodparam><parameter>jobj1</parameter></methodparam>
-              <methodparam><parameter>jobj2</parameter></methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Makes <parameter>jobj1</parameter> refer to the same
-                Java object as <parameter>jobj2</parameter>.
+                Creates a Scheme object representing a Java
+                <literal>null</literal> object of a specific type. If
+                <parameter>jclass</parameter> is absent, it defaults
+                to <classname>java.lang.Object</classname>.
               </para>
             </blockquote>
           </para>
         </blockquote>
         <para>
           For convenience there is a constant <literal>jnull</literal>
-          that represents the java <literal>null</literal>
-          object. Note however that the object isn't truly constant,
-          i.e. it is actually possible to make it refer to another
-          Java object using <literal>java-set!</literal>. Doing so is
-          not recommended, for obvious reasons.
+          that represents the Java <literal>null</literal> object of
+          type <classname>java.lang.Object</classname>.
+        </para>
+        <para>
+          All objects representing Java <literal>null</literal> are
+          equal with respect to <function>equal?</function>, but are
+          only equal with respect to <function>eq?</function> if they
+          have the same type.
+        </para>
+        <para>
+          Method invocation and field access returns
+          <literal>null</literal> objects of the method's declared
+          return type / the field's declared type. This ensures that
+          chained invocation is possible in the presence of
+          <literal>null</literal> returns.
         </para>
       </sect3>
       <sect3 id="JavaProxies">

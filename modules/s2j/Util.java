@@ -92,7 +92,8 @@ public class Util extends ModuleAdapter {
     }
 
     public static final JavaObject makeJObj(Object o) {
-        return makeJObj(o, Object.class);
+        if (o == null) throw new RuntimeException(liMessage(S2JB, "unexpectednull"));
+        return new JavaObject(o);
     }
 
     public static final JavaObject makeJObj(Object o, Class c) {
@@ -100,9 +101,10 @@ public class Util extends ModuleAdapter {
     }
 
     public static final Value objArrayToVec(Object[] objs) {
+        Class c = objs.getClass().getComponentType();
         JavaObject[] res = new JavaObject[objs.length];
         for (int i=0; i < objs.length; i++) {
-            res[i] = makeJObj(objs[i]);
+            res[i] = makeJObj(objs[i], c);
         }
         return new SchemeVector(res);
     }

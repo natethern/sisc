@@ -91,6 +91,8 @@
 (value-of <jstring> jnull) ;=> #<java java.lang.String null>
 (type-of jnull) ;=> <java.lang.Object>
 (instance-of? jstring-null <jstring>) ;=> #t
+(define aa (java-array-new <jstring> '#(2 2 2)))
+(aa '#(0 0 0)) ;=> #<jnull java.lang.String>
 
 ;;<bot>, <top>, <jclass>
 (define-generic top-bot-test)

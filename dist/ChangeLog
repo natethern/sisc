@@ -1,3 +1,11 @@
+2002-09-29  Matthias Radestock  <matthias@sorted.org>
+
+	* Made S2J's Java nulls typed, which, amongst other benefits,
+	  allows them to be used for generic procedure method selection.
+
+	* Removed S2J object mutation (java-new and java-set!). It's not
+	  really that useful and it conflicts with typed Java nulls.
+
 2002-09-28  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Added support for stack-trace on wind-safe continuations
