@@ -1,3 +1,8 @@
+2004-10-13  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed sisc.sh so it works correctly when rlwrap is not
+	  installed, rather than just exiting.
+
 2004-09-30  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed negation of rationals. See bug 1037559.
