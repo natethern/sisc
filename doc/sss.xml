@@ -421,6 +421,25 @@
 	  printing vectors, and if elements repeat at the end of a
 	  Vector, only the last unique element is printed.
 	</para>
+	<para>
+	  Vectors are displayed differently depending on the call
+	  used.  When called with
+	  <computeroutput>display</computeroutput>, apart from the
+	  ordinary rule where all elements are displayed using the
+	  same semantics, no shortening of the vector is done and the
+	  length prefix is not displayed.  Using
+	  <computeroutput>write</computeroutput> on the other hand
+	  does produce shortened, length-prefixed vectors. 
+	</para>
+	<para>
+	  Displaying a vector with
+	  <computeroutput>pretty-print</computeroutput> may or may not
+	  output a compact vector representation.  The behavior of
+	  pretty-print is controlled by the parameter
+	  <computeroutput>vector-length-prefixing</computeroutput>.
+	  If set to &num;t, pretty-print will emit the compact form.
+	  If &num;f, the standard form is produced.
+	</para>
       </sect2>
       <sect2>
 	<title>
@@ -584,9 +603,57 @@
     </sect1>
     <sect1>
       <title>
-	Logical Operations
+	Bitwise Logical Operations
       </title>
-      <para></para>
+      <para>
+	In addition to the &R5RS; set of procedures that deal with
+	numbers, &SISC; provides operators for performing bitwise
+	logic operations on a limited range of integers.  The domain of the
+	logical operators are exact real integers of the range
+	-2,147,483,648 to 2,147,483,647 inclusive.  An error is raised
+	if the logical operators are applied to integers outside this
+	range, to a non-integer, or a non-real.
+      </para>
+      <programlisting>
+	&procedure; (logand integer [integer] ...)
+	&returns; The logical AND of all provided operands
+	
+	&procedure; (logor integer [integer] ...)
+	&returns; The logical OR of all provided operands
+
+	&procedure; (logxor integer [integer] ...)
+	&returns; The logical exclusive-OR of all provided operands
+
+	&procedure; (lognot integer)
+	&returns; The logical NOT of the provided operand
+      </programlisting>
+      <para>
+	In addition, two operators are provided to perform arithmetic
+	shifts on any integer (these operators do not have the range
+	limitation the previous logical functions do).  The shift
+	operators return a newly generated number formed by shifting
+	the provided number left or right by the given number of bits.
+      </para>
+      <programlisting>
+	&procedure; (ashl integer bits)
+	&returns; <emphasis>integer</emphasis> shifted left by <emphasis>bits</emphasis> bits.
+
+	&procedure; (ashr integer bits)
+	&returns; <emphasis>integer</emphasis> shifted right by <emphasis>bits</emphasis> bits.
+      </programlisting>
+      <para>
+	Mathematically, if r is the number, and s is the number of
+	bits, ashl calculates:
+	<programlisting>
+	  r x 2<superscript>s</superscript>
+	</programlisting>
+	while ashr calculates
+	<programlisting>
+	  r / 2<superscript>s</superscript>
+	</programlisting>
+	in the integer domain.  Both ashl and ashr operate on exact
+	integers and produce only exact integers.  
+      </para>
     </sect1>
     <sect1>
       <title>
@@ -665,8 +732,8 @@
 	&procedure; (block-read buffer input-port integer)
 	&returns; the number of bytes read, an integer
 
-	Reads up to <emphasis>integer</emphasis> bytes of data from the
-        provided <emphasis>input-port</emphasis> into
+	Reads up to <emphasis>integer</emphasis> bytes of data from
+        the provided <emphasis>input-port</emphasis> into
         <emphasis>buffer</emphasis>.  Note that less than
         <emphasis>integer</emphasis> bytes may be read. 
 
@@ -674,15 +741,84 @@
 	&returns; unspecified
  
         Writes up to <emphasis>integer</emphasis> bytes of data stored
-	in <emphasis>buffer</emphasis> to the specified 
+	in <emphasis>buffer</emphasis> to the specified
 	<emphasis>output-port</emphasis>.
+      </programlisting>
+    </sect1>
+    <sect1>
+      <title>
+	String Ports
+      </title>
+      <para>
+	String ports are input or output ports that read or write to a
+	string rather than a file or other stream.  String ports can
+	be used to parse or emit formatted strings using the standard
+	Scheme port operations.  A String Input port will read from a
+	given string until the end of string is reached, at which
+	point <computeroutput>&num;!eof</computeroutput> is returned.  
+      </para>
+      <programlisting>
+	&procedure; (open-input-string string)
+	&returns; A string input port 
+	
+	Creates a string input port whose characters are read from the
+	provided string.  Characters will be returned from any read
+	operation on the port until the end of the string is reached.
+	Read calls after reaching the end of the string will return 
+	&num;!eof.
+
+	
+	&procedure; (open-output-string)
+	&returns; A string output port
+
+	Creates a string output port, which behaves as an ordinary
+	output port, except that writes are used to create a string as
+	output.  The results of all the write operations are retrieved
+	using (get-output-string)
+
+
+	&procedure; (get-output-string string-output-port)
+	&returns; A string
+
+	Returns the string that was created by zero or more writes to
+	a string output port.  If no writes were performed on the
+	string output port, an empty string ("") is returned.  After
+	this call, the provided string output port is reset to its
+	initial, empty state.
+      </programlisting>
+    </sect1>
+    <sect1>
+      <title>
+	Pretty-printing
+      </title>
+      <para>
+	&SISC; includes a pretty-printer, a function that behaves like
+	<computeroutput>write</computeroutput>, but introduces
+	whitespace in order to make the output of data more readable
+	to humans. 
+	</para>
+      <programlisting>
+	&procedure; (pretty-print value [output-port])
+	&returns; unspecified
+
+	Pretty-prints the specified value, either to the specified
+	output-port, or to the console if no output-port is
+	specified. 
       </programlisting>
     </sect1>
     <sect1>
       <title>
 	File-system interface
       </title>
-      <para></para>
+      <para>
+	&SISC; provides several additional functions that allow a
+	programmer to interface to the filesystem, to obtain
+	information about files or directories, and to delete, rename, 
+	and modify these files and directories.
+      </para>
+      <para>
+	This API is incomplete... please stay tuned.
+      </para>
     </sect1>
     <sect1 id="netio">
       <title>
