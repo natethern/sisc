@@ -50,7 +50,7 @@
             <type>does not return</type>
             <methodname>exit</methodname>
             <methodparam choice="opt">
-              <param>return-value</param>
+              <parameter>return-value</parameter>
             </methodparam>
           </methodsynopsis>
 	  <blockquote>
