@@ -74,9 +74,11 @@
   </target>
   
   <target name="i18n" depends="prepare">
-    <copy todir="${classdir}">
-      <fileset dir="${basedir}/i18n" >
+    <mkdir dir="${classdir}"/>
+    <copy todir="${classdir}/sisc">
+      <fileset dir="${basedir}" >
         <include name="**/*.properties"/>
+        <exclude name="**/build.properties"/>
       </fileset>                   
     </copy>
   </target> 

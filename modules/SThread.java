@@ -12,8 +12,10 @@ import sisc.ser.Deserializer;
 
 public class SThread extends ModuleAdapter {
 
-    static final Symbol THREADB=Symbol.intern("Threading"),
-        MONITOR=Symbol.get("monitor");
+    protected static final Symbol THREADB =
+        Symbol.intern("sisc.modules.Messages");
+
+    protected static final Symbol MONITOR=Symbol.get("monitor");
 
     protected static final int 
         THREADNEW=0, THREADSTART=1, THREADYIELD=2, THREADSLEEP=3,

@@ -13,7 +13,8 @@ import sisc.ser.Deserializer;
 
 public class SHashtable extends ModuleAdapter {
 
-    static Symbol SHASHB = Symbol.intern("Hashtable");
+    protected static final Symbol SHASHB =
+        Symbol.intern("sisc.modules.Messages");
 
     protected static final int 
         HT_MAKE		=1,

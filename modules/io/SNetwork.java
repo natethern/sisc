@@ -43,7 +43,7 @@ import sisc.nativefun.*;
 
 public class SNetwork extends ModuleAdapter {
 
-    static final Symbol SNETB=Symbol.intern("Networking");
+    static final Symbol SNETB=Symbol.intern("sisc.modules.io.Messages");
 
     protected static final int
 	GET_LOCAL_HOST=0, GET_HOST_NAME_BY_IP=1, GET_HOST_IP_BY_NAME=2,

@@ -13,7 +13,7 @@ public class BlockIO extends ModuleAdapter {
     protected static final int
         BLOCKREAD=1, BLOCKWRITE=2, MAKEBUFFER=3, BUFFERQ=4,
         BUFFERLENGTH=5, BUFFERREF=6, BUFFERSET=7, BUFFERCOPY=8;
-    protected Symbol BLOCKB=Symbol.get("BlockIO");
+    protected Symbol BLOCKB=Symbol.get("sisc.modules.io.Messages");
 
     public BlockIO() {
         define("block-read",    BLOCKREAD);

@@ -8,6 +8,9 @@ import sisc.nativefun.*;
 
 public class SLogicOps extends ModuleAdapter {
 
+    protected static final Symbol LOGICOPSB =
+        Symbol.intern("sisc.modules.Messages");
+
     protected static final int
 	LOGAND=1, LOGOR=2, LOGXOR=3, LOGNOT=4;
 
@@ -23,7 +26,7 @@ public class SLogicOps extends ModuleAdapter {
             Quantity q=(Quantity)v;
             if (q.type==Quantity.FIXEDINT) return q.val;
             else throw new ClassCastException();
-        } catch (ClassCastException e) { typeError("fixedinteger", v); }
+        } catch (ClassCastException e) { typeError(LOGICOPSB, "fixedinteger", v); }
 	return -1;
     }
 

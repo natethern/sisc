@@ -8,7 +8,8 @@ import sisc.data.*;
 
 public class Util extends ModuleAdapter {
 
-    protected static final Symbol S2JB = Symbol.intern("S2J");
+    protected static final Symbol S2JB =
+        Symbol.intern("sisc.modules.s2j.Messages");
 
     public Util() {}
 
