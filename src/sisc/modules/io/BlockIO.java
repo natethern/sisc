@@ -55,8 +55,19 @@ public class BlockIO extends IndexedProcedure {
         return null;
     }
 
-    private static SchemeOutputPort openBinOutFile(Interpreter f, 
-                                                   URL url, boolean aflush) 
+    private static StreamInputPort openBinInFile(Interpreter f, URL url)
+        throws ContinuationException {
+        try {
+            return new StreamInputPort(new BufferedInputStream(IO.getURLInputStream(url))); 
+        } catch (IOException e) {
+            IO.throwIOException(f, liMessage(IO.IOB, "erroropening", 
+                                             url.toString()), e);
+        }
+        return null;
+    }
+
+    private static StreamOutputPort openBinOutFile(Interpreter f,  URL url,
+                                                   boolean aflush) 
         throws ContinuationException {
         try {          
             return new StreamOutputPort(new BufferedOutputStream(IO.getURLOutputStream(url)),
@@ -92,17 +103,9 @@ public class BlockIO extends IndexedProcedure {
             case BUFFERQ:
                 return truth(f.vlr[0] instanceof Buffer);
             case OPENBINARYINPUTFILE:
-                URL url = url(f.vlr[0]);
-                try {
-                  return new StreamInputPort(
-                          new BufferedInputStream(IO.getURLInputStream(url))); 
-                } catch (IOException e) {
-                  IO.throwIOException(f, liMessage(IO.IOB, "erroropening", 
-                                                   url.toString()), e);
-                }
+                return openBinInFile(f, url(f.vlr[0]));
             case OPENBINARYOUTPUTFILE:
-                url = url(f.vlr[0]);
-                return openBinOutFile(f, url, false);
+                return openBinOutFile(f, url(f.vlr[0]), false);
             default:
                 throwArgSizeException();
             }
@@ -122,8 +125,7 @@ public class BlockIO extends IndexedProcedure {
                                                      f.vlr[0].synopsis()}));
                 }
             case OPENBINARYOUTPUTFILE:
-                URL url = url(f.vlr[0]);
-                return openBinOutFile(f, url, truth(f.vlr[1]));
+                return openBinOutFile(f, url(f.vlr[0]), truth(f.vlr[1]));
             default:
                 throwArgSizeException();
             }
