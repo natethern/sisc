@@ -1,7 +1,5 @@
 <chapter id="IO">
-  <title>
-    I/O
-  </title>
+  <title>I/O</title>
   <para>
     &SISC;'s I/O routines are implemented in a flexible manner, allowing 
     extensions to create new I/O sources that will behave as
@@ -9,297 +7,240 @@
     with all &R5RS; port operations, as well as some &SISC; specific 
     port functions.
   </para>
-  <sect1 id="PortCreation">
-    <title>
-      Port creation
-    </title>
-    <para>&SISC; extends the &R5RS; standard's port-creation
-      functions in order to provide buffered output ports.  All &SISC; 
-      output ports are buffered, and a programmer may choose whether
-      a given port should automatically flush after each write
-      operation.  By default ports do <emphasis>not</emphasis>
-      automatically flush.  Enabling auto-flush can be done when the
-      port is created per the specifications below.  A port that
-      does not automatically flush can be flushed at any time by
-      calling <computeroutput>flush-output-port</computeroutput>.
-      Finally, an output-port that does not automatically flush will
-      be flushed when the port is closed with
-      <computeroutput>close-output-port</computeroutput>, but may
-      not be flushed if the Scheme system is exited without closing
-      the port.
-    </para>
-    <para>
-      <blockquote>
-	<para>
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>output port</type>
-	    <methodname>open-output-file</methodname>
-	    <methodparam>
-	      <parameter>
-		file
-	      </parameter>
-	    </methodparam>
-	    <methodparam choice="opt">
-	      <parameter>
-		auto-flush
-	      </parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Creates an output port to the specified file (a string).  If
-	      the optional auto-flush argument is provided and is true, the
-	      port will automatically flush after each write call.  If the
-	      specified file exists, it will be overwritten silently when
-	      the port is opened.
-	    </para>
-	  </blockquote>
-	</para>
-	<para>
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>undefined</type>
-	    <methodname>flush-output-port</methodname>
-	    <methodparam>
-	      <parameter>
-		output-port
-	      </parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Causes the specified output-port's buffered data to be written
-	      immediately.  This operation is allowed on both auto-flush and
-	      non-auto-flush output ports, though it has no effect on the
-	      former.
-	    </para>
-	  </blockquote>
-	</para>
-      </blockquote>
-    </para>
-  </sect1>
-  <sect1 id="BlockIO">
-    <title>
-      Block I/O
-    </title>
-    <para>
-      In addition to the standard operations on ports
-      (<computeroutput>read, read-char, char-available?,
-	display,</computeroutput> and
-      <computeroutput>write</computeroutput>), &SISC; provides block
-      input/output functions, that allow a Scheme program to read
-      blocks of more than one byte or character of data at a time.
-      &SISC; stores data that is read or is to be written in a string.
-      Binary data in strings is fully supported throughout &SISC;.  
-      Such strings may be read and written as usual, though
-      undisplayable characters will often be escaped.
-    </para>
-    <para>
-      <blockquote>
-	<para id="func-block-read">
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>integer</type>
-	    <methodname>block-read</methodname>
-	    <methodparam>
-	      <parameter>
-		buffer
-	      </parameter>
-	    </methodparam>
-	    <methodparam>
-	      <parameter>
-		input-port
-	      </parameter>
-	    </methodparam>
-	    <methodparam>
-	      <parameter>
-                count
-	      </parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Reads up to <parameter>count</parameter> bytes of data from
-	      the provided <parameter>input-port</parameter> into
-	      <parameter>buffer</parameter>.  Note that less than
-	      <parameter>count</parameter> bytes may be read.  The number 
-	      of bytes actually read is returned.  If the end-of-file
-              is encountered before any bytes could be read, 
-	      <literal>&num;!eof</literal> will be returned.
-	    </para>
-	  </blockquote>
-	</para>
-	<para id="func-block-write">
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>undefined</type>
-	    <methodname>block-write</methodname>
-	    <methodparam>
-	      <parameter>
-		buffer
-	      </parameter>
-	    </methodparam>
-	    <methodparam>
-	      <parameter>
-		output-port
-	      </parameter>
-	    </methodparam>
-	    <methodparam>
-	      <parameter>
-		count
-	      </parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Writes <parameter>count</parameter> bytes of data from
-	      the provided <parameter>buffer</parameter> to the given
-	      <parameter>output-port</parameter>.  Exactly
-	      <parameter>count</parameter> bytes will be written.  
-	    </para>
-	  </blockquote>
-	</para>
-      </blockquote>
-    </para>
-  </sect1>
-  <sect1 id="StringPorts">
-    <title>
-      String Ports
-    </title>
-    <para>
-      String ports are input or output ports that read or write to a
-      string rather than a file or other stream.  String ports can
-      be used to parse or emit formatted strings using the standard
-      Scheme port operations.  A String Input port will read from a
-      given string until the end of string is reached, at which
-      point <computeroutput>&num;!eof</computeroutput> is returned.  
-    </para>
-    <para>
-      <blockquote>
-	<para id="func-open-input-string">
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>input-port</type>
-	    <methodname>open-input-string</methodname>
-	    <methodparam>
-	      <parameter>
-		string
-	      </parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Creates a string input port whose characters are read from the
-	      provided string.  Characters will be returned from any read
-	      operation on the port until the end of the string is reached.
-	      Read calls after reaching the end of the string will return 
-	      &num;!eof.
-	    </para>
-	  </blockquote>
-	</para>
-	<para id="func-open-output-string">
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>output-port</type>
-	    <methodname>open-output-string</methodname>
-	    <void/>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Creates a string output port, which behaves as an ordinary
-	      output port, except that writes are used to create a string as
-	      output.  The results of all the write operations are retrieved
-	      using <function>get-output-string</function>.
-	    </para>
-	  </blockquote>
-	</para>
-	<para id="func-get-output-string">
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>string</type>
-	    <methodname>get-output-string</methodname>
-	    <methodparam>
-	      <parameter>
-		string-output-port
-	      </parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Returns the string that was created by zero or more writes to
-	      a string output port.  If no writes were performed on the
-	      string output port, an empty string ("") is returned.  After
-	      this call, the provided string output port is reset to its
-	      initial, empty state.
-	    </para>
-	  </blockquote>
-	</para>
-      </blockquote>
-    </para>
-    <note>
+  <sect1>
+    <title>Ports</title>
+    <sect2 id="PortCreation">
+      <title>Port Creation</title>
       <para>
-        This interface complies with SRFI-6 (Basic String Ports).
+        &SISC; extends the &R5RS; standard's port-creation functions
+        in order to provide buffered output ports.  All &SISC; output
+        ports are buffered, and a programmer may choose whether a
+        given port should automatically flush after each write
+        operation.  By default ports do <emphasis>not</emphasis>
+        automatically flush.  Enabling auto-flush can be done when the
+        port is created per the specifications below.  A port that
+        does not automatically flush can be flushed at any time by
+        calling <computeroutput>flush-output-port</computeroutput>.
+        Finally, an output-port that does not automatically flush will
+        be flushed when the port is closed with
+        <computeroutput>close-output-port</computeroutput>, but may
+        not be flushed if the Scheme system is exited without closing
+        the port.
       </para>
-    </note>
-  </sect1>
-  <sect1 id="PrettyPrinting">
-    <title>
-      Pretty-printing
-    </title>
-    <para>
-      &SISC; includes a pretty-printer, a function that behaves like
-      <computeroutput>write</computeroutput>, but introduces
-      whitespace in order to make the output of data more readable
-      to humans. 
-    </para>
-    <para id="func-pretty-print">
-      <blockquote>
-	<para>
-	  &procedure;
-	  <methodsynopsis language="scheme">
-	    <type>unspecified</type>
-	    <methodname>pretty-print</methodname>
-	    <methodparam>
-	      <parameter>value</parameter>
-	    </methodparam>
-	    <methodparam choice="opt">
-	      <parameter>output-port</parameter>
-	    </methodparam>
-	  </methodsynopsis>
-	  <blockquote>
-	    <para>
-	      Pretty-prints the specified value, either to the specified
-	      output-port, or to the console if no output-port is
-	      specified. 
-	    </para>
-	  </blockquote>
-	</para>
-      </blockquote>
-    </para>
-  </sect1>
-  <sect1 id="FileSystem">
-    <title>
-      File-system interface
-    </title>
-    <para>
-      &SISC; provides several additional functions that allow a
-      programmer to interface to the filesystem, to obtain
-      information about files or directories, and to delete, rename, 
-      and modify these files and directories.
-    </para>
-    <note>
       <para>
-        The interface to the filesystem is a work in progress.
-        Documentation and a corresponding implementation will appear
-        in future revisions.
+        <blockquote>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>output port</type>
+              <methodname>open-output-file</methodname>
+              <methodparam>
+                <parameter>
+                  file
+                </parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>
+                  auto-flush
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates an output port to the specified file (a
+                string).  If the optional auto-flush argument is
+                provided and is true, the port will automatically
+                flush after each write call.  If the specified file
+                exists, it will be overwritten silently when the port
+                is opened.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>flush-output-port</methodname>
+              <methodparam>
+                <parameter>
+                  output-port
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Causes the specified output-port's buffered data to be
+                written immediately.  This operation is allowed on
+                both auto-flush and non-auto-flush output ports,
+                though it has no effect on the former.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
       </para>
-    </note>
+    </sect2>
+    <sect2 id="BlockIO">
+      <title>Block I/O</title>
+      <para>
+        In addition to the standard operations on ports
+        (<computeroutput>read, read-char, char-available?,
+          display,</computeroutput> and
+        <computeroutput>write</computeroutput>), &SISC; provides block
+        input/output functions, that allow a Scheme program to read
+        blocks of more than one byte or character of data at a time.
+          &SISC; stores data that is read or is to be written in a
+        string.  Binary data in strings is fully supported throughout
+          &SISC;.  Such strings may be read and written as usual, though
+        undisplayable characters will often be escaped.
+      </para>
+      <para>
+        <blockquote>
+          <para id="func-block-read">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>integer</type>
+              <methodname>block-read</methodname>
+              <methodparam>
+                <parameter>
+                  buffer
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  input-port
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  count
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Reads up to <parameter>count</parameter> bytes of data
+                from the provided <parameter>input-port</parameter>
+                into <parameter>buffer</parameter>.  Note that less
+                than <parameter>count</parameter> bytes may be read.
+                The number of bytes actually read is returned.  If the
+                end-of-file is encountered before any bytes could be
+                read, <literal>&num;!eof</literal> will be returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-block-write">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>block-write</methodname>
+              <methodparam>
+                <parameter>
+                  buffer
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  output-port
+                </parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>
+                  count
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Writes <parameter>count</parameter> bytes of data from
+                the provided <parameter>buffer</parameter> to the
+                given <parameter>output-port</parameter>.  Exactly
+                <parameter>count</parameter> bytes will be written.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
+    <sect2 id="StringPorts"> <title>String Ports</title>
+      <para>
+        String ports are input or output ports that read or write to a
+        string rather than a file or other stream.  String ports can
+        be used to parse or emit formatted strings using the standard
+        Scheme port operations.  A String Input port will read from a
+        given string until the end of string is reached, at which
+        point <computeroutput>&num;!eof</computeroutput> is returned.
+      </para>
+      <para>
+        <blockquote>
+          <para id="func-open-input-string">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>input-port</type>
+              <methodname>open-input-string</methodname>
+              <methodparam>
+                <parameter>
+                  string
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates a string input port whose characters are read
+                from the provided string.  Characters will be returned
+                from any read operation on the port until the end of
+                the string is reached.  Read calls after reaching the
+                end of the string will return &num;!eof.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-open-output-string">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>output-port</type>
+              <methodname>open-output-string</methodname> <void/>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates a string output port, which behaves as an
+                ordinary output port, except that writes are used to
+                create a string as output.  The results of all the
+                write operations are retrieved using
+                <function>get-output-string</function>.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-get-output-string">
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>string</type> <methodname>get-output-string</methodname>
+              <methodparam>
+                <parameter>
+                  string-output-port
+                </parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the string that was created by zero or more
+                writes to a string output port.  If no writes were
+                performed on the string output port, an empty string
+                ("") is returned.  After this call, the provided
+                string output port is reset to its initial, empty
+                state.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+      <note>
+        <para>
+          This interface complies with SRFI-6 (Basic String Ports).
+        </para>
+      </note>
+    </sect2>
   </sect1>
   <sect1 id="netio">
-    <title>
-      Networking
-    </title>
+    <title>Networking</title>
     <para>
       &requires; 
       <emphasis role="bold">
@@ -328,9 +269,7 @@
       be integers in the proper range.
     </para>
     <sect2 id="netutils">
-      <title>
-	Address functions
-      </title>
+      <title>Adresss Functions</title>
       <para>
 	Several utility functions are provided for manipulating IP
 	addresses.  These are described below.
@@ -390,9 +329,7 @@
       </para>
     </sect2>
     <sect2 id="sockets">
-      <title>
-	Socket operations
-      </title>
+      <title>Socket Operations</title>
       <para>
 	Once obtained using a protocol specific constructor, a
 	Socket Handle allows manipulation of common socket options,
@@ -459,9 +396,7 @@
       </para>
     </sect2>
     <sect2 id="TCP">
-      <title>
-	TCP
-      </title>
+      <title>TCP</title>
       <para>
 	The most commonly used Internet protocol maps most favorably
 	to Scheme's input/output model.  Writing to an output port
@@ -581,9 +516,72 @@
       </para>
     </sect2>
   </sect1>
+  <sect1>
+    <title>Miscellaneous</title>
+    <sect2 id="PrettyPrinting">
+      <title>Pretty-Printing</title>
+      <para>
+        &SISC; includes a pretty-printer, a function that behaves like
+        <computeroutput>write</computeroutput>, but introduces
+        whitespace in order to make the output of data more readable
+        to humans.
+      </para>
+      <para id="func-pretty-print">
+        <blockquote>
+          <para>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>unspecified</type>
+              <methodname>pretty-print</methodname>
+              <methodparam>
+                <parameter>value</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>output-port</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Pretty-prints the specified value, either to the specified
+                output-port, or to the console if no output-port is
+                specified. 
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
+    <sect2 id="FileSystem">
+      <title>File-System Interface</title>
+      <para>
+        &SISC; provides several additional functions that allow a
+        programmer to interface to the filesystem, to obtain
+        information about files or directories, and to delete, rename,
+        and modify these files and directories.
+      </para>
+      <note>
+        <para>
+          The interface to the filesystem is a work in progress.
+          Documentation and a corresponding implementation will appear
+          in future revisions.
+        </para>
+      </note>
+    </sect2>
+  </sect1>
 </chapter>
 <!-- Keep this comment at the end of the file
 Local variables:
 sgml-parent-document:("sss.xml" "chapter")
+sgml-omittag:nil
+sgml-shorttag:nil
+sgml-namecase-general:nil
+sgml-general-insert-case:lower
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:2
+sgml-indent-data:t
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
 End:
 -->
