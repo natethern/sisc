@@ -18,14 +18,14 @@ public class ApplyValuesContEval extends Expression {
     public void eval(Interpreter r) throws ContinuationException {
         if (r.acc instanceof Values) {
             r.vlr=((Values)r.acc).values;
-            //r.vlk=true
-            //Because we are explicitly setting the VLR, we may want to lock it to keep it
-            //from being recycled.  This cannot currently happen in Scheme code, and
-            //blindly setting vlk to true can break continuation capture by short circuiting
-            //continuation marking too soon, so we will disable it and leave this note for
-            //further study.
-        }
-        else {
+            /**
+               Procedure application may recycle the vlr. Since Values
+               are first class, they may be referenced from multiple
+               places. Hence we need to prevent vlr recycling when we
+               use a Values' arg array as the vlr.
+            **/
+            r.vlk = true;
+        } else {
             r.newVLR(1);
             r.vlr[0]=r.acc;
         }
