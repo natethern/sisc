@@ -736,5 +736,5 @@
           (set! *startup-hooks* (cons thunk *startup-hooks*)))))
 
 ;;
-(if (not (getprop 'LITE '*sisc*))
+(if (not (getprop 'LITE (get-symbolic-environment '*sisc*)))
     (load "../modules/std-modules.scm"))

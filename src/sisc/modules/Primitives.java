@@ -456,7 +456,10 @@ public class Primitives extends IndexedProcedure {
                 SchemeString.compactRepresentation=truth(vlr[0]);
                 return VOID;
             case GETPROP:
-                return r.getCtx().toplevel_env.lookup(symbol(vlr[0])); 
+            	SymbolicEnvironment tlev=r.getCtx().toplevel_env;
+                int loc=tlev.getLoc(symbol(vlr[0]));
+                if (loc==-1) return FALSE;
+                else return tlev.lookup(loc); 
             case INTERACTIONENVIRONMENT:
                 Value env=r.getCtx().toplevel_env.asValue();
                 r.getCtx().toplevel_env=Util.env(vlr[0]);
