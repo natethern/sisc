@@ -337,10 +337,7 @@
      method=
      method-applicable?
      compare-methods
-     method
-
-     method-list-cache
-     method-cache-get)
+     method)
   (import* record
            define-struct
            define-record-type)
