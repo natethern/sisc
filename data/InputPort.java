@@ -36,7 +36,6 @@ import java.io.*;
 import sisc.*;
 
 public class InputPort extends NamedValue {
-    protected static final Symbol READ=Symbol.get("read");
     protected BufferedReader r;
     protected int pushback = -1;
 
