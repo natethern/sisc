@@ -218,19 +218,20 @@
       (if (and (_fill-rib? expr)
                (_free-reference-exp? 
                 (_fill-rib-exp expr)))
-          (format "~a:~a:~a: <called from ~a>~%" 
+          (format "~a:~a:~a: <called from ~a>" 
                   sourcefile
                   line column
                   (_free-reference-symbol
                    (_fill-rib-exp expr)))
-          (format "~a:~a:~a: <indeterminate call>~%" 
+          (format "~a:~a:~a: <indeterminate call>" 
                   sourcefile
                   line column)))))
 
 (define (print-stack-trace k)
   (for-each
    (lambda (entry)
-     (display (format-stack-trace-entry entry)))
+     (display (format-stack-trace-entry entry))
+     (newline))
    (stack-trace k)))
 
 (define (print-exception e . st)
