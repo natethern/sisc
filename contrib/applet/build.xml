@@ -1,6 +1,6 @@
 <project name="sisc-applet" default="all">
   <target name="prepare">
-    <property name="srcdir" value="${basedir}/.."/>
+    <property name="srcdir" value="${basedir}/java"/>
     <property name="classdir" value="${basedir}/classes"/>
     <property name="dist" value="${basedir}/dist"/>
     <property name="optimization" value="on"/>
@@ -11,17 +11,18 @@
   <target name="applet">
     <javac srcdir="${srcdir}"
            destdir="${classdir}"
+           classpath="${CLASSPATH}:${SISC_HOME}/.."
 	   debug="${debugging}"
            optimize="${optimization}">
-      <include name="applet/*.java"/>
+      <include name="sisc/contrib/applet/**"/>
     </javac>
     <jar jarfile="${dist}/sisc-applet.jar"
          basedir="${classdir}"
-         includes="sisc/applet/**"/>
+         includes="sisc/**"/>
   </target>
-  <target name="clean">
+  <target name="clean" depends="prepare">
     <delete dir="${dist}"/>
-    <delete dir="${classes}"/>
+    <delete dir="${classdir}"/>
   </target>
   <target name="all" depends="prepare,applet"/>
 </project>

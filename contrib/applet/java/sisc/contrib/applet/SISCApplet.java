@@ -1,4 +1,4 @@
-package sisc.applet;
+package sisc.contrib.applet;
 
 import sisc.*;
 import javax.swing.*;
