@@ -97,3 +97,16 @@
                (->jstring "([0-9])"))
               (->jstring "a3b"))
              'ok))
+
+;;Used to cause a stack overflow error
+(should-be 864792 2000
+           (let ([x (iota 2000)])
+             (import serial-io)
+             (call-with-serial-output-file "test.ser"
+               (lambda (out)
+                 (serialize x out)))
+             (length (call-with-serial-input-file "test.ser"
+                       (lambda (in)
+                         (deserialize in))))))
+                    
+             
