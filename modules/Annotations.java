@@ -19,7 +19,8 @@ public class Annotations extends ModuleAdapter {
         EMITANNOTATIONS         = 6,
         MAKEANNOTATION          = 7,
         SETANNOTATION           = 8,
-        SETANNOTATIONSTRIPPED   = 9;
+        SETANNOTATIONSTRIPPED   = 9
+        EMITDEBUGGINGSYMS       = 10;
 
     public Annotations() {
         define("annotation?"            , ANNOTATIONQ);
@@ -29,6 +30,7 @@ public class Annotations extends ModuleAdapter {
         define("annotation-expression"  , ANNOTATIONEXPR);
         define("annotation-stripped"    , ANNOTATIONSTRIPPED);
         define("emit-annotations"       , EMITANNOTATIONS);
+        define("emit-debugging-symbols"       , EMITDEBUGGINGSYMS);
         define("make-annotation"        , MAKEANNOTATION);
         define("set-annotation!"        , SETANNOTATION);
         define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
@@ -40,6 +42,7 @@ public class Annotations extends ModuleAdapter {
         case 0:
             switch (primid) {
             case EMITANNOTATIONS: return truth(f.dynenv.parser.annotate);
+            case EMITDEBUGGINGSYMS: return truth(f.dynenv.emitDebuggingSymbols);
             default:
                 throwArgSizeException();
             }
@@ -47,6 +50,9 @@ public class Annotations extends ModuleAdapter {
             switch (primid) {
             case EMITANNOTATIONS:
                 f.dynenv.parser.annotate=truth(f.vlr[0]);
+                return VOID;
+            case EMITDEBUGGINGSYMS:
+                f.dynenv.emitDebuggingSymbols=truth(f.vlr[0]);
                 return VOID;
             case ANNOTATIONKEYS: {
                 Pair akl=EMPTYLIST;
