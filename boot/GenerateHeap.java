@@ -43,6 +43,7 @@ public class GenerateHeap {
 	// Lock in the R5RS environment
 	AssociativeEnvironment report_env, top_env;
 	report_env=(AssociativeEnvironment)r.symenv.lookup(Util.TOPLEVEL);
+	report_env.trim();
 	top_env=new AssociativeEnvironment(report_env);
 	r.symenv.define(Util.TOPLEVEL, top_env);
 	r.symenv.define(Util.REPORT, report_env);
@@ -54,7 +55,7 @@ public class GenerateHeap {
 
 	try {
 	    BufferedOutputStream out=
-		new BufferedOutputStream(new DeflaterOutputStream(new FileOutputStream(args[0]), new Deflater(Deflater.BEST_COMPRESSION)));
+		new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(args[0])));
 	    r.saveEnv(out);
 	    out.flush();
 	    out.close();

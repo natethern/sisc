@@ -33,7 +33,7 @@ public abstract class Util {
 	TOPLEVEL=Symbol.get("*toplevel*"),
 	REPORT=Symbol.get("*report*"),
 	ENVVARS=Symbol.get("*environment-variables*"),
-	SYNTAX=Symbol.get("syntax");
+    	SYNTAX=Symbol.get("syntax");
 
     public static void error(Interpreter r, Value where, String errormessage) 
 	throws ContinuationException {
@@ -46,15 +46,17 @@ public abstract class Util {
 	throw new ContinuationException(r.fk);
     }
 
-    public static void error(Interpreter r, String errormessage) throws ContinuationException {
+    public static void error(Interpreter r, String errormessage) 
+	throws ContinuationException {
 	error(r, errormessage, true);
     }
 
-    public static void error(Interpreter r, String errormessage, boolean prependError) throws ContinuationException {
+    public static void error(Interpreter r, String errormessage, 
+			     boolean prependError) 
+	throws ContinuationException {
 	r.acc=new Values(new Value[] {
-	    (prependError ? 
-	     new SchemeString("Error: "+errormessage) :
-	     new SchemeString(errormessage)),
+	    new SchemeString((prependError ? "Error: "+errormessage : 
+			      errormessage)),
 	    new CallFrame(r.nxp, r.vlr, r.env, r.fk, r.stk).capture(),
 	    r.fk.fk});
 
@@ -76,10 +78,15 @@ public abstract class Util {
     }
 
     public static int length(Pair p) {
-	int i=0;
-	for (; p!=EMPTYLIST; i++)
-	    p=(Pair)p.cdr;
-	return i;
+	Pair s=p;
+	try {
+	    int i=0;
+	    for (; p!=EMPTYLIST; i++)
+		p=(Pair)p.cdr;
+	    return i;
+	} catch (ClassCastException ce) {
+	    throw new RuntimeException(s+" is not a proper list");
+	}
     }
 
     public static Expression[] pairToExpressions(Pair p) {
@@ -117,11 +124,7 @@ public abstract class Util {
 	    v.addElement(p.car);
 	}
 	Symbol[] vs=new Symbol[i];
-	try {
-	    v.copyInto(vs);
-	} catch (Exception e) {
-	    throw (RuntimeException)e;
-	}
+	v.copyInto(vs);
 	return vs;
     }
 

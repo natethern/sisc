@@ -106,10 +106,14 @@
 
     (define (spaces n col)
       (if (> n 0)
-        (if (> n 7)
-          (spaces (- n 8) (out "        " col))
-          (out (substring "        " 0 n) col))
+        (out (make-string n #\space) col)
         col))
+
+;      (if (> n 0)
+ ;       (if (> n 7)
+  ;        (spaces (- n 8) (out "        " col))
+   ;       (out (substring "        " 0 n) col))
+    ;    col))
 
     (define (indent to col)
       (and col

@@ -16,7 +16,7 @@ public class FreeSetEval extends Expression {
 
     public void eval(Interpreter r) throws ContinuationException { 
 	try {
-	    senv.set(envLoc, r.acc);
+	    senv.env[envLoc]=r.acc;
 	} catch (ArrayIndexOutOfBoundsException aie) {
 	    envLoc=senv.set(lhs, r.acc);
 	}
@@ -26,6 +26,7 @@ public class FreeSetEval extends Expression {
 	    if (nv.name==null)
 		nv.name=lhs;
 	}
+
 	r.acc=VOID;
 	r.nxp=null;
     }

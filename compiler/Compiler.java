@@ -3,8 +3,6 @@ package sisc.compiler;
 import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
-//import sisc.syntax.*;
-import sisc.Util;
 import java.util.*;
 
 public class Compiler extends Util {
@@ -108,11 +106,12 @@ public class Compiler extends Util {
 	if (expr.car instanceof Symbol) {
 	    Symbol s=(Symbol)expr.car;
 	    int t=getExpType(s);
+	    expr=(Pair)expr.cdr;
+
 	    switch (t) {
 	    case QUOTE:
-		return cadr(expr);
+		return expr.car;
 	    case LAMBDA: 
-		expr=(Pair)expr.cdr;
 		boolean infArity=false;
 		Symbol[] formals=null;
 
@@ -129,18 +128,16 @@ public class Compiler extends Util {
 		}
 
 		expr=(Pair)expr.cdr;		    
-		if (expr.cdr!=EMPTYLIST) 
+		if (expr.cdr != EMPTYLIST) 
 		    expr=new Pair(new Pair(Util.BEGIN, expr));
 		Expression body=compile(r, expr.car, 
 					new ReferenceEnv(formals, rt), 
 					TAIL | LAMBDA, env);
 		return new LambdaExp(formals.length, body, infArity);
 	    case _IF:
-		expr=(Pair)expr.cdr;
 		Expression test=compile(r, expr.car, rt, PREDICATE, env);
 		expr=(Pair)expr.cdr;
 		if (test instanceof Value) {
-		    System.err.println("bopt:"+test);
 		    if (truth((Value)test))
 			return compile(r, expr.car, rt, TAIL, env);
 		    else {
@@ -154,16 +151,13 @@ public class Compiler extends Util {
 		    return new IfExp(test, conseq, altern);
 		}
 	    case BEGIN:
-		expr=(Pair)expr.cdr;
 		Vector v=new Vector();
-		int i=0;
 		
-		for (; expr!=EMPTYLIST; expr=(Pair)expr.cdr, i++) {
+		for (; expr!=EMPTYLIST; expr=(Pair)expr.cdr) {
 		    v.addElement(expr.car);
 		}
 		return compileBegin(r, v, context, rt, env);
 	    case SET:
-		expr=(Pair)expr.cdr;
 		Expression re=compile(r, expr.car, rt, 0, env);
 		expr=(Pair)expr.cdr;
 		Expression rhs=compile(r, expr.car, rt, 0, env);
@@ -179,26 +173,13 @@ public class Compiler extends Util {
 		    error(r, "left-hand-side of set! is not a symbol");
 		    return null;
 		} 
-		/*	    case PUTPROP:
-		expr=(Pair)expr.cdr;
-	        Expression lhs=compile(r, expr.car, rt, 0, env);
-		expr=(Pair)expr.cdr;
-		Expression envctx=compile(r, expr.car, rt, 0, env);
-		expr=(Pair)expr.cdr;
-		rhs=compile(r, expr.car, rt, 0, env);
-		return new DefineExp(lhs, rhs, envctx);*/
 	    case DEFINE: 
+		Symbol lhs=(Symbol)expr.car;
 		expr=(Pair)expr.cdr;
-		Expression lhs=expr.car;
-		rhs=null;
 
-		expr=(Pair)expr.cdr;
-		rhs=expr.car;
-
-		return new DefineExp((Symbol)lhs,
-				     compile(r, rhs, rt, 0, env));
+		return new DefineExp(lhs, compile(r, expr.car, rt, 0, env));
 	    default:
-		Expression[] exps=pairToExpressions((Pair)expr.cdr);
+		Expression[] exps=pairToExpressions(expr);
 		compileExpressions(r, exps, rt, 0, env);
 		return new AppExp(compile(r, s, rt, 0, env),
 				  exps, (context & TAIL)!=0);
@@ -222,8 +203,8 @@ public class Compiler extends Util {
     void compileExpressions(Interpreter r, Expression exprs[], ReferenceEnv rt,
 			    int context, AssociativeEnvironment env)
 	throws ContinuationException {
-	for (int i=0; i<exprs.length; i++) 
-	    exprs[i]=compile(r, exprs[i],rt, context, env);
+	for (int i=exprs.length-1; i>=0; i--) 
+	    exprs[i]=compile(r, exprs[i], rt, context, env);
     }
 
     Expression compileBegin(Interpreter r, Vector v, int context,
@@ -241,7 +222,7 @@ public class Compiler extends Util {
 	    if (!(e instanceof Immediate)) 
 		v2.addElement(e);
 	}
-	//	System.err.println(")");
+
 	if (v2.size()==0) return last;
 	Expression[] exprs=new Expression[v2.size()];
 	v2.copyInto(exprs);

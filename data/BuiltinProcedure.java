@@ -25,7 +25,6 @@ public class BuiltinProcedure extends Procedure {
 	} catch (ArrayIndexOutOfBoundsException np) {
 	    error(r, name, "incorrect number of arguments to procedure");
 	} catch (ClassCastException cc) {
-	    cc.printStackTrace();
 	    error(r, name, "got unexpected value "+cc.getMessage());
 	} catch (RuntimeException re) {
 	    error(r, name, re.getMessage());

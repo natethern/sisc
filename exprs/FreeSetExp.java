@@ -10,7 +10,7 @@ public class FreeSetExp extends Expression {
     public FreeSetExp(Symbol lhs, int envLoc, Expression rhs,
 		      AssociativeEnvironment lenv) {
 	this.rhs=rhs;
-	this.eexpr = new FreeSetEval(lhs,envLoc, lenv);
+	this.eexpr = new FreeSetEval(lhs, envLoc, lenv);
     }
 
     public void eval(Interpreter r) throws ContinuationException { 
@@ -20,7 +20,7 @@ public class FreeSetExp extends Expression {
 
     public String toString(){
 	StringBuffer b=new StringBuffer();
-	b.append("(Set-exp)");
+	b.append("(Set-exp ");
 	b.append(eexpr.lhs).append(' ');
 	b.append(rhs).append(')');
 	return b.toString();

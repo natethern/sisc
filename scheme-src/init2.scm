@@ -13,6 +13,8 @@
 	     (define original-cwcc call-with-current-continuation)
 	     
 	     (define (reroot! there)
+ (display (format "(reroot! ~s) Here: ~s~%" there *here*))
+
 	       (if (not (eq? *here* there))
 		   (begin
 		     (reroot! (cdr there))

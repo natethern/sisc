@@ -17,7 +17,17 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public void eval(Interpreter r) throws ContinuationException { 
 	r.nxp=null;
-	r.acc=getValue(r);
+	try {
+	    r.acc=lenv.env[envLoc];
+	} catch (ArrayIndexOutOfBoundsException aie) {
+	    try {
+		envLoc=lenv.getLoc(sym);
+		r.acc= lenv.env[envLoc];
+	    } catch (UndefinedException e2) {
+		error(r, "undefined variable '"+sym+"'");
+		return;
+	    }
+	}
     }
 
     public Value getValue(Interpreter r) throws ContinuationException {
@@ -27,7 +37,6 @@ public class FreeReferenceExp extends Expression implements Immediate {
 	    try {
 		envLoc=lenv.getLoc(sym);
 		return lenv.env[envLoc];
-		//		return lenv.lookup(envLoc);
 	    } catch (UndefinedException e2) {
 		error(r, "undefined variable '"+sym+"'");
 		return null;
