@@ -1132,9 +1132,10 @@
             </methodparam>
           </methodsynopsis>
           <blockquote>
-            <para>        
+            <para>
               The <function>iota</function> function produces a list
-              whose elements are the integers 0 to n inclusive.
+              whose elements are the integers 0 to
+              <parameter>n</parameter>-1 inclusive.
             </para>
           </blockquote>
         </para>
@@ -1174,5 +1175,16 @@
 <!-- Keep this comment at the end of the file
 Local variables:
 sgml-parent-document:("sss.xml" "chapter")
+sgml-omittag:nil
+sgml-shorttag:nil
+sgml-namecase-general:nil
+sgml-general-insert-case:lower
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:2
+sgml-indent-data:t
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
 End:
 -->
