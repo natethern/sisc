@@ -475,23 +475,25 @@
 ;;; as a starting point.  session-key should be a unique string for each
 ;;; system run to support separate compilation; the default value given
 ;;; is satisfactory during initial development only.
-(define generate-id
-  (let ((digits "0123456789abcdefghijklmnopqrstuvwxyz"))
-    (let ((base (string-length digits)) (session-key "_"))
-      (define make-digit (lambda (x) (string-ref digits x)))
-      (define fmt
-        (lambda (n)
-          (let fmt ((n n) (a '()))
-            (if (< n base)
-                (list->string (cons (make-digit n) a))
-                (let ((r (modulo n base)) (rest (quotient n base)))
-                  (fmt rest (cons (make-digit r) a)))))))
-      (let ((n -1))
-        (lambda (name)
-          (set! n (+ n 1))
-          (string->symbol (string-append (symbol->string name)
-                                         session-key
-                                         (fmt n))))))))
+
+(define generate-id gen-sym) ; SISC's gen-sym has this property
+
+;  (let ((digits "0123456789abcdefghijklmnopqrstuvwxyz"))
+;    (let ((base (string-length digits)) (session-key "_"))
+;      (define make-digit (lambda (x) (string-ref digits x)))
+;      (define fmt
+;        (lambda (n)
+;          (let fmt ((n n) (a '()))
+;            (if (< n base)
+;                (list->string (cons (make-digit n) a))
+;                (let ((r (modulo n base)) (rest (quotient n base)))
+;                  (fmt rest (cons (make-digit r) a)))))))
+;      (let ((n -1))
+;        (lambda (name)
+;          (set! n (+ n 1))
+;          (string->symbol (string-append (symbol->string name)
+;                                         session-key
+;                                         (fmt n))))))))
 )
 
 

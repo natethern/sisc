@@ -1,3 +1,9 @@
+2002-10-11  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Modified gensym to produce 4d-unique (unique in both space and
+	  time) symbols.  This will allow code compiled in one place/time
+	  to load in another without conflicts.
+
 2002-10-10  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Created the loadable-libraries module, which allows one
