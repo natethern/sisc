@@ -259,38 +259,276 @@
           (begin (display "Caused by ")
                  (apply print-exception p st))))))
 
-(define (format format-string . objects)
-  (let ((buffer (open-output-string)))
-    (let loop ((format-list (string->list format-string))
-               (objects objects))
-      (cond ((null? format-list) (get-output-string buffer))
-            ((char=? (car format-list) #\~)
-             (if (null? (cdr format-list))
-                 (error 'format "Incomplete escape sequence")
-                 (case (char-downcase (cadr format-list))
-                   ((#\a)
-                    (if (null? objects)
-                        (error 'format "No value for escape sequence")
-                        (begin
-                          (display (car objects) buffer)
-                          (loop (cddr format-list) (cdr objects)))))
-                   ((#\s)
-                    (if (null? objects)
-                        (error 'format "No value for escape sequence")
-                        (begin
-                          (write (car objects) buffer)
-                          (loop (cddr format-list) (cdr objects)))))
-                   ((#\%)
-                    (display #\newline buffer)
-                    (loop (cddr format-list) objects))
-                   ((#\~)
-                    (display #\~ buffer)
-                    (loop (cddr format-list) objects))
-                   (else
-                     (error 'format "Unrecognized escape sequence")))))
-            (else (display (car format-list) buffer)                        
-                  (loop (cdr format-list) objects))))))
-
+;; FORMAT
+(define format
+  (let ()
+    (define (round* n scale) ;; assert scale < 0
+      (let ((one (expt 10 (- scale))))
+        (/ (round (* n one)) one)))
+    
+    (define (string-index str c)
+      (let ((len (string-length str)))
+        (let loop ((i 0))
+          (cond ((= i len) #f)
+                ((eqv? c (string-ref str i)) i)
+                (else (loop (+ i 1)))))))
+    
+    (define (string-grow str len char)
+      (let ((off (- len (string-length str))))
+        (if (positive? off)
+            (string-append (make-string off char) str)
+            str)))
+    
+    (define (string-pad-right str len char)
+      (let ((slen (string-length str)))
+        (cond ((< slen len)
+               (string-append str (make-string (- len slen) char)))
+              ((> slen len)
+               (substring str 0 len))
+              (else str))))
+    (define documentation-string
+"(format []  [...]) --  is #t, #f or an output-port
+OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
+~H	[Help]		output this text
+~A	[Any]		(display arg) for humans
+~S	[Slashified]	(write arg) for parsers
+~W	[WriteCircular]	like ~s but outputs circular and recursive data structures
+~~	[tilde]		output a tilde
+~T	[Tab]		output a tab character
+~%	[Newline]	output a newline character
+~&	[Freshline]	output a newline character if the previous output was not a newline
+~D	[Decimal]	the arg is a number which is output in decimal radix
+~X	[heXadecimal]	the arg is a number which is output in hexdecimal radix
+~O	[Octal]		the arg is a number which is output in octal radix
+~B	[Binary]	the arg is a number which is output in binary radix
+~w,dF	[Fixed]		the arg is a string or number which has width w and d digits after the decimal
+~C	[Character]	charater arg is output by write-char
+~_	[Space]		a single space character is output
+~Y	[Yuppify]	the list arg is pretty-printed to the output
+~?	[Indirection]	recursive format: next 2 args are format-string and list of arguments
+~K	[Indirection]	same as ~?
+")
+    
+    (define (format-fixed number-or-string width digits) ; returns a string
+      (cond
+       ((string? number-or-string)
+        (string-grow number-or-string width #\space))
+       ((number? number-or-string)
+        (let ((real (real-part number-or-string))
+              (imag (imag-part number-or-string)))
+          (cond
+           ((not (zero? imag))
+            (string-grow
+             (string-append (format-fixed real 0 digits)
+                            (if (negative? imag) "" "+")
+                            (format-fixed imag 0 digits)
+                            "i")
+             width
+             #\space))
+           (digits
+            (let* ((rounded-number (exact->inexact (round* real (- digits))))
+                   (rounded-string (number->string rounded-number))
+                   (dot-index (string-index  rounded-string #\.))
+                   (exp-index (string-index  rounded-string #\e))
+                   (length    (string-length rounded-string))
+                   (pre-string
+                    (cond
+                     (exp-index
+                      (if dot-index
+                          (substring rounded-string 0 (+ dot-index 1))
+                          (substring rounded-string 0 (+ exp-index 1))))
+                     (dot-index
+                      (substring rounded-string 0 (+ dot-index 1)))
+                     (else
+                      rounded-string)))
+                   (exp-string
+                    (if exp-index (substring rounded-string exp-index length) ""))
+                   (frac-string
+                    (if exp-index
+                        (substring rounded-string (+ dot-index 1) exp-index)
+                        (substring rounded-string (+ dot-index 1) length))))
+              (string-grow
+               (string-append pre-string
+                              (if dot-index "" ".")
+                              (string-pad-right frac-string digits #\0)
+                              exp-string)
+               width
+               #\space)))
+           (else ;; no digits
+            (string-grow (number->string real) width #\space)))))
+       (else
+        (error 'format "~F requires a number or a string, got ~s" number-or-string))))
+    (lambda args
+      (cond
+       ((null? args)
+        (error 'format "required format-string argument is missing"))
+       ((string? (car args))
+        (apply format #f args))
+       ((< (length args) 2)
+        (error 'format "too few arguments ~s" args))
+       (else
+        (let ((output-port   (car  args))
+              (format-string (cadr args))
+              (args          (cddr args)))
+          (letrec ((port 
+                    (cond ((output-port? output-port) output-port)
+                          ((eq? output-port #t) (current-output-port)) 
+                          ((eq? output-port #f) (open-output-string)) 
+                          (else (error 'format "bad output-port argument: ~s"
+                                       output-port))))
+                   (return-value 
+                    (if (eq? output-port #f)    ;; if format into a string 
+                        (lambda () (get-output-string port)) ;; then return the string
+                        void))) ;; else do something harmless
+            
+            (define (format-help format-strg arglist)
+              
+              (let ((length-of-format-string (string-length format-strg)))
+                (letrec ((anychar-dispatch       
+                          (lambda (pos arglist last-was-newline) 
+                            (if (>= pos length-of-format-string) 
+                                arglist ; return unused args 
+                                (let ((char (string-ref format-strg pos)))
+                                  (cond            
+                                   ((eqv? char #\~)
+                                    (tilde-dispatch (+ pos 1) arglist
+                                                    last-was-newline))
+                                   (else                   
+                                    (write-char char port)     
+                                    (anychar-dispatch (+ pos 1) arglist #f)))))))
+                         (has-newline?
+                          (lambda (whatever last-was-newline)
+                            (or (eqv? whatever #\newline)
+                                (and (string? whatever)
+                                     (let ((len (string-length whatever)))
+                                       (if (zero? len)
+                                           last-was-newline
+                                           (eqv? #\newline
+                                                 (string-ref whatever (- len 1)))))))))
+                         (tilde-dispatch          
+                          (lambda (pos arglist last-was-newline)     
+                            (cond           
+                             ((>= pos length-of-format-string)   
+                              (write-char #\~ port) ; tilde at end of string is just output
+                              arglist) ; return unused args
+                             (else      
+                              (case (char-upcase (string-ref format-strg pos)) 
+                                ((#\A)       ; Any -- for humans 
+                                 (let ((whatever (car arglist)))
+                                   (display whatever port)
+                                   (anychar-dispatch (+ pos 1) 
+                                                     (cdr arglist) 
+                                                     (has-newline? whatever last-was-newline))))
+                                ((#\S)       ; Slashified -- for parsers  
+                                 (let ((whatever (car arglist)))
+                                   (write whatever port)     
+                                   (anychar-dispatch (+ pos 1) 
+                                                     (cdr arglist) 
+                                                     (has-newline? whatever last-was-newline))))
+                                ((#\W)
+                                 (let ((whatever (car arglist)))
+                                   (let ([old-shared-state (print-shared #t)])
+                                     (write whatever port)
+                                     (print-shared old-shared-state))
+                                   (anychar-dispatch (+ pos 1) 
+                                                     (cdr arglist) 
+                                                     (has-newline? whatever last-was-newline))))
+                                ((#\D)       ; Decimal
+                                 (display (number->string (car arglist) 10) port)  
+                                 (anychar-dispatch (+ pos 1) (cdr arglist) #f))
+                                ((#\X)       ; HeXadecimal    
+                                 (display (number->string (car arglist) 16) port)
+                                 (anychar-dispatch (+ pos 1) (cdr arglist) #f))
+                                ((#\O)       ; Octal   
+                                 (display (number->string (car arglist)  8) port)
+                                 (anychar-dispatch (+ pos 1) (cdr arglist) #f))
+                                ((#\B)       ; Binary
+                                 (display (number->string (car arglist)  2) port)
+                                 (anychar-dispatch (+ pos 1) (cdr arglist) #f))
+                                ((#\C)       ; Character 
+                                 (write-char (car arglist) port) 
+                                 (anychar-dispatch (+ pos 1) (cdr arglist) (eqv? (car arglist) #\newline)))
+                                ((#\~)       ; Tilde  
+                                 (write-char #\~ port)   
+                                 (anychar-dispatch (+ pos 1) arglist #f))
+                                ((#\%)       ; Newline   
+                                 (newline port) 
+                                 (anychar-dispatch (+ pos 1) arglist #t))
+                                ((#\&)      ; Freshline
+                                 (if (not last-was-newline) ;; (unless last-was-newline ..
+                                     (newline port))
+                                 (anychar-dispatch (+ pos 1) arglist #t))
+                                ((#\_)       ; Space 
+                                 (write-char #\space port)   
+                                 (anychar-dispatch (+ pos 1) arglist #f))
+                                ((#\T)       ; Tab 
+                                 (write-char #\tab port)          
+                                 (anychar-dispatch (+ pos 1) arglist #f))
+                                ((#\Y)       ; Pretty-print
+                                 (pretty-print (car arglist) port) 
+                                 (anychar-dispatch (+ pos 1) (cdr arglist) #f))
+                                ((#\F)
+                                 (display (format-fixed (car arglist) 0 #f) port)
+                                 (anychar-dispatch (+ pos 1) (cdr arglist) #f))
+                                ((#\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9) ;; gather "~w[,d]F" w and d digits
+                                 (let loop ((index (+ pos 1))
+                                            (w-digits (list (string-ref format-strg pos)))
+                                            (d-digits '())
+                                            (in-width? #t))
+                                   (if (>= index length-of-format-string)
+                                       (error 'format "improper numeric format directive in ~s" format-strg)
+                                       (let ((next-char (string-ref format-strg index)))
+                                         (cond
+                                          ((char-numeric? next-char)
+                                           (if in-width?
+                                               (loop (+ index 1)
+                                                     (cons next-char w-digits)
+                                                     d-digits
+                                                     in-width?)
+                                               (loop (+ index 1)
+                                                     w-digits
+                                                     (cons next-char d-digits)
+                                                     in-width?)))
+                                          ((char=? next-char #\F)
+                                           (let ((width  (string->number (list->string (reverse w-digits))))
+                                                 (digits (if (zero? (length d-digits))
+                                                             #f
+                                                             (string->number (list->string (reverse d-digits))))))
+                                             (display (format-fixed (car arglist) width digits) port)
+                                             (anychar-dispatch (+ index 1) (cdr arglist) #f)))
+                                          ((char=? next-char #\,)
+                                           (if in-width?
+                                               (loop (+ index 1)
+                                                     w-digits
+                                                     d-digits
+                                                     #f)
+                                               (error 'format "too many commas in directive ~s" format-strg)))
+                                          (else
+                                           (error "~~w.dF directive ill-formed in ~s" format-strg)))))))
+                                ((#\? #\K)       ; indirection -- take next arg as format string
+                                 (cond	     ;  and following arg as list of format args
+                                  ((< (length arglist) 2)
+                                   (error 'format "less arguments than specified for ~~?: ~s" arglist))
+                                  ((not (string? (car arglist)))
+                                   (error 'format "~~? requires a string: ~s" (car arglist)))
+                                  (else
+                                   (format-help (car arglist) (cdr arglist))
+                                   (anychar-dispatch (+ pos 1) (cddr arglist) #f))))
+                                ((#\H)	; Help
+                                 (display documentation-string port)
+                                 (anychar-dispatch (+ pos 1) arglist #t))
+                                (else                
+                                 (error "unknown tilde escape: ~s"
+                                        (string-ref format-strg pos)))))))))
+                                        ; format-help main      
+                  (anychar-dispatch 0 arglist #f))))
+              
+                                        ; format main    
+              (let ((unused-args (format-help format-string args)))
+                (if (not (null? unused-args))
+                    (error "unused arguments ~s" unused-args))
+                (return-value)))))))))
+  
 ;Loads an already expanded file (ie does not run it through the expander)
 (define (load-expanded file)
   (call-with-input-file file
