@@ -88,6 +88,7 @@ public class GenerateHeap {
                                          90000)))));
         }
 
+        r.define(Symbol.get("version"), new SchemeString(Util.VERSION), Util.SISC);
         Properties sysProps=System.getProperties();
         for (Iterator ir=sysProps.keySet().iterator(); ir.hasNext();) {
             String key=(String)ir.next();
@@ -107,15 +108,18 @@ public class GenerateHeap {
         }
 
         // Lock in the R5RS environment
-        AssociativeEnvironment report_env, top_env;
+        AssociativeEnvironment report_env, top_env, sisc_env;
         report_env=r.lookupContextEnv(Util.TOPLEVEL);
         report_env.trim();
         top_env=new AssociativeEnvironment(report_env);
+        sisc_env=r.lookupContextEnv(Util.SISC);
         r.defineContextEnv(Util.TOPLEVEL, top_env);
 	r.defineContextEnv(Util.REPORT, report_env);
+	r.defineContextEnv(Util.SISC, sisc_env);
         //	report_env.lock();
         report_env.name=Symbol.get("r5rs");
         top_env.name=Symbol.get("top-level");
+        sisc_env.name=Symbol.get("sisc");
 
         System.out.println("Saving heap...");
 
