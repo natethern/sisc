@@ -65,9 +65,16 @@
                                     [else (cp-helper (cdr x)
                                                      (cdr y)
                                                      (cons (cons cx v) acc))])))]
-                    ;If the right-hand-side is a var-ref and 
-                    ;that var is not set! in the body, we can
-                    ;do a simple variable renaming.
+                    ;; If the right hand side is a var-ref, 
+                    ;; but its set!'ed, skip it.
+                    [(and (symbol? cy) 
+                          (memq cy (get-state-entry state 'set-vars)))]
+                     (set! nf (cons cx nf))
+                     (set! nv (cons cy nv))
+                     (cp-helper (cdr x) (cdr y) acc)]
+                    ;; If the right-hand-side is a var-ref and 
+                    ;; that var is not set! in the body, we can
+                    ;; do a simple variable renaming.
                     [(and (symbol? cy) 
                           (not (memq cy (get-state-entry state 'set-vars)))
                           (or (and rec (memq cy formals))
