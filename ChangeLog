@@ -1,3 +1,7 @@
+2004-10-25  Matthias Radestock  <matthias@sorted.org>
+
+	* Removed old-s2j and old-generic-procedures. Finally!
+
 2004-10-24  Scott G. Miller  <scott@sgmiller.org>
  
  	* Fixed primitive calls had no error handling, fixed.
