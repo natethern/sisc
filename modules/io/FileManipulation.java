@@ -18,7 +18,7 @@ public class FileManipulation extends ModuleAdapter {
         DIRECTORYQ = 1, FILEQ = 2, HIDDENQ = 3,
         DIRLIST = 6, LASTMODIFIED = 7, SETLASTMODIFIED = 8,
         SETREADONLY = 9, LENGTH = 10, GETPARENTURL = 11, MAKEDIRECTORY = 12,
-        MAKEDIRECTORIES = 13, RENAME = 14;
+        MAKEDIRECTORIES = 13, RENAME = 14, DELETE=15;
         
 
     public FileManipulation() {
@@ -31,6 +31,7 @@ public class FileManipulation extends ModuleAdapter {
         define("file/set-read-only!", SETREADONLY);
         define("file/length"       , LENGTH);
         define("file/rename"       , RENAME);
+        define("file/delete!"      , DELETE);
         define("_get-parent-url"    , GETPARENTURL);
         define("_make-directory!"    , MAKEDIRECTORY);
         define("_make-directories!"  , MAKEDIRECTORIES);
@@ -66,6 +67,8 @@ public class FileManipulation extends ModuleAdapter {
                 return Quantity.valueOf(fileHandle(f.vlr[0]).lastModified());
             case SETREADONLY:
                 return truth(fileHandle(f.vlr[0]).setReadOnly());
+            case DELETE:
+                return truth(fileHandle(f.vlr[0]).delete());
             case GETPARENTURL:
                 try {
                     return new SchemeString(fileHandle(f.vlr[0])
