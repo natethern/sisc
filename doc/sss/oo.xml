@@ -1034,20 +1034,20 @@
               <methodname>let-monomorphic</methodname>
               <methodparam><parameter>bindings</parameter></methodparam>
               <methodparam
-            choice="rep"><parameter>expressions</parameter></methodparam>
+            rep="repeat"><parameter>expressions</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <simplelist>
                 <member>
                   where <parameter>bindings</parameter> are of the
-                  form <literal>(<parameter>generic</parameter>
-                  <parameter>type</parameter>...)
+                  form <literal>((<parameter>generic</parameter>
+                  <parameter>type</parameter>...) ...)
                   </literal>
                 </member>
                 <member>
-                  or <literal>((<parameter>binding</parameter>
-                  <parameter>generic</parameter>)
-                  <parameter>type</parameter>...)</literal>
+                  or <literal>(((<parameter>binding</parameter>
+                    <parameter>generic</parameter>)
+                  <parameter>type</parameter>...) ...)</literal>
                 </member>
               </simplelist>
               <para>
@@ -1069,6 +1069,14 @@
                 <function>begin</function>.
               </para>
             </blockquote>
+            <informalexample>
+              <programlisting>
+(let-monomorphic ([foo-generic &lt;number&gt; &lt;string&gt;]
+                  [(bar bar-generic) &lt;char&gt;])
+  (foo-generic 3 "four")
+  (bar #\x))
+              </programlisting>
+            </informalexample>
           </para>
         </blockquote>
       </para>
