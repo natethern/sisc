@@ -74,7 +74,8 @@
    monitor/synchronize
    monitor/synchronize-unsafe
    synchronized
-   synchronized-unsafe)
+   synchronized-unsafe
+   parallel)
   (import threading-native)
   (include "../modules/thread.scm"))
 
@@ -92,6 +93,7 @@
    hashtable/for-each
    hashtable/map)
   (import hashtable-native)
+  (import threading)
   (include "../modules/hashtable.scm"))
 
 (module generic-procedures
