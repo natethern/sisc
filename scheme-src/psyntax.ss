@@ -461,11 +461,12 @@
     (getprop symbol token)))
 
 (define generate-id
-  (let ((b (- 127 32 2)))
+  (let ((b 36))
    ; session-key should generate a unique integer for each system run
    ; to support separate compilation
     (define session-key (lambda () 0))
-    (define make-digit (lambda (x) (integer->char (fx+ x 33))))
+    (define make-digit
+      (lambda (x) (integer->char (fx+ x (if (> x 9) 55 48)))))
     (define fmt
       (lambda (n)
         (let fmt ((n n) (a '()))
@@ -476,8 +477,10 @@
     (let ((prefix (fmt (session-key))) (n -1))
       (lambda (name)
         (set! n (+ n 1))
-        (let ((newsym (string->symbol (string-append "#" prefix (fmt n)))))
-          newsym)))))
+        (string->symbol (string-append (symbol->string name)
+                                       "#"
+                                       prefix
+                                       (fmt n)))))))
 )
 
 
@@ -2906,7 +2909,7 @@
 ;;; a file.
 
 (set! sc-expand
-  (let ((ctem '(L)) (rtem '(L))
+  (let ((ctem '(L C)) (rtem '(L))
         (user-ribcage
          (let ((ribcage (make-empty-ribcage)))
            (extend-ribcage-subst! ribcage '*top*)
