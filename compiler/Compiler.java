@@ -138,7 +138,7 @@ public class Compiler extends Util {
                     expr=(Pair)expr.cdr;
                     tmp=compile(r, expr.car, rt, TAIL | LAMBDA | REALTAIL, 
                                 env, null);
-                    rv=new LambdaExp(formals.length, tmp, infArity);
+                    rv=new LambdaExp(0, tmp, false);
                 } else {
                     if (expr.car instanceof Pair) {
                         formals=argsToSymbols((Pair)expr.car);
