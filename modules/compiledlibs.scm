@@ -56,7 +56,7 @@
     (define-generic load)
     (lambda (filename)
       (load <sisc.ser.Library>
-            (url <sisc.Util> (java-wrap filename))))))
+            (url <sisc.Util> (normalize-url (current-url) filename))))))
 
 (define (link-library lib)
   (for-each
