@@ -113,7 +113,7 @@ public class Interpreter extends Util {
                     do {
                         while (nxp==null) 
                             pop(stk);
-
+                        //                        System.err.println(nxp);
                         nxp.eval(this);
                     } while (true);
                 } catch (ContinuationException ce) {
@@ -128,10 +128,10 @@ public class Interpreter extends Util {
         }
     }
 
-    public final Value[] newVLR(int size) {
+    public final void newVLR(int size) {
         vlk=false;
         cap=null;
-        return (vlr=createValues(size));
+        vlr=createValues(size);
     }
 
     public final void pop(CallFrame c) {
@@ -311,7 +311,7 @@ public class Interpreter extends Util {
     protected static final int FRAMEPOOLSIZE=24, FPMAX=FRAMEPOOLSIZE-1;
     protected CallFrame deadFrames[]=new CallFrame[FRAMEPOOLSIZE];
     protected int deadFramePointer=-1;
-    CallFrame returnRegister;
+    CallFrame rv;
 
     public CallFrame createFrame(Expression n, Value[] v,
                                  boolean vlk, 
@@ -322,16 +322,16 @@ public class Interpreter extends Util {
         if (deadFramePointer < 0)
             return new CallFrame(n,v,vlk,e,f,p,cap);
         else {
-	    returnRegister=deadFrames[deadFramePointer];
+	    rv=deadFrames[deadFramePointer];
             deadFrames[deadFramePointer--]=null;
-            returnRegister.nxp=n;
-            returnRegister.vlr=v;
-            returnRegister.vlk=vlk;
-            returnRegister.env=e;
-            returnRegister.fk=f;
-            returnRegister.parent=p;
-            returnRegister.cap=cap;
-            return returnRegister;
+            rv.nxp=n;
+            rv.vlr=v;
+            rv.vlk=vlk;
+            rv.env=e;
+            rv.fk=f;
+            rv.parent=p;
+            rv.cap=cap;
+            return rv;
         }
     }
     
@@ -341,6 +341,44 @@ public class Interpreter extends Util {
         }
     }
 
+    protected static final int LENVPOOLSIZE=128, LEMAX=LENVPOOLSIZE-1;
+    protected LexicalEnvironment deadLenvs[]=new LexicalEnvironment[LENVPOOLSIZE];
+    protected int deadLenvPointer=-1;
+    /*
+    protected static int m, o, h;
+    static {
+        System.runFinalizersOnExit(true);
+    }
+    protected void finalize() throws Throwable {
+        if (m>0) {
+            System.err.println("M:"+m+" H:"+h+" O:"+o);
+            m=o=h=0;
+        }
+    }
+   */
+    public final void returnEnv() {
+        if (env != null && !env.locked) {
+            returnValues(env.vals);
+            if (deadLenvPointer < LEMAX)
+                deadLenvs[++deadLenvPointer]=env;
+            //else 
+            //    o++;
+        }
+    }
+    
+    public final void newLenv(Value[] vals, 
+                              LexicalEnvironment p) {
+        if (deadLenvPointer < 0) {
+	    //m++;
+            env=new LexicalEnvironment(vals, p);
+        } else {
+            //h++;
+            env=deadLenvs[deadLenvPointer--];
+            //            deadLenvs[deadLenvPointer--]=null;
+            env.vals=vals;
+            env.parent=p;
+        }
+    }
 
     protected static final int VALUESPOOLSIZE=8;
     protected Value deadValues[][] = new Value[VALUESPOOLSIZE][];
@@ -371,11 +409,11 @@ public class Interpreter extends Util {
         vlr=null;
     }
 
-    public final Value[] replaceVLR(int size) {
+    public final void replaceVLR(int size) {
         if (!vlk) {
             returnValues(vlr);
         }
-        return newVLR(size);
+        newVLR(size);
     }
 
     public final void returnValues(Value[] v) {

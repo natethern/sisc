@@ -1,6 +1,7 @@
 package sisc.data;
 
 import sisc.interpreter.*;
+import sisc.env.LexicalEnvironment;
 
 /**
  * The Procedure class is the base class for any Scheme Procedure.  

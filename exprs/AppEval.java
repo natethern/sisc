@@ -3,8 +3,17 @@ package sisc.exprs;
 import java.io.*;
 import sisc.data.*;
 import sisc.interpreter.*;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
+import sisc.util.*;
 
 public class AppEval extends Expression {
+
+    public boolean tail;
+
+    public AppEval(boolean tail) {
+        this.tail=tail;
+    }
 
     public final void eval(Interpreter r) throws ContinuationException {
         /* To allow break of execution (turadg)
@@ -17,6 +26,8 @@ public class AppEval extends Expression {
            error(r, liMessage(SISCB, "evaluationinterrupted"));
         }
         
+        if (tail)
+ 	   r.returnEnv();
         r.acc.apply(r);
     }
 
@@ -25,17 +36,27 @@ public class AppEval extends Expression {
     }
 
     public Value express() {
-        return list(sym("App-Eval"));
+        return list(sym(tail ? "TApp-Eval" : "App-Eval"));
     }
 
     public AppEval() {}
+
+    
+    public void serialize(Serializer s) throws IOException {
+        s.writeBoolean(tail);
+    }
+
+    public void deserialize(Deserializer s) throws IOException {
+        tail=s.readBoolean();
+    }
 
     public boolean equals(Object o) {
         if (!(o instanceof AppEval)) return false;
         AppEval other=(AppEval)o;
         return (annotations!=null ? 
                 annotations.equals(other.annotations) :
-                other.annotations == null);
+                other.annotations == null) &&
+            tail==other.tail;
     }
 
     public int hashCode() {

@@ -1,5 +1,1585 @@
 <index>
-<title>Index of Functions, Parameters, and Syntax</title>
+
 <!-- This file was produced by collateindex.pl.         -->
 <!-- Remove this comment if you edit this file by hand! -->
+<!-- ULINK is abused here.
+
+      The URL attribute holds the URL that points from the index entry
+      back to the appropriate place in the output produced by the HTML
+      stylesheet. (It's much easier to calculate this URL in the first
+      pass.)
+
+      The Role attribute holds the ID (either real or manufactured) of
+      the corresponding INDEXTERM.  This is used by the print backends
+      to produce page numbers.
+
+      The entries below are sorted and collated into the correct order.
+      Duplicates may be removed in the HTML backend, but in the print
+      backends, it is impossible to suppress duplicate pages or coalesce
+      sequences of pages into a range.
+-->
+
+<title>Index of Functions, Parameters, and Syntax</title>
+
+<indexdiv><title>Symbols</title>
+
+<indexentry>
+  <primaryie>-&gt;,
+    <ulink url="x3963.html#S2JConversions" role="AEN4375">Converting between Scheme and Java Types</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>-&gt;jarray,
+    <ulink url="x3963.html#S2JConversions" role="AEN4401">Converting between Scheme and Java Types</ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>A</title>
+
+<indexentry>
+  <primaryie>accept-tcp-socket,
+    <ulink url="x1979.html#TCP" role="AEN2139">TCP</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>add-method,
+    <ulink url="x3275.html#genprocdef" role="AEN3412">Defining Generic Procedures</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>alist-&gt;hashtable,
+    <ulink url="c4671.html#AEN4788" role="AEN4833">Creation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>append,
+    <ulink url="x5471.html#AEN5480" role="AEN5547">External Representation of Values</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>applicable-methods,
+    <ulink url="x3275.html#AEN3554" role="AEN3579">Invoking Generic Procedures</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>ashl,
+    <ulink url="c4671.html#BitwiseLogicalOperations" role="AEN4745">         Bitwise Logical Operations       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>ashr,
+    <ulink url="c4671.html#BitwiseLogicalOperations" role="AEN4760">         Bitwise Logical Operations       </ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>B</title>
+
+<indexentry>
+  <primaryie>block-read,
+    <ulink url="c1592.html#BlockIO" role="AEN1738">Block I/O</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>block-write,
+    <ulink url="c1592.html#BlockIO" role="AEN1758">Block I/O</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>box,
+    <ulink url="c195.html#Boxing" role="AEN483"> 	Boxes       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>box?,
+    <ulink url="c195.html#Boxing" role="AEN529"> 	Boxes       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>buffer,
+    <ulink url="c4671.html#Buffers" role="AEN5078">Binary Buffers</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>buffer-copy!,
+    <ulink url="c4671.html#Buffers" role="AEN5133">Binary Buffers</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>buffer-length,
+    <ulink url="c4671.html#Buffers" role="AEN5089">Binary Buffers</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>buffer-ref,
+    <ulink url="c4671.html#Buffers" role="AEN5100">Binary Buffers</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>buffer-set!,
+    <ulink url="c4671.html#Buffers" role="AEN5115">Binary Buffers</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>buffer?,
+    <ulink url="c4671.html#Buffers" role="AEN5051">Binary Buffers</ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>C</title>
+
+<indexentry>
+  <primaryie>call-with-failure-continuation,
+    <ulink url="x700.html#AEN754" role="AEN761">Capture</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>call-with-input-file,
+    <ulink url="c1592.html#iodelegate" role="AEN1821">Port Creation Wrappers</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>call-with-input-string,
+    <ulink url="c1592.html#iodelegate" role="AEN1851">Port Creation Wrappers</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>call-with-output-file,
+    <ulink url="c1592.html#iodelegate" role="AEN1836">Port Creation Wrappers</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>call-with-output-string,
+    <ulink url="c1592.html#iodelegate" role="AEN1866">Port Creation Wrappers</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>call/fc,
+    <ulink url="x700.html#AEN754" role="AEN770">Capture</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>case-sensitive,
+    <ulink url="c195.html#AEN353" role="AEN361">Case Sensitivity</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>circular?,
+    <ulink url="x1282.html" role="AEN1288">       Miscellaneous Functions     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>class-direct-slot-names,
+    <ulink url="c3095.html#AEN3170" role="AEN3189">Class Operations</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>class-direct-superclasses,
+    <ulink url="c3095.html#AEN3170" role="AEN3175">Class Operations</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>class-precedence-list,
+    <ulink url="c3095.html#AEN3170" role="AEN3203">Class Operations</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>class?,
+    <ulink url="c3095.html#AEN3231" role="AEN3264">Predicates</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>clear-breakpoint!,
+    <ulink url="x1472.html#AEN1551" role="AEN1572">         Breakpoints       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>close-socket,
+    <ulink url="x1979.html#sockets" role="AEN2081">Socket Operations</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>compact-string-rep,
+    <ulink url="x6186.html#AEN6201" role="AEN6211">Strings</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>compose,
+    <ulink url="x1282.html" role="AEN1300">       Miscellaneous Functions     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>constructor,
+    <ulink url="x3275.html#genconstrdef" role="AEN3520">Defining Constructors</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>continue,
+    <ulink url="x1472.html#AEN1551" role="AEN1583">         Breakpoints       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>create-library-from-module,
+    <ulink url="x5407.html" role="AEN5425">Creating Libraries</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>current-class-path,
+    <ulink url="x2311.html#ClassLoading" role="AEN2619">Class Loading</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>current-url,
+    <ulink url="c1592.html#urlfile" role="AEN1616">URLs</ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>D</title>
+
+<indexentry>
+  <primaryie>define,
+    <ulink url="x5471.html#AEN5655" role="AEN5730">Adding Native Bindings</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>define-class,
+    <ulink url="x3620.html#AEN3625" role="AEN3648">Defining Classes</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>define-constructor,
+    <ulink url="x3275.html#genconstrdef" role="AEN3469">Defining Constructors</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>define-generic,
+    <ulink url="x3275.html#genprocdef" role="AEN3291">Defining Generic Procedures</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>define-java-proxy,
+    <ulink url="x3963.html#JavaProxies" role="AEN4507">Proxies</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>define-method,
+    <ulink url="x3275.html#genprocdef" role="AEN3354">Defining Generic Procedures</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>deserialize,
+    <ulink url="x5471.html#serialization" role="AEN5770">Serialization</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>directory-list,
+    <ulink url="x2311.html#FileManipulation" role="AEN2578">File Manipulation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>display,
+    <ulink url="x5471.html#AEN5480" role="AEN5487">External Representation of Values</ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>E</title>
+
+<indexentry>
+  <primaryie>emit-annotations,
+    <ulink url="c1347.html#passive-debugging" role="AEN1421">       Passive Debugging     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>emit-debugging-symbols,
+    <ulink url="c1347.html#passive-debugging" role="AEN1447">       Passive Debugging     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>eq,
+    <ulink url="x5471.html#AEN5616" role="AEN5621">Equality</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>error,
+    <ulink url="x700.html#RaisingErrors" role="AEN965">Raising Errors</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>error-location,
+    <ulink url="x700.html#AEN869" role="AEN875">Accessors</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>error-message,
+    <ulink url="x700.html#AEN869" role="AEN887">Accessors</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>error-parent-continuation,
+    <ulink url="x700.html#AEN869" role="AEN913">Accessors</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>error-parent-error,
+    <ulink url="x700.html#AEN869" role="AEN900">Accessors</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>eval,
+    <ulink url="c3799.html#AEN3821" role="AEN3830">Internal Calls</ulink>,
+    <ulink url="x5471.html#AEN5655" role="AEN5703">Adding Native Bindings</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>exception-continuation,
+    <ulink url="x700.html#Exceptions" role="AEN1039">Exceptions</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>exception-error,
+    <ulink url="x700.html#Exceptions" role="AEN1027">Exceptions</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>exception?,
+    <ulink url="x700.html#Exceptions" role="AEN1051">Exceptions</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>exit,
+    <ulink url="x137.html" role="AEN148">       The Read-Eval-Print-Loop     </ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>F</title>
+
+<indexentry>
+  <primaryie>file-delete!,
+    <ulink url="x2311.html#FileManipulation" role="AEN2431">File Manipulation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>file-hidden?,
+    <ulink url="x2311.html#FileManipulation" role="AEN2443">File Manipulation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>file-is-directory?,
+    <ulink url="x2311.html#FileManipulation" role="AEN2454">File Manipulation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>file-is-file?,
+    <ulink url="x2311.html#FileManipulation" role="AEN2465">File Manipulation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>file-is-readable?,
+    <ulink url="x2311.html#FileManipulation" role="AEN2528">File Manipulation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>file-is-writeable?,
+    <ulink url="x2311.html#FileManipulation" role="AEN2540">File Manipulation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>file-last-modified,
+    <ulink url="x2311.html#FileManipulation" role="AEN2476">File Manipulation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>file-length,
+    <ulink url="x2311.html#FileManipulation" role="AEN2552">File Manipulation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>file-rename!,
+    <ulink url="x2311.html#FileManipulation" role="AEN2487">File Manipulation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>file-set-last-modified!,
+    <ulink url="x2311.html#FileManipulation" role="AEN2501">File Manipulation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>file-set-read-only!,
+    <ulink url="x2311.html#FileManipulation" role="AEN2563">File Manipulation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>find-resource,
+    <ulink url="x2311.html#Resources" role="AEN2394">Locating Resources</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>find-resources,
+    <ulink url="x2311.html#Resources" role="AEN2407">Locating Resources</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>flush-output-port,
+    <ulink url="c1592.html#PortCreation" role="AEN1712">Buffered I/O</ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>G</title>
+
+<indexentry>
+  <primaryie>generic-java-constructor,
+    <ulink url="x3963.html#AEN4123" role="AEN4137">Object Creation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>generic-java-procedure,
+    <ulink url="x3963.html#JavaMethodInvocation" role="AEN4187">Method Invocation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>generic-procedure-methods,
+    <ulink url="x3275.html#genprocdef" role="AEN3327">Defining Generic Procedures</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>generic-procedure-next,
+    <ulink url="x3275.html#genprocdef" role="AEN3340">Defining Generic Procedures</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>get-host-by-ip-name,
+    <ulink url="x1979.html#netutils" role="AEN2008">IP Addressing</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>get-host-name-by-ip,
+    <ulink url="x1979.html#netutils" role="AEN2019">IP Addressing</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>get-last-exception,
+    <ulink url="c1347.html#passive-debugging" role="AEN1356">       Passive Debugging     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>get-local-host,
+    <ulink url="x1979.html#netutils" role="AEN2030">IP Addressing</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>get-output-string,
+    <ulink url="c1592.html#StringPorts" role="AEN1803">String Ports</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>get-parent-url,
+    <ulink url="x2311.html#FileManipulation" role="AEN2515">File Manipulation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>get-symbolic-environment,
+    <ulink url="x1128.html#ObtainingSymbolicEnvironments" role="AEN1240">          Obtaining and Naming       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>getBindingValue,
+    <ulink url="x5471.html#AEN5655" role="AEN5692">Adding Native Bindings</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>getModuleBindingNames,
+    <ulink url="x5471.html#AEN5655" role="AEN5683">Adding Native Bindings</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>getModuleName,
+    <ulink url="x5471.html#AEN5655" role="AEN5665">Adding Native Bindings</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>getModuleVersion,
+    <ulink url="x5471.html#AEN5655" role="AEN5674">Adding Native Bindings</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>getprop,
+    <ulink url="x1128.html#AccessingSymbolicEnvironments" role="AEN1139">         Access Functions       </ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>H</title>
+
+<indexentry>
+  <primaryie>hashtable-&gt;alist,
+    <ulink url="c4671.html#AEN4788" role="AEN4849">Creation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>hashtable/clear!,
+    <ulink url="c4671.html#AEN4980" role="AEN4985">Bulk Operations</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>hashtable/for-each,
+    <ulink url="c4671.html#AEN4980" role="AEN5009">Bulk Operations</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>hashtable/get,
+    <ulink url="c4671.html#AEN4863" role="AEN4891">Access</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>hashtable/get!,
+    <ulink url="c4671.html#AEN4863" role="AEN4910">Access</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>hashtable/keys,
+    <ulink url="c4671.html#AEN4980" role="AEN4997">Bulk Operations</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>hashtable/map,
+    <ulink url="c4671.html#AEN4980" role="AEN5025">Bulk Operations</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>hashtable/put!,
+    <ulink url="c4671.html#AEN4863" role="AEN4868">Access</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>hashtable/remove!,
+    <ulink url="c4671.html#AEN4863" role="AEN4932">Access</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>hashtable/size,
+    <ulink url="c4671.html#AEN4788" role="AEN4821">Creation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>hashtable?,
+    <ulink url="c4671.html#AEN4788" role="AEN4809">Creation</ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>I</title>
+
+<indexentry>
+  <primaryie>input-port-location,
+    <ulink url="x2311.html#AEN2353" role="AEN2372">Location Tracking</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>instance-of?,
+    <ulink url="c3095.html#AEN3231" role="AEN3236">Predicates</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>iota,
+    <ulink url="x1282.html" role="AEN1315">       Miscellaneous Functions     </ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>J</title>
+
+<indexentry>
+  <primaryie>java-array-new,
+    <ulink url="x3963.html#AEN4123" role="AEN4163">Object Creation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>java-array?,
+    <ulink url="x3963.html#AEN3987" role="AEN4012">Object Types</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>java-assignable?,
+    <ulink url="x3963.html#JavaClasses" role="AEN4331">Classes</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>java-class,
+    <ulink url="x3963.html#JavaClasses" role="AEN4266">Classes</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>java-class-of,
+    <ulink url="x3963.html#JavaClasses" role="AEN4299">Classes</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>java-class?,
+    <ulink url="x3963.html#AEN3987" role="AEN3994">Object Types</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>java-instance?,
+    <ulink url="x3963.html#JavaClasses" role="AEN4313">Classes</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>java-interface?,
+    <ulink url="x3963.html#AEN3987" role="AEN4003">Object Types</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>java-mangle-field-name,
+    <ulink url="x3963.html#JavaMethodInvocation" role="AEN4232">Method Invocation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>java-mangle-method-name,
+    <ulink url="x3963.html#JavaMethodInvocation" role="AEN4206">Method Invocation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>java-null,
+    <ulink url="x3963.html#AEN4466" role="AEN4477">Null</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>java-null?,
+    <ulink url="x3963.html#AEN3987" role="AEN4021">Object Types</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>java-object?,
+    <ulink url="x3963.html#AEN3971" role="AEN3976">Java Objects</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>java-synchronized,
+    <ulink url="x3963.html#AEN4574" role="AEN4581">Synchronization</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>java-unwrap,
+    <ulink url="x3963.html#AEN4436" role="AEN4454">Wrapping Scheme Values</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>java-wrap,
+    <ulink url="x3963.html#AEN4436" role="AEN4442">Wrapping Scheme Values</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>join-multicast-group,
+    <ulink url="x1979.html#AEN2209" role="AEN2264">Multicast UDP</ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>L</title>
+
+<indexentry>
+  <primaryie>leave-multicast-group,
+    <ulink url="x1979.html#AEN2209" role="AEN2278">Multicast UDP</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>library-exists?,
+    <ulink url="c4671.html#LibraryModule" role="AEN5269">Loadable Scheme Libraries</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>library-loaded?,
+    <ulink url="c4671.html#LibraryModule" role="AEN5281">Loadable Scheme Libraries</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>logand,
+    <ulink url="c4671.html#BitwiseLogicalOperations" role="AEN4692">         Bitwise Logical Operations       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>lognot,
+    <ulink url="c4671.html#BitwiseLogicalOperations" role="AEN4731">         Bitwise Logical Operations       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>logor,
+    <ulink url="c4671.html#BitwiseLogicalOperations" role="AEN4705">         Bitwise Logical Operations       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>logxor,
+    <ulink url="c4671.html#BitwiseLogicalOperations" role="AEN4718">         Bitwise Logical Operations       </ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>M</title>
+
+<indexentry>
+  <primaryie>make-buffer,
+    <ulink url="c4671.html#Buffers" role="AEN5062">Binary Buffers</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>make-class,
+    <ulink url="x3620.html#AEN3625" role="AEN3630">Defining Classes</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>make-directories!,
+    <ulink url="x2311.html#FileManipulation" role="AEN2601">File Manipulation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>make-directory!,
+    <ulink url="x2311.html#FileManipulation" role="AEN2589">File Manipulation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>make-error,
+    <ulink url="x700.html#AEN791" role="AEN798">Creating Error Records</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>make-exception,
+    <ulink url="x700.html#Exceptions" role="AEN1008">Exceptions</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>make-generic-constructor,
+    <ulink url="x3275.html#genconstrdef" role="AEN3506">Defining Constructors</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>make-generic-procedure,
+    <ulink url="x3275.html#genprocdef" role="AEN3314">Defining Generic Procedures</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>make-hashtable,
+    <ulink url="c4671.html#AEN4788" role="AEN4793">Creation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>make-method,
+    <ulink url="x3275.html#genprocdef" role="AEN3390">Defining Generic Procedures</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>make-nested-error,
+    <ulink url="x700.html#AEN791" role="AEN835">Creating Error Records</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>make-object,
+    <ulink url="x3620.html#AEN3682" role="AEN3695">Instantiating Classes</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>max-precision,
+    <ulink url="c195.html#NumericConstants" role="AEN242"> 	  Numeric constants 	</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>meta,
+    <ulink url="c3095.html#TypeSystem" role="AEN3124">Type System</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>method-applicable?,
+    <ulink url="x3275.html#AEN3554" role="AEN3595">Invoking Generic Procedures</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>method-procedure,
+    <ulink url="x3275.html#genprocdef" role="AEN3429">Defining Generic Procedures</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>method-rest?,
+    <ulink url="x3275.html#genprocdef" role="AEN3447">Defining Generic Procedures</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>method-types,
+    <ulink url="x3275.html#genprocdef" role="AEN3438">Defining Generic Procedures</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>min-precision,
+    <ulink url="c195.html#NumericConstants" role="AEN231"> 	  Numeric constants 	</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>monitor-of,
+    <ulink url="x2924.html" role="AEN2960">       Monitors and Synchronization     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>monitor/lock,
+    <ulink url="x2924.html#AEN2970" role="AEN2978"> 	Lock Operations       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>monitor/new,
+    <ulink url="x2924.html" role="AEN2950">       Monitors and Synchronization     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>monitor/notify,
+    <ulink url="x2924.html#AEN3004" role="AEN3035">         Condition Variable Operations       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>monitor/notify-all,
+    <ulink url="x2924.html#AEN3004" role="AEN3047">         Condition Variable Operations       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>monitor/synchronize,
+    <ulink url="x2924.html#AEN3058" role="AEN3063"> 	  High-level Concurrency 	</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>monitor/synchronize-unsafe,
+    <ulink url="x2924.html#AEN3058" role="AEN3077"> 	  High-level Concurrency 	</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>monitor/unlock,
+    <ulink url="x2924.html#AEN2970" role="AEN2989"> 	Lock Operations       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>monitor/wait,
+    <ulink url="x2924.html#AEN3004" role="AEN3015">         Condition Variable Operations       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>monitor?,
+    <ulink url="x2924.html" role="AEN2939">       Monitors and Synchronization     </ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>N</title>
+
+<indexentry>
+  <primaryie>normalize-url,
+    <ulink url="c1592.html#urlfile" role="AEN1651">URLs</ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>O</title>
+
+<indexentry>
+  <primaryie>object?,
+    <ulink url="c3095.html#AEN3231" role="AEN3252">Predicates</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>open-input-string,
+    <ulink url="c1592.html#StringPorts" role="AEN1783">String Ports</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>open-multicast-socket,
+    <ulink url="x1979.html#AEN2209" role="AEN2219">Multicast UDP</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>open-output-file,
+    <ulink url="c1592.html#PortCreation" role="AEN1697">Buffered I/O</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>open-socket-input-port,
+    <ulink url="x1979.html#sockets" role="AEN2056">Socket Operations</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>open-socket-output-port,
+    <ulink url="x1979.html#sockets" role="AEN2067">Socket Operations</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>open-source-input-file,
+    <ulink url="x2311.html#AEN2353" role="AEN2360">Location Tracking</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>open-tcp-listener,
+    <ulink url="x1979.html#TCP" role="AEN2115">TCP</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>open-tcp-socket,
+    <ulink url="x1979.html#TCP" role="AEN2102">TCP</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>open-udp-listen-socket,
+    <ulink url="x1979.html#UDP" role="AEN2172">UDP</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>open-udp-socket,
+    <ulink url="x1979.html#UDP" role="AEN2191">UDP</ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>P</title>
+
+<indexentry>
+  <primaryie>parallel,
+    <ulink url="x2860.html" role="AEN2865">       High-level Functions     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>parameterize,
+    <ulink url="c195.html#Parameters" role="AEN551">         Parameters       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>pretty-print,
+    <ulink url="x2311.html#PrettyPrinting" role="AEN2321">Pretty-Printing</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>print-exception,
+    <ulink url="c1347.html#passive-debugging" role="AEN1401">       Passive Debugging     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>print-shared,
+    <ulink url="c195.html#Writing" role="AEN598">Writing</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>print-stack-trace,
+    <ulink url="c1347.html#passive-debugging" role="AEN1387">       Passive Debugging     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>procedure-property,
+    <ulink url="c4671.html#AEN5158" role="AEN5171">Procedure Properties</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>procedure-property!,
+    <ulink url="c4671.html#AEN5158" role="AEN5212">Procedure Properties</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>proper-list?,
+    <ulink url="c195.html#Lists" role="AEN434">         Pairs and Lists       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>putprop,
+    <ulink url="x1128.html#AccessingSymbolicEnvironments" role="AEN1174">         Access Functions       </ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>R</title>
+
+<indexentry>
+  <primaryie>readBigDecimal,
+    <ulink url="x5471.html#AEN5806" role="AEN5822">Deserializer methods</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>readBigInteger,
+    <ulink url="x5471.html#AEN5806" role="AEN5811">Deserializer methods</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>readClass,
+    <ulink url="x5471.html#AEN5806" role="AEN5833">Deserializer methods</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>readExpression,
+    <ulink url="x5471.html#AEN5806" role="AEN5844">Deserializer methods</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>readModule,
+    <ulink url="x5471.html#AEN5806" role="AEN5856">Deserializer methods</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>readSymbolicEnvironment,
+    <ulink url="x5471.html#AEN5806" role="AEN5868">Deserializer methods</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>require-library,
+    <ulink url="c4671.html#LibraryModule" role="AEN5246">Loadable Scheme Libraries</ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>S</title>
+
+<indexentry>
+  <primaryie>scheme-class?,
+    <ulink url="x3620.html#AEN3755" role="AEN3772">Predicates</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>scheme-object?,
+    <ulink url="x3620.html#AEN3755" role="AEN3760">Predicates</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>serialize,
+    <ulink url="x5471.html#serialization" role="AEN5757">Serialization</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>server-socket?,
+    <ulink url="x1979.html#TCP" role="AEN2128">TCP</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>set-box!,
+    <ulink url="c195.html#Boxing" role="AEN505"> 	Boxes       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>set-breakpoint!,
+    <ulink url="x1472.html#AEN1551" role="AEN1561">         Breakpoints       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>set-multicast-ttl!,
+    <ulink url="x1979.html#AEN2209" role="AEN2297">Multicast UDP</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>set-procedure-property!,
+    <ulink url="c4671.html#AEN5158" role="AEN5190">Procedure Properties</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>set-so-timeout!,
+    <ulink url="x1979.html#TCP" role="AEN2150">TCP</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>set-symbolic-environment!,
+    <ulink url="x1128.html#ObtainingSymbolicEnvironments" role="AEN1253">          Obtaining and Naming       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>sisc-initial-environment,
+    <ulink url="x1128.html#ObtainingSymbolicEnvironments" role="AEN1218">          Obtaining and Naming       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>socket?,
+    <ulink url="x1979.html#sockets" role="AEN2045">Socket Operations</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>stack-trace,
+    <ulink url="c1347.html#passive-debugging" role="AEN1371">       Passive Debugging     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>stack-trace-on-error,
+    <ulink url="c1347.html#passive-debugging" role="AEN1462">       Passive Debugging     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>strict-r5rs-compliance,
+    <ulink url="a5972.html" role="AEN6019">R5RS Liberties and Violations</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>string-&gt;uninterned-symbol,
+    <ulink url="c195.html#Symbols" role="AEN341"> 	Symbols       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>synopsis,
+    <ulink url="x5471.html#AEN5480" role="AEN5527">External Representation of Values</ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>T</title>
+
+<indexentry>
+  <primaryie>thread/daemon!,
+    <ulink url="x2686.html" role="AEN2732">       Basic Thread Operations     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>thread/daemon?,
+    <ulink url="x2686.html" role="AEN2746">       Basic Thread Operations     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>thread/interrupt,
+    <ulink url="x2686.html" role="AEN2823">       Basic Thread Operations     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>thread/join,
+    <ulink url="x2686.html" role="AEN2798">       Basic Thread Operations     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>thread/new,
+    <ulink url="x2686.html" role="AEN2705">       Basic Thread Operations     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>thread/priority,
+    <ulink url="x2879.html" role="AEN2888">       Thread Scheduling     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>thread/priority!,
+    <ulink url="x2879.html" role="AEN2899">       Thread Scheduling     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>thread/result,
+    <ulink url="x2686.html" role="AEN2849">       Basic Thread Operations     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>thread/spawn,
+    <ulink url="x2686.html" role="AEN2761">       Basic Thread Operations     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>thread/start,
+    <ulink url="x2686.html" role="AEN2720">       Basic Thread Operations     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>thread/state,
+    <ulink url="x2686.html" role="AEN2776">       Basic Thread Operations     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>thread/yield,
+    <ulink url="x2879.html" role="AEN2915">       Thread Scheduling     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>thread?,
+    <ulink url="x2686.html" role="AEN2694">       Basic Thread Operations     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>throw,
+    <ulink url="x700.html#RaisingErrors" role="AEN931">Raising Errors</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>time,
+    <ulink url="x1282.html" role="AEN1328">       Miscellaneous Functions     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>trace,
+    <ulink url="x1472.html#AEN1480" role="AEN1520">         Runtime Tracing       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>trace-lambda,
+    <ulink url="x1472.html#AEN1480" role="AEN1486">         Runtime Tracing       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>trace-let,
+    <ulink url="x1472.html#AEN1480" role="AEN1505">         Runtime Tracing       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>type&lt;=,
+    <ulink url="c3095.html#AEN3136" role="AEN3141">Type Operations</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>type-of,
+    <ulink url="c3095.html#AEN3136" role="AEN3158">Type Operations</ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>U</title>
+
+<indexentry>
+  <primaryie>unbox,
+    <ulink url="c195.html#Boxing" role="AEN494"> 	Boxes       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>unless,
+    <ulink url="x659.html" role="AEN685">       Control Features     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>untrace,
+    <ulink url="x1472.html#AEN1480" role="AEN1532">         Runtime Tracing       </ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>V</title>
+
+<indexentry>
+  <primaryie>valueEqual,
+    <ulink url="x5471.html#AEN5616" role="AEN5635">Equality</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>vector-length-prefixing,
+    <ulink url="c195.html#Vectors" role="AEN466"> 	Vectors       </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>visit,
+    <ulink url="x5471.html#serialization" role="AEN5784">Serialization</ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
+<indexdiv><title>W</title>
+
+<indexentry>
+  <primaryie>when,
+    <ulink url="x659.html" role="AEN669">       Control Features     </ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>with-class-path,
+    <ulink url="x2311.html#ClassLoading" role="AEN2635">Class Loading</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>with-current-url,
+    <ulink url="c1592.html#urlfile" role="AEN1634">URLs</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>with-failure-continuation,
+    <ulink url="x700.html#AEN712" role="AEN720">Creation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>with-input-from-file,
+    <ulink url="c1592.html#redirectedio" role="AEN1917">Replacing Standard Ports</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>with-input-from-port,
+    <ulink url="c1592.html#redirectedio" role="AEN1885">Replacing Standard Ports</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>with-input-from-string,
+    <ulink url="c1592.html#redirectedio" role="AEN1951">Replacing Standard Ports</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>with-output-to-file,
+    <ulink url="c1592.html#redirectedio" role="AEN1934">Replacing Standard Ports</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>with-output-to-port,
+    <ulink url="c1592.html#redirectedio" role="AEN1901">Replacing Standard Ports</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>with-output-to-string,
+    <ulink url="c1592.html#redirectedio" role="AEN1967">Replacing Standard Ports</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>with/fc,
+    <ulink url="x700.html#AEN712" role="AEN731">Creation</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>write,
+    <ulink url="x5471.html#AEN5480" role="AEN5507">External Representation of Values</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>writeBigDecimal,
+    <ulink url="x5471.html#AEN5879" role="AEN5897">Serializer methods</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>writeBigInteger,
+    <ulink url="x5471.html#AEN5879" role="AEN5884">Serializer methods</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>writeClass,
+    <ulink url="x5471.html#AEN5879" role="AEN5910">Serializer methods</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>writeExpression,
+    <ulink url="x5471.html#AEN5879" role="AEN5923">Serializer methods</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>writeModule,
+    <ulink url="x5471.html#AEN5879" role="AEN5937">Serializer methods</ulink>
+  </primaryie>
+</indexentry>
+
+<indexentry>
+  <primaryie>writeSymbolicEnvironment,
+    <ulink url="x5471.html#AEN5879" role="AEN5951">Serializer methods</ulink>
+  </primaryie>
+</indexentry>
+
+</indexdiv>
 </index>

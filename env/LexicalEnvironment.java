@@ -10,6 +10,7 @@ import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 
 public class LexicalEnvironment extends Value {
+    public boolean locked;
     public LexicalEnvironment parent;
     public Value[] vals;
 
@@ -26,7 +27,7 @@ public class LexicalEnvironment extends Value {
         LexicalEnvironment e = this;
         while(depth-- > 0) 
 	    e = e.parent;
-	
+	if (e==null) System.err.println("$");
         return e.vals[pos];
     }
 
@@ -47,6 +48,7 @@ public class LexicalEnvironment extends Value {
         s.writeInt(vals.length);
         for (int i=0; i<vals.length; i++)
             s.writeExpression(vals[i]);
+        s.writeBoolean(locked);
         s.writeExpression(parent);
     }
 
@@ -55,6 +57,7 @@ public class LexicalEnvironment extends Value {
         vals=new Value[size];
         for (int i=0; i<size; i++)
             vals[i]=(Value)s.readExpression();
+        locked=s.readBoolean();
         parent = (LexicalEnvironment)s.readExpression();
     }
 

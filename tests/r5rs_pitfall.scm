@@ -114,6 +114,8 @@
 (should-be 4.2 '(1 2 3)
  ((lambda (begin) (begin 1 2 3)) (lambda lambda lambda)))
 
+(should-be 4.3 #f
+ (let ((quote -)) (eqv? '1 1)))
 ;; Section 5: #f/() distinctness
 
 ;; Scott Miller

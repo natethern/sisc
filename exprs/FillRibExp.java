@@ -25,11 +25,13 @@ public class FillRibExp extends Expression {
         r.setVLR(pos, r.acc);
         //r.vlr[pos]=r.acc;
         if (lastAndRatorImmediate) {
-            r.nxp=nxp;
             r.acc=exp.getValue(r);
+            r.nxp=nxp;
+            nxp.eval(r);
         } else {
             r.push(nxp);
             r.nxp=exp;
+            exp.eval(r);
         }
     }
 

@@ -20,6 +20,10 @@ public class Closure extends Procedure implements NamedValue {
         this.fcount=fcount;
         this.env=env;
         this.body=body;
+	while (env!=null && !env.locked) {
+	   env.locked=true;		
+           env=env.parent;
+        }
     }
 
     private final Value[] matchArgs(Interpreter r)
@@ -35,7 +39,7 @@ public class Closure extends Procedure implements NamedValue {
                 } else return v;
             }
             error(r, liMessage(SISCB,"notenoughargsto", toString(),
-                               fcount, vl));
+                                         fcount, vl));
             return null;
         }
         
@@ -49,7 +53,7 @@ public class Closure extends Procedure implements NamedValue {
         if (vl > sm1 && !r.vlk) {
             vals=v;
         } else {
-            vals=r.createValues(sm1+1);
+            vals=r.createValues(fcount);
             System.arraycopy(v, 0, vals, 0, sm1);
         }
 
@@ -58,7 +62,7 @@ public class Closure extends Procedure implements NamedValue {
     }
 
     public void apply(Interpreter r) throws ContinuationException {
-        r.env=new LexicalEnvironment(matchArgs(r), env);
+        r.newLenv(matchArgs(r), env);
         r.nxp=body;
         r.vlr=ZV;
     }

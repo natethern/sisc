@@ -5,6 +5,7 @@ import sisc.interpreter.*;
 import sisc.io.ValueWriter;
 import sisc.io.WriterOutputPort;
 import sisc.io.PortValueWriter;
+import sisc.env.LexicalEnvironment;
 
 /**
  * Value is the base class for anything treated as a first-class value 

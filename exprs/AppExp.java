@@ -10,35 +10,40 @@ import sisc.util.ExpressionVisitor;
 public class AppExp extends Expression {
     public Expression exp, rands[], nxp;
     public boolean allImmediate;
+    protected int l;
 
     public AppExp(Expression exp, Expression rands[], Expression nxp, 
                   boolean allImmediate) {
         this.exp=exp;
         this.rands=rands;
+        l=rands.length;
         this.nxp = nxp;
         this.allImmediate=allImmediate;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-
-        r.newVLR(rands.length);
+        r.newVLR(l);
 
         if (allImmediate) {
-            r.nxp=nxp;
             r.acc=exp.getValue(r);
+            // Load the immediates from right to left
+            for (int i = l-1; i>=0; i--) {
+                r.vlr[i] = rands[i].getValue(r);
+            }
+            r.nxp=nxp;
+            nxp.eval(r);
         } else {
             r.push(nxp);
+            // Load the immediates from right to left
+            Expression ex;
+            for (int i = l-1; i>=0; i--) {
+                ex=rands[i];
+                if (ex != null)
+                    r.vlr[i] = ex.getValue(r);
+            }
             r.nxp=exp;
+            exp.eval(r);
         }
-
-	    Expression ex;
-	    // Load the immediates from right to left
-	    for (int i = rands.length-1; i>=0; i--) {
-            ex=rands[i];
-            if (ex != null)
-                r.vlr[i] = ex.getValue(r);
-	    }
-
     }
 
     public Value express() {
@@ -52,8 +57,8 @@ public class AppExp extends Expression {
 
     public void serialize(Serializer s) throws IOException {
         s.writeExpression(exp);
-        s.writeInt(rands.length);
-        for (int i=0; i<rands.length; i++) {
+        s.writeInt(l);
+        for (int i=0; i<l; i++) {
             s.writeExpression(rands[i]);
         }
         s.writeExpression(nxp);
@@ -64,9 +69,9 @@ public class AppExp extends Expression {
 
     public void deserialize(Deserializer s) throws IOException {
         exp=s.readExpression();
-        int size=s.readInt();
-        rands=new Expression[size];
-        for (int i=0; i<size; i++) {
+        l=s.readInt();
+        rands=new Expression[l];
+        for (int i=0; i<l; i++) {
             rands[i]=s.readExpression();
         }
         nxp=s.readExpression();
