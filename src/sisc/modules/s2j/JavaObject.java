@@ -159,7 +159,7 @@ public class JavaObject extends Procedure {
         w.append("#<java ")
             .append(Util.nameType(obj.getClass()))
             .append(' ')
-            .append(obj.toString())
+            .append((getObjType() == JCLASS) ? Util.nameType((Class)obj) : obj.toString())
             .append('>');
     }
 
