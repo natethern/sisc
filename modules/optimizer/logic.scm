@@ -1,10 +1,18 @@
 (define opt:lambda
   (lambda (formals body state)
     (mvlet ([(rv state)
-             (opt body ((if (list? formals)
-                            union-state-entry*
-                            union-state-entry)
-                        state 'vars formals))])
+             (opt body
+                  (union-state-entry*
+                   state
+                   'vars
+                   (match formals
+                     ((,formal* ... . ,lastf)
+                      (guard (symbol? lastf))
+                      `(,lastf ,@formal*))
+                     ((,formal* ...)
+                      formal*)
+                     (,formal
+                      (list formal)))))])
       (values `(lambda ,formals ,rv) state))))
 
 
@@ -16,46 +24,50 @@
         (nv '()))
     (let ((cpc
            (let loop ((x formals)
-                            (y values*)
-                            (acc '()))
-             (cond [(null? x) acc]
-                   ; If this var is bound to another var ref,
-                   ; see if it too is bound to a cp-candidate,
-                   ; and use that value instead of the var.
-                   [(and rec
-                         (symbol? (car y))
-                         (assq (car y) acc)) =>
-                    (lambda (vref)
-                      (let vloop ((v (cdr vref)))
-                              ;Watch that we never have a chain leading
-                              ;to an existing var
-                        (cond [(eq? v (car x))
-                               (error 'optimizer "optimizer detected circular variable assignment")]
-                              ; Reached an immediate or non-var
-                              [(not (symbol? v)) 
-                               (loop (cdr x) (cdr y)
-                                     (cons (cons (car x) v) acc))]
-                              [(assq v acc) =>
-                               (lambda (vref2)
-                                 (vloop (cdr vref2)))]
-                              [else (loop (cdr x) (cdr y)
-                                          (cons (cons (car x) v) acc))])))]
-                   [(symbol? (car y))
-                    (loop (cdr x) (cdr y) 
-                          (cons (cons (car x) (car y)) acc))]
-                   [(or (not (immediate? (car y)))
-                        (and set-vars (memq (car x) set-vars)))
-                    (set! nf (cons (car x) nf))
-                    (set! nv (cons (car y) nv))
-                    (loop (cdr x) (cdr y) acc)]
-                   [else 
-                     (if rec
-                         (let vloop ((v acc))
-                           (unless (null? v) 
-                             (if (eq? (cdr v) (car x))
-                                 (set-cdr! v (car y))))))
-                     (loop (cdr x) (cdr y) 
-                           (cons (cons (car x) (car y)) acc))]))))
+                      (y values*)
+                      (acc '()))
+             (if (null? x) acc
+                 (let ((cx (car x))
+                       (cy (car y)))
+                   (cond [(null? x) acc]
+                         ; If this var is bound to another var ref,
+                         ; see if it too is bound to a cp-candidate,
+                         ; and use that value instead of the var.
+                         [(and rec
+                               (symbol? cy)
+                               (assq cy acc)) =>
+                               (lambda (vref)
+                                 (let vloop ((v (cdr vref)))
+                                        ;Watch that we never have a chain leading
+                                        ;to an existing var
+                                   (cond [(eq? v cx)
+                                          (error 'optimizer "optimizer detected circular variable assignment")]
+                                        ; Reached an immediate or non-var
+                                         [(not (symbol? v)) 
+                                          (loop (cdr x) (cdr y)
+                                                (cons (cons cx v) acc))]
+                                         [(assq v acc) =>
+                                          (lambda (vref2)
+                                            (vloop (cdr vref2)))]
+                                         [else (loop (cdr x) (cdr y)
+                                                     (cons (cons cx v) acc))])))]
+                         [(and (symbol? cy)
+                               (memq cy formals))
+                          (loop (cdr x) (cdr y) 
+                                (cons (cons cx cy) acc))]
+                         [(or (not (immediate? cy))
+                              (and set-vars (memq cx set-vars)))
+                          (set! nf (cons cx nf))
+                          (set! nv (cons cy nv))
+                          (loop (cdr x) (cdr y) acc)]
+                         [else 
+                           (if rec
+                               (let vloop ((v acc))
+                                 (unless (null? v) 
+                                   (if (eq? (cdr v) cx)
+                                       (set-cdr! v cy)))))
+                           (loop (cdr x) (cdr y) 
+                                 (cons (cons cx cy) acc))]))))))
       (values nf nv cpc))))
 
 (define opt:letrec

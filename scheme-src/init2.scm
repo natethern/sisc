@@ -32,7 +32,7 @@
 ;;
 		 
 (current-evaluator eval)
-;(emit-annotations #t)
+(emit-annotations #t)
 
 ;;;;;;;;;;;;;;;; error handling ;;;;;;;;;;;;;;;
 
@@ -328,11 +328,13 @@
       (lambda ()
         (let loop ([e (read-code inf)])
           (or (eof-object? e)
-              (begin
-                (pretty-print ((current-optimizer) 
-                               (apply sc-expand `(,e ,@scexpopts))) outf)
-                (newline outf)
-                (loop (read inf)))))))
+              (begin 
+                ;(pretty-print e) (newline)
+                (let ([source ((current-optimizer)
+                               (apply sc-expand `(,e ,@scexpopts)))])
+                  ;(pretty-print source) (newline)
+                  (pretty-print source outf) (newline outf)
+                  (loop (read inf))))))))
     (close-output-port outf)
     (close-input-port inf)
     (max-precision precision)))
