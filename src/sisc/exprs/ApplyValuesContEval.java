@@ -11,20 +11,25 @@ import sisc.util.ExpressionVisitor;
 public class ApplyValuesContEval extends Expression {
     public Procedure consumer;
 
+    private static int count = 0;
+
     public ApplyValuesContEval(Procedure c) {
         consumer=c;
     }
 
     public void eval(Interpreter r) throws ContinuationException {
+        count++;
+        if (count % 1000 == 0) System.err.println(count);
         if (r.acc instanceof Values) {
-            r.vlr=((Values)r.acc).values;
-            /**
-               Procedure application may recycle the vlr. Since Values
-               are first class, they may be referenced from multiple
-               places. Hence we need to prevent vlr recycling when we
-               use a Values' arg array as the vlr.
-            **/
-            r.vlk = true;
+            final Value[] vlr = ((Values)r.acc).values;
+            final int len = vlr.length;
+            if (len == 0) {
+                r.vlr = ZV;
+            } else {
+                r.vlr = r.createValues(len);
+                System.arraycopy(vlr, 0, r.vlr, 0, len);
+            }
+            r.vlk = false;
         } else {
             r.newVLR(1);
             r.vlr[0]=r.acc;
