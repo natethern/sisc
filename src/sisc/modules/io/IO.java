@@ -201,7 +201,7 @@ public class IO extends IndexedProcedure {
     }
 
 	public SchemeOutputPort openOutPort(OutputStream out, String encoding, boolean autoflush) throws IOException {
-		return new WriterOutputPort(new BufferedWriter(new OutputStreamWriter(out)), autoflush);
+		return new WriterOutputPort(new BufferedWriter(new OutputStreamWriter(out, encoding)), autoflush);
 	}
 	
 	public SchemeInputPort openInPort(InputStream in, String encoding) throws IOException {
