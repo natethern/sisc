@@ -13,8 +13,6 @@
       ((_ expr)
        (syntax
 	(let ([source (sc-expand (quote expr))])
-          (display expr)
-          (newline)
 	  (pretty-print source)
           (newline)
           (display "=>")
