@@ -64,7 +64,6 @@ public class IO extends ModuleAdapter {
         define("input-port?"        , INPORTQ);
         define("input-port-location", INPORTLOCATION);
         define("load"               , LOAD);
-        define("make-path"          , MAKEPATH);
         define("normalize-url"      , NORMALIZEURL);
         define("open-input-file"    , OPENINPUTFILE);
         define("open-input-string"  , OPENINPUTSTRING);
@@ -438,16 +437,6 @@ public class IO extends ModuleAdapter {
                 return displayOrWrite(f, outport(f.vlr[1]), f.vlr[0], true);
             case WRITE:
                 return displayOrWrite(f, outport(f.vlr[1]), f.vlr[0], false);
-            case MAKEPATH:
-                String f1=string(f.vlr[0]);
-                String f2=string(f.vlr[1]);
-                File fn=new File(f1);
-                fn=new File(f1, f2);
-                try {
-                    return new SchemeString(fn.getCanonicalPath());
-                } catch (IOException e) {
-                    throwPrimException(liMessage(IOB, "invalidpathspec"));
-                }
             case OPENOUTPUTFILE:
                 URL url = url(f.vlr[0]);
                 try {

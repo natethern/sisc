@@ -99,7 +99,7 @@ public class Interpreter extends Util {
         interpret();
         return acc;
     }
-
+    
     protected void interpret() throws SchemeException {
         try {
             do {
@@ -142,7 +142,7 @@ public class Interpreter extends Util {
     }
 
     public final void push(Expression nxp) {
-        stk=createFrame(nxp, vlr, false, env, fk, stk, cap);
+        stk=createFrame(nxp, vlr, vlk, env, fk, stk, cap);
     }
 
     public final void setVLR(int pos, Value v) {
@@ -307,7 +307,7 @@ public class Interpreter extends Util {
     protected int deadFramePointer=-1;
     CallFrame returnRegister;
 
-    public CallFrame createFrame(Expression n, Value[] v,
+    public synchronized CallFrame createFrame(Expression n, Value[] v,
                                  boolean vlk, 
                                  LexicalEnvironment e,
                                  CallFrame f,
@@ -316,7 +316,8 @@ public class Interpreter extends Util {
         if (deadFramePointer < 0)
             return new CallFrame(n,v,vlk,e,f,p,cap);
         else {
-	    returnRegister=deadFrames[deadFramePointer--];
+	    returnRegister=deadFrames[deadFramePointer];
+            deadFrames[deadFramePointer--]=null;
             returnRegister.nxp=n;
             returnRegister.vlr=v;
             returnRegister.vlk=vlk;
@@ -327,8 +328,8 @@ public class Interpreter extends Util {
             return returnRegister;
         }
     }
-
-    public final void returnFrame(CallFrame f) {
+    
+    public synchronized final void returnFrame(CallFrame f) {
         if (!f.vlk && (deadFramePointer < FPMAX)) {
             deadFrames[++deadFramePointer]=f;
         }

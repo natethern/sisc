@@ -272,6 +272,8 @@ public class Primitives extends ModuleAdapter {
         switch (f.vlr.length) {
         case 0:
             switch (primid) {
+            case 300: f.step=true; return VOID;
+            case 301: System.gc(); return VOID;
             case GENSYM: 
                 long unv=f.tctx.nextUnique();
                 return Symbol.intern(base64encode(unv));

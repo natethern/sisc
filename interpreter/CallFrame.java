@@ -19,7 +19,7 @@ public class CallFrame extends Procedure {
     public LexicalEnvironment    env;
 
     public CallFrame              fk;
-    public CallFrame          parent;
+    protected CallFrame          parent;
 
     public boolean             cap[];
 

@@ -22,6 +22,7 @@ public class ApplyValuesContEval extends Expression {
             r.replaceVLR(1);
             r.vlr[0]=r.acc;
         }
+        r.vlk=true;
         r.nxp=APPEVAL;
         r.acc=(Value)consumer;
     }
