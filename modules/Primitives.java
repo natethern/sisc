@@ -633,30 +633,20 @@ public class Primitives extends ModuleAdapter {
         //0-10
         //13
         //16
-        //26-28
-        //30
+        //26-30
         //33-34
         //37
-        //40
-        //44
-        //46
-        //50
-        //54
+        //44-46
         //59
         //69
-        //72-73
-        //75
-        //78
-        //80-82
+        //72-75
+        //78-82
         //110-111
-        //120
-        //125
-        //136
-        //138-139
+        //136-139
         //154
         ACOS = 14,
         ADD = 152,
-        APPLY = 137,
+        APPLY = 50,
         ASHL = 104,
         ASHR = 105,
         ASIN = 15,
@@ -673,8 +663,8 @@ public class Primitives extends ModuleAdapter {
         CEILING = 23,
         CHAR2INTEGER = 24,
         CHARACTERQ = 25,
-        COMPACTSTRINGREP = 74,
-        COMPLEXQ = 29,
+        COMPACTSTRINGREP = 125,
+        COMPLEXQ = 40,
         CONS = 109,
         COS = 31,
         CURRENTEVAL = 32,
@@ -688,7 +678,7 @@ public class Primitives extends ModuleAdapter {
         EXACT2INEXACT = 41,
         EXACTQ = 42,
         EXP = 43,
-        FLOOR = 45,
+        FLOOR = 54,
         GCD = 116,
         GETENVIRONMENT = 64,
         GETPROP = 119,
@@ -725,7 +715,7 @@ public class Primitives extends ModuleAdapter {
         NUMERATOR = 71,
         PAIRQ = 76,
         PARAMETERQ = 77,
-        PROCEDUREQ = 79,
+        PROCEDUREQ = 120,
         PUTPROP = 140,
         QUOTIENT = 126,
         REALPART = 83,
