@@ -450,27 +450,31 @@
 ;; I/O ;;
 
 (define (call-with-input-file file procOrEncoding . proc)
-  (if (null? proc) 
-      (let* ([port (open-input-file file)]
-             [result (procOrEncoding port)])
-        (close-input-port port)
-        result)
-      (let* ([port (open-input-file file procOrEncoding)]
-             [result ((car proc) port)])
-        (close-input-port port)
-        result)))
+  (cond [(null? proc) 
+         (let* ([port (open-input-file file)]
+                [result (procOrEncoding port)])
+           (close-input-port port)
+           result)]
+        [(null? (cdr proc))
+         (let* ([port (open-input-file file procOrEncoding)]
+                [result ((car proc) port)])
+           (close-input-port port)
+           result)]
+        [else (error 'call-with-input-file "too many arguments.")]))
 
 (define (call-with-output-file file procOrEncoding . proc)
-  (if (null? proc) 
-      (let* ([port (open-output-file file)]
-             [result (procOrEncoding port)])
-        (close-input-port port)
-        result)
-      (let* ([port (open-output-file file procOrEncoding)]
-             [result ((car proc) port)])
-        (close-output-port port)
-        result)))
-        
+  (cond [(null? proc) 
+         (let* ([port (open-output-file file)]
+                [result (procOrEncoding port)])
+           (close-output-port port)
+           result)]
+        [(null? (cdr proc))
+         (let* ([port (open-output-file file procOrEncoding)]
+                [result ((car proc) port)])
+           (close-output-port port)
+           result)]
+        [else (error 'call-with-output-file "too many arguments.")]))
+
 (define (call-with-binary-input-file file proc)
   (let* ([port (open-binary-input-file file)]
          [result (proc port)])
@@ -506,18 +510,22 @@
     (lambda (port) (with-output-to-port port (if port thunk)))))
         
 (define (with-input-from-file file thunkOrEncoding . thunk)
-  (if (null? thunk)
-      (call-with-input-file file 
-        (lambda (port) (with-input-from-port port (if port thunkOrEncoding))))
-      (call-with-input-file file thunkOrEncoding
-        (lambda (port) (with-input-from-port port (if port (car thunk)))))))
+  (cond [(null? thunk)
+         (call-with-input-file file 
+           (lambda (port) (with-input-from-port port (if port thunkOrEncoding))))]
+        [(null? (cdr thunk))
+         (call-with-input-file file thunkOrEncoding
+           (lambda (port) (with-input-from-port port (if port (car thunk)))))]
+        [else (error 'with-input-from-file "too many arguments.")]))
 
 (define (with-output-to-file file thunkOrEncoding . thunk)
-  (if (null? thunk)
-      (call-with-output-file file 
-        (lambda (port) (with-output-to-port port (if port thunkOrEncoding))))
-      (call-with-output-file file thunkOrEncoding
-        (lambda (port) (with-output-to-port port (if port (car thunk)))))))
+  (cond [(null? thunk)
+         (call-with-output-file file 
+           (lambda (port) (with-output-to-port port (if port thunkOrEncoding))))]
+        [(null? (cdr thunk))
+         (call-with-output-file file thunkOrEncoding
+           (lambda (port) (with-output-to-port port (if port (car thunk)))))]
+        [else (error 'with-output-to-file "too many arguments.")]))
 
 (define (with-character-set set thunk)
  (let ([previous-set (character-set)])
