@@ -1,3 +1,7 @@
+2004-01-16  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Fixed bug where error continuations weren't wind safe.
+
 2004-01-09  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed several inexactness contagion bugs in Quantity.
