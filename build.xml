@@ -30,6 +30,7 @@
     <property name="libjar" value="sisc-lib.jar"/>
     <property name="heap" value="${basedir}/sisc.shp"/>
     <property name="quantity-type" value="apfloat"/>
+    <property name="property-file" value="~/sisc.properties"/>
     <condition property="debugging" value="on">
       <or> 
         <isset property="releasecandidate"/>
@@ -215,7 +216,7 @@
         <arg value="-x"/>
         <arg value="${srfidir}/srfi-sll.scm"/>
         <arg value="-p"/>
-        <arg value="~/sisc.properties"/>
+        <arg value="${property-file}"/>
     </java>
   </target> 
 
@@ -230,7 +231,7 @@
         <arg value="-x"/>
         <arg value="${srfidir}/srfi-slt.scm"/>
         <arg value="-p"/>
-        <arg value="~/sisc.properties"/>
+        <arg value="${property-file}"/>
     </java>
   </target>
 
