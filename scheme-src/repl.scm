@@ -40,7 +40,7 @@
      (display message output-port)
      (newline output-port)
      (putprop 'last-error '*sisc* `((cont . ,(error-continuation-k error-cont))
-				    (message . ,message))))))
+				    (value . ,message))))))
 
 (define _separator (void))
 (define repl

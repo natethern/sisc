@@ -42,7 +42,7 @@ public class SourceInputPort extends InputPort {
     public SourceInputPort(BufferedReader rd, String file) {
 	super(rd);
 	line=1;
-	column=1;
+	column=0;
 	sourceFile=file;
     }
 
@@ -54,7 +54,7 @@ public class SourceInputPort extends InputPort {
             c=r.read();
 	    if (c=='\n') {
 		line++;
-		column=1;
+		column=0;
 	    } else if (c=='\t') 
 		column+=8;
 	    else column++;

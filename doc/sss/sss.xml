@@ -10,6 +10,7 @@
  <!ENTITY requires "<emphasis>Requires: </emphasis>">
  <!ENTITY intro-chapter SYSTEM "intro.xml">
  <!ENTITY inst-chapter SYSTEM "inst.xml">
+ <!ENTITY debugging-chapter SYSTEM "debug.xml">
  <!ENTITY scheme-chapter SYSTEM "scheme.xml">
  <!ENTITY library-chapter SYSTEM "library.xml">
  <!ENTITY io-chapter SYSTEM "io.xml">
@@ -64,11 +65,12 @@
   &intro-chapter;
   &inst-chapter;
   &scheme-chapter;
-  &library-chapter;
+  &debugging-chapter;
   &io-chapter;
   &threads-chapter;
-  &modules-chapter;
   &java-chapter;
+  &library-chapter;
+  &modules-chapter;
   <appendix id="Errata">
     <title>Errata</title>
     <para>

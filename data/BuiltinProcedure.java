@@ -51,6 +51,7 @@ public class BuiltinProcedure extends Procedure {
     }
 
     public void apply(Interpreter r) throws ContinuationException {
+        r.lxp=r.nxp;
         r.nxp=null;
         try {
             Value v=host.eval(id, r);

@@ -34,7 +34,7 @@ package sisc.debug;
 
 import sisc.*;
 import sisc.data.*;
-import sisc.exprs.AnnotatedExpr;
+import sisc.exprs.*;
 import java.awt.*;
 import java.util.Set;
 import java.util.Iterator;
@@ -50,7 +50,8 @@ public class SDebug extends ModuleAdapter {
 	CONT_LOCKQ=6, CONT_PARENT=7, 
 	ANNOTATIONEXPR=10, ANNOTATIONQ=11, ANNOTATION=8, ANNOTATIONKEYS=9,
 	EMITANNOTATIONS=12, ERROR_CONT_K=13, SETANNOTATION=14,
-        ANNOTATIONSRC=15, ANNOTATIONSTRIPPED=16, SETANNOTATIONSTRIPPED=17;
+        ANNOTATIONSRC=15, ANNOTATIONSTRIPPED=16, SETANNOTATIONSTRIPPED=17, 
+        FILLRIBQ=18, FILLRIBEXP=19, FREEXPQ=20, FRESYM=21;
 
     public SDebug() {
 	define("emit-annotations", EMITANNOTATIONS);
@@ -71,6 +72,10 @@ public class SDebug extends ModuleAdapter {
         define("annotation-expression", ANNOTATIONEXPR);
 	define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
         define("annotation-stripped", ANNOTATIONSTRIPPED);
+        define("_fill-rib?", FILLRIBQ);
+        define("_fill-rib-exp", FILLRIBEXP);
+        define("_free-reference-exp?", FREEXPQ);
+        define("_free-reference-symbol", FRESYM);
     }
 
     class SISCExpression extends Value {
@@ -115,6 +120,16 @@ public class SDebug extends ModuleAdapter {
 	    }
         case 1:
             switch(primid) {
+            case FREEXPQ:
+                return truth(((SISCExpression)f.vlr[0]).e
+                             instanceof FreeReferenceExp);
+            case FRESYM:
+                return ((FreeReferenceExp)((SISCExpression)f.vlr[0]).e).sym;
+            case FILLRIBQ:
+                return truth(f.vlr[0] instanceof SISCExpression &&
+                             ((SISCExpression)f.vlr[0]).e instanceof FillRibExp);
+            case FILLRIBEXP:
+                return new SISCExpression(((FillRibExp)((SISCExpression)f.vlr[0]).e).exp);
             case ANNOTATIONKEYS:
                 Set s=f.vlr[0].getAnnotationKeys();
                 Pair p=EMPTYLIST;
@@ -139,19 +154,29 @@ public class SDebug extends ModuleAdapter {
 	    case ERROR_CONT_K:
 		return ((ApplyParentFrame)f.vlr[0]).c;
             case CONT_LOCKQ:
+                if (f.vlr[0] instanceof ApplyParentFrame)
+                    f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
                 CallFrame cn=cont(f.vlr[0]);
                 return truth(cn.lock);
             case CONT_NXP:
+                if (f.vlr[0] instanceof ApplyParentFrame)
+                    f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
                 cn=cont(f.vlr[0]);
                 if (cn.nxp==null) return EMPTYLIST;
                 return new SISCExpression(cn.nxp);
             case CONT_VLR:
+                if (f.vlr[0] instanceof ApplyParentFrame)
+                    f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
                 cn=cont(f.vlr[0]);
                 return new SchemeVector(cn.vlr);
             case CONT_ENV:
+                if (f.vlr[0] instanceof ApplyParentFrame)
+                    f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
                 cn=cont(f.vlr[0]);
                 return cn.env;
 	    case CONT_PARENT: 
+                if (f.vlr[0] instanceof ApplyParentFrame)
+                    f.vlr[0]=((ApplyParentFrame)f.vlr[0]).c;
 		cn=cont(f.vlr[0]);
 		if (cn.parent==null) return EMPTYLIST;
                 return cn.parent;

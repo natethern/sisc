@@ -118,7 +118,7 @@ public abstract class Util implements Conf {
     throws ContinuationException {
         r.acc=new Values(new Value[] {
 	    error,
-	    new ApplyParentFrame(new CallFrame(r.nxp, r.vlr, 
+	    new ApplyParentFrame(new CallFrame((r.nxp==null?r.lxp:r.nxp), r.vlr, 
 					       r.env, r.fk, r.stk).capture(r)),
 	    new CurriedFC(r.fk.fk)});
         throw new ContinuationException(r.fk);

@@ -126,7 +126,8 @@ public class Compiler extends Util {
     }
 
     public Expression compile(Interpreter r, Expression v, ReferenceEnv rt,
-                              int context, AssociativeEnvironment env)
+                              int context, AssociativeEnvironment env, 
+                              Pair an)
     throws ContinuationException {
 	//	System.err.println("C"+v);
 	//	System.err.println(v.getClass());
@@ -141,7 +142,7 @@ public class Compiler extends Util {
 	    return EMPTYLIST;
 	} else if (v instanceof Pair) {
             Pair expr=(Pair)v;
-            return compileApp(r,expr,rt,context,env);
+            return compileApp(r,expr,rt,context,env,an);
         } else if (v instanceof Symbol) {
             Symbol sym=(Symbol)v;
 
@@ -153,7 +154,7 @@ public class Compiler extends Util {
     public Expression compile(Interpreter r, Expression v,
                               AssociativeEnvironment env)
     throws ContinuationException {
-        Expression e= compile(r, v, new ReferenceEnv(), TAIL, env);
+        Expression e= compile(r, v, new ReferenceEnv(), TAIL, env, null);
         return e;
     }
 
@@ -179,10 +180,11 @@ public class Compiler extends Util {
 
     public Expression compileApp(Interpreter r,
                                  Pair expr, ReferenceEnv rt,
-                                 int context, AssociativeEnvironment env)
+                                 int context, AssociativeEnvironment env,
+                                 Pair an)
     throws ContinuationException {
 
-        Expression tmp;
+        Expression tmp, rv;
 
         if (expr.car instanceof Symbol) {
             Symbol s=(Symbol)expr.car;
@@ -191,9 +193,8 @@ public class Compiler extends Util {
 
             switch (t) {
             case QUOTE:
-                return expr.car;
-                //	    case _VOID:
-                //return VOID;
+                rv=expr.car;
+                break;
             case LAMBDA:
                 boolean infArity=false;
                 Symbol[] formals=null;
@@ -214,77 +215,100 @@ public class Compiler extends Util {
                 if (expr.cdr != EMPTYLIST)
                     expr=list(new Pair(Util.BEGIN, expr));
                 tmp=compile(r, expr.car, new ReferenceEnv(formals, rt),
-                            TAIL | LAMBDA | REALTAIL, env);
-                return new LambdaExp(formals.length, tmp, infArity);
+                            TAIL | LAMBDA | REALTAIL, env, null);
+
+                rv=new LambdaExp(formals.length, tmp, infArity);
+                break;
             case _IF:
-                tmp=compile(r, expr.car, rt, PREDICATE, env);
+                tmp=compile(r, expr.car, rt, PREDICATE, env, null);
                 expr=(Pair)expr.cdr;
                 if (tmp instanceof Value) {
-                    if (truth((Value)tmp))
-                        return compile(r, expr.car, rt, TAIL | context, env);
-                    else {
+                    if (truth((Value)tmp)) {
+                        rv=compile(r, expr.car, rt, TAIL | context, env, null);
+                        break;
+                    } else {
                         expr=(Pair)expr.cdr;
-                        return compile(r, expr.car, rt, TAIL | context, env);
+                        rv=compile(r, expr.car, rt, TAIL | context, env, null);
+                        break;
                     }
                 } else {
                     Expression conseq=compile(r, expr.car, rt, TAIL | context,
-                                              env);
+                                              env, null);
                     expr=(Pair)expr.cdr;
                     Expression altern=compile(r, expr.car, rt, TAIL | context,
-                                              env);
-                    return new EvalExp(tmp, new IfEval(conseq, altern));
+                                              env, null);
+                    rv=new EvalExp(tmp, new IfEval(conseq, altern));
+                    break;
                 }
             case BEGIN:
-                return compileBegin(r, pairToExpVect(expr), context, rt,
-                                    env);
+                rv=compileBegin(r, pairToExpVect(expr), context, rt, env);
+                break;
             case SET:
-                tmp=compile(r, expr.car, rt, 0, env);
+                tmp=compile(r, expr.car, rt, 0, env, null);
                 expr=(Pair)expr.cdr;
-                Expression rhs=compile(r, expr.car, rt, 0, env);
+                Expression rhs=compile(r, expr.car, rt, 0, env, null);
                 if (tmp instanceof LexicalReferenceExp) {
                     LexicalReferenceExp lre=(LexicalReferenceExp)tmp;
 
-                    return new EvalExp(rhs, new LexicalSetEval(lre.depth, lre.pos));
+                    rv=new LexicalSetEval(lre.depth, lre.pos);
                 } else if (tmp instanceof FreeReferenceExp) {
                     FreeReferenceExp fre=(FreeReferenceExp)tmp;
-
-                    return new EvalExp(rhs, new FreeSetEval(fre.sym, fre.envLoc, env));
+                    
+                    rv=new FreeSetEval(fre.sym, fre.envLoc, env);
                 } else {
                     error(r, liMessage(SISCB, "setlhsnotsymbol"));
                     return null;
                 }
+                if (an!=null) {
+                    setAnnotations(rv, an);
+                    an=null;
+                }
+                rv=new EvalExp(rhs, rv);
+                break;
             case DEFINE:
                 Symbol lhs=(Symbol)expr.car;
                 expr=(Pair)expr.cdr;
+                
+                rv=new DefineEval(lhs);
 
-                return new EvalExp(compile(r, expr.car, rt, 0, env),
-				   new DefineEval(lhs));
+                if (an!=null) {
+                    setAnnotations(rv, an);
+                    an=null;
+                }
+
+                rv=new EvalExp(compile(r, expr.car, rt, 0, env, null), rv);
+                break;
             case MAKEANNOTATION:
                 Value aexpr=expr.car;
                 expr=(Pair)expr.cdr;
-
-                rhs=compile(r, aexpr, rt, context, env);
+                Pair annot=null;
                 if (expr.car instanceof Pair)
-                    setAnnotations(rhs, pair(expr.car));
+                    annot=pair(expr.car);
                 else
-                    setAnnotations(rhs, list(new Pair(OTHER, expr.car)));
-
-                return rhs;
+                    annot=list(new Pair(OTHER, expr.car));
+                rv=compile(r, aexpr, rt, context, env, annot);
+                an=null;
+                break;
             default:
                 Expression[] exps=pairToExpressions(expr);
                 compileExpressions(r, exps, rt, 0, env);
-                return application(compile(r,s,rt,0,env), exps, context);
+                return application(compile(r,s,rt,0,env, null), 
+                                   exps, context, an);
             }
         } else if (expr.car instanceof Pair) {
             Expression[] exps=pairToExpressions((Pair)expr.cdr);
             compileExpressions(r, exps, rt, 0, env);
-	    return application(compile(r, expr.car, rt, 0, env), exps, context);
+	    return application(compile(r, expr.car, rt, 0, env, null), 
+                               exps, context, an);
         } else {
             Expression[] exps=pairToExpressions((Pair)expr.cdr);
             compileExpressions(r, exps, rt, 0, env);
-	    return application(compile(r, expr.car, rt, 0, env), exps, context);
+	    return application(compile(r, expr.car, rt, 0, env, null), 
+                               exps, context, an);
         }
-
+        if (an!=null)
+            setAnnotations(rv, an);
+        return rv;
     }
 
     boolean isImmediate(Expression e) {
@@ -293,7 +317,8 @@ public class Compiler extends Util {
              (((AnnotatedExpr)e).expr instanceof Immediate));
     }
 
-    public final Expression application(Expression rator, Expression rands[], int context) {
+    public final Expression application(Expression rator, Expression rands[], 
+                                        int context, Pair annotation) {
         boolean nonTail=(context & TAIL) == 0;
 
         if (rator instanceof Value && 
@@ -301,7 +326,13 @@ public class Compiler extends Util {
 	    !(rator instanceof AnnotatedExpr))
 
             System.err.println(warn("nonprocappdetected",((Value)rator).synopsis()));
-        Expression nxp = APPEVAL;
+        Expression nxp;
+        if (annotation==null)
+            nxp=APPEVAL;
+        else {
+            nxp=new AppEval();
+            setAnnotations(nxp, annotation);
+        }
 
         Expression lastRand = rator;
         boolean allImmediate=isImmediate(rator);
@@ -321,20 +352,20 @@ public class Compiler extends Util {
                             int context, AssociativeEnvironment env)
     throws ContinuationException {
         for (int i=exprs.length-1; i>=0; i--)
-            exprs[i]=compile(r, exprs[i], rt, context, env);
+            exprs[i]=compile(r, exprs[i], rt, context, env, null);
     }
 
     Expression compileBegin(Interpreter r, Vector v, int context,
                             ReferenceEnv rt, AssociativeEnvironment env)
     throws ContinuationException {
 	Expression last=compile(r, (Expression)v.lastElement(), rt,
-                                TAIL | context, env);
+                                TAIL | context, env, null);
         if (v.size()==1) return last;
 
 	Expression be=last;
         for (int i=v.size()-2; i>=0; i--) {
             Expression e=compile(r, (Expression)v.elementAt(i),
-                                 rt, COMMAND, env);
+                                 rt, COMMAND, env, null);
             if (!(e instanceof Immediate))
 		be=new EvalExp(e, be);
         }
@@ -345,7 +376,7 @@ public class Compiler extends Util {
 	Vector ev=new Vector(v.size()-1);
 	for (int i=0; i<v.size()-1; i++) {
             Expression e=compile(r, (Expression)v.elementAt(i),
-                                 rt, COMMAND, env);
+                                 rt, COMMAND, env, null);
 	    if (!(e instanceof Immediate))
 		ev.addElement(e);
 	}

@@ -6,6 +6,7 @@ import java.io.*;
 public class ApplyParentFrame extends Procedure {
     public CallFrame c;
 
+    public ApplyParentFrame() {}
     public ApplyParentFrame(CallFrame cf) {
 	this.c=cf;
     }

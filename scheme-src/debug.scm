@@ -1,4 +1,7 @@
-(load-module "sisc.debug.SDebug")
+(import debug-module)
+
+(define (get-last-error)
+  (getprop 'last-error '*sisc*))
 
 (define annotated?
   (lambda (obj)
@@ -37,14 +40,14 @@
 		     (for-each (lambda (n) (display #\space)) (iota 40))
 		     (display (format "[~s]" depth)))
 		   (for-each (lambda (n) (display #\space)) (iota (* depth 2))))
-	       (display (list 'name formal ...))
+	       (write (list 'name formal ...))
 	       (newline)
 	       (let ([result (begin body ...)])
 		 (if (> depth 20)
 		     (begin 
 		       (for-each (lambda (n) (display #\space)) (iota 40))
 		       (display (format "[~s]" depth)))
-		     (for-each (lambda (n) (display #\space)) (iota (* depth 2))))		 (display result)
+		     (for-each (lambda (n) (display #\space)) (iota (* depth 2))))		 (write result)
 		     (newline)
 		     result)))
 	   (lambda () (putprop 'trace-depth '*sisc* 
@@ -65,59 +68,82 @@
 		     (for-each (lambda (n) (display #\space)) (iota 40))
 		     (display (format "[~s]" depth)))
 		   (for-each (lambda (n) (display #\space)) (iota (* depth 2))))
-	       (display (list 'name var ...))
+	       (write (list 'name var ...))
 	       (newline)
 	       (let ([result (begin body ...)])
 		 (if (> depth 20)
 		     (begin 
 		       (for-each (lambda (n) (display #\space)) (iota 40))
 		       (display (format "[~s]" depth)))
-		     (for-each (lambda (n) (display #\space)) (iota (* depth 2))))		 (display result)
+		     (for-each (lambda (n) (display #\space)) (iota (* depth 2))))		 (write result)
 		     (newline)
 		     result)))
 	   (lambda () (putprop 'trace-depth '*sisc* 
 			       (- (getprop 'trace-depth '*sisc*) 1))))))))
 
-(emit-annotations #t)
-
-(define (stack-trace k)
-  (let loop ((k k))
-    (cond [(null? k) '()]
-	  [(null? (continuation-nxp k)) (loop (continuation-stk k))]
-	  [else 
-	   (let ([nxp (continuation-nxp k)])
-	     (cons nxp 
-		   (loop (continuation-stk k))))])))
-
-(define (emacs-stack-trace e) 
-  (let* ([k (cdr (assoc 'cont e))]
-	 [m (cdr (assoc 'message e))]
-	 [st 
-	 (let loop ((x (map annotation-source (stack-trace k))))
-	   (cond [(null? x) '()]
-		 [(not (car x)) (loop (cdr x))]
-		 [else (cons (car x) (loop (cdr x)))]))])
-    (if (not (null? st))
-	(begin
-	  (let ([data (car st)])
-	    (let ([line (cdr (assoc 'line-number data))]
-		  [column (cdr (assoc 'column-number data))]
-		  [sourcefile (cdr (assoc 'source-file data))])
-	      (display (format "~a:~a:~a:~a:~a: ~a~%"
-			       sourcefile
-			       line column
-			       line column
-			       m)))
-	    (set! st (cdr st)))
-	  (for-each
-	   (lambda (data)
-	     (if data
-		 (let ([line (cdr (assoc 'line-number data))]
-		       [column (cdr (assoc 'column-number data))]
-		       [sourcefile (cdr (assoc 'source-file data))])
-		   (display (format "~a:~a:~a:~a:~a: <called from>~%" 
-				    sourcefile
-				    line column
-				    line column)))))
-	   st)))))
+(define stack-trace 
+  (letrec ([annotations-to-assoc
+            (lambda (expr)
+              (let loop ([x ()] [keys (annotation-keys expr)])
+                (if (null? keys) x
+                    (loop
+                     (cons (cons (car keys) (annotation expr (car keys)))
+                           x)
+                     (cdr keys)))))])
+    (lambda (e)
+      (let* ([k (cdr (assoc 'cont e))]
+             [m (cdr (assoc 'value e))]
+             [st
+              (let loop ((k k))
+                (cond [(null? k) '()]
+                      [(null? (continuation-nxp k)) 
+                       (loop (continuation-stk k))]
+                      [else 
+                       (let ([nxp (continuation-nxp k)])
+                         (cons nxp 
+                               (loop (continuation-stk k))))]))]
+             [annots 
+              (let loop ((st st) (last-st #f))
+                (if (null? st) '()
+                    (let ([asc (annotations-to-assoc (car st))])
+                      (if (null? asc)
+                          (begin
+                            (if last-st
+                                (set-cdr! last-st (cdr st)))
+                            (loop (cdr st) st))
+                          (cons asc (loop (cdr st) st))))))])
+        (if (not (null? annots))
+            (begin
+              (let ([data (car annots)])
+                (let ([line (cdr (assoc 'line-number data))]
+                      [column (cdr (assoc 'column-number data))]
+                      [sourcefile (cdr (assoc 'source-file data))])
+                      (display 
+                       (format "~a:~a:~a:~a:~a: ~a~%" 
+                               sourcefile
+                               line column
+                               line column
+                               m))))
+              (for-each
+               (lambda (data expr)
+                 (if data
+                     (let ([line (cdr (assoc 'line-number data))]
+                           [column (cdr (assoc 'column-number data))]
+                           [sourcefile (cdr (assoc 'source-file data))])
+                       (if (and (_fill-rib? expr)
+                                (_free-reference-exp? (_fill-rib-exp expr)))
+                           (display 
+                            (format "~a:~a:~a:~a:~a: <called from ~a>~%" 
+                                    sourcefile
+                                    line column
+                                    line column
+                                    (_free-reference-symbol
+                                     (_fill-rib-exp expr))))
+                           (display 
+                            (format "~a:~a:~a:~a:~a: <called from>~%" 
+                                    sourcefile
+                                    line column
+                                    line column))))))
+               (cdr annots) (cdr st)))
+              (display (format "{No stack trace available.}~%")))))))
 

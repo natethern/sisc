@@ -556,8 +556,9 @@
       <para>
 	The error handler required as an argument to
 	<function>call-with-failure-continuation</function>
-	must take three parameters.  The first, a string, is a human
-	readable message describing the error that occurred.  The
+	must take three parameters.  The first, a string, is a value
+	containing information about the error that occured.  This is
+	often a string containing the error message.  The
 	second is a procedure encapsulating the continuation that was
 	in place at the site of the error.  This continuation is
 	referred to as the <emphasis>error continuation</emphasis>

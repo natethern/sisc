@@ -32,7 +32,7 @@
     <property name="packagename" value="sisc"/>
     <property name="jarname" value="sisc.jar"/>
     <property name="heap" value="${basedir}/boot/sisc.heap"/>
-    <property name="quantity-type" value="64float"/>
+    <property name="quantity-type" value="apfloat"/>
     <property name="debugging" value="off"/>
     <property name="optimization" value="on"/>
     <property name="dist" value="${basedir}/dist"/>

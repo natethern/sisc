@@ -68,7 +68,7 @@ public class Interpreter extends Util {
     //REGISTERS
     public boolean               lck;
     public Value                 acc;
-    public Expression            nxp;
+    public Expression            nxp, lxp; //lxp used only for debugging
     public Value[]               vlr;
     public LexicalEnvironment    env;
     public CallFrame             stk, fk;
