@@ -1705,7 +1705,7 @@
               </para>
               <para>
                 <parameter>slot-name</parameter> names a
-                slot. <parameter>accessor</paramter> must be a generic
+                slot. <parameter>accessor</parameter> must be a generic
                 procedure. An accessor method for the slot will be
                 added to it. <parameter>modifier</paramter> must be a
                 generic procedure. A modifier method for the slot will
