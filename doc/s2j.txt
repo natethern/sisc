@@ -598,3 +598,7 @@ of field and method names has been improved and there is now also
 support for mangling class names.
 
 * Most of the Java reflection API is exported as Scheme functions.
+
+* The generic conversion procedure -> no longer exists since it relied
+on meta typing, which the new type system does not support. The
+specific conversion procedures should be used instead.
