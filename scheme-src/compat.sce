@@ -94,7 +94,15 @@
       ((lambda (t) (if t t (ormap proc (cdr list1))))
        (proc (car list1)))
       '#f)))
- 
+
+(define remq
+  (lambda (o lst)
+    (if (null? lst)
+        '()
+        (if (eq? o (car lst))
+            (remq o (cdr lst))
+            (cons (car lst) (remq o (cdr lst)))))))
+
 (define $sc-put-cte (void))
 (define identifier? (void))
 (define sc-expand (void))
