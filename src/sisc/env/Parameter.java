@@ -5,8 +5,6 @@ import sisc.interpreter.*;
 
 public abstract class Parameter extends Procedure {
  
-    public abstract Value getDefault(DynamicEnvironment dynenv);
-    public abstract void setDefault(DynamicEnvironment dynenv, Value v);
     public abstract Value getValue(DynamicEnvironment dynenv);
     public abstract void setValue(DynamicEnvironment dynenv, Value v);
 
@@ -18,7 +16,6 @@ public abstract class Parameter extends Procedure {
             switch (r.vlr.length) {
             case 0:
                 res = getValue(r.dynenv);
-                if (null == res) res = getDefault(r.dynenv);
                 break;
             case 1:
                 res = getValue(r.dynenv);

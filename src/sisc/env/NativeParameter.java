@@ -42,15 +42,6 @@ public class NativeParameter extends Parameter {
         throw new RuntimeException(liMessage(SISCB, "nativeparamnotfound", fieldName));
     }
 
-    public Value getDefault(DynamicEnvironment dynenv) {
-        //TODO: implement
-        return null;
-    }
-
-    public void setDefault(DynamicEnvironment dynenv, Value v) {
-        //TODO: implement
-    }
-
     public Value getValue(DynamicEnvironment dynenv) {
         try {
             return (Value)readMethod.invoke(dynenv, new Object[]{});
