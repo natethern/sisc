@@ -41,7 +41,7 @@
        (putprop 'last-exception '*debug* exception)
        (print-exception exception (stack-trace-on-error))))))
 
-(define current-prompt (make-config-parameter "prompt" ""))
+(define repl-prompt (make-config-parameter "replPrompt" ""))
 
 (define (get-last-exception)
   (getprop 'last-exception '*debug*))
@@ -55,7 +55,7 @@
               (let ([len (- (length (_exit-handler)) 1)])
                 (unless (zero? len)
                   (display len)))
-              (display (current-prompt))
+              (display (repl-prompt))
               (display "> ")
               ;;read
               (let ([exp (read-code (current-input-port))])
