@@ -59,11 +59,7 @@ public class CallFrame extends Procedure {
             w.vlk=true;
             if (w.nxp!=null)
                 w.nxp.setCaptured(r, w);
-            LexicalEnvironment tenv=w.env;
-            while (tenv!=null && !tenv.locked) {
-                tenv.locked=true;		
-                tenv=tenv.parent;
-            }
+	    LexicalEnvironment.lock(w.env);
             w=w.parent;
         } while (w!=null && !lastWasLocked); 
 

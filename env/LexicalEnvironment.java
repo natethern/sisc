@@ -23,6 +23,13 @@ public class LexicalEnvironment extends Value {
         this.parent=parent;
     }
 
+    public static final void lock(LexicalEnvironment env) {
+	while (env != null && !env.locked) {
+		env.locked=true;
+		env=env.parent;
+	} 
+    }
+
     public final Value lookup(int depth, int pos) {
         LexicalEnvironment e = this;
         while(depth-- > 0) e = e.parent;
