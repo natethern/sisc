@@ -53,13 +53,6 @@ public abstract class Expression extends Util implements Serializable {
 
     public Map annotations;
     
-    /**
-     * Returns the value of the annotation named by <tt>key</tt>.  
-     * If there is no such annotation, <tt>def</tt> is returned instead.
-     * 
-     * @param key 
-     * @param def 
-     */
     public synchronized Value getAnnotation(Symbol key, Value def) {
         if (annotations==null)
             return def;
@@ -67,25 +60,10 @@ public abstract class Expression extends Util implements Serializable {
         return (res == null) ? def : res;
     }
 
-    /**
-     * Returns the value of the annotation named by <tt>key</tt>.  False 
-     * is returned if there is no such annotation.
-     * 
-     * @param key 
-     */
     public Value getAnnotation(Symbol key) {
         return getAnnotation(key, FALSE);
     }
 
-    /**
-     * Sets the value of the annotation named by <tt>key</tt> to the 
-     * value <tt>val</tt>.  The previous value is returned.  If there 
-     * was no previous value, <tt>def</tt> is returned.
-     * 
-     * @param key 
-     * @param val 
-     * @param def 
-     */
     public synchronized Value setAnnotation(Symbol key, Value val, Value def) {
         if (annotations==null)
             annotations=new HashMap(0);
@@ -93,21 +71,10 @@ public abstract class Expression extends Util implements Serializable {
         return (res == null) ? def : res;
     }
 
-    /**
-     * Sets the value of the annotation named by <tt>key</tt> to the 
-     * value <tt>val</tt>.  The previous value is returned.  If there was 
-     * no previous value, false is returned.
-     * 
-     * @param key 
-     * @param val 
-     */
     public Value setAnnotation(Symbol key, Value val) {
         return setAnnotation(key, val, FALSE);
     }
 
-    /**
-     * Returns the set of all annotation keys on this object.
-     */
     public synchronized Set getAnnotationKeys() {
         if (annotations==null) return EMPTYSET;
         return annotations.keySet();
@@ -128,18 +95,19 @@ public abstract class Expression extends Util implements Serializable {
      * be evaluated next before this method returns.
      * 
      * @exception ContinuationException 
-     * @param r 
+     * @param r the Interpreter
      */
     public abstract void eval(Interpreter r) throws ContinuationException;
+
     /**
      * If an expression implements the Immediate interface, it must 
      * override getValue, which returns as a Value, the immediate value 
      * of this expression. 
      * 
      * @exception ContinuationException 
-     * @param r 
+     * @param r the Interpreter
      * @return the immediate value of this expression, or null if the value 
-     *        cannot be obtained   immediately.
+     *        cannot be obtained immediately.
      */
     public Value getValue(Interpreter r) throws ContinuationException {
         return null;
@@ -159,7 +127,7 @@ public abstract class Expression extends Util implements Serializable {
      * to write its state.
      * 
      * @exception IOException 
-     * @param s 
+     * @param s the Serializer
      */
     public void serialize(Serializer s) throws IOException {
     }
@@ -168,12 +136,11 @@ public abstract class Expression extends Util implements Serializable {
      * All Expressions must implement a default (no-argument) constructor.  
      * Those that wish to b serialized to a heap must implement both this 
      * and the serialize method.  The Expression may use any method of the 
-     * DataInput stream and the Serializer serialization context
+     * DataInput stream and the Deserializer serialization context
      * to read its state.
      * 
      * @exception IOException 
-     * @param s 
-     * @param dis 
+     * @param s the Deserializer
      */
     public void deserialize(Deserializer s) throws IOException
         {}

@@ -43,10 +43,10 @@ public class LibraryBuilder extends Serializer {
     }
 
     /**
-     * Add an entry point.
+     * Add a shared data structure
      *
-     * @param val the value of the entry point
-     * @return the index of the new (or existing) entry point
+     * @param val the shared data structure
+     * @return the index of the new (or existing) shared data structure
      */
     public int add(Expression val) {
         if (val==null) return -1;

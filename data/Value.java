@@ -52,10 +52,10 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     /**
-     * A synopsis is a limited number of characters of a
-     * human readable Value representation.  They are used in
-     * errors or informational messages where the entire value's 
-     * representation is not necessary.
+     * A synopsis is a limited number of characters of a human
+     * readable Value representation. They are used in errors or
+     * informational messages where the entire value's representation
+     * is not necessary.
      *
      * @param limit The number of characters to display
      */
@@ -75,10 +75,9 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     /**
-     * Compares this Value to another.  By default equal to eq.
-     * eq
+     * Compares this Value to another. By default equal to eq.
      * 
-     * @param v 
+     * @param v the other Value
      */
     public boolean equals(Object v) {
         return eq(v);
@@ -88,7 +87,7 @@ public abstract class Value extends Expression implements Immediate {
      * Compares this Value to another for pointer-equality.  This is
      * used to implement Scheme 'eq?'.
      * 
-     * @param v 
+     * @param v the other Value
      */
     public boolean eq(Object v) {
         return this==v;
@@ -98,7 +97,7 @@ public abstract class Value extends Expression implements Immediate {
      * Compares this value to another for semantic equality.  Used to
      * implement Scheme's 'equal?'.
      * 
-     * @param v 
+     * @param v the other Value
      */
     public boolean valueEqual(Value v) {
         return eq(v) || equals(v);
@@ -109,7 +108,7 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     /**
-     * Called to evaluate this value.  As Values ordinarily evaluate
+     * Called to evaluate this value. As Values ordinarily evaluate
      * to themselves, this method simply sets <tt>acc</tt> to this.
      * 
      * @param r 
@@ -121,7 +120,7 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     /**
-     * Called to obtain the value of this Value.  Simply <tt>this</tt>.
+     * Called to obtain the value of this Value. Simply <tt>this</tt>.
      * 
      * @param r 
      * @exception ContinuationException 

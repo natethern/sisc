@@ -77,21 +77,12 @@ public class Parser extends Util implements Tokens {
         this.lexer=l;
     }
 
-    /**
-     * Reads an s-expression from the given input port.
-     * 
-     * @param read If true, this is a Scheme read call, no annotations 
-     *             will be emitted even if annotations are enabled
-     */
     public final Value nextExpression(InputPort is, boolean read) throws IOException {
         return nextExpression(is, 10, read);
     }
 
-    /**
-     * Reads an s-expression from the given input port
-     */
     public final Value nextExpression(InputPort is) throws IOException {
-	return nextExpression(is, 10, false);
+        return nextExpression(is, 10, false);
     }
 
     protected final Value nextExpression(InputPort is, HashMap state, 
@@ -104,7 +95,10 @@ public class Parser extends Util implements Tokens {
      * Reads an s-expression from the given input port.
      *
      * @param radix Specifies the radix of any numbers that are read
-     * @param read If true, no annotations will be emitted
+     * @param read If true, this is a Scheme read call, no annotations
+     *             will be emitted even if annotations are enabled
+     * @return the read expression
+     * @exception IOException if an error occurs
      */
     public Value nextExpression(InputPort is, int radix,
                                 boolean read) throws IOException {

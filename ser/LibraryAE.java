@@ -127,8 +127,15 @@ public class LibraryAE extends AssociativeEnvironment {
         } else
             addressMap.remove(s);
     }
-
-    //Catch all occurences of sets and note them for when we serialize
+    
+    
+    /**
+     * Catch all occurences of sets and note them for when we serialize
+     *
+     * @param s the key being set
+     * @param v the value associated with the key
+     * @return index of binding
+     */
     public int store(Symbol s, Value v) {
         int rv=super.store(s, v);
         if (bindWatch!=null)

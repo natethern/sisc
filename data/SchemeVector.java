@@ -38,34 +38,16 @@ import java.io.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
-/**
- * A Scheme Vector 
- *
- */
 public class SchemeVector extends Value {
     public Value[] vals;
     protected int lastUnique=-1;
 
     public SchemeVector() {}
 
-    
-    /**
-     * Creates a new <code>SchemeVector</code> instance.  
-     *
-     * @param count The number of elements for the vector to contain, all
-     *              initialized to 0.
-     */
     public SchemeVector(int count) {
         this(count, Quantity.ZERO);
     }
 
-    
-    /**
-     * Creates a new <code>SchemeVector</code> instance.
-     *
-     * @param count The number of elements
-     * @param initializer The Scheme value to initialize the elements to.
-     */
     public SchemeVector(int count, Value initializer) {
         vals=new Value[count];
         for (int i=0; i<vals.length; i++) {
@@ -73,12 +55,6 @@ public class SchemeVector extends Value {
         }
     }
 
-    
-    /**
-     * Creates a new <code>SchemeVector</code> instance.
-     *
-     * @param v The values this vector will contain.
-     */
     public SchemeVector(Value[] v) {
         vals=v;
     }

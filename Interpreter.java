@@ -43,36 +43,31 @@ import java.util.*;
 /**
  * The SISC engine.
  * 
- * Interpreter is the SISC engine.  It contains the engine registers, and the main loop
- * responsible for repeatedly executing the <tt>nxp</tt> register and maintaining the stack.
- * Interpreter also localizes all thread-specific information.  One Interpreter instance
- * must exist per executing Scheme thread.
+ * Interpreter is the SISC engine.  It contains the engine registers,
+ * and the main loop responsible for repeatedly executing the
+ * <tt>nxp</tt> register and maintaining the stack. Interpreter also
+ * localizes all thread-specific information.  One Interpreter
+ * instance must exist per executing Scheme thread.
  */
 public class Interpreter extends Util {
 
     public static class ThrowSchemeException extends Expression {
 	
-	/**
-	 * "@param r
-	 * 
-	 * @exception ContinuationException 
-	 * @exception SchemeRuntimeException 
-	 */
-	public void eval(Interpreter r) 
-	    throws ContinuationException, SchemeRuntimeException {
-	    r.nxp=null;
-	    Values v=(Values)r.acc;
-	    throw new SchemeRuntimeException(v.values[0], 
-					     proc(v.values[1]), 
-					     v.values.length>2 ? 
-					     proc(v.values[2]) :
-					     //This really shouldn't ever happen, but it seems possible at the very top of stacks for some reason
-					     r.fk);
-	}
+        public void eval(Interpreter r) 
+            throws ContinuationException, SchemeRuntimeException {
+            r.nxp=null;
+            Values v=(Values)r.acc;
+            throw new SchemeRuntimeException(v.values[0], 
+                                             proc(v.values[1]), 
+                                             v.values.length>2 ? 
+                                             proc(v.values[2]) :
+                                             //This really shouldn't ever happen, but it seems possible at the very top of stacks for some reason
+                                             r.fk);
+        }
 
-	public Value express() {
-	    return list(Symbol.get("TSException"));
-	}
+        public Value express() {
+            return list(Symbol.get("TSException"));
+        }
     }
 
     //the compiler is stateless; if that ever changes it would need to
@@ -99,46 +94,21 @@ public class Interpreter extends Util {
         top_fk.vlk = true;
     }
 
-    /**
-     * Creates a new Interpreter with a specific AppContext and DynamicEnv
-     * 
-     * @param ctx 
-     * @param dynenv 
-     * @see sisc.Context.enter
-     */
     public Interpreter(AppContext ctx, DynamicEnv dynenv) {
-	fk=top_fk;
-	this.ctx = ctx;
-	this.dynenv = dynenv;
+        fk=top_fk;
+        this.ctx = ctx;
+        this.dynenv = dynenv;
     }
 
-    /**
-     * "@param v
-     * 
-     * @param v 
-     * @exception ContinuationException 
-     */
     public Expression compile(Value v) throws ContinuationException {
         return compiler.compile(this, v, ctx.toplevel_env);
     }
 
-    /**
-     * "@param v
-     * 
-     * @exception ContinuationException 
-     * @param v 
-     * @param env 
-     */
     public Expression compile(Value v, AssociativeEnvironment env)
-    throws ContinuationException {
+        throws ContinuationException {
         return compiler.compile(this, v, env);
     }
 
-    /**
-     * "@param e
-     * 
-     * @exception SchemeException 
-     */
     protected Value interpret(Expression e) throws SchemeException {
         stk=createFrame(null, null, false, null, fk, null);
         nxp=e;
@@ -146,9 +116,6 @@ public class Interpreter extends Util {
         return acc;
     }
 
-    /**
-     * "@exception SchemeException
-     */
     protected void interpret() throws SchemeException {
         try {
             do {
@@ -197,12 +164,12 @@ public class Interpreter extends Util {
     /**
      * Parses and evaluates an s-expression
      * 
+     * @param expr An s-expression
+     * @return The value of the evaluated s-expression
      * @exception IOException Raised if the given string does not  
      *     contain a  parseable s-expression
      * @exception SchemeException Raised if the evaluation of  
      *      the  expression results in an error
-     * @param expr An s-expression
-     * @return The value of the evaluated s-expression
      */
     public Value eval(String expr) throws IOException, SchemeException {
         InputPort ip=new InputPort(new BufferedReader(new StringReader(expr)));
@@ -218,12 +185,13 @@ public class Interpreter extends Util {
     }
 
     /**
-     * Evaluates a Scheme value as code.  This is equivalent to <tt>(eval <i>v</i>)</tt> in Scheme.
+     * Evaluates a Scheme value as code.  This is equivalent to
+     * <tt>(eval <i>v</i>)</tt> in Scheme.
      * 
-     * @exception SchemeException Raised if the evaluation of the  
-     *     expression  results in an error
      * @param v A Scheme Value
      * @return The resulting value
+     * @exception SchemeException Raised if the evaluation of the  
+     *     expression  results in an error
      */
     public Value eval(Value v) throws SchemeException {
         return eval(ctx.evaluator, new Value[] {v});
@@ -232,32 +200,22 @@ public class Interpreter extends Util {
     /**
      * Applies the given procedure to the given values
      * 
-     * @exception SchemeException Raised if the evaluation of the  
-     *     expression  results in an error
      * @param p A procedure
-     * @param args Zero or more evaluated arguments
-     * @return The value of the application
+     * @param args Arguments to call the procedure with
+     * @return The result returned by the procedure
+     * @exception SchemeException Raised if applying the
+     *     procedure results in an error
      */
     public Value eval(Procedure p, Value[] args) throws SchemeException {
-	acc = p;
-	vlr = args;
+        acc = p;
+        vlr = args;
         return interpret(APPEVAL);
     }
 
-    // Symbolic environment handling
-    /**
-     * "@param s
-     */
     public AssociativeEnvironment lookupContextEnv(Symbol s) {
         return ctx.lookupContextEnv(s);
     }
 
-    /**
-     * "@param s
-     * 
-     * @param s 
-     * @param env 
-     */
     public void defineContextEnv(Symbol s, AssociativeEnvironment env) {
         ctx.defineContextEnv(s, env);
     }
@@ -279,7 +237,7 @@ public class Interpreter extends Util {
      * @param s The name of the new binding
      * @param v The value of the new binding
      * @param context The name of the environment in which to  
-     *      create  the binding
+     *      create the binding
      */
     public void define(Symbol s, Value v, Symbol context) {
         AssociativeEnvironment contenv=getContextEnv(context);
