@@ -32,20 +32,41 @@
  */
 package sisc.boot;
 
+import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.util.*;
+import java.util.zip.*;
+import java.util.zip.GZIPInputStream;
+import sisc.*;
 import sisc.compiler.*;
 import sisc.data.*;
 import sisc.exprs.*;
-import sisc.*;
-import java.io.*;
-import java.util.zip.*;
-import java.util.*;
 
 public class GenerateHeap {
 
     public static void main(String[] args) throws Exception {
         Interpreter r;
+        String inHeap = null;
+        String outHeap = null;
+        int i;
 
-        System.out.println("Generating heap: "+args[0]);
+        for (i = 0; i < args.length; i++) {
+          if ("-in".equalsIgnoreCase(args[i]))
+            inHeap = args[++i];
+          else if ("-out".equalsIgnoreCase(args[i]))
+            outHeap = args[++i];
+          else if ("-files".equalsIgnoreCase(args[i])) {
+            i++;
+            break;
+          }
+        }
+
+        if (outHeap == null) {
+          System.out.println("Output heap file name has not been specified!");
+          System.exit(1);
+        }
 
 	AppContext ctx = new AppContext(sisc.compiler.Compiler.addSpecialForms(new AssociativeEnvironment()));
 	DynamicEnv d = new DynamicEnv(System.in, System.out);
@@ -56,6 +77,15 @@ public class GenerateHeap {
         FreeReferenceExp load=new FreeReferenceExp(Symbol.get("load"),
                               -1, r.ctx.toplevel_env);
 
+        if (inHeap != null) {
+          System.out.println("Reading input heap: " + inHeap);
+          ctx.loadEnv(r, new DataInputStream(
+                             new BufferedInputStream(
+                                 new GZIPInputStream(
+                                     new BufferedInputStream(
+                                         new FileInputStream(inHeap),
+                                         90000)))));
+        }
 
         Properties sysProps=System.getProperties();
         for (Iterator ir=sysProps.keySet().iterator(); ir.hasNext();) {
@@ -65,7 +95,9 @@ public class GenerateHeap {
                      Util.ENVVARS);
         }
 
-        for (int i=1; i<args.length; i++) {
+        System.out.println("Generating heap: "+outHeap);
+
+        for (; i<args.length; i++) {
             System.out.println("Expanding and compiling "+args[i]+"...");
             r.interpret(new AppExp(load,
                                    (Expression[])
@@ -90,7 +122,7 @@ public class GenerateHeap {
             DataOutputStream out=new DataOutputStream(
                                      new GZIPOutputStream(
                                          new BufferedOutputStream(
-                                             new FileOutputStream(args[0]))));
+                                             new FileOutputStream(outHeap))));
             ctx.saveEnv(r,out);
             out.flush();
             out.close();
