@@ -275,8 +275,18 @@
       (lambda ()
         (let loop ([e (read-code inf)])
           (if (not (eof-object? e))
-              (begin
-                (pretty-print (sc-expand e) outf)
+              (let ([res (sc-expand e)])
+                ;;transform (begin (void) expr ...) into expr ...
+                (if (and (pair? res) (eq? (car res) 'begin))
+                    (let ([res (cdr res)])
+                      (if (and (pair? res)
+                               (equal? (car res) '(void)))
+                          (set! res (cdr res))
+                          res)
+                      (for-each (lambda (expr)
+                                  (pretty-print expr outf))
+                                res))
+                    (pretty-print res outf))
                 (newline outf)
                 (loop (read inf)))))))
     (close-output-port outf)
@@ -379,13 +389,6 @@
 
 (define (error . args)
   (throw (apply make-error args)))
-
-(define (throw error . args)
-  (call-with-failure-continuation
-      (lambda (fk)
-        (if (null? args)
-            (call-with-current-continuation (lambda (k) (fk error k)))
-            (fk error (car args))))))
 
 (define (make-nested-error error-record parent-record)
   (cons (cons 'parent parent-record) error-record))
