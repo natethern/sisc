@@ -44,6 +44,8 @@
          (putprop 'last-exception '*debug* exception)
          (print-exception exception (stack-trace-on-error)))))))
 
+(define current-prompt (parameterize #f))
+
 (define (get-last-exception)
   (getprop 'last-exception '*debug*))
 
@@ -52,10 +54,13 @@
 (define repl
   (letrec ([repl/read
             (lambda (writer)
-              (display (format "#;~a> "
+              (display (format "#;~a~a> "
                                (let ((len (- (length (_exit-handler))
                                              1)))
-                                 (if (zero? len) "" len))))
+                                 (if (zero? len) "" len))
+                               (if (current-prompt) 
+                                   (string-append "-" (current-prompt))
+                                   "")))
               ;;read
               (let ([exp (read-code (current-input-port))])
                 (if (eof-object? exp) 
