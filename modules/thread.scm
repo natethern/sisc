@@ -1,5 +1,3 @@
-(import threading-module)
-
 ;;
 ; monitor/synchronize-unsafe will synchronize a set of expressions
 ; on a given monitor, but will *not* safely unlock the monitor when

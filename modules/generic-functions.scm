@@ -22,11 +22,7 @@
 (define (types<= x y) (every2 java/assignable? y x))
 (define (instances? x y) (every2 java/instance? y x))
 
-(define (synchronized monitor f)
-  (dynamic-wind
-   (lambda () (monitor/lock monitor))
-   f
-   (lambda () (monitor/unlock monitor))))
+(include "../modules/thread.scm")
 
 ;;Generic functions are mapped to names which in turn are the main key
 ;;by which methods are stored / looked up. We do this so that all
@@ -35,11 +31,13 @@
 (define *FUNCTIONS* (make-hashtable))
 (define *FUNCTIONS-LOCK* (monitor/new))
 (define (add-generic-function f name)
-  (synchronized *FUNCTIONS-LOCK*
-                (lambda () (*FUNCTIONS* f name))))
+  (monitor/synchronize-unsafe 
+   *FUNCTIONS-LOCK*
+   (*FUNCTIONS* f name)))
+
 (define (generic-function-name f)
-  (or (synchronized *FUNCTIONS-LOCK*
-                    (lambda () (*FUNCTIONS* f)))
+  (or (monitor/synchronize-unsafe *FUNCTIONS-LOCK*
+				   (*FUNCTIONS* f))
       (error "~a is not a generic function" f)))
 
 ;;we keep track of all the classes whose methods we have already
@@ -58,12 +56,12 @@
 (define *METHODS* (make-hashtable))
 (define *METHODS-LOCK* (monitor/new))
 (define (get-methods name)
-  (synchronized *METHODS-LOCK*
-                (lambda ()
-                  (let ([m (*METHODS* name)])
-                    (or m (let ([m (cons (monitor/new) '())])
-                            (*METHODS* name m)
-                            m))))))
+  (monitor/synchronize-unsafe 
+   *METHODS-LOCK*
+   (let ([m (*METHODS* name)])
+     (or m (let ([m (cons (monitor/new) '())])
+	     (*METHODS* name m)
+	     m)))))
 
 ;;This maps classes to lists of constructors ordered by their "specificity".
 ;;Constructors are represented by a pair with the CAR containing the
@@ -72,12 +70,12 @@
 (define *CONSTRUCTORS* (make-hashtable))
 (define *CONSTRUCTORS-LOCK* (monitor/new))
 (define (get-constructors class)
-  (synchronized *CONSTRUCTORS-LOCK*
-                (lambda ()
-                  (let ([c (*CONSTRUCTORS* class)])
-                    (or c (let ([c (cons (monitor/new) '())])
-                            (*CONSTRUCTORS* class c)
-                            c))))))
+  (monitor/synchronize-unsafe 
+   *CONSTRUCTORS-LOCK*
+   (let ([c (*CONSTRUCTORS* class)])
+     (or c (let ([c (cons (monitor/new) '())])
+	     (*CONSTRUCTORS* class c)
+	     c)))))
 
 ;;mangle java method names so they look a bit more like scheme
 ;;function names
@@ -135,8 +133,9 @@
                   (not (java/object? (method-function m1))))))))
 
 (define (add-method-helper m methods)
-  (synchronized (car methods)
-                (lambda () (add-method-helper2 m methods))))
+  (monitor/synchronize-unsafe 
+   (car methods)
+   (add-method-helper2 m methods)))
 (define (add-method-helper2 m methods)
   (let ([meths (cdr methods)])
     (if (null? meths)
@@ -160,8 +159,8 @@
                      (get-constructors class)))
 (define (add-class class)
   (if (and (not (java/null? class))
-           (not (synchronized *CLASSES-LOCK*
-                              (lambda () (*CLASSES* class #t)))))
+           (not (monitor/synchronize-unsafe *CLASSES-LOCK*
+					     (*CLASSES* class #t))))
       (begin
         (add-class (java/superclass class))
         (for-each add-class (vector->list (java/interfaces class)))

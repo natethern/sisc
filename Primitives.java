@@ -325,8 +325,11 @@ public class Primitives extends ModuleAdapter {
             case SYMBOL2STRING:
                 return new ImmutableString(symbol(f.vlr[0]).symval);
             case STRING2NUMBER:
+		String st=string(f.vlr[0]);
                 try {
-                    return (Quantity)f.dynenv.parser.nextExpression(new InputPort(new BufferedReader(new StringReader(string(f.vlr[0])))));
+                    return (Quantity)f.dynenv.parser.nextExpression(new InputPort(new BufferedReader(new StringReader(st))));
+		} catch (ClassCastException cce) {
+		    return FALSE;
                 } catch (NumberFormatException nf) {
                     return FALSE;
                 } catch (IOException e) {
@@ -549,7 +552,7 @@ public class Primitives extends ModuleAdapter {
             case CONS:
                 return new Pair(f.vlr[0], f.vlr[1]);
             case EQUAL:
-                return truth(f.vlr[0].equals(f.vlr[1]));
+                return truth(f.vlr[0].valueEqual(f.vlr[1]));
             case SETCAR:
                 truePair(f.vlr[0]).setCar(f.vlr[1]);
                 return VOID;

@@ -20,7 +20,6 @@
     [(_ m spec0 spec1 ...)
      (begin (import* m spec0)
             (import* m spec1 ...))]))
-
 ;;;;;;;;;;;;;;;; NATIVE MODULES ;;;;;;;;;;;;;;;
 
 (define-syntax native-module
@@ -63,7 +62,7 @@
     (for-each (lambda (x) (proc (car x) (cdr x))) (hashtable->alist ht)))
   (define (hashtable/map proc ht)
     (map (lambda (x) (proc (car x) (cdr x))) (hashtable->alist ht))))
-  
+
 (module generic-functions 
   ((define-generic generic-function)
    (define-method add-method generic-function-name)

@@ -30,7 +30,7 @@
 	top-level and symbolic environments are shared by all
 	threads.  If a thread makes a change to these environments,
 	the change will be visible in all other threads.  
-	unless changed by the thread, all threads share the same
+	Unless changed by the thread, all threads share the same
 	console input and output ports.  As threads originate from a
 	thunk created in the primordial thread or a child thread, the
 	lexical environment captured by the thunk may include some
@@ -38,7 +38,7 @@
 	will be visible by both the parent and child threads.  The
 	lexical environments created in an executing thread are
 	visible by that thread only (unless that thread spawns a child
-	thread whose thunk binds its parents lexicals).  
+	thread whose thunk binds it's parent's lexicals).  
       </para>
       <para>
 	Some resources can be shared but may also be distinct from
@@ -271,8 +271,8 @@
 	Though not guaranteed, the behavior of the scheduler when two 
 	threads, one with higher priority than another are both
 	runnable but only one processor is available to run a thread,
-	the higher priority thread will be selected.  If only equal
-	priority are available to be run, the scheduler can choose any
+	is that the higher priority thread will be selected.  If only equal
+	priority threads are available to be run, the scheduler can choose any
 	thread to run.  No guarantees are made about latency or fairness.
       </para>
       <para>

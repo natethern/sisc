@@ -851,7 +851,7 @@
       following:
     </para>
     <programlisting>
-      &lt;boxed value&gt; --&gt; &num;&amp;&lt;datum&gt;
+&lt;boxed value&gt; --&gt; &num;&amp;&lt;datum&gt;
     </programlisting>
     <para>
       This syntax denotes a boxed value, with

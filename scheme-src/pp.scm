@@ -58,7 +58,6 @@
 ;   (display obj) = (generic-write obj #t #f display-string)
 ;
 ; where display-string = (lambda (s) (for-each write-char (string->list s)) #t)
-
 (define (generic-write obj display? width output)
 
   (define string-buffer (open-output-string))

@@ -45,7 +45,6 @@ import java.net.*;
 public class REPL extends Thread {
     public Interpreter r;
 
-
     public REPL(Interpreter r) {
         this.r = r;
     }
@@ -54,20 +53,29 @@ public class REPL extends Thread {
 	try {
 	    String heapLocation=System.getProperty("HEAP", null);
 	    InputStream heap=null;
-	    if (heapLocation==null) 
-		heap=ClassLoader.getSystemResource("sisc.heap").openStream();
-	    else 
+	    if (heapLocation==null) {
+		URL heapURL=ClassLoader.getSystemResource("sisc.heap");
+		if (heapURL==null)
+		    heap=new FileInputStream("sisc.heap");
+		else 
+		    heap=heapURL.openStream();
+	    } else 
 		heap=new FileInputStream(heapLocation);
 	    heap=new BufferedInputStream(new GZIPInputStream(new BufferedInputStream(heap)), 65536);
 
 	    return heap;
-	} catch (IOException e) {
-	    return null;
+	} catch (Exception e) {
 	}
+	return null;
     }
 
     public static boolean initializeInterpreter(Interpreter r, String[] args) throws ClassNotFoundException {
-	return initializeInterpreter(r, args, new DataInputStream(findHeap()));
+	InputStream heap=findHeap();
+	if (heap==null) {
+	    System.err.println(Util.liMessage(Util.SISCB, "noheap"));
+	    return false;
+	}
+	return initializeInterpreter(r, args, new DataInputStream(heap));
     }
 
     public static boolean initializeInterpreter(Interpreter r, String[] args, DataInputStream in) throws ClassNotFoundException {
