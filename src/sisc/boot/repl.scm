@@ -76,7 +76,7 @@
 
                     ;;eval
 
-                      (let ([val (eval exp)])
+                      (let ([val (eval exp (interaction-environment))])
                         (if (not (void? val))
                             (begin (writer val) (newline)))
                         (repl/read writer))))))])
