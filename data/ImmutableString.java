@@ -33,7 +33,6 @@
 package sisc.data;
 
 import sisc.*;
-
 public class ImmutableString extends SchemeString {
 
     public ImmutableString() {}
@@ -57,7 +56,7 @@ public class ImmutableString extends SchemeString {
     }
     
     public int hashCode() {
-	boolean complete=false;
+	boolean complete=true;
 	int rv=0, reg=0;
 	for (int i=0; i<stringdata.length; i++) {
 	    if (complete) {
@@ -66,7 +65,9 @@ public class ImmutableString extends SchemeString {
 	    } else {
 		reg|=stringdata[i];
 	    }
+	    complete=!complete;
 	}
+	rv^=reg;
 	return rv;
     }
 }
