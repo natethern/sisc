@@ -18,5 +18,3 @@
 (define (with-output-to-string thunk)
   (call-with-output-string
     (lambda (port) (with-output-to-port port thunk))))
-
-        
