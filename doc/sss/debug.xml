@@ -159,6 +159,34 @@
       linkend="running-sisc"/> for information on passing system
       properties options to the &SISC; startup script.
     </para>
+    <para>
+      Finally, when debugging a program for a long period of time, it
+      may be desirable to have stack traces displayed whenever an
+      error occurs, rather than needing to invoke
+      <function>print-exception</function> or other functions each
+      time.  For this, the <function>stack-trace-on-error</function>
+      parameter may be set non-false.
+    </para>
+    <blockquote>
+      <para>
+        <indexterm><primary>stack-trace-on-error</primary>
+        </indexterm>
+        &parameter;
+        <methodsynopsis language="scheme">
+          <type>&num;t/&num;f</type>
+          <methodname>stack-trace-on-error</methodname>
+          <methodparam choice="opt">
+            <parameter>enabled</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>    
+            If set to a non-false value, stack traces will be
+            displayed whenever an uncaught error occurs in the REPL.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
   </sect1>
   <sect1 id="ActiveDebugging">
     <title>
