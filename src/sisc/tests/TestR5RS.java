@@ -71,9 +71,9 @@ public class TestR5RS
         interpreter = Context.enter("main");
 
         REPL.loadHeap(
-        	interpreter,
-        	REPL.findHeap(
-        	    null));
+         interpreter,
+         REPL.findHeap(
+             null));
     }
 
     protected void tearDown()
@@ -211,17 +211,17 @@ public class TestR5RS
         check("((if #f + *) 3 4)", "12");
     }
 
-	public void test4_1_3b()
-		throws Exception
-	{
-		try
-		{
-			eval("()");
-			fail();
-		}
-		catch (SchemeException e)
-		{ }
-	}
+ public void test4_1_3b()
+  throws Exception
+ {
+  try
+  {
+   eval("()");
+   fail();
+  }
+  catch (SchemeException e)
+  { }
+ }
 
 
     /// 4.1.4 Procedures
@@ -375,33 +375,33 @@ public class TestR5RS
         );
     }
 
-	public void test4_2_2b_letstar()
-		throws Exception
-	{
-		check(
-			"(let* ((a 1) (b (+ a 1)) (c (+ a b)) (d (+ b c)) (e (+ c d)))" +
-			"  (list a b c d e))",
-			"(1 2 3 5 8)"
-		);
-	}
+ public void test4_2_2b_letstar()
+  throws Exception
+ {
+  check(
+   "(let* ((a 1) (b (+ a 1)) (c (+ a b)) (d (+ b c)) (e (+ c d)))" +
+   "  (list a b c d e))",
+   "(1 2 3 5 8)"
+  );
+ }
 
-	public void test4_2_2c_letstar()
-		throws Exception
-	{
-		check("(let* ((x 1) (y x)) y)", "1");
-	}
+ public void test4_2_2c_letstar()
+  throws Exception
+ {
+  check("(let* ((x 1) (y x)) y)", "1");
+ }
 
-	public void test4_2_2d_letstar()
-		throws Exception
-	{
-		try
-		{
-			eval("(let* ((x y) (y 1)) 0)");
-			fail();
-		}
-		catch (SchemeException e)
-		{ }
-	}
+ public void test4_2_2d_letstar()
+  throws Exception
+ {
+  try
+  {
+   eval("(let* ((x y) (y 1)) 0)");
+   fail();
+  }
+  catch (SchemeException e)
+  { }
+ }
 
     public void test4_2_2_letrec()
         throws Exception

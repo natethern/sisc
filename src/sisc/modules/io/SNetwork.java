@@ -55,7 +55,7 @@ public class SNetwork extends IndexedProcedure {
         ACCEPT_TCP_SOCKET = 7,
         OPEN_SOCKET_OUTPUT_PORT = 10,
         OPEN_SOCKET_INPUT_PORT = 11,
-	OPEN_BINARY_SOCKET_OUTPUT_PORT = 12,
+        OPEN_BINARY_SOCKET_OUTPUT_PORT = 12,
         OPEN_BINARY_SOCKET_INPUT_PORT = 13,
         OPEN_TCP_SOCKET = 14,
         OPEN_TCP_LISTENER = 15,
@@ -73,32 +73,32 @@ public class SNetwork extends IndexedProcedure {
         public abstract void close() throws IOException;
         
         SchemeInputPort getInputPort(Interpreter r)
-	    throws IOException, ContinuationException {
+            throws IOException, ContinuationException {
             return getInputPort(r, r.dynenv.characterSet);
         }
         
         abstract SchemeInputPort getInputPort(Interpreter r, String encoding)
-	    throws IOException, ContinuationException;
+            throws IOException, ContinuationException;
         abstract SchemeInputPort getBinaryInputPort(Interpreter r)
-	    throws IOException, ContinuationException;
+            throws IOException, ContinuationException;
         abstract SchemeOutputPort getBinaryOutputPort(Interpreter r, 
                                                       boolean autoflush)
-	    throws IOException, ContinuationException;
-	
+            throws IOException, ContinuationException;
+ 
         SchemeOutputPort getOutputPort(Interpreter r, boolean autoflush)
-	    throws IOException, ContinuationException {
+            throws IOException, ContinuationException {
             return getOutputPort(r, r.dynenv.characterSet, autoflush); 
         }
         
         SchemeOutputPort getOutputPort(Interpreter r, String encoding)
-	    throws IOException, ContinuationException {
+            throws IOException, ContinuationException {
             return getOutputPort(r, encoding, false);
         }
-	
+ 
         abstract SchemeOutputPort getOutputPort(Interpreter r, 
                                                 String encoding, 
                                                 boolean autoflush)
-	    throws IOException, ContinuationException;
+            throws IOException, ContinuationException;
     }
     
     class SchemeServerSocket extends Value implements Closable {
@@ -136,17 +136,17 @@ public class SNetwork extends IndexedProcedure {
         public void close() throws IOException {
             s.close();
         }
-	
+ 
         public void setSoTimeout(int ms) throws SocketException {
             s.setSoTimeout(ms);
         }
-	
+ 
         public SchemeInputPort getBinaryInputPort(Interpreter r)
             throws IOException, ContinuationException {
             return new StreamInputPort(
                     new BufferedInputStream(s.getInputStream()));
         }
-	
+ 
         public SchemeInputPort getInputPort(Interpreter r, String encoding)
                    throws IOException, ContinuationException {
             return new ReaderInputPort(s.getInputStream(), encoding);
@@ -164,8 +164,8 @@ public class SNetwork extends IndexedProcedure {
                                                     boolean autoflush) 
             throws IOException, ContinuationException {
             return new StreamOutputPort(
-		    new BufferedOutputStream(s.getOutputStream()),
-		    autoflush);
+              new BufferedOutputStream(s.getOutputStream()),
+              autoflush);
         }
     }
     
@@ -331,7 +331,7 @@ public class SNetwork extends IndexedProcedure {
                 error(r, liMessage(SNETB, "outputoninputudp"));
             return new WriterOutputPort(
                     new UDPOutputStream(s, remoteHost, dport), encoding,
-		    autoflush);
+                    autoflush);
         }        
     }
 

@@ -7,7 +7,7 @@ public class WriterOutputPort extends AutoflushOutputPort {
     protected Writer out;
 
     public WriterOutputPort(OutputStream out, String encoding, boolean aflush) 
-	throws UnsupportedEncodingException {
+        throws UnsupportedEncodingException {
         this(new BufferedWriter(new OutputStreamWriter(out, encoding)), aflush);
     }
     

@@ -24,22 +24,22 @@ public class StringIO extends IndexedProcedure {
 
     public static class Index extends IndexedLibraryAdapter { 
 
-		public Value construct(int id) {
-			return new StringIO(id);
-		}
-		    	
-    	public Index() {
-        define("_get-output-string"  , GETOUTPUTSTRING);
-        define("_open-input-string"  , OPENINPUTSTRING);
-        define("_open-output-string" , OPENOUTPUTSTRING);
-        define("_open-source-input-string", OPENSOURCEINPUTSTRING);
-        define("_string-input-port?" , STRINGINPORTQ);
-        define("_string-output-port?", STRINGOUTPORTQ);
+        public Value construct(int id) {
+            return new StringIO(id);
+        }
+        
+        public Index() {
+            define("_get-output-string"  , GETOUTPUTSTRING);
+            define("_open-input-string"  , OPENINPUTSTRING);
+            define("_open-output-string" , OPENOUTPUTSTRING);
+            define("_open-source-input-string", OPENSOURCEINPUTSTRING);
+            define("_string-input-port?" , STRINGINPORTQ);
+            define("_string-output-port?", STRINGOUTPORTQ);
         }
     }
     
     public StringIO(int id) {
-    	super(id);
+     super(id);
     }
     
     public StringIO() {}
@@ -77,11 +77,10 @@ public class StringIO extends IndexedProcedure {
                 SchemeString s=new SchemeString(sw.getBuffer().toString());
                 sw.getBuffer().setLength(0);
                 return s;
-	    case OPENINPUTSTRING:
-		return new ReaderInputPort(new StringReader(string(f.vlr[0])));
+            case OPENINPUTSTRING:
+                return new ReaderInputPort(new StringReader(string(f.vlr[0])));
             case OPENSOURCEINPUTSTRING:
-                return new SourceInputPort(
-                        new StringReader(string(f.vlr[0])), "<string>");
+                return new SourceInputPort(new StringReader(string(f.vlr[0])), "<string>");
             default:
                 throwArgSizeException();
             }

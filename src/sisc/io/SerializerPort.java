@@ -29,13 +29,13 @@ public class SerializerPort
     }
     
     public void flush() throws IOException {
-	serializer.flush();
-	super.flush();
+        serializer.flush();
+        super.flush();
     }
 
     public void close() throws IOException {
-	serializer.close();
-	super.close();
+        serializer.close();
+        super.close();
     }
 }
 /*

@@ -16,7 +16,7 @@ public class ApplyParentFrame extends Procedure {
     }
 
     public void apply(Interpreter r) throws ContinuationException {
-	c.parent.apply(r);
+        c.parent.apply(r);
     }
 
     public void display(ValueWriter w) throws IOException {

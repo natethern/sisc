@@ -17,7 +17,7 @@ public class Symbol extends Value {
     }
 
     public static Symbol get(String str) {
-	return get(str, false);
+        return get(str, false);
     }
 
     public static Symbol get(String str, boolean caseSensitive) {

@@ -13,9 +13,9 @@ import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 
 public class EvalExp extends Expression implements OptimisticHost {
-	public static final int POS_PRE=0, POS_POST=1;
-
-	public Expression pre, post;
+    public static final int POS_PRE=0, POS_POST=1;
+    
+    public Expression pre, post;
     public boolean preImmediate;
 
     public EvalExp(Expression pre, Expression post, boolean preImmediate) {
@@ -30,17 +30,17 @@ public class EvalExp extends Expression implements OptimisticHost {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-    	try {
+     try {
             if (preImmediate) {
                 r.acc = pre.getValue(r);
                 r.next(post);
             } else {
                 r.push(post);
                 r.next(pre);
-            }    		
-    	} catch (OptimismUnwarrantedException uwe) {
-    	  eval(r);
-    	}
+            }      
+     } catch (OptimismUnwarrantedException uwe) {
+       eval(r);
+     }
     }
 
     public Value express() {
@@ -65,24 +65,24 @@ public class EvalExp extends Expression implements OptimisticHost {
         return v.visit(pre) && v.visit(post);
     }
 
-	/* (non-Javadoc)
-	 * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
-	 */
-	public void alter(int uexpPosition, Expression replaceWith) {
-		switch(uexpPosition) {
-		case POS_PRE:
-			pre=replaceWith;
-			if (preImmediate && !(replaceWith instanceof Immediate)) {
-				preImmediate=false;
-			}
-			break;
-		case POS_POST:
-			post=replaceWith;
-			break;
-		}
+    /* (non-Javadoc)
+     * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
+     */
+    public void alter(int uexpPosition, Expression replaceWith) {
+        switch(uexpPosition) {
+        case POS_PRE:
+            pre=replaceWith;
+            if (preImmediate && !(replaceWith instanceof Immediate)) {
+                preImmediate=false;
+            }
+            break;
+        case POS_POST:
+            post=replaceWith;
+            break;
+        }
         if (replaceWith instanceof OptimisticHost) 
             ((OptimisticHost)replaceWith).setHosts();
-	}
+    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public

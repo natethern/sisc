@@ -12,7 +12,7 @@ import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 
 public class FillRibExp extends Expression implements OptimisticHost {
-	static final int POS_EXP=0, POS_NXP=1;
+    static final int POS_EXP=0, POS_NXP=1;
 
     public Expression exp, nxp;
     public int pos;
@@ -31,18 +31,18 @@ public class FillRibExp extends Expression implements OptimisticHost {
     }
     
     public void eval(Interpreter r) throws ContinuationException {
-    	try {
-        	r.setVLR(pos, r.acc);
+     try {
+         r.setVLR(pos, r.acc);
             if (lastAndRatorImmediate) {
                 r.acc=exp.getValue(r);
                 r.next(nxp);
             } else {
                 r.push(nxp);
                 r.next(exp);
-            }    		
-    	} catch (OptimismUnwarrantedException uwe) {
-    		eval(r);
-    	}	
+            }      
+     } catch (OptimismUnwarrantedException uwe) {
+      eval(r);
+     } 
     }
 
     public Value express() {
@@ -69,22 +69,22 @@ public class FillRibExp extends Expression implements OptimisticHost {
         return v.visit(exp) &&  v.visit(nxp);
     }
 
-	public void alter(int uexpPosition, Expression replaceWith) {
-		switch(uexpPosition) {
-		case POS_NXP:
-			nxp=replaceWith;
-			break;
-		case POS_EXP:
-			exp=replaceWith;
-			if (lastAndRatorImmediate && !(replaceWith instanceof Immediate)) {
-				lastAndRatorImmediate=false;
-			}
-			break;
-		}
+    public void alter(int uexpPosition, Expression replaceWith) {
+        switch(uexpPosition) {
+        case POS_NXP:
+            nxp=replaceWith;
+            break;
+        case POS_EXP:
+            exp=replaceWith;
+            if (lastAndRatorImmediate && !(replaceWith instanceof Immediate)) {
+                lastAndRatorImmediate=false;
+            }
+            break;
+        }
         if (replaceWith instanceof OptimisticExpression) {
             ((OptimisticExpression)replaceWith).setHost(this, uexpPosition);
         }        
-	}
+    }
 }
 
 /*

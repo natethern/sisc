@@ -18,14 +18,14 @@ public class SchemeException extends Exception {
      * @return the Scheme message Pair as String
      */
     public String getMessage() {
-    	return m.toString();
+        return m.toString();
     }
 
     /**
      * @return the bare Scheme message text 
      */
     public String getMessageText() {
-    	return ((Pair)m.car).cdr.toString();
+        return ((Pair)m.car).cdr.toString();
     }
 
 }

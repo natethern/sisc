@@ -41,13 +41,13 @@ public class Compiler extends CompilerConstants {
     public Compiler() {}
 
     public static void addSpecialForms(SymbolicEnvironment menv) {
-    	for (Iterator i=SYNTACTIC_TOKENS.keySet().iterator(); i.hasNext();) {
+        for (Iterator i=SYNTACTIC_TOKENS.keySet().iterator(); i.hasNext();) {
             Object ns=i.next();
             if (ns instanceof String) {
-        		String name=(String)ns;
-		      	extendenv(menv,name,(Syntax)SYNTACTIC_TOKENS.get(name));
+                String name=(String)ns;
+                extendenv(menv,name,(Syntax)SYNTACTIC_TOKENS.get(name));
             }
-    	}
+        }
     }
 
     protected Expression compile(Interpreter r, Expression v, Pair sets,
@@ -91,13 +91,13 @@ public class Compiler extends CompilerConstants {
     }
 
     public static final int getExpType(SymbolicEnvironment env, Value s) {
-    	if (s instanceof Syntax) {
+        if (s instanceof Syntax) {
             return ((Syntax)s).synid;
         } else if (s instanceof Symbol){
             Object h = env.lookup((Symbol)s);
             if (h != null && (h instanceof Syntax))
                 return ((Syntax) h).synid;
-    	}
+        }
         return APPLICATION;
     }
 
@@ -194,76 +194,76 @@ public class Compiler extends CompilerConstants {
                        env, null);
             break;
         case LAMBDA:
-        	{
-	            boolean infArity=false;
-	            // Skip #t
-	            expr=(Pair)expr.cdr;
-	
-	            Symbol[] formals=null;
-	            Value ftmp=expr.car;
-	            if (ftmp instanceof Pair && ftmp != EMPTYLIST) {
-	                formals=argsToSymbols((Pair)ftmp);
-	                do {
-	                    ftmp=((Pair)ftmp).cdr; 
-	                } while (ftmp != EMPTYLIST && ftmp instanceof Pair);
-	                infArity=ftmp instanceof Symbol;
-	            } else if (expr.car instanceof Symbol) {
-	                formals=new Symbol[] {(Symbol)expr.car};
-	                infArity=true;
-	            } else {
-	                formals=new Symbol[0];
-	            }
-	            
-	            expr=(Pair)expr.cdr;
-	
-	            Symbol[] lexicalSyms=argsToSymbols((Pair)expr.car);
-	            expr=(Pair)expr.cdr;
-	            	            ReferenceFactory nf=new ReferenceFactory(formals, lexicalSyms);
-	
-	            tmp=compile(r, expr.car, sets, nf, TAIL | LAMBDA | REALTAIL, 
-	                        env, null);
-	            int[][] copies=resolveCopies(rf, lexicalSyms);
-	            int[] boxes=findBoxes(formals, sets);
-	            rv=new LambdaExp(formals.length, 
-	                             tmp, infArity, copies[0], copies[1], 
-	                             (boxes.length==0 ? null :boxes));
+         {
+             boolean infArity=false;
+             // Skip #t
+             expr=(Pair)expr.cdr;
+ 
+             Symbol[] formals=null;
+             Value ftmp=expr.car;
+             if (ftmp instanceof Pair && ftmp != EMPTYLIST) {
+                 formals=argsToSymbols((Pair)ftmp);
+                 do {
+                     ftmp=((Pair)ftmp).cdr; 
+                 } while (ftmp != EMPTYLIST && ftmp instanceof Pair);
+                 infArity=ftmp instanceof Symbol;
+             } else if (expr.car instanceof Symbol) {
+                 formals=new Symbol[] {(Symbol)expr.car};
+                 infArity=true;
+             } else {
+                 formals=new Symbol[0];
+             }
+             
+             expr=(Pair)expr.cdr;
+ 
+             Symbol[] lexicalSyms=argsToSymbols((Pair)expr.car);
+             expr=(Pair)expr.cdr;
+                          ReferenceFactory nf=new ReferenceFactory(formals, lexicalSyms);
+ 
+             tmp=compile(r, expr.car, sets, nf, TAIL | LAMBDA | REALTAIL, 
+                         env, null);
+             int[][] copies=resolveCopies(rf, lexicalSyms);
+             int[] boxes=findBoxes(formals, sets);
+             rv=new LambdaExp(formals.length, 
+                              tmp, infArity, copies[0], copies[1], 
+                              (boxes.length==0 ? null :boxes));
                 if (tmp instanceof OptimisticExpression) {
                     ((OptimisticExpression)tmp).setHost((LambdaExp)rv, 0);
                 }
-        	}
+         }
             break;
         case LETREC:
-        	{
-	            // Skip the #t marker
-	            expr=(Pair)expr.cdr;
-	
-	            Pair tmpp=(Pair)expr.car;
-	
-	            Vector formv=new Vector();
-	            Vector expv=new Vector();
-	            
-	            while (tmpp != EMPTYLIST) {
-	                Pair bp=(Pair)tmpp.car;
-	
-	                formv.add(bp.car);
-	                expv.add(((Pair)bp.cdr).car);
-	                tmpp=(Pair)tmpp.cdr;
-	            }
-	            
-	            Symbol[] formals=new Symbol[formv.size()];
-	            Expression[] rhses=new Expression[expv.size()];
-	            formv.copyInto(formals);
-	            expv.copyInto(rhses);
-	
-	            expr=(Pair)expr.cdr;
-	            Symbol[] lexicalSyms=argsToSymbols((Pair)expr.car);
-	            expr=(Pair)expr.cdr;
-	            
-	            rv=compileLetrec(r, formals, lexicalSyms, rhses, expr.car, 
-	                             sets, rf, env, context);
+         {
+             // Skip the #t marker
+             expr=(Pair)expr.cdr;
+ 
+             Pair tmpp=(Pair)expr.car;
+ 
+             Vector formv=new Vector();
+             Vector expv=new Vector();
+             
+             while (tmpp != EMPTYLIST) {
+                 Pair bp=(Pair)tmpp.car;
+ 
+                 formv.add(bp.car);
+                 expv.add(((Pair)bp.cdr).car);
+                 tmpp=(Pair)tmpp.cdr;
+             }
+             
+             Symbol[] formals=new Symbol[formv.size()];
+             Expression[] rhses=new Expression[expv.size()];
+             formv.copyInto(formals);
+             expv.copyInto(rhses);
+ 
+             expr=(Pair)expr.cdr;
+             Symbol[] lexicalSyms=argsToSymbols((Pair)expr.car);
+             expr=(Pair)expr.cdr;
+             
+             rv=compileLetrec(r, formals, lexicalSyms, rhses, expr.car, 
+                              sets, rf, env, context);
                 ((OptimisticHost)rv).setHosts();
-        	}
-	        break;
+         }
+         break;
         case _IF:
             tmp=compile(r, expr.car, sets, rf, PREDICATE, env, null);
             expr=(Pair)expr.cdr;
@@ -586,10 +586,6 @@ public class Compiler extends CompilerConstants {
         System.err.println(r.interpret(v));
     }
 }
-
-
-
-
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file

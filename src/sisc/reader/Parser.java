@@ -26,22 +26,22 @@ public class Parser extends Util implements Tokens {
         PRODUCE_IMMUTABLES =0x1,
         PRODUCE_ANNOTATIONS=0x2,
         STRICT_R5RS        =0x4,
-	    CASE_SENSITIVE     =0x8;
+        CASE_SENSITIVE     =0x8;
 
     public boolean annotate = Defaults.EMIT_ANNOTATIONS;
 
     public Lexer lexer;
 
     static final Object DOT=
-	new Object() {
-	    public String toString() { return "."; }
-	};
-
+        new Object() {
+            public String toString() { return "."; }
+        };
+    
     static final Object ENDPAIR=
-	new Object() {
-	    public String toString() { return ")"; }
-	};
-	    
+        new Object() {
+            public String toString() { return ")"; }
+        };
+    
     static final Symbol SYNTAX=Symbol.get("syntax"),
         ANNOTATION=Symbol.get("make-annotation"),
         LINE=Symbol.get("line-number"),
@@ -290,13 +290,13 @@ public class Parser extends Util implements Tokens {
                 else if (bv.equals("nan"))
                     return Quantity.NaN;
                 else throw new IOException(liMessage(SISCB, "invalidsharpc", bv));
-			case '%': 
-				// Syntactic tokens
+            case '%': 
+                // Syntactic tokens
                 bv=lexer.readToBreak(is, Lexer.special, false, false).toLowerCase();
                 Syntax s=(Syntax)CompilerConstants.SYNTACTIC_TOKENS.get(bv);
                 if (s==null)
-                	throw new IOException(liMessage(SISCB, "invalidsyntoken", bv));
-                return s;				
+                 throw new IOException(liMessage(SISCB, "invalidsyntoken", bv));
+                return s;    
             case '\'':
                 o=listSpecial(SYNTAX, is, state, def, flags);
                 break;

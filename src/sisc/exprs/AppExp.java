@@ -12,8 +12,8 @@ import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 
 public class AppExp extends Expression implements OptimisticHost {
-	public static final int POS_EXP=-1, POS_NXP=-2;
-	
+    public static final int POS_EXP=-1, POS_NXP=-2;
+ 
     public Expression exp, rands[], nxp;
     public boolean allImmediate;
     protected int l;
@@ -37,8 +37,8 @@ public class AppExp extends Expression implements OptimisticHost {
     
     public void eval(Interpreter r) throws ContinuationException {
         try {
-        	r.newVLR(l);
-
+            r.newVLR(l);
+            
             if (allImmediate) {
                 r.acc=exp.getValue(r);
                 // Load the immediates from right to left
@@ -56,9 +56,9 @@ public class AppExp extends Expression implements OptimisticHost {
                         r.vlr[i] = ex.getValue(r);
                 }
                 r.next(exp);
-            }        	
+            }         
         } catch (OptimismUnwarrantedException uwe) {
-        	eval(r);
+            eval(r);
         }
     }
 
@@ -102,26 +102,26 @@ public class AppExp extends Expression implements OptimisticHost {
         return v.visit(nxp);
     }
 
-	/* (non-Javadoc)
-	 * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
-	 */
-	public void alter(int uexpPosition, Expression replaceWith) {
-		switch(uexpPosition) {
-		case POS_EXP:
-			exp=replaceWith;
-			break;
+    /* (non-Javadoc)
+     * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
+     */
+    public void alter(int uexpPosition, Expression replaceWith) {
+        switch(uexpPosition) {
+        case POS_EXP:
+            exp=replaceWith;
+            break;
         case POS_NXP:
-        	nxp=replaceWith;
-        	break;
+            nxp=replaceWith;
+            break;
         default:
-        	rands[uexpPosition]=replaceWith;
-		}
-		if (allImmediate && !(replaceWith instanceof Immediate)) 
-			allImmediate=false;
+            rands[uexpPosition]=replaceWith;
+        }
+        if (allImmediate && !(replaceWith instanceof Immediate)) 
+            allImmediate=false;
         if (replaceWith instanceof OptimisticHost) 
             ((OptimisticHost)replaceWith).setHosts();
-
-	}
+        
+    }
 }
 
 /*

@@ -580,20 +580,20 @@ public abstract class Util implements Version {
     }
 
     public static Pair reverseInPlace(Pair s) {
-		if (s==EMPTYLIST) {
-		    return EMPTYLIST;
-		}
-		Pair r=EMPTYLIST;
-		Value d;
-		for (;;) {
-		    d=s.cdr;
-		    s.cdr=r;
-		    r=s;
-		    if (d==EMPTYLIST) {
-		        break;
-		    }
-		    s=(Pair)d;
-	    }
+        if (s==EMPTYLIST) {
+            return EMPTYLIST;
+        }
+        Pair r=EMPTYLIST;
+        Value d;
+        for (;;) {
+            d=s.cdr;
+            s.cdr=r;
+            r=s;
+            if (d==EMPTYLIST) {
+                break;
+            }
+            s=(Pair)d;
+        }
         return r;
     }
 

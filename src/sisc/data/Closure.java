@@ -71,7 +71,7 @@ public class Closure extends Procedure implements NamedValue {
     }
 
     public void apply(Interpreter r) throws ContinuationException {
-    	r.lcl= matchArgs(r);
+     r.lcl= matchArgs(r);
         r.env=env;
         r.nxp=body;
     }
@@ -125,14 +125,6 @@ public class Closure extends Procedure implements NamedValue {
     }           
     */
 }
-
-
-
-
-
-
-
-
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file

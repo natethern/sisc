@@ -34,9 +34,9 @@ public abstract class IndexedLibraryAdapter extends NativeLibrary {
             int inum=i.intValue();
             Value v=construct(inum);
             if (v instanceof NamedValue)
-            	v.setName(name);
+             v.setName(name);
            
-	        return v;
+         return v;
         } catch (NullPointerException n) {
             throw new NoSuchMethodError();
         }

@@ -31,12 +31,11 @@ public class AnnotatedExpr extends Value implements OptimisticHost {
     }
     
     public final Value getValue(Interpreter r) throws ContinuationException {
-    	try {
-    		return expr.getValue(r);
-    	} catch (OptimismUnwarrantedException uwe) {
-    		return getValue(r);
-    	}
-    
+        try {
+            return expr.getValue(r);
+        } catch (OptimismUnwarrantedException uwe) {
+            return getValue(r);
+        }
     }
 
     public Value express() {
@@ -70,15 +69,15 @@ public class AnnotatedExpr extends Value implements OptimisticHost {
         return v.visit(expr) && v.visit(annotation) && v.visit(stripped);
     }
 
-	/* (non-Javadoc)
-	 * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
-	 */
-	public void alter(int uexpPosition, Expression replaceWith) {
-		expr=replaceWith;
+    /* (non-Javadoc)
+     * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
+     */
+    public void alter(int uexpPosition, Expression replaceWith) {
+        expr=replaceWith;
         if (replaceWith instanceof OptimisticExpression) {
             ((OptimisticExpression)replaceWith).setHost(this, uexpPosition);
         }
-	}
+    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public

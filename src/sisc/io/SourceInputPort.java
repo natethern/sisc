@@ -12,17 +12,17 @@ public class SourceInputPort extends ReaderInputPort {
     }
 
     /**
-	 * @param reader
-	 */
-	public SourceInputPort(Reader reader, String file) {
-		super(reader);
-
-		line=1;
-		column=1;
-		sourceFile=file;
-	}
-
-	public int readHelper() throws IOException {
+     * @param reader
+     */
+    public SourceInputPort(Reader reader, String file) {
+        super(reader);
+        
+        line=1;
+        column=1;
+        sourceFile=file;
+    }
+    
+    public int readHelper() throws IOException {
         int c=super.readHelper();
         if (c=='\n') {
             line++;

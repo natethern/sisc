@@ -121,16 +121,16 @@ public class REPL {
                        new Value[] {new SchemeString(files[i])});
             } catch (SchemeException se) {
                 Value vm=se.m;
-	       try {
-		   r.eval((Procedure)r.lookup(Symbol.get("print-error"), Util.TOPLEVEL),
-			  new Value[] {vm, se.e});
-	       } catch (SchemeException se2) {
-		   if (vm instanceof Pair) {
-		       System.err.println(simpleErrorToString((Pair)vm));
-		   } else {
-		       System.err.println(Util.liMessage(Util.SISCB, "errorduringload")+vm);
-		   }
-	       }
+        try {
+     r.eval((Procedure)r.lookup(Symbol.get("print-error"), Util.TOPLEVEL),
+     new Value[] {vm, se.e});
+        } catch (SchemeException se2) {
+     if (vm instanceof Pair) {
+         System.err.println(simpleErrorToString((Pair)vm));
+     } else {
+         System.err.println(Util.liMessage(Util.SISCB, "errorduringload")+vm);
+     }
+        }
                 returnStatus=false;
             }
         }
@@ -206,47 +206,47 @@ public class REPL {
         
         String expr=(String)args.get("eval");
         if (expr!=null) {
-	    Value v=Util.VOID;
-	    try {
-		v=r.eval(expr);
-		if (!call) 
-		    System.out.println(v);
-	    } catch (SchemeException se) {
-		se.printStackTrace();
-		returnCode = 1;
-	    }
+            Value v=Util.VOID;
+            try {
+                v=r.eval(expr);
+                if (!call) 
+                    System.out.println(v);
+            } catch (SchemeException se) {
+                se.printStackTrace();
+                returnCode = 1;
+            }
         }
 
         String func=(String)args.get("call-with-args");
         if (func!=null) {
             Procedure fun=null;
-	    try {
-		fun=Util.proc(r.eval(func));
-	    } catch (SchemeException se) {
-		se.printStackTrace();
-		returnCode = 1;
-	    }
-	    if (fun!=null) {
-		Vector av=(Vector)args.get("argv");
-		Value[] sargs=new Value[(av == null ? 0 : 
-						         av.size())];
-		for (int i=0; i<sargs.length; i++) 
-		    sargs[i]=new SchemeString((String)av.elementAt(i));
-		Value v=Util.VOID;
-		try {
-		    v=r.eval(fun, sargs);
-		    if (noRepl) {
-			if (v instanceof Quantity)
-			    returnCode=((Quantity)v).indexValue();
-			else if (!(v instanceof SchemeVoid)) {
-			    System.out.println(v);
-			}
-		    }
-		} catch (SchemeException se) {
-		    se.printStackTrace();
-		    returnCode = 1;
-		}           
-	    }
+            try {
+                fun=Util.proc(r.eval(func));
+            } catch (SchemeException se) {
+                se.printStackTrace();
+                returnCode = 1;
+            }
+            if (fun!=null) {
+                Vector av=(Vector)args.get("argv");
+                Value[] sargs=new Value[(av == null ? 0 : 
+                                         av.size())];
+                for (int i=0; i<sargs.length; i++) 
+                    sargs[i]=new SchemeString((String)av.elementAt(i));
+                Value v=Util.VOID;
+                try {
+                    v=r.eval(fun, sargs);
+                    if (noRepl) {
+                        if (v instanceof Quantity)
+                            returnCode=((Quantity)v).indexValue();
+                        else if (!(v instanceof SchemeVoid)) {
+                            System.out.println(v);
+                        }
+                    }
+                } catch (SchemeException se) {
+                    se.printStackTrace();
+                    returnCode = 1;
+                }           
+            }
         }
         
         DynamicEnvironment dynenv=r.dynenv;

@@ -79,23 +79,16 @@ public class LambdaExp extends Expression implements Immediate, OptimisticHost {
         return v.visit(body);
     }
 
-	/* (non-Javadoc)
-	 * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
-	 */
-	public void alter(int uexpPosition, Expression replaceWith) {
-		body=replaceWith;
+    /* (non-Javadoc)
+     * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
+     */
+    public void alter(int uexpPosition, Expression replaceWith) {
+        body=replaceWith;
         if (replaceWith instanceof OptimisticExpression) {
             ((OptimisticExpression)replaceWith).setHost(this, uexpPosition);
         }        
-	}
+    }
 }
-
-
-
-
-
-
-
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file

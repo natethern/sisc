@@ -225,13 +225,13 @@ public abstract class Util extends IndexedProcedure {
             return (c == null) ?
                 null : makeArrayClass(c, (name.length()-idx)/2);
         }
-		Class res = resolvePrimitiveType(name);
-		if (res != null) return res;
-		try {
-		  return Class.forName(name, true, cl);
-		} catch (ClassNotFoundException e) {
-		  return null;
-		}
+        Class res = resolvePrimitiveType(name);
+        if (res != null) return res;
+        try {
+            return Class.forName(name, true, cl);
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
     }
 
     /**

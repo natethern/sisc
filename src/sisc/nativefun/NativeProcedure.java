@@ -30,7 +30,7 @@ public abstract class NativeProcedure extends Procedure implements NamedValue {
                 r,
                 getName(),
                 liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()),
-		cc);
+  cc);
         } catch (NestedPrimRuntimeException npr) {
             error(r, getName(), npr);
         } catch (RuntimeException re) {

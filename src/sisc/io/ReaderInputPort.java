@@ -6,7 +6,7 @@ public class ReaderInputPort extends PushbackInputPort {
     protected Reader r;
 
     public ReaderInputPort(InputStream in, String encoding)
-	throws UnsupportedEncodingException {
+        throws UnsupportedEncodingException {
         this(new BufferedReader(new InputStreamReader(in, encoding)));
     }
     

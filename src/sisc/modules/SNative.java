@@ -404,7 +404,7 @@ public class SNative extends IndexedFixableProcedure {
         MAPCDR = 22,
         MAPCAR = 23,
         REVERSE = 24,
-	REVERSEB = 25;
+        REVERSEB = 25;
     
     public static void main(String[] args) throws Exception {
         Symbol a=Symbol.get("a");

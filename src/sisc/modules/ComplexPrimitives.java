@@ -143,7 +143,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                     throwPrimException(e.getMessage());
                 }
             case GETPROP:
-            	SymbolicEnvironment tlev=r.getCtx().toplevel_env;
+             SymbolicEnvironment tlev=r.getCtx().toplevel_env;
                 int loc=tlev.getLoc(symbol(vlr[0]));
                 if (loc==-1) return FALSE;
                 else return tlev.lookup(loc); 

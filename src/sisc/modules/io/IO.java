@@ -51,7 +51,7 @@ public class IO extends IndexedProcedure {
             return new IO(id);
         }
         
-    	public Index() {
+     public Index() {
             define("absolute-path?"     , ABSPATHQ);
             define("char-ready?"        , CHARREADY);
             define("close-input-port"   , CLOSEINPUTPORT);
@@ -82,7 +82,7 @@ public class IO extends IndexedProcedure {
     }
     
     public IO(int id) {
-    	super(id);
+        super(id);
     }
     
     public IO() {}

@@ -8,42 +8,42 @@ import sisc.data.*;
 import sisc.exprs.AnnotatedExpr;
 
 public class Annotations extends IndexedProcedure {
-	protected static final int ANNOTATION = 0,
-		ANNOTATIONQ = 1,
-		ANNOTATIONKEYS = 2,
-		ANNOTATIONSRC = 3,
-		ANNOTATIONEXPR = 4,
-		ANNOTATIONSTRIPPED = 5,
-		MAKEANNOTATION = 7,
-		SETANNOTATION = 8,
-		SETANNOTATIONSTRIPPED = 6;
-
-	public static class Index extends IndexedLibraryAdapter {
-
-		public Value construct(int id) {
-			return new Annotations(id);
-		}
-
-		public Index() {
-			define("annotation?", ANNOTATIONQ);
-			define("annotation-keys", ANNOTATIONKEYS);
-			define("annotation", ANNOTATION);
-			define("annotation-source", ANNOTATIONSRC);
-			define("annotation-expression", ANNOTATIONEXPR);
-			define("annotation-stripped", ANNOTATIONSTRIPPED);
-			define("make-annotation", MAKEANNOTATION);
-			define("set-annotation!", SETANNOTATION);
-			define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
-		}
-	}
-
-	public Annotations(int id) {
-		super(id);
-	}
-
-	public Annotations() {
-	}
-	
+    protected static final int ANNOTATION = 0,
+        ANNOTATIONQ = 1,
+        ANNOTATIONKEYS = 2,
+        ANNOTATIONSRC = 3,
+        ANNOTATIONEXPR = 4,
+        ANNOTATIONSTRIPPED = 5,
+        MAKEANNOTATION = 7,
+        SETANNOTATION = 8,
+        SETANNOTATIONSTRIPPED = 6;
+    
+    public static class Index extends IndexedLibraryAdapter {
+        
+        public Value construct(int id) {
+            return new Annotations(id);
+        }
+        
+        public Index() {
+            define("annotation?", ANNOTATIONQ);
+            define("annotation-keys", ANNOTATIONKEYS);
+            define("annotation", ANNOTATION);
+            define("annotation-source", ANNOTATIONSRC);
+            define("annotation-expression", ANNOTATIONEXPR);
+            define("annotation-stripped", ANNOTATIONSTRIPPED);
+            define("make-annotation", MAKEANNOTATION);
+            define("set-annotation!", SETANNOTATION);
+            define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
+        }
+    }
+    
+    public Annotations(int id) {
+        super(id);
+    }
+    
+    public Annotations() {
+    }
+ 
     public Value doApply(Interpreter f) throws ContinuationException {
         switch (f.vlr.length) {
         case 0:

@@ -1,35 +1,3 @@
-/*
- * The contents of this file are subject to the Mozilla Public
- * License Version 1.1 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a copy of
- * the License at http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS
- * IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
- * implied. See the License for the specific language governing
- * rights and limitations under the License.
- * 
- * The Original Code is the Second Interpreter of Scheme Code (SISC).
- * 
- * The Initial Developer of the Original Code is Scott G. Miller.
- * Portions created by Scott G. Miller are Copyright (C) 2000-2001
- * Scott G. Miller.  All Rights Reserved.
- * 
- * Contributor(s):
- * Matthias Radestock 
- * 
- * Alternatively, the contents of this file may be used under the
- * terms of the GNU General Public License Version 2 or later (the
- * "GPL"), in which case the provisions of the GPL are applicable 
- * instead of those above.  If you wish to allow use of your 
- * version of this file only under the terms of the GPL and not to
- * allow others to use your version of this file under the MPL,
- * indicate your decision by deleting the provisions above and
- * replace them with the notice and other provisions required by
- * the GPL.  If you do not delete the provisions above, a recipient
- * may use your version of this file under either the MPL or the
- * GPL.
- */
 package sisc.boot;
 
 import java.io.*;
@@ -70,7 +38,7 @@ public class GenerateHeap {
         "inexact?", "input-port?", "integer->char", "integer?",
         "interaction-environment", "lcm", "length", "list", "list->string",
         "list->vector", "list-ref", "list-tail", "list?", "load", "log",        
-		"magnitude", "make-polar", "make-rectangular", "make-string",
+        "magnitude", "make-polar", "make-rectangular", "make-string",
         "make-vector", "map", "max", "member", "memq", "memv", "min", "modulo",
         "negative?", "newline", "not", "null-environment", "null?",
         "number->string", "number?", "numerator", "odd?", "open-input-file",
@@ -89,50 +57,50 @@ public class GenerateHeap {
         "with-input-from-file", "with-output-to-file",
         "write", "write-char", "zero?",
 
-		//Yes, I know, these shouldn't be here, but we have problems without them
-		"make-promise", "$syntax-dispatch", "$sc-put-cte", "syntax-error"
-
+        //Yes, I know, these shouldn't be here, but we have problems without them
+        "make-promise", "$syntax-dispatch", "$sc-put-cte", "syntax-error"
+        
         };
 
-	static String[] inlinedBindings = new String[] {
-		//core forms
-
-		//procedures
-		"*", "+", "-", "/", "<", "<=", "=", ">", ">=", "abs", "acos", "angle",
-		"asin", "assoc", "assq", "assv", "atan", "boolean?",
+    static String[] inlinedBindings = new String[] {
+        //core forms
+        
+        //procedures
+        "*", "+", "-", "/", "<", "<=", "=", ">", ">=", "abs", "acos", "angle",
+        "asin", "assoc", "assq", "assv", "atan", "boolean?",
         "car", "cdr", "caar",
-		"cadr", "cdar", "cddr", "caaar", "caadr", "cadar", "caddr", "cdaar",
-		"cdadr", "cddar", "cdddr", "caaaar", "caaadr", "caadar", "caaddr",
-		"cadaar", "cadadr", "caddar", "cadddr", "cdaaar", "cdaadr", "cdadar",
-		"cdaddr", "cddaar", "cddadr", "cdddar", "cddddr", "ceiling",
-		"char-alphabetic?", "char-ci<=?", "char-ci<?",
-		"char-ci=?", "char-ci>=?", "char-ci>?", 
-		"char-lower-case?", "char-numeric?", "char-ready?", "char-upcase",
-		"char-upper-case?", "char-whitespace?", "char<=?", "char<?", "char=?",
-		"char>=?", "char>?", "char?", 
-		"complex?", "cos", 
-		"denominator", "eof-object?", "eq?", "equal?",
-		"eqv?", "even?", "exact?", "exp", "expt",
-		"floor", "gcd", "imag-part",
-		"inexact?", "input-port?", "integer?",
-		"lcm", "length", 
-		"list-ref", "list?", "log",        
-		"magnitude",
-		"max", "member", "memq", "memv", "min", "modulo",
-		"negative?", "not", "null?",
-		"number?", "numerator", "odd?", 
-		"output-port?", "pair?", "positive?",
-		"procedure?", "quotient", "rational?", "real-part", "real?", 
+        "cadr", "cdar", "cddr", "caaar", "caadr", "cadar", "caddr", "cdaar",
+        "cdadr", "cddar", "cdddr", "caaaar", "caaadr", "caadar", "caaddr",
+        "cadaar", "cadadr", "caddar", "cadddr", "cdaaar", "cdaadr", "cdadar",
+        "cdaddr", "cddaar", "cddadr", "cdddar", "cddddr", "ceiling",
+        "char-alphabetic?", "char-ci<=?", "char-ci<?",
+        "char-ci=?", "char-ci>=?", "char-ci>?", 
+        "char-lower-case?", "char-numeric?", "char-ready?", "char-upcase",
+        "char-upper-case?", "char-whitespace?", "char<=?", "char<?", "char=?",
+        "char>=?", "char>?", "char?", 
+        "complex?", "cos", 
+        "denominator", "eof-object?", "eq?", "equal?",
+        "eqv?", "even?", "exact?", "exp", "expt",
+        "floor", "gcd", "imag-part",
+        "inexact?", "input-port?", "integer?",
+        "lcm", "length", 
+        "list-ref", "list?", "log",        
+        "magnitude",
+        "max", "member", "memq", "memv", "min", "modulo",
+        "negative?", "not", "null?",
+        "number?", "numerator", "odd?", 
+        "output-port?", "pair?", "positive?",
+        "procedure?", "quotient", "rational?", "real-part", "real?", 
         "remainder", "round",
-		"sin", "sqrt",
-		"string-ci<=?", "string-ci<?", "string-ci=?",
-		"string-ci>=?", "string-ci>?",
-		"string-length",  "string<=?", "string<?",
-		"string=?", "string>=?", "string>?", "string?", 
-		"symbol?", "tan", "truncate", 
-		"vector-length", 
-		"vector?", "zero?"
-		};
+        "sin", "sqrt",
+        "string-ci<=?", "string-ci<?", "string-ci=?",
+        "string-ci>=?", "string-ci>?",
+        "string-length",  "string<=?", "string<?",
+        "string=?", "string>=?", "string>?", "string?", 
+        "symbol?", "tan", "truncate", 
+        "vector-length", 
+        "vector?", "zero?"
+    };
 
     static {
         r5rs_bindings=new HashSet(bindingNames.length);
@@ -225,7 +193,7 @@ public class GenerateHeap {
         Interpreter r = Context.enter(ctx);
         r.dynenv.inlinePrimitives=new Pair();
         for (int j=0; j<inlinedBindings.length; j++) {
-        	r.dynenv.inlinePrimitives=new Pair(Symbol.get(inlinedBindings[j]), r.dynenv.inlinePrimitives);
+         r.dynenv.inlinePrimitives=new Pair(Symbol.get(inlinedBindings[j]), r.dynenv.inlinePrimitives);
         }        new sisc.modules.SimplePrimitives.Index().bindAll(r, ctx.toplevel_env);
         new sisc.modules.ComplexPrimitives.Index().bindAll(r, ctx.toplevel_env);
         new sisc.modules.Annotations.Index().bindAll(r, ctx.toplevel_env);
@@ -303,5 +271,35 @@ public class GenerateHeap {
                Context.exit();
     }
 }
-
-
+/*
+ * The contents of this file are subject to the Mozilla Public
+ * License Version 1.1 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS
+ * IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * rights and limitations under the License.
+ * 
+ * The Original Code is the Second Interpreter of Scheme Code (SISC).
+ * 
+ * The Initial Developer of the Original Code is Scott G. Miller.
+ * Portions created by Scott G. Miller are Copyright (C) 2000-2001
+ * Scott G. Miller.  All Rights Reserved.
+ * 
+ * Contributor(s):
+ * Matthias Radestock 
+ * 
+ * Alternatively, the contents of this file may be used under the
+ * terms of the GNU General Public License Version 2 or later (the
+ * "GPL"), in which case the provisions of the GPL are applicable 
+ * instead of those above.  If you wish to allow use of your 
+ * version of this file only under the terms of the GPL and not to
+ * allow others to use your version of this file under the MPL,
+ * indicate your decision by deleting the provisions above and
+ * replace them with the notice and other provisions required by
+ * the GPL.  If you do not delete the provisions above, a recipient
+ * may use your version of this file under either the MPL or the
+ * GPL.
+ */
