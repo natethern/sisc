@@ -647,7 +647,7 @@ public class Quantity extends Value implements Singleton {
         case DECIM:
             return new Quantity(d.negate());
         case RATIO:
-            return new Quantity(i.negate(), de.negate());
+            return new Quantity(i.negate(), de);
         case COMPLEX:
             return new Quantity(d.negate(), im.negate());
         case POSINF: return NEGATIVE_INFINITY;

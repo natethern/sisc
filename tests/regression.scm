@@ -175,3 +175,5 @@
 (should-be 994759 #f
   (with/fc (lambda (m e) #f)
            (lambda () (and (set-cdr! `(3) 3) #t))))
+
+(should-be 1037559 -1/4 (- 1/4))
