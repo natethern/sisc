@@ -1573,12 +1573,12 @@
                 <type>&num;t/&num;f</type>
                 <methodname>exception?</methodname>
                 <methodparam>
-                  <parameter>obj</parameter>
+                  <parameter>value</parameter>
                 </methodparam>
               </methodsynopsis>
               <blockquote>
                 <para>
-                  Returns &num;t if <parameter>obj</parameter> is an
+                  Returns &num;t if <parameter>value</parameter> is an
                   exception object, &num;f otherwise.
                 </para>
               </blockquote>

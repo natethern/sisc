@@ -334,11 +334,11 @@ Context.exit()
           <methodsynopsis language="scheme">
             <type>&num;t/&num;f</type>
             <methodname>java-object?</methodname>
-            <methodparam><parameter>obj</parameter></methodparam>
+            <methodparam><parameter>value</parameter></methodparam>
           </methodsynopsis>
           <blockquote>
             <para>
-              returns &num;t if <parameter>obj</parameter> is a Java
+              returns &num;t if <parameter>value</parameter> is a Java
               object, &num;f otherwise.
             </para>
           </blockquote>
@@ -361,7 +361,7 @@ Context.exit()
               <methodsynopsis language="scheme">
                 <type>&num;t/&num;f</type>
                 <methodname>java-class?</methodname>
-                <methodparam><parameter>obj</parameter></methodparam>
+                <methodparam><parameter>value</parameter></methodparam>
               </methodsynopsis>
             </member>
             <member>
@@ -371,7 +371,7 @@ Context.exit()
               <methodsynopsis language="scheme">
                 <type>&num;t/&num;f</type>
                 <methodname>java-interface?</methodname>
-                <methodparam><parameter>obj</parameter></methodparam>
+                <methodparam><parameter>value</parameter></methodparam>
               </methodsynopsis>
             </member>
             <member>
@@ -381,7 +381,7 @@ Context.exit()
               <methodsynopsis language="scheme">
                 <type>&num;t/&num;f</type>
                 <methodname>java-array?</methodname>
-                <methodparam><parameter>obj</parameter></methodparam>
+                <methodparam><parameter>value</parameter></methodparam>
               </methodsynopsis>
             </member>
             <member>
@@ -391,13 +391,13 @@ Context.exit()
               <methodsynopsis language="scheme">
                 <type>&num;t/&num;f</type>
                 <methodname>java-null?</methodname>
-                <methodparam><parameter>obj</parameter></methodparam>
+                <methodparam><parameter>value</parameter></methodparam>
               </methodsynopsis>
             </member>
           </simplelist>
           <blockquote>
             <para>
-              Ascertains whether <parameter>obj</parameter> is a Java
+              Ascertains whether <parameter>value</parameter> is a Java
               class, interface, array or is <constant>null</constant>.
             </para>
           </blockquote>
@@ -534,7 +534,7 @@ Context.exit()
           compares the objects using Java's
           <function>equals</function> method. Applying either
           <function>eq?</function> or <function>equal?</function> to a
-          mixture of Java objects and other Scheme objects returns
+          mixture of Java objects and other Scheme values returns
           &num;f.
         </para>
       </sect3>
@@ -1168,16 +1168,16 @@ Context.exit()
       <para>
       </para>
       <sect3>
-        <title>Wrapping Scheme Objects</title>
+        <title>Wrapping Scheme Values</title>
         <para>
-          Sometimes we may want to pass Scheme objects to Java as
+          Sometimes we may want to pass Scheme values to Java as
           parameters in method calls and as values for fields without
           converting them into Java objects. For instance, we may want
-          to store and retrieve Scheme objects in/from an instance of
+          to store and retrieve Scheme values in/from an instance of
           a Java collection class such as
           <classname>java.util.HashSet</classname>. This can be done
           with the help of two procedures that wrap and and unwrap
-          Scheme objects.
+          Scheme values.
         </para>
         <blockquote>
           <para>
@@ -1187,11 +1187,11 @@ Context.exit()
             <methodsynopsis language="scheme">
               <type>jobj</type>
               <methodname>java-wrap</methodname>
-              <methodparam><parameter>obj</parameter></methodparam>
+              <methodparam><parameter>value</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Wraps a Scheme object so it can be passed in call to a
+                Wraps a Scheme value so it can be passed in call to a
                 Java method / constructor or when setting a field of a
                 Java object or class.
               </para>
@@ -1210,24 +1210,24 @@ Context.exit()
             </methodsynopsis>
             <blockquote>
               <para>
-                Casts a Java object into a Scheme object, so a Scheme
-                object returned by a Java method or when accessing a Java
+                Casts a Java object into a Scheme value, so a Scheme
+                value returned by a Java method or when accessing a Java
                 field can be used in Scheme code.
               </para>
             </blockquote>
           </para>
         </blockquote>
         <para>
-          Since all Scheme objects are represented internally as Java
+          Since all Scheme values are represented internally as Java
           objects anyway, the wrapping and unwrapping preserves object
           identity.
         </para>
         <para>
           At present, the invocation of Java methods and constructors
-          via generic procedures automatically wraps Scheme object
+          via generic procedures automatically wraps Scheme values
           arguments. This is done purely in order to ensure
           consistency with the present type system, which does not
-          distinguish between Scheme objects and their internal
+          distinguish between Scheme values and their internal
           representation.
         </para>
       </sect3>
@@ -1240,7 +1240,7 @@ Context.exit()
           field can be assigned a <literal>null</literal> value.
         </para>
         <para>
-          By contrast, the Scheme objects representing Java
+          By contrast, the Scheme values representing Java
           <literal>null</literal> are typed. This allows generic
           function invocation to use the type information for method
           selection, otherwise it would be impossible to invoke
@@ -1260,7 +1260,7 @@ Context.exit()
             </methodsynopsis>
             <blockquote>
               <para>
-                Creates a Scheme object representing a Java
+                Creates a Scheme value representing a Java
                 <literal>null</literal> object of a specific type. If
                 <parameter>jclass</parameter> is absent, it defaults
                 to <classname>java.lang.Object</classname>.
@@ -1441,7 +1441,7 @@ Context.exit()
             </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
-              <type>obj</type>
+              <type>value</type>
               <methodname>java-synchronized</methodname>
               <methodparam><parameter>jobj</parameter></methodparam>
               <methodparam><parameter>thunk</parameter></methodparam>
@@ -1573,873 +1573,6 @@ Class.getSigners()
             </blockquote>
           </para>
         </blockquote>
-      </sect3>
-    </sect2>
-    <sect2 id="GenericProcedures">
-      <title>Generic Procedures</title>
-      <para>
-	&requires; 
-	<emphasis role="bold">
-	  (import <emphasis>generic-procedures</emphasis>)
-	</emphasis>
-      </para>
-      <para>
-        Generic procedures provide a mechanism by which a Scheme
-        procedure can select different bodies for execution depending
-        on the types of the parameters it was called with. Languages
-        like ANSI Lisp and Dylan provide similar
-        functionality. Generic procedures have several advantages over
-        normal functions:
-        <itemizedlist>
-          <listitem>
-            <para>
-              It is not necessary to come up with unique names for
-              procedures that perform the same operation on different
-              types of objects. This avoids cluttering the name
-              space. All these procedures can be defined separately
-              but yet be part of the same, single generic procedure.
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              The functionality of a generic procedure can be extended
-              incrementally through code located in different
-              places. This avoids "spaghetti code" where adding a new
-              type of objects requires changes to existing pieces of
-              code in several locations.
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              Code using generic procedures has a high degree of
-              polymorphism without having to resort to ugly and
-              hard-to-maintain test-type-and-dispatch branching.
-            </para>
-          </listitem>
-        </itemizedlist>
-      </para>
-      <sect3>
-        <title>The Type System</title>
-        <para>
-          Generic procedures require a type system for their
-          operation. At present the type system employed by &SISC;'s
-          generic procedures is rather basic. This will change in the
-          future. Currently, only the following kinds of types are supported:
-          <itemizedlist>
-            <listitem>
-              <para>
-                Java classes and interfaces, obtained through the
-                mechanisms described in <xref linkend="JavaClasses"/>.
-              </para>
-            </listitem>
-            <listitem>
-              <para>
-                Meta types, obtained by invoking
-                <function>meta</function>.
-              </para>
-            </listitem>
-            <listitem>
-              <para>
-                <literal>&lt;top&gt;</literal> and
-                <literal>&lt;bot&gt;</literal>. All types are
-                sub-types of <literal>&lt;top&gt;</literal> and
-                super-types of <literal>&lt;bot&gt;</literal>.
-              </para>
-            </listitem>
-          </itemizedlist>
-          <function>meta</function> is defined as follows:
-          <blockquote>
-            <para>
-              <indexterm><primary>meta</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <type>type</type>
-                <methodname>meta</methodname>
-                <methodparam><parameter>type</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Returns the meta type of <parameter>type</parameter>,
-                  i.e. a type whose instances are comprised of
-                  <parameter>type</parameter> and all its sub-types.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-        </para>
-        <para>
-          Types can be compared with
-          <blockquote>
-            <para>
-              <indexterm><primary>type&lt;=</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <type>&num;t/&num;f</type>
-                <methodname>type&lt;=</methodname>
-                <methodparam><parameter>type1</parameter></methodparam>
-                <methodparam><parameter>type2</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Returns &num;t if <parameter>type1</parameter> is a
-                  sub-type of <parameter>type2</parameter>, &num;f
-                  otherwise.
-                </para>
-                <para>
-                  Meta types are compared by comparing their underlying
-                  types.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-          One can test whether an object is an instance of a
-          particular type with
-          <blockquote>
-            <para>
-              <indexterm><primary>instance-of?</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <type>&num;t/&num;f</type>
-                <methodname>instance-of?</methodname>
-                <methodparam><parameter>obj</parameter></methodparam>
-                <methodparam><parameter>type</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Returns &num;t if <parameter>obj</parameter> is an
-                  instance of <parameter>type</parameter>, &num;f
-                  otherwise.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-          The type of an object can be obtained with
-          <blockquote>
-            <para>
-              <indexterm><primary>type-of</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <type>type</type>
-                <methodname>type-of</methodname>
-                <methodparam><parameter>obj</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Returns the type of <parameter>obj</parameter>. The
-                  type of a Scheme object is represented by its
-                  corresponding &SISC; Java class. The type of a Java
-                  class is represented by its meta type. The type of a
-                  Java object is represented by its Java class.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-        </para>
-        <para>
-          For types that are classes, the following operations are
-          supported:
-          <blockquote>
-            <para>
-              <indexterm><primary>class-direct-superclasses</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <type>list</type>
-                <methodname>class-direct-superclasses</methodname>
-                <methodparam><parameter>class</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Returns the list of classes of which
-                  <parameter>class</parameter> is a direct
-                  descendant. If <parameter>class</parameter> is a
-                  Java class or interface the list comprises the
-                  superclass and superinterfaces in exactly the order
-                  specified in the class/interface declaration.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-          <blockquote>
-            <para>
-              <indexterm><primary>class-direct-slots</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <type>list</type>
-                <methodname>class-direct-slots</methodname>
-                <methodparam><parameter>class</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Returns the list of slot names (as symbols) directly
-                  defined by <parameter>class</parameter>. If
-                  <parameter>class</parameter> is a Java class or
-                  interface the list comprises the names of
-                  the static and normal fields specified in the
-                  class/interface declaration.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-          <blockquote>
-            <para>
-              <indexterm><primary>class-precedence-list</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <type>list</type>
-                <methodname>class-precedence-list</methodname>
-                <methodparam><parameter>class</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Returns the class precedence list for class
-                  <parameter>class</parameter>. The class precedence
-                  list for a class <varname>C</varname> is a total
-                  ordering on <varname>C</varname> and its
-                  superclasses that is consistent with the local
-                  precedence order of <varname>C</varname> and with
-                  the class precedence lists of its superclasses.
-                </para>
-                <para>
-                  Two
-                  lists are consistent if for every
-                  <varname>A</varname> and <varname>B</varname> that
-                  are each members of both lists, either
-                  <varname>A</varname> precedes <varname>B</varname>
-                  in both or <varname>B</varname> precedes
-                  <varname>A</varname> in both.
-                </para>
-                <para>
-                  The local precedence order of a class
-                  <varname>C</varname> consists of the class itself
-                  followed by the direct superclasses as returned by
-                  <function>class-direct-superclasses</function>.
-                </para>
-                <para>
-                  The exact algorithm for computing the class
-                  precedence list is the same as that employed by
-                  Dylan, Goo and others. When there are
-                  <emphasis>several</emphasis> possible total
-                  orderings, one is chosen deterministically. When
-                  there is <emphasis>no</emphasis> possible total
-                  ordering, an error is signalled. The details of the
-                  algorithm are beyond the scope of this document. The
-                  interested reader is referred to the Dylan
-                  documentation and the &SISC; source code.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-        </para>
-      </sect3>
-      <sect3 id="genprocdef">
-        <title>Defining Generic Procedures</title>
-        <para>
-          There are two steps to defining generic procedures -
-          defining the generic procedures itself and adding methods to
-          it.
-        </para>
-        <para>
-          <blockquote>
-            <para>
-              <indexterm><primary>define-generic</primary>
-              </indexterm>
-              &syntax;
-              <methodsynopsis language="scheme">
-                <void/>
-                <methodname>define-generic</methodname>
-                <methodparam><parameter>name</parameter></methodparam>
-                <methodparam choice="opt">
-                  <parameter>next-proc</parameter>
-                </methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Creates a new generic procedure and binds it to
-                  <parameter>name</parameter> in the current lexical
-                  environment. <parameter>next-proc</parameter> specifies
-                  a procedure to be invoked when an invocation of the
-                  generic procedure finds no matching method. This
-                  mechanism is known as <emphasis>chaining</emphasis>. By
-                  default, <parameter>next-proc</parameter> is set to
-                  <literal>(generic-java-procedure
-                    '</literal><parameter>name</parameter><literal>)</literal>
-                  (see <xref linkend="JavaMethodInvocation"/>), resulting
-                  in the invocation of Java methods if no matching Scheme
-                  methods are found. Setting
-                  <parameter>next-proc</parameter> to &num;f disables
-                  chaining; an error will be thrown if an invocation of
-                  the generic procedure cannot find a matching method.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-          Generic procedures can also be constructed procedurally, using
-          <blockquote>
-            <para>
-              <indexterm><primary>make-generic-procedure</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <type>proc</type>
-                <methodname>make-generic-procedure</methodname>
-                <methodparam choice="opt">
-                  <parameter>next-proc</parameter>
-                </methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                Creates a new generic procedure that is chained to
-                <parameter>next-proc</parameter>.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-          There are accessors for the various elements that make up a
-          generic procedure:
-          <blockquote>
-            <para>
-              <indexterm><primary>generic-procedure-methods</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <type>list</type>
-                <methodname>generic-procedure-methods</methodname>
-                <methodparam><parameter>proc</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Returns a list of the methods which are part of the
-                  generic procedure <parameter>proc</parameter>, in order
-                  of their precedence.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-          <blockquote>
-            <para>
-              <indexterm><primary>generic-procedure-next</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <type>proc/&num;f</type>
-                <methodname>generic-procedure-next</methodname>
-                <methodparam><parameter>proc</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Returns the chainee of the generic procedure
-                  <parameter>proc</parameter>, or &num;f if no chainee was
-                  specified.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-        </para>
-        <para>
-          Methods can be added to generic procedures with
-          <blockquote>
-            <para>
-              <indexterm><primary>define-method</primary>
-              </indexterm>
-              &syntax;
-              <methodsynopsis language="scheme">
-                <void/>
-                <methodname>define-method</methodname>
-                <methodparam><parameter>signature</parameter></methodparam>
-                <methodparam><parameter>.</parameter></methodparam>
-                <methodparam><parameter>body</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <simplelist spacing="compact">
-                  <member>
-                    where <parameter>signature</parameter> is of the
-                    form <literal>(</literal><parameter>name</parameter>
-                    <literal>(</literal><parameter>type</parameter>
-                    <parameter>param</parameter><literal>)</literal>
-                    ... [ <literal>.</literal>
-                    <parameter>rest</parameter>]<literal>)</literal>
-                  </member>
-                  <member>
-                    and <parameter>body</parameter> can contain anything
-                    that is valid inside the body of a
-                    <function>lambda</function>.
-                  </member>
-                </simplelist>
-                <para>
-                  Adds a method the generic procedure
-                  <parameter>name</parameter>. A method has a typed
-                  parameter list and a body. Defining a method with the
-                  same signature as an existing method overwrites the
-                  existing method.
-                </para>
-                <note>
-                  <para>
-                    <function>define-method</function> is a macro that
-                    expands into a function call rather than a
-                    definition. This means any usage inside a function
-                    must occur <emphasis>after</emphasis> all
-                    definitions. Otherwise a syntax error will be raised.
-                  </para>
-                </note>
-              </blockquote>
-            </para>
-          </blockquote>
-          Methods can also be defined procedurally using
-          <blockquote>
-            <para>
-              <indexterm><primary>make-method</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <type>method</type>
-                <methodname>make-method</methodname>
-                <methodparam><parameter>proc</parameter></methodparam>
-                <methodparam><parameter>types</parameter></methodparam>
-                <methodparam><parameter>rest?</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Creates a new method. <parameter>proc</parameter> is a
-                  procedure that will be invoked when the method is
-                  invoked. <parameter>types</parameter> is a list of
-                  types, one for each parameter of the
-                  method. <parameter>rest?</parameter> is a boolean that
-                  indicates whether the method can take additional
-                  (optional) parameters. The combination of
-                  <parameter>types</parameter> and
-                  <parameter>rest?</parameter> make up the
-                  <emphasis>signature</emphasis> of the method.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-          A method thus defined can be added to a generic procedure
-          with
-          <blockquote>
-            <para>
-              <indexterm><primary>add-method</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <void/>
-                <methodname>add-method</methodname>
-                <methodparam><parameter>proc</parameter></methodparam>
-                <methodparam><parameter>method</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Adds the method <parameter>method</parameter> to the
-                  generic procedure <parameter>proc</parameter>. If a
-                  method with the same signature as an existing method is
-                  added, the existing method is replaced with the new
-                  method.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-          There are accessors for the various elements that make up a
-          method:
-          <blockquote>
-            <simplelist>
-              <member>
-                <indexterm><primary>method-procedure</primary>
-                </indexterm>
-                &procedure;
-                <methodsynopsis language="scheme">
-                  <type>proc</type>
-                  <methodname>method-procedure</methodname>
-                  <methodparam><parameter>method</parameter></methodparam>
-                </methodsynopsis>
-              </member>
-              <member>
-                <indexterm><primary>method-types</primary>
-                </indexterm>
-                  &procedure;
-                <methodsynopsis language="scheme">
-                  <type>list</type>
-                  <methodname>method-types</methodname>
-                  <methodparam><parameter>method</parameter></methodparam>
-                </methodsynopsis>
-              </member>
-              <member>
-                <indexterm><primary>method-rest?</primary>
-                </indexterm>
-                  &procedure;
-                <methodsynopsis language="scheme">
-                  <type>&num;t/&num;f</type>
-                  <methodname>method-rest?</methodname>
-                  <methodparam><parameter>method</parameter></methodparam>
-                </methodsynopsis>
-              </member>
-            </simplelist>
-            <blockquote>
-              <para>
-                Returns the methods procedure, parameter types and rest
-                parameter flag respectively.
-              </para>
-            </blockquote>
-          </blockquote>
-        </para>
-        <para>
-          An example might be helpful at this stage.
-          <programlisting>
-(define-generic app (generic-java-procedure 'append))
-(define-method (app (next: next-method)
-                    (&lt;jstringbuffer&gt; buf) . rest)
-  (for-each (lambda (x) (next-method buf x)) rest)
-  buf)
-(define sb (make &lt;jstringbuffer&gt;))
-(-&gt;string (app sb (-&gt;jstring "foo") (-&gt;jint 1) (-&gt;jstring "bar")))
-;=&gt; "foo1bar"
-          </programlisting>
-          This defines a new generic procedure
-          <function>app</function> which is chained to a generic
-          procedure representing the Java <function>append</function>
-          methods. The explicit chaining is done in order to avoid a
-          name clash with Scheme's <function>append</function>
-          procedure. A method is defined on the generic procedure that
-          appends the contents of any number of arguments to a
-          <classname>java.lang.StringBuffer</classname>. It does this
-          by calling the Java method for appending a single object
-          using the <function>next-method</function> mechanism which
-          we will describe later.
-        </para>
-      </sect3>
-      <sect3 id="genconstrdef">
-        <title>Defining Constructors</title>
-        <para>
-          Constructors are defined with
-          <blockquote>
-            <para>
-              <indexterm><primary>define-constructor</primary>
-              </indexterm>
-              &syntax;
-              <methodsynopsis language="scheme">
-                <void/>
-                <methodname>define-constructor</methodname>
-                <methodparam><parameter>signature</parameter></methodparam>
-                <methodparam><parameter>.</parameter></methodparam>
-                <methodparam><parameter>body</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <simplelist spacing="compact">
-                  <member>
-                    where <parameter>signature</parameter> is of the
-                    form <literal>(</literal><parameter>type</parameter>
-                    <literal>(</literal><parameter>type</parameter>
-                    <parameter>param</parameter><literal>)</literal>
-                    ... [ <literal>.</literal>
-                    <parameter>rest</parameter>]<literal>)</literal>
-                  </member>
-                  <member>
-                    and <parameter>body</parameter> can contain anything
-                    that is valid inside the body of a
-                    <function>lambda</function>.
-                  </member>
-                </simplelist>
-                <para>
-                  This form is basically identical to the
-                  <function>define-method</function> form except it
-                  defines a "constructor" method for a specific
-                  type. All constructor methods are part of the single
-                  generic constructor called by <function>make</function>.
-                </para>
-                <note>
-                  <para>
-                    <function>define-constructor</function> is a macro that
-                    expands into a function call rather than a
-                    definition. This means any usage inside a function
-                    must occur <emphasis>after</emphasis> all
-                    definitions. Otherwise a syntax error will be raised.
-                  </para>
-                </note>
-              </blockquote>
-            </para>
-          </blockquote>
-          New generic constructors can be created with
-          <blockquote>
-            <para>
-              <indexterm><primary>make-generic-constructor</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <type>proc</type>
-                <methodname>make-generic-constructor</methodname>
-                <methodparam choice="opt">
-                  <parameter>next-proc</parameter>
-                </methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Creates a generic constructor which is chained to
-                  <parameter>next-proc</parameter>, which must be
-                  another generic constructor. This procedure is
-                  rarely used since the pre-defined generic
-                  constructor called by <function>make</function>
-                  typically suffices.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-          Generic constructors maintain a table of generic procedures
-          - one for each class of which instances can be
-          constructed. The mapping is performed by
-          <blockquote>
-            <para>
-              <indexterm><primary>constructor</primary>
-              </indexterm>
-              &procedure;
-              <methodsynopsis language="scheme">
-                <type>proc</type>
-                <methodname>constructor</methodname>
-                <methodparam><parameter>constr</parameter></methodparam>
-                <methodparam><parameter>class</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Returns the generic procedure that holds constructor
-                  methods for class <parameter>class</parameter> of the
-                  generic constructor <parameter>constr</parameter>.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-        </para>
-        <para>
-          After <function>make</function> has invoked the generic
-          constructor, it calls the <function>initialize</function>
-          generic procedure with the result of the constructor
-          invocation an the arguments supplied to
-          <function>make</function>. The main purpose of
-          <function>initialize</function> is to facilitate the
-          definition of post-creation object initialization,
-          particularly the invocation of initialization code for
-          superclasses.
-        </para>
-        <para>
-          The <function>initialize</function> generic procedure is
-          chained to a procedure that accepts any number of arguments
-          and returns nothing. As a result it is not necessary to
-          define methods for <function>initialize</function> unless
-          post-creation initialization is required. Furthermore, it is
-          always possible to invoke the "next best" matching method
-          (as described below) from the body of an
-          <function>initialize</function> method.
-        </para>
-        <para>
-          An example might be helpful at this stage.
-          <programlisting>
-(define-constructor (&lt;jstring&gt; (&lt;jchar&gt; c))
-  (make &lt;jstring&gt; (-&gt;jarray (list c) &lt;jchar&gt;)))
-(-&gt;string (make &lt;jstring&gt; (-&gt;jchar #\o)))
-;=&gt; "o"
-(define-constructor (&lt;jstringbuffer&gt; (next: next-method) . rest)
-  (next-method))
-(define-method (initialize (&lt;jstringbuffer&gt; sb) . rest)
-  (apply app sb rest))
-(-&gt;string (make &lt;jstringbuffer&gt; (-&gt;jstring "foo") (-&gt;jint 1) (-&gt;jstring "bar")))
-;=&gt; "foo1bar"
-          </programlisting>
-          First this defines a method new constructor on
-          <classname>java.lang.String</classname> that constructs a
-          string from a single character by constructing a
-          single-element array of characters and invoking the existing
-          Java constructor with it. Second, a new constructor is
-          defined for <classname>java.lang.StringBuffer</classname>
-          that takes any number of arguments and calls
-          <classname>StringBuffer</classname>'s the null-arg
-          constructor. An initialization method is defined that
-          appends all the arguments to a
-          <classname>StringBuffer</classname> instance. The subsequent
-          call to <function>make</function> invokes the defined
-          constructor method which in turn invokes the null-arg
-          constructor defined in Java. Then <function>make</function>
-          calls <function>initialize</function>, resulting in the
-          invocation of the defined method. The end result is a
-          <classname>StringBuffer</classname> instance containing the
-          concatenation of the three arguments passed to
-          <function>make</function>.
-        </para>
-      </sect3>
-      <sect3>
-        <title>Invoking Generic Procedures</title>
-        <para>
-          Generic procedures are invoked just like ordinary
-          procedures. The invocation computes a list of applicable
-          methods (i.e. methods whose type signature matches that of
-          the argument types) sorted by specificity and invokes the
-          first. An error is reported if there is no such method. The
-          algorithm for determining the relative specificity of two
-          methods <varname>A</varname> and <varname>B</varname> with
-          respect to a particular set of arguments is the same as that
-          employed by Dylan, Goo and others:
-          <blockquote>
-            <para>
-              The method <varname>A</varname> is more specific than
-              the method <varname>B</varname> if and only if
-              <varname>A</varname> precedes <varname>B</varname> in at
-              least one argument position, and <varname>B</varname>
-              does not precede <varname>A</varname> in any argument
-              position. Similarly, <varname>B</varname> is more
-              specific than <varname>A</varname> if and only if
-              <varname>B</varname> precedes <varname>A</varname> in at
-              least one argument position, and <varname>A</varname>
-              does not precede <varname>B</varname> in any argument
-              position. If neither of these cases apply then
-              <varname>A</varname> and <varname>B</varname> are
-              ambiguous methods.
-            </para>
-            <para>
-              In order to determine the precedence at a particular
-              argument position, the types associated with that
-              position in the method signatures of the two methods are
-              compared. If the types are the same then the position
-              provides no information about the order of the two
-              methods. If one of the types is a subtype of the other
-              then the former type's method precedes the
-              other. Otherwise, the precedence is determined by the
-              order of the types in the class precedence list of the
-              type of the argument in the position in question.
-            </para>
-            <para>
-              In a method with a rest parameter, the type associated
-              with an argument position in the rest part is considered to
-              be a supertype of all other types.
-            </para>
-          </blockquote>
-          The algorithm is encapsulated by the following procedures:
-          <blockquote>
-            <para>
-              <indexterm><primary>applicable-methods</primary>
-              </indexterm>
-                &procedure;
-              <methodsynopsis language="scheme">
-                <type>list list</type>
-                <methodname>applicable-methods</methodname>
-                <methodparam><parameter>proc</parameter></methodparam>
-                <methodparam><parameter>types</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Returns two values: the list of applicable methods
-                  of generic procedure <parameter>proc</parameter>
-                  when applied to arguments of types
-                  <parameter>types</parameter> (a list) ordered by
-                  specificity, and the corresponding list of ambiguous
-                  methods.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-          <blockquote>
-            <para>
-              <indexterm><primary>method-applicable?</primary>
-              </indexterm>
-                &procedure;
-              <methodsynopsis language="scheme">
-                <type>&num;t/&num;f</type>
-                <methodname>method-applicable?</methodname>
-                <methodparam><parameter>method</parameter></methodparam>
-                <methodparam><parameter>types</parameter></methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Determines whether the types in
-                  <parameter>types</parameter> (a list) match the type
-                  signature of <parameter>method</parameter>, i.e. if
-                  it is possible to invoke
-                  <parameter>method</parameter> with arguments of the
-                  specified <parameter>types</parameter>.
-                </para>
-              </blockquote>
-            </para>
-          </blockquote>
-        </para>
-        <para>
-          It is possible to call the "next best" matching method from
-          within the body of a method. To do so, the first parameter
-          declaration must have the form <literal>(next:
-          </literal><parameter>next-method</parameter><literal>)</literal>,
-          e.g.
-          <programlisting>
-(define-method (value-of (next: next-method)
-                         ((meta &lt;jstring&gt;) s)
-                         (&lt;java.lang.Character&gt; c))
-  (display "\nin method\n")
-  (next-method s c))
-          </programlisting>
-          <parameter>next-method</parameter> should only be called
-          with arguments that would result in the same ordered
-          sequence of applicable methods as the original arguments.
-          The behavior of <parameter>next-method</parameter> when
-          invoked with arguments that do not meet this criteria is
-          undefined.
-        </para>
-        <para>
-          If <parameter>next-method</parameter> is called when there
-          are no more applicable methods left, the chainee of the
-          generic procedure is invoked if present and an error is
-          raised otherwise.
-        </para>
-      </sect3>
-      <sect3>
-        <title>Limitations</title>
-        <para>
-          The generic procedures code is still relatively new and
-          suffers from a number of shortcomings.
-          <itemizedlist>
-            <listitem>
-              <para>
-                Error reporting is not particularly good. Real-world
-                usage will tell what errors crop up frequently and we
-                can then put some mechanism in place for reporting
-                them in a meaningful way.
-              </para>
-            </listitem>
-            <listitem>
-              <para>
-                The invocation of generic procedures is
-                computationally expensive. The main source of
-                complexity is the computation of applicable
-                methods. This will be addressed in a future release by
-                introducing a cache that records the applicable
-                methods for any combination of argument types used.
-              </para>
-            </listitem>
-            <listitem>
-              <para>
-                The type of Scheme objects is their &SISC; class. This
-                makes it impossible to distinguish between Scheme
-                objects and their internal representation. &SISC;
-                needs a more complex type system to fix this, which is
-                quite hard but most of the code for that has already
-                been written.
-              </para>
-            </listitem>
-            <listitem>
-              <para>
-                Generic procedures are lexically scoped, but their
-                methods are not.
-              </para>
-            </listitem>
-          </itemizedlist>
-          The last item implies that defining methods in a local scope
-          is generally a bad idea. One exception are module
-          definitions. It is perfectly safe for modules to define
-          private (i.e. not exported) generic functions and add
-          methods to them without interfering with other
-          modules. However, care must be taken when generic functions
-          are imported or exported - methods are added to generic
-          function when the module gets <emphasis>defined</emphasis>
-          rather then when it gets imported.
-        </para>
       </sect3>
     </sect2>
   </sect1>

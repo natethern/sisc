@@ -16,7 +16,7 @@
  <!ENTITY io-chapter SYSTEM "io.xml">
  <!ENTITY threads-chapter SYSTEM "threads.xml">
  <!ENTITY modules-chapter SYSTEM "modules.xml">
- <!ENTITY genf-chapter SYSTEM "genf.xml">
+ <!ENTITY oo-chapter SYSTEM "oo.xml">
  <!ENTITY java-chapter SYSTEM "java.xml">
  <!ENTITY index SYSTEM "index.xml">
  <!ENTITY gfdl SYSTEM "fdl.xml">
@@ -74,6 +74,7 @@
   &debugging-chapter;
   &io-chapter;
   &threads-chapter;
+  &oo-chapter;
   &java-chapter;
   &library-chapter;
   &modules-chapter;
