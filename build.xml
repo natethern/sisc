@@ -304,7 +304,7 @@
   </target>
 
   <target name="javadocs" depends="prepare"
-          description="Generate javadocs">
+          description="Generate javadocs" unless="lite">
     <mkdir dir="${gendocdir}/javadoc"/>
     <javadoc packagenames="${packagename}.*"
              sourcepath="${srcdir}"
@@ -312,7 +312,7 @@
   </target>
 
   <target name="manual" depends="prepare"
-          description="Generate Manual" unless="lite">
+          description="Generate Manual">
     <copy file="${docdir}/sss/html.xsl" tofile="${docdir}/sss/style.xsl"/>
     <replace file="${docdir}/sss/style.xsl"
              token="@@@doc.style@@@"
