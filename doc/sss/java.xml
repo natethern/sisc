@@ -377,10 +377,12 @@ Context.exit()
             </methodsynopsis>
             <blockquote>
               <para>
-                Gets or sets the value of Java object's instance or static
-                member field. <parameter>jobj</parameter> can be any Java
-                object. <parameter>fieldname</parameter> denotes the field
-                name and must be supplied as a symbol.
+                Gets or sets the value of Java object's instance or
+                static member field. <parameter>jobj</parameter> can
+                be any Java object. <parameter>fieldname</parameter>
+                denotes the field name and must be supplied as a
+                symbol. It is converted to a Java field name using the
+                <function>java-mangle-field-name</function> procedure.
               </para>
             </blockquote>
           </para>
@@ -401,8 +403,10 @@ Context.exit()
               <para>
                 Gets or sets the value of Java class' static member
                 field. <parameter>jclass</parameter> can be any Java
-                class. <parameter>fieldname</parameter> denotes the field
-                name and must be supplied as a symbol.
+                class. <parameter>fieldname</parameter> denotes the
+                field name and must be supplied as a symbol. It is
+                converted from a to a Java field name using the
+                <function>java-mangle-field-name</function> procedure.
               </para>
             </blockquote>
           </para>
@@ -432,6 +436,52 @@ Context.exit()
         </blockquote>
       </sect3>
       <sect3>
+        <title>Java Beans</title>
+        <para>
+          Access to Java Bean properties is accomplished by invoking a
+          Java object with a list of field names instead of the single
+          field name supplied for ordinary field access.
+        </para>
+        <blockquote>
+          <para>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>jobj</type>
+              <methodname></methodname>
+              <methodparam><parameter>jobj</parameter></methodparam>
+              <methodparam><parameter>prop-list</parameter></methodparam>
+              <methodparam choice="opt">
+                <parameter>jobj</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Gets or sets the value of Java object's bean property
+                <parameter>jobj</parameter> can be any Java
+                object. <parameter>prop-list</parameter> is a list of
+                property names, supplied as symbols, and must contain
+                at least one element. The symbols are converted to
+                bean property names using the
+                <function>java-mangle-field-name</function> procedure.
+              </para>
+              <para>
+                If <parameter>prop-list</parameter> contains more than
+                one element then a nested lookup is performed,
+                i.e. the first property is looked up on the
+                <parameter>jobj</parameter>, the second property is
+                looked up on the resulting object, and so on until the
+                final property in the list, which is retrieved from or
+                set on the object resulting from the preceding lookup.
+              </para>
+              <para>
+                The bean property access falls back on normal field
+                access if the named bean property cannot be found.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </sect3>
+      <sect3>
         <title>Object Comparison</title>
         <para>
           Comparing Java objects using <function>eq?</function>
@@ -448,8 +498,8 @@ Context.exit()
         <title>Object Serialization</title>
         <para>
           The objects representing Java classes, fields, methods and
-          constructors can be (de)serialized. Ordinary Java objects
-          cannot be (de)serialized.
+          constructors can be (de)serialized. Objects representing
+          ordinary Java objects cannot be (de)serialized.
         </para>
       </sect3>
     </sect2>
@@ -1381,11 +1431,6 @@ Class.getSigners()
                 on which the field is accessed. The optional
                 <parameter>jobj</parameter> is the new value for the
                 field.
-              </para>
-              <para>
-                The <parameter>jfield</parameter> is converted from a
-                Scheme symbol into a Java symbol using the
-                <function>java-mangle-field-name</function> procedure.
               </para>
             </blockquote>
           </para>

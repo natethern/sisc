@@ -1,3 +1,8 @@
+2002-09-23  Matthias Radestock  <matthias@sorted.org>
+
+	* Added Java Bean property access via
+	  (<jobj> '(<property> ...) [<value>]).
+
 2002-09-22  Matthias Radestock  <matthias@sorted.org>
 
 	* Added automatic name mangling to S2J field access via

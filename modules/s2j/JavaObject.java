@@ -1,6 +1,7 @@
 package sisc.modules.s2j;
 
 import java.lang.reflect.*;
+import java.beans.*;
 
 import sisc.data.*;
 import sisc.interpreter.*;
@@ -330,7 +331,111 @@ public class JavaObject extends Procedure {
         }
     }
 
-    protected static final Value apply(Object obj, Value[] args) {
+    public static interface FieldAccessor {
+        Object get(Object o)
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+        void set(Object o, Object v)
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+    }
+
+    public static class BeanFieldAccessor implements FieldAccessor {
+
+        private PropertyDescriptor d;
+
+        public BeanFieldAccessor(PropertyDescriptor d) {
+            this.d = d;
+        }
+
+        public Object get(Object o)
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+
+            return d.getReadMethod().invoke(o, new Object[] {});
+        }
+
+        public void set(Object o, Object v)
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+
+            d.getWriteMethod().invoke(o, new Object[] {v});
+        }
+    }
+
+    public static class NormalFieldAccessor implements FieldAccessor {
+
+        private Field f;
+
+        public NormalFieldAccessor(Field f) {
+            this.f = f;
+        }
+
+        public Object get(Object o)
+            throws IllegalAccessException {
+
+            return f.get(o);
+        }
+
+        public void set(Object o, Object v)
+            throws IllegalAccessException {
+            f.set(o, v);
+        }
+    }
+
+    protected static final FieldAccessor accessField(Class objClass,
+                                                     String fieldName)
+        throws NoSuchFieldException {
+        try {
+            PropertyDescriptor[] descriptors = Introspector.getBeanInfo(objClass).getPropertyDescriptors();
+            for (int i=0; i<descriptors.length; i++) {
+                PropertyDescriptor d = descriptors[i];
+                if (d.getName().equals(fieldName))
+                    return new BeanFieldAccessor(d);
+            }
+        } catch (IntrospectionException e) {}
+
+        Field f = objClass.getField(fieldName);
+        return new NormalFieldAccessor(f);
+    }
+
+    protected static final Value accessBeanField(Object obj, Value[] args)
+        throws InvocationTargetException {
+
+        String fieldName = null;
+        try {
+            FieldAccessor fa = null;
+            Pair p = pair(args[0]);
+            while (true) {
+                fieldName = Util.mangleFieldName(symval(p.car));
+                fa = accessField(obj.getClass(), fieldName);
+                if (p.cdr == EMPTYLIST) break;
+                obj = fa.get(obj);
+                p = pair(p.cdr);
+            }
+
+            switch (args.length) {
+            case 1: //get value of bean field
+                return new JavaObject(fa.get(obj));
+            case 2: //set value of bean field
+                fa.set(obj, Util.jobj(args[1]));
+                return VOID;
+            default:
+                throw new RuntimeException(liMessage(Util.S2JB, "onetwoargs", liMessage(Util.S2JB, "jobject"), obj.toString()));
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "illegalaccess", 
+                                                 new Object[] {
+                liMessage(Util.S2JB, "jobject"), 
+                    fieldName,
+                    obj.toString()}));
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(liMessage(Util.S2JB, "nosuchfield", fieldName, obj.toString()));
+        }
+    }
+
+    protected static final Value apply(Object obj, Value[] args) 
+        throws InvocationTargetException {
+
+        if (!(args[0] instanceof Symbol)) {
+            return accessBeanField(obj, args);
+        }
         String fieldName = Util.mangleFieldName(symval(args[0]));
         try {
             switch (args.length) {
