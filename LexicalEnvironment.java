@@ -41,7 +41,7 @@ public class LexicalEnvironment extends Value {
     public Value[] vals;
 
     public LexicalEnvironment() {
-        this.vals=new Value[0];
+        this.vals=ZV;
     }
 
     public LexicalEnvironment(int s, Value[] v, LexicalEnvironment parent,
@@ -51,30 +51,35 @@ public class LexicalEnvironment extends Value {
         this.parent=parent;
 
         if (infiniteArity) {
-            int sm1=s-1;
-            if (v.length < sm1)
-                error(r, "expected "+(infiniteArity ? s - 1 : s)
-                      +" arguments to "+c+", got "+v.length);
-            vals=new Value[s];
-            System.arraycopy(v, 0, vals, 0, sm1);
-            vals[sm1]=valArrayToList(v, sm1, v.length-sm1);
+            vals=new Value[s--];
+            if (v.length < s)
+                error(r, "expected " + s +
+                      " arguments to "+c+", got "+v.length);
+            System.arraycopy(v, 0, vals, 0, s);
+            vals[s]=valArrayToList(v, s, v.length-s);
         } else {
             if (v.length!=s)
-                error(r, "expected "+(infiniteArity ? s - 1 : s)
-                      +" arguments to "+c+", got "+v.length);
+                error(r, "expected " + s +
+                      " arguments to "+c+", got "+v.length);
             vals=v;
         }
     }
 
-    public Value lookup(int depth, int pos) {
+    public final Value lookup(int depth, int pos) {
         LexicalEnvironment e = this;
-        while(depth-- > 0) e = e.parent;
+        while(depth > 0) {
+	    depth--;
+	    e = e.parent;
+	}
         return e.vals[pos];
     }
 
-    public void set(int depth, int pos, Value v) {
+    public final void set(int depth, int pos, Value v) {
         LexicalEnvironment e = this;
-        while(depth-- > 0) e = e.parent;
+        while(depth > 0) {
+	    depth--;
+	    e = e.parent;
+	}
         e.vals[pos]=v;
     }
 

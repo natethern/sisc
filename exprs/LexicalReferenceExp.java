@@ -50,7 +50,7 @@ public class LexicalReferenceExp extends Expression implements Immediate {
         r.acc=r.env.lookup(depth, pos);
     }
 
-    public Value getValue(Interpreter r) throws ContinuationException {
+    public final Value getValue(Interpreter r) throws ContinuationException {
         return r.env.lookup(depth, pos);
     }
 

@@ -82,7 +82,7 @@ public class SThread extends ModuleAdapter {
 	define("thread/interrupted?", THREADINTERRUPTEDQ);
 	define("thread/holds-lock?", THREADHOLDSLOCKQ);
 
-	define("_active-thread-count", THREADSRUNNING);
+	define("thread/_active-thread-count", THREADSRUNNING);
 
 	define("monitor/new", MONITORNEW);
 	define("monitor/lock", MONITORLOCK);
@@ -378,6 +378,8 @@ public class SThread extends ModuleAdapter {
 		} else {
 		    throw new RuntimeException("Thread has not yet started");
 		}
+	    case THREADHOLDSLOCKQ:
+		return truth(monitor(f.vlr[0]).owner==tcont(f.vlr[0]).thread);
 	    case SETTHREADPRIORITY:
 		tcont(f.vlr[0]).thread.setPriority(num(f.vlr[1]).intValue());
 		return VOID;

@@ -37,7 +37,6 @@ import sisc.data.*;
 import java.io.*;
 
 public class AppExp extends Expression {
-    protected static final Value[] ZV=new Value[0];
     public Expression rator, rands[];
     public boolean nonTail;
 
@@ -69,10 +68,7 @@ public class AppExp extends Expression {
 
         // If not all were immediate, push a fillrib, otherwise
         // go straight to eval
-        if (i>-1) {
-            r.push(r.createFillRib(i, rands, rator, APPEVAL));
-            r.nxp=rands[i];
-        } else {
+        if (i < 0) {
             tmp=rator.getValue(r);
 
 	    if (tmp!=null) {
@@ -82,7 +78,9 @@ public class AppExp extends Expression {
 		r.push(APPEVAL);
                 r.nxp=rator;
 	    }
-
+        } else {
+	    r.push(r.createFillRib(i, rands, rator, APPEVAL));
+            r.nxp=rands[i];
         }
     }
 

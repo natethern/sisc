@@ -77,7 +77,7 @@ public class Interpreter extends Util {
 
     public Interpreter(AppContext ctx, DynamicEnv dynenv) {
         env=new LexicalEnvironment();
-	fk=createFrame(THROW_SCHEME_EXCEPTION, null, null, null, stk);
+	fk=new CallFrame(THROW_SCHEME_EXCEPTION, null, null, null, stk);
 	fk.fk=fk;
 	fk.capture();
 	this.ctx = ctx;
@@ -105,8 +105,8 @@ public class Interpreter extends Util {
             do {
                 try {
                     do {
-                        while (nxp==null)
-                            pop(stk);
+                        while (nxp==null) 
+			    pop(stk);
 
 			nxp.eval(this);
                     } while (true);
@@ -129,13 +129,8 @@ public class Interpreter extends Util {
         returnFrame(c);
     }
 
-    public final void push(Expression nxp, Value[] vlr, LexicalEnvironment env,
-                           CallFrame fk) {
-        stk=createFrame(nxp, vlr, env, fk, stk);
-    }
-
     public final void push(Expression nxp) {
-        stk=createFrame(nxp, vlr, env, fk, stk);
+	stk=createFrame(nxp, vlr, env, fk, stk);
     }
 
     public final void save() {
@@ -211,7 +206,7 @@ public class Interpreter extends Util {
                                        LexicalEnvironment e,
                                        CallFrame f,
                                        CallFrame p) {
-        if (deadFramePointer<0)
+        if (deadFramePointer < 0)
             return new CallFrame(n,v,e,f,p);
         else {
             CallFrame toReturn=deadFrames[deadFramePointer--];
@@ -237,7 +232,7 @@ public class Interpreter extends Util {
                                           Expression rands[],
                                           Expression last,
                                           Expression cleanup) {
-        if (deadFillRibsPointer<0)
+        if (deadFillRibsPointer < 0)
             return new FillRibExp(pos,rands,last,cleanup);
         else {
             FillRibExp toReturn=deadFillRibs[deadFillRibsPointer--];
