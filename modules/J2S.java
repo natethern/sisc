@@ -107,6 +107,11 @@ public class J2S extends ModuleAdapter {
         }
 
         public JavaObject() {}
+
+        public Object javaValue()
+        {
+            return o;
+        }
     }
 
     public J2S() {
