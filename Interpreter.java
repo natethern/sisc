@@ -37,7 +37,6 @@ import sisc.data.*;
 import sisc.compiler.*;
 import sisc.compiler.Compiler;
 import sisc.exprs.*;
-import sisc.vm.*;
 import java.io.*;
 import java.util.*;
 
