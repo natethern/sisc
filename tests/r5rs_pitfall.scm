@@ -14,6 +14,9 @@
 ;; Section 1: Proper letrec implementation
 
 ;;Credits to Al Petrofsky
+;; In thread:
+;; defines in letrec body 
+;; http://groups.google.com/groups?selm=87bsoq0wfk.fsf%40app.dial.idiom.com
 (should-be 1.1 0
  (let ((cont #f))
    (letrec ((x (call-with-current-continuation (lambda (c) (set! cont c) 0)))
@@ -27,6 +30,9 @@
          (+ x y)))))
 
 ;;Credits to Al Petrofsky
+;; In thread:
+;; Widespread bug (arguably) in letrec when an initializer returns twice
+;; http://groups.google.com/groups?selm=87d793aacz.fsf_-_%40app.dial.idiom.com
 (should-be 1.2 #t
   (letrec ((x (call/cc list)) (y (call/cc list)))
     (cond ((procedure? x) (x (pair? y)))
@@ -35,6 +41,9 @@
       (and (call/cc x) (call/cc y) (call/cc x)))))
 
 ;;Credits to Alan Bawden
+;; In thread:
+;; LETREC + CALL/CC = SET! even in a limited setting 
+;; http://groups.google.com/groups?selm=19890302162742.4.ALAN%40PIGPEN.AI.MIT.EDU
 (should-be 1.3 #t
   (letrec ((x (call-with-current-continuation
 		  (lambda (c)
@@ -45,13 +54,19 @@
 
 ;; Section 2: Proper call/cc and procedure application
 
-;;Credits to ???, (and a wink to Matthias Blume)
+;;Credits to Al Petrofsky, (and a wink to Matthias Blume)
+;; In thread:
+;; Widespread bug in handling (call/cc (lambda (c) (0 (c 1)))) => 1 
+;; http://groups.google.com/groups?selm=87g00y4b6l.fsf%40radish.petrofsky.org
 (should-be 2.1 1
  (call/cc (lambda (c) (0 (c 1)))))
 
 ;; Section 3: Hygenic macros
 
 ;; Eli Barzilay 
+;; In thread:
+;; R5RS macros...
+;; http://groups.google.com/groups?selm=skitsdqjq3.fsf%40tulare.cs.cornell.edu
 (should-be 3.1 4
   (let-syntax ((foo
                 (syntax-rules ()
@@ -61,6 +76,9 @@
 
 
 ;; Al Petrofsky again
+;; In thread:
+;; Buggy use of begin in r5rs cond and case macros. 
+;; http://groups.google.com/groups?selm=87bse3bznr.fsf%40radish.petrofsky.org
 (should-be 3.2 2
  (let-syntax ((foo (syntax-rules ()
                        ((_ var) (define var 1)))))
@@ -72,6 +90,9 @@
 ;; Setion 4: No identifiers are reserved
 
 ;;(Brian M. Moore)
+;; In thread:
+;; shadowing syntatic keywords, bug in MIT Scheme?
+;; http://groups.google.com/groups?selm=6e6n88%248qf%241%40news.cc.ukans.edu
 (should-be 4.1 '(x)
  ((lambda lambda lambda) 'x))
 
@@ -91,12 +112,22 @@
 ;; Section 6: string->symbol case sensitivity
 
 ;; Jens Axel S?gaard
+;; In thread:
+;; Symbols in DrScheme - bug? 
+;; http://groups.google.com/groups?selm=3be55b4f%240%24358%24edfadb0f%40dspool01.news.tele.dk
 (should-be 6.1 #f
   (eq? (string->symbol "f") (string->symbol "F")))
 
 ;; Section 7: First class continuations
 
 ;; Scott Miller
+;; No newsgroup posting associated.  The jist of this test and 7.2
+;; is that once captured, a continuation should be unmodified by the 
+;; invocation of other continuations.  This test determines that this is 
+;; the case by capturing a continuation and setting it aside in a temporary
+;; variable while it invokes that and another continuation, trying to 
+;; side effect the first continuation.  This test case was developed when
+;; testing SISC 1.7's lazy CallFrame unzipping code.
 (define r #f)
 (define a #f)
 (define b #f)
@@ -136,6 +167,8 @@
       ((4) (c 4)))
     r))
 
+;; Credits to Matthias Radestock
+;; Another test case used to test SISC's lazy CallFrame routines.
 (should-be 7.3 '((-1 4 5 3)
                  (4 -1 5 3)
                  (-1 5 4 3)
