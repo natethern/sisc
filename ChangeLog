@@ -1,3 +1,10 @@
+2003-10-24  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Fixed char-whitespace? returning #f for #\return
+
+	* Intepreter.eval() and friends use R5RS compliant
+	  eval, and so should work with strict-r5rs enabled.
+
 2003-10-15  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed bug in srfi-19's |current-data|. See bug #823824.
