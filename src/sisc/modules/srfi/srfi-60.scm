@@ -84,19 +84,9 @@
 (define (booleans->integer . bools)
   (list->integer bools))
 
-;;;;@ SRFI-60 aliases
-(define logior logor)
 (define (arithmetic-shift i n)
   (if (>= n 0)
       (ashl i n)
       (ashr i (abs n))))
-(define ash arithmetic-shift)
-(define bitwise-ior logor)x
-(define bitwise-xor logxor)
-(define bitwise-and logand)
-(define bitwise-not lognot)
-(define bit-count logcount)
-(define bit-set?   logbit?)
-(define any-bits-set? logtest)
-(define first-set-bit log2-binary-factors)
-(define bitwise-merge bitwise-if)
+
+
