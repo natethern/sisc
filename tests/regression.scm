@@ -122,3 +122,15 @@
 
 ;;Used to be true
 (should-be 870845 #f (char>? #\c #\a #\b))
+
+;;Used to return (1 2)
+(should-be 878707 '(2 2)
+           (let ([entrances 0]
+                 [exits 0])
+             (with/fc
+              (lambda (a b) (b 5))
+              (lambda () (dynamic-wind
+                             (lambda () (set! entrances (+ entrances 1)))
+                             (lambda () (/ 1 0))
+                             (lambda () (set! exits (+ exits 1))))))
+             (list entrances exits)))
