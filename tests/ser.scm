@@ -52,3 +52,19 @@
 (close p)
 (define kk (java-unwrap (element-at vv (->jint 0))))
 (kk)
+
+
+;;serialisation using new framework
+
+(import serial-io)
+(define (foo x)
+  (+ x (call/cc (lambda (k)
+                  (call-with-serial-output-file "/tmp/rade/foo.ser"
+                    (lambda (port) (serialize k port)))
+                  1))))
+(foo 10) ;=> 11
+(exit)
+;;restart
+(import serial-io)
+(define k (call-with-serial-input-file "/tmp/rade/foo.ser" deserialize))
+(k 2) ;=> 12
