@@ -54,7 +54,7 @@ public class REPL extends Thread {
     
     public static InputStream findHeap() {
         try {
-            String heapLocation=Util.getSystemProperty("heapfile", null);
+            String heapLocation=Util.getSystemProperty("sisc.heapfile", null);
             InputStream heap=null;
             if (heapLocation==null) {
                 URL heapURL=ClassLoader.getSystemResource("sisc.heap");

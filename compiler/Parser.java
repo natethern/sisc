@@ -40,7 +40,7 @@ import java.io.*;
 import java.util.*;
 
 public class Parser extends Util implements Tokens {
-    public boolean annotate=getSystemProperty("emitannotations", "false").equalsIgnoreCase("true");
+    public boolean annotate=getSystemProperty("sisc.emitannotations", "false").equalsIgnoreCase("true");
     Lexer lexer;
     static final Object DOT=new Object();
     static final Object ENDPAIR=new Object();
