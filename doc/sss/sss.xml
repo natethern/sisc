@@ -38,9 +38,12 @@
       <author>
 	<firstname>Matthias</firstname>
 	<surname>Radestock</surname>
+<!-- This doesn't render very well -->
+<!--
 	<contrib>
-	  Generic functions and Scheme/Java bridge documentation
+	  Documentation for hash tables, generic functions and Scheme/Java bridge
 	</contrib>
+-->
       </author>
     </authorgroup>
     <date>
@@ -49,6 +52,7 @@
     <copyright>
       <year>2002</year>
       <holder>Scott G. Miller</holder>
+      <holder>Matthias Radestock</holder>
     </copyright>
     <legalnotice>
       <para>
@@ -189,6 +193,6 @@ for <function>sqrt</function>, it is not clear what other mathematical
     </bibliomixed>
   </bibliography>
 -->
-  &index;
+<!--  &index; -->
   &gfdl;
 </book>
