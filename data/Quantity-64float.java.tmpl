@@ -175,14 +175,9 @@ public class Quantity extends Value {
     }
 
     Quantity(BigInteger i) {
-        if (i.compareTo(_INT_MAX)<=0 &&
-            i.compareTo(_INT_MIN)>=0) {
-            val=i.intValue();
-            type=FIXEDINT;
-        } else {
-            type=INTEG;
-            this.i=i;
-        }
+        type=INTEG;
+        this.i=i;
+        simplify();
     }
 
     Quantity(BigInteger numerator, BigInteger denominator) {
