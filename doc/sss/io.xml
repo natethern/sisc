@@ -574,6 +574,12 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
     </sect2>
     <sect2 id="StringPorts"> <title>String Ports</title>
       <para>
+        &requires; 
+        <emphasis role="bold">
+          (import <emphasis>string-io</emphasis>)
+        </emphasis>
+      </para>
+      <para>
         String ports are input or output ports that read or write to a
         string rather than a file or other stream.  String ports can
         be used to parse or emit formatted strings using the standard
