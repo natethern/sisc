@@ -318,18 +318,17 @@ public class Primitives extends ModuleAdapter {
                         inport.readchar());
             case EVAL:
                 f.nxp=f.compile(f.vlr[0]);
+                f.returnValues(f.vlr);
                 return VOID;
             case OPENINPUTSTRING:
                 return new InputPort(new BufferedReader(
 							new StringReader(string(f.vlr[0]))));
             case CALLCC:
                 Procedure kproc=(Procedure)f.vlr[0];
-                f.vlr=new Value[] {f.stk.capture()};
-
-                kproc.apply(f);
-                //stop recycling of vlr
-                f.vlr = null;
-                return null;
+                f.returnValues(f.vlr);
+                f.vlr = new Value[] {f.stk.capture()};
+                f.nxp = APPEVAL;
+                return kproc;
             case GETOUTPUTSTRING:
                 OutputPort port=outport(f.vlr[0]);
                 if (!(port.w instanceof StringWriter))
@@ -608,27 +607,25 @@ public class Primitives extends ModuleAdapter {
 		return module(f.vlr[0]).getBindingValue(symbol(f.vlr[1]));
             case EVAL:
                 f.nxp=f.compile(f.vlr[0], env(f.vlr[1]));
+                f.returnValues(f.vlr);
                 return VOID;
             case CALLFC:
                 Procedure proc=proc(f.vlr[0]);
                 Procedure ehandler=proc(f.vlr[1]);
                 f.fk=f.createFrame(new ApplyValuesContEval(ehandler),
                                    null, f.env, f.fk, f.stk);
-                f.vlr=ZV;
-                proc.apply(f);
-                //stop recycling of vlr
-                f.vlr = null;
-                return null;
+                f.returnValues(f.vlr);
+                f.vlr = ZV;
+                f.nxp = APPEVAL;
+                return proc;
             case CALLWITHVALUES:
                 Procedure producer=proc(f.vlr[0]);
                 Procedure consumer=proc(f.vlr[1]);
                 f.push(new ApplyValuesContEval(consumer));
-
-                f.vlr=ZV;
-                producer.apply(f);
-                //stop recycling of vlr
-                f.vlr = null;
-                return null;
+                f.returnValues(f.vlr);
+                f.vlr = ZV;
+                f.nxp = APPEVAL;
+                return producer;
             case ERROR:
                 error(f, string(f.vlr[0]), false);
             case MAKEPATH:
@@ -699,15 +696,24 @@ public class Primitives extends ModuleAdapter {
             switch (primid) {
             case APPLY:
                 Procedure proc=proc(f.vlr[0]);
-                Pair args=pair(f.vlr[f.vlr.length-1]);
-                Pair arg1=EMPTYLIST;
-                for (int i=f.vlr.length-2; i>=1; i--)
-                    arg1=new Pair(f.vlr[i],arg1);
-                Pair applyArgs=append(arg1, args);
-                f.nxp=f.compiler.application((Expression)proc,
-					     pairToExpressions(applyArgs),
-					     false);
-                return null;
+                int l = f.vlr.length-2;
+                Pair args=pair(f.vlr[l+1]);
+                //f.vlr can be recycled
+                f.returnValues(f.vlr);
+                //this might get us back the just recycled f.vlr,
+                //which is fine since we only shift its contents to
+                //the left by one
+                Value newvlr[] = f.createValues(l + length(args));
+                int j;
+                for (j=0; j < l; j++) {
+                    newvlr[j] = f.vlr[j+1];
+                }
+                for (; args != EMPTYLIST; args = (Pair)args.cdr, j++) {
+                    newvlr[j] = args.car;
+                }
+                f.vlr = newvlr;
+                f.nxp = APPEVAL;
+                return proc;
 	    case LIST: return valArrayToList(f.vlr,0,f.vlr.length);
             case ADD:
                 quantity=Quantity.ZERO;
