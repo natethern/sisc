@@ -1,22 +1,28 @@
-;;METHOD OBJECTS
-;;we could be using srfi-9's structures here, but I do want to keep
-;;this code clean of any srfi dependencies.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;; GENERIC PROCEDURES ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;a method is a procedure. It has an arity and a signature (a list of
-;;parameter types) and flag indicating whether it can take rest
-;;parameters
-(define (make-method f types rest?)
-  (vector f (length types) types rest?))
-(define (method-procedure m)    (vector-ref m 0))
-(define (method-arity m)        (vector-ref m 1))
-(define (method-types m)        (vector-ref m 2))
-(define (method-rest? m)        (vector-ref m 3))
+;;;;;;;;;;;;;;;;;;;;;;;; HELPER FUNCTIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;same as in srfi-1
 (define (every2 pred x y)
   (or (null? x)
       (null? y)
       (and (pred (car x) (car y)) (every2 pred (cdr x) (cdr y)))))
+
+;;simplified from srfi-1
+(define (any pred l)
+  (and (pair? l) (or (pred (car l)) (any pred (cdr l)))))
+(define (filter pred l)
+  (if (pair? l)
+      (if (pred (car l))
+          (cons (car l) (filter pred (cdr l)))
+          (filter pred (cdr l)))
+      l))
+(define (remove pred l) (filter (lambda (x) (not (pred x))) l))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;; TYPE SYSTEM ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;meta types
 (define (meta x) (cons 'meta x))
@@ -36,6 +42,83 @@
 
 (define (types<= x y) (every2 type<= x y))
 (define (instances-of? x y) (every2 instance-of? x y))
+
+(define (class-direct-superclasses class)
+  (let ([sc (java/superclass class)]
+        [intfs (vector->list (java/interfaces class))])
+    (if (java/null? sc)
+        intfs
+        (cons sc intfs))))
+(define (class-direct-slot-names class)
+  (map java/name (filter (lambda (f) (memq 'public (java/modifiers f)))
+                         (vector->list (java/decl-fields class)))))
+
+;;The class precedence list of a class is a total ordering on the
+;;class and its superclasses/interfaces that is consistent with the
+;;local precedence orders specified in the class definitions.
+;;The algorithm used here is the same as the one employed by Goo
+;;(http://www.googoogaga.org/), Dylan and others.
+;;
+;;ATM the cpl isn't used for anything, but in future it will serve as
+;;a tie breaker when sorting applicable methods by specificity during
+;;the invocation of generic procedures.
+;;
+;;Because computing the cpl is expensive we cache the results.
+(define *CLASS-PRECEDENCE-LISTS* (make-hashtable))
+(define (class-precedence-list class)
+  (hashtable/get! *CLASS-PRECEDENCE-LISTS* class
+                  (lambda () (compute-class-precedence-list class))))
+(define (compute-class-precedence-list class)
+  (define (merge-lists partial-cpl remaining-lists)
+    (set! remaining-lists (remove null? remaining-lists))
+    (if (null? remaining-lists)
+        (reverse partial-cpl)
+        (let* ([candidate
+                (lambda (c)
+                  (and (not (any (lambda (l) (memq c (cdr l)))
+                                 remaining-lists))
+                       c))]
+               [next (any (lambda (l) (candidate (car l)))
+                          remaining-lists)])
+          (if next
+              (merge-lists
+               (cons next partial-cpl)
+               (map (lambda (l) (if (eq? (car l) next) (cdr l) l))
+                    remaining-lists))
+              (error "inconsistent class precedence graph for ~a"
+                     class)))))
+  (merge-lists (list class)
+               (let ([parents (class-direct-superclasses class)])
+                 (append (map class-precedence-list parents)
+                         (list parents)))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;; METHOD OBJECTS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;we could be using srfi-9's structures here, but I do want to keep
+;;this code clean of any srfi dependencies.
+
+;;a method is a procedure. It has an arity and a signature (a list of
+;;parameter types) and flag indicating whether it can take rest
+;;parameters
+(define (make-method f types rest?)
+  (vector f (length types) types rest?))
+(define (method-procedure m)    (vector-ref m 0))
+(define (method-arity m)        (vector-ref m 1))
+(define (method-types m)        (vector-ref m 2))
+(define (method-rest? m)        (vector-ref m 3))
+
+(define (method<= m1 m2)
+  (cond ((> (method-arity m1) (method-arity m2)) #t)
+        ((> (method-arity m2) (method-arity m1)) #f)
+        ;;same arity
+        ((and (not (method-rest? m1)) (method-rest? m2)) #t)
+        ((and (not (method-rest? m2)) (method-rest? m1)) #f)
+        ;;both or neither have rest arg
+        (else (types<= (method-types m1) (method-types m2)))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;; MAIN ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;This maps procedure to lists of methods ordered by their
 ;;"specificity", i.e. methods appearing earlier in the list are always
@@ -79,15 +162,6 @@
               (if next
                   (list (constructor next class))
                   '()))))))
-
-(define (method<= m1 m2)
-  (cond ((> (method-arity m1) (method-arity m2)) #t)
-        ((> (method-arity m2) (method-arity m1)) #f)
-        ;;same arity
-        ((and (not (method-rest? m1)) (method-rest? m2)) #t)
-        ((and (not (method-rest? m2)) (method-rest? m1)) #f)
-        ;;both or neither have rest arg
-        (else (types<= (method-types m1) (method-types m2)))))
 
 (define (add-method proc m)
   (add-method-to-list (get-methods proc) m))

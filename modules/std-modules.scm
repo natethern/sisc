@@ -121,6 +121,9 @@
    method-procedure
    method-types
    method-rest?
+   class-direct-superclasses
+   class-direct-slot-names
+   class-precedence-list
    generic-procedure-methods
    generic-procedure-next
    constructor

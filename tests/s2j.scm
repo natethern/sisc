@@ -157,3 +157,9 @@
           '(button1 button2 button3))
 (pack frame)
 (show frame)
+
+;; class precedence list
+(define <java.util.TreeSet> (java-class "java.util.TreeSet"))
+(class-precedence-list <java.util.TreeSet>)
+;; slot names
+(class-direct-slot-names <number>)
