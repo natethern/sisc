@@ -14,7 +14,7 @@ public abstract class Defaults {
     public static boolean VECTOR_LENGTH_PREFIXING     = true;
     public static boolean EMIT_ANNOTATIONS            = true;
     public static boolean EMIT_DEBUGGING_SYMBOLS      = true;
-    public static Value   INLINE_PRIMITIVES           = null;
+    public static Value   INLINE_PRIMITIVES           = Util.FALSE;
 }
  
 /*
