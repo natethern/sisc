@@ -51,20 +51,6 @@
                        (else (intlen (logical:ash-4 n) (+ 4 tot)))))))
     (lambda (n) (intlen n 0))))
 ;@
-(define logcount
-  (letrec ((logcnt (lambda (n tot)
-                     (if (zero? n)
-                         tot
-                         (logcnt (ashr n 4)
-                                 (+ (vector-ref
-                                     '#(0 1 1 2 1 2 2 3 1 2 2 3 2 3 3 4)
-                                     (modulo n 16))
-                                    tot))))))
-    (lambda (n)
-      (cond ((negative? n) (logcnt (lognot n) 0))
-            ((positive? n) (logcnt n 0))
-            (else 0)))))
-;@
 (define (log2-binary-factors n)
   (+ -1 (integer-length (logand n (- n)))))
 
@@ -100,8 +86,11 @@
 
 ;;;;@ SRFI-60 aliases
 (define logior logor)
-(define arithmetic-shift ashl)
-(define ash ashl)
+(define (arithmetic-shift i n)
+  (if (>= n 0)
+      (ashl i n)
+      (ashr i (abs n))))
+(define ash arithmetic-shift)
 (define bitwise-ior logor)
 (define bitwise-xor logxor)
 (define bitwise-and logand)

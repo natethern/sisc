@@ -4,12 +4,14 @@ import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
 
-public class SLogicOps extends IndexedProcedure {
+public class SLogicOps extends IndexedFixableProcedure {
 
     protected static final Symbol LOGICOPSB =
         Symbol.intern("sisc.modules.Messages");
 
-    protected static final int LOGAND = 1, LOGOR = 2, LOGXOR = 3, LOGNOT = 4;
+    protected static final int 
+        LOGAND = 1, LOGOR = 2, LOGXOR = 3, LOGNOT = 4, 
+        LOGCOUNT = 5;
 
     public static class Index extends IndexedLibraryAdapter {
 
@@ -22,6 +24,7 @@ public class SLogicOps extends IndexedProcedure {
             define("logor", LOGOR);
             define("logxor", LOGXOR);
             define("lognot", LOGNOT);
+            define("logcount", LOGCOUNT);
         }
     }
     
@@ -31,37 +34,58 @@ public class SLogicOps extends IndexedProcedure {
     
     public SLogicOps() {}
     
-    public int fixed(Value v) {
-        try {
-            Quantity q=(Quantity)v;
-            if (q.type==Quantity.FIXEDINT) return q.val;
-            else throw new ClassCastException();
-        } catch (ClassCastException e) { typeError(LOGICOPSB, "fixedinteger", v); }
-        return -1;
+    public Value apply(Value v1) throws ContinuationException {
+        switch(id) {
+        case LOGNOT: return num(v1).not();
+        case LOGCOUNT: return num(v1).bitCount();
+        case LOGAND: case LOGOR: case LOGXOR:
+            return num(v1);
+        default:
+            throwArgSizeException();
+        }
+        return VOID;
+    }
+    
+    public Value apply(Value v1, Value v2) throws ContinuationException {
+        switch(id) {
+        case LOGAND: return num(v1).and(num(v2));
+        case LOGOR: return num(v1).or(num(v2));
+        case LOGXOR: return num(v1).xor(num(v2));
+        default:
+            throwArgSizeException();
+        }
+        return VOID;
     }
 
-    public Value doApply(Interpreter f) throws ContinuationException {
-        if (id==LOGNOT) {
-            if (f.vlr.length > 1) throwArgSizeException();
-            return Quantity.valueOf(~fixed(f.vlr[0]));
-        } else {
-            int v=fixed(f.vlr[0]);
-            switch(id) {
-            case LOGAND:
-                for (int i=f.vlr.length-1; i>0; i--)
-                    v&=fixed(f.vlr[i]);
-                break;
-            case LOGOR:
-                for (int i=f.vlr.length-1; i>0; i--)
-                    v|=fixed(f.vlr[i]);
-                break;
-            case LOGXOR:
-                for (int i=f.vlr.length-1; i>0; i--)
-                    v^=fixed(f.vlr[i]);
-                break;
-            }
-            return Quantity.valueOf(v);
+    public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
+        switch(id) {
+        case LOGAND: return num(v1).and(num(v2)).and(num(v3));
+        case LOGOR: return num(v1).or(num(v2)).or(num(v3));
+        case LOGXOR: return num(v1).xor(num(v2)).xor(num(v3));
+        default:
+            throwArgSizeException();
         }
+        return VOID;
+    }
+
+
+    public Value apply(Value[] v) throws ContinuationException {
+        Quantity r=num(v[0]);
+        switch(id) {
+        case LOGAND:
+            for (int i=v.length-1; i>0; i--)
+                r=r.and(num(v[i]));
+            break;
+        case LOGOR:
+            for (int i=v.length-1; i>0; i--)
+                r=r.or(num(v[i]));
+            break;
+        case LOGXOR:
+            for (int i=v.length-1; i>0; i--)
+                r=r.xor(num(v[i]));
+            break;
+        }
+        return r;
     }
 }
 

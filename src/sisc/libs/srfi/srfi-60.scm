@@ -19,6 +19,6 @@
 	    list->integer
 	    booleans->integer)
     (import logicops)
-    (include "../modules/srfi/srfi-60.scm"))
+    (include "../../modules/srfi/srfi-60.scm"))
 
 (display "srfi-60\n")

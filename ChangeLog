@@ -1,3 +1,9 @@
+2005-03-14  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Implemented the logical operators (and, or, xor, not bit-count) for
+	  all integers (instead of just fixed ones), and updated the SRFI-60
+	  implementation to use the new logcount.
+	 
 2005-03-08  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Added support for SRFI 60.
