@@ -28,8 +28,8 @@
 
 (define (go)
   (let ((connection 
-         (connect (getprop 'host '*environment-variables*)
-                  (string->number (getprop 'port '*environment-variables*)))))
+         (connect (getenv "icfp.host")
+                  (string->number (getenv "icfp.port")))))
     (set! sock (car connection))
     (set! in (cadr connection))
     (set! out (caddr connection)))
@@ -38,7 +38,7 @@
   (debug "Receiving Game State...")
   
   (let ((playerno (receive-gamestate in)))
-;    (if (getprop 'gui '*environment-variables*)
+;    (if (getenv "icfp.gui")
 ;        (setup-gui playerno))
     (debug "Entering main-loop...")
     (main-loop playerno #f #f #f)))
