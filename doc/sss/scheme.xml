@@ -277,6 +277,11 @@
 	  </para>
 	</blockquote>
       </para>
+      <para>
+        Uninterned symbols, while always pointer-distinct, may still
+        be <function>equal?</function> to another symbol if it's
+        representation matches another.
+      </para>
       <sect3>
         <title>Case Sensitivity</title>
         <para>
