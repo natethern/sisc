@@ -2,7 +2,7 @@
   (not (null? (annotation-keys obj))))
 
 (define (compile x . env)
-  (apply _compile ((current-optimizer) (sc-expand x)) env))
+  (apply _compile ((current-optimizer) (_analyze! (sc-expand x))) env))
 
 (define-syntax show
   (lambda (e)
