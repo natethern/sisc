@@ -190,3 +190,11 @@
 			(putprop 'foo 'bar 'baz)
 			(remprop 'foo 'bar)
 			(getprop 'foo 'bar)))
+
+(should-be 1094723 #t 
+  (with/fc (lambda (m e) #t)
+    (lambda () 
+      (with-input-from-string "'#(1 2 . ,(- 3))" read))))
+
+        
+          
