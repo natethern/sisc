@@ -95,7 +95,54 @@ public class Quantity extends Value {
     }
 
     public static Quantity valueOf(String v, int radix) {
-	return new Quantity(v, radix);
+        int x,y;
+        if ((x=v.indexOf('/'))!=-1) {
+	    Quantity 
+		num=parseUinteger(v.substring(0,x), radix),
+		den=parseUinteger(v.substring(x+1), radix);
+	    if (num.is(INEXACT) || den.is(INEXACT)) 
+		return num.div(den);
+	    else 
+		return new Quantity(num.integer(), den.integer());
+        } else if ((x=v.indexOf('@'))!=-1) {
+            //R5RS Lexical structure violation:
+            float xd=parseDecimal(v.substring(0,x), radix, true);
+	    float yd=parseDecimal(v.substring(x+1), radix, true);
+	    return new Quantity((float)(xd*Math.cos(yd)), 
+				(float)(xd*Math.sin(yd)));
+        } else if ((x=v.indexOf('i'))!=-1) {
+	    float d,im;
+            if (x!=v.length()-1)
+                throw new NumberFormatException("Invalid complex number format");
+            x=v.lastIndexOf('+');
+            if (x==-1) {
+                x=v.lastIndexOf('-');
+                if (x==-1) throw new NumberFormatException("invalid complex number format");
+                if (x==0)
+                    d=0.0f;
+                else
+                    d=parseDecimal(v.substring(0,x), radix, true);
+                im = ( (x+2)==v.length() ? -1.0f :
+		       parseDecimal(v.substring(x, v.length()-1), radix, true));
+            } else {
+                if (x==0)
+                    d=0.0f;
+                else
+                    d=parseDecimal(v.substring(0,x), radix, true);
+                im = ( (x+2)==v.length() ? 1.0f :
+		       parseDecimal(v.substring(x+1, v.length()-1), radix, true));
+            }
+	    return new Quantity(d,im);
+        } else if (radix==10 &&
+                   (v.indexOf('.') != -1 ||
+                    v.indexOf('e') != -1 ||
+                    v.indexOf('s') != -1 ||
+                    v.indexOf('f') != -1 ||
+                    v.indexOf('d') != -1 ||
+                    v.indexOf('l') != -1)) {
+	    return new Quantity(parseDecimal(v, radix));
+        } else 
+	    return parseUinteger(v, radix);
     }
 
     public int type;
@@ -120,10 +167,6 @@ public class Quantity extends Value {
     public Quantity(long v) {
         i=BigInteger.valueOf(v);
         type=INTEG;
-    }
-
-    public Quantity(String v) throws NumberFormatException {
-        this(v, 10);
     }
 
     public Quantity(BigInteger i) {
@@ -172,6 +215,16 @@ public class Quantity extends Value {
             else break;
         }
         return rv;
+    }
+
+    protected static Quantity parseUinteger(String v, int radix) {
+        char[] c=v.toCharArray();
+        boolean hadPounds=parsePounds(c);
+        if (c[0]=='+' && c.length>1) c[0]='0';
+	if (hadPounds)
+	    return new Quantity((float)Double.parseDouble(new String(c)));
+	else
+	    return new Quantity(new BigInteger(new String(c), radix));
     }
 
     protected static float parseDecimal(String dv, int radix) {
@@ -230,58 +283,6 @@ public class Quantity extends Value {
                                                 Math.pow(radix, fpartstr.length()))))).floatValue();
             }
         }
-    }
-
-    public Quantity(String v, int radix) throws NumberFormatException {
-        int x,y;
-        if ((x=v.indexOf('/'))!=-1) {
-            i=new BigInteger(v.substring(0, x), radix);
-            de=new BigInteger(v.substring(x+1), radix);
-            type=RATIO;
-        } else if ((x=v.indexOf('@'))!=-1) {
-            float xd=parseDecimal(v.substring(0,x), radix, true);
-            float yd=parseDecimal(v.substring(x+1), radix, true);
-            d=xd * (float)Math.cos(yd);
-            im=xd * (float)Math.sin(yd);
-            type=COMPLEX;
-        } else if ((x=v.indexOf('i'))!=-1) {
-            if (x!=v.length()-1)
-                throw new NumberFormatException("Invalid complex number format");
-            x=v.lastIndexOf('+');
-            if (x==-1) {
-                x=v.lastIndexOf('-');
-                if (x==-1) throw new NumberFormatException("invalid complex number format");
-                if (x==0)
-                    d=0.0f;
-                else
-                    d=parseDecimal(v.substring(0,x), radix, true);
-                im = ( (x+2)==v.length() ? -1.0f :
-                       parseDecimal(v.substring(x, v.length()-1), radix, true));
-            } else {
-                if (x==0)
-                    d=0.0f;
-                else
-                    d=parseDecimal(v.substring(0,x), radix, true);
-                im = ( (x+2)==v.length() ?
-                       1.0f :
-                       parseDecimal(v.substring(x+1, v.length()-1), radix, true));
-            }
-            type=COMPLEX;
-        } else {
-            try {
-                d=parseDecimal(v, radix);
-                type=DECIM;
-            } catch (NumberFormatException n) {
-                try {
-                    val=Integer.parseInt(v, radix);
-                    type=FIXEDINT;
-                } catch (Exception e) {
-                    i=new BigInteger(v, radix);
-                    type=INTEG;
-                }
-            }
-        }
-        simplify();
     }
 
     protected void simplify() {
@@ -620,12 +621,12 @@ public class Quantity extends Value {
                 return new Quantity(0.0f, (float)Math.sqrt(-1*floatValue()));
             break;
 	case DECIM:
-            if (d<0) return new Quantity(0.0, Math.sqrt(-d));
+            if (d<0) return new Quantity(0.0f, (float)Math.sqrt(-d));
 	    break;
 	case RATIO:
 	    float dv=floatValue();
-            if (dv<0) return new Quantity(0.0, Math.sqrt(-dv));
-	    else return new Quantity(Math.sqrt(dv));
+            if (dv<0) return new Quantity(0.0f, (float)Math.sqrt(-dv));
+	    else return new Quantity((float)Math.sqrt(dv));
         case COMPLEX:
             // Take r=sqrt(a^2 + b^2)
             float a2=d*d;
@@ -1098,7 +1099,7 @@ public class Quantity extends Value {
         return 0;
     }
 
-    public BigInteger integerVal() {
+    public BigInteger integer() {
         switch (type) {
         case FIXEDINT:
             return BigInteger.valueOf(val);

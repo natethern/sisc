@@ -90,12 +90,58 @@ public class Quantity extends Value {
 	return new Quantity(real, imag);
     }
 
-    public static Quantity valueOf(String v) {
+    public static Quantity valueOf(String v) throws NumberFormatException {
 	return valueOf(v, 10);
     }
 
-    public static Quantity valueOf(String v, int radix) {
-	return new Quantity(v, radix);
+    public static Quantity valueOf(String v, int radix) throws NumberFormatException {
+        int x,y;
+        if ((x=v.indexOf('/'))!=-1) {
+	    Quantity 
+		num=parseUinteger(v.substring(0,x), radix),
+		den=parseUinteger(v.substring(x+1), radix);
+	    if (num.is(INEXACT) || den.is(INEXACT)) 
+		return num.div(den);
+	    else 
+		return new Quantity(num.integer(), den.integer());
+        } else if ((x=v.indexOf('@'))!=-1) {
+            //R5RS Lexical structure violation:
+            double xd=parseDecimal(v.substring(0,x), radix, true);
+	    double yd=parseDecimal(v.substring(x+1), radix, true);
+	    return new Quantity(xd*Math.cos(yd), xd*Math.sin(yd));
+        } else if ((x=v.indexOf('i'))!=-1) {
+	    double d,im;
+            if (x!=v.length()-1)
+                throw new NumberFormatException("Invalid complex number format");
+            x=v.lastIndexOf('+');
+            if (x==-1) {
+                x=v.lastIndexOf('-');
+                if (x==-1) throw new NumberFormatException("invalid complex number format");
+                if (x==0)
+                    d=0.0;
+                else
+                    d=parseDecimal(v.substring(0,x), radix, true);
+                im = ( (x+2)==v.length() ? -1.0 :
+		       parseDecimal(v.substring(x, v.length()-1), radix, true));
+            } else {
+                if (x==0)
+                    d=0.0;
+                else
+                    d=parseDecimal(v.substring(0,x), radix, true);
+                im = ( (x+2)==v.length() ? 1.0 :
+		       parseDecimal(v.substring(x+1, v.length()-1), radix, true));
+            }
+	    return new Quantity(d,im);
+        } else if (radix==10 &&
+                   (v.indexOf('.') != -1 ||
+                    v.indexOf('e') != -1 ||
+                    v.indexOf('s') != -1 ||
+                    v.indexOf('f') != -1 ||
+                    v.indexOf('d') != -1 ||
+                    v.indexOf('l') != -1)) {
+	    return new Quantity(parseDecimal(v, radix));
+        } else 
+	    return parseUinteger(v, radix);
     }
 
     public int type;
@@ -120,10 +166,6 @@ public class Quantity extends Value {
     Quantity(long v) {
         i=BigInteger.valueOf(v);
         type=INTEG;
-    }
-
-    Quantity(String v) throws NumberFormatException {
-        this(v, 10);
     }
 
     Quantity(BigInteger i) {
@@ -259,11 +301,14 @@ public class Quantity extends Value {
         }
     }
 
-    protected Quantity parseUinteger(String v, int radix) {
+    protected static Quantity parseUinteger(String v, int radix) {
         char[] c=v.toCharArray();
         boolean hadPounds=parsePounds(c);
         if (c[0]=='+' && c.length>1) c[0]='0';
-        return new Quantity(new BigInteger(new String(c), radix));
+	if (hadPounds)
+	    return new Quantity(Double.parseDouble(new String(c)));
+	else
+	    return new Quantity(new BigInteger(new String(c), radix));
     }
 
     protected double decimal() {
@@ -285,59 +330,6 @@ public class Quantity extends Value {
             throw new NumberFormatException("Value was not an integer");
         }
     }
-
-    public Quantity(String v, int radix) throws NumberFormatException {
-        int x,y;
-        if ((x=v.indexOf('/'))!=-1) {
-            i=parseUinteger(v.substring(0,x), radix).integer();
-            de=parseUinteger(v.substring(x+1), radix).integer();
-            type=RATIO;
-
-        } else if ((x=v.indexOf('@'))!=-1) {
-            //R5RS Lexical structure violation:
-            double xd=parseDecimal(v.substring(0,x), radix, true);
-	    double yd=parseDecimal(v.substring(x+1), radix, true);
-            d=xd*Math.cos(yd);
-            im=xd*Math.sin(yd);
-            type=COMPLEX;
-        } else if ((x=v.indexOf('i'))!=-1) {
-            if (x!=v.length()-1)
-                throw new NumberFormatException("Invalid complex number format");
-            x=v.lastIndexOf('+');
-            if (x==-1) {
-                x=v.lastIndexOf('-');
-                if (x==-1) throw new NumberFormatException("invalid complex number format");
-                if (x==0)
-                    d=0.0;
-                else
-                    d=parseDecimal(v.substring(0,x), radix, true);
-                im = ( (x+2)==v.length() ? -1.0 :
-		       parseDecimal(v.substring(x, v.length()-1), radix, true));
-            } else {
-                if (x==0)
-                    d=0.0;
-                else
-                    d=parseDecimal(v.substring(0,x), radix, true);
-                im = ( (x+2)==v.length() ? 1.0 :
-		       parseDecimal(v.substring(x+1, v.length()-1), radix, true));
-            }
-            type=COMPLEX;
-        } else if (radix==10 &&
-                   (v.indexOf('.') != -1 ||
-                    v.indexOf('e') != -1 ||
-                    v.indexOf('s') != -1 ||
-                    v.indexOf('f') != -1 ||
-                    v.indexOf('d') != -1 ||
-                    v.indexOf('l') != -1)) {
-            d=parseDecimal(v, radix);
-            type=DECIM;
-        } else {
-            i=parseUinteger(v, radix).integer();
-            type=INTEG;
-        }
-        simplify();
-    }
-
 
     protected void simplify() {
         if (type==RATIO) {

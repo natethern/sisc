@@ -7,7 +7,18 @@
 	* Fixed string->number, which should have been able to accept
 	  #[xobd]num format numbers as well as ordinary ones.
 
+	* Fixed string->number handling of ""
+
+	* Fixed sqrt on negative floating point values
+
         * Fixed error in lexer's handling of EOF.
+
+	* Removed String constructor for Quantities, rely
+	  on valueOf, which requires much less needless instantiation.
+
+	* Fixed precision loss during serialization/deserialization
+
+	* Fixed handling of uncertain digits in exact numbers.
 
 r1.3.0  Major changes
 

@@ -93,8 +93,8 @@ public class Quantity extends Value {
     }
 
     public static Quantity valueOf(Quantity real, Quantity imag) {
-	return new Quantity(real.toInexact().decimalValue(),
-			    imag.toInexact().decimalValue());
+	return new Quantity(real.toInexact().decimal(),
+			    imag.toInexact().decimal());
     }
 
     public static Quantity valueOf(String v) {
@@ -102,7 +102,54 @@ public class Quantity extends Value {
     }
 
     public static Quantity valueOf(String v, int radix) {
-	return new Quantity(v, radix);
+        int x,y;
+        if ((x=v.indexOf('/'))!=-1) {
+	    Quantity 
+		num=parseUinteger(v.substring(0,x), radix),
+		den=parseUinteger(v.substring(x+1), radix);
+	    if (num.is(INEXACT) || den.is(INEXACT)) 
+		return num.div(den);
+	    else 
+		return new Quantity(num.integer(), den.integer());
+        } else if ((x=v.indexOf('@'))!=-1) {
+            //R5RS Lexical structure violation:
+	    double xd=parseDecimal(v.substring(0,x), radix, true).doubleValue();
+	    double yd=parseDecimal(v.substring(x+1), radix, true).doubleValue();
+	    return new Quantity(new BigDecimal(xd*Math.cos(yd)),
+				new BigDecimal(xd*Math.sin(yd)));
+        } else if ((x=v.indexOf('i'))!=-1) {
+	    BigDecimal d,im;
+            if (x!=v.length()-1)
+                throw new NumberFormatException("Invalid complex number format");
+            x=v.lastIndexOf('+');
+            if (x==-1) {
+                x=v.lastIndexOf('-');
+                if (x==-1) throw new NumberFormatException("invalid complex number format");
+                if (x==0)
+                    d=_BD_ZERO;
+                else
+                    d=parseDecimal(v.substring(0,x), radix, true);
+                im = ( (x+2)==v.length() ? _BD_NEGONE :
+		       parseDecimal(v.substring(x, v.length()-1), radix, true));
+            } else {
+                if (x==0)
+                    d=_BD_ZERO;
+                else
+                    d=parseDecimal(v.substring(0,x), radix, true);
+                im = ( (x+2)==v.length() ? _BD_NEGONE :
+		       parseDecimal(v.substring(x+1, v.length()-1), radix, true));
+            }
+	    return new Quantity(d,im);
+        } else if (radix==10 &&
+                   (v.indexOf('.') != -1 ||
+                    v.indexOf('e') != -1 ||
+                    v.indexOf('s') != -1 ||
+                    v.indexOf('f') != -1 ||
+                    v.indexOf('d') != -1 ||
+                    v.indexOf('l') != -1)) {
+	    return new Quantity(parseDecimal(v, radix));
+        } else 
+	    return parseUinteger(v, radix);
     }
 
     public int type;
@@ -135,10 +182,6 @@ public class Quantity extends Value {
     public Quantity(long v) {
         i=BigInteger.valueOf(v);
         type=INTEG;
-    }
-
-    public Quantity(String v) throws NumberFormatException {
-        this(v, 10);
     }
 
     public Quantity(BigDecimal d) {
@@ -180,6 +223,17 @@ public class Quantity extends Value {
             else break;
         }
         return rv;
+    }
+
+
+    protected static Quantity parseUinteger(String v, int radix) {
+        char[] c=v.toCharArray();
+        boolean hadPounds=parsePounds(c);
+        if (c[0]=='+' && c.length>1) c[0]='0';
+	if (hadPounds)
+	    return new Quantity(Double.parseDouble(new String(c)));
+	else
+	    return new Quantity(new BigInteger(new String(c), radix));
     }
 
     protected static BigDecimal parseDecimal(String dv, int radix) {
@@ -241,59 +295,6 @@ public class Quantity extends Value {
                                 new BigDecimal(Math.pow(radix, fpartstr.length()))));
             }
         }
-    }
-
-    public Quantity(String v, int radix) throws NumberFormatException {
-        int x,y;
-        if ((x=v.indexOf('/'))!=-1) {
-            i=new BigInteger(v.substring(0, x), radix);
-            de=new BigInteger(v.substring(x+1), radix);
-            type=RATIO;
-        } else if ((x=v.indexOf('@'))!=-1) {
-            double xd=parseDecimal(v.substring(0,x), radix, true).doubleValue();
-            double yd=parseDecimal(v.substring(x+1), radix, true).doubleValue();
-            d=new BigDecimal(xd * Math.cos(yd));
-            im=new BigDecimal(xd * Math.sin(yd));
-            type=COMPLEX;
-        } else if ((x=v.indexOf('i'))!=-1) {
-            if (x!=v.length()-1)
-                throw new NumberFormatException("Invalid complex number format");
-            x=v.lastIndexOf('+');
-            if (x==-1) {
-                x=v.lastIndexOf('-');
-                if (x==-1) throw new NumberFormatException("invalid complex number format");
-                if (x==0)
-                    d=_BD_ZERO;
-                else
-                    d=parseDecimal(v.substring(0,x), radix, true);
-                im = ( (x+2)==v.length() ?
-                       _BD_NEGONE :
-                       parseDecimal(v.substring(x, v.length()-1), radix, true));
-            } else {
-                if (x==0)
-                    d=_BD_ZERO;
-                else
-                    d=parseDecimal(v.substring(0,x), radix, true);
-                im = ( (x+2)==v.length() ?
-                       _BD_ONE :
-                       parseDecimal(v.substring(x+1, v.length()-1), radix, true));
-            }
-            type=COMPLEX;
-        } else {
-            try {
-                d=parseDecimal(v, radix);
-                type=DECIM;
-            } catch (NumberFormatException n) {
-                try {
-                    val=Integer.parseInt(v, radix);
-                    type=FIXEDINT;
-                } catch (NumberFormatException e) {
-                    i=new BigInteger(v, radix);
-                    type=INTEG;
-                }
-            }
-        }
-        simplify();
     }
 
     protected void simplify() {
@@ -1089,7 +1090,7 @@ public class Quantity extends Value {
         return 0.0;
     }
 
-    public BigDecimal decimalValue() {
+    public BigDecimal decimal() {
         switch (type) {
         case FIXEDINT:
             return new BigDecimal(val);
@@ -1117,7 +1118,7 @@ public class Quantity extends Value {
         return 0;
     }
 
-    public BigInteger integerVal() {
+    public BigInteger integer() {
         switch (type) {
         case FIXEDINT:
             return BigInteger.valueOf(val);
@@ -1330,12 +1331,7 @@ public class Quantity extends Value {
                 im=new BigDecimal(new BigInteger(buffer), scale);
                 break;
             }
-            simplify();
         }
-    }
-
-    protected BigInteger unscaledValue(BigDecimal d) {
-        return d.setScale(0, BigDecimal.ROUND_HALF_EVEN).toBigInteger();
     }
 
     public void serialize(Serializer s, DataOutputStream dos) throws IOException {
@@ -1352,7 +1348,7 @@ public class Quantity extends Value {
                 break;
             case DECIM:
                 int scale=d.scale();
-                buffer=unscaledValue(d).toByteArray();
+                buffer=d.unscaledValue().toByteArray();
                 s.writeBer(buffer.length, dos);
                 s.writeBer(scale, dos);
                 dos.write(buffer);
@@ -1366,13 +1362,13 @@ public class Quantity extends Value {
                 dos.write(buffer);
                 break;
             case COMPLEX:
-                buffer=unscaledValue(d).toByteArray();
+                buffer=d.unscaledValue().toByteArray();
                 scale=d.scale();
                 s.writeBer(buffer.length, dos);
                 s.writeBer(scale, dos);
                 dos.write(buffer);
 
-                buffer=unscaledValue(d).toByteArray();
+                buffer=d.unscaledValue().toByteArray();
                 scale=im.scale();
                 s.writeBer(buffer.length, dos);
                 s.writeBer(scale, dos);
