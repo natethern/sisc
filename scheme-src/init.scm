@@ -701,12 +701,12 @@
 
 (define iota
   (letrec ([iota-help
-	    (lambda (n h) 
-	      (if (> n h)
-		  ()
-		  (cons n (iota-help (+ n 1) h))))])
+	    (lambda (n acc) 
+	      (if (< n 0)
+		  acc
+		  (iota-help (- n 1) (cons n acc))))])
     (lambda (n) 
-      (iota-help 0 n))))
+      (iota-help (- n 1) '()))))
 
 
 (define (values . args)
