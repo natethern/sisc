@@ -1106,12 +1106,19 @@ public class Quantity extends Value {
         return comp(o, -1);
     }
 
+    public boolean eq(Object v) {
+        if (!(v instanceof Quantity)) return false;
+        Quantity q=(Quantity)v;
+	    return ((is(EXACT) && q.is(EXACT)) ||
+                (is(INEXACT) && q.is(INEXACT))) && comp(q, 0);
+    }
+
     public boolean equals(Object v) {
         if (!(v instanceof Quantity)) return false;
         Quantity q=(Quantity)v;
 	    return (q.type==type && comp(q, 0));
     }
-	
+
     public boolean valueEqual(Value v) {
         return (this == v) ||
             ((v instanceof Quantity) && comp((Quantity)v, 0));

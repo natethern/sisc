@@ -77,12 +77,6 @@ public class SchemeCharacter extends Value {
                 ((SchemeCharacter)v).c==c);
     }
 
-    public boolean equals(Object v) {
-        return (v instanceof SchemeCharacter &&
-                ((SchemeCharacter)v).c==c);
-    }
-
-
     public int hashCode(){
         return (int)c;
     }

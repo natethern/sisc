@@ -12,23 +12,7 @@
 (define eof-object?
   (lambda (%_922) (eq? %_922 '#!eof)))
 (define not (lambda (%_923) (if %_923 '#f '#t)))
-(define eqv?
-  (lambda (%_924 %_925)
-    ((lambda (%_926)
-       (if %_926
-         %_926
-         (if (number? %_924)
-           (if (number? %_925)
-             (if ((lambda (%_927)
-                    (if %_927
-                      %_927
-                      (if (inexact? %_924) (inexact? %_925) '#f)))
-                  (if (exact? %_924) (exact? %_925) '#f))
-               (= %_924 %_925)
-               '#f)
-             '#f)
-           '#f)))
-     (eq? %_924 %_925))))
+(define eqv? eq?)
 (define newline
   (lambda %_928
     (apply display (cons '#\newline %_928))))

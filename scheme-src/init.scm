@@ -49,13 +49,7 @@
 ;;;;;;;;; Standard Scheme functions
 
 (define (not x) (if x #f #t))
-(define (eqv? x y)
-  (or (eq? x y) 
-      (and (number? x)
-	   (number? y)
-           (or (and (exact? x) (exact? y))
-               (and (inexact? x) (inexact? y)))
-           (= x y))))
+(define eqv? eq?)
 (define (newline . port)
   (apply display (cons #\newline port)))
 
