@@ -167,3 +167,6 @@
                   (list <java.io.file>
                         <java.io.serializable>
                         <int*>))))
+
+;; equal? was insensitive to exactness of numbers
+(should-be 987271 #f (equal? 3 3.0))

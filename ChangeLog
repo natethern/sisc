@@ -1,3 +1,8 @@
+2004-07-08  Scott G. Miller   <scgmille@freenetproject.org>
+
+	* Fixed |equal?| on numbers, which was insensitive to 
+          exactness.
+
 2004-06-20  Scott G. Miller   <scgmille@freenetproject.org>
 
 	* Added the os module.

@@ -1338,8 +1338,11 @@ public class Quantity extends Value implements Singleton {
     }
 
     public boolean valueEqual(Value v) {
-        return (this == v) ||
-            ((v instanceof Quantity) && comp((Quantity)v, 0));
+        if (this == v) return true;
+        if (v instanceof Quantity) {
+            Quantity o=(Quantity)v;
+            return (type == o.type) && comp(o, 0);
+        } else return false;
     }
 
     public int hashCode() {
