@@ -228,7 +228,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         parameter <function>character-set</function> as the character
         encoding name.  A list of many possible encoding names can be
         found in the
-        <ulink url="http://java.sun.com/j2se/1.4.1/docs/guide/intl/encoding.doc.html">
+        <ulink url="http://java.sun.com/j2se/1.4/docs/guide/intl/encoding.doc.html">
         Java Platform Documentation</ulink>
       </para>
       <para>
