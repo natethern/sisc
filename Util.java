@@ -82,22 +82,6 @@ public abstract class Util extends Defaults implements Version {
 	return b.toString();
     }
 
-    public static void error(Interpreter r, Value where, 
-                             NestedPrimRuntimeException parent) 
-        throws ContinuationException {
-        SchemeException rootCauseException=parent.getRootCause();
-        Pair rootCause=new Pair(new Pair(ERRORK, rootCauseException.e),
-                                new Pair(new Pair(FCONT, rootCauseException.f),
-                                         rootCauseException.m));
-        String parentMessage=parent.getMessage();
-        error(r, (parentMessage == null ?
-                  list(new Pair(LOCATION, where),
-                       new Pair(PARENT, rootCause)) :
-                  list(new Pair(MESSAGE, new SchemeString(parent.getMessage())),
-                       new Pair(LOCATION, where),
-                       new Pair(PARENT, rootCause))));
-    }
-
     public static void error(Interpreter r, Value where, String errormessage)
     throws ContinuationException {
 	error(r, list(new Pair(MESSAGE, new SchemeString(errormessage)),
@@ -317,13 +301,6 @@ public abstract class Util extends Defaults implements Version {
         try {
             return (Box)o;
         } catch (ClassCastException e) { typeError("box", o); }
-	return null;
-    }
-
-    public static final Module module(Value o) {
-        try {
-            return (Module)o;
-        } catch (ClassCastException e) { typeError("nativelibrary", o); }
 	return null;
     }
 

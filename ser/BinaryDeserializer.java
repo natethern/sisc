@@ -6,7 +6,7 @@ import java.lang.ref.*;
 import java.lang.reflect.*;
 import sisc.*;
 import sisc.data.*;
-import sisc.Module;
+import sisc.nativefun.Module;
 import sisc.env.SymbolicEnvironment;
 
 public class BinaryDeserializer extends DeserializerImpl {

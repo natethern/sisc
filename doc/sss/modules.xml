@@ -37,7 +37,7 @@
       <title>Adding Types</title>
       <para>
         A Scheme value is represented in &SISC; as a subclass of the
-        abstract Java class <literal>sisc.data.Value</literal>.  A proper
+        abstract Java class <classname>sisc.data.Value</classname>.  A proper
         subclass <emphasis>must</emphasis> implement the
         <function>display</function> method:
       </para>
@@ -154,17 +154,16 @@
     <sect2>
       <title>Adding Native Bindings</title>
       <para>
-        Adding native functions or values implemented in native code 
-        is accomplished by creating a
-        Java class that extends the abstract class
-        <literal>sisc.Module</literal>, or, more commonly, the helper
-        class <literal>sisc.ModuleAdapter</literal>.  This should not
-        be confused with a Scheme module, which is a scoped package
-        for bindings.  Natively defined functions in a &SISC;
-        <literal>Module</literal> can be packaged into a Scheme module
-        however.  The following
-        methods must be defined in a proper <literal>Module</literal>
-        subclass:
+        Adding native functions or values implemented in native code
+        is accomplished by creating a Java class that extends the
+        abstract class <classname>sisc.nativefun.Module</classname>, or,
+        more commonly, the helper class
+        <classname>sisc.nativefun.ModuleAdapter</classname>.  This should
+        not be confused with a Scheme module, which is a scoped
+        package for bindings.  Natively defined functions in a &SISC;
+        <classname>Module</classname> can be packaged into a Scheme module
+        however.  The following methods must be defined in a proper
+        <classname>Module</classname> subclass:
         <blockquote>
           <para>
             <methodsynopsis language="java">
@@ -244,22 +243,22 @@
         more primitive functions whose implementations are in Java
         code.  Each such function must be referenced by an integer
         unique to the function within this module.  The integer and
-        the module are wrapped in a &SISC;
-        <literal>BuiltinProcedure</literal>.  When the procedure is
-        applied in Scheme, the <function>eval</function> method will
-        be called with the primitive id and the calling Interpreter.
-        The <literal>Value[]</literal> <literal>vlr</literal> in the
-        Interpreter will contain the evaluated arguments to the
-        primitive.
+        the module are wrapped in a
+        <classname>sisc.nativefun.BuiltinProcedure</classname>.  When the
+        procedure is applied in Scheme, the <function>eval</function>
+        method will be called with the primitive id and the calling
+        Interpreter.  The <classname>Value[]</classname>
+        <literal>vlr</literal> in the Interpreter will contain the
+        evaluated arguments to the primitive.
       </para>
       <para>
         The simplest way to define a Module that exports functions is
-        to subclass <literal>sisc.ModuleAdapter</literal>.  If done
-        this way, only the <function>getModuleName</function> and
-        <function>eval</function> methods must be implemented.  Each
-        function that one wishes to export is then described with the
-        <function>define</function> method available in
-        <literal>ModuleAdapter</literal>:
+        to subclass <classname>sisc.nativefun.ModuleAdapter</classname>.
+        If done this way, only the <function>getModuleName</function>
+        and <function>eval</function> methods must be implemented.
+        Each function that one wishes to export is then described with
+        the <function>define</function> method available in
+        <classname>ModuleAdapter</classname>:
         <blockquote>
           <para>
             <methodsynopsis language="java">
@@ -343,10 +342,10 @@
         </blockquote>
       </para>
       <para>
-        The <literal>Serializer</literal> and
-        <literal>Deserializer</literal> objects implement Java's
-        <literal>java.io.DataOutput</literal> and
-        <literal>java.io.DataInput</literal> interfaces,
+        The <classname>Serializer</classname> and
+        <classname>Deserializer</classname> objects implement Java's
+        <classname>java.io.DataOutput</classname> and
+        <classname>java.io.DataInput</classname> interfaces,
         respectively.  This means that you can use any of the
         write/read functions in those interfaces to serialize the
         state of your Expression or Value.  In addition, a

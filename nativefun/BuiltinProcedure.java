@@ -1,9 +1,10 @@
-package sisc.data;
+package sisc.nativefun;
 
 import java.io.*;
 import sisc.*;
 import sisc.compiler.*;
 import sisc.interpreter.*;
+import sisc.data.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -47,6 +48,22 @@ public class BuiltinProcedure extends Procedure {
         } catch (RuntimeException re) {
             error(r, name, re.getMessage());
         } 
+    }
+
+    public static void error(Interpreter r, Value where, 
+                             NestedPrimRuntimeException parent) 
+        throws ContinuationException {
+        SchemeException rootCauseException=parent.getRootCause();
+        Pair rootCause=new Pair(new Pair(ERRORK, rootCauseException.e),
+                                new Pair(new Pair(FCONT, rootCauseException.f),
+                                         rootCauseException.m));
+        String parentMessage=parent.getMessage();
+        error(r, (parentMessage == null ?
+                  list(new Pair(LOCATION, where),
+                       new Pair(PARENT, rootCause)) :
+                  list(new Pair(MESSAGE, new SchemeString(parent.getMessage())),
+                       new Pair(LOCATION, where),
+                       new Pair(PARENT, rootCause))));
     }
 
     public String display() {

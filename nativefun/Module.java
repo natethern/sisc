@@ -1,4 +1,4 @@
-package sisc;
+package sisc.nativefun;
 
 import sisc.data.*;
 import sisc.interpreter.*;
@@ -33,6 +33,14 @@ public abstract class Module extends NamedValue implements java.io.Serializable 
     public static void throwArgSizeException() {
 	throw new ArrayIndexOutOfBoundsException();
     }
+
+    public static final Module module(Value o) {
+        try {
+            return (Module)o;
+        } catch (ClassCastException e) { typeError("nativelibrary", o); }
+	return null;
+    }
+
 }
 /*
  * The contents of this file are subject to the Mozilla Public

@@ -1,14 +1,24 @@
-package sisc;
+package sisc.nativefun;
 
-import sisc.data.*;
+import sisc.interpreter.SchemeException;
 
-public class PrimRuntimeException extends RuntimeException {
-    
-    public PrimRuntimeException(String message) {
+public class NestedPrimRuntimeException extends PrimRuntimeException {
+
+    protected SchemeException e;
+
+    public NestedPrimRuntimeException(String message, SchemeException e) {
 	super(message);
+	this.e=e;
     }
 
-    public PrimRuntimeException() {}
+    public NestedPrimRuntimeException(SchemeException e) {
+	super();
+	this.e=e;
+    }
+
+    public SchemeException getRootCause() {
+	return e;
+    }
 }
     
 /*

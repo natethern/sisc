@@ -3,7 +3,7 @@ package sisc.ser;
 import java.io.*;
 import java.math.*;
 
-import sisc.Module;
+import sisc.nativefun.Module;
 import sisc.data.Expression;
 import sisc.data.Symbol;
 import sisc.env.SymbolicEnvironment;

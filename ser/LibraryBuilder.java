@@ -7,7 +7,7 @@ import sisc.*;
 import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.env.SymbolicEnvironment;
-import sisc.Module;
+import sisc.nativefun.Module;
 
 /**
  * Keeps track of entry points - points where serialization begins.

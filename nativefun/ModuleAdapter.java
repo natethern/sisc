@@ -1,50 +1,65 @@
-package sisc;
+package sisc.nativefun;
 
-import sisc.interpreter.SchemeException;
+import java.text.*;
+import java.util.*;
+import sisc.data.*;
+import sisc.interpreter.*;
 
-public class NestedPrimRuntimeException extends PrimRuntimeException {
+public abstract class ModuleAdapter extends Module {
+    protected HashMap bindings=new HashMap(0);
 
-    protected SchemeException e;
-
-    public NestedPrimRuntimeException(String message, SchemeException e) {
-	super(message);
-	this.e=e;
+    protected void define(String s, int id) {
+        Symbol name=Symbol.get(s);
+        bindings.put(name, new Integer(id));
     }
 
-    public NestedPrimRuntimeException(SchemeException e) {
-	super();
-	this.e=e;
+    public Symbol[] getModuleBindingNames(Interpreter r) {
+        Symbol[] slist=new Symbol[bindings.size()];
+        int x=0;
+        for (Iterator i=bindings.keySet().iterator(); 
+             i.hasNext();) 
+            slist[x++]=(Symbol)i.next();
+        return slist;
     }
 
-    public SchemeException getRootCause() {
-	return e;
+
+    public Value getBindingValue(Interpreter r, Symbol name) throws NoSuchMethodError {
+        Integer i=(Integer)bindings.get(name);
+        try {
+            int inum=i.intValue();
+            return new BuiltinProcedure(this, name, inum);
+        } catch (NullPointerException n) {
+            throw new NoSuchMethodError();
+        }
+    }
+    
+    public float getModuleVersion() {
+        return 0.0f;
     }
 }
-    
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of
  * the License at http://www.mozilla.org/MPL/
- *
+ * 
  * Software distributed under the License is distributed on an "AS
  * IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
  * implied. See the License for the specific language governing
  * rights and limitations under the License.
- *
+ * 
  * The Original Code is the Second Interpreter of Scheme Code (SISC).
- *
+ * 
  * The Initial Developer of the Original Code is Scott G. Miller.
  * Portions created by Scott G. Miller are Copyright (C) 2000-2001
  * Scott G. Miller.  All Rights Reserved.
- *
+ * 
  * Contributor(s):
- * Matthias Radestock
- *
+ * 
  * Alternatively, the contents of this file may be used under the
  * terms of the GNU General Public License Version 2 or later (the
- * "GPL"), in which case the provisions of the GPL are applicable
- * instead of those above.  If you wish to allow use of your
+ * "GPL"), in which case the provisions of the GPL are applicable 
+ * instead of those above.  If you wish to allow use of your 
  * version of this file only under the terms of the GPL and not to
  * allow others to use your version of this file under the MPL,
  * indicate your decision by deleting the provisions above and

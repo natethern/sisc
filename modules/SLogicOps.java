@@ -5,6 +5,7 @@ import java.io.IOException;
 import sisc.*;
 import sisc.data.*;
 import sisc.interpreter.*;
+import sisc.nativefun.*;
 
 public class SLogicOps extends ModuleAdapter {
     protected static final int

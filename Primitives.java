@@ -9,6 +9,7 @@ import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import sisc.interpreter.*;
+import sisc.nativefun.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;

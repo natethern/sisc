@@ -7,6 +7,7 @@ import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import sisc.interpreter.*;
+import sisc.nativefun.*;
 
 public class SDebug extends ModuleAdapter {
 

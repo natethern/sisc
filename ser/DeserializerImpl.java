@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import sisc.Module;
+import sisc.nativefun.Module;
 import sisc.data.Expression;
 import sisc.Util;
 
