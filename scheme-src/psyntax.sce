@@ -1,185 +1,185 @@
-(letrec ((|lambda-var-list_e_D770Tqe|
-           (lambda (|vars_e_PacVDBe|)
-             ((letrec ((|lvl_e_97amEBe|
-                         (lambda (|vars_e_v38PEBe|
-                                  |ls_e_R_5gFBe|
-                                  |w_e_bY3JFBe|)
-                           (if (pair? |vars_e_v38PEBe|)
-                             (|lvl_e_97amEBe|
-                               (cdr |vars_e_v38PEBe|)
-                               (cons (|wrap_e_jG6Yqqe|
-                                       (car |vars_e_v38PEBe|)
-                                       |w_e_bY3JFBe|)
-                                     |ls_e_R_5gFBe|)
-                               |w_e_bY3JFBe|)
-                             (if (|id?_e_TJwZGpe| |vars_e_v38PEBe|)
-                               (cons (|wrap_e_jG6Yqqe|
-                                       |vars_e_v38PEBe|
-                                       |w_e_bY3JFBe|)
-                                     |ls_e_R_5gFBe|)
-                               (if (null? |vars_e_v38PEBe|)
-                                 |ls_e_R_5gFBe|
-                                 (if (syntax-object?_e_h-lahpe
-                                       |vars_e_v38PEBe|)
-                                   (|lvl_e_97amEBe|
-                                     (|syntax-object-expression_e_DWjDhpe|
-                                       |vars_e_v38PEBe|)
-                                     |ls_e_R_5gFBe|
-                                     (|join-wraps_e_NLJliqe|
-                                       |w_e_bY3JFBe|
-                                       (|syntax-object-wrap_e_ZSh4ipe|
-                                         |vars_e_v38PEBe|)))
-                                   (if (annotation? |vars_e_v38PEBe|)
-                                     (|lvl_e_97amEBe|
-                                       (annotation-expression |vars_e_v38PEBe|)
-                                       |ls_e_R_5gFBe|
-                                       |w_e_bY3JFBe|)
-                                     (cons |vars_e_v38PEBe|
-                                           |ls_e_R_5gFBe|)))))))))
-                |lvl_e_97amEBe|)
-              |vars_e_PacVDBe|
+(letrec ((|lambda-var-list_VIuKM_zOh|
+           (lambda (|vars_VIGNRUkZh|)
+             ((letrec ((|lvl_VI0KPllZh|
+                         (lambda (|vars_VImGNOlZh|
+                                  |ls_VIICLfmZh|
+                                  |w_VI2zJImZh|)
+                           (if (pair? |vars_VImGNOlZh|)
+                             (|lvl_VI0KPllZh|
+                               (cdr |vars_VImGNOlZh|)
+                               (cons (|wrap_VIahMX7Oh|
+                                       (car |vars_VImGNOlZh|)
+                                       |w_VI2zJImZh|)
+                                     |ls_VIICLfmZh|)
+                               |w_VI2zJImZh|)
+                             (if (|id?_VIKkaZnNh| |vars_VImGNOlZh|)
+                               (cons (|wrap_VIahMX7Oh|
+                                       |vars_VImGNOlZh|
+                                       |w_VI2zJImZh|)
+                                     |ls_VIICLfmZh|)
+                               (if (null? |vars_VImGNOlZh|)
+                                 |ls_VIICLfmZh|
+                                 (if (|syntax-object?_VI8B_9-Mh|
+                                       |vars_VImGNOlZh|)
+                                   (|lvl_VI0KPllZh|
+                                     (|syntax-object-expression_VIuxZC-Mh|
+                                       |vars_VImGNOlZh|)
+                                     |ls_VIICLfmZh|
+                                     (|join-wraps_VIEmnl_Nh|
+                                       |w_VI2zJImZh|
+                                       (|syntax-object-wrap_VIQtX3_Mh|
+                                         |vars_VImGNOlZh|)))
+                                   (if (annotation? |vars_VImGNOlZh|)
+                                     (|lvl_VI0KPllZh|
+                                       (annotation-expression |vars_VImGNOlZh|)
+                                       |ls_VIICLfmZh|
+                                       |w_VI2zJImZh|)
+                                     (cons |vars_VImGNOlZh|
+                                           |ls_VIICLfmZh|)))))))))
+                |lvl_VI0KPllZh|)
+              |vars_VIGNRUkZh|
               '()
               '(()))))
-         (|gen-var_e_hb9zSqe|
-           (lambda (|id_e_7ig_CBe|)
-             ((lambda (|id_e_teesDBe|)
-                (if (annotation? |id_e_teesDBe|)
-                  (if (annotation-source |id_e_teesDBe|)
+         (|gen-var_VI8OOyzOh|
+           (lambda (|id_VI-UV-jZh|)
+             ((lambda (|id_VIkRTrkZh|)
+                (if (annotation? |id_VIkRTrkZh|)
+                  (if (annotation-source |id_VIkRTrkZh|)
                     (list 'compile-in-annotation
-                          (gen-sym (annotation-expression |id_e_teesDBe|))
-                          (annotation-source |id_e_teesDBe|))
-                    (gen-sym (annotation-expression |id_e_teesDBe|)))
-                  (gen-sym |id_e_teesDBe|)))
-              (if (syntax-object?_e_h-lahpe |id_e_7ig_CBe|)
-                (|syntax-object-expression_e_DWjDhpe|
-                  |id_e_7ig_CBe|)
-                |id_e_7ig_CBe|))))
-         (|strip_e_Xeb6Sqe|
-           (lambda (|x_e_pAqKABe| |w_e_LwobBBe|)
-             (|strip*_e_BidFRqe|
-               |x_e_pAqKABe|
-               |w_e_LwobBBe|
-               (lambda (|x_e_5tmEBBe|)
-                 (if ((lambda (|t_e_rpk5CBe|)
-                        (if |t_e_rpk5CBe|
-                          |t_e_rpk5CBe|
-                          ((lambda (|t_e_NliyCBe|)
-                             (if |t_e_NliyCBe|
-                               |t_e_NliyCBe|
-                               (if (box? |x_e_5tmEBBe|)
-                                 (annotation? (unbox |x_e_5tmEBBe|))
+                          (gen-sym (annotation-expression |id_VIkRTrkZh|))
+                          (annotation-source |id_VIkRTrkZh|))
+                    (gen-sym (annotation-expression |id_VIkRTrkZh|)))
+                  (gen-sym |id_VIkRTrkZh|)))
+              (if (|syntax-object?_VI8B_9-Mh| |id_VI-UV-jZh|)
+                (|syntax-object-expression_VIuxZC-Mh|
+                  |id_VI-UV-jZh|)
+                |id_VI-UV-jZh|))))
+         (|strip_VIORQ5zOh|
+           (lambda (|x_VIgb4KhZh| |w_VIC72biZh|)
+             (|strip*_VIsVSEyOh|
+               |x_VIgb4KhZh|
+               |w_VIC72biZh|
+               (lambda (|x_VIY30EiZh|)
+                 (if ((lambda (|t_VIi0-4jZh|)
+                        (if |t_VIi0-4jZh|
+                          |t_VIi0-4jZh|
+                          ((lambda (|t_VIEYXxjZh|)
+                             (if |t_VIEYXxjZh|
+                               |t_VIEYXxjZh|
+                               (if (box? |x_VIY30EiZh|)
+                                 (annotation? (unbox |x_VIY30EiZh|))
                                  '#f)))
-                           (if (pair? |x_e_5tmEBBe|)
-                             (annotation? (car |x_e_5tmEBBe|))
+                           (if (pair? |x_VIY30EiZh|)
+                             (annotation? (car |x_VIY30EiZh|))
                              '#f))))
-                      (annotation? |x_e_5tmEBBe|))
-                   (|strip-annotation_e_fmfcRqe| |x_e_5tmEBBe| '#f)
-                   |x_e_5tmEBBe|)))))
-         (|strip*_e_BidFRqe|
-           (lambda (|x_e_j5JFwBe| |w_e_F1H6xBe| |fn_e__ZEzxBe|)
+                      (annotation? |x_VIY30EiZh|))
+                   (|strip-annotation_VI6ZUbyOh| |x_VIY30EiZh| '#f)
+                   |x_VIY30EiZh|)))))
+         (|strip*_VIsVSEyOh|
+           (lambda (|x_VIaImFdZh| |w_VIwEk6eZh| |fn_VISAizeZh|)
              (if (memq 'top
-                       (|wrap-marks_e_DggBKpe| |w_e_F1H6xBe|))
-               (|fn_e__ZEzxBe| |x_e_j5JFwBe|)
-               ((letrec ((|f_e_lWC0yBe|
-                           (lambda (|x_e_HSAtyBe|)
-                             (if (syntax-object?_e_h-lahpe |x_e_HSAtyBe|)
-                               (|strip*_e_BidFRqe|
-                                 (|syntax-object-expression_e_DWjDhpe|
-                                   |x_e_HSAtyBe|)
-                                 (|syntax-object-wrap_e_ZSh4ipe| |x_e_HSAtyBe|)
-                                 |fn_e__ZEzxBe|)
-                               (if (pair? |x_e_HSAtyBe|)
-                                 ((lambda (|a_e_JHuQzBe| |d_e_3EshABe|)
-                                    (if (if (eq? |a_e_JHuQzBe|
-                                                 (car |x_e_HSAtyBe|))
-                                          (eq? |d_e_3EshABe|
-                                               (cdr |x_e_HSAtyBe|))
+                       (|wrap-marks_VIuTVArNh| |w_VIwEk6eZh|))
+               (|fn_VISAizeZh| |x_VIaImFdZh|)
+               ((letrec ((|f_VIcxg0fZh|
+                           (lambda (|x_VIytetfZh|)
+                             (if (|syntax-object?_VI8B_9-Mh| |x_VIytetfZh|)
+                               (|strip*_VIsVSEyOh|
+                                 (|syntax-object-expression_VIuxZC-Mh|
+                                   |x_VIytetfZh|)
+                                 (|syntax-object-wrap_VIQtX3_Mh| |x_VIytetfZh|)
+                                 |fn_VISAizeZh|)
+                               (if (pair? |x_VIytetfZh|)
+                                 ((lambda (|a_VIAi8QgZh| |d_VIWe6hhZh|)
+                                    (if (if (eq? |a_VIAi8QgZh|
+                                                 (car |x_VIytetfZh|))
+                                          (eq? |d_VIWe6hhZh|
+                                               (cdr |x_VIytetfZh|))
                                           '#f)
-                                      |x_e_HSAtyBe|
-                                      (cons |a_e_JHuQzBe| |d_e_3EshABe|)))
-                                  (|f_e_lWC0yBe| (car |x_e_HSAtyBe|))
-                                  (|f_e_lWC0yBe| (cdr |x_e_HSAtyBe|)))
-                                 (if (vector? |x_e_HSAtyBe|)
-                                   ((lambda (|old_e_1PyWyBe|)
-                                      ((lambda (|new_e_nLwnzBe|)
+                                      |x_VIytetfZh|
+                                      (cons |a_VIAi8QgZh| |d_VIWe6hhZh|)))
+                                  (|f_VIcxg0fZh| (car |x_VIytetfZh|))
+                                  (|f_VIcxg0fZh| (cdr |x_VIytetfZh|)))
+                                 (if (vector? |x_VIytetfZh|)
+                                   ((lambda (|old_VIUpcWfZh|)
+                                      ((lambda (|new_VIemangZh|)
                                          (if (andmap
                                                eq?
-                                               |old_e_1PyWyBe|
-                                               |new_e_nLwnzBe|)
-                                           |x_e_HSAtyBe|
-                                           (list->vector |new_e_nLwnzBe|)))
-                                       (map |f_e_lWC0yBe| |old_e_1PyWyBe|)))
-                                    (vector->list |x_e_HSAtyBe|))
-                                   |x_e_HSAtyBe|))))))
-                  |f_e_lWC0yBe|)
-                |x_e_j5JFwBe|))))
-         (|strip-annotation_e_fmfcRqe|
-           (lambda (|x_e_VuXutBe| |parent_e_frVXtBe|)
-             (if (pair? |x_e_VuXutBe|)
-               ((lambda (|new_e_Z8LcwBe|)
+                                               |old_VIUpcWfZh|
+                                               |new_VIemangZh|)
+                                           |x_VIytetfZh|
+                                           (list->vector |new_VIemangZh|)))
+                                       (map |f_VIcxg0fZh| |old_VIUpcWfZh|)))
+                                    (vector->list |x_VIytetfZh|))
+                                   |x_VIytetfZh|))))))
+                  |f_VIcxg0fZh|)
+                |x_VIaImFdZh|))))
+         (|strip-annotation_VI6ZUbyOh|
+           (lambda (|x_VIM5BuaZh| |parent_VI62zXaZh|)
+             (if (pair? |x_VIM5BuaZh|)
+               ((lambda (|new_VIQLocdZh|)
                   (begin
-                    (if |parent_e_frVXtBe|
+                    (if |parent_VI62zXaZh|
                       (set-annotation-stripped!
-                        |parent_e_frVXtBe|
-                        |new_e_Z8LcwBe|)
+                        |parent_VI62zXaZh|
+                        |new_VIQLocdZh|)
                       (void))
                     (set-car!
-                      |new_e_Z8LcwBe|
-                      (|strip-annotation_e_fmfcRqe|
-                        (car |x_e_VuXutBe|)
+                      |new_VIQLocdZh|
+                      (|strip-annotation_VI6ZUbyOh|
+                        (car |x_VIM5BuaZh|)
                         '#f))
                     (set-cdr!
-                      |new_e_Z8LcwBe|
-                      (|strip-annotation_e_fmfcRqe|
-                        (cdr |x_e_VuXutBe|)
+                      |new_VIQLocdZh|
+                      (|strip-annotation_VI6ZUbyOh|
+                        (cdr |x_VIM5BuaZh|)
                         '#f))
-                    |new_e_Z8LcwBe|))
+                    |new_VIQLocdZh|))
                 (cons '#f '#f))
-               (if (annotation? |x_e_VuXutBe|)
-                 ((lambda (|t_e_DcNLvBe|)
-                    (if |t_e_DcNLvBe|
-                      |t_e_DcNLvBe|
-                      (|strip-annotation_e_fmfcRqe|
-                        (annotation-expression |x_e_VuXutBe|)
-                        |x_e_VuXutBe|)))
-                  (annotation-stripped |x_e_VuXutBe|))
-                 (if (vector? |x_e_VuXutBe|)
-                   ((lambda (|new_e_BnTouBe|)
+               (if (annotation? |x_VIM5BuaZh|)
+                 ((lambda (|t_VIuPqLcZh|)
+                    (if |t_VIuPqLcZh|
+                      |t_VIuPqLcZh|
+                      (|strip-annotation_VI6ZUbyOh|
+                        (annotation-expression |x_VIM5BuaZh|)
+                        |x_VIM5BuaZh|)))
+                  (annotation-stripped |x_VIM5BuaZh|))
+                 (if (vector? |x_VIM5BuaZh|)
+                   ((lambda (|new_VIs-wobZh|)
                       (begin
-                        (if |parent_e_frVXtBe|
+                        (if |parent_VI62zXaZh|
                           (set-annotation-stripped!
-                            |parent_e_frVXtBe|
-                            |new_e_BnTouBe|)
+                            |parent_VI62zXaZh|
+                            |new_VIs-wobZh|)
                           (void))
-                        ((letrec ((|loop_e_XjRRuBe|
-                                    (lambda (|i_e_hgPivBe|)
-                                      (if (not (< |i_e_hgPivBe| '0))
+                        ((letrec ((|loop_VIOWuRbZh|
+                                    (lambda (|i_VI8TsicZh|)
+                                      (if (not (< |i_VI8TsicZh| '0))
                                         (begin
                                           (vector-set!
-                                            |new_e_BnTouBe|
-                                            |i_e_hgPivBe|
-                                            (|strip-annotation_e_fmfcRqe|
+                                            |new_VIs-wobZh|
+                                            |i_VI8TsicZh|
+                                            (|strip-annotation_VI6ZUbyOh|
                                               (vector-ref
-                                                |x_e_VuXutBe|
-                                                |i_e_hgPivBe|)
+                                                |x_VIM5BuaZh|
+                                                |i_VI8TsicZh|)
                                               '#f))
-                                          (|loop_e_XjRRuBe|
-                                            (- |i_e_hgPivBe| '1)))
+                                          (|loop_VIOWuRbZh|
+                                            (- |i_VI8TsicZh| '1)))
                                         (void)))))
-                           |loop_e_XjRRuBe|)
-                         (- (vector-length |x_e_VuXutBe|) '1))
-                        |new_e_BnTouBe|))
-                    (make-vector (vector-length |x_e_VuXutBe|)))
-                   (if (box? |x_e_VuXutBe|)
-                     (box (|strip-annotation_e_fmfcRqe|
-                            (unbox |x_e_VuXutBe|)
+                           |loop_VIOWuRbZh|)
+                         (- (vector-length |x_VIM5BuaZh|) '1))
+                        |new_VIs-wobZh|))
+                    (make-vector (vector-length |x_VIM5BuaZh|)))
+                   (if (box? |x_VIM5BuaZh|)
+                     (box (|strip-annotation_VI6ZUbyOh|
+                            (unbox |x_VIM5BuaZh|)
                             '#f))
-                     |x_e_VuXutBe|))))))
-         (|ellipsis?_e_VphLQqe|
-           (lambda (|x_e_zyZ1tBe|)
-             (if (|nonsymbol-id?_e_P3JfEpe| |x_e_zyZ1tBe|)
-               (|literal-id=?_e_xitZlqe|
-                 |x_e_zyZ1tBe|
+                     |x_VIM5BuaZh|))))))
+         (|ellipsis?_VIM0XKxOh|
+           (lambda (|x_VIq9D1aZh|)
+             (if (|nonsymbol-id?_VIGGmflNh| |x_VIq9D1aZh|)
+               (|literal-id=?_VIoV6Z2Oh|
+                 |x_VIq9D1aZh|
                  '#(syntax-object
                     ...
                     ((top)
@@ -752,249 +752,249 @@
                         "i"))
                      #(ribcage (#(import-token *top*)) () ()))))
                '#f)))
-         (|chi-void_e_ztjiQqe| (lambda () (list 'void)))
-         (|chi-local-syntax_e_dxlRPqe|
-           (lambda (|rec?_e_jWKaiBe|
-                    |e_e_FSIDiBe|
-                    |r_e__OG4jBe|
-                    |w_e_lLExjBe|
-                    |s_e_HHC-jBe|
-                    |k_e_1EArkBe|)
-             ((lambda (|tmp_e_nAyUkBe|)
-                ((lambda (|tmp_e_JwwllBe|)
-                   (if |tmp_e_JwwllBe|
-                     (apply (lambda (|__e_ppsfmBe|
-                                     |id_e_LlqImBe|
-                                     |val_e_5io9nBe|
-                                     |e1_e_remCnBe|
-                                     |e2_e_Nak3oBe|)
-                              ((lambda (|ids_e_77iwoBe|)
-                                 (if (not (|valid-bound-ids?_e_dbpTmqe|
-                                            |ids_e_77iwoBe|))
-                                   (|invalid-ids-error_e_DNa2qqe|
-                                     (map (lambda (|x_e_TF18sBe|)
-                                            (|wrap_e_jG6Yqqe|
-                                              |x_e_TF18sBe|
-                                              |w_e_lLExjBe|))
-                                          |ids_e_77iwoBe|)
-                                     (|source-wrap_e_FC4prqe|
-                                       |e_e_FSIDiBe|
-                                       |w_e_lLExjBe|
-                                       |s_e_HHC-jBe|)
+         (|chi-void_VIq4ZhxOh| (lambda () (list 'void)))
+         (|chi-local-syntax_VI48_QwOh|
+           (lambda (|rec?_VIaxoa_Yh|
+                    |e_VIwtmD_Yh|
+                    |r_VISpk40Zh|
+                    |w_VIcmix0Zh|
+                    |s_VIyig-0Zh|
+                    |k_VIUeer1Zh|)
+             ((lambda (|tmp_VIebcU1Zh|)
+                ((lambda (|tmp_VIA7al2Zh|)
+                   (if |tmp_VIA7al2Zh|
+                     (apply (lambda (|__VIg06f3Zh|
+                                     |id_VICY3I3Zh|
+                                     |val_VIYU194Zh|
+                                     |e1_VIiR_B4Zh|
+                                     |e2_VIENZ25Zh|)
+                              ((lambda (|ids_VI-JXv5Zh|)
+                                 (if (not (|valid-bound-ids?_VI4O2T3Oh|
+                                            |ids_VI-JXv5Zh|))
+                                   (|invalid-ids-error_VIuoQ17Oh|
+                                     (map (lambda (|x_VIKgH79Zh|)
+                                            (|wrap_VIahMX7Oh|
+                                              |x_VIKgH79Zh|
+                                              |w_VIcmix0Zh|))
+                                          |ids_VI-JXv5Zh|)
+                                     (|source-wrap_VIwdKo8Oh|
+                                       |e_VIwtmD_Yh|
+                                       |w_VIcmix0Zh|
+                                       |s_VIyig-0Zh|)
                                      '"keyword")
-                                   ((lambda (|labels_e_t3gZoBe|)
-                                      ((lambda (|new-w_e_P_dqpBe|)
-                                         (|k_e_1EArkBe|
-                                           (cons |e1_e_remCnBe| |e2_e_Nak3oBe|)
-                                           (|extend-env*_e_3xZDApe|
-                                             |labels_e_t3gZoBe|
-                                             ((lambda (|w_e_vU9kqBe|
-                                                       |trans-r_e_RQ7NqBe|)
-                                                (map (lambda (|x_e_bN5erBe|)
-                                                       (make-binding_e_zruotpe
+                                   ((lambda (|labels_VIkGVY5Zh|)
+                                      ((lambda (|new-w_VIGCTp6Zh|)
+                                         (|k_VIUeer1Zh|
+                                           (cons |e1_VIiR_B4Zh| |e2_VIENZ25Zh|)
+                                           (|extend-env*_VIW7DDhNh|
+                                             |labels_VIkGVY5Zh|
+                                             ((lambda (|w_VImvPj7Zh|
+                                                       |trans-r_VIIrNM7Zh|)
+                                                (map (lambda (|x_VI2oLd8Zh|)
+                                                       (|make-binding_VIq28oaNh|
                                                          'deferred
-                                                         (|chi_e_LgMYJqe|
-                                                           |x_e_bN5erBe|
-                                                           |trans-r_e_RQ7NqBe|
-                                                           |w_e_vU9kqBe|)))
-                                                     |val_e_5io9nBe|))
-                                              (if |rec?_e_jWKaiBe|
-                                                |new-w_e_P_dqpBe|
-                                                |w_e_lLExjBe|)
-                                              (|transformer-env_e_LpVxBpe|
-                                                |r_e__OG4jBe|))
-                                             |r_e__OG4jBe|)
-                                           |new-w_e_P_dqpBe|
-                                           |s_e_HHC-jBe|))
-                                       (|make-binding-wrap_e_LWP-gqe|
-                                         |ids_e_77iwoBe|
-                                         |labels_e_t3gZoBe|
-                                         |w_e_lLExjBe|)))
-                                    (gen-labels_e_120f0qe |ids_e_77iwoBe|))))
-                               |id_e_LlqImBe|))
-                            |tmp_e_JwwllBe|)
-                     ((lambda (|__e_3tuOlBe|)
+                                                         (|chi_VICTpYqOh|
+                                                           |x_VI2oLd8Zh|
+                                                           |trans-r_VIIrNM7Zh|
+                                                           |w_VImvPj7Zh|)))
+                                                     |val_VIYU194Zh|))
+                                              (if |rec?_VIaxoa_Yh|
+                                                |new-w_VIGCTp6Zh|
+                                                |w_VIcmix0Zh|)
+                                              (|transformer-env_VIC0zxiNh|
+                                                |r_VISpk40Zh|))
+                                             |r_VISpk40Zh|)
+                                           |new-w_VIGCTp6Zh|
+                                           |s_VIyig-0Zh|))
+                                       (|make-binding-wrap_VICxt-ZNh|
+                                         |ids_VI-JXv5Zh|
+                                         |labels_VIkGVY5Zh|
+                                         |w_VIcmix0Zh|)))
+                                    (|gen-labels_VIUEFeJNh| |ids_VI-JXv5Zh|))))
+                               |id_VICY3I3Zh|))
+                            |tmp_VIA7al2Zh|)
+                     ((lambda (|__VIW38O2Zh|)
                         (syntax-error
-                          (|source-wrap_e_FC4prqe|
-                            |e_e_FSIDiBe|
-                            |w_e_lLExjBe|
-                            |s_e_HHC-jBe|)))
-                      |tmp_e_nAyUkBe|)))
+                          (|source-wrap_VIwdKo8Oh|
+                            |e_VIwtmD_Yh|
+                            |w_VIcmix0Zh|
+                            |s_VIyig-0Zh|)))
+                      |tmp_VIebcU1Zh|)))
                  ($syntax-dispatch
-                   (compile-in-annotation |tmp_e_nAyUkBe| value)
+                   (compile-in-annotation |tmp_VIebcU1Zh| value)
                    '(any #(each (any any)) any . each-any))))
-              |e_e_FSIDiBe|)))
-         (|chi-lambda-clause_e_TAnoPqe|
-           (lambda (|e_e_1tCY5Be|
-                    |c_e_npAp6Be|
-                    |r_e_JlyS6Be|
-                    |w_e_3iwj7Be|
-                    |k_e_peuM7Be|)
-             ((lambda (|tmp_e_Lasd8Be|)
-                ((lambda (|tmp_e_57qG8Be|)
-                   (if |tmp_e_57qG8Be|
-                     (apply (lambda (|id_e_zn_yeBe|
-                                     |e1_e_VjZ_eBe|
-                                     |e2_e_fgXsfBe|)
-                              ((lambda (|ids_e_BcVVfBe|)
-                                 (if (not (|valid-bound-ids?_e_dbpTmqe|
-                                            |ids_e_BcVVfBe|))
+              |e_VIwtmD_Yh|)))
+         (|chi-lambda-clause_VIKb1owOh|
+           (lambda (|e_VIU3gYOYh|
+                    |c_VIe0epPYh|
+                    |r_VIAYbSPYh|
+                    |w_VIWU9jQYh|
+                    |k_VIgR7MQYh|)
+             ((lambda (|tmp_VICN5dRYh|)
+                ((lambda (|tmp_VIYJ3GRYh|)
+                   (if |tmp_VIYJ3GRYh|
+                     (apply (lambda (|id_VIq-EyXYh|
+                                     |e1_VIMWC_XYh|
+                                     |e2_VI6TAsYYh|)
+                              ((lambda (|ids_VIsPyVYYh|)
+                                 (if (not (|valid-bound-ids?_VI4O2T3Oh|
+                                            |ids_VIsPyVYYh|))
                                    (syntax-error
-                                     |e_e_1tCY5Be|
+                                     |e_VIU3gYOYh|
                                      '"invalid parameter list in")
-                                   ((lambda (|labels_e_X8TmgBe|
-                                             |new-vars_e_h5RPgBe|)
-                                      (|k_e_peuM7Be|
-                                        |new-vars_e_h5RPgBe|
-                                        (|chi-body_e_t-BdMqe|
-                                          (cons |e1_e_VjZ_eBe| |e2_e_fgXsfBe|)
-                                          |e_e_1tCY5Be|
-                                          (|extend-var-env*_e_ptX4Bpe|
-                                            |labels_e_X8TmgBe|
-                                            |new-vars_e_h5RPgBe|
-                                            |r_e_JlyS6Be|)
-                                          (|make-binding-wrap_e_LWP-gqe|
-                                            |ids_e_BcVVfBe|
-                                            |labels_e_X8TmgBe|
-                                            |w_e_3iwj7Be|))))
-                                    (gen-labels_e_120f0qe |ids_e_BcVVfBe|)
-                                    (map |gen-var_e_hb9zSqe|
-                                         |ids_e_BcVVfBe|))))
-                               |id_e_zn_yeBe|))
-                            |tmp_e_57qG8Be|)
-                     ((lambda (|tmp_e_r3o79Be|)
-                        (if |tmp_e_r3o79Be|
-                          (apply (lambda (|ids_e_7Yj1aBe|
-                                          |e1_e_tUhuaBe|
-                                          |e2_e_PQfXaBe|)
-                                   ((lambda (|old-ids_e_9NdobBe|)
-                                      (if (not (|valid-bound-ids?_e_dbpTmqe|
-                                                 |old-ids_e_9NdobBe|))
+                                   ((lambda (|labels_VIOLwmZYh|
+                                             |new-vars_VI8IuPZYh|)
+                                      (|k_VIgR7MQYh|
+                                        |new-vars_VI8IuPZYh|
+                                        (|chi-body_VIkBfdtOh|
+                                          (cons |e1_VIMWC_XYh| |e2_VI6TAsYYh|)
+                                          |e_VIU3gYOYh|
+                                          (|extend-var-env*_VIg4B4iNh|
+                                            |labels_VIOLwmZYh|
+                                            |new-vars_VI8IuPZYh|
+                                            |r_VIAYbSPYh|)
+                                          (|make-binding-wrap_VICxt-ZNh|
+                                            |ids_VIsPyVYYh|
+                                            |labels_VIOLwmZYh|
+                                            |w_VIWU9jQYh|))))
+                                    (|gen-labels_VIUEFeJNh| |ids_VIsPyVYYh|)
+                                    (map |gen-var_VI8OOyzOh|
+                                         |ids_VIsPyVYYh|))))
+                               |id_VIq-EyXYh|))
+                            |tmp_VIYJ3GRYh|)
+                     ((lambda (|tmp_VIiG17SYh|)
+                        (if |tmp_VIiG17SYh|
+                          (apply (lambda (|ids_VI-yZ0TYh|
+                                          |e1_VIkvXtTYh|
+                                          |e2_VIGrVWTYh|)
+                                   ((lambda (|old-ids_VI0oTnUYh|)
+                                      (if (not (|valid-bound-ids?_VI4O2T3Oh|
+                                                 |old-ids_VI0oTnUYh|))
                                         (syntax-error
-                                          |e_e_1tCY5Be|
+                                          |e_VIU3gYOYh|
                                           '"invalid parameter list in")
-                                        ((lambda (|labels_e_vJbRbBe|
-                                                  |new-vars_e_RF9icBe|)
-                                           (|k_e_peuM7Be|
-                                             ((letrec ((|f_e_bC7LcBe|
-                                                         (lambda (|ls1_e_xy5cdBe|
-                                                                  |ls2_e_Tu3FdBe|)
-                                                           (if (null? |ls1_e_xy5cdBe|)
-                                                             |ls2_e_Tu3FdBe|
-                                                             (|f_e_bC7LcBe|
-                                                               (cdr |ls1_e_xy5cdBe|)
-                                                               (cons (car |ls1_e_xy5cdBe|)
-                                                                     |ls2_e_Tu3FdBe|))))))
-                                                |f_e_bC7LcBe|)
-                                              (cdr |new-vars_e_RF9icBe|)
-                                              (car |new-vars_e_RF9icBe|))
-                                             (|chi-body_e_t-BdMqe|
-                                               (cons |e1_e_tUhuaBe|
-                                                     |e2_e_PQfXaBe|)
-                                               |e_e_1tCY5Be|
-                                               (|extend-var-env*_e_ptX4Bpe|
-                                                 |labels_e_vJbRbBe|
-                                                 |new-vars_e_RF9icBe|
-                                                 |r_e_JlyS6Be|)
-                                               (|make-binding-wrap_e_LWP-gqe|
-                                                 |old-ids_e_9NdobBe|
-                                                 |labels_e_vJbRbBe|
-                                                 |w_e_3iwj7Be|))))
-                                         (gen-labels_e_120f0qe
-                                           |old-ids_e_9NdobBe|)
-                                         (map |gen-var_e_hb9zSqe|
-                                              |old-ids_e_9NdobBe|))))
-                                    (|lambda-var-list_e_D770Tqe|
-                                      |ids_e_7Yj1aBe|)))
-                                 |tmp_e_r3o79Be|)
-                          ((lambda (|__e_N_lA9Be|)
-                             (syntax-error |e_e_1tCY5Be|))
-                           |tmp_e_Lasd8Be|)))
+                                        ((lambda (|labels_VImkRQUYh|
+                                                  |new-vars_VIIgPhVYh|)
+                                           (|k_VIgR7MQYh|
+                                             ((letrec ((|f_VI2dNKVYh|
+                                                         (lambda (|ls1_VIo9LbWYh|
+                                                                  |ls2_VIK5JEWYh|)
+                                                           (if (null? |ls1_VIo9LbWYh|)
+                                                             |ls2_VIK5JEWYh|
+                                                             (|f_VI2dNKVYh|
+                                                               (cdr |ls1_VIo9LbWYh|)
+                                                               (cons (car |ls1_VIo9LbWYh|)
+                                                                     |ls2_VIK5JEWYh|))))))
+                                                |f_VI2dNKVYh|)
+                                              (cdr |new-vars_VIIgPhVYh|)
+                                              (car |new-vars_VIIgPhVYh|))
+                                             (|chi-body_VIkBfdtOh|
+                                               (cons |e1_VIkvXtTYh|
+                                                     |e2_VIGrVWTYh|)
+                                               |e_VIU3gYOYh|
+                                               (|extend-var-env*_VIg4B4iNh|
+                                                 |labels_VImkRQUYh|
+                                                 |new-vars_VIIgPhVYh|
+                                                 |r_VIAYbSPYh|)
+                                               (|make-binding-wrap_VICxt-ZNh|
+                                                 |old-ids_VI0oTnUYh|
+                                                 |labels_VImkRQUYh|
+                                                 |w_VIWU9jQYh|))))
+                                         (|gen-labels_VIUEFeJNh|
+                                           |old-ids_VI0oTnUYh|)
+                                         (map |gen-var_VI8OOyzOh|
+                                              |old-ids_VI0oTnUYh|))))
+                                    (|lambda-var-list_VIuKM_zOh|
+                                      |ids_VI-yZ0TYh|)))
+                                 |tmp_VIiG17SYh|)
+                          ((lambda (|__VIEC_zSYh|)
+                             (syntax-error |e_VIU3gYOYh|))
+                           |tmp_VICN5dRYh|)))
                       ($syntax-dispatch
-                        (compile-in-annotation |tmp_e_Lasd8Be| value)
+                        (compile-in-annotation |tmp_VICN5dRYh| value)
                         '(any any . each-any)))))
                  ($syntax-dispatch
-                   (compile-in-annotation |tmp_e_Lasd8Be| value)
+                   (compile-in-annotation |tmp_VICN5dRYh| value)
                    '(each-any any . each-any))))
-              |c_e_npAp6Be|)))
-         (|parse-define-syntax_e_xEpXOqe|
-           (lambda (|e_e_zc140Be|
-                    |w_e_V8_w0Be|
-                    |s_e_f5ZZ0Be|
-                    |k_e_B1Xq1Be|)
-             ((lambda (|tmp_e_XZUT1Be|)
-                ((lambda (|tmp_e_hWSk2Be|)
-                   (if (if |tmp_e_hWSk2Be|
-                         (apply (lambda (|__e__DIB4Be|
-                                         |name_e_lAG25Be|
-                                         |val_e_HwEv5Be|)
-                                  (|id?_e_TJwZGpe| |name_e_lAG25Be|))
-                                |tmp_e_hWSk2Be|)
+              |c_VIe0epPYh|)))
+         (|parse-define-syntax_VIof3XvOh|
+           (lambda (|e_VIqPG3JYh|
+                    |w_VIMLEwJYh|
+                    |s_VI6ICZJYh|
+                    |k_VIsEAqKYh|)
+             ((lambda (|tmp_VIOAyTKYh|)
+                ((lambda (|tmp_VI8xwkLYh|)
+                   (if (if |tmp_VI8xwkLYh|
+                         (apply (lambda (|__VISemBNYh|
+                                         |name_VIcbk2OYh|
+                                         |val_VIy7ivOYh|)
+                                  (|id?_VIKkaZnNh| |name_VIcbk2OYh|))
+                                |tmp_VI8xwkLYh|)
                          '#f)
-                     (apply (lambda (|__e_ZOOe3Be|
-                                     |name_e_jLMH3Be|
-                                     |val_e_FHK84Be|)
-                              (|k_e_B1Xq1Be|
-                                |name_e_jLMH3Be|
-                                |val_e_FHK84Be|
-                                |w_e_V8_w0Be|))
-                            |tmp_e_hWSk2Be|)
-                     ((lambda (|__e_DSQN2Be|)
+                     (apply (lambda (|__VIQpseMYh|
+                                     |name_VIamqHMYh|
+                                     |val_VIwio8NYh|)
+                              (|k_VIsEAqKYh|
+                                |name_VIamqHMYh|
+                                |val_VIwio8NYh|
+                                |w_VIMLEwJYh|))
+                            |tmp_VI8xwkLYh|)
+                     ((lambda (|__VIutuNLYh|)
                         (syntax-error
-                          (|source-wrap_e_FC4prqe|
-                            |e_e_zc140Be|
-                            |w_e_V8_w0Be|
-                            |s_e_f5ZZ0Be|)))
-                      |tmp_e_XZUT1Be|)))
+                          (|source-wrap_VIwdKo8Oh|
+                            |e_VIqPG3JYh|
+                            |w_VIMLEwJYh|
+                            |s_VI6ICZJYh|)))
+                      |tmp_VIOAyTKYh|)))
                  ($syntax-dispatch
-                   (compile-in-annotation |tmp_e_XZUT1Be| value)
+                   (compile-in-annotation |tmp_VIOAyTKYh| value)
                    '(any any any))))
-              |e_e_zc140Be|)))
-         (|parse-define_e_bIruOqe|
-           (lambda (|e_e_fW-uOAe|
-                    |w_e_BSYXOAe|
-                    |s_e_XOWoPAe|
-                    |k_e_hLURPAe|)
-             ((lambda (|tmp_e_DHSiQAe|)
-                ((lambda (|tmp_e_ZDQLQAe|)
-                   (if (if |tmp_e_ZDQLQAe|
-                         (apply (lambda (|__e_xn7J-Ae|
-                                         |name_e_Tj5a_Ae|
-                                         |val_e_dg3D_Ae|)
-                                  (|id?_e_TJwZGpe| |name_e_Tj5a_Ae|))
-                                |tmp_e_ZDQLQAe|)
+              |e_VIqPG3JYh|)))
+         (|parse-define_VI2j5uvOh|
+           (lambda (|e_VI6xEuvYh|
+                    |w_VIstCXvYh|
+                    |s_VIOpAowYh|
+                    |k_VI8myRwYh|)
+             ((lambda (|tmp_VIuiwixYh|)
+                ((lambda (|tmp_VIQeuLxYh|)
+                   (if (if |tmp_VIQeuLxYh|
+                         (apply (lambda (|__VIo-MIHYh|
+                                         |name_VIKWK9IYh|
+                                         |val_VI4TICIYh|)
+                                  (|id?_VIKkaZnNh| |name_VIKWK9IYh|))
+                                |tmp_VIQeuLxYh|)
                          '#f)
-                     (apply (lambda (|__e_vydmZAe|
-                                     |name_e_RubPZAe|
-                                     |val_e_br9g-Ae|)
-                              (|k_e_hLURPAe|
-                                |name_e_RubPZAe|
-                                |val_e_br9g-Ae|
-                                |w_e_BSYXOAe|))
-                            |tmp_e_ZDQLQAe|)
-                     ((lambda (|tmp_e_jAOcRAe|)
-                        (if (if |tmp_e_jAOcRAe|
-                              (apply (lambda (|__e_NQn5XAe|
-                                              |name_e_7NlyXAe|
-                                              |args_e_tJj_XAe|
-                                              |e1_e_PFhsYAe|
-                                              |e2_e_9CfVYAe|)
-                                       (if (|id?_e_TJwZGpe| |name_e_7NlyXAe|)
-                                         (|valid-bound-ids?_e_dbpTmqe|
-                                           (|lambda-var-list_e_D770Tqe|
-                                             |args_e_tJj_XAe|))
+                     (apply (lambda (|__VIm9TlGYh|
+                                     |name_VII5ROGYh|
+                                     |val_VI22PfHYh|)
+                              (|k_VI8myRwYh|
+                                |name_VII5ROGYh|
+                                |val_VI22PfHYh|
+                                |w_VIstCXvYh|))
+                            |tmp_VIQeuLxYh|)
+                     ((lambda (|tmp_VIabscyYh|)
+                        (if (if |tmp_VIabscyYh|
+                              (apply (lambda (|__VIEr15EYh|
+                                              |name_VI-n_xEYh|
+                                              |args_VIkkZ-EYh|
+                                              |e1_VIGgXrFYh|
+                                              |e2_VI0dVUFYh|)
+                                       (if (|id?_VIKkaZnNh| |name_VI-n_xEYh|)
+                                         (|valid-bound-ids?_VI4O2T3Oh|
+                                           (|lambda-var-list_VIuKM_zOh|
+                                             |args_VIkkZ-EYh|))
                                          '#f))
-                                     |tmp_e_jAOcRAe|)
+                                     |tmp_VIabscyYh|)
                               '#f)
-                          (apply (lambda (|__e_JaAnUAe|
-                                          |name_e_37yQUAe|
-                                          |args_e_p3whVAe|
-                                          |e1_e_L_tKVAe|
-                                          |e2_e_5YrbWAe|)
-                                   (|k_e_hLURPAe|
-                                     (|wrap_e_jG6Yqqe|
-                                       |name_e_37yQUAe|
-                                       |w_e_BSYXOAe|)
+                          (apply (lambda (|__VIANdnBYh|
+                                          |name_VIWJbQBYh|
+                                          |args_VIgG9hCYh|
+                                          |e1_VICC7KCYh|
+                                          |e2_VIYy5bDYh|)
+                                   (|k_VI8myRwYh|
+                                     (|wrap_VIahMX7Oh|
+                                       |name_VIWJbQBYh|
+                                       |w_VIstCXvYh|)
                                      (cons '#(syntax-object
                                               lambda
                                               ((top)
@@ -1580,25 +1580,25 @@
                                                  (#(import-token *top*))
                                                  ()
                                                  ())))
-                                           (|wrap_e_jG6Yqqe|
-                                             (cons |args_e_p3whVAe|
-                                                   (cons |e1_e_L_tKVAe|
-                                                         |e2_e_5YrbWAe|))
-                                             |w_e_BSYXOAe|))
+                                           (|wrap_VIahMX7Oh|
+                                             (cons |args_VIgG9hCYh|
+                                                   (cons |e1_VICC7KCYh|
+                                                         |e2_VIYy5bDYh|))
+                                             |w_VIstCXvYh|))
                                      '(())))
-                                 |tmp_e_jAOcRAe|)
-                          ((lambda (|tmp_e_FwMFRAe|)
-                             (if (if |tmp_e_FwMFRAe|
-                                   (apply (lambda (|__e_1iEtTAe|
-                                                   |name_e_neCWTAe|)
-                                            (|id?_e_TJwZGpe| |name_e_neCWTAe|))
-                                          |tmp_e_FwMFRAe|)
+                                 |tmp_VIabscyYh|)
+                          ((lambda (|tmp_VIw7qFyYh|)
+                             (if (if |tmp_VIw7qFyYh|
+                                   (apply (lambda (|__VIUUhtAYh|
+                                                   |name_VIeRfWAYh|)
+                                            (|id?_VIKkaZnNh| |name_VIeRfWAYh|))
+                                          |tmp_VIw7qFyYh|)
                                    '#f)
-                               (apply (lambda (|__e_lpIzSAe| |name_e_HlG0TAe|)
-                                        (|k_e_hLURPAe|
-                                          (|wrap_e_jG6Yqqe|
-                                            |name_e_HlG0TAe|
-                                            |w_e_BSYXOAe|)
+                               (apply (lambda (|__VIc0mzzYh| |name_VIyYj0AYh|)
+                                        (|k_VI8myRwYh|
+                                          (|wrap_VIahMX7Oh|
+                                            |name_VIyYj0AYh|
+                                            |w_VIstCXvYh|)
                                           '#(syntax-object
                                              (void)
                                              ((top)
@@ -2181,740 +2181,740 @@
                                                 ()
                                                 ())))
                                           '(())))
-                                      |tmp_e_FwMFRAe|)
-                               ((lambda (|__e__sK6SAe|)
+                                      |tmp_VIw7qFyYh|)
+                               ((lambda (|__VIS3o6zYh|)
                                   (syntax-error
-                                    (|source-wrap_e_FC4prqe|
-                                      |e_e_fW-uOAe|
-                                      |w_e_BSYXOAe|
-                                      |s_e_XOWoPAe|)))
-                                |tmp_e_DHSiQAe|)))
+                                    (|source-wrap_VIwdKo8Oh|
+                                      |e_VI6xEuvYh|
+                                      |w_VIstCXvYh|
+                                      |s_VIOpAowYh|)))
+                                |tmp_VIuiwixYh|)))
                            ($syntax-dispatch
-                             (compile-in-annotation |tmp_e_DHSiQAe| value)
+                             (compile-in-annotation |tmp_VIuiwixYh| value)
                              '(any any)))))
                       ($syntax-dispatch
-                        (compile-in-annotation |tmp_e_DHSiQAe| value)
+                        (compile-in-annotation |tmp_VIuiwixYh| value)
                         '(any (any . any) any . each-any)))))
                  ($syntax-dispatch
-                   (compile-in-annotation |tmp_e_DHSiQAe| value)
+                   (compile-in-annotation |tmp_VIuiwixYh| value)
                    '(any any any))))
-              |e_e_fW-uOAe|)))
-         (|parse-import_e_RLt1Oqe|
-           (lambda (|e_e_tylwJAe|
-                    |w_e_PujZJAe|
-                    |s_e_9rhqKAe|
-                    |k_e_vnfTKAe|)
-             ((lambda (|tmp_e_RjdkLAe|)
-                ((lambda (|tmp_e_bgbNLAe|)
-                   (if (if |tmp_e_bgbNLAe|
-                         (apply (lambda (|__e_z13BNAe| |mid_e_VZ02OAe|)
-                                  (|id?_e_TJwZGpe| |mid_e_VZ02OAe|))
-                                |tmp_e_bgbNLAe|)
+              |e_VI6xEuvYh|)))
+         (|parse-import_VIIm71vOh|
+           (lambda (|e_VIk9_vqYh|
+                    |w_VIG5ZYqYh|
+                    |s_VI02XprYh|
+                    |k_VIm-USrYh|)
+             ((lambda (|tmp_VIIWSjsYh|)
+                ((lambda (|tmp_VI2TQMsYh|)
+                   (if (if |tmp_VI2TQMsYh|
+                         (apply (lambda (|__VIqEIAuYh| |mid_VIMAG1vYh|)
+                                  (|id?_VIKkaZnNh| |mid_VIMAG1vYh|))
+                                |tmp_VI2TQMsYh|)
                          '#f)
-                     (apply (lambda (|__e_T87HMAe| |mid_e_d558NAe|)
-                              (|k_e_vnfTKAe|
-                                (|wrap_e_jG6Yqqe|
-                                  |mid_e_d558NAe|
-                                  |w_e_PujZJAe|)))
-                            |tmp_e_bgbNLAe|)
-                     ((lambda (|__e_xc9eMAe|)
+                     (apply (lambda (|__VIKLMGtYh| |mid_VI4IK7uYh|)
+                              (|k_VIm-USrYh|
+                                (|wrap_VIahMX7Oh|
+                                  |mid_VI4IK7uYh|
+                                  |w_VIG5ZYqYh|)))
+                            |tmp_VI2TQMsYh|)
+                     ((lambda (|__VIoPOdtYh|)
                         (syntax-error
-                          (|source-wrap_e_FC4prqe|
-                            |e_e_tylwJAe|
-                            |w_e_PujZJAe|
-                            |s_e_9rhqKAe|)))
-                      |tmp_e_RjdkLAe|)))
+                          (|source-wrap_VIwdKo8Oh|
+                            |e_VIk9_vqYh|
+                            |w_VIG5ZYqYh|
+                            |s_VI02XprYh|)))
+                      |tmp_VIIWSjsYh|)))
                  ($syntax-dispatch
-                   (compile-in-annotation |tmp_e_RjdkLAe| value)
+                   (compile-in-annotation |tmp_VIIWSjsYh| value)
                    '(any any))))
-              |e_e_tylwJAe|)))
-         (|parse-module_e_vPvANqe|
-           (lambda (|e_e_5CvdtAe|
-                    |w_e_rytGtAe|
-                    |s_e_Nur7uAe|
-                    |*w_e_7rpAuAe|
-                    |k_e_tnn1vAe|)
-             (letrec ((|listify_e_PjluvAe|
-                        (lambda (|exports_e_17G-EAe|)
-                          (if (null? |exports_e_17G-EAe|)
+              |e_VIk9_vqYh|)))
+         (|parse-module_VImq9AuOh|
+           (lambda (|e_VIYc9daYh|
+                    |w_VIi97GaYh|
+                    |s_VIE557bYh|
+                    |*w_VI-13AbYh|
+                    |k_VIk-01cYh|)
+             (letrec ((|listify_VIGW-tcYh|
+                        (lambda (|exports_VIUJj-lYh|)
+                          (if (null? |exports_VIUJj-lYh|)
                             '()
-                            (cons ((lambda (|tmp_e_n3ErFAe|)
-                                     ((lambda (|tmp_e_J_BUFAe|)
-                                        (if |tmp_e_J_BUFAe|
-                                          (apply (lambda (|ex_e_pUxOGAe|)
-                                                   (|listify_e_PjluvAe|
-                                                     |ex_e_pUxOGAe|))
-                                                 |tmp_e_J_BUFAe|)
-                                          ((lambda (|x_e_3YzlGAe|)
-                                             (if (|id?_e_TJwZGpe|
-                                                   |x_e_3YzlGAe|)
-                                               (|wrap_e_jG6Yqqe|
-                                                 |x_e_3YzlGAe|
-                                                 |*w_e_7rpAuAe|)
+                            (cons ((lambda (|tmp_VIeGhrmYh|)
+                                     ((lambda (|tmp_VIACfUmYh|)
+                                        (if |tmp_VIACfUmYh|
+                                          (apply (lambda (|ex_VIgvbOnYh|)
+                                                   (|listify_VIGW-tcYh|
+                                                     |ex_VIgvbOnYh|))
+                                                 |tmp_VIACfUmYh|)
+                                          ((lambda (|x_VIWydlnYh|)
+                                             (if (|id?_VIKkaZnNh|
+                                                   |x_VIWydlnYh|)
+                                               (|wrap_VIahMX7Oh|
+                                                 |x_VIWydlnYh|
+                                                 |*w_VI-13AbYh|)
                                                (syntax-error
-                                                 (|source-wrap_e_FC4prqe|
-                                                   |e_e_5CvdtAe|
-                                                   |w_e_rytGtAe|
-                                                   |s_e_Nur7uAe|)
+                                                 (|source-wrap_VIwdKo8Oh|
+                                                   |e_VIYc9daYh|
+                                                   |w_VIi97GaYh|
+                                                   |s_VIE557bYh|)
                                                  '"invalid exports list in")))
-                                           |tmp_e_n3ErFAe|)))
+                                           |tmp_VIeGhrmYh|)))
                                       ($syntax-dispatch
                                         (compile-in-annotation
-                                          |tmp_e_n3ErFAe|
+                                          |tmp_VIeGhrmYh|
                                           value)
                                         'each-any)))
-                                   (car |exports_e_17G-EAe|))
-                                  (|listify_e_PjluvAe|
-                                    (cdr |exports_e_17G-EAe|))))))
-                      (|return_e_9gjXvAe|
-                        (lambda (|id_e_5NtIHAe|
-                                 |exports_e_rJr9IAe|
-                                 |forms_e_NFpCIAe|)
-                          (|k_e_tnn1vAe|
-                            |id_e_5NtIHAe|
-                            (|listify_e_PjluvAe| |exports_e_rJr9IAe|)
-                            (map (lambda (|x_e_7Cn3JAe|)
-                                   (|wrap_e_jG6Yqqe|
-                                     |x_e_7Cn3JAe|
-                                     |*w_e_7rpAuAe|))
-                                 |forms_e_NFpCIAe|)))))
-               ((lambda (|tmp_e_vchowAe|)
-                  ((lambda (|tmp_e_R8fRwAe|)
-                     (if |tmp_e_R8fRwAe|
-                       (apply (lambda (|__e_jpQJCAe|
-                                       |ex_e_FlOaDAe|
-                                       |form_e__hMDDAe|)
-                                (|return_e_9gjXvAe|
+                                   (car |exports_VIUJj-lYh|))
+                                  (|listify_VIGW-tcYh|
+                                    (cdr |exports_VIUJj-lYh|))))))
+                      (|return_VI0TYWcYh|
+                        (lambda (|id_VIYn7IoYh|
+                                 |exports_VIik59pYh|
+                                 |forms_VIEg3CpYh|)
+                          (|k_VIk-01cYh|
+                            |id_VIYn7IoYh|
+                            (|listify_VIGW-tcYh| |exports_VIik59pYh|)
+                            (map (lambda (|x_VI-c13qYh|)
+                                   (|wrap_VIahMX7Oh|
+                                     |x_VI-c13qYh|
+                                     |*w_VI-13AbYh|))
+                                 |forms_VIEg3CpYh|)))))
+               ((lambda (|tmp_VImPWndYh|)
+                  ((lambda (|tmp_VIILUQdYh|)
+                     (if |tmp_VIILUQdYh|
+                       (apply (lambda (|__VIa0uJjYh|
+                                       |ex_VIwYrakYh|
+                                       |form_VISUpDkYh|)
+                                (|return_VI0TYWcYh|
                                   '#f
-                                  |ex_e_FlOaDAe|
-                                  |form_e__hMDDAe|))
-                              |tmp_e_R8fRwAe|)
-                       ((lambda (|tmp_e_b5dixAe|)
-                          (if (if |tmp_e_b5dixAe|
-                                (apply (lambda (|__e_XDYVAAe|
-                                                |mid_e_hAWmBAe|
-                                                |ex_e_DwUPBAe|
-                                                |form_e_ZsSgCAe|)
-                                         (|id?_e_TJwZGpe| |mid_e_hAWmBAe|))
-                                       |tmp_e_b5dixAe|)
+                                  |ex_VIwYrakYh|
+                                  |form_VISUpDkYh|))
+                              |tmp_VIILUQdYh|)
+                       ((lambda (|tmp_VI2ISheYh|)
+                          (if (if |tmp_VI2ISheYh|
+                                (apply (lambda (|__VIOeCVhYh|
+                                                |mid_VI8bAmiYh|
+                                                |ex_VIu7yPiYh|
+                                                |form_VIQ3wgjYh|)
+                                         (|id?_VIKkaZnNh| |mid_VI8bAmiYh|))
+                                       |tmp_VI2ISheYh|)
                                 '#f)
-                            (apply (lambda (|__e_TZ8cyAe|
-                                            |mid_e_dW6FyAe|
-                                            |ex_e_zS46zAe|
-                                            |form_e_VO2zzAe|)
-                                     (|return_e_9gjXvAe|
-                                       (|wrap_e_jG6Yqqe|
-                                         |mid_e_dW6FyAe|
-                                         |w_e_rytGtAe|)
-                                       |ex_e_zS46zAe|
-                                       |form_e_VO2zzAe|))
-                                   |tmp_e_b5dixAe|)
-                            ((lambda (|__e_x1bLxAe|)
+                            (apply (lambda (|__VIKAObfYh|
+                                            |mid_VI4xMEfYh|
+                                            |ex_VIqtK5gYh|
+                                            |form_VIMpIygYh|)
+                                     (|return_VI0TYWcYh|
+                                       (|wrap_VIahMX7Oh|
+                                         |mid_VI4xMEfYh|
+                                         |w_VIi97GaYh|)
+                                       |ex_VIqtK5gYh|
+                                       |form_VIMpIygYh|))
+                                   |tmp_VI2ISheYh|)
+                            ((lambda (|__VIoEQKeYh|)
                                (syntax-error
-                                 (|source-wrap_e_FC4prqe|
-                                   |e_e_5CvdtAe|
-                                   |w_e_rytGtAe|
-                                   |s_e_Nur7uAe|)))
-                             |tmp_e_vchowAe|)))
+                                 (|source-wrap_VIwdKo8Oh|
+                                   |e_VIYc9daYh|
+                                   |w_VIi97GaYh|
+                                   |s_VIE557bYh|)))
+                             |tmp_VImPWndYh|)))
                         ($syntax-dispatch
-                          (compile-in-annotation |tmp_e_vchowAe| value)
+                          (compile-in-annotation |tmp_VImPWndYh| value)
                           '(any any each-any . each-any)))))
                    ($syntax-dispatch
-                     (compile-in-annotation |tmp_e_vchowAe| value)
+                     (compile-in-annotation |tmp_VImPWndYh| value)
                      '(any each-any . each-any))))
-                |e_e_5CvdtAe|))))
-         (|do-import!_e_9Tx7Nqe|
-           (lambda (|interface_e_nUFYqAe| |ribcage_e_JQDprAe|)
-             ((lambda (|token_e_3NBSrAe|)
-                (if |token_e_3NBSrAe|
-                  (|extend-ribcage-subst!_e_32U4gqe|
-                    |ribcage_e_JQDprAe|
-                    |token_e_3NBSrAe|)
-                  (|vfor-each_e_HCYeHqe|
-                    (lambda (|id_e_pJzjsAe|)
-                      ((lambda (|label1_e_LFxMsAe|)
+                |e_VIYc9daYh|))))
+         (|do-import!_VI0ub7uOh|
+           (lambda (|interface_VIevjY7Yh| |ribcage_VIArhp8Yh|)
+             ((lambda (|token_VIWnfS8Yh|)
+                (if |token_VIWnfS8Yh|
+                  (|extend-ribcage-subst!_VIWEx4ZNh|
+                    |ribcage_VIArhp8Yh|
+                    |token_VIWnfS8Yh|)
+                  (|vfor-each_VIydCeoOh|
+                    (lambda (|id_VIgkdj9Yh|)
+                      ((lambda (|label1_VICgbM9Yh|)
                          (begin
-                           (if (not |label1_e_LFxMsAe|)
+                           (if (not |label1_VICgbM9Yh|)
                              (syntax-error
-                               |id_e_pJzjsAe|
+                               |id_VIgkdj9Yh|
                                '"exported identifier not visible")
                              (void))
-                           (|extend-ribcage!_e_1d-Jeqe|
-                             |ribcage_e_JQDprAe|
-                             |id_e_pJzjsAe|
-                             |label1_e_LFxMsAe|)))
-                       (|id-var-name-loc_e_vtzCkqe|
-                         |id_e_pJzjsAe|
+                           (|extend-ribcage!_VIUPDJXNh|
+                             |ribcage_VIArhp8Yh|
+                             |id_VIgkdj9Yh|
+                             |label1_VICgbM9Yh|)))
+                       (|id-var-name-loc_VIm4dC1Oh|
+                         |id_VIgkdj9Yh|
                          '(()))))
-                    (|interface-exports_e_52MWvqe|
-                      |interface_e_nUFYqAe|))))
-              (|interface-token_e_r-Jnwqe|
-                |interface_e_nUFYqAe|))))
-         (|chi-internal_e_PWzGMqe|
-           (lambda (|ribcage_e_TseLSze|
-                    |source-exp_e_dpccTze|
-                    |body_e_zlaFTze|
-                    |r_e_Vh86Uze|
-                    |k_e_fe6zUze|)
-             (letrec ((|return_e_Ba40Vze|
-                        (lambda (|exprs_e_FaQHoAe|
-                                 |ids_e__6O8pAe|
-                                 |vars_e_l3MBpAe|
-                                 |vals_e_H_J2qAe|
-                                 |inits_e_1YHvqAe|)
+                    (|interface-exports_VIYEpWcOh|
+                      |interface_VIevjY7Yh|))))
+              (|interface-token_VIiBnndOh|
+                |interface_VIevjY7Yh|))))
+         (|chi-internal_VIGxdGtOh|
+           (lambda (|ribcage_VIK3UKzXh|
+                    |source-exp_VI40SbAXh|
+                    |body_VIqYPEAXh|
+                    |r_VIMUN5BXh|
+                    |k_VI6RLyBXh|)
+             (letrec ((|return_VIsNJ_BXh|
+                        (lambda (|exprs_VIwNtH5Yh|
+                                 |ids_VISJr86Yh|
+                                 |vars_VIcGpB6Yh|
+                                 |vals_VIyCn27Yh|
+                                 |inits_VIUylv7Yh|)
                           (begin
-                            (|check-defined-ids_e_FN2UFqe|
-                              |source-exp_e_dpccTze|
-                              |ids_e__6O8pAe|)
-                            (|k_e_fe6zUze|
-                              |exprs_e_FaQHoAe|
-                              |ids_e__6O8pAe|
-                              (reverse |vars_e_l3MBpAe|)
-                              (reverse |vals_e_H_J2qAe|)
-                              |inits_e_1YHvqAe|)))))
-               ((letrec ((|parse_e_X62tVze|
-                           (lambda (|body_e_h30WVze|
-                                    |ids_e_D_ZmWze|
-                                    |vars_e_ZXXPWze|
-                                    |vals_e_jUVgXze|
-                                    |inits_e_FQTJXze|)
-                             (if (null? |body_e_h30WVze|)
-                               (|return_e_Ba40Vze|
-                                 |body_e_h30WVze|
-                                 |ids_e_D_ZmWze|
-                                 |vars_e_ZXXPWze|
-                                 |vals_e_jUVgXze|
-                                 |inits_e_FQTJXze|)
-                               ((lambda (|e_e__MRaYze| |er_e_lJPDYze|)
+                            (|check-defined-ids_VIwoITmOh|
+                              |source-exp_VI40SbAXh|
+                              |ids_VISJr86Yh|)
+                            (|k_VI6RLyBXh|
+                              |exprs_VIwNtH5Yh|
+                              |ids_VISJr86Yh|
+                              (reverse |vars_VIcGpB6Yh|)
+                              (reverse |vals_VIyCn27Yh|)
+                              |inits_VIUylv7Yh|)))))
+               ((letrec ((|parse_VIOJHsCXh|
+                           (lambda (|body_VI8GFVCXh|
+                                    |ids_VIuCDmDXh|
+                                    |vars_VIQyBPDXh|
+                                    |vals_VIavzgEXh|
+                                    |inits_VIwrxJEXh|)
+                             (if (null? |body_VI8GFVCXh|)
+                               (|return_VIsNJ_BXh|
+                                 |body_VI8GFVCXh|
+                                 |ids_VIuCDmDXh|
+                                 |vars_VIQyBPDXh|
+                                 |vals_VIavzgEXh|
+                                 |inits_VIwrxJEXh|)
+                               ((lambda (|e_VISnvaFXh| |er_VIcktDFXh|)
                                   (call-with-values
                                     (lambda ()
-                                      (|syntax-type_e_1oYctqe|
-                                        |e_e__MRaYze|
-                                        |er_e_lJPDYze|
+                                      (|syntax-type_VIU-BcaOh|
+                                        |e_VISnvaFXh|
+                                        |er_VIcktDFXh|
                                         '(())
                                         '#f
-                                        |ribcage_e_TseLSze|))
-                                    (lambda (|type_e_HFN4Zze|
-                                             |value_e_1CLxZze|
-                                             |e_e_nyJ-Zze|
-                                             |w_e_JuHr-ze|
-                                             |s_e_3rFU-ze|)
-                                      ((lambda (|t_e_pnDl_ze|)
-                                         (if (memv |t_e_pnDl_ze|
+                                        |ribcage_VIK3UKzXh|))
+                                    (lambda (|type_VIygr4GXh|
+                                             |value_VIUcpxGXh|
+                                             |e_VIe9n-GXh|
+                                             |w_VIA5lrHXh|
+                                             |s_VIW1jUHXh|)
+                                      ((lambda (|t_VIg-glIXh|)
+                                         (if (memv |t_VIg-glIXh|
                                                    '(define-form))
-                                           (|parse-define_e_bIruOqe|
-                                             |e_e_nyJ-Zze|
-                                             |w_e_JuHr-ze|
-                                             |s_e_3rFU-ze|
-                                             (lambda (|id_e_Bw0-lAe|
-                                                      |rhs_e_Xs-qmAe|
-                                                      |w_e_hpYTmAe|)
-                                               ((lambda (|id_e_DlWknAe|
-                                                         |label_e_ZhUNnAe|)
-                                                  ((lambda (|var_e_jeSeoAe|)
+                                           (|parse-define_VI2j5uvOh|
+                                             |e_VIe9n-GXh|
+                                             |w_VIA5lrHXh|
+                                             |s_VIW1jUHXh|
+                                             (lambda (|id_VIs7GZ2Yh|
+                                                      |rhs_VIO3Eq3Yh|
+                                                      |w_VI80CT3Yh|)
+                                               ((lambda (|id_VIuYzk4Yh|
+                                                         |label_VIQUxN4Yh|)
+                                                  ((lambda (|var_VIaRve5Yh|)
                                                      (begin
-                                                       (|extend-ribcage!_e_1d-Jeqe|
-                                                         |ribcage_e_TseLSze|
-                                                         |id_e_DlWknAe|
-                                                         |label_e_ZhUNnAe|)
-                                                       (|extend-store!_e_ZU6-Eqe|
-                                                         |r_e_Vh86Uze|
-                                                         |label_e_ZhUNnAe|
-                                                         (make-binding_e_zruotpe
+                                                       (|extend-ribcage!_VIUPDJXNh|
+                                                         |ribcage_VIK3UKzXh|
+                                                         |id_VIuYzk4Yh|
+                                                         |label_VIQUxN4Yh|)
+                                                       (|extend-store!_VIQvMZlOh|
+                                                         |r_VIMUN5BXh|
+                                                         |label_VIQUxN4Yh|
+                                                         (|make-binding_VIq28oaNh|
                                                            'lexical
-                                                           |var_e_jeSeoAe|))
-                                                       (|parse_e_X62tVze|
-                                                         (cdr |body_e_h30WVze|)
-                                                         (cons |id_e_DlWknAe|
-                                                               |ids_e_D_ZmWze|)
-                                                         (cons |var_e_jeSeoAe|
-                                                               |vars_e_ZXXPWze|)
-                                                         (cons (cons |er_e_lJPDYze|
-                                                                     (|wrap_e_jG6Yqqe|
-                                                                       |rhs_e_Xs-qmAe|
-                                                                       |w_e_hpYTmAe|))
-                                                               |vals_e_jUVgXze|)
-                                                         |inits_e_FQTJXze|)))
-                                                   (|gen-var_e_hb9zSqe|
-                                                     |id_e_DlWknAe|)))
-                                                (|wrap_e_jG6Yqqe|
-                                                  |id_e_Bw0-lAe|
-                                                  |w_e_hpYTmAe|)
-                                                (gen-label_e_l94l_pe))))
-                                           (if (memv |t_e_pnDl_ze|
+                                                           |var_VIaRve5Yh|))
+                                                       (|parse_VIOJHsCXh|
+                                                         (cdr |body_VI8GFVCXh|)
+                                                         (cons |id_VIuYzk4Yh|
+                                                               |ids_VIuCDmDXh|)
+                                                         (cons |var_VIaRve5Yh|
+                                                               |vars_VIQyBPDXh|)
+                                                         (cons (cons |er_VIcktDFXh|
+                                                                     (|wrap_VIahMX7Oh|
+                                                                       |rhs_VIO3Eq3Yh|
+                                                                       |w_VI80CT3Yh|))
+                                                               |vals_VIavzgEXh|)
+                                                         |inits_VIwrxJEXh|)))
+                                                   (|gen-var_VI8OOyzOh|
+                                                     |id_VIuYzk4Yh|)))
+                                                (|wrap_VIahMX7Oh|
+                                                  |id_VIs7GZ2Yh|
+                                                  |w_VI80CT3Yh|)
+                                                (|gen-label_VIcMJkINh|))))
+                                           (if (memv |t_VIg-glIXh|
                                                      '(define-syntax-form))
-                                             (|parse-define-syntax_e_xEpXOqe|
-                                               |e_e_nyJ-Zze|
-                                               |w_e_JuHr-ze|
-                                               |s_e_3rFU-ze|
-                                               (lambda (|id_e_xScgjAe|
-                                                        |rhs_e_TOaJjAe|
-                                                        |w_e_dL8akAe|)
-                                                 ((lambda (|id_e_zH6DkAe|
-                                                           |label_e_VD44lAe|
-                                                           |exp_e_fA2xlAe|)
+                                             (|parse-define-syntax_VIof3XvOh|
+                                               |e_VIe9n-GXh|
+                                               |w_VIA5lrHXh|
+                                               |s_VIW1jUHXh|
+                                               (lambda (|id_VIotSf0Yh|
+                                                        |rhs_VIKpQI0Yh|
+                                                        |w_VI4mO91Yh|)
+                                                 ((lambda (|id_VIqiMC1Yh|
+                                                           |label_VIMeK32Yh|
+                                                           |exp_VI6bIw2Yh|)
                                                     (begin
-                                                      (|extend-ribcage!_e_1d-Jeqe|
-                                                        |ribcage_e_TseLSze|
-                                                        |id_e_zH6DkAe|
-                                                        |label_e_VD44lAe|)
-                                                      (|extend-store!_e_ZU6-Eqe|
-                                                        |r_e_Vh86Uze|
-                                                        |label_e_VD44lAe|
-                                                        (make-binding_e_zruotpe
+                                                      (|extend-ribcage!_VIUPDJXNh|
+                                                        |ribcage_VIK3UKzXh|
+                                                        |id_VIqiMC1Yh|
+                                                        |label_VIMeK32Yh|)
+                                                      (|extend-store!_VIQvMZlOh|
+                                                        |r_VIMUN5BXh|
+                                                        |label_VIMeK32Yh|
+                                                        (|make-binding_VIq28oaNh|
                                                           'deferred
-                                                          |exp_e_fA2xlAe|))
-                                                      (|parse_e_X62tVze|
-                                                        (cdr |body_e_h30WVze|)
-                                                        (cons |id_e_zH6DkAe|
-                                                              |ids_e_D_ZmWze|)
-                                                        |vars_e_ZXXPWze|
-                                                        |vals_e_jUVgXze|
-                                                        |inits_e_FQTJXze|)))
-                                                  (|wrap_e_jG6Yqqe|
-                                                    |id_e_xScgjAe|
-                                                    |w_e_dL8akAe|)
-                                                  (gen-label_e_l94l_pe)
-                                                  (|chi_e_LgMYJqe|
-                                                    |rhs_e_TOaJjAe|
-                                                    (|transformer-env_e_LpVxBpe|
-                                                      |er_e_lJPDYze|)
-                                                    |w_e_dL8akAe|))))
-                                             (if (memv |t_e_pnDl_ze|
+                                                          |exp_VI6bIw2Yh|))
+                                                      (|parse_VIOJHsCXh|
+                                                        (cdr |body_VI8GFVCXh|)
+                                                        (cons |id_VIqiMC1Yh|
+                                                              |ids_VIuCDmDXh|)
+                                                        |vars_VIQyBPDXh|
+                                                        |vals_VIavzgEXh|
+                                                        |inits_VIwrxJEXh|)))
+                                                  (|wrap_VIahMX7Oh|
+                                                    |id_VIotSf0Yh|
+                                                    |w_VI4mO91Yh|)
+                                                  (|gen-label_VIcMJkINh|)
+                                                  (|chi_VICTpYqOh|
+                                                    |rhs_VIKpQI0Yh|
+                                                    (|transformer-env_VIC0zxiNh|
+                                                      |er_VIcktDFXh|)
+                                                    |w_VI4mO91Yh|))))
+                                             (if (memv |t_VIg-glIXh|
                                                        '(module-form))
-                                               ((lambda (|*ribcage_e_1NJ0cAe|)
-                                                  ((lambda (|*w_e_nJHtcAe|)
-                                                     (|parse-module_e_vPvANqe|
-                                                       |e_e_nyJ-Zze|
-                                                       |w_e_JuHr-ze|
-                                                       |s_e_3rFU-ze|
-                                                       |*w_e_nJHtcAe|
-                                                       (lambda (|id_e_JFFWcAe|
-                                                                |exports_e_3CDndAe|
-                                                                |forms_e_pyBQdAe|)
-                                                         (|chi-internal_e_PWzGMqe|
-                                                           |*ribcage_e_1NJ0cAe|
-                                                           (|source-wrap_e_FC4prqe|
-                                                             |e_e_nyJ-Zze|
-                                                             |w_e_JuHr-ze|
-                                                             |s_e_3rFU-ze|)
-                                                           (map (lambda (|d_e_LuzheAe|)
-                                                                  (cons |er_e_lJPDYze|
-                                                                        |d_e_LuzheAe|))
-                                                                |forms_e_pyBQdAe|)
-                                                           |r_e_Vh86Uze|
-                                                           (lambda (|*body_e_5rxKeAe|
-                                                                    |*ids_e_rnvbfAe|
-                                                                    |*vars_e_NjtEfAe|
-                                                                    |*vals_e_7gr5gAe|
-                                                                    |*inits_e_tcpygAe|)
+                                               ((lambda (|*ribcage_VIUnn0VXh|)
+                                                  ((lambda (|*w_VIekltVXh|)
+                                                     (|parse-module_VImq9AuOh|
+                                                       |e_VIe9n-GXh|
+                                                       |w_VIA5lrHXh|
+                                                       |s_VIW1jUHXh|
+                                                       |*w_VIekltVXh|
+                                                       (lambda (|id_VIAgjWVXh|
+                                                                |exports_VIWchnWXh|
+                                                                |forms_VIg9fQWXh|)
+                                                         (|chi-internal_VIGxdGtOh|
+                                                           |*ribcage_VIUnn0VXh|
+                                                           (|source-wrap_VIwdKo8Oh|
+                                                             |e_VIe9n-GXh|
+                                                             |w_VIA5lrHXh|
+                                                             |s_VIW1jUHXh|)
+                                                           (map (lambda (|d_VIC5dhXXh|)
+                                                                  (cons |er_VIcktDFXh|
+                                                                        |d_VIC5dhXXh|))
+                                                                |forms_VIg9fQWXh|)
+                                                           |r_VIMUN5BXh|
+                                                           (lambda (|*body_VIY1bKXXh|
+                                                                    |*ids_VIi-8bYXh|
+                                                                    |*vars_VIEW6EYXh|
+                                                                    |*vals_VI-S45ZXh|
+                                                                    |*inits_VIkP2yZXh|)
                                                              (begin
-                                                               (|check-module-exports_e_jR4rFqe|
-                                                                 |source-exp_e_dpccTze|
-                                                                 (|flatten-exports_e_3dSzuqe|
-                                                                   |exports_e_3CDndAe|)
-                                                                 |*ids_e_rnvbfAe|)
-                                                               ((lambda (|iface_e_P8n_gAe|
-                                                                         |vars_e_95lshAe|
-                                                                         |vals_e_v1jVhAe|
-                                                                         |inits_e_RZgmiAe|)
-                                                                  (if |id_e_JFFWcAe|
-                                                                    ((lambda (|label_e_bWePiAe|)
+                                                               (|check-module-exports_VIasKqmOh|
+                                                                 |source-exp_VI40SbAXh|
+                                                                 (|flatten-exports_VIWPvzbOh|
+                                                                   |exports_VIWchnWXh|)
+                                                                 |*ids_VIi-8bYXh|)
+                                                               ((lambda (|iface_VIGL0_ZXh|
+                                                                         |vars_VI0I-r-Xh|
+                                                                         |vals_VImEYU-Xh|
+                                                                         |inits_VIIAWl_Xh|)
+                                                                  (if |id_VIAgjWVXh|
+                                                                    ((lambda (|label_VI2xUO_Xh|)
                                                                        (begin
-                                                                         (|extend-ribcage!_e_1d-Jeqe|
-                                                                           |ribcage_e_TseLSze|
-                                                                           |id_e_JFFWcAe|
-                                                                           |label_e_bWePiAe|)
-                                                                         (|extend-store!_e_ZU6-Eqe|
-                                                                           |r_e_Vh86Uze|
-                                                                           |label_e_bWePiAe|
-                                                                           (make-binding_e_zruotpe
+                                                                         (|extend-ribcage!_VIUPDJXNh|
+                                                                           |ribcage_VIK3UKzXh|
+                                                                           |id_VIAgjWVXh|
+                                                                           |label_VI2xUO_Xh|)
+                                                                         (|extend-store!_VIQvMZlOh|
+                                                                           |r_VIMUN5BXh|
+                                                                           |label_VI2xUO_Xh|
+                                                                           (|make-binding_VIq28oaNh|
                                                                              'module
-                                                                             |iface_e_P8n_gAe|))
-                                                                         (|parse_e_X62tVze|
-                                                                           (cdr |body_e_h30WVze|)
-                                                                           (cons |id_e_JFFWcAe|
-                                                                                 |ids_e_D_ZmWze|)
-                                                                           |vars_e_95lshAe|
-                                                                           |vals_e_v1jVhAe|
-                                                                           |inits_e_RZgmiAe|)))
-                                                                     (gen-label_e_l94l_pe))
+                                                                             |iface_VIGL0_ZXh|))
+                                                                         (|parse_VIOJHsCXh|
+                                                                           (cdr |body_VI8GFVCXh|)
+                                                                           (cons |id_VIAgjWVXh|
+                                                                                 |ids_VIuCDmDXh|)
+                                                                           |vars_VI0I-r-Xh|
+                                                                           |vals_VImEYU-Xh|
+                                                                           |inits_VIIAWl_Xh|)))
+                                                                     (|gen-label_VIcMJkINh|))
                                                                     (begin
-                                                                      (|do-import!_e_9Tx7Nqe|
-                                                                        |iface_e_P8n_gAe|
-                                                                        |ribcage_e_TseLSze|)
-                                                                      (|parse_e_X62tVze|
-                                                                        (cdr |body_e_h30WVze|)
-                                                                        (cons |iface_e_P8n_gAe|
-                                                                              |ids_e_D_ZmWze|)
-                                                                        |vars_e_95lshAe|
-                                                                        |vals_e_v1jVhAe|
-                                                                        |inits_e_RZgmiAe|))))
-                                                                (|make-trimmed-interface_e_tPDKxqe|
-                                                                  |exports_e_3CDndAe|)
+                                                                      (|do-import!_VI0ub7uOh|
+                                                                        |iface_VIGL0_ZXh|
+                                                                        |ribcage_VIK3UKzXh|)
+                                                                      (|parse_VIOJHsCXh|
+                                                                        (cdr |body_VI8GFVCXh|)
+                                                                        (cons |iface_VIGL0_ZXh|
+                                                                              |ids_VIuCDmDXh|)
+                                                                        |vars_VI0I-r-Xh|
+                                                                        |vals_VImEYU-Xh|
+                                                                        |inits_VIIAWl_Xh|))))
+                                                                (|make-trimmed-interface_VIkqhKeOh|
+                                                                  |exports_VIWchnWXh|)
                                                                 (append
-                                                                  |*vars_e_NjtEfAe|
-                                                                  |vars_e_ZXXPWze|)
+                                                                  |*vars_VIEW6EYXh|
+                                                                  |vars_VIQyBPDXh|)
                                                                 (append
-                                                                  |*vals_e_7gr5gAe|
-                                                                  |vals_e_jUVgXze|)
+                                                                  |*vals_VI-S45ZXh|
+                                                                  |vals_VIavzgEXh|)
                                                                 (append
-                                                                  |inits_e_FQTJXze|
-                                                                  |*inits_e_tcpygAe|
-                                                                  |*body_e_5rxKeAe|))))))))
-                                                   (|make-wrap_e_hki8Kpe|
-                                                     (|wrap-marks_e_DggBKpe|
-                                                       |w_e_JuHr-ze|)
-                                                     (cons |*ribcage_e_1NJ0cAe|
-                                                           (|wrap-subst_e_Zce2Lpe|
-                                                             |w_e_JuHr-ze|)))))
-                                                (|make-ribcage_e_n-ZH0qe|
+                                                                  |inits_VIwrxJEXh|
+                                                                  |*inits_VIkP2yZXh|
+                                                                  |*body_VIY1bKXXh|))))))))
+                                                   (|make-wrap_VI8XX7rNh|
+                                                     (|wrap-marks_VIuTVArNh|
+                                                       |w_VIA5lrHXh|)
+                                                     (cons |*ribcage_VIUnn0VXh|
+                                                           (|wrap-subst_VIQPT1sNh|
+                                                             |w_VIA5lrHXh|)))))
+                                                (|make-ribcage_VIeBDHJNh|
                                                   '()
                                                   '()
                                                   '()))
-                                               (if (memv |t_e_pnDl_ze|
+                                               (if (memv |t_VIg-glIXh|
                                                          '(import-form))
-                                                 (|parse-import_e_RLt1Oqe|
-                                                   |e_e_nyJ-Zze|
-                                                   |w_e_JuHr-ze|
-                                                   |s_e_3rFU-ze|
-                                                   (lambda (|mid_e_j3UL9Ae|)
-                                                     ((lambda (|mlabel_e_F_RcaAe|)
-                                                        ((lambda (|binding_e__XPFaAe|)
-                                                           ((lambda (|t_e_lUN6bAe|)
-                                                              (if (memv |t_e_lUN6bAe|
+                                                 (|parse-import_VIIm71vOh|
+                                                   |e_VIe9n-GXh|
+                                                   |w_VIA5lrHXh|
+                                                   |s_VIW1jUHXh|
+                                                   (lambda (|mid_VIaGxLSXh|)
+                                                     ((lambda (|mlabel_VIwCvcTXh|)
+                                                        ((lambda (|binding_VISytFTXh|)
+                                                           ((lambda (|t_VIcvr6UXh|)
+                                                              (if (memv |t_VIcvr6UXh|
                                                                         '(module))
-                                                                ((lambda (|iface_e_HQLzbAe|)
+                                                                ((lambda (|iface_VIyrpzUXh|)
                                                                    (begin
-                                                                     (if |value_e_1CLxZze|
-                                                                       (|extend-ribcage-barrier!_e_n9Yafqe|
-                                                                         |ribcage_e_TseLSze|
-                                                                         |value_e_1CLxZze|)
+                                                                     (if |value_VIUcpxGXh|
+                                                                       (|extend-ribcage-barrier!_VIeMBaYNh|
+                                                                         |ribcage_VIK3UKzXh|
+                                                                         |value_VIUcpxGXh|)
                                                                        (void))
-                                                                     (|do-import!_e_9Tx7Nqe|
-                                                                       |iface_e_HQLzbAe|
-                                                                       |ribcage_e_TseLSze|)
-                                                                     (|parse_e_X62tVze|
-                                                                       (cdr |body_e_h30WVze|)
-                                                                       (cons |iface_e_HQLzbAe|
-                                                                             |ids_e_D_ZmWze|)
-                                                                       |vars_e_ZXXPWze|
-                                                                       |vals_e_jUVgXze|
-                                                                       |inits_e_FQTJXze|)))
-                                                                 (cdr |binding_e__XPFaAe|))
-                                                                (if (memv |t_e_lUN6bAe|
+                                                                     (|do-import!_VI0ub7uOh|
+                                                                       |iface_VIyrpzUXh|
+                                                                       |ribcage_VIK3UKzXh|)
+                                                                     (|parse_VIOJHsCXh|
+                                                                       (cdr |body_VI8GFVCXh|)
+                                                                       (cons |iface_VIyrpzUXh|
+                                                                             |ids_VIuCDmDXh|)
+                                                                       |vars_VIQyBPDXh|
+                                                                       |vals_VIavzgEXh|
+                                                                       |inits_VIwrxJEXh|)))
+                                                                 (cdr |binding_VISytFTXh|))
+                                                                (if (memv |t_VIcvr6UXh|
                                                                           '(displaced-lexical))
-                                                                  (|displaced-lexical-error_e_5mT-Bpe|
-                                                                    |mid_e_j3UL9Ae|)
+                                                                  (|displaced-lexical-error_VIYYw-iNh|
+                                                                    |mid_VIaGxLSXh|)
                                                                   (syntax-error
-                                                                    |mid_e_j3UL9Ae|
+                                                                    |mid_VIaGxLSXh|
                                                                     '"import from unknown module"))))
-                                                            (car |binding_e__XPFaAe|)))
-                                                         (|lookup_e_7bNlDpe|
-                                                           |mlabel_e_F_RcaAe|
-                                                           |r_e_Vh86Uze|)))
-                                                      (|id-var-name_e_Rpx3lqe|
-                                                        |mid_e_j3UL9Ae|
+                                                            (car |binding_VISytFTXh|)))
+                                                         (|lookup_VI-NqlkNh|
+                                                           |mlabel_VIwCvcTXh|
+                                                           |r_VIMUN5BXh|)))
+                                                      (|id-var-name_VII0b32Oh|
+                                                        |mid_VIaGxLSXh|
                                                         '(())))))
-                                                 (if (memv |t_e_pnDl_ze|
+                                                 (if (memv |t_VIg-glIXh|
                                                            '(begin-form))
-                                                   ((lambda (|tmp_e_Vs6B6Ae|)
-                                                      ((lambda (|tmp_e_fp427Ae|)
-                                                         (if |tmp_e_fp427Ae|
-                                                           (apply (lambda (|__e_Bl2v7Ae|
-                                                                           |e1_e_Xh0Y7Ae|)
-                                                                    (|parse_e_X62tVze|
-                                                                      ((letrec ((|f_e_he-o8Ae|
-                                                                                  (lambda (|forms_e_DaYR8Ae|)
-                                                                                    (if (null? |forms_e_DaYR8Ae|)
-                                                                                      (cdr |body_e_h30WVze|)
-                                                                                      (cons (cons |er_e_lJPDYze|
-                                                                                                  (|wrap_e_jG6Yqqe|
-                                                                                                    (car |forms_e_DaYR8Ae|)
-                                                                                                    |w_e_JuHr-ze|))
-                                                                                            (|f_e_he-o8Ae|
-                                                                                              (cdr |forms_e_DaYR8Ae|)))))))
-                                                                         |f_e_he-o8Ae|)
-                                                                       |e1_e_Xh0Y7Ae|)
-                                                                      |ids_e_D_ZmWze|
-                                                                      |vars_e_ZXXPWze|
-                                                                      |vals_e_jUVgXze|
-                                                                      |inits_e_FQTJXze|))
-                                                                  |tmp_e_fp427Ae|)
+                                                   ((lambda (|tmp_VIM3MAPXh|)
+                                                      ((lambda (|tmp_VI60K1QXh|)
+                                                         (if |tmp_VI60K1QXh|
+                                                           (apply (lambda (|__VIsYHuQXh|
+                                                                           |e1_VIOUFXQXh|)
+                                                                    (|parse_VIOJHsCXh|
+                                                                      ((letrec ((|f_VI8RDoRXh|
+                                                                                  (lambda (|forms_VIuNBRRXh|)
+                                                                                    (if (null? |forms_VIuNBRRXh|)
+                                                                                      (cdr |body_VI8GFVCXh|)
+                                                                                      (cons (cons |er_VIcktDFXh|
+                                                                                                  (|wrap_VIahMX7Oh|
+                                                                                                    (car |forms_VIuNBRRXh|)
+                                                                                                    |w_VIA5lrHXh|))
+                                                                                            (|f_VI8RDoRXh|
+                                                                                              (cdr |forms_VIuNBRRXh|)))))))
+                                                                         |f_VI8RDoRXh|)
+                                                                       |e1_VIOUFXQXh|)
+                                                                      |ids_VIuCDmDXh|
+                                                                      |vars_VIQyBPDXh|
+                                                                      |vals_VIavzgEXh|
+                                                                      |inits_VIwrxJEXh|))
+                                                                  |tmp_VI60K1QXh|)
                                                            (syntax-error
-                                                             |tmp_e_Vs6B6Ae|)))
+                                                             |tmp_VIM3MAPXh|)))
                                                        ($syntax-dispatch
                                                          (compile-in-annotation
-                                                           |tmp_e_Vs6B6Ae|
+                                                           |tmp_VIM3MAPXh|
                                                            value)
                                                          '(any . each-any))))
-                                                    |e_e_nyJ-Zze|)
-                                                   (if (memv |t_e_pnDl_ze|
+                                                    |e_VIe9n-GXh|)
+                                                   (if (memv |t_VIg-glIXh|
                                                              '(eval-when-form))
-                                                     ((lambda (|tmp_e_PZow2Ae|)
-                                                        ((lambda (|tmp_e_9WmZ2Ae|)
-                                                           (if |tmp_e_9WmZ2Ae|
-                                                             (apply (lambda (|__e_vSkq3Ae|
-                                                                             |x_e_ROiT3Ae|
-                                                                             |e1_e_bLgk4Ae|)
-                                                                      (|parse_e_X62tVze|
+                                                     ((lambda (|tmp_VIGA2wLXh|)
+                                                        ((lambda (|tmp_VI0x0ZLXh|)
+                                                           (if |tmp_VI0x0ZLXh|
+                                                             (apply (lambda (|__VImt-pMXh|
+                                                                             |x_VIIpYSMXh|
+                                                                             |e1_VI2mWjNXh|)
+                                                                      (|parse_VIOJHsCXh|
                                                                         (if (memq 'eval
-                                                                                  (|chi-when-list_e_Hr-Lsqe|
-                                                                                    |x_e_ROiT3Ae|
-                                                                                    |w_e_JuHr-ze|))
-                                                                          ((letrec ((|f_e_xHeN4Ae|
-                                                                                      (lambda (|forms_e_TDce5Ae|)
-                                                                                        (if (null? |forms_e_TDce5Ae|)
-                                                                                          (cdr |body_e_h30WVze|)
-                                                                                          (cons (cons |er_e_lJPDYze|
-                                                                                                      (|wrap_e_jG6Yqqe|
-                                                                                                        (car |forms_e_TDce5Ae|)
-                                                                                                        |w_e_JuHr-ze|))
-                                                                                                (|f_e_xHeN4Ae|
-                                                                                                  (cdr |forms_e_TDce5Ae|)))))))
-                                                                             |f_e_xHeN4Ae|)
-                                                                           |e1_e_bLgk4Ae|)
-                                                                          (cdr |body_e_h30WVze|))
-                                                                        |ids_e_D_ZmWze|
-                                                                        |vars_e_ZXXPWze|
-                                                                        |vals_e_jUVgXze|
-                                                                        |inits_e_FQTJXze|))
-                                                                    |tmp_e_9WmZ2Ae|)
+                                                                                  (|chi-when-list_VIy2EL9Oh|
+                                                                                    |x_VIIpYSMXh|
+                                                                                    |w_VIA5lrHXh|))
+                                                                          ((letrec ((|f_VIoiUMNXh|
+                                                                                      (lambda (|forms_VIKeSdOXh|)
+                                                                                        (if (null? |forms_VIKeSdOXh|)
+                                                                                          (cdr |body_VI8GFVCXh|)
+                                                                                          (cons (cons |er_VIcktDFXh|
+                                                                                                      (|wrap_VIahMX7Oh|
+                                                                                                        (car |forms_VIKeSdOXh|)
+                                                                                                        |w_VIA5lrHXh|))
+                                                                                                (|f_VIoiUMNXh|
+                                                                                                  (cdr |forms_VIKeSdOXh|)))))))
+                                                                             |f_VIoiUMNXh|)
+                                                                           |e1_VI2mWjNXh|)
+                                                                          (cdr |body_VI8GFVCXh|))
+                                                                        |ids_VIuCDmDXh|
+                                                                        |vars_VIQyBPDXh|
+                                                                        |vals_VIavzgEXh|
+                                                                        |inits_VIwrxJEXh|))
+                                                                    |tmp_VI0x0ZLXh|)
                                                              (syntax-error
-                                                               |tmp_e_PZow2Ae|)))
+                                                               |tmp_VIGA2wLXh|)))
                                                          ($syntax-dispatch
                                                            (compile-in-annotation
-                                                             |tmp_e_PZow2Ae|
+                                                             |tmp_VIGA2wLXh|
                                                              value)
                                                            '(any each-any
                                                                  .
                                                                  each-any))))
-                                                      |e_e_nyJ-Zze|)
-                                                     (if (memv |t_e_pnDl_ze|
+                                                      |e_VIe9n-GXh|)
+                                                     (if (memv |t_VIg-glIXh|
                                                                '(local-syntax-form))
-                                                       (|chi-local-syntax_e_dxlRPqe|
-                                                         |value_e_1CLxZze|
-                                                         |e_e_nyJ-Zze|
-                                                         |er_e_lJPDYze|
-                                                         |w_e_JuHr-ze|
-                                                         |s_e_3rFU-ze|
-                                                         (lambda (|forms_e_LjBO_ze|
-                                                                  |er_e_5gzf0Ae|
-                                                                  |w_e_rcxI0Ae|
-                                                                  |s_e_N8v91Ae|)
-                                                           (|parse_e_X62tVze|
-                                                             ((letrec ((|f_e_75tC1Ae|
-                                                                         (lambda (|forms_e_t1r32Ae|)
-                                                                           (if (null? |forms_e_t1r32Ae|)
-                                                                             (cdr |body_e_h30WVze|)
-                                                                             (cons (cons |er_e_5gzf0Ae|
-                                                                                         (|wrap_e_jG6Yqqe|
-                                                                                           (car |forms_e_t1r32Ae|)
-                                                                                           |w_e_rcxI0Ae|))
-                                                                                   (|f_e_75tC1Ae|
-                                                                                     (cdr |forms_e_t1r32Ae|)))))))
-                                                                |f_e_75tC1Ae|)
-                                                              |forms_e_LjBO_ze|)
-                                                             |ids_e_D_ZmWze|
-                                                             |vars_e_ZXXPWze|
-                                                             |vals_e_jUVgXze|
-                                                             |inits_e_FQTJXze|)))
-                                                       (|return_e_Ba40Vze|
-                                                         (cons (cons |er_e_lJPDYze|
-                                                                     (|source-wrap_e_FC4prqe|
-                                                                       |e_e_nyJ-Zze|
-                                                                       |w_e_JuHr-ze|
-                                                                       |s_e_3rFU-ze|))
-                                                               (cdr |body_e_h30WVze|))
-                                                         |ids_e_D_ZmWze|
-                                                         |vars_e_ZXXPWze|
-                                                         |vals_e_jUVgXze|
-                                                         |inits_e_FQTJXze|)))))))))
-                                       |type_e_HFN4Zze|))))
-                                (cdar |body_e_h30WVze|)
-                                (caar |body_e_h30WVze|))))))
-                  |parse_e_X62tVze|)
-                |body_e_zlaFTze|
+                                                       (|chi-local-syntax_VI48_QwOh|
+                                                         |value_VIUcpxGXh|
+                                                         |e_VIe9n-GXh|
+                                                         |er_VIcktDFXh|
+                                                         |w_VIA5lrHXh|
+                                                         |s_VIW1jUHXh|
+                                                         (lambda (|forms_VICWeOIXh|
+                                                                  |er_VIYScfJXh|
+                                                                  |w_VIiPaIJXh|
+                                                                  |s_VIEL89KXh|)
+                                                           (|parse_VIOJHsCXh|
+                                                             ((letrec ((|f_VI-H6CKXh|
+                                                                         (lambda (|forms_VIkE43LXh|)
+                                                                           (if (null? |forms_VIkE43LXh|)
+                                                                             (cdr |body_VI8GFVCXh|)
+                                                                             (cons (cons |er_VIYScfJXh|
+                                                                                         (|wrap_VIahMX7Oh|
+                                                                                           (car |forms_VIkE43LXh|)
+                                                                                           |w_VIiPaIJXh|))
+                                                                                   (|f_VI-H6CKXh|
+                                                                                     (cdr |forms_VIkE43LXh|)))))))
+                                                                |f_VI-H6CKXh|)
+                                                              |forms_VICWeOIXh|)
+                                                             |ids_VIuCDmDXh|
+                                                             |vars_VIQyBPDXh|
+                                                             |vals_VIavzgEXh|
+                                                             |inits_VIwrxJEXh|)))
+                                                       (|return_VIsNJ_BXh|
+                                                         (cons (cons |er_VIcktDFXh|
+                                                                     (|source-wrap_VIwdKo8Oh|
+                                                                       |e_VIe9n-GXh|
+                                                                       |w_VIA5lrHXh|
+                                                                       |s_VIW1jUHXh|))
+                                                               (cdr |body_VI8GFVCXh|))
+                                                         |ids_VIuCDmDXh|
+                                                         |vars_VIQyBPDXh|
+                                                         |vals_VIavzgEXh|
+                                                         |inits_VIwrxJEXh|)))))))))
+                                       |type_VIygr4GXh|))))
+                                (cdar |body_VI8GFVCXh|)
+                                (caar |body_VI8GFVCXh|))))))
+                  |parse_VIOJHsCXh|)
+                |body_VIqYPEAXh|
                 '()
                 '()
                 '()
                 '()))))
-         (|chi-body_e_t-BdMqe|
-           (lambda (|body_e_nnLvLze|
-                    |outer-form_e_JjJYLze|
-                    |r_e_3gHpMze|
-                    |w_e_pcFSMze|)
-             ((lambda (|r_e_L8DjNze|)
-                ((lambda (|ribcage_e_55BMNze|)
-                   ((lambda (|w_e_r1zdOze|)
-                      ((lambda (|body_e_NZwGOze|)
-                         (|chi-internal_e_PWzGMqe|
-                           |ribcage_e_55BMNze|
-                           |outer-form_e_JjJYLze|
-                           |body_e_NZwGOze|
-                           |r_e_L8DjNze|
-                           (lambda (|exprs_e_7Wu7Pze|
-                                    |ids_e_tSsAPze|
-                                    |vars_e_POq1Qze|
-                                    |vals_e_9LouQze|
-                                    |inits_e_vHmXQze|)
+         (|chi-body_VIkBfdtOh|
+           (lambda (|body_VIe-ovsXh|
+                    |outer-form_VIAWmYsXh|
+                    |r_VIWSkptXh|
+                    |w_VIgPiStXh|)
+             ((lambda (|r_VICLgjuXh|)
+                ((lambda (|ribcage_VIYHeMuXh|)
+                   ((lambda (|w_VIiEcdvXh|)
+                      ((lambda (|body_VIEAaGvXh|)
+                         (|chi-internal_VIGxdGtOh|
+                           |ribcage_VIYHeMuXh|
+                           |outer-form_VIAWmYsXh|
+                           |body_VIEAaGvXh|
+                           |r_VICLgjuXh|
+                           (lambda (|exprs_VI-w87wXh|
+                                    |ids_VIkt6AwXh|
+                                    |vars_VIGp41xXh|
+                                    |vals_VI0m2uxXh|
+                                    |inits_VImi0XxXh|)
                              (begin
-                               (if (null? |exprs_e_7Wu7Pze|)
+                               (if (null? |exprs_VI-w87wXh|)
                                  (syntax-error
-                                   |outer-form_e_JjJYLze|
+                                   |outer-form_VIAWmYsXh|
                                    '"no expressions in body")
                                  (void))
-                               (|build-body_e_PJMhbpe|
+                               (|build-body_VIGkqhUMh|
                                  '#f
-                                 |vars_e_POq1Qze|
-                                 (map (lambda (|x_e_RDkoRze|)
-                                        (|chi_e_LgMYJqe|
-                                          (cdr |x_e_RDkoRze|)
-                                          (car |x_e_RDkoRze|)
+                                 |vars_VIGp41xXh|
+                                 (map (lambda (|x_VIIe-nyXh|)
+                                        (|chi_VICTpYqOh|
+                                          (cdr |x_VIIe-nyXh|)
+                                          (car |x_VIIe-nyXh|)
                                           '(())))
-                                      |vals_e_9LouQze|)
-                                 (|build-sequence_e_7RQnape|
+                                      |vals_VI0m2uxXh|)
+                                 (|build-sequence_VI-runTMh|
                                    '#f
-                                   (map (lambda (|x_e_bAiRRze|)
-                                          (|chi_e_LgMYJqe|
-                                            (cdr |x_e_bAiRRze|)
-                                            (car |x_e_bAiRRze|)
+                                   (map (lambda (|x_VI2bYQyXh|)
+                                          (|chi_VICTpYqOh|
+                                            (cdr |x_VI2bYQyXh|)
+                                            (car |x_VI2bYQyXh|)
                                             '(())))
                                         (append
-                                          |inits_e_vHmXQze|
-                                          |exprs_e_7Wu7Pze|))))))))
-                       (map (lambda (|x_e_xwgiSze|)
-                              (cons |r_e_L8DjNze|
-                                    (|wrap_e_jG6Yqqe|
-                                      |x_e_xwgiSze|
-                                      |w_e_r1zdOze|)))
-                            |body_e_nnLvLze|)))
-                    (|make-wrap_e_hki8Kpe|
-                      (|wrap-marks_e_DggBKpe| |w_e_pcFSMze|)
-                      (cons |ribcage_e_55BMNze|
-                            (|wrap-subst_e_Zce2Lpe| |w_e_pcFSMze|)))))
-                 (|make-ribcage_e_n-ZH0qe| '() '() '())))
-              (cons '("placeholder" placeholder) |r_e_3gHpMze|))))
-         (|chi-macro_e_72EMLqe|
-           (lambda (|p_e_bpkmDze|
-                    |e_e_xliPDze|
-                    |r_e_ThggEze|
-                    |w_e_deeJEze|
-                    |s_e_zacaFze|
-                    |rib_e_V6aDFze|)
-             (letrec ((|rebuild-macro-output_e_f384Gze|
-                        (lambda (|x_e_hU1rHze| |m_e_DQ_THze|)
-                          (if (pair? |x_e_hU1rHze|)
-                            (cons (|rebuild-macro-output_e_f384Gze|
-                                    (car |x_e_hU1rHze|)
-                                    |m_e_DQ_THze|)
-                                  (|rebuild-macro-output_e_f384Gze|
-                                    (cdr |x_e_hU1rHze|)
-                                    |m_e_DQ_THze|))
-                            (if (syntax-object?_e_h-lahpe |x_e_hU1rHze|)
-                              ((lambda (|w_e_lyR8Kze|)
-                                 ((lambda (|ms_e_HuPBKze| |s_e_1rN2Lze|)
-                                    (|make-syntax-object_e_X1oJgpe|
-                                      (|syntax-object-expression_e_DWjDhpe|
-                                        |x_e_hU1rHze|)
-                                      (if (if (pair? |ms_e_HuPBKze|)
-                                            (eq? (car |ms_e_HuPBKze|) '#f)
+                                          |inits_VImi0XxXh|
+                                          |exprs_VI-w87wXh|))))))))
+                       (map (lambda (|x_VIo7WhzXh|)
+                              (cons |r_VICLgjuXh|
+                                    (|wrap_VIahMX7Oh|
+                                      |x_VIo7WhzXh|
+                                      |w_VIiEcdvXh|)))
+                            |body_VIe-ovsXh|)))
+                    (|make-wrap_VI8XX7rNh|
+                      (|wrap-marks_VIuTVArNh| |w_VIgPiStXh|)
+                      (cons |ribcage_VIYHeMuXh|
+                            (|wrap-subst_VIQPT1sNh| |w_VIgPiStXh|)))))
+                 (|make-ribcage_VIeBDHJNh| '() '() '())))
+              (cons '("placeholder" placeholder) |r_VIWSkptXh|))))
+         (|chi-macro_VI-EhMsOh|
+           (lambda (|p_VI20-lkXh|
+                    |e_VIoYXOkXh|
+                    |r_VIKUVflXh|
+                    |w_VI4RTIlXh|
+                    |s_VIqNR9mXh|
+                    |rib_VIMJPCmXh|)
+             (letrec ((|rebuild-macro-output_VI6GN3nXh|
+                        (lambda (|x_VI8vHqoXh| |m_VIurFToXh|)
+                          (if (pair? |x_VI8vHqoXh|)
+                            (cons (|rebuild-macro-output_VI6GN3nXh|
+                                    (car |x_VI8vHqoXh|)
+                                    |m_VIurFToXh|)
+                                  (|rebuild-macro-output_VI6GN3nXh|
+                                    (cdr |x_VI8vHqoXh|)
+                                    |m_VIurFToXh|))
+                            (if (|syntax-object?_VI8B_9-Mh| |x_VI8vHqoXh|)
+                              ((lambda (|w_VIc9v8rXh|)
+                                 ((lambda (|ms_VIy5tBrXh| |s_VIU1r2sXh|)
+                                    (|make-syntax-object_VIOE1JZMh|
+                                      (|syntax-object-expression_VIuxZC-Mh|
+                                        |x_VI8vHqoXh|)
+                                      (if (if (pair? |ms_VIy5tBrXh|)
+                                            (eq? (car |ms_VIy5tBrXh|) '#f)
                                             '#f)
-                                        (|make-wrap_e_hki8Kpe|
-                                          (cdr |ms_e_HuPBKze|)
-                                          (cdr |s_e_1rN2Lze|))
-                                        (|make-wrap_e_hki8Kpe|
-                                          (cons |m_e_DQ_THze| |ms_e_HuPBKze|)
-                                          (if |rib_e_V6aDFze|
-                                            (cons |rib_e_V6aDFze|
-                                                  (cons 'shift |s_e_1rN2Lze|))
-                                            (cons 'shift |s_e_1rN2Lze|))))))
-                                  (|wrap-marks_e_DggBKpe| |w_e_lyR8Kze|)
-                                  (|wrap-subst_e_Zce2Lpe| |w_e_lyR8Kze|)))
-                               (|syntax-object-wrap_e_ZSh4ipe| |x_e_hU1rHze|))
-                              (if (vector? |x_e_hU1rHze|)
-                                ((lambda (|n_e_ZMZkIze|)
-                                   ((lambda (|v_e_jJXNIze|)
-                                      ((letrec ((|doloop_e_FFVeJze|
-                                                  (lambda (|i_e__BTHJze|)
-                                                    (if (= |i_e__BTHJze|
-                                                           |n_e_ZMZkIze|)
-                                                      |v_e_jJXNIze|
+                                        (|make-wrap_VI8XX7rNh|
+                                          (cdr |ms_VIy5tBrXh|)
+                                          (cdr |s_VIU1r2sXh|))
+                                        (|make-wrap_VI8XX7rNh|
+                                          (cons |m_VIurFToXh| |ms_VIy5tBrXh|)
+                                          (if |rib_VIMJPCmXh|
+                                            (cons |rib_VIMJPCmXh|
+                                                  (cons 'shift |s_VIU1r2sXh|))
+                                            (cons 'shift |s_VIU1r2sXh|))))))
+                                  (|wrap-marks_VIuTVArNh| |w_VIc9v8rXh|)
+                                  (|wrap-subst_VIQPT1sNh| |w_VIc9v8rXh|)))
+                               (|syntax-object-wrap_VIQtX3_Mh| |x_VI8vHqoXh|))
+                              (if (vector? |x_VI8vHqoXh|)
+                                ((lambda (|n_VIQnDkpXh|)
+                                   ((lambda (|v_VIakBNpXh|)
+                                      ((letrec ((|doloop_VIwgzeqXh|
+                                                  (lambda (|i_VIScxHqXh|)
+                                                    (if (= |i_VIScxHqXh|
+                                                           |n_VIQnDkpXh|)
+                                                      |v_VIakBNpXh|
                                                       (begin
                                                         (vector-set!
-                                                          |v_e_jJXNIze|
-                                                          |i_e__BTHJze|
-                                                          (|rebuild-macro-output_e_f384Gze|
+                                                          |v_VIakBNpXh|
+                                                          |i_VIScxHqXh|
+                                                          (|rebuild-macro-output_VI6GN3nXh|
                                                             (vector-ref
-                                                              |x_e_hU1rHze|
-                                                              |i_e__BTHJze|)
-                                                            |m_e_DQ_THze|))
-                                                        (|doloop_e_FFVeJze|
-                                                          (+ |i_e__BTHJze|
+                                                              |x_VI8vHqoXh|
+                                                              |i_VIScxHqXh|)
+                                                            |m_VIurFToXh|))
+                                                        (|doloop_VIwgzeqXh|
+                                                          (+ |i_VIScxHqXh|
                                                              '1)))))))
-                                         |doloop_e_FFVeJze|)
+                                         |doloop_VIwgzeqXh|)
                                        '0))
-                                    (make-vector |n_e_ZMZkIze|)))
-                                 (vector-length |x_e_hU1rHze|))
-                                (if (symbol? |x_e_hU1rHze|)
+                                    (make-vector |n_VIQnDkpXh|)))
+                                 (vector-length |x_VI8vHqoXh|))
+                                (if (symbol? |x_VI8vHqoXh|)
                                   (syntax-error
-                                    (|source-wrap_e_FC4prqe|
-                                      |e_e_xliPDze|
-                                      |w_e_deeJEze|
-                                      |s_e_zacaFze|)
+                                    (|source-wrap_VIwdKo8Oh|
+                                      |e_VIoYXOkXh|
+                                      |w_VI4RTIlXh|
+                                      |s_VIqNR9mXh|)
                                     '"encountered raw symbol "
-                                    (format '"~s" |x_e_hU1rHze|)
+                                    (format '"~s" |x_VI8vHqoXh|)
                                     '" in output of macro")
-                                  |x_e_hU1rHze|)))))))
-               (|rebuild-macro-output_e_f384Gze|
-                 ((lambda (|out_e_B_5xGze|)
-                    (if (procedure? |out_e_B_5xGze|)
-                      (|out_e_B_5xGze|
-                        (lambda (|id_e_XX3-Gze|)
+                                  |x_VI8vHqoXh|)))))))
+               (|rebuild-macro-output_VI6GN3nXh|
+                 ((lambda (|out_VIsCLwnXh|)
+                    (if (procedure? |out_VIsCLwnXh|)
+                      (|out_VIsCLwnXh|
+                        (lambda (|id_VIOyJZnXh|)
                           (begin
-                            (if (not (identifier? |id_e_XX3-Gze|))
+                            (if (not (identifier? |id_VIOyJZnXh|))
                               (syntax-error
-                                |id_e_XX3-Gze|
+                                |id_VIOyJZnXh|
                                 '"environment argument is not an identifier")
                               (void))
-                            (|lookup_e_7bNlDpe|
-                              (|id-var-name_e_Rpx3lqe| |id_e_XX3-Gze| '(()))
-                              |r_e_ThggEze|))))
-                      |out_e_B_5xGze|))
-                  (|p_e_bpkmDze|
-                    (|source-wrap_e_FC4prqe|
-                      |e_e_xliPDze|
-                      (anti-mark_e_d0ro8qe |w_e_deeJEze|)
-                      |s_e_zacaFze|)))
+                            (|lookup_VI-NqlkNh|
+                              (|id-var-name_VII0b32Oh| |id_VIOyJZnXh| '(()))
+                              |r_VIKUVflXh|))))
+                      |out_VIsCLwnXh|))
+                  (|p_VI20-lkXh|
+                    (|source-wrap_VIwdKo8Oh|
+                      |e_VIoYXOkXh|
+                      (|anti-mark_VI4D4oRNh| |w_VI4RTIlXh|)
+                      |s_VIqNR9mXh|)))
                  (string '#\m)))))
-         (|chi-set!_e_N5GjLqe|
-           (lambda (|e_e_VXb8rze|
-                    |r_e_fU9Brze|
-                    |w_e_BQ72sze|
-                    |s_e_XM5vsze|
-                    |rib_e_hJ3Ysze|)
-             ((lambda (|tmp_e_DF1ptze|)
-                ((lambda (|tmp_e_ZB_Rtze|)
-                   (if (if |tmp_e_ZB_Rtze|
-                         (apply (lambda (|__e_9Aq_Bze|
-                                         |id_e_vwosCze|
-                                         |val_e_RsmVCze|)
-                                  (|id?_e_TJwZGpe| |id_e_vwosCze|))
-                                |tmp_e_ZB_Rtze|)
+         (|chi-set!_VIEIjjsOh|
+           (lambda (|e_VIMyR78Xh|
+                    |r_VI6vPA8Xh|
+                    |w_VIsrN19Xh|
+                    |s_VIOnLu9Xh|
+                    |rib_VI8kJX9Xh|)
+             ((lambda (|tmp_VIugHoaXh|)
+                ((lambda (|tmp_VIQcFRaXh|)
+                   (if (if |tmp_VIQcFRaXh|
+                         (apply (lambda (|__VI0b4_iXh|
+                                         |id_VIm72sjXh|
+                                         |val_VII30VjXh|)
+                                  (|id?_VIKkaZnNh| |id_VIm72sjXh|))
+                                |tmp_VIQcFRaXh|)
                          '#f)
-                     (apply (lambda (|__e_FuXLuze|
-                                     |id_e__qVcvze|
-                                     |val_e_lnTFvze|)
-                              ((lambda (|n_e_HjR6wze|)
-                                 ((lambda (|b_e_1gPzwze|)
-                                    ((lambda (|t_e_ncN0xze|)
-                                       (if (memv |t_e_ncN0xze| '(macro!))
-                                         ((lambda (|id_e_tHu5Bze|
-                                                   |val_e_PDsyBze|)
-                                            (|syntax-type_e_1oYctqe|
-                                              (|chi-macro_e_72EMLqe|
-                                                (binding-value_e_fkqiupe
-                                                  |b_e_1gPzwze|)
+                     (apply (lambda (|__VIw5BLbXh|
+                                     |id_VIS1zccXh|
+                                     |val_VIc-wFcXh|)
+                              ((lambda (|n_VIyWu6dXh|)
+                                 ((lambda (|b_VIUSszdXh|)
+                                    ((lambda (|t_VIePq0eXh|)
+                                       (if (memv |t_VIePq0eXh| '(macro!))
+                                         ((lambda (|id_VIki85iXh|
+                                                   |val_VIGe6yiXh|)
+                                            (|syntax-type_VIU-BcaOh|
+                                              (|chi-macro_VI-EhMsOh|
+                                                (|binding-value_VI6X3ibNh|
+                                                  |b_VIUSszdXh|)
                                                 (list '#(syntax-object
                                                          set!
                                                          ((top)
@@ -3527,408 +3527,408 @@
                                                                *top*))
                                                             ()
                                                             ())))
-                                                      |id_e_tHu5Bze|
-                                                      |val_e_PDsyBze|)
-                                                |r_e_fU9Brze|
+                                                      |id_VIki85iXh|
+                                                      |val_VIGe6yiXh|)
+                                                |r_VI6vPA8Xh|
                                                 '(())
-                                                |s_e_XM5vsze|
-                                                |rib_e_hJ3Ysze|)
-                                              |r_e_fU9Brze|
+                                                |s_VIOnLu9Xh|
+                                                |rib_VI8kJX9Xh|)
+                                              |r_VI6vPA8Xh|
                                               '(())
-                                              |s_e_XM5vsze|
-                                              |rib_e_hJ3Ysze|))
-                                          (|wrap_e_jG6Yqqe|
-                                            |id_e__qVcvze|
-                                            |w_e_BQ72sze|)
-                                          (|wrap_e_jG6Yqqe|
-                                            |val_e_lnTFvze|
-                                            |w_e_BQ72sze|))
+                                              |s_VIOnLu9Xh|
+                                              |rib_VI8kJX9Xh|))
+                                          (|wrap_VIahMX7Oh|
+                                            |id_VIS1zccXh|
+                                            |w_VIsrN19Xh|)
+                                          (|wrap_VIahMX7Oh|
+                                            |val_VIc-wFcXh|
+                                            |w_VIsrN19Xh|))
                                          (values
                                            'core
-                                           (lambda (|e_e_J8Ltxze|
-                                                    |r_e_35JWxze|
-                                                    |w_e_p1Hnyze|
-                                                    |s_e_LZEQyze|)
-                                             ((lambda (|val_e_5WChzze|
-                                                       |n_e_rSAKzze|)
-                                                ((lambda (|b_e_NOybAze|)
-                                                   ((lambda (|t_e_7LwEAze|)
-                                                      (if (memv |t_e_7LwEAze|
+                                           (lambda (|e_VIALoteXh|
+                                                    |r_VIWHmWeXh|
+                                                    |w_VIgEknfXh|
+                                                    |s_VICAiQfXh|)
+                                             ((lambda (|val_VIYwghgXh|
+                                                       |n_VIiteKgXh|)
+                                                ((lambda (|b_VIEpcbhXh|)
+                                                   ((lambda (|t_VI-laEhXh|)
+                                                      (if (memv |t_VI-laEhXh|
                                                                 '(lexical))
-                                                        (if |s_e_LZEQyze|
+                                                        (if |s_VICAiQfXh|
                                                           (list 'compile-in-annotation
                                                                 (list 'set!
-                                                                      (binding-value_e_fkqiupe
-                                                                        |b_e_NOybAze|)
-                                                                      |val_e_5WChzze|)
-                                                                |s_e_LZEQyze|)
+                                                                      (|binding-value_VI6X3ibNh|
+                                                                        |b_VIEpcbhXh|)
+                                                                      |val_VIYwghgXh|)
+                                                                |s_VICAiQfXh|)
                                                           (list 'set!
-                                                                (binding-value_e_fkqiupe
-                                                                  |b_e_NOybAze|)
-                                                                |val_e_5WChzze|))
-                                                        (if (memv |t_e_7LwEAze|
+                                                                (|binding-value_VI6X3ibNh|
+                                                                  |b_VIEpcbhXh|)
+                                                                |val_VIYwghgXh|))
+                                                        (if (memv |t_VI-laEhXh|
                                                                   '(global))
-                                                          (if |s_e_LZEQyze|
+                                                          (if |s_VICAiQfXh|
                                                             (list 'compile-in-annotation
                                                                   (list 'set!
-                                                                        (binding-value_e_fkqiupe
-                                                                          |b_e_NOybAze|)
-                                                                        |val_e_5WChzze|)
-                                                                  |s_e_LZEQyze|)
+                                                                        (|binding-value_VI6X3ibNh|
+                                                                          |b_VIEpcbhXh|)
+                                                                        |val_VIYwghgXh|)
+                                                                  |s_VICAiQfXh|)
                                                             (list 'set!
-                                                                  (binding-value_e_fkqiupe
-                                                                    |b_e_NOybAze|)
-                                                                  |val_e_5WChzze|))
-                                                          (if (memv |t_e_7LwEAze|
+                                                                  (|binding-value_VI6X3ibNh|
+                                                                    |b_VIEpcbhXh|)
+                                                                  |val_VIYwghgXh|))
+                                                          (if (memv |t_VI-laEhXh|
                                                                     '(displaced-lexical))
                                                             (syntax-error
-                                                              (|wrap_e_jG6Yqqe|
-                                                                |id_e__qVcvze|
-                                                                |w_e_p1Hnyze|)
+                                                              (|wrap_VIahMX7Oh|
+                                                                |id_VIS1zccXh|
+                                                                |w_VIgEknfXh|)
                                                               '"identifier out of context")
                                                             (syntax-error
-                                                              (|source-wrap_e_FC4prqe|
-                                                                |e_e_J8Ltxze|
-                                                                |w_e_p1Hnyze|
-                                                                |s_e_LZEQyze|))))))
-                                                    (|binding-type_e_VnsRtpe|
-                                                      |b_e_NOybAze|)))
-                                                 (|lookup_e_7bNlDpe|
-                                                   |n_e_rSAKzze|
-                                                   |r_e_35JWxze|)))
-                                              (|chi_e_LgMYJqe|
-                                                |val_e_lnTFvze|
-                                                |r_e_35JWxze|
-                                                |w_e_p1Hnyze|)
-                                              (|id-var-name_e_Rpx3lqe|
-                                                |id_e__qVcvze|
-                                                |w_e_p1Hnyze|)))
-                                           |e_e_VXb8rze|
-                                           |w_e_BQ72sze|
-                                           |s_e_XM5vsze|)))
-                                     (|binding-type_e_VnsRtpe| |b_e_1gPzwze|)))
-                                  (|lookup_e_7bNlDpe|
-                                    |n_e_HjR6wze|
-                                    |r_e_fU9Brze|)))
-                               (|id-var-name_e_Rpx3lqe|
-                                 |id_e__qVcvze|
-                                 |w_e_BQ72sze|)))
-                            |tmp_e_ZB_Rtze|)
-                     ((lambda (|__e_jyZiuze|)
+                                                              (|source-wrap_VIwdKo8Oh|
+                                                                |e_VIALoteXh|
+                                                                |w_VIgEknfXh|
+                                                                |s_VICAiQfXh|))))))
+                                                    (|binding-type_VIM-5RaNh|
+                                                      |b_VIEpcbhXh|)))
+                                                 (|lookup_VI-NqlkNh|
+                                                   |n_VIiteKgXh|
+                                                   |r_VIWHmWeXh|)))
+                                              (|chi_VICTpYqOh|
+                                                |val_VIc-wFcXh|
+                                                |r_VIWHmWeXh|
+                                                |w_VIgEknfXh|)
+                                              (|id-var-name_VII0b32Oh|
+                                                |id_VIS1zccXh|
+                                                |w_VIgEknfXh|)))
+                                           |e_VIMyR78Xh|
+                                           |w_VIsrN19Xh|
+                                           |s_VIOnLu9Xh|)))
+                                     (|binding-type_VIM-5RaNh| |b_VIUSszdXh|)))
+                                  (|lookup_VI-NqlkNh|
+                                    |n_VIyWu6dXh|
+                                    |r_VI6vPA8Xh|)))
+                               (|id-var-name_VII0b32Oh|
+                                 |id_VIS1zccXh|
+                                 |w_VIsrN19Xh|)))
+                            |tmp_VIQcFRaXh|)
+                     ((lambda (|__VIa9DibXh|)
                         (syntax-error
-                          (|source-wrap_e_FC4prqe|
-                            |e_e_VXb8rze|
-                            |w_e_BQ72sze|
-                            |s_e_XM5vsze|)))
-                      |tmp_e_DF1ptze|)))
+                          (|source-wrap_VIwdKo8Oh|
+                            |e_VIMyR78Xh|
+                            |w_VIsrN19Xh|
+                            |s_VIOnLu9Xh|)))
+                      |tmp_VIugHoaXh|)))
                  ($syntax-dispatch
-                   (compile-in-annotation |tmp_e_DF1ptze| value)
+                   (compile-in-annotation |tmp_VIugHoaXh| value)
                    '(any any any))))
-              |e_e_VXb8rze|)))
-         (|chi-application_e_r9ISKqe|
-           (lambda (|x_e_5LEOkze|
-                    |e_e_rHCflze|
-                    |r_e_NDAIlze|
-                    |w_e_7Ay9mze|
-                    |s_e_twwCmze|)
-             ((lambda (|tmp_e_Psu3nze|)
-                ((lambda (tmp_e_9pswnze)
-                   (if tmp_e_9pswnze
-                     (apply (lambda (|e0_e_Rhoqoze| |e1_e_bemToze|)
-                              (if |s_e_twwCmze|
+              |e_VIMyR78Xh|)))
+         (|chi-application_VIiMlSrOh|
+           (lambda (|x_VIYliO1Xh|
+                    |e_VIiigf2Xh|
+                    |r_VIEeeI2Xh|
+                    |w_VI-ac93Xh|
+                    |s_VIk7aC3Xh|)
+             ((lambda (|tmp_VIG3834Xh|)
+                ((lambda (|tmp_VI006w4Xh|)
+                   (if |tmp_VI006w4Xh|
+                     (apply (lambda (|e0_VIIU1q5Xh| |e1_VI2R_S5Xh|)
+                              (if |s_VIk7aC3Xh|
                                 (list 'compile-in-annotation
-                                      (cons |x_e_5LEOkze|
-                                            (map (lambda (e_e_d3geqze)
-                                                   (|chi_e_LgMYJqe|
-                                                     e_e_d3geqze
-                                                     |r_e_NDAIlze|
-                                                     |w_e_7Ay9mze|))
-                                                 |e1_e_bemToze|))
-                                      |s_e_twwCmze|)
-                                (cons |x_e_5LEOkze|
-                                      (map (lambda (e_e_xakkpze)
-                                             (|chi_e_LgMYJqe|
-                                               e_e_xakkpze
-                                               |r_e_NDAIlze|
-                                               |w_e_7Ay9mze|))
-                                           |e1_e_bemToze|))))
-                            tmp_e_9pswnze)
-                     ((lambda (|__e_vlqZnze|)
+                                      (cons |x_VIYliO1Xh|
+                                            (map (lambda (|e_VI4GVd7Xh|)
+                                                   (|chi_VICTpYqOh|
+                                                     |e_VI4GVd7Xh|
+                                                     |r_VIEeeI2Xh|
+                                                     |w_VI-ac93Xh|))
+                                                 |e1_VI2R_S5Xh|))
+                                      |s_VIk7aC3Xh|)
+                                (cons |x_VIYliO1Xh|
+                                      (map (lambda (|e_VIoNZj6Xh|)
+                                             (|chi_VICTpYqOh|
+                                               |e_VIoNZj6Xh|
+                                               |r_VIEeeI2Xh|
+                                               |w_VI-ac93Xh|))
+                                           |e1_VI2R_S5Xh|))))
+                            |tmp_VI006w4Xh|)
+                     ((lambda (|__VImY3Z4Xh|)
                         (syntax-error
-                          (|source-wrap_e_FC4prqe|
-                            |e_e_rHCflze|
-                            |w_e_7Ay9mze|
-                            |s_e_twwCmze|)))
-                      |tmp_e_Psu3nze|)))
+                          (|source-wrap_VIwdKo8Oh|
+                            |e_VIiigf2Xh|
+                            |w_VI-ac93Xh|
+                            |s_VIk7aC3Xh|)))
+                      |tmp_VIG3834Xh|)))
                  ($syntax-dispatch
-                   (compile-in-annotation |tmp_e_Psu3nze| value)
+                   (compile-in-annotation |tmp_VIG3834Xh| value)
                    '(any . each-any))))
-              |e_e_rHCflze|)))
-         (|chi-expr_e_5dKpKqe|
-           (lambda (|type_e_TXjibze|
-                    |value_e_dUhLbze|
-                    |e_e_zQfccze|
-                    |r_e_VMdFcze|
-                    |w_e_fJb6dze|
-                    |s_e_BF9zdze|)
-             ((lambda (|t_e_XB70eze|)
-                (if (memv |t_e_XB70eze| '(lexical))
-                  (if |s_e_BF9zdze|
+              |e_VIiigf2Xh|)))
+         (|chi-expr_VIYPnprOh|
+           (lambda (|type_VIKyZhUWh|
+                    |value_VI4vXKUWh|
+                    |e_VIqrVbVWh|
+                    |r_VIMnTEVWh|
+                    |w_VI6kR5WWh|
+                    |s_VIsgPyWWh|)
+             ((lambda (|t_VIOcN_WWh|)
+                (if (memv |t_VIOcN_WWh| '(lexical))
+                  (if |s_VIsgPyWWh|
                     (list 'compile-in-annotation
-                          |value_e_dUhLbze|
-                          |s_e_BF9zdze|)
-                    |value_e_dUhLbze|)
-                  (if (memv |t_e_XB70eze| '(core))
-                    (|value_e_dUhLbze|
-                      |e_e_zQfccze|
-                      |r_e_VMdFcze|
-                      |w_e_fJb6dze|
-                      |s_e_BF9zdze|)
-                    (if (memv |t_e_XB70eze| '(lexical-call))
-                      (|chi-application_e_r9ISKqe|
-                        (if (|source-annotation_e_PUKMppe|
-                              (car |e_e_zQfccze|))
+                          |value_VI4vXKUWh|
+                          |s_VIsgPyWWh|)
+                    |value_VI4vXKUWh|)
+                  (if (memv |t_VIOcN_WWh| '(core))
+                    (|value_VI4vXKUWh|
+                      |e_VIqrVbVWh|
+                      |r_VIMnTEVWh|
+                      |w_VI6kR5WWh|
+                      |s_VIsgPyWWh|)
+                    (if (memv |t_VIOcN_WWh| '(lexical-call))
+                      (|chi-application_VIiMlSrOh|
+                        (if (|source-annotation_VIGvoM6Nh|
+                              (car |e_VIqrVbVWh|))
                           (list 'compile-in-annotation
-                                |value_e_dUhLbze|
-                                (|source-annotation_e_PUKMppe|
-                                  (car |e_e_zQfccze|)))
-                          |value_e_dUhLbze|)
-                        |e_e_zQfccze|
-                        |r_e_VMdFcze|
-                        |w_e_fJb6dze|
-                        |s_e_BF9zdze|)
-                      (if (memv |t_e_XB70eze| '(constant))
-                        (if |s_e_BF9zdze|
+                                |value_VI4vXKUWh|
+                                (|source-annotation_VIGvoM6Nh|
+                                  (car |e_VIqrVbVWh|)))
+                          |value_VI4vXKUWh|)
+                        |e_VIqrVbVWh|
+                        |r_VIMnTEVWh|
+                        |w_VI6kR5WWh|
+                        |s_VIsgPyWWh|)
+                      (if (memv |t_VIOcN_WWh| '(constant))
+                        (if |s_VIsgPyWWh|
                           (list 'compile-in-annotation
                                 (list 'quote
-                                      (|strip_e_Xeb6Sqe|
-                                        (|source-wrap_e_FC4prqe|
-                                          |e_e_zQfccze|
-                                          |w_e_fJb6dze|
-                                          |s_e_BF9zdze|)
+                                      (|strip_VIORQ5zOh|
+                                        (|source-wrap_VIwdKo8Oh|
+                                          |e_VIqrVbVWh|
+                                          |w_VI6kR5WWh|
+                                          |s_VIsgPyWWh|)
                                         '(())))
-                                |s_e_BF9zdze|)
+                                |s_VIsgPyWWh|)
                           (list 'quote
-                                (|strip_e_Xeb6Sqe|
-                                  (|source-wrap_e_FC4prqe|
-                                    |e_e_zQfccze|
-                                    |w_e_fJb6dze|
-                                    |s_e_BF9zdze|)
+                                (|strip_VIORQ5zOh|
+                                  (|source-wrap_VIwdKo8Oh|
+                                    |e_VIqrVbVWh|
+                                    |w_VI6kR5WWh|
+                                    |s_VIsgPyWWh|)
                                   '(()))))
-                        (if (memv |t_e_XB70eze| '(global))
-                          (if |s_e_BF9zdze|
+                        (if (memv |t_VIOcN_WWh| '(global))
+                          (if |s_VIsgPyWWh|
                             (list 'compile-in-annotation
-                                  |value_e_dUhLbze|
-                                  |s_e_BF9zdze|)
-                            |value_e_dUhLbze|)
-                          (if (memv |t_e_XB70eze| '(call))
-                            (|chi-application_e_r9ISKqe|
-                              (|chi_e_LgMYJqe|
-                                (car |e_e_zQfccze|)
-                                |r_e_VMdFcze|
-                                |w_e_fJb6dze|)
-                              |e_e_zQfccze|
-                              |r_e_VMdFcze|
-                              |w_e_fJb6dze|
-                              |s_e_BF9zdze|)
-                            (if (memv |t_e_XB70eze| '(begin-form))
-                              ((lambda (|tmp_e_15R4ize|)
-                                 ((lambda (|tmp_e_n1Pxize|)
-                                    (if |tmp_e_n1Pxize|
-                                      (apply (lambda (|__e_JZM-ize|
-                                                      |e1_e_3WKrjze|
-                                                      |e2_e_pSIUjze|)
-                                               (|chi-sequence_e__y2Srqe|
-                                                 (cons |e1_e_3WKrjze|
-                                                       |e2_e_pSIUjze|)
-                                                 |r_e_VMdFcze|
-                                                 |w_e_fJb6dze|
-                                                 |s_e_BF9zdze|))
-                                             |tmp_e_n1Pxize|)
-                                      (syntax-error |tmp_e_15R4ize|)))
+                                  |value_VI4vXKUWh|
+                                  |s_VIsgPyWWh|)
+                            |value_VI4vXKUWh|)
+                          (if (memv |t_VIOcN_WWh| '(call))
+                            (|chi-application_VIiMlSrOh|
+                              (|chi_VICTpYqOh|
+                                (car |e_VIqrVbVWh|)
+                                |r_VIMnTEVWh|
+                                |w_VI6kR5WWh|)
+                              |e_VIqrVbVWh|
+                              |r_VIMnTEVWh|
+                              |w_VI6kR5WWh|
+                              |s_VIsgPyWWh|)
+                            (if (memv |t_VIOcN_WWh| '(begin-form))
+                              ((lambda (|tmp_VIUHu4_Wh|)
+                                 ((lambda (|tmp_VIeEsx_Wh|)
+                                    (if |tmp_VIeEsx_Wh|
+                                      (apply (lambda (|__VIAAq-_Wh|
+                                                      |e1_VIWwor0Xh|
+                                                      |e2_VIgtmU0Xh|)
+                                               (|chi-sequence_VIS9IR8Oh|
+                                                 (cons |e1_VIWwor0Xh|
+                                                       |e2_VIgtmU0Xh|)
+                                                 |r_VIMnTEVWh|
+                                                 |w_VI6kR5WWh|
+                                                 |s_VIsgPyWWh|))
+                                             |tmp_VIeEsx_Wh|)
+                                      (syntax-error |tmp_VIUHu4_Wh|)))
                                   ($syntax-dispatch
                                     (compile-in-annotation
-                                      |tmp_e_15R4ize|
+                                      |tmp_VIUHu4_Wh|
                                       value)
                                     '(any any . each-any))))
-                               |e_e_zQfccze|)
-                              (if (memv |t_e_XB70eze| '(local-syntax-form))
-                                (|chi-local-syntax_e_dxlRPqe|
-                                  |value_e_dUhLbze|
-                                  |e_e_zQfccze|
-                                  |r_e_VMdFcze|
-                                  |w_e_fJb6dze|
-                                  |s_e_BF9zdze|
-                                  |chi-sequence_e__y2Srqe|)
-                                (if (memv |t_e_XB70eze| '(eval-when-form))
-                                  ((lambda (tmp_e_hy5teze)
-                                     ((lambda (|tmp_e_Du3Weze|)
-                                        (if |tmp_e_Du3Weze|
-                                          (apply (lambda (|__e_Zq1nfze|
-                                                          |x_e_jn_Pfze|
-                                                          |e1_e_FjZggze|
-                                                          |e2_e__fXJgze|)
+                               |e_VIqrVbVWh|)
+                              (if (memv |t_VIOcN_WWh| '(local-syntax-form))
+                                (|chi-local-syntax_VI48_QwOh|
+                                  |value_VI4vXKUWh|
+                                  |e_VIqrVbVWh|
+                                  |r_VIMnTEVWh|
+                                  |w_VI6kR5WWh|
+                                  |s_VIsgPyWWh|
+                                  |chi-sequence_VIS9IR8Oh|)
+                                (if (memv |t_VIOcN_WWh| '(eval-when-form))
+                                  ((lambda (|tmp_VI89LsXWh|)
+                                     ((lambda (|tmp_VIu5JVXWh|)
+                                        (if |tmp_VIu5JVXWh|
+                                          (apply (lambda (|__VIQ1HmYWh|
+                                                          |x_VIa-EPYWh|
+                                                          |e1_VIwWCgZWh|
+                                                          |e2_VISSAJZWh|)
                                                    (if (memq 'eval
-                                                             (|chi-when-list_e_Hr-Lsqe|
-                                                               |x_e_jn_Pfze|
-                                                               |w_e_fJb6dze|))
-                                                     (|chi-sequence_e__y2Srqe|
-                                                       (cons |e1_e_FjZggze|
-                                                             |e2_e__fXJgze|)
-                                                       |r_e_VMdFcze|
-                                                       |w_e_fJb6dze|
-                                                       |s_e_BF9zdze|)
-                                                     (|chi-void_e_ztjiQqe|)))
-                                                 |tmp_e_Du3Weze|)
-                                          (syntax-error tmp_e_hy5teze)))
+                                                             (|chi-when-list_VIy2EL9Oh|
+                                                               |x_VIa-EPYWh|
+                                                               |w_VI6kR5WWh|))
+                                                     (|chi-sequence_VIS9IR8Oh|
+                                                       (cons |e1_VIwWCgZWh|
+                                                             |e2_VISSAJZWh|)
+                                                       |r_VIMnTEVWh|
+                                                       |w_VI6kR5WWh|
+                                                       |s_VIsgPyWWh|)
+                                                     (|chi-void_VIq4ZhxOh|)))
+                                                 |tmp_VIu5JVXWh|)
+                                          (syntax-error |tmp_VI89LsXWh|)))
                                       ($syntax-dispatch
                                         (compile-in-annotation
-                                          tmp_e_hy5teze
+                                          |tmp_VI89LsXWh|
                                           value)
                                         '(any each-any any . each-any))))
-                                   |e_e_zQfccze|)
-                                  (if (memv |t_e_XB70eze|
+                                   |e_VIqrVbVWh|)
+                                  (if (memv |t_VIOcN_WWh|
                                             '(define-form
                                                define-syntax-form
                                                module-form
                                                import-form))
                                     (syntax-error
-                                      (|source-wrap_e_FC4prqe|
-                                        |e_e_zQfccze|
-                                        |w_e_fJb6dze|
-                                        |s_e_BF9zdze|)
+                                      (|source-wrap_VIwdKo8Oh|
+                                        |e_VIqrVbVWh|
+                                        |w_VI6kR5WWh|
+                                        |s_VIsgPyWWh|)
                                       '"invalid context for definition")
-                                    (if (memv |t_e_XB70eze| '(syntax))
+                                    (if (memv |t_VIOcN_WWh| '(syntax))
                                       (syntax-error
-                                        (|source-wrap_e_FC4prqe|
-                                          |e_e_zQfccze|
-                                          |w_e_fJb6dze|
-                                          |s_e_BF9zdze|)
+                                        (|source-wrap_VIwdKo8Oh|
+                                          |e_VIqrVbVWh|
+                                          |w_VI6kR5WWh|
+                                          |s_VIsgPyWWh|)
                                         '"reference to pattern variable outside syntax form")
-                                      (if (memv |t_e_XB70eze|
+                                      (if (memv |t_VIOcN_WWh|
                                                 '(displaced-lexical))
-                                        (|displaced-lexical-error_e_5mT-Bpe|
-                                          (|source-wrap_e_FC4prqe|
-                                            |e_e_zQfccze|
-                                            |w_e_fJb6dze|
-                                            |s_e_BF9zdze|))
+                                        (|displaced-lexical-error_VIYYw-iNh|
+                                          (|source-wrap_VIwdKo8Oh|
+                                            |e_VIqrVbVWh|
+                                            |w_VI6kR5WWh|
+                                            |s_VIsgPyWWh|))
                                         (syntax-error
-                                          (|source-wrap_e_FC4prqe|
-                                            |e_e_zQfccze|
-                                            |w_e_fJb6dze|
-                                            |s_e_BF9zdze|)))))))))))))))
-              |type_e_TXjibze|)))
-         (|chi_e_LgMYJqe|
-           (lambda (|e_e_7pAG7ze| r_e_tly78ze |w_e_PhwA8ze|)
+                                          (|source-wrap_VIwdKo8Oh|
+                                            |e_VIqrVbVWh|
+                                            |w_VI6kR5WWh|
+                                            |s_VIsgPyWWh|)))))))))))))))
+              |type_VIKyZhUWh|)))
+         (|chi_VICTpYqOh|
+           (lambda (|e_VI-_dGQWh| |r_VIkYb7RWh| |w_VIGU9ARWh|)
              (call-with-values
                (lambda ()
-                 (|syntax-type_e_1oYctqe|
-                   |e_e_7pAG7ze|
-                   r_e_tly78ze
-                   |w_e_PhwA8ze|
+                 (|syntax-type_VIU-BcaOh|
+                   |e_VI-_dGQWh|
+                   |r_VIkYb7RWh|
+                   |w_VIGU9ARWh|
                    '#f
                    '#f))
-               (lambda (type_e_9eu19ze
-                        value_e_vasu9ze
-                        |e_e_R6qX9ze|
-                        w_e_b3ooaze
-                        |s_e_x_lRaze|)
-                 (|chi-expr_e_5dKpKqe|
-                   type_e_9eu19ze
-                   value_e_vasu9ze
-                   |e_e_R6qX9ze|
-                   r_e_tly78ze
-                   w_e_b3ooaze
-                   |s_e_x_lRaze|)))))
-         (|ct-eval/residualize_e_pkOvJqe|
-           (lambda (|ctem_e_3LMY4ze| |thunk_e_pHKp5ze|)
-             (if (memq 'e |ctem_e_3LMY4ze|)
+               (lambda (|type_VI0R71SWh|
+                        |value_VImN5uSWh|
+                        |e_VIIJ3XSWh|
+                        |w_VI2G1oTWh|
+                        |s_VIoC_QTWh|)
+                 (|chi-expr_VIYPnprOh|
+                   |type_VI0R71SWh|
+                   |value_VImN5uSWh|
+                   |e_VIIJ3XSWh|
+                   |r_VIkYb7RWh|
+                   |w_VI2G1oTWh|
+                   |s_VIoC_QTWh|)))))
+         (|ct-eval/residualize_VIgXrvqOh|
+           (lambda (|ctem_VIWlqYNWh| |thunk_VIgiopOWh|)
+             (if (memq 'e |ctem_VIWlqYNWh|)
                (begin
-                 (|top-level-eval-hook_e_j7nBooe|
-                   (|thunk_e_pHKp5ze|))
-                 (|chi-void_e_ztjiQqe|))
-               ((lambda (|thunk_e_LDIS5ze|)
-                  (if (memq 'r |ctem_e_3LMY4ze|)
-                    (if ((lambda (|t_e_rwEM6ze|)
-                           (if |t_e_rwEM6ze|
-                             |t_e_rwEM6ze|
-                             (memq 'v |ctem_e_3LMY4ze|)))
-                         (memq 'l |ctem_e_3LMY4ze|))
-                      (|thunk_e_LDIS5ze|)
-                      (|thunk_e_LDIS5ze|))
-                    (if ((lambda (|t_e_5AGj6ze|)
-                           (if |t_e_5AGj6ze|
-                             |t_e_5AGj6ze|
-                             (memq 'v |ctem_e_3LMY4ze|)))
-                         (memq 'l |ctem_e_3LMY4ze|))
-                      (|thunk_e_LDIS5ze|)
-                      (|chi-void_e_ztjiQqe|))))
-                (if (memq 'c |ctem_e_3LMY4ze|)
-                  ((lambda (|x_e_NsCd7ze|)
+                 (|top-level-eval-hook_VIaK0B5Mh|
+                   (|thunk_VIgiopOWh|))
+                 (|chi-void_VIq4ZhxOh|))
+               ((lambda (|thunk_VICemSOWh|)
+                  (if (memq 'r |ctem_VIWlqYNWh|)
+                    (if ((lambda (|t_VIi7iMPWh|)
+                           (if |t_VIi7iMPWh|
+                             |t_VIi7iMPWh|
+                             (memq 'v |ctem_VIWlqYNWh|)))
+                         (memq 'l |ctem_VIWlqYNWh|))
+                      (|thunk_VICemSOWh|)
+                      (|thunk_VICemSOWh|))
+                    (if ((lambda (|t_VIYakjPWh|)
+                           (if |t_VIYakjPWh|
+                             |t_VIYakjPWh|
+                             (memq 'v |ctem_VIWlqYNWh|)))
+                         (memq 'l |ctem_VIWlqYNWh|))
+                      (|thunk_VICemSOWh|)
+                      (|chi-void_VIq4ZhxOh|))))
+                (if (memq 'c |ctem_VIWlqYNWh|)
+                  ((lambda (|x_VIE3gdQWh|)
                      (begin
-                       (|top-level-eval-hook_e_j7nBooe| |x_e_NsCd7ze|)
-                       (lambda () |x_e_NsCd7ze|)))
-                   (|thunk_e_pHKp5ze|))
-                  |thunk_e_pHKp5ze|)))))
-         (|rt-eval/residualize_e_3oQ2Jqe|
-           (lambda (|rtem_e__4Ze2ze| |thunk_e_l1XH2ze|)
-             (if (memq 'e |rtem_e__4Ze2ze|)
-               (|thunk_e_l1XH2ze|)
-               ((lambda (|thunk_e_HZU83ze|)
-                  (if (memq 'v |rtem_e__4Ze2ze|)
-                    (if ((lambda (|t_e_nSQ24ze|)
-                           (if |t_e_nSQ24ze|
-                             |t_e_nSQ24ze|
-                             (memq 'r |rtem_e__4Ze2ze|)))
-                         (memq 'l |rtem_e__4Ze2ze|))
-                      (|thunk_e_HZU83ze|)
-                      (|thunk_e_HZU83ze|))
-                    (if ((lambda (|t_e_1WSB3ze|)
-                           (if |t_e_1WSB3ze|
-                             |t_e_1WSB3ze|
-                             (memq 'r |rtem_e__4Ze2ze|)))
-                         (memq 'l |rtem_e__4Ze2ze|))
-                      (|thunk_e_HZU83ze|)
-                      (|chi-void_e_ztjiQqe|))))
-                (if (memq 'c |rtem_e__4Ze2ze|)
-                  ((lambda (|x_e_JOOv4ze|)
+                       (|top-level-eval-hook_VIaK0B5Mh| |x_VIE3gdQWh|)
+                       (lambda () |x_VIE3gdQWh|)))
+                   (|thunk_VIgiopOWh|))
+                  |thunk_VIgiopOWh|)))))
+         (|rt-eval/residualize_VIW-t2qOh|
+           (lambda (|rtem_VISHCeLWh| |thunk_VIcEAHLWh|)
+             (if (memq 'e |rtem_VISHCeLWh|)
+               (|thunk_VIcEAHLWh|)
+               ((lambda (|thunk_VIyAy8MWh|)
+                  (if (memq 'v |rtem_VISHCeLWh|)
+                    (if ((lambda (|t_VIetu2NWh|)
+                           (if |t_VIetu2NWh|
+                             |t_VIetu2NWh|
+                             (memq 'r |rtem_VISHCeLWh|)))
+                         (memq 'l |rtem_VISHCeLWh|))
+                      (|thunk_VIyAy8MWh|)
+                      (|thunk_VIyAy8MWh|))
+                    (if ((lambda (|t_VIUwwBMWh|)
+                           (if |t_VIUwwBMWh|
+                             |t_VIUwwBMWh|
+                             (memq 'r |rtem_VISHCeLWh|)))
+                         (memq 'l |rtem_VISHCeLWh|))
+                      (|thunk_VIyAy8MWh|)
+                      (|chi-void_VIq4ZhxOh|))))
+                (if (memq 'c |rtem_VISHCeLWh|)
+                  ((lambda (|x_VIApsvNWh|)
                      (begin
-                       (|top-level-eval-hook_e_j7nBooe| |x_e_JOOv4ze|)
-                       (lambda () |x_e_JOOv4ze|)))
-                   (|thunk_e_l1XH2ze|))
-                  |thunk_e_l1XH2ze|)))))
-         (|initial-mode-set_e_JrSBIqe|
-           (lambda (when-list_e_hn7-_ye
-                    |compiling-a-file_e_Dj5r0ze|)
+                       (|top-level-eval-hook_VIaK0B5Mh| |x_VIApsvNWh|)
+                       (lambda () |x_VIApsvNWh|)))
+                   (|thunk_VIcEAHLWh|))
+                  |thunk_VIcEAHLWh|)))))
+         (|initial-mode-set_VIA2wBpOh|
+           (lambda (|when-list_VI8-MZIWh|
+                    |compiling-a-file_VIuWKqJWh|)
              (apply append
-                    (map (lambda (|s_e_Zf3U0ze|)
-                           (if |compiling-a-file_e_Dj5r0ze|
-                             ((lambda (|t_e_F8_N1ze|)
-                                (if (memv |t_e_F8_N1ze| '(compile))
+                    (map (lambda (|s_VIQSITJWh|)
+                           (if |compiling-a-file_VIuWKqJWh|
+                             ((lambda (|t_VIwLENKWh|)
+                                (if (memv |t_VIwLENKWh| '(compile))
                                   '(c)
-                                  (if (memv |t_e_F8_N1ze| '(load))
+                                  (if (memv |t_VIwLENKWh| '(load))
                                     '(l)
-                                    (if (memv |t_e_F8_N1ze| '(visit))
+                                    (if (memv |t_VIwLENKWh| '(visit))
                                       '(v)
-                                      (if (memv |t_e_F8_N1ze| '(revisit))
+                                      (if (memv |t_VIwLENKWh| '(revisit))
                                         '(r)
                                         '())))))
-                              |s_e_Zf3U0ze|)
-                             ((lambda (t_e_jc1l1ze)
-                                (if (memv t_e_jc1l1ze '(eval)) '(e) '()))
-                              |s_e_Zf3U0ze|)))
-                         when-list_e_hn7-_ye))))
-         (|update-mode-set_e_nvU8Iqe|
-           (lambda (|when-list_e_zFhJZye| |mode-set_e_VBfa-ye|)
+                              |s_VIQSITJWh|)
+                             ((lambda (|t_VIaPGkKWh|)
+                                (if (memv |t_VIaPGkKWh| '(eval)) '(e) '()))
+                              |s_VIQSITJWh|)))
+                         |when-list_VI8-MZIWh|))))
+         (|update-mode-set_VIe6y8pOh|
+           (lambda (|when-list_VIqgXIGWh| |mode-set_VIMcV9HWh|)
              (remq '-
                    (apply append
-                          (map (lambda (|m_e_fydD-ye|)
-                                 ((lambda (|row_e_Bub4_ye|)
-                                    (map (lambda (|s_e_Xq9x_ye|)
-                                           (cdr (assq |s_e_Xq9x_ye|
-                                                      |row_e_Bub4_ye|)))
-                                         |when-list_e_zFhJZye|))
-                                  (cdr (assq |m_e_fydD-ye|
+                          (map (lambda (|m_VI69TCHWh|)
+                                 ((lambda (|row_VIs5R3IWh|)
+                                    (map (lambda (|s_VIO1PwIWh|)
+                                           (cdr (assq |s_VIO1PwIWh|
+                                                      |row_VIs5R3IWh|)))
+                                         |when-list_VIqgXIGWh|))
+                                  (cdr (assq |m_VI69TCHWh|
                                              '((l (load . l)
                                                   (compile . c)
                                                   (visit . v)
@@ -3954,1907 +3954,1911 @@
                                                   (visit . -)
                                                   (revisit . -)
                                                   (eval . e)))))))
-                               |mode-set_e_VBfa-ye|)))))
-         (|do-top-import_e_1zWHHqe|
-           (lambda (|mid_e_xQnmYye| |token_e_TMlPYye|)
+                               |mode-set_VIMcV9HWh|)))))
+         (|do-top-import_VIU9AHoOh|
+           (lambda (|mid_VIor1mFWh| |token_VIKn_OFWh|)
              (list '$sc-put-cte
-                   (list 'quote |mid_e_xQnmYye|)
+                   (list 'quote |mid_VIor1mFWh|)
                    (list 'quote
-                         (make-binding_e_zruotpe
+                         (|make-binding_VIq28oaNh|
                            'do-import
-                           |token_e_TMlPYye|)))))
-         (|vfor-each_e_HCYeHqe|
-           (lambda (|fn_e_P6y5Wye| |v_e_93wyWye|)
-             ((lambda (|len_e_v_t_Wye|)
-                ((letrec ((|doloop_e_RXrsXye|
-                            (lambda (|i_e_bUpVXye|)
-                              (if (not (= |i_e_bUpVXye| |len_e_v_t_Wye|))
+                           |token_VIKn_OFWh|)))))
+         (|vfor-each_VIydCeoOh|
+           (lambda (|fn_VIGJb5DWh| |v_VI0G9yDWh|)
+             ((lambda (|len_VImC7_DWh|)
+                ((letrec ((|doloop_VIIy5sEWh|
+                            (lambda (|i_VI2v3VEWh|)
+                              (if (not (= |i_VI2v3VEWh| |len_VImC7_DWh|))
                                 (begin
-                                  (|fn_e_P6y5Wye|
-                                    (vector-ref |v_e_93wyWye| |i_e_bUpVXye|))
-                                  (|doloop_e_RXrsXye| (+ |i_e_bUpVXye| '1)))
+                                  (|fn_VIGJb5DWh|
+                                    (vector-ref |v_VI0G9yDWh| |i_VI2v3VEWh|))
+                                  (|doloop_VIIy5sEWh| (+ |i_VI2v3VEWh| '1)))
                                 (void)))))
-                   |doloop_e_RXrsXye|)
+                   |doloop_VIIy5sEWh|)
                  '0))
-              (vector-length |v_e_93wyWye|))))
-         (|vmap_e_lG-NGqe|
-           (lambda (|fn_e_5pIQTye| |v_e_rlGhUye|)
-             ((letrec ((|doloop_e_NhEKUye|
-                         (lambda (|i_e_7eCbVye| |ls_e_taAEVye|)
-                           (if (< |i_e_7eCbVye| '0)
-                             |ls_e_taAEVye|
-                             (|doloop_e_NhEKUye|
-                               (- |i_e_7eCbVye| '1)
-                               (cons (|fn_e_5pIQTye|
+              (vector-length |v_VI0G9yDWh|))))
+         (|vmap_VIchENnOh|
+           (lambda (|fn_VIY_lQAWh| |v_VIiYjhBWh|)
+             ((letrec ((|doloop_VIEUhKBWh|
+                         (lambda (|i_VI-QfbCWh| |ls_VIkNdECWh|)
+                           (if (< |i_VI-QfbCWh| '0)
+                             |ls_VIkNdECWh|
+                             (|doloop_VIEUhKBWh|
+                               (- |i_VI-QfbCWh| '1)
+                               (cons (|fn_VIY_lQAWh|
                                        (vector-ref
-                                         |v_e_rlGhUye|
-                                         |i_e_7eCbVye|))
-                                     |ls_e_taAEVye|))))))
-                |doloop_e_NhEKUye|)
-              (- (vector-length |v_e_rlGhUye|) '1)
+                                         |v_VIiYjhBWh|
+                                         |i_VI-QfbCWh|))
+                                     |ls_VIkNdECWh|))))))
+                |doloop_VIEUhKBWh|)
+              (- (vector-length |v_VIiYjhBWh|) '1)
               '())))
-         (|chi-external_e__J0lGqe|
-           (lambda (ribcage_e_vuzyfye
-                    |source-exp_e_Rqx_fye|
-                    body_e_bnvsgye
-                    |r_e_xjtVgye|
-                    |exports_e_Tfrmhye|
-                    |fexports_e_dcpPhye|
-                    ctem_e_z8ngiye
-                    |k_e_V4lJiye|)
-             (letrec ((return_e_f1jajye
-                        (lambda (|bindings_e_Z45pOye|
-                                 |ids_e_j13SOye|
-                                 |inits_e_FZ0jPye|)
+         (|chi-external_VISkGknOh|
+           (lambda (|ribcage_VIm5dyYVh|
+                    |source-exp_VII1b_YVh|
+                    |body_VI2-8sZVh|
+                    |r_VIoW6VZVh|
+                    |exports_VIKS4m-Vh|
+                    |fexports_VI4P2P-Vh|
+                    |ctem_VIqL0g_Vh|
+                    |k_VIMH-I_Vh|)
+             (letrec ((|return_VI6EY90Wh|
+                        (lambda (|bindings_VIQHKovWh|
+                                 |ids_VIaEIRvWh|
+                                 |inits_VIwAGiwWh|)
                           (begin
-                            (|check-defined-ids_e_FN2UFqe|
-                              |source-exp_e_Rqx_fye|
-                              |ids_e_j13SOye|)
-                            (|check-module-exports_e_jR4rFqe|
-                              |source-exp_e_Rqx_fye|
-                              |fexports_e_dcpPhye|
-                              |ids_e_j13SOye|)
-                            (|k_e_V4lJiye|
-                              |bindings_e_Z45pOye|
-                              |inits_e_FZ0jPye|))))
-                      (|get-implicit-exports_e_BZgDjye|
-                        (lambda (|id_e__V-LPye|)
-                          ((letrec ((|f_e_lSYcQye|
-                                      (lambda (|exports_e_HOWFQye|)
-                                        (if (null? |exports_e_HOWFQye|)
+                            (|check-defined-ids_VIwoITmOh|
+                              |source-exp_VII1b_YVh|
+                              |ids_VIaEIRvWh|)
+                            (|check-module-exports_VIasKqmOh|
+                              |source-exp_VII1b_YVh|
+                              |fexports_VI4P2P-Vh|
+                              |ids_VIaEIRvWh|)
+                            (|k_VIMH-I_Vh|
+                              |bindings_VIQHKovWh|
+                              |inits_VIwAGiwWh|))))
+                      (|get-implicit-exports_VIsAWC0Wh|
+                        (lambda (|id_VISwELwWh|)
+                          ((letrec ((|f_VIctCcxWh|
+                                      (lambda (|exports_VIypAFxWh|)
+                                        (if (null? |exports_VIypAFxWh|)
                                           '()
-                                          (if (if (pair? (car |exports_e_HOWFQye|))
-                                                (|bound-id=?_e_Terqmqe|
-                                                  |id_e__V-LPye|
-                                                  (caar |exports_e_HOWFQye|))
+                                          (if (if (pair? (car |exports_VIypAFxWh|))
+                                                (|bound-id=?_VIKR4q3Oh|
+                                                  |id_VISwELwWh|
+                                                  (caar |exports_VIypAFxWh|))
                                                 '#f)
-                                            (|flatten-exports_e_3dSzuqe|
-                                              (cdar |exports_e_HOWFQye|))
-                                            (|f_e_lSYcQye|
-                                              (cdr |exports_e_HOWFQye|)))))))
-                             |f_e_lSYcQye|)
-                           |exports_e_Tfrmhye|)))
-                      (|update-imp-exports_e_XVe4kye|
-                        (lambda (|bindings_e_1LU6Rye| |exports_e_nHSzRye|)
-                          ((lambda (|exports_e_JDQ0Sye|)
-                             (map (lambda (|b_e_3AOtSye|)
-                                    ((lambda (|id_e_pwMWSye|)
-                                       (if (not (|bound-id-member?_e_ZJ8vqqe|
-                                                  |id_e_pwMWSye|
-                                                  |exports_e_JDQ0Sye|))
-                                         |b_e_3AOtSye|
-                                         (|make-module-binding_e_9IzEyqe|
-                                           (|module-binding-type_e_RAvyzqe|
-                                             |b_e_3AOtSye|)
-                                           |id_e_pwMWSye|
-                                           (|module-binding-label_e_xtrsAqe|
-                                             |b_e_3AOtSye|)
+                                            (|flatten-exports_VIWPvzbOh|
+                                              (cdar |exports_VIypAFxWh|))
+                                            (|f_VIctCcxWh|
+                                              (cdr |exports_VIypAFxWh|)))))))
+                             |f_VIctCcxWh|)
+                           |exports_VIKS4m-Vh|)))
+                      (|update-imp-exports_VIOwU31Wh|
+                        (lambda (|bindings_VIUly6yWh| |exports_VIeiwzyWh|)
+                          ((lambda (|exports_VIAeu0zWh|)
+                             (map (lambda (|b_VIWastzWh|)
+                                    ((lambda (|id_VIg7qWzWh|)
+                                       (if (not (|bound-id-member?_VIQkOu7Oh|
+                                                  |id_VIg7qWzWh|
+                                                  |exports_VIAeu0zWh|))
+                                         |b_VIWastzWh|
+                                         (|make-module-binding_VI0jdEfOh|
+                                           (|module-binding-type_VIIb9ygOh|
+                                             |b_VIWastzWh|)
+                                           |id_VIg7qWzWh|
+                                           (|module-binding-label_VIo45shOh|
+                                             |b_VIWastzWh|)
                                            (append
-                                             (|get-implicit-exports_e_BZgDjye|
-                                               |id_e_pwMWSye|)
-                                             (|module-binding-imps_e_TppVAqe|
-                                               |b_e_3AOtSye|))
-                                           (|module-binding-val_e_dmnmBqe|
-                                             |b_e_3AOtSye|))))
-                                     (module-binding-id_e_bxt_zqe
-                                       |b_e_3AOtSye|)))
-                                  |bindings_e_1LU6Rye|))
-                           (map (lambda (|x_e_LsKnTye|)
-                                  (if (pair? |x_e_LsKnTye|)
-                                    (car |x_e_LsKnTye|)
-                                    |x_e_LsKnTye|))
-                                |exports_e_nHSzRye|)))))
-               ((letrec ((|parse_e_hScxkye|
-                           (lambda (|body_e_DOa-kye|
-                                    |ids_e_ZK8rlye|
-                                    |bindings_e_jH6Ulye|
-                                    |inits_e_FD4lmye|)
-                             (if (null? |body_e_DOa-kye|)
-                               (return_e_f1jajye
-                                 |bindings_e_jH6Ulye|
-                                 |ids_e_ZK8rlye|
-                                 |inits_e_FD4lmye|)
-                               ((lambda (|e_e__z2Omye| er_e_lw0fnye)
+                                             (|get-implicit-exports_VIsAWC0Wh|
+                                               |id_VIg7qWzWh|)
+                                             (|module-binding-imps_VIK03VhOh|
+                                               |b_VIWastzWh|))
+                                           (|module-binding-val_VI4Z0miOh|
+                                             |b_VIWastzWh|))))
+                                     (|module-binding-id_VI287_gOh|
+                                       |b_VIWastzWh|)))
+                                  |bindings_VIUly6yWh|))
+                           (map (lambda (|x_VIC3onAWh|)
+                                  (if (pair? |x_VIC3onAWh|)
+                                    (car |x_VIC3onAWh|)
+                                    |x_VIC3onAWh|))
+                                |exports_VIeiwzyWh|)))))
+               ((letrec ((|parse_VI8tSw1Wh|
+                           (lambda (|body_VIupQZ1Wh|
+                                    |ids_VIQlOq2Wh|
+                                    |bindings_VIaiMT2Wh|
+                                    |inits_VIweKk3Wh|)
+                             (if (null? |body_VIupQZ1Wh|)
+                               (|return_VI6EY90Wh|
+                                 |bindings_VIaiMT2Wh|
+                                 |ids_VIQlOq2Wh|
+                                 |inits_VIweKk3Wh|)
+                               ((lambda (|e_VISaIN3Wh| |er_VIc7Ge4Wh|)
                                   (call-with-values
                                     (lambda ()
-                                      (|syntax-type_e_1oYctqe|
-                                        |e_e__z2Omye|
-                                        er_e_lw0fnye
+                                      (|syntax-type_VIU-BcaOh|
+                                        |e_VISaIN3Wh|
+                                        |er_VIc7Ge4Wh|
                                         '(())
                                         '#f
-                                        ribcage_e_vuzyfye))
-                                    (lambda (|type_e_Hs-Hnye|
-                                             |value_e_1pY8oye|
-                                             |e_e_nlWBoye|
-                                             |w_e_JhU2pye|
-                                             |s_e_3eSvpye|)
-                                      ((lambda (|t_e_paQYpye|)
-                                         (if (memv |t_e_paQYpye|
+                                        |ribcage_VIm5dyYVh|))
+                                    (lambda (|type_VIy3EH4Wh|
+                                             |value_VIU_B85Wh|
+                                             |e_VIeYzB5Wh|
+                                             |w_VIAUx26Wh|
+                                             |s_VIWQvv6Wh|)
+                                      ((lambda (|t_VIgNtY6Wh|)
+                                         (if (memv |t_VIgNtY6Wh|
                                                    '(define-form))
-                                           (|parse-define_e_bIruOqe|
-                                             |e_e_nlWBoye|
-                                             |w_e_JhU2pye|
-                                             |s_e_3eSvpye|
-                                             (lambda (|id_e_VqhHLye|
-                                                      |rhs_e_fnf8Mye|
-                                                      |w_e_BjdBMye|)
-                                               ((lambda (|id_e_Xfb2Nye|)
-                                                  ((lambda (|label_e_hc9vNye|)
-                                                     ((lambda (|imps_e_D87YNye|)
+                                           (|parse-define_VI2j5uvOh|
+                                             |e_VIeYzB5Wh|
+                                             |w_VIAUx26Wh|
+                                             |s_VIWQvv6Wh|
+                                             (lambda (|id_VIM1XGsWh|
+                                                      |rhs_VI6-U7tWh|
+                                                      |w_VIsWSAtWh|)
+                                               ((lambda (|id_VIOSQ1uWh|)
+                                                  ((lambda (|label_VI8POuuWh|)
+                                                     ((lambda (|imps_VIuLMXuWh|)
                                                         (begin
-                                                          (|extend-ribcage!_e_1d-Jeqe|
-                                                            ribcage_e_vuzyfye
-                                                            |id_e_Xfb2Nye|
-                                                            |label_e_hc9vNye|)
-                                                          (|parse_e_hScxkye|
-                                                            (cdr |body_e_DOa-kye|)
-                                                            (cons |id_e_Xfb2Nye|
-                                                                  |ids_e_ZK8rlye|)
-                                                            (cons (|make-module-binding_e_9IzEyqe|
-                                                                    |type_e_Hs-Hnye|
-                                                                    |id_e_Xfb2Nye|
-                                                                    |label_e_hc9vNye|
-                                                                    |imps_e_D87YNye|
-                                                                    (cons er_e_lw0fnye
-                                                                          (|wrap_e_jG6Yqqe|
-                                                                            |rhs_e_fnf8Mye|
-                                                                            |w_e_BjdBMye|)))
-                                                                  |bindings_e_jH6Ulye|)
-                                                            |inits_e_FD4lmye|)))
-                                                      (|get-implicit-exports_e_BZgDjye|
-                                                        |id_e_Xfb2Nye|)))
-                                                   (|gen-indirect-label_e_jka-Zpe|)))
-                                                (|wrap_e_jG6Yqqe|
-                                                  |id_e_VqhHLye|
-                                                  |w_e_BjdBMye|))))
-                                           (if (memv |t_e_paQYpye|
+                                                          (|extend-ribcage!_VIUPDJXNh|
+                                                            |ribcage_VIm5dyYVh|
+                                                            |id_VIOSQ1uWh|
+                                                            |label_VI8POuuWh|)
+                                                          (|parse_VI8tSw1Wh|
+                                                            (cdr |body_VIupQZ1Wh|)
+                                                            (cons |id_VIOSQ1uWh|
+                                                                  |ids_VIQlOq2Wh|)
+                                                            (cons (|make-module-binding_VI0jdEfOh|
+                                                                    |type_VIy3EH4Wh|
+                                                                    |id_VIOSQ1uWh|
+                                                                    |label_VI8POuuWh|
+                                                                    |imps_VIuLMXuWh|
+                                                                    (cons |er_VIc7Ge4Wh|
+                                                                          (|wrap_VIahMX7Oh|
+                                                                            |rhs_VI6-U7tWh|
+                                                                            |w_VIsWSAtWh|)))
+                                                                  |bindings_VIaiMT2Wh|)
+                                                            |inits_VIweKk3Wh|)))
+                                                      (|get-implicit-exports_VIsAWC0Wh|
+                                                        |id_VIOSQ1uWh|)))
+                                                   (|gen-indirect-label_VIaXPZGNh|)))
+                                                (|wrap_VIahMX7Oh|
+                                                  |id_VIM1XGsWh|
+                                                  |w_VIsWSAtWh|))))
+                                           (if (memv |t_VIgNtY6Wh|
                                                      '(define-syntax-form))
-                                             (|parse-define-syntax_e_xEpXOqe|
-                                               |e_e_nlWBoye|
-                                               |w_e_JhU2pye|
-                                               |s_e_3eSvpye|
-                                               (lambda (|id_e_vQvwIye|
-                                                        |rhs_e_RMtZIye|
-                                                        |w_e_bJrqJye|)
-                                                 ((lambda (|id_e_xFpTJye|)
-                                                    ((lambda (|label_e_TBnkKye|)
-                                                       ((lambda (|imps_e_dylNKye|)
-                                                          ((lambda (|exp_e_zujeLye|)
+                                             (|parse-define-syntax_VIof3XvOh|
+                                               |e_VIeYzB5Wh|
+                                               |w_VIAUx26Wh|
+                                               |s_VIWQvv6Wh|
+                                               (lambda (|id_VImr9wpWh|
+                                                        |rhs_VIIn7ZpWh|
+                                                        |w_VI2k5qqWh|)
+                                                 ((lambda (|id_VIog3TqWh|)
+                                                    ((lambda (|label_VIKc1krWh|)
+                                                       ((lambda (|imps_VI49_MrWh|)
+                                                          ((lambda (|exp_VIq5ZdsWh|)
                                                              (begin
-                                                               (|extend-store!_e_ZU6-Eqe|
-                                                                 |r_e_xjtVgye|
-                                                                 (|get-indirect-label_e_Fg8r-pe|
-                                                                   |label_e_TBnkKye|)
+                                                               (|extend-store!_VIQvMZlOh|
+                                                                 |r_VIoW6VZVh|
+                                                                 (|get-indirect-label_VIwTNqHNh|
+                                                                   |label_VIKc1krWh|)
                                                                  (cons 'deferred
-                                                                       |exp_e_zujeLye|))
-                                                               (|extend-ribcage!_e_1d-Jeqe|
-                                                                 ribcage_e_vuzyfye
-                                                                 |id_e_xFpTJye|
-                                                                 |label_e_TBnkKye|)
-                                                               (|parse_e_hScxkye|
-                                                                 (cdr |body_e_DOa-kye|)
-                                                                 (cons |id_e_xFpTJye|
-                                                                       |ids_e_ZK8rlye|)
-                                                                 (cons (|make-module-binding_e_9IzEyqe|
-                                                                         |type_e_Hs-Hnye|
-                                                                         |id_e_xFpTJye|
-                                                                         |label_e_TBnkKye|
-                                                                         |imps_e_dylNKye|
-                                                                         |exp_e_zujeLye|)
-                                                                       |bindings_e_jH6Ulye|)
-                                                                 |inits_e_FD4lmye|)))
-                                                           (|chi_e_LgMYJqe|
-                                                             |rhs_e_RMtZIye|
-                                                             (|transformer-env_e_LpVxBpe|
-                                                               er_e_lw0fnye)
-                                                             |w_e_bJrqJye|)))
-                                                        (|get-implicit-exports_e_BZgDjye|
-                                                          |id_e_xFpTJye|)))
-                                                     (|gen-indirect-label_e_jka-Zpe|)))
-                                                  (|wrap_e_jG6Yqqe|
-                                                    |id_e_vQvwIye|
-                                                    |w_e_bJrqJye|))))
-                                             (if (memv |t_e_paQYpye|
+                                                                       |exp_VIq5ZdsWh|))
+                                                               (|extend-ribcage!_VIUPDJXNh|
+                                                                 |ribcage_VIm5dyYVh|
+                                                                 |id_VIog3TqWh|
+                                                                 |label_VIKc1krWh|)
+                                                               (|parse_VI8tSw1Wh|
+                                                                 (cdr |body_VIupQZ1Wh|)
+                                                                 (cons |id_VIog3TqWh|
+                                                                       |ids_VIQlOq2Wh|)
+                                                                 (cons (|make-module-binding_VI0jdEfOh|
+                                                                         |type_VIy3EH4Wh|
+                                                                         |id_VIog3TqWh|
+                                                                         |label_VIKc1krWh|
+                                                                         |imps_VI49_MrWh|
+                                                                         |exp_VIq5ZdsWh|)
+                                                                       |bindings_VIaiMT2Wh|)
+                                                                 |inits_VIweKk3Wh|)))
+                                                           (|chi_VICTpYqOh|
+                                                             |rhs_VIIn7ZpWh|
+                                                             (|transformer-env_VIC0zxiNh|
+                                                               |er_VIc7Ge4Wh|)
+                                                             |w_VI2k5qqWh|)))
+                                                        (|get-implicit-exports_VIsAWC0Wh|
+                                                          |id_VIog3TqWh|)))
+                                                     (|gen-indirect-label_VIaXPZGNh|)))
+                                                  (|wrap_VIahMX7Oh|
+                                                    |id_VImr9wpWh|
+                                                    |w_VI2k5qqWh|))))
+                                             (if (memv |t_VIgNtY6Wh|
                                                        '(module-form))
-                                               ((lambda (|*ribcage_e_1AWDCye|)
-                                                  ((lambda (|*w_e_nwU4Dye|)
-                                                     (|parse-module_e_vPvANqe|
-                                                       |e_e_nlWBoye|
-                                                       |w_e_JhU2pye|
-                                                       |s_e_3eSvpye|
-                                                       |*w_e_nwU4Dye|
-                                                       (lambda (|id_e_JsSxDye|
-                                                                |*exports_e_3pQ-Dye|
-                                                                |forms_e_plOrEye|)
-                                                         (|chi-external_e__J0lGqe|
-                                                           |*ribcage_e_1AWDCye|
-                                                           (|source-wrap_e_FC4prqe|
-                                                             |e_e_nlWBoye|
-                                                             |w_e_JhU2pye|
-                                                             |s_e_3eSvpye|)
-                                                           (map (lambda (|d_e_LhMUEye|)
-                                                                  (cons er_e_lw0fnye
-                                                                        |d_e_LhMUEye|))
-                                                                |forms_e_plOrEye|)
-                                                           |r_e_xjtVgye|
-                                                           |*exports_e_3pQ-Dye|
-                                                           (|flatten-exports_e_3dSzuqe|
-                                                             |*exports_e_3pQ-Dye|)
-                                                           ctem_e_z8ngiye
-                                                           (lambda (|*bindings_e_5eKlFye|
-                                                                    |*inits_e_raIOFye|)
-                                                             ((lambda (|iface_e_N6GfGye|)
-                                                                ((lambda (|bindings_e_73EIGye|)
-                                                                   ((lambda (|inits_e_t_B9Hye|)
-                                                                      (if |id_e_JsSxDye|
-                                                                        ((lambda (|label_e_PXzCHye|
-                                                                                  |imps_e_9Ux3Iye|)
+                                               ((lambda (|*ribcage_VIUaADjWh|)
+                                                  ((lambda (|*w_VIe7y4kWh|)
+                                                     (|parse-module_VImq9AuOh|
+                                                       |e_VIeYzB5Wh|
+                                                       |w_VIAUx26Wh|
+                                                       |s_VIWQvv6Wh|
+                                                       |*w_VIe7y4kWh|
+                                                       (lambda (|id_VIA3wxkWh|
+                                                                |*exports_VIW_t-kWh|
+                                                                |forms_VIgYrrlWh|)
+                                                         (|chi-external_VISkGknOh|
+                                                           |*ribcage_VIUaADjWh|
+                                                           (|source-wrap_VIwdKo8Oh|
+                                                             |e_VIeYzB5Wh|
+                                                             |w_VIAUx26Wh|
+                                                             |s_VIWQvv6Wh|)
+                                                           (map (lambda (|d_VICUpUlWh|)
+                                                                  (cons |er_VIc7Ge4Wh|
+                                                                        |d_VICUpUlWh|))
+                                                                |forms_VIgYrrlWh|)
+                                                           |r_VIoW6VZVh|
+                                                           |*exports_VIW_t-kWh|
+                                                           (|flatten-exports_VIWPvzbOh|
+                                                             |*exports_VIW_t-kWh|)
+                                                           |ctem_VIqL0g_Vh|
+                                                           (lambda (|*bindings_VIYQnlmWh|
+                                                                    |*inits_VIiNlOmWh|)
+                                                             ((lambda (|iface_VIEJjfnWh|)
+                                                                ((lambda (|bindings_VI-FhInWh|)
+                                                                   ((lambda (|inits_VIkCf9oWh|)
+                                                                      (if |id_VIA3wxkWh|
+                                                                        ((lambda (|label_VIGydCoWh|
+                                                                                  |imps_VI0vb3pWh|)
                                                                            (begin
-                                                                             (|extend-store!_e_ZU6-Eqe|
-                                                                               |r_e_xjtVgye|
-                                                                               (|get-indirect-label_e_Fg8r-pe|
-                                                                                 |label_e_PXzCHye|)
-                                                                               (make-binding_e_zruotpe
+                                                                             (|extend-store!_VIQvMZlOh|
+                                                                               |r_VIoW6VZVh|
+                                                                               (|get-indirect-label_VIwTNqHNh|
+                                                                                 |label_VIGydCoWh|)
+                                                                               (|make-binding_VIq28oaNh|
                                                                                  'module
-                                                                                 |iface_e_N6GfGye|))
-                                                                             (|extend-ribcage!_e_1d-Jeqe|
-                                                                               ribcage_e_vuzyfye
-                                                                               |id_e_JsSxDye|
-                                                                               |label_e_PXzCHye|)
-                                                                             (|parse_e_hScxkye|
-                                                                               (cdr |body_e_DOa-kye|)
-                                                                               (cons |id_e_JsSxDye|
-                                                                                     |ids_e_ZK8rlye|)
-                                                                               (cons (|make-module-binding_e_9IzEyqe|
-                                                                                       |type_e_Hs-Hnye|
-                                                                                       |id_e_JsSxDye|
-                                                                                       |label_e_PXzCHye|
-                                                                                       |imps_e_9Ux3Iye|
-                                                                                       |*exports_e_3pQ-Dye|)
-                                                                                     |bindings_e_73EIGye|)
-                                                                               |inits_e_t_B9Hye|)))
-                                                                         (|gen-indirect-label_e_jka-Zpe|)
-                                                                         (|get-implicit-exports_e_BZgDjye|
-                                                                           |id_e_JsSxDye|))
+                                                                                 |iface_VIEJjfnWh|))
+                                                                             (|extend-ribcage!_VIUPDJXNh|
+                                                                               |ribcage_VIm5dyYVh|
+                                                                               |id_VIA3wxkWh|
+                                                                               |label_VIGydCoWh|)
+                                                                             (|parse_VI8tSw1Wh|
+                                                                               (cdr |body_VIupQZ1Wh|)
+                                                                               (cons |id_VIA3wxkWh|
+                                                                                     |ids_VIQlOq2Wh|)
+                                                                               (cons (|make-module-binding_VI0jdEfOh|
+                                                                                       |type_VIy3EH4Wh|
+                                                                                       |id_VIA3wxkWh|
+                                                                                       |label_VIGydCoWh|
+                                                                                       |imps_VI0vb3pWh|
+                                                                                       |*exports_VIW_t-kWh|)
+                                                                                     |bindings_VI-FhInWh|)
+                                                                               |inits_VIkCf9oWh|)))
+                                                                         (|gen-indirect-label_VIaXPZGNh|)
+                                                                         (|get-implicit-exports_VIsAWC0Wh|
+                                                                           |id_VIA3wxkWh|))
                                                                         (begin
-                                                                          (|do-import!_e_9Tx7Nqe|
-                                                                            |iface_e_N6GfGye|
-                                                                            ribcage_e_vuzyfye)
-                                                                          (|parse_e_hScxkye|
-                                                                            (cdr |body_e_DOa-kye|)
-                                                                            (cons |iface_e_N6GfGye|
-                                                                                  |ids_e_ZK8rlye|)
-                                                                            |bindings_e_73EIGye|
-                                                                            |inits_e_t_B9Hye|))))
+                                                                          (|do-import!_VI0ub7uOh|
+                                                                            |iface_VIEJjfnWh|
+                                                                            |ribcage_VIm5dyYVh|)
+                                                                          (|parse_VI8tSw1Wh|
+                                                                            (cdr |body_VIupQZ1Wh|)
+                                                                            (cons |iface_VIEJjfnWh|
+                                                                                  |ids_VIQlOq2Wh|)
+                                                                            |bindings_VI-FhInWh|
+                                                                            |inits_VIkCf9oWh|))))
                                                                     (append
-                                                                      |inits_e_FD4lmye|
-                                                                      |*inits_e_raIOFye|)))
+                                                                      |inits_VIweKk3Wh|
+                                                                      |*inits_VIiNlOmWh|)))
                                                                  (append
-                                                                   (if |id_e_JsSxDye|
-                                                                     |*bindings_e_5eKlFye|
-                                                                     (|update-imp-exports_e_XVe4kye|
-                                                                       |*bindings_e_5eKlFye|
-                                                                       |*exports_e_3pQ-Dye|))
-                                                                   |bindings_e_jH6Ulye|)))
-                                                              (|make-trimmed-interface_e_tPDKxqe|
-                                                                |*exports_e_3pQ-Dye|)))))))
-                                                   (|make-wrap_e_hki8Kpe|
-                                                     (|wrap-marks_e_DggBKpe|
-                                                       |w_e_JhU2pye|)
-                                                     (cons |*ribcage_e_1AWDCye|
-                                                           (|wrap-subst_e_Zce2Lpe|
-                                                             |w_e_JhU2pye|)))))
-                                                (|make-ribcage_e_n-ZH0qe|
+                                                                   (if |id_VIA3wxkWh|
+                                                                     |*bindings_VIYQnlmWh|
+                                                                     (|update-imp-exports_VIOwU31Wh|
+                                                                       |*bindings_VIYQnlmWh|
+                                                                       |*exports_VIW_t-kWh|))
+                                                                   |bindings_VIaiMT2Wh|)))
+                                                              (|make-trimmed-interface_VIkqhKeOh|
+                                                                |*exports_VIW_t-kWh|)))))))
+                                                   (|make-wrap_VI8XX7rNh|
+                                                     (|wrap-marks_VIuTVArNh|
+                                                       |w_VIAUx26Wh|)
+                                                     (cons |*ribcage_VIUaADjWh|
+                                                           (|wrap-subst_VIQPT1sNh|
+                                                             |w_VIAUx26Wh|)))))
+                                                (|make-ribcage_VIeBDHJNh|
                                                   '()
                                                   '()
                                                   '()))
-                                               (if (memv |t_e_paQYpye|
+                                               (if (memv |t_VIgNtY6Wh|
                                                          '(import-form))
-                                                 (|parse-import_e_RLt1Oqe|
-                                                   |e_e_nlWBoye|
-                                                   |w_e_JhU2pye|
-                                                   |s_e_3eSvpye|
-                                                   (lambda (|mid_e_jS4nAye|)
-                                                     ((lambda (|mlabel_e_FO2QAye|)
-                                                        ((lambda (|binding_e__K0hBye|)
-                                                           ((lambda (|t_e_lH-JBye|)
-                                                              (if (memv |t_e_lH-JBye|
+                                                 (|parse-import_VIIm71vOh|
+                                                   |e_VIeYzB5Wh|
+                                                   |w_VIAUx26Wh|
+                                                   |s_VIWQvv6Wh|
+                                                   (lambda (|mid_VIatKmhWh|)
+                                                     ((lambda (|mlabel_VIwpIPhWh|)
+                                                        ((lambda (|binding_VISlGgiWh|)
+                                                           ((lambda (|t_VIciEJiWh|)
+                                                              (if (memv |t_VIciEJiWh|
                                                                         '(module))
-                                                                ((lambda (|iface_e_HDYaCye|)
+                                                                ((lambda (|iface_VIyeCajWh|)
                                                                    (begin
-                                                                     (if |value_e_1pY8oye|
-                                                                       (|extend-ribcage-barrier!_e_n9Yafqe|
-                                                                         ribcage_e_vuzyfye
-                                                                         |value_e_1pY8oye|)
+                                                                     (if |value_VIU_B85Wh|
+                                                                       (|extend-ribcage-barrier!_VIeMBaYNh|
+                                                                         |ribcage_VIm5dyYVh|
+                                                                         |value_VIU_B85Wh|)
                                                                        (void))
-                                                                     (|do-import!_e_9Tx7Nqe|
-                                                                       |iface_e_HDYaCye|
-                                                                       ribcage_e_vuzyfye)
-                                                                     (|parse_e_hScxkye|
-                                                                       (cdr |body_e_DOa-kye|)
-                                                                       (cons |iface_e_HDYaCye|
-                                                                             |ids_e_ZK8rlye|)
-                                                                       (|update-imp-exports_e_XVe4kye|
-                                                                         |bindings_e_jH6Ulye|
+                                                                     (|do-import!_VI0ub7uOh|
+                                                                       |iface_VIyeCajWh|
+                                                                       |ribcage_VIm5dyYVh|)
+                                                                     (|parse_VI8tSw1Wh|
+                                                                       (cdr |body_VIupQZ1Wh|)
+                                                                       (cons |iface_VIyeCajWh|
+                                                                             |ids_VIQlOq2Wh|)
+                                                                       (|update-imp-exports_VIOwU31Wh|
+                                                                         |bindings_VIaiMT2Wh|
                                                                          (vector->list
-                                                                           (|interface-exports_e_52MWvqe|
-                                                                             |iface_e_HDYaCye|)))
-                                                                       |inits_e_FD4lmye|)))
-                                                                 (binding-value_e_fkqiupe
-                                                                   |binding_e__K0hBye|))
-                                                                (if (memv |t_e_lH-JBye|
+                                                                           (|interface-exports_VIYEpWcOh|
+                                                                             |iface_VIyeCajWh|)))
+                                                                       |inits_VIweKk3Wh|)))
+                                                                 (|binding-value_VI6X3ibNh|
+                                                                   |binding_VISlGgiWh|))
+                                                                (if (memv |t_VIciEJiWh|
                                                                           '(displaced-lexical))
-                                                                  (|displaced-lexical-error_e_5mT-Bpe|
-                                                                    |mid_e_jS4nAye|)
+                                                                  (|displaced-lexical-error_VIYYw-iNh|
+                                                                    |mid_VIatKmhWh|)
                                                                   (syntax-error
-                                                                    |mid_e_jS4nAye|
+                                                                    |mid_VIatKmhWh|
                                                                     '"import from unknown module"))))
-                                                            (|binding-type_e_VnsRtpe|
-                                                              |binding_e__K0hBye|)))
-                                                         (|lookup_e_7bNlDpe|
-                                                           |mlabel_e_FO2QAye|
-                                                           |r_e_xjtVgye|)))
-                                                      (|id-var-name_e_Rpx3lqe|
-                                                        |mid_e_jS4nAye|
+                                                            (|binding-type_VIM-5RaNh|
+                                                              |binding_VISlGgiWh|)))
+                                                         (|lookup_VI-NqlkNh|
+                                                           |mlabel_VIwpIPhWh|
+                                                           |r_VIoW6VZVh|)))
+                                                      (|id-var-name_VII0b32Oh|
+                                                        |mid_VIatKmhWh|
                                                         '(())))))
-                                                 (if (memv |t_e_paQYpye|
+                                                 (if (memv |t_VIgNtY6Wh|
                                                            '(begin-form))
-                                                   ((lambda (|tmp_e_Vfjcxye|)
-                                                      ((lambda (|tmp_e_fchFxye|)
-                                                         (if |tmp_e_fchFxye|
-                                                           (apply (lambda (|__e_B8f6yye|
-                                                                           |e1_e_X4dzyye|)
-                                                                    (|parse_e_hScxkye|
-                                                                      ((letrec ((f_e_h1b0zye
-                                                                                  (lambda (|forms_e_DZ8tzye|)
-                                                                                    (if (null? |forms_e_DZ8tzye|)
-                                                                                      (cdr |body_e_DOa-kye|)
-                                                                                      (cons (cons er_e_lw0fnye
-                                                                                                  (|wrap_e_jG6Yqqe|
-                                                                                                    (car |forms_e_DZ8tzye|)
-                                                                                                    |w_e_JhU2pye|))
-                                                                                            (f_e_h1b0zye
-                                                                                              (cdr |forms_e_DZ8tzye|)))))))
-                                                                         f_e_h1b0zye)
-                                                                       |e1_e_X4dzyye|)
-                                                                      |ids_e_ZK8rlye|
-                                                                      |bindings_e_jH6Ulye|
-                                                                      |inits_e_FD4lmye|))
-                                                                  |tmp_e_fchFxye|)
+                                                   ((lambda (|tmp_VIMSYbeWh|)
+                                                      ((lambda (|tmp_VI6PWEeWh|)
+                                                         (if |tmp_VI6PWEeWh|
+                                                           (apply (lambda (|__VIsLU5fWh|
+                                                                           |e1_VIOHSyfWh|)
+                                                                    (|parse_VI8tSw1Wh|
+                                                                      ((letrec ((|f_VI8EQ_fWh|
+                                                                                  (lambda (|forms_VIuAOsgWh|)
+                                                                                    (if (null? |forms_VIuAOsgWh|)
+                                                                                      (cdr |body_VIupQZ1Wh|)
+                                                                                      (cons (cons |er_VIc7Ge4Wh|
+                                                                                                  (|wrap_VIahMX7Oh|
+                                                                                                    (car |forms_VIuAOsgWh|)
+                                                                                                    |w_VIAUx26Wh|))
+                                                                                            (|f_VI8EQ_fWh|
+                                                                                              (cdr |forms_VIuAOsgWh|)))))))
+                                                                         |f_VI8EQ_fWh|)
+                                                                       |e1_VIOHSyfWh|)
+                                                                      |ids_VIQlOq2Wh|
+                                                                      |bindings_VIaiMT2Wh|
+                                                                      |inits_VIweKk3Wh|))
+                                                                  |tmp_VI6PWEeWh|)
                                                            (syntax-error
-                                                             |tmp_e_Vfjcxye|)))
+                                                             |tmp_VIMSYbeWh|)))
                                                        ($syntax-dispatch
                                                          (compile-in-annotation
-                                                           |tmp_e_Vfjcxye|
+                                                           |tmp_VIMSYbeWh|
                                                            value)
                                                          '(any . each-any))))
-                                                    |e_e_nlWBoye|)
-                                                   (if (memv |t_e_paQYpye|
+                                                    |e_VIeYzB5Wh|)
+                                                   (if (memv |t_VIgNtY6Wh|
                                                              '(eval-when-form))
-                                                     ((lambda (|tmp_e_PMB7tye|)
-                                                        ((lambda (|tmp_e_9JzAtye|)
-                                                           (if |tmp_e_9JzAtye|
-                                                             (apply (lambda (|__e_vFx1uye|
-                                                                             |x_e_RBvuuye|
-                                                                             |e1_e_bytXuye|)
-                                                                      (|parse_e_hScxkye|
+                                                     ((lambda (|tmp_VIGnf7aWh|)
+                                                        ((lambda (|tmp_VI0kdAaWh|)
+                                                           (if |tmp_VI0kdAaWh|
+                                                             (apply (lambda (|__VImgb1bWh|
+                                                                             |x_VIIc9ubWh|
+                                                                             |e1_VI297XbWh|)
+                                                                      (|parse_VI8tSw1Wh|
                                                                         (if (memq 'eval
-                                                                                  (|chi-when-list_e_Hr-Lsqe|
-                                                                                    |x_e_RBvuuye|
-                                                                                    |w_e_JhU2pye|))
-                                                                          ((letrec ((f_e_xurovye
-                                                                                      (lambda (|forms_e_TqpRvye|)
-                                                                                        (if (null? |forms_e_TqpRvye|)
-                                                                                          (cdr |body_e_DOa-kye|)
-                                                                                          (cons (cons er_e_lw0fnye
-                                                                                                      (|wrap_e_jG6Yqqe|
-                                                                                                        (car |forms_e_TqpRvye|)
-                                                                                                        |w_e_JhU2pye|))
-                                                                                                (f_e_xurovye
-                                                                                                  (cdr |forms_e_TqpRvye|)))))))
-                                                                             f_e_xurovye)
-                                                                           |e1_e_bytXuye|)
-                                                                          (cdr |body_e_DOa-kye|))
-                                                                        |ids_e_ZK8rlye|
-                                                                        |bindings_e_jH6Ulye|
-                                                                        |inits_e_FD4lmye|))
-                                                                    |tmp_e_9JzAtye|)
+                                                                                  (|chi-when-list_VIy2EL9Oh|
+                                                                                    |x_VIIc9ubWh|
+                                                                                    |w_VIAUx26Wh|))
+                                                                          ((letrec ((|f_VIo55ocWh|
+                                                                                      (lambda (|forms_VIK13RcWh|)
+                                                                                        (if (null? |forms_VIK13RcWh|)
+                                                                                          (cdr |body_VIupQZ1Wh|)
+                                                                                          (cons (cons |er_VIc7Ge4Wh|
+                                                                                                      (|wrap_VIahMX7Oh|
+                                                                                                        (car |forms_VIK13RcWh|)
+                                                                                                        |w_VIAUx26Wh|))
+                                                                                                (|f_VIo55ocWh|
+                                                                                                  (cdr |forms_VIK13RcWh|)))))))
+                                                                             |f_VIo55ocWh|)
+                                                                           |e1_VI297XbWh|)
+                                                                          (cdr |body_VIupQZ1Wh|))
+                                                                        |ids_VIQlOq2Wh|
+                                                                        |bindings_VIaiMT2Wh|
+                                                                        |inits_VIweKk3Wh|))
+                                                                    |tmp_VI0kdAaWh|)
                                                              (syntax-error
-                                                               |tmp_e_PMB7tye|)))
+                                                               |tmp_VIGnf7aWh|)))
                                                          ($syntax-dispatch
                                                            (compile-in-annotation
-                                                             |tmp_e_PMB7tye|
+                                                             |tmp_VIGnf7aWh|
                                                              value)
                                                            '(any each-any
                                                                  .
                                                                  each-any))))
-                                                      |e_e_nlWBoye|)
-                                                     (if (memv |t_e_paQYpye|
+                                                      |e_VIeYzB5Wh|)
+                                                     (if (memv |t_VIgNtY6Wh|
                                                                '(local-syntax-form))
-                                                       (|chi-local-syntax_e_dxlRPqe|
-                                                         |value_e_1pY8oye|
-                                                         |e_e_nlWBoye|
-                                                         er_e_lw0fnye
-                                                         |w_e_JhU2pye|
-                                                         |s_e_3eSvpye|
-                                                         (lambda (|forms_e_L6Opqye|
-                                                                  |er_e_53MSqye|
-                                                                  |w_e_r_Jjrye|
-                                                                  |s_e_NXHMrye|)
-                                                           (|parse_e_hScxkye|
-                                                             ((letrec ((|f_e_7UFdsye|
-                                                                         (lambda (|forms_e_tQDGsye|)
-                                                                           (if (null? |forms_e_tQDGsye|)
-                                                                             (cdr |body_e_DOa-kye|)
-                                                                             (cons (cons |er_e_53MSqye|
-                                                                                         (|wrap_e_jG6Yqqe|
-                                                                                           (car |forms_e_tQDGsye|)
-                                                                                           |w_e_r_Jjrye|))
-                                                                                   (|f_e_7UFdsye|
-                                                                                     (cdr |forms_e_tQDGsye|)))))))
-                                                                |f_e_7UFdsye|)
-                                                              |forms_e_L6Opqye|)
-                                                             |ids_e_ZK8rlye|
-                                                             |bindings_e_jH6Ulye|
-                                                             |inits_e_FD4lmye|)))
-                                                       (return_e_f1jajye
-                                                         |bindings_e_jH6Ulye|
-                                                         |ids_e_ZK8rlye|
+                                                       (|chi-local-syntax_VI48_QwOh|
+                                                         |value_VIU_B85Wh|
+                                                         |e_VIeYzB5Wh|
+                                                         |er_VIc7Ge4Wh|
+                                                         |w_VIAUx26Wh|
+                                                         |s_VIWQvv6Wh|
+                                                         (lambda (|forms_VICJrp7Wh|
+                                                                  |er_VIYFpS7Wh|
+                                                                  |w_VIiCnj8Wh|
+                                                                  |s_VIEylM8Wh|)
+                                                           (|parse_VI8tSw1Wh|
+                                                             ((letrec ((|f_VI-ujd9Wh|
+                                                                         (lambda (|forms_VIkrhG9Wh|)
+                                                                           (if (null? |forms_VIkrhG9Wh|)
+                                                                             (cdr |body_VIupQZ1Wh|)
+                                                                             (cons (cons |er_VIYFpS7Wh|
+                                                                                         (|wrap_VIahMX7Oh|
+                                                                                           (car |forms_VIkrhG9Wh|)
+                                                                                           |w_VIiCnj8Wh|))
+                                                                                   (|f_VI-ujd9Wh|
+                                                                                     (cdr |forms_VIkrhG9Wh|)))))))
+                                                                |f_VI-ujd9Wh|)
+                                                              |forms_VICJrp7Wh|)
+                                                             |ids_VIQlOq2Wh|
+                                                             |bindings_VIaiMT2Wh|
+                                                             |inits_VIweKk3Wh|)))
+                                                       (|return_VI6EY90Wh|
+                                                         |bindings_VIaiMT2Wh|
+                                                         |ids_VIQlOq2Wh|
                                                          (append
-                                                           |inits_e_FD4lmye|
-                                                           (cons (cons er_e_lw0fnye
-                                                                       (|source-wrap_e_FC4prqe|
-                                                                         |e_e_nlWBoye|
-                                                                         |w_e_JhU2pye|
-                                                                         |s_e_3eSvpye|))
-                                                                 (cdr |body_e_DOa-kye|))))))))))))
-                                       |type_e_Hs-Hnye|))))
-                                (cdar |body_e_DOa-kye|)
-                                (caar |body_e_DOa-kye|))))))
-                  |parse_e_hScxkye|)
-                body_e_bnvsgye
+                                                           |inits_VIweKk3Wh|
+                                                           (cons (cons |er_VIc7Ge4Wh|
+                                                                       (|source-wrap_VIwdKo8Oh|
+                                                                         |e_VIeYzB5Wh|
+                                                                         |w_VIAUx26Wh|
+                                                                         |s_VIWQvv6Wh|))
+                                                                 (cdr |body_VIupQZ1Wh|))))))))))))
+                                       |type_VIy3EH4Wh|))))
+                                (cdar |body_VIupQZ1Wh|)
+                                (caar |body_VIupQZ1Wh|))))))
+                  |parse_VI8tSw1Wh|)
+                |body_VI2-8sZVh|
                 '()
                 '()
                 '()))))
-         (|check-defined-ids_e_FN2UFqe|
-           (lambda (|source-exp_e_n_ZDXxe| |ls_e_JXX4Yxe|)
-             (letrec ((|b-i=?_e_3UVxYxe|
-                        (lambda (|x_e_bcxZ1ye| y_e_x8vq2ye)
-                          (if (symbol? |x_e_bcxZ1ye|)
-                            (if (symbol? y_e_x8vq2ye)
-                              (eq? |x_e_bcxZ1ye| y_e_x8vq2ye)
-                              (if (eq? |x_e_bcxZ1ye|
-                                       ((lambda (|x_e_zZoN3ye|)
-                                          ((lambda (|e_e_VVme4ye|)
-                                             (if (annotation? |e_e_VVme4ye|)
+         (|check-defined-ids_VIwoITmOh|
+           (lambda (|source-exp_VIeCDDEVh| |ls_VIAyB4FVh|)
+             (letrec ((|b-i=?_VIWuzxFVh|
+                        (lambda (|x_VI2PaZKVh| |y_VIoL8qLVh|)
+                          (if (symbol? |x_VI2PaZKVh|)
+                            (if (symbol? |y_VIoL8qLVh|)
+                              (eq? |x_VI2PaZKVh| |y_VIoL8qLVh|)
+                              (if (eq? |x_VI2PaZKVh|
+                                       ((lambda (|x_VIqA2NMVh|)
+                                          ((lambda (|e_VIMw0eNVh|)
+                                             (if (annotation? |e_VIMw0eNVh|)
                                                (annotation-expression
-                                                 |e_e_VVme4ye|)
-                                               |e_e_VVme4ye|))
-                                           (if (syntax-object?_e_h-lahpe
-                                                 |x_e_zZoN3ye|)
-                                             (|syntax-object-expression_e_DWjDhpe|
-                                               |x_e_zZoN3ye|)
-                                             |x_e_zZoN3ye|)))
-                                        y_e_x8vq2ye))
-                                (|same-marks?_e_tEFfjqe|
-                                  (|wrap-marks_e_DggBKpe|
-                                    (|syntax-object-wrap_e_ZSh4ipe|
-                                      y_e_x8vq2ye))
-                                  (|wrap-marks_e_DggBKpe| '((top))))
+                                                 |e_VIMw0eNVh|)
+                                               |e_VIMw0eNVh|))
+                                           (if (|syntax-object?_VI8B_9-Mh|
+                                                 |x_VIqA2NMVh|)
+                                             (|syntax-object-expression_VIuxZC-Mh|
+                                               |x_VIqA2NMVh|)
+                                             |x_VIqA2NMVh|)))
+                                        |y_VIoL8qLVh|))
+                                (|same-marks?_VIkfjf0Oh|
+                                  (|wrap-marks_VIuTVArNh|
+                                    (|syntax-object-wrap_VIQtX3_Mh|
+                                      |y_VIoL8qLVh|))
+                                  (|wrap-marks_VIuTVArNh| '((top))))
                                 '#f))
-                            (if (symbol? y_e_x8vq2ye)
-                              (if (eq? y_e_x8vq2ye
-                                       ((lambda (|x_e_T4tT2ye|)
-                                          ((lambda (e_e_d1rk3ye)
-                                             (if (annotation? e_e_d1rk3ye)
+                            (if (symbol? |y_VIoL8qLVh|)
+                              (if (eq? |y_VIoL8qLVh|
+                                       ((lambda (|x_VIKH6TLVh|)
+                                          ((lambda (|e_VI4E4kMVh|)
+                                             (if (annotation? |e_VI4E4kMVh|)
                                                (annotation-expression
-                                                 e_e_d1rk3ye)
-                                               e_e_d1rk3ye))
-                                           (if (syntax-object?_e_h-lahpe
-                                                 |x_e_T4tT2ye|)
-                                             (|syntax-object-expression_e_DWjDhpe|
-                                               |x_e_T4tT2ye|)
-                                             |x_e_T4tT2ye|)))
-                                        |x_e_bcxZ1ye|))
-                                (|same-marks?_e_tEFfjqe|
-                                  (|wrap-marks_e_DggBKpe|
-                                    (|syntax-object-wrap_e_ZSh4ipe|
-                                      |x_e_bcxZ1ye|))
-                                  (|wrap-marks_e_DggBKpe| '((top))))
+                                                 |e_VI4E4kMVh|)
+                                               |e_VI4E4kMVh|))
+                                           (if (|syntax-object?_VI8B_9-Mh|
+                                                 |x_VIKH6TLVh|)
+                                             (|syntax-object-expression_VIuxZC-Mh|
+                                               |x_VIKH6TLVh|)
+                                             |x_VIKH6TLVh|)))
+                                        |x_VI2PaZKVh|))
+                                (|same-marks?_VIkfjf0Oh|
+                                  (|wrap-marks_VIuTVArNh|
+                                    (|syntax-object-wrap_VIQtX3_Mh|
+                                      |x_VI2PaZKVh|))
+                                  (|wrap-marks_VIuTVArNh| '((top))))
                                 '#f)
-                              (|bound-id=?_e_Terqmqe|
-                                |x_e_bcxZ1ye|
-                                y_e_x8vq2ye)))))
-                      (|vfold_e_pQT-Yxe|
-                        (lambda (|v_e_fSkH4ye| |p_e_BOi85ye| |cls_e_XKgB5ye|)
-                          ((lambda (|len_e_hHe26ye|)
-                             ((letrec ((|lp_e_DDcv6ye|
-                                         (lambda (|i_e_ZzaY6ye| cls_e_jw8p7ye)
-                                           (if (= |i_e_ZzaY6ye|
-                                                  |len_e_hHe26ye|)
-                                             cls_e_jw8p7ye
-                                             (|lp_e_DDcv6ye|
-                                               (+ |i_e_ZzaY6ye| '1)
-                                               (|p_e_BOi85ye|
+                              (|bound-id=?_VIKR4q3Oh|
+                                |x_VI2PaZKVh|
+                                |y_VIoL8qLVh|)))))
+                      (|vfold_VIgrx-FVh|
+                        (lambda (|v_VI6t-GNVh| |p_VIspY7OVh| |cls_VIOlWAOVh|)
+                          ((lambda (|len_VI8iU1PVh|)
+                             ((letrec ((|lp_VIueSuPVh|
+                                         (lambda (|i_VIQaQXPVh|
+                                                  |cls_VIa7OoQVh|)
+                                           (if (= |i_VIQaQXPVh|
+                                                  |len_VI8iU1PVh|)
+                                             |cls_VIa7OoQVh|
+                                             (|lp_VIueSuPVh|
+                                               (+ |i_VIQaQXPVh| '1)
+                                               (|p_VIspY7OVh|
                                                  (vector-ref
-                                                   |v_e_fSkH4ye|
-                                                   |i_e_ZzaY6ye|)
-                                                 cls_e_jw8p7ye))))))
-                                |lp_e_DDcv6ye|)
+                                                   |v_VI6t-GNVh|
+                                                   |i_VIQaQXPVh|)
+                                                 |cls_VIa7OoQVh|))))))
+                                |lp_VIueSuPVh|)
                               '0
-                              |cls_e_XKgB5ye|))
-                           (vector-length |v_e_fSkH4ye|))))
-                      (|conflicts_e_LMRrZxe|
-                        (lambda (|x_e_Fs6S7ye| y_e__o4j8ye |cls_e_ll2M8ye|)
-                          (if (|interface?_e_L5Otvqe| |x_e_Fs6S7ye|)
-                            (if (|interface?_e_L5Otvqe| y_e__o4j8ye)
+                              |cls_VIOlWAOVh|))
+                           (vector-length |v_VI6t-GNVh|))))
+                      (|conflicts_VICnvrGVh|
+                        (lambda (|x_VIw3MRQVh| |y_VIS_JiRVh| |cls_VIcYHLRVh|)
+                          (if (|interface?_VICIrtcOh| |x_VIw3MRQVh|)
+                            (if (|interface?_VICIrtcOh| |y_VIS_JiRVh|)
                               (call-with-values
                                 (lambda ()
-                                  ((lambda (|xe_e_Hh0d9ye| |ye_e_1e-F9ye|)
-                                     (if (> (vector-length |xe_e_Hh0d9ye|)
-                                            (vector-length |ye_e_1e-F9ye|))
-                                       (values |x_e_Fs6S7ye| |ye_e_1e-F9ye|)
-                                       (values y_e__o4j8ye |xe_e_Hh0d9ye|)))
-                                   (|interface-exports_e_52MWvqe|
-                                     |x_e_Fs6S7ye|)
-                                   (|interface-exports_e_52MWvqe|
-                                     y_e__o4j8ye)))
-                                (lambda (|iface_e_naY6aye| |exports_e_J6Wzaye|)
-                                  (|vfold_e_pQT-Yxe|
-                                    |exports_e_J6Wzaye|
-                                    (lambda (|id_e_33U0bye| |cls_e_p_Rtbye|)
-                                      (|id-iface-conflicts_e_5JPUZxe|
-                                        |id_e_33U0bye|
-                                        |iface_e_naY6aye|
-                                        |cls_e_p_Rtbye|))
-                                    |cls_e_ll2M8ye|)))
-                              (|id-iface-conflicts_e_5JPUZxe|
-                                y_e__o4j8ye
-                                |x_e_Fs6S7ye|
-                                |cls_e_ll2M8ye|))
-                            (if (|interface?_e_L5Otvqe| y_e__o4j8ye)
-                              (|id-iface-conflicts_e_5JPUZxe|
-                                |x_e_Fs6S7ye|
-                                y_e__o4j8ye
-                                |cls_e_ll2M8ye|)
-                              (if (|b-i=?_e_3UVxYxe| |x_e_Fs6S7ye| y_e__o4j8ye)
-                                (cons |x_e_Fs6S7ye| |cls_e_ll2M8ye|)
-                                |cls_e_ll2M8ye|)))))
-                      (|id-iface-conflicts_e_5JPUZxe|
-                        (lambda (|id_e_LXPWbye|
-                                 |iface_e_5UNncye|
-                                 |cls_e_rQLQcye|)
-                          ((lambda (|token_e_NMJhdye|)
-                             (if |token_e_NMJhdye|
-                               (if (|lookup-import-binding-name_e_p-Rxgqe|
-                                     ((lambda (|x_e_PBDEeye|)
-                                        ((lambda (|e_e_9yB5fye|)
-                                           (if (annotation? |e_e_9yB5fye|)
+                                  ((lambda (|xe_VIyUFcSVh| |ye_VIUQDFSVh|)
+                                     (if (> (vector-length |xe_VIyUFcSVh|)
+                                            (vector-length |ye_VIUQDFSVh|))
+                                       (values |x_VIw3MRQVh| |ye_VIUQDFSVh|)
+                                       (values |y_VIS_JiRVh| |xe_VIyUFcSVh|)))
+                                   (|interface-exports_VIYEpWcOh|
+                                     |x_VIw3MRQVh|)
+                                   (|interface-exports_VIYEpWcOh|
+                                     |y_VIS_JiRVh|)))
+                                (lambda (|iface_VIeNB6TVh| |exports_VIAJzzTVh|)
+                                  (|vfold_VIgrx-FVh|
+                                    |exports_VIAJzzTVh|
+                                    (lambda (|id_VIWFx0UVh| |cls_VIgCvtUVh|)
+                                      (|id-iface-conflicts_VIYjtUGVh|
+                                        |id_VIWFx0UVh|
+                                        |iface_VIeNB6TVh|
+                                        |cls_VIgCvtUVh|))
+                                    |cls_VIcYHLRVh|)))
+                              (|id-iface-conflicts_VIYjtUGVh|
+                                |y_VIS_JiRVh|
+                                |x_VIw3MRQVh|
+                                |cls_VIcYHLRVh|))
+                            (if (|interface?_VICIrtcOh| |y_VIS_JiRVh|)
+                              (|id-iface-conflicts_VIYjtUGVh|
+                                |x_VIw3MRQVh|
+                                |y_VIS_JiRVh|
+                                |cls_VIcYHLRVh|)
+                              (if (|b-i=?_VIWuzxFVh|
+                                    |x_VIw3MRQVh|
+                                    |y_VIS_JiRVh|)
+                                (cons |x_VIw3MRQVh| |cls_VIcYHLRVh|)
+                                |cls_VIcYHLRVh|)))))
+                      (|id-iface-conflicts_VIYjtUGVh|
+                        (lambda (|id_VICytWUVh|
+                                 |iface_VIYurnVVh|
+                                 |cls_VIirpQVVh|)
+                          ((lambda (|token_VIEnnhWVh|)
+                             (if |token_VIEnnhWVh|
+                               (if (|lookup-import-binding-name_VIgBvxZNh|
+                                     ((lambda (|x_VIGchEXVh|)
+                                        ((lambda (|e_VI09f5YVh|)
+                                           (if (annotation? |e_VI09f5YVh|)
                                              (annotation-expression
-                                               |e_e_9yB5fye|)
-                                             |e_e_9yB5fye|))
-                                         (if (syntax-object?_e_h-lahpe
-                                               |x_e_PBDEeye|)
-                                           (|syntax-object-expression_e_DWjDhpe|
-                                             |x_e_PBDEeye|)
-                                           |x_e_PBDEeye|)))
-                                      |id_e_LXPWbye|)
-                                     |token_e_NMJhdye|
-                                     (if (symbol? |id_e_LXPWbye|)
-                                       (|wrap-marks_e_DggBKpe| '((top)))
-                                       (|wrap-marks_e_DggBKpe|
-                                         (|syntax-object-wrap_e_ZSh4ipe|
-                                           |id_e_LXPWbye|))))
-                                 (cons |id_e_LXPWbye| |cls_e_rQLQcye|)
-                                 |cls_e_rQLQcye|)
-                               (|vfold_e_pQT-Yxe|
-                                 (|interface-exports_e_52MWvqe|
-                                   |iface_e_5UNncye|)
-                                 (lambda (|*id_e_7JHKdye| |cls_e_tFFbeye|)
-                                   (if (|b-i=?_e_3UVxYxe|
-                                         |*id_e_7JHKdye|
-                                         |id_e_LXPWbye|)
-                                     (cons |*id_e_7JHKdye| |cls_e_tFFbeye|)
-                                     |cls_e_tFFbeye|))
-                                 |cls_e_rQLQcye|)))
-                           (|interface-token_e_r-Jnwqe| |iface_e_5UNncye|)))))
-               (if (not (null? |ls_e_JXX4Yxe|))
-                 ((letrec ((|lp_e_rFNl-xe|
-                             (lambda (|x_e_NBLO-xe|
-                                      |ls_e_7yJf_xe|
-                                      |cls_e_tuHI_xe|)
-                               (if (null? |ls_e_7yJf_xe|)
-                                 (if (not (null? |cls_e_tuHI_xe|))
-                                   ((lambda (|cls_e_Rfzw1ye|)
+                                               |e_VI09f5YVh|)
+                                             |e_VI09f5YVh|))
+                                         (if (|syntax-object?_VI8B_9-Mh|
+                                               |x_VIGchEXVh|)
+                                           (|syntax-object-expression_VIuxZC-Mh|
+                                             |x_VIGchEXVh|)
+                                           |x_VIGchEXVh|)))
+                                      |id_VICytWUVh|)
+                                     |token_VIEnnhWVh|
+                                     (if (symbol? |id_VICytWUVh|)
+                                       (|wrap-marks_VIuTVArNh| '((top)))
+                                       (|wrap-marks_VIuTVArNh|
+                                         (|syntax-object-wrap_VIQtX3_Mh|
+                                           |id_VICytWUVh|))))
+                                 (cons |id_VICytWUVh| |cls_VIirpQVVh|)
+                                 |cls_VIirpQVVh|)
+                               (|vfold_VIgrx-FVh|
+                                 (|interface-exports_VIYEpWcOh|
+                                   |iface_VIYurnVVh|)
+                                 (lambda (|*id_VI-jlKWVh| |cls_VIkgjbXVh|)
+                                   (if (|b-i=?_VIWuzxFVh|
+                                         |*id_VI-jlKWVh|
+                                         |id_VICytWUVh|)
+                                     (cons |*id_VI-jlKWVh| |cls_VIkgjbXVh|)
+                                     |cls_VIkgjbXVh|))
+                                 |cls_VIirpQVVh|)))
+                           (|interface-token_VIiBnndOh| |iface_VIYurnVVh|)))))
+               (if (not (null? |ls_VIAyB4FVh|))
+                 ((letrec ((|lp_VIigrlHVh|
+                             (lambda (|x_VIEcpOHVh|
+                                      |ls_VI-8nfIVh|
+                                      |cls_VIk5lIIVh|)
+                               (if (null? |ls_VI-8nfIVh|)
+                                 (if (not (null? |cls_VIk5lIIVh|))
+                                   ((lambda (|cls_VIIScwKVh|)
                                       (syntax-error
-                                        |source-exp_e_n_ZDXxe|
+                                        |source-exp_VIeCDDEVh|
                                         '"duplicate definition for "
-                                        (symbol->string (car |cls_e_Rfzw1ye|))
+                                        (symbol->string (car |cls_VIIScwKVh|))
                                         '" in"))
-                                    (syntax-object->datum |cls_e_tuHI_xe|))
+                                    (syntax-object->datum |cls_VIk5lIIVh|))
                                    (void))
-                                 ((letrec ((|lp2_e_PqF90ye|
-                                             (lambda (|ls2_e_9nDC0ye|
-                                                      |cls_e_vjB31ye|)
-                                               (if (null? |ls2_e_9nDC0ye|)
-                                                 (|lp_e_rFNl-xe|
-                                                   (car |ls_e_7yJf_xe|)
-                                                   (cdr |ls_e_7yJf_xe|)
-                                                   |cls_e_vjB31ye|)
-                                                 (|lp2_e_PqF90ye|
-                                                   (cdr |ls2_e_9nDC0ye|)
-                                                   (|conflicts_e_LMRrZxe|
-                                                     |x_e_NBLO-xe|
-                                                     (car |ls2_e_9nDC0ye|)
-                                                     |cls_e_vjB31ye|))))))
-                                    |lp2_e_PqF90ye|)
-                                  |ls_e_7yJf_xe|
-                                  |cls_e_tuHI_xe|)))))
-                    |lp_e_rFNl-xe|)
-                  (car |ls_e_JXX4Yxe|)
-                  (cdr |ls_e_JXX4Yxe|)
+                                 ((letrec ((|lp2_VIG1j9JVh|
+                                             (lambda (|ls2_VI0-gCJVh|
+                                                      |cls_VImWe3KVh|)
+                                               (if (null? |ls2_VI0-gCJVh|)
+                                                 (|lp_VIigrlHVh|
+                                                   (car |ls_VI-8nfIVh|)
+                                                   (cdr |ls_VI-8nfIVh|)
+                                                   |cls_VImWe3KVh|)
+                                                 (|lp2_VIG1j9JVh|
+                                                   (cdr |ls2_VI0-gCJVh|)
+                                                   (|conflicts_VICnvrGVh|
+                                                     |x_VIEcpOHVh|
+                                                     (car |ls2_VI0-gCJVh|)
+                                                     |cls_VImWe3KVh|))))))
+                                    |lp2_VIG1j9JVh|)
+                                  |ls_VI-8nfIVh|
+                                  |cls_VIk5lIIVh|)))))
+                    |lp_VIigrlHVh|)
+                  (car |ls_VIAyB4FVh|)
+                  (cdr |ls_VIAyB4FVh|)
                   '())
                  (void)))))
-         (|check-module-exports_e_jR4rFqe|
-           (lambda (|source-exp_e_R4B1Pxe|
-                    |fexports_e_b1zuPxe|
-                    |ids_e_xZwXPxe|)
-             (letrec ((|defined?_e_TVuoQxe|
-                        (lambda (|e_e_Xzi6Txe| |ids_e_hwgzTxe|)
-                          (ormap (lambda (|x_e_Dse0Uxe|)
-                                   (if (|interface?_e_L5Otvqe| |x_e_Dse0Uxe|)
-                                     ((lambda (|token_e_ZoctUxe|)
-                                        (if |token_e_ZoctUxe|
-                                          (|lookup-import-binding-name_e_p-Rxgqe|
-                                            ((lambda (|x_e_H62KWxe|)
-                                               ((lambda (|e_e_130bXxe|)
+         (|check-module-exports_VIasKqmOh|
+           (lambda (|source-exp_VIIHe1wVh|
+                    |fexports_VI2EcuwVh|
+                    |ids_VIoAaXwVh|)
+             (letrec ((|defined?_VIKw8oxVh|
+                        (lambda (|e_VIOaY5AVh| |ids_VI87WyAVh|)
+                          (ormap (lambda (|x_VIu3U_AVh|)
+                                   (if (|interface?_VICIrtcOh| |x_VIu3U_AVh|)
+                                     ((lambda (|token_VIQ_RsBVh|)
+                                        (if |token_VIQ_RsBVh|
+                                          (|lookup-import-binding-name_VIgBvxZNh|
+                                            ((lambda (|x_VIyJHJDVh|)
+                                               ((lambda (|e_VIUFFaEVh|)
                                                   (if (annotation?
-                                                        |e_e_130bXxe|)
+                                                        |e_VIUFFaEVh|)
                                                     (annotation-expression
-                                                      |e_e_130bXxe|)
-                                                    |e_e_130bXxe|))
-                                                (if (syntax-object?_e_h-lahpe
-                                                      |x_e_H62KWxe|)
-                                                  (|syntax-object-expression_e_DWjDhpe|
-                                                    |x_e_H62KWxe|)
-                                                  |x_e_H62KWxe|)))
-                                             |e_e_Xzi6Txe|)
-                                            |token_e_ZoctUxe|
-                                            (|wrap-marks_e_DggBKpe|
-                                              (|syntax-object-wrap_e_ZSh4ipe|
-                                                |e_e_Xzi6Txe|)))
-                                          ((lambda (|v_e_jlaWUxe|)
-                                             ((letrec ((|lp_e_Fh8nVxe|
-                                                         (lambda (|i_e__d6QVxe|)
-                                                           (if (>= |i_e__d6QVxe|
+                                                      |e_VIUFFaEVh|)
+                                                    |e_VIUFFaEVh|))
+                                                (if (|syntax-object?_VI8B_9-Mh|
+                                                      |x_VIyJHJDVh|)
+                                                  (|syntax-object-expression_VIuxZC-Mh|
+                                                    |x_VIyJHJDVh|)
+                                                  |x_VIyJHJDVh|)))
+                                             |e_VIOaY5AVh|)
+                                            |token_VIQ_RsBVh|
+                                            (|wrap-marks_VIuTVArNh|
+                                              (|syntax-object-wrap_VIQtX3_Mh|
+                                                |e_VIOaY5AVh|)))
+                                          ((lambda (|v_VIaYPVBVh|)
+                                             ((letrec ((|lp_VIwUNmCVh|
+                                                         (lambda (|i_VISQLPCVh|)
+                                                           (if (>= |i_VISQLPCVh|
                                                                    '0)
-                                                             ((lambda (|t_e_la4hWxe|)
-                                                                (if |t_e_la4hWxe|
-                                                                  |t_e_la4hWxe|
-                                                                  (|lp_e_Fh8nVxe|
-                                                                    (- |i_e__d6QVxe|
+                                                             ((lambda (|t_VIcNJgDVh|)
+                                                                (if |t_VIcNJgDVh|
+                                                                  |t_VIcNJgDVh|
+                                                                  (|lp_VIwUNmCVh|
+                                                                    (- |i_VISQLPCVh|
                                                                        '1))))
-                                                              (|bound-id=?_e_Terqmqe|
-                                                                |e_e_Xzi6Txe|
+                                                              (|bound-id=?_VIKR4q3Oh|
+                                                                |e_VIOaY5AVh|
                                                                 (vector-ref
-                                                                  |v_e_jlaWUxe|
-                                                                  |i_e__d6QVxe|)))
+                                                                  |v_VIaYPVBVh|
+                                                                  |i_VISQLPCVh|)))
                                                              '#f))))
-                                                |lp_e_Fh8nVxe|)
-                                              (- (vector-length |v_e_jlaWUxe|)
+                                                |lp_VIwUNmCVh|)
+                                              (- (vector-length |v_VIaYPVBVh|)
                                                  '1)))
-                                           (|interface-exports_e_52MWvqe|
-                                             |x_e_Dse0Uxe|))))
-                                      (|interface-token_e_r-Jnwqe|
-                                        |x_e_Dse0Uxe|))
-                                     (|bound-id=?_e_Terqmqe|
-                                       |e_e_Xzi6Txe|
-                                       |x_e_Dse0Uxe|)))
-                                 |ids_e_hwgzTxe|))))
-               ((letrec ((|loop_e_dSsRQxe|
-                           (lambda (|fexports_e_zOqiRxe| |missing_e_VKoLRxe|)
-                             (if (null? |fexports_e_zOqiRxe|)
-                               (if (not (null? |missing_e_VKoLRxe|))
+                                           (|interface-exports_VIYEpWcOh|
+                                             |x_VIu3U_AVh|))))
+                                      (|interface-token_VIiBnndOh|
+                                        |x_VIu3U_AVh|))
+                                     (|bound-id=?_VIKR4q3Oh|
+                                       |e_VIOaY5AVh|
+                                       |x_VIu3U_AVh|)))
+                                 |ids_VI87WyAVh|))))
+               ((letrec ((|loop_VI4t6RxVh|
+                           (lambda (|fexports_VIqp4iyVh| |missing_VIMl2LyVh|)
+                             (if (null? |fexports_VIqp4iyVh|)
+                               (if (not (null? |missing_VIMl2LyVh|))
                                  (syntax-error
-                                   |missing_e_VKoLRxe|
+                                   |missing_VIMl2LyVh|
                                    '"missing definition for export(s)")
                                  (void))
-                               ((lambda (|e_e_fHmcSxe| |fexports_e_BDkFSxe|)
-                                  (if (|defined?_e_TVuoQxe|
-                                        |e_e_fHmcSxe|
-                                        |ids_e_xZwXPxe|)
-                                    (|loop_e_dSsRQxe|
-                                      |fexports_e_BDkFSxe|
-                                      |missing_e_VKoLRxe|)
-                                    (|loop_e_dSsRQxe|
-                                      |fexports_e_BDkFSxe|
-                                      (cons |e_e_fHmcSxe|
-                                            |missing_e_VKoLRxe|))))
-                                (car |fexports_e_zOqiRxe|)
-                                (cdr |fexports_e_zOqiRxe|))))))
-                  |loop_e_dSsRQxe|)
-                |fexports_e_b1zuPxe|
+                               ((lambda (|e_VI6i0czVh| |fexports_VIse-EzVh|)
+                                  (if (|defined?_VIKw8oxVh|
+                                        |e_VI6i0czVh|
+                                        |ids_VIoAaXwVh|)
+                                    (|loop_VI4t6RxVh|
+                                      |fexports_VIse-EzVh|
+                                      |missing_VIMl2LyVh|)
+                                    (|loop_VI4t6RxVh|
+                                      |fexports_VIse-EzVh|
+                                      (cons |e_VI6i0czVh|
+                                            |missing_VIMl2LyVh|))))
+                                (car |fexports_VIqp4iyVh|)
+                                (cdr |fexports_VIqp4iyVh|))))))
+                  |loop_VI4t6RxVh|)
+                |fexports_VI2EcuwVh|
                 '()))))
-         (|extend-store!_e_ZU6-Eqe|
-           (lambda (|r_e_PfHGNxe|
-                    |label_e_9cF7Oxe|
-                    |binding_e_v8DAOxe|)
+         (|extend-store!_VIQvMZlOh|
+           (lambda (|r_VIGSkGuVh|
+                    |label_VI0Pi7vVh|
+                    |binding_VImLgAvVh|)
              (set-cdr!
-               |r_e_PfHGNxe|
-               (|extend-env_e_JA_aApe|
-                 |label_e_9cF7Oxe|
-                 |binding_e_v8DAOxe|
-                 (cdr |r_e_PfHGNxe|)))))
-         (|id-set-diff_e_DY8xEqe|
-           (lambda (|exports_e_7nLMMxe| |defs_e_tjJdNxe|)
-             (if (null? |exports_e_7nLMMxe|)
+               |r_VIGSkGuVh|
+               (|extend-env_VIAbFahNh|
+                 |label_VI0Pi7vVh|
+                 |binding_VImLgAvVh|
+                 (cdr |r_VIGSkGuVh|)))))
+         (|id-set-diff_VIuzOwlOh|
+           (lambda (|exports_VI-ZoMtVh| |defs_VIkWmduVh|)
+             (if (null? |exports_VI-ZoMtVh|)
                '()
-               (if (|bound-id-member?_e_ZJ8vqqe|
-                     (car |exports_e_7nLMMxe|)
-                     |defs_e_tjJdNxe|)
-                 (|id-set-diff_e_DY8xEqe|
-                   (cdr |exports_e_7nLMMxe|)
-                   |defs_e_tjJdNxe|)
-                 (cons (car |exports_e_7nLMMxe|)
-                       (|id-set-diff_e_DY8xEqe|
-                         (cdr |exports_e_7nLMMxe|)
-                         |defs_e_tjJdNxe|))))))
-         (|chi-top-module_e_h0b4Eqe|
-           (lambda (|e_e_FMdWdxe|
-                    |r_e__Ibnexe|
-                    |ribcage_e_lF9Qexe|
-                    |w_e_HB7hfxe|
-                    |s_e_1y5Kfxe|
-                    ctem_e_nu3bgxe
-                    |rtem_e_Jq1Egxe|
-                    id_e_3n_4hxe
-                    |exports_e_pjZxhxe|
-                    |forms_e_LfX-hxe|)
-             ((lambda (|fexports_e_5cVrixe| |module-id_e_r8TUixe|)
-                (|chi-external_e__J0lGqe|
-                  |ribcage_e_lF9Qexe|
-                  (|source-wrap_e_FC4prqe|
-                    |e_e_FMdWdxe|
-                    |w_e_HB7hfxe|
-                    |s_e_1y5Kfxe|)
-                  (map (lambda (|d_e_N4Rljxe|)
-                         (cons |r_e__Ibnexe| |d_e_N4Rljxe|))
-                       |forms_e_LfX-hxe|)
-                  |r_e__Ibnexe|
-                  |exports_e_pjZxhxe|
-                  |fexports_e_5cVrixe|
-                  ctem_e_nu3bgxe
-                  (lambda (|bindings_e_71POjxe| |inits_e_tZMfkxe|)
-                    ((letrec ((|partition_e_PVKIkxe|
-                                (lambda (|fexports_e_9SI9lxe|
-                                         |bs_e_vOGClxe|
-                                         |svs_e_RKE3mxe|
-                                         |ses_e_bHCwmxe|
-                                         |ctdefs_e_xDAZmxe|)
-                                  (if (null? |fexports_e_9SI9lxe|)
-                                    ((letrec ((|partition_e_5nTWwxe|
-                                                (lambda (|bs_e_rjRnxxe|
-                                                         |dvs_e_NfPQxxe|
-                                                         |des_e_7cNhyxe|)
-                                                  (if (null? |bs_e_rjRnxxe|)
-                                                    ((lambda (|ses_e_vZE5Axe|
-                                                              |des_e_RVCyAxe|
-                                                              |inits_e_bSA_Axe|)
+               (if (|bound-id-member?_VIQkOu7Oh|
+                     (car |exports_VI-ZoMtVh|)
+                     |defs_VIkWmduVh|)
+                 (|id-set-diff_VIuzOwlOh|
+                   (cdr |exports_VI-ZoMtVh|)
+                   |defs_VIkWmduVh|)
+                 (cons (car |exports_VI-ZoMtVh|)
+                       (|id-set-diff_VIuzOwlOh|
+                         (cdr |exports_VI-ZoMtVh|)
+                         |defs_VIkWmduVh|))))))
+         (|chi-top-module_VI8DQ3lOh|
+           (lambda (|e_VIwnTVWUh|
+                    |r_VISjRmXUh|
+                    |ribcage_VIcgPPXUh|
+                    |w_VIycNgYUh|
+                    |s_VIU8LJYUh|
+                    |ctem_VIe5JaZUh|
+                    |rtem_VIA1HDZUh|
+                    |id_VIWZE4-Uh|
+                    |exports_VIgWCx-Uh|
+                    |forms_VICSA--Uh|)
+             ((lambda (|fexports_VIYOyr_Uh| |module-id_VIiLwU_Uh|)
+                (|chi-external_VISkGknOh|
+                  |ribcage_VIcgPPXUh|
+                  (|source-wrap_VIwdKo8Oh|
+                    |e_VIwnTVWUh|
+                    |w_VIycNgYUh|
+                    |s_VIU8LJYUh|)
+                  (map (lambda (|d_VIEHul0Vh|)
+                         (cons |r_VISjRmXUh| |d_VIEHul0Vh|))
+                       |forms_VICSA--Uh|)
+                  |r_VISjRmXUh|
+                  |exports_VIgWCx-Uh|
+                  |fexports_VIYOyr_Uh|
+                  |ctem_VIe5JaZUh|
+                  (lambda (|bindings_VI-DsO0Vh| |inits_VIkAqf1Vh|)
+                    ((letrec ((|partition_VIGwoI1Vh|
+                                (lambda (|fexports_VI0tm92Vh|
+                                         |bs_VImpkC2Vh|
+                                         |svs_VIIli33Vh|
+                                         |ses_VI2igw3Vh|
+                                         |ctdefs_VIoeeZ3Vh|)
+                                  (if (null? |fexports_VI0tm92Vh|)
+                                    ((letrec ((|partition_VIYZwWdVh|
+                                                (lambda (|bs_VIiWuneVh|
+                                                         |dvs_VIESsQeVh|
+                                                         |des_VI-OqhfVh|)
+                                                  (if (null? |bs_VIiWuneVh|)
+                                                    ((lambda (|ses_VImAi5hVh|
+                                                              |des_VIIwgyhVh|
+                                                              |inits_VI2te_hVh|)
                                                        (begin
                                                          (for-each
-                                                           (lambda (|x_e_xOysBxe|)
-                                                             (apply (lambda (|t_e_TKwVBxe|
-                                                                             |label_e_dHumCxe|
-                                                                             |sym_e_zDsPCxe|
-                                                                             |val_e_VzqgDxe|)
-                                                                      (if |label_e_dHumCxe|
-                                                                        (|set-indirect-label!_e__c6U-pe|
-                                                                          |label_e_dHumCxe|
-                                                                          |sym_e_zDsPCxe|)
+                                                           (lambda (|x_VIopcsiVh|)
+                                                             (apply (lambda (|t_VIKlaViVh|
+                                                                             |label_VI4i8mjVh|
+                                                                             |sym_VIqe6PjVh|
+                                                                             |val_VIMa4gkVh|)
+                                                                      (if |label_VI4i8mjVh|
+                                                                        (|set-indirect-label!_VISPLTHNh|
+                                                                          |label_VI4i8mjVh|
+                                                                          |sym_VIqe6PjVh|)
                                                                         (void)))
-                                                                    |x_e_xOysBxe|))
-                                                           |ctdefs_e_xDAZmxe|)
-                                                         (|build-sequence_e_7RQnape|
+                                                                    |x_VIopcsiVh|))
+                                                           |ctdefs_VIoeeZ3Vh|)
+                                                         (|build-sequence_VI-runTMh|
                                                            '#f
-                                                           (list (|ct-eval/residualize_e_pkOvJqe|
-                                                                   ctem_e_nu3bgxe
+                                                           (list (|ct-eval/residualize_VIgXrvqOh|
+                                                                   |ctem_VIe5JaZUh|
                                                                    (lambda ()
-                                                                     (if (null? |ctdefs_e_xDAZmxe|)
-                                                                       (|chi-void_e_ztjiQqe|)
-                                                                       (|build-sequence_e_7RQnape|
+                                                                     (if (null? |ctdefs_VIoeeZ3Vh|)
+                                                                       (|chi-void_VIq4ZhxOh|)
+                                                                       (|build-sequence_VI-runTMh|
                                                                          '#f
-                                                                         (map (lambda (|x_e_fwoJDxe|)
-                                                                                (apply (lambda (|t_e_BsmaExe|
-                                                                                                |label_e_XokDExe|
-                                                                                                |sym_e_hli4Fxe|
-                                                                                                |val_e_DhgxFxe|)
+                                                                         (map (lambda (|x_VI672JkVh|)
+                                                                                (apply (lambda (|t_VIs30alVh|
+                                                                                                |label_VIO_ZClVh|
+                                                                                                |sym_VI8YX3mVh|
+                                                                                                |val_VIuUVwmVh|)
                                                                                          (list '$sc-put-cte
                                                                                                (list 'quote
-                                                                                                     |sym_e_hli4Fxe|)
-                                                                                               (if (eq? |t_e_BsmaExe|
+                                                                                                     |sym_VI8YX3mVh|)
+                                                                                               (if (eq? |t_VIs30alVh|
                                                                                                         'define-syntax-form)
-                                                                                                 |val_e_DhgxFxe|
+                                                                                                 |val_VIuUVwmVh|
                                                                                                  (list 'quote
-                                                                                                       (make-binding_e_zruotpe
+                                                                                                       (|make-binding_VIq28oaNh|
                                                                                                          'module
-                                                                                                         (|make-resolved-interface_e_PLBbyqe|
-                                                                                                           |val_e_DhgxFxe|
-                                                                                                           |sym_e_hli4Fxe|))))))
-                                                                                       |x_e_fwoJDxe|))
-                                                                              |ctdefs_e_xDAZmxe|)))))
-                                                                 (|ct-eval/residualize_e_pkOvJqe|
-                                                                   ctem_e_nu3bgxe
+                                                                                                         (|make-resolved-interface_VIGmfbfOh|
+                                                                                                           |val_VIuUVwmVh|
+                                                                                                           |sym_VI8YX3mVh|))))))
+                                                                                       |x_VI672JkVh|))
+                                                                              |ctdefs_VIoeeZ3Vh|)))))
+                                                                 (|ct-eval/residualize_VIgXrvqOh|
+                                                                   |ctem_VIe5JaZUh|
                                                                    (lambda ()
-                                                                     ((lambda (|n_e_Zde-Fxe|)
-                                                                        ((lambda (|token_e_jacrGxe|)
-                                                                           ((lambda (|b_e_F6aUGxe|)
-                                                                              (if |n_e_Zde-Fxe|
+                                                                     ((lambda (|n_VIQQTZmVh|)
+                                                                        ((lambda (|token_VIaNRqnVh|)
+                                                                           ((lambda (|b_VIwJPTnVh|)
+                                                                              (if |n_VIQQTZmVh|
                                                                                 (list '$sc-put-cte
                                                                                       (list 'quote
-                                                                                            (if (|same-marks?_e_tEFfjqe|
-                                                                                                  (|wrap-marks_e_DggBKpe|
-                                                                                                    (|syntax-object-wrap_e_ZSh4ipe|
-                                                                                                      id_e_3n_4hxe))
-                                                                                                  (|wrap-marks_e_DggBKpe|
+                                                                                            (if (|same-marks?_VIkfjf0Oh|
+                                                                                                  (|wrap-marks_VIuTVArNh|
+                                                                                                    (|syntax-object-wrap_VIQtX3_Mh|
+                                                                                                      |id_VIWZE4-Uh|))
+                                                                                                  (|wrap-marks_VIuTVArNh|
                                                                                                     '((top))))
-                                                                                              |n_e_Zde-Fxe|
-                                                                                              ((lambda (|marks_e_l_5OHxe|)
-                                                                                                 (|make-syntax-object_e_X1oJgpe|
-                                                                                                   |n_e_Zde-Fxe|
-                                                                                                   (|make-wrap_e_hki8Kpe|
-                                                                                                     |marks_e_l_5OHxe|
-                                                                                                     (list (|make-ribcage_e_n-ZH0qe|
+                                                                                              |n_VIQQTZmVh|
+                                                                                              ((lambda (|marks_VIcCLNoVh|)
+                                                                                                 (|make-syntax-object_VIOE1JZMh|
+                                                                                                   |n_VIQQTZmVh|
+                                                                                                   (|make-wrap_VI8XX7rNh|
+                                                                                                     |marks_VIcCLNoVh|
+                                                                                                     (list (|make-ribcage_VIeBDHJNh|
                                                                                                              (vector
-                                                                                                               |n_e_Zde-Fxe|)
+                                                                                                               |n_VIQQTZmVh|)
                                                                                                              (vector
-                                                                                                               |marks_e_l_5OHxe|)
+                                                                                                               |marks_VIcCLNoVh|)
                                                                                                              (vector
-                                                                                                               (|generate-id_e_Ly27toe|
-                                                                                                                 |n_e_Zde-Fxe|)))))))
-                                                                                               (|wrap-marks_e_DggBKpe|
-                                                                                                 (|syntax-object-wrap_e_ZSh4ipe|
-                                                                                                   id_e_3n_4hxe)))))
-                                                                                      |b_e_F6aUGxe|)
-                                                                                ((lambda (|n_e__28lHxe|)
-                                                                                   (|build-sequence_e_7RQnape|
+                                                                                                               (|generate-id_VIC9I6aMh|
+                                                                                                                 |n_VIQQTZmVh|)))))))
+                                                                                               (|wrap-marks_VIuTVArNh|
+                                                                                                 (|syntax-object-wrap_VIQtX3_Mh|
+                                                                                                   |id_VIWZE4-Uh|)))))
+                                                                                      |b_VIwJPTnVh|)
+                                                                                ((lambda (|n_VISFNkoVh|)
+                                                                                   (|build-sequence_VI-runTMh|
                                                                                      '#f
                                                                                      (list (list '$sc-put-cte
                                                                                                  (list 'quote
-                                                                                                       |n_e__28lHxe|)
-                                                                                                 |b_e_F6aUGxe|)
-                                                                                           (|do-top-import_e_1zWHHqe|
-                                                                                             |n_e__28lHxe|
-                                                                                             |token_e_jacrGxe|))))
-                                                                                 (|generate-id_e_Ly27toe|
+                                                                                                       |n_VISFNkoVh|)
+                                                                                                 |b_VIwJPTnVh|)
+                                                                                           (|do-top-import_VIU9AHoOh|
+                                                                                             |n_VISFNkoVh|
+                                                                                             |token_VIaNRqnVh|))))
+                                                                                 (|generate-id_VIC9I6aMh|
                                                                                    'tmp))))
                                                                             (list 'quote
-                                                                                  (make-binding_e_zruotpe
+                                                                                  (|make-binding_VIq28oaNh|
                                                                                     'module
-                                                                                    (|make-resolved-interface_e_PLBbyqe|
-                                                                                      |exports_e_pjZxhxe|
-                                                                                      |token_e_jacrGxe|)))))
-                                                                         (|generate-id_e_Ly27toe|
-                                                                           |n_e_Zde-Fxe|)))
-                                                                      (if id_e_3n_4hxe
-                                                                        ((lambda (|x_e_HX3fIxe|)
-                                                                           ((lambda (|e_e_1U1IIxe|)
+                                                                                    (|make-resolved-interface_VIGmfbfOh|
+                                                                                      |exports_VIgWCx-Uh|
+                                                                                      |token_VIaNRqnVh|)))))
+                                                                         (|generate-id_VIC9I6aMh|
+                                                                           |n_VIQQTZmVh|)))
+                                                                      (if |id_VIWZE4-Uh|
+                                                                        ((lambda (|x_VIyyJepVh|)
+                                                                           ((lambda (|e_VIUuHHpVh|)
                                                                               (if (annotation?
-                                                                                    |e_e_1U1IIxe|)
+                                                                                    |e_VIUuHHpVh|)
                                                                                 (annotation-expression
-                                                                                  |e_e_1U1IIxe|)
-                                                                                |e_e_1U1IIxe|))
-                                                                            (if (syntax-object?_e_h-lahpe
-                                                                                  |x_e_HX3fIxe|)
-                                                                              (|syntax-object-expression_e_DWjDhpe|
-                                                                                |x_e_HX3fIxe|)
-                                                                              |x_e_HX3fIxe|)))
-                                                                         id_e_3n_4hxe)
+                                                                                  |e_VIUuHHpVh|)
+                                                                                |e_VIUuHHpVh|))
+                                                                            (if (|syntax-object?_VI8B_9-Mh|
+                                                                                  |x_VIyyJepVh|)
+                                                                              (|syntax-object-expression_VIuxZC-Mh|
+                                                                                |x_VIyyJepVh|)
+                                                                              |x_VIyyJepVh|)))
+                                                                         |id_VIWZE4-Uh|)
                                                                         '#f))))
-                                                                 (if (null? |svs_e_RKE3mxe|)
-                                                                   (|chi-void_e_ztjiQqe|)
-                                                                   (|build-sequence_e_7RQnape|
+                                                                 (if (null? |svs_VIIli33Vh|)
+                                                                   (|chi-void_VIq4ZhxOh|)
+                                                                   (|build-sequence_VI-runTMh|
                                                                      '#f
-                                                                     (map (lambda (|v_e_nQ_8Jxe|)
+                                                                     (map (lambda (|v_VIerF8qVh|)
                                                                             (list 'define
-                                                                                  |v_e_nQ_8Jxe|
-                                                                                  (|chi-void_e_ztjiQqe|)))
-                                                                          |svs_e_RKE3mxe|)))
-                                                                 (|rt-eval/residualize_e_3oQ2Jqe|
-                                                                   |rtem_e_Jq1Egxe|
+                                                                                  |v_VIerF8qVh|
+                                                                                  (|chi-void_VIq4ZhxOh|)))
+                                                                          |svs_VIIli33Vh|)))
+                                                                 (|rt-eval/residualize_VIW-t2qOh|
+                                                                   |rtem_VIA1HDZUh|
                                                                    (lambda ()
-                                                                     (|build-body_e_PJMhbpe|
+                                                                     (|build-body_VIGkqhUMh|
                                                                        '#f
-                                                                       |dvs_e_NfPQxxe|
-                                                                       |des_e_RVCyAxe|
-                                                                       (|build-sequence_e_7RQnape|
+                                                                       |dvs_VIESsQeVh|
+                                                                       |des_VIIwgyhVh|
+                                                                       (|build-sequence_VI-runTMh|
                                                                          '#f
-                                                                         (list (if (null? |svs_e_RKE3mxe|)
-                                                                                 (|chi-void_e_ztjiQqe|)
-                                                                                 (|build-sequence_e_7RQnape|
+                                                                         (list (if (null? |svs_VIIli33Vh|)
+                                                                                 (|chi-void_VIq4ZhxOh|)
+                                                                                 (|build-sequence_VI-runTMh|
                                                                                    '#f
-                                                                                   (map (lambda (|v_e_JMZBJxe|
-                                                                                                 |e_e_3JX2Kxe|)
+                                                                                   (map (lambda (|v_VIAnDBqVh|
+                                                                                                 |e_VIWjB2rVh|)
                                                                                           (list 'set!
-                                                                                                |v_e_JMZBJxe|
-                                                                                                |e_e_3JX2Kxe|))
-                                                                                        |svs_e_RKE3mxe|
-                                                                                        |ses_e_vZE5Axe|)))
-                                                                               (if (null? |inits_e_bSA_Axe|)
-                                                                                 (|chi-void_e_ztjiQqe|)
-                                                                                 (|build-sequence_e_7RQnape|
+                                                                                                |v_VIAnDBqVh|
+                                                                                                |e_VIWjB2rVh|))
+                                                                                        |svs_VIIli33Vh|
+                                                                                        |ses_VImAi5hVh|)))
+                                                                               (if (null? |inits_VI2te_hVh|)
+                                                                                 (|chi-void_VIq4ZhxOh|)
+                                                                                 (|build-sequence_VI-runTMh|
                                                                                    '#f
-                                                                                   |inits_e_bSA_Axe|)))))))
-                                                                 (|chi-void_e_ztjiQqe|)))))
-                                                     (map (lambda (|x_e_pFVvKxe|)
-                                                            (|chi_e_LgMYJqe|
-                                                              (cdr |x_e_pFVvKxe|)
-                                                              (car |x_e_pFVvKxe|)
+                                                                                   |inits_VI2te_hVh|)))))))
+                                                                 (|chi-void_VIq4ZhxOh|)))))
+                                                     (map (lambda (|x_VIggzvrVh|)
+                                                            (|chi_VICTpYqOh|
+                                                              (cdr |x_VIggzvrVh|)
+                                                              (car |x_VIggzvrVh|)
                                                               '(())))
-                                                          |ses_e_bHCwmxe|)
-                                                     (map (lambda (|x_e_LBTYKxe|)
-                                                            (|chi_e_LgMYJqe|
-                                                              (cdr |x_e_LBTYKxe|)
-                                                              (car |x_e_LBTYKxe|)
+                                                          |ses_VI2igw3Vh|)
+                                                     (map (lambda (|x_VICcxYrVh|)
+                                                            (|chi_VICTpYqOh|
+                                                              (cdr |x_VICcxYrVh|)
+                                                              (car |x_VICcxYrVh|)
                                                               '(())))
-                                                          |des_e_7cNhyxe|)
-                                                     (map (lambda (|x_e_5yRpLxe|)
-                                                            (|chi_e_LgMYJqe|
-                                                              (cdr |x_e_5yRpLxe|)
-                                                              (car |x_e_5yRpLxe|)
+                                                          |des_VI-OqhfVh|)
+                                                     (map (lambda (|x_VIY8vpsVh|)
+                                                            (|chi_VICTpYqOh|
+                                                              (cdr |x_VIY8vpsVh|)
+                                                              (car |x_VIY8vpsVh|)
                                                               '(())))
-                                                          |inits_e_tZMfkxe|))
-                                                    ((lambda (|b_e_t8LKyxe|)
-                                                       ((lambda (|t_e_P4Jbzxe|)
-                                                          (if (memv |t_e_P4Jbzxe|
+                                                          |inits_VIkAqf1Vh|))
+                                                    ((lambda (|b_VIkLoKfVh|)
+                                                       ((lambda (|t_VIGHmbgVh|)
+                                                          (if (memv |t_VIGHmbgVh|
                                                                     '(define-form))
-                                                            ((lambda (|var_e_91HEzxe|)
+                                                            ((lambda (|var_VI0EkEgVh|)
                                                                (begin
-                                                                 (|extend-store!_e_ZU6-Eqe|
-                                                                   |r_e__Ibnexe|
-                                                                   (|get-indirect-label_e_Fg8r-pe|
-                                                                     (|module-binding-label_e_xtrsAqe|
-                                                                       |b_e_t8LKyxe|))
-                                                                   (make-binding_e_zruotpe
+                                                                 (|extend-store!_VIQvMZlOh|
+                                                                   |r_VISjRmXUh|
+                                                                   (|get-indirect-label_VIwTNqHNh|
+                                                                     (|module-binding-label_VIo45shOh|
+                                                                       |b_VIkLoKfVh|))
+                                                                   (|make-binding_VIq28oaNh|
                                                                      'lexical
-                                                                     |var_e_91HEzxe|))
-                                                                 (|partition_e_5nTWwxe|
-                                                                   (cdr |bs_e_rjRnxxe|)
-                                                                   (cons |var_e_91HEzxe|
-                                                                         |dvs_e_NfPQxxe|)
-                                                                   (cons (|module-binding-val_e_dmnmBqe|
-                                                                           |b_e_t8LKyxe|)
-                                                                         |des_e_7cNhyxe|))))
-                                                             (|gen-var_e_hb9zSqe|
-                                                               (module-binding-id_e_bxt_zqe
-                                                                 |b_e_t8LKyxe|)))
-                                                            (if (memv |t_e_P4Jbzxe|
+                                                                     |var_VI0EkEgVh|))
+                                                                 (|partition_VIYZwWdVh|
+                                                                   (cdr |bs_VIiWuneVh|)
+                                                                   (cons |var_VI0EkEgVh|
+                                                                         |dvs_VIESsQeVh|)
+                                                                   (cons (|module-binding-val_VI4Z0miOh|
+                                                                           |b_VIkLoKfVh|)
+                                                                         |des_VI-OqhfVh|))))
+                                                             (|gen-var_VI8OOyzOh|
+                                                               (|module-binding-id_VI287_gOh|
+                                                                 |b_VIkLoKfVh|)))
+                                                            (if (memv |t_VIGHmbgVh|
                                                                       '(define-syntax-form
                                                                          module-form))
-                                                              (|partition_e_5nTWwxe|
-                                                                (cdr |bs_e_rjRnxxe|)
-                                                                |dvs_e_NfPQxxe|
-                                                                |des_e_7cNhyxe|)
+                                                              (|partition_VIYZwWdVh|
+                                                                (cdr |bs_VIiWuneVh|)
+                                                                |dvs_VIESsQeVh|
+                                                                |des_VI-OqhfVh|)
                                                               (error 'sc-expand-internal
                                                                      '"unexpected module binding type"))))
-                                                        (|module-binding-type_e_RAvyzqe|
-                                                          |b_e_t8LKyxe|)))
-                                                     (car |bs_e_rjRnxxe|))))))
-                                       |partition_e_5nTWwxe|)
-                                     |bs_e_vOGClxe|
+                                                        (|module-binding-type_VIIb9ygOh|
+                                                          |b_VIkLoKfVh|)))
+                                                     (car |bs_VIiWuneVh|))))))
+                                       |partition_VIYZwWdVh|)
+                                     |bs_VImpkC2Vh|
                                      '()
                                      '())
-                                    ((lambda (|id_e_Tzyqnxe|
-                                              |fexports_e_dwwTnxe|)
-                                       (letrec ((pluck-binding_e_zsukoxe
-                                                  (lambda (|id_e_HM5Mtxe|
-                                                           |bs_e_1J3duxe|
-                                                           |succ_e_nF1Guxe|
-                                                           |fail_e_JB_6vxe|)
-                                                    ((letrec ((|loop_e_3yZzvxe|
-                                                                (lambda (|bs_e_puX0wxe|
-                                                                         |new-bs_e_LqVtwxe|)
-                                                                  (if (null? |bs_e_puX0wxe|)
-                                                                    (|fail_e_JB_6vxe|)
-                                                                    (if (free-id=?_e_bmvwlqe
-                                                                          (module-binding-id_e_bxt_zqe
-                                                                            (car |bs_e_puX0wxe|))
-                                                                          |id_e_HM5Mtxe|)
-                                                                      (|succ_e_nF1Guxe|
-                                                                        (car |bs_e_puX0wxe|)
-                                                                        (|smart-append_e_rPLUhqe|
+                                    ((lambda (|id_VIKacq4Vh|
+                                              |fexports_VI47aT4Vh|)
+                                       (letrec ((|pluck-binding_VIq38k5Vh|
+                                                  (lambda (|id_VIynLLaVh|
+                                                           |bs_VIUjJcbVh|
+                                                           |succ_VIegHFbVh|
+                                                           |fail_VIAcF6cVh|)
+                                                    ((letrec ((|loop_VIW8DzcVh|
+                                                                (lambda (|bs_VIg5B0dVh|
+                                                                         |new-bs_VIC1ztdVh|)
+                                                                  (if (null? |bs_VIg5B0dVh|)
+                                                                    (|fail_VIAcF6cVh|)
+                                                                    (if (|free-id=?_VI2Z8w2Oh|
+                                                                          (|module-binding-id_VI287_gOh|
+                                                                            (car |bs_VIg5B0dVh|))
+                                                                          |id_VIynLLaVh|)
+                                                                      (|succ_VIegHFbVh|
+                                                                        (car |bs_VIg5B0dVh|)
+                                                                        (|smart-append_VIiqpU-Nh|
                                                                           (reverse
-                                                                            |new-bs_e_LqVtwxe|)
-                                                                          (cdr |bs_e_puX0wxe|)))
-                                                                      (|loop_e_3yZzvxe|
-                                                                        (cdr |bs_e_puX0wxe|)
-                                                                        (cons (car |bs_e_puX0wxe|)
-                                                                              |new-bs_e_LqVtwxe|)))))))
-                                                       |loop_e_3yZzvxe|)
-                                                     |bs_e_1J3duxe|
+                                                                            |new-bs_VIC1ztdVh|)
+                                                                          (cdr |bs_VIg5B0dVh|)))
+                                                                      (|loop_VIW8DzcVh|
+                                                                        (cdr |bs_VIg5B0dVh|)
+                                                                        (cons (car |bs_VIg5B0dVh|)
+                                                                              |new-bs_VIC1ztdVh|)))))))
+                                                       |loop_VIW8DzcVh|)
+                                                     |bs_VIUjJcbVh|
                                                      '()))))
-                                         (pluck-binding_e_zsukoxe
-                                           |id_e_Tzyqnxe|
-                                           |bs_e_vOGClxe|
-                                           (lambda (|b_e_VosNoxe| bs_e_flqepxe)
-                                             ((lambda (|t_e_BhoHpxe|
-                                                       |label_e_Xdm8qxe|
-                                                       |imps_e_hakBqxe|)
-                                                ((lambda (|fexports_e_D6i2rxe|
-                                                          |sym_e_Z2gvrxe|)
-                                                   ((lambda (|t_e_j_dYrxe|)
-                                                      (if (memv |t_e_j_dYrxe|
+                                         (|pluck-binding_VIq38k5Vh|
+                                           |id_VIKacq4Vh|
+                                           |bs_VImpkC2Vh|
+                                           (lambda (|b_VIM_5N5Vh|
+                                                    |bs_VI6Y3e6Vh|)
+                                             ((lambda (|t_VIsU1H6Vh|
+                                                       |label_VIOQ_77Vh|
+                                                       |imps_VI8NZA7Vh|)
+                                                ((lambda (|fexports_VIuJX18Vh|
+                                                          |sym_VIQFVu8Vh|)
+                                                   ((lambda (|t_VIaCTX8Vh|)
+                                                      (if (memv |t_VIaCTX8Vh|
                                                                 '(define-form))
                                                         (begin
-                                                          (|set-indirect-label!_e__c6U-pe|
-                                                            |label_e_Xdm8qxe|
-                                                            |sym_e_Z2gvrxe|)
-                                                          (|partition_e_PVKIkxe|
-                                                            |fexports_e_D6i2rxe|
-                                                            bs_e_flqepxe
-                                                            (cons |sym_e_Z2gvrxe|
-                                                                  |svs_e_RKE3mxe|)
-                                                            (cons (|module-binding-val_e_dmnmBqe|
-                                                                    |b_e_VosNoxe|)
-                                                                  |ses_e_bHCwmxe|)
-                                                            |ctdefs_e_xDAZmxe|))
-                                                        (if (memv |t_e_j_dYrxe|
+                                                          (|set-indirect-label!_VISPLTHNh|
+                                                            |label_VIOQ_77Vh|
+                                                            |sym_VIQFVu8Vh|)
+                                                          (|partition_VIGwoI1Vh|
+                                                            |fexports_VIuJX18Vh|
+                                                            |bs_VI6Y3e6Vh|
+                                                            (cons |sym_VIQFVu8Vh|
+                                                                  |svs_VIIli33Vh|)
+                                                            (cons (|module-binding-val_VI4Z0miOh|
+                                                                    |b_VIM_5N5Vh|)
+                                                                  |ses_VI2igw3Vh|)
+                                                            |ctdefs_VIoeeZ3Vh|))
+                                                        (if (memv |t_VIaCTX8Vh|
                                                                   '(define-syntax-form))
-                                                          (|partition_e_PVKIkxe|
-                                                            |fexports_e_D6i2rxe|
-                                                            bs_e_flqepxe
-                                                            |svs_e_RKE3mxe|
-                                                            |ses_e_bHCwmxe|
-                                                            (cons (list |t_e_BhoHpxe|
-                                                                        |label_e_Xdm8qxe|
-                                                                        |sym_e_Z2gvrxe|
-                                                                        (|module-binding-val_e_dmnmBqe|
-                                                                          |b_e_VosNoxe|))
-                                                                  |ctdefs_e_xDAZmxe|))
-                                                          (if (memv |t_e_j_dYrxe|
+                                                          (|partition_VIGwoI1Vh|
+                                                            |fexports_VIuJX18Vh|
+                                                            |bs_VI6Y3e6Vh|
+                                                            |svs_VIIli33Vh|
+                                                            |ses_VI2igw3Vh|
+                                                            (cons (list |t_VIsU1H6Vh|
+                                                                        |label_VIOQ_77Vh|
+                                                                        |sym_VIQFVu8Vh|
+                                                                        (|module-binding-val_VI4Z0miOh|
+                                                                          |b_VIM_5N5Vh|))
+                                                                  |ctdefs_VIoeeZ3Vh|))
+                                                          (if (memv |t_VIaCTX8Vh|
                                                                     '(module-form))
-                                                            ((lambda (|exports_e_FXbpsxe|)
-                                                               (|partition_e_PVKIkxe|
+                                                            ((lambda (|exports_VIwyRo9Vh|)
+                                                               (|partition_VIGwoI1Vh|
                                                                  (append
-                                                                   (|flatten-exports_e_3dSzuqe|
-                                                                     |exports_e_FXbpsxe|)
-                                                                   |fexports_e_D6i2rxe|)
-                                                                 bs_e_flqepxe
-                                                                 |svs_e_RKE3mxe|
-                                                                 |ses_e_bHCwmxe|
-                                                                 (cons (list |t_e_BhoHpxe|
-                                                                             |label_e_Xdm8qxe|
-                                                                             |sym_e_Z2gvrxe|
-                                                                             |exports_e_FXbpsxe|)
-                                                                       |ctdefs_e_xDAZmxe|)))
-                                                             (|module-binding-val_e_dmnmBqe|
-                                                               |b_e_VosNoxe|))
+                                                                   (|flatten-exports_VIWPvzbOh|
+                                                                     |exports_VIwyRo9Vh|)
+                                                                   |fexports_VIuJX18Vh|)
+                                                                 |bs_VI6Y3e6Vh|
+                                                                 |svs_VIIli33Vh|
+                                                                 |ses_VI2igw3Vh|
+                                                                 (cons (list |t_VIsU1H6Vh|
+                                                                             |label_VIOQ_77Vh|
+                                                                             |sym_VIQFVu8Vh|
+                                                                             |exports_VIwyRo9Vh|)
+                                                                       |ctdefs_VIoeeZ3Vh|)))
+                                                             (|module-binding-val_VI4Z0miOh|
+                                                               |b_VIM_5N5Vh|))
                                                             (error 'sc-expand-internal
                                                                    '"unexpected module binding type")))))
-                                                    |t_e_BhoHpxe|))
+                                                    |t_VIsU1H6Vh|))
                                                  (append
-                                                   |imps_e_hakBqxe|
-                                                   |fexports_e_dwwTnxe|)
-                                                 (|generate-module-id_e_5v0Atoe|
-                                                   |module-id_e_r8TUixe|
-                                                   ((lambda (|x_e__T9Ssxe|)
-                                                      ((lambda (|e_e_lQ7jtxe|)
+                                                   |imps_VI8NZA7Vh|
+                                                   |fexports_VI47aT4Vh|)
+                                                 (|generate-module-id_VIY5GzaMh|
+                                                   |module-id_VIiLwU_Uh|
+                                                   ((lambda (|x_VISuPR9Vh|)
+                                                      ((lambda (|e_VIcrNiaVh|)
                                                          (if (annotation?
-                                                               |e_e_lQ7jtxe|)
+                                                               |e_VIcrNiaVh|)
                                                            (annotation-expression
-                                                             |e_e_lQ7jtxe|)
-                                                           |e_e_lQ7jtxe|))
-                                                       (if (syntax-object?_e_h-lahpe
-                                                             |x_e__T9Ssxe|)
-                                                         (|syntax-object-expression_e_DWjDhpe|
-                                                           |x_e__T9Ssxe|)
-                                                         |x_e__T9Ssxe|)))
-                                                    |id_e_Tzyqnxe|))))
-                                              (|module-binding-type_e_RAvyzqe|
-                                                |b_e_VosNoxe|)
-                                              (|module-binding-label_e_xtrsAqe|
-                                                |b_e_VosNoxe|)
-                                              (|module-binding-imps_e_TppVAqe|
-                                                |b_e_VosNoxe|)))
+                                                             |e_VIcrNiaVh|)
+                                                           |e_VIcrNiaVh|))
+                                                       (if (|syntax-object?_VI8B_9-Mh|
+                                                             |x_VISuPR9Vh|)
+                                                         (|syntax-object-expression_VIuxZC-Mh|
+                                                           |x_VISuPR9Vh|)
+                                                         |x_VISuPR9Vh|)))
+                                                    |id_VIKacq4Vh|))))
+                                              (|module-binding-type_VIIb9ygOh|
+                                                |b_VIM_5N5Vh|)
+                                              (|module-binding-label_VIo45shOh|
+                                                |b_VIM_5N5Vh|)
+                                              (|module-binding-imps_VIK03VhOh|
+                                                |b_VIM_5N5Vh|)))
                                            (lambda ()
-                                             (|partition_e_PVKIkxe|
-                                               |fexports_e_dwwTnxe|
-                                               |bs_e_vOGClxe|
-                                               |svs_e_RKE3mxe|
-                                               |ses_e_bHCwmxe|
-                                               |ctdefs_e_xDAZmxe|)))))
-                                     (car |fexports_e_9SI9lxe|)
-                                     (cdr |fexports_e_9SI9lxe|))))))
-                       |partition_e_PVKIkxe|)
-                     |fexports_e_5cVrixe|
-                     |bindings_e_71POjxe|
+                                             (|partition_VIGwoI1Vh|
+                                               |fexports_VI47aT4Vh|
+                                               |bs_VImpkC2Vh|
+                                               |svs_VIIli33Vh|
+                                               |ses_VI2igw3Vh|
+                                               |ctdefs_VIoeeZ3Vh|)))))
+                                     (car |fexports_VI0tm92Vh|)
+                                     (cdr |fexports_VI0tm92Vh|))))))
+                       |partition_VIGwoI1Vh|)
+                     |fexports_VIYOyr_Uh|
+                     |bindings_VI-DsO0Vh|
                      '()
                      '()
                      '()))))
-              (|flatten-exports_e_3dSzuqe| |exports_e_pjZxhxe|)
-              (if id_e_3n_4hxe
-                ((lambda (|x_e_ruPSLxe|)
-                   ((lambda (|e_e_NqNjMxe|)
-                      (if (annotation? |e_e_NqNjMxe|)
-                        (annotation-expression |e_e_NqNjMxe|)
-                        |e_e_NqNjMxe|))
-                    (if (syntax-object?_e_h-lahpe |x_e_ruPSLxe|)
-                      (|syntax-object-expression_e_DWjDhpe|
-                        |x_e_ruPSLxe|)
-                      |x_e_ruPSLxe|)))
-                 id_e_3n_4hxe)
-                'anon))))
-         (|set-module-binding-val!_e_X3dDDqe|
-           (lambda (|x_e_ZTh0dxe| |update_e_jQftdxe|)
-             (vector-set! |x_e_ZTh0dxe| '5 |update_e_jQftdxe|)))
-         (|set-module-binding-imps!_e_B7faDqe|
-           (lambda (x_e_h_l6cxe |update_e_DXjzcxe|)
-             (vector-set! x_e_h_l6cxe '4 |update_e_DXjzcxe|)))
-         (|set-module-binding-label!_e_fbhJCqe|
-           (lambda (|x_e_B6qcbxe| |update_e_X2oFbxe|)
-             (vector-set! |x_e_B6qcbxe| '3 |update_e_X2oFbxe|)))
-         (|set-module-binding-id!_e_VejgCqe|
-           (lambda (|x_e_Vduiaxe| |update_e_fasLaxe|)
-             (vector-set! |x_e_Vduiaxe| '2 |update_e_fasLaxe|)))
-         (|set-module-binding-type!_e_zilPBqe|
-           (lambda (x_e_dlyo9xe |update_e_zhwR9xe|)
-             (vector-set! x_e_dlyo9xe '1 |update_e_zhwR9xe|)))
-         (|module-binding-val_e_dmnmBqe|
-           (lambda (|x_e_ToAX8xe|)
-             (vector-ref |x_e_ToAX8xe| '5)))
-         (|module-binding-imps_e_TppVAqe|
-           (lambda (|x_e_xsCu8xe|)
-             (vector-ref |x_e_xsCu8xe| '4)))
-         (|module-binding-label_e_xtrsAqe|
-           (lambda (|x_e_bwE18xe|)
-             (vector-ref |x_e_bwE18xe| '3)))
-         (module-binding-id_e_bxt_zqe
-           (lambda (|x_e_RzGA7xe|)
-             (vector-ref |x_e_RzGA7xe| '2)))
-         (|module-binding-type_e_RAvyzqe|
-           (lambda (|x_e_vDI77xe|)
-             (vector-ref |x_e_vDI77xe| '1)))
-         (|module-binding?_e_vEx5zqe|
-           (lambda (|x_e_9HKG6xe|)
-             (if (vector? |x_e_9HKG6xe|)
-               (if (= (vector-length |x_e_9HKG6xe|) '6)
-                 (eq? (vector-ref |x_e_9HKG6xe| '0)
+              (|flatten-exports_VIWPvzbOh| |exports_VIgWCx-Uh|)
+              (if |id_VIWZE4-Uh|
+                ((lambda (|x_VIi5tSsVh|)
+                   ((lambda (|e_VIE1rjtVh|)
+                      (if (annotation? |e_VIE1rjtVh|)
+                        (annotation-expression |e_VIE1rjtVh|)
+                        |e_VIE1rjtVh|))
+                    (if (|syntax-object?_VI8B_9-Mh| |x_VIi5tSsVh|)
+                      (|syntax-object-expression_VIuxZC-Mh|
+                        |x_VIi5tSsVh|)
+                      |x_VIi5tSsVh|)))
+                 |id_VIWZE4-Uh|)
+                (gensym)))))
+         (|set-module-binding-val!_VIOGSCkOh|
+           (lambda (|x_VIQuX_VUh| |update_VIarVsWUh|)
+             (vector-set! |x_VIQuX_VUh| '5 |update_VIarVsWUh|)))
+         (|set-module-binding-imps!_VIsKU9kOh|
+           (lambda (|x_VI8C_5VUh| |update_VIuyZyVUh|)
+             (vector-set! |x_VI8C_5VUh| '4 |update_VIuyZyVUh|)))
+         (|set-module-binding-label!_VI6OWIjOh|
+           (lambda (|x_VIsJ3cUUh| |update_VIOF1FUUh|)
+             (vector-set! |x_VIsJ3cUUh| '3 |update_VIOF1FUUh|)))
+         (|set-module-binding-id!_VIMRYfjOh|
+           (lambda (|x_VIMQ7iTUh| |update_VI6N5LTUh|)
+             (vector-set! |x_VIMQ7iTUh| '2 |update_VI6N5LTUh|)))
+         (|set-module-binding-type!_VIqV-OiOh|
+           (lambda (|x_VI4YboSUh| |update_VIqU9RSUh|)
+             (vector-set! |x_VI4YboSUh| '1 |update_VIqU9RSUh|)))
+         (|module-binding-val_VI4Z0miOh|
+           (lambda (|x_VIK_dXRUh|)
+             (vector-ref |x_VIK_dXRUh| '5)))
+         (|module-binding-imps_VIK03VhOh|
+           (lambda (|x_VIo3guRUh|)
+             (vector-ref |x_VIo3guRUh| '4)))
+         (|module-binding-label_VIo45shOh|
+           (lambda (|x_VI27i1RUh|)
+             (vector-ref |x_VI27i1RUh| '3)))
+         (|module-binding-id_VI287_gOh|
+           (lambda (|x_VIIakAQUh|)
+             (vector-ref |x_VIIakAQUh| '2)))
+         (|module-binding-type_VIIb9ygOh|
+           (lambda (|x_VImem7QUh|)
+             (vector-ref |x_VImem7QUh| '1)))
+         (|module-binding?_VImfb5gOh|
+           (lambda (|x_VI0ioGPUh|)
+             (if (vector? |x_VI0ioGPUh|)
+               (if (= (vector-length |x_VI0ioGPUh|) '6)
+                 (eq? (vector-ref |x_VI0ioGPUh| '0)
                       'module-binding)
                  '#f)
                '#f)))
-         (|make-module-binding_e_9IzEyqe|
-           (lambda (|type_e_rZUp4xe|
-                    |id_e_NVSS4xe|
-                    |label_e_7SQj5xe|
-                    |imps_e_tOOM5xe|
-                    |val_e_PKMd6xe|)
+         (|make-module-binding_VI0jdEfOh|
+           (lambda (|type_VIiAypNUh|
+                    |id_VIEwwSNUh|
+                    |label_VI-sujOUh|
+                    |imps_VIkpsMOUh|
+                    |val_VIGlqdPUh|)
              (vector
                'module-binding
-               |type_e_rZUp4xe|
-               |id_e_NVSS4xe|
-               |label_e_7SQj5xe|
-               |imps_e_tOOM5xe|
-               |val_e_PKMd6xe|)))
-         (|make-resolved-interface_e_PLBbyqe|
-           (lambda (exports_e_p8_23xe |import-token_e_L4Zv3xe|)
-             (|make-interface_e_p9Q0vqe|
+               |type_VIiAypNUh|
+               |id_VIEwwSNUh|
+               |label_VI-sujOUh|
+               |imps_VIkpsMOUh|
+               |val_VIGlqdPUh|)))
+         (|make-resolved-interface_VIGmfbfOh|
+           (lambda (|exports_VIgLE2MUh| |import-token_VICHCvMUh|)
+             (|make-interface_VIgMt0cOh|
                (list->vector
-                 (map (lambda (|x_e_51XY3xe|)
-                        (|make-trimmed-syntax-object_e_5TNrhqe|
-                          (if (pair? |x_e_51XY3xe|)
-                            (car |x_e_51XY3xe|)
-                            |x_e_51XY3xe|)))
-                      exports_e_p8_23xe))
-               |import-token_e_L4Zv3xe|)))
-         (|make-trimmed-interface_e_tPDKxqe|
-           (lambda (|exports_e_Jf392xe|)
-             (|make-interface_e_p9Q0vqe|
+                 (map (lambda (|x_VIYDAYMUh|)
+                        (|make-trimmed-syntax-object_VIYtrr-Nh|
+                          (if (pair? |x_VIYDAYMUh|)
+                            (car |x_VIYDAYMUh|)
+                            |x_VIYDAYMUh|)))
+                      |exports_VIgLE2MUh|))
+               |import-token_VICHCvMUh|)))
+         (|make-trimmed-interface_VIkqhKeOh|
+           (lambda (|exports_VIASI8LUh|)
+             (|make-interface_VIgMt0cOh|
                (list->vector
-                 (map (lambda (|x_e_3c1C2xe|)
-                        (if (pair? |x_e_3c1C2xe|)
-                          (car |x_e_3c1C2xe|)
-                          |x_e_3c1C2xe|))
-                      |exports_e_Jf392xe|))
+                 (map (lambda (|x_VIWOGBLUh|)
+                        (if (pair? |x_VIWOGBLUh|)
+                          (car |x_VIWOGBLUh|)
+                          |x_VIWOGBLUh|))
+                      |exports_VIASI8LUh|))
                '#f)))
-         (|set-interface-token!_e_7TFhxqe|
-           (lambda (x_e_1n7f1xe |update_e_nj5I1xe|)
-             (vector-set! x_e_1n7f1xe '2 |update_e_nj5I1xe|)))
-         (|set-interface-exports!_e_NWHQwqe|
-           (lambda (x_e_lubl0xe |update_e_Hq9O0xe|)
-             (vector-set! x_e_lubl0xe '1 |update_e_Hq9O0xe|)))
-         (|interface-token_e_r-Jnwqe|
-           (lambda (|x_e__xdU_we|)
-             (vector-ref |x_e__xdU_we| '2)))
-         (|interface-exports_e_52MWvqe|
-           (lambda (|x_e_FBfr_we|)
-             (vector-ref |x_e_FBfr_we| '1)))
-         (|interface?_e_L5Otvqe|
-           (lambda (|x_e_jFh--we|)
-             (if (vector? |x_e_jFh--we|)
-               (if (= (vector-length |x_e_jFh--we|) '3)
-                 (eq? (vector-ref |x_e_jFh--we| '0) 'interface)
+         (|set-interface-token!_VI-tjheOh|
+           (lambda (|x_VIUZMeKUh| |update_VIeWKHKUh|)
+             (vector-set! |x_VIUZMeKUh| '2 |update_VIeWKHKUh|)))
+         (|set-interface-exports!_VIExlQdOh|
+           (lambda (|x_VIc5RkJUh| |update_VIy1PNJUh|)
+             (vector-set! |x_VIc5RkJUh| '1 |update_VIy1PNJUh|)))
+         (|interface-token_VIiBnndOh|
+           (lambda (|x_VIS8TTIUh|)
+             (vector-ref |x_VIS8TTIUh| '2)))
+         (|interface-exports_VIYEpWcOh|
+           (lambda (|x_VIwcVqIUh|)
+             (vector-ref |x_VIwcVqIUh| '1)))
+         (|interface?_VICIrtcOh|
+           (lambda (|x_VIagXZHUh|)
+             (if (vector? |x_VIagXZHUh|)
+               (if (= (vector-length |x_VIagXZHUh|) '3)
+                 (eq? (vector-ref |x_VIagXZHUh| '0) 'interface)
                  '#f)
                '#f)))
-         (|make-interface_e_p9Q0vqe|
-           (lambda (|exports_e_DMl4-we| |token_e_ZIjx-we|)
+         (|make-interface_VIgMt0cOh|
+           (lambda (|exports_VIun_3HUh| |token_VIQjZwHUh|)
              (vector
                'interface
-               |exports_e_DMl4-we|
-               |token_e_ZIjx-we|)))
-         (|flatten-exports_e_3dSzuqe|
-           (lambda (|exports_e_f_tgYwe|)
-             ((letrec ((|loop_e_BXrJYwe|
-                         (lambda (|exports_e_XTpaZwe| |ls_e_hQnDZwe|)
-                           (if (null? |exports_e_XTpaZwe|)
-                             |ls_e_hQnDZwe|
-                             (|loop_e_BXrJYwe|
-                               (cdr |exports_e_XTpaZwe|)
-                               (if (pair? (car |exports_e_XTpaZwe|))
-                                 (|loop_e_BXrJYwe|
-                                   (car |exports_e_XTpaZwe|)
-                                   |ls_e_hQnDZwe|)
-                                 (cons (car |exports_e_XTpaZwe|)
-                                       |ls_e_hQnDZwe|)))))))
-                |loop_e_BXrJYwe|)
-              |exports_e_f_tgYwe|
+               |exports_VIun_3HUh|
+               |token_VIQjZwHUh|)))
+         (|flatten-exports_VIWPvzbOh|
+           (lambda (|exports_VI6C7gFUh|)
+             ((letrec ((|loop_VIsy5JFUh|
+                         (lambda (|exports_VIOu3aGUh| |ls_VI8r1DGUh|)
+                           (if (null? |exports_VIOu3aGUh|)
+                             |ls_VI8r1DGUh|
+                             (|loop_VIsy5JFUh|
+                               (cdr |exports_VIOu3aGUh|)
+                               (if (pair? (car |exports_VIOu3aGUh|))
+                                 (|loop_VIsy5JFUh|
+                                   (car |exports_VIOu3aGUh|)
+                                   |ls_VI8r1DGUh|)
+                                 (cons (car |exports_VIOu3aGUh|)
+                                       |ls_VI8r1DGUh|)))))))
+                |loop_VIsy5JFUh|)
+              |exports_VI6C7gFUh|
               '())))
-         (|chi-top_e_JgU6uqe|
-           (lambda (|e_e_b_JAswe|
-                    |r_e_xXH1twe|
-                    |w_e_TTFutwe|
-                    |ctem_e_dQDXtwe|
-                    |rtem_e_zMBouwe|
-                    |top-ribcage_e_VIzRuwe|)
+         (|chi-top_VIATx6bOh|
+           (lambda (|e_VI2CnA9Uh|
+                    |r_VIoyl1aUh|
+                    |w_VIKujuaUh|
+                    |ctem_VI4rhXaUh|
+                    |rtem_VIqnfobUh|
+                    |top-ribcage_VIMjdRbUh|)
              (call-with-values
                (lambda ()
-                 (|syntax-type_e_1oYctqe|
-                   |e_e_b_JAswe|
-                   |r_e_xXH1twe|
-                   |w_e_TTFutwe|
+                 (|syntax-type_VIU-BcaOh|
+                   |e_VI2CnA9Uh|
+                   |r_VIoyl1aUh|
+                   |w_VIKujuaUh|
                    '#f
-                   |top-ribcage_e_VIzRuwe|))
-               (lambda (|type_e_fFxivwe|
-                        |value_e_BBvLvwe|
-                        |e_e_Xxtcwwe|
-                        |w_e_hurFwwe|
-                        |s_e_Dqp6xwe|)
-                 ((lambda (|t_e_Zmnzxwe|)
-                    (if (memv |t_e_Zmnzxwe| '(begin-form))
-                      ((lambda (|tmp_e_vsKEUwe|)
-                         ((lambda (|tmp_e_RoI5Vwe|)
-                            (if |tmp_e_RoI5Vwe|
-                              (apply (lambda (|__e_V2wPXwe|)
-                                       (|chi-void_e_ztjiQqe|))
-                                     |tmp_e_RoI5Vwe|)
-                              ((lambda (|tmp_e_blGyVwe|)
-                                 (if |tmp_e_blGyVwe|
-                                   (apply (lambda (|__e_xhE_Vwe|
-                                                   |e1_e_TdCsWwe|
-                                                   |e2_e_daAVWwe|)
-                                            (chi-top-sequence_e_lv0jsqe
-                                              (cons |e1_e_TdCsWwe|
-                                                    |e2_e_daAVWwe|)
-                                              |r_e_xXH1twe|
-                                              |w_e_hurFwwe|
-                                              |s_e_Dqp6xwe|
-                                              |ctem_e_dQDXtwe|
-                                              |rtem_e_zMBouwe|
-                                              |top-ribcage_e_VIzRuwe|))
-                                          |tmp_e_blGyVwe|)
-                                   (syntax-error |tmp_e_vsKEUwe|)))
+                   |top-ribcage_VIMjdRbUh|))
+               (lambda (|type_VI6gbicUh|
+                        |value_VIsc9LcUh|
+                        |e_VIO87cdUh|
+                        |w_VI855FdUh|
+                        |s_VIu136eUh|)
+                 ((lambda (|t_VIQZ0zeUh|)
+                    (if (memv |t_VIQZ0zeUh| '(begin-form))
+                      ((lambda (|tmp_VIm3oEBUh|)
+                         ((lambda (|tmp_VII_l5CUh|)
+                            (if |tmp_VII_l5CUh|
+                              (apply (lambda (|__VIMF9PEUh|)
+                                       (|chi-void_VIq4ZhxOh|))
+                                     |tmp_VII_l5CUh|)
+                              ((lambda (|tmp_VI2YjyCUh|)
+                                 (if |tmp_VI2YjyCUh|
+                                   (apply (lambda (|__VIoUh_CUh|
+                                                   |e1_VIKQfsDUh|
+                                                   |e2_VI4NdVDUh|)
+                                            (|chi-top-sequence_VIc6Gi9Oh|
+                                              (cons |e1_VIKQfsDUh|
+                                                    |e2_VI4NdVDUh|)
+                                              |r_VIoyl1aUh|
+                                              |w_VI855FdUh|
+                                              |s_VIu136eUh|
+                                              |ctem_VI4rhXaUh|
+                                              |rtem_VIqnfobUh|
+                                              |top-ribcage_VIMjdRbUh|))
+                                          |tmp_VI2YjyCUh|)
+                                   (syntax-error |tmp_VIm3oEBUh|)))
                                ($syntax-dispatch
-                                 (compile-in-annotation |tmp_e_vsKEUwe| value)
+                                 (compile-in-annotation |tmp_VIm3oEBUh| value)
                                  '(any any . each-any)))))
                           ($syntax-dispatch
-                            (compile-in-annotation |tmp_e_vsKEUwe| value)
+                            (compile-in-annotation |tmp_VIm3oEBUh| value)
                             '(any))))
-                       |e_e_Xxtcwwe|)
-                      (if (memv |t_e_Zmnzxwe| '(local-syntax-form))
-                        (|chi-local-syntax_e_dxlRPqe|
-                          |value_e_BBvLvwe|
-                          |e_e_Xxtcwwe|
-                          |r_e_xXH1twe|
-                          |w_e_hurFwwe|
-                          |s_e_Dqp6xwe|
-                          (lambda (|body_e_7HSQSwe|
-                                   |r_e_tDQhTwe|
-                                   |w_e_PzOKTwe|
-                                   |s_e_9wMbUwe|)
-                            (chi-top-sequence_e_lv0jsqe
-                              |body_e_7HSQSwe|
-                              |r_e_tDQhTwe|
-                              |w_e_PzOKTwe|
-                              |s_e_9wMbUwe|
-                              |ctem_e_dQDXtwe|
-                              |rtem_e_zMBouwe|
-                              |top-ribcage_e_VIzRuwe|)))
-                        (if (memv |t_e_Zmnzxwe| '(eval-when-form))
-                          ((lambda (|tmp_e__mfpNwe|)
-                             ((lambda (|tmp_e_ljdSNwe|)
-                                (if |tmp_e_ljdSNwe|
-                                  (apply (lambda (|__e_HfbjOwe|
-                                                  |x_e_1c9MOwe|
-                                                  |e1_e_n87dPwe|
-                                                  |e2_e_J45GPwe|)
-                                           ((lambda (|when-list_e_3137Qwe|
-                                                     |body_e_pZ0AQwe|)
-                                              ((lambda (|ctem_e_LV-0Rwe|
-                                                        |rtem_e_5SYtRwe|)
-                                                 (if (if (null? |ctem_e_LV-0Rwe|)
-                                                       (null? |rtem_e_5SYtRwe|)
+                       |e_VIO87cdUh|)
+                      (if (memv |t_VIQZ0zeUh| '(local-syntax-form))
+                        (|chi-local-syntax_VI48_QwOh|
+                          |value_VIsc9LcUh|
+                          |e_VIO87cdUh|
+                          |r_VIoyl1aUh|
+                          |w_VI855FdUh|
+                          |s_VIu136eUh|
+                          (lambda (|body_VI-hwQzUh|
+                                   |r_VIkeuhAUh|
+                                   |w_VIGasKAUh|
+                                   |s_VI07qbBUh|)
+                            (|chi-top-sequence_VIc6Gi9Oh|
+                              |body_VI-hwQzUh|
+                              |r_VIkeuhAUh|
+                              |w_VIGasKAUh|
+                              |s_VI07qbBUh|
+                              |ctem_VI4rhXaUh|
+                              |rtem_VIqnfobUh|
+                              |top-ribcage_VIMjdRbUh|)))
+                        (if (memv |t_VIQZ0zeUh| '(eval-when-form))
+                          ((lambda (|tmp_VISZUouUh|)
+                             ((lambda (|tmp_VIcWSRuUh|)
+                                (if |tmp_VIcWSRuUh|
+                                  (apply (lambda (|__VIySQivUh|
+                                                  |x_VIUOOLvUh|
+                                                  |e1_VIeLMcwUh|
+                                                  |e2_VIAHKFwUh|)
+                                           ((lambda (|when-list_VIWDI6xUh|
+                                                     |body_VIgAGzxUh|)
+                                              ((lambda (|ctem_VICwE0yUh|
+                                                        |rtem_VIYsCtyUh|)
+                                                 (if (if (null? |ctem_VICwE0yUh|)
+                                                       (null? |rtem_VIYsCtyUh|)
                                                        '#f)
-                                                   (|chi-void_e_ztjiQqe|)
-                                                   (chi-top-sequence_e_lv0jsqe
-                                                     |body_e_pZ0AQwe|
-                                                     |r_e_xXH1twe|
-                                                     |w_e_hurFwwe|
-                                                     |s_e_Dqp6xwe|
-                                                     |ctem_e_LV-0Rwe|
-                                                     |rtem_e_5SYtRwe|
-                                                     |top-ribcage_e_VIzRuwe|)))
-                                               (|update-mode-set_e_nvU8Iqe|
-                                                 |when-list_e_3137Qwe|
-                                                 |ctem_e_dQDXtwe|)
-                                               (|update-mode-set_e_nvU8Iqe|
-                                                 |when-list_e_3137Qwe|
-                                                 |rtem_e_zMBouwe|)))
-                                            (|chi-when-list_e_Hr-Lsqe|
-                                              |x_e_1c9MOwe|
-                                              |w_e_hurFwwe|)
-                                            (cons |e1_e_n87dPwe|
-                                                  |e2_e_J45GPwe|)))
-                                         |tmp_e_ljdSNwe|)
-                                  (syntax-error |tmp_e__mfpNwe|)))
+                                                   (|chi-void_VIq4ZhxOh|)
+                                                   (|chi-top-sequence_VIc6Gi9Oh|
+                                                     |body_VIgAGzxUh|
+                                                     |r_VIoyl1aUh|
+                                                     |w_VI855FdUh|
+                                                     |s_VIu136eUh|
+                                                     |ctem_VICwE0yUh|
+                                                     |rtem_VIYsCtyUh|
+                                                     |top-ribcage_VIMjdRbUh|)))
+                                               (|update-mode-set_VIe6y8pOh|
+                                                 |when-list_VIWDI6xUh|
+                                                 |ctem_VI4rhXaUh|)
+                                               (|update-mode-set_VIe6y8pOh|
+                                                 |when-list_VIWDI6xUh|
+                                                 |rtem_VIqnfobUh|)))
+                                            (|chi-when-list_VIy2EL9Oh|
+                                              |x_VIUOOLvUh|
+                                              |w_VI855FdUh|)
+                                            (cons |e1_VIeLMcwUh|
+                                                  |e2_VIAHKFwUh|)))
+                                         |tmp_VIcWSRuUh|)
+                                  (syntax-error |tmp_VISZUouUh|)))
                               ($syntax-dispatch
-                                (compile-in-annotation |tmp_e__mfpNwe| value)
+                                (compile-in-annotation |tmp_VISZUouUh| value)
                                 '(any each-any any . each-any))))
-                           |e_e_Xxtcwwe|)
-                          (if (memv |t_e_Zmnzxwe| '(define-syntax-form))
-                            (|parse-define-syntax_e_xEpXOqe|
-                              |e_e_Xxtcwwe|
-                              |w_e_hurFwwe|
-                              |s_e_Dqp6xwe|
-                              (lambda (|id_e_d_BqIwe|
-                                       |rhs_e_zXzTIwe|
-                                       |w_e_VTxkJwe|)
-                                ((lambda (|id_e_fQvNJwe|)
+                           |e_VIO87cdUh|)
+                          (if (memv |t_VIQZ0zeUh| '(define-syntax-form))
+                            (|parse-define-syntax_VIof3XvOh|
+                              |e_VIO87cdUh|
+                              |w_VI855FdUh|
+                              |s_VIu136eUh|
+                              (lambda (|id_VI4CfqpUh|
+                                       |rhs_VIqydTpUh|
+                                       |w_VIMubkqUh|)
+                                ((lambda (|id_VI6r9NqUh|)
                                    (begin
-                                     ((lambda (|n_e_BMteKwe|)
-                                        ((lambda (|b_e_XIrHKwe|)
-                                           ((lambda (|t_e_hFp8Lwe|)
-                                              (if (memv |t_e_hFp8Lwe|
+                                     ((lambda (|n_VIsn7erUh|)
+                                        ((lambda (|b_VIOj5HrUh|)
+                                           ((lambda (|t_VI8g38sUh|)
+                                              (if (memv |t_VI8g38sUh|
                                                         '(displaced-lexical))
-                                                (|displaced-lexical-error_e_5mT-Bpe|
-                                                  |id_e_fQvNJwe|)
+                                                (|displaced-lexical-error_VIYYw-iNh|
+                                                  |id_VI6r9NqUh|)
                                                 (void)))
-                                            (|binding-type_e_VnsRtpe|
-                                              |b_e_XIrHKwe|)))
-                                         (|lookup_e_7bNlDpe|
-                                           |n_e_BMteKwe|
-                                           |r_e_xXH1twe|)))
-                                      (|id-var-name_e_Rpx3lqe|
-                                        |id_e_fQvNJwe|
+                                            (|binding-type_VIM-5RaNh|
+                                              |b_VIOj5HrUh|)))
+                                         (|lookup_VI-NqlkNh|
+                                           |n_VIsn7erUh|
+                                           |r_VIoyl1aUh|)))
+                                      (|id-var-name_VII0b32Oh|
+                                        |id_VI6r9NqUh|
                                         '(())))
-                                     (|ct-eval/residualize_e_pkOvJqe|
-                                       |ctem_e_dQDXtwe|
+                                     (|ct-eval/residualize_VIgXrvqOh|
+                                       |ctem_VI4rhXaUh|
                                        (lambda ()
                                          (list '$sc-put-cte
                                                (list 'quote
-                                                     ((lambda (|sym_e_DBnBLwe|)
-                                                        (if (|same-marks?_e_tEFfjqe|
-                                                              (|wrap-marks_e_DggBKpe|
-                                                                (|syntax-object-wrap_e_ZSh4ipe|
-                                                                  |id_e_fQvNJwe|))
-                                                              (|wrap-marks_e_DggBKpe|
+                                                     ((lambda (|sym_VIuc1BsUh|)
+                                                        (if (|same-marks?_VIkfjf0Oh|
+                                                              (|wrap-marks_VIuTVArNh|
+                                                                (|syntax-object-wrap_VIQtX3_Mh|
+                                                                  |id_VI6r9NqUh|))
+                                                              (|wrap-marks_VIuTVArNh|
                                                                 '((top))))
-                                                          |sym_e_DBnBLwe|
-                                                          ((lambda (|marks_e_Zxl2Mwe|)
-                                                             (|make-syntax-object_e_X1oJgpe|
-                                                               |sym_e_DBnBLwe|
-                                                               (|make-wrap_e_hki8Kpe|
-                                                                 |marks_e_Zxl2Mwe|
-                                                                 (list (|make-ribcage_e_n-ZH0qe|
+                                                          |sym_VIuc1BsUh|
+                                                          ((lambda (|marks_VIQ8_1tUh|)
+                                                             (|make-syntax-object_VIOE1JZMh|
+                                                               |sym_VIuc1BsUh|
+                                                               (|make-wrap_VI8XX7rNh|
+                                                                 |marks_VIQ8_1tUh|
+                                                                 (list (|make-ribcage_VIeBDHJNh|
                                                                          (vector
-                                                                           |sym_e_DBnBLwe|)
+                                                                           |sym_VIuc1BsUh|)
                                                                          (vector
-                                                                           |marks_e_Zxl2Mwe|)
+                                                                           |marks_VIQ8_1tUh|)
                                                                          (vector
-                                                                           (|generate-id_e_Ly27toe|
-                                                                             |sym_e_DBnBLwe|)))))))
-                                                           (|wrap-marks_e_DggBKpe|
-                                                             (|syntax-object-wrap_e_ZSh4ipe|
-                                                               |id_e_fQvNJwe|)))))
-                                                      ((lambda (|x_e_jujvMwe|)
-                                                         ((lambda (|e_e_FqhYMwe|)
+                                                                           (|generate-id_VIC9I6aMh|
+                                                                             |sym_VIuc1BsUh|)))))))
+                                                           (|wrap-marks_VIuTVArNh|
+                                                             (|syntax-object-wrap_VIQtX3_Mh|
+                                                               |id_VI6r9NqUh|)))))
+                                                      ((lambda (|x_VIa5ZutUh|)
+                                                         ((lambda (|e_VIw1XXtUh|)
                                                             (if (annotation?
-                                                                  |e_e_FqhYMwe|)
+                                                                  |e_VIw1XXtUh|)
                                                               (annotation-expression
-                                                                |e_e_FqhYMwe|)
-                                                              |e_e_FqhYMwe|))
-                                                          (if (syntax-object?_e_h-lahpe
-                                                                |x_e_jujvMwe|)
-                                                            (|syntax-object-expression_e_DWjDhpe|
-                                                              |x_e_jujvMwe|)
-                                                            |x_e_jujvMwe|)))
-                                                       |id_e_fQvNJwe|)))
-                                               (|chi_e_LgMYJqe|
-                                                 |rhs_e_zXzTIwe|
-                                                 (|transformer-env_e_LpVxBpe|
-                                                   |r_e_xXH1twe|)
-                                                 |w_e_VTxkJwe|))))))
-                                 (|wrap_e_jG6Yqqe|
-                                   |id_e_d_BqIwe|
-                                   |w_e_VTxkJwe|))))
-                            (if (memv |t_e_Zmnzxwe| '(define-form))
-                              (|parse-define_e_bIruOqe|
-                                |e_e_Xxtcwwe|
-                                |w_e_hurFwwe|
-                                |s_e_Dqp6xwe|
-                                (lambda (|id_e_5H--Cwe|
-                                         |rhs_e_rDYrDwe|
-                                         |w_e_NzWUDwe|)
-                                  ((lambda (|id_e_7wUlEwe|)
+                                                                |e_VIw1XXtUh|)
+                                                              |e_VIw1XXtUh|))
+                                                          (if (|syntax-object?_VI8B_9-Mh|
+                                                                |x_VIa5ZutUh|)
+                                                            (|syntax-object-expression_VIuxZC-Mh|
+                                                              |x_VIa5ZutUh|)
+                                                            |x_VIa5ZutUh|)))
+                                                       |id_VI6r9NqUh|)))
+                                               (|chi_VICTpYqOh|
+                                                 |rhs_VIqydTpUh|
+                                                 (|transformer-env_VIC0zxiNh|
+                                                   |r_VIoyl1aUh|)
+                                                 |w_VIMubkqUh|))))))
+                                 (|wrap_VIahMX7Oh|
+                                   |id_VI4CfqpUh|
+                                   |w_VIMubkqUh|))))
+                            (if (memv |t_VIQZ0zeUh| '(define-form))
+                              (|parse-define_VI2j5uvOh|
+                                |e_VIO87cdUh|
+                                |w_VI855FdUh|
+                                |s_VIu136eUh|
+                                (lambda (|id_VIYhE-jUh|
+                                         |rhs_VIieCrkUh|
+                                         |w_VIEaAUkUh|)
+                                  ((lambda (|id_VI-6yllUh|)
                                      (begin
-                                       ((lambda (|n_e_tsSOEwe|)
-                                          ((lambda (|b_e_PoQfFwe|)
-                                             ((lambda (|t_e_9lOIFwe|)
-                                                (if (memv |t_e_9lOIFwe|
+                                       ((lambda (|n_VIk3wOlUh|)
+                                          ((lambda (|b_VIG_tfmUh|)
+                                             ((lambda (|t_VI0YrImUh|)
+                                                (if (memv |t_VI0YrImUh|
                                                           '(displaced-lexical))
-                                                  (|displaced-lexical-error_e_5mT-Bpe|
-                                                    |id_e_7wUlEwe|)
+                                                  (|displaced-lexical-error_VIYYw-iNh|
+                                                    |id_VI-6yllUh|)
                                                   (void)))
-                                              (|binding-type_e_VnsRtpe|
-                                                |b_e_PoQfFwe|)))
-                                           (|lookup_e_7bNlDpe|
-                                             |n_e_tsSOEwe|
-                                             |r_e_xXH1twe|)))
-                                        (|id-var-name_e_Rpx3lqe|
-                                          |id_e_7wUlEwe|
+                                              (|binding-type_VIM-5RaNh|
+                                                |b_VIG_tfmUh|)))
+                                           (|lookup_VI-NqlkNh|
+                                             |n_VIk3wOlUh|
+                                             |r_VIoyl1aUh|)))
+                                        (|id-var-name_VII0b32Oh|
+                                          |id_VI-6yllUh|
                                           '(())))
-                                       ((lambda (|sym_e_vhM9Gwe|)
-                                          ((lambda (|valsym_e_RdKCGwe|)
-                                             (|build-sequence_e_7RQnape|
+                                       ((lambda (|sym_VImUp9nUh|)
+                                          ((lambda (|valsym_VIIQnCnUh|)
+                                             (|build-sequence_VI-runTMh|
                                                '#f
-                                               (list (|ct-eval/residualize_e_pkOvJqe|
-                                                       |ctem_e_dQDXtwe|
+                                               (list (|ct-eval/residualize_VIgXrvqOh|
+                                                       |ctem_VI4rhXaUh|
                                                        (lambda ()
                                                          (list '$sc-put-cte
                                                                (list 'quote
-                                                                     (if (eq? |sym_e_vhM9Gwe|
-                                                                              |valsym_e_RdKCGwe|)
-                                                                       |sym_e_vhM9Gwe|
-                                                                       ((lambda (|marks_e_baI3Hwe|)
-                                                                          (|make-syntax-object_e_X1oJgpe|
-                                                                            |sym_e_vhM9Gwe|
-                                                                            (|make-wrap_e_hki8Kpe|
-                                                                              |marks_e_baI3Hwe|
-                                                                              (list (|make-ribcage_e_n-ZH0qe|
+                                                                     (if (eq? |sym_VImUp9nUh|
+                                                                              |valsym_VIIQnCnUh|)
+                                                                       |sym_VImUp9nUh|
+                                                                       ((lambda (|marks_VI2Nl3oUh|)
+                                                                          (|make-syntax-object_VIOE1JZMh|
+                                                                            |sym_VImUp9nUh|
+                                                                            (|make-wrap_VI8XX7rNh|
+                                                                              |marks_VI2Nl3oUh|
+                                                                              (list (|make-ribcage_VIeBDHJNh|
                                                                                       (vector
-                                                                                        |sym_e_vhM9Gwe|)
+                                                                                        |sym_VImUp9nUh|)
                                                                                       (vector
-                                                                                        |marks_e_baI3Hwe|)
+                                                                                        |marks_VI2Nl3oUh|)
                                                                                       (vector
-                                                                                        |valsym_e_RdKCGwe|))))))
-                                                                        (|wrap-marks_e_DggBKpe|
-                                                                          (|syntax-object-wrap_e_ZSh4ipe|
-                                                                            |id_e_7wUlEwe|)))))
+                                                                                        |valsym_VIIQnCnUh|))))))
+                                                                        (|wrap-marks_VIuTVArNh|
+                                                                          (|syntax-object-wrap_VIQtX3_Mh|
+                                                                            |id_VI-6yllUh|)))))
                                                                (list 'quote
-                                                                     (make-binding_e_zruotpe
+                                                                     (|make-binding_VIq28oaNh|
                                                                        'global
-                                                                       |valsym_e_RdKCGwe|)))))
-                                                     (|rt-eval/residualize_e_3oQ2Jqe|
-                                                       |rtem_e_zMBouwe|
+                                                                       |valsym_VIIQnCnUh|)))))
+                                                     (|rt-eval/residualize_VIW-t2qOh|
+                                                       |rtem_VIqnfobUh|
                                                        (lambda ()
-                                                         (if |s_e_Dqp6xwe|
+                                                         (if |s_VIu136eUh|
                                                            (list 'compile-in-annotation
                                                                  (list 'define
-                                                                       |valsym_e_RdKCGwe|
-                                                                       (|chi_e_LgMYJqe|
-                                                                         |rhs_e_rDYrDwe|
-                                                                         |r_e_xXH1twe|
-                                                                         |w_e_NzWUDwe|))
-                                                                 |s_e_Dqp6xwe|)
+                                                                       |valsym_VIIQnCnUh|
+                                                                       (|chi_VICTpYqOh|
+                                                                         |rhs_VIieCrkUh|
+                                                                         |r_VIoyl1aUh|
+                                                                         |w_VIEaAUkUh|))
+                                                                 |s_VIu136eUh|)
                                                            (list 'define
-                                                                 |valsym_e_RdKCGwe|
-                                                                 (|chi_e_LgMYJqe|
-                                                                   |rhs_e_rDYrDwe|
-                                                                   |r_e_xXH1twe|
-                                                                   |w_e_NzWUDwe|))))))))
-                                           (if (|same-marks?_e_tEFfjqe|
-                                                 (|wrap-marks_e_DggBKpe|
-                                                   (|syntax-object-wrap_e_ZSh4ipe|
-                                                     |id_e_7wUlEwe|))
-                                                 (|wrap-marks_e_DggBKpe|
+                                                                 |valsym_VIIQnCnUh|
+                                                                 (|chi_VICTpYqOh|
+                                                                   |rhs_VIieCrkUh|
+                                                                   |r_VIoyl1aUh|
+                                                                   |w_VIEaAUkUh|))))))))
+                                           (if (|same-marks?_VIkfjf0Oh|
+                                                 (|wrap-marks_VIuTVArNh|
+                                                   (|syntax-object-wrap_VIQtX3_Mh|
+                                                     |id_VI-6yllUh|))
+                                                 (|wrap-marks_VIuTVArNh|
                                                    '((top))))
-                                             |sym_e_vhM9Gwe|
-                                             (|generate-id_e_Ly27toe|
-                                               |sym_e_vhM9Gwe|))))
-                                        ((lambda (|x_e_x6GwHwe|)
-                                           ((lambda (|e_e_T2EZHwe|)
-                                              (if (annotation? |e_e_T2EZHwe|)
+                                             |sym_VImUp9nUh|
+                                             (|generate-id_VIC9I6aMh|
+                                               |sym_VImUp9nUh|))))
+                                        ((lambda (|x_VIoJjwoUh|)
+                                           ((lambda (|e_VIKFhZoUh|)
+                                              (if (annotation? |e_VIKFhZoUh|)
                                                 (annotation-expression
-                                                  |e_e_T2EZHwe|)
-                                                |e_e_T2EZHwe|))
-                                            (if (syntax-object?_e_h-lahpe
-                                                  |x_e_x6GwHwe|)
-                                              (|syntax-object-expression_e_DWjDhpe|
-                                                |x_e_x6GwHwe|)
-                                              |x_e_x6GwHwe|)))
-                                         |id_e_7wUlEwe|))))
-                                   (|wrap_e_jG6Yqqe|
-                                     |id_e_5H--Cwe|
-                                     |w_e_NzWUDwe|))))
-                              (if (memv |t_e_Zmnzxwe| '(module-form))
-                                ((lambda (r_e_l8fnzwe |ribcage_e_H4dQzwe|)
-                                   (|parse-module_e_vPvANqe|
-                                     |e_e_Xxtcwwe|
-                                     |w_e_hurFwwe|
-                                     |s_e_Dqp6xwe|
-                                     (|make-wrap_e_hki8Kpe|
-                                       (|wrap-marks_e_DggBKpe| |w_e_hurFwwe|)
-                                       (cons |ribcage_e_H4dQzwe|
-                                             (|wrap-subst_e_Zce2Lpe|
-                                               |w_e_hurFwwe|)))
-                                     (lambda (|id_e_11bhAwe|
-                                              |exports_e_nZ8KAwe|
-                                              |forms_e_JV6bBwe|)
-                                       (if |id_e_11bhAwe|
+                                                  |e_VIKFhZoUh|)
+                                                |e_VIKFhZoUh|))
+                                            (if (|syntax-object?_VI8B_9-Mh|
+                                                  |x_VIoJjwoUh|)
+                                              (|syntax-object-expression_VIuxZC-Mh|
+                                                |x_VIoJjwoUh|)
+                                              |x_VIoJjwoUh|)))
+                                         |id_VI-6yllUh|))))
+                                   (|wrap_VIahMX7Oh|
+                                     |id_VIYhE-jUh|
+                                     |w_VIEaAUkUh|))))
+                              (if (memv |t_VIQZ0zeUh| '(module-form))
+                                ((lambda (|r_VIcLUmgUh| |ribcage_VIyHSPgUh|)
+                                   (|parse-module_VImq9AuOh|
+                                     |e_VIO87cdUh|
+                                     |w_VI855FdUh|
+                                     |s_VIu136eUh|
+                                     (|make-wrap_VI8XX7rNh|
+                                       (|wrap-marks_VIuTVArNh| |w_VI855FdUh|)
+                                       (cons |ribcage_VIyHSPgUh|
+                                             (|wrap-subst_VIQPT1sNh|
+                                               |w_VI855FdUh|)))
+                                     (lambda (|id_VIUDQghUh|
+                                              |exports_VIeAOJhUh|
+                                              |forms_VIAwMaiUh|)
+                                       (if |id_VIUDQghUh|
                                          (begin
-                                           ((lambda (|n_e_3S4EBwe|)
-                                              ((lambda (|b_e_pO25Cwe|)
-                                                 ((lambda (|t_e_LK0yCwe|)
-                                                    (if (memv |t_e_LK0yCwe|
+                                           ((lambda (|n_VIWsKDiUh|)
+                                              ((lambda (|b_VIgpI4jUh|)
+                                                 ((lambda (|t_VIClGxjUh|)
+                                                    (if (memv |t_VIClGxjUh|
                                                               '(displaced-lexical))
-                                                      (|displaced-lexical-error_e_5mT-Bpe|
-                                                        (|wrap_e_jG6Yqqe|
-                                                          |id_e_11bhAwe|
-                                                          |w_e_hurFwwe|))
+                                                      (|displaced-lexical-error_VIYYw-iNh|
+                                                        (|wrap_VIahMX7Oh|
+                                                          |id_VIUDQghUh|
+                                                          |w_VI855FdUh|))
                                                       (void)))
-                                                  (|binding-type_e_VnsRtpe|
-                                                    |b_e_pO25Cwe|)))
-                                               (|lookup_e_7bNlDpe|
-                                                 |n_e_3S4EBwe|
-                                                 r_e_l8fnzwe)))
-                                            (|id-var-name_e_Rpx3lqe|
-                                              |id_e_11bhAwe|
+                                                  (|binding-type_VIM-5RaNh|
+                                                    |b_VIgpI4jUh|)))
+                                               (|lookup_VI-NqlkNh|
+                                                 |n_VIWsKDiUh|
+                                                 |r_VIcLUmgUh|)))
+                                            (|id-var-name_VII0b32Oh|
+                                              |id_VIUDQghUh|
                                               '(())))
-                                           (|chi-top-module_e_h0b4Eqe|
-                                             |e_e_Xxtcwwe|
-                                             r_e_l8fnzwe
-                                             |ribcage_e_H4dQzwe|
-                                             |w_e_hurFwwe|
-                                             |s_e_Dqp6xwe|
-                                             |ctem_e_dQDXtwe|
-                                             |rtem_e_zMBouwe|
-                                             |id_e_11bhAwe|
-                                             |exports_e_nZ8KAwe|
-                                             |forms_e_JV6bBwe|))
-                                         (|chi-top-module_e_h0b4Eqe|
-                                           |e_e_Xxtcwwe|
-                                           r_e_l8fnzwe
-                                           |ribcage_e_H4dQzwe|
-                                           |w_e_hurFwwe|
-                                           |s_e_Dqp6xwe|
-                                           |ctem_e_dQDXtwe|
-                                           |rtem_e_zMBouwe|
+                                           (|chi-top-module_VI8DQ3lOh|
+                                             |e_VIO87cdUh|
+                                             |r_VIcLUmgUh|
+                                             |ribcage_VIyHSPgUh|
+                                             |w_VI855FdUh|
+                                             |s_VIu136eUh|
+                                             |ctem_VI4rhXaUh|
+                                             |rtem_VIqnfobUh|
+                                             |id_VIUDQghUh|
+                                             |exports_VIeAOJhUh|
+                                             |forms_VIAwMaiUh|))
+                                         (|chi-top-module_VI8DQ3lOh|
+                                           |e_VIO87cdUh|
+                                           |r_VIcLUmgUh|
+                                           |ribcage_VIyHSPgUh|
+                                           |w_VI855FdUh|
+                                           |s_VIu136eUh|
+                                           |ctem_VI4rhXaUh|
+                                           |rtem_VIqnfobUh|
                                            '#f
-                                           |exports_e_nZ8KAwe|
-                                           |forms_e_JV6bBwe|)))))
+                                           |exports_VIeAOJhUh|
+                                           |forms_VIAwMaiUh|)))))
                                  (cons '("top-level module placeholder"
                                          placeholder)
-                                       |r_e_xXH1twe|)
-                                 (|make-ribcage_e_n-ZH0qe| '() '() '()))
-                                (if (memv |t_e_Zmnzxwe| '(import-form))
-                                  (|parse-import_e_RLt1Oqe|
-                                    |e_e_Xxtcwwe|
-                                    |w_e_hurFwwe|
-                                    |s_e_Dqp6xwe|
-                                    (lambda (mid_e_jjl0ywe)
-                                      (|ct-eval/residualize_e_pkOvJqe|
-                                        |ctem_e_dQDXtwe|
+                                       |r_VIoyl1aUh|)
+                                 (|make-ribcage_VIeBDHJNh| '() '() '()))
+                                (if (memv |t_VIQZ0zeUh| '(import-form))
+                                  (|parse-import_VIIm71vOh|
+                                    |e_VIO87cdUh|
+                                    |w_VI855FdUh|
+                                    |s_VIu136eUh|
+                                    (lambda (|mid_VIaW-_eUh|)
+                                      (|ct-eval/residualize_VIgXrvqOh|
+                                        |ctem_VI4rhXaUh|
                                         (lambda ()
                                           (begin
-                                            (if |value_e_BBvLvwe|
+                                            (if |value_VIsc9LcUh|
                                               (syntax-error
-                                                (|source-wrap_e_FC4prqe|
-                                                  |e_e_Xxtcwwe|
-                                                  |w_e_hurFwwe|
-                                                  |s_e_Dqp6xwe|)
+                                                (|source-wrap_VIwdKo8Oh|
+                                                  |e_VIO87cdUh|
+                                                  |w_VI855FdUh|
+                                                  |s_VIu136eUh|)
                                                 '"not valid at top-level")
                                               (void))
-                                            ((lambda (|binding_e_Ffjtywe|)
-                                               ((lambda (|t_e__bhWywe|)
-                                                  (if (memv |t_e__bhWywe|
+                                            ((lambda (|binding_VIwSYsfUh|)
+                                               ((lambda (|t_VISOWVfUh|)
+                                                  (if (memv |t_VISOWVfUh|
                                                             '(module))
-                                                    (|do-top-import_e_1zWHHqe|
-                                                      mid_e_jjl0ywe
-                                                      (|interface-token_e_r-Jnwqe|
-                                                        (binding-value_e_fkqiupe
-                                                          |binding_e_Ffjtywe|)))
-                                                    (if (memv |t_e__bhWywe|
+                                                    (|do-top-import_VIU9AHoOh|
+                                                      |mid_VIaW-_eUh|
+                                                      (|interface-token_VIiBnndOh|
+                                                        (|binding-value_VI6X3ibNh|
+                                                          |binding_VIwSYsfUh|)))
+                                                    (if (memv |t_VISOWVfUh|
                                                               '(displaced-lexical))
-                                                      (|displaced-lexical-error_e_5mT-Bpe|
-                                                        mid_e_jjl0ywe)
+                                                      (|displaced-lexical-error_VIYYw-iNh|
+                                                        |mid_VIaW-_eUh|)
                                                       (syntax-error
-                                                        mid_e_jjl0ywe
+                                                        |mid_VIaW-_eUh|
                                                         '"import from unknown module"))))
-                                                (|binding-type_e_VnsRtpe|
-                                                  |binding_e_Ffjtywe|)))
-                                             (|lookup_e_7bNlDpe|
-                                               (|id-var-name_e_Rpx3lqe|
-                                                 mid_e_jjl0ywe
+                                                (|binding-type_VIM-5RaNh|
+                                                  |binding_VIwSYsfUh|)))
+                                             (|lookup_VI-NqlkNh|
+                                               (|id-var-name_VII0b32Oh|
+                                                 |mid_VIaW-_eUh|
                                                  '(()))
                                                '())))))))
-                                  (|rt-eval/residualize_e_3oQ2Jqe|
-                                    |rtem_e_zMBouwe|
+                                  (|rt-eval/residualize_VIW-t2qOh|
+                                    |rtem_VIqnfobUh|
                                     (lambda ()
-                                      (|chi-expr_e_5dKpKqe|
-                                        |type_e_fFxivwe|
-                                        |value_e_BBvLvwe|
-                                        |e_e_Xxtcwwe|
-                                        |r_e_xXH1twe|
-                                        |w_e_hurFwwe|
-                                        |s_e_Dqp6xwe|)))))))))))
-                  |type_e_fFxivwe|)))))
-         (|chi-top-expr_e_nkWFtqe|
-           (lambda (e_e_5w0wowe
-                    |r_e_rs-Yowe|
-                    |w_e_NoYppwe|
-                    |top-ribcage_e_7lWSpwe|)
+                                      (|chi-expr_VIYPnprOh|
+                                        |type_VI6gbicUh|
+                                        |value_VIsc9LcUh|
+                                        |e_VIO87cdUh|
+                                        |r_VIoyl1aUh|
+                                        |w_VI855FdUh|
+                                        |s_VIu136eUh|)))))))))))
+                  |type_VI6gbicUh|)))))
+         (|chi-top-expr_VIeXzFaOh|
+           (lambda (|e_VIY6Gv5Uh|
+                    |r_VIi3EY5Uh|
+                    |w_VIE_Bp6Uh|
+                    |top-ribcage_VI-XzS6Uh|)
              (call-with-values
                (lambda ()
-                 (|syntax-type_e_1oYctqe|
-                   e_e_5w0wowe
-                   |r_e_rs-Yowe|
-                   |w_e_NoYppwe|
+                 (|syntax-type_VIU-BcaOh|
+                   |e_VIY6Gv5Uh|
+                   |r_VIi3EY5Uh|
+                   |w_VIE_Bp6Uh|
                    '#f
-                   |top-ribcage_e_7lWSpwe|))
-               (lambda (|type_e_thUjqwe|
-                        |value_e_PdSMqwe|
-                        |e_e_9aQdrwe|
-                        |w_e_v6OGrwe|
-                        |s_e_R2M7swe|)
-                 (|chi-expr_e_5dKpKqe|
-                   |type_e_thUjqwe|
-                   |value_e_PdSMqwe|
-                   |e_e_9aQdrwe|
-                   |r_e_rs-Yowe|
-                   |w_e_v6OGrwe|
-                   |s_e_R2M7swe|)))))
-         (|syntax-type_e_1oYctqe|
-           (lambda (|e_e_Bqxghwe|
-                    |r_e_XmvJhwe|
-                    w_e_hjtaiwe
-                    |s_e_DfrDiwe|
-                    |rib_e_Zbp4jwe|)
-             (if (symbol? |e_e_Bqxghwe|)
-               ((lambda (|n_e_JK8Imwe|)
-                  ((lambda (|b_e_3H69nwe|)
-                     ((lambda (|type_e_pD4Cnwe|)
-                        ((lambda (|t_e_Lz23owe|)
-                           (if (memv |t_e_Lz23owe| '(lexical))
+                   |top-ribcage_VI-XzS6Uh|))
+               (lambda (|type_VIkUxj7Uh|
+                        |value_VIGQvM7Uh|
+                        |e_VI0Ntd8Uh|
+                        |w_VImJrG8Uh|
+                        |s_VIIFp79Uh|)
+                 (|chi-expr_VIYPnprOh|
+                   |type_VIkUxj7Uh|
+                   |value_VIGQvM7Uh|
+                   |e_VI0Ntd8Uh|
+                   |r_VIi3EY5Uh|
+                   |w_VImJrG8Uh|
+                   |s_VIIFp79Uh|)))))
+         (|syntax-type_VIU-BcaOh|
+           (lambda (|e_VIs1bg-Th|
+                    |r_VIOZ8J-Th|
+                    |w_VI8W6a_Th|
+                    |s_VIuS4D_Th|
+                    |rib_VIQO240Uh|)
+             (if (symbol? |e_VIs1bg-Th|)
+               ((lambda (|n_VIAlOH3Uh|)
+                  ((lambda (|b_VIWhM84Uh|)
+                     ((lambda (|type_VIgeKB4Uh|)
+                        ((lambda (|t_VICaI25Uh|)
+                           (if (memv |t_VICaI25Uh| '(lexical))
                              (values
-                               |type_e_pD4Cnwe|
-                               (binding-value_e_fkqiupe |b_e_3H69nwe|)
-                               |e_e_Bqxghwe|
-                               w_e_hjtaiwe
-                               |s_e_DfrDiwe|)
-                             (if (memv |t_e_Lz23owe| '(global))
+                               |type_VIgeKB4Uh|
+                               (|binding-value_VI6X3ibNh| |b_VIWhM84Uh|)
+                               |e_VIs1bg-Th|
+                               |w_VI8W6a_Th|
+                               |s_VIuS4D_Th|)
+                             (if (memv |t_VICaI25Uh| '(global))
                                (values
-                                 |type_e_pD4Cnwe|
-                                 (binding-value_e_fkqiupe |b_e_3H69nwe|)
-                                 |e_e_Bqxghwe|
-                                 w_e_hjtaiwe
-                                 |s_e_DfrDiwe|)
-                               (if (memv |t_e_Lz23owe| '(macro macro!))
-                                 (|syntax-type_e_1oYctqe|
-                                   (|chi-macro_e_72EMLqe|
-                                     (binding-value_e_fkqiupe |b_e_3H69nwe|)
-                                     |e_e_Bqxghwe|
-                                     |r_e_XmvJhwe|
-                                     w_e_hjtaiwe
-                                     |s_e_DfrDiwe|
-                                     |rib_e_Zbp4jwe|)
-                                   |r_e_XmvJhwe|
+                                 |type_VIgeKB4Uh|
+                                 (|binding-value_VI6X3ibNh| |b_VIWhM84Uh|)
+                                 |e_VIs1bg-Th|
+                                 |w_VI8W6a_Th|
+                                 |s_VIuS4D_Th|)
+                               (if (memv |t_VICaI25Uh| '(macro macro!))
+                                 (|syntax-type_VIU-BcaOh|
+                                   (|chi-macro_VI-EhMsOh|
+                                     (|binding-value_VI6X3ibNh| |b_VIWhM84Uh|)
+                                     |e_VIs1bg-Th|
+                                     |r_VIOZ8J-Th|
+                                     |w_VI8W6a_Th|
+                                     |s_VIuS4D_Th|
+                                     |rib_VIQO240Uh|)
+                                   |r_VIOZ8J-Th|
                                    '(())
                                    '#f
-                                   |rib_e_Zbp4jwe|)
+                                   |rib_VIQO240Uh|)
                                  (values
-                                   |type_e_pD4Cnwe|
-                                   (binding-value_e_fkqiupe |b_e_3H69nwe|)
-                                   |e_e_Bqxghwe|
-                                   w_e_hjtaiwe
-                                   |s_e_DfrDiwe|)))))
-                         |type_e_pD4Cnwe|))
-                      (|binding-type_e_VnsRtpe| |b_e_3H69nwe|)))
-                   (|lookup_e_7bNlDpe| |n_e_JK8Imwe| |r_e_XmvJhwe|)))
-                (|id-var-name_e_Rpx3lqe|
-                  |e_e_Bqxghwe|
-                  w_e_hjtaiwe))
-               (if (pair? |e_e_Bqxghwe|)
-                 ((lambda (first_e__0jrkwe)
-                    (if (|id?_e_TJwZGpe| first_e__0jrkwe)
-                      ((lambda (|n_e_lZgUkwe|)
-                         ((lambda (|b_e_HVellwe|)
-                            ((lambda (|type_e_1ScOlwe|)
-                               ((lambda (|t_e_nOafmwe|)
-                                  (if (memv |t_e_nOafmwe| '(lexical))
+                                   |type_VIgeKB4Uh|
+                                   (|binding-value_VI6X3ibNh| |b_VIWhM84Uh|)
+                                   |e_VIs1bg-Th|
+                                   |w_VI8W6a_Th|
+                                   |s_VIuS4D_Th|)))))
+                         |type_VIgeKB4Uh|))
+                      (|binding-type_VIM-5RaNh| |b_VIWhM84Uh|)))
+                   (|lookup_VI-NqlkNh| |n_VIAlOH3Uh| |r_VIOZ8J-Th|)))
+                (|id-var-name_VII0b32Oh|
+                  |e_VIs1bg-Th|
+                  |w_VI8W6a_Th|))
+               (if (pair? |e_VIs1bg-Th|)
+                 ((lambda (|first_VISDYq1Uh|)
+                    (if (|id?_VIKkaZnNh| |first_VISDYq1Uh|)
+                      ((lambda (|n_VIcAWT1Uh|)
+                         ((lambda (|b_VIywUk2Uh|)
+                            ((lambda (|type_VIUsSN2Uh|)
+                               ((lambda (|t_VIepQe3Uh|)
+                                  (if (memv |t_VIepQe3Uh| '(lexical))
                                     (values
                                       'lexical-call
-                                      (binding-value_e_fkqiupe |b_e_HVellwe|)
-                                      |e_e_Bqxghwe|
-                                      w_e_hjtaiwe
-                                      |s_e_DfrDiwe|)
-                                    (if (memv |t_e_nOafmwe| '(macro macro!))
-                                      (|syntax-type_e_1oYctqe|
-                                        (|chi-macro_e_72EMLqe|
-                                          (binding-value_e_fkqiupe
-                                            |b_e_HVellwe|)
-                                          |e_e_Bqxghwe|
-                                          |r_e_XmvJhwe|
-                                          w_e_hjtaiwe
-                                          |s_e_DfrDiwe|
-                                          |rib_e_Zbp4jwe|)
-                                        |r_e_XmvJhwe|
+                                      (|binding-value_VI6X3ibNh| |b_VIywUk2Uh|)
+                                      |e_VIs1bg-Th|
+                                      |w_VI8W6a_Th|
+                                      |s_VIuS4D_Th|)
+                                    (if (memv |t_VIepQe3Uh| '(macro macro!))
+                                      (|syntax-type_VIU-BcaOh|
+                                        (|chi-macro_VI-EhMsOh|
+                                          (|binding-value_VI6X3ibNh|
+                                            |b_VIywUk2Uh|)
+                                          |e_VIs1bg-Th|
+                                          |r_VIOZ8J-Th|
+                                          |w_VI8W6a_Th|
+                                          |s_VIuS4D_Th|
+                                          |rib_VIQO240Uh|)
+                                        |r_VIOZ8J-Th|
                                         '(())
                                         '#f
-                                        |rib_e_Zbp4jwe|)
-                                      (if (memv |t_e_nOafmwe| '(core))
+                                        |rib_VIQO240Uh|)
+                                      (if (memv |t_VIepQe3Uh| '(core))
                                         (values
-                                          |type_e_1ScOlwe|
-                                          (binding-value_e_fkqiupe
-                                            |b_e_HVellwe|)
-                                          |e_e_Bqxghwe|
-                                          w_e_hjtaiwe
-                                          |s_e_DfrDiwe|)
-                                        (if (memv |t_e_nOafmwe|
+                                          |type_VIUsSN2Uh|
+                                          (|binding-value_VI6X3ibNh|
+                                            |b_VIywUk2Uh|)
+                                          |e_VIs1bg-Th|
+                                          |w_VI8W6a_Th|
+                                          |s_VIuS4D_Th|)
+                                        (if (memv |t_VIepQe3Uh|
                                                   '(local-syntax))
                                           (values
                                             'local-syntax-form
-                                            (binding-value_e_fkqiupe
-                                              |b_e_HVellwe|)
-                                            |e_e_Bqxghwe|
-                                            w_e_hjtaiwe
-                                            |s_e_DfrDiwe|)
-                                          (if (memv |t_e_nOafmwe| '(begin))
+                                            (|binding-value_VI6X3ibNh|
+                                              |b_VIywUk2Uh|)
+                                            |e_VIs1bg-Th|
+                                            |w_VI8W6a_Th|
+                                            |s_VIuS4D_Th|)
+                                          (if (memv |t_VIepQe3Uh| '(begin))
                                             (values
                                               'begin-form
                                               '#f
-                                              |e_e_Bqxghwe|
-                                              w_e_hjtaiwe
-                                              |s_e_DfrDiwe|)
-                                            (if (memv |t_e_nOafmwe|
+                                              |e_VIs1bg-Th|
+                                              |w_VI8W6a_Th|
+                                              |s_VIuS4D_Th|)
+                                            (if (memv |t_VIepQe3Uh|
                                                       '(eval-when))
                                               (values
                                                 'eval-when-form
                                                 '#f
-                                                |e_e_Bqxghwe|
-                                                w_e_hjtaiwe
-                                                |s_e_DfrDiwe|)
-                                              (if (memv |t_e_nOafmwe|
+                                                |e_VIs1bg-Th|
+                                                |w_VI8W6a_Th|
+                                                |s_VIuS4D_Th|)
+                                              (if (memv |t_VIepQe3Uh|
                                                         '(define))
                                                 (values
                                                   'define-form
                                                   '#f
-                                                  |e_e_Bqxghwe|
-                                                  w_e_hjtaiwe
-                                                  |s_e_DfrDiwe|)
-                                                (if (memv |t_e_nOafmwe|
+                                                  |e_VIs1bg-Th|
+                                                  |w_VI8W6a_Th|
+                                                  |s_VIuS4D_Th|)
+                                                (if (memv |t_VIepQe3Uh|
                                                           '(define-syntax))
                                                   (values
                                                     'define-syntax-form
                                                     '#f
-                                                    |e_e_Bqxghwe|
-                                                    w_e_hjtaiwe
-                                                    |s_e_DfrDiwe|)
-                                                  (if (memv |t_e_nOafmwe|
+                                                    |e_VIs1bg-Th|
+                                                    |w_VI8W6a_Th|
+                                                    |s_VIuS4D_Th|)
+                                                  (if (memv |t_VIepQe3Uh|
                                                             '(module-key))
                                                     (values
                                                       'module-form
                                                       '#f
-                                                      |e_e_Bqxghwe|
-                                                      w_e_hjtaiwe
-                                                      |s_e_DfrDiwe|)
-                                                    (if (memv |t_e_nOafmwe|
+                                                      |e_VIs1bg-Th|
+                                                      |w_VI8W6a_Th|
+                                                      |s_VIuS4D_Th|)
+                                                    (if (memv |t_VIepQe3Uh|
                                                               '(import))
                                                       (values
                                                         'import-form
-                                                        (if (binding-value_e_fkqiupe
-                                                              |b_e_HVellwe|)
-                                                          (|wrap_e_jG6Yqqe|
-                                                            first_e__0jrkwe
-                                                            w_e_hjtaiwe)
+                                                        (if (|binding-value_VI6X3ibNh|
+                                                              |b_VIywUk2Uh|)
+                                                          (|wrap_VIahMX7Oh|
+                                                            |first_VISDYq1Uh|
+                                                            |w_VI8W6a_Th|)
                                                           '#f)
-                                                        |e_e_Bqxghwe|
-                                                        w_e_hjtaiwe
-                                                        |s_e_DfrDiwe|)
-                                                      (if (memv |t_e_nOafmwe|
+                                                        |e_VIs1bg-Th|
+                                                        |w_VI8W6a_Th|
+                                                        |s_VIuS4D_Th|)
+                                                      (if (memv |t_VIepQe3Uh|
                                                                 '(set!))
-                                                        (|chi-set!_e_N5GjLqe|
-                                                          |e_e_Bqxghwe|
-                                                          |r_e_XmvJhwe|
-                                                          w_e_hjtaiwe
-                                                          |s_e_DfrDiwe|
-                                                          |rib_e_Zbp4jwe|)
+                                                        (|chi-set!_VIEIjjsOh|
+                                                          |e_VIs1bg-Th|
+                                                          |r_VIOZ8J-Th|
+                                                          |w_VI8W6a_Th|
+                                                          |s_VIuS4D_Th|
+                                                          |rib_VIQO240Uh|)
                                                         (values
                                                           'call
                                                           '#f
-                                                          |e_e_Bqxghwe|
-                                                          w_e_hjtaiwe
-                                                          |s_e_DfrDiwe|)))))))))))))
-                                |type_e_1ScOlwe|))
-                             (|binding-type_e_VnsRtpe| |b_e_HVellwe|)))
-                          (|lookup_e_7bNlDpe| |n_e_lZgUkwe| |r_e_XmvJhwe|)))
-                       (|id-var-name_e_Rpx3lqe|
-                         first_e__0jrkwe
-                         w_e_hjtaiwe))
+                                                          |e_VIs1bg-Th|
+                                                          |w_VI8W6a_Th|
+                                                          |s_VIuS4D_Th|)))))))))))))
+                                |type_VIUsSN2Uh|))
+                             (|binding-type_VIM-5RaNh| |b_VIywUk2Uh|)))
+                          (|lookup_VI-NqlkNh| |n_VIcAWT1Uh| |r_VIOZ8J-Th|)))
+                       (|id-var-name_VII0b32Oh|
+                         |first_VISDYq1Uh|
+                         |w_VI8W6a_Th|))
                       (values
                         'call
                         '#f
-                        |e_e_Bqxghwe|
-                        w_e_hjtaiwe
-                        |s_e_DfrDiwe|)))
-                  (car |e_e_Bqxghwe|))
-                 (if (syntax-object?_e_h-lahpe |e_e_Bqxghwe|)
-                   (|syntax-type_e_1oYctqe|
-                     (|syntax-object-expression_e_DWjDhpe|
-                       |e_e_Bqxghwe|)
-                     |r_e_XmvJhwe|
-                     (|join-wraps_e_NLJliqe|
-                       w_e_hjtaiwe
-                       (|syntax-object-wrap_e_ZSh4ipe| |e_e_Bqxghwe|))
+                        |e_VIs1bg-Th|
+                        |w_VI8W6a_Th|
+                        |s_VIuS4D_Th|)))
+                  (car |e_VIs1bg-Th|))
+                 (if (|syntax-object?_VI8B_9-Mh| |e_VIs1bg-Th|)
+                   (|syntax-type_VIU-BcaOh|
+                     (|syntax-object-expression_VIuxZC-Mh|
+                       |e_VIs1bg-Th|)
+                     |r_VIOZ8J-Th|
+                     (|join-wraps_VIEmnl_Nh|
+                       |w_VI8W6a_Th|
+                       (|syntax-object-wrap_VIQtX3_Mh| |e_VIs1bg-Th|))
                      '#f
-                     |rib_e_Zbp4jwe|)
-                   (if (annotation? |e_e_Bqxghwe|)
-                     (|syntax-type_e_1oYctqe|
-                       (annotation-expression |e_e_Bqxghwe|)
-                       |r_e_XmvJhwe|
-                       w_e_hjtaiwe
-                       (annotation-source |e_e_Bqxghwe|)
-                       |rib_e_Zbp4jwe|)
-                     (if ((lambda (x_e_j8nxjwe)
-                            (not ((lambda (|t_e_F4l-jwe|)
-                                    (if |t_e_F4l-jwe|
-                                      |t_e_F4l-jwe|
-                                      (vector? x_e_j8nxjwe)))
-                                  (pair? x_e_j8nxjwe))))
-                          |e_e_Bqxghwe|)
+                     |rib_VIQO240Uh|)
+                   (if (annotation? |e_VIs1bg-Th|)
+                     (|syntax-type_VIU-BcaOh|
+                       (annotation-expression |e_VIs1bg-Th|)
+                       |r_VIOZ8J-Th|
+                       |w_VI8W6a_Th|
+                       (annotation-source |e_VIs1bg-Th|)
+                       |rib_VIQO240Uh|)
+                     (if ((lambda (|x_VIaL0x0Uh|)
+                            (not ((lambda (|t_VIwH-Z0Uh|)
+                                    (if |t_VIwH-Z0Uh|
+                                      |t_VIwH-Z0Uh|
+                                      (vector? |x_VIaL0x0Uh|)))
+                                  (pair? |x_VIaL0x0Uh|))))
+                          |e_VIs1bg-Th|)
                        (values
                          'constant
                          '#f
-                         |e_e_Bqxghwe|
-                         w_e_hjtaiwe
-                         |s_e_DfrDiwe|)
+                         |e_VIs1bg-Th|
+                         |w_VI8W6a_Th|
+                         |s_VIuS4D_Th|)
                        (values
                          'other
                          '#f
-                         |e_e_Bqxghwe|
-                         w_e_hjtaiwe
-                         |s_e_DfrDiwe|))))))))
-         (|chi-when-list_e_Hr-Lsqe|
-           (lambda (|when-list_e_zBDVfwe| |w_e_VxBmgwe|)
-             (map (lambda (|x_e_fuzPgwe|)
-                    (if (|literal-id=?_e_xitZlqe|
-                          |x_e_fuzPgwe|
+                         |e_VIs1bg-Th|
+                         |w_VI8W6a_Th|
+                         |s_VIuS4D_Th|))))))))
+         (|chi-when-list_VIy2EL9Oh|
+           (lambda (|when-list_VIqchVYTh| |w_VIM8fmZTh|)
+             (map (lambda (|x_VI65dPZTh|)
+                    (if (|literal-id=?_VIoV6Z2Oh|
+                          |x_VI65dPZTh|
                           '#(syntax-object
                              compile
                              ((top)
@@ -6432,8 +6436,8 @@
                                  "i"))
                               #(ribcage (#(import-token *top*)) () ()))))
                       'compile
-                      (if (|literal-id=?_e_xitZlqe|
-                            |x_e_fuzPgwe|
+                      (if (|literal-id=?_VIoV6Z2Oh|
+                            |x_VI65dPZTh|
                             '#(syntax-object
                                load
                                ((top)
@@ -7011,8 +7015,8 @@
                                    "i"))
                                 #(ribcage (#(import-token *top*)) () ()))))
                         'load
-                        (if (|literal-id=?_e_xitZlqe|
-                              |x_e_fuzPgwe|
+                        (if (|literal-id=?_VIoV6Z2Oh|
+                              |x_VI65dPZTh|
                               '#(syntax-object
                                  visit
                                  ((top)
@@ -7590,8 +7594,8 @@
                                      "i"))
                                   #(ribcage (#(import-token *top*)) () ()))))
                           'visit
-                          (if (|literal-id=?_e_xitZlqe|
-                                |x_e_fuzPgwe|
+                          (if (|literal-id=?_VIoV6Z2Oh|
+                                |x_VI65dPZTh|
                                 '#(syntax-object
                                    revisit
                                    ((top)
@@ -8169,8 +8173,8 @@
                                        "i"))
                                     #(ribcage (#(import-token *top*)) () ()))))
                             'revisit
-                            (if (|literal-id=?_e_xitZlqe|
-                                  |x_e_fuzPgwe|
+                            (if (|literal-id=?_VIoV6Z2Oh|
+                                  |x_VI65dPZTh|
                                   '#(syntax-object
                                      eval
                                      ((top)
@@ -8752,2888 +8756,2898 @@
                                         ()))))
                               'eval
                               (syntax-error
-                                (|wrap_e_jG6Yqqe| |x_e_fuzPgwe| |w_e_VxBmgwe|)
+                                (|wrap_VIahMX7Oh| |x_VI65dPZTh| |w_VIM8fmZTh|)
                                 '"invalid eval-when situation")))))))
-                  |when-list_e_zBDVfwe|)))
-         (chi-top-sequence_e_lv0jsqe
-           (lambda (|body_e_Lo4A9we|
-                    r_e_5l21awe
-                    w_e_rh0uawe
-                    |s_e_Nd-Wawe|
-                    |ctem_e_7aYnbwe|
-                    |rtem_e_t6WQbwe|
-                    |ribcage_e_P2Uhcwe|)
-             (|build-sequence_e_7RQnape|
-               |s_e_Nd-Wawe|
-               ((letrec ((|dobody_e_9_RKcwe|
-                           (lambda (|body_e_vXPbdwe|
-                                    |r_e_RTNEdwe|
-                                    |w_e_bQL5ewe|
-                                    |ctem_e_xMJyewe|
-                                    |rtem_e_TIH_ewe|)
-                             (if (null? |body_e_vXPbdwe|)
+                  |when-list_VIqchVYTh|)))
+         (|chi-top-sequence_VIc6Gi9Oh|
+           (lambda (|body_VIC_JzSTh|
+                    |r_VIYXH0TTh|
+                    |w_VIiUFtTTh|
+                    |s_VIEQDWTTh|
+                    |ctem_VI-MBnUTh|
+                    |rtem_VIkJzQUTh|
+                    |ribcage_VIGFxhVTh|)
+             (|build-sequence_VI-runTMh|
+               |s_VIEQDWTTh|
+               ((letrec ((|dobody_VI0CvKVTh|
+                           (lambda (|body_VImytbWTh|
+                                    |r_VIIurEWTh|
+                                    |w_VI2rp5XTh|
+                                    |ctem_VIonnyXTh|
+                                    |rtem_VIKjl_XTh|)
+                             (if (null? |body_VImytbWTh|)
                                '()
-                               ((lambda (|first_e_dFFsfwe|)
-                                  (cons |first_e_dFFsfwe|
-                                        (|dobody_e_9_RKcwe|
-                                          (cdr |body_e_vXPbdwe|)
-                                          |r_e_RTNEdwe|
-                                          |w_e_bQL5ewe|
-                                          |ctem_e_xMJyewe|
-                                          |rtem_e_TIH_ewe|)))
-                                (|chi-top_e_JgU6uqe|
-                                  (car |body_e_vXPbdwe|)
-                                  |r_e_RTNEdwe|
-                                  |w_e_bQL5ewe|
-                                  |ctem_e_xMJyewe|
-                                  |rtem_e_TIH_ewe|
-                                  |ribcage_e_P2Uhcwe|))))))
-                  |dobody_e_9_RKcwe|)
-                |body_e_Lo4A9we|
-                r_e_5l21awe
-                w_e_rh0uawe
-                |ctem_e_7aYnbwe|
-                |rtem_e_t6WQbwe|))))
-         (|chi-sequence_e__y2Srqe|
-           (lambda (|body_e_FVmv5we|
-                    |r_e__RkY5we|
-                    |w_e_lOip6we|
-                    |s_e_HKgS6we|)
-             (|build-sequence_e_7RQnape|
-               |s_e_HKgS6we|
-               ((letrec ((|dobody_e_1Hej7we|
-                           (lambda (|body_e_nDcM7we|
-                                    |r_e_Jzad8we|
-                                    |w_e_3w8G8we|)
-                             (if (null? |body_e_nDcM7we|)
+                               ((lambda (|first_VI4gjsYTh|)
+                                  (cons |first_VI4gjsYTh|
+                                        (|dobody_VI0CvKVTh|
+                                          (cdr |body_VImytbWTh|)
+                                          |r_VIIurEWTh|
+                                          |w_VI2rp5XTh|
+                                          |ctem_VIonnyXTh|
+                                          |rtem_VIKjl_XTh|)))
+                                (|chi-top_VIATx6bOh|
+                                  (car |body_VImytbWTh|)
+                                  |r_VIIurEWTh|
+                                  |w_VI2rp5XTh|
+                                  |ctem_VIonnyXTh|
+                                  |rtem_VIKjl_XTh|
+                                  |ribcage_VIGFxhVTh|))))))
+                  |dobody_VI0CvKVTh|)
+                |body_VIC_JzSTh|
+                |r_VIYXH0TTh|
+                |w_VIiUFtTTh|
+                |ctem_VI-MBnUTh|
+                |rtem_VIkJzQUTh|))))
+         (|chi-sequence_VIS9IR8Oh|
+           (lambda (|body_VIww0vOTh|
+                    |r_VISs-XOTh|
+                    |w_VIcpYoPTh|
+                    |s_VIylWRPTh|)
+             (|build-sequence_VI-runTMh|
+               |s_VIylWRPTh|
+               ((letrec ((|dobody_VIUhUiQTh|
+                           (lambda (|body_VIeeSLQTh|
+                                    |r_VIAaQcRTh|
+                                    |w_VIW6OFRTh|)
+                             (if (null? |body_VIeeSLQTh|)
                                '()
-                               ((lambda (first_e_ps679we)
-                                  (cons first_e_ps679we
-                                        (|dobody_e_1Hej7we|
-                                          (cdr |body_e_nDcM7we|)
-                                          |r_e_Jzad8we|
-                                          |w_e_3w8G8we|)))
-                                (|chi_e_LgMYJqe|
-                                  (car |body_e_nDcM7we|)
-                                  |r_e_Jzad8we|
-                                  |w_e_3w8G8we|))))))
-                  |dobody_e_1Hej7we|)
-                |body_e_FVmv5we|
-                |r_e__RkY5we|
-                |w_e_lOip6we|))))
-         (|source-wrap_e_FC4prqe|
-           (lambda (|x_e_D4t84we| |w_e_Z0rB4we| |s_e_jZo25we|)
-             (|wrap_e_jG6Yqqe|
-               (if |s_e_jZo25we|
-                 (make-annotation |x_e_D4t84we| |s_e_jZo25we| '#f)
-                 |x_e_D4t84we|)
-               |w_e_Z0rB4we|)))
-         (|wrap_e_jG6Yqqe|
-           (lambda (|x_e_Xbxe3we| |w_e_h8vH3we|)
-             (if (if (null? (|wrap-marks_e_DggBKpe| |w_e_h8vH3we|))
-                   (null? (|wrap-subst_e_Zce2Lpe| |w_e_h8vH3we|))
+                               ((lambda (|first_VIg3M6STh|)
+                                  (cons |first_VIg3M6STh|
+                                        (|dobody_VIUhUiQTh|
+                                          (cdr |body_VIeeSLQTh|)
+                                          |r_VIAaQcRTh|
+                                          |w_VIW6OFRTh|)))
+                                (|chi_VICTpYqOh|
+                                  (car |body_VIeeSLQTh|)
+                                  |r_VIAaQcRTh|
+                                  |w_VIW6OFRTh|))))))
+                  |dobody_VIUhUiQTh|)
+                |body_VIww0vOTh|
+                |r_VISs-XOTh|
+                |w_VIcpYoPTh|))))
+         (|source-wrap_VIwdKo8Oh|
+           (lambda (|x_VIuH68NTh| |w_VIQD4BNTh| |s_VIaA22OTh|)
+             (|wrap_VIahMX7Oh|
+               (if |s_VIaA22OTh|
+                 (make-annotation |x_VIuH68NTh| |s_VIaA22OTh| '#f)
+                 |x_VIuH68NTh|)
+               |w_VIQD4BNTh|)))
+         (|wrap_VIahMX7Oh|
+           (lambda (|x_VIOOaeMTh| |w_VI8L8HMTh|)
+             (if (if (null? (|wrap-marks_VIuTVArNh| |w_VI8L8HMTh|))
+                   (null? (|wrap-subst_VIQPT1sNh| |w_VI8L8HMTh|))
                    '#f)
-               |x_e_Xbxe3we|
-               (if (syntax-object?_e_h-lahpe |x_e_Xbxe3we|)
-                 (|make-syntax-object_e_X1oJgpe|
-                   (|syntax-object-expression_e_DWjDhpe|
-                     |x_e_Xbxe3we|)
-                   (|join-wraps_e_NLJliqe|
-                     |w_e_h8vH3we|
-                     (|syntax-object-wrap_e_ZSh4ipe| |x_e_Xbxe3we|)))
-                 (if (null? |x_e_Xbxe3we|)
-                   |x_e_Xbxe3we|
-                   (|make-syntax-object_e_X1oJgpe|
-                     |x_e_Xbxe3we|
-                     |w_e_h8vH3we|))))))
-         (|bound-id-member?_e_ZJ8vqqe|
-           (lambda (|x_e_VmDT1we| |list_e_fjBk2we|)
-             (if (not (null? |list_e_fjBk2we|))
-               ((lambda (|t_e_BfzN2we|)
-                  (if |t_e_BfzN2we|
-                    |t_e_BfzN2we|
-                    (|bound-id-member?_e_ZJ8vqqe|
-                      |x_e_VmDT1we|
-                      (cdr |list_e_fjBk2we|))))
-                (|bound-id=?_e_Terqmqe|
-                  |x_e_VmDT1we|
-                  (car |list_e_fjBk2we|)))
+               |x_VIOOaeMTh|
+               (if (|syntax-object?_VI8B_9-Mh| |x_VIOOaeMTh|)
+                 (|make-syntax-object_VIOE1JZMh|
+                   (|syntax-object-expression_VIuxZC-Mh|
+                     |x_VIOOaeMTh|)
+                   (|join-wraps_VIEmnl_Nh|
+                     |w_VI8L8HMTh|
+                     (|syntax-object-wrap_VIQtX3_Mh| |x_VIOOaeMTh|)))
+                 (if (null? |x_VIOOaeMTh|)
+                   |x_VIOOaeMTh|
+                   (|make-syntax-object_VIOE1JZMh|
+                     |x_VIOOaeMTh|
+                     |w_VI8L8HMTh|))))))
+         (|bound-id-member?_VIQkOu7Oh|
+           (lambda (|x_VIMZgTKTh| |list_VI6WekLTh|)
+             (if (not (null? |list_VI6WekLTh|))
+               ((lambda (|t_VIsScNLTh|)
+                  (if |t_VIsScNLTh|
+                    |t_VIsScNLTh|
+                    (|bound-id-member?_VIQkOu7Oh|
+                      |x_VIMZgTKTh|
+                      (cdr |list_VI6WekLTh|))))
+                (|bound-id=?_VIKR4q3Oh|
+                  |x_VIMZgTKTh|
+                  (car |list_VI6WekLTh|)))
                '#f)))
-         (|invalid-ids-error_e_DNa2qqe|
-           (lambda (|ids_e_RIP9_ve|
-                    |exp_e_bFNC_ve|
-                    |class_e_xBL30we|)
-             ((letrec ((|find_e_TxJw0we|
-                         (lambda (|ids_e_duHZ0we| |gooduns_e_zqFq1we|)
-                           (if (null? |ids_e_duHZ0we|)
-                             (syntax-error |exp_e_bFNC_ve|)
-                             (if (|id?_e_TJwZGpe| (car |ids_e_duHZ0we|))
-                               (if (|bound-id-member?_e_ZJ8vqqe|
-                                     (car |ids_e_duHZ0we|)
-                                     |gooduns_e_zqFq1we|)
+         (|invalid-ids-error_VIuoQ17Oh|
+           (lambda (|ids_VIIjt9ITh|
+                    |exp_VI2grCITh|
+                    |class_VIocp3JTh|)
+             ((letrec ((|find_VIK8nwJTh|
+                         (lambda (|ids_VI45lZJTh| |gooduns_VIq1jqKTh|)
+                           (if (null? |ids_VI45lZJTh|)
+                             (syntax-error |exp_VI2grCITh|)
+                             (if (|id?_VIKkaZnNh| (car |ids_VI45lZJTh|))
+                               (if (|bound-id-member?_VIQkOu7Oh|
+                                     (car |ids_VI45lZJTh|)
+                                     |gooduns_VIq1jqKTh|)
                                  (syntax-error
-                                   (car |ids_e_duHZ0we|)
+                                   (car |ids_VI45lZJTh|)
                                    '"duplicate "
-                                   |class_e_xBL30we|)
-                                 (|find_e_TxJw0we|
-                                   (cdr |ids_e_duHZ0we|)
-                                   (cons (car |ids_e_duHZ0we|)
-                                         |gooduns_e_zqFq1we|)))
+                                   |class_VIocp3JTh|)
+                                 (|find_VIK8nwJTh|
+                                   (cdr |ids_VI45lZJTh|)
+                                   (cons (car |ids_VI45lZJTh|)
+                                         |gooduns_VIq1jqKTh|)))
                                (syntax-error
-                                 (car |ids_e_duHZ0we|)
+                                 (car |ids_VI45lZJTh|)
                                  '"invalid "
-                                 |class_e_xBL30we|))))))
-                |find_e_TxJw0we|)
-              |ids_e_RIP9_ve|
+                                 |class_VIocp3JTh|))))))
+                |find_VIK8nwJTh|)
+              |ids_VIIjt9ITh|
               '())))
-         (|distinct-bound-ids?_e_hRcBpqe|
-           (lambda (|ids_e_tXXlZve|)
-             ((letrec ((|distinct?_e_PTVOZve|
-                         (lambda (|ids_e_9QTf-ve|)
-                           ((lambda (|t_e_vMRI-ve|)
-                              (if |t_e_vMRI-ve|
-                                |t_e_vMRI-ve|
-                                (if (not (|bound-id-member?_e_ZJ8vqqe|
-                                           (car |ids_e_9QTf-ve|)
-                                           (cdr |ids_e_9QTf-ve|)))
-                                  (|distinct?_e_PTVOZve| (cdr |ids_e_9QTf-ve|))
+         (|distinct-bound-ids?_VI8sSA6Oh|
+           (lambda (|ids_VIkyBlGTh|)
+             ((letrec ((|distinct?_VIGuzOGTh|
+                         (lambda (|ids_VI0rxfHTh|)
+                           ((lambda (|t_VImnvIHTh|)
+                              (if |t_VImnvIHTh|
+                                |t_VImnvIHTh|
+                                (if (not (|bound-id-member?_VIQkOu7Oh|
+                                           (car |ids_VI0rxfHTh|)
+                                           (cdr |ids_VI0rxfHTh|)))
+                                  (|distinct?_VIGuzOGTh| (cdr |ids_VI0rxfHTh|))
                                   '#f)))
-                            (null? |ids_e_9QTf-ve|)))))
-                |distinct?_e_PTVOZve|)
-              |ids_e_tXXlZve|)))
-         (|valid-bound-ids?_e_dbpTmqe|
-           (lambda (|ids_e_5a4yXve|)
-             (if ((letrec ((|all-ids?_e_r62_Xve|
-                             (lambda (|ids_e_N20sYve|)
-                               ((lambda (|t_e_7_ZUYve|)
-                                  (if |t_e_7_ZUYve|
-                                    |t_e_7_ZUYve|
-                                    (if (|id?_e_TJwZGpe| (car |ids_e_N20sYve|))
-                                      (|all-ids?_e_r62_Xve|
-                                        (cdr |ids_e_N20sYve|))
+                            (null? |ids_VI0rxfHTh|)))))
+                |distinct?_VIGuzOGTh|)
+              |ids_VIkyBlGTh|)))
+         (|valid-bound-ids?_VI4O2T3Oh|
+           (lambda (|ids_VIYMJxETh|)
+             (if ((letrec ((|all-ids?_VIiJH-ETh|
+                             (lambda (|ids_VIEFFrFTh|)
+                               ((lambda (|t_VI-BDUFTh|)
+                                  (if |t_VI-BDUFTh|
+                                    |t_VI-BDUFTh|
+                                    (if (|id?_VIKkaZnNh| (car |ids_VIEFFrFTh|))
+                                      (|all-ids?_VIiJH-ETh|
+                                        (cdr |ids_VIEFFrFTh|))
                                       '#f)))
-                                (null? |ids_e_N20sYve|)))))
-                    |all-ids?_e_r62_Xve|)
-                  |ids_e_5a4yXve|)
-               (|distinct-bound-ids?_e_hRcBpqe| |ids_e_5a4yXve|)
+                                (null? |ids_VIEFFrFTh|)))))
+                    |all-ids?_VIiJH-ETh|)
+                  |ids_VIYMJxETh|)
+               (|distinct-bound-ids?_VI8sSA6Oh| |ids_VIYMJxETh|)
                '#f)))
-         (|bound-id=?_e_Terqmqe|
-           (lambda (|i_e_1wgQUve| |j_e_nsehVve|)
-             (if (if (syntax-object?_e_h-lahpe |i_e_1wgQUve|)
-                   (syntax-object?_e_h-lahpe |j_e_nsehVve|)
+         (|bound-id=?_VIKR4q3Oh|
+           (lambda (|i_VIU6WPBTh| |j_VIe3UgCTh|)
+             (if (if (|syntax-object?_VI8B_9-Mh| |i_VIU6WPBTh|)
+                   (|syntax-object?_VI8B_9-Mh| |j_VIe3UgCTh|)
                    '#f)
-               (if (eq? ((lambda (|e_e_ph8EWve|)
-                           (if (annotation? |e_e_ph8EWve|)
-                             (annotation-expression |e_e_ph8EWve|)
-                             |e_e_ph8EWve|))
-                         (|syntax-object-expression_e_DWjDhpe|
-                           |i_e_1wgQUve|))
-                        ((lambda (|e_e_Ld65Xve|)
-                           (if (annotation? |e_e_Ld65Xve|)
-                             (annotation-expression |e_e_Ld65Xve|)
-                             |e_e_Ld65Xve|))
-                         (|syntax-object-expression_e_DWjDhpe|
-                           |j_e_nsehVve|)))
-                 (|same-marks?_e_tEFfjqe|
-                   (|wrap-marks_e_DggBKpe|
-                     (|syntax-object-wrap_e_ZSh4ipe| |i_e_1wgQUve|))
-                   (|wrap-marks_e_DggBKpe|
-                     (|syntax-object-wrap_e_ZSh4ipe| |j_e_nsehVve|)))
+               (if (eq? ((lambda (|e_VIgUNDDTh|)
+                           (if (annotation? |e_VIgUNDDTh|)
+                             (annotation-expression |e_VIgUNDDTh|)
+                             |e_VIgUNDDTh|))
+                         (|syntax-object-expression_VIuxZC-Mh|
+                           |i_VIU6WPBTh|))
+                        ((lambda (|e_VICQL4ETh|)
+                           (if (annotation? |e_VICQL4ETh|)
+                             (annotation-expression |e_VICQL4ETh|)
+                             |e_VICQL4ETh|))
+                         (|syntax-object-expression_VIuxZC-Mh|
+                           |j_VIe3UgCTh|)))
+                 (|same-marks?_VIkfjf0Oh|
+                   (|wrap-marks_VIuTVArNh|
+                     (|syntax-object-wrap_VIQtX3_Mh| |i_VIU6WPBTh|))
+                   (|wrap-marks_VIuTVArNh|
+                     (|syntax-object-wrap_VIQtX3_Mh| |j_VIe3UgCTh|)))
                  '#f)
-               (eq? ((lambda (|e_e_JocKVve|)
-                       (if (annotation? |e_e_JocKVve|)
-                         (annotation-expression |e_e_JocKVve|)
-                         |e_e_JocKVve|))
-                     |i_e_1wgQUve|)
-                    ((lambda (|e_e_3labWve|)
-                       (if (annotation? |e_e_3labWve|)
-                         (annotation-expression |e_e_3labWve|)
-                         |e_e_3labWve|))
-                     |j_e_nsehVve|)))))
-         (|literal-id=?_e_xitZlqe|
-           (lambda (|id_e_f8DRPve| |literal_e_B4BiQve|)
-             (if (eq? ((lambda (|x_e_FKo0Tve|)
-                         ((lambda (|e_e__GmtTve|)
-                            (if (annotation? |e_e__GmtTve|)
-                              (annotation-expression |e_e__GmtTve|)
-                              |e_e__GmtTve|))
-                          (if (syntax-object?_e_h-lahpe |x_e_FKo0Tve|)
-                            (|syntax-object-expression_e_DWjDhpe|
-                              |x_e_FKo0Tve|)
-                            |x_e_FKo0Tve|)))
-                       |id_e_f8DRPve|)
-                      ((lambda (|x_e_lDkWTve|)
-                         ((lambda (|e_e_HzinUve|)
-                            (if (annotation? |e_e_HzinUve|)
-                              (annotation-expression |e_e_HzinUve|)
-                              |e_e_HzinUve|))
-                          (if (syntax-object?_e_h-lahpe |x_e_lDkWTve|)
-                            (|syntax-object-expression_e_DWjDhpe|
-                              |x_e_lDkWTve|)
-                            |x_e_lDkWTve|)))
-                       |literal_e_B4BiQve|))
-               ((lambda (|n-id_e_X0zLQve| |n-literal_e_hZwcRve|)
-                  ((lambda (|t_e_DVuFRve|)
-                     (if |t_e_DVuFRve|
-                       |t_e_DVuFRve|
-                       (if ((lambda (|t_e_jOqzSve|)
-                              (if |t_e_jOqzSve|
-                                |t_e_jOqzSve|
-                                (symbol? |n-id_e_X0zLQve|)))
-                            (not |n-id_e_X0zLQve|))
-                         ((lambda (|t_e_ZRs6Sve|)
-                            (if |t_e_ZRs6Sve|
-                              |t_e_ZRs6Sve|
-                              (symbol? |n-literal_e_hZwcRve|)))
-                          (not |n-literal_e_hZwcRve|))
+               (eq? ((lambda (|e_VIA_RJCTh|)
+                       (if (annotation? |e_VIA_RJCTh|)
+                         (annotation-expression |e_VIA_RJCTh|)
+                         |e_VIA_RJCTh|))
+                     |i_VIU6WPBTh|)
+                    ((lambda (|e_VIWXPaDTh|)
+                       (if (annotation? |e_VIWXPaDTh|)
+                         (annotation-expression |e_VIWXPaDTh|)
+                         |e_VIWXPaDTh|))
+                     |j_VIe3UgCTh|)))))
+         (|literal-id=?_VIoV6Z2Oh|
+           (lambda (|id_VI6LgRwTh| |literal_VIsHeixTh|)
+             (if (eq? ((lambda (|x_VIwl20ATh|)
+                         ((lambda (|e_VISh0tATh|)
+                            (if (annotation? |e_VISh0tATh|)
+                              (annotation-expression |e_VISh0tATh|)
+                              |e_VISh0tATh|))
+                          (if (|syntax-object?_VI8B_9-Mh| |x_VIwl20ATh|)
+                            (|syntax-object-expression_VIuxZC-Mh|
+                              |x_VIwl20ATh|)
+                            |x_VIwl20ATh|)))
+                       |id_VI6LgRwTh|)
+                      ((lambda (|x_VIce-VATh|)
+                         ((lambda (|e_VIyaYmBTh|)
+                            (if (annotation? |e_VIyaYmBTh|)
+                              (annotation-expression |e_VIyaYmBTh|)
+                              |e_VIyaYmBTh|))
+                          (if (|syntax-object?_VI8B_9-Mh| |x_VIce-VATh|)
+                            (|syntax-object-expression_VIuxZC-Mh|
+                              |x_VIce-VATh|)
+                            |x_VIce-VATh|)))
+                       |literal_VIsHeixTh|))
+               ((lambda (|n-id_VIODcLxTh| |n-literal_VI8AacyTh|)
+                  ((lambda (|t_VIuw8FyTh|)
+                     (if |t_VIuw8FyTh|
+                       |t_VIuw8FyTh|
+                       (if ((lambda (|t_VIap4zzTh|)
+                              (if |t_VIap4zzTh|
+                                |t_VIap4zzTh|
+                                (symbol? |n-id_VIODcLxTh|)))
+                            (not |n-id_VIODcLxTh|))
+                         ((lambda (|t_VIQs66zTh|)
+                            (if |t_VIQs66zTh|
+                              |t_VIQs66zTh|
+                              (symbol? |n-literal_VI8AacyTh|)))
+                          (not |n-literal_VI8AacyTh|))
                          '#f)))
-                   (eq? |n-id_e_X0zLQve| |n-literal_e_hZwcRve|)))
-                (|id-var-name_e_Rpx3lqe| |id_e_f8DRPve| '(()))
-                (|id-var-name_e_Rpx3lqe|
-                  |literal_e_B4BiQve|
+                   (eq? |n-id_VIODcLxTh| |n-literal_VI8AacyTh|)))
+                (|id-var-name_VII0b32Oh| |id_VI6LgRwTh| '(()))
+                (|id-var-name_VII0b32Oh|
+                  |literal_VIsHeixTh|
                   '(())))
                '#f)))
-         (free-id=?_e_bmvwlqe
-           (lambda (|i_e_buP7Nve| |j_e_xqNANve|)
-             (if (eq? ((lambda (|x_e_TmL1Ove|)
-                         ((lambda (|e_e_djJuOve|)
-                            (if (annotation? |e_e_djJuOve|)
-                              (annotation-expression |e_e_djJuOve|)
-                              |e_e_djJuOve|))
-                          (if (syntax-object?_e_h-lahpe |x_e_TmL1Ove|)
-                            (|syntax-object-expression_e_DWjDhpe|
-                              |x_e_TmL1Ove|)
-                            |x_e_TmL1Ove|)))
-                       |i_e_buP7Nve|)
-                      ((lambda (|x_e_zfHXOve|)
-                         ((lambda (|e_e_VbFoPve|)
-                            (if (annotation? |e_e_VbFoPve|)
-                              (annotation-expression |e_e_VbFoPve|)
-                              |e_e_VbFoPve|))
-                          (if (syntax-object?_e_h-lahpe |x_e_zfHXOve|)
-                            (|syntax-object-expression_e_DWjDhpe|
-                              |x_e_zfHXOve|)
-                            |x_e_zfHXOve|)))
-                       |j_e_xqNANve|))
-               (eq? (|id-var-name_e_Rpx3lqe| |i_e_buP7Nve| '(()))
-                    (|id-var-name_e_Rpx3lqe| |j_e_xqNANve| '(())))
+         (|free-id=?_VI2Z8w2Oh|
+           (lambda (|i_VI25t7uTh| |j_VIo1rAuTh|)
+             (if (eq? ((lambda (|x_VIKZo1vTh|)
+                         ((lambda (|e_VI4WmuvTh|)
+                            (if (annotation? |e_VI4WmuvTh|)
+                              (annotation-expression |e_VI4WmuvTh|)
+                              |e_VI4WmuvTh|))
+                          (if (|syntax-object?_VI8B_9-Mh| |x_VIKZo1vTh|)
+                            (|syntax-object-expression_VIuxZC-Mh|
+                              |x_VIKZo1vTh|)
+                            |x_VIKZo1vTh|)))
+                       |i_VI25t7uTh|)
+                      ((lambda (|x_VIqSkXvTh|)
+                         ((lambda (|e_VIMOiowTh|)
+                            (if (annotation? |e_VIMOiowTh|)
+                              (annotation-expression |e_VIMOiowTh|)
+                              |e_VIMOiowTh|))
+                          (if (|syntax-object?_VI8B_9-Mh| |x_VIqSkXvTh|)
+                            (|syntax-object-expression_VIuxZC-Mh|
+                              |x_VIqSkXvTh|)
+                            |x_VIqSkXvTh|)))
+                       |j_VIo1rAuTh|))
+               (eq? (|id-var-name_VII0b32Oh| |i_VI25t7uTh| '(()))
+                    (|id-var-name_VII0b32Oh| |j_VIo1rAuTh| '(())))
                '#f)))
-         (|id-var-name_e_Rpx3lqe|
-           (lambda (|id_e_PIXjLve| |w_e_9FVMLve|)
+         (|id-var-name_VII0b32Oh|
+           (lambda (|id_VIGjBjsTh| |w_VI0gzMsTh|)
              (call-with-values
                (lambda ()
-                 (|id-var-name-loc&marks_e_PADIjqe|
-                   |id_e_PIXjLve|
-                   |w_e_9FVMLve|))
-               (lambda (|label_e_vBTdMve| |marks_e_RxRGMve|)
-                 (if (|indirect-label?_e_hvgDYpe| |label_e_vBTdMve|)
-                   (|get-indirect-label_e_Fg8r-pe|
-                     |label_e_vBTdMve|)
-                   |label_e_vBTdMve|)))))
-         (|id-var-name-loc_e_vtzCkqe|
-           (lambda (|id_e_rX3wJve| |w_e_NT1ZJve|)
+                 (|id-var-name-loc&marks_VIGbhI0Oh|
+                   |id_VIGjBjsTh|
+                   |w_VI0gzMsTh|))
+               (lambda (|label_VImcxdtTh| |marks_VII8vGtTh|)
+                 (if (|indirect-label?_VI86WCFNh| |label_VImcxdtTh|)
+                   (|get-indirect-label_VIwTNqHNh|
+                     |label_VImcxdtTh|)
+                   |label_VImcxdtTh|)))))
+         (|id-var-name-loc_VIm4dC1Oh|
+           (lambda (|id_VIiyJvqTh| |w_VIEuHYqTh|)
              (call-with-values
                (lambda ()
-                 (|id-var-name-loc&marks_e_PADIjqe|
-                   |id_e_rX3wJve|
-                   |w_e_NT1ZJve|))
-               (lambda (|label_e_7Q_pKve| |marks_e_tMZSKve|)
-                 |label_e_7Q_pKve|))))
-         (|id-var-name&marks_e_9xB9kqe|
-           (lambda (|id_e_3acIHve| |w_e_p6a9Ive|)
+                 (|id-var-name-loc&marks_VIGbhI0Oh|
+                   |id_VIiyJvqTh|
+                   |w_VIEuHYqTh|))
+               (lambda (|label_VI-qFprTh| |marks_VIknDSrTh|)
+                 |label_VI-qFprTh|))))
+         (|id-var-name&marks_VI08f91Oh|
+           (lambda (|id_VIWMRHoTh| |w_VIgJP8pTh|)
              (call-with-values
                (lambda ()
-                 (|id-var-name-loc&marks_e_PADIjqe|
-                   |id_e_3acIHve|
-                   |w_e_p6a9Ive|))
-               (lambda (|label_e_L28CIve| |marks_e_5_53Jve|)
+                 (|id-var-name-loc&marks_VIGbhI0Oh|
+                   |id_VIWMRHoTh|
+                   |w_VIgJP8pTh|))
+               (lambda (|label_VICFNBpTh| |marks_VIYBL2qTh|)
                  (values
-                   (if (|indirect-label?_e_hvgDYpe| |label_e_L28CIve|)
-                     (|get-indirect-label_e_Fg8r-pe|
-                       |label_e_L28CIve|)
-                     |label_e_L28CIve|)
-                   |marks_e_5_53Jve|)))))
-         (|id-var-name-loc&marks_e_PADIjqe|
-           (lambda (|id_e_1akSrve| w_e_n6ijsve)
-             (letrec ((|search_e_J2gMsve|
-                        (lambda (|sym_e_9uXhxve|
-                                 |subst_e_vqVKxve|
-                                 |marks_e_RmTbyve|)
-                          (if (null? |subst_e_vqVKxve|)
-                            (values |sym_e_9uXhxve| |marks_e_RmTbyve|)
-                            ((lambda (|fst_e_bjREyve|)
-                               (if (eq? |fst_e_bjREyve| 'shift)
-                                 (|search_e_J2gMsve|
-                                   |sym_e_9uXhxve|
-                                   (cdr |subst_e_vqVKxve|)
-                                   (cdr |marks_e_RmTbyve|))
-                                 ((lambda (|symnames_e_xfP5zve|)
-                                    (if (vector? |symnames_e_xfP5zve|)
-                                      (|search-vector-rib_e_pXbGtve|
-                                        |sym_e_9uXhxve|
-                                        |subst_e_vqVKxve|
-                                        |marks_e_RmTbyve|
-                                        |symnames_e_xfP5zve|
-                                        |fst_e_bjREyve|)
-                                      (search-list-rib_e_3_ddtve
-                                        |sym_e_9uXhxve|
-                                        |subst_e_vqVKxve|
-                                        |marks_e_RmTbyve|
-                                        |symnames_e_xfP5zve|
-                                        |fst_e_bjREyve|)))
-                                  (|ribcage-symnames_e_3TVB1qe|
-                                    |fst_e_bjREyve|))))
-                             (car |subst_e_vqVKxve|)))))
-                      (search-list-rib_e_3_ddtve
-                        (lambda (|sym_e_TbNyzve|
-                                 |subst_e_d8L_zve|
-                                 |marks_e_z4JsAve|
-                                 |symnames_e_V0HVAve|
-                                 |ribcage_e_fZEmBve|)
-                          ((letrec ((|f_e_BVCPBve|
-                                      (lambda (|symnames_e_XRAgCve|
-                                               |i_e_hOyJCve|)
-                                        (if (null? |symnames_e_XRAgCve|)
-                                          (|search_e_J2gMsve|
-                                            |sym_e_TbNyzve|
-                                            (cdr |subst_e_d8L_zve|)
-                                            |marks_e_z4JsAve|)
-                                          (if (if (eq? (car |symnames_e_XRAgCve|)
-                                                       |sym_e_TbNyzve|)
-                                                (|same-marks?_e_tEFfjqe|
-                                                  |marks_e_z4JsAve|
+                   (if (|indirect-label?_VI86WCFNh| |label_VICFNBpTh|)
+                     (|get-indirect-label_VIwTNqHNh|
+                       |label_VICFNBpTh|)
+                     |label_VICFNBpTh|)
+                   |marks_VIYBL2qTh|)))))
+         (|id-var-name-loc&marks_VIGbhI0Oh|
+           (lambda (|id_VIUMZR8Th| |w_VIeJXi9Th|)
+             (letrec ((|search_VIAFVL9Th|
+                        (lambda (|sym_VI05BheTh|
+                                 |subst_VIm1zKeTh|
+                                 |marks_VIIZwbfTh|)
+                          (if (null? |subst_VIm1zKeTh|)
+                            (values |sym_VI05BheTh| |marks_VIIZwbfTh|)
+                            ((lambda (|fst_VI2WuEfTh|)
+                               (if (eq? |fst_VI2WuEfTh| 'shift)
+                                 (|search_VIAFVL9Th|
+                                   |sym_VI05BheTh|
+                                   (cdr |subst_VIm1zKeTh|)
+                                   (cdr |marks_VIIZwbfTh|))
+                                 ((lambda (|symnames_VIoSs5gTh|)
+                                    (if (vector? |symnames_VIoSs5gTh|)
+                                      (|search-vector-rib_VIgyRFaTh|
+                                        |sym_VI05BheTh|
+                                        |subst_VIm1zKeTh|
+                                        |marks_VIIZwbfTh|
+                                        |symnames_VIoSs5gTh|
+                                        |fst_VI2WuEfTh|)
+                                      (|search-list-rib_VIWBTcaTh|
+                                        |sym_VI05BheTh|
+                                        |subst_VIm1zKeTh|
+                                        |marks_VIIZwbfTh|
+                                        |symnames_VIoSs5gTh|
+                                        |fst_VI2WuEfTh|)))
+                                  (|ribcage-symnames_VIWtzBKNh|
+                                    |fst_VI2WuEfTh|))))
+                             (car |subst_VIm1zKeTh|)))))
+                      (|search-list-rib_VIWBTcaTh|
+                        (lambda (|sym_VIKOqygTh|
+                                 |subst_VI4Lo_gTh|
+                                 |marks_VIqHmshTh|
+                                 |symnames_VIMDkVhTh|
+                                 |ribcage_VI6AimiTh|)
+                          ((letrec ((|f_VIswgPiTh|
+                                      (lambda (|symnames_VIOsegjTh|
+                                               |i_VI8pcJjTh|)
+                                        (if (null? |symnames_VIOsegjTh|)
+                                          (|search_VIAFVL9Th|
+                                            |sym_VIKOqygTh|
+                                            (cdr |subst_VI4Lo_gTh|)
+                                            |marks_VIqHmshTh|)
+                                          (if (if (eq? (car |symnames_VIOsegjTh|)
+                                                       |sym_VIKOqygTh|)
+                                                (|same-marks?_VIkfjf0Oh|
+                                                  |marks_VIqHmshTh|
                                                   (list-ref
-                                                    (|ribcage-marks_e_pPT22qe|
-                                                      |ribcage_e_fZEmBve|)
-                                                    |i_e_hOyJCve|))
+                                                    (|ribcage-marks_VIgqx2LNh|
+                                                      |ribcage_VI6AimiTh|)
+                                                    |i_VI8pcJjTh|))
                                                 '#f)
                                             (values
                                               (list-ref
-                                                (|ribcage-labels_e_LLRv2qe|
-                                                  |ribcage_e_fZEmBve|)
-                                                |i_e_hOyJCve|)
-                                              |marks_e_z4JsAve|)
-                                            (if (|import-token?_e_DCczbqe|
-                                                  (car |symnames_e_XRAgCve|))
-                                              ((lambda (|t_e_DKwaDve|)
-                                                 (if |t_e_DKwaDve|
-                                                   ((lambda (|id_e_ZGuDDve|)
+                                                (|ribcage-labels_VICmvvLNh|
+                                                  |ribcage_VI6AimiTh|)
+                                                |i_VI8pcJjTh|)
+                                              |marks_VIqHmshTh|)
+                                            (if (|import-token?_VIudSyUNh|
+                                                  (car |symnames_VIOsegjTh|))
+                                              ((lambda (|t_VIulaakTh|)
+                                                 (if |t_VIulaakTh|
+                                                   ((lambda (|id_VIQh8DkTh|)
                                                       (if (symbol?
-                                                            |id_e_ZGuDDve|)
+                                                            |id_VIQh8DkTh|)
                                                         (values
-                                                          |id_e_ZGuDDve|
-                                                          |marks_e_z4JsAve|)
-                                                        (|id-var-name&marks_e_9xB9kqe|
-                                                          |id_e_ZGuDDve|
+                                                          |id_VIQh8DkTh|
+                                                          |marks_VIqHmshTh|)
+                                                        (|id-var-name&marks_VI08f91Oh|
+                                                          |id_VIQh8DkTh|
                                                           '(()))))
-                                                    |t_e_DKwaDve|)
-                                                   (|f_e_BVCPBve|
-                                                     (cdr |symnames_e_XRAgCve|)
-                                                     |i_e_hOyJCve|)))
-                                               (|lookup-import-binding-name_e_p-Rxgqe|
-                                                 |sym_e_TbNyzve|
-                                                 (|import-token-key_e_Zya0cqe|
-                                                   (car |symnames_e_XRAgCve|))
-                                                 |marks_e_z4JsAve|))
-                                              (if (if (eq? (car |symnames_e_XRAgCve|)
-                                                           |barrier-marker_e_XJgFaqe|)
-                                                    (|same-marks?_e_tEFfjqe|
-                                                      |marks_e_z4JsAve|
+                                                    |t_VIulaakTh|)
+                                                   (|f_VIswgPiTh|
+                                                     (cdr |symnames_VIOsegjTh|)
+                                                     |i_VI8pcJjTh|)))
+                                               (|lookup-import-binding-name_VIgBvxZNh|
+                                                 |sym_VIKOqygTh|
+                                                 (|import-token-key_VIQ9Q_UNh|
+                                                   (car |symnames_VIOsegjTh|))
+                                                 |marks_VIqHmshTh|))
+                                              (if (if (eq? (car |symnames_VIOsegjTh|)
+                                                           |barrier-marker_VIOkWETNh|)
+                                                    (|same-marks?_VIkfjf0Oh|
+                                                      |marks_VIqHmshTh|
                                                       (list-ref
-                                                        (|ribcage-marks_e_pPT22qe|
-                                                          |ribcage_e_fZEmBve|)
-                                                        |i_e_hOyJCve|))
+                                                        (|ribcage-marks_VIgqx2LNh|
+                                                          |ribcage_VI6AimiTh|)
+                                                        |i_VI8pcJjTh|))
                                                     '#f)
-                                                (values '#f |marks_e_z4JsAve|)
-                                                (|f_e_BVCPBve|
-                                                  (cdr |symnames_e_XRAgCve|)
-                                                  (+ |i_e_hOyJCve| '1)))))))))
-                             |f_e_BVCPBve|)
-                           |symnames_e_V0HVAve|
+                                                (values '#f |marks_VIqHmshTh|)
+                                                (|f_VIswgPiTh|
+                                                  (cdr |symnames_VIOsegjTh|)
+                                                  (+ |i_VI8pcJjTh| '1)))))))))
+                             |f_VIswgPiTh|)
+                           |symnames_VIMDkVhTh|
                            '0)))
-                      (|search-vector-rib_e_pXbGtve|
-                        (lambda (|sym_e_jDs4Eve|
-                                 |subst_e_FzqxEve|
-                                 |marks_e__vo-Eve|
-                                 |symnames_e_lsmrFve|
-                                 |ribcage_e_HokUFve|)
-                          ((lambda (|n_e_1lilGve|)
-                             ((letrec ((|f_e_nhgOGve|
-                                         (lambda (|i_e_JdefHve|)
-                                           (if (= |i_e_JdefHve| |n_e_1lilGve|)
-                                             (|search_e_J2gMsve|
-                                               |sym_e_jDs4Eve|
-                                               (cdr |subst_e_FzqxEve|)
-                                               |marks_e__vo-Eve|)
+                      (|search-vector-rib_VIgyRFaTh|
+                        (lambda (|sym_VIae64lTh|
+                                 |subst_VIwa4xlTh|
+                                 |marks_VIS62-lTh|
+                                 |symnames_VIc30rmTh|
+                                 |ribcage_VIy_ZTmTh|)
+                          ((lambda (|n_VIUXXknTh|)
+                             ((letrec ((|f_VIeUVNnTh|
+                                         (lambda (|i_VIAQTeoTh|)
+                                           (if (= |i_VIAQTeoTh| |n_VIUXXknTh|)
+                                             (|search_VIAFVL9Th|
+                                               |sym_VIae64lTh|
+                                               (cdr |subst_VIwa4xlTh|)
+                                               |marks_VIS62-lTh|)
                                              (if (if (eq? (vector-ref
-                                                            |symnames_e_lsmrFve|
-                                                            |i_e_JdefHve|)
-                                                          |sym_e_jDs4Eve|)
-                                                   (|same-marks?_e_tEFfjqe|
-                                                     |marks_e__vo-Eve|
+                                                            |symnames_VIc30rmTh|
+                                                            |i_VIAQTeoTh|)
+                                                          |sym_VIae64lTh|)
+                                                   (|same-marks?_VIkfjf0Oh|
+                                                     |marks_VIS62-lTh|
                                                      (vector-ref
-                                                       (|ribcage-marks_e_pPT22qe|
-                                                         |ribcage_e_HokUFve|)
-                                                       |i_e_JdefHve|))
+                                                       (|ribcage-marks_VIgqx2LNh|
+                                                         |ribcage_VIy_ZTmTh|)
+                                                       |i_VIAQTeoTh|))
                                                    '#f)
                                                (values
                                                  (vector-ref
-                                                   (|ribcage-labels_e_LLRv2qe|
-                                                     |ribcage_e_HokUFve|)
-                                                   |i_e_JdefHve|)
-                                                 |marks_e__vo-Eve|)
-                                               (|f_e_nhgOGve|
-                                                 (+ |i_e_JdefHve| '1)))))))
-                                |f_e_nhgOGve|)
+                                                   (|ribcage-labels_VICmvvLNh|
+                                                     |ribcage_VIy_ZTmTh|)
+                                                   |i_VIAQTeoTh|)
+                                                 |marks_VIS62-lTh|)
+                                               (|f_VIeUVNnTh|
+                                                 (+ |i_VIAQTeoTh| '1)))))))
+                                |f_VIeUVNnTh|)
                               '0))
-                           (vector-length |symnames_e_lsmrFve|)))))
-               (if (symbol? |id_e_1akSrve|)
-                 (|search_e_J2gMsve|
-                   |id_e_1akSrve|
-                   (|wrap-subst_e_Zce2Lpe| w_e_n6ijsve)
-                   (|wrap-marks_e_DggBKpe| w_e_n6ijsve))
-                 (if (syntax-object?_e_h-lahpe |id_e_1akSrve|)
-                   ((lambda (|sym_e_5Q7Auve| |w1_e_rM51vve|)
-                      ((lambda (|marks_e_NI3uvve|)
+                           (vector-length |symnames_VIc30rmTh|)))))
+               (if (symbol? |id_VIUMZR8Th|)
+                 (|search_VIAFVL9Th|
+                   |id_VIUMZR8Th|
+                   (|wrap-subst_VIQPT1sNh| |w_VIeJXi9Th|)
+                   (|wrap-marks_VIuTVArNh| |w_VIeJXi9Th|))
+                 (if (|syntax-object?_VI8B_9-Mh| |id_VIUMZR8Th|)
+                   ((lambda (|sym_VIYqNzbTh| |w1_VIinL0cTh|)
+                      ((lambda (|marks_VIEjJtcTh|)
                          (call-with-values
                            (lambda ()
-                             (|search_e_J2gMsve|
-                               |sym_e_5Q7Auve|
-                               (|wrap-subst_e_Zce2Lpe| w_e_n6ijsve)
-                               |marks_e_NI3uvve|))
-                           (lambda (|new-id_e_7F1Xvve| |marks_e_tB_nwve|)
-                             (if (eq? |new-id_e_7F1Xvve| |sym_e_5Q7Auve|)
-                               (|search_e_J2gMsve|
-                                 |sym_e_5Q7Auve|
-                                 (|wrap-subst_e_Zce2Lpe| |w1_e_rM51vve|)
-                                 |marks_e_tB_nwve|)
+                             (|search_VIAFVL9Th|
+                               |sym_VIYqNzbTh|
+                               (|wrap-subst_VIQPT1sNh| |w_VIeJXi9Th|)
+                               |marks_VIEjJtcTh|))
+                           (lambda (|new-id_VI-fHWcTh| |marks_VIkcFndTh|)
+                             (if (eq? |new-id_VI-fHWcTh| |sym_VIYqNzbTh|)
+                               (|search_VIAFVL9Th|
+                                 |sym_VIYqNzbTh|
+                                 (|wrap-subst_VIQPT1sNh| |w1_VIinL0cTh|)
+                                 |marks_VIkcFndTh|)
                                (values
-                                 |new-id_e_7F1Xvve|
-                                 |marks_e_tB_nwve|)))))
-                       (|join-marks_e_7IHOiqe|
-                         (|wrap-marks_e_DggBKpe| w_e_n6ijsve)
-                         (|wrap-marks_e_DggBKpe| |w1_e_rM51vve|))))
-                    ((lambda (|e_e_PxZQwve|)
-                       (if (annotation? |e_e_PxZQwve|)
-                         (annotation-expression |e_e_PxZQwve|)
-                         |e_e_PxZQwve|))
-                     (|syntax-object-expression_e_DWjDhpe|
-                       |id_e_1akSrve|))
-                    (|syntax-object-wrap_e_ZSh4ipe| |id_e_1akSrve|))
-                   (if (annotation? |id_e_1akSrve|)
-                     (|search_e_J2gMsve|
-                       ((lambda (|e_e_LT97uve|)
-                          (if (annotation? |e_e_LT97uve|)
-                            (annotation-expression |e_e_LT97uve|)
-                            |e_e_LT97uve|))
-                        |id_e_1akSrve|)
-                       (|wrap-subst_e_Zce2Lpe| w_e_n6ijsve)
-                       (|wrap-marks_e_DggBKpe| w_e_n6ijsve))
-                     (error-hook_e___ivpoe
+                                 |new-id_VI-fHWcTh|
+                                 |marks_VIkcFndTh|)))))
+                       (|join-marks_VI-ilO_Nh|
+                         (|wrap-marks_VIuTVArNh| |w_VIeJXi9Th|)
+                         (|wrap-marks_VIuTVArNh| |w1_VIinL0cTh|))))
+                    ((lambda (|e_VIG8DQdTh|)
+                       (if (annotation? |e_VIG8DQdTh|)
+                         (annotation-expression |e_VIG8DQdTh|)
+                         |e_VIG8DQdTh|))
+                     (|syntax-object-expression_VIuxZC-Mh|
+                       |id_VIUMZR8Th|))
+                    (|syntax-object-wrap_VIQtX3_Mh| |id_VIUMZR8Th|))
+                   (if (annotation? |id_VIUMZR8Th|)
+                     (|search_VIAFVL9Th|
+                       ((lambda (|e_VICuP6bTh|)
+                          (if (annotation? |e_VICuP6bTh|)
+                            (annotation-expression |e_VICuP6bTh|)
+                            |e_VICuP6bTh|))
+                        |id_VIUMZR8Th|)
+                       (|wrap-subst_VIQPT1sNh| |w_VIeJXi9Th|)
+                       (|wrap-marks_VIuTVArNh| |w_VIeJXi9Th|))
+                     (|error-hook_VISCYu6Mh|
                        'id-var-name
                        '"invalid id"
-                       |id_e_1akSrve|)))))))
-         (|same-marks?_e_tEFfjqe|
-           (lambda (x_e__kqvqve |y_e_lhoYqve|)
-             ((lambda (|t_e_Hdmprve|)
-                (if |t_e_Hdmprve|
-                  |t_e_Hdmprve|
-                  (if (not (null? x_e__kqvqve))
-                    (if (not (null? |y_e_lhoYqve|))
-                      (if (eq? (car x_e__kqvqve) (car |y_e_lhoYqve|))
-                        (|same-marks?_e_tEFfjqe|
-                          (cdr x_e__kqvqve)
-                          (cdr |y_e_lhoYqve|))
+                       |id_VIUMZR8Th|)))))))
+         (|same-marks?_VIkfjf0Oh|
+           (lambda (|x_VISX3v7Th| |y_VIcU1Y7Th|)
+             ((lambda (|t_VIyQ_o8Th|)
+                (if |t_VIyQ_o8Th|
+                  |t_VIyQ_o8Th|
+                  (if (not (null? |x_VISX3v7Th|))
+                    (if (not (null? |y_VIcU1Y7Th|))
+                      (if (eq? (car |x_VISX3v7Th|) (car |y_VIcU1Y7Th|))
+                        (|same-marks?_VIkfjf0Oh|
+                          (cdr |x_VISX3v7Th|)
+                          (cdr |y_VIcU1Y7Th|))
                         '#f)
                       '#f)
                     '#f)))
-              (eq? x_e__kqvqve |y_e_lhoYqve|))))
-         (|join-marks_e_7IHOiqe|
-           (lambda (|m1_e_jsuBpve| |m2_e_Fos2qve|)
-             (|smart-append_e_rPLUhqe|
-               |m1_e_jsuBpve|
-               |m2_e_Fos2qve|)))
-         (|join-wraps_e_NLJliqe|
-           (lambda (|w1_e_XGCNnve| |w2_e_hDAeove|)
-             ((lambda (|m1_e_DzyHove| |s1_e_Zvw8pve|)
-                (if (null? |m1_e_DzyHove|)
-                  (if (null? |s1_e_Zvw8pve|)
-                    |w2_e_hDAeove|
-                    (|make-wrap_e_hki8Kpe|
-                      (|wrap-marks_e_DggBKpe| |w2_e_hDAeove|)
-                      (|smart-append_e_rPLUhqe|
-                        |s1_e_Zvw8pve|
-                        (|wrap-subst_e_Zce2Lpe| |w2_e_hDAeove|))))
-                  (|make-wrap_e_hki8Kpe|
-                    (|smart-append_e_rPLUhqe|
-                      |m1_e_DzyHove|
-                      (|wrap-marks_e_DggBKpe| |w2_e_hDAeove|))
-                    (|smart-append_e_rPLUhqe|
-                      |s1_e_Zvw8pve|
-                      (|wrap-subst_e_Zce2Lpe| |w2_e_hDAeove|)))))
-              (|wrap-marks_e_DggBKpe| |w1_e_XGCNnve|)
-              (|wrap-subst_e_Zce2Lpe| |w1_e_XGCNnve|))))
-         (|smart-append_e_rPLUhqe|
-           (lambda (|m1_e_fOGTmve| |m2_e_BKEknve|)
-             (if (null? |m2_e_BKEknve|)
-               |m1_e_fOGTmve|
-               (append |m1_e_fOGTmve| |m2_e_BKEknve|))))
-         (|make-trimmed-syntax-object_e_5TNrhqe|
-           (lambda (|id_e_b8T9kve|)
+              (eq? |x_VISX3v7Th| |y_VIcU1Y7Th|))))
+         (|join-marks_VI-ilO_Nh|
+           (lambda (|m1_VIa38B6Th| |m2_VIw_527Th|)
+             (|smart-append_VIiqpU-Nh|
+               |m1_VIa38B6Th|
+               |m2_VIw_527Th|)))
+         (|join-wraps_VIEmnl_Nh|
+           (lambda (|w1_VIOhgN4Th| |w2_VI8eee5Th|)
+             ((lambda (|m1_VIuacH5Th| |s1_VIQ6a86Th|)
+                (if (null? |m1_VIuacH5Th|)
+                  (if (null? |s1_VIQ6a86Th|)
+                    |w2_VI8eee5Th|
+                    (|make-wrap_VI8XX7rNh|
+                      (|wrap-marks_VIuTVArNh| |w2_VI8eee5Th|)
+                      (|smart-append_VIiqpU-Nh|
+                        |s1_VIQ6a86Th|
+                        (|wrap-subst_VIQPT1sNh| |w2_VI8eee5Th|))))
+                  (|make-wrap_VI8XX7rNh|
+                    (|smart-append_VIiqpU-Nh|
+                      |m1_VIuacH5Th|
+                      (|wrap-marks_VIuTVArNh| |w2_VI8eee5Th|))
+                    (|smart-append_VIiqpU-Nh|
+                      |s1_VIQ6a86Th|
+                      (|wrap-subst_VIQPT1sNh| |w2_VI8eee5Th|)))))
+              (|wrap-marks_VIuTVArNh| |w1_VIOhgN4Th|)
+              (|wrap-subst_VIQPT1sNh| |w1_VIOhgN4Th|))))
+         (|smart-append_VIiqpU-Nh|
+           (lambda (|m1_VI6pkT3Th| |m2_VIslik4Th|)
+             (if (null? |m2_VIslik4Th|)
+               |m1_VI6pkT3Th|
+               (append |m1_VI6pkT3Th| |m2_VIslik4Th|))))
+         (|make-trimmed-syntax-object_VIYtrr-Nh|
+           (lambda (|id_VI2Lw91Th|)
              (call-with-values
                (lambda ()
-                 (|id-var-name&marks_e_9xB9kqe|
-                   |id_e_b8T9kve|
+                 (|id-var-name&marks_VI08f91Oh|
+                   |id_VI2Lw91Th|
                    '(())))
-               (lambda (|tosym_e_x4RCkve| |marks_e_T0P3lve|)
+               (lambda (|tosym_VIoHuC1Th| |marks_VIKDs32Th|)
                  (begin
-                   (if (not |tosym_e_x4RCkve|)
+                   (if (not |tosym_VIoHuC1Th|)
                      (syntax-error
-                       |id_e_b8T9kve|
+                       |id_VI2Lw91Th|
                        '"identifier not visible for export")
                      (void))
-                   ((lambda (|fromsym_e_dZMwlve|)
-                      (|make-syntax-object_e_X1oJgpe|
-                        |fromsym_e_dZMwlve|
-                        (|make-wrap_e_hki8Kpe|
-                          |marks_e_T0P3lve|
-                          (list (|make-ribcage_e_n-ZH0qe|
-                                  (vector |fromsym_e_dZMwlve|)
-                                  (vector |marks_e_T0P3lve|)
-                                  (vector |tosym_e_x4RCkve|))))))
-                    ((lambda (|x_e_zVKZlve|)
-                       ((lambda (|e_e_VRIqmve|)
-                          (if (annotation? |e_e_VRIqmve|)
-                            (annotation-expression |e_e_VRIqmve|)
-                            |e_e_VRIqmve|))
-                        (if (syntax-object?_e_h-lahpe |x_e_zVKZlve|)
-                          (|syntax-object-expression_e_DWjDhpe|
-                            |x_e_zVKZlve|)
-                          |x_e_zVKZlve|)))
-                     |id_e_b8T9kve|)))))))
-         (|make-binding-wrap_e_LWP-gqe|
-           (lambda (|ids_e_3QfKeve|
-                    |labels_e_pMdbfve|
-                    |w_e_LIbEfve|)
-             (if (null? |ids_e_3QfKeve|)
-               |w_e_LIbEfve|
-               (|make-wrap_e_hki8Kpe|
-                 (|wrap-marks_e_DggBKpe| |w_e_LIbEfve|)
-                 (cons ((lambda (|labelvec_e_5F95gve|)
-                          ((lambda (|n_e_rB7ygve|)
-                             ((lambda (|symnamevec_e_Nx5_gve|
-                                       marksvec_e_7u3shve)
+                   ((lambda (|fromsym_VI4Aqw2Th|)
+                      (|make-syntax-object_VIOE1JZMh|
+                        |fromsym_VI4Aqw2Th|
+                        (|make-wrap_VI8XX7rNh|
+                          |marks_VIKDs32Th|
+                          (list (|make-ribcage_VIeBDHJNh|
+                                  (vector |fromsym_VI4Aqw2Th|)
+                                  (vector |marks_VIKDs32Th|)
+                                  (vector |tosym_VIoHuC1Th|))))))
+                    ((lambda (|x_VIqwoZ2Th|)
+                       ((lambda (|e_VIMsmq3Th|)
+                          (if (annotation? |e_VIMsmq3Th|)
+                            (annotation-expression |e_VIMsmq3Th|)
+                            |e_VIMsmq3Th|))
+                        (if (|syntax-object?_VI8B_9-Mh| |x_VIqwoZ2Th|)
+                          (|syntax-object-expression_VIuxZC-Mh|
+                            |x_VIqwoZ2Th|)
+                          |x_VIqwoZ2Th|)))
+                     |id_VI2Lw91Th|)))))))
+         (|make-binding-wrap_VICxt-ZNh|
+           (lambda (|ids_VIWqVJXSh|
+                    |labels_VIgnTaYSh|
+                    |w_VICjRDYSh|)
+             (if (null? |ids_VIWqVJXSh|)
+               |w_VICjRDYSh|
+               (|make-wrap_VI8XX7rNh|
+                 (|wrap-marks_VIuTVArNh| |w_VICjRDYSh|)
+                 (cons ((lambda (|labelvec_VIYfP4ZSh|)
+                          ((lambda (|n_VIicNxZSh|)
+                             ((lambda (|symnamevec_VIE8L-ZSh|
+                                       |marksvec_VI-4Jr-Sh|)
                                 (begin
-                                  ((letrec ((|f_e_tq1Vhve|
-                                              (lambda (|ids_e_Pm_live|
-                                                       |i_e_9jZOive|)
-                                                (if (not (null? |ids_e_Pm_live|))
+                                  ((letrec ((|f_VIk1HU-Sh|
+                                              (lambda (|ids_VIGZEl_Sh|
+                                                       |i_VI0WCO_Sh|)
+                                                (if (not (null? |ids_VIGZEl_Sh|))
                                                   (call-with-values
                                                     (lambda ()
-                                                      (|id-sym-name&marks_e_XnkHJpe|
-                                                        (car |ids_e_Pm_live|)
-                                                        |w_e_LIbEfve|))
-                                                    (lambda (|symname_e_vfXfjve|
-                                                             |marks_e_RbVIjve|)
+                                                      (|id-sym-name&marks_VIO-ZGqNh|
+                                                        (car |ids_VIGZEl_Sh|)
+                                                        |w_VICjRDYSh|))
+                                                    (lambda (|symname_VImSAf0Th|
+                                                             |marks_VIIOyI0Th|)
                                                       (begin
                                                         (vector-set!
-                                                          |symnamevec_e_Nx5_gve|
-                                                          |i_e_9jZOive|
-                                                          |symname_e_vfXfjve|)
+                                                          |symnamevec_VIE8L-ZSh|
+                                                          |i_VI0WCO_Sh|
+                                                          |symname_VImSAf0Th|)
                                                         (vector-set!
-                                                          marksvec_e_7u3shve
-                                                          |i_e_9jZOive|
-                                                          |marks_e_RbVIjve|)
-                                                        (|f_e_tq1Vhve|
-                                                          (cdr |ids_e_Pm_live|)
-                                                          (+ |i_e_9jZOive|
+                                                          |marksvec_VI-4Jr-Sh|
+                                                          |i_VI0WCO_Sh|
+                                                          |marks_VIIOyI0Th|)
+                                                        (|f_VIk1HU-Sh|
+                                                          (cdr |ids_VIGZEl_Sh|)
+                                                          (+ |i_VI0WCO_Sh|
                                                              '1)))))
                                                   (void)))))
-                                     |f_e_tq1Vhve|)
-                                   |ids_e_3QfKeve|
+                                     |f_VIk1HU-Sh|)
+                                   |ids_VIWqVJXSh|
                                    '0)
-                                  (|make-ribcage_e_n-ZH0qe|
-                                    |symnamevec_e_Nx5_gve|
-                                    marksvec_e_7u3shve
-                                    |labelvec_e_5F95gve|)))
-                              (make-vector |n_e_rB7ygve|)
-                              (make-vector |n_e_rB7ygve|)))
-                           (vector-length |labelvec_e_5F95gve|)))
-                        (list->vector |labels_e_pMdbfve|))
-                       (|wrap-subst_e_Zce2Lpe| |w_e_LIbEfve|))))))
-         (|lookup-import-binding-name_e_p-Rxgqe|
-           (lambda (|sym_e_Fduzbve| key_e__9s0cve marks_e_l6qtcve)
-             ((lambda (|new_e_H2oWcve|)
-                (if |new_e_H2oWcve|
-                  ((letrec ((f_e_1_lndve
-                              (lambda (|new_e_nXjQdve|)
-                                (if (pair? |new_e_nXjQdve|)
-                                  ((lambda (|t_e_JThheve|)
-                                     (if |t_e_JThheve|
-                                       |t_e_JThheve|
-                                       (f_e_1_lndve (cdr |new_e_nXjQdve|))))
-                                   (f_e_1_lndve (car |new_e_nXjQdve|)))
-                                  (if (symbol? |new_e_nXjQdve|)
-                                    (if (|same-marks?_e_tEFfjqe|
-                                          marks_e_l6qtcve
-                                          (|wrap-marks_e_DggBKpe| '((top))))
-                                      |new_e_nXjQdve|
+                                  (|make-ribcage_VIeBDHJNh|
+                                    |symnamevec_VIE8L-ZSh|
+                                    |marksvec_VI-4Jr-Sh|
+                                    |labelvec_VIYfP4ZSh|)))
+                              (make-vector |n_VIicNxZSh|)
+                              (make-vector |n_VIicNxZSh|)))
+                           (vector-length |labelvec_VIYfP4ZSh|)))
+                        (list->vector |labels_VIgnTaYSh|))
+                       (|wrap-subst_VIQPT1sNh| |w_VICjRDYSh|))))))
+         (|lookup-import-binding-name_VIgBvxZNh|
+           (lambda (|sym_VIwQ7zUSh|
+                    |key_VISM50VSh|
+                    |marks_VIcJ3tVSh|)
+             ((lambda (|new_VIyF1WVSh|)
+                (if |new_VIyF1WVSh|
+                  ((letrec ((|f_VIUB_mWSh|
+                              (lambda (|new_VIeyZPWSh|)
+                                (if (pair? |new_VIeyZPWSh|)
+                                  ((lambda (|t_VIAuXgXSh|)
+                                     (if |t_VIAuXgXSh|
+                                       |t_VIAuXgXSh|
+                                       (|f_VIUB_mWSh| (cdr |new_VIeyZPWSh|))))
+                                   (|f_VIUB_mWSh| (car |new_VIeyZPWSh|)))
+                                  (if (symbol? |new_VIeyZPWSh|)
+                                    (if (|same-marks?_VIkfjf0Oh|
+                                          |marks_VIcJ3tVSh|
+                                          (|wrap-marks_VIuTVArNh| '((top))))
+                                      |new_VIeyZPWSh|
                                       '#f)
-                                    (if (|same-marks?_e_tEFfjqe|
-                                          marks_e_l6qtcve
-                                          (|wrap-marks_e_DggBKpe|
-                                            (|syntax-object-wrap_e_ZSh4ipe|
-                                              |new_e_nXjQdve|)))
-                                      |new_e_nXjQdve|
+                                    (if (|same-marks?_VIkfjf0Oh|
+                                          |marks_VIcJ3tVSh|
+                                          (|wrap-marks_VIuTVArNh|
+                                            (|syntax-object-wrap_VIQtX3_Mh|
+                                              |new_VIeyZPWSh|)))
+                                      |new_VIeyZPWSh|
                                       '#f))))))
-                     f_e_1_lndve)
-                   |new_e_H2oWcve|)
+                     |f_VIUB_mWSh|)
+                   |new_VIyF1WVSh|)
                   '#f))
-              (|get-import-binding_e_pC4Gsoe|
-                |sym_e_Fduzbve|
-                key_e__9s0cve))))
-         (|extend-ribcage-subst!_e_32U4gqe|
-           (lambda (|ribcage_e_ZkyFave| token_e_jhw6bve)
-             (|set-ribcage-symnames!_e_5IPY2qe|
-               |ribcage_e_ZkyFave|
-               (cons (|make-import-token_e_hGe6bqe| token_e_jhw6bve)
-                     (|ribcage-symnames_e_3TVB1qe|
-                       |ribcage_e_ZkyFave|)))))
-         (|extend-ribcage-barrier-help!_e_J5WDfqe|
-           (lambda (|ribcage_e_hsCL9ve| |wrap_e_DoAcave|)
+              (|get-import-binding_VIgdKF9Mh|
+                |sym_VIwQ7zUSh|
+                |key_VISM50VSh|))))
+         (|extend-ribcage-subst!_VIWEx4ZNh|
+           (lambda (|ribcage_VIQXbFTSh| |token_VIaU96USh|)
+             (|set-ribcage-symnames!_VIYitYLNh|
+               |ribcage_VIQXbFTSh|
+               (cons (|make-import-token_VI8hU5UNh| |token_VIaU96USh|)
+                     (|ribcage-symnames_VIWtzBKNh|
+                       |ribcage_VIQXbFTSh|)))))
+         (|extend-ribcage-barrier-help!_VIAIzDYNh|
+           (lambda (|ribcage_VI83gLSSh| |wrap_VIu_dcTSh|)
              (begin
-               (|set-ribcage-symnames!_e_5IPY2qe|
-                 |ribcage_e_hsCL9ve|
-                 (cons |barrier-marker_e_XJgFaqe|
-                       (|ribcage-symnames_e_3TVB1qe|
-                         |ribcage_e_hsCL9ve|)))
-               (|set-ribcage-marks!_e_rENp3qe|
-                 |ribcage_e_hsCL9ve|
-                 (cons (|wrap-marks_e_DggBKpe| |wrap_e_DoAcave|)
-                       (|ribcage-marks_e_pPT22qe| |ribcage_e_hsCL9ve|))))))
-         (|extend-ribcage-barrier!_e_n9Yafqe|
-           (lambda (|ribcage_e_BzGR8ve| |killer-id_e_XvEi9ve|)
-             (|extend-ribcage-barrier-help!_e_J5WDfqe|
-               |ribcage_e_BzGR8ve|
-               (|syntax-object-wrap_e_ZSh4ipe|
-                 |killer-id_e_XvEi9ve|))))
-         (|extend-ribcage!_e_1d-Jeqe|
-           (lambda (|ribcage_e_dOO17ve|
-                    |id_e_zKMu7ve|
-                    |label_e_VGKX7ve|)
+               (|set-ribcage-symnames!_VIYitYLNh|
+                 |ribcage_VI83gLSSh|
+                 (cons |barrier-marker_VIOkWETNh|
+                       (|ribcage-symnames_VIWtzBKNh|
+                         |ribcage_VI83gLSSh|)))
+               (|set-ribcage-marks!_VIifrpMNh|
+                 |ribcage_VI83gLSSh|
+                 (cons (|wrap-marks_VIuTVArNh| |wrap_VIu_dcTSh|)
+                       (|ribcage-marks_VIgqx2LNh| |ribcage_VI83gLSSh|))))))
+         (|extend-ribcage-barrier!_VIeMBaYNh|
+           (lambda (|ribcage_VIsakRRSh| |killer-id_VIO6iiSSh|)
+             (|extend-ribcage-barrier-help!_VIAIzDYNh|
+               |ribcage_VIsakRRSh|
+               (|syntax-object-wrap_VIQtX3_Mh|
+                 |killer-id_VIO6iiSSh|))))
+         (|extend-ribcage!_VIUPDJXNh|
+           (lambda (|ribcage_VI4ps1QSh|
+                    |id_VIqlquQSh|
+                    |label_VIMhoXQSh|)
              (begin
-               (|set-ribcage-symnames!_e_5IPY2qe|
-                 |ribcage_e_dOO17ve|
-                 (cons ((lambda (|e_e_fDIo8ve|)
-                          (if (annotation? |e_e_fDIo8ve|)
-                            (annotation-expression |e_e_fDIo8ve|)
-                            |e_e_fDIo8ve|))
-                        (|syntax-object-expression_e_DWjDhpe|
-                          |id_e_zKMu7ve|))
-                       (|ribcage-symnames_e_3TVB1qe|
-                         |ribcage_e_dOO17ve|)))
-               (|set-ribcage-marks!_e_rENp3qe|
-                 |ribcage_e_dOO17ve|
-                 (cons (|wrap-marks_e_DggBKpe|
-                         (|syntax-object-wrap_e_ZSh4ipe| |id_e_zKMu7ve|))
-                       (|ribcage-marks_e_pPT22qe| |ribcage_e_dOO17ve|)))
-               (|set-ribcage-labels!_e_NALS3qe|
-                 |ribcage_e_dOO17ve|
-                 (cons |label_e_VGKX7ve|
-                       (|ribcage-labels_e_LLRv2qe| |ribcage_e_dOO17ve|))))))
-         (set-import-token-key!_e_jv8tcqe
-           (lambda (|x_e_xVS76ve| |update_e_TRQA6ve|)
-             (vector-set! |x_e_xVS76ve| '1 |update_e_TRQA6ve|)))
-         (|import-token-key_e_Zya0cqe|
-           (lambda (|x_e_bZUG5ve|)
-             (vector-ref |x_e_bZUG5ve| '1)))
-         (|import-token?_e_DCczbqe|
-           (lambda (|x_e_R0Xd5ve|)
-             (if (vector? |x_e_R0Xd5ve|)
-               (if (= (vector-length |x_e_R0Xd5ve|) '2)
-                 (eq? (vector-ref |x_e_R0Xd5ve| '0) 'import-token)
+               (|set-ribcage-symnames!_VIYitYLNh|
+                 |ribcage_VI4ps1QSh|
+                 (cons ((lambda (|e_VI6emoRSh|)
+                          (if (annotation? |e_VI6emoRSh|)
+                            (annotation-expression |e_VI6emoRSh|)
+                            |e_VI6emoRSh|))
+                        (|syntax-object-expression_VIuxZC-Mh|
+                          |id_VIqlquQSh|))
+                       (|ribcage-symnames_VIWtzBKNh|
+                         |ribcage_VI4ps1QSh|)))
+               (|set-ribcage-marks!_VIifrpMNh|
+                 |ribcage_VI4ps1QSh|
+                 (cons (|wrap-marks_VIuTVArNh|
+                         (|syntax-object-wrap_VIQtX3_Mh| |id_VIqlquQSh|))
+                       (|ribcage-marks_VIgqx2LNh| |ribcage_VI4ps1QSh|)))
+               (|set-ribcage-labels!_VIEbpSMNh|
+                 |ribcage_VI4ps1QSh|
+                 (cons |label_VIMhoXQSh|
+                       (|ribcage-labels_VICmvvLNh| |ribcage_VI4ps1QSh|))))))
+         (|set-import-token-key!_VIa6OsVNh|
+           (lambda (|x_VIoww7PSh| |update_VIKsuAPSh|)
+             (vector-set! |x_VIoww7PSh| '1 |update_VIKsuAPSh|)))
+         (|import-token-key_VIQ9Q_UNh|
+           (lambda (|x_VI2AyGOSh|)
+             (vector-ref |x_VI2AyGOSh| '1)))
+         (|import-token?_VIudSyUNh|
+           (lambda (|x_VIIDAdOSh|)
+             (if (vector? |x_VIIDAdOSh|)
+               (if (= (vector-length |x_VIIDAdOSh|) '2)
+                 (eq? (vector-ref |x_VIIDAdOSh| '0) 'import-token)
                  '#f)
                '#f)))
-         (|make-import-token_e_hGe6bqe|
-           (lambda (|key_e_v4ZM4ve|)
-             (vector 'import-token |key_e_v4ZM4ve|)))
-         (|barrier-marker_e_XJgFaqe| '#f)
-         (anti-mark_e_d0ro8qe
-           (lambda (w_e_98_j4ve)
-             (|make-wrap_e_hki8Kpe|
-               (cons '#f (|wrap-marks_e_DggBKpe| w_e_98_j4ve))
+         (|make-import-token_VI8hU5UNh|
+           (lambda (|key_VImHCMNSh|)
+             (vector 'import-token |key_VImHCMNSh|)))
+         (|barrier-marker_VIOkWETNh| '#f)
+         (|anti-mark_VI4D4oRNh|
+           (lambda (|w_VI0LEjNSh|)
+             (|make-wrap_VI8XX7rNh|
+               (cons '#f (|wrap-marks_VIuTVArNh| |w_VI0LEjNSh|))
                (cons 'shift
-                     (|wrap-subst_e_Zce2Lpe| w_e_98_j4ve)))))
-         (|set-ribcage-labels!_e_NALS3qe|
-           (lambda (x_e_tf3q3ve |update_e_Pb1T3ve|)
-             (vector-set! x_e_tf3q3ve '3 |update_e_Pb1T3ve|)))
-         (|set-ribcage-marks!_e_rENp3qe|
-           (lambda (|x_e_Nm7w2ve| |update_e_7j5Z2ve|)
-             (vector-set! |x_e_Nm7w2ve| '2 |update_e_7j5Z2ve|)))
-         (|set-ribcage-symnames!_e_5IPY2qe|
-           (lambda (|x_e_5ubC1ve| update_e_rq932ve)
-             (vector-set! |x_e_5ubC1ve| '1 update_e_rq932ve)))
-         (|ribcage-labels_e_LLRv2qe|
-           (lambda (|x_e_Lxd91ve|)
-             (vector-ref |x_e_Lxd91ve| '3)))
-         (|ribcage-marks_e_pPT22qe|
-           (lambda (|x_e_pBfI0ve|)
-             (vector-ref |x_e_pBfI0ve| '2)))
-         (|ribcage-symnames_e_3TVB1qe|
-           (lambda (|x_e_3Fhf0ve|)
-             (vector-ref |x_e_3Fhf0ve| '1)))
-         (|ribcage?_e_JWX81qe|
-           (lambda (|x_e_JIjO_ue|)
-             (if (vector? |x_e_JIjO_ue|)
-               (if (= (vector-length |x_e_JIjO_ue|) '4)
-                 (eq? (vector-ref |x_e_JIjO_ue| '0) 'ribcage)
+                     (|wrap-subst_VIQPT1sNh| |w_VI0LEjNSh|)))))
+         (|set-ribcage-labels!_VIEbpSMNh|
+           (lambda (|x_VIkSIpMSh| |update_VIGOGSMSh|)
+             (vector-set! |x_VIkSIpMSh| '3 |update_VIGOGSMSh|)))
+         (|set-ribcage-marks!_VIifrpMNh|
+           (lambda (|x_VIEZMvLSh| |update_VI-VKYLSh|)
+             (vector-set! |x_VIEZMvLSh| '2 |update_VI-VKYLSh|)))
+         (|set-ribcage-symnames!_VIYitYLNh|
+           (lambda (|x_VIY4RBKSh| |update_VIi1P2LSh|)
+             (vector-set! |x_VIY4RBKSh| '1 |update_VIi1P2LSh|)))
+         (|ribcage-labels_VICmvvLNh|
+           (lambda (|x_VIC8T8KSh|)
+             (vector-ref |x_VIC8T8KSh| '3)))
+         (|ribcage-marks_VIgqx2LNh|
+           (lambda (|x_VIgcVHJSh|)
+             (vector-ref |x_VIgcVHJSh| '2)))
+         (|ribcage-symnames_VIWtzBKNh|
+           (lambda (|x_VIWfXeJSh|)
+             (vector-ref |x_VIWfXeJSh| '1)))
+         (|ribcage?_VIAxB8KNh|
+           (lambda (|x_VIAjZNISh|)
+             (if (vector? |x_VIAjZNISh|)
+               (if (= (vector-length |x_VIAjZNISh|) '4)
+                 (eq? (vector-ref |x_VIAjZNISh| '0) 'ribcage)
                  '#f)
                '#f)))
-         (|make-ribcage_e_n-ZH0qe|
-           (lambda (|symnames_e_HTpr-ue|
-                    |marks_e_1QnU-ue|
-                    |labels_e_nMll_ue|)
+         (|make-ribcage_VIeBDHJNh|
+           (lambda (|symnames_VIyu3rHSh|
+                    |marks_VIUq1UHSh|
+                    |labels_VIen_kISh|)
              (vector
                'ribcage
-               |symnames_e_HTpr-ue|
-               |marks_e_1QnU-ue|
-               |labels_e_nMll_ue|)))
-         (gen-labels_e_120f0qe
-           (lambda (|ls_e_lXr-Zue|)
-             (if (null? |ls_e_lXr-Zue|)
+               |symnames_VIyu3rHSh|
+               |marks_VIUq1UHSh|
+               |labels_VIen_kISh|)))
+         (|gen-labels_VIUEFeJNh|
+           (lambda (|ls_VIcy5-GSh|)
+             (if (null? |ls_VIcy5-GSh|)
                '()
-               (cons (gen-label_e_l94l_pe)
-                     (gen-labels_e_120f0qe (cdr |ls_e_lXr-Zue|))))))
-         (|label?_e_H52O_pe|
-           (lambda (|x_e_j6yDYue|)
-             ((lambda (|t_e_F2w4Zue|)
-                (if |t_e_F2w4Zue|
-                  |t_e_F2w4Zue|
-                  ((lambda (|t_e__-txZue|)
-                     (if |t_e__-txZue|
-                       |t_e__-txZue|
-                       (|indirect-label?_e_hvgDYpe| |x_e_j6yDYue|)))
-                   (symbol? |x_e_j6yDYue|))))
-              (string? |x_e_j6yDYue|))))
-         (gen-label_e_l94l_pe (lambda () (string '#\i)))
-         (|make-indirect-label_e_XyiaYpe|
-           (lambda (|label_e_Z9AaYue|)
-             (vector 'indirect-label |label_e_Z9AaYue|)))
-         (|indirect-label?_e_hvgDYpe|
-           (lambda (|x_e_DdCJXue|)
-             (if (vector? |x_e_DdCJXue|)
-               (if (= (vector-length |x_e_DdCJXue|) '2)
-                 (eq? (vector-ref |x_e_DdCJXue| '0)
+               (cons (|gen-label_VIcMJkINh|)
+                     (|gen-labels_VIUEFeJNh| (cdr |ls_VIcy5-GSh|))))))
+         (|label?_VIyIHNINh|
+           (lambda (|x_VIaJbDFSh|)
+             ((lambda (|t_VIwF94GSh|)
+                (if |t_VIwF94GSh|
+                  |t_VIwF94GSh|
+                  ((lambda (|t_VISB7xGSh|)
+                     (if |t_VISB7xGSh|
+                       |t_VISB7xGSh|
+                       (|indirect-label?_VI86WCFNh| |x_VIaJbDFSh|)))
+                   (symbol? |x_VIaJbDFSh|))))
+              (string? |x_VIaJbDFSh|))))
+         (|gen-label_VIcMJkINh| (lambda () (string '#\i)))
+         (|make-indirect-label_VIO9Y9FNh|
+           (lambda (|label_VIQMdaFSh|)
+             (vector 'indirect-label |label_VIQMdaFSh|)))
+         (|indirect-label?_VI86WCFNh|
+           (lambda (|x_VIuQfJESh|)
+             (if (vector? |x_VIuQfJESh|)
+               (if (= (vector-length |x_VIuQfJESh|) '2)
+                 (eq? (vector-ref |x_VIuQfJESh| '0)
                       'indirect-label)
                  '#f)
                '#f)))
-         (|indirect-label-label_e_Dre4Zpe|
-           (lambda (|x_e_hhEgXue|)
-             (vector-ref |x_e_hhEgXue| '1)))
-         (|set-indirect-label-label!_e_ZncxZpe|
-           (lambda (|x_e_BoImWue| |update_e_XkGPWue|)
-             (vector-set! |x_e_BoImWue| '1 |update_e_XkGPWue|)))
-         (|gen-indirect-label_e_jka-Zpe|
+         (|indirect-label-label_VIu2U3GNh|
+           (lambda (|x_VI8UhgESh|)
+             (vector-ref |x_VI8UhgESh| '1)))
+         (|set-indirect-label-label!_VIQ-RwGNh|
+           (lambda (|x_VIs_lmDSh| |update_VIOXjPDSh|)
+             (vector-set! |x_VIs_lmDSh| '1 |update_VIOXjPDSh|)))
+         (|gen-indirect-label_VIaXPZGNh|
            (lambda ()
-             (|make-indirect-label_e_XyiaYpe|
-               (gen-label_e_l94l_pe))))
-         (|get-indirect-label_e_Fg8r-pe|
-           (lambda (|x_e_fsKVVue|)
-             (|indirect-label-label_e_Dre4Zpe| |x_e_fsKVVue|)))
-         (|set-indirect-label!_e__c6U-pe|
-           (lambda (|x_e_zzO_Uue| |v_e_VvMsVue|)
-             (|set-indirect-label-label!_e_ZncxZpe|
-               |x_e_zzO_Uue|
-               |v_e_VvMsVue|)))
-         (|wrap-subst_e_Zce2Lpe| cdr)
-         (|wrap-marks_e_DggBKpe| car)
-         (|make-wrap_e_hki8Kpe| cons)
-         (|id-sym-name&marks_e_XnkHJpe|
-           (lambda (|x_e_bOWbTue| |w_e_xKUETue|)
-             (if (syntax-object?_e_h-lahpe |x_e_bOWbTue|)
+             (|make-indirect-label_VIO9Y9FNh|
+               (|gen-label_VIcMJkINh|))))
+         (|get-indirect-label_VIwTNqHNh|
+           (lambda (|x_VI63oVCSh|)
+             (|indirect-label-label_VIu2U3GNh| |x_VI63oVCSh|)))
+         (|set-indirect-label!_VISPLTHNh|
+           (lambda (|x_VIqas_BSh| |v_VIM6qsCSh|)
+             (|set-indirect-label-label!_VIQ-RwGNh|
+               |x_VIqas_BSh|
+               |v_VIM6qsCSh|)))
+         (|wrap-subst_VIQPT1sNh| cdr)
+         (|wrap-marks_VIuTVArNh| car)
+         (|make-wrap_VI8XX7rNh| cons)
+         (|id-sym-name&marks_VIO-ZGqNh|
+           (lambda (|x_VI2pAbASh| |w_VIolyEASh|)
+             (if (|syntax-object?_VI8B_9-Mh| |x_VI2pAbASh|)
                (values
-                 ((lambda (|e_e_dDQyUue|)
-                    (if (annotation? |e_e_dDQyUue|)
-                      (annotation-expression |e_e_dDQyUue|)
-                      |e_e_dDQyUue|))
-                  (|syntax-object-expression_e_DWjDhpe|
-                    |x_e_bOWbTue|))
-                 (|join-marks_e_7IHOiqe|
-                   (|wrap-marks_e_DggBKpe| |w_e_xKUETue|)
-                   (|wrap-marks_e_DggBKpe|
-                     (|syntax-object-wrap_e_ZSh4ipe| |x_e_bOWbTue|))))
+                 ((lambda (|e_VI4euyBSh|)
+                    (if (annotation? |e_VI4euyBSh|)
+                      (annotation-expression |e_VI4euyBSh|)
+                      |e_VI4euyBSh|))
+                  (|syntax-object-expression_VIuxZC-Mh|
+                    |x_VI2pAbASh|))
+                 (|join-marks_VI-ilO_Nh|
+                   (|wrap-marks_VIuTVArNh| |w_VIolyEASh|)
+                   (|wrap-marks_VIuTVArNh|
+                     (|syntax-object-wrap_VIQtX3_Mh| |x_VI2pAbASh|))))
                (values
-                 ((lambda (|e_e_TGS5Uue|)
-                    (if (annotation? |e_e_TGS5Uue|)
-                      (annotation-expression |e_e_TGS5Uue|)
-                      |e_e_TGS5Uue|))
-                  |x_e_bOWbTue|)
-                 (|wrap-marks_e_DggBKpe| |w_e_xKUETue|)))))
-         (|id?_e_TJwZGpe|
-           (lambda (|x_e_vV-hSue|)
-             (if (symbol? |x_e_vV-hSue|)
+                 ((lambda (|e_VIKhw5BSh|)
+                    (if (annotation? |e_VIKhw5BSh|)
+                      (annotation-expression |e_VIKhw5BSh|)
+                      |e_VIKhw5BSh|))
+                  |x_VI2pAbASh|)
+                 (|wrap-marks_VIuTVArNh| |w_VIolyEASh|)))))
+         (|id?_VIKkaZnNh|
+           (lambda (|x_VImwEhzSh|)
+             (if (symbol? |x_VImwEhzSh|)
                '#t
-               (if (syntax-object?_e_h-lahpe |x_e_vV-hSue|)
+               (if (|syntax-object?_VI8B_9-Mh| |x_VImwEhzSh|)
                  (symbol?
-                   ((lambda (|e_e_RRYKSue|)
-                      (if (annotation? |e_e_RRYKSue|)
-                        (annotation-expression |e_e_RRYKSue|)
-                        |e_e_RRYKSue|))
-                    (|syntax-object-expression_e_DWjDhpe|
-                      |x_e_vV-hSue|)))
-                 (if (annotation? |x_e_vV-hSue|)
-                   (symbol? (annotation-expression |x_e_vV-hSue|))
+                   ((lambda (|e_VIIsCKzSh|)
+                      (if (annotation? |e_VIIsCKzSh|)
+                        (annotation-expression |e_VIIsCKzSh|)
+                        |e_VIIsCKzSh|))
+                    (|syntax-object-expression_VIuxZC-Mh|
+                      |x_VImwEhzSh|)))
+                 (if (annotation? |x_VImwEhzSh|)
+                   (symbol? (annotation-expression |x_VImwEhzSh|))
                    '#f)))))
-         (|nonsymbol-id?_e_P3JfEpe|
-           (lambda (|x_e_P03oRue|)
-             (if (syntax-object?_e_h-lahpe |x_e_P03oRue|)
+         (|nonsymbol-id?_VIGGmflNh|
+           (lambda (|x_VIGDInySh|)
+             (if (|syntax-object?_VI8B_9-Mh| |x_VIGDInySh|)
                (symbol?
-                 ((lambda (|e_e_9Z0RRue|)
-                    (if (annotation? |e_e_9Z0RRue|)
-                      (annotation-expression |e_e_9Z0RRue|)
-                      |e_e_9Z0RRue|))
-                  (|syntax-object-expression_e_DWjDhpe|
-                    |x_e_P03oRue|)))
+                 ((lambda (|e_VI0AGQySh|)
+                    (if (annotation? |e_VI0AGQySh|)
+                      (annotation-expression |e_VI0AGQySh|)
+                      |e_VI0AGQySh|))
+                  (|syntax-object-expression_VIuxZC-Mh|
+                    |x_VIGDInySh|)))
                '#f)))
-         (|global-extend_e_t7LODpe|
-           (lambda (|type_e_Nb91Que|
-                    |sym_e_787uQue|
-                    |val_e_t45XQue|)
-             (|put-global-definition-hook_e_JJ8Mroe|
-               |sym_e_787uQue|
-               (make-binding_e_zruotpe
-                 |type_e_Nb91Que|
-                 |val_e_t45XQue|))))
-         (|lookup_e_7bNlDpe|
-           (lambda (|x_e_lMtvLue| |r_e_HIrYLue|)
-             (letrec ((|whack-binding!_e_1FppMue|
-                        (lambda (|b_e_5jd7Pue| |*b_e_rfbAPue|)
+         (|global-extend_VIkKoOkNh|
+           (lambda (|type_VIEOO0xSh|
+                    |sym_VI-KMtxSh|
+                    |val_VIkHKWxSh|)
+             (|put-global-definition-hook_VIAkOL8Mh|
+               |sym_VI-KMtxSh|
+               (|make-binding_VIq28oaNh|
+                 |type_VIEOO0xSh|
+                 |val_VIkHKWxSh|))))
+         (|lookup_VI-NqlkNh|
+           (lambda (|x_VIcn7vsSh| |r_VIyj5YsSh|)
+             (letrec ((|whack-binding!_VIUf3ptSh|
+                        (lambda (|b_VIYVS6wSh| |*b_VIiSQzwSh|)
                           (begin
-                            (|set-binding-type!_e_BgoLupe|
-                              |b_e_5jd7Pue|
-                              (|binding-type_e_VnsRtpe| |*b_e_rfbAPue|))
-                            (|set-binding-value!_e_Xcmcvpe|
-                              |b_e_5jd7Pue|
-                              (binding-value_e_fkqiupe |*b_e_rfbAPue|))))))
-               ((lambda (|b_e_nBnSMue|)
-                  ((lambda (|t_e_JxljNue|)
-                     (if (memv |t_e_JxljNue| '(deferred))
+                            (|set-binding-type!_VIsT1LbNh|
+                              |b_VIYVS6wSh|
+                              (|binding-type_VIM-5RaNh| |*b_VIiSQzwSh|))
+                            (|set-binding-value!_VIOP_bcNh|
+                              |b_VIYVS6wSh|
+                              (|binding-value_VI6X3ibNh| |*b_VIiSQzwSh|))))))
+               ((lambda (|b_VIec1StSh|)
+                  ((lambda (|t_VIA8_iuSh|)
+                     (if (memv |t_VIA8_iuSh| '(deferred))
                        (begin
-                         (|whack-binding!_e_1FppMue|
-                           |b_e_nBnSMue|
-                           ((lambda (|*b_e_3ujMNue|)
-                              ((lambda (|t_e_pqhdOue|)
-                                 (if |t_e_pqhdOue|
-                                   |t_e_pqhdOue|
+                         (|whack-binding!_VIUf3ptSh|
+                           |b_VIec1StSh|
+                           ((lambda (|*b_VIW4ZLuSh|)
+                              ((lambda (|t_VIg1XcvSh|)
+                                 (if |t_VIg1XcvSh|
+                                   |t_VIg1XcvSh|
                                    (syntax-error
-                                     |*b_e_3ujMNue|
+                                     |*b_VIW4ZLuSh|
                                      '"invalid transformer")))
-                               (|sanitize-binding_e_NePUCpe| |*b_e_3ujMNue|)))
-                            (|local-eval-hook_e_F3l2poe|
-                              (binding-value_e_fkqiupe |b_e_nBnSMue|))))
-                         ((lambda (|t_e_LmfGOue|) |b_e_nBnSMue|)
-                          (|binding-type_e_VnsRtpe| |b_e_nBnSMue|)))
-                       |b_e_nBnSMue|))
-                   (|binding-type_e_VnsRtpe| |b_e_nBnSMue|)))
-                (|lookup*_e_riRrCpe| |x_e_lMtvLue| |r_e_HIrYLue|)))))
-         (|sanitize-binding_e_NePUCpe|
-           (lambda (|b_e_FTxBKue|)
-             (if (procedure? |b_e_FTxBKue|)
-               (make-binding_e_zruotpe 'macro |b_e_FTxBKue|)
-               (if (|binding?_e_h9kFvpe| |b_e_FTxBKue|)
-                 ((lambda (|t_e__Pv2Lue|)
-                    (if (memv |t_e__Pv2Lue| '(core macro macro!))
+                               (|sanitize-binding_VIERsUjNh| |*b_VIW4ZLuSh|)))
+                            (|local-eval-hook_VIwG-16Mh|
+                              (|binding-value_VI6X3ibNh| |b_VIec1StSh|))))
+                         ((lambda (|t_VICZUFvSh|) |b_VIec1StSh|)
+                          (|binding-type_VIM-5RaNh| |b_VIec1StSh|)))
+                       |b_VIec1StSh|))
+                   (|binding-type_VIM-5RaNh| |b_VIec1StSh|)))
+                (|lookup*_VIiVurjNh| |x_VIcn7vsSh| |r_VIyj5YsSh|)))))
+         (|sanitize-binding_VIERsUjNh|
+           (lambda (|b_VIwubBrSh|)
+             (if (procedure? |b_VIwubBrSh|)
+               (|make-binding_VIq28oaNh| 'macro |b_VIwubBrSh|)
+               (if (|binding?_VI8MZEcNh| |b_VIwubBrSh|)
+                 ((lambda (|t_VISq92sSh|)
+                    (if (memv |t_VISq92sSh| '(core macro macro!))
                       (if (procedure?
-                            (binding-value_e_fkqiupe |b_e_FTxBKue|))
-                        |b_e_FTxBKue|
+                            (|binding-value_VI6X3ibNh| |b_VIwubBrSh|))
+                        |b_VIwubBrSh|
                         '#f)
-                      (if (memv |t_e__Pv2Lue| '(module))
-                        (if (|interface?_e_L5Otvqe|
-                              (binding-value_e_fkqiupe |b_e_FTxBKue|))
-                          |b_e_FTxBKue|
+                      (if (memv |t_VISq92sSh| '(module))
+                        (if (|interface?_VICIrtcOh|
+                              (|binding-value_VI6X3ibNh| |b_VIwubBrSh|))
+                          |b_VIwubBrSh|
                           '#f)
-                        |b_e_FTxBKue|)))
-                  (|binding-type_e_VnsRtpe| |b_e_FTxBKue|))
+                        |b_VIwubBrSh|)))
+                  (|binding-type_VIM-5RaNh| |b_VIwubBrSh|))
                  '#f))))
-         (|lookup*_e_riRrCpe|
-           (lambda (|x_e_h6GNIue| |r_e_D2EeJue|)
-             ((lambda (|t_e_Z-BHJue|)
-                (if |t_e_Z-BHJue|
-                  (cdr |t_e_Z-BHJue|)
-                  (if (symbol? |x_e_h6GNIue|)
-                    ((lambda (|t_e_jXz8Kue|)
-                       (if |t_e_jXz8Kue|
-                         |t_e_jXz8Kue|
-                         (make-binding_e_zruotpe 'global |x_e_h6GNIue|)))
-                     (|get-global-definition-hook_e_3G6dsoe|
-                       |x_e_h6GNIue|))
-                    (make-binding_e_zruotpe 'displaced-lexical '#f))))
-              (assq |x_e_h6GNIue| |r_e_D2EeJue|))))
-         (|displaced-lexical-error_e_5mT-Bpe|
-           (lambda (|id_e_X9IkIue|)
+         (|lookup*_VIiVurjNh|
+           (lambda (|x_VI8JjNpSh| |r_VIuFheqSh|)
+             ((lambda (|t_VIQBfHqSh|)
+                (if |t_VIQBfHqSh|
+                  (cdr |t_VIQBfHqSh|)
+                  (if (symbol? |x_VI8JjNpSh|)
+                    ((lambda (|t_VIayd8rSh|)
+                       (if |t_VIayd8rSh|
+                         |t_VIayd8rSh|
+                         (|make-binding_VIq28oaNh| 'global |x_VI8JjNpSh|)))
+                     (|get-global-definition-hook_VIWgMc9Mh|
+                       |x_VI8JjNpSh|))
+                    (|make-binding_VIq28oaNh| 'displaced-lexical '#f))))
+              (assq |x_VI8JjNpSh| |r_VIuFheqSh|))))
+         (|displaced-lexical-error_VIYYw-iNh|
+           (lambda (|id_VIOMlkpSh|)
              (syntax-error
-               |id_e_X9IkIue|
-               (if (|id-var-name_e_Rpx3lqe| |id_e_X9IkIue| '(()))
+               |id_VIOMlkpSh|
+               (if (|id-var-name_VII0b32Oh| |id_VIOMlkpSh| '(()))
                  '"identifier out of context"
                  '"identifier not visible"))))
-         (|transformer-env_e_LpVxBpe|
-           (lambda (|r_e_fhMqHue|)
-             (if (null? |r_e_fhMqHue|)
+         (|transformer-env_VIC0zxiNh|
+           (lambda (|r_VI6UpqoSh|)
+             (if (null? |r_VI6UpqoSh|)
                '()
-               ((lambda (|a_e_BdKTHue|)
-                  (if (eq? (cadr |a_e_BdKTHue|) 'lexical)
-                    (|transformer-env_e_LpVxBpe| (cdr |r_e_fhMqHue|))
-                    (cons |a_e_BdKTHue|
-                          (|transformer-env_e_LpVxBpe| (cdr |r_e_fhMqHue|)))))
-                (car |r_e_fhMqHue|)))))
-         (|extend-var-env*_e_ptX4Bpe|
-           (lambda (|labels_e_dsS3Gue|
-                    |vars_e_zoQwGue|
-                    |r_e_VkOZGue|)
-             (if (null? |labels_e_dsS3Gue|)
-               |r_e_VkOZGue|
-               (|extend-var-env*_e_ptX4Bpe|
-                 (cdr |labels_e_dsS3Gue|)
-                 (cdr |vars_e_zoQwGue|)
-                 (|extend-env_e_JA_aApe|
-                   (car |labels_e_dsS3Gue|)
-                   (make-binding_e_zruotpe
+               ((lambda (|a_VIsQnToSh|)
+                  (if (eq? (cadr |a_VIsQnToSh|) 'lexical)
+                    (|transformer-env_VIC0zxiNh| (cdr |r_VI6UpqoSh|))
+                    (cons |a_VIsQnToSh|
+                          (|transformer-env_VIC0zxiNh| (cdr |r_VI6UpqoSh|)))))
+                (car |r_VI6UpqoSh|)))))
+         (|extend-var-env*_VIg4B4iNh|
+           (lambda (|labels_VI43w3nSh|
+                    |vars_VIq_twnSh|
+                    |r_VIMXrZnSh|)
+             (if (null? |labels_VI43w3nSh|)
+               |r_VIMXrZnSh|
+               (|extend-var-env*_VIg4B4iNh|
+                 (cdr |labels_VI43w3nSh|)
+                 (cdr |vars_VIq_twnSh|)
+                 (|extend-env_VIAbFahNh|
+                   (car |labels_VI43w3nSh|)
+                   (|make-binding_VIq28oaNh|
                      'lexical
-                     (car |vars_e_zoQwGue|))
-                   |r_e_VkOZGue|)))))
-         (|extend-env*_e_3xZDApe|
-           (lambda (|labels_e_bDYIEue|
-                    |bindings_e_xzW9Fue|
-                    |r_e_TvUCFue|)
-             (if (null? |labels_e_bDYIEue|)
-               |r_e_TvUCFue|
-               (|extend-env*_e_3xZDApe|
-                 (cdr |labels_e_bDYIEue|)
-                 (cdr |bindings_e_xzW9Fue|)
-                 (|extend-env_e_JA_aApe|
-                   (car |labels_e_bDYIEue|)
-                   (car |bindings_e_xzW9Fue|)
-                   |r_e_TvUCFue|)))))
-         (|extend-env_e_JA_aApe|
-           (lambda (|label_e_9O2mDue|
-                    |binding_e_vK0PDue|
-                    |r_e_RG-fEue|)
-             (cons (cons |label_e_9O2mDue| |binding_e_vK0PDue|)
-                   |r_e_RG-fEue|)))
-         (|binding?_e_h9kFvpe|
-           (lambda (|x_e_PR4VCue|)
-             (if (pair? |x_e_PR4VCue|)
-               (symbol? (car |x_e_PR4VCue|))
+                     (car |vars_VIq_twnSh|))
+                   |r_VIMXrZnSh|)))))
+         (|extend-env*_VIW7DDhNh|
+           (lambda (|labels_VI2eCIlSh|
+                    |bindings_VIoaA9mSh|
+                    |r_VIK6yCmSh|)
+             (if (null? |labels_VI2eCIlSh|)
+               |r_VIK6yCmSh|
+               (|extend-env*_VIW7DDhNh|
+                 (cdr |labels_VI2eCIlSh|)
+                 (cdr |bindings_VIoaA9mSh|)
+                 (|extend-env_VIAbFahNh|
+                   (car |labels_VI2eCIlSh|)
+                   (car |bindings_VIoaA9mSh|)
+                   |r_VIK6yCmSh|)))))
+         (|extend-env_VIAbFahNh|
+           (lambda (|label_VI0pIlkSh|
+                    |binding_VImlGOkSh|
+                    |r_VIIhEflSh|)
+             (cons (cons |label_VI0pIlkSh| |binding_VImlGOkSh|)
+                   |r_VIIhEflSh|)))
+         (|binding?_VI8MZEcNh|
+           (lambda (|x_VIGsKUjSh|)
+             (if (pair? |x_VIGsKUjSh|)
+               (symbol? (car |x_VIGsKUjSh|))
                '#f)))
-         (|set-binding-value!_e_Xcmcvpe| set-cdr!)
-         (|set-binding-type!_e_BgoLupe| set-car!)
-         (binding-value_e_fkqiupe cdr)
-         (|binding-type_e_VnsRtpe| car)
-         (make-binding_e_zruotpe
-           (lambda (|x_e_7Z8_Bue| |y_e_tV6sCue|)
-             (cons |x_e_7Z8_Bue| |y_e_tV6sCue|)))
-         (|source-annotation_e_PUKMppe|
-           (lambda (|x_e_N0byBue|)
-             (if (annotation? |x_e_N0byBue|)
-               (annotation-source |x_e_N0byBue|)
-               (if (syntax-object?_e_h-lahpe |x_e_N0byBue|)
-                 (|source-annotation_e_PUKMppe|
-                   (|syntax-object-expression_e_DWjDhpe|
-                     |x_e_N0byBue|))
+         (|set-binding-value!_VIOP_bcNh| set-cdr!)
+         (|set-binding-type!_VIsT1LbNh| set-car!)
+         (|binding-value_VI6X3ibNh| cdr)
+         (|binding-type_VIM-5RaNh| car)
+         (|make-binding_VIq28oaNh|
+           (lambda (|x_VI-zO-iSh| |y_VIkwMrjSh|)
+             (cons |x_VI-zO-iSh| |y_VIkwMrjSh|)))
+         (|source-annotation_VIGvoM6Nh|
+           (lambda (|x_VIEDQxiSh|)
+             (if (annotation? |x_VIEDQxiSh|)
+               (annotation-source |x_VIEDQxiSh|)
+               (if (|syntax-object?_VI8B_9-Mh| |x_VIEDQxiSh|)
+                 (|source-annotation_VIGvoM6Nh|
+                   (|syntax-object-expression_VIuxZC-Mh|
+                     |x_VIEDQxiSh|))
                  '#f))))
-         (|set-syntax-object-wrap!_e_FLd-ipe|
-           (lambda (|x_e_58fEAue| |update_e_r4d5Bue|)
-             (vector-set! |x_e_58fEAue| '2 |update_e_r4d5Bue|)))
-         (|set-syntax-object-expression!_e_jPfxipe|
-           (lambda (|x_e_pfjKzue| |update_e_LbhbAue|)
-             (vector-set! |x_e_pfjKzue| '1 |update_e_LbhbAue|)))
-         (|syntax-object-wrap_e_ZSh4ipe|
-           (lambda (x_e_3jlhzue)
-             (vector-ref x_e_3jlhzue '2)))
-         (|syntax-object-expression_e_DWjDhpe|
-           (lambda (|x_e_JmnQyue|)
-             (vector-ref |x_e_JmnQyue| '1)))
-         (syntax-object?_e_h-lahpe
-           (lambda (x_e_nqpnyue)
-             (if (vector? x_e_nqpnyue)
-               (if (= (vector-length x_e_nqpnyue) '3)
-                 (eq? (vector-ref x_e_nqpnyue '0) 'syntax-object)
+         (|set-syntax-object-wrap!_VIwmTZ_Mh|
+           (lambda (|x_VIYKUDhSh| |update_VIiHS4iSh|)
+             (vector-set! |x_VIYKUDhSh| '2 |update_VIiHS4iSh|)))
+         (|set-syntax-object-expression!_VIaqVw_Mh|
+           (lambda (|x_VIgSYJgSh| |update_VICOWahSh|)
+             (vector-set! |x_VIgSYJgSh| '1 |update_VICOWahSh|)))
+         (|syntax-object-wrap_VIQtX3_Mh|
+           (lambda (|x_VIWV-ggSh|)
+             (vector-ref |x_VIWV-ggSh| '2)))
+         (|syntax-object-expression_VIuxZC-Mh|
+           (lambda (|x_VIAZ0QfSh|)
+             (vector-ref |x_VIAZ0QfSh| '1)))
+         (|syntax-object?_VI8B_9-Mh|
+           (lambda (|x_VIe13nfSh|)
+             (if (vector? |x_VIe13nfSh|)
+               (if (= (vector-length |x_VIe13nfSh|) '3)
+                 (eq? (vector-ref |x_VIe13nfSh| '0)
+                      'syntax-object)
                  '#f)
                '#f)))
-         (|make-syntax-object_e_X1oJgpe|
-           (lambda (|expression_e_Hxttxue| |wrap_e_1urWxue|)
+         (|make-syntax-object_VIOE1JZMh|
+           (lambda (|expression_VIy87teSh| |wrap_VIU45WeSh|)
              (vector
                'syntax-object
-               |expression_e_Hxttxue|
-               |wrap_e_1urWxue|)))
-         (|build-body_e_PJMhbpe|
-           (lambda (|src_e_jMBFvue|
-                    |vars_e_FIz6wue|
-                    |val-exps_e__Exzwue|
-                    |body-exp_e_lBv0xue|)
-             (|build-letrec_e_tNOQape|
-               |src_e_jMBFvue|
-               |vars_e_FIz6wue|
-               |val-exps_e__Exzwue|
-               |body-exp_e_lBv0xue|)))
-         (|build-letrec_e_tNOQape|
-           (lambda (|src_e_X-JRtue|
-                    |vars_e_hXHiuue|
-                    |val-exps_e_DTFLuue|
-                    |body-exp_e_ZPDcvue|)
-             (if (null? |vars_e_hXHiuue|)
-               (if |src_e_X-JRtue|
+               |expression_VIy87teSh|
+               |wrap_VIU45WeSh|)))
+         (|build-body_VIGkqhUMh|
+           (lambda (|src_VIanfFcSh|
+                    |vars_VIwjd6dSh|
+                    |val-exps_VISfbzdSh|
+                    |body-exp_VIcc90eSh|)
+             (|build-letrec_VIkosQTMh|
+               |src_VIanfFcSh|
+               |vars_VIwjd6dSh|
+               |val-exps_VISfbzdSh|
+               |body-exp_VIcc90eSh|)))
+         (|build-letrec_VIkosQTMh|
+           (lambda (|src_VIOBnRaSh|
+                    |vars_VI8ylibSh|
+                    |val-exps_VIuujLbSh|
+                    |body-exp_VIQqhccSh|)
+             (if (null? |vars_VI8ylibSh|)
+               (if |src_VIOBnRaSh|
                  (list 'compile-in-annotation
-                       |body-exp_e_ZPDcvue|
-                       |src_e_X-JRtue|)
-                 |body-exp_e_ZPDcvue|)
-               (if |src_e_X-JRtue|
+                       |body-exp_VIQqhccSh|
+                       |src_VIOBnRaSh|)
+                 |body-exp_VIQqhccSh|)
+               (if |src_VIOBnRaSh|
                  (list 'compile-in-annotation
                        (list 'letrec
-                             (map list |vars_e_hXHiuue| |val-exps_e_DTFLuue|)
-                             |body-exp_e_ZPDcvue|)
-                       |src_e_X-JRtue|)
+                             (map list |vars_VI8ylibSh| |val-exps_VIuujLbSh|)
+                             |body-exp_VIQqhccSh|)
+                       |src_VIOBnRaSh|)
                  (list 'letrec
-                       (map list |vars_e_hXHiuue| |val-exps_e_DTFLuue|)
-                       |body-exp_e_ZPDcvue|)))))
-         (|build-sequence_e_7RQnape|
-           (lambda (|src_e_f6OXsue| |exps_e_B2Motue|)
-             (if (null? |exps_e_B2Motue|)
+                       (map list |vars_VI8ylibSh| |val-exps_VIuujLbSh|)
+                       |body-exp_VIQqhccSh|)))))
+         (|build-sequence_VI-runTMh|
+           (lambda (|src_VI6JrX9Sh| |exps_VIsFpoaSh|)
+             (if (null? |exps_VIsFpoaSh|)
                '(if '#f '#f)
-               (if (equal? '(void) (car |exps_e_B2Motue|))
-                 (|build-sequence_e_7RQnape|
-                   |src_e_f6OXsue|
-                   (cdr |exps_e_B2Motue|))
-                 (if (null? (cdr |exps_e_B2Motue|))
-                   (if |src_e_f6OXsue|
+               (if (equal? '(void) (car |exps_VIsFpoaSh|))
+                 (|build-sequence_VI-runTMh|
+                   |src_VI6JrX9Sh|
+                   (cdr |exps_VIsFpoaSh|))
+                 (if (null? (cdr |exps_VIsFpoaSh|))
+                   (if |src_VI6JrX9Sh|
                      (list 'compile-in-annotation
-                           (car |exps_e_B2Motue|)
-                           |src_e_f6OXsue|)
-                     (car |exps_e_B2Motue|))
-                   (if |src_e_f6OXsue|
+                           (car |exps_VIsFpoaSh|)
+                           |src_VI6JrX9Sh|)
+                     (car |exps_VIsFpoaSh|))
+                   (if |src_VI6JrX9Sh|
                      (list 'compile-in-annotation
-                           (cons 'begin |exps_e_B2Motue|)
-                           |src_e_f6OXsue|)
-                     (cons 'begin |exps_e_B2Motue|)))))))
-         (|generate-module-id_e_5v0Atoe|
-           (lambda (|module-id_e_zdS1sue| |id_e_V9Qusue|)
+                           (cons 'begin |exps_VIsFpoaSh|)
+                           |src_VI6JrX9Sh|)
+                     (cons 'begin |exps_VIsFpoaSh|)))))))
+         (|generate-module-id_VIY5GzaMh|
+           (lambda (|module-id_VIqQv19Sh| |id_VIMMtu9Sh|)
              (string->symbol
                (format
-                 '"_~a ~a"
-                 |module-id_e_zdS1sue|
-                 |id_e_V9Qusue|))))
-         (|generate-id_e_Ly27toe| gen-sym)
-         (|get-import-binding_e_pC4Gsoe|
-           (lambda (|symbol_e_TkW7rue| |token_e_dhUArue|)
-             (getprop |symbol_e_TkW7rue| |token_e_dhUArue|)))
-         (|get-global-definition-hook_e_3G6dsoe|
-           (lambda (|symbol_e_xoYGque|)
-             (getprop |symbol_e_xoYGque| '*sc-expander*)))
-         (|put-global-definition-hook_e_JJ8Mroe|
-           (lambda (|symbol_e_Rv0Npue| val_e_bs-dque)
-             ($sc-put-cte |symbol_e_Rv0Npue| val_e_bs-dque)))
-         (error-hook_e___ivpoe
-           (lambda (|who_e_PG6qoue| |why_e_9D4Toue| what_e_vz2kpue)
-             (error |who_e_PG6qoue|
+                 '"_~a_ ~a"
+                 |module-id_VIqQv19Sh|
+                 |id_VIMMtu9Sh|))))
+         (|generate-id_VIC9I6aMh| gen-sym)
+         (|get-import-binding_VIgdKF9Mh|
+           (lambda (|symbol_VIKXz78Sh| |token_VI4UxA8Sh|)
+             (getprop |symbol_VIKXz78Sh| |token_VI4UxA8Sh|)))
+         (|get-global-definition-hook_VIWgMc9Mh|
+           (lambda (|symbol_VIo_BG7Sh|)
+             (getprop |symbol_VIo_BG7Sh| '*sc-expander*)))
+         (|put-global-definition-hook_VIAkOL8Mh|
+           (lambda (|symbol_VII6GM6Sh| |val_VI23Ed7Sh|)
+             ($sc-put-cte |symbol_VII6GM6Sh| |val_VI23Ed7Sh|)))
+         (|error-hook_VISCYu6Mh|
+           (lambda (|who_VIGhMp5Sh|
+                    |why_VI0eKS5Sh|
+                    |what_VImaIj6Sh|)
+             (error |who_VIGhMp5Sh|
                     '"~a ~s"
-                    |why_e_9D4Toue|
-                    what_e_vz2kpue)))
-         (|local-eval-hook_e_F3l2poe|
-           (lambda (|x_e_tK8Znue|)
-             (eval (list |noexpand_e_jNqDXne| |x_e_tK8Znue|))))
-         (|top-level-eval-hook_e_j7nBooe|
-           (lambda (|x_e_7Oawnue|)
-             (eval (list |noexpand_e_jNqDXne| |x_e_7Oawnue|))))
-         (|noexpand_e_jNqDXne| '"noexpand"))
+                    |why_VI0eKS5Sh|
+                    |what_VImaIj6Sh|)))
+         (|local-eval-hook_VIwG-16Mh|
+           (lambda (|x_VIklOY4Sh|)
+             (eval (list |noexpand_VIao4DELh| |x_VIklOY4Sh|))))
+         (|top-level-eval-hook_VIaK0B5Mh|
+           (lambda (|x_VI-oQv4Sh|)
+             (eval (list |noexpand_VIao4DELh| |x_VI-oQv4Sh|))))
+         (|noexpand_VIao4DELh| '"noexpand"))
   (begin
     (set! $sc-put-cte
-      (lambda (|id_e_Z35tTqe| |b_e_j03WTqe|)
-        (letrec ((|put-token_e_FY0nUqe|
-                   (lambda (|id_e_rkGlZqe| |token_e_NgEOZqe|)
-                     (letrec ((|cons-id_e_7dCf-qe|
-                                (lambda (|id_e_bTpZ0re| |x_e_xPnq1re|)
-                                  (if (not |x_e_xPnq1re|)
-                                    |id_e_bTpZ0re|
-                                    (cons |id_e_bTpZ0re| |x_e_xPnq1re|))))
-                              (|weed_e_t9AI-qe|
-                                (lambda (|id_e_TLlT1re| |x_e_dIjk2re|)
-                                  (if (pair? |x_e_dIjk2re|)
-                                    (if (|bound-id=?_e_Terqmqe|
-                                          (car |x_e_dIjk2re|)
-                                          |id_e_TLlT1re|)
-                                      (|weed_e_t9AI-qe|
-                                        |id_e_TLlT1re|
-                                        (cdr |x_e_dIjk2re|))
-                                      (|cons-id_e_7dCf-qe|
-                                        (car |x_e_dIjk2re|)
-                                        (|weed_e_t9AI-qe|
-                                          |id_e_TLlT1re|
-                                          (cdr |x_e_dIjk2re|))))
-                                    (if ((lambda (|t_e_zEhN2re|)
-                                           (if |t_e_zEhN2re|
-                                             |t_e_zEhN2re|
-                                             (|bound-id=?_e_Terqmqe|
-                                               |x_e_dIjk2re|
-                                               |id_e_TLlT1re|)))
-                                         (not |x_e_dIjk2re|))
+      (lambda (|id_VIQGKsAOh| |b_VIaDIVAOh|)
+        (letrec ((|put-token_VIwzGmBOh|
+                   (lambda (|id_VIiXjlGOh| |token_VIEThOGOh|)
+                     (letrec ((|cons-id_VI-PffHOh|
+                                (lambda (|id_VI2u3ZJOh| |x_VIoq1qKOh|)
+                                  (if (not |x_VIoq1qKOh|)
+                                    |id_VI2u3ZJOh|
+                                    (cons |id_VI2u3ZJOh| |x_VIoq1qKOh|))))
+                              (|weed_VIkMdIHOh|
+                                (lambda (|id_VIKm_SKOh| |x_VI4jZjLOh|)
+                                  (if (pair? |x_VI4jZjLOh|)
+                                    (if (|bound-id=?_VIKR4q3Oh|
+                                          (car |x_VI4jZjLOh|)
+                                          |id_VIKm_SKOh|)
+                                      (|weed_VIkMdIHOh|
+                                        |id_VIKm_SKOh|
+                                        (cdr |x_VI4jZjLOh|))
+                                      (|cons-id_VI-PffHOh|
+                                        (car |x_VI4jZjLOh|)
+                                        (|weed_VIkMdIHOh|
+                                          |id_VIKm_SKOh|
+                                          (cdr |x_VI4jZjLOh|))))
+                                    (if ((lambda (|t_VIqfXMLOh|)
+                                           (if |t_VIqfXMLOh|
+                                             |t_VIqfXMLOh|
+                                             (|bound-id=?_VIKR4q3Oh|
+                                               |x_VI4jZjLOh|
+                                               |id_VIKm_SKOh|)))
+                                         (not |x_VI4jZjLOh|))
                                       '#f
-                                      |x_e_dIjk2re|)))))
-                       ((lambda (|sym_e_P5y9_qe|)
-                          ((lambda (|x_e_92wC_qe|)
-                             (if (if (not |x_e_92wC_qe|)
-                                   (symbol? |id_e_rkGlZqe|)
+                                      |x_VI4jZjLOh|)))))
+                       ((lambda (|sym_VIGIb9IOh|)
+                          ((lambda (|x_VI0F9CIOh|)
+                             (if (if (not |x_VI0F9CIOh|)
+                                   (symbol? |id_VIiXjlGOh|)
                                    '#f)
-                               (remprop |sym_e_P5y9_qe| |token_e_NgEOZqe|)
+                               (remprop |sym_VIGIb9IOh| |token_VIEThOGOh|)
                                (putprop
-                                 |sym_e_P5y9_qe|
-                                 |token_e_NgEOZqe|
-                                 (|cons-id_e_7dCf-qe|
-                                   |id_e_rkGlZqe|
-                                   |x_e_92wC_qe|))))
-                           (|weed_e_t9AI-qe|
-                             |id_e_rkGlZqe|
-                             (getprop |sym_e_P5y9_qe| |token_e_NgEOZqe|))))
-                        ((lambda (x_e_v-t30re)
-                           ((lambda (|e_e_RWrw0re|)
-                              (if (annotation? |e_e_RWrw0re|)
-                                (annotation-expression |e_e_RWrw0re|)
-                                |e_e_RWrw0re|))
-                            (if (syntax-object?_e_h-lahpe x_e_v-t30re)
-                              (|syntax-object-expression_e_DWjDhpe|
-                                x_e_v-t30re)
-                              x_e_v-t30re)))
-                         |id_e_rkGlZqe|)))))
-                 (|sc-put-module_e__U-PUqe|
-                   (lambda (|exports_e_VAfe3re| |token_e_fxdH3re|)
-                     (|vfor-each_e_HCYeHqe|
-                       (lambda (|id_e_Btb84re|)
-                         (|put-token_e_FY0nUqe|
-                           |id_e_Btb84re|
-                           |token_e_fxdH3re|))
-                       |exports_e_VAfe3re|)))
-                 (|put-cte_e_lRYgVqe|
-                   (lambda (|id_e_Xp9B4re| binding_e_hm725re)
+                                 |sym_VIGIb9IOh|
+                                 |token_VIEThOGOh|
+                                 (|cons-id_VI-PffHOh|
+                                   |id_VIiXjlGOh|
+                                   |x_VI0F9CIOh|))))
+                           (|weed_VIkMdIHOh|
+                             |id_VIiXjlGOh|
+                             (getprop |sym_VIGIb9IOh| |token_VIEThOGOh|))))
+                        ((lambda (|x_VImB73JOh|)
+                           ((lambda (|e_VIIx5wJOh|)
+                              (if (annotation? |e_VIIx5wJOh|)
+                                (annotation-expression |e_VIIx5wJOh|)
+                                |e_VIIx5wJOh|))
+                            (if (|syntax-object?_VI8B_9-Mh| |x_VImB73JOh|)
+                              (|syntax-object-expression_VIuxZC-Mh|
+                                |x_VImB73JOh|)
+                              |x_VImB73JOh|)))
+                         |id_VIiXjlGOh|)))))
+                 (|sc-put-module_VISvEPBOh|
+                   (lambda (|exports_VIMbVdMOh| |token_VI68TGMOh|)
+                     (|vfor-each_VIydCeoOh|
+                       (lambda (|id_VIs4R7NOh|)
+                         (|put-token_VIwzGmBOh|
+                           |id_VIs4R7NOh|
+                           |token_VI68TGMOh|))
+                       |exports_VIMbVdMOh|)))
+                 (|put-cte_VIcsCgCOh|
+                   (lambda (|id_VIO0PANOh| |binding_VI8ZM1OOh|)
                      (begin
-                       (|put-token_e_FY0nUqe| |id_e_Xp9B4re| '*top*)
-                       ((lambda (|sym_e_Di5v5re|)
+                       (|put-token_VIwzGmBOh| |id_VIO0PANOh| '*top*)
+                       ((lambda (|sym_VIuVKuOOh|)
                           (putprop
-                            |sym_e_Di5v5re|
+                            |sym_VIuVKuOOh|
                             '*sc-expander*
-                            binding_e_hm725re))
-                        (if (symbol? |id_e_Xp9B4re|)
-                          |id_e_Xp9B4re|
-                          (|id-var-name_e_Rpx3lqe| |id_e_Xp9B4re| '(()))))))))
-          ((lambda (|binding_e_HNWJVqe|)
-             ((lambda (|t_e_1KUaWqe|)
-                (if (memv |t_e_1KUaWqe| '(module))
+                            |binding_VI8ZM1OOh|))
+                        (if (symbol? |id_VIO0PANOh|)
+                          |id_VIO0PANOh|
+                          (|id-var-name_VII0b32Oh| |id_VIO0PANOh| '(()))))))))
+          ((lambda (|binding_VIyoAJCOh|)
+             ((lambda (|t_VIUkyaDOh|)
+                (if (memv |t_VIUkyaDOh| '(module))
                   (begin
-                    ((lambda (|iface_e_LrKrYqe|)
-                       (|sc-put-module_e__U-PUqe|
-                         (|interface-exports_e_52MWvqe| |iface_e_LrKrYqe|)
-                         (|interface-token_e_r-Jnwqe| |iface_e_LrKrYqe|)))
-                     (binding-value_e_fkqiupe |binding_e_HNWJVqe|))
-                    (|put-cte_e_lRYgVqe|
-                      |id_e_Z35tTqe|
-                      |binding_e_HNWJVqe|))
-                  (if (memv |t_e_1KUaWqe| '(do-import))
-                    ((lambda (|token_e_nGSDWqe|)
-                       ((lambda (|b_e_JCQ4Xqe|)
-                          ((lambda (|t_e_3zOxXqe|)
-                             (if (memv |t_e_3zOxXqe| '(module))
-                               ((lambda (|iface_e_pvM-Xqe|)
+                    ((lambda (|iface_VIC2orFOh|)
+                       (|sc-put-module_VISvEPBOh|
+                         (|interface-exports_VIYEpWcOh| |iface_VIC2orFOh|)
+                         (|interface-token_VIiBnndOh| |iface_VIC2orFOh|)))
+                     (|binding-value_VI6X3ibNh| |binding_VIyoAJCOh|))
+                    (|put-cte_VIcsCgCOh|
+                      |id_VIQGKsAOh|
+                      |binding_VIyoAJCOh|))
+                  (if (memv |t_VIUkyaDOh| '(do-import))
+                    ((lambda (|token_VIehwDDOh|)
+                       ((lambda (|b_VIAdu4EOh|)
+                          ((lambda (|t_VIW9sxEOh|)
+                             (if (memv |t_VIW9sxEOh| '(module))
+                               ((lambda (|iface_VIg6q-EOh|)
                                   (begin
-                                    (if (not (eq? (|interface-token_e_r-Jnwqe|
-                                                    |iface_e_pvM-Xqe|)
-                                                  |token_e_nGSDWqe|))
+                                    (if (not (eq? (|interface-token_VIiBnndOh|
+                                                    |iface_VIg6q-EOh|)
+                                                  |token_VIehwDDOh|))
                                       (syntax-error
-                                        |id_e_Z35tTqe|
+                                        |id_VIQGKsAOh|
                                         '"import mismatch for module")
                                       (void))
-                                    (|sc-put-module_e__U-PUqe|
-                                      (|interface-exports_e_52MWvqe|
-                                        |iface_e_pvM-Xqe|)
+                                    (|sc-put-module_VISvEPBOh|
+                                      (|interface-exports_VIYEpWcOh|
+                                        |iface_VIg6q-EOh|)
                                       '*top*)))
-                                (binding-value_e_fkqiupe |b_e_JCQ4Xqe|))
+                                (|binding-value_VI6X3ibNh| |b_VIAdu4EOh|))
                                (syntax-error
-                                 |id_e_Z35tTqe|
+                                 |id_VIQGKsAOh|
                                  '"import from unknown module")))
-                           (|binding-type_e_VnsRtpe| |b_e_JCQ4Xqe|)))
-                        (|lookup_e_7bNlDpe|
-                          (|id-var-name_e_Rpx3lqe| |id_e_Z35tTqe| '(()))
+                           (|binding-type_VIM-5RaNh| |b_VIAdu4EOh|)))
+                        (|lookup_VI-NqlkNh|
+                          (|id-var-name_VII0b32Oh| |id_VIQGKsAOh| '(()))
                           '())))
-                     (binding-value_e_fkqiupe |b_e_j03WTqe|))
-                    (|put-cte_e_lRYgVqe|
-                      |id_e_Z35tTqe|
-                      |binding_e_HNWJVqe|))))
-              (|binding-type_e_VnsRtpe| |binding_e_HNWJVqe|)))
-           ((lambda (|t_e_5oIUYqe|)
-              (if |t_e_5oIUYqe|
-                |t_e_5oIUYqe|
+                     (|binding-value_VI6X3ibNh| |b_VIaDIVAOh|))
+                    (|put-cte_VIcsCgCOh|
+                      |id_VIQGKsAOh|
+                      |binding_VIyoAJCOh|))))
+              (|binding-type_VIM-5RaNh| |binding_VIyoAJCOh|)))
+           ((lambda (|t_VIY-lUFOh|)
+              (if |t_VIY-lUFOh|
+                |t_VIY-lUFOh|
                 (error 'define-syntax
                        '"invalid transformer ~s"
-                       |b_e_j03WTqe|)))
-            (|sanitize-binding_e_NePUCpe| |b_e_j03WTqe|))))))
-    (|global-extend_e_t7LODpe|
+                       |b_VIaDIVAOh|)))
+            (|sanitize-binding_VIERsUjNh| |b_VIaDIVAOh|))))))
+    (|global-extend_VIkKoOkNh|
       'local-syntax
       'letrec-syntax
       '#t)
-    (|global-extend_e_t7LODpe|
+    (|global-extend_VIkKoOkNh|
       'local-syntax
       'let-syntax
       '#f)
-    (|global-extend_e_t7LODpe|
+    (|global-extend_VIkKoOkNh|
       'core
       'fluid-let-syntax
-      (lambda (|e_e_Ze3Y5re|
-               r_e_jb1p6re
-               |w_e_F7_R6re|
-               |s_e__3Zi7re|)
-        ((lambda (|tmp_e_l0XL7re|)
-           ((lambda (|tmp_e_HYUc8re|)
-              (if (if |tmp_e_HYUc8re|
-                    (apply (lambda (|__e_TWjmgre|
-                                    |var_e_dThPgre|
-                                    |val_e_zPfghre|
-                                    |e1_e_VLdJhre|
-                                    |e2_e_fIbaire|)
-                             (|valid-bound-ids?_e_dbpTmqe| |var_e_dThPgre|))
-                           |tmp_e_HYUc8re|)
+      (lambda (|e_VIQRIXOOh|
+               |r_VIaOGoPOh|
+               |w_VIwKERPOh|
+               |s_VISGCiQOh|)
+        ((lambda (|tmp_VIcDALQOh|)
+           ((lambda (|tmp_VIyzycROh|)
+              (if (if |tmp_VIyzycROh|
+                    (apply (lambda (|__VIKxZlZOh|
+                                    |var_VI4uXOZOh|
+                                    |val_VIqqVf-Oh|
+                                    |e1_VIMmTI-Oh|
+                                    |e2_VI6jR9_Oh|)
+                             (|valid-bound-ids?_VI4O2T3Oh| |var_VI4uXOZOh|))
+                           |tmp_VIyzycROh|)
                     '#f)
-                (apply (lambda (|__e_nRQ69re|
-                                |var_e_JNOz9re|
-                                |val_e_3KM0are|
-                                |e1_e_pGKtare|
-                                |e2_e_LCIWare|)
-                         ((lambda (|names_e_5zGnbre|)
+                (apply (lambda (|__VIesu6SOh|
+                                |var_VIAoszSOh|
+                                |val_VIWkq0TOh|
+                                |e1_VIghotTOh|
+                                |e2_VICdmWTOh|)
+                         ((lambda (|names_VIY9knUOh|)
                             (begin
                               (for-each
-                                (lambda (|id_e_rvEQbre| |n_e_NrChcre|)
-                                  ((lambda (|t_e_7oAKcre|)
-                                     (if (memv |t_e_7oAKcre|
+                                (lambda (|id_VIi6iQUOh| |n_VIE2ghVOh|)
+                                  ((lambda (|t_VI--dKVOh|)
+                                     (if (memv |t_VI--dKVOh|
                                                '(displaced-lexical))
-                                       (|displaced-lexical-error_e_5mT-Bpe|
-                                         (|wrap_e_jG6Yqqe|
-                                           |id_e_rvEQbre|
-                                           |w_e_F7_R6re|))
+                                       (|displaced-lexical-error_VIYYw-iNh|
+                                         (|wrap_VIahMX7Oh|
+                                           |id_VIi6iQUOh|
+                                           |w_VIwKERPOh|))
                                        (void)))
-                                   (|binding-type_e_VnsRtpe|
-                                     (|lookup_e_7bNlDpe|
-                                       |n_e_NrChcre|
-                                       r_e_jb1p6re))))
-                                |var_e_JNOz9re|
-                                |names_e_5zGnbre|)
-                              (|chi-body_e_t-BdMqe|
-                                (cons |e1_e_pGKtare| |e2_e_LCIWare|)
-                                (|source-wrap_e_FC4prqe|
-                                  |e_e_Ze3Y5re|
-                                  |w_e_F7_R6re|
-                                  |s_e__3Zi7re|)
-                                (|extend-env*_e_3xZDApe|
-                                  |names_e_5zGnbre|
-                                  ((lambda (trans-r_e_9du5ere)
-                                     (map (lambda (x_e_v9syere)
-                                            (make-binding_e_zruotpe
+                                   (|binding-type_VIM-5RaNh|
+                                     (|lookup_VI-NqlkNh|
+                                       |n_VIE2ghVOh|
+                                       |r_VIaOGoPOh|))))
+                                |var_VIAoszSOh|
+                                |names_VIY9knUOh|)
+                              (|chi-body_VIkBfdtOh|
+                                (cons |e1_VIghotTOh| |e2_VICdmWTOh|)
+                                (|source-wrap_VIwdKo8Oh|
+                                  |e_VIQRIXOOh|
+                                  |w_VIwKERPOh|
+                                  |s_VISGCiQOh|)
+                                (|extend-env*_VIW7DDhNh|
+                                  |names_VIY9knUOh|
+                                  ((lambda (|trans-r_VI0Q75XOh|)
+                                     (map (lambda (|x_VImM5yXOh|)
+                                            (|make-binding_VIq28oaNh|
                                               'deferred
-                                              (|chi_e_LgMYJqe|
-                                                x_e_v9syere
-                                                trans-r_e_9du5ere
-                                                |w_e_F7_R6re|)))
-                                          |val_e_3KM0are|))
-                                   (|transformer-env_e_LpVxBpe| r_e_jb1p6re))
-                                  r_e_jb1p6re)
-                                |w_e_F7_R6re|)))
-                          (map (lambda (x_e_b2osfre)
-                                 (|id-var-name_e_Rpx3lqe|
-                                   x_e_b2osfre
-                                   |w_e_F7_R6re|))
-                               |var_e_JNOz9re|)))
-                       |tmp_e_HYUc8re|)
-                ((lambda (|__e_1VSF8re|)
+                                              (|chi_VICTpYqOh|
+                                                |x_VImM5yXOh|
+                                                |trans-r_VI0Q75XOh|
+                                                |w_VIwKERPOh|)))
+                                          |val_VIWkq0TOh|))
+                                   (|transformer-env_VIC0zxiNh| |r_VIaOGoPOh|))
+                                  |r_VIaOGoPOh|)
+                                |w_VIwKERPOh|)))
+                          (map (lambda (|x_VI2F1sYOh|)
+                                 (|id-var-name_VII0b32Oh|
+                                   |x_VI2F1sYOh|
+                                   |w_VIwKERPOh|))
+                               |var_VIAoszSOh|)))
+                       |tmp_VIyzycROh|)
+                ((lambda (|__VIUvwFROh|)
                    (syntax-error
-                     (|source-wrap_e_FC4prqe|
-                       |e_e_Ze3Y5re|
-                       |w_e_F7_R6re|
-                       |s_e__3Zi7re|)))
-                 |tmp_e_l0XL7re|)))
+                     (|source-wrap_VIwdKo8Oh|
+                       |e_VIQRIXOOh|
+                       |w_VIwKERPOh|
+                       |s_VISGCiQOh|)))
+                 |tmp_VIcDALQOh|)))
             ($syntax-dispatch
-              (compile-in-annotation |tmp_e_l0XL7re| value)
+              (compile-in-annotation |tmp_VIcDALQOh| value)
               '(any #(each (any any)) any . each-any))))
-         |e_e_Ze3Y5re|)))
-    (|global-extend_e_t7LODpe|
+         |e_VIQRIXOOh|)))
+    (|global-extend_VIkKoOkNh|
       'core
       'quote
-      (lambda (|e_e_XA74jre|
-               r_e_hx5xjre
-               |w_e_Dt3-jre|
-               |s_e_Zp1rkre|)
-        ((lambda (|tmp_e_jm_Tkre|)
-           ((lambda (|tmp_e_FiZklre|)
-              (if |tmp_e_FiZklre|
-                (apply (lambda (|__e_lbVemre| |e_e_H7THmre|)
-                         (if |s_e_Zp1rkre|
+      (lambda (|e_VIObN30Ph|
+               |r_VI88Lw0Ph|
+               |w_VIu4JZ0Ph|
+               |s_VIQ0Hq1Ph|)
+        ((lambda (|tmp_VIaZET1Ph|)
+           ((lambda (|tmp_VIwVCk2Ph|)
+              (if |tmp_VIwVCk2Ph|
+                (apply (lambda (|__VIcOye3Ph| |e_VIyKwH3Ph|)
+                         (if |s_VIQ0Hq1Ph|
                            (list 'compile-in-annotation
                                  (list 'quote
-                                       (|strip_e_Xeb6Sqe|
-                                         |e_e_H7THmre|
-                                         |w_e_Dt3-jre|))
-                                 |s_e_Zp1rkre|)
+                                       (|strip_VIORQ5zOh|
+                                         |e_VIyKwH3Ph|
+                                         |w_VIu4JZ0Ph|))
+                                 |s_VIQ0Hq1Ph|)
                            (list 'quote
-                                 (|strip_e_Xeb6Sqe|
-                                   |e_e_H7THmre|
-                                   |w_e_Dt3-jre|))))
-                       |tmp_e_FiZklre|)
-                ((lambda (|__e__eXNlre|)
+                                 (|strip_VIORQ5zOh|
+                                   |e_VIyKwH3Ph|
+                                   |w_VIu4JZ0Ph|))))
+                       |tmp_VIwVCk2Ph|)
+                ((lambda (|__VISRAN2Ph|)
                    (syntax-error
-                     (|source-wrap_e_FC4prqe|
-                       |e_e_XA74jre|
-                       |w_e_Dt3-jre|
-                       |s_e_Zp1rkre|)))
-                 |tmp_e_jm_Tkre|)))
+                     (|source-wrap_VIwdKo8Oh|
+                       |e_VIObN30Ph|
+                       |w_VIu4JZ0Ph|
+                       |s_VIQ0Hq1Ph|)))
+                 |tmp_VIaZET1Ph|)))
             ($syntax-dispatch
-              (compile-in-annotation |tmp_e_jm_Tkre| value)
+              (compile-in-annotation |tmp_VIaZET1Ph| value)
               '(any any))))
-         |e_e_XA74jre|)))
-    (|global-extend_e_t7LODpe|
+         |e_VIObN30Ph|)))
+    (|global-extend_VIkKoOkNh|
       'core
       'syntax
-      (letrec ((|gen-syntax_e_14R8nre|
-                 (lambda (|src_e_VWbcwre|
-                          |e_e_fT9Fwre|
-                          |r_e_BP76xre|
-                          |maps_e_XL5zxre|
-                          |ellipsis?_e_hI30yre|)
-                   (if (|id?_e_TJwZGpe| |e_e_fT9Fwre|)
-                     ((lambda (|label_e_tRsEUre|)
-                        ((lambda (|b_e_PNq5Vre|)
-                           (if (eq? (|binding-type_e_VnsRtpe| |b_e_PNq5Vre|)
+      (letrec ((|gen-syntax_VIUGu84Ph|
+                 (lambda (|src_VIMxRbdPh|
+                          |e_VI6uPEdPh|
+                          |r_VIsqN5ePh|
+                          |maps_VIOmLyePh|
+                          |ellipsis?_VI8jJ_ePh|)
+                   (if (|id?_VIKkaZnNh| |e_VI6uPEdPh|)
+                     ((lambda (|label_VIks6EBPh|)
+                        ((lambda (|b_VIGo45CPh|)
+                           (if (eq? (|binding-type_VIM-5RaNh| |b_VIGo45CPh|)
                                     'syntax)
                              (call-with-values
                                (lambda ()
-                                 ((lambda (|var.lev_e_9KoyVre|)
-                                    (|gen-ref_e_n0PBnre|
-                                      |src_e_VWbcwre|
-                                      (car |var.lev_e_9KoyVre|)
-                                      (cdr |var.lev_e_9KoyVre|)
-                                      |maps_e_XL5zxre|))
-                                  (binding-value_e_fkqiupe |b_e_PNq5Vre|)))
-                               (lambda (|var_e_vGm_Vre| |maps_e_RCksWre|)
+                                 ((lambda (|var.lev_VI0l2yCPh|)
+                                    (|gen-ref_VIeDsB4Ph|
+                                      |src_VIMxRbdPh|
+                                      (car |var.lev_VI0l2yCPh|)
+                                      (cdr |var.lev_VI0l2yCPh|)
+                                      |maps_VIOmLyePh|))
+                                  (|binding-value_VI6X3ibNh| |b_VIGo45CPh|)))
+                               (lambda (|var_VImh0_CPh| |maps_VIId-rDPh|)
                                  (values
-                                   (list 'ref |var_e_vGm_Vre|)
-                                   |maps_e_RCksWre|)))
-                             (if (|ellipsis?_e_hI30yre| |e_e_fT9Fwre|)
+                                   (list 'ref |var_VImh0_CPh|)
+                                   |maps_VIId-rDPh|)))
+                             (if (|ellipsis?_VI8jJ_ePh| |e_VI6uPEdPh|)
                                (syntax-error
-                                 |src_e_VWbcwre|
+                                 |src_VIMxRbdPh|
                                  '"misplaced ellipsis in syntax form")
                                (values
-                                 (list 'quote |e_e_fT9Fwre|)
-                                 |maps_e_XL5zxre|))))
-                         (|lookup_e_7bNlDpe|
-                           |label_e_tRsEUre|
-                           |r_e_BP76xre|)))
-                      (|id-var-name_e_Rpx3lqe| |e_e_fT9Fwre| '(())))
-                     ((lambda (|tmp_e_DE1tyre|)
-                        ((lambda (|tmp_e_ZA_Vyre|)
-                           (if (if |tmp_e_ZA_Vyre|
-                                 (apply (lambda (|dots_e_NYwKTre|
-                                                 |e_e_7VubUre|)
-                                          (|ellipsis?_e_hI30yre|
-                                            |dots_e_NYwKTre|))
-                                        |tmp_e_ZA_Vyre|)
+                                 (list 'quote |e_VI6uPEdPh|)
+                                 |maps_VIOmLyePh|))))
+                         (|lookup_VI-NqlkNh|
+                           |label_VIks6EBPh|
+                           |r_VIsqN5ePh|)))
+                      (|id-var-name_VII0b32Oh| |e_VI6uPEdPh| '(())))
+                     ((lambda (|tmp_VIufHsfPh|)
+                        ((lambda (|tmp_VIQbFVfPh|)
+                           (if (if |tmp_VIQbFVfPh|
+                                 (apply (lambda (|dots_VIEzaKAPh|
+                                                 |e_VI-v8bBPh|)
+                                          (|ellipsis?_VI8jJ_ePh|
+                                            |dots_VIEzaKAPh|))
+                                        |tmp_VIQbFVfPh|)
                                  '#f)
-                             (apply (lambda (|dots_e_L7DnSre| |e_e_54BQSre|)
-                                      (|gen-syntax_e_14R8nre|
-                                        |src_e_VWbcwre|
-                                        |e_e_54BQSre|
-                                        |r_e_BP76xre|
-                                        |maps_e_XL5zxre|
-                                        (lambda (|x_e_r0zhTre|) '#f)))
-                                    |tmp_e_ZA_Vyre|)
-                             ((lambda (|tmp_e_jxZmzre|)
-                                (if (if |tmp_e_jxZmzre|
-                                      (apply (lambda (|x_e_JiJ0Rre|
-                                                      |dots_e_3fHtRre|
-                                                      |y_e_pbFWRre|)
-                                               (|ellipsis?_e_hI30yre|
-                                                 |dots_e_3fHtRre|))
-                                             |tmp_e_jxZmzre|)
+                             (apply (lambda (|dots_VICKgnzPh| |e_VIYGeQzPh|)
+                                      (|gen-syntax_VIUGu84Ph|
+                                        |src_VIMxRbdPh|
+                                        |e_VIYGeQzPh|
+                                        |r_VIsqN5ePh|
+                                        |maps_VIOmLyePh|
+                                        (lambda (|x_VIiDchAPh|) '#f)))
+                                    |tmp_VIQbFVfPh|)
+                             ((lambda (|tmp_VIa8DmgPh|)
+                                (if (if |tmp_VIa8DmgPh|
+                                      (apply (lambda (|x_VIAVm0yPh|
+                                                      |dots_VIWRktyPh|
+                                                      |y_VIgOiWyPh|)
+                                               (|ellipsis?_VI8jJ_ePh|
+                                                 |dots_VIWRktyPh|))
+                                             |tmp_VIa8DmgPh|)
                                       '#f)
-                                  (apply (lambda (|x_e_PCsCGre|
-                                                  |dots_e_9zq3Hre|
-                                                  |y_e_vvowHre|)
-                                           ((letrec ((|f_e_RrmZHre|
-                                                       (lambda (|y_e_bokqIre|
-                                                                |k_e_xkiTIre|)
-                                                         ((lambda (|tmp_e_TggkJre|)
-                                                            ((lambda (|tmp_e_ddeNJre|)
-                                                               (if (if |tmp_e_ddeNJre|
-                                                                     (apply (lambda (|dots_e__ATLOre|
-                                                                                     |y_e_lxRcPre|)
-                                                                              (|ellipsis?_e_hI30yre|
-                                                                                |dots_e__ATLOre|))
-                                                                            |tmp_e_ddeNJre|)
+                                  (apply (lambda (|x_VIGd6CnPh|
+                                                  |dots_VI0a43oPh|
+                                                  |y_VIm62woPh|)
+                                           ((letrec ((|f_VII20ZoPh|
+                                                       (lambda (|y_VI2_ZppPh|
+                                                                |k_VIoXXSpPh|)
+                                                         ((lambda (|tmp_VIKTVjqPh|)
+                                                            ((lambda (|tmp_VI4QTMqPh|)
+                                                               (if (if |tmp_VI4QTMqPh|
+                                                                     (apply (lambda (|dots_VISbxLvPh|
+                                                                                     |y_VIc8vcwPh|)
+                                                                              (|ellipsis?_VI8jJ_ePh|
+                                                                                |dots_VISbxLvPh|))
+                                                                            |tmp_VI4QTMqPh|)
                                                                      '#f)
-                                                                 (apply (lambda (|dots_e_hT1vMre|
-                                                                                 |y_e_DP_XMre|)
-                                                                          (|f_e_RrmZHre|
-                                                                            |y_e_DP_XMre|
-                                                                            (lambda (|maps_e_ZLZoNre|)
+                                                                 (apply (lambda (|dots_VI8uHutPh|
+                                                                                 |y_VIuqFXtPh|)
+                                                                          (|f_VII20ZoPh|
+                                                                            |y_VIuqFXtPh|
+                                                                            (lambda (|maps_VIQmDouPh|)
                                                                               (call-with-values
                                                                                 (lambda ()
-                                                                                  (|k_e_xkiTIre|
+                                                                                  (|k_VIoXXSpPh|
                                                                                     (cons '()
-                                                                                          |maps_e_ZLZoNre|)))
-                                                                                (lambda (|x_e_jIXRNre|
-                                                                                         |maps_e_FEViOre|)
-                                                                                  (if (null? (car |maps_e_FEViOre|))
+                                                                                          |maps_VIQmDouPh|)))
+                                                                                (lambda (|x_VIajBRuPh|
+                                                                                         |maps_VIwfzivPh|)
+                                                                                  (if (null? (car |maps_VIwfzivPh|))
                                                                                     (syntax-error
-                                                                                      |src_e_VWbcwre|
+                                                                                      |src_VIMxRbdPh|
                                                                                       '"extra ellipsis in syntax form")
                                                                                     (values
-                                                                                      (|gen-mappend_e_3VKvore|
-                                                                                        |x_e_jIXRNre|
-                                                                                        (car |maps_e_FEViOre|))
-                                                                                      (cdr |maps_e_FEViOre|))))))))
-                                                                        |tmp_e_ddeNJre|)
-                                                                 ((lambda (|__e_z9ceKre|)
+                                                                                      (|gen-mappend_VIWvov5Ph|
+                                                                                        |x_VIajBRuPh|
+                                                                                        (car |maps_VIwfzivPh|))
+                                                                                      (cdr |maps_VIwfzivPh|))))))))
+                                                                        |tmp_VI4QTMqPh|)
+                                                                 ((lambda (|__VIqMRdrPh|)
                                                                     (call-with-values
                                                                       (lambda ()
-                                                                        (|gen-syntax_e_14R8nre|
-                                                                          |src_e_VWbcwre|
-                                                                          |y_e_bokqIre|
-                                                                          |r_e_BP76xre|
-                                                                          |maps_e_XL5zxre|
-                                                                          |ellipsis?_e_hI30yre|))
-                                                                      (lambda (|y_e_V5aHKre|
-                                                                               |maps_e_f288Lre|)
+                                                                        (|gen-syntax_VIUGu84Ph|
+                                                                          |src_VIMxRbdPh|
+                                                                          |y_VI2_ZppPh|
+                                                                          |r_VIsqN5ePh|
+                                                                          |maps_VIOmLyePh|
+                                                                          |ellipsis?_VI8jJ_ePh|))
+                                                                      (lambda (|y_VIMIPGrPh|
+                                                                               |maps_VI6FN7sPh|)
                                                                         (call-with-values
                                                                           (lambda ()
-                                                                            (|k_e_xkiTIre|
-                                                                              |maps_e_f288Lre|))
-                                                                          (lambda (|x_e_B-5BLre|
-                                                                                   |maps_e_XW32Mre|)
+                                                                            (|k_VIoXXSpPh|
+                                                                              |maps_VI6FN7sPh|))
+                                                                          (lambda (|x_VIsBLAsPh|
+                                                                                   |maps_VIOxJ1tPh|)
                                                                             (values
-                                                                              (|gen-append_e_JYM2ore|
-                                                                                |x_e_B-5BLre|
-                                                                                |y_e_V5aHKre|)
-                                                                              |maps_e_XW32Mre|))))))
-                                                                  |tmp_e_TggkJre|)))
+                                                                              (|gen-append_VIAzq25Ph|
+                                                                                |x_VIsBLAsPh|
+                                                                                |y_VIMIPGrPh|)
+                                                                              |maps_VIOxJ1tPh|))))))
+                                                                  |tmp_VIKTVjqPh|)))
                                                              ($syntax-dispatch
                                                                (compile-in-annotation
-                                                                 |tmp_e_TggkJre|
+                                                                 |tmp_VIKTVjqPh|
                                                                  value)
                                                                '(any . any))))
-                                                          |y_e_bokqIre|))))
-                                              |f_e_RrmZHre|)
-                                            |y_e_vvowHre|
-                                            (lambda (|maps_e_HtPFPre|)
+                                                          |y_VI2_ZppPh|))))
+                                              |f_VII20ZoPh|)
+                                            |y_VIm62woPh|
+                                            (lambda (|maps_VIy4tFwPh|)
                                               (call-with-values
                                                 (lambda ()
-                                                  (|gen-syntax_e_14R8nre|
-                                                    |src_e_VWbcwre|
-                                                    |x_e_PCsCGre|
-                                                    |r_e_BP76xre|
-                                                    (cons '() |maps_e_HtPFPre|)
-                                                    |ellipsis?_e_hI30yre|))
-                                                (lambda (|x_e_1qN6Qre|
-                                                         |maps_e_nmLzQre|)
-                                                  (if (null? (car |maps_e_nmLzQre|))
+                                                  (|gen-syntax_VIUGu84Ph|
+                                                    |src_VIMxRbdPh|
+                                                    |x_VIGd6CnPh|
+                                                    |r_VIsqN5ePh|
+                                                    (cons '() |maps_VIy4tFwPh|)
+                                                    |ellipsis?_VI8jJ_ePh|))
+                                                (lambda (|x_VIU0r6xPh|
+                                                         |maps_VIeZozxPh|)
+                                                  (if (null? (car |maps_VIeZozxPh|))
                                                     (syntax-error
-                                                      |src_e_VWbcwre|
+                                                      |src_VIMxRbdPh|
                                                       '"extra ellipsis in syntax form")
                                                     (values
-                                                      (|gen-map_e_pRIYore|
-                                                        |x_e_1qN6Qre|
-                                                        (car |maps_e_nmLzQre|))
-                                                      (cdr |maps_e_nmLzQre|))))))))
-                                         |tmp_e_jxZmzre|)
-                                  ((lambda (|tmp_e_FtXPzre|)
-                                     (if |tmp_e_FtXPzre|
-                                       (apply (lambda (|x_e_LYEUDre|
-                                                       |y_e_5VClEre|)
+                                                      (|gen-map_VIgsmY5Ph|
+                                                        |x_VIU0r6xPh|
+                                                        (car |maps_VIeZozxPh|))
+                                                      (cdr |maps_VIeZozxPh|))))))))
+                                         |tmp_VIa8DmgPh|)
+                                  ((lambda (|tmp_VIw4BPgPh|)
+                                     (if |tmp_VIw4BPgPh|
+                                       (apply (lambda (|x_VICziUkPh|
+                                                       |y_VIYvgllPh|)
                                                 (call-with-values
                                                   (lambda ()
-                                                    (|gen-syntax_e_14R8nre|
-                                                      |src_e_VWbcwre|
-                                                      |x_e_LYEUDre|
-                                                      |r_e_BP76xre|
-                                                      |maps_e_XL5zxre|
-                                                      |ellipsis?_e_hI30yre|))
-                                                  (lambda (|xnew_e_rRAOEre|
-                                                           |maps_e_NNyfFre|)
+                                                    (|gen-syntax_VIUGu84Ph|
+                                                      |src_VIMxRbdPh|
+                                                      |x_VICziUkPh|
+                                                      |r_VIsqN5ePh|
+                                                      |maps_VIOmLyePh|
+                                                      |ellipsis?_VI8jJ_ePh|))
+                                                  (lambda (|xnew_VIiseOlPh|
+                                                           |maps_VIEocfmPh|)
                                                     (call-with-values
                                                       (lambda ()
-                                                        (|gen-syntax_e_14R8nre|
-                                                          |src_e_VWbcwre|
-                                                          |y_e_5VClEre|
-                                                          |r_e_BP76xre|
-                                                          |maps_e_NNyfFre|
-                                                          |ellipsis?_e_hI30yre|))
-                                                      (lambda (|ynew_e_7KwIFre|
-                                                               |maps_e_tGu9Gre|)
+                                                        (|gen-syntax_VIUGu84Ph|
+                                                          |src_VIMxRbdPh|
+                                                          |y_VIYvgllPh|
+                                                          |r_VIsqN5ePh|
+                                                          |maps_VIEocfmPh|
+                                                          |ellipsis?_VI8jJ_ePh|))
+                                                      (lambda (|ynew_VI-kaImPh|
+                                                               |maps_VIkh89nPh|)
                                                         (values
-                                                          (|gen-cons_e_LNGppre|
-                                                            |e_e_fT9Fwre|
-                                                            |x_e_LYEUDre|
-                                                            |y_e_5VClEre|
-                                                            |xnew_e_rRAOEre|
-                                                            |ynew_e_7KwIFre|)
-                                                          |maps_e_tGu9Gre|))))))
-                                              |tmp_e_FtXPzre|)
-                                       ((lambda (|tmp_e__pVgAre|)
-                                          (if |tmp_e__pVgAre|
-                                            (apply (lambda (|x1_e_HiRaBre|
-                                                            |x2_e_1fPDBre|)
-                                                     ((lambda (|ls_e_nbN4Cre|)
+                                                          (|gen-cons_VICokp6Ph|
+                                                            |e_VI6uPEdPh|
+                                                            |x_VICziUkPh|
+                                                            |y_VIYvgllPh|
+                                                            |xnew_VIiseOlPh|
+                                                            |ynew_VI-kaImPh|)
+                                                          |maps_VIkh89nPh|))))))
+                                              |tmp_VIw4BPgPh|)
+                                       ((lambda (|tmp_VIS0zghPh|)
+                                          (if |tmp_VIS0zghPh|
+                                            (apply (lambda (|x1_VIyVuaiPh|
+                                                            |x2_VIURsDiPh|)
+                                                     ((lambda (|ls_VIeOq4jPh|)
                                                         (call-with-values
                                                           (lambda ()
-                                                            (|gen-syntax_e_14R8nre|
-                                                              |src_e_VWbcwre|
-                                                              |ls_e_nbN4Cre|
-                                                              |r_e_BP76xre|
-                                                              |maps_e_XL5zxre|
-                                                              |ellipsis?_e_hI30yre|))
-                                                          (lambda (|lsnew_e_J7LxCre|
-                                                                   |maps_e_34J-Cre|)
+                                                            (|gen-syntax_VIUGu84Ph|
+                                                              |src_VIMxRbdPh|
+                                                              |ls_VIeOq4jPh|
+                                                              |r_VIsqN5ePh|
+                                                              |maps_VIOmLyePh|
+                                                              |ellipsis?_VI8jJ_ePh|))
+                                                          (lambda (|lsnew_VIAKoxjPh|
+                                                                   |maps_VIWGm-jPh|)
                                                             (values
-                                                              (|gen-vector_e_5KESpre|
-                                                                |e_e_fT9Fwre|
-                                                                |ls_e_nbN4Cre|
-                                                                |lsnew_e_J7LxCre|)
-                                                              |maps_e_34J-Cre|))))
-                                                      (cons |x1_e_HiRaBre|
-                                                            |x2_e_1fPDBre|)))
-                                                   |tmp_e__pVgAre|)
-                                            ((lambda (|__e_lmTJAre|)
+                                                              (|gen-vector_VIYkiS6Ph|
+                                                                |e_VI6uPEdPh|
+                                                                |ls_VIeOq4jPh|
+                                                                |lsnew_VIAKoxjPh|)
+                                                              |maps_VIWGm-jPh|))))
+                                                      (cons |x1_VIyVuaiPh|
+                                                            |x2_VIURsDiPh|)))
+                                                   |tmp_VIS0zghPh|)
+                                            ((lambda (|__VIcZwJhPh|)
                                                (values
-                                                 (list 'quote |e_e_fT9Fwre|)
-                                                 |maps_e_XL5zxre|))
-                                             |tmp_e_DE1tyre|)))
+                                                 (list 'quote |e_VI6uPEdPh|)
+                                                 |maps_VIOmLyePh|))
+                                             |tmp_VIufHsfPh|)))
                                         ($syntax-dispatch
                                           (compile-in-annotation
-                                            |tmp_e_DE1tyre|
+                                            |tmp_VIufHsfPh|
                                             value)
                                           '#(vector (any . each-any))))))
                                    ($syntax-dispatch
                                      (compile-in-annotation
-                                       |tmp_e_DE1tyre|
+                                       |tmp_VIufHsfPh|
                                        value)
                                      '(any . any)))))
                               ($syntax-dispatch
-                                (compile-in-annotation |tmp_e_DE1tyre| value)
+                                (compile-in-annotation |tmp_VIufHsfPh| value)
                                 '(any any . any)))))
                          ($syntax-dispatch
-                           (compile-in-annotation |tmp_e_DE1tyre| value)
+                           (compile-in-annotation |tmp_VIufHsfPh| value)
                            '(any any))))
-                      |e_e_fT9Fwre|))))
-               (|gen-ref_e_n0PBnre|
-                 (lambda (|src_e_bziVWre|
-                          |var_e_xvgmXre|
-                          |level_e_TrePXre|
-                          |maps_e_docgYre|)
-                   (if (= |level_e_TrePXre| '0)
-                     (values |var_e_xvgmXre| |maps_e_docgYre|)
-                     (if (null? |maps_e_docgYre|)
+                      |e_VI6uPEdPh|))))
+               (|gen-ref_VIeDsB4Ph|
+                 (lambda (|src_VI2aYUDPh|
+                          |var_VIo6WlEPh|
+                          |level_VIK2UOEPh|
+                          |maps_VI4_RfFPh|)
+                   (if (= |level_VIK2UOEPh| '0)
+                     (values |var_VIo6WlEPh| |maps_VI4_RfFPh|)
+                     (if (null? |maps_VI4_RfFPh|)
                        (syntax-error
-                         |src_e_bziVWre|
+                         |src_VI2aYUDPh|
                          '"missing ellipsis in syntax form")
                        (call-with-values
                          (lambda ()
-                           (|gen-ref_e_n0PBnre|
-                             |src_e_bziVWre|
-                             |var_e_xvgmXre|
-                             (- |level_e_TrePXre| '1)
-                             (cdr |maps_e_docgYre|)))
-                         (lambda (|outer-var_e_zkaJYre| |outer-maps_e_Vg8aZre|)
-                           ((lambda (|b_e_fd6DZre|)
-                              (if |b_e_fd6DZre|
-                                (values (cdr |b_e_fd6DZre|) |maps_e_docgYre|)
-                                ((lambda (|inner-var_e_B944-re|)
+                           (|gen-ref_VIeDsB4Ph|
+                             |src_VI2aYUDPh|
+                             |var_VIo6WlEPh|
+                             (- |level_VIK2UOEPh| '1)
+                             (cdr |maps_VI4_RfFPh|)))
+                         (lambda (|outer-var_VIqXPIFPh| |outer-maps_VIMTN9GPh|)
+                           ((lambda (|b_VI6QLCGPh|)
+                              (if |b_VI6QLCGPh|
+                                (values (cdr |b_VI6QLCGPh|) |maps_VI4_RfFPh|)
+                                ((lambda (|inner-var_VIsMJ3HPh|)
                                    (values
-                                     |inner-var_e_B944-re|
-                                     (cons (cons (cons |outer-var_e_zkaJYre|
-                                                       |inner-var_e_B944-re|)
-                                                 (car |maps_e_docgYre|))
-                                           |outer-maps_e_Vg8aZre|)))
-                                 (|gen-var_e_hb9zSqe| 'tmp))))
-                            (assq |outer-var_e_zkaJYre|
-                                  (car |maps_e_docgYre|)))))))))
-               (|gen-append_e_JYM2ore|
-                 (lambda (|x_e_X52x-re| y_e_h20--re)
-                   (if (equal? y_e_h20--re ''())
-                     |x_e_X52x-re|
-                     (list 'append |x_e_X52x-re| y_e_h20--re))))
-               (|gen-mappend_e_3VKvore|
-                 (lambda (|e_e_D-Zq_re| |map-env_e_ZWXT_re|)
+                                     |inner-var_VIsMJ3HPh|
+                                     (cons (cons (cons |outer-var_VIqXPIFPh|
+                                                       |inner-var_VIsMJ3HPh|)
+                                                 (car |maps_VI4_RfFPh|))
+                                           |outer-maps_VIMTN9GPh|)))
+                                 (|gen-var_VI8OOyzOh| 'tmp))))
+                            (assq |outer-var_VIqXPIFPh|
+                                  (car |maps_VI4_RfFPh|)))))))))
+               (|gen-append_VIAzq25Ph|
+                 (lambda (|x_VIOIHwHPh| |y_VI8FFZHPh|)
+                   (if (equal? |y_VI8FFZHPh| ''())
+                     |x_VIOIHwHPh|
+                     (list 'append |x_VIOIHwHPh| |y_VI8FFZHPh|))))
+               (|gen-mappend_VIWvov5Ph|
+                 (lambda (|e_VIuBDqIPh| |map-env_VIQxBTIPh|)
                    (list 'apply
                          '(primitive append)
-                         (|gen-map_e_pRIYore|
-                           |e_e_D-Zq_re|
-                           |map-env_e_ZWXT_re|))))
-               (|gen-map_e_pRIYore|
-                 (lambda (|e_e_jTVk0se| |map-env_e_FPTN0se|)
-                   ((lambda (|formals_e__LRe1se| |actuals_e_lIPH1se|)
-                      (if (eq? (car |e_e_jTVk0se|) 'ref)
-                        (car |actuals_e_lIPH1se|)
+                         (|gen-map_VIgsmY5Ph|
+                           |e_VIuBDqIPh|
+                           |map-env_VIQxBTIPh|))))
+               (|gen-map_VIgsmY5Ph|
+                 (lambda (|e_VIauzkJPh| |map-env_VIwqxNJPh|)
+                   ((lambda (|formals_VISmveKPh| |actuals_VIcjtHKPh|)
+                      (if (eq? (car |e_VIauzkJPh|) 'ref)
+                        (car |actuals_VIcjtHKPh|)
                         (if (andmap
-                              (lambda (|x_e_nxJ23se|)
-                                (if (eq? (car |x_e_nxJ23se|) 'ref)
-                                  (memq (cadr |x_e_nxJ23se|)
-                                        |formals_e__LRe1se|)
+                              (lambda (|x_VIe8n2MPh|)
+                                (if (eq? (car |x_VIe8n2MPh|) 'ref)
+                                  (memq (cadr |x_VIe8n2MPh|)
+                                        |formals_VISmveKPh|)
                                   '#f))
-                              (cdr |e_e_jTVk0se|))
+                              (cdr |e_VIauzkJPh|))
                           (cons 'map
-                                (cons (list 'primitive (car |e_e_jTVk0se|))
-                                      (map ((lambda (|r_e_HEN82se|)
-                                              (lambda (|x_e_1BLB2se|)
-                                                (cdr (assq (cadr |x_e_1BLB2se|)
-                                                           |r_e_HEN82se|))))
+                                (cons (list 'primitive (car |e_VIauzkJPh|))
+                                      (map ((lambda (|r_VIyfr8LPh|)
+                                              (lambda (|x_VIUbpBLPh|)
+                                                (cdr (assq (cadr |x_VIUbpBLPh|)
+                                                           |r_VIyfr8LPh|))))
                                             (map cons
-                                                 |formals_e__LRe1se|
-                                                 |actuals_e_lIPH1se|))
-                                           (cdr |e_e_jTVk0se|))))
+                                                 |formals_VISmveKPh|
+                                                 |actuals_VIcjtHKPh|))
+                                           (cdr |e_VIauzkJPh|))))
                           (cons 'map
                                 (cons (list 'lambda
-                                            |formals_e__LRe1se|
-                                            |e_e_jTVk0se|)
-                                      |actuals_e_lIPH1se|)))))
-                    (map cdr |map-env_e_FPTN0se|)
-                    (map (lambda (|x_e_JtHv3se|)
-                           (list 'ref (car |x_e_JtHv3se|)))
-                         |map-env_e_FPTN0se|))))
-               (|gen-cons_e_LNGppre|
-                 (lambda (|e_e_3qFY3se|
-                          |x_e_pmDp4se|
-                          |y_e_LiBS4se|
-                          xnew_e_5fzj5se
-                          |ynew_e_rbxM5se|)
-                   ((lambda (|t_e_N7vd6se|)
-                      (if (memv |t_e_N7vd6se| '(quote))
-                        (if (eq? (car xnew_e_5fzj5se) 'quote)
-                          ((lambda (|xnew_e_74tG6se| ynew_e_t0r77se)
-                             (if (if (eq? |xnew_e_74tG6se| |x_e_pmDp4se|)
-                                   (eq? ynew_e_t0r77se |y_e_LiBS4se|)
+                                            |formals_VISmveKPh|
+                                            |e_VIauzkJPh|)
+                                      |actuals_VIcjtHKPh|)))))
+                    (map cdr |map-env_VIwqxNJPh|)
+                    (map (lambda (|x_VIA4lvMPh|)
+                           (list 'ref (car |x_VIA4lvMPh|)))
+                         |map-env_VIwqxNJPh|))))
+               (|gen-cons_VICokp6Ph|
+                 (lambda (|e_VIW0jYMPh|
+                          |x_VIgZgpNPh|
+                          |y_VICVeSNPh|
+                          |xnew_VIYRcjOPh|
+                          |ynew_VIiOaMOPh|)
+                   ((lambda (|t_VIEK8dPPh|)
+                      (if (memv |t_VIEK8dPPh| '(quote))
+                        (if (eq? (car |xnew_VIYRcjOPh|) 'quote)
+                          ((lambda (|xnew_VI-G6GPPh| |ynew_VIkD47QPh|)
+                             (if (if (eq? |xnew_VI-G6GPPh| |x_VIgZgpNPh|)
+                                   (eq? |ynew_VIkD47QPh| |y_VICVeSNPh|)
                                    '#f)
-                               (list 'quote |e_e_3qFY3se|)
+                               (list 'quote |e_VIW0jYMPh|)
                                (list 'quote
-                                     (cons |xnew_e_74tG6se| ynew_e_t0r77se))))
-                           (cadr xnew_e_5fzj5se)
-                           (cadr |ynew_e_rbxM5se|))
-                          (if (eq? (cadr |ynew_e_rbxM5se|) '())
-                            (list 'list xnew_e_5fzj5se)
-                            (list 'cons xnew_e_5fzj5se |ynew_e_rbxM5se|)))
-                        (if (memv |t_e_N7vd6se| '(list))
+                                     (cons |xnew_VI-G6GPPh|
+                                           |ynew_VIkD47QPh|))))
+                           (cadr |xnew_VIYRcjOPh|)
+                           (cadr |ynew_VIiOaMOPh|))
+                          (if (eq? (cadr |ynew_VIiOaMOPh|) '())
+                            (list 'list |xnew_VIYRcjOPh|)
+                            (list 'cons |xnew_VIYRcjOPh| |ynew_VIiOaMOPh|)))
+                        (if (memv |t_VIEK8dPPh| '(list))
                           (cons 'list
-                                (cons xnew_e_5fzj5se (cdr |ynew_e_rbxM5se|)))
-                          (list 'cons xnew_e_5fzj5se |ynew_e_rbxM5se|))))
-                    (car |ynew_e_rbxM5se|))))
-               (|gen-vector_e_5KESpre|
-                 (lambda (|e_e_PYoA7se| |ls_e_9Vm18se| |lsnew_e_vRku8se|)
-                   (if (eq? (car |lsnew_e_vRku8se|) 'quote)
-                     (if (eq? (cadr |lsnew_e_vRku8se|) |ls_e_9Vm18se|)
-                       (list 'quote |e_e_PYoA7se|)
+                                (cons |xnew_VIYRcjOPh| (cdr |ynew_VIiOaMOPh|)))
+                          (list 'cons |xnew_VIYRcjOPh| |ynew_VIiOaMOPh|))))
+                    (car |ynew_VIiOaMOPh|))))
+               (|gen-vector_VIYkiS6Ph|
+                 (lambda (|e_VIGz2AQPh| |ls_VI0w01RPh| |lsnew_VIms-tRPh|)
+                   (if (eq? (car |lsnew_VIms-tRPh|) 'quote)
+                     (if (eq? (cadr |lsnew_VIms-tRPh|) |ls_VI0w01RPh|)
+                       (list 'quote |e_VIGz2AQPh|)
                        (list 'quote
-                             (list->vector (cadr |lsnew_e_vRku8se|))))
-                     (if (eq? (car |lsnew_e_vRku8se|) 'list)
-                       (cons 'vector (cdr |lsnew_e_vRku8se|))
-                       (list 'list->vector |lsnew_e_vRku8se|)))))
-               (|regen_e_rGCjqre|
-                 (lambda (|x_e_RNiX8se|)
-                   ((lambda (|t_e_bKgo9se|)
-                      (if (memv |t_e_bKgo9se| '(ref))
-                        (cadr |x_e_RNiX8se|)
-                        (if (memv |t_e_bKgo9se| '(primitive))
-                          (cadr |x_e_RNiX8se|)
-                          (if (memv |t_e_bKgo9se| '(quote))
-                            (list 'quote (cadr |x_e_RNiX8se|))
-                            (if (memv |t_e_bKgo9se| '(lambda))
+                             (list->vector (cadr |lsnew_VIms-tRPh|))))
+                     (if (eq? (car |lsnew_VIms-tRPh|) 'list)
+                       (cons 'vector (cdr |lsnew_VIms-tRPh|))
+                       (list 'list->vector |lsnew_VIms-tRPh|)))))
+               (|regen_VIihgj7Ph|
+                 (lambda (|x_VIIoYWRPh|)
+                   ((lambda (|t_VI2lWnSPh|)
+                      (if (memv |t_VI2lWnSPh| '(ref))
+                        (cadr |x_VIIoYWRPh|)
+                        (if (memv |t_VI2lWnSPh| '(primitive))
+                          (cadr |x_VIIoYWRPh|)
+                          (if (memv |t_VI2lWnSPh| '(quote))
+                            (list 'quote (cadr |x_VIIoYWRPh|))
+                            (if (memv |t_VI2lWnSPh| '(lambda))
                               (list 'lambda
-                                    (cadr |x_e_RNiX8se|)
-                                    (|regen_e_rGCjqre| (caddr |x_e_RNiX8se|)))
-                              (if (memv |t_e_bKgo9se| '(map))
-                                ((lambda (|ls_e_xGeR9se|)
-                                   (cons (if (= (length |ls_e_xGeR9se|) '2)
+                                    (cadr |x_VIIoYWRPh|)
+                                    (|regen_VIihgj7Ph| (caddr |x_VIIoYWRPh|)))
+                              (if (memv |t_VI2lWnSPh| '(map))
+                                ((lambda (|ls_VIohUQSPh|)
+                                   (cons (if (= (length |ls_VIohUQSPh|) '2)
                                            'map
                                            'map)
-                                         |ls_e_xGeR9se|))
-                                 (map |regen_e_rGCjqre| (cdr |x_e_RNiX8se|)))
-                                (cons (car |x_e_RNiX8se|)
-                                      (map |regen_e_rGCjqre|
-                                           (cdr |x_e_RNiX8se|)))))))))
-                    (car |x_e_RNiX8se|)))))
-        (lambda (|e_e_NCAMqre|
-                 r_e_7zydrre
-                 |w_e_tvwGrre|
-                 |s_e_Pru7sre|)
-          ((lambda (|e_e_9osAsre|)
-             ((lambda (tmp_e_vkq1tre)
-                ((lambda (|tmp_e_Rgoutre|)
-                   (if |tmp_e_Rgoutre|
-                     (apply (lambda (__e_x9koure |x_e_T5iRure|)
+                                         |ls_VIohUQSPh|))
+                                 (map |regen_VIihgj7Ph| (cdr |x_VIIoYWRPh|)))
+                                (cons (car |x_VIIoYWRPh|)
+                                      (map |regen_VIihgj7Ph|
+                                           (cdr |x_VIIoYWRPh|)))))))))
+                    (car |x_VIIoYWRPh|)))))
+        (lambda (|e_VIEdeM7Ph|
+                 |r_VI-9cd8Ph|
+                 |w_VIk6aG8Ph|
+                 |s_VIG2879Ph|)
+          ((lambda (|e_VI0_5A9Ph|)
+             ((lambda (|tmp_VImX31aPh|)
+                ((lambda (|tmp_VIIT1uaPh|)
+                   (if |tmp_VIIT1uaPh|
+                     (apply (lambda (|__VIoMZnbPh| |x_VIKIXQbPh|)
                               (call-with-values
                                 (lambda ()
-                                  (|gen-syntax_e_14R8nre|
-                                    |e_e_9osAsre|
-                                    |x_e_T5iRure|
-                                    r_e_7zydrre
+                                  (|gen-syntax_VIUGu84Ph|
+                                    |e_VI0_5A9Ph|
+                                    |x_VIKIXQbPh|
+                                    |r_VI-9cd8Ph|
                                     '()
-                                    |ellipsis?_e_VphLQqe|))
-                                (lambda (e_e_d2givre |maps_e_z-dLvre|)
-                                  (|regen_e_rGCjqre| e_e_d2givre))))
-                            |tmp_e_Rgoutre|)
-                     ((lambda (|__e_bdmXtre|)
-                        (syntax-error |e_e_9osAsre|))
-                      tmp_e_vkq1tre)))
+                                    |ellipsis?_VIM0XKxOh|))
+                                (lambda (|e_VI4FVhcPh| |maps_VIqBTKcPh|)
+                                  (|regen_VIihgj7Ph| |e_VI4FVhcPh|))))
+                            |tmp_VIIT1uaPh|)
+                     ((lambda (|__VI2Q_WaPh|)
+                        (syntax-error |e_VI0_5A9Ph|))
+                      |tmp_VImX31aPh|)))
                  ($syntax-dispatch
-                   (compile-in-annotation tmp_e_vkq1tre value)
+                   (compile-in-annotation |tmp_VImX31aPh| value)
                    '(any any))))
-              |e_e_9osAsre|))
-           (|source-wrap_e_FC4prqe|
-             |e_e_NCAMqre|
-             |w_e_tvwGrre|
-             |s_e_Pru7sre|)))))
-    (|global-extend_e_t7LODpe|
+              |e_VI0_5A9Ph|))
+           (|source-wrap_VIwdKo8Oh|
+             |e_VIEdeM7Ph|
+             |w_VIk6aG8Ph|
+             |s_VIG2879Ph|)))))
+    (|global-extend_VIkKoOkNh|
       'core
       'lambda
-      (lambda (|e_e_TCciase|
-               |r_e_dzaLase|
-               w_e_zv8cbse
-               |s_e_Vr6Fbse|)
-        ((lambda (tmp_e_fo46cse)
-           ((lambda (|tmp_e_Bk2zcse|)
-              (if |tmp_e_Bk2zcse|
-                (apply (lambda (|__e_Xg00dse| c_e_hd-sdse)
-                         (|chi-lambda-clause_e_TAnoPqe|
-                           (|source-wrap_e_FC4prqe|
-                             |e_e_TCciase|
-                             w_e_zv8cbse
-                             |s_e_Vr6Fbse|)
-                           c_e_hd-sdse
-                           |r_e_dzaLase|
-                           w_e_zv8cbse
-                           (lambda (|vars_e_D9YVdse| |body_e_Z5Wmese|)
-                             (if |s_e_Vr6Fbse|
+      (lambda (|e_VIKdShTPh|
+               |r_VI4aQKTPh|
+               |w_VIq6ObUPh|
+               |s_VIM2MEUPh|)
+        ((lambda (|tmp_VI6_J5VPh|)
+           ((lambda (|tmp_VIsXHyVPh|)
+              (if |tmp_VIsXHyVPh|
+                (apply (lambda (|__VIOTF_VPh| |c_VI8QDsWPh|)
+                         (|chi-lambda-clause_VIKb1owOh|
+                           (|source-wrap_VIwdKo8Oh|
+                             |e_VIKdShTPh|
+                             |w_VIq6ObUPh|
+                             |s_VIM2MEUPh|)
+                           |c_VI8QDsWPh|
+                           |r_VI4aQKTPh|
+                           |w_VIq6ObUPh|
+                           (lambda (|vars_VIuMBVWPh| |body_VIQIzmXPh|)
+                             (if |s_VIM2MEUPh|
                                (list 'compile-in-annotation
                                      (list 'lambda
-                                           |vars_e_D9YVdse|
-                                           |body_e_Z5Wmese|)
-                                     |s_e_Vr6Fbse|)
+                                           |vars_VIuMBVWPh|
+                                           |body_VIQIzmXPh|)
+                                     |s_VIM2MEUPh|)
                                (list 'lambda
-                                     |vars_e_D9YVdse|
-                                     |body_e_Z5Wmese|)))))
-                       |tmp_e_Bk2zcse|)
-                (syntax-error tmp_e_fo46cse)))
+                                     |vars_VIuMBVWPh|
+                                     |body_VIQIzmXPh|)))))
+                       |tmp_VIsXHyVPh|)
+                (syntax-error |tmp_VI6_J5VPh|)))
             ($syntax-dispatch
-              (compile-in-annotation tmp_e_fo46cse value)
+              (compile-in-annotation |tmp_VI6_J5VPh| value)
               '(any . any))))
-         |e_e_TCciase|)))
-    (|global-extend_e_t7LODpe|
+         |e_VIKdShTPh|)))
+    (|global-extend_VIkKoOkNh|
       'core
       'letrec
-      (lambda (|e_e_j2UPese|
-               |r_e_F-Rgfse|
-               |w_e__WPJfse|
-               |s_e_lTNagse|)
-        ((lambda (|tmp_e_HPLDgse|)
-           ((lambda (|tmp_e_1MJ4hse|)
-              (if |tmp_e_1MJ4hse|
-                (apply (lambda (|__e_JEF-hse|
-                                |id_e_3BDrise|
-                                |val_e_pxBUise|
-                                |e1_e_Ltzljse|
-                                |e2_e_5qxOjse|)
-                         ((lambda (ids_e_rmvfkse)
-                            (if (not (|valid-bound-ids?_e_dbpTmqe|
-                                       ids_e_rmvfkse))
-                              (|invalid-ids-error_e_DNa2qqe|
-                                (map (lambda (|x_e_bVeTnse|)
-                                       (|wrap_e_jG6Yqqe|
-                                         |x_e_bVeTnse|
-                                         |w_e__WPJfse|))
-                                     ids_e_rmvfkse)
-                                (|source-wrap_e_FC4prqe|
-                                  |e_e_j2UPese|
-                                  |w_e__WPJfse|
-                                  |s_e_lTNagse|)
+      (lambda (|e_VIaFxPXPh|
+               |r_VIwBvgYPh|
+               |w_VISxtJYPh|
+               |s_VIcuraZPh|)
+        ((lambda (|tmp_VIyqpDZPh|)
+           ((lambda (|tmp_VIUmn4-Ph|)
+              (if |tmp_VIUmn4-Ph|
+                (apply (lambda (|__VIAfj--Ph|
+                                |id_VIWbhr_Ph|
+                                |val_VIg8fU_Ph|
+                                |e1_VIC4dl0Qh|
+                                |e2_VIY0bO0Qh|)
+                         ((lambda (|ids_VIiZ8f1Qh|)
+                            (if (not (|valid-bound-ids?_VI4O2T3Oh|
+                                       |ids_VIiZ8f1Qh|))
+                              (|invalid-ids-error_VIuoQ17Oh|
+                                (map (lambda (|x_VI2wUS4Qh|)
+                                       (|wrap_VIahMX7Oh|
+                                         |x_VI2wUS4Qh|
+                                         |w_VISxtJYPh|))
+                                     |ids_VIiZ8f1Qh|)
+                                (|source-wrap_VIwdKo8Oh|
+                                  |e_VIaFxPXPh|
+                                  |w_VISxtJYPh|
+                                  |s_VIcuraZPh|)
                                 '"bound variable")
-                              ((lambda (|labels_e_NitIkse| new-vars_e_7fr9lse)
-                                 ((lambda (|w_e_tbpClse| |r_e_P7n3mse|)
-                                    (|build-letrec_e_tNOQape|
-                                      |s_e_lTNagse|
-                                      new-vars_e_7fr9lse
-                                      (map (lambda (x_e_94lwmse)
-                                             (|chi_e_LgMYJqe|
-                                               x_e_94lwmse
-                                               |r_e_P7n3mse|
-                                               |w_e_tbpClse|))
-                                           |val_e_pxBUise|)
-                                      (|chi-body_e_t-BdMqe|
-                                        (cons |e1_e_Ltzljse| |e2_e_5qxOjse|)
-                                        (|source-wrap_e_FC4prqe|
-                                          |e_e_j2UPese|
-                                          |w_e_tbpClse|
-                                          |s_e_lTNagse|)
-                                        |r_e_P7n3mse|
-                                        |w_e_tbpClse|)))
-                                  (|make-binding-wrap_e_LWP-gqe|
-                                    ids_e_rmvfkse
-                                    |labels_e_NitIkse|
-                                    |w_e__WPJfse|)
-                                  (|extend-var-env*_e_ptX4Bpe|
-                                    |labels_e_NitIkse|
-                                    new-vars_e_7fr9lse
-                                    |r_e_F-Rgfse|)))
-                               (gen-labels_e_120f0qe ids_e_rmvfkse)
-                               (map |gen-var_e_hb9zSqe| ids_e_rmvfkse))))
-                          |id_e_3BDrise|))
-                       |tmp_e_1MJ4hse|)
-                ((lambda (|__e_nIHxhse|)
+                              ((lambda (|labels_VIEV6I1Qh|
+                                        |new-vars_VI-R492Qh|)
+                                 ((lambda (|w_VIkO2C2Qh| |r_VIGK033Qh|)
+                                    (|build-letrec_VIkosQTMh|
+                                      |s_VIcuraZPh|
+                                      |new-vars_VI-R492Qh|
+                                      (map (lambda (|x_VI0H-v3Qh|)
+                                             (|chi_VICTpYqOh|
+                                               |x_VI0H-v3Qh|
+                                               |r_VIGK033Qh|
+                                               |w_VIkO2C2Qh|))
+                                           |val_VIg8fU_Ph|)
+                                      (|chi-body_VIkBfdtOh|
+                                        (cons |e1_VIC4dl0Qh| |e2_VIY0bO0Qh|)
+                                        (|source-wrap_VIwdKo8Oh|
+                                          |e_VIaFxPXPh|
+                                          |w_VIkO2C2Qh|
+                                          |s_VIcuraZPh|)
+                                        |r_VIGK033Qh|
+                                        |w_VIkO2C2Qh|)))
+                                  (|make-binding-wrap_VICxt-ZNh|
+                                    |ids_VIiZ8f1Qh|
+                                    |labels_VIEV6I1Qh|
+                                    |w_VISxtJYPh|)
+                                  (|extend-var-env*_VIg4B4iNh|
+                                    |labels_VIEV6I1Qh|
+                                    |new-vars_VI-R492Qh|
+                                    |r_VIwBvgYPh|)))
+                               (|gen-labels_VIUEFeJNh| |ids_VIiZ8f1Qh|)
+                               (map |gen-var_VI8OOyzOh| |ids_VIiZ8f1Qh|))))
+                          |id_VIWbhr_Ph|))
+                       |tmp_VIUmn4-Ph|)
+                ((lambda (|__VIejlx-Ph|)
                    (syntax-error
-                     (|source-wrap_e_FC4prqe|
-                       |e_e_j2UPese|
-                       |w_e__WPJfse|
-                       |s_e_lTNagse|)))
-                 |tmp_e_HPLDgse|)))
+                     (|source-wrap_VIwdKo8Oh|
+                       |e_VIaFxPXPh|
+                       |w_VISxtJYPh|
+                       |s_VIcuraZPh|)))
+                 |tmp_VIyqpDZPh|)))
             ($syntax-dispatch
-              (compile-in-annotation |tmp_e_HPLDgse| value)
+              (compile-in-annotation |tmp_VIyqpDZPh| value)
               '(any #(each (any any)) any . each-any))))
-         |e_e_j2UPese|)))
-    (|global-extend_e_t7LODpe|
+         |e_VIaFxPXPh|)))
+    (|global-extend_VIkKoOkNh|
       'core
       'if
-      (lambda (|e_e_TNaNose|
-               |r_e_dK8epse|
-               |w_e_zG6Hpse|
-               |s_e_VC48qse|)
-        ((lambda (|tmp_e_fz2Bqse|)
-           ((lambda (|tmp_e_Bv02rse|)
-              (if |tmp_e_Bv02rse|
-                (apply (lambda (|__e__5Ocuse|
-                                |test_e_l2MFuse|
-                                |then_e_H-J6vse|)
-                         (if |s_e_VC48qse|
+      (lambda (|e_VIKoQM5Qh|
+               |r_VI4lOd6Qh|
+               |w_VIqhMG6Qh|
+               |s_VIMdK77Qh|)
+        ((lambda (|tmp_VI6aIA7Qh|)
+           ((lambda (|tmp_VIs6G18Qh|)
+              (if |tmp_VIs6G18Qh|
+                (apply (lambda (|__VISIrcbQh|
+                                |test_VIcFpFbQh|
+                                |then_VIyBn6cQh|)
+                         (if |s_VIMdK77Qh|
                            (list 'compile-in-annotation
                                  (list 'if
-                                       (|chi_e_LgMYJqe|
-                                         |test_e_l2MFuse|
-                                         |r_e_dK8epse|
-                                         |w_e_zG6Hpse|)
-                                       (|chi_e_LgMYJqe|
-                                         |then_e_H-J6vse|
-                                         |r_e_dK8epse|
-                                         |w_e_zG6Hpse|)
-                                       (|chi-void_e_ztjiQqe|))
-                                 |s_e_VC48qse|)
+                                       (|chi_VICTpYqOh|
+                                         |test_VIcFpFbQh|
+                                         |r_VI4lOd6Qh|
+                                         |w_VIqhMG6Qh|)
+                                       (|chi_VICTpYqOh|
+                                         |then_VIyBn6cQh|
+                                         |r_VI4lOd6Qh|
+                                         |w_VIqhMG6Qh|)
+                                       (|chi-void_VIq4ZhxOh|))
+                                 |s_VIMdK77Qh|)
                            (list 'if
-                                 (|chi_e_LgMYJqe|
-                                   |test_e_l2MFuse|
-                                   |r_e_dK8epse|
-                                   |w_e_zG6Hpse|)
-                                 (|chi_e_LgMYJqe|
-                                   |then_e_H-J6vse|
-                                   |r_e_dK8epse|
-                                   |w_e_zG6Hpse|)
-                                 (|chi-void_e_ztjiQqe|))))
-                       |tmp_e_Bv02rse|)
-                ((lambda (|tmp_e_Xr-urse|)
-                   (if |tmp_e_Xr-urse|
-                     (apply (lambda (|__e_DkWosse|
-                                     |test_e_ZgURsse|
-                                     |then_e_jdSitse|
-                                     |else_e_F9QLtse|)
-                              (if |s_e_VC48qse|
+                                 (|chi_VICTpYqOh|
+                                   |test_VIcFpFbQh|
+                                   |r_VI4lOd6Qh|
+                                   |w_VIqhMG6Qh|)
+                                 (|chi_VICTpYqOh|
+                                   |then_VIyBn6cQh|
+                                   |r_VI4lOd6Qh|
+                                   |w_VIqhMG6Qh|)
+                                 (|chi-void_VIq4ZhxOh|))))
+                       |tmp_VIs6G18Qh|)
+                ((lambda (|tmp_VIO2Eu8Qh|)
+                   (if |tmp_VIO2Eu8Qh|
+                     (apply (lambda (|__VIuXzo9Qh|
+                                     |test_VIQTxR9Qh|
+                                     |then_VIaQviaQh|
+                                     |else_VIwMtLaQh|)
+                              (if |s_VIMdK77Qh|
                                 (list 'compile-in-annotation
                                       (list 'if
-                                            (|chi_e_LgMYJqe|
-                                              |test_e_ZgURsse|
-                                              |r_e_dK8epse|
-                                              |w_e_zG6Hpse|)
-                                            (|chi_e_LgMYJqe|
-                                              |then_e_jdSitse|
-                                              |r_e_dK8epse|
-                                              |w_e_zG6Hpse|)
-                                            (|chi_e_LgMYJqe|
-                                              |else_e_F9QLtse|
-                                              |r_e_dK8epse|
-                                              |w_e_zG6Hpse|))
-                                      |s_e_VC48qse|)
+                                            (|chi_VICTpYqOh|
+                                              |test_VIQTxR9Qh|
+                                              |r_VI4lOd6Qh|
+                                              |w_VIqhMG6Qh|)
+                                            (|chi_VICTpYqOh|
+                                              |then_VIaQviaQh|
+                                              |r_VI4lOd6Qh|
+                                              |w_VIqhMG6Qh|)
+                                            (|chi_VICTpYqOh|
+                                              |else_VIwMtLaQh|
+                                              |r_VI4lOd6Qh|
+                                              |w_VIqhMG6Qh|))
+                                      |s_VIMdK77Qh|)
                                 (list 'if
-                                      (|chi_e_LgMYJqe|
-                                        |test_e_ZgURsse|
-                                        |r_e_dK8epse|
-                                        |w_e_zG6Hpse|)
-                                      (|chi_e_LgMYJqe|
-                                        |then_e_jdSitse|
-                                        |r_e_dK8epse|
-                                        |w_e_zG6Hpse|)
-                                      (|chi_e_LgMYJqe|
-                                        |else_e_F9QLtse|
-                                        |r_e_dK8epse|
-                                        |w_e_zG6Hpse|))))
-                            |tmp_e_Xr-urse|)
-                     ((lambda (|__e_hoYXrse|)
+                                      (|chi_VICTpYqOh|
+                                        |test_VIQTxR9Qh|
+                                        |r_VI4lOd6Qh|
+                                        |w_VIqhMG6Qh|)
+                                      (|chi_VICTpYqOh|
+                                        |then_VIaQviaQh|
+                                        |r_VI4lOd6Qh|
+                                        |w_VIqhMG6Qh|)
+                                      (|chi_VICTpYqOh|
+                                        |else_VIwMtLaQh|
+                                        |r_VI4lOd6Qh|
+                                        |w_VIqhMG6Qh|))))
+                            |tmp_VIO2Eu8Qh|)
+                     ((lambda (|__VI8_BX8Qh|)
                         (syntax-error
-                          (|source-wrap_e_FC4prqe|
-                            |e_e_TNaNose|
-                            |w_e_zG6Hpse|
-                            |s_e_VC48qse|)))
-                      |tmp_e_fz2Bqse|)))
+                          (|source-wrap_VIwdKo8Oh|
+                            |e_VIKoQM5Qh|
+                            |w_VIqhMG6Qh|
+                            |s_VIMdK77Qh|)))
+                      |tmp_VI6aIA7Qh|)))
                  ($syntax-dispatch
-                   (compile-in-annotation |tmp_e_fz2Bqse| value)
+                   (compile-in-annotation |tmp_VI6aIA7Qh| value)
                    '(any any any any)))))
             ($syntax-dispatch
-              (compile-in-annotation |tmp_e_fz2Bqse| value)
+              (compile-in-annotation |tmp_VI6aIA7Qh| value)
               '(any any any))))
-         |e_e_TNaNose|)))
-    (|global-extend_e_t7LODpe| 'set! 'set! '())
-    (|global-extend_e_t7LODpe| 'begin 'begin '())
-    (|global-extend_e_t7LODpe|
+         |e_VIKoQM5Qh|)))
+    (|global-extend_VIkKoOkNh| 'set! 'set! '())
+    (|global-extend_VIkKoOkNh| 'begin 'begin '())
+    (|global-extend_VIkKoOkNh|
       'module-key
       'module
       '())
-    (|global-extend_e_t7LODpe| 'import 'import '#f)
-    (|global-extend_e_t7LODpe|
+    (|global-extend_VIkKoOkNh| 'import 'import '#f)
+    (|global-extend_VIkKoOkNh|
       'import
       'import-only
       '#t)
-    (|global-extend_e_t7LODpe| 'define 'define '())
-    (|global-extend_e_t7LODpe|
+    (|global-extend_VIkKoOkNh| 'define 'define '())
+    (|global-extend_VIkKoOkNh|
       'define-syntax
       'define-syntax
       '())
-    (|global-extend_e_t7LODpe|
+    (|global-extend_VIkKoOkNh|
       'eval-when
       'eval-when
       '())
-    (|global-extend_e_t7LODpe|
+    (|global-extend_VIkKoOkNh|
       'core
       'syntax-case
-      (letrec ((|convert-pattern_e_1XHzvse|
-                 (lambda (|pattern_e_ZrSkHse| |keys_e_joQNHse|)
-                   (letrec ((|cvt*_e_FkOeIse|
-                              (lambda (|p*_e_ldK8Jse|
-                                       |n_e_H9IBJse|
-                                       |ids_e_16G2Kse|)
-                                (if (null? |p*_e_ldK8Jse|)
-                                  (values '() |ids_e_16G2Kse|)
+      (letrec ((|convert-pattern_VIUxlzcQh|
+                 (lambda (|pattern_VIQ2wkoQh| |keys_VIa_tNoQh|)
+                   (letrec ((|cvt*_VIwXrepQh|
+                              (lambda (|p*_VIcQn8qQh|
+                                       |n_VIyMlBqQh|
+                                       |ids_VIUIj2rQh|)
+                                (if (null? |p*_VIcQn8qQh|)
+                                  (values '() |ids_VIUIj2rQh|)
                                   (call-with-values
                                     (lambda ()
-                                      (|cvt*_e_FkOeIse|
-                                        (cdr |p*_e_ldK8Jse|)
-                                        |n_e_H9IBJse|
-                                        |ids_e_16G2Kse|))
-                                    (lambda (|y_e_n2EvKse| |ids_e_J-BYKse|)
+                                      (|cvt*_VIwXrepQh|
+                                        (cdr |p*_VIcQn8qQh|)
+                                        |n_VIyMlBqQh|
+                                        |ids_VIUIj2rQh|))
+                                    (lambda (|y_VIeFhvrQh| |ids_VIABfYrQh|)
                                       (call-with-values
                                         (lambda ()
-                                          (|cvt_e__gMHIse|
-                                            (car |p*_e_ldK8Jse|)
-                                            |n_e_H9IBJse|
-                                            |ids_e_J-BYKse|))
-                                        (lambda (|x_e_3XzpLse| |ids_e_pTxSLse|)
+                                          (|cvt_VISTpHpQh|
+                                            (car |p*_VIcQn8qQh|)
+                                            |n_VIyMlBqQh|
+                                            |ids_VIABfYrQh|))
+                                        (lambda (|x_VIWxdpsQh| |ids_VIgubSsQh|)
                                           (values
-                                            (cons |x_e_3XzpLse| |y_e_n2EvKse|)
-                                            |ids_e_pTxSLse|))))))))
-                            (|cvt_e__gMHIse|
-                              (lambda (|p_e_LPvjMse|
-                                       |n_e_5MtMMse|
-                                       |ids_e_rIrdNse|)
-                                (if (|id?_e_TJwZGpe| |p_e_LPvjMse|)
-                                  (if (|bound-id-member?_e_ZJ8vqqe|
-                                        |p_e_LPvjMse|
-                                        |keys_e_joQNHse|)
+                                            (cons |x_VIWxdpsQh| |y_VIeFhvrQh|)
+                                            |ids_VIgubSsQh|))))))))
+                            (|cvt_VISTpHpQh|
+                              (lambda (|p_VICq9jtQh|
+                                       |n_VIYm7MtQh|
+                                       |ids_VIij5duQh|)
+                                (if (|id?_VIKkaZnNh| |p_VICq9jtQh|)
+                                  (if (|bound-id-member?_VIQkOu7Oh|
+                                        |p_VICq9jtQh|
+                                        |keys_VIa_tNoQh|)
                                     (values
-                                      (vector 'free-id |p_e_LPvjMse|)
-                                      |ids_e_rIrdNse|)
+                                      (vector 'free-id |p_VICq9jtQh|)
+                                      |ids_VIij5duQh|)
                                     (values
                                       'any
-                                      (cons (cons |p_e_LPvjMse| |n_e_5MtMMse|)
-                                            |ids_e_rIrdNse|)))
-                                  ((lambda (|tmp_e_NEpGNse|)
-                                     ((lambda (|tmp_e_7Bn7Ose|)
-                                        (if (if |tmp_e_7Bn7Ose|
-                                              (apply (lambda (|x_e_9BfZ1te|
-                                                              dots_e_vxdq2te)
-                                                       (|ellipsis?_e_VphLQqe|
-                                                         dots_e_vxdq2te))
-                                                     |tmp_e_7Bn7Ose|)
+                                      (cons (cons |p_VICq9jtQh| |n_VIYm7MtQh|)
+                                            |ids_VIij5duQh|)))
+                                  ((lambda (|tmp_VIEf3GuQh|)
+                                     ((lambda (|tmp_VI-b17vQh|)
+                                        (if (if |tmp_VI-b17vQh|
+                                              (apply (lambda (|x_VI0cVYKQh|
+                                                              |dots_VIm8TpLQh|)
+                                                       (|ellipsis?_VIM0XKxOh|
+                                                         |dots_VIm8TpLQh|))
+                                                     |tmp_VI-b17vQh|)
                                               '#f)
-                                          (apply (lambda (|x_e_NPn90te|
-                                                          |dots_e_7MlC0te|)
+                                          (apply (lambda (|x_VIEq19JQh|
+                                                          |dots_VI-m_BJQh|)
                                                    (call-with-values
                                                      (lambda ()
-                                                       (|cvt_e__gMHIse|
-                                                         |x_e_NPn90te|
-                                                         (+ |n_e_5MtMMse| '1)
-                                                         |ids_e_rIrdNse|))
-                                                     (lambda (|p_e_tIj31te|
-                                                              |ids_e_PEhw1te|)
+                                                       (|cvt_VISTpHpQh|
+                                                         |x_VIEq19JQh|
+                                                         (+ |n_VIYm7MtQh| '1)
+                                                         |ids_VIij5duQh|))
+                                                     (lambda (|p_VIkjZ2KQh|
+                                                              |ids_VIGfXvKQh|)
                                                        (values
-                                                         (if (eq? |p_e_tIj31te|
+                                                         (if (eq? |p_VIkjZ2KQh|
                                                                   'any)
                                                            'each-any
                                                            (vector
                                                              'each
-                                                             |p_e_tIj31te|))
-                                                         |ids_e_PEhw1te|))))
-                                                 |tmp_e_7Bn7Ose|)
-                                          ((lambda (|tmp_e_txlAOse|)
-                                             (if (if |tmp_e_txlAOse|
-                                                   (apply (lambda (x_e_p2wl-se
-                                                                   |dots_e_L-tO-se|
-                                                                   |y_e_5Xrf_se|
-                                                                   |z_e_rTpI_se|)
-                                                            (|ellipsis?_e_VphLQqe|
-                                                              |dots_e_L-tO-se|))
-                                                          |tmp_e_txlAOse|)
+                                                             |p_VIkjZ2KQh|))
+                                                         |ids_VIGfXvKQh|))))
+                                                 |tmp_VI-b17vQh|)
+                                          ((lambda (|tmp_VIk8_zvQh|)
+                                             (if (if |tmp_VIk8_zvQh|
+                                                   (apply (lambda (|x_VIgF9lHQh|
+                                                                   |dots_VICB7OHQh|
+                                                                   |y_VIYx5fIQh|
+                                                                   |z_VIiu3IIQh|)
+                                                            (|ellipsis?_VIM0XKxOh|
+                                                              |dots_VICB7OHQh|))
+                                                          |tmp_VIk8_zvQh|)
                                                    '#f)
-                                               (apply (lambda (|x_e_DGSmVse|
-                                                               |dots_e_ZCQPVse|
-                                                               |y_e_jzOgWse|
-                                                               |z_e_FvMJWse|)
+                                               (apply (lambda (|x_VIuhwmCQh|
+                                                               |dots_VIQduPCQh|
+                                                               |y_VIaasgDQh|
+                                                               |z_VIw6qJDQh|)
                                                         (call-with-values
                                                           (lambda ()
-                                                            (|cvt_e__gMHIse|
-                                                              |z_e_FvMJWse|
-                                                              |n_e_5MtMMse|
-                                                              |ids_e_rIrdNse|))
-                                                          (lambda (|z_e__rKaXse|
-                                                                   |ids_e_loIDXse|)
+                                                            (|cvt_VISTpHpQh|
+                                                              |z_VIw6qJDQh|
+                                                              |n_VIYm7MtQh|
+                                                              |ids_VIij5duQh|))
+                                                          (lambda (|z_VIS2oaEQh|
+                                                                   |ids_VIc_lDEQh|)
                                                             (call-with-values
                                                               (lambda ()
-                                                                (|cvt*_e_FkOeIse|
-                                                                  |y_e_jzOgWse|
-                                                                  |n_e_5MtMMse|
-                                                                  |ids_e_loIDXse|))
-                                                              (lambda (|y_e_1hExYse|
-                                                                       |ids_e_ndC-Yse|)
+                                                                (|cvt*_VIwXrepQh|
+                                                                  |y_VIaasgDQh|
+                                                                  |n_VIYm7MtQh|
+                                                                  |ids_VIc_lDEQh|))
+                                                              (lambda (|y_VIUThxFQh|
+                                                                       |ids_VIeQf-FQh|)
                                                                 (call-with-values
                                                                   (lambda ()
-                                                                    (|cvt_e__gMHIse|
-                                                                      |x_e_DGSmVse|
-                                                                      (+ |n_e_5MtMMse|
+                                                                    (|cvt_VISTpHpQh|
+                                                                      |x_VIuhwmCQh|
+                                                                      (+ |n_VIYm7MtQh|
                                                                          '1)
-                                                                      |ids_e_ndC-Yse|))
-                                                                  (lambda (|x_e_J9ArZse|
-                                                                           |ids_e_36yUZse|)
+                                                                      |ids_VIeQf-FQh|))
+                                                                  (lambda (|x_VIAMdrGQh|
+                                                                           |ids_VIWIbUGQh|)
                                                                     (values
                                                                       (vector
                                                                         'each+
-                                                                        |x_e_J9ArZse|
+                                                                        |x_VIAMdrGQh|
                                                                         (reverse
-                                                                          |y_e_1hExYse|)
-                                                                        |z_e__rKaXse|)
-                                                                      |ids_e_36yUZse|))))))))
-                                                      |tmp_e_txlAOse|)
-                                               ((lambda (|tmp_e_Ptj1Pse|)
-                                                  (if |tmp_e_Ptj1Pse|
-                                                    (apply (lambda (|x_e_z03FSse|
-                                                                    |y_e_VY06Tse|)
+                                                                          |y_VIUThxFQh|)
+                                                                        |z_VIS2oaEQh|)
+                                                                      |ids_VIWIbUGQh|))))))))
+                                                      |tmp_VIk8_zvQh|)
+                                               ((lambda (|tmp_VIG4Z0wQh|)
+                                                  (if |tmp_VIG4Z0wQh|
+                                                    (apply (lambda (|x_VIqDIEzQh|
+                                                                    |y_VIMzG5AQh|)
                                                              (call-with-values
                                                                (lambda ()
-                                                                 (|cvt_e__gMHIse|
-                                                                   |y_e_VY06Tse|
-                                                                   |n_e_5MtMMse|
-                                                                   |ids_e_rIrdNse|))
-                                                               (lambda (|y_e_fV-yTse|
-                                                                        |ids_e_BRY_Tse|)
+                                                                 (|cvt_VISTpHpQh|
+                                                                   |y_VIMzG5AQh|
+                                                                   |n_VIYm7MtQh|
+                                                                   |ids_VIij5duQh|))
+                                                               (lambda (|y_VI6wEyAQh|
+                                                                        |ids_VIssC_AQh|)
                                                                  (call-with-values
                                                                    (lambda ()
-                                                                     (|cvt_e__gMHIse|
-                                                                       |x_e_z03FSse|
-                                                                       |n_e_5MtMMse|
-                                                                       |ids_e_BRY_Tse|))
-                                                                   (lambda (|x_e_XNWsUse|
-                                                                            |ids_e_hKUVUse|)
+                                                                     (|cvt_VISTpHpQh|
+                                                                       |x_VIqDIEzQh|
+                                                                       |n_VIYm7MtQh|
+                                                                       |ids_VIssC_AQh|))
+                                                                   (lambda (|x_VIOoAsBQh|
+                                                                            |ids_VI8lyVBQh|)
                                                                      (values
-                                                                       (cons |x_e_XNWsUse|
-                                                                             |y_e_fV-yTse|)
-                                                                       |ids_e_hKUVUse|))))))
-                                                           |tmp_e_Ptj1Pse|)
-                                                    ((lambda (|tmp_e_9qhuPse|)
-                                                       (if |tmp_e_9qhuPse|
+                                                                       (cons |x_VIOoAsBQh|
+                                                                             |y_VI6wEyAQh|)
+                                                                       |ids_VI8lyVBQh|))))))
+                                                           |tmp_VIG4Z0wQh|)
+                                                    ((lambda (|tmp_VI01XtwQh|)
+                                                       (if |tmp_VI01XtwQh|
                                                          (apply (lambda ()
                                                                   (values
                                                                     '()
-                                                                    |ids_e_rIrdNse|))
-                                                                |tmp_e_9qhuPse|)
-                                                         ((lambda (|tmp_e_vmfXPse|)
-                                                            (if |tmp_e_vmfXPse|
-                                                              (apply (lambda (|x_e_bfbRQse|)
+                                                                    |ids_VIij5duQh|))
+                                                                |tmp_VI01XtwQh|)
+                                                         ((lambda (|tmp_VImZUWwQh|)
+                                                            (if |tmp_VImZUWwQh|
+                                                              (apply (lambda (|x_VI2SQQxQh|)
                                                                        (call-with-values
                                                                          (lambda ()
-                                                                           (|cvt_e__gMHIse|
-                                                                             |x_e_bfbRQse|
-                                                                             |n_e_5MtMMse|
-                                                                             |ids_e_rIrdNse|))
-                                                                         (lambda (|p_e_T77LRse|
-                                                                                  |ids_e_d45cSse|)
+                                                                           (|cvt_VISTpHpQh|
+                                                                             |x_VI2SQQxQh|
+                                                                             |n_VIYm7MtQh|
+                                                                             |ids_VIij5duQh|))
+                                                                         (lambda (|p_VIKKMKyQh|
+                                                                                  |ids_VI4HKbzQh|)
                                                                            (values
                                                                              (vector
                                                                                'vector
-                                                                               |p_e_T77LRse|)
-                                                                             |ids_e_d45cSse|))))
-                                                                     |tmp_e_vmfXPse|)
-                                                              ((lambda (|x_e_RidoQse|)
+                                                                               |p_VIKKMKyQh|)
+                                                                             |ids_VI4HKbzQh|))))
+                                                                     |tmp_VImZUWwQh|)
+                                                              ((lambda (|x_VIIVSnxQh|)
                                                                  (values
                                                                    (vector
                                                                      'atom
-                                                                     (|strip_e_Xeb6Sqe|
-                                                                       |p_e_LPvjMse|
+                                                                     (|strip_VIORQ5zOh|
+                                                                       |p_VICq9jtQh|
                                                                        '(())))
-                                                                   |ids_e_rIrdNse|))
-                                                               |tmp_e_NEpGNse|)))
+                                                                   |ids_VIij5duQh|))
+                                                               |tmp_VIEf3GuQh|)))
                                                           ($syntax-dispatch
                                                             (compile-in-annotation
-                                                              |tmp_e_NEpGNse|
+                                                              |tmp_VIEf3GuQh|
                                                               value)
                                                             '#(vector
                                                                each-any)))))
                                                      ($syntax-dispatch
                                                        (compile-in-annotation
-                                                         |tmp_e_NEpGNse|
+                                                         |tmp_VIEf3GuQh|
                                                          value)
                                                        '()))))
                                                 ($syntax-dispatch
                                                   (compile-in-annotation
-                                                    |tmp_e_NEpGNse|
+                                                    |tmp_VIEf3GuQh|
                                                     value)
                                                   '(any . any)))))
                                            ($syntax-dispatch
                                              (compile-in-annotation
-                                               |tmp_e_NEpGNse|
+                                               |tmp_VIEf3GuQh|
                                                value)
                                              '(any any
                                                    .
                                                    #(each+ any () any))))))
                                       ($syntax-dispatch
                                         (compile-in-annotation
-                                          |tmp_e_NEpGNse|
+                                          |tmp_VIEf3GuQh|
                                           value)
                                         '(any any))))
-                                   |p_e_LPvjMse|)))))
-                     (|cvt_e__gMHIse| |pattern_e_ZrSkHse| '0 '()))))
-               (|build-dispatch-call_e_nTF0wse|
-                 (lambda (|pvars_e_RtbT2te|
-                          exp_e_bq9k3te
-                          |y_e_xm7N3te|
-                          |r_e_Ti5e4te|)
-                   ((lambda (|ids_e_df3H4te| levels_e_zb185te)
-                      ((lambda (|labels_e_V7_A5te| |new-vars_e_f4Z16te|)
+                                   |p_VICq9jtQh|)))))
+                     (|cvt_VISTpHpQh| |pattern_VIQ2wkoQh| '0 '()))))
+               (|build-dispatch-call_VIeuj0dQh|
+                 (lambda (|pvars_VII4RSLQh|
+                          |exp_VI21PjMQh|
+                          |y_VIoZMMMQh|
+                          |r_VIKVKdNQh|)
+                   ((lambda (|ids_VI4SIGNQh| |levels_VIqOG7OQh|)
+                      ((lambda (|labels_VIMKEAOQh| |new-vars_VI6HC1PQh|)
                          (list 'apply
                                (list 'lambda
-                                     |new-vars_e_f4Z16te|
-                                     (|chi_e_LgMYJqe|
-                                       exp_e_bq9k3te
-                                       (|extend-env*_e_3xZDApe|
-                                         |labels_e_V7_A5te|
-                                         (map (lambda (|var_e_B0Xu6te|
-                                                       |level_e_XYUX6te|)
-                                                (make-binding_e_zruotpe
+                                     |new-vars_VI6HC1PQh|
+                                     (|chi_VICTpYqOh|
+                                       |exp_VI21PjMQh|
+                                       (|extend-env*_VIW7DDhNh|
+                                         |labels_VIMKEAOQh|
+                                         (map (lambda (|var_VIsDAuPQh|
+                                                       |level_VIOzyXPQh|)
+                                                (|make-binding_VIq28oaNh|
                                                   'syntax
-                                                  (cons |var_e_B0Xu6te|
-                                                        |level_e_XYUX6te|)))
-                                              |new-vars_e_f4Z16te|
-                                              (map cdr |pvars_e_RtbT2te|))
-                                         |r_e_Ti5e4te|)
-                                       (|make-binding-wrap_e_LWP-gqe|
-                                         |ids_e_df3H4te|
-                                         |labels_e_V7_A5te|
+                                                  (cons |var_VIsDAuPQh|
+                                                        |level_VIOzyXPQh|)))
+                                              |new-vars_VI6HC1PQh|
+                                              (map cdr |pvars_VII4RSLQh|))
+                                         |r_VIKVKdNQh|)
+                                       (|make-binding-wrap_VICxt-ZNh|
+                                         |ids_VI4SIGNQh|
+                                         |labels_VIMKEAOQh|
                                          '(()))))
-                               |y_e_xm7N3te|))
-                       (gen-labels_e_120f0qe |ids_e_df3H4te|)
-                       (map |gen-var_e_hb9zSqe| |ids_e_df3H4te|)))
-                    (map car |pvars_e_RtbT2te|)
-                    (map cdr |pvars_e_RtbT2te|))))
-               (|gen-clause_e_JPDtwse|
-                 (lambda (|x_e_lzG6ate|
-                          |keys_e_HvEzate|
-                          |clauses_e_1sC0bte|
-                          |r_e_noAtbte|
-                          |pat_e_JkyWbte|
-                          fender_e_3hwncte
-                          |exp_e_pduQcte|)
+                               |y_VIoZMMMQh|))
+                       (|gen-labels_VIUEFeJNh| |ids_VI4SIGNQh|)
+                       (map |gen-var_VI8OOyzOh| |ids_VI4SIGNQh|)))
+                    (map car |pvars_VII4RSLQh|)
+                    (map cdr |pvars_VII4RSLQh|))))
+               (|gen-clause_VIAqhtdQh|
+                 (lambda (|x_VIcak6TQh|
+                          |keys_VIy6izTQh|
+                          |clauses_VIU2g0UQh|
+                          |r_VIe_dtUQh|
+                          |pat_VIAXbWUQh|
+                          |fender_VIWT9nVQh|
+                          |exp_VIgQ7QVQh|)
                    (call-with-values
                      (lambda ()
-                       (|convert-pattern_e_1XHzvse|
-                         |pat_e_JkyWbte|
-                         |keys_e_HvEzate|))
-                     (lambda (|p_e_L9shdte| |pvars_e_56qKdte|)
-                       (if (not (|distinct-bound-ids?_e_hRcBpqe|
-                                  (map car |pvars_e_56qKdte|)))
-                         (|invalid-ids-error_e_DNa2qqe|
-                           (map car |pvars_e_56qKdte|)
-                           |pat_e_JkyWbte|
+                       (|convert-pattern_VIUxlzcQh|
+                         |pat_VIAXbWUQh|
+                         |keys_VIy6izTQh|))
+                     (lambda (|p_VICM5hWQh| |pvars_VIYI3KWQh|)
+                       (if (not (|distinct-bound-ids?_VI8sSA6Oh|
+                                  (map car |pvars_VIYI3KWQh|)))
+                         (|invalid-ids-error_VIuoQ17Oh|
+                           (map car |pvars_VIYI3KWQh|)
+                           |pat_VIAXbWUQh|
                            '"pattern variable")
                          (if (not (andmap
-                                    (lambda (|x_e_pzqOFte|)
-                                      (not (|ellipsis?_e_VphLQqe|
-                                             (car |x_e_pzqOFte|))))
-                                    |pvars_e_56qKdte|))
+                                    (lambda (|x_VIga4OmRh|)
+                                      (not (|ellipsis?_VIM0XKxOh|
+                                             (car |x_VIga4OmRh|))))
+                                    |pvars_VIYI3KWQh|))
                            (syntax-error
-                             |pat_e_JkyWbte|
+                             |pat_VIAXbWUQh|
                              '"misplaced ellipsis in syntax-case pattern")
-                           ((lambda (y_e_r2obete)
+                           ((lambda (|y_VIiF1bXQh|)
                               (list (list 'lambda
-                                          (list y_e_r2obete)
+                                          (list |y_VIiF1bXQh|)
                                           (list 'if
-                                                ((lambda (|tmp_e_Tt3Jite|)
-                                                   ((lambda (tmp_e_dq1ajte)
-                                                      (if tmp_e_dq1ajte
+                                                ((lambda (|tmp_VIK4JI_Qh|)
+                                                   ((lambda (|tmp_VI41H90Rh|)
+                                                      (if |tmp_VI41H90Rh|
                                                         (apply (lambda ()
-                                                                 y_e_r2obete)
-                                                               tmp_e_dq1ajte)
-                                                        ((lambda (|__e_zm_Cjte|)
+                                                                 |y_VIiF1bXQh|)
+                                                               |tmp_VI41H90Rh|)
+                                                        ((lambda (|__VIqZEC0Rh|)
                                                            (list 'if
-                                                                 y_e_r2obete
-                                                                 (|build-dispatch-call_e_nTF0wse|
-                                                                   |pvars_e_56qKdte|
-                                                                   fender_e_3hwncte
-                                                                   y_e_r2obete
-                                                                   |r_e_noAtbte|)
+                                                                 |y_VIiF1bXQh|
+                                                                 (|build-dispatch-call_VIeuj0dQh|
+                                                                   |pvars_VIYI3KWQh|
+                                                                   |fender_VIWT9nVQh|
+                                                                   |y_VIiF1bXQh|
+                                                                   |r_VIe_dtUQh|)
                                                                  (list 'quote
                                                                        '#f)))
-                                                         |tmp_e_Tt3Jite|)))
+                                                         |tmp_VIK4JI_Qh|)))
                                                     ($syntax-dispatch
                                                       (compile-in-annotation
-                                                        |tmp_e_Tt3Jite|
+                                                        |tmp_VIK4JI_Qh|
                                                         value)
                                                       '#(atom #t))))
-                                                 fender_e_3hwncte)
-                                                (|build-dispatch-call_e_nTF0wse|
-                                                  |pvars_e_56qKdte|
-                                                  |exp_e_pduQcte|
-                                                  y_e_r2obete
-                                                  |r_e_noAtbte|)
-                                                (|gen-syntax-case_e_3MBWwse|
-                                                  |x_e_lzG6ate|
-                                                  |keys_e_HvEzate|
-                                                  |clauses_e_1sC0bte|
-                                                  |r_e_noAtbte|)))
-                                    (if (eq? |p_e_L9shdte| 'any)
+                                                 |fender_VIWT9nVQh|)
+                                                (|build-dispatch-call_VIeuj0dQh|
+                                                  |pvars_VIYI3KWQh|
+                                                  |exp_VIgQ7QVQh|
+                                                  |y_VIiF1bXQh|
+                                                  |r_VIe_dtUQh|)
+                                                (|gen-syntax-case_VIWmfWdQh|
+                                                  |x_VIcak6TQh|
+                                                  |keys_VIy6izTQh|
+                                                  |clauses_VIU2g0UQh|
+                                                  |r_VIe_dtUQh|)))
+                                    (if (eq? |p_VICM5hWQh| 'any)
                                       (list 'list
                                             (cons 'compile-in-annotation
-                                                  (cons |x_e_lzG6ate|
+                                                  (cons |x_VIcak6TQh|
                                                         '(value))))
                                       (list '$syntax-dispatch
                                             (cons 'compile-in-annotation
-                                                  (cons |x_e_lzG6ate|
+                                                  (cons |x_VIcak6TQh|
                                                         '(value)))
-                                            (list 'quote |p_e_L9shdte|)))))
-                            (|gen-var_e_hb9zSqe| 'tmp))))))))
-               (|gen-syntax-case_e_3MBWwse|
-                 (lambda (|x_e_LvofGte|
-                          |keys_e_5smIGte|
-                          |clauses_e_rok9Hte|
-                          |r_e_NkiCHte|)
-                   (if (null? |clauses_e_rok9Hte|)
-                     (list 'syntax-error |x_e_LvofGte|)
-                     ((lambda (|tmp_e_7hg3Ite|)
-                        ((lambda (|tmp_e_tdewIte|)
-                           (if |tmp_e_tdewIte|
-                             (apply (lambda (|pat_e_xT1eLte| |exp_e_TP_GLte|)
-                                      (if (if (|id?_e_TJwZGpe| |pat_e_xT1eLte|)
-                                            (if (not (|bound-id-member?_e_ZJ8vqqe|
-                                                       |pat_e_xT1eLte|
-                                                       |keys_e_5smIGte|))
-                                              (not (|ellipsis?_e_VphLQqe|
-                                                     |pat_e_xT1eLte|))
+                                            (list 'quote |p_VICM5hWQh|)))))
+                            (|gen-var_VI8OOyzOh| 'tmp))))))))
+               (|gen-syntax-case_VIWmfWdQh|
+                 (lambda (|x_VIC62fnRh|
+                          |keys_VIY20InRh|
+                          |clauses_VIi_Z8oRh|
+                          |r_VIEXXBoRh|)
+                   (if (null? |clauses_VIi_Z8oRh|)
+                     (list 'syntax-error |x_VIC62fnRh|)
+                     ((lambda (|tmp_VI-TV2pRh|)
+                        ((lambda (|tmp_VIkQTvpRh|)
+                           (if |tmp_VIkQTvpRh|
+                             (apply (lambda (|pat_VIouHdsRh| |exp_VIKqFGsRh|)
+                                      (if (if (|id?_VIKkaZnNh| |pat_VIouHdsRh|)
+                                            (if (not (|bound-id-member?_VIQkOu7Oh|
+                                                       |pat_VIouHdsRh|
+                                                       |keys_VIY20InRh|))
+                                              (not (|ellipsis?_VIM0XKxOh|
+                                                     |pat_VIouHdsRh|))
                                               '#f)
                                             '#f)
-                                        ((lambda (|label_e_dMZ7Mte|
-                                                  |var_e_zIXAMte|)
+                                        ((lambda (|label_VI4nD7tRh|
+                                                  |var_VIqjBAtRh|)
                                            (list (list 'lambda
-                                                       (list |var_e_zIXAMte|)
-                                                       (|chi_e_LgMYJqe|
-                                                         |exp_e_TP_GLte|
-                                                         (|extend-env_e_JA_aApe|
-                                                           |label_e_dMZ7Mte|
-                                                           (make-binding_e_zruotpe
+                                                       (list |var_VIqjBAtRh|)
+                                                       (|chi_VICTpYqOh|
+                                                         |exp_VIKqFGsRh|
+                                                         (|extend-env_VIAbFahNh|
+                                                           |label_VI4nD7tRh|
+                                                           (|make-binding_VIq28oaNh|
                                                              'syntax
-                                                             (cons |var_e_zIXAMte|
+                                                             (cons |var_VIqjBAtRh|
                                                                    '0))
-                                                           |r_e_NkiCHte|)
-                                                         (|make-binding-wrap_e_LWP-gqe|
-                                                           (list |pat_e_xT1eLte|)
-                                                           (list |label_e_dMZ7Mte|)
+                                                           |r_VIEXXBoRh|)
+                                                         (|make-binding-wrap_VICxt-ZNh|
+                                                           (list |pat_VIouHdsRh|)
+                                                           (list |label_VI4nD7tRh|)
                                                            '(()))))
-                                                 |x_e_LvofGte|))
-                                         (gen-label_e_l94l_pe)
-                                         (|gen-var_e_hb9zSqe| |pat_e_xT1eLte|))
-                                        (|gen-clause_e_JPDtwse|
-                                          |x_e_LvofGte|
-                                          |keys_e_5smIGte|
-                                          (cdr |clauses_e_rok9Hte|)
-                                          |r_e_NkiCHte|
-                                          |pat_e_xT1eLte|
+                                                 |x_VIC62fnRh|))
+                                         (|gen-label_VIcMJkINh|)
+                                         (|gen-var_VI8OOyzOh| |pat_VIouHdsRh|))
+                                        (|gen-clause_VIAqhtdQh|
+                                          |x_VIC62fnRh|
+                                          |keys_VIY20InRh|
+                                          (cdr |clauses_VIi_Z8oRh|)
+                                          |r_VIEXXBoRh|
+                                          |pat_VIouHdsRh|
                                           '#t
-                                          |exp_e_TP_GLte|)))
-                                    |tmp_e_tdewIte|)
-                             ((lambda (|tmp_e_P9cZIte|)
-                                (if |tmp_e_P9cZIte|
-                                  (apply (lambda (|pat_e_v28TJte|
-                                                  |fender_e_R-5kKte|
-                                                  |exp_e_bX3NKte|)
-                                           (|gen-clause_e_JPDtwse|
-                                             |x_e_LvofGte|
-                                             |keys_e_5smIGte|
-                                             (cdr |clauses_e_rok9Hte|)
-                                             |r_e_NkiCHte|
-                                             |pat_e_v28TJte|
-                                             |fender_e_R-5kKte|
-                                             |exp_e_bX3NKte|))
-                                         |tmp_e_P9cZIte|)
-                                  ((lambda (|__e_96aqJte|)
+                                          |exp_VIKqFGsRh|)))
+                                    |tmp_VIkQTvpRh|)
+                             ((lambda (|tmp_VIGMRYpRh|)
+                                (if |tmp_VIGMRYpRh|
+                                  (apply (lambda (|pat_VImFNSqRh|
+                                                  |fender_VIIBLjrRh|
+                                                  |exp_VI2yJMrRh|)
+                                           (|gen-clause_VIAqhtdQh|
+                                             |x_VIC62fnRh|
+                                             |keys_VIY20InRh|
+                                             (cdr |clauses_VIi_Z8oRh|)
+                                             |r_VIEXXBoRh|
+                                             |pat_VImFNSqRh|
+                                             |fender_VIIBLjrRh|
+                                             |exp_VI2yJMrRh|))
+                                         |tmp_VIGMRYpRh|)
+                                  ((lambda (|__VI0JPpqRh|)
                                      (syntax-error
-                                       (car |clauses_e_rok9Hte|)
+                                       (car |clauses_VIi_Z8oRh|)
                                        '"invalid syntax-case clause"))
-                                   |tmp_e_7hg3Ite|)))
+                                   |tmp_VI-TV2pRh|)))
                               ($syntax-dispatch
-                                (compile-in-annotation |tmp_e_7hg3Ite| value)
+                                (compile-in-annotation |tmp_VI-TV2pRh| value)
                                 '(any any any)))))
                          ($syntax-dispatch
-                           (compile-in-annotation |tmp_e_7hg3Ite| value)
+                           (compile-in-annotation |tmp_VI-TV2pRh| value)
                            '(any any))))
-                      (car |clauses_e_rok9Hte|))))))
-        (lambda (|e_e_pIznxse|
-                 |r_e_LExQxse|
-                 |w_e_5Bvhyse|
-                 |s_e_rxtKyse|)
-          ((lambda (|e_e_Ntrbzse|)
-             ((lambda (|tmp_e_7qpEzse|)
-                ((lambda (|tmp_e_tmn5Ase|)
-                   (if |tmp_e_tmn5Ase|
-                     (apply (lambda (|__e_PilyAse|
-                                     |val_e_9fj_Ase|
-                                     |key_e_vbhsBse|
-                                     |m_e_R7fVBse|)
+                      (car |clauses_VIi_Z8oRh|))))))
+        (lambda (|e_VIgjdneQh|
+                 |r_VICfbQeQh|
+                 |w_VIYb9hfQh|
+                 |s_VIi87KfQh|)
+          ((lambda (|e_VIE45bgQh|)
+             ((lambda (|tmp_VI-03EgQh|)
+                ((lambda (|tmp_VIkZ05hQh|)
+                   (if |tmp_VIkZ05hQh|
+                     (apply (lambda (|__VIGV-xhQh|
+                                     |val_VI0SY-hQh|
+                                     |key_VImOWriQh|
+                                     |m_VIIKUUiQh|)
                               (if (andmap
-                                    (lambda (|x_e_hzWqGse|)
-                                      (if (|id?_e_TJwZGpe| |x_e_hzWqGse|)
-                                        (not (|ellipsis?_e_VphLQqe|
-                                               |x_e_hzWqGse|))
+                                    (lambda (|x_VI8aAqnQh|)
+                                      (if (|id?_VIKkaZnNh| |x_VI8aAqnQh|)
+                                        (not (|ellipsis?_VIM0XKxOh|
+                                               |x_VI8aAqnQh|))
                                         '#f))
-                                    |key_e_vbhsBse|)
-                                ((lambda (|x_e_b4dmCse|)
-                                   (if |s_e_rxtKyse|
+                                    |key_VImOWriQh|)
+                                ((lambda (|x_VI2HSljQh|)
+                                   (if |s_VIi87KfQh|
                                      (list 'compile-in-annotation
                                            (list (list 'lambda
-                                                       (list |x_e_b4dmCse|)
-                                                       (|gen-syntax-case_e_3MBWwse|
-                                                         |x_e_b4dmCse|
-                                                         |key_e_vbhsBse|
-                                                         |m_e_R7fVBse|
-                                                         |r_e_LExQxse|))
-                                                 (|chi_e_LgMYJqe|
-                                                   |val_e_9fj_Ase|
-                                                   |r_e_LExQxse|
+                                                       (list |x_VI2HSljQh|)
+                                                       (|gen-syntax-case_VIWmfWdQh|
+                                                         |x_VI2HSljQh|
+                                                         |key_VImOWriQh|
+                                                         |m_VIIKUUiQh|
+                                                         |r_VICfbQeQh|))
+                                                 (|chi_VICTpYqOh|
+                                                   |val_VI0SY-hQh|
+                                                   |r_VICfbQeQh|
                                                    '(())))
-                                           |s_e_rxtKyse|)
+                                           |s_VIi87KfQh|)
                                      (list (list 'lambda
-                                                 (list |x_e_b4dmCse|)
-                                                 (|gen-syntax-case_e_3MBWwse|
-                                                   |x_e_b4dmCse|
-                                                   |key_e_vbhsBse|
-                                                   |m_e_R7fVBse|
-                                                   |r_e_LExQxse|))
-                                           (|chi_e_LgMYJqe|
-                                             |val_e_9fj_Ase|
-                                             |r_e_LExQxse|
+                                                 (list |x_VI2HSljQh|)
+                                                 (|gen-syntax-case_VIWmfWdQh|
+                                                   |x_VI2HSljQh|
+                                                   |key_VImOWriQh|
+                                                   |m_VIIKUUiQh|
+                                                   |r_VICfbQeQh|))
+                                           (|chi_VICTpYqOh|
+                                             |val_VI0SY-hQh|
+                                             |r_VICfbQeQh|
                                              '(())))))
-                                 (|gen-var_e_hb9zSqe| 'tmp))
+                                 (|gen-var_VI8OOyzOh| 'tmp))
                                 (syntax-error
-                                  |e_e_Ntrbzse|
+                                  |e_VIE45bgQh|
                                   '"invalid literals list in")))
-                            |tmp_e_tmn5Ase|)
-                     (syntax-error |tmp_e_7qpEzse|)))
+                            |tmp_VIkZ05hQh|)
+                     (syntax-error |tmp_VI-03EgQh|)))
                  ($syntax-dispatch
-                   (compile-in-annotation |tmp_e_7qpEzse| value)
+                   (compile-in-annotation |tmp_VI-03EgQh| value)
                    '(any any each-any . each-any))))
-              |e_e_Ntrbzse|))
-           (|source-wrap_e_FC4prqe|
-             |e_e_pIznxse|
-             |w_e_5Bvhyse|
-             |s_e_rxtKyse|)))))
+              |e_VIE45bgQh|))
+           (|source-wrap_VIwdKo8Oh|
+             |e_VIgjdneQh|
+             |w_VIYb9hfQh|
+             |s_VIi87KfQh|)))))
     (set! sc-expand
-      ((lambda (|user-ribcage_e_BxRXNte|)
-         ((lambda (|user-top-wrap_e_XtPoOte|)
-            (lambda (|x_e_DmLiPte| . |c/rtem_e_hqNROte|)
-              (if (if (pair? |x_e_DmLiPte|)
-                    (equal? (car |x_e_DmLiPte|) '"noexpand")
+      ((lambda (|user-ribcage_VIs8vXuRh|)
+         ((lambda (|user-top-wrap_VIO4tovRh|)
+            (lambda (|x_VIuZoiwRh| . |c/rtem_VI81rRvRh|)
+              (if (if (pair? |x_VIuZoiwRh|)
+                    (equal? (car |x_VIuZoiwRh|) '"noexpand")
                     '#f)
-                (cadr |x_e_DmLiPte|)
-                (if (null? |c/rtem_e_hqNROte|)
-                  (|chi-top_e_JgU6uqe|
-                    |x_e_DmLiPte|
+                (cadr |x_VIuZoiwRh|)
+                (if (null? |c/rtem_VI81rRvRh|)
+                  (|chi-top_VIATx6bOh|
+                    |x_VIuZoiwRh|
                     '()
-                    |user-top-wrap_e_XtPoOte|
+                    |user-top-wrap_VIO4tovRh|
                     '(l c)
                     '(l)
-                    |user-ribcage_e_BxRXNte|)
-                  (|chi-top_e_JgU6uqe|
-                    |x_e_DmLiPte|
+                    |user-ribcage_VIs8vXuRh|)
+                  (|chi-top_VIATx6bOh|
+                    |x_VIuZoiwRh|
                     '()
-                    |user-top-wrap_e_XtPoOte|
-                    (car |c/rtem_e_hqNROte|)
-                    (cadr |c/rtem_e_hqNROte|)
-                    |user-ribcage_e_BxRXNte|)))))
-          (|make-wrap_e_hki8Kpe|
-            (|wrap-marks_e_DggBKpe| '((top)))
-            (cons |user-ribcage_e_BxRXNte|
-                  (|wrap-subst_e_Zce2Lpe| '((top)))))))
-       ((lambda (|ribcage_e_ZiJLPte|)
+                    |user-top-wrap_VIO4tovRh|
+                    (car |c/rtem_VI81rRvRh|)
+                    (cadr |c/rtem_VI81rRvRh|)
+                    |user-ribcage_VIs8vXuRh|)))))
+          (|make-wrap_VI8XX7rNh|
+            (|wrap-marks_VIuTVArNh| '((top)))
+            (cons |user-ribcage_VIs8vXuRh|
+                  (|wrap-subst_VIQPT1sNh| '((top)))))))
+       ((lambda (|ribcage_VIQVmLwRh|)
           (begin
-            (|extend-ribcage-subst!_e_32U4gqe|
-              |ribcage_e_ZiJLPte|
+            (|extend-ribcage-subst!_VIWEx4ZNh|
+              |ribcage_VIQVmLwRh|
               '*top*)
-            |ribcage_e_ZiJLPte|))
-        (|make-ribcage_e_n-ZH0qe| '() '() '()))))
+            |ribcage_VIQVmLwRh|))
+        (|make-ribcage_VIeBDHJNh| '() '() '()))))
     (set! identifier?
-      (lambda (|x_e_jfHcQte|)
-        (|nonsymbol-id?_e_P3JfEpe| |x_e_jfHcQte|)))
+      (lambda (|x_VIaSkcxRh|)
+        (|nonsymbol-id?_VIGGmflNh| |x_VIaSkcxRh|)))
     (set! datum->syntax-object
-      (lambda (|id_e_FbFFQte| |datum_e__7D6Rte|)
+      (lambda (|id_VIwOiFxRh| |datum_VISKg6yRh|)
         (begin
-          ((lambda (|x_e_l4BzRte|)
-             (if (not (|nonsymbol-id?_e_P3JfEpe| |x_e_l4BzRte|))
-               (error-hook_e___ivpoe
+          ((lambda (|x_VIcHezyRh|)
+             (if (not (|nonsymbol-id?_VIGGmflNh| |x_VIcHezyRh|))
+               (|error-hook_VISCYu6Mh|
                  'datum->syntax-object
                  '"invalid argument"
-                 |x_e_l4BzRte|)
+                 |x_VIcHezyRh|)
                (void)))
-           |id_e_FbFFQte|)
-          (|make-syntax-object_e_X1oJgpe|
-            |datum_e__7D6Rte|
-            (|syntax-object-wrap_e_ZSh4ipe| |id_e_FbFFQte|)))))
+           |id_VIwOiFxRh|)
+          (|make-syntax-object_VIOE1JZMh|
+            |datum_VISKg6yRh|
+            (|syntax-object-wrap_VIQtX3_Mh| |id_VIwOiFxRh|)))))
     (set! syntax-object->datum
-      (lambda (|x_e_H0z0Ste|)
-        (|strip_e_Xeb6Sqe| |x_e_H0z0Ste| '(()))))
+      (lambda (|x_VIyDc0zRh|)
+        (|strip_VIORQ5zOh| |x_VIyDc0zRh| '(()))))
     (set! generate-temporaries
-      (lambda (|ls_e_1ZwtSte|)
+      (lambda (|ls_VIUzatzRh|)
         (begin
-          ((lambda (|x_e_nVuWSte|)
-             (if (not (list? |x_e_nVuWSte|))
-               (error-hook_e___ivpoe
+          ((lambda (|x_VIew8WzRh|)
+             (if (not (list? |x_VIew8WzRh|))
+               (|error-hook_VISCYu6Mh|
                  'generate-temporaries
                  '"invalid argument"
-                 |x_e_nVuWSte|)
+                 |x_VIew8WzRh|)
                (void)))
-           |ls_e_1ZwtSte|)
-          (map (lambda (|x_e_JRsnTte|)
-                 (|wrap_e_jG6Yqqe| (gensym) '((top))))
-               |ls_e_1ZwtSte|))))
+           |ls_VIUzatzRh|)
+          (map (lambda (|x_VIAs6nARh|)
+                 (|wrap_VIahMX7Oh| (gensym) '((top))))
+               |ls_VIUzatzRh|))))
     (set! free-identifier=?
-      (lambda (|x_e_3OqQTte| |y_e_pKohUte|)
+      (lambda (|x_VIWo4QARh| |y_VIgl2hBRh|)
         (begin
-          ((lambda (|x_e_LGmKUte|)
-             (if (not (|nonsymbol-id?_e_P3JfEpe| |x_e_LGmKUte|))
-               (error-hook_e___ivpoe
+          ((lambda (|x_VICh0KBRh|)
+             (if (not (|nonsymbol-id?_VIGGmflNh| |x_VICh0KBRh|))
+               (|error-hook_VISCYu6Mh|
                  'free-identifier=?
                  '"invalid argument"
-                 |x_e_LGmKUte|)
+                 |x_VICh0KBRh|)
                (void)))
-           |x_e_3OqQTte|)
-          ((lambda (|x_e_5DkbVte|)
-             (if (not (|nonsymbol-id?_e_P3JfEpe| |x_e_5DkbVte|))
-               (error-hook_e___ivpoe
+           |x_VIWo4QARh|)
+          ((lambda (|x_VIYd-aCRh|)
+             (if (not (|nonsymbol-id?_VIGGmflNh| |x_VIYd-aCRh|))
+               (|error-hook_VISCYu6Mh|
                  'free-identifier=?
                  '"invalid argument"
-                 |x_e_5DkbVte|)
+                 |x_VIYd-aCRh|)
                (void)))
-           |y_e_pKohUte|)
-          (free-id=?_e_bmvwlqe |x_e_3OqQTte| |y_e_pKohUte|))))
+           |y_VIgl2hBRh|)
+          (|free-id=?_VI2Z8w2Oh|
+            |x_VIWo4QARh|
+            |y_VIgl2hBRh|))))
     (set! bound-identifier=?
-      (lambda (|x_e_rziEVte| |y_e_Nvg5Wte|)
+      (lambda (|x_VIiaYDCRh| |y_VIE6W4DRh|)
         (begin
-          ((lambda (|x_e_7seyWte|)
-             (if (not (|nonsymbol-id?_e_P3JfEpe| |x_e_7seyWte|))
-               (error-hook_e___ivpoe
+          ((lambda (|x_VI-2UxDRh|)
+             (if (not (|nonsymbol-id?_VIGGmflNh| |x_VI-2UxDRh|))
+               (|error-hook_VISCYu6Mh|
                  'bound-identifier=?
                  '"invalid argument"
-                 |x_e_7seyWte|)
+                 |x_VI-2UxDRh|)
                (void)))
-           |x_e_rziEVte|)
-          ((lambda (|x_e_toc_Wte|)
-             (if (not (|nonsymbol-id?_e_P3JfEpe| |x_e_toc_Wte|))
-               (error-hook_e___ivpoe
+           |x_VIiaYDCRh|)
+          ((lambda (|x_VIk_R-DRh|)
+             (if (not (|nonsymbol-id?_VIGGmflNh| |x_VIk_R-DRh|))
+               (|error-hook_VISCYu6Mh|
                  'bound-identifier=?
                  '"invalid argument"
-                 |x_e_toc_Wte|)
+                 |x_VIk_R-DRh|)
                (void)))
-           |y_e_Nvg5Wte|)
-          (|bound-id=?_e_Terqmqe|
-            |x_e_rziEVte|
-            |y_e_Nvg5Wte|))))
+           |y_VIE6W4DRh|)
+          (|bound-id=?_VIKR4q3Oh|
+            |x_VIiaYDCRh|
+            |y_VIE6W4DRh|))))
     (set! literal-identifier=?
-      (lambda (|x_e_PkasXte| |y_e_9h8VXte|)
+      (lambda (|x_VIGXPrERh| |y_VI0UNUERh|)
         (begin
-          ((lambda (|x_e_vd6mYte|)
-             (if (not (|nonsymbol-id?_e_P3JfEpe| |x_e_vd6mYte|))
-               (error-hook_e___ivpoe
+          ((lambda (|x_VImQLlFRh|)
+             (if (not (|nonsymbol-id?_VIGGmflNh| |x_VImQLlFRh|))
+               (|error-hook_VISCYu6Mh|
                  'literal-identifier=?
                  '"invalid argument"
-                 |x_e_vd6mYte|)
+                 |x_VImQLlFRh|)
                (void)))
-           |x_e_PkasXte|)
-          ((lambda (|x_e_R94PYte|)
-             (if (not (|nonsymbol-id?_e_P3JfEpe| |x_e_R94PYte|))
-               (error-hook_e___ivpoe
+           |x_VIGXPrERh|)
+          ((lambda (|x_VIIMJOFRh|)
+             (if (not (|nonsymbol-id?_VIGGmflNh| |x_VIIMJOFRh|))
+               (|error-hook_VISCYu6Mh|
                  'literal-identifier=?
                  '"invalid argument"
-                 |x_e_R94PYte|)
+                 |x_VIIMJOFRh|)
                (void)))
-           |y_e_9h8VXte|)
-          (|literal-id=?_e_xitZlqe|
-            |x_e_PkasXte|
-            |y_e_9h8VXte|))))
+           |y_VI0UNUERh|)
+          (|literal-id=?_VIoV6Z2Oh|
+            |x_VIGXPrERh|
+            |y_VI0UNUERh|))))
     (set! syntax-error
-      (lambda (|object_e_x20JZte| . |messages_e_b62gZte|)
+      (lambda (|object_VIoFFIGRh| . |messages_VI2JHfGRh|)
         (begin
           (for-each
-            (lambda (|x_e_T-Z9-te|)
-              ((lambda (|x_e_dXXC-te|)
-                 (if (not (string? |x_e_dXXC-te|))
-                   (error-hook_e___ivpoe
+            (lambda (|x_VIKBD9HRh|)
+              ((lambda (|x_VI4yBCHRh|)
+                 (if (not (string? |x_VI4yBCHRh|))
+                   (|error-hook_VISCYu6Mh|
                      'syntax-error
                      '"invalid argument"
-                     |x_e_dXXC-te|)
+                     |x_VI4yBCHRh|)
                    (void)))
-               |x_e_T-Z9-te|))
-            |messages_e_b62gZte|)
-          ((lambda (|message_e_zTV3_te|)
-             (error-hook_e___ivpoe
+               |x_VIKBD9HRh|))
+            |messages_VI2JHfGRh|)
+          ((lambda (|message_VIquz3IRh|)
+             (|error-hook_VISCYu6Mh|
                '#f
-               |message_e_zTV3_te|
-               (|strip_e_Xeb6Sqe| |object_e_x20JZte| '(()))))
-           (if (null? |messages_e_b62gZte|)
+               |message_VIquz3IRh|
+               (|strip_VIORQ5zOh| |object_VIoFFIGRh| '(()))))
+           (if (null? |messages_VI2JHfGRh|)
              '"invalid syntax"
-             (apply string-append |messages_e_b62gZte|))))))
-    (letrec ((|match-each_e_VPTw_te|
-               (lambda (|e_e_Hbxv4ue| |p_e_18vY4ue| w_e_n4tp5ue)
-                 (if (annotation? |e_e_Hbxv4ue|)
-                   (|match-each_e_VPTw_te|
-                     (annotation-expression |e_e_Hbxv4ue|)
-                     |p_e_18vY4ue|
-                     w_e_n4tp5ue)
-                   (if (pair? |e_e_Hbxv4ue|)
-                     ((lambda (|first_e_J0rS5ue|)
-                        (if |first_e_J0rS5ue|
-                          ((lambda (|rest_e_3Zoj6ue|)
-                             (if |rest_e_3Zoj6ue|
-                               (cons |first_e_J0rS5ue| |rest_e_3Zoj6ue|)
+             (apply string-append |messages_VI2JHfGRh|))))))
+    (letrec ((|match-each_VIMqxwIRh|
+               (lambda (|e_VIyOavNRh| |p_VIUK8YNRh| |w_VIeH6pORh|)
+                 (if (annotation? |e_VIyOavNRh|)
+                   (|match-each_VIMqxwIRh|
+                     (annotation-expression |e_VIyOavNRh|)
+                     |p_VIUK8YNRh|
+                     |w_VIeH6pORh|)
+                   (if (pair? |e_VIyOavNRh|)
+                     ((lambda (|first_VIAD4SORh|)
+                        (if |first_VIAD4SORh|
+                          ((lambda (|rest_VIWz2jPRh|)
+                             (if |rest_VIWz2jPRh|
+                               (cons |first_VIAD4SORh| |rest_VIWz2jPRh|)
                                '#f))
-                           (|match-each_e_VPTw_te|
-                             (cdr |e_e_Hbxv4ue|)
-                             |p_e_18vY4ue|
-                             w_e_n4tp5ue))
+                           (|match-each_VIMqxwIRh|
+                             (cdr |e_VIyOavNRh|)
+                             |p_VIUK8YNRh|
+                             |w_VIeH6pORh|))
                           '#f))
-                      (|match_e_ZtHe2ue|
-                        (car |e_e_Hbxv4ue|)
-                        |p_e_18vY4ue|
-                        w_e_n4tp5ue
+                      (|match_VIQ4leLRh|
+                        (car |e_VIyOavNRh|)
+                        |p_VIUK8YNRh|
+                        |w_VIeH6pORh|
                         '()))
-                     (if (null? |e_e_Hbxv4ue|)
+                     (if (null? |e_VIyOavNRh|)
                        '()
-                       (if (syntax-object?_e_h-lahpe |e_e_Hbxv4ue|)
-                         (|match-each_e_VPTw_te|
-                           (|syntax-object-expression_e_DWjDhpe|
-                             |e_e_Hbxv4ue|)
-                           |p_e_18vY4ue|
-                           (|join-wraps_e_NLJliqe|
-                             w_e_n4tp5ue
-                             (|syntax-object-wrap_e_ZSh4ipe| |e_e_Hbxv4ue|)))
+                       (if (|syntax-object?_VI8B_9-Mh| |e_VIyOavNRh|)
+                         (|match-each_VIMqxwIRh|
+                           (|syntax-object-expression_VIuxZC-Mh|
+                             |e_VIyOavNRh|)
+                           |p_VIUK8YNRh|
+                           (|join-wraps_VIEmnl_Nh|
+                             |w_VIeH6pORh|
+                             (|syntax-object-wrap_VIQtX3_Mh| |e_VIyOavNRh|)))
                          '#f))))))
-             (|match-each+_e_fMRZ_te|
-               (lambda (|e_e_pVmM6ue|
-                        |x-pat_e_LRkd7ue|
-                        |y-pat_e_5OiG7ue|
-                        |z-pat_e_rKg78ue|
-                        |w_e_NGeA8ue|
-                        |r_e_7Dc19ue|)
-                 ((letrec ((f_e_tzau9ue
-                             (lambda (|e_e_Pv8X9ue| w_e_9s6oaue)
-                               (if (pair? |e_e_Pv8X9ue|)
+             (|match-each+_VI6nvZIRh|
+               (lambda (|e_VIgw0MPRh|
+                        |x-pat_VICs-cQRh|
+                        |y-pat_VIYoYFQRh|
+                        |z-pat_VIilW6RRh|
+                        |w_VIEhUzRRh|
+                        |r_VI-dS0SRh|)
+                 ((letrec ((|f_VIkaQtSRh|
+                             (lambda (|e_VIG6OWSRh| |w_VI03MnTRh|)
+                               (if (pair? |e_VIG6OWSRh|)
                                  (call-with-values
                                    (lambda ()
-                                     (f_e_tzau9ue
-                                       (cdr |e_e_Pv8X9ue|)
-                                       w_e_9s6oaue))
-                                   (lambda (|xr*_e_vo4Raue|
-                                            |y-pat_e_Rk2ibue|
-                                            |r_e_bh0Lbue|)
-                                     (if |r_e_bh0Lbue|
-                                       (if (null? |y-pat_e_Rk2ibue|)
-                                         ((lambda (xr_e_xd-bcue)
-                                            (if xr_e_xd-bcue
+                                     (|f_VIkaQtSRh|
+                                       (cdr |e_VIG6OWSRh|)
+                                       |w_VI03MnTRh|))
+                                   (lambda (|xr*_VIm_JQTRh|
+                                            |y-pat_VIIXHhURh|
+                                            |r_VI2UFKURh|)
+                                     (if |r_VI2UFKURh|
+                                       (if (null? |y-pat_VIIXHhURh|)
+                                         ((lambda (|xr_VIoQDbVRh|)
+                                            (if |xr_VIoQDbVRh|
                                               (values
-                                                (cons xr_e_xd-bcue
-                                                      |xr*_e_vo4Raue|)
-                                                |y-pat_e_Rk2ibue|
-                                                |r_e_bh0Lbue|)
+                                                (cons |xr_VIoQDbVRh|
+                                                      |xr*_VIm_JQTRh|)
+                                                |y-pat_VIIXHhURh|
+                                                |r_VI2UFKURh|)
                                               (values '#f '#f '#f)))
-                                          (|match_e_ZtHe2ue|
-                                            (car |e_e_Pv8X9ue|)
-                                            |x-pat_e_LRkd7ue|
-                                            w_e_9s6oaue
+                                          (|match_VIQ4leLRh|
+                                            (car |e_VIG6OWSRh|)
+                                            |x-pat_VICs-cQRh|
+                                            |w_VI03MnTRh|
                                             '()))
                                          (values
                                            '()
-                                           (cdr |y-pat_e_Rk2ibue|)
-                                           (|match_e_ZtHe2ue|
-                                             (car |e_e_Pv8X9ue|)
-                                             (car |y-pat_e_Rk2ibue|)
-                                             w_e_9s6oaue
-                                             |r_e_bh0Lbue|)))
+                                           (cdr |y-pat_VIIXHhURh|)
+                                           (|match_VIQ4leLRh|
+                                             (car |e_VIG6OWSRh|)
+                                             (car |y-pat_VIIXHhURh|)
+                                             |w_VI03MnTRh|
+                                             |r_VI2UFKURh|)))
                                        (values '#f '#f '#f))))
-                                 (if (annotation? |e_e_Pv8X9ue|)
-                                   (f_e_tzau9ue
-                                     (annotation-expression |e_e_Pv8X9ue|)
-                                     w_e_9s6oaue)
-                                   (if (syntax-object?_e_h-lahpe |e_e_Pv8X9ue|)
-                                     (f_e_tzau9ue
-                                       (|syntax-object-expression_e_DWjDhpe|
-                                         |e_e_Pv8X9ue|)
-                                       (|join-wraps_e_NLJliqe|
-                                         w_e_9s6oaue
-                                         (|syntax-object-wrap_e_ZSh4ipe|
-                                           |e_e_Pv8X9ue|)))
+                                 (if (annotation? |e_VIG6OWSRh|)
+                                   (|f_VIkaQtSRh|
+                                     (annotation-expression |e_VIG6OWSRh|)
+                                     |w_VI03MnTRh|)
+                                   (if (|syntax-object?_VI8B_9-Mh|
+                                         |e_VIG6OWSRh|)
+                                     (|f_VIkaQtSRh|
+                                       (|syntax-object-expression_VIuxZC-Mh|
+                                         |e_VIG6OWSRh|)
+                                       (|join-wraps_VIEmnl_Nh|
+                                         |w_VI03MnTRh|
+                                         (|syntax-object-wrap_VIQtX3_Mh|
+                                           |e_VIG6OWSRh|)))
                                      (values
                                        '()
-                                       |y-pat_e_5OiG7ue|
-                                       (|match_e_ZtHe2ue|
-                                         |e_e_Pv8X9ue|
-                                         |z-pat_e_rKg78ue|
-                                         w_e_9s6oaue
-                                         |r_e_7Dc19ue|))))))))
-                    f_e_tzau9ue)
-                  |e_e_pVmM6ue|
-                  |w_e_NGeA8ue|)))
-             (|match-each-any_e_BIPq0ue|
-               (lambda (|e_e_T9YEcue| |w_e_d6W5due|)
-                 (if (annotation? |e_e_T9YEcue|)
-                   (|match-each-any_e_BIPq0ue|
-                     (annotation-expression |e_e_T9YEcue|)
-                     |w_e_d6W5due|)
-                   (if (pair? |e_e_T9YEcue|)
-                     ((lambda (|l_e_z2Uydue|)
-                        (if |l_e_z2Uydue|
-                          (cons (|wrap_e_jG6Yqqe|
-                                  (car |e_e_T9YEcue|)
-                                  |w_e_d6W5due|)
-                                |l_e_z2Uydue|)
+                                       |y-pat_VIYoYFQRh|
+                                       (|match_VIQ4leLRh|
+                                         |e_VIG6OWSRh|
+                                         |z-pat_VIilW6RRh|
+                                         |w_VI03MnTRh|
+                                         |r_VI-dS0SRh|))))))))
+                    |f_VIkaQtSRh|)
+                  |e_VIgw0MPRh|
+                  |w_VIEhUzRRh|)))
+             (|match-each-any_VIsjtqJRh|
+               (lambda (|e_VIKMBEVRh| |w_VI4Jz5WRh|)
+                 (if (annotation? |e_VIKMBEVRh|)
+                   (|match-each-any_VIsjtqJRh|
+                     (annotation-expression |e_VIKMBEVRh|)
+                     |w_VI4Jz5WRh|)
+                   (if (pair? |e_VIKMBEVRh|)
+                     ((lambda (|l_VIqFxyWRh|)
+                        (if |l_VIqFxyWRh|
+                          (cons (|wrap_VIahMX7Oh|
+                                  (car |e_VIKMBEVRh|)
+                                  |w_VI4Jz5WRh|)
+                                |l_VIqFxyWRh|)
                           '#f))
-                      (|match-each-any_e_BIPq0ue|
-                        (cdr |e_e_T9YEcue|)
-                        |w_e_d6W5due|))
-                     (if (null? |e_e_T9YEcue|)
+                      (|match-each-any_VIsjtqJRh|
+                        (cdr |e_VIKMBEVRh|)
+                        |w_VI4Jz5WRh|))
+                     (if (null? |e_VIKMBEVRh|)
                        '()
-                       (if (syntax-object?_e_h-lahpe |e_e_T9YEcue|)
-                         (|match-each-any_e_BIPq0ue|
-                           (|syntax-object-expression_e_DWjDhpe|
-                             |e_e_T9YEcue|)
-                           (|join-wraps_e_NLJliqe|
-                             |w_e_d6W5due|
-                             (|syntax-object-wrap_e_ZSh4ipe| |e_e_T9YEcue|)))
+                       (if (|syntax-object?_VI8B_9-Mh| |e_VIKMBEVRh|)
+                         (|match-each-any_VIsjtqJRh|
+                           (|syntax-object-expression_VIuxZC-Mh|
+                             |e_VIKMBEVRh|)
+                           (|join-wraps_VIEmnl_Nh|
+                             |w_VI4Jz5WRh|
+                             (|syntax-object-wrap_VIQtX3_Mh| |e_VIKMBEVRh|)))
                          '#f))))))
-             (|match-empty_e_XENT0ue|
-               (lambda (|p_e_V-R_due| |r_e_fXPseue|)
-                 (if (null? |p_e_V-R_due|)
-                   |r_e_fXPseue|
-                   (if (eq? |p_e_V-R_due| 'any)
-                     (cons '() |r_e_fXPseue|)
-                     (if (pair? |p_e_V-R_due|)
-                       (|match-empty_e_XENT0ue|
-                         (car |p_e_V-R_due|)
-                         (|match-empty_e_XENT0ue|
-                           (cdr |p_e_V-R_due|)
-                           |r_e_fXPseue|))
-                       (if (eq? |p_e_V-R_due| 'each-any)
-                         (cons '() |r_e_fXPseue|)
-                         ((lambda (|t_e_BTNVeue|)
-                            (if (memv |t_e_BTNVeue| '(each))
-                              (|match-empty_e_XENT0ue|
-                                (vector-ref |p_e_V-R_due| '1)
-                                |r_e_fXPseue|)
-                              (if (memv |t_e_BTNVeue| '(each+))
-                                (|match-empty_e_XENT0ue|
-                                  (vector-ref |p_e_V-R_due| '1)
-                                  (|match-empty_e_XENT0ue|
-                                    (reverse (vector-ref |p_e_V-R_due| '2))
-                                    (|match-empty_e_XENT0ue|
-                                      (vector-ref |p_e_V-R_due| '3)
-                                      |r_e_fXPseue|)))
-                                (if (memv |t_e_BTNVeue| '(free-id atom))
-                                  |r_e_fXPseue|
-                                  (if (memv |t_e_BTNVeue| '(vector))
-                                    (|match-empty_e_XENT0ue|
-                                      (vector-ref |p_e_V-R_due| '1)
-                                      |r_e_fXPseue|)
+             (|match-empty_VIOfrTJRh|
+               (lambda (|p_VIMBv_WRh| |r_VI6ytsXRh|)
+                 (if (null? |p_VIMBv_WRh|)
+                   |r_VI6ytsXRh|
+                   (if (eq? |p_VIMBv_WRh| 'any)
+                     (cons '() |r_VI6ytsXRh|)
+                     (if (pair? |p_VIMBv_WRh|)
+                       (|match-empty_VIOfrTJRh|
+                         (car |p_VIMBv_WRh|)
+                         (|match-empty_VIOfrTJRh|
+                           (cdr |p_VIMBv_WRh|)
+                           |r_VI6ytsXRh|))
+                       (if (eq? |p_VIMBv_WRh| 'each-any)
+                         (cons '() |r_VI6ytsXRh|)
+                         ((lambda (|t_VIsurVXRh|)
+                            (if (memv |t_VIsurVXRh| '(each))
+                              (|match-empty_VIOfrTJRh|
+                                (vector-ref |p_VIMBv_WRh| '1)
+                                |r_VI6ytsXRh|)
+                              (if (memv |t_VIsurVXRh| '(each+))
+                                (|match-empty_VIOfrTJRh|
+                                  (vector-ref |p_VIMBv_WRh| '1)
+                                  (|match-empty_VIOfrTJRh|
+                                    (reverse (vector-ref |p_VIMBv_WRh| '2))
+                                    (|match-empty_VIOfrTJRh|
+                                      (vector-ref |p_VIMBv_WRh| '3)
+                                      |r_VI6ytsXRh|)))
+                                (if (memv |t_VIsurVXRh| '(free-id atom))
+                                  |r_VI6ytsXRh|
+                                  (if (memv |t_VIsurVXRh| '(vector))
+                                    (|match-empty_VIOfrTJRh|
+                                      (vector-ref |p_VIMBv_WRh| '1)
+                                      |r_VI6ytsXRh|)
                                     (void))))))
-                          (vector-ref |p_e_V-R_due| '0))))))))
-             (|combine_e_hBLk1ue|
-               (lambda (|r*_e_XPLmfue| |r_e_hMJPfue|)
-                 (if (null? (car |r*_e_XPLmfue|))
-                   |r_e_hMJPfue|
-                   (cons (map car |r*_e_XPLmfue|)
-                         (|combine_e_hBLk1ue|
-                           (map cdr |r*_e_XPLmfue|)
-                           |r_e_hMJPfue|)))))
-             (|match*_e_DxJN1ue|
-               (lambda (|e_e_DIHggue|
-                        |p_e_ZEFJgue|
-                        |w_e_jBDahue|
-                        |r_e_FxBDhue|)
-                 (if (null? |p_e_ZEFJgue|)
-                   (if (null? |e_e_DIHggue|) |r_e_FxBDhue| '#f)
-                   (if (pair? |p_e_ZEFJgue|)
-                     (if (pair? |e_e_DIHggue|)
-                       (|match_e_ZtHe2ue|
-                         (car |e_e_DIHggue|)
-                         (car |p_e_ZEFJgue|)
-                         |w_e_jBDahue|
-                         (|match_e_ZtHe2ue|
-                           (cdr |e_e_DIHggue|)
-                           (cdr |p_e_ZEFJgue|)
-                           |w_e_jBDahue|
-                           |r_e_FxBDhue|))
+                          (vector-ref |p_VIMBv_WRh| '0))))))))
+             (|combine_VI8cpkKRh|
+               (lambda (|r*_VIOqpmYRh| |r_VI8nnPYRh|)
+                 (if (null? (car |r*_VIOqpmYRh|))
+                   |r_VI8nnPYRh|
+                   (cons (map car |r*_VIOqpmYRh|)
+                         (|combine_VI8cpkKRh|
+                           (map cdr |r*_VIOqpmYRh|)
+                           |r_VI8nnPYRh|)))))
+             (|match*_VIu8nNKRh|
+               (lambda (|e_VIujlgZRh|
+                        |p_VIQfjJZRh|
+                        |w_VIacha-Rh|
+                        |r_VIw8fD-Rh|)
+                 (if (null? |p_VIQfjJZRh|)
+                   (if (null? |e_VIujlgZRh|) |r_VIw8fD-Rh| '#f)
+                   (if (pair? |p_VIQfjJZRh|)
+                     (if (pair? |e_VIujlgZRh|)
+                       (|match_VIQ4leLRh|
+                         (car |e_VIujlgZRh|)
+                         (car |p_VIQfjJZRh|)
+                         |w_VIacha-Rh|
+                         (|match_VIQ4leLRh|
+                           (cdr |e_VIujlgZRh|)
+                           (cdr |p_VIQfjJZRh|)
+                           |w_VIacha-Rh|
+                           |r_VIw8fD-Rh|))
                        '#f)
-                     (if (eq? |p_e_ZEFJgue| 'each-any)
-                       ((lambda (|l_e_Jbplkue|)
-                          (if |l_e_Jbplkue|
-                            (cons |l_e_Jbplkue| |r_e_FxBDhue|)
+                     (if (eq? |p_VIQfjJZRh| 'each-any)
+                       ((lambda (|l_VIAO2l1Sh|)
+                          (if |l_VIAO2l1Sh|
+                            (cons |l_VIAO2l1Sh| |r_VIw8fD-Rh|)
                             '#f))
-                        (|match-each-any_e_BIPq0ue|
-                          |e_e_DIHggue|
-                          |w_e_jBDahue|))
-                       ((lambda (t_e__tz4iue)
-                          (if (memv t_e__tz4iue '(each))
-                            (if (null? |e_e_DIHggue|)
-                              (|match-empty_e_XENT0ue|
-                                (vector-ref |p_e_ZEFJgue| '1)
-                                |r_e_FxBDhue|)
-                              ((lambda (|r*_e_nfrUjue|)
-                                 (if |r*_e_nfrUjue|
-                                   (|combine_e_hBLk1ue|
-                                     |r*_e_nfrUjue|
-                                     |r_e_FxBDhue|)
+                        (|match-each-any_VIsjtqJRh|
+                          |e_VIujlgZRh|
+                          |w_VIacha-Rh|))
+                       ((lambda (|t_VIS4d4_Rh|)
+                          (if (memv |t_VIS4d4_Rh| '(each))
+                            (if (null? |e_VIujlgZRh|)
+                              (|match-empty_VIOfrTJRh|
+                                (vector-ref |p_VIQfjJZRh| '1)
+                                |r_VIw8fD-Rh|)
+                              ((lambda (|r*_VIeS4U0Sh|)
+                                 (if |r*_VIeS4U0Sh|
+                                   (|combine_VI8cpkKRh|
+                                     |r*_VIeS4U0Sh|
+                                     |r_VIw8fD-Rh|)
                                    '#f))
-                               (|match-each_e_VPTw_te|
-                                 |e_e_DIHggue|
-                                 (vector-ref |p_e_ZEFJgue| '1)
-                                 |w_e_jBDahue|)))
-                            (if (memv t_e__tz4iue '(free-id))
-                              (if (|id?_e_TJwZGpe| |e_e_DIHggue|)
-                                (if (|literal-id=?_e_xitZlqe|
-                                      (|wrap_e_jG6Yqqe|
-                                        |e_e_DIHggue|
-                                        |w_e_jBDahue|)
-                                      (vector-ref |p_e_ZEFJgue| '1))
-                                  |r_e_FxBDhue|
+                               (|match-each_VIMqxwIRh|
+                                 |e_VIujlgZRh|
+                                 (vector-ref |p_VIQfjJZRh| '1)
+                                 |w_VIacha-Rh|)))
+                            (if (memv |t_VIS4d4_Rh| '(free-id))
+                              (if (|id?_VIKkaZnNh| |e_VIujlgZRh|)
+                                (if (|literal-id=?_VIoV6Z2Oh|
+                                      (|wrap_VIahMX7Oh|
+                                        |e_VIujlgZRh|
+                                        |w_VIacha-Rh|)
+                                      (vector-ref |p_VIQfjJZRh| '1))
+                                  |r_VIw8fD-Rh|
                                   '#f)
                                 '#f)
-                              (if (memv t_e__tz4iue '(each+))
+                              (if (memv |t_VIS4d4_Rh| '(each+))
                                 (call-with-values
                                   (lambda ()
-                                    (|match-each+_e_fMRZ_te|
-                                      |e_e_DIHggue|
-                                      (vector-ref |p_e_ZEFJgue| '1)
-                                      (vector-ref |p_e_ZEFJgue| '2)
-                                      (vector-ref |p_e_ZEFJgue| '3)
-                                      |w_e_jBDahue|
-                                      |r_e_FxBDhue|))
-                                  (lambda (xr*_e_lqxxiue
-                                           |y-pat_e_Hmv-iue|
-                                           r_e_1jtrjue)
-                                    (if r_e_1jtrjue
-                                      (if (null? |y-pat_e_Hmv-iue|)
-                                        (if (null? xr*_e_lqxxiue)
-                                          (|match-empty_e_XENT0ue|
-                                            (vector-ref |p_e_ZEFJgue| '1)
-                                            r_e_1jtrjue)
-                                          (|combine_e_hBLk1ue|
-                                            xr*_e_lqxxiue
-                                            r_e_1jtrjue))
+                                    (|match-each+_VI6nvZIRh|
+                                      |e_VIujlgZRh|
+                                      (vector-ref |p_VIQfjJZRh| '1)
+                                      (vector-ref |p_VIQfjJZRh| '2)
+                                      (vector-ref |p_VIQfjJZRh| '3)
+                                      |w_VIacha-Rh|
+                                      |r_VIw8fD-Rh|))
+                                  (lambda (|xr*_VIc1bx_Rh|
+                                           |y-pat_VIyZ8-_Rh|
+                                           |r_VIUV6r0Sh|)
+                                    (if |r_VIUV6r0Sh|
+                                      (if (null? |y-pat_VIyZ8-_Rh|)
+                                        (if (null? |xr*_VIc1bx_Rh|)
+                                          (|match-empty_VIOfrTJRh|
+                                            (vector-ref |p_VIQfjJZRh| '1)
+                                            |r_VIUV6r0Sh|)
+                                          (|combine_VI8cpkKRh|
+                                            |xr*_VIc1bx_Rh|
+                                            |r_VIUV6r0Sh|))
                                         '#f)
                                       '#f)))
-                                (if (memv t_e__tz4iue '(atom))
+                                (if (memv |t_VIS4d4_Rh| '(atom))
                                   (if (equal?
-                                        (vector-ref |p_e_ZEFJgue| '1)
-                                        (|strip_e_Xeb6Sqe|
-                                          |e_e_DIHggue|
-                                          |w_e_jBDahue|))
-                                    |r_e_FxBDhue|
+                                        (vector-ref |p_VIQfjJZRh| '1)
+                                        (|strip_VIORQ5zOh|
+                                          |e_VIujlgZRh|
+                                          |w_VIacha-Rh|))
+                                    |r_VIw8fD-Rh|
                                     '#f)
-                                  (if (memv t_e__tz4iue '(vector))
-                                    (if (vector? |e_e_DIHggue|)
-                                      (|match_e_ZtHe2ue|
-                                        (vector->list |e_e_DIHggue|)
-                                        (vector-ref |p_e_ZEFJgue| '1)
-                                        |w_e_jBDahue|
-                                        |r_e_FxBDhue|)
+                                  (if (memv |t_VIS4d4_Rh| '(vector))
+                                    (if (vector? |e_VIujlgZRh|)
+                                      (|match_VIQ4leLRh|
+                                        (vector->list |e_VIujlgZRh|)
+                                        (vector-ref |p_VIQfjJZRh| '1)
+                                        |w_VIacha-Rh|
+                                        |r_VIw8fD-Rh|)
                                       '#f)
                                     (void)))))))
-                        (vector-ref |p_e_ZEFJgue| '0)))))))
-             (|match_e_ZtHe2ue|
-               (lambda (|e_e_38nOkue|
-                        p_e_p4lflue
-                        |w_e_L0jIlue|
-                        |r_e_5Zg9mue|)
-                 (if (not |r_e_5Zg9mue|)
+                        (vector-ref |p_VIQfjJZRh| '0)))))))
+             (|match_VIQ4leLRh|
+               (lambda (|e_VIWK0O1Sh|
+                        |p_VIgH-e2Sh|
+                        |w_VICDYH2Sh|
+                        |r_VIYzW83Sh|)
+                 (if (not |r_VIYzW83Sh|)
                    '#f
-                   (if (eq? p_e_p4lflue 'any)
-                     (cons (|wrap_e_jG6Yqqe| |e_e_38nOkue| |w_e_L0jIlue|)
-                           |r_e_5Zg9mue|)
-                     (if (syntax-object?_e_h-lahpe |e_e_38nOkue|)
-                       (|match*_e_DxJN1ue|
-                         ((lambda (|e_e_NRc3nue|)
-                            (if (annotation? |e_e_NRc3nue|)
-                              (annotation-expression |e_e_NRc3nue|)
-                              |e_e_NRc3nue|))
-                          (|syntax-object-expression_e_DWjDhpe|
-                            |e_e_38nOkue|))
-                         p_e_p4lflue
-                         (|join-wraps_e_NLJliqe|
-                           |w_e_L0jIlue|
-                           (|syntax-object-wrap_e_ZSh4ipe| |e_e_38nOkue|))
-                         |r_e_5Zg9mue|)
-                       (|match*_e_DxJN1ue|
-                         ((lambda (|e_e_rVeCmue|)
-                            (if (annotation? |e_e_rVeCmue|)
-                              (annotation-expression |e_e_rVeCmue|)
-                              |e_e_rVeCmue|))
-                          |e_e_38nOkue|)
-                         p_e_p4lflue
-                         |w_e_L0jIlue|
-                         |r_e_5Zg9mue|)))))))
+                   (if (eq? |p_VIgH-e2Sh| 'any)
+                     (cons (|wrap_VIahMX7Oh| |e_VIWK0O1Sh| |w_VICDYH2Sh|)
+                           |r_VIYzW83Sh|)
+                     (if (|syntax-object?_VI8B_9-Mh| |e_VIWK0O1Sh|)
+                       (|match*_VIu8nNKRh|
+                         ((lambda (|e_VIEsS24Sh|)
+                            (if (annotation? |e_VIEsS24Sh|)
+                              (annotation-expression |e_VIEsS24Sh|)
+                              |e_VIEsS24Sh|))
+                          (|syntax-object-expression_VIuxZC-Mh|
+                            |e_VIWK0O1Sh|))
+                         |p_VIgH-e2Sh|
+                         (|join-wraps_VIEmnl_Nh|
+                           |w_VICDYH2Sh|
+                           (|syntax-object-wrap_VIQtX3_Mh| |e_VIWK0O1Sh|))
+                         |r_VIYzW83Sh|)
+                       (|match*_VIu8nNKRh|
+                         ((lambda (|e_VIiwUB3Sh|)
+                            (if (annotation? |e_VIiwUB3Sh|)
+                              (annotation-expression |e_VIiwUB3Sh|)
+                              |e_VIiwUB3Sh|))
+                          |e_VIWK0O1Sh|)
+                         |p_VIgH-e2Sh|
+                         |w_VICDYH2Sh|
+                         |r_VIYzW83Sh|)))))))
       (set! $syntax-dispatch
-        (lambda (|e_e_jqFH2ue| |p_e_FmD83ue|)
-          (if (eq? |p_e_FmD83ue| 'any)
-            (list |e_e_jqFH2ue|)
-            (if (syntax-object?_e_h-lahpe |e_e_jqFH2ue|)
-              (|match*_e_DxJN1ue|
-                ((lambda (e_e_lfz24ue)
-                   (if (annotation? e_e_lfz24ue)
-                     (annotation-expression e_e_lfz24ue)
-                     e_e_lfz24ue))
-                 (|syntax-object-expression_e_DWjDhpe|
-                   |e_e_jqFH2ue|))
-                |p_e_FmD83ue|
-                (|syntax-object-wrap_e_ZSh4ipe| |e_e_jqFH2ue|)
+        (lambda (|e_VIa1jHLRh| |p_VIwZg8MRh|)
+          (if (eq? |p_VIwZg8MRh| 'any)
+            (list |e_VIa1jHLRh|)
+            (if (|syntax-object?_VI8B_9-Mh| |e_VIa1jHLRh|)
+              (|match*_VIu8nNKRh|
+                ((lambda (|e_VIcSc2NRh|)
+                   (if (annotation? |e_VIcSc2NRh|)
+                     (annotation-expression |e_VIcSc2NRh|)
+                     |e_VIcSc2NRh|))
+                 (|syntax-object-expression_VIuxZC-Mh|
+                   |e_VIa1jHLRh|))
+                |p_VIwZg8MRh|
+                (|syntax-object-wrap_VIQtX3_Mh| |e_VIa1jHLRh|)
                 '())
-              (|match*_e_DxJN1ue|
-                ((lambda (|e_e__iBB3ue|)
-                   (if (annotation? |e_e__iBB3ue|)
-                     (annotation-expression |e_e__iBB3ue|)
-                     |e_e__iBB3ue|))
-                 |e_e_jqFH2ue|)
-                |p_e_FmD83ue|
+              (|match*_VIu8nNKRh|
+                ((lambda (|e_VISVeBMRh|)
+                   (if (annotation? |e_VISVeBMRh|)
+                     (annotation-expression |e_VISVeBMRh|)
+                     |e_VISVeBMRh|))
+                 |e_VIa1jHLRh|)
+                |p_VIwZg8MRh|
                 '(())
                 '()))))))))
 ($sc-put-cte
   'with-syntax
-  (lambda (|x_e_xU1aGBe|)
-    ((lambda (|tmp_e_TQ_CGBe|)
-       ((lambda (|tmp_e_dNZ3HBe|)
-          (if |tmp_e_dNZ3HBe|
-            (apply (lambda (|__e_3PqMOBe| |e1_e_pLodPBe| |e2_e_LHmGPBe|)
+  (lambda (|x_VIovH9nZh|)
+    ((lambda (|tmp_VIKrFCnZh|)
+       ((lambda (|tmp_VI4oD3oZh|)
+          (if |tmp_VI4oD3oZh|
+            (apply (lambda (|__VIWp4MvZh| |e1_VIgm2dwZh| |e2_VICi0GwZh|)
                      (cons '#(syntax-object
                               begin
                               ((top)
@@ -11644,15 +11658,15 @@
                                #(ribcage () () ())
                                #(ribcage #(x) #((top)) #("i"))
                                #(ribcage (#(import-token *top*)) () ())))
-                           (cons |e1_e_pLodPBe| |e2_e_LHmGPBe|)))
-                   |tmp_e_dNZ3HBe|)
-            ((lambda (|tmp_e_zJXwHBe|)
-               (if |tmp_e_zJXwHBe|
-                 (apply (lambda (|__e__8D2MBe|
-                                 |out_e_l5BvMBe|
-                                 |in_e_H1zYMBe|
-                                 |e1_e_1-wpNBe|
-                                 |e2_e_nWuSNBe|)
+                           (cons |e1_VIgm2dwZh| |e2_VICi0GwZh|)))
+                   |tmp_VI4oD3oZh|)
+            ((lambda (|tmp_VIqkBwoZh|)
+               (if |tmp_VIqkBwoZh|
+                 (apply (lambda (|__VISLg2tZh|
+                                 |out_VIcIevtZh|
+                                 |in_VIyEcYtZh|
+                                 |e1_VIUAapuZh|
+                                 |e2_VIex8SuZh|)
                           (list '#(syntax-object
                                    syntax-case
                                    ((top)
@@ -11663,9 +11677,9 @@
                                     #(ribcage () () ())
                                     #(ribcage #(x) #((top)) #("i"))
                                     #(ribcage (#(import-token *top*)) () ())))
-                                |in_e_H1zYMBe|
+                                |in_VIyEcYtZh|
                                 '()
-                                (list |out_e_l5BvMBe|
+                                (list |out_VIcIevtZh|
                                       (cons '#(syntax-object
                                                begin
                                                ((top)
@@ -11683,16 +11697,16 @@
                                                   (#(import-token *top*))
                                                   ()
                                                   ())))
-                                            (cons |e1_e_1-wpNBe|
-                                                  |e2_e_nWuSNBe|)))))
-                        |tmp_e_zJXwHBe|)
-                 ((lambda (|tmp_e_VFVZHBe|)
-                    (if |tmp_e_VFVZHBe|
-                      (apply (lambda (|__e_fCTqIBe|
-                                      |out_e_ByRTIBe|
-                                      |in_e_XuPkJBe|
-                                      |e1_e_hrNNJBe|
-                                      |e2_e_DnLeKBe|)
+                                            (cons |e1_VIUAapuZh|
+                                                  |e2_VIex8SuZh|)))))
+                        |tmp_VIqkBwoZh|)
+                 ((lambda (|tmp_VIMgzZoZh|)
+                    (if |tmp_VIMgzZoZh|
+                      (apply (lambda (|__VI6dxqpZh|
+                                      |out_VIs9vTpZh|
+                                      |in_VIO5tkqZh|
+                                      |e1_VI82rNqZh|
+                                      |e2_VIu-oerZh|)
                                (list '#(syntax-object
                                         syntax-case
                                         ((top)
@@ -11723,9 +11737,9 @@
                                                  (#(import-token *top*))
                                                  ()
                                                  ())))
-                                           |in_e_XuPkJBe|)
+                                           |in_VIO5tkqZh|)
                                      '()
-                                     (list |out_e_ByRTIBe|
+                                     (list |out_VIs9vTpZh|
                                            (cons '#(syntax-object
                                                     begin
                                                     ((top)
@@ -11746,31 +11760,31 @@
                                                        (#(import-token *top*))
                                                        ()
                                                        ())))
-                                                 (cons |e1_e_hrNNJBe|
-                                                       |e2_e_DnLeKBe|)))))
-                             |tmp_e_VFVZHBe|)
-                      (syntax-error |tmp_e_TQ_CGBe|)))
+                                                 (cons |e1_VI82rNqZh|
+                                                       |e2_VIu-oerZh|)))))
+                             |tmp_VIMgzZoZh|)
+                      (syntax-error |tmp_VIKrFCnZh|)))
                   ($syntax-dispatch
-                    (compile-in-annotation |tmp_e_TQ_CGBe| value)
+                    (compile-in-annotation |tmp_VIKrFCnZh| value)
                     '(any #(each (any any)) any . each-any)))))
              ($syntax-dispatch
-               (compile-in-annotation |tmp_e_TQ_CGBe| value)
+               (compile-in-annotation |tmp_VIKrFCnZh| value)
                '(any ((any any)) any . each-any)))))
         ($syntax-dispatch
-          (compile-in-annotation |tmp_e_TQ_CGBe| value)
+          (compile-in-annotation |tmp_VIKrFCnZh| value)
           '(any () any . each-any))))
-     |x_e_xU1aGBe|)))
+     |x_VIovH9nZh|)))
 ($sc-put-cte
   'syntax-rules
-  (lambda (|x_e_rAiAQBe|)
-    ((lambda (|tmp_e_Nwg1RBe|)
-       ((lambda (|tmp_e_7teuRBe|)
-          (if |tmp_e_7teuRBe|
-            (apply (lambda (|__e_tpcXRBe|
-                            |k_e_PlaoSBe|
-                            |keyword_e_9i8RSBe|
-                            |pattern_e_ve6iTBe|
-                            |template_e_Ra4LTBe|)
+  (lambda (|x_VIibYzxZh|)
+    ((lambda (|tmp_VIE7W0yZh|)
+       ((lambda (|tmp_VI-3UtyZh|)
+          (if |tmp_VI-3UtyZh|
+            (apply (lambda (|__VIk0SWyZh|
+                            |k_VIGYPnzZh|
+                            |keyword_VI0VNQzZh|
+                            |pattern_VImRLhAZh|
+                            |template_VIINJKAZh|)
                      (list '#(syntax-object
                               lambda
                               ((top)
@@ -11814,9 +11828,9 @@
                                              (#(import-token *top*))
                                              ()
                                              ())))
-                                       (cons |k_e_PlaoSBe|
-                                             (map (lambda (|tmp_e_T_Z5VBe|
-                                                           |tmp_e_x30FUBe|)
+                                       (cons |k_VIGYPnzZh|
+                                             (map (lambda (|tmp_VIKCD5CZh|
+                                                           |tmp_VIoGFEBZh|)
                                                     (list (cons '#(syntax-object
                                                                    dummy
                                                                    ((top)
@@ -11849,7 +11863,7 @@
                                                                          *top*))
                                                                       ()
                                                                       ())))
-                                                                |tmp_e_x30FUBe|)
+                                                                |tmp_VIoGFEBZh|)
                                                           (list '#(syntax-object
                                                                    syntax
                                                                    ((top)
@@ -11882,22 +11896,22 @@
                                                                          *top*))
                                                                       ()
                                                                       ())))
-                                                                |tmp_e_T_Z5VBe|)))
-                                                  |template_e_Ra4LTBe|
-                                                  |pattern_e_ve6iTBe|))))))
-                   |tmp_e_7teuRBe|)
-            (syntax-error |tmp_e_Nwg1RBe|)))
+                                                                |tmp_VIKCD5CZh|)))
+                                                  |template_VIINJKAZh|
+                                                  |pattern_VImRLhAZh|))))))
+                   |tmp_VI-3UtyZh|)
+            (syntax-error |tmp_VIE7W0yZh|)))
         ($syntax-dispatch
-          (compile-in-annotation |tmp_e_Nwg1RBe| value)
+          (compile-in-annotation |tmp_VIE7W0yZh| value)
           '(any each-any . #(each ((any . any) any))))))
-     |x_e_rAiAQBe|)))
+     |x_VIibYzxZh|)))
 ($sc-put-cte
   'or
-  (lambda (|x_e_dYXyVBe|)
-    ((lambda (|tmp_e_zUV_VBe|)
-       ((lambda (|tmp_e_VQTsWBe|)
-          (if |tmp_e_VQTsWBe|
-            (apply (lambda (|__e_lgz--Be|)
+  (lambda (|x_VI4zByCZh|)
+    ((lambda (|tmp_VIqvz_CZh|)
+       ((lambda (|tmp_VIMrxsDZh|)
+          (if |tmp_VIMrxsDZh|
+            (apply (lambda (|__VIcTc-HZh|)
                      '#(syntax-object
                         #f
                         ((top)
@@ -11905,18 +11919,18 @@
                          #(ribcage () () ())
                          #(ribcage #(x) #((top)) #("i"))
                          #(ribcage (#(import-token *top*)) () ()))))
-                   |tmp_e_VQTsWBe|)
-            ((lambda (|tmp_e_fNRVWBe|)
-               (if |tmp_e_fNRVWBe|
-                 (apply (lambda (|__e_FnD4-Be| |e_e__jBx-Be|)
-                          |e_e__jBx-Be|)
-                        |tmp_e_fNRVWBe|)
-                 ((lambda (|tmp_e_BJPmXBe|)
-                    (if |tmp_e_BJPmXBe|
-                      (apply (lambda (|__e_XFNPXBe|
-                                      |e1_e_hCLgYBe|
-                                      |e2_e_DyJJYBe|
-                                      |e3_e_ZuHaZBe|)
+                   |tmp_VIMrxsDZh|)
+            ((lambda (|tmp_VI6ovVDZh|)
+               (if |tmp_VI6ovVDZh|
+                 (apply (lambda (|__VIw-g4HZh| |e_VISWexHZh|)
+                          |e_VISWexHZh|)
+                        |tmp_VI6ovVDZh|)
+                 ((lambda (|tmp_VIsktmEZh|)
+                    (if |tmp_VIsktmEZh|
+                      (apply (lambda (|__VIOgrPEZh|
+                                      |e1_VI8dpgFZh|
+                                      |e2_VIu9nJFZh|
+                                      |e3_VIQ5laGZh|)
                                (list '#(syntax-object
                                         let
                                         ((top)
@@ -11949,7 +11963,7 @@
                                                        (#(import-token *top*))
                                                        ()
                                                        ())))
-                                                 |e1_e_hCLgYBe|))
+                                                 |e1_VI8dpgFZh|))
                                      (list '#(syntax-object
                                               if
                                               ((top)
@@ -12008,30 +12022,30 @@
                                                        (#(import-token *top*))
                                                        ()
                                                        ())))
-                                                 (cons |e2_e_DyJJYBe|
-                                                       |e3_e_ZuHaZBe|)))))
-                             |tmp_e_BJPmXBe|)
-                      (syntax-error |tmp_e_zUV_VBe|)))
+                                                 (cons |e2_VIu9nJFZh|
+                                                       |e3_VIQ5laGZh|)))))
+                             |tmp_VIsktmEZh|)
+                      (syntax-error |tmp_VIqvz_CZh|)))
                   ($syntax-dispatch
-                    (compile-in-annotation |tmp_e_zUV_VBe| value)
+                    (compile-in-annotation |tmp_VIqvz_CZh| value)
                     '(any any any . each-any)))))
              ($syntax-dispatch
-               (compile-in-annotation |tmp_e_zUV_VBe| value)
+               (compile-in-annotation |tmp_VIqvz_CZh| value)
                '(any any)))))
         ($syntax-dispatch
-          (compile-in-annotation |tmp_e_zUV_VBe| value)
+          (compile-in-annotation |tmp_VIqvz_CZh| value)
           '(any))))
-     |x_e_dYXyVBe|)))
+     |x_VI4zByCZh|)))
 ($sc-put-cte
   'and
-  (lambda (|x_e_Hcxr_Be|)
-    ((lambda (|tmp_e_19vU_Be|)
-       ((lambda (|tmp_e_n5tl0Ce|)
-          (if |tmp_e_n5tl0Ce|
-            (apply (lambda (|__e_rLg33Ce|
-                            |e1_e_NHew3Ce|
-                            |e2_e_7EcZ3Ce|
-                            |e3_e_tAaq4Ce|)
+  (lambda (|x_VIyParIZh|)
+    ((lambda (|tmp_VIUL8UIZh|)
+       ((lambda (|tmp_VIeI6lJZh|)
+          (if |tmp_VIeI6lJZh|
+            (apply (lambda (|__VIimW2MZh|
+                            |e1_VIEiUvMZh|
+                            |e2_VI-eSYMZh|
+                            |e3_VIkbQpNZh|)
                      (cons '#(syntax-object
                               if
                               ((top)
@@ -12042,7 +12056,7 @@
                                #(ribcage () () ())
                                #(ribcage #(x) #((top)) #("i"))
                                #(ribcage (#(import-token *top*)) () ())))
-                           (cons |e1_e_NHew3Ce|
+                           (cons |e1_VIEiUvMZh|
                                  (cons (cons '#(syntax-object
                                                 and
                                                 ((top)
@@ -12059,8 +12073,8 @@
                                                    (#(import-token *top*))
                                                    ()
                                                    ())))
-                                             (cons |e2_e_7EcZ3Ce|
-                                                   |e3_e_tAaq4Ce|))
+                                             (cons |e2_VI-eSYMZh|
+                                                   |e3_VIkbQpNZh|))
                                        '#(syntax-object
                                           (#f)
                                           ((top)
@@ -12074,15 +12088,15 @@
                                              (#(import-token *top*))
                                              ()
                                              ())))))))
-                   |tmp_e_n5tl0Ce|)
-            ((lambda (|tmp_e_J1rO0Ce|)
-               (if |tmp_e_J1rO0Ce|
-                 (apply (lambda (|__e_LSk92Ce| |e_e_5PiC2Ce|)
-                          |e_e_5PiC2Ce|)
-                        |tmp_e_J1rO0Ce|)
-                 ((lambda (|tmp_e_3-of1Ce|)
-                    (if |tmp_e_3-of1Ce|
-                      (apply (lambda (|__e_pWmI1Ce|)
+                   |tmp_VIeI6lJZh|)
+            ((lambda (|tmp_VIAE4OJZh|)
+               (if |tmp_VIAE4OJZh|
+                 (apply (lambda (|__VICt-8LZh| |e_VIYpYBLZh|)
+                          |e_VIYpYBLZh|)
+                        |tmp_VIAE4OJZh|)
+                 ((lambda (|tmp_VIWA2fKZh|)
+                    (if |tmp_VIWA2fKZh|
+                      (apply (lambda (|__VIgx0IKZh|)
                                '#(syntax-object
                                   #t
                                   ((top)
@@ -12090,37 +12104,37 @@
                                    #(ribcage () () ())
                                    #(ribcage #(x) #((top)) #("i"))
                                    #(ribcage (#(import-token *top*)) () ()))))
-                             |tmp_e_3-of1Ce|)
-                      (syntax-error |tmp_e_19vU_Be|)))
+                             |tmp_VIWA2fKZh|)
+                      (syntax-error |tmp_VIUL8UIZh|)))
                   ($syntax-dispatch
-                    (compile-in-annotation |tmp_e_19vU_Be| value)
+                    (compile-in-annotation |tmp_VIUL8UIZh| value)
                     '(any)))))
              ($syntax-dispatch
-               (compile-in-annotation |tmp_e_19vU_Be| value)
+               (compile-in-annotation |tmp_VIUL8UIZh| value)
                '(any any)))))
         ($syntax-dispatch
-          (compile-in-annotation |tmp_e_19vU_Be| value)
+          (compile-in-annotation |tmp_VIUL8UIZh| value)
           '(any any any . each-any))))
-     |x_e_Hcxr_Be|)))
+     |x_VIyParIZh|)))
 ($sc-put-cte
   'let
-  (lambda (|x_e_9t6k5Ce|)
-    ((lambda (|tmp_e_vp4N5Ce|)
-       ((lambda (|tmp_e_Rl2e6Ce|)
-          (if (if |tmp_e_Rl2e6Ce|
-                (apply (lambda (|__e_NSc_hCe|
-                                |x_e_7PasiCe|
-                                |v_e_tL8ViCe|
-                                |e1_e_PH6mjCe|
-                                |e2_e_9E4PjCe|)
-                         (andmap identifier? |x_e_7PasiCe|))
-                       |tmp_e_Rl2e6Ce|)
+  (lambda (|x_VI04MjOZh|)
+    ((lambda (|tmp_VIm0KMOZh|)
+       ((lambda (|tmp_VIIYHdPZh|)
+          (if (if |tmp_VIIYHdPZh|
+                (apply (lambda (|__VIEtS--Zh|
+                                |x_VI-pQr_Zh|
+                                |v_VIkmOU_Zh|
+                                |e1_VIGiMl0-h|
+                                |e2_VI0fKO0-h|)
+                         (andmap identifier? |x_VI-pQr_Zh|))
+                       |tmp_VIIYHdPZh|)
                 '#f)
-            (apply (lambda (|__e_1ktneCe|
-                            |x_e_ngrQeCe|
-                            |v_e_JcphfCe|
-                            |e1_e_39nKfCe|
-                            |e2_e_p5lbgCe|)
+            (apply (lambda (|__VIUW6nXZh|
+                            |x_VIeT4QXZh|
+                            |v_VIAP2hYZh|
+                            |e1_VIWL0KYZh|
+                            |e2_VIgI-aZZh|)
                      (cons (cons '#(syntax-object
                                     lambda
                                     ((top)
@@ -12131,29 +12145,29 @@
                                      #(ribcage () () ())
                                      #(ribcage #(x) #((top)) #("i"))
                                      #(ribcage (#(import-token *top*)) () ())))
-                                 (cons |x_e_ngrQeCe|
-                                       (cons |e1_e_39nKfCe| |e2_e_p5lbgCe|)))
-                           |v_e_JcphfCe|))
-                   |tmp_e_Rl2e6Ce|)
-            ((lambda (|tmp_e_bi0H6Ce|)
-               (if (if |tmp_e_bi0H6Ce|
-                     (apply (lambda (|__e_DJHcbCe|
-                                     |f_e_ZFFFbCe|
-                                     |x_e_jCD6cCe|
-                                     |v_e_FyBzcCe|
-                                     |e1_e__uz0dCe|
-                                     |e2_e_lrxtdCe|)
+                                 (cons |x_VIeT4QXZh|
+                                       (cons |e1_VIWL0KYZh| |e2_VIgI-aZZh|)))
+                           |v_VIAP2hYZh|))
+                   |tmp_VIIYHdPZh|)
+            ((lambda (|tmp_VI2VFGPZh|)
+               (if (if |tmp_VI2VFGPZh|
+                     (apply (lambda (|__VIuklcUZh|
+                                     |f_VIQgjFUZh|
+                                     |x_VIadh6VZh|
+                                     |v_VIw9fzVZh|
+                                     |e1_VIS5d0WZh|
+                                     |e2_VIc2btWZh|)
                               (andmap
                                 identifier?
-                                (cons |f_e_ZFFFbCe| |x_e_jCD6cCe|)))
-                            |tmp_e_bi0H6Ce|)
+                                (cons |f_VIQgjFUZh| |x_VIadh6VZh|)))
+                            |tmp_VI2VFGPZh|)
                      '#f)
-                 (apply (lambda (|__e_xe-77Ce|
-                                 |f_e_TaYA7Ce|
-                                 |x_e_d7W18Ce|
-                                 |v_e_z3Uu8Ce|
-                                 |e1_e_V_RX8Ce|
-                                 |e2_e_fYPo9Ce|)
+                 (apply (lambda (|__VIoRD7QZh|
+                                 |f_VIKNBAQZh|
+                                 |x_VI4Kz1RZh|
+                                 |v_VIqGxuRZh|
+                                 |e1_VIMCvXRZh|
+                                 |e2_VI6ztoSZh|)
                           (cons (list '#(syntax-object
                                          letrec
                                          ((top)
@@ -12172,7 +12186,7 @@
                                             (#(import-token *top*))
                                             ()
                                             ())))
-                                      (list (list |f_e_TaYA7Ce|
+                                      (list (list |f_VIKNBAQZh|
                                                   (cons '#(syntax-object
                                                            lambda
                                                            ((top)
@@ -12200,42 +12214,42 @@
                                                                  *top*))
                                                               ()
                                                               ())))
-                                                        (cons |x_e_d7W18Ce|
-                                                              (cons |e1_e_V_RX8Ce|
-                                                                    |e2_e_fYPo9Ce|)))))
-                                      |f_e_TaYA7Ce|)
-                                |v_e_z3Uu8Ce|))
-                        |tmp_e_bi0H6Ce|)
-                 (syntax-error |tmp_e_vp4N5Ce|)))
+                                                        (cons |x_VI4Kz1RZh|
+                                                              (cons |e1_VIMCvXRZh|
+                                                                    |e2_VI6ztoSZh|)))))
+                                      |f_VIKNBAQZh|)
+                                |v_VIqGxuRZh|))
+                        |tmp_VI2VFGPZh|)
+                 (syntax-error |tmp_VIm0KMOZh|)))
              ($syntax-dispatch
-               (compile-in-annotation |tmp_e_vp4N5Ce| value)
+               (compile-in-annotation |tmp_VIm0KMOZh| value)
                '(any any #(each (any any)) any . each-any)))))
         ($syntax-dispatch
-          (compile-in-annotation |tmp_e_vp4N5Ce| value)
+          (compile-in-annotation |tmp_VIm0KMOZh| value)
           '(any #(each (any any)) any . each-any))))
-     |x_e_9t6k5Ce|)))
+     |x_VI04MjOZh|)))
 ($sc-put-cte
   'let*
-  (lambda (|x_e_Rw0JkCe|)
-    ((lambda (|tmp_e_bt-9lCe|)
-       ((lambda (|tmp_e_xpYClCe|)
-          (if (if |tmp_e_xpYClCe|
-                (apply (lambda (|let*_e_HytpsCe|
-                                |x_e_1vrSsCe|
-                                |v_e_nrpjtCe|
-                                |e1_e_JnnMtCe|
-                                |e2_e_3klduCe|)
-                         (andmap identifier? |x_e_1vrSsCe|))
-                       |tmp_e_xpYClCe|)
+  (lambda (|x_VII7GI1-h|)
+    ((lambda (|tmp_VI24E92-h|)
+       ((lambda (|tmp_VIo0CC2-h|)
+          (if (if |tmp_VIo0CC2-h|
+                (apply (lambda (|let*_VIy97p9-h|
+                                |x_VIU55S9-h|
+                                |v_VIe23ja-h|
+                                |e1_VIA-0Ma-h|
+                                |e2_VIWW-cb-h|)
+                         (andmap identifier? |x_VIU55S9-h|))
+                       |tmp_VIo0CC2-h|)
                 '#f)
-            (apply (lambda (|let*_e_TlW3mCe|
-                            |x_e_diUwmCe|
-                            |v_e_zeSZmCe|
-                            |e1_e_VaQqnCe|
-                            |e2_e_f7OTnCe|)
-                     ((letrec ((|f_e_B3MkoCe|
-                                 (lambda (|bindings_e_X_JNoCe|)
-                                   (if (null? |bindings_e_X_JNoCe|)
+            (apply (lambda (|let*_VIKYz33-h|
+                            |x_VI4Vxw3-h|
+                            |v_VIqRvZ3-h|
+                            |e1_VIMNtq4-h|
+                            |e2_VI6KrT4-h|)
+                     ((letrec ((|f_VIsGpk5-h|
+                                 (lambda (|bindings_VIOCnN5-h|)
+                                   (if (null? |bindings_VIOCnN5-h|)
                                      (cons '#(syntax-object
                                               let
                                               ((top)
@@ -12260,13 +12274,13 @@
                                                  ()
                                                  ())))
                                            (cons '()
-                                                 (cons |e1_e_VaQqnCe|
-                                                       |e2_e_f7OTnCe|)))
-                                     ((lambda (|tmp_e_hYHepCe|)
-                                        ((lambda (|tmp_e_DUFHpCe|)
-                                           (if |tmp_e_DUFHpCe|
-                                             (apply (lambda (|body_e_ZQD8qCe|
-                                                             |binding_e_jNBBqCe|)
+                                                 (cons |e1_VIMNtq4-h|
+                                                       |e2_VI6KrT4-h|)))
+                                     ((lambda (|tmp_VI8zle6-h|)
+                                        ((lambda (|tmp_VIuvjH6-h|)
+                                           (if |tmp_VIuvjH6-h|
+                                             (apply (lambda (|body_VIQrh87-h|
+                                                             |binding_VIaofB7-h|)
                                                       (list '#(syntax-object
                                                                let
                                                                ((top)
@@ -12317,42 +12331,42 @@
                                                                      *top*))
                                                                   ()
                                                                   ())))
-                                                            (list |binding_e_jNBBqCe|)
-                                                            |body_e_ZQD8qCe|))
-                                                    |tmp_e_DUFHpCe|)
-                                             (syntax-error |tmp_e_hYHepCe|)))
+                                                            (list |binding_VIaofB7-h|)
+                                                            |body_VIQrh87-h|))
+                                                    |tmp_VIuvjH6-h|)
+                                             (syntax-error |tmp_VI8zle6-h|)))
                                          ($syntax-dispatch
                                            (compile-in-annotation
-                                             |tmp_e_hYHepCe|
+                                             |tmp_VI8zle6-h|
                                              value)
                                            '(any any))))
-                                      (list (|f_e_B3MkoCe|
-                                              (cdr |bindings_e_X_JNoCe|))
-                                            (car |bindings_e_X_JNoCe|)))))))
-                        |f_e_B3MkoCe|)
-                      (map list |x_e_diUwmCe| |v_e_zeSZmCe|)))
-                   |tmp_e_xpYClCe|)
-            (syntax-error |tmp_e_bt-9lCe|)))
+                                      (list (|f_VIsGpk5-h|
+                                              (cdr |bindings_VIOCnN5-h|))
+                                            (car |bindings_VIOCnN5-h|)))))))
+                        |f_VIsGpk5-h|)
+                      (map list |x_VI4Vxw3-h| |v_VIqRvZ3-h|)))
+                   |tmp_VIo0CC2-h|)
+            (syntax-error |tmp_VI24E92-h|)))
         ($syntax-dispatch
-          (compile-in-annotation |tmp_e_bt-9lCe| value)
+          (compile-in-annotation |tmp_VI24E92-h| value)
           '(any #(each (any any)) any . each-any))))
-     |x_e_Rw0JkCe|)))
+     |x_VII7GI1-h|)))
 ($sc-put-cte
   'cond
-  (lambda (|x_e_Lch7vCe|)
-    ((lambda (|tmp_e_59fAvCe|)
-       ((lambda (|tmp_e_r5d1wCe|)
-          (if |tmp_e_r5d1wCe|
-            (apply (lambda (|__e_N1buwCe| |m1_e_7-8XwCe| |m2_e_tW6oxCe|)
-                     ((letrec ((|f_e_PS4RxCe|
-                                 (lambda (|clause_e_9P2iyCe|
-                                          |clauses_e_vL0LyCe|)
-                                   (if (null? |clauses_e_vL0LyCe|)
-                                     ((lambda (|tmp_e_FUxxFCe|)
-                                        ((lambda (|tmp_e__Qv-FCe|)
-                                           (if |tmp_e__Qv-FCe|
-                                             (apply (lambda (|e1_e_797qLCe|
-                                                             |e2_e_t55TLCe|)
+  (lambda (|x_VICPW6c-h|)
+    ((lambda (|tmp_VIYLUzc-h|)
+       ((lambda (|tmp_VIiIS0d-h|)
+          (if |tmp_VIiIS0d-h|
+            (apply (lambda (|__VIEEQtd-h| |m1_VI-AOWd-h| |m2_VIkxMne-h|)
+                     ((letrec ((|f_VIGtKQe-h|
+                                 (lambda (|clause_VI0qIhf-h|
+                                          |clauses_VImmGKf-h|)
+                                   (if (null? |clauses_VImmGKf-h|)
+                                     ((lambda (|tmp_VIwvbxm-h|)
+                                        ((lambda (|tmp_VISr9-m-h|)
+                                           (if |tmp_VISr9-m-h|
+                                             (apply (lambda (|e1_VI-LMps-h|
+                                                             |e2_VIkIKSs-h|)
                                                       (cons '#(syntax-object
                                                                begin
                                                                ((top)
@@ -12396,12 +12410,12 @@
                                                                      *top*))
                                                                   ()
                                                                   ())))
-                                                            (cons |e1_e_797qLCe|
-                                                                  |e2_e_t55TLCe|)))
-                                                    |tmp_e__Qv-FCe|)
-                                             ((lambda (|tmp_e_lNtrGCe|)
-                                                (if |tmp_e_lNtrGCe|
-                                                  (apply (lambda (|e0_e_Nc9ZKCe|)
+                                                            (cons |e1_VI-LMps-h|
+                                                                  |e2_VIkIKSs-h|)))
+                                                    |tmp_VISr9-m-h|)
+                                             ((lambda (|tmp_VIco7rn-h|)
+                                                (if |tmp_VIco7rn-h|
+                                                  (apply (lambda (|e0_VIEPOYr-h|)
                                                            (cons '#(syntax-object
                                                                     let
                                                                     ((top)
@@ -12492,7 +12506,7 @@
                                                                                             *top*))
                                                                                          ()
                                                                                          ())))
-                                                                                   |e0_e_Nc9ZKCe|))
+                                                                                   |e0_VIEPOYr-h|))
                                                                        '#(syntax-object
                                                                           ((if t
                                                                              t))
@@ -12539,11 +12553,11 @@
                                                                                 *top*))
                                                                              ()
                                                                              ()))))))
-                                                         |tmp_e_lNtrGCe|)
-                                                  ((lambda (|tmp_e_HJrUGCe|)
-                                                     (if |tmp_e_HJrUGCe|
-                                                       (apply (lambda (|e0_e_5kd3KCe|
-                                                                       |e1_e_rgbwKCe|)
+                                                         |tmp_VIco7rn-h|)
+                                                  ((lambda (|tmp_VIyk5Un-h|)
+                                                     (if |tmp_VIyk5Un-h|
+                                                       (apply (lambda (|e0_VIYWS2r-h|
+                                                                       |e1_VIiTQvr-h|)
                                                                 (list '#(syntax-object
                                                                          let
                                                                          ((top)
@@ -12640,7 +12654,7 @@
                                                                                            *top*))
                                                                                         ()
                                                                                         ())))
-                                                                                  |e0_e_5kd3KCe|))
+                                                                                  |e0_VIYWS2r-h|))
                                                                       (list '#(syntax-object
                                                                                if
                                                                                ((top)
@@ -12737,7 +12751,7 @@
                                                                                      *top*))
                                                                                   ()
                                                                                   ())))
-                                                                            (cons |e1_e_rgbwKCe|
+                                                                            (cons |e1_VIiTQvr-h|
                                                                                   '#(syntax-object
                                                                                      (t)
                                                                                      ((top)
@@ -12786,12 +12800,12 @@
                                                                                            *top*))
                                                                                         ()
                                                                                         ())))))))
-                                                              |tmp_e_HJrUGCe|)
-                                                       ((lambda (|tmp_e_1GplHCe|)
-                                                          (if |tmp_e_1GplHCe|
-                                                            (apply (lambda (|e0_e_JylfICe|
-                                                                            |e1_e_3vjIICe|
-                                                                            |e2_e_prh9JCe|)
+                                                              |tmp_VIyk5Un-h|)
+                                                       ((lambda (|tmp_VIUg3lo-h|)
+                                                          (if |tmp_VIUg3lo-h|
+                                                            (apply (lambda (|e0_VIA9_ep-h|
+                                                                            |e1_VIW5ZHp-h|
+                                                                            |e2_VIg2X8q-h|)
                                                                      (list '#(syntax-object
                                                                               if
                                                                               ((top)
@@ -12843,7 +12857,7 @@
                                                                                     *top*))
                                                                                  ()
                                                                                  ())))
-                                                                           |e0_e_JylfICe|
+                                                                           |e0_VIA9_ep-h|
                                                                            (cons '#(syntax-object
                                                                                     begin
                                                                                     ((top)
@@ -12895,23 +12909,23 @@
                                                                                           *top*))
                                                                                        ()
                                                                                        ())))
-                                                                                 (cons |e1_e_3vjIICe|
-                                                                                       |e2_e_prh9JCe|))))
-                                                                   |tmp_e_1GplHCe|)
-                                                            ((lambda (|__e_nCnOHCe|)
+                                                                                 (cons |e1_VIW5ZHp-h|
+                                                                                       |e2_VIg2X8q-h|))))
+                                                                   |tmp_VIUg3lo-h|)
+                                                            ((lambda (|__VIed1Oo-h|)
                                                                (syntax-error
-                                                                 |x_e_Lch7vCe|))
-                                                             |tmp_e_FUxxFCe|)))
+                                                                 |x_VICPW6c-h|))
+                                                             |tmp_VIwvbxm-h|)))
                                                         ($syntax-dispatch
                                                           (compile-in-annotation
-                                                            |tmp_e_FUxxFCe|
+                                                            |tmp_VIwvbxm-h|
                                                             value)
                                                           '(any any
                                                                 .
                                                                 each-any)))))
                                                    ($syntax-dispatch
                                                      (compile-in-annotation
-                                                       |tmp_e_FUxxFCe|
+                                                       |tmp_VIwvbxm-h|
                                                        value)
                                                      '(any #(free-id
                                                              #(syntax-object
@@ -12955,12 +12969,12 @@
                                                            any)))))
                                               ($syntax-dispatch
                                                 (compile-in-annotation
-                                                  |tmp_e_FUxxFCe|
+                                                  |tmp_VIwvbxm-h|
                                                   value)
                                                 '(any)))))
                                          ($syntax-dispatch
                                            (compile-in-annotation
-                                             |tmp_e_FUxxFCe|
+                                             |tmp_VIwvbxm-h|
                                              value)
                                            '(#(free-id
                                                #(syntax-object
@@ -12991,13 +13005,13 @@
                                              any
                                              .
                                              each-any))))
-                                      |clause_e_9P2iyCe|)
-                                     ((lambda (|tmp_e_RH-bzCe|)
-                                        ((lambda (|rest_e_bEYEzCe|)
-                                           ((lambda (|tmp_e_xAW5ACe|)
-                                              ((lambda (|tmp_e_TwUyACe|)
-                                                 (if |tmp_e_TwUyACe|
-                                                   (apply (lambda (|e0_e_jYz4FCe|)
+                                      |clause_VI0qIhf-h|)
+                                     ((lambda (|tmp_VIIiEbg-h|)
+                                        ((lambda (|rest_VI2fCEg-h|)
+                                           ((lambda (|tmp_VIobA5h-h|)
+                                              ((lambda (|tmp_VIK7yyh-h|)
+                                                 (if |tmp_VIK7yyh-h|
+                                                   (apply (lambda (|e0_VIazd4m-h|)
                                                             (list '#(syntax-object
                                                                      let
                                                                      ((top)
@@ -13096,7 +13110,7 @@
                                                                                        *top*))
                                                                                     ()
                                                                                     ())))
-                                                                              |e0_e_jYz4FCe|))
+                                                                              |e0_VIazd4m-h|))
                                                                   (list '#(syntax-object
                                                                            if
                                                                            ((top)
@@ -13244,12 +13258,12 @@
                                                                                  *top*))
                                                                               ()
                                                                               ())))
-                                                                        |rest_e_bEYEzCe|)))
-                                                          |tmp_e_TwUyACe|)
-                                                   ((lambda (|tmp_e_dtS_ACe|)
-                                                      (if |tmp_e_dtS_ACe|
-                                                        (apply (lambda (|e0_e_D3EaECe|
-                                                                        |e1_e_Z_BDECe|)
+                                                                        |rest_VI2fCEg-h|)))
+                                                          |tmp_VIK7yyh-h|)
+                                                   ((lambda (|tmp_VI44w_h-h|)
+                                                      (if |tmp_VI44w_h-h|
+                                                        (apply (lambda (|e0_VIuGhal-h|
+                                                                        |e1_VIQCfDl-h|)
                                                                  (list '#(syntax-object
                                                                           let
                                                                           ((top)
@@ -13354,7 +13368,7 @@
                                                                                             *top*))
                                                                                          ()
                                                                                          ())))
-                                                                                   |e0_e_D3EaECe|))
+                                                                                   |e0_VIuGhal-h|))
                                                                        (list '#(syntax-object
                                                                                 if
                                                                                 ((top)
@@ -13459,7 +13473,7 @@
                                                                                       *top*))
                                                                                    ()
                                                                                    ())))
-                                                                             (cons |e1_e_Z_BDECe|
+                                                                             (cons |e1_VIQCfDl-h|
                                                                                    '#(syntax-object
                                                                                       (t)
                                                                                       ((top)
@@ -13512,13 +13526,13 @@
                                                                                             *top*))
                                                                                          ()
                                                                                          ()))))
-                                                                             |rest_e_bEYEzCe|)))
-                                                               |tmp_e_dtS_ACe|)
-                                                        ((lambda (|tmp_e_zpQsBCe|)
-                                                           (if |tmp_e_zpQsBCe|
-                                                             (apply (lambda (|e0_e_fiMmCCe|
-                                                                             |e1_e_BeKPCCe|
-                                                                             |e2_e_XaIgDCe|)
+                                                                             |rest_VI2fCEg-h|)))
+                                                               |tmp_VI44w_h-h|)
+                                                        ((lambda (|tmp_VIq0usi-h|)
+                                                           (if |tmp_VIq0usi-h|
+                                                             (apply (lambda (|e0_VI6Vpmj-h|
+                                                                             |e1_VIsRnPj-h|
+                                                                             |e2_VIONlgk-h|)
                                                                       (list '#(syntax-object
                                                                                if
                                                                                ((top)
@@ -13574,7 +13588,7 @@
                                                                                      *top*))
                                                                                   ()
                                                                                   ())))
-                                                                            |e0_e_fiMmCCe|
+                                                                            |e0_VI6Vpmj-h|
                                                                             (cons '#(syntax-object
                                                                                      begin
                                                                                      ((top)
@@ -13630,24 +13644,24 @@
                                                                                            *top*))
                                                                                         ()
                                                                                         ())))
-                                                                                  (cons |e1_e_BeKPCCe|
-                                                                                        |e2_e_XaIgDCe|))
-                                                                            |rest_e_bEYEzCe|))
-                                                                    |tmp_e_zpQsBCe|)
-                                                             ((lambda (|__e_VlOVBCe|)
+                                                                                  (cons |e1_VIsRnPj-h|
+                                                                                        |e2_VIONlgk-h|))
+                                                                            |rest_VI2fCEg-h|))
+                                                                    |tmp_VIq0usi-h|)
+                                                             ((lambda (|__VIMYrVi-h|)
                                                                 (syntax-error
-                                                                  |x_e_Lch7vCe|))
-                                                              |tmp_e_xAW5ACe|)))
+                                                                  |x_VICPW6c-h|))
+                                                              |tmp_VIobA5h-h|)))
                                                          ($syntax-dispatch
                                                            (compile-in-annotation
-                                                             |tmp_e_xAW5ACe|
+                                                             |tmp_VIobA5h-h|
                                                              value)
                                                            '(any any
                                                                  .
                                                                  each-any)))))
                                                     ($syntax-dispatch
                                                       (compile-in-annotation
-                                                        |tmp_e_xAW5ACe|
+                                                        |tmp_VIobA5h-h|
                                                         value)
                                                       '(any #(free-id
                                                               #(syntax-object
@@ -13695,43 +13709,43 @@
                                                             any)))))
                                                ($syntax-dispatch
                                                  (compile-in-annotation
-                                                   |tmp_e_xAW5ACe|
+                                                   |tmp_VIobA5h-h|
                                                    value)
                                                  '(any))))
-                                            |clause_e_9P2iyCe|))
-                                         |tmp_e_RH-bzCe|))
-                                      (|f_e_PS4RxCe|
-                                        (car |clauses_e_vL0LyCe|)
-                                        (cdr |clauses_e_vL0LyCe|)))))))
-                        |f_e_PS4RxCe|)
-                      |m1_e_7-8XwCe|
-                      |m2_e_tW6oxCe|))
-                   |tmp_e_r5d1wCe|)
-            (syntax-error |tmp_e_59fAvCe|)))
+                                            |clause_VI0qIhf-h|))
+                                         |tmp_VIIiEbg-h|))
+                                      (|f_VIGtKQe-h|
+                                        (car |clauses_VImmGKf-h|)
+                                        (cdr |clauses_VImmGKf-h|)))))))
+                        |f_VIGtKQe-h|)
+                      |m1_VI-AOWd-h|
+                      |m2_VIkxMne-h|))
+                   |tmp_VIiIS0d-h|)
+            (syntax-error |tmp_VIYLUzc-h|)))
         ($syntax-dispatch
-          (compile-in-annotation |tmp_e_59fAvCe| value)
+          (compile-in-annotation |tmp_VIYLUzc-h| value)
           '(any any . each-any))))
-     |x_e_Lch7vCe|)))
+     |x_VICPW6c-h|)))
 ($sc-put-cte
   'do
-  (lambda (|orig-x_e_vW-dNCe|)
-    ((lambda (|tmp_e_RSYGNCe|)
-       ((lambda (|tmp_e_bPW7OCe|)
-          (if |tmp_e_bPW7OCe|
-            (apply (lambda (|__e_xLUAOCe|
-                            |var_e_THS1PCe|
-                            |init_e_dEQuPCe|
-                            |step_e_zAOXPCe|
-                            |e0_e_VwMoQCe|
-                            |e1_e_ftKRQCe|
-                            |c_e_BpIiRCe|)
-                     ((lambda (|tmp_e_XlGLRCe|)
-                        ((lambda (|tmp_e_nNlhWCe|)
-                           (if |tmp_e_nNlhWCe|
-                             (apply (lambda (|step_e_JJjKWCe|)
-                                      ((lambda (|tmp_e_3GhbXCe|)
-                                         ((lambda (|tmp_e_Lyd5YCe|)
-                                            (if |tmp_e_Lyd5YCe|
+  (lambda (|orig-x_VImxEdu-h|)
+    ((lambda (|tmp_VIItCGu-h|)
+       ((lambda (|tmp_VI2qA7v-h|)
+          (if |tmp_VI2qA7v-h|
+            (apply (lambda (|__VIomyAv-h|
+                            |var_VIKiw1w-h|
+                            |init_VI4fuuw-h|
+                            |step_VIqbsXw-h|
+                            |e0_VIM7qox-h|
+                            |e1_VI64oRx-h|
+                            |c_VIs0miy-h|)
+                     ((lambda (|tmp_VIOYjLy-h|)
+                        ((lambda (|tmp_VIeo_gD-h|)
+                           (if |tmp_VIeo_gD-h|
+                             (apply (lambda (|step_VIAkZJD-h|)
+                                      ((lambda (|tmp_VIWgXaE-h|)
+                                         ((lambda (|tmp_VIC9T4F-h|)
+                                            (if |tmp_VIC9T4F-h|
                                               (apply (lambda ()
                                                        (list '#(syntax-object
                                                                 let
@@ -13818,8 +13832,8 @@
                                                                    ()
                                                                    ())))
                                                              (map list
-                                                                  |var_e_THS1PCe|
-                                                                  |init_e_dEQuPCe|)
+                                                                  |var_VIKiw1w-h|
+                                                                  |init_VI4fuuw-h|)
                                                              (list '#(syntax-object
                                                                       if
                                                                       ((top)
@@ -13904,7 +13918,7 @@
                                                                                   *top*))
                                                                                ()
                                                                                ())))
-                                                                         |e0_e_VwMoQCe|)
+                                                                         |e0_VIM7qox-h|)
                                                                    (cons '#(syntax-object
                                                                             begin
                                                                             ((top)
@@ -13948,7 +13962,7 @@
                                                                                ()
                                                                                ())))
                                                                          (append
-                                                                           |c_e_BpIiRCe|
+                                                                           |c_VIs0miy-h|
                                                                            (list (cons '#(syntax-object
                                                                                           doloop
                                                                                           ((top)
@@ -13991,12 +14005,12 @@
                                                                                                 *top*))
                                                                                              ()
                                                                                              ())))
-                                                                                       |step_e_JJjKWCe|)))))))
-                                                     |tmp_e_Lyd5YCe|)
-                                              ((lambda (|tmp_e_5vbyYCe|)
-                                                 (if |tmp_e_5vbyYCe|
-                                                   (apply (lambda (|e1_e_rr9_YCe|
-                                                                   |e2_e_Nn7sZCe|)
+                                                                                       |step_VIAkZJD-h|)))))))
+                                                     |tmp_VIC9T4F-h|)
+                                              ((lambda (|tmp_VIY5RxF-h|)
+                                                 (if |tmp_VIY5RxF-h|
+                                                   (apply (lambda (|e1_VIi2P-F-h|
+                                                                   |e2_VIE-MrG-h|)
                                                             (list '#(syntax-object
                                                                      let
                                                                      ((top)
@@ -14096,8 +14110,8 @@
                                                                         ()
                                                                         ())))
                                                                   (map list
-                                                                       |var_e_THS1PCe|
-                                                                       |init_e_dEQuPCe|)
+                                                                       |var_VIKiw1w-h|
+                                                                       |init_VI4fuuw-h|)
                                                                   (list '#(syntax-object
                                                                            if
                                                                            ((top)
@@ -14147,7 +14161,7 @@
                                                                                  *top*))
                                                                               ()
                                                                               ())))
-                                                                        |e0_e_VwMoQCe|
+                                                                        |e0_VIM7qox-h|
                                                                         (cons '#(syntax-object
                                                                                  begin
                                                                                  ((top)
@@ -14197,8 +14211,8 @@
                                                                                        *top*))
                                                                                     ()
                                                                                     ())))
-                                                                              (cons |e1_e_rr9_YCe|
-                                                                                    |e2_e_Nn7sZCe|))
+                                                                              (cons |e1_VIi2P-F-h|
+                                                                                    |e2_VIE-MrG-h|))
                                                                         (cons '#(syntax-object
                                                                                  begin
                                                                                  ((top)
@@ -14249,7 +14263,7 @@
                                                                                     ()
                                                                                     ())))
                                                                               (append
-                                                                                |c_e_BpIiRCe|
+                                                                                |c_VIs0miy-h|
                                                                                 (list (cons '#(syntax-object
                                                                                                doloop
                                                                                                ((top)
@@ -14299,69 +14313,69 @@
                                                                                                      *top*))
                                                                                                   ()
                                                                                                   ())))
-                                                                                            |step_e_JJjKWCe|)))))))
-                                                          |tmp_e_5vbyYCe|)
+                                                                                            |step_VIAkZJD-h|)))))))
+                                                          |tmp_VIY5RxF-h|)
                                                    (syntax-error
-                                                     |tmp_e_3GhbXCe|)))
+                                                     |tmp_VIWgXaE-h|)))
                                                ($syntax-dispatch
                                                  (compile-in-annotation
-                                                   |tmp_e_3GhbXCe|
+                                                   |tmp_VIWgXaE-h|
                                                    value)
                                                  '(any . each-any)))))
                                           ($syntax-dispatch
                                             (compile-in-annotation
-                                              |tmp_e_3GhbXCe|
+                                              |tmp_VIWgXaE-h|
                                               value)
                                             '())))
-                                       |e1_e_ftKRQCe|))
-                                    |tmp_e_nNlhWCe|)
-                             (syntax-error |tmp_e_XlGLRCe|)))
+                                       |e1_VI64oRx-h|))
+                                    |tmp_VIeo_gD-h|)
+                             (syntax-error |tmp_VIOYjLy-h|)))
                          ($syntax-dispatch
-                           (compile-in-annotation |tmp_e_XlGLRCe| value)
+                           (compile-in-annotation |tmp_VIOYjLy-h| value)
                            'each-any)))
-                      (map (lambda (|v_e_hiEcSCe| |s_e_DeCFSCe|)
-                             ((lambda (|tmp_e_ZaA6TCe|)
-                                ((lambda (|tmp_e_j7yzTCe|)
-                                   (if |tmp_e_j7yzTCe|
-                                     (apply (lambda () |v_e_hiEcSCe|)
-                                            |tmp_e_j7yzTCe|)
-                                     ((lambda (|tmp_e_F3w0UCe|)
-                                        (if |tmp_e_F3w0UCe|
-                                          (apply (lambda (|e_e_lYrWUCe|)
-                                                   |e_e_lYrWUCe|)
-                                                 |tmp_e_F3w0UCe|)
-                                          ((lambda (|__e___ttUCe|)
-                                             (syntax-error |orig-x_e_vW-dNCe|))
-                                           |tmp_e_ZaA6TCe|)))
+                      (map (lambda (|v_VI8Vhcz-h| |s_VIuRfFz-h|)
+                             ((lambda (|tmp_VIQNd6A-h|)
+                                ((lambda (|tmp_VIaKbzA-h|)
+                                   (if |tmp_VIaKbzA-h|
+                                     (apply (lambda () |v_VI8Vhcz-h|)
+                                            |tmp_VIaKbzA-h|)
+                                     ((lambda (|tmp_VIwG90B-h|)
+                                        (if |tmp_VIwG90B-h|
+                                          (apply (lambda (|e_VIcz5WB-h|)
+                                                   |e_VIcz5WB-h|)
+                                                 |tmp_VIwG90B-h|)
+                                          ((lambda (|__VISC7tB-h|)
+                                             (syntax-error |orig-x_VImxEdu-h|))
+                                           |tmp_VIQNd6A-h|)))
                                       ($syntax-dispatch
                                         (compile-in-annotation
-                                          |tmp_e_ZaA6TCe|
+                                          |tmp_VIQNd6A-h|
                                           value)
                                         '(any)))))
                                  ($syntax-dispatch
                                    (compile-in-annotation
-                                     |tmp_e_ZaA6TCe|
+                                     |tmp_VIQNd6A-h|
                                      value)
                                    '())))
-                              |s_e_DeCFSCe|))
-                           |var_e_THS1PCe|
-                           |step_e_zAOXPCe|)))
-                   |tmp_e_bPW7OCe|)
-            (syntax-error |tmp_e_RSYGNCe|)))
+                              |s_VIuRfFz-h|))
+                           |var_VIKiw1w-h|
+                           |step_VIqbsXw-h|)))
+                   |tmp_VI2qA7v-h|)
+            (syntax-error |tmp_VIItCGu-h|)))
         ($syntax-dispatch
-          (compile-in-annotation |tmp_e_RSYGNCe| value)
+          (compile-in-annotation |tmp_VIItCGu-h| value)
           '(any #(each (any any . any))
                 (any . each-any)
                 .
                 each-any))))
-     |orig-x_e_vW-dNCe|)))
+     |orig-x_VImxEdu-h|)))
 ($sc-put-cte
   'quasiquote
-  (letrec ((|isquote?_e_dPOZ1De|
-             (lambda (|x_e_10mj8De|)
-               (if (identifier? |x_e_10mj8De|)
+  (letrec ((|isquote?_VI4qsZK-h|
+             (lambda (|x_VIUC_iR-h|)
+               (if (identifier? |x_VIUC_iR-h|)
                  (free-identifier=?
-                   |x_e_10mj8De|
+                   |x_VIUC_iR-h|
                    '#(syntax-object
                       quote
                       ((top)
@@ -14389,11 +14403,11 @@
                          #("i" "i" "i" "i" "i" "i" "i" "i" "i"))
                        #(ribcage (#(import-token *top*)) () ()))))
                  '#f)))
-           (|islist?_e_zLMq2De|
-             (lambda (|x_e_nYjM8De|)
-               (if (identifier? |x_e_nYjM8De|)
+           (|islist?_VIqmqqL-h|
+             (lambda (|x_VIezZLR-h|)
+               (if (identifier? |x_VIezZLR-h|)
                  (free-identifier=?
-                   |x_e_nYjM8De|
+                   |x_VIezZLR-h|
                    '#(syntax-object
                       list
                       ((top)
@@ -14421,11 +14435,11 @@
                          #("i" "i" "i" "i" "i" "i" "i" "i" "i"))
                        #(ribcage (#(import-token *top*)) () ()))))
                  '#f)))
-           (|iscons?_e_VHKT2De|
-             (lambda (|x_e_JUhd9De|)
-               (if (identifier? |x_e_JUhd9De|)
+           (|iscons?_VIMioTL-h|
+             (lambda (|x_VIAvXcS-h|)
+               (if (identifier? |x_VIAvXcS-h|)
                  (free-identifier=?
-                   |x_e_JUhd9De|
+                   |x_VIAvXcS-h|
                    '#(syntax-object
                       cons
                       ((top)
@@ -14453,58 +14467,58 @@
                          #("i" "i" "i" "i" "i" "i" "i" "i" "i"))
                        #(ribcage (#(import-token *top*)) () ()))))
                  '#f)))
-           (|quote-nil?_e_fEIk3De|
-             (lambda (|x_e_3RfG9De|)
-               ((lambda (|tmp_e_pNd7aDe|)
-                  ((lambda (|tmp_e_LJbAaDe|)
-                     (if |tmp_e_LJbAaDe|
-                       (apply (lambda (|quote?_e_rC7ubDe|)
-                                (|isquote?_e_dPOZ1De| |quote?_e_rC7ubDe|))
-                              |tmp_e_LJbAaDe|)
-                       ((lambda (|__e_5G91bDe|) '#f) |tmp_e_pNd7aDe|)))
+           (|quote-nil?_VI6fmkM-h|
+             (lambda (|x_VIWrVFS-h|)
+               ((lambda (|tmp_VIgoT6T-h|)
+                  ((lambda (|tmp_VICkRzT-h|)
+                     (if |tmp_VICkRzT-h|
+                       (apply (lambda (|quote?_VIidNtU-h|)
+                                (|isquote?_VI4qsZK-h| |quote?_VIidNtU-h|))
+                              |tmp_VICkRzT-h|)
+                       ((lambda (|__VIYgP0U-h|) '#f) |tmp_VIgoT6T-h|)))
                    ($syntax-dispatch
-                     (compile-in-annotation |tmp_e_pNd7aDe| value)
+                     (compile-in-annotation |tmp_VIgoT6T-h| value)
                      '(any ()))))
-                |x_e_3RfG9De|)))
-           (|quasilist*_e_BAGN3De|
-             (lambda (|x_e_Ny5XbDe| |y_e_7v3ocDe|)
-               ((letrec ((|f_e_tr1RcDe|
-                           (lambda (|x_e_Pn_hdDe|)
-                             (if (null? |x_e_Pn_hdDe|)
-                               |y_e_7v3ocDe|
-                               (|quasicons_e_XwEe4De|
-                                 (car |x_e_Pn_hdDe|)
-                                 (|f_e_tr1RcDe| (cdr |x_e_Pn_hdDe|)))))))
-                  |f_e_tr1RcDe|)
-                |x_e_Ny5XbDe|)))
-           (|quasicons_e_XwEe4De|
-             (lambda (|x_e_9kZKdDe| |y_e_vgXbeDe|)
-               ((lambda (|tmp_e_RcVEeDe|)
-                  ((lambda (|tmp_e_b9T5fDe|)
-                     (if |tmp_e_b9T5fDe|
-                       (apply (lambda (|x_e_x5RyfDe| |y_e_T1P_fDe|)
-                                ((lambda (|tmp_e_d-MsgDe|)
-                                   ((lambda (|tmp_e_zWKVgDe|)
-                                      (if (if |tmp_e_zWKVgDe|
-                                            (apply (lambda (|quote?_e_30e9oDe|
-                                                            |dy_e_pYbCoDe|)
-                                                     (|isquote?_e_dPOZ1De|
-                                                       |quote?_e_30e9oDe|))
-                                                   |tmp_e_zWKVgDe|)
+                |x_VIWrVFS-h|)))
+           (|quasilist*_VIsbkNM-h|
+             (lambda (|x_VIE9LWU-h| |y_VI-5JnV-h|)
+               ((letrec ((|f_VIk2HQV-h|
+                           (lambda (|x_VIG-EhW-h|)
+                             (if (null? |x_VIG-EhW-h|)
+                               |y_VI-5JnV-h|
+                               (|quasicons_VIO7ieN-h|
+                                 (car |x_VIG-EhW-h|)
+                                 (|f_VIk2HQV-h| (cdr |x_VIG-EhW-h|)))))))
+                  |f_VIk2HQV-h|)
+                |x_VIE9LWU-h|)))
+           (|quasicons_VIO7ieN-h|
+             (lambda (|x_VI0XCKW-h| |y_VImTAbX-h|)
+               ((lambda (|tmp_VIIPyEX-h|)
+                  ((lambda (|tmp_VI2Mw5Y-h|)
+                     (if |tmp_VI2Mw5Y-h|
+                       (apply (lambda (|x_VIoIuyY-h| |y_VIKEs_Y-h|)
+                                ((lambda (|tmp_VI4BqsZ-h|)
+                                   ((lambda (|tmp_VIqxoVZ-h|)
+                                      (if (if |tmp_VIqxoVZ-h|
+                                            (apply (lambda (|quote?_VIWCT85_h|
+                                                            |dy_VIgzRB5_h|)
+                                                     (|isquote?_VI4qsZK-h|
+                                                       |quote?_VIWCT85_h|))
+                                                   |tmp_VIqxoVZ-h|)
                                             '#f)
-                                        (apply (lambda (|quote?_e_Zww4kDe|
-                                                        |dy_e_jtuxkDe|)
-                                                 ((lambda (|tmp_e_Fps-kDe|)
-                                                    ((lambda (|tmp_e__lqrlDe|)
-                                                       (if (if |tmp_e__lqrlDe|
-                                                             (apply (lambda (|quote?_e_n7ifnDe|
-                                                                             |dx_e_J3gInDe|)
-                                                                      (|isquote?_e_dPOZ1De|
-                                                                        |quote?_e_n7ifnDe|))
-                                                                    |tmp_e__lqrlDe|)
+                                        (apply (lambda (|quote?_VIQ7a41_h|
+                                                        |dy_VIa48x1_h|)
+                                                 ((lambda (|tmp_VIw06-1_h|)
+                                                    ((lambda (|tmp_VISY3r2_h|)
+                                                       (if (if |tmp_VISY3r2_h|
+                                                             (apply (lambda (|quote?_VIeKXe4_h|
+                                                                             |dx_VIAGVH4_h|)
+                                                                      (|isquote?_VI4qsZK-h|
+                                                                        |quote?_VIeKXe4_h|))
+                                                                    |tmp_VISY3r2_h|)
                                                              '#f)
-                                                         (apply (lambda (|quote?_e_HemlmDe|
-                                                                         |dx_e_1bkOmDe|)
+                                                         (apply (lambda (|quote?_VIyR_k3_h|
+                                                                         |dx_VIUNZN3_h|)
                                                                   (list '#(syntax-object
                                                                            quote
                                                                            ((top)
@@ -14573,11 +14587,11 @@
                                                                                  *top*))
                                                                               ()
                                                                               ())))
-                                                                        (cons |dx_e_1bkOmDe|
-                                                                              |dy_e_jtuxkDe|)))
-                                                                |tmp_e__lqrlDe|)
-                                                         ((lambda (|__e_lioUlDe|)
-                                                            (if (null? |dy_e_jtuxkDe|)
+                                                                        (cons |dx_VIUNZN3_h|
+                                                                              |dy_VIa48x1_h|)))
+                                                                |tmp_VISY3r2_h|)
+                                                         ((lambda (|__VIcV1U2_h|)
+                                                            (if (null? |dy_VIa48x1_h|)
                                                               (list '#(syntax-object
                                                                        list
                                                                        ((top)
@@ -14643,7 +14657,7 @@
                                                                              *top*))
                                                                           ()
                                                                           ())))
-                                                                    |x_e_x5RyfDe|)
+                                                                    |x_VIoIuyY-h|)
                                                               (list '#(syntax-object
                                                                        cons
                                                                        ((top)
@@ -14709,26 +14723,26 @@
                                                                              *top*))
                                                                           ()
                                                                           ())))
-                                                                    |x_e_x5RyfDe|
-                                                                    |y_e_T1P_fDe|)))
-                                                          |tmp_e_Fps-kDe|)))
+                                                                    |x_VIoIuyY-h|
+                                                                    |y_VIKEs_Y-h|)))
+                                                          |tmp_VIw06-1_h|)))
                                                      ($syntax-dispatch
                                                        (compile-in-annotation
-                                                         |tmp_e_Fps-kDe|
+                                                         |tmp_VIw06-1_h|
                                                          value)
                                                        '(any any))))
-                                                  |x_e_x5RyfDe|))
-                                               |tmp_e_zWKVgDe|)
-                                        ((lambda (|tmp_e_VSImhDe|)
-                                           (if (if |tmp_e_VSImhDe|
-                                                 (apply (lambda (|listp_e_hEAajDe|
-                                                                 |stuff_e_DAyDjDe|)
-                                                          (|islist?_e_zLMq2De|
-                                                            |listp_e_hEAajDe|))
-                                                        |tmp_e_VSImhDe|)
+                                                  |x_VIoIuyY-h|))
+                                               |tmp_VIqxoVZ-h|)
+                                        ((lambda (|tmp_VIMtmm--h|)
+                                           (if (if |tmp_VIMtmm--h|
+                                                 (apply (lambda (|listp_VI8fea0_h|
+                                                                 |stuff_VIubcD0_h|)
+                                                          (|islist?_VIqmqqL-h|
+                                                            |listp_VI8fea0_h|))
+                                                        |tmp_VIMtmm--h|)
                                                  '#f)
-                                             (apply (lambda (|listp_e_BLEgiDe|
-                                                             |stuff_e_XHCJiDe|)
+                                             (apply (lambda (|listp_VIsmig_-h|
+                                                             |stuff_VIOigJ_-h|)
                                                       (cons '#(syntax-object
                                                                list
                                                                ((top)
@@ -14785,10 +14799,10 @@
                                                                      *top*))
                                                                   ()
                                                                   ())))
-                                                            (cons |x_e_x5RyfDe|
-                                                                  |stuff_e_XHCJiDe|)))
-                                                    |tmp_e_VSImhDe|)
-                                             ((lambda (|else_e_fPGPhDe|)
+                                                            (cons |x_VIoIuyY-h|
+                                                                  |stuff_VIOigJ_-h|)))
+                                                    |tmp_VIMtmm--h|)
+                                             ((lambda (|else_VI6qkP--h|)
                                                 (list '#(syntax-object
                                                          cons
                                                          ((top)
@@ -14838,30 +14852,30 @@
                                                                *top*))
                                                             ()
                                                             ())))
-                                                      |x_e_x5RyfDe|
-                                                      |y_e_T1P_fDe|))
-                                              |tmp_e_d-MsgDe|)))
+                                                      |x_VIoIuyY-h|
+                                                      |y_VIKEs_Y-h|))
+                                              |tmp_VI4BqsZ-h|)))
                                          ($syntax-dispatch
                                            (compile-in-annotation
-                                             |tmp_e_d-MsgDe|
+                                             |tmp_VI4BqsZ-h|
                                              value)
                                            '(any . any)))))
                                     ($syntax-dispatch
                                       (compile-in-annotation
-                                        |tmp_e_d-MsgDe|
+                                        |tmp_VI4BqsZ-h|
                                         value)
                                       '(any any))))
-                                 |y_e_T1P_fDe|))
-                              |tmp_e_b9T5fDe|)
-                       (syntax-error |tmp_e_RcVEeDe|)))
+                                 |y_VIKEs_Y-h|))
+                              |tmp_VI2Mw5Y-h|)
+                       (syntax-error |tmp_VIIPyEX-h|)))
                    ($syntax-dispatch
-                     (compile-in-annotation |tmp_e_RcVEeDe| value)
+                     (compile-in-annotation |tmp_VIIPyEX-h| value)
                      '(any any))))
-                (list |x_e_9kZKdDe| |y_e_vgXbeDe|))))
-           (|quasiappend_e_htCH4De|
-             (lambda (|x_e_LU93pDe| |y_e_5R7wpDe|)
-               ((lambda (|ls_e_rN5ZpDe|)
-                  (if (null? |ls_e_rN5ZpDe|)
+                (list |x_VI0XCKW-h| |y_VImTAbX-h|))))
+           (|quasiappend_VI84gHN-h|
+             (lambda (|x_VICvP26_h| |y_VIYrNv6_h|)
+               ((lambda (|ls_VIioLY6_h|)
+                  (if (null? |ls_VIioLY6_h|)
                     '#(syntax-object
                        '()
                        ((top)
@@ -14890,12 +14904,12 @@
                             (top))
                           #("i" "i" "i" "i" "i" "i" "i" "i" "i"))
                         #(ribcage (#(import-token *top*)) () ())))
-                    (if (null? (cdr |ls_e_rN5ZpDe|))
-                      (car |ls_e_rN5ZpDe|)
-                      ((lambda (|tmp_e_NJ3qqDe|)
-                         ((lambda (|tmp_e_7G1TqDe|)
-                            (if |tmp_e_7G1TqDe|
-                              (apply (lambda (|p_e_tC_jrDe|)
+                    (if (null? (cdr |ls_VIioLY6_h|))
+                      (car |ls_VIioLY6_h|)
+                      ((lambda (|tmp_VIEkJp7_h|)
+                         ((lambda (|tmp_VI-gHS7_h|)
+                            (if |tmp_VI-gHS7_h|
+                              (apply (lambda (|p_VIkdFj8_h|)
                                        (cons '#(syntax-object
                                                 append
                                                 ((top)
@@ -14945,41 +14959,41 @@
                                                    (#(import-token *top*))
                                                    ()
                                                    ())))
-                                             |p_e_tC_jrDe|))
-                                     |tmp_e_7G1TqDe|)
-                              (syntax-error |tmp_e_NJ3qqDe|)))
+                                             |p_VIkdFj8_h|))
+                                     |tmp_VI-gHS7_h|)
+                              (syntax-error |tmp_VIEkJp7_h|)))
                           ($syntax-dispatch
-                            (compile-in-annotation |tmp_e_NJ3qqDe| value)
+                            (compile-in-annotation |tmp_VIEkJp7_h| value)
                             'each-any)))
-                       |ls_e_rN5ZpDe|))))
-                ((letrec ((|f_e_9vXdsDe|
-                            (lambda (|x_e_vrVGsDe|)
-                              (if (null? |x_e_vrVGsDe|)
-                                (if (|quote-nil?_e_fEIk3De| |y_e_5R7wpDe|)
+                       |ls_VIioLY6_h|))))
+                ((letrec ((|f_VI06Bd9_h|
+                            (lambda (|x_VIm2zG9_h|)
+                              (if (null? |x_VIm2zG9_h|)
+                                (if (|quote-nil?_VI6fmkM-h| |y_VIYrNv6_h|)
                                   '()
-                                  (list |y_e_5R7wpDe|))
-                                (if (|quote-nil?_e_fEIk3De|
-                                      (car |x_e_vrVGsDe|))
-                                  (|f_e_9vXdsDe| (cdr |x_e_vrVGsDe|))
-                                  (cons (car |x_e_vrVGsDe|)
-                                        (|f_e_9vXdsDe|
-                                          (cdr |x_e_vrVGsDe|))))))))
-                   |f_e_9vXdsDe|)
-                 |x_e_LU93pDe|))))
-           (|quasivector_e_DpA85De|
-             (lambda (|x_e_RnT7tDe|)
-               ((lambda (|tmp_e_bkRAtDe|)
-                  ((lambda (|pat-x_e_xgP1uDe|)
-                     ((lambda (|tmp_e_TcNuuDe|)
-                        ((lambda (|tmp_e_d9LXuDe|)
-                           (if (if |tmp_e_d9LXuDe|
-                                 (apply (lambda (|quote?_e_TnLZIDe|
-                                                 |x_e_dkJqJDe|)
-                                          (|isquote?_e_dPOZ1De|
-                                            |quote?_e_TnLZIDe|))
-                                        |tmp_e_d9LXuDe|)
+                                  (list |y_VIYrNv6_h|))
+                                (if (|quote-nil?_VI6fmkM-h|
+                                      (car |x_VIm2zG9_h|))
+                                  (|f_VI06Bd9_h| (cdr |x_VIm2zG9_h|))
+                                  (cons (car |x_VIm2zG9_h|)
+                                        (|f_VI06Bd9_h|
+                                          (cdr |x_VIm2zG9_h|))))))))
+                   |f_VI06Bd9_h|)
+                 |x_VICvP26_h|))))
+           (|quasivector_VIu0e8O-h|
+             (lambda (|x_VII-w7a_h|)
+               ((lambda (|tmp_VI2XuAa_h|)
+                  ((lambda (|pat-x_VIoTs1b_h|)
+                     ((lambda (|tmp_VIKPqub_h|)
+                        ((lambda (|tmp_VI4MoXb_h|)
+                           (if (if |tmp_VI4MoXb_h|
+                                 (apply (lambda (|quote?_VIK-oZp_h|
+                                                 |x_VI4Xmqq_h|)
+                                          (|isquote?_VI4qsZK-h|
+                                            |quote?_VIK-oZp_h|))
+                                        |tmp_VI4MoXb_h|)
                                  '#f)
-                             (apply (lambda (|quote?_e_RyRCHDe| |x_e_bvP3IDe|)
+                             (apply (lambda (|quote?_VII9vCo_h| |x_VI26t3p_h|)
                                       (list '#(syntax-object
                                                quote
                                                ((top)
@@ -15025,25 +15039,25 @@
                                                   (#(import-token *top*))
                                                   ()
                                                   ())))
-                                            (list->vector |x_e_bvP3IDe|)))
-                                    |tmp_e_d9LXuDe|)
-                             ((lambda (|__e_z5JovDe|)
-                                ((letrec ((|f_e_V1HRvDe|
-                                            (lambda (|x_e_f-EiwDe|
-                                                     |k_e_BWCLwDe|)
-                                              ((lambda (|tmp_e_XSAcxDe|)
-                                                 ((lambda (|tmp_e_hPyFxDe|)
-                                                    (if (if |tmp_e_hPyFxDe|
-                                                          (apply (lambda (|quote?_e_PJXfGDe|
-                                                                          |x_e_9GVIGDe|)
-                                                                   (|isquote?_e_dPOZ1De|
-                                                                     |quote?_e_PJXfGDe|))
-                                                                 |tmp_e_hPyFxDe|)
+                                            (list->vector |x_VI26t3p_h|)))
+                                    |tmp_VI4MoXb_h|)
+                             ((lambda (|__VIqImoc_h|)
+                                ((letrec ((|f_VIMEkRc_h|
+                                            (lambda (|x_VI6Biid_h|
+                                                     |k_VIsxgLd_h|)
+                                              ((lambda (|tmp_VIOtece_h|)
+                                                 ((lambda (|tmp_VI8qcFe_h|)
+                                                    (if (if |tmp_VI8qcFe_h|
+                                                          (apply (lambda (|quote?_VIGkBfn_h|
+                                                                          |x_VI0hzIn_h|)
+                                                                   (|isquote?_VI4qsZK-h|
+                                                                     |quote?_VIGkBfn_h|))
+                                                                 |tmp_VI8qcFe_h|)
                                                           '#f)
-                                                      (apply (lambda (|quote?_e_NU1VEDe|
-                                                                      |x_e_7R_lFDe|)
-                                                               (|k_e_BWCLwDe|
-                                                                 (map (lambda (|tmp_e_tNZOFDe|)
+                                                      (apply (lambda (|quote?_VIEvHUl_h|
+                                                                      |x_VI-rFlm_h|)
+                                                               (|k_VIsxgLd_h|
+                                                                 (map (lambda (|tmp_VIkoDOm_h|)
                                                                         (list '#(syntax-object
                                                                                  quote
                                                                                  ((top)
@@ -15118,42 +15132,42 @@
                                                                                        *top*))
                                                                                     ()
                                                                                     ())))
-                                                                              |tmp_e_tNZOFDe|))
-                                                                      |x_e_7R_lFDe|)))
-                                                             |tmp_e_hPyFxDe|)
-                                                      ((lambda (|tmp_e_DLw6yDe|)
-                                                         (if (if |tmp_e_DLw6yDe|
-                                                               (apply (lambda (|listp_e_506_DDe|
-                                                                               |x_e_rY3sEDe|)
-                                                                        (|islist?_e_zLMq2De|
-                                                                          |listp_e_506_DDe|))
-                                                                      |tmp_e_DLw6yDe|)
+                                                                              |tmp_VIkoDOm_h|))
+                                                                      |x_VI-rFlm_h|)))
+                                                             |tmp_VI8qcFe_h|)
+                                                      ((lambda (|tmp_VIuma6f_h|)
+                                                         (if (if |tmp_VIuma6f_h|
+                                                               (apply (lambda (|listp_VIYCL-k_h|
+                                                                               |x_VIizJrl_h|)
+                                                                        (|islist?_VIqmqqL-h|
+                                                                          |listp_VIYCL-k_h|))
+                                                                      |tmp_VIuma6f_h|)
                                                                '#f)
-                                                           (apply (lambda (|listp_e_3bcECDe|
-                                                                           |x_e_p7a5DDe|)
-                                                                    (|k_e_BWCLwDe|
-                                                                      |x_e_p7a5DDe|))
-                                                                  |tmp_e_DLw6yDe|)
-                                                           ((lambda (|tmp_e_ZHuzyDe|)
-                                                              (if (if |tmp_e_ZHuzyDe|
-                                                                    (apply (lambda (|cons?_e_1mihBDe|
-                                                                                    |x_e_nigKBDe|
-                                                                                    |y_e_JeebCDe|)
-                                                                             (|iscons?_e_VHKT2De|
-                                                                               |cons?_e_1mihBDe|))
-                                                                           |tmp_e_ZHuzyDe|)
+                                                           (apply (lambda (|listp_VIWNRDj_h|
+                                                                           |x_VIgKP4k_h|)
+                                                                    (|k_VIsxgLd_h|
+                                                                      |x_VIgKP4k_h|))
+                                                                  |tmp_VIuma6f_h|)
+                                                           ((lambda (|tmp_VIQi8zf_h|)
+                                                              (if (if |tmp_VIQi8zf_h|
+                                                                    (apply (lambda (|cons?_VIUYXgi_h|
+                                                                                    |x_VIeVVJi_h|
+                                                                                    |y_VIARTaj_h|)
+                                                                             (|iscons?_VIMioTL-h|
+                                                                               |cons?_VIUYXgi_h|))
+                                                                           |tmp_VIQi8zf_h|)
                                                                     '#f)
-                                                                (apply (lambda (|cons?_e_FAqtzDe|
-                                                                                |x_e__woWzDe|
-                                                                                |y_e_ltmnADe|)
-                                                                         (|f_e_V1HRvDe|
-                                                                           |y_e_ltmnADe|
-                                                                           (lambda (|ls_e_HpkQADe|)
-                                                                             (|k_e_BWCLwDe|
-                                                                               (cons |x_e__woWzDe|
-                                                                                     |ls_e_HpkQADe|)))))
-                                                                       |tmp_e_ZHuzyDe|)
-                                                                ((lambda (|else_e_jEs0zDe|)
+                                                                (apply (lambda (|cons?_VIwb4tg_h|
+                                                                                |x_VIS72Wg_h|
+                                                                                |y_VIc40nh_h|)
+                                                                         (|f_VIMEkRc_h|
+                                                                           |y_VIc40nh_h|
+                                                                           (lambda (|ls_VIy0-Ph_h|)
+                                                                             (|k_VIsxgLd_h|
+                                                                               (cons |x_VIS72Wg_h|
+                                                                                     |ls_VIy0-Ph_h|)))))
+                                                                       |tmp_VIQi8zf_h|)
+                                                                ((lambda (|else_VIaf60g_h|)
                                                                    (list '#(syntax-object
                                                                             list->vector
                                                                             ((top)
@@ -15225,28 +15239,28 @@
                                                                                   *top*))
                                                                                ()
                                                                                ())))
-                                                                         |pat-x_e_xgP1uDe|))
-                                                                 |tmp_e_XSAcxDe|)))
+                                                                         |pat-x_VIoTs1b_h|))
+                                                                 |tmp_VIOtece_h|)))
                                                             ($syntax-dispatch
                                                               (compile-in-annotation
-                                                                |tmp_e_XSAcxDe|
+                                                                |tmp_VIOtece_h|
                                                                 value)
                                                               '(any any
                                                                     any)))))
                                                        ($syntax-dispatch
                                                          (compile-in-annotation
-                                                           |tmp_e_XSAcxDe|
+                                                           |tmp_VIOtece_h|
                                                            value)
                                                          '(any . each-any)))))
                                                   ($syntax-dispatch
                                                     (compile-in-annotation
-                                                      |tmp_e_XSAcxDe|
+                                                      |tmp_VIOtece_h|
                                                       value)
                                                     '(any each-any))))
-                                               |x_e_f-EiwDe|))))
-                                   |f_e_V1HRvDe|)
-                                 |x_e_RnT7tDe|
-                                 (lambda (|ls_e_vCT9HDe|)
+                                               |x_VI6Biid_h|))))
+                                   |f_VIMEkRc_h|)
+                                 |x_VII-w7a_h|
+                                 (lambda (|ls_VImdx9o_h|)
                                    (cons '#(syntax-object
                                             vector
                                             ((top)
@@ -15291,23 +15305,23 @@
                                                (#(import-token *top*))
                                                ()
                                                ())))
-                                         |ls_e_vCT9HDe|))))
-                              |tmp_e_TcNuuDe|)))
+                                         |ls_VImdx9o_h|))))
+                              |tmp_VIKPqub_h|)))
                          ($syntax-dispatch
-                           (compile-in-annotation |tmp_e_TcNuuDe| value)
+                           (compile-in-annotation |tmp_VIKPqub_h| value)
                            '(any each-any))))
-                      |pat-x_e_xgP1uDe|))
-                   |tmp_e_bkRAtDe|))
-                |x_e_RnT7tDe|)))
-           (|quasi_e_ZlyB5De|
-             (lambda (|p_e_zgHTJDe| |lev_e_VcFkKDe|)
-               ((lambda (|tmp_e_f9DNKDe|)
-                  ((lambda (|tmp_e_B5BeLDe|)
-                     (if |tmp_e_B5BeLDe|
-                       (apply (lambda (|p_e_tYXhUDe|)
-                                (if (= |lev_e_VcFkKDe| '0)
-                                  |p_e_tYXhUDe|
-                                  (|quasicons_e_XwEe4De|
+                      |pat-x_VIoTs1b_h|))
+                   |tmp_VI2XuAa_h|))
+                |x_VII-w7a_h|)))
+           (|quasi_VIQYbBO-h|
+             (lambda (|p_VIqTkTq_h| |lev_VIMPikr_h|)
+               ((lambda (|tmp_VI6MgNr_h|)
+                  ((lambda (|tmp_VIsIees_h|)
+                     (if |tmp_VIsIees_h|
+                       (apply (lambda (|p_VIkzBhB_h|)
+                                (if (= |lev_VIMPikr_h| '0)
+                                  |p_VIkzBhB_h|
+                                  (|quasicons_VIO7ieN-h|
                                     '#(syntax-object
                                        'unquote
                                        ((top)
@@ -15349,21 +15363,21 @@
                                           (#(import-token *top*))
                                           ()
                                           ())))
-                                    (|quasi_e_ZlyB5De|
-                                      (list |p_e_tYXhUDe|)
-                                      (- |lev_e_VcFkKDe| '1)))))
-                              |tmp_e_B5BeLDe|)
-                       ((lambda (|tmp_e_X1zHLDe|)
-                          (if |tmp_e_X1zHLDe|
-                            (apply (lambda (|p_e_5b4uSDe| |q_e_r72XSDe|)
-                                     (if (= |lev_e_VcFkKDe| '0)
-                                       (|quasilist*_e_BAGN3De|
-                                         |p_e_5b4uSDe|
-                                         (|quasi_e_ZlyB5De|
-                                           |q_e_r72XSDe|
-                                           |lev_e_VcFkKDe|))
-                                       (|quasicons_e_XwEe4De|
-                                         (|quasicons_e_XwEe4De|
+                                    (|quasi_VIQYbBO-h|
+                                      (list |p_VIkzBhB_h|)
+                                      (- |lev_VIMPikr_h| '1)))))
+                              |tmp_VIsIees_h|)
+                       ((lambda (|tmp_VIOEcHs_h|)
+                          (if |tmp_VIOEcHs_h|
+                            (apply (lambda (|p_VIYNJtz_h| |q_VIiKHWz_h|)
+                                     (if (= |lev_VIMPikr_h| '0)
+                                       (|quasilist*_VIsbkNM-h|
+                                         |p_VIYNJtz_h|
+                                         (|quasi_VIQYbBO-h|
+                                           |q_VIiKHWz_h|
+                                           |lev_VIMPikr_h|))
+                                       (|quasicons_VIO7ieN-h|
+                                         (|quasicons_VIO7ieN-h|
                                            '#(syntax-object
                                               'unquote
                                               ((top)
@@ -15408,24 +15422,24 @@
                                                  (#(import-token *top*))
                                                  ()
                                                  ())))
-                                           (|quasi_e_ZlyB5De|
-                                             |p_e_5b4uSDe|
-                                             (- |lev_e_VcFkKDe| '1)))
-                                         (|quasi_e_ZlyB5De|
-                                           |q_e_r72XSDe|
-                                           |lev_e_VcFkKDe|))))
-                                   |tmp_e_X1zHLDe|)
-                            ((lambda (|tmp_e_h-w8MDe|)
-                               (if |tmp_e_h-w8MDe|
-                                 (apply (lambda (|p_e_JpcGQDe| |q_e_3ma7RDe|)
-                                          (if (= |lev_e_VcFkKDe| '0)
-                                            (|quasiappend_e_htCH4De|
-                                              |p_e_JpcGQDe|
-                                              (|quasi_e_ZlyB5De|
-                                                |q_e_3ma7RDe|
-                                                |lev_e_VcFkKDe|))
-                                            (|quasicons_e_XwEe4De|
-                                              (|quasicons_e_XwEe4De|
+                                           (|quasi_VIQYbBO-h|
+                                             |p_VIYNJtz_h|
+                                             (- |lev_VIMPikr_h| '1)))
+                                         (|quasi_VIQYbBO-h|
+                                           |q_VIiKHWz_h|
+                                           |lev_VIMPikr_h|))))
+                                   |tmp_VIOEcHs_h|)
+                            ((lambda (|tmp_VI8Ba8t_h|)
+                               (if |tmp_VI8Ba8t_h|
+                                 (apply (lambda (|p_VIA0SFx_h| |q_VIWYP6y_h|)
+                                          (if (= |lev_VIMPikr_h| '0)
+                                            (|quasiappend_VI84gHN-h|
+                                              |p_VIA0SFx_h|
+                                              (|quasi_VIQYbBO-h|
+                                                |q_VIWYP6y_h|
+                                                |lev_VIMPikr_h|))
+                                            (|quasicons_VIO7ieN-h|
+                                              (|quasicons_VIO7ieN-h|
                                                 '#(syntax-object
                                                    'unquote-splicing
                                                    ((top)
@@ -15470,17 +15484,17 @@
                                                       (#(import-token *top*))
                                                       ()
                                                       ())))
-                                                (|quasi_e_ZlyB5De|
-                                                  |p_e_JpcGQDe|
-                                                  (- |lev_e_VcFkKDe| '1)))
-                                              (|quasi_e_ZlyB5De|
-                                                |q_e_3ma7RDe|
-                                                |lev_e_VcFkKDe|))))
-                                        |tmp_e_h-w8MDe|)
-                                 ((lambda (|tmp_e_DWuBMDe|)
-                                    (if |tmp_e_DWuBMDe|
-                                      (apply (lambda (|p_e_ntedQDe|)
-                                               (|quasicons_e_XwEe4De|
+                                                (|quasi_VIQYbBO-h|
+                                                  |p_VIA0SFx_h|
+                                                  (- |lev_VIMPikr_h| '1)))
+                                              (|quasi_VIQYbBO-h|
+                                                |q_VIWYP6y_h|
+                                                |lev_VIMPikr_h|))))
+                                        |tmp_VI8Ba8t_h|)
+                                 ((lambda (|tmp_VIux8Bt_h|)
+                                    (if |tmp_VIux8Bt_h|
+                                      (apply (lambda (|p_VIe4Ucx_h|)
+                                               (|quasicons_VIO7ieN-h|
                                                  '#(syntax-object
                                                     'quasiquote
                                                     ((top)
@@ -15525,31 +15539,31 @@
                                                        (#(import-token *top*))
                                                        ()
                                                        ())))
-                                                 (|quasi_e_ZlyB5De|
-                                                   (list |p_e_ntedQDe|)
-                                                   (+ |lev_e_VcFkKDe| '1))))
-                                             |tmp_e_DWuBMDe|)
-                                      ((lambda (|tmp_e_ZSs2NDe|)
-                                         (if |tmp_e_ZSs2NDe|
-                                           (apply (lambda (|p_e_HAijPDe|
-                                                           |q_e_1xgMPDe|)
-                                                    (|quasicons_e_XwEe4De|
-                                                      (|quasi_e_ZlyB5De|
-                                                        |p_e_HAijPDe|
-                                                        |lev_e_VcFkKDe|)
-                                                      (|quasi_e_ZlyB5De|
-                                                        |q_e_1xgMPDe|
-                                                        |lev_e_VcFkKDe|)))
-                                                  |tmp_e_ZSs2NDe|)
-                                           ((lambda (|tmp_e_jPqvNDe|)
-                                              (if |tmp_e_jPqvNDe|
-                                                (apply (lambda (|x_e__HmpODe|)
-                                                         (|quasivector_e_DpA85De|
-                                                           (|quasi_e_ZlyB5De|
-                                                             |x_e__HmpODe|
-                                                             |lev_e_VcFkKDe|)))
-                                                       |tmp_e_jPqvNDe|)
-                                                ((lambda (|p_e_FLoYNDe|)
+                                                 (|quasi_VIQYbBO-h|
+                                                   (list |p_VIe4Ucx_h|)
+                                                   (+ |lev_VIMPikr_h| '1))))
+                                             |tmp_VIux8Bt_h|)
+                                      ((lambda (|tmp_VIQt62u_h|)
+                                         (if |tmp_VIQt62u_h|
+                                           (apply (lambda (|p_VIybYiw_h|
+                                                           |q_VIU7WLw_h|)
+                                                    (|quasicons_VIO7ieN-h|
+                                                      (|quasi_VIQYbBO-h|
+                                                        |p_VIybYiw_h|
+                                                        |lev_VIMPikr_h|)
+                                                      (|quasi_VIQYbBO-h|
+                                                        |q_VIU7WLw_h|
+                                                        |lev_VIMPikr_h|)))
+                                                  |tmp_VIQt62u_h|)
+                                           ((lambda (|tmp_VIaq4vu_h|)
+                                              (if |tmp_VIaq4vu_h|
+                                                (apply (lambda (|x_VISi0pv_h|)
+                                                         (|quasivector_VIu0e8O-h|
+                                                           (|quasi_VIQYbBO-h|
+                                                             |x_VISi0pv_h|
+                                                             |lev_VIMPikr_h|)))
+                                                       |tmp_VIaq4vu_h|)
+                                                ((lambda (|p_VIwm2Yu_h|)
                                                    (list '#(syntax-object
                                                             quote
                                                             ((top)
@@ -15598,21 +15612,21 @@
                                                                   *top*))
                                                                ()
                                                                ())))
-                                                         |p_e_FLoYNDe|))
-                                                 |tmp_e_f9DNKDe|)))
+                                                         |p_VIwm2Yu_h|))
+                                                 |tmp_VI6MgNr_h|)))
                                             ($syntax-dispatch
                                               (compile-in-annotation
-                                                |tmp_e_f9DNKDe|
+                                                |tmp_VI6MgNr_h|
                                                 value)
                                               '#(vector each-any)))))
                                        ($syntax-dispatch
                                          (compile-in-annotation
-                                           |tmp_e_f9DNKDe|
+                                           |tmp_VI6MgNr_h|
                                            value)
                                          '(any . any)))))
                                   ($syntax-dispatch
                                     (compile-in-annotation
-                                      |tmp_e_f9DNKDe|
+                                      |tmp_VI6MgNr_h|
                                       value)
                                     '(#(free-id
                                         #(syntax-object
@@ -15657,7 +15671,7 @@
                                              ()))))
                                       any)))))
                              ($syntax-dispatch
-                               (compile-in-annotation |tmp_e_f9DNKDe| value)
+                               (compile-in-annotation |tmp_VI6MgNr_h| value)
                                '((#(free-id
                                     #(syntax-object
                                       unquote-splicing
@@ -15704,7 +15718,7 @@
                                  .
                                  any)))))
                         ($syntax-dispatch
-                          (compile-in-annotation |tmp_e_f9DNKDe| value)
+                          (compile-in-annotation |tmp_VI6MgNr_h| value)
                           '((#(free-id
                                #(syntax-object
                                  unquote
@@ -15737,7 +15751,7 @@
                             .
                             any)))))
                    ($syntax-dispatch
-                     (compile-in-annotation |tmp_e_f9DNKDe| value)
+                     (compile-in-annotation |tmp_VI6MgNr_h| value)
                      '(#(free-id
                          #(syntax-object
                            unquote
@@ -15766,50 +15780,50 @@
                               #("i" "i" "i" "i" "i" "i" "i" "i" "i"))
                             #(ribcage (#(import-token *top*)) () ()))))
                        any))))
-                |p_e_zgHTJDe|))))
-    (lambda (|x_e_jiw26De|)
-      ((lambda (|tmp_e_Feuv6De|)
-         ((lambda (|tmp_e__asY6De|)
-            (if |tmp_e__asY6De|
-              (apply (lambda (|__e_l7qp7De| |e_e_H3oS7De|)
-                       (|quasi_e_ZlyB5De| |e_e_H3oS7De| '0))
-                     |tmp_e__asY6De|)
-              (syntax-error |tmp_e_Feuv6De|)))
+                |p_VIqTkTq_h|))))
+    (lambda (|x_VIaV92P-h|)
+      ((lambda (|tmp_VIwR7vP-h|)
+         ((lambda (|tmp_VISN5YP-h|)
+            (if |tmp_VISN5YP-h|
+              (apply (lambda (|__VIcK3pQ-h| |e_VIyG1SQ-h|)
+                       (|quasi_VIQYbBO-h| |e_VIyG1SQ-h| '0))
+                     |tmp_VISN5YP-h|)
+              (syntax-error |tmp_VIwR7vP-h|)))
           ($syntax-dispatch
-            (compile-in-annotation |tmp_e_Feuv6De| value)
+            (compile-in-annotation |tmp_VIwR7vP-h| value)
             '(any any))))
-       |x_e_jiw26De|))))
+       |x_VIaV92P-h|))))
 ($sc-put-cte
   'include
-  (lambda (|x_e_PUVKUDe|)
-    (letrec ((|read-file_e_9RTbVDe|
-               (lambda (|fn_e_BgzJZDe| |k_e_Xcxa-De|)
-                 ((lambda (|p_e_h9vD-De|)
-                    ((letrec ((|f_e_D5t4_De|
-                                (lambda (|acc_e_Z1rx_De|)
-                                  ((lambda (|x_e_j-o-_De|)
-                                     (if (eof-object? |x_e_j-o-_De|)
+  (lambda (|x_VIGvzKB_h|)
+    (letrec ((|read-file_VI0sxbC_h|
+               (lambda (|fn_VIsTcJG_h| |k_VIOPaaH_h|)
+                 ((lambda (|p_VI8M8DH_h|)
+                    ((letrec ((|f_VIuI64I_h|
+                                (lambda (|acc_VIQE4xI_h|)
+                                  ((lambda (|x_VIaB2-I_h|)
+                                     (if (eof-object? |x_VIaB2-I_h|)
                                        (begin
-                                         (close-input-port |p_e_h9vD-De|)
-                                         (reverse |acc_e_Z1rx_De|))
-                                       (|f_e_D5t4_De|
+                                         (close-input-port |p_VI8M8DH_h|)
+                                         (reverse |acc_VIQE4xI_h|))
+                                       (|f_VIuI64I_h|
                                          (cons (datum->syntax-object
-                                                 |k_e_Xcxa-De|
-                                                 |x_e_j-o-_De|)
-                                               |acc_e_Z1rx_De|))))
-                                   (read-code |p_e_h9vD-De|)))))
-                       |f_e_D5t4_De|)
+                                                 |k_VIOPaaH_h|
+                                                 |x_VIaB2-I_h|)
+                                               |acc_VIQE4xI_h|))))
+                                   (read-code |p_VI8M8DH_h|)))))
+                       |f_VIuI64I_h|)
                      '()))
-                  (open-source-input-file |fn_e_BgzJZDe|)))))
-      ((lambda (|tmp_e_vNREVDe|)
-         ((lambda (|tmp_e_RJP5WDe|)
-            (if |tmp_e_RJP5WDe|
-              (apply (lambda (|k_e_bGNyWDe| |filename_e_xCL_WDe|)
-                       ((lambda (|fn_e_TyJsXDe|)
-                          ((lambda (|tmp_e_dvHVXDe|)
-                             ((lambda (|tmp_e_zrFmYDe|)
-                                (if |tmp_e_zrFmYDe|
-                                  (apply (lambda (|exp_e_VnDPYDe|)
+                  (open-source-input-file |fn_VIsTcJG_h|)))))
+      ((lambda (|tmp_VImovEC_h|)
+         ((lambda (|tmp_VIIkt5D_h|)
+            (if |tmp_VIIkt5D_h|
+              (apply (lambda (|k_VI2hryD_h| |filename_VIodp_D_h|)
+                       ((lambda (|fn_VIK9nsE_h|)
+                          ((lambda (|tmp_VI46lVE_h|)
+                             ((lambda (|tmp_VIq2jmF_h|)
+                                (if |tmp_VIq2jmF_h|
+                                  (apply (lambda (|exp_VIM-gPF_h|)
                                            (cons '#(syntax-object
                                                     begin
                                                     ((top)
@@ -15838,66 +15852,66 @@
                                                        (#(import-token *top*))
                                                        ()
                                                        ())))
-                                                 |exp_e_VnDPYDe|))
-                                         |tmp_e_zrFmYDe|)
-                                  (syntax-error |tmp_e_dvHVXDe|)))
+                                                 |exp_VIM-gPF_h|))
+                                         |tmp_VIq2jmF_h|)
+                                  (syntax-error |tmp_VI46lVE_h|)))
                               ($syntax-dispatch
-                                (compile-in-annotation |tmp_e_dvHVXDe| value)
+                                (compile-in-annotation |tmp_VI46lVE_h| value)
                                 'each-any)))
-                           (|read-file_e_9RTbVDe|
-                             |fn_e_TyJsXDe|
-                             |k_e_bGNyWDe|)))
-                        (syntax-object->datum |filename_e_xCL_WDe|)))
-                     |tmp_e_RJP5WDe|)
-              (syntax-error |tmp_e_vNREVDe|)))
+                           (|read-file_VI0sxbC_h|
+                             |fn_VIK9nsE_h|
+                             |k_VI2hryD_h|)))
+                        (syntax-object->datum |filename_VIodp_D_h|)))
+                     |tmp_VIIkt5D_h|)
+              (syntax-error |tmp_VImovEC_h|)))
           ($syntax-dispatch
-            (compile-in-annotation |tmp_e_vNREVDe| value)
+            (compile-in-annotation |tmp_VImovEC_h| value)
             '(any any))))
-       |x_e_PUVKUDe|))))
+       |x_VIGvzKB_h|))))
 ($sc-put-cte
   'unquote
-  (lambda (|x_e_FWmr0Ee|)
-    ((lambda (|tmp_e__SkU0Ee|)
-       ((lambda (|tmp_e_lPil1Ee|)
-          (if |tmp_e_lPil1Ee|
-            (apply (lambda (|__e_HLgO1Ee| |e_e_1Ief2Ee|)
+  (lambda (|x_VIwx0rJ_h|)
+    ((lambda (|tmp_VISt-TJ_h|)
+       ((lambda (|tmp_VIcqYkK_h|)
+          (if |tmp_VIcqYkK_h|
+            (apply (lambda (|__VIymWNK_h| |e_VIUiUeL_h|)
                      (syntax-error
-                       |x_e_FWmr0Ee|
+                       |x_VIwx0rJ_h|
                        '"expression not valid outside of quasiquote"))
-                   |tmp_e_lPil1Ee|)
-            (syntax-error |tmp_e__SkU0Ee|)))
+                   |tmp_VIcqYkK_h|)
+            (syntax-error |tmp_VISt-TJ_h|)))
         ($syntax-dispatch
-          (compile-in-annotation |tmp_e__SkU0Ee| value)
+          (compile-in-annotation |tmp_VISt-TJ_h| value)
           '(any . each-any))))
-     |x_e_FWmr0Ee|)))
+     |x_VIwx0rJ_h|)))
 ($sc-put-cte
   'unquote-splicing
-  (lambda (|x_e_nEcI2Ee|)
-    ((lambda (|tmp_e_JAa93Ee|)
-       ((lambda (|tmp_e_3x8C3Ee|)
-          (if |tmp_e_3x8C3Ee|
-            (apply (lambda (|__e_pt634Ee| |e_e_Lp4w4Ee|)
+  (lambda (|x_VIefSHL_h|)
+    ((lambda (|tmp_VIAbQ8M_h|)
+       ((lambda (|tmp_VIW7OBM_h|)
+          (if |tmp_VIW7OBM_h|
+            (apply (lambda (|__VIg4M2N_h| |e_VIC0KvN_h|)
                      (syntax-error
-                       |x_e_nEcI2Ee|
+                       |x_VIefSHL_h|
                        '"expression not valid outside of quasiquote"))
-                   |tmp_e_3x8C3Ee|)
-            (syntax-error |tmp_e_JAa93Ee|)))
+                   |tmp_VIW7OBM_h|)
+            (syntax-error |tmp_VIAbQ8M_h|)))
         ($syntax-dispatch
-          (compile-in-annotation |tmp_e_JAa93Ee| value)
+          (compile-in-annotation |tmp_VIAbQ8M_h| value)
           '(any . each-any))))
-     |x_e_nEcI2Ee|)))
+     |x_VIefSHL_h|)))
 ($sc-put-cte
   'case
-  (lambda (|x_e_5m2Z4Ee|)
-    ((lambda (|tmp_e_ri0q5Ee|)
-       ((lambda (|tmp_e_Ne-S5Ee|)
-          (if |tmp_e_Ne-S5Ee|
-            (apply (lambda (|__e_7bYj6Ee|
-                            |e_e_t7WM6Ee|
-                            |m1_e_P3Ud7Ee|
-                            |m2_e_90SG7Ee|)
-                     ((lambda (|tmp_e_vYP78Ee|)
-                        ((lambda (|body_e_NpYlkEe|)
+  (lambda (|x_VIYYHYN_h|)
+    ((lambda (|tmp_VIiVFpO_h|)
+       ((lambda (|tmp_VIERDSO_h|)
+          (if |tmp_VIERDSO_h|
+            (apply (lambda (|__VI-NBjP_h|
+                            |e_VIkKzMP_h|
+                            |m1_VIGGxdQ_h|
+                            |m2_VI0DvGQ_h|)
+                     ((lambda (|tmp_VImzt7R_h|)
+                        ((lambda (|body_VIE0Cl10i|)
                            (list '#(syntax-object
                                     let
                                     ((top)
@@ -15929,18 +15943,18 @@
                                                    (#(import-token *top*))
                                                    ()
                                                    ())))
-                                             |e_e_t7WM6Ee|))
-                                 |body_e_NpYlkEe|))
-                         |tmp_e_vYP78Ee|))
-                      ((letrec ((|f_e_RUNA8Ee|
-                                  (lambda (|clause_e_bRL19Ee|
-                                           |clauses_e_xNJu9Ee|)
-                                    (if (null? |clauses_e_xNJu9Ee|)
-                                      ((lambda (|tmp_e_j9nteEe|)
-                                         ((lambda (|tmp_e_F5lWeEe|)
-                                            (if |tmp_e_F5lWeEe|
-                                              (apply (lambda (|e1_e_pE4yiEe|
-                                                              |e2_e_LA2_iEe|)
+                                             |e_VIkKzMP_h|))
+                                 |body_VIE0Cl10i|))
+                         |tmp_VImzt7R_h|))
+                      ((letrec ((|f_VIIvrAR_h|
+                                  (lambda (|clause_VI2sp1S_h|
+                                           |clauses_VIoonuS_h|)
+                                    (if (null? |clauses_VIoonuS_h|)
+                                      ((lambda (|tmp_VIaM0tX_h|)
+                                         ((lambda (|tmp_VIwI-VX_h|)
+                                            (if |tmp_VIwI-VX_h|
+                                              (apply (lambda (|e1_VIgfKx__h|
+                                                              |e2_VICbI-__h|)
                                                        (cons '#(syntax-object
                                                                 begin
                                                                 ((top)
@@ -15986,14 +16000,14 @@
                                                                       *top*))
                                                                    ()
                                                                    ())))
-                                                             (cons |e1_e_pE4yiEe|
-                                                                   |e2_e_LA2_iEe|)))
-                                                     |tmp_e_F5lWeEe|)
-                                              ((lambda (|tmp_e__1jnfEe|)
-                                                 (if |tmp_e__1jnfEe|
-                                                   (apply (lambda (|k_e_HWehgEe|
-                                                                   |e1_e_1TcKgEe|
-                                                                   |e2_e_nPabhEe|)
+                                                             (cons |e1_VIgfKx__h|
+                                                                   |e2_VICbI-__h|)))
+                                                     |tmp_VIwI-VX_h|)
+                                              ((lambda (|tmp_VISEYmY_h|)
+                                                 (if |tmp_VISEYmY_h|
+                                                   (apply (lambda (|k_VIyxUgZ_h|
+                                                                   |e1_VIUtSJZ_h|
+                                                                   |e2_VIeqQa-_h|)
                                                             (list '#(syntax-object
                                                                      if
                                                                      ((top)
@@ -16210,7 +16224,7 @@
                                                                                        *top*))
                                                                                     ()
                                                                                     ())))
-                                                                              |k_e_HWehgEe|))
+                                                                              |k_VIyxUgZ_h|))
                                                                   (cons '#(syntax-object
                                                                            begin
                                                                            ((top)
@@ -16265,21 +16279,21 @@
                                                                                  *top*))
                                                                               ()
                                                                               ())))
-                                                                        (cons |e1_e_1TcKgEe|
-                                                                              |e2_e_nPabhEe|))))
-                                                          |tmp_e__1jnfEe|)
-                                                   ((lambda (|__e_l-gQfEe|)
+                                                                        (cons |e1_VIUtSJZ_h|
+                                                                              |e2_VIeqQa-_h|))))
+                                                          |tmp_VISEYmY_h|)
+                                                   ((lambda (|__VIcBWPY_h|)
                                                       (syntax-error
-                                                        |x_e_5m2Z4Ee|))
-                                                    |tmp_e_j9nteEe|)))
+                                                        |x_VIYYHYN_h|))
+                                                    |tmp_VIaM0tX_h|)))
                                                ($syntax-dispatch
                                                  (compile-in-annotation
-                                                   |tmp_e_j9nteEe|
+                                                   |tmp_VIaM0tX_h|
                                                    value)
                                                  '(each-any any . each-any)))))
                                           ($syntax-dispatch
                                             (compile-in-annotation
-                                              |tmp_e_j9nteEe|
+                                              |tmp_VIaM0tX_h|
                                               value)
                                             '(#(free-id
                                                 #(syntax-object
@@ -16310,15 +16324,15 @@
                                               any
                                               .
                                               each-any))))
-                                       |clause_e_bRL19Ee|)
-                                      ((lambda (|tmp_e_TJHX9Ee|)
-                                         ((lambda (|rest_e_dGFoaEe|)
-                                            ((lambda (|tmp_e_zCDRaEe|)
-                                               ((lambda (|tmp_e_VyBibEe|)
-                                                  (if |tmp_e_VyBibEe|
-                                                    (apply (lambda (|k_e_BrxccEe|
-                                                                    |e1_e_XnvFcEe|
-                                                                    |e2_e_hkt6dEe|)
+                                       |clause_VI2sp1S_h|)
+                                      ((lambda (|tmp_VIKklXS_h|)
+                                         ((lambda (|rest_VI4hjoT_h|)
+                                            ((lambda (|tmp_VIqdhRT_h|)
+                                               ((lambda (|tmp_VIM9fiU_h|)
+                                                  (if |tmp_VIM9fiU_h|
+                                                    (apply (lambda (|k_VIs2bcV_h|
+                                                                    |e1_VIO-8FV_h|
+                                                                    |e2_VI8X66W_h|)
                                                              (list '#(syntax-object
                                                                       if
                                                                       ((top)
@@ -16551,7 +16565,7 @@
                                                                                         *top*))
                                                                                      ()
                                                                                      ())))
-                                                                               |k_e_BrxccEe|))
+                                                                               |k_VIs2bcV_h|))
                                                                    (cons '#(syntax-object
                                                                             begin
                                                                             ((top)
@@ -16610,40 +16624,40 @@
                                                                                   *top*))
                                                                                ()
                                                                                ())))
-                                                                         (cons |e1_e_XnvFcEe|
-                                                                               |e2_e_hkt6dEe|))
-                                                                   |rest_e_dGFoaEe|))
-                                                           |tmp_e_VyBibEe|)
-                                                    ((lambda (|__e_fvzLbEe|)
+                                                                         (cons |e1_VIO-8FV_h|
+                                                                               |e2_VI8X66W_h|))
+                                                                   |rest_VI4hjoT_h|))
+                                                           |tmp_VIM9fiU_h|)
+                                                    ((lambda (|__VI66dLU_h|)
                                                        (syntax-error
-                                                         |x_e_5m2Z4Ee|))
-                                                     |tmp_e_zCDRaEe|)))
+                                                         |x_VIYYHYN_h|))
+                                                     |tmp_VIqdhRT_h|)))
                                                 ($syntax-dispatch
                                                   (compile-in-annotation
-                                                    |tmp_e_zCDRaEe|
+                                                    |tmp_VIqdhRT_h|
                                                     value)
                                                   '(each-any any . each-any))))
-                                             |clause_e_bRL19Ee|))
-                                          |tmp_e_TJHX9Ee|))
-                                       (|f_e_RUNA8Ee|
-                                         (car |clauses_e_xNJu9Ee|)
-                                         (cdr |clauses_e_xNJu9Ee|)))))))
-                         |f_e_RUNA8Ee|)
-                       |m1_e_P3Ud7Ee|
-                       |m2_e_90SG7Ee|)))
-                   |tmp_e_Ne-S5Ee|)
-            (syntax-error |tmp_e_ri0q5Ee|)))
+                                             |clause_VI2sp1S_h|))
+                                          |tmp_VIKklXS_h|))
+                                       (|f_VIIvrAR_h|
+                                         (car |clauses_VIoonuS_h|)
+                                         (cdr |clauses_VIoonuS_h|)))))))
+                         |f_VIIvrAR_h|)
+                       |m1_VIGGxdQ_h|
+                       |m2_VI0DvGQ_h|)))
+                   |tmp_VIERDSO_h|)
+            (syntax-error |tmp_VIiVFpO_h|)))
         ($syntax-dispatch
-          (compile-in-annotation |tmp_e_ri0q5Ee| value)
+          (compile-in-annotation |tmp_VIiVFpO_h| value)
           '(any any any . each-any))))
-     |x_e_5m2Z4Ee|)))
+     |x_VIYYHYN_h|)))
 ($sc-put-cte
   'identifier-syntax
-  (lambda (|x_e_7mWOkEe|)
-    ((lambda (|tmp_e_tiUflEe|)
-       ((lambda (|tmp_e_PeSIlEe|)
-          (if |tmp_e_PeSIlEe|
-            (apply (lambda (|__e_Drp2sEe| |e_e_ZnnvsEe|)
+  (lambda (|x_VI-YzO10i|)
+    ((lambda (|tmp_VIkVxf20i|)
+       ((lambda (|tmp_VIGRvI20i|)
+          (if |tmp_VIGRvI20i|
+            (apply (lambda (|__VIu23290i| |e_VIQ-0v90i|)
                      (list '#(syntax-object
                               lambda
                               ((top)
@@ -16721,8 +16735,8 @@
                                                    (#(import-token *top*))
                                                    ()
                                                    ())))
-                                             |e_e_ZnnvsEe|))
-                                 (list (cons |__e_Drp2sEe|
+                                             |e_VIQ-0v90i|))
+                                 (list (cons |__VIu23290i|
                                              '(#(syntax-object
                                                  x
                                                  ((top)
@@ -16771,7 +16785,7 @@
                                                    (#(import-token *top*))
                                                    ()
                                                    ())))
-                                             (cons |e_e_ZnnvsEe|
+                                             (cons |e_VIQ-0v90i|
                                                    '(#(syntax-object
                                                        x
                                                        ((top)
@@ -16806,26 +16820,26 @@
                                                              *top*))
                                                           ()
                                                           ()))))))))))
-                   |tmp_e_PeSIlEe|)
-            ((lambda (|tmp_e_9bQ9mEe|)
-               (if (if |tmp_e_9bQ9mEe|
-                     (apply (lambda (|__e_zNBkpEe|
-                                     |id_e_VJzNpEe|
-                                     |exp1_e_fGxeqEe|
-                                     |var_e_BCvHqEe|
-                                     |val_e_Xyt8rEe|
-                                     |exp2_e_hvrBrEe|)
-                              (if (identifier? |id_e_VJzNpEe|)
-                                (identifier? |var_e_BCvHqEe|)
+                   |tmp_VIGRvI20i|)
+            ((lambda (|tmp_VI0Ot930i|)
+               (if (if |tmp_VI0Ot930i|
+                     (apply (lambda (|__VIqofk60i|
+                                     |id_VIMkdN60i|
+                                     |exp1_VI6hbe70i|
+                                     |var_VIsd9H70i|
+                                     |val_VIO97880i|
+                                     |exp2_VI865B80i|)
+                              (if (identifier? |id_VIMkdN60i|)
+                                (identifier? |var_VIsd9H70i|)
                                 '#f))
-                            |tmp_e_9bQ9mEe|)
+                            |tmp_VI0Ot930i|)
                      '#f)
-                 (apply (lambda (|__e_v7OCmEe|
-                                 |id_e_R3M3nEe|
-                                 |exp1_e_b0KwnEe|
-                                 |var_e_xYHZnEe|
-                                 |val_e_TUFqoEe|
-                                 |exp2_e_dRDToEe|)
+                 (apply (lambda (|__VImKrC30i|
+                                 |id_VIIGp340i|
+                                 |exp1_VI2Dnw40i|
+                                 |var_VIozlZ40i|
+                                 |val_VIKvjq50i|
+                                 |exp2_VI4shT50i|)
                           (list '#(syntax-object
                                    cons
                                    ((top)
@@ -16968,8 +16982,8 @@
                                                                  *top*))
                                                               ()
                                                               ())))
-                                                        |var_e_xYHZnEe|
-                                                        |val_e_TUFqoEe|)
+                                                        |var_VIozlZ40i|
+                                                        |val_VIKvjq50i|)
                                                   (list '#(syntax-object
                                                            syntax
                                                            ((top)
@@ -17002,8 +17016,8 @@
                                                                  *top*))
                                                               ()
                                                               ())))
-                                                        |exp2_e_dRDToEe|))
-                                            (list (cons |id_e_R3M3nEe|
+                                                        |exp2_VI4shT50i|))
+                                            (list (cons |id_VIIGp340i|
                                                         '(#(syntax-object
                                                             x
                                                             ((top)
@@ -17106,7 +17120,7 @@
                                                                  *top*))
                                                               ()
                                                               ())))
-                                                        (cons |exp1_e_b0KwnEe|
+                                                        (cons |exp1_VI2Dnw40i|
                                                               '(#(syntax-object
                                                                   x
                                                                   ((top)
@@ -17177,7 +17191,7 @@
                                                                         *top*))
                                                                      ()
                                                                      ())))))))
-                                            (list |id_e_R3M3nEe|
+                                            (list |id_VIIGp340i|
                                                   (list '#(syntax-object
                                                            identifier?
                                                            ((top)
@@ -17245,7 +17259,7 @@
                                                                        *top*))
                                                                     ()
                                                                     ())))
-                                                              |id_e_R3M3nEe|))
+                                                              |id_VIIGp340i|))
                                                   (list '#(syntax-object
                                                            syntax
                                                            ((top)
@@ -17278,11 +17292,11 @@
                                                                  *top*))
                                                               ()
                                                               ())))
-                                                        |exp1_e_b0KwnEe|))))))
-                        |tmp_e_9bQ9mEe|)
-                 (syntax-error |tmp_e_tiUflEe|)))
+                                                        |exp1_VI2Dnw40i|))))))
+                        |tmp_VI0Ot930i|)
+                 (syntax-error |tmp_VIkVxf20i|)))
              ($syntax-dispatch
-               (compile-in-annotation |tmp_e_tiUflEe| value)
+               (compile-in-annotation |tmp_VIkVxf20i| value)
                '(any (any any)
                      ((#(free-id
                          #(syntax-object
@@ -17295,6 +17309,6 @@
                        any)
                       any))))))
         ($syntax-dispatch
-          (compile-in-annotation |tmp_e_tiUflEe| value)
+          (compile-in-annotation |tmp_VIkVxf20i| value)
           '(any any))))
-     |x_e_7mWOkEe|)))
+     |x_VI-YzO10i|)))
