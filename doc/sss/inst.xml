@@ -351,6 +351,20 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
               <tbody> 
                 <row>
                   <entry>
+                    <indexterm><primary>permissive-parsing</primary></indexterm>
+                    <envar>permissiveParsing</envar></entry>
+                  <entry><function>permissive-parsing</function></entry>
+                  <entry>false</entry>
+                  <entry>
+                    If set to <literal>true</literal>, the Scheme parser
+                    will warn rather than raise an error for various syntactic errors 
+                    such as unbalanced parentheses.  This allows one to
+                    continue parsing a syntactically invalid file, finding many errors
+                    at once.
+                  </entry>
+                </row>
+                <row>
+                  <entry>
                     <indexterm><primary>permit-interrupts</primary></indexterm>
                     <envar>permitInterrupts</envar></entry>
                   <entry><function>permit-interrupts</function></entry>
