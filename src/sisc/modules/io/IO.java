@@ -283,7 +283,7 @@ public class IO extends IndexedProcedure {
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(true);
                     conn.setDoOutput(false);
-                    return new StreamInputPort(new BufferedInputStream(conn.getInputStream()));
+                    return new ReaderInputPort(new BufferedReader(new InputStreamReader(conn.getInputStream())));
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "erroropening", 
                                                url.toString()), e);
@@ -293,7 +293,7 @@ public class IO extends IndexedProcedure {
                 try {
                     if (url.getProtocol().equals("file")) {
                         //the JDK does not permit write access to file URLs
-                        return new StreamOutputPort(new BufferedOutputStream(new FileOutputStream(url.getPath())), false);
+                        return new WriterOutputPort(new BufferedWriter(new FileWriter(url.getPath())), false);
                     }
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(false);
