@@ -599,12 +599,84 @@
     <title>
       I/O
     </title>
-    <para></para>
+    <para>
+      &SISC;'s I/O routines are implemented in a flexible manner, allowing 
+      extensions to create new I/O sources that will behave as
+      standard Scheme port objects.  The ports can then be operated on
+      with all &R5RS; port operations, as well as some &SISC; specific 
+      port functions.
+    </para>
     <sect1>
       <title>
-	Port Input/Output
+	Port creation
       </title>
-      <para></para>
+      <para>&SISC; extends the &R5RS; standard's port-creation
+	functions in order to provide buffered output ports.  All &SISC; 
+	output ports are buffered, and a programmer may choose whether
+	a given port should automatically flush after each write
+	operation.  By default ports do <emphasis>not</emphasis>
+	automatically flush.  Enabling auto-flush can be done when the
+	port is created per the specifications below.  A port that
+	does not automatically flush can be flushed at any time by
+	calling <computeroutput>flush-output-port</computeroutput>.
+	Finally, an output-port that does not automatically flush will
+	be flushed when the port is closed with
+	<computeroutput>close-output-port</computeroutput>, but may
+	not be flushed if the Scheme system is exited without closing
+	the port.
+      </para>
+      <programlisting>
+	&procedure; (open-output-file file [auto-flush])
+	&returns; An output port
+
+	Creates an output port to the specified file (a string).  If
+	the optional auto-flush argument is provided and is true, the
+	port will automatically flush after each write call.  If the
+	specified file exists, it will be overwritten silently when
+	the port is opened.
+
+
+	&procedure; (flush-output-port output-port)
+	&returns; unspecified
+
+	Causes the specified output-port's buffered data to be written
+	immediately.  This operation is allowed on both auto-flush and
+	non-auto-flush output ports, though it has no effect on the
+	former.
+      </programlisting>
+    </sect1>
+    <sect1>
+      <title>
+	Block I/O
+      </title>
+      <para>
+	In addition to the standard operations on ports
+	(<computeroutput>read, read-char, char-available?,
+	display,</computeroutput> and
+	<computeroutput>write</computeroutput>), &SISC; provides block
+	input/output functions, that allow a Scheme program to read
+	blocks of more than one byte/character of data at a time.
+	&SISC; stores data that is read or is to be written as String
+	objects.  Binary data in strings is fully supported throughout
+	the Scheme system.  Such strings may be read and written as
+	usual, though undisplayable characters will often be escaped.
+      </para>
+      <programlisting> 
+	&procedure; (block-read buffer input-port integer)
+	&returns; the number of bytes read, an integer
+
+	Reads up to <emphasis>integer</emphasis> bytes of data from the
+        provided <emphasis>input-port</emphasis> into
+        <emphasis>buffer</emphasis>.  Note that less than
+        <emphasis>integer</emphasis> bytes may be read. 
+
+	&procedure; (block-write buffer input-port integer)
+	&returns; unspecified
+ 
+        Writes up to <emphasis>integer</emphasis> bytes of data stored
+	in <emphasis>buffer</emphasis> to the specified 
+	<emphasis>output-port</emphasis>.
+      </programlisting>
     </sect1>
     <sect1>
       <title>
