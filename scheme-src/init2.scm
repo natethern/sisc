@@ -279,12 +279,6 @@
       (putprop 'call/cc '*toplevel* original-call/cc)
       (putprop 'dynamic-wind '*toplevel* dynamic-wind-loader))))
 
-(define r
-(dynamic-wind
-(lambda () #f)
-(lambda () (vector #f (list #f)))
-(lambda () #f))) 
-
 ;;;; "ratize.scm" Convert number to rational number (ported from SLIB)
 
 (define rationalize (void))
