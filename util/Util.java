@@ -5,6 +5,7 @@ import java.util.jar.*;
 import java.io.*;
 import java.text.*;
 import java.net.*;
+import java.security.*;
 import java.lang.reflect.Field;
 import sisc.io.*;
 import sisc.data.*;
