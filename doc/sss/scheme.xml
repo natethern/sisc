@@ -244,8 +244,7 @@
         Pairs and Lists
       </title>
       <para>
-        &SISC; provides a few non-standard functions for dealing with
-        pairs and lists.
+	A function is provided to determine if a given pair is a <emphasis>proper list</emphasis>.
       </para>
       <para>
 	<blockquote>
@@ -262,9 +261,9 @@
 	      <para>        
                 Returns <literal>#t</literal> if the given argument is
                 a <emphasis>proper-list</emphasis>.  That is, if the
-                argument is a pair, whose cdr is either the empty-list
-                or also a proper-list, and which contains no
-                references to itself (is not circular).
+                argument is a pair, whose <literal>cdr</literal> is
+                either the empty-list or also a proper-list, and which
+                contains no references to itself (is not circular).
               </para>
             </blockquote>
           </para>
@@ -406,6 +405,31 @@
 	This syntax denotes a boxed value, with
 	<computeroutput>&lt;datum&gt;</computeroutput> as the contained
 	value.
+      </para>
+      <para>
+	Boxes are a distinct first class type.  The
+	<function>box?</function> predicate tests a value to see if is
+	a box.
+      </para>
+      <para>
+	<blockquote>
+	  <para>
+	    &procedure;
+	    <methodsynopsis language="scheme">
+	      <type>#t/#f</type>
+	      <methodname>box?</methodname>
+	      <methodparam>
+		<parameter>value</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Returns <literal>#t</literal> only if the given value
+		is a box.
+	      </para>
+	    </blockquote>
+	  </para>
+	</blockquote>
       </para>
       <para>
         Boxes, like pairs, are only equal in the sense of
@@ -918,7 +942,8 @@
 	  <blockquote>
 	    <para>
 	      Attempts a lookup of variable-name in the symbolic environment
-	      named by environment-name.  If found, the value is returned.
+	      named by environment-name (both are symbols).  If found,
+	      the value is returned.
 	      If not bound, &num;f is returned.
 	    </para>
 	  </blockquote>
@@ -942,7 +967,7 @@
 	    <para>
 	      Sets the value of the variable named by variable name in the
 	      symbolic environment named by environment-value to the provided
-	      value.  Any previous value is forgotten.
+	      value (both are symbols).  Any previous value is forgotten.
 	    </para>
 	  </blockquote>
 	</para>
@@ -1009,9 +1034,9 @@
     <para>
       &SISC; provides a hygienic macro system that fully conforms to
       the &R5RS; standard.  The macro system is provided by the
-      portable syntax-case macro expander
-      <citation>Expander</citation>, and as such also a more flexible 
-      macro definition system called
+      portable syntax-case macro expander.  In addition to &R5RS;
+      macros, the expander provides a more flexible 
+      macro definition tool called
       <function>syntax-case</function>.  A full description of the
       capabilities of the expander is best found in the 
       <ulink url="http://www.scheme.com/csug.html">

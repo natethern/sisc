@@ -107,7 +107,13 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         ports are buffered, and a programmer may choose whether a
         given port should automatically flush after each write
         operation.  By default ports do <emphasis>not</emphasis>
-        automatically flush.  Enabling auto-flush can be done when the
+        automatically flush
+	<footnote>
+	  <para>
+	    Except for the console output port, which does flush
+	    automatically by default.
+	  </para>
+	</footnote>.  Enabling auto-flush can be done when the
         port is created per the specifications below.  A port that
         does not automatically flush can be flushed at any time by
         calling <computeroutput>flush-output-port</computeroutput>.
@@ -447,7 +453,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <title>Block I/O</title>
       <para>
         In addition to the standard operations on ports
-        (<computeroutput>read, read-char, char-available?,
+        (<computeroutput>read, read-char, char-ready?,
           display,</computeroutput> and
         <computeroutput>write</computeroutput>), &SISC; provides block
         input/output functions, that allow a Scheme program to read
@@ -455,7 +461,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
           &SISC; stores data that is read or is to be written in a
         string.  Binary data in strings is fully supported throughout
           &SISC;.  Such strings may be read and written as usual, though
-        undisplayable characters will often be escaped.
+        undisplayable characters will often be escaped when printed to
+        the console.
       </para>
       <para>
         <blockquote>
@@ -1257,12 +1264,6 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
     </sect2>
     <sect2 id="FileSystem">
       <title>File-System Interface</title>
-      <para>
-        &SISC; provides several additional functions that allow a
-        programmer to interface to the filesystem, to obtain
-        information about files or directories, and to delete, rename,
-        and modify these files and directories.
-      </para>
       <note>
         <para>
           The interface to the filesystem is a work in progress.

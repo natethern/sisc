@@ -38,7 +38,24 @@
     <para>
       The process terminates with a forced kill of the JVM (with
       Control-C or similar), or when an end of file is detected on
-      the console.
+      the console.  Also, the <function>exit</function> procedure may
+      be used to exit the current REPL.
+    </para>
+    <para>
+      <blockquote>
+	<para>
+	  &procedure; 
+	  <methodsynopsis language="scheme">
+	      <type>undefined</type>
+	      <methodname>exit</methodname>
+	    </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Instructs the current REPL to exit.
+	    </para>
+	  </blockquote>
+	</para>
+      </blockquote>
     </para>
   </sect1>
   <sect1 id="DisplayConventions">

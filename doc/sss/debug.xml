@@ -4,7 +4,7 @@
   </title>
   <para>
     No Scheme system would be complete without facilities to assist
-    the programmer in debugging his or her code.  SISC provides aid
+    the programmer in debugging his or her code.  &SISC; provides aid
     for passive debugging (requiring no action on the part of the
     programmer) and active debugging (requiring code modification to
     facilitate debugging).  
@@ -104,7 +104,7 @@
     </blockquote>
     <para>
       In addition, setting the Java system property
-      <literal>EMITANNOTATIONS</literal> to <literal>true</literal>
+      <literal>sisc.emitannotations</literal> to <literal>true</literal>
       will enable annotations.  This method must be used to annotate
       any source passed to &SISC; on the command line.  See <xref
       linkend="running-sisc"/> for information on passing Java options to
@@ -235,7 +235,9 @@
       call is indented slightly, so as to illustrate the depth of
       calls.  When the function application returns, the value of the
       function-call is displayed at the same indentation as the call
-      itself.
+      itself.  Once indented to a certain depth, the same indentation
+      is kept for further nesting, but the depth of the call is
+      displayed as an integer preceding the call.
     </para>
   </sect1>
 </chapter>

@@ -62,7 +62,7 @@
       <listitem>
 	<para>
 	  Flexible runtime extensibility through a scopeable module
-	  system, which may add new functions and first-class types.
+	  system, which may add arbitrary bindings and new first-class types.
 	</para>
       </listitem>
     </itemizedlist>
@@ -156,7 +156,7 @@
 	    </blockquote>
 	  </para>
 	</blockquote>
-	Syntax refers to a syntactic keyword that when read or
+	Syntax refers to a syntactic keyword that when 
 	compiled will be transformed into some expression composed
 	only of basic Scheme forms.  <function>let</function>,
 	<function>cond</function>, and <function>or</function> are all
