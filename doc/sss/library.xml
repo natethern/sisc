@@ -499,7 +499,7 @@
           standard &SISC; heap build and hence must be loaded
           separately from the <filename>srfi.scm</filename>, which can
           be found in the <filename>scheme-src</filename> directory
-          of the &SISC; source distribution:
+          of the &SISC; distribution:
 <programlisting>
 (load "<parameter>path</parameter>/srfi.scm")
 </programlisting>
@@ -600,7 +600,7 @@
           You also need access to the file
           <filename>slib.scm</filename>, which can be found in the
           <filename>scheme-src</filename> directory of the &SISC;
-          source distribution.
+          distribution.
         </para>
       </sect3>
       <sect3>
