@@ -1,3 +1,8 @@
+2002-06-24  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Added support for Java-style unicode characters in character
+	  literals and strings.
+
 2002-06-23  Matthias Radestock  <matthias@sorted.org>
 
 	* Changed generic procedure method dispatch logic. It now uses the
