@@ -1,27 +1,35 @@
 (import s2j)
-(define-generic append)
 (define-generic value-of)
-
+(define-generic index-of)
+(define-generic app append) ;;do not overwrite Scheme's append
+(define-generic to-string)
 ;;test calling of constructor
 (define sb (make <jstringbuffer> (->jstring "foo")))
 ;;test calling of normal method
-(append sb (->jstring "foo"))
-(append sb sb)
+(app sb (->jstring "foo"))
+(app sb sb)
 ;;test calling of static methods
 (value-of (->jstring "foo") (->jint 1234))
 (value-of <jstring> (->jint 1234))
 ;;test overloading of Java methods in Scheme...
 ;;Wouldn't it be nice if StringBuffer.indexOf could take a char as an
 ;;argument? Well, now it can - as long as we call it from Scheme :)
-(define-generic index-of)
 (define-method (index-of (<jstringbuffer> buf) (<jchar> c))
   (index-of buf (make <jstring> (->jarray (list c) <jchar>))))
 (index-of sb (->jstring "oo")) ;calls java method
 (index-of sb (->jchar #\o)) ;calls scheme method
+;;
+(define-method (app (<jstring> x) (<jstring> y))
+  (let ([sb (make <jstringbuffer>)])
+    (app sb x)
+    (app sb y)
+    (to-string sb)))
+(app (->jstring "foo") (->jstring "bar"))
 ;test of "next-method" functionality.
+(define <java.lang.Character> (java-class "java.lang.Character"))
 (define-method (value-of (next: next-method)
                          (<jstring> s)
-                         ((java-class "java.lang.Character") c))
+                         (<java.lang.Character> c))
   (display "\nFOUND\n")
   (next-method s c))
 (value-of <jstring> (->jchar #\o))
@@ -30,6 +38,17 @@
   (display "\nHERE\n")
   (next-method))
 (make <jstringbuffer> (->jstring "foo"))
+;scoping
+(let ()
+  (define-generic value-of)
+  (define-method (value-of (next: next-method)
+                           (<jstring> s)
+                           (<java.lang.Character> c))
+    (display "\nLOCAL\n")
+    (next-method s c))
+  (value-of <jstring> (->jchar #\o)))
+(value-of <jstring> (->jchar #\o))
+  
 
 ;array creation and access
 (define a (java-array-new <jint> #(2 2 2)))

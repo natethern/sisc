@@ -46,8 +46,8 @@
 (native-module s2j-module "sisc.modules.S2J")
 
 (module generic-functions 
-  ((define-generic generic-method)
-   (define-method add-method)
+  ((define-generic generic-function)
+   (define-method add-method generic-function-name)
    (define-constructor add-constructor)
    make)
   (import s2j-module)

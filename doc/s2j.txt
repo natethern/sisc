@@ -4,24 +4,11 @@ Scheme -> Java Interface
 
 Generic Functions
 -----------------
-(define-generic <name>)
-(define-method (<name> [(next: <next-method-param>)]
-                       (<type> <param>) ...) . <body>)
+(define-generic <name> [<fname>])
+Create a new generic function and bind it to <name>. The name of the
+generic function is <fname>, which defaults to <name>.
 
-The first form binds <name> to a generic function. The second one adds
-the function, as defined by the param list and body, to the method
-list of the generic functions.
-
-When a generic function is invoked, the method is called whose type
-signature best matches the types of the given parameters. An error is
-reported if there is no such method.
-
-The next-method-param, if supplied in the definition of a method, will
-be bound to the "next best" matching method. It can be invoked with
-parameters or without parameters, in which case the parameters of the
-orignal invocation are used.
-
-Generic methods implictly include all java methods (in all classes)
+Generic functions implictly include all java methods (in all classes)
 whose mangled name matches the generic function name. Name mangling is
 done as follows:
 1) a '-' is inserted between a lower-case character and an upper-case
@@ -31,6 +18,20 @@ characters.
 ==> "fooBarBaz" becomes "foo-bar-baz", "FooBar" becomes "foo-bar"
 3) a '!' is appended if the original name started with "set" followed
 by an upper-case character.
+
+
+(define-method (<genf> [(next: <next-method>)]
+                       (<type> <param>) ...) . <body>)
+
+Adds a method the generic function <genf>. A method has a typed
+parameter list and a body. When a generic function is invoked, the
+method is called whose type signature best matches the types of the
+given parameters. An error is reported if there is no such method.
+
+The <next-method> parameter, if supplied in the definition of a
+method, will be bound to the "next best" matching method. It can be
+invoked with parameters or without parameters, in which case the
+parameters of the orignal invocation are used.
 
 Scheme methods with the same signature as java methods *always* take
 precedence (i.e. are a better match) than the java methods.
@@ -242,7 +243,7 @@ Issues
 internally and hence these methods cannot be defined at the Scheme
 level. FIX: this is hard to fix.
 
-Shortcomings of generic methods:
+Shortcomings of generic functions:
 
 * not as efficient as they could be. FIX: considerable improvements
 will result from the introduction of a hashtable type into sisc
@@ -259,7 +260,16 @@ already written.
 
 * not thread-safe. FIX: use the threads module.
 
-* not properly lexically scoped. The binding of the generic method
-name *is* lexically scoped, but the contents are not, i.e. all generic
-methods of the same name share their underlying definitions regardless
-of the scope they are defined in. FIX: *very* hard to fix.
+* not garbage collected.
+
+* not properly lexically scoped. Generic functions are lexically
+scoped but their methods are not.
+
+The last two items imply that defining generic functions or their
+methods in a local scope is generally a bad idea. One exception are
+module definitions. It is perfectly safe for modules to define private
+(i.e. not exported) generic functions and add methods to them without
+interfering with other modules. However, care must be taken when
+generic functions are imported or exported - methods are added to
+generic function when the module gets *defined* rather then when it
+gets imported.
