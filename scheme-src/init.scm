@@ -261,6 +261,7 @@
        (current-output-port fop)
        (thunk))
      (lambda ()
+       (close-output-port fop)
        (current-output-port cop)))))
 
 (define (call-with-input-file file proc)
