@@ -701,7 +701,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         &requires; 
         <emphasis role="bold">
-          (import <emphasis>block-io</emphasis>)
+          (import <emphasis>binary-io</emphasis>)
         </emphasis>
       </para>
       <para>

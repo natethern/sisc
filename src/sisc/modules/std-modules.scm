@@ -87,7 +87,7 @@
 (native-module s2j-conversion    "sisc.modules.s2j.Conversion$Index")
 (native-module hashtable-native  "sisc.modules.hashtable.Primitives$Index")
 (native-module record-native     "sisc.modules.record.Primitives$Index")
-(native-module block-io-native   "sisc.modules.io.BlockIO$Index")
+(native-module binary-io-native  "sisc.modules.io.BinaryIO$Index")
 (native-module file-manipulation-native "sisc.modules.io.FileManipulation$Index")
 
 (module misc
@@ -167,7 +167,7 @@
    buffer-set!
    buffer-length
    buffer-copy!)
-  (import block-io-native)
+  (import binary-io-native)
   (include "io/buffer.scm"))
 
 (module file-manipulation
@@ -225,7 +225,7 @@
   (set! make-directory! (normalize _make-directory!))
   (set! make-directories! (normalize _make-directories!)))
 
-(module block-io
+(module binary-io
   (block-read
    block-write
    make-buffer
@@ -242,12 +242,12 @@
    with-binary-input-from-file
    with-binary-output-to-file)
   (import buffers)
-  (import* block-io-native
+  (import* binary-io-native
            block-read
            block-write
            open-binary-input-file
            open-binary-output-file)
-  (include "io/block-io.scm"))
+  (include "io/binary-io.scm"))
 
 (module hashtable
     (make-hashtable
@@ -736,7 +736,7 @@
      link-library)
   (import s2j)
   (import type-system)
-  (import block-io)
+  (import binary-io)
   (include "compiledlibs.scm"))
 
 (module pattern-matching

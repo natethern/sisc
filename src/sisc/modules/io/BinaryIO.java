@@ -10,9 +10,9 @@ import java.net.URL;
 import sisc.io.StreamOutputPort;
 import sisc.io.StreamInputPort;
 
-public class BlockIO extends IndexedProcedure {
+public class BinaryIO extends IndexedProcedure {
 
-    protected static Symbol BLOCKB =
+    protected static Symbol BINARYB =
         Symbol.intern("sisc.modules.io.Messages");
 
     protected static final int
@@ -24,7 +24,7 @@ public class BlockIO extends IndexedProcedure {
     public static class Index extends IndexedLibraryAdapter {
         
         public Value construct(int id) {
-            return new BlockIO(id);
+            return new BinaryIO(id);
         }
         
       	public Index() {
@@ -44,14 +44,14 @@ public class BlockIO extends IndexedProcedure {
     public static final StreamOutputPort soutport(Value o) {
         try {
             return (StreamOutputPort)o;
-        } catch (ClassCastException e) { typeError(BLOCKB, "soutput-port", o); }
+        } catch (ClassCastException e) { typeError(BINARYB, "soutput-port", o); }
         return null;
     }
 
     public static final StreamInputPort sinport(Value o) {
         try {
             return (StreamInputPort)o;
-        } catch (ClassCastException e) { typeError(BLOCKB, "sinput-port", o); }
+        } catch (ClassCastException e) { typeError(BINARYB, "sinput-port", o); }
         return null;
     }
 
@@ -79,16 +79,16 @@ public class BlockIO extends IndexedProcedure {
         return null;
     }
 
-    public BlockIO(int id) {
+    public BinaryIO(int id) {
         super(id);
     }
     
-    public BlockIO() {}
+    public BinaryIO() {}
 
     final Buffer buffer(Value v) throws ContinuationException {
         try {
             return (Buffer)v;
-        } catch (ClassCastException e) { typeError(BLOCKB, "buffer", v); }
+        } catch (ClassCastException e) { typeError(BINARYB, "buffer", v); }
         return null;
     }
 
@@ -152,7 +152,7 @@ public class BlockIO extends IndexedProcedure {
                     if (rv==-1) return EOF;
                     else return Quantity.valueOf(rv);
                 } catch (IOException e) {
-                    error(f, liMessage(BLOCKB, "errorreading", 
+                    error(f, liMessage(BINARYB, "errorreading", 
                                        inport.toString(),
                                        e.getMessage()));
                 }
@@ -164,7 +164,7 @@ public class BlockIO extends IndexedProcedure {
                 try {
                     outport.write(buf, 0, count);
                 } catch (IOException e) {
-                    error(f, liMessage(BLOCKB, "errorwriting",
+                    error(f, liMessage(BINARYB, "errorwriting",
                                        outport.toString(),
                                        e.getMessage()));
                 }
@@ -185,7 +185,7 @@ public class BlockIO extends IndexedProcedure {
                 try {
                     System.arraycopy(sbuf, soff, dbuf, doff, count);
                 } catch (ArrayIndexOutOfBoundsException aib) {
-                    throwPrimException(liMessage(BLOCKB, "bufferoverrun", 
+                    throwPrimException(liMessage(BINARYB, "bufferoverrun", 
                                                  f.vlr[0].synopsis(), 
                                                  f.vlr[2].synopsis()));
                 }
@@ -206,7 +206,7 @@ public class BlockIO extends IndexedProcedure {
                 try {
                     System.arraycopy(sbuf, soff, dbuf, doff, count);
                 } catch (ArrayIndexOutOfBoundsException aib) {
-                    throwPrimException(liMessage(BLOCKB, "bufferoverrun", 
+                    throwPrimException(liMessage(BINARYB, "bufferoverrun", 
                                                  f.vlr[0].synopsis(), 
                                                  f.vlr[2].synopsis()));
                 }

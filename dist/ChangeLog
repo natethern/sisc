@@ -1,8 +1,12 @@
+2003-06-15  Matthias Radestock  <matthias@sorted.org>
+
+	* Merged block IO and binary IO into new binary-io module.
+
 2003-06-04  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Separated character from binary IO. 
 	
-	* Means to use multiple character sets in Scheme.
+	* Added means to use multiple character sets in Scheme.
 	
 2003-06-02  Matthias Radestock  <matthias@sorted.org>
 
