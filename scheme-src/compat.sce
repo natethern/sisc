@@ -58,30 +58,33 @@
 	 ((lambda (mapf)
 	    (begin 
 	      (set! mapf (lambda (l)
-			   (if (null? l) #t
-			       (if (f (car l)) (mapf (cdr l)) #f))))
-	      (mapf first))) #f)
+			   (if (null? l) '#t
+			       (if (f (car l)) (mapf (cdr l)) '#f))))
+	      (mapf first))) '#f)
 	 (if (null? (cdr rest))
 	     ((lambda (mapf)
 		(begin 
 		  (set! mapf (lambda (l1 l2)
-			       (if (null? l1) #t
+			       (if (null? l1) '#t
 				   (if (f (car l1) (car l2)) 
-				       (mapf (cdr l1) (cdr l2)) #f))))
-		  (mapf first (car rest)))) #f)
+				       (mapf (cdr l1) (cdr l2)) 
+                                       '#f))))
+		  (mapf first (car rest)))) '#f)
 	     ((lambda (mapf)
 		(begin
 		  (set! mapf (lambda (first rest)
-			       (if (null? first) #t
+			       (if (null? first) '#t
 				   (if (apply f (car first) (map car rest))
-				       (mapf (cdr first) (map cdr rest)) #f))))
-		  (mapf first rest))) #f)))))
+				       (mapf (cdr first) (map cdr rest)) 
+                                       '#f))))
+		  (mapf first rest))) '#f)))))
 
 (define gen-sym
   ((lambda (symcounter)
      (lambda (base) 
-       (set! symcounter (+ symcounter 1))
-       (string->symbol (format "~s_~s" base symcounter))))
+        (begin
+          (set! symcounter (+ symcounter '1))
+          (string->symbol (format "~s_~s" base symcounter)))))
    0))
   
 (define gensym
@@ -90,10 +93,10 @@
 
 (define ormap
   (lambda (proc list1)
-    (if (not (null? list1))
+    (if (null? list1)
+      '#f
       ((lambda (t) (if t t (ormap proc (cdr list1))))
-       (proc (car list1)))
-      '#f)))
+       (proc (car list1))))))
 
 (define remq
   (lambda (o lst)
@@ -124,14 +127,14 @@
 (define eval 
   ((lambda (old-eval)
      (lambda (x . env)
-       (if (if (pair? x) (equal? (car x) "noexpand") #f)
+       (if (if (pair? x) (equal? (car x) "noexpand") '#f)
            (apply old-eval (cons (cadr x) env))
            ((lambda (e) (apply old-eval (cons e env)))
             ((current-optimizer) (sc-expand x '(E) '(E)))))))
    (current-evaluator)))
 
 (define make-false
-  (lambda (v) #f))
+  (lambda (v) '#f))
 
 ;;;;;;;;;;;;; Module loading
 ;(if (not (getprop 'LITE '*sisc*))

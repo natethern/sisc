@@ -227,7 +227,7 @@
                      (lambda (file . rest)
                        (apply proc (normalize-url (current-url) file) rest)))]
         [file-handler (lambda (extension)
-                        (case extension
+                        (case (string->symbol (string-downcase extension))
                           ((sce pp) load-expanded)
                           (else _load)))]
         [file-extension (lambda (url)

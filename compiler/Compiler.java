@@ -8,33 +8,11 @@ import java.io.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
+/**
+ * Compiler - Compiles regularized Scheme s-expressions into an
+ * AST of SISC Expression objects.
+ */
 public class Compiler extends Util {
-
-    public static class Syntax extends NamedValue {
-        int synid;
-
-        public Syntax(int synid) {
-            this.synid=synid;
-        }
-
-        public void eval(Interpreter r) throws ContinuationException {
-            error(r, liMessage(SISCB, "invalidsyncontext", name.write()));
-        }
-
-        public String display() {
-            return "#!"+synid;
-        }
-
-        public Syntax() {}
-
-        public void deserialize(Deserializer s) throws IOException {
-            synid=s.readInt();
-        }
-
-        public void serialize(Serializer s) throws IOException {
-            s.writeInt(synid);
-        }
-    }
 
     static void extendenv(SymbolicEnvironment env, String s, int i) {
         Symbol name=Symbol.get(s);
@@ -60,45 +38,11 @@ public class Compiler extends Util {
         extendenv(menv,"compile-in-annotation", MAKEANNOTATION);
     }
 
-    static class ReferenceEnv {
-        ReferenceEnv parent;
-        Hashtable ref=new Hashtable(5);
-
-
-        public ReferenceEnv() {}
-
-        public ReferenceEnv(Symbol[] s, ReferenceEnv parent) {
-            this.parent=parent;
-            for (int i=0; i<s.length; i++) {
-                ref.put(s[i], new Integer(i));
-            }
-        }
-
-        public Expression createReference(Symbol s, SymbolicEnvironment env) {
-            int lev=-1;
-            ReferenceEnv ctx=this;
-            Integer r=null;
-            while (r==null && ctx!=null) {
-                r=(Integer)ctx.ref.get(s);
-                ctx=ctx.parent;
-                lev++;
-            }
-
-            if (r==null)
-                return new FreeReferenceExp(s, env);
-            else
-                return new LexicalReferenceExp(lev, r.intValue());
-        }
-    }
-
     public Expression compile(Interpreter r, Expression v, ReferenceEnv rt,
                               int context, SymbolicEnvironment env, 
                               Pair an)
     throws ContinuationException {
         if (v==EMPTYLIST) {
-	    //error(r, liMessage(SISCB, "invnullexpr"));
-	    //return null;
-
 	    //we evaluate () to the empty list, which is an "ignorable
 	    //error", according to R5RS. Note that presently we never
 	    //actually end up in this code since the macro expander
@@ -187,8 +131,8 @@ public class Compiler extends Util {
 
                 
                 expr=(Pair)expr.cdr;
-                tmp=compileLambdaBody(r, expr, new ReferenceEnv(formals, rt), 
-                                      TAIL | LAMBDA | REALTAIL, env);
+                tmp=compile(r, expr.car, new ReferenceEnv(formals, rt), 
+                            TAIL | LAMBDA | REALTAIL, env, null);
                 rv=new LambdaExp(formals.length, tmp, infArity);
                 break;
             case LETREC:
@@ -217,26 +161,16 @@ public class Compiler extends Util {
             case _IF:
                 tmp=compile(r, expr.car, rt, PREDICATE, env, null);
                 expr=(Pair)expr.cdr;
-                if (tmp instanceof Value) {
-                    if (truth((Value)tmp)) {
-                        rv=compile(r, expr.car, rt, TAIL | context, env, null);
-                        break;
-                    } else {
-                        expr=(Pair)expr.cdr;
-                        rv=compile(r, expr.car, rt, TAIL | context, env, null);
-                        break;
-                    }
-                } else {
-                    Expression conseq=compile(r, expr.car, rt, TAIL | context,
-                                              env, null);
-                    expr=(Pair)expr.cdr;
-                    Expression altern=compile(r, expr.car, rt, TAIL | context,
-                                              env, null);
-                    rv = new IfEval(conseq, altern);
-                    rv.annotations = tmp.annotations;
-                    rv = makeEvalExp(tmp, rv);
-                    break;
-                }
+
+                Expression conseq=compile(r, expr.car, rt, TAIL | context,
+                                          env, null);
+                expr=(Pair)expr.cdr;
+                Expression altern=compile(r, expr.car, rt, TAIL | context,
+                                          env, null);
+                rv = new IfEval(conseq, altern);
+                rv.annotations = tmp.annotations;
+                rv = makeEvalExp(tmp, rv);
+                break;
             case BEGIN:
                 rv=compileBegin(r, pairToExpVect(expr), context, rt, env);
                 break;
@@ -295,20 +229,6 @@ public class Compiler extends Util {
         return rv;
     }
 
-    public Expression compileLambdaBody(Interpreter r, Pair bodyp, 
-                                        ReferenceEnv rt, int context,
-                                        SymbolicEnvironment env) 
-        throws ContinuationException {
-        Expression body;
-        if (bodyp.cdr != EMPTYLIST)
-            body=new Pair(Util.BEGIN, bodyp);
-        else
-            body=bodyp.car;
-        
-        return compile(r, body, rt, 
-                       TAIL | LAMBDA | REALTAIL, env, null);
-    }
-
     public Expression compileLetrec(Interpreter r,
                                     Symbol[] formals, Expression[] rands,
                                     Pair body, ReferenceEnv rt, 
@@ -317,8 +237,8 @@ public class Compiler extends Util {
         ReferenceEnv nrt=new ReferenceEnv(formals, rt);
         compileExpressions(r, rands, nrt, 0, env);
         boolean allImmediate=true;
-        Expression nxp=new LetrecEval(compileLambdaBody(r, body, nrt, 
-                                                        TAIL | LAMBDA, env));
+        Expression nxp=new LetrecEval(compile(r, body.car, nrt, 
+                                              TAIL | LAMBDA, env, null));
         Expression lastRand = VOID;
         for (int i= 0; i<rands.length; i++) {
             if (!isImmediate(rands[i])) {
@@ -370,21 +290,76 @@ public class Compiler extends Util {
 
     Expression compileBegin(Interpreter r, Vector v, int context,
                             ReferenceEnv rt, SymbolicEnvironment env)
-    throws ContinuationException {
+    throws ContinuationException {        
         Expression last=compile(r, (Expression)v.lastElement(), rt,
                                 TAIL | context, env, null);
-        if (v.size()==1) return last;
+        //if (v.size()==1) return last;
         
         Expression be=last;
         for (int i=v.size()-2; i>=0; i--) {
             Expression e=compile(r, (Expression)v.elementAt(i),
                                  rt, COMMAND, env, null);
-            if (!(e instanceof Immediate)) {
-                be.annotations = e.annotations;
-                be = makeEvalExp(e, be);
-            }
+            be.annotations = e.annotations;
+            be = makeEvalExp(e, be);
         }
         return be;
+    }
+
+    public static class Syntax extends NamedValue {
+        int synid;
+
+        public Syntax(int synid) {
+            this.synid=synid;
+        }
+
+        public void eval(Interpreter r) throws ContinuationException {
+            error(r, liMessage(SISCB, "invalidsyncontext", name.write()));
+        }
+
+        public String display() {
+            return "#!"+synid;
+        }
+
+        public Syntax() {}
+
+        public void deserialize(Deserializer s) throws IOException {
+            synid=s.readInt();
+        }
+
+        public void serialize(Serializer s) throws IOException {
+            s.writeInt(synid);
+        }
+    }
+
+    static class ReferenceEnv {
+        ReferenceEnv parent;
+        Hashtable ref=new Hashtable(5);
+
+
+        public ReferenceEnv() {}
+
+        public ReferenceEnv(Symbol[] s, ReferenceEnv parent) {
+            this.parent=parent;
+            for (int i=0; i<s.length; i++) {
+                ref.put(s[i], new Integer(i));
+            }
+        }
+
+        public Expression createReference(Symbol s, SymbolicEnvironment env) {
+            int lev=-1;
+            ReferenceEnv ctx=this;
+            Integer r=null;
+            while (r==null && ctx!=null) {
+                r=(Integer)ctx.ref.get(s);
+                ctx=ctx.parent;
+                lev++;
+            }
+
+            if (r==null)
+                return new FreeReferenceExp(s, env);
+            else
+                return new LexicalReferenceExp(lev, r.intValue());
+        }
     }
 }
 

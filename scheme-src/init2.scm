@@ -319,7 +319,7 @@
      (if (not e0) (begin e1 e2 ...)))))
 
 ;;perform macro expansion on a file
-(define (expand-file from to)
+(define (expand-file from to . scexpopts)
   (let ([inf (open-source-input-file from)]
         [outf (open-output-file to)]
         [precision (max-precision)])
@@ -329,7 +329,7 @@
         (let loop ([e (read-code inf)])
           (or (eof-object? e)
               (begin
-                (pretty-print (sc-expand e) outf)
+                (pretty-print (apply sc-expand `(,e ,@scexpopts)) outf)
                 (newline outf)
                 (loop (read inf)))))))
     (close-output-port outf)
