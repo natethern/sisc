@@ -35,6 +35,7 @@ package sisc;
 import sisc.data.*;
 import sisc.exprs.*;
 import sisc.compiler.*;
+import sisc.compiler.Compiler;
 import java.util.*;
 import java.util.jar.*;
 import java.io.*;
@@ -108,7 +109,7 @@ public abstract class Util implements Conf {
 	CallFrame c;
         r.acc=new Values(new Value[] {
 	    error,
-	    c=new CallFrame(r.nxp, r.vlr, r.env, r.fk, r.stk).capture(r),
+	    c=r.stk.capture(r),
 	    new CurriedFC(r.fk.fk)});
 	/*while (c!=null) {
 	    if (c.nxp!=null)
@@ -185,7 +186,7 @@ public abstract class Util implements Conf {
 
         for (; (p.cdr instanceof Pair) &&
                 (p.cdr!=EMPTYLIST);
-                p=(Pair)p.cdr) {
+	     p=(Pair)p.cdr) {
             v.addElement(p.car);
         }
         v.addElement(p.car);
@@ -205,7 +206,7 @@ public abstract class Util implements Conf {
         if (o instanceof Values)
             throw new RuntimeException(liMessage(bundleName, "multiplevalues"));
         throw new RuntimeException(liMessage(bundleName, "unexpectedarg", liMessage(SISCB, type), 
-					     o.synopsis(DEFAULT_SYNOPSIS_LENGTH)));
+					     o.write()));
     }
 
     public static final Symbol sym(String s) {
