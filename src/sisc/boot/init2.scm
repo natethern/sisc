@@ -36,54 +36,64 @@
 (define current-optimizer (_make-parameter (lambda (x) x)))
   
 ;; source to eval:
-#;(set! eval (let ([old-eval eval]
+#;(set! eval (let ([old-eval _eval]
                  [apply apply]
                  [current-cte current-cte]
                  [sc-expand sc-expand]
                  [interaction-environment interaction-environment])
              (lambda (x . env)
-               (if (and (pair? x) (equal? (car x) "noexpand"))
-                   (apply old-eval (cadr x) env)
-                   (let* ([optimizer (current-optimizer)]
-                          [old-ie (apply interaction-environment env)]
-                          [source (optimizer
-                                   (sc-expand x '(e) '(e)))])
-                     (interaction-environment old-ie)
-                     (apply old-eval source env))))))
-
+               (cond [(and (pair? x) (equal? (car x) "noexpand"))
+                      (apply old-eval (cadr x) env)]
+                     [(and (null? env) (strict-r5rs-compliance))
+                      (error 'eval "expected 2 arguments to procedure, got 1.")]
+                     [else 
+                       (let* ([optimizer (current-optimizer)]
+                              [old-ie (apply interaction-environment env)]
+                              [source (optimizer
+                                        (sc-expand x '(e) '(e)))])
+                          (interaction-environment old-ie)
+                          (apply old-eval source env))]))))
 (set! eval
-  ((lambda (|interaction-environment_fglBCWfWB|
-            |sc-expand_fg_EEtfWB|
-            |apply_fgjMIzeWB|
-            |old-eval_fgZPK6eWB|)
-     (lambda (|x_fg1uyQgWB| . |env_fgHxAngWB|)
-       (if (if (pair? |x_fg1uyQgWB|)
-             (equal? (car |x_fg1uyQgWB|) '"noexpand")
-             '#f)
-         (|apply_fgjMIzeWB|
-           |old-eval_fgZPK6eWB|
-           (cadr |x_fg1uyQgWB|)
-           |env_fgHxAngWB|)
-         ((lambda (|optimizer_fgnqwhhWB|)
-            ((lambda (|old-ie_fgJmuKhWB|)
-               ((lambda (|source_fg3jsbiWB|)
-                  (begin
-                    (|interaction-environment_fglBCWfWB|
-                      |old-ie_fgJmuKhWB|)
-                    (|apply_fgjMIzeWB|
-                      |old-eval_fgZPK6eWB|
-                      |source_fg3jsbiWB|
-                      |env_fgHxAngWB|)))
-                (|optimizer_fgnqwhhWB|
-                  (|sc-expand_fg_EEtfWB| |x_fg1uyQgWB| '(e) '(e)))))
-             (|apply_fgjMIzeWB|
-               |interaction-environment_fglBCWfWB|
-               |env_fgHxAngWB|)))
-          (current-optimizer)))))
+  ((lambda (|interaction-environment_a9Lbf3gRD|
+              |sc-expand_a9pfhCfRD|
+              |apply_a9JmlIeRD|
+              |old-eval_a9nqnfeRD|)
+     (lambda (|x_a9r4bZgRD| . |env_a958dwgRD|)
+       (if (if (pair? |x_a9r4bZgRD|)
+               (equal? (car |x_a9r4bZgRD|) "noexpand")
+               #f)
+         (|apply_a9JmlIeRD|
+           |old-eval_a9nqnfeRD|
+           (cadr |x_a9r4bZgRD|)
+           |env_a958dwgRD|)
+         (if (if (null? |env_a958dwgRD|)
+                 (strict-r5rs-compliance)
+                 #f)
+           (error (quote eval)
+                  "expected 2 arguments to procedure, got 1.")
+           ((lambda (|optimizer_a9N09qhRD|)
+              ((lambda (|old-ie_a97Z6ThRD|)
+                 ((lambda (|source_a9tV4kiRD|)
+                    (begin
+                      (|interaction-environment_a9Lbf3gRD|
+                        |old-ie_a97Z6ThRD|)
+                      (|apply_a9JmlIeRD|
+                        |old-eval_a9nqnfeRD|
+                        |source_a9tV4kiRD|
+                        |env_a958dwgRD|)))
+                  (|optimizer_a9N09qhRD|
+                    (|sc-expand_a9pfhCfRD|
+                      |x_a9r4bZgRD|
+                      (#%quote (e))
+                      (#%quote (e))))))
+               (|apply_a9JmlIeRD|
+                 |interaction-environment_a9Lbf3gRD|
+                 |env_a958dwgRD|)))
+            (current-optimizer))))))
    interaction-environment
    sc-expand
    apply
-   eval))
+   _eval))
    
 ;; Parameter Support, compatible with SRFI-39
 

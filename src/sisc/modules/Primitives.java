@@ -67,7 +67,7 @@ public class Primitives extends IndexedProcedure {
             define("eq?", EQ);
             define("eqv?", EQV);
             define("equal?", EQUAL);
-            define("eval", EVALUATE);
+            define("_eval", EVALUATE);
             define("exact->inexact", EXACT2INEXACT);
             define("exact?", EXACTQ);
             define("exp", EXP);
@@ -369,8 +369,6 @@ public class Primitives extends IndexedProcedure {
                                                           indexValue());
             case VECTORFINDLASTUNIQUE: return Quantity.valueOf(vec(vlr[0]).findEnd());
             case EVALUATE:
-                if (r.dynenv.parser.lexer.strictR5RS) 
-                   throwArgSizeException();
                 r.nxp=r.compile(vlr[0]);
                 r.env=null;
                 return VOID;
@@ -380,6 +378,7 @@ public class Primitives extends IndexedProcedure {
                 r.vlr[0]=r.stk.capture(r);
                 
                 r.saveVLR=true;
+                r.vlk=true;
                 r.nxp = APPEVAL;
                 return kproc;
             case CALLFC:
