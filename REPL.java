@@ -1,4 +1,3 @@
-
 package sisc;
 
 import sisc.compiler.*;
@@ -50,15 +49,18 @@ public class REPL extends Thread {
     }
 
     public static String simpleErrorToString(Pair p) {
-        StringBuffer b=new StringBuffer("\n  ");
+        StringBuffer b=new StringBuffer();
         String location=null;
         String message=null;
+        Pair parent = null;
         while (p!=Util.EMPTYLIST && (location==null || message==null)) {
             Pair cp=(Pair)p.car;
             if (cp.car.equals(Util.MESSAGE))
                 message=cp.cdr.display();
             else if (cp.car.equals(Util.LOCATION))
                 location=cp.cdr.display();
+            else if (cp.car.equals(Util.PARENT))
+                parent=(Pair)cp.cdr;
             p=(Pair)p.cdr;
         }
         if (location==null)
@@ -69,6 +71,8 @@ public class REPL extends Thread {
             b.append(": ").append(message);
         else
             b.append('.');
+        if (parent!=null)
+            b.append("\n  ").append(simpleErrorToString(parent));
         return b.toString();
     }
         
@@ -104,8 +108,7 @@ public class REPL extends Thread {
                 Value vm=se.m;
                 if (vm instanceof Pair) {
                     String errormessage=simpleErrorToString((Pair)vm);
-                    System.err.println(Util.liMessage(Util.SISCB, "errorduringload")+
-                                       errormessage);
+                    System.err.println(errormessage);
                 } else {
                     System.err.println(Util.liMessage(Util.SISCB, "errorduringload")+vm);
                 }
