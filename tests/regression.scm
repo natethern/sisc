@@ -66,3 +66,22 @@
                      (sleep 100)
                      (thread/interrupt t)
                      (loop (- x 1)))))))
+
+;; Used to trigger any number of serialization bugs related to ports when
+;; run from the repl
+#|
+
+(import serial-io)
+(define (foo x)
+  (+ x (call/cc
+        (lambda (k)
+          (call-with-serial-output-file
+           "test.ser"
+           (lambda (port) (serialize k port)))
+          1))))
+
+((call-with-serial-input-file "test.ser" deserialize) 1)
+
+(should-be 856491 11 (foo 10))
+|#
+
