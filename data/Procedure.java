@@ -1,6 +1,7 @@
 package sisc.data;
 
 import sisc.*;
+import sisc.interpreter.*;
 
 /**
  * The Procedure class is the base class for any Scheme Procedure.  

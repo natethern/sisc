@@ -2,6 +2,7 @@ package sisc.data;
 
 import sisc.*;
 import java.io.*;
+import sisc.interpreter.*;
 
 /**
  * Value is the base class for anything treated as a first-class value 

@@ -8,6 +8,7 @@ import java.net.*;
 
 import sisc.*;
 import sisc.ser.*;
+import sisc.interpreter.*;
 
 public class SISCApplet extends JApplet {
 

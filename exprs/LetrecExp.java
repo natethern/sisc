@@ -2,6 +2,7 @@ package sisc.exprs;
 
 import sisc.*;
 import sisc.data.*;
+import sisc.interpreter.*;
 
 public class LetrecExp extends AppExp {
 

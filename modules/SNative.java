@@ -1,9 +1,10 @@
 package sisc.modules;
 
-import sisc.*;
-import sisc.data.*;
 import java.awt.*;
 import java.io.IOException;
+import sisc.*;
+import sisc.data.*;
+import sisc.interpreter.*;
 
 public class SNative extends ModuleAdapter {
     public String getModuleName() {

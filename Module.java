@@ -1,7 +1,7 @@
 package sisc;
 
 import sisc.data.*;
-import sisc.exprs.FreeReferenceExp;
+import sisc.interpreter.*;
 
 public abstract class Module extends NamedValue implements java.io.Serializable {
 

@@ -8,6 +8,7 @@ import java.net.*;
 import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
+import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 

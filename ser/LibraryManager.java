@@ -1,17 +1,18 @@
 package sisc.ser;
 
-import sisc.Util;
-import sisc.data.Expression;
-import sisc.data.Symbol;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.io.*;
 import java.util.*;
+import sisc.Util;
+import sisc.data.Expression;
+import sisc.data.Symbol;
+import sisc.interpreter.Context;
 
 public class LibraryManager extends Util {
     
     public static LibraryManager getInstance() {
-        return sisc.Context.currentInterpreter().ctx.libraries;
+        return Context.currentInterpreter().ctx.libraries;
     }
 
     static class LoadableLibrary {

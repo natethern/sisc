@@ -1,7 +1,8 @@
-package sisc;
+package sisc.interpreter;
 
-import sisc.data.*;
 import java.io.*;
+import sisc.data.*;
+import sisc.interpreter.*;
 
 public class ApplyParentFrame extends Procedure {
     public CallFrame c;

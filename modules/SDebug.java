@@ -1,11 +1,12 @@
 package sisc.modules;
 
-import sisc.*;
-import sisc.data.*;
-import sisc.exprs.*;
 import java.awt.*;
 import java.util.Set;
 import java.util.Iterator;
+import sisc.*;
+import sisc.data.*;
+import sisc.exprs.*;
+import sisc.interpreter.*;
 
 public class SDebug extends ModuleAdapter {
 

@@ -1,12 +1,13 @@
-package sisc;
+package sisc.interpreter;
 
 import java.lang.ref.*;
-import sisc.data.*;
-import sisc.compiler.*;
-import sisc.compiler.Compiler;
-import sisc.exprs.*;
 import java.io.*;
 import java.util.*;
+import sisc.*;
+import sisc.data.*;
+import sisc.compiler.*;
+import sisc.exprs.*;
+import sisc.compiler.Compiler;
 
 /**
  * The SISC engine.
@@ -190,7 +191,7 @@ public class Interpreter extends Util {
         ctx.defineContextEnv(s, env);
     }
 
-    protected SymbolicEnvironment getContextEnv(Symbol s) {
+    public SymbolicEnvironment getContextEnv(Symbol s) {
         SymbolicEnvironment contenv=null;
         try {
             contenv = lookupContextEnv(s);

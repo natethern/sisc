@@ -1,4 +1,4 @@
-package sisc;
+package sisc.interpreter;
 
 import sisc.data.*;
 

@@ -5,6 +5,7 @@ import java.util.*;
 import sisc.*;
 import java.io.*;
 import sisc.ser.*;
+import sisc.interpreter.*;
 
 /**
  * The base class for any and all expressions.  An expression is anything 

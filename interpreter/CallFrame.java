@@ -1,10 +1,11 @@
-package sisc;
+package sisc.interpreter;
 
-import sisc.data.*;
-import sisc.exprs.*;
-import java.util.Stack;
 import java.io.*;
 import java.lang.ref.*;
+import java.util.Stack;
+import sisc.*;
+import sisc.data.*;
+import sisc.exprs.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 

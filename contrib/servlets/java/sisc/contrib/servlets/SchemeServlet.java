@@ -6,6 +6,7 @@ import java.io.*;
 
 import sisc.*;
 import sisc.data.*;
+import sisc.interpreter.*;
 
 import sisc.modules.S2J.JavaObject;
 

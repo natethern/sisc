@@ -1,7 +1,7 @@
 package sisc.data;
 
-import sisc.ContinuationException;
-import sisc.Interpreter;
+import sisc.interpreter.ContinuationException;
+import sisc.interpreter.Interpreter;
 
 /**
  * An Immediate is any Expression that can be evaluated without evaluating

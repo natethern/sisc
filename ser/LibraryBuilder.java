@@ -1,11 +1,12 @@
 package sisc.ser;
 
-import sisc.data.*;
-import sisc.Module;
 import java.util.*;
 import java.io.*;
-import sisc.*;
 import java.lang.reflect.*;
+import sisc.*;
+import sisc.data.*;
+import sisc.interpreter.*;
+import sisc.Module;
 
 /**
  * Keeps track of entry points - points where serialization begins.

@@ -2,6 +2,7 @@ package sisc.data;
 
 import java.io.*;
 import sisc.*;
+import sisc.interpreter.*;
 
 public class InputPort extends NamedValue {
     protected BufferedReader r;

@@ -40,6 +40,7 @@ import java.util.*;
 import java.util.zip.*;
 import java.util.zip.GZIPInputStream;
 import sisc.*;
+import sisc.interpreter.*;
 import sisc.compiler.*;
 import sisc.ser.*;
 import sisc.data.*;

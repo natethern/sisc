@@ -3,6 +3,7 @@ package sisc;
 import java.text.*;
 import java.util.*;
 import sisc.data.*;
+import sisc.interpreter.*;
 
 public abstract class ModuleAdapter extends Module {
     protected HashMap bindings=new HashMap(0);

@@ -1,4 +1,4 @@
-package sisc;
+package sisc.interpreter;
 
 import sisc.*;
 import sisc.ser.*;
@@ -8,8 +8,8 @@ import java.io.*;
 
 public class AppContext extends Util {
 
-    protected Procedure evaluator;
-    protected SymbolicEnvironment symenv;
+    public Procedure evaluator;
+    public SymbolicEnvironment symenv;
     public SymbolicEnvironment toplevel_env;
     public LibraryManager libraries;
 

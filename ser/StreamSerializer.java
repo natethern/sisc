@@ -1,13 +1,14 @@
 package sisc.ser;
 
+import java.util.*;
+import java.io.*;
+import java.lang.reflect.*;
+import sisc.*;
 import sisc.data.Expression;
 import sisc.data.Singleton;
 import sisc.data.Symbol;
 import sisc.Module;
-import java.util.*;
-import java.io.*;
-import sisc.*;
-import java.lang.reflect.*;
+import sisc.interpreter.Interpreter;
 
 public class StreamSerializer extends SerializerImpl {
 

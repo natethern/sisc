@@ -8,6 +8,7 @@ import java.net.*;
 import sisc.*;
 import sisc.data.*;
 import sisc.ser.*;
+import sisc.interpreter.*;
 
 public class SchemeAppServlet extends SchemeServletBase {
 
