@@ -556,18 +556,12 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
 (add-file-handler 'sce load-expanded)
 (add-file-handler 'pp load-expanded)
 
-(define call/fc call-with-failure-continuation)
-(define with/fc with-failure-continuation)
-(define call/cc call-with-current-continuation)
-(define call/ec call-with-escape-continuation)
-
 ;; This code is based on Richard Kelsey and Jonathan Rees' version of
 ;; dynamic-wind in Scheme48 (http://s48.org). It has been heavily
 ;; modified to account for SISC's lack of structures, make exception
 ;; handling work properly and conform with SRFI18 requirements with
 ;; regard to call/cc behaviour.
 (define dynamic-wind)
-(define unload-dynamic-wind)
 
 ;;a point in the dynamic wind stack
 ;;-this would be easier if we had structures
@@ -634,20 +628,15 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
             (set-dynamic-point! here)
             (out)
             (apply values results)))))
-    (define dynamic-wind-loader
-      (lambda (in body out)
-        (putprop 'call-with-current-continuation dynwind-call/cc)
-        (putprop 'call/cc dynwind-call/cc)
-        (putprop 'dynamic-wind dynamic-wind/impl)
-        (dynamic-wind/impl in body out)))
     ;;finally, the install the dynamic-wind hooks
-    (set! dynamic-wind dynamic-wind-loader)
-    (set! unload-dynamic-wind
-          (lambda ()
-            (putprop 'call-with-current-continuation original-call/cc)
-            (putprop 'call/cc original-call/cc)
-            (putprop 'dynamic-wind dynamic-wind-loader)))))
-  
+    (set! dynamic-wind dynamic-wind/impl)
+    (set! call-with-current-continuation dynwind-call/cc)))
+
+(define call/fc call-with-failure-continuation)
+(define with/fc with-failure-continuation)
+(define call/ec call-with-escape-continuation)
+(define call/cc call-with-current-continuation)
+
 ;;;; "ratize.scm" Convert number to rational number (ported from SLIB)
 
 (define rationalize (void))
@@ -973,9 +962,6 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
 ;;
 (if (not (getprop 'LITE (get-symbolic-environment '*sisc*)))
     (load "../modules/std-modules.scm"))
-
-;;some init code (e.g. s2j) pulls in d/w
-(unload-dynamic-wind)
 
 ;;And disable inlining/assumptions
 (putprop 'assumptive-procedures '*opt* '())
