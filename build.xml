@@ -289,7 +289,7 @@
   </target>
 
   <target name="manual" depends="prepare"
-          description="Generate Manual" unless="nomanual">
+          description="Generate Manual">
     <copy file="${docdir}/sss/html.xsl" tofile="${docdir}/sss/style.xsl"/>
     <replace file="${docdir}/sss/style.xsl"
              token="@@@doc.style@@@"
@@ -303,7 +303,7 @@
     <copy file="${docdir}/sss/sss.css" tofile="${gendocdir}/sss/sss.css"/>
   </target>
 
-  <target name="docs" depends="javadocs,manual"
+  <target name="docs" depends="javadocs"
           description="Generate Documentation"/>
 
   <target name="all" depends="sisc-lib,docs"
@@ -495,6 +495,6 @@
     </cvs>
   </target> 
  
-  <target name="release-full-dist" depends="clean,srfi-sll,dist"/> 
+  <target name="release-full-dist" depends="clean,dist"/> 
   <target name="release" depends="tag,source-dist"/> 
 </project>
