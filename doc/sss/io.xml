@@ -796,7 +796,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>   
-                Calls thunk with a new input port attached to
+                Calls <parameter>procedure</parameter> with a new input port attached to
                 <parameter>url</parameter>.  The result of the thunk
                 is returned.
               </para>
@@ -820,7 +820,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>   
-                Calls thunk with a new output port attached to
+                Calls <parameter>procedure</parameter> with a new output port attached to
                 <parameter>url</parameter>.  The result of the thunk
                 is returned.
               </para>
@@ -844,7 +844,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>   
-                Calls thunk with a new string input port created from
+                Calls <parameter>procedure</parameter> with a new string input port created from
                 <parameter>string</parameter>.  The result of the
                 thunk is returned.
               </para>
@@ -863,7 +863,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>   
-                Calls thunk with a new string output port.  The
+                Calls <parameter>procedure</parameter> with a new string output port.  The
                 contents of the string-output-port are returned when 
                 the procedure returns.
               </para>
