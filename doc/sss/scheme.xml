@@ -730,10 +730,9 @@
           representation described in the previous section.
         </para>
         <para>
-          Alternately, &SISC; also intends to support SRFI-38, which describes
+          Alternately, &SISC; also supports SRFI-38, which describes
           the functions <function>write-showing-shared</function> and
-          <function>read-with-shared-structure</function>.  At the
-          time of this writing, the SRFI is in draft.
+          <function>read-with-shared-structure</function>.  
         </para>
       </sect3>
     </sect2>   
