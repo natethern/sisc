@@ -1,3 +1,20 @@
+2003-03-10  SISC 1.7.7 Released
+	
+2003-03-10  Scott G. Miller  <scgmille@freenetproject.org>
+
+	* Fixed bug in recreating datastructures of compiled libraries,
+	  resulting in broken syntax exports.
+
+	* Renamed the buffer library to buffers, to match the manual.
+
+	* Fixed a bug where the OS isn't correctly detected under OS/2.
+	
+2003-03-10  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed typo in SRFI-6
+	
+	* Fixed a bug in the reference implementation of SRFI-1.
+
 2003-03-07  SISC 1.7.6 Released
 
 2003-03-06  Scott G. Miller  <scgmille@freenetproject.org>
