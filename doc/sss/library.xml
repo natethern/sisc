@@ -687,7 +687,7 @@ r / 2<superscript>s</superscript>
                 unspecified, it is assumed to be the length of the
                 source buffer.
                 It is an error to copy more bytes from the source
-                buffer than are available, or two copy more bytes into
+                buffer than are available, or to copy more bytes into
                 the destination buffer than its capacity allows.
               </para>
             </blockquote>
