@@ -211,7 +211,13 @@
 (define (current-directory . rest)
   (if (null? rest)
       (normalize-url (current-url) ".")
-      (current-url (normalize-url (current-url) (car rest)))))
+      (current-url
+       (normalize-url (current-url)
+                      (let* ([v (car rest)]
+                             [l (string-length v)])
+                        (if (eq? (string-ref v (- l 1)) '#\/)
+                            v
+                            (string-append v "/")))))))
 
 ;Will be redefined later
 (define load-expanded load)
