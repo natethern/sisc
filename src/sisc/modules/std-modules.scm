@@ -835,28 +835,27 @@
 
 (import generic-io)
 
-; Good Lord what a hack!
-(for-each 
-  (lambda (x) (putprop x (eval (sc-expand x))))
- '(write
-   display
-   newline
-   write-char
-   write-block
-   write-string
-   open-input-file
-   open-output-file
-   open-binary-input-file
-   open-binary-output-file
-   close-input-port
-   close-output-port
-   input-port?
-   output-port?
-   character-input-port?
-   character-output-port?
-   binary-input-port?
-   binary-output-port?))
-   
+; Good Lord what a hack!  Redefine the toplevel R5RS IO primitives
+; to contain the generic values.  This will overwrite older uses
+; of these primitives buried in functions.
+(define read read)
+(define peek-char peek-char)
+(define read-char read-char)
+(define read-code read-code)
+(define read-string read-string)
+(define flush-output-port flush-output-port)
+(define write write)
+(define display display)
+(define newline newline)
+(define write-char write-char)
+(define write-string write-string)
+(define open-input-file open-input-file)
+(define open-output-file open-output-file)
+(define close-input-port close-input-port)
+(define close-output-port close-output-port)
+(define input-port? input-port?)
+(define output-port? output-port?)
+
 (let ()
   (import type-system)
   (import oo)
