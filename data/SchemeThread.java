@@ -5,7 +5,7 @@ import sisc.interpreter.*;
 import sisc.io.ValueWriter;
 import java.io.IOException;
 
-public class SchemeThread extends NamedValue implements Runnable {
+public class SchemeThread extends Value implements Runnable, NamedValue {
     public static final int READY=0, RUNNING=1, FINISHED=2, FINISHED_ABNORMALLY=3;
 
     public static final ThreadGroup 

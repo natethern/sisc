@@ -5,8 +5,8 @@ import sisc.data.NamedValue;
 import sisc.io.InputPort;
 import sisc.io.ValueWriter;
 
-public abstract class SchemeInputPort extends NamedValue
-    implements InputPort {
+public abstract class SchemeInputPort extends Value
+    implements InputPort, NamedValue {
 
     public void display(ValueWriter w) throws IOException {
         displayNamedOpaque(w, "input-port");

@@ -9,8 +9,8 @@
   </path>
 
   <target name="prepare">
-    <property name="version" value="1.7.1-beta"/>
-    <property name="cvsversion" value="b1_7_1"/>
+    <property name="version" value="1.7.2-beta"/>
+    <property name="cvsversion" value="b1_7_2"/>
     <property file="${basedir}/build.properties"/>    
     <property name="srcdir" value="${basedir}/.."/>
     <property name="classdir" value="${basedir}/classes"/>

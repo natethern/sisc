@@ -16,7 +16,7 @@ import sisc.util.ExpressionVisitor;
  * set of behavior in the host module (ie the implementation for one
  * procedure).  
  */
-public class BuiltinProcedure extends Procedure {
+public class BuiltinProcedure extends Procedure implements NamedValue {
     public int id;
     public Module host;
 
@@ -26,7 +26,7 @@ public class BuiltinProcedure extends Procedure {
 
     public BuiltinProcedure(Module host, Symbol name, int id) {
         this.id=id;
-        this.name=name;
+        setName(name);
         this.host=host;
     }
 
@@ -41,14 +41,14 @@ public class BuiltinProcedure extends Procedure {
                 r.returnVLR();
             }
         } catch (ClassCastException cc) {
-            error(r, name, liMessage(SISCB,"gotunexpectedvalue",
+            error(r, getName(), liMessage(SISCB,"gotunexpectedvalue",
                                      cc.getMessage()));
         } catch (NestedPrimRuntimeException npr) {
-            error(r, name, npr);
+            error(r, getName(), npr);
         } catch (RuntimeException re) {
             String msg = re.getMessage();
             if (msg == null) msg = re.toString();
-            error(r, name, msg);
+            error(r, getName(), msg);
         }
         //time+=System.currentTimeMillis()-start;
     }

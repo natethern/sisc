@@ -5,14 +5,14 @@ import java.io.IOException;
 import sisc.io.ValueWriter;
 import sisc.util.ExpressionVisitor;
 
-public class DelegatingSymEnv extends NamedValue
-    implements SymbolicEnvironment {
+public class DelegatingSymEnv extends Value
+    implements SymbolicEnvironment, NamedValue {
 
     private SymbolicEnvironment delegee;
 
     protected SymbolicEnvironment getEnv() {
         if (delegee == null) {
-            delegee = (SymbolicEnvironment)sisc.interpreter.Context.currentInterpreter().ctx.getExpression(name);
+            delegee = (SymbolicEnvironment)sisc.interpreter.Context.currentInterpreter().ctx.getExpression(getName());
         }
         return delegee;
     }
@@ -20,7 +20,7 @@ public class DelegatingSymEnv extends NamedValue
     public DelegatingSymEnv() {}
 
     public DelegatingSymEnv(Symbol name) {
-        this.name = name;
+        setName(name);
     }
 
     public void display(ValueWriter w) throws IOException {

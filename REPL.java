@@ -14,17 +14,18 @@ import sisc.interpreter.*;
 import sisc.env.DynamicEnvironment;
 import sisc.util.Util;
 
-public class REPL extends SchemeThread {
+public class REPL {
 
+    public SchemeThread primordialThread;
     public String appName;
 
     public REPL(String appName, DynamicEnvironment dynenv, Procedure repl) {
         this(appName, repl);
-        env=dynenv;
+        primordialThread.env=dynenv;
     }
 
     public REPL(String appName, Procedure repl) {
-        super(appName, repl);
+        primordialThread=new SchemeThread(appName, repl);
         this.appName=appName;
     }
     
@@ -168,15 +169,16 @@ public class REPL extends SchemeThread {
 
     public void go() {
         try {
-            env.out.write("SISC ("+Util.VERSION+") - " + appName + "\n");
+            primordialThread.env.out.write("SISC ("+Util.VERSION+") - " + 
+                                           appName + "\n");
         } catch (IOException e) {}
 
-        if (thunk == null) {
+        if (primordialThread.thunk == null) {
             System.err.println(Util.liMessage(Util.SISCB, "heapnotfound"));
             return;
         }
 
-        start();
+        primordialThread.start();
     }
 
     public static void main(String[] argv) throws Exception {
@@ -251,7 +253,7 @@ public class REPL extends SchemeThread {
         }
     
         public void run() {
-            super.run();
+            super.go();
             try {
                 s.close();
             } catch(IOException e) {}
@@ -268,7 +270,7 @@ public class REPL extends SchemeThread {
                     r.ctx.toplevel_env.lookup(Symbol.get("sisc-cli"));
                 Context.exit();
                 REPL repl = new SocketREPL(app, dynenv, client, p);
-                repl.start();
+                repl.primordialThread.start();
             }
         }
     }

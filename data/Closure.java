@@ -8,7 +8,7 @@ import sisc.ser.Deserializer;
 import sisc.env.LexicalEnvironment;
 import sisc.util.ExpressionVisitor;
 
-public class Closure extends Procedure {
+public class Closure extends Procedure implements NamedValue {
     public boolean arity;
     public int fcount;
     public LexicalEnvironment env;
@@ -62,7 +62,6 @@ public class Closure extends Procedure {
     }
 
     public void serialize(Serializer s) throws IOException {
-        super.serialize(s);
         long attr=(long)fcount << 1;
         if (arity) attr|=1;
         s.writeLong(attr);
@@ -77,7 +76,6 @@ public class Closure extends Procedure {
     public Closure() {}
 
     public void deserialize(Deserializer s) throws IOException {
-        super.deserialize(s);
         long attr=s.readLong();
         fcount=(int)(attr>>1);
         arity=(attr&1)!=0;

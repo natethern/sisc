@@ -9,7 +9,7 @@ import sisc.interpreter.*;
  * arguments to return a value or cause additional expressions to be
  * evaluated.
  */
-public abstract class Procedure extends NamedValue {
+public abstract class Procedure extends Value {
 
     /**
      * Called when applying this procedure to a number of arguments in 

@@ -6,37 +6,18 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 
-public abstract class NamedValue extends Value {
+public interface NamedValue { 
 
-    protected Symbol name;
+    /**
+     * Sets the 'name annotation of a Named object. 
+     */
+    public void setName(Symbol s);
 
-    public void setName(Symbol s) {
-        name=s;
-    }
-
-    public Symbol getName() {
-        return name;
-    }
-
-    public void displayNamedOpaque(ValueWriter w, String type)
-        throws IOException {
-        w.append("#<").append(type);
-        if (name!=null)
-            w.append(' ').append(name);
-        w.append('>');
-    }
-
-    public void serialize(Serializer s) throws IOException {
-        s.writeExpression(name);
-    }
-
-    public void deserialize(Deserializer s) throws IOException {
-        name=(Symbol)s.readExpression();
-    }
-
-    public boolean visit(ExpressionVisitor v) {
-        return v.visit(name);
-    }
+    /**
+     * Retrieves the name of a named object, or null if the
+     * object has not yet been given a name
+     */
+    public Symbol getName();
 }
 /*
  * The contents of this file are subject to the Mozilla Public

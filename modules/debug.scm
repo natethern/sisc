@@ -73,14 +73,25 @@
        (trace-call (lambda () (list 'name var ...))
                    (lambda () (begin body ...)))))))
 
+(define (verify-traced proclist)
+  (let loop ((x proclist))
+    (if (null? x) 
+        '()
+        (let ([traced-procedure (car x)])
+          (if (not (eq? (cdr traced-procedure)
+                        (getprop (car traced-procedure) '*toplevel*)))
+              (loop (cdr x))
+              (cons traced-procedure (loop (cdr x))))))))
+              
 (define (trace . procs)
   (define (make-traced procedure-name procedure)
     (lambda args
       (trace-call (lambda () (cons procedure-name args))
                   (lambda () (apply procedure args)))))
-  (let ([traced-procedures (cond [(getprop 'traced-procedures '*debug*) => 
-                                  (lambda (x) x)]
-                                 [else '()])])
+  (let ([traced-procedures (verify-traced
+                            (cond [(getprop 'traced-procedures '*debug*) => 
+                                   (lambda (x) x)]
+                                  [else '()]))])
     (if (null? procs)
         (display (format "{currently traced procedures: ~a}~%" 
                          (map car traced-procedures)))
@@ -118,7 +129,9 @@
        (let ([proc (assq procedure-symbol traced-procedures)])
          (if proc
              (begin
-               (putprop procedure-symbol '*toplevel* (cdr proc))
+               (when (eq? (cdr proc) 
+                          (getprop procedure-symbol '*toplevel*))
+                 (putprop procedure-symbol '*toplevel* (cdr proc)))
                (set! traced-procedures 
                      (remove-from-assoc procedure-symbol traced-procedures))))))
      (cons proc1 procs))

@@ -29,29 +29,32 @@ public abstract class Util extends Defaults implements Version {
         FALSE=SchemeBoolean.FALSE;
 
     public static Symbol
-        SETBANG=Symbol.get("set!"),
-        UNQUOTE=Symbol.get("unquote"),
-        QUOTE=Symbol.get("quote"),
-        UNQUOTE_SPLICING=Symbol.get("unquote-splicing"),
-        BACKQUOTE=Symbol.get("quasiquote"),
         BEGIN=Symbol.get("begin"),
-        THIS=Symbol.get("this"),
-        LAMBDA=Symbol.get("lambda"),
-        TOPLEVEL=Symbol.get("*toplevel*"),
-        SYMENV=Symbol.get("*symenv*"),
-        REPORT=Symbol.get("*report*"),
         ENVVARS=Symbol.get("*environment-variables*"),
+        ERRORK=Symbol.get("error-continuation"),
+        EXPSC=Symbol.get("*sc-expander*"),
+        EXPTOP=Symbol.get("*top*"),
+        FCONT=Symbol.get("failure-continuation"),
+        QUOTE=Symbol.get("quote"),
+        LAMBDA=Symbol.get("lambda"),
+        LOCATION=Symbol.get("location"),
+        MESSAGE=Symbol.get("message"),
+        NAME=Symbol.get("name"),
+        OTHER=Symbol.get("other"),
+        PARENT=Symbol.get("parent"),
+        REPORT=Symbol.get("*report*"),
+        SETBANG=Symbol.get("set!"),
         SISCCONF=Symbol.get("*config-parameters*"),
         SISC=Symbol.get("*sisc*"),
         SISC_SPECIFIC=Symbol.get("*sisc-specific*"),
-        OTHER=Symbol.get("other"),
-        MESSAGE=Symbol.get("message"),
-        LOCATION=Symbol.get("location"),
-        ERRORK=Symbol.get("error-continuation"),
-        FCONT=Symbol.get("failure-continuation"),
-        PARENT=Symbol.get("parent"),
-        EXPTOP=Symbol.get("*top*"),
-        EXPSC=Symbol.get("*sc-expander*");
+        SYMENV=Symbol.get("*symenv*"),
+        THIS=Symbol.get("this"),
+        TOPLEVEL=Symbol.get("*toplevel*"),
+        BACKQUOTE=Symbol.get("quasiquote"),
+        UNQUOTE=Symbol.get("unquote"),
+        UNQUOTE_SPLICING=Symbol.get("unquote-splicing");
+
+
     
     public static String getSystemProperty(String name, String def) {
         try {

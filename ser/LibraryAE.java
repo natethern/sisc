@@ -162,8 +162,8 @@ public class LibraryAE extends MemorySymEnv {
         s.writeExpression(getName());
         if (base == null) {
             //serialize in "observe" mode
-            if (name!=null)
-                lb.add(name, this);
+            if (getName()!=null)
+                lb.add(getName(), this);
 
             s.writeInt(bindWatch.size());
             for (Iterator i=bindWatch.iterator(); i.hasNext();) {
@@ -190,8 +190,8 @@ public class LibraryAE extends MemorySymEnv {
     public boolean visit(ExpressionVisitor v) {
         if (!v.visit(parent)) return false;
         if (base == null) {
-            if (name!=null && v==lb)
-                lb.add(name, this);
+            if (getName()!=null && v==lb)
+                lb.add(getName(), this);
             for (Iterator i=bindWatch.iterator(); i.hasNext();) {
                 Symbol key=(Symbol)i.next();
                 if (!v.visit(key)) return false;

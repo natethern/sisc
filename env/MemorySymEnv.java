@@ -11,8 +11,8 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 
-public class MemorySymEnv extends NamedValue
-    implements SymbolicEnvironment {
+public class MemorySymEnv extends Value
+    implements SymbolicEnvironment, NamedValue {
 
     protected static final float EXPFACT=1.5F;
     public Map symbolMap;
@@ -38,7 +38,7 @@ public class MemorySymEnv extends NamedValue
 
     public MemorySymEnv(Symbol name) {
         this();
-        this.name=name;
+        setName(name);
     }
 
     public MemorySymEnv() {
@@ -160,7 +160,6 @@ public class MemorySymEnv extends NamedValue
     }
 
     public void serialize(Serializer s) throws IOException {
-        super.serialize(s);
         s.writeInt(symbolMap.size());
         for (Iterator i=symbolMap.keySet().iterator(); i.hasNext();) {
             Symbol key=(Symbol)i.next();
@@ -172,7 +171,6 @@ public class MemorySymEnv extends NamedValue
     }
 
     public void deserialize(Deserializer s) throws IOException {
-        super.deserialize(s);
         int size=s.readInt();
         env=new Value[size];
         symbolMap=new HashMap();

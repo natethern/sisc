@@ -52,6 +52,18 @@ public abstract class Expression extends Util
     }
 
     /**
+     * The following helpers set the 'name annotation, which is used for 
+     * naming procedures, environments, etc.
+     */
+    public void setName(Symbol s) {
+        setAnnotation(NAME, s);
+    }
+
+    public Symbol getName() {
+        return (Symbol)getAnnotation(NAME, null);
+    }
+
+    /**
      * All expressions can be evaluated to some Scheme value.  This function 
      * implements the exact manner in which an expression is evaluated.  
      * An expression, when evaluated, performs some action that results 

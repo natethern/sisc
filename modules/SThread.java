@@ -70,7 +70,8 @@ public class SThread extends ModuleAdapter {
         define("monitor/notify-all", MONITORNOTIFY);
     }
 
-    public static class CondVar extends NamedValue {
+    public static class CondVar extends Value implements NamedValue {
+
         public CondVar() {};
 
         public void display(ValueWriter w) throws IOException {
@@ -78,7 +79,7 @@ public class SThread extends ModuleAdapter {
         }
     }
 
-    public static class Monitor extends NamedValue {
+    public static class Monitor extends Value implements NamedValue {
         private transient int lockCount=0;
         private transient Thread owner=null;
         private CondVar condvar=new CondVar();
@@ -217,14 +218,12 @@ public class SThread extends ModuleAdapter {
         public Monitor() {}
 
         public void serialize(Serializer ser) throws IOException {
-            super.serialize(ser);
             if (lockCount > 0 || owner != null)
                 warn("serializinglockedmonitor");
             ser.writeExpression(condvar);
         }
 
         public void deserialize(Deserializer ser) throws IOException {
-            super.deserialize(ser);
             condvar=(CondVar)ser.readExpression();
         }
 

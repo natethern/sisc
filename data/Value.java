@@ -117,6 +117,22 @@ public abstract class Value extends Expression implements Immediate {
     public Value express() {
         return this;
     }
+
+    /**
+     * Helper function to generate an opaque type representation which
+     * may be named
+     */
+    public void displayNamedOpaque(ValueWriter w, String type)
+        throws IOException {
+        w.append("#<").append(type);
+
+        Symbol name=getName();
+        if (name!=null)
+            w.append(' ').append(name);
+        w.append('>');
+    }
+
+
 }
 
 

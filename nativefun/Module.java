@@ -5,8 +5,8 @@ import sisc.interpreter.*;
 import java.io.IOException;
 import sisc.io.ValueWriter;
 
-public abstract class Module extends NamedValue
-    implements java.io.Serializable {
+public abstract class Module extends Value
+    implements java.io.Serializable, NamedValue {
 
     public abstract Symbol[] getModuleBindingNames(Interpreter r);
     public abstract Value getBindingValue(Interpreter r, Symbol name) throws NoSuchMethodError;
