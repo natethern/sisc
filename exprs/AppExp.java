@@ -34,6 +34,7 @@ package sisc.exprs;
 
 import sisc.*;
 import sisc.data.*;
+import java.io.*;
 
 public class AppExp extends Expression {
     static Value[] ZV=new Value[0];
@@ -41,6 +42,10 @@ public class AppExp extends Expression {
     public boolean nonTail;
 
     public AppExp(Expression rator, Expression rands[], boolean nontail) {
+	if (rator instanceof Value && !(rator instanceof Procedure)) 
+	    System.err.println("{warning: compiler detected application of non-procedure '"+
+			       ((Value)rator).write()+"'}");
+
 	this.rator=rator;
 	this.rands=rands;
 	this.nonTail=nontail;
@@ -89,5 +94,28 @@ public class AppExp extends Expression {
 	}
 	args=new Pair(rator.express(), args);
 	return new Pair(nonTail ? sym("App-exp") : sym("TailApp-exp"), args);
+    }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.writeBer(rands.length, dos);
+	for (int i=0; i<rands.length; i++) 
+	    s.serialize(rands[i], dos);
+	s.serialize(rator, dos);
+	dos.writeBoolean(nonTail);
+    }
+
+    public AppExp() {}
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	int size=s.readBer(dis);
+
+	rands=new Expression[size];
+	for (int i=0; i<size; i++) { 
+	    rands[i]=s.deserialize(dis);
+	} 
+
+	rator=s.deserialize(dis);
+	nonTail=dis.readBoolean();
     }
 }

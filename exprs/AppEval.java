@@ -34,6 +34,7 @@ package sisc.exprs;
 
 import sisc.*;
 import sisc.data.*;
+import java.io.*;
 
 public class AppEval extends Expression {
 
@@ -48,4 +49,6 @@ public class AppEval extends Expression {
     public Value express() {
 	return list(sym("App-Eval"));
     }
+
+    public AppEval() {}
 }

@@ -34,6 +34,7 @@ package sisc.exprs;
 
 import sisc.*;
 import sisc.data.*;
+import java.io.*;
 
 public class ApplyValuesContEval extends Expression {
     public Procedure consumer;
@@ -60,4 +61,14 @@ public class ApplyValuesContEval extends Expression {
 	return list(sym("ApplyValuesContEval"));
     }
 
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.serialize(consumer, dos);
+    }
+
+    public ApplyValuesContEval() {}
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	consumer=(Procedure)s.deserialize(dis);
+    }
 }

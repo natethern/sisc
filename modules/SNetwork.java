@@ -25,9 +25,10 @@ import java.io.*;
  *   (open-udp-socket <listen port> . <packet size>) => <udp socket>
  *   (open-udp-socket <host> <send port> <listen port>) => <udp socket>
  
- *   (open-multicast-udp-socket . <port>) => <mcast-socket>
+ *   (open-multicast-client-socket <port> . <packet size>) => <mcast-socket>
+ *   (open-multicast-server-socket <inet address> <port>) => <mcast-socket>
  *   (join-multicast-group <socket> <inet address>) => <void>
- *   (leave-multicast-group <socket> <ineta address>) => <void>
+ *   (leave-multicast-group <socket> <inet address>) => <void>
  *   (set-multicast-ttl! <socket> <ttl>) => <void>
  
  *   (get-host-ip-by-name <inet address>) => <inet address>
@@ -39,7 +40,8 @@ public class SNetwork extends Module {
     protected static final int 
 	GET_LOCAL_HOST=0, GET_HOST_NAME_BY_IP=1, GET_HOST_IP_BY_NAME=2,
 	SET_MULTICAST_TTL=3, LEAVE_MULTICAST_GROUP=4, 
-	JOIN_MULTICAST_GROUP=5, OPEN_MULTICAST_UDP_SOCKET=6, 
+	JOIN_MULTICAST_GROUP=5, OPEN_MULTICAST_CLIENT_SOCKET=6, 
+	OPEN_MULTICAST_SERVER_SOCKET=8, 
 	OPEN_UDP_SOCKET=9, ACCEPT_TCP_SOCKET=7,
 	OPEN_SOCKET_OUTPUT_PORT=10, OPEN_SOCKET_INPUT_PORT=11, 
 	OPEN_TCP_SOCKET=12,
@@ -202,6 +204,38 @@ public class SNetwork extends Module {
 	}
     }
 
+    class SchemeMulticastUDPSocket extends SchemeUDPSocket {
+	
+	public SchemeMulticastUDPSocket(MulticastSocket s) {
+	    super(s);
+	}
+
+	public SchemeMulticastUDPSocket(MulticastSocket s, int ps) {
+	    super(s,ps);
+	}
+
+	public SchemeMulticastUDPSocket(MulticastSocket s, String host,
+					int dport) throws IOException {
+	    super(s, host, dport);
+	}
+
+	public String display() {
+	    return "#<multicast udp socket>";
+	}
+
+	public void joinGroup(InetAddress group) throws IOException {
+	    ((MulticastSocket)s).joinGroup(group);
+	}
+
+	public void leaveGroup(InetAddress group) throws IOException {
+	    ((MulticastSocket)s).leaveGroup(group);
+	}
+
+	public void setTTL(int ttl) throws IOException {
+	    ((MulticastSocket)s).setTimeToLive(ttl);
+	}
+    }
+
     public void initialize(Interpreter r) {
 	define(r, "open-tcp-listener", OPEN_TCP_LISTENER);
 	define(r, "accept-tcp-socket", ACCEPT_TCP_SOCKET);
@@ -213,6 +247,11 @@ public class SNetwork extends Module {
 	define(r, "get-host-name-by-ip", GET_HOST_NAME_BY_IP);
 	define(r, "get-local-host", GET_LOCAL_HOST);
 	define(r, "open-udp-socket", OPEN_UDP_SOCKET);
+	define(r, "open-multicast-client-socket", OPEN_MULTICAST_CLIENT_SOCKET);
+	define(r, "open-multicast-server-socket", OPEN_MULTICAST_SERVER_SOCKET);
+	define(r, "join-multicast-group", JOIN_MULTICAST_GROUP);
+	define(r, "leave-multicast-group", LEAVE_MULTICAST_GROUP);
+	define(r, "set-multicast-ttl!", SET_MULTICAST_TTL);
     }
 
     public static SchemeSocket sock(Interpreter r, Value o) throws ContinuationException {
@@ -221,6 +260,11 @@ public class SNetwork extends Module {
 	} catch (ClassCastException e) { typeError(r, "socket", o); } return null;
     }
 
+    public static SchemeMulticastUDPSocket mcastsock(Interpreter r, Value o) throws ContinuationException {
+	try {
+	    return (SchemeMulticastUDPSocket)o;
+	} catch (ClassCastException e) { typeError(r, "multicast udp socket", o); } return null;
+    }
 
     public static SchemeServerSocket serversock(Interpreter r, Value o) throws ContinuationException {
 	try {
@@ -267,6 +311,9 @@ public class SNetwork extends Module {
 		case OPEN_UDP_SOCKET:
 		    port=num(f,f.vlr[0]).intValue();
 		    return new SchemeUDPSocket(new DatagramSocket(port));
+		case OPEN_MULTICAST_CLIENT_SOCKET:
+		    port=num(f,f.vlr[0]).intValue();
+		    return new SchemeMulticastUDPSocket(new MulticastSocket(port));
 		default:
 		    error(f, "Incorrect number of arguments to procedure "+f.acc);
 		}
@@ -280,6 +327,27 @@ public class SNetwork extends Module {
 		    port=num(f,f.vlr[0]).intValue();
 		    int ps=num(f,f.vlr[1]).intValue();
 		    return new SchemeUDPSocket(new DatagramSocket(port), ps);
+		case OPEN_MULTICAST_SERVER_SOCKET:
+		    host=string(f,f.vlr[0]);
+		    int dport=num(f,f.vlr[1]).intValue();
+		    return new SchemeMulticastUDPSocket(new MulticastSocket(), host, dport);
+		case OPEN_MULTICAST_CLIENT_SOCKET:
+		    port=num(f,f.vlr[0]).intValue();
+		    ps=num(f,f.vlr[1]).intValue();
+		    return new SchemeMulticastUDPSocket(new MulticastSocket(port), ps);
+		case SET_MULTICAST_TTL:
+		    SchemeMulticastUDPSocket ms=mcastsock(f,f.vlr[0]);
+		    int ttl=num(f,f.vlr[1]).intValue();
+		    ms.setTTL(ttl);
+		    return VOID;
+		case JOIN_MULTICAST_GROUP:
+		    ms=mcastsock(f,f.vlr[0]);
+		    host=string(f, f.vlr[1]);
+		    ms.joinGroup(InetAddress.getByName(host));
+		case LEAVE_MULTICAST_GROUP:
+		    ms=mcastsock(f,f.vlr[0]);
+		    host=string(f, f.vlr[1]);
+		    ms.leaveGroup(InetAddress.getByName(host));
 		default:
 		    error(f, "Incorrect number of arguments to procedure "+f.acc);
 		}

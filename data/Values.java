@@ -33,6 +33,7 @@
 package sisc.data;
 
 import sisc.*;
+import java.io.*;
 
 public class Values extends Value {
     public Value[] values;
@@ -63,6 +64,23 @@ public class Values extends Value {
 
     public void eval(Interpreter r) throws ContinuationException {
 	error(r, "multiple values received in single-value context");
+    }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.writeBer(values.length, dos);
+	for (int i=0; i<values.length; i++) {
+	    s.serialize(values[i], dos);
+	}
+    }
+
+    public Values() {}
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	int size=s.readBer(dis);
+	values=new Value[size];
+	for (int i=0; i<size; i++) {
+	    values[i]=(Value)s.deserialize(dis);
+	}
     }
 }
 

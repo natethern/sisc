@@ -35,14 +35,14 @@ package sisc.modules;
 import sisc.*;
 import sisc.data.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class SNative extends Module {
     protected static final int 
 	ASSQ=0, MEMQ=1, ASSOC=6, MEMBER=7,
 	CADR=2, CDAR=3, CAAR=4, CDDR=5, NOT=8,
 	APPEND=9, EQV=10, MEMV=11, ASSV=12, 
-	VECTOR=13, LISTREF=14, VALUES=15, GENSYM=16,
-	GEN_SYM=17;
+	VECTOR=13, LISTREF=14, VALUES=15, READLINE=16;
 
     static long symid=0;
 
@@ -63,13 +63,7 @@ public class SNative extends Module {
 	define(r, "cddr", CDDR);
 	define(r, "list-ref", LISTREF);
 	define(r, "values", VALUES);
-	define(r, "gensym", GENSYM);
-	define(r, "gen-sym", GEN_SYM);
-    }
-
-    protected synchronized Symbol gensym(StringBuffer b) {
-	b.append('_').append(symid++);
-	return Symbol.get(b.toString());
+	define(r, "read-line", READLINE);
     }
 
     protected boolean eqv(Value v1, Value v2) {
@@ -92,9 +86,14 @@ public class SNative extends Module {
 	    switch(f.vlr.length) {
 	    case 0:
 		switch(primid) {
-		case GENSYM:
-		    StringBuffer b=new StringBuffer("%");
-		    return gensym(b);
+		case READLINE:
+		    try {
+			String s=f.console_in.getReader().readLine();
+			if (s==null) return EOF;
+			return new SchemeString(s);
+		    } catch (IOException e) {
+			throw new RuntimeException(e.getMessage());
+		    }
 		default: 
 		    error(f, "Incorrect number of arguments to procedure "+f.acc);
 		}	
@@ -109,9 +108,14 @@ public class SNative extends Module {
 		    return ((Pair)pair(f,f.vlr[0]).car).car;
 		case CDDR:
 		    return ((Pair)pair(f,f.vlr[0]).cdr).cdr;
-		case GEN_SYM:
-		    StringBuffer b=new StringBuffer(symbol(f,f.vlr[0]).display());
-		    return gensym(b);
+		case READLINE:
+		    try {
+			String s=inport(f,f.vlr[0]).getReader().readLine();
+			if (s==null) return EOF;
+			return new SchemeString(s);
+		    } catch (IOException e) {
+			throw new RuntimeException(e.getMessage());
+		    }
 		default: 
 		    error(f, "Incorrect number of arguments to procedure "+f.acc);
 		}	

@@ -34,11 +34,11 @@ package sisc.data;
 
 import sisc.*;
 import sisc.compiler.*;
+import java.io.*;
 
 public class BuiltinProcedure extends Procedure {
     public int id;
     public Module host;
-    public long usecount;
 
     public BuiltinProcedure(Module host, String name, int id) {
 	this(host, Symbol.get(name),id);
@@ -49,8 +49,21 @@ public class BuiltinProcedure extends Procedure {
 	this.name=name;
 	this.host=host;
     }
+    /*
+    int useCount;
+    long consumedTime;
 
+    protected void finalize() {
+	if (name!=null) {
+	    System.err.println(justify(useCount+"", 10, ' ')+" "+name);
+	    System.err.println(justify(consumedTime+"", 15, ' ')+"ms "+name);
+	}
+	
+    }
+    */
      public void apply(Interpreter r) throws ContinuationException {
+	 // if (name!=null) useCount++;
+	 //long st=System.currentTimeMillis();
 	r.nxp=null;
 	try {
 	    //	    long start=System.currentTimeMillis();
@@ -64,6 +77,7 @@ public class BuiltinProcedure extends Procedure {
 	} catch (RuntimeException re) {
 	    error(r, name, re.getMessage());
 	}
+	//	consumedTime+=System.currentTimeMillis()-st;
     }
 
     public String display() {
@@ -81,6 +95,23 @@ public class BuiltinProcedure extends Procedure {
     public void finalize() {
 	System.err.println(justify(""+usecount,10,' ')+" "+name);
 	}*/
-}
 
+    public void serialize(Serializer s, 
+			  DataOutputStream dos) throws IOException {
+	s.serializeModule(host, dos);
+	s.writeBer(id, dos);
+	s.serialize(name, dos);
+    }
+
+    public BuiltinProcedure() {}
+
+    public void deserialize(Serializer s, 
+			    DataInputStream dis) 
+	throws IOException {
+	host=s.retrieveModule(dis);
+	id=s.readBer(dis);
+	name=(Symbol)s.deserialize(dis);
+    }
+}	
+	
     

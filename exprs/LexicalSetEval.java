@@ -34,6 +34,7 @@ package sisc.exprs;
 
 import sisc.*;
 import sisc.data.*;
+import java.io.*;
 
 public class LexicalSetEval extends Expression {
     public short depth, pos;
@@ -52,5 +53,18 @@ public class LexicalSetEval extends Expression {
     public Value express() {
 	return list(sym("LexicalSet-eval"), 
 		    new Pair(new Quantity(depth), new Quantity(pos)));
+    }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.writeBer(depth, dos);
+	s.writeBer(pos, dos);
+    }
+
+    public LexicalSetEval() {}
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	depth=s.readBerShort(dis);
+	pos=s.readBerShort(dis);
     }
 }

@@ -33,13 +33,14 @@
 package sisc.data;
 
 import sisc.*;
+import java.io.*;
 
 public class Closure extends Procedure {
     public boolean arity;
     public short fcount;
     public LexicalEnvironment env;
     public Expression body;
-   
+    
     public Closure(boolean arity, short fcount, Expression body,
 		   LexicalEnvironment env) {
 	this.arity=arity;
@@ -48,7 +49,18 @@ public class Closure extends Procedure {
 	this.body=body;
     }
 
+    /*    int useCount;
+    static {
+	System.runFinalizersOnExit(true);
+    }
+
+    protected void finalize() {
+	if (name!=null)
+	    System.err.println(justify(useCount+"", 10, ' ')+" "+name);
+    }
+    */
     public void apply(Interpreter r) throws ContinuationException {	
+	//if (name!=null) useCount++;
 	try {
 	    r.env=new LexicalEnvironment(fcount, r.vlr, 
 					 env, arity);
@@ -67,7 +79,31 @@ public class Closure extends Procedure {
 	b.append('>');
 	return b.toString();
     }
-}
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.serialize(name, dos);
+	dos.writeBoolean(arity);
+	s.writeBer(fcount, dos);
+	s.serialize(env, dos);
+	s.serialize(body, dos);
+    }
+
+    public Closure() {}
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	name=(Symbol)s.deserialize(dis);
+	arity=dis.readBoolean();
+	fcount=s.readBerShort(dis);
+	env=(LexicalEnvironment)s.deserialize(dis);
+	body=s.deserialize(dis);
+    }
+}	
 	
-	
+
+
+
+
+
+
 

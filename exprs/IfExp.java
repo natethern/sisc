@@ -34,10 +34,16 @@ package sisc.exprs;
 
 import sisc.*;
 import sisc.data.*;
+import java.io.*;
 
 public class IfExp extends Expression {
     public Expression test;
     public IfEval eexp;
+
+    public IfExp(Expression test, IfEval eexp) {
+	this.test=test;
+	this.eexp=eexp;
+    }
 
     public IfExp(Expression test, Expression conseq, Expression altern) {
 	this.test=test;
@@ -56,5 +62,18 @@ public class IfExp extends Expression {
 
     public Value express() {
 	return list(sym("If-exp"), test.express(), eexp.express());
+    }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.serialize(test, dos);
+	s.serialize(eexp, dos);
+    }
+
+    public IfExp() {} 
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	test=s.deserialize(dis);
+	eexp=(IfEval)s.deserialize(dis);
     }
 }

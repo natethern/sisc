@@ -44,6 +44,11 @@ public class LexicalEnvironment extends Value {
 	this(new Value[0]);
     }
 
+    LexicalEnvironment(Value[] v, LexicalEnvironment parent) {
+	this.vals=v;
+	this.parent=parent;
+    }
+
     public LexicalEnvironment(Value[] v) {
 	this((short)v.length, v, null);
     }
@@ -85,6 +90,32 @@ public class LexicalEnvironment extends Value {
 
     public String display() {
 	return "#<environment>";
+    }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.writeBer(vals.length, dos);
+	for (int i=0; i<vals.length; i++) 
+	    s.serialize(vals[i], dos);
+	if (parent==null)
+	    dos.writeBoolean(false);
+	else {
+	    dos.writeBoolean(true);
+	    s.serialize(parent, dos);
+	}
+    }
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	int size=s.readBer(dis);
+	vals=new Value[size];
+
+	for (int i=0; i<size; i++) 
+	    vals[i]=(Value)s.deserialize(dis);
+
+	if (dis.readBoolean()) {
+	    parent=(LexicalEnvironment)s.deserialize(dis);
+	}
+	else parent=null;
     }
 }
 

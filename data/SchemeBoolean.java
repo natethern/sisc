@@ -32,7 +32,10 @@
  */
 package sisc.data;
 
-public class SchemeBoolean extends Value {
+import sisc.Serializer;
+import java.io.*;
+
+public class SchemeBoolean extends Value implements Singleton {
     public static SchemeBoolean TRUE=new SchemeBoolean(true);
     public static SchemeBoolean FALSE=new SchemeBoolean(false);
     public static Boolean JTRUE=new Boolean(true), JFALSE=new Boolean(false);
@@ -49,4 +52,19 @@ public class SchemeBoolean extends Value {
     public Object javaValue() {
 	return val ? JTRUE : JFALSE;
     }
+
+    public SchemeBoolean() {}
+
+    public void serialize(Serializer s,
+			  DataOutputStream dos) throws IOException {
+	dos.writeBoolean(val);
+    }
+
+    public static Value getValue(DataInputStream dis) throws IOException {
+	boolean v=dis.readBoolean();
+	if (v)
+	    return TRUE;
+	return FALSE;
+    }
 }
+

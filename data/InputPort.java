@@ -55,6 +55,10 @@ public class InputPort extends NamedValue {
 	}
     }
 
+    public BufferedReader getReader() {
+	return r;
+    }
+
     public int read() throws IOException {
 	int c=pushback;
 	if (pushback!=0) 

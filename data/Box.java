@@ -34,21 +34,15 @@ package sisc.data;
 
 import java.util.*;
 import sisc.data.*;
+import java.io.*;
+import sisc.Serializer;
 
 public class Box extends Value {
     public Expression val;
-    protected boolean locked=false, shadowed=false;
+    protected boolean locked=false;
 
     public Box(Expression val) {
 	this.val=val;
-    }
-
-    public void shadow() {
-	shadowed=true;
-    }
-
-    public boolean shadowed() {
-	return shadowed;
     }
 
     public void lock() {
@@ -76,6 +70,19 @@ public class Box extends Value {
 	Box b=(Box)v;
 	if (val==null && b.val!=null) return false;
 	return ((Value)val).valueEqual((Value)b.val);
+    }
+    
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	dos.writeBoolean(locked);
+	s.serialize(val, dos);
+    }
+    
+    public Box() {}
+
+    public void deserialize(Serializer s, DataInputStream dis)
+	throws IOException {
+	locked=dis.readBoolean();
+	val=s.deserialize(dis);
     }
 }
 

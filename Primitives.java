@@ -57,7 +57,7 @@ public class Primitives extends Module {
         GCD=57,   DENOMINATOR=55,  REMAINDER=56,  LIST2VECTOR=62,      
         LCM=58,   VECTOR2LIST=61,  LOOKUP=70,     STRING2SYMBOL=60, 
         EVAL=63,  STRINGAPPEND=68, ERROR=69,      CURRENTWRITE=65, 
-	SIN=98,   SAVEENV=71,      LOADENV=72,    CURRENTEVAL=64, 
+	SIN=98,   CURRENTEVAL=64, 
         COS=99,   FILETYPE=73,     SYSTIME=78,    STRING2NUMBER=74, 
         TAN=100,  CALLCC=76,       ROUND=85,      NUMBER2STRING=75, 
         ASIN=101, SETBOX=117,      CEILING=84,    INEXACT2EXACT=82, 
@@ -75,7 +75,7 @@ public class Primitives extends Module {
         FLOOR=83, OPENOUTPUTSTRING=48,         GETOUTPUTSTRING=49, 
 	PUTPROP=121, STRING2UNINTERNEDSYMBOL=66,  OPENINPUTSTRING=50,
 	LIST=122, _VOID=123, VECTORFINDLASTUNIQUE=124, MAKEPATH=125,
-	ABSPATHQ=126;
+	ABSPATHQ=126, PARENT_CONT=127, CONTINUATIONQ=128;
 
     public void initialize(Interpreter r) {
 	define(r, "list", LIST);
@@ -113,6 +113,7 @@ public class Primitives extends Module {
 	define(r, "close-output-port", CLOSEOUTPUTPORT);
 	define(r, "complex?", COMPLEXQ); 
 	define(r, "cons", CONS);    
+	define(r, "continuation?", CONTINUATIONQ);
 	define(r, "cos", COS);
 	define(r, "current-evaluator", CURRENTEVAL);
 	define(r, "current-input-port", CURRENTINPUTPORT);
@@ -163,6 +164,7 @@ public class Primitives extends Module {
 	define(r, "open-output-string", OPENOUTPUTSTRING);
 	define(r, "output-port?", OUTPORTQ);
 	define(r, "pair?", PAIRQ);
+	define(r, "parent-continuation", PARENT_CONT);
 	define(r, "peek-char", PEEKCHAR);
 	define(r, "procedure?", PROCEDUREQ);
 	define(r, "putprop", PUTPROP);
@@ -173,7 +175,6 @@ public class Primitives extends Module {
 	define(r, "real-part", REALPART);
 	define(r, "remainder", REMAINDER);
 	define(r, "round", ROUND);
-	define(r, "save-env", SAVEENV);
 	define(r, "scheme-report-environment", REPORTENVIRONMENT);
 	define(r, "set-box!", SETBOX);
 	define(r, "set-car!", SETCAR);
@@ -262,6 +263,7 @@ public class Primitives extends Module {
 	    case VOIDQ: return truth(f.vlr[0]==VOID);
 	    case ENVIRONMENTQ: return truth(f.vlr[0] instanceof 
 					    AssociativeEnvironment);
+	    case CONTINUATIONQ: return truth(f.vlr[0] instanceof CallFrame);
 	    case PROCEDUREQ: return truth(f.vlr[0] instanceof Procedure);
 	    case INTEGERQ: return numQuery(f.vlr[0],Quantity.INTEGER);
 
@@ -376,8 +378,6 @@ public class Primitives extends Module {
 			v=EOF;
 		    } catch (IOException e) {
 			f.pop(before);
-			e.printStackTrace();
-
 			throw new RuntimeException( "error reading from "+p.write());
 		    }
 		    if (v!=EOF)
@@ -456,21 +456,8 @@ public class Primitives extends Module {
 		    m.initialize(f);
 		    return VOID;
 		} catch (Exception e) {
-		    e.printStackTrace();
 		    throw new RuntimeException(e.getMessage());
 		}
-	    case SAVEENV:
-		String of=string(f,f.vlr[0]);
-		try {
-		    BufferedOutputStream out=
-			new BufferedOutputStream(new FileOutputStream(of));
-		    f.saveEnv(out);
-		    out.close();
-		} catch (IOException e) {
-		    e.printStackTrace();
-		    throw new RuntimeException("Error writing to file \""+of+"\"");
-		}
-		return VOID;
 	    case MAX_PRECISION:
 		Quantity.max_precision=num(f,f.vlr[0]).intValue();
 		return VOID;
@@ -481,6 +468,8 @@ public class Primitives extends Module {
 		String f1=string(f,f.vlr[0]);
 		File fn=new File(f1);
 		return truth(fn.isAbsolute());
+	    case PARENT_CONT:
+		return ((CallFrame)f.vlr[0]).parent;
 	    }	    
 	case 2:
 	    switch (primid) {
@@ -662,14 +651,14 @@ public class Primitives extends Module {
 		return null;
 	    case ADD: 
 		quantity=Quantity.ZERO;
-		for (int i=0; i<f.vlr.length; i++) {
+		for (int i=f.vlr.length-1; i>=0; i--) {
 		    quantity=quantity.add(num(f,f.vlr[i]));
 		}	       
 		return quantity;
 		
 	    case MUL: 
 		quantity=Quantity.ONE;
-		for (int i=0; i<f.vlr.length; i++) {
+		for (int i=f.vlr.length-1; i>=0; i--) {
 		    quantity=quantity.mul(num(f,f.vlr[i]));
 		}	       
 		return quantity;
@@ -690,7 +679,7 @@ public class Primitives extends Module {
 		
 	    case NEQ: 
 		quantity=num(f,f.vlr[0]);
-		for (int i=1; i<f.vlr.length; i++) {
+		for (int i=f.vlr.length-1; i>=0; i--) {
 		    if (!quantity.comp(num(f,f.vlr[i]), 0)) {
 			return FALSE;
 			

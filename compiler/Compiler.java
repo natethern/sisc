@@ -36,10 +36,11 @@ import sisc.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import java.util.*;
+import java.io.*;
 
 public class Compiler extends Util {
     
-    static class Syntax extends NamedValue {
+    public static class Syntax extends NamedValue {
 	int synid;
 
 	public Syntax(int synid) {
@@ -52,6 +53,15 @@ public class Compiler extends Util {
 
 	public String display() {
 	    return "#!"+synid;
+	}
+
+	public Syntax() {}
+	public void deserialize(Serializer s, DataInputStream dis)
+	    throws IOException {
+	    synid=s.readBer(dis);
+	}
+	public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	    s.writeBer(synid, dos);
 	}
     }
 
@@ -227,7 +237,7 @@ public class Compiler extends Util {
 	    default:
 		Expression[] exps=pairToExpressions(expr);
 		compileExpressions(r, exps, rt, 0, env);
-		return new AppExp(compile(r, s, rt, 0, env),
+		return new AppExp(compile(r,s,rt,0,env),
 				  exps, (context & TAIL)==0);
 	    }
 	} else if (expr.car instanceof Pair) {
@@ -236,8 +246,6 @@ public class Compiler extends Util {
 	    return new AppExp(compile(r, expr.car, rt, 0, env), 
 			      exps, (context & TAIL)==0);
 	} else {
-	    System.err.println("{warning: compiler detected application of non-procedure '"+
-			       expr.write()+"'}");
 	    Expression[] exps=pairToExpressions((Pair)expr.cdr);
 	    compileExpressions(r, exps, rt, 0, env);
 	    return new AppExp(compile(r, expr.car, rt, 0, env),
@@ -258,11 +266,13 @@ public class Compiler extends Util {
 	throws ContinuationException {
 	Expression last=compile(r, (Expression)v.lastElement(), rt, 
 				TAIL & context, env);
+	
 	v.removeElementAt(v.size()-1);
-
+	
 	if (v.size()==0) return last;
-	Vector v2=new Vector(v.size());
-	for (int i=0; i<v.size(); i++) {
+	int vs=v.size();
+	Vector v2=new Vector(vs);
+	for (int i=0; i<vs; i++) {
 	    Expression e=compile(r, (Expression)v.elementAt(i), 
 				 rt, COMMAND, env);
 	    if (!(e instanceof Immediate)) 

@@ -34,6 +34,7 @@ package sisc.exprs;
 
 import sisc.data.*;
 import sisc.*;
+import java.io.*;
 
 public class LexicalReferenceExp extends Expression implements Immediate {
 
@@ -55,6 +56,30 @@ public class LexicalReferenceExp extends Expression implements Immediate {
 
     public Value express() {
 	return new Pair(new Quantity(depth), new Quantity(pos));
+    }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.writeBer(depth, dos);
+	s.writeBer(pos, dos);
+    }
+
+    public boolean equals(Object o) {
+	if (!(o instanceof LexicalReferenceExp))
+	    return false;
+	LexicalReferenceExp e=(LexicalReferenceExp)o;
+	return e.depth==depth && e.pos==pos;
+    }
+
+    public int hashCode() {
+	return depth<<16 | pos | 0xea000000;
+    }
+    
+    public LexicalReferenceExp() {}
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	depth=s.readBerShort(dis);
+	pos=s.readBerShort(dis);
     }
 }
 

@@ -483,59 +483,73 @@
 
 ;;; output constructors
 (begin
-(define-syntax build-application
-  (syntax-rules ()
-    ((_ source fun-exp arg-exps)
-     `(,fun-exp . ,arg-exps))))
+; (define-syntax build-application
+;   (syntax-rules ()
+;     ((_ source fun-exp arg-exps)
+;      `(,fun-exp . ,arg-exps))))
+(define (build-application source fun-exp arg-exps)
+  `(,fun-exp . ,arg-exps))
 
-(define-syntax build-conditional
-  (syntax-rules ()
-    ((_ source test-exp then-exp else-exp)
-     `(if ,test-exp ,then-exp ,else-exp))))
+; (define-syntax build-conditional
+;   (syntax-rules ()
+;     ((_ source test-exp then-exp else-exp)
+;      `(if ,test-exp ,then-exp ,else-exp))))
+(define (build-conditional source test-exp then-exp else-exp)
+  `(if ,test-exp ,then-exp ,else-exp))
 
 (define-syntax build-lexical-reference
   (syntax-rules ()
     ((_ type source var)
      var)))
 
-(define-syntax build-lexical-assignment
-  (syntax-rules ()
-    ((_ source var exp)
-     `(set! ,var ,exp))))
+; (define-syntax build-lexical-assignment
+;   (syntax-rules ()
+;     ((_ source var exp)
+;      `(set! ,var ,exp))))
+(define (build-lexical-assignment source var exo)
+  `(set! ,var ,exp))
 
 (define-syntax build-global-reference
   (syntax-rules ()
     ((_ source var)
      var)))
 
-(define-syntax build-global-assignment
-  (syntax-rules ()
-    ((_ source var exp)
-     `(set! ,var ,exp))))
+; (define-syntax build-global-assignment
+;   (syntax-rules ()
+;     ((_ source var exp)
+;      `(set! ,var ,exp))))
+(define (build-global-assignment source var exo)
+  `(set! ,var ,exp))
 
 (define build-global-assignment-func
   (lambda (var exp)
      `(set! ,var ,exp)))
 
-(define-syntax build-global-definition
-  (syntax-rules ()
-    ((_ source var exp)
-     `(define ,var ,exp))))
+; (define-syntax build-global-definition
+;   (syntax-rules ()
+;     ((_ source var exp)
+;      `(define ,var ,exp))))
+(define (build-global-definition source var exp)
+  `(define ,var ,exp))
 
 (define-syntax build-module-definition
  ; should have the effect of a global definition but may not appear at top level
   (identifier-syntax build-global-assignment))
 
-(define-syntax build-cte-install
- ; should build a call that has the same effect as calling the
- ; global definition hook
-  (syntax-rules ()
-    ((_ sym exp) `($sc-put-cte ',sym ,exp))))
- 
-(define-syntax build-lambda
-  (syntax-rules ()
-    ((_ src vars exp)
-     `(lambda ,vars ,exp))))
+; (define-syntax build-cte-install
+;  ; should build a call that has the same effect as calling the
+;  ; global definition hook
+;   (syntax-rules ()
+;     ((_ sym exp) `($sc-put-cte ',sym ,exp))))
+(define (build-cte-install sym exp)
+  `($sc-put-cte ',sym ,exp))
+
+; (define-syntax build-lambda
+;   (syntax-rules ()
+;     ((_ src vars exp)
+;      `(lambda ,vars ,exp))))
+(define (build-lambda src vars exp)
+  `(lambda ,vars ,exp))
 
 (define-syntax build-primref
   (syntax-rules ()
@@ -1919,7 +1933,7 @@
                      ((fx= i n) v)
                      (vector-set! v i
                        (rebuild-macro-output (vector-ref x i) m)))))
-              ((symbol? x)
+              ((symbol? x) 
                (syntax-error (source-wrap e w s)
                  "encountered raw symbol "
                  (format "~s" x)
@@ -2759,6 +2773,7 @@
 ;;; the object file if we are compiling a file.
 (set! sc-expand
   (let ((m 'e) (esew '(eval))
+;   (let ((m 'c) (esew '(compile load eval))
         (user-ribcage
          (let ((ribcage (make-empty-ribcage)))
            (extend-ribcage-subst! ribcage '*top*)

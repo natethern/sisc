@@ -32,7 +32,10 @@
  */
 package sisc.data;
 
-public class EmptyList extends Pair {
+import java.io.*;
+import sisc.Serializer;
+
+public class EmptyList extends Pair implements Singleton {
     public static EmptyList EMPTYLIST=new EmptyList();
 
     static {
@@ -52,5 +55,12 @@ public class EmptyList extends Pair {
     public Object javaValue() {
 	return null;
     }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {}
+
+    public static Value getValue(DataInputStream dis) {
+	return EMPTYLIST;
+    }
 }
+
 

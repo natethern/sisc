@@ -34,6 +34,7 @@ package sisc.exprs;
 
 import sisc.*;
 import sisc.data.*;
+import java.io.*;
 
 public class BeginExp extends Expression {
     public Expression exprs[], tail;
@@ -63,7 +64,26 @@ public class BeginExp extends Expression {
 	}
 	return new Pair(sym("Begin-exp"), args);
     }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.writeBer(exprs.length, dos);
+	for (int i=0; i<exprs.length; i++) 
+	    s.serialize(exprs[i], dos);
+	s.serialize(tail, dos);
+    }
+
+    public BeginExp() {}
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	int size=s.readBer(dis);
+	exprs=new Expression[size];
+	for (int i=0; i<size; i++) 
+	    exprs[i]=s.deserialize(dis);
+	tail=s.deserialize(dis);
+    }
 }
+
 
 
 

@@ -86,7 +86,10 @@ public class GenerateHeap {
 	System.out.println("Saving heap...");
 
 	try {
-	    OutputStream out=new GZIPOutputStream(new BufferedOutputStream(new FileOutputStream(args[0])));
+	    DataOutputStream out=new DataOutputStream(
+				 new GZIPOutputStream(
+				 new BufferedOutputStream(
+				 new FileOutputStream(args[0]))));
 	    r.saveEnv(out);
 	    out.flush();
 	    out.close();
@@ -96,7 +99,6 @@ public class GenerateHeap {
 	    System.exit(1);
 
 	}
-	//System.runFinalizersOnExit(true);
 	System.out.println("Heap saved.");
     }
 }

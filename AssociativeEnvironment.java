@@ -33,7 +33,9 @@
 package sisc;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import sisc.data.*;
+import java.io.*;
 
 public class AssociativeEnvironment extends NamedValue {
     
@@ -47,6 +49,12 @@ public class AssociativeEnvironment extends NamedValue {
 	nextFree=cloneFrom.nextFree;
 	env=new Value[nextFree];
 	System.arraycopy(cloneFrom.env, 0, env, 0, nextFree);
+    }
+
+    AssociativeEnvironment(Value[] env, HashMap symMap) {
+	this.env=env;
+	symbolMap=symMap;
+	nextFree=env.length;
     }
 
     public AssociativeEnvironment() {
@@ -90,8 +98,9 @@ public class AssociativeEnvironment extends NamedValue {
 
     public int define(Symbol s, Value v) {
 	synchronized(symbolMap) {
-	    if (nextFree >= env.length)
+	    if (nextFree >= env.length) {
 		expand();
+	    }
 	    symbolMap.put(s, new Integer(nextFree));
 	    env[nextFree]=v;
 	    return nextFree++;
@@ -123,6 +132,28 @@ public class AssociativeEnvironment extends NamedValue {
 	return sb.toString();
     }
 
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.writeBer(symbolMap.size(), dos);
+	for (Iterator i=symbolMap.keySet().iterator(); i.hasNext();) {
+	    Symbol key=(Symbol)i.next();
+	    s.serialize(key, dos);
+	    int loc=((Integer)symbolMap.get(key)).intValue();
+	    s.serialize(env[loc], dos);
+	}
+    }
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	int size=s.readBer(dis);
+	env=new Value[Math.max(10,size)];
+	symbolMap=new HashMap();
+	for (int i=0; i<size; i++) {
+	    Symbol id=(Symbol)s.deserialize(dis);
+	    env[i]=(Value)s.deserialize(dis);
+	    symbolMap.put(id, new Integer(i));
+	}
+	nextFree=size;
+    }
 }
 
 

@@ -34,6 +34,7 @@ package sisc.exprs;
 
 import sisc.*;
 import sisc.data.*;
+import java.io.*;
 
 public class FreeReferenceExp extends Expression implements Immediate {
     public Symbol sym;
@@ -68,5 +69,30 @@ public class FreeReferenceExp extends Expression implements Immediate {
 
     public Value express() {
 	return list(sym("FreeReference-exp"), sym);
+    }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.serialize(sym, dos);
+	s.serialize(lenv, dos);
+    }
+
+    public FreeReferenceExp() {}
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	sym=(Symbol)s.deserialize(dis);
+	lenv=(AssociativeEnvironment)s.deserialize(dis);
+	envLoc=-1;
+    }
+
+    public boolean equals(Object o) {
+	if (!(o instanceof FreeReferenceExp))
+	    return false;
+	FreeReferenceExp e=(FreeReferenceExp)o;
+	return lenv.equals(e.lenv) && sym.equals(e.sym);
+    }
+
+    public int hashCode() {
+	return lenv.hashCode() ^ sym.hashCode();
     }
 }

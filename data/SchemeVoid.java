@@ -32,7 +32,10 @@
  */
 package sisc.data;
 
-public class SchemeVoid extends Value {
+import java.io.*;
+import sisc.Serializer;
+
+public class SchemeVoid extends Value implements Singleton {
     public static SchemeVoid VOID=new SchemeVoid();
 
     protected SchemeVoid() {}
@@ -40,4 +43,8 @@ public class SchemeVoid extends Value {
     public String display() {
 	return "#<void>";
     }    
+
+    public static Value getValue(DataInputStream dis) {
+	return VOID;
+    }
 }

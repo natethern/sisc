@@ -34,6 +34,7 @@ package sisc.exprs;
 
 import sisc.*;
 import sisc.data.*;
+import java.io.*;
 
 public class LambdaExp extends Expression implements Immediate {
     public boolean infiniteArity;
@@ -58,7 +59,22 @@ public class LambdaExp extends Expression implements Immediate {
     public Value express() {
 	return list(sym("Lambda-exp"), new Quantity(fcount), body.express());
     }
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	dos.writeBoolean(infiniteArity);
+	s.writeBer(fcount, dos);
+	s.serialize(body, dos);
+    }
+
+    public LambdaExp() {}
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	infiniteArity=dis.readBoolean();
+	fcount=s.readBerShort(dis);
+	body=s.deserialize(dis);
+    }
 }
+
 
 
 

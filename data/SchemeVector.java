@@ -33,6 +33,8 @@
 package sisc.data;
 
 import java.util.Vector;
+import sisc.Serializer;
+import java.io.*;
 
 public class SchemeVector extends Value {
     public Value[] vals;
@@ -111,6 +113,23 @@ public class SchemeVector extends Value {
 	for (int i=0; i<vals.length; i++) 
 	    v[i]=vals[i].javaValue();
 	return v;
+    }
+
+    public void serialize(Serializer s, DataOutputStream dos) 
+	throws IOException {
+	s.writeBer(vals.length, dos);
+	for (int i=0; i<vals.length; i++) {
+	    s.serialize(vals[i], dos);
+	}
+    }
+
+    public SchemeVector() {}
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	vals=new Value[s.readBer(dis)];
+	for (int i=0; i<vals.length; i++) {
+	    vals[i]=(Value)s.deserialize(dis);
+	}
     }
 }
 

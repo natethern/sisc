@@ -55,11 +55,14 @@ public class REPL extends Thread {
 	r=new Interpreter(in, out);
 	r.setEvaluator("eval");
 	try {
-	    r.loadEnv(new GZIPInputStream(
+	    r.loadEnv(new DataInputStream(
 		       new BufferedInputStream(
-                        new FileInputStream(
-			     System.getProperty("HEAP","sisc.heap"))),
-			   48000));
+		       new GZIPInputStream(
+		       new BufferedInputStream(
+                       new FileInputStream(
+			     System.getProperty("HEAP","sisc.heap")),
+		       90000))
+			   )));
 	} catch (IOException e) {
 	    System.err.println("Error loading heap!");
 	    e.printStackTrace();
@@ -85,15 +88,12 @@ public class REPL extends Thread {
 	File[] roots=File.listRoots();
 	SchemeString[] rootss=new SchemeString[roots.length];
 	for (int i=0; i<roots.length; i++) 
-	    try {
-		rootss[i]=new SchemeString(roots[i].getCanonicalPath());
-	    } catch (IOException e) {}
+	    rootss[i]=new SchemeString(roots[i].getPath());
 	r.define(Symbol.get("fs-roots"), Util.valArrayToList((Value[])rootss,
 							     0, rootss.length), 
 		 Util.SISC);
 
 	this.out.println(" ("+Util.VERSION+")");
-	this.out.println(Quantity.reportLibraryType());
 	this.out.flush();
     }
 

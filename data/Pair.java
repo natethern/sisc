@@ -32,6 +32,9 @@
  */
 package sisc.data;
 
+import java.io.*;
+import sisc.Serializer;
+
 public class Pair extends Value {
     public Value car, cdr;
 
@@ -49,27 +52,21 @@ public class Pair extends Value {
 	this.cdr=cdr;
     }
 
-    public Value car() {
-	return car;
-    }
-
-    public Value cdr() {
-	return cdr;
-    }
-
     protected void display(StringBuffer b, boolean write) {
-	if (car==null) b.append("()");
-	else
-	    b.append((write ? car.write() : car.display()));
-	if (cdr == EMPTYLIST) 
-	    return;
-	else if (cdr==null)
-	    b.append("()");
-	else if (cdr instanceof Pair) {
-	    b.append(' ');
-	    ((Pair)cdr).display(b, write);
-	} else
-	    b.append(" . ").append((write ? cdr.write() : cdr.display()));
+
+	Pair cv=this;
+	do {
+	    b.append((write ? cv.car.write() : cv.car.display()));
+	    
+	    if (cv.cdr instanceof Pair) {
+		if (cv.cdr!=EMPTYLIST)
+		    b.append(' ');
+		cv=(Pair)cv.cdr;
+	    } else {
+		b.append(" . ").append((write ? cv.cdr.write() : cv.cdr.display()));
+		break;
+	    }
+	} while (cv!=EMPTYLIST);
     }
 	    
     public String display() {
@@ -113,6 +110,37 @@ public class Pair extends Value {
 	Pair p=(Pair)v;
 	return car.equals(p.car) &&
 	    cdr.equals(p.cdr);
+    }
+
+    public void serialize(Serializer s, DataOutputStream dos) 
+	throws IOException {
+	Pair rv=this;
+	boolean cont;
+	do {
+	    cont=false;
+	    s.serialize(rv.car, dos);
+	    if (!s.seen(rv.cdr) &&
+		rv.cdr instanceof Pair && rv.cdr != EMPTYLIST) {
+		dos.writeBoolean(cont=true);
+		rv=(Pair)rv.cdr;
+	    } else {
+		dos.writeBoolean(false);
+	    }
+	} while (cont);
+	s.serialize(rv.cdr, dos);
+    }
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	car=(Value)s.deserialize(dis);
+	Pair rv=this, tmp, head=rv;
+	while (dis.readBoolean()) {
+	    tmp=new Pair();
+	    rv.cdr=tmp;
+	    tmp.car=(Value)s.deserialize(dis);
+	    rv=tmp;
+	}
+	rv.cdr=(Value)s.deserialize(dis);
     }
 }
     

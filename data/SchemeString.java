@@ -33,6 +33,7 @@
 package sisc.data;
 
 import sisc.*;
+import java.io.*;
 
 public class SchemeString extends Value {
     public boolean immutable;
@@ -104,6 +105,19 @@ public class SchemeString extends Value {
 
     public Object javaValue() {
 	return new String(stringdata);
+    }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	dos.writeUTF(new String(stringdata));
+	dos.writeBoolean(immutable);
+    }
+
+    public SchemeString() {}
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	stringdata=dis.readUTF().toCharArray();
+	immutable=dis.readBoolean();
     }
 }
 		

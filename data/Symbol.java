@@ -34,8 +34,9 @@ package sisc.data;
 
 import java.util.WeakHashMap; 
 import java.io.*;
+import sisc.Serializer;
 
-public class Symbol extends Value {
+public class Symbol extends Value implements Singleton {
     
     public static WeakHashMap memo=new WeakHashMap(100);
 
@@ -98,7 +99,19 @@ public class Symbol extends Value {
 		memo.put(symval, this);
 	}
     }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	dos.writeUTF(symval);
+    }
+
+    public Symbol() {}
+
+    public static Expression getValue(DataInputStream dis) throws IOException {
+	return Symbol.get(dis.readUTF());
+    }
 }
+
+
 
 
 

@@ -34,6 +34,7 @@ package sisc.exprs;
 
 import sisc.*;
 import sisc.data.*;
+import java.io.*;
 
 public class FreeSetEval extends Expression {
     public Symbol lhs;
@@ -66,4 +67,19 @@ public class FreeSetEval extends Expression {
     public Value express() {
 	return list(sym("FreeSet-eval"), lhs);
     }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.serialize(lhs, dos);
+	s.serialize(senv, dos);
+    }
+
+    public FreeSetEval() {}
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	lhs=(Symbol)s.deserialize(dis);
+	senv=(AssociativeEnvironment)s.deserialize(dis);
+	envLoc=-1;
+    }
+
 }

@@ -39,13 +39,12 @@ import java.util.*;
 import java.io.*;
 
 public abstract class Util {
-    public static final String VERSION = "r1.1.2";
+    public static final String VERSION = "r1.1.3";
 
     protected static final Quantity FIVE=new Quantity(5);
     protected static final Expression APPEVAL=new AppEval();
 
     public static EOFObject EOF=EOFObject.EOF;
-    public static Serializable UNBOUND=new Serializable() {};
     public static EmptyList EMPTYLIST=EmptyList.EMPTYLIST;
     public static SchemeVoid VOID=SchemeVoid.VOID;
     public static SchemeBoolean TRUE=SchemeBoolean.TRUE,
@@ -79,7 +78,7 @@ public abstract class Util {
 	throw new ContinuationException(r.fk);
     }
 
-    public static Symbol sym(String s) {
+    public static final Symbol sym(String s) {
 	return Symbol.get(s);
     }
 
@@ -89,7 +88,7 @@ public abstract class Util {
     }
 
     public static void error(Interpreter r, String errormessage, 
-			     boolean prependError) 
+			     boolean prependError) 			     
 	throws ContinuationException {
 	r.acc=new Values(new Value[] {
 	    new SchemeString((prependError ? "Error: "+errormessage : 
@@ -190,81 +189,81 @@ public abstract class Util {
 	throw new RuntimeException("expected type "+type+", got '"+o.write()+'\'');
     }
 
-    public static Quantity num(Interpreter r, Value o) throws ContinuationException {
+    public static final Quantity num(Interpreter r, Value o) throws ContinuationException {
 	try {
 	    return (Quantity)o;
 	} catch (ClassCastException e) { typeError(r, "number", o); } return null;
     }
 
-    public static Pair pair(Interpreter r, Value o) throws ContinuationException {
+    public static final Pair pair(Interpreter r, Value o) throws ContinuationException {
 	try {
 	    return (Pair)o;
 	} catch (ClassCastException e) { typeError(r, "pair", o); } return null;
     }
 
-    public static Procedure proc(Interpreter r, Value o) throws ContinuationException {
+    public static final Procedure proc(Interpreter r, Value o) throws ContinuationException {
 	try {
 	    return (Procedure)o;
 	} catch (ClassCastException e) { typeError(r, "procedure", o); } return null;
     }
 
-    public static Pair truePair(Interpreter r, Value o) throws ContinuationException {
+    public static final Pair truePair(Interpreter r, Value o) throws ContinuationException {
 	Pair p=pair(r, o);
 	if (p==EMPTYLIST) typeError(r, "pair", o);
 	return p;
     }
 	
-    public static char character(Interpreter r, Value c) throws ContinuationException {
+    public static final char character(Interpreter r, Value c) throws ContinuationException {
 	return chr(r, c).c;
     }
 
-    public static SchemeCharacter chr(Interpreter r, Value o) throws ContinuationException {
+    public static final SchemeCharacter chr(Interpreter r, Value o) throws ContinuationException {
 	try {
 	    return (SchemeCharacter)o;
 	} catch (ClassCastException e) { typeError(r, "character", o); } return null;
     }
 
-    public static String string(Interpreter r, Value o) throws ContinuationException {
+    public static final String string(Interpreter r, Value o) throws ContinuationException {
 	return new String(str(r, o).stringdata);
     }
 
-    public static SchemeString str(Interpreter r, Value o) throws ContinuationException {
+    public static final SchemeString str(Interpreter r, Value o) throws ContinuationException {
 	try {
 	    return (SchemeString)o;
 	} catch (ClassCastException e) { typeError(r, "string", o); } return null;
     }
 
-    public static Symbol symbol(Interpreter r, Value o) throws ContinuationException {
+    public static final Symbol symbol(Interpreter r, Value o) throws ContinuationException {
 	try {
 	    return (Symbol)o;
 	} catch (ClassCastException e) { typeError(r, "symbol", o); } return null;
     }
 
-    public static SchemeVector vec(Interpreter r, Value o) throws ContinuationException {
+    public static final SchemeVector vec(Interpreter r, Value o) throws ContinuationException {
 	try {
 	    return (SchemeVector)o;
 	} catch (ClassCastException e) { typeError(r, "vector", o); } return null;
     }
     
-    public static OutputPort outport(Interpreter r, Value o) throws ContinuationException {
+    public static final OutputPort outport(Interpreter r, Value o) throws ContinuationException {
 	try {
 	    return (OutputPort)o;
 	} catch (ClassCastException e) { typeError(r, "output-port", o); } return null;
     }
 
-    public static InputPort inport(Interpreter r, Value o) throws ContinuationException {
+    public static final InputPort inport(Interpreter r, Value o) throws ContinuationException {
 	try {
 	    return (InputPort)o;
 	} catch (ClassCastException e) { typeError(r, "input-port", o); } return null;
     }
     
-    public static AssociativeEnvironment env(Interpreter r, Value o) throws ContinuationException {
+    public static final AssociativeEnvironment env(Interpreter r, Value o) throws ContinuationException {
 	try {
 	    return (AssociativeEnvironment)o;
 	} catch (ClassCastException e) { typeError(r, "environment", o); } return null;
     }
 
-    public static Box box(Interpreter r, Value o) throws ContinuationException {
+    public static final Box box(Interpreter r, Value o) throws ContinuationException {
 	try {	
 	    return (Box)o;
 	} catch (ClassCastException e) { typeError(r, "box", o); } return null;

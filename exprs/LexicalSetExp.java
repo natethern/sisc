@@ -34,6 +34,7 @@ package sisc.exprs;
 
 import sisc.*;
 import sisc.data.*;
+import java.io.*;
 
 public class LexicalSetExp extends Expression {
     public Expression rhs;
@@ -52,4 +53,18 @@ public class LexicalSetExp extends Expression {
     public Value express() {
 	return list(sym("LexicalSet-exp"), eexpr.express(), rhs.express());
     }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.serialize(rhs, dos);
+	s.serialize(eexpr, dos);
+    }
+
+    public LexicalSetExp() {}
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	rhs=s.deserialize(dis);
+	eexpr=(LexicalSetEval)s.deserialize(dis);
+    }
 }
+

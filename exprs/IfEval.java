@@ -34,6 +34,7 @@ package sisc.exprs;
 
 import sisc.*;
 import sisc.data.*;
+import java.io.*;
 
 public class IfEval extends Expression {
     public Expression conseq, altern;
@@ -49,6 +50,19 @@ public class IfEval extends Expression {
 
     public Value express() {
 	return list(sym("If-eval"), conseq.express(), altern.express());
+    }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.serialize(conseq, dos);
+	s.serialize(altern, dos);
+    }
+
+    public IfEval() {}
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	conseq=s.deserialize(dis);
+	altern=s.deserialize(dis);
     }
 }
 

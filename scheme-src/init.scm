@@ -622,7 +622,9 @@
 			   #f)]
 	     [message (if (not location)
 			  (if (not (null? args))
-			      (car args)
+			      (if (not (car args))
+				  (cadr args)
+				  (car args))
 			      #f)
 			  (if (not (null? (cdr args)))
 			      (cadr args)

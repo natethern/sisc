@@ -54,7 +54,7 @@ public class Interpreter extends Util {
 	    r.nxp=null;
 	    try {
 		Values v=(Values)r.acc;
-		System.err.println(v.values[0]);
+		System.err.println("Untrapped error: "+v.values[0].display());
 	    } catch (ClassCastException c) {
 		System.err.println("System error: invalid failure record in base failure continuation.");
 	    }
@@ -254,45 +254,48 @@ public class Interpreter extends Util {
 
 
     // Heapfile loading/saving
-    public void loadEnv(InputStream i) throws IOException {
-	ObjectInputStream in=new ObjectInputStream(i);
-
+    public void loadEnv(DataInputStream i) throws IOException {
+	Serializer s=new Serializer(this);
+	CallFrame lstk=(CallFrame)s.deserialize(i);
+	AssociativeEnvironment lsymenv=(AssociativeEnvironment)s.deserialize(i);
+	Procedure levaluator=(Procedure)s.deserialize(i);
+	Procedure lwriter=(Procedure)s.deserialize(i);
+	SchemeBoolean lTRUE=(SchemeBoolean)s.deserialize(i),
+	    lFALSE=(SchemeBoolean)s.deserialize(i);
+	SchemeVoid lVOID=(SchemeVoid)s.deserialize(i);
+	EmptyList lEMPTYLIST=(EmptyList)s.deserialize(i);
+	EOFObject lEOF=(EOFObject)s.deserialize(i);
+	
+	stk=lstk;
+	symenv=lsymenv;
 	try {
-	    CallFrame lstk=(CallFrame)in.readObject();
-	    AssociativeEnvironment lsymenv=(AssociativeEnvironment)in.readObject();
-	    Procedure levaluator=(Procedure)in.readObject();
-	    Procedure lwriter=(Procedure)in.readObject();
-	    SchemeBoolean lTRUE=(SchemeBoolean)in.readObject(),
-		lFALSE=(SchemeBoolean)in.readObject();
-	    SchemeVoid lVOID=(SchemeVoid)in.readObject();
-	    EmptyList lEMPTYLIST=(EmptyList)in.readObject();
-	    EOFObject lEOF=(EOFObject)in.readObject();
-	    Serializable lUNBOUND=(Serializable)in.readObject();
-
-	    stk=lstk;
-	    symenv=lsymenv;
-	    try {
-		toplevel_env=(AssociativeEnvironment)symenv.lookup(TOPLEVEL);
-	    } catch (ArrayIndexOutOfBoundsException e) {
-		throw new IOException("Heap did not contain toplevel environment!");
-	    }
-	    writer=lwriter;
-	    evaluator=levaluator;
-	    TRUE=lTRUE;
-	    FALSE=lFALSE;
-	    VOID=lVOID;
-	    EMPTYLIST=lEMPTYLIST;
-	    EOF=lEOF;
-	    UNBOUND=lUNBOUND;
-	    pop(stk);
-	} catch (ClassNotFoundException e) {
-	    throw new IOException("Could not load class!");
+	    toplevel_env=(AssociativeEnvironment)symenv.lookup(TOPLEVEL);
+	} catch (ArrayIndexOutOfBoundsException e) {
+	    throw new IOException("Heap did not contain toplevel environment!");
 	}
+	writer=lwriter;
+	evaluator=levaluator;
+	TRUE=lTRUE;
+	FALSE=lFALSE;
+	VOID=lVOID;
+	EMPTYLIST=lEMPTYLIST;
+	EOF=lEOF;
+	pop(stk);
     }
 
-    public void saveEnv(OutputStream o) throws IOException {
-	ObjectOutputStream out=new ObjectOutputStream(o);
+    public void saveEnv(DataOutputStream o) throws IOException {
 	save();
+	Serializer s=new Serializer(this);
+	s.serialize(stk, o);
+	s.serialize(symenv, o);
+	s.serialize(evaluator, o);
+	s.serialize(writer, o);
+	s.serialize(TRUE, o);
+	s.serialize(FALSE, o);
+	s.serialize(VOID,o);
+	s.serialize(EMPTYLIST,o);
+	s.serialize(EOF,o);
+	/*
 	out.writeObject(stk);
 	out.writeObject(symenv);
 	out.writeObject(evaluator);
@@ -302,9 +305,8 @@ public class Interpreter extends Util {
 	out.writeObject(VOID);
 	out.writeObject(EMPTYLIST);
 	out.writeObject(EOF);
-	out.writeObject(UNBOUND);
-
-	out.flush();
+	*/
+	o.flush();
 	pop(stk);
     }
 

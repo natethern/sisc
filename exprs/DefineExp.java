@@ -34,10 +34,16 @@ package sisc.exprs;
 
 import sisc.*;
 import sisc.data.*;
+import java.io.*;
 
 public class DefineExp extends Expression {
     public Expression rhs;
     public DefineEval defineEval;
+
+    DefineExp(Expression rhs, DefineEval de) {
+	this.rhs=rhs;
+	defineEval=de;
+    }
 
     public DefineExp(Symbol lhs, Expression rhs) {
 	defineEval=new DefineEval(lhs);
@@ -51,5 +57,18 @@ public class DefineExp extends Expression {
 
     public Value express() {
 	return list(sym("Define-exp"), defineEval.express(), rhs.express());
+    }
+
+    public void serialize(Serializer s, DataOutputStream dos) throws IOException {
+	s.serialize(rhs, dos);
+	s.serialize(defineEval, dos);
+    }
+
+    public DefineExp() {}
+
+    public void deserialize(Serializer s, DataInputStream dis) 
+	throws IOException {
+	rhs=s.deserialize(dis);
+	defineEval=(DefineEval)s.deserialize(dis);
     }
 }
