@@ -9,7 +9,8 @@ import java.io.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
-public class MemorySymEnv extends NamedValue implements SymbolicEnvironment {
+public class MemorySymEnv extends NamedValue
+    implements SymbolicEnvironment {
 
     protected static final float EXPFACT=1.5F;
     public Map symbolMap;

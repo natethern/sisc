@@ -3,7 +3,8 @@ package sisc.nativefun;
 import sisc.data.*;
 import sisc.interpreter.*;
 
-public abstract class Module extends NamedValue implements java.io.Serializable {
+public abstract class Module extends NamedValue
+    implements java.io.Serializable {
 
     public abstract Symbol[] getModuleBindingNames(Interpreter r);
     public abstract Value getBindingValue(Interpreter r, Symbol name) throws NoSuchMethodError;
