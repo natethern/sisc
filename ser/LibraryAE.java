@@ -177,12 +177,12 @@ public class LibraryAE extends MemorySymEnv {
         } else {
             //serialize in "retrieve" mode
             s.writeInt(0);
-            /*            for (Iterator i=addressMap.keySet().iterator(); i.hasNext();) {
+            for (Iterator i=addressMap.keySet().iterator(); i.hasNext();) {
                 Symbol key=(Symbol)i.next();
-                Integer pos=(Integer)addressMap.get(key);
+                LibraryBinding b=(LibraryBinding)addressMap.get(key);
                 s.writeExpression(key);
-                s.writeInt(pos.intValue());
-                }*/
+                s.writeInt(b.entryPoint);
+            }
             s.writeInt(parentIdx);
         }
     }
