@@ -6,7 +6,7 @@ import java.io.OutputStream;
 
 public class StreamOutputPort extends AutoflushOutputPort {
 
-    protected OutputStream out;
+    public OutputStream out;
 
     public StreamOutputPort(OutputStream out, boolean aflush) {
         super(aflush);
