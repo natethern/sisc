@@ -964,12 +964,11 @@ com/foo/bar/baz/baz3.scm
           linkend="Modules"/> for details of &SISC;'s module system. 
           The definitions for SRFI modules are not included in the
           standard &SISC; heap build and hence must be loaded
-          separately from the pre-expanded source file
-          <filename>srfi.sce</filename>, which can be found in the
-          <literal>scheme-src</literal> subdirectory of the &SISC; 
-          binary distribution:
+          separately from the compiled library
+          <filename>srfi.sll</filename>, which can be found in the
+          root directory of the &SISC; binary distribution:
           <programlisting>
-(load "<parameter>install-path</parameter>/scheme-src/srfi.sce")
+(load "<parameter>install-path</parameter>/srfi.sll")
           </programlisting>
         </para>
       </sect3>
