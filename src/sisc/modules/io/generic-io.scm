@@ -79,8 +79,8 @@
 (define (read-string string offset length . port)
   (gio/read-string string offset length (inport port)))
 
-(define (_gio/read-block buffer offset max-count . port)
-  (gio/read-block buffer offset max-count (inport port)))
+(define (_gio/read-block buffer offset length . port)
+  (gio/read-block buffer offset length (inport port)))
 
 (define (display v . port)
   (gio/display v (outport port)))
@@ -91,17 +91,11 @@
 (define (write-char char . port)
   (gio/write-char char (outport port)))
 
-(define (write-string str . args)
-  (let ([port (car (last-pair args))])
-    (if (output-port? port)
-        (apply gio/write-string str (take args (- (length args) 1)))
-        (apply gio/write-string args))))
+(define (write-string str offset length . port)
+  (gio/write-string str offset length (outport port)))
 
-(define (_gio/write-block str . args)
-  (let ([port (car (last-pair args))])
-    (if (output-port? port)
-        (apply gio/write-block str (take args (- (length args) 1)))
-        (apply gio/write-block args))))
+(define (_gio/write-block buf offset length . port)
+  (gio/write-block buf offset length (outport port)))
 
 (define (flush-output-port . port)
   (gio/flush-output-port (outport port)))
@@ -143,9 +137,9 @@
 (define-method (gio/char-ready? (<filter-input-port> i))
   (gio/char-ready? (:in i)))
 
-(define-method (gio/read-string (<string> string) (<number> max-count)
+(define-method (gio/read-string (<string> string) (<number> length)
                                 (<filter-input-port> i))
-  (gio/read-string string max-count (:in i)))
+  (gio/read-string string length (:in i)))
 
 (define-method (gio/write-char (<char> c) (<filter-output-port> o))
   (gio/write-char c (:out o)))
@@ -211,15 +205,15 @@
 
 (define-method (gio/read-block (<sisc.modules.io.buffer> buffer)
                                (<number> offset)
-                               (<number> max-count)
+                               (<number> length)
                                (<sisc.data.scheme-input-port> i))
-  (native-read-block buffer offset max-count i))
+  (native-read-block buffer offset length i))
 
 (define-method (gio/read-block (<sisc.modules.io.buffer> buffer)
                                (<number> offset)
-                               (<number> max-count)
+                               (<number> length)
                                (<filter-input-port> i))
-  (gio/read-block buffer offset max-count (:in i)))
+  (gio/read-block buffer offset length (:in i)))
 
 (define-method (gio/write-char (<char> c) (<sisc.data.scheme-output-port> o))
   (native-write-char c o))
