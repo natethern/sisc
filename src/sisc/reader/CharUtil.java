@@ -67,7 +67,6 @@ public abstract class CharUtil {
      * @return The real character represented by the escaped input
      */
     public static int escapedToChar(char c) {
-        int rv;
         //escaping rules are those defined by Java, except we don't
         //handle octal escapes.
         switch (c) {
