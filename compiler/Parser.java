@@ -204,7 +204,7 @@ public class Parser extends Util implements Tokens {
                     break;
                 }
                 is.pushback(c);
-                String cn=lexer.readToBreak(is, Lexer.special);
+                String cn=lexer.readToBreak(is, Lexer.special, false);
                 String cnl=cn.toLowerCase();
                 Object cs=chars.get(cnl);
                 try {
@@ -244,7 +244,7 @@ public class Parser extends Util implements Tokens {
                 o=numberCheck(_nextExpression(is, state, null, radix, flags)).toExact();
                 break;
             case '!':
-                if (lexer.readToBreak(is, Lexer.special).equals("eof"))
+                if (lexer.readToBreak(is, Lexer.special, false).equals("eof"))
                     return EOF;
                 else throw new IOException(liMessage(SISCB, "invalidsharpc"));
             case '\'':
@@ -269,7 +269,8 @@ public class Parser extends Util implements Tokens {
                                     .parseInt(lexer
                                               .readToBreak(is,
                                                            Lexer
-                                                           .sharp_special)));
+                                                           .sharp_special,
+                                                           false)));
 
                     c=is.read();
                     if (c=='=') {

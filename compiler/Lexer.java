@@ -102,7 +102,7 @@ public class Lexer implements Tokens {
                 return TT_UNQUOTE;
             default:
                 is.pushback(c);
-                String v=readToBreak(is, special);
+                String v=readToBreak(is, special, true);
                 Object result=v;
                 if (numberStart(v.charAt(0), radix))
                     result=readNum(v, radix);
@@ -169,14 +169,15 @@ public class Lexer implements Tokens {
         return b.toString();
     }
 
-    public static String readToBreak(InputPort is, char[] stops)
+    public static String readToBreak(InputPort is, char[] stops, 
+                                     boolean handleEscapes)
     throws IOException {
         StringBuffer b=new StringBuffer();
         char c;
         boolean escaped=false, bar=false;
 	try {
 	    while (!in((c=(char)is.read()), stops) || escaped) {
-                if (!escaped && c=='\\') {
+                if (handleEscapes && !escaped && c=='\\') {
                     escaped=true;
                 } else {
                     b.append(c);
