@@ -248,7 +248,9 @@ public class SThread extends ModuleAdapter {
 	}
 
 	public void run() {
-	    Interpreter r = Context.enter(parent.ctx, parent.dynenv.copy());
+            DynamicEnv newenv = parent.dynenv.copy();
+            newenv.wind = FALSE;
+	    Interpreter r = Context.enter(parent.ctx, newenv);
 	    state=RUNNING;
 	    synchronized(this) {
 		this.notify();
