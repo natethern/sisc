@@ -387,7 +387,7 @@ public class Quantity extends Value implements Singleton {
         case DECIM:
             BigInteger o2=d.toBigInteger();
             if (new BigDecimal(o2).compareTo(d)==0)
-                return new Quantity(o2).gcd(o);
+                return new Quantity(o2).gcd(o).toInexact();
         case INTEG:
             if (o.type==FIXEDINT)
                 o=new Quantity((long)o.val);

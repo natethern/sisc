@@ -368,7 +368,7 @@ public class Quantity extends Value implements Singleton {
             return o.gcd(new Quantity((long)val));
         case DECIM:
             if (Math.floor(d)==d)
-                return new Quantity(d2i(d)).gcd(o);
+                return new Quantity(d2i(d)).gcd(o).toInexact();
         case INTEG:
             if (o.type==FIXEDINT)
                 o=new Quantity((long)o.val);
