@@ -7,6 +7,7 @@ import java.net.*;
 
 import sisc.*;
 import sisc.data.*;
+import sisc.ser.*;
 
 public class SchemeAppServlet extends SchemeServletBase {
 
@@ -23,6 +24,8 @@ public class SchemeAppServlet extends SchemeServletBase {
         try {
             ctx.loadEnv(r, new SeekableDataInputStream(new BufferedRandomAccessInputStream(realFile, "r", 1, 8192)));
         } catch (IOException e) {
+            throw new ServletException("unable to load heap file " + realFile, e);
+        } catch (ClassNotFoundException e) {
             throw new ServletException("unable to load heap file " + realFile, e);
         } finally {
             Context.exit();

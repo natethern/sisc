@@ -18,6 +18,7 @@
       <include name="*.jar"/>
     </fileset>
     <pathelement location="${sisc.home}/sisc.jar"/>
+    <pathelement location="${sisc.home}/sisc-opt.jar"/>
   </path>
 
   <target name="prepare">

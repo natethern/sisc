@@ -44,7 +44,7 @@ public class SchemeServletBase extends HttpServlet {
         if (expr == null) return;
         Interpreter r = Context.enter(appName);
         try {
-            r.eval("(current-directory \"" + getServletContext().getRealPath("")+"\")");
+            r.eval("(current-directory \"" + getServletContext().getRealPath("/")+"\")");
             Procedure p = (Procedure)r.eval(expr);
             r.eval(p, new Value[] { new sisc.modules.S2J.JavaObject(this) });
         } catch (IOException e) {
