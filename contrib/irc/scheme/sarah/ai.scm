@@ -1,3 +1,4 @@
+
 (import srfi-2)
 (import srfi-11)
 (import threading)
@@ -7,6 +8,11 @@
 (define-generic next-token)
 (define-generic has-more-tokens)
 (define-generic jtrim (generic-java-procedure 'trim))
+
+(define (rac ls)
+  (cond [(null? ls) (error 'rac "Expected type pair, got '()")]
+	[(null? (cdr ls)) (car ls)]
+	[else (rac (cdr ls))]))
 
 (define somewhat-clean
   (string->list "abcdefghijklmnopqrstuvwxyz()[]->+-*/_01234567890?!."))
@@ -110,7 +116,9 @@
                                      (symbol->string tok)))
                                   tokens))]
           [to-bot (or (and (not (null? priv-message)) (car priv-message))
-                      (memq bot-name strict-tokens))]
+		      ;; Name must be first or last in a sentence
+		      (eq? bot-name (car strict-tokens))
+		      (eq? bot-name (rac strict-tokens)))]
           [cleaned-message (bot-clean message)]
           [pattern (find-pattern strict-tokens)]
           [response (and pattern 
@@ -184,7 +192,7 @@
                                      0 (- (string-length term) 1))))
            (and-let* ([results (lookup-item dbcon type term)])
              (let ([random-result (random-elem results)])
-               (sisc:format "~a ~a ~a ~a" 
+               (sisc:format "~a~a ~a ~a" 
                        (random-elem whatis-preludes) 
                        (car random-result)
                        (cdr (assq type '((what . is) (where . "is at"))))
@@ -211,7 +219,7 @@
            [watchdog-thread
             (thread/new
              (lambda ()
-               (sleep 200)
+               (sleep 500)
                (with-failure-continuation
                    (lambda (m e)
                      ; An error?  Egads!
@@ -235,16 +243,12 @@
   (let-values ([(term definition) (string-split message " is at ")])    
     (and (or (and term definition
                   (if (store-item dbcon 'where term definition)
-                      (string-append (ask-alice from message) " ("
-				     (random-elem learn-responses) 
-				     ")")
+		      (random-elem learn-responses) 
                       (random-elem knewthat-responses)))
              (let-values ([(term definition) (string-split message " is ")])
                (and term definition
                     (if (store-item dbcon 'what term definition)
-			(string-append (ask-alice from message) " ("
-				       (random-elem learn-responses) 
-				       ")")
+			(random-elem learn-responses) 
                         (random-elem knewthat-responses))))))))
 
 (define (onJoin channel sender login hostname)

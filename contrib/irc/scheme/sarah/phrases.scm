@@ -3,13 +3,13 @@
     "My watch says"))
 
 (define whatis-preludes
-  '("I've heard" 
-    "Someone once said"
+  '("I've heard " 
+    "Someone once said "
     ""
-    "I could be wrong, but"
-    "And I quote:"
-    "Last time I checked"
-    "From what I understand,"))
+    "I could be wrong, but "
+    "Its been said that "
+    "Last time I checked "
+    "From what I understand, "))
 
 (define knewthat-responses
   '("Thats what I heard."
