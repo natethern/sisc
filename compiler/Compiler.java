@@ -28,6 +28,11 @@ public class Compiler extends Util {
 	
 	TAIL=1, COMMAND=2, PREDICATE=4, REALTAIL=8;
 
+    static final Symbol 
+        VARNAME=Symbol.get("var-name"),
+        PROCNAME=Symbol.get("proc-name"),
+        _LETREC=Symbol.get("letrec");
+        
     public Compiler() {}
 
     public static void addSpecialForms(SymbolicEnvironment menv) {
@@ -57,7 +62,7 @@ public class Compiler extends Util {
         } else if (v instanceof Symbol) {
             Symbol sym=(Symbol)v;
 
-            return rt.createReference(sym, env);
+            return rt.createReference(r, sym, env);
         }
         else return v;
     }
@@ -214,13 +219,13 @@ public class Compiler extends Util {
             default:
                 Expression[] exps=pairToExpressions(expr);
                 compileExpressions(r, exps, rt, 0, env);
-                rv = application(compile(r,s,rt,0,env, null), 
+                rv = application(r, compile(r,s,rt,0,env, null), 
                                  exps, context, an);
             }
         } else {
             Expression[] exps=pairToExpressions((Pair)expr.cdr);
             compileExpressions(r, exps, rt, 0, env);
-            rv = application(compile(r, expr.car, rt, 0, env, null), 
+            rv = application(r, compile(r, expr.car, rt, 0, env, null), 
                              exps, context, an);
         }
         if (an!=null)
@@ -238,11 +243,40 @@ public class Compiler extends Util {
         boolean allImmediate=true;
         Expression nxp=new LetrecEval(compile(r, body.car, nrt, 
                                               TAIL | LAMBDA, env, null));
+
+        /* If we're emitting debugging symbols, annotate the AppEval
+           with the name of the procedure. 
+        */
+        if (r.dynenv.emitDebuggingSymbols)
+            nxp.setAnnotation(PROCNAME, _LETREC);
+
         Expression lastRand = VOID;
+
         for (int i= 0; i<rands.length; i++) {
             if (!isImmediate(rands[i])) {
                 nxp.annotations = lastRand.annotations;
-                nxp = new FillRibExp(lastRand, i, nxp, allImmediate);
+
+                nxp=new FillRibExp(lastRand, i, nxp, allImmediate);
+
+                /* If we're emitting debugging symbols, annotate the
+                 * FillRibExps with the names of the functions in the 
+                 * operator position.
+                 */
+                if (r.dynenv.emitDebuggingSymbols &&
+                    (i+1) < rands.length &&
+                    rands[i+1] instanceof AppExp) {
+                    AppExp ae=(AppExp)rands[i+1];
+                    if (ae.exp instanceof FreeReferenceExp) {
+                        nxp.setAnnotation(PROCNAME, 
+                                          ((FreeReferenceExp)ae.exp).sym);
+                    } else if (ae.exp instanceof LexicalReferenceExp) {
+                        Symbol varName=(Symbol)((LexicalReferenceExp)ae.exp)
+                            .getAnnotation(VARNAME, null);
+                        if (varName != null)
+                            nxp.setAnnotation(PROCNAME, varName);
+                    }
+                } 
+
                 lastRand = rands[i];
                 rands[i] = null;
                 allImmediate=false;
@@ -253,7 +287,8 @@ public class Compiler extends Util {
         return new LetrecExp(lastRand, rands, nxp, allImmediate);
     }
 
-    public final Expression application(Expression rator, Expression rands[], 
+    public final Expression application(Interpreter r,
+                                        Expression rator, Expression rands[], 
                                         int context, Pair annotation) {
         if (rator instanceof Value && 
 	    !(rator instanceof Procedure) &&
@@ -263,12 +298,44 @@ public class Compiler extends Util {
         Expression nxp = new AppEval();
         if (annotation!=null)
             setAnnotations(nxp, annotation);
+
+        /* If we're emitting debugging symbols, annotate the AppEval
+           with the name of the procedure. 
+        */
+        if (r.dynenv.emitDebuggingSymbols)
+            if (rator instanceof FreeReferenceExp) {
+                nxp.setAnnotation(PROCNAME, ((FreeReferenceExp)rator).sym);
+            } else if (rator instanceof LexicalReferenceExp &&
+                       rator.getAnnotation(VARNAME, null) !=null) {
+                nxp.setAnnotation(PROCNAME, rator.getAnnotation(VARNAME));
+            }
+
         Expression lastRand = rator;
         boolean allImmediate=isImmediate(rator);
         for (int i= 0; i<rands.length; i++) {
             if (!isImmediate(rands[i])) {
                 nxp.annotations = lastRand.annotations;
                 nxp = new FillRibExp(lastRand, i, nxp, allImmediate);
+
+                /* If we're emitting debugging symbols, annotate the
+                 * FillRibExps with the names of the functions in the 
+                 * operator position.
+                 */
+                if (r.dynenv.emitDebuggingSymbols &&
+                    (i+1) < rands.length &&
+                    rands[i+1] instanceof AppExp) {
+                    AppExp ae=(AppExp)rands[i+1];
+                    if (ae.exp instanceof FreeReferenceExp) {
+                        nxp.setAnnotation(PROCNAME, 
+                                          ((FreeReferenceExp)ae.exp).sym);
+                    } else if (ae.exp instanceof LexicalReferenceExp) {
+                        Symbol varName=(Symbol)((LexicalReferenceExp)ae.exp)
+                            .getAnnotation(VARNAME, null);
+                        if (varName != null)
+                            nxp.setAnnotation(PROCNAME, varName);
+                    }
+                } 
+
                 lastRand = rands[i];
                 rands[i] = null;
                 allImmediate=false;
@@ -344,7 +411,8 @@ public class Compiler extends Util {
             }
         }
 
-        public Expression createReference(Symbol s, SymbolicEnvironment env) {
+        public Expression createReference(Interpreter i,
+                                          Symbol s, SymbolicEnvironment env) {
             int lev=-1;
             ReferenceEnv ctx=this;
             Integer r=null;
@@ -356,8 +424,12 @@ public class Compiler extends Util {
 
             if (r==null)
                 return new FreeReferenceExp(s, env);
-            else
-                return new LexicalReferenceExp(lev, r.intValue());
+            else {
+                Expression lre=new LexicalReferenceExp(lev, r.intValue());
+                if (i.dynenv.emitDebuggingSymbols)
+                    lre.setAnnotation(VARNAME, s);
+                return lre;
+            }
         }
     }
 }

@@ -148,7 +148,8 @@
                  (putprop 'continue-point '*debug* 
                           (delay (k (apply proc args))))
                  (((getprop 'repl '*debug*)))))))
-  (let ([breakpoints (cond [(getprop 'breakpoints '*debug*) => 
+  (let* ([function-id (sc-expand function-id)]
+         [breakpoints (cond [(getprop 'breakpoints '*debug*) => 
                             (lambda (x) x)]
                            [else '()])])
     (if (not (assq function-id breakpoints))
@@ -162,9 +163,10 @@
               (error 'set-breakpoint! "no such function."))))))
 
 (define (clear-breakpoint! function-id) 
-  (let ([breakpoints (cond [(getprop 'breakpoints '*debug*) => 
-                            (lambda (x) x)]
-                           [else '()])])
+  (let* ([function-id (sc-expand function-id)]
+         [breakpoints (cond [(getprop 'breakpoints '*debug*) => 
+                             (lambda (x) x)]
+                            [else '()])])
     (cond [(assq function-id breakpoints) =>
            (lambda (v)
              (putprop function-id '*toplevel* (cdr v))
@@ -206,7 +208,8 @@
                                                [else '?])))
                                '(line-number
                                  column-number
-                                 source-file))))
+                                 source-file
+                                 proc-name))))
                   stk))))))
 
 (define (format-stack-trace-entry entry)
@@ -214,19 +217,26 @@
         [data (cdr entry)])
     (let ([line (cdr (assoc 'line-number data))]
           [column (cdr (assoc 'column-number data))]
-          [sourcefile (cdr (assoc 'source-file data))])
-      (if (and (_fill-rib? expr)
-               (_free-reference-exp? 
-                (_fill-rib-exp expr)))
-          (format "~a:~a:~a: <called from ~a>" 
-                  sourcefile
-                  line column
-                  (_free-reference-symbol
+          [sourcefile (cdr (assoc 'source-file data))]
+          [procname (if (eq? (cdr (assoc 'proc-name data)) '?)
+                        #f
+                        (cdr (assoc 'proc-name data)))])
+      (cond [procname
+             (format "~a:~a:~a <called from ~a>"
+                     sourcefile line column procname)]
+            [(and (_fill-rib? expr)
+                  (_free-reference-exp? 
                    (_fill-rib-exp expr)))
-          (format "~a:~a:~a: <indeterminate call>" 
-                  sourcefile
-                  line column)))))
-
+             (format "~a:~a:~a: <called from ~a>" 
+                     sourcefile
+                     line column
+                     (_free-reference-symbol
+                      (_fill-rib-exp expr)))]
+            [else
+              (format "~a:~a:~a: <indeterminate call>" 
+                      sourcefile
+                      line column)]))))
+  
 (define (print-stack-trace k)
   (for-each
    (lambda (entry)

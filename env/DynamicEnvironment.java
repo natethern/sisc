@@ -14,6 +14,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
 
     public boolean printShared;
     public boolean vectorLengthPrefixing;
+    public boolean emitDebuggingSymbols=true;
 
     public Value wind = FALSE; //top of wind stack
 

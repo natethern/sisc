@@ -1,12 +1,12 @@
 2003-01-23  Scott G. Miller  <scgmille@freenetproject.org>
 
-	* Made NamedValue's value properties, allowing introspection from
+	* Made NamedValues value properties, allowing introspection from
 	  Scheme.
 
 	* Improvements to |trace|/|untrace| which allow module-bound procedures
 	  to be traced without knowing their unique name, and to detect
 	  when traced procedures have been redefined.
-	
+
 2003-01-15  Matthias Radestock  <matthias@lshift.net>
 
 	* Implemented SRFIs 31, 34, 35, 37.
