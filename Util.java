@@ -51,15 +51,17 @@ public abstract class Util extends Defaults implements Version {
     
     public static String getSystemProperty(String name, String def) {
         try {
-            return System.getProperty(name, def);
+            String rv=System.getProperty(name);
+            if (rv==null) throw new RuntimeException();
+            return rv;
         } catch (RuntimeException e) {
             try {
                 String propname=name.substring(name.indexOf('.')+1);
                 Field f=Defaults.class.getField(propname);
                 return (String)f.get(null);
             } catch (Exception e2) {}
-            return def;
         }
+        return def;
     }
 
     public static String warn(String messageClass) {
