@@ -74,19 +74,19 @@
 ;;inheritance hierarchy
 (java-class-precedence-list <jbyte>)
 ;;=>
-#;(#<java java.lang.Class byte>
+#|(#<java java.lang.Class byte>
    #<java java.lang.Class short>
    #<java java.lang.Class int>
    #<java java.lang.Class long>
    #<java java.lang.Class float>
-   #<java java.lang.Class double>)
+   #<java java.lang.Class double>) |#
 (java-class-precedence-list <jchar>)
 ;;=>
-#;(#<java java.lang.Class char>
+#|(#<java java.lang.Class char>
    #<java java.lang.Class int>
    #<java java.lang.Class long>
    #<java java.lang.Class float>
-   #<java java.lang.Class double>)
+   #<java java.lang.Class double>)|#
 
 ;;primitive types do not inherit from the java.lang types
 (define-java-class <java.lang.integer>)
