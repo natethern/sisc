@@ -18,16 +18,7 @@ public class LetrecExp extends AppExp {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        Value[] envv=r.createValues(rands.length);
-
-        int csf=0;
-        do {
-            int cc=Math.min(MANY_VOIDS.length, rands.length-csf);
-            System.arraycopy(MANY_VOIDS, 0, envv, csf, cc);
-            csf+=cc;
-        } while (csf < rands.length);
-
-        r.newEnv(envv, r.env);
+        r.newEnv(r.createValues(rands.length), r.env);
         super.eval(r);
     }
 
