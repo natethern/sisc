@@ -288,7 +288,7 @@ public class REPL {
         {"x","no-repl"},
     };
     static final int optTypes[]=new int[] {
-        OPTION, OPTION, OPTION, OPTION, OPTION, SWITCH};
+        SWITCH, OPTION, OPTION, OPTION, OPTION, OPTION, SWITCH};
                                                   
     public static Map parseOpts(String[] args) {
         Map m=new HashMap();
