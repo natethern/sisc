@@ -314,6 +314,10 @@
   (letrec ([general-expt
 	    (lambda (base exponent)
 	      (exp (* exponent (log base))))]
+           [rational-expt
+            (lambda (base-numerator base-denominator exponent)
+              (/ (expt base-numerator exponent)
+                 (expt base-denominator exponent)))]
 	   [integer-expt 
 	    (lambda (base exponent)
 	      (cond
@@ -335,6 +339,8 @@
       (cond
        ((zero? exponent) (if (exact? exponent) #e1 #i1))
        ((zero? base) (if (exact? exponent) base #i0))       
+       ((and (exact? base) (rational? base) (not (integer? base)))
+        (rational-expt (numerator base) (denominator base) exponent))
        ((and (exact? exponent) (integer? exponent))
 	(integer-expt base exponent))
        (else (general-expt base exponent))))))
