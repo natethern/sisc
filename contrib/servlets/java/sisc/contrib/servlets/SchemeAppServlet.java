@@ -134,7 +134,9 @@ public class SchemeAppServlet extends SchemeServletBase {
             Value v = r.eval(p.nextExpression(inp));
             response.setContentType("application/x-scheme");
             OutputPort outp = new WriterOutputPort(response.getWriter(), true);
-            ValueWriter w = new PortValueWriter(outp);
+            ValueWriter w = new PortValueWriter(outp,
+                                                r.dynenv.vectorLengthPrefixing,
+                                                r.dynenv.caseSensitive);
             w.write(v);
             outp.flush();
         } catch (SchemeException e) {

@@ -27,7 +27,7 @@ public class SchemeAppClient {
             conn.connect();
             OutputStream out = conn.getOutputStream();
             OutputPort outp = new WriterOutputPort(new PrintWriter(out), true);
-            ValueWriter w = new PortValueWriter(outp);
+            ValueWriter w = new PortValueWriter(outp, false, false);
             w.write(v);
             outp.flush();
             InputStream in = conn.getInputStream();
