@@ -193,3 +193,27 @@
 
 (define-simple-syntax (define-methods ?name (?signature . ?body) ...)
   (add-methods ?name (list (method ?signature . ?body) ...)))
+
+(define (first-method-procedure generic types)
+  (let ([methods (applicable-methods generic types)])
+    (let ([first-method (car methods)]
+          [next-method (if (null? (cdr methods)) #f (cadr methods))])
+      (let ([proc (method-procedure first-method)])
+        (lambda temps 
+          (apply proc next-method temps))))))
+
+(define-syntax let-monomorphic
+  (lambda (x)
+    (syntax-case x ()
+      ((_ () expr ...)
+       (syntax (begin expr ...)))
+      ((_ (((aka fun) type ...) rest ...) expr ...)
+       (with-syntax ([(temps ...)
+                      (generate-temporaries (syntax (type ...)))])
+         (syntax
+          (let ([aka (first-method-procedure fun (list type ...))])
+            (let-monomorphic (rest ...) expr ...)))))
+      ((_ ((fun type ...) rest ...) expr ...)
+       (syntax
+        (let-monomorphic (((fun fun) type ...) rest ...) expr ...))))))
+         
