@@ -5,13 +5,6 @@ import sisc.interpreter.*;
 
 public class LetrecExp extends AppExp {
 
-    protected static Value[] MANY_VOIDS=new Value[32];
-
-    static {
-        for (int i=MANY_VOIDS.length-1; i>=0; i--)
-            MANY_VOIDS[i]=VOID;
-    }
-
     public LetrecExp(Expression exp, Expression rands[], Expression nxp, 
                      boolean allImmediate) {
         super(exp, rands, nxp, allImmediate);
