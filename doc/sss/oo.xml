@@ -1654,9 +1654,8 @@
               <para>
                 <parameter>slot-def-list</parameter> defines the slots
                 that instances of the new class will have, and
-                determines how to initialise, access and modify
-                them. It is an association list with each entry of the
-                form
+                determines how to access and modify them. It is an
+                association list with each entry of the form
                 <literal>(</literal><parameter>slot-name</parameter>
                 <literal>(</literal><parameter>slot-prop-name</parameter>
                 <literal>.</literal>
@@ -1667,16 +1666,6 @@
                 <parameter>slot-prop-value</parameter> is its
                 value. The following are the valid slot properties:
                 <variablelist>
-                  <varlistentry>
-                    <term>value</term>
-                    <listitem>
-                      <para>
-                        The initial value of the slot. The default is
-                        &f;. This value will be assigned to the slot
-                        in instances of the class upon their creation.
-                      </para>
-                    </listitem>
-                  </varlistentry>
                   <varlistentry>
                     <term>accessor</term>
                     <listitem>
@@ -1712,7 +1701,7 @@
 (define &lt;foo&gt; (make-class '&lt;foo&gt; '() '()))
 (define &lt;bar&gt; (make-class '&lt;bar&gt; '() '()))
 (define &lt;baz&gt; (make-class '&lt;baz&gt; (list &lt;foo&gt; &lt;bar&gt;)
-                          `((x (value . 1) (accessor . ,:x))
+                          `((x (accessor . ,:x))
                             (y (accessor . ,:y) (modifier . ,:y!)))))
               </programlisting>
             </informalexample>
@@ -1757,7 +1746,7 @@
 (define-class (&lt;foo&gt;))
 (define-class (&lt;bar&gt;))
 (define-class (&lt;baz&gt; &lt;foo&gt; &lt;bar&gt;)
-  (x (value 1) (accessor :x))
+  (x (accessor :x))
   (y (accessor :y) (modifier :y!)))
               </programlisting>
             </informalexample>
@@ -1868,7 +1857,7 @@
 (class-direct-slots (make-class '&lt;foo&gt; '() '()))  &arrow; '()
 (define-generics :x :y :y!)
 (define-class (&lt;baz&gt;)
-  (x (value 1) (accessor :x))
+  (x (accessor :x))
   (y (accessor :y) (modifier :y!)))
 (class-direct-slots &lt;baz&gt; &arrow; (&lt;slot&gt; &lt;slot&gt;))
               </programlisting>
@@ -1954,41 +1943,11 @@
         </blockquote>
       </para>
       <para>
-        Slot definitions can produce procedures that allow
-        initialization, access and modification of slots. Since slots
-        can be defined without accessors and modifiers, this may be
-        the only way to access/modify a particular slot.
+        Slot definitions can produce procedures that allow access and
+        modification of slots. Since slots can be defined without
+        accessors and modifiers, this may be the only way to
+        access/modify a particular slot.
         <blockquote>
-          <para>
-            <indexterm><primary>slot-initializer</primary></indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>procedure</type>
-              <methodname>slot-initializer</methodname>
-              <methodparam><parameter>slot</parameter></methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Returns a procedure than when applied to an instance
-                of <parameter>slot</parameter>'s class, will set the
-                slot's value on that instance to its initial value, as
-                specified in the class definition.
-              </para>
-            </blockquote>
-            <informalexample>
-              <programlisting>
-(define-generics :x :x!)
-(define-class (&lt;baz&gt;)
-  (x (value 1) (accessor :x) (modifier :x!)))
-(define baz (make &lt;baz&gt;))
-(:x baz)  &arrow; 1
-(:x! baz 2)
-(:x baz)  &arrow; 2
-((slot-initializer (car (class-direct-slots &lt;baz&gt;))) baz)
-(:x baz)  &arrow; 1
-              </programlisting>
-            </informalexample>
-          </para>
           <para>
             <indexterm><primary>slot-accessor</primary></indexterm>
             &procedure;
@@ -2006,7 +1965,7 @@
             </blockquote>
             <informalexample>
               <programlisting>
-(define-class (&lt;baz&gt;) (x (value 1)))
+(define-class (&lt;baz&gt;) (x))
 (define baz (make &lt;baz&gt;))
 ((slot-accessor (car (class-direct-slots &lt;baz&gt;))) baz) &arrow; 1
               </programlisting>
@@ -2023,15 +1982,15 @@
             <blockquote>
               <para>
                 Returns a procedure than when applied to an instance
-                of <parameter>slot</parameter>'s class, will set the
-                slot's value on that instance to its initial value, as
-                specified in the class definition.
+                of <parameter>slot</parameter>'s class and a value,
+                will set the slot's value on that instance to the
+                supplied value.
               </para>
             </blockquote>
             <informalexample>
               <programlisting>
 (define-generics :x :x!)
-(define-class (&lt;baz&gt;) (x (value 1) (accessor :x)))
+(define-class (&lt;baz&gt;) (x (accessor :x)))
 (define baz (make &lt;baz&gt;))
 (:x baz)  &arrow; 1
 ((slot-modifier (car (class-direct-slots &lt;baz&gt;))) baz 2)
@@ -2042,30 +2001,13 @@
         </blockquote>
       </para>
       <para>
-        In addition to <emphasis>procedures</emphasis> for slot
-        initialization, access and modification, slot definitions can
-        also produce equivalent <emphasis>methods</emphasis>. These
-        are suitable for adding to generic procedures and can, for
-        instance, be used to achieve the same effect as specifying
-        generic procedures for slot access/modification at class
-        creation time.
+        In addition to <emphasis>procedures</emphasis> for slot access
+        and modification, slot definitions can also produce equivalent
+        <emphasis>methods</emphasis>. These are suitable for adding to
+        generic procedures and can, for instance, be used to achieve
+        the same effect as specifying generic procedures for slot
+        access/modification at class creation time.
         <blockquote>
-          <para>
-            <indexterm><primary>slot-initializer-method</primary></indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>method</type>
-              <methodname>slot-initializer-method</methodname>
-              <methodparam><parameter>slot</parameter></methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                This is the same as
-                <function>slot-initializer</function>, except it
-                returns a method instead of a procedure.
-              </para>
-            </blockquote>
-          </para>
           <para>
             <indexterm><primary>slot-accessor-method</primary></indexterm>
             &procedure;
@@ -2105,12 +2047,10 @@
       <title>Instantiation</title>
       <indexterm><primary>initialize</primary></indexterm>
       <para>
-        Class instantiation is a three-stage process. First a new object
+        Class instantiation is a two-stage process. First a new object
         is created whose type is that of the instantiated class. Then
-        the object's slots are initialized using the slot initializers
-        of the class and its super-classes. Finally, the
-        <function>initialize</function> generic procedure is called
-        with the newly created instance and additional
+        the <function>initialize</function> generic procedure is
+        called with the newly created instance and additional
         arguments. <function>initialize</function> serves the same
         purpose as constructors in other object systems.
       </para>
@@ -2130,8 +2070,7 @@
             <blockquote>
               <para>
                 Creates a new object that is an instance of
-                <parameter>class</parameter> and initialises its slots
-                using the slots' initialisers. The instance and
+                <parameter>class</parameter>. The instance and
                 <parameter>value</parameter>s are then passed as
                 parameters to a call to the
                 <function>initialize</function> generic procedure. The
@@ -2143,7 +2082,7 @@
               <programlisting>
 (define-generics :x :x!)
 (define-class (&lt;baz&gt;)
-  (x (value 1) (accessor :x) (modifier :x!)))
+  (x (accessor :x) (modifier :x!)))
 (define-method (initialize (&lt;baz&gt; b) (&lt;number&gt; x)) (:x! b x))
 (define baz (make &lt;baz&gt; 2))
 (:x baz)  &arrow; 2
@@ -2163,9 +2102,9 @@
           <programlisting>
 (define-generics :x :x!)
 (define-class (&lt;baz&gt;)
-  (x (value 1) (accessor :x) (modifier :x!)))
+  (x (accessor :x) (modifier :x!)))
 (define baz (make &lt;baz&gt;))
-(:x baz)  &arrow; 1
+(:x baz)  &arrow; #f
           </programlisting>
         </informalexample>
       </para>
@@ -2265,13 +2204,13 @@
   :x :x! :y :y! :z :z!
   :xb :xb! :yb :yb! :zb :zb!)
 (define-class (&lt;foo&gt;)
-  (x (value 1) (accessor :x) (modifier :x!))
+  (x (accessor :x) (modifier :x!))
   (y (accessor :y) (modifier :y!))
-  (z (value 1) (accessor :z)))
+  (z (accessor :z)))
 (define f (make &lt;foo&gt;))
-(:x f)  &arrow; 1
+(:x f)  &arrow; #f
 (:y f)  &arrow; #f
-(:z f)  &arrow; 1
+(:z f)  &arrow; #f
 (:x! f 2)
 (:y! f 2)
 (:x f)  &arrow; 2
@@ -2279,15 +2218,15 @@
 
 ;;overloading slots in sub-class
 (define-class (&lt;bar&gt; &lt;foo&gt;)
-  (x (value 2) (accessor :x) (modifier :x!))
+  (x (accessor :x) (modifier :x!))
   (y (accessor :yb) (modifier :yb!))
-  (zb (value 2) (accessor :zb) (modifier :zb!)))
+  (zb (accessor :zb) (modifier :zb!)))
 (define b (make &lt;bar&gt;))
-(:x b)  &arrow; 2
+(:x b)  &arrow; #f
 (:y b)  &arrow; #f
-(:z b)  &arrow; 1
+(:z b)  &arrow; #f
 (:yb b)  &arrow; #f
-(:zb b)  &arrow; 2
+(:zb b)  &arrow; #f
 (:y! b 3)
 (:yb! b 4)
 (:y b)  &arrow; 3

@@ -32,7 +32,7 @@
     (in (accessor :in) (modifier :in!)))
   (define-class (<filter-output-port> <output-port>)
     (out (accessor :out) (modifier :out!))
-    (auto-flush (value #f) (accessor :aflush) (modifier :aflush!))))
+    (auto-flush (accessor :aflush) (modifier :aflush!))))
 
 (module gio/nativeporttypes
   (<native-input-port>

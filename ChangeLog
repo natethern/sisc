@@ -1,3 +1,8 @@
+2004-12-09  Matthias Radestock  <matthias@sorted.org>
+
+	* Simplified the OO system by removing slot initializers / default
+	  values.
+
 2004-12-07  Matthias Radestock  <matthiassorted.org>
 
 	* Implemented DEFINE-VALUES, working correctly at both the top

@@ -53,9 +53,7 @@
                    name
                    class
                    (begin (set! offs (+ offs 1))
-                          (+ idx offs -1))
-                   (cond [(assq 'value props) => cdr]
-                         [else #f]))])
+                          (+ idx offs -1)))])
         (define (add-slot-method kind fetch)
           (let ([gproc (assq kind props)])
             (if gproc (add-method (cdr gproc) (fetch slot)))))
@@ -63,15 +61,8 @@
         (add-slot-method 'modifier slot-modifier-method)
         slot))
     (define (make-constructor)
-      (let ([class-slot-count (+ offs idx)]
-            [initializers
-             (map slot-initializer
-                  (apply append (map class-direct-slots cpl)))])
-        (lambda args
-          (let ([instance (make-record class class-slot-count)])
-            (for-each (lambda (initializer) (initializer instance))
-                      initializers)
-            instance))))
+      (let ([class-slot-count (+ offs idx)])
+        (lambda () (make-record class class-slot-count))))
     (set-class-precedence-list! class cpl)
     (enforce-single-inheritance class)
     (set-class-direct-slots! class

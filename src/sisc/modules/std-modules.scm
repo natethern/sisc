@@ -491,11 +491,8 @@
      slot?
      slot-name
      slot-class
-     slot-initializer
      slot-accessor
      slot-modifier
-     slot-initializer-method
-     slot-accessor-method
      slot-modifier-method
      <class>
      class?
