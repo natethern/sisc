@@ -7,6 +7,7 @@
 package sisc.util;
 
 import java.lang.reflect.*;
+import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +37,11 @@ public class SignalHook implements InvocationHandler {
         try {
             csignal=Class.forName("sun.misc.Signal");
             csignalHandler=Class.forName("sun.misc.SignalHandler");
-        } catch (ClassNotFoundException cnf) { System.err.println(cnf);}
+        } catch (ClassNotFoundException cnf) { 
+        } catch (AccessControlException ace) {
+            //Apparently this can happen on some JVMs, despite not being 
+            //declared throwable in Class.forName.
+        }
     }
 
     static {
