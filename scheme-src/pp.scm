@@ -59,22 +59,16 @@
 ;
 ; where display-string = (lambda (s) (for-each write-char (string->list s)) #t)
 (define (generic-write obj display? width output)
-
   (define string-buffer (open-output-string))
-
   (define (generic-display display? obj)
     (if display? 
-	(display obj string-buffer)
-	(write obj string-buffer))
+        (display obj string-buffer)
+        (write obj string-buffer))
     (get-output-string string-buffer))
-
   (define (vector->list-n v s n)
-   (if (>= s n) 
-	'()
-	(cons (vector-ref v s) (vector->list-n v (+ s 1) n))))
-
-  (define *MAX_PPV* 50000)
-
+    (if (>= s n) 
+        '()
+        (cons (vector-ref v s) (vector->list-n v (+ s 1) n))))
   (define vector-find-endpoint find-last-unique-vector-element)
 ;    (let ([lastelem (- (vector-length v) 1)])
 ;      (if (= lastelem -1) 
@@ -84,17 +78,14 @@
 ;	      (if (and (> x -1) (eq? base (vector-ref v x)))
 ;		  (loop (- x 1))
 ;		  (+ x 2)))))))
-
   (define (read-macro? l)
     (define (length1? l) (and (pair? l) (null? (cdr l))))
     (let ((head (car l)) (tail (cdr l)))
       (case head
         ((QUOTE QUASIQUOTE UNQUOTE UNQUOTE-SPLICING) (length1? tail))
         (else                                        #f))))
-
   (define (read-macro-body l)
     (cadr l))
-
   (define (read-macro-prefix l)
     (let ((head (car l)) (tail (cdr l)))
       (case head
@@ -102,105 +93,90 @@
         ((QUASIQUOTE)       "`")
         ((UNQUOTE)          ",")
         ((UNQUOTE-SPLICING) ",@"))))
-
   (define (out str col)
     (and col (output str) (+ col (string-length str))))
-
   (define (wr obj col)
-
     (define (wr-expr expr col)
       (if (read-macro? expr)
-        (wr (read-macro-body expr) (out (read-macro-prefix expr) col))
-        (wr-lst expr col)))
-
+          (wr (read-macro-body expr) (out (read-macro-prefix expr) col))
+          (wr-lst expr col)))
     (define (wr-lst l col)
       (if (pair? l)
-        (let loop ((l (cdr l)) (col (wr (car l) (out "(" col))))
-          (and col
-               (cond ((pair? l) (loop (cdr l) (wr (car l) (out " " col))))
-                     ((null? l) (out ")" col))
-                     (else      (out ")" (wr l (out " . " col)))))))
-        (out "()" col)))
-
-    (cond ((pair? obj)        (wr-expr obj col))
-          ((vector? obj)      (if (vector-length-prefixing)
-				  (wr-lst 
-				;(if (> (vector-length obj) *MAX_PPV*)
-					; (vector->list obj)
-				   (vector->list-n 
-				    obj 0 
-				    (vector-find-endpoint obj));)
-				   (wr (vector-length obj)
-				       (out "#" col)))
-				  (wr-lst
-				   (vector->list obj)
-				   (out "#" col))))
-	   (else               (out (generic-display display? obj) col))))
-
+          (let loop ((l (cdr l)) (col (wr (car l) (out "(" col))))
+            (and col
+                 (cond ((pair? l) (loop (cdr l) (wr (car l) (out " " col))))
+                       ((null? l) (out ")" col))
+                       (else      (out ")" (wr l (out " . " col)))))))
+          (out "()" col)))
+    (cond ((pair? obj)
+           (wr-expr obj col))
+          ((vector? obj)
+           (if (vector-length-prefixing)
+               (wr-lst (vector->list-n obj 0 (vector-find-endpoint obj))
+                       (wr (vector-length obj) (out "#" col)))
+               (wr-lst (vector->list obj)
+                       (out "#" col))))
+          (else
+            (out (generic-display display? obj) col))))
   (define (pp obj col)
-
     (define (spaces n col)
       (if (> n 0)
-        (out (make-string n #\space) col)
-        col))
-
+          (out (make-string n #\space) col)
+          col))
     (define (indent to col)
       (and col
            (if (< to col)
-             (and (out (make-string 1 #\newline) col) (spaces to 0))
-             (spaces (- to col) col))))
-
+               (and (out (make-string 1 #\newline) col) (spaces to 0))
+               (spaces (- to col) col))))
     (define (pr obj col extra pp-pair)
       (if (or (pair? obj) (vector? obj)) ; may have to split on multiple lines
-        (let ((result '())
-              (left (min (+ (- (- width col) extra) 1) max-expr-width)))
-          (generic-write obj display? #f
-            (lambda (str)
-              (set! result (cons str result))
-              (set! left (- left (string-length str)))
-              (> left 0)))
-          (if (> left 0) ; all can be printed on one line
-            (out (reverse-string-append result) col)
-            (if (pair? obj)
-              (pp-pair obj col extra)
-              (pp-list (vector->list obj) (if (vector-length-prefixing)
-					      (wr (vector-length obj) 
-						  (out "#" col))
-					      (out "#" col)) extra pp-expr))))
-        (wr obj col)))
-
+          (let ((result '())
+                (left (min (+ (- (- width col) extra) 1) max-expr-width)))
+            (generic-write obj display? #f
+                           (lambda (str)
+                             (set! result (cons str result))
+                             (set! left (- left (string-length str)))
+                             (> left 0)))
+            (if (> left 0)              ; all can be printed on one line
+                (out (reverse-string-append result) col)
+                (if (pair? obj)
+                    (pp-pair obj col extra)
+                    (pp-list (vector->list obj)
+                             (if (vector-length-prefixing)
+                                 (wr (vector-length obj) (out "#" col))
+                                 (out "#" col)) extra pp-expr))))
+          (wr obj col)))
     (define (pp-expr expr col extra)
       (if (read-macro? expr)
-        (pr (read-macro-body expr)
-            (out (read-macro-prefix expr) col)
-            extra
-            pp-expr)
-        (let ((head (car expr)))
-          (if (symbol? head)
-            (let ((proc (style head)))
-              (if proc
-                (proc expr col extra)
-                (if (> (string-length (symbol->string head))
-                       max-call-head-width)
-                  (pp-general expr col extra #f #f #f pp-expr)
-                  (pp-call expr col extra pp-expr))))
-            (pp-list expr col extra pp-expr)))))
+          (pr (read-macro-body expr)
+              (out (read-macro-prefix expr) col)
+              extra
+              pp-expr)
+          (let ((head (car expr)))
+            (if (symbol? head)
+                (let ((proc (style head)))
+                  (if proc
+                      (proc expr col extra)
+                      (if (> (string-length (symbol->string head))
+                             max-call-head-width)
+                          (pp-general expr col extra #f #f #f pp-expr)
+                          (pp-call expr col extra pp-expr))))
+                (pp-list expr col extra pp-expr)))))
 
-    ; (head item1
-    ;       item2
-    ;       item3)
+    ;; (head item1
+    ;;       item2
+    ;;       item3)
     (define (pp-call expr col extra pp-item)
       (let ((col* (wr (car expr) (out "(" col))))
         (and col
              (pp-down (cdr expr) col* (+ col* 1) extra pp-item))))
 
-    ; (item1
-    ;  item2
-    ;  item3)
+    ;; (item1
+    ;;  item2
+    ;;  item3)
     (define (pp-list l col extra pp-item)
       (let ((col (out "(" col)))
         (pp-down l col col extra pp-item)))
-
     (define (pp-down l col1 col2 extra pp-item)
       (let loop ((l l) (col col1))
         (and col
@@ -212,80 +188,62 @@
                    ((null? l)
                     (out ")" col))
                    (else
-                    (out ")"
-                         (pr l
-                             (indent col2 (out "." (indent col2 col)))
-                             (+ extra 1)
-                             pp-item)))))))
-
+                     (out ")"
+                          (pr l
+                              (indent col2 (out "." (indent col2 col)))
+                              (+ extra 1)
+                              pp-item)))))))
     (define (pp-general expr col extra named? pp-1 pp-2 pp-3)
-
       (define (tail1 rest col1 col2 col3)
         (if (and pp-1 (pair? rest))
-          (let* ((val1 (car rest))
-                 (rest (cdr rest))
-                 (extra (if (null? rest) (+ extra 1) 0)))
-            (tail2 rest col1 (pr val1 (indent col3 col2) extra pp-1) col3))
-          (tail2 rest col1 col2 col3)))
-
+            (let* ((val1 (car rest))
+                   (rest (cdr rest))
+                   (extra (if (null? rest) (+ extra 1) 0)))
+              (tail2 rest col1 (pr val1 (indent col3 col2) extra pp-1) col3))
+            (tail2 rest col1 col2 col3)))
       (define (tail2 rest col1 col2 col3)
         (if (and pp-2 (pair? rest))
-          (let* ((val1 (car rest))
-                 (rest (cdr rest))
-                 (extra (if (null? rest) (+ extra 1) 0)))
-            (tail3 rest col1 (pr val1 (indent col3 col2) extra pp-2)))
-          (tail3 rest col1 col2)))
-
+            (let* ((val1 (car rest))
+                   (rest (cdr rest))
+                   (extra (if (null? rest) (+ extra 1) 0)))
+              (tail3 rest col1 (pr val1 (indent col3 col2) extra pp-2)))
+            (tail3 rest col1 col2)))
       (define (tail3 rest col1 col2)
         (pp-down rest col2 col1 extra pp-3))
-
       (let* ((head (car expr))
              (rest (cdr expr))
              (col* (wr head (out "(" col))))
         (if (and named? (pair? rest))
-          (let* ((name (car rest))
-                 (rest (cdr rest))
-                 (col** (wr name (out " " col*))))
-            (tail1 rest (+ col indent-general) col** (+ col** 1)))
-          (tail1 rest (+ col indent-general) col* (+ col* 1)))))
-
+            (let* ((name (car rest))
+                   (rest (cdr rest))
+                   (col** (wr name (out " " col*))))
+              (tail1 rest (+ col indent-general) col** (+ col** 1)))
+            (tail1 rest (+ col indent-general) col* (+ col* 1)))))
     (define (pp-expr-list l col extra)
       (pp-list l col extra pp-expr))
-
     (define (pp-LAMBDA expr col extra)
       (pp-general expr col extra #f pp-expr-list #f pp-expr))
-
     (define (pp-IF expr col extra)
       (pp-general expr col extra #f pp-expr #f pp-expr))
-
     (define (pp-COND expr col extra)
       (pp-call expr col extra pp-expr-list))
-
     (define (pp-CASE expr col extra)
       (pp-general expr col extra #f pp-expr #f pp-expr-list))
-
     (define (pp-AND expr col extra)
       (pp-call expr col extra pp-expr))
-
     (define (pp-LET expr col extra)
       (let* ((rest (cdr expr))
              (named? (and (pair? rest) (symbol? (car rest)))))
         (pp-general expr col extra named? pp-expr-list #f pp-expr)))
-
     (define (pp-BEGIN expr col extra)
       (pp-general expr col extra #f #f #f pp-expr))
-
     (define (pp-DO expr col extra)
       (pp-general expr col extra #f pp-expr-list pp-expr-list pp-expr))
 
-    ; define formatting style (change these to suit your style)
-
+    ;; define formatting style (change these to suit your style)
     (define indent-general 2)
-
     (define max-call-head-width 5)
-
     (define max-expr-width 50)
-
     (define (style head)
       (case head
         ((LAMBDA LET* LETREC DEFINE) pp-LAMBDA)
@@ -297,15 +255,12 @@
         ((BEGIN)                     pp-BEGIN)
         ((DO)                        pp-DO)
         (else                        #f)))
+    (pr obj col 0 pp-expr)) ; pp
+  ((if width pp wr) obj 0)) ; generic-write
 
-    (pr obj col 0 pp-expr))
-
-  ((if width pp wr) obj 0))
-
-; (reverse-string-append l) = (apply string-append (reverse l))
+;; (reverse-string-append l) = (apply string-append (reverse l))
 
 (define (reverse-string-append l)
-
   (define (rev-string-append l i)
     (if (pair? l)
       (let* ((str (car l))
@@ -318,47 +273,48 @@
               (loop (+ j 1) (+ k 1)))
             result)))
       (make-string i)))
-
+  ;;
   (rev-string-append l 0))
 
-; (object->string obj) returns the textual representation of 'obj' as a
-; string.
-;
-; Note: (write obj) = (display (object->string obj))
+;; (object->string obj) returns the textual representation of 'obj' as a
+;; string.
+;;
+;; Note: (write obj) = (display (object->string obj))
 
 (define (object->string obj)
   (let ((result '()))
     (generic-write obj #f #f (lambda (str) (set! result (cons str result)) #t))
     (reverse-string-append result)))
 
-; (object->limited-string obj limit) returns a string containing the first
-; 'limit' characters of the textual representation of 'obj'.
+;; (object->limited-string obj limit) returns a string containing the first
+;; 'limit' characters of the textual representation of 'obj'.
 
 (define (object->limited-string obj limit)
   (let ((result '()) (left limit))
-    (generic-write obj #f #f
-      (lambda (str)
-        (let ((len (string-length str)))
-          (if (> len left)
-            (begin
-              (set! result (cons (substring str 0 left) result))
-              (set! left 0)
-              #f)
-            (begin
-              (set! result (cons str result))
-              (set! left (- left len))
-              #t)))))
+    (generic-write
+     obj #f #f
+     (lambda (str)
+       (let ((len (string-length str)))
+         (if (> len left)
+             (begin
+               (set! result (cons (substring str 0 left) result))
+               (set! left 0)
+               #f)
+             (begin
+               (set! result (cons str result))
+               (set! left (- left len))
+               #t)))))
     (reverse-string-append result)))
 
-; (pretty-print obj port) pretty prints 'obj' on 'port'.  The current
-; output port is used if 'port' is not specified.
+;; (pretty-print obj port) pretty prints 'obj' on 'port'.  The current
+;; output port is used if 'port' is not specified.
 
 (define (pretty-print obj . opt)
   (let ((port (if (pair? opt) (car opt) (current-output-port))))
     (generic-write obj #f 79 (lambda (s) (display s port))) (void)))
 
-; (pretty-print-to-string obj) returns a string with the pretty-printed
-; textual representation of 'obj'.
+;; (pretty-print-to-string obj) returns a string with the pretty-printed
+;; textual representation of 'obj'.
 
 (define (pretty-print-to-string obj)
   (let ((result '()))
@@ -367,7 +323,9 @@
 
 (define (display^ obj . opt)
   (let ((port (if (pair? opt) (car opt) (current-output-port))))
-    (generic-write obj #t 79 (lambda (s) (display (substring s 0 
-                                                    (- (string-length s) 1)))
-                                          port) #t)))
+    (generic-write obj #t 79 (lambda (s)
+                               (display (substring s
+                                                   0 
+                                                   (- (string-length s) 1)))
+                               port) #t)))
 

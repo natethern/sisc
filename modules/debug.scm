@@ -151,50 +151,45 @@
   (cond [(assoc x ls) => cdr]
         [else #f]))
 
-(define stack-trace  
-  (lambda (e . ec)
-    (define (annotations-to-assoc expr)
-      (let loop ([x ()] [keys (annotation-keys expr)])
-        (if (null? keys) x
-            (loop
-             (cons (cons (car keys) (annotation expr (car keys)))
-                   x)
-             (cdr keys)))))
-    (let* ([k (cond [(assoc 'error-continuation e) => cdr]
-                    [(null? ec) #f]
-                    [else (car ec)])]
-           [m (assoc-val 'message e)]
-           [p (assoc-val 'parent e)]
-           [st #f]
-           [annots #f])
-      (if (not k)
-          (display (format "{warning: no error continuation in error record, cannot display trace.~%}"))
-          (begin
+(define (annotations-to-assoc expr)
+  (let loop ([x ()] [keys (annotation-keys expr)])
+    (if (null? keys) x
+        (loop
+         (cons (cons (car keys) (annotation expr (car keys)))
+               x)
+         (cdr keys)))))
+
+(define (get-stack-trace k)
+  (cond [(null? k) (values '() '())]
+        [(null? (continuation-nxp k)) 
+         (get-stack-trace (continuation-stk k))]
+        [else 
+          (let* ([nxp (continuation-nxp k)]
+                 [nxp-annot (annotations-to-assoc nxp)])
             (call-with-values 
-                (lambda ()
-                  (let loop ((k k))
-                    (cond [(null? k) (values '() '())]
-                          [(null? (continuation-nxp k)) 
-                           (loop (continuation-stk k))]
-                          [else 
-                            (let* ([nxp (continuation-nxp k)]
-                                   [nxp-annot (annotations-to-assoc nxp)])
-                              (call-with-values 
-                                  (lambda () (loop (continuation-stk k)))
-                                (lambda (exprs annots)
-                                  (values 
-                                   (cons nxp exprs)
-                                   (cons 
-                                    (if (null? nxp-annot)
-                                        '((line-number . ?)
-                                          (column-number . ?)
-                                          (source-file . ?))
-                                        nxp-annot)
-                                    annots)))))])))
-              (lambda (exprs ants)
-                (set! st exprs)
-                (set! annots ants)))
-            (if (not (null? annots))
+                (lambda () (get-stack-trace (continuation-stk k)))
+              (lambda (exprs annots)
+                (values 
+                 (cons nxp exprs)
+                 (cons 
+                  (if (null? nxp-annot)
+                      '((line-number . ?)
+                        (column-number . ?)
+                        (source-file . ?))
+                      nxp-annot)
+                  annots)))))]))
+
+(define (stack-trace e . ec)
+  (let* ([k (cond [(assoc 'error-continuation e) => cdr]
+                  [(null? ec) #f]
+                  [else (car ec)])])
+    (if (not k)
+        (display (format "{warning: no error continuation in error record, cannot display trace.~%}"))
+        (call-with-values
+            (lambda () (get-stack-trace k))
+          (lambda (st annots)
+            (if (null? annots)
+                (display (format "{No stack trace available.}~%"))
                 (begin
                   (let ([data (car annots)])
                     (let ([line (cdr (assoc 'line-number data))]
@@ -226,11 +221,11 @@
                                 (format "~a:~a:~a: <indeterminate call>~%" 
                                         sourcefile
                                         line column))))))
-                   (cdr annots) (cdr st)))
-                (display (format "{No stack trace available.}~%")))
-            (if p 
-                (begin (display (format "~%While calling:~%~%"))
-                       (stack-trace p))))))))
+                   (cdr annots) (cdr st))))
+            (let ([p (assoc-val 'parent e)])
+              (if p 
+                  (begin (display (format "~%While calling:~%~%"))
+                         (stack-trace p)))))))))
   
 (define (set-breakpoint! function-id)
   (define (make-breakpoint proc)
