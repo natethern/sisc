@@ -587,8 +587,7 @@ public class Primitives extends IndexedProcedure {
                 Procedure proc=proc(vlr[1]);
                 Procedure ehandler=proc(vlr[0]);
                 r.fk=r.createFrame(new ApplyValuesContEval(ehandler),
-                                   null, false, r.env, r.fk, r.stk, 
-                                   null);
+                                   null, false, r.env, r.fk, r.stk);
                 r.replaceVLR(0);
                 r.saveVLR=true;
                 r.nxp = APPEVAL;
