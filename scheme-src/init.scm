@@ -678,38 +678,6 @@
               (else (display (car format-list) buffer)                        
                     (loop (cdr format-list) objects)))))))
     
-;;;;;;;;;;;;;; Runtime system
-
-;;we try to accomodate syntax-case's way of reporting errors.
-
-(define error
-  (let ((oerror error))
-    (lambda args
-      (let ([error-record '()])
-        ;;Location
-        (cond [(null? args) (void)]
-              [(and (not (null? args))
-                    (symbol? (car args)))
-               (set! error-record (cons (cons 'location (car args)) 
-                                        error-record))
-               (set! args (cdr args))]
-              [(not (car args))
-               (set! args (cdr args))])
-
-        ;;Message/Value
-        (let ([message (and (not (null? args))
-                            (car args))])
-          (if message (set! args (cdr args)))
-          (if (null? args)
-              (if message (set! error-record (cons `(message . ,message)
-                                                   error-record)))
-              (if (string? message)
-                  (set! error-record
-                    (cons `(message . ,(apply format (cons message args)))
-                          error-record))
-                  (error 'error "cannot specify arguments to a non format-string error."))))
-        (oerror error-record)))))
-
 ;;;;;;;;;;;;; Miscellaneous
 
 (define (list-ref list n)
