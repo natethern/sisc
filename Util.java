@@ -391,47 +391,43 @@ public abstract class Util extends Defaults implements Version {
     static MessageFormat formatter=new MessageFormat("");
 
     static {
-	formatter.setLocale(myLocale);
+        formatter.setLocale(myLocale);
     }
 
     public static void registerBundle(Symbol bundleName) 
-	throws MissingResourceException {
-	ResourceBundle b=ResourceBundle.getBundle(bundleName.symval);
-	bundles.put(bundleName, b);
+        throws MissingResourceException {
+        ResourceBundle b=ResourceBundle.getBundle(bundleName.symval);
+        bundles.put(bundleName, b);
     }
 
     public static String liMessage(Symbol bundleName, String messageName) {
-	ResourceBundle bundle=(ResourceBundle)bundles.get(bundleName);
-	if (bundle==null) {
-	    try {
-		registerBundle(bundleName);
-	    } catch (MissingResourceException mr) {
-		return null;
-	    }
-	    bundle=(ResourceBundle)bundles.get(bundleName);
-	}
-	try {
-	    return bundle.getString(messageName);
-	} catch (MissingResourceException mr) {
-	    if (!bundleName.equals(SISCB))
-		return liMessage(SISCB, messageName);
-	    else
-		return "<localized message not found: "+messageName+">";
-	}
+        ResourceBundle bundle=(ResourceBundle)bundles.get(bundleName);
+        try {
+            if (bundle==null) {
+                registerBundle(bundleName);
+                bundle=(ResourceBundle)bundles.get(bundleName);
+            }
+            return bundle.getString(messageName);
+        } catch (MissingResourceException mr) {
+            if (!bundleName.equals(SISCB))
+                return liMessage(SISCB, messageName);
+            else
+                return "<localized message not found: "+messageName+">";
+        }
     }
 
     public static String liMessage(Symbol bundle, 
 				   String messageName, String arg1) {
-	return formatter.format(liMessage(bundle, messageName),
-				new Object[] { arg1 });
+        return formatter.format(liMessage(bundle, messageName),
+                                new Object[] { arg1 });
     }
 
     public static String liMessage(Symbol bundle, String messageName, 
-				   String arg1, String arg2) {
-	return formatter.format(liMessage(bundle, messageName),
-				new Object[] { arg1, arg2 });
+                                   String arg1, String arg2) {
+        return formatter.format(liMessage(bundle, messageName),
+                                new Object[] { arg1, arg2 });
     }
-
+    
     public static String liMessage(Symbol bundle, String messageName, 
                                    String arg1, int arg2, int arg3) {
         return formatter.format(liMessage(bundle, messageName),
