@@ -575,6 +575,24 @@
 	<function>symbol-&gt;string</function>.
       </para>
     </sect2>
+    <sect2 id="comments">
+      <title>Comments</title>
+      <para>
+        In addition to the single line comments of the Scheme
+        standard, &SISC; supports <emphasis>s-expression
+        commenting</emphasis>.  An s-expression comment is used to
+        comment out an entire s-expression.  To do this, the sharp
+        sequence <literal>#;</literal> is used.  It extends the &R5RS;
+        grammar with the following production:
+        <programlisting>
+&lt;expression-comment&gt; --&gt; #;&lt;datum&gt;
+        </programlisting>
+      </para>
+      <para>
+        The reader, upon encountering this sharp sequence, will read
+        and discard the next datum.
+      </para>
+    </sect2>
   </sect1>
   <sect1 id="ControlFeatures">
     <title>
