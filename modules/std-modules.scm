@@ -57,6 +57,8 @@
      error-continuation-k
      annotated?
      stack-trace
+     print-stack-trace
+     print-error
      trace-depth
      trace-call
      trace-lambda

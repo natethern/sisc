@@ -159,73 +159,62 @@
                x)
          (cdr keys)))))
 
-(define (get-stack-trace k)
-  (cond [(null? k) (values '() '())]
-        [(null? (continuation-nxp k)) 
-         (get-stack-trace (continuation-stk k))]
-        [else 
-          (let* ([nxp (continuation-nxp k)]
-                 [nxp-annot (annotations-to-assoc nxp)])
-            (call-with-values 
-                (lambda () (get-stack-trace (continuation-stk k)))
-              (lambda (exprs annots)
-                (values 
-                 (cons nxp exprs)
-                 (cons 
-                  (if (null? nxp-annot)
-                      '((line-number . ?)
-                        (column-number . ?)
-                        (source-file . ?))
-                      nxp-annot)
-                  annots)))))]))
+(define (stack-trace k)
+  (if (null? k)
+      '()
+      (let ([nxp (continuation-nxp k)]
+            [stk (stack-trace (continuation-stk k))])
+        (if (null? nxp)
+            stk
+            (cons (cons nxp 
+                        (let ([nxp-annot (annotations-to-assoc nxp)])
+                          (map (lambda (v)
+                                 (cons v (cond [(assoc v nxp-annot)
+                                                => cdr]
+                                               [else '?])))
+                               '(line-number
+                                 column-number
+                                 source-file))))
+                  stk)))))
 
-(define (stack-trace e . ec)
-  (let* ([k (cond [(assoc 'error-continuation e) => cdr]
-                  [(null? ec) #f]
-                  [else (car ec)])])
-    (if (not k)
-        (display (format "{warning: no error continuation in error record, cannot display trace.~%}"))
-        (call-with-values
-            (lambda () (get-stack-trace k))
-          (lambda (st annots)
-            (if (null? annots)
-                (display (format "{No stack trace available.}~%"))
-                (begin
-                  (let ([data (car annots)])
-                    (let ([line (cdr (assoc 'line-number data))]
-                          [column (cdr (assoc 'column-number data))]
-                          [sourcefile (cdr (assoc 'source-file data))])
-                      (display 
-                       (format "~a:~a:~a: ~a~%" 
-                               sourcefile
-                               line column
-                               (make-error-message 
-                                (and (pair? e) (assoc-val 'location e))
-                                (and (pair? e) (assoc-val 'message e)))))))
-                  (for-each
-                   (lambda (data expr)
-                     (if data
-                         (let ([line (cdr (assoc 'line-number data))]
-                               [column (cdr (assoc 'column-number data))]
-                               [sourcefile (cdr (assoc 'source-file data))])
-                           (if (and (_fill-rib? expr)
-                                    (_free-reference-exp? 
-                                     (_fill-rib-exp expr)))
-                               (display 
-                                (format "~a:~a:~a: <called from ~a>~%" 
-                                        sourcefile
-                                        line column
-                                        (_free-reference-symbol
-                                         (_fill-rib-exp expr))))
-                               (display 
-                                (format "~a:~a:~a: <indeterminate call>~%" 
-                                        sourcefile
-                                        line column))))))
-                   (cdr annots) (cdr st))))
-            (let ([p (assoc-val 'parent e)])
-              (if p 
-                  (begin (display (format "~%While calling:~%~%"))
-                         (stack-trace p)))))))))
+(define (print-stack-trace k)
+  (for-each
+   (lambda (entry)
+     (let ([expr (car entry)]
+           [data (cdr entry)])
+       (let ([line (cdr (assoc 'line-number data))]
+             [column (cdr (assoc 'column-number data))]
+             [sourcefile (cdr (assoc 'source-file data))])
+         (if (and (_fill-rib? expr)
+                  (_free-reference-exp? 
+                   (_fill-rib-exp expr)))
+             (display 
+              (format "~a:~a:~a: <called from ~a>~%" 
+                      sourcefile
+                      line column
+                      (_free-reference-symbol
+                       (_fill-rib-exp expr))))
+             (display 
+              (format "~a:~a:~a: <indeterminate call>~%" 
+                      sourcefile
+                      line column))))))
+   (stack-trace k)))
+
+(define (print-error e . ec)
+  (display (make-error-message (assoc-val 'location e)
+                               (assoc-val 'message e)))
+  (newline)
+  (let ([k (if (null? ec)
+               (cond [(assoc 'error-continuation e) => cdr]
+                     [else #f])
+               (car ec))])
+    (if k
+        (print-stack-trace k)
+        (display (format "{no stack trace available}~%")))
+    (let ([p (assoc-val 'parent e)])
+      (if p 
+          (begin (display "Nested ")
+                 (print-error p))))))
   
 (define (set-breakpoint! function-id)
   (define (make-breakpoint proc)
