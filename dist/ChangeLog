@@ -1,3 +1,10 @@
+2003-03-07  SISC 1.7.6 Released
+
+2003-03-06  Scott G. Miller  <scgmille@freenetproject.org>
+
+        * Fixed an implicit module definition bug, and an
+          oversight in compiled-lib creation.
+
 2003-03-03  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed problem calling methods defined on java.lang.Class via
