@@ -107,4 +107,3 @@
 	       '*toplevel* 
 	       (java/method-proxy c (car x)))
 	      (loop (cdr x))))))))
-'(3
