@@ -514,7 +514,7 @@
 		(begin 
 		  (string-set! strdst n (proc (string-ref strsrc n))) 
 		  (string-map strsrc strdst proc (+ n 1) l))
-		strdest))])
+		strdst))])
   (set! string-downcase (lambda (str)
 			  (let ([newstr (make-string (string-length str))])
 			    (string-map str newstr char-downcase 0 
