@@ -46,7 +46,7 @@ public class SchemePanel extends JScrollPane {
 
         Procedure p=(Procedure)
             r.ctx.toplevel_env.lookup(Symbol.get("sisc-cli"));
-        repl=new REPL("main", p);
+        repl=new REPL("main", dynenv, p);
         repl.go();
     }
 
