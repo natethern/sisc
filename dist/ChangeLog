@@ -1,3 +1,5 @@
+2002-06-03  Released SISC b1.5.1
+
 2002-06-01  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed a compliance bug with letrec and call/cc interactions.
@@ -7,6 +9,8 @@
 	* Matthias' change of self-evaluating to exclude vectors
 	  causes the expander to raise an error for unquoted
 	  vectors, which is actually the specified behavior.  
+
+2002-05-28  Released SISC b1.5.0
 	
 2002-06-01  Matthias Radestock  <matthias@sorted.org>
 
@@ -23,6 +27,8 @@
 
 	* Allowed properties from config file to be overridden by Java
 	  properties.
+
+2002-05-17  Released SISC r1.4.1
 
 2002-05-16  Scott G. Miller  <scgmille@freenetproject.org>
 
