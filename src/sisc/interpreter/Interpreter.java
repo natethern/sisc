@@ -102,7 +102,7 @@ public class Interpreter extends Util {
     }
 
     protected Value interpret(Expression e) throws SchemeException {
-        stk=createFrame(null, null, false, null, top_fk, null, null);
+        stk=createFrame(null, null, false, null, top_fk, null);
         nxp=e;
         interpret();
         return acc;
@@ -152,19 +152,14 @@ public class Interpreter extends Util {
         llcf=lcf;
         lcf=c;
     }
-    /*
-    public final void push(Expression nxp) {
-        stk=createFrame(nxp);
-    }
-    */
+
     public final void setVLR(int pos, Value v) {
         if (cap!=null) {
             for (int i=pos; i>=0; i--) {
                 if (cap[i]) {
-                    if (i+1 < vlr.length)
-                        cap[i+1]=false;
                     llcf.parent=lcf=lcf.makeSafe(this);
                     vlr=lcf.vlr;
+                    cap = null;
                     break;
                 }
             }
@@ -318,14 +313,14 @@ public class Interpreter extends Util {
     protected CallFrame frameFreeList;
     protected int frameFreeListSize;
 
-    public final CallFrame createFrame(Expression n, Value[] v,
-                                 boolean vlk, 
-                                 LexicalEnvironment e,
-                                 CallFrame f,
-                                 CallFrame p, 
-                                 boolean[] cap) {
+    public final CallFrame createFrame(Expression n,
+                                       Value[] v,
+                                       boolean vlk, 
+                                       LexicalEnvironment e,
+                                       CallFrame f,
+                                       CallFrame p) {
         if (frameFreeList == null)
-            return new CallFrame(n,v,vlk,e,f,p,cap);
+            return new CallFrame(n,v,vlk,e,f,p, null);
         else {
             frameFreeList.fk=f;
             f=frameFreeList;
@@ -336,7 +331,7 @@ public class Interpreter extends Util {
             f.vlk=vlk;
             f.env=e;
             f.parent=p;
-            f.cap=cap;
+            f.cap=null;
             return f;
         }
     }
