@@ -72,7 +72,7 @@
     (record-set! res 1 field-tags)
     res))
 
-(define (record-type? think)
+(define (record-type? thing)
   (and (record? thing) (eq? (record-type thing) type)))
 
 ; Accessors for record types.
